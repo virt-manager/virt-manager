@@ -2705,7 +2705,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">3</property>
+                                        <property name="top_attach">4</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2719,7 +2719,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">4</property>
+                                        <property name="top_attach">5</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2732,7 +2732,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="top_attach">3</property>
+                                        <property name="top_attach">4</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2746,7 +2746,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="top_attach">4</property>
+                                        <property name="top_attach">5</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2758,7 +2758,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">2</property>
+                                        <property name="top_attach">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2770,7 +2770,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="top_attach">2</property>
+                                        <property name="top_attach">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2896,7 +2896,7 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
-                                        <property name="top_attach">5</property>
+                                        <property name="top_attach">6</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -2911,7 +2911,63 @@
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
-                                        <property name="top_attach">5</property>
+                                        <property name="top_attach">6</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="disk-bus-labeller">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">Disk b_us:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">disk-bus-text</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="spacing">3</property>
+                                        <child>
+                                          <object class="GtkComboBox" id="disk-bus">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="has_entry">True</property>
+                                            <signal name="changed" handler="on_disk_bus_combo_changed" swapped="no"/>
+                                            <child internal-child="entry">
+                                              <object class="GtkEntry" id="disk-bus-text">
+                                                <property name="can_focus">True</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="disk-bus-label">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">disk-bus-label</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">2</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -2932,19 +2988,19 @@
                                         <property name="orientation">vertical</property>
                                         <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkGrid" id="table11">
+                                          <object class="GtkGrid" id="table19">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="row_spacing">3</property>
                                             <property name="column_spacing">8</property>
                                             <child>
-                                              <object class="GtkLabel" id="label32">
+                                              <object class="GtkLabel" id="label123">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="halign">end</property>
-                                                <property name="label" translatable="yes">Disk b_us:</property>
+                                                <property name="label" translatable="yes">Cac_he mode:</property>
                                                 <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">disk-bus-text</property>
+                                                <property name="mnemonic_widget">disk-cache-text</property>
                                               </object>
                                               <packing>
                                                 <property name="left_attach">0</property>
@@ -2952,13 +3008,13 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkComboBox" id="disk-bus">
+                                              <object class="GtkComboBox" id="disk-cache">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="has_entry">True</property>
-                                                <signal name="changed" handler="on_disk_bus_combo_changed" swapped="no"/>
+                                                <signal name="changed" handler="on_disk_cache_combo_changed" swapped="no"/>
                                                 <child internal-child="entry">
-                                                  <object class="GtkEntry" id="disk-bus-text">
+                                                  <object class="GtkEntry" id="disk-cache-text">
                                                     <property name="can_focus">True</property>
                                                   </object>
                                                 </child>
@@ -2968,137 +3024,73 @@
                                                 <property name="top_attach">0</property>
                                               </packing>
                                             </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label-disk-discard">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">end</property>
+                                                <property name="label" translatable="yes">Discard mod_e:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">disk-discard-text</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBox" id="disk-discard">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="has_entry">True</property>
+                                                <signal name="changed" handler="on_disk_discard_combo_changed" swapped="no"/>
+                                                <child internal-child="entry">
+                                                  <object class="GtkEntry" id="disk-discard-text">
+                                                    <property name="can_focus">True</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label-disk-detect-zeroes">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="halign">end</property>
+                                                <property name="label" translatable="yes">Detect _zeroes:</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic_widget">disk-detect-zeroes-text</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">0</property>
+                                                <property name="top_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBox" id="disk-detect-zeroes">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="has_entry">True</property>
+                                                <signal name="changed" handler="on_disk_detect_zeroes_combo_changed" swapped="no"/>
+                                                <child internal-child="entry">
+                                                  <object class="GtkEntry" id="disk-detect-zeroes-text">
+                                                    <property name="can_focus">True</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                              </packing>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
                                             <property name="fill">True</property>
                                             <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkExpander" id="expander8">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <child>
-                                              <object class="GtkGrid" id="table19">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="row_spacing">3</property>
-                                                <property name="column_spacing">8</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="label123">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="yes">Cac_he mode:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">disk-cache-text</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBox" id="disk-cache">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="has_entry">True</property>
-                                                    <signal name="changed" handler="on_disk_cache_combo_changed" swapped="no"/>
-                                                    <child internal-child="entry">
-                                                      <object class="GtkEntry" id="disk-cache-text">
-                                                        <property name="can_focus">True</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="label-disk-discard">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="yes">Discard mod_e:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">disk-discard-text</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBox" id="disk-discard">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="has_entry">True</property>
-                                                    <signal name="changed" handler="on_disk_discard_combo_changed" swapped="no"/>
-                                                    <child internal-child="entry">
-                                                      <object class="GtkEntry" id="disk-discard-text">
-                                                        <property name="can_focus">True</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">2</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkLabel" id="label-disk-detect-zeroes">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="yes">Detect _zeroes:</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="mnemonic_widget">disk-detect-zeroes-text</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">0</property>
-                                                    <property name="top_attach">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkComboBox" id="disk-detect-zeroes">
-                                                    <property name="visible">True</property>
-                                                    <property name="can_focus">False</property>
-                                                    <property name="has_entry">True</property>
-                                                    <signal name="changed" handler="on_disk_detect_zeroes_combo_changed" swapped="no"/>
-                                                    <child internal-child="entry">
-                                                      <object class="GtkEntry" id="disk-detect-zeroes-text">
-                                                        <property name="can_focus">True</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">3</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                              </object>
-                                            </child>
-                                            <child type="label">
-                                              <object class="GtkLabel" id="label78">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes">_Performance options</property>
-                                                <property name="use_underline">True</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
                                           </packing>
                                         </child>
                                       </object>

@@ -195,6 +195,21 @@ class NewVM(uiutils.UITestCase):
         addhw.find("Finish", "push button").click()
         uiutils.check_in_loop(lambda: vmwindow.active)
 
+        # Select the new disk, change the bus to USB
+        vmwindow.find_fuzzy("IDE Disk 2", "table cell").click()
+        appl = vmwindow.find("config-apply", "push button")
+        hwlist = vmwindow.find("hw-list")
+        tab = vmwindow.find("disk-tab")
+        tab.find("Disk bus:", "text").text = "usb"
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+        # Device is now 'USB Disk 1'
+        c = hwlist.find("USB Disk 1", "table cell")
+        self.assertTrue(c.state_selected)
+        tab.find("Removable:", "check box").click()
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
         # Start the install, close via the VM window
         vmwindow.find_fuzzy("Begin Installation", "button").click()
         uiutils.check_in_loop(lambda: newvm.showing is False)

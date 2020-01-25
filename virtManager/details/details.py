@@ -846,6 +846,12 @@ class vmmDetails(vmmGObjectUI):
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
         vmmAddHardware.build_disk_bus_combo(self.vm, disk_bus)
+        self.widget("disk-bus-label").set_visible(
+            not self.is_customize_dialog)
+        self.widget("disk-bus").set_visible(self.is_customize_dialog)
+        if not self.is_customize_dialog:
+            # Remove the mnemonic
+            self.widget("disk-bus-labeller").set_text(_("Disk bus:"))
 
         # Network model
         net_model = self.widget("network-model")
@@ -2174,6 +2180,8 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
             self.widget("disk-bus").get_model())
         uiutil.set_list_selection(self.widget("disk-bus"), bus)
+        self.widget("disk-bus-label").set_text(
+                vmmAddHardware.disk_pretty_bus(bus) or "-")
 
         is_removable = disk.is_cdrom() or disk.is_floppy()
         self.widget("disk-source-box").set_visible(is_removable)

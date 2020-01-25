@@ -227,15 +227,8 @@ class Details(uiutils.UITestCase):
         tab.find("Shareable:", "check box").click()
         tab.find("Readonly:", "check box").click()
         tab.find("Advanced options", "toggle button").click_expander()
-        tab.find("Disk bus:", "text").text = "usb"
-        tab.find("Performance options", "toggle button").click_expander()
         tab.find("Cache mode:", "text").text = "unsafe"
-        appl.click()
-        uiutils.check_in_loop(lambda: not appl.sensitive)
-        # Device is now 'USB Disk 1'
-        c = hwlist.find("USB Disk 1", "table cell")
-        self.assertTrue(c.state_selected)
-        tab.find("Removable:", "check box").click()
+        tab.find("Discard mode:", "text").text = "unmap"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
