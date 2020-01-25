@@ -69,8 +69,6 @@ class DeviceAddress(XMLBuilder):
             self.domain = "0"
             if ":" in addrstr:
                 self.domain, self.bus = addrstr.split(":", 1)
-        elif addrstr == "spapr-vio":
-            self.type = self.ADDRESS_TYPE_SPAPR_VIO
         else:
             raise ValueError(_("Could not determine or unsupported "
                                "format of '%s'") % addrstr)

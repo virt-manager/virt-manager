@@ -1106,7 +1106,7 @@ class XMLParseTest(unittest.TestCase):
         adddev.type = "network"
         adddev.source = "default"
         adddev.macaddr = "1A:2A:3A:4A:5A:6A"
-        adddev.address.set_addrstr("spapr-vio")
+        adddev.address.type = "spapr-vio"
         adddev.set_defaults(guest)
 
         # Test adding and removing the same device

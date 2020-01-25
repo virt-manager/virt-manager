@@ -658,7 +658,7 @@ class vmmDomain(vmmLibvirtObject):
             path=_SENTINEL, readonly=_SENTINEL,
             shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
             io=_SENTINEL, discard=_SENTINEL, detect_zeroes=_SENTINEL,
-            bus=_SENTINEL, addrstr=_SENTINEL):
+            bus=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -673,7 +673,6 @@ class vmmDomain(vmmLibvirtObject):
                 return
 
             editdev.address.clear()
-            editdev.address.set_addrstr(addrstr)
 
             if oldprefix == editdev.get_target_prefix()[0]:
                 return
@@ -721,7 +720,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_network(self, devobj, do_hotplug,
             ntype=_SENTINEL, source=_SENTINEL,
-            mode=_SENTINEL, model=_SENTINEL, addrstr=_SENTINEL,
+            mode=_SENTINEL, model=_SENTINEL,
             vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
             typeidversion=_SENTINEL, instanceid=_SENTINEL,
             portgroup=_SENTINEL, macaddr=_SENTINEL, linkstate=_SENTINEL):
@@ -741,7 +740,6 @@ class vmmDomain(vmmLibvirtObject):
         if model != _SENTINEL:
             if editdev.model != model:
                 editdev.address.clear()
-                editdev.address.set_addrstr(addrstr)
             editdev.model = model
 
         if vtype != _SENTINEL:

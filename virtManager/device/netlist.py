@@ -365,8 +365,6 @@ class vmmNetworkList(vmmGObjectUI):
         net.model = model
         net.source_mode = mode
         net.portgroup = portgroup
-        if net.model == "spapr-vlan":
-            net.address.set_addrstr("spapr-vio")
 
         if net.type == "direct":
             (vport_type, vport_managerid, vport_typeid,

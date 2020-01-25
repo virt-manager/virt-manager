@@ -1720,11 +1720,8 @@ class vmmDetails(vmmGObjectUI):
                 self.widget("disk-detect-zeroes"))
 
         if self.edited(EDIT_DISK_BUS):
-            bus = uiutil.get_list_selection(self.widget("disk-bus"))
-            addr = None
-
-            kwargs["bus"] = bus
-            kwargs["addrstr"] = addr
+            kwargs["bus"] = uiutil.get_list_selection(
+                    self.widget("disk-bus"))
 
         return vmmAddHardware.change_config_helper(self.vm.define_disk,
                                           kwargs, self.vm, self.err,
@@ -1759,11 +1756,7 @@ class vmmDetails(vmmGObjectUI):
 
         if self.edited(EDIT_NET_MODEL):
             model = uiutil.get_list_selection(self.widget("network-model"))
-            addrstr = None
-            if model == "spapr-vlan":
-                addrstr = "spapr-vio"
             kwargs["model"] = model
-            kwargs["addrstr"] = addrstr
 
         if self.edited(EDIT_NET_SOURCE):
             (kwargs["ntype"], kwargs["source"],

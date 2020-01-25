@@ -491,8 +491,6 @@ class vmmAddHardware(vmmGObjectUI):
         if dev.type == "scsi":
             if dev.model == "virtio-scsi":
                 ret = "Virtio " + ret
-            elif dev.address.type == "spapr-vio":
-                ret = "sPAPR " + ret
         if dev.type == "pci" and dev.model == "pcie-root":
             ret = "PCIe"
         return ret
