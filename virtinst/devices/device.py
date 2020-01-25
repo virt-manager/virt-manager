@@ -58,21 +58,6 @@ class DeviceAddress(XMLBuilder):
     _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
                        "function", "target", "unit", "multifunction"]
 
-    def set_addrstr(self, addrstr):
-        if addrstr is None:
-            return
-
-        if addrstr.count(":") in [1, 2] and "." in addrstr:
-            self.type = self.ADDRESS_TYPE_PCI
-            addrstr, self.function = addrstr.split(".", 1)
-            addrstr, self.slot = addrstr.rsplit(":", 1)
-            self.domain = "0"
-            if ":" in addrstr:
-                self.domain, self.bus = addrstr.split(":", 1)
-        else:
-            raise ValueError(_("Could not determine or unsupported "
-                               "format of '%s'") % addrstr)
-
     def pretty_desc(self):
         pretty_desc = None
         if self.type == self.ADDRESS_TYPE_DRIVE:

@@ -3498,7 +3498,17 @@ class ParserController(VirtCLIParser):
     ###################
 
     def set_address_cb(self, inst, val, virtarg):
-        inst.address.set_addrstr(val)
+        addrstr = val
+        if addrstr.count(":") in [1, 2] and "." in addrstr:
+            inst.address.type = inst.address.ADDRESS_TYPE_PCI
+            addrstr, inst.address.function = addrstr.split(".", 1)
+            addrstr, inst.address.slot = addrstr.rsplit(":", 1)
+            inst.address.domain = "0"
+            if ":" in addrstr:
+                inst.address.domain, inst.address.bus = addrstr.split(":", 1)
+            return
+        raise ValueError(
+                _("Expected PCI format string for '%s'") % addrstr)
 
     @classmethod
     def _init_class(cls, **kwargs):
