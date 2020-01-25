@@ -562,13 +562,12 @@ class vmmDomain(vmmLibvirtObject):
                 guest.cpu.set_model(guest, model)
         self._redefine_xmlobj(guest)
 
-    def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
+    def define_memory(self, memory=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
         if memory != _SENTINEL:
             guest.currentMemory = int(memory)
-        if maxmem != _SENTINEL:
-            guest.memory = int(maxmem)
+            guest.memory = int(memory)
         self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
@@ -1001,38 +1000,14 @@ class vmmDomain(vmmLibvirtObject):
         log.debug("update_device with xml=\n%s", xml)
         self._backend.updateDeviceFlags(xml, flags)
 
-    def hotplug(self, memory=_SENTINEL, maxmem=_SENTINEL,
-            description=_SENTINEL, title=_SENTINEL, device=_SENTINEL):
+    def hotplug(self, description=_SENTINEL, title=_SENTINEL, device=_SENTINEL):
         if not self.is_active():
             return
-
-        def _hotplug_memory(val):
-            if val != self.get_memory():
-                self._backend.setMemory(val)
-        def _hotplug_maxmem(val):
-            if val != self.maximum_memory():
-                self._backend.setMaxMemory(val)
 
         def _hotplug_metadata(val, mtype):
             flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
                      libvirt.VIR_DOMAIN_AFFECT_CONFIG)
             self._backend.setMetadata(mtype, val, None, None, flags)
-
-        if memory != _SENTINEL:
-            log.debug("Hotplugging curmem=%s maxmem=%s for VM '%s'",
-                         memory, maxmem, self.get_name())
-
-            actual_cur = self.get_memory()
-            if memory:
-                if maxmem < actual_cur:
-                    # Set current first to avoid error
-                    _hotplug_memory(memory)
-                    _hotplug_maxmem(maxmem)
-                else:
-                    _hotplug_maxmem(maxmem)
-                    _hotplug_memory(memory)
-            else:
-                _hotplug_maxmem(maxmem)
 
         if description != _SENTINEL:
             _hotplug_metadata(description,
@@ -1304,11 +1279,6 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().title
     def get_description(self):
         return self.get_xmlobj().description
-
-    def get_memory(self):
-        return int(self.get_xmlobj().currentMemory)
-    def maximum_memory(self):
-        return int(self.get_xmlobj().memory)
 
     def get_cpu_config(self):
         return self.get_xmlobj().cpu

@@ -103,19 +103,16 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
-
-        # Memory balloon
-        tab = self._select_hw(win, "Memory", "memory-tab")
-        tab.find("Current allocation:", "spin button").text = "300"
-        # Newer libvirt rejects this hotplug operation for test driver
-        # tab.find("Maximum allocation:", "spin button").text = "800"
-        appl.click()
-        uiutils.check_in_loop(lambda: not appl.sensitive)
-
         # There's no hotplug operations after this point
         self._stop_vm(win)
 
-        # CPU hotplug
+        # Memory
+        tab = self._select_hw(win, "Memory", "memory-tab")
+        tab.find("Memory allocation:", "spin button").text = "300"
+        appl.click()
+        uiutils.check_in_loop(lambda: not appl.sensitive)
+
+        # VCPUs
         tab = self._select_hw(win, "CPUs", "cpu-tab")
         tab.find("VCPU allocation:", "spin button").text = "4"
         appl.click()
