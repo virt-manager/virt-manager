@@ -93,7 +93,7 @@ class Details(uiutils.UITestCase):
         Test overview, memory, cpu pages
         """
         self.app.uri = tests.utils.URIs.kvm
-        win = self._open_details_window(vmname="test-many-devices")
+        win = self._open_details_window(vmname="test")
         appl = win.find("config-apply", "push button")
 
         # Overview description
@@ -112,15 +112,16 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
+        # There's no hotplug operations after this point
+        self._stop_vm(win)
 
         # CPU hotplug
         tab = self._select_hw(win, "CPUs", "cpu-tab")
-        tab.find("Current allocation:", "spin button").text = "2"
+        tab.find("VCPU allocation:", "spin button").text = "4"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
         # Static CPU config
-        self._stop_vm(win)
         # more cpu config: host-passthrough, copy, clear CPU, manual
         tab.find("cpu-model").click_combo_entry()
         tab.find_fuzzy("Clear CPU", "menu item").click()
@@ -141,13 +142,14 @@ class Details(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
         # CPU topology
+        tab.find_fuzzy("Topology", "toggle button").click_expander()
         tab.find_fuzzy("Manually set", "check").click()
         tab.find("Sockets:", "spin button").typeText("8")
         tab.find("Cores:", "spin button").typeText("2")
         tab.find("Threads:", "spin button").typeText("2")
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertTrue(tab.find_fuzzy("Maximum", "spin").text == "32")
+        self.assertTrue(tab.find_fuzzy("VCPU allocation", "spin").text == "32")
 
 
     def testDetailsEditDomain2(self):
@@ -500,7 +502,7 @@ class Details(uiutils.UITestCase):
         finish.click()
         win.find("Details", "page tab").click()
         self.assertEqual(
-                tab.find("Current allocation:", "spin button").text, "8")
+                tab.find("VCPU allocation:", "spin button").text, "8")
 
         # Make some disk edits
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")

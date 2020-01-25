@@ -61,13 +61,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="adjustment6">
-    <property name="lower">1</property>
-    <property name="upper">1024</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">2</property>
-  </object>
   <object class="GtkAdjustment" id="adjustment7">
     <property name="lower">1</property>
     <property name="upper">1024</property>
@@ -1452,27 +1445,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label335">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="valign">center</property>
-                                        <property name="label" translatable="yes">Ma_ximum allocation:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">cpu-maxvcpus</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkLabel" id="label333">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="valign">center</property>
-                                        <property name="label" translatable="yes">Current a_llocation:</property>
+                                        <property name="label" translatable="yes">VCPU a_llocation:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">cpu-vcpus</property>
                                       </object>
@@ -1482,25 +1460,12 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkSpinButton" id="cpu-maxvcpus">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="invisible_char">●</property>
-                                        <property name="text" translatable="yes">1</property>
-                                        <property name="adjustment">adjustment6</property>
-                                        <property name="value">1</property>
-                                        <signal name="changed" handler="on_cpu_maxvcpus_changed" swapped="no"/>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <object class="GtkSpinButton" id="cpu-vcpus">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="halign">start</property>
                                         <property name="valign">center</property>
+                                        <property name="hexpand">True</property>
                                         <property name="invisible_char">●</property>
                                         <property name="text" translatable="yes">2</property>
                                         <property name="adjustment">adjustment7</property>
@@ -1520,53 +1485,50 @@
                                         <property name="top_attach">1</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <object class="GtkBox" id="cpu-vcpus-warn-box">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage" id="image9">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="stock">gtk-dialog-warning</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">False</property>
+                                            <property name="label" translatable="yes">&lt;small&gt;Overcommitting vCPUs can hurt performance&lt;/small&gt;</property>
+                                            <property name="use_markup">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="width">2</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
                                     <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkBox" id="cpu-vcpus-warn-box">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="spacing">6</property>
-                                    <child>
-                                      <object class="GtkImage" id="image9">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="stock">gtk-dialog-warning</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label28">
-                                        <property name="width_request">300</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">&lt;small&gt;Overcommitting vCPUs can hurt performance&lt;/small&gt;</property>
-                                        <property name="use_markup">True</property>
-                                        <property name="wrap">True</property>
-                                        <property name="max_width_chars">32</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3186,6 +3148,12 @@
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">3</property>
                                                   </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
                                                 </child>
                                               </object>
                                             </child>

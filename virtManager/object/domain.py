@@ -540,15 +540,14 @@ class vmmDomain(vmmLibvirtObject):
         self._redefine_xmlobj(xmlobj)
         return editdev, newdev
 
-    def define_cpu(self, vcpus=_SENTINEL, maxvcpus=_SENTINEL,
+    def define_cpu(self, vcpus=_SENTINEL,
             model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
             cores=_SENTINEL, threads=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
         if vcpus != _SENTINEL:
+            guest.vcpus = int(vcpus)
             guest.vcpu_current = int(vcpus)
-        if maxvcpus != _SENTINEL:
-            guest.vcpus = int(maxvcpus)
 
         if sockets != _SENTINEL:
             guest.cpu.sockets = sockets
@@ -1002,7 +1001,7 @@ class vmmDomain(vmmLibvirtObject):
         log.debug("update_device with xml=\n%s", xml)
         self._backend.updateDeviceFlags(xml, flags)
 
-    def hotplug(self, vcpus=_SENTINEL, memory=_SENTINEL, maxmem=_SENTINEL,
+    def hotplug(self, memory=_SENTINEL, maxmem=_SENTINEL,
             description=_SENTINEL, title=_SENTINEL, device=_SENTINEL):
         if not self.is_active():
             return
@@ -1018,11 +1017,6 @@ class vmmDomain(vmmLibvirtObject):
             flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
                      libvirt.VIR_DOMAIN_AFFECT_CONFIG)
             self._backend.setMetadata(mtype, val, None, None, flags)
-
-        if vcpus != _SENTINEL:
-            vcpus = int(vcpus)
-            if vcpus != self.vcpu_count():
-                self._backend.setVcpus(vcpus)
 
         if memory != _SENTINEL:
             log.debug("Hotplugging curmem=%s maxmem=%s for VM '%s'",
@@ -1315,11 +1309,6 @@ class vmmDomain(vmmLibvirtObject):
         return int(self.get_xmlobj().currentMemory)
     def maximum_memory(self):
         return int(self.get_xmlobj().memory)
-
-    def vcpu_count(self):
-        return int(self.get_xmlobj().vcpu_current or self.get_xmlobj().vcpus)
-    def vcpu_max_count(self):
-        return int(self.get_xmlobj().vcpus)
 
     def get_cpu_config(self):
         return self.get_xmlobj().cpu

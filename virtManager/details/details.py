@@ -42,7 +42,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_OS_NAME,
 
  EDIT_VCPUS,
- EDIT_MAXVCPUS,
  EDIT_CPU,
  EDIT_TOPOLOGY,
 
@@ -96,7 +95,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 51)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 50)
 
 
 # Columns in hw list model
@@ -453,8 +452,7 @@ class vmmDetails(vmmGObjectUI):
 
             "on_details_inspection_refresh_clicked": self.inspection_refresh,
 
-            "on_cpu_vcpus_changed": self.config_vcpus_changed,
-            "on_cpu_maxvcpus_changed": self.config_maxvcpus_changed,
+            "on_cpu_vcpus_changed": self._config_vcpus_changed_cb,
             "on_cpu_model_changed": lambda *x: self.config_cpu_model_changed(x),
             "on_cpu_copy_host_clicked": self.on_cpu_copy_host_clicked,
             "on_cpu_secure_toggled": self.on_cpu_secure_toggled,
@@ -1227,10 +1225,8 @@ class vmmDetails(vmmGObjectUI):
     # VCPUS
     def config_get_vcpus(self):
         return uiutil.spin_get_helper(self.widget("cpu-vcpus"))
-    def config_get_maxvcpus(self):
-        return uiutil.spin_get_helper(self.widget("cpu-maxvcpus"))
 
-    def config_vcpus_changed(self, src):
+    def _config_vcpus_changed_cb(self, src):
         self.enable_apply(EDIT_VCPUS)
 
         conn = self.vm.conn
@@ -1240,26 +1236,6 @@ class vmmDetails(vmmGObjectUI):
         # Warn about overcommit
         warn = bool(cur > host_active_count)
         self.widget("cpu-vcpus-warn-box").set_visible(warn)
-
-        maxadj = self.widget("cpu-maxvcpus")
-        maxval = self.config_get_maxvcpus()
-        if maxval < cur:
-            if maxadj.get_sensitive():
-                maxadj.set_value(cur)
-            else:
-                src.set_value(maxval)
-                cur = maxval
-        ignore, upper = maxadj.get_range()
-        maxadj.set_range(cur, upper)
-
-    def config_maxvcpus_changed(self, ignore):
-        if self.widget("cpu-maxvcpus").get_sensitive():
-            self.config_cpu_topology_changed()
-
-        # As this callback can be triggered by other events, set EDIT_MAXVCPUS
-        # only when the value is changed.
-        if self.config_get_maxvcpus() != self.vm.vcpu_max_count():
-            self.enable_apply(EDIT_MAXVCPUS)
 
     def on_cpu_copy_host_clicked(self, src):
         uiutil.set_grid_row_visible(
@@ -1282,7 +1258,7 @@ class vmmDetails(vmmGObjectUI):
 
     def config_cpu_topology_changed(self, ignore=None):
         manual_top = self.widget("cpu-topology-table").is_sensitive()
-        self.widget("cpu-maxvcpus").set_sensitive(not manual_top)
+        self.widget("cpu-vcpus").set_sensitive(not manual_top)
 
         if manual_top:
             cores = uiutil.spin_get_helper(self.widget("cpu-cores")) or 1
@@ -1291,7 +1267,7 @@ class vmmDetails(vmmGObjectUI):
             total = cores * sockets * threads
             if uiutil.spin_get_helper(self.widget("cpu-vcpus")) > total:
                 self.widget("cpu-vcpus").set_value(total)
-            self.widget("cpu-maxvcpus").set_value(total)
+            self.widget("cpu-vcpus").set_value(total)
 
             # Warn about hyper-threading setting
             cpu_model = self.get_config_cpu_model()
@@ -1299,8 +1275,8 @@ class vmmDetails(vmmGObjectUI):
             self.widget("cpu-topology-warn-box").set_visible(warn_ht)
 
         else:
-            maxvcpus = uiutil.spin_get_helper(self.widget("cpu-maxvcpus"))
-            self.widget("cpu-sockets").set_value(maxvcpus or 1)
+            vcpus = uiutil.spin_get_helper(self.widget("cpu-vcpus"))
+            self.widget("cpu-sockets").set_value(vcpus or 1)
             self.widget("cpu-cores").set_value(1)
             self.widget("cpu-threads").set_value(1)
 
@@ -1569,14 +1545,9 @@ class vmmDetails(vmmGObjectUI):
 
     def config_vcpus_apply(self):
         kwargs = {}
-        hotplug_args = {}
 
         if self.edited(EDIT_VCPUS):
             kwargs["vcpus"] = self.config_get_vcpus()
-            hotplug_args["vcpus"] = kwargs["vcpus"]
-
-        if self.edited(EDIT_MAXVCPUS):
-            kwargs["maxvcpus"] = self.config_get_maxvcpus()
 
         if self.edited(EDIT_CPU):
             kwargs["model"] = self.get_config_cpu_model()
@@ -1593,8 +1564,7 @@ class vmmDetails(vmmGObjectUI):
                 kwargs["threads"] = None
 
         return vmmAddHardware.change_config_helper(self.vm.define_cpu,
-                                          kwargs, self.vm, self.err,
-                                          hotplug_args=hotplug_args)
+                                          kwargs, self.vm, self.err)
 
     def config_memory_apply(self):
         kwargs = {}
@@ -2120,7 +2090,7 @@ class vmmDetails(vmmGObjectUI):
         return self.vm.get_xmlobj().os.is_x86() and len(features) > 0
 
     def refresh_config_cpu(self):
-        # Set topology first, because it impacts maxvcpus values
+        # Set topology first, because it impacts vcpus values
         cpu = self.vm.get_cpu_config()
         show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
         self.widget("cpu-topology-enable").set_active(show_top)
@@ -2136,14 +2106,12 @@ class vmmDetails(vmmGObjectUI):
             self.widget("cpu-topology-expander").set_expanded(True)
 
         host_active_count = self.vm.conn.host_active_processor_count()
-        maxvcpus = self.vm.vcpu_max_count()
-        curvcpus = self.vm.vcpu_count()
+        vcpus = self.vm.xmlobj.vcpus
 
-        self.widget("cpu-vcpus").set_value(int(curvcpus))
-        self.widget("cpu-maxvcpus").set_value(int(maxvcpus))
+        self.widget("cpu-vcpus").set_value(int(vcpus))
         self.widget("state-host-cpus").set_text(str(host_active_count))
 
-        # Trigger this again to make sure maxvcpus is correct
+        # Trigger this again to make sure vcpus is correct
         self.config_cpu_topology_changed()
 
         # Warn about overcommit
