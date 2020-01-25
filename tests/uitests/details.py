@@ -239,10 +239,6 @@ class Details(uiutils.UITestCase):
         tab.find_fuzzy("macvtap", "menu item").bring_on_screen().click()
         tab.find("Device model:", "combo box").click_combo_entry()
         tab.find("rtl8139", "menu item").click()
-        mode = tab.find_fuzzy("Source mode:", "combo box")
-        mode.click_combo_entry()
-        self.assertTrue(mode.find("Bridge", "menu item").selected)
-        self.pressKey("Escape")
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 

@@ -78,7 +78,6 @@ class vmmNetworkList(vmmGObjectUI):
 
         self.builder.connect_signals({
             "on_net_source_changed": self._on_net_source_changed,
-            "on_net_source_mode_changed": self._emit_changed,
             "on_net_bridge_name_changed": self._emit_changed,
         })
 
@@ -115,18 +114,6 @@ class vmmNetworkList(vmmGObjectUI):
         combo.pack_start(text, True)
         combo.add_attribute(text, 'text', NET_ROW_LABEL)
         combo.add_attribute(text, 'sensitive', NET_ROW_SENSITIVE)
-
-        combo = self.widget("net-source-mode")
-        # [xml value, label]
-        model = Gtk.ListStore(str, str)
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 1)
-
-        model.append(["bridge", _("Bridge")])
-        model.append(["vepa", "VEPA"])
-        model.append(["private", _("Private")])
-        model.append(["passthrough", _("Passthrough")])
-        combo.set_active(0)
 
         self.conn.connect("net-added", self._repopulate_network_list)
         self.conn.connect("net-removed", self._repopulate_network_list)
@@ -340,8 +327,10 @@ class vmmNetworkList(vmmGObjectUI):
             net_src = self.widget("net-bridge-name").get_text() or None
 
         mode = None
-        if self.widget("net-source-mode").is_visible():
-            mode = uiutil.get_list_selection(self.widget("net-source-mode"))
+        is_direct = (net_type == virtinst.DeviceInterface.TYPE_DIRECT)
+        if is_direct:
+            # This is generally the safest and most featureful default
+            mode = "bridge"
 
         return net_type, net_src, mode
 
@@ -375,7 +364,6 @@ class vmmNetworkList(vmmGObjectUI):
         net_warn.set_tooltip_text(net_err or "")
 
         self.widget("net-bridge-name").set_text("")
-        self.widget("net-source-mode").set_active(0)
 
     def set_dev(self, net):
         self.reset_state()
@@ -389,9 +377,6 @@ class vmmNetworkList(vmmGObjectUI):
             # be filled in. For our purposes, treat this as a type=network
             source = net.network
             nettype = "network"
-
-        source_mode = net.source_mode
-        uiutil.set_list_selection(self.widget("net-source-mode"), source_mode)
 
         # Find the matching row in the net list
         combo = self.widget("net-source")
@@ -460,11 +445,8 @@ class vmmNetworkList(vmmGObjectUI):
 
         nettype = row[NET_ROW_TYPE]
         is_direct = (nettype == virtinst.DeviceInterface.TYPE_DIRECT)
-        uiutil.set_grid_row_visible(self.widget("net-source-mode"), is_direct)
         uiutil.set_grid_row_visible(
             self.widget("net-macvtap-warn-box"), is_direct)
-        if is_direct and self.widget("net-source-mode").get_active() == -1:
-            self.widget("net-source-mode").set_active(0)
 
         show_bridge = row[NET_ROW_MANUAL]
         uiutil.set_grid_row_visible(

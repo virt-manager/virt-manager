@@ -277,10 +277,6 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Network", "network-tab")
         src.click()
         tab.find_fuzzy("macvtap", "menu item").click()
-        mode = tab.find_fuzzy("Source mode:", "combo box")
-        mode.click_combo_entry()
-        self.assertTrue(mode.find("Bridge", "menu item").selected)
-        self.pressKey("Escape")
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
