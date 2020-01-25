@@ -187,7 +187,6 @@ class Console(uiutils.UITestCase):
         win.find("SCSI Disk 1", "table cell").click()
         tab = win.find("disk-tab", None)
         uiutils.check_in_loop(lambda: tab.showing)
-        self.assertTrue(tab.find("Storage format:", "text").text == "qcow2")
         win.find("config-remove").click()
         delete = self.app.root.find_fuzzy("Delete", "frame")
         delete.find_fuzzy("Delete", "button").click()

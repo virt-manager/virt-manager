@@ -62,7 +62,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_DISK_DISCARD,
  EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
- EDIT_DISK_FORMAT,
  EDIT_DISK_SGIO,
  EDIT_DISK_PATH,
  EDIT_DISK_PR,
@@ -101,7 +100,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 56)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 55)
 
 
 # Columns in hw list model
@@ -501,7 +500,6 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_discard_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DISCARD),
             "on_disk_detect_zeroes_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
-            "on_disk_format_changed": self.disk_format_changed,
             "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
             "on_disk_pr_checkbox_toggled": lambda *x: self.enable_apply(x, EDIT_DISK_PR),
 
@@ -1399,10 +1397,6 @@ class vmmDetails(vmmGObjectUI):
 
 
     # Disk callbacks
-    def disk_format_changed(self, ignore):
-        self.widget("disk-format-warn").show()
-        self.enable_apply(EDIT_DISK_FORMAT)
-
     def _disk_source_browse_clicked_cb(self, src):
         disk = self.get_hw_row()[HW_LIST_COL_DEVICE]
         if disk.is_floppy():
@@ -1728,9 +1722,6 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_DISK_DETECT_ZEROES):
             kwargs["detect_zeroes"] = uiutil.get_list_selection(
                 self.widget("disk-detect-zeroes"))
-
-        if self.edited(EDIT_DISK_FORMAT):
-            kwargs["driver_type"] = self.widget("disk-format").get_text()
 
         if self.edited(EDIT_DISK_SGIO):
             sgio = uiutil.get_list_selection(self.widget("disk-sgio"))
@@ -2264,7 +2255,6 @@ class vmmDetails(vmmGObjectUI):
         io = disk.driver_io
         discard = disk.driver_discard
         detect_zeroes = disk.driver_detect_zeroes
-        driver_type = disk.driver_type or ""
 
         size = "-"
         if path:
@@ -2308,9 +2298,6 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("disk-discard"), discard)
         uiutil.set_list_selection(self.widget("disk-detect-zeroes"),
                                   detect_zeroes)
-
-        self.widget("disk-format").set_text(driver_type)
-        self.widget("disk-format-warn").hide()
 
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
             self.widget("disk-bus").get_model())

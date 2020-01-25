@@ -228,7 +228,6 @@ class Details(uiutils.UITestCase):
         tab.find("Shareable:", "check box").click()
         tab.find("Readonly:", "check box").click()
         tab.find("Advanced options", "toggle button").click_expander()
-        tab.find("Storage format:", "text").text = "vmdk"
         tab.find("Disk bus:", "text").text = "usb"
         tab.find("Performance options", "toggle button").click_expander()
         tab.find("IO mode:", "text").text = "threads"
