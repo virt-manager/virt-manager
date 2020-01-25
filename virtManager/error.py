@@ -4,6 +4,7 @@
 # See the COPYING file in the top-level directory.
 
 import sys
+import textwrap
 import traceback
 
 from gi.repository import Gtk
@@ -15,10 +16,21 @@ from .baseclass import vmmGObject
 
 def _launch_dialog(dialog, primary_text, secondary_text, title,
                    widget=None, modal=True):
-    if primary_text and len(primary_text) > 512:
-        primary_text = primary_text[:512] + "..."
-    if secondary_text and len(secondary_text) > 512:
-        secondary_text = secondary_text[:512] + "..."
+    def fix_text(t):
+        if not t:
+            return t
+        if len(t) > 512:
+            t = t[:512] + "..."
+        retlines = []
+        for line in t.splitlines():
+            if not line:
+                retlines.append("")
+            else:
+                retlines.extend(textwrap.wrap(line, 80))
+        return "\n".join(retlines)
+
+    primary_text = fix_text(primary_text)
+    secondary_text = fix_text(secondary_text)
 
     dialog.set_property("text", primary_text)
     dialog.format_secondary_text(secondary_text or None)

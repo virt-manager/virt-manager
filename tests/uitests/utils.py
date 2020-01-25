@@ -158,7 +158,7 @@ class UITestCase(unittest.TestCase):
         # Click the finish button, but our bogus change should trigger error
         finish.click()
         alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy("(xmlParseDoc|tag mismatch)")
+        alert.find_fuzzy("(xmlParseDoc|tag.mismatch)")
         alert.find("Close", "push button").click()
 
         # Try unapplied changes again, this time abandon our changes
@@ -187,11 +187,11 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
         self._role_pattern = None
         self._labeller_pattern = None
         if self._name:
-            self._name_pattern = re.compile(self._name)
+            self._name_pattern = re.compile(self._name, re.DOTALL)
         if self._roleName:
-            self._role_pattern = re.compile(self._roleName)
+            self._role_pattern = re.compile(self._roleName, re.DOTALL)
         if self._labeller_text:
-            self._labeller_pattern = re.compile(self._labeller_text)
+            self._labeller_pattern = re.compile(self._labeller_text, re.DOTALL)
 
     def makeScriptMethodCall(self, isRecursive):
         ignore = isRecursive

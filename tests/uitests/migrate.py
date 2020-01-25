@@ -32,7 +32,7 @@ class VMMMigrate(uiutils.UITestCase):
         mig.find("Advanced", "toggle button").click_expander()
         mig.find("Migrate", "push button").click()
         alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("the connection driver: virDomainMigrate")
+        alert.find_fuzzy("the.connection.driver:.virDomainMigrate")
         alert.find("Close", "push button").click()
         mig.find("Cancel", "push button").click()
         uiutils.check_in_loop(lambda: not mig.showing)
