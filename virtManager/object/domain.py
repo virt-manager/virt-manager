@@ -571,7 +571,7 @@ class vmmDomain(vmmLibvirtObject):
         self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
-            title=_SENTINEL, idmap_list=_SENTINEL, loader=_SENTINEL,
+            title=_SENTINEL, loader=_SENTINEL,
             nvram=_SENTINEL):
         guest = self._make_xmlobj_to_define()
         if machine != _SENTINEL:
@@ -597,19 +597,6 @@ class vmmDomain(vmmLibvirtObject):
 
         if nvram != _SENTINEL:
             guest.os.nvram = nvram
-
-        if idmap_list != _SENTINEL:
-            if idmap_list is not None:
-                # pylint: disable=unpacking-non-sequence
-                (uid_target, uid_count, gid_target, gid_count) = idmap_list
-                guest.idmap.uid_start = 0
-                guest.idmap.uid_target = uid_target
-                guest.idmap.uid_count = uid_count
-                guest.idmap.gid_start = 0
-                guest.idmap.gid_target = gid_target
-                guest.idmap.gid_count = gid_count
-            else:
-                guest.idmap.clear()
 
         self._redefine_xmlobj(guest)
 
@@ -1266,8 +1253,6 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().emulator
     def get_machtype(self):
         return self.get_xmlobj().os.machine
-    def get_idmap(self):
-        return self.get_xmlobj().idmap
 
     def get_name_or_title(self):
         title = self.get_title()

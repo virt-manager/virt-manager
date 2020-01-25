@@ -37,7 +37,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_MACHTYPE,
  EDIT_FIRMWARE,
  EDIT_DESC,
- EDIT_IDMAP,
 
  EDIT_OS_NAME,
 
@@ -95,7 +94,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 50)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 49)
 
 
 # Columns in hw list model
@@ -444,11 +443,6 @@ class vmmDetails(vmmGObjectUI):
             "on_machine_type_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
             "on_overview_firmware_changed": lambda *x: self.enable_apply(x, EDIT_FIRMWARE),
             "on_overview_chipset_changed": lambda *x: self.enable_apply(x, EDIT_MACHTYPE),
-            "on_idmap_uid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
-            "on_idmap_uid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
-            "on_idmap_gid_target_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
-            "on_idmap_gid_count_changed": lambda *x: self.enable_apply(x, EDIT_IDMAP),
-            "on_idmap_check_toggled": self.config_idmap_enable,
 
             "on_details_inspection_refresh_clicked": self.inspection_refresh,
 
@@ -1198,13 +1192,6 @@ class vmmDetails(vmmGObjectUI):
         if edittype != EDIT_XML:
             self._xmleditor.details_changed = True
 
-    # Idmap
-    def config_idmap_enable(self, src):
-        do_enable = src.get_active()
-        self.widget("idmap-spin-grid").set_sensitive(do_enable)
-        self.enable_apply(EDIT_IDMAP)
-
-
     # Memory
     def config_memory_changed(self, src_ignore):
         self.enable_apply(EDIT_MEM)
@@ -1494,19 +1481,6 @@ class vmmDetails(vmmGObjectUI):
             kwargs["description"] = (
                 desc_widget.get_buffer().get_property("text") or "")
             hotplug_args["description"] = kwargs["description"]
-
-        if self.edited(EDIT_IDMAP):
-            enable_idmap = self.widget("idmap-checkbutton").get_active()
-            if enable_idmap:
-                uid_target = self.widget("uid-target").get_text().strip()
-                uid_count = self.widget("uid-count").get_text().strip()
-                gid_target = self.widget("gid-target").get_text().strip()
-                gid_count = self.widget("gid-count").get_text().strip()
-
-                idmap_list = [uid_target, uid_count, gid_target, gid_count]
-            else:
-                idmap_list = None
-            kwargs["idmap_list"] = idmap_list
 
         # This needs to be last
         if self.edited(EDIT_NAME):
@@ -1936,26 +1910,6 @@ class vmmDetails(vmmGObjectUI):
                 self.widget("overview-chipset"), chipset)
         elif self.widget("overview-chipset-label").is_visible():
             self.widget("overview-chipset-label").set_text(chipset)
-
-        # User namespace idmap setting
-        is_container = self.vm.is_container()
-        self.widget("idmap-expander").set_visible(is_container)
-
-        self.widget("uid-target").set_text('1000')
-        self.widget("uid-count").set_text('10')
-        self.widget("gid-target").set_text('1000')
-        self.widget("gid-count").set_text('10')
-
-        IdMap = self.vm.get_idmap()
-        show_config = IdMap.uid_start is not None
-
-        self.widget("idmap-checkbutton").set_active(show_config)
-        self.widget("idmap-spin-grid").set_sensitive(show_config)
-        if show_config:
-            Name = ["uid-target", "uid-count", "gid-target", "gid-count"]
-            for name in Name:
-                IdMap_proper = getattr(IdMap, name.replace("-", "_"))
-                self.widget(name).set_value(int(IdMap_proper))
 
     def refresh_os_page(self):
         self._os_list.select_os(self.vm.xmlobj.osinfo)

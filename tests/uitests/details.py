@@ -218,7 +218,6 @@ class Details(uiutils.UITestCase):
         """
         win = self._open_details_window(vmname="test-many-devices")
         appl = win.find("config-apply", "push button")
-        hwlist = win.find("hw-list")
         self._stop_vm(win)
 
 
