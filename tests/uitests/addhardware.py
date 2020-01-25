@@ -313,10 +313,6 @@ class AddHardware(uiutils.UITestCase):
         self.sleep(1)
         self.pressKey("Home")
         tab.find_fuzzy("plainbridge-portgroups", "menu item").click()
-        c = tab.find_fuzzy("Portgroup:", "combo box")
-        c.click_combo_entry()
-        self.assertTrue(c.find("engineering", "menu item").selected)
-        self.pressKey("Escape")
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
