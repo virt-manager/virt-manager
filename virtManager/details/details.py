@@ -62,7 +62,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_DISK_DISCARD,
  EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
- EDIT_DISK_SGIO,
  EDIT_DISK_PATH,
  EDIT_DISK_PR,
 
@@ -100,7 +99,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 55)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 54)
 
 
 # Columns in hw list model
@@ -500,7 +499,6 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_discard_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DISCARD),
             "on_disk_detect_zeroes_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
-            "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
             "on_disk_pr_checkbox_toggled": lambda *x: self.enable_apply(x, EDIT_DISK_PR),
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
@@ -1723,10 +1721,6 @@ class vmmDetails(vmmGObjectUI):
             kwargs["detect_zeroes"] = uiutil.get_list_selection(
                 self.widget("disk-detect-zeroes"))
 
-        if self.edited(EDIT_DISK_SGIO):
-            sgio = uiutil.get_list_selection(self.widget("disk-sgio"))
-            kwargs["sgio"] = sgio
-
         if self.edited(EDIT_DISK_PR):
             kwargs["managed_pr"] = self.widget("disk-pr-checkbox").get_active()
 
@@ -2234,16 +2228,6 @@ class vmmDetails(vmmGObjectUI):
             ignore, upper = maxmem.get_range()
             maxmem.set_range(curmem.get_value(), upper)
 
-    @staticmethod
-    def build_disk_sgio(vm, combo):
-        ignore = vm
-        model = Gtk.ListStore(str, str)
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 1)
-        model.append([None, _("Hypervisor default")])
-        model.append(["filtered", "filtered"])
-        model.append(["unfiltered", "unfiltered"])
-
     def refresh_disk_page(self, disk):
         path = disk.path
         devtype = disk.device
@@ -2284,11 +2268,8 @@ class vmmDetails(vmmGObjectUI):
                                        can_set_removable)
 
         is_lun = disk.device == virtinst.DeviceDisk.DEVICE_LUN
-        uiutil.set_grid_row_visible(self.widget("disk-sgio"), is_lun)
         uiutil.set_grid_row_visible(self.widget("disk-pr-checkbox"), is_lun)
         if is_lun:
-            self.build_disk_sgio(self.vm, self.widget("disk-sgio"))
-            uiutil.set_list_selection(self.widget("disk-sgio"), disk.sgio)
             managed = disk.reservations_managed == "yes"
             self.widget("disk-pr-checkbox").set_active(managed)
 
