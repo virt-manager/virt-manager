@@ -230,7 +230,6 @@ class Details(uiutils.UITestCase):
         tab.find("Advanced options", "toggle button").click_expander()
         tab.find("Disk bus:", "text").text = "usb"
         tab.find("Performance options", "toggle button").click_expander()
-        tab.find("IO mode:", "text").text = "threads"
         tab.find("Cache mode:", "text").text = "unsafe"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)

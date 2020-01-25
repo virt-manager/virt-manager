@@ -58,7 +58,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_DISK_SHARE,
  EDIT_DISK_REMOVABLE,
  EDIT_DISK_CACHE,
- EDIT_DISK_IO,
  EDIT_DISK_DISCARD,
  EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
@@ -98,7 +97,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 53)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 52)
 
 
 # Columns in hw list model
@@ -494,7 +493,6 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_shareable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SHARE),
             "on_disk_removable_changed": lambda *x: self.enable_apply(x, EDIT_DISK_REMOVABLE),
             "on_disk_cache_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_CACHE),
-            "on_disk_io_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_IO),
             "on_disk_discard_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DISCARD),
             "on_disk_detect_zeroes_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
@@ -843,10 +841,6 @@ class vmmDetails(vmmGObjectUI):
         # Disk cache combo
         disk_cache = self.widget("disk-cache")
         vmmAddHardware.build_disk_cache_combo(self.vm, disk_cache)
-
-        # Disk io combo
-        disk_io = self.widget("disk-io")
-        vmmAddHardware.build_disk_io_combo(self.vm, disk_io)
 
         # Discard combo
         combo = self.widget("disk-discard")
@@ -1708,9 +1702,6 @@ class vmmDetails(vmmGObjectUI):
             kwargs["cache"] = uiutil.get_list_selection(
                 self.widget("disk-cache"))
 
-        if self.edited(EDIT_DISK_IO):
-            kwargs["io"] = uiutil.get_list_selection(self.widget("disk-io"))
-
         if self.edited(EDIT_DISK_DISCARD):
             kwargs["discard"] = uiutil.get_list_selection(
                 self.widget("disk-discard"))
@@ -2224,7 +2215,6 @@ class vmmDetails(vmmGObjectUI):
         bus = disk.bus
         removable = disk.removable
         cache = disk.driver_cache
-        io = disk.driver_io
         discard = disk.driver_discard
         detect_zeroes = disk.driver_detect_zeroes
 
@@ -2257,7 +2247,6 @@ class vmmDetails(vmmGObjectUI):
 
         self.widget("disk-size").set_text(size)
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
-        uiutil.set_list_selection(self.widget("disk-io"), io)
         uiutil.set_list_selection(self.widget("disk-discard"), discard)
         uiutil.set_list_selection(self.widget("disk-detect-zeroes"),
                                   detect_zeroes)
