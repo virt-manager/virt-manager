@@ -63,7 +63,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
  EDIT_DISK_PATH,
- EDIT_DISK_PR,
 
  EDIT_SOUND_MODEL,
 
@@ -99,7 +98,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 54)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 53)
 
 
 # Columns in hw list model
@@ -499,7 +498,6 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_discard_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DISCARD),
             "on_disk_detect_zeroes_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
-            "on_disk_pr_checkbox_toggled": lambda *x: self.enable_apply(x, EDIT_DISK_PR),
 
             "on_network_model_combo_changed": lambda *x: self.enable_apply(x, EDIT_NET_MODEL),
             "on_network_mac_entry_changed": lambda *x: self.enable_apply(x,
@@ -1721,9 +1719,6 @@ class vmmDetails(vmmGObjectUI):
             kwargs["detect_zeroes"] = uiutil.get_list_selection(
                 self.widget("disk-detect-zeroes"))
 
-        if self.edited(EDIT_DISK_PR):
-            kwargs["managed_pr"] = self.widget("disk-pr-checkbox").get_active()
-
         if self.edited(EDIT_DISK_BUS):
             bus = uiutil.get_list_selection(self.widget("disk-bus"))
             addr = None
@@ -2266,12 +2261,6 @@ class vmmDetails(vmmGObjectUI):
         self.widget("disk-removable").set_active(removable)
         uiutil.set_grid_row_visible(self.widget("disk-removable"),
                                        can_set_removable)
-
-        is_lun = disk.device == virtinst.DeviceDisk.DEVICE_LUN
-        uiutil.set_grid_row_visible(self.widget("disk-pr-checkbox"), is_lun)
-        if is_lun:
-            managed = disk.reservations_managed == "yes"
-            self.widget("disk-pr-checkbox").set_active(managed)
 
         self.widget("disk-size").set_text(size)
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
