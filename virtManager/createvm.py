@@ -1226,20 +1226,9 @@ class vmmCreateVM(vmmGObjectUI):
 
 
     def _netdev_changed(self, ignore):
-        row = self._netlist.get_network_row()
-        pxe_install = (self._get_config_install_page() == INSTALL_PAGE_PXE)
-
-        ntype = row[0]
-        connkey = row[6]
+        ntype = self._netlist.get_network_selection()[0]
         expand = (ntype != "network" and ntype != "bridge")
         no_network = ntype is None
-
-        if (no_network or ntype == virtinst.DeviceInterface.TYPE_USER):
-            can_pxe = False
-        elif ntype != virtinst.DeviceInterface.TYPE_VIRTUAL:
-            can_pxe = True
-        else:
-            can_pxe = self.conn.get_net(connkey).can_pxe()
 
         if expand:
             self.widget("advanced-expander").set_expanded(True)
@@ -1253,8 +1242,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         if no_network:
             _show_netdev_warn(_("No network selected"))
-        elif not can_pxe and pxe_install:
-            _show_netdev_warn(_("Network selection does not support PXE"))
 
 
     # Enable/Disable container source URL entry on checkbox click

@@ -309,12 +309,12 @@ class vmmNetworkList(vmmGObjectUI):
     # Public APIs #
     ###############
 
-    def get_network_row(self):
+    def _get_network_row(self):
         return uiutil.get_list_selected_row(self.widget("net-source"))
 
     def get_network_selection(self):
         bridge_entry = self.widget("net-bridge-name")
-        row = self.get_network_row()
+        row = self._get_network_row()
         if not row:
             return None, None, None, None
 
@@ -463,7 +463,7 @@ class vmmNetworkList(vmmGObjectUI):
     def _on_net_source_changed(self, src):
         ignore = src
         self._emit_changed()
-        row = self.get_network_row()
+        row = self._get_network_row()
         if not row:
             return
 

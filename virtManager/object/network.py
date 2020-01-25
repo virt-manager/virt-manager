@@ -117,9 +117,6 @@ class vmmNetwork(vmmLibvirtObject):
     def get_ipv4_forward_mode(self):
         return self.get_xmlobj().forward.mode
 
-    def can_pxe(self):
-        return self.get_xmlobj().can_pxe()
-
     def _get_static_route(self, family):
         xmlobj = self.get_xmlobj()
         route = None
