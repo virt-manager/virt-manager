@@ -3061,19 +3061,6 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkEntry" id="disk-serial">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="invisible_char">●</property>
-                                                <property name="width_chars">20</property>
-                                                <signal name="changed" handler="on_disk_serial_changed" swapped="no"/>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="top_attach">1</property>
-                                              </packing>
-                                            </child>
-                                            <child>
                                               <object class="GtkComboBox" id="disk-bus">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
@@ -3088,20 +3075,6 @@
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="top_attach">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="label6">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">False</property>
-                                                <property name="halign">end</property>
-                                                <property name="label" translatable="yes">Seria_l number:</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic_widget">disk-serial</property>
-                                              </object>
-                                              <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="top_attach">1</property>
                                               </packing>
                                             </child>
                                             <child>

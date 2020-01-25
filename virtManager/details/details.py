@@ -62,7 +62,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_DISK_DISCARD,
  EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
- EDIT_DISK_SERIAL,
  EDIT_DISK_FORMAT,
  EDIT_DISK_SGIO,
  EDIT_DISK_PATH,
@@ -102,7 +101,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 57)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 56)
 
 
 # Columns in hw list model
@@ -503,7 +502,6 @@ class vmmDetails(vmmGObjectUI):
             "on_disk_detect_zeroes_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": lambda *x: self.enable_apply(x, EDIT_DISK_BUS),
             "on_disk_format_changed": self.disk_format_changed,
-            "on_disk_serial_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SERIAL),
             "on_disk_sgio_entry_changed": lambda *x: self.enable_apply(x, EDIT_DISK_SGIO),
             "on_disk_pr_checkbox_toggled": lambda *x: self.enable_apply(x, EDIT_DISK_PR),
 
@@ -1734,9 +1732,6 @@ class vmmDetails(vmmGObjectUI):
         if self.edited(EDIT_DISK_FORMAT):
             kwargs["driver_type"] = self.widget("disk-format").get_text()
 
-        if self.edited(EDIT_DISK_SERIAL):
-            kwargs["serial"] = self.get_text("disk-serial")
-
         if self.edited(EDIT_DISK_SGIO):
             sgio = uiutil.get_list_selection(self.widget("disk-sgio"))
             kwargs["sgio"] = sgio
@@ -2270,7 +2265,6 @@ class vmmDetails(vmmGObjectUI):
         discard = disk.driver_discard
         detect_zeroes = disk.driver_detect_zeroes
         driver_type = disk.driver_type or ""
-        serial = disk.serial
 
         size = "-"
         if path:
@@ -2321,7 +2315,6 @@ class vmmDetails(vmmGObjectUI):
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
             self.widget("disk-bus").get_model())
         uiutil.set_list_selection(self.widget("disk-bus"), bus)
-        self.widget("disk-serial").set_text(serial or "")
 
         is_removable = disk.is_cdrom() or disk.is_floppy()
         self.widget("disk-source-box").set_visible(is_removable)
