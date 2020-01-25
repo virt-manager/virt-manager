@@ -3498,6 +3498,9 @@ class ParserController(VirtCLIParser):
     ###################
 
     def set_address_cb(self, inst, val, virtarg):
+        # Convenience option for address= PCI parsing. This pattern should
+        # not be extended IMO, make users manually specify the address
+        # fields they need
         addrstr = val
         if addrstr.count(":") in [1, 2] and "." in addrstr:
             inst.address.type = inst.address.ADDRESS_TYPE_PCI
