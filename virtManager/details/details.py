@@ -68,7 +68,6 @@ from ..xmleditor import vmmXMLEditor
  EDIT_SMARTCARD_MODE,
 
  EDIT_NET_MODEL,
- EDIT_NET_VPORT,
  EDIT_NET_SOURCE,
  EDIT_NET_MAC,
  EDIT_NET_LINKSTATE,
@@ -97,7 +96,7 @@ from ..xmleditor import vmmXMLEditor
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 52)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 51)
 
 
 # Columns in hw list model
@@ -405,11 +404,8 @@ class vmmDetails(vmmGObjectUI):
         self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("network-source-label-align").add(self.netlist.top_label)
         self.widget("network-source-ui-align").add(self.netlist.top_box)
-        self.widget("network-vport-align").add(self.netlist.top_vport)
         self.netlist.connect("changed",
             lambda x: self.enable_apply(x, EDIT_NET_SOURCE))
-        self.netlist.connect("changed-vport",
-            lambda x: self.enable_apply(x, EDIT_NET_VPORT))
 
         self.vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
         self.widget("vsock-align").add(self.vsockdetails.top_box)
@@ -1753,11 +1749,6 @@ class vmmDetails(vmmGObjectUI):
             (kwargs["ntype"], kwargs["source"],
              kwargs["mode"], kwargs["portgroup"]) = (
                 self.netlist.get_network_selection())
-
-        if self.edited(EDIT_NET_VPORT):
-            (kwargs["vtype"], kwargs["managerid"],
-             kwargs["typeid"], kwargs["typeidversion"],
-             kwargs["instanceid"]) = self.netlist.get_vport()
 
         if self.edited(EDIT_NET_MAC):
             kwargs["macaddr"] = self.widget("network-mac-entry").get_text()

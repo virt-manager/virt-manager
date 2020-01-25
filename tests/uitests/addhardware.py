@@ -320,23 +320,6 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
-        # Network with vport stuff
-        self._open_addhw_window(details)
-        tab = self._select_hw(addhw, "Network", "network-tab")
-        tab.find("MAC Address Field", "text").text = "00:11:0C:11:00:11"
-        src.click()
-        tab.find_fuzzy("OpenVSwitch", "menu item").click()
-        t = tab.find("Virtual port", "toggle button")
-        t.click()
-        t.find("Type:", "text").text = "802.1Qbg"
-        t.find("Managerid:", "text").text = "12"
-        t.find("Typeid:", "text").text = "1193046"
-        t.find("Typeid version:", "text").text = "1"
-        t.find("Instance id:", "text").text = (
-                "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b")
-        finish.click()
-        uiutils.check_in_loop(lambda: details.active)
-
 
     def testAddGraphics(self):
         """

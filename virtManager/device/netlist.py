@@ -20,7 +20,6 @@ NetDev = collections.namedtuple('Netdev', ['name', 'is_bridge', 'slave_names'])
 class vmmNetworkList(vmmGObjectUI):
     __gsignals__ = {
         "changed": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-vport": (vmmGObjectUI.RUN_FIRST, None, [])
     }
 
     def __init__(self, conn, builder, topwin):
@@ -33,18 +32,11 @@ class vmmNetworkList(vmmGObjectUI):
             "on_net_source_mode_changed": self._emit_changed,
             "on_net_portgroup_changed": self._emit_changed,
             "on_net_bridge_name_changed": self._emit_changed,
-
-            "on_vport_type_changed": self._emit_vport_changed,
-            "on_vport_managerid_changed": self._emit_vport_changed,
-            "on_vport_typeid_changed": self._emit_vport_changed,
-            "on_vport_typeidversion_changed": self._emit_vport_changed,
-            "on_vport_instanceid_changed": self._emit_vport_changed,
         })
 
         self._init_ui()
         self.top_label = self.widget("net-source-label")
         self.top_box = self.widget("net-source-box")
-        self.top_vport = self.widget("vport-expander")
 
     def _cleanup(self):
         self.conn.disconnect_by_obj(self)
@@ -52,7 +44,6 @@ class vmmNetworkList(vmmGObjectUI):
 
         self.top_label.destroy()
         self.top_box.destroy()
-        self.top_vport.destroy()
 
 
     ##########################
@@ -345,16 +336,6 @@ class vmmNetworkList(vmmGObjectUI):
 
         return net_type, net_src, mode, portgroup or None
 
-    def get_vport(self):
-        vport_type = self.widget("vport-type").get_text()
-        vport_managerid = self.widget("vport-managerid").get_text()
-        vport_typeid = self.widget("vport-typeid").get_text()
-        vport_idver = self.widget("vport-typeidversion").get_text()
-        vport_instid = self.widget("vport-instanceid").get_text()
-
-        return (vport_type, vport_managerid, vport_typeid,
-         vport_idver, vport_instid)
-
     def build_device(self, macaddr, model=None):
         nettype, devname, mode, portgroup = self.get_network_selection()
 
@@ -365,16 +346,6 @@ class vmmNetworkList(vmmGObjectUI):
         net.model = model
         net.source_mode = mode
         net.portgroup = portgroup
-
-        if net.type == "direct":
-            (vport_type, vport_managerid, vport_typeid,
-             vport_idver, vport_instid) = self.get_vport()
-
-            net.virtualport.type = vport_type or None
-            net.virtualport.managerid = vport_managerid or None
-            net.virtualport.typeid = vport_typeid or None
-            net.virtualport.typeidversion = vport_idver or None
-            net.virtualport.instanceid = vport_instid or None
 
         return net
 
@@ -399,12 +370,6 @@ class vmmNetworkList(vmmGObjectUI):
         self.widget("net-source-mode").set_active(0)
         self.widget("net-portgroup").get_child().set_text("")
 
-        self.widget("vport-type").set_text("")
-        self.widget("vport-managerid").set_text("")
-        self.widget("vport-typeid").set_text("")
-        self.widget("vport-typeidversion").set_text("")
-        self.widget("vport-instanceid").set_text("")
-
     def set_dev(self, net):
         self.reset_state()
 
@@ -419,20 +384,7 @@ class vmmNetworkList(vmmGObjectUI):
             nettype = "network"
 
         source_mode = net.source_mode
-        is_direct = (net.type == "direct")
-
         uiutil.set_list_selection(self.widget("net-source-mode"), source_mode)
-
-        # Virtualport config
-        self.widget("vport-expander").set_visible(is_direct)
-
-        vport = net.virtualport
-        self.widget("vport-type").set_text(vport.type or "")
-        self.widget("vport-managerid").set_text(str(vport.managerid or ""))
-        self.widget("vport-typeid").set_text(str(vport.typeid or ""))
-        self.widget("vport-typeidversion").set_text(
-            str(vport.typeidversion or ""))
-        self.widget("vport-instanceid").set_text(vport.instanceid or "")
 
         # Find the matching row in the net list
         combo = self.widget("net-source")
@@ -466,11 +418,6 @@ class vmmNetworkList(vmmGObjectUI):
         ignore1 = args
         ignore2 = kwargs
         self.emit("changed")
-
-    def _emit_vport_changed(self, *args, **kwargs):
-        ignore1 = args
-        ignore2 = kwargs
-        self.emit("changed-vport")
 
     def _repopulate_network_list(self, *args, **kwargs):
         ignore1 = args
@@ -520,9 +467,7 @@ class vmmNetworkList(vmmGObjectUI):
         if not row:
             return
 
-        is_openvswitch = row[2].endswith("(OpenVSwitch)")
         is_direct = (row[0] == virtinst.DeviceInterface.TYPE_DIRECT)
-        self.widget("vport-expander").set_visible(is_direct or is_openvswitch)
         uiutil.set_grid_row_visible(self.widget("net-source-mode"), is_direct)
         uiutil.set_grid_row_visible(
             self.widget("net-macvtap-warn-box"), is_direct)

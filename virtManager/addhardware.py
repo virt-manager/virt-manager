@@ -87,7 +87,6 @@ class vmmAddHardware(vmmGObjectUI):
         self._netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("network-source-label-align").add(self._netlist.top_label)
         self.widget("network-source-ui-align").add(self._netlist.top_box)
-        self.widget("network-vport-align").add(self._netlist.top_vport)
 
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self.addstorage.top_box)

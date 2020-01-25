@@ -718,8 +718,6 @@ class vmmDomain(vmmLibvirtObject):
     def define_network(self, devobj, do_hotplug,
             ntype=_SENTINEL, source=_SENTINEL,
             mode=_SENTINEL, model=_SENTINEL,
-            vtype=_SENTINEL, managerid=_SENTINEL, typeid=_SENTINEL,
-            typeidversion=_SENTINEL, instanceid=_SENTINEL,
             portgroup=_SENTINEL, macaddr=_SENTINEL, linkstate=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
@@ -738,13 +736,6 @@ class vmmDomain(vmmLibvirtObject):
             if editdev.model != model:
                 editdev.address.clear()
             editdev.model = model
-
-        if vtype != _SENTINEL:
-            editdev.virtualport.type = vtype or None
-            editdev.virtualport.managerid = managerid or None
-            editdev.virtualport.typeid = typeid or None
-            editdev.virtualport.typeidversion = typeidversion or None
-            editdev.virtualport.instanceid = instanceid or None
 
         if macaddr != _SENTINEL:
             editdev.macaddr = macaddr
