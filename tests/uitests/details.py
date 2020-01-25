@@ -244,7 +244,7 @@ class Details(uiutils.UITestCase):
 
         # Manual bridge
         src.click()
-        tab.find_fuzzy("Specify shared device",
+        tab.find_fuzzy("Bridge device...",
                        "menu item").bring_on_screen().click()
         appl.click()
         # Check validation error

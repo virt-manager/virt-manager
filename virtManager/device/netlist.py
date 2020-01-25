@@ -228,7 +228,7 @@ class vmmNetworkList(vmmGObjectUI):
         model.clear()
 
         def _add_manual_bridge_row():
-            model.append(_build_manual_row(_("Specify shared device name")))
+            model.append(_build_manual_row(_("Bridge device...")))
 
         if self.conn.is_qemu_session():
             nettype = virtinst.DeviceInterface.TYPE_USER

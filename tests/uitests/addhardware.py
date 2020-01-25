@@ -286,7 +286,7 @@ class AddHardware(uiutils.UITestCase):
         tab.find("mac-address-enable", "check box").click()
         src.click()
         self.pressKey("End")
-        tab.find_fuzzy("Specify shared device", "menu item").click()
+        tab.find_fuzzy("Bridge device...", "menu item").click()
         tab.find("Bridge name:", "text").text = "zbr0"
         finish.click()
 
