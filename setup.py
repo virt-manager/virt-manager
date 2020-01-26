@@ -621,8 +621,8 @@ class CheckPylint(distutils.core.Command):
             # pylint: disable=protected-access
             print("running codespell")
             codespell_lib._codespell.main(
-                '-I', 'tests/codespell_dict.txt',
-                '--skip', '*.pyc,*.zip,*.vmdk,*.iso,*.xml', *files)
+                '-I', 'tests/data/codespell_dict.txt',
+                '--skip', '*.pyc,*.iso,*.xml', *files)
         except ImportError:
             print("codespell is not installed. skipping...")
         except Exception as e:

@@ -17,7 +17,8 @@ def _vm_wrapper(vmname, uri="qemu:///system"):
     def wrap1(fn):
         def wrapper(self, *args, **kwargs):
             self.app.error_if_already_running()
-            xmlfile = "%s/xml/%s.xml" % (os.path.dirname(__file__), vmname)
+            xmlfile = "%s/data/live/%s.xml" % (
+                    os.path.dirname(__file__), vmname)
             conn = libvirt.open(uri)
             dom = conn.defineXML(open(xmlfile).read())
             try:

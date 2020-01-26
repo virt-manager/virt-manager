@@ -30,7 +30,7 @@ os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
-XMLDIR = "tests/cli-test-xml"
+XMLDIR = "tests/data/clitest"
 OLD_OSINFO = utils.has_old_osinfo()
 NO_OSINFO_UNATTEND = not unattended.OSInstallScript.have_new_libosinfo()
 HAS_ISOINFO = shutil.which("isoinfo")
@@ -453,7 +453,7 @@ class App(object):
 # add_valid: A test that should pass
 # add_invalid: A test that should fail
 # add_compare: Get the generated XML, and compare against the passed filename
-#              in tests/clitest-xml/compare/
+#              in tests/data/clitest/compare/
 #
 
 ######################

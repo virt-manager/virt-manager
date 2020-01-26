@@ -34,7 +34,7 @@ class TestNodeDev(unittest.TestCase):
         return NodeDevice(self.conn, xml)
 
     def _testNode2DeviceCompare(self, nodename, devfile, nodedev=None):
-        devfile = os.path.join("tests/nodedev-xml/devxml", devfile)
+        devfile = os.path.join("tests/data/nodedev/devxml", devfile)
         if not nodedev:
             nodedev = self._nodeDevFromName(nodename)
 

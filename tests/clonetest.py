@@ -28,7 +28,7 @@ DISKPOOL = "/dev/disk-pool"
 
 local_files = [FILE1, FILE2]
 
-clonexml_dir = os.path.join(os.getcwd(), "tests/clone-xml")
+clonexml_dir = os.path.join(os.getcwd(), "tests/data/clone")
 
 
 class TestClone(unittest.TestCase):

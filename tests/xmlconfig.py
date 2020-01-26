@@ -68,7 +68,7 @@ class TestXMLMisc(unittest.TestCase):
         return utils.URIs.open_testdefault_cached()
 
     def _compare(self, guest, filebase, do_install):
-        filename = os.path.join("tests/xmlconfig-xml", filebase + ".xml")
+        filename = os.path.join("tests/data/xmlconfig", filebase + ".xml")
 
         installer = _make_installer(conn=guest.conn)
         inst_xml, boot_xml = installer.start_install(
@@ -122,13 +122,13 @@ class TestXMLMisc(unittest.TestCase):
         # Simple sanity test to make sure detect_distro works. test-urls
         # does much more exhaustive testing but it's only run occasionally
         i = _make_installer(
-            location="tests/cli-test-xml/fakefedoratree")
+            location="tests/data/clitest/fakefedoratree")
         g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "fedora17")
 
         i = _make_installer(
-            location="tests/cli-test-xml/fakerhel6tree")
+            location="tests/data/clitest/fakerhel6tree")
         g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "rhel6.0")

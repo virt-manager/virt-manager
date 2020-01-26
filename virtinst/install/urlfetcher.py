@@ -30,7 +30,7 @@ def _make_mock_url(url, filesyntax):
     if url.endswith("treeinfo"):
         # If the url is requesting treeinfo, give a fake treeinfo from
         # our testsuite data
-        fn = ("%s/../../tests/cli-test-xml/fakerhel6tree/.treeinfo" %
+        fn = ("%s/../../tests/data/clitest/fakerhel6tree/.treeinfo" %
                 os.path.abspath(os.path.dirname(__file__)))
         abspath = os.path.abspath(fn)
     else:

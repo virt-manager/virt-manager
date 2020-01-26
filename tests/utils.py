@@ -52,7 +52,7 @@ class _URIs(object):
         self._testdriver_error = None
         self._testdriver_default = None
 
-        _capspath = "%s/tests/capabilities-xml/" % os.getcwd()
+        _capspath = "%s/tests/data/capabilities/" % os.getcwd()
         def _domcaps(path):
             return ",domcaps=" + _capspath + path
         def _caps(path):
@@ -64,7 +64,7 @@ class _URIs(object):
         self.test_suite = _testtmpl % (os.getcwd() + "/tests/testsuite.xml")
         self.test_remote = self.test_full + ",remote"
         self.test_defaultpool_collision = (_testtmpl % (os.getcwd() +
-            "/tests/cli-test-xml/testdriver-defaultpool-collision.xml"))
+            "/tests/data/clitest/testdriver-defaultpool-collision.xml"))
 
         self.xen = self.test_full + _caps("xen-rhel5.4.xml") + ",xen"
         self.lxc = self.test_full + _caps("lxc.xml") + ",lxc"

@@ -14,7 +14,7 @@ from tests import utils
 # pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
-basepath = os.path.join(os.getcwd(), "tests", "storage-xml")
+basepath = os.path.join(os.getcwd(), "tests", "data", "storage")
 
 
 def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,

@@ -24,9 +24,9 @@ def prompt():
     return sys.stdin.readline()
 
 
-KSOLD = "tests/inject-data/old-kickstart.ks"
-KSNEW = "tests/inject-data/new-kickstart.ks"
-PRESEED = "tests/inject-data/preseed.cfg"
+KSOLD = "tests/data/inject/old-kickstart.ks"
+KSNEW = "tests/data/inject/new-kickstart.ks"
+PRESEED = "tests/data/inject/preseed.cfg"
 
 
 class Distro(object):

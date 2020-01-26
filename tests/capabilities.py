@@ -12,9 +12,12 @@ from virtinst import Capabilities
 from virtinst import DomainCapabilities
 
 
+DATADIR = "tests/data/capabilities"
+
+
 class TestCapabilities(unittest.TestCase):
     def _buildCaps(self, filename):
-        path = os.path.join("tests/capabilities-xml", filename)
+        path = os.path.join(DATADIR, filename)
         conn = utils.URIs.open_testdefault_cached()
         return Capabilities(conn, open(path).read())
 
@@ -64,7 +67,7 @@ class TestCapabilities(unittest.TestCase):
     ##############################
 
     def testDomainCapabilities(self):
-        xml = open("tests/capabilities-xml/test-domcaps.xml").read()
+        xml = open(DATADIR + "/test-domcaps.xml").read()
         caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
         self.assertEqual(caps.os.loader.supported, True)
@@ -75,7 +78,7 @@ class TestCapabilities(unittest.TestCase):
             ["rom", "pflash"])
 
     def testDomainCapabilitiesx86(self):
-        xml = open("tests/capabilities-xml/kvm-x86_64-domcaps.xml").read()
+        xml = open(DATADIR + "/kvm-x86_64-domcaps.xml").read()
         caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
         self.assertEqual(caps.machine, "pc-i440fx-2.1")

@@ -22,7 +22,7 @@ os.environ.pop("VIRTINST_TEST_SUITE", None)
 class _URLTestData(object):
     """
     Class that tracks all data needed for a single URL test case.
-    Data is stored in test_urls.ini
+    Data is stored in data/test_urls.ini
     """
     def __init__(self, name, url, detectdistro,
             testxen, testshortcircuit, kernelarg, kernelregex,
@@ -212,7 +212,7 @@ class URLTests(unittest.TestCase):
 def _make_tests():
     import configparser
     cfg = configparser.ConfigParser()
-    cfg.read("tests/test_urls.ini")
+    cfg.read("tests/data/test_urls.ini")
 
     manualpath = "~/.config/virt-manager/test_urls_manual.ini"
     cfg.read(os.path.expanduser(manualpath))

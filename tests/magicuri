@@ -27,7 +27,7 @@ def parse_options():
     options = parser.parse_args()
 
     testdir = os.path.abspath(os.path.dirname(__file__))
-    capsdir = os.path.join(testdir, "capabilities-xml/")
+    capsdir = os.path.join(testdir, "data/capabilities/")
 
     hv = options.hv
     capsfile = None

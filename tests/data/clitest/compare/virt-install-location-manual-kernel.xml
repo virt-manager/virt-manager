@@ -29,7 +29,7 @@
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="tests/cli-test-xml/fake-no-osinfo.iso"/>
+      <source file="tests/data/clitest/fake-no-osinfo.iso"/>
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
