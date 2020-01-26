@@ -123,7 +123,6 @@ class vmmNetworkList(vmmGObjectUI):
     def _find_virtual_networks(self):
         rows = []
         vnet_bridges = []
-        default_label = None
 
         for net in self.conn.list_nets():
             nettype = virtinst.DeviceInterface.TYPE_VIRTUAL
@@ -135,9 +134,6 @@ class vmmNetworkList(vmmGObjectUI):
             if net.get_xmlobj().virtualport_type == "openvswitch":
                 label += " (OpenVSwitch)"
 
-            if net.get_name() == "default":
-                default_label = label
-
             rows.append(_build_row(
                 nettype, net.get_name(), label, True,
                 connkey=net.get_connkey()))
@@ -148,16 +144,10 @@ class vmmNetworkList(vmmGObjectUI):
             if vnet_bridge:
                 vnet_bridges.append(vnet_bridge)
 
-        if not rows:
-            label = _("No virtual networks available")
-            rows.append(_build_label_row(label, False))
-
-        return rows, vnet_bridges, default_label
+        return rows, vnet_bridges
 
     def _find_physical_devices(self, vnet_bridges):
         rows = []
-        can_default = False
-        default_label = None
         skip_ifaces = ["lo"]
 
         vnet_taps = []
@@ -215,14 +205,11 @@ class vmmNetworkList(vmmGObjectUI):
                 source_name = None
                 label += (": %s" % _("Not bridged"))
 
-            if can_default and not default_label:
-                default_label = label
-
             rows.append(_build_row(
                 nettype, source_name, label, sensitive,
                 connkey=name))
 
-        return rows, default_label
+        return rows
 
     def _populate_network_model(self, model):
         model.clear()
@@ -244,9 +231,8 @@ class vmmNetworkList(vmmGObjectUI):
             _add_manual_bridge_row()
             return
 
-        (vnets, vnet_bridges, default_net) = self._find_virtual_networks()
-        (iface_rows, default_bridge) = self._find_physical_devices(
-            vnet_bridges)
+        vnets, vnet_bridges = self._find_virtual_networks()
+        iface_rows = self._find_physical_devices(vnet_bridges)
 
         # Sorting is:
         # 1) Bridges
@@ -263,24 +249,34 @@ class vmmNetworkList(vmmGObjectUI):
             for row in rows:
                 model.append(row)
 
-        # If there is a bridge device, default to that
-        # If not, use 'default' network
-        # If not present, use first list entry
-        # If list empty, use no network devices
-        label = default_bridge or default_net
+        default_bridge = virtinst.DeviceInterface.default_bridge(
+                self.conn.get_backend())
 
-        default = 0
         if not len(model):
             row = _build_label_row(_("No networking"), True)
             model.insert(0, row)
-            default = 0
-        elif label:
-            default = [idx for idx, model_label in enumerate(model) if
-                       model_label[2] == label][0]
 
         _add_manual_bridge_row()
         _add_manual_macvtap_row()
-        return default
+
+        # If there is a bridge device, default to that
+        # If not, use 'default' network
+        # If not present, use first list entry
+        default_bridge = virtinst.DeviceInterface.default_bridge(
+                self.conn.get_backend())
+        for idx, row in enumerate(model):
+            nettype = row[NET_ROW_TYPE]
+            source = row[NET_ROW_SOURCE]
+            is_bridge = nettype == virtinst.DeviceInterface.TYPE_BRIDGE
+            is_network = nettype == virtinst.DeviceInterface.TYPE_VIRTUAL
+
+            if default_bridge:
+                if is_bridge and source == default_bridge:
+                    return idx
+            elif is_network and source == "default":
+                return idx
+
+        return 0
 
     def _check_network_is_running(self, net):
         # Make sure VirtualNetwork is running

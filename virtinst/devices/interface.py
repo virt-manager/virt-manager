@@ -167,6 +167,14 @@ class DeviceInterface(Device):
                             _("The MAC address '%s' is in use "
                               "by another virtual machine.") % searchmac)
 
+    @staticmethod
+    def default_bridge(conn):
+        """
+        Return the bridge virt-install would use as a default value,
+        if one is setup on the host
+        """
+        return _default_bridge(conn)
+
 
     ###############
     # XML helpers #
