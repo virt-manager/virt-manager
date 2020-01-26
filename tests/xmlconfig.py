@@ -8,6 +8,7 @@ import tempfile
 import unittest
 
 import virtinst
+from virtinst import cli
 from virtinst import DeviceDisk
 
 from tests import utils
@@ -214,8 +215,8 @@ class TestXMLMisc(unittest.TestCase):
 
     def test_nonpredicatble_generate(self):
         kvm_uri = utils.URIs.kvm.replace(",predictable", "")
-        kvmconn = virtinst.cli.getConnection(kvm_uri)
-        testconn = virtinst.cli.getConnection("test:///default")
+        kvmconn = cli.getConnection(kvm_uri)
+        testconn = cli.getConnection("test:///default")
 
         testuuid = virtinst.Guest.generate_uuid(self.conn)
         randomuuid = virtinst.Guest.generate_uuid(testconn)

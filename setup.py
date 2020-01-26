@@ -68,10 +68,7 @@ def _generate_potfiles_in():
         ret.sort(key=lambda s: s.lower())
         return ret
 
-    scripts = ["virt-manager", "virt-install",
-               "virt-clone", "virt-xml"]
-
-    potfiles = "\n".join(scripts) + "\n\n"
+    potfiles = ""
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
 
@@ -179,21 +176,34 @@ class my_build(distutils.command.build.build):
     """
 
     def _make_bin_wrappers(self):
-        cmds = ["virt-manager", "virt-install", "virt-clone",
-                "virt-xml"]
+        template = """#!/usr/bin/env python3
+
+import os
+import sys
+sys.path.insert(0, "%(sharepath)s")
+from %(pkgname)s import %(filename)s
+
+%(filename)s.runcli()
+"""
         if not os.path.exists("build"):
             os.mkdir("build")
+        sharepath = os.path.join(BuildConfig.prefix, "share", "virt-manager")
 
-        for app in cmds:
-            sharepath = os.path.join(BuildConfig.prefix,
-                "share", "virt-manager", app)
+        def make_script(pkgname, filename, toolname):
+            assert os.path.exists(pkgname + "/" + filename + ".py")
+            content = template % {
+                "sharepath": sharepath,
+                "pkgname": pkgname,
+                "filename": filename}
 
-            wrapper = "#!/bin/sh\n\n"
-            wrapper += "exec \"%s\" \"$@\"" % (sharepath)
-
-            newpath = os.path.abspath(os.path.join("build", app))
+            newpath = os.path.abspath(os.path.join("build", toolname))
             print("Generating %s" % newpath)
-            open(newpath, "w").write(wrapper)
+            open(newpath, "w").write(content)
+
+        make_script("virtinst", "virtinstall", "virt-install")
+        make_script("virtinst", "virtclone", "virt-clone")
+        make_script("virtinst", "virtxml", "virt-xml")
+        make_script("virtManager", "virtmanager", "virt-manager")
 
 
     def _make_man_pages(self):
@@ -452,7 +462,6 @@ class TestBaseCommand(distutils.core.Command):
         for key, val in self._clistate.items():
             setattr(testsmodule.utils.clistate, key, val)
         testsmodule.setup_logging()
-        testsmodule.setup_cli_imports()
 
         # This makes the test runner report results before exiting from ctrl-c
         unittest.installHandler()
@@ -605,10 +614,7 @@ class CheckPylint(distutils.core.Command):
         import pylint.lint
         import pycodestyle
 
-        files = ["setup.py", "virt-install", "virt-clone",
-                 "virt-xml", "virt-manager",
-                 "virtinst", "virtManager",
-                 "tests"]
+        files = ["setup.py", "virtinst", "virtManager", "tests"]
 
         try:
             import codespell_lib
@@ -673,12 +679,6 @@ distutils.core.setup(
         "build/virt-xml"]),
 
     data_files=[
-        ("share/virt-manager/", [
-            "virt-manager",
-            "virt-install",
-            "virt-clone",
-            "virt-xml",
-        ]),
         ("share/glib-2.0/schemas",
          ["data/org.virt-manager.virt-manager.gschema.xml"]),
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),

@@ -11,7 +11,7 @@ import unittest
 import libvirt
 
 import virtinst
-import virtinst.cli
+from virtinst import cli
 import virtinst.uri
 
 
@@ -109,7 +109,7 @@ class _URIs(object):
 
         if not (is_testdriver_xml and self._testdriver_error):
             try:
-                conn = virtinst.cli.getConnection(uri)
+                conn = cli.getConnection(uri)
             except libvirt.libvirtError as e:
                 if not is_testdriver_xml:
                     raise

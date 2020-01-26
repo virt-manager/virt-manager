@@ -3,7 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import atexit
 import imp
 import os
 
@@ -20,9 +19,10 @@ imp.reload(buildconfig)
 
 from tests import utils
 
-virtinstall = None
-virtclone = None
-virtxml = None
+# pylint: disable=ungrouped-imports
+from virtinst import virtinstall
+from virtinst import virtclone
+from virtinst import virtxml
 
 
 def setup_logging():
@@ -38,24 +38,3 @@ def setup_logging():
         streamHandler.setLevel(logging.ERROR)
     log.addHandler(streamHandler)
     log.setLevel(logging.DEBUG)
-
-
-def setup_cli_imports():
-    _cleanup_imports = []
-
-    def _cleanup_imports_cb():
-        for f in _cleanup_imports:
-            if os.path.exists(f):
-                os.unlink(f)
-
-    def _import(name, path):
-        _cleanup_imports.append(path + "c")
-        return imp.load_source(name, path)
-
-    global virtinstall
-    global virtclone
-    global virtxml
-    atexit.register(_cleanup_imports_cb)
-    virtinstall = _import("virtinstall", "virt-install")
-    virtclone = _import("virtclone", "virt-clone")
-    virtxml = _import("virtxml", "virt-xml")
