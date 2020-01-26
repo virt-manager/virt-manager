@@ -327,6 +327,15 @@ def _warn_cpu_thread_topo(threads, cpu_model):
     return False
 
 
+def _get_performance_icon_name():
+    # This icon isn't in standard adwaita-icon-theme, so
+    # fallback to system-run if it is missing
+    icon = "utilities-system-monitor"
+    if not Gtk.IconTheme.get_default().has_icon(icon):
+        icon = "system-run"
+    return icon
+
+
 def _unindent_device_xml(xml):
     """
     The device parsed from a domain will have no indent
@@ -2505,7 +2514,7 @@ class vmmDetails(vmmGObjectUI):
         add_hw_list_option(_("OS information"), HW_LIST_TYPE_OS, "computer")
         if not self.is_customize_dialog:
             add_hw_list_option(_("Performance"), HW_LIST_TYPE_STATS,
-                               "utilities-system-monitor")
+                               _get_performance_icon_name())
         add_hw_list_option(_("CPUs"), HW_LIST_TYPE_CPU, "device_cpu")
         add_hw_list_option(_("Memory"), HW_LIST_TYPE_MEMORY, "device_mem")
         add_hw_list_option(_("Boot Options"), HW_LIST_TYPE_BOOT, "system-run")
