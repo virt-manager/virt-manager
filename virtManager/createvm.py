@@ -44,8 +44,8 @@ DEFAULT_MEM = 1024
 
 (INSTALL_PAGE_ISO,
  INSTALL_PAGE_URL,
- INSTALL_PAGE_PXE,
  INSTALL_PAGE_IMPORT,
+ INSTALL_PAGE_MANUAL,
  INSTALL_PAGE_CONTAINER_APP,
  INSTALL_PAGE_CONTAINER_OS,
  INSTALL_PAGE_VZ_TEMPLATE) = range(7)
@@ -433,7 +433,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Install Options
         method_tree = self.widget("method-tree")
-        method_pxe = self.widget("method-pxe")
+        method_manual = self.widget("method-manual")
         method_local = self.widget("method-local")
         method_import = self.widget("method-import")
         method_container_app = self.widget("method-container-app")
@@ -442,11 +442,11 @@ class vmmCreateVM(vmmGObjectUI):
                                   installable_arch)
         method_local.set_sensitive(not is_pv and can_storage and
                                    installable_arch)
-        method_pxe.set_sensitive(not is_pv and installable_arch)
+        method_manual.set_sensitive(not is_container)
         method_import.set_sensitive(can_storage)
-        virt_methods = [method_local, method_tree, method_pxe, method_import]
+        virt_methods = [method_local, method_tree,
+                method_manual, method_import]
 
-        pxe_tt = None
         local_tt = None
         tree_tt = None
         import_tt = None
@@ -461,7 +461,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         if is_pv:
             base = _("%s installs not available for paravirt guests.")
-            pxe_tt = base % "PXE"
             local_tt = base % "CDROM/ISO"
 
         if not installable_arch:
@@ -469,7 +468,6 @@ class vmmCreateVM(vmmGObjectUI):
                    guest.os.arch)
             tree_tt = msg
             local_tt = msg
-            pxe_tt = msg
 
         if not any([w.get_active() and w.get_sensitive()
                     for w in virt_methods]):
@@ -486,7 +484,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         method_tree.set_tooltip_text(tree_tt or "")
         method_local.set_tooltip_text(local_tt or "")
-        method_pxe.set_tooltip_text(pxe_tt or "")
         method_import.set_tooltip_text(import_tt or "")
 
         # Container install options
@@ -921,10 +918,10 @@ class vmmCreateVM(vmmGObjectUI):
             install = _("Local CDROM/ISO")
         elif instmethod == INSTALL_PAGE_URL:
             install = _("URL Install Tree")
-        elif instmethod == INSTALL_PAGE_PXE:
-            install = _("PXE Install")
         elif instmethod == INSTALL_PAGE_IMPORT:
             install = _("Import existing OS image")
+        elif instmethod == INSTALL_PAGE_MANUAL:
+            install = _("Manual install")
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             install = _("Application container")
         elif instmethod == INSTALL_PAGE_CONTAINER_OS:
@@ -961,10 +958,10 @@ class vmmCreateVM(vmmGObjectUI):
                 return INSTALL_PAGE_ISO
             elif self.widget("method-tree").get_active():
                 return INSTALL_PAGE_URL
-            elif self.widget("method-pxe").get_active():
-                return INSTALL_PAGE_PXE
             elif self.widget("method-import").get_active():
                 return INSTALL_PAGE_IMPORT
+            elif self.widget("method-manual").get_active():
+                return INSTALL_PAGE_MANUAL
         else:
             if self.widget("method-container-app").get_active():
                 return INSTALL_PAGE_CONTAINER_APP
@@ -1323,9 +1320,9 @@ class vmmCreateVM(vmmGObjectUI):
                 self.widget("install-detect-os").get_active())
         self._change_os_detect(not dodetect)
 
-        # PXE installs have nothing to ask for
+        # Manual installs have nothing to ask for
         self.widget("install-method-pages").set_visible(
-                instpage != INSTALL_PAGE_PXE)
+                instpage != INSTALL_PAGE_MANUAL)
         self.widget("install-method-pages").set_current_page(instpage)
 
     def _back_clicked(self, src_ignore):
@@ -1481,9 +1478,6 @@ class vmmCreateVM(vmmGObjectUI):
                 return self.err.val_err(_("An install tree is required."))
 
             location = media
-
-        elif instmethod == INSTALL_PAGE_PXE:
-            install_bootdev = "network"
 
         elif instmethod == INSTALL_PAGE_IMPORT:
             is_import = True
@@ -1734,9 +1728,7 @@ class vmmCreateVM(vmmGObjectUI):
             # No network device available
             instmethod = self._get_config_install_page()
             methname = None
-            if instmethod == INSTALL_PAGE_PXE:
-                methname  = "PXE"
-            elif instmethod == INSTALL_PAGE_URL:
+            if instmethod == INSTALL_PAGE_URL:
                 methname = "URL"
 
             if methname:

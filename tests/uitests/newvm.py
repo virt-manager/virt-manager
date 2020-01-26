@@ -71,15 +71,14 @@ class NewVM(uiutils.UITestCase):
         cdrom.click_combo_entry()
         self.assertTrue("/dev/sr1" not in cdrom.fmt_nodes())
 
-    def testNewVMPXEDefault(self):
+    def testNewVMManualDefault(self):
         """
-        Click through the New VM wizard with default values + PXE, then
+        Click through the New VM wizard with default values + manual, then
         delete the VM
         """
         newvm = self._open_create_wizard()
 
-        # Create default PXE VM
-        newvm.find_fuzzy("PXE", "radio").click()
+        newvm.find_fuzzy("Manual", "radio").click()
         self.forward(newvm)
         osentry = newvm.find("oslist-entry")
         uiutils.check_in_loop(lambda: not osentry.text)
@@ -288,7 +287,6 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("ppc64", "menu item").click()
         newvm.find_fuzzy("pseries", "menu item")
 
-        # Create default PXE VM
         newvm.find_fuzzy("Import", "radio").click()
         newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/testvol1.img"
@@ -431,7 +429,6 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Xen Type", "combo").click()
         newvm.find_fuzzy("paravirt", "menu item").click()
 
-        # Create default PXE VM
         newvm.find_fuzzy("Import", "radio").click()
         newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/testvol1.img"
