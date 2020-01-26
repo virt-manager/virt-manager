@@ -57,7 +57,6 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_confirm_poweroff()
         self.refresh_confirm_pause()
         self.refresh_confirm_removedev()
-        self.refresh_confirm_interface()
         self.refresh_confirm_unapplied()
         self.refresh_confirm_delstorage()
 
@@ -86,7 +85,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_confirm_poweroff_toggled": self.change_confirm_poweroff,
             "on_prefs_confirm_pause_toggled": self.change_confirm_pause,
             "on_prefs_confirm_removedev_toggled": self.change_confirm_removedev,
-            "on_prefs_confirm_interface_toggled": self.change_confirm_interface,
             "on_prefs_confirm_unapplied_toggled": self.change_confirm_unapplied,
             "on_prefs_confirm_delstorage_toggled": self.change_confirm_delstorage,
             "on_prefs_btn_keys_define_clicked": self.change_grab_keys,
@@ -308,9 +306,6 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_confirm_removedev(self):
         self.widget("prefs-confirm-removedev").set_active(
                                 self.config.get_confirm_removedev())
-    def refresh_confirm_interface(self):
-        self.widget("prefs-confirm-interface").set_active(
-                                self.config.get_confirm_interface())
     def refresh_confirm_unapplied(self):
         self.widget("prefs-confirm-unapplied").set_active(
                                 self.config.get_confirm_unapplied())
@@ -434,8 +429,6 @@ class vmmPreferences(vmmGObjectUI):
         self.config.set_confirm_pause(src.get_active())
     def change_confirm_removedev(self, src):
         self.config.set_confirm_removedev(src.get_active())
-    def change_confirm_interface(self, src):
-        self.config.set_confirm_interface(src.get_active())
     def change_confirm_unapplied(self, src):
         self.config.set_confirm_unapplied(src.get_active())
     def change_confirm_delstorage(self, src):

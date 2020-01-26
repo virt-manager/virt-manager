@@ -335,8 +335,6 @@ class vmmConfig(object):
         return self.conf.get("/confirm/pause")
     def get_confirm_removedev(self):
         return self.conf.get("/confirm/removedev")
-    def get_confirm_interface(self):
-        return self.conf.get("/confirm/interface-power")
     def get_confirm_unapplied(self):
         return self.conf.get("/confirm/unapplied-dev")
     def get_confirm_delstorage(self):
@@ -350,8 +348,6 @@ class vmmConfig(object):
         self.conf.set("/confirm/pause", val)
     def set_confirm_removedev(self, val):
         self.conf.set("/confirm/removedev", val)
-    def set_confirm_interface(self, val):
-        self.conf.set("/confirm/interface-power", val)
     def set_confirm_unapplied(self, val):
         self.conf.set("/confirm/unapplied-dev", val)
     def set_confirm_delstorage(self, val):
