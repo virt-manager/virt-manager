@@ -64,7 +64,7 @@ class _URIs(object):
         self.test_suite = _testtmpl % (os.getcwd() + "/tests/testsuite.xml")
         self.test_remote = self.test_full + ",remote"
         self.test_defaultpool_collision = (_testtmpl % (os.getcwd() +
-            "/tests/data/clitest/testdriver-defaultpool-collision.xml"))
+            "/tests/data/cli/testdriver-defaultpool-collision.xml"))
 
         self.xen = self.test_full + _caps("xen-rhel5.4.xml") + ",xen"
         self.lxc = self.test_full + _caps("lxc.xml") + ",lxc"

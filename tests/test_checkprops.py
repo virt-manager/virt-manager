@@ -55,7 +55,7 @@ class CheckPropsTest(unittest.TestCase):
                     "untested in the test suite. This could be caused\n"
                     "by a previous test suite failure, or if you added\n"
                     "a new property and didn't extend the test suite.\n"
-                    "Look into extending clitest.py and/or xmlparse.py.")
+                    "Look into extending test_cli.py and/or test_xmlparse.py.")
 
         if msg:
             self.fail(msg)

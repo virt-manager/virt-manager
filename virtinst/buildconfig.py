@@ -29,7 +29,7 @@ if os.path.exists(_cfgpath):
 
 _istest = "VIRTINST_TEST_SUITE" in os.environ
 _running_from_srcdir = os.path.exists(
-    os.path.join(_srcdir, "tests", "clitest.py"))
+    os.path.join(_srcdir, "tests", "test_cli.py"))
 
 
 def _split_list(commastr):

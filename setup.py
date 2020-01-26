@@ -516,18 +516,18 @@ class TestCommand(TestBaseCommand):
         '''
         Finds all the tests modules in tests/, and runs them.
         '''
-        excludes = ["dist.py", "test_urls.py", "test_inject.py"]
+        excludes = ["test_dist.py", "test_urls.py", "test_inject.py"]
         testfiles = self._find_tests_in_dir("tests", excludes)
 
-        # Put clitest at the end, since it takes the longest
+        # Put test_cli at the end, since it takes the longest
         for f in testfiles[:]:
-            if "clitest" in f:
+            if "test_cli" in f:
                 testfiles.remove(f)
                 testfiles.append(f)
 
-        # Always want to put checkprops at the end to get accurate results
+        # Always want to put test_checkprops at the end to get accurate results
         for f in testfiles[:]:
-            if "checkprops" in f:
+            if "test_checkprops" in f:
                 testfiles.remove(f)
                 if not self.testfile:
                     testfiles.append(f)
@@ -593,7 +593,7 @@ class TestDist(TestBaseCommand):
     description = "Tests to run before cutting a release"
 
     def run(self):
-        self._testfiles = ["tests.dist"]
+        self._testfiles = ["tests.test_dist"]
         TestBaseCommand.run(self)
 
 

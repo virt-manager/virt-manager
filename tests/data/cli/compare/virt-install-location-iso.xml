@@ -1,13 +1,18 @@
 <domain type="kvm">
-  <name>vm1</name>
+  <name>fedora17</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/17"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
+  <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="pc">hvm</type>
-    <kernel>/VIRTINST-TESTSUITE/frib.img</kernel>
-    <initrd>/VIRTINST-TESTSUITE/frob.img</initrd>
+    <kernel>/VIRTINST-TESTSUITE/vmlinuz</kernel>
+    <initrd>/VIRTINST-TESTSUITE/initrd.img</initrd>
   </os>
   <features>
     <acpi/>
@@ -27,9 +32,14 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="tests/data/clitest/fake-no-osinfo.iso"/>
+      <source file="tests/data/cli/fake-fedora17-tree.iso"/>
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
@@ -43,12 +53,11 @@
     <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <interface type="bridge">
-      <source bridge="testsuitebr0"/>
-      <mac address="00:11:22:33:44:55"/>
-      <model type="e1000"/>
-    </interface>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
@@ -62,17 +71,26 @@
     </video>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>
 <domain type="kvm">
-  <name>vm1</name>
+  <name>fedora17</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/17"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
+  <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="pc">hvm</type>
-    <boot dev="cdrom"/>
+    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -91,6 +109,11 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
     <disk type="file" device="cdrom">
       <target dev="hda" bus="ide"/>
       <readonly/>
@@ -105,12 +128,11 @@
     <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <interface type="bridge">
-      <source bridge="testsuitebr0"/>
-      <mac address="00:11:22:33:44:55"/>
-      <model type="e1000"/>
-    </interface>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
@@ -124,5 +146,9 @@
     </video>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>

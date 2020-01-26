@@ -61,7 +61,7 @@ class TestXMLMisc(unittest.TestCase):
     """
     Misc tests for various XML special behavior. These should only aim for
     testing any particularly tricky bits, general XML generation should
-    be through virt-install examples in clitest
+    be through virt-install examples in test_cli
     """
     @property
     def conn(self):
@@ -122,13 +122,13 @@ class TestXMLMisc(unittest.TestCase):
         # Simple sanity test to make sure detect_distro works. test-urls
         # does much more exhaustive testing but it's only run occasionally
         i = _make_installer(
-            location="tests/data/clitest/fakefedoratree")
+            location="tests/data/cli/fakefedoratree")
         g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "fedora17")
 
         i = _make_installer(
-            location="tests/data/clitest/fakerhel6tree")
+            location="tests/data/cli/fakerhel6tree")
         g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "rhel6.0")
