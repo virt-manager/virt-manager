@@ -356,7 +356,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         except dogtail.tree.SearchError:
             raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
                 "roleName='%s' labeller_text='%s'" %
-                (name, roleName, labeller_text))
+                (name, roleName, labeller_text)) from None
 
         # Wait for independent windows to become active in the window manager
         # before we return them. This ensures the window is actually onscreen
