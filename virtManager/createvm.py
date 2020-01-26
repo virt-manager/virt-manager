@@ -175,10 +175,6 @@ class vmmCreateVM(vmmGObjectUI):
 
             "on_install_detect_os_toggled": self._detect_os_toggled_cb,
 
-            "on_kernel_browse_clicked": self._browse_kernel,
-            "on_initrd_browse_clicked": self._browse_initrd,
-            "on_dtb_browse_clicked": self._browse_dtb,
-
             "on_enable_storage_toggled": self._toggle_enable_storage,
 
             "on_create_vm_name_changed": self._name_changed,
@@ -372,9 +368,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Install import
         self.widget("install-import-entry").set_text("")
-        self.widget("kernel").set_text("")
-        self.widget("initrd").set_text("")
-        self.widget("dtb").set_text("")
 
         # Install container app
         self.widget("install-app-entry").set_text("/bin/sh")
@@ -503,11 +496,7 @@ class vmmCreateVM(vmmGObjectUI):
         self.widget("virt-install-box").set_visible(
             not is_container and not is_vz_container)
 
-        show_dtb = ("arm" in guest.os.arch or
-                    "microblaze" in guest.os.arch or
-                    "ppc" in guest.os.arch)
-        self.widget("kernel-box").set_visible(not installable_arch)
-        uiutil.set_grid_row_visible(self.widget("dtb"), show_dtb)
+        self.widget("kernel-info-box").set_visible(not installable_arch)
 
     def _populate_conn_state(self):
         """
@@ -1196,12 +1185,6 @@ class vmmCreateVM(vmmGObjectUI):
         def set_path(ignore, path):
             self._mediacombo.set_path(path)
         self._browse_file(None, cb=set_path, is_media=True)
-    def _browse_kernel(self, ignore):
-        self._browse_file("kernel")
-    def _browse_initrd(self, ignore):
-        self._browse_file("initrd")
-    def _browse_dtb(self, ignore):
-        self._browse_file("dtb")
 
 
     # Storage page listeners
@@ -1602,25 +1585,6 @@ class vmmCreateVM(vmmGObjectUI):
         except Exception as e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
-
-        # Setting kernel
-        if instmethod == INSTALL_PAGE_IMPORT:
-            kernel = self.widget("kernel").get_text() or None
-            kargs = self.widget("kernel-args").get_text() or None
-            initrd = self.widget("initrd").get_text() or None
-            dtb = self.widget("dtb").get_text() or None
-
-            if not self.widget("dtb").get_visible():
-                dtb = None
-            if not self.widget("kernel").get_visible():
-                kernel = None
-                initrd = None
-                kargs = None
-
-            self._guest.os.kernel = kernel
-            self._guest.os.initrd = initrd
-            self._guest.os.dtb = dtb
-            self._guest.os.kernel_args = kargs
 
         try:
             name = virtinst.Guest.generate_name(self._guest)

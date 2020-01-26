@@ -324,7 +324,8 @@ class NewVM(uiutils.UITestCase):
 
         # Validate some initial defaults
         newvm.find_fuzzy("Virt Type", "combo").click()
-        self.assertFalse(newvm.find_fuzzy("PXE", "radio").sensitive)
+        newvm.find_fuzzy("Import", "radio").click()
+        self.assertFalse(newvm.find_fuzzy("Local", "radio").sensitive)
         newvm.find_fuzzy("vexpress-a15", "menu item")
         newvm.find("virt", "menu item")
         self.forward(newvm)
@@ -332,14 +333,8 @@ class NewVM(uiutils.UITestCase):
         # Set the import media details
         newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/default-vol"
-        newvm.find_fuzzy(None,
-            "text", "Kernel path").text = "/tmp/kernel"
-        newvm.find_fuzzy(None,
-            "text", "Initrd").text = "/tmp/initrd"
-        newvm.find_fuzzy(None,
-            "text", "DTB").text = "/tmp/dtb"
-        newvm.find_fuzzy(None,
-            "text", "Kernel args").text = "console=ttyS0"
+        # Make sure the info box shows up
+        newvm.find("Kernel/initrd settings can be configured")
         newvm.find("oslist-entry").text = "generic"
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm, check=False)

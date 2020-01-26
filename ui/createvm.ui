@@ -1030,7 +1030,7 @@ User shouldn't see this.</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
-                                <property name="spacing">24</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkBox" id="vbox20">
                                     <property name="visible">True</property>
@@ -1104,178 +1104,34 @@ User shouldn't see this.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkGrid" id="kernel-box">
+                                  <object class="GtkBox" id="kernel-info-box">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="row_spacing">6</property>
-                                    <property name="column_spacing">6</property>
+                                    <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkLabel" id="label38">
+                                      <object class="GtkImage">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Kernel path:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">kernel</property>
+                                        <property name="stock">gtk-info</property>
+                                        <property name="icon_size">3</property>
                                       </object>
                                       <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">1</property>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkLabel" id="label48">
+                                      <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Initrd path:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">initrd</property>
+                                        <property name="label" translatable="yes">&lt;small&gt;Kernel/initrd settings can be configured with 'Customize before install' on the final page.&lt;/small&gt;</property>
+                                        <property name="use_markup">True</property>
                                       </object>
                                       <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label49">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_DTB path:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">dtb</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkEntry" id="kernel">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="hexpand">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkEntry" id="initrd">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="hexpand">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkEntry" id="dtb">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="hexpand">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="kernel-browse">
-                                        <property name="label" translatable="yes">Br_owse...</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_kernel_browse_clicked" swapped="no"/>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="kernel-browse-atkobject">
-                                            <property name="AtkObject::accessible-name">kernel-browse</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">2</property>
-                                        <property name="top_attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="initrd-browse">
-                                        <property name="label" translatable="yes">Bro_wse...</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_initrd_browse_clicked" swapped="no"/>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="initrd-browse-atkobject">
-                                            <property name="AtkObject::accessible-name">initrd-browse</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">2</property>
-                                        <property name="top_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkButton" id="dtb-browse">
-                                        <property name="label" translatable="yes">Brow_se...</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">True</property>
-                                        <property name="use_underline">True</property>
-                                        <signal name="clicked" handler="on_dtb_browse_clicked" swapped="no"/>
-                                        <child internal-child="accessible">
-                                          <object class="AtkObject" id="dtb-browse-atkobject">
-                                            <property name="AtkObject::accessible-name">dtb-browse</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">2</property>
-                                        <property name="top_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkBox" id="dtb-warn-virtio">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="spacing">6</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">0</property>
-                                        <property name="width">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label51">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">Kerne_l args:</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic_widget">kernel-args</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">0</property>
-                                        <property name="top_attach">4</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkEntry" id="kernel-args">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="top_attach">4</property>
-                                        <property name="width">2</property>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </object>
