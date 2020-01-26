@@ -350,8 +350,8 @@ def _show_memory_warnings(guest):
 
 def show_guest_warnings(options, guest, osdata):
     if options.pxe and not supports_pxe(guest):
-        log.warning(_("The guest's network configuration does not support "
-                       "PXE"))
+        log.warning(
+            _("The guest's network configuration may not support PXE"))
 
     # Limit it to hvm x86 guests which presently our defaults
     # only really matter for
