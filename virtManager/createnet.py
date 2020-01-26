@@ -53,6 +53,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_create_finish_clicked": self.finish,
 
             "on_net_forward_mode_changed": self._net_forward_mode_changed_cb,
+            "on_net_forward_device_changed": self._net_forward_device_changed_cb,
             "on_net_dns_use_toggled": self._net_dns_use_toggled_cb,
 
             "on_net-ipv4-enable_toggled":  self.change_ipv4_enable,
@@ -101,20 +102,22 @@ class vmmCreateNetwork(vmmGObjectUI):
         blue = Gdk.Color.parse("#0072A8")[1]
         self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
-        # [ label, dev name ]
+        # [ dev name, label ]
         pf_list = self.widget("net-hostdevs")
         pf_model = Gtk.ListStore(str, str)
         pf_list.set_model(pf_model)
         text = uiutil.init_combo_text_column(pf_list, 1)
         text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
-        # [ label, dev name ]
+        # [ show_manual, label]
         fw_list = self.widget("net-forward-device")
-        fw_model = Gtk.ListStore(str, str)
+        fw_model = Gtk.ListStore(bool, str)
         fw_list.set_model(fw_model)
         uiutil.init_combo_text_column(fw_list, 1)
+        fw_model.append([False, _("Any physical device")])
+        fw_model.append([True, _("Physical device...")])
 
-        # [ label, mode ]
+        # [ mode, label ]
         mode_list = self.widget("net-forward-mode")
         mode_model = Gtk.ListStore(str, str)
         mode_list.set_model(mode_model)
@@ -159,22 +162,9 @@ class vmmCreateNetwork(vmmGObjectUI):
 
 
         # Populate physical forward devices
-        devnames = []
-        for nodedev in self.conn.filter_nodedevs("net"):
-            devnames.append(nodedev.xmlobj.interface)
-        for iface in self.conn.list_interfaces():
-            if iface.get_name() not in devnames:
-                devnames.append(iface.get_name())
-
-        fw_model = self.widget("net-forward-device").get_model()
-        fw_model.clear()
-        fw_model.append([None, _("Any physical device")])
-
-        for name in devnames:
-            fw_model.append([name, _("Physical device %s") % name])
         self.widget("net-forward-device").set_active(0)
-
         self.widget("net-forward-mode").set_active(0)
+        self.widget("net-forward-manual").set_text("")
 
 
         # Populate hostdev forward devices
@@ -254,7 +244,13 @@ class vmmCreateNetwork(vmmGObjectUI):
         if mode == "hostdev":
             dev = uiutil.get_list_selection(self.widget("net-hostdevs"))
         else:
-            dev = uiutil.get_list_selection(self.widget("net-forward-device"))
+            manual = uiutil.get_list_selection(
+                    self.widget("net-forward-device"))
+            if manual:
+                dev = self.widget("net-forward-manual").get_text()
+            else:
+                dev = None
+
         return [dev, mode]
 
 
@@ -270,11 +266,20 @@ class vmmCreateNetwork(vmmGObjectUI):
 
         uiutil.set_grid_row_visible(
             self.widget("net-forward-device"), fw_visible)
+        self._net_forward_device_changed_cb(self.widget("net-forward-device"))
         uiutil.set_grid_row_visible(self.widget("net-hostdevs"), is_hostdev)
 
         self.widget("net-ipv4-expander").set_visible(not is_hostdev)
         self.widget("net-ipv6-expander").set_visible(not is_hostdev)
         self.widget("net-dns-expander").set_visible(not is_hostdev)
+
+    def _net_forward_device_changed_cb(self, src):
+        manual = uiutil.get_list_selection(
+                self.widget("net-forward-device"))
+        if not src.is_visible():
+            manual = False
+        uiutil.set_grid_row_visible(
+                self.widget("net-forward-manual"), manual)
 
     def _net_dns_use_toggled_cb(self, src):
         custom = self.widget("net-dns-use-custom").get_active()

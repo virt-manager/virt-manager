@@ -165,13 +165,14 @@
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">3</property>
+                            <property name="top_attach">4</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkComboBox" id="net-forward-device">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <signal name="changed" handler="on_net_forward_device_changed" swapped="no"/>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="net-forward-device-atkobject">
                                 <property name="AtkObject::accessible-name">Physical Network</property>
@@ -192,7 +193,7 @@
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">3</property>
+                            <property name="top_attach">4</property>
                           </packing>
                         </child>
                         <child>
@@ -226,6 +227,29 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="can_focus">False</property>
+                            <property name="halign">end</property>
+                            <property name="label" translatable="yes">De_vice:</property>
+                            <property name="use_underline">True</property>
+                            <property name="justify">right</property>
+                            <property name="mnemonic_widget">net-forward-manual</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="net-forward-manual">
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">3</property>
                           </packing>
                         </child>
                       </object>
