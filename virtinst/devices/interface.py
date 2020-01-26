@@ -62,7 +62,7 @@ def _default_route():
     return None  # pragma: no cover
 
 
-def _default_bridge():
+def _host_default_bridge():
     dev = _default_route()
     if not dev:
         return None  # pragma: no cover
@@ -85,14 +85,14 @@ def _default_bridge():
     return None
 
 
-def _default_source(conn):
-    if not conn.is_remote():
-        ret = _default_bridge()
-        if conn.in_testsuite():
-            ret = "testsuitebr0"
-        if ret:
-            return ["bridge", ret]
-    return ["network", "default"]
+def _default_bridge(conn):
+    if conn.is_remote():
+        return None
+
+    ret = _host_default_bridge()
+    if conn.in_testsuite():
+        ret = "testsuitebr0"
+    return ret
 
 
 class _VirtualPort(XMLBuilder):
@@ -236,10 +236,18 @@ class DeviceInterface(Device):
         self.is_conflict_net(self.conn, self.macaddr)
 
     def set_default_source(self):
-        if (self.conn.is_qemu_session() or self.conn.is_test()):
+        if self.conn.is_qemu_session() or self.conn.is_test():
             self.type = self.TYPE_USER
-        else:
-            self.type, self.source = _default_source(self.conn)
+            return
+
+        nettype = DeviceInterface.TYPE_BRIDGE
+        source = _default_bridge(self.conn)
+        if not source:
+            nettype = DeviceInterface.TYPE_VIRTUAL
+            source = "default"
+
+        self.type = nettype
+        self.source = source
 
 
     ##################
@@ -270,8 +278,6 @@ class DeviceInterface(Device):
         if not self.macaddr:
             self.macaddr = self.generate_mac(self.conn)
         if self.type == self.TYPE_BRIDGE and not self.bridge:
-            srctype, br = _default_source(self.conn)
-            if srctype == self.TYPE_BRIDGE:
-                self.bridge = br
+            self.bridge = _default_bridge(self.conn)
         if not self.model:
             self.model = self.default_model(guest)
