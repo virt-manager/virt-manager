@@ -272,7 +272,7 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
-        # macvtap
+        # macvtap selection
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
         src.click()
@@ -287,7 +287,7 @@ class AddHardware(uiutils.UITestCase):
         src.click()
         self.pressKey("End")
         tab.find_fuzzy("Bridge device...", "menu item").click()
-        tab.find("Bridge name:", "text").text = "zbr0"
+        tab.find("Device name:", "text").text = "zbr0"
         finish.click()
 
         # Check MAC validation error
@@ -301,14 +301,15 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
-        # Network with portops
+        # Manual macvtap
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
         tab.find("MAC Address Field", "text").text = "00:11:0B:11:00:11"
         src.click()
         self.sleep(1)
         self.pressKey("Home")
-        tab.find_fuzzy("plainbridge-portgroups", "menu item").click()
+        tab.find_fuzzy("Macvtap device...", "menu item").click()
+        tab.find("Device name:", "text").text = "macvtapfoo7"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 

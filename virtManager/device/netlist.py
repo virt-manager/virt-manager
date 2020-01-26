@@ -40,8 +40,8 @@ def _build_label_row(label, active):
     return _build_row(None, None, label, active)
 
 
-def _build_manual_row(label):
-    return _build_row(None, None, label, True, manual=True)
+def _build_manual_row(nettype, label):
+    return _build_row(nettype, None, label, True, manual=True)
 
 
 def _pretty_network_desc(nettype, source=None, netobj=None):
@@ -228,7 +228,14 @@ class vmmNetworkList(vmmGObjectUI):
         model.clear()
 
         def _add_manual_bridge_row():
-            model.append(_build_manual_row(_("Bridge device...")))
+            _nettype = virtinst.DeviceInterface.TYPE_BRIDGE
+            _label = _("Bridge device...")
+            model.append(_build_manual_row(_nettype, _label))
+
+        def _add_manual_macvtap_row():
+            _label = _("Macvtap device...")
+            _nettype = virtinst.DeviceInterface.TYPE_DIRECT
+            model.append(_build_manual_row(_nettype, _label))
 
         if self.conn.is_qemu_session():
             nettype = virtinst.DeviceInterface.TYPE_USER
@@ -272,6 +279,7 @@ class vmmNetworkList(vmmGObjectUI):
                        model_label[2] == label][0]
 
         _add_manual_bridge_row()
+        _add_manual_macvtap_row()
         return default
 
     def _check_network_is_running(self, net):
@@ -305,6 +313,49 @@ class vmmNetworkList(vmmGObjectUI):
             return self.err.show_err(_("Could not start virtual network "
                                   "'%s': %s") % (devname, str(e)))
 
+    def _find_rowiter_for_dev(self, net):
+        nettype = net.type
+        source = net.source
+        if net.network:
+            # If using type=network with a forward mode=bridge network,
+            # on domain startup the runtime XML will be changed to
+            # type=bridge and both source/@bridge and source/@network will
+            # be filled in. For our purposes, treat this as a type=network
+            source = net.network
+            nettype = "network"
+
+        def _find_row(_nettype, _source, _manual):
+            for row in combo.get_model():
+                if _nettype and row[NET_ROW_TYPE] != _nettype:
+                    continue
+                if _source and row[NET_ROW_SOURCE] != _source:
+                    continue
+                if _manual and row[NET_ROW_MANUAL] != _manual:
+                    continue
+                return row.iter
+
+        # Find the matching row in the net list
+        combo = self.widget("net-source")
+        rowiter = _find_row(nettype, source, None)
+        if rowiter:
+            return rowiter
+
+        # If this is a bridge or macvtap device, show the
+        # manual source mode
+        if nettype in [virtinst.DeviceInterface.TYPE_BRIDGE,
+                       virtinst.DeviceInterface.TYPE_DIRECT]:
+            rowiter = _find_row(nettype, None, True)
+            self.widget("net-manual-source").set_text(source or "")
+            if rowiter:
+                return rowiter
+
+        # This is some network type we don't know about. Generate
+        # a label for it and stuff it in the list
+        desc = _pretty_network_desc(nettype, source)
+        combo.get_model().insert(0,
+            _build_row(nettype, source, desc, True))
+        return combo.get_model()[0].iter
+
 
     ###############
     # Public APIs #
@@ -323,8 +374,7 @@ class vmmNetworkList(vmmGObjectUI):
         net_check_manual = row[NET_ROW_MANUAL]
 
         if net_check_manual:
-            net_type = virtinst.DeviceInterface.TYPE_BRIDGE
-            net_src = self.widget("net-bridge-name").get_text() or None
+            net_src = self.widget("net-manual-source").get_text() or None
 
         mode = None
         is_direct = (net_type == virtinst.DeviceInterface.TYPE_DIRECT)
@@ -363,38 +413,13 @@ class vmmNetworkList(vmmGObjectUI):
         net_warn.set_visible(bool(net_err))
         net_warn.set_tooltip_text(net_err or "")
 
-        self.widget("net-bridge-name").set_text("")
+        self.widget("net-manual-source").set_text("")
 
     def set_dev(self, net):
         self.reset_state()
+        rowiter = self._find_rowiter_for_dev(net)
 
-        nettype = net.type
-        source = net.source
-        if net.network:
-            # If using type=network with a forward mode=bridge network,
-            # on domain startup the runtime XML will be changed to
-            # type=bridge and both source/@bridge and source/@network will
-            # be filled in. For our purposes, treat this as a type=network
-            source = net.network
-            nettype = "network"
-
-        # Find the matching row in the net list
         combo = self.widget("net-source")
-        rowiter = None
-        for row in combo.get_model():
-            if row[0] == nettype and row[1] == source:
-                rowiter = row.iter
-                break
-        if not rowiter:
-            if nettype == "bridge":
-                rowiter = combo.get_model()[-1].iter
-                self.widget("net-bridge-name").set_text(source)
-        if not rowiter:
-            desc = _pretty_network_desc(nettype, source)
-            combo.get_model().insert(0,
-                _build_row(nettype, source, desc, True))
-            rowiter = combo.get_model()[0].iter
-
         combo.set_active_iter(rowiter)
         combo.emit("changed")
 
@@ -450,4 +475,4 @@ class vmmNetworkList(vmmGObjectUI):
 
         show_bridge = row[NET_ROW_MANUAL]
         uiutil.set_grid_row_visible(
-            self.widget("net-bridge-name"), show_bridge)
+            self.widget("net-manual-source"), show_bridge)

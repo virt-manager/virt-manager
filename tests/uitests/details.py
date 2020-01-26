@@ -251,15 +251,17 @@ class Details(uiutils.UITestCase):
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Error changing VM configuration", "label")
         alert.find("Close", "push button").click()
-        tab.find("Bridge name:", "text").text = "zbr0"
+        tab.find("Device name:", "text").text = "zbr0"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
-        # Network with portops
+        # Manual macvtap
         src.click()
         self.pressKey("Home")
-        tab.find_fuzzy("plainbridge-portgroups",
+        tab.find_fuzzy("Macvtap device...",
                        "menu item").bring_on_screen().click()
+        appl.click()
+        tab.find("Device name:", "text").text = "fakedev12"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
