@@ -232,11 +232,14 @@ class Details(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
 
-        # Network values
+        # Network values w/ macvtap manual
         tab = self._select_hw(win, "NIC :54:32:10", "network-tab")
         src = tab.find("Network source:", "combo box")
         src.click()
-        tab.find_fuzzy("macvtap", "menu item").bring_on_screen().click()
+        self.pressKey("Home")
+        tab.find_fuzzy("Macvtap device...",
+                       "menu item").bring_on_screen().click()
+        tab.find("Device name:", "text").text = "fakedev12"
         tab.find("Device model:", "combo box").click_combo_entry()
         tab.find("rtl8139", "menu item").click()
         appl.click()
@@ -246,22 +249,13 @@ class Details(uiutils.UITestCase):
         src.click()
         tab.find_fuzzy("Bridge device...",
                        "menu item").bring_on_screen().click()
+        tab.find("Device name:", "text").text = ""
         appl.click()
         # Check validation error
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Error changing VM configuration", "label")
         alert.find("Close", "push button").click()
         tab.find("Device name:", "text").text = "zbr0"
-        appl.click()
-        uiutils.check_in_loop(lambda: not appl.sensitive)
-
-        # Manual macvtap
-        src.click()
-        self.pressKey("Home")
-        tab.find_fuzzy("Macvtap device...",
-                       "menu item").bring_on_screen().click()
-        appl.click()
-        tab.find("Device name:", "text").text = "fakedev12"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 

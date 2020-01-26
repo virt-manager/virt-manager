@@ -272,15 +272,16 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
-        # macvtap selection
+        # Manual macvtap
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
         src.click()
-        tab.find_fuzzy("macvtap", "menu item").click()
+        tab.find_fuzzy("Macvtap device...", "menu item").click()
+        tab.find("Device name:", "text").text = "macvtapfoo7"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
-        # Manual bridge
+        # Manual bridge. Also trigger MAC collision
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
         tab.find("mac-address-enable", "check box").click()
@@ -298,18 +299,6 @@ class AddHardware(uiutils.UITestCase):
         # Fix MAC
         tab.find("mac-address-enable", "check box").click()
         tab.find("MAC Address Field", "text").text = "00:11:0A:11:00:11"
-        finish.click()
-        uiutils.check_in_loop(lambda: details.active)
-
-        # Manual macvtap
-        self._open_addhw_window(details)
-        tab = self._select_hw(addhw, "Network", "network-tab")
-        tab.find("MAC Address Field", "text").text = "00:11:0B:11:00:11"
-        src.click()
-        self.sleep(1)
-        self.pressKey("Home")
-        tab.find_fuzzy("Macvtap device...", "menu item").click()
-        tab.find("Device name:", "text").text = "macvtapfoo7"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 

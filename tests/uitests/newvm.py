@@ -493,9 +493,10 @@ class NewVM(uiutils.UITestCase):
         win.find_fuzzy("NIC", "table cell").click()
         tab = win.find("network-tab")
         win.find("XML", "page tab").click()
-        oldbrname = "brplain"
         newbrname = "BRFAKE"
-        xmleditor.text = xmleditor.text.replace(oldbrname, newbrname)
+        newx = xmleditor.text.replace("network", "bridge")
+        newx = newx.replace('bridge="default"', "bridge='%s'" % newbrname)
+        xmleditor.text = newx
         finish.click()
 
         # Finish install.
@@ -514,7 +515,7 @@ class NewVM(uiutils.UITestCase):
         win.find_fuzzy("NIC", "table cell").click()
         tab = win.find("network-tab")
         self.assertEqual(
-                tab.find("Bridge name:", "text").text, newbrname)
+                tab.find("Device name:", "text").text, newbrname)
 
         # Verify install media is handled correctly after XML customize
         win.find_fuzzy("IDE CDROM 1", "table cell").click()
