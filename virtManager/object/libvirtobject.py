@@ -105,8 +105,6 @@ class vmmLibvirtObject(vmmGObject):
         return self.class_name() == "pool"
     def is_nodedev(self):
         return self.class_name() == "nodedev"
-    def is_interface(self):
-        return self.class_name() == "interface"
 
     def change_name_backend(self, newbackend):
         # Used for changing the backing object after a rename

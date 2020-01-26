@@ -235,8 +235,6 @@ class SupportCache:
         function="virConnect.listDevices", run_args=(None, 0))
     conn_network = _make(
         function="virConnect.listNetworks", run_args=())
-    conn_interface = _make(
-        function="virConnect.listInterfaces", run_args=())
 
     conn_stream = _make(function="virConnect.newStream", run_args=(0,))
     conn_working_xen_events = _make(hv_version={"xen": "4.0.0", "all": 0})

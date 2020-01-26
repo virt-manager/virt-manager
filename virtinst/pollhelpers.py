@@ -58,13 +58,6 @@ def fetch_volumes(backend, pool, origmap, build_cb):
     return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
 
 
-def fetch_interfaces(backend, origmap, build_cb):
-    name = "interface"
-    list_cb = backend.listAllInterfaces
-    support_cb = backend.support.conn_interface
-    return _new_poll_helper(origmap, name, list_cb, build_cb, support_cb)
-
-
 def fetch_nodedevs(backend, origmap, build_cb):
     name = "nodedev"
     list_cb = backend.listAllDevices

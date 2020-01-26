@@ -514,7 +514,7 @@ class vmmCreateVM(vmmGObjectUI):
         Update all state that has some dependency on the current connection
         """
         self.conn.schedule_priority_tick(pollnet=True,
-                                         pollpool=True, polliface=True,
+                                         pollpool=True,
                                          pollnodedev=True)
 
         self.widget("install-box").show()

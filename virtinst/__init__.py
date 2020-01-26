@@ -50,7 +50,6 @@ from virtinst.domain import *  # pylint: disable=wildcard-import
 
 from virtinst.capabilities import Capabilities
 from virtinst.domcapabilities import DomainCapabilities
-from virtinst.interface import Interface
 from virtinst.network import Network
 from virtinst.nodedev import NodeDevice
 from virtinst.storage import StoragePool, StorageVolume

@@ -19,7 +19,6 @@ from .lib import connectauth
 from .baseclass import vmmGObject
 from .lib.libvirtenummap import LibvirtEnumMap
 from .object.domain import vmmDomain
-from .object.interface import vmmInterface
 from .object.network import vmmNetwork
 from .object.nodedev import vmmNodeDevice
 from .object.storagepool import vmmStoragePool
@@ -148,8 +147,6 @@ class vmmConnection(vmmGObject):
         "net-removed": (vmmGObject.RUN_FIRST, None, [str]),
         "pool-added": (vmmGObject.RUN_FIRST, None, [str]),
         "pool-removed": (vmmGObject.RUN_FIRST, None, [str]),
-        "interface-added": (vmmGObject.RUN_FIRST, None, [str]),
-        "interface-removed": (vmmGObject.RUN_FIRST, None, [str]),
         "nodedev-added": (vmmGObject.RUN_FIRST, None, [str]),
         "nodedev-removed": (vmmGObject.RUN_FIRST, None, [str]),
         "resources-sampled": (vmmGObject.RUN_FIRST, None, []),
@@ -532,11 +529,6 @@ class vmmConnection(vmmGObject):
         return self._objects.lookup_object(vmmStoragePool, connkey)
     def list_pools(self):
         return self._objects.get_objects_for_class(vmmStoragePool)
-
-    def get_interface(self, connkey):
-        return self._objects.lookup_object(vmmInterface, connkey)
-    def list_interfaces(self):
-        return self._objects.get_objects_for_class(vmmInterface)
 
     def get_nodedev(self, connkey):
         return self._objects.lookup_object(vmmNodeDevice, connkey)
@@ -958,8 +950,6 @@ class vmmConnection(vmmGObject):
             log.debug("Connection doesn't seem to support storage APIs.")
         if not self.support.conn_network():
             log.debug("Connection doesn't seem to support network APIs.")
-        if not self.support.conn_interface():
-            log.debug("Connection doesn't seem to support interface APIs.")
         if not self.support.conn_nodedev():
             log.debug("Connection doesn't seem to support nodedev APIs.")
 
@@ -983,8 +973,8 @@ class vmmConnection(vmmGObject):
 
         self.schedule_priority_tick(stats_update=True,
             pollvm=True, pollnet=True,
-            pollpool=True, polliface=True,
-            pollnodedev=True, force=True, initial_poll=True)
+            pollpool=True, pollnodedev=True,
+            force=True, initial_poll=True)
 
         self._init_object_event.wait()
         self._init_object_event = None
@@ -1027,8 +1017,6 @@ class vmmConnection(vmmGObject):
             self.emit("net-removed", obj.get_connkey())
         elif obj.is_pool():
             self.emit("pool-removed", obj.get_connkey())
-        elif obj.is_interface():
-            self.emit("interface-removed", obj.get_connkey())
         elif obj.is_nodedev():
             self.emit("nodedev-removed", obj.get_connkey())
 
@@ -1090,8 +1078,6 @@ class vmmConnection(vmmGObject):
                 self.emit("net-added", obj.get_connkey())
             elif obj.is_pool():
                 self.emit("pool-added", obj.get_connkey())
-            elif obj.is_interface():
-                self.emit("interface-added", obj.get_connkey())
             elif obj.is_nodedev():
                 self.emit("nodedev-added", obj.get_connkey())
         finally:
@@ -1112,12 +1098,6 @@ class vmmConnection(vmmGObject):
             return vmmStoragePool(self, obj, key)
         return pollhelpers.fetch_pools(self._backend, keymap, cb)
 
-    def _update_interfaces(self):
-        keymap = dict((o.get_connkey(), o) for o in self.list_interfaces())
-        def cb(obj, key):
-            return vmmInterface(self, obj, key)
-        return pollhelpers.fetch_interfaces(self._backend, keymap, cb)
-
     def _update_nodedevs(self):
         keymap = dict((o.get_connkey(), o) for o in self.list_nodedevs())
         def cb(obj, key):
@@ -1131,7 +1111,7 @@ class vmmConnection(vmmGObject):
         return pollhelpers.fetch_vms(self._backend, keymap, cb)
 
     def _poll(self, initial_poll,
-            pollvm, pollnet, pollpool, polliface, pollnodedev):
+            pollvm, pollnet, pollpool, pollnodedev):
         """
         Helper called from tick() to do necessary polling and return
         the relevant object lists
@@ -1156,7 +1136,6 @@ class vmmConnection(vmmGObject):
         new_vms = _process_objects(self._update_vms, pollvm)
         new_nets = _process_objects(self._update_nets, pollnet)
         new_pools = _process_objects(self._update_pools, pollpool)
-        new_ifaces = _process_objects(self._update_interfaces, polliface)
         new_nodedevs = _process_objects(self._update_nodedevs, pollnodedev)
 
         # Kick off one thread per object type to handle the initial
@@ -1172,8 +1151,7 @@ class vmmConnection(vmmGObject):
             # is never called and the event is never set, so let's do it here
             self._init_object_event.set()
 
-        for newlist in [new_vms, new_nets, new_pools,
-                new_ifaces, new_nodedevs]:
+        for newlist in [new_vms, new_nets, new_pools, new_nodedevs]:
             if not newlist:
                 continue
 
@@ -1190,8 +1168,7 @@ class vmmConnection(vmmGObject):
 
     def _tick(self, stats_update=False,
              pollvm=False, pollnet=False,
-             pollpool=False, polliface=False,
-             pollnodedev=False,
+             pollpool=False, pollnodedev=False,
              force=False, initial_poll=False):
         """
         main update function: polls for new objects, updates stats, ...
@@ -1225,7 +1202,7 @@ class vmmConnection(vmmGObject):
             self.statsmanager.cache_all_stats(self)
 
         gone_objects, preexisting_objects = self._poll(
-            initial_poll, pollvm, pollnet, pollpool, polliface, pollnodedev)
+            initial_poll, pollvm, pollnet, pollpool, pollnodedev)
         self.idle_add(self._gone_object_signals, gone_objects)
 
         # Only tick() pre-existing objects, since new objects will be
@@ -1239,8 +1216,6 @@ class vmmConnection(vmmGObject):
                 elif obj.is_network() and not pollnet:
                     continue
                 elif obj.is_pool() and not pollpool:
-                    continue
-                elif obj.is_interface() and not polliface:
                     continue
                 elif obj.is_nodedev() and not pollnodedev:
                     continue
