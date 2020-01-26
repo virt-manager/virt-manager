@@ -1321,8 +1321,10 @@ class vmmCreateVM(vmmGObjectUI):
         self._change_os_detect(not dodetect)
 
         # Manual installs have nothing to ask for
-        self.widget("install-method-pages").set_visible(
-                instpage != INSTALL_PAGE_MANUAL)
+        has_install = instpage != INSTALL_PAGE_MANUAL
+        self.widget("install-method-pages").set_visible(has_install)
+        if not has_install:
+            self._os_list.search_entry.grab_focus()
         self.widget("install-method-pages").set_current_page(instpage)
 
     def _back_clicked(self, src_ignore):
@@ -1359,12 +1361,11 @@ class vmmCreateVM(vmmGObjectUI):
         if self._validate(curpage) is not True:
             return
 
+        self.widget("create-forward").grab_focus()
         if curpage == PAGE_NAME:
             self._set_install_page()
 
         next_page = self._get_next_pagenum(curpage)
-
-        self.widget("create-forward").grab_focus()
         notebook.set_current_page(next_page)
 
 
