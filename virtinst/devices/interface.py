@@ -85,14 +85,28 @@ def _host_default_bridge():
     return None
 
 
+# Cache the host default bridge lookup. It can change over the lifetime
+# of a virt-manager run, but that should be rare, and this saves us
+# possibly spamming logs if host lookup goes wrong
+_HOST_DEFAULT_BRIDGE = -1
+
+
 def _default_bridge(conn):
     if conn.is_remote():
         return None
 
-    ret = _host_default_bridge()
+    global _HOST_DEFAULT_BRIDGE
+    if _HOST_DEFAULT_BRIDGE == -1:
+        try:
+            ret = _host_default_bridge()
+        except Exception:
+            log.debug("Error getting host default bridge", exc_info=True)
+            ret = None
+        _HOST_DEFAULT_BRIDGE = ret
+
     if conn.in_testsuite():
-        ret = "testsuitebr0"
-    return ret
+        return "testsuitebr0"
+    return _HOST_DEFAULT_BRIDGE
 
 
 class _VirtualPort(XMLBuilder):
