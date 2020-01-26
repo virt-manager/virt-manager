@@ -72,6 +72,15 @@ Sending patches using `git send-email` is preferred, but `git format-patch`
 output attached to an email is also fine.
 
 
+## UI design
+
+If you are planning to add a feature to virt-manager's UI, please read
+[DESIGN.md](DESIGN.md) first. Features that do not fit the goals specified
+in that document may be rejected. If you are unsure if your feature is a
+good fit for virt-manager, please ask on the mailing list before you start
+coding!
+
+
 ## Introductory tasks
 
 Extending the virt-install or virt-xml command line is a good introductory
