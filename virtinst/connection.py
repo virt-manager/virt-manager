@@ -43,16 +43,7 @@ class VirtinstConnection(object):
 
     @staticmethod
     def get_app_cache_dir():
-        ret = ""
-        try:
-            # We don't want to depend on glib for virt-install
-            from gi.repository import GLib
-            ret = GLib.get_user_cache_dir()
-        except ImportError:
-            pass
-
-        if not ret:
-            ret = os.environ.get("XDG_CACHE_HOME")
+        ret = os.environ.get("XDG_CACHE_HOME")
         if not ret:
             ret = os.path.expanduser("~/.cache")
         return os.path.join(ret, "virt-manager")
