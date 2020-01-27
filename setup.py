@@ -417,6 +417,7 @@ class TestBaseCommand(distutils.core.Command):
         self.testfile = None
         self._force_verbose = False
         self._external_coverage = False
+        self._urlfetcher_mock = False
 
     def finalize_options(self):
         if self.only:
@@ -462,6 +463,9 @@ class TestBaseCommand(distutils.core.Command):
         for key, val in self._clistate.items():
             setattr(testsmodule.utils.clistate, key, val)
         testsmodule.setup_logging()
+        if self._urlfetcher_mock:
+            import tests.urlfetcher_mock
+            tests.urlfetcher_mock.setup_mock()
 
         # This makes the test runner report results before exiting from ctrl-c
         unittest.installHandler()
@@ -523,6 +527,7 @@ class TestCommand(TestBaseCommand):
         '''
         Finds all the tests modules in tests/, and runs them.
         '''
+        self._urlfetcher_mock = True
         excludes = ["test_dist.py", "test_urls.py", "test_inject.py"]
         testfiles = self._find_tests_in_dir("tests", excludes)
 

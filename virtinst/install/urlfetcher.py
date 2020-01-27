@@ -18,72 +18,6 @@ import requests
 from ..logger import log
 
 
-##############################
-# Mocking for the test suite #
-##############################
-
-def _in_testsuite():
-    return "VIRTINST_TEST_SUITE" in os.environ
-
-
-def _make_mock_url(url, filesyntax):
-    if url.endswith("treeinfo"):
-        # If the url is requesting treeinfo, give a fake treeinfo from
-        # our testsuite data
-        fn = ("%s/../../tests/data/cli/fakerhel6tree/.treeinfo" %
-                os.path.abspath(os.path.dirname(__file__)))
-        abspath = os.path.abspath(fn)
-    else:
-        # Otherwise just copy this file
-        abspath = os.path.abspath(__file__)
-
-    if filesyntax:
-        return "file://" + abspath
-    return abspath
-
-
-class _MockRequestsResponse:
-    def __init__(self, url):
-        log.debug("mocking requests session for url=%s", url)
-        fn = _make_mock_url(url, filesyntax=False)
-        self._content = open(fn).read()
-        self.headers = {'content-length': len(self._content)}
-
-    def raise_for_status(self):
-        pass
-    def iter_content(self, *args, **kwargs):
-        dummy = args
-        dummy = kwargs
-        return [self._content.encode("utf-8")]
-
-
-class _MockRequestsSession:
-    def close(self):
-        pass
-    def head(self, url, *args, **kwargs):
-        dummy = args
-        dummy = kwargs
-        return _MockRequestsResponse(url)
-    def get(self, url, *args, **kwargs):
-        dummy = args
-        dummy = kwargs
-        return _MockRequestsResponse(url)
-
-
-class _MockFTPSession:
-    def connect(self, *args, **kwargs):
-        pass
-    def login(self, *args, **kwargs):
-        pass
-    def voidcmd(self, *args, **kwargs):
-        pass
-    def quit(self, *args, **kwargs):
-        pass
-    def size(self, url):
-        path = _make_mock_url(url, filesyntax=False)
-        return os.path.getsize(path)
-
-
 ###########################
 # Fetcher implementations #
 ###########################
@@ -224,10 +158,10 @@ class _URLFetcher(object):
             self._grabURL(filename, fileobj, fullurl=fullurl)
             log.debug("Saved file to %s", fn)
             return fn
-        except:  # noqa
-            if fn and os.path.exists(fn):  # pragma: no cover
-                os.unlink(fn)  # pragma: no cover
-            raise  # pragma: no cover
+        except BaseException:  # pragma: no cover
+            if fn and os.path.exists(fn):
+                os.unlink(fn)
+            raise
 
     def acquireFileContent(self, filename):
         """
@@ -242,10 +176,7 @@ class _HTTPURLFetcher(_URLFetcher):
     _session = None
 
     def _prepare(self):
-        if _in_testsuite():
-            self._session = _MockRequestsSession()
-        else:
-            self._session = requests.Session()
+        self._session = requests.Session()
 
     def _cleanup(self):
         if self._session:
@@ -305,10 +236,7 @@ class _FTPURLFetcher(_URLFetcher):
 
         try:
             parsed = urllib.parse.urlparse(self.location)
-            if _in_testsuite():
-                self._ftp = _MockFTPSession()
-            else:
-                self._ftp = ftplib.FTP()
+            self._ftp = ftplib.FTP()
             username = urllib.parse.unquote(parsed.username or '')
             password = urllib.parse.unquote(parsed.password or '')
             self._ftp.connect(parsed.hostname, parsed.port or 0)
@@ -323,8 +251,6 @@ class _FTPURLFetcher(_URLFetcher):
         """
         Use urllib and ftplib to grab the file
         """
-        if _in_testsuite():
-            url = _make_mock_url(url, filesyntax=True)
         request = urllib.request.Request(url)
         urlobj = urllib.request.urlopen(request)
         size = self._ftp.size(urllib.parse.urlparse(url)[2])
@@ -349,7 +275,7 @@ class _FTPURLFetcher(_URLFetcher):
             try:
                 # If it's a file
                 self._ftp.size(path)
-            except ftplib.all_errors:
+            except ftplib.all_errors:  # pragma: no cover
                 # If it's a dir
                 self._ftp.cwd(path)
         except ftplib.all_errors as e:  # pragma: no cover

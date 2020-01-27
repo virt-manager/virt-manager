@@ -853,6 +853,9 @@ c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for 
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
 c.add_invalid("--os-variant foo://bar", grep="Unknown libosinfo ID")  # bad full id
+c.add_invalid("--location http://testsuitefail.com", grep="installable distribution")  # will trigger a particular mock failure
+
+
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
 c.add_valid("--hvm --import")  # FV Import install
