@@ -181,7 +181,7 @@ class VirtinstConnection(object):
 
     def _fetch_helper(self, key, raw_cb, override_cb):
         if override_cb:
-            return override_cb()
+            return override_cb()  # pragma: no cover
         if key not in self._fetch_cache:
             self._fetch_cache[key] = raw_cb()
         return self._fetch_cache[key][:]
@@ -220,7 +220,7 @@ class VirtinstConnection(object):
             try:
                 xml = vol.XMLDesc(0)
                 ret.append(StorageVolume(weakref.proxy(self), parsexml=xml))
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 log.debug("Fetching volume XML failed: %s", e)
         return ret
 
@@ -320,7 +320,7 @@ class VirtinstConnection(object):
             self._daemon_version = 0
             try:
                 self._daemon_version = self._libvirtconn.getLibVersion()
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error calling getLibVersion", exc_info=True)
         return self._daemon_version
 
@@ -332,7 +332,7 @@ class VirtinstConnection(object):
             self._conn_version = 0
             try:
                 self._conn_version = self._libvirtconn.getVersion()
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error calling getVersion", exc_info=True)
         return self._conn_version
 
@@ -394,10 +394,7 @@ class VirtinstConnection(object):
     #########################
 
     def support_remote_url_install(self):
-        if self.in_testsuite():
-            return True
-        if self._magic_uri:
-            return False
-        if self.is_test():
-            return False
-        return self.support.conn_stream()
+        ret = self.support.conn_stream()
+        if self._magic_uri or self.is_test():
+            ret = False
+        return self.in_testsuite() or ret

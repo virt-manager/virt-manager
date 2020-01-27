@@ -958,10 +958,7 @@ class vmmConnection(vmmGObject):
         try:
             self._backend.setKeepAlive(20, 1)
         except Exception as e:
-            if (not isinstance(e, AttributeError) and
-                not self.support.is_error_nosupport(e)):
-                raise
-            log.debug("Connection doesn't support KeepAlive, skipping")
+            log.debug("Failed to setKeepAlive: %s", str(e))
 
         # The initial tick will set up a threading event that will only
         # trigger after all the polled libvirt objects are fully initialized.

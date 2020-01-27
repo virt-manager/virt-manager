@@ -19,7 +19,7 @@ def _new_poll_helper(origmap, typename, list_cb, build_cb, support_cb):
     try:
         if support_cb():
             objs = list_cb()
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         log.debug("Unable to list all %ss: %s", typename, e)
 
     for obj in objs:
