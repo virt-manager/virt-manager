@@ -11,12 +11,12 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="pc">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE.fd</loader>
     <boot dev="cdrom"/>
   </os>
   <features>
     <acpi/>
     <apic/>
-    <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
     <model>Penryn</model>
@@ -48,18 +48,10 @@
       <model type="virtio"/>
     </interface>
     <console type="pty"/>
-    <channel type="spicevmc">
-      <target type="virtio" name="com.redhat.spice.0"/>
-    </channel>
     <input type="tablet" bus="usb"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
-      <image compression="off"/>
-    </graphics>
-    <sound model="ich6"/>
+    <graphics type="vnc" port="-1"/>
     <video>
-      <model type="qxl"/>
+      <model type="bochs"/>
     </video>
-    <redirdev bus="usb" type="spicevmc"/>
-    <redirdev bus="usb" type="spicevmc"/>
   </devices>
 </domain>

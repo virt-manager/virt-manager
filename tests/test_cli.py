@@ -936,7 +936,7 @@ c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TRE
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
-c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet", "qemu-plain")  # plain qemu
+c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 
 # ppc64 tests
