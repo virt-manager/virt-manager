@@ -103,7 +103,8 @@ class Guest(XMLBuilder):
                     conn.lookupByUUID, uuid):
                 return uuid
 
-        log.error("Failed to generate non-conflicting UUID")
+        log.error(  # pragma: no cover
+                "Failed to generate non-conflicting UUID")
 
     @staticmethod
     def generate_name(guest):
@@ -151,7 +152,7 @@ class Guest(XMLBuilder):
             if capsinfo.arch in ["armv7l", "aarch64"]:
                 if "virt" in capsinfo.machines:
                     return "virt"
-                if "vexpress-a15" in capsinfo.machines:
+                if "vexpress-a15" in capsinfo.machines:  # pragma: no cover
                     return "vexpress-a15"
 
             if capsinfo.arch in ["s390x"]:
@@ -452,7 +453,7 @@ class Guest(XMLBuilder):
         if self.os.is_x86():
             return True
 
-        return False
+        return False  # pragma: no cover
 
     def supports_virtionet(self):
         return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
@@ -521,7 +522,7 @@ class Guest(XMLBuilder):
                 self.os.arch)
 
         path = domcaps.find_uefi_path_for_arch()
-        if not path:
+        if not path:  # pragma: no cover
             raise RuntimeError(_("Did not find any UEFI binary path for "
                 "arch '%s'") % self.os.arch)
 
@@ -607,7 +608,7 @@ class Guest(XMLBuilder):
 
     def lookup_domcaps(self):
         # We need to regenerate domcaps cache if any of these values change
-        def _compare(domcaps):
+        def _compare(domcaps):  # pragma: no cover
             if self.type == "test":
                 # Test driver doesn't support domcaps. We kinda fake it in
                 # some cases, but it screws up the checking here for parsed XML
@@ -628,7 +629,7 @@ class Guest(XMLBuilder):
 
     def lookup_capsinfo(self):
         # We need to regenerate capsinfo cache if any of these values change
-        def _compare(capsinfo):
+        def _compare(capsinfo):  # pragma: no cover
             if self.type and self.type != capsinfo.hypervisor_type:
                 return False
             if self.os.os_type and self.os.os_type != capsinfo.os_type:
@@ -648,7 +649,7 @@ class Guest(XMLBuilder):
         return self._capsinfo
 
     def set_capabilities_defaults(self, capsinfo=None):
-        if capsinfo:
+        if capsinfo:  # pragma: no cover
             self._capsinfo = capsinfo
         else:
             capsinfo = self.lookup_capsinfo()
@@ -670,8 +671,8 @@ class Guest(XMLBuilder):
             self.conn.is_qemu() and
             self.os.is_x86() and
             self.type != "kvm"):
-            log.warning("KVM acceleration not available, using '%s'",
-                            self.type)
+            log.warning(  # pragma: no cover
+                    "KVM acceleration not available, using '%s'", self.type)
 
     def sync_vcpus_topology(self):
         """
@@ -985,7 +986,7 @@ class Guest(XMLBuilder):
         if self.devices.sound:
             return
         if not self.os.is_hvm():
-            return
+            return  # pragma: no cover
 
         dev = DeviceSound(self.conn)
         dev.set_defaults(self)

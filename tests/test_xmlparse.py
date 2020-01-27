@@ -104,12 +104,19 @@ class XMLParseTest(unittest.TestCase):
         guest, outfile = self._get_test_content("change-guest")
 
         check = self._make_checker(guest)
+
+        # Check specific vcpu_current behaviro
+        check("vcpus", 5, 10)
+        assert guest.vcpu_current is None
+        check("vcpu_current", None, 15)
+        guest.vcpus = 12
+        assert guest.vcpu_current == 12
+        guest.vcpu_current = 10
+
         check("name", "TestGuest", "change_name")
         check("id", None, 1234)
         check("description", None, "Hey desc changed&")
         check("title", None, "Hey title changed!")
-        check("vcpus", 5, 12)
-        check("vcpu_current", None, 10)
         check("vcpu_cpuset", "1-3", "1-8,^6", "1-5,15")
         check("memory", 409600, 512000)
         check("currentMemory", 204800, 1024000)
@@ -242,6 +249,7 @@ class XMLParseTest(unittest.TestCase):
         check("size", None, 1)
         check("unit", None, "G")
 
+        assert guest.is_full_os_container() is False
         self._alter_compare(guest.get_xml(), outfile)
 
     def testSeclabel(self):
@@ -734,7 +742,9 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev5)
         check("autoport", True, False)
         check = self._make_checker(dev5.listens[0])
-        check("type", "network", "foo", "network")
+        dev5.listens[0].type = "none"
+        assert guest.has_listen_none() is True
+        check("type", "none", "foo", "network")
         check("network", "Bobsnetwork", "mynewnet")
 
         check = self._make_checker(dev6.listens[0])
@@ -1175,6 +1185,32 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
+    def testGuestBootorder(self):
+        guest, outfile = self._get_test_content("bootorder", kvm=True)
+
+        self.assertEqual(guest.get_boot_order(), ['./devices/disk[1]'])
+        self.assertEqual(guest.get_boot_order(legacy=True), ['hd'])
+
+        legacy_order = ['hd', 'fd', 'cdrom', 'network']
+        dev_order = ['./devices/disk[1]',
+                 './devices/disk[3]',
+                 './devices/disk[2]',
+                 './devices/interface[1]']
+        guest.set_boot_order(legacy_order, legacy=True)
+        self.assertEqual(guest.get_boot_order(), dev_order)
+        self.assertEqual(guest.get_boot_order(legacy=True), legacy_order)
+
+        guest.set_boot_order(dev_order)
+        self.assertEqual(guest.get_boot_order(), dev_order)
+        self.assertEqual(guest.get_boot_order(legacy=True), [])
+
+        self._alter_compare(guest.get_xml(), outfile)
+
+
+    ##################
+    # Snapshot tests #
+    ##################
+
     def testChangeSnapshot(self):
         basename = "change-snapshot"
         infile = DATADIR + "%s-in.xml" % basename
@@ -1544,6 +1580,10 @@ class XMLParseTest(unittest.TestCase):
         # Assert type checking correct returns False
         ifacedev = guest.devices.interface[0]
         assert ifacedev.compare_device(diskdev, 0) is False
+
+        # find_device should fail here
+        nodev = virtinst.DeviceWatchdog(conn)
+        assert guest.find_device(nodev) is None
 
         # Ensure parsed XML devices match correctly
         for srcdev in guest.devices.get_all():
