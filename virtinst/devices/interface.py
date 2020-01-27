@@ -99,14 +99,15 @@ def _default_bridge(conn):
     if _HOST_DEFAULT_BRIDGE == -1:
         try:
             ret = _host_default_bridge()
-        except Exception:
+        except Exception:  # pragma: no cover
             log.debug("Error getting host default bridge", exc_info=True)
             ret = None
         _HOST_DEFAULT_BRIDGE = ret
 
+    ret = _HOST_DEFAULT_BRIDGE
     if conn.in_testsuite():
-        return "testsuitebr0"
-    return _HOST_DEFAULT_BRIDGE
+        ret = "testsuitebr0"
+    return ret
 
 
 class _VirtualPort(XMLBuilder):
@@ -263,7 +264,7 @@ class DeviceInterface(Device):
             return
 
         nettype = DeviceInterface.TYPE_BRIDGE
-        source = _default_bridge(self.conn)
+        source = DeviceInterface.default_bridge(self.conn)
         if not source:
             nettype = DeviceInterface.TYPE_VIRTUAL
             source = "default"
