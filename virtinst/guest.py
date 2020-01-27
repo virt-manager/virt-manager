@@ -1029,9 +1029,6 @@ class Guest(XMLBuilder):
             return
         if not self.os.is_hvm():
             return
-        if not (self.os.is_x86() or
-                self.os.is_arm_machvirt):
-            return
 
         dev = DeviceSound(self.conn)
         dev.set_defaults(self)
