@@ -23,6 +23,29 @@ from .storage import StorageVolume
 from .devices import DeviceChannel
 
 
+def _replace_vm(conn, name):
+    """
+    Remove the existing VM with the same name if requested
+    """
+    try:
+        vm = conn.lookupByName(name)
+    except libvirt.libvirtError:
+        return
+
+    try:
+
+        log.debug("Explicitly replacing guest '%s'", name)
+        if vm.ID() != -1:
+            log.debug("Destroying guest '%s'", name)
+            vm.destroy()
+
+        log.debug("Undefining guest '%s'", name)
+        vm.undefine()
+    except libvirt.libvirtError as e:  # pragma: no cover
+        raise RuntimeError(_("Could not remove old vm '%s': %s") %
+                           (str(e)))
+
+
 class Cloner(object):
 
     # Reasons why we don't default to cloning.
@@ -447,8 +470,8 @@ class Cloner(object):
         dom = None
         try:
             # Replace orig VM if required
-            Guest.check_vm_collision(self.conn, self.clone_name,
-                                     do_remove=self.replace)
+            if self.replace:
+                _replace_vm(self.conn, self.clone_name)
 
             # Define domain early to catch any xml errors before duping storage
             dom = self.conn.defineXML(self.clone_xml)

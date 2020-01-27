@@ -8,8 +8,6 @@
 
 import random
 
-import libvirt
-
 from . import generatename
 from . import xmlutil
 from .buildconfig import BuildConfig
@@ -72,36 +70,6 @@ class _IOThreadID(XMLBuilder):
 
 
 class Guest(XMLBuilder):
-    @staticmethod
-    def check_vm_collision(conn, name, do_remove):
-        """
-        Remove the existing VM with the same name if requested, or error
-        if there is a collision.
-        """
-        vm = None
-        try:
-            vm = conn.lookupByName(name)
-        except libvirt.libvirtError:
-            pass
-
-        if vm is None:
-            return
-
-        if not do_remove:
-            raise RuntimeError(_("Domain named %s already exists!") % name)
-
-        try:
-            log.debug("Explicitly replacing guest '%s'", name)
-            if vm.ID() != -1:
-                log.debug("Destroying guest '%s'", name)
-                vm.destroy()
-
-            log.debug("Undefining guest '%s'", name)
-            vm.undefine()
-        except libvirt.libvirtError as e:
-            raise RuntimeError(_("Could not remove old vm '%s': %s") %
-                               (str(e)))
-
     @staticmethod
     def validate_name(conn, name, check_collision=True, validate=True):
         if validate:
