@@ -1504,3 +1504,36 @@ class XMLParseTest(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             disk.validate()
+
+    def testGuestXMLDeviceMatch(self):
+        """
+        Test Guest.find_device and Device.compare_device
+        """
+        uri = utils.URIs.test_suite
+        conn = utils.URIs.openconn(uri)
+        dom = conn.lookupByName("test-for-virtxml")
+        xml = dom.XMLDesc(0)
+        guest = virtinst.Guest(conn, xml)
+        guest2 = virtinst.Guest(conn, xml)
+
+        # Assert id matching works
+        diskdev = guest.devices.disk[0]
+        assert guest.find_device(diskdev) == diskdev
+
+        # Assert type checking correct returns False
+        ifacedev = guest.devices.interface[0]
+        assert ifacedev.compare_device(diskdev, 0) is False
+
+        # Ensure parsed XML devices match correctly
+        for srcdev in guest.devices.get_all():
+            devxml = srcdev.get_xml()
+            newdev = srcdev.__class__(conn, devxml)
+            if srcdev != guest.find_device(newdev):
+                raise AssertionError("guest.find_device failed for dev=%s" %
+                        newdev)
+
+        # Ensure devices from another parsed XML doc compare correctly
+        for srcdev in guest.devices.get_all():
+            if not guest2.find_device(srcdev):
+                raise AssertionError("guest.find_device failed for dev=%s" %
+                        srcdev)

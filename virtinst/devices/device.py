@@ -137,7 +137,7 @@ class Device(XMLBuilder):
             "input":         ["bus", "type", "xmlindex"],
             "sound":         ["model", "xmlindex"],
             "video":         ["model", "xmlindex"],
-            "watchdog":      ["xmlindex"],
+            "watchdog":      ["model", "xmlindex"],
             "hostdev":       ["type", "managed", "xmlindex",
                               "product", "vendor",
                               "function", "domain", "slot"],
@@ -152,8 +152,9 @@ class Device(XMLBuilder):
             "redirdev":      ["bus", "type", "xmlindex"],
             "tpm":           ["type", "xmlindex"],
             "rng":           ["backend_model", "xmlindex"],
-            "panic":         ["type", "xmlindex"],
-            "vsock":         ["xmlindex"],
+            "panic":         ["model", "xmlindex"],
+            "vsock":         ["model", "xmlindex"],
+            "memballoon":    ["model", "xmlindex"],
         }
 
         if id(self) == id(newdev):
@@ -162,8 +163,19 @@ class Device(XMLBuilder):
         if not isinstance(self, type(newdev)):
             return False
 
+        if self.DEVICE_TYPE not in devprops:  # pragma: no cover
+            return False
+
+        # Only compare against XML ID values, if both devices were
+        # taken from inside a complete guest hierarchy, otherwise
+        # things won't line up.
+        can_check_xml = ("devices" in newdev.get_xml_id() and
+                "devices" in self.get_xml_id())
+
         for devprop in devprops[self.DEVICE_TYPE]:
             if devprop == "xmlindex":
+                if not can_check_xml:
+                    continue
                 origval = self.get_xml_idx()
                 newval = idx
             else:
