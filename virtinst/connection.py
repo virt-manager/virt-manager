@@ -169,10 +169,6 @@ class VirtinstConnection(object):
             self._uri = self._libvirtconn.getURI()
             self._uriobj = URI(self._uri)
 
-    def set_keep_alive(self, interval, count):
-        if hasattr(self._libvirtconn, "setKeepAlive"):
-            self._libvirtconn.setKeepAlive(interval, count)
-
 
     ####################
     # Polling routines #
