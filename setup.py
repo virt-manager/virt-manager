@@ -503,8 +503,15 @@ class TestBaseCommand(distutils.core.Command):
 
         err = int(bool(len(result.failures) > 0 or
                        len(result.errors) > 0))
+        if getattr(result, "shouldStop", False):
+            # Test was aborted with ctrl-c
+            err = True
+
         if cov and not err:
-            cov.report(show_missing=False, skip_covered=True)
+            if len(result.skipped):
+                print("Skipping coverage report because tests were skipped.")
+            else:
+                cov.report(show_missing=False, skip_covered=True)
         sys.exit(err)
 
 
