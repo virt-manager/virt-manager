@@ -101,9 +101,6 @@ class VirtinstConnection(object):
     ##############
 
     def __getattr__(self, attr):
-        if attr in self.__dict__:
-            return self.__dict__[attr]
-
         # Proxy virConnect API calls
         libvirtconn = self.__dict__.get("_libvirtconn")
         return getattr(libvirtconn, attr)
