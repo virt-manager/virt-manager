@@ -186,23 +186,18 @@ class VirtinstConnection(object):
     _FETCH_KEY_VOLS = "vols"
     _FETCH_KEY_NODEDEVS = "nodedevs"
 
+    def _fetch_helper(self, key, raw_cb, override_cb):
+        if override_cb:
+            return override_cb()
+        if key not in self._fetch_cache:
+            self._fetch_cache[key] = raw_cb()
+        return self._fetch_cache[key][:]
+
     def _fetch_all_domains_raw(self):
         ignore, ignore, ret = pollhelpers.fetch_vms(
             self, {}, lambda obj, ignore: obj)
         return [Guest(weakref.proxy(self), parsexml=obj.XMLDesc(0))
                 for obj in ret]
-
-    def fetch_all_domains(self):
-        """
-        Returns a list of Guest() objects
-        """
-        if self.cb_fetch_all_domains:
-            return self.cb_fetch_all_domains()  # pylint: disable=not-callable
-
-        key = self._FETCH_KEY_DOMAINS
-        if key not in self._fetch_cache:
-            self._fetch_cache[key] = self._fetch_all_domains_raw()
-        return self._fetch_cache[key][:]
 
     def _build_pool_raw(self, poolobj):
         return StoragePool(weakref.proxy(self),
@@ -213,17 +208,11 @@ class VirtinstConnection(object):
             self, {}, lambda obj, ignore: obj)
         return [self._build_pool_raw(poolobj) for poolobj in ret]
 
-    def fetch_all_pools(self):
-        """
-        Returns a list of StoragePool objects
-        """
-        if self.cb_fetch_all_pools:
-            return self.cb_fetch_all_pools()  # pylint: disable=not-callable
-
-        key = self._FETCH_KEY_POOLS
-        if key not in self._fetch_cache:
-            self._fetch_cache[key] = self._fetch_all_pools_raw()
-        return self._fetch_cache[key][:]
+    def _fetch_all_nodedevs_raw(self):
+        ignore, ignore, ret = pollhelpers.fetch_nodedevs(
+            self, {}, lambda obj, ignore: obj)
+        return [NodeDevice(weakref.proxy(self), obj.XMLDesc(0))
+                for obj in ret]
 
     def _fetch_vols_raw(self, poolxmlobj):
         ret = []
@@ -247,18 +236,6 @@ class VirtinstConnection(object):
         for poolxmlobj in self.fetch_all_pools():
             ret.extend(self._fetch_vols_raw(poolxmlobj))
         return ret
-
-    def fetch_all_vols(self):
-        """
-        Returns a list of StorageVolume objects
-        """
-        if self.cb_fetch_all_vols:
-            return self.cb_fetch_all_vols()  # pylint: disable=not-callable
-
-        key = self._FETCH_KEY_VOLS
-        if key not in self._fetch_cache:
-            self._fetch_cache[key] = self._fetch_all_vols_raw()
-        return self._fetch_cache[key][:]
 
     def _cache_new_pool_raw(self, poolobj):
         # Make sure cache is primed
@@ -285,23 +262,41 @@ class VirtinstConnection(object):
             return self.cb_cache_new_pool(poolobj)
         return self._cache_new_pool_raw(poolobj)
 
-    def _fetch_all_nodedevs_raw(self):
-        ignore, ignore, ret = pollhelpers.fetch_nodedevs(
-            self, {}, lambda obj, ignore: obj)
-        return [NodeDevice(weakref.proxy(self), obj.XMLDesc(0))
-                for obj in ret]
+    def fetch_all_domains(self):
+        """
+        Returns a list of Guest() objects
+        """
+        return self._fetch_helper(
+                self._FETCH_KEY_DOMAINS,
+                self._fetch_all_domains_raw,
+                self.cb_fetch_all_domains)
+
+    def fetch_all_pools(self):
+        """
+        Returns a list of StoragePool objects
+        """
+        return self._fetch_helper(
+                self._FETCH_KEY_POOLS,
+                self._fetch_all_pools_raw,
+                self.cb_fetch_all_pools)
+
+    def fetch_all_vols(self):
+        """
+        Returns a list of StorageVolume objects
+        """
+        return self._fetch_helper(
+                self._FETCH_KEY_VOLS,
+                self._fetch_all_vols_raw,
+                self.cb_fetch_all_vols)
 
     def fetch_all_nodedevs(self):
         """
         Returns a list of NodeDevice() objects
         """
-        if self.cb_fetch_all_nodedevs:
-            return self.cb_fetch_all_nodedevs()  # pylint: disable=not-callable
-
-        key = self._FETCH_KEY_NODEDEVS
-        if key not in self._fetch_cache:
-            self._fetch_cache[key] = self._fetch_all_nodedevs_raw()
-        return self._fetch_cache[key][:]
+        return self._fetch_helper(
+                self._FETCH_KEY_NODEDEVS,
+                self._fetch_all_nodedevs_raw,
+                self.cb_fetch_all_nodedevs)
 
 
     #########################
