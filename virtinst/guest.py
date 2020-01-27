@@ -227,7 +227,6 @@ class Guest(XMLBuilder):
         self.skip_default_usbredir = False
         self.skip_default_graphics = False
         self.skip_default_rng = False
-        self.disable_default_memballoon = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
 
         self.skip_default_osinfo = False
@@ -962,16 +961,6 @@ class Guest(XMLBuilder):
         if self.devices.memballoon:
             return
         if not self.conn.is_qemu():
-            return
-
-        # For most QEMU guests, libvirt will automatically add a memballoon
-        # device, which means that if the user has explicitly asked for it
-        # *not* to be present then we still need to create the device and
-        # set the model to "none" to let libvirt know
-        if self.disable_default_memballoon:
-            dev = DeviceMemballoon(self.conn)
-            dev.model = "none"
-            self.add_device(dev)
             return
 
         # We know for certain that a memballoon is good to have with these
