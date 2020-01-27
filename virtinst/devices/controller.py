@@ -77,3 +77,36 @@ class DeviceController(Device):
     driver_queues = XMLProperty("./driver/@queues", is_int=True)
 
     master_startport = XMLProperty("./master/@startport", is_int=True)
+
+
+    def _get_attached_disk_devices(self, guest):
+        ret = []
+        for disk in guest.devices.disk:
+            if (self.type == disk.bus and
+                self.index == disk.address.controller):
+                ret.append(disk)
+        return ret
+
+    def _get_attached_virtioserial_devices(self, guest):
+        ret = []
+        for dev in guest.devices.channel:
+            if (self.type == dev.address.type and
+                self.index == dev.address.controller):
+                ret.append(dev)
+        for dev in guest.devices.console:
+            # virtio console is implied to be on virtio-serial index=0
+            if self.index == 0 and dev.target_type == "virtio":
+                ret.append(dev)
+        return ret
+
+    def get_attached_devices(self, guest):
+        """
+        Return all the Device objects from the passed Guest that are attached
+        to this controller
+        """
+        ret = []
+        if self.type == "virtio-serial":
+            ret = self._get_attached_virtioserial_devices(guest)
+        elif self.type in ["scsi", "sata", "ide", "fdc"]:
+            ret = self._get_attached_disk_devices(guest)
+        return ret

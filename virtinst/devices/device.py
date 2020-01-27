@@ -65,12 +65,6 @@ class DeviceAddress(XMLBuilder):
                             (self.controller, self.bus, self.target, self.unit))
         return pretty_desc
 
-    def compare_controller(self, controller, dev_bus):
-        if (controller.type == dev_bus and
-            controller.index == self.controller):
-            return True
-        return False
-
 
     type = XMLProperty("./@type")
     # type=pci

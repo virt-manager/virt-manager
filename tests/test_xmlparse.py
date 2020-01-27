@@ -1537,3 +1537,27 @@ class XMLParseTest(unittest.TestCase):
             if not guest2.find_device(srcdev):
                 raise AssertionError("guest.find_device failed for dev=%s" %
                         srcdev)
+
+    def testControllerAttachedDevices(self):
+        """
+        Test DeviceController.get_attached_devices
+        """
+        xml = open(DATADIR + "controller-attached-devices.xml").read()
+        guest = virtinst.Guest(self.conn, xml)
+
+        # virtio-serial path
+        controller = [c for c in guest.devices.controller if
+                c.type == "virtio-serial"][0]
+        devs = controller.get_attached_devices(guest)
+        assert len(devs) == 4
+        assert devs[-1].DEVICE_TYPE == "console"
+
+        # disk path
+        controller = [c for c in guest.devices.controller if
+                c.type == "sata"][0]
+        devs = controller.get_attached_devices(guest)
+        assert len(devs) == 1
+        assert devs[-1].device == "cdrom"
+
+        # Little test for DeviceAddress.pretty_desc
+        assert devs[-1].address.pretty_desc() == "0:0:0:3"

@@ -2381,27 +2381,23 @@ class vmmDetails(vmmGObjectUI):
         elif controller.type in ["scsi", "sata", "ide", "fdc"]:
             model = self.widget("controller-device-list").get_model()
             model.clear()
-            for disk in _calculate_disk_bus_index(self.vm.xmlobj.devices.disk):
-                if disk.address.compare_controller(controller, disk.bus):
-                    name = _label_for_device(disk)
-                    infoStr = ("%s on %s" % (name, disk.address.pretty_desc()))
-                    model.append([infoStr])
-                    self._disable_device_remove(
-                        _("Cannot remove controller while devices are attached."))
-            uiutil.set_grid_row_visible(self.widget("device-list-label"), True)
-            uiutil.set_grid_row_visible(self.widget("controller-device-box"), True)
+            disks = controller.get_attached_devices(self.vm.xmlobj)
+            for disk in disks:
+                name = _label_for_device(disk)
+                infoStr = ("%s on %s" % (name, disk.address.pretty_desc()))
+                model.append([infoStr])
+                self._disable_device_remove(
+                    _("Cannot remove controller while devices are attached."))
+            uiutil.set_grid_row_visible(
+                    self.widget("device-list-label"), True)
+            uiutil.set_grid_row_visible(
+                    self.widget("controller-device-box"), True)
+
         elif controller.type == "virtio-serial":
-            for dev in self.vm.xmlobj.devices.channel:
-                if dev.address.compare_controller(controller, dev.address.type):
-                    self._disable_device_remove(
-                        _("Cannot remove controller while devices are attached."))
-                    break
-            for dev in self.vm.xmlobj.devices.console:
-                # virtio console is implied to be on virtio-serial index=0
-                if controller.index == 0 and dev.target_type == "virtio":
-                    self._disable_device_remove(
-                        _("Cannot remove controller while devices are attached."))
-                    break
+            devs = controller.get_attached_devices(self.vm.xmlobj)
+            if devs:
+                self._disable_device_remove(
+                    _("Cannot remove controller while devices are attached."))
 
         type_label = vmmAddHardware.controller_pretty_desc(controller)
         self.widget("controller-type").set_text(type_label)
