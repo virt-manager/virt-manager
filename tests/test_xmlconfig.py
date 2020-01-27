@@ -146,6 +146,9 @@ class TestXMLMisc(unittest.TestCase):
     def testCPUTopology(self):
         # Test CPU topology determining
         cpu = virtinst.DomainCpu(self.conn)
+        cpu.set_topology_defaults(6)
+        assert cpu.sockets is None
+
         cpu.sockets = "2"
         cpu.set_topology_defaults(6)
         self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 3, 1])

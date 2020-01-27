@@ -7,6 +7,7 @@
 from ..logger import log
 
 from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+from .. import xmlutil
 
 
 class _CPUCellSibling(XMLBuilder):
@@ -106,8 +107,8 @@ class DomainCpu(XMLBuilder):
                 self.clear()
                 self.set_model(guest, self.conn.caps.host.cpu.model)
         else:
-            raise RuntimeError("programming error: unknown "
-                "special cpu mode '%s'" % val)
+            xmlutil.raise_programming_error(
+                True, "unknown special cpu mode '%s'" % val)
 
         self.special_mode_was_set = True
 
@@ -129,7 +130,6 @@ class DomainCpu(XMLBuilder):
         """
         domcaps = guest.lookup_domcaps()
         features = domcaps.get_cpu_security_features()
-
         if len(features) == 0:
             self.secure = False
             return
@@ -187,7 +187,7 @@ class DomainCpu(XMLBuilder):
             cpu = self.conn.caps.host.cpu
             model = cpu.model
             fallback = None
-            if not model:
+            if not model:  # pragma: no cover
                 raise ValueError(_("No host CPU reported in capabilities"))
 
         self.mode = "custom"
@@ -218,18 +218,13 @@ class DomainCpu(XMLBuilder):
 
     def set_topology_defaults(self, vcpus):
         """
-        Fill in unset topology values, using the passed vcpus count if
-        required
+        Fill in unset topology values, using the passed vcpus count.
+        Will not set topology from scratch, this just fills in missing
+        topology values.
         """
-        if vcpus is None:
-            if self.sockets is None:
-                self.sockets = 1
-            if self.threads is None:
-                self.threads = 1
-            if self.cores is None:
-                self.cores = 1
+        if not self.has_topology():
+            return
 
-        vcpus = int(vcpus or 0)
         if not self.sockets:
             if not self.cores:
                 self.sockets = vcpus // self.threads
@@ -273,12 +268,12 @@ class DomainCpu(XMLBuilder):
         # <capabilities> is not actually supported by qemu/kvm
         # combo which will be reported in <domainCapabilities>
         if not self.model:
-            return
+            return  # pragma: no cover
 
         domcaps = guest.lookup_domcaps()
         domcaps_mode = domcaps.cpu.get_mode("custom")
         if not domcaps_mode:
-            return
+            return  # pragma: no cover
 
         cpu_model = domcaps_mode.get_model(self.model)
         if cpu_model and cpu_model.usable != "no":

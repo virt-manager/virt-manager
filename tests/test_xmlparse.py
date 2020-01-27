@@ -345,9 +345,13 @@ class XMLParseTest(unittest.TestCase):
         self._alter_compare(guest.get_xml(), outfile)
 
     def testAlterCpuMode(self):
-        guest, outfile = self._get_test_content("change-cpumode")
-
+        xml = open(DATADIR + "change-cpumode-in.xml").read()
+        outfile = DATADIR + "change-cpumode-out.xml"
+        conn = utils.URIs.openconn(utils.URIs.kvm_q35)
+        guest = virtinst.Guest(conn, xml)
         check = self._make_checker(guest.cpu)
+
+        guest.cpu.model = "foo"
         check("mode", "host-passthrough")
         guest.cpu.check_security_features(guest)
         check("secure", False)
@@ -360,7 +364,24 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.check_security_features(guest)
         check("secure", False)
 
+        # Test actually filling in security values, and removing them
+        guest.cpu.secure = True
+        guest.cpu.set_model(guest, "Skylake-Client-IBRS")
+        guest.cpu.check_security_features(guest)
+        check("secure", True)
+        guest.cpu.set_model(guest, "EPYC-IBPB")
+        guest.cpu.check_security_features(guest)
+        check("secure", True)
+        guest.cpu.secure = False
+        guest.cpu.set_model(guest, "Skylake-Client-IBRS")
+        guest.cpu.check_security_features(guest)
+        check("secure", False)
         self._alter_compare(guest.get_xml(), outfile)
+
+        # Hits a codepath when domcaps don't provide the needed info
+        guest = virtinst.Guest(self.conn, xml)
+        guest.cpu.check_security_features(guest)
+        assert guest.cpu.secure is False
 
     def testAlterDisk(self):
         """
@@ -1561,3 +1582,17 @@ class XMLParseTest(unittest.TestCase):
 
         # Little test for DeviceAddress.pretty_desc
         assert devs[-1].address.pretty_desc() == "0:0:0:3"
+
+    def testCPUHostModelOnly(self):
+        """
+        Hit the validation paths for default HOST_MODEL_ONLY
+        """
+        guest = virtinst.Guest(self.kvmconn)
+        guest.x86_cpu_default = guest.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
+        guest.set_defaults(guest)
+        assert guest.cpu.model == "Opteron_G4"
+
+        # pylint: disable=protected-access
+        guest.cpu.model = "idontexist"
+        guest.cpu._validate_default_host_model_only(guest)
+        assert guest.cpu.model is None
