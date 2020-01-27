@@ -21,7 +21,8 @@ def _in_testsuite():
 
 def _media_create_from_location(location):
     if not hasattr(Libosinfo.Media, "create_from_location_with_flags"):
-        return Libosinfo.Media.create_from_location(location, None)
+        return Libosinfo.Media.create_from_location(  # pragma: no cover
+                location, None)
 
     # We prefer this API, because by default it will not
     # reject non-bootable media, like debian s390x
@@ -277,7 +278,7 @@ class _OSDB(object):
             if not db.identify_tree(tree):
                 return None  # pragma: no cover
             return tree.get_os().get_short_id(), _OsTree(tree)
-        else:
+        else:  # pragma: no cover
             osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
             if not osobj:
                 return None  # pragma: no cover
@@ -369,10 +370,9 @@ class _OsVariant(object):
 
         self._short_ids = ["generic"]
         if self._os:
+            self._short_ids = [self._os.get_short_id()]
             if hasattr(self._os, "get_short_id_list"):
                 self._short_ids = self._os.get_short_id_list()
-            else:
-                self._short_ids = [self._os.get_short_id()]
         self.name = self._short_ids[0]
 
         self.full_id = self._os and self._os.get_id() or None
@@ -629,7 +629,7 @@ class _OsVariant(object):
         return "inst.repo"
 
     def _get_generic_location(self, treelist, arch, profile):
-        if not hasattr(Libosinfo.Tree, "get_os_variants"):
+        if not hasattr(Libosinfo.Tree, "get_os_variants"):  # pragma: no cover
             for tree in treelist:
                 if tree.get_architecture() == arch:
                     return tree.get_url()
@@ -648,12 +648,8 @@ class _OsVariant(object):
                 continue
 
             variant_list = tree.get_os_variants()
-            if variant_list.get_length() == 0:
-                return tree.get_url()
-
             fallback_tree = tree
-            for i in range(variant_list.get_length()):
-                variant = variant_list.get_nth(i)
+            for variant in _OsinfoIter(variant_list):
                 if profile in variant.get_name():
                     return tree.get_url()
 
@@ -774,7 +770,7 @@ class _OsMedia(object):
         for variant in variants:
             if "netinst" in variant.get_id():
                 return True
-        return False
+        return False  # pragma: no cover
 
     def get_install_script_list(self):
         return list(_OsinfoIter(self._media.get_install_script_list()))

@@ -252,9 +252,8 @@ class InstallerTreeMedia(object):
             args = []
             for unattended_script in unattended_scripts:
                 cmdline = unattended_script.generate_cmdline()
-                if not cmdline:
-                    continue
-                args.append(cmdline)
+                if cmdline:
+                    args.append(cmdline)
             install_args = (" ").join(args)
             log.debug("Generated unattended cmdline: %s", install_args)
         elif self.is_network_url():

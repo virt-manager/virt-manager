@@ -114,3 +114,7 @@ class TestOSDB(unittest.TestCase):
 
         # Just call this for code coverage. Values differ by osinfo-db version
         win7.get_post_installable_drivers_location("x86_64")
+
+        win10 = OSDB.lookup_os("win10")
+        win10.get_post_installable_drivers_location("x86_64")
+        win10.supports_unattended_agents("x86_64")
