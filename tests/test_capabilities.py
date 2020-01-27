@@ -91,3 +91,17 @@ class TestCapabilities(unittest.TestCase):
         cpu_model = custom_mode.get_model("Opteron_G4")
         self.assertTrue(bool(cpu_model))
         self.assertTrue(cpu_model.usable)
+
+        models = caps.get_cpu_models()
+        assert len(models) > 10
+        assert "SandyBridge" in models
+
+        assert caps.label_for_firmware_path(None) == "BIOS"
+        assert "Custom:" in caps.label_for_firmware_path("/foobar")
+        assert "UEFI" in caps.label_for_firmware_path("OVMF")
+
+    def testDomainCapabilitiesAArch64(self):
+        xml = open(DATADIR + "/kvm-aarch64-domcaps.xml").read()
+        caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
+
+        assert "None" in caps.label_for_firmware_path(None)

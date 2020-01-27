@@ -158,7 +158,7 @@ class DomainCapabilities(XMLBuilder):
             try:
                 xml = conn.getDomainCapabilities(emulator, arch,
                     machine, hvtype)
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error fetching domcapabilities XML",
                     exc_info=True)
 
@@ -204,7 +204,7 @@ class DomainCapabilities(XMLBuilder):
         Search the loader paths for one that matches the passed arch
         """
         if not self.arch_can_uefi():
-            return
+            return  # pragma: no cover
 
         patterns = self._uefi_arch_patterns.get(self.arch)
         for pattern in patterns:
@@ -288,9 +288,8 @@ class DomainCapabilities(XMLBuilder):
 
         return DomainCpu(self.conn, expandedXML)
 
-    _features = None
-
-    def get_cpu_security_features(self):
+    def _lookup_cpu_security_features(self):
+        ret = []
         sec_features = [
                 'spec-ctrl',
                 'ssbd',
@@ -298,27 +297,29 @@ class DomainCapabilities(XMLBuilder):
                 'virt-ssbd',
                 'md-clear']
 
-        if self._features is not None:
-            return self._features
-
-        self._features = []
-
         for m in self.cpu.modes:
             if m.name != "host-model" or not m.supported:
-                continue
+                continue  # pragma: no cover
 
             try:
                 cpu = self._get_expanded_cpu(m)
-            except libvirt.libvirtError as e:
+            except libvirt.libvirtError as e:  # pragma: no cover
                 log.warning(_("Failed to get expanded CPU XML: %s"), e)
                 break
 
             for feature in cpu.features:
                 if feature.name in sec_features:
-                    self._features.append(feature.name)
+                    ret.append(feature.name)
 
-        log.debug("Found host-model security features: %s", self._features)
+        log.debug("Found host-model security features: %s", ret)
+        return ret
+
+    _features = None
+    def get_cpu_security_features(self):
+        if self._features is None:
+            self._features = self._lookup_cpu_security_features() or []
         return self._features
+
 
     def supports_sev_launch_security(self):
         """
