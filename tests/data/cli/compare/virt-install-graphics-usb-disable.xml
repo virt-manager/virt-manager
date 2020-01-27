@@ -1,0 +1,64 @@
+<domain type="kvm">
+  <name>fedora26</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/26"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <vmport state="off"/>
+  </features>
+  <cpu mode="host-model"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source file="/var/lib/libvirt/images/fedora26.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <controller type="usb" model="none"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
+    <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
+    <video>
+      <model type="qxl"/>
+    </video>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
+  </devices>
+</domain>

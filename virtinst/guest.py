@@ -1028,6 +1028,8 @@ class Guest(XMLBuilder):
             return
         if self.devices.redirdev:
             return
+        if self._usb_disabled():
+            return
         if not self.os.is_x86():
             return
 

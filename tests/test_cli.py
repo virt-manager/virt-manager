@@ -978,6 +978,7 @@ c.add_compare("--arch i686 --boot uefi --install kernel=http://example.com/httpk
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
 c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
+c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
 
 c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
