@@ -113,7 +113,8 @@ class _vmmDeleteBase(vmmGObjectUI):
             self.widget("delete-warn-running-vm-box"), vm_active)
 
         # Enable storage removal by default
-        self.widget("delete-remove-storage").set_active(True)
+        remove_storage_default = self._get_remove_storage_default()
+        self.widget("delete-remove-storage").set_active(remove_storage_default)
         self.widget("delete-remove-storage").toggled()
         diskdatas = self._get_disk_datas()
         _populate_storage_list(self.widget("delete-storage-list"),
@@ -273,6 +274,9 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _destroy_vm(self, vm):
         raise NotImplementedError
 
+    def _get_remove_storage_default(self):
+        raise NotImplementedError
+
 
 class vmmDeleteDialog(_vmmDeleteBase):
     """
@@ -280,6 +284,9 @@ class vmmDeleteDialog(_vmmDeleteBase):
     """
     def _get_dialog_title(self):
         return self.vm.get_name()
+
+    def _get_remove_storage_default(self):
+        return True
 
     def _get_disk_datas(self):
         return _build_diskdata_for_vm(self.vm)
@@ -358,6 +365,9 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _get_dialog_title(self):
         return self.disk.target
+
+    def _get_remove_storage_default(self):
+        return False
 
     def _get_disk_datas(self):
         return [_DiskData.from_disk(self.disk)]
