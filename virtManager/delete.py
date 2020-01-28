@@ -57,6 +57,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         self.bind_escape_key_close()
         self._cleanup_on_app_close()
 
+        self.topwin.set_title(self._get_dialog_title())
         self._init_state()
 
 
@@ -98,10 +99,10 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _reset_state(self):
         # Set VM name or disk.target in title'
-        text = self._get_dialog_title()
+        text = self._get_dialog_text()
 
-        title_str = ("<span size='large' color='white'>%s '%s'</span>" %
-                     (_("Delete"), xmlutil.xml_escape(text)))
+        title_str = ("<span size='large' color='white'>%s</span>" %
+                     xmlutil.xml_escape(text))
         self.widget("header-label").set_markup(title_str)
 
         self.topwin.resize(1, 1)
@@ -163,12 +164,12 @@ class _vmmDeleteBase(vmmGObjectUI):
         self.close()
 
     def _finish(self):
-        devs = self._get_paths_to_delete()
+        paths = self._get_paths_to_delete()
 
-        if devs:
+        if paths:
             title = _("Are you sure you want to delete the storage?")
             message = (_("The following paths will be deleted:\n\n%s") %
-                       "\n".join(devs))
+                       "\n".join(paths))
             ret = self.err.chkbox_helper(
                 self.config.get_confirm_delstorage,
                 self.config.set_confirm_delstorage,
@@ -178,14 +179,14 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         self.set_finish_cursor()
 
-        if not self._remove_device(devs):
+        if not self._remove_device(paths):
             # Don't delete storage if device removal failed
             self._delete_finished_cb(None, None)
             return
 
-        title, text = self._get_title_text(devs)
+        title, text = self._get_progress_text(paths)
 
-        progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
+        progWin = vmmAsyncJob(self._async_delete, [self.vm, paths],
                               self._delete_finished_cb, [],
                               title, text, self.topwin)
         progWin.run()
@@ -261,9 +262,11 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _get_dialog_title(self):
         raise NotImplementedError
-    def _get_disk_datas(self):
+    def _get_dialog_text(self):
         raise NotImplementedError
-    def _get_title_text(self, devs):
+    def _get_progress_text(self, paths):
+        raise NotImplementedError
+    def _get_disk_datas(self):
         raise NotImplementedError
     def _vm_active_status(self):
         raise NotImplementedError
@@ -273,7 +276,6 @@ class _vmmDeleteBase(vmmGObjectUI):
         raise NotImplementedError
     def _destroy_vm(self, vm):
         raise NotImplementedError
-
     def _get_remove_storage_default(self):
         raise NotImplementedError
 
@@ -283,16 +285,13 @@ class vmmDeleteDialog(_vmmDeleteBase):
     Dialog for deleting a VM and optionally its storage
     """
     def _get_dialog_title(self):
-        return self.vm.get_name()
+        return _("Delete Virtual Machine")
 
-    def _get_remove_storage_default(self):
-        return True
+    def _get_dialog_text(self):
+        return _("Delete '%(vmname)s'") % {"vmname": self.vm.get_name()}
 
-    def _get_disk_datas(self):
-        return _build_diskdata_for_vm(self.vm)
-
-    def _get_title_text(self, devs):
-        if devs:
+    def _get_progress_text(self, paths):
+        if paths:
             title = _("Deleting virtual machine '%s' and selected storage "
                       "(this may take a while)") % self.vm.get_name()
             text = title
@@ -300,6 +299,12 @@ class vmmDeleteDialog(_vmmDeleteBase):
             title = _("Deleting virtual machine '%s'") % self.vm.get_name()
             text = title
         return [title, text]
+
+    def _get_remove_storage_default(self):
+        return True
+
+    def _get_disk_datas(self):
+        return _build_diskdata_for_vm(self.vm)
 
     def _vm_active_status(self):
         vm_active = self.vm.is_active()
@@ -364,18 +369,26 @@ class vmmDeleteStorage(_vmmDeleteBase):
         self.disk = disk
 
     def _get_dialog_title(self):
-        return self.disk.target
+        return _("Remove Disk Device")
+
+    def _get_dialog_text(self):
+        return _("Remove disk device '%(target)s'") % {
+                "target": self.disk.target}
+
+    def _get_progress_text(self, paths):
+        if paths:
+            title = _("Removing disk device '%s' and selected storage "
+                      "(this may take a while)") % self.disk.target
+        else:
+            title = _("Removing disk device '%s'") % self.disk.target
+        text = title
+        return [title, text]
 
     def _get_remove_storage_default(self):
         return False
 
     def _get_disk_datas(self):
         return [_DiskData.from_disk(self.disk)]
-
-    def _get_title_text(self, devs):
-        title = _("Deleting the selected storage")
-        text = _('%s') % self.disk.target
-        return [title, text]
 
     def _vm_active_status(self):
         return False
