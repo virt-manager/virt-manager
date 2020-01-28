@@ -379,13 +379,13 @@ class Details(uiutils.UITestCase):
         disklabel = "SCSI Disk 1"
         tab = self._select_hw(win, disklabel, "disk-tab")
         win.find("config-remove", "push button").click()
-        delete = self.app.root.find_fuzzy("Delete", "frame")
+        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         delete.find_fuzzy("Delete", "button").click()
 
         # Will be fixed eventually
-        # alert = self.app.root.find("vmm dialog", "alert")
-        # alert.find_fuzzy("Device could not be removed", "label")
-        # alert.find("OK", "push button").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Device could not be removed", "label")
+        alert.find("OK", "push button").click()
 
         c = hwlist.find(disklabel, "table cell")
         self._stop_vm(win)
@@ -394,7 +394,7 @@ class Details(uiutils.UITestCase):
         # Remove a device for offline VM
         tab = self._select_hw(win, "SCSI CDROM 1", "disk-tab")
         win.find("config-remove", "push button").click()
-        delete = self.app.root.find_fuzzy("Delete", "frame")
+        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         delete.find_fuzzy("Delete", "button").click()
         uiutils.check_in_loop(lambda: win.active)
 
