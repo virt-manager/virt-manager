@@ -31,6 +31,9 @@ STORAGE_ROW_TOOLTIP = 7
 
 
 class _vmmDeleteBase(vmmGObjectUI):
+    """
+    Base class for both types of VM/device storage deleting wizards
+    """
     @classmethod
     def show_instance(cls, parentobj, vm):
         try:
@@ -56,39 +59,6 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         self._init_state()
 
-    def _get_dialog_title(self):
-        raise NotImplementedError
-
-    def _get_disk_datas(self):
-        raise NotImplementedError
-
-    def _get_title_text(self, devs):
-        raise NotImplementedError
-
-    def _vm_active_status(self):
-        raise NotImplementedError
-
-    def _delete_vm(self, vm):
-        raise NotImplementedError
-
-    def _remove_device(self, paths):
-        raise NotImplementedError
-
-    def _delete_disks(self, vm, paths, conn, meter):
-        storage_errors = []
-        for path in paths:
-            try:
-                log.debug("Deleting path: %s", path)
-                meter.start(text=_("Deleting path '%s'") % path)
-                self._async_delete_dev(vm, conn, path, meter)
-            except Exception as e:
-                storage_errors.append((str(e),
-                                          "".join(traceback.format_exc())))
-            meter.end(0)
-        return storage_errors
-
-    def _destroy_vm(self, vm):
-        raise NotImplementedError
 
     def _init_state(self):
         blue = Gdk.Color.parse("#0072A8")[1]
@@ -112,7 +82,6 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _cleanup(self):
         pass
-
 
 
     ##########################
@@ -228,7 +197,7 @@ class _vmmDeleteBase(vmmGObjectUI):
 
             conn = vm.conn.get_backend()
             meter = asyncjob.get_meter()
-            storage_errors = self._delete_disks(vm, paths, conn, meter)
+            storage_errors = self._async_delete_paths(paths, conn, meter)
 
             self._delete_vm(vm)
         except Exception as e:
@@ -259,29 +228,56 @@ class _vmmDeleteBase(vmmGObjectUI):
             asyncjob.set_error(error, details)
         vm.conn.schedule_priority_tick(pollvm=True)
 
-    def _async_delete_dev(self, vm, conn, path, ignore):
-        vol = None
+    def _async_delete_paths(self, paths, conn, meter):
+        storage_errors = []
+        for path in paths:
+            try:
+                log.debug("Deleting path: %s", path)
+                meter.start(text=_("Deleting path '%s'") % path)
+                self._async_delete_path(conn, path, meter)
+            except Exception as e:
+                storage_errors.append((str(e),
+                                          "".join(traceback.format_exc())))
+            meter.end(0)
+        return storage_errors
 
+    def _async_delete_path(self, conn, path, ignore):
         try:
             vol = conn.storageVolLookupByPath(path)
         except Exception:
+            vol = None
             log.debug("Path '%s' is not managed. Deleting locally", path)
 
         if vol:
             vol.delete(0)
         else:
             os.unlink(path)
-        self._async_delete_xmldev(vm, path, ignore)
 
-    def _async_delete_xmldev(self, vm, path, ignore):
-        for d in vm.xmlobj.devices.disk:
-            if d.path == path:
-                dev = d
-                break
-        vm.remove_device(dev)
+
+    ################
+    # Subclass API #
+    ################
+
+    def _get_dialog_title(self):
+        raise NotImplementedError
+    def _get_disk_datas(self):
+        raise NotImplementedError
+    def _get_title_text(self, devs):
+        raise NotImplementedError
+    def _vm_active_status(self):
+        raise NotImplementedError
+    def _delete_vm(self, vm):
+        raise NotImplementedError
+    def _remove_device(self, paths):
+        raise NotImplementedError
+    def _destroy_vm(self, vm):
+        raise NotImplementedError
 
 
 class vmmDeleteDialog(_vmmDeleteBase):
+    """
+    Dialog for deleting a VM and optionally its storage
+    """
     def _get_dialog_title(self):
         return self.vm.get_name()
 
@@ -318,6 +314,10 @@ class vmmDeleteDialog(_vmmDeleteBase):
 
 
 class vmmDeleteStorage(_vmmDeleteBase):
+    """
+    Dialog for removing a disk device from a VM and optionally deleting
+    its storage
+    """
     @staticmethod
     def remove_devobj_internal(vm, err, devobj, deleting_storage=False):
         log.debug("Removing device: %s", devobj)
@@ -378,12 +378,6 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
     def _delete_vm(self, vm):
         pass
-
-    def _delete_disks(self, vm, paths, conn, meter):
-        storage_errors = []
-        if paths:
-            super()._delete_disks(vm, paths, conn, meter)
-        return storage_errors
 
     def _destroy_vm(self, vm):
         pass
