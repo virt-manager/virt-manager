@@ -109,7 +109,7 @@ Some examples:
 We plan to keep open bugs only for:
 
 * bugs/problems that are actively affecting users, which the developers plan to fix eventually.
-* features/improvments that the developers plan to implement eventually.
+* features/improvements that the developers plan to implement eventually.
 
 The bug tracker will not be used as a wishlist. Users are free to
 file RFEs there, but they may be closed.

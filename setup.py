@@ -626,7 +626,16 @@ class CheckPylint(distutils.core.Command):
         import pylint.lint
         import pycodestyle
 
-        files = ["setup.py", "virtinst", "virtManager", "tests"]
+        lintfiles = ["setup.py", "virtinst", "virtManager", "tests"]
+
+        spellfiles = lintfiles[:]
+        spellfiles += list(glob.glob("*.md"))
+        spellfiles += list(glob.glob("man/*.pod"))
+        spellfiles += ["data/virt-manager.appdata.xml.in",
+                       "data/virt-manager.desktop.in",
+                       "data/org.virt-manager.virt-manager.gschema.xml",
+                       "virt-manager.spec.in"]
+        spellfiles.remove("NEWS.md")
 
         try:
             import codespell_lib
@@ -634,7 +643,7 @@ class CheckPylint(distutils.core.Command):
             print("running codespell")
             codespell_lib._codespell.main(
                 '-I', 'tests/data/codespell_dict.txt',
-                '--skip', '*.pyc,*.iso,*.xml', *files)
+                '--skip', '*.pyc,*.iso,*.xml', *spellfiles)
         except ImportError:
             print("codespell is not installed. skipping...")
         except Exception as e:
@@ -646,7 +655,7 @@ class CheckPylint(distutils.core.Command):
         style_guide = pycodestyle.StyleGuide(
             config_file='setup.cfg',
             format="pylint",
-            paths=files
+            paths=lintfiles,
         )
         report = style_guide.check_files()
         if style_guide.options.count:
@@ -660,7 +669,7 @@ class CheckPylint(distutils.core.Command):
         if self.jobs:
             pylint_opts += ["--jobs=%d" % self.jobs]
 
-        pylint.lint.Run(files + pylint_opts)
+        pylint.lint.Run(lintfiles + pylint_opts)
 
 
 class VMMDistribution(distutils.dist.Distribution):

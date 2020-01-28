@@ -157,7 +157,7 @@ Special type that exposes the host's SMBIOS info into the VM.
 
 =item B<--sysinfo emulate>
 
-Sepcial type where hypervisor will generate SMBIOS info into the VM.
+Special type where hypervisor will generate SMBIOS info into the VM.
 
 =item B<--sysinfo bios.vendor=custom> or B<--sysinfo smbios,bios.vendor=custom>
 
@@ -1908,7 +1908,7 @@ instance:
       --cdrom /path/to/my/win10.iso
 
 Install a CentOS 7 KVM from a URL, with recommended device defaults and
-default required storag,e but specifically request VNC graphics instead
+default required storage, but specifically request VNC graphics instead
 of the default SPICE, and request 8 virtual CPUs and 8192 MiB of memory:
 
   # virt-install \
