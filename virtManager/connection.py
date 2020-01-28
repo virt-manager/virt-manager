@@ -840,7 +840,7 @@ class vmmConnection(vmmGObject):
         self._closing = True
 
         try:
-            if not self._backend.is_closed():
+            if self._backend.is_open():
                 for eid in self._domain_cb_ids:
                     self._backend.domainEventDeregisterAny(eid)
                 for eid in self._network_cb_ids:

@@ -28,7 +28,6 @@ class TestConn(unittest.TestCase):
         assert not conn.get_uri_username()
         assert not conn.get_uri_transport()
         assert conn.close() == 0
-        assert conn.is_closed()
 
         # Coverage for a daemon_version check
         fakeuri = "__virtinst_test__test:///default,libver=123"

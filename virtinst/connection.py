@@ -124,9 +124,6 @@ class VirtinstConnection(object):
     # Public API #
     ##############
 
-    def is_closed(self):
-        return not bool(self._libvirtconn)
-
     def close(self):
         ret = 0
         if self._libvirtconn:
