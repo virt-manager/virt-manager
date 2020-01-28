@@ -71,6 +71,9 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _delete_vm(self, vm):
         raise NotImplementedError
 
+    def _remove_device(self, paths):
+        raise NotImplementedError
+
     def _delete_disks(self, vm, paths, conn, meter):
         storage_errors = []
         for path in paths:
@@ -204,6 +207,12 @@ class _vmmDeleteBase(vmmGObjectUI):
                 return
 
         self.set_finish_cursor()
+
+        if not self._remove_device(devs):
+            # Don't delete storage if device removal failed
+            self._delete_finished_cb(None, None)
+            return
+
         title, text = self._get_title_text(devs)
 
         progWin = vmmAsyncJob(self._async_delete, [self.vm, devs],
@@ -293,6 +302,10 @@ class vmmDeleteDialog(_vmmDeleteBase):
         vm_active = self.vm.is_active()
         return vm_active
 
+    def _remove_device(self, paths):
+        dummy = paths
+        return True
+
     def _delete_vm(self, vm):
         if vm.is_persistent():
             log.debug("Removing VM '%s'", vm.get_name())
@@ -306,7 +319,7 @@ class vmmDeleteDialog(_vmmDeleteBase):
 
 class vmmDeleteStorage(_vmmDeleteBase):
     @staticmethod
-    def remove_devobj_internal(vm, err, devobj):
+    def remove_devobj_internal(vm, err, devobj, deleting_storage=False):
         log.debug("Removing device: %s", devobj)
 
         # Define the change
@@ -328,11 +341,14 @@ class vmmDeleteStorage(_vmmDeleteBase):
         if not detach_err:
             return True
 
+        msg = _("This change will take effect after the next guest shutdown.")
+        if deleting_storage:
+            msg += " "
+            msg += _("Storage will not be deleted.")
+
         err.show_err(
             _("Device could not be removed from the running machine"),
-            details=(detach_err[0] + "\n\n" + detach_err[1]),
-            text2=_("This change will take effect after the next guest "
-                    "shutdown."),
+            details=(detach_err[0] + "\n\n" + detach_err[1]), text2=msg,
             buttons=Gtk.ButtonsType.OK,
             dialog_type=Gtk.MessageType.INFO)
 
@@ -354,12 +370,17 @@ class vmmDeleteStorage(_vmmDeleteBase):
     def _vm_active_status(self):
         return False
 
+    def _remove_device(self, paths):
+        deleting_storage = bool(paths)
+        return vmmDeleteStorage.remove_devobj_internal(
+                self.vm, self.err, self.disk,
+                deleting_storage=deleting_storage)
+
     def _delete_vm(self, vm):
         pass
 
     def _delete_disks(self, vm, paths, conn, meter):
         storage_errors = []
-        vmmDeleteStorage.remove_devobj_internal(vm, self.err, self.disk)
         if paths:
             super()._delete_disks(vm, paths, conn, meter)
         return storage_errors
