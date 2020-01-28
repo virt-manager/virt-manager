@@ -84,20 +84,23 @@ Some examples:
 * [Raw `<genid>` config](https://www.redhat.com/archives/virt-tools-list/2019-April/msg00001.html)
 * [Fine grained `<cpu><feature>` config](https://www.redhat.com/archives/virt-tools-list/2014-January/msg00180.html)
 * [Host network management via libvirt interface APIs](https://blog.wikichoon.com/2019/04/host-network-interfaces-panel-removed.html)
+* [VM hugepages/hugetlbfs](https://bugzilla.redhat.com/show_bug.cgi?id=1688641)
 * Most VM tuning: `<cputune>`, `<blkiotune>`, `<numatune>`, fine grained `<vcpus>` listing
 * Editing existing machine type/arch/ostype, UEFI config. Only advanced users can make it work, and they can edit the XML.
 * Tight desktop integration stuff: registering as a default file handler, registering as a gnome search provider, etc. This is gnome-boxes territory
+* Serial console config options like [buffer scrollback size](https://bugzilla.redhat.com/show_bug.cgi?id=1610165). Use `virsh console` or cli tools if need flexibility.
 
 * Advanced VNC/SPICE viewer config. virt-viewer should be the target app
   * VNC bit depth config
   * advanced mouse/keyboard grab support
   * advanced SPICE viewer options
   * [hiding viewer window borders](https://www.redhat.com/archives/virt-tools-list/2019-January/msg00000.html)
+  * [keypress delay](https://bugzilla.redhat.com/show_bug.cgi?id=1410943)
 
 * UI scalability features to manage large amounts of VMs
   * [custom manager columns for VM organizing](https://www.redhat.com/archives/virt-tools-list/2019-April/msg00059.html)
-  * [organizing VMs into collections/groups](https://bugzilla.redhat.com/show_bug.cgi?id=1193303)
-  * multiselect operations on VMs/other objects
+  * [organizing VMs into collections/groups](https://bugzilla.redhat.com/show_bug.cgi?id=1193303) ([and another](https://bugzilla.redhat.com/show_bug.cgi?id=1548879))
+  * multiselect operations on VMs/other objects ([like storage](https://bugzilla.redhat.com/show_bug.cgi?id=1698879))
   * hiding offline VMs or other view options
 
 
