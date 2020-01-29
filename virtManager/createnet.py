@@ -21,11 +21,6 @@ from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .xmleditor import vmmXMLEditor
 
-_green = Gdk.Color.parse("#c0ffc0")[1]
-_red = Gdk.Color.parse("#ffc0c0")[1]
-_black = Gdk.Color.parse("#000000")[1]
-_white = Gdk.Color.parse("#f0f0f0")[1]
-
 
 def _make_ipaddr(addrstr):
     if addrstr is None:
@@ -57,16 +52,12 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_net_dns_use_toggled": self._net_dns_use_toggled_cb,
 
             "on_net-ipv4-enable_toggled":  self.change_ipv4_enable,
-            "on_net-ipv4-network_changed":  self.change_ipv4_network,
+            "on_net-ipv4-network_changed": self._change_ipv4_network_cb,
             "on_net-dhcpv4-enable_toggled": self.change_dhcpv4_enable,
-            "on_net-dhcpv4-start_changed":  self.change_dhcpv4_start,
-            "on_net-dhcpv4-end_changed":    self.change_dhcpv4_end,
 
             "on_net-ipv6-enable_toggled":  self.change_ipv6_enable,
-            "on_net-ipv6-network_changed":  self.change_ipv6_network,
+            "on_net-ipv6-network_changed": self._change_ipv6_network_cb,
             "on_net-dhcpv6-enable_toggled": self.change_dhcpv6_enable,
-            "on_net-dhcpv6-start_changed":  self.change_dhcpv6_start,
-            "on_net-dhcpv6-end_changed":    self.change_dhcpv6_end,
         })
         self.bind_escape_key_close()
 
@@ -305,71 +296,31 @@ class vmmCreateNetwork(vmmGObjectUI):
         uiutil.set_grid_row_visible(start, enabled)
         uiutil.set_grid_row_visible(end, enabled)
 
-    def change_dhcpv4_start(self, src):
-        start = self.get_config_dhcpv4_start()
-        self.change_dhcpv4(src, start)
-    def change_dhcpv4_end(self, src):
-        end = self.get_config_dhcpv4_end()
-        self.change_dhcpv4(src, end)
-    def change_dhcpv4(self, src, addr):
-        ip = self.get_config_ip4()
-        if ip is None or addr is None:
-            src.modify_bg(Gtk.StateType.NORMAL, _white)
-            return
 
-        if addr.version != 4 or not ip.overlaps(addr):
-            src.modify_bg(Gtk.StateType.NORMAL, _red)
-        else:
-            src.modify_bg(Gtk.StateType.NORMAL, _green)
-
-    def change_dhcpv6_start(self, src):
-        start = self.get_config_dhcpv6_start()
-        self.change_dhcpv6(src, start)
-    def change_dhcpv6_end(self, src):
-        end = self.get_config_dhcpv6_end()
-        self.change_dhcpv6(src, end)
-    def change_dhcpv6(self, src, addr):
-        ip = self.get_config_ip6()
-        if ip is None or addr is None:
-            src.modify_bg(Gtk.StateType.NORMAL, _white)
-            return
-
-        if addr.version != 6 or not ip.overlaps(addr):
-            src.modify_bg(Gtk.StateType.NORMAL, _red)
-        else:
-            src.modify_bg(Gtk.StateType.NORMAL, _green)
-
-
-    def change_ipv4_network(self, src):
+    def _change_ipv4_network_cb(self, src):
         ip = self.get_config_ip4()
 
         # No IP specified or invalid IP
         if ip is None or ip.version != 4:
-            src.modify_bg(Gtk.StateType.NORMAL, _red)
             return
 
-        valid_ip = (ip.num_addresses >= 8 and ip.is_private)
         start = int(ip.num_addresses // 2)
         end = int(ip.num_addresses - 2)
 
-        src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)
         self.widget("net-dhcpv4-start").set_text(
             str(ip.network_address + start)
         )
         self.widget("net-dhcpv4-end").set_text(str(ip.network_address + end))
 
-    def change_ipv6_network(self, src):
+    def _change_ipv6_network_cb(self, src):
         ip = self.get_config_ip6()
 
         if ip is None or ip.version != 6:
-            src.modify_bg(Gtk.StateType.NORMAL, _red)
             return
 
-        valid_ip = (ip.num_addresses == 64 and ip.is_private)
         start = 256
         end = 512 - 1
 
-        src.modify_bg(Gtk.StateType.NORMAL, valid_ip and _green or _red)
         self.widget("net-dhcpv6-start").set_text(
             str(ip.network_address + start)
         )
