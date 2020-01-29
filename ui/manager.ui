@@ -395,7 +395,9 @@
                         <signal name="key-press-event" handler="on_vm_list_key_press_event" swapped="no"/>
                         <signal name="row-activated" handler="on_vm_list_row_activated" swapped="no"/>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                          <object class="GtkTreeSelection" id="treeview-selection1">
+                            <property name="mode">browse</property>
+                          </object>
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="vm-list-atkobject">
