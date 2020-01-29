@@ -370,31 +370,35 @@ class vmmCreateNetwork(vmmGObjectUI):
         if self.get_config_ipv4_enable():
             ip = self.get_config_ip4()
             ipobj = net.ips.add_new()
-            ipobj.address = str(ip.network_address + 1)
-            ipobj.netmask = str(ip.netmask)
+            if ip:
+                ipobj.address = str(ip.network_address + 1)
+                ipobj.netmask = str(ip.netmask)
 
             if self.get_config_dhcpv4_enable():
                 dhcpobj = ipobj.ranges.add_new()
-                dhcpobj.start = str(
-                    self.get_config_dhcpv4_start().network_address
-                )
-                dhcpobj.end = str(self.get_config_dhcpv4_end().network_address)
+                start = self.get_config_dhcpv4_start()
+                end = self.get_config_dhcpv4_end()
+                if start:
+                    dhcpobj.start = str(start.network_address)
+                if end:
+                    dhcpobj.end = str(end.network_address)
 
         if self.get_config_ipv6_enable():
             ip = self.get_config_ip6()
             ipobj = net.ips.add_new()
             ipobj.family = "ipv6"
-            ipobj.address = str(ip.network_address + 1)
-            ipobj.prefix = str(ip.prefixlen)
+            if ip:
+                ipobj.address = str(ip.network_address + 1)
+                ipobj.prefix = str(ip.prefixlen)
 
             if self.get_config_dhcpv6_enable():
                 dhcpobj = ipobj.ranges.add_new()
-                dhcpobj.start = str(
-                    self.get_config_dhcpv6_start().network_address
-                )
-                dhcpobj.end = str(
-                    self.get_config_dhcpv6_end().network_address
-                )
+                start = self.get_config_dhcpv6_start()
+                end = self.get_config_dhcpv6_end()
+                if start:
+                    dhcpobj.start = str(start.network_address)
+                if end:
+                    dhcpobj.end = str(end.network_address)
 
         return net
 
