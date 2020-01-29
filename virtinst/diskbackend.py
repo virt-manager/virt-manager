@@ -15,6 +15,7 @@ import libvirt
 
 from .logger import log
 from .storage import StoragePool, StorageVolume
+from . import xmlutil
 
 
 def _lookup_vol_by_path(conn, path):
@@ -389,14 +390,19 @@ class _StorageBase(object):
         raise NotImplementedError()
     def get_path(self):
         raise NotImplementedError()
+    def is_stub(self):
+        return False
 
     # Storage creation routines
     def is_size_conflict(self):
         raise NotImplementedError()
-    def create(self, progresscb):
-        raise NotImplementedError()
     def will_create_storage(self):
         raise NotImplementedError()
+
+    def create(self, progresscb):
+        ignore = progresscb  # pragma: no cover
+        xmlutil.raise_programming_error(None,
+            "%s can't create storage" % self.__class__.__name__)
 
 
 class _StorageCreator(_StorageBase):
@@ -627,6 +633,48 @@ class ManagedStorageCreator(_StorageCreator):
         return self._vol_install.is_size_conflict()
 
 
+class StorageBackendStub(_StorageBase):
+    """
+    Class representing a storage path for a parsed XML disk, that we
+    don't want to do slow resolving of unless requested
+    """
+    def __init__(self, conn, path, dev_type, driver_type):
+        _StorageBase.__init__(self, conn)
+        self._path = path
+        self._dev_type = dev_type
+        self._driver_type = driver_type
+
+
+    def get_path(self):
+        return self._path
+    def get_vol_object(self):
+        return None
+    def get_vol_xml(self):
+        return None
+    def get_parent_pool(self):
+        return None
+    def get_size(self):
+        return 0
+    def exists(self):
+        return True
+    def get_dev_type(self):
+        return self._dev_type
+    def get_driver_type(self):
+        return self._driver_type
+
+    def validate(self, disk):
+        ignore = disk
+        return
+    def get_vol_install(self):
+        return None
+    def is_size_conflict(self):
+        return (False, None)
+    def is_stub(self):
+        return True
+    def will_create_storage(self):
+        return False
+
+
 class StorageBackend(_StorageBase):
     """
     Class that carries all the info about any existing storage that
@@ -643,8 +691,8 @@ class StorageBackend(_StorageBase):
             self._path = None
 
         if self._vol_object and not self._parent_pool:
-            raise RuntimeError(
-                "programming error: parent_pool must be specified")
+            xmlutil.raise_programming_error(None,
+                "parent_pool must be specified")
 
         # Cached bits
         self._vol_xml = None

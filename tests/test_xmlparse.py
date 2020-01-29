@@ -1570,10 +1570,10 @@ class XMLParseTest(unittest.TestCase):
         disk.validate()
         disk.is_size_conflict()
         disk.build_storage(None)
-        self.assertEqual(getattr(disk, "_storage_backend"), None)
+        self.assertTrue(getattr(disk, "_storage_backend").is_stub())
 
         disk.set_backend_for_existing_path()
-        self.assertEqual(bool(getattr(disk, "_storage_backend")), True)
+        self.assertFalse(getattr(disk, "_storage_backend").is_stub())
 
         with self.assertRaises(ValueError):
             disk.validate()

@@ -291,7 +291,7 @@ class DeviceDisk(Device):
 
 
     _XML_PROP_ORDER = [
-        "_type", "_device", "snapshot_policy",
+        "_xmltype", "_device", "snapshot_policy",
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_detect_zeroes",
         "driver_io", "error_policy",
@@ -307,8 +307,10 @@ class DeviceDisk(Device):
         Device.__init__(self, *args, **kwargs)
 
         self._source_volume_err = None
-        self._storage_backend = None
         self.storage_was_created = False
+
+        self._storage_backend = diskbackend.StorageBackendStub(
+            self.conn, self._get_xmlpath(), self._xmltype, self.driver_type)
 
 
     #############################
@@ -316,16 +318,12 @@ class DeviceDisk(Device):
     #############################
 
     def _get_path(self):
-        if not self._storage_backend:
-            xmlpath = self._get_xmlpath()
-            if xmlpath:
-                return xmlpath
-
-            self._set_default_storage_backend()
+        if (self._storage_backend.is_stub() and not
+            self._storage_backend.get_path()):
+            self._resolve_storage_backend()
         return self._storage_backend.get_path()
     def _set_path(self, newpath):
-        if (self._storage_backend and
-            self._storage_backend.will_create_storage()):
+        if self._storage_backend.will_create_storage():
             xmlutil.raise_programming_error(None,
                     "Can't change disk path if storage creation info "
                     "has been set.")
@@ -343,8 +341,8 @@ class DeviceDisk(Device):
         # a _storage_backend to be initialized from the XML path. That
         # will cause validate() to actually validate the path exists.
         # We need this so addhw XML editing will still validate the disk path
-        if not self._storage_backend:
-            self._set_default_storage_backend()
+        if self._storage_backend.is_stub():
+            self._resolve_storage_backend()
 
     def set_vol_object(self, vol_object, parent_pool):
         log.debug("disk.set_vol_object: volxml=\n%s",
@@ -362,18 +360,11 @@ class DeviceDisk(Device):
         self._set_xmlpath(self.path)
 
     def get_vol_object(self):
-        if not self._storage_backend:
-            return None
         return self._storage_backend.get_vol_object()
     def get_vol_install(self):
-        if not self._storage_backend:
-            return None
         return self._storage_backend.get_vol_install()
     def get_parent_pool(self):
-        if self.get_vol_install():
-            return self.get_vol_install().pool
         return self._storage_backend.get_parent_pool()
-
     def get_size(self):
         return self._storage_backend.get_size()
 
@@ -526,7 +517,7 @@ class DeviceDisk(Device):
     def _get_default_type(self):
         if self.source_pool or self.source_volume:
             return DeviceDisk.TYPE_VOLUME
-        if self._storage_backend:
+        if not self._storage_backend.is_stub():
             return self._storage_backend.get_dev_type()
         if self.source_protocol:
             return DeviceDisk.TYPE_NETWORK
@@ -590,13 +581,13 @@ class DeviceDisk(Device):
     # type, device, driver_name, driver_type handling
     # These are all weirdly intertwined so require some special handling
     def _get_type(self):
-        if self._type:
-            return self._type
+        if self._xmltype:
+            return self._xmltype
         return self._get_default_type()
     def _set_type(self, val):
-        self._type = val
+        self._xmltype = val
     type = property(_get_type, _set_type)
-    _type = XMLProperty("./@type")
+    _xmltype = XMLProperty("./@type")
 
     def _get_device(self):
         if self._device:
@@ -660,7 +651,7 @@ class DeviceDisk(Device):
     # Validation assistance methods #
     #################################
 
-    def _set_default_storage_backend(self):
+    def _resolve_storage_backend(self):
         path = None
         vol_object = None
         parent_pool = None
@@ -730,8 +721,7 @@ class DeviceDisk(Device):
         If true, this disk needs storage creation parameters or things
         will error.
         """
-        return (self._storage_backend and
-                not self._storage_backend.exists())
+        return not self._storage_backend.exists()
 
     def validate(self):
         if self.path is None:
@@ -742,9 +732,6 @@ class DeviceDisk(Device):
                 raise ValueError(_("Device type '%s' requires a path") %
                                  self.device)
 
-            return
-
-        if not self._storage_backend:
             return
 
         if (not self._storage_backend.will_create_storage() and
@@ -762,8 +749,7 @@ class DeviceDisk(Device):
         If storage doesn't exist (a non-existent file 'path', or 'vol_install'
         was specified), we create it.
         """
-        if (not self._storage_backend or
-            not self._storage_backend.will_create_storage()):
+        if not self._storage_backend.will_create_storage():
             return
 
         meter = progress.ensure_meter(meter)
@@ -785,8 +771,6 @@ class DeviceDisk(Device):
         Non fatal conflicts (sparse disk exceeds available space) will
         return (False, "description of collision")
         """
-        if not self._storage_backend:
-            return (False, None)
         return self._storage_backend.is_size_conflict()
 
     def is_conflict_disk(self):
@@ -924,8 +908,8 @@ class DeviceDisk(Device):
     def set_defaults(self, guest):
         if not self._device:
             self._device = self._get_device()
-        if not self._type:
-            self._type = self._get_default_type()
+        if not self._xmltype:
+            self._xmltype = self._get_default_type()
         if not self.driver_name:
             self.driver_name = self._get_default_driver_name()
         if not self.driver_type:
