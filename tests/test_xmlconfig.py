@@ -206,6 +206,17 @@ class TestXMLMisc(unittest.TestCase):
             errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
             self.assertTrue(not bool(errdict))
 
+            # Mock setfacl to definitely, as getfacl won't accept args
+            with unittest.mock.patch("virtinst.diskbackend.SETFACL",
+                    "getfacl"):
+                errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
+
+            # Test uid check short circuiting
+            searchdata.uid = os.getuid()
+            os.chown(tmpdir, os.getuid(), os.getgid())
+            assert virtinst.diskbackend.is_path_searchable(
+                    tmpdir, os.getuid(), "foo") == []
+
     def test_path_in_use(self):
         # Extra tests for DeviceDisk.path_in_use
         conn = utils.URIs.open_kvm()
@@ -238,3 +249,20 @@ class TestXMLMisc(unittest.TestCase):
         except Exception as e:
             if not self.conn.support.is_libvirt_error_no_domain(e):
                 raise
+
+    def test_disk_backend(self):
+        # Test get_size() with vol_install
+        disk = virtinst.DeviceDisk(self.conn)
+        pool = self.conn.storagePoolLookupByName("default-pool")
+        vol_install = disk.build_vol_install(self.conn, "newvol1.img",
+                pool, 1, False)
+        disk.set_vol_install(vol_install)
+        assert disk.get_size() == 1.0
+
+        # Test some blockdev inspecting
+        if os.path.exists("/dev/loop0"):
+            conn = utils.URIs.openconn("test:///default")
+            disk = virtinst.DeviceDisk(conn)
+            disk.path = "/dev/loop0"
+            assert disk.type == "block"
+            disk.get_size()

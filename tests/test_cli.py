@@ -615,6 +615,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client
 --disk vol=iscsi-direct/unit:0:0:1
 --disk size=.0001,format=raw
+--disk size=.0001,pool=disk-pool
 
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3,filterref=foobar,rom.bar=off,rom.file=/some/rom,source.portgroup=foo

@@ -734,13 +734,13 @@ class DeviceDisk(Device):
 
             return
 
-        if (not self._storage_backend.will_create_storage() and
-            not self._storage_backend.exists()):
+        if (not self._storage_backend.exists() and
+            not self._storage_backend.will_create_storage()):
             raise ValueError(
                 _("Must specify storage creation parameters for "
                   "non-existent path '%s'.") % self.path)
 
-        self._storage_backend.validate(self)
+        self._storage_backend.validate()
 
     def build_storage(self, meter):
         """

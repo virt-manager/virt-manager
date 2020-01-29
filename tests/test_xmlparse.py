@@ -1558,11 +1558,9 @@ class XMLParseTest(unittest.TestCase):
         guest.devices.replace_child(guest.devices.disk[4], newdisk)
         utils.diff_compare(guest.get_xml(), parsefile)
 
-    def testDiskRevalidate(self):
-        """
-        Test that calling validate() on parsed disk XML doesn't attempt
-        to verify the path exists. Assume it's a working config
-        """
+    def testDiskBackend(self):
+        # Test that calling validate() on parsed disk XML doesn't attempt
+        # to verify the path exists. Assume it's a working config
         xml = ("<disk type='file' device='disk'>"
             "<source file='/A/B/C/D/NOPE'/>"
             "</disk>")
@@ -1571,6 +1569,17 @@ class XMLParseTest(unittest.TestCase):
         disk.is_size_conflict()
         disk.build_storage(None)
         self.assertTrue(getattr(disk, "_storage_backend").is_stub())
+
+        # Stub backend coverage testing
+        backend = getattr(disk, "_storage_backend")
+        assert disk.get_parent_pool() is None
+        assert disk.get_vol_object() is None
+        assert disk.get_vol_install() is None
+        assert disk.get_size() == 0
+        assert backend.get_vol_xml() is None
+        assert backend.get_dev_type() == "file"
+        assert backend.get_driver_type() is None
+        assert backend.get_parent_pool() is None
 
         disk.set_backend_for_existing_path()
         self.assertFalse(getattr(disk, "_storage_backend").is_stub())
