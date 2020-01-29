@@ -309,6 +309,51 @@ class Guest(XMLBuilder):
         return self.__osinfo
     osinfo = property(_get_osinfo)
 
+    def _set_os_obj(self, obj):
+        self.__osinfo = obj
+        self._metadata.libosinfo.os_id = obj.full_id
+
+    def set_os_name(self, name):
+        obj = OSDB.lookup_os(name, raise_error=True)
+        log.debug("Setting Guest osinfo name %s", obj)
+        self._set_os_obj(obj)
+
+    def set_default_os_name(self):
+        self.set_os_name("generic")
+
+    def _supports_virtio(self, os_support):
+        if not self.conn.is_qemu():
+            return False
+
+        # These _only_ support virtio so don't check the OS
+        if (self.os.is_arm_machvirt() or
+            self.os.is_riscv_virt() or
+            self.os.is_s390x() or
+            self.os.is_pseries()):
+            return True
+
+        if not os_support:
+            return False
+
+        if self.os.is_x86():
+            return True
+
+        return False  # pragma: no cover
+
+    def supports_virtionet(self):
+        return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
+    def supports_virtiodisk(self):
+        return self._supports_virtio(self.osinfo.supports_virtiodisk(self._extra_drivers))
+    def supports_virtioscsi(self):
+        return self._supports_virtio(self.osinfo.supports_virtioscsi(self._extra_drivers))
+    def _supports_virtioserial(self):
+        return self._supports_virtio(self.osinfo.supports_virtioserial(self._extra_drivers))
+
+
+    #####################
+    # Bootorder helpers #
+    #####################
+
     def _get_old_boot_order(self):
         return self.os.bootorder
 
@@ -423,46 +468,6 @@ class Guest(XMLBuilder):
             if next_boot_index is not None:
                 # we found a hole so we can stop here
                 break
-
-    def _set_os_obj(self, obj):
-        self.__osinfo = obj
-        self._metadata.libosinfo.os_id = obj.full_id
-
-    def set_os_name(self, name):
-        obj = OSDB.lookup_os(name, raise_error=True)
-        log.debug("Setting Guest osinfo name %s", obj)
-        self._set_os_obj(obj)
-
-    def set_default_os_name(self):
-        self.set_os_name("generic")
-
-    def _supports_virtio(self, os_support):
-        if not self.conn.is_qemu():
-            return False
-
-        # These _only_ support virtio so don't check the OS
-        if (self.os.is_arm_machvirt() or
-            self.os.is_riscv_virt() or
-            self.os.is_s390x() or
-            self.os.is_pseries()):
-            return True
-
-        if not os_support:
-            return False
-
-        if self.os.is_x86():
-            return True
-
-        return False  # pragma: no cover
-
-    def supports_virtionet(self):
-        return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
-    def supports_virtiodisk(self):
-        return self._supports_virtio(self.osinfo.supports_virtiodisk(self._extra_drivers))
-    def supports_virtioscsi(self):
-        return self._supports_virtio(self.osinfo.supports_virtioscsi(self._extra_drivers))
-    def _supports_virtioserial(self):
-        return self._supports_virtio(self.osinfo.supports_virtioserial(self._extra_drivers))
 
 
     ###############################
