@@ -92,8 +92,7 @@ def parse_args():
 
     geng = parser.add_argument_group(_("General Options"))
     geng.add_argument("-o", "--original", dest="original_guest",
-                    help=_("Name of the original guest; "
-                           "The status must be shut off or paused."))
+                    help=_("Name of the original guest to clone."))
     geng.add_argument("--original-xml",
                     help=_("XML file to use as the original guest."))
     geng.add_argument("--auto-clone", action="store_true",

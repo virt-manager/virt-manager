@@ -297,15 +297,10 @@ class Cloner(object):
         log.debug("Original sizes: %s",
                       [d.get_size() for d in self.original_disks])
 
-        # If domain has devices to clone, it must be 'off' or 'paused'
-        if (not self.clone_running and
-            (self.original_dom and len(self.original_disks) != 0)):
+        if not self.clone_running and self.original_dom:
             status = self.original_dom.info()[0]
-
-            if status not in [libvirt.VIR_DOMAIN_SHUTOFF,
-                              libvirt.VIR_DOMAIN_PAUSED]:
-                raise RuntimeError(_("Domain with devices to clone must be "
-                                     "paused or shutoff."))
+            if status not in [libvirt.VIR_DOMAIN_SHUTOFF]:
+                raise RuntimeError(_("Domain to clone must be shutoff."))
 
     def _setup_disk_clone_destination(self, orig_disk, clone_disk):
         """

@@ -197,7 +197,7 @@ class TestClone(unittest.TestCase):
             cloner = Cloner(conn)
             cloner.original_guest = "test-snapshots"
             cloner.setup_original()
-        self.assertTrue("paused or shutoff" in str(err.exception))
+        self.assertTrue("must be shutoff" in str(err.exception))
 
         with self.assertRaises(ValueError) as err:
             cloner = Cloner(conn)
