@@ -264,15 +264,10 @@ class DeviceDisk(Device):
             num -= amt
             digits.insert(0, amt)
 
-        seen_valid = False
         gen_t = ""
         for digit in digits:
             if digit == 0:
-                if not seen_valid:
-                    continue
-                digit = 1
-
-            seen_valid = True
+                continue
             gen_t += "%c" % (ord('a') + digit - 1)
 
         return gen_t
