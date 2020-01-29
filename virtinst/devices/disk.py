@@ -840,16 +840,13 @@ class DeviceDisk(Device):
                     return _return(pref)
         return _return("sd")
 
-    def generate_target(self, skip_targets, pref_ctrl=None):
+    def generate_target(self, skip_targets):
         """
         Generate target device ('hda', 'sdb', etc..) for disk, excluding
-        any targets in 'skip_targets'.  If given the 'pref_ctrl'
-        parameter, it tries to select the target so that the disk is
-        mapped onto that controller.
+        any targets in 'skip_targets'.
         Sets self.target, and returns the generated value.
 
         :param skip_targets: list of targets to exclude
-        :param pref_ctrl: preferred controller to connect the disk to
         :returns: generated target
         """
         prefix, maxnode = self.get_target_prefix(skip_targets)
@@ -859,13 +856,7 @@ class DeviceDisk(Device):
         def get_target():
             first_found = None
 
-            ran = range(maxnode)
-            if pref_ctrl is not None:
-                # We assume narrow SCSI bus and libvirt assigning 7
-                # (1-7, 8-14, etc.) devices per controller
-                ran = range(pref_ctrl * 7, (pref_ctrl + 1) * 7)
-
-            for i in ran:
+            for i in range(maxnode):
                 gen_t = prefix + self.num_to_target(i + 1)
                 if gen_t in skip_targets:
                     skip_targets.remove(gen_t)
@@ -882,11 +873,6 @@ class DeviceDisk(Device):
             self.target = ret
             return ret
 
-        if pref_ctrl is not None:
-            # This basically means that we either chose full
-            # controller or didn't add any
-            raise ValueError(_("Controller number %d for disk of type %s has "
-                               "no empty slot to use" % (pref_ctrl, prefix)))
         raise ValueError(_("Only %s disks for bus '%s' are supported"
                            % (maxnode, self.bus)))
 

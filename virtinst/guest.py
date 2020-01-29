@@ -603,6 +603,14 @@ class Guest(XMLBuilder):
                 return True
         return False
 
+    def can_default_virtioscsi(self):
+        """
+        Return True if the guest supports virtio-scsi, and there's
+        no other scsi controllers attached to the guest
+        """
+        has_any_scsi = any([d.type == "scsi" for d in self.devices.controller])
+        return not has_any_scsi and self.supports_virtioscsi()
+
     def hyperv_supported(self):
         if not self.osinfo.is_windows():
             return False
@@ -953,13 +961,8 @@ class Guest(XMLBuilder):
             self.add_device(dev)
 
     def _add_implied_controllers(self):
-        has_any_scsi = False
-        for dev in self.devices.controller:
-            if dev.type == "scsi":
-                has_any_scsi = True
-
         # Add virtio-scsi controller if needed
-        if not has_any_scsi and self.supports_virtioscsi():
+        if self.can_default_virtioscsi():
             for dev in self.devices.disk:
                 if dev.bus == "scsi":
                     ctrl = DeviceController(self.conn)

@@ -113,11 +113,6 @@ class TestXMLMisc(unittest.TestCase):
         self.assertEqual("hdc", disk.generate_target(["hdb", "sda"]))
         self.assertEqual("hdb", disk.generate_target(["hda", "hdd"]))
 
-        disk.bus = "scsi"
-        self.assertEqual("sdb",
-            disk.generate_target(["sda", "sdg", "sdi"], 0))
-        self.assertEqual("sdh", disk.generate_target(["sda", "sdg"], 1))
-
     def testQuickTreeinfo(self):
         # Simple sanity test to make sure detect_distro works. test-urls
         # does much more exhaustive testing but it's only run occasionally

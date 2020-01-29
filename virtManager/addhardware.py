@@ -1483,51 +1483,17 @@ class vmmAddHardware(vmmGObjectUI):
         dev.set_defaults(self.vm.get_xmlobj())
         return dev
 
-    def _set_disk_controller(self, disk, controller_model, used_disks):
+    def _set_disk_controller(self, disk):
         # Add a SCSI controller with model virtio-scsi if needed
         disk.vmm_controller = None
-        if controller_model != "virtio-scsi":
-            return None
+        if not self.vm.xmlobj.can_default_virtioscsi():
+            return
 
-        # Get SCSI controllers
-        controllers = self.vm.xmlobj.devices.controller
-        ctrls_scsi = [x for x in controllers if
-                (x.type == DeviceController.TYPE_SCSI)]
-
-        # Create possible new controller
         controller = DeviceController(self.conn.get_backend())
         controller.type = "scsi"
-        controller.model = controller_model
-
-        # And set its index
+        controller.model = "virtio-scsi"
         controller.index = 0
-        if ctrls_scsi:
-            controller.index = max([x.index for x in ctrls_scsi]) + 1
-
-        # Take only virtio-scsi ones
-        ctrls_scsi = [x for x in ctrls_scsi
-                      if x.model == controller_model]
-
-        # Save occupied places per controller
-        occupied = {}
-        for d in used_disks:
-            if (d.get_target_prefix() == disk.get_target_prefix() and
-                d.bus == "scsi"):
-                num = DeviceDisk.target_to_num(d.target)
-                idx = num // 7
-                if idx not in occupied:
-                    occupied[idx] = []
-                if d.target not in occupied[idx]:
-                    occupied[idx].append(d.target)
-
-        for c in ctrls_scsi:
-            if c.index not in occupied or len(occupied[c.index]) < 7:
-                controller = c
-                break
-        else:
-            disk.vmm_controller = controller
-
-        return controller.index
+        disk.vmm_controller = controller
 
     def _build_storage(self):
         bus = uiutil.get_list_selection(
@@ -1540,13 +1506,6 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-discard"))
         detect_zeroes = uiutil.get_list_selection(
             self.widget("storage-detect-zeroes"))
-
-        controller_model = None
-        if (bus == "scsi" and
-            self.vm.get_hv_type() in ["qemu", "kvm", "test"] and
-            not any([c.type == "scsi"
-                 for c in self.vm.xmlobj.devices.controller])):
-            controller_model = "virtio-scsi"
 
         disk = self.addstorage.build_device(self.vm.get_name(),
             collideguest=self.vm.xmlobj, device=device)
@@ -1567,10 +1526,8 @@ class vmmAddHardware(vmmGObjectUI):
             if d.target not in used:
                 used.append(d.target)
 
-        prefer_ctrl = self._set_disk_controller(
-            disk, controller_model, disks)
-
-        disk.generate_target(used, prefer_ctrl)
+        self._set_disk_controller(disk)
+        disk.generate_target(used)
         return disk
 
     def _build_network(self):
