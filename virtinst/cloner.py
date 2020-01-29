@@ -410,6 +410,8 @@ class Cloner(object):
 
         self._guest.name = self._clone_name
         self._guest.uuid = self._clone_uuid
+        self._guest.title = None
+
         self._clone_macs.reverse()
         for dev in self._guest.devices.graphics:
             if dev.port and dev.port != -1:
