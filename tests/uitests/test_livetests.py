@@ -189,18 +189,10 @@ class Console(uiutils.UITestCase):
         tab = win.find("disk-tab", None)
         uiutils.check_in_loop(lambda: tab.showing)
         win.find("config-remove").click()
-        delete = self.app.root.find_fuzzy("Delete", "frame")
+        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         delete.find_fuzzy("Delete", "button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find("Are you sure you want", "label")
-        alert.find("Yes", "push button").click()
         uiutils.check_in_loop(lambda: not delete.active)
-        if alert:
-            # Will be fixed later
-            return
-        # alert = self.app.root.find("vmm dialog", "alert")
-        # alert.find_fuzzy("Are you sure you want to remove", "label")
-        # alert.find("Yes", "push button").click()
+        assert os.path.exists(fname)
 
         # Change CDROM
         win.find("IDE CDROM 1", "table cell").click()
