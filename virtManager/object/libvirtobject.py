@@ -389,17 +389,11 @@ class vmmLibvirtObject(vmmGObject):
     def _redefine_xml_internal(self, origxml, newxml):
         self.log_redefine_xml_diff(self, origxml, newxml)
 
-        if origxml != newxml:
-            self._define(newxml)
-
+        self._define(newxml)
         if self._using_events():
             return
 
-        # Make sure we have latest XML.
         self.ensure_latest_xml(nosignal=True)
-
-        # We force a signal even if XML didn't change, so the details
-        # window is correctly refreshed.
         self.idle_emit("state-changed")
 
     def _redefine_xmlobj(self, xmlobj):
