@@ -100,8 +100,7 @@ class vmmAddStorage(vmmGObjectUI):
             return
 
         log.debug("Attempting to correct permission issues.")
-        errors = virtinst.DeviceDisk.fix_path_search(
-                conn.get_backend(), searchdata)
+        errors = virtinst.DeviceDisk.fix_path_search(searchdata)
         if not errors:
             return
 

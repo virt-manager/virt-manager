@@ -645,6 +645,50 @@
 
 
 
+<pool type='logical'>
+  <name>disk-pool</name>
+  <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5aaa</uuid>
+  <capacity>107374182400</capacity>
+  <allocation>0</allocation>
+  <available>107374182400</available>
+  <source>
+  </source>
+  <target>
+    <path>/dev/disk-pool</path>
+    <permissions>
+      <mode>0700</mode>
+      <owner>10736</owner>
+      <group>10736</group>
+    </permissions>
+  </target>
+
+  <volume type='block'>
+    <name>diskvol1</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume type='block'>
+    <name>diskvol7</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+</pool>
+
+
 
 
 

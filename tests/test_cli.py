@@ -765,7 +765,7 @@ c.add_valid("--disk %(EXISTIMG1)s")  # Not specifying path=
 c.add_valid("--disk %(NEWIMG1)s,format=raw,size=.0000001")  # Not specifying path= but creating storage
 c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
-c.add_valid("--disk /dev/default-pool/sharevol.img,perms=sh")  # Colliding shareable storage
+c.add_valid("--connect %(URI-KVM)s --disk /dev/default-pool/sharevol.img,perms=sh")  # Colliding shareable storage
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom --disk path=%(EXISTIMG1)s,device=cdrom")  # Two IDE cds
 c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver name and type options
 c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
@@ -777,6 +777,8 @@ c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexistin
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
 c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Too many IDE
+c.add_invalid("--disk device=disk", grep="requires a path")  # --disk device=disk, but no path
+c.add_invalid("--disk pool=disk-pool,size=1,format=qcow2", grep="Format attribute not supported")  # format= invalid for disk pool
 c.add_invalid("--disk pool=foopool,size=.0001")  # Specify a nonexistent pool
 c.add_invalid("--disk vol=default-pool/foovol")  # Specify a nonexistent volume
 c.add_invalid("--disk vol=default-pool-no-slash")  # Wrong vol= format

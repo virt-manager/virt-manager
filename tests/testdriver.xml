@@ -227,7 +227,9 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <!-- bus scsi -->
     <disk type='file' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
+      <source file='/dev/default-pool/sharevol.img'/>
       <address type='drive' controller='5'/>
+      <shareable/>
     </disk>
 
     <disk type='file' device='disk'>
@@ -301,6 +303,13 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
         <host name='192.168.1.100'/>
       </source>
       <target dev='vdae' bus='virtio'/>
+    </disk>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source protocol='nbd'>
+        <host transport='unix' socket='relative.sock'/>
+      </source>
+      <target dev='vdaf' bus='virtio'/>
     </disk>
 
     <!-- bus usb -->

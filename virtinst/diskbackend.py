@@ -34,7 +34,7 @@ def _lookup_vol_by_path(conn, path):
         # an empty error code
         if (e.get_error_code() and
             e.get_error_code() != libvirt.VIR_ERR_NO_STORAGE_VOL):
-            raise
+            raise  # pragma: no cover
         return None, e
 
 
@@ -129,7 +129,7 @@ def manage_path(conn, path):
     If path is not managed, try to create a storage pool to probe the path
     """
     if not conn.support.conn_storage():
-        return None, None
+        return None, None  # pragma: no cover
     if not path:
         return None, None
 
@@ -160,20 +160,15 @@ def path_is_url(path):
     """
     Detect if path is a URL
     """
-    if not path:
-        return False
-    return bool(re.match(r"[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path))
+    return bool(re.match(r"[a-zA-Z]+(\+[a-zA-Z]+)?://.*", path or ""))
 
 
 def path_is_network_vol(conn, path):
     """
     Detect if path is a network volume such as rbd, gluster, etc
     """
-    if not path:
-        return False
-
     for volxml in conn.fetch_all_vols():
-        if volxml.target_path == path:
+        if path and volxml.target_path == path:
             return volxml.type == "network"
     return False
 
@@ -240,7 +235,7 @@ def path_definitely_exists(conn, path):
 
         if not conn.is_remote():
             return os.path.exists(path)
-    except Exception:
+    except Exception:  # pragma: no cover
         pass
 
     return False

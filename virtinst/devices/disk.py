@@ -12,6 +12,7 @@ from ..logger import log
 
 from .. import diskbackend
 from .. import progress
+from .. import xmlutil
 from .device import Device, DeviceSeclabel
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
@@ -115,7 +116,6 @@ class DeviceDisk(Device):
         if path is None:
             return searchdata
 
-        path = os.path.abspath(path)
         if conn.is_remote():
             return searchdata
         if not conn.is_qemu_system():
@@ -124,10 +124,11 @@ class DeviceDisk(Device):
             return searchdata
         if diskbackend.path_is_network_vol(conn, path):
             return searchdata
+        path = os.path.abspath(path)
 
         user, uid = conn.caps.host.get_qemu_baselabel()
         if not user:
-            return searchdata
+            return searchdata  # pragma: no cover
         if uid == 0:
             return searchdata
 
@@ -138,13 +139,12 @@ class DeviceDisk(Device):
         return searchdata
 
     @staticmethod
-    def fix_path_search(conn, searchdata):
+    def fix_path_search(searchdata):
         """
         Try to fix any permission problems found by check_path_search
 
         :returns: Return a dictionary of entries {broken path : error msg}
         """
-        ignore = conn
         errdict = diskbackend.set_dirs_searchable(
                 searchdata.fixlist, searchdata.user)
         return errdict
@@ -172,7 +172,7 @@ class DeviceDisk(Device):
         while backpath in volmap:
             vol = volmap[backpath]
             if vol in vols:
-                break
+                break  # pragma: no cover
             backpath = vol.target_path
             vols.append(backpath)
 
@@ -326,8 +326,9 @@ class DeviceDisk(Device):
     def _set_path(self, newpath):
         if (self._storage_backend and
             self._storage_backend.will_create_storage()):
-            raise ValueError(_("Can't change disk path if storage creation info "
-                               "has been set."))
+            xmlutil.raise_programming_error(None,
+                    "Can't change disk path if storage creation info "
+                    "has been set.")
 
         # User explicitly changed 'path', so try to lookup its storage
         # object since we may need it
@@ -788,19 +789,14 @@ class DeviceDisk(Device):
             return (False, None)
         return self._storage_backend.is_size_conflict()
 
-    def is_conflict_disk(self, conn=None):
+    def is_conflict_disk(self):
         """
         check if specified storage is in use by any other VMs on passed
         connection.
 
         :returns: list of colliding VM names
         """
-        if not self.path:
-            return False
-        if not conn:
-            conn = self.conn
-
-        ret = self.path_in_use_by(conn, self.path,
+        ret = self.path_in_use_by(self.conn, self.path,
                                   shareable=self.shareable,
                                   read_only=self.read_only)
         return ret

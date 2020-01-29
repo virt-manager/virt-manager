@@ -202,19 +202,23 @@ class TestXMLMisc(unittest.TestCase):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code
         # to ensure it isn't horribly broken
-        from virtinst import diskbackend
-        uid = -1
-        username = "fakeuser-zzzz"
+        conn = utils.URIs.open_kvm()
+
         with tempfile.TemporaryDirectory() as tmpdir:
-            fixlist = diskbackend.is_path_searchable(tmpdir, uid, username)
-            self.assertTrue(bool(fixlist))
-            errdict = diskbackend.set_dirs_searchable(fixlist, username)
+            searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
+            self.assertTrue(bool(searchdata.fixlist))
+            self.assertEqual(searchdata.user, "qemu")
+            errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
             self.assertTrue(not bool(errdict))
 
-        import getpass
-        fixlist = diskbackend.is_path_searchable(
-                os.getcwd(), os.getuid(), getpass.getuser())
-        self.assertTrue(not bool(fixlist))
+    def test_path_in_use(self):
+        # Extra tests for DeviceDisk.path_in_use
+        conn = utils.URIs.open_kvm()
+
+        # Comparing against kernel
+        vms = virtinst.DeviceDisk.path_in_use_by(
+                conn, "/dev/default-pool/test-arm-kernel")
+        assert vms == ["test-arm-kernel"]
 
     def test_nonpredicatble_generate(self):
         kvm_uri = utils.URIs.kvm.replace(",predictable", "")
