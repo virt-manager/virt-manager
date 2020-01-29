@@ -78,24 +78,90 @@ def _pretty_memory(mem):
 # Helpers for tracking devices we create from this wizard #
 ###########################################################
 
-def _mark_vmm_device(dev):
-    setattr(dev, "vmm_create_wizard_device", True)
-
-
-def _get_vmm_device(guest, devkey):
-    for dev in getattr(guest.devices, devkey):
-        if hasattr(dev, "vmm_create_wizard_device"):
-            return dev
-
-
-def _remove_vmm_device(guest, devkey):
-    dev = _get_vmm_device(guest, devkey)
-    if dev:
-        guest.remove_device(dev)
-
-
 def is_virt_bootstrap_installed():
     return pkgutil.find_loader('virtBootstrap') is not None
+
+
+class _GuestData:
+    """
+    Wrapper to hold all data that will go into the Guest object,
+    so we can rebuild it as needed.
+    """
+    def __init__(self, conn, capsinfo):
+        self.conn = conn
+        self.capsinfo = capsinfo
+        self.failed_guest = None
+
+        self.default_graphics_type = None
+        self.skip_default_sound = None
+        self.skip_default_usbredir = None
+        self.x86_cpu_default = None
+
+        self.disk = None
+        self.filesystem = None
+        self.interface = None
+        self.init = None
+
+        self.machine = None
+        self.os_variant = None
+        self.uefi_path = None
+        self.name = None
+
+        self.vcpus = None
+        self.memory = None
+        self.currentMemory = None
+
+        self.location = None
+        self.cdrom = None
+        self.extra_args = None
+        self.livecd = False
+
+    def build_installer(self):
+        kwargs = {}
+        if self.location:
+            kwargs["location"] = self.location
+        if self.cdrom:
+            kwargs["cdrom"] = self.cdrom
+
+        installer = virtinst.Installer(self.conn, **kwargs)
+        if self.extra_args:
+            installer.set_extra_args([self.extra_args])
+        if self.livecd:
+            installer.livecd = True
+        return installer
+
+    def build_guest(self):
+        guest = virtinst.Guest(self.conn)
+        guest.set_capabilities_defaults(self.capsinfo)
+
+        if self.machine:
+            # If no machine was explicitly selected, we don't overwrite
+            # it, because we want to
+            guest.os.machine = self.machine
+        if self.os_variant:
+            guest.set_os_name(self.os_variant)
+        if self.uefi_path:
+            guest.set_uefi_path(self.uefi_path)
+
+        if self.filesystem:
+            guest.add_device(self.filesystem)
+        if self.disk:
+            guest.add_device(self.disk)
+        if self.interface:
+            guest.add_device(self.interface)
+
+        if self.init:
+            guest.os.init = self.init
+        if self.name:
+            guest.name = self.name
+        if self.vcpus:
+            guest.vcpus = self.vcpus
+        if self.currentMemory:
+            guest.currentMemory = self.currentMemory
+        if self.memory:
+            guest.memory = self.memory
+
+        return guest
 
 
 ##############
@@ -122,8 +188,7 @@ class vmmCreateVM(vmmGObjectUI):
         self.conn = None
         self._capsinfo = None
 
-        self._guest = None
-        self._failed_guest = None
+        self._gdata = None
 
         # Distro detection state variables
         self._detect_os_in_progress = False
@@ -209,8 +274,7 @@ class vmmCreateVM(vmmGObjectUI):
         if self._storage_browser:
             self._storage_browser.close()
         self._set_conn(None)
-        self._failed_guest = None
-        self._guest = None
+        self._gdata = None
 
     def _cleanup(self):
         if self._storage_browser:
@@ -228,7 +292,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         self.conn = None
         self._capsinfo = None
-        self._guest = None
+        self._gdata = None
 
 
     ##########################
@@ -399,7 +463,8 @@ class vmmCreateVM(vmmGObjectUI):
         Set state that is dependent on when capsinfo changes
         """
         self.widget("arch-warning-box").hide()
-        guest = self._build_guest(None)
+        self._gdata = self._build_guestdata()
+        guest = self._gdata.build_guest()
 
         # Helper state
         is_local = not self.conn.is_remote()
@@ -417,7 +482,9 @@ class vmmCreateVM(vmmGObjectUI):
 
         if guest.prefers_uefi():
             try:
-                guest.set_uefi_path(guest.get_uefi_path())
+                self._gdata.uefi_path = guest.get_uefi_path()
+                # Call for validation
+                guest.set_uefi_path(self._gdata.uefi_path)
                 installable_arch = True
                 log.debug("UEFI found, setting it as default.")
             except Exception as e:
@@ -879,18 +946,16 @@ class vmmCreateVM(vmmGObjectUI):
         storagesize = ""
         storagepath = ""
 
-        disk = _get_vmm_device(self._guest, "disk")
+        disk = self._gdata.disk
+        fs = self._gdata.filesystem
         if disk:
             if disk.wants_storage_creation():
                 storagesize = "%s" % _pretty_storage(disk.get_size())
             if not path:
                 path = disk.path
             storagepath = (storagetmpl % path)
-        elif len(self._guest.devices.filesystem):
-            fs = self._guest.devices.filesystem[0]
+        elif fs:
             storagepath = storagetmpl % fs.source
-        elif self._guest.os.is_container():
-            storagepath = _("Host filesystem")
         else:
             storagepath = _("None")
 
@@ -899,8 +964,9 @@ class vmmCreateVM(vmmGObjectUI):
         self.widget("summary-storage-path").set_markup(storagepath)
 
     def _populate_summary(self):
-        mem = _pretty_memory(int(self._guest.memory))
-        cpu = str(int(self._guest.vcpus))
+        guest = self._gdata.build_guest()
+        mem = _pretty_memory(int(guest.memory))
+        cpu = str(int(guest.vcpus))
 
         instmethod = self._get_config_install_page()
         install = ""
@@ -919,7 +985,7 @@ class vmmCreateVM(vmmGObjectUI):
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
             install = _("Virtuozzo container")
 
-        self.widget("summary-os").set_text(self._guest.osinfo.label)
+        self.widget("summary-os").set_text(guest.osinfo.label)
         self.widget("summary-install").set_text(install)
         self.widget("summary-mem").set_text(mem)
         self.widget("summary-cpu").set_text(cpu)
@@ -1045,31 +1111,28 @@ class vmmCreateVM(vmmGObjectUI):
         When user tries to close the dialog, check for any disks that
         we should auto cleanup
         """
-        if (self._failed_guest and
-            self._failed_guest.installer_instance.get_created_disks(
-                self._failed_guest)):
-
-            def _cleanup_disks(asyncjob):
-                meter = asyncjob.get_meter()
-                self._failed_guest.installer_instance.cleanup_created_disks(
-                        self._failed_guest, meter)
-
-            def _cleanup_disks_finished(error, details):
-                if error:  # pragma: no cover
-                    log.debug("Error cleaning up disk images:"
-                        "\nerror=%s\ndetails=%s", error, details)
-                self.idle_add(self._close)
-
-            progWin = vmmAsyncJob(
-                _cleanup_disks, [],
-                _cleanup_disks_finished, [],
-                _("Removing disk images"),
-                _("Removing disk images we created for this virtual machine."),
-                self.topwin)
-            progWin.run()
-
-        else:
+        if (not self._gdata or
+            not self._gdata.failed_guest):
             self._close()
+            return 1
+
+        def _cleanup_disks(asyncjob, _failed_guest):
+            meter = asyncjob.get_meter()
+            virtinst.Installer.cleanup_created_disks(_failed_guest, meter)
+
+        def _cleanup_disks_finished(error, details):
+            if error:  # pragma: no cover
+                log.debug("Error cleaning up disk images:"
+                    "\nerror=%s\ndetails=%s", error, details)
+            self.idle_add(self._close)
+
+        progWin = vmmAsyncJob(
+            _cleanup_disks, [self._gdata.failed_guest],
+            _cleanup_disks_finished, [],
+            _("Removing disk images"),
+            _("Removing disk images we created for this virtual machine."),
+            self.topwin)
+        progWin.run()
 
         return 1
 
@@ -1227,7 +1290,8 @@ class vmmCreateVM(vmmGObjectUI):
                 fs_dir = [os.path.expanduser("~"),
                           '.local/share/libvirt/filesystems/']
 
-            default_name = virtinst.Guest.generate_name(self._guest)
+            guest = self._gdata.build_guest()
+            default_name = virtinst.Guest.generate_name(guest)
             fs = fs_dir + [default_name]
             self.widget("install-oscontainer-fs").set_text(os.path.join(*fs))
 
@@ -1384,30 +1448,16 @@ class vmmCreateVM(vmmGObjectUI):
     # Page validation routines #
     ############################
 
-    def _build_guest(self, variant):
-        guest = virtinst.Guest(self.conn.get_backend())
-        guest.set_capabilities_defaults(self._capsinfo)
+    def _build_guestdata(self):
+        gdata = _GuestData(self.conn.get_backend(), self._capsinfo)
 
-        # If no machine was selected don't clear recommended machine
-        machine = self._get_config_machine()
-        if machine:
-            guest.os.machine = machine
-
-        # Validation catches user manually typing an invalid value
-        try:
-            if variant:
-                guest.set_os_name(variant)
-        except ValueError as e:
-            self.err.val_err(_("Error setting OS information."), str(e))
-            return None
-
-        guest.default_graphics_type = self.config.get_graphics_type()
-        guest.skip_default_sound = not self.config.get_new_vm_sound()
-        guest.skip_default_usbredir = (
+        gdata.default_graphics_type = self.config.get_graphics_type()
+        gdata.skip_default_sound = not self.config.get_new_vm_sound()
+        gdata.skip_default_usbredir = (
             self.config.get_add_spice_usbredir() == "no")
-        guest.x86_cpu_default = self.config.get_default_cpu_setting()
+        gdata.x86_cpu_default = self.config.get_default_cpu_setting()
 
-        return guest
+        return gdata
 
     def _validate(self, pagenum):
         try:
@@ -1427,14 +1477,8 @@ class vmmCreateVM(vmmGObjectUI):
             return
 
     def _validate_intro_page(self):
-        # We just set this here because it's needed soon after for distro
-        # detection. But the 'real' self._guest is created in validate_install,
-        # and it just uses _build_guest, so don't ever add any other guest
-        # altering here.
-        self._guest = self._build_guest(None)
-        if not self._guest:
-            return False
-        return True
+        self._gdata.machine = self._get_config_machine()
+        return bool(self._gdata.build_guest())
 
     def _validate_install_page(self):
         instmethod = self._get_config_install_page()
@@ -1442,7 +1486,6 @@ class vmmCreateVM(vmmGObjectUI):
         location = None
         extra = None
         cdrom = None
-        install_bootdev = None
         is_import = False
         init = None
         fs = None
@@ -1530,52 +1573,49 @@ class vmmCreateVM(vmmGObjectUI):
             if not template:
                 return self.err.val_err(_("A template name is required."))
 
-        # Build the installer and Guest instance
-        try:
-            # Overwrite the guest
-            installer = virtinst.Installer(
-                    self.conn.get_backend(),
-                    location=location, cdrom=cdrom,
-                    install_bootdev=install_bootdev)
-            variant = osobj and osobj.name or None
-            self._guest = self._build_guest(variant)
-            if not self._guest:
-                return False
-        except Exception as e:
-            return self.err.val_err(
-                        _("Error setting installer parameters."), e)
-
         # Validate media location
         try:
-            if extra:
-                installer.set_extra_args([extra])
             if init:
-                self._guest.os.init = init
+                self._gdata.init = init
 
             if fs:
-                fsdev = virtinst.DeviceFilesystem(self._guest.conn)
+                fsdev = virtinst.DeviceFilesystem(self._gdata.conn)
                 fsdev.target = "/"
                 fsdev.source = fs
-                self._guest.add_device(fsdev)
+                self._gdata.filesystem = fsdev
 
             if template:
-                fsdev = virtinst.DeviceFilesystem(self._guest.conn)
+                fsdev = virtinst.DeviceFilesystem(self._gdata.conn)
                 fsdev.target = "/"
                 fsdev.type = "template"
                 fsdev.source = template
-                self._guest.add_device(fsdev)
+                self._gdata.filesystem = fsdev
 
         except Exception as e:
             return self.err.val_err(
                                 _("Error setting install media location."), e)
 
+        # Build the installer and Guest instance
         try:
-            name = virtinst.Guest.generate_name(self._guest)
-            self.widget("create-vm-name").set_text(name)
-            self._guest.validate_name(self._guest.conn, name)
-            self._guest.name = name
+            self._gdata.location = location
+            self._gdata.cdrom = cdrom
+            self._gdata.extra_args = extra
+            self._gdata.livecd = False
+            self._gdata.os_variant = osobj and osobj.name or None
+            guest = self._gdata.build_guest()
+            installer = self._gdata.build_installer()
+        except Exception as e:
+            return self.err.val_err(
+                        _("Error setting installer parameters."), e)
+
+        try:
+            name = virtinst.Guest.generate_name(guest)
+            virtinst.Guest.validate_name(self._gdata.conn, name)
+            self._gdata.name = name
         except Exception as e:
             return self.err.val_err(_("Error setting default name."), e)
+
+        self.widget("create-vm-name").set_text(self._gdata.name)
 
         # Kind of wonky, run storage validation now, which will assign
         # the import path. Import installer skips the storage page.
@@ -1583,17 +1623,17 @@ class vmmCreateVM(vmmGObjectUI):
             if not self._validate_storage_page():
                 return False
 
-        for path in installer.get_search_paths(self._guest):
+        for path in installer.get_search_paths(guest):
             self._addstorage.check_path_search(
                 self, self.conn, path)
 
-        res = self._guest.osinfo.get_recommended_resources()
-        ram = res.get_recommended_ram(self._guest.os.arch)
-        n_cpus = res.get_recommended_ncpus(self._guest.os.arch)
-        storage = res.get_recommended_storage(self._guest.os.arch)
+        res = guest.osinfo.get_recommended_resources()
+        ram = res.get_recommended_ram(guest.os.arch)
+        n_cpus = res.get_recommended_ncpus(guest.os.arch)
+        storage = res.get_recommended_storage(guest.os.arch)
         log.debug("Recommended resources for os=%s: "
             "ram=%s ncpus=%s storage=%s",
-            self._guest.osinfo.name, ram, n_cpus, storage)
+            guest.osinfo.name, ram, n_cpus, storage)
 
         # Change the default values suggested to the user.
         ram_size = DEFAULT_MEM
@@ -1607,10 +1647,6 @@ class vmmCreateVM(vmmGObjectUI):
             storage_size = storage // (1024 ** 3)
             self._addstorage.widget("storage-size").set_value(storage_size)
 
-        # Stash the installer in the _guest instance so we don't need
-        # to cache both objects individually
-        self._guest.installer_instance = installer
-
         # Validation passed, store the install path (if there is one) in
         # gsettings
         self._get_config_oscontainer_source_url(store_media=True)
@@ -1622,25 +1658,16 @@ class vmmCreateVM(vmmGObjectUI):
         cpus = self.widget("cpus").get_value()
         mem  = self.widget("mem").get_value()
 
-        # VCPUS
-        try:
-            self._guest.vcpus = int(cpus)
-        except Exception as e:
-            return self.err.val_err(_("Error setting CPUs."), e)
-
-        # Memory
-        try:
-            self._guest.currentMemory = int(mem) * 1024
-            self._guest.memory = int(mem) * 1024
-        except Exception as e:
-            return self.err.val_err(_("Error setting guest memory."), e)
+        self._gdata.vcpus = int(cpus)
+        self._gdata.currentMemory = int(mem) * 1024
+        self._gdata.memory = int(mem) * 1024
 
         return True
 
     def _get_storage_path(self, vmname, do_log):
         failed_disk = None
-        if self._failed_guest:
-            failed_disk = _get_vmm_device(self._failed_guest, "disk")
+        if self._gdata.failed_guest:
+            failed_disk = self._gdata.disk
 
         path = None
         path_already_created = False
@@ -1665,14 +1692,14 @@ class vmmCreateVM(vmmGObjectUI):
 
     def _validate_storage_page(self):
         path, path_already_created = self._get_storage_path(
-            self._guest.name, do_log=True)
+            self._gdata.name, do_log=True)
 
         disk = None
         storage_enabled = self.widget("enable-storage").get_active()
         try:
             if storage_enabled:
                 disk = self._addstorage.build_device(
-                        self._guest.name, path=path)
+                        self._gdata.name, path=path)
 
             if disk and self._addstorage.validate_device(disk) is False:
                 return False
@@ -1681,27 +1708,23 @@ class vmmCreateVM(vmmGObjectUI):
 
         if self._get_config_install_page() == INSTALL_PAGE_ISO:
             # CD/ISO install and no disks implies LiveCD
-            self._guest.installer_instance.livecd = not storage_enabled
+            self._gdata.livecd = not storage_enabled
 
-        _remove_vmm_device(self._guest, "disk")
-
+        self._gdata.disk = disk
         if not storage_enabled:
             return True
 
         disk.storage_was_created = path_already_created
-        _mark_vmm_device(disk)
-        self._guest.add_device(disk)
-
         return True
 
 
     def _validate_final_page(self):
         # HV + Arch selection
         name = self._get_config_name()
-        if name != self._guest.name:
+        if name != self._gdata.name:
             try:
-                self._guest.validate_name(self._guest.conn, name)
-                self._guest.name = name
+                virtinst.Guest.validate_name(self._gdata.conn, name)
+                self._gdata.name = name
             except Exception as e:
                 return self.err.val_err(_("Invalid guest name"), str(e))
             if self._is_default_storage():
@@ -1731,11 +1754,7 @@ class vmmCreateVM(vmmGObjectUI):
         net = self._netlist.build_device(macaddr)
         self._netlist.validate_device(net)
 
-        _remove_vmm_device(self._guest, "interface")
-        if net:
-            _mark_vmm_device(net)
-            self._guest.add_device(net)
-
+        self._gdata.interface = net
         return True
 
 
@@ -1820,7 +1839,7 @@ class vmmCreateVM(vmmGObjectUI):
             installer = virtinst.Installer(self.conn.get_backend(),
                                            cdrom=cdrom,
                                            location=location)
-            distro = installer.detect_distro(self._guest)
+            distro = installer.detect_distro(self._gdata.build_guest())
             thread_results.set_distro(distro)
         except Exception:
             log.exception("Error detecting distro.")
@@ -1884,23 +1903,24 @@ class vmmCreateVM(vmmGObjectUI):
             return False
 
         log.debug("Starting create finish() sequence")
-        self._failed_guest = None
-        guest = self._guest
+        self._gdata.failed_guest = None
 
         try:
+            guest = self._gdata.build_guest()
+            installer = self._gdata.build_installer()
             self.set_finish_cursor()
 
             # This encodes all the virtinst defaults up front, so the customize
             # dialog actually shows disk buses, cache values, default devices,
             # etc. Not required for straight start_install but doesn't hurt.
-            guest.installer_instance.set_install_defaults(guest)
+            installer.set_install_defaults(guest)
 
             if not self.widget("summary-customize").get_active():
-                self._start_install(guest)
+                self._start_install(guest, installer)
                 return
 
             log.debug("User requested 'customize', launching dialog")
-            self._show_customize_dialog(self._guest)
+            self._show_customize_dialog(guest, installer)
         except Exception as e:
             self.reset_finish_cursor()
             self.err.show_err(_("Error starting installation: ") + str(e))
@@ -1915,15 +1935,16 @@ class vmmCreateVM(vmmGObjectUI):
         self._customize_window = None
         window.cleanup()
 
-    def _show_customize_dialog(self, origguest):
-        orig_vdomain = vmmDomainVirtinst(self.conn, origguest, origguest.uuid)
+    def _show_customize_dialog(self, origguest, installer):
+        orig_vdomain = vmmDomainVirtinst(self.conn,
+                origguest, origguest.uuid, installer)
 
         def customize_finished_cb(src, vdomain):
             if not self.is_visible():
                 return
             log.debug("User finished customize dialog, starting install")
-            self._failed_guest = None
-            self._start_install(vdomain.get_backend())
+            self._gdata.failed_guest = None
+            self._start_install(vdomain.get_backend(), installer)
 
         def config_canceled_cb(src):
             log.debug("User closed customize window, closing wizard")
@@ -1944,7 +1965,7 @@ class vmmCreateVM(vmmGObjectUI):
         if error:
             error = (_("Unable to complete install: '%s'") % error)
             parentobj.err.show_err(error, details=details)
-            self._failed_guest = guest
+            self._gdata.failed_guest = guest
             return
 
         foundvm = None
@@ -1959,7 +1980,7 @@ class vmmCreateVM(vmmGObjectUI):
         vmmVMWindow.get_instance(self, foundvm).show()
 
 
-    def _start_install(self, guest):
+    def _start_install(self, guest, installer):
         """
         Launch the async job to start the install
         """
@@ -1979,7 +2000,8 @@ class vmmCreateVM(vmmGObjectUI):
                 bootstrap_args[key] = getter()
 
         parentobj = self._customize_window or self
-        progWin = vmmAsyncJob(self._do_async_install, [guest, bootstrap_args],
+        progWin = vmmAsyncJob(self._do_async_install,
+                              [guest, installer, bootstrap_args],
                               self._install_finished_cb, [guest, parentobj],
                               _("Creating Virtual Machine"),
                               _("The virtual machine is now being "
@@ -1990,7 +2012,7 @@ class vmmCreateVM(vmmGObjectUI):
                               parentobj.topwin)
         progWin.run()
 
-    def _do_async_install(self, asyncjob, guest, bootstrap_args):
+    def _do_async_install(self, asyncjob, guest, installer, bootstrap_args):
         """
         Kick off the actual install
         """
@@ -2018,7 +2040,7 @@ class vmmCreateVM(vmmGObjectUI):
                 refresh_pools.append(poolname)
 
         log.debug("Starting background install process")
-        guest.installer_instance.start_install(guest, meter=meter)
+        installer.start_install(guest, meter=meter)
         log.debug("Install completed")
 
         # Wait for VM to show up
@@ -2044,7 +2066,7 @@ class vmmCreateVM(vmmGObjectUI):
             # Probably means guest had no 'install' phase, as in
             # for live cds. Try to restart the domain.
             vm.startup()
-        elif guest.installer_instance.has_install_phase():
+        elif installer.has_install_phase():
             # Register a status listener, which will restart the
             # guest after the install has finished
             def cb():

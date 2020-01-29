@@ -82,6 +82,40 @@ class Installer(object):
                     install_kernel, install_initrd, install_kernel_args)
 
 
+    ##################
+    # Static helpers #
+    ##################
+
+    @staticmethod
+    def cleanup_created_disks(guest, meter):
+        """
+        Remove any disks we created as part of the install. Only ever
+        called by clients.
+        """
+        clean_disks = [d for d in guest.devices.disk if d.storage_was_created]
+
+        for disk in clean_disks:
+            log.debug("Removing created disk path=%s vol_object=%s",
+                disk.path, disk.get_vol_object())
+            name = os.path.basename(disk.path)
+
+            try:
+                meter.start(size=None, text=_("Removing disk '%s'") % name)
+
+                if disk.get_vol_object():
+                    disk.get_vol_object().delete()
+                else:  # pragma: no cover
+                    # This case technically shouldn't happen here, but
+                    # it's here in case future assumptions change
+                    os.unlink(disk.path)
+
+                meter.end(0)
+            except Exception as e:  # pragma: no cover
+                log.debug("Failed to remove disk '%s'",
+                    name, exc_info=True)
+                log.error("Failed to remove disk '%s': %s", name, e)
+
+
     ###################
     # Private helpers #
     ###################
@@ -612,36 +646,3 @@ class Installer(object):
             return domain
         finally:
             self._cleanup(guest)
-
-    def get_created_disks(self, guest):
-        return [d for d in guest.devices.disk if d.storage_was_created]
-
-    def cleanup_created_disks(self, guest, meter):
-        """
-        Remove any disks we created as part of the install. Only ever
-        called by clients.
-        """
-        clean_disks = self.get_created_disks(guest)
-        if not clean_disks:
-            return
-
-        for disk in clean_disks:
-            log.debug("Removing created disk path=%s vol_object=%s",
-                disk.path, disk.get_vol_object())
-            name = os.path.basename(disk.path)
-
-            try:
-                meter.start(size=None, text=_("Removing disk '%s'") % name)
-
-                if disk.get_vol_object():
-                    disk.get_vol_object().delete()
-                else:  # pragma: no cover
-                    # This case technically shouldn't happen here, but
-                    # it's here in case future assumptions change
-                    os.unlink(disk.path)
-
-                meter.end(0)
-            except Exception as e:  # pragma: no cover
-                log.debug("Failed to remove disk '%s'",
-                    name, exc_info=True)
-                log.error("Failed to remove disk '%s': %s", name, e)

@@ -542,11 +542,8 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Name", "text").text = "test-foo"
         newvm.find_fuzzy("Finish", "button").click()
 
-        alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy("Unable to complete install")
-
-        # self.app.root.find_fuzzy("test-foo on", "frame")
-        # self.assertFalse(newvm.showing)
+        self.app.root.find_fuzzy("test-foo on", "frame")
+        self.assertFalse(newvm.showing)
 
 
     def testNewVMCustomizeXMLEdit(self):

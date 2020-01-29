@@ -1618,10 +1618,11 @@ class vmmDomainVirtinst(vmmDomain):
 
     Used for launching a details window for customizing a VM before install.
     """
-    def __init__(self, conn, backend, key):
+    def __init__(self, conn, backend, key, installer):
         vmmDomain.__init__(self, conn, backend, key)
         self._orig_xml = None
         self._orig_backend = self._backend
+        self._installer = installer
 
         self._refresh_status()
         log.debug("%s initialized with XML=\n%s", self, self._XMLDesc(0))
@@ -1639,9 +1640,9 @@ class vmmDomainVirtinst(vmmDomain):
         return False
 
     def get_autostart(self):
-        return self._backend.installer_instance.autostart
+        return self._installer.autostart
     def set_autostart(self, val):
-        self._backend.installer_instance.autostart = bool(val)
+        self._installer.autostart = bool(val)
         self.emit("state-changed")
 
     def _using_events(self):
@@ -1688,7 +1689,6 @@ class vmmDomainVirtinst(vmmDomain):
         info afterwards
         """
         newbackend = Guest(self._backend.conn, parsexml=newxml)
-        newbackend.installer_instance = self._backend.installer_instance
 
         for origdisk in self._backend.devices.disk:
             for newdisk in newbackend.devices.disk:

@@ -735,7 +735,7 @@ def start_install(guest, installer, options):
     except Exception as e:
         fail(e, do_exit=False)
         if domain is None:
-            installer.cleanup_created_disks(guest, meter)
+            virtinst.Installer.cleanup_created_disks(guest, meter)
         cli.install_fail(guest)
 
     if cli.in_testsuite() and options.destroy_on_exit:
