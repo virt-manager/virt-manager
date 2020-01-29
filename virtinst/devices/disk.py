@@ -802,7 +802,7 @@ class DeviceDisk(Device):
         return ret
 
 
-    def get_target_prefix(self, used_targets=None):
+    def get_target_prefix(self):
         """
         Returns the suggested disk target prefix (hd, xvd, sd ...) for the
         disk.
@@ -828,17 +828,9 @@ class DeviceDisk(Device):
             return _return("fd")
         elif self.bus == "ide":
             return _return("hd")
-        elif self.bus or not used_targets:
-            # sata, scsi, usb, sd
-            return _return("sd")
-
-        # If guest already has some disks defined
-        preforder = ["vd", "xvd", "sd", "hd"]
-        for pref in preforder:
-            for target in used_targets:
-                if target.startswith(pref):
-                    return _return(pref)
+        # sata, scsi, usb, sd
         return _return("sd")
+
 
     def generate_target(self, skip_targets):
         """
@@ -849,7 +841,7 @@ class DeviceDisk(Device):
         :param skip_targets: list of targets to exclude
         :returns: generated target
         """
-        prefix, maxnode = self.get_target_prefix(skip_targets)
+        prefix, maxnode = self.get_target_prefix()
         skip_targets = [t for t in skip_targets if t and t.startswith(prefix)]
         skip_targets.sort()
 
