@@ -648,31 +648,6 @@ class vmmDomain(vmmLibvirtObject):
         if not editdev:
             return
 
-        def _change_bus():
-            oldprefix = editdev.get_target_prefix()[0]
-            oldbus = editdev.bus
-            editdev.bus = bus
-
-            if oldbus == bus:
-                return
-
-            editdev.address.clear()
-
-            if oldprefix == editdev.get_target_prefix()[0]:
-                return
-
-            used = []
-            disks = (self.xmlobj.devices.disk +
-                     self.get_xmlobj(inactive=True).devices.disk)
-            for d in disks:
-                used.append(d.target)
-
-            if editdev.target:
-                used.remove(editdev.target)
-
-            editdev.target = None
-            editdev.generate_target(used)
-
         if path != _SENTINEL:
             editdev.path = path
             if not do_hotplug:
@@ -693,7 +668,7 @@ class vmmDomain(vmmLibvirtObject):
             editdev.driver_detect_zeroes = detect_zeroes or None
 
         if bus != _SENTINEL:
-            _change_bus()
+            editdev.change_bus(self.xmlobj, bus)
 
         if do_hotplug:
             self.hotplug(device=editdev)

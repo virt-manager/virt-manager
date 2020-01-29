@@ -890,6 +890,30 @@ class DeviceDisk(Device):
         raise ValueError(_("Only %s disks for bus '%s' are supported"
                            % (maxnode, self.bus)))
 
+    def change_bus(self, guest, newbus):
+        """
+        Change the bus value for an existing disk, which has some
+        follow on side effects.
+        """
+        if self.bus == newbus:
+            return
+
+        oldprefix = self.get_target_prefix()[0]
+        self.bus = newbus
+
+        self.address.clear()
+
+        if oldprefix == self.get_target_prefix()[0]:
+            return
+
+        used = [disk.target for disk in guest.devices.disk]
+
+        if self.target:
+            used.remove(self.target)
+
+        self.target = None
+        self.generate_target(used)
+
 
     ##################
     # Default config #

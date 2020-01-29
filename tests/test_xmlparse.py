@@ -1206,6 +1206,22 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
+    def testDiskChangeBus(self):
+        guest, outfile = self._get_test_content("disk-change-bus")
+
+        disk = guest.devices.disk[0]
+
+        # Same bus is a no-op
+        origxml = disk.get_xml()
+        disk.change_bus(guest, "virtio")
+        assert origxml == disk.get_xml()
+        disk.change_bus(guest, "ide")
+
+        disk = guest.devices.disk[2]
+        disk.change_bus(guest, "scsi")
+
+        self._alter_compare(guest.get_xml(), outfile)
+
 
     ##################
     # Snapshot tests #

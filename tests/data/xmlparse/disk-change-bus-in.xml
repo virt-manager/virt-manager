@@ -1,0 +1,25 @@
+<domain type='kvm'>
+  <name>f30</name>
+  <memory unit='KiB'>8294400</memory>
+  <os>
+    <type arch='x86_64'>hvm</type>
+  </os>
+  <devices>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/mnt/data/devel/images/f30.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x04' slot='0x00' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <target dev='hda' bus='ide'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='sda' bus='sata'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='0' target='0' unit='3'/>
+    </disk>
+  </devices>
+</domain>
+
