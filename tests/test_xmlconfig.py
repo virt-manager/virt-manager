@@ -260,9 +260,28 @@ class TestXMLMisc(unittest.TestCase):
         assert disk.get_size() == 1.0
 
         # Test some blockdev inspecting
+        conn = utils.URIs.openconn("test:///default")
         if os.path.exists("/dev/loop0"):
-            conn = utils.URIs.openconn("test:///default")
             disk = virtinst.DeviceDisk(conn)
             disk.path = "/dev/loop0"
             assert disk.type == "block"
             disk.get_size()
+
+        # Test sparse cloning
+        tmpinput = tempfile.NamedTemporaryFile()
+        open(tmpinput.name, "wb").write(b'\0' * 10000)
+
+        srcdisk = virtinst.DeviceDisk(conn)
+        srcdisk.path = tmpinput.name
+
+        newdisk = virtinst.DeviceDisk(conn)
+        tmpoutput = tempfile.NamedTemporaryFile()
+        os.unlink(tmpoutput.name)
+        newdisk.path = tmpoutput.name
+        newdisk.set_local_disk_to_clone(srcdisk, True)
+        newdisk.build_storage(None)
+
+        # Test cloning onto existing disk
+        newdisk.path = newdisk.path
+        newdisk.set_local_disk_to_clone(srcdisk, True)
+        newdisk.build_storage(None)
