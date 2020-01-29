@@ -78,7 +78,7 @@ class DeviceDisk(Device):
 
     IO_MODE_NATIVE = "native"
     IO_MODE_THREADS = "threads"
-    IO_MODES = [IO_MODE_NATIVE, IO_MODE_THREADS]
+
 
     @staticmethod
     def path_definitely_exists(conn, path):

@@ -196,7 +196,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_disk_bus_combo(self.vm, self.widget("storage-bustype"))
         self._build_disk_device_combo()
         self.build_disk_cache_combo(self.vm, self.widget("storage-cache"))
-        self.build_disk_io_combo(self.vm, self.widget("storage-io"))
         self.build_disk_discard_combo(self.vm, self.widget("storage-discard"))
         self.build_disk_detect_zeroes_combo(self.vm,
             self.widget("storage-detect-zeroes"))
@@ -734,13 +733,6 @@ class vmmAddHardware(vmmGObjectUI):
         _build_combo(combo, values, sort=False)
 
     @staticmethod
-    def build_disk_io_combo(_vm, combo):
-        values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.IO_MODES:
-            values.append([m, m])
-        _build_combo(combo, values, sort=False)
-
-    @staticmethod
     def build_disk_discard_combo(_vm, combo):
         values = [[None, _("Hypervisor default")]]
         for m in DeviceDisk.DISCARD_MODES:
@@ -1139,11 +1131,6 @@ class vmmAddHardware(vmmGObjectUI):
         devtype = uiutil.get_list_selection(
             self.widget("storage-devtype"))
         self._refresh_disk_bus(devtype)
-
-        # Reset the status of disk-pr-checkbox to inactive
-        self.widget("disk-pr-checkbox").set_active(False)
-        is_lun = devtype == "lun"
-        uiutil.set_grid_row_visible(self.widget("disk-pr-checkbox"), is_lun)
 
         allow_create = devtype not in ["cdrom", "floppy"]
         self.addstorage.widget("storage-create-box").set_sensitive(
@@ -1549,14 +1536,10 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-devtype"))
         cache = uiutil.get_list_selection(
             self.widget("storage-cache"))
-        io = uiutil.get_list_selection(
-            self.widget("storage-io"))
         discard = uiutil.get_list_selection(
             self.widget("storage-discard"))
         detect_zeroes = uiutil.get_list_selection(
             self.widget("storage-detect-zeroes"))
-        if device == "lun":
-            reservations_managed = self.widget("disk-pr-checkbox").get_active()
 
         controller_model = None
         if (bus == "scsi" and
@@ -1572,14 +1555,10 @@ class vmmAddHardware(vmmGObjectUI):
         disk.bus = bus
         if cache:
             disk.driver_cache = cache
-        if io:
-            disk.driver_io = io
         if discard:
             disk.driver_discard = discard
         if detect_zeroes:
             disk.driver_detect_zeroes = detect_zeroes
-        if device == "lun" and reservations_managed:
-            disk.reservations_managed = "yes"
 
         # Generate target
         disks = (self.vm.xmlobj.devices.disk +
