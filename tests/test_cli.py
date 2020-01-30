@@ -931,9 +931,10 @@ c.add_invalid("--install fedora29 --unattended user-login=root", grep="as user-l
 
 c = vinst.add_category("remote", "--connect %(URI-TEST-REMOTE)s --nographics --noautoconsole")
 c.add_valid("--nodisks --pxe")  # Simple pxe nodisks
-c.add_valid("--pxe --disk /foo/bar/baz,size=.01")  # Creating any random path on the remote host
-c.add_valid("--pxe --disk /dev/zde")  # /dev file that we just pass through to the remote VM
 c.add_valid("--cdrom %(EXISTIMG1)s --disk none --livecd --dry")  # remote cdrom install
+c.add_compare("--pxe "
+"--pxe --disk /foo/bar/baz,size=.01 "  # Creating any random path on the remote host
+"--disk /dev/zde ", "remote-storage")  # /dev file that we just pass through to the remote VM
 c.add_invalid("--pxe --disk /foo/bar/baz")  # File that doesn't exist after auto storage setup
 c.add_invalid("--nodisks --location /tmp")  # Use of --location
 c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage without size argument

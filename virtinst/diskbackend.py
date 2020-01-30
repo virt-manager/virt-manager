@@ -203,7 +203,14 @@ def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
         if path_is_url(path):
             return "network"
 
-        if not remote:
+        if remote:
+            if not _can_auto_manage(path):
+                # Just a heurisitic, if this path is one of the ones
+                # we don't try to auto-import, then consider it a
+                # block device, because managing those correctly is difficult
+                return "block"
+
+        else:
             if os.path.isdir(path):
                 return "dir"
             elif _stat_is_block(path):
