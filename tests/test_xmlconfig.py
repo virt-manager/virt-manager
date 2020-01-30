@@ -202,7 +202,6 @@ class TestXMLMisc(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
             self.assertTrue(bool(searchdata.fixlist))
-            self.assertEqual(searchdata.user, "qemu")
             errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
             self.assertTrue(not bool(errdict))
 
