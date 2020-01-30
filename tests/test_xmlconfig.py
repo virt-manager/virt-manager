@@ -199,22 +199,44 @@ class TestXMLMisc(unittest.TestCase):
         # to ensure it isn't horribly broken
         conn = utils.URIs.open_kvm()
 
-        with tempfile.TemporaryDirectory() as tmpdir:
+        def _set_caps_baselabel_uid(uid):
+            secmodel = [s for s in conn.caps.host.secmodels
+                        if s.model == "dac"][0]
+            for baselabel in [b for b in secmodel.baselabels
+                              if b.type in ["qemu", "kvm"]]:
+                baselabel.content = "+%s:+%s" % (uid, uid)
+
+        tmpobj = tempfile.TemporaryDirectory(prefix="virtinst-test-search")
+        tmpdir = tmpobj.name
+        try:
+            # Invalid uid
+            _set_caps_baselabel_uid(-1)
             searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
-            self.assertTrue(bool(searchdata.fixlist))
+            self.assertEqual(searchdata.uid, None)
+
+            # Use our uid, verify it shows we have expected access
+            _set_caps_baselabel_uid(os.getuid())
+            searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
+            self.assertEqual(searchdata.uid, os.getuid())
+            self.assertEqual(searchdata.fixlist, [])
+
+            # Remove perms on the tmpdir, now it should report failures
+            os.chmod(tmpdir, 0o000)
+            searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
+            self.assertEqual(searchdata.fixlist, [tmpdir])
+
             errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
             self.assertTrue(not bool(errdict))
 
-            # Mock setfacl to definitely, as getfacl won't accept args
+            # Mock setfacl to definitely fail
             with unittest.mock.patch("virtinst.diskbackend.SETFACL",
                     "getfacl"):
                 errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
 
-            # Test uid check short circuiting
-            searchdata.uid = os.getuid()
-            os.chown(tmpdir, os.getuid(), os.getgid())
-            assert virtinst.diskbackend.is_path_searchable(
-                    tmpdir, os.getuid(), "foo") == []
+        finally:
+            # Reset changes we made
+            conn.invalidate_caps()
+            os.chmod(tmpdir, 0o777)
 
     def test_path_in_use(self):
         # Extra tests for DeviceDisk.path_in_use

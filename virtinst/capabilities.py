@@ -87,10 +87,10 @@ class _CapsHost(XMLBuilder):
                 uid = int(label.split(":")[0].replace("+", ""))
                 user = pwd.getpwuid(uid)[0]
                 return user, uid
-            except Exception:  # pragma: no cover
+            except Exception:
                 log.debug("Exception parsing qemu dac baselabel=%s",
                     label, exc_info=True)
-        return None, None  # pragma: no cover
+        return None, None
 
 
 ################################
