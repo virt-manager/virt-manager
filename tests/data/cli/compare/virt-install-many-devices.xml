@@ -222,6 +222,11 @@
       <source dev="/dev/disk-pool/disk"/>
       <target dev="vdq" bus="virtio"/>
     </disk>
+    <disk type="dir" device="disk">
+      <driver name="qemu" type="qcow2"/>
+      <source dir="/dev/default-pool/testvol1.img"/>
+      <target dev="vdr" bus="virtio"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>

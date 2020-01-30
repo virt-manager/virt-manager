@@ -3087,6 +3087,7 @@ class ParserDisk(VirtCLIParser):
         fmt = self.optdict.pop("format", None)
         sparse = _on_off_convert("sparse", self.optdict.pop("sparse", "yes"))
         convert_perms(self.optdict.pop("perms", None))
+        disktype = self.optdict.pop("type", None)
 
         if volname:
             if volname.count("/") != 1:
@@ -3096,6 +3097,9 @@ class ParserDisk(VirtCLIParser):
             log.debug("Parsed --disk volume as: pool=%s vol=%s",
                           poolname, volname)
 
+        # Set this up front, it has lots of follow on effects
+        if disktype:
+            inst.type = disktype
         super()._parse(inst)
 
         if (size and
@@ -3165,6 +3169,8 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("size", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("format", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("sparse", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("type", None, lookup_cb=None, cb=cls.noset_cb)
+
         # These are handled in _add_advertised_aliases
         cls.add_arg("bus", "bus", cb=cls.noset_cb)
         cls.add_arg("cache", "driver_cache", cb=cls.noset_cb)
