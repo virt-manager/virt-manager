@@ -71,8 +71,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes">&lt;span size='large' color='white'&gt;Create a new virtual machine&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">&lt;span size='large'&gt;Create a new virtual machine&lt;/span&gt;</property>
                             <property name="use_markup">True</property>
+                            <style>
+                              <class name="vmm-header-text"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -85,13 +88,16 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label">&lt;span color='#59B0E2'&gt;Step foo of bar&lt;/span&gt;</property>
+                            <property name="label">Step foo of bar</property>
                             <property name="use_markup">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="header-pagenum-atkobject">
                                 <property name="AtkObject::accessible-name">pagenum-label</property>
                               </object>
                             </child>
+                            <style>
+                              <class name="vmm-header-subtext"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -115,6 +121,9 @@
                 </child>
               </object>
             </child>
+            <style>
+              <class name="vmm-header"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -2109,10 +2118,13 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">False</property>
-                                    <property name="label" translatable="yes">&lt;span color='#484848'&gt;_Name:&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">_Name:</property>
                                     <property name="use_markup">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">create-vm-name</property>
+                                    <style>
+                                      <class name="vmm-lighter"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2137,8 +2149,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">False</property>
-                                    <property name="label" translatable="yes">&lt;span color='#484848'&gt;Install:&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">Install:</property>
                                     <property name="use_markup">True</property>
+                                    <style>
+                                      <class name="vmm-lighter"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2151,8 +2166,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">False</property>
-                                    <property name="label" translatable="yes">&lt;span color='#484848'&gt;Memory:&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">Memory:</property>
                                     <property name="use_markup">True</property>
+                                    <style>
+                                      <class name="vmm-lighter"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2165,8 +2183,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">False</property>
-                                    <property name="label" translatable="yes">&lt;span color='#484848'&gt;CPUs:&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">CPUs:</property>
                                     <property name="use_markup">True</property>
+                                    <style>
+                                      <class name="vmm-lighter"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2179,8 +2200,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">False</property>
-                                    <property name="label" translatable="yes">&lt;span color='#484848'&gt;Storage:&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">Storage:</property>
                                     <property name="use_markup">True</property>
+                                    <style>
+                                      <class name="vmm-lighter"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -2193,8 +2217,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="hexpand">False</property>
-                                    <property name="label" translatable="yes">&lt;span color='#484848'&gt;OS:&lt;/span&gt;</property>
+                                    <property name="label" translatable="yes">OS:</property>
                                     <property name="use_markup">True</property>
+                                    <style>
+                                      <class name="vmm-lighter"/>
+                                    </style>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>

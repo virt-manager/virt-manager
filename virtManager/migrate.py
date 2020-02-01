@@ -6,7 +6,6 @@
 
 import traceback
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -104,9 +103,6 @@ class vmmMigrateDialog(vmmGObjectUI):
     ################
 
     def _init_state(self):
-        blue = Gdk.color_parse("#0072A8")
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         # Connection combo
         cols = [None] * NUM_COLS
         cols[COL_LABEL] = str
@@ -153,7 +149,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             self.widget("migrate-temporary-label").get_tooltip_text())
 
     def _reset_state(self):
-        title_str = ("<span size='large' color='white'>%s '%s'</span>" %
+        title_str = ("<span size='large'>%s '%s'</span>" %
                      (_("Migrate"), xmlutil.xml_escape(self.vm.get_name())))
         self.widget("header-label").set_markup(title_str)
 

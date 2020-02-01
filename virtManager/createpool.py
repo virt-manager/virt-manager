@@ -6,7 +6,6 @@
 
 import os
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from virtinst import log
@@ -87,9 +86,6 @@ class vmmCreatePool(vmmGObjectUI):
             model.append([typ, "%s: %s" % (typ, desc)])
 
     def _init_ui(self):
-        blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         format_list = self.widget("pool-format")
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)

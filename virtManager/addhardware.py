@@ -7,7 +7,6 @@
 import traceback
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 from virtinst import (DeviceChannel, DeviceConsole,
         DeviceController, DeviceDisk, DeviceGraphics, DeviceHostdev,
@@ -172,9 +171,6 @@ class vmmAddHardware(vmmGObjectUI):
     def _set_initial_state(self):
         self.widget("create-pages").set_show_tabs(False)
         self.widget("top-pages").set_show_tabs(False)
-
-        blue = Gdk.color_parse("#0072A8")
-        self.widget("page-title-box").modify_bg(Gtk.StateType.NORMAL, blue)
 
         hw_col = Gtk.TreeViewColumn(_("Hardware"))
         hw_col.set_spacing(6)
@@ -1098,8 +1094,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _set_page_title(self, page):
         title = self._dev_to_title(page)
-        markup = "<span size='large' color='white'>%s</span>" % title
-        self.widget("page-title-label").set_markup(markup)
+        self.widget("page-title-label").set_markup(title)
 
     def _xmleditor_xml_requested_cb(self, src):
         dev = self._build_device(check_xmleditor=False)

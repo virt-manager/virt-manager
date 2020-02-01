@@ -9,7 +9,6 @@ import stat
 import traceback
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 from gi.repository import Pango
 
 import virtinst
@@ -62,9 +61,6 @@ class _vmmDeleteBase(vmmGObjectUI):
 
 
     def _init_state(self):
-        blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         _prepare_storage_list(self.widget("delete-storage-list"))
 
     def show(self, parent, vm):
@@ -101,7 +97,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         # Set VM name or disk.target in title'
         text = self._get_dialog_text()
 
-        title_str = ("<span size='large' color='white'>%s</span>" %
+        title_str = ("<span size='large'>%s</span>" %
                      xmlutil.xml_escape(text))
         self.widget("header-label").set_markup(title_str)
 

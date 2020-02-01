@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.2 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -100,8 +100,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label">&lt;span color='#484848'&gt;Free Space&lt;/span&gt;</property>
+                    <property name="label">Free Space</property>
                     <property name="use_markup">True</property>
+                    <style>
+                      <class name="vmm-lighter"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>

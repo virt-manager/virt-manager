@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkImage" id="image1">
@@ -12,6 +12,9 @@
     <property name="title" translatable="yes">Clone Virtual Machine</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_clone_delete_event" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child>
       <object class="GtkBox" id="vbox1">
         <property name="visible">True</property>
@@ -50,8 +53,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;span size='large' color='white'&gt;Clone virtual machine&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span size='large'&gt;Clone virtual machine&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
+                        <style>
+                          <class name="vmm-header-text"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -68,6 +74,9 @@
                 </child>
               </object>
             </child>
+            <style>
+              <class name="vmm-header"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -216,8 +225,11 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
                                 <property name="valign">start</property>
-                                <property name="label" translatable="yes">&lt;span color='#484848'&gt;Networking:&lt;/span&gt;</property>
+                                <property name="label" translatable="yes">Networking:</property>
                                 <property name="use_markup">True</property>
+                                <style>
+                                  <class name="vmm-lighter"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -344,8 +356,11 @@
                                 <property name="halign">end</property>
                                 <property name="valign">start</property>
                                 <property name="vexpand">True</property>
-                                <property name="label" translatable="yes">&lt;span color='#484848'&gt;Storage:&lt;/span&gt;</property>
+                                <property name="label" translatable="yes">Storage:</property>
                                 <property name="use_markup">True</property>
+                                <style>
+                                  <class name="vmm-lighter"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -358,10 +373,13 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">end</property>
                                 <property name="valign">center</property>
-                                <property name="label" translatable="yes">&lt;span color='#484848'&gt;_Name:&lt;/span&gt;</property>
+                                <property name="label" translatable="yes">_Name:</property>
                                 <property name="use_markup">True</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">clone-new-name</property>
+                                <style>
+                                  <class name="vmm-lighter"/>
+                                </style>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -563,6 +581,9 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_change_mac_delete_event" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -728,8 +749,11 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="yes">&lt;span color='#484848'&gt;Type:&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">Type:</property>
                             <property name="use_markup">True</property>
+                            <style>
+                              <class name="vmm-lighter"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -742,8 +766,11 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="yes">&lt;span color='#484848'&gt;MAC:&lt;/span&gt;</property>
+                            <property name="label" translatable="yes">MAC:</property>
                             <property name="use_markup">True</property>
+                            <style>
+                              <class name="vmm-lighter"/>
+                            </style>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -788,6 +815,9 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_change_storage_delete_event" swapped="no"/>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox2">
         <property name="visible">True</property>
@@ -922,8 +952,11 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="valign">end</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;Size:&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">Size:</property>
                         <property name="use_markup">True</property>
+                        <style>
+                          <class name="vmm-lighter"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -935,8 +968,11 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;Target:&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">Target:</property>
                         <property name="use_markup">True</property>
+                        <style>
+                          <class name="vmm-lighter"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -949,8 +985,11 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="valign">center</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;Path:&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">Path:</property>
                         <property name="use_markup">True</property>
+                        <style>
+                          <class name="vmm-lighter"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -1000,7 +1039,7 @@ like change passwords or static IPs, please see the virt-sysprep(1) tool.&lt;/sp
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">&lt;span color='#484848'&gt;New _Path:&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">New _Path:</property>
                         <property name="use_markup">True</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">change-storage-new</property>

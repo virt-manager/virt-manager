@@ -7,7 +7,6 @@
 import os
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 import virtinst
 from virtinst import Cloner
@@ -233,9 +232,6 @@ class vmmCloneVM(vmmGObjectUI):
     # First time setup
 
     def _init_ui(self):
-        blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         context = self.topwin.get_style_context()
         defcolor = context.get_background_color(Gtk.StateType.NORMAL)
         self.widget("storage-viewport").override_background_color(

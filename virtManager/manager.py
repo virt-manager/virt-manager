@@ -595,7 +595,7 @@ class vmmManager(vmmGObjectUI):
     def _build_conn_color(self, conn):
         color = None
         if conn.is_disconnected():
-            color = "#5b5b5b"
+            color = self.config.color_insensitive
         return color
 
     def _build_vm_markup(self, name, status):

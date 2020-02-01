@@ -50,8 +50,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes">&lt;span size='large' color='white'&gt;Create storage pool&lt;/span&gt;</property>
+                        <property name="label" translatable="yes">&lt;span size='large'&gt;Create storage pool&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
+                        <style>
+                          <class name="vmm-header-text"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -68,6 +71,9 @@
                 </child>
               </object>
             </child>
+            <style>
+              <class name="vmm-header"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>

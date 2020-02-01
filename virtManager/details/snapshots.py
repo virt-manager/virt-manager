@@ -9,7 +9,6 @@ import glob
 import io
 import os
 
-from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -110,9 +109,6 @@ class vmmSnapshotNew(vmmGObjectUI):
     ###########
 
     def _init_ui(self):
-        blue = Gdk.color_parse("#0072A8")
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
 

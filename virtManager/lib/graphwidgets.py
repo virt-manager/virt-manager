@@ -9,6 +9,8 @@ from gi.repository import Gtk
 # pylint: disable=arguments-differ
 # Newer pylint can detect, but warns that overridden arguments are wrong
 
+BASECOLOR = Gtk.StyleContext().lookup_color("theme_base_color")[1]
+
 
 def rect_print(name, rect):
     # For debugging
@@ -162,8 +164,8 @@ class CellRendererSparkline(Gtk.CellRenderer):
                      cell_area.height - (BORDER_PADDING * 2))
         cr.stroke()
 
-        # Fill in white box inside graph outline
-        cr.set_source_rgb(1, 1, 1)
+        # Fill in basecolor box inside graph outline
+        cr.set_source_rgb(BASECOLOR.red, BASECOLOR.green, BASECOLOR.blue)
         cr.rectangle(cell_area.x + BORDER_PADDING,
                      cell_area.y + BORDER_PADDING,
                      border_width,
@@ -205,6 +207,7 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
         # Set color to light blue for the fill
         cr.set_source_rgba(0.71484375, 0.84765625, 0.89453125, .5)
+
         draw_fill(cr,
                   cell_area.x, cell_area.y,
                   cell_area.width, cell_area.height,

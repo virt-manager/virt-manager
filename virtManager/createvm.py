@@ -10,7 +10,6 @@ import os
 import threading
 import time
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -260,9 +259,6 @@ class vmmCreateVM(vmmGObjectUI):
     def _init_state(self):
         self.widget("create-pages").set_show_tabs(False)
         self.widget("install-method-pages").set_show_tabs(False)
-
-        blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
 
         # Connection list
         self.widget("create-conn-label").set_text("")
@@ -591,8 +587,7 @@ class vmmCreateVM(vmmGObjectUI):
         memory = int(self.conn.host_memory_size())
         mem_label = (_("Up to %(maxmem)s available on the host") %
                      {'maxmem': _pretty_memory(memory)})
-        mem_label = ("<span size='small' color='#484848'>%s</span>" %
-                     mem_label)
+        mem_label = ("<span size='small'>%s</span>" % mem_label)
         self.widget("mem").set_range(50, memory // 1024)
         self.widget("phys-mem-label").set_markup(mem_label)
 
@@ -603,8 +598,7 @@ class vmmCreateVM(vmmGObjectUI):
             cmax = 1
         cpu_label = (_("Up to %(numcpus)d available") %
                      {'numcpus': int(phys_cpus)})
-        cpu_label = ("<span size='small' color='#484848'>%s</span>" %
-                     cpu_label)
+        cpu_label = ("<span size='small'>%s</span>" % cpu_label)
         self.widget("cpus").set_range(1, cmax)
         self.widget("phys-cpu-label").set_markup(cpu_label)
 
@@ -885,7 +879,7 @@ class vmmCreateVM(vmmGObjectUI):
     ###############################
 
     def _populate_summary_storage(self, path=None):
-        storagetmpl = "<span size='small' color='#484848'>%s</span>"
+        storagetmpl = "<span size='small'>%s</span>"
         storagesize = ""
         storagepath = ""
 
@@ -1290,8 +1284,7 @@ class vmmCreateVM(vmmGObjectUI):
             final -= 1
             cur = min(cur, final)
 
-        page_lbl = ("<span color='#59B0E2'>%s</span>" %
-                    _("Step %(current_page)d of %(max_page)d") %
+        page_lbl = (_("Step %(current_page)d of %(max_page)d") %
                     {'current_page': cur, 'max_page': final})
 
         self.widget("header-pagenum").set_markup(page_lbl)

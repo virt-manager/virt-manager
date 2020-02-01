@@ -5,7 +5,6 @@
 # See the COPYING file in the top-level directory.
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 from virtinst import log
 from virtinst import StorageVolume
@@ -108,9 +107,6 @@ class vmmCreateVolume(vmmGObjectUI):
     ###########
 
     def _init_state(self):
-        blue = Gdk.color_parse("#0072A8")
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         format_list = self.widget("vol-format")
         format_model = Gtk.ListStore(str, str)
         format_list.set_model(format_model)

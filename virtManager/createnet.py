@@ -7,7 +7,6 @@
 import ipaddress
 
 from gi.repository import Gtk
-from gi.repository import Gdk
 from gi.repository import Pango
 
 import libvirt
@@ -90,9 +89,6 @@ class vmmCreateNetwork(vmmGObjectUI):
     ###########
 
     def set_initial_state(self):
-        blue = Gdk.Color.parse("#0072A8")[1]
-        self.widget("header").modify_bg(Gtk.StateType.NORMAL, blue)
-
         # [ dev name, label ]
         pf_list = self.widget("net-hostdevs")
         pf_model = Gtk.ListStore(str, str)

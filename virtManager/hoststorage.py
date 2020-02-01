@@ -51,7 +51,7 @@ def _get_pool_size_percent(pool):
         per = 0
     else:
         per = int(((float(alloc) / float(cap)) * 100))
-    return "<span size='small' color='#484848'>%s%%</span>" % int(per)
+    return "<span size='small'>%s%%</span>" % int(per)
 
 
 class vmmHostStorage(vmmGObjectUI):
