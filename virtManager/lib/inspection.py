@@ -53,8 +53,8 @@ class vmmInspection(vmmGObject):
         self._thread = None
 
         self._q = queue.Queue()
-        self._conns = {}
         self._cached_data = {}
+        self._uris = []
 
         val = self.config.get_libguestfs_inspect_vms()
         log.debug("libguestfs gsetting enabled=%s", str(val))
@@ -62,41 +62,39 @@ class vmmInspection(vmmGObject):
             return
 
         connmanager = vmmConnectionManager.get_instance()
-        connmanager.connect("conn-added", self._conn_added)
-        connmanager.connect("conn-removed", self._conn_removed)
+        connmanager.connect("conn-added", self._conn_added_cb)
+        connmanager.connect("conn-removed", self._conn_removed_cb)
         for conn in connmanager.conns.values():
-            self._conn_added(connmanager, conn)
+            self._conn_added_cb(connmanager, conn)
 
         self._start()
 
     def _cleanup(self):
         self._stop()
         self._q = queue.Queue()
-        self._conns = {}
         self._cached_data = {}
 
-    def _conn_added(self, _src, conn):
-        obj = ("conn_added", conn)
-        self._q.put(obj)
+    def _conn_added_cb(self, connmanager, conn):
+        uri = conn.get_uri()
+        if uri in self._uris:
+            return
 
-    def _conn_removed(self, _src, uri):
-        obj = ("conn_removed", uri)
-        self._q.put(obj)
+        self._uris.append(uri)
+        conn.connect("vm-added", self._vm_added_cb)
+        for vm in conn.list_vms():
+            self._vm_added_cb(conn, vm.get_connkey())
 
-    # Called by the main thread whenever a VM is added to vmlist.
-    def _vm_added(self, conn, connkey):
+    def _conn_removed_cb(self, connmanager, uri):
+        self._uris.remove(uri)
+
+    def _vm_added_cb(self, conn, connkey):
+        # Called by the main thread whenever a VM is added to vmlist.
         if connkey.startswith("guestfs-"):
             log.debug("ignore libvirt/guestfs temporary VM %s",
                           connkey)
             return
 
-        obj = ("vm_added", conn.get_uri(), connkey)
-        self._q.put(obj)
-
-    def vm_refresh(self, vm):
-        log.debug("Refresh requested for vm=%s", vm.get_name())
-        obj = ("vm_refresh", vm.conn.get_uri(), vm.get_name(), vm.get_uuid())
-        self._q.put(obj)
+        self._q.put((conn.get_uri(), connkey))
 
     def _start(self):
         self._thread = threading.Thread(
@@ -115,58 +113,28 @@ class vmmInspection(vmmGObject):
         # Process everything on the queue.  If the queue is empty when
         # called, block.
         while True:
-            obj = self._q.get()
-            if obj is None:
-                log.debug("libguestfs queue obj=None, exiting thread")
+            data = self._q.get()
+            if data is None:
+                log.debug("libguestfs queue vm=None, exiting thread")
                 return
-            self._process_queue_item(obj)
+            uri, connkey = data
+            self._process_vm(uri, connkey)
             self._q.task_done()
 
-    def _process_queue_item(self, obj):
-        cmd = obj[0]
-        if cmd == "conn_added":
-            conn = obj[1]
-            uri = conn.get_uri()
-            if uri in self._conns:
-                return
+    def _process_vm(self, uri, connkey):
+        connmanager = vmmConnectionManager.get_instance()
+        conn = connmanager.conns.get(uri)
+        if not conn:
+            return
 
-            self._conns[uri] = conn
-            conn.connect("vm-added", self._vm_added)
-            for vm in conn.list_vms():
-                self._vm_added(conn, vm.get_connkey())
+        vm = conn.get_vm(connkey)
+        if not vm:
+            return
 
-        elif cmd == "conn_removed":
-            uri = obj[1]
-            self._conns.pop(uri)
-
-        elif cmd == "vm_added" or cmd == "vm_refresh":
-            uri = obj[1]
-            if uri not in self._conns:
-                # This connection disappeared in the meanwhile.
-                return
-
-            conn = self._conns[uri]
-            vm = conn.get_vm(obj[2])
-            if not vm:
-                # The VM was removed in the meanwhile.
-                return
-
-            if cmd == "vm_refresh":
-                vmuuid = obj[3]
-                # When refreshing the inspection data of a VM,
-                # all we need is to remove it from the "seen" cache,
-                # as the data itself will be replaced once the new
-                # results are available.
-                self._cached_data.pop(vmuuid, None)
-
-            self._process_vm(conn, vm)
-
-    def _process_vm(self, conn, vm):
         # Try processing a single VM, keeping into account whether it was
         # visited already, and whether there are cached data for it.
         def _set_vm_inspection_data(_data):
-            vm.inspection = _data
-            vm.inspection_data_updated()
+            vm.set_inspection_data(_data)
             self._cached_data[vm.get_uuid()] = _data
 
         prettyvm = conn.get_uri() + ":" + vm.get_name()
@@ -315,3 +283,18 @@ class vmmInspection(vmmGObject):
         data.package_format = str(package_format)
 
         return data
+
+
+    ##############
+    # Public API #
+    ##############
+
+    def vm_refresh(self, vm):
+        log.debug("Refresh requested for vm=%s", vm.get_name())
+
+        # When refreshing the inspection data of a VM,
+        # all we need is to remove it from the "seen" cache,
+        # as the data itself will be replaced once the new
+        # results are available.
+        self._cached_data.pop(vm.get_uuid(), None)
+        self._q.put((vm.conn.get_uri(), vm.get_connkey()))

@@ -1529,7 +1529,8 @@ class vmmDomain(vmmLibvirtObject):
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
 
-    def inspection_data_updated(self):
+    def set_inspection_data(self, data):
+        self.inspection = data
         self.idle_emit("inspection-changed")
 
 
