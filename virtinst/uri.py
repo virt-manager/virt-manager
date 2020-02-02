@@ -105,8 +105,7 @@ class MagicURI(object):
 
         * 'predictable': Generate predictable UUIDs, MAC addresses, and
             temporary file names.
-        * 'remote': Have the code consider this as a remote URI
-        * 'session': Have the code consider this as a session URI
+        * 'fakeuri': The URI to advertise as the actual connection URI
         * 'connver=%d': Override the connection (hv) version
         * 'libver=%d': Override the libvirt version
         * 'caps=%s': Points to a file with capabilities XML, that will
@@ -114,7 +113,6 @@ class MagicURI(object):
                      files in test/capabilities-xml/
         * 'domcaps=%s': Points to a file with domain capabilities XML, that
                         will be returned in conn.getDomainCapabilities
-        * qemu, xen, lxc or vz: Fake the specified hypervisor
 
     See tests/utils.py for example URLs
     """
@@ -140,46 +138,32 @@ class MagicURI(object):
             return ret
 
         self.predictable = pop_bool("predictable")
-        self.remote = pop_bool("remote")
-        self.session = pop_bool("session")
+        self.fakeuri = opts.pop("fakeuri", None)
         self.capsfile = opts.pop("caps", None)
         self.domcapsfile = opts.pop("domcaps", None)
-
-        self.hv = None
-        if pop_bool("qemu"):
-            self.hv = "qemu"
-        if pop_bool("lxc"):
-            self.hv = "lxc"
-        if pop_bool("xen"):
-            self.hv = "xen"
-        if pop_bool("vz"):
-            self.hv = "vz"
 
         self.conn_version = opts.pop("connver", None)
         if self.conn_version:
             self.conn_version = int(self.conn_version)
-        elif self.hv:
+        elif self.fakeuri:
             self.conn_version = 10000000000
 
         self.libvirt_version = opts.pop("libver", None)
         if self.libvirt_version:
             self.libvirt_version = int(self.libvirt_version)
 
-        assert not opts
+        self._err = None
+        if opts:
+            self._err = "MagicURI has unhandled opts=%s" % opts
 
 
     ##############
     # Public API #
     ##############
 
-    def make_fake_uri(self):
-        """
-        If self.hv is set, we need to make a fake URI so that Connection
-        URI handling bits have something to work with.
-        """
-        if self.hv:
-            return self.hv + "+abc:///system"
-        return self.open_uri
+    def validate(self):
+        if self._err:
+            raise RuntimeError(self._err)
 
     def overwrite_conn_functions(self, conn):
         """
@@ -209,7 +193,7 @@ class MagicURI(object):
 
             conn.getDomainCapabilities = fake_domcaps
 
-        if self.hv:
+        if self.fakeuri:
             origcreate = conn.createXML
             origdefine = conn.defineXML
             def newcreate(xml, flags):

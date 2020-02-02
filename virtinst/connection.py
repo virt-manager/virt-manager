@@ -58,11 +58,9 @@ class VirtinstConnection(object):
         if MagicURI.uri_is_magic(_initial_uri):
             self._magic_uri = MagicURI(_initial_uri)
             self._open_uri = self._magic_uri.open_uri
-            self._uri = self._magic_uri.make_fake_uri()
+            self._uri = self._magic_uri.fakeuri or self._open_uri
 
             self._fake_conn_predictable = self._magic_uri.predictable
-            self._fake_conn_remote = self._magic_uri.remote
-            self._fake_conn_session = self._magic_uri.session
             self._fake_conn_version = self._magic_uri.conn_version
             self._fake_libvirt_version = self._magic_uri.libvirt_version
         else:
@@ -71,8 +69,6 @@ class VirtinstConnection(object):
             self._uri = _initial_uri
 
             self._fake_conn_predictable = False
-            self._fake_conn_remote = False
-            self._fake_conn_session = False
             self._fake_libvirt_version = None
             self._fake_conn_version = None
 
@@ -143,6 +139,9 @@ class VirtinstConnection(object):
         return bool(self._libvirtconn)
 
     def open(self, authcb, cbdata):
+        if self._magic_uri:
+            self._magic_uri.validate()
+
         # Mirror the set of libvirt.c virConnectCredTypeDefault
         valid_auth_options = [
             libvirt.VIR_CRED_AUTHNAME,
@@ -339,9 +338,9 @@ class VirtinstConnection(object):
     ###################
 
     def is_remote(self):
-        return (self._fake_conn_remote or self._uriobj.hostname)
+        return self._uriobj.hostname
     def is_session_uri(self):
-        return (self._fake_conn_session or self.get_uri_path() == "/session")
+        return self.get_uri_path() == "/session"
 
     def get_uri_hostname(self):
         return self._uriobj.hostname

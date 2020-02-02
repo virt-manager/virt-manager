@@ -40,6 +40,10 @@ class TestConn(unittest.TestCase):
         assert conn.get_uri_transport() == "tls"
 
 
+        # Hit fakuuri validation error, for old style opts
+        with self.assertRaises(RuntimeError):
+            cli.getConnection(fakeuri + ",qemu")
+
     @unittest.mock.patch.dict(os.environ,
             {"LIBVIRT_DEFAULT_URI": "test:///default"})
     def test_default_uri(self):
