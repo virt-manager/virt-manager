@@ -112,6 +112,9 @@ class TestOSDB(unittest.TestCase):
         self.assertFalse(win7.supports_unattended_drivers("fakearch"))
         self.assertTrue(win7.get_pre_installable_drivers_location("x86_64"))
 
+        self.assertFalse(
+            OSDB.lookup_os("fedora10").supports_unattended_agents("x86_64"))
+
         # Just call this for code coverage. Values differ by osinfo-db version
         win7.get_post_installable_drivers_location("x86_64")
 
