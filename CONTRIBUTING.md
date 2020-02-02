@@ -38,6 +38,11 @@ and [`pycodestyle`](https://github.com/pycqa/pycodestyle) to be installed.
 If [`codespell`](https://github.com/codespell-project/codespell) is installed,
 it will be invoked as well.
 
+Patches to `virtinst/` code should ideally not regress code coverage
+testing. Run `./setup.py test --coverage` to see a coverage report
+before and after your contribution, and ensure no new lines show up.
+Maintainers can help you out if you aren't sure how to test your code.
+
 One useful way to manually test virt-manager's UI is using libvirt's
 unit test driver. From the source directory, Launch virt-manager like:
 ```sh
