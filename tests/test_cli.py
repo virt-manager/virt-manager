@@ -1112,18 +1112,18 @@ c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing fi
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
 c = vinst.add_category("console-tests", "--nodisks")
-c.add_valid("--pxe", grep="testsuite console command: ['virt-viewer'")  # mock default graphics+virt-viewer usage
+c.add_valid("--pxe", grep="graphical console command: virt-viewer")  # mock default graphics+virt-viewer usage
 c.add_valid("--pxe --graphics spice,gl=on", grep="--attach")  # using virt-viewer --attach option for gl
 c.add_valid("--pxe --destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
 c.add_valid("--pxe --transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
-c.add_valid("--pxe --graphics vnc --noreboot", grep="testsuite console command: ['virt-viewer'")  # mock virt-viewer waiting, with noreboot magic
+c.add_valid("--pxe --graphics vnc --noreboot", grep="graphical console command: virt-viewer")  # mock virt-viewer waiting, with noreboot magic
 c.add_valid("--nographics --cdrom %(EXISTIMG1)s")  # console warning about cdrom + nographics
 c.add_valid("--nographics --console none --location %(TREEDIR)s", grep="Directory tree installs typically")  # warning about directory trees not working well
-c.add_valid("--pxe --nographics --transient", grep="testsuite console command: ['virsh'")  # --transient handling
-c.add_valid("--pxe --nographics --autoconsole graphical", grep="testsuite console command: ['virt-viewer'")  # force --autoconsole graphical
-c.add_valid("--pxe --autoconsole text", grep="testsuite console command: ['virsh'")  # force --autoconsole text
+c.add_valid("--pxe --nographics --transient", grep="text console command: virsh")  # --transient handling
+c.add_valid("--pxe --nographics --autoconsole graphical", grep="graphical console command: virt-viewer")  # force --autoconsole graphical
+c.add_valid("--pxe --autoconsole text", grep="text console command: virsh")  # force --autoconsole text
 c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
-c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="testsuite console command: ['virsh'")  # make sure we notify about text console
+c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="text console command: virsh")  # make sure we notify about text console
 c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
 
 

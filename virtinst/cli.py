@@ -361,11 +361,15 @@ def validate_disk(dev, warn_overwrite=False):
     check_path_search(dev.conn, dev.path)
 
 
-def _run_console(domain, args):
+def _run_console(domain, console_type, args):
     ignore = domain
     log.debug("Running: %s", " ".join(args))
+    argstr = " ".join([shlex.quote(a) for a in args])
+    print_stdout(
+        _("Running %(console_type)s console command: %(command)s") %
+        {"command": argstr, "console_type": console_type})
+
     if in_testsuite():
-        print_stdout("testsuite console command: %s" % args)
         args = ["/bin/test"]
 
     child = os.fork()
@@ -391,7 +395,7 @@ def _gfx_console(guest, domain):
     if guest.has_gl() or guest.has_listen_none():
         args.append("--attach")
 
-    return _run_console(domain, args)
+    return _run_console(domain, "graphical", args)
 
 
 def _txt_console(guest, domain):
@@ -399,7 +403,7 @@ def _txt_console(guest, domain):
             "--connect", guest.conn.uri,
             "console", guest.name]
 
-    return _run_console(domain, args)
+    return _run_console(domain, "text", args)
 
 
 def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
@@ -416,9 +420,12 @@ def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
 
     # If we connected the console, wait for it to finish
     try:
-        os.waitpid(child, 0)
+        errcode = os.waitpid(child, 0)[1]
     except OSError as e:  # pragma: no cover
         log.debug("waitpid error: %s", e)
+
+    if errcode:
+        log.warning(_("Console command returned failure."))
 
     if destroy_on_exit and domain.isActive():
         log.debug("console exited and destroy_on_exit passed, destroying")

@@ -761,6 +761,9 @@ def check_domain(installer, domain, conscb, transient, waithandler):
             return  # pragma: no cover
 
     # If we reach here, the VM still appears to be running.
+    msg = "\n"
+    msg += _("Domain is still running. Installation may be in progress.")
+
     if not waithandler.wait_is_requested:
         # User either:
         #   used --noautoconsole
@@ -768,12 +771,13 @@ def check_domain(installer, domain, conscb, transient, waithandler):
         if not installer.has_install_phase():
             return
 
-        print_stdout(
-            _("Domain installation still in progress. You can reconnect"
-              " to \nthe console to complete the installation process."))
+        msg += "\n"
+        msg += _("You can reconnect to the console to complete the "
+                 "installation process.")
+        print_stdout(msg)
         sys.exit(0)
 
-    print_stdout(_("Domain installation still in progress."))
+    print_stdout(msg)
     print_stdout(waithandler.get_time_string())
 
     # Wait loop
