@@ -84,6 +84,14 @@ class Installer(object):
     # Private helpers #
     ###################
 
+    def _make_cdrom_device(self, path):
+        dev = DeviceDisk(self.conn)
+        dev.device = dev.DEVICE_CDROM
+        dev.path = path
+        dev.sync_path_props()
+        dev.validate()
+        return dev
+
     def _cdrom_path(self):
         if self._treemedia:
             return self._treemedia.cdrom_path()
@@ -95,11 +103,7 @@ class Installer(object):
         if not bool(self._cdrom_path()):
             return
 
-        dev = DeviceDisk(self.conn)
-        dev.device = dev.DEVICE_CDROM
-        dev.path = self._cdrom_path()
-        dev.sync_path_props()
-        dev.validate()
+        dev = self._make_cdrom_device(self._cdrom_path())
         self._install_cdrom_device_added = True
 
         # Insert the CDROM before any other CDROM, so boot=cdrom picks
@@ -125,11 +129,8 @@ class Installer(object):
     def _add_unattended_install_cdrom_device(self, guest, location):
         if self._unattended_install_cdrom_device:
             return  # pragma: no cover
-        dev = DeviceDisk(self.conn)
-        dev.device = dev.DEVICE_CDROM
-        dev.path = location
-        dev.sync_path_props()
-        dev.validate()
+
+        dev = self._make_cdrom_device(location)
         dev.set_defaults(guest)
         self._unattended_install_cdrom_device = dev
         guest.add_device(self._unattended_install_cdrom_device)
