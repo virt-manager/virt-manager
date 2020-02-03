@@ -98,11 +98,13 @@ class NewVM(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: osentry.text == "Generic default")
 
         # Verify back+forward still keeps Generic selected
+        self.sleep(.5)
         newvm.find_fuzzy("Back", "button").click()
-        self.sleep(.2)
+        self.sleep(.5)
         self.forward(newvm)
-        self.sleep(.2)
+        self.sleep(.5)
         uiutils.check_in_loop(lambda: "Generic" in osentry.text)
+        uiutils.check_in_loop(lambda: osentry.onscreen)
 
         # The sleeps shouldn't be required, but this test continues to be
         # flakey, so this is an attempt to fix it.
