@@ -91,7 +91,7 @@ class InstallerTreeMedia(object):
 
         # If we are a session URI, or we don't have access to the system
         # scratchdir, make sure the session scratchdir exists and use that.
-        if (guest.conn.is_session_uri() or
+        if (guest.conn.is_unprivileged() or
             not os.path.exists(system_scratchdir) or
             not os.access(system_scratchdir, os.W_OK)):
             if not os.path.exists(user_scratchdir):

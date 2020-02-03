@@ -146,7 +146,7 @@ class vmmNetworkList(vmmGObjectUI):
             _nettype = virtinst.DeviceInterface.TYPE_DIRECT
             model.append(_build_manual_row(_nettype, _label))
 
-        if self.conn.is_qemu_session():
+        if self.conn.is_qemu_unprivileged():
             nettype = virtinst.DeviceInterface.TYPE_USER
             label = _pretty_network_desc(nettype)
             model.append(_build_row(nettype, None, label, True))

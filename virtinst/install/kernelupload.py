@@ -136,7 +136,7 @@ def upload_kernel_initrd(conn, scratchdir, system_scratchdir,
     tmpvols = []
 
     if (not conn.is_remote() and
-        (conn.is_session_uri() or scratchdir == system_scratchdir)):
+        (conn.is_unprivileged() or scratchdir == system_scratchdir)):
         # We have access to system scratchdir, don't jump through hoops
         log.debug("Have access to preferred scratchdir so"
                     " nothing to upload")  # pragma: no cover

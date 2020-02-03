@@ -118,7 +118,7 @@ class DeviceDisk(Device):
 
         if conn.is_remote():
             return searchdata
-        if not conn.is_qemu_system():
+        if not conn.is_qemu_privileged():
             return searchdata
         if diskbackend.path_is_url(path):
             return searchdata

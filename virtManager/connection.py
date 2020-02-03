@@ -338,11 +338,11 @@ class vmmConnection(vmmGObject):
     is_xen = property(lambda s: getattr(s, "_backend").is_xen)
     is_remote = property(lambda s: getattr(s, "_backend").is_remote)
     is_qemu = property(lambda s: getattr(s, "_backend").is_qemu)
-    is_qemu_system = property(lambda s: getattr(s, "_backend").is_qemu_system)
-    is_qemu_session = property(lambda s:
-                               getattr(s, "_backend").is_qemu_session)
+    is_qemu_privileged = property(lambda s: getattr(s, "_backend").is_qemu_privileged)
+    is_qemu_unprivileged = property(lambda s:
+                               getattr(s, "_backend").is_qemu_unprivileged)
     is_test = property(lambda s: getattr(s, "_backend").is_test)
-    is_session_uri = property(lambda s: getattr(s, "_backend").is_session_uri)
+    is_unprivileged = property(lambda s: getattr(s, "_backend").is_unprivileged)
 
 
     def get_cache_dir(self):
@@ -397,12 +397,13 @@ class vmmConnection(vmmGObject):
         hv = pretty_map.get(self.get_driver(), self.get_driver())
         hostname = self.get_uri_hostname()
         path = self.get_backend().get_uri_path()
-        is_session = self.get_backend().is_session_uri()
 
         ret = hv
 
-        if is_session:
+        if path == "/session":
             ret += " " + _("User session")
+        elif path == "/embed":
+            ret += " " + _("Embedded session")
         elif (path and path != "/system" and os.path.basename(path)):
             # Used by test URIs to report what XML file they are using
             ret += " %s" % os.path.basename(path)

@@ -220,7 +220,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             elif not rendernode_supported:
                 rendernode_warning = (
                     _("Hypervisor/libvirt does not support manual rendernode"))
-                if self.conn.is_qemu_system():
+                if self.conn.is_qemu_privileged():
                     opengl_warning = rendernode_warning
 
             if not opengl_warning:

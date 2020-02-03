@@ -338,9 +338,15 @@ class VirtinstConnection(object):
     ###################
 
     def is_remote(self):
-        return self._uriobj.hostname
-    def is_session_uri(self):
-        return self.get_uri_path() == "/session"
+        return bool(self._uriobj.hostname)
+    def is_privileged(self):
+        if self.get_uri_path() == "/session":
+            return False
+        if self.get_uri_path() == "/embed":
+            return os.getuid() == 0
+        return True
+    def is_unprivileged(self):
+        return not self.is_privileged()
 
     def get_uri_hostname(self):
         return self._uriobj.hostname
@@ -362,10 +368,10 @@ class VirtinstConnection(object):
 
     def is_qemu(self):
         return self._uriobj.scheme.startswith("qemu")
-    def is_qemu_system(self):
-        return (self.is_qemu() and self._uriobj.path == "/system")
-    def is_qemu_session(self):
-        return (self.is_qemu() and self.is_session_uri())
+    def is_qemu_privileged(self):
+        return (self.is_qemu() and self.is_privileged())
+    def is_qemu_unprivileged(self):
+        return (self.is_qemu() and self.is_unprivileged())
 
     def is_really_test(self):
         return URI(self._open_uri).scheme.startswith("test")

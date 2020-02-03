@@ -39,6 +39,10 @@ class TestConn(unittest.TestCase):
         conn._uriobj = URI("qemu://example.com/system")
         assert conn.get_uri_transport() == "tls"
 
+        # Hit the qemu:///embed case privileged case check
+        fakeuri = "__virtinst_test__test:///default,fakeuri=qemu:///embed"
+        conn = cli.getConnection(fakeuri)
+        assert conn.is_privileged() == (os.getuid() == 0)
 
         # Hit fakuuri validation error, for old style opts
         with self.assertRaises(RuntimeError):

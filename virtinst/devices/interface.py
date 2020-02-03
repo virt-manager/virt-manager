@@ -259,7 +259,7 @@ class DeviceInterface(Device):
         self.is_conflict_net(self.conn, self.macaddr)
 
     def set_default_source(self):
-        if self.conn.is_qemu_session() or self.conn.is_test():
+        if self.conn.is_qemu_unprivileged() or self.conn.is_test():
             self.type = self.TYPE_USER
             return
 
