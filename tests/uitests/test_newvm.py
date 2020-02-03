@@ -420,7 +420,7 @@ class NewVM(uiutils.UITestCase):
         self.assertFalse(newvm.showing)
 
 
-    def testNewXenPV(self):
+    def testNewVMXenPV(self):
         """
         Test the create wizard with a fake xen PV install
         """
@@ -440,6 +440,27 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
+
+
+    def testNewVMInstallFail(self):
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("Manual", "radio").click()
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        self.forward(newvm)
+
+        # '/' in name will trigger libvirt error
+        newvm.find_fuzzy("Name", "text").text = "test/bad"
+        newvm.find_fuzzy("Finish", "button").click()
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Unable to complete install")
+        alert.find_fuzzy("Close", "button").click()
+
+        # Closing dialog should trigger storage cleanup path
+        newvm.find_fuzzy("Cancel", "button").click()
 
 
     def testNewVMCustomizeXMLEdit(self):
