@@ -2,11 +2,11 @@
   <path>/usr/libexec/qemu-kvm</path>
   <domain>kvm</domain>
   <machine>virt</machine>
-  <arch>aarch64</arch>
+  <arch>armv7l</arch>
   <vcpu max='255'/>
   <os supported='yes'>
     <loader supported='yes'>
-      <value>/usr/share/AAVMF/AAVMF_CODE.fd</value>
+      <value>/usr/share/edk2/arm/QEMU_EFI.fd</value>
       <enum name='type'>
         <value>rom</value>
         <value>pflash</value>
