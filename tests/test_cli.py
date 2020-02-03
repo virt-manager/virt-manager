@@ -902,6 +902,11 @@ c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 c.add_compare("--os-type linux --cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
 c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
+c.add_compare("--connect %(URI-KVM)s --reinstall test-clone-simple --pxe", "reinstall-pxe")  # compare --reinstall with --pxe
+c.add_compare("--connect %(URI-KVM)s --reinstall test-clone-simple --location http://example.com", "reinstall-location")  # compare --reinstall with --location
+c.add_compare("--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended", "reinstall-cdrom")  # compare --reinstall with --cdrom handling
+c.add_invalid("--reinstall test --cdrom %(ISO-WIN7)s", grep="already active")  # trying to reinstall an active VM should fail
+c.add_invalid("--reinstall test", grep="install method must be specified")  # missing install method
 
 
 ####################

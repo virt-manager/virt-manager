@@ -305,12 +305,13 @@ def validate_required_options(options, guest, installer):
     # aggregate the errors to help first time users get it right
     msg = ""
 
-    if not memory_specified(guest):
-        msg += "\n" + _("--memory amount in MiB is required")
+    if not options.reinstall:
+        if not memory_specified(guest):
+            msg += "\n" + _("--memory amount in MiB is required")
 
-    if not storage_specified(options, guest):
-        msg += "\n" + (
-            _("--disk storage must be specified (override with --disk none)"))
+        if not storage_specified(options, guest):
+            msg += "\n" + (
+                _("--disk storage must be specified (override with --disk none)"))
 
     if not guest.os.is_container() and not installer.options_specified():
         msg += "\n" + (
@@ -384,6 +385,7 @@ def build_installer(options, guest, installdata):
     location = None
     location_kernel = None
     location_initrd = None
+    is_reinstall = bool(options.reinstall)
     unattended_data = None
     extra_args = options.extra_args
 
@@ -431,7 +433,8 @@ def build_installer(options, guest, installdata):
             install_kernel=install_kernel,
             install_initrd=install_initrd,
             install_kernel_args=install_kernel_args,
-            no_install=no_install)
+            no_install=no_install,
+            is_reinstall=is_reinstall)
 
     if unattended_data:
         installer.set_unattended_data(unattended_data)
@@ -541,7 +544,7 @@ def installer_detect_distro(guest, installer, osdata):
         fail(_("Error validating install location: %s") % str(e))
 
 
-def build_guest_instance(conn, options):
+def _build_options_guest(conn, options):
     guest = Guest(conn)
     guest.skip_default_osinfo = True
 
@@ -554,25 +557,37 @@ def build_guest_instance(conn, options):
     # However we want to do it after parse_option_strings to ensure
     # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
+    return guest
 
+
+def build_guest_instance(conn, options):
     installdata = cli.parse_install(options.install)
-    installer = build_installer(options, guest, installdata)
-
-    # Set guest osname, from commandline or detected from media
     osdata = cli.parse_os_variant(options.os_variant)
     if installdata.os:
         osdata.set_installdata_name(installdata.os)
+
+    if options.reinstall:
+        dummy, guest, dummy = cli.get_domain_and_guest(conn, options.reinstall)
+    else:
+        guest = _build_options_guest(conn, options)
+
+    installer = build_installer(options, guest, installdata)
+
+    # Set guest osname, from commandline or detected from media
     guest.set_default_os_name()
     installer_detect_distro(guest, installer, osdata)
 
-    set_cli_defaults(options, guest)
+    if not options.reinstall:
+        set_cli_defaults(options, guest)
+
     installer.set_install_defaults(guest)
     for path in installer.get_search_paths(guest):
         cli.check_path_search(guest.conn, path)
 
-    # cli specific disk validation
-    for disk in guest.devices.disk:
-        cli.validate_disk(disk)
+    if not options.reinstall:
+        # cli specific disk validation
+        for disk in guest.devices.disk:
+            cli.validate_disk(disk)
 
     validate_required_options(options, guest, installer)
     show_guest_warnings(options, guest, osdata)
@@ -867,6 +882,9 @@ def parse_args():
                     help=_("Perform an unattended installation"))
     insg.add_argument("--install",
             help=_("Specify fine grained install options"))
+    insg.add_argument("--reinstall", metavar="DOMAIN",
+            help=_("Reinstall existing VM. Only install options are applied, "
+                   "all other VM configuration options are ignored."))
     insg.add_argument("--cloud-init", nargs="?", const=1,
                     help=_("Perform a cloud image installation, configuring cloud-init"))
 

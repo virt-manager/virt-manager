@@ -50,7 +50,7 @@ class Installer(object):
     def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
             location_kernel=None, location_initrd=None,
             install_kernel=None, install_initrd=None, install_kernel_args=None,
-            no_install=None):
+            no_install=None, is_reinstall=False):
         self.conn = conn
 
         # Entry point for virt-manager 'Customize' wizard to change autostart
@@ -65,6 +65,8 @@ class Installer(object):
 
         self._install_bootdev = install_bootdev
         self._no_install = no_install
+        self._is_reinstall = is_reinstall
+        self._pre_reinstall_xml = None
 
         self._treemedia = None
         self._treemedia_bootconfig = None
@@ -103,8 +105,18 @@ class Installer(object):
         if not bool(self._cdrom_path()):
             return
 
-        dev = self._make_cdrom_device(self._cdrom_path())
         self._install_cdrom_device_added = True
+
+        if self._is_reinstall:
+            cdroms = [d for d in guest.devices.disk if d.is_cdrom()]
+            if cdroms:
+                dev = cdroms[0]
+                dev.path = self._cdrom_path()
+                return
+
+        dev = self._make_cdrom_device(self._cdrom_path())
+        if self._is_reinstall:
+            dev.set_defaults(guest)
 
         # Insert the CDROM before any other CDROM, so boot=cdrom picks
         # it as the priority
@@ -271,6 +283,9 @@ class Installer(object):
                 os_media, os_tree, injection_method)
 
     def _prepare(self, guest, meter):
+        if self._is_reinstall:
+            self._pre_reinstall_xml = guest.get_xml()
+
         unattended_scripts = None
         if self._unattended_data:
             unattended_scripts = self._prepare_unattended_scripts(guest, meter)
@@ -349,6 +364,8 @@ class Installer(object):
         """
         if self._defaults_are_set:
             return
+        if self._is_reinstall:
+            self._pre_reinstall_xml = guest.get_xml()
 
         self._add_install_cdrom_device(guest)
 
@@ -356,7 +373,8 @@ class Installer(object):
             bootdev = self._get_postinstall_bootdev(guest)
             guest.os.bootorder = self._build_boot_order(guest, bootdev)
 
-        guest.set_defaults(None)
+        if not self._is_reinstall:
+            guest.set_defaults(None)
         self._defaults_are_set = True
 
     def get_search_paths(self, guest):
@@ -481,7 +499,7 @@ class Installer(object):
         install_xml = None
         if self.has_install_phase():
             install_xml = self._get_install_xml(guest, meter)
-        final_xml = guest.get_xml()
+        final_xml = self._pre_reinstall_xml or guest.get_xml()
 
         log.debug("Generated install XML: %s",
             (install_xml and ("\n" + install_xml) or "None required"))
@@ -524,7 +542,7 @@ class Installer(object):
         meter.start(size=None, text=meter_label)
         needs_boot = doboot or self.has_install_phase()
 
-        if guest.type == "vz":
+        if guest.type == "vz" and not self._is_reinstall:
             if transient:
                 raise RuntimeError(_("Domain type 'vz' doesn't support "
                     "transient installs."))
@@ -570,13 +588,14 @@ class Installer(object):
 
         :param return_xml: Don't create the guest, just return generated XML
         """
-        guest.validate_name(guest.conn, guest.name)
+        if not self._is_reinstall and not return_xml:
+            guest.validate_name(guest.conn, guest.name)
         self.set_install_defaults(guest)
 
         try:
             self._prepare(guest, meter)
 
-            if not dry:
+            if not dry and not self._is_reinstall:
                 for dev in guest.devices.disk:
                     dev.build_storage(meter)
 

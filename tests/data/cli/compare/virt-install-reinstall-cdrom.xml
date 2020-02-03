@@ -1,0 +1,63 @@
+<domain type="test">
+  <name>test-cdrom</name>
+  <uuid>4a64cc71-aaaa-2fd0-2323-3050941ea3c3</uuid>
+  <memory unit="KiB">8388608</memory>
+  <currentMemory unit="KiB">2097152</currentMemory>
+  <vcpu placement="static">2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="cdrom"/>
+  </os>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type="file" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="1" target="0" unit="0"/>
+      <source file="tests/data/cli/fake-win7.iso"/>
+    </disk>
+    <controller type="ide" index="0"/>
+    <disk type="file" device="cdrom">
+      <source file="/VIRTINST-TESTSUITE/unattended.iso"/>
+      <target dev="hdd" bus="ide"/>
+      <readonly/>
+    </disk>
+  </devices>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/win/7"/>
+    </libosinfo:libosinfo>
+  </metadata>
+</domain>
+<domain type="test">
+  <name>test-cdrom</name>
+  <uuid>4a64cc71-aaaa-2fd0-2323-3050941ea3c3</uuid>
+  <memory unit="KiB">8388608</memory>
+  <currentMemory unit="KiB">2097152</currentMemory>
+  <vcpu placement="static">2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type="file" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="1" target="0" unit="0"/>
+      <source file="tests/data/cli/fake-win7.iso"/>
+    </disk>
+    <controller type="ide" index="0"/>
+  </devices>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://microsoft.com/win/7"/>
+    </libosinfo:libosinfo>
+  </metadata>
+</domain>

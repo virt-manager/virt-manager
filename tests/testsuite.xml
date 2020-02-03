@@ -37,6 +37,30 @@
 </domain>
 
 
+<domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
+  <name>test-cdrom</name>
+  <uuid>4a64cc71-aaaa-2fd0-2323-3050941ea3c3</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <test:runstate>5</test:runstate>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type="file" device="cdrom">
+      <target dev="hdc" bus="ide"/>
+      <readonly/>
+    </disk>
+  </devices>
+</domain>
+
+
 <domain type='test'>
   <name>test-collide</name>
   <currentMemory>204800</currentMemory>

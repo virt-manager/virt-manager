@@ -594,6 +594,20 @@ options. The deprecated B<--live> option is the same as
 =back
 
 
+=item B<--reinstall DOMAIN>
+
+Reinstall an existing VM. DOMAIN can be a VM name, UUID, or ID number.
+virt-install will fetch the domain XML from libvirt, apply the specified
+install config changes, boot the VM for the install process, and then
+revert to roughly the same starting XML.
+
+Only install related options are processed, all other VM configuration
+options like --name, --disk, etc. are completely ignored.
+
+If --reinstall is used with --cdrom, an existing CDROM attached to
+the VM will be used if one is available, otherwise a permanent CDROM
+device will be added.
+
 
 =item B<--unattended> [OPTIONS]
 
