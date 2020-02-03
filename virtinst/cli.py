@@ -23,6 +23,7 @@ from .buildconfig import BuildConfig
 from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
         DeviceInterface, DevicePanic)
+from .guest import Guest
 from .logger import log, reset_logging
 from .nodedev import NodeDevice
 from .osdict import OSDB
@@ -436,6 +437,50 @@ def get_meter():
     import virtinst.progress
     quiet = (get_global_state().quiet or in_testsuite())
     return virtinst.progress.make_meter(quiet=quiet)
+
+
+def get_xmldesc(domain, inactive=False):
+    flags = libvirt.VIR_DOMAIN_XML_SECURE
+    if inactive:
+        flags |= libvirt.VIR_DOMAIN_XML_INACTIVE
+    return domain.XMLDesc(flags)
+
+
+def get_domain_and_guest(conn, domstr):
+    try:
+        int(domstr)
+        isint = True
+    except ValueError:
+        isint = False
+
+    uuidre = "[a-fA-F0-9]{8}[-]([a-fA-F0-9]{4}[-]){3}[a-fA-F0-9]{12}$"
+    isuuid = bool(re.match(uuidre, domstr))
+
+    try:
+        domain = None
+        try:
+            domain = conn.lookupByName(domstr)
+        except Exception:
+            # In case the VM has a UUID or ID for a name
+            log.debug("Error looking up domain by name", exc_info=True)
+            if isint:
+                domain = conn.lookupByID(int(domstr))
+            elif isuuid:
+                domain = conn.lookupByUUIDString(domstr)
+            else:
+                raise
+    except libvirt.libvirtError as e:
+        fail(_("Could not find domain '%s': %s") % (domstr, e))
+
+    state = domain.info()[0]
+    active_xmlobj = None
+    inactive_xmlobj = Guest(conn, parsexml=get_xmldesc(domain))
+    if state != libvirt.VIR_DOMAIN_SHUTOFF:
+        active_xmlobj = inactive_xmlobj
+        inactive_xmlobj = Guest(conn,
+                parsexml=get_xmldesc(domain, inactive=True))
+
+    return (domain, inactive_xmlobj, active_xmlobj)
 
 
 ###########################

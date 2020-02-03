@@ -6,7 +6,6 @@
 # See the COPYING file in the top-level directory.
 
 import difflib
-import re
 import sys
 
 import libvirt
@@ -59,52 +58,8 @@ def set_os_variant(options, guest):
         guest.set_os_name(osdata.name)
 
 
-def get_xmldesc(domain, inactive=False):
-    flags = libvirt.VIR_DOMAIN_XML_SECURE
-    if inactive:
-        flags |= libvirt.VIR_DOMAIN_XML_INACTIVE
-    return domain.XMLDesc(flags)
-
-
-def get_domain_and_guest(conn, domstr):
-    try:
-        int(domstr)
-        isint = True
-    except ValueError:
-        isint = False
-
-    uuidre = "[a-fA-F0-9]{8}[-]([a-fA-F0-9]{4}[-]){3}[a-fA-F0-9]{12}$"
-    isuuid = bool(re.match(uuidre, domstr))
-
-    try:
-        domain = None
-        try:
-            domain = conn.lookupByName(domstr)
-        except Exception:
-            # In case the VM has a UUID or ID for a name
-            log.debug("Error looking up domain by name", exc_info=True)
-            if isint:
-                domain = conn.lookupByID(int(domstr))
-            elif isuuid:
-                domain = conn.lookupByUUIDString(domstr)
-            else:
-                raise
-    except libvirt.libvirtError as e:
-        fail(_("Could not find domain '%s': %s") % (domstr, e))
-
-    state = domain.info()[0]
-    active_xmlobj = None
-    inactive_xmlobj = Guest(conn, parsexml=get_xmldesc(domain))
-    if state != libvirt.VIR_DOMAIN_SHUTOFF:
-        active_xmlobj = inactive_xmlobj
-        inactive_xmlobj = Guest(conn,
-                parsexml=get_xmldesc(domain, inactive=True))
-
-    return (domain, inactive_xmlobj, active_xmlobj)
-
-
 def defined_xml_is_unchanged(conn, domain, original_xml):
-    rawxml = get_xmldesc(domain, inactive=True)
+    rawxml = cli.get_xmldesc(domain, inactive=True)
     new_xml = Guest(conn, parsexml=rawxml).get_xml()
     return new_xml == original_xml
 
@@ -498,7 +453,7 @@ def main(conn=None):
     active_xmlobj = None
     inactive_xmlobj = None
     if options.domain:
-        domain, inactive_xmlobj, active_xmlobj = get_domain_and_guest(
+        domain, inactive_xmlobj, active_xmlobj = cli.get_domain_and_guest(
             conn, options.domain)
     else:
         inactive_xmlobj = Guest(conn, parsexml=options.stdinxml)
