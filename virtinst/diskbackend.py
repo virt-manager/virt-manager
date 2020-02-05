@@ -301,9 +301,6 @@ def _is_dir_searchable(dirname, uid, username):
     """
     Check if passed directory is searchable by uid
     """
-    if "VIRTINST_TEST_SUITE" in os.environ:
-        return True
-
     try:
         statinfo = os.stat(dirname)
     except OSError:  # pragma: no cover

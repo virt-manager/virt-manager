@@ -2,7 +2,6 @@
 # See the COPYING file in the top-level directory.
 
 import os
-import tempfile
 
 import tests
 from tests.uitests import utils as uiutils
@@ -106,49 +105,6 @@ class AddHardware(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: tab.showing)
         disk_path = tab.find("disk-source-path")
         self.assertTrue("rbd://" in disk_path.text)
-
-    def _testQemuSearchCheck(self, filename):
-        """
-        Use fake KVM URI, create a tmpdir with bad perms, make sure
-        UI offers to fix it, and initiate the fix
-        """
-        self.app.uri = tests.utils.URIs.kvm
-        details = self._open_details_window()
-        addhw = self._open_addhw_window(details)
-        finish = addhw.find("Finish", "push button")
-
-        # Launch addhw, storage, file chooser
-        tab = self._select_hw(addhw, "Storage", "storage-tab")
-        tab.find_fuzzy("Select or create", "radio").click()
-        tab.find("storage-browse", "push button").click()
-        browse = self.app.root.find("Choose Storage Volume", "frame")
-        browse.find("Browse Local", "push button").click()
-        chooser = self.app.root.find(
-                "Locate existing storage", "file chooser")
-
-        # Enter the filename and select it
-        chooser.find("Name", "text").text = filename
-        obutton = chooser.find("Open", "push button")
-        uiutils.check_in_loop(lambda: obutton.sensitive)
-        obutton.click()
-        uiutils.check_in_loop(lambda: not chooser.showing)
-        uiutils.check_in_loop(lambda: addhw.active)
-        finish.click()
-
-        # Verify permission dialog pops up, ask to change
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find("The emulator may not have search permissions")
-        alert.find("Yes", "push button").click()
-
-        # Verify no errors
-        uiutils.check_in_loop(lambda: not addhw.showing)
-        uiutils.check_in_loop(lambda: details.active)
-
-    def testQemuSearchCheck(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            with tempfile.NamedTemporaryFile(dir=tmpdir) as tmpfile:
-                os.chmod(tmpdir, 0o700)
-                self._testQemuSearchCheck(tmpfile.name)
 
     def testAddDisks(self):
         """

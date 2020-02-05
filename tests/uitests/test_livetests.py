@@ -184,6 +184,15 @@ class Console(uiutils.UITestCase):
         tab.find("SCSI", "menu item").click()
         addhw.find("Finish", "push button").click()
 
+        # Verify permission dialog pops up, ask to change
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find("The emulator may not have search permissions")
+        alert.find("Yes", "push button").click()
+
+        # Verify no errors
+        uiutils.check_in_loop(lambda: not addhw.showing)
+        uiutils.check_in_loop(lambda: win.active)
+
         # Hot unplug the disk
         win.find("SCSI Disk 1", "table cell").click()
         tab = win.find("disk-tab", None)
@@ -216,17 +225,15 @@ class Console(uiutils.UITestCase):
         Live test for basic hotplugging and media change, as well as
         testing our auto-poolify magic
         """
-
-        import shutil
         import tempfile
-        dname = tempfile.mkdtemp(prefix="uitests-tmp")
+        tmpdir = tempfile.TemporaryDirectory(prefix="uitests-tmp")
+        dname = tmpdir.name
         try:
             fname = os.path.join(dname, "test.img")
             os.system("qemu-img create -f qcow2 %s 1M > /dev/null" % fname)
-            os.system("chmod -R 777 %s" % dname)
+            os.system("chmod 700 %s" % dname)
             self._testLiveHotplug(fname)
         finally:
-            shutil.rmtree(dname)
             poolname = os.path.basename(dname)
             try:
                 pool = self.conn.storagePoolLookupByName(poolname)

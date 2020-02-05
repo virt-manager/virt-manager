@@ -216,7 +216,8 @@ class TestXMLMisc(unittest.TestCase):
 
             # Use our uid, verify it shows we have expected access
             _set_caps_baselabel_uid(os.getuid())
-            searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
+            searchdata = virtinst.DeviceDisk.check_path_search(conn,
+                    tmpdir + "/footest")
             self.assertEqual(searchdata.uid, os.getuid())
             self.assertEqual(searchdata.fixlist, [])
 
