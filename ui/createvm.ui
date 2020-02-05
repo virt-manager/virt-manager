@@ -955,6 +955,11 @@ bar</property>
                                                     <property name="valign">center</property>
                                                     <property name="hexpand">True</property>
                                                     <property name="invisible_char">●</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="install-urlopts-entry-atkobject">
+                                                        <property name="AtkObject::accessible-name" translatable="yes">install-urlopts-entry</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -971,6 +976,11 @@ bar</property>
                                             <property name="can_focus">False</property>
                                             <property name="label" translatable="yes">URL _Options</property>
                                             <property name="use_underline">True</property>
+                                          </object>
+                                        </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-url-options-atkobject">
+                                            <property name="AtkObject::accessible-name" translatable="yes">install-urlopts-expander</property>
                                           </object>
                                         </child>
                                       </object>
@@ -1451,6 +1461,11 @@ connections is not yet supported.&lt;/small&gt;</property>
  * docker://registry:port/image:tag
  * virt-builder://template
 </property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="install-oscontainer-source-url-entry-atkobject">
+                                                        <property name="AtkObject::accessible-name" translatable="yes">install-oscontainer-source-uri</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                 </child>
                                               </object>
@@ -1561,6 +1576,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                                     <child>
                                       <object class="GtkBox" id="install-oscontainer-rootpw-box">
                                         <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="can_focus">False</property>
                                         <property name="spacing">3</property>
                                         <child>
@@ -1581,6 +1597,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                             <property name="can_focus">True</property>
                                             <property name="visibility">False</property>
                                             <property name="invisible_char">●</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="install-oscontainer-rootpw-atkobject">
+                                                <property name="AtkObject::accessible-name" translatable="yes">install-oscontainer-root-passwd</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>

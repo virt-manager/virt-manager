@@ -29,6 +29,13 @@ class NewVM(uiutils.UITestCase):
         if check:
             uiutils.check_in_loop(lambda: pagenumlabel.text != oldtext)
 
+    def back(self, newvm, check=True):
+        pagenumlabel = newvm.find("pagenum-label")
+        oldtext = pagenumlabel.text
+        newvm.find_fuzzy("Back", "button").click()
+        if check:
+            uiutils.check_in_loop(lambda: pagenumlabel.text != oldtext)
+
 
     ##############
     # Test cases #
@@ -62,8 +69,8 @@ class NewVM(uiutils.UITestCase):
         entry.click()
 
         # Back up, select test:///default, verify media-combo is now empty
+        self.back(newvm)
         back = newvm.find_fuzzy("Back", "button")
-        back.click()
         uiutils.check_in_loop(lambda: not back.sensitive)
         combo.click()
         combo.find_fuzzy("test default").click()
@@ -99,7 +106,7 @@ class NewVM(uiutils.UITestCase):
 
         # Verify back+forward still keeps Generic selected
         self.sleep(.5)
-        newvm.find_fuzzy("Back", "button").click()
+        self.back(newvm)
         self.sleep(.5)
         self.forward(newvm)
         self.sleep(.5)
@@ -236,19 +243,21 @@ class NewVM(uiutils.UITestCase):
         url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
         oslabel = "Fedora 10"
         newvm.find("install-url-entry").text = url
+        newvm.find("install-urlopts-expander").click_expander()
+        newvm.find("install-urlopts-entry").text = "foo=bar"
 
         uiutils.check_in_loop(lambda: osentry.text == oslabel, timeout=10)
 
         # Move forward, then back, ensure OS stays selected
         self.forward(newvm)
-        newvm.find_fuzzy("Back", "button").click()
+        self.back(newvm)
         uiutils.check_in_loop(lambda: osentry.text == oslabel)
 
         # Disable autodetect, make sure OS still selected
         newvm.find_fuzzy("Automatically detect", "check").click()
         uiutils.check_in_loop(lambda: osentry.text == oslabel)
         self.forward(newvm)
-        newvm.find_fuzzy("Back", "button").click()
+        self.back(newvm)
 
         # Ensure the EOL field was selected
         osentry.click()
@@ -296,19 +305,36 @@ class NewVM(uiutils.UITestCase):
         newvm.find("oslist-entry").text = "generic"
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm, check=False)
-
-        # Path permission check
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("No", "push button").click()
-
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("vm-ppc64 on", "frame")
         self.assertFalse(newvm.showing)
 
+    def testNewVMAArch64UEFI(self):
+        """
+        Test aarch64 UEFI usage
+        """
+        self.app.uri = tests.utils.URIs.kvm_aarch64
+        newvm = self._open_create_wizard()
 
-    def testNewArmKernel(self):
+        newvm.find_fuzzy("Local install media", "radio").click()
+        self.forward(newvm)
+
+        newvm.find_fuzzy("Automatically detect", "check").click()
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        newvm.find("media-entry").text = "/dev/default-pool/testvol1.img"
+        self.forward(newvm)
+        self.forward(newvm)
+        newvm.find_fuzzy("Enable storage", "check box").click()
+        self.forward(newvm)
+        newvm.find_fuzzy("Finish", "button").click()
+
+        self.app.root.find_fuzzy("vm1 on", "frame")
+        self.assertFalse(newvm.showing)
+
+    def testNewVMArmKernel(self):
         """
         New arm VM that requires kernel/initrd/dtb
         """
@@ -323,11 +349,15 @@ class NewVM(uiutils.UITestCase):
         self.assertTrue(TCG.showing)
 
         # Validate some initial defaults
-        newvm.find_fuzzy("Virt Type", "combo").click()
+        newvm.find_fuzzy("Import", "radio").click()
         newvm.find_fuzzy("Import", "radio").click()
         self.assertFalse(newvm.find_fuzzy("Local", "radio").sensitive)
-        newvm.find_fuzzy("vexpress-a15", "menu item")
-        newvm.find("virt", "menu item")
+        newvm.find_fuzzy("Machine Type", "combo").click()
+        self.sleep(.2)
+        newvm.find_fuzzy("canon", "menu item").click()
+        newvm.find_fuzzy("Machine Type", "combo").click()
+        self.sleep(.2)
+        newvm.find("virt", "menu item").click()
         self.forward(newvm)
 
         # Set the import media details
@@ -342,10 +372,6 @@ class NewVM(uiutils.UITestCase):
         # Disk collision box pops up, hit ok
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Yes", "push button").click()
-
-        # Path permission check
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("No", "push button").click()
 
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -368,6 +394,11 @@ class NewVM(uiutils.UITestCase):
         # Set custom init
         newvm.find_fuzzy(None,
             "text", "application path").text = "/sbin/init"
+        self.forward(newvm)
+        self.forward(newvm)
+        # Trigger back, to ensure disk page skipping works
+        self.back(newvm)
+        self.back(newvm)
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -420,6 +451,38 @@ class NewVM(uiutils.UITestCase):
         self.assertFalse(newvm.showing)
 
 
+    def testNewVMContainerBootstrap(self):
+        self.app.uri = tests.utils.URIs.lxc
+        try:
+            import virtBootstrap  # pylint: disable=unused-import
+        except ImportError:
+            self.skipTest("virtBootstrap not installed")
+
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("Operating system", "radio").click()
+        self.forward(newvm)
+
+        # Set directory path
+        import tempfile
+        tmpdir = tempfile.TemporaryDirectory()
+        newvm.find_fuzzy("Create OS directory", "check box").click()
+        self.sleep(.5)
+        rootdir = newvm.find_fuzzy(None, "text", "root directory")
+        self.assertTrue(".local/share/libvirt" in rootdir.text)
+        rootdir.text = tmpdir.name
+        newvm.find("install-oscontainer-source-uri").text = "docker://alpine"
+        newvm.find("install-oscontainer-root-passwd").text = "foobar"
+        self.forward(newvm)
+        self.forward(newvm)
+        newvm.find_fuzzy("Finish", "button").click()
+        prog = self.app.root.find("Creating Virtual Machine", "frame")
+        uiutils.check_in_loop(lambda: not prog.showing, timeout=30)
+
+        time.sleep(1)
+        self.app.root.find_fuzzy("container1 on", "frame")
+        self.assertFalse(newvm.showing)
+
+
     def testNewVMXenPV(self):
         """
         Test the create wizard with a fake xen PV install
@@ -441,26 +504,49 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
 
+        self.app.root.find_fuzzy("vm1 on", "frame")
+        self.assertFalse(newvm.showing)
+
 
     def testNewVMInstallFail(self):
-        newvm = self._open_create_wizard()
-        newvm.find_fuzzy("Manual", "radio").click()
-        self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
-        newvm.find("oslist-popover").find_fuzzy("generic").click()
-        self.forward(newvm)
-        self.forward(newvm)
-        self.forward(newvm)
+        def dofail():
+            _newvm = self._open_create_wizard()
+            _newvm.find_fuzzy("Manual", "radio").click()
+            self.forward(_newvm)
+            _newvm.find("oslist-entry").text = "generic"
+            _newvm.find("oslist-popover").find_fuzzy("generic").click()
+            self.forward(_newvm)
+            self.forward(_newvm)
+            self.forward(_newvm)
 
-        # '/' in name will trigger libvirt error
-        newvm.find_fuzzy("Name", "text").text = "test/bad"
-        newvm.find_fuzzy("Finish", "button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Unable to complete install")
-        alert.find_fuzzy("Close", "button").click()
+            # '/' in name will trigger libvirt error
+            _newvm.find_fuzzy("Name", "text").text = "test/bad"
+            _newvm.find_fuzzy("Finish", "button").click()
+            alert = self.app.root.find("vmm dialog", "alert")
+            alert.find_fuzzy("Unable to complete install")
+            alert.find_fuzzy("Close", "button").click()
+            return _newvm
+
+        newvm = dofail()
 
         # Closing dialog should trigger storage cleanup path
         newvm.find_fuzzy("Cancel", "button").click()
+        uiutils.check_in_loop(lambda: not newvm.visible)
+
+        # Run again
+        newvm = dofail()
+        self.back(newvm)
+        newvm.find_fuzzy("Select or create", "radio").click()
+        newvm.find("storage-entry").text = "/dev/default-pool/somenewvol1"
+        self.forward(newvm)
+        newvm.find_fuzzy("Name", "text").text = "test-foo"
+        newvm.find_fuzzy("Finish", "button").click()
+
+        alert = self.app.root.find("vmm dialog")
+        alert.find_fuzzy("Unable to complete install")
+
+        # self.app.root.find_fuzzy("test-foo on", "frame")
+        # self.assertFalse(newvm.showing)
 
 
     def testNewVMCustomizeXMLEdit(self):

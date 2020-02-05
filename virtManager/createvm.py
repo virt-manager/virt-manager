@@ -109,7 +109,7 @@ class vmmCreateVM(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmCreateVM()
             cls._instance.show(parentobj and parentobj.topwin or None, uri=uri)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if not parentobj:
                 raise
             parentobj.err.show_err(
@@ -593,13 +593,10 @@ class vmmCreateVM(vmmGObjectUI):
 
         # CPU
         phys_cpus = int(self.conn.host_active_processor_count())
-        cmax = phys_cpus
-        if cmax <= 0:
-            cmax = 1
         cpu_label = (_("Up to %(numcpus)d available") %
                      {'numcpus': int(phys_cpus)})
         cpu_label = ("<span size='small'>%s</span>" % cpu_label)
-        self.widget("cpus").set_range(1, cmax)
+        self.widget("cpus").set_range(1, max(phys_cpus, 1))
         self.widget("phys-cpu-label").set_markup(cpu_label)
 
         # Storage
@@ -638,7 +635,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         try:
             self._populate_conn_state()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.exception("Error setting create wizard conn state.")
             return self._show_startup_error(str(e))
 
@@ -689,7 +686,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         for guest in guests:
             if not guest.domains:
-                continue
+                continue  # pragma: no cover
 
             gtype = guest.os_type
             dom = guest.domains[0]
@@ -736,12 +733,11 @@ class vmmCreateVM(vmmGObjectUI):
             "s390x"]
         if self.conn.caps.host.cpu.arch not in prios:
             prios = []
-        else:
-            for p in prios[:]:
-                if p not in archs:
-                    prios.remove(p)
-                else:
-                    archs.remove(p)
+        for p in prios[:]:
+            if p not in archs:
+                prios.remove(p)
+            else:
+                archs.remove(p)
         if prios:
             if archs:
                 prios += [None]
@@ -1059,7 +1055,7 @@ class vmmCreateVM(vmmGObjectUI):
                         self._failed_guest, meter)
 
             def _cleanup_disks_finished(error, details):
-                if error:
+                if error:  # pragma: no cover
                     log.debug("Error cleaning up disk images:"
                         "\nerror=%s\ndetails=%s", error, details)
                 self.idle_add(self._close)
@@ -1194,7 +1190,7 @@ class vmmCreateVM(vmmGObjectUI):
         try:
             path, ignore = self._get_storage_path(newname, do_log=False)
             self._populate_summary_storage(path=path)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.debug("Error generating storage path on name change "
                 "for name=%s", newname, exc_info=True)
 
@@ -1226,10 +1222,9 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Auto-generate a path if not specified
         if enable_src and not self.widget("install-oscontainer-fs").get_text():
-            if os.geteuid() == 0:
-                fs_dir = ['/var/lib/libvirt/filesystems/']
-            else:
-                fs_dir = [os.environ['HOME'],
+            fs_dir = ['/var/lib/libvirt/filesystems/']
+            if os.geteuid() != 0:
+                fs_dir = [os.path.expanduser("~"),
                           '.local/share/libvirt/filesystems/']
 
             default_name = virtinst.Guest.generate_name(self._guest)
@@ -1366,7 +1361,7 @@ class vmmCreateVM(vmmGObjectUI):
         if pagenum == PAGE_FINISH:
             try:
                 self._populate_summary()
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 self.err.show_err(_("Error populating summary page: %s") %
                     str(e))
                 return
