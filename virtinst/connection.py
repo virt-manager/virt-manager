@@ -183,7 +183,7 @@ class VirtinstConnection(object):
         return self._fetch_cache[key][:]
 
     def _fetch_all_domains_raw(self):
-        ignore, ignore, ret = pollhelpers.fetch_vms(
+        dummy1, dummy2, ret = pollhelpers.fetch_vms(
             self, {}, lambda obj, ignore: obj)
         return [Guest(weakref.proxy(self), parsexml=obj.XMLDesc(0))
                 for obj in ret]
@@ -193,12 +193,12 @@ class VirtinstConnection(object):
                            parsexml=poolobj.XMLDesc(0))
 
     def _fetch_all_pools_raw(self):
-        ignore, ignore, ret = pollhelpers.fetch_pools(
+        dummy1, dummy2, ret = pollhelpers.fetch_pools(
             self, {}, lambda obj, ignore: obj)
         return [self._build_pool_raw(poolobj) for poolobj in ret]
 
     def _fetch_all_nodedevs_raw(self):
-        ignore, ignore, ret = pollhelpers.fetch_nodedevs(
+        dummy1, dummy2, ret = pollhelpers.fetch_nodedevs(
             self, {}, lambda obj, ignore: obj)
         return [NodeDevice(weakref.proxy(self), obj.XMLDesc(0))
                 for obj in ret]
@@ -209,7 +209,7 @@ class VirtinstConnection(object):
         if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
             return ret
 
-        ignore, ignore, vols = pollhelpers.fetch_volumes(
+        dummy1, dummy2, vols = pollhelpers.fetch_volumes(
             self, pool, {}, lambda obj, ignore: obj)
 
         for vol in vols:

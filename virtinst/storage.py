@@ -439,7 +439,7 @@ def _progress_thread(volname, pool, meter, event):
         return
 
     while True:  # pragma: no cover
-        ignore, ignore, alloc = vol.info()
+        dummy1, dummy2, alloc = vol.info()
         meter.update(alloc)
         if event.wait(1):
             break

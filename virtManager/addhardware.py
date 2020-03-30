@@ -926,7 +926,7 @@ class vmmAddHardware(vmmGObjectUI):
                 mod_list.append("tpm-spapr")
             else:
                 mod_list.append("tpm-tis")
-                if tpmversion == None or tpmversion != '1.2':
+                if tpmversion != '1.2':
                     mod_list.append("tpm-crb")
             mod_list.sort()
         return mod_list

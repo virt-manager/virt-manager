@@ -567,7 +567,7 @@ def build_guest_instance(conn, options):
         osdata.set_installdata_name(installdata.os)
 
     if options.reinstall:
-        dummy, guest, dummy = cli.get_domain_and_guest(conn, options.reinstall)
+        dummy1, guest, dummy2 = cli.get_domain_and_guest(conn, options.reinstall)
     else:
         guest = _build_options_guest(conn, options)
 
