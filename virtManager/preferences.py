@@ -291,8 +291,7 @@ class vmmPreferences(vmmGObjectUI):
                     else:
                         keystr = keystr + "+" + Gdk.keyval_name(key)
 
-
-        self.widget("prefs-keys-grab-sequence").set_text(keystr)
+        self.widget("prefs-keys-grab-sequence").set_text(keystr or "")
 
     def refresh_confirm_forcepoweroff(self):
         self.widget("prefs-confirm-forcepoweroff").set_active(
