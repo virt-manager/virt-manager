@@ -1722,7 +1722,7 @@ Use --tpm=? to see a list of all available sub options. Complete details at L<ht
 
 Configure a virtual RNG device.
 
-Type can be B<random> or B<egd>.
+Type can be B<random>, B<egd> or B<builtin>.
 
 If the specified type is B<random> then these values must
 be specified:
@@ -1768,6 +1768,8 @@ B<udp> and backend_mode is B<bind>.
 
 =back
 
+If the specified type is B<builtin>, B<backend> is not required.
+
 An example invocation:
 
 =over 4
@@ -1780,6 +1782,10 @@ Connect to localhost to the TCP port 8000 to get entropy data.
 
 Use the /dev/random device to get entropy data, this form implicitly uses the
 "random" model.
+
+=item B<--rng builtin>
+
+Use the builtin rng device to get entropy data.
 
 Use --rng=? to see a list of all available sub options. Complete details at L<https://libvirt.org/formatdomain.html#elementsRng>
 

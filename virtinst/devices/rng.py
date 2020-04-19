@@ -14,6 +14,7 @@ class DeviceRng(Device):
 
     TYPE_RANDOM = "random"
     TYPE_EGD = "egd"
+    TYPE_BUILTIN = "builtin"
 
     model = XMLProperty("./@model")
 

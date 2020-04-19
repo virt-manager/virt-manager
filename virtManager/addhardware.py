@@ -573,6 +573,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("Random")
         if rng_type == DeviceRng.TYPE_EGD:
             return _("Entropy Gathering Daemon")
+        if rng_type == DeviceRng.TYPE_BUILTIN:
+            return _("Builtin RNG")
         return rng_type
 
     @staticmethod
