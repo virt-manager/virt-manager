@@ -648,6 +648,8 @@ class _DebianDistro(_DistroTree):
         media_type = None
         if check_manifest("current/images/MANIFEST"):
             media_type = "url"
+        elif check_manifest("current/legacy-images/MANIFEST"):
+            media_type = "url"
         elif check_manifest("daily/MANIFEST"):
             media_type = "daily"
         elif cache.content_regex(".disk/info",
@@ -701,6 +703,9 @@ class _DebianDistro(_DistroTree):
 
     def _set_url_paths(self):
         url_prefix = "current/images"
+        if self._debname == "ubuntu" and self._os_variant >= 'ubuntu20.04':
+            url_prefix = "current/legacy-images"
+            log.warn("Using legacy d-i based installer, that has been deprecated and will be removed in the future. https://discourse.ubuntu.com/c/server")
         if self.cache.debian_media_type == "daily":
             url_prefix = "daily"
         elif self.cache.debian_media_type == "mounted_iso_url":
