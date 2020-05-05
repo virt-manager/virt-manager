@@ -30,7 +30,7 @@ class DomainLaunchSecurity(XMLBuilder):
         # exercise for pc-i440fx to make SEV work, AMD recommends Q35 anyway
         # NOTE: at some point both of these platform checks should be put in
         # validate(), once that accepts the 'guest' instance
-        if guest.os.machine != "q35" or guest.os.loader_type != "pflash":
+        if guest.os.is_q35() is False or guest.os.loader_type != "pflash":
             raise RuntimeError(_("SEV launch security requires a Q35 UEFI machine"))
 
         # libvirt or QEMU might not support SEV
