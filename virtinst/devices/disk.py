@@ -77,7 +77,6 @@ class DeviceDisk(Device):
     TYPE_NETWORK = "network"
 
     IO_MODE_NATIVE = "native"
-    IO_MODE_THREADS = "threads"
 
 
     @staticmethod
