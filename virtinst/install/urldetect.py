@@ -648,6 +648,8 @@ class _DebianDistro(_DistroTree):
         media_type = None
         if check_manifest("current/images/MANIFEST"):
             media_type = "url"
+        elif check_manifest("current/legacy-images/MANIFEST"):
+            media_type = "legacy_url"
         elif check_manifest("daily/MANIFEST"):
             media_type = "daily"
         elif cache.content_regex(".disk/info",
@@ -705,6 +707,8 @@ class _DebianDistro(_DistroTree):
             url_prefix = "daily"
         elif self.cache.debian_media_type == "mounted_iso_url":
             url_prefix = "install"
+        elif self.cache.debian_media_type == "legacy_url":
+            url_prefix = "current/legacy-images"
 
         tree_arch = self._find_treearch()
         hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix,
