@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-03 20:25-0400\n"
+"POT-Creation-Date: 2020-05-27 14:56-0400\n"
 "PO-Revision-Date: 2018-05-12 02:43+0000\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/virt-manager/"
@@ -24,1020 +24,347 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Zanata 4.6.2\n"
 
-#: ../virt-manager:43
-msgid "Error starting Virtual Machine Manager"
-msgstr "Virhe käynnistäessä Virtuaalikoneiden hallitsinta"
-
-#: ../virt-manager:283
-msgid "virt-manager requires libvirt 0.6.0 or later."
-msgstr "virt-manager vaatii libvirt-version 0.6.0 tai uudemman."
-
-#: ../virt-install:122
-msgid "Cannot specify storage and use --nodisks"
-msgstr ""
-
-#: ../virt-install:126
-msgid ""
-"Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
-"disk PATH[,size=SIZE][,sparse=yes|no]"
-msgstr ""
-
-#: ../virt-install:175
-msgid "Cannot mix both --bridge and --network arguments"
-msgstr ""
-
-#: ../virt-install:220
-msgid "Cannot mix --graphics and old style graphical options"
-msgstr ""
-
-#: ../virt-install:224
-msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
-msgstr ""
-
-#: ../virt-install:306
-msgid "--memory amount in MiB is required"
-msgstr ""
-
-#: ../virt-install:310
-msgid "--disk storage must be specified (override with --disk none)"
-msgstr ""
-
-#: ../virt-install:314
-msgid ""
-"An install method must be specified\n"
-"(%(methods)s)"
-msgstr ""
-"Asennustapa tulee määrittää\n"
-"(%(methods)s)"
-
-#: ../virt-install:321
-msgid "See the man page for examples of using --location with CDROM media"
-msgstr ""
-
-#: ../virt-install:332
-msgid ""
-"CDROM media does not print to the text console by default, so you likely "
-"will not see text install output. You might want to use --location."
-msgstr ""
-
-#: ../virt-install:345
-msgid ""
-"No --console device added, you likely will not see text install output from "
-"the guest."
-msgstr ""
-
-#. 1024) > guest.currentMemory:
-#: ../virt-install:359
-#, c-format
-msgid "Requested memory %s MiB is less than the recommended %s MiB for OS %s"
-msgstr ""
-
-#: ../virt-install:363
-#, c-format
-msgid ""
-"Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
-msgstr ""
-
-#: ../virt-install:369
-msgid "The guest's network configuration does not support PXE"
-msgstr "Tämän vierasjärjestelmän verkkomääritykset eivät tue PXE:tä"
-
-#: ../virt-install:378
-msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
-msgstr ""
-
-#: ../virt-install:392
-msgid "Using {osname} --location {url}"
-msgstr ""
-
-#: ../virt-install:462
-msgid "Using default --name {vm_name}"
-msgstr ""
-
-#: ../virt-install:477
-msgid "Using {os_name} default --memory {megabytes}"
-msgstr ""
-
-#: ../virt-install:492
-msgid "Using {os_name} default --disk {disk_options}"
-msgstr ""
-
-#: ../virt-install:532
-#, c-format
-msgid "Error validating install location: %s"
-msgstr "Virhe vahvistaessa asennussijaintia: %s"
-
-#: ../virt-install:613
-#, c-format
-msgid " %d minutes"
-msgstr " %d minuuttia"
-
-#: ../virt-install:616
-msgid "Waiting%(time_string)s for installation to complete."
-msgstr ""
-
-#: ../virt-install:641
-msgid "No console to launch for the guest, defaulting to --wait -1"
-msgstr ""
-
-#: ../virt-install:651
-msgid ""
-"\n"
-"Starting install..."
-msgstr ""
-"\n"
-"Aloitetaan asennus..."
-
-#: ../virt-install:669
-msgid "Domain creation completed."
-msgstr "Domainin luonti valmistui."
-
-#: ../virt-install:673
-#, c-format
-msgid ""
-"You can restart your domain by running:\n"
-"  %s"
-msgstr ""
-"Voit käynnistää domainin uudelleen suorittamalla:\n"
-"  %s"
-
-#: ../virt-install:676
-msgid "Restarting guest."
-msgstr "Käynnistetään vierasjärjestelmä uudelleen."
-
-#: ../virt-install:683
-msgid "Domain install interrupted."
-msgstr "Domainin asennus keskeytettiin."
-
-#: ../virt-install:708
-msgid "Domain has crashed."
-msgstr "Domain on kaatunut."
-
-#: ../virt-install:738
-msgid ""
-"Domain installation still in progress. You can reconnect to \n"
-"the console to complete the installation process."
-msgstr ""
-"Domainin asennus on yhä kesken. Voit yhdistää\n"
-"uudelleen konsoliin saattaaksesi asennuksen loppuun."
-
-#: ../virt-install:742
-msgid "Domain installation still in progress."
-msgstr ""
-
-#: ../virt-install:748
-msgid "Domain has shutdown. Continuing."
-msgstr "Domain on sammunut. Jatketaan."
-
-#: ../virt-install:754
-msgid "Installation has exceeded specified time limit. Exiting application."
-msgstr "Asennus on ylittänyt määritetyn aikarajan. Poistutaan sovelluksesta."
-
-#: ../virt-install:771
-msgid "Dry run completed successfully"
-msgstr ""
-
-#: ../virt-install:775
-#, c-format
-msgid "Unknown XML step request '%s', must be 1, 2, or all"
-msgstr ""
-
-#: ../virt-install:782
-msgid "Requested installation does not have XML step 2"
-msgstr ""
-
-#: ../virt-install:799
-msgid "Create a new virtual machine from specified install media."
-msgstr "Luo uusi virtuaalikone määritetystä asennusmediasta."
-
-#: ../virt-install:803 ../virt-clone:93
-msgid "General Options"
-msgstr "Yleiset valinnat"
-
-#: ../virt-install:805
-msgid "Name of the guest instance"
-msgstr "Vierasinstanssin nimi"
-
-#: ../virt-install:812
-msgid "Installation Method Options"
-msgstr "Asennustavan valinnat"
-
-#: ../virt-install:814
-msgid "CD-ROM installation media"
-msgstr "CD-ROM-asennusmedia"
-
-#: ../virt-install:816
-msgid ""
-"Distro install URL, eg. https://host/path. See man page for specific distro "
-"examples."
-msgstr ""
-
-#: ../virt-install:819
-msgid "Boot from the network using the PXE protocol"
-msgstr "Käynnistä verkosta käyttäen PXE-protokollaa"
-
-#: ../virt-install:821
-msgid "Build guest around an existing disk image"
-msgstr "Rakenna vierasjärjestelmä olemassa olevan levykuvan ympärille"
-
-#: ../virt-install:824
-msgid ""
-"Additional arguments to pass to the install kernel booted from --location"
-msgstr ""
-
-#: ../virt-install:827
-msgid "Add given file to root of initrd from --location"
-msgstr ""
-
-#: ../virt-install:829
-msgid "Perform an unattended installation"
-msgstr ""
-
-#: ../virt-install:831
-msgid "Specify fine grained install options"
-msgstr ""
-
-#: ../virt-install:845
-msgid "Device Options"
-msgstr "Laitevalinnat"
-
-#: ../virt-install:875
-msgid "Guest Configuration Options"
-msgstr "Vierasjärjestelmän määritysvalinnat"
-
-#: ../virt-install:879
-msgid "Virtualization Platform Options"
-msgstr "Virtualisointialustan valinnat"
-
-#: ../virt-install:883
-msgid "This guest should be a fully virtualized guest"
-msgstr "Tämän vierasjärjestelmän tulisi olla täysin virtualisoitu vieras"
-
-#: ../virt-install:886
-msgid "This guest should be a paravirtualized guest"
-msgstr "Tämän vierasjärjestelmän tulisi olla paravirtualisoitu vieras"
-
-#: ../virt-install:889
-msgid "This guest should be a container guest"
-msgstr "Tämän vierasjärjestelmän tulisi olla säiliövieras"
-
-#: ../virt-install:891
-msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
-msgstr "Käytettäävän hypervisorin nimi (kvm, qemu, xen, ...)"
-
-#: ../virt-install:892
-msgid "The CPU architecture to simulate"
-msgstr "Simuloitava suoritinarkkitehtuuri"
-
-#: ../virt-install:893
-msgid "The machine type to emulate"
-msgstr "Emuloitavan koneen tyyppi"
-
-#: ../virt-install:902 ../virt-clone:135 ../virt-xml:431
-msgid "Miscellaneous Options"
-msgstr "Muut valinnat"
-
-#: ../virt-install:904
-msgid "Have domain autostart on host boot up."
-msgstr ""
-"Aseta domain käynnistymään automaattisesti isäntäjärjestelmän käynnistyessä."
-
-#: ../virt-install:906
-msgid "Create a transient domain."
-msgstr "Luo transientti domain."
-
-#: ../virt-install:908
-msgid "Force power off the domain when the console viewer is closed."
-msgstr ""
-
-#: ../virt-install:911
-msgid "Minutes to wait for install to complete."
-msgstr ""
-
-#: ../virt-install:1010 ../virt-clone:215
-msgid "Installation aborted at user request"
-msgstr "Asennus lopetettu käyttäjän pyynnöstä"
-
-#: ../virt-clone:25
-msgid ""
-"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
-"specify one."
-msgstr ""
-"Uusi virtuaalikone tarvitsee nimen, käytä valitsinta '--name "
-"UUDEN_VIRTUAALIKONEEN_NIMI' määrittääksesi nimen."
-
-#: ../virt-clone:44
-msgid ""
-"An original machine name is required, use '--original ORIGINAL_GUEST' and "
-"try again."
-msgstr ""
-
-#: ../virt-clone:83
-msgid ""
-"Duplicate a virtual machine, changing all the unique host side configuration "
-"like MAC address, name, etc. \n"
-"\n"
-"The VM contents are NOT altered: virt-clone does not change anything "
-"_inside_ the guest OS, it only duplicates disks and does host side changes. "
-"So things like changing passwords, changing static IP address, etc are "
-"outside the scope of this tool. For these types of changes, please see virt-"
-"sysprep(1)."
-msgstr ""
-
-#: ../virt-clone:95
-msgid "Name of the original guest; The status must be shut off or paused."
-msgstr ""
-"Alkuperäisen vieraan nimi; tilan tulee olla sammutettu tai keskeytetty."
-
-#: ../virt-clone:98
-msgid "XML file to use as the original guest."
-msgstr ""
-
-#: ../virt-clone:100
-msgid ""
-"Auto generate clone name and storage paths from the original guest "
-"configuration."
-msgstr ""
-"Luo automaattisesti kloonin nimi ja tallennustilan polut alkuperäisen "
-"vierasjärjestelmän määrityksistä."
-
-#: ../virt-clone:103
-msgid "Name for the new guest"
-msgstr "Uuden vierasjärjestelmän nimi"
-
-#: ../virt-clone:106
-msgid "use btrfs COW lightweight copy"
-msgstr ""
-
-#: ../virt-clone:108
-msgid "Storage Configuration"
-msgstr "Tallennustilan määritykset"
-
-#: ../virt-clone:110
-msgid "New file to use as the disk image for the new guest"
-msgstr ""
-
-#: ../virt-clone:113
-msgid ""
-"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
-"copy=hdc)"
-msgstr ""
-
-#: ../virt-clone:116
-msgid ""
-"Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
-"copy and use the same path in the new VM, use --skip-copy=vda)"
-msgstr ""
-
-#: ../virt-clone:121
-msgid "Do not use a sparse file for the clone's disk image"
-msgstr ""
-
-#: ../virt-clone:125
-msgid ""
-"Do not clone storage, new disk images specified via --file are preserved "
-"unchanged"
-msgstr ""
-
-#: ../virt-clone:128
-msgid "New file to use as storage for nvram VARS"
-msgstr ""
-
-#: ../virt-clone:130
-msgid "Networking Configuration"
-msgstr "Verkkomääritykset"
-
-#: ../virt-clone:132
-msgid ""
-"New fixed MAC address for the clone guest. Default is a randomly generated "
-"MAC"
-msgstr ""
-
-#: ../virt-clone:164
-msgid ""
-"Either --auto-clone or --file is required, use '--auto-clone or --file' and "
-"try again."
-msgstr ""
-
-#: ../virt-clone:205
-#, c-format
-msgid "Clone '%s' created successfully."
-msgstr "Klooni '%s' luotiin onnistuneesti."
-
-#: ../virt-convert:38
-msgid ""
-"Convert an OVF or VMX appliance to native libvirt XML, and run the guest.\n"
-"The VM contents are not altered. Disk images are copied to the hypervisor\n"
-"default storage location.\n"
-"\n"
-"Examples:\n"
-"  virt-convert fedora18.ova\n"
-"  virt-convert centos6.zip --disk-format qcow2"
-msgstr ""
-
-#: ../virt-convert:49
-msgid ""
-"Conversion input. Can be a ovf/vmx file, a directory containing a config and "
-"disk images, or a zip/ova/7z/etc archive."
-msgstr ""
-
-#: ../virt-convert:56
-msgid "Force the input format. 'vmx' or 'ovf'"
-msgstr ""
-
-#: ../virt-convert:58
-msgid "Output disk format. default is 'raw'. Disable conversion with 'none'"
-msgstr ""
-
-#: ../virt-convert:61
-msgid ""
-"Destination directory the disk images should be converted/copied to. "
-"Defaults to the default libvirt directory."
-msgstr ""
-
-#: ../virt-convert:113
-#, c-format
-msgid "Creating guest '%s'."
-msgstr "Luodaan vierasjärjestelmä '%s'."
-
-#: ../virt-convert:129 ../virt-xml:571
-msgid "Aborted at user request"
-msgstr "Lopetettu käyttäjän pyynnöstä"
-
-#: ../virt-xml:37
-msgid "Please enter 'yes' or 'no'."
-msgstr ""
-
-#: ../virt-xml:93
-#, c-format
-msgid "Could not find domain '%s': %s"
-msgstr "Domainia '%s' ei löydy: %s"
-
-#: ../virt-xml:129
-#, c-format
-msgid "Invalid --edit option '%s'"
-msgstr "Virheellinen --edit-valinta '%s'"
-
-#: ../virt-xml:132
-#, c-format
-msgid "No --%s objects found in the XML"
-msgstr ""
-
-#: ../virt-xml:135
-#, c-format
-msgid "--edit %s requested but there's only %s --%s object in the XML"
-msgstr ""
-
-#: ../virt-xml:152
-#, c-format
-msgid "No matching objects found for --%s %s"
-msgstr ""
-
-#: ../virt-xml:168
-#, c-format
-msgid "One of %s must be specified."
-msgstr ""
-
-#: ../virt-xml:171
-#, c-format
-msgid "Conflicting options %s"
-msgstr ""
-
-#: ../virt-xml:182
-msgid "No change specified."
-msgstr ""
-
-#: ../virt-xml:184
-#, c-format
-msgid "Only one change operation may be specified (conflicting options %s)"
-msgstr ""
-
-#: ../virt-xml:197
-#, c-format
-msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
-msgstr ""
-
-#: ../virt-xml:201
-msgid "--os-variant is not supported with --edit"
-msgstr ""
-
-#: ../virt-xml:208
-#, c-format
-msgid "Cannot use --add-device with --%s"
-msgstr ""
-
-#: ../virt-xml:219
-#, c-format
-msgid "Cannot use --remove-device with --%s"
-msgstr ""
-
-#: ../virt-xml:222
-msgid "--os-variant is not supported with --remove-device"
-msgstr ""
-
-#: ../virt-xml:235
-#, c-format
-msgid "--build-xml not supported for --%s"
-msgstr ""
-
-#: ../virt-xml:238
-msgid "--os-variant is not supported with --build-xml"
-msgstr ""
-
-#: ../virt-xml:264
-#, c-format
-msgid "Define '%s' with the changed XML?"
-msgstr ""
-
-#: ../virt-xml:272
-#, c-format
-msgid "Domain '%s' defined successfully."
-msgstr ""
-
-#: ../virt-xml:279
-#, c-format
-msgid "Start '%s' with the changed XML?"
-msgstr ""
-
-#: ../virt-xml:289 ../virt-xml:549
-#, c-format
-msgid "Failed starting domain '%s': %s"
-msgstr ""
-
-#: ../virt-xml:291 ../virt-xml:551
-#, c-format
-msgid "Domain '%s' started successfully."
-msgstr ""
-
-#: ../virt-xml:323
-#, c-format
-msgid "Error attempting device %s: %s"
-msgstr ""
-
-#: ../virt-xml:326
-#, c-format
-msgid "Device %s successful."
-msgstr ""
-
-#: ../virt-xml:350
-msgid "No XML diff was generated. The requested changes will have no effect."
-msgstr ""
-
-#: ../virt-xml:369
-msgid "Edit libvirt XML using command line options."
-msgstr ""
-
-#: ../virt-xml:375
-msgid "Domain name, id, or uuid"
-msgstr "Domainin nimi, id tai uuid"
-
-#: ../virt-xml:377
-msgid "XML actions"
-msgstr "XML-toiminnot"
-
-#: ../virt-xml:379
-msgid ""
-"Edit VM XML. Examples:\n"
-"--edit --disk ...     (edit first disk device)\n"
-"--edit 2 --disk ...   (edit second disk device)\n"
-"--edit all --disk ... (edit all disk devices)\n"
-"--edit target=hda --disk ... (edit disk 'hda')\n"
-msgstr ""
-
-#: ../virt-xml:385
-msgid ""
-"Remove specified device. Examples:\n"
-"--remove-device --disk 1 (remove first disk)\n"
-"--remove-device --disk all (remove all disks)\n"
-"--remove-device --disk /some/path"
-msgstr ""
-
-#: ../virt-xml:390
-msgid ""
-"Add specified device. Example:\n"
-"--add-device --disk ..."
-msgstr ""
-"Lisää määritetty laite. Esimerkki:\n"
-"--add-device --disk ..."
-
-#: ../virt-xml:393
-msgid ""
-"Output built device XML. Domain is optional but recommended to ensure "
-"optimal defaults."
-msgstr ""
-
-#: ../virt-xml:396
-msgid "Output options"
-msgstr ""
-
-#: ../virt-xml:398
-msgid ""
-"Apply changes to the running VM.\n"
-"With --add-device, this is a hotplug operation.\n"
-"With --remove-device, this is a hotunplug operation.\n"
-"With --edit, this is an update device operation."
-msgstr ""
-
-#: ../virt-xml:404
-msgid ""
-"Force defining the domain. Only required if a --print option was specified."
-msgstr ""
-
-#: ../virt-xml:407
-msgid "Force not defining the domain."
-msgstr ""
-
-#: ../virt-xml:410
-msgid "Start the domain."
-msgstr ""
-
-#: ../virt-xml:412
-msgid "Only print the requested change, in diff format"
-msgstr "Tulosta vain pyydetty muutos diff-muodossa"
-
-#: ../virt-xml:414
-msgid "Only print the requested change, in full XML format"
-msgstr "Tulosta vain pyydetty muutos täydessä XML-muodossa"
-
-#: ../virt-xml:416
-msgid "Require confirmation before saving any results."
-msgstr "Vaadi vahvistus ennen minkään tuloksen tallennusta."
-
-#: ../virt-xml:420
-msgid "XML options"
-msgstr "XML-valinnat"
-
-#: ../virt-xml:459
-msgid "Can't use --confirm with stdin input."
-msgstr ""
-
-#: ../virt-xml:461
-msgid "Can't use --update with stdin input."
-msgstr ""
-
-#: ../virt-xml:464
-msgid "A domain must be specified"
-msgstr "Domain tulee määrittää"
-
-#: ../virt-xml:492
-#, c-format
-msgid "Don't know how to --update for --%s"
-msgstr ""
-
-#: ../virt-xml:517
-msgid "Cannot mix --update and --start"
-msgstr ""
-
-#: ../virt-xml:525
-msgid "The VM is not running, --update is inapplicable."
-msgstr ""
-
-#: ../virt-xml:556
-msgid "Changes will take effect after the domain is fully powered off."
-msgstr ""
-
-#: ../virt-xml:558
-msgid ""
-"XML did not change after domain define. You may have changed a value that "
-"libvirt is setting by default."
-msgstr ""
-
 #: ../virtManager/about.py:21
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Virhe käynnistäessä \"Tietoja\"-ikkunaa: %s"
 
-#: ../virtManager/addhardware.py:180 ../virtManager/details/details.py:657
+#: ../virtManager/addhardware.py:175 ../virtManager/details/details.py:637
 msgid "Hardware"
 msgstr "Laitteisto"
 
-#: ../virtManager/addhardware.py:229 ../virtManager/createvm.py:466
-#: ../virtManager/device/addstorage.py:141
+#: ../virtManager/addhardware.py:221 ../virtManager/createvm.py:522
+#: ../virtManager/device/addstorage.py:140
 msgid "Connection does not support storage management."
 msgstr "Yhteys ei tue tallennustilan hallintaa."
 
-#: ../virtManager/addhardware.py:240 ../virtManager/addhardware.py:1071
-#: ../ui/createvm.ui.h:66
+#: ../virtManager/addhardware.py:232 ../virtManager/addhardware.py:1061
+#: ../ui/createvm.ui.h:65
 msgid "Storage"
 msgstr "Tallennustila"
 
-#: ../virtManager/addhardware.py:242 ../virtManager/addhardware.py:1073
+#: ../virtManager/addhardware.py:234 ../virtManager/addhardware.py:1063
 msgid "Controller"
 msgstr "Ohjain"
 
-#: ../virtManager/addhardware.py:243 ../virtManager/addhardware.py:1075
-#: ../virtManager/createnet.py:379
+#: ../virtManager/addhardware.py:235 ../virtManager/addhardware.py:1065
+#: ../virtManager/createnet.py:331
 msgid "Network"
 msgstr "Verkko"
 
-#: ../virtManager/addhardware.py:244 ../virtManager/addhardware.py:1077
-#: ../virtManager/details/details.py:212
+#: ../virtManager/addhardware.py:236 ../virtManager/addhardware.py:1067
+#: ../virtManager/details/details.py:202
 msgid "Input"
 msgstr "Syöte"
 
-#: ../virtManager/addhardware.py:245 ../virtManager/addhardware.py:250
-#: ../virtManager/addhardware.py:253 ../virtManager/addhardware.py:257
-#: ../virtManager/addhardware.py:263 ../virtManager/addhardware.py:283
+#: ../virtManager/addhardware.py:237 ../virtManager/addhardware.py:242
+#: ../virtManager/addhardware.py:245 ../virtManager/addhardware.py:249
+#: ../virtManager/addhardware.py:255 ../virtManager/addhardware.py:275
 msgid "Not supported for this guest type."
 msgstr "Ei tuettu tälle vierasjärjestelmätyypille."
 
-#: ../virtManager/addhardware.py:246 ../virtManager/addhardware.py:1079
+#: ../virtManager/addhardware.py:238 ../virtManager/addhardware.py:1069
 msgid "Graphics"
 msgstr "Grafiikka"
 
-#: ../virtManager/addhardware.py:248 ../virtManager/addhardware.py:1081
+#: ../virtManager/addhardware.py:240 ../virtManager/addhardware.py:1071
 msgid "Sound"
 msgstr "Ääni"
 
-#: ../virtManager/addhardware.py:251 ../virtManager/details/details.py:216
+#: ../virtManager/addhardware.py:243 ../virtManager/details/details.py:206
 #: ../ui/vmwindow.ui.h:43
 msgid "Serial"
 msgstr "Sarja"
 
-#: ../virtManager/addhardware.py:255 ../virtManager/details/details.py:218
+#: ../virtManager/addhardware.py:247 ../virtManager/details/details.py:208
 msgid "Parallel"
 msgstr "Rinnakkais"
 
-#: ../virtManager/addhardware.py:259 ../virtManager/details/details.py:220
+#: ../virtManager/addhardware.py:251 ../virtManager/details/details.py:210
 #: ../ui/vmwindow.ui.h:23
 msgid "Console"
 msgstr "Konsoli"
 
-#: ../virtManager/addhardware.py:261 ../virtManager/details/details.py:226
+#: ../virtManager/addhardware.py:253 ../virtManager/details/details.py:216
 msgid "Channel"
 msgstr "Kanava"
 
-#: ../virtManager/addhardware.py:265
+#: ../virtManager/addhardware.py:257
 msgid "USB Host Device"
 msgstr "USB-isäntälaite"
 
-#: ../virtManager/addhardware.py:267 ../virtManager/addhardware.py:271
+#: ../virtManager/addhardware.py:259 ../virtManager/addhardware.py:263
 msgid "Connection does not support host device enumeration"
 msgstr ""
 
-#: ../virtManager/addhardware.py:275
+#: ../virtManager/addhardware.py:267
 msgid "Not supported for containers"
 msgstr "Ei tuettu säiliöille"
 
-#: ../virtManager/addhardware.py:276
+#: ../virtManager/addhardware.py:268
 msgid "PCI Host Device"
 msgstr "PCI-isäntälaite"
 
-#: ../virtManager/addhardware.py:279
+#: ../virtManager/addhardware.py:271
 msgid "Video"
 msgstr "Video"
 
-#: ../virtManager/addhardware.py:280
+#: ../virtManager/addhardware.py:272
 msgid "Libvirt version does not support video devices."
 msgstr ""
 
-#: ../virtManager/addhardware.py:281 ../virtManager/details/details.py:268
+#: ../virtManager/addhardware.py:273 ../virtManager/details/details.py:258
 #: ../virtManager/lib/libvirtenummap.py:114
 msgid "Watchdog"
 msgstr ""
 
-#: ../virtManager/addhardware.py:284
+#: ../virtManager/addhardware.py:276
 msgid "Filesystem"
 msgstr "Tiedostojärjestelmä"
 
-#: ../virtManager/addhardware.py:285 ../virtManager/addhardware.py:1089
-#: ../virtManager/details/details.py:266
+#: ../virtManager/addhardware.py:277 ../virtManager/addhardware.py:1079
+#: ../virtManager/details/details.py:256
 msgid "Smartcard"
 msgstr "Älykortti"
 
-#: ../virtManager/addhardware.py:287 ../virtManager/addhardware.py:1091
+#: ../virtManager/addhardware.py:279 ../virtManager/addhardware.py:1081
 msgid "USB Redirection"
 msgstr "USB-uudelleenohjaus"
 
-#: ../virtManager/addhardware.py:289 ../virtManager/addhardware.py:1093
-#: ../virtManager/details/details.py:257
+#: ../virtManager/addhardware.py:281 ../virtManager/addhardware.py:1083
+#: ../virtManager/details/details.py:247
 msgid "TPM"
 msgstr "TPM"
 
-#: ../virtManager/addhardware.py:291 ../virtManager/details/details.py:252
+#: ../virtManager/addhardware.py:283 ../virtManager/details/details.py:242
 msgid "RNG"
 msgstr "RNG"
 
-#: ../virtManager/addhardware.py:292 ../virtManager/addhardware.py:1097
-#: ../virtManager/details/details.py:265
+#: ../virtManager/addhardware.py:284 ../virtManager/addhardware.py:1087
+#: ../virtManager/details/details.py:255
 msgid "Panic Notifier"
 msgstr ""
 
-#: ../virtManager/addhardware.py:294 ../virtManager/addhardware.py:297
+#: ../virtManager/addhardware.py:286 ../virtManager/addhardware.py:289
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr ""
 
-#: ../virtManager/addhardware.py:295 ../virtManager/details/details.py:267
+#: ../virtManager/addhardware.py:287 ../virtManager/details/details.py:257
 msgid "Virtio VSOCK"
 msgstr ""
 
-#: ../virtManager/addhardware.py:369
+#: ../virtManager/addhardware.py:361
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Virhe muuttaessa virtuaalikoneen määrityksiä: %s"
 
-#: ../virtManager/addhardware.py:395
+#: ../virtManager/addhardware.py:387
 msgid "Some changes may require a guest shutdown to take effect."
 msgstr ""
 "Jotkin muutokset saattavat vaatia toimiakseen vierasjärjestelmän sammutuksen."
 
-#: ../virtManager/addhardware.py:398
+#: ../virtManager/addhardware.py:390
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 "Nämä muutokset tulevat voimaan vierasjärjestelmän seuraavan sammutuksen "
 "jälkeen."
 
-#: ../virtManager/addhardware.py:451
+#: ../virtManager/addhardware.py:443
 msgid "Pseudo TTY"
 msgstr ""
 
-#: ../virtManager/addhardware.py:453
+#: ../virtManager/addhardware.py:445
 msgid "Output to a file"
 msgstr ""
 
-#: ../virtManager/addhardware.py:455
+#: ../virtManager/addhardware.py:447
 msgid "TCP net console"
 msgstr ""
 
-#: ../virtManager/addhardware.py:457
+#: ../virtManager/addhardware.py:449
 msgid "UDP net console"
 msgstr ""
 
-#: ../virtManager/addhardware.py:459
+#: ../virtManager/addhardware.py:451
 msgid "Unix socket"
 msgstr "Unix-pistoke"
 
-#: ../virtManager/addhardware.py:461
+#: ../virtManager/addhardware.py:453
 msgid "Spice agent"
 msgstr "Spice-agentti"
 
-#: ../virtManager/addhardware.py:463
+#: ../virtManager/addhardware.py:455
 msgid "Spice port"
 msgstr "Spice-portti"
 
-#: ../virtManager/addhardware.py:477 ../virtManager/details/details.py:183
-#: ../virtManager/details/details.py:2820
+#: ../virtManager/addhardware.py:469 ../virtManager/details/details.py:173
+#: ../virtManager/details/details.py:2613
 msgid "Floppy"
 msgstr ""
 
-#: ../virtManager/addhardware.py:553
+#: ../virtManager/addhardware.py:543
 msgid "Passthrough device"
 msgstr "Läpikulkulaite"
 
-#: ../virtManager/addhardware.py:555
+#: ../virtManager/addhardware.py:545
 msgid "Emulated device"
 msgstr ""
 
-#: ../virtManager/addhardware.py:561
+#: ../virtManager/addhardware.py:551
 msgid "TIS"
 msgstr ""
 
-#: ../virtManager/addhardware.py:563
+#: ../virtManager/addhardware.py:553
 msgid "CRB"
 msgstr ""
 
-#: ../virtManager/addhardware.py:569
+#: ../virtManager/addhardware.py:555
+msgid "SPAPR"
+msgstr ""
+
+#: ../virtManager/addhardware.py:561
 msgid "ISA"
 msgstr "ISA"
 
-#: ../virtManager/addhardware.py:571
+#: ../virtManager/addhardware.py:563
 msgid "pSeries"
 msgstr "pSeries"
 
-#: ../virtManager/addhardware.py:573
+#: ../virtManager/addhardware.py:565
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: ../virtManager/addhardware.py:575
+#: ../virtManager/addhardware.py:567
 msgid "s390"
 msgstr "s390"
 
-#: ../virtManager/addhardware.py:581
+#: ../virtManager/addhardware.py:573
 msgid "Random"
 msgstr "Satunnainen"
 
-#: ../virtManager/addhardware.py:583
+#: ../virtManager/addhardware.py:575
 msgid "Entropy Gathering Daemon"
 msgstr ""
 
-#: ../virtManager/addhardware.py:593
+#: ../virtManager/addhardware.py:577
+msgid "Builtin RNG"
+msgstr ""
+
+#: ../virtManager/addhardware.py:587
 msgid "Bind"
 msgstr ""
 
-#: ../virtManager/addhardware.py:594
+#: ../virtManager/addhardware.py:588
 msgid "Connect"
 msgstr ""
 
-#: ../virtManager/addhardware.py:610
+#: ../virtManager/addhardware.py:604
 msgid "Forcefully reset the guest"
 msgstr ""
 
-#: ../virtManager/addhardware.py:612
+#: ../virtManager/addhardware.py:606
 msgid "Gracefully shutdown the guest"
 msgstr ""
 
-#: ../virtManager/addhardware.py:614
+#: ../virtManager/addhardware.py:608
 msgid "Forcefully power off the guest"
 msgstr ""
 
-#: ../virtManager/addhardware.py:616
+#: ../virtManager/addhardware.py:610
 msgid "Pause the guest"
 msgstr "Keskeytä vierasjärjestelmä"
 
-#: ../virtManager/addhardware.py:618
+#: ../virtManager/addhardware.py:612
 msgid "No action"
 msgstr "Ei toimintoa"
 
-#: ../virtManager/addhardware.py:620
+#: ../virtManager/addhardware.py:614
 msgid "Dump guest memory core"
 msgstr ""
 
-#: ../virtManager/addhardware.py:626
+#: ../virtManager/addhardware.py:620
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB -piirtopöytä"
 
-#: ../virtManager/addhardware.py:629
+#: ../virtManager/addhardware.py:623
 msgid "Generic"
 msgstr "Yleinen"
 
-#: ../virtManager/addhardware.py:724 ../virtManager/clone.py:106
+#: ../virtManager/addhardware.py:718 ../virtManager/clone.py:105
 msgid "Disk device"
 msgstr "Levylaite"
 
-#: ../virtManager/addhardware.py:726
+#: ../virtManager/addhardware.py:720
 msgid "CDROM device"
 msgstr "CDROM-laite"
 
-#: ../virtManager/addhardware.py:728
+#: ../virtManager/addhardware.py:722
 msgid "Floppy device"
 msgstr "Diskettilaite"
 
-#: ../virtManager/addhardware.py:731
+#: ../virtManager/addhardware.py:725
 msgid "LUN Passthrough"
 msgstr "LUN-läpikulku"
 
 #. [xml value, label]
-#: ../virtManager/addhardware.py:736 ../virtManager/addhardware.py:743
-#: ../virtManager/addhardware.py:750 ../virtManager/addhardware.py:757
-#: ../virtManager/addhardware.py:782 ../virtManager/addhardware.py:863
-#: ../virtManager/addhardware.py:873 ../virtManager/addhardware.py:990
-#: ../virtManager/details/details.py:2255
-#: ../virtManager/device/gfxdetails.py:99 ../virtManager/preferences.py:185
+#: ../virtManager/addhardware.py:730 ../virtManager/addhardware.py:737
+#: ../virtManager/addhardware.py:744 ../virtManager/addhardware.py:769
+#: ../virtManager/addhardware.py:850 ../virtManager/addhardware.py:860
+#: ../virtManager/addhardware.py:980 ../virtManager/device/gfxdetails.py:94
+#: ../virtManager/preferences.py:183
 msgid "Hypervisor default"
 msgstr "Hypervisorin oletus"
 
-#: ../virtManager/addhardware.py:853
+#: ../virtManager/addhardware.py:840
 msgid "No Devices Available"
 msgstr "Ei laitteita saatavilla"
 
-#: ../virtManager/addhardware.py:910 ../virtManager/device/netlist.py:83
+#: ../virtManager/addhardware.py:897
 msgid "Passthrough"
 msgstr "Läpikulku"
 
-#: ../virtManager/addhardware.py:911
+#: ../virtManager/addhardware.py:898
 msgid "Host"
 msgstr "Isäntä"
 
-#: ../virtManager/addhardware.py:917
+#: ../virtManager/addhardware.py:904
 msgid "Spice channel"
 msgstr "Spice-kanava"
 
-#: ../virtManager/addhardware.py:1083
+#: ../virtManager/addhardware.py:1073
 msgid "Video Device"
 msgstr "Videolaite"
 
-#: ../virtManager/addhardware.py:1085
+#: ../virtManager/addhardware.py:1075
 msgid "Watchdog Device"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1087
+#: ../virtManager/addhardware.py:1077
 msgid "Filesystem Passthrough"
 msgstr "Tiedostojärjestelmän läpikulku"
 
-#: ../virtManager/addhardware.py:1095
+#: ../virtManager/addhardware.py:1085
 msgid "Random Number Generator"
 msgstr "Satunnaislukugeneraattori"
 
-#: ../virtManager/addhardware.py:1099
+#: ../virtManager/addhardware.py:1089
 msgid "VM Sockets"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1103 ../virtManager/details/details.py:2443
+#: ../virtManager/addhardware.py:1093 ../virtManager/details/details.py:2240
 #, python-format
 msgid "%s Device"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1107
+#: ../virtManager/addhardware.py:1097
 msgid "PCI Device"
 msgstr "PCI-laite"
 
-#: ../virtManager/addhardware.py:1108
+#: ../virtManager/addhardware.py:1098
 msgid "USB Device"
 msgstr "USB-laite"
 
-#: ../virtManager/addhardware.py:1242
+#: ../virtManager/addhardware.py:1226
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -1048,11 +375,11 @@ msgstr ""
 "Vain yhden USB-ohjaimen lisääminen on tuettu.\n"
 "Voit vaihtaa USB-ohjaimen tyyppiä virtuaalikoneen tietonäkymästä."
 
-#: ../virtManager/addhardware.py:1334
+#: ../virtManager/addhardware.py:1318
 msgid "Are you sure you want to add this device?"
 msgstr "Haluatko varmasti lisätä tämän laitteen?"
 
-#: ../virtManager/addhardware.py:1337
+#: ../virtManager/addhardware.py:1321
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -1061,44 +388,44 @@ msgstr ""
 "Haluatko asettaa laitteen saataville, kun vierasjärjestelmä käynnistetään "
 "seuraavan kerran uudelleen?"
 
-#: ../virtManager/addhardware.py:1353
+#: ../virtManager/addhardware.py:1337
 #, python-format
 msgid "Error adding device: %s"
 msgstr "Virhe laitetta lisätessä: %s"
 
-#: ../virtManager/addhardware.py:1365
+#: ../virtManager/addhardware.py:1349
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Laitteen lisääminen ei onnistunut: %s"
 
-#: ../virtManager/addhardware.py:1386
+#: ../virtManager/addhardware.py:1370
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1392
+#: ../virtManager/addhardware.py:1376
 msgid "Creating device"
 msgstr "Luodaan laitetta"
 
-#: ../virtManager/addhardware.py:1393
+#: ../virtManager/addhardware.py:1377
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "Laitteesta riippuen tämä saattaa kestää muutaman minuutin."
 
-#: ../virtManager/addhardware.py:1415
+#: ../virtManager/addhardware.py:1399
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1417
+#: ../virtManager/addhardware.py:1401
 msgid "Do you really want to use the device?"
 msgstr "Haluatko varmasti käyttää tätä laitetta?"
 
-#: ../virtManager/addhardware.py:1461
+#: ../virtManager/addhardware.py:1445
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
 
-#: ../virtManager/addhardware.py:1634
+#: ../virtManager/addhardware.py:1566
 msgid "invalid listen type"
 msgstr ""
 
@@ -1115,15 +442,15 @@ msgstr "Käsitellään..."
 msgid "Completed"
 msgstr "Valmis"
 
-#: ../virtManager/clone.py:53
+#: ../virtManager/clone.py:52
 msgid "No storage to clone."
 msgstr "Ei kloonattavaa tallennustilaa."
 
-#: ../virtManager/clone.py:58
+#: ../virtManager/clone.py:57
 msgid "Cannot clone unmanaged remote storage."
 msgstr "Hallitsematonta etätallennustilaa ei voi kloonata."
 
-#: ../virtManager/clone.py:61
+#: ../virtManager/clone.py:60
 msgid ""
 "Block devices to clone must be libvirt\n"
 "managed storage volumes."
@@ -1131,98 +458,98 @@ msgstr ""
 "Kloonattavien lohkolaitteiden tulee olla\n"
 "libvirt-hallittuja tallennustaltioita. "
 
-#: ../virtManager/clone.py:64 ../virtManager/delete.py:357
+#: ../virtManager/clone.py:63 ../virtManager/delete.py:568
 msgid "No write access to parent directory."
 msgstr ""
 
-#: ../virtManager/clone.py:66 ../virtManager/delete.py:355
+#: ../virtManager/clone.py:65 ../virtManager/delete.py:566
 msgid "Path does not exist."
 msgstr "Polkua ei ole olemassa."
 
-#: ../virtManager/clone.py:72
+#: ../virtManager/clone.py:71
 #, python-format
 msgid "Cannot clone %s storage pool."
 msgstr ""
 
-#: ../virtManager/clone.py:96
+#: ../virtManager/clone.py:95
 msgid "Removable"
 msgstr "Irrotettava"
 
-#: ../virtManager/clone.py:99
+#: ../virtManager/clone.py:98
 msgid "Read Only"
 msgstr "Vain luku"
 
-#: ../virtManager/clone.py:101
+#: ../virtManager/clone.py:100
 msgid "No write access"
 msgstr "Ei kirjoitusoikeutta"
 
-#: ../virtManager/clone.py:110
+#: ../virtManager/clone.py:109
 msgid "Shareable"
 msgstr "Jaettavissa"
 
-#: ../virtManager/clone.py:128
+#: ../virtManager/clone.py:127
 #, python-format
 msgid "Error launching clone dialog: %s"
 msgstr ""
 
-#: ../virtManager/clone.py:296 ../virtManager/clone.py:552
+#: ../virtManager/clone.py:292 ../virtManager/clone.py:548
 msgid "Details..."
 msgstr "Tiedot..."
 
-#: ../virtManager/clone.py:324
+#: ../virtManager/clone.py:320
 msgid "Usermode"
 msgstr ""
 
-#: ../virtManager/clone.py:340
+#: ../virtManager/clone.py:336
 msgid "Virtual Network"
 msgstr "Virtuaaliverkko"
 
-#: ../virtManager/clone.py:413
+#: ../virtManager/clone.py:409
 msgid "Nothing to clone."
 msgstr "Ei kloonattavaa."
 
-#: ../virtManager/clone.py:544
+#: ../virtManager/clone.py:540
 msgid "Clone this disk"
 msgstr "Kloonaa tämä levy"
 
-#: ../virtManager/clone.py:548
+#: ../virtManager/clone.py:544
 #, python-format
 msgid "Share disk with %s"
 msgstr ""
 
-#: ../virtManager/clone.py:560
+#: ../virtManager/clone.py:556
 msgid "Storage cannot be shared or cloned."
 msgstr "Tallennustilaa ei voi jakaa tai kloonata."
 
-#: ../virtManager/clone.py:618
+#: ../virtManager/clone.py:614
 msgid "One or more disks cannot be cloned or shared."
 msgstr "Yhtä tai useampaa levyä ei voi kloonata tai jakaa."
 
-#: ../virtManager/clone.py:703
+#: ../virtManager/clone.py:699
 #, python-format
 msgid "Error changing MAC address: %s"
 msgstr "Virhe vaihdettaessa MAC-osoitetta: %s"
 
-#: ../virtManager/clone.py:729
+#: ../virtManager/clone.py:725
 msgid "Cloning will overwrite the existing file"
 msgstr "Kloonaaminen korvaa olemassa olevan tiedoston"
 
-#: ../virtManager/clone.py:731
+#: ../virtManager/clone.py:727
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr ""
 
-#: ../virtManager/clone.py:743
+#: ../virtManager/clone.py:739
 #, python-format
 msgid "Error changing storage path: %s"
 msgstr "Virhe tallennustilan polkua vaihtaessa: %s"
 
-#: ../virtManager/clone.py:795
+#: ../virtManager/clone.py:791
 msgid "Skipping disks may cause data to be overwritten."
 msgstr ""
 
-#: ../virtManager/clone.py:796
+#: ../virtManager/clone.py:792
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -1231,83 +558,87 @@ msgid ""
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 
-#: ../virtManager/clone.py:813
+#: ../virtManager/clone.py:809
 #, python-format
 msgid "Error creating virtual machine clone '%s': %s"
 msgstr "Virhe luotaessa virtuaalikonekloonia '%s': %s"
 
-#: ../virtManager/clone.py:826 ../virtManager/migrate.py:387
+#: ../virtManager/clone.py:822 ../virtManager/migrate.py:383
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr ""
 
-#: ../virtManager/clone.py:831
+#: ../virtManager/clone.py:827
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Luodaan virtuaalikonekloonia '%s'"
 
-#: ../virtManager/clone.py:835 ../virtManager/delete.py:158
+#: ../virtManager/clone.py:831
 msgid " and selected storage (this may take a while)"
 msgstr ""
 
-#: ../virtManager/config.py:121
+#: ../virtManager/config.py:144
 msgid "Locate or create storage volume"
 msgstr "Paikanna tai luo tallennustaltio"
 
-#: ../virtManager/config.py:122
+#: ../virtManager/config.py:145
 msgid "Locate existing storage"
 msgstr "Paikanna olemassa oleva tallennustila"
 
-#: ../virtManager/config.py:129
+#: ../virtManager/config.py:152
 msgid "Locate ISO media volume"
 msgstr "Paikanna ISO-mediataltio"
 
-#: ../virtManager/config.py:130
+#: ../virtManager/config.py:153
 msgid "Locate ISO media"
 msgstr "Paikanna ISO-media"
 
-#: ../virtManager/config.py:135
+#: ../virtManager/config.py:158
 msgid "Locate floppy media volume"
 msgstr ""
 
-#: ../virtManager/config.py:136
+#: ../virtManager/config.py:159
 msgid "Locate floppy media"
 msgstr ""
 
-#: ../virtManager/config.py:141 ../virtManager/config.py:142
+#: ../virtManager/config.py:164 ../virtManager/config.py:165
 msgid "Locate directory volume"
 msgstr ""
 
-#: ../virtManager/connection.py:413
+#: ../virtManager/connection.py:404
 msgid "User session"
 msgstr "Käyttäjäistunto"
 
-#: ../virtManager/connection.py:545 ../virtManager/migrate.py:303
+#: ../virtManager/connection.py:406
+msgid "Embedded session"
+msgstr ""
+
+#: ../virtManager/connection.py:506 ../virtManager/migrate.py:299
 msgid "Disconnected"
 msgstr "Katkaistu"
 
-#: ../virtManager/connection.py:547
+#: ../virtManager/connection.py:508
 msgid "Connecting"
 msgstr "Yhdistää"
 
-#: ../virtManager/connection.py:549 ../virtManager/hostnets.py:263
-#: ../virtManager/hoststorage.py:329 ../virtManager/object/libvirtobject.py:216
+#: ../virtManager/connection.py:510 ../virtManager/hostnets.py:263
+#: ../virtManager/hoststorage.py:329 ../virtManager/object/libvirtobject.py:214
 #: ../ui/hoststorage.ui.h:11
 msgid "Active"
 msgstr "Aktiivinen"
 
 #. Machine settings
-#: ../virtManager/connection.py:551 ../virtManager/details/details.py:1420
-#: ../virtManager/details/details.py:2013
-#: ../virtManager/details/details.py:2029
-#: ../virtManager/details/details.py:2275
-#: ../virtManager/device/gfxdetails.py:301
-#: ../virtManager/device/gfxdetails.py:303
+#: ../virtManager/connection.py:512 ../virtManager/details/details.py:1365
+#: ../virtManager/details/details.py:1861
+#: ../virtManager/details/details.py:1880
+#: ../virtManager/details/details.py:2084
+#: ../virtManager/device/gfxdetails.py:267
+#: ../virtManager/device/gfxdetails.py:269
 #: ../virtManager/lib/libvirtenummap.py:90
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../virtManager/connection.py:645
+#: ../virtManager/connection.py:601
 #, python-format
 msgid ""
 "%s rename failed. Attempting to recover also failed.\n"
@@ -1326,10 +657,6 @@ msgstr "Virhe käynnistäessä yhteysikkunaa: %s"
 msgid "user session"
 msgstr "käyttäjäistunto"
 
-#: ../virtManager/createconn.py:119
-msgid "Linux Containers"
-msgstr "Linux-säiliöt"
-
 #: ../virtManager/createconn.py:241
 msgid "A hostname is required for remote connections."
 msgstr ""
@@ -1338,176 +665,173 @@ msgstr ""
 msgid "Would you still like to remember this connection?"
 msgstr "Haluatko silti muistaa tämän yhteyden?"
 
-#: ../virtManager/createnet.py:123 ../virtManager/object/network.py:190
-msgid "NAT"
-msgstr "NAT"
-
-#: ../virtManager/createnet.py:124 ../ui/hostnets.ui.h:12
-msgid "Routed"
-msgstr "Reititetty"
-
-#: ../virtManager/createnet.py:125
-msgid "Open"
-msgstr ""
-
-#: ../virtManager/createnet.py:126
-msgid "Isolated"
-msgstr ""
-
-#: ../virtManager/createnet.py:127
-msgid "SR-IOV pool"
-msgstr ""
-
-#: ../virtManager/createnet.py:171
+#: ../virtManager/createnet.py:104
 msgid "Any physical device"
 msgstr "Mikä tahansa fyysinen laite"
 
-#: ../virtManager/createnet.py:174
-#, python-format
-msgid "Physical device %s"
-msgstr "Fyysinen laite %s"
+#: ../virtManager/createnet.py:105
+msgid "Physical device..."
+msgstr ""
 
-#: ../virtManager/createnet.py:201
+#: ../virtManager/createnet.py:113 ../virtManager/object/network.py:187
+msgid "NAT"
+msgstr "NAT"
+
+#: ../virtManager/createnet.py:114 ../ui/hostnets.ui.h:12
+msgid "Routed"
+msgstr "Reititetty"
+
+#: ../virtManager/createnet.py:115
+msgid "Open"
+msgstr ""
+
+#: ../virtManager/createnet.py:116
+msgid "Isolated"
+msgstr ""
+
+#: ../virtManager/createnet.py:117
+msgid "SR-IOV pool"
+msgstr ""
+
+#: ../virtManager/createnet.py:178
 msgid "No available device"
 msgstr ""
 
-#: ../virtManager/createnet.py:385
+#: ../virtManager/createnet.py:337
 #, python-format
 msgid "Name '%s' already in use by another network."
 msgstr ""
 
-#: ../virtManager/createnet.py:452 ../virtManager/createpool.py:337
-#: ../virtManager/createvol.py:289
+#: ../virtManager/createnet.py:408 ../virtManager/createpool.py:333
+#: ../virtManager/createvol.py:285
 #, python-format
 msgid "Error building XML: %s"
 msgstr ""
 
-#: ../virtManager/createnet.py:458
+#: ../virtManager/createnet.py:414
 #, python-format
 msgid "Error creating virtual network: %s"
 msgstr "Virhe luotaessa virtuaaliverkkoa: %s"
 
-#: ../virtManager/createnet.py:487
+#: ../virtManager/createnet.py:443
 #, python-format
 msgid "Error validating network: %s"
 msgstr ""
 
-#: ../virtManager/createnet.py:492
+#: ../virtManager/createnet.py:448
 msgid "Creating virtual network..."
 msgstr "Luodaan virtuaaliverkkoa..."
 
-#: ../virtManager/createnet.py:493
+#: ../virtManager/createnet.py:449
 msgid "Creating the virtual network may take a while..."
 msgstr "Virtuaaliverkon luominen saattaa kestää hetken..."
 
-#: ../virtManager/createpool.py:231
+#: ../virtManager/createpool.py:227
 msgid "Volg_roup Name:"
 msgstr ""
 
-#: ../virtManager/createpool.py:231
-#, fuzzy
+#: ../virtManager/createpool.py:227
 msgid "Sou_rce Name:"
-msgstr "Lähteen polku:"
+msgstr ""
 
-#: ../virtManager/createpool.py:233
+#: ../virtManager/createpool.py:229
 msgid "_Source Path:"
 msgstr ""
 
-#: ../virtManager/createpool.py:235
+#: ../virtManager/createpool.py:231
 msgid "_Source IQN:"
 msgstr ""
 
-#: ../virtManager/createpool.py:237
-#, fuzzy
+#: ../virtManager/createpool.py:233
 msgid "_Source Adapter:"
-msgstr "Lähteen polku:"
+msgstr ""
 
-#: ../virtManager/createpool.py:346
+#: ../virtManager/createpool.py:342
 msgid ""
 "Building a pool of this type will format the source device. Are you sure you "
 "want to 'build' this pool?"
 msgstr ""
 
-#: ../virtManager/createpool.py:365
+#: ../virtManager/createpool.py:361
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "Virhe luotaessa varantoa: %s"
 
 #. pragma: no cover
-#: ../virtManager/createpool.py:391
+#: ../virtManager/createpool.py:387
 #, python-format
 msgid "Error validating pool: %s"
 msgstr ""
 
-#: ../virtManager/createpool.py:398
+#: ../virtManager/createpool.py:394
 msgid "Creating storage pool..."
 msgstr "Luodaan tallennustilavarantoa..."
 
-#: ../virtManager/createpool.py:399
+#: ../virtManager/createpool.py:395
 msgid "Creating the storage pool may take a while..."
 msgstr "Tallennustilavarannon luominen saattaa kestää hetken..."
 
-#: ../virtManager/createpool.py:421
+#: ../virtManager/createpool.py:417
 msgid "Choose source path"
 msgstr ""
 
-#: ../virtManager/createpool.py:434
+#: ../virtManager/createpool.py:430
 msgid "Choose target directory"
 msgstr ""
 
-#: ../virtManager/createvm.py:71
+#: ../virtManager/createvm.py:70
 #, python-format
 msgid "%.1f GiB"
 msgstr "%.1f GiB"
 
-#: ../virtManager/createvm.py:75
+#: ../virtManager/createvm.py:74
 #, python-format
 msgid "%d MiB"
 msgstr "%d MiB"
 
-#: ../virtManager/createvm.py:117
+#: ../virtManager/createvm.py:182
 #, python-format
 msgid "Error launching create dialog: %s"
 msgstr ""
 
-#: ../virtManager/createvm.py:250
+#: ../virtManager/createvm.py:309
 msgid "Error"
 msgstr "Virhe"
 
-#: ../virtManager/createvm.py:256 ../virtManager/createvm.py:261
+#: ../virtManager/createvm.py:315 ../virtManager/createvm.py:320
 msgid "Warning"
 msgstr "Varoitus"
 
-#: ../virtManager/createvm.py:437
+#: ../virtManager/createvm.py:493
 #, python-format
 msgid ""
 "Failed to setup UEFI: %s\n"
 "Install options are limited."
 msgstr ""
 
-#: ../virtManager/createvm.py:463
+#: ../virtManager/createvm.py:519
 msgid "Libvirt version does not support remote URL installs."
 msgstr ""
 
-#: ../virtManager/createvm.py:470
+#: ../virtManager/createvm.py:526
 #, python-format
 msgid "%s installs not available for paravirt guests."
 msgstr ""
 
-#: ../virtManager/createvm.py:475
+#: ../virtManager/createvm.py:530
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "Arkkitehtuuri '%s' ei ole asennettavissa"
 
-#: ../virtManager/createvm.py:491
+#: ../virtManager/createvm.py:545
 msgid "No install methods available for this connection."
 msgstr "Asennustapoja ei ole saatavilla tälle yhteydelle."
 
-#: ../virtManager/createvm.py:529
+#: ../virtManager/createvm.py:578
 msgid "No hypervisor options were found for this connection."
 msgstr "Tälle yhteydelle ei löytynyt hypervisor-valintoja."
 
-#: ../virtManager/createvm.py:534
+#: ../virtManager/createvm.py:583
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -1515,7 +839,7 @@ msgstr ""
 "Tämä tarkoittaa yleensä, ettei QEMUa tai KVM:ää ole asennettu tietokoneelle, "
 "tai ettei KVM:n kernel-moduuleja ole ladattu."
 
-#: ../virtManager/createvm.py:558
+#: ../virtManager/createvm.py:607
 msgid ""
 "Host is not advertising support for full virtualization. Install options may "
 "be limited."
@@ -1523,7 +847,7 @@ msgstr ""
 "Isäntä ei mainosta täyttä tukea virtualisoinnille. Asennusvalinnat voivat "
 "olla rajoitettuja."
 
-#: ../virtManager/createvm.py:564
+#: ../virtManager/createvm.py:613
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -1532,212 +856,193 @@ msgstr ""
 "asennettu, tai ettei KVM:n kernel-moduuleja ole ladattu. Virtuaalikoneiden "
 "suorituskyky saattaa olla heikko."
 
-#: ../virtManager/createvm.py:606
+#: ../virtManager/createvm.py:655
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "Saatavilla enintään %(maxmem)s isäntäkoneessa"
 
-#: ../virtManager/createvm.py:618
+#: ../virtManager/createvm.py:663
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgstr "Saatavilla enintään %(numcpus)d"
 
-#: ../virtManager/createvm.py:656
+#: ../virtManager/createvm.py:700
 msgid "No active connection to install on."
 msgstr ""
 
-#: ../virtManager/createvm.py:917
-msgid "Host filesystem"
-msgstr "Isäntätiedostojärjestelmä:"
-
-#: ../virtManager/createvm.py:919 ../virtManager/details/details.py:2014
-#: ../virtManager/device/gfxdetails.py:92 ../virtinst/domcapabilities.py:218
+#: ../virtManager/createvm.py:960 ../virtManager/details/details.py:1862
+#: ../virtManager/device/gfxdetails.py:87 ../virtinst/domcapabilities.py:223
 msgid "None"
 msgstr ""
 
-#: ../virtManager/createvm.py:932
+#: ../virtManager/createvm.py:974
 msgid "Local CDROM/ISO"
 msgstr "Paikallinen CDROM/ISO"
 
-#: ../virtManager/createvm.py:934
+#: ../virtManager/createvm.py:976
 msgid "URL Install Tree"
 msgstr ""
 
-#: ../virtManager/createvm.py:936
-msgid "PXE Install"
-msgstr "PXE-asennus"
-
-#: ../virtManager/createvm.py:938
+#: ../virtManager/createvm.py:978
 msgid "Import existing OS image"
 msgstr "Tuo olemassa oleva käyttöjärjestelmäkuva"
 
-#: ../virtManager/createvm.py:940
+#: ../virtManager/createvm.py:980
+msgid "Manual install"
+msgstr ""
+
+#: ../virtManager/createvm.py:982
 msgid "Application container"
 msgstr "Sovellussäiliö"
 
-#: ../virtManager/createvm.py:942
+#: ../virtManager/createvm.py:984
 msgid "Operating system container"
 msgstr "Käyttöjärjestelmäsäiliö"
 
-#: ../virtManager/createvm.py:944
+#: ../virtManager/createvm.py:986
 msgid "Virtuozzo container"
 msgstr "Virtuozzo-kontti"
 
-#: ../virtManager/createvm.py:1090
+#: ../virtManager/createvm.py:1132
 msgid "Removing disk images"
 msgstr "Poistetaan levykuvia"
 
-#: ../virtManager/createvm.py:1091
+#: ../virtManager/createvm.py:1133
 msgid "Removing disk images we created for this virtual machine."
 msgstr "Poistetaan tälle virtuaalikoneelle luotuja levykuvia."
 
-#: ../virtManager/createvm.py:1255
+#: ../virtManager/createvm.py:1277
 msgid "No network selected"
 msgstr "Verkkoa ei ole valittu"
 
-#: ../virtManager/createvm.py:1257
-msgid "Network selection does not support PXE"
-msgstr "Valittu verkko ei tue PXE:tä"
-
-#: ../virtManager/createvm.py:1327
+#: ../virtManager/createvm.py:1346
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Vaihe %(current_page)d/%(max_page)d"
 
-#: ../virtManager/createvm.py:1336
+#: ../virtManager/createvm.py:1355
 msgid "Waiting for install media / source"
 msgstr ""
 
-#: ../virtManager/createvm.py:1409
+#. pragma: no cover
+#: ../virtManager/createvm.py:1429
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "Virhe muodostaessa yhteenvetosivua: %s"
 
-#: ../virtManager/createvm.py:1445
-msgid "Error setting OS information."
-msgstr "Virhe asettaessa käyttöjärjestelmän tietoja."
-
-#: ../virtManager/createvm.py:1469
+#: ../virtManager/createvm.py:1475
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr ""
 
-#: ../virtManager/createvm.py:1497
+#: ../virtManager/createvm.py:1496
 msgid "You must select an OS."
 msgstr ""
 
-#: ../virtManager/createvm.py:1504
+#: ../virtManager/createvm.py:1503
 msgid "An install media selection is required."
 msgstr "Asennusmediavalinta vaaditaan."
 
-#: ../virtManager/createvm.py:1511
+#: ../virtManager/createvm.py:1510
 msgid "An install tree is required."
 msgstr ""
 
-#: ../virtManager/createvm.py:1523
+#: ../virtManager/createvm.py:1519
 msgid "A storage path to import is required."
 msgstr ""
 
-#: ../virtManager/createvm.py:1528
+#: ../virtManager/createvm.py:1524
 msgid "The import path must point to an existing storage."
 msgstr ""
 
-#: ../virtManager/createvm.py:1534
+#: ../virtManager/createvm.py:1530
 msgid "An application path is required."
 msgstr "Sovelluksen polku vaaditaan."
 
-#: ../virtManager/createvm.py:1539
+#: ../virtManager/createvm.py:1535
 msgid "An OS directory path is required."
 msgstr ""
 
-#: ../virtManager/createvm.py:1548
+#: ../virtManager/createvm.py:1544
 msgid "Source URL is required"
 msgstr ""
 
-#: ../virtManager/createvm.py:1553
+#: ../virtManager/createvm.py:1549
 msgid "Please specify password for accessing source registry"
 msgstr ""
 
-#: ../virtManager/createvm.py:1559
+#: ../virtManager/createvm.py:1555
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr ""
 
-#: ../virtManager/createvm.py:1562
+#: ../virtManager/createvm.py:1558
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr ""
 
-#: ../virtManager/createvm.py:1567
+#: ../virtManager/createvm.py:1563
 msgid "OS root directory is not empty"
 msgstr ""
 
-#: ../virtManager/createvm.py:1568
+#: ../virtManager/createvm.py:1564
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
 
-#: ../virtManager/createvm.py:1578
+#: ../virtManager/createvm.py:1574
 msgid "A template name is required."
 msgstr ""
 
-#: ../virtManager/createvm.py:1593
-msgid "Error setting installer parameters."
-msgstr ""
-
-#: ../virtManager/createvm.py:1617
+#: ../virtManager/createvm.py:1596
 msgid "Error setting install media location."
 msgstr "Virhe asettaessa asennusmedian sijaintia."
 
-#: ../virtManager/createvm.py:1644
+#: ../virtManager/createvm.py:1609
+msgid "Error setting installer parameters."
+msgstr ""
+
+#: ../virtManager/createvm.py:1616
 msgid "Error setting default name."
 msgstr "Virhe asettaessa oletusnimeä."
 
-#: ../virtManager/createvm.py:1695
-msgid "Error setting CPUs."
-msgstr "Virhe asettaessa suorittimia."
-
-#: ../virtManager/createvm.py:1702
-msgid "Error setting guest memory."
-msgstr "Virhe asetettaessa vierasjärjestelmän muistia."
-
-#: ../virtManager/createvm.py:1746
+#: ../virtManager/createvm.py:1707
 msgid "Storage parameter error."
 msgstr "Massamuistiparametrivirhe"
 
-#: ../virtManager/createvm.py:1772
+#: ../virtManager/createvm.py:1729
 msgid "Invalid guest name"
 msgstr "Virheellinen vierasjärjestelmän nimi"
 
-#: ../virtManager/createvm.py:1793
+#: ../virtManager/createvm.py:1748
 #, python-format
 msgid "Network device required for %s install."
 msgstr ""
 
-#: ../virtManager/createvm.py:1876
+#: ../virtManager/createvm.py:1827
 msgid "Detecting..."
 msgstr ""
 
-#: ../virtManager/createvm.py:1938
+#: ../virtManager/createvm.py:1889
 msgid "None detected"
 msgstr ""
 
-#: ../virtManager/createvm.py:1974
+#: ../virtManager/createvm.py:1926
 msgid "Error starting installation: "
 msgstr "Virhe asennusta käynnistäessä:"
 
-#: ../virtManager/createvm.py:2013
+#: ../virtManager/createvm.py:1966
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Asennus ei onnistu: ”%s”"
 
-#: ../virtManager/createvm.py:2052
+#: ../virtManager/createvm.py:2006
 msgid "Creating Virtual Machine"
 msgstr "Luodaan virtuaalikonetta"
 
-#: ../virtManager/createvm.py:2053
+#: ../virtManager/createvm.py:2007
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -1745,52 +1050,48 @@ msgstr ""
 "Virtuaalikonetta luodaan nyt. Levytilan varaaminen ja asennusmedian "
 "noutaminen saattaa kestää hetken."
 
-#: ../virtManager/createvm.py:2107
+#: ../virtManager/createvm.py:2061
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr ""
 
-#: ../virtManager/createvm.py:2155
+#: ../virtManager/createvm.py:2109
 #, python-format
 msgid "Error continue install: %s"
 msgstr ""
 
-#: ../virtManager/createvm.py:2168
+#: ../virtManager/createvm.py:2122
 msgid "Bootstraping container"
 msgstr ""
 
-#: ../virtManager/createvol.py:303
+#: ../virtManager/createvol.py:299
 #, python-format
 msgid "Error creating vol: %s"
 msgstr ""
 
-#: ../virtManager/createvol.py:319
+#: ../virtManager/createvol.py:315
 #, python-format
 msgid "Error validating volume: %s"
 msgstr ""
 
-#: ../virtManager/createvol.py:324
+#: ../virtManager/createvol.py:320
 msgid "Creating storage volume..."
 msgstr "Luodaan tallennustaltiota..."
 
-#: ../virtManager/createvol.py:325
+#: ../virtManager/createvol.py:321
 msgid "Creating the storage volume may take a while..."
 msgstr "Tallennustaltion luominen saattaa kestää hetken..."
 
-#: ../virtManager/delete.py:42
+#: ../virtManager/delete.py:44
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Virhe käynnistäessä poistamisikkunaa: %s"
 
-#: ../virtManager/delete.py:96
-msgid "Delete"
-msgstr "Poista"
-
-#: ../virtManager/delete.py:143
+#: ../virtManager/delete.py:166
 msgid "Are you sure you want to delete the storage?"
 msgstr "Haluatko varmasti poistaa tallennustilan?"
 
-#: ../virtManager/delete.py:144
+#: ../virtManager/delete.py:167
 #, python-format
 msgid ""
 "The following paths will be deleted:\n"
@@ -1801,70 +1102,123 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../virtManager/delete.py:155
-#, python-format
-msgid "Deleting virtual machine '%s'"
-msgstr "Poistetaan virtuaalikone '%s'"
-
-#: ../virtManager/delete.py:182
-#, python-format
-msgid "Deleting path '%s'"
-msgstr "Poistetaan polku '%s'"
-
-#: ../virtManager/delete.py:194
+#: ../virtManager/delete.py:202
 #, python-format
 msgid "Error deleting virtual machine '%s': %s"
 msgstr "Virhe poistettaessa virtuaalikonetta '%s': %s"
 
-#: ../virtManager/delete.py:210
+#: ../virtManager/delete.py:217
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Lisäksi joitain tallennustilalaitteita poistaessa ilmeni virheitä: \n"
 
-#: ../virtManager/delete.py:214
+#: ../virtManager/delete.py:221
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Tiettyjä tallennustilalaitteita poistaessa ilmeni virheitä."
 
-#: ../virtManager/delete.py:293 ../ui/details.ui.h:20
-msgid "Target"
+#: ../virtManager/delete.py:234
+#, python-format
+msgid "Deleting path '%s'"
+msgstr "Poistetaan polku '%s'"
+
+#: ../virtManager/delete.py:284 ../ui/delete.ui.h:1
+msgid "Delete Virtual Machine"
+msgstr "Poista virtuaalikone"
+
+#: ../virtManager/delete.py:287
+#, python-format
+msgid "Delete '%(vmname)s'"
+msgstr ""
+
+#: ../virtManager/delete.py:291
+#, python-format
+msgid ""
+"Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
 
 #: ../virtManager/delete.py:295
+#, python-format
+msgid "Deleting virtual machine '%s'"
+msgstr "Poistetaan virtuaalikone '%s'"
+
+#: ../virtManager/delete.py:337
+#, python-format
+msgid "Error Removing Device: %s"
+msgstr "Virhe poistettaessa laitetta: %s"
+
+#: ../virtManager/delete.py:352
+msgid "This change will take effect after the next guest shutdown."
+msgstr ""
+"Tämä muutos tulee voimaan, kun vierasjärjestelmän sammutetaan seuraavan "
+"kerran."
+
+#: ../virtManager/delete.py:355
+msgid "Storage will not be deleted."
+msgstr ""
+
+#: ../virtManager/delete.py:358
+msgid "Device could not be removed from the running machine"
+msgstr "Laitetta ei voitu poistaa käynnissä olevasta koneesta"
+
+#: ../virtManager/delete.py:368
+msgid "Remove Disk Device"
+msgstr ""
+
+#: ../virtManager/delete.py:371
+#, python-format
+msgid "Remove disk device '%(target)s'"
+msgstr ""
+
+#: ../virtManager/delete.py:376
+#, python-format
+msgid "Removing disk device '%s' and selected storage (this may take a while)"
+msgstr ""
+
+#: ../virtManager/delete.py:379
+#, python-format
+msgid "Removing disk device '%s'"
+msgstr ""
+
+#: ../virtManager/delete.py:504
+msgid "Target"
+msgstr ""
+
+#: ../virtManager/delete.py:506
 msgid "Storage Path"
 msgstr "Tallennustilan polku"
 
-#: ../virtManager/delete.py:348
+#: ../virtManager/delete.py:559
 msgid "Cannot delete iscsi share."
 msgstr ""
 
-#: ../virtManager/delete.py:350
+#: ../virtManager/delete.py:561
 msgid "Cannot delete SCSI device."
 msgstr ""
 
-#: ../virtManager/delete.py:353
+#: ../virtManager/delete.py:564
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Hallitsematonta etätallennustilaa ei voi poistaa."
 
-#: ../virtManager/delete.py:359
+#: ../virtManager/delete.py:570
 msgid "Cannot delete unmanaged block device."
 msgstr "Hallitsematonta lohkolaitetta ei voi poistaa."
 
-#: ../virtManager/delete.py:380
+#: ../virtManager/delete.py:591
 msgid "Storage is read-only."
 msgstr "Tallennustila on \"vain luku\"-muotoa."
 
-#: ../virtManager/delete.py:382
+#: ../virtManager/delete.py:593
 msgid "No write access to path."
 msgstr "Polkuun ei ole kirjoitusoikeutta."
 
-#: ../virtManager/delete.py:385
+#: ../virtManager/delete.py:596
 msgid "Storage is marked as shareable."
 msgstr "Tallennustila on merkitty jaettavaksi."
 
-#: ../virtManager/delete.py:388
+#: ../virtManager/delete.py:599
 msgid "Storage is a media device."
 msgstr "Tallennustila on medialaite."
 
-#: ../virtManager/delete.py:398
+#: ../virtManager/delete.py:610
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -1891,371 +1245,360 @@ msgstr "%(vm-name)s yhteydellä %(connection-name)s"
 msgid "Press %s to release pointer."
 msgstr "Paina %s osoittimen vapauttamiseksi."
 
-#: ../virtManager/details/console.py:412
+#: ../virtManager/details/console.py:415
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 
-#: ../virtManager/details/console.py:415
+#: ../virtManager/details/console.py:418
 msgid "Guest agent is not available."
 msgstr ""
 
-#: ../virtManager/details/console.py:556
+#: ../virtManager/details/console.py:559
 msgid "Guest has crashed."
 msgstr "Vierasjärjestelmä on kaatunut."
 
-#: ../virtManager/details/console.py:558
+#: ../virtManager/details/console.py:561
 msgid "Guest is not running."
 msgstr "Vierasjärjestelmä ei ole käynnissä."
 
-#: ../virtManager/details/console.py:699
+#: ../virtManager/details/console.py:702
 msgid "Graphical console not configured for guest"
 msgstr "Vierasjärjestelmän graafista konsolia ei ole asetettu"
 
-#: ../virtManager/details/console.py:706
+#: ../virtManager/details/console.py:709
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr ""
 
-#: ../virtManager/details/console.py:713
+#: ../virtManager/details/console.py:716
 msgid "Connecting to graphical console for guest"
 msgstr "Kytkeydytään vierasjärjestelmän graafiseen konsoliin"
 
-#: ../virtManager/details/console.py:736
+#: ../virtManager/details/console.py:739
 msgid "Error connecting to graphical console"
 msgstr "Virhe kytkeydyttäessä graafiseen konsoliin"
 
-#: ../virtManager/details/console.py:790
+#: ../virtManager/details/console.py:793
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: ../virtManager/details/console.py:808
+#: ../virtManager/details/console.py:811
 msgid "USB redirection error"
 msgstr "USB-uudelleenohjauksen virhe"
 
-#: ../virtManager/details/console.py:817
+#: ../virtManager/details/console.py:820
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: ../virtManager/details/console.py:823
+#: ../virtManager/details/console.py:826
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: ../virtManager/details/console.py:828 ../virtManager/details/console.py:1016
+#: ../virtManager/details/console.py:831 ../virtManager/details/console.py:1019
 msgid "Viewer disconnected."
 msgstr ""
 
-#: ../virtManager/details/console.py:919
+#: ../virtManager/details/console.py:922
 msgid "No text console available"
 msgstr "Ei tekstikonsolia saatavilla"
 
-#: ../virtManager/details/console.py:932
+#: ../virtManager/details/console.py:935
 #, python-format
 msgid "Text Console %d"
 msgstr "Tekstikonsoli %d"
 
-#: ../virtManager/details/console.py:934
+#: ../virtManager/details/console.py:937
 #, python-format
 msgid "Serial %d"
 msgstr "Sarja %d"
 
-#: ../virtManager/details/console.py:946
+#: ../virtManager/details/console.py:949
 msgid "No graphical console available"
 msgstr "Ei graafista konsolia saatavilla"
 
-#: ../virtManager/details/console.py:955
+#: ../virtManager/details/console.py:958
 msgid "Graphical Console"
 msgstr "Graafinen konsoli"
 
-#: ../virtManager/details/console.py:963
+#: ../virtManager/details/console.py:966
 msgid "virt-manager does not support more that one graphical console"
 msgstr "virt-manager tukee vain yhtä graafista konsolia"
 
-#: ../virtManager/details/details.py:186 ../virtManager/details/details.py:2818
+#: ../virtManager/details/details.py:176 ../virtManager/details/details.py:2611
 msgid "CDROM"
 msgstr "CDROM"
 
-#: ../virtManager/details/details.py:188
+#: ../virtManager/details/details.py:178
 msgid "Disk"
 msgstr "Levy"
 
-#: ../virtManager/details/details.py:207
+#: ../virtManager/details/details.py:197
 msgid "Tablet"
 msgstr "Piirtopöytä"
 
-#: ../virtManager/details/details.py:209
+#: ../virtManager/details/details.py:199
 msgid "Mouse"
 msgstr "Hiiri"
 
-#: ../virtManager/details/details.py:211
+#: ../virtManager/details/details.py:201
 msgid "Keyboard"
 msgstr "Näppäimistö"
 
-#: ../virtManager/details/details.py:236
+#: ../virtManager/details/details.py:226
 #, python-format
 msgid "Display %s"
 msgstr "Näyttö %s"
 
-#: ../virtManager/details/details.py:238
+#: ../virtManager/details/details.py:228
 #, python-format
 msgid "%s Redirector %s"
 msgstr ""
 
-#: ../virtManager/details/details.py:243
+#: ../virtManager/details/details.py:233
 #, python-format
 msgid "Sound %s"
 msgstr ""
 
-#: ../virtManager/details/details.py:245
+#: ../virtManager/details/details.py:235
 #, python-format
 msgid "Video %s"
 msgstr ""
 
-#: ../virtManager/details/details.py:247
+#: ../virtManager/details/details.py:237
 #, python-format
 msgid "Filesystem %s"
 msgstr "Tiedostojärjestelmä %s"
 
-#: ../virtManager/details/details.py:249
+#: ../virtManager/details/details.py:239
 #, python-format
 msgid "Controller %s %s"
 msgstr ""
 
-#: ../virtManager/details/details.py:599
+#: ../virtManager/details/details.py:579
 msgid "_Add Hardware"
 msgstr "_Lisää laitteisto"
 
-#: ../virtManager/details/details.py:607
+#: ../virtManager/details/details.py:587
 msgid "_Remove Hardware"
 msgstr "_Poista laitteisto"
 
-#: ../virtManager/details/details.py:728
+#: ../virtManager/details/details.py:708
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt tai hypervisor ei tue UEFI:a."
 
-#: ../virtManager/details/details.py:731
+#: ../virtManager/details/details.py:711
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: ../virtManager/details/details.py:736
+#: ../virtManager/details/details.py:716
 msgid "UEFI not found"
 msgstr "UEFI:a ei löytynyt"
 
-#: ../virtManager/details/details.py:784 ../virtManager/manager.py:330
+#: ../virtManager/details/details.py:764 ../virtManager/manager.py:330
 #: ../virtManager/oslist.py:65 ../ui/createvm.ui.h:20
 msgid "Name"
 msgstr "Nimi"
 
-#: ../virtManager/details/details.py:785
+#: ../virtManager/details/details.py:765
 msgid "Version"
 msgstr "Versio"
 
-#: ../virtManager/details/details.py:847
+#: ../virtManager/details/details.py:827
 msgid "Application Default"
 msgstr "Sovelluksen oletus"
 
-#: ../virtManager/details/details.py:849
+#: ../virtManager/details/details.py:829
 msgid "Hypervisor Default"
 msgstr "Hypervisorin oletus"
 
-#: ../virtManager/details/details.py:851
+#: ../virtManager/details/details.py:831
 msgid "Clear CPU configuration"
 msgstr ""
 
-#: ../virtManager/details/details.py:1009
+#. Remove the mnemonic
+#: ../virtManager/details/details.py:857
+msgid "Disk bus:"
+msgstr ""
+
+#: ../virtManager/details/details.py:991
 msgid "Remove this device from the virtual machine"
 msgstr "Poista tämä laite virtuaalikoneesta"
 
-#: ../virtManager/details/details.py:1067
+#: ../virtManager/details/details.py:1049
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Virhe päivittäessä laitteistosivua: %s"
 
-#: ../virtManager/details/details.py:1108
+#: ../virtManager/details/details.py:1090
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Virhe käynnistäessä laitteistoikkunaa: %s"
 
-#: ../virtManager/details/details.py:1488
+#: ../virtManager/details/details.py:1095
+msgid "Are you sure you want to remove this device?"
+msgstr "Haluatko poistaa tämän laitteen?"
+
+#: ../virtManager/details/details.py:1433
 #, python-format
 msgid "Error applying changes: %s"
 msgstr ""
 
-#: ../virtManager/details/details.py:1646
+#: ../virtManager/details/details.py:1558
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Virhe muuttaessa automaattikäynnistyksen arvoa: %s"
 
-#: ../virtManager/details/details.py:1664
+#: ../virtManager/details/details.py:1576
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Initrd:tä ei voi asettaa määrittämättä kernelin polkua"
 
-#: ../virtManager/details/details.py:1667
+#: ../virtManager/details/details.py:1579
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 
-#: ../virtManager/details/details.py:1673
+#: ../virtManager/details/details.py:1585
 msgid "An init path must be specified"
 msgstr "Init-polku tulee määrittää"
 
-#: ../virtManager/details/details.py:1692
-#: ../virtManager/device/addstorage.py:214
+#: ../virtManager/details/details.py:1604
+#: ../virtManager/device/addstorage.py:213
 #, python-format
 msgid "Disk \"%s\" is already in use by other guests %s"
 msgstr ""
 
-#: ../virtManager/details/details.py:1694
-#: ../virtManager/device/addstorage.py:216
+#: ../virtManager/details/details.py:1606
+#: ../virtManager/device/addstorage.py:215
 msgid "Do you really want to use the disk?"
 msgstr "Haluatko käyttää levyä?"
 
-#: ../virtManager/details/details.py:1930
-msgid "Are you sure you want to remove this device?"
-msgstr "Haluatko poistaa tämän laitteen?"
-
 #: ../virtManager/details/details.py:1937
-#, python-format
-msgid "Error Removing Device: %s"
-msgstr "Virhe poistettaessa laitetta: %s"
-
-#: ../virtManager/details/details.py:1954
-msgid "Device could not be removed from the running machine"
-msgstr "Laitetta ei voitu poistaa käynnissä olevasta koneesta"
-
-#: ../virtManager/details/details.py:1956
-msgid "This change will take effect after the next guest shutdown."
-msgstr ""
-"Tämä muutos tulee voimaan, kun vierasjärjestelmän sammutetaan seuraavan "
-"kerran."
-
-#: ../virtManager/details/details.py:2106
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: ../virtManager/details/details.py:2118
+#: ../virtManager/details/details.py:1949
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s luettu"
 
-#: ../virtManager/details/details.py:2119
+#: ../virtManager/details/details.py:1950
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr ""
 
-#: ../virtManager/details/details.py:2122
+#: ../virtManager/details/details.py:1953
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s sisään"
 
-#: ../virtManager/details/details.py:2123
+#: ../virtManager/details/details.py:1954
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr ""
 
-#: ../virtManager/details/details.py:2125
-#: ../virtManager/details/details.py:2126
-#: ../virtManager/details/details.py:2127
-#: ../virtManager/details/details.py:2128 ../virtManager/hostnets.py:210
+#: ../virtManager/details/details.py:1956
+#: ../virtManager/details/details.py:1957
+#: ../virtManager/details/details.py:1958
+#: ../virtManager/details/details.py:1959 ../virtManager/hostnets.py:210
 #: ../virtManager/hostnets.py:240
 msgid "Disabled"
 msgstr "Poistettu käytöstä"
 
-#: ../virtManager/details/details.py:2136
+#: ../virtManager/details/details.py:1967
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s/%(total-memory)s"
 
-#: ../virtManager/details/details.py:2355
+#: ../virtManager/details/details.py:2152
 msgid "Absolute Movement"
 msgstr "Absoluuttinen liikkuminen"
 
-#: ../virtManager/details/details.py:2357
+#: ../virtManager/details/details.py:2154
 msgid "Relative Movement"
 msgstr "Suhteellinen liikkuminen"
 
-#: ../virtManager/details/details.py:2366
-#: ../virtManager/details/details.py:2553
-#: ../virtManager/details/details.py:2556
+#: ../virtManager/details/details.py:2163
+#: ../virtManager/details/details.py:2350
+#: ../virtManager/details/details.py:2353
 msgid "Hypervisor does not support removing this device"
 msgstr "Hypervisor ei tue tämän laitteen poistamista"
 
-#: ../virtManager/details/details.py:2381
+#: ../virtManager/details/details.py:2178
 #, python-format
 msgid "%s:%s"
 msgstr "%s:%s"
 
-#: ../virtManager/details/details.py:2435
+#: ../virtManager/details/details.py:2232
 msgid "Serial Device"
 msgstr "Sarjalaite"
 
-#: ../virtManager/details/details.py:2437
+#: ../virtManager/details/details.py:2234
 msgid "Parallel Device"
 msgstr "Rinnakkaislaite"
 
-#: ../virtManager/details/details.py:2439
+#: ../virtManager/details/details.py:2236
 msgid "Console Device"
 msgstr "Konsolilaite"
 
-#: ../virtManager/details/details.py:2441
+#: ../virtManager/details/details.py:2238
 msgid "Channel Device"
 msgstr "Kanavalaite"
 
-#: ../virtManager/details/details.py:2451
+#: ../virtManager/details/details.py:2248
 msgid "Primary Console"
 msgstr "Ensisijainen konsoli"
 
-#: ../virtManager/details/details.py:2507
+#: ../virtManager/details/details.py:2304
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: ../virtManager/details/details.py:2537
+#: ../virtManager/details/details.py:2334
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: ../virtManager/details/details.py:2566
-#: ../virtManager/details/details.py:2573
-#: ../virtManager/details/details.py:2579
+#: ../virtManager/details/details.py:2363
+#: ../virtManager/details/details.py:2373
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: ../virtManager/details/details.py:2689
+#: ../virtManager/details/details.py:2482
 msgid "Overview"
 msgstr "Yleistiedot"
 
-#: ../virtManager/details/details.py:2690
+#: ../virtManager/details/details.py:2483
 msgid "OS information"
 msgstr "Käyttöjärjestelmän tiedot"
 
-#: ../virtManager/details/details.py:2692
+#: ../virtManager/details/details.py:2485
 msgid "Performance"
 msgstr "Suorituskyky"
 
-#: ../virtManager/details/details.py:2694
+#: ../virtManager/details/details.py:2487
 msgid "CPUs"
 msgstr "Suorittimet"
 
-#: ../virtManager/details/details.py:2695 ../ui/createvm.ui.h:64
+#: ../virtManager/details/details.py:2488 ../ui/createvm.ui.h:63
 msgid "Memory"
 msgstr "Muisti"
 
-#: ../virtManager/details/details.py:2696
+#: ../virtManager/details/details.py:2489
 msgid "Boot Options"
 msgstr "Käynnistysvalinnat"
 
-#: ../virtManager/details/details.py:2817
+#: ../virtManager/details/details.py:2610
 msgid "Hard Disk"
 msgstr "Kiintolevy"
 
-#: ../virtManager/details/details.py:2819
+#: ../virtManager/details/details.py:2612
 msgid "Network (PXE)"
 msgstr "Verkko (PXE)"
 
-#: ../virtManager/details/details.py:2831
+#: ../virtManager/details/details.py:2624
 msgid "No bootable devices"
 msgstr "Ei käynnistettäviä laitteita"
 
@@ -2273,118 +1616,144 @@ msgstr ""
 msgid "Error connecting to text console: %s"
 msgstr "Virhe yhdistäessä tekstikonsoliin: %s"
 
-#: ../virtManager/details/snapshots.py:203
+#: ../virtManager/details/snapshots.py:199
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr "Virhe luotaessa tilannevedosta: %s"
 
-#: ../virtManager/details/snapshots.py:218
+#: ../virtManager/details/snapshots.py:214
 msgid "Snapshot"
 msgstr ""
 
-#: ../virtManager/details/snapshots.py:221
+#: ../virtManager/details/snapshots.py:217
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr "Virhe vahvistaessa tilannevedosta: %s"
 
-#: ../virtManager/details/snapshots.py:274
+#: ../virtManager/details/snapshots.py:270
 #: ../virtManager/lib/libvirtenummap.py:117
 msgid "Creating snapshot"
 msgstr "Luodaan tilannevedos"
 
-#: ../virtManager/details/snapshots.py:275
+#: ../virtManager/details/snapshots.py:271
 msgid "Creating virtual machine snapshot"
 msgstr "Luodaan virtuaalikoneen tilannevedos"
 
-#: ../virtManager/details/snapshots.py:381
+#: ../virtManager/details/snapshots.py:377
 msgid "_Start snapshot"
 msgstr "_Käynnistä tilannevedos"
 
-#: ../virtManager/details/snapshots.py:390
+#: ../virtManager/details/snapshots.py:386
 msgid "_Delete snapshot"
 msgstr "_Poista tilannevedos"
 
-#: ../virtManager/details/snapshots.py:447
+#: ../virtManager/details/snapshots.py:443
 #, python-format
 msgid "Error refreshing snapshot list: %s"
 msgstr "Virhe päivittäessä tilannevedoslistaa: %s"
 
-#: ../virtManager/details/snapshots.py:460
+#: ../virtManager/details/snapshots.py:456
 msgid "External"
 msgstr "Ulkoinen"
 
-#: ../virtManager/details/snapshots.py:467
+#: ../virtManager/details/snapshots.py:463
 msgid "VM State"
 msgstr "Virtuaalikoneen tila"
 
-#: ../virtManager/details/snapshots.py:543
+#: ../virtManager/details/snapshots.py:539
 msgid "External disk and memory"
 msgstr "Ulkoinen levy ja muisti"
 
-#: ../virtManager/details/snapshots.py:545
+#: ../virtManager/details/snapshots.py:541
 msgid "External memory only"
 msgstr "Vain ulkoinen muisti"
 
-#: ../virtManager/details/snapshots.py:547
+#: ../virtManager/details/snapshots.py:543
 msgid "External disk only"
 msgstr "Vain ulkoinen levy"
 
-#: ../virtManager/details/snapshots.py:647
+#: ../virtManager/details/snapshots.py:634
+msgid "Saved memory state will not be part of the snapshot"
+msgstr ""
+
+#: ../virtManager/details/snapshots.py:635
+msgid ""
+"The domain is currently saved. Due to technical limitations that saved "
+"memory state will not become part of the snapshot. Running it later will be "
+"the same as having forced the system off mid-flight. It is recommended to "
+"snapshot either the running or shut down system instead."
+msgstr ""
+
+#: ../virtManager/details/snapshots.py:654
 #, python-format
 msgid ""
 "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 "snapshot was created will be discarded."
 msgstr ""
 
-#: ../virtManager/details/snapshots.py:651
+#: ../virtManager/details/snapshots.py:658
 msgid "disk"
 msgstr "levy"
 
-#: ../virtManager/details/snapshots.py:653
+#: ../virtManager/details/snapshots.py:660
 msgid "disk and configuration"
 msgstr "levy ja määritykset"
 
-#: ../virtManager/details/snapshots.py:662
+#: ../virtManager/details/snapshots.py:668
+msgid "Saved state will be removed to avoid filesystem corruption"
+msgstr ""
+
+#: ../virtManager/details/snapshots.py:669
+#, python-format
+msgid ""
+"Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
+"would leave the existing saved state in place, effectively switching a disk "
+"underneath a running system. Running the domain afterwards would likely "
+"result in extensive filesystem corruption. Therefore the saved state will be "
+"removed before restoring the snapshot."
+msgstr ""
+
+#: ../virtManager/details/snapshots.py:683
 msgid "Running snapshot"
 msgstr "Suoritetaan tilannevedos"
 
-#: ../virtManager/details/snapshots.py:663
+#: ../virtManager/details/snapshots.py:684
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "Suoritetaan tilannevedos '%s'"
 
-#: ../virtManager/details/snapshots.py:664
+#: ../virtManager/details/snapshots.py:685
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Virhe suorittaessa tilannevedosta '%s'"
 
-#: ../virtManager/details/snapshots.py:673
+#: ../virtManager/details/snapshots.py:694
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "Haluatko varmasti poistaa valitut tilannevedokset pysyvästi?"
 
-#: ../virtManager/details/snapshots.py:681
+#: ../virtManager/details/snapshots.py:702
 msgid "Deleting snapshot"
 msgstr "Poistetaan tilannevedos"
 
-#: ../virtManager/details/snapshots.py:682
+#: ../virtManager/details/snapshots.py:703
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "Poistetaan tilannevedos '%s'"
 
-#: ../virtManager/details/snapshots.py:683
+#: ../virtManager/details/snapshots.py:704
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Virhe poistaessa tilannevedosta '%s'"
 
-#: ../virtManager/details/snapshots.py:691
+#: ../virtManager/details/snapshots.py:712
 msgid "No snapshot selected."
 msgstr "Tilannevedoksia ei ole valittu."
 
-#: ../virtManager/details/snapshots.py:694
+#: ../virtManager/details/snapshots.py:715
 msgid "Multiple snapshots selected."
 msgstr "Useita tilannevedoksia valittu."
 
-#: ../virtManager/details/snapshots.py:704
+#: ../virtManager/details/snapshots.py:725
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Virhe valitessa tilannevedosta: %s"
@@ -2444,21 +1813,21 @@ msgid "Do you want to correct this now?"
 msgstr "Haluatko korjata tämän nyt?"
 
 #: ../virtManager/device/addstorage.py:94
-#: ../virtManager/device/addstorage.py:120
+#: ../virtManager/device/addstorage.py:119
 msgid "Don't ask about these directories again."
 msgstr "Älä kysy näistä hakemistoista uudelleen."
 
-#: ../virtManager/device/addstorage.py:108
+#: ../virtManager/device/addstorage.py:107
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
 
-#: ../virtManager/device/addstorage.py:199
+#: ../virtManager/device/addstorage.py:198
 msgid "A storage path must be specified."
 msgstr "Tallennustilan polku tulee määrittää."
 
 #. Fatal errors are reported when setting 'size'
-#: ../virtManager/device/addstorage.py:206
+#: ../virtManager/device/addstorage.py:205
 msgid "Not Enough Free Space"
 msgstr "Ei tarpeeksi levytilaa vapaana"
 
@@ -2486,61 +1855,56 @@ msgstr ""
 msgid "Filesystem parameter error"
 msgstr "Tiedostojärjestelmän parametrivirhe"
 
-#: ../virtManager/device/gfxdetails.py:83
+#: ../virtManager/device/gfxdetails.py:78
 msgid "Spice server"
 msgstr "Spice-palvelin"
 
-#: ../virtManager/device/gfxdetails.py:84
+#: ../virtManager/device/gfxdetails.py:79
 msgid "VNC server"
 msgstr "VNC-palvelin"
 
-#: ../virtManager/device/gfxdetails.py:91
+#: ../virtManager/device/gfxdetails.py:86
 msgid "Address"
 msgstr "Osoite"
 
-#: ../virtManager/device/gfxdetails.py:100
+#: ../virtManager/device/gfxdetails.py:95
 msgid "Localhost only"
 msgstr ""
 
-#: ../virtManager/device/gfxdetails.py:101
+#: ../virtManager/device/gfxdetails.py:96
 msgid "All interfaces"
 msgstr "Kaikki liitännät"
 
-#: ../virtManager/device/gfxdetails.py:109
-#: ../virtManager/device/gfxdetails.py:120
+#: ../virtManager/device/gfxdetails.py:103
 msgid "Auto"
 msgstr ""
 
-#: ../virtManager/device/gfxdetails.py:111
-msgid "Copy local keymap"
-msgstr "Kopioi paikallinen näppäimistöasettelu"
-
-#: ../virtManager/device/gfxdetails.py:198
+#: ../virtManager/device/gfxdetails.py:168
 msgid "Port"
 msgstr "Portti"
 
-#: ../virtManager/device/gfxdetails.py:212
+#: ../virtManager/device/gfxdetails.py:182
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s-palvelin"
 
-#: ../virtManager/device/gfxdetails.py:253
+#: ../virtManager/device/gfxdetails.py:219
 msgid "Hypervisor/libvirt does not support spice GL"
 msgstr "Hypervisor/libvirt ei tue spice GL:ää"
 
-#: ../virtManager/device/gfxdetails.py:256
+#: ../virtManager/device/gfxdetails.py:222
 msgid "Hypervisor/libvirt does not support manual rendernode"
 msgstr ""
 
-#: ../virtManager/device/gfxdetails.py:270
+#: ../virtManager/device/gfxdetails.py:236
 msgid "Spice GL requires virtio graphics configured with accel3d."
 msgstr ""
 
-#: ../virtManager/device/gfxdetails.py:273
+#: ../virtManager/device/gfxdetails.py:239
 msgid "Graphics listen type does not support spice GL."
 msgstr ""
 
-#: ../virtManager/device/gfxdetails.py:298
+#: ../virtManager/device/gfxdetails.py:264
 msgid "Local SDL Window"
 msgstr "Paikallinen SDL-ikkuna"
 
@@ -2556,80 +1920,50 @@ msgstr "Mediaa ei havaittu"
 msgid "Media Unknown"
 msgstr ""
 
-#: ../virtManager/device/netlist.py:80 ../virtManager/device/netlist.py:103
-msgid "Bridge"
-msgstr "Silta"
-
-#: ../virtManager/device/netlist.py:82
-msgid "Private"
-msgstr "Yksityinen"
-
-#: ../virtManager/device/netlist.py:99
+#: ../virtManager/device/netlist.py:45
 msgid "Usermode networking"
 msgstr "Käyttäjätilan verkotus"
 
-#: ../virtManager/device/netlist.py:105
+#: ../virtManager/device/netlist.py:49
+msgid "Bridge"
+msgstr "Silta"
+
+#: ../virtManager/device/netlist.py:51
 msgid "Virtual network"
 msgstr "Virtuaaliverkko"
 
-#: ../virtManager/device/netlist.py:134 ../virtManager/hostnets.py:263
-#: ../virtManager/hoststorage.py:329 ../virtManager/object/libvirtobject.py:217
+#: ../virtManager/device/netlist.py:125 ../virtManager/hostnets.py:263
+#: ../virtManager/hoststorage.py:329 ../virtManager/object/libvirtobject.py:215
 msgid "Inactive"
 msgstr "Passiivinen"
 
-#: ../virtManager/device/netlist.py:153
-msgid "No virtual networks available"
-msgstr "Virtuaaliverkkoja ei ole käytettävissä"
-
-#: ../virtManager/device/netlist.py:200 ../virtManager/device/netlist.py:204
-#, python-format
-msgid "Host device %s"
-msgstr "Isäntälaite %s"
-
-#: ../virtManager/device/netlist.py:207
-msgid "Empty bridge"
+#: ../virtManager/device/netlist.py:141
+msgid "Bridge device..."
 msgstr ""
 
-#: ../virtManager/device/netlist.py:208
-#, python-format
-msgid "Bridge %s: %s"
+#: ../virtManager/device/netlist.py:145
+msgid "Macvtap device..."
 msgstr ""
 
-#: ../virtManager/device/netlist.py:212
-msgid "macvtap"
-msgstr ""
-
-#: ../virtManager/device/netlist.py:218
-msgid "Not bridged"
-msgstr "Ei sillattu"
-
-#: ../virtManager/device/netlist.py:234
-msgid "Specify shared device name"
-msgstr "Määritä jaetun laitteen nimi"
-
-#: ../virtManager/device/netlist.py:275
+#: ../virtManager/device/netlist.py:160
 msgid "No networking"
 msgstr "Ei verkkoa"
 
-#: ../virtManager/device/netlist.py:301
+#: ../virtManager/device/netlist.py:201
 msgid "Virtual Network is not active."
 msgstr "Virtuaaliverkko ei ole aktiivinen."
 
-#: ../virtManager/device/netlist.py:302
+#: ../virtManager/device/netlist.py:202
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
 "Virtuaaliverkko '%s' ei ole aktiivinen. Haluatko käynnistää verkon nyt?"
 
-#: ../virtManager/device/netlist.py:313
+#: ../virtManager/device/netlist.py:213
 #, python-format
 msgid "Could not start virtual network '%s': %s"
 msgstr "Virhe käynnistettäessä virtuaaliverkkoa '%s': %s"
-
-#: ../virtManager/device/netlist.py:393
-msgid "Libvirt version does not support physical interface listing."
-msgstr ""
 
 #: ../virtManager/device/vsockdetails.py:61
 msgid "CID"
@@ -2662,29 +1996,29 @@ msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
 
-#: ../virtManager/error.py:122
+#: ../virtManager/error.py:139
 msgid "Input Error"
 msgstr "Syötevirhe"
 
-#: ../virtManager/error.py:123
+#: ../virtManager/error.py:140
 #, python-format
 msgid "Validation Error: %s"
 msgstr "Vahvistusvirhe: %s"
 
-#: ../virtManager/error.py:168
+#: ../virtManager/error.py:185
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr ""
 "Havaittiin toteuttamattomia muutoksia. Haluatko toteuttaa muutokset nyt?"
 
-#: ../virtManager/error.py:170
+#: ../virtManager/error.py:187
 msgid "Don't warn me again."
 msgstr "Älä varoita uudelleen."
 
-#: ../virtManager/error.py:202
+#: ../virtManager/error.py:219
 msgid "Don't ask me again"
 msgstr "Älä kysy uudelleen"
 
-#: ../virtManager/error.py:346 ../ui/vmwindow.ui.h:25
+#: ../virtManager/error.py:363 ../ui/vmwindow.ui.h:25
 msgid "Details"
 msgstr "Yksityiskohdat"
 
@@ -2719,7 +2053,7 @@ msgstr "Virtuaaliverkkoa ei ole valittu."
 msgid "Error selecting network: %s"
 msgstr "Virhe valittaessa verkkoa: %s"
 
-#: ../virtManager/hostnets.py:233 ../virtManager/object/network.py:195
+#: ../virtManager/hostnets.py:233 ../virtManager/object/network.py:192
 msgid "Routed network"
 msgstr "Reititetty verkko"
 
@@ -2911,21 +2245,21 @@ msgstr ""
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtuaalikonehallitsimen yhteysvirhe"
 
-#: ../virtManager/lib/inspection.py:184
+#: ../virtManager/lib/inspection.py:152
 #, python-format
 msgid "Error inspection VM: %s"
 msgstr ""
 
-#: ../virtManager/lib/inspection.py:195
+#: ../virtManager/lib/inspection.py:163
 msgid "Cannot inspect VM on remote connection"
 msgstr ""
 
-#: ../virtManager/lib/inspection.py:210
+#: ../virtManager/lib/inspection.py:178
 #, python-format
 msgid "Error launching libguestfs appliance: %s"
 msgstr ""
 
-#: ../virtManager/lib/inspection.py:219
+#: ../virtManager/lib/inspection.py:187
 msgid "Inspection found no operating systems."
 msgstr ""
 
@@ -3119,78 +2453,78 @@ msgstr "Keskeytä virtuaalikone"
 msgid "Disabled in preferences dialog."
 msgstr "Poistettu käytöstä asetusikkunan kautta."
 
-#: ../virtManager/migrate.py:38
+#: ../virtManager/migrate.py:37
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Virhe käynnistäessä migraatioikkunaa: %s"
 
-#: ../virtManager/migrate.py:141
+#: ../virtManager/migrate.py:137
 msgid "Direct"
 msgstr ""
 
-#: ../virtManager/migrate.py:142
+#: ../virtManager/migrate.py:138
 msgid "Tunnelled"
 msgstr ""
 
-#: ../virtManager/migrate.py:157
+#: ../virtManager/migrate.py:153
 msgid "Migrate"
 msgstr "Migratoi"
 
-#: ../virtManager/migrate.py:216
+#: ../virtManager/migrate.py:212
 msgid "A valid destination connection must be selected."
 msgstr ""
 
-#: ../virtManager/migrate.py:232
+#: ../virtManager/migrate.py:228
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
 
-#: ../virtManager/migrate.py:242
+#: ../virtManager/migrate.py:238
 msgid ""
 "The destination's hostname is 'localhost', which will be rejected by "
 "libvirt. You must configure the destination to have a valid publicly "
 "accessible hostname."
 msgstr ""
 
-#: ../virtManager/migrate.py:301
+#: ../virtManager/migrate.py:297
 msgid "Hypervisors do not match"
 msgstr "Hypervisorit eivät täsmää"
 
-#: ../virtManager/migrate.py:305
+#: ../virtManager/migrate.py:301
 msgid "Same connection"
 msgstr "Sama yhteys"
 
-#: ../virtManager/migrate.py:324
+#: ../virtManager/migrate.py:320
 msgid "No usable connections available."
 msgstr "Ei käytettäviä yhteyksiä saatavilla."
 
-#: ../virtManager/migrate.py:364
+#: ../virtManager/migrate.py:360
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "Vierasjärjestelmän migraatio ei onnistunut: %s"
 
-#: ../virtManager/migrate.py:405
+#: ../virtManager/migrate.py:401
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "Migratoidaan virtuaalikone '%s'"
 
-#: ../virtManager/migrate.py:406
+#: ../virtManager/migrate.py:402
 #, python-format
 msgid "Migrating VM '%s' to %s. This may take a while."
 msgstr ""
 
-#: ../virtManager/migrate.py:420
+#: ../virtManager/migrate.py:416
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "Virhe peruessa migraatiotyötä: %s"
 
-#: ../virtManager/object/domain.py:291
+#: ../virtManager/object/domain.py:385
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt-yhteys ei tue tilannevedoksia."
 
-#: ../virtManager/object/domain.py:306
+#: ../virtManager/object/domain.py:400
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -3198,45 +2532,45 @@ msgstr ""
 "Tilannevedokset ovat tuettuja vain, jos kaikki vierasjärjestelmälle varatut "
 "kirjoitettavat levykuvat ovat qcow2-muodossa."
 
-#: ../virtManager/object/domain.py:309
+#: ../virtManager/object/domain.py:403
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
 
-#: ../virtManager/object/domain.py:344
+#: ../virtManager/object/domain.py:437
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: ../virtManager/object/domain.py:1318
+#: ../virtManager/object/domain.py:1369
 msgid "Saving domain to disk"
 msgstr "Tallennetaan domainia levylle"
 
-#: ../virtManager/object/domain.py:1367
+#: ../virtManager/object/domain.py:1419
 msgid "Migrating domain"
 msgstr "Migratoidaan domain"
 
-#: ../virtManager/object/network.py:184
+#: ../virtManager/object/network.py:181
 msgid "Isolated network"
 msgstr "Eristetty verkko"
 
-#: ../virtManager/object/network.py:188
+#: ../virtManager/object/network.py:185
 #, python-format
 msgid "NAT to %s"
 msgstr ""
 
-#: ../virtManager/object/network.py:193
+#: ../virtManager/object/network.py:190
 #, python-format
 msgid "Route to %s"
 msgstr ""
 
-#: ../virtManager/object/network.py:199
+#: ../virtManager/object/network.py:196
 #, python-format
 msgid "%(mode)s to %(device)s"
 msgstr ""
 
-#: ../virtManager/object/network.py:202
+#: ../virtManager/object/network.py:199
 #, python-format
 msgid "%s network"
 msgstr ""
@@ -3303,69 +2637,69 @@ msgstr ""
 msgid "Error launching preferences: %s"
 msgstr "Virhe käynnistäessä asetuksia: %s"
 
-#: ../virtManager/preferences.py:116
+#: ../virtManager/preferences.py:114
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: ../virtManager/preferences.py:117
+#: ../virtManager/preferences.py:115
 msgid "Fullscreen only"
 msgstr "Vain koko näyttö"
 
-#: ../virtManager/preferences.py:118
+#: ../virtManager/preferences.py:116
 msgid "Always"
 msgstr "Aina"
 
-#: ../virtManager/preferences.py:127
+#: ../virtManager/preferences.py:125
 msgid "Off"
 msgstr "Pois"
 
-#: ../virtManager/preferences.py:128
+#: ../virtManager/preferences.py:126
 msgid "On"
 msgstr "Päällä"
 
-#: ../virtManager/preferences.py:130 ../virtManager/preferences.py:152
-#: ../virtManager/preferences.py:162 ../virtManager/preferences.py:172
+#: ../virtManager/preferences.py:128 ../virtManager/preferences.py:150
+#: ../virtManager/preferences.py:160 ../virtManager/preferences.py:170
 #, python-format
 msgid "System default (%s)"
 msgstr "Järjestelmän oletus (%s)"
 
-#: ../virtManager/preferences.py:141
+#: ../virtManager/preferences.py:139
 msgid "Manual redirect only"
 msgstr ""
 
-#: ../virtManager/preferences.py:142
+#: ../virtManager/preferences.py:140
 msgid "Auto redirect on USB attach"
 msgstr ""
 
-#: ../virtManager/preferences.py:164
+#: ../virtManager/preferences.py:162
 msgid "Yes"
 msgstr "Kyllä"
 
-#: ../virtManager/preferences.py:164
+#: ../virtManager/preferences.py:162
 msgid "No"
 msgstr "Ei"
 
-#: ../virtManager/preferences.py:184
+#: ../virtManager/preferences.py:182
 msgid "Application default"
 msgstr ""
 
-#: ../virtManager/preferences.py:187
+#: ../virtManager/preferences.py:185
 msgid "Nearest host CPU model"
 msgstr ""
 
-#: ../virtManager/preferences.py:189
+#: ../virtManager/preferences.py:187
 msgid "Copy host CPU definition"
 msgstr "Kopioi isännän suoritinmääritys"
 
-#: ../virtManager/preferences.py:197
+#: ../virtManager/preferences.py:195
 msgid "python libguestfs support is not installed"
 msgstr ""
 
-#: ../virtManager/preferences.py:342
+#: ../virtManager/preferences.py:336
 msgid "Configure grab key combination"
 msgstr "Muokkaa tarttumisnäppäinten yhdistelmää"
 
-#: ../virtManager/preferences.py:351
+#: ../virtManager/preferences.py:345
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -3375,7 +2709,7 @@ msgstr ""
 "Vahvista valintasi napsauttamalla OK-painiketta,\n"
 "kun haluamasi näppäimet on painettu."
 
-#: ../virtManager/preferences.py:354
+#: ../virtManager/preferences.py:348
 msgid "Please press desired grab key combination"
 msgstr "Paina haluttua tarttumisnäppäinyhdistelmää"
 
@@ -3395,6 +2729,14 @@ msgstr "Virtuaalikoneiden hallitsin"
 #: ../virtManager/systray.py:251
 msgid "No virtual machines"
 msgstr "Ei virtuaalikoneita"
+
+#: ../virtManager/virtmanager.py:43
+msgid "Error starting Virtual Machine Manager"
+msgstr "Virhe käynnistäessä Virtuaalikoneiden hallitsinta"
+
+#: ../virtManager/virtmanager.py:276
+msgid "virt-manager requires libvirt 0.6.0 or later."
+msgstr "virt-manager vaatii libvirt-version 0.6.0 tai uudemman."
 
 #: ../virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -3605,81 +2947,6 @@ msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 
-#: ../virtconv/formats.py:60
-#, python-format
-msgid "No parser found for type '%s'"
-msgstr ""
-
-#: ../virtconv/formats.py:70
-#, python-format
-msgid "Don't know how to parse file %s"
-msgstr ""
-
-#: ../virtconv/formats.py:146
-#, python-format
-msgid ""
-"%s appears to be an archive, but '%s' is not installed. Please either "
-"install '%s', or extract the archive yourself and point virt-convert at the "
-"extracted directory."
-msgstr ""
-
-#: ../virtconv/formats.py:152
-#, python-format
-msgid "%s appears to be an archive, running: %s"
-msgstr ""
-
-#: ../virtconv/formats.py:259
-#, python-format
-msgid "None of %s tools found."
-msgstr ""
-
-#: ../virtconv/formats.py:309
-#, python-format
-msgid "New path name '%s' already exists"
-msgstr ""
-
-#: ../virtconv/ovf.py:134
-#, python-format
-msgid "Unknown disk reference id '%s' for path %s."
-msgstr ""
-
-#: ../virtconv/ovf.py:142
-#, python-format
-msgid "Unknown storage path type %s."
-msgstr ""
-
-#: ../virtconv/ovf.py:147
-#, python-format
-msgid "Unknown reference id '%s' for path %s."
-msgstr ""
-
-#: ../virtconv/ovf.py:192
-#, python-format
-msgid ""
-"OVF section '%s' is listed as required, but parser doesn't know how to "
-"handle it."
-msgstr ""
-
-#: ../virtconv/vmx.py:76
-#, python-format
-msgid ""
-"Syntax error at line %d: %s\n"
-"%s"
-msgstr ""
-
-#: ../virtconv/vmx.py:114
-msgid "Didn't detect a storage line in the VMDK descriptor file"
-msgstr ""
-
-#: ../virtconv/vmx.py:117
-msgid "Don't know how to handle multistorage VMDK descriptors"
-msgstr ""
-
-#: ../virtconv/vmx.py:252
-#, python-format
-msgid "No displayName defined in '%s'"
-msgstr ""
-
 #: ../virtinst/capabilities.py:292
 #, python-format
 msgid "for arch '%s'"
@@ -3706,15 +2973,15 @@ msgid ""
 "type '%(virttype)s' arch '%(arch)s'"
 msgstr ""
 
-#: ../virtinst/cli.py:105
+#: ../virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
 msgstr ""
 
-#: ../virtinst/cli.py:107
+#: ../virtinst/cli.py:109
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 
-#: ../virtinst/cli.py:294
+#: ../virtinst/cli.py:291
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -3723,95 +2990,105 @@ msgid ""
 "otherwise, please restart your installation."
 msgstr ""
 
-#: ../virtinst/cli.py:311
+#: ../virtinst/cli.py:308
 #, python-format
 msgid ""
 "%s may not be accessible by the hypervisor. You will need to grant the '%s' "
 "user search permissions for the following directories: %s"
 msgstr ""
 
-#: ../virtinst/cli.py:321
+#: ../virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr ""
 
-#: ../virtinst/cli.py:338
+#: ../virtinst/cli.py:335
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Tämä korvaa olemassa olevan polun '%s'"
 
-#: ../virtinst/cli.py:349
+#: ../virtinst/cli.py:346
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
 msgstr ""
 
-#. pragma: no cover
-#: ../virtinst/cli.py:444
-msgid ""
-"Unable to connect to graphical console: virt-viewer not installed. Please "
-"install the 'virt-viewer' package."
+#: ../virtinst/cli.py:370
+#, python-format
+msgid "Running %(console_type)s console command: %(command)s"
 msgstr ""
 
-#. pragma: no cover
-#: ../virtinst/cli.py:451
-msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
+#: ../virtinst/cli.py:429
+msgid "Console command returned failure."
 msgstr ""
 
-#: ../virtinst/cli.py:547 ../virtinst/cli.py:550
+#: ../virtinst/cli.py:473
+#, python-format
+msgid "Could not find domain '%s': %s"
+msgstr "Domainia '%s' ei löydy: %s"
+
+#: ../virtinst/cli.py:569 ../virtinst/cli.py:572
 msgid "Connect to hypervisor with libvirt URI"
 msgstr ""
 
-#: ../virtinst/cli.py:566
+#: ../virtinst/cli.py:587
+msgid ""
+"Configure guest console auto connect. Example:\n"
+"--autoconsole text\n"
+"--autoconsole graphical\n"
+"--autoconsole none"
+msgstr ""
+
+#: ../virtinst/cli.py:593
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Älä yhdistä automaattisesti vierasjärjestelmän konsoliin"
 
-#: ../virtinst/cli.py:570
+#: ../virtinst/cli.py:597
 msgid "Don't boot guest after completing install."
 msgstr "Älä käynnistä vierasjärjestelmää asennuksen valmistuttua."
 
-#: ../virtinst/cli.py:574
+#: ../virtinst/cli.py:601
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 
-#: ../virtinst/cli.py:581
+#: ../virtinst/cli.py:608
 msgid "Print the generated domain XML rather than create the guest."
 msgstr ""
 
-#: ../virtinst/cli.py:600
+#: ../virtinst/cli.py:627
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 
-#: ../virtinst/cli.py:605
+#: ../virtinst/cli.py:632
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: ../virtinst/cli.py:609
+#: ../virtinst/cli.py:636
 msgid "Suppress non-error output"
 msgstr ""
 
-#: ../virtinst/cli.py:611
+#: ../virtinst/cli.py:638
 msgid "Print debugging information"
 msgstr ""
 
-#: ../virtinst/cli.py:617
+#: ../virtinst/cli.py:644
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
 
-#: ../virtinst/cli.py:625
+#: ../virtinst/cli.py:652
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
 
-#: ../virtinst/cli.py:638
+#: ../virtinst/cli.py:665
 msgid ""
 "Number of vcpus to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -3819,14 +3096,14 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
 
-#: ../virtinst/cli.py:647
+#: ../virtinst/cli.py:674
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
 
-#: ../virtinst/cli.py:660
+#: ../virtinst/cli.py:687
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -3834,7 +3111,7 @@ msgid ""
 "--graphics none\n"
 msgstr ""
 
-#: ../virtinst/cli.py:669
+#: ../virtinst/cli.py:696
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -3850,80 +3127,80 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: ../virtinst/cli.py:680
+#: ../virtinst/cli.py:707
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
 
-#: ../virtinst/cli.py:685
+#: ../virtinst/cli.py:712
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: ../virtinst/cli.py:690
+#: ../virtinst/cli.py:717
 msgid "Configure a guest serial device"
 msgstr ""
 
-#: ../virtinst/cli.py:693
+#: ../virtinst/cli.py:720
 msgid "Configure a guest parallel device"
 msgstr "Määritä vierasrinnakkaislaite"
 
-#: ../virtinst/cli.py:696
+#: ../virtinst/cli.py:723
 msgid "Configure a guest communication channel"
 msgstr ""
 
-#: ../virtinst/cli.py:699
+#: ../virtinst/cli.py:726
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
 
-#: ../virtinst/cli.py:703
+#: ../virtinst/cli.py:730
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Määritä fyysiset suoritin-/PCI-/yms. -laitteet jaettavaksi "
 "vierasjärjestelmän kanssa "
 
-#: ../virtinst/cli.py:711
+#: ../virtinst/cli.py:738
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
 
-#: ../virtinst/cli.py:719
+#: ../virtinst/cli.py:746
 msgid "Configure guest sound device emulation"
 msgstr ""
 
-#: ../virtinst/cli.py:730
+#: ../virtinst/cli.py:757
 msgid "Configure a guest watchdog device"
 msgstr ""
 
-#: ../virtinst/cli.py:733
+#: ../virtinst/cli.py:760
 msgid "Configure guest video hardware."
 msgstr ""
 
-#: ../virtinst/cli.py:736
+#: ../virtinst/cli.py:763
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 
-#: ../virtinst/cli.py:740
+#: ../virtinst/cli.py:767
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
 
-#: ../virtinst/cli.py:744
+#: ../virtinst/cli.py:771
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
-#: ../virtinst/cli.py:748
+#: ../virtinst/cli.py:775
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -3931,101 +3208,105 @@ msgstr ""
 "Määritä vierasjärjestelmän TPM-laite, esim.\n"
 "--tpm /dev/tpm"
 
-#: ../virtinst/cli.py:752
+#: ../virtinst/cli.py:779
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: ../virtinst/cli.py:756
+#: ../virtinst/cli.py:783
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
-#: ../virtinst/cli.py:760
+#: ../virtinst/cli.py:787
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: ../virtinst/cli.py:764
+#: ../virtinst/cli.py:791
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: ../virtinst/cli.py:772
+#: ../virtinst/cli.py:799
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: ../virtinst/cli.py:776
+#: ../virtinst/cli.py:803
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: ../virtinst/cli.py:780
+#: ../virtinst/cli.py:807
+msgid "Set guest to perform the S390 cryptographic key management operations."
+msgstr ""
+
+#: ../virtinst/cli.py:812
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: ../virtinst/cli.py:784
+#: ../virtinst/cli.py:816
 msgid "Tune NUMA policy for the domain process."
 msgstr ""
 
-#: ../virtinst/cli.py:788
+#: ../virtinst/cli.py:820
 msgid "Tune memory policy for the domain process."
 msgstr ""
 
-#: ../virtinst/cli.py:792
+#: ../virtinst/cli.py:824
 msgid "Tune blkio policy for the domain process."
 msgstr ""
 
-#: ../virtinst/cli.py:796
+#: ../virtinst/cli.py:828
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
 
-#: ../virtinst/cli.py:801
+#: ../virtinst/cli.py:833
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: ../virtinst/cli.py:807
+#: ../virtinst/cli.py:839
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
 
-#: ../virtinst/cli.py:812
+#: ../virtinst/cli.py:844
 msgid "Configure VM power management features"
 msgstr "Määritä virtuaalikoneen virranhallintaominaisuudet"
 
-#: ../virtinst/cli.py:816
+#: ../virtinst/cli.py:848
 msgid "Configure VM lifecycle management policy"
 msgstr "Määritä virtuaalikoneen elinkaaren hallintakäytäntö"
 
-#: ../virtinst/cli.py:820
+#: ../virtinst/cli.py:852
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Määritä virtuaalikoneen resurssiosiointi (cgroups)"
 
-#: ../virtinst/cli.py:824
+#: ../virtinst/cli.py:856
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: ../virtinst/cli.py:830
+#: ../virtinst/cli.py:862
 msgid ""
 "Pass arguments directly to the qemu emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: ../virtinst/cli.py:836
+#: ../virtinst/cli.py:868
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -4033,20 +3314,20 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: ../virtinst/cli.py:844
+#: ../virtinst/cli.py:876
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
 
-#: ../virtinst/cli.py:850
+#: ../virtinst/cli.py:882
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: ../virtinst/cli.py:860
+#: ../virtinst/cli.py:892
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -4055,90 +3336,113 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: ../virtinst/cli.py:868
+#: ../virtinst/cli.py:900
 msgid "OS options"
 msgstr ""
 
-#: ../virtinst/cli.py:871
+#: ../virtinst/cli.py:903
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: ../virtinst/cli.py:873
+#: ../virtinst/cli.py:905
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: ../virtinst/cli.py:875
+#: ../virtinst/cli.py:907
 msgid ""
 "This is used for deciding optimal defaults like virtio.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: ../virtinst/cli.py:907
+#: ../virtinst/cli.py:939
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr ""
 
-#: ../virtinst/cli.py:1094
+#: ../virtinst/cli.py:1126
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: ../virtinst/cli.py:1404
+#: ../virtinst/cli.py:1439
 #, python-format
 msgid "Unknown %s options: %s"
 msgstr ""
 
-#: ../virtinst/cli.py:1459 ../virtinst/cli.py:1490
+#: ../virtinst/cli.py:1494 ../virtinst/cli.py:1525
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: ../virtinst/cli.py:2876
+#. pragma: no cover
+#: ../virtinst/cli.py:1777
+msgid ""
+"Unable to connect to graphical console: virt-viewer not installed. Please "
+"install the 'virt-viewer' package."
+msgstr ""
+
+#. pragma: no cover
+#: ../virtinst/cli.py:1784
+msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
+msgstr ""
+
+#: ../virtinst/cli.py:1795
+#, python-format
+msgid "Unknown autoconsole type '%s'"
+msgstr ""
+
+#: ../virtinst/cli.py:3119
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr ""
 
-#: ../virtinst/cli.py:2889
+#: ../virtinst/cli.py:3132
 #, python-format
 msgid "Unknown '%s' value '%s'"
 msgstr ""
 
-#: ../virtinst/cli.py:2902
+#: ../virtinst/cli.py:3146
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 
-#: ../virtinst/cli.py:3238
+#: ../virtinst/cli.py:3572
 #, python-format
-msgid "Didn't match keymap '%s' in keytable!"
+msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: ../virtinst/cloner.py:101
+#. pragma: no cover
+#: ../virtinst/cloner.py:45
+#, python-format
+msgid "Could not remove old vm '%s': %s"
+msgstr "Vanhaa virtuaalikonetta '%s' ei voitu poistaa: %s"
+
+#: ../virtinst/cloner.py:124
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "Virheellinen nimi uudelle vieraalle: %s"
 
-#: ../virtinst/cloner.py:136
+#: ../virtinst/cloner.py:159
 #, python-format
 msgid "Could not use path '%s' for cloning: %s"
 msgstr ""
 
-#: ../virtinst/cloner.py:257
+#: ../virtinst/cloner.py:280
 msgid "Original guest name or xml is required."
 msgstr ""
 
-#: ../virtinst/cloner.py:284
-msgid "Domain with devices to clone must be paused or shutoff."
-msgstr "Kloonattava domain laitteiden kera tulee keskeyttää tai sammuttaa."
+#: ../virtinst/cloner.py:303
+msgid "Domain to clone must be shutoff."
+msgstr ""
 
-#: ../virtinst/cloner.py:307
+#: ../virtinst/cloner.py:325
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 
-#: ../virtinst/cloner.py:381
+#: ../virtinst/cloner.py:399
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -4147,74 +3451,58 @@ msgstr ""
 "Enemmän levyjä kloonattavaksi kuin uusia polkuja määritetty. (%(passed)d "
 "määritetty, %(need)d tarvitaan"
 
-#: ../virtinst/cloner.py:393
+#: ../virtinst/cloner.py:413
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
-#: ../virtinst/cloner.py:555
+#: ../virtinst/cloner.py:575
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: ../virtinst/cloner.py:560
+#: ../virtinst/cloner.py:580
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr ""
 
-#: ../virtinst/cloner.py:598
+#: ../virtinst/cloner.py:618
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "Domainia '%s' ei löytynyt."
 
-#: ../virtinst/devices/device.py:75
-#, python-format
-msgid "Could not determine or unsupported format of '%s'"
-msgstr ""
-
-#: ../virtinst/devices/device.py:81
+#: ../virtinst/devices/device.py:64
 #, python-format
 msgid "%s:%s:%s:%s"
 msgstr ""
 
-#: ../virtinst/devices/disk.py:215
+#: ../virtinst/devices/disk.py:219
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr ""
 
-#: ../virtinst/devices/disk.py:220
+#: ../virtinst/devices/disk.py:224
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
 
-#: ../virtinst/devices/disk.py:243
+#: ../virtinst/devices/disk.py:247
 msgid "Format attribute not supported for this volume type"
 msgstr ""
 
-#: ../virtinst/devices/disk.py:330
-msgid "Can't change disk path if storage creation info has been set."
-msgstr ""
-
-#: ../virtinst/devices/disk.py:741
+#: ../virtinst/devices/disk.py:732
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Laitetyyppi '%s' vaatii polun"
 
-#: ../virtinst/devices/disk.py:752
+#: ../virtinst/devices/disk.py:740
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 
-#. This basically means that we either chose full
-#. controller or didn't add any
-#: ../virtinst/devices/disk.py:892
-#, python-format
-msgid "Controller number %d for disk of type %s has no empty slot to use"
-msgstr ""
-
-#: ../virtinst/devices/disk.py:894
+#: ../virtinst/devices/disk.py:852
 #, python-format
 msgid "Only %s disks for bus '%s' are supported"
 msgstr ""
@@ -4230,7 +3518,7 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr ""
 
 #. pragma: no cover
-#: ../virtinst/devices/graphics.py:239
+#: ../virtinst/devices/graphics.py:201
 msgid "Host does not support spice GL"
 msgstr "Isäntäkone ei tue spice GL:ää"
 
@@ -4239,58 +3527,58 @@ msgstr "Isäntäkone ei tue spice GL:ää"
 msgid "Unknown node device type %s"
 msgstr ""
 
-#: ../virtinst/devices/interface.py:153
+#: ../virtinst/devices/interface.py:168
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "MAC-osoite '%s' on käytössä toisessa virtuaalikoneessa."
 
-#: ../virtinst/diskbackend.py:108
+#. pragma: no cover
+#: ../virtinst/diskbackend.py:109
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "Tallennustilaa %(path)s ei voi käyttää: %(err)s"
 
 #. Trying to change perms on vfat at least doesn't work
 #. but also doesn't seem to error. Try and detect that
-#: ../virtinst/diskbackend.py:276
+#. pragma: no cover
+#: ../virtinst/diskbackend.py:275
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr ""
 
-#: ../virtinst/diskbackend.py:468
-#, python-format
-msgid "Cannot create storage for %s device."
-msgstr ""
-
-#: ../virtinst/diskbackend.py:476
-#, python-format
-msgid "size is required for non-existent disk '%s'"
-msgstr ""
-
-#: ../virtinst/diskbackend.py:524
+#: ../virtinst/diskbackend.py:528
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
 
-#: ../virtinst/diskbackend.py:529
+#: ../virtinst/diskbackend.py:533
 msgid "There is not enough free space to create the disk."
 msgstr "Ei riittävästi vapaata levytilaa levyn luomiseksi."
 
-#: ../virtinst/diskbackend.py:533
+#: ../virtinst/diskbackend.py:537
 #, python-format
 msgid " %d M requested > %d M available"
 msgstr ""
 
-#: ../virtinst/diskbackend.py:538
+#. pragma: no cover
+#: ../virtinst/diskbackend.py:543
+#, python-format
+msgid "size is required for non-existent disk '%s'"
+msgstr ""
+
+#: ../virtinst/diskbackend.py:553
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "Kloonataan %(srcfile)s"
 
-#: ../virtinst/diskbackend.py:608
+#. pragma: no cover
+#: ../virtinst/diskbackend.py:623
 #, python-format
 msgid "Error cloning diskimage %s to %s: %s"
 msgstr ""
 
+#. pragma: no cover
 #: ../virtinst/domain/cpu.py:191
 msgid "No host CPU reported in capabilities"
 msgstr ""
@@ -4307,100 +3595,92 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: ../virtinst/domcapabilities.py:217
+#: ../virtinst/domcapabilities.py:222
 msgid "BIOS"
 msgstr "BIOS"
 
-#: ../virtinst/domcapabilities.py:223
+#: ../virtinst/domcapabilities.py:228
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: ../virtinst/domcapabilities.py:226
+#: ../virtinst/domcapabilities.py:231
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Mukautettu: %(path)s"
 
-#: ../virtinst/domcapabilities.py:310
+#. pragma: no cover
+#: ../virtinst/domcapabilities.py:307
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
 
-#: ../virtinst/guest.py:91
-#, python-format
-msgid "Domain named %s already exists!"
-msgstr "Domain nimellä %s on jo olemassa!"
-
-#: ../virtinst/guest.py:102
-#, python-format
-msgid "Could not remove old vm '%s': %s"
-msgstr "Vanhaa virtuaalikonetta '%s' ei voitu poistaa: %s"
-
-#: ../virtinst/guest.py:108
+#: ../virtinst/guest.py:76
 msgid "Guest"
 msgstr "Vierasjärjestelmä"
 
-#: ../virtinst/guest.py:116
+#: ../virtinst/guest.py:84
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "Vierasjärjestelmän nimi '%s' on jo käytössä."
 
-#: ../virtinst/guest.py:549
+#: ../virtinst/guest.py:522
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: ../virtinst/guest.py:553
+#: ../virtinst/guest.py:526
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: ../virtinst/guest.py:558
+#. pragma: no cover
+#: ../virtinst/guest.py:531
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
 
-#: ../virtinst/install/installer.py:213
-#, python-format
-msgid "Overriding memory to %s MiB needed for %s network install."
-msgstr ""
-
-#: ../virtinst/install/installer.py:477
-msgid "Creating domain..."
-msgstr "Luodaan domain..."
-
-#: ../virtinst/install/installer.py:484
-msgid "Domain type 'vz' doesn't support transient installs."
-msgstr ""
-
-#: ../virtinst/install/installer.py:570
+#: ../virtinst/install/installer.py:103
 #, python-format
 msgid "Removing disk '%s'"
 msgstr "Poistetaan levy '%s'"
 
-#: ../virtinst/install/installertreemedia.py:69
+#: ../virtinst/install/installer.py:262
+#, python-format
+msgid "Overriding memory to %s MiB needed for %s network install."
+msgstr ""
+
+#: ../virtinst/install/installer.py:574
+msgid "Creating domain..."
+msgstr "Luodaan domain..."
+
+#: ../virtinst/install/installer.py:581
+msgid "Domain type 'vz' doesn't support transient installs."
+msgstr ""
+
+#: ../virtinst/install/installertreemedia.py:70
 #, python-format
 msgid "Validating install media '%s' failed: %s"
 msgstr "Asennusmedian '%s' vahvistaminen epäonnistui: %s"
 
-#: ../virtinst/install/installertreemedia.py:116
+#: ../virtinst/install/installertreemedia.py:117
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: ../virtinst/install/installertreemedia.py:119
+#: ../virtinst/install/installertreemedia.py:120
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
 
-#: ../virtinst/install/installertreemedia.py:143
+#: ../virtinst/install/installertreemedia.py:144
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
 #. pragma: no cover
-#: ../virtinst/install/installertreemedia.py:206
+#: ../virtinst/install/installertreemedia.py:209
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: ../virtinst/install/installertreemedia.py:256
+#: ../virtinst/install/installertreemedia.py:273
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -4411,53 +3691,58 @@ msgstr ""
 msgid "Transferring %s"
 msgstr "Siirretään %s"
 
-#: ../virtinst/install/unattended.py:45
+#: ../virtinst/install/unattended.py:57
+#, python-format
+msgid "%s cannot use '%s' as user-login."
+msgstr ""
+
+#: ../virtinst/install/unattended.py:67
 #, python-format
 msgid "%s requires the user-password to be set."
 msgstr ""
 
-#: ../virtinst/install/unattended.py:54
+#: ../virtinst/install/unattended.py:76
 #, python-format
 msgid "%s requires the admin-password to be set."
 msgstr ""
 
 #. pragma: no cover
-#: ../virtinst/install/unattended.py:134
+#: ../virtinst/install/unattended.py:173
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 
-#: ../virtinst/install/unattended.py:152
+#: ../virtinst/install/unattended.py:191
 #, python-format
 msgid "OS '%s' does not support required injection method '%s'"
 msgstr ""
 
-#: ../virtinst/install/unattended.py:274
+#: ../virtinst/install/unattended.py:327
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr ""
 
-#: ../virtinst/install/unattended.py:285
+#: ../virtinst/install/unattended.py:338
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr ""
 
-#: ../virtinst/install/unattended.py:294
+#: ../virtinst/install/unattended.py:347
 #, python-format
 msgid ""
 "OS '%s' does not support unattended installation for the '%s' profile. "
 "Available profiles: %s"
 msgstr ""
 
-#: ../virtinst/install/unattended.py:299
+#: ../virtinst/install/unattended.py:352
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr ""
 
-#: ../virtinst/install/urldetect.py:307
+#: ../virtinst/install/urldetect.py:309
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: ../virtinst/install/urldetect.py:310
+#: ../virtinst/install/urldetect.py:312
 #, python-format
 msgid ""
 "Could not find an installable distribution at '%s'%s\n"
@@ -4466,18 +3751,18 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: ../virtinst/install/urlfetcher.py:136
+#: ../virtinst/install/urlfetcher.py:70
 #, python-format
 msgid "Couldn't acquire file %s: %s"
 msgstr ""
 
-#: ../virtinst/install/urlfetcher.py:141
+#: ../virtinst/install/urlfetcher.py:75
 #, python-format
 msgid "Retrieving file %s..."
 msgstr ""
 
 #. pragma: no cover
-#: ../virtinst/install/urlfetcher.py:317
+#: ../virtinst/install/urlfetcher.py:247
 #, python-format
 msgid "Opening URL %s failed: %s."
 msgstr "Osoitteen %s avaaminen epäonnistui: %s."
@@ -4492,29 +3777,29 @@ msgstr ""
 msgid "Did not find a matching node device for '%s'"
 msgstr ""
 
-#: ../virtinst/osdict.py:219
+#: ../virtinst/osdict.py:231
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr ""
 
-#: ../virtinst/osdict.py:226
+#: ../virtinst/osdict.py:238
 #, python-format
 msgid ""
 "OS name '%s' is deprecated, using '%s' instead. This alias will be removed "
 "in the future."
 msgstr ""
 
-#: ../virtinst/osdict.py:232
+#: ../virtinst/osdict.py:244
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 
-#: ../virtinst/osdict.py:603
+#: ../virtinst/osdict.py:667
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: ../virtinst/osdict.py:614
+#: ../virtinst/osdict.py:679
 #, python-format
 msgid "OS '%s' does not have a URL location for the %s architecture"
 msgstr ""
@@ -4524,7 +3809,7 @@ msgstr ""
 msgid "Couldn't create default storage pool '%s': %s"
 msgstr "Oletustallennustilavarannon '%s' luominen ei onnistunut: %s"
 
-#: ../virtinst/storage.py:218 ../virtinst/storage.py:529
+#: ../virtinst/storage.py:218 ../virtinst/storage.py:552
 msgid "Storage object"
 msgstr ""
 
@@ -4557,23 +3842,23 @@ msgstr "Tallennustilavarantoa ei voitu käynnistää: %s"
 msgid "Could not set pool autostart flag: %s"
 msgstr ""
 
-#: ../virtinst/storage.py:535
+#: ../virtinst/storage.py:558
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Nimi '%s' on jo toisen taltion käytössä."
 
-#: ../virtinst/storage.py:624
+#: ../virtinst/storage.py:647
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr ""
 
-#: ../virtinst/storage.py:671
+#: ../virtinst/storage.py:693
 #, python-format
 msgid "Allocating '%s'"
 msgstr "Varataan '%s'"
 
-#: ../virtinst/storage.py:734
+#: ../virtinst/storage.py:731
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
@@ -4582,12 +3867,669 @@ msgstr ""
 "Tallennustilavarannossa ei ole riittävästi vapaata tilaa taltion luomiseksi. "
 "(%d M pyydettiin varausta > %d M saatavilla)"
 
-#: ../virtinst/storage.py:740
+#: ../virtinst/storage.py:737
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%d M requested capacity > %d M available)"
 msgstr ""
+
+#: ../virtinst/virtclone.py:25
+msgid ""
+"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
+"specify one."
+msgstr ""
+"Uusi virtuaalikone tarvitsee nimen, käytä valitsinta '--name "
+"UUDEN_VIRTUAALIKONEEN_NIMI' määrittääksesi nimen."
+
+#: ../virtinst/virtclone.py:44
+msgid ""
+"An original machine name is required, use '--original ORIGINAL_GUEST' and "
+"try again."
+msgstr ""
+
+#: ../virtinst/virtclone.py:83
+msgid ""
+"Duplicate a virtual machine, changing all the unique host side configuration "
+"like MAC address, name, etc. \n"
+"\n"
+"The VM contents are NOT altered: virt-clone does not change anything "
+"_inside_ the guest OS, it only duplicates disks and does host side changes. "
+"So things like changing passwords, changing static IP address, etc are "
+"outside the scope of this tool. For these types of changes, please see virt-"
+"sysprep(1)."
+msgstr ""
+
+#: ../virtinst/virtclone.py:93 ../virtinst/virtinstall.py:856
+msgid "General Options"
+msgstr "Yleiset valinnat"
+
+#: ../virtinst/virtclone.py:95
+msgid "Name of the original guest to clone."
+msgstr ""
+
+#: ../virtinst/virtclone.py:97
+msgid "XML file to use as the original guest."
+msgstr ""
+
+#: ../virtinst/virtclone.py:99
+msgid ""
+"Auto generate clone name and storage paths from the original guest "
+"configuration."
+msgstr ""
+"Luo automaattisesti kloonin nimi ja tallennustilan polut alkuperäisen "
+"vierasjärjestelmän määrityksistä."
+
+#: ../virtinst/virtclone.py:102
+msgid "Name for the new guest"
+msgstr "Uuden vierasjärjestelmän nimi"
+
+#: ../virtinst/virtclone.py:105
+msgid "use btrfs COW lightweight copy"
+msgstr ""
+
+#: ../virtinst/virtclone.py:107
+msgid "Storage Configuration"
+msgstr "Tallennustilan määritykset"
+
+#: ../virtinst/virtclone.py:109
+msgid "New file to use as the disk image for the new guest"
+msgstr ""
+
+#: ../virtinst/virtclone.py:112
+msgid ""
+"Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
+"copy=hdc)"
+msgstr ""
+
+#: ../virtinst/virtclone.py:115
+msgid ""
+"Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
+"copy and use the same path in the new VM, use --skip-copy=vda)"
+msgstr ""
+
+#: ../virtinst/virtclone.py:120
+msgid "Do not use a sparse file for the clone's disk image"
+msgstr ""
+
+#: ../virtinst/virtclone.py:124
+msgid ""
+"Do not clone storage, new disk images specified via --file are preserved "
+"unchanged"
+msgstr ""
+
+#: ../virtinst/virtclone.py:127
+msgid "New file to use as storage for nvram VARS"
+msgstr ""
+
+#: ../virtinst/virtclone.py:129
+msgid "Networking Configuration"
+msgstr "Verkkomääritykset"
+
+#: ../virtinst/virtclone.py:131
+msgid ""
+"New fixed MAC address for the clone guest. Default is a randomly generated "
+"MAC"
+msgstr ""
+
+#: ../virtinst/virtclone.py:134 ../virtinst/virtinstall.py:960
+#: ../virtinst/virtxml.py:386
+msgid "Miscellaneous Options"
+msgstr "Muut valinnat"
+
+#: ../virtinst/virtclone.py:163
+msgid ""
+"Either --auto-clone or --file is required, use '--auto-clone or --file' and "
+"try again."
+msgstr ""
+
+#: ../virtinst/virtclone.py:204
+#, python-format
+msgid "Clone '%s' created successfully."
+msgstr "Klooni '%s' luotiin onnistuneesti."
+
+#: ../virtinst/virtclone.py:215 ../virtinst/virtinstall.py:1069
+msgid "Installation aborted at user request"
+msgstr "Asennus lopetettu käyttäjän pyynnöstä"
+
+#: ../virtinst/virtinstall.py:125
+msgid "Cannot specify storage and use --nodisks"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:129
+msgid ""
+"Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
+"disk PATH[,size=SIZE][,sparse=yes|no]"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:178
+msgid "Cannot mix both --bridge and --network arguments"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:223
+msgid "Cannot mix --graphics and old style graphical options"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:227
+msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:310
+msgid "--memory amount in MiB is required"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:314
+msgid "--disk storage must be specified (override with --disk none)"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:318
+#, python-format
+msgid ""
+"An install method must be specified\n"
+"(%(methods)s)"
+msgstr ""
+"Asennustapa tulee määrittää\n"
+"(%(methods)s)"
+
+#: ../virtinst/virtinstall.py:330
+msgid ""
+"CDROM media does not print to the text console by default, so you likely "
+"will not see text install output. You might want to use --location."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:333
+msgid "See the man page for examples of using --location with CDROM media"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:346
+#, python-format
+msgid "Requested memory %s MiB is less than the recommended %s MiB for OS %s"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:350
+#, python-format
+msgid ""
+"Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:357
+msgid "The guest's network configuration may not support PXE"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:365
+msgid ""
+"No operating system detected, VM performance may suffer. Specify an OS with "
+"--os-variant for optimal results."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:378
+#, python-brace-format
+msgid "Using {osname} --location {url}"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:457
+#, python-brace-format
+msgid "Using default --name {vm_name}"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:467
+#, python-brace-format
+msgid "Using container default --memory {megabytes}"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:486
+#, python-brace-format
+msgid "Using {os_name} default --memory {megabytes}"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:501
+#, python-brace-format
+msgid "Using {os_name} default --disk {disk_options}"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:544
+#, python-format
+msgid "Error validating install location: %s"
+msgstr "Virhe vahvistaessa asennussijaintia: %s"
+
+#: ../virtinst/virtinstall.py:637
+#, python-format
+msgid " %d minutes"
+msgstr " %d minuuttia"
+
+#: ../virtinst/virtinstall.py:640
+#, python-format
+msgid "Waiting%(time_string)s for installation to complete."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:663
+#, python-format
+msgid "Password for first root login is: %s"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:675
+msgid "Installation will continue in 10 seconds (press Enter to skip)..."
+msgstr ""
+
+#. If there isn't any console to actually connect up,
+#. default to --wait -1 to get similarish behavior
+#: ../virtinst/virtinstall.py:690
+msgid "No console to launch for the guest, defaulting to --wait -1"
+msgstr ""
+
+#. we've got everything -- try to start the install
+#: ../virtinst/virtinstall.py:699
+msgid ""
+"\n"
+"Starting install..."
+msgstr ""
+"\n"
+"Aloitetaan asennus..."
+
+#: ../virtinst/virtinstall.py:719
+msgid "Domain creation completed."
+msgstr "Domainin luonti valmistui."
+
+#. pragma: no cover
+#: ../virtinst/virtinstall.py:723
+#, python-format
+msgid ""
+"You can restart your domain by running:\n"
+"  %s"
+msgstr ""
+"Voit käynnistää domainin uudelleen suorittamalla:\n"
+"  %s"
+
+#: ../virtinst/virtinstall.py:726
+msgid "Restarting guest."
+msgstr "Käynnistetään vierasjärjestelmä uudelleen."
+
+#: ../virtinst/virtinstall.py:733
+msgid "Domain install interrupted."
+msgstr "Domainin asennus keskeytettiin."
+
+#: ../virtinst/virtinstall.py:757
+msgid "Domain has crashed."
+msgstr "Domain on kaatunut."
+
+#: ../virtinst/virtinstall.py:780
+msgid "Domain is still running. Installation may be in progress."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:790
+msgid "You can reconnect to the console to complete the installation process."
+msgstr ""
+
+#. pragma: no cover
+#: ../virtinst/virtinstall.py:801
+msgid "Domain has shutdown. Continuing."
+msgstr "Domain on sammunut. Jatketaan."
+
+#: ../virtinst/virtinstall.py:807
+msgid "Installation has exceeded specified time limit. Exiting application."
+msgstr "Asennus on ylittänyt määritetyn aikarajan. Poistutaan sovelluksesta."
+
+#: ../virtinst/virtinstall.py:824
+msgid "Dry run completed successfully"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:828
+#, python-format
+msgid "Unknown XML step request '%s', must be 1, 2, or all"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:835
+msgid "Requested installation does not have XML step 2"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:852
+msgid "Create a new virtual machine from specified install media."
+msgstr "Luo uusi virtuaalikone määritetystä asennusmediasta."
+
+#: ../virtinst/virtinstall.py:858
+msgid "Name of the guest instance"
+msgstr "Vierasinstanssin nimi"
+
+#: ../virtinst/virtinstall.py:865
+msgid "Installation Method Options"
+msgstr "Asennustavan valinnat"
+
+#: ../virtinst/virtinstall.py:867
+msgid "CD-ROM installation media"
+msgstr "CD-ROM-asennusmedia"
+
+#: ../virtinst/virtinstall.py:869
+msgid ""
+"Distro install URL, eg. https://host/path. See man page for specific distro "
+"examples."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:872
+msgid "Boot from the network using the PXE protocol"
+msgstr "Käynnistä verkosta käyttäen PXE-protokollaa"
+
+#: ../virtinst/virtinstall.py:874
+msgid "Build guest around an existing disk image"
+msgstr "Rakenna vierasjärjestelmä olemassa olevan levykuvan ympärille"
+
+#: ../virtinst/virtinstall.py:877
+msgid ""
+"Additional arguments to pass to the install kernel booted from --location"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:880
+msgid "Add given file to root of initrd from --location"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:882
+msgid "Perform an unattended installation"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:884
+msgid "Specify fine grained install options"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:886
+msgid ""
+"Reinstall existing VM. Only install options are applied, all other VM "
+"configuration options are ignored."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:889
+msgid "Perform a cloud image installation, configuring cloud-init"
+msgstr ""
+
+#: ../virtinst/virtinstall.py:903
+msgid "Device Options"
+msgstr "Laitevalinnat"
+
+#: ../virtinst/virtinstall.py:933
+msgid "Guest Configuration Options"
+msgstr "Vierasjärjestelmän määritysvalinnat"
+
+#: ../virtinst/virtinstall.py:937
+msgid "Virtualization Platform Options"
+msgstr "Virtualisointialustan valinnat"
+
+#: ../virtinst/virtinstall.py:941
+msgid "This guest should be a fully virtualized guest"
+msgstr "Tämän vierasjärjestelmän tulisi olla täysin virtualisoitu vieras"
+
+#: ../virtinst/virtinstall.py:944
+msgid "This guest should be a paravirtualized guest"
+msgstr "Tämän vierasjärjestelmän tulisi olla paravirtualisoitu vieras"
+
+#: ../virtinst/virtinstall.py:947
+msgid "This guest should be a container guest"
+msgstr "Tämän vierasjärjestelmän tulisi olla säiliövieras"
+
+#: ../virtinst/virtinstall.py:949
+msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
+msgstr "Käytettäävän hypervisorin nimi (kvm, qemu, xen, ...)"
+
+#: ../virtinst/virtinstall.py:950
+msgid "The CPU architecture to simulate"
+msgstr "Simuloitava suoritinarkkitehtuuri"
+
+#: ../virtinst/virtinstall.py:951
+msgid "The machine type to emulate"
+msgstr "Emuloitavan koneen tyyppi"
+
+#: ../virtinst/virtinstall.py:962
+msgid "Have domain autostart on host boot up."
+msgstr ""
+"Aseta domain käynnistymään automaattisesti isäntäjärjestelmän käynnistyessä."
+
+#: ../virtinst/virtinstall.py:964
+msgid "Create a transient domain."
+msgstr "Luo transientti domain."
+
+#: ../virtinst/virtinstall.py:966
+msgid "Force power off the domain when the console viewer is closed."
+msgstr ""
+
+#: ../virtinst/virtinstall.py:969
+msgid "Minutes to wait for install to complete."
+msgstr ""
+
+#: ../virtinst/virtxml.py:36
+msgid "Please enter 'yes' or 'no'."
+msgstr ""
+
+#: ../virtinst/virtxml.py:84
+#, python-format
+msgid "Invalid --edit option '%s'"
+msgstr "Virheellinen --edit-valinta '%s'"
+
+#: ../virtinst/virtxml.py:87
+#, python-format
+msgid "No --%s objects found in the XML"
+msgstr ""
+
+#: ../virtinst/virtxml.py:90
+#, python-format
+msgid "--edit %s requested but there's only %s --%s object in the XML"
+msgstr ""
+
+#: ../virtinst/virtxml.py:107
+#, python-format
+msgid "No matching objects found for --%s %s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:123
+#, python-format
+msgid "One of %s must be specified."
+msgstr ""
+
+#: ../virtinst/virtxml.py:126
+#, python-format
+msgid "Conflicting options %s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:137
+msgid "No change specified."
+msgstr ""
+
+#: ../virtinst/virtxml.py:139
+#, python-format
+msgid "Only one change operation may be specified (conflicting options %s)"
+msgstr ""
+
+#: ../virtinst/virtxml.py:152
+#, python-format
+msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
+msgstr ""
+
+#: ../virtinst/virtxml.py:156
+msgid "--os-variant is not supported with --edit"
+msgstr ""
+
+#: ../virtinst/virtxml.py:163
+#, python-format
+msgid "Cannot use --add-device with --%s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:174
+#, python-format
+msgid "Cannot use --remove-device with --%s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:177
+msgid "--os-variant is not supported with --remove-device"
+msgstr ""
+
+#: ../virtinst/virtxml.py:190
+#, python-format
+msgid "--build-xml not supported for --%s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:193
+msgid "--os-variant is not supported with --build-xml"
+msgstr ""
+
+#: ../virtinst/virtxml.py:219
+#, python-format
+msgid "Define '%s' with the changed XML?"
+msgstr ""
+
+#: ../virtinst/virtxml.py:227
+#, python-format
+msgid "Domain '%s' defined successfully."
+msgstr ""
+
+#: ../virtinst/virtxml.py:234
+#, python-format
+msgid "Start '%s' with the changed XML?"
+msgstr ""
+
+#. pragma: no cover
+#: ../virtinst/virtxml.py:244 ../virtinst/virtxml.py:504
+#, python-format
+msgid "Failed starting domain '%s': %s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:246 ../virtinst/virtxml.py:506
+#, python-format
+msgid "Domain '%s' started successfully."
+msgstr ""
+
+#: ../virtinst/virtxml.py:278
+#, python-format
+msgid "Error attempting device %s: %s"
+msgstr ""
+
+#. Test driver doesn't support device hotplug so we can't reach this
+#: ../virtinst/virtxml.py:281
+#, python-format
+msgid "Device %s successful."
+msgstr ""
+
+#: ../virtinst/virtxml.py:305
+msgid "No XML diff was generated. The requested changes will have no effect."
+msgstr ""
+
+#: ../virtinst/virtxml.py:324
+msgid "Edit libvirt XML using command line options."
+msgstr ""
+
+#: ../virtinst/virtxml.py:330
+msgid "Domain name, id, or uuid"
+msgstr "Domainin nimi, id tai uuid"
+
+#: ../virtinst/virtxml.py:332
+msgid "XML actions"
+msgstr "XML-toiminnot"
+
+#: ../virtinst/virtxml.py:334
+msgid ""
+"Edit VM XML. Examples:\n"
+"--edit --disk ...     (edit first disk device)\n"
+"--edit 2 --disk ...   (edit second disk device)\n"
+"--edit all --disk ... (edit all disk devices)\n"
+"--edit target=hda --disk ... (edit disk 'hda')\n"
+msgstr ""
+
+#: ../virtinst/virtxml.py:340
+msgid ""
+"Remove specified device. Examples:\n"
+"--remove-device --disk 1 (remove first disk)\n"
+"--remove-device --disk all (remove all disks)\n"
+"--remove-device --disk /some/path"
+msgstr ""
+
+#: ../virtinst/virtxml.py:345
+msgid ""
+"Add specified device. Example:\n"
+"--add-device --disk ..."
+msgstr ""
+"Lisää määritetty laite. Esimerkki:\n"
+"--add-device --disk ..."
+
+#: ../virtinst/virtxml.py:348
+msgid ""
+"Output built device XML. Domain is optional but recommended to ensure "
+"optimal defaults."
+msgstr ""
+
+#: ../virtinst/virtxml.py:351
+msgid "Output options"
+msgstr ""
+
+#: ../virtinst/virtxml.py:353
+msgid ""
+"Apply changes to the running VM.\n"
+"With --add-device, this is a hotplug operation.\n"
+"With --remove-device, this is a hotunplug operation.\n"
+"With --edit, this is an update device operation."
+msgstr ""
+
+#: ../virtinst/virtxml.py:359
+msgid ""
+"Force defining the domain. Only required if a --print option was specified."
+msgstr ""
+
+#: ../virtinst/virtxml.py:362
+msgid "Force not defining the domain."
+msgstr ""
+
+#: ../virtinst/virtxml.py:365
+msgid "Start the domain."
+msgstr ""
+
+#: ../virtinst/virtxml.py:367
+msgid "Only print the requested change, in diff format"
+msgstr "Tulosta vain pyydetty muutos diff-muodossa"
+
+#: ../virtinst/virtxml.py:369
+msgid "Only print the requested change, in full XML format"
+msgstr "Tulosta vain pyydetty muutos täydessä XML-muodossa"
+
+#: ../virtinst/virtxml.py:371
+msgid "Require confirmation before saving any results."
+msgstr "Vaadi vahvistus ennen minkään tuloksen tallennusta."
+
+#: ../virtinst/virtxml.py:375
+msgid "XML options"
+msgstr "XML-valinnat"
+
+#: ../virtinst/virtxml.py:414
+msgid "Can't use --confirm with stdin input."
+msgstr ""
+
+#: ../virtinst/virtxml.py:416
+msgid "Can't use --update with stdin input."
+msgstr ""
+
+#: ../virtinst/virtxml.py:419
+msgid "A domain must be specified"
+msgstr "Domain tulee määrittää"
+
+#: ../virtinst/virtxml.py:447
+#, python-format
+msgid "Don't know how to --update for --%s"
+msgstr ""
+
+#: ../virtinst/virtxml.py:472
+msgid "Cannot mix --update and --start"
+msgstr ""
+
+#: ../virtinst/virtxml.py:480
+msgid "The VM is not running, --update is inapplicable."
+msgstr ""
+
+#: ../virtinst/virtxml.py:511
+msgid "Changes will take effect after the domain is fully powered off."
+msgstr ""
+
+#: ../virtinst/virtxml.py:513
+msgid ""
+"XML did not change after domain define. You may have changed a value that "
+"libvirt is setting by default."
+msgstr ""
+
+#: ../virtinst/virtxml.py:526
+msgid "Aborted at user request"
+msgstr "Lopetettu käyttäjän pyynnöstä"
 
 #: ../virtinst/xmlapi.py:190
 #, python-format
@@ -4639,7 +4581,7 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "Graafinen konsoliyhteys virtuaalikoneeseen"
 
 #: ../ui/about.ui.h:1
-msgid "Copyright (C) 2006-2019 Red Hat Inc."
+msgid "Copyright (C) 2006-2020 Red Hat Inc."
 msgstr ""
 
 #: ../ui/about.ui.h:2
@@ -4666,115 +4608,107 @@ msgstr "_Laitetyyppi:"
 msgid "_Bus type:"
 msgstr "_Väylätyyppi:"
 
-#: ../ui/addhardware.ui.h:4 ../ui/details.ui.h:82
+#: ../ui/addhardware.ui.h:4 ../ui/details.ui.h:68
 msgid "Cac_he mode:"
 msgstr "Cac_he-tila:"
 
-#: ../ui/addhardware.ui.h:5 ../ui/details.ui.h:83
-msgid "_IO mode:"
-msgstr "_IO-tila:"
-
-#: ../ui/addhardware.ui.h:6 ../ui/details.ui.h:84
+#: ../ui/addhardware.ui.h:5 ../ui/details.ui.h:69
 msgid "Discard mod_e:"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:7 ../ui/details.ui.h:85
+#: ../ui/addhardware.ui.h:6 ../ui/details.ui.h:70
 msgid "Detect _zeroes:"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:8 ../ui/details.ui.h:81
-msgid "Persistent _Reservations:"
-msgstr ""
-
-#: ../ui/addhardware.ui.h:9
+#: ../ui/addhardware.ui.h:7
 msgid "<b>Ad_vanced options</b>"
 msgstr "<b>Lis_ävalinnat</b>"
 
-#: ../ui/addhardware.ui.h:10 ../ui/createpool.ui.h:11 ../ui/fsdetails.ui.h:4
-#: ../ui/gfxdetails.ui.h:2 ../ui/netlist.ui.h:10
+#: ../ui/addhardware.ui.h:8 ../ui/createpool.ui.h:11 ../ui/fsdetails.ui.h:4
+#: ../ui/gfxdetails.ui.h:2
 msgid "_Type:"
 msgstr "T_yyppi:"
 
-#: ../ui/addhardware.ui.h:11
+#: ../ui/addhardware.ui.h:9
 msgid "_Model:"
 msgstr "_Malli:"
 
-#: ../ui/addhardware.ui.h:12
+#: ../ui/addhardware.ui.h:10
 msgid "ctrl"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:13
+#: ../ui/addhardware.ui.h:11
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
-#: ../ui/addhardware.ui.h:14
+#: ../ui/addhardware.ui.h:12
 msgid "_MAC address:"
 msgstr "_MAC-osoite:"
 
-#: ../ui/addhardware.ui.h:15 ../ui/details.ui.h:89
+#: ../ui/addhardware.ui.h:13 ../ui/details.ui.h:73
 msgid "Device mode_l:"
 msgstr "Lai_tteen malli:"
 
-#: ../ui/addhardware.ui.h:16
+#: ../ui/addhardware.ui.h:14
 msgid "Host _Device:"
 msgstr "I_säntälaite:"
 
-#: ../ui/addhardware.ui.h:17
+#: ../ui/addhardware.ui.h:15
 msgid "_Path:"
 msgstr "Po_lku:"
 
-#: ../ui/addhardware.ui.h:18
+#: ../ui/addhardware.ui.h:16
 msgid "Device _Type:"
 msgstr "Laitteen t_yyppi:"
 
-#: ../ui/addhardware.ui.h:19
+#: ../ui/addhardware.ui.h:17
 msgid "T_ype:"
 msgstr "Tyy_ppi:"
 
-#: ../ui/addhardware.ui.h:20 ../ui/createnet.ui.h:6 ../ui/createpool.ui.h:10
-#: ../ui/createvol.ui.h:4 ../ui/details.ui.h:4 ../ui/host.ui.h:5
-#: ../ui/snapshotsnew.ui.h:3
+#: ../ui/addhardware.ui.h:18 ../ui/clone.ui.h:9 ../ui/createnet.ui.h:6
+#: ../ui/createpool.ui.h:10 ../ui/createvm.ui.h:68 ../ui/createvol.ui.h:4
+#: ../ui/details.ui.h:4 ../ui/host.ui.h:5 ../ui/snapshotsnew.ui.h:3
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: ../ui/addhardware.ui.h:21
+#: ../ui/addhardware.ui.h:19
 msgid "_Auto socket:"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:22
+#: ../ui/addhardware.ui.h:20
 msgid "_Channel:"
 msgstr "_Kanava:"
 
-#: ../ui/addhardware.ui.h:23 ../ui/details.ui.h:113
+#: ../ui/addhardware.ui.h:21 ../ui/details.ui.h:97
 msgid "Ac_tion:"
 msgstr "T_oiminto:"
 
-#: ../ui/addhardware.ui.h:24 ../ui/createnet.ui.h:3
+#: ../ui/addhardware.ui.h:22 ../ui/createnet.ui.h:3
 msgid "_Mode:"
 msgstr "T_ila:"
 
-#: ../ui/addhardware.ui.h:25
+#: ../ui/addhardware.ui.h:23
 msgid "Device _Path:"
 msgstr "L_aitteen polku:"
 
-#: ../ui/addhardware.ui.h:26
+#: ../ui/addhardware.ui.h:24
 msgid "_Backend:"
 msgstr "_Taustaosa:"
 
-#: ../ui/addhardware.ui.h:27
+#: ../ui/addhardware.ui.h:25
 msgid "_Version:"
 msgstr "_Versio:"
 
-#: ../ui/addhardware.ui.h:28 ../ui/details.ui.h:127
+#: ../ui/addhardware.ui.h:26 ../ui/details.ui.h:111
 msgid "rng"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:29 ../ui/details.ui.h:131
+#: ../ui/addhardware.ui.h:27 ../ui/details.ui.h:115
 msgid "panic"
 msgstr ""
 
-#: ../ui/addhardware.ui.h:30 ../ui/createnet.ui.h:19 ../ui/createpool.ui.h:12
-#: ../ui/createvm.ui.h:77 ../ui/createvol.ui.h:15 ../ui/snapshotsnew.ui.h:7
+#: ../ui/addhardware.ui.h:28 ../ui/createnet.ui.h:20 ../ui/createpool.ui.h:12
+#: ../ui/createvm.ui.h:76 ../ui/createvol.ui.h:15 ../ui/snapshotsnew.ui.h:7
 msgid "_Finish"
 msgstr "_Valmis"
 
@@ -4815,8 +4749,8 @@ msgid "Clone Virtual Machine"
 msgstr "Kloonaa virtuaalikone"
 
 #: ../ui/clone.ui.h:2
-msgid "<span size='large' color='white'>Clone virtual machine</span>"
-msgstr "<span size='large' color='white'>Kloonaa virtuaalikone</span>"
+msgid "<span size='large'>Clone virtual machine</span>"
+msgstr ""
 
 #: ../ui/clone.ui.h:3
 msgid "Create clone based on:"
@@ -4831,20 +4765,16 @@ msgid "No networking devices"
 msgstr "Ei verkkolaitteita"
 
 #: ../ui/clone.ui.h:6
-msgid "<span color='#484848'>Networking:</span>"
-msgstr "<span color='#484848'>Verkko:</span>"
+msgid "Networking:"
+msgstr ""
 
 #: ../ui/clone.ui.h:7
 msgid "No storage to clone"
 msgstr "Ei kloonattavaa tallennustilaa"
 
-#: ../ui/clone.ui.h:8 ../ui/createvm.ui.h:73
-msgid "<span color='#484848'>Storage:</span>"
-msgstr "<span color='#484848'>Tallennustila:</span>"
-
-#: ../ui/clone.ui.h:9 ../ui/createvm.ui.h:69
-msgid "<span color='#484848'>_Name:</span>"
-msgstr "<span color='#484848'>_Nimi:</span>"
+#: ../ui/clone.ui.h:8 ../ui/createvm.ui.h:72
+msgid "Storage:"
+msgstr ""
 
 #: ../ui/clone.ui.h:10
 msgid ""
@@ -4882,37 +4812,37 @@ msgstr "Vaihda MAC-osoite"
 msgid "New _MAC:"
 msgstr "Uusi _MAC:"
 
-#: ../ui/clone.ui.h:17
-msgid "<span color='#484848'>Type:</span>"
-msgstr "<span color='#484848'>Tyyppi:</span>"
+#: ../ui/clone.ui.h:17 ../ui/details.ui.h:80
+msgid "Type:"
+msgstr "Tyyppi:"
 
 #: ../ui/clone.ui.h:18
-msgid "<span color='#484848'>MAC:</span>"
-msgstr "<span color='#484848'>MAC:</span>"
+msgid "MAC:"
+msgstr "MAC:"
 
 #: ../ui/clone.ui.h:19
 msgid "Change storage path"
 msgstr "Muuta tallennustilapolku"
 
-#: ../ui/clone.ui.h:20
-msgid "<span color='#484848'>Size:</span>"
-msgstr "<span color='#484848'>Koko:</span>"
+#: ../ui/clone.ui.h:20 ../ui/hoststorage.ui.h:16
+msgid "Size:"
+msgstr "Koko:"
 
 #: ../ui/clone.ui.h:21
-msgid "<span color='#484848'>Target:</span>"
-msgstr "<span color='#484848'>Kohde:</span>"
+msgid "Target:"
+msgstr ""
 
-#: ../ui/clone.ui.h:22
-msgid "<span color='#484848'>Path:</span>"
-msgstr "<span color='#484848'>Polku:</span>"
+#: ../ui/clone.ui.h:22 ../ui/createvol.ui.h:12 ../ui/details.ui.h:106
+msgid "Path:"
+msgstr "Polku:"
 
 #: ../ui/clone.ui.h:23
 msgid "Existing disk"
 msgstr "Olemassa oleva levy"
 
 #: ../ui/clone.ui.h:24
-msgid "<span color='#484848'>New _Path:</span>"
-msgstr "<span color='#484848'>Uusi _polku:</span>"
+msgid "New _Path:"
+msgstr ""
 
 #: ../ui/clone.ui.h:25
 msgid "Create a new disk (c_lone) for the virtual machine"
@@ -4971,8 +4901,8 @@ msgid "Create a new virtual network"
 msgstr "Luo uusi virtuaaliverkko"
 
 #: ../ui/createnet.ui.h:2
-msgid "<span size='large' color='white'>Create virtual network</span>"
-msgstr "<span size='large' color='white'>Luo virtuaaliverkko</span>"
+msgid "<span size='large'>Create virtual network</span>"
+msgstr ""
 
 #: ../ui/createnet.ui.h:4
 msgid "Fo_rward to:"
@@ -4983,50 +4913,54 @@ msgid "Device _List:"
 msgstr ""
 
 #: ../ui/createnet.ui.h:7
-msgid "_Enable IPv4"
+msgid "De_vice:"
 msgstr ""
 
 #: ../ui/createnet.ui.h:8
+msgid "_Enable IPv4"
+msgstr ""
+
+#: ../ui/createnet.ui.h:9
 msgid "_Network:"
 msgstr "_Verkko:"
 
-#: ../ui/createnet.ui.h:9
+#: ../ui/createnet.ui.h:10
 msgid "Start:"
 msgstr ""
 
-#: ../ui/createnet.ui.h:10
+#: ../ui/createnet.ui.h:11
 msgid "End:"
 msgstr ""
 
-#: ../ui/createnet.ui.h:11
+#: ../ui/createnet.ui.h:12
 msgid "Enable DHCPv4"
 msgstr "Käytä DHCPv4:ää"
 
-#: ../ui/createnet.ui.h:12 ../ui/hostnets.ui.h:11
+#: ../ui/createnet.ui.h:13 ../ui/hostnets.ui.h:11
 msgid "<b>IPv_4 configuration</b>"
 msgstr ""
 
-#: ../ui/createnet.ui.h:13
+#: ../ui/createnet.ui.h:14
 msgid "_Enable IPv6"
 msgstr ""
 
-#: ../ui/createnet.ui.h:14
+#: ../ui/createnet.ui.h:15
 msgid "Enable DHCPv6"
 msgstr "Käytä DHCPv6:tta"
 
-#: ../ui/createnet.ui.h:15 ../ui/hostnets.ui.h:13
+#: ../ui/createnet.ui.h:16 ../ui/hostnets.ui.h:13
 msgid "<b>IPv_6 configuration</b>"
 msgstr ""
 
-#: ../ui/createnet.ui.h:16
+#: ../ui/createnet.ui.h:17
 msgid "Use net_work name"
 msgstr ""
 
-#: ../ui/createnet.ui.h:17
+#: ../ui/createnet.ui.h:18
 msgid "Cust_om"
 msgstr ""
 
-#: ../ui/createnet.ui.h:18
+#: ../ui/createnet.ui.h:19
 msgid "<b>DNS domain name</b>"
 msgstr ""
 
@@ -5035,8 +4969,8 @@ msgid "Add a New Storage Pool"
 msgstr "Lisää uusi tallennustilavaranto"
 
 #: ../ui/createpool.ui.h:2
-msgid "<span size='large' color='white'>Create storage pool</span>"
-msgstr "<span size='large' color='white'>Luo tallennustilavaranto</span>"
+msgid "<span size='large'>Create storage pool</span>"
+msgstr ""
 
 #: ../ui/createpool.ui.h:3
 msgid "B_uild Pool:"
@@ -5071,8 +5005,8 @@ msgid "New VM"
 msgstr "Uusi virtuaalikone"
 
 #: ../ui/createvm.ui.h:2
-msgid "<span size='large' color='white'>Create a new virtual machine</span>"
-msgstr "<span size='large' color='white'>Luo uusi virtuaalikone</span>"
+msgid "<span size='large'>Create a new virtual machine</span>"
+msgstr ""
 
 #: ../ui/createvm.ui.h:3
 msgid "Choose virtualization type"
@@ -5099,12 +5033,12 @@ msgid "Network _Install (HTTP, HTTPS, or FTP)"
 msgstr ""
 
 #: ../ui/createvm.ui.h:9
-msgid "Network _Boot (PXE)"
-msgstr "Käynnistys verkosta (P_XE)"
-
-#: ../ui/createvm.ui.h:10
 msgid "Import _existing disk image"
 msgstr "Tuo olemas_sa oleva levykuva"
+
+#: ../ui/createvm.ui.h:10
+msgid "Ma_nual install"
+msgstr ""
 
 #: ../ui/createvm.ui.h:11
 msgid "Choose the container type"
@@ -5163,58 +5097,48 @@ msgid "Kerne_l options:"
 msgstr "_Kernel-valinnat:"
 
 #: ../ui/createvm.ui.h:26
+msgid "install-urlopts-entry"
+msgstr ""
+
+#: ../ui/createvm.ui.h:27
 msgid "URL _Options"
 msgstr "Osoi_tteen valinnat"
 
-#: ../ui/createvm.ui.h:27
+#: ../ui/createvm.ui.h:28
+msgid "install-urlopts-expander"
+msgstr ""
+
+#: ../ui/createvm.ui.h:29
 msgid "URL"
 msgstr "Osoite"
 
-#: ../ui/createvm.ui.h:28
+#: ../ui/createvm.ui.h:30
 msgid "PXE"
 msgstr "PXE"
 
-#: ../ui/createvm.ui.h:29
+#: ../ui/createvm.ui.h:31
 msgid "Provide the existing stora_ge path:"
 msgstr "Anna olemassa olevan talle_nnustilan polku:"
 
-#: ../ui/createvm.ui.h:30
+#: ../ui/createvm.ui.h:32
 msgid "B_rowse..."
 msgstr "Se_laa..."
 
-#: ../ui/createvm.ui.h:31
-msgid "_Kernel path:"
-msgstr "_Kernel-polku:"
-
-#: ../ui/createvm.ui.h:32 ../ui/details.ui.h:62
-msgid "_Initrd path:"
-msgstr "_Initrd-polku:"
-
 #: ../ui/createvm.ui.h:33
-msgid "_DTB path:"
-msgstr "_DTB-polku:"
-
-#: ../ui/createvm.ui.h:34
-msgid "Br_owse..."
-msgstr "S_elaa..."
-
-#: ../ui/createvm.ui.h:35
-msgid "Brow_se..."
-msgstr "Se_laa..."
-
-#: ../ui/createvm.ui.h:36
-msgid "Kerne_l args:"
+msgid ""
+"<small>Kernel/initrd settings can be configured with 'Customize before "
+"install' on the final page.</small>"
 msgstr ""
 
-#: ../ui/createvm.ui.h:37
+#: ../ui/createvm.ui.h:34
 msgid "Provide the _application path:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:38
+#: ../ui/createvm.ui.h:35
 msgid "Provide the existing OS root _directory:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:39
+#: ../ui/createvm.ui.h:36
 msgid ""
 "<small>The OS directory tree must already exist. To enable OS directory tree "
 "creation,\n"
@@ -5222,22 +5146,22 @@ msgid ""
 "\">virt-bootstrap</a></small>"
 msgstr ""
 
-#: ../ui/createvm.ui.h:41
+#: ../ui/createvm.ui.h:38
 msgid ""
 "<small>The OS directory tree must already exist. Creating an OS directory "
 "tree for remote\n"
 "connections is not yet supported.</small>"
 msgstr ""
 
-#: ../ui/createvm.ui.h:43
+#: ../ui/createvm.ui.h:40
 msgid "Create OS directory tree from container image"
 msgstr ""
 
-#: ../ui/createvm.ui.h:44
+#: ../ui/createvm.ui.h:41
 msgid "Source URI:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:45
+#: ../ui/createvm.ui.h:42
 msgid ""
 "Possible URL formats:\n"
 " * file:///path/to/rootfs.tar\n"
@@ -5245,95 +5169,103 @@ msgid ""
 " * virt-builder://template\n"
 msgstr ""
 
-#: ../ui/createvm.ui.h:50
+#: ../ui/createvm.ui.h:47
+msgid "install-oscontainer-source-uri"
+msgstr ""
+
+#: ../ui/createvm.ui.h:48
 msgid "Do not verify TLS certificates of registry"
 msgstr ""
 
-#: ../ui/createvm.ui.h:51
+#: ../ui/createvm.ui.h:49
 msgid "Username:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:52
+#: ../ui/createvm.ui.h:50
 msgid "Password:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:53
+#: ../ui/createvm.ui.h:51
 msgid "Credentials for accessing the source registry"
 msgstr ""
 
-#: ../ui/createvm.ui.h:54
+#: ../ui/createvm.ui.h:52
 msgid "Root password:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:55
+#: ../ui/createvm.ui.h:53
+msgid "install-oscontainer-root-passwd"
+msgstr ""
+
+#: ../ui/createvm.ui.h:54
 msgid "Select _container template:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:56
+#: ../ui/createvm.ui.h:55
 msgid "VZ templates"
 msgstr ""
 
-#: ../ui/createvm.ui.h:57
+#: ../ui/createvm.ui.h:56
 msgid "C_hoose the operating system you are installing:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:58
+#: ../ui/createvm.ui.h:57
 msgid "A_utomatically detect from the installation media / source"
 msgstr ""
 
-#: ../ui/createvm.ui.h:59
+#: ../ui/createvm.ui.h:58
 msgid "Install"
 msgstr "Asenna"
 
-#: ../ui/createvm.ui.h:60
+#: ../ui/createvm.ui.h:59
 msgid "Choose Memory and CPU settings:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:61
+#: ../ui/createvm.ui.h:60
 msgid "_Memory:"
 msgstr ""
 
-#: ../ui/createvm.ui.h:62
+#: ../ui/createvm.ui.h:61
 msgid "C_PUs:"
 msgstr "Suo_rittimet:"
 
-#: ../ui/createvm.ui.h:63
+#: ../ui/createvm.ui.h:62
 msgid "(Insert host mem)"
 msgstr ""
 
-#: ../ui/createvm.ui.h:65
+#: ../ui/createvm.ui.h:64
 msgid "_Enable storage for this virtual machine"
 msgstr "_Ota käyttöön tallennustila tälle virtuaalikoneelle"
 
-#: ../ui/createvm.ui.h:67
+#: ../ui/createvm.ui.h:66
 msgid "Ready to begin the installation"
 msgstr "Valmiina asennukseen"
 
-#: ../ui/createvm.ui.h:68
+#: ../ui/createvm.ui.h:67
 msgid "C_ustomize configuration before install"
 msgstr "_Mukauta määrityksiä ennen asennusta"
 
+#: ../ui/createvm.ui.h:69
+msgid "Install:"
+msgstr ""
+
 #: ../ui/createvm.ui.h:70
-msgid "<span color='#484848'>Install:</span>"
-msgstr "<span color='#484848'>Asenna:</span>"
+msgid "Memory:"
+msgstr "Muisti:"
 
 #: ../ui/createvm.ui.h:71
-msgid "<span color='#484848'>Memory:</span>"
-msgstr "<span color='#484848'>Muisti:</span>"
+msgid "CPUs:"
+msgstr ""
 
-#: ../ui/createvm.ui.h:72
-msgid "<span color='#484848'>CPUs:</span>"
-msgstr "<span color='#484848'>Suorittimet:</span>"
+#: ../ui/createvm.ui.h:73
+msgid "OS:"
+msgstr ""
 
 #: ../ui/createvm.ui.h:74
-msgid "<span color='#484848'>OS:</span>"
-msgstr "<span color='#484848'>Käyttöjärjestelmä:</span>"
-
-#: ../ui/createvm.ui.h:75
 msgid "N_etwork selection"
 msgstr "Ver_kon valinta"
 
-#: ../ui/createvm.ui.h:76
+#: ../ui/createvm.ui.h:75
 msgid "Finish"
 msgstr "Valmis"
 
@@ -5342,8 +5274,8 @@ msgid "Add a Storage Volume"
 msgstr "Lisää tallennustaltio"
 
 #: ../ui/createvol.ui.h:2
-msgid "<span size='large' color='white'>Create storage volume</span>"
-msgstr "<span size='large' color='white'>Luo tallennustaltio</span>"
+msgid "<span size='large'>Create storage volume</span>"
+msgstr ""
 
 #: ../ui/createvol.ui.h:3
 msgid "Create a storage unit to be used directly by a virtual machine."
@@ -5373,10 +5305,6 @@ msgstr "En_immäiskapasiteetti:"
 msgid "_Allocation:"
 msgstr "_Varaus:"
 
-#: ../ui/createvol.ui.h:12 ../ui/details.ui.h:122
-msgid "Path:"
-msgstr "Polku:"
-
 #: ../ui/createvol.ui.h:13
 msgid "Browse..."
 msgstr "Selaa..."
@@ -5384,10 +5312,6 @@ msgstr "Selaa..."
 #: ../ui/createvol.ui.h:14
 msgid "Backing store"
 msgstr ""
-
-#: ../ui/delete.ui.h:1
-msgid "Delete Virtual Machine"
-msgstr "Poista virtuaalikone"
 
 #: ../ui/delete.ui.h:2
 msgid ""
@@ -5458,422 +5382,368 @@ msgid "<b>Hypervisor Details</b>"
 msgstr "<b>Hypervisorin tiedot</b>"
 
 #: ../ui/details.ui.h:16
-msgid "Enable User Namespace"
-msgstr ""
-
-#: ../ui/details.ui.h:17
-msgid "User ID: "
-msgstr ""
-
-#: ../ui/details.ui.h:18
-msgid "  Group ID: "
-msgstr ""
-
-#: ../ui/details.ui.h:19
-msgid "Start"
-msgstr ""
-
-#: ../ui/details.ui.h:21
-msgid "Count"
-msgstr ""
-
-#: ../ui/details.ui.h:22
-msgid "1000"
-msgstr ""
-
-#: ../ui/details.ui.h:23
-msgid "10"
-msgstr ""
-
-#: ../ui/details.ui.h:24 ../ui/migrate.ui.h:7
-msgid "0"
-msgstr ""
-
-#: ../ui/details.ui.h:25
-msgid "<b>User Namespace</b>"
-msgstr ""
-
-#: ../ui/details.ui.h:26
 msgid "<b>Operating Sys_tem</b>"
 msgstr ""
 
-#: ../ui/details.ui.h:27
+#: ../ui/details.ui.h:17
 msgid "<b>Applications</b>"
 msgstr "<b>Sovellukset</b>"
 
-#: ../ui/details.ui.h:28
+#: ../ui/details.ui.h:18
 msgid "Refresh"
 msgstr ""
 
-#: ../ui/details.ui.h:29 ../ui/host.ui.h:8
+#: ../ui/details.ui.h:19 ../ui/host.ui.h:8
 msgid "<b>CPU usage</b>"
 msgstr "<b>Suoritinkäyttö</b>"
 
-#: ../ui/details.ui.h:30 ../ui/host.ui.h:9
+#: ../ui/details.ui.h:20 ../ui/host.ui.h:9
 msgid "<b>Memory usage</b>"
 msgstr "<b>Muistin käyttö</b>"
 
-#: ../ui/details.ui.h:31
+#: ../ui/details.ui.h:21
 msgid "0 KiBytes/s 0 KiBytes/s"
 msgstr ""
 
-#: ../ui/details.ui.h:32
+#: ../ui/details.ui.h:22
 msgid "<b>Disk I/O</b>"
 msgstr "<b>Levyn I/O</b>"
 
-#: ../ui/details.ui.h:33
+#: ../ui/details.ui.h:23
 msgid "<b>Network I/O</b>"
 msgstr "<b>Verkon I/O</b>"
 
-#: ../ui/details.ui.h:34
+#: ../ui/details.ui.h:24
 msgid "Logical host CPUs:"
 msgstr "Loogisen isännän suorittimet:"
 
+#: ../ui/details.ui.h:25
+msgid "VCPU a_llocation:"
+msgstr ""
+
+#: ../ui/details.ui.h:26
+msgid "2"
+msgstr ""
+
+#: ../ui/details.ui.h:27
+msgid "<small>Overcommitting vCPUs can hurt performance</small>"
+msgstr ""
+
+#: ../ui/details.ui.h:28
+msgid "<b>CPUs</b>"
+msgstr "<b>Suorittimet</b>"
+
+#: ../ui/details.ui.h:29
+msgid "M_odel:"
+msgstr "_Malli:"
+
+#: ../ui/details.ui.h:30
+msgid "Copy host CP_U configuration"
+msgstr "Kopioi isäntäkoneen suoritinmäärit_ykset"
+
+#: ../ui/details.ui.h:31
+msgid "Enable available CPU security flaw mitigations"
+msgstr ""
+
+#: ../ui/details.ui.h:32
+msgid "<b>Configu_ration</b>"
+msgstr "<b>M_ääritykset</b>"
+
+#: ../ui/details.ui.h:33
+msgid "Manuall_y set CPU topology"
+msgstr "Aseta suoritintopologia _manuaalisesti"
+
+#: ../ui/details.ui.h:34
+msgid "Thread_s:"
+msgstr "S_äikeet:"
+
 #: ../ui/details.ui.h:35
-msgid "Ma_ximum allocation:"
-msgstr "S_uurin varaus:"
+msgid "Cor_es:"
+msgstr "_Ytimet:"
 
 #: ../ui/details.ui.h:36
-msgid "Current a_llocation:"
-msgstr "Nykyinen _varaus:"
+msgid "Socke_ts:"
+msgstr "P_istokkeet:"
 
 #: ../ui/details.ui.h:37
 msgid "1"
 msgstr ""
 
 #: ../ui/details.ui.h:38
-msgid "2"
-msgstr ""
-
-#: ../ui/details.ui.h:39
-msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr ""
-
-#: ../ui/details.ui.h:40
-msgid "<b>CPUs</b>"
-msgstr "<b>Suorittimet</b>"
-
-#: ../ui/details.ui.h:41
-msgid "M_odel:"
-msgstr "_Malli:"
-
-#: ../ui/details.ui.h:42
-msgid "Copy host CP_U configuration"
-msgstr "Kopioi isäntäkoneen suoritinmäärit_ykset"
-
-#: ../ui/details.ui.h:43
-msgid "Enable available CPU security flaw mitigations"
-msgstr ""
-
-#: ../ui/details.ui.h:44
-msgid "<b>Configu_ration</b>"
-msgstr "<b>M_ääritykset</b>"
-
-#: ../ui/details.ui.h:45
-msgid "Manuall_y set CPU topology"
-msgstr "Aseta suoritintopologia _manuaalisesti"
-
-#: ../ui/details.ui.h:46
-msgid "Thread_s:"
-msgstr "S_äikeet:"
-
-#: ../ui/details.ui.h:47
-msgid "Cor_es:"
-msgstr "_Ytimet:"
-
-#: ../ui/details.ui.h:48
-msgid "Socke_ts:"
-msgstr "P_istokkeet:"
-
-#: ../ui/details.ui.h:49
 msgid "<small>Selected CPU model does not support Hyper-Threading</small>"
 msgstr ""
 "<small>Valittu suoritinmalli ei tue Hyper-Threading-ominaisuutta</small>"
 
-#: ../ui/details.ui.h:50
+#: ../ui/details.ui.h:39
 msgid "<b>To_pology</b>"
 msgstr "<b>Topolo_gia</b>"
 
-#: ../ui/details.ui.h:51
+#: ../ui/details.ui.h:40
+msgid "Memory a_llocation:"
+msgstr ""
+
+#: ../ui/details.ui.h:41
 msgid "Total host memory:"
 msgstr "Isäntäkoneen muisti yhteensä:"
 
-#: ../ui/details.ui.h:52
+#: ../ui/details.ui.h:42
 msgid "50"
 msgstr ""
 
-#: ../ui/details.ui.h:53 ../ui/fsdetails.ui.h:9
+#: ../ui/details.ui.h:43 ../ui/fsdetails.ui.h:9
 msgid "MiB"
 msgstr "MiB"
 
-#: ../ui/details.ui.h:54
+#: ../ui/details.ui.h:44
 msgid "<b>Memory</b>"
 msgstr "<b>Muisti</b>"
 
-#: ../ui/details.ui.h:55
+#: ../ui/details.ui.h:45
 msgid "Start virt_ual machine on host boot up"
 msgstr "Käy_nnistä virtuaalikone isäntäkoneen käynnistyessä"
 
-#: ../ui/details.ui.h:56
+#: ../ui/details.ui.h:46
 msgid "<b>Autostart</b>"
 msgstr "<b>Automaattinen käynnistys</b>"
 
-#: ../ui/details.ui.h:57
+#: ../ui/details.ui.h:47
 msgid "Init _path:"
 msgstr "Init-_polku:"
 
-#: ../ui/details.ui.h:58
+#: ../ui/details.ui.h:48
 msgid "Init ar_gs:"
 msgstr ""
 
-#: ../ui/details.ui.h:59
+#: ../ui/details.ui.h:49
 msgid "<b>Container init</b>"
 msgstr ""
 
-#: ../ui/details.ui.h:60
+#: ../ui/details.ui.h:50
 msgid "Ena_ble direct kernel boot"
 msgstr "Käy_tä suoraa kernel-käynnistystä"
 
-#: ../ui/details.ui.h:61
+#: ../ui/details.ui.h:51
 msgid "Ke_rnel path:"
 msgstr "Ke_rnel-polku:"
 
-#: ../ui/details.ui.h:63
+#: ../ui/details.ui.h:52
+msgid "_Initrd path:"
+msgstr "_Initrd-polku:"
+
+#: ../ui/details.ui.h:53
 msgid "Browse"
 msgstr "Selaa"
 
-#: ../ui/details.ui.h:64
+#: ../ui/details.ui.h:54
 msgid "Kernel ar_gs:"
 msgstr ""
 
-#: ../ui/details.ui.h:65
+#: ../ui/details.ui.h:55
 msgid "D_TB path:"
 msgstr "D_TB-polku:"
 
-#: ../ui/details.ui.h:66
+#: ../ui/details.ui.h:56
 msgid "<b>Dir_ect kernel boot</b>"
 msgstr "<b>Suora kern_el-käynnistys</b>"
 
-#: ../ui/details.ui.h:67
+#: ../ui/details.ui.h:57
 msgid "Enable boot me_nu"
 msgstr "Käytä käynnistysvalikkoa"
 
-#: ../ui/details.ui.h:68
+#: ../ui/details.ui.h:58
 msgid "<b>Boot device order</b>"
 msgstr "<b>Käynnistyslaitteiden järjestys</b>"
 
-#: ../ui/details.ui.h:69
+#: ../ui/details.ui.h:59
 msgid "R_eadonly:"
 msgstr "Vain luku:"
 
-#: ../ui/details.ui.h:70
+#: ../ui/details.ui.h:60
 msgid "Sharea_ble:"
 msgstr "_Jaettavissa:"
 
-#: ../ui/details.ui.h:71
+#: ../ui/details.ui.h:61
 msgid "Storage size:"
 msgstr "Tallennustilan koko:"
 
-#: ../ui/details.ui.h:72
+#: ../ui/details.ui.h:62
 msgid "Source _path:"
 msgstr ""
 
-#: ../ui/details.ui.h:73
+#: ../ui/details.ui.h:63
 msgid "_Browse"
 msgstr ""
 
-#: ../ui/details.ui.h:74
+#: ../ui/details.ui.h:64
 msgid "Device type:"
 msgstr "Laitetyyppi:"
 
-#: ../ui/details.ui.h:75
+#: ../ui/details.ui.h:65
 msgid "Removab_le:"
 msgstr "Irrotettavissa:"
 
-#: ../ui/details.ui.h:76
+#: ../ui/details.ui.h:66
 msgid "Disk b_us:"
 msgstr "Levyn väy_lä:"
 
-#: ../ui/details.ui.h:77
-msgid "Seria_l number:"
-msgstr "_Sarjanumero:"
-
-#: ../ui/details.ui.h:78
-msgid ""
-"<small>Changing this will not change the disk image format, it only tells "
-"libvirt about the existing image format. </small>"
+#: ../ui/details.ui.h:67
+msgid "disk-bus-label"
 msgstr ""
 
-#: ../ui/details.ui.h:79
-msgid "Storage forma_t:"
-msgstr "Tallenn_ustilan muoto:"
-
-#: ../ui/details.ui.h:80
-msgid "_SGIO:"
-msgstr "_SGIO:"
-
-#: ../ui/details.ui.h:86
-msgid "_Performance options"
-msgstr "_Suorituskykyvalinnat"
-
-#: ../ui/details.ui.h:87
+#: ../ui/details.ui.h:71
 msgid "Advanced _options"
 msgstr "_Lisävalinnat"
 
-#: ../ui/details.ui.h:88
+#: ../ui/details.ui.h:72
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>Virtuaaliinen levy</b>"
 
-#: ../ui/details.ui.h:90
+#: ../ui/details.ui.h:74
 msgid "MAC address:"
 msgstr "MAC-osoite:"
 
-#: ../ui/details.ui.h:91
+#: ../ui/details.ui.h:75
 msgid "Link _state:"
 msgstr ""
 
-#: ../ui/details.ui.h:92
+#: ../ui/details.ui.h:76
 msgid "active"
 msgstr ""
 
-#: ../ui/details.ui.h:93 ../ui/gfxdetails.ui.h:14 ../ui/hoststorage.ui.h:17
+#: ../ui/details.ui.h:77 ../ui/gfxdetails.ui.h:10 ../ui/hoststorage.ui.h:17
 #: ../ui/snapshots.ui.h:5
 msgid "label"
 msgstr ""
 
-#: ../ui/details.ui.h:94
+#: ../ui/details.ui.h:78
 msgid "I_P address:"
 msgstr ""
 
-#: ../ui/details.ui.h:95
+#: ../ui/details.ui.h:79
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Virtuaalinen verkkoliitäntä</b>"
 
-#: ../ui/details.ui.h:96
-msgid "Type:"
-msgstr "Tyyppi:"
-
-#: ../ui/details.ui.h:97
+#: ../ui/details.ui.h:81
 msgid "Mode:"
 msgstr "Tila: "
 
-#: ../ui/details.ui.h:98
+#: ../ui/details.ui.h:82
 msgid "<b>Virtual Input Device</b>"
 msgstr "<b>Virtuaalinen syötelaite</b>"
 
-#: ../ui/details.ui.h:99
+#: ../ui/details.ui.h:83
 msgid "<b>Sound Device</b>"
 msgstr "<b>Äänilaite</b>"
 
-#: ../ui/details.ui.h:100
+#: ../ui/details.ui.h:84
 msgid "Source host:"
 msgstr ""
 
-#: ../ui/details.ui.h:101
+#: ../ui/details.ui.h:85
 msgid "Bind host:"
 msgstr ""
 
-#: ../ui/details.ui.h:102
+#: ../ui/details.ui.h:86
 msgid "Target type:"
 msgstr ""
 
-#: ../ui/details.ui.h:103
+#: ../ui/details.ui.h:87
 msgid "Target name:"
 msgstr ""
 
-#: ../ui/details.ui.h:104 ../ui/hostnets.ui.h:2 ../ui/hoststorage.ui.h:14
+#: ../ui/details.ui.h:88 ../ui/hostnets.ui.h:2 ../ui/hoststorage.ui.h:14
 msgid "State:"
 msgstr "Tila:"
 
-#: ../ui/details.ui.h:105
+#: ../ui/details.ui.h:89
 msgid "Source path:"
 msgstr "Lähteen polku:"
 
-#: ../ui/details.ui.h:106
+#: ../ui/details.ui.h:90
 msgid "<b>insert type</b>"
 msgstr ""
 
-#: ../ui/details.ui.h:107 ../ui/hostnets.ui.h:1
+#: ../ui/details.ui.h:91 ../ui/hostnets.ui.h:1
 msgid "Device:"
 msgstr "Laite:"
 
-#: ../ui/details.ui.h:108
+#: ../ui/details.ui.h:92
 msgid "ROM _BAR:"
 msgstr ""
 
-#: ../ui/details.ui.h:109
+#: ../ui/details.ui.h:93
 msgid "RAM:"
 msgstr "Muisti:"
 
-#: ../ui/details.ui.h:110
+#: ../ui/details.ui.h:94
 msgid "Heads:"
 msgstr ""
 
-#: ../ui/details.ui.h:111
+#: ../ui/details.ui.h:95
 msgid "_3D acceleration:"
 msgstr "_3D-kiihdytys:"
 
-#: ../ui/details.ui.h:112
+#: ../ui/details.ui.h:96
 msgid "<b>Video</b>"
 msgstr "<b>Video</b>"
 
-#: ../ui/details.ui.h:114
+#: ../ui/details.ui.h:98
 msgid "Devices:"
 msgstr "Laitteet:"
 
-#: ../ui/details.ui.h:115
+#: ../ui/details.ui.h:99
 msgid "<b>Controller</b>"
 msgstr "<b>Ohjain</b>"
 
-#: ../ui/details.ui.h:116
+#: ../ui/details.ui.h:100
 msgid "<b>Filesystem</b>"
 msgstr "<b>Tiedostojärjestelmä</b>"
 
-#: ../ui/details.ui.h:117 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
+#: ../ui/details.ui.h:101 ../ui/fsdetails.ui.h:5 ../ui/migrate.ui.h:12
 msgid "M_ode:"
 msgstr "_Tila:"
 
-#: ../ui/details.ui.h:118
+#: ../ui/details.ui.h:102
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>Älykorttilaite</b>"
 
-#: ../ui/details.ui.h:119
+#: ../ui/details.ui.h:103
 msgid "Address:"
 msgstr "Osoite:"
 
-#: ../ui/details.ui.h:120
+#: ../ui/details.ui.h:104
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ../ui/details.ui.h:121
+#: ../ui/details.ui.h:105
 msgid "<b>Redirected device</b>"
 msgstr "<b>Uudelleenohjattu laite</b>"
 
-#: ../ui/details.ui.h:123
+#: ../ui/details.ui.h:107
 msgid "Version:"
 msgstr ""
 
-#: ../ui/details.ui.h:124
+#: ../ui/details.ui.h:108
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM-laite</b>"
 
-#: ../ui/details.ui.h:125
+#: ../ui/details.ui.h:109
 msgid "Host Device:"
 msgstr ""
 
-#: ../ui/details.ui.h:126
+#: ../ui/details.ui.h:110
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>Satunnaislukugeneraattori</b>"
 
-#: ../ui/details.ui.h:128
+#: ../ui/details.ui.h:112
 msgid "Model:"
 msgstr ""
 
-#: ../ui/details.ui.h:129
+#: ../ui/details.ui.h:113
 msgid "panic-model"
 msgstr ""
 
-#: ../ui/details.ui.h:130
+#: ../ui/details.ui.h:114
 msgid "<b>Panic Notifier</b>"
 msgstr ""
 
@@ -5917,43 +5787,27 @@ msgstr "_Salasana:"
 msgid "_Port:"
 msgstr "_Portti:"
 
-#: ../ui/gfxdetails.ui.h:6
-msgid "T_LS port:"
-msgstr "T_LS-portti:"
-
-#: ../ui/gfxdetails.ui.h:7
-msgid "Aut_o"
-msgstr "Aut_omaattinen"
-
-#: ../ui/gfxdetails.ui.h:8
-msgid "5901"
-msgstr "5901"
-
-#: ../ui/gfxdetails.ui.h:9
-msgid "Ke_ymap:"
-msgstr "_Näppäinasettelu:"
-
-#: ../ui/gfxdetails.ui.h:10 ../ui/vsockdetails.ui.h:2
+#: ../ui/gfxdetails.ui.h:6 ../ui/vsockdetails.ui.h:2
 msgid "A_uto"
 msgstr "A_utomaattinen"
 
-#: ../ui/gfxdetails.ui.h:11 ../ui/vsockdetails.ui.h:3
+#: ../ui/gfxdetails.ui.h:7 ../ui/vsockdetails.ui.h:3
 msgid "5900"
 msgstr "5900"
 
-#: ../ui/gfxdetails.ui.h:12
+#: ../ui/gfxdetails.ui.h:8
 msgid "Display:"
 msgstr "Näyttö:"
 
-#: ../ui/gfxdetails.ui.h:13
+#: ../ui/gfxdetails.ui.h:9
 msgid "XAuth:"
 msgstr "XAuth:"
 
-#: ../ui/gfxdetails.ui.h:15
+#: ../ui/gfxdetails.ui.h:11
 msgid "Open_GL:"
 msgstr ""
 
-#: ../ui/gfxdetails.ui.h:16
+#: ../ui/gfxdetails.ui.h:12
 msgid "L_isten type:"
 msgstr ""
 
@@ -6085,10 +5939,6 @@ msgstr "Toteuta varantomuutokset"
 msgid "Location:"
 msgstr "Sijainti:"
 
-#: ../ui/hoststorage.ui.h:16
-msgid "Size:"
-msgstr "Koko:"
-
 #: ../ui/hoststorage.ui.h:18
 msgid "<b>Volumes</b>"
 msgstr "<b>Taltiot</b>"
@@ -6182,20 +6032,24 @@ msgid "Migrate the virtual machine"
 msgstr "Migratoi virtuaalikone"
 
 #: ../ui/migrate.ui.h:2
-msgid "<span color='#484848'>Migrating VM:</span>"
-msgstr "<span color='#484848'>Migratoidaan virtuaalikone:</span>"
+msgid "Migrating VM:"
+msgstr ""
 
 #: ../ui/migrate.ui.h:3
-msgid "<span color='#484848'>Original host:</span>"
-msgstr "<span color='#484848'>Alkuperäinen isäntäkone:</span>"
+msgid "Original host:"
+msgstr ""
 
 #: ../ui/migrate.ui.h:4
-msgid "<span color='#484848'>New _host:</span>"
-msgstr "<span color='#484848'>Uusi _isäntäkone:</span>"
+msgid "New _host:"
+msgstr ""
 
 #: ../ui/migrate.ui.h:5
 msgid "_Address:"
 msgstr "_Osoite:"
+
+#: ../ui/migrate.ui.h:7
+msgid "0"
+msgstr ""
 
 #: ../ui/migrate.ui.h:8
 msgid "Let libvirt decide"
@@ -6259,46 +6113,18 @@ msgid "_Migrate"
 msgstr "_Migratoi"
 
 #: ../ui/netlist.ui.h:1
-msgid "_Bridge name:"
-msgstr "_Sillan nimi:"
-
-#: ../ui/netlist.ui.h:2
-msgid "Source m_ode:"
+msgid "De_vice name:"
 msgstr ""
 
-#: ../ui/netlist.ui.h:3
+#: ../ui/netlist.ui.h:2
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
 msgstr ""
 
-#: ../ui/netlist.ui.h:4
-msgid "_Portgroup:"
-msgstr ""
-
-#: ../ui/netlist.ui.h:5
+#: ../ui/netlist.ui.h:3
 msgid "_Network source:"
 msgstr "_Verkon lähde:"
-
-#: ../ui/netlist.ui.h:6
-msgid "Ins_tance id:"
-msgstr ""
-
-#: ../ui/netlist.ui.h:7
-msgid "Typ_eid version:"
-msgstr ""
-
-#: ../ui/netlist.ui.h:8
-msgid "T_ypeid:"
-msgstr ""
-
-#: ../ui/netlist.ui.h:9
-msgid "M_anagerid:"
-msgstr ""
-
-#: ../ui/netlist.ui.h:11
-msgid "Virtual _port"
-msgstr ""
 
 #: ../ui/oslist.ui.h:1
 msgid "Include end of life operating systems"
@@ -6472,22 +6298,18 @@ msgid "Device re_moval:"
 msgstr "_Laitteen poistaminen:"
 
 #: ../ui/preferences.ui.h:42
-msgid "_Interface start/stop:"
-msgstr "Liit_ännän käynnistyessä/pysähtyessä:"
-
-#: ../ui/preferences.ui.h:43
 msgid "_Unapplied changes:"
 msgstr "_Toteuttamattomia muutoksia:"
 
-#: ../ui/preferences.ui.h:44
+#: ../ui/preferences.ui.h:43
 msgid "_Deleting storage:"
 msgstr "T_allennustilan poistaminen:"
 
-#: ../ui/preferences.ui.h:45
+#: ../ui/preferences.ui.h:44
 msgid "<b>Confirmations</b>"
 msgstr "<b>Vahvistukset</b>"
 
-#: ../ui/preferences.ui.h:46
+#: ../ui/preferences.ui.h:45
 msgid "Feed_back"
 msgstr "_Palaute"
 
@@ -6544,8 +6366,8 @@ msgid "Create snapshot"
 msgstr "Luo tilannevedos"
 
 #: ../ui/snapshotsnew.ui.h:2
-msgid "<span size='large' color='white'>Create snapshot</span>"
-msgstr "<span size='large' color='white'>Luo tilannevedos</span>"
+msgid "<span size='large'>Create snapshot</span>"
+msgstr ""
 
 #: ../ui/snapshotsnew.ui.h:4
 msgid "_Description:"
@@ -6693,6 +6515,3 @@ msgstr ""
 #: ../ui/xmleditor.ui.h:3
 msgid "_XML"
 msgstr ""
-
-#~ msgid "Hostname is required"
-#~ msgstr "Konenimi vaaditaan"
