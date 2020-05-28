@@ -709,6 +709,9 @@ class _DebianDistro(_DistroTree):
             url_prefix = "install"
         elif self.cache.debian_media_type == "legacy_url":
             url_prefix = "current/legacy-images"
+            log.warning(("Using legacy d-i based installer, that has been"
+                         " deprecated and will be removed in the future."
+                         " https://discourse.ubuntu.com/c/server"))
 
         tree_arch = self._find_treearch()
         hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix,
