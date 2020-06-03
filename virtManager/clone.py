@@ -349,7 +349,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def check_all_storage(self):
         """
-        Determine which storage is cloneable, and which isn't
+        Determine which storage is clonable, and which isn't
         """
         diskinfos = self.vm.xmlobj.devices.disk
         cd = self.clone_design
