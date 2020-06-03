@@ -246,7 +246,7 @@ class DomainCapabilities(XMLBuilder):
     def supports_safe_host_model(self):
         """
         Return True if domcaps reports support for cpu mode=host-model.
-        host-model infact predates this support, however it wasn't
+        host-model in fact predates this support, however it wasn't
         general purpose safe prior to domcaps advertisement.
         """
         for m in self.cpu.modes:

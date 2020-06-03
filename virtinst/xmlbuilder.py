@@ -436,7 +436,7 @@ class XMLBuilder(object):
     # Name of the root XML element
     XML_NAME = None
 
-    # In some cases, libvirt can incorrectly generate unparseable XML.
+    # In some cases, libvirt can incorrectly generate unparsable XML.
     # These are libvirt bugs, but this allows us to work around it in
     # for specific XML classes.
     #
