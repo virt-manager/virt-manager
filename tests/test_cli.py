@@ -963,6 +963,7 @@ c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default", "ppc64le-kvm-import")
+c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --graphics vnc --network none --tpm /dev/tpm0", "ppc64-pseries-tpm")  # default TPM for ppc64
 
 # s390x tests
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21", "s390x-cdrom", prerun_check=has_old_osinfo)

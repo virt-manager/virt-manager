@@ -41,3 +41,6 @@ class DeviceTpm(Device):
             self.type = self.TYPE_PASSTHROUGH
         if not self.model:
             self.model = self.MODEL_TIS
+
+            if guest.os.is_ppc64():
+                self.model = self.MODEL_SPAPR
