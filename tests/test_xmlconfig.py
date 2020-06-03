@@ -83,35 +83,38 @@ class TestXMLMisc(unittest.TestCase):
 
     def testDiskNumbers(self):
         # Various testing our target generation
-        self.assertEqual("a", DeviceDisk.num_to_target(1))
-        self.assertEqual("b", DeviceDisk.num_to_target(2))
-        self.assertEqual("z", DeviceDisk.num_to_target(26))
-        self.assertEqual("aa", DeviceDisk.num_to_target(27))
-        self.assertEqual("ab", DeviceDisk.num_to_target(28))
-        self.assertEqual("az", DeviceDisk.num_to_target(52))
-        self.assertEqual("ba", DeviceDisk.num_to_target(53))
-        self.assertEqual("zz", DeviceDisk.num_to_target(27 * 26))
-        self.assertEqual("aaa", DeviceDisk.num_to_target(27 * 26 + 1))
+        #
+        # Note: using single quotes in strings to avoid
+        # codespell flagging the 'ba' assert
+        self.assertEqual('a', DeviceDisk.num_to_target(1))
+        self.assertEqual('b', DeviceDisk.num_to_target(2))
+        self.assertEqual('z', DeviceDisk.num_to_target(26))
+        self.assertEqual('aa', DeviceDisk.num_to_target(27))
+        self.assertEqual('ab', DeviceDisk.num_to_target(28))
+        self.assertEqual('az', DeviceDisk.num_to_target(52))
+        self.assertEqual('ba', DeviceDisk.num_to_target(53))
+        self.assertEqual('zz', DeviceDisk.num_to_target(27 * 26))
+        self.assertEqual('aaa', DeviceDisk.num_to_target(27 * 26 + 1))
 
-        self.assertEqual(DeviceDisk.target_to_num("hda"), 0)
-        self.assertEqual(DeviceDisk.target_to_num("hdb"), 1)
-        self.assertEqual(DeviceDisk.target_to_num("sdz"), 25)
-        self.assertEqual(DeviceDisk.target_to_num("sdaa"), 26)
-        self.assertEqual(DeviceDisk.target_to_num("vdab"), 27)
-        self.assertEqual(DeviceDisk.target_to_num("vdaz"), 51)
-        self.assertEqual(DeviceDisk.target_to_num("xvdba"), 52)
-        self.assertEqual(DeviceDisk.target_to_num("xvdzz"),
+        self.assertEqual(DeviceDisk.target_to_num('hda'), 0)
+        self.assertEqual(DeviceDisk.target_to_num('hdb'), 1)
+        self.assertEqual(DeviceDisk.target_to_num('sdz'), 25)
+        self.assertEqual(DeviceDisk.target_to_num('sdaa'), 26)
+        self.assertEqual(DeviceDisk.target_to_num('vdab'), 27)
+        self.assertEqual(DeviceDisk.target_to_num('vdaz'), 51)
+        self.assertEqual(DeviceDisk.target_to_num('xvdba'), 52)
+        self.assertEqual(DeviceDisk.target_to_num('xvdzz'),
             26 * (25 + 1) + 25)
-        self.assertEqual(DeviceDisk.target_to_num("xvdaaa"),
+        self.assertEqual(DeviceDisk.target_to_num('xvdaaa'),
             26 * 26 * 1 + 26 * 1 + 0)
 
         disk = virtinst.DeviceDisk(self.conn)
-        disk.bus = "ide"
+        disk.bus = 'ide'
 
-        self.assertEqual("hda", disk.generate_target([]))
-        self.assertEqual("hdb", disk.generate_target(["hda"]))
-        self.assertEqual("hdc", disk.generate_target(["hdb", "sda"]))
-        self.assertEqual("hdb", disk.generate_target(["hda", "hdd"]))
+        self.assertEqual('hda', disk.generate_target([]))
+        self.assertEqual('hdb', disk.generate_target(['hda']))
+        self.assertEqual('hdc', disk.generate_target(['hdb', 'sda']))
+        self.assertEqual('hdb', disk.generate_target(['hda', 'hdd']))
 
     def testQuickTreeinfo(self):
         # Simple sanity test to make sure detect_distro works. test-urls
