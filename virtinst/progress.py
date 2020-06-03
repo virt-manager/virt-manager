@@ -236,9 +236,9 @@ def _term_add_end(tl, osize, size):
 
 
 class TextMeter(BaseMeter):
-    def __init__(self, fo=sys.stderr):
+    def __init__(self, output=sys.stderr):
         BaseMeter.__init__(self)
-        self.fo = fo
+        self.output = output
 
     def _do_update(self, amount_read, now=None):
         etime = self.re.elapsed_time()
@@ -291,8 +291,8 @@ class TextMeter(BaseMeter):
                 ui_rate, ui_size, ui_time, ui_end
             )
 
-        self.fo.write(out)
-        self.fo.flush()
+        self.output.write(out)
+        self.output.flush()
 
     def _do_end(self, amount_read, now=None):
         global _text_meter_total_size
@@ -313,8 +313,8 @@ class TextMeter(BaseMeter):
         ui_end, not_done = _term_add_end(tl, self.size, amount_read)
         out = '\r%-*.*s%s%s%s\n' % (tl.rest(), tl.rest(), text,
                                     ui_size, ui_time, ui_end)
-        self.fo.write(out)
-        self.fo.flush()
+        self.output.write(out)
+        self.output.flush()
 
         # Don't add size to the sofar size until we have all of it.
         # If we don't have a size, then just pretend/hope we got all of it.
@@ -524,7 +524,7 @@ def format_number(number, SI=0, space=' '):
 def make_meter(quiet):
     if quiet:
         return BaseMeter()
-    return TextMeter(fo=sys.stdout)
+    return TextMeter(output=sys.stdout)
 
 
 def ensure_meter(meter):
