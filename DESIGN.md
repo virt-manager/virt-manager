@@ -80,13 +80,21 @@ Some examples:
 
 ## Previously rejected/removed UI elements
 
-* [Any explicit `<clock>`/`<timer>` config](https://www.redhat.com/archives/virt-tools-list/2019-January/thread.html#00041)
-* [Raw `<genid>` config](https://www.redhat.com/archives/virt-tools-list/2019-April/msg00001.html)
-* [Fine grained `<cpu><feature>` config](https://www.redhat.com/archives/virt-tools-list/2014-January/msg00180.html)
-* [Host network management via libvirt interface APIs](https://blog.wikichoon.com/2019/04/host-network-interfaces-panel-removed.html)
-* [VM hugepages/hugetlbfs](https://bugzilla.redhat.com/show_bug.cgi?id=1688641)
-* Most VM tuning: `<cputune>`, `<blkiotune>`, `<numatune>`, fine grained `<vcpus>` listing
-* Editing existing machine type/arch/ostype, UEFI config. Only advanced users can make it work, and they can edit the XML.
+* VM properties
+  * [disk driver io=threads|native](https://github.com/virt-manager/virt-manager/commit/a162a3b845eee24f66baf63b3aeb82523b274b0d)
+  * [disk serial](https://github.com/virt-manager/virt-manager/commit/106686758346c7f7f0f25ce2a29e36fa6dff0547)
+  * [disk scsi reservations](https://github.com/virt-manager/virt-manager/commit/b583ea7e66cd0b7117971cf55365355f78dd3670)
+  * [graphics spice TLS port](https://github.com/virt-manager/virt-manager/commit/bd82ef65292cc47cffc27b8f67d7987679c61bf3)
+  * [graphics keymap selection](https://github.com/virt-manager/virt-manager/commit/7251ea25c2936b69284366abc787f1b33c199b15)
+  * [network virtualport](https://github.com/virt-manager/virt-manager/commit/b4b497e28f3f3e32a05f4cf78c21f07022ee824b)
+  * [Any explicit `<clock>`/`<timer>` config](https://www.redhat.com/archives/virt-tools-list/2019-January/thread.html#00041)
+  * [Raw `<genid>` config](https://www.redhat.com/archives/virt-tools-list/2019-April/msg00001.html)
+  * [Fine grained `<cpu><feature>` config](https://www.redhat.com/archives/virt-tools-list/2014-January/msg00180.html)
+  * [Host network management via libvirt interface APIs](https://blog.wikichoon.com/2019/04/host-network-interfaces-panel-removed.html)
+  * [VM hugepages/hugetlbfs](https://bugzilla.redhat.com/show_bug.cgi?id=1688641)
+  * Most VM tuning: `<cputune>`, `<blkiotune>`, `<numatune>`, fine grained `<vcpus>` listing
+  * Editing existing machine type/arch/ostype, UEFI config. Only advanced users can make it work, and they can edit the XML.
+
 * Tight desktop integration stuff: registering as a default file handler, registering as a gnome search provider, etc. This is gnome-boxes territory
 * Serial console config options like [buffer scrollback size](https://bugzilla.redhat.com/show_bug.cgi?id=1610165). Use `virsh console` or cli tools if need flexibility.
 
