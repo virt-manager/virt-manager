@@ -322,7 +322,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         click wrapper, give up to a second for widget to appear on
         screen, helps reduce some test flakiness
         """
-        # pylint: disable=arguments-differ
+        # pylint: disable=arguments-differ,signature-differs
         check_in_loop(lambda: self.onscreen)
         dogtail.tree.Node.click(self, *args, **kwargs)
 

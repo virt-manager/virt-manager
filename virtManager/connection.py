@@ -228,6 +228,7 @@ class vmmConnection(vmmGObject):
         return label
 
     def __repr__(self):
+        # pylint: disable=arguments-differ
         return "<%s uri=%s id=%s>" % (
                 self.__class__.__name__, self.get_uri(), hex(id(self)))
 

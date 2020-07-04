@@ -78,6 +78,7 @@ class vmmLibvirtObject(vmmGObject):
         return newfn
 
     def __repr__(self):
+        # pylint: disable=arguments-differ
         try:
             name = self.get_name()
         except Exception:

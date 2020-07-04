@@ -752,6 +752,7 @@ class DeviceDisk(Device):
             return
 
         meter = progress.ensure_meter(meter)
+        # pylint: disable=assignment-from-no-return
         vol_object = self._storage_backend.create(meter)
         self.storage_was_created = True
         if not vol_object:
