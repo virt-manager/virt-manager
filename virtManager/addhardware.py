@@ -1409,7 +1409,7 @@ class vmmAddHardware(vmmGObjectUI):
             if self.addstorage.validate_device(dev) is False:
                 return False
 
-        if dev.DEVICE_TYPE == "network":
+        if dev.DEVICE_TYPE == "interface":
             self._netlist.validate_device(dev)
 
         if dev.DEVICE_TYPE == "hostdev":
