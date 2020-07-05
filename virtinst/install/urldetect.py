@@ -65,7 +65,7 @@ class _DistroCache(object):
         # If the file doesn't parse or there's no 'family', this will
         # error, but that should be fine because we aren't going to
         # successfully detect the tree anyways
-        treeinfo = configparser.SafeConfigParser()
+        treeinfo = configparser.ConfigParser()
         treeinfo.read_string(treeinfostr)
         self.treeinfo_family = treeinfo.get("general", "family")
         self._treeinfo = treeinfo
