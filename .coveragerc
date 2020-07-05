@@ -1,4 +1,10 @@
+[run]
+source=virtinst/
+omit=virtinst/progress.py
+
 [report]
+skip_covered = yes
+
 exclude_lines =
     # Have to re-enable the standard pragma
     pragma: no cover

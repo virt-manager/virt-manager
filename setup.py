@@ -410,7 +410,7 @@ class TestBaseCommand(distutils.core.Command):
         if self.coverage:
             import coverage
             omit = ["/usr/*", "/*/tests/*", "*progress.py"]
-            cov = coverage.coverage(omit=omit)
+            cov = coverage.coverage()
             cov.erase()
             if not self._external_coverage:
                 cov.start()
