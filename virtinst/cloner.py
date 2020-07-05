@@ -171,10 +171,7 @@ class Cloner(object):
 
     # MAC address for the new guest clone
     def set_clone_macs(self, mac):
-        maclist = xmlutil.listify(mac)
-        for m in maclist:
-            DeviceInterface.is_conflict_net(self.conn, m)
-        self._clone_macs = maclist
+        self._clone_macs = xmlutil.listify(mac)
     def get_clone_macs(self):
         return self._clone_macs
     clone_macs = property(get_clone_macs, set_clone_macs)

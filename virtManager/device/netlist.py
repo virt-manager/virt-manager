@@ -298,6 +298,7 @@ class vmmNetworkList(vmmGObjectUI):
 
     def validate_device(self, net):
         self._check_network_is_running(net)
+        virtinst.DeviceInterface.is_conflict_net(net.conn, net.macaddr)
         net.validate()
 
     def reset_state(self):

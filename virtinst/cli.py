@@ -311,18 +311,35 @@ def check_path_search(conn, path):
         path, searchdata.user, searchdata.fixlist)  # pragma: no cover
 
 
+def _optional_fail(msg, checkname, warn_on_skip=True):
+    """
+    Handle printing a message with an associated --check option
+    """
+    do_check = get_global_state().get_validation_check(checkname)
+    if do_check:
+        fail(msg + (_(" (Use --check %s=off or "
+            "--check all=off to override)") % checkname))
+
+    log.debug("Skipping --check %s error condition '%s'",
+        checkname, msg)
+    if warn_on_skip:
+        log.warning(msg)
+
+
+def validate_mac(conn, macaddr):
+    """
+    There's legitimate use cases for creating/cloning VMs with duplicate
+    MACs, so we do the collision check here but allow it to be skipped
+    with --check
+    """
+    try:
+        DeviceInterface.is_conflict_net(conn, macaddr)
+        return
+    except Exception as e:
+        _optional_fail(str(e), "mac_in_use")
+
+
 def validate_disk(dev, warn_overwrite=False):
-    def _optional_fail(msg, checkname, warn_on_skip=True):
-        do_check = get_global_state().get_validation_check(checkname)
-        if do_check:
-            fail(msg + (_(" (Use --check %s=off or "
-                "--check all=off to override)") % checkname))
-
-        log.debug("Skipping --check %s error condition '%s'",
-            checkname, msg)
-        if warn_on_skip:
-            log.warning(msg)
-
     def check_path_exists(dev):
         """
         Prompt if disk file already exists and preserve mode is not used
@@ -1585,6 +1602,8 @@ class ParserCheck(VirtCLIParser):
         cls.add_arg("disk_size", None, is_onoff=True,
                     cb=cls.set_cb, lookup_cb=None)
         cls.add_arg("path_exists", None, is_onoff=True,
+                    cb=cls.set_cb, lookup_cb=None)
+        cls.add_arg("mac_in_use", None, is_onoff=True,
                     cb=cls.set_cb, lookup_cb=None)
         cls.add_arg("all", "all_checks", is_onoff=True)
 

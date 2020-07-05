@@ -588,6 +588,8 @@ def build_guest_instance(conn, options):
         # cli specific disk validation
         for disk in guest.devices.disk:
             cli.validate_disk(disk)
+        for net in guest.devices.interface:
+            cli.validate_mac(net.conn, net.macaddr)
 
     validate_required_options(options, guest, installer)
     show_guest_warnings(options, guest, osdata)

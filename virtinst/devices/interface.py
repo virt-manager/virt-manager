@@ -159,6 +159,9 @@ class DeviceInterface(Device):
         """
         Raise RuntimeError if the passed mac conflicts with a defined VM
         """
+        if not searchmac:
+            return
+
         vms = conn.fetch_all_domains()
         for vm in vms:
             for nic in vm.devices.interface:
@@ -251,12 +254,6 @@ class DeviceInterface(Device):
     #############
     # Build API #
     #############
-
-    def validate(self):
-        if not self.macaddr:
-            return
-
-        self.is_conflict_net(self.conn, self.macaddr)
 
     def set_default_source(self):
         if self.conn.is_qemu_unprivileged() or self.conn.is_test():

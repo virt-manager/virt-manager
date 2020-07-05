@@ -1105,11 +1105,12 @@ c.add_valid("--network bridge:mybr0,model=e1000")  # --network bridge:
 c.add_valid("--network network:default --mac RANDOM")  # VirtualNetwork with a random macaddr
 c.add_valid("--vnc --keymap=local")  # --keymap local
 c.add_valid("--panic 0x505")  # ISA panic with iobase specified
+c.add_valid("--mac 22:11:11:11:11:11 --check mac_in_use=off")  # colliding mac, but check is skipped
+c.add_invalid("--mac 22:11:11:11:11:11")  # Colliding macaddr will error
 c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
 c.add_invalid("--network=FOO")  # Nonexistent network
 c.add_invalid("--mac 1234")  # Invalid mac
 c.add_invalid("--network user --bridge foo0")  # Mixing bridge and network
-c.add_invalid("--connect %(URI-TEST-FULL)s --mac 22:22:33:12:34:AB")  # Colliding macaddr
 
 c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole")
 c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
@@ -1321,6 +1322,8 @@ c.add_valid("--original-xml " + _CLONE_UNMANAGED + " --auto-clone")  # Auto flag
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --clone-running --nonsparse")  # Auto flag, actual VM, skip state check
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest --original-xml " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
+c.add_valid("-n clonetest --original-xml " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11:11:11:11 --check all=off")  # Colliding mac but we skip the check
+c.add_invalid("-n clonetest --original-xml " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11:11:11:11", grep="--check mac_in_use=off")  # Colliding mac should fail
 c.add_invalid("--auto-clone")  # Just the auto flag
 c.add_invalid("-o test --clone-running --file foo")  # Didn't specify new name
 c.add_invalid("-o test --clone-running --auto-clone -n test")  # new name raises error

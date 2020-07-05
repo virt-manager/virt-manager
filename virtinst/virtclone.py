@@ -51,6 +51,8 @@ def get_clone_macaddr(new_mac, design):
         return
     design.clone_macs = new_mac
 
+    for mac in design.clone_macs:
+        cli.validate_mac(design.conn, mac)
 
 
 def get_clone_diskfile(new_diskfiles, design, preserve, auto_clone):
