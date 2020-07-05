@@ -333,7 +333,7 @@ def validate_mac(conn, macaddr):
     with --check
     """
     try:
-        DeviceInterface.is_conflict_net(conn, macaddr)
+        DeviceInterface.check_mac_in_use(conn, macaddr)
         return
     except Exception as e:
         _optional_fail(str(e), "mac_in_use")

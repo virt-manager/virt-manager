@@ -145,7 +145,7 @@ class DeviceInterface(Device):
         for ignore in range(256):
             mac = _random_mac(conn)
             try:
-                DeviceInterface.is_conflict_net(conn, mac)
+                DeviceInterface.check_mac_in_use(conn, mac)
                 return mac
             except RuntimeError:  # pragma: no cover
                 continue
@@ -155,7 +155,7 @@ class DeviceInterface(Device):
         return None  # pragma: no cover
 
     @staticmethod
-    def is_conflict_net(conn, searchmac):
+    def check_mac_in_use(conn, searchmac):
         """
         Raise RuntimeError if the passed mac conflicts with a defined VM
         """

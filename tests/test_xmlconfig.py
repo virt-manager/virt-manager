@@ -268,8 +268,8 @@ class TestXMLMisc(unittest.TestCase):
         self.assertTrue(qemumac != testmac)
         self.assertTrue(len(randommac) == len(testmac))
 
-        # Ensure is_conflict_net doesn't error on None
-        virtinst.DeviceInterface.is_conflict_net(self.conn, None)
+        # Ensure check_mac_in_use doesn't error on None
+        virtinst.DeviceInterface.check_mac_in_use(self.conn, None)
 
     def test_support_misc(self):
         try:
