@@ -149,6 +149,7 @@ class Device(XMLBuilder):
             "panic":         ["model", "xmlindex"],
             "vsock":         ["model", "xmlindex"],
             "memballoon":    ["model", "xmlindex"],
+            "iommu":         ["model", "xmlindex"],
         }
 
         if id(self) == id(newdev):

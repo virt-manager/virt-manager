@@ -811,6 +811,10 @@ def add_device_options(devg, sound_back_compat=False):
                     help=_("Configure guest vsock sockets. Ex:\n"
                            "--vsock cid.auto=yes\n"
                            "--vsock cid.address=7"))
+    ParserIommu.register()
+    devg.add_argument("--iommu", action="append",
+                    help=_("Configure an IOMMU device. Ex:\n"
+                           "--iommu model=intel,driver.aw_bits=48"))
 
 
 def add_guest_xml_options(geng):
@@ -3627,6 +3631,23 @@ class ParserInput(VirtCLIParser):
 
         cls.add_arg("type", "type", ignore_default=True)
         cls.add_arg("bus", "bus", ignore_default=True)
+
+
+class ParserIommu(VirtCLIParser):
+    cli_arg_name = "iommu"
+    guest_propname = "devices.iommu"
+    remove_first = "model"
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+
+        cls.add_arg("model", "model")
+        cls.add_arg("driver.aw_bits", "aw_bits")
+        cls.add_arg("driver.intremap", "intremap", is_onoff=True)
+        cls.add_arg("driver.caching_mode", "caching_mode", is_onoff=True)
+        cls.add_arg("driver.eim", "eim", is_onoff=True)
+        cls.add_arg("driver.iotlb", "iotlb", is_onoff=True)
 
 
 #######################

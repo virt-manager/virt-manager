@@ -13,6 +13,7 @@ from .graphics import DeviceGraphics
 from .hostdev import DeviceHostdev
 from .input import DeviceInput
 from .interface import DeviceInterface
+from .iommu import DeviceIommu
 from .memballoon import DeviceMemballoon
 from .memory import DeviceMemory
 from .panic import DevicePanic
