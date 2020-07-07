@@ -556,6 +556,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 --panic iobase=0x506
+--iommu model=intel,driver.aw_bits=48,driver.caching_mode=on,driver.eim=off,driver.intremap=off,driver.iotlb=off
 """, "singleton-config-2")
 
 
