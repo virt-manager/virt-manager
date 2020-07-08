@@ -59,6 +59,13 @@ _appdata_files = [
 ]
 
 
+def _generate_meta_potfiles_in():
+    potfiles = ""
+    for ignore, filelist in _desktop_files + _appdata_files:
+        potfiles += "\n".join(filelist) + "\n"
+    return potfiles
+
+
 def _generate_potfiles_in():
     def find(dirname, ext):
         ret = []
@@ -72,8 +79,7 @@ def _generate_potfiles_in():
     potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
     potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
 
-    for ignore, filelist in _desktop_files + _appdata_files:
-        potfiles += "\n".join(filelist) + "\n"
+    potfiles += _generate_meta_potfiles_in()
     potfiles += "\n"
 
     potfiles += "\n".join(["[type: gettext/glade]" + f for
