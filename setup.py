@@ -12,6 +12,7 @@ if sys.version_info.major < 3:
 import glob
 import fnmatch
 import os
+from pathlib import Path
 import unittest
 
 import distutils
@@ -690,6 +691,54 @@ class VMMDistribution(distutils.dist.Distribution):
         distutils.dist.Distribution.__init__(self, *args, **kwargs)
 
 
+class ExtractMessages(distutils.core.Command):
+    user_options = [
+    ]
+    description = "Extract the translation messages"
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        bug_address = "https://github.com/virt-manager/virt-manager/issues"
+        xgettext_args = [
+            "xgettext",
+            "-F",
+            "--msgid-bugs-address=" + bug_address,
+            "-o", "po/virt-manager.pot",
+            "--package-name=virt-manager",
+        ]
+
+        # First extract the messages using intltool, so it creates the template
+        potpath = "po/POTFILES.in"
+        try:
+            potfiles = _generate_meta_potfiles_in()
+            open(potpath, "w").write(potfiles)
+            cmd = ["intltool-update", "-p", "-g", "virt-manager"]
+            wd = os.getcwd()
+            os.chdir("po")
+            self.spawn(cmd)
+            os.chdir(wd)
+        finally:
+            os.unlink(potpath)
+
+        # Extract the messages from the Python sources
+        py_sources = list(Path("virtManager").rglob("*.py"))
+        py_sources += list(Path("virtinst").rglob("*.py"))
+        py_sources = [str(src) for src in py_sources]
+        cmd = xgettext_args + ["-j", "-L", "Python"] + py_sources
+        self.spawn(cmd)
+
+        # Extract the messages from the Glade UI files
+        ui_files = list(Path(".").rglob("*.ui"))
+        ui_files = [str(src) for src in ui_files]
+        cmd = xgettext_args + ["-j", "-L", "Glade"] + ui_files
+        self.spawn(cmd)
+
+
 distutils.core.setup(
     name="virt-manager",
     version=BuildConfig.version,
@@ -754,6 +803,8 @@ distutils.core.setup(
         'test_urls': TestURLFetch,
         'test_initrd_inject': TestInitrdInject,
         'test_dist': TestDist,
+
+        'extract_messages': ExtractMessages,
     },
 
     distclass=VMMDistribution,
