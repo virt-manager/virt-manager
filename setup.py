@@ -61,7 +61,7 @@ _appdata_files = [
 
 def _generate_meta_potfiles_in():
     potfiles = ""
-    for ignore, filelist in _desktop_files + _appdata_files:
+    for ignore, filelist in _appdata_files:
         potfiles += "\n".join(filelist) + "\n"
     return potfiles
 
@@ -107,9 +107,35 @@ class my_build_i18n(distutils.command.build.build):
             targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
             self.distribution.data_files.append((targetpath, (mo_file,)))
 
+        # Merge .in with translations using gettext
+        for (file_set, switch) in [(_desktop_files, "--desktop")]:
+            for (target, files) in file_set:
+                build_target = os.path.join("build", target)
+                if not os.path.exists(build_target):
+                    os.makedirs(build_target)
+
+                files_merged = []
+                for f in files:
+                    if f.endswith(".in"):
+                        file_merged = os.path.basename(f[:-3])
+                    else:
+                        file_merged = os.path.basename(f)
+
+                    file_merged = os.path.join(build_target, file_merged)
+                    cmd = ["msgfmt", switch, "--template", f, "-d", po_dir,
+                           "-o", file_merged]
+                    mtime_merged = (os.path.exists(file_merged) and
+                                    os.path.getmtime(file_merged)) or 0
+                    mtime_file = os.path.getmtime(f)
+                    if (mtime_merged < max_po_mtime or
+                        mtime_merged < mtime_file):
+                        # Only build if output is older than input (.po,.in)
+                        self.spawn(cmd)
+                    files_merged.append(file_merged)
+                self.distribution.data_files.append((target, files_merged))
+
         # merge .in with translation
-        for (file_set, switch) in [(_desktop_files, "-d"),
-                                   (_appdata_files, "-x")]:
+        for (file_set, switch) in [(_appdata_files, "-x")]:
             for (target, files) in file_set:
                 build_target = os.path.join("build", target)
                 if not os.path.exists(build_target):
@@ -684,6 +710,11 @@ class ExtractMessages(distutils.core.Command):
             os.chdir(wd)
         finally:
             os.unlink(potpath)
+
+        # Extract the messages from the desktop files
+        desktop_files = [f for sublist in _desktop_files for f in sublist[1]]
+        cmd = xgettext_args + ["-j", "-L", "Desktop"] + desktop_files
+        self.spawn(cmd)
 
         # Extract the messages from the Python sources
         py_sources = list(Path("virtManager").rglob("*.py"))
