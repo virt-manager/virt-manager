@@ -30,7 +30,7 @@ A detailed dependency list can be found in
 
 Minimum version requirements of major components:
 
-   - gettext >= 0.19
+   - gettext >= 0.19.6
    - python >= 3.4
    - gtk3 >= 3.22
    - libvirt-python >= 0.6.0
