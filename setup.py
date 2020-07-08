@@ -10,7 +10,6 @@ if sys.version_info.major < 3:
     sys.exit(1)
 
 import glob
-import fnmatch
 import os
 from pathlib import Path
 import unittest
@@ -67,28 +66,6 @@ def _generate_meta_potfiles_in():
     return potfiles
 
 
-def _generate_potfiles_in():
-    def find(dirname, ext):
-        ret = []
-        for root, ignore, filenames in os.walk(dirname):
-            for filename in fnmatch.filter(filenames, ext):
-                ret.append(os.path.join(root, filename))
-        ret.sort(key=lambda s: s.lower())
-        return ret
-
-    potfiles = ""
-    potfiles += "\n".join(find("virtManager", "*.py")) + "\n\n"
-    potfiles += "\n".join(find("virtinst", "*.py")) + "\n\n"
-
-    potfiles += _generate_meta_potfiles_in()
-    potfiles += "\n"
-
-    potfiles += "\n".join(["[type: gettext/glade]" + f for
-                          f in find("ui", "*.ui")]) + "\n\n"
-
-    return potfiles
-
-
 class my_build_i18n(distutils.command.build.build):
     """
     Add our desktop files to the list, saves us having to track setup.cfg
@@ -103,30 +80,13 @@ class my_build_i18n(distutils.command.build.build):
         pass
 
     def run(self):
-        potfiles = _generate_potfiles_in()
-        potpath = "po/POTFILES.in"
-
-        try:
-            print("Writing %s" % potpath)
-            open(potpath, "w").write(potfiles)
-            self._run()
-        finally:
-            print("Removing %s" % potpath)
-            os.unlink(potpath)
-
-    def _run(self):
-        # Borrowed from python-distutils-extra
         po_dir = "po"
+        if self.merge_po:
+            pot_file = os.path.join("po", "virt-manager.pot")
+            for po_file in glob.glob("%s/*.po" % po_dir):
+                cmd = ["msgmerge", "--previous", "-o", po_file, po_file, pot_file]
+                self.spawn(cmd)
 
-        # Update po(t) files and print a report
-        # We have to change the working dir to the po dir for intltool
-        cmd = ["intltool-update",
-               (self.merge_po and "-r" or "-p"), "-g", "virt-manager"]
-
-        wd = os.getcwd()
-        os.chdir("po")
-        self.spawn(cmd)
-        os.chdir(wd)
         max_po_mtime = 0
         for po_file in glob.glob("%s/*.po" % po_dir):
             lang = os.path.basename(po_file[:-3])
