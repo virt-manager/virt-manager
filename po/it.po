@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-27 14:56-0400\n"
 "PO-Revision-Date: 2020-07-09 10:51+0000\n"
-"Last-Translator: Frediano Ziglio <fziglio@redhat.com>\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/it/>\n"
 "Language: it\n"
@@ -102,7 +102,7 @@ msgstr ""
 
 #: ../virtManager/addhardware.py:267
 msgid "Not supported for containers"
-msgstr "Non supportato per i contenitori"
+msgstr "Non supportato per i container"
 
 #: ../virtManager/addhardware.py:268
 msgid "PCI Host Device"
@@ -167,7 +167,8 @@ msgstr "Alcune modifiche richiedono il riavvio del guest."
 
 #: ../virtManager/addhardware.py:390
 msgid "These changes will take effect after the next guest shutdown."
-msgstr "Queste modifiche avranno effetto al prossimo riavvio del guest."
+msgstr ""
+"Queste modifiche avranno effetto dopo il prossimo spegnimento del guest."
 
 #: ../virtManager/addhardware.py:443
 msgid "Pseudo TTY"
@@ -187,11 +188,11 @@ msgstr "Console di rete UDP"
 
 #: ../virtManager/addhardware.py:451
 msgid "Unix socket"
-msgstr "Socket UNIX"
+msgstr "Socket Unix"
 
 #: ../virtManager/addhardware.py:453
 msgid "Spice agent"
-msgstr "Spice agent"
+msgstr "Agente Spice"
 
 #: ../virtManager/addhardware.py:455
 msgid "Spice port"
@@ -208,7 +209,7 @@ msgstr "Dispositivo passthrough"
 
 #: ../virtManager/addhardware.py:545
 msgid "Emulated device"
-msgstr ""
+msgstr "Dispositivo emulato"
 
 #: ../virtManager/addhardware.py:551
 msgid "TIS"
@@ -220,7 +221,7 @@ msgstr ""
 
 #: ../virtManager/addhardware.py:555
 msgid "SPAPR"
-msgstr ""
+msgstr "SPAPR"
 
 #: ../virtManager/addhardware.py:561
 msgid "ISA"
@@ -228,15 +229,15 @@ msgstr "ISA"
 
 #: ../virtManager/addhardware.py:563
 msgid "pSeries"
-msgstr ""
+msgstr "pSeries"
 
 #: ../virtManager/addhardware.py:565
 msgid "Hyper-V"
-msgstr ""
+msgstr "Hyper-V"
 
 #: ../virtManager/addhardware.py:567
 msgid "s390"
-msgstr ""
+msgstr "s390"
 
 #: ../virtManager/addhardware.py:573
 msgid "Random"
@@ -248,7 +249,7 @@ msgstr "Demone Gathering Entropia"
 
 #: ../virtManager/addhardware.py:577
 msgid "Builtin RNG"
-msgstr ""
+msgstr "RNG incluso"
 
 #: ../virtManager/addhardware.py:587
 msgid "Bind"
@@ -268,7 +269,7 @@ msgstr "Arresta correttamente il guest"
 
 #: ../virtManager/addhardware.py:608
 msgid "Forcefully power off the guest"
-msgstr "Accendi forzatamente il guest"
+msgstr "Forza lo spegnimento del guest"
 
 #: ../virtManager/addhardware.py:610
 msgid "Pause the guest"
@@ -345,11 +346,11 @@ msgstr "Filesystem Passthrough"
 
 #: ../virtManager/addhardware.py:1085
 msgid "Random Number Generator"
-msgstr "Generatore Numeri Casuali"
+msgstr "Generatore numeri casuali"
 
 #: ../virtManager/addhardware.py:1089
 msgid "VM Sockets"
-msgstr ""
+msgstr "Socket della VM"
 
 #: ../virtManager/addhardware.py:1093 ../virtManager/details/details.py:2240
 #, python-format
@@ -378,7 +379,7 @@ msgstr ""
 
 #: ../virtManager/addhardware.py:1318
 msgid "Are you sure you want to add this device?"
-msgstr "Si conferma di voler aggiungere questo dispositivo?"
+msgstr "Sei sicuro di voler aggiungere questo dispositivo?"
 
 #: ../virtManager/addhardware.py:1321
 msgid ""
@@ -386,7 +387,8 @@ msgid ""
 "make the device available after the next guest shutdown?"
 msgstr ""
 "Questo dispositivo non può essere collegato alla macchina in esecuzione. "
-"Rendere questo dispositivo disponibile al prossimo riavvio di guest?"
+"Rendere questo dispositivo disponibile dopo il prossimo spegnimento del "
+"guest?"
 
 #: ../virtManager/addhardware.py:1337
 #, python-format
@@ -401,7 +403,7 @@ msgstr "Impossibile aggiungere il dispositivo: %s"
 #: ../virtManager/addhardware.py:1370
 #, python-format
 msgid "Error validating device parameters: %s"
-msgstr ""
+msgstr "Errore durante la validazione dei parametri del dispositivo: %s"
 
 #: ../virtManager/addhardware.py:1376
 msgid "Creating device"
@@ -410,7 +412,7 @@ msgstr "Creazione dispositivo"
 #: ../virtManager/addhardware.py:1377
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
-"Dipende dal dispisitivo, può richiedere alcuni minuti per essere completata."
+"Dipende dal dispositivo, può richiedere alcuni minuti per essere completata."
 
 #: ../virtManager/addhardware.py:1399
 #, python-format
@@ -424,7 +426,7 @@ msgstr "Utilizzare il dispositivo comunque?"
 #: ../virtManager/addhardware.py:1445
 #, python-format
 msgid "Error building device XML: %s"
-msgstr ""
+msgstr "Errore durante la creazione dell'XML del dispositivo: %s"
 
 #: ../virtManager/addhardware.py:1566
 msgid "invalid listen type"
@@ -491,7 +493,7 @@ msgstr "Condivisibile"
 #: ../virtManager/clone.py:127
 #, python-format
 msgid "Error launching clone dialog: %s"
-msgstr ""
+msgstr "Errore nell'avvio della finestra di clonazione: %s"
 
 #: ../virtManager/clone.py:292 ../virtManager/clone.py:548
 msgid "Details..."
@@ -604,15 +606,15 @@ msgstr "Trova immagine ISO"
 
 #: ../virtManager/config.py:158
 msgid "Locate floppy media volume"
-msgstr "Individuare il volume del supporto floppy"
+msgstr "Trova volume del supporto floppy"
 
 #: ../virtManager/config.py:159
 msgid "Locate floppy media"
-msgstr "Individuare il supporto floppy"
+msgstr "Trova supporto floppy"
 
 #: ../virtManager/config.py:164 ../virtManager/config.py:165
 msgid "Locate directory volume"
-msgstr "Individuare il volume della cartella"
+msgstr "Trova volume della cartella"
 
 #: ../virtManager/connection.py:404
 msgid "User session"
@@ -620,7 +622,7 @@ msgstr "Sessione utente"
 
 #: ../virtManager/connection.py:406
 msgid "Embedded session"
-msgstr ""
+msgstr "Sessione integrata"
 
 #: ../virtManager/connection.py:506 ../virtManager/migrate.py:299
 msgid "Disconnected"
@@ -645,7 +647,7 @@ msgstr "Attivo"
 #: ../virtManager/device/gfxdetails.py:269
 #: ../virtManager/lib/libvirtenummap.py:90
 msgid "Unknown"
-msgstr "Sconosciuto"
+msgstr "Sconosciute"
 
 #: ../virtManager/connection.py:601
 #, python-format
@@ -656,7 +658,7 @@ msgid ""
 "\n"
 "Recover error: %s"
 msgstr ""
-"rinominazione di %s fallita. Anche il tentativo di ripristino è fallito.\n"
+"Rinominazione di %s fallita. Anche il tentativo di ripristino è fallito.\n"
 "\n"
 "Errore orginale: %s\n"
 "\n"
@@ -685,7 +687,7 @@ msgstr "Qualsiasi dispositivo fisico"
 
 #: ../virtManager/createnet.py:105
 msgid "Physical device..."
-msgstr ""
+msgstr "Dispositivo fisico..."
 
 #: ../virtManager/createnet.py:113 ../virtManager/object/network.py:187
 msgid "NAT"
@@ -697,11 +699,11 @@ msgstr "Routed"
 
 #: ../virtManager/createnet.py:115
 msgid "Open"
-msgstr ""
+msgstr "Aperta"
 
 #: ../virtManager/createnet.py:116
 msgid "Isolated"
-msgstr ""
+msgstr "Isolata"
 
 #: ../virtManager/createnet.py:117
 msgid "SR-IOV pool"
@@ -709,7 +711,7 @@ msgstr ""
 
 #: ../virtManager/createnet.py:178
 msgid "No available device"
-msgstr ""
+msgstr "Nessun dispositivo disponibile"
 
 #: ../virtManager/createnet.py:337
 #, python-format
@@ -720,7 +722,7 @@ msgstr "Il nome '%s' è già in uso in un'altra rete."
 #: ../virtManager/createvol.py:285
 #, python-format
 msgid "Error building XML: %s"
-msgstr ""
+msgstr "Errore nella creazione dell'XML: %s"
 
 #: ../virtManager/createnet.py:414
 #, python-format
@@ -730,7 +732,7 @@ msgstr "Errore nella creazione della rete virtuale: %s"
 #: ../virtManager/createnet.py:443
 #, python-format
 msgid "Error validating network: %s"
-msgstr ""
+msgstr "Errore nella validazione della rete: %s"
 
 #: ../virtManager/createnet.py:448
 msgid "Creating virtual network..."
@@ -738,7 +740,7 @@ msgstr "Creazione della rete virtuale..."
 
 #: ../virtManager/createnet.py:449
 msgid "Creating the virtual network may take a while..."
-msgstr "La creazione della rete virtuale può richiedere alcuni minuti..."
+msgstr "La creazione della rete virtuale può richiedere del tempo..."
 
 #: ../virtManager/createpool.py:227
 msgid "Volg_roup Name:"
@@ -777,7 +779,7 @@ msgstr "Errore nella creazione del pool: %s"
 #: ../virtManager/createpool.py:387
 #, python-format
 msgid "Error validating pool: %s"
-msgstr ""
+msgstr "Errore nella validazione del pool: %s"
 
 #: ../virtManager/createpool.py:394
 msgid "Creating storage pool..."
@@ -785,7 +787,7 @@ msgstr "Creazione pool di storage in corso..."
 
 #: ../virtManager/createpool.py:395
 msgid "Creating the storage pool may take a while..."
-msgstr "La creazione del pool di storage potrebbe richiedere qualche minuto..."
+msgstr "La creazione del pool di storage potrebbe richiedere del tempo..."
 
 #: ../virtManager/createpool.py:417
 msgid "Choose source path"
@@ -808,7 +810,7 @@ msgstr "%d MiB"
 #: ../virtManager/createvm.py:182
 #, python-format
 msgid "Error launching create dialog: %s"
-msgstr ""
+msgstr "Errore nell'avvio della finestra di creazione: %s"
 
 #: ../virtManager/createvm.py:309
 msgid "Error"
@@ -816,7 +818,7 @@ msgstr "Errore"
 
 #: ../virtManager/createvm.py:315 ../virtManager/createvm.py:320
 msgid "Warning"
-msgstr "Avvertenza"
+msgstr "Avviso"
 
 #: ../virtManager/createvm.py:493
 #, python-format
@@ -827,7 +829,7 @@ msgstr ""
 
 #: ../virtManager/createvm.py:519
 msgid "Libvirt version does not support remote URL installs."
-msgstr "La versione libvirt non supporta le instalazzioni URL remote."
+msgstr "La versione libvirt non supporta le installazioni da URL remoti."
 
 #: ../virtManager/createvm.py:526
 #, python-format
@@ -905,28 +907,28 @@ msgstr "Importa immagine OS esistente"
 
 #: ../virtManager/createvm.py:980
 msgid "Manual install"
-msgstr ""
+msgstr "Installazione manuale"
 
 #: ../virtManager/createvm.py:982
 msgid "Application container"
-msgstr "Contenitore applicazione"
+msgstr "Container di applicazione"
 
 #: ../virtManager/createvm.py:984
 msgid "Operating system container"
-msgstr "Contenitore sistema operativo"
+msgstr "Container di sistema operativo"
 
 #: ../virtManager/createvm.py:986
 msgid "Virtuozzo container"
-msgstr ""
+msgstr "Container Virtuozzo"
 
 #: ../virtManager/createvm.py:1132
 msgid "Removing disk images"
-msgstr "Rimozione immagini del disco"
+msgstr "Rimozione immagini dei dischi"
 
 #: ../virtManager/createvm.py:1133
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
-"Rimozione delle immagini del disco create per questa macchina virtuale."
+"Rimozione delle immagini dei dischi create per questa macchina virtuale."
 
 #: ../virtManager/createvm.py:1277
 msgid "No network selected"
@@ -954,7 +956,7 @@ msgstr "Errore non gestito nella convalida dei parametri di installazione: %s"
 
 #: ../virtManager/createvm.py:1496
 msgid "You must select an OS."
-msgstr ""
+msgstr "Occorre selezionare il sistema operativo."
 
 #: ../virtManager/createvm.py:1503
 msgid "An install media selection is required."
@@ -966,11 +968,11 @@ msgstr "Occorre specificare l'albero di installazione."
 
 #: ../virtManager/createvm.py:1519
 msgid "A storage path to import is required."
-msgstr "Occorre specificare un percorso di storage per l'importazionie."
+msgstr "Occorre specificare un percorso di storage da importare."
 
 #: ../virtManager/createvm.py:1524
 msgid "The import path must point to an existing storage."
-msgstr "Il percorso di import deve puntare ad uno storage esistente"
+msgstr "Il percorso di importazione deve puntare ad uno storage esistente."
 
 #: ../virtManager/createvm.py:1530
 msgid "An application path is required."
@@ -978,7 +980,7 @@ msgstr "Il percorso dell'applicazione è obbligatorio."
 
 #: ../virtManager/createvm.py:1535
 msgid "An OS directory path is required."
-msgstr "Il percroso della cartella dell'OS è obbligatorio."
+msgstr "Il percorso della cartella del sistema operativo è obbligatorio."
 
 #: ../virtManager/createvm.py:1544
 msgid "Source URL is required"
@@ -991,12 +993,12 @@ msgstr ""
 #: ../virtManager/createvm.py:1555
 #, python-format
 msgid "Destination path is not directory: %s"
-msgstr ""
+msgstr "Il percorso di destinazione non è una cartella: %s"
 
 #: ../virtManager/createvm.py:1558
 #, python-format
 msgid "No write permissions for directory path: %s"
-msgstr ""
+msgstr "Non ci sono i permessi di scrittura per il percorso della cartella: %s"
 
 #: ../virtManager/createvm.py:1563
 msgid "OS root directory is not empty"
@@ -1011,7 +1013,7 @@ msgstr ""
 
 #: ../virtManager/createvm.py:1574
 msgid "A template name is required."
-msgstr ""
+msgstr "Occorre specificare il nome del modello."
 
 #: ../virtManager/createvm.py:1596
 msgid "Error setting install media location."
@@ -1041,11 +1043,11 @@ msgstr "Dispositivo di rete necessario per l'installazione %s."
 
 #: ../virtManager/createvm.py:1827
 msgid "Detecting..."
-msgstr ""
+msgstr "Rilevamento..."
 
 #: ../virtManager/createvm.py:1889
 msgid "None detected"
-msgstr ""
+msgstr "Nessuno rilevato"
 
 #: ../virtManager/createvm.py:1926
 msgid "Error starting installation: "
@@ -1091,7 +1093,7 @@ msgstr "Errore nella creazione del volume: %s"
 #: ../virtManager/createvol.py:315
 #, python-format
 msgid "Error validating volume: %s"
-msgstr ""
+msgstr "Errore nella validazione del volume: %s"
 
 #: ../virtManager/createvol.py:320
 msgid "Creating storage volume..."
@@ -1099,8 +1101,7 @@ msgstr "Creazione volume di storage in corso..."
 
 #: ../virtManager/createvol.py:321
 msgid "Creating the storage volume may take a while..."
-msgstr ""
-"La creazione del volume di storage potrebbe richiedere qualche minuto..."
+msgstr "La creazione del volume di storage potrebbe richiedere del tempo..."
 
 #: ../virtManager/delete.py:44
 #, python-format
@@ -1151,18 +1152,20 @@ msgstr "Eliminare la Macchina Virtuale"
 #: ../virtManager/delete.py:287
 #, python-format
 msgid "Delete '%(vmname)s'"
-msgstr ""
+msgstr "Elimina '%(vmname)s'"
 
 #: ../virtManager/delete.py:291
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
+"Eliminazione della macchina virtuale '%s' e dello storage selezionato ("
+"potrebbe richiedere del tempo)"
 
 #: ../virtManager/delete.py:295
 #, python-format
 msgid "Deleting virtual machine '%s'"
-msgstr "Eliminazione macchina virtuale '%s' in corso"
+msgstr "Eliminazione macchina virtuale '%s'"
 
 #: ../virtManager/delete.py:337
 #, python-format
@@ -1171,11 +1174,11 @@ msgstr "Errore durante la rimozione del dispositivo: %s"
 
 #: ../virtManager/delete.py:352
 msgid "This change will take effect after the next guest shutdown."
-msgstr "Questa modifica avrà effetto al prossimo riavvio del guest."
+msgstr "Questa modifica avrà effetto dopo il prossimo spegnimento del guest."
 
 #: ../virtManager/delete.py:355
 msgid "Storage will not be deleted."
-msgstr ""
+msgstr "Lo storage non sarà eliminato."
 
 #: ../virtManager/delete.py:358
 msgid "Device could not be removed from the running machine"
@@ -1184,22 +1187,24 @@ msgstr ""
 
 #: ../virtManager/delete.py:368
 msgid "Remove Disk Device"
-msgstr ""
+msgstr "Rimuovi dispositivo disco"
 
 #: ../virtManager/delete.py:371
 #, python-format
 msgid "Remove disk device '%(target)s'"
-msgstr ""
+msgstr "Rimuovi dispositivo disco '%(target)s'"
 
 #: ../virtManager/delete.py:376
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
+"Rimozione del dispositivo disco '%s' e dello storage selezionato (potrebbe "
+"richiedere del tempo)"
 
 #: ../virtManager/delete.py:379
 #, python-format
 msgid "Removing disk device '%s'"
-msgstr ""
+msgstr "Rimozione del dispositivo disco '%s'"
 
 #: ../virtManager/delete.py:504
 msgid "Target"
@@ -1215,7 +1220,7 @@ msgstr "Impossibile eliminare la condivisione iscsi."
 
 #: ../virtManager/delete.py:561
 msgid "Cannot delete SCSI device."
-msgstr ""
+msgstr "Impossibile eliminare il dispositivo SCSI."
 
 #: ../virtManager/delete.py:564
 msgid "Cannot delete unmanaged remote storage."
