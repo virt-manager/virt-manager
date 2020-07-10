@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-27 14:56-0400\n"
-"PO-Revision-Date: 2020-07-10 05:01+0000\n"
+"PO-Revision-Date: 2020-07-10 13:58+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/it/>\n"
@@ -3046,18 +3046,18 @@ msgid ""
 "Host does not support domain type %(domain)s%(machine)s for virtualization "
 "type '%(virttype)s' arch '%(arch)s'"
 msgstr ""
-"L'host non supporta il tipo dominio %(domain)s%(machine)s per il tipo di "
-"virtualizzazione '%(virttype)s' architettura '%(arch)s'"
+"L'host non supporta il tipo di dominio %(domain)s%(machine)s per il tipo di "
+"virtualizzazione '%(virttype)s' e l'architettura '%(arch)s'"
 
 #: ../virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
 msgstr ""
-"Leggere le pagine man per esempi e per la sintassi completa delle opzioni."
+"Consulta la pagina di man per esempi e per la sintassi completa delle "
+"opzioni."
 
 #: ../virtinst/cli.py:109
 msgid "Use '--option=?' or '--option help' to see available suboptions"
-msgstr ""
-"Utilizzare '--opzione=?' o '--opzione help' per vedere le opzioni secondarie"
+msgstr "Usa '--opzione=?' o '--opzione help' per vedere le opzioni secondarie"
 
 #: ../virtinst/cli.py:291
 #, python-format
@@ -3084,7 +3084,7 @@ msgstr ""
 #: ../virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
-msgstr " (Utilizzare --check %s=off o --check all=off per sovrascrivere)"
+msgstr " (usare --check %s=off o --check all=off per sovrascrivere)"
 
 #: ../virtinst/cli.py:335
 #, python-format
@@ -3094,7 +3094,7 @@ msgstr "Ciò sovrascriverà il percorso esistente '%s'"
 #: ../virtinst/cli.py:346
 #, python-format
 msgid "Disk %s is already in use by other guests %s."
-msgstr "Il disco %s è già in uso da un altro guest %s."
+msgstr "Il disco %s è già usato dagli altri guest %s."
 
 #: ../virtinst/cli.py:370
 #, python-format
@@ -3121,7 +3121,7 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
-"Configurare la connessione automatica alla console del guest. Esempio:\n"
+"Configura la connessione automatica alla console del guest. Esempio:\n"
 "--autoconsole text\n"
 "--autoconsole graphical\n"
 "--autoconsole none"
@@ -3137,19 +3137,19 @@ msgstr "Non avviare il guest dopo aver completato l'installazione."
 #: ../virtinst/cli.py:601
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
-"Non controllare la collisione del nome, sovrascrivere qualsiasi guest con lo "
+"Non controllare la collisione del nome, sovrascrivi qualsiasi guest con lo "
 "stesso nome."
 
 #: ../virtinst/cli.py:608
 msgid "Print the generated domain XML rather than create the guest."
-msgstr "Stampare l’XML del dominio generato piuttosto che creare il guest."
+msgstr "Stampa l’XML generato per il dominio piuttosto che creare il guest."
 
 #: ../virtinst/cli.py:627
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
-"Esegue i processi di installazione, ma non crea i dispositivi o definisce il "
-"guest."
+"Esegui il processo di installazione, ma non creare i dispositivi o definire "
+"il guest."
 
 #: ../virtinst/cli.py:632
 msgid ""
@@ -3157,13 +3157,13 @@ msgid ""
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
-"Abilitare o disabilitare i controlli di convalida. Esempio:\n"
+"Abilita o disabilita i controlli di convalida. Esempio:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 
 #: ../virtinst/cli.py:636
 msgid "Suppress non-error output"
-msgstr "Sopprime gli output non-error"
+msgstr "Sopprimi i messaggi che non sono errori"
 
 #: ../virtinst/cli.py:638
 msgid "Print debugging information"
@@ -3175,7 +3175,7 @@ msgid ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
-"Configurare i metadati del guest. Es.:\n"
+"Configura i metadati del guest. Es.:\n"
 "--metadata name=foo,title=\"Il mio bel titolo\",uuid=...\n"
 "--metadata description=\"La mia splendida descrizione lunga\""
 
@@ -3185,7 +3185,7 @@ msgid ""
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
-"Configurare l'allocazione della memoria per il guest. Es.:\n"
+"Configura l'allocazione della memoria per il guest. Es.:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
@@ -3225,7 +3225,7 @@ msgid ""
 "--network none\n"
 "--network help"
 msgstr ""
-"Configurare un’interfaccia di rete per il guest. Es.:\n"
+"Configura un’interfaccia di rete per il guest. Es.:\n"
 "--network bridge=miobr0\n"
 "--network network=mia_rete_virtuale_di_libvirt\n"
 "--network network=miarete,model=virtio,mac=00:11...\n"
@@ -3238,7 +3238,7 @@ msgid ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
-"Configurare un dispositivo controller per il guest. Es:\n"
+"Configura un dispositivo controller per il guest. Es:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 
@@ -3248,31 +3248,31 @@ msgid ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
-"Configurare un dispositivo di input per il guest. Es.:\n"
+"Configura un dispositivo di input per il guest. Es.:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
 #: ../virtinst/cli.py:717
 msgid "Configure a guest serial device"
-msgstr "Configurare un dispositivo seriale per il guest"
+msgstr "Configura un dispositivo seriale per il guest"
 
 #: ../virtinst/cli.py:720
 msgid "Configure a guest parallel device"
-msgstr "Configurare un dispositivo parallelo per il guest"
+msgstr "Configura un dispositivo parallelo per il guest"
 
 #: ../virtinst/cli.py:723
 msgid "Configure a guest communication channel"
-msgstr "Configurare un canale di comunicazione per il guest"
+msgstr "Configura un canale di comunicazione con il guest"
 
 #: ../virtinst/cli.py:726
 msgid "Configure a text console connection between the guest and host"
-msgstr "Configurare una connessione a console di testo fra il guest e l'host"
+msgstr "Configura una connessione a console di testo fra il guest e l'host"
 
 #: ../virtinst/cli.py:730
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
-"Configurare i dispositivi host fisici USB/PCI/ecc. per la condivisione con "
-"il guest"
+"Configura i dispositivi host fisici USB/PCI/ecc. per la condivisione con il "
+"guest"
 
 #: ../virtinst/cli.py:738
 msgid ""
@@ -3280,36 +3280,37 @@ msgid ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
-"Passare una directory dell'host al guest. Es: \n"
+"Passa una directory dell'host al guest. Es:\n"
 "--filesystem /mia/directory/sorgente,/directory/nel/guest\n"
 "--filesystem nome_modello,/,type=template"
 
 #: ../virtinst/cli.py:746
 msgid "Configure guest sound device emulation"
-msgstr "Configurare l'emulazione del dispositivo sonoro del guest"
+msgstr "Configura l'emulazione del dispositivo sonoro del guest"
 
 #: ../virtinst/cli.py:757
 msgid "Configure a guest watchdog device"
-msgstr "Configurare un dispositivo watchdog per il guest"
+msgstr "Configura un dispositivo watchdog per il guest"
 
 #: ../virtinst/cli.py:760
 msgid "Configure guest video hardware."
-msgstr "Configurare l'hardware video per il guest."
+msgstr "Configura l'hardware video per il guest."
 
 #: ../virtinst/cli.py:763
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
-"Configurare un dispositivo smartcard per il guest. Es:\n"
+"Configura un dispositivo smartcard per il guest. Es:\n"
 "--smartcard mode=passthrough"
 
 #: ../virtinst/cli.py:767
+#, fuzzy
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
-"Configurare un dispositivo di redirezione per il guest. Es:\n"
+"Configura un dispositivo di redirezione per il guest. Es:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: ../virtinst/cli.py:771
@@ -3317,7 +3318,7 @@ msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
-"Configurare un dispositivo memballoon per il guest. Es:\n"
+"Configura un dispositivo memballoon per il guest. Es:\n"
 "--memballoon model=virtio"
 
 #: ../virtinst/cli.py:775
@@ -3325,7 +3326,7 @@ msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
-"Configurare un dispositivo TPM per il guest. Es:\n"
+"Configura un dispositivo TPM per il guest. Es:\n"
 "--tpm /dev/tpm"
 
 #: ../virtinst/cli.py:779
@@ -3333,7 +3334,7 @@ msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
-"Configurare un dispositivo RNG per il guest. Es.:\n"
+"Configura un dispositivo RNG per il guest. Es.:\n"
 "--rng /dev/urandom"
 
 #: ../virtinst/cli.py:783
@@ -3341,7 +3342,7 @@ msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
-"Configurare un dispositivo panic per il guest. Es.:\n"
+"Configura un dispositivo panic per il guest. Es.:\n"
 "--panic default"
 
 #: ../virtinst/cli.py:787
@@ -3349,7 +3350,7 @@ msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
-"Configurare un dispositivo di memoria per il guest. Es.:\n"
+"Configura un dispositivo di memoria per il guest. Es.:\n"
 "--memdev dimm,target.size=1024"
 
 #: ../virtinst/cli.py:791
@@ -3358,17 +3359,17 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
-"Configurare socket vsock per il guest. Es.:\n"
+"Configura socket vsock per il guest. Es.:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
 #: ../virtinst/cli.py:799
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr "Impostare la configurazione <iothreads> e <iothreadids> del guest."
+msgstr "Imposta la configurazione <iothreads> e <iothreadids> del guest."
 
 #: ../virtinst/cli.py:803
 msgid "Set domain seclabel configuration."
-msgstr "Impostare la configurazione seclabel del guest."
+msgstr "Imposta la configurazione seclabel del dominio."
 
 #: ../virtinst/cli.py:807
 msgid "Set guest to perform the S390 cryptographic key management operations."
@@ -3376,27 +3377,27 @@ msgstr ""
 
 #: ../virtinst/cli.py:812
 msgid "Tune CPU parameters for the domain process."
-msgstr "Regolare i parametri della CPU per il processo del dominio."
+msgstr "Regola i parametri della CPU per il processo del dominio."
 
 #: ../virtinst/cli.py:816
 msgid "Tune NUMA policy for the domain process."
-msgstr "Regolare la politica NUMA per il processo del dominio."
+msgstr "Regola la politica NUMA per il processo del dominio."
 
 #: ../virtinst/cli.py:820
 msgid "Tune memory policy for the domain process."
-msgstr "Mettere a punto i criteri di memoria per il processo del dominio."
+msgstr "Regola i criteri di memoria per il processo del dominio."
 
 #: ../virtinst/cli.py:824
 msgid "Tune blkio policy for the domain process."
-msgstr "Mettere a punto i criteri blkio per il processo del dominio."
+msgstr "Regola i criteri blkio per il processo del dominio."
 
 #: ../virtinst/cli.py:828
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Impostare i criteri di supporto della memoria per il processo del dominio. "
-"Es.:\n"
+"Imposta i criteri di supporto della memoria per il processo del dominio. Es.:"
+"\n"
 "--memorybacking hugepages=on"
 
 #: ../virtinst/cli.py:833
@@ -3405,30 +3406,32 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
+"Imposta l'XML di <features> del dominio. Es.:\n"
+"--features acpi=off\n"
+"--features apic=on,apic.eoi=on"
 
 #: ../virtinst/cli.py:839
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
-"Configura l'XML per il <clock> del dominio. Es.:\n"
+"Configura l'XML di <clock> del dominio. Es.:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: ../virtinst/cli.py:844
 msgid "Configure VM power management features"
 msgstr ""
-"Configurare le funzionalità di gestione energetica della macchina virtuale"
+"Configura le funzionalità di gestione energetica della macchina virtuale"
 
 #: ../virtinst/cli.py:848
 msgid "Configure VM lifecycle management policy"
 msgstr ""
-"Configurare i criteri di gestione del ciclo di vita della macchina virtuale"
+"Configura i criteri di gestione del ciclo di vita della macchina virtuale"
 
 #: ../virtinst/cli.py:852
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr ""
-"Configurare il partizionamento delle risorse della macchina virtuale "
-"(cgroups)"
+"Configura il partizionamento delle risorse della macchina virtuale (cgroups)"
 
 #: ../virtinst/cli.py:856
 msgid ""
@@ -3436,7 +3439,7 @@ msgid ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
-"Configurare le informazioni di sistema SMBIOS. Es.:\n"
+"Configura le informazioni di sistema SMBIOS. Es.:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MioVendor,bios.version=1.2.3,...\n"
 
@@ -3446,7 +3449,7 @@ msgid ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
-"Specificare direttamente argomenti per l'emulatore qemu. Es.:\n"
+"Specifica argomenti direttamente per l'emulatore qemu. Es.:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
@@ -3464,7 +3467,7 @@ msgid ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
-"Configurare le impostazioni di boot del guest. Es.:\n"
+"Configura le impostazioni di boot del guest. Es.:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (per i container)"
 
@@ -3473,7 +3476,7 @@ msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
-"Abilitare il namespace utente per container LXC. Es.:\n"
+"Abilita il namespace utente per container LXC. Es.:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: ../virtinst/cli.py:892
@@ -3484,7 +3487,7 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
-"Specificare lo storage con varie opzioni. Es.\n"
+"Specifica lo storage con varie opzioni. Es.\n"
 "--disk size=10 (nuova immagine da 10 GiB nel percorso predefinito)\n"
 "--disk /mio/disco/esistente,cache=none\n"
 "--disk device=cdrom,bus=scsi\n"
@@ -3539,14 +3542,14 @@ msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
-"Impossibile connettersi alla console grafica: virt-viewer non installato. Si "
-"prega di installare il pacchetto 'virt-viewer'."
+"Impossibile connettersi alla console grafica: virt-viewer non è installato. "
+"Si prega di installare il pacchetto 'virt-viewer'."
 
 #. pragma: no cover
 #: ../virtinst/cli.py:1784
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
-"Grafica richiesta, ma DISPLAY non impostato. virt-viewer non sarà avviato."
+"Grafica richiesta, ma DISPLAY non è impostato. virt-viewer non sarà avviato."
 
 #: ../virtinst/cli.py:1795
 #, python-format
@@ -3561,7 +3564,7 @@ msgstr "Valore non corretto per 'size': %s"
 #: ../virtinst/cli.py:3132
 #, python-format
 msgid "Unknown '%s' value '%s'"
-msgstr "Valore '%s' sconosciuto '%s'"
+msgstr "Valore di '%s' sconosciuto: '%s'"
 
 #: ../virtinst/cli.py:3146
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -3602,7 +3605,7 @@ msgstr "Il dominio da clonare deve essere spento."
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
-"La clonazione in un volume storage esistente non è al momento supportata: "
+"La clonazione in un volume di storage esistente non è al momento supportata: "
 "'%s'"
 
 #: ../virtinst/cloner.py:399
@@ -3618,7 +3621,8 @@ msgstr ""
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
-"Impostare porta dei dispositivi grafici a autoport, per evitare conflitti."
+"La porta del dispositivo grafico è impostata come 'autoport' per evitare "
+"conflitti."
 
 #: ../virtinst/cloner.py:575
 #, python-format
@@ -3652,7 +3656,7 @@ msgid ""
 "the parent directory as a pool first."
 msgstr ""
 "Impossibile creare lo storage per il percorso '%s'. Utilizzare prima le API "
-"libvirt per gestire la directory principale come un pool."
+"di libvirt per gestire la directory principale come un pool."
 
 #: ../virtinst/devices/disk.py:247
 msgid "Format attribute not supported for this volume type"
@@ -3735,7 +3739,7 @@ msgstr " %d M richiesti > %d M disponibili"
 #: ../virtinst/diskbackend.py:543
 #, python-format
 msgid "size is required for non-existent disk '%s'"
-msgstr "dimensione necessaria per i dischi non esistenti '%s'"
+msgstr "dimensione necessaria per il disco non esistente '%s'"
 
 #: ../virtinst/diskbackend.py:553
 #, python-format
@@ -3751,7 +3755,7 @@ msgstr "Errore nella clonazione dell'immagine disco %s in %s: %s"
 #. pragma: no cover
 #: ../virtinst/domain/cpu.py:191
 msgid "No host CPU reported in capabilities"
-msgstr "Nessuna CPU host riportata nelle funzionalità"
+msgstr "Nessuna CPU dell'host riportata nelle funzionalità"
 
 #: ../virtinst/domain/launch_security.py:25
 msgid "Missing mandatory attribute 'type'"
@@ -3792,7 +3796,7 @@ msgstr "Guest"
 #: ../virtinst/guest.py:84
 #, python-format
 msgid "Guest name '%s' is already in use."
-msgstr "Il nome guest '%s' è già in uso."
+msgstr "Il nome guest '%s' è già usato."
 
 #: ../virtinst/guest.py:522
 msgid "Libvirt version does not support UEFI."
@@ -3807,7 +3811,8 @@ msgstr "Impossibile configurare UEFI per l'architettura '%s'"
 #: ../virtinst/guest.py:531
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
-msgstr "Impossibile trovare un percorso binario UEFI per l'architettura '%s'"
+msgstr ""
+"Non è stato trovato alcun percorso di binari UEFI per l'architettura '%s'"
 
 #: ../virtinst/install/installer.py:103
 #, python-format
@@ -3818,7 +3823,7 @@ msgstr "Rimozione disco '%s’ in corso"
 #, python-format
 msgid "Overriding memory to %s MiB needed for %s network install."
 msgstr ""
-"Sovrascrittura della memoria a %s MiB richiesta per l'installazione da rete "
+"Sovrascrittura della memoria a %s MiB richiesti per l'installazione da rete "
 "di %s."
 
 #: ../virtinst/install/installer.py:574
@@ -3926,7 +3931,7 @@ msgstr ""
 "Impossibile trovare una distribuzione installabile su ‘%s’%s\n"
 "\n"
 "Il percorso deve essere la directory root della struttura di installazione.\n"
-"Per i vari esempi di distribuzione, vedere la pagina man di virt-install."
+"Consultare la pagina man di virt-install per vari esempi di distribuzioni."
 
 #: ../virtinst/install/urlfetcher.py:70
 #, python-format
@@ -3988,7 +3993,7 @@ msgstr ""
 #: ../virtinst/storage.py:166
 #, python-format
 msgid "Couldn't create default storage pool '%s': %s"
-msgstr "Impossibile creare lo storage pool predefinito '%s': %s"
+msgstr "Impossibile creare il pool di storage predefinito '%s': %s"
 
 #: ../virtinst/storage.py:218 ../virtinst/storage.py:552
 msgid "Storage object"
@@ -3997,44 +4002,44 @@ msgstr "Oggetto storage"
 #: ../virtinst/storage.py:224
 #, python-format
 msgid "Name '%s' already in use by another pool."
-msgstr "Il nome '%s' è già in uso da un altro pool."
+msgstr "Il nome '%s' è già usato da un altro pool."
 
 #. pragma: no cover
 #: ../virtinst/storage.py:387
 #, python-format
 msgid "Could not define storage pool: %s"
-msgstr "Impossibile definire lo storage pool: %s"
+msgstr "Impossibile definire il pool di storage: %s"
 
 #. pragma: no cover
 #: ../virtinst/storage.py:394
 #, python-format
 msgid "Could not build storage pool: %s"
-msgstr "Impossibile configurare lo storage pool: %s"
+msgstr "Impossibile creare il pool di storage: %s"
 
 #. pragma: no cover
 #: ../virtinst/storage.py:400
 #, python-format
 msgid "Could not start storage pool: %s"
-msgstr "Impossibile avviare lo storage pool: %s"
+msgstr "Impossibile avviare il pool di storage: %s"
 
 #. pragma: no cover
 #: ../virtinst/storage.py:406
 #, python-format
 msgid "Could not set pool autostart flag: %s"
-msgstr "Impossibile impostare il flag autostart per il pool: %s"
+msgstr "Impossibile impostare l'avvio automatico del pool: %s"
 
 #: ../virtinst/storage.py:558
 #, python-format
 msgid "Name '%s' already in use by another volume."
-msgstr "Il nome '%s' è già in uso da un altro volume."
+msgstr "Il nome '%s' è già usato da un altro volume."
 
 #: ../virtinst/storage.py:647
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr ""
-"I volumi logici sparsi non sono supportati, impostare l'allocazione uguale "
-"alla capacità"
+"I volumi logici sparsi non sono supportati, viene impostata l'allocazione "
+"uguale alla capacità"
 
 #: ../virtinst/storage.py:693
 #, python-format
@@ -4047,8 +4052,8 @@ msgid ""
 "There is not enough free space on the storage pool to create the volume. (%d "
 "M requested allocation > %d M available)"
 msgstr ""
-"Spazio libero sullo storage pool insufficiente per la creazione del volume. "
-"(%d M allocazione richiesta > %d M disponibili)"
+"Non c'è abbastanza spazio libero nel pool di storage per creare il volume. ("
+"%d M richiesti da allocare > %d M disponibili)"
 
 #: ../virtinst/storage.py:737
 #, python-format
@@ -4087,8 +4092,8 @@ msgid ""
 "outside the scope of this tool. For these types of changes, please see virt-"
 "sysprep(1)."
 msgstr ""
-"Duplicare una macchina virtuale, modificando tutta la configurazione lato "
-"host unica come indirizzo MAC, nome, ecc. \n"
+"Duplica una macchina virtuale, modificando tutta la configurazione unica "
+"lato host come indirizzo MAC, nome, ecc.\n"
 "\n"
 "I contenuti della macchina virtuale NON saranno modificati: virt-clone non "
 "modifica nulla all'_interno_ del sistema operativo del guest, ma duplica "
@@ -4114,7 +4119,7 @@ msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
-"Autogenerazione del nome del clone e dei percorsi storage dalla "
+"Genera automatica il nome del clone e i percorsi di storage dalla "
 "configurazione del guest originale."
 
 #: ../virtinst/virtclone.py:102
@@ -4123,11 +4128,11 @@ msgstr "Nome per il nuovo guest"
 
 #: ../virtinst/virtclone.py:105
 msgid "use btrfs COW lightweight copy"
-msgstr "utilizza della copia lightweight COW di btrfs"
+msgstr "utilizza la copia lightweight COW di btrfs"
 
 #: ../virtinst/virtclone.py:107
 msgid "Storage Configuration"
-msgstr "Configurazione storage"
+msgstr "Configurazione dello storage"
 
 #: ../virtinst/virtclone.py:109
 msgid "New file to use as the disk image for the new guest"
@@ -4138,7 +4143,7 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
-"Forza la copia dei dispositivi (es, se 'hdc' è un dispositivo cdrom di sola "
+"Forza la copia dei dispositivi (es, se 'hdc' è un dispositivo cdrom in sola "
 "lettura, --force-copy=hdc)"
 
 #: ../virtinst/virtclone.py:115
@@ -4211,7 +4216,7 @@ msgstr ""
 
 #: ../virtinst/virtinstall.py:178
 msgid "Cannot mix both --bridge and --network arguments"
-msgstr "Impossibile utilizzare insieme gli argomenti --bridge e --network"
+msgstr "Impossibile utilizzare insieme gli argomenti di --bridge e --network"
 
 #: ../virtinst/virtinstall.py:223
 msgid "Cannot mix --graphics and old style graphical options"
@@ -4228,7 +4233,9 @@ msgstr "--memory richiede un valore in MiB"
 
 #: ../virtinst/virtinstall.py:314
 msgid "--disk storage must be specified (override with --disk none)"
-msgstr "Deve essere specificato --disk storage (sovrascrivere con --disk none)"
+msgstr ""
+"Deve essere specificato uno storage con --disk (sovrascrivere con --disk "
+"none)"
 
 #: ../virtinst/virtinstall.py:318
 #, python-format
@@ -4251,7 +4258,8 @@ msgstr ""
 #: ../virtinst/virtinstall.py:333
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
-"Vedere la pagina man per esempi di utilizzo di --location con supporto CDROM"
+"Consultare la pagina man per esempi di utilizzo di --location con supporto "
+"CDROM"
 
 #: ../virtinst/virtinstall.py:346
 #, python-format
@@ -4265,6 +4273,8 @@ msgstr ""
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
+"La memoria richiesta %s MiB è insolitamente poca. È stato specificato un "
+"valore in GiB?"
 
 #: ../virtinst/virtinstall.py:357
 msgid "The guest's network configuration may not support PXE"
@@ -4282,7 +4292,7 @@ msgstr ""
 #: ../virtinst/virtinstall.py:378
 #, python-brace-format
 msgid "Using {osname} --location {url}"
-msgstr ""
+msgstr "Viene usato {osname} --location {url}"
 
 #: ../virtinst/virtinstall.py:457
 #, python-brace-format
