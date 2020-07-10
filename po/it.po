@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
 "PO-Revision-Date: 2022-03-09 17:58+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/it/>\n"
 "Language: it\n"
@@ -652,8 +652,8 @@ msgstr ""
 "<small>L'albero di directory del sistema operativo deve esistere già. Per "
 "abilitare\n"
 "la creazione di un albero di directory di sistema operativo, installare <a "
-"href=\"https://github.com/virt-manager/virt-bootstrap\">virt-bootstrap</a></"
-"small>"
+"href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
+"bootstrap</a></small>"
 
 #: ui/createvm.ui:1373
 msgid ""
@@ -1688,9 +1688,9 @@ msgid ""
 "is shutdown."
 msgstr ""
 "Normalmente la configurazione della macchina virtuale migrata viene rimossa "
-"dall’host sorgente e salvata definitivamente sull’host di destinazione. "
-"L’host di destinazione è considerato la nuova \"casa\" della macchina "
-"virtuale.\n"
+"dall’host sorgente e salvata definitivamente sull’host di destinazione. L’"
+"host di destinazione è considerato la nuova \"casa\" della macchina virtuale."
+"\n"
 "\n"
 "Se \"Spostamento temporaneo\" è attivato, la migrazione è considerata solo "
 "un trasferimento temporaneo: l’host sorgente mantiene una copia della "
@@ -2701,8 +2701,8 @@ msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
-"Creazione della macchina virtuale clonata '%s' e dello storage selezionato "
-"(potrebbe richiedere del tempo)"
+"Creazione della macchina virtuale clonata '%s' e dello storage selezionato ("
+"potrebbe richiedere del tempo)"
 
 #: virtManager/config.py:148
 msgid "Locate or create storage volume"
@@ -3050,8 +3050,7 @@ msgstr "Il percorso di destinazione non è una directory: %s"
 #: virtManager/createvm.py:1478
 #, python-format
 msgid "No write permissions for directory path: %s"
-msgstr ""
-"Non ci sono i permessi di scrittura per il percorso della directory: %s"
+msgstr "Non ci sono i permessi di scrittura per il percorso della directory: %s"
 
 #: virtManager/createvm.py:1485
 msgid "OS root directory is not empty"
@@ -3236,8 +3235,8 @@ msgstr "Elimina '%(vmname)s'"
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
-"Eliminazione della macchina virtuale '%s' e dello storage selezionato "
-"(potrebbe richiedere del tempo)"
+"Eliminazione della macchina virtuale '%s' e dello storage selezionato ("
+"potrebbe richiedere del tempo)"
 
 #: virtManager/delete.py:298
 #, python-format
@@ -4446,8 +4445,7 @@ msgstr "Errore nell'ispezione della VM: %s"
 
 #: virtManager/lib/inspection.py:328
 msgid "Cannot inspect VM on remote connection"
-msgstr ""
-"Impossibile ispezionare una macchina virtuale in una connessione remota"
+msgstr "Impossibile ispezionare una macchina virtuale in una connessione remota"
 
 #: virtManager/lib/libvirtenummap.py:69
 msgid "Running"
@@ -5566,8 +5564,8 @@ msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Imposta i criteri della memoria di supporto per il processo del dominio. "
-"Es.:\n"
+"Imposta i criteri della memoria di supporto per il processo del dominio. Es.:"
+"\n"
 "--memorybacking hugepages=on"
 
 #: virtinst/cli.py:859
@@ -6197,8 +6195,7 @@ msgstr ""
 #: virtinst/storage.py:166
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr ""
-"Impossibile creare il pool di storage predefinito '%(path)s': %(error)s"
+msgstr "Impossibile creare il pool di storage predefinito '%(path)s': %(error)s"
 
 #: virtinst/storage.py:219 virtinst/storage.py:551
 msgid "Storage object"
@@ -6292,9 +6289,9 @@ msgstr ""
 "I contenuti della macchina virtuale NON saranno modificati: virt-clone non "
 "modifica nulla all'_interno_ del sistema operativo del guest, ma duplica "
 "solo i dischi e apporta modifiche lato host. Per questo motivo, la modifica "
-"delle password, la modifica dell’indirizzo IP statico, ecc. esulano "
-"dall’ambito di questo strumento. Per questa tipologia di modifiche, vedere "
-"virt-sysprep(1)."
+"delle password, la modifica dell’indirizzo IP statico, ecc. esulano dall’"
+"ambito di questo strumento. Per questa tipologia di modifiche, vedere virt-"
+"sysprep(1)."
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
 msgid "General Options"
@@ -6598,10 +6595,8 @@ msgstr "In attesa del completamento dell'installazione."
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] ""
-"In attesa di %(minutes)d minuto del completamento dell'installazione."
-msgstr[1] ""
-"In attesa di %(minutes)d minuti del completamento dell'installazione."
+msgstr[0] "In attesa di %(minutes)d minuto del completamento dell'installazione."
+msgstr[1] "In attesa di %(minutes)d minuti del completamento dell'installazione."
 
 #: virtinst/virtinstall.py:743
 #, python-format
@@ -7058,16 +7053,16 @@ msgid ""
 msgstr ""
 "Applica le modifiche alla macchina in esecuzione.\n"
 "Con --add-device, questa è un’operazione di collegamento di dispositivi.\n"
-"Con --remove-device, questa è un’operazione di scollegamento di "
-"dispositivi.\n"
+"Con --remove-device, questa è un’operazione di scollegamento di dispositivi."
+"\n"
 "Con --edit, questa è un’operazione di aggiornamento di dispositivi."
 
 #: virtinst/virtxml.py:403
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
-"Forza la definizione del dominio. Richiesta solo se è stata specificata "
-"un’opzione --print."
+"Forza la definizione del dominio. Richiesta solo se è stata specificata un’"
+"opzione --print."
 
 #: virtinst/virtxml.py:406
 msgid "Force not defining the domain."
