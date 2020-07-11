@@ -96,11 +96,10 @@ that still need to be added to our command line.
 
 ## Translations
 
-Translations are handled at `fedora.zanata.org`. Please register for a Fedora
-account and request access to a translation team, as described at
-[Translate on Zanata](https://fedoraproject.org/wiki/L10N/Translate_on_Zanata),
-and contribute at
-[virt-manager at Zanata](https://fedora.zanata.org/project/view/virt-manager/).
+Translations are handled through the Weblate instance hosted by the Fedora Project.
+
+* https://translate.fedoraproject.org/projects/virt-manager/virt-manager/
+* More info about translating as part of Fedora: https://fedoraproject.org/wiki/L10N/Translate_on_Weblate
 
 
 ## Advanced testing
