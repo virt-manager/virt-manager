@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+
+  # This job will run ./setup.py extract_messages on top of git master
+  # and force push that to the 'translations' branch. That branch will
+  # always have an up to date .pot file for use in weblate
+  update-translation-pot:
+    # Only run this if on the main 'virt-manager/virt-manager' repo, not forks
+    if: "contains(github.repository, 'virt-manager/virt-manager')"
+
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - name: Install deps
+      run: |
+        dnf install -y python3-setuptools gettext git
+
+    - uses: actions/checkout@v2
+      with:
+        # This fetches full git history. We need that for proper
+        # branch updating
+        fetch-depth: 0
+
+    - name: Extract messages
+      run: ./setup.py extract_messages
+
+    - name: Push to translations branch
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "Github Actions"
+
+        git commit po/virt-manager.pot \
+          --message "Refresh translation .pot template"
+        git fetch --all
+        git rebase remotes/origin/translations
+
+        remote_repo="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+        git push "${remote_repo}" HEAD:translations
