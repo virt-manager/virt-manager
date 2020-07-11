@@ -660,6 +660,7 @@ class ExtractMessages(distutils.core.Command):
         potfile = "po/virt-manager.pot"
         xgettext_args = [
             "xgettext",
+            "--add-comments=translators",
             "--msgid-bugs-address=" + bug_address,
             "--package-name=virt-manager",
             "--output=" + potfile,

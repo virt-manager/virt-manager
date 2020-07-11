@@ -454,8 +454,9 @@ class XMLBuilder(object):
         # know don't work
         forbid = [" "]
         if not val:
-            raise ValueError(
-                _("A name must be specified for the %s") % name_label)
+            # translators: value is a generic object type name
+            raise ValueError(_("A name must be specified for the %s") %
+                    name_label)
         for c in forbid:
             if c not in val:
                 continue
