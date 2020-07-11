@@ -163,8 +163,8 @@ class StoragePool(_StorageObject):
             return defpool
         except Exception as e:  # pragma: no cover
             raise RuntimeError(
-                _("Couldn't create default storage pool '%s': %s") %
-                (path, str(e)))
+                (_("Couldn't create default storage pool '%s'") % path) +
+                (": %s" % str(e)))
 
     @staticmethod
     def lookup_pool_by_path(conn, path):
@@ -728,16 +728,18 @@ class StorageVolume(_StorageObject):
         # pool info is [pool state, capacity, allocation, available]
         avail = self.pool.info()[3]
         if self.allocation > avail:
-            return (True, _("There is not enough free space on the storage "
-                            "pool to create the volume. "
-                            "(%d M requested allocation > %d M available)") %
-                            ((self.allocation // (1024 * 1024)),
-                             (avail // (1024 * 1024))))
+            msg = (_("There is not enough free space on the storage "
+                    "pool to create the volume. (%(mem1)s M requested "
+                    "allocation > %(mem2)s M available)") %
+                    {"mem1": (self.allocation // (1024 * 1024)),
+                     "mem2": (avail // (1024 * 1024))})
+            return (True, msg)
         elif self.capacity > avail:
-            return (False, _("The requested volume capacity will exceed the "
-                             "available pool space when the volume is fully "
-                             "allocated. "
-                             "(%d M requested capacity > %d M available)") %
-                             ((self.capacity // (1024 * 1024)),
-                              (avail // (1024 * 1024))))
+            msg = (_("The requested volume capacity will exceed the "
+                     "available pool space when the volume is fully "
+                     "allocated. (%(mem1)s M requested "
+                     "capacity > %(mem2)s M available)") %
+                     {"mem1": (self.capacity // (1024 * 1024)),
+                      "mem2": (avail // (1024 * 1024))})
+            return (False, msg)
         return (False, "")

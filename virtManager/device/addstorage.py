@@ -209,9 +209,10 @@ class vmmAddStorage(vmmGObjectUI):
         # Disk collision
         names = disk.is_conflict_disk()
         if names:
-            res = self.err.yes_no(
-                    _('Disk "%s" is already in use by other guests %s') %
-                     (disk.path, names),
+            msg = (_("Disk '%(path)s' is already in use by other "
+                   "guests %(names)s") %
+                   {"path": disk.path, "names": names})
+            res = self.err.yes_no(msg,
                     _("Do you really want to use the disk?"))
             if not res:
                 return False

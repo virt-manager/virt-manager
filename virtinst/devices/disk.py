@@ -849,8 +849,9 @@ class DeviceDisk(Device):
             self.target = ret
             return ret
 
-        raise ValueError(_("Only %s disks for bus '%s' are supported"
-                           % (maxnode, self.bus)))
+        raise ValueError(
+                _("Only %(number)s disks for bus '%(bus)s' are supported") %
+                {"number": maxnode, "bus": self.bus})
 
     def change_bus(self, guest, newbus):
         """

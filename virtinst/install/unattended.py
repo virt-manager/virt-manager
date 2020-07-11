@@ -54,7 +54,8 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
         login = login.lower()
         if not is_user_login_safe(login):
             raise RuntimeError(
-                _("%s cannot use '%s' as user-login.") % (osobj.name, login))
+                _("%(osname)s cannot use '%(loginname)s' as user-login.") %
+                {"osname": osobj.name, "loginname": login})
 
         config.set_user_login(login)
         config.set_user_realname(realname)
@@ -188,8 +189,9 @@ class OSInstallScript:
         supported_injection_methods = self._script.get_injection_methods()
         if (injection_method & supported_injection_methods == 0):
             raise RuntimeError(
-                _("OS '%s' does not support required injection method '%s'") %
-                (self._osobj.name, namestr))
+                _("OS '%(osname)s' does not support required "
+                  "injection method '%(methodname)s'") %
+                {"osname": self._osobj.name, "methodname": namestr})
 
         self._script.set_preferred_injection_method(injection_method)
 
@@ -344,9 +346,11 @@ def _lookup_rawscripts(osinfo, profile, os_media):
         rawscripts = script_map.get(profile, [])
         if not rawscripts:
             raise RuntimeError(
-                _("OS '%s' does not support unattended installation for "
-                  "the '%s' profile. Available profiles: %s") %
-                (osinfo.name, profile, ", ".join(profile_names)))
+                _("OS '%(osname)s' does not support unattended "
+                  "installation for the '%(profilename)s' profile. "
+                  "Available profiles: %(profiles)s") %
+                {"osname": osinfo.name, "profilename": profile,
+                 "profiles": ", ".join(profile_names)})
     else:
         profile = _find_default_profile(profile_names)
         log.warning(_("Using unattended profile '%s'"), profile)

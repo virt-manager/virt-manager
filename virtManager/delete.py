@@ -199,8 +199,9 @@ class _vmmDeleteBase(vmmGObjectUI):
 
             self._delete_vm(vm)
         except Exception as e:
-            error = (_("Error deleting virtual machine '%s': %s") %
-                      (vm.get_name(), str(e)))
+            error = (
+                (_("Error deleting virtual machine '%s'") % vm.get_name()) +
+                (": %s") % str(e))
             details = "".join(traceback.format_exc())
 
         storage_errstr = ""

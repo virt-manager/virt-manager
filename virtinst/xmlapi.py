@@ -187,8 +187,9 @@ class _XMLBase(object):
         if rootname == expected_root_name:
             return
         raise RuntimeError(
-            _("XML did not have expected root element name '%s', found '%s'") %
-            (expected_root_name, rootname))
+            _("XML did not have expected root element name "
+              "'%(expectname)s', found '%(foundname)s'") %
+            {"expectname": expected_root_name, "foundname": rootname})
 
     def _node_set_content(self, xpath, node, setval):
         xpathobj = _XPath(xpath)

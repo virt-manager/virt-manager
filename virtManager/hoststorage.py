@@ -318,8 +318,9 @@ class vmmHostStorage(vmmGObjectUI):
         self.widget("pool-name-entry").set_text(pool.get_name())
         self.widget("pool-name-entry").set_editable(not active)
         self.widget("pool-sizes").set_markup(
-                _("%s Free / <i>%s In Use</i>") %
-                (pool.get_pretty_available(), pool.get_pretty_allocation()))
+                _("%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>") %
+                {"bytesfree": pool.get_pretty_available(),
+                 "bytesinuse": pool.get_pretty_allocation()})
         self.widget("pool-location").set_text(
                 pool.get_target_path())
         self.widget("pool-state-icon").set_from_icon_name(

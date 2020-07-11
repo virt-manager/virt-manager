@@ -459,9 +459,10 @@ class XMLBuilder(object):
         for c in forbid:
             if c not in val:
                 continue
-            raise ValueError(
-                _("%s name '%s' can not contain '%s' character.") %
-                (name_label, val, c))
+            msg = (_("%(objecttype)s name '%(name)s' can not contain "
+                    "'%(char)s' character.") %
+                    {"objecttype": name_label, "name": val, "char": c})
+            raise ValueError(msg)
 
 
     def __init__(self, conn, parsexml=None,

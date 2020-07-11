@@ -61,7 +61,7 @@ class DeviceAddress(XMLBuilder):
     def pretty_desc(self):
         pretty_desc = None
         if self.type == self.ADDRESS_TYPE_DRIVE:
-            pretty_desc = _("%s:%s:%s:%s" %
+            pretty_desc = ("%s:%s:%s:%s" %
                             (self.controller, self.bus, self.target, self.unit))
         return pretty_desc
 

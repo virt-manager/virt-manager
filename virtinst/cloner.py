@@ -42,8 +42,9 @@ def _replace_vm(conn, name):
         log.debug("Undefining guest '%s'", name)
         vm.undefine()
     except libvirt.libvirtError as e:  # pragma: no cover
-        raise RuntimeError(_("Could not remove old vm '%s': %s") %
-                           (str(e)))
+        raise RuntimeError(
+                (_("Could not remove old vm '%s'") % name) +
+                (": " + str(e)))
 
 
 class Cloner(object):
@@ -156,8 +157,9 @@ class Cloner(object):
                 disklist.append(disk)
             except Exception as e:
                 log.debug("Error setting clone path.", exc_info=True)
-                raise ValueError(_("Could not use path '%s' for cloning: %s") %
-                                 (path, str(e)))
+                raise ValueError(
+                        (_("Could not use path '%s' for cloning") % path) +
+                        (": " + str(e)))
 
         self._clone_disks = disklist
     def get_clone_paths(self):

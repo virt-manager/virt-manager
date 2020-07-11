@@ -87,9 +87,10 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
             fail(_("No --%s objects found in the XML") %
                 parserclass.cli_arg_name)
         if len(objlist) < abs(idx):
-            fail(_("--edit %s requested but there's only %s "
-                   "--%s object in the XML") %
-                (idx, len(objlist), parserclass.cli_arg_name))
+            fail(_("'--edit %(number)s' requested but there's only %(max)s "
+                   "--%(type)s object in the XML") %
+                {"number": idx, "max": len(objlist),
+                 "type": parserclass.cli_arg_name})
 
         if idx > 0:
             idx -= 1
@@ -104,8 +105,8 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
         parserobj = parserclass(editval, guest=guest)
         inst = parserobj.lookup_child_from_option_string()
         if not inst:
-            fail(_("No matching objects found for --%s %s") %
-                 (action_name, editval))
+            fail(_("No matching objects found for %s") %
+                 ("--%s %s" % (action_name, editval)))
 
     return inst
 
@@ -149,9 +150,10 @@ def action_edit(guest, options, parserclass):
     else:
         inst = guest
         if options.edit and options.edit != '1' and options.edit != 'all':
-            fail(_("'--edit %s' doesn't make sense with --%s, "
-                   "just use empty '--edit'") %
-            (options.edit, parserclass.cli_arg_name))
+            fail(_("'--edit %(option)s' doesn't make sense with "
+                   "--%(objecttype)s, just use empty '--edit'") %
+                 {"option": options.edit,
+                  "objecttype": parserclass.cli_arg_name})
     if options.os_variant is not None:
         fail(_("--os-variant is not supported with --edit"))
 
@@ -241,7 +243,8 @@ def start_domain_transient(conn, xmlobj, devs, action, confirm):
     try:
         dom = conn.createXML(xmlobj.get_xml())
     except libvirt.libvirtError as e:
-        fail(_("Failed starting domain '%s': %s") % (xmlobj.name, e))
+        fail((_("Failed starting domain '%s'") % xmlobj.name) +
+             (": %s" % e))
     else:
         print_stdout(_("Domain '%s' started successfully.") % xmlobj.name)
         return dom
@@ -275,7 +278,8 @@ def update_changes(domain, devs, action, confirm):
             elif action == "update":
                 domain.updateDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
         except libvirt.libvirtError as e:
-            fail(_("Error attempting device %s: %s") % (action, e))
+            fail((_("Error attempting device action %s") % action) +
+                 (": %s" % e))
 
         # Test driver doesn't support device hotplug so we can't reach this
         print_stdout(_("Device %s successful.") % action)  # pragma: no cover
@@ -501,8 +505,8 @@ def main(conn=None):
         try:
             dom.create()
         except libvirt.libvirtError as e:  # pragma: no cover
-            fail(_("Failed starting domain '%s': %s") % (
-                inactive_xmlobj.name, e))
+            fail((_("Failed starting domain '%s'") % inactive_xmlobj.name) +
+                 (": " % e))
         print_stdout(_("Domain '%s' started successfully.") %
                      inactive_xmlobj.name)
 

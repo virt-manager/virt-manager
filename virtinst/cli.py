@@ -305,10 +305,12 @@ def check_path_search(conn, path):
     searchdata = DeviceDisk.check_path_search(conn, path)
     if not searchdata.fixlist:
         return
-    log.warning(_("%s may not be accessible by the hypervisor. "
-        "You will need to grant the '%s' user search permissions for "
-        "the following directories: %s"),
-        path, searchdata.user, searchdata.fixlist)  # pragma: no cover
+    msg = (  # pragma: no cover
+        _("%(path)s may not be accessible by the hypervisor. "
+        "You will need to grant the '%(user)s' user search permissions for "
+        "the following directories: %(dirs)s") %
+        {"path": path, "user": searchdata.user, "dirs": searchdata.fixlist})
+    log.warning(msg)  # pragma: no cover
 
 
 def _optional_fail(msg, checkname, warn_on_skip=True):
@@ -360,9 +362,9 @@ def validate_disk(dev, warn_overwrite=False):
         if not names:
             return
 
-        _optional_fail(_("Disk %s is already in use by other guests %s." %
-            (dev.path, names)),
-            "path_in_use")
+        msg = (_("Disk %(path)s is already in use by other guests %(names)s.") %
+            {"path": dev.path, "names": names})
+        _optional_fail(msg, "path_in_use")
 
     def check_size_conflict(dev):
         """
@@ -487,7 +489,8 @@ def get_domain_and_guest(conn, domstr):
             else:
                 raise
     except libvirt.libvirtError as e:
-        fail(_("Could not find domain '%s': %s") % (domstr, e))
+        fail((_("Could not find domain '%s'") % domstr) +
+             (": " + str(e)))
 
     state = domain.info()[0]
     active_xmlobj = None
@@ -1453,8 +1456,9 @@ class VirtCLIParser(metaclass=_InitClass):
         passed an invalid argument such as --disk idontexist=foo
         """
         if optdict:
-            fail(_("Unknown %s options: %s") %
-                    (self.cli_flag_name(), list(optdict.keys())))
+            fail(_("Unknown %(optionflag)s options: %(string)s") %
+                    {"optionflag": self.cli_flag_name(),
+                     "string": list(optdict.keys())})
 
     def _parse(self, inst):
         """
@@ -3148,7 +3152,8 @@ class ParserDisk(VirtCLIParser):
                 # It's default. Nothing to do.
                 pass
             else:
-                fail(_("Unknown '%s' value '%s'") % ("perms", val))
+                fail(_("Unknown '%(optionname)s' value '%(string)'") %
+                    {"optionname": "perms", "string": val})
 
         backing_store = self.optdict.pop("backing_store", None)
         backing_format = self.optdict.pop("backing_format", None)

@@ -225,8 +225,8 @@ def _label_for_device(dev):
         pretty = vmmGraphicsDetails.graphics_pretty_type_simple(dev.type)
         return _("Display %s") % pretty
     if devtype == "redirdev":
-        return _("%s Redirector %s") % (dev.bus.upper(),
-                dev.get_xml_idx() + 1)
+        return (_("%s Redirector") % (dev.bus.upper()) +
+                (" %s" % (dev.get_xml_idx() + 1)))
     if devtype == "hostdev":
         return vmmAddHardware.hostdev_pretty_name(dev)
     if devtype == "sound":
@@ -234,10 +234,10 @@ def _label_for_device(dev):
     if devtype == "video":
         return _("Video %s") % vmmAddHardware.video_pretty_model(dev.model)
     if devtype == "filesystem":
-        return _("Filesystem %s") % dev.target[:8]
+        return _("Filesystem") + (" %s" % dev.target[:8])
     if devtype == "controller":
-        return _("Controller %s %s") % (
-                vmmAddHardware.controller_pretty_desc(dev), dev.index)
+        return _("Controller") + (" %s %s" % (
+                vmmAddHardware.controller_pretty_desc(dev), dev.index))
     if devtype == "rng":
         label = _("RNG")
         if dev.device:
@@ -1600,9 +1600,10 @@ class vmmDetails(vmmGObjectUI):
 
             names = virtinst.DeviceDisk.path_in_use_by(devobj.conn, path)
             if names:
-                res = self.err.yes_no(
-                        _('Disk "%s" is already in use by other guests %s') %
-                         (path, names),
+                msg = (_("Disk '%(path)s' is already in use by other "
+                       "guests %(names)s") %
+                       {"path": path, "names": names})
+                res = self.err.yes_no(msg,
                         _("Do you really want to use the disk?"))
                 if not res:
                     return False
@@ -2175,7 +2176,7 @@ class vmmDetails(vmmGObjectUI):
     def refresh_redir_page(self, rd):
         address = None
         if rd.type == 'tcp':
-            address = _("%s:%s") % (rd.source.host, rd.source.service)
+            address = "%s:%s" % (rd.source.host, rd.source.service)
 
         self.widget("redir-title").set_markup(_label_for_device(rd))
         self.widget("redir-type").set_text(

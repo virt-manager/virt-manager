@@ -534,8 +534,10 @@ class CloneStorageCreator(_StorageCreator):
 
 
             if msg:
-                msg += (_(" %d M requested > %d M available") %
-                        ((need // (1024 * 1024)), (avail // (1024 * 1024))))
+                msg += " "
+                msg += (_("%(mem1)s M requested > %(mem2)s M available") %
+                        {"mem1": (need // (1024 * 1024)),
+                         "mem2": (avail // (1024 * 1024))})
         return (ret, msg)
 
     def validate(self):
@@ -620,8 +622,12 @@ class CloneStorageCreator(_StorageCreator):
                     if i < size_bytes:
                         meter.update(i)
             except OSError as e:  # pragma: no cover
-                raise RuntimeError(_("Error cloning diskimage %s to %s: %s") %
-                                (self._input_path, self._output_path, str(e)))
+                msg = (_("Error cloning diskimage "
+                         "%(inputpath)s to %(outputpath)s") %
+                         {"inputpath": self._input_path,
+                          "outputpath": self._output_path})
+                msg += ": " + str(e)
+                raise RuntimeError(msg)
         finally:
             if src_fd is not None:
                 os.close(src_fd)

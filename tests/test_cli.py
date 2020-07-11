@@ -858,7 +858,7 @@ c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail 
 c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
 c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
 c.add_invalid("--install winxp", grep="does not have a URL location")  # no URL for winxp
-c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL location for the i686")  # there's no URL for i686
+c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL location for the architecture 'i686")  # there's no URL for i686
 c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for ambiguous -c and --cdrom collision
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure

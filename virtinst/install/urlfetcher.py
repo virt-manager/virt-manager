@@ -67,8 +67,9 @@ class _URLFetcher(object):
         try:
             urlobj, size = self._grabber(url)
         except Exception as e:
-            raise ValueError(_("Couldn't acquire file %s: %s") %
-                               (url, str(e)))
+            raise ValueError(
+                    (_("Couldn't acquire file %s") % url) +
+                    (": %s" % str(e)))
 
         log.debug("Fetching URI: %s", url)
         self.meter.start(
@@ -244,8 +245,9 @@ class _FTPURLFetcher(_URLFetcher):
             # Force binary mode
             self._ftp.voidcmd("TYPE I")
         except Exception as e:  # pragma: no cover
-            raise ValueError(_("Opening URL %s failed: %s.") %
-                              (self.location, str(e)))
+            raise ValueError(
+                    (_("Opening URL %s failed") % self.location) +
+                    (": %s" % str(e)))
 
     def _grabber(self, url):
         """

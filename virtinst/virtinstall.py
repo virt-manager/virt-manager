@@ -343,9 +343,10 @@ def _show_memory_warnings(guest):
     minram = (res.get_minimum_ram(guest.os.arch) or 0)
     if minram:
         if (minram // 1024) > guest.currentMemory:
-            log.warning(_("Requested memory %s MiB is less than the "
-                "recommended %s MiB for OS %s"), rammb,
-                minram // (1024 * 1024), guest.osinfo.name)
+            log.warning(_("Requested memory %(mem1)s MiB is less than the "
+                "recommended %(mem2)s MiB for OS %(osname)s"),
+                {"mem1": rammb, "mem2": minram // (1024 * 1024),
+                 "osname": guest.osinfo.name})
     elif rammb < 17:
         log.warning(_("Requested memory %s MiB is abnormally low. "
             "Were you trying to specify GiB?"), rammb)

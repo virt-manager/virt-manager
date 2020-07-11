@@ -308,11 +308,13 @@ def getDistroStore(guest, fetcher, skip_error):
         extramsg = (": " +
             _("The URL could not be accessed, maybe you mistyped?"))
 
-    raise ValueError(
-        _("Could not find an installable distribution at '%s'%s\n\n"
-          "The location must be the root directory of an install tree.\n"
-          "See virt-install man page for various distro examples." %
-          (fetcher.location, extramsg)))
+    msg = (_("Could not find an installable distribution at URL '%s'") %
+            fetcher.location)
+    msg += extramsg
+    msg += "\n\n"
+    msg += _("The location must be the root directory of an install tree.\n"
+          "See virt-install man page for various distro examples.")
+    raise ValueError(msg)
 
 
 ##################

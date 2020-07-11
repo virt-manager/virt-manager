@@ -210,8 +210,9 @@ class vmmNetworkList(vmmGObjectUI):
             netobj.start()
             log.debug("Started network '%s'", devname)
         except Exception as e:
-            return self.err.show_err(_("Could not start virtual network "
-                                  "'%s': %s") % (devname, str(e)))
+            return self.err.show_err(
+                    (_("Could not start virtual network '%s'") % devname) +
+                    (": %s") % str(e))
 
     def _find_rowiter_for_dev(self, net):
         nettype = net.type

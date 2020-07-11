@@ -460,8 +460,9 @@ class VNCViewer(Viewer):
             sock.connect(self._ginfo.gsocket)
             self._sockfd = sock
         except Exception as e:
-            raise RuntimeError(_("Error opening socket path '%s': %s") %
-                               (self._ginfo.gsocket, e))
+            raise RuntimeError(
+                (_("Error opening socket path '%s'") % self._ginfo.gsocket) +
+                (": %s" % e))
 
         fd = self._sockfd.fileno()
         if fd < 0:

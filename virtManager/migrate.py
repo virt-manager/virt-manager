@@ -399,8 +399,8 @@ class vmmMigrateDialog(vmmGObjectUI):
             [self.vm, destconn, uri, tunnel, unsafe, temporary],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'") % self.vm.get_name(),
-            (_("Migrating VM '%s' to %s. This may take a while.") %
-             (self.vm.get_name(), destlabel)),
+            (_("Migrating VM '%(name)s' to %(host)s. This may take a while.") %
+                {"name": self.vm.get_name(), "host": destlabel}),
             self.topwin, cancel_cb=cancel_cb)
         progWin.run()
 

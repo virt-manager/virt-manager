@@ -259,8 +259,10 @@ class Installer(object):
         ram = guest.osinfo.get_network_install_required_ram(guest)
         ram = (ram or 0) // 1024
         if ram > guest.currentMemory:
-            log.warning(_("Overriding memory to %s MiB needed for %s "
-                "network install."), ram // 1024, guest.osinfo.name)
+            msg = (_("Overriding memory to %(number)s MiB needed for "
+                "%(osname)s network install.") %
+                {"number": ram // 1024, "osname": guest.osinfo.name})
+            log.warning(msg)
             guest.currentMemory = ram
 
 

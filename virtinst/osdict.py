@@ -234,9 +234,10 @@ class _OSDB(object):
         if key not in self._all_variants and key in self._aliases:
             alias = self._aliases[key]
             # Added 2018-10-02. Maybe remove aliases in a year
-            log.warning(
-                _("OS name '%s' is deprecated, using '%s' instead. "
-                  "This alias will be removed in the future."), key, alias)
+            msg = (_("OS name '%(oldname)s' is deprecated, using '%(newname)s' "
+                    "instead. This alias will be removed in the future.") %
+                    {"oldname": key, "newname": alias})
+            log.warning(msg)
             key = alias
 
         ret = self._all_variants.get(key)
@@ -676,8 +677,9 @@ class _OsVariant(object):
             return location
 
         raise RuntimeError(
-            _("OS '%s' does not have a URL location for the %s architecture") %
-            (self.name, arch))
+            _("OS '%(osname)s' does not have a URL location "
+              "for the architecture '%(archname)s'") %
+            {"osname": self.name, "archname": arch})
 
     def get_install_script_list(self):
         if not self._os:
