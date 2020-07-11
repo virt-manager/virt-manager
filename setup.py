@@ -657,13 +657,18 @@ class ExtractMessages(distutils.core.Command):
 
     def run(self):
         bug_address = "https://github.com/virt-manager/virt-manager/issues"
+        potfile = "po/virt-manager.pot"
         xgettext_args = [
             "xgettext",
-            "-F",
             "--msgid-bugs-address=" + bug_address,
-            "-o", "po/virt-manager.pot",
             "--package-name=virt-manager",
+            "--output=" + potfile,
+            "--sort-by-file",
+            "--join-existing",
         ]
+
+        # Truncate .pot file to ensure it exists
+        open(potfile, "w").write("")
 
         # First extract the messages from the AppStream sources,
         # creating the template
@@ -673,20 +678,20 @@ class ExtractMessages(distutils.core.Command):
 
         # Extract the messages from the desktop files
         desktop_files = [f for sublist in _desktop_files for f in sublist[1]]
-        cmd = xgettext_args + ["-j", "-L", "Desktop"] + desktop_files
+        cmd = xgettext_args + ["--language=Desktop"] + desktop_files
         self.spawn(cmd)
 
         # Extract the messages from the Python sources
         py_sources = list(Path("virtManager").rglob("*.py"))
         py_sources += list(Path("virtinst").rglob("*.py"))
         py_sources = [str(src) for src in py_sources]
-        cmd = xgettext_args + ["-j", "-L", "Python"] + py_sources
+        cmd = xgettext_args + ["--language=Python"] + py_sources
         self.spawn(cmd)
 
         # Extract the messages from the Glade UI files
         ui_files = list(Path(".").rglob("*.ui"))
         ui_files = [str(src) for src in ui_files]
-        cmd = xgettext_args + ["-j", "-L", "Glade"] + ui_files
+        cmd = xgettext_args + ["--language=Glade"] + ui_files
         self.spawn(cmd)
 
 
