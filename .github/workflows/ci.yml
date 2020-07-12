@@ -36,10 +36,11 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "Github Actions"
 
-        git commit po/virt-manager.pot \
-          --message "Refresh translation .pot template"
         git fetch --all
         git rebase remotes/origin/translations
+
+        git commit po/virt-manager.pot \
+          --message "Refresh translation .pot template"
 
         remote_repo="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
         git push "${remote_repo}" HEAD:translations
