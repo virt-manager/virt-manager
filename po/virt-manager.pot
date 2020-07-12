@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-12 13:02+0000\n"
+"POT-Creation-Date: 2020-07-12 18:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5064,80 +5064,86 @@ msgid ""
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:819
-msgid "Set domain <iothreads> and <iothreadids> configuration."
+#: virtinst/cli.py:816
+msgid ""
+"Configure an IOMMU device. Ex:\n"
+"--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
 #: virtinst/cli.py:823
-msgid "Set domain seclabel configuration."
+msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
 #: virtinst/cli.py:827
+msgid "Set domain seclabel configuration."
+msgstr ""
+
+#: virtinst/cli.py:831
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:832
+#: virtinst/cli.py:836
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:836
+#: virtinst/cli.py:840
 msgid "Tune NUMA policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:840
+#: virtinst/cli.py:844
 msgid "Tune memory policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:844
+#: virtinst/cli.py:848
 msgid "Tune blkio policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:848
+#: virtinst/cli.py:852
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
 
-#: virtinst/cli.py:853
+#: virtinst/cli.py:857
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:863
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
 
-#: virtinst/cli.py:864
+#: virtinst/cli.py:868
 msgid "Configure VM power management features"
 msgstr ""
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:872
 msgid "Configure VM lifecycle management policy"
 msgstr ""
 
-#: virtinst/cli.py:872
+#: virtinst/cli.py:876
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr ""
 
-#: virtinst/cli.py:876
+#: virtinst/cli.py:880
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:886
 msgid ""
 "Pass arguments directly to the qemu emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:892
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5145,20 +5151,20 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:896
+#: virtinst/cli.py:900
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
 
-#: virtinst/cli.py:902
+#: virtinst/cli.py:906
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:912
+#: virtinst/cli.py:916
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5167,76 +5173,76 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:920
+#: virtinst/cli.py:924
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:923
+#: virtinst/cli.py:927
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:925
+#: virtinst/cli.py:929
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:927
+#: virtinst/cli.py:931
 msgid ""
 "This is used for deciding optimal defaults like virtio.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:959
+#: virtinst/cli.py:963
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr ""
 
-#: virtinst/cli.py:1146
+#: virtinst/cli.py:1150
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: virtinst/cli.py:1459
+#: virtinst/cli.py:1463
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1515 virtinst/cli.py:1546
+#: virtinst/cli.py:1519 virtinst/cli.py:1550
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1800
+#: virtinst/cli.py:1804
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
 
-#: virtinst/cli.py:1807
+#: virtinst/cli.py:1811
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1818
+#: virtinst/cli.py:1822
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3142
+#: virtinst/cli.py:3146
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr ""
 
-#: virtinst/cli.py:3155
+#: virtinst/cli.py:3159
 msgid "Unknown '%(optionname)s' value '%(string)'"
 msgstr ""
 
-#: virtinst/cli.py:3170
+#: virtinst/cli.py:3174
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 
-#: virtinst/cli.py:3596
+#: virtinst/cli.py:3600
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5426,25 +5432,25 @@ msgstr ""
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
 
-#: virtinst/guest.py:76
+#: virtinst/guest.py:77
 msgid "Guest"
 msgstr ""
 
-#: virtinst/guest.py:84
+#: virtinst/guest.py:85
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr ""
 
-#: virtinst/guest.py:522
+#: virtinst/guest.py:523
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: virtinst/guest.py:526
+#: virtinst/guest.py:527
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:531
+#: virtinst/guest.py:532
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
