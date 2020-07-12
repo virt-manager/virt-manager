@@ -4,6 +4,7 @@
 # See the COPYING file in the top-level directory.
 
 import glob
+import subprocess
 import unittest
 import xml.etree.ElementTree as ET
 
@@ -21,7 +22,6 @@ class TestDist(unittest.TestCase):
         """
         failures = []
         for pofile in glob.glob("po/*.po"):
-            import subprocess
             proc = subprocess.Popen(["msgfmt", "--output-file=/dev/null",
                 "--check", pofile],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -35,6 +35,26 @@ class TestDist(unittest.TestCase):
         msg = "The following po files have errors:\n"
         msg += "\n".join(failures)
         raise AssertionError(msg)
+
+
+    def test_validate_pot_strings(self):
+        """
+        Validate that xgettext via `setup.py extract_messages` don't print
+        any warnings
+        """
+        potfile = "po/virt-manager.pot"
+        origpot = open(potfile).read()
+        try:
+            out = subprocess.check_output(
+                    ["./setup.py", "extract_messages"],
+                    stderr=subprocess.STDOUT)
+            warnings = [l for l in out.decode("utf-8").splitlines()
+                        if "warning:" in l]
+            if warnings:
+                raise AssertionError("xgettext has warnings:\n\n%s" %
+                        "\n".join(warnings))
+        finally:
+            open(potfile, "w").write(origpot)
 
 
     def test_ui_minimum_version(self):
