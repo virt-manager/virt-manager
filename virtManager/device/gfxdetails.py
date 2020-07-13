@@ -160,12 +160,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
             auto = self.widget(basename + "-auto")
             widget = self.widget(basename)
             auto.set_inconsistent(False)
-            label = auto.get_label().split(" (")[0]
+            label = _("A_uto")
 
             if val == -1 or gfx.autoport:
                 auto.set_active(True)
                 if val and val != -1:
-                    label += " (%s %s)" % (_("Port"), val)
+                    label = _("A_uto (Port %(port)d)") % {"port": val}
             elif val is None:
                 auto.set_inconsistent(True)
             else:
