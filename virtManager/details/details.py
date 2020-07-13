@@ -229,8 +229,10 @@ def _label_for_device(dev):
         pretty = vmmGraphicsDetails.graphics_pretty_type_simple(dev.type)
         return _("Display %s") % pretty
     if devtype == "redirdev":
-        return (_("%s Redirector") % (dev.bus.upper()) +
-                (" %s" % (dev.get_xml_idx() + 1)))
+        return _("%(bus)s Redirector %(index)d") % {
+            "bus": vmmAddHardware.disk_pretty_bus(dev.bus),
+            "index": dev.get_xml_idx() + 1,
+        }
     if devtype == "hostdev":
         return vmmAddHardware.hostdev_pretty_name(dev)
     if devtype == "sound":
