@@ -201,16 +201,20 @@ def _label_for_device(dev):
             return _("Keyboard")
         return _("Input")
 
-    if devtype in ["serial", "parallel", "console"]:
-        if devtype == "serial":
-            label = _("Serial")
-        elif devtype == "parallel":
-            label = _("Parallel")
-        elif devtype == "console":
-            label = _("Console")
+    if devtype == "serial":
         if dev.target_port is not None:
-            label += " %s" % (int(dev.target_port) + 1)
-        return label
+            return _("Serial %(num)d") % {"num": int(dev.target_port) + 1}
+        return _("Serial")
+
+    if devtype == "parallel":
+        if dev.target_port is not None:
+            return _("Parallel %(num)d") % {"num": int(dev.target_port) + 1}
+        return _("Parallel")
+
+    if devtype == "console":
+        if dev.target_port is not None:
+            return _("Console %(num)d") % {"num": int(dev.target_port) + 1}
+        return _("Console")
 
     if devtype == "channel":
         name = vmmAddHardware.char_pretty_channel_name(dev.target_name)
