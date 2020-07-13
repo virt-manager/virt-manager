@@ -149,8 +149,9 @@ class vmmMigrateDialog(vmmGObjectUI):
             self.widget("migrate-temporary-label").get_tooltip_text())
 
     def _reset_state(self):
-        title_str = ("<span size='large'>%s '%s'</span>" %
-                     (_("Migrate"), xmlutil.xml_escape(self.vm.get_name())))
+        title_str = _("<span size='large'>Migrate '%(vm)s'</span>") % {
+            "vm": xmlutil.xml_escape(self.vm.get_name()),
+        }
         self.widget("header-label").set_markup(title_str)
 
         self.widget("migrate-advanced-expander").set_expanded(False)
