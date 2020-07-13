@@ -1482,7 +1482,7 @@ for _cmd in _cmdlist:
         _base = os.path.splitext(os.path.basename(_cmd.compare_file))[0]
         _name += _base.replace("-", "_")
     else:
-        _name += _cmd.app.replace("-", "_")
+        _name += os.path.basename(_cmd.app.replace("-", "_"))
     setattr(CLITests, _name, maketest(_cmd))
 
 atexit.register(cleanup)
