@@ -290,21 +290,19 @@ class vmmMigrateDialog(vmmGObjectUI):
         origuri = self.conn.get_uri()
 
         can_migrate = False
-        desc = destconn.get_pretty_desc()
-        reason = ""
+        pretty_uri = destconn.get_pretty_desc()
+        desc = pretty_uri
         desturi = destconn.get_uri()
 
         if destconn.get_driver() != driver:
-            reason = _("Hypervisors do not match")
+            desc = _("%(uri)s (Hypervisors do not match)") % {"uri": pretty_uri}
         elif destconn.is_disconnected():
-            reason = _("Disconnected")
+            desc = _("%(uri)s (Disconnected)") % {"uri": pretty_uri}
         elif destconn.get_uri() == origuri:
-            reason = _("Same connection")
+            desc = _("%(uri)s (Same connection)") % {"uri": pretty_uri}
         elif destconn.is_active():
             can_migrate = True
 
-        if reason:
-            desc = "%s (%s)" % (desc, reason)
         return [desc, desturi, can_migrate]
 
     def _populate_destconn(self):
