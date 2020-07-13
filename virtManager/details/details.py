@@ -242,9 +242,12 @@ def _label_for_device(dev):
     if devtype == "filesystem":
         return _("Filesystem %(path)s") % {"path": dev.target[:8]}
     if devtype == "controller":
-        return _("Controller %(controller)s %(index)d") % {
+        idx = dev.index
+        if idx is None:
+            idx = ""
+        return _("Controller %(controller)s %(index)s") % {
             "controller": vmmAddHardware.controller_pretty_desc(dev),
-            "index": dev.index,
+            "index": idx,
         }
     if devtype == "rng":
         if dev.device:

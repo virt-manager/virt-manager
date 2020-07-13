@@ -172,4 +172,4 @@ class Manager(uiutils.UITestCase):
         uiutils.check_in_loop(
                 lambda: "File->Add Connection" in errlabel.text)
         uiutils.check_in_loop(
-                lambda: "appropriate qemu/kvm" in errlabel.text)
+                lambda: "appropriate QEMU/KVM" in errlabel.text)
