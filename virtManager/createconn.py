@@ -120,7 +120,7 @@ class vmmCreateConn(vmmGObjectUI):
         _add_hv_row(HV_BHYVE, "bhyve", "Bhyve")
         _add_hv_row(HV_VZ, "vz", "Virtuozzo")
         _add_hv_row(-1, None, "")
-        _add_hv_row(HV_CUSTOM, None, "Custom URI...")
+        _add_hv_row(HV_CUSTOM, None, _("Custom URI..."))
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
         def sepfunc(model, it):
