@@ -102,7 +102,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find("oslist-popover")
         osentry.click()
         self.pressKey("Enter")
-        uiutils.check_in_loop(lambda: osentry.text == "Generic default")
+        uiutils.check_in_loop(lambda: osentry.text == "Generic OS")
 
         # Verify back+forward still keeps Generic selected
         self.sleep(.5)

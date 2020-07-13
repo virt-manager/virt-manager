@@ -377,7 +377,7 @@ class _OsVariant(object):
         self.name = self._short_ids[0]
 
         self.full_id = self._os and self._os.get_id() or None
-        self.label = self._os and self._os.get_name() or "Generic default"
+        self.label = self._os and self._os.get_name() or _("Generic OS")
         self.codename = self._os and self._os.get_codename() or ""
         self.distro = self._os and self._os.get_distro() or ""
         self.version = self._os and self._os.get_version() or None
