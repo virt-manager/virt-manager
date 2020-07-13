@@ -201,7 +201,7 @@ class vmmEngine(vmmGObject):
             if msg:
                 msg += "\n\n"
             msg += _("Could not detect a default hypervisor. Make "
-                    "sure the appropriate qemu/kvm virtualization "
+                    "sure the appropriate QEMU/KVM virtualization "
                     "packages are installed to manage virtualization "
                     "on this host.")
 

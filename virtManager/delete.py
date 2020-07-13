@@ -557,7 +557,7 @@ def _can_delete(conn, vol, path):
         # Managed storage
         pool_type = vol.get_parent_pool().get_type()
         if pool_type == virtinst.StoragePool.TYPE_ISCSI:
-            msg = _("Cannot delete iscsi share.")
+            msg = _("Cannot delete iSCSI share.")
         elif pool_type == virtinst.StoragePool.TYPE_SCSI:
             msg = _("Cannot delete SCSI device.")
     else:

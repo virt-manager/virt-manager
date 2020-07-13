@@ -254,7 +254,7 @@ def _label_for_device(dev):
     devmap = {
         "panic": _("Panic Notifier"),
         "smartcard": _("Smartcard"),
-        "vsock": _("Virtio VSOCK"),
+        "vsock": _("VirtIO VSOCK"),
         "watchdog": _("Watchdog"),
     }
     return devmap[devtype]
