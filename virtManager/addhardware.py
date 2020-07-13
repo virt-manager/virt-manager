@@ -465,15 +465,15 @@ class vmmAddHardware(vmmGObjectUI):
     @staticmethod
     def controller_pretty_type(ctype):
         pretty_mappings = {
-            DeviceController.TYPE_IDE:             "IDE",
+            DeviceController.TYPE_IDE:             _("IDE"),
             DeviceController.TYPE_FDC:              _("Floppy"),
-            DeviceController.TYPE_SCSI:            "SCSI",
-            DeviceController.TYPE_SATA:            "SATA",
-            DeviceController.TYPE_VIRTIOSERIAL:    "VirtIO Serial",
-            DeviceController.TYPE_USB:             "USB",
-            DeviceController.TYPE_PCI:             "PCI",
-            DeviceController.TYPE_CCID:            "CCID",
-            DeviceController.TYPE_XENBUS:          "xenbus",
+            DeviceController.TYPE_SCSI:            _("SCSI"),
+            DeviceController.TYPE_SATA:            _("SATA"),
+            DeviceController.TYPE_VIRTIOSERIAL:    _("VirtIO Serial"),
+            DeviceController.TYPE_USB:             _("USB"),
+            DeviceController.TYPE_PCI:             _("PCI"),
+            DeviceController.TYPE_CCID:            _("CCID"),
+            DeviceController.TYPE_XENBUS:          _("xenbus"),
         }
         if ctype not in pretty_mappings:
             return ctype
@@ -486,7 +486,7 @@ class vmmAddHardware(vmmGObjectUI):
             if dev.model == "virtio-scsi":
                 ret = "Virtio " + ret
         if dev.type == "pci" and dev.model == "pcie-root":
-            ret = "PCIe"
+            ret = _("PCIe")
         return ret
 
     @staticmethod
@@ -973,10 +973,10 @@ class vmmAddHardware(vmmGObjectUI):
 
         rows = []
         if controller_type == DeviceController.TYPE_USB:
-            rows.append(["usb3", "USB 3"])
-            rows.append(["ich9-ehci1", "USB 2"])
+            rows.append(["usb3", _("USB 3")])
+            rows.append(["ich9-ehci1", _("USB 2")])
         elif controller_type == DeviceController.TYPE_SCSI:
-            rows.append(["virtio-scsi", "VirtIO SCSI"])
+            rows.append(["virtio-scsi", _("VirtIO SCSI")])
         rows.append([None, _("Hypervisor default")])
 
         for row in rows:
