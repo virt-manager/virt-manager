@@ -240,7 +240,7 @@ def _label_for_device(dev):
     if devtype == "video":
         return _("Video %s") % vmmAddHardware.video_pretty_model(dev.model)
     if devtype == "filesystem":
-        return _("Filesystem") + (" %s" % dev.target[:8])
+        return _("Filesystem %(path)s") % {"path": dev.target[:8]}
     if devtype == "controller":
         return _("Controller %(controller)s %(index)d") % {
             "controller": vmmAddHardware.controller_pretty_desc(dev),
