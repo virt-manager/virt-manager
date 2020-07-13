@@ -243,10 +243,9 @@ def _label_for_device(dev):
         return _("Controller") + (" %s %s" % (
                 vmmAddHardware.controller_pretty_desc(dev), dev.index))
     if devtype == "rng":
-        label = _("RNG")
         if dev.device:
-            label += (" %s" % dev.device)
-        return label
+            return _("RNG %(device)s") % {"device": dev.device}
+        return _("RNG")
     if devtype == "tpm":
         label = _("TPM")
         if dev.device_path:
