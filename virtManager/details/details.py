@@ -167,12 +167,12 @@ def _label_for_device(dev):
     devtype = dev.DEVICE_TYPE
 
     if devtype == "disk":
+        if dev.device == "floppy":
+            return _("Floppy %(index)d") % {"index": dev.disk_bus_index}
+
         busstr = vmmAddHardware.disk_pretty_bus(dev.bus) or ""
 
-        if dev.device == "floppy":
-            devstr = _("Floppy")
-            busstr = ""
-        elif dev.device == "cdrom":
+        if dev.device == "cdrom":
             devstr = _("CDROM")
         elif dev.device == "disk":
             devstr = _("Disk")
