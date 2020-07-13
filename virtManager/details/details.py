@@ -188,9 +188,9 @@ def _label_for_device(dev):
 
     if devtype == "interface":
         if dev.macaddr:
-            return "NIC %s" % dev.macaddr[-9:]
+            return _("NIC %(mac)s") % {"mac": dev.macaddr[-9:]}
         else:
-            return "NIC"
+            return _("NIC")
 
     if devtype == "input":
         if dev.type == "tablet":
