@@ -529,13 +529,16 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def disk_pretty_bus(bus):
-        if bus in ["ide", "sata", "scsi", "usb", "sd"]:
-            return bus.upper()
-        if bus in ["xen"]:
-            return bus.capitalize()
-        if bus == "virtio":
-            return "VirtIO"
-        return bus
+        bus_mappings = {
+            "ide": _("IDE"),
+            "sata": _("SATA"),
+            "scsi": _("SCSI"),
+            "sd": _("SD"),
+            "usb": _("USB"),
+            "virtio": _("VirtIO"),
+            "xen": _("Xen"),
+        }
+        return bus_mappings.get(bus, bus)
 
     @staticmethod
     def tpm_pretty_type(tpm_type):
