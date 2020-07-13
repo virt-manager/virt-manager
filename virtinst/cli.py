@@ -556,6 +556,7 @@ def autocomplete(parser):
         return
 
     import argcomplete
+    import unittest.mock
 
     parsernames = [pclass.cli_flag_name() for pclass in
                    _get_completer_parsers()]
@@ -572,13 +573,22 @@ def autocomplete(parser):
         kwargs["output_stream"] = io.BytesIO()
         kwargs["exit_method"] = sys.exit
 
-    try:
-        argcomplete.autocomplete(parser, **kwargs)
-    except SystemExit:
-        if in_testsuite():
-            output = kwargs["output_stream"].getvalue().decode("utf-8")
-            print(output)
-        raise
+    # This fdopen hackery is to avoid argcomplete debug_stream behavior
+    # from taking over an fd that pytest wants to use
+    fake_fdopen = os.fdopen
+    if in_testsuite():
+        def fake_fdopen_cb(*args, **kwargs):
+            return sys.stderr
+        fake_fdopen = fake_fdopen_cb
+
+    with unittest.mock.patch.object(os, "fdopen", fake_fdopen):
+        try:
+            argcomplete.autocomplete(parser, **kwargs)
+        except SystemExit:
+            if in_testsuite():
+                output = kwargs["output_stream"].getvalue().decode("utf-8")
+                print(output)
+            raise
 
 
 ###########################
