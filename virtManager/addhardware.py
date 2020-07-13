@@ -481,13 +481,13 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def controller_pretty_desc(dev):
-        ret = vmmAddHardware.controller_pretty_type(dev.type)
-        if dev.type == "scsi":
+        if dev.type == DeviceController.TYPE_SCSI:
             if dev.model == "virtio-scsi":
-                ret = "Virtio " + ret
-        if dev.type == "pci" and dev.model == "pcie-root":
-            ret = _("PCIe")
-        return ret
+                return _("VirtIO SCSI")
+        if dev.type == DeviceController.TYPE_PCI:
+            if dev.model == "pcie-root":
+                return _("PCIe")
+        return vmmAddHardware.controller_pretty_type(dev.type)
 
     @staticmethod
     def disk_old_recommended_buses(guest):
