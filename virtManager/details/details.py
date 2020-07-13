@@ -247,12 +247,9 @@ def _label_for_device(dev):
             return _("RNG %(device)s") % {"device": dev.device}
         return _("RNG")
     if devtype == "tpm":
-        label = _("TPM")
         if dev.device_path:
-            label += (" %s" % dev.device_path)
-        else:
-            label += (" v%s" % dev.version)
-        return label
+            return _("TPM %(device)s") % {"device": dev.device_path}
+        return _("TPM v%(version)s") % {"version": dev.version}
 
     devmap = {
         "panic": _("Panic Notifier"),
