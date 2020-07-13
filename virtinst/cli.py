@@ -682,7 +682,7 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
     ParserCPU.register()
     ParserVCPU.register()
     grp.add_argument("--vcpus", action="append",
-        help=_("Number of vcpus to configure for your guest. Ex:\n"
+        help=_("Number of vCPUs to configure for your guest. Ex:\n"
                "--vcpus 5\n"
                "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
                "--vcpus sockets=2,cores=4,threads=2"))
@@ -883,7 +883,7 @@ def add_guest_xml_options(geng):
 
     ParserQemuCLI.register()
     geng.add_argument("--qemu-commandline", action="append",
-        help=_("Pass arguments directly to the qemu emulator. Ex:\n"
+        help=_("Pass arguments directly to the QEMU emulator. Ex:\n"
                "--qemu-commandline='-display gtk,gl=on'\n"
                "--qemu-commandline env=DISPLAY=:0.1"))
 
@@ -928,7 +928,7 @@ def add_os_variant_option(parser, virtinstall):
     else:
         msg = _("The OS installed in the guest.")
     msg += "\n"
-    msg += _("This is used for deciding optimal defaults like virtio.\n"
+    msg += _("This is used for deciding optimal defaults like VirtIO.\n"
              "Example values: fedora29, rhel7.0, win10, ...\n"
              "See 'osinfo-query os' for a full list.")
 

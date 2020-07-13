@@ -276,7 +276,7 @@ class Cloner(object):
         log.debug("Validating original guest parameters")
 
         if self.original_guest is None and self.original_xml is None:
-            raise RuntimeError(_("Original guest name or xml is required."))
+            raise RuntimeError(_("Original guest name or XML is required."))
 
         if self.original_guest is not None and not self.original_xml:
             self.original_dom = self._lookup_vm(self.original_guest)

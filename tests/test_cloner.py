@@ -191,7 +191,7 @@ class TestClone(unittest.TestCase):
             # Add this bit here for coverage testing
             cloner.clone_xml = None
             cloner.setup_original()
-        self.assertTrue("Original guest name or xml" in str(err.exception))
+        self.assertTrue("Original guest name or XML" in str(err.exception))
 
         with self.assertRaises(RuntimeError) as err:
             cloner = Cloner(conn)

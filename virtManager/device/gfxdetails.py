@@ -234,7 +234,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             elif not [v for v in self.vm.xmlobj.devices.video if
                     (v.model == "virtio" and v.accel3d)]:
                 opengl_warning = _("Spice GL requires "
-                    "virtio graphics configured with accel3d.")
+                    "VirtIO graphics configured with accel3d.")
             elif gfx.get_first_listen_type() not in ["none", "socket"]:
                 opengl_warning = _("Graphics listen type does not support "
                     "spice GL.")

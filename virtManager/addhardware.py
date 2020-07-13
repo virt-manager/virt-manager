@@ -284,7 +284,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
             bool(DevicePanic.get_models(self.vm.get_xmlobj())),
             _("Not supported for this hypervisor/libvirt/arch combination."))
-        add_hw_option(_("Virtio VSOCK"), "network-idle", PAGE_VSOCK,
+        add_hw_option(_("VirtIO VSOCK"), "network-idle", PAGE_VSOCK,
             self.vm.is_hvm(),
             _("Not supported for this hypervisor/libvirt/arch combination."))
 
@@ -448,7 +448,7 @@ class vmmAddHardware(vmmGObjectUI):
         elif ctype == DeviceSerial.TYPE_UDP:
             return _("UDP net console")
         elif ctype == DeviceSerial.TYPE_UNIX:
-            return _("Unix socket")
+            return _("UNIX socket")
         elif ctype == DeviceSerial.TYPE_SPICEVMC:
             return _("Spice agent")
         elif ctype == DeviceSerial.TYPE_SPICEPORT:
