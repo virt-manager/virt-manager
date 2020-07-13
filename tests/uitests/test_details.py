@@ -112,9 +112,9 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
-        # VCPUs
+        # vCPUs
         tab = self._select_hw(win, "CPUs", "cpu-tab")
-        tab.find("VCPU allocation:", "spin button").text = "4"
+        tab.find("vCPU allocation:", "spin button").text = "4"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
 
@@ -146,7 +146,7 @@ class Details(uiutils.UITestCase):
         tab.find("Threads:", "spin button").typeText("2")
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertTrue(tab.find_fuzzy("VCPU allocation", "spin").text == "32")
+        self.assertTrue(tab.find_fuzzy("vCPU allocation", "spin").text == "32")
 
 
     def testDetailsEditDomain2(self):
@@ -315,7 +315,7 @@ class Details(uiutils.UITestCase):
 
         # Controller SCSI
         tab = self._select_hw(
-                win, "Controller Virtio SCSI 9", "controller-tab")
+                win, "Controller VirtIO SCSI 9", "controller-tab")
         tab.find("controller-model", "combo box").click_combo_entry()
         tab.find("Hypervisor default", "menu item").click()
         tab.find("SCSI Disk 1 on 9:0:0:0", "table cell")
@@ -357,7 +357,7 @@ class Details(uiutils.UITestCase):
 
 
         # vsock tweaks
-        tab = self._select_hw(win, "Virtio VSOCK", "vsock-tab")
+        tab = self._select_hw(win, "VirtIO VSOCK", "vsock-tab")
         addr = tab.find("vsock-cid")
         auto = tab.find("vsock-auto")
         self.assertTrue(addr.text == "5")
@@ -479,7 +479,7 @@ class Details(uiutils.UITestCase):
         finish.click()
         win.find("Details", "page tab").click()
         self.assertEqual(
-                tab.find("VCPU allocation:", "spin button").text, "8")
+                tab.find("vCPU allocation:", "spin button").text, "8")
 
         # Make some disk edits
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")

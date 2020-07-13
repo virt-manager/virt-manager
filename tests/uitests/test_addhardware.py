@@ -391,7 +391,7 @@ class AddHardware(uiutils.UITestCase):
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Parallel", "char-tab")
         tab.find("Device Type:", "combo box").click()
-        tab.find_fuzzy("Unix", "menu item").click()
+        tab.find_fuzzy("UNIX", "menu item").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
@@ -531,7 +531,7 @@ class AddHardware(uiutils.UITestCase):
 
         # Add vsock
         self._open_addhw_window(details)
-        tab = self._select_hw(addhw, "Virtio VSOCK", "vsock-tab")
+        tab = self._select_hw(addhw, "VirtIO VSOCK", "vsock-tab")
         tab.find("vsock-auto").click()
         tab.find("vsock-cid").text = "7"
         finish.click()
