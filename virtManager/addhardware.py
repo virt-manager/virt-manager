@@ -616,13 +616,35 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def input_pretty_name(typ, bus):
-        if typ == "tablet" and bus == "usb":
-            return _("EvTouch USB Graphics Tablet")
-
-        if bus in ["usb", "ps2"]:
-            return _("Generic") + (" %s %s" %
-                (bus.upper(), str(typ).capitalize()))
-        return "%s %s" % (str(bus).capitalize(), str(typ).capitalize())
+        pretty_mappings = {
+            (DeviceInput.TYPE_MOUSE, DeviceInput.BUS_PS2): _("Generic PS/2 Mouse"),
+            (DeviceInput.TYPE_MOUSE, DeviceInput.BUS_USB): _("Generic USB Mouse"),
+            (DeviceInput.TYPE_TABLET, DeviceInput.BUS_USB): _("EvTouch USB Graphics Tablet"),
+            (DeviceInput.TYPE_TABLET, DeviceInput.BUS_VIRTIO): _("Generic VirtIO Tablet"),
+            (DeviceInput.TYPE_KEYBOARD, DeviceInput.BUS_PS2): _("Generic PS/2 Keyboard"),
+            (DeviceInput.TYPE_KEYBOARD, DeviceInput.BUS_USB): _("Generic USB Keyboard"),
+            (DeviceInput.TYPE_KEYBOARD, DeviceInput.BUS_VIRTIO): _("Generic VirtIO Keyboard"),
+        }
+        try:
+            return pretty_mappings[(typ, bus)]
+        except KeyError:
+            bus_mappings = {
+                DeviceInput.BUS_PS2: _("PS/2"),
+                DeviceInput.BUS_USB: _("USB"),
+                DeviceInput.BUS_VIRTIO: _("VirtIO"),
+                DeviceInput.BUS_XEN: _("Xen"),
+            }
+            pretty_bus = bus_mappings.get(bus, str(bus).capitalize())
+            if typ == DeviceInput.TYPE_MOUSE:
+                return _("Generic %(bus)s Mouse") % {"bus": pretty_bus}
+            if typ == DeviceInput.TYPE_TABLET:
+                return _("Generic %(bus)s Tablet") % {"bus": pretty_bus}
+            if typ == DeviceInput.TYPE_KEYBOARD:
+                return _("Generic %(bus)s Keyboard") % {"bus": pretty_bus}
+            return _("Generic %(bus)s %(type)s") % {
+                "bus": pretty_bus,
+                "type": str(typ).capitalize()
+            }
 
     @staticmethod
     def interface_recommended_models(guest):
