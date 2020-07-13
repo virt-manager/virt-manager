@@ -213,13 +213,13 @@ def _label_for_device(dev):
         return label
 
     if devtype == "channel":
-        label = _("Channel")
         name = vmmAddHardware.char_pretty_channel_name(dev.target_name)
-        if not name:
-            name = vmmAddHardware.char_pretty_type(dev.type)
         if name:
-            label += " %s" % name
-        return label
+            return _("Channel %(name)s") % {"name": name}
+        pretty_type = vmmAddHardware.char_pretty_type(dev.type)
+        if pretty_type:
+            return _("Channel %(type)s") % {"type": pretty_type}
+        return _("Channel")
 
     if devtype == "graphics":
         pretty = vmmGraphicsDetails.graphics_pretty_type_simple(dev.type)
