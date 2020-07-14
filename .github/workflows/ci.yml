@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Install deps
       run: |
-        dnf install -y python3-setuptools gettext git
+        dnf install -y python3-setuptools gettext git diffutils
 
     - uses: actions/checkout@v2
       with:
@@ -36,9 +36,21 @@ jobs:
         git fetch --all
         git rebase remotes/origin/translations
 
+        cp po/virt-manager.pot old.pot
         ./setup.py extract_messages
-        git commit po/virt-manager.pot \
-          --message "Refresh translation .pot template"
+        ec=0
+        diff -q -I 'POT-Creation-Date' old.pot po/virt-manager.pot || ec=$?
+        case "${ec}" in
+          0) ;;
+          1)
+            git commit po/virt-manager.pot \
+              --message "Refresh translation .pot template"
 
-        remote_repo="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-        git push "${remote_repo}" HEAD:translations
+            remote_repo="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+            git push "${remote_repo}" HEAD:translations
+            ;;
+          *)
+            echo "diff failed with exit status ${ec}" >&2
+            exit 1
+            ;;
+        esac
