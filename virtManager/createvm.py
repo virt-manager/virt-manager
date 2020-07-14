@@ -1923,7 +1923,7 @@ class vmmCreateVM(vmmGObjectUI):
             self._show_customize_dialog(guest, installer)
         except Exception as e:
             self.reset_finish_cursor()
-            self.err.show_err(_("Error starting installation: ") + str(e))
+            self.err.show_err(_("Error starting installation: %s") % str(e))
             return
 
     def _cleanup_customize_window(self):

@@ -489,8 +489,10 @@ def get_domain_and_guest(conn, domstr):
             else:
                 raise
     except libvirt.libvirtError as e:
-        fail((_("Could not find domain '%s'") % domstr) +
-             (": " + str(e)))
+        fail(_("Could not find domain '%(domain)s': %(error)s") % {
+                 "domain": domstr,
+                 "error": str(e),
+             })
 
     state = domain.info()[0]
     active_xmlobj = None

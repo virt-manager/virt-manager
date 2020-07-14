@@ -736,7 +736,7 @@ class vmmConsolePages(vmmGObjectUI):
         except Exception as e:
             log.exception("Error connection to graphical console")
             self._activate_unavailable_page(
-                    _("Error connecting to graphical console") + ":\n%s" % e)
+                    _("Error connecting to graphical console:\n%s") % e)
 
     def _set_credentials(self, src_ignore=None):
         passwd = self.widget("console-auth-password")

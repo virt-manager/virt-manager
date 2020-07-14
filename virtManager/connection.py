@@ -598,11 +598,16 @@ class vmmConnection(vmmGObject):
             except Exception as fixerr:
                 log.debug("Failed to redefine original %s!",
                     obj.class_name(), exc_info=True)
-                msg = (_("%s rename failed. Attempting to "
-                    "recover also failed") % (obj.class_name()))
-                msg += "\n\n"
-                msg += ("Original error: %s\n\n" % str(renameerr))
-                msg += ("Recover error: %s" % str(fixerr))
+                msg = _("%(object)s rename failed. Attempting to recover also "
+                        "failed.\n"
+                        "\n"
+                        "Original error: %(origerror)s\n"
+                        "\n"
+                        "Recover error: %s") % {
+                            "object": obj.class_name(),
+                            "origerror": str(renameerr),
+                            "recovererror": str(fixerr),
+                        }
                 raise RuntimeError(msg)
             raise
         finally:

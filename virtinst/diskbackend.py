@@ -623,10 +623,10 @@ class CloneStorageCreator(_StorageCreator):
                         meter.update(i)
             except OSError as e:  # pragma: no cover
                 msg = (_("Error cloning diskimage "
-                         "%(inputpath)s to %(outputpath)s") %
+                         "%(inputpath)s to %(outputpath)s: %(error)s") %
                          {"inputpath": self._input_path,
-                          "outputpath": self._output_path})
-                msg += ": " + str(e)
+                          "outputpath": self._output_path,
+                          "error": str(e)})
                 raise RuntimeError(msg)
         finally:
             if src_fd is not None:

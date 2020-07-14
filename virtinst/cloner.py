@@ -43,8 +43,10 @@ def _replace_vm(conn, name):
         vm.undefine()
     except libvirt.libvirtError as e:  # pragma: no cover
         raise RuntimeError(
-                (_("Could not remove old vm '%s'") % name) +
-                (": " + str(e)))
+            _("Could not remove old vm '%(vm)s': %(error)s") % {
+                "vm": name,
+                "error": str(e),
+            })
 
 
 class Cloner(object):

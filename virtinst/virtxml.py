@@ -243,8 +243,10 @@ def start_domain_transient(conn, xmlobj, devs, action, confirm):
     try:
         dom = conn.createXML(xmlobj.get_xml())
     except libvirt.libvirtError as e:
-        fail((_("Failed starting domain '%s'") % xmlobj.name) +
-             (": %s" % e))
+        fail(_("Failed starting domain '%(domain)s': %(error)s") % {
+                 "vm": xmlobj.name,
+                 "error": e,
+             })
     else:
         print_stdout(_("Domain '%s' started successfully.") % xmlobj.name)
         return dom
@@ -278,8 +280,10 @@ def update_changes(domain, devs, action, confirm):
             elif action == "update":
                 domain.updateDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
         except libvirt.libvirtError as e:
-            fail((_("Error attempting device action %s") % action) +
-                 (": %s" % e))
+            fail(_("Error attempting device action %(action)s: %(error)s") % {
+                     "action": action,
+                     "error": e,
+                 })
 
         # Test driver doesn't support device hotplug so we can't reach this
         print_stdout(_("Device %s successful.") % action)  # pragma: no cover
@@ -505,8 +509,10 @@ def main(conn=None):
         try:
             dom.create()
         except libvirt.libvirtError as e:  # pragma: no cover
-            fail((_("Failed starting domain '%s'") % inactive_xmlobj.name) +
-                 (": " % e))
+            fail(_("Failed starting domain '%(domain)s': %(error)s") % {
+                     "domain": inactive_xmlobj.name,
+                     "error": e,
+                 })
         print_stdout(_("Domain '%s' started successfully.") %
                      inactive_xmlobj.name)
 
