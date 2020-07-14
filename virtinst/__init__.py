@@ -21,7 +21,8 @@ def _setup_i18n():
         # Can happen if user passed a bogus LANG
         pass
 
-    gettext.install("virt-manager", BuildConfig.gettext_dir)
+    gettext.install("virt-manager", BuildConfig.gettext_dir,
+                    names=["ngettext"])
     gettext.bindtextdomain("virt-manager", BuildConfig.gettext_dir)
 
 
