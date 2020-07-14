@@ -829,7 +829,9 @@ class vmmCloneVM(vmmGObjectUI):
                  self.clone_design.clone_name)
         text = title
         if self.clone_design.clone_disks:
-            text = title + _(" and selected storage (this may take a while)")
+            text = (_("Creating virtual machine clone '%s' and selected "
+                      "storage (this may take a while)") %
+                    self.clone_design.clone_name)
 
         progWin = vmmAsyncJob(self._async_clone, [],
                               self._finish_cb, [self.conn],
