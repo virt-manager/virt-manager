@@ -37,8 +37,7 @@ class _LibvirtEnumMap(object):
     # Regex map for 'state' values returned from lifecycle and other events
     _DETAIL1_PREFIX = {
         "VIR_DOMAIN_EVENT_ID_LIFECYCLE": "VIR_DOMAIN_EVENT_[^_]+$",
-        "VIR_DOMAIN_EVENT_ID_AGENT_LIFECYCLE": _("VIR_CONNECT_DOMAIN_EVENT_AGENT"
-                                                 "_LIFECYCLE_STATE_[^_]+$"),
+        "VIR_DOMAIN_EVENT_ID_AGENT_LIFECYCLE": "VIR_CONNECT_DOMAIN_EVENT_AGENT_LIFECYCLE_STATE_[^_]+$",
         "VIR_NETWORK_EVENT_ID_LIFECYCLE": "VIR_NETWORK_EVENT_[^_]+$",
         "VIR_STORAGE_POOL_EVENT_ID_LIFECYCLE": "VIR_STORAGE_POOL_EVENT_[^_]+$",
         "VIR_NODE_DEVICE_EVENT_ID_LIFECYCLE": "VIR_NODE_DEVICE_EVENT_[^_]+$",
