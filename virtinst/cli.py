@@ -381,13 +381,11 @@ def validate_disk(dev, warn_overwrite=False):
     check_path_search(dev.conn, dev.path)
 
 
-def _run_console(domain, console_type, args):
+def _run_console(domain, message, args):
     ignore = domain
     log.debug("Running: %s", " ".join(args))
     argstr = " ".join([shlex.quote(a) for a in args])
-    print_stdout(
-        _("Running %(console_type)s console command: %(command)s") %
-        {"command": argstr, "console_type": console_type})
+    print_stdout(message % {"command": argstr})
 
     if in_testsuite():
         args = ["/bin/test"]
@@ -409,21 +407,23 @@ def _gfx_console(guest, domain):
     args = ["virt-viewer",
             "--connect", guest.conn.uri,
             "--wait", guest.name]
+    message = _("Running graphical console command: %(command)s")
 
     # Currently virt-viewer needs attaching to the local display while
     # spice gl is enabled or listen type none is used.
     if guest.has_gl() or guest.has_listen_none():
         args.append("--attach")
 
-    return _run_console(domain, "graphical", args)
+    return _run_console(domain, message, args)
 
 
 def _txt_console(guest, domain):
     args = ["virsh",
             "--connect", guest.conn.uri,
             "console", guest.name]
+    message = _("Running text console command: %(command)s")
 
-    return _run_console(domain, "text", args)
+    return _run_console(domain, message, args)
 
 
 def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
