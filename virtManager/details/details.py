@@ -170,21 +170,32 @@ def _label_for_device(dev):
         if dev.device == "floppy":
             return _("Floppy %(index)d") % {"index": dev.disk_bus_index}
 
-        busstr = vmmAddHardware.disk_pretty_bus(dev.bus) or ""
+        if dev.bus:
+            busstr = vmmAddHardware.disk_pretty_bus(dev.bus)
+            if dev.device == "cdrom":
+                return _("%(bus)s CDROM %(index)d") % {
+                    "bus": busstr,
+                    "index": dev.disk_bus_index,
+                }
+            elif dev.device == "disk":
+                return _("%(bus)s Disk %(index)d") % {
+                    "bus": busstr,
+                    "index": dev.disk_bus_index,
+                }
+            return _("%(bus)s %(device)s %(index)d") % {
+                "bus": busstr,
+                "device": dev.device.capitalize(),
+                "index": dev.disk_bus_index,
+            }
 
         if dev.device == "cdrom":
-            devstr = _("CDROM")
+            return _("CDROM %(index)d") % {"index": dev.disk_bus_index}
         elif dev.device == "disk":
-            devstr = _("Disk")
-        else:
-            devstr = dev.device.capitalize()
-
-        if busstr:
-            ret = "%s %s" % (busstr, devstr)
-        else:
-            ret = devstr
-
-        return "%s %s" % (ret, dev.disk_bus_index)
+            return _("Disk %(index)d") % {"index": dev.disk_bus_index}
+        return _("%(device)s %(index)d") % {
+            "device": dev.device.capitalize(),
+            "index": dev.disk_bus_index,
+        }
 
     if devtype == "interface":
         if dev.macaddr:
