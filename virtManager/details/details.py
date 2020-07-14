@@ -2365,7 +2365,10 @@ class vmmDetails(vmmGObjectUI):
             disks = controller.get_attached_devices(self.vm.xmlobj)
             for disk in disks:
                 name = _label_for_device(disk)
-                infoStr = ("%s on %s" % (name, disk.address.pretty_desc()))
+                infoStr = _("%(device)s on %(address)s") % {
+                    "device": name,
+                    "address": disk.address.pretty_desc(),
+                }
                 model.append([infoStr])
                 self._disable_device_remove(
                     _("Cannot remove controller while devices are attached."))
