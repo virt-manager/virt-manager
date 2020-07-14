@@ -3158,7 +3158,7 @@ class ParserDisk(VirtCLIParser):
                 # It's default. Nothing to do.
                 pass
             else:
-                fail(_("Unknown '%(optionname)s' value '%(string)'") %
+                fail(_("Unknown '%(optionname)s' value '%(string)s'") %
                     {"optionname": "perms", "string": val})
 
         backing_store = self.optdict.pop("backing_store", None)
