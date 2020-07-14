@@ -287,7 +287,7 @@ class vmmCloneVM(vmmGObjectUI):
 
         def build_net_row(labelstr, origmac, newmac):
 
-            label = Gtk.Label(label=labelstr + " (%s)" % origmac)
+            label = Gtk.Label(label=labelstr)
             label.set_alignment(0, .5)
             button = Gtk.Button(_("Details..."))
             button.connect("clicked", self.net_change_mac, origmac)
@@ -317,7 +317,7 @@ class vmmCloneVM(vmmGObjectUI):
 
             # [ interface type, device name, origmac, newmac, label ]
             if net_type == DeviceInterface.TYPE_USER:
-                label = _("Usermode")
+                label = _("Usermode (%(mac)s)") % {"mac": mac}
 
             elif net_type == DeviceInterface.TYPE_VIRTUAL:
                 net = None
@@ -327,19 +327,32 @@ class vmmCloneVM(vmmGObjectUI):
                         break
 
                 if net:
-                    label = ""
-
-                    desc = net.pretty_forward_mode()
-                    label += "%s" % desc
-
+                    label = _("%(netmode)s (%(mac)s)") % {
+                        "netmode": net.pretty_forward_mode(),
+                        "mac": mac,
+                    }
+                elif net_dev:
+                    label = _("Virtual Network %(netdevice)s (%(mac)s)") % {
+                        "netdevice": net_dev,
+                        "mac": mac,
+                    }
                 else:
-                    label = (_("Virtual Network") +
-                             (net_dev and " %s" % net_dev or ""))
+                    label = _("Virtual Network (%(mac)s)") % {"mac": mac}
 
             else:
                 # 'bridge' or anything else
-                label = (net_type.capitalize() +
-                         (net_dev and (" %s" % net_dev) or ""))
+                pretty_net_type = net_type.capitalize()
+                if net_dev:
+                    label = _("%(nettype)s %(netdevice)s (%(mac)s)") % {
+                        "nettype": pretty_net_type,
+                        "netdevice": net_dev,
+                        "mac": mac,
+                    }
+                else:
+                    label = _("%(nettype)s (%(mac)s)") % {
+                        "nettype": pretty_net_type,
+                        "mac": mac,
+                    }
 
             build_net_row(label, mac, newmac)
 
