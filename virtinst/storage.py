@@ -163,8 +163,10 @@ class StoragePool(_StorageObject):
             return defpool
         except Exception as e:  # pragma: no cover
             raise RuntimeError(
-                (_("Couldn't create default storage pool '%s'") % path) +
-                (": %s" % str(e)))
+                _("Couldn't create default storage pool '%(path)s': %(error)s") % {
+                    "path": path,
+                    "error": str(e),
+                })
 
     @staticmethod
     def lookup_pool_by_path(conn, path):

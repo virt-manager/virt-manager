@@ -68,8 +68,10 @@ class InstallerTreeMedia(object):
                     "from the local directory mount point.")
 
             raise ValueError(
-                (_("Validating install media '%s' failed") % str(path)) +
-                (": %s" % e))
+                _("Validating install media '%(media)s' failed: %(error)s") % {
+                    "media": str(path),
+                    "error": str(e),
+                })
 
     @staticmethod
     def get_system_scratchdir(guest):

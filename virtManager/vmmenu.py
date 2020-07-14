@@ -239,7 +239,7 @@ class VMActionUI(object):
             def errorcb(error, details):
                 # This is run from the main thread
                 res = src.err.show_err(
-                    _("Error restoring domain") + ": " + error,
+                    _("Error restoring domain: %s") % error,
                     details=details,
                     text2=_(
                         "The domain could not be restored. Would you like\n"

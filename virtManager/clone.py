@@ -806,10 +806,12 @@ class vmmCloneVM(vmmGObjectUI):
         self.reset_finish_cursor()
 
         if error is not None:
-            msg = (_("Error creating virtual machine clone '%s'") %
-                      self.clone_design.clone_name)
-            msg += ": %s" % error
-            self.err.show_err(msg, details=details)
+            error = (_("Error creating virtual machine clone '%(vm)s': "
+                       "%(error)s") % {
+                     "vm": self.clone_design.clone_name,
+                     "error": error,
+                     })
+            self.err.show_err(error, details=details)
             return
 
         conn.schedule_priority_tick(pollvm=True)
