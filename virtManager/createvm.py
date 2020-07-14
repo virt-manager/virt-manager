@@ -660,7 +660,9 @@ class vmmCreateVM(vmmGObjectUI):
 
         # CPU
         phys_cpus = int(self.conn.host_active_processor_count())
-        cpu_label = (_("Up to %(numcpus)d available") %
+        cpu_label = (ngettext("Up to %(numcpus)d available",
+                              "Up to %(numcpus)d available",
+                              phys_cpus) %
                      {'numcpus': int(phys_cpus)})
         cpu_label = ("<span size='small'>%s</span>" % cpu_label)
         self.widget("cpus").set_range(1, max(phys_cpus, 1))
