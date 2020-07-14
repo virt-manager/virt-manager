@@ -639,8 +639,9 @@ class WaitHandler:
     def get_time_string(self):
         if self._wait_forever:
             return _("Waiting for the installation to complete.")
-        return (_("Waiting %(minutes)d minutes for the installation to complete.") %
-                  {"minutes": self._wait_mins})
+        return ngettext("Waiting %(minutes)d minute for the installation to complete.",
+                        "Waiting %(minutes)d minutes for the installation to complete.",
+                        self._wait_mins) % {"minutes": self._wait_mins}
 
     def wait(self):
         """

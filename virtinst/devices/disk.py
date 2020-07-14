@@ -850,8 +850,10 @@ class DeviceDisk(Device):
             return ret
 
         raise ValueError(
-                _("Only %(number)s disks for bus '%(bus)s' are supported") %
-                {"number": maxnode, "bus": self.bus})
+            ngettext("Only %(number)s disk for bus '%(bus)s' are supported",
+                     "Only %(number)s disks for bus '%(bus)s' are supported",
+                     maxnode) %
+            {"number": maxnode, "bus": self.bus})
 
     def change_bus(self, guest, newbus):
         """
