@@ -306,18 +306,18 @@ class vmmCreateVM(vmmGObjectUI):
             self.widget("install-box").hide()
             self.widget("arch-expander").hide()
 
-        self.widget("startup-error").set_text("%s: %s" % (_("Error"), error))
+        self.widget("startup-error").set_text(_("Error: %s") % error)
         return False
 
     def _show_startup_warning(self, error):
         self.widget("startup-error-box").show()
         self.widget("startup-error").set_markup(
-            "<span size='small'>%s: %s</span>" % (_("Warning"), error))
+            _("<span size='small'>Warning: %s</span>") % error)
 
     def _show_arch_warning(self, error):
         self.widget("arch-warning-box").show()
         self.widget("arch-warning").set_markup(
-            "<span size='small'>%s: %s</span>" % (_("Warning"), error))
+            _("<span size='small'>Warning: %s</span>") % error)
 
 
     def _init_state(self):
