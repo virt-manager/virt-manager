@@ -1,8 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches: [master]
+  schedule:
+    # every two days at 6:00 UTC
+    - cron: '0 6 */2 * *'
 
 jobs:
 
