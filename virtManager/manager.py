@@ -578,16 +578,16 @@ class vmmManager(vmmGObjectUI):
     def _build_conn_hint(self, conn):
         hint = conn.get_uri()
         if conn.is_disconnected():
-            hint += " (%s)" % _("Double click to connect")
+            hint = _("%(uri)s (Double click to connect)") % {"uri": conn.get_uri()}
         return hint
 
     def _build_conn_markup(self, conn, name):
         name = xmlutil.xml_escape(name)
         text = name
         if conn.is_disconnected():
-            text += " - " + _("Not Connected")
+            text = _("%(connection)s - Not Connected") % {"connection": name}
         elif conn.is_connecting():
-            text += " - " + _("Connecting...")
+            text = _("%(connection)s - Connecting...") % {"connection": name}
 
         markup = "<span size='smaller'>%s</span>" % text
         return markup
