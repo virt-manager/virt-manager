@@ -523,8 +523,7 @@ class vmmCreateVM(vmmGObjectUI):
                 import_tt = local_tt
 
         if is_pv:
-            base = _("%s installs not available for paravirt guests.")
-            local_tt = base % "CDROM/ISO"
+            local_tt = _("CDROM/ISO installs not available for paravirt guests.")
 
         if not installable_arch:
             msg = (_("Architecture '%s' is not installable") %
