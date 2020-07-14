@@ -105,21 +105,22 @@ class _TimedRevealer(vmmGObject):
 def build_keycombo_menu(on_send_key_fn):
     menu = Gtk.Menu()
 
-    def make_item(name, combo):
-        item = Gtk.MenuItem.new_with_mnemonic(name)
+    def make_item(accel, combo):
+        name = Gtk.accelerator_get_label(*Gtk.accelerator_parse(accel))
+        item = Gtk.MenuItem(name)
         item.connect("activate", on_send_key_fn, combo)
 
         menu.add(item)
 
-    make_item("Ctrl+Alt+_Backspace", ["Control_L", "Alt_L", "BackSpace"])
-    make_item("Ctrl+Alt+_Delete", ["Control_L", "Alt_L", "Delete"])
+    make_item("<Control><Alt>BackSpace", ["Control_L", "Alt_L", "BackSpace"])
+    make_item("<Control><Alt>Delete", ["Control_L", "Alt_L", "Delete"])
     menu.add(Gtk.SeparatorMenuItem())
 
     for i in range(1, 13):
-        make_item("Ctrl+Alt+F_%d" % i, ["Control_L", "Alt_L", "F%d" % i])
+        make_item("<Control><Alt>F%d" % i, ["Control_L", "Alt_L", "F%d" % i])
     menu.add(Gtk.SeparatorMenuItem())
 
-    make_item("_Printscreen", ["Print"])
+    make_item("Print", ["Print"])
 
     menu.show_all()
     return menu
