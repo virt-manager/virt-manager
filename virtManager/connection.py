@@ -603,7 +603,7 @@ class vmmConnection(vmmGObject):
                         "\n"
                         "Original error: %(origerror)s\n"
                         "\n"
-                        "Recover error: %s") % {
+                        "Recover error: %(recovererror)s") % {
                             "object": obj.class_name(),
                             "origerror": str(renameerr),
                             "recovererror": str(fixerr),
