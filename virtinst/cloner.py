@@ -160,8 +160,10 @@ class Cloner(object):
             except Exception as e:
                 log.debug("Error setting clone path.", exc_info=True)
                 raise ValueError(
-                        (_("Could not use path '%s' for cloning") % path) +
-                        (": " + str(e)))
+                    _("Could not use path '%(path)s' for cloning: %(error)s") % {
+                        "path": path,
+                        "error": str(e),
+                    })
 
         self._clone_disks = disklist
     def get_clone_paths(self):

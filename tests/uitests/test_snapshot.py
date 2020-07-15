@@ -50,7 +50,7 @@ class Snapshots(uiutils.UITestCase):
         snaprun.click()
         alert = self.app.root.find_fuzzy("vmm dialog", "alert")
         alert.find_fuzzy(
-                "sure you want to run snapshot '%s'" % snapname, "label")
+                "sure you want to run the snapshot '%s'" % snapname, "label")
         alert.find("Yes", "push button").click()
         uiutils.check_in_loop(lambda: vmrun.sensitive)
 
@@ -60,7 +60,7 @@ class Snapshots(uiutils.UITestCase):
         snaprun.click()
         alert = self.app.root.find_fuzzy("vmm dialog", "alert")
         alert.find_fuzzy(
-                "sure you want to run snapshot '%s'" % snapname, "label")
+                "sure you want to run the snapshot '%s'" % snapname, "label")
         alert.find("Yes", "push button").click()
         uiutils.check_in_loop(lambda: vmpause.checked)
 

@@ -453,15 +453,18 @@ class vmmSnapshotPage(vmmGObjectUI):
             if snap.is_external():
                 has_external = True
                 sortname = "3%s" % name
-                external = " (%s)" % _("External")
+                label = _("%(vm)s\n<span size='small'>VM State: "
+                          "%(state)s (External)</span>")
             else:
                 has_internal = True
-                external = ""
                 sortname = "1%s" % name
+                label = _("%(vm)s\n<span size='small'>VM State: "
+                          "%(state)s</span>")
 
-            label = "%s\n<span size='small'>%s: %s%s</span>" % (
-                (xmlutil.xml_escape(name), _("VM State"),
-                 xmlutil.xml_escape(state), external))
+            label = label % {
+                "vm": xmlutil.xml_escape(name),
+                "state": xmlutil.xml_escape(state)
+            }
             model.append([name, label, desc, snap.run_status_icon_name(),
                           sortname, snap.is_current()])
 
@@ -652,14 +655,15 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         snap = snaps[0]
 
-        label = _("disk")
-        if not self.vm.is_active():
-            label = _("disk and configuration")
-
-        msg = (_("Are you sure you want to run snapshot '%(name)s'? "
-            "All %(changetype)s changes since the last snapshot was "
-            "created will be discarded.") %
-            {"name": snap.get_name(), "changetype": label})
+        if self.vm.is_active():
+            msg = _("Are you sure you want to run the snapshot '%(name)s'? "
+                    "All the disk changes since the last snapshot was created "
+                    "will be discarded.")
+        else:
+            msg = _("Are you sure you want to run the snapshot '%(name)s'? "
+                    "All the disk and configuration changes since the last "
+                    "snapshot was created will be discarded.")
+        msg = msg % {"name": snap.get_name()}
 
         result = self.err.yes_no(msg)
         if not result:
