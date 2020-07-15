@@ -520,7 +520,8 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         title = ""
         if name:
-            title = "<b>Snapshot '%s':</b>" % xmlutil.xml_escape(name)
+            title = (_("<b>Snapshot '%(name)s':</b>") %
+                     {"name": xmlutil.xml_escape(name)})
 
         uiutil.set_grid_row_visible(
             self.widget("snapshot-is-current"), is_current)
