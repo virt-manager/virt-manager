@@ -630,6 +630,8 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --graphics sdl
 --graphics spice,keymap=none
 --graphics vnc,port=5950,listen=1.2.3.4,keymap=ja,password=foo
+--graphics vnc,port=5950,listen=1.2.3.4,keymap=ja,password=foo,websocket=15950
+--graphics vnc,port=5950,listen=1.2.3.4,keymap=ja,password=foo,websocket=-1
 --graphics spice,port=5950,tlsport=5950,listen=1.2.3.4,keymap=ja
 --graphics spice,image_compression=glz,streaming_mode=filter,clipboard_copypaste=yes,mouse_mode=client,filetransfer_enable=on,zlib.compression=always
 --graphics spice,gl=yes,listen=socket,image.compression=glz,streaming.mode=filter,clipboard.copypaste=yes,mouse.mode=client,filetransfer.enable=on,tlsPort=6000,passwd=testpass,passwdValidTo=2010-04-09T15:51:00,passwordValidTo=2010-04-09T15:51:01,defaultMode=insecure
