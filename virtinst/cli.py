@@ -3531,6 +3531,7 @@ class ParserGraphics(VirtCLIParser):
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("port", "port")
         cls.add_arg("tlsPort", "tlsPort")
+        cls.add_arg("websocket", "websocket")
         cls.add_arg("listen", "listen")
         cls.add_arg("keymap", "keymap", cb=cls.set_keymap_cb)
         cls.add_arg("password", "passwd")
