@@ -51,7 +51,7 @@ class DeviceGraphics(Device):
     CHANNEL_TYPE_PLAYBACK = "playback"
     CHANNEL_TYPE_RECORD   = "record"
 
-    _XML_PROP_ORDER = ["type", "gl", "_port", "_tlsPort", "autoport",
+    _XML_PROP_ORDER = ["type", "gl", "_port", "_tlsPort", "autoport", "websocket",
                        "keymap", "_listen",
                        "passwd", "display", "xauth"]
 
@@ -76,6 +76,7 @@ class DeviceGraphics(Device):
     tlsPort = property(_get_tlsport, _set_tlsport)
 
     autoport = XMLProperty("./@autoport", is_yesno=True)
+    websocket = XMLProperty("./@websocket", is_int=True)
 
     channel_main_mode = _get_mode_prop(CHANNEL_TYPE_MAIN)
     channel_display_mode = _get_mode_prop(CHANNEL_TYPE_DISPLAY)

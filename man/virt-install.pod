@@ -1212,6 +1212,14 @@ console. This is used by 'vnc' and 'spice'
 
 Specify the spice tlsport.
 
+=item B<websocket>
+
+Request a VNC WebSocket port for the guest console.
+
+If -1 is specified, the WebSocket port is auto-allocated.
+
+This is used by 'vnc' and 'spice'
+
 =item B<listen>
 
 Address to listen on for VNC/Spice connections. Default is typically 127.0.0.1
