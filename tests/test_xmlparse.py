@@ -1516,9 +1516,9 @@ class XMLParseTest(unittest.TestCase):
             virtinst.DeviceDisk(self.conn, parsexml=-1)
         self.assertTrue("xmlParseDoc" in str(cm.exception))
 
-        with self.assertRaises(RuntimeError):
-            from virtinst import xmlutil
-            xmlutil.raise_programming_error(True, "for coverage")
+        from virtinst import xmlutil
+        with self.assertRaises(xmlutil.DevError):
+            raise xmlutil.DevError("for coverage")
 
         with self.assertRaises(ValueError):
             virtinst.DeviceDisk.validate_generic_name("objtype", None)

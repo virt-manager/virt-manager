@@ -8,6 +8,7 @@ import unittest
 
 from virtinst import Guest
 from virtinst import OSDB
+from virtinst import xmlutil
 from virtinst.install import urldetect
 
 from tests import utils
@@ -45,7 +46,7 @@ class TestOSDB(unittest.TestCase):
         for store in allstores:
             for distro in store.matching_distros:
                 if distro in seen_distro:
-                    raise RuntimeError("programming error: "
+                    raise xmlutil.DevError(
                             "store=%s has conflicting matching_distro=%s " %
                             (store.PRETTY_NAME, distro))
                 seen_distro.append(distro)

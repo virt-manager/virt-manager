@@ -400,7 +400,7 @@ class _StorageBase(object):
 
     def create(self, progresscb):
         ignore = progresscb  # pragma: no cover
-        xmlutil.raise_programming_error(None,
+        raise xmlutil.DevError(
             "%s can't create storage" % self.__class__.__name__)
 
 
@@ -692,7 +692,7 @@ class StorageBackend(_StorageBase):
             self._path = None
 
         if self._vol_object and not self._parent_pool:
-            xmlutil.raise_programming_error(None,
+            raise xmlutil.DevError(
                 "parent_pool must be specified")
 
         # Cached bits

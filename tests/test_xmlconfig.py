@@ -310,6 +310,7 @@ class TestXMLMisc(unittest.TestCase):
         newdisk.build_storage(None)
 
         # Test cloning onto existing disk
+        newdisk = virtinst.DeviceDisk(conn, parsexml=newdisk.get_xml())
         newdisk.path = newdisk.path
         newdisk.set_local_disk_to_clone(srcdisk, True)
         newdisk.build_storage(None)

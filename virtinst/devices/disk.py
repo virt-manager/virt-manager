@@ -323,7 +323,7 @@ class DeviceDisk(Device):
         return self._storage_backend.get_path()
     def _set_path(self, newpath):
         if self._storage_backend.will_create_storage():
-            xmlutil.raise_programming_error(None,
+            raise xmlutil.DevError(
                     "Can't change disk path if storage creation info "
                     "has been set.")
 

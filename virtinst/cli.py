@@ -1035,12 +1035,10 @@ class _VirtCLIArgumentStatic(object):
         self._aliases = []
 
         if not self.propname and not self.cb:
-            raise RuntimeError(  # pragma: no cover
-                "programming error: propname or cb must be specified.")
+            raise xmlutil.DevError("propname or cb must be specified.")
 
         if not self.propname and self.lookup_cb == -1:
-            raise RuntimeError(  # pragma: no cover
-                "programming error: "
+            raise xmlutil.DevError(
                 "cliname=%s propname is None but lookup_cb is not specified. "
                 "Even if a 'cb' is passed, 'propname' is still used for "
                 "device lookup for virt-xml --edit.\n\nIf cb is just "
@@ -1136,8 +1134,8 @@ class _VirtCLIArgument(object):
             if self.propname:
                 xmlutil.get_prop_path(inst, self.propname)
         except AttributeError:  # pragma: no cover
-            raise RuntimeError("programming error: obj=%s does not have "
-                               "member=%s" % (inst, self.propname))
+            raise xmlutil.DevError(
+                    "obj=%s does not have member=%s" % (inst, self.propname))
 
         if self._virtarg.cb:
             self._virtarg.cb(parser, inst, self.val, self)
@@ -1274,9 +1272,8 @@ class _InitClass(type):
 
         # Check for leftover aliases
         if self.aliases:
-            raise RuntimeError(  # pragma: no cover
-                    "programming error: class=%s "
-                    "leftover aliases=%s" % (self, self.aliases))
+            raise xmlutil.DevError(
+                    "class=%s leftover aliases=%s" % (self, self.aliases))
         return self
 
 

@@ -225,8 +225,9 @@ class _XMLBase(object):
         xpathobj = _XPath(fullxpath)
         parentxpath = "."
         parentnode = self._find(parentxpath)
-        xmlutil.raise_programming_error(not parentnode,
-                "Did not find XML root node for xpath=%s" % fullxpath)
+        if not parentnode:
+            raise xmlutil.DevError(
+                    "Did not find XML root node for xpath=%s" % fullxpath)
 
         for xpathseg in xpathobj.segments[1:]:
             oldxpath = parentxpath

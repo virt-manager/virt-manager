@@ -107,8 +107,7 @@ class DomainCpu(XMLBuilder):
                 self.clear()
                 self.set_model(guest, self.conn.caps.host.cpu.model)
         else:
-            xmlutil.raise_programming_error(
-                True, "unknown special cpu mode '%s'" % val)
+            raise xmlutil.DevError("unknown special cpu mode '%s'" % val)
 
         self.special_mode_was_set = True
 

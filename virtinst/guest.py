@@ -304,8 +304,9 @@ class Guest(XMLBuilder):
             # tried to access osinfo before we can depend on it being
             # available. Try moving whatever bits need osinfo to be
             # triggered via set_defaults
-            xmlutil.raise_programming_error(self.skip_default_osinfo,
-                    "osinfo is accessed before it has been set.")
+            if self.skip_default_osinfo:
+                raise xmlutil.DevError(
+                        "osinfo is accessed before it has been set.")
             self.set_default_os_name()
         return self.__osinfo
     osinfo = property(_get_osinfo)
