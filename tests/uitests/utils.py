@@ -467,9 +467,6 @@ class VMMDogtailApp(object):
             stderr = open(os.devnull)
 
         cmd = [sys.executable]
-        if tests.utils.clistate.use_coverage:
-            cmd += ["-m", "coverage", "run", "--append",
-                    "--source", os.path.join(os.getcwd(), "virtManager")]
         cmd += [os.path.join(os.getcwd(), "virt-manager"),
                 "--test-first-run",
                 "--no-fork"]
