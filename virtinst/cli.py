@@ -131,7 +131,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     vi_dir = VirtinstConnection.get_app_cache_dir()
     logfile = os.path.join(vi_dir, appname + ".log")
-    if in_testsuite():
+    if xmlutil.in_testsuite():
         vi_dir = None
         logfile = None
 
@@ -202,10 +202,6 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
 
     # Log the app command string
     log.debug("Launched with command line: %s", " ".join(sys.argv))
-
-
-def in_testsuite():
-    return "VIRTINST_TEST_SUITE" in os.environ
 
 
 ##############################
@@ -387,7 +383,7 @@ def _run_console(domain, message, args):
     argstr = " ".join([shlex.quote(a) for a in args])
     print_stdout(message % {"command": argstr})
 
-    if in_testsuite():
+    if xmlutil.in_testsuite():
         args = ["/bin/test"]
 
     child = os.fork()
@@ -454,7 +450,7 @@ def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
 
 def get_meter():
     import virtinst.progress
-    quiet = (get_global_state().quiet or in_testsuite())
+    quiet = (get_global_state().quiet or xmlutil.in_testsuite())
     return virtinst.progress.make_meter(quiet=quiet)
 
 
@@ -568,7 +564,7 @@ def autocomplete(parser):
                 break
 
     kwargs = {"validator": _completer_validator}
-    if in_testsuite():
+    if xmlutil.in_testsuite():
         import io
         kwargs["output_stream"] = io.BytesIO()
         kwargs["exit_method"] = sys.exit
@@ -576,7 +572,7 @@ def autocomplete(parser):
     # This fdopen hackery is to avoid argcomplete debug_stream behavior
     # from taking over an fd that pytest wants to use
     fake_fdopen = os.fdopen
-    if in_testsuite():
+    if xmlutil.in_testsuite():
         def fake_fdopen_cb(*args, **kwargs):
             return sys.stderr
         fake_fdopen = fake_fdopen_cb
@@ -585,7 +581,7 @@ def autocomplete(parser):
         try:
             argcomplete.autocomplete(parser, **kwargs)
         except SystemExit:
-            if in_testsuite():
+            if xmlutil.in_testsuite():
                 output = kwargs["output_stream"].getvalue().decode("utf-8")
                 print(output)
             raise
@@ -1812,14 +1808,14 @@ def _determine_default_autoconsole_type(guest, installer):
         log.debug("No viewer to launch for graphics type '%s'", gtype)
         return None
 
-    if not HAS_VIRTVIEWER and not in_testsuite():  # pragma: no cover
+    if not HAS_VIRTVIEWER and not xmlutil.in_testsuite():  # pragma: no cover
         log.warning(_("Unable to connect to graphical console: "
                        "virt-viewer not installed. Please install "
                        "the 'virt-viewer' package."))
         return None
 
     if (not os.environ.get("DISPLAY", "") and
-        not in_testsuite()):  # pragma: no cover
+        not xmlutil.in_testsuite()):  # pragma: no cover
         log.warning(_("Graphics requested but DISPLAY is not set. "
                        "Not running virt-viewer."))
         return None

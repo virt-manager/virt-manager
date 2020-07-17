@@ -9,9 +9,10 @@ import weakref
 
 import libvirt
 
+from . import Capabilities
 from . import pollhelpers
 from . import support
-from . import Capabilities
+from . import xmlutil
 from .guest import Guest
 from .logger import log
 from .nodedev import NodeDevice
@@ -50,7 +51,7 @@ class VirtinstConnection(object):
 
     @staticmethod
     def in_testsuite():
-        return "VIRTINST_TEST_SUITE" in os.environ
+        return xmlutil.in_testsuite()
 
     def __init__(self, uri):
         _initial_uri = uri or ""

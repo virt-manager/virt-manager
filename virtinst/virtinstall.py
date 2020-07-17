@@ -603,7 +603,7 @@ def build_guest_instance(conn, options):
 ###########################
 
 def _sleep(secs):
-    if not cli.in_testsuite():
+    if not virtinst.xmlutil.in_testsuite():
         time.sleep(secs)  # pragma: no cover
 
 
@@ -649,12 +649,12 @@ class WaitHandler:
         """
         _sleep(1)
         if self._wait_forever:
-            if cli.in_testsuite():
+            if virtinst.xmlutil.in_testsuite():
                 return True
             return False  # pragma: no cover
 
         time_elapsed = (time.time() - self._start_time)
-        return (time_elapsed >= self._wait_secs) or cli.in_testsuite()
+        return (time_elapsed >= self._wait_secs) or virtinst.xmlutil.in_testsuite()
 
 
 def _print_cloudinit_passwd(installer):
@@ -668,7 +668,7 @@ def _print_cloudinit_passwd(installer):
     stdins = [sys.stdin]
     timeout = 10
     if sys.stdin.closed or not sys.stdin.isatty():
-        if not cli.in_testsuite():  # pragma: no cover
+        if not virtinst.xmlutil.in_testsuite():  # pragma: no cover
             return
         stdins = []
         timeout = .0001
@@ -740,7 +740,7 @@ def start_install(guest, installer, options):
             virtinst.Installer.cleanup_created_disks(guest, meter)
         cli.install_fail(guest)
 
-    if cli.in_testsuite() and options.destroy_on_exit:
+    if virtinst.xmlutil.in_testsuite() and options.destroy_on_exit:
         # Helps with unit testing
         _destroy_on_exit(domain)
 

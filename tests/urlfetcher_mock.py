@@ -12,10 +12,6 @@ import requests
 from virtinst import log
 
 
-def _in_testsuite():
-    return "VIRTINST_TEST_SUITE" in os.environ
-
-
 def _make_mock_url(url, filesyntax):
     if url.endswith("treeinfo"):
         # If the url is requesting treeinfo, give a fake treeinfo from

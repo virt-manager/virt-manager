@@ -5,6 +5,8 @@
 # See the COPYING file in the top-level directory.
 #
 
+import os
+
 
 def listify(l):
     if l is None:
@@ -65,3 +67,7 @@ def raise_programming_error(cond, msg):
     """
     if cond:
         raise RuntimeError("programming error: %s" % msg)
+
+
+def in_testsuite():
+    return "VIRTINST_TEST_SUITE" in os.environ
