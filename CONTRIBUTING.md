@@ -24,11 +24,11 @@ report.
 The following commands will be useful for anyone writing patches:
 
 ```sh
-./setup.py test      # Run local unit test suite
+pytest               # Run local unit test suite
 ./setup.py pylint    # Run pylint/pycodestyle checking
 ```
 
-Any patches shouldn't change the output of 'test' or 'pylint'. Depending
+Any patches shouldn't change the output of 'pytest' or 'pylint'. Depending
 on what version of libvirt or pylint is installed, you may see some
 pre-existing errors from these commands. The important thing is that
 any changes you make do not add additional errors.
@@ -39,7 +39,7 @@ If [`codespell`](https://github.com/codespell-project/codespell) is installed,
 it will be invoked as well.
 
 Patches to `virtinst/` code should ideally not regress code coverage
-testing. Run `./setup.py test --coverage` to see a coverage report
+testing. Run `pytest --cov` to see a coverage report
 before and after your contribution, and ensure no new lines show up.
 Maintainers can help you out if you aren't sure how to test your code.
 
@@ -108,9 +108,10 @@ Translations are handled through the Weblate instance hosted by the Fedora Proje
 There's a few standalone specialty tests:
 
 ```sh
-./setup.py test_ui              # dogtail UI test suite. This takes over your desktop
-./setup.py test_urls            # Test fetching media from live distro URLs
-./setup.py test_initrd_inject   # Test live virt-install --initrd-inject
+pytest --uitest                 # dogtail UI test suite. This takes over your desktop
+pytest tests/test_urls.py       # Test fetching media from live distro URLs
+pytest tests/test_inject.py     # Test live virt-install --initrd-inject
 ```
 
-All test 'test*' commands have a `--debug` option if you are hitting problems. For more options, see `./setup.py test --help`.
+To see full debug output from test runs, use
+`pytest --capture=no --log-level=debug ...`
