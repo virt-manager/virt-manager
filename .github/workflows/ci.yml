@@ -1,0 +1,42 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  # Setup latest Fedora with latest libvirt from virt-preview, build
+  # the RPM, verify it installs, run test suite, upload coverage
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install RPM build deps
+      run: |
+        # glibc-langpacks-en needed to work around python locale issues
+        dnf install -y \
+          rpm-build \
+          dnf-plugins-core \
+          glibc-langpack-en \
+          python3-pytest python3-pytest-cov
+
+        dnf copr enable -y @virtmaint-sig/virt-preview
+        dnf install -y virt-install
+        dnf builddep -y ./virt-manager.spec
+
+    - name: Build RPM and test install
+      run: |
+        ./setup.py rpm
+        dnf update -y noarch/*.rpm
+
+    - name: Run test suite and generate coverage report
+      run: |
+        pytest --cov --cov-report=xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
+        flags: unittests
