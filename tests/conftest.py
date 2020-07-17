@@ -79,6 +79,7 @@ def pytest_collection_modifyitems(config, items):
 
 
 def pytest_configure(config):
+    import tests
     from tests.utils import clistate
 
     clistate.url_iso_only = config.getoption("--urls-iso-only")
@@ -86,3 +87,6 @@ def pytest_configure(config):
     clistate.url_skip_libosinfo = config.getoption("--urls-skip-libosinfo")
     clistate.url_force_libosinfo = config.getoption("--urls-force-libosinfo")
     clistate.regenerate_output = config.getoption("--regenerate-output")
+
+    clistate.debug = config.getoption("--log-level") == "debug"
+    tests.setup_logging()
