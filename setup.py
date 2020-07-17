@@ -12,6 +12,7 @@ if sys.version_info.major < 3:
 import glob
 import os
 from pathlib import Path
+import subprocess
 
 import distutils
 import distutils.command.build
@@ -302,7 +303,7 @@ class my_sdist(distutils.command.sdist.sdist):
 
 class my_rpm(distutils.core.Command):
     user_options = []
-    description = "Build src and noarch rpms."
+    description = "Build RPMs and output to the source directory."
 
     def initialize_options(self):
         pass
@@ -310,12 +311,16 @@ class my_rpm(distutils.core.Command):
         pass
 
     def run(self):
-        """
-        Run sdist, then 'rpmbuild' the tar.gz
-        """
         self.run_command('sdist')
-        os.system('rpmbuild -ta --clean dist/virt-manager-%s.tar.gz' %
-                  BuildConfig.version)
+        srcdir = os.path.dirname(__file__)
+        cmd = [
+            "rpmbuild", "-ta",
+            "--define", "_rpmdir %s" % srcdir,
+            "--define", "_srcrpmdir %s" % srcdir,
+            "--define", "_specdir /tmp",
+            "dist/virt-manager-%s.tar.gz" % BuildConfig.version,
+        ]
+        subprocess.check_call(cmd)
 
 
 class configure(distutils.core.Command):
