@@ -10,6 +10,25 @@ def pytest_addoption(parser):
     parser.addoption("--uitests", action="store_true", default=False,
             help="Run dogtail UI tests")
 
+    # test_urls options
+    parser.addoption('--urls-skip-libosinfo',
+            action="store_true", default=False,
+            help=("For test_urls.py, "
+                  "Don't use libosinfo for media/tree detection, "
+                  "Use our internal detection logic."))
+    parser.addoption("--urls-force-libosinfo",
+            action="store_true", default=False,
+            help=("For test_urls.py, Only use libosinfo for "
+                  "media/tree detection. This will skip "
+                  "some cases that are known not to work, "
+                  "like debian/ubuntu tree detection."))
+    parser.addoption("--urls-iso-only",
+            action="store_true", default=False,
+            help=("For test_urls.py, Only run iso tests."))
+    parser.addoption("--urls-url-only",
+            action="store_true", default=False,
+            help=("For test_urls.py, Only run url tests"))
+
 
 def pytest_ignore_collect(path, config):
     uitests_requested = config.getoption("--uitests")
@@ -53,3 +72,12 @@ def pytest_collection_modifyitems(config, items):
     if find_items("test_inject.py"):
         if not config.getoption("--capture") == "no":
             pytest.fail("test_inject.py requires `pytest --capture=no`")
+
+
+def pytest_configure(config):
+    from tests.utils import clistate
+
+    clistate.url_iso_only = config.getoption("--urls-iso-only")
+    clistate.url_only = config.getoption("--urls-url-only")
+    clistate.url_skip_libosinfo = config.getoption("--urls-skip-libosinfo")
+    clistate.url_force_libosinfo = config.getoption("--urls-force-libosinfo")
