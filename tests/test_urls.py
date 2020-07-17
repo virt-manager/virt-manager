@@ -66,11 +66,11 @@ hvmguest.os.os_type = "hvm"
 xenguest = Guest(testconn)
 xenguest.os.os_type = "xen"
 
-meter = virtinst.progress.make_meter(quiet=not utils.clistate.debug)
+meter = virtinst.progress.make_meter(quiet=not utils.TESTCONFIG.debug)
 
-if utils.clistate.url_skip_libosinfo:
+if utils.TESTCONFIG.url_skip_libosinfo:
     os.environ["VIRTINST_TEST_SUITE_FORCE_LIBOSINFO"] = "0"
-elif utils.clistate.url_force_libosinfo:
+elif utils.TESTCONFIG.url_force_libosinfo:
     os.environ["VIRTINST_TEST_SUITE_FORCE_LIBOSINFO"] = "1"
 
 
@@ -84,12 +84,12 @@ def _skipmsg(testdata):
     is_iso = testdata.url.lower().endswith(".iso")
     distname = testdata.name
 
-    if utils.clistate.url_iso_only and not is_iso:
+    if utils.TESTCONFIG.url_iso_only and not is_iso:
         return "skipping non-iso test"
-    elif utils.clistate.url_only and is_iso:
+    elif utils.TESTCONFIG.url_only and is_iso:
         return "skipping non-url test"
 
-    if not utils.clistate.url_force_libosinfo:
+    if not utils.TESTCONFIG.url_force_libosinfo:
         return
     if testdata.skip_libosinfo:
         return "force-libosinfo requested but test has skip_libosinfo set"

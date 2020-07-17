@@ -273,7 +273,7 @@ class Command(object):
 
         # Generate test files that don't exist yet
         filename = self.compare_file
-        if (utils.clistate.regenerate_output or
+        if (utils.TESTCONFIG.regenerate_output or
             not os.path.exists(filename)):
             open(filename, "w").write(output)
 

@@ -32,7 +32,7 @@ def setup_logging():
     fmt = "%(levelname)-8s %(message)s"
     streamHandler = logging.StreamHandler()
     streamHandler.setFormatter(logging.Formatter(fmt))
-    if utils.clistate.debug:
+    if utils.TESTCONFIG.debug:
         streamHandler.setLevel(logging.DEBUG)
     else:
         streamHandler.setLevel(logging.ERROR)
