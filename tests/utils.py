@@ -18,7 +18,7 @@ import virtinst.uri
 # pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
-class _CLIState(object):
+class _TestConfig(object):
     """
     Class containing any bits passed in from setup.py
     """
@@ -32,7 +32,7 @@ class _CLIState(object):
         self.url_force_libosinfo = False
 
 
-clistate = _CLIState()
+TESTCONFIG = _TestConfig()
 
 
 def has_old_osinfo():
@@ -212,7 +212,7 @@ def test_create(testconn, xml, define_func="defineXML"):
 def diff_compare(actual_out, filename=None, expect_out=None):
     """Compare passed string output to contents of filename"""
     if not expect_out:
-        if not os.path.exists(filename) or clistate.regenerate_output:
+        if not os.path.exists(filename) or TESTCONFIG.regenerate_output:
             open(filename, "w").write(actual_out)
         expect_out = open(filename).read()
 

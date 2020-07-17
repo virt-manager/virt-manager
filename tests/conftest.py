@@ -80,13 +80,13 @@ def pytest_collection_modifyitems(config, items):
 
 def pytest_configure(config):
     import tests
-    from tests.utils import clistate
+    from tests.utils import TESTCONFIG
 
-    clistate.url_iso_only = config.getoption("--urls-iso-only")
-    clistate.url_only = config.getoption("--urls-url-only")
-    clistate.url_skip_libosinfo = config.getoption("--urls-skip-libosinfo")
-    clistate.url_force_libosinfo = config.getoption("--urls-force-libosinfo")
-    clistate.regenerate_output = config.getoption("--regenerate-output")
+    TESTCONFIG.url_iso_only = config.getoption("--urls-iso-only")
+    TESTCONFIG.url_only = config.getoption("--urls-url-only")
+    TESTCONFIG.url_skip_libosinfo = config.getoption("--urls-skip-libosinfo")
+    TESTCONFIG.url_force_libosinfo = config.getoption("--urls-force-libosinfo")
+    TESTCONFIG.regenerate_output = config.getoption("--regenerate-output")
 
-    clistate.debug = config.getoption("--log-level") == "debug"
+    TESTCONFIG.debug = config.getoption("--log-level") == "debug"
     tests.setup_logging()

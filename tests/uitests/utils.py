@@ -458,7 +458,7 @@ class VMMDogtailApp(object):
             window_name=None, xmleditor_enabled=False):
         extra_opts = extra_opts or []
 
-        if tests.utils.clistate.debug:
+        if tests.utils.TESTCONFIG.debug:
             stdout = sys.stdout
             stderr = sys.stderr
             extra_opts.append("--debug")
