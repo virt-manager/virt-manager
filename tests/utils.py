@@ -24,7 +24,6 @@ class _CLIState(object):
     """
     def __init__(self):
         self.regenerate_output = False
-        self.use_coverage = False
         self.debug = False
 
         self.url_only = False

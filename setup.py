@@ -12,7 +12,6 @@ if sys.version_info.major < 3:
 import glob
 import os
 from pathlib import Path
-import unittest
 
 import distutils
 import distutils.command.build
@@ -353,220 +352,16 @@ class configure(distutils.core.Command):
         print("Generated %s" % BuildConfig.cfgpath)
 
 
-class TestBaseCommand(distutils.core.Command):
-    user_options = [
-        ('debug', 'd', 'Show debug output'),
-        ('testverbose', None, 'Show verbose output'),
-        ('coverage', 'c', 'Show coverage report'),
-        ('regenerate-output', None, 'Regenerate test output'),
-        ("only=", None,
-         "Run only testcases whose name contains the passed string"),
-        ("testfile=", None, "Specific test file to run (e.g "
-                            "validation, storage, ...)"),
-    ]
-
-    def initialize_options(self):
-        self.debug = 0
-        self.testverbose = 0
-        self.regenerate_output = 0
-        self.coverage = 0
-        self.only = None
-        self._testfiles = []
-        self._clistate = {}
-        self._dir = os.getcwd()
-        self.testfile = None
-        self._force_verbose = False
-        self._external_coverage = False
-        self._urlfetcher_mock = False
-
+class TestCommand(distutils.core.Command):
+    user_options = []
+    description = "DEPRECATED: Use `pytest`. See CONTRIBUTING.md"
     def finalize_options(self):
-        if self.only:
-            # Can do --only many-devices to match on the cli testcase
-            # for "virt-install-many-devices", despite the actual test
-            # function name not containing any '-'
-            self.only = self.only.replace("-", "_")
-
-    def _find_tests_in_dir(self, dirname, excludes):
-        testfiles = []
-        for t in sorted(glob.glob(os.path.join(self._dir, dirname, '*.py'))):
-            base = os.path.basename(t)
-            if base in excludes + ["__init__.py"]:
-                continue
-
-            if self.testfile:
-                check = os.path.basename(self.testfile)
-                if base != check and base != (check + ".py"):
-                    continue
-
-            testfiles.append('.'.join(
-                dirname.split("/") + [os.path.splitext(base)[0]]))
-
-        if not testfiles:
-            raise RuntimeError("--testfile didn't catch anything")
-        return testfiles
-
-    def run(self):
-        cov = None
-        if self.coverage:
-            import coverage
-            omit = ["/usr/*", "/*/tests/*", "*progress.py"]
-            cov = coverage.coverage()
-            cov.erase()
-            if not self._external_coverage:
-                cov.start()
-
-        import tests as testsmodule
-        testsmodule.utils.clistate.regenerate_output = bool(
-                self.regenerate_output)
-        testsmodule.utils.clistate.use_coverage = bool(cov)
-        testsmodule.utils.clistate.debug = bool(self.debug)
-        for key, val in self._clistate.items():
-            setattr(testsmodule.utils.clistate, key, val)
-        testsmodule.setup_logging()
-        if self._urlfetcher_mock:
-            import tests.urlfetcher_mock
-            tests.urlfetcher_mock.setup_mock()
-
-        # This makes the test runner report results before exiting from ctrl-c
-        unittest.installHandler()
-
-        tests = unittest.TestLoader().loadTestsFromNames(self._testfiles)
-        if self.only:
-            newtests = []
-            for suite1 in tests:
-                for suite2 in suite1:
-                    for testcase in suite2:
-                        if self.only in str(testcase):
-                            newtests.append(testcase)
-
-            if not newtests:
-                print("--only didn't find any tests")
-                sys.exit(1)
-            tests = unittest.TestSuite(newtests)
-            print("Running only:")
-            for test in newtests:
-                print("%s" % test)
-            print("")
-
-        verbosity = 1
-        if self.debug or self.testverbose or self._force_verbose:
-            verbosity = 2
-        t = unittest.TextTestRunner(verbosity=verbosity)
-
-        try:
-            result = t.run(tests)
-        except KeyboardInterrupt:
-            sys.exit(1)
-
-        if cov:
-            if self._external_coverage:
-                cov.load()
-            else:
-                cov.stop()
-                cov.save()
-
-        err = int(bool(len(result.failures) > 0 or
-                       len(result.errors) > 0))
-        if getattr(result, "shouldStop", False):
-            # Test was aborted with ctrl-c
-            err = True
-
-        if cov and not err:
-            if len(result.skipped):
-                print("Skipping coverage report because tests were skipped.")
-            else:
-                cov.report(show_missing=False, skip_covered=True)
-        sys.exit(err)
-
-
-
-class TestCommand(TestBaseCommand):
-    description = "Runs a quick unit test suite"
-
-    def run(self):
-        '''
-        Finds all the tests modules in tests/, and runs them.
-        '''
-        self._urlfetcher_mock = True
-        excludes = ["test_dist.py", "test_urls.py", "test_inject.py"]
-        testfiles = self._find_tests_in_dir("tests", excludes)
-
-        # Put test_cli at the end, since it takes the longest
-        for f in testfiles[:]:
-            if "test_cli" in f:
-                testfiles.remove(f)
-                testfiles.append(f)
-
-        # Always want to put test_checkprops at the end to get accurate results
-        for f in testfiles[:]:
-            if "test_checkprops" in f:
-                testfiles.remove(f)
-                if not self.testfile:
-                    testfiles.append(f)
-
-        self._testfiles = testfiles
-        TestBaseCommand.run(self)
-
-
-class TestUI(TestBaseCommand):
-    description = "Run UI dogtails tests"
-
-    def run(self):
-        self._testfiles = self._find_tests_in_dir("tests/uitests", [])
-        self._force_verbose = True
-        self._external_coverage = True
-        TestBaseCommand.run(self)
-
-
-class TestURLFetch(TestBaseCommand):
-    description = "Test fetching kernels and isos from various distro trees"
-    user_options = TestBaseCommand.user_options + [
-        ('skip-libosinfo', None,
-            "Don't use libosinfo for media/tree detection, "
-            "Use our internal detection logic."),
-        ('force-libosinfo', None,
-            "Only use libosinfo for media/tree detection. This will skip "
-            "some cases that are known not to work, like debian/ubuntu "
-            "tree detection."),
-        ('iso-only', None, "Only run iso tests"),
-        ('url-only', None, "Only run url tests"),
-    ]
-
+        pass
     def initialize_options(self):
-        TestBaseCommand.initialize_options(self)
-        self.skip_libosinfo = 0
-        self.force_libosinfo = 0
-        self.iso_only = 0
-        self.url_only = 0
-
-    def finalize_options(self):
-        TestBaseCommand.finalize_options(self)
-
+        pass
     def run(self):
-        self._testfiles = ["tests.test_urls"]
-        self._clistate = {
-            "url_iso_only": bool(self.iso_only),
-            "url_only": bool(self.url_only),
-            "url_skip_libosinfo": bool(self.skip_libosinfo),
-            "url_force_libosinfo": bool(self.force_libosinfo),
-        }
-        TestBaseCommand.run(self)
-
-
-class TestInitrdInject(TestBaseCommand):
-    description = "Test initrd inject with real kernels, fetched from URLs"
-
-    def run(self):
-        self._testfiles = ["tests.test_inject"]
-        TestBaseCommand.run(self)
-
-
-class TestDist(TestBaseCommand):
-    description = "Tests to run before cutting a release"
-
-    def run(self):
-        self._testfiles = ["tests.test_dist"]
-        TestBaseCommand.run(self)
+        sys.exit("ERROR: `test` is deprecated. Call `pytest` instead. "
+                 "See CONTRIBUTING.md for more info.")
 
 
 class CheckPylint(distutils.core.Command):
@@ -756,10 +551,6 @@ distutils.core.setup(
         'pylint': CheckPylint,
         'rpm': my_rpm,
         'test': TestCommand,
-        'test_ui': TestUI,
-        'test_urls': TestURLFetch,
-        'test_initrd_inject': TestInitrdInject,
-        'test_dist': TestDist,
 
         'extract_messages': ExtractMessages,
     },
