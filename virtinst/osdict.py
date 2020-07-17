@@ -700,21 +700,9 @@ class _OsVariant(object):
         installable_drivers = self._get_installable_drivers(arch)
         pre_inst_drivers = []
         for driver in installable_drivers:
-            if not driver.get_pre_installable():
-                continue
-
-            pre_inst_drivers.append(driver)
-        return pre_inst_drivers
-
-    def _get_post_installable_drivers(self, arch):
-        installable_drivers = self._get_installable_drivers(arch)
-        post_inst_drivers = []
-        for driver in installable_drivers:
             if driver.get_pre_installable():
-                continue
-
-            post_inst_drivers.append(driver)
-        return post_inst_drivers
+                pre_inst_drivers.append(driver)
+        return pre_inst_drivers
 
     def _get_drivers_location(self, drivers):
         locations = []
@@ -730,11 +718,6 @@ class _OsVariant(object):
 
         return self._get_drivers_location(pre_inst_drivers)
 
-    def get_post_installable_drivers_location(self, arch):
-        post_inst_drivers = self._get_post_installable_drivers(arch)
-
-        return self._get_drivers_location(post_inst_drivers)
-
     def get_pre_installable_devices(self, arch):
         drivers = self._get_pre_installable_drivers(arch)
         devices = []
@@ -744,11 +727,6 @@ class _OsVariant(object):
 
     def supports_unattended_drivers(self, arch):
         if self._get_pre_installable_drivers(arch):
-            return True
-        return False
-
-    def supports_unattended_agents(self, arch):
-        if self._get_post_installable_drivers(arch):
             return True
         return False
 
