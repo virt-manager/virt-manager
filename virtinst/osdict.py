@@ -12,11 +12,8 @@ import re
 
 from gi.repository import Libosinfo
 
+from . import xmlutil
 from .logger import log
-
-
-def _in_testsuite():
-    return "VIRTINST_TEST_SUITE" in os.environ
 
 
 def _media_create_from_location(location):
@@ -261,7 +258,7 @@ class _OSDB(object):
         if location.startswith("/"):
             location = "file://" + location
 
-        if _in_testsuite() and not location.startswith("file:"):
+        if xmlutil.in_testsuite() and not location.startswith("file:"):
             # We have mock network tests, but we don't want to pass the
             # fake URL to libosinfo because it slows down the testcase
             return None
