@@ -50,12 +50,12 @@ def _lookup_vol_by_basename(pool, path):
         return pool.storageVolLookupByName(name)
 
 
-def _get_block_size(path):
+def _get_block_size(path):  # pragma: no cover
     try:
         fd = os.open(path, os.O_RDONLY)
         # os.SEEK_END is not present on all systems
-        size = os.lseek(fd, 0, 2)  # pragma: no cover
-        os.close(fd)  # pragma: no cover
+        size = os.lseek(fd, 0, 2)
+        os.close(fd)
     except Exception:
         size = 0
     return size
@@ -65,7 +65,7 @@ def _get_size(path):
     if not os.path.exists(path):
         return 0
     if _stat_is_block(path):
-        return _get_block_size(path)
+        return _get_block_size(path)  # pragma: no cover
     return os.path.getsize(path)
 
 
@@ -214,7 +214,7 @@ def _get_dev_type(path, vol_xml, vol_object, pool_xml, remote):
             if os.path.isdir(path):
                 return "dir"
             elif _stat_is_block(path):
-                return "block"
+                return "block"  # pragma: no cover
 
     return "file"
 

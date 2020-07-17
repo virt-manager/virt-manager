@@ -195,7 +195,6 @@ class TestXMLMisc(unittest.TestCase):
         g._metadata.libosinfo.os_id = "http://example.com/idontexit"  # pylint: disable=protected-access
         self.assertEqual(g.osinfo.name, "generic")
 
-    @utils.run_without_testsuite_hacks
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
         # but let's contrive an example that should trigger all the code
