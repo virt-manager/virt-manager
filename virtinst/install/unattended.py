@@ -20,6 +20,18 @@ from .. import progress
 from ..logger import log
 
 
+def _is_user_login_safe(login):
+    return login != "root"
+
+
+def _login_from_hostuser():
+    hostuser = getpass.getuser()
+    realname = pwd.getpwnam(hostuser).pw_gecos
+    if not _is_user_login_safe(hostuser):
+        return None, None  # pragma: no cover
+    return hostuser, realname  # pragma: no cover
+
+
 def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     """
     Build a Libosinfo.InstallConfig instance
@@ -34,9 +46,6 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     def get_language():
         return locale.getlocale()[0]
 
-    def is_user_login_safe(login):
-        return login != "root"
-
     config = Libosinfo.InstallConfig()
 
     # Set user login and name
@@ -45,14 +54,11 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     login = unattended_data.user_login
     realname = unattended_data.user_login
     if not login:
-        hostuser = getpass.getuser()
-        if is_user_login_safe(hostuser):
-            login = getpass.getuser()
-            realname = pwd.getpwnam(login).pw_gecos
+        login, realname = _login_from_hostuser()
 
     if login:
         login = login.lower()
-        if not is_user_login_safe(login):
+        if not _is_user_login_safe(login):
             raise RuntimeError(
                 _("%(osname)s cannot use '%(loginname)s' as user-login.") %
                 {"osname": osobj.name, "loginname": login})

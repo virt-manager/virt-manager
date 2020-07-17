@@ -128,8 +128,8 @@ class DeviceDisk(Device):
         user, uid = conn.caps.host.get_qemu_baselabel()
         if not user:
             return searchdata
-        if uid == 0:
-            return searchdata
+        if uid == 0 and not xmlutil.in_testsuite():
+            return searchdata  # pragma: no cover
 
         searchdata.user = user
         searchdata.uid = uid
