@@ -25,6 +25,7 @@ class _TestConfig(object):
     def __init__(self):
         self.regenerate_output = False
         self.debug = False
+        self.skip_checkprops = False
 
         self.url_only = False
         self.url_iso_only = False
