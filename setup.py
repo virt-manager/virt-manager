@@ -408,7 +408,7 @@ class CheckPylint(distutils.core.Command):
 
         print("running pylint")
         pylint_opts = [
-            "--rcfile", "pylintrc",
+            "--rcfile", ".pylintrc",
             "--output-format=%s" % output_format,
         ]
         if self.jobs:
