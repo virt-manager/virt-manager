@@ -25,8 +25,7 @@ To build an RPM, you can run:
 
 ## Pre-requisite software
 
-A detailed dependency list can be found in
-[virt-manager.spec.in](virt-manager.spec.in) file.
+A detailed dependency list can be found in [virt-manager.spec](virt-manager.spec) file.
 
 Minimum version requirements of major components:
 
