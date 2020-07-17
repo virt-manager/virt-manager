@@ -580,7 +580,7 @@ class vmmConnection(vmmGObject):
         elif obj.is_network():
             define_cb = self.define_network
         else:
-            raise RuntimeError("programming error: rename_object "
+            raise virtinst.xmlutil.DevError("rename_object "
                 "helper doesn't support object class %s" % obj.__class__)
 
         # Undefine the original object

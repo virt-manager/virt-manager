@@ -192,8 +192,8 @@ class XMLProperty(_XMLPropertyBase):
         :param do_abspath: If True, run os.path.abspath on the passed value
         """
         self._xpath = xpath
-        xmlutil.raise_programming_error(not self._xpath,
-                "XMLProperty: xpath must be passed.")
+        if not self._xpath:
+            raise xmlutil.DevError("XMLProperty: xpath must be passed.")
 
         self._is_bool = is_bool
         self._is_int = is_int
@@ -204,8 +204,8 @@ class XMLProperty(_XMLPropertyBase):
         conflicts = sum([int(bool(i)) for i in
                 [self._is_bool, self._is_int,
                  self._is_yesno, self._is_onoff]])
-        xmlutil.raise_programming_error(conflicts > 1,
-                "Conflict property converter options.")
+        if conflicts > 1:
+            raise xmlutil.DevError("Conflict property converter options.")
 
         self._is_tracked = False
         if _trackprops:
@@ -499,16 +499,16 @@ class XMLBuilder(object):
         xmlprops = self._all_xml_props()
         childprops = self._all_child_props()
         for key in self._XML_PROP_ORDER:
-            xmlutil.raise_programming_error(
-                key not in xmlprops and key not in childprops,
-                "key '%s' must be xml prop or child prop" % key)
+            if key not in xmlprops and key not in childprops:
+                raise xmlutil.DevError(
+                        "key '%s' must be xml prop or child prop" % key)
 
         childclasses = []
         for childprop in childprops.values():
-            xmlutil.raise_programming_error(
-                childprop.child_class in childclasses,
-                "can't register duplicate child_class=%s" %
-                childprop.child_class)
+            if childprop.child_class in childclasses:
+                raise xmlutil.DevError(
+                        "can't register duplicate child_class=%s" %
+                        childprop.child_class)
             childclasses.append(childprop.child_class)
 
         setattr(self.__class__, cachekey, True)
@@ -641,7 +641,8 @@ class XMLBuilder(object):
             if child_class is xmlprop.child_class:
                 ret = xmlprop
                 break
-        xmlutil.raise_programming_error(not ret,
+        if not ret:
+            raise xmlutil.DevError(
                 "Didn't find child property for child_class=%s" % child_class)
         return ret
 
