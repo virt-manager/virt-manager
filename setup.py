@@ -19,7 +19,6 @@ import distutils.command.build
 import distutils.command.install
 import distutils.command.install_data
 import distutils.command.install_egg_info
-import distutils.command.sdist
 import distutils.dist
 import distutils.log
 import distutils.sysconfig
@@ -283,20 +282,6 @@ class my_install_data(distutils.command.install_data.install_data):
             self.spawn(["glib-compile-schemas", gschema_install])
 
 
-class my_sdist(distutils.command.sdist.sdist):
-    description = "Update virt-manager.spec; build sdist-tarball."
-
-    def run(self):
-        f1 = open('virt-manager.spec.in', 'r')
-        f2 = open('virt-manager.spec', 'w')
-        for line in f1:
-            f2.write(line.replace('@VERSION@', BuildConfig.version))
-        f1.close()
-        f2.close()
-
-        distutils.command.sdist.sdist.run(self)
-
-
 ###################
 # Custom commands #
 ###################
@@ -394,7 +379,7 @@ class CheckPylint(distutils.core.Command):
         spellfiles += ["data/virt-manager.appdata.xml.in",
                        "data/virt-manager.desktop.in",
                        "data/org.virt-manager.virt-manager.gschema.xml",
-                       "virt-manager.spec.in"]
+                       "virt-manager.spec"]
         spellfiles.remove("NEWS.md")
 
         try:
@@ -546,7 +531,6 @@ distutils.core.setup(
         'build': my_build,
         'build_i18n': my_build_i18n,
 
-        'sdist': my_sdist,
         'install': my_install,
         'install_data': my_install_data,
         'install_egg_info': my_egg_info,
