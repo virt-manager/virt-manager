@@ -10,6 +10,10 @@ def pytest_addoption(parser):
     parser.addoption("--uitests", action="store_true", default=False,
             help="Run dogtail UI tests")
 
+    parser.addoption("--regenerate-output",
+            action="store_true", default=False,
+            help="Regenerate test output")
+
     # test_urls options
     parser.addoption('--urls-skip-libosinfo',
             action="store_true", default=False,
@@ -81,3 +85,4 @@ def pytest_configure(config):
     clistate.url_only = config.getoption("--urls-url-only")
     clistate.url_skip_libosinfo = config.getoption("--urls-skip-libosinfo")
     clistate.url_force_libosinfo = config.getoption("--urls-force-libosinfo")
+    clistate.regenerate_output = config.getoption("--regenerate-output")
