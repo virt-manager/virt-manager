@@ -43,7 +43,7 @@ LIBOSINFO_SUPPORT_LOCAL_TREE = hasattr(Libosinfo.Tree, "create_from_treeinfo")
 
 # Images that will be created by virt-install/virt-clone, and removed before
 # each run
-new_images = [
+NEW_FILES = [
     TMP_IMAGE_DIR + "new1.img",
     TMP_IMAGE_DIR + "new2.img",
     TMP_IMAGE_DIR + "new3.img",
@@ -52,16 +52,13 @@ new_images = [
 ]
 
 # Images that are expected to exist before a command is run
-exist_images = [
+EXIST_FILES = [
     TMP_IMAGE_DIR + "exist1.img",
     TMP_IMAGE_DIR + "exist2.img",
 ]
 
-exist_files = exist_images
-new_files   = new_images
-clean_files = (new_images + exist_images)
 
-test_files = {
+TEST_DATA = {
     'URI-TEST-FULL': utils.URIs.test_full,
     'URI-TEST-REMOTE': utils.URIs.test_remote,
     'URI-KVM': utils.URIs.kvm,
@@ -74,13 +71,13 @@ test_files = {
     'XMLDIR': XMLDIR,
     'NEWIMG1': "/dev/default-pool/new1.img",
     'NEWIMG2': "/dev/default-pool/new2.img",
-    'NEWCLONEIMG1': new_images[0],
-    'NEWCLONEIMG2': new_images[1],
-    'NEWCLONEIMG3': new_images[2],
+    'NEWCLONEIMG1': NEW_FILES[0],
+    'NEWCLONEIMG2': NEW_FILES[1],
+    'NEWCLONEIMG3': NEW_FILES[2],
     'EXISTIMG1': "/dev/default-pool/testvol1.img",
     'EXISTIMG2': "/dev/default-pool/testvol2.img",
-    'EXISTIMG3': exist_images[0],
-    'EXISTIMG4': exist_images[1],
+    'EXISTIMG3': EXIST_FILES[0],
+    'EXISTIMG4': EXIST_FILES[1],
     'ISOTREE': "%s/fake-fedora17-tree.iso" % XMLDIR,
     'ISOLABEL': "%s/fake-centos65-label.iso" % XMLDIR,
     'ISO-NO-OS': "%s/fake-no-osinfo.iso" % XMLDIR,
@@ -175,7 +172,7 @@ class Command(object):
                  nogrep=None, skip_checks=None, compare_file=None, env=None,
                  check_success=True, input_text=None, **kwargs):
         # Options that alter what command we run
-        self.cmdstr = cmd % test_files
+        self.cmdstr = cmd % TEST_DATA
         app, opts = self.cmdstr.split(" ", 1)
         self.app = app
         self.argv = [os.path.abspath(app)] + shlex.split(opts)
@@ -255,11 +252,7 @@ class Command(object):
 
     def _get_output(self, conn):
         try:
-            for i in new_files:
-                if os.path.isdir(i):
-                    shutil.rmtree(i)
-                elif os.path.exists(i):
-                    os.unlink(i)
+            cleanup(clean_all=False)
 
             code, output = self._launch_command(conn)
 
@@ -1436,16 +1429,24 @@ def setup():
     """
     Create initial test files/dirs
     """
-    for i in exist_files:
+    for i in EXIST_FILES:
         open(i, "a")
 
 
-def cleanup():
+def cleanup(clean_all=True):
     """
     Cleanup temporary files used for testing
     """
+    clean_files = NEW_FILES
+    if clean_all:
+        clean_files += EXIST_FILES
+
     for i in clean_files:
-        if os.path.exists(i):
+        if not os.path.exists(i):
+            continue
+        if os.path.isdir(i):
+            shutil.rmtree(i)
+        else:
             os.unlink(i)
 
 
