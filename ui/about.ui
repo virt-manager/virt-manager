@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAboutDialog" id="vmm-about">
@@ -11,20 +11,6 @@
     <property name="comments" translatable="yes">Powered by libvirt</property>
     <property name="website">https://virt-manager.org/</property>
     <property name="website_label">https://virt-manager.org/</property>
-    <property name="license">    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-</property>
     <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;
 Cole Robinson &lt;crobinso@redhat.com&gt;
 Hugh O. Brock &lt;hbrock@redhat.com&gt;
@@ -36,6 +22,7 @@ Jeremy Perry &lt;jeperry@redhat.com&gt;
 Jakub Steiner &lt;jsteiner@redhat.com&gt;
 </property>
     <property name="logo_icon_name">virt-manager</property>
+    <property name="license_type">gpl-2-0</property>
     <signal name="delete-event" handler="on_vmm_about_delete_event" swapped="no"/>
     <signal name="response" handler="on_vmm_about_response" swapped="no"/>
     <child internal-child="vbox">
@@ -54,6 +41,9 @@ Jakub Steiner &lt;jsteiner@redhat.com&gt;
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
