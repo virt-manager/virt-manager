@@ -557,9 +557,6 @@ class _SuseDistro(_RHELDistro):
 
         version = distro_version.split('.', 1)[0].strip()
 
-        if int(version) < 10:
-            return self._variant_prefix + "9"
-
         if str(self._variant_prefix).startswith(("sles", "sled")):
             sp_version = ""
             if len(distro_version.split('.', 1)) == 2:
