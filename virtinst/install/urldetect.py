@@ -556,9 +556,6 @@ class _SuseDistro(_RHELDistro):
             return
 
         version = distro_version.split('.', 1)[0].strip()
-        if len(version) == 8:
-            # Tumbleweed 8 digit date
-            return "opensusetumbleweed"
 
         if int(version) < 10:
             return self._variant_prefix + "9"
