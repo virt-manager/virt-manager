@@ -1,0 +1,77 @@
+[addon-Server-HighAvailability]
+id = HighAvailability
+name = High Availability
+packages = addons/HighAvailability
+parent = Server
+repository = addons/HighAvailability
+type = addon
+uid = Server-HighAvailability
+
+[addon-Server-ResilientStorage]
+id = ResilientStorage
+name = Resilient Storage
+packages = addons/ResilientStorage
+parent = Server
+repository = addons/ResilientStorage
+type = addon
+uid = Server-ResilientStorage
+
+[checksums]
+LiveOS/squashfs.img = sha256:158657d4ff270db50204ae70c2256ca1523ee4f3c23eeedbabc3f723b69163a2
+images/boot.iso = sha256:f4c6ded159284522cd85f6c4dd7a970dd6ff47d8d3680d658e9c5f38736180df
+images/pxeboot/initrd.img = sha256:094631a67f1766688dfcf4ec1f07ab0921100878736afc3cc1b31f69e7b517a1
+images/pxeboot/upgrade.img = sha256:bc884c1b4b520e57f81f3bf43156365d9ef651a47266b21e2c3d00b09e0da46b
+images/pxeboot/vmlinuz = sha256:91052b444e73f3eebdb93d1fb1506597e96c92d8de9c1e3c3f36b07a57d0a18f
+
+[general]
+; WARNING.0 = This section provides compatibility with pre-productmd treeinfos.
+; WARNING.1 = Read productmd documentation for details about new format.
+arch = x86_64
+family = Red Hat Enterprise Linux
+name = Red Hat Enterprise Linux 7.6
+packagedir = Packages
+platforms = x86_64,xen
+repository = .
+timestamp = 1539194952
+variant = Server
+variants = Server
+version = 7.6
+
+[header]
+type = productmd.treeinfo
+version = 1.2
+
+[images-x86_64]
+boot.iso = images/boot.iso
+initrd = images/pxeboot/initrd.img
+kernel = images/pxeboot/vmlinuz
+upgrade = images/pxeboot/upgrade.img
+
+[images-xen]
+initrd = images/pxeboot/initrd.img
+kernel = images/pxeboot/vmlinuz
+upgrade = images/pxeboot/upgrade.img
+
+[release]
+name = Red Hat Enterprise Linux
+short = RHEL
+version = 7.6
+
+[stage2]
+mainimage = LiveOS/squashfs.img
+
+[tree]
+arch = x86_64
+build_timestamp = 1539194952
+platforms = x86_64,xen
+variants = Server
+
+[variant-Server]
+addons = Server-HighAvailability,Server-ResilientStorage
+id = Server
+name = Server
+packages = Packages
+repository = .
+type = variant
+uid = Server
+

@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 import configparser
+import os
 import re
 
 from ..logger import log
@@ -156,7 +157,7 @@ class _DistroCache(object):
 
         self.libosinfo_os_variant, self.libosinfo_mediaobj = ret
         if (not self.libosinfo_mediaobj.get_kernel_path() or
-            not self.libosinfo_mediaobj.get_initrd_path()):
+            not self.libosinfo_mediaobj.get_initrd_path()):  # pragma: no cover
             # This can happen if the media is live media, or just
             # with incomplete libosinfo data
             log.debug("libosinfo didn't report any media kernel/initrd "
@@ -207,7 +208,7 @@ class _SUSEContent(object):
         if not distro_arch and "REPOID" in self.content_dict:
             distro_arch = self.content_dict["REPOID"].rsplit('/', 1)[1]
         if not distro_arch:
-            return None
+            return None  # pragma: no cover
 
         tree_arch = distro_arch.strip()
         # Fix for 13.2 official oss repo
@@ -254,7 +255,7 @@ class _SUSEContent(object):
         #
         # As of 2018 all latest distros match only DISTRO and REPOID.
         if not self.product_name:
-            return None
+            return None  # pragma: no cover
 
         distro_version = self.content_dict.get("VERSION", "")
         if "-" in distro_version:
@@ -340,10 +341,10 @@ class _DistroTree(object):
         else:
             self._os_variant = self._detect_version()
 
-        if self._os_variant and not OSDB.lookup_os(self._os_variant):
-            log.debug("Detected os_variant as %s, which is not "
-                          "in osdict.",
-                          self._os_variant)
+        if (self._os_variant and
+            not OSDB.lookup_os(self._os_variant)):
+            log.debug("Detected os_variant as %s, which is not in osdict.",
+                    self._os_variant)
             self._os_variant = None
 
         self._kernel_paths = []
@@ -427,10 +428,10 @@ class _FedoraDistro(_DistroTree):
         if OSDB.lookup_os(variant):
             return variant
 
-        log.debug(  # pragma: no cover
+        log.debug(
                 "variant=%s from treeinfo version=%s not found, "
                 "using latest_variant=%s", variant, verstr, latest_variant)
-        return latest_variant  # pragma: no cover
+        return latest_variant
 
 
 class _RHELDistro(_DistroTree):
@@ -444,10 +445,11 @@ class _RHELDistro(_DistroTree):
         #   Red Hat Enterprise Linux
         #   RHEL Atomic Host
         famregex = ".*(Red Hat Enterprise Linux|RHEL).*"
-        return cache.treeinfo_family_regex(famregex)
+        if cache.treeinfo_family_regex(famregex):
+            return True
 
     def _detect_version(self):
-        if not self.cache.treeinfo_version:
+        if not self.cache.treeinfo_version:  # pragma: no cover
             log.debug("No treeinfo version? Not setting an os_variant")
             return
 
@@ -472,8 +474,11 @@ class _CentOSDistro(_RHELDistro):
 
     @classmethod
     def is_valid(cls, cache):
-        famregex = ".*(CentOS|Scientific).*"
-        return cache.treeinfo_family_regex(famregex)
+        if cache.treeinfo_family_regex(".*CentOS.*"):
+            return True
+        if cache.treeinfo_family_regex(".*Scientific.*"):
+            return True
+
 
 
 class _SuseDistro(_RHELDistro):
@@ -496,7 +501,7 @@ class _SuseDistro(_RHELDistro):
 
             try:
                 cache.suse_content = _SUSEContent(content_str)
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 log.debug("Error parsing SUSE content file: %s", str(e))
                 return False
 
@@ -549,11 +554,11 @@ class _SuseDistro(_RHELDistro):
 
     def _detect_osdict_from_suse_content(self):
         if not self.cache.suse_content:
-            return
+            return  # pragma: no cover
 
         distro_version = self.cache.suse_content.product_version
         if not distro_version:
-            return
+            return  # pragma: no cover
 
         version = distro_version.split('.', 1)[0].strip()
 
@@ -689,7 +694,7 @@ class _DebianDistro(_DistroTree):
             if arch in self.uri:
                 log.debug("Found treearch=%s in uri", arch)
                 if arch == "x86_64":
-                    arch = "amd64"
+                    arch = "amd64"  # pragma: no cover
                 return arch
 
         # Otherwise default to i386
@@ -762,7 +767,7 @@ class _DebianDistro(_DistroTree):
                 codename = osobj.codename.split()[0].lower()
             else:
                 if " " not in osobj.label:
-                    continue
+                    continue  # pragma: no cover
                 # Debian labels look like 'Debian Sarge'
                 codename = osobj.label.split()[1].lower()
 
@@ -863,9 +868,8 @@ def _build_distro_list(osobj):
         else:
             log.debug("No matching store found, not prioritizing anything")
 
-    import os
     force_libosinfo = os.environ.get("VIRTINST_TEST_SUITE_FORCE_LIBOSINFO")
-    if force_libosinfo:
+    if force_libosinfo:  # pragma: no cover
         if bool(int(force_libosinfo)):
             allstores = [_LibosinfoDistro]
         else:

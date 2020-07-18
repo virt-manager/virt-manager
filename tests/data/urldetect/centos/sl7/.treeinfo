@@ -1,0 +1,74 @@
+[general]
+name = Scientific-7.8
+family = Scientific
+timestamp = 1586358444
+variant = RELEASE
+version = 7.8
+packagedir = 
+arch = x86_64
+
+[product]
+name = Scientific Linux
+short = SL
+version = 7.8
+
+[tree]
+arch = x86_64
+build_timestamp = 1586358444
+platforms = x86_64,xen
+variants = RELEASE
+
+[variant-RELEASE]
+addons = RELEASE-updates,RELEASE-fastbugs
+id = RELEASE
+name = RELEASE
+packages = Packages
+repository = .
+type = variant
+uid = RELEASE
+
+[addon-RELEASE-updates]
+id = RELEASE-updates
+name = Security Updates
+packages = ../updates/security/
+parent = RELEASE
+repository = ../updates/security/
+type = addon
+uid = RELEASE-updates
+
+[addon-RELEASE-fastbugs]
+id = RELEASE-fastbugs
+name = Bugfix Updates
+packages = ../updates/fastbugs/
+parent = RELEASE
+repository = ../updates/fastbugs/
+type = addon
+uid = RELEASE-fastbugs
+
+[header]
+type = productmd.treeinfo
+version = 1.2
+
+[stage2]
+mainimage = LiveOS/squashfs.img
+
+[images-x86_64]
+kernel = images/pxeboot/vmlinuz
+initrd = images/pxeboot/initrd.img
+upgrade = images/pxeboot/upgrade.img
+boot.iso = images/boot.iso
+
+[images-xen]
+kernel = images/pxeboot/vmlinuz
+initrd = images/pxeboot/initrd.img
+upgrade = images/pxeboot/upgrade.img
+
+[checksums]
+images/efiboot.img = sha256:58bea698c9ed57699e28b7d6109c43598cf684f68cb67fd605f614235e60cd9e
+images/boot.iso = sha256:56b5f079debaf01c1936b06d8a47d7145a2257df81fb9c1c89051968eef4867a
+images/pxeboot/vmlinuz = sha256:78db1967bbf2b04cb6263955ccbef3e7930cc28bd887ee1de77b7e77c0157385
+images/pxeboot/initrd.img = sha256:78ad5cb81b55d8f7fd55ade1d8d97282279995664630af74764e6948a818d78a
+images/pxeboot/upgrade.img = sha256:6f6a4cdf233485b1738d31f4c2276344b4cddfe5b7551c443ed3e8c75cd583c2
+LiveOS/squashfs.img = sha256:1a3c64036b69e828357aa0e1f1b2e7cfbd053350528c9b3521204469818b21b3
+repodata/repomd.xml = sha256:8ef17c97f0188502a6be321937cbc8ec964a12947837bd9082ab40093be268d4
+

@@ -1,0 +1,31 @@
+[general]
+name = ClearOS-7.7.2.280072
+family = ClearOS
+timestamp = 1578158484.65
+variant = 
+version = 7.7.2.280072
+packagedir = 
+arch = x86_64
+
+[stage2]
+mainimage = LiveOS/squashfs.img
+
+[images-x86_64]
+kernel = images/pxeboot/vmlinuz
+initrd = images/pxeboot/initrd.img
+upgrade = images/pxeboot/upgrade.img
+boot.iso = images/boot.iso
+
+[images-xen]
+kernel = images/pxeboot/vmlinuz
+initrd = images/pxeboot/initrd.img
+upgrade = images/pxeboot/upgrade.img
+
+[checksums]
+images/boot.iso = sha256:e9cd79703ea46c21fb907b77004a24b17cf31bac6a9b78deca88a7f16d5e8bfe
+images/efiboot.img = sha256:ed395e40a7e483257977879b0934d8cf32ed4e3d39aa215b94e3cdee118a8332
+images/pxeboot/vmlinuz = sha256:a8bc49618304a7b761ee3f817358e0a654f6dfa106024c91f0b6e9e669736208
+images/pxeboot/upgrade.img = sha256:0246e84bed26f1d0aed5cf7eb5bcae22560412608bd619406475d0562e541bad
+images/pxeboot/initrd.img = sha256:f6a1da0fb86af372cbf7c916e7168319acfe92b53d85aab4bc831615103dbf8f
+repodata/repomd.xml = sha256:88c096d8f92810186b7dffa0b58adba3e1a40f9aa42edaf229c56ae607c79521
+
