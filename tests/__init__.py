@@ -34,7 +34,8 @@ def setup_logging():
     streamHandler.setFormatter(logging.Formatter(fmt))
     if utils.TESTCONFIG.debug:
         streamHandler.setLevel(logging.DEBUG)
+        log.setLevel(logging.DEBUG)
     else:
         streamHandler.setLevel(logging.ERROR)
+        log.setLevel(logging.ERROR)
     log.addHandler(streamHandler)
-    log.setLevel(logging.DEBUG)
