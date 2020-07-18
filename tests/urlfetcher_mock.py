@@ -11,27 +11,37 @@ import requests
 
 from virtinst import log
 
+_URLPREFIX = "https://virtinst-testsuite.example/"
+_MOCK_TOPDIR = os.path.dirname(__file__) + "/data/urldetect/"
 
-def _make_mock_url(url, filesyntax):
-    if url.endswith("treeinfo"):
+
+def make_mock_input_url(distro):
+    return _URLPREFIX + distro
+
+
+def _map_mock_url_to_file(url):
+    if url.startswith(_URLPREFIX):
+        path = url[len(_URLPREFIX):]
+        fn = _MOCK_TOPDIR + path
+        if not os.path.exists(os.path.dirname(fn)):
+            raise RuntimeError("Expected mock file not found: %s" % fn)
+
+    elif url.endswith("treeinfo"):
         # If the url is requesting treeinfo, give a fake treeinfo from
         # our testsuite data
         fn = ("%s/data/cli/fakerhel6tree/.treeinfo" %
                 os.path.abspath(os.path.dirname(__file__)))
-        abspath = os.path.abspath(fn)
     else:
         # Otherwise just copy this file
-        abspath = os.path.abspath(__file__)
+        fn = os.path.abspath(__file__)
 
-    if filesyntax:
-        return "file://" + abspath
-    return abspath
+    return os.path.abspath(fn)
 
 
 class _MockRequestsResponse:
     def __init__(self, url):
         log.debug("mocking requests session for url=%s", url)
-        fn = _make_mock_url(url, filesyntax=False)
+        fn = _map_mock_url_to_file(url)
         self._content = open(fn).read()
         self.headers = {'content-length': len(self._content)}
 
@@ -68,12 +78,13 @@ class _MockFTPSession:
     def quit(self, *args, **kwargs):
         pass
     def size(self, url):
-        path = _make_mock_url(url, filesyntax=False)
+        path = _map_mock_url_to_file(url)
         return os.path.getsize(path)
 
 
 def _MockUrllibRequest(url):
-    url = _make_mock_url(url, filesyntax=True)
+    url = _map_mock_url_to_file(url)
+    url = "file://" + url
     return Request(url)
 
 

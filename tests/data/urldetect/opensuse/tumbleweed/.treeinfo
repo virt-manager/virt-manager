@@ -1,0 +1,19 @@
+[header]
+version = 1.0
+
+[release]
+name = openSUSE Tumbleweed
+
+[general]
+arch = x86_64
+family = openSUSE Tumbleweed
+name = openSUSE Tumbleweed
+platforms = x86_64,xen
+
+[images-x86_64]
+kernel = boot/x86_64/loader/linux
+initrd = boot/x86_64/loader/initrd
+
+[images-xen]
+kernel = boot/x86_64/loader/linux
+initrd = boot/x86_64/loader/initrd

@@ -48,8 +48,6 @@ class _URLFetcher(object):
         Generate a full fetchable URL from the passed filename, which
         is relative to the self.location
         """
-        if self._is_iso:
-            return os.path.join("/", filename)
         if not filename:
             return self.location
         return os.path.join(self.location, filename)
@@ -310,6 +308,9 @@ class _LocalURLFetcher(_URLFetcher):
 class _ISOURLFetcher(_URLFetcher):
     _cache_file_list = None
     _is_iso = True
+
+    def _make_full_url(self, filename):
+        return os.path.join("/", filename)
 
     def _grabber(self, url):
         """
