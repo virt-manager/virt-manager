@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-07-17 06:10+0000\n"
-"PO-Revision-Date: 2020-07-14 16:52+0000\n"
+"PO-Revision-Date: 2020-07-17 06:45+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2866,13 +2866,7 @@ msgid "Unknown"
 msgstr "Невідомо"
 
 #: virtManager/connection.py:601
-#, fuzzy, python-format
-#| msgid ""
-#| "%(object)s rename failed. Attempting to recover also failed.\n"
-#| "\n"
-#| "Original error: %(origerror)s\n"
-#| "\n"
-#| "Recover error: %s"
+#, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
@@ -2885,7 +2879,7 @@ msgstr ""
 "\n"
 "Початкове повідомлення про помилку: %(origerror)s\n"
 "\n"
-"Повідомлення про помилку під час спроби відновлення: %s"
+"Повідомлення про помилку під час спроби відновлення: %(recovererror)s"
 
 #: virtManager/createconn.py:37
 #, python-format
@@ -3269,10 +3263,8 @@ msgid "Invalid guest name"
 msgstr "Некоректна назва гостьової системи"
 
 #: virtManager/createvm.py:1745
-#, fuzzy
-#| msgid "Network device required for %s install."
 msgid "Network device required for URL install."
-msgstr "Для встановлення %s потрібен мережевий пристрій."
+msgstr "Для встановлення за адресою потрібен мережевий пристрій."
 
 #: virtManager/createvm.py:1823
 msgid "Detecting..."
@@ -3989,25 +3981,27 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Помилка під час оновлення списку знімків: %s"
 
 #: virtManager/details/snapshots.py:456
-#, fuzzy, python-format
-#| msgid "<span size='small'>Warning: %s</span>"
+#, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s (External)</span>"
-msgstr "<span size='small'>Попередження: %s</span>"
+msgstr ""
+"%(vm)s\n"
+"<span size='small'>Стан ВМ: %(state)s (зовнішня)</span>"
 
 #: virtManager/details/snapshots.py:461
-#, fuzzy, python-format
-#| msgid "<span size='small'>Warning: %s</span>"
+#, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s</span>"
-msgstr "<span size='small'>Попередження: %s</span>"
+msgstr ""
+"%(vm)s\n"
+"<span size='small'>Стан ВМ: %(state)s</span>"
 
 #: virtManager/details/snapshots.py:523
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
-msgstr ""
+msgstr "<b>Знімок «%(name)s»:</b>"
 
 #: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
@@ -4038,28 +4032,23 @@ msgstr ""
 "створювати знімки лише запущених або лише вимкнених систем."
 
 #: virtManager/details/snapshots.py:660
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
-#| "changes since the last snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"Ви справді хочете запустити знімок «%(name)s»? Усі зміни на %(changetype)s, "
-"які було внесено з часу створення останнього знімка, було відкинуто."
+"Ви справді хочете запустити знімок «%(name)s»? Усі зміни на диску, які було "
+"внесено з часу створення останнього знімка, було відкинуто."
 
 #: virtManager/details/snapshots.py:664
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
-#| "changes since the last snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"Ви справді хочете запустити знімок «%(name)s»? Усі зміни на %(changetype)s, "
-"які було внесено з часу створення останнього знімка, було відкинуто."
+"Ви справді хочете запустити знімок «%(name)s»? Усі зміни на диску і у "
+"налаштуваннях, які було внесено з часу створення останнього знімка, було "
+"відкинуто."
 
 #: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -5940,10 +5929,9 @@ msgid "Invalid name for new guest: %s"
 msgstr "Некоректна назва нової гостьової системи: %s"
 
 #: virtinst/cloner.py:163
-#, fuzzy, python-format
-#| msgid "Could not use path '%s' for cloning"
+#, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Не вдалося використати адресу «%s» для клонування"
+msgstr "Не вдалося використати адресу «%(path)s» для клонування: %(error)s"
 
 #: virtinst/cloner.py:283
 msgid "Original guest name or XML is required."
