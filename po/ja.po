@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-17 06:10+0000\n"
+"POT-Creation-Date: 2020-07-19 06:10+0000\n"
 "PO-Revision-Date: 2019-07-24 02:29+0000\n"
 "Last-Translator: Hajime Taira <htaira@fedoraproject.org>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/virt-manager/"
@@ -5387,7 +5387,7 @@ msgstr ""
 "'--option=?' や '--option help'を使用して、指定可能なサブオプションを確認する"
 "ことができます"
 
-#: virtinst/cli.py:291
+#: virtinst/cli.py:287
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5400,7 +5400,7 @@ msgstr ""
 "  %s\n"
 "そうでなければ、インストールをやり直してください。"
 
-#: virtinst/cli.py:309
+#: virtinst/cli.py:305
 #, fuzzy, python-format
 #| msgid ""
 #| "%s may not be accessible by the hypervisor. You will need to grant the "
@@ -5412,48 +5412,48 @@ msgstr ""
 "%s は、ハイパーバイザーからアクセスできない可能性があります。'%s' ユーザー"
 "に、次のディレクトリーの検索パーミッションを付与する必要があります: %s"
 
-#: virtinst/cli.py:322
+#: virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (--check %s=off を使用するか、--check all=off で上書きします)"
 
-#: virtinst/cli.py:354
+#: virtinst/cli.py:350
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "これにより既存のパス '%s' が上書きされます"
 
-#: virtinst/cli.py:365
+#: virtinst/cli.py:361
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "ディスク %s は、他の仮想マシン %s に使用されています"
 
-#: virtinst/cli.py:410
+#: virtinst/cli.py:406
 #, fuzzy, python-format
 #| msgid "Connecting to graphical console for guest"
 msgid "Running graphical console command: %(command)s"
 msgstr "この仮想マシンのグラフィカルコンソールに接続中"
 
-#: virtinst/cli.py:424
+#: virtinst/cli.py:420
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr ""
 
-#: virtinst/cli.py:448
+#: virtinst/cli.py:444
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/cli.py:492
+#: virtinst/cli.py:488
 #, fuzzy, python-format
 #| msgid "Could not find domain '%s': %s"
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "仮想マシン '%s' が見つかりませんでした: %s"
 
-#: virtinst/cli.py:591 virtinst/cli.py:594
+#: virtinst/cli.py:597 virtinst/cli.py:600
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "接続先のハイパーバイザーの libvirt URI"
 
-#: virtinst/cli.py:609
+#: virtinst/cli.py:615
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5461,31 +5461,31 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:615
+#: virtinst/cli.py:621
 msgid "Don't automatically try to connect to the guest console"
 msgstr "ゲストコンソールに自動的に接続しようとしないでください"
 
-#: virtinst/cli.py:619
+#: virtinst/cli.py:625
 msgid "Don't boot guest after completing install."
 msgstr "インストール完了後に仮想マシンを起動しません。"
 
-#: virtinst/cli.py:623
+#: virtinst/cli.py:629
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "名前の競合をチェックしません。同じ名前のゲストがあった場合は上書きされます。"
 
-#: virtinst/cli.py:630
+#: virtinst/cli.py:636
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "生成した仮想マシンの XML ファイルを表示します。"
 
-#: virtinst/cli.py:649
+#: virtinst/cli.py:655
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "インストールプロセス全体を実行しますが、デバイスを作成しません、または仮想マ"
 "シンを定義しません。"
 
-#: virtinst/cli.py:654
+#: virtinst/cli.py:660
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5495,15 +5495,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:658
+#: virtinst/cli.py:664
 msgid "Suppress non-error output"
 msgstr "エラー以外の出力を制限します"
 
-#: virtinst/cli.py:660
+#: virtinst/cli.py:666
 msgid "Print debugging information"
 msgstr "デバッグ情報を表示します"
 
-#: virtinst/cli.py:666
+#: virtinst/cli.py:672
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5513,7 +5513,7 @@ msgstr ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 
-#: virtinst/cli.py:674
+#: virtinst/cli.py:680
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -5523,7 +5523,7 @@ msgstr ""
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: virtinst/cli.py:687
+#: virtinst/cli.py:693
 #, fuzzy
 #| msgid ""
 #| "Number of vcpus to configure for your guest. Ex:\n"
@@ -5541,7 +5541,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 
-#: virtinst/cli.py:696
+#: virtinst/cli.py:702
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -5551,7 +5551,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: virtinst/cli.py:709
+#: virtinst/cli.py:715
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5563,7 +5563,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: virtinst/cli.py:718
+#: virtinst/cli.py:724
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5579,7 +5579,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:729
+#: virtinst/cli.py:735
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5589,7 +5589,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 
-#: virtinst/cli.py:734
+#: virtinst/cli.py:740
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5599,27 +5599,27 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:739
+#: virtinst/cli.py:745
 msgid "Configure a guest serial device"
 msgstr "ゲストのシリアルデバイスを設定します"
 
-#: virtinst/cli.py:742
+#: virtinst/cli.py:748
 msgid "Configure a guest parallel device"
 msgstr "ゲストのパラレルデバイスを設定します"
 
-#: virtinst/cli.py:745
+#: virtinst/cli.py:751
 msgid "Configure a guest communication channel"
 msgstr "ゲストのコミュニケーションチャネルを設定します"
 
-#: virtinst/cli.py:748
+#: virtinst/cli.py:754
 msgid "Configure a text console connection between the guest and host"
 msgstr "ゲストとホストの間のテキストコンソール接続を設定します"
 
-#: virtinst/cli.py:752
+#: virtinst/cli.py:758
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr "ゲストに共有される物理 USB や PCI などのデバイスを設定します"
 
-#: virtinst/cli.py:760
+#: virtinst/cli.py:766
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5629,19 +5629,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: virtinst/cli.py:768
+#: virtinst/cli.py:774
 msgid "Configure guest sound device emulation"
 msgstr "ゲストのサウンドデバイスのエミュレーションを設定します"
 
-#: virtinst/cli.py:779
+#: virtinst/cli.py:785
 msgid "Configure a guest watchdog device"
 msgstr "ゲストの watchdog デバイスを設定します"
 
-#: virtinst/cli.py:782
+#: virtinst/cli.py:788
 msgid "Configure guest video hardware."
 msgstr "ゲストのビデオハードウェアを設定します"
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:791
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5649,7 +5649,7 @@ msgstr ""
 "ゲストのスマートカードデバイスを設定します。例:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:795
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5657,7 +5657,7 @@ msgstr ""
 "ゲストのリダイレクトデバイスを設定します。例:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:799
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5665,7 +5665,7 @@ msgstr ""
 "ゲストのメモリーバルーンデバイスを構成します。例:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:797
+#: virtinst/cli.py:803
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5673,7 +5673,7 @@ msgstr ""
 "ゲストの TPM デバイスを設定します。例:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:801
+#: virtinst/cli.py:807
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -5681,7 +5681,7 @@ msgstr ""
 "ゲストの RNG デバイスを設定します。例:\n"
 "--rng /dev/urandom"
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:811
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5689,7 +5689,7 @@ msgstr ""
 "ゲストのパニックデバイスを設定します。例:\n"
 "--panic default"
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:815
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -5697,7 +5697,7 @@ msgstr ""
 "ゲストのメモリーデバイスを構成します。例:\n"
 "--memdev dimm,target.size=1024"
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:819
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -5707,41 +5707,41 @@ msgstr ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:824
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:831
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "仮想マシンの <iothreads> と <iothreadids> の設定"
 
-#: virtinst/cli.py:829
+#: virtinst/cli.py:835
 msgid "Set domain seclabel configuration."
 msgstr "仮想マシンの seclabel の設定"
 
-#: virtinst/cli.py:833
+#: virtinst/cli.py:839
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:844
 msgid "Tune CPU parameters for the domain process."
 msgstr "仮想マシンに対するCPUパラメーターの調整"
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:848
 msgid "Tune NUMA policy for the domain process."
 msgstr "仮想マシンに対する NUMA ポリシーの調整"
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:852
 msgid "Tune memory policy for the domain process."
 msgstr "仮想マシンに対するメモリーポリシーの調整"
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:856
 msgid "Tune blkio policy for the domain process."
 msgstr "仮想マシンに対する blkio ポリシーの調整"
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:860
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5749,7 +5749,7 @@ msgstr ""
 "ドメインプロセスのメモリーバッキングポリシー:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:865
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -5759,7 +5759,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: virtinst/cli.py:865
+#: virtinst/cli.py:871
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5767,19 +5767,19 @@ msgstr ""
 "仮想マシン定義 XML に <clock> を定義します。例:\n"
 " --clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:876
 msgid "Configure VM power management features"
 msgstr "仮想マシンの電源管理機能を設定する"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:880
 msgid "Configure VM lifecycle management policy"
 msgstr "仮想マシンのライフサイクル管理ポリシーを設定する"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:884
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "仮想マシンのリソースプランニング (cgroups) を設定する"
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:888
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -5789,7 +5789,7 @@ msgstr ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:894
 #, fuzzy
 #| msgid ""
 #| "Pass arguments directly to the qemu emulator. Ex:\n"
@@ -5804,7 +5804,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:900
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5812,7 +5812,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:902
+#: virtinst/cli.py:908
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5822,13 +5822,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (Linuxコンテナ向け)"
 
-#: virtinst/cli.py:908
+#: virtinst/cli.py:914
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:924
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5842,31 +5842,31 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:932
 msgid "OS options"
 msgstr "OS のオプション"
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:935
 msgid "The OS being installed in the guest."
 msgstr "ゲスト内にインストールされているOS"
 
-#: virtinst/cli.py:931
+#: virtinst/cli.py:937
 msgid "The OS installed in the guest."
 msgstr "ゲスト内にインストールされているOS"
 
-#: virtinst/cli.py:933
+#: virtinst/cli.py:939
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:965
+#: virtinst/cli.py:971
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s は、'yes' か 'no' でなければなりません"
 
-#: virtinst/cli.py:1152
+#: virtinst/cli.py:1156
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5875,17 +5875,17 @@ msgstr ""
 "%(device_type)s のプロパティー %(property_name)s をマッチさせる方法が分かりま"
 "せん。"
 
-#: virtinst/cli.py:1465
+#: virtinst/cli.py:1468
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1521 virtinst/cli.py:1552
+#: virtinst/cli.py:1524 virtinst/cli.py:1555
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1806
+#: virtinst/cli.py:1809
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5893,34 +5893,34 @@ msgstr ""
 "グラフィカルコンソールに接続できません: virt-viewer がインストールされていま"
 "せん。'virt-viewer' パッケージをインストールしてください。"
 
-#: virtinst/cli.py:1813
+#: virtinst/cli.py:1816
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "グラフィックスが要求されていますが DISPLAY 変数が設定されていません。virt-"
 "viewer を起動できません。"
 
-#: virtinst/cli.py:1824
+#: virtinst/cli.py:1827
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3148
+#: virtinst/cli.py:3151
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' に不適切な値があります: %s"
 
-#: virtinst/cli.py:3161
+#: virtinst/cli.py:3164
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "'%s' の不明な値 '%s'"
 
-#: virtinst/cli.py:3176
+#: virtinst/cli.py:3179
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "ストレージボリュームを vol=poolname/volname のように指定する必要があります"
 
-#: virtinst/cli.py:3603
+#: virtinst/cli.py:3606
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -6096,7 +6096,7 @@ msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 "ディスクイメージ %s のクローンを %s に作成中に、エラーが発生しました: %s"
 
-#: virtinst/domain/cpu.py:191
+#: virtinst/domain/cpu.py:190
 msgid "No host CPU reported in capabilities"
 msgstr "ケイパビリティにおいて報告されたホスト CPU がありません"
 
@@ -6140,16 +6140,16 @@ msgstr "ゲスト"
 msgid "Guest name '%s' is already in use."
 msgstr "ゲスト名 '%s' はすでに使用中です。"
 
-#: virtinst/guest.py:523
+#: virtinst/guest.py:524
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt バージョンが UEFI に対応していません。"
 
-#: virtinst/guest.py:527
+#: virtinst/guest.py:528
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "アーキテクチャー '%s' に対する UEFI の設定方法がわかりません"
 
-#: virtinst/guest.py:532
+#: virtinst/guest.py:533
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "アーキテクチャー '%s' の UEFI バイナリーパスが見つかりませんでした"
@@ -6202,68 +6202,68 @@ msgid ""
 "passed to point the installer at a network accessible install tree."
 msgstr ""
 
-#: virtinst/install/kernelupload.py:109
+#: virtinst/install/kernelupload.py:110
 #, python-format
 msgid "Transferring %s"
 msgstr "%s の転送中"
 
-#: virtinst/install/unattended.py:57
+#: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
 msgstr ""
 
-#: virtinst/install/unattended.py:68
+#: virtinst/install/unattended.py:74
 #, python-format
 msgid "%s requires the user-password to be set."
 msgstr "%s はユーザーパスワードの設定を要求します。"
 
-#: virtinst/install/unattended.py:77
+#: virtinst/install/unattended.py:83
 #, python-format
 msgid "%s requires the admin-password to be set."
 msgstr "%s は管理者パスワードの設定を要求します。"
 
-#: virtinst/install/unattended.py:174
+#: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 
-#: virtinst/install/unattended.py:192
+#: virtinst/install/unattended.py:198
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr ""
 
-#: virtinst/install/unattended.py:329
+#: virtinst/install/unattended.py:335
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr "OS '%s' のメディアは無人インストールをサポートしていません。"
 
-#: virtinst/install/unattended.py:340
+#: virtinst/install/unattended.py:346
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr "OS '%s' は無人インストールをサポートしていません。"
 
-#: virtinst/install/unattended.py:349
+#: virtinst/install/unattended.py:355
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
 
-#: virtinst/install/unattended.py:356
+#: virtinst/install/unattended.py:362
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr "無人インストールプロファイル '%s' を使用中"
 
-#: virtinst/install/urldetect.py:309
+#: virtinst/install/urldetect.py:310
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "URL にアクセスできません。URLは正しいですか？"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:315
+#: virtinst/install/urldetect.py:316
 #, fuzzy
 #| msgid ""
 #| "Could not find an installable distribution at '%s'%s\n"
@@ -6280,18 +6280,18 @@ msgstr ""
 "各ディストリビューションの指定例については、virt-install の man ページをご確"
 "認ください。"
 
-#: virtinst/install/urlfetcher.py:71
+#: virtinst/install/urlfetcher.py:69
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "ファイル %s を取得できませんでした: %s"
 
-#: virtinst/install/urlfetcher.py:78
+#: virtinst/install/urlfetcher.py:76
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "ファイル %s を読出中..."
 
-#: virtinst/install/urlfetcher.py:251
+#: virtinst/install/urlfetcher.py:249
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"
@@ -6307,35 +6307,35 @@ msgstr "%s が複数のノードデバイスと対応しています"
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' に一致するノードデバイスを見つけられませんでした"
 
-#: virtinst/osdict.py:231
+#: virtinst/osdict.py:228
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr ""
 
-#: virtinst/osdict.py:237
+#: virtinst/osdict.py:234
 #, python-format
 msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
 "will be removed in the future."
 msgstr ""
 
-#: virtinst/osdict.py:245
+#: virtinst/osdict.py:242
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 
-#: virtinst/osdict.py:380
+#: virtinst/osdict.py:377
 #, fuzzy
 #| msgid "Generic"
 msgid "Generic OS"
 msgstr "全般"
 
-#: virtinst/osdict.py:668
+#: virtinst/osdict.py:665
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:680
+#: virtinst/osdict.py:677
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
