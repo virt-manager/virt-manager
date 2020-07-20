@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-07-17 06:10+0000\n"
-"PO-Revision-Date: 2020-07-15 14:51+0000\n"
+"PO-Revision-Date: 2020-07-19 06:41+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1916,7 +1916,7 @@ msgstr "Modifiche _non applicate:"
 
 #: ui/preferences.ui:954
 msgid "_Deleting storage:"
-msgstr "_Eliminazione dello storage:"
+msgstr "_Eliminazione di storage:"
 
 #: ui/preferences.ui:985
 msgid "<b>Confirmations</b>"
@@ -2107,7 +2107,7 @@ msgstr "_Annulla installazione"
 
 #: ui/vmwindow.ui:515
 msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>La console è attualmente non disponibile</b>"
+msgstr "<b>La console non è attualmente disponibile</b>"
 
 #: ui/vmwindow.ui:551
 msgid "_Password:"
@@ -2868,13 +2868,7 @@ msgid "Unknown"
 msgstr "Sconosciuto"
 
 #: virtManager/connection.py:601
-#, fuzzy, python-format
-#| msgid ""
-#| "%(object)s rename failed. Attempting to recover also failed.\n"
-#| "\n"
-#| "Original error: %(origerror)s\n"
-#| "\n"
-#| "Recover error: %s"
+#, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
@@ -2887,7 +2881,7 @@ msgstr ""
 "\n"
 "Errore orginale: %(origerror)s\n"
 "\n"
-"Errore ripristino :%s"
+"Errore ripristino: %(recovererror)s"
 
 #: virtManager/createconn.py:37
 #, python-format
@@ -3270,10 +3264,8 @@ msgid "Invalid guest name"
 msgstr "Nome guest non valido"
 
 #: virtManager/createvm.py:1745
-#, fuzzy
-#| msgid "Network device required for %s install."
 msgid "Network device required for URL install."
-msgstr "Dispositivo di rete necessario per l'installazione %s."
+msgstr "Dispositivo di rete necessario per l'installazione da URL."
 
 #: virtManager/createvm.py:1823
 msgid "Detecting..."
@@ -3318,7 +3310,7 @@ msgstr "Errore nel continuare l'installazione: %s"
 
 #: virtManager/createvm.py:2118
 msgid "Bootstraping container"
-msgstr ""
+msgstr "Creazione del container"
 
 #: virtManager/createvol.py:299
 #, python-format
@@ -3989,25 +3981,27 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Errore nell'aggiornamento della lista degli snapshot: %s"
 
 #: virtManager/details/snapshots.py:456
-#, fuzzy, python-format
-#| msgid "<span size='small'>Warning: %s</span>"
+#, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s (External)</span>"
-msgstr "<span size='small'>Avviso: %s</span>"
+msgstr ""
+"%(vm)s\n"
+"<span size='small'>Stato VM: %(state)s (esterno)</span>"
 
 #: virtManager/details/snapshots.py:461
-#, fuzzy, python-format
-#| msgid "<span size='small'>Warning: %s</span>"
+#, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s</span>"
-msgstr "<span size='small'>Avviso: %s</span>"
+msgstr ""
+"%(vm)s\n"
+"<span size='small'>Stato VM: %(state)s</span>"
 
 #: virtManager/details/snapshots.py:523
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
-msgstr ""
+msgstr "<b>Snapshot '%(name)s':</b>"
 
 #: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
@@ -4034,32 +4028,27 @@ msgid ""
 msgstr ""
 
 #: virtManager/details/snapshots.py:660
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
-#| "changes since the last snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"Si conferma l'esecuzione dello snapshot '%(name)s'? Tutte le modifiche a "
-"%(changetype)s dalla creazione dell’ultimo snapshot verranno scartate."
+"Si conferma l'esecuzione dello snapshot '%(name)s'? Tutte le modifiche nei "
+"dischi dalla creazione dell’ultimo snapshot verranno scartate."
 
 #: virtManager/details/snapshots.py:664
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
-#| "changes since the last snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"Si conferma l'esecuzione dello snapshot '%(name)s'? Tutte le modifiche a "
-"%(changetype)s dalla creazione dell’ultimo snapshot verranno scartate."
+"Si conferma l'esecuzione dello snapshot '%(name)s'? Tutte le modifiche nei "
+"dischi e della configurazione dalla creazione dell’ultimo snapshot verranno "
+"scartate."
 
 #: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
-msgstr ""
+msgstr "Lo stato salvato sarà rimosso per evitare di danneggiare il filesystem"
 
 #: virtManager/details/snapshots.py:676
 #, python-format
@@ -4166,7 +4155,7 @@ msgstr "Incontrato SPICE %(error-name)s"
 #: virtManager/device/addstorage.py:65
 #, python-format
 msgid "%s available in the default location"
-msgstr "%s disponibile nella posizione predefinita"
+msgstr "%s disponibili nella posizione predefinita"
 
 #: virtManager/device/addstorage.py:91
 #, python-format
@@ -4313,7 +4302,7 @@ msgstr "Dispositivo macvtap..."
 
 #: virtManager/device/netlist.py:160
 msgid "No networking"
-msgstr "Rete non disponibile"
+msgstr "Senza rete"
 
 #: virtManager/device/netlist.py:201
 msgid "Virtual Network is not active."
@@ -5904,10 +5893,9 @@ msgid "Invalid name for new guest: %s"
 msgstr "Nome non valido per il nuovo guest: %s"
 
 #: virtinst/cloner.py:163
-#, fuzzy, python-format
-#| msgid "Could not use path '%s' for cloning"
+#, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Impossibile usare il percorso '%s' per la clonazione"
+msgstr "Impossibile usare il percorso '%(path)s' per la clonazione: %(error)s"
 
 #: virtinst/cloner.py:283
 msgid "Original guest name or XML is required."
@@ -6169,6 +6157,10 @@ msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
 msgstr ""
+"Le installazioni da un albero di directory in genere non funzionano a meno "
+"che non sono specificati argomenti aggiuntivi per il kernel per indicare "
+"all'installazione dove si trova un albero di installazione accessibile via "
+"rete."
 
 #: virtinst/install/kernelupload.py:109
 #, python-format
@@ -6434,7 +6426,7 @@ msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
-"Genera automatica il nome del clone e i percorsi di storage dalla "
+"Genera automaticamente il nome del clone e i percorsi di storage dalla "
 "configurazione del guest originale."
 
 #: virtinst/virtclone.py:104
@@ -6614,22 +6606,22 @@ msgstr "Viene usato {osname} --location {url}"
 #: virtinst/virtinstall.py:458
 #, python-brace-format
 msgid "Using default --name {vm_name}"
-msgstr ""
+msgstr "Viene usato --name {vm_name} predefinito"
 
 #: virtinst/virtinstall.py:468
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
-msgstr ""
+msgstr "Viene usato --memory {megabytes} predefinito del container"
 
 #: virtinst/virtinstall.py:487
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
-msgstr ""
+msgstr "Viene usato --memory {megabytes} predefinito di {os_name}"
 
 #: virtinst/virtinstall.py:502
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
-msgstr ""
+msgstr "Viene usato --disk {disk_options} predefinito di {os_name}"
 
 #: virtinst/virtinstall.py:545
 #, python-format
@@ -6979,7 +6971,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:332
 msgid "Edit libvirt XML using command line options."
-msgstr "Modificare l’XML di libvirt con le opzioni da riga di comando."
+msgstr "Modifica l’XML di libvirt con opzioni a riga di comando."
 
 #: virtinst/virtxml.py:338
 msgid "Domain name, id, or uuid"
@@ -6987,7 +6979,7 @@ msgstr "Nome del dominio, id o uuid"
 
 #: virtinst/virtxml.py:340
 msgid "XML actions"
-msgstr "Azioni XML"
+msgstr "Azioni per l'XML"
 
 #: virtinst/virtxml.py:342
 msgid ""
@@ -6997,10 +6989,10 @@ msgid ""
 "--edit all --disk ... (edit all disk devices)\n"
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
-"Modificare l’XML della macchina virtuale. Esempi:\n"
+"Modifica l’XML della macchina virtuale. Esempi:\n"
 "--edit --disk ...     (modifica il dispositivo del primo disco)\n"
 "--edit 2 --disk ...   (modifica il dispositivo del secondo disco)\n"
-"--edit all --disk ... (modifica tutti i dispositivi disco)\n"
+"--edit all --disk ... (modifica tutti i dispositivi di dischi)\n"
 "--edit target=hda --disk ... (modifica il disco 'hda')\n"
 
 #: virtinst/virtxml.py:348
@@ -7010,10 +7002,10 @@ msgid ""
 "--remove-device --disk all (remove all disks)\n"
 "--remove-device --disk /some/path"
 msgstr ""
-"Rimuovere il dispositivo specificato. Esempi:\n"
+"Rimuovi il dispositivo specificato. Esempi:\n"
 "--remove-device --disk 1 (rimuove il primo disco)\n"
 "--remove-device --disk all (rimuove tutti i dischi)\n"
-"--remove-device --disk /some/path"
+"--remove-device --disk /un/percorso"
 
 #: virtinst/virtxml.py:353
 msgid ""
@@ -7040,10 +7032,10 @@ msgid ""
 "With --remove-device, this is a hotunplug operation.\n"
 "With --edit, this is an update device operation."
 msgstr ""
-"Applicare le modifiche alla macchina in esecuzione.\n"
-"Con --add-device, questa si tratta di un’operazione hotplug.\n"
-"Con --remove-device, questa si tratta di un’operazione hotunplug.\n"
-"Con --edit, si tratta di un’operazione del dispositivo di aggiornamento."
+"Applica le modifiche alla macchina in esecuzione.\n"
+"Con --add-device, questa è un’operazione hotplug.\n"
+"Con --remove-device, questa è un’operazione hotunplug.\n"
+"Con --edit, questa è un’operazione di aggiornamento dei dispositivi."
 
 #: virtinst/virtxml.py:367
 msgid ""
@@ -7058,23 +7050,23 @@ msgstr ""
 
 #: virtinst/virtxml.py:373
 msgid "Start the domain."
-msgstr "Avviare il dominio."
+msgstr "Avvia il dominio."
 
 #: virtinst/virtxml.py:375
 msgid "Only print the requested change, in diff format"
-msgstr "Stampare solo la modifica richiesta, in formato diff"
+msgstr "Stampa solo la modifica richiesta, in formato diff"
 
 #: virtinst/virtxml.py:377
 msgid "Only print the requested change, in full XML format"
-msgstr "Stampare solo la modifica richiesta, in formato XML completo"
+msgstr "Stampa solo la modifica richiesta, in formato XML completo"
 
 #: virtinst/virtxml.py:379
 msgid "Require confirmation before saving any results."
-msgstr "Richiedere conferma prima di salvare i risultati."
+msgstr "Richiedi conferma prima di salvare i risultati."
 
 #: virtinst/virtxml.py:383
 msgid "XML options"
-msgstr "Opzioni XML"
+msgstr "Opzioni per l'XML"
 
 #: virtinst/virtxml.py:422
 msgid "Can't use --confirm with stdin input."
@@ -7117,7 +7109,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:536
 msgid "Aborted at user request"
-msgstr "Installazione annullata su richiesta dell'utente"
+msgstr "Operazione annullata su richiesta dell'utente"
 
 #: virtinst/xmlapi.py:190
 #, python-format
