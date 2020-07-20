@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-17 06:10+0000\n"
+"POT-Creation-Date: 2020-07-19 06:10+0000\n"
 "PO-Revision-Date: 2019-09-28 09:19+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish (http://www.transifex.com/projects/p/virt-manager/"
@@ -5379,7 +5379,7 @@ msgstr ""
 "Använd ”--option=?” eller ”--option help” för att se tillgängliga "
 "underflaggor"
 
-#: virtinst/cli.py:291
+#: virtinst/cli.py:287
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5392,7 +5392,7 @@ msgstr ""
 "  %s\n"
 "annars, starta om din installation."
 
-#: virtinst/cli.py:309
+#: virtinst/cli.py:305
 #, fuzzy, python-format
 #| msgid ""
 #| "%s may not be accessible by the hypervisor. You will need to grant the "
@@ -5404,48 +5404,48 @@ msgstr ""
 "%s är kanske inte åtkomlig för hypervisorn.  Du kommer behöva ge användaren "
 "”%s” sökrättigheter för följande kataloger: %s"
 
-#: virtinst/cli.py:322
+#: virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (Använd --check %s=off eller --check all=off för att åsidosätta)"
 
-#: virtinst/cli.py:354
+#: virtinst/cli.py:350
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Detta kommer skriva över den befintliga sökvägen ”%s”"
 
-#: virtinst/cli.py:365
+#: virtinst/cli.py:361
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "Disken %s används redan av andra gäster %s."
 
-#: virtinst/cli.py:410
+#: virtinst/cli.py:406
 #, fuzzy, python-format
 #| msgid "Connecting to graphical console for guest"
 msgid "Running graphical console command: %(command)s"
 msgstr "Ansluter till grafisk konsol för gästen"
 
-#: virtinst/cli.py:424
+#: virtinst/cli.py:420
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr ""
 
-#: virtinst/cli.py:448
+#: virtinst/cli.py:444
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/cli.py:492
+#: virtinst/cli.py:488
 #, fuzzy, python-format
 #| msgid "Could not find domain '%s': %s"
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "Kunde inte hitta domänen ”%s”: %s"
 
-#: virtinst/cli.py:591 virtinst/cli.py:594
+#: virtinst/cli.py:597 virtinst/cli.py:600
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Anslut till hypervisorn med libvirt-URI"
 
-#: virtinst/cli.py:609
+#: virtinst/cli.py:615
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5453,32 +5453,32 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:615
+#: virtinst/cli.py:621
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Försök inte automatiskt att ansluta till gästkonsolen"
 
-#: virtinst/cli.py:619
+#: virtinst/cli.py:625
 msgid "Don't boot guest after completing install."
 msgstr "Starta inte gästen efter en avslutad installation."
 
-#: virtinst/cli.py:623
+#: virtinst/cli.py:629
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "Kontrollera inte namnkollisioner, skriv över eventuella gäster med samma "
 "namn."
 
-#: virtinst/cli.py:630
+#: virtinst/cli.py:636
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Skriv den genererade domän-XML:en istället för att skapa gästen."
 
-#: virtinst/cli.py:649
+#: virtinst/cli.py:655
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Kör igenom installationsprocessen, men skapa inte enheter eller definiera "
 "gäster."
 
-#: virtinst/cli.py:654
+#: virtinst/cli.py:660
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5488,15 +5488,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:658
+#: virtinst/cli.py:664
 msgid "Suppress non-error output"
 msgstr "Undertryck annat än felutskrifter"
 
-#: virtinst/cli.py:660
+#: virtinst/cli.py:666
 msgid "Print debugging information"
 msgstr "Skriv ut felsökningsinformation"
 
-#: virtinst/cli.py:666
+#: virtinst/cli.py:672
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5506,7 +5506,7 @@ msgstr ""
 "--metadata name=foo,title=\"Min fina rubrik\",uuid=…\n"
 "--metadata description=\"Min fina långa beskrivning\""
 
-#: virtinst/cli.py:674
+#: virtinst/cli.py:680
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -5516,7 +5516,7 @@ msgstr ""
 "--memory 1024 (i MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: virtinst/cli.py:687
+#: virtinst/cli.py:693
 #, fuzzy
 #| msgid ""
 #| "Number of vcpus to configure for your guest. Ex:\n"
@@ -5534,7 +5534,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 
-#: virtinst/cli.py:696
+#: virtinst/cli.py:702
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -5544,7 +5544,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: virtinst/cli.py:709
+#: virtinst/cli.py:715
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5556,7 +5556,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: virtinst/cli.py:718
+#: virtinst/cli.py:724
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5572,7 +5572,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:729
+#: virtinst/cli.py:735
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5582,7 +5582,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 
-#: virtinst/cli.py:734
+#: virtinst/cli.py:740
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5592,27 +5592,27 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:739
+#: virtinst/cli.py:745
 msgid "Configure a guest serial device"
 msgstr "Konfigurera en gästs seriella enhet"
 
-#: virtinst/cli.py:742
+#: virtinst/cli.py:748
 msgid "Configure a guest parallel device"
 msgstr "Konfigurera en gästs parallella enhet"
 
-#: virtinst/cli.py:745
+#: virtinst/cli.py:751
 msgid "Configure a guest communication channel"
 msgstr "Konfigurera en gästs kommunikationskanal"
 
-#: virtinst/cli.py:748
+#: virtinst/cli.py:754
 msgid "Configure a text console connection between the guest and host"
 msgstr "Konfigurera en textkonsolförbindelse mellan gästen och värden"
 
-#: virtinst/cli.py:752
+#: virtinst/cli.py:758
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr "Konfigurera fysiska USB/PCI/etc. värdenheter till att delas med gästen"
 
-#: virtinst/cli.py:760
+#: virtinst/cli.py:766
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5622,19 +5622,19 @@ msgstr ""
 "--filesystem /min/käll/kat,/kat/i/gästen\n"
 "--filesystem mallnamn,/,type=template"
 
-#: virtinst/cli.py:768
+#: virtinst/cli.py:774
 msgid "Configure guest sound device emulation"
 msgstr "Konfigurera gästens emulering av ljudenheter"
 
-#: virtinst/cli.py:779
+#: virtinst/cli.py:785
 msgid "Configure a guest watchdog device"
 msgstr "Konfigurera en vakthundsenhet på gästen"
 
-#: virtinst/cli.py:782
+#: virtinst/cli.py:788
 msgid "Configure guest video hardware."
 msgstr "Konfigurera gästens videohårdvara."
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:791
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5642,7 +5642,7 @@ msgstr ""
 "Konfigurera en smartkortenhet på gästen.  Ex:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:795
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5650,7 +5650,7 @@ msgstr ""
 "Konfigurera en omdirigeringsenhet för gästen.  Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:799
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5658,7 +5658,7 @@ msgstr ""
 "Konfigurera en memballoon-enhet för gästen.  Ex:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:797
+#: virtinst/cli.py:803
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5666,7 +5666,7 @@ msgstr ""
 "Konfigurera en TPM-enhet för gästen.  Ex:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:801
+#: virtinst/cli.py:807
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -5674,7 +5674,7 @@ msgstr ""
 "Konfigurera en gäst-RNG-enhet.  T.ex:\n"
 "--rng /dev/urandom"
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:811
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5682,7 +5682,7 @@ msgstr ""
 "Konfigurera en panikenhet för gästen.  Ex:\n"
 "--panic default"
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:815
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -5690,7 +5690,7 @@ msgstr ""
 "Konfigurera en minnesenhet för gästen.  T.ex:\n"
 "--memdev dimm,target.size=1024"
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:819
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -5700,43 +5700,43 @@ msgstr ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:824
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:831
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "Sätt domänkonfiguration av <iothreads> och <iothreadids>."
 
-#: virtinst/cli.py:829
+#: virtinst/cli.py:835
 msgid "Set domain seclabel configuration."
 msgstr "Sätt domänkonfigurationen av seclabel."
 
-#: virtinst/cli.py:833
+#: virtinst/cli.py:839
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 "Ställ in gästen till att utföra S390:s operationer för hantering av "
 "kryptografiska nycklar."
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:844
 msgid "Tune CPU parameters for the domain process."
 msgstr "Trimma CPU-parametrar för domänprocessen."
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:848
 msgid "Tune NUMA policy for the domain process."
 msgstr "Ställ in NUMA-policyn för domänprocessen."
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:852
 msgid "Tune memory policy for the domain process."
 msgstr "Ställ in minnespolicyn för domänprocessen."
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:856
 msgid "Tune blkio policy for the domain process."
 msgstr "Ställ in blkio-policyn för domänprocessen."
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:860
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5744,7 +5744,7 @@ msgstr ""
 "Sätt policyn för minnesuppbackning för domänprocessen.  Ex:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:865
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -5754,7 +5754,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: virtinst/cli.py:865
+#: virtinst/cli.py:871
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5762,19 +5762,19 @@ msgstr ""
 "Sätt domänens <clock>-XML.  Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:876
 msgid "Configure VM power management features"
 msgstr "Konfigurera strömhanteringsfunktioner för VM"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:880
 msgid "Configure VM lifecycle management policy"
 msgstr "Konfigurera livscykelhanteringspolicyn för VM"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:884
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Konfigurera resurspartitionering (cgroups) för VM"
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:888
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -5784,7 +5784,7 @@ msgstr ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MinTllverkare,bios.version=1.2.3-,…\n"
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:894
 #, fuzzy
 #| msgid ""
 #| "Pass arguments directly to the qemu emulator. Ex:\n"
@@ -5799,7 +5799,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:900
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5811,7 +5811,7 @@ msgstr ""
 "dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
-#: virtinst/cli.py:902
+#: virtinst/cli.py:908
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5821,7 +5821,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (för behållare)"
 
-#: virtinst/cli.py:908
+#: virtinst/cli.py:914
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
@@ -5829,7 +5829,7 @@ msgstr ""
 "Aktivera användarnamnrymder för LXC-behållare.  Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:924
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5843,19 +5843,19 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:932
 msgid "OS options"
 msgstr "OS-alternativ"
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:935
 msgid "The OS being installed in the guest."
 msgstr "OS:et installeras på gästen."
 
-#: virtinst/cli.py:931
+#: virtinst/cli.py:937
 msgid "The OS installed in the guest."
 msgstr "OS:et är installerat på gästen."
 
-#: virtinst/cli.py:933
+#: virtinst/cli.py:939
 #, fuzzy
 #| msgid ""
 #| "This is used for deciding optimal defaults like virtio.\n"
@@ -5870,12 +5870,12 @@ msgstr ""
 "Exempelvärden: fedora29, rhel7.0, win10, …\n"
 "Se ”osinfo-query os” för en fullständig lista."
 
-#: virtinst/cli.py:965
+#: virtinst/cli.py:971
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s måste vara ”yes” eller ”no”"
 
-#: virtinst/cli.py:1152
+#: virtinst/cli.py:1156
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5884,18 +5884,18 @@ msgstr ""
 "Vet inte hur man skall matcha enhetstypen ”%(device_type)s” egenskap "
 "”%(property_name)s”"
 
-#: virtinst/cli.py:1465
+#: virtinst/cli.py:1468
 #, fuzzy, python-format
 #| msgid "Unknown %s options: %s"
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr "Okända %s-flaggor: %s"
 
-#: virtinst/cli.py:1521 virtinst/cli.py:1552
+#: virtinst/cli.py:1524 virtinst/cli.py:1555
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Fel: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1806
+#: virtinst/cli.py:1809
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5903,31 +5903,31 @@ msgstr ""
 "Kan inte ansluta till den grafiska konsolen: virt-viewer är inte "
 "installerad.  Installera paketet “virt-viewer”."
 
-#: virtinst/cli.py:1813
+#: virtinst/cli.py:1816
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr "Grafik begärd men DISPLAY inte satt.  Kör inte virt-viewer."
 
-#: virtinst/cli.py:1824
+#: virtinst/cli.py:1827
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3148
+#: virtinst/cli.py:3151
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Felaktigt värde för ”size”: %s"
 
-#: virtinst/cli.py:3161
+#: virtinst/cli.py:3164
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Okänt ”%s”-värde ”%s”"
 
-#: virtinst/cli.py:3176
+#: virtinst/cli.py:3179
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Lagringsvolymer måste anges som vol=poolnamn/volnamn"
 
-#: virtinst/cli.py:3603
+#: virtinst/cli.py:3606
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -6100,7 +6100,7 @@ msgstr "Klonar %(srcfile)s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr "Fel när diskavbilden %s klonades till %s: %s"
 
-#: virtinst/domain/cpu.py:191
+#: virtinst/domain/cpu.py:190
 msgid "No host CPU reported in capabilities"
 msgstr "Ingen värd-CPU rapporterad i egenskaper"
 
@@ -6144,16 +6144,16 @@ msgstr "Gäst"
 msgid "Guest name '%s' is already in use."
 msgstr "Gästnamnet ”%s” används redan."
 
-#: virtinst/guest.py:523
+#: virtinst/guest.py:524
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt-versionen stödjer inte UEFI."
 
-#: virtinst/guest.py:527
+#: virtinst/guest.py:528
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "Vet inte hur man sätter upp UEFI för arkitekturen ”%s”"
 
-#: virtinst/guest.py:532
+#: virtinst/guest.py:533
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "Hittade inte någon UEFI-binärsökväg för arkitekturen ”%s”"
@@ -6210,50 +6210,50 @@ msgstr ""
 "skickas för att peka ut installeraren i ett nätverksåtkomligt "
 "installationsträd."
 
-#: virtinst/install/kernelupload.py:109
+#: virtinst/install/kernelupload.py:110
 #, python-format
 msgid "Transferring %s"
 msgstr "Överför %s"
 
-#: virtinst/install/unattended.py:57
+#: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
 msgstr ""
 
-#: virtinst/install/unattended.py:68
+#: virtinst/install/unattended.py:74
 #, python-format
 msgid "%s requires the user-password to be set."
 msgstr "%s kräver att användarlösenordet är satt."
 
-#: virtinst/install/unattended.py:77
+#: virtinst/install/unattended.py:83
 #, python-format
 msgid "%s requires the admin-password to be set."
 msgstr "%s kräver att administratörslösenordet är satt."
 
-#: virtinst/install/unattended.py:174
+#: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 "libosinfo eller osinfo-db är för gammal för att stödja obevakade "
 "installationer."
 
-#: virtinst/install/unattended.py:192
+#: virtinst/install/unattended.py:198
 #, fuzzy, python-format
 #| msgid "OS '%s' does not support required injection method '%s'"
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr "OS:et ”%s” stödjer inte den begärda injiceringsmetoden ”%s”"
 
-#: virtinst/install/unattended.py:329
+#: virtinst/install/unattended.py:335
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr "OS:et ”%s” medium stödjer inte obevakad installation"
 
-#: virtinst/install/unattended.py:340
+#: virtinst/install/unattended.py:346
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr "OS:et ”%s” stödjer inte obevakad installation."
 
-#: virtinst/install/unattended.py:349
+#: virtinst/install/unattended.py:355
 #, fuzzy, python-format
 #| msgid ""
 #| "OS '%s' does not support unattended installation for the '%s' profile. "
@@ -6265,21 +6265,21 @@ msgstr ""
 "OS:et ”%s” stödjer inte obevakad installation för profilen ”%s”.  "
 "Tillgängliga profiler: %s"
 
-#: virtinst/install/unattended.py:356
+#: virtinst/install/unattended.py:362
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr "Använder obevakad profil ”%s”"
 
-#: virtinst/install/urldetect.py:309
+#: virtinst/install/urldetect.py:310
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "URL:en kunde inte nås, kanske du skrev fel?"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:315
+#: virtinst/install/urldetect.py:316
 #, fuzzy
 #| msgid ""
 #| "Could not find an installable distribution at '%s'%s\n"
@@ -6295,18 +6295,18 @@ msgstr ""
 "Platsen måste vara rotkatalogen i ett installationsträd.\n"
 "Se manualsidan för virt-install för exempel för olika distributioner."
 
-#: virtinst/install/urlfetcher.py:71
+#: virtinst/install/urlfetcher.py:69
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Kunde inte få tag i filen %s: %s"
 
-#: virtinst/install/urlfetcher.py:78
+#: virtinst/install/urlfetcher.py:76
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "Hämtar filen %s …"
 
-#: virtinst/install/urlfetcher.py:251
+#: virtinst/install/urlfetcher.py:249
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"
@@ -6322,12 +6322,12 @@ msgstr "%s motsvarar flera nodenheter"
 msgid "Did not find a matching node device for '%s'"
 msgstr "Hittade inte någon matchande nodenhet för ”%s”"
 
-#: virtinst/osdict.py:231
+#: virtinst/osdict.py:228
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "Okänt libosinfo-ID ”%s”"
 
-#: virtinst/osdict.py:237
+#: virtinst/osdict.py:234
 #, fuzzy, python-format
 #| msgid ""
 #| "OS name '%s' is deprecated, using '%s' instead. This alias will be "
@@ -6339,23 +6339,23 @@ msgstr ""
 "OS-namnet ”%s” bör undvikas, använder ”%s” istället.  Detta alias kommer tas "
 "bort i framtiden."
 
-#: virtinst/osdict.py:245
+#: virtinst/osdict.py:242
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr "Okänt OS-namn ”%s”.  Se ”osinfo-query os” för giltiga värden."
 
-#: virtinst/osdict.py:380
+#: virtinst/osdict.py:377
 #, fuzzy
 #| msgid "Generic"
 msgid "Generic OS"
 msgstr "Generisk"
 
-#: virtinst/osdict.py:668
+#: virtinst/osdict.py:665
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "OS:et ”%s” har inte en URL-plats"
 
-#: virtinst/osdict.py:680
+#: virtinst/osdict.py:677
 #, fuzzy, python-format
 #| msgid "OS '%s' does not have a URL location for the %s architecture"
 msgid ""

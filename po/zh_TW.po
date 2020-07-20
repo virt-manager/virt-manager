@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-17 06:10+0000\n"
+"POT-Creation-Date: 2020-07-19 06:10+0000\n"
 "PO-Revision-Date: 2019-08-02 08:32+0000\n"
 "Last-Translator: Ting-Wei Lan <lantw44@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/virt-"
@@ -5214,7 +5214,7 @@ msgstr ""
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 
-#: virtinst/cli.py:291
+#: virtinst/cli.py:287
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5227,55 +5227,55 @@ msgstr ""
 "  %s\n"
 "否則，請重新進行安裝程序。"
 
-#: virtinst/cli.py:309
+#: virtinst/cli.py:305
 #, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
 
-#: virtinst/cli.py:322
+#: virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr ""
 
-#: virtinst/cli.py:354
+#: virtinst/cli.py:350
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "這將會覆寫既有的路徑「%s」"
 
-#: virtinst/cli.py:365
+#: virtinst/cli.py:361
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "磁碟 %s 已由其它客端 %s 使用中。"
 
-#: virtinst/cli.py:410
+#: virtinst/cli.py:406
 #, fuzzy, python-format
 #| msgid "Connecting to graphical console for guest"
 msgid "Running graphical console command: %(command)s"
 msgstr "正在替客端連接至圖形介面主控臺"
 
-#: virtinst/cli.py:424
+#: virtinst/cli.py:420
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr ""
 
-#: virtinst/cli.py:448
+#: virtinst/cli.py:444
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/cli.py:492
+#: virtinst/cli.py:488
 #, fuzzy, python-format
 #| msgid "Could not find domain '%s': %s"
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "找不到「%s」區域：%s"
 
-#: virtinst/cli.py:591 virtinst/cli.py:594
+#: virtinst/cli.py:597 virtinst/cli.py:600
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "以 libvirt URI 連上 hypervisor"
 
-#: virtinst/cli.py:609
+#: virtinst/cli.py:615
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5283,57 +5283,57 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:615
+#: virtinst/cli.py:621
 msgid "Don't automatically try to connect to the guest console"
 msgstr "不自動嘗試連上客端主控臺"
 
-#: virtinst/cli.py:619
+#: virtinst/cli.py:625
 msgid "Don't boot guest after completing install."
 msgstr "安裝完成後不啟動客端。"
 
-#: virtinst/cli.py:623
+#: virtinst/cli.py:629
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 
-#: virtinst/cli.py:630
+#: virtinst/cli.py:636
 msgid "Print the generated domain XML rather than create the guest."
 msgstr ""
 
-#: virtinst/cli.py:649
+#: virtinst/cli.py:655
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr "執行安裝程序，但不建立裝置或定義客端。"
 
-#: virtinst/cli.py:654
+#: virtinst/cli.py:660
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: virtinst/cli.py:658
+#: virtinst/cli.py:664
 msgid "Suppress non-error output"
 msgstr "抑制強制無錯誤的輸出"
 
-#: virtinst/cli.py:660
+#: virtinst/cli.py:666
 msgid "Print debugging information"
 msgstr "列印除錯資訊"
 
-#: virtinst/cli.py:666
+#: virtinst/cli.py:672
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
 
-#: virtinst/cli.py:674
+#: virtinst/cli.py:680
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
 
-#: virtinst/cli.py:687
+#: virtinst/cli.py:693
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5341,14 +5341,14 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
 
-#: virtinst/cli.py:696
+#: virtinst/cli.py:702
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
 
-#: virtinst/cli.py:709
+#: virtinst/cli.py:715
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5356,7 +5356,7 @@ msgid ""
 "--graphics none\n"
 msgstr ""
 
-#: virtinst/cli.py:718
+#: virtinst/cli.py:724
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5366,41 +5366,41 @@ msgid ""
 "--network help"
 msgstr ""
 
-#: virtinst/cli.py:729
+#: virtinst/cli.py:735
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
 
-#: virtinst/cli.py:734
+#: virtinst/cli.py:740
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: virtinst/cli.py:739
+#: virtinst/cli.py:745
 msgid "Configure a guest serial device"
 msgstr "配置客端序列裝置"
 
-#: virtinst/cli.py:742
+#: virtinst/cli.py:748
 msgid "Configure a guest parallel device"
 msgstr "配置客端平行裝置"
 
-#: virtinst/cli.py:745
+#: virtinst/cli.py:751
 msgid "Configure a guest communication channel"
 msgstr "配置客端通訊通道"
 
-#: virtinst/cli.py:748
+#: virtinst/cli.py:754
 msgid "Configure a text console connection between the guest and host"
 msgstr "配置客端與主機之間的文字主控臺連線"
 
-#: virtinst/cli.py:752
+#: virtinst/cli.py:758
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
-#: virtinst/cli.py:760
+#: virtinst/cli.py:766
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5410,19 +5410,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: virtinst/cli.py:768
+#: virtinst/cli.py:774
 msgid "Configure guest sound device emulation"
 msgstr "配置客端音效裝置模擬"
 
-#: virtinst/cli.py:779
+#: virtinst/cli.py:785
 msgid "Configure a guest watchdog device"
 msgstr "配置客端的 watchdog 裝置"
 
-#: virtinst/cli.py:782
+#: virtinst/cli.py:788
 msgid "Configure guest video hardware."
 msgstr "配置客端的繪圖卡硬體。"
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:791
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5430,7 +5430,7 @@ msgstr ""
 "配置客端的智慧卡裝置。例如：\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:795
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5438,7 +5438,7 @@ msgstr ""
 "配置客端的重定向裝置。例如：\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:799
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5446,117 +5446,117 @@ msgstr ""
 "配置客端的 memballoon 裝置。例如：\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:797
+#: virtinst/cli.py:803
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
-#: virtinst/cli.py:801
+#: virtinst/cli.py:807
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:811
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:815
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:819
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:824
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:831
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:829
+#: virtinst/cli.py:835
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:833
+#: virtinst/cli.py:839
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:844
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:848
 msgid "Tune NUMA policy for the domain process."
 msgstr "為區域程序調整 NUMA 政策。"
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:852
 msgid "Tune memory policy for the domain process."
 msgstr "為區域程序調整記憶體政策。"
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:856
 msgid "Tune blkio policy for the domain process."
 msgstr "為區域程序調整 blkio 政策。"
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:860
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:865
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:865
+#: virtinst/cli.py:871
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:876
 msgid "Configure VM power management features"
 msgstr "設定 VM 電源管理功能"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:880
 msgid "Configure VM lifecycle management policy"
 msgstr "設定 VM 生命週期管理政策"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:884
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "設定 VM 資源分割（cgroups）"
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:888
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:894
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:900
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5564,7 +5564,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:902
+#: virtinst/cli.py:908
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5574,13 +5574,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 
-#: virtinst/cli.py:908
+#: virtinst/cli.py:914
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:924
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5589,79 +5589,79 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:932
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:935
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:931
+#: virtinst/cli.py:937
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:933
+#: virtinst/cli.py:939
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:965
+#: virtinst/cli.py:971
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s 必須是 'yes' 或 'no'"
 
-#: virtinst/cli.py:1152
+#: virtinst/cli.py:1156
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: virtinst/cli.py:1465
+#: virtinst/cli.py:1468
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1521 virtinst/cli.py:1552
+#: virtinst/cli.py:1524 virtinst/cli.py:1555
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1806
+#: virtinst/cli.py:1809
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
 "無法連至圖形介面主控臺：尚未安裝 virt-viewer。請安裝 'virt-viewer' 套件。"
 
-#: virtinst/cli.py:1813
+#: virtinst/cli.py:1816
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1824
+#: virtinst/cli.py:1827
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3148
+#: virtinst/cli.py:3151
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "「大小」的值無效：%s"
 
-#: virtinst/cli.py:3161
+#: virtinst/cli.py:3164
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "不明的「%s」值「%s」"
 
-#: virtinst/cli.py:3176
+#: virtinst/cli.py:3179
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "儲藏集區必須指定為 vol=poolname/volname"
 
-#: virtinst/cli.py:3603
+#: virtinst/cli.py:3606
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5822,7 +5822,7 @@ msgstr "製作 %(srcfile)s 分身"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 
-#: virtinst/domain/cpu.py:191
+#: virtinst/domain/cpu.py:190
 msgid "No host CPU reported in capabilities"
 msgstr "能力內無法回報主機 CPU"
 
@@ -5866,16 +5866,16 @@ msgstr "客端"
 msgid "Guest name '%s' is already in use."
 msgstr "客端名稱「%s」已被使用。"
 
-#: virtinst/guest.py:523
+#: virtinst/guest.py:524
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt 版本不支援 UEFI。"
 
-#: virtinst/guest.py:527
+#: virtinst/guest.py:528
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "不知道如何設置「%s」架構的 UEFI"
 
-#: virtinst/guest.py:532
+#: virtinst/guest.py:533
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "找不到「%s」架構的任何 UEFI 二進位路徑"
@@ -5927,85 +5927,85 @@ msgid ""
 "passed to point the installer at a network accessible install tree."
 msgstr ""
 
-#: virtinst/install/kernelupload.py:109
+#: virtinst/install/kernelupload.py:110
 #, python-format
 msgid "Transferring %s"
 msgstr "正在傳輸 %s"
 
-#: virtinst/install/unattended.py:57
+#: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
 msgstr ""
 
-#: virtinst/install/unattended.py:68
+#: virtinst/install/unattended.py:74
 #, python-format
 msgid "%s requires the user-password to be set."
 msgstr ""
 
-#: virtinst/install/unattended.py:77
+#: virtinst/install/unattended.py:83
 #, python-format
 msgid "%s requires the admin-password to be set."
 msgstr ""
 
-#: virtinst/install/unattended.py:174
+#: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 
-#: virtinst/install/unattended.py:192
+#: virtinst/install/unattended.py:198
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr ""
 
-#: virtinst/install/unattended.py:329
+#: virtinst/install/unattended.py:335
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr ""
 
-#: virtinst/install/unattended.py:340
+#: virtinst/install/unattended.py:346
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr ""
 
-#: virtinst/install/unattended.py:349
+#: virtinst/install/unattended.py:355
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
 
-#: virtinst/install/unattended.py:356
+#: virtinst/install/unattended.py:362
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:309
+#: virtinst/install/urldetect.py:310
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:315
+#: virtinst/install/urldetect.py:316
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:71
+#: virtinst/install/urlfetcher.py:69
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "無法取得檔案 %s：%s"
 
-#: virtinst/install/urlfetcher.py:78
+#: virtinst/install/urlfetcher.py:76
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "正在取得檔案 %s..."
 
-#: virtinst/install/urlfetcher.py:251
+#: virtinst/install/urlfetcher.py:249
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"
@@ -6021,35 +6021,35 @@ msgstr "%s 對應至多個節點裝置"
 msgid "Did not find a matching node device for '%s'"
 msgstr "找不到符合「%s」的節點裝置"
 
-#: virtinst/osdict.py:231
+#: virtinst/osdict.py:228
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr ""
 
-#: virtinst/osdict.py:237
+#: virtinst/osdict.py:234
 #, python-format
 msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
 "will be removed in the future."
 msgstr ""
 
-#: virtinst/osdict.py:245
+#: virtinst/osdict.py:242
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 
-#: virtinst/osdict.py:380
+#: virtinst/osdict.py:377
 #, fuzzy
 #| msgid "Generic"
 msgid "Generic OS"
 msgstr "一般"
 
-#: virtinst/osdict.py:668
+#: virtinst/osdict.py:665
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:680
+#: virtinst/osdict.py:677
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
