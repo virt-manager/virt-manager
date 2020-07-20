@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2018-11-22 04:54+0000\n"
 "Last-Translator: Máximo Castañeda Riloba <mcrcctm@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/virt-manager/"
@@ -2888,7 +2888,7 @@ msgid "Unknown"
 msgstr "Desconocido"
 
 #: virtManager/connection.py:601
-#, fuzzy
+#, fuzzy, python-format
 #| msgid ""
 #| "%s rename failed. Attempting to recover also failed.\n"
 #| "\n"
@@ -2900,7 +2900,7 @@ msgid ""
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 "%s cambio del nombre falló. El intento de recuperación también falló.\n"
 "\n"
@@ -3292,35 +3292,36 @@ msgstr "Error de parámetro de almacenamiento."
 msgid "Invalid guest name"
 msgstr "Nombre de invitado no válido"
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "Es necesario un dispositivo de red para la instalación de %s."
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr "Detectando..."
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr "No detectada"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "Error al iniciar instalación:"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Imposible completar la instalación: '%s'"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "Creando la máquina virtual"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3329,17 +3330,17 @@ msgstr ""
 "almacenamiento del disco, y la obtención de las imágenes de instalación "
 "puede demorar unos minutos en completarse."
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "La VM '%s' no se mostró tras del intervalo esperado."
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Error al continuar la instalación: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr "Inicializando el contenedor"
 
@@ -4031,30 +4032,41 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Error al recargar lista de  instantáneas: '%s'"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "Externo"
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "Estado de la VM"
+#: virtManager/details/snapshots.py:461
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "Disco y memoria externos"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "Memoria externa únicamente"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "Disco externo únicamente"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -4062,31 +4074,35 @@ msgid ""
 "snapshot either the running or shut down system instead."
 msgstr ""
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "disco"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "disco y configuración"
-
-#: virtManager/details/snapshots.py:659
+#: virtManager/details/snapshots.py:660
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 #| "snapshot was created will be discarded."
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 "¿Está seguro de que quiere ejecutar la instantánea '%s'? Todos los cambios "
 "de %s desde la creación de última instantánea serán descartados."
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
+#| "snapshot was created will be discarded."
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+"¿Está seguro de que quiere ejecutar la instantánea '%s'? Todos los cambios "
+"de %s desde la creación de última instantánea serán descartados."
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -4096,49 +4112,49 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "Ejecutando instantánea"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "Ejecutando instantánea '%s'"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Error ejecutando instantánea '%s'"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr ""
 "¿Está seguro de que quiere borrar permanentemente las instantáneas "
 "seleccionadas?"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "Borrando instantánea "
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "Borrando instantánea '%s'"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Error al eliminar la instantánea '%s'"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "No se ha seleccionado ninguna instantánea."
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "Se seleccionaron múltiples instantáneas."
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Error al seleccionar instantánea: %s"
@@ -5909,7 +5925,7 @@ msgstr ""
 "El volumen de almacenamiento debe especificarse como vol=nombredesilo/"
 "nombredevolumen"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5928,27 +5944,27 @@ msgstr "Nombre inválido para el nuevo huésped: %s"
 #: virtinst/cloner.py:163
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
-msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "No se pudo usar ruta '%s' para clonación: %s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 #, fuzzy
 #| msgid "Original guest name or xml is required."
 msgid "Original guest name or XML is required."
 msgstr "Se requiere el nombre del huésped o xml original."
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "La clonación en un volumen de almacenamiento no tiene soporte actualmente: "
 "'%s'"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5957,24 +5973,24 @@ msgstr ""
 "Más discos para clonar que nuevas rutas especificadas. (Se ha especificado "
 "%(passed)d, son necesarios %(need)d)"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Configuración de puerto de dispositivo de gráficos para autoport, con el fin "
 "de evitar conflictos"
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "La ruta al disco '%s' no existe."
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "No se pudo determinar información de disco original: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "No se encontró el dominio %s"
@@ -6027,7 +6043,7 @@ msgstr "El sistema de archivos '%s' elegido debe ser una ruta absolta"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s debe estar por encima de 5900, o -1 para auto asignación"
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr "El anfitrión no soporta spice GL"
 
@@ -7156,6 +7172,18 @@ msgstr "Debe especificarse un nombre para la %s"
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "El nombre de %s '%s' no puede contener el caracter '%s'."
+
+#~ msgid "External"
+#~ msgstr "Externo"
+
+#~ msgid "VM State"
+#~ msgstr "Estado de la VM"
+
+#~ msgid "disk"
+#~ msgstr "disco"
+
+#~ msgid "disk and configuration"
+#~ msgstr "disco y configuración"
 
 #~ msgid "Virtual Network"
 #~ msgstr "Red virtual"

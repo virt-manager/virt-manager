@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2020-06-09 02:40+0000\n"
 "Last-Translator: Seungyeon Choi <p@ij.rs>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
@@ -2829,7 +2829,7 @@ msgid "Unknown"
 msgstr "알 수 없음"
 
 #: virtManager/connection.py:601
-#, fuzzy
+#, fuzzy, python-format
 #| msgid ""
 #| "%s rename failed. Attempting to recover also failed.\n"
 #| "\n"
@@ -2841,7 +2841,7 @@ msgid ""
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 "%s 이름을 다시 지정하는 데 실패했습니다. 복구 시도도 실패했습니다.\n"
 "\n"
@@ -3223,35 +3223,36 @@ msgstr "저장소 매개 변수 오류."
 msgid "Invalid guest name"
 msgstr "잘못된 게스트 이름"
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "%s 설치를 위해 네트워크 장치가 필요합니다."
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr ""
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr ""
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "설치 시작 도중 오류 발생:"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "설치를 완료할 수 없음: '%s'"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "가상 머신 생성"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3259,17 +3260,17 @@ msgstr ""
 "가상 머신이 지금 생성 중 입니다. 디스크 저장소의 할당과 새로운 설치 이미지를 "
 "읽어들이는 작업을 완료하기 위해 몇 분이 필요할 것입니다."
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "예상 시간이 지나도 VM '%s'이(가) 표시되지 않습니다."
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "설치 계속 중 오류 발생: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr ""
 
@@ -3950,30 +3951,41 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "스냅샷 목록을 새로 고치는 도중 오류 발생: %s"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "외부"
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "VM 상태"
+#: virtManager/details/snapshots.py:461
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "외부 디스크 및 메모리"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "외부 메모리만"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "외부 디스크만"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -3981,31 +3993,35 @@ msgid ""
 "snapshot either the running or shut down system instead."
 msgstr ""
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "디스크"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "디스크 및 설정"
-
-#: virtManager/details/snapshots.py:659
+#: virtManager/details/snapshots.py:660
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 #| "snapshot was created will be discarded."
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 "정말로 스냅샷 '%s'을(를) 실행하시겠습니까? 마지막 스냅샷이 작성된 이후로 수행"
 "된 모든 %s 변경사항은 버립니다."
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
+#| "snapshot was created will be discarded."
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+"정말로 스냅샷 '%s'을(를) 실행하시겠습니까? 마지막 스냅샷이 작성된 이후로 수행"
+"된 모든 %s 변경사항은 버립니다."
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -4015,47 +4031,47 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "스냅샷 실행"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "스냅샷 '%s' 실행"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "스냅샷 '%s' 실행 중 오류 발생"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "정말로 선택한 스냅샷을 영구히 삭제하시겠습니까?"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "스냅샷 삭제"
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "스냅샷 '%s' 삭제"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "스냅샷 '%s' 삭제 중 오류 발생"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "스냅샷이 선택되지 않았습니다."
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "여러 스냅샷이 선택되었습니다."
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "스냅샷 선택 중 오류 발생: %s"
@@ -5766,7 +5782,7 @@ msgstr "알 수 없는 '%s' 값 '%s'"
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "저장소 볼륨은 vol=poolname/volname으로 지정해야 함"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5785,25 +5801,25 @@ msgstr "새 게스트의 잘못된 이름: %s"
 #: virtinst/cloner.py:163
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
-msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "'%s' 경로를 복제에 사용할 수 없음: %s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 #, fuzzy
 #| msgid "Original guest name or xml is required."
 msgid "Original guest name or XML is required."
 msgstr "원래 게스트 이름 또는 xml이 필요합니다."
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "기존 저장소 볼륨에 복제하는 기능은 현재 지원되지 않음: '%s'"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5812,22 +5828,22 @@ msgstr ""
 "지정된 새 경로보다 복제할 디스크가 더 많습니다. (%(passed)d 지정됨, %(need)d "
 "필요"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr "충돌을 방지하기 위해 그래픽 장치 포트를 autoport로 설정합니다."
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "디스크 경로 '%s'이(가) 존재하지 않습니다."
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "원래 디스크 정보를 판별할 수 없음: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "'%s' 도메인을 찾을 수 없습니다."
@@ -5876,7 +5892,7 @@ msgstr "파일 시스템 대상 '%s'은(는) 절대 경로여야 합니다."
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s은(는) 5900 이상이거나 자동 할당의 경우 -1이어야 함"
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr ""
 
@@ -6970,6 +6986,18 @@ msgstr "%s의 이름을 지정해야 합니다."
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s 이름 '%s'에 '%s' 문자를 포함할 수 없습니다."
+
+#~ msgid "External"
+#~ msgstr "외부"
+
+#~ msgid "VM State"
+#~ msgstr "VM 상태"
+
+#~ msgid "disk"
+#~ msgstr "디스크"
+
+#~ msgid "disk and configuration"
+#~ msgstr "디스크 및 설정"
 
 #~ msgid "Virtual Network"
 #~ msgstr "가상 네트워크"

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2020-07-09 05:27+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
@@ -2911,7 +2911,7 @@ msgid "Unknown"
 msgstr "Neznámé"
 
 #: virtManager/connection.py:601
-#, fuzzy
+#, fuzzy, python-format
 #| msgid ""
 #| "%s rename failed. Attempting to recover also failed.\n"
 #| "\n"
@@ -2923,7 +2923,7 @@ msgid ""
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 "Přejmenování %s se nezdařilo. Pokus o zotavení se také nezdařil.\n"
 "\n"
@@ -3315,35 +3315,36 @@ msgstr "Chyba v parametru úložiště."
 msgid "Invalid guest name"
 msgstr "Neplatný název hosta"
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "Pro instalaci %s je zapotřebí síťového rozhraní"
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr "Zjišťování…"
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr "Žádné nezjištěno"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "Chyba při spouštění instalace:"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nelze dokončit instalaci: „%s“"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "Vytváření virtuálního stroje"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3351,17 +3352,17 @@ msgstr ""
 "Virtuální stroj je nyní vytvářen. Přiřazení diskového úložiště a získání "
 "instalačních obrazů může několik minut trvat."
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "Virt. stroj „%s“ se neobjevil v očekávaném čase."
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Chyba při pokračování instalace: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr "Spouštění kontejneru"
 
@@ -4053,30 +4054,43 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Chyba při opětovném načítání seznamu zachycených stavů: %s"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "Vnější"
+#, fuzzy, python-format
+#| msgid "<span size='large'>Create snapshot</span>"
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr "<span size='large'>Pořídit zachycený stav</span>"
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "Stav virt. stroje"
+#: virtManager/details/snapshots.py:461
+#, fuzzy, python-format
+#| msgid "<span size='large'>Create snapshot</span>"
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr "<span size='large'>Pořídit zachycený stav</span>"
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "Externí disk a paměť"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "Pouze externí paměť"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "Pouze externí disk"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr "Uložený stav operační paměti nebude součástí zachyceného stavu"
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -4089,32 +4103,36 @@ msgstr ""
 "namísto toho pořídit zachycený stav buď ze spuštěného, nebo vypnutého "
 "systému."
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "disk"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "disk a nastavení"
-
-#: virtManager/details/snapshots.py:659
+#: virtManager/details/snapshots.py:660
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 #| "snapshot was created will be discarded."
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 "Opravdu chcete spustit ze zachyceného stavu „%s“? Budou zahozeny všechny "
 "změny %s od vytvoření posledního zachyceného stavu."
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
+#| "snapshot was created will be discarded."
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+"Opravdu chcete spustit ze zachyceného stavu „%s“? Budou zahozeny všechny "
+"změny %s od vytvoření posledního zachyceného stavu."
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 "Uložený stav bude odebrán aby se zabránilo poškození souborového systému"
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -4129,47 +4147,47 @@ msgstr ""
 "domény by nejspíš vedlo k rozsáhlému poškození souborového systému. Proto "
 "před obnovením zachyceného stavu bude uložený stav odebrán."
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "Spuštěný zachycený stav"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "Spuštěný zachycený stav „%s“"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Chyba spouštění zachyceného stavu „%s“"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "Opravdu chcete označené zachycené stavy nadobro smazat?"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "Mazání zachyceného stavu"
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "Mazání zachyceného stavu „%s“"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Chyba při mazání zachyceného stavu „%s“"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "Není vybrán žádný zachycený stav."
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "Vybráno vícero zachycených stavů."
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Chyba při vybírání zachyceného stavu: %s"
@@ -5991,7 +6009,7 @@ msgstr "Neznámá hodnota „%s“ „%s“"
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Svazek úložiště je třeba zadat jako vol=nazev_fondu/nazev_svazku"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Očekáván řetězec v PCI formátu pro „%s“"
@@ -6010,25 +6028,25 @@ msgstr "Neplatný název pro nového hosta: %s"
 #: virtinst/cloner.py:163
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
-msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "Nedaří se použít umístění „%s“ pro klonování: %s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 #, fuzzy
 #| msgid "Original guest name or xml is required."
 msgid "Original guest name or XML is required."
 msgstr "Je třeba název původního hosta nebo xml."
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr "Doménu je třeba před klonováním vypnout."
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "Klonování do existujícího svazku úložiště zatím není podporováno: „%s“"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -6037,24 +6055,24 @@ msgstr ""
 "Zadáno více disků ke klonování než nových umístění. (%(passed)d zadáno, "
 "%(need)d potřebných"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Port grafického zařízení se nastavuje na automatickou volbu, aby se zamezilo "
 "kolizi."
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "Diskové umístění „%s“ neexistuje."
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "Nedaří se zjistit informace o původním disku: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "Doména „%s“ nebyla nalezena"
@@ -6108,7 +6126,7 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr ""
 "Je třeba, aby %s bylo vyšší než 5900 (nebo -1 pro automatické přiřazení)"
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr "Hostitel nepodporuje spice GL"
 
@@ -7265,6 +7283,18 @@ msgstr "Je třeba zadat název pro %s"
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "název %s „%s“ nemůže obsahovat znak „%s“."
+
+#~ msgid "External"
+#~ msgstr "Vnější"
+
+#~ msgid "VM State"
+#~ msgstr "Stav virt. stroje"
+
+#~ msgid "disk"
+#~ msgstr "disk"
+
+#~ msgid "disk and configuration"
+#~ msgstr "disk a nastavení"
 
 #~ msgid "Virtual Network"
 #~ msgstr "Virtuální síť"

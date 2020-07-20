@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2020-07-14 16:52+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1630,8 +1630,8 @@ msgid ""
 msgstr ""
 "Тунельоване перенесення за допомогою каналу з'єднання libvirtd замість "
 "відкриття гіпервізором окремого з'єднання мережі з призначенням. Екземпляр "
-"джерела libvirt з'єднується безпосередньо із екземпляром призначення libvirt."
-"\n"
+"джерела libvirt з'єднується безпосередньо із екземпляром призначення "
+"libvirt.\n"
 "\n"
 "Може спростити налаштування, оскільки не потрібно відкривати додаткові порти "
 "у брандмауері, і зашифрувати дані, що передаються під час перенесення, якщо "
@@ -2866,12 +2866,19 @@ msgid "Unknown"
 msgstr "Невідомо"
 
 #: virtManager/connection.py:601
+#, fuzzy, python-format
+#| msgid ""
+#| "%(object)s rename failed. Attempting to recover also failed.\n"
+#| "\n"
+#| "Original error: %(origerror)s\n"
+#| "\n"
+#| "Recover error: %s"
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 "Спроба перейменування %(object)s зазнала невдачі. Спроба відновлення також "
 "зазнала невдачі.\n"
@@ -3261,34 +3268,35 @@ msgstr "Помилка у параметрах сховища."
 msgid "Invalid guest name"
 msgstr "Некоректна назва гостьової системи"
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "Для встановлення %s потрібен мережевий пристрій."
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr "Виявляємо…"
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr "Не виявлено жодного"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "Помилка під час спроби розпочати встановлення: %s"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Не вдалося завершити встановлення: «%s»"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "Створення віртуальної машини"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3296,17 +3304,17 @@ msgstr ""
 "Зараз створюється віртуальна машина. Розміщення дискового сховища і "
 "отримання образів для встановлення може виконуватися декілька хвилин."
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "ВМ «%s» не дала про себе знати у очікуваний проміжок часу."
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Помилка під час спроби продовження встановлення: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr "Перебудовуємо контейнер"
 
@@ -3981,30 +3989,43 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Помилка під час оновлення списку знімків: %s"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "Зовнішній"
+#, fuzzy, python-format
+#| msgid "<span size='small'>Warning: %s</span>"
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr "<span size='small'>Попередження: %s</span>"
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "Стан ВМ"
+#: virtManager/details/snapshots.py:461
+#, fuzzy, python-format
+#| msgid "<span size='small'>Warning: %s</span>"
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr "<span size='small'>Попередження: %s</span>"
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "Зовнішній диск і пам'ять"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "Лише зовнішня пам'ять"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "Лише зовнішній диск"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr "Збережений стан пам'яті не буде частиною знімка"
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -4016,29 +4037,36 @@ msgstr ""
 "подібними до раптового вимикання системи під час роботи. Рекомендуємо вам "
 "створювати знімки лише запущених або лише вимкнених систем."
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "диску"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "диску і у налаштуваннях"
-
-#: virtManager/details/snapshots.py:659
-#, python-format
+#: virtManager/details/snapshots.py:660
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
+#| "changes since the last snapshot was created will be discarded."
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 "Ви справді хочете запустити знімок «%(name)s»? Усі зміни на %(changetype)s, "
 "які було внесено з часу створення останнього знімка, було відкинуто."
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
+#| "changes since the last snapshot was created will be discarded."
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+"Ви справді хочете запустити знімок «%(name)s»? Усі зміни на %(changetype)s, "
+"які було внесено з часу створення останнього знімка, було відкинуто."
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 "Збережений стан буде вилучено, щоб запобігти пошкодженню файлової системи"
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -4053,47 +4081,47 @@ msgstr ""
 "призведе до суттєвого пошкодження файлової системи. Через це, збережений "
 "стан буде вилучено до відновлення знімка."
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "Запускаємо знімок"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "Запускаємо знімок «%s»"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Не вдалося запустити знімок «%s»"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "Ви справді хочете остаточно вилучити позначені знімки?"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "Вилучаємо знімок"
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "Вилучаємо знімок «%s»"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Помилка під час вилучення знімка «%s»"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "Не позначено жодного знімка."
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "Позначено декілька знімків."
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Помилка під час вибору знімка: %s"
@@ -5896,7 +5924,7 @@ msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Том сховища даних слід вказувати так vol=назва_резервного_сховища/назва_тому"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "«%s» мало бути рядком у форматі PCI"
@@ -5912,26 +5940,27 @@ msgid "Invalid name for new guest: %s"
 msgstr "Некоректна назва нової гостьової системи: %s"
 
 #: virtinst/cloner.py:163
-#, python-format
-msgid "Could not use path '%s' for cloning"
+#, fuzzy, python-format
+#| msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "Не вдалося використати адресу «%s» для клонування"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 msgid "Original guest name or XML is required."
 msgstr "Слід вказати початкову назву гостьової системи або XML."
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr "Домен для клонування має бути вимкнено."
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "Підтримки клонування на вже створений том сховища даних у поточній версії не "
 "передбачено: «%s»"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5940,24 +5969,24 @@ msgstr ""
 "Ви наказали клонувати більше дисків, ніж вказали адрес для зберігання даних. "
 "(вказано %(passed)d, потрібно%(need)d)"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Встановлюємо для порту графічного пристрою значення autoport з метою "
 "уникнення конфліктів."
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "Шляху на диску «%s» не існує."
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "Не вдалося визначити дані початкового диска: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "Домену «%s» не знайдено."
@@ -6011,7 +6040,7 @@ msgstr "Призначенням файлової системи «%s» має �
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s має перевищувати 5900. Вкажіть -1 для автоматичного визначення."
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr "У основній системі не передбачено підтримки spice GL"
 
@@ -6329,7 +6358,8 @@ msgstr "Для ОС «%(osname)s» не має місця URL для архіт�
 #: virtinst/storage.py:166
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr "Не вдалося створити типове резервне сховище даних «%(path)s»: %(error)s"
+msgstr ""
+"Не вдалося створити типове резервне сховище даних «%(path)s»: %(error)s"
 
 #: virtinst/storage.py:220 virtinst/storage.py:554
 msgid "Storage object"
@@ -6892,8 +6922,8 @@ msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgstr ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s "
-"--%(type)s"
+"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
+"%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -7163,6 +7193,18 @@ msgstr "Для %s слід вказати назву"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "У %(objecttype)s назва «%(name)s» не повинна містити символу «%(char)s»."
+
+#~ msgid "External"
+#~ msgstr "Зовнішній"
+
+#~ msgid "VM State"
+#~ msgstr "Стан ВМ"
+
+#~ msgid "disk"
+#~ msgstr "диску"
+
+#~ msgid "disk and configuration"
+#~ msgstr "диску і у налаштуваннях"
 
 #~ msgid "Virtual Network"
 #~ msgstr "Віртуальна мережа"

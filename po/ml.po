@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2017-02-05 04:06+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Malayalam (http://www.transifex.com/projects/p/virt-manager/"
@@ -2794,12 +2794,13 @@ msgid "Unknown"
 msgstr "അപരിചിതം"
 
 #: virtManager/connection.py:601
+#, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 
 #: virtManager/createconn.py:37
@@ -3175,35 +3176,36 @@ msgstr "സ്റ്റോറേജ് പരാമീറ്റര്‍ പി�
 msgid "Invalid guest name"
 msgstr ""
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "%s ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി നെറ്റ്‌വര്‍ക്ക് ഡിവൈസ് ആവശ്യമുണ്ടു്."
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr ""
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr ""
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "ഇന്‍സ്റ്റലേഷന്‍ ആരംഭിയ്ക്കുന്നതില്‍ പിശക്:"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "ഇന്‍സ്റ്റ്ലേഷന്‍ പൂറ്‍ത്തിയാക്കുവാന്‍ സാധ്യമായില്ല: '%s'"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഉണ്ടാക്കുന്നു"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3211,17 +3213,17 @@ msgstr ""
 "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഇപ്പോള്‍ ഉണ്ടാക്കുന്നു. ഡിസ്ക് സ്റ്റോറേജും ഇന്‍സ്റ്റലേഷന്‍ ഇമേജും ലഭ്യമാക്കുന്നതു് പൂര്‍"
 "ണ്ണമാക്കുന്നതിനു് അല്‍പം സമയമെടുക്കുന്നു."
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr ""
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "ഇന്‍സ്റ്റോള്‍ തുടരുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr ""
 
@@ -3898,30 +3900,41 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "സ്നാപ്പ്ഷോട്ട് പട്ടിക പുതുക്കുന്നതില്‍ പിശക്: %s"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "പുറമേയുള്ള"
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "വിഎം അവസ്ഥ"
+#: virtManager/details/snapshots.py:461
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "പുറമേയുള്ള ഡിസ്കും മെമ്മറിയും"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "പുറമേയുള്ള മെമ്മറി മാത്രം"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "പുറമേയുള്ള ഡിസ്ക് മാത്രം"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -3929,26 +3942,25 @@ msgid ""
 "snapshot either the running or shut down system instead."
 msgstr ""
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "ഡിസ്ക്"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "ഡിസ്കും ക്രമീകരണവും"
-
-#: virtManager/details/snapshots.py:659
+#: virtManager/details/snapshots.py:660
 #, python-format
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, python-format
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -3958,47 +3970,47 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "സ്നാപ്പ്ഷോട്ട് നടപ്പിലാക്കുന്നു"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "'%s' സ്നാപ്പ്ഷോട്ട് നടപ്പിലാക്കുന്നു"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "സ്നാപ്പ്ഷോട്ട് '%s' നടപ്പിലാക്കുന്നതില്‍ പിശക്"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr ""
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "സ്നാപ്പ്ഷോട്ട് വെട്ടിനീക്കുന്നു"
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "സ്നാപ്പ്ഷോട്ട് '%s' വെട്ടിനീക്കുന്നു"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "'%s' സ്നാപ്പ്ഷോട്ട് വെട്ടി നീക്കുന്നതില്‍ പിശക്"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "ഒരു സ്നാപ്പ്ഷോട്ടും തെരഞ്ഞെടുത്തിട്ടില്ല"
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "അനവധി സ്നാപ്പ്ഷോട്ടുകള്‍ തെരഞ്ഞെടുത്തിരിയ്ക്കുന്നു."
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "സ്നാപ്പ്ഷോട്ട് തെരഞ്ഞെടുക്കുന്നതില്‍ പിശക്: %s"
@@ -5654,7 +5666,7 @@ msgstr "അപരിചിതമായ '%s' മൂല്ല്യം '%s'"
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "സംഭരണ വോള്യം vol=poolname/volname ആയി നല്‍കണം"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5673,25 +5685,25 @@ msgstr "പുതിയ ഗസ്റ്റിനു് തെറ്റായ പ
 #: virtinst/cloner.py:163
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
-msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "ക്ലോണിങിനു് '%s' പാഥ് ഉപയോഗിയ്ക്കുവാന്‍ പാടില്ല: %s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 #, fuzzy
 #| msgid "Original guest name or xml is required."
 msgid "Original guest name or XML is required."
 msgstr "യഥാര്‍ത്ഥ ഗസ്റ്റ് നാമം അല്ലെങ്കില്‍ എക്സ്എംഎല്‍ ആവശ്യമുണ്ടു്."
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "നിലവിലുള്ള സംഭരണ വോള്യം ക്ലോണ്‍ ചെയ്യുന്നതു് നിലവില്‍ പിന്തുണയ്ക്കുന്നില്ല: '%s'"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5700,23 +5712,23 @@ msgstr ""
 "നിഷ്കര്‍ഷിച്ചിരിയ്ക്കുന്ന പുതിയ പാഥുകളേക്കാള്‍ കൂടുതല്‍ ഡിസ്കുകള്‍ ക്ലോണ്‍ ചെയ്യണം. (%(passed)d നിഷ്കര്‍"
 "ച്ചിരിയ്ക്കുന്നു, %(need)d ആവശ്യം"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "പൊരുത്തക്കേടു് ഒഴിവാക്കുന്നതിനായി, ഗ്രാഫിക്സ് ഡിവൈസ് പോര്‍ട്ട് ഓട്ടോപോര്‍ട്ടിലേക്കു് സജ്ജമാക്കുന്നു."
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "യഥാര്‍ത്ഥ ഡിസ്ക് വിവരം കണ്ടുപിടിയ്ക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "ഡൊമെയിന്‍ '%s' കണ്ടുപിടിയ്ക്കുവാനായില്ല."
@@ -5764,7 +5776,7 @@ msgstr "ഫയല്‍സിസ്റ്റം ലക്ഷം '%s' ഒരു �
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s, 5900-ല്‍ കൂടുതലായിരിയ്ക്കണം, അല്ലെങ്കില്‍ സ്വയമായി അനുവദിയ്ക്കുന്നതിനു് -1 "
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr ""
 
@@ -6810,6 +6822,18 @@ msgstr ""
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
+
+#~ msgid "External"
+#~ msgstr "പുറമേയുള്ള"
+
+#~ msgid "VM State"
+#~ msgstr "വിഎം അവസ്ഥ"
+
+#~ msgid "disk"
+#~ msgstr "ഡിസ്ക്"
+
+#~ msgid "disk and configuration"
+#~ msgstr "ഡിസ്കും ക്രമീകരണവും"
 
 #~ msgid "Virtual Network"
 #~ msgstr "വിര്‍ച്ച്വല്‍ നെറ്റ്‌വര്‍ക്ക്"

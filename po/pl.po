@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2020-07-15 13:01+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2859,12 +2859,19 @@ msgid "Unknown"
 msgstr "Nieznane"
 
 #: virtManager/connection.py:601
+#, fuzzy, python-format
+#| msgid ""
+#| "%(object)s rename failed. Attempting to recover also failed.\n"
+#| "\n"
+#| "Original error: %(origerror)s\n"
+#| "\n"
+#| "Recover error: %s"
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 "Zmiana nazwy %(object)s się nie powiodła. Próba przywrócenia także się nie "
 "powiodła.\n"
@@ -3251,34 +3258,35 @@ msgstr "Błąd parametru pamięci masowej."
 msgid "Invalid guest name"
 msgstr "Nieprawidłowa nazwa gościa"
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "Dla instalacji %s wymagane jest urządzenie sieciowe."
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr "Wykrywanie…"
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr "Nic nie wykryto"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "Błąd podczas uruchamiania instalacji: %s"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nie można ukończyć instalacji: „%s”"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "Tworzenie maszyny wirtualnej"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3286,17 +3294,17 @@ msgstr ""
 "Maszyna wirtualna jest teraz tworzona. Przydzielenie pamięci masowej dysku "
 "i pobranie obrazów instalacji może zająć kilka minut."
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "Maszyna wirtualna „%s” nie pojawiła się po oczekiwanym czasie."
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "Błąd podczas kontynuowania instalacji: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr "Zakładanie kontenera"
 
@@ -3966,30 +3974,43 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Błąd podczas odświeżania listy migawek: %s"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "Zewnętrzne"
+#, fuzzy, python-format
+#| msgid "<span size='small'>Warning: %s</span>"
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr "<span size='small'>Ostrzeżenie: %s</span>"
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "Stan maszyny wirtualnej"
+#: virtManager/details/snapshots.py:461
+#, fuzzy, python-format
+#| msgid "<span size='small'>Warning: %s</span>"
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr "<span size='small'>Ostrzeżenie: %s</span>"
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "Zewnętrzny dysk i pamięć"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "Tylko zewnętrzna pamięć"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "Tylko zewnętrzny dysk"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr "Zapisany stan pamięci nie będzie częścią migawki"
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -4001,29 +4022,36 @@ msgstr ""
 "tożsame z wymuszeniem wyłączenia systemu w trakcie jego działania. Zalecane "
 "jest wykonanie migawki uruchomionego lub wyłączonego systemu."
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "dysku"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "dyski i w konfiguracji"
-
-#: virtManager/details/snapshots.py:659
-#, python-format
+#: virtManager/details/snapshots.py:660
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
+#| "changes since the last snapshot was created will be discarded."
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 "Na pewno uruchomić migawkę „%(name)s”? Wszystkie zmiany na %(changetype)s od "
 "utworzenia ostatniej migawki zostaną odrzucone."
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
+#| "changes since the last snapshot was created will be discarded."
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+"Na pewno uruchomić migawkę „%(name)s”? Wszystkie zmiany na %(changetype)s od "
+"utworzenia ostatniej migawki zostaną odrzucone."
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 "Zapisany stan zostanie usunięty, aby uniknąć uszkodzenia systemu plików"
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -4038,47 +4066,47 @@ msgstr ""
 "spowodowałoby rozległe uszkodzenie systemu plików. Z tego powodu zapisany "
 "stan zostanie usunięty przed przywróceniem migawki."
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "Uruchamianie migawki"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "Uruchamianie migawki „%s”"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Błąd podczas uruchamiania migawki „%s”"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "Na pewno trwale usunąć zaznaczone migawki?"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "Usuwanie migawki"
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "Usuwanie migawki „%s”"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Błąd podczas usuwania migawki „%s”"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "Nie zaznaczono migawki."
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "Zaznaczono wiele migawek."
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Błąd podczas zaznaczania migawki: %s"
@@ -5857,7 +5885,7 @@ msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Wolumin pamięci masowej musi zostać podany jako vol=nazwa_puli/nazwa_woluminu"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Oczekiwano ciągu w formacie PCI dla „%s”"
@@ -5873,26 +5901,27 @@ msgid "Invalid name for new guest: %s"
 msgstr "Nieprawidłowa nazwa nowego gościa: %s"
 
 #: virtinst/cloner.py:163
-#, python-format
-msgid "Could not use path '%s' for cloning"
+#, fuzzy, python-format
+#| msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "Nie można użyć ścieżki „%s” do sklonowania"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 msgid "Original guest name or XML is required."
 msgstr "Oryginalna nazwa gościa lub XML są wymagane."
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr "Domena do sklonowania musi być wyłączona."
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "Klonowanie do istniejącego woluminu pamięci masowej jest obecnie "
 "nieobsługiwane: „%s”"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5901,23 +5930,23 @@ msgstr ""
 "Podano więcej dysków do klonowania niż nowych ścieżek. (%(passed)d podano, "
 "%(need)d jest wymaganych"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Ustawianie portu urządzenia graficznego na autoport, aby uniknąć konfliktu."
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "Ścieżka do dysku „%s” nie istnieje."
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "Nie można ustalić informacji o oryginalnym dysku: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "Nie odnaleziono domeny „%s”."
@@ -5970,7 +5999,7 @@ msgstr "Docelowy system plików „%s” musi być ścieżką bezwzględną"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s musi wynosić ponad 5900 lub -1 dla automatycznego przydzielenia"
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr "Gospodarz nie obsługuje GL Spice"
 
@@ -6290,7 +6319,8 @@ msgstr ""
 #: virtinst/storage.py:166
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr "Nie można utworzyć domyślnej puli pamięci masowej „%(path)s”: %(error)s"
+msgstr ""
+"Nie można utworzyć domyślnej puli pamięci masowej „%(path)s”: %(error)s"
 
 #: virtinst/storage.py:220 virtinst/storage.py:554
 msgid "Storage object"
@@ -6847,8 +6877,8 @@ msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgstr ""
-"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko obiekt %(max)s "
-"--%(type)s"
+"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko obiekt %(max)s --"
+"%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -7112,6 +7142,18 @@ msgstr "Należy podać nazwę dla %s"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s nazwa „%(name)s” nie może zawierać znaku „%(char)s”."
+
+#~ msgid "External"
+#~ msgstr "Zewnętrzne"
+
+#~ msgid "VM State"
+#~ msgstr "Stan maszyny wirtualnej"
+
+#~ msgid "disk"
+#~ msgstr "dysku"
+
+#~ msgid "disk and configuration"
+#~ msgstr "dyski i w konfiguracji"
 
 #~ msgid "Virtual Network"
 #~ msgstr "Sieć wirtualna"

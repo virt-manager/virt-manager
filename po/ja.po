@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-14 15:39+0000\n"
+"POT-Creation-Date: 2020-07-17 06:10+0000\n"
 "PO-Revision-Date: 2019-07-24 02:29+0000\n"
 "Last-Translator: Hajime Taira <htaira@fedoraproject.org>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/virt-manager/"
@@ -2888,7 +2888,7 @@ msgid "Unknown"
 msgstr "不明"
 
 #: virtManager/connection.py:601
-#, fuzzy
+#, fuzzy, python-format
 #| msgid ""
 #| "%s rename failed. Attempting to recover also failed.\n"
 #| "\n"
@@ -2900,7 +2900,7 @@ msgid ""
 "\n"
 "Original error: %(origerror)s\n"
 "\n"
-"Recover error: %s"
+"Recover error: %(recovererror)s"
 msgstr ""
 "%s の名前を変更できませんでした。修復を試みましたが失敗しました。\n"
 "\n"
@@ -3290,35 +3290,36 @@ msgstr "ストレージのパラメーターがエラーです。"
 msgid "Invalid guest name"
 msgstr "不正なゲスト名です"
 
-#: virtManager/createvm.py:1749
-#, python-format
-msgid "Network device required for %s install."
+#: virtManager/createvm.py:1745
+#, fuzzy
+#| msgid "Network device required for %s install."
+msgid "Network device required for URL install."
 msgstr "%s をインストールするにはネットワークデバイスが必要です。"
 
-#: virtManager/createvm.py:1828
+#: virtManager/createvm.py:1823
 msgid "Detecting..."
 msgstr "認識中…"
 
-#: virtManager/createvm.py:1890
+#: virtManager/createvm.py:1885
 msgid "None detected"
 msgstr "何も検出されませんでした"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1922
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "インストール開始時にエラーが発生しました。"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1962
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "インストールを完了できません: '%s'"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2002
 msgid "Creating Virtual Machine"
 msgstr "仮想マシンを作成中"
 
-#: virtManager/createvm.py:2008
+#: virtManager/createvm.py:2003
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3326,17 +3327,17 @@ msgstr ""
 "現在仮想マシンを作成中です。ディスクストレージの割り当てとインストールイメー"
 "ジの取り込みの完了まで数分かかることがあります。"
 
-#: virtManager/createvm.py:2062
+#: virtManager/createvm.py:2057
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "仮想マシン '%s' は期待された時間に表示されませんでした。"
 
-#: virtManager/createvm.py:2110
+#: virtManager/createvm.py:2105
 #, python-format
 msgid "Error continue install: %s"
 msgstr "インストールを継続する際にエラーが発生しました: %s"
 
-#: virtManager/createvm.py:2123
+#: virtManager/createvm.py:2118
 msgid "Bootstraping container"
 msgstr "Bootstraping コンテナー"
 
@@ -4022,30 +4023,41 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "スナップショット一覧の更新中に、エラーが発生しました: %s"
 
 #: virtManager/details/snapshots.py:456
-msgid "External"
-msgstr "外部"
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s (External)</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:463
-msgid "VM State"
-msgstr "仮想マシンの状態"
+#: virtManager/details/snapshots.py:461
+#, python-format
+msgid ""
+"%(vm)s\n"
+"<span size='small'>VM State: %(state)s</span>"
+msgstr ""
 
-#: virtManager/details/snapshots.py:539
+#: virtManager/details/snapshots.py:523
+#, python-format
+msgid "<b>Snapshot '%(name)s':</b>"
+msgstr ""
+
+#: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
 msgstr "外部ディスクとメモリー"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:545
 msgid "External memory only"
 msgstr "外部メモリーのみ"
 
-#: virtManager/details/snapshots.py:543
+#: virtManager/details/snapshots.py:547
 msgid "External disk only"
 msgstr "外部ディスクのみ"
 
-#: virtManager/details/snapshots.py:634
+#: virtManager/details/snapshots.py:638
 msgid "Saved memory state will not be part of the snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:635
+#: virtManager/details/snapshots.py:639
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -4053,31 +4065,35 @@ msgid ""
 "snapshot either the running or shut down system instead."
 msgstr ""
 
-#: virtManager/details/snapshots.py:655
-msgid "disk"
-msgstr "ディスク"
-
-#: virtManager/details/snapshots.py:657
-msgid "disk and configuration"
-msgstr "ディスクと構成"
-
-#: virtManager/details/snapshots.py:659
+#: virtManager/details/snapshots.py:660
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
 #| "snapshot was created will be discarded."
 msgid ""
-"Are you sure you want to run snapshot '%(name)s'? All %(changetype)s changes "
+"Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 "本当にスナップショット '%s' を起動したいですか？ 最新のスナップショット以降に"
 "行われた %s への変更は、すべて破棄されます。"
 
-#: virtManager/details/snapshots.py:670
+#: virtManager/details/snapshots.py:664
+#, fuzzy, python-format
+#| msgid ""
+#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
+#| "snapshot was created will be discarded."
+msgid ""
+"Are you sure you want to run the snapshot '%(name)s'? All the disk and "
+"configuration changes since the last snapshot was created will be discarded."
+msgstr ""
+"本当にスナップショット '%s' を起動したいですか？ 最新のスナップショット以降に"
+"行われた %s への変更は、すべて破棄されます。"
+
+#: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 
-#: virtManager/details/snapshots.py:671
+#: virtManager/details/snapshots.py:676
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -4087,47 +4103,47 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:690
 msgid "Running snapshot"
 msgstr "スナップショットを実行中"
 
-#: virtManager/details/snapshots.py:686
+#: virtManager/details/snapshots.py:691
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "スナップショット '%s' を実行中"
 
-#: virtManager/details/snapshots.py:687
+#: virtManager/details/snapshots.py:692
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "スナップショット '%s' の実行中にエラーが発生しました"
 
-#: virtManager/details/snapshots.py:696
+#: virtManager/details/snapshots.py:701
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "選択したスナップショットを永久削除してもよいですか？"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:709
 msgid "Deleting snapshot"
 msgstr "スナップショットを削除中"
 
-#: virtManager/details/snapshots.py:705
+#: virtManager/details/snapshots.py:710
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "スナップショット '%s' を削除中"
 
-#: virtManager/details/snapshots.py:706
+#: virtManager/details/snapshots.py:711
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "スナップショット '%s' の削除中にエラーが発生しました"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:719
 msgid "No snapshot selected."
 msgstr "スナップショットが選択されていません。"
 
-#: virtManager/details/snapshots.py:717
+#: virtManager/details/snapshots.py:722
 msgid "Multiple snapshots selected."
 msgstr "複数のスナップショットが選択されました。"
 
-#: virtManager/details/snapshots.py:727
+#: virtManager/details/snapshots.py:732
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "スナップショットの選択中にエラーが発生しました: %s"
@@ -5904,7 +5920,7 @@ msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "ストレージボリュームを vol=poolname/volname のように指定する必要があります"
 
-#: virtinst/cli.py:3602
+#: virtinst/cli.py:3603
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5923,27 +5939,27 @@ msgstr "新しいゲストに対する無効な名前: %s"
 #: virtinst/cloner.py:163
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
-msgid "Could not use path '%s' for cloning"
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "クローンのために、パス '%s' を使用できませんでした: %s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:283
 #, fuzzy
 #| msgid "Original guest name or xml is required."
 msgid "Original guest name or XML is required."
 msgstr "元のゲスト名または XML が必要です。"
 
-#: virtinst/cloner.py:304
+#: virtinst/cloner.py:306
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:326
+#: virtinst/cloner.py:328
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "既存のストレージボリュームにクローンを作成するのは、現在サポートされていませ"
 "ん: '%s'"
 
-#: virtinst/cloner.py:400
+#: virtinst/cloner.py:402
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5952,24 +5968,24 @@ msgstr ""
 "クローンを作成するディスクに対して、指定したパスの数が足りません (%(passed)d "
 "個指定, %(need)d 個必要)"
 
-#: virtinst/cloner.py:414
+#: virtinst/cloner.py:416
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "ポートの競合を避けるために、グラフィックスデバイスのポートを自動ポートに設定"
 "しました。"
 
-#: virtinst/cloner.py:576
+#: virtinst/cloner.py:578
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "ディスクパス '%s' が存在しません。"
 
-#: virtinst/cloner.py:581
+#: virtinst/cloner.py:583
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "元のディスク情報を決定できません: %s"
 
-#: virtinst/cloner.py:619
+#: virtinst/cloner.py:621
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "ドメイン '%s' が見つかりませんでした。"
@@ -6021,7 +6037,7 @@ msgstr "ファイルシステムのターゲット '%s' は、絶対パスであ
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s は 5900 以上にしてください。自動割り当ての場合は -1 にします"
 
-#: virtinst/devices/graphics.py:201
+#: virtinst/devices/graphics.py:202
 msgid "Host does not support spice GL"
 msgstr "ホストは SPICE GLをサポートしていません"
 
@@ -7140,6 +7156,18 @@ msgstr "%s に対して名前を指定しなければなりません"
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s の名前 '%s' に、'%s' 文字は使用できません。"
+
+#~ msgid "External"
+#~ msgstr "外部"
+
+#~ msgid "VM State"
+#~ msgstr "仮想マシンの状態"
+
+#~ msgid "disk"
+#~ msgstr "ディスク"
+
+#~ msgid "disk and configuration"
+#~ msgstr "ディスクと構成"
 
 #~ msgid "Virtual Network"
 #~ msgstr "仮想ネットワーク"
