@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-27 14:56-0400\n"
-"PO-Revision-Date: 2020-07-10 13:58+0000\n"
+"PO-Revision-Date: 2020-07-13 19:47+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/it/>\n"
@@ -245,9 +245,8 @@ msgid "Random"
 msgstr "Casuale"
 
 #: ../virtManager/addhardware.py:575
-#, fuzzy
 msgid "Entropy Gathering Daemon"
-msgstr "Demone Gathering Entropia"
+msgstr "Demone per la raccolta dell'entropia"
 
 #: ../virtManager/addhardware.py:577
 msgid "Builtin RNG"
@@ -432,7 +431,7 @@ msgstr "Errore durante la creazione dell'XML del dispositivo: %s"
 
 #: ../virtManager/addhardware.py:1566
 msgid "invalid listen type"
-msgstr ""
+msgstr "tipo non valido per 'listen'"
 
 #: ../virtManager/asyncjob.py:229
 msgid "Cancelling job..."
@@ -710,7 +709,7 @@ msgstr "Isolata"
 
 #: ../virtManager/createnet.py:117
 msgid "SR-IOV pool"
-msgstr ""
+msgstr "Pool SR-IOV"
 
 #: ../virtManager/createnet.py:178
 msgid "No available device"
@@ -747,7 +746,7 @@ msgstr "La creazione della rete virtuale può richiedere del tempo..."
 
 #: ../virtManager/createpool.py:227
 msgid "Volg_roup Name:"
-msgstr ""
+msgstr "Nome g_ruppo di volumi:"
 
 #: ../virtManager/createpool.py:227
 msgid "Sou_rce Name:"
@@ -989,7 +988,7 @@ msgstr "Il percorso della directory del sistema operativo è obbligatorio."
 
 #: ../virtManager/createvm.py:1544
 msgid "Source URL is required"
-msgstr ""
+msgstr "Occorre specificare un URL sorgente"
 
 #: ../virtManager/createvm.py:1549
 msgid "Please specify password for accessing source registry"
@@ -1007,7 +1006,7 @@ msgstr "Non ci sono i permessi di scrittura per il percorso della directory: %s"
 
 #: ../virtManager/createvm.py:1563
 msgid "OS root directory is not empty"
-msgstr ""
+msgstr "La directory principale del sistema operativo non è vuota"
 
 #: ../virtManager/createvm.py:1564
 msgid ""
@@ -1408,7 +1407,7 @@ msgstr "Filesystem %s"
 #: ../virtManager/details/details.py:239
 #, python-format
 msgid "Controller %s %s"
-msgstr ""
+msgstr "Controller %s %s"
 
 #: ../virtManager/details/details.py:579
 msgid "_Add Hardware"
@@ -1519,22 +1518,22 @@ msgstr "%(summary)s..."
 #: ../virtManager/details/details.py:1949
 #, python-format
 msgid "%(received)d %(units)s read"
-msgstr "Lettura di %(received)d %(units)s"
+msgstr "%(received)d %(units)s letti"
 
 #: ../virtManager/details/details.py:1950
 #, python-format
 msgid "%(transferred)d %(units)s write"
-msgstr ""
+msgstr "%(transferred)d %(units)s scritti"
 
 #: ../virtManager/details/details.py:1953
 #, python-format
 msgid "%(received)d %(units)s in"
-msgstr "Input %(received)d %(units)s"
+msgstr "%(received)d %(units)s ricevuti"
 
 #: ../virtManager/details/details.py:1954
 #, python-format
 msgid "%(transferred)d %(units)s out"
-msgstr ""
+msgstr "%(transferred)d %(units)s inviati"
 
 #: ../virtManager/details/details.py:1956
 #: ../virtManager/details/details.py:1957
@@ -1600,7 +1599,7 @@ msgstr ""
 #: ../virtManager/details/details.py:2363
 #: ../virtManager/details/details.py:2373
 msgid "Cannot remove controller while devices are attached."
-msgstr ""
+msgstr "Impossibile rimuovere un controller se ha dispositivi collegati."
 
 #: ../virtManager/details/details.py:2482
 msgid "Overview"
@@ -2013,7 +2012,7 @@ msgstr "Errore nell'avvio della rete virtuale '%s': %s"
 
 #: ../virtManager/device/vsockdetails.py:61
 msgid "CID"
-msgstr ""
+msgstr "CID"
 
 #: ../virtManager/engine.py:125
 msgid "Checking for virtualization packages..."
@@ -2292,6 +2291,9 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
+"Impossibile rilevare una sessione locale: nel caso in cui virt-manager è in "
+"esecuzione tramite ssh -X o VNC, potrebbe non essere possibile connettersi a "
+"libvirt come semplice utente. Provare ad eseguire come root."
 
 #: ../virtManager/lib/connectauth.py:181
 msgid "Verify that the 'libvirtd' daemon is running."
@@ -2313,7 +2315,7 @@ msgstr "Errore nell'ispezione della VM: %s"
 
 #: ../virtManager/lib/inspection.py:163
 msgid "Cannot inspect VM on remote connection"
-msgstr ""
+msgstr "Impossibile ispezionare una macchina virtuale in una connessione remota"
 
 #: ../virtManager/lib/inspection.py:178
 #, python-format
@@ -3103,7 +3105,7 @@ msgstr ""
 
 #: ../virtinst/cli.py:429
 msgid "Console command returned failure."
-msgstr ""
+msgstr "Il comando di console è terminato con un errore."
 
 #: ../virtinst/cli.py:473
 #, python-format
@@ -3511,6 +3513,9 @@ msgid ""
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
+"Usato per decidere i valori predefiniti ottimali tipo VirtIO.\n"
+"Valori di esempio: fedora29, rhel7.0, win10, ...\n"
+"Consultare `osinfo-query os` per una lista completa."
 
 #: ../virtinst/cli.py:939
 #, python-format
@@ -4478,7 +4483,7 @@ msgstr ""
 
 #: ../virtinst/virtinstall.py:889
 msgid "Perform a cloud image installation, configuring cloud-init"
-msgstr ""
+msgstr "Esegue un'installazione di immagine per cloud, configurando cloud-init"
 
 #: ../virtinst/virtinstall.py:903
 msgid "Device Options"
@@ -4779,6 +4784,7 @@ msgstr "Non è possibile usare --update e --start allo stesso tempo"
 #: ../virtinst/virtxml.py:480
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
+"La macchina virtuale non è in esecuzione, --update non può essere usato."
 
 #: ../virtinst/virtxml.py:511
 msgid "Changes will take effect after the domain is fully powered off."
@@ -5435,7 +5441,7 @@ msgstr ""
 
 #: ../ui/createvm.ui.h:41
 msgid "Source URI:"
-msgstr ""
+msgstr "URI sorgente:"
 
 #: ../ui/createvm.ui.h:42
 msgid ""
@@ -5491,7 +5497,7 @@ msgstr "S_cegliere il sistema operativo da installare:"
 
 #: ../ui/createvm.ui.h:57
 msgid "A_utomatically detect from the installation media / source"
-msgstr ""
+msgstr "Rileva a_utomaticamente dalla sorgente o dal supporto di installazione"
 
 #: ../ui/createvm.ui.h:58
 msgid "Install"
@@ -5527,7 +5533,7 @@ msgstr "Pers_onalizzare la configurazione prima di installare"
 
 #: ../ui/createvm.ui.h:69
 msgid "Install:"
-msgstr ""
+msgstr "Installazione:"
 
 #: ../ui/createvm.ui.h:70
 msgid "Memory:"
@@ -6436,7 +6442,7 @@ msgstr "Origine _rete:"
 
 #: ../ui/oslist.ui.h:1
 msgid "Include end of life operating systems"
-msgstr ""
+msgstr "Includi sistemi operativi fuori supporto"
 
 #: ../ui/preferences.ui.h:1
 msgid "Preferences"
@@ -6591,8 +6597,9 @@ msgid "_Resize guest with window:"
 msgstr "_Ridimensionare guest con la finestra:"
 
 #: ../ui/preferences.ui.h:35
+#, fuzzy
 msgid "SPICE _USB Redirection:"
-msgstr ""
+msgstr "Redirezione _USB di Spice:"
 
 #: ../ui/preferences.ui.h:36
 msgid "<b>Graphical Consoles</b>"
