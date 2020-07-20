@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-07-17 06:10+0000\n"
-"PO-Revision-Date: 2020-07-15 13:01+0000\n"
+"PO-Revision-Date: 2020-07-17 10:32+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2859,13 +2859,7 @@ msgid "Unknown"
 msgstr "Nieznane"
 
 #: virtManager/connection.py:601
-#, fuzzy, python-format
-#| msgid ""
-#| "%(object)s rename failed. Attempting to recover also failed.\n"
-#| "\n"
-#| "Original error: %(origerror)s\n"
-#| "\n"
-#| "Recover error: %s"
+#, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
@@ -2878,7 +2872,7 @@ msgstr ""
 "\n"
 "Pierwotny błąd: %(origerror)s\n"
 "\n"
-"Błąd przywrócenia: %s"
+"Błąd przywrócenia: %(recovererror)s"
 
 #: virtManager/createconn.py:37
 #, python-format
@@ -3259,10 +3253,8 @@ msgid "Invalid guest name"
 msgstr "Nieprawidłowa nazwa gościa"
 
 #: virtManager/createvm.py:1745
-#, fuzzy
-#| msgid "Network device required for %s install."
 msgid "Network device required for URL install."
-msgstr "Dla instalacji %s wymagane jest urządzenie sieciowe."
+msgstr "Dla instalacji przez adres URL wymagane jest urządzenie sieciowe."
 
 #: virtManager/createvm.py:1823
 msgid "Detecting..."
@@ -3974,25 +3966,27 @@ msgid "Error refreshing snapshot list: %s"
 msgstr "Błąd podczas odświeżania listy migawek: %s"
 
 #: virtManager/details/snapshots.py:456
-#, fuzzy, python-format
-#| msgid "<span size='small'>Warning: %s</span>"
+#, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s (External)</span>"
-msgstr "<span size='small'>Ostrzeżenie: %s</span>"
+msgstr ""
+"%(vm)s\n"
+"<span size='small'>Stan maszyny wirtualnej: %(state)s (zewnętrzne)</span>"
 
 #: virtManager/details/snapshots.py:461
-#, fuzzy, python-format
-#| msgid "<span size='small'>Warning: %s</span>"
+#, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s</span>"
-msgstr "<span size='small'>Ostrzeżenie: %s</span>"
+msgstr ""
+"%(vm)s\n"
+"<span size='small'>Stan maszyny wirtualnej: %(state)s</span>"
 
 #: virtManager/details/snapshots.py:523
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
-msgstr ""
+msgstr "<b>Migawka „%(name)s”:</b>"
 
 #: virtManager/details/snapshots.py:543
 msgid "External disk and memory"
@@ -4023,28 +4017,22 @@ msgstr ""
 "jest wykonanie migawki uruchomionego lub wyłączonego systemu."
 
 #: virtManager/details/snapshots.py:660
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
-#| "changes since the last snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"Na pewno uruchomić migawkę „%(name)s”? Wszystkie zmiany na %(changetype)s od "
+"Na pewno uruchomić migawkę „%(name)s”? Wszystkie zmiany na dysku od "
 "utworzenia ostatniej migawki zostaną odrzucone."
 
 #: virtManager/details/snapshots.py:664
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%(name)s'? All %(changetype)s "
-#| "changes since the last snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"Na pewno uruchomić migawkę „%(name)s”? Wszystkie zmiany na %(changetype)s od "
-"utworzenia ostatniej migawki zostaną odrzucone."
+"Na pewno uruchomić migawkę „%(name)s”? Wszystkie zmiany na dysku i "
+"konfiguracji od utworzenia ostatniej migawki zostaną odrzucone."
 
 #: virtManager/details/snapshots.py:675
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -5901,10 +5889,9 @@ msgid "Invalid name for new guest: %s"
 msgstr "Nieprawidłowa nazwa nowego gościa: %s"
 
 #: virtinst/cloner.py:163
-#, fuzzy, python-format
-#| msgid "Could not use path '%s' for cloning"
+#, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Nie można użyć ścieżki „%s” do sklonowania"
+msgstr "Nie można użyć ścieżki „%(path)s” do sklonowania: %(error)s"
 
 #: virtinst/cloner.py:283
 msgid "Original guest name or XML is required."
