@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-13 19:45+0000\n"
+"POT-Creation-Date: 2020-07-14 15:39+0000\n"
 "PO-Revision-Date: 2020-06-09 02:40+0000\n"
 "Last-Translator: Seungyeon Choi <p@ij.rs>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
@@ -561,7 +561,7 @@ msgstr "_Virt 종류:"
 msgid "Architecture options"
 msgstr "아키텍처 옵션"
 
-#: ui/createvm.ui:776 virtManager/details/details.py:771
+#: ui/createvm.ui:776 virtManager/details/details.py:784
 #: virtManager/manager.py:330 virtManager/oslist.py:65
 msgid "Name"
 msgstr "이름"
@@ -707,7 +707,7 @@ msgstr "C_PU들"
 msgid "(Insert host mem)"
 msgstr "(호스트 메모리 입력)"
 
-#: ui/createvm.ui:1978 virtManager/details/details.py:2496
+#: ui/createvm.ui:1978 virtManager/details/details.py:2512
 msgid "Memory"
 msgstr "메모리"
 
@@ -796,7 +796,7 @@ msgstr "검색..."
 msgid "Backing store"
 msgstr "백업 저장소"
 
-#: ui/delete.ui:9 virtManager/delete.py:285
+#: ui/delete.ui:9 virtManager/delete.py:286
 msgid "Delete Virtual Machine"
 msgstr "가상 머신 삭제"
 
@@ -2026,7 +2026,7 @@ msgid "Show the graphical console"
 msgstr "그래픽 콘솔 표시"
 
 #: ui/vmwindow.ui:305 virtManager/addhardware.py:251
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:228
 msgid "Console"
 msgstr "콘솔"
 
@@ -2087,7 +2087,7 @@ msgid "_Login"
 msgstr "로그인(_L)"
 
 #: ui/vmwindow.ui:723 virtManager/addhardware.py:243
-#: virtManager/details/details.py:207
+#: virtManager/details/details.py:218
 msgid "Serial"
 msgstr "직렬"
 
@@ -2110,7 +2110,7 @@ msgstr ""
 msgid "Error launching 'About' dialog: %s"
 msgstr "'정보' 대화 상자를 시작하는 도중 오류 발생: %s"
 
-#: virtManager/addhardware.py:175 virtManager/details/details.py:644
+#: virtManager/addhardware.py:175 virtManager/details/details.py:657
 msgid "Hardware"
 msgstr "하드웨어"
 
@@ -2129,7 +2129,7 @@ msgid "Network"
 msgstr "네트워크"
 
 #: virtManager/addhardware.py:236 virtManager/addhardware.py:1092
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:213
 msgid "Input"
 msgstr "입력"
 
@@ -2147,11 +2147,11 @@ msgstr "그래픽"
 msgid "Sound"
 msgstr "사운드"
 
-#: virtManager/addhardware.py:247 virtManager/details/details.py:212
+#: virtManager/addhardware.py:247 virtManager/details/details.py:223
 msgid "Parallel"
 msgstr "병렬"
 
-#: virtManager/addhardware.py:253 virtManager/details/details.py:226
+#: virtManager/addhardware.py:253 virtManager/details/details.py:237
 msgid "Channel"
 msgstr "채널"
 
@@ -2179,8 +2179,8 @@ msgstr "비디오"
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt 버전이 비디오 장치를 지원하지 않음"
 
-#: virtManager/addhardware.py:273 virtManager/details/details.py:265
-#: virtManager/lib/libvirtenummap.py:114
+#: virtManager/addhardware.py:273 virtManager/details/details.py:278
+#: virtManager/lib/libvirtenummap.py:113
 msgid "Watchdog"
 msgstr "와치독"
 
@@ -2189,7 +2189,7 @@ msgid "Filesystem"
 msgstr "파일 시스템"
 
 #: virtManager/addhardware.py:277 virtManager/addhardware.py:1104
-#: virtManager/details/details.py:263
+#: virtManager/details/details.py:276
 msgid "Smartcard"
 msgstr "스마트 카드"
 
@@ -2201,12 +2201,12 @@ msgstr "USB 리디렉션"
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:283 virtManager/details/details.py:255
+#: virtManager/addhardware.py:283 virtManager/details/details.py:268
 msgid "RNG"
 msgstr "RNG"
 
 #: virtManager/addhardware.py:284 virtManager/addhardware.py:1112
-#: virtManager/details/details.py:262
+#: virtManager/details/details.py:275
 msgid "Panic Notifier"
 msgstr "Panic Notifier"
 
@@ -2214,7 +2214,7 @@ msgstr "Panic Notifier"
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr ""
 
-#: virtManager/addhardware.py:287 virtManager/details/details.py:264
+#: virtManager/addhardware.py:287 virtManager/details/details.py:277
 msgid "VirtIO VSOCK"
 msgstr ""
 
@@ -2265,7 +2265,7 @@ msgstr "Spice 포트"
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:469 virtManager/details/details.py:2621
+#: virtManager/addhardware.py:469 virtManager/details/details.py:2637
 msgid "Floppy"
 msgstr "플로피"
 
@@ -2520,7 +2520,7 @@ msgstr "임의 번호 생성기"
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1118 virtManager/details/details.py:2248
+#: virtManager/addhardware.py:1118 virtManager/details/details.py:2261
 #, python-format
 msgid "%s Device"
 msgstr "%s 장치"
@@ -2621,11 +2621,11 @@ msgstr ""
 "복제할 차단 장치는 libvirt 관리 스토리지\n"
 "볼륨이어야 합니다."
 
-#: virtManager/clone.py:63 virtManager/delete.py:569
+#: virtManager/clone.py:63 virtManager/delete.py:570
 msgid "No write access to parent directory."
 msgstr "부모 디렉토리에 대한 쓰기 권한이 없습니다."
 
-#: virtManager/clone.py:65 virtManager/delete.py:567
+#: virtManager/clone.py:65 virtManager/delete.py:568
 msgid "Path does not exist."
 msgstr "경로가 존재하지 않습니다."
 
@@ -2655,49 +2655,75 @@ msgstr "공유 가능"
 msgid "Error launching clone dialog: %s"
 msgstr ""
 
-#: virtManager/clone.py:292 virtManager/clone.py:548
+#: virtManager/clone.py:292 virtManager/clone.py:561
 msgid "Details..."
 msgstr "상세정보..."
 
 #: virtManager/clone.py:320
-msgid "Usermode"
+#, fuzzy, python-format
+#| msgid "Usermode"
+msgid "Usermode (%(mac)s)"
 msgstr "사용자 모드"
 
-#: virtManager/clone.py:336
-msgid "Virtual Network"
-msgstr "가상 네트워크"
+#: virtManager/clone.py:330
+#, fuzzy, python-format
+#| msgid "%(mode)s to %(device)s"
+msgid "%(netmode)s (%(mac)s)"
+msgstr "%(mode)s - %(device)s"
 
-#: virtManager/clone.py:409
+#: virtManager/clone.py:335
+#, fuzzy, python-format
+#| msgid "Virtual Network is not active."
+msgid "Virtual Network %(netdevice)s (%(mac)s)"
+msgstr "가상 네트워크가 활성화되지 않았습니다."
+
+#: virtManager/clone.py:340
+#, fuzzy, python-format
+#| msgid "_Virtual Networks"
+msgid "Virtual Network (%(mac)s)"
+msgstr "가상 네트워크(_V)"
+
+#: virtManager/clone.py:346
+#, python-format
+msgid "%(nettype)s %(netdevice)s (%(mac)s)"
+msgstr ""
+
+#: virtManager/clone.py:352
+#, python-format
+msgid "%(nettype)s (%(mac)s)"
+msgstr ""
+
+#: virtManager/clone.py:422
 msgid "Nothing to clone."
 msgstr "복제할 것이 없습니다."
 
-#: virtManager/clone.py:540
+#: virtManager/clone.py:553
 msgid "Clone this disk"
 msgstr "이 디스크 복제"
 
-#: virtManager/clone.py:544
+#: virtManager/clone.py:557
 #, python-format
 msgid "Share disk with %s"
 msgstr "%s와 디스크 공유"
 
-#: virtManager/clone.py:556
+#: virtManager/clone.py:569
 msgid "Storage cannot be shared or cloned."
 msgstr "저장소를 공유하거나 복제할 수 없습니다."
 
-#: virtManager/clone.py:614
+#: virtManager/clone.py:627
 msgid "One or more disks cannot be cloned or shared."
 msgstr "하나 이상의 디스크를 공유 또는 복제할 수 없습니다."
 
-#: virtManager/clone.py:699
+#: virtManager/clone.py:712
 #, python-format
 msgid "Error changing MAC address: %s"
 msgstr "MAC 주소 변경 중 오류 발생: %s  "
 
-#: virtManager/clone.py:725
+#: virtManager/clone.py:738
 msgid "Cloning will overwrite the existing file"
 msgstr "복제는 기존 파일을 덮어쓸 것임"
 
-#: virtManager/clone.py:727
+#: virtManager/clone.py:740
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2705,16 +2731,16 @@ msgstr ""
 "기존 이미지를 사용하면 복제 과정에서 해당 경로를 덮어쓰게 됩니다. 이 경로를 "
 "사용하겠습니까?"
 
-#: virtManager/clone.py:739
+#: virtManager/clone.py:752
 #, python-format
 msgid "Error changing storage path: %s"
 msgstr "저장 경로를 변경하는 도중 오류 발생: %s"
 
-#: virtManager/clone.py:791
+#: virtManager/clone.py:804
 msgid "Skipping disks may cause data to be overwritten."
 msgstr "디스크를 생략하면 데이터를 덮어쓸 수 있습니다."
 
-#: virtManager/clone.py:792
+#: virtManager/clone.py:805
 #, python-format
 msgid ""
 "The following disk devices will not be cloned:\n"
@@ -2727,24 +2753,28 @@ msgstr ""
 "%s\n"
 "새로운 게스트를 실행하면 이 디스크 이미지에 있는 정보를 덮어쓰게 될 것입니다."
 
-#: virtManager/clone.py:809
+#: virtManager/clone.py:822
 #, fuzzy, python-format
 #| msgid "Error creating virtual machine clone '%s': %s"
-msgid "Error creating virtual machine clone '%s'"
+msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "가상 머신 복제 '%s' 생성 중 오류 발생 : %s"
 
-#: virtManager/clone.py:823 virtManager/migrate.py:382
+#: virtManager/clone.py:838 virtManager/migrate.py:382
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "입력 검증 중 해결 할 수 없는 오류 발생: %s"
 
-#: virtManager/clone.py:828
+#: virtManager/clone.py:843
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "가상 머신 복제 '%s' 생성"
 
-#: virtManager/clone.py:832
-msgid " and selected storage (this may take a while)"
+#: virtManager/clone.py:847
+#, fuzzy, python-format
+#| msgid " and selected storage (this may take a while)"
+msgid ""
+"Creating virtual machine clone '%s' and selected storage (this may take a "
+"while)"
 msgstr "그리고 선택된 저장소(시간이 걸릴 수 있습니다.)"
 
 #: virtManager/config.py:144
@@ -2791,22 +2821,27 @@ msgstr "연결 해제됨"
 msgid "Connecting"
 msgstr "연결 중"
 
-#: virtManager/connection.py:513 virtManager/details/details.py:1372
-#: virtManager/details/details.py:1869 virtManager/details/details.py:1888
-#: virtManager/details/details.py:2092 virtManager/device/gfxdetails.py:267
-#: virtManager/device/gfxdetails.py:269 virtManager/lib/libvirtenummap.py:90
+#: virtManager/connection.py:513 virtManager/details/details.py:1385
+#: virtManager/details/details.py:1882 virtManager/details/details.py:1901
+#: virtManager/details/details.py:2105 virtManager/device/gfxdetails.py:267
+#: virtManager/device/gfxdetails.py:269 virtManager/lib/libvirtenummap.py:89
 msgid "Unknown"
 msgstr "알 수 없음"
 
 #: virtManager/connection.py:601
-#, fuzzy, python-format
+#, fuzzy
 #| msgid ""
 #| "%s rename failed. Attempting to recover also failed.\n"
 #| "\n"
 #| "Original error: %s\n"
 #| "\n"
 #| "Recover error: %s"
-msgid "%s rename failed. Attempting to recover also failed"
+msgid ""
+"%(object)s rename failed. Attempting to recover also failed.\n"
+"\n"
+"Original error: %(origerror)s\n"
+"\n"
+"Recover error: %s"
 msgstr ""
 "%s 이름을 다시 지정하는 데 실패했습니다. 복구 시도도 실패했습니다.\n"
 "\n"
@@ -2962,12 +2997,15 @@ msgid "Error launching create dialog: %s"
 msgstr ""
 
 #: virtManager/createvm.py:309
-msgid "Error"
+#, fuzzy, python-format
+#| msgid "Error"
+msgid "Error: %s"
 msgstr "오류"
 
 #: virtManager/createvm.py:315 virtManager/createvm.py:320
-msgid "Warning"
-msgstr "경고"
+#, python-format
+msgid "<span size='small'>Warning: %s</span>"
+msgstr ""
 
 #: virtManager/createvm.py:493
 #, python-format
@@ -2981,24 +3019,25 @@ msgid "Libvirt version does not support remote URL installs."
 msgstr "Libvirt 버전은 원격 URL 설치를 지원하지 않습니다."
 
 #: virtManager/createvm.py:526
-#, python-format
-msgid "%s installs not available for paravirt guests."
+#, fuzzy
+#| msgid "%s installs not available for paravirt guests."
+msgid "CDROM/ISO installs not available for paravirt guests."
 msgstr "%s 설치가 paravirt 게스트에서 사용 불가능합니다."
 
-#: virtManager/createvm.py:530
+#: virtManager/createvm.py:529
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "아키텍처 '%s'을(를) 설치할 수 없습니다."
 
-#: virtManager/createvm.py:545
+#: virtManager/createvm.py:544
 msgid "No install methods available for this connection."
 msgstr "이 연결에 대해 사용 가능한 설치 방식이 없습니다. "
 
-#: virtManager/createvm.py:578
+#: virtManager/createvm.py:577
 msgid "No hypervisor options were found for this connection."
 msgstr "이 연결에 대한 하이퍼바이저 옵션을 찾을 수 없습니다."
 
-#: virtManager/createvm.py:583
+#: virtManager/createvm.py:582
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -3006,7 +3045,7 @@ msgstr ""
 "이는 시스템에서 QEMU 또는 KVM이 설치되지 않거나 KVM 커널이 로드되지 않음을 의"
 "미합니다."
 
-#: virtManager/createvm.py:607
+#: virtManager/createvm.py:606
 msgid ""
 "Host is not advertising support for full virtualization. Install options may "
 "be limited."
@@ -3014,7 +3053,7 @@ msgstr ""
 "호스트에서 전체 가상화를 위한 지원을 광고하지 않습니다. 설치 옵션이 제한될 "
 "수 있습니다."
 
-#: virtManager/createvm.py:613
+#: virtManager/createvm.py:612
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -3023,192 +3062,196 @@ msgstr ""
 "이 로드되지 않았음을 의미하는 것일 수 있습니다. 가상 머신이 제대로 실행되지 "
 "않는것 같습니다."
 
-#: virtManager/createvm.py:655
+#: virtManager/createvm.py:654
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "호스트에 최대 %(maxmem)s 까지 사용 가능"
 
-#: virtManager/createvm.py:663
-#, python-format
+#: virtManager/createvm.py:662
+#, fuzzy, python-format
+#| msgid "Up to %(numcpus)d available"
 msgid "Up to %(numcpus)d available"
-msgstr "최대 %(numcpus)d 개 사용가능"
+msgid_plural "Up to %(numcpus)d available"
+msgstr[0] "최대 %(numcpus)d 개 사용가능"
 
-#: virtManager/createvm.py:700
+#: virtManager/createvm.py:701
 msgid "No active connection to install on."
 msgstr "설치할 활성화된 연결 없음"
 
-#: virtManager/createvm.py:960 virtManager/details/details.py:1870
+#: virtManager/createvm.py:961 virtManager/details/details.py:1883
 #: virtManager/device/gfxdetails.py:87 virtinst/domcapabilities.py:223
 msgid "None"
 msgstr "없음"
 
-#: virtManager/createvm.py:974
+#: virtManager/createvm.py:975
 msgid "Local CDROM/ISO"
 msgstr "로컬 CDROM/ISO"
 
-#: virtManager/createvm.py:976
+#: virtManager/createvm.py:977
 msgid "URL Install Tree"
 msgstr "URL 설치 트리"
 
-#: virtManager/createvm.py:978
+#: virtManager/createvm.py:979
 msgid "Import existing OS image"
 msgstr "기존 OS 이미지 가져오기"
 
-#: virtManager/createvm.py:980
+#: virtManager/createvm.py:981
 msgid "Manual install"
 msgstr ""
 
-#: virtManager/createvm.py:982
+#: virtManager/createvm.py:983
 msgid "Application container"
 msgstr "애플리케이션 컨테이너"
 
-#: virtManager/createvm.py:984
+#: virtManager/createvm.py:985
 msgid "Operating system container"
 msgstr "운영 체제 컨테이너"
 
-#: virtManager/createvm.py:986
+#: virtManager/createvm.py:987
 msgid "Virtuozzo container"
 msgstr ""
 
-#: virtManager/createvm.py:1132
+#: virtManager/createvm.py:1133
 msgid "Removing disk images"
 msgstr "디스크 이미지 제거"
 
-#: virtManager/createvm.py:1133
+#: virtManager/createvm.py:1134
 msgid "Removing disk images we created for this virtual machine."
 msgstr "이 가상 머신용으로 작성한 디스크 이미지를 제거합니다."
 
-#: virtManager/createvm.py:1277
+#: virtManager/createvm.py:1278
 msgid "No network selected"
 msgstr "네트워크가 선택되지 않음"
 
-#: virtManager/createvm.py:1346
+#: virtManager/createvm.py:1347
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(max_page)d 중 %(current_page)d 단계"
 
-#: virtManager/createvm.py:1355
+#: virtManager/createvm.py:1356
 msgid "Waiting for install media / source"
 msgstr ""
 
-#: virtManager/createvm.py:1429
+#: virtManager/createvm.py:1430
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "요약 페이지를 채우는 도중 오류 발생: %s"
 
-#: virtManager/createvm.py:1475
+#: virtManager/createvm.py:1476
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "설치 매개 변수 검증 중 해결 할 수 없는 오류 발생: %s"
 
-#: virtManager/createvm.py:1496
+#: virtManager/createvm.py:1497
 msgid "You must select an OS."
 msgstr ""
 
-#: virtManager/createvm.py:1503
+#: virtManager/createvm.py:1504
 msgid "An install media selection is required."
 msgstr "설치 매체를 선택해야 합니다."
 
-#: virtManager/createvm.py:1510
+#: virtManager/createvm.py:1511
 msgid "An install tree is required."
 msgstr "설치 트리가 필요합니다."
 
-#: virtManager/createvm.py:1519
+#: virtManager/createvm.py:1520
 msgid "A storage path to import is required."
 msgstr "불러올 저장소 경로를 지정해야 합니다."
 
-#: virtManager/createvm.py:1524
+#: virtManager/createvm.py:1525
 msgid "The import path must point to an existing storage."
 msgstr ""
 
-#: virtManager/createvm.py:1530
+#: virtManager/createvm.py:1531
 msgid "An application path is required."
 msgstr "애플리케이션 경로가 필요합니다."
 
-#: virtManager/createvm.py:1535
+#: virtManager/createvm.py:1536
 msgid "An OS directory path is required."
 msgstr "OS 디렉토리 경로가 필요합니다."
 
-#: virtManager/createvm.py:1544
+#: virtManager/createvm.py:1545
 msgid "Source URL is required"
 msgstr ""
 
-#: virtManager/createvm.py:1549
+#: virtManager/createvm.py:1550
 msgid "Please specify password for accessing source registry"
 msgstr ""
 
-#: virtManager/createvm.py:1555
+#: virtManager/createvm.py:1556
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1558
+#: virtManager/createvm.py:1559
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1563
+#: virtManager/createvm.py:1564
 msgid "OS root directory is not empty"
 msgstr ""
 
-#: virtManager/createvm.py:1564
+#: virtManager/createvm.py:1565
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
 
-#: virtManager/createvm.py:1574
+#: virtManager/createvm.py:1575
 msgid "A template name is required."
 msgstr ""
 
-#: virtManager/createvm.py:1596
+#: virtManager/createvm.py:1597
 msgid "Error setting install media location."
 msgstr "설치 매체 위치 설정 중 오류 발생."
 
-#: virtManager/createvm.py:1609
+#: virtManager/createvm.py:1610
 msgid "Error setting installer parameters."
 msgstr "설치 프로그램 매개 변수 설정 중 오류 발생."
 
-#: virtManager/createvm.py:1616
+#: virtManager/createvm.py:1617
 msgid "Error setting default name."
 msgstr "기본 이름 설정 중 오류 발생."
 
-#: virtManager/createvm.py:1707
+#: virtManager/createvm.py:1708
 msgid "Storage parameter error."
 msgstr "저장소 매개 변수 오류."
 
-#: virtManager/createvm.py:1729
+#: virtManager/createvm.py:1730
 msgid "Invalid guest name"
 msgstr "잘못된 게스트 이름"
 
-#: virtManager/createvm.py:1748
+#: virtManager/createvm.py:1749
 #, python-format
 msgid "Network device required for %s install."
 msgstr "%s 설치를 위해 네트워크 장치가 필요합니다."
 
-#: virtManager/createvm.py:1827
+#: virtManager/createvm.py:1828
 msgid "Detecting..."
 msgstr ""
 
-#: virtManager/createvm.py:1889
+#: virtManager/createvm.py:1890
 msgid "None detected"
 msgstr ""
 
-#: virtManager/createvm.py:1926
-msgid "Error starting installation: "
+#: virtManager/createvm.py:1927
+#, fuzzy, python-format
+#| msgid "Error starting installation: "
+msgid "Error starting installation: %s"
 msgstr "설치 시작 도중 오류 발생:"
 
-#: virtManager/createvm.py:1966
+#: virtManager/createvm.py:1967
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "설치를 완료할 수 없음: '%s'"
 
-#: virtManager/createvm.py:2006
+#: virtManager/createvm.py:2007
 msgid "Creating Virtual Machine"
 msgstr "가상 머신 생성"
 
-#: virtManager/createvm.py:2007
+#: virtManager/createvm.py:2008
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3216,17 +3259,17 @@ msgstr ""
 "가상 머신이 지금 생성 중 입니다. 디스크 저장소의 할당과 새로운 설치 이미지를 "
 "읽어들이는 작업을 완료하기 위해 몇 분이 필요할 것입니다."
 
-#: virtManager/createvm.py:2061
+#: virtManager/createvm.py:2062
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "예상 시간이 지나도 VM '%s'이(가) 표시되지 않습니다."
 
-#: virtManager/createvm.py:2109
+#: virtManager/createvm.py:2110
 #, python-format
 msgid "Error continue install: %s"
 msgstr "설치 계속 중 오류 발생: %s"
 
-#: virtManager/createvm.py:2122
+#: virtManager/createvm.py:2123
 msgid "Bootstraping container"
 msgstr ""
 
@@ -3268,120 +3311,120 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:203
+#: virtManager/delete.py:202
 #, fuzzy, python-format
 #| msgid "Error deleting virtual machine '%s': %s"
-msgid "Error deleting virtual machine '%s'"
+msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "가상 머신 '%s' 삭제 중 오류 발생: %s"
 
-#: virtManager/delete.py:218
+#: virtManager/delete.py:219
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "또한, 몇몇 저장소 장치 삭제 중 오류가 있었습니다:\n"
 
-#: virtManager/delete.py:222
+#: virtManager/delete.py:223
 msgid "Errors encountered while removing certain storage devices."
 msgstr "몇몇 저장소 장치 삭제 중 오류가 발생했습니다."
 
-#: virtManager/delete.py:235
+#: virtManager/delete.py:236
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "경로 '%s' 삭제 중"
 
-#: virtManager/delete.py:288
+#: virtManager/delete.py:289
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr ""
 
-#: virtManager/delete.py:292
+#: virtManager/delete.py:293
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:296
+#: virtManager/delete.py:297
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "'%s' 가상 머신 삭제 중"
 
-#: virtManager/delete.py:338
+#: virtManager/delete.py:339
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "장치 삭제 중 오류 발생: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr "이 변경 사항은 다음번 게스트 종료 후 적용됩니다."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr ""
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "실행 중인 컴퓨터에서 장치를 제거할 수 없음"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr ""
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr ""
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr ""
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "대상"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "저장소 경로"
 
-#: virtManager/delete.py:560
+#: virtManager/delete.py:561
 #, fuzzy
 #| msgid "Cannot delete iscsi share."
 msgid "Cannot delete iSCSI share."
 msgstr "iscsi 공유를 삭제할 수 없습니다."
 
-#: virtManager/delete.py:562
+#: virtManager/delete.py:563
 msgid "Cannot delete SCSI device."
 msgstr ""
 
-#: virtManager/delete.py:565
+#: virtManager/delete.py:566
 msgid "Cannot delete unmanaged remote storage."
 msgstr "관리안된 원격 저장소를 삭제할 수 없습니다."
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged block device."
 msgstr "관리안된 블럭 장치를 삭제할 수 없습니다."
 
-#: virtManager/delete.py:592
+#: virtManager/delete.py:593
 msgid "Storage is read-only."
 msgstr "저장소가 읽기 전용입니다."
 
-#: virtManager/delete.py:594
+#: virtManager/delete.py:595
 msgid "No write access to path."
 msgstr "경로에 대한 쓰기 권한이 없습니다."
 
-#: virtManager/delete.py:597
+#: virtManager/delete.py:598
 msgid "Storage is marked as shareable."
 msgstr "저장소가 공유 가능으로 표시되어 있습니다."
 
-#: virtManager/delete.py:600
+#: virtManager/delete.py:601
 msgid "Storage is a media device."
 msgstr ""
 
-#: virtManager/delete.py:611
+#: virtManager/delete.py:612
 #, python-format
 msgid ""
 "Storage is in use by the following virtual machines:\n"
@@ -3390,103 +3433,107 @@ msgstr ""
 "다음 가상 머신이 저장소를 사용중입니다:\n"
 "- '%s'"
 
-#: virtManager/details/console.py:147
+#: virtManager/details/console.py:148
 msgid "Leave fullscreen"
 msgstr "전체 화면 해제"
 
-#: virtManager/details/console.py:156
+#: virtManager/details/console.py:157
 msgid "Send key combination"
 msgstr "키 조합 전송"
 
-#: virtManager/details/console.py:280
+#: virtManager/details/console.py:281
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s/%(connection-name)s"
 
-#: virtManager/details/console.py:287
+#: virtManager/details/console.py:288
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "포인터를 해제하려면 %s를 누르십시오."
 
-#: virtManager/details/console.py:415
+#: virtManager/details/console.py:416
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "그래픽 유형 '%s'에서 자동 크기 조정을 지원하지 않습니다."
 
-#: virtManager/details/console.py:418
+#: virtManager/details/console.py:419
 msgid "Guest agent is not available."
 msgstr "게스트 에이전트를 사용할 수 없습니다."
 
-#: virtManager/details/console.py:559
+#: virtManager/details/console.py:560
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:561
+#: virtManager/details/console.py:562
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:702
+#: virtManager/details/console.py:703
 msgid "Graphical console not configured for guest"
 msgstr "게스트를 위한 그래픽 콘솔이 설정되지 않음"
 
-#: virtManager/details/console.py:709
+#: virtManager/details/console.py:710
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "그래픽 콘솔 유형 '%s'을 표시할 수 없음"
 
-#: virtManager/details/console.py:716
+#: virtManager/details/console.py:717
 msgid "Connecting to graphical console for guest"
 msgstr "게스트를 위한 그래픽 콘솔에 연결 중"
 
-#: virtManager/details/console.py:739
-msgid "Error connecting to graphical console"
+#: virtManager/details/console.py:740
+#, fuzzy, python-format
+#| msgid "Error connecting to graphical console"
+msgid ""
+"Error connecting to graphical console:\n"
+"%s"
 msgstr "그래픽 콘솔로 연결하는 도중 오류 발생"
 
-#: virtManager/details/console.py:793
+#: virtManager/details/console.py:794
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "뷰어 인증 오류: %s"
 
-#: virtManager/details/console.py:811
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "USB 리디렉션 오류"
 
-#: virtManager/details/console.py:820
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:831 virtManager/details/console.py:1019
+#: virtManager/details/console.py:832 virtManager/details/console.py:1020
 msgid "Viewer disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:922
+#: virtManager/details/console.py:923
 msgid "No text console available"
 msgstr "사용 가능한 텍스트 콘솔이 없음"
 
-#: virtManager/details/console.py:935
+#: virtManager/details/console.py:936
 #, python-format
 msgid "Text Console %d"
 msgstr "텍스트 콘솔 %d"
 
-#: virtManager/details/console.py:937
+#: virtManager/details/console.py:938
 #, python-format
 msgid "Serial %d"
 msgstr "직렬 %d"
 
-#: virtManager/details/console.py:949
+#: virtManager/details/console.py:950
 msgid "No graphical console available"
 msgstr "사용 가능한 그래픽 콘솔이 없음"
 
-#: virtManager/details/console.py:958
+#: virtManager/details/console.py:959
 msgid "Graphical Console"
 msgstr "그래픽 콘솔"
 
-#: virtManager/details/console.py:966
+#: virtManager/details/console.py:967
 msgid "virt-manager does not support more that one graphical console"
 msgstr "virt-manager에서는 두 개 이상의 그래픽 콘솔을 지원하지 않습니다."
 
@@ -3496,317 +3543,360 @@ msgstr "virt-manager에서는 두 개 이상의 그래픽 콘솔을 지원하지
 msgid "Floppy %(index)d"
 msgstr "플로피 장치"
 
-#: virtManager/details/details.py:176 virtManager/details/details.py:2619
-msgid "CDROM"
-msgstr "CDROM"
+#: virtManager/details/details.py:176
+#, fuzzy, python-format
+#| msgid "%s Redirector %s"
+msgid "%(bus)s CDROM %(index)d"
+msgstr "%s 리디렉터 %s"
 
-#: virtManager/details/details.py:178
-msgid "Disk"
-msgstr "디스크"
+#: virtManager/details/details.py:181
+#, fuzzy, python-format
+#| msgid "%s Redirector %s"
+msgid "%(bus)s Disk %(index)d"
+msgstr "%s 리디렉터 %s"
 
-#: virtManager/details/details.py:191
+#: virtManager/details/details.py:185
+#, fuzzy, python-format
+#| msgid "%s Redirector %s"
+msgid "%(bus)s %(device)s %(index)d"
+msgstr "%s 리디렉터 %s"
+
+#: virtManager/details/details.py:192
+#, fuzzy, python-format
+#| msgid "Floppy device"
+msgid "CDROM %(index)d"
+msgstr "플로피 장치"
+
+#: virtManager/details/details.py:194
+#, fuzzy, python-format
+#| msgid "Floppy device"
+msgid "Disk %(index)d"
+msgstr "플로피 장치"
+
+#: virtManager/details/details.py:195
+#, fuzzy, python-format
+#| msgid "%s Redirector %s"
+msgid "%(device)s %(index)d"
+msgstr "%s 리디렉터 %s"
+
+#: virtManager/details/details.py:202
 #, python-format
 msgid "NIC %(mac)s"
 msgstr ""
 
-#: virtManager/details/details.py:193
+#: virtManager/details/details.py:204
 msgid "NIC"
 msgstr ""
 
-#: virtManager/details/details.py:197
+#: virtManager/details/details.py:208
 msgid "Tablet"
 msgstr "타블렛"
 
-#: virtManager/details/details.py:199
+#: virtManager/details/details.py:210
 msgid "Mouse"
 msgstr "마우스"
 
-#: virtManager/details/details.py:201
+#: virtManager/details/details.py:212
 msgid "Keyboard"
 msgstr "키보드"
 
-#: virtManager/details/details.py:206
+#: virtManager/details/details.py:217
 #, fuzzy, python-format
 #| msgid "Serial %d"
 msgid "Serial %(num)d"
 msgstr "직렬 %d"
 
-#: virtManager/details/details.py:211
+#: virtManager/details/details.py:222
 #, fuzzy, python-format
 #| msgid "Parallel"
 msgid "Parallel %(num)d"
 msgstr "병렬"
 
-#: virtManager/details/details.py:216
+#: virtManager/details/details.py:227
 #, fuzzy, python-format
 #| msgid "Text Console %d"
 msgid "Console %(num)d"
 msgstr "텍스트 콘솔 %d"
 
-#: virtManager/details/details.py:222
+#: virtManager/details/details.py:233
 #, fuzzy, python-format
 #| msgid "Channel"
 msgid "Channel %(name)s"
 msgstr "채널"
 
-#: virtManager/details/details.py:225
+#: virtManager/details/details.py:236
 #, fuzzy, python-format
 #| msgid "Channel"
 msgid "Channel %(type)s"
 msgstr "채널"
 
-#: virtManager/details/details.py:230
+#: virtManager/details/details.py:241
 #, python-format
 msgid "Display %s"
 msgstr "디스플레이 %s"
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:243
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%s 리디렉터 %s"
 
-#: virtManager/details/details.py:239
+#: virtManager/details/details.py:250
 #, python-format
 msgid "Sound %s"
 msgstr ""
 
-#: virtManager/details/details.py:241
+#: virtManager/details/details.py:252
 #, python-format
 msgid "Video %s"
 msgstr "비디오 %s"
 
-#: virtManager/details/details.py:243
+#: virtManager/details/details.py:254
 #, fuzzy, python-format
 #| msgid "Filesystem %s"
 msgid "Filesystem %(path)s"
 msgstr "파일 시스템 %s"
 
-#: virtManager/details/details.py:248
+#: virtManager/details/details.py:258
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr ""
 
-#: virtManager/details/details.py:254
+#: virtManager/details/details.py:262
+#, python-format
+msgid "Controller %(controller)s"
+msgstr ""
+
+#: virtManager/details/details.py:267
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "RNG %(device)s"
 msgstr "CDROM 장치"
 
-#: virtManager/details/details.py:258
+#: virtManager/details/details.py:271
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "TPM %(device)s"
 msgstr "CDROM 장치"
 
-#: virtManager/details/details.py:259
+#: virtManager/details/details.py:272
 #, python-format
 msgid "TPM v%(version)s"
 msgstr ""
 
-#: virtManager/details/details.py:586
+#: virtManager/details/details.py:599
 msgid "_Add Hardware"
 msgstr "하드웨어 추가(_A)"
 
-#: virtManager/details/details.py:594
+#: virtManager/details/details.py:607
 msgid "_Remove Hardware"
 msgstr "하드웨어 제거(_R)"
 
-#: virtManager/details/details.py:715
+#: virtManager/details/details.py:728
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt 또는 하이퍼바이저가 UEFI를 지원하지 않습니다."
 
-#: virtManager/details/details.py:718
+#: virtManager/details/details.py:731
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirt가 호스트에 설치된 UEFI/OVMF 펌웨어 이미지를 감지하지 못했습니다."
 
-#: virtManager/details/details.py:723
+#: virtManager/details/details.py:736
 msgid "UEFI not found"
 msgstr "UEFI를 찾을 수 없음"
 
-#: virtManager/details/details.py:772
+#: virtManager/details/details.py:785
 msgid "Version"
 msgstr "버전"
 
-#: virtManager/details/details.py:834
+#: virtManager/details/details.py:847
 msgid "Application Default"
 msgstr "애플리케이션 기본값"
 
-#: virtManager/details/details.py:836
+#: virtManager/details/details.py:849
 msgid "Hypervisor Default"
 msgstr "하이퍼바이저 기본값"
 
-#: virtManager/details/details.py:838
+#: virtManager/details/details.py:851
 msgid "Clear CPU configuration"
 msgstr "CPU 설정 지우기"
 
-#: virtManager/details/details.py:864
+#: virtManager/details/details.py:877
 msgid "Disk bus:"
 msgstr ""
 
-#: virtManager/details/details.py:998
+#: virtManager/details/details.py:1011
 msgid "Remove this device from the virtual machine"
 msgstr "가상 머신에서 이 장치 제거"
 
-#: virtManager/details/details.py:1056
+#: virtManager/details/details.py:1069
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "하드웨어 페이지를 새로고치는 중 오류 발생: %s"
 
-#: virtManager/details/details.py:1097
+#: virtManager/details/details.py:1110
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "하드웨어 대화를 시작하는 도중 오류 발생: %s"
 
-#: virtManager/details/details.py:1102
+#: virtManager/details/details.py:1115
 msgid "Are you sure you want to remove this device?"
 msgstr "이 장치를 삭제하겠습니까?"
 
-#: virtManager/details/details.py:1440
+#: virtManager/details/details.py:1453
 #, python-format
 msgid "Error applying changes: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1565
+#: virtManager/details/details.py:1578
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "autostart 값 변경 중 오류 발상: %s"
 
-#: virtManager/details/details.py:1583
+#: virtManager/details/details.py:1596
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "커널 경로를 지정하지 않고 initrd를 설정할 수 없음"
 
-#: virtManager/details/details.py:1586
+#: virtManager/details/details.py:1599
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "커널 경로를 지정하지 않고 커널 인수를 설정할 수 없음"
 
-#: virtManager/details/details.py:1592
+#: virtManager/details/details.py:1605
 msgid "An init path must be specified"
 msgstr "init 경로를 지정해야 함"
 
-#: virtManager/details/details.py:1610 virtManager/device/addstorage.py:212
+#: virtManager/details/details.py:1623 virtManager/device/addstorage.py:212
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "%s 디스크는 이미 다른 게스트 %s에서 사용 중입니다."
 
-#: virtManager/details/details.py:1614 virtManager/device/addstorage.py:216
+#: virtManager/details/details.py:1627 virtManager/device/addstorage.py:216
 msgid "Do you really want to use the disk?"
 msgstr "정말로 디스크를 사용하겠습니까? "
 
-#: virtManager/details/details.py:1945
+#: virtManager/details/details.py:1958
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: virtManager/details/details.py:1957
+#: virtManager/details/details.py:1970
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s 읽기"
 
-#: virtManager/details/details.py:1958
+#: virtManager/details/details.py:1971
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr ""
 
-#: virtManager/details/details.py:1961
+#: virtManager/details/details.py:1974
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s 입력"
 
-#: virtManager/details/details.py:1962
+#: virtManager/details/details.py:1975
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr ""
 
-#: virtManager/details/details.py:1964 virtManager/details/details.py:1965
-#: virtManager/details/details.py:1966 virtManager/details/details.py:1967
+#: virtManager/details/details.py:1977 virtManager/details/details.py:1978
+#: virtManager/details/details.py:1979 virtManager/details/details.py:1980
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:240
 msgid "Disabled"
 msgstr "비활성화됨"
 
-#: virtManager/details/details.py:1975
+#: virtManager/details/details.py:1988
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "전체 %(total-memory)s 중 %(current-memory)s"
 
-#: virtManager/details/details.py:2160
+#: virtManager/details/details.py:2173
 msgid "Absolute Movement"
 msgstr "절대 움직임"
 
-#: virtManager/details/details.py:2162
+#: virtManager/details/details.py:2175
 msgid "Relative Movement"
 msgstr "상대 움직임"
 
-#: virtManager/details/details.py:2171 virtManager/details/details.py:2358
-#: virtManager/details/details.py:2361
+#: virtManager/details/details.py:2184 virtManager/details/details.py:2371
+#: virtManager/details/details.py:2374
 msgid "Hypervisor does not support removing this device"
 msgstr "하이퍼바이저에서 이 장치 제거를 지원하지 않습니다."
 
-#: virtManager/details/details.py:2240
+#: virtManager/details/details.py:2253
 msgid "Serial Device"
 msgstr "직렬 장치"
 
-#: virtManager/details/details.py:2242
+#: virtManager/details/details.py:2255
 msgid "Parallel Device"
 msgstr "병렬 장치"
 
-#: virtManager/details/details.py:2244
+#: virtManager/details/details.py:2257
 msgid "Console Device"
 msgstr "콘솔 장치"
 
-#: virtManager/details/details.py:2246
+#: virtManager/details/details.py:2259
 msgid "Channel Device"
 msgstr "채널 장치"
 
-#: virtManager/details/details.py:2256
+#: virtManager/details/details.py:2269
 msgid "Primary Console"
 msgstr "1차 콘솔"
 
-#: virtManager/details/details.py:2312
+#: virtManager/details/details.py:2325
 #, python-format
 msgid "Physical %s Device"
 msgstr "물리적 %s 장치"
 
-#: virtManager/details/details.py:2342
+#: virtManager/details/details.py:2355
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2371 virtManager/details/details.py:2381
+#: virtManager/details/details.py:2381
+#, fuzzy, python-format
+#| msgid "%(mode)s to %(device)s"
+msgid "%(device)s on %(address)s"
+msgstr "%(mode)s - %(device)s"
+
+#: virtManager/details/details.py:2387 virtManager/details/details.py:2397
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2490
+#: virtManager/details/details.py:2506
 msgid "Overview"
 msgstr "개요"
 
-#: virtManager/details/details.py:2491
+#: virtManager/details/details.py:2507
 msgid "OS information"
 msgstr "OS 정보"
 
-#: virtManager/details/details.py:2493
+#: virtManager/details/details.py:2509
 msgid "Performance"
 msgstr "성능"
 
-#: virtManager/details/details.py:2495
+#: virtManager/details/details.py:2511
 msgid "CPUs"
 msgstr "CPU"
 
-#: virtManager/details/details.py:2497
+#: virtManager/details/details.py:2513
 msgid "Boot Options"
 msgstr "부팅 옵션"
 
-#: virtManager/details/details.py:2618
+#: virtManager/details/details.py:2634
 msgid "Hard Disk"
 msgstr "하드 디스크"
 
-#: virtManager/details/details.py:2620
+#: virtManager/details/details.py:2635
+msgid "CDROM"
+msgstr "CDROM"
+
+#: virtManager/details/details.py:2636
 msgid "Network (PXE)"
 msgstr "네트워크(PXE)"
 
-#: virtManager/details/details.py:2632
+#: virtManager/details/details.py:2648
 msgid "No bootable devices"
 msgstr "부팅 가능 장치가 없음"
 
@@ -3838,7 +3928,7 @@ msgstr ""
 msgid "Error validating snapshot: %s"
 msgstr "스냅샷 검증 중 오류 발생: %s"
 
-#: virtManager/details/snapshots.py:270 virtManager/lib/libvirtenummap.py:117
+#: virtManager/details/snapshots.py:270 virtManager/lib/libvirtenummap.py:116
 msgid "Creating snapshot"
 msgstr "스냅샷 생성 중"
 
@@ -3997,12 +4087,18 @@ msgstr ""
 "요청된 자격 증명을 VNC 서버에 제공할 수 없습니다.\n"
 " 자격 증명 유형 %s이(가) 지원되지 않습니다."
 
-#: virtManager/details/viewers.py:464 virtManager/details/viewers.py:469
+#: virtManager/details/viewers.py:464
+#, fuzzy, python-format
+#| msgid "Error opening socket path '%s': %s"
+msgid "Error opening socket path '%(path)s': %(error)s"
+msgstr "소켓 경로 '%s'를 여는 도중 오류 발생: %s"
+
+#: virtManager/details/viewers.py:471
 #, python-format
 msgid "Error opening socket path '%s'"
 msgstr "소켓 경로 '%s'를 여는 도중 오류 발생"
 
-#: virtManager/details/viewers.py:575
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
@@ -4171,7 +4267,7 @@ msgstr ""
 #: virtManager/device/netlist.py:214
 #, fuzzy, python-format
 #| msgid "Could not start virtual network '%s': %s"
-msgid "Could not start virtual network '%s'"
+msgid "Could not start virtual network '%(device)s': %(error)s"
 msgstr "'%s' 가상 네트워크를 시작할 수 없음: %s"
 
 #: virtManager/device/vsockdetails.py:61
@@ -4470,109 +4566,105 @@ msgstr ""
 msgid "Inspection found no operating systems."
 msgstr ""
 
-#: virtManager/lib/libvirtenummap.py:40
-msgid "VIR_CONNECT_DOMAIN_EVENT_AGENT_LIFECYCLE_STATE_[^_]+$"
-msgstr ""
-
-#: virtManager/lib/libvirtenummap.py:74
+#: virtManager/lib/libvirtenummap.py:73
 msgid "Running"
 msgstr "실행 중"
 
-#: virtManager/lib/libvirtenummap.py:76
+#: virtManager/lib/libvirtenummap.py:75
 msgid "Paused"
 msgstr "일시 정지"
 
-#: virtManager/lib/libvirtenummap.py:78
+#: virtManager/lib/libvirtenummap.py:77
 msgid "Shutting Down"
 msgstr "종료 중"
 
-#: virtManager/lib/libvirtenummap.py:81 virtManager/lib/libvirtenummap.py:128
+#: virtManager/lib/libvirtenummap.py:80 virtManager/lib/libvirtenummap.py:127
 msgid "Saved"
 msgstr "저장됨 "
 
-#: virtManager/lib/libvirtenummap.py:83
+#: virtManager/lib/libvirtenummap.py:82
 msgid "Shutoff"
 msgstr "종료"
 
-#: virtManager/lib/libvirtenummap.py:85 virtManager/lib/libvirtenummap.py:106
-#: virtManager/lib/libvirtenummap.py:118 virtManager/lib/libvirtenummap.py:126
+#: virtManager/lib/libvirtenummap.py:84 virtManager/lib/libvirtenummap.py:105
+#: virtManager/lib/libvirtenummap.py:117 virtManager/lib/libvirtenummap.py:125
 msgid "Crashed"
 msgstr "충돌"
 
-#: virtManager/lib/libvirtenummap.py:87
+#: virtManager/lib/libvirtenummap.py:86
 msgid "Suspended"
 msgstr "중단됨"
 
-#: virtManager/lib/libvirtenummap.py:98
+#: virtManager/lib/libvirtenummap.py:97
 msgid "Booted"
 msgstr "부팅됨"
 
-#: virtManager/lib/libvirtenummap.py:99 virtManager/lib/libvirtenummap.py:127
+#: virtManager/lib/libvirtenummap.py:98 virtManager/lib/libvirtenummap.py:126
 msgid "Migrated"
 msgstr "이식됨"
 
-#: virtManager/lib/libvirtenummap.py:100
+#: virtManager/lib/libvirtenummap.py:99
 msgid "Restored"
 msgstr "복구됨"
 
-#: virtManager/lib/libvirtenummap.py:101 virtManager/lib/libvirtenummap.py:115
-#: virtManager/lib/libvirtenummap.py:130
+#: virtManager/lib/libvirtenummap.py:100 virtManager/lib/libvirtenummap.py:114
+#: virtManager/lib/libvirtenummap.py:129
 msgid "From snapshot"
 msgstr "시작 스냅샷"
 
-#: virtManager/lib/libvirtenummap.py:102
+#: virtManager/lib/libvirtenummap.py:101
 msgid "Unpaused"
 msgstr "일시 정지 해제"
 
-#: virtManager/lib/libvirtenummap.py:103
+#: virtManager/lib/libvirtenummap.py:102
 msgid "Migration canceled"
 msgstr "이식이 취소됨"
 
-#: virtManager/lib/libvirtenummap.py:104
+#: virtManager/lib/libvirtenummap.py:103
 msgid "Save canceled"
 msgstr "저장이 취소됨"
 
-#: virtManager/lib/libvirtenummap.py:105
+#: virtManager/lib/libvirtenummap.py:104
 msgid "Event wakeup"
 msgstr "이벤트 시동"
 
-#: virtManager/lib/libvirtenummap.py:109 virtManager/lib/libvirtenummap.py:121
+#: virtManager/lib/libvirtenummap.py:108 virtManager/lib/libvirtenummap.py:120
 msgid "User"
 msgstr "사용자"
 
-#: virtManager/lib/libvirtenummap.py:110
+#: virtManager/lib/libvirtenummap.py:109
 msgid "Migrating"
 msgstr "이식 중"
 
-#: virtManager/lib/libvirtenummap.py:111
+#: virtManager/lib/libvirtenummap.py:110
 msgid "Saving"
 msgstr "저장 중"
 
-#: virtManager/lib/libvirtenummap.py:112
+#: virtManager/lib/libvirtenummap.py:111
 msgid "Dumping"
 msgstr "덤프 중"
 
-#: virtManager/lib/libvirtenummap.py:113
+#: virtManager/lib/libvirtenummap.py:112
 msgid "I/O error"
 msgstr "I/O 오류"
 
-#: virtManager/lib/libvirtenummap.py:116
+#: virtManager/lib/libvirtenummap.py:115
 msgid "Shutting down"
 msgstr "종료 중"
 
-#: virtManager/lib/libvirtenummap.py:124
+#: virtManager/lib/libvirtenummap.py:123
 msgid "Shut Down"
 msgstr "종료"
 
-#: virtManager/lib/libvirtenummap.py:125
+#: virtManager/lib/libvirtenummap.py:124
 msgid "Destroyed"
 msgstr "제거됨"
 
-#: virtManager/lib/libvirtenummap.py:129
+#: virtManager/lib/libvirtenummap.py:128
 msgid "Failed"
 msgstr "실패함"
 
-#: virtManager/lib/libvirtenummap.py:133
+#: virtManager/lib/libvirtenummap.py:132
 msgid "Panicked"
 msgstr "Panic됨"
 
@@ -4621,15 +4713,21 @@ msgstr ""
 "제거하겠습니까?"
 
 #: virtManager/manager.py:581
-msgid "Double click to connect"
+#, fuzzy, python-format
+#| msgid "Double click to connect"
+msgid "%(uri)s (Double click to connect)"
 msgstr "연결하려면 더블클릭하십시오"
 
 #: virtManager/manager.py:588
-msgid "Not Connected"
-msgstr "연결되지 않음"
+#, fuzzy, python-format
+#| msgid "Connection not active."
+msgid "%(connection)s - Not Connected"
+msgstr "연결이 비활성화 되어 있습니다."
 
 #: virtManager/manager.py:590
-msgid "Connecting..."
+#, fuzzy, python-format
+#| msgid "Connecting..."
+msgid "%(connection)s - Connecting..."
 msgstr "연결 중..."
 
 #: virtManager/manager.py:764 virtManager/vmwindow.py:355
@@ -5032,7 +5130,9 @@ msgid "Error unpausing domain"
 msgstr "도메인 일시 정지 해제 도중 오류 발생 "
 
 #: virtManager/vmmenu.py:242
-msgid "Error restoring domain"
+#, fuzzy, python-format
+#| msgid "Error restoring domain"
+msgid "Error restoring domain: %s"
 msgstr "도메인 복구 중 오류 발생"
 
 #: virtManager/vmmenu.py:245
@@ -5219,9 +5319,15 @@ msgstr "그러면 기존 경로 '%s'을(를) 덮어씁니다."
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "%s 디스크는 이미 다른 게스트 %s에서 사용 중입니다."
 
-#: virtinst/cli.py:389
+#: virtinst/cli.py:410
+#, fuzzy, python-format
+#| msgid "Connecting to graphical console for guest"
+msgid "Running graphical console command: %(command)s"
+msgstr "게스트를 위한 그래픽 콘솔에 연결 중"
+
+#: virtinst/cli.py:424
 #, python-format
-msgid "Running %(console_type)s console command: %(command)s"
+msgid "Running text console command: %(command)s"
 msgstr ""
 
 #: virtinst/cli.py:448
@@ -5231,14 +5337,14 @@ msgstr ""
 #: virtinst/cli.py:492
 #, fuzzy, python-format
 #| msgid "Could not find domain '%s': %s"
-msgid "Could not find domain '%s'"
+msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "'%s' 도메인을 찾을 수 없음: %s"
 
-#: virtinst/cli.py:589 virtinst/cli.py:592
+#: virtinst/cli.py:591 virtinst/cli.py:594
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Libvirt URI를 사용하여 하이퍼바이저에 연결"
 
-#: virtinst/cli.py:607
+#: virtinst/cli.py:609
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5246,31 +5352,31 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:613
+#: virtinst/cli.py:615
 msgid "Don't automatically try to connect to the guest console"
 msgstr "게스트 콘솔에 자동으로 연결하지 마십시오."
 
-#: virtinst/cli.py:617
+#: virtinst/cli.py:619
 msgid "Don't boot guest after completing install."
 msgstr "설치를 완료한 후 게스트를 부팅하지 마십시오."
 
-#: virtinst/cli.py:621
+#: virtinst/cli.py:623
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "이름 충돌을 확인하지 마십시오. 모든 게스트를 동일한 이름으로 덮어쓰십시오."
 
-#: virtinst/cli.py:628
+#: virtinst/cli.py:630
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "게스트를 생성하지 말고 생성된 도메인 XML을 인쇄하십시오."
 
-#: virtinst/cli.py:647
+#: virtinst/cli.py:649
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "설치 프로세스를 실행하십시오. 단, 장치를 작성하거나 게스트를 정의하지 마십시"
 "오."
 
-#: virtinst/cli.py:652
+#: virtinst/cli.py:654
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5280,15 +5386,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:656
+#: virtinst/cli.py:658
 msgid "Suppress non-error output"
 msgstr "오류가 아닌 출력 억제"
 
-#: virtinst/cli.py:658
+#: virtinst/cli.py:660
 msgid "Print debugging information"
 msgstr "디버깅 정보 인쇄"
 
-#: virtinst/cli.py:664
+#: virtinst/cli.py:666
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5298,14 +5404,14 @@ msgstr ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 
-#: virtinst/cli.py:672
+#: virtinst/cli.py:674
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
 
-#: virtinst/cli.py:685
+#: virtinst/cli.py:687
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5313,14 +5419,14 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
 
-#: virtinst/cli.py:694
+#: virtinst/cli.py:696
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
 
-#: virtinst/cli.py:707
+#: virtinst/cli.py:709
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5328,7 +5434,7 @@ msgid ""
 "--graphics none\n"
 msgstr ""
 
-#: virtinst/cli.py:716
+#: virtinst/cli.py:718
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5344,14 +5450,14 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:727
+#: virtinst/cli.py:729
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
 
-#: virtinst/cli.py:732
+#: virtinst/cli.py:734
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5361,27 +5467,27 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:737
+#: virtinst/cli.py:739
 msgid "Configure a guest serial device"
 msgstr "게스트 직렬 장치 설정"
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:742
 msgid "Configure a guest parallel device"
 msgstr "게스트 병렬 장치 설정"
 
-#: virtinst/cli.py:743
+#: virtinst/cli.py:745
 msgid "Configure a guest communication channel"
 msgstr "게스트 통신 채널 설정"
 
-#: virtinst/cli.py:746
+#: virtinst/cli.py:748
 msgid "Configure a text console connection between the guest and host"
 msgstr "게스트와 호스트 사이의 텍스트 콘솔 연결 설정"
 
-#: virtinst/cli.py:750
+#: virtinst/cli.py:752
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr "물리적 USB/PCI 등의 호스트 장치를 게스트와 공유하도록 설정"
 
-#: virtinst/cli.py:758
+#: virtinst/cli.py:760
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5391,19 +5497,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: virtinst/cli.py:766
+#: virtinst/cli.py:768
 msgid "Configure guest sound device emulation"
 msgstr "게스트 사운드 장치 에뮬레이션 설정"
 
-#: virtinst/cli.py:777
+#: virtinst/cli.py:779
 msgid "Configure a guest watchdog device"
 msgstr "게스트 와치독 장치 설정"
 
-#: virtinst/cli.py:780
+#: virtinst/cli.py:782
 msgid "Configure guest video hardware."
 msgstr "게스트 비디오 하드웨어 설정"
 
-#: virtinst/cli.py:783
+#: virtinst/cli.py:785
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5411,7 +5517,7 @@ msgstr ""
 "게스트 스마트 카드 장치를 설정하십시오. 예:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:787
+#: virtinst/cli.py:789
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5419,7 +5525,7 @@ msgstr ""
 "게스트 리디렉션 장치를 설정하십시오. 예:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:791
+#: virtinst/cli.py:793
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5427,7 +5533,7 @@ msgstr ""
 "게스트 memballoon 장치를 설정하십시오. 예:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:795
+#: virtinst/cli.py:797
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5435,13 +5541,13 @@ msgstr ""
 "게스트 TPM 장치를 설정하십시오. 예:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:799
+#: virtinst/cli.py:801
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: virtinst/cli.py:803
+#: virtinst/cli.py:805
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5449,54 +5555,54 @@ msgstr ""
 "게스트 panic 장치를 설정하십시오. 예:\n"
 "--panic default"
 
-#: virtinst/cli.py:807
+#: virtinst/cli.py:809
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:811
+#: virtinst/cli.py:813
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:816
+#: virtinst/cli.py:818
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:823
+#: virtinst/cli.py:825
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:827
+#: virtinst/cli.py:829
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:831
+#: virtinst/cli.py:833
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:836
+#: virtinst/cli.py:838
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:840
+#: virtinst/cli.py:842
 msgid "Tune NUMA policy for the domain process."
 msgstr "도메인 프로세스의 NUMA 정책을 조정하십시오."
 
-#: virtinst/cli.py:844
+#: virtinst/cli.py:846
 msgid "Tune memory policy for the domain process."
 msgstr "도메인 프로세스의 메모리 정책을 조정하십시오."
 
-#: virtinst/cli.py:848
+#: virtinst/cli.py:850
 msgid "Tune blkio policy for the domain process."
 msgstr "도메인 프로세스의 blkio 정책을 조정하십시오."
 
-#: virtinst/cli.py:852
+#: virtinst/cli.py:854
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5504,14 +5610,14 @@ msgstr ""
 "도메인 프로세스의 메모리 백업 정책을 설정하십시오. 예:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:857
+#: virtinst/cli.py:859
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:863
+#: virtinst/cli.py:865
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5519,33 +5625,33 @@ msgstr ""
 "도메인 <clock> XML을 설정하십시오. 예:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:870
 msgid "Configure VM power management features"
 msgstr "VM 전원 관리 기능 설정"
 
-#: virtinst/cli.py:872
+#: virtinst/cli.py:874
 msgid "Configure VM lifecycle management policy"
 msgstr "VM 라이프사이클 관리 정책 설정"
 
-#: virtinst/cli.py:876
+#: virtinst/cli.py:878
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "VM 자원 파티셔닝(cgroups) 설정"
 
-#: virtinst/cli.py:880
+#: virtinst/cli.py:882
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:886
+#: virtinst/cli.py:888
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:892
+#: virtinst/cli.py:894
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5553,7 +5659,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:900
+#: virtinst/cli.py:902
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5563,13 +5669,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init(컨테이너용)"
 
-#: virtinst/cli.py:906
+#: virtinst/cli.py:908
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:916
+#: virtinst/cli.py:918
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5583,31 +5689,31 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:924
+#: virtinst/cli.py:926
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:927
+#: virtinst/cli.py:929
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:931
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:931
+#: virtinst/cli.py:933
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:963
+#: virtinst/cli.py:965
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s은(는) '예' 또는 '아니요'여야 함"
 
-#: virtinst/cli.py:1150
+#: virtinst/cli.py:1152
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5616,17 +5722,17 @@ msgstr ""
 "장치 유형 '%(device_type)s' 속성 '%(property_name)s'과(와) 일치시키는 방법을 "
 "알 수 없음"
 
-#: virtinst/cli.py:1463
+#: virtinst/cli.py:1465
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1519 virtinst/cli.py:1550
+#: virtinst/cli.py:1521 virtinst/cli.py:1552
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1804
+#: virtinst/cli.py:1806
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5634,33 +5740,33 @@ msgstr ""
 "그래픽 콘솔에 연결할 수 없습니다. virt-viewer가 설치되지 않았습니다. 'virt-"
 "viewer' 패키지를 설치하십시오."
 
-#: virtinst/cli.py:1811
+#: virtinst/cli.py:1813
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "그래픽이 요청되었지만 DISPLAY가 설정되지 않았습니다. virt-viewer를 실행하지 "
 "않습니다."
 
-#: virtinst/cli.py:1822
+#: virtinst/cli.py:1824
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3146
+#: virtinst/cli.py:3148
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size'의 부적절한 값: %s"
 
-#: virtinst/cli.py:3159
-#, fuzzy
+#: virtinst/cli.py:3161
+#, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
-msgid "Unknown '%(optionname)s' value '%(string)'"
+msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "알 수 없는 '%s' 값 '%s'"
 
-#: virtinst/cli.py:3174
+#: virtinst/cli.py:3176
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "저장소 볼륨은 vol=poolname/volname으로 지정해야 함"
 
-#: virtinst/cli.py:3600
+#: virtinst/cli.py:3602
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5668,36 +5774,36 @@ msgstr ""
 #: virtinst/cloner.py:46
 #, fuzzy, python-format
 #| msgid "Could not remove old vm '%s': %s"
-msgid "Could not remove old vm '%s'"
+msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "이전 vm '%s'을(를) 제거할 수 없음: %s"
 
-#: virtinst/cloner.py:125
+#: virtinst/cloner.py:127
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "새 게스트의 잘못된 이름: %s"
 
-#: virtinst/cloner.py:161
+#: virtinst/cloner.py:163
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
 msgid "Could not use path '%s' for cloning"
 msgstr "'%s' 경로를 복제에 사용할 수 없음: %s"
 
-#: virtinst/cloner.py:279
+#: virtinst/cloner.py:281
 #, fuzzy
 #| msgid "Original guest name or xml is required."
 msgid "Original guest name or XML is required."
 msgstr "원래 게스트 이름 또는 xml이 필요합니다."
 
-#: virtinst/cloner.py:302
+#: virtinst/cloner.py:304
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:324
+#: virtinst/cloner.py:326
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "기존 저장소 볼륨에 복제하는 기능은 현재 지원되지 않음: '%s'"
 
-#: virtinst/cloner.py:398
+#: virtinst/cloner.py:400
 #, python-format
 msgid ""
 "More disks to clone than new paths specified. (%(passed)d specified, "
@@ -5706,22 +5812,22 @@ msgstr ""
 "지정된 새 경로보다 복제할 디스크가 더 많습니다. (%(passed)d 지정됨, %(need)d "
 "필요"
 
-#: virtinst/cloner.py:412
+#: virtinst/cloner.py:414
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr "충돌을 방지하기 위해 그래픽 장치 포트를 autoport로 설정합니다."
 
-#: virtinst/cloner.py:574
+#: virtinst/cloner.py:576
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "디스크 경로 '%s'이(가) 존재하지 않습니다."
 
-#: virtinst/cloner.py:579
+#: virtinst/cloner.py:581
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "원래 디스크 정보를 판별할 수 없음: %s"
 
-#: virtinst/cloner.py:617
+#: virtinst/cloner.py:619
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "'%s' 도메인을 찾을 수 없습니다."
@@ -5756,8 +5862,9 @@ msgstr "존재하지 않는 경로 '%s'의 저장소 생성 매개변수를 지�
 
 #: virtinst/devices/disk.py:853
 #, python-format
-msgid "Only %(number)s disks for bus '%(bus)s' are supported"
-msgstr ""
+msgid "Only %(number)s disk for bus '%(bus)s' are supported"
+msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
+msgstr[0] ""
 
 #: virtinst/devices/filesystem.py:104
 #, python-format
@@ -5824,7 +5931,7 @@ msgstr "%(srcfile)s 복제"
 #: virtinst/diskbackend.py:625
 #, fuzzy, python-format
 #| msgid "Error cloning diskimage %s to %s: %s"
-msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s"
+msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr "디스크 이미지 %s을(를) %s에 복제하는 중 오류 발생: %s"
 
 #: virtinst/domain/cpu.py:191
@@ -5907,27 +6014,27 @@ msgstr ""
 #: virtinst/install/installertreemedia.py:71
 #, fuzzy, python-format
 #| msgid "Validating install media '%s' failed: %s"
-msgid "Validating install media '%s' failed"
+msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr "설치 미디어 '%s' 검증 실패: %s"
 
-#: virtinst/install/installertreemedia.py:118
+#: virtinst/install/installertreemedia.py:120
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:121
+#: virtinst/install/installertreemedia.py:123
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:145
+#: virtinst/install/installertreemedia.py:147
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:210
+#: virtinst/install/installertreemedia.py:212
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:274
+#: virtinst/install/installertreemedia.py:276
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -6013,18 +6120,18 @@ msgstr ""
 #: virtinst/install/urlfetcher.py:71
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
-msgid "Couldn't acquire file %s"
+msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "%s 파일을 얻을 수 없음: %s"
 
-#: virtinst/install/urlfetcher.py:76
+#: virtinst/install/urlfetcher.py:78
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "%s 파일 검색 중..."
 
-#: virtinst/install/urlfetcher.py:249
+#: virtinst/install/urlfetcher.py:251
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
-msgid "Opening URL %s failed"
+msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "URL %s 열기 실패: %s."
 
 #: virtinst/nodedev.py:230
@@ -6075,55 +6182,55 @@ msgstr ""
 #: virtinst/storage.py:166
 #, fuzzy, python-format
 #| msgid "Couldn't create default storage pool '%s': %s"
-msgid "Couldn't create default storage pool '%s'"
+msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "저장소 풀 기본값 '%s'를 생성할 수 없음: %s"
 
-#: virtinst/storage.py:218 virtinst/storage.py:552
+#: virtinst/storage.py:220 virtinst/storage.py:554
 msgid "Storage object"
 msgstr "저장소 개체"
 
-#: virtinst/storage.py:224
+#: virtinst/storage.py:226
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "이름 '%s'이(가) 다른 풀에서 이미 사용 중입니다."
 
-#: virtinst/storage.py:387
+#: virtinst/storage.py:389
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "저장소 풀을 정의할 수 없음: %s"
 
-#: virtinst/storage.py:394
+#: virtinst/storage.py:396
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "저장소 풀을 빌드할 수 없음: %s"
 
-#: virtinst/storage.py:400
+#: virtinst/storage.py:402
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "저장소 풀을 시작할 수 없음: %s"
 
-#: virtinst/storage.py:406
+#: virtinst/storage.py:408
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "풀 자동 시작 플래그를 설정할 수 없음: %s"
 
-#: virtinst/storage.py:558
+#: virtinst/storage.py:560
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "이름 '%s'이(가) 다른 볼륨에서 이미 사용 중입니다."
 
-#: virtinst/storage.py:647
+#: virtinst/storage.py:649
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "희소 논리 볼륨이 지원되지 않으므로, 할당량을 용량과 동일하게 설정"
 
-#: virtinst/storage.py:693
+#: virtinst/storage.py:695
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s' 할당"
 
-#: virtinst/storage.py:731
+#: virtinst/storage.py:733
 #, fuzzy, python-format
 #| msgid ""
 #| "There is not enough free space on the storage pool to create the volume. "
@@ -6135,7 +6242,7 @@ msgstr ""
 "볼륨을 작성하는 데 충분한 여유 공간이 저장소 풀에 없습니다(%d M 요청된 할당 "
 "> %d M 사용 가능)."
 
-#: virtinst/storage.py:738
+#: virtinst/storage.py:740
 #, fuzzy, python-format
 #| msgid ""
 #| "The requested volume capacity will exceed the available pool space when "
@@ -6183,7 +6290,7 @@ msgstr ""
 "소 변경과 같은 작업은 이 도구의 범위를 벗어납니다. 이러한 유형의 변경은 virt-"
 "sysprep(1)을 참조하십시오."
 
-#: virtinst/virtclone.py:95 virtinst/virtinstall.py:859
+#: virtinst/virtclone.py:95 virtinst/virtinstall.py:858
 msgid "General Options"
 msgstr "일반 옵션"
 
@@ -6257,8 +6364,8 @@ msgid ""
 msgstr ""
 "복제 게스트의 새로운 고정 MAC 주소입니다. 기본값은 임의로 생성된 MAC입니다."
 
-#: virtinst/virtclone.py:136 virtinst/virtinstall.py:963
-#: virtinst/virtxml.py:390
+#: virtinst/virtclone.py:136 virtinst/virtinstall.py:962
+#: virtinst/virtxml.py:394
 msgid "Miscellaneous Options"
 msgstr "기타 옵션"
 
@@ -6273,7 +6380,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "'%s' 복제본이 성공적으로 생성되었습니다."
 
-#: virtinst/virtclone.py:217 virtinst/virtinstall.py:1072
+#: virtinst/virtclone.py:217 virtinst/virtinstall.py:1071
 msgid "Installation aborted at user request"
 msgstr "사용자 요청에 따라 설치가 중단됨"
 
@@ -6387,30 +6494,33 @@ msgstr ""
 msgid "Error validating install location: %s"
 msgstr "설치 위치 검증 오류: %s"
 
-#: virtinst/virtinstall.py:640
-#, python-format
-msgid " %d minutes"
-msgstr " %d분"
+#: virtinst/virtinstall.py:641
+#, fuzzy
+#| msgid "Minutes to wait for install to complete."
+msgid "Waiting for the installation to complete."
+msgstr "설치가 완료될 때까지 대기하는 시간입니다."
 
-#: virtinst/virtinstall.py:643
-#, python-format
-msgid "Waiting%(time_string)s for installation to complete."
-msgstr ""
+#: virtinst/virtinstall.py:642
+#, fuzzy, python-format
+#| msgid "Minutes to wait for install to complete."
+msgid "Waiting %(minutes)d minute for the installation to complete."
+msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
+msgstr[0] "설치가 완료될 때까지 대기하는 시간입니다."
 
-#: virtinst/virtinstall.py:666
+#: virtinst/virtinstall.py:665
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:678
+#: virtinst/virtinstall.py:677
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:693
+#: virtinst/virtinstall.py:692
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "게스트의 콘솔이 시작되지 않았으므로 --wait -1이 기본값이 됩니다."
 
-#: virtinst/virtinstall.py:702
+#: virtinst/virtinstall.py:701
 msgid ""
 "\n"
 "Starting install..."
@@ -6418,11 +6528,11 @@ msgstr ""
 "\n"
 "설치 시작 중..."
 
-#: virtinst/virtinstall.py:722
+#: virtinst/virtinstall.py:721
 msgid "Domain creation completed."
 msgstr "도메인 생성이 완료되었습니다."
 
-#: virtinst/virtinstall.py:726
+#: virtinst/virtinstall.py:725
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6431,153 +6541,153 @@ msgstr ""
 "다음을 실행하여 도메인을 다시 시작할 수 있습니다.\n"
 "  %s"
 
-#: virtinst/virtinstall.py:729
+#: virtinst/virtinstall.py:728
 msgid "Restarting guest."
 msgstr "게스트를 다시 시작합니다."
 
-#: virtinst/virtinstall.py:736
+#: virtinst/virtinstall.py:735
 msgid "Domain install interrupted."
 msgstr "도메인 설치가 중단되었습니다."
 
-#: virtinst/virtinstall.py:760
+#: virtinst/virtinstall.py:759
 msgid "Domain has crashed."
 msgstr "도메인이 충돌합니다."
 
-#: virtinst/virtinstall.py:783
+#: virtinst/virtinstall.py:782
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:793
+#: virtinst/virtinstall.py:792
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:804
+#: virtinst/virtinstall.py:803
 msgid "Domain has shutdown. Continuing."
 msgstr "도메인이 종료되었습니다. 계속합니다."
 
-#: virtinst/virtinstall.py:810
+#: virtinst/virtinstall.py:809
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "설치가 지정된 제한 시간을 초과했습니다. 애플리케이션을 종료합니다."
 
-#: virtinst/virtinstall.py:827
+#: virtinst/virtinstall.py:826
 msgid "Dry run completed successfully"
 msgstr "모의 실행이 성공적으로 완료되었습니다."
 
-#: virtinst/virtinstall.py:831
+#: virtinst/virtinstall.py:830
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: virtinst/virtinstall.py:838
+#: virtinst/virtinstall.py:837
 msgid "Requested installation does not have XML step 2"
 msgstr "요청된 설치에 XML 2단계가 없습니다."
 
-#: virtinst/virtinstall.py:855
+#: virtinst/virtinstall.py:854
 msgid "Create a new virtual machine from specified install media."
 msgstr "지정된 설치 미디어에서 새로운 가상 머신을 생성하십시오."
 
-#: virtinst/virtinstall.py:861
+#: virtinst/virtinstall.py:860
 msgid "Name of the guest instance"
 msgstr "게스트 인스턴스의 이름"
 
-#: virtinst/virtinstall.py:868
+#: virtinst/virtinstall.py:867
 msgid "Installation Method Options"
 msgstr "설치 방법 옵션"
 
-#: virtinst/virtinstall.py:870
+#: virtinst/virtinstall.py:869
 msgid "CD-ROM installation media"
 msgstr "CD-ROM 설치 미디어"
 
-#: virtinst/virtinstall.py:872
+#: virtinst/virtinstall.py:871
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 
-#: virtinst/virtinstall.py:875
+#: virtinst/virtinstall.py:874
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE 프로토콜을 사용하여 네트워크에서 부팅"
 
-#: virtinst/virtinstall.py:877
+#: virtinst/virtinstall.py:876
 msgid "Build guest around an existing disk image"
 msgstr "기존 디스크 이미지를 중심으로 게스트 빌드"
 
-#: virtinst/virtinstall.py:880
+#: virtinst/virtinstall.py:879
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "--location에서 부팅된 설치 커널에 전달할 추가 인수"
 
-#: virtinst/virtinstall.py:883
+#: virtinst/virtinstall.py:882
 msgid "Add given file to root of initrd from --location"
 msgstr "--location의 initrd root에 지정된 파일 추가"
 
-#: virtinst/virtinstall.py:885
+#: virtinst/virtinstall.py:884
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:887
+#: virtinst/virtinstall.py:886
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:889
+#: virtinst/virtinstall.py:888
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:892
+#: virtinst/virtinstall.py:891
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:906
+#: virtinst/virtinstall.py:905
 msgid "Device Options"
 msgstr "장치 옵션"
 
-#: virtinst/virtinstall.py:936
+#: virtinst/virtinstall.py:935
 msgid "Guest Configuration Options"
 msgstr "게스트 설정 옵션"
 
-#: virtinst/virtinstall.py:940
+#: virtinst/virtinstall.py:939
 msgid "Virtualization Platform Options"
 msgstr "가상화 플랫폼 옵션"
 
-#: virtinst/virtinstall.py:944
+#: virtinst/virtinstall.py:943
 msgid "This guest should be a fully virtualized guest"
 msgstr "이 게스트는 완전히 가상화된 게스트여야 합니다."
 
-#: virtinst/virtinstall.py:947
+#: virtinst/virtinstall.py:946
 msgid "This guest should be a paravirtualized guest"
 msgstr "이 게스트는 반가상화된 게스트여야 합니다."
 
-#: virtinst/virtinstall.py:950
+#: virtinst/virtinstall.py:949
 msgid "This guest should be a container guest"
 msgstr "이 게스트는 컨테이너 게스트여야 합니다."
 
-#: virtinst/virtinstall.py:952
+#: virtinst/virtinstall.py:951
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "사용할 하이퍼바이저 이름(kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:953
+#: virtinst/virtinstall.py:952
 msgid "The CPU architecture to simulate"
 msgstr "시뮬레이션할 CPU 아키텍처"
 
-#: virtinst/virtinstall.py:954
+#: virtinst/virtinstall.py:953
 msgid "The machine type to emulate"
 msgstr "에뮬레이션할 머신 유형"
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:964
 msgid "Have domain autostart on host boot up."
 msgstr "호스트 부팅 시 도메인을 자동 시작합니다."
 
-#: virtinst/virtinstall.py:967
+#: virtinst/virtinstall.py:966
 msgid "Create a transient domain."
 msgstr ""
 
-#: virtinst/virtinstall.py:969
+#: virtinst/virtinstall.py:968
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:972
+#: virtinst/virtinstall.py:971
 msgid "Minutes to wait for install to complete."
 msgstr "설치가 완료될 때까지 대기하는 시간입니다."
 
@@ -6680,45 +6790,45 @@ msgstr "'%s' 도메인이 성공적으로 정의되었습니다."
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:246 virtinst/virtxml.py:508
+#: virtinst/virtxml.py:246 virtinst/virtxml.py:512
 #, fuzzy, python-format
 #| msgid "Error starting domain"
-msgid "Failed starting domain '%s'"
+msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "도메인 시작 도중 오류 발생 "
 
-#: virtinst/virtxml.py:249 virtinst/virtxml.py:510
+#: virtinst/virtxml.py:251 virtinst/virtxml.py:516
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:281
+#: virtinst/virtxml.py:283
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
-msgid "Error attempting device action %s"
+msgid "Error attempting device action %(action)s: %(error)s"
 msgstr "%s 장치를 시도하는 중에 오류 발생: %s"
 
-#: virtinst/virtxml.py:285
+#: virtinst/virtxml.py:289
 #, python-format
 msgid "Device %s successful."
 msgstr "%s 장치 성공."
 
-#: virtinst/virtxml.py:309
+#: virtinst/virtxml.py:313
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:328
+#: virtinst/virtxml.py:332
 msgid "Edit libvirt XML using command line options."
 msgstr "명령줄 옵션을 사용하여 libvirt XML을 편집하십시오."
 
-#: virtinst/virtxml.py:334
+#: virtinst/virtxml.py:338
 msgid "Domain name, id, or uuid"
 msgstr "도메인 이름, ID 또는 UUID"
 
-#: virtinst/virtxml.py:336
+#: virtinst/virtxml.py:340
 msgid "XML actions"
 msgstr "XML 조치"
 
-#: virtinst/virtxml.py:338
+#: virtinst/virtxml.py:342
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6732,7 +6842,7 @@ msgstr ""
 "--edit all --disk ... (모든 디스크 장치 편집)\n"
 "--edit target=hda --disk ... ('hda' 디스크 편집)\n"
 
-#: virtinst/virtxml.py:344
+#: virtinst/virtxml.py:348
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6744,7 +6854,7 @@ msgstr ""
 "--remove-device --disk all (모든 디스크 제거)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:349
+#: virtinst/virtxml.py:353
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6752,17 +6862,17 @@ msgstr ""
 "지정된 장치를 추가합니다. 예:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:352
+#: virtinst/virtxml.py:356
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:355
+#: virtinst/virtxml.py:359
 msgid "Output options"
 msgstr "출력 옵션"
 
-#: virtinst/virtxml.py:357
+#: virtinst/virtxml.py:361
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6774,71 +6884,71 @@ msgstr ""
 "--remove-device를 사용하면 hotunplug 조작입니다.\n"
 "--edit를 사용하면 장치 업데이트 조작입니다."
 
-#: virtinst/virtxml.py:363
+#: virtinst/virtxml.py:367
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr "도메인을 강제 정의합니다. --print 옵션이 지정된 경우에만 필요합니다."
 
-#: virtinst/virtxml.py:366
+#: virtinst/virtxml.py:370
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:369
+#: virtinst/virtxml.py:373
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:371
+#: virtinst/virtxml.py:375
 msgid "Only print the requested change, in diff format"
 msgstr "요청된 변경만 diff 형식으로 인쇄합니다."
 
-#: virtinst/virtxml.py:373
+#: virtinst/virtxml.py:377
 msgid "Only print the requested change, in full XML format"
 msgstr "요청된 변경만 전체 XML 형식으로 인쇄합니다."
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:379
 msgid "Require confirmation before saving any results."
 msgstr "결과를 저장하기 전에 확인해야 합니다."
 
-#: virtinst/virtxml.py:379
+#: virtinst/virtxml.py:383
 msgid "XML options"
 msgstr "XML 옵션"
 
-#: virtinst/virtxml.py:418
+#: virtinst/virtxml.py:422
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin 입력과 함께 --confirm을 사용할 수 없습니다."
 
-#: virtinst/virtxml.py:420
+#: virtinst/virtxml.py:424
 msgid "Can't use --update with stdin input."
 msgstr "Stdin 입력과 함께 --update를 사용할 수 없습니다."
 
-#: virtinst/virtxml.py:423
+#: virtinst/virtxml.py:427
 msgid "A domain must be specified"
 msgstr "도메인을 지정해야 합니다."
 
-#: virtinst/virtxml.py:451
+#: virtinst/virtxml.py:455
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s의 --update 방법을 알 수 없습니다."
 
-#: virtinst/virtxml.py:476
+#: virtinst/virtxml.py:480
 msgid "Cannot mix --update and --start"
 msgstr ""
 
-#: virtinst/virtxml.py:484
+#: virtinst/virtxml.py:488
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:515
+#: virtinst/virtxml.py:521
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:517
+#: virtinst/virtxml.py:523
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:530
+#: virtinst/virtxml.py:536
 msgid "Aborted at user request"
 msgstr "사용자 요청에 따라 중단됨"
 
@@ -6861,6 +6971,21 @@ msgstr "%s의 이름을 지정해야 합니다."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s 이름 '%s'에 '%s' 문자를 포함할 수 없습니다."
 
+#~ msgid "Virtual Network"
+#~ msgstr "가상 네트워크"
+
+#~ msgid "Warning"
+#~ msgstr "경고"
+
+#~ msgid "Disk"
+#~ msgstr "디스크"
+
+#~ msgid "Not Connected"
+#~ msgstr "연결되지 않음"
+
+#~ msgid " %d minutes"
+#~ msgstr " %d분"
+
 #~ msgid "Port"
 #~ msgstr "포트"
 
@@ -6872,6 +6997,3 @@ msgstr "%s 이름 '%s'에 '%s' 문자를 포함할 수 없습니다."
 
 #~ msgid "%s:%s"
 #~ msgstr "%s:%s"
-
-#~ msgid "Error opening socket path '%s': %s"
-#~ msgstr "소켓 경로 '%s'를 여는 도중 오류 발생: %s"
