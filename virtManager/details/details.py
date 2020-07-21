@@ -1886,7 +1886,7 @@ class vmmDetails(vmmGObjectUI):
 
         # Firmware
         domcaps = self.vm.get_domain_capabilities()
-        if self.vm.get_xmlobj().is_uefi():
+        if self.vm.get_xmlobj().os.firmware == "efi":
             firmware = 'UEFI'
         else:
             firmware = domcaps.label_for_firmware_path(
