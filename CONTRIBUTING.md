@@ -108,7 +108,7 @@ Translations are handled through the Weblate instance hosted by the Fedora Proje
 There's a few standalone specialty tests:
 
 ```sh
-pytest --uitest                 # dogtail UI test suite. This takes over your desktop
+pytest --uitests                # dogtail UI test suite. This takes over your desktop
 pytest tests/test_urls.py       # Test fetching media from live distro URLs
 pytest tests/test_inject.py     # Test live virt-install --initrd-inject
 ```
