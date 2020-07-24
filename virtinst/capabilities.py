@@ -138,13 +138,13 @@ class _CapsGuest(XMLBuilder):
     def all_machine_names(self, domain):
         """
         Return all machine string names, including canonical aliases for
-        the guest+domain combo
+        the guest+domain combo but avoiding duplicates
         """
         mobjs = (domain and domain.machines) or self.machines
         ret = []
         for m in mobjs:
             ret.append(m.name)
-            if m.canonical:
+            if m.canonical and m.canonical not in ret:
                 ret.append(m.canonical)
         return ret
 
