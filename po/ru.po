@@ -15,7 +15,7 @@
 # yuliya <ypoyarko@redhat.com>, 2015. #zanata
 # yuliya <ypoyarko@redhat.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
-# Olesya Gerasimenko <gammaray@basealt.ru>, 2020.
+# Olesya Gerasimenko <gammaray@basealt.ru>, 2020, 2022.
 # Dmitry Astankov <mornie@basealt.ru>, 2021.
 # Alexey Rubtsov <rushills@gmail.com>, 2021.
 msgid ""
@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
 "PO-Revision-Date: 2022-03-09 18:01+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Olesya Gerasimenko <gammaray@basealt.ru>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
@@ -43,8 +43,7 @@ msgstr "Менеджер виртуальных машин"
 
 #: data/virt-manager.appdata.xml.in:7
 msgid "Graphically manage KVM, Xen, or LXC via libvirt"
-msgstr ""
-"Графический интерфейс для управления KVM, Xen или LXC с помощью libvirt"
+msgstr "Графический интерфейс для управления KVM, Xen или LXC с помощью libvirt"
 
 #: data/virt-manager.appdata.xml.in:9
 msgid ""
@@ -333,8 +332,8 @@ msgid ""
 msgstr ""
 "<span size='small'>Клонирование <u>НЕ</u> изменяет содержимое гостевой ОС. "
 "Если требуется изменить\n"
-"пароли или статические адреса, это можно сделать с помощью virt-sysprep(1).</"
-"span>"
+"пароли или статические адреса, это можно сделать с помощью virt-"
+"sysprep(1).</span>"
 
 #: ui/clone.ui:706
 msgid "C_lone"
@@ -730,8 +729,7 @@ msgstr "В_ыберите операционную систему для уст�
 
 #: ui/createvm.ui:1758
 msgid "A_utomatically detect from the installation media / source"
-msgstr ""
-"А_втоматически определить по носителю / источнику пакетов для установки"
+msgstr "А_втоматически определить по носителю / источнику пакетов для установки"
 
 #: ui/createvm.ui:1807
 msgid "Install"
@@ -2161,8 +2159,8 @@ msgid ""
 "what you are doing.</small>"
 msgstr ""
 "<small>Редактирование XML отключено в диалоге «Настройки». Включайте этот "
-"параметр только в том случае, если полностью уверены в том, что делаете.</"
-"small>"
+"параметр только в том случае, если полностью уверены в том, что "
+"делаете.</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
@@ -3226,8 +3224,8 @@ msgstr "Ошибка удаления виртуальной машины «%(vm
 #: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Кроме того, имели место ошибки при удалении определённых устройств "
-"хранения:\n"
+"Кроме того, имели место ошибки при удалении определённых устройств хранения:"
+"\n"
 
 #: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
@@ -4392,8 +4390,7 @@ msgstr ""
 
 #: virtManager/lib/connectauth.py:164
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
-msgstr ""
-"Убедитесь, что на удалённом узле запущена внутренняя служба «libvirtd»."
+msgstr "Убедитесь, что на удалённом узле запущена внутренняя служба «libvirtd»."
 
 #: virtManager/lib/connectauth.py:168
 msgid ""
@@ -5280,8 +5277,8 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
-"Конфигурация автоматического подключения к консоли гостевой системы. "
-"Пример:\n"
+"Конфигурация автоматического подключения к консоли гостевой системы. Пример:"
+"\n"
 "--autoconsole text\n"
 "--autoconsole graphical\n"
 "--autoconsole none"
@@ -5657,8 +5654,8 @@ msgid ""
 msgstr ""
 "Конфигурация защиты при запуске ВМ (например, с помощью шифрования памяти "
 "SEV). Пример:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
+"BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:902
@@ -6376,8 +6373,8 @@ msgid ""
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 "Пропустить копирование цели устройства. (Например, если не следует "
-"копировать диск «vda» и использовать тот же путь в новой ВМ, используйте --"
-"skip-copy=vda)"
+"копировать диск «vda» и использовать тот же путь в новой ВМ, используйте "
+"--skip-copy=vda)"
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6667,8 +6664,7 @@ msgstr "Домен ещё работает. Вероятно, выполняет
 
 #: virtinst/virtinstall.py:859
 msgid "You can reconnect to the console to complete the installation process."
-msgstr ""
-"Можно заново подключиться к консоли, чтобы завершить процесс установки."
+msgstr "Можно заново подключиться к консоли, чтобы завершить процесс установки."
 
 #: virtinst/virtinstall.py:870
 msgid "Domain has shutdown. Continuing."
@@ -7154,8 +7150,7 @@ msgstr "Неизвестный способ выполнения --update для
 
 #: virtinst/virtxml.py:528
 msgid "The VM is not running, --update is inapplicable."
-msgstr ""
-"Виртуальная машина не запущена — использовать параметр --update нельзя."
+msgstr "Виртуальная машина не запущена — использовать параметр --update нельзя."
 
 #: virtinst/virtxml.py:561
 msgid "Changes will take effect after the domain is fully powered off."
