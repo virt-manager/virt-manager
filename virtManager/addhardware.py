@@ -522,7 +522,7 @@ class vmmAddHardware(vmmGObjectUI):
         bus_map = {
             "disk": ["ide", "sata", "scsi", "sd", "usb", "virtio", "xen"],
             "floppy": ["fdc"],
-            "cdrom": ["ide", "sata", "scsi"],
+            "cdrom": ["ide", "sata", "scsi", "usb"],
             "lun": ["scsi"],
         }
         return [bus for bus in buses if bus in bus_map.get(devtype, [])]
@@ -682,7 +682,7 @@ class vmmAddHardware(vmmGObjectUI):
         if guest.conn.is_xen():
             return ["xen", "vga"]
         if guest.conn.is_qemu() or guest.conn.is_test():
-            return ["vga", "bochs", "qxl", "virtio"]
+            return ["vga", "bochs", "qxl", "virtio", "ramfb"]
         return []
 
     @staticmethod
