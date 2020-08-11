@@ -322,8 +322,9 @@ class _OsResources:
 
     def _get_key(self, resources, key, arch):
         for checkarch in [arch, "all"]:
-            if checkarch in resources and key in resources[checkarch]:
-                return resources[checkarch][key]
+            val = resources.get(checkarch, {}).get(key, -1)
+            if val != -1:
+                return val
 
     def _get_minimum_key(self, key, arch):
         val = self._get_key(self._minimum, key, arch)
