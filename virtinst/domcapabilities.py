@@ -269,7 +269,7 @@ class DomainCapabilities(XMLBuilder):
     def _convert_mode_to_cpu(self, xml):
         root = ET.fromstring(xml)
         root.tag = "cpu"
-        root.attrib = None
+        root.attrib = {}
         arch = ET.SubElement(root, "arch")
         arch.text = self.arch
         return ET.tostring(root, encoding="unicode")
