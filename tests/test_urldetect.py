@@ -135,5 +135,5 @@ def test_misc():
 
     with pytest.raises(ValueError) as e:
         _test("empty")
-    assert "installable distribution" in str(e)
-    assert "mistyped" in str(e)
+    assert "installable distribution" in str(e.value)
+    assert "mistyped" in str(e.value)
