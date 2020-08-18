@@ -474,9 +474,9 @@ class _OsVariant(object):
         if release_status == "rolling":
             return False
 
-        # If no EOL is present, assume EOL if release was > 5 years ago
+        # If no EOL is present, assume EOL if release was > 10 years ago
         if rel is not None:
-            rel5 = _glib_to_datetime(rel) + datetime.timedelta(days=365 * 5)
+            rel5 = _glib_to_datetime(rel) + datetime.timedelta(days=365 * 10)
             return now > rel5
         return False
 
