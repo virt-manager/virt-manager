@@ -21,13 +21,13 @@
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Huacai Chen <chenhuacai@gmail.com>, 2020.
 # Pavel Hrdina <phrdina@redhat.com>, 2020.
-# Whired Planck <fungdaat31@outlook.com>, 2020, 2021.
+# Whired Planck <fungdaat31@outlook.com>, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2021-06-13 15:04+0000\n"
+"PO-Revision-Date: 2022-03-09 18:02+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.6.2\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -333,8 +333,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。如果需要做一些配"
-"置\n"
+"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。"
+"如果需要做一些配置\n"
 "比如修改密码或设置静态 IP 地址，请查看 virt-sysprep(1) 工具。</span>"
 
 #: ui/clone.ui:706
@@ -1641,11 +1641,12 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"隧道迁移直接通过 libvirtd 连接通道，而不是由虚拟机管理程序打开一个单独的网络"
-"连接到目标。 源 libvirt 实例直接连接到目标 libvirt 实例。\n"
+"隧道迁移直接通过 libvirtd "
+"连接通道，而不是由虚拟机管理程序打开一个单独的网络连接到目标。 源 libvirt "
+"实例直接连接到目标 libvirt 实例。\n"
 "\n"
-"由于不需要开放额外的防火墙端口，因此可以简化配置。如果启用 libvirt 连接加"
-"密， 还可以加密迁移流量。但它很难由 SSH 来完成数据传输工作。"
+"由于不需要开放额外的防火墙端口，因此可以简化配置。如果启用 libvirt 连接加密，"
+" 还可以加密迁移流量。但它很难由 SSH 来完成数据传输工作。"
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1867,9 +1868,8 @@ msgstr "更改..."
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
-msgstr ""
-"当改变客户机窗口大小时，请修改其分辨率。仅适用于使用 Spice 和桌面代理正确配置"
-"的客户机。"
+msgstr "当改变客户机窗口大小时，请修改其分辨率。仅适用于使用 Spice "
+"和桌面代理正确配置的客户机。"
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
@@ -2131,9 +2131,8 @@ msgstr "客户机 CID(_I)："
 msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
-msgstr ""
-"<small>XML 编辑已在“首选项” 中被禁用。仅当知道自己在做什么时才启用它。</"
-"small>"
+msgstr "<small>XML 编辑已在“首选项” "
+"中被禁用。仅当知道自己在做什么时才启用它。</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
@@ -2931,9 +2930,8 @@ msgstr "这通常是因为计算机没有安装 QEMU 或 KVM，或者没有载�
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
-msgstr ""
-"KVM 不可用。这可能是因为没有安装 KVM 软件包，或者没有载入 KVM 内核模块。虚拟"
-"系统可能性能会很差。"
+msgstr "KVM 不可用。这可能是因为没有安装 KVM 软件包，或者没有载入 KVM "
+"内核模块。虚拟系统可能性能会很差。"
 
 #: virtManager/createvm.py:649
 #, python-format
@@ -3840,18 +3838,16 @@ msgstr ""
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
-msgstr ""
-"确定要应用快照 '%(name)s' 吗？所有自最后一次快照创建以来的对磁盘的更改都会被"
-"丢弃。"
+msgstr "确定要应用快照 '%(name)s' "
+"吗？所有自最后一次快照创建以来的对磁盘的更改都会被丢弃。"
 
 #: virtManager/details/snapshots.py:657
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
-msgstr ""
-"确定要应用快照 '%(name)s' 吗？所有自最后一次快照创建以来对磁盘和配置的更改都"
-"会被丢弃。"
+msgstr "确定要应用快照 '%(name)s' "
+"吗？所有自最后一次快照创建以来对磁盘和配置的更改都会被丢弃。"
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -3867,8 +3863,8 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 "快照 '%s' 仅包含磁盘状态，没有内存状态。还原快照将使现有的保存状态保持原状，"
-"从而有效地在正在运行的系统下切换磁盘。之后再运行域可能会导致大量文件系统损"
-"坏。因此，在还原快照之前，将移除保存的状态。"
+"从而有效地在正在运行的系统下切换磁盘。之后再运行域可能会导致大量文件系统损坏"
+"。因此，在还原快照之前，将移除保存的状态。"
 
 #: virtManager/details/snapshots.py:683
 msgid "Running snapshot"
@@ -3931,8 +3927,7 @@ msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
-msgstr ""
-"客户机位于具有 '%s' 传输的远程主机上，但仅配置为在本地监听。要远程连接，需要"
+msgstr "客户机位于具有 '%s' 传输的远程主机上，但仅配置为在本地监听。要远程连接，需要"
 "更改客户机的监听地址。"
 
 #: virtManager/details/viewers.py:351
@@ -4356,17 +4351,15 @@ msgstr "虚拟机管理器连接失败"
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
-msgstr ""
-"libvirtd 服务似乎没有安装。请安装并运行 libvirtd 服务以管理此主机上的虚拟化服"
-"务。"
+msgstr "libvirtd 服务似乎没有安装。请安装并运行 libvirtd "
+"服务以管理此主机上的虚拟化服务。"
 
 #: virtManager/lib/connectauth.py:225
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
-msgstr ""
-"无法检测到默认虚拟机管理程序。确保安装了合适的 QEMU/KVM 虚拟化软件包以管理此"
-"主机上的虚拟化服务。"
+msgstr "无法检测到默认虚拟机管理程序。确保安装了合适的 QEMU/KVM "
+"虚拟化软件包以管理此主机上的虚拟化服务。"
 
 #: virtManager/lib/connectauth.py:232
 msgid ""
@@ -5086,16 +5079,15 @@ msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"主机不支持机器 '%(machine)s' 的域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化"
-"类型 '%(virttype)s'"
+"主机不支持机器 '%(machine)s' 的域类型 %(domain)s 用于 '%(arch)s' "
+"架构的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/capabilities.py:301
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
-msgstr ""
-"主机不支持域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化类型 '%(virttype)s'"
+msgstr "主机不支持域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5123,9 +5115,8 @@ msgstr ""
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
-msgstr ""
-"%(path)s 可能不能被虚拟机管理程序访问。将需要授予 '%(user)s' 用户搜索以下目录"
-"的权限：%(dirs)s"
+msgstr "%(path)s 可能不能被虚拟机管理程序访问。将需要授予 '%(user)s' "
+"用户搜索以下目录的权限：%(dirs)s"
 
 #: virtinst/cli.py:318
 #, python-format
@@ -5542,8 +5533,8 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 "配置虚拟系统启动安全性设置（例如：SEV 内存加密）。示例：\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
+"BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:902
@@ -5963,8 +5954,7 @@ msgstr "找不到安装树的内核。"
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
-msgstr ""
-"除非传递了额外的内核参数来将安装程序指向网络可访问的安装树，否则目录树的安装"
+msgstr "除非传递了额外的内核参数来将安装程序指向网络可访问的安装树，否则目录树的安装"
 "通常不起作用。"
 
 #: virtinst/install/unattended.py:63
@@ -6008,8 +5998,8 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
-"操作系统 '%(osname)s' 不支持 '%(profilename)s' 配置文件的无人值守安装。可用的"
-"配置文件：%(profiles)s"
+"操作系统 '%(osname)s' 不支持 '%(profilename)s' "
+"配置文件的无人值守安装。可用的配置文件：%(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -6135,8 +6125,7 @@ msgstr "正在分配 '%(filename)s'"
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
-msgstr ""
-"存储池中没有足够空间来创建卷。(%(mem1)s M 需要的空间 > %(mem2)s M 可用空间)"
+msgstr "存储池中没有足够空间来创建卷。(%(mem1)s M 需要的空间 > %(mem2)s M 可用空间)"
 
 #: virtinst/storage.py:734
 #, python-format
@@ -6144,8 +6133,7 @@ msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
-msgstr ""
-"当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%(mem1)s M 需要的容量 > "
+msgstr "当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%(mem1)s M 需要的容量 > "
 "%(mem2)s M 可用容量)"
 
 #: virtinst/virtclone.py:20
@@ -6216,8 +6204,9 @@ msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
-"跳过设备目标的复制。 （例如，如果 'vda' 是不想复制的磁盘，并且不想在新虚拟系"
-"统中使用相同的路径，请使用 --skip-copy=vda 选项）"
+"跳过设备目标的复制。 （例如，如果 'vda' "
+"是不想复制的磁盘，并且不想在新虚拟系统中使用相同的路径，请使用 --skip-"
+"copy=vda 选项）"
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6228,8 +6217,7 @@ msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
-msgstr ""
-"不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆"
+msgstr "不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆"
 "磁盘映像指定现有路径。"
 
 #: virtinst/virtclone.py:113
@@ -6276,9 +6264,8 @@ msgstr "根据用户要求取消安装"
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
-msgstr ""
-"-c 后指定的内容似乎是一个 libvirt URI。您是想使用 --connect 选项吗？如果不"
-"是，请改用 --cdrom"
+msgstr "-c 后指定的内容似乎是一个 libvirt URI。您是想使用 --connect "
+"选项吗？如果不是，请改用 --cdrom"
 
 #: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
@@ -6325,9 +6312,8 @@ msgstr ""
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
-msgstr ""
-"CDROM 介质默认情况下不输出信息到文本控制台，所以可能看不到安装的输出。可能需"
-"要使用 --location 选项。"
+msgstr "CDROM 介质默认情况下不输出信息到文本控制台，所以可能看不到安装的输出。"
+"可能需要使用 --location 选项。"
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6338,8 +6324,7 @@ msgstr "请参考 man 手册以了解使用 --location 选项与 CDROM 介质的
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
-msgstr ""
-"为操作系统 %(osname)s 请求的内存大小 %(mem1)s MiB 小于建议值 %(mem2)s MiB"
+msgstr "为操作系统 %(osname)s 请求的内存大小 %(mem1)s MiB 小于建议值 %(mem2)s MiB"
 
 #: virtinst/virtinstall.py:353
 #, python-format
@@ -6557,8 +6542,7 @@ msgstr "光驱安装介质"
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
-msgstr ""
-"发行版安装 URL，例如：https://host/path。请参见手册页获取有关特定发行的示例。"
+msgstr "发行版安装 URL，例如：https://host/path。请参见手册页获取有关特定发行的示例。"
 
 #: virtinst/virtinstall.py:1024
 msgid "Boot from the network using the PXE protocol"
@@ -6669,8 +6653,7 @@ msgid ""
 msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
-msgstr[0] ""
-"需要 '--edit %(number)s' 选项，但 XML 文件中仅存在 %(max)s --%(type)s 对象"
+msgstr[0] "需要 '--edit %(number)s' 选项，但 XML 文件中仅存在 %(max)s --%(type)s 对象"
 
 #: virtinst/virtxml.py:107
 #, python-format
@@ -6966,8 +6949,7 @@ msgstr "根据用户要求丢弃"
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
-msgstr ""
-"XML 文件中没有预期的根元素名称 '%(expectname)s'，而已找到 '%(foundname)s'"
+msgstr "XML 文件中没有预期的根元素名称 '%(expectname)s'，而已找到 '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:487
