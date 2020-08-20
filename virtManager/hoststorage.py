@@ -486,7 +486,6 @@ class vmmHostStorage(vmmGObjectUI):
         try:
             if self._addpool is None:
                 self._addpool = vmmCreatePool(self.conn)
-                self._addpool.connect("pool-created", self._pool_created_cb)
             self._addpool.show(self.topwin)
         except Exception as e:
             self.err.show_err(_("Error launching pool wizard: %s") % str(e))
@@ -631,12 +630,6 @@ class vmmHostStorage(vmmGObjectUI):
 
     def _vol_list_row_activated_cb(self, src, treeiter, viewcol):
         self.emit("volume-chosen", self._current_vol())
-
-    def _pool_created_cb(self, src, connkey):
-        # The pool list will have already been updated, since this
-        # signal arrives only after pool-added. So all we do here is
-        # select the pool we just created.
-        uiutil.set_list_selection(self.widget("pool-list"), connkey)
 
     def _vol_created_cb(self, src, pool_connkey, volname):
         # The vol list will have already been updated, since this
