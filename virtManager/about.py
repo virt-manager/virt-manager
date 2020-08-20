@@ -16,7 +16,7 @@ class vmmAbout(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmAbout()
             cls._instance.show(parentobj.topwin)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             parentobj.err.show_err(
                     _("Error launching 'About' dialog: %s") % str(e))
 

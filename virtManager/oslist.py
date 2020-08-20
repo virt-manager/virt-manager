@@ -81,7 +81,7 @@ class vmmOSList(vmmGObjectUI):
         if not self.is_visible():
             return
         if not len(os_list.get_model()):
-            return
+            return   # pragma: no cover
         sel.select_iter(os_list.get_model()[0].iter)
 
     def _refilter(self):
@@ -126,7 +126,7 @@ class vmmOSList(vmmGObjectUI):
     def _entry_activate_cb(self, src):
         os_list = self.widget("os-list")
         if not os_list.is_visible():
-            return
+            return  # pragma: no cover
 
         sel = os_list.get_selection()
         model, rows = sel.get_selected_rows()

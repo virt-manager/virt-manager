@@ -160,9 +160,6 @@ class vmmConnection(vmmGObject):
 
     def __init__(self, uri):
         self._uri = uri
-        if self._uri is None or self._uri.lower() == "xen":
-            self._uri = "xen:///"
-
         vmmGObject.__init__(self)
 
         self._state = self._STATE_DISCONNECTED
@@ -277,7 +274,7 @@ class vmmConnection(vmmGObject):
                 for vol in pool.get_volumes():
                     try:
                         ret.append(vol.get_xmlobj(refresh_if_nec=False))
-                    except Exception as e:
+                    except Exception as e:  # pragma: no cover
                         log.debug("Fetching volume XML failed: %s", e)
             return ret
         self._backend.cb_fetch_all_vols = fetch_all_vols
@@ -450,13 +447,13 @@ class vmmConnection(vmmGObject):
 
             if self.support.domain_xml_inactive(vm):
                 inact = libvirt.VIR_DOMAIN_XML_INACTIVE
-            else:
+            else:  # pragma: no cover
                 log.debug("Domain XML inactive flag not supported.")
 
             if self.support.domain_xml_secure(vm):
                 inact |= libvirt.VIR_DOMAIN_XML_SECURE
                 act = libvirt.VIR_DOMAIN_XML_SECURE
-            else:
+            else:  # pragma: no cover
                 log.debug("Domain XML secure flag not supported.")
 
             return inact, act
@@ -477,7 +474,7 @@ class vmmConnection(vmmGObject):
                 try:
                     if vol.get_target_path() == path:
                         return vol
-                except Exception as e:
+                except Exception as e:  # pragma: no cover
                     # Errors can happen if the volume disappeared, bug 1092739
                     log.debug("Error looking up volume from path=%s: %s",
                         path, e)
@@ -507,10 +504,7 @@ class vmmConnection(vmmGObject):
             return _("Disconnected")
         elif self.is_connecting():
             return _("Connecting")
-        elif self.is_active():
-            return _("Active")
-        else:
-            return _("Unknown")
+        return _("Active")
 
 
     #################################
@@ -547,7 +541,7 @@ class vmmConnection(vmmGObject):
         for dev in self.list_nodedevs():
             try:
                 xmlobj = dev.get_xmlobj()
-            except libvirt.libvirtError as e:
+            except libvirt.libvirtError as e:  # pragma: no cover
                 # Libvirt nodedev XML fetching can be busted
                 # https://bugzilla.redhat.com/show_bug.cgi?id=1225771
                 if e.get_error_code() != libvirt.VIR_ERR_NO_NODE_DEVICE:
@@ -742,7 +736,7 @@ class vmmConnection(vmmGObject):
 
     def _add_conn_events(self):
         if not self.support.conn_working_xen_events():
-            return
+            return  # pragma: no cover
 
         def _check_events_disabled():
             if self.config.CLITestOptions.no_events:
@@ -771,7 +765,7 @@ class vmmConnection(vmmGObject):
                 self._domain_cb_ids.append(
                     self.get_backend().domainEventRegisterAny(
                     None, eventid, cb, eventname))
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 log.debug("Error registering %s event: %s",
                     eventname, e)
 
@@ -856,7 +850,7 @@ class vmmConnection(vmmGObject):
                     self._backend.storagePoolEventDeregisterAny(eid)
                 for eid in self._node_device_cb_ids:
                     self._backend.nodeDeviceEventDeregisterAny(eid)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.debug("Failed to deregister events in conn cleanup",
                 exc_info=True)
         finally:
@@ -875,14 +869,15 @@ class vmmConnection(vmmGObject):
             try:
                 self._remove_object_signal(obj)
                 obj.cleanup()
-            except Exception as e:
+            except Exception as e:  # pramga: no cover
                 log.debug("Failed to cleanup %s: %s", obj, e)
         self._objects.cleanup()
         self._objects = _ObjectList()
 
         closeret = self._backend.close()
         if closeret == 1 and self.config.CLITestOptions.leak_debug:
-            log.debug("LEAK: conn close() returned 1, "
+            log.debug(  # pragma: no cover
+                    "LEAK: conn close() returned 1, "
                     "meaning refs may have leaked.")
 
         self._change_state(self._STATE_DISCONNECTED)
@@ -900,7 +895,7 @@ class vmmConnection(vmmGObject):
 
     def open(self):
         if not self.is_disconnected():
-            return
+            return  # pragma: no cover
 
         self._change_state(self._STATE_CONNECTING)
 
@@ -949,15 +944,15 @@ class vmmConnection(vmmGObject):
         log.debug("conn version=%s", self._backend.conn_version())
         log.debug("%s capabilities:\n%s", self.get_uri(), self.caps.get_xml())
 
-        if not self.support.conn_domain():
+        if not self.support.conn_domain():  # pragma: no cover
             raise RuntimeError("Connection does not support required "
                     "domain listing APIs")
 
-        if not self.support.conn_storage():
+        if not self.support.conn_storage():  # pragma: no cover
             log.debug("Connection doesn't seem to support storage APIs.")
-        if not self.support.conn_network():
+        if not self.support.conn_network():  # pragma: no cover
             log.debug("Connection doesn't seem to support network APIs.")
-        if not self.support.conn_nodedev():
+        if not self.support.conn_nodedev():  # pragma: no cover
             log.debug("Connection doesn't seem to support nodedev APIs.")
 
         self._add_conn_events()
@@ -989,7 +984,7 @@ class vmmConnection(vmmGObject):
         # pool already exists
         try:
             virtinst.StoragePool.build_default_pool(self.get_backend())
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.debug("Building default pool failed: %s", str(e))
 
     def _open_thread(self):
@@ -1031,7 +1026,7 @@ class vmmConnection(vmmGObject):
         app with long tick operations.
         """
         if not self._backend.is_open():
-            return
+            return  # pragma: no cover
 
         for obj in gone_objects:
             class_name = obj.class_name()
@@ -1051,7 +1046,7 @@ class vmmConnection(vmmGObject):
 
     def _new_object_cb(self, obj, initialize_failed):
         if not self._backend.is_open():
-            return
+            return  # pragma: no cover
 
         try:
             class_name = obj.class_name()
@@ -1182,9 +1177,9 @@ class vmmConnection(vmmGObject):
             are in use.
         """
         if self._closing:
-            return
+            return  # pragma: no cover
         if self.is_disconnected():
-            return
+            return  # pragma: no cover
         if self.is_connecting() and not force:
             return
 
@@ -1244,7 +1239,7 @@ class vmmConnection(vmmGObject):
 
     def _recalculate_stats(self, vms):
         if not self._backend.is_open():
-            return
+            return  # pragma: no cover
 
         now = time.time()
         expected = self.config.get_stats_history_length()

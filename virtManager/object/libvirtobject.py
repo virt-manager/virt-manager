@@ -129,7 +129,7 @@ class vmmLibvirtObject(vmmGObject):
         try:
             self._key = newname
             self.conn.rename_object(self, origxml, newxml, oldconnkey)
-        except Exception:
+        except Exception:  # pragma: no cover
             self._key = oldname
             raise
         finally:
@@ -190,7 +190,7 @@ class vmmLibvirtObject(vmmGObject):
         initialize_failed = False
         try:
             self._init_libvirt_state()
-        except Exception:
+        except Exception:  # pragma: no cover
             log.debug("Error initializing libvirt state for %s", self,
                 exc_info=True)
             initialize_failed = True

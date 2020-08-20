@@ -231,7 +231,7 @@ class vmmConfig(object):
              Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
         found, color = context.lookup_color("insensitive_fg_color")
-        if not found:
+        if not found:  # pragma: no cover
             log.debug("Didn't find insensitive_fg_color in theme")
             return
         self.color_insensitive = color.to_string()
@@ -252,7 +252,7 @@ class vmmConfig(object):
 
     def inspection_supported(self):
         if not vmmInspection.libguestfs_installed():
-            return False
+            return False  # pragma: no cover
         return self.get_libguestfs_inspect_vms()
 
     def remove_notifier(self, h):

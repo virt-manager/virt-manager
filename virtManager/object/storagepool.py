@@ -54,7 +54,7 @@ class vmmStorageVolume(vmmLibvirtObject):
     def _XMLDesc(self, flags):
         try:
             return self._backend.XMLDesc(flags)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.debug("XMLDesc for vol=%s failed: %s",
                 self._backend.key(), e)
             raise
@@ -97,13 +97,9 @@ class vmmStorageVolume(vmmLibvirtObject):
         return self.get_xmlobj().format
     def get_capacity(self):
         return self.get_xmlobj().capacity
-    def get_allocation(self):
-        return self.get_xmlobj().allocation
 
     def get_pretty_capacity(self):
         return _pretty_bytes(self.get_capacity())
-    def get_pretty_allocation(self):
-        return _pretty_bytes(self.get_allocation())
 
     def get_pretty_name(self, pooltype):
         name = self.get_name()
@@ -111,9 +107,10 @@ class vmmStorageVolume(vmmLibvirtObject):
             return name
 
         key = self.get_key()
-        if not key:
-            return name
-        return "%s (%s)" % (name, key)
+        ret = name
+        if key:
+            ret += " (%s)" % key
+        return ret
 
 
 class vmmStoragePool(vmmLibvirtObject):
@@ -261,7 +258,6 @@ class vmmStoragePool(vmmLibvirtObject):
         for vol in self.get_volumes():
             if vol.get_connkey() == key:
                 return vol
-        return None
 
     def _update_volumes(self, force):
         if not self.is_active():
@@ -287,14 +283,8 @@ class vmmStoragePool(vmmLibvirtObject):
     def get_autostart(self):
         return self._backend.autostart()
 
-    def can_change_alloc(self):
-        typ = self.get_type()
-        return (typ in [StoragePool.TYPE_LOGICAL, StoragePool.TYPE_ZFS])
-
     def get_type(self):
         return self.get_xmlobj().type
-    def get_uuid(self):
-        return self.get_xmlobj().uuid
     def get_target_path(self):
         return self.get_xmlobj().target_path or ""
 

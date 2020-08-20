@@ -40,7 +40,7 @@ class vmmConnectionManager(vmmGObject):
                 conn.close()
                 self.emit("conn-removed", uri)
                 conn.cleanup()
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.exception("Error cleaning up conn=%s", uri)
         self._conns = {}
 
@@ -50,7 +50,7 @@ class vmmConnectionManager(vmmGObject):
 
     def add_conn(self, uri):
         if uri in self._conns:
-            return self._conns[uri]
+            return self._conns[uri]  # pragma: no cover
         conn = vmmConnection(uri)
         self._conns[uri] = conn
         self.config.add_conn_uri(uri)
@@ -59,7 +59,7 @@ class vmmConnectionManager(vmmGObject):
 
     def remove_conn(self, uri):
         if uri not in self._conns:
-            return
+            return  # pragma: no cover
         conn = self._conns.pop(uri)
         self.config.remove_conn_uri(uri)
         self.emit("conn-removed", uri)

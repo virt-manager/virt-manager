@@ -47,9 +47,8 @@ ICON_SHUTOFF = "state_shutoff"
 def _get_pool_size_percent(pool):
     cap = pool.get_capacity()
     alloc = pool.get_allocation()
-    if not cap or alloc is None:
-        per = 0
-    else:
+    per = 0
+    if cap and alloc is not None:
         per = int(((float(alloc) / float(cap)) * 100))
     return "<span size='small'>%s%%</span>" % int(per)
 
@@ -118,7 +117,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _cleanup(self):
         try:
             self.conn.disconnect_by_obj(self)
-        except Exception:
+        except Exception:  # pragma: no cover
             pass
         self.conn = None
 
@@ -271,7 +270,7 @@ class vmmHostStorage(vmmGObjectUI):
             self.conn.support.conn_storage())
 
         if conn_active and not self.conn.support.conn_storage():
-            self._set_error_page(
+            self._set_error_page(  # pragma: no cover
                 _("Libvirt connection does not support storage management."))
 
         if conn_active:
@@ -288,7 +287,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _current_vol(self):
         pool = self._current_pool()
         if not pool:
-            return None
+            return None  # pragma: no cover
 
         connkey = uiutil.get_list_selection(self.widget("vol-list"))
         return connkey and pool.get_volume(connkey)
@@ -369,7 +368,7 @@ class vmmHostStorage(vmmGObjectUI):
 
         try:
             self._populate_pool_state(pool)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.exception(e)
             self._set_error_page(_("Error selecting pool: %s") % e)
         self._disable_pool_apply()
@@ -427,7 +426,7 @@ class vmmHostStorage(vmmGObjectUI):
                 cap = str(vol.get_capacity())
                 sizestr = vol.get_pretty_capacity()
                 fmt = vol.get_format() or ""
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error getting volume info for '%s', "
                               "hiding it", key, exc_info=True)
                 continue
@@ -440,7 +439,7 @@ class vmmHostStorage(vmmGObjectUI):
                     namestr = ", ".join(names)
                     if not namestr:
                         namestr = None
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.exception("Failed to determine if storage volume in "
                                   "use.")
 
@@ -470,7 +469,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _pool_stop_cb(self, src):
         pool = self._current_pool()
         if pool is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Stopping pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.stop, [], self,
@@ -479,7 +478,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _pool_start_cb(self, src):
         pool = self._current_pool()
         if pool is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Starting pool '%s'", pool.get_name())
         vmmAsyncJob.simple_async_noshow(pool.start, [], self,
@@ -492,13 +491,13 @@ class vmmHostStorage(vmmGObjectUI):
             if self._addpool is None:
                 self._addpool = vmmCreatePool(self.conn)
             self._addpool.show(self.topwin)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error launching pool wizard: %s") % str(e))
 
     def _pool_delete_cb(self, src):
         pool = self._current_pool()
         if pool is None:
-            return
+            return  # pragma: no cover
 
         result = self.err.yes_no(_("Are you sure you want to permanently "
                                    "delete the pool %s?") % pool.get_name())

@@ -106,8 +106,6 @@ class vmmNetwork(vmmLibvirtObject):
             self._refresh_dhcp_leases()
         return self._leases
 
-    def get_uuid(self):
-        return self.get_xmlobj().uuid
     def get_bridge_device(self):
         return self.get_xmlobj().bridge
     def get_name_domain(self):

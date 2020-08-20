@@ -23,7 +23,7 @@ class vmmPreferences(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmPreferences()
             cls._instance.show(parentobj.topwin)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             parentobj.err.show_err(
                     _("Error launching preferences: %s") % str(e))
 
@@ -201,12 +201,10 @@ class vmmPreferences(vmmGObjectUI):
 
     def refresh_view_system_tray(self):
         errmsg = vmmSystray.systray_disabled_message()
-        val = self.config.get_view_system_tray()
-        if errmsg:
-            val = False
+        val = bool(self.config.get_view_system_tray() and not errmsg)
         self.widget("prefs-system-tray").set_sensitive(not bool(errmsg))
         self.widget("prefs-system-tray").set_tooltip_text(errmsg)
-        self.widget("prefs-system-tray").set_active(bool(val))
+        self.widget("prefs-system-tray").set_active(val)
 
     def refresh_xmleditor(self):
         val = self.config.get_xmleditor_enabled()
