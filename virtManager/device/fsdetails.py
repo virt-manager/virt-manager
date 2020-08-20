@@ -152,8 +152,6 @@ class vmmFSDetails(vmmGObjectUI):
                                          check_visible=True)
 
     def get_config_fs_readonly(self):
-        if not self.widget("fs-readonly").is_visible():
-            return None
         return self.widget("fs-readonly").get_active()
 
     def get_config_fs_driver(self):
@@ -293,7 +291,7 @@ class vmmFSDetails(vmmGObjectUI):
                     self._dev.format = fsformat
             if wrpolicy:
                 self._dev.wrpolicy = wrpolicy
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             return self.err.val_err(_("Filesystem parameter error"), e)
 
     def _browse_file(self, textent, isdir=False):

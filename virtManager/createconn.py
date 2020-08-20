@@ -32,13 +32,9 @@ class vmmCreateConn(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmCreateConn()
             return cls._instance
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             parentobj.err.show_err(
                     _("Error launching connect dialog: %s") % str(e))
-
-    @classmethod
-    def is_initialized(cls):
-        return bool(cls._instance)
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "createconn.ui", "vmm-open-connection")

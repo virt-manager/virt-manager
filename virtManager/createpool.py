@@ -350,8 +350,7 @@ class vmmCreatePool(vmmGObjectUI):
             return
 
         try:
-            if self._validate(pool) is False:
-                return
+            self._validate(pool)
             build = self._get_build_default(pool.type)
         except Exception as e:  # pragma: no cover
             return self.err.show_err(_("Error validating pool: %s") % e)

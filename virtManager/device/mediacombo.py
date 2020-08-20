@@ -97,11 +97,9 @@ class vmmMediaCombo(vmmGObjectUI):
             if nodedev.xmlobj.drive_type != media_type:
                 continue
 
-            media_label = nodedev.xmlobj.media_label
+            media_label = nodedev.xmlobj.media_label or _("Media Unknown")
             if not nodedev.xmlobj.media_available:
                 media_label = _("No media detected")
-            elif not nodedev.xmlobj.media_label:
-                media_label = _("Media Unknown")
             label = "%s (%s)" % (media_label, nodedev.xmlobj.block)
 
             row = self._make_row(nodedev.xmlobj.block, label,

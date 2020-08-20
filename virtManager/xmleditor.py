@@ -10,7 +10,7 @@ from virtinst import log
 try:
     gi.require_version("GtkSource", "4")
     log.debug("Using GtkSource 4")
-except ValueError:
+except ValueError:  # pragma: no cover
     gi.require_version("GtkSource", "3.0")
     log.debug("Using GtkSource 3.0")
 from gi.repository import GtkSource

@@ -169,7 +169,7 @@ class vmmHostNets(vmmGObjectUI):
 
         try:
             self._populate_net_state(net)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.exception(e)
             self._set_error_page(_("Error selecting network: %s") % e)
         self._disable_net_apply()
@@ -275,7 +275,7 @@ class vmmHostNets(vmmGObjectUI):
     def _delete_network_cb(self, src):
         net = self._current_network()
         if net is None:
-            return
+            return  # pragma: no cover
 
         result = self.err.yes_no(_("Are you sure you want to permanently "
                                    "delete the network %s?") % net.get_name())
@@ -289,7 +289,7 @@ class vmmHostNets(vmmGObjectUI):
     def _start_network_cb(self, src):
         net = self._current_network()
         if net is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Starting network '%s'", net.get_name())
         vmmAsyncJob.simple_async_noshow(net.start, [], self,
@@ -298,7 +298,7 @@ class vmmHostNets(vmmGObjectUI):
     def _stop_network_cb(self, src):
         net = self._current_network()
         if net is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Stopping network '%s'", net.get_name())
         vmmAsyncJob.simple_async_noshow(net.stop, [], self,
@@ -310,7 +310,7 @@ class vmmHostNets(vmmGObjectUI):
             if self._addnet is None:
                 self._addnet = vmmCreateNetwork(self.conn)
             self._addnet.show(self.topwin)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error launching network wizard: %s") % str(e))
 
 
@@ -321,7 +321,7 @@ class vmmHostNets(vmmGObjectUI):
     def _net_apply(self):
         net = self._current_network()
         if net is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Applying changes for network '%s'", net.get_name())
         try:

@@ -80,7 +80,7 @@ class vmmManager(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmManager()
             return cls._instance
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if not parentobj:
                 raise
             parentobj.err.show_err(
@@ -279,13 +279,11 @@ class vmmManager(vmmGObjectUI):
             c.set_homogeneous(False)
 
     def init_context_menus(self):
-        def add_to_menu(idx, text, icon, cb):
+        def add_to_menu(idx, text, cb):
             if text[0:3] == 'gtk':
                 item = Gtk.ImageMenuItem.new_from_stock(text, None)
             else:
                 item = Gtk.ImageMenuItem.new_with_mnemonic(text)
-            if icon:
-                item.set_image(icon)
             if cb:
                 item.connect("activate", cb)
             item.get_accessible().set_name("conn-%s" % idx)
@@ -293,14 +291,14 @@ class vmmManager(vmmGObjectUI):
             self.connmenu_items[idx] = item
 
         # Build connection context menu
-        add_to_menu("create", Gtk.STOCK_NEW, None, self.new_vm)
-        add_to_menu("connect", Gtk.STOCK_CONNECT, None, self.open_conn)
-        add_to_menu("disconnect", Gtk.STOCK_DISCONNECT, None,
+        add_to_menu("create", Gtk.STOCK_NEW, self.new_vm)
+        add_to_menu("connect", Gtk.STOCK_CONNECT, self.open_conn)
+        add_to_menu("disconnect", Gtk.STOCK_DISCONNECT,
                       self.close_conn)
         self.connmenu.add(Gtk.SeparatorMenuItem())
-        add_to_menu("delete", Gtk.STOCK_DELETE, None, self.do_delete)
+        add_to_menu("delete", Gtk.STOCK_DELETE, self.do_delete)
         self.connmenu.add(Gtk.SeparatorMenuItem())
-        add_to_menu("details", _("D_etails"), None, self.show_host)
+        add_to_menu("details", _("D_etails"), self.show_host)
         self.connmenu.show_all()
 
     def init_vmlist(self):
@@ -553,7 +551,7 @@ class vmmManager(vmmGObjectUI):
     def vm_added(self, conn, connkey):
         vm = conn.get_vm(connkey)
         if not vm:
-            return
+            return  # pragma: no cover
 
         vm_row = self._build_row(None, vm)
         conn_row = self.get_row(conn)
@@ -643,7 +641,7 @@ class vmmManager(vmmGObjectUI):
         # Make sure error page isn't showing
         self.widget("vm-notebook").set_current_page(0)
         if self.get_row(conn):
-            return
+            return  # pragma: no cover
 
         conn_row = self._build_row(conn, None)
         self.model.append(None, conn_row)

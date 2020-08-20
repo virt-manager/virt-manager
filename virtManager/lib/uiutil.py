@@ -7,6 +7,8 @@
 from gi.repository import GObject
 from gi.repository import Gtk
 
+from virtinst import xmlutil
+
 
 #####################
 # UI getter helpers #
@@ -142,8 +144,7 @@ def set_grid_row_visible(child, visible):
     """
     parent = child.get_parent()
     if not isinstance(parent, Gtk.Grid):
-        raise RuntimeError("Programming error, parent must be grid, "
-                           "not %s" % type(parent))
+        raise xmlutil.DevError("parent must be grid, not %s" % type(parent))
 
     row = child_get_property(parent, child, "top-attach")
     for c in parent.get_children():
