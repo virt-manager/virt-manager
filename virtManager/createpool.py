@@ -19,10 +19,6 @@ from .xmleditor import vmmXMLEditor
 
 
 class vmmCreatePool(vmmGObjectUI):
-    __gsignals__ = {
-        "pool-created": (vmmGObjectUI.RUN_FIRST, None, [str]),
-    }
-
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "createpool.ui", "vmm-create-pool")
         self.conn = conn
@@ -329,10 +325,6 @@ class vmmCreatePool(vmmGObjectUI):
     # Object install #
     ##################
 
-    def _pool_added_cb(self, src, connkey, created_name):
-        if connkey == created_name:
-            self.emit("pool-created", connkey)
-
     def _finish_cb(self, error, details, pool):
         self.reset_finish_cursor()
 
@@ -341,8 +333,6 @@ class vmmCreatePool(vmmGObjectUI):
             self.err.show_err(error,
                               details=details)
         else:
-            self.conn.connect_once("pool-added", self._pool_added_cb,
-                pool.name)
             self.conn.schedule_priority_tick(pollpool=True)
             self.close()
 
