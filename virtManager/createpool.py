@@ -123,8 +123,6 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-iqn-chk").toggled()
         self.widget("pool-iqn").set_text("")
         self.widget("pool-format").set_active(0)
-        self.widget("pool-build").set_sensitive(True)
-        self.widget("pool-build").set_active(False)
 
         uiutil.set_list_selection(self.widget("pool-type"), 0)
         self._show_options_by_pool()
@@ -176,18 +174,12 @@ class vmmCreatePool(vmmGObjectUI):
         return plist
 
     def _get_build_default(self, pooltype):
-        """ Return (default value, whether build option can be changed)"""
         if pooltype in [StoragePool.TYPE_DIR,
                         StoragePool.TYPE_FS,
                         StoragePool.TYPE_NETFS]:
             # Building for these simply entails creating a directory
-            return (True, False)
-        elif pooltype in [StoragePool.TYPE_DISK]:
-            # This is a dangerous operation, anything (False, True)
-            # should be assumed to be one.
-            return (False, True)
-
-        return (False, False)
+            return True
+        return False
 
     def _show_options_by_pool(self):
         def show_row(base, do_show):
@@ -202,7 +194,6 @@ class vmmCreatePool(vmmGObjectUI):
         host = pool.supports_hosts()
         fmt = pool.supports_format()
         iqn = pool.supports_iqn()
-        builddef, buildsens = self._get_build_default(pool.type)
 
         src_name = pool.supports_source_name()
         is_lvm = pool.type == StoragePool.TYPE_LOGICAL
@@ -219,7 +210,6 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-source", src)
         show_row("pool-hostname", host)
         show_row("pool-format", fmt)
-        show_row("pool-build", buildsens)
         show_row("pool-iqn", iqn)
         show_row("pool-source-name", src_name)
 
@@ -240,7 +230,6 @@ class vmmCreatePool(vmmGObjectUI):
 
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
-        self.widget("pool-build").set_active(builddef)
 
         if src_name:
             self.widget("pool-source-name").get_child().set_text(
@@ -335,16 +324,6 @@ class vmmCreatePool(vmmGObjectUI):
     def _validate(self, pool):
         pool.validate()
 
-        buildval = self.widget("pool-build").get_active()
-        buildsen = (self.widget("pool-build").get_sensitive() and
-                    self.widget("pool-build").get_visible())
-        if buildsen and buildval:
-            ret = self.err.yes_no(_("Building a pool of this type will "
-                                    "format the source device. Are you "
-                                    "sure you want to 'build' this pool?"))
-            if not ret:
-                return ret
-
 
     ##################
     # Object install #
@@ -383,12 +362,12 @@ class vmmCreatePool(vmmGObjectUI):
         try:
             if self._validate(pool) is False:
                 return
+            build = self._get_build_default(pool.type)
         except Exception as e:  # pragma: no cover
             return self.err.show_err(_("Error validating pool: %s") % e)
 
         self.reset_finish_cursor()
 
-        build = self.widget("pool-build").get_active()
         progWin = vmmAsyncJob(self._async_pool_create, [pool, build],
                               self._finish_cb, [pool],
                               _("Creating storage pool..."),
