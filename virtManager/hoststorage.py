@@ -105,6 +105,7 @@ class vmmHostStorage(vmmGObjectUI):
 
         self._init_ui()
         self._populate_pools()
+        self._refresh_conn_state()
         self.conn.connect("pool-added", self._conn_pools_changed_cb)
         self.conn.connect("pool-removed", self._conn_pools_changed_cb)
         self.conn.connect("state-changed", self._conn_state_changed_cb)
@@ -277,8 +278,8 @@ class vmmHostStorage(vmmGObjectUI):
             uiutil.set_list_selection_by_number(self.widget("pool-list"), 0)
             return
 
-        self._set_error_page(_("Connection not active."))
         self._populate_pools()
+        self._set_error_page(_("Connection not active."))
 
     def _current_pool(self):
         connkey = uiutil.get_list_selection(self.widget("pool-list"))
@@ -353,6 +354,10 @@ class vmmHostStorage(vmmGObjectUI):
     def _set_error_page(self, msg):
         self.widget("storage-pages").set_current_page(1)
         self.widget("storage-error-label").set_text(msg)
+        self.widget("pool-delete").set_sensitive(False)
+        self.widget("pool-stop").set_sensitive(False)
+        self.widget("pool-start").set_sensitive(False)
+        self._disable_pool_apply()
 
     def _refresh_current_pool(self):
         pool = self._current_pool()
