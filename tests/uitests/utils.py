@@ -455,7 +455,7 @@ class VMMDogtailApp(object):
         return bool(self._proc and self._proc.poll() is None)
 
     def open(self, extra_opts=None, check_already_running=True, use_uri=True,
-            window_name=None, xmleditor_enabled=False):
+            window_name=None, xmleditor_enabled=False, keyfile=None):
         extra_opts = extra_opts or []
 
         if tests.utils.TESTCONFIG.debug:
@@ -472,8 +472,20 @@ class VMMDogtailApp(object):
                 "--no-fork"]
         if use_uri:
             cmd += ["--connect", self.uri]
+
+        testoptions = []
         if xmleditor_enabled:
-            cmd += ["--test-options=xmleditor-enabled"]
+            testoptions.append("xmleditor-enabled")
+        if keyfile:
+            import atexit
+            import tempfile
+            tempname = tempfile.mktemp(prefix="virtmanager-uitests-keyfile")
+            open(tempname, "w").write(open(keyfile).read())
+            atexit.register(lambda: os.unlink(tempname))
+            testoptions.append("gsettings-keyfile=%s" % tempname)
+
+        if testoptions:
+            cmd += ["--test-options=%s" % ",".join(testoptions)]
         cmd += extra_opts
 
         if check_already_running:
