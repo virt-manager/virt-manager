@@ -1087,7 +1087,7 @@ class vmmDomain(vmmLibvirtObject):
         if iface.type == "network":
             net = self.conn.get_net(iface.source)
             if net:
-                net.refresh_dhcp_leases()
+                net.get_dhcp_leases(refresh=True)
         if not self.is_active():
             return
 
