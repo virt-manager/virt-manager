@@ -117,23 +117,6 @@ class vmmNetwork(vmmLibvirtObject):
     def get_ipv4_forward_mode(self):
         return self.get_xmlobj().forward.mode
 
-    def _get_static_route(self, family):
-        xmlobj = self.get_xmlobj()
-        route = None
-        for r in xmlobj.routes:
-            if (r.family == family or (family == "ipv4" and not r.family)):
-                route = r
-                break
-        if not route:
-            return [None, None]
-
-        routeAddr = _make_addr_str(route.address, route.prefix, route.netmask)
-        routeVia = str(ipaddress.ip_address(str(route.gateway)))
-
-        if not routeAddr or not routeVia:
-            return [None, None]
-        return [routeAddr, routeVia]
-
     def _get_network(self, family):
         dhcpstart = None
         dhcpend = None
@@ -167,11 +150,9 @@ class vmmNetwork(vmmLibvirtObject):
         return [ret, dhcp]
 
     def get_ipv4_network(self):
-        ret = self._get_network("ipv4")
-        return ret + [self._get_static_route("ipv4")]
+        return self._get_network("ipv4")
     def get_ipv6_network(self):
-        ret = self._get_network("ipv6")
-        return ret + [self._get_static_route("ipv6")]
+        return self._get_network("ipv6")
 
     def pretty_forward_mode(self):
         mode = self.xmlobj.forward.mode

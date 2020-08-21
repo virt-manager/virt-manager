@@ -193,9 +193,7 @@ class vmmHostNets(vmmGObjectUI):
             curnet and curnet.get_connkey() or None)
 
     def _populate_net_ipv4_state(self, net):
-        (netstr,
-         (dhcpstart, dhcpend),
-         (routeaddr, routevia)) = net.get_ipv4_network()
+        (netstr, (dhcpstart, dhcpend)) = net.get_ipv4_network()
 
         self.widget("net-ipv4-expander").set_visible(bool(netstr))
         if not netstr:
@@ -213,16 +211,8 @@ class vmmHostNets(vmmGObjectUI):
         self.widget("net-ipv4-dhcp-range").set_text(dhcpstr)
         self.widget("net-ipv4-network").set_text(netstr)
 
-        uiutil.set_grid_row_visible(
-            self.widget("net-ipv4-route"), bool(routevia))
-        if routevia:
-            routevia = routeaddr + ", gateway=" + routevia
-            self.widget("net-ipv4-route").set_text(routevia or "")
-
     def _populate_net_ipv6_state(self, net):
-        (netstr,
-         (dhcpstart, dhcpend),
-         (routeaddr, routevia)) = net.get_ipv6_network()
+        (netstr, (dhcpstart, dhcpend)) = net.get_ipv6_network()
 
         self.widget("net-ipv6-expander").set_visible(bool(netstr))
         self.widget("net-ipv6-forwarding-icon").set_from_stock(
@@ -242,12 +232,6 @@ class vmmHostNets(vmmGObjectUI):
             dhcpstr = dhcpstart + " - " + dhcpend
         self.widget("net-ipv6-dhcp-range").set_text(dhcpstr)
         self.widget("net-ipv6-network").set_text(netstr or "")
-
-        uiutil.set_grid_row_visible(
-            self.widget("net-ipv6-route"), bool(routevia))
-        if routevia:
-            routevia = routeaddr + ", gateway=" + routevia
-            self.widget("net-ipv6-route").set_text(routevia or "")
 
     def _populate_net_state(self, net):
         active = net.is_active()
