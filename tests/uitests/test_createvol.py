@@ -42,9 +42,7 @@ class CreateVol(uiutils.UITestCase):
         volcell.click()
         hostwin.find("vol-refresh", "push button").click()
         hostwin.find("vol-delete", "push button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("permanently delete the volume", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("permanently delete the volume", "Yes")
         uiutils.check_in_loop(lambda: volcell.dead)
 
 

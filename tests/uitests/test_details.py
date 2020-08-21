@@ -252,9 +252,7 @@ class Details(uiutils.UITestCase):
         tab.find("Device name:", "text").text = ""
         appl.click()
         # Check validation error
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Error changing VM configuration", "label")
-        alert.find("Close", "push button").click()
+        self._click_alert_button("Error changing VM configuration", "Close")
         tab.find("Device name:", "text").text = "zbr0"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
@@ -383,9 +381,7 @@ class Details(uiutils.UITestCase):
         delete.find_fuzzy("Delete", "button").click()
 
         # Will be fixed eventually
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Device could not be removed", "label")
-        alert.find("OK", "push button").click()
+        self._click_alert_button("Device could not be removed", "OK")
 
         c = hwlist.find(disklabel, "table cell")
         self._stop_vm(win)
@@ -410,9 +406,7 @@ class Details(uiutils.UITestCase):
         share = tab.find("Shareable:", "check box")
         share.click()
         hwlist.find("CPUs", "table cell").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("There are unapplied changes", "label")
-        alert.find("No", "push button").click()
+        self._click_alert_button("There are unapplied changes", "No")
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
         self.assertFalse(share.checked)
 
@@ -439,9 +433,7 @@ class Details(uiutils.UITestCase):
 
         # Now apply changes to running VM, ensure they show up on shutdown
         win.find("config-apply").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("changes will take effect", "label")
-        alert.find("OK", "push button").click()
+        self._click_alert_button("changes will take effect", "OK")
         self.assertTrue(share.checked)
         self._stop_vm(win)
         self.assertTrue(not share.checked)
@@ -450,17 +442,13 @@ class Details(uiutils.UITestCase):
         tab = self._select_hw(win, "Overview", "overview-tab")
         tab.find("Description:", "text").text = "hey new description"
         win.find("XML", "page tab").click()
-        alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy("changes will be lost")
-
         # Select 'No', meaning don't abandon changes
-        alert.find("No", "push button").click()
+        self._click_alert_button("changes will be lost", "No")
         uiutils.check_in_loop(lambda: tab.showing)
 
         # Try unapplied changes again, this time abandon our changes
         win.find("XML", "page tab").click()
-        alert = self.app.root.find("vmm dialog")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("changes will be lost", "Yes")
         uiutils.check_in_loop(lambda: not tab.showing)
 
     def testDetailsXMLEdit(self):

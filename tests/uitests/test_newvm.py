@@ -92,9 +92,7 @@ class NewVM(uiutils.UITestCase):
 
         # Make sure we throw an error if no OS selected
         self.forward(newvm, check=False)
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find("You must select", "label")
-        alert.find("OK", "push button").click()
+        self._click_alert_button("You must select", "OK")
 
         # Test activating the osentry to grab the popover selection
         osentry.click()
@@ -130,8 +128,7 @@ class NewVM(uiutils.UITestCase):
 
         delete = self.app.root.find_fuzzy("Delete", "frame")
         delete.find_fuzzy("Delete", "button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Yes", "push button").click()
+        self._click_alert_button("Are you sure", "Yes")
 
         # Verify delete dialog and VM dialog are now gone
         uiutils.check_in_loop(lambda: vmwindow.showing is False)
@@ -370,8 +367,7 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm, check=False)
 
         # Disk collision box pops up, hit ok
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Yes", "push button").click()
+        self._click_alert_button("in use", "Yes")
 
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -522,9 +518,7 @@ class NewVM(uiutils.UITestCase):
             # '/' in name will trigger libvirt error
             _newvm.find_fuzzy("Name", "text").text = "test/bad"
             _newvm.find_fuzzy("Finish", "button").click()
-            alert = self.app.root.find("vmm dialog", "alert")
-            alert.find_fuzzy("Unable to complete install")
-            alert.find_fuzzy("Close", "button").click()
+            self._click_alert_button("Unable to complete install", "Close")
             return _newvm
 
         newvm = dofail()

@@ -31,8 +31,7 @@ class VMMMigrate(uiutils.UITestCase):
         mig = self.app.root.find("Migrate the virtual machine", "frame")
         mig.find("Advanced", "toggle button").click_expander()
         mig.find("Migrate", "push button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("the.connection.driver:.virDomainMigrate")
-        alert.find("Close", "push button").click()
+        self._click_alert_button(
+                "the.connection.driver:.virDomainMigrate", "Close")
         mig.find("Cancel", "push button").click()
         uiutils.check_in_loop(lambda: not mig.showing)

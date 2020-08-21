@@ -75,8 +75,7 @@ class VMMCLI(uiutils.UITestCase):
 
         delete = self.app.topwin
         delete.find_fuzzy("Delete", "button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Yes", "push button").click()
+        self._click_alert_button("Are you sure", "Yes")
 
         # Ensure app exits
         uiutils.check_in_loop(lambda: not self.app.is_running())
@@ -99,13 +98,11 @@ class VMMCLI(uiutils.UITestCase):
 
     def testShowCLIError(self):
         self.app.open(extra_opts=["--idontexist"])
-        alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy("Unhandled command line")
+        self._click_alert_button("Unhandled command line", "Close")
+        uiutils.check_in_loop(lambda: not self.app.is_running())
 
     def testShowConnectBadURI(self):
         baduri = "fribfrobfroo"
         self.app = uiutils.VMMDogtailApp(baduri)
-        alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy(baduri)
-        alert.find_fuzzy("Close", "push button").click()
+        self._click_alert_button(baduri, "Close")
         uiutils.check_in_loop(lambda: not self.app.is_running())

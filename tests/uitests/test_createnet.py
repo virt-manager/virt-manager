@@ -50,9 +50,7 @@ class CreateNet(uiutils.UITestCase):
 
         # Delete it
         delete.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("permanently delete the network", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("permanently delete the network", "Yes")
 
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)

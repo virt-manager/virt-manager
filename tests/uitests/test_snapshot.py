@@ -48,20 +48,18 @@ class Snapshots(uiutils.UITestCase):
         snapname = "offline-root"
         win.find(snapname, "table cell").click()
         snaprun.click()
-        alert = self.app.root.find_fuzzy("vmm dialog", "alert")
-        alert.find_fuzzy(
-                "sure you want to run the snapshot '%s'" % snapname, "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button(
+                "sure you want to run the snapshot '%s'" % snapname,
+                "Yes")
         uiutils.check_in_loop(lambda: vmrun.sensitive)
 
         # Start paused snapshot
         snapname = "snap-paused"
         win.find(snapname, "table cell").click()
         snaprun.click()
-        alert = self.app.root.find_fuzzy("vmm dialog", "alert")
-        alert.find_fuzzy(
-                "sure you want to run the snapshot '%s'" % snapname, "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button(
+                "sure you want to run the snapshot '%s'" % snapname,
+                "Yes")
         uiutils.check_in_loop(lambda: vmpause.checked)
 
         # Edit snapshot
@@ -84,9 +82,7 @@ class Snapshots(uiutils.UITestCase):
 
         # Delete it
         win.find("snapshot-delete", "push button").click()
-        alert = self.app.root.find_fuzzy("vmm dialog", "alert")
-        alert.find_fuzzy("permanently delete", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("permanently delete", "Yes")
         uiutils.check_in_loop(lambda: newc.dead)
 
         # Switch out of window

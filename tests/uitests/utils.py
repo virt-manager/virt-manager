@@ -97,6 +97,12 @@ class UITestCase(unittest.TestCase):
             check_in_loop(lambda: run.sensitive)
         return win
 
+    def _click_alert_button(self, label_text, button_text):
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy(label_text, "label")
+        alert.find(button_text, "push button").click()
+        check_in_loop(lambda: not alert.active)
+
     def _walkUIList(self, win, lst, error_cb, reverse=False):
         """
         Toggle down through a UI list like addhardware, net/storage/iface
@@ -148,23 +154,17 @@ class UITestCase(unittest.TestCase):
 
         # Trying to click away should warn that there's unapplied changes
         win.find("Details", "page tab").click()
-        alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy("changes will be lost")
-
         # Select 'No', meaning don't abandon changes
-        alert.find("No", "push button").click()
+        self._click_alert_button("changes will be lost", "No")
         check_in_loop(lambda: xmleditor.showing)
 
         # Click the finish button, but our bogus change should trigger error
         finish.click()
-        alert = self.app.root.find("vmm dialog")
-        alert.find_fuzzy("(xmlParseDoc|tag.mismatch)")
-        alert.find("Close", "push button").click()
+        self._click_alert_button("(xmlParseDoc|tag.mismatch)", "Close")
 
         # Try unapplied changes again, this time abandon our changes
         win.find("Details", "page tab").click()
-        alert = self.app.root.find("vmm dialog")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("changes will be lost", "Yes")
         check_in_loop(lambda: not xmleditor.showing)
 
 

@@ -61,9 +61,7 @@ class CreatePool(uiutils.UITestCase):
 
         # Delete it
         delete.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("permanently delete the pool", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("permanently delete the pool", "Yes")
 
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)
@@ -91,9 +89,7 @@ class CreatePool(uiutils.UITestCase):
         _browse_local_path("Choose target directory", "by-path")
         finish.click()
         # Catch example error
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("source host name", "label")
-        alert.find("Close", "push button").click()
+        self._click_alert_button("source host name", "Close")
         win.find("Host Name:", "text").text = "example.com"
         win.find("pool-source-path-text").text = "foo-iqn"
         win.find_fuzzy("Initiator IQN:", "check").click()

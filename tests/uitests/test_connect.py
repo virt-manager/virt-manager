@@ -22,9 +22,7 @@ class VMMConnect(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: "Not Connected" in c.text)
         c.click(button=3)
         self.app.root.find("conn-delete", "menu item").click()
-        err = self.app.root.find("vmm dialog", "alert")
-        err.find_fuzzy("will remove the connection", "label")
-        err.find_fuzzy("Yes", "push button").click()
+        self._click_alert_button("will remove the connection", "Yes")
         uiutils.check_in_loop(lambda: c.dead)
 
         # Launch the dialog, grab some UI pointers
@@ -61,8 +59,7 @@ class VMMConnect(uiutils.UITestCase):
         c = self.app.root.find_fuzzy(fakehost, "table cell")
         uiutils.check_in_loop(lambda: "Connecting..." not in c.text,
                 timeout=10)
-        err = self.app.root.find_fuzzy("vmm dialog", "alert")
-        err.find_fuzzy("No", "push button").click()
+        self._click_alert_button("Unable to connect", "No")
 
         # Ensure dialog shows old contents for editing
         uiutils.check_in_loop(lambda: win.showing)
@@ -74,8 +71,7 @@ class VMMConnect(uiutils.UITestCase):
         c = self.app.root.find_fuzzy(fakehost, "table cell")
         uiutils.check_in_loop(lambda: "Connecting..." not in c.text,
                 timeout=10)
-        err = self.app.root.find_fuzzy("vmm dialog", "alert")
-        err.find_fuzzy("Yes", "push button").click()
+        self._click_alert_button("Unable to connect", "Yes")
         c = self.app.root.find_fuzzy(fakehost, "table cell")
 
         # Test with custom test:///default connection
