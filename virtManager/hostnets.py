@@ -86,6 +86,16 @@ class vmmHostNets(vmmGObjectUI):
     def _init_ui(self):
         self.widget("network-pages").set_show_tabs(False)
 
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("net-details-align"),
+                self.widget("net-details"))
+        self._xmleditor.connect("changed",
+                lambda s: self._enable_net_apply(EDIT_NET_XML))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
+        self._xmleditor.connect("xml-reset",
+                self._xmleditor_xml_reset_cb)
+
         # [ unique, label, icon name, icon size, is_active ]
         netListModel = Gtk.ListStore(str, str, str, int, bool)
         self.widget("net-list").set_model(netListModel)
@@ -106,16 +116,6 @@ class vmmHostNets(vmmGObjectUI):
         netCol.add_attribute(net_img, 'stock-size', 3)
         self.widget("net-list").append_column(netCol)
         netListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
-                self.widget("net-details-align"),
-                self.widget("net-details"))
-        self._xmleditor.connect("changed",
-                lambda s: self._enable_net_apply(EDIT_NET_XML))
-        self._xmleditor.connect("xml-requested",
-                self._xmleditor_xml_requested_cb)
-        self._xmleditor.connect("xml-reset",
-                self._xmleditor_xml_reset_cb)
 
 
     ##############
