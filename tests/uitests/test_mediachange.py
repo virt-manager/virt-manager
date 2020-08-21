@@ -38,7 +38,8 @@ class MediaChange(uiutils.UITestCase):
         entry.text = "/dev/fdb"
         appl.click()
         uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertEqual(entry.text, "Floppy_install_label (/dev/fdb)")
+        uiutils.check_in_loop(lambda:
+            entry.text == "Floppy_install_label (/dev/fdb)")
 
         # Specify manual path
         path = "/tmp/aaaaaaaaaaaaaaaaaaaaaaa.img"
