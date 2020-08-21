@@ -94,16 +94,16 @@ class vmmNetwork(vmmLibvirtObject):
     def set_autostart(self, value):
         self._backend.setAutostart(value)
 
-    def refresh_dhcp_leases(self):
+    def _refresh_dhcp_leases(self):
         try:
             self._leases = self._backend.DHCPLeases()
         except Exception as e:
             log.debug("Error getting %s DHCP leases: %s", self, str(e))
             self._leases = []
 
-    def get_dhcp_leases(self):
-        if self._leases is None:
-            self.refresh_dhcp_leases()
+    def get_dhcp_leases(self, refresh=False):
+        if self._leases is None or refresh:
+            self._refresh_dhcp_leases()
         return self._leases
 
     def get_uuid(self):
