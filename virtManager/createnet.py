@@ -22,11 +22,9 @@ from .xmleditor import vmmXMLEditor
 
 
 def _make_ipaddr(addrstr):
-    if addrstr is None:
-        return None
     try:
         return ipaddress.ip_network(str(addrstr), strict=False)
-    except Exception:
+    except Exception:  # pragma: no cover
         return None
 
 
@@ -50,13 +48,13 @@ class vmmCreateNetwork(vmmGObjectUI):
             "on_net_forward_device_changed": self._net_forward_device_changed_cb,
             "on_net_dns_use_toggled": self._net_dns_use_toggled_cb,
 
-            "on_net-ipv4-enable_toggled":  self.change_ipv4_enable,
+            "on_net-ipv4-enable_toggled":  self._ipv4_toggled_cb,
             "on_net-ipv4-network_changed": self._change_ipv4_network_cb,
-            "on_net-dhcpv4-enable_toggled": self.change_dhcpv4_enable,
+            "on_net-dhcpv4-enable_toggled": self._dhcpv4_toggled_cb,
 
-            "on_net-ipv6-enable_toggled":  self.change_ipv6_enable,
+            "on_net-ipv6-enable_toggled":  self._ipv6_toggled_cb,
             "on_net-ipv6-network_changed": self._change_ipv6_network_cb,
-            "on_net-dhcpv6-enable_toggled": self.change_dhcpv6_enable,
+            "on_net-dhcpv6-enable_toggled": self._dhcpv6_toggled_cb,
         })
         self.bind_escape_key_close()
 
@@ -147,7 +145,6 @@ class vmmCreateNetwork(vmmGObjectUI):
         self.widget("net-dhcpv6-start").set_text("")
         self.widget("net-dhcpv6-end").set_text("")
 
-
         # Populate physical forward devices
         self.widget("net-forward-device").set_active(0)
         self.widget("net-forward-mode").set_active(0)
@@ -223,22 +220,15 @@ class vmmCreateNetwork(vmmGObjectUI):
     def get_config_dhcpv6_end(self):
         return self._get_network_helper("net-dhcpv6-end")
 
-    def get_config_forwarding(self):
-        mode = uiutil.get_list_selection(self.widget("net-forward-mode"))
-        if mode == "isolated":
-            return [None, None]
+    def _get_config_net_forward_dev(self):
+        if not self.widget("net-forward-device").is_visible():
+            return None
 
-        if mode == "hostdev":
-            dev = uiutil.get_list_selection(self.widget("net-hostdevs"))
-        else:
-            manual = uiutil.get_list_selection(
-                    self.widget("net-forward-device"))
-            if manual:
-                dev = self.widget("net-forward-manual").get_text()
-            else:
-                dev = None
-
-        return [dev, mode]
+        manual = bool(uiutil.get_list_selection(
+                    self.widget("net-forward-device")))
+        if not manual:
+            return None
+        return self.widget("net-forward-manual").get_text()
 
 
     #############
@@ -272,20 +262,29 @@ class vmmCreateNetwork(vmmGObjectUI):
         custom = self.widget("net-dns-use-custom").get_active()
         self.widget("net-domain-name").set_sensitive(custom)
 
-    def change_ipv4_enable(self, ignore):
-        enabled = self.get_config_ipv4_enable()
+    def _ipv4_toggled_cb(self, src):
+        self.change_ipv4_enable()
+    def _dhcpv4_toggled_cb(self, src):
+        self.change_dhcpv4_enable()
+    def _ipv6_toggled_cb(self, src):
+        self.change_ipv6_enable()
+    def _dhcpv6_toggled_cb(self, src):
+        self.change_dhcpv6_enable()
+
+    def change_ipv4_enable(self):
+        enabled = self.widget("net-ipv4-enable").get_active()
         self.widget("net-ipv4-box").set_visible(enabled)
-    def change_ipv6_enable(self, ignore):
-        enabled = self.get_config_ipv6_enable()
+    def change_ipv6_enable(self):
+        enabled = self.widget("net-ipv6-enable").get_active()
         self.widget("net-ipv6-box").set_visible(enabled)
 
-    def change_dhcpv4_enable(self, ignore):
+    def change_dhcpv4_enable(self):
         enabled = self.get_config_dhcpv4_enable()
         start = self.widget("net-dhcpv4-start")
         end = self.widget("net-dhcpv4-end")
         uiutil.set_grid_row_visible(start, enabled)
         uiutil.set_grid_row_visible(end, enabled)
-    def change_dhcpv6_enable(self, ignore):
+    def change_dhcpv6_enable(self):
         enabled = self.get_config_dhcpv6_enable()
         start = self.widget("net-dhcpv6-start")
         end = self.widget("net-dhcpv6-end")
@@ -348,19 +347,20 @@ class vmmCreateNetwork(vmmGObjectUI):
         net.name = self.widget("net-name").get_text()
         net.domain_name = self.get_config_domain_name()
 
-        dev, mode = self.get_config_forwarding()
-        if mode:
-            net.forward.mode = mode
-            if mode == "open":
-                net.forward.dev = None
-            else:
-                net.forward.dev = dev or None
+        mode = uiutil.get_list_selection(self.widget("net-forward-mode"))
+        dev = self._get_config_net_forward_dev()
+
+        if mode == "isolated":
+            mode = None
+
+        net.forward.mode = mode
+        net.forward.dev = dev
 
         if net.forward.mode == "hostdev":
             net.forward.managed = "yes"
             pfobj = net.forward.pf.add_new()
-            pfobj.dev = net.forward.dev
-            net.forward.dev = None
+            pfobj.dev = uiutil.get_list_selection(
+                self.widget("net-hostdevs"))
             return net
 
         if self.get_config_ipv4_enable():
@@ -427,7 +427,7 @@ class vmmCreateNetwork(vmmGObjectUI):
         try:
             netobj.create()
             netobj.setAutostart(True)
-        except Exception:
+        except Exception:  # pragma: no cover
             netobj.undefine()
             raise
 
