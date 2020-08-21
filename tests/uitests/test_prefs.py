@@ -89,3 +89,16 @@ class VMMPrefs(uiutils.UITestCase):
         detailswin.find("Details", "page tab").click()
         uiutils.check_in_loop(lambda:
                 detailswin.find("Title:", "text").text == "FOOTITLE")
+
+    def testPrefsKeyfile(self):
+        """
+        Preload some keyfile settings and verify they work as expected
+        """
+        import os
+        keyfile = os.path.dirname(__file__) + "/data/keyfile/defaultconn.ini"
+        self.app.open(use_uri=False, keyfile=keyfile)
+        managerwin = self.app.topwin
+
+        # test:///default should be connected
+        managerwin.find("test default", "table cell")
+        managerwin.find("foo - Not Connected", "table cell")
