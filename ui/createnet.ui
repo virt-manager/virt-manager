@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkImage" id="image2">
@@ -14,9 +14,6 @@
     <property name="title" translatable="yes">Create a new virtual network</property>
     <property name="type_hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_create_delete_event" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -127,6 +124,11 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <signal name="changed" handler="on_net_forward_mode_changed" swapped="no"/>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-forward-mode-atkobject">
+                                <property name="AtkObject::accessible-name">net-mode</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -181,7 +183,7 @@
                             <signal name="changed" handler="on_net_forward_device_changed" swapped="no"/>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="net-forward-device-atkobject">
-                                <property name="AtkObject::accessible-name">Physical Network</property>
+                                <property name="AtkObject::accessible-name">net-forward</property>
                               </object>
                             </child>
                           </object>
@@ -196,6 +198,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-hostdevs-atkobject">
+                                <property name="AtkObject::accessible-name">net-devicelist</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -252,6 +259,11 @@
                         <child>
                           <object class="GtkEntry" id="net-forward-manual">
                             <property name="can_focus">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-forward-manual-atkobject">
+                                <property name="AtkObject::accessible-name">net-device</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -338,6 +350,11 @@
                                                 <property name="invisible_char">●</property>
                                                 <property name="width_chars">25</property>
                                                 <signal name="changed" handler="on_net-ipv4-network_changed" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="net-ipv4-network-atkobject">
+                                                    <property name="AtkObject::accessible-name">ipv4-network</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -374,6 +391,11 @@
                                             <property name="max_length">15</property>
                                             <property name="invisible_char">●</property>
                                             <property name="width_chars">25</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="net-dhcpv4-start-atkobject">
+                                                <property name="AtkObject::accessible-name">ipv4-start</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -386,6 +408,11 @@
                                             <property name="can_focus">True</property>
                                             <property name="max_length">15</property>
                                             <property name="invisible_char">●</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="net-dhcpv4-end-atkobject">
+                                                <property name="AtkObject::accessible-name">ipv4-end</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -541,6 +568,11 @@
                                                 <property name="invisible_char">●</property>
                                                 <property name="width_chars">25</property>
                                                 <signal name="changed" handler="on_net-ipv6-network_changed" swapped="no"/>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="net-ipv6-network-atkobject">
+                                                    <property name="AtkObject::accessible-name">ipv6-network</property>
+                                                  </object>
+                                                </child>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -575,6 +607,11 @@
                                             <property name="max_length">40</property>
                                             <property name="invisible_char">●</property>
                                             <property name="width_chars">25</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="net-dhcpv6-start-atkobject">
+                                                <property name="AtkObject::accessible-name">ipv6-start</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -587,6 +624,11 @@
                                             <property name="can_focus">True</property>
                                             <property name="max_length">40</property>
                                             <property name="invisible_char">●</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="net-dhcpv6-end-atkobject">
+                                                <property name="AtkObject::accessible-name">ipv6-end</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="left_attach">1</property>
@@ -691,6 +733,11 @@
                                     <property name="max_length">20</property>
                                     <property name="invisible_char">●</property>
                                     <property name="width_chars">20</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="net-domain-name-atkobject">
+                                        <property name="AtkObject::accessible-name">domain-custom</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -810,6 +857,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
