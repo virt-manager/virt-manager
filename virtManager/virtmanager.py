@@ -200,14 +200,28 @@ class CLITestOptionsClass:
             opts.remove(optname)
             return True
 
+        def _get_value(optname):
+            for opt in opts:
+                if opt.startswith(optname + "="):
+                    opts.remove(opt)
+                    return opt.split("=", 1)[1]
+
         self.first_run = _get("first-run")
         self.leak_debug = _get("leak-debug")
         self.no_events = _get("no-events")
         self.xmleditor_enabled = _get("xmleditor-enabled")
+        self.gsettings_keyfile = _get_value("gsettings-keyfile")
 
         if opts:
             print("Unknown --test-options keys: %s" % opts)
             sys.exit(1)
+
+        if self.first_run and not self.gsettings_keyfile:
+            import atexit
+            import tempfile
+            filename = tempfile.mktemp(prefix="virtmanager-firstrun-keyfile")
+            self.gsettings_keyfile = filename
+            atexit.register(lambda: os.unlink(filename))
 
 
 def main():
