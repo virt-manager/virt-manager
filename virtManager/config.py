@@ -47,16 +47,23 @@ class _SettingsWrapper(object):
     we internally convert it to the settings nested hierarchy. Makes
     client code much smaller.
     """
-    def __init__(self, settings_id):
+    def __init__(self, settings_id, gsettings_keyfile):
         self._root = settings_id
-        self._settings = Gio.Settings.new(self._root)
+
+        if gsettings_keyfile:
+            backend = Gio.keyfile_settings_backend_new(gsettings_keyfile, "/")
+        else:
+            backend = Gio.SettingsBackend.get_default()
+
+        self._settings = Gio.Settings.new_with_backend(self._root, backend)
 
         self._settingsmap = {"": self._settings}
         self._handler_map = {}
 
         for child in self._settings.list_children():
             childschema = self._root + "." + child
-            self._settingsmap[child] = Gio.Settings.new(childschema)
+            self._settingsmap[child] = Gio.Settings.new_with_backend(
+                    childschema, backend)
 
 
     ###################
@@ -189,7 +196,8 @@ class vmmConfig(object):
         self.conf_dir = "/org/virt-manager/%s/" % self.appname
         self.ui_dir = BuildConfig.ui_dir
 
-        self.conf = _SettingsWrapper("org.virt-manager.virt-manager")
+        self.conf = _SettingsWrapper("org.virt-manager.virt-manager",
+                CLITestOptions.gsettings_keyfile)
 
         self.CLITestOptions = CLITestOptions
         if self.CLITestOptions.xmleditor_enabled:
