@@ -136,7 +136,7 @@ class vmmHostNets(vmmGObjectUI):
             self.conn.support.conn_network())
 
         if conn_active and not self.conn.support.conn_network():
-            self._set_error_page(
+            self._set_error_page(  # pragma: no cover
                 _("Libvirt connection does not support virtual network "
                   "management."))
 

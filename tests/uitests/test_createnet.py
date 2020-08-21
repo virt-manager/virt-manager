@@ -51,10 +51,12 @@ class CreateNet(uiutils.UITestCase):
         stop.click()
         uiutils.check_in_loop(lambda: delete.sensitive)
 
-        # Delete it
+        # Delete it, clicking No first
+        delete.click()
+        self._click_alert_button("permanently delete the network", "No")
+        uiutils.check_in_loop(lambda: not cell.dead)
         delete.click()
         self._click_alert_button("permanently delete the network", "Yes")
-
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)
 

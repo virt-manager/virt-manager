@@ -113,6 +113,11 @@
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_net_autostart_toggled" swapped="no"/>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-autostart-atkobject">
+                                <property name="AtkObject::accessible-name">net-autostart</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -217,6 +222,11 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <signal name="changed" handler="on_net_name_changed" swapped="no"/>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="net-name-atkobject">
+                                <property name="AtkObject::accessible-name">net-name</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>

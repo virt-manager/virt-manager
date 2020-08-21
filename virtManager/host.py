@@ -25,7 +25,7 @@ class vmmHost(vmmGObjectUI):
             if uri not in cls._instances:
                 cls._instances[uri] = vmmHost(conn)
             cls._instances[uri].show()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if not parentobj:
                 raise
             parentobj.err.show_err(
@@ -88,7 +88,7 @@ class vmmHost(vmmGObjectUI):
         vis = self.is_visible()
         self.topwin.present()
         if vis:
-            return
+            return  # pragma: no cover
 
         vmmEngine.get_instance().increment_window_counter()
 
