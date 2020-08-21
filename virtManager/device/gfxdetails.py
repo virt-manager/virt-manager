@@ -121,9 +121,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
     ##############
 
     def reset_state(self):
-        uiutil.set_grid_row_visible(self.widget("graphics-display"), False)
-        uiutil.set_grid_row_visible(self.widget("graphics-xauth"), False)
-
         self.widget("graphics-type").set_active(0)
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
@@ -176,7 +173,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
         gtype = gfx.type
         is_vnc = (gtype == "vnc")
-        is_sdl = (gtype == "sdl")
         is_spice = (gtype == "spice")
         pretty_type = vmmGraphicsDetails.graphics_pretty_type_simple(gtype)
         title = (_("%(graphicstype)s Server") % {"graphicstype": pretty_type})
@@ -260,14 +256,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
             self.widget("graphics-rendernode-warn").set_visible(
                     bool(rendernode_warning))
 
-        if is_sdl:
-            title = _("Local SDL Window")
-
-            self.widget("graphics-display").set_text(
-                gfx.display or _("Unknown"))
-            self.widget("graphics-xauth").set_text(
-                gfx.xauth or _("Unknown"))
-
         uiutil.set_list_selection(self.widget("graphics-type"), gtype)
         return title
 
@@ -277,13 +265,13 @@ class vmmGraphicsDetails(vmmGObjectUI):
     #############
 
     def _show_rows_from_type(self):
-        hide_all = ["graphics-xauth", "graphics-display", "graphics-address",
-            "graphics-password-box", "graphics-port-box", "graphics-opengl-box"]
+        hide_all = ["graphics-address",
+            "graphics-password-box", "graphics-port-box",
+            "graphics-opengl-box"]
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
 
-        sdl_rows = ["graphics-xauth", "graphics-display"]
         vnc_rows = ["graphics-password-box"]
         if listen == 'address':
             vnc_rows.extend(["graphics-port-box", "graphics-address"])
@@ -291,9 +279,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         spice_rows.extend(["graphics-opengl-box"])
 
         rows = []
-        if gtype == "sdl":
-            rows = sdl_rows
-        elif gtype == "vnc":
+        if gtype == "vnc":
             rows = vnc_rows
         elif gtype == "spice":
             rows = spice_rows
