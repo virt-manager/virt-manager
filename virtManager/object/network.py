@@ -173,10 +173,6 @@ class vmmNetwork(vmmLibvirtObject):
                 desc = _("Routed network")
         else:
             modestr = mode.capitalize()
-            if dev:
-                desc = (_("%(mode)s to %(device)s") %
-                        {"mode": modestr, "device": dev})
-            else:
-                desc = _("%s network") % modestr
+            desc = _("%s network") % modestr
 
         return desc
