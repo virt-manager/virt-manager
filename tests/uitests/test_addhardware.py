@@ -152,9 +152,7 @@ class AddHardware(uiutils.UITestCase):
         volcell = browse.find(newname, "table cell")
         self.assertTrue(volcell.selected)
         browse.find("vol-delete", "push button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("permanently delete the volume", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("permanently delete the volume", "Yes")
         uiutils.check_in_loop(lambda: volcell.dead)
 
         # Test browse local
@@ -181,9 +179,7 @@ class AddHardware(uiutils.UITestCase):
         browse.find("Choose Volume", "push button").click()
         self.assertTrue("/diskvol1" in tab.find("storage-entry").text)
         finish.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("already in use by", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("already in use by", "Yes")
         uiutils.check_in_loop(lambda: details.active)
 
 
@@ -248,9 +244,7 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
 
         # Check MAC validation error
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("00:11:22:33:44:55", "label")
-        alert.find("Close", "push button").click()
+        self._click_alert_button("00:11:22:33:44:55", "Close")
 
         # Fix MAC
         tab.find("mac-address-enable", "check box").click()
@@ -286,9 +280,7 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
 
         # Catch a port error
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Port must be above 5900", "label")
-        alert.find("Close", "push button").click()
+        self._click_alert_button("Port must be above 5900", "Close")
         tab.find("graphics-port", "spin button").text = "5920"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
@@ -329,9 +321,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "USB Host Device", "host-tab")
         tab.find_fuzzy("HP Dup USB 1", "table cell").click()
         finish.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("device is already in use by", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("device is already in use by", "Yes")
         uiutils.check_in_loop(lambda: details.active)
 
         # Add USB device dup2
@@ -339,9 +329,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "USB Host Device", "host-tab")
         tab.find_fuzzy("HP Dup USB 2", "table cell").click()
         finish.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("device is already in use by", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("device is already in use by", "Yes")
         uiutils.check_in_loop(lambda: details.active)
 
         # Add another USB device
@@ -356,9 +344,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "PCI Host Device", "host-tab")
         tab.find_fuzzy("(Interface eth0)", "table cell").click()
         finish.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("device is already in use by", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("device is already in use by", "Yes")
         uiutils.check_in_loop(lambda: details.active)
 
 
@@ -587,9 +573,7 @@ class AddHardware(uiutils.UITestCase):
         newpath = "/FOO/XMLEDIT/test1.img"
         xmleditor.text = xmleditor.text.replace(origpath, newpath)
         finish.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("non-existent path")
-        alert.find("Close", "push button").click()
+        self._click_alert_button("non-existent path", "Close")
 
         # Undo the bad change, change bus/target
         xmleditor.text = xmleditor.text.replace(newpath, origpath)

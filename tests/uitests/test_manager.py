@@ -30,9 +30,7 @@ class Manager(uiutils.UITestCase):
         c.click()
         smenu.click()
         force.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find("Are you sure you want", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("Are you sure you want", "Yes")
         uiutils.check_in_loop(lambda: run.sensitive, timeout=5)
 
         run.click()
@@ -158,9 +156,7 @@ class Manager(uiutils.UITestCase):
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click(button=3)
         self.app.root.find("conn-delete", "menu item").click()
-        err = self.app.root.find("vmm dialog", "alert")
-        err.find_fuzzy("will remove the connection", "label")
-        err.find_fuzzy("Yes", "push button").click()
+        self._click_alert_button("will remove the connection", "Yes")
         uiutils.check_in_loop(lambda: not host.showing)
 
     def testManagerDefaultStartup(self):

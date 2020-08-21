@@ -66,9 +66,7 @@ class MediaChange(uiutils.UITestCase):
         browsewin.find("Choose Volume", "push button").click()
         appl.click()
         # Check 'already in use' dialog
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("already in use by", "label")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button("already in use by", "Yes")
         uiutils.check_in_loop(lambda: not appl.sensitive)
         self.assertTrue("backing" in entry.text)
         entry.text = ""
@@ -91,9 +89,7 @@ class MediaChange(uiutils.UITestCase):
         self.assertTrue(not entry.text)
         entry.text = "/dev/sr0"
         appl.click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("changes will take effect", "label")
-        alert.find("OK", "push button").click()
+        self._click_alert_button("changes will take effect", "OK")
         uiutils.check_in_loop(lambda: not appl.sensitive)
         self.assertTrue(not entry.text)
 

@@ -122,9 +122,7 @@ class Console(uiutils.UITestCase):
         # Check wrong password handling
         passwd.typeText("xx")
         win.find("Login", "push button").click()
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find_fuzzy("Viewer authentication error", "label")
-        alert.find("OK", "push button").click()
+        self._click_alert_button("Viewer authentication error", "OK")
 
         # Check proper password
         passwd.typeText("goodp")
@@ -185,9 +183,8 @@ class Console(uiutils.UITestCase):
         addhw.find("Finish", "push button").click()
 
         # Verify permission dialog pops up, ask to change
-        alert = self.app.root.find("vmm dialog", "alert")
-        alert.find("The emulator may not have search permissions")
-        alert.find("Yes", "push button").click()
+        self._click_alert_button(
+                "The emulator may not have search permissions", "Yes")
 
         # Verify no errors
         uiutils.check_in_loop(lambda: not addhw.showing)
