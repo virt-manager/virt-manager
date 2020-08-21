@@ -54,6 +54,7 @@ class vmmHostNets(vmmGObjectUI):
 
         self._init_ui()
         self._populate_networks()
+        self._refresh_conn_state()
         self.conn.connect("net-added", self._conn_nets_changed_cb)
         self.conn.connect("net-removed", self._conn_nets_changed_cb)
         self.conn.connect("state-changed", self._conn_state_changed_cb)
@@ -122,7 +123,6 @@ class vmmHostNets(vmmGObjectUI):
     ##############
 
     def refresh_page(self):
-        self._populate_networks()
         self.conn.schedule_priority_tick(pollnet=True)
 
 
@@ -144,8 +144,8 @@ class vmmHostNets(vmmGObjectUI):
             uiutil.set_list_selection_by_number(self.widget("net-list"), 0)
             return
 
-        self._set_error_page(_("Connection not active."))
         self._populate_networks()
+        self._set_error_page(_("Connection not active."))
 
     def _current_network(self):
         connkey = uiutil.get_list_selection(self.widget("net-list"))
@@ -154,6 +154,10 @@ class vmmHostNets(vmmGObjectUI):
     def _set_error_page(self, msg):
         self.widget("network-pages").set_current_page(1)
         self.widget("network-error-label").set_text(msg)
+        self.widget("net-start").set_sensitive(False)
+        self.widget("net-stop").set_sensitive(False)
+        self.widget("net-delete").set_sensitive(False)
+        self._disable_net_apply()
 
     def _refresh_current_network(self):
         net = self._current_network()
