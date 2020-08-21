@@ -59,10 +59,12 @@ class CreatePool(uiutils.UITestCase):
         stop.click()
         uiutils.check_in_loop(lambda: delete.sensitive)
 
-        # Delete it
+        # Delete it, clicking 'No' first
+        delete.click()
+        self._click_alert_button("permanently delete the pool", "No")
+        uiutils.check_in_loop(lambda: not cell.dead)
         delete.click()
         self._click_alert_button("permanently delete the pool", "Yes")
-
         # Ensure it's gone
         uiutils.check_in_loop(lambda: cell.dead)
 

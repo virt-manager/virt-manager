@@ -148,7 +148,7 @@ class vmmHostStorage(vmmGObjectUI):
     # UI init #
     ###########
 
-    def _cap_sort_func_cb(self, model, iter1, iter2):
+    def _cap_sort_func_cb(self, model, iter1, iter2, userdata):
         def _cmp(a, b):
             return ((a > b) - (a < b))
 
@@ -511,7 +511,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _pool_refresh_cb(self, src):
         pool = self._current_pool()
         if pool is None:
-            return
+            return  # pragma: no cover
 
         self._confirm_changes()
 
@@ -527,7 +527,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _vol_copy_path_cb(self, src):
         vol = self._current_vol()
         if not vol:
-            return
+            return  # pragma: no cover
 
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         target_path = vol.get_target_path()
@@ -537,7 +537,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _vol_add_cb(self, src):
         pool = self._current_pool()
         if pool is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Launching 'Add Volume' wizard for pool '%s'",
                       pool.get_name())
@@ -550,13 +550,13 @@ class vmmHostStorage(vmmGObjectUI):
             self._addvol.set_modal(self.topwin.get_modal())
             self._addvol.set_name_hint(self._name_hint)
             self._addvol.show(self.topwin)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error launching volume wizard: %s") % str(e))
 
     def _vol_delete_cb(self, src):
         vol = self._current_vol()
         if vol is None:
-            return
+            return  # pragma: no cover
 
         pool = self._current_pool()
         result = self.err.yes_no(_("Are you sure you want to permanently "
@@ -582,7 +582,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _pool_apply(self):
         pool = self._current_pool()
         if pool is None:
-            return
+            return  # pragma: no cover
 
         log.debug("Applying changes for pool '%s'", pool.get_name())
         try:
@@ -641,7 +641,7 @@ class vmmHostStorage(vmmGObjectUI):
         # select the vol we just created.
         pool = self._current_pool()
         if not pool or pool.get_connkey() != pool_connkey:
-            return
+            return  # pragma: no cover
 
         # Select the new volume
         uiutil.set_list_selection(self.widget("vol-list"), volname)
