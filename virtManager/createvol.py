@@ -58,7 +58,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def show(self, parent):
         try:
             parent_xml = self._parent_pool.xmlobj.get_xml()
-        except Exception:
+        except Exception:  # pragma: no cover
             log.debug("Error getting parent_pool xml", exc_info=True)
             parent_xml = None
 
@@ -97,8 +97,7 @@ class vmmCreateVolume(vmmGObjectUI):
     def set_modal(self, modal):
         self.topwin.set_modal(bool(modal))
 
-    def set_parent_pool(self, conn, pool):
-        self.conn = conn
+    def set_parent_pool(self, pool):
         self._parent_pool = pool
 
 
@@ -171,7 +170,7 @@ class vmmCreateVolume(vmmGObjectUI):
                 hint, suffix=suffix)
             if ret and suffix:
                 ret = ret.rsplit(".", 1)[0]
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error finding a default vol name")
 
         return ret
@@ -215,11 +214,6 @@ class vmmCreateVolume(vmmGObjectUI):
             self.widget("backing-expander"), self._can_backing())
 
     def _browse_file(self):
-        if (self._storage_browser and
-            self._storage_browser.conn != self.conn):
-            self._storage_browser.cleanup()
-            self._storage_browser = None
-
         if self._storage_browser is None:
             def cb(src, text):
                 ignore = src
@@ -295,14 +289,14 @@ class vmmCreateVolume(vmmGObjectUI):
     def _finish_cb(self, error, details, vol):
         self.reset_finish_cursor()
 
-        if error:
+        if error:  # pragma: no cover
             error = _("Error creating vol: %s") % error
             self._show_err(error, details=details)
-        else:
-            self._parent_pool.connect("refreshed",
-                self._pool_refreshed_cb, vol.name)
-            self.idle_add(self._parent_pool.refresh)
-            self.close()
+            return
+        self._parent_pool.connect("refreshed",
+            self._pool_refreshed_cb, vol.name)
+        self.idle_add(self._parent_pool.refresh)
+        self.close()
 
     def _finish(self):
         vol = self._build_xmlobj(check_xmleditor=True)
