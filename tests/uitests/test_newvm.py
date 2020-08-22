@@ -149,6 +149,11 @@ class NewVM(uiutils.UITestCase):
         combo.click_combo_entry()
         combo.find(r"No media detected \(/dev/sr1\)")
         combo.find(r"Fedora12_media \(/dev/sr0\)").click()
+        # test entry activation too
+        entry = newvm.find("media-entry")
+        entry.click()
+        entry.text = "/dev/sr0"
+        self.pressKey("Enter")
 
         # Select a fake iso
         newvm.find_fuzzy("install-iso-browse", "button").click()
