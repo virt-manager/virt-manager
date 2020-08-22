@@ -47,9 +47,9 @@ class vmmStorageVolume(vmmLibvirtObject):
     ##########################
 
     def _conn_tick_poll_param(self):
-        return None
+        return None  # pragma: no cover
     def class_name(self):
-        return "volume"
+        return "volume"  # pragma: no cover
 
     def _XMLDesc(self, flags):
         try:
@@ -289,5 +289,3 @@ class vmmStoragePool(vmmLibvirtObject):
         return _pretty_bytes(self.get_allocation())
     def get_pretty_available(self):
         return _pretty_bytes(self.get_available())
-    def get_pretty_capacity(self):
-        return _pretty_bytes(self.get_capacity())

@@ -10,44 +10,19 @@ from .libvirtobject import vmmLibvirtObject
 
 
 def _usb_pretty_name(xmlobj):
-    # Hypervisor may return a rather sparse structure, missing
-    # some ol all stringular descriptions of the device altogether.
-    # Do our best to help user identify the device.
-
-    # Certain devices pad their vendor with trailing spaces,
-    # such as "LENOVO       ". It does not look well.
-    product = str(xmlobj.product_name).strip()
-    vendor = str(xmlobj.vendor_name).strip()
-
-    if product == "":
-        product = str(xmlobj.product_id)
-        if vendor == "":
-            # No stringular descriptions altogether
-            vendor = str(xmlobj.vendor_id)
-            devstr = "%s:%s" % (vendor, product)
-        else:
-            # Only the vendor is known
-            devstr = "%s %s" % (vendor, product)
-    else:
-        if vendor == "":
-            # Sometimes vendor is left out empty, but product is
-            # already descriptive enough or contains the vendor string:
-            # "Lenovo USB Laser Mouse"
-            devstr = product
-        else:
-            # We know everything. Perfect.
-            devstr = "%s %s" % (vendor, product)
-
+    # product/vendor name fields can be messy, this tries to cope
+    product = str(xmlobj.product_name or "").strip()
+    vendor = str(xmlobj.vendor_name or "").strip()
+    product = product or str(xmlobj.product_id or "")
+    vendor = vendor or str(xmlobj.vendor_id or "")
     busstr = "%.3d:%.3d" % (int(xmlobj.bus), int(xmlobj.device))
-    desc = "%s %s" % (busstr, devstr)
+    desc = "%s %s %s" % (busstr, vendor, product)
     return desc
 
 
 def _pretty_name(xmlobj):
     if xmlobj.device_type == "net":
-        if xmlobj.interface:
-            return _("Interface %s") % xmlobj.interface
-        return xmlobj.name
+        return _("Interface %s") % xmlobj.interface or xmlobj.name
 
     if xmlobj.device_type == "pci":
         devstr = "%.4X:%.2X:%.2X:%X" % (int(xmlobj.domain),
@@ -64,7 +39,7 @@ def _pretty_name(xmlobj):
                 xmlobj.conn, xmlobj.parent)
         return "%s (%s)" % (_pretty_name(parent), xmlobj.drm_type)
 
-    return xmlobj.name
+    return xmlobj.name  # pragma: no cover
 
 
 class vmmNodeDevice(vmmLibvirtObject):
@@ -72,7 +47,7 @@ class vmmNodeDevice(vmmLibvirtObject):
         vmmLibvirtObject.__init__(self, conn, backend, key, NodeDevice)
 
     def _conn_tick_poll_param(self):
-        return "pollnodedev"
+        return "pollnodedev"  # pragma: no cover
     def class_name(self):
         return "nodedev"
 
