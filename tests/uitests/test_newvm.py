@@ -168,10 +168,28 @@ class NewVM(uiutils.UITestCase):
 
         # Change distro to win8
         newvm.find_fuzzy("Automatically detect", "check").click()
+        osentry.click()
         osentry.text = "windows 8"
         popover = newvm.find("oslist-popover")
+        uiutils.check_in_loop(lambda: popover.onscreen)
+        # Verify Escape resets the text entry
+        self.pressKey("Escape")
+        uiutils.check_in_loop(lambda: not popover.onscreen)
+        assert osentry.text == ""
+        # Re-enter text
+        osentry.text = "windows 8"
+        uiutils.check_in_loop(lambda: popover.onscreen)
         popover.find_fuzzy("include-eol").click()
         popover.find_fuzzy(r"\(win8\)").click()
+        uiutils.check_in_loop(lambda: not popover.onscreen)
+        foundtext = osentry.text
+        # Start typing again, and exit, make sure it resets to previous entry
+        osentry.click()
+        osentry.text = "foo"
+        uiutils.check_in_loop(lambda: popover.onscreen)
+        self.pressKey("Escape")
+        uiutils.check_in_loop(lambda: not popover.onscreen)
+        assert osentry.text == foundtext
         self.forward(newvm)
 
         # Verify that CPU values are non-default
