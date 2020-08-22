@@ -27,7 +27,6 @@ class vmmLibvirtObject(vmmGObject):
 
         self.__initialized = False
         self.__status = None
-        self._support_isactive = None
 
         self._xmlobj = None
         self._xmlobj_to_define = None
@@ -153,8 +152,6 @@ class vmmLibvirtObject(vmmGObject):
         return False
     def _using_events(self):
         return False
-    def _check_supports_isactive(self):
-        return False
     def _get_backend_status(self):
         raise NotImplementedError()
 
@@ -174,10 +171,11 @@ class vmmLibvirtObject(vmmGObject):
         return self._backend.name()
 
     def tick(self, stats_update=True):
-        raise NotImplementedError()
+        ignore = stats_update
+        self._refresh_status()
 
     def _init_libvirt_state(self):
-        raise NotImplementedError()
+        self.tick()
 
     def init_libvirt_state(self):
         """
@@ -242,16 +240,6 @@ class vmmLibvirtObject(vmmGObject):
         if cansignal:
             self.idle_emit("state-changed")
         return True
-
-    def _backend_get_active(self):
-        if self._support_isactive is None:
-            self._support_isactive = self._check_supports_isactive()
-
-        if not self._support_isactive:
-            return self._STATUS_ACTIVE
-        return (bool(self._backend.isActive()) and
-                self._STATUS_ACTIVE or
-                self._STATUS_INACTIVE)
 
 
     ##################

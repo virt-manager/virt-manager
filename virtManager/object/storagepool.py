@@ -62,12 +62,6 @@ class vmmStorageVolume(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
 
-    def tick(self, stats_update=True):
-        # Deliberately empty
-        ignore = stats_update
-    def _init_libvirt_state(self):
-        self.ensure_latest_xml()
-
 
     ###########
     # Actions #
@@ -169,17 +163,13 @@ class vmmStoragePool(vmmLibvirtObject):
         return self.conn.define_pool(xml)
     def _using_events(self):
         return self.conn.using_storage_pool_events
-    def _check_supports_isactive(self):
-        return True
     def _get_backend_status(self):
-        return self._backend_get_active()
-
-    def tick(self, stats_update=True):
-        ignore = stats_update
-        self._refresh_status()
+        return (bool(self._backend.isActive()) and
+                self._STATUS_ACTIVE or
+                self._STATUS_INACTIVE)
 
     def _init_libvirt_state(self):
-        self.tick()
+        super()._init_libvirt_state()
         if not self.conn.is_active():
             # We only want to refresh a pool on initial conn startup,
             # since the pools may be out of date. But if a storage pool
