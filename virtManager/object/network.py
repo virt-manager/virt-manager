@@ -54,7 +54,7 @@ class vmmNetwork(vmmLibvirtObject):
     def _using_events(self):
         return self.conn.using_network_events
     def _check_supports_isactive(self):
-        return self.conn.support.net_isactive(self._backend)
+        return True
     def _get_backend_status(self):
         return self._backend_get_active()
 

@@ -307,13 +307,9 @@ class SupportCache:
         version="1.2.8", hv_version={"qemu": 0})
 
     # Pool checks
-    pool_isactive = _make(function="virStoragePool.isActive", run_args=())
     pool_metadata_prealloc = _make(
         flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
         version="1.0.1")
-
-    # Network checks
-    net_isactive = _make(function="virNetwork.isActive", run_args=())
 
 
     def _check_version(self, version):
