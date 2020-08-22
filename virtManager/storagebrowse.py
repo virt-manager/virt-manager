@@ -57,17 +57,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.storagelist.cleanup()
         self.storagelist = None
 
-
-    ##############
-    # Public API #
-    ##############
-
-    def set_finish_cb(self, callback):
-        self._finish_cb = callback
-    def set_browse_reason(self, reason):
-        self._browse_reason = reason
-    def set_vm_name(self, name):
-        self.storagelist.set_name_hint(name)
+    ###########
+    # UI init #
+    ###########
 
     def _init_ui(self):
         self.storagelist.connect("browse-clicked", self._browse_clicked)
@@ -97,12 +89,28 @@ class vmmStorageBrowser(vmmGObjectUI):
         self.storagelist.widget("choose-volume").set_sensitive(False)
         self.storagelist.widget("pool-apply").set_visible(False)
 
-        data = self.config.browse_reason_data.get(self._browse_reason)
-        allow_create = True
-        if data:
-            self.topwin.set_title(data["storage_title"])
-            allow_create = data["enable_create"]
+        self.set_browse_reason(self._browse_reason)
 
+
+    ##############
+    # Public API #
+    ##############
+
+    def set_finish_cb(self, callback):
+        self._finish_cb = callback
+    def set_vm_name(self, name):
+        self.storagelist.set_name_hint(name)
+
+    def set_browse_reason(self, reason):
+        self._browse_reason = reason
+        data = self.config.browse_reason_data.get(self._browse_reason, {})
+        allow_create = True
+        title = _("Choose Storage Volume")
+        if data:
+            allow_create = data["enable_create"]
+            title = data["storage_title"]
+
+        self.topwin.set_title(title)
         self.storagelist.widget("vol-add").set_sensitive(allow_create)
 
 

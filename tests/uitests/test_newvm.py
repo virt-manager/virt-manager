@@ -152,7 +152,7 @@ class NewVM(uiutils.UITestCase):
 
         # Select a fake iso
         newvm.find_fuzzy("install-iso-browse", "button").click()
-        browser = self.app.root.find_fuzzy("Choose Storage", "frame")
+        browser = self.app.root.find("vmm-storage-browser")
         browser.find_fuzzy("default-pool", "table cell").click()
         browser.find_fuzzy("iso-vol", "table cell").click()
         browser.find_fuzzy("Choose Volume", "button").click()
@@ -621,6 +621,5 @@ class NewVM(uiutils.UITestCase):
         # Verify default disk storage was actually created. This has some
         # special handling in domain.py
         tab.find("Browse", "push button").click()
-        browsewin = self.app.root.find(
-                "Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find("%s.qcow2" % vmname, "table cell")

@@ -205,7 +205,7 @@ class Details(uiutils.UITestCase):
         tab.find_fuzzy("Direct kernel boot", "toggle button").click_expander()
         tab.find_fuzzy("Enable direct kernel", "check box").click()
         tab.find("kernel-browse", "push button").click()
-        browsewin = self.app.root.find("Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find("default-pool", "table cell").click()
         browsewin.find("bochs-vol", "table cell").click()
         browsewin.find("Choose Volume", "push button").click()

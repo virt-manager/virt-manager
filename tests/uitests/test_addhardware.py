@@ -92,7 +92,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         tab.find("storage-browse", "push button").click()
-        browse = self.app.root.find("Choose Storage Volume", "frame")
+        browse = self.app.root.find("vmm-storage-browser")
         browse.find_fuzzy("rbd-ceph", "table cell").bring_on_screen().click()
         browse.find_fuzzy("some-rbd-vol", "table cell").click()
         browse.find("Choose Volume", "push button").click()
@@ -136,7 +136,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         tab.find("storage-browse", "push button").click()
-        browse = self.app.root.find("Choose Storage Volume", "frame")
+        browse = self.app.root.find("vmm-storage-browser")
 
         # Create a vol, refresh, then delete it
         browse.find_fuzzy("default-pool", "table cell").click()
@@ -172,7 +172,7 @@ class AddHardware(uiutils.UITestCase):
 
         # Reopen dialog, select a volume, etic
         tab.find("storage-browse", "push button").click()
-        browse = self.app.root.find("Choose Storage Volume", "frame")
+        browse = self.app.root.find("vmm-storage-browser")
 
         browse.find_fuzzy("disk-pool", "table cell").click()
         browse.find("diskvol1", "table cell").click()
@@ -410,8 +410,7 @@ class AddHardware(uiutils.UITestCase):
         tab.find("qcow2", "menu item").click()
         tab.find("Browse...", "push button").click()
 
-        browsewin = self.app.root.find(
-                "Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find("Cancel", "push button").click()
         uiutils.check_in_loop(lambda: addhw.active)
 
@@ -588,7 +587,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(win, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         tab.find("storage-browse", "push button").click()
-        browse = self.app.root.find("Choose Storage Volume", "frame")
+        browse = self.app.root.find("vmm-storage-browser")
         browse.find(os.path.basename(origpath))
         browse.find("Cancel").click()
 
