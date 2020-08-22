@@ -129,9 +129,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-readonly").set_active(False)
 
     # Getters
-    def get_dev(self):
-        return self._dev
-
     def get_config_fs_mode(self):
         return uiutil.get_list_selection(self.widget("fs-mode-combo"),
                                          check_visible=True)
@@ -241,52 +238,10 @@ class vmmFSDetails(vmmGObjectUI):
         self.update_fs_rows()
         self.notify_change(src)
 
-    # Page validation method
-    def validate_page_filesystem(self):
-        conn = self.conn.get_backend()
-        source = self.widget("fs-source").get_text()
-        target = self.widget("fs-target").get_text()
-        usage = uiutil.spin_get_helper(self.widget("fs-ram-source-spin"))
-        mode = self.get_config_fs_mode()
-        fstype = self.get_config_fs_type()
-        readonly = self.get_config_fs_readonly()
-        driver = self.get_config_fs_driver()
-        fsformat = self.get_config_fs_format()
-        wrpolicy = self.get_config_fs_wrpolicy()
 
-        if not source and fstype != DeviceFilesystem.TYPE_RAM:
-            return self.err.val_err(_("A filesystem source must be specified"))
-        elif usage == 0 and fstype == DeviceFilesystem.TYPE_RAM:
-            return self.err.val_err(
-                _("A RAM filesystem usage must be specified"))
-        if not target:
-            return self.err.val_err(_("A filesystem target must be specified"))
-
-        try:
-            self._dev = DeviceFilesystem(conn)
-            if fstype == DeviceFilesystem.TYPE_RAM:
-                self._dev.source = usage
-                self._dev.units = 'MiB'
-            else:
-                self._dev.source = source
-            self._dev.target = target
-            self._dev.validate_target(target)
-            if mode:
-                self._dev.accessmode = mode
-            if fstype:
-                self._dev.type = fstype
-            if readonly:
-                self._dev.readonly = readonly
-            if driver:
-                self._dev.driver = driver
-                if driver == DeviceFilesystem.DRIVER_LOOP:
-                    self._dev.format = "raw"
-                elif driver == DeviceFilesystem.DRIVER_NBD:
-                    self._dev.format = fsformat
-            if wrpolicy:
-                self._dev.wrpolicy = wrpolicy
-        except Exception as e:  # pragma: no cover
-            return self.err.val_err(_("Filesystem parameter error"), e)
+    ####################
+    # Internal helpers #
+    ####################
 
     def _browse_file(self, textent, isdir=False):
         def set_storage_cb(src, path):
@@ -307,3 +262,50 @@ class vmmFSDetails(vmmGObjectUI):
         self.storage_browser.set_browse_reason(reason)
 
         self.storage_browser.show(self.topwin.get_ancestor(Gtk.Window))
+
+
+    ###################
+    # Device building #
+    ###################
+
+    def _build_xmlobj(self):
+        conn = self.conn.get_backend()
+        source = self.widget("fs-source").get_text()
+        target = self.widget("fs-target").get_text()
+        usage = uiutil.spin_get_helper(self.widget("fs-ram-source-spin"))
+        mode = self.get_config_fs_mode()
+        fstype = self.get_config_fs_type()
+        readonly = self.get_config_fs_readonly()
+        driver = self.get_config_fs_driver()
+        fsformat = self.get_config_fs_format()
+        wrpolicy = self.get_config_fs_wrpolicy()
+
+        dev = DeviceFilesystem(conn)
+        if fstype == DeviceFilesystem.TYPE_RAM:
+            dev.source = usage
+            dev.units = 'MiB'
+        else:
+            dev.source = source
+        dev.target = target
+        dev.validate_target(target)
+        if mode:
+            dev.accessmode = mode
+        if fstype:
+            dev.type = fstype
+        if readonly:
+            dev.readonly = readonly
+        if driver:
+            dev.driver = driver
+            if driver == DeviceFilesystem.DRIVER_LOOP:
+                dev.format = "raw"
+            elif driver == DeviceFilesystem.DRIVER_NBD:
+                dev.format = fsformat
+        if wrpolicy:
+            dev.wrpolicy = wrpolicy
+
+        dev.validate()
+        return dev
+
+    def build_xmlobj(self):
+        self._dev = self._build_xmlobj()
+        return self._dev
