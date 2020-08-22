@@ -122,7 +122,7 @@ class vmmCloneVM(vmmGObjectUI):
             if uri not in cls._instances:
                 cls._instances[uri] = vmmCloneVM()
             cls._instances[uri].show(parentobj.topwin, vm)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             parentobj.err.show_err(
                     _("Error launching clone dialog: %s") % str(e))
 

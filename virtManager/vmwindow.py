@@ -38,7 +38,7 @@ class vmmVMWindow(vmmGObjectUI):
             if key not in cls._instances:
                 cls._instances[key] = vmmVMWindow(vm)
             return cls._instances[key]
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if not parentobj:
                 raise
             parentobj.err.show_err(
@@ -229,7 +229,7 @@ class vmmVMWindow(vmmGObjectUI):
         if self.console.details_viewer_is_visible():
             try:
                 self.console.details_close_viewer()
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.error("Failure when disconnecting from desktop server")
 
         self.emit("closed")
@@ -484,7 +484,7 @@ class vmmVMWindow(vmmGObjectUI):
         ignore = src
         try:
             return self._take_screenshot()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error taking screenshot: %s") % str(e))
 
     def control_vm_usb_redirection(self, src):
@@ -492,7 +492,7 @@ class vmmVMWindow(vmmGObjectUI):
         spice_usbdev_dialog = self.err
 
         spice_usbdev_widget = self.console.details_viewer_get_usb_widget()
-        if not spice_usbdev_widget:
+        if not spice_usbdev_widget:  # pragma: no cover
             self.err.show_err(_("Error initializing spice USB device widget"))
             return
 
@@ -522,7 +522,7 @@ class vmmVMWindow(vmmGObjectUI):
             ret = ret[1]
         # F24 rawhide, ret[1] is a named tuple with a 'buffer' element...
         if hasattr(ret, "buffer"):
-            ret = ret.buffer
+            ret = ret.buffer  # pragma: no cover
 
         import datetime
         now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
@@ -557,7 +557,7 @@ class vmmVMWindow(vmmGObjectUI):
         try:
             if self.is_visible():
                 self.vm.ensure_latest_xml()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if self.conn.support.is_libvirt_error_no_domain(e):
                 self.close()
                 return
