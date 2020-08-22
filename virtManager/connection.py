@@ -329,9 +329,9 @@ class vmmConnection(vmmGObject):
         getattr(s, "_backend").get_uri_transport)
     get_uri_port = property(lambda s: getattr(s, "_backend").get_uri_port)
     get_driver = property(lambda s: getattr(s, "_backend").get_uri_driver)
-    is_container = property(lambda s: getattr(s, "_backend").is_container)
+    is_container_only = property(
+            lambda s: getattr(s, "_backend").is_container_only)
     is_lxc = property(lambda s: getattr(s, "_backend").is_lxc)
-    is_openvz = property(lambda s: getattr(s, "_backend").is_openvz)
     is_vz = property(lambda s: getattr(s, "_backend").is_vz)
     is_xen = property(lambda s: getattr(s, "_backend").is_xen)
     is_remote = property(lambda s: getattr(s, "_backend").is_remote)

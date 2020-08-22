@@ -471,7 +471,7 @@ class vmmCreateVM(vmmGObjectUI):
         is_storage_capable = self.conn.support.conn_storage()
         can_storage = (is_local or is_storage_capable)
         is_pv = guest.os.is_xenpv()
-        is_container = self.conn.is_container()
+        is_container_only = self.conn.is_container_only()
         is_vz = self.conn.is_vz()
         is_vz_container = is_vz and guest.os.is_container()
         can_remote_url = self.conn.get_backend().support_remote_url_install()
@@ -505,7 +505,7 @@ class vmmCreateVM(vmmGObjectUI):
                                   installable_arch)
         method_local.set_sensitive(not is_pv and can_storage and
                                    installable_arch)
-        method_manual.set_sensitive(not is_container)
+        method_manual.set_sensitive(not is_container_only)
         method_import.set_sensitive(can_storage)
         virt_methods = [method_local, method_tree,
                 method_manual, method_import]
@@ -538,7 +538,7 @@ class vmmCreateVM(vmmGObjectUI):
                     w.set_active(True)
                     break
 
-        if not (is_container or
+        if not (is_container_only or
                 [w for w in virt_methods if w.get_sensitive()]):
             return self._show_startup_error(
                     _("No install methods available for this connection."),
@@ -550,10 +550,10 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Container install options
         method_container_app.set_active(True)
-        self.widget("container-install-box").set_visible(is_container)
+        self.widget("container-install-box").set_visible(is_container_only)
         self.widget("vz-install-box").set_visible(is_vz)
         self.widget("virt-install-box").set_visible(
-            not is_container and not is_vz_container)
+            not is_container_only and not is_vz_container)
 
         self.widget("kernel-info-box").set_visible(not installable_arch)
 

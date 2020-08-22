@@ -385,7 +385,7 @@ class VirtinstConnection(object):
         return self._uriobj.scheme.startswith("lxc")
     def is_openvz(self):
         return self._uriobj.scheme.startswith("openvz")
-    def is_container(self):
+    def is_container_only(self):
         return self.is_lxc() or self.is_openvz()
     def is_vz(self):
         return (self._uriobj.scheme.startswith("vz") or

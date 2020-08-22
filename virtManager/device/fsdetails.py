@@ -88,11 +88,7 @@ class vmmFSDetails(vmmGObjectUI):
                 model.append([xmlval, label])
 
         # Filesystem widgets
-        if self.conn.is_openvz():
-            simple_store_set("fs-type-combo",
-                [DeviceFilesystem.TYPE_MOUNT,
-                 DeviceFilesystem.TYPE_TEMPLATE], sort=False)
-        elif self.conn.is_lxc():
+        if self.conn.is_container_only():
             simple_store_set("fs-type-combo",
                 [DeviceFilesystem.TYPE_MOUNT,
                  DeviceFilesystem.TYPE_FILE,
@@ -116,8 +112,7 @@ class vmmFSDetails(vmmGObjectUI):
         simple_store_set("fs-format-combo", ["raw", "qcow2"], capitalize=False)
         simple_store_set("fs-wrpolicy-combo",
                 DeviceFilesystem.WRPOLICIES + [None])
-        self.show_pair_combo("fs-type",
-            self.conn.is_openvz() or self.conn.is_lxc())
+        self.show_pair_combo("fs-type", self.conn.is_container_only())
         self.show_check_button("fs-readonly",
                 self.conn.is_qemu() or
                 self.conn.is_test() or
@@ -178,8 +173,7 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-target").set_text(dev.target or "")
         self.widget("fs-readonly").set_active(dev.readonly)
 
-        self.show_pair_combo("fs-type",
-            self.conn.is_openvz() or self.conn.is_lxc())
+        self.show_pair_combo("fs-type", self.conn.is_container_only())
 
     def set_config_value(self, name, value):
         combo = self.widget("%s-combo" % name)

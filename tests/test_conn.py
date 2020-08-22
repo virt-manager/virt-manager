@@ -21,7 +21,7 @@ class TestConn(unittest.TestCase):
         conn.invalidate_caps()
         assert conn.libvirt_new_enough_for_virtmanager(1000) is True
         assert conn.is_open() is True
-        assert conn.is_container() is False
+        assert conn.is_container_only() is False
         assert conn.is_openvz() is False
         assert not conn.get_uri_hostname()
         assert not conn.get_uri_port()
