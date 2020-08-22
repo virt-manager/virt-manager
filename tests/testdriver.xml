@@ -687,14 +687,14 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
   <description>Test alternate devices that can't be crammed in
 test-many-devices, like an alternate RNG, EOL OS ID, title field
   </description>
-  <title>test alternate devs (title)</title>
+  <title>test alternate devs title</title>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/msdos/6.22"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory>8388608</memory>
-  <currentMemory>2097152</currentMemory>
+  <memory unit='GiB'>128</memory>
+  <currentMemory unit='GiB'>64</currentMemory>
   <vcpu>2</vcpu>
   <cpu mode='host-model'/>
   <os>
@@ -710,6 +710,9 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
       <rate bytes='123' period='1234'/>
       <backend model='random'>/dev/hwrng</backend>
     </rng>
+    <vsock model='virtio'>
+      <cid auto='yes'/>
+    </vsock>
   </devices>
 </domain>
 

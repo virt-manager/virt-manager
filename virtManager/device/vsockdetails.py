@@ -51,10 +51,7 @@ class vmmVsockDetails(vmmGObjectUI):
         self.reset_state()
 
         is_auto = bool(dev.auto_cid)
-        if dev.cid is not None:
-            cid = int(dev.cid)
-        else:
-            cid = self.MIN_GUEST_CID
+        cid = int(dev.cid or self.MIN_GUEST_CID)
 
         label = self.widget("vsock-auto").get_label().split(" (")[0]
         if is_auto and self.vm.is_active():
