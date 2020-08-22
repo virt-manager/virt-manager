@@ -76,12 +76,12 @@ class CreateVol(uiutils.UITestCase):
         combo.find("qcow2", "menu item").click()
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
-        browsewin = self.app.root.find("Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         # Test cancel button
         browsewin.find("Cancel", "push button").click()
         uiutils.check_in_loop(lambda: not browsewin.active)
         win.find("Browse...").click()
-        browsewin = self.app.root.find("Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         # Test browse local opening
         browsewin.find("Browse Local", "push button").click()
         chooser = self.app.root.find(
@@ -130,8 +130,7 @@ class CreateVol(uiutils.UITestCase):
         name.text = newname
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
-        browsewin = self.app.root.find(
-                "Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find_fuzzy("disk-pool", "table cell").click()
         browsewin.find("diskvol7", "table cell").click()
         browsewin.find("Choose Volume").click()

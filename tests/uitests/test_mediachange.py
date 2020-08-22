@@ -60,8 +60,7 @@ class MediaChange(uiutils.UITestCase):
         combo.find(r"Fedora12_media \(/dev/sr0\)")
         entry.click()
         tab.find("Browse", "push button").click()
-        browsewin = self.app.root.find(
-                "Choose Storage Volume", "frame")
+        browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find_fuzzy("default-pool", "table cell").click()
         browsewin.find_fuzzy("backingl1.img", "table cell").click()
         browsewin.find("Choose Volume", "push button").click()
