@@ -170,7 +170,7 @@ class vmmStoragePool(vmmLibvirtObject):
     def _using_events(self):
         return self.conn.using_storage_pool_events
     def _check_supports_isactive(self):
-        return self.conn.support.pool_isactive(self._backend)
+        return True
     def _get_backend_status(self):
         return self._backend_get_active()
 
