@@ -68,7 +68,7 @@ class vmmGObject(GObject.GObject):
 
     def cleanup(self):
         if self.__cleaned_up:
-            return
+            return  # pragma: no cover
 
         # Do any cleanup required to drop reference counts so object is
         # actually reaped by python. Usually means unregistering callbacks
@@ -93,7 +93,7 @@ class vmmGObject(GObject.GObject):
                     self.disconnect(h)
             for h in self._gobject_timeouts[:]:
                 self.remove_gobject_timeout(h)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error cleaning up %s", self)
 
         self.__cleaned_up = True
@@ -110,7 +110,7 @@ class vmmGObject(GObject.GObject):
         try:
             if config.vmmConfig.is_initialized() and self._leak_check:
                 self.config.remove_object(self.object_key)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error removing %s", self.object_key)
 
     @property
@@ -171,7 +171,7 @@ class vmmGObject(GObject.GObject):
         """
         GObject emit() wrapper to simplify callers
         """
-        if not self._is_main_thread():
+        if not self._is_main_thread():  # pragma: no cover
             log.error("emitting signal from non-main thread. This is a bug "
                     "please report it. thread=%s self=%s signal=%s",
                     self._thread_name(), self, signal_name)
@@ -189,6 +189,18 @@ class vmmGObject(GObject.GObject):
         GLib.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
+    def _start_thread(self, target=None, name=None, args=None, kwargs=None):
+        # Helper for starting a daemonized thread
+        t = threading.Thread(target=target, name=name,
+            args=args or [], kwargs=kwargs or {})
+        t.daemon = True
+        t.start()
+
+
+    ##############################
+    # Internal debugging helpers #
+    ##############################
+
     def _refcount(self):
         return sys.getrefcount(self)
 
@@ -199,17 +211,10 @@ class vmmGObject(GObject.GObject):
                       msg, self.object_key, self._refcount(),
                        "".join(traceback.format_stack()))
 
-    def _gc_get_referrers(self):
+    def _gc_get_referrers(self):  # pragma: no cover
         import gc
         import pprint
         pprint.pprint(gc.get_referrers(self))
-
-    def _start_thread(self, target=None, name=None, args=None, kwargs=None):
-        # Helper for starting a daemonized thread
-        t = threading.Thread(target=target, name=name,
-            args=args or [], kwargs=kwargs or {})
-        t.daemon = True
-        t.start()
 
     def _thread_name(self):
         return threading.current_thread().name
@@ -304,7 +309,7 @@ class vmmGObjectUI(vmmGObject):
 
     def cleanup(self):
         if self.__cleaned_up:
-            return
+            return  # pragma: no cover
 
         try:
             self.close()
@@ -314,7 +319,7 @@ class vmmGObjectUI(vmmGObject):
                 self.topwin.destroy()
             self.topwin = None
             self._err = None
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error cleaning up %s", self)
 
         self.__cleaned_up = True
@@ -343,7 +348,7 @@ class vmmGObjectUI(vmmGObject):
             cursor = Gdk.Cursor.new_from_name(
                     gdk_window.get_display(), cursor_type)
             gdk_window.set_cursor(cursor)
-        except Exception:
+        except Exception:  # pragma: no cover
             # If a cursor icon theme isn't installed this can cause errors
             # https://bugzilla.redhat.com/show_bug.cgi?id=1516588
             log.debug("Error setting cursor_type=%s",

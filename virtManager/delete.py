@@ -39,7 +39,7 @@ class _vmmDeleteBase(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmDeleteDialog()
             cls._instance.show(parentobj.topwin, vm)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             parentobj.err.show_err(
                     _("Error launching delete dialog: %s") % str(e))
 

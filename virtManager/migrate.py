@@ -32,7 +32,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             if not cls._instance:
                 cls._instance = vmmMigrateDialog()
             cls._instance.show(parentobj.topwin, vm)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             parentobj.err.show_err(
                     _("Error launching migrate dialog: %s") % str(e))
 

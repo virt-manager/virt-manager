@@ -213,7 +213,7 @@ class vmmStoragePool(vmmLibvirtObject):
             we just updated it.
         """
         if not self.is_active():
-            return
+            return  # pragma: no cover
 
         self._backend.refresh(0)
         if self._using_events() and not _from_object_init:

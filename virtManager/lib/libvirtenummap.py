@@ -10,10 +10,6 @@ import libvirt
 from virtinst import log
 
 
-if not hasattr(libvirt, "VIR_DOMAIN_PMSUSPENDED"):
-    setattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
-
-
 class _LibvirtEnumMap(object):
     """
     Helper for mapping libvirt event int values to their API names
@@ -74,7 +70,7 @@ class _LibvirtEnumMap(object):
         elif status == libvirt.VIR_DOMAIN_PAUSED:
             return _("Paused")
         elif status == libvirt.VIR_DOMAIN_SHUTDOWN:
-            return _("Shutting Down")
+            return _("Shutting Down")  # pragma: no cover
         elif status == libvirt.VIR_DOMAIN_SHUTOFF:
             if has_managed_save:
                 return _("Saved")
@@ -85,8 +81,9 @@ class _LibvirtEnumMap(object):
         elif status == libvirt.VIR_DOMAIN_PMSUSPENDED:
             return _("Suspended")
 
-        log.debug("Unknown status %s, returning 'Unknown'", status)
-        return _("Unknown")
+        log.debug(  # pragma: no cover
+                "Unknown status %s, returning 'Unknown'", status)
+        return _("Unknown")  # pragma: no cover
 
     @staticmethod
     def pretty_status_reason(status, reason):
@@ -142,11 +139,11 @@ class _LibvirtEnumMap(object):
         ret = {}
         for key in [a for a in dir(libvirt) if re.match(regex, a)]:
             val = getattr(libvirt, key)
-            if type(val) is not int:
+            if type(val) is not int:  # pragma: no cover
                 log.debug("libvirt regex=%s key=%s val=%s "
                     "isn't an integer", regex, key, val)
                 continue
-            if val in ret:
+            if val in ret:  # pragma: no cover
                 log.debug("libvirt regex=%s key=%s val=%s is already "
                     "in dict as key=%s", regex, key, val, regex[val])
                 continue
@@ -168,7 +165,7 @@ class _LibvirtEnumMap(object):
 
         if eventmap:
             if event not in eventmap:
-                event = next(iter(eventmap))
+                event = next(iter(eventmap))  # pragma: no cover
             eventstr = eventmap[event]
             detail1map = self._get_map(eventstr,
                     self._DETAIL1_PREFIX.get(eventstr))

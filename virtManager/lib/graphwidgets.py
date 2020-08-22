@@ -12,7 +12,7 @@ from gi.repository import Gtk
 BASECOLOR = Gtk.StyleContext().lookup_color("theme_base_color")[1]
 
 
-def rect_print(name, rect):
+def rect_print(name, rect):  # pragma: no cover
     # For debugging
     print("%s: height=%d, width=%d, x=%d, y=%d" %
           (name, rect.height, rect.width, rect.x, rect.y))
@@ -53,7 +53,7 @@ def _line_helper(cairo_ct, bottom_baseline, points, for_fill=False):
 
 def draw_line(cairo_ct, y, h, points):
     if not len(points):
-        return
+        return  # pragma: no cover
 
     last_point = _line_helper(cairo_ct, y + h, points)
     if not last_point:
@@ -66,7 +66,7 @@ def draw_line(cairo_ct, y, h, points):
 
 def draw_fill(cairo_ct, x, y, w, h, points, taper=False):
     if not len(points):
-        return
+        return  # pragma: no cover
 
     _line_helper(cairo_ct, y + h, points, for_fill=True)
 
@@ -175,10 +175,9 @@ class CellRendererSparkline(Gtk.CellRenderer):
         def get_y(index):
             baseline_y = graph_y + graph_height
 
+            n = index
             if self.reversed:
                 n = (len(self.data_array) - index - 1)
-            else:
-                n = index
 
             val = self.data_array[n]
             y = baseline_y - (graph_height * val)
@@ -216,19 +215,14 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
     def do_get_size(self, widget, cell_area=None):
         ignore = widget
+        ignore = cell_area
 
         FIXED_WIDTH = len(self.data_array)
         FIXED_HEIGHT = 15
         xpad = self.get_property("xpad")
         ypad = self.get_property("ypad")
-
-        if cell_area:
-            # What to do here? haven't encountered this in practice
-            xoffset = 0
-            yoffset = 0
-        else:
-            xoffset = 0
-            yoffset = 0
+        xoffset = 0
+        yoffset = 0
 
         width = ((xpad * 2) + FIXED_WIDTH)
         height = ((ypad * 2) + FIXED_HEIGHT)
@@ -239,7 +233,7 @@ class CellRendererSparkline(Gtk.CellRenderer):
     # variables can't be named like that
     def _sanitize_param_spec_name(self, name):
         return name.replace("-", "_")
-    def do_get_property(self, param_spec):
+    def do_get_property(self, param_spec):  # pragma: no cover
         name = self._sanitize_param_spec_name(param_spec.name)
         return getattr(self, name)
     def do_set_property(self, param_spec, value):
@@ -365,7 +359,7 @@ class Sparkline(Gtk.DrawingArea):
 
         return 0
 
-    def do_size_request(self, requisition):
+    def do_size_request(self, requisition):  # pragma: no cover
         width = len(self.data_array) / self.num_sets
         height = 20
 
@@ -376,7 +370,7 @@ class Sparkline(Gtk.DrawingArea):
     # variables can't be named like that
     def _sanitize_param_spec_name(self, name):
         return name.replace("-", "_")
-    def do_get_property(self, param_spec):
+    def do_get_property(self, param_spec):  # pragma: no cover
         name = self._sanitize_param_spec_name(param_spec.name)
         return getattr(self, name)
     def do_set_property(self, param_spec, value):
