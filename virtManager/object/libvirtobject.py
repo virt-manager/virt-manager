@@ -117,7 +117,7 @@ class vmmLibvirtObject(vmmGObject):
         self.ensure_latest_xml()
         xmlobj = self._make_xmlobj_to_define()
         if xmlobj.name == newname:
-            return
+            return  # pragma: no cover
 
         log.debug("Changing %s name from %s to %s",
                       self, oldname, newname)
@@ -155,11 +155,11 @@ class vmmLibvirtObject(vmmGObject):
     def _get_backend_status(self):
         raise NotImplementedError()
 
-    def _define(self, xml):
+    def _define(self, xml):  # pragma: no cover
         ignore = xml
         return
 
-    def delete(self, force=True):
+    def delete(self, force=True):  # pragma: no cover
         ignore = force
 
     def get_name(self):
@@ -183,7 +183,7 @@ class vmmLibvirtObject(vmmGObject):
         a new object appears.
         """
         if self.__initialized:
-            return
+            return  # pragma: no cover
 
         initialize_failed = False
         try:
