@@ -408,14 +408,22 @@ class AddHardware(uiutils.UITestCase):
         tab.find("Nbd", "menu item").click()
         tab.find("Format:", "combo box").click_combo_entry()
         tab.find("qcow2", "menu item").click()
-        tab.find("Browse...", "push button").click()
-
-        browsewin = self.app.root.find("vmm-storage-browser")
-        browsewin.find("Cancel", "push button").click()
-        uiutils.check_in_loop(lambda: addhw.active)
-
-        tab.find("Source path:", "text").text = "/foo/source"
         tab.find("Target path:", "text").text = "/foo/target"
+        source = tab.find("Source path:", "text")
+        source.text = "/foo/source"
+        tab.find("Browse...", "push button").click()
+        browsewin = self.app.root.find("vmm-storage-browser")
+        browsewin.find_fuzzy("default-pool", "table cell").click()
+        browsewin.find_fuzzy("bochs-vol", "table cell").click()
+        choose = browsewin.find("Choose Volume")
+        uiutils.check_in_loop(lambda: not choose.sensitive)
+        browsewin.find_fuzzy("dir-vol", "table cell").click()
+        uiutils.check_in_loop(lambda: choose.sensitive)
+        choose.click()
+        uiutils.check_in_loop(lambda: addhw.active)
+        uiutils.check_in_loop(
+                lambda: source.text == "/dev/default-pool/dir-vol")
+
         tab.find_fuzzy("Export filesystem", "check").click()
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
