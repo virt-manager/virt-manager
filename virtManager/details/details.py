@@ -1778,9 +1778,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self.edited(EDIT_FS):
-            if self.fsDetails.validate_page_filesystem() is False:
-                return False
-            kwargs["newdev"] = self.fsDetails.get_dev()
+            kwargs["newdev"] = self.fsDetails.build_xmlobj()
 
         return vmmAddHardware.change_config_helper(self.vm.define_filesystem,
                                           kwargs, self.vm, self.err,

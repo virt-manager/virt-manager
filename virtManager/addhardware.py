@@ -1647,9 +1647,7 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _build_filesystem(self):
-        if self._fsdetails.validate_page_filesystem() is False:
-            return False
-        return self._fsdetails.get_dev()
+        return self._fsdetails.build_xmlobj()
 
     def _build_smartcard(self):
         mode = uiutil.get_list_selection(self.widget("smartcard-mode"))
