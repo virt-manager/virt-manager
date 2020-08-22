@@ -252,9 +252,6 @@ class vmmFSDetails(vmmGObjectUI):
                   self.config.CONFIG_DIR_FS or
                   self.config.CONFIG_DIR_IMAGE)
 
-        if self.storage_browser and self.storage_browser.conn != self.conn:
-            self.storage_browser.cleanup()
-            self.storage_browser = None
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
 
