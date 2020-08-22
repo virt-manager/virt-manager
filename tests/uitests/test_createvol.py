@@ -21,46 +21,112 @@ class CreateVol(uiutils.UITestCase):
     # Test cases #
     ##############
 
-    def testCreateVol(self):
+    def testCreateVolDefault(self):
+        """
+        Create default volume, clean it up
+        """
         hostwin = self._open_host_window("Storage")
         poolcell = hostwin.find("default-pool", "table cell")
         poolcell.click()
+        vollist = hostwin.find("vol-list", "table")
         win = self._open_create_win(hostwin)
-
-        # Create a default qcow2 volume
         finish = win.find("Finish", "push button")
         name = win.find("Name:", "text")
+
+        # Create a default qcow2 volume
         self.assertEqual(name.text, "vol")
         newname = "a-newvol"
         name.text = newname
         win.find("Max Capacity:", "spin button").text = "10.5"
         finish.click()
 
-        # Delete it
-        vollist = hostwin.find("vol-list", "table")
+        # Delete it, clicking 'No' first
         volcell = vollist.find(newname + ".qcow2")
         volcell.click()
         hostwin.find("vol-refresh", "push button").click()
         hostwin.find("vol-delete", "push button").click()
+        self._click_alert_button("permanently delete the volume", "No")
+        volcell = vollist.find(newname + ".qcow2")
+        hostwin.find("vol-delete", "push button").click()
         self._click_alert_button("permanently delete the volume", "Yes")
         uiutils.check_in_loop(lambda: volcell.dead)
-
-
-        # Create a raw volume too
-        win = self._open_create_win(hostwin)
-        newname = "a-newvol.raw"
-        name.text = newname
-        combo = win.find("Format:", "combo box")
-        combo.click_combo_entry()
-        combo.find("raw", "menu item").click()
-        win.find("Allocation:", "spin button").text = "0.5"
-        finish.click()
-        vollist.find(newname)
 
         # Ensure host window closes fine
         hostwin.keyCombo("<ctrl>w")
         uiutils.check_in_loop(lambda: not hostwin.showing and
                 not hostwin.active)
+
+    def testCreateVolMisc(self):
+        """
+        Cover all createvol options
+        """
+        hostwin = self._open_host_window("Storage")
+        poolcell = hostwin.find("default-pool", "table cell")
+        poolcell.click()
+        win = self._open_create_win(hostwin)
+        name = win.find("Name:", "text")
+        finish = win.find("Finish", "push button")
+        vollist = hostwin.find("vol-list", "table")
+
+        # Create a qcow2 with backing file
+        newname = "aaa-qcow2-backing.qcow2"
+        name.text = newname
+        combo = win.find("Format:", "combo box")
+        combo.click_combo_entry()
+        combo.find("qcow2", "menu item").click()
+        win.find("Backing store").click_expander()
+        win.find("Browse...").click()
+        browsewin = self.app.root.find(
+                "Choose Storage Volume", "frame")
+        browsewin.find_fuzzy("default-pool", "table cell").click()
+        browsewin.find("bochs-vol", "table cell").doubleClick()
+        uiutils.check_in_loop(lambda: not browsewin.active)
+        assert "bochs-vol" in win.find("backing-store").text
+        finish.click()
+        vollist.find(newname)
+
+        # Create a raw volume with some size tweaking
+        win = self._open_create_win(hostwin)
+        # Using previous name so we collide
+        name.text = newname
+        combo = win.find("Format:", "combo box")
+        combo.click_combo_entry()
+        combo.find("raw", "menu item").click()
+        cap = win.find("Max Capacity:", "spin button")
+        alloc = win.find("Allocation:", "spin button")
+        alloc.text = "50.0"
+        alloc.click()
+        self.pressKey("Enter")
+        uiutils.check_in_loop(lambda: cap.text == "50.0")
+        cap.text = "1.0"
+        cap.click()
+        self.pressKey("Enter")
+        uiutils.check_in_loop(lambda: alloc.text == "1.0")
+        alloc.text = "0.5"
+        alloc.click()
+        self.pressKey("Enter")
+        assert cap.text == "1.0"
+
+        finish.click()
+        self._click_alert_button("Error validating volume", "Close")
+        newname = "a-newvol.raw"
+        name.text = newname
+        finish.click()
+        vollist.find(newname)
+
+        # Create LVM backing store
+        hostwin.find("disk-pool", "table cell").click()
+        win = self._open_create_win(hostwin)
+        newname = "aaa-lvm"
+        name.text = newname
+        win.find("Backing store").click_expander()
+        win.find("Browse...").click()
+        browsewin = self.app.root.find(
+                "Choose Storage Volume", "frame")
+        browsewin.find_fuzzy("disk-pool", "table cell").click()
+        browsewin.find("diskvol7", "table cell").doubleClick()
+        finish.click()
+        vollist.find(newname)
 
 
     def testCreateVolXMLEditor(self):

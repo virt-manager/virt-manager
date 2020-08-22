@@ -546,7 +546,7 @@ class vmmHostStorage(vmmGObjectUI):
                 self._addvol = vmmCreateVolume(self.conn, pool)
                 self._addvol.connect("vol-created", self._vol_created_cb)
             else:
-                self._addvol.set_parent_pool(self.conn, pool)
+                self._addvol.set_parent_pool(pool)
             self._addvol.set_modal(self.topwin.get_modal())
             self._addvol.set_name_hint(self._name_hint)
             self._addvol.show(self.topwin)
