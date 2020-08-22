@@ -97,12 +97,22 @@ class VMMCLI(uiutils.UITestCase):
         self.app.topwin.find("test default", "table cell")
 
     def testShowCLIError(self):
+        # Unknown option
         self.app.open(extra_opts=["--idontexist"])
         self._click_alert_button("Unhandled command line", "Close")
         uiutils.check_in_loop(lambda: not self.app.is_running())
 
-    def testShowConnectBadURI(self):
+        # Missing VM
+        self.app.open(extra_opts=["--show-domain-delete", "IDONTEXIST"])
+        self._click_alert_button("does not have VM", "Close")
+        uiutils.check_in_loop(lambda: not self.app.is_running())
+
+        # Bad URI
         baduri = "fribfrobfroo"
         self.app = uiutils.VMMDogtailApp(baduri)
         self._click_alert_button(baduri, "Close")
         uiutils.check_in_loop(lambda: not self.app.is_running())
+
+    def testCLITraceLibvirt(self):
+        self.app.open(extra_opts=["--trace-libvirt=mainloop"])
+        self.sleep(5)

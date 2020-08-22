@@ -80,7 +80,7 @@ def wrap_module(module, mainloop, regex):
     CHECK_MAINLOOP = mainloop
     for name in dir(module):
         if regex and not re.match(regex, name):
-            continue
+            continue  # pragma: no cover
         obj = getattr(module, name)
         if isinstance(obj, FunctionType):
             wrap_func(module, obj)
