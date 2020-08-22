@@ -37,18 +37,24 @@ class Details(uiutils.UITestCase):
     # Test cases #
     ##############
 
-    def testDetailsHardwareSmokeTest(self):
+    def _testSmokeTest(self, vmname):
         """
         Open the VM with all the crazy hardware and just verify that each
         HW panel shows itself without raising any error.
         """
-        win = self._open_details_window(double=True)
+        win = self._open_details_window(vmname=vmname, double=True)
         lst = win.find("hw-list", "table")
         self._walkUIList(win, lst, lambda: False)
 
         # Select XML editor, and reverse walk the list
         win.find("XML", "page tab").click()
         self._walkUIList(win, lst, lambda: False, reverse=True)
+
+    def testDetailsHardwareSmokeTest(self):
+        self._testSmokeTest(None)
+
+    def testDetailsHardwareSmokeTestAlternate(self):
+        self._testSmokeTest("test alternate devs title")
 
     def _testRename(self, origname, newname):
         win = self._open_details_window(origname)
