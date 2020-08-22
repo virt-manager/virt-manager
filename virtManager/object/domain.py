@@ -117,11 +117,6 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
 
-    def tick(self, stats_update=True):
-        ignore = stats_update
-    def _init_libvirt_state(self):
-        self.ensure_latest_xml()
-
 
     ###########
     # Actions #
@@ -1649,11 +1644,6 @@ class vmmDomainVirtinst(vmmDomain):
         return False
     def _get_backend_status(self):
         return libvirt.VIR_DOMAIN_SHUTOFF
-    def _init_libvirt_state(self):
-        pass
-
-    def tick(self, stats_update=True):
-        ignore = stats_update
 
 
     ################

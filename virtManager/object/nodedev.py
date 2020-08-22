@@ -82,16 +82,8 @@ class vmmNodeDevice(vmmLibvirtObject):
         return self._STATUS_ACTIVE
     def _backend_get_name(self):
         return self.get_connkey()
-    def is_active(self):
-        return True
     def _using_events(self):
         return self.conn.using_node_device_events
-
-    def tick(self, stats_update=True):
-        # Deliberately empty
-        ignore = stats_update
-    def _init_libvirt_state(self):
-        self.ensure_latest_xml()
 
     def pretty_name(self):
         return _pretty_name(self.xmlobj)
