@@ -455,7 +455,8 @@ class VMMDogtailApp(object):
         return bool(self._proc and self._proc.poll() is None)
 
     def open(self, extra_opts=None, check_already_running=True, use_uri=True,
-            window_name=None, xmleditor_enabled=False, keyfile=None):
+            window_name=None, xmleditor_enabled=False, keyfile=None,
+            break_setfacl=False):
         extra_opts = extra_opts or []
 
         if tests.utils.TESTCONFIG.debug:
@@ -476,6 +477,8 @@ class VMMDogtailApp(object):
         testoptions = []
         if xmleditor_enabled:
             testoptions.append("xmleditor-enabled")
+        if break_setfacl:
+            testoptions.append("break-setfacl")
         if keyfile:
             import atexit
             import tempfile
