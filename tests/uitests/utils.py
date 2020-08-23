@@ -281,9 +281,9 @@ class VMMDogtailNode(dogtail.tree.Node):
         if self.roleName in ["menu", "menu item", "frame"]:
             return True
         screen = Gdk.Screen.get_default()
-        return (self.position[0] > 0 and
+        return (self.position[0] >= 0 and
                 self.position[0] + self.size[0] < screen.get_width() and
-                self.position[1] > 0 and
+                self.position[1] >= 0 and
                 self.position[1] + self.size[1] < screen.get_height())
 
     def click_secondary_icon(self):

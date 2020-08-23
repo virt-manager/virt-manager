@@ -1581,7 +1581,7 @@ class vmmCreateVM(vmmGObjectUI):
             if not template:
                 return self.err.val_err(_("A template name is required."))
 
-        # Validate media location
+        # Build the installer and Guest instance
         try:
             if init:
                 self._gdata.init = init
@@ -1599,12 +1599,6 @@ class vmmCreateVM(vmmGObjectUI):
                 fsdev.source = template
                 self._gdata.filesystem = fsdev
 
-        except Exception as e:
-            msg = _("Error setting install media location.")
-            return self.err.val_err(msg, e)
-
-        # Build the installer and Guest instance
-        try:
             self._gdata.location = location
             self._gdata.cdrom = cdrom
             self._gdata.extra_args = extra
