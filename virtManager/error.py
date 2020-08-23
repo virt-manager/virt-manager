@@ -69,7 +69,7 @@ class vmmErrorDialog(vmmGObject):
         self._modal_default = False
 
     def _cleanup(self):
-        pass
+        pass  # pragma: no cover
 
     def set_modal_default(self, val):
         self._modal_default = val
@@ -251,9 +251,8 @@ class vmmErrorDialog(vmmGObject):
 
         # Initial setup
         overwrite_confirm = False
+        dialog_type = dialog_type or Gtk.FileChooserAction.OPEN
 
-        if dialog_type is None:
-            dialog_type = Gtk.FileChooserAction.OPEN
         if dialog_type == Gtk.FileChooserAction.SAVE:
             if choose_button is None:
                 choose_button = Gtk.STOCK_SAVE
@@ -377,7 +376,7 @@ class _errorDialog (Gtk.MessageDialog):
         self.hide()
         self.buf_expander.hide()
         for c in self.chk_vbox.get_children():
-            self.chk_vbox.remove(c)
+            self.chk_vbox.remove(c)  # pragma: no cover
 
         if details:
             self.buffer.set_text(details)
