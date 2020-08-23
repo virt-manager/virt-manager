@@ -408,7 +408,7 @@ class AddHardware(uiutils.UITestCase):
         tab.find("Nbd", "menu item").click()
         tab.find("Format:", "combo box").click_combo_entry()
         tab.find("qcow2", "menu item").click()
-        tab.find("Target path:", "text").text = "/foo/target"
+
         source = tab.find("Source path:", "text")
         source.text = "/foo/source"
         tab.find("Browse...", "push button").click()
@@ -425,6 +425,12 @@ class AddHardware(uiutils.UITestCase):
                 lambda: source.text == "/dev/default-pool/dir-vol")
 
         tab.find_fuzzy("Export filesystem", "check").click()
+        # Use this to test some error.py logic for truncating large errors
+        badtarget = "a" * 1024
+        tab.find("Target path:", "text").text = badtarget
+        finish.click()
+        self._click_alert_button("aaa...", "Close")
+        tab.find("Target path:", "text").text = "/foo/target"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 

@@ -411,8 +411,14 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
 
         # Set custom init
-        newvm.find_fuzzy(None,
-            "text", "application path").text = "/sbin/init"
+        apptext = newvm.find_fuzzy(None, "text", "application path")
+        apptext.text = ""
+        self.forward(newvm, check=False)
+        self._click_alert_button("path is required", "OK")
+        newvm.find("install-app-browse").click()
+        self._select_storagebrowser_volume("default-pool", "aaa-unused.qcow2")
+        uiutils.check_in_loop(lambda: "aaa-unused.qcow2" in apptext.text)
+
         self.forward(newvm)
         self.forward(newvm)
         # Trigger back, to ensure disk page skipping works
@@ -438,8 +444,15 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
 
         # Set directory path
-        newvm.find_fuzzy(None,
-            "text", "root directory").text = "/tmp"
+        dirtext = newvm.find_fuzzy(None, "text", "root directory")
+        dirtext.text = ""
+        self.forward(newvm, check=False)
+        self._click_alert_button("path is required", "OK")
+
+        newvm.find("install-oscontainer-browse").click()
+        self._select_storagebrowser_volume("default-pool", "dir-vol")
+        uiutils.check_in_loop(lambda: "dir-vol" in dirtext.text)
+
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -574,16 +587,20 @@ class NewVM(uiutils.UITestCase):
         vmname = "fooxmleditvm"
         newvm.find_fuzzy("Local install media", "radio").click()
         newvm.find_fuzzy("Forward", "button").click()
+        nonexistpath = "/dev/foovmm-idontexist"
         existpath = "/dev/default-pool/testvol1.img"
-        newvm.find("media-entry").text = existpath
+        newvm.find("media-entry").text = nonexistpath
         uiutils.check_in_loop(
                 lambda: newvm.find("oslist-entry").text == "None detected")
         newvm.find_fuzzy("Automatically detect", "check").click()
         newvm.find("oslist-entry").text = "generic"
         newvm.find("oslist-popover").find_fuzzy("generic").click()
-        newvm.find_fuzzy("Forward", "button").click()
-        newvm.find_fuzzy("Forward", "button").click()
-        newvm.find_fuzzy("Forward", "button").click()
+        self.forward(newvm, check=False)
+        self._click_alert_button("Error setting installer", "OK")
+        newvm.find("media-entry").text = existpath
+        self.forward(newvm)
+        self.forward(newvm)
+        self.forward(newvm)
         newvm.find_fuzzy("Customize", "check").click()
         newvm.find_fuzzy("Name", "text").text = vmname
         newvm.find_fuzzy("Finish", "button").click()
@@ -657,6 +674,29 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Import", "radio").click()
         self.forward(newvm)
+        importtext = newvm.find_fuzzy(None, "text", "existing storage")
+
+        # Click forward, hitting missing OS error
+        self.forward(newvm, check=False)
+        self._click_alert_button("select an OS", "OK")
+
+        # Set OS
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+
+        # Click forward, hitting missing Import path error
+        self.forward(newvm, check=False)
+        self._click_alert_button("import is required", "OK")
+
+        # Click forward, but Import path doesn't exist
+        importtext.text = "/dev/default-pool/idontexist"
+        self.forward(newvm, check=False)
+        self._click_alert_button("import path must point", "OK")
+
+        # Click forward, but Import path is in use, and exit
+        importtext.text = "/dev/default-pool/default-vol"
+        self.forward(newvm, check=False)
+        self._click_alert_button("in use", "No")
 
         # storagebrowser bits
         newvm.find("install-import-browse").click()
@@ -672,12 +712,9 @@ class NewVM(uiutils.UITestCase):
         browsewin.find_fuzzy("default-pool", "table cell").click()
         browsewin.find_fuzzy("bochs-vol", "table cell").click()
         browsewin.find("Choose Volume").click()
-        importtext = newvm.find_fuzzy(None, "text", "existing storage")
         uiutils.check_in_loop(
                 lambda: importtext.text == "/dev/default-pool/bochs-vol")
 
-        newvm.find("oslist-entry").text = "generic"
-        newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
 

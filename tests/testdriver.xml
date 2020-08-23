@@ -1642,6 +1642,19 @@ ba</description>
   </target>
 
   <volume type='file'>
+    <name>aaa-unused.qcow2</name>
+    <capacity>1000000</capacity>
+    <allocation>50000</allocation>
+    <target>
+      <format type='qcow2'/>
+      <permissions>
+        <mode>0700</mode>
+        <owner>10736</owner>
+        <group>10736</group>
+      </permissions>
+    </target>
+  </volume>
+  <volume type='file'>
     <name>default-vol</name>
     <capacity>1000000</capacity>
     <allocation>50000</allocation>
