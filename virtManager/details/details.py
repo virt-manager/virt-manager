@@ -1592,11 +1592,11 @@ class vmmDetails(vmmGObjectUI):
                 checksens=True)
 
             if kwargs["initrd"] and not kwargs["kernel"]:
-                return self.err.val_err(
-                    _("Cannot set initrd without specifying a kernel path"))
+                msg = _("Cannot set initrd without specifying a kernel path")
+                return self.err.val_err(msg)
             if kwargs["kernel_args"] and not kwargs["kernel"]:
-                return self.err.val_err(
-                    _("Cannot set kernel arguments without specifying a kernel path"))
+                msg = _("Cannot set kernel arguments without specifying a kernel path")
+                return self.err.val_err(msg)
 
         if self.edited(EDIT_INIT):
             kwargs["init"] = self.get_text("boot-init-path")

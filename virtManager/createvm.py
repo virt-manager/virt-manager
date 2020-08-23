@@ -1489,19 +1489,19 @@ class vmmCreateVM(vmmGObjectUI):
         # Require username and password when authenticate
         # to source registry.
         if user and not passwd:
-            return self.err.val_err(_("Please specify password "
-                                      "for accessing source registry"))
+            msg = _("Please specify password for accessing source registry")
+            return self.err.val_err(msg)
 
         # Validate destination path
         if not os.path.exists(fs):
             return
 
         if not os.path.isdir(fs):
-            return self.err.val_err(_("Destination path "
-                                      "is not directory: %s") % fs)
+            msg = _("Destination path is not directory: %s") % fs
+            return self.err.val_err(msg)
         if not os.access(fs, os.W_OK):
-            return self.err.val_err(_("No write permissions for "
-                                      "directory path: %s") % fs)
+            msg = _("No write permissions for directory path: %s") % fs
+            return self.err.val_err(msg)
         if os.listdir(fs) == []:
             return
 
@@ -1525,14 +1525,15 @@ class vmmCreateVM(vmmGObjectUI):
         osobj = self._os_list.get_selected_os()
 
         if not self._is_container_install() and not osobj:
-            return self.err.val_err(_("You must select an OS.") +
-                    "\n\n" + self._os_list.eol_text)
+            msg = _("You must select an OS.")
+            msg += "\n\n" + self._os_list.eol_text
+            return self.err.val_err(msg)
 
         if instmethod == INSTALL_PAGE_ISO:
             media = self._get_config_local_media()
             if not media:
-                return self.err.val_err(
-                                _("An install media selection is required."))
+                msg = _("An install media selection is required.")
+                return self.err.val_err(msg)
             cdrom = media
 
         elif instmethod == INSTALL_PAGE_URL:
@@ -1547,14 +1548,14 @@ class vmmCreateVM(vmmGObjectUI):
             is_import = True
             import_path = self._get_config_import_path()
             if not import_path:
-                return self.err.val_err(
-                                _("A storage path to import is required."))
+                msg = _("A storage path to import is required.")
+                return self.err.val_err(msg)
 
             if not virtinst.DeviceDisk.path_definitely_exists(
                                                 self.conn.get_backend(),
                                                 import_path):
-                return self.err.val_err(_("The import path must point to "
-                                          "an existing storage."))
+                msg = _("The import path must point to an existing storage.")
+                return self.err.val_err(msg)
 
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             init = self.widget("install-app-entry").get_text()
@@ -1599,8 +1600,8 @@ class vmmCreateVM(vmmGObjectUI):
                 self._gdata.filesystem = fsdev
 
         except Exception as e:
-            return self.err.val_err(
-                                _("Error setting install media location."), e)
+            msg = _("Error setting install media location.")
+            return self.err.val_err(msg, e)
 
         # Build the installer and Guest instance
         try:
@@ -1612,8 +1613,8 @@ class vmmCreateVM(vmmGObjectUI):
             guest = self._gdata.build_guest()
             installer = self._gdata.build_installer()
         except Exception as e:
-            return self.err.val_err(
-                        _("Error setting installer parameters."), e)
+            msg = _("Error setting installer parameters.")
+            return self.err.val_err(msg, e)
 
         try:
             name = virtinst.Guest.generate_name(guest)
@@ -1747,8 +1748,8 @@ class vmmCreateVM(vmmGObjectUI):
             # No network device available
             instmethod = self._get_config_install_page()
             if instmethod == INSTALL_PAGE_URL:
-                return self.err.val_err(
-                            _("Network device required for URL install."))
+                msg = _("Network device required for URL install.")
+                return self.err.val_err(msg)
 
         macaddr = virtinst.DeviceInterface.generate_mac(
             self.conn.get_backend())
