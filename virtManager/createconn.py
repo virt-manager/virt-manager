@@ -234,8 +234,8 @@ class vmmCreateConn(vmmGObjectUI):
         host = self.widget("hostname").get_text()
 
         if is_remote and not host:
-            return self.err.val_err(_("A hostname is required for "
-                                      "remote connections."))
+            msg = _("A hostname is required for remote connections.")
+            return self.err.val_err(msg)
 
         return True
 
