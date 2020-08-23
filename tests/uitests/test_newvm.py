@@ -646,3 +646,41 @@ class NewVM(uiutils.UITestCase):
         tab.find("Browse", "push button").click()
         browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find("%s.qcow2" % vmname, "table cell")
+
+
+    def testNewVMRemote(self):
+        """
+        Hit some is_remote code paths
+        """
+        self.app.uri = tests.utils.URIs.test_remote
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        self.forward(newvm)
+
+        # storagebrowser bits
+        newvm.find("install-import-browse").click()
+        browsewin = self.app.root.find("vmm-storage-browser")
+        # Insensitive for remote connection
+        assert browsewin.find("Browse Local").sensitive is False
+        # Close the browser and reopen
+        browsewin.find("Cancel").click()
+        uiutils.check_in_loop(lambda: not browsewin.active)
+        # Reopen, select storage
+        newvm.find("install-import-browse").click()
+        browsewin = self.app.root.find("vmm-storage-browser")
+        browsewin.find_fuzzy("default-pool", "table cell").click()
+        browsewin.find_fuzzy("bochs-vol", "table cell").click()
+        browsewin.find("Choose Volume").click()
+        importtext = newvm.find_fuzzy(None, "text", "existing storage")
+        uiutils.check_in_loop(
+                lambda: importtext.text == "/dev/default-pool/bochs-vol")
+
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+
+        newvm.find_fuzzy("Finish", "button").click()
+        self.app.root.find_fuzzy("vm1 on", "frame")
+        self.assertFalse(newvm.showing)
