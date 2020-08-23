@@ -103,6 +103,12 @@ class UITestCase(unittest.TestCase):
         alert.find(button_text, "push button").click()
         check_in_loop(lambda: not alert.active)
 
+    def _select_storagebrowser_volume(self, pool, vol):
+        browsewin = self.app.root.find("vmm-storage-browser")
+        browsewin.find_fuzzy(pool, "table cell").click()
+        browsewin.find_fuzzy(vol, "table cell").click()
+        browsewin.find_fuzzy("Choose Volume").click()
+
     def _walkUIList(self, win, lst, error_cb, reverse=False):
         """
         Toggle down through a UI list like addhardware, net/storage/iface
