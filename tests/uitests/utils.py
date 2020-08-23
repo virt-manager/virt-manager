@@ -479,6 +479,7 @@ class VMMDogtailApp(object):
         if keyfile:
             import atexit
             import tempfile
+            keyfile = os.path.dirname(__file__) + "/data/keyfile/" + keyfile
             tempname = tempfile.mktemp(prefix="virtmanager-uitests-keyfile")
             open(tempname, "w").write(open(keyfile).read())
             atexit.register(lambda: os.unlink(tempname))

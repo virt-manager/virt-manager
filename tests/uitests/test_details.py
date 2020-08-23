@@ -54,9 +54,11 @@ class Details(uiutils.UITestCase):
         self._testSmokeTest(None)
 
     def testDetailsHardwareSmokeTestAlternate(self):
+        self.app.open(keyfile="allstats.ini")
         self._testSmokeTest("test alternate devs title")
 
     def _testRename(self, origname, newname):
+        # Enable all stats prefs to hit some extra code
         win = self._open_details_window(origname)
 
         # Ensure the Overview page is the first selected

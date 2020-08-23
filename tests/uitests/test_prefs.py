@@ -94,9 +94,7 @@ class VMMPrefs(uiutils.UITestCase):
         """
         Preload some keyfile settings and verify they work as expected
         """
-        import os
-        keyfile = os.path.dirname(__file__) + "/data/keyfile/defaultconn.ini"
-        self.app.open(use_uri=False, keyfile=keyfile)
+        self.app.open(use_uri=False, keyfile="defaultconn.ini")
         managerwin = self.app.topwin
 
         # test:///default should be connected
