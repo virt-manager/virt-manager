@@ -1018,6 +1018,13 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
   <name>test-state-managedsave</name>
   <memory>1048576</memory>
   <bootloader>/tmp/bootfoo</bootloader>
+  <devices>
+    <disk type='file' device='disk'>
+      <source file='/foo/bar/baz.qcow2'/>
+      <target dev='hda' bus='ide'/>
+      <driver type="qcow2"/>
+    </disk>
+  </devices>
   <test:runstate>5</test:runstate>
   <test:hasmanagedsave/>
 </domain>
@@ -1337,6 +1344,40 @@ ba</description>
   </domain>
   <active>0</active>
 </test:domainsnapshot>
+
+
+<test:domainsnapshot>
+  <name>aaa-external-mem-only</name>
+  <state>running</state>
+  <creationTime>1365903080</creationTime>
+  <memory snapshot='external' file='/path/to/memory/state2'/>
+  <domain type='test'>
+    <name>test-snapshots</name>
+    <uuid>12345678-1234-fddf-1234-12345678ffff</uuid>
+    <memory unit='KiB'>409600</memory>
+    <currentMemory unit='KiB'>409600</currentMemory>
+    <vcpu placement='static'>1</vcpu>
+    <bootloader>/tmp/bootfoo</bootloader>
+    <os>
+      <type arch='i686'>xen</type>
+    </os>
+    <clock offset='utc'/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>restart</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+      <disk type='file' device='disk'>
+        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <target dev='hda' bus='ide'/>
+        <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+      </disk>
+      <controller type='ide' index='0'/>
+      <graphics type='vnc'/>
+    </devices>
+  </domain>
+  <active>0</active>
+</test:domainsnapshot>
+
 
 <test:domainsnapshot>
   <name>zzz-external-diskonly</name>

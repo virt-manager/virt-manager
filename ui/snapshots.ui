@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="snapshot-top-window">
     <property name="width_request">600</property>
     <property name="height_request">400</property>
     <property name="can_focus">False</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="snapshot-top-box">
         <property name="visible">True</property>
@@ -103,6 +100,11 @@
                                     <property name="can_focus">True</property>
                                     <property name="left_margin">2</property>
                                     <property name="right_margin">2</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="snapshot-description-atkobject">
+                                        <property name="AtkObject::accessible-name">snapshot-description</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -535,6 +537,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>

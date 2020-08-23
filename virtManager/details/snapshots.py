@@ -38,7 +38,7 @@ def _make_screenshot_pixbuf(mime, sdata):
     maxsize = 450
     def _scale(big, small, maxsize):
         if big <= maxsize:
-            return big, small
+            return big, small  # pragma: no cover
         factor = float(maxsize) / float(big)
         return maxsize, int(factor * float(small))
 
@@ -47,7 +47,7 @@ def _make_screenshot_pixbuf(mime, sdata):
     if width > height:
         width, height = _scale(width, height, maxsize)
     else:
-        height, width = _scale(height, width, maxsize)
+        height, width = _scale(height, width, maxsize)  # pragma: no cover
 
     return pixbuf.scale_simple(width, height,
                                GdkPixbuf.InterpType.BILINEAR)
@@ -59,7 +59,7 @@ def _mime_to_ext(val, reverse=False):
             return e
         if val == e and reverse:
             return m
-    log.debug("Don't know how to convert %s=%s to %s",
+    log.debug("Don't know how to convert %s=%s to %s",  # pragma: no cover
                   reverse and "extension" or "mime", val,
                   reverse and "mime" or "extension")
 
@@ -161,7 +161,7 @@ class vmmSnapshotNew(vmmGObjectUI):
             try:
                 if stream:
                     stream.finish()
-            except Exception:
+            except Exception:  # pragma: no cover
                 pass
 
     def _get_screenshot(self):
@@ -179,13 +179,13 @@ class vmmSnapshotNew(vmmGObjectUI):
             # https://bugs.launchpad.net/qemu/+bug/1314293
             self._take_screenshot()
             mime, sdata = self._take_screenshot()
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error taking screenshot")
             return
 
         ext = _mime_to_ext(mime)
         if not ext:
-            return
+            return  # pragma: no cover
 
         newpix = _make_screenshot_pixbuf(mime, sdata)
         setattr(newpix, "vmm_mimetype", mime)
@@ -199,7 +199,9 @@ class vmmSnapshotNew(vmmGObjectUI):
             error = _("Error creating snapshot: %s") % error
             self.err.show_err(error, details=details)
             return
+
         self.emit("snapshot-created", newname)
+        self.close()
 
     def _validate_new_snapshot(self):
         name = self.widget("snapshot-new-name").get_text()
@@ -222,7 +224,7 @@ class vmmSnapshotNew(vmmGObjectUI):
             return None, None
 
         sn = snwidget.get_pixbuf()
-        if not sn:
+        if not sn:  # pragma: no cover
             return None, None
 
         mime = getattr(sn, "vmm_mimetype", None)
@@ -250,7 +252,7 @@ class vmmSnapshotNew(vmmGObjectUI):
             filename = basesn + "." + _mime_to_ext(mime)
             log.debug("Writing screenshot to %s", filename)
             open(filename, "wb").write(sndata)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error saving screenshot")
 
     def _create_new_snapshot(self):
@@ -261,7 +263,6 @@ class vmmSnapshotNew(vmmGObjectUI):
         xml = snap.get_xml()
         name = snap.name
         mime, sndata = self._get_screenshot_data_for_save()
-        self.close()
 
         self.set_finish_cursor()
         progWin = vmmAsyncJob(
@@ -408,7 +409,7 @@ class vmmSnapshotPage(vmmGObjectUI):
                 for snap in self.vm.list_snapshots():
                     if name == snap.get_name():
                         snaps.append(snap)
-            except Exception:
+            except Exception:  # pragma: no cover
                 pass
 
         snaps = []
@@ -438,7 +439,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         try:
             snapshots = self.vm.list_snapshots()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.exception(e)
             self._set_error_page(_("Error refreshing snapshot list: %s") %
                                 str(e))
@@ -499,7 +500,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         filename = files[0]
         mime = _mime_to_ext(os.path.splitext(filename)[1][1:], reverse=True)
         if not mime:
-            return
+            return  # pragma: no cover
         return _make_screenshot_pixbuf(mime, open(filename, "rb").read())
 
     def _set_snapshot_state(self, snap=None):
@@ -576,7 +577,7 @@ class vmmSnapshotPage(vmmGObjectUI):
     def _apply(self):
         snaps = self._get_selected_snapshots()
         if not snaps or len(snaps) > 1:
-            return False
+            return False  # pragma: no cover
 
         snap = snaps[0]
         desc_widget = self.widget("snapshot-description")
@@ -589,7 +590,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self.vm.log_redefine_xml_diff(snap, origxml, newxml)
         if newxml == origxml:
-            return True
+            return True  # pragma: no cover
 
         self.vm.create_snapshot(newxml, redefine=True)
         snap.ensure_latest_xml()
@@ -652,7 +653,7 @@ class vmmSnapshotPage(vmmGObjectUI):
     def _on_start_clicked(self, ignore, ignore2=None, ignore3=None):
         snaps = self._get_selected_snapshots()
         if not snaps or len(snaps) > 1:
-            return
+            return  # pragma: no cover
 
         snap = snaps[0]
 
@@ -696,7 +697,7 @@ class vmmSnapshotPage(vmmGObjectUI):
     def _on_delete_clicked(self, ignore):
         snaps = self._get_selected_snapshots()
         if not snaps:
-            return
+            return  # pragma: no cover
 
         result = self.err.yes_no(_("Are you sure you want to permanently "
                                    "delete the selected snapshots?"))
@@ -727,6 +728,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         try:
             self._set_snapshot_state(snap[0])
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.exception(e)
             self._set_error_page(_("Error selecting snapshot: %s") % str(e))
