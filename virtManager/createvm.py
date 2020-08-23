@@ -1481,6 +1481,37 @@ class vmmCreateVM(vmmGObjectUI):
         self._gdata.machine = self._get_config_machine()
         return bool(self._gdata.build_guest())
 
+    def _validate_oscontainer_bootstrap(self, fs, src_url, user, passwd):
+        # Check if the source path was provided
+        if not src_url:
+            return self.err.val_err(_("Source URL is required"))
+
+        # Require username and password when authenticate
+        # to source registry.
+        if user and not passwd:
+            return self.err.val_err(_("Please specify password "
+                                      "for accessing source registry"))
+
+        # Validate destination path
+        if not os.path.exists(fs):
+            return
+
+        if not os.path.isdir(fs):
+            return self.err.val_err(_("Destination path "
+                                      "is not directory: %s") % fs)
+        if not os.access(fs, os.W_OK):
+            return self.err.val_err(_("No write permissions for "
+                                      "directory path: %s") % fs)
+        if os.listdir(fs) == []:
+            return
+
+        # Show Yes/No dialog if the destination is not empty
+        return self.err.yes_no(
+            _("OS root directory is not empty"),
+            _("Creating root file system in a non-empty "
+              "directory might fail due to file conflicts.\n"
+              "Would you like to continue?"))
+
     def _validate_install_page(self):
         instmethod = self._get_config_install_page()
         installer = None
@@ -1539,35 +1570,10 @@ class vmmCreateVM(vmmGObjectUI):
                 src_url = self._get_config_oscontainer_source_url()
                 user = self._get_config_oscontainer_source_username()
                 passwd = self._get_config_oscontainer_source_password()
-
-                # Check if the source path was provided
-                if not src_url:
-                    return self.err.val_err(_("Source URL is required"))
-
-                # Require username and password when authenticate
-                # to source registry.
-                if user and not passwd:
-                    return self.err.val_err(_("Please specify password "
-                                              "for accessing source registry"))
-
-                # Validate destination path
-                if os.path.exists(fs):
-                    if not os.path.isdir(fs):
-                        return self.err.val_err(_("Destination path "
-                                                  "is not directory: %s") % fs)
-                    if not os.access(fs, os.W_OK):
-                        return self.err.val_err(_("No write permissions for "
-                                                  "directory path: %s") % fs)
-                    if os.listdir(fs) != []:
-                        # Show Yes/No dialog if the destination is not empty
-                        res = self.err.yes_no(
-                            _("OS root directory is not empty"),
-                            _("Creating root file system in a non-empty "
-                              "directory might fail due to file conflicts.\n"
-                              "Would you like to continue?"))
-                        if not res:
-                            return False
-
+                ret = self._validate_oscontainer_bootstrap(
+                        fs, src_url, user, passwd)
+                if ret is False:
+                    return False
 
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
             template = self.widget("install-container-template").get_text()
