@@ -1428,8 +1428,6 @@ class vmmAddHardware(vmmGObjectUI):
                 return False
 
     def _validate_device(self, dev):
-        dev.validate()
-
         if dev.DEVICE_TYPE == "disk":
             if self.addstorage.validate_device(dev) is False:
                 return False
@@ -1439,6 +1437,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         if dev.DEVICE_TYPE == "hostdev":
             self._validate_hostdev_collision(dev)
+
+        dev.validate()
 
     def _build_xmleditor_device(self, srcdev):
         xml = self._xmleditor.get_xml()

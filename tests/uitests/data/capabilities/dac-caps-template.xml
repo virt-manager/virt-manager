@@ -1,0 +1,89 @@
+<capabilities>
+
+  <host>
+    <cpu>
+      <arch>i686</arch>
+      <features>
+        <pae/>
+        <nonpae/>
+      </features>
+      <pages unit='KiB' size='4'/>
+      <pages unit='KiB' size='8'/>
+      <pages unit='KiB' size='2048'/>
+      <pages unit='KiB' size='1048576'/>
+    </cpu>
+    <power_management/>
+    <iommu support='yes'/>
+    <topology>
+      <cells num='2'>
+        <cell id='0'>
+          <memory unit='KiB'>2097152</memory>
+          <pages unit='KiB' size='4'>524288</pages>
+          <pages unit='KiB' size='2048'>0</pages>
+          <pages unit='KiB' size='1048576'>0</pages>
+          <cpus num='8'>
+            <cpu id='0' socket_id='0' die_id='0' core_id='0' siblings='0'/>
+            <cpu id='1' socket_id='0' die_id='0' core_id='1' siblings='1'/>
+            <cpu id='2' socket_id='0' die_id='0' core_id='2' siblings='2'/>
+            <cpu id='3' socket_id='0' die_id='0' core_id='3' siblings='3'/>
+            <cpu id='4' socket_id='0' die_id='0' core_id='4' siblings='4'/>
+            <cpu id='5' socket_id='0' die_id='0' core_id='5' siblings='5'/>
+            <cpu id='6' socket_id='0' die_id='0' core_id='6' siblings='6'/>
+            <cpu id='7' socket_id='0' die_id='0' core_id='7' siblings='7'/>
+          </cpus>
+        </cell>
+        <cell id='1'>
+          <memory unit='KiB'>4194304</memory>
+          <pages unit='KiB' size='8'>524288</pages>
+          <pages unit='KiB' size='2048'>0</pages>
+          <pages unit='KiB' size='1048576'>0</pages>
+          <cpus num='8'>
+            <cpu id='8' socket_id='1' die_id='0' core_id='0' siblings='8'/>
+            <cpu id='9' socket_id='1' die_id='0' core_id='1' siblings='9'/>
+            <cpu id='10' socket_id='1' die_id='0' core_id='2' siblings='10'/>
+            <cpu id='11' socket_id='1' die_id='0' core_id='3' siblings='11'/>
+            <cpu id='12' socket_id='1' die_id='0' core_id='4' siblings='12'/>
+            <cpu id='13' socket_id='1' die_id='0' core_id='5' siblings='13'/>
+            <cpu id='14' socket_id='1' die_id='0' core_id='6' siblings='14'/>
+            <cpu id='15' socket_id='1' die_id='0' core_id='7' siblings='15'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+    <secmodel>
+      <model>dac</model>
+      <doi>0</doi>
+      <baselabel type='kvm'>+%(UID)s:+%(GID)s</baselabel>
+      <baselabel type='qemu'>+%(UID)s:+%(GID)s</baselabel>
+    </secmodel>
+  </host>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='i686'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/test-hv</emulator>
+      <domain type='test'/>
+    </arch>
+    <features>
+      <pae/>
+      <nonpae/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>xen</os_type>
+    <arch name='i686'>
+      <wordsize>32</wordsize>
+      <emulator>/usr/bin/test-hv</emulator>
+      <domain type='test'/>
+    </arch>
+    <features>
+      <pae/>
+      <nonpae/>
+    </features>
+  </guest>
+
+</capabilities>
+
+

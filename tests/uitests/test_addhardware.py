@@ -2,9 +2,42 @@
 # See the COPYING file in the top-level directory.
 
 import os
+import tempfile
 
 import tests
 from tests.uitests import utils as uiutils
+
+
+def _search_permissions_decorator(fn):
+    """
+    Decorator to set up necessary bits to test disk permission search
+    """
+    def wrapper(self, *args, **kwargs):
+        # Generate capabilities XML from a template, with out
+        # UID/GID inserted as the intended emulator permissions
+        capsfile = (os.path.dirname(__file__) +
+                "/data/capabilities/dac-caps-template.xml")
+        capsdata = open(capsfile).read() % {
+                "UID": os.getuid(), "GID": os.getgid()}
+        tmpcaps = tempfile.NamedTemporaryFile(
+                prefix="virt-manager-uitests-caps")
+        tmpcapspath = tmpcaps.name
+        open(tmpcapspath, "w").write(capsdata)
+
+        # We mock a qemu URI to trigger the permissions check
+        uri = (tests.utils.URIs.test_full +
+                ",fakeuri=qemu:///system,caps=%s" % tmpcapspath)
+
+        # Create a temporary directory that we can manipulate perms
+        tmpobj = tempfile.TemporaryDirectory(
+                prefix="virtinst-test-search")
+        tmpdir = tmpobj.name
+        try:
+            os.chmod(tmpdir, 0o000)
+            fn(self, uri, tmpdir, *args, **kwargs)
+        finally:
+            os.chmod(tmpdir, 0o777)
+    return wrapper
 
 
 class AddHardware(uiutils.UITestCase):
@@ -122,12 +155,16 @@ class AddHardware(uiutils.UITestCase):
         # Disk with some tweaks
         addhw = self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Storage", "storage-tab")
-        tab.find("GiB", "spin button").text = "1.5"
         tab.find("Bus type:", "combo box").click()
         tab.find("VirtIO", "menu item").click()
         tab.find("Advanced options", "toggle button").click_expander()
         tab.find("Cache mode:", "combo box").click()
         tab.find("none", "menu item").click()
+        # Size too big
+        tab.find("GiB", "spin button").text = "2000"
+        finish.click()
+        self._click_alert_button("not enough free space", "Close")
+        tab.find("GiB", "spin button").text = "1.5"
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
@@ -135,6 +172,8 @@ class AddHardware(uiutils.UITestCase):
         addhw = self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
+        finish.click()
+        self._click_alert_button("storage path must be specified", "OK")
         tab.find("storage-browse", "push button").click()
         browse = self.app.root.find("vmm-storage-browser")
 
@@ -179,6 +218,8 @@ class AddHardware(uiutils.UITestCase):
         browse.find("Choose Volume", "push button").click()
         self.assertTrue("/diskvol1" in tab.find("storage-entry").text)
         finish.click()
+        self._click_alert_button("already in use by", "No")
+        finish.click()
         self._click_alert_button("already in use by", "Yes")
         uiutils.check_in_loop(lambda: details.active)
 
@@ -204,6 +245,106 @@ class AddHardware(uiutils.UITestCase):
         finish.click()
         uiutils.check_in_loop(lambda: details.active)
 
+    @_search_permissions_decorator
+    def testAddDiskSearchPermsCheckbox(self, uri, tmpdir):
+        """
+        Test search permissions 'no' and checkbox case
+        """
+        self.app.uri = uri
+        details = self._open_details_window()
+
+        # Say 'No' but path should still work due to test driver
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo1.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        self._click_alert_button("emulator may not have", "No")
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Say 'don't ask again'
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo2.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        alert = self.app.root.find_fuzzy("vmm dialog", "alert")
+        alert.find_fuzzy("Don't ask", "check box").click()
+        self._click_alert_button("emulator may not have", "No")
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Confirm it doesn't ask about path again
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo3.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+    @_search_permissions_decorator
+    def testAddDiskSearchPermsSuccess(self, uri, tmpdir):
+        """
+        Select 'Yes' for search perms fixing
+        """
+        self.app.uri = uri
+        details = self._open_details_window()
+
+        # Say 'Yes'
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo1.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        self._click_alert_button("emulator may not have", "Yes")
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Confirm it doesn't ask about path again
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo3.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
+
+    @_search_permissions_decorator
+    def testAddDiskSearchPermsFail(self, uri, tmpdir):
+        """
+        Force perms fixing to fail
+        """
+        self.app.uri = uri
+        self.app.open(break_setfacl=True)
+        details = self._open_details_window()
+
+        # Say 'Yes' and it should fail, then blacklist the paths
+        addhw = self._open_addhw_window(details)
+        finish = addhw.find("Finish", "push button")
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo1.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        self._click_alert_button("emulator may not have", "Yes")
+        alert = self.app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Errors were encountered", "label")
+        alert.find_fuzzy("Don't ask", "check box").click()
+        alert.find_fuzzy("OK", "push button").click()
+        uiutils.check_in_loop(lambda: details.active)
+
+        # Confirm it doesn't ask about path again
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.find_fuzzy("Select or create", "radio").click()
+        path = tmpdir + "/foo2.img"
+        tab.find("storage-entry").text = path
+        finish.click()
+        uiutils.check_in_loop(lambda: details.active)
 
     def testAddNetworks(self):
         """

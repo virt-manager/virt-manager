@@ -49,7 +49,7 @@ class vmmAddStorage(vmmGObjectUI):
                     pool.refresh()
                 avail = int(pool.get_available())
                 return float(avail / 1024.0 / 1024.0 / 1024.0)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error determining host disk space")
         return -1
 
@@ -108,9 +108,8 @@ class vmmAddStorage(vmmGObjectUI):
                    "following directories:")
         details = ""
         for p, error in errors.items():
-            if p not in broken_paths:
-                continue
-            details += "%s : %s\n" % (p, error)
+            if p in broken_paths:
+                details += "%s : %s\n" % (p, error)
         details += "\nIt is very likely the VM will fail to start up."
 
         log.debug("Permission errors:\n%s", details)
@@ -136,7 +135,7 @@ class vmmAddStorage(vmmGObjectUI):
         storage_area = self.widget("storage-box")
 
         storage_area.set_sensitive(can_storage)
-        if not can_storage:
+        if not can_storage:  # pragma: no cover
             storage_tooltip = _("Connection does not support storage"
                                 " management.")
             use_storage.set_sensitive(True)
@@ -145,7 +144,7 @@ class vmmAddStorage(vmmGObjectUI):
     def get_default_path(self, name, collideguest=None):
         pool = self.conn.get_default_pool()
         if not pool:
-            return
+            return  # pragma: no cover
 
         fmt = self.conn.get_default_storage_format()
         suffix = virtinst.StorageVolume.get_file_extension_for_format(fmt)
@@ -189,7 +188,7 @@ class vmmAddStorage(vmmGObjectUI):
                 disk.get_vol_install().format = fmt
             else:
                 log.debug("path=%s can not use default prefs format=%s, "
-                    "not setting it", disk.path, fmt)
+                        "not setting it", disk.path, fmt)  # pragma: no cover
 
         return disk
 
@@ -198,13 +197,6 @@ class vmmAddStorage(vmmGObjectUI):
             return self.err.val_err(_("A storage path must be specified."))
 
         disk.validate()
-
-        isfatal, errmsg = disk.is_size_conflict()
-        if not isfatal and errmsg:
-            # Fatal errors are reported when setting 'size'
-            res = self.err.ok_cancel(_("Not Enough Free Space"), errmsg)
-            if not res:
-                return False
 
         # Disk collision
         names = disk.is_conflict_disk()

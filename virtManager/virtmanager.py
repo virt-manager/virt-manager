@@ -211,6 +211,7 @@ class CLITestOptionsClass:
         self.no_events = _get("no-events")
         self.xmleditor_enabled = _get("xmleditor-enabled")
         self.gsettings_keyfile = _get_value("gsettings-keyfile")
+        self.break_setfacl = _get("break-setfacl")
 
         if opts:
             print("Unknown --test-options keys: %s" % opts)
@@ -250,6 +251,14 @@ def main():
         CLITestOptions.leak_debug = True
     if options.test_no_events:
         CLITestOptions.no_events = True
+
+    if CLITestOptions.break_setfacl:
+        import virtinst.diskbackend
+        def fake_search(*args, **kwargs):
+            raise RuntimeError("Fake search fix fail from test suite")
+        virtinst.diskbackend.SETFACL = "getfacl"
+        # pylint: disable=protected-access
+        virtinst.diskbackend._fix_perms_chmod = fake_search
 
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir
