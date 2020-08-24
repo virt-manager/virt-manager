@@ -198,12 +198,9 @@ class DeviceGraphics(Device):
         return None
 
     def _default_spice_gl(self, _guest):
-        if not self.conn.support.conn_spice_gl():  # pragma: no cover
-            raise ValueError(_("Host does not support spice GL"))
-
         # If spice GL but rendernode wasn't specified, hardcode
         # the first one
-        if not self.rendernode and self.conn.support.conn_spice_rendernode():
+        if not self.rendernode:
             for nodedev in self.conn.fetch_all_nodedevs():
                 if not nodedev.is_drm_render():
                     continue

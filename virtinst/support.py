@@ -262,12 +262,6 @@ class SupportCache:
         version="1.1.1", hv_version={"qemu": 0})
     # spice GL is actually enabled with libvirt 1.3.3, but 3.1.0 is the
     # first version that sorts out the qemu:///system + cgroup issues
-    conn_spice_gl = _make(version="3.1.0",
-        hv_version={"qemu": "2.6.0", "test": 0})
-    conn_spice_rendernode = _make(version="3.1.0",
-        hv_version={"qemu": "2.9.0", "test": 0})
-    conn_video_virtio_accel3d = _make(version="1.3.0",
-        hv_version={"qemu": "2.5.0", "test": 0})
     conn_graphics_listen_none = _make(version="2.0.0")
     conn_rng_urandom = _make(version="1.3.4")
     conn_usb3_ports = _make(version="1.3.5")

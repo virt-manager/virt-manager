@@ -104,10 +104,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
         devs = self.conn.filter_nodedevs("drm")
         for i in devs:
             drm = i.xmlobj
-            if not drm.is_drm_render():
-                continue
-            rendernode = drm.get_devnode().path
-            model.append([rendernode, i.pretty_name()])
+            if drm.is_drm_render():
+                rendernode = drm.get_devnode().path
+                model.append([rendernode, i.pretty_name()])
 
     def _get_config_graphics_ports(self):
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
@@ -161,7 +160,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
             if val == -1 or gfx.autoport:
                 auto.set_active(True)
-                if val and val != -1:
+                if val and val != -1:  # pragma: no cover
+                    # Triggering this with the test driver is tough
+                    # because it doesn't fill in runtime port values
                     label = _("A_uto (Port %(port)d)") % {"port": val}
             elif val is None:
                 auto.set_inconsistent(True)
@@ -195,39 +196,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
         if is_spice:
             opengl_warning = ""
-            rendernode_warning = ""
-            opengl_supported = self.conn.support.conn_spice_gl()
-            rendernode_supported = self.conn.support.conn_spice_rendernode()
+            glval = bool(gfx.gl)
+            renderval = gfx.rendernode or None
 
-            # * If spicegl isn't supported, show a warning icon and
-            #     and desensitive everything
-            # * If qemu:///system and rendernode isn't supported,
-            #     show a warning icon and desensitize everything, since
-            #     rendernode support is needed for it to work out of the box.
-            # * Otherwise, enable all UI, but show warning icons anyways
-            #     for potential config issues
-
-            glval = False
-            renderval = None
-            glsensitive = False
-            if not opengl_supported:
-                opengl_warning = (
-                    _("Hypervisor/libvirt does not support spice GL"))
-            elif not rendernode_supported:
-                rendernode_warning = (
-                    _("Hypervisor/libvirt does not support manual rendernode"))
-                if self.conn.is_qemu_privileged():
-                    opengl_warning = rendernode_warning
-
-            if not opengl_warning:
-                glval = bool(gfx.gl)
-                glsensitive = True
-            if not rendernode_warning:
-                renderval = gfx.rendernode or None
-
-            if opengl_warning:
-                pass
-            elif not [v for v in self.vm.xmlobj.devices.video if
+            # If the config doesn't support spice GL, show a warning
+            # but still let the user set the value in case we are wrong
+            if not [v for v in self.vm.xmlobj.devices.video if
                     (v.model == "virtio" and v.accel3d)]:
                 opengl_warning = _("Spice GL requires "
                     "VirtIO graphics configured with accel3d.")
@@ -243,18 +217,10 @@ class vmmGraphicsDetails(vmmGObjectUI):
                 uiutil.set_list_selection(
                        self.widget("graphics-rendernode"), renderval)
 
-            self.widget("graphics-opengl").set_sensitive(glsensitive)
             self.widget("graphics-opengl-warn").set_tooltip_text(
                     opengl_warning or None)
             self.widget("graphics-opengl-warn").set_visible(
                     bool(opengl_warning))
-
-            self.widget("graphics-rendernode").set_sensitive(
-                    rendernode_supported)
-            self.widget("graphics-rendernode-warn").set_tooltip_text(
-                    rendernode_warning or None)
-            self.widget("graphics-rendernode-warn").set_visible(
-                    bool(rendernode_warning))
 
         uiutil.set_list_selection(self.widget("graphics-type"), gtype)
         return title
@@ -297,7 +263,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
     def _change_opengl(self, ignore):
         uiutil.set_grid_row_visible(
-                self.widget("graphics-rendernode-box"),
+                self.widget("graphics-rendernode"),
                 self.widget("graphics-opengl").get_active())
         self.emit("changed-opengl")
 
