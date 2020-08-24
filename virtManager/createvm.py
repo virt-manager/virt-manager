@@ -1737,14 +1737,6 @@ class vmmCreateVM(vmmGObjectUI):
                 if not self._validate_storage_page():
                     return False
 
-        nettype = self._netlist.get_network_selection()[0]
-        if nettype is None:
-            # No network device available
-            instmethod = self._get_config_install_page()
-            if instmethod == INSTALL_PAGE_URL:
-                msg = _("Network device required for URL install.")
-                return self.err.val_err(msg)
-
         macaddr = virtinst.DeviceInterface.generate_mac(
             self.conn.get_backend())
 
