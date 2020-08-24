@@ -767,3 +767,30 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
         self.assertFalse(newvm.showing)
+
+    def testNewVMInactiveNetwork(self):
+        """
+        Test with an inactive 'default' network
+        """
+        self.app.uri = tests.utils.URIs.test_default
+        hostwin = self._open_host_window("Virtual Networks",
+                conn_label="test default")
+        cell = hostwin.find("default", "table cell")
+        cell.click()
+        hostwin.find("net-stop").click()
+        hostwin.keyCombo("<ctrl>w")
+
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = __file__
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+
+        newvm.find_fuzzy("Finish", "button").click()
+        self._click_alert_button("start the network", "Yes")
+        self.assertFalse(newvm.showing)
