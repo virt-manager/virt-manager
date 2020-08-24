@@ -1741,9 +1741,9 @@ class vmmCreateVM(vmmGObjectUI):
             self.conn.get_backend())
 
         net = self._netlist.build_device(macaddr)
-        self._netlist.validate_device(net)
-
-        self._gdata.interface = net
+        if net:
+            self._netlist.validate_device(net)
+            self._gdata.interface = net
         return True
 
 

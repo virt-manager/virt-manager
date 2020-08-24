@@ -289,6 +289,8 @@ class vmmNetworkList(vmmGObjectUI):
 
     def build_device(self, macaddr, model=None):
         nettype, devname, mode = self.get_network_selection()
+        if nettype is None:
+            return None
 
         net = virtinst.DeviceInterface(self.conn.get_backend())
         net.type = nettype
