@@ -189,7 +189,7 @@ class vmmPreferences(vmmGObjectUI):
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
 
-        if not vmmInspection.libguestfs_installed():
+        if not vmmInspection.libguestfs_installed():  # pragma: no cover
             self.widget("prefs-libguestfs").set_sensitive(False)
             self.widget("prefs-libguestfs").set_tooltip_text(
                     _("python libguestfs support is not installed"))
@@ -269,26 +269,20 @@ class vmmPreferences(vmmGObjectUI):
         self.widget("prefs-stats-enable-memory").set_active(
             self.config.get_stats_enable_memory_poll())
 
+    def _process_grabkeys(self, val):
+        # We convert keysyms to names
+        keys = []
+        for k in val.split(','):
+            try:
+                key = int(k)
+                keys.append(Gdk.keyval_name(key))
+            except Exception:  # pragma: no cover
+                continue
+        return "+".join(keys)
+
     def refresh_grabkeys_combination(self):
         val = self.config.get_keys_combination()
-
-        # We convert keysyms to names
-        if not val:
-            keystr = "Control_L+Alt_L"
-        else:
-            keystr = None
-            for k in val.split(','):
-                try:
-                    key = int(k)
-                except Exception:
-                    key = None
-
-                if key is not None:
-                    if keystr is None:
-                        keystr = Gdk.keyval_name(key)
-                    else:
-                        keystr = keystr + "+" + Gdk.keyval_name(key)
-
+        keystr = self._process_grabkeys(val)
         self.widget("prefs-keys-grab-sequence").set_text(keystr or "")
 
     def refresh_confirm_forcepoweroff(self):
