@@ -21,6 +21,8 @@ from virtinst import VirtinstConnection
 from virtinst import cli
 from virtinst import log
 
+from .lib.testmock import CLITestOptionsClass
+
 # This is massively heavy handed, but I can't figure out any way to shut
 # up the slew of gtk deprecation warnings that clog up our very useful
 # stdout --debug output. Of course we could drop use of deprecated APIs,
@@ -144,22 +146,11 @@ def parse_commandline():
     # PackageKit integration
     parser.add_argument("--test-first-run",
         help=argparse.SUPPRESS, action="store_true")
-    # Force disable use of libvirt object events
-    parser.add_argument("--test-no-events",
-        help=argparse.SUPPRESS, action="store_true")
-    # Enabling this will tell us, at app exit time, which vmmGObjects were not
-    # garbage collected. This is caused by circular references to other objects,
-    # like a signal that wasn't disconnected. It's not a big deal, but if we
-    # have objects that can be created and destroyed a lot over the course of
-    # the app lifecycle, every non-garbage collected class is a memory leak.
-    # So it's nice to poke at this every now and then and try to track down
-    # what we need to add to class _cleanup handling.
-    parser.add_argument("--test-leak-debug",
-        help=argparse.SUPPRESS, action="store_true")
 
     # comma separated string of options to tweak app behavior,
     # for manual and automated testing config
-    parser.add_argument("--test-options", help=argparse.SUPPRESS)
+    parser.add_argument("--test-options", action='append',
+            default=[], help=argparse.SUPPRESS)
 
     parser.add_argument("-c", "--connect", dest="uri",
         help="Connect to hypervisor at URI", metavar="URI")
@@ -185,46 +176,6 @@ def parse_commandline():
     return parser.parse_known_args()
 
 
-class CLITestOptionsClass:
-    """
-    Helper class for parsing and tracking --test-* options
-    """
-    def __init__(self, test_options_str):
-        opts = []
-        if test_options_str:
-            opts = test_options_str.split(",")
-
-        def _get(optname):
-            if optname not in opts:
-                return False
-            opts.remove(optname)
-            return True
-
-        def _get_value(optname):
-            for opt in opts:
-                if opt.startswith(optname + "="):
-                    opts.remove(opt)
-                    return opt.split("=", 1)[1]
-
-        self.first_run = _get("first-run")
-        self.leak_debug = _get("leak-debug")
-        self.no_events = _get("no-events")
-        self.xmleditor_enabled = _get("xmleditor-enabled")
-        self.gsettings_keyfile = _get_value("gsettings-keyfile")
-        self.break_setfacl = _get("break-setfacl")
-
-        if opts:
-            print("Unknown --test-options keys: %s" % opts)
-            sys.exit(1)
-
-        if self.first_run and not self.gsettings_keyfile:
-            import atexit
-            import tempfile
-            filename = tempfile.mktemp(prefix="virtmanager-firstrun-keyfile")
-            self.gsettings_keyfile = filename
-            atexit.register(lambda: os.unlink(filename))
-
-
 def main():
     (options, leftovers) = parse_commandline()
 
@@ -244,21 +195,8 @@ def main():
                 mainloop=(options.trace_libvirt == "mainloop"),
                 regex=None)
 
-    CLITestOptions = CLITestOptionsClass(options.test_options)
-    if options.test_first_run:
-        CLITestOptions.first_run = True
-    if options.test_leak_debug:
-        CLITestOptions.leak_debug = True
-    if options.test_no_events:
-        CLITestOptions.no_events = True
-
-    if CLITestOptions.break_setfacl:
-        import virtinst.diskbackend
-        def fake_search(*args, **kwargs):
-            raise RuntimeError("Fake search fix fail from test suite")
-        virtinst.diskbackend.SETFACL = "getfacl"
-        # pylint: disable=protected-access
-        virtinst.diskbackend._fix_perms_chmod = fake_search
+    CLITestOptions = CLITestOptionsClass(options.test_options,
+            options.test_first_run)
 
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir

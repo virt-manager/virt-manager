@@ -15,7 +15,7 @@ class Manager(uiutils.UITestCase):
 
     def _testVMLifecycle(self):
         """
-        Basic VM lifecycle test, shared between standard and --test-no-events
+        Basic VM lifecycle test, shared between standard and no-events
         testing
         """
         manager = self.app.topwin
@@ -48,7 +48,7 @@ class Manager(uiutils.UITestCase):
         self._testVMLifecycle()
 
     def testVMNoEventsLifecycle(self):
-        self.app.open(extra_opts=["--test-no-events"])
+        self.app.open(extra_opts=["--test-options=no-events"])
 
         # Change preferences timeout to 1 second
         self.app.root.find("Edit", "menu").click()

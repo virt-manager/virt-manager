@@ -1,0 +1,87 @@
+# Copyright (C) 2020 Red Hat, Inc.
+#
+# This work is licensed under the GNU GPLv2 or later.
+# See the COPYING file in the top-level directory.
+
+
+class CLITestOptionsClass:
+    """
+    Helper class for parsing and tracking --test-* options.
+    The suboptions are:
+
+    * first-run: Run the app with fresh gsettings values and
+        no config changes saved to disk, among a few other tweaks.
+        Heavily used by the UI test suite.
+
+    * xmleditor-enabled: Force the xmleditor preference on if
+        using first-run. Used by the test suite
+
+    * gsettings-keyfile: Override the gsettings values with those
+        from the passed in keyfile, to test with different default
+        settings.
+
+    * leak-debug: Enabling this will tell us, at app exit time,
+        which vmmGObjects were not garbage collected. This is caused
+        by circular references to other objects, like a signal that
+        wasn't disconnected. It's not a big deal, but if we have objects
+        that can be created and destroyed a lot over the course of
+        the app lifecycle, every non-garbage collected class is a
+        memory leak. So it's nice to poke at this every now and then
+        and try to track down what we need to add to class _cleanup handling.
+
+    * no-events: Force disable libvirt event APIs for testing fallback
+
+    * break_setfacl: For setfacl calls to fail, for test scenarios.
+        This is hit via the directory search permissions checking
+        for disk image usage for qemu
+
+    """
+    def __init__(self, test_options_str, test_first_run):
+        optset = set()
+        for optstr in test_options_str:
+            optset.update(set(optstr.split(",")))
+
+        self._parse(optset)
+        if test_first_run:
+            self.first_run = True
+        self._process()
+
+    def _parse(self, optset):
+        def _get(optname):
+            if optname not in optset:
+                return False
+            optset.remove(optname)
+            return True
+
+        def _get_value(optname):
+            for opt in optset:
+                if opt.startswith(optname + "="):
+                    optset.remove(opt)
+                    return opt.split("=", 1)[1]
+
+        self.first_run = _get("first-run")
+        self.leak_debug = _get("leak-debug")
+        self.no_events = _get("no-events")
+        self.xmleditor_enabled = _get("xmleditor-enabled")
+        self.gsettings_keyfile = _get_value("gsettings-keyfile")
+        self.break_setfacl = _get("break-setfacl")
+
+        if optset:  # pragma: no cover
+            raise RuntimeError("Unknown --test-options keys: %s" % optset)
+
+    def _process(self):
+        if self.first_run and not self.gsettings_keyfile:
+            import atexit
+            import tempfile
+            import os
+            filename = tempfile.mktemp(prefix="virtmanager-firstrun-keyfile")
+            self.gsettings_keyfile = filename
+            atexit.register(lambda: os.unlink(filename))
+
+        if self.break_setfacl:
+            import virtinst.diskbackend
+            def fake_search(*args, **kwargs):
+                raise RuntimeError("Fake search fix fail from test suite")
+            virtinst.diskbackend.SETFACL = "getfacl"
+            # pylint: disable=protected-access
+            virtinst.diskbackend._fix_perms_chmod = fake_search
