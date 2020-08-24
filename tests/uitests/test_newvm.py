@@ -2,6 +2,7 @@
 # See the COPYING file in the top-level directory.
 
 import time
+import unittest.mock
 
 import tests
 from tests.uitests import utils as uiutils
@@ -796,4 +797,30 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self._click_alert_button("start the network", "Yes")
+        self.assertFalse(newvm.showing)
+
+    @unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE": "1"})
+    def testNewVMDefaultBridge(self):
+        """
+        We actually set the unittest env variable here, which
+        sets a fake bridge in interface.py
+        """
+        self.app.uri = tests.utils.URIs.test_empty
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = __file__
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        combo = newvm.find(None, "combo box", "Network source:")
+        # For some reason atspi reports the internal combo value
+        assert combo.name == 'bridge'
+        assert newvm.find("Device name:", "text").text == "testsuitebr0"
+
+        newvm.find_fuzzy("Finish", "button").click()
+        self.app.root.find_fuzzy("vm1 on", "frame")
         self.assertFalse(newvm.showing)
