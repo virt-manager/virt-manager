@@ -304,7 +304,7 @@ class NewVM(uiutils.UITestCase):
         uiutils.check_in_loop(lambda: not progress.showing, timeout=120)
 
         self.app.root.find_fuzzy("fedora10 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewPPC64(self):
@@ -330,7 +330,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("vm-ppc64 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
     def testNewVMAArch64UEFI(self):
         """
@@ -353,7 +353,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
     def testNewVMArmKernel(self):
         """
@@ -398,7 +398,7 @@ class NewVM(uiutils.UITestCase):
 
         time.sleep(1)
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMContainerApp(self):
@@ -431,7 +431,7 @@ class NewVM(uiutils.UITestCase):
 
         time.sleep(1)
         self.app.root.find_fuzzy("container1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMContainerTree(self):
@@ -460,7 +460,7 @@ class NewVM(uiutils.UITestCase):
 
         time.sleep(1)
         self.app.root.find_fuzzy("container1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMContainerVZ(self):
@@ -481,7 +481,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("container1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMContainerBootstrap(self):
@@ -513,7 +513,7 @@ class NewVM(uiutils.UITestCase):
 
         time.sleep(1)
         self.app.root.find_fuzzy("container1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMXenPV(self):
@@ -538,7 +538,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMInstallFail(self):
@@ -574,7 +574,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("test-foo on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
 
     def testNewVMCustomizeXMLEdit(self):
@@ -721,7 +721,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
     def testNewVMSession(self):
         """
@@ -744,7 +744,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
     def testNewVMEmptyConn(self):
         """
@@ -770,7 +770,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
     def testNewVMInactiveNetwork(self):
         """
@@ -797,7 +797,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self._click_alert_button("start the network", "Yes")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
 
     @unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE": "1"})
     def testNewVMDefaultBridge(self):
@@ -823,4 +823,4 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        self.assertFalse(newvm.showing)
+        uiutils.check_in_loop(lambda: not newvm.showing)
