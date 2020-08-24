@@ -60,11 +60,13 @@ class _URIs(object):
 
         _testtmpl = "__virtinst_test__test://%s,predictable"
         self.test_default = _testtmpl % "/default"
-        self.test_suite = _testtmpl % (os.getcwd() + "/tests/testsuite.xml")
-        self.test_defaultpool_collision = (_testtmpl % (os.getcwd() +
-            "/tests/data/cli/testdriver-defaultpool-collision.xml"))
 
-        self.test_full = _testtmpl % (os.getcwd() + "/tests/testdriver.xml")
+        _testdriverdir = (os.path.dirname(__file__) + "/data/testdriver/")
+        self.test_full = _testtmpl % (_testdriverdir + "testdriver.xml")
+        self.test_suite = _testtmpl % (_testdriverdir + "testsuite.xml")
+        self.test_defaultpool_collision = _testtmpl % (
+            _testdriverdir + "defaultpool-collision.xml")
+
         def _m(fakeuri):
             return self.test_full + ",fakeuri=%s" % fakeuri
         self.test_remote = _m("test+tls://fakeuri.example.com/")
