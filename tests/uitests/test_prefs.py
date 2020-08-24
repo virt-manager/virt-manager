@@ -13,31 +13,72 @@ class VMMPrefs(uiutils.UITestCase):
     # Test cases #
     ##############
 
-    def testPrefs(self):
+    def testPrefsAll(self):
         self.app.root.find("Edit", "menu").click()
         self.app.root.find("Preferences", "menu item").click()
 
         win = self.app.root.find_fuzzy("Preferences", "frame")
+        generaltab = win.find("general-tab")
+        pollingtab = win.find("polling-tab")
+        newvmtab = win.find("newvm-tab")
+        consoletab = win.find("console-tab")
+        feedbacktab = win.find("feedback-tab")
 
-        win.find_fuzzy("Enable system tray", "check").click()
+        uiutils.check_in_loop(lambda: not feedbacktab.onscreen)
+        tab = generaltab
+        uiutils.check_in_loop(lambda: tab.onscreen)
+        tab.find_fuzzy("Enable system tray", "check").click()
+        tab.find_fuzzy("Enable XML").click()
+        tab.find_fuzzy("libguestfs VM").click()
 
         win.find("Polling", "page tab").click()
-        win.find_fuzzy(None, "check box",
-                           labeller_text="Poll CPU").click()
+        tab = pollingtab
+        uiutils.check_in_loop(lambda: tab.onscreen)
+        tab.find_fuzzy(None, "check box", "Poll CPU").click()
+        tab.find_fuzzy(None, "check box", "Poll Disk").click()
+        tab.find_fuzzy(None, "check box", "Poll Memory").click()
+        tab.find_fuzzy(None, "check box", "Poll Network").click()
+        period = tab.find_fuzzy("cpu-poll", "spin button")
+        period.click()
+        period.text = "5"
 
         win.find("New VM", "page tab").click()
-        win.find("prefs-add-spice-usbredir",
-                             "combo box").click()
-        win.find("No", "menu item").click()
+        tab = newvmtab
+        newvmtab.print_nodes()
+        uiutils.check_in_loop(lambda: tab.onscreen)
+        tab.find_fuzzy(None, "check box", "sound device").click()
+        tab.find(None, "combo box", "CPU default:").click()
+        tab.find_fuzzy("Copy host", "menu item").click()
+        tab.find(None, "combo box", "Storage format:").click()
+        tab.find("Raw", "menu item").click()
+        tab.find("prefs-add-spice-usbredir", "combo box").click()
+        tab.find("No", "menu item").click()
+        tab.find_fuzzy("Graphics type", "combo box").click()
+        tab.find("VNC", "menu item").click()
 
         win.find("Console", "page tab").click()
-        win.find("Change...", "push button").click()
+        tab = consoletab
+        uiutils.check_in_loop(lambda: tab.onscreen)
+        tab.find(None, "combo box", "SPICE USB").click()
+        tab.find_fuzzy("Manual redirect", "menu item").click()
+        tab.find_fuzzy(None, "combo box", "Resize guest").click()
+        tab.find("On", "menu item").click()
+        tab.find_fuzzy(None, "combo box", "console scaling").click()
+        tab.find_fuzzy("Always", "menu item").click()
+        tab.find_fuzzy(None, "check box", "Force console").click()
+
+        tab.find("Change...", "push button").click()
         keyframe = self.app.root.find_fuzzy("Configure grab", "dialog")
 
-        # On certain environments pressing "Alt_L" and clicking a window starts
-        # window drag operation. Work around by pushing both Control and Alt.
+        # On certain environments pressing "Alt_L" and
+        # clicking a window starts window drag operation.
+        # Work around by pushing both Control and Alt.
         self.holdKey("Control_L")
         self.holdKey("Alt_L")
+        self.holdKey("Z")
+
+        # Test releasekey handler
+        self.releaseKey("Z")
         self.holdKey("Z")
         try:
             keyframe.find_fuzzy("OK", "push button").click()
@@ -47,8 +88,14 @@ class VMMPrefs(uiutils.UITestCase):
             self.releaseKey("Control_L")
 
         win.find("Feedback", "page tab").click()
-        win.find_fuzzy(None, "check box",
-                           labeller_text="Force Poweroff").click()
+        tab = feedbacktab
+        uiutils.check_in_loop(lambda: tab.onscreen)
+        tab.find_fuzzy(None, "check box", "Force Poweroff").click()
+        tab.find_fuzzy(None, "check box", "Poweroff/Reboot").click()
+        tab.find_fuzzy(None, "check box", "Pause").click()
+        tab.find_fuzzy(None, "check box", "Device removal").click()
+        tab.find_fuzzy(None, "check box", "Unapplied changes").click()
+        tab.find_fuzzy(None, "check box", "Deleting storage").click()
 
         win.find("General", "page tab").click()
         win.find_fuzzy("Enable system tray", "check").click()
