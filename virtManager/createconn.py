@@ -25,6 +25,25 @@ HV_VZ,
 HV_CUSTOM) = range(7)
 
 
+def _default_uri():  # pragma: no cover
+    if os.path.exists('/var/lib/xen'):
+        if (os.path.exists('/dev/xen/evtchn') or
+            os.path.exists("/proc/xen")):
+            return 'xen:///'
+
+    if (os.path.exists("/usr/bin/qemu") or
+        os.path.exists("/usr/bin/qemu-kvm") or
+        os.path.exists("/usr/bin/kvm") or
+        os.path.exists("/usr/libexec/qemu-kvm") or
+        glob.glob("/usr/bin/qemu-system-*")):
+        return "qemu:///system"
+
+    if (os.path.exists("/usr/lib/libvirt/libvirt_lxc") or
+        os.path.exists("/usr/lib64/libvirt/libvirt_lxc")):
+        return "lxc:///"
+    return None
+
+
 class vmmCreateConn(vmmGObjectUI):
     @classmethod
     def get_instance(cls, parentobj):
@@ -56,22 +75,7 @@ class vmmCreateConn(vmmGObjectUI):
 
     @staticmethod
     def default_uri():
-        if os.path.exists('/var/lib/xen'):
-            if (os.path.exists('/dev/xen/evtchn') or
-                os.path.exists("/proc/xen")):
-                return 'xen:///'
-
-        if (os.path.exists("/usr/bin/qemu") or
-            os.path.exists("/usr/bin/qemu-kvm") or
-            os.path.exists("/usr/bin/kvm") or
-            os.path.exists("/usr/libexec/qemu-kvm") or
-            glob.glob("/usr/bin/qemu-system-*")):
-            return "qemu:///system"
-
-        if (os.path.exists("/usr/lib/libvirt/libvirt_lxc") or
-            os.path.exists("/usr/lib64/libvirt/libvirt_lxc")):
-            return "lxc:///"
-        return None
+        return _default_uri()
 
     def cancel(self, ignore1=None, ignore2=None):
         log.debug("Cancelling open connection")
@@ -142,7 +146,7 @@ class vmmCreateConn(vmmGObjectUI):
         default = self.default_uri()
         if not default or default.startswith("qemu"):
             uiutil.set_list_selection(self.widget("hypervisor"), HV_QEMU)
-        elif default.startswith("xen"):
+        elif default.startswith("xen"):  # pragma: no cover
             uiutil.set_list_selection(self.widget("hypervisor"), HV_XEN)
 
     def hostname_changed(self, src_ignore):
@@ -275,6 +279,7 @@ class vmmCreateConn(vmmGObjectUI):
         conn = vmmConnectionManager.get_instance().add_conn(uri)
         conn.set_autoconnect(auto)
         if conn.is_active():
+            self._conn_open_completed(conn, None)
             return
 
         conn.connect_once("open-completed", self._conn_open_completed)
