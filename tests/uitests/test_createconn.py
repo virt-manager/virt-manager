@@ -36,23 +36,57 @@ class VMMConnect(uiutils.UITestCase):
         host = win.find("Hostname", "text")
         urilabel = win.find("uri-label", "label")
         urientry = win.find("uri-entry", "text")
-        self.assertTrue(user.showing is host.showing is True)
+        assert user.showing is host.showing is True
 
+        # Select all HV options
+        hvcombo = win.find_fuzzy("Hypervisor", "combo box")
+        def _click_hv(hvname):
+            hvcombo.click()
+            hvcombo.find_fuzzy(hvname, "menu item").click()
+        _click_hv("user session")
+        _click_hv("QEMU/KVM")
+        _click_hv("Xen")
+        _click_hv("Bhyve")
+        _click_hv("Virtuozzo")
+        _click_hv("LXC")
+
+        # Test a simple selection
         win.find_fuzzy("Hypervisor", "combo box").click()
         win.find_fuzzy("QEMU/KVM user session", "menu item").click()
-        self.assertTrue(user.showing is host.showing is False)
-        self.assertTrue(urilabel.text == "qemu:///session")
+        assert user.showing is host.showing is False
+        assert urilabel.text == "qemu:///session"
+
+        # Cancel the dialog
+        win.find_fuzzy("Cancel", "push button").click()
+        uiutils.check_in_loop(lambda: not win.showing)
+
+        # Reopen it, confirm content changed
+        self.app.root.find("File", "menu").click()
+        self.app.root.find("Add Connection...", "menu item").click()
+        win = self.app.root.find_fuzzy("Add Connection", "dialog")
+        assert ":///session" not in urilabel.text
+
+        # Relaunch the dialog, confirm it doesn't overwrite content
+        _click_hv("LXC")
+        uiutils.check_in_loop(lambda: "lxc" in urilabel.text)
+        self.app.root.find("File", "menu").click()
+        self.app.root.find("Add Connection...", "menu item").click()
+        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check_in_loop(lambda: "lxc" in urilabel.text)
 
         # Enter a failing URI, make sure error is raised, and we can
         # fall back to the dialog
-        win.find_fuzzy("Hypervisor", "combo box").click()
-        win.find_fuzzy("Xen", "menu item").click()
+        _click_hv("Xen")
         remote.click()
         user.text = "fribuser"
+        connect.click()
+        self._click_alert_button("hostname is required", "OK")
+        fakeipv6 = "fe80::1"
+        host.text = fakeipv6
+        assert urilabel.text == "xen+ssh://fribuser@[%s]/" % fakeipv6
         fakehost = "ix8khfyidontexistkdjur.com"
         host.text = fakehost + ":12345"
-        self.assertTrue(
-                urilabel.text == "xen+ssh://fribuser@%s:12345/" % fakehost)
+        assert urilabel.text == "xen+ssh://fribuser@%s:12345/" % fakehost
         connect.click()
 
         uiutils.check_in_loop(lambda: win.showing is True)
@@ -63,7 +97,7 @@ class VMMConnect(uiutils.UITestCase):
 
         # Ensure dialog shows old contents for editing
         uiutils.check_in_loop(lambda: win.showing)
-        self.assertTrue(fakehost in host.text)
+        assert fakehost in host.text
 
         # This time say 'yes'
         connect.click()
@@ -79,8 +113,16 @@ class VMMConnect(uiutils.UITestCase):
         self.app.root.find("File", "menu").click()
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
-        win.find_fuzzy("Hypervisor", "combo box").click()
-        win.find_fuzzy("Custom URI", "menu item").click()
+        _click_hv("Custom URI")
+        urientry.text = "test:///default"
+        connect.click()
+
+        # Do it again to make sure things don't explode
+        uiutils.check_in_loop(lambda: win.showing is False)
+        self.app.root.find("File", "menu").click()
+        self.app.root.find("Add Connection...", "menu item").click()
+        win = self.app.root.find_fuzzy("Add Connection", "dialog")
+        _click_hv("Custom URI")
         urientry.text = "test:///default"
         connect.click()
 
