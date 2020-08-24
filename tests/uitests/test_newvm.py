@@ -721,3 +721,26 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
         self.assertFalse(newvm.showing)
+
+    def testNewVMSession(self):
+        """
+        Test with fake qemu session
+        """
+        self.app.uri = tests.utils.URIs.kvm_session
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        combo = newvm.find(None, "combo box", "Network source:")
+        # For some reason atspi reports the internal combo value
+        assert combo.name == "user"
+
+        newvm.find_fuzzy("Finish", "button").click()
+        self.app.root.find_fuzzy("vm1 on", "frame")
+        self.assertFalse(newvm.showing)
