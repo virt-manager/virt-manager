@@ -1260,22 +1260,10 @@ class vmmCreateVM(vmmGObjectUI):
 
 
     def _netdev_changed(self, ignore):
-        ntype = self._netlist.get_network_selection()[0]
-        expand = (ntype != "network" and ntype != "bridge")
-        no_network = ntype is None
-
+        ignore, nsource, ignore = self._netlist.get_network_selection()
+        expand = not nsource
         if expand:
             self.widget("advanced-expander").set_expanded(True)
-
-        self.widget("netdev-warn-box").set_visible(False)
-        def _show_netdev_warn(msg):
-            self.widget("advanced-expander").set_expanded(True)
-            self.widget("netdev-warn-box").set_visible(True)
-            self.widget("netdev-warn-label").set_markup(
-                "<small>%s</small>" % msg)
-
-        if no_network:
-            _show_netdev_warn(_("No network selected"))
 
 
     # Enable/Disable container source URL entry on checkbox click
@@ -1741,9 +1729,9 @@ class vmmCreateVM(vmmGObjectUI):
             self.conn.get_backend())
 
         net = self._netlist.build_device(macaddr)
-        if net:
-            self._netlist.validate_device(net)
-            self._gdata.interface = net
+
+        self._netlist.validate_device(net)
+        self._gdata.interface = net
         return True
 
 

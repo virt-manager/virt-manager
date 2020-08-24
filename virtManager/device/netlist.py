@@ -140,46 +140,52 @@ class vmmNetworkList(vmmGObjectUI):
             _nettype = virtinst.DeviceInterface.TYPE_BRIDGE
             _label = _("Bridge device...")
             model.append(_build_manual_row(_nettype, _label))
+            return len(model) - 1
 
         def _add_manual_macvtap_row():
             _label = _("Macvtap device...")
             _nettype = virtinst.DeviceInterface.TYPE_DIRECT
             model.append(_build_manual_row(_nettype, _label))
 
+        vnets = self._find_virtual_networks()
+        default_bridge = virtinst.DeviceInterface.default_bridge(
+                self.conn.get_backend())
+
+        add_usermode = False
         if self.conn.is_qemu_unprivileged():
+            log.debug("Using unprivileged qemu, adding usermode net")
+            vnets = []
+            default_bridge = None
+            add_usermode = True
+
+        if add_usermode:
             nettype = virtinst.DeviceInterface.TYPE_USER
             label = _pretty_network_desc(nettype)
             model.append(_build_row(nettype, None, label, True))
-            _add_manual_bridge_row()
-            return
 
-        vnets = self._find_virtual_networks()
+        defaultnetidx = None
         for row in sorted(vnets, key=lambda r: r[NET_ROW_LABEL]):
             model.append(row)
-        if not len(model):
-            row = _build_label_row(_("No networking"), True)
-            model.insert(0, row)
+            if row[NET_ROW_SOURCE] == "default":
+                defaultnetidx = len(model) - 1
 
-        _add_manual_bridge_row()
+        bridgeidx = _add_manual_bridge_row()
         _add_manual_macvtap_row()
 
         # If there is a bridge device, default to that
+        if default_bridge:
+            self.widget("net-manual-source").set_text(default_bridge)
+            return bridgeidx
+
         # If not, use 'default' network
+        if defaultnetidx is not None:
+            return defaultnetidx
+
         # If not present, use first list entry
-        default_bridge = virtinst.DeviceInterface.default_bridge(
-                self.conn.get_backend())
-        for idx, row in enumerate(model):
-            nettype = row[NET_ROW_TYPE]
-            source = row[NET_ROW_SOURCE]
-            is_bridge = nettype == virtinst.DeviceInterface.TYPE_BRIDGE
-            is_network = nettype == virtinst.DeviceInterface.TYPE_VIRTUAL
-
-            if default_bridge:
-                if is_bridge and source == default_bridge:
-                    return idx
-            elif is_network and source == "default":
-                return idx
-
+        if bridgeidx == 0:
+            # This means we are defaulting to something that
+            # requires manual intervention. Raise the warning
+            self.widget("net-default-warn-box").show()
         return 0
 
     def _check_network_is_running(self, net):
@@ -203,13 +209,13 @@ class vmmNetworkList(vmmGObjectUI):
               "Would you like to start the network "
               "now?") % devname)
         if not res:
-            return
+            return  # pragma: no cover
 
         # Try to start the network
         try:
             netobj.start()
             log.debug("Started network '%s'", devname)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             return self.err.show_err(
                 _("Could not start virtual network '%(device)s': %(error)s") % {
                     "device": devname,
@@ -217,6 +223,11 @@ class vmmNetworkList(vmmGObjectUI):
                 })
 
     def _find_rowiter_for_dev(self, net):
+        """
+        Find the row in our current model that matches the passed in
+        net device (like populating the details UI for an existing VM).
+        If we don't find a match, we fake it a bit
+        """
         nettype = net.type
         source = net.source
         if net.network:
@@ -227,6 +238,7 @@ class vmmNetworkList(vmmGObjectUI):
             source = net.network
             nettype = "network"
 
+        combo = self.widget("net-source")
         def _find_row(_nettype, _source, _manual):
             for row in combo.get_model():
                 if _nettype and row[NET_ROW_TYPE] != _nettype:
@@ -238,7 +250,6 @@ class vmmNetworkList(vmmGObjectUI):
                 return row.iter
 
         # Find the matching row in the net list
-        combo = self.widget("net-source")
         rowiter = _find_row(nettype, source, None)
         if rowiter:
             return rowiter
@@ -269,9 +280,6 @@ class vmmNetworkList(vmmGObjectUI):
 
     def get_network_selection(self):
         row = self._get_network_row()
-        if not row:
-            return None, None, None
-
         net_type = row[NET_ROW_TYPE]
         net_src = row[NET_ROW_SOURCE]
         net_check_manual = row[NET_ROW_MANUAL]
@@ -289,8 +297,6 @@ class vmmNetworkList(vmmGObjectUI):
 
     def build_device(self, macaddr, model=None):
         nettype, devname, mode = self.get_network_selection()
-        if nettype is None:
-            return None
 
         net = virtinst.DeviceInterface(self.conn.get_backend())
         net.type = nettype
@@ -307,11 +313,9 @@ class vmmNetworkList(vmmGObjectUI):
         net.validate()
 
     def reset_state(self):
-        self._repopulate_network_list()
-
-        self.widget("net-source-warn").set_visible(False)
-        self.widget("net-source-warn").set_tooltip_text("")
+        self.widget("net-default-warn-box").set_visible(False)
         self.widget("net-manual-source").set_text("")
+        self._repopulate_network_list()
 
     def set_dev(self, net):
         self.reset_state()
@@ -364,7 +368,7 @@ class vmmNetworkList(vmmGObjectUI):
         self._emit_changed()
         row = self._get_network_row()
         if not row:
-            return
+            return  # pragma: no cover
 
         nettype = row[NET_ROW_TYPE]
         is_direct = (nettype == virtinst.DeviceInterface.TYPE_DIRECT)

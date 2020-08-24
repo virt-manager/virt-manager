@@ -762,7 +762,10 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         combo = newvm.find(None, "combo box", "Network source:")
         # For some reason atspi reports the internal combo value
-        assert combo.name == ''
+        assert combo.name == 'bridge'
+        warnlabel = newvm.find_fuzzy("suitable default network", "label")
+        assert warnlabel.onscreen
+        newvm.find("Device name:", "text").text = "foobr0"
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
