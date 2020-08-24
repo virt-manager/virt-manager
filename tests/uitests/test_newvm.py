@@ -744,3 +744,26 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
         self.assertFalse(newvm.showing)
+
+    def testNewVMEmptyConn(self):
+        """
+        Test with an empty connection
+        """
+        self.app.uri = tests.utils.URIs.test_empty
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = __file__
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        combo = newvm.find(None, "combo box", "Network source:")
+        # For some reason atspi reports the internal combo value
+        assert combo.name == ''
+
+        newvm.find_fuzzy("Finish", "button").click()
+        self.app.root.find_fuzzy("vm1 on", "frame")
+        self.assertFalse(newvm.showing)

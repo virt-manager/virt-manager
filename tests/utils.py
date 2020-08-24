@@ -66,6 +66,7 @@ class _URIs(object):
         self.test_suite = _testtmpl % (_testdriverdir + "testsuite.xml")
         self.test_defaultpool_collision = _testtmpl % (
             _testdriverdir + "defaultpool-collision.xml")
+        self.test_empty = _testtmpl % (_testdriverdir + "empty.xml")
 
         def _m(fakeuri):
             return self.test_full + ",fakeuri=%s" % fakeuri
