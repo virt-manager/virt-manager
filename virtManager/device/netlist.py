@@ -32,10 +32,6 @@ def _build_row(nettype, source_name,
     return row
 
 
-def _build_label_row(label, active):
-    return _build_row(None, None, label, active)
-
-
 def _build_manual_row(nettype, label):
     return _build_row(nettype, None, label, True, manual=True)
 
@@ -45,9 +41,7 @@ def _pretty_network_desc(nettype, source=None, netobj=None):
         return _("Usermode networking")
 
     extra = None
-    if nettype == virtinst.DeviceInterface.TYPE_BRIDGE:
-        ret = _("Bridge")
-    elif nettype == virtinst.DeviceInterface.TYPE_VIRTUAL:
+    if nettype == virtinst.DeviceInterface.TYPE_VIRTUAL:
         ret = _("Virtual network")
         if netobj:
             extra = ": %s" % netobj.pretty_forward_mode()
@@ -246,7 +240,7 @@ class vmmNetworkList(vmmGObjectUI):
                 if _source and row[NET_ROW_SOURCE] != _source:
                     continue
                 if _manual and row[NET_ROW_MANUAL] != _manual:
-                    continue
+                    continue  # pragma: no cover
                 return row.iter
 
         # Find the matching row in the net list
@@ -344,7 +338,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         model = netlist.get_model()
         if not model:
-            return
+            return  # pragma: no cover
 
         try:
             if model:
@@ -358,8 +352,6 @@ class vmmNetworkList(vmmGObjectUI):
                 netlist.set_active_iter(row.iter)
                 return
 
-        if default_idx is None:
-            default_idx = 0
         netlist.set_active(default_idx)
 
 
