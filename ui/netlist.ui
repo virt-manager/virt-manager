@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkGrid" id="net-source-box">
@@ -19,7 +19,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
     <child>
@@ -32,7 +32,7 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
+        <property name="top_attach">2</property>
       </packing>
     </child>
     <child>
@@ -73,22 +73,34 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
+        <property name="top_attach">3</property>
         <property name="width">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box2">
+      <object class="GtkComboBox" id="net-source">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">False</property>
+        <signal name="changed" handler="on_net_source_changed" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="net-default-warn-box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkComboBox" id="net-source">
+          <object class="GtkImage" id="image1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">start</property>
-            <property name="hexpand">False</property>
-            <signal name="changed" handler="on_net_source_changed" swapped="no"/>
+            <property name="stock">gtk-dialog-warning</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -97,10 +109,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkImage" id="net-source-warn">
+          <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="stock">gtk-dialog-warning</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">&lt;small&gt;Failed to find a suitable default network.&lt;/small&gt;</property>
+            <property name="use_markup">True</property>
+            <property name="wrap">True</property>
+            <property name="max_width_chars">35</property>
           </object>
           <packing>
             <property name="expand">False</property>
