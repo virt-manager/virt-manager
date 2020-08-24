@@ -94,7 +94,7 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">5</property>
+        <property name="top_attach">4</property>
       </packing>
     </child>
     <child>
@@ -138,7 +138,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
+        <property name="top_attach">4</property>
       </packing>
     </child>
     <child>
@@ -261,7 +261,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">7</property>
+        <property name="top_attach">5</property>
       </packing>
     </child>
     <child>
@@ -339,45 +339,23 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="graphics-rendernode-box">
+          <object class="GtkComboBox" id="graphics-rendernode">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">3</property>
-            <child>
-              <object class="GtkComboBox" id="graphics-rendernode">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="hexpand">False</property>
+            <property name="has_entry">True</property>
+            <signal name="changed" handler="on_graphics_rendernode_changed" swapped="no"/>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can_focus">True</property>
                 <property name="halign">start</property>
-                <property name="hexpand">False</property>
-                <property name="has_entry">True</property>
-                <signal name="changed" handler="on_graphics_rendernode_changed" swapped="no"/>
-                <child internal-child="entry">
-                  <object class="GtkEntry">
-                    <property name="can_focus">True</property>
-                    <property name="halign">start</property>
-                  </object>
-                </child>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="graphics-rendernode-atkobject">
-                    <property name="AtkObject::accessible-name">graphics-rendernode</property>
-                  </object>
-                </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkImage" id="graphics-rendernode-warn">
-                <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-warning</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="graphics-rendernode-atkobject">
+                <property name="AtkObject::accessible-name">graphics-rendernode</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
           <packing>
@@ -388,20 +366,8 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">7</property>
+        <property name="top_attach">5</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
     </child>
   </object>
 </interface>

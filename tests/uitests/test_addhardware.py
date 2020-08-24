@@ -417,7 +417,9 @@ class AddHardware(uiutils.UITestCase):
         newpass = "foobar"
         passwd.typeText(newpass)
         tab.find("Show password", "check").click()
-        self.assertEqual(passwd.text, newpass)
+        uiutils.check_in_loop(lambda: passwd.text == newpass)
+        tab.find("Show password", "check").click()
+        uiutils.check_in_loop(lambda: passwd.text != newpass)
         finish.click()
 
         # Catch a port error

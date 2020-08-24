@@ -713,6 +713,20 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
     <vsock model='virtio'>
       <cid auto='yes'/>
     </vsock>
+
+    <!-- To hit some spice GL warning UI code paths -->
+    <graphics type='spice'>
+      <listen type='none'/>
+      <gl enable="yes" rendernode="/dev/dri/renderD128"/>
+    </graphics>
+    <graphics type='spice'>
+      <listen type='network' network='default'/>
+    </graphics>
+    <video>
+      <model type="virtio">
+        <acceleration accel3d="yes"/>
+      </model>
+    </video>
   </devices>
 </domain>
 
