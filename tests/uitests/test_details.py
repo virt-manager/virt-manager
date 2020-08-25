@@ -241,14 +241,13 @@ class Details(uiutils.UITestCase):
 
         # Network values w/ macvtap manual
         tab = self._select_hw(win, "NIC :54:32:10", "network-tab")
-        src = tab.find("Network source:", "combo box")
+        src = tab.find("net-source")
         src.click()
         self.pressKey("Home")
         tab.find_fuzzy("Macvtap device...",
                        "menu item").bring_on_screen().click()
         tab.find("Device name:", "text").text = "fakedev12"
-        tab.find("Device model:", "combo box").click_combo_entry()
-        tab.find("rtl8139", "menu item").click()
+        tab.combo_select("Device model:", "rtl8139")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -276,13 +275,11 @@ class Details(uiutils.UITestCase):
 
         # Graphics
         tab = self._select_hw(win, "Display VNC", "graphics-tab")
-        tab.find("Type:", "combo box").click_combo_entry()
-        tab.find("Spice server", "menu item").click()
+        tab.combo_select("Type:", "Spice")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
-        tab.find("Type:", "combo box").click_combo_entry()
-        tab.find("VNC server", "menu item").click()
+        tab.combo_select("Type:", "VNC")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -321,31 +318,26 @@ class Details(uiutils.UITestCase):
         # Controller SCSI
         tab = self._select_hw(
                 win, "Controller VirtIO SCSI 9", "controller-tab")
-        tab.find("controller-model", "combo box").click_combo_entry()
-        tab.find("Hypervisor default", "menu item").click()
+        tab.combo_select("controller-model", "Hypervisor")
         tab.find("SCSI Disk 1 on 9:0:0:0", "table cell")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
         # Controller USB
         tab = self._select_hw(win, "Controller USB 0", "controller-tab")
-        tab.find("controller-model", "combo box").click_combo_entry()
-        tab.find("USB 2", "menu item").click()
+        tab.combo_select("controller-model", "USB 2")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         tab = self._select_hw(win, "Controller USB 0", "controller-tab")
-        tab.find("controller-model", "combo box").click_combo_entry()
-        tab.find("USB 3", "menu item").click()
+        tab.combo_select("controller-model", "USB 3")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
 
         # Filesystem tweaks
         tab = self._select_hw(win, "Filesystem /target/", "filesystem-tab")
-        tab.find("Driver:", "combo box").click()
-        tab.find("Path", "menu item").click()
-        tab.find("Write Policy:", "combo box").click()
-        tab.find("Immediate", "menu item").click()
+        tab.combo_select("Driver:", "Path")
+        tab.combo_select("Write Policy:", "Immediate")
         tab.find("Source path:", "text").text = "/frib1"
         tab.find("Target path:", "text").text = "newtarget"
         tab.find_fuzzy("Export filesystem", "check box").click()
@@ -355,8 +347,7 @@ class Details(uiutils.UITestCase):
 
         # Smartcard tweaks
         tab = self._select_hw(win, "Smartcard", "smartcard-tab")
-        tab.find("smartcard-mode", "combo box").click_combo_entry()
-        tab.find("Passthrough", "menu item").click()
+        tab.combo_select("smartcard-mode", "Passthrough")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 

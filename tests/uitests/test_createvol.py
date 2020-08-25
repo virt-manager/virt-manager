@@ -71,9 +71,7 @@ class CreateVol(uiutils.UITestCase):
         # Create a qcow2 with backing file
         newname = "aaa-qcow2-backing.qcow2"
         name.text = newname
-        combo = win.find("Format:", "combo box")
-        combo.click_combo_entry()
-        combo.find("qcow2", "menu item").click()
+        win.combo_select("Format:", "qcow2")
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
         browsewin = self.app.root.find("vmm-storage-browser")
@@ -98,9 +96,7 @@ class CreateVol(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         # Using previous name so we collide
         name.text = newname
-        combo = win.find("Format:", "combo box")
-        combo.click_combo_entry()
-        combo.find("raw", "menu item").click()
+        win.combo_select("Format:", "raw")
         cap = win.find("Max Capacity:", "spin button")
         alloc = win.find("Allocation:", "spin button")
         alloc.text = "50.0"

@@ -392,6 +392,28 @@ class VMMDogtailNode(dogtail.tree.Node):
 
         return self.find(name_pattern, role_pattern, labeller_pattern)
 
+    ##########################
+    # Higher level behaviors #
+    ##########################
+
+    def combo_select(self, combolabel, itemlabel):
+        """
+        Lookup the combo, click it, select the menu item
+        """
+        combo = self.find(combolabel, "combo box")
+        combo.click_combo_entry()
+        combo.find(itemlabel, "menu item").click()
+
+    def combo_check_default(self, combolabel, itemlabel):
+        """
+        Lookup the combo and verify the menu item is selected
+        """
+        combo = self.find(combolabel, "combo box")
+        combo.click_combo_entry()
+        item = combo.find(itemlabel, "menu item")
+        check(lambda: item.selected)
+        dogtail.rawinput.pressKey("Escape")
+
 
     #####################
     # Debugging helpers #
