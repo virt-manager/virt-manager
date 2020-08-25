@@ -608,35 +608,28 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def input_pretty_name(typ, bus):
-        pretty_mappings = {
-            (DeviceInput.TYPE_MOUSE, DeviceInput.BUS_PS2): _("Generic PS/2 Mouse"),
-            (DeviceInput.TYPE_MOUSE, DeviceInput.BUS_USB): _("Generic USB Mouse"),
-            (DeviceInput.TYPE_TABLET, DeviceInput.BUS_USB): _("EvTouch USB Graphics Tablet"),
-            (DeviceInput.TYPE_TABLET, DeviceInput.BUS_VIRTIO): _("Generic VirtIO Tablet"),
-            (DeviceInput.TYPE_KEYBOARD, DeviceInput.BUS_PS2): _("Generic PS/2 Keyboard"),
-            (DeviceInput.TYPE_KEYBOARD, DeviceInput.BUS_USB): _("Generic USB Keyboard"),
-            (DeviceInput.TYPE_KEYBOARD, DeviceInput.BUS_VIRTIO): _("Generic VirtIO Keyboard"),
+        if typ == DeviceInput.TYPE_TABLET and bus == DeviceInput.BUS_USB:
+            return _("EvTouch USB Graphics Tablet")
+
+        typ_labels = {
+            DeviceInput.TYPE_KEYBOARD: _("Keyboard"),
+            DeviceInput.TYPE_MOUSE: _("Mouse"),
+            DeviceInput.TYPE_TABLET: _("Tablet"),
         }
-        try:
-            return pretty_mappings[(typ, bus)]
-        except KeyError:
-            bus_mappings = {
-                DeviceInput.BUS_PS2: _("PS/2"),
-                DeviceInput.BUS_USB: _("USB"),
-                DeviceInput.BUS_VIRTIO: _("VirtIO"),
-                DeviceInput.BUS_XEN: _("Xen"),
-            }
-            pretty_bus = bus_mappings.get(bus, str(bus).capitalize())
-            if typ == DeviceInput.TYPE_MOUSE:
-                return _("Generic %(bus)s Mouse") % {"bus": pretty_bus}
-            if typ == DeviceInput.TYPE_TABLET:
-                return _("Generic %(bus)s Tablet") % {"bus": pretty_bus}
-            if typ == DeviceInput.TYPE_KEYBOARD:
-                return _("Generic %(bus)s Keyboard") % {"bus": pretty_bus}
-            return _("Generic %(bus)s %(type)s") % {
-                "bus": pretty_bus,
-                "type": str(typ).capitalize()
-            }
+
+        bus_labels = {
+            DeviceInput.BUS_PS2: _("PS/2"),
+            DeviceInput.BUS_USB: _("USB"),
+            DeviceInput.BUS_VIRTIO: _("VirtIO"),
+            DeviceInput.BUS_XEN: _("Xen"),
+        }
+
+        bus_label = bus_labels.get(bus, bus)
+        typ_label = typ_labels.get(typ, typ)
+        # translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
+        ret = _("%(input_bus)s %(input_type)s") % {
+                "input_bus": bus_label, "input_type": typ_label}
+        return ret
 
     @staticmethod
     def interface_recommended_models(guest):
