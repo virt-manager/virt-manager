@@ -123,13 +123,14 @@ class CreatePool(uiutils.UITestCase):
         win.find_fuzzy("Host Name:", "text").text = "example.com:1234"
         win.find_fuzzy("pool-source-name-text", "text").typeText("frob")
         finish.click()
+        uiutils.check(lambda: not win.showing)
+        uiutils.check(lambda: hostwin.active)
         hostwin.find(newname, "table cell")
 
         # Ensure host window closes fine
         hostwin.click()
         hostwin.keyCombo("<ctrl>w")
-        uiutils.check(lambda: not hostwin.showing and
-                not hostwin.active)
+        uiutils.check(lambda: not hostwin.showing)
 
 
     def testCreatePoolXMLEditor(self):
