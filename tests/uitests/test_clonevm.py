@@ -71,8 +71,7 @@ class CloneVM(uiutils.UITestCase):
                 "text", "New MAC:").text = "00:16:3e:cc:cf:05"
         macwin.find("OK", "push button").click()
 
-        win.find_fuzzy("Clone this disk.*", "combo box").click()
-        win.find_fuzzy("Details...", "menu item").click()
+        win.combo_select("Clone this disk.*", "Details...")
         stgwin = self.app.root.find("Change storage path", "dialog")
         stgwin.find(None, "text",
                 "New Path:").text = "/dev/default-pool/my-new-path"

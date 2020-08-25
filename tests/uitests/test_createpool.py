@@ -70,11 +70,9 @@ class CreatePool(uiutils.UITestCase):
 
         # Test a disk pool
         win = self._open_create_win(hostwin)
-        typ = win.find("Type:", "combo box")
+        win.combo_select("Type:", "disk:")
         newname = "a-disk-pool"
         name.text = "a-disk-pool"
-        typ.click()
-        win.find_fuzzy("Physical Disk", "menu item").click()
         win.find("source-browse").click()
         _browse_local_path("Choose source path", "console")
         finish.click()
@@ -82,11 +80,9 @@ class CreatePool(uiutils.UITestCase):
 
         # Test a iscsi pool
         win = self._open_create_win(hostwin)
-        typ = win.find("Type:", "combo box")
+        win.combo_select("Type:", "iscsi:")
         newname = "a-iscsi-pool"
         name.text = "a-iscsi-pool"
-        typ.click()
-        win.find_fuzzy("iSCSI", "menu item").click()
         win.find("target-browse").click()
         _browse_local_path("Choose target directory", "by-path")
         finish.click()
@@ -101,28 +97,21 @@ class CreatePool(uiutils.UITestCase):
 
         # Test a logical pool
         win = self._open_create_win(hostwin)
-        typ = win.find("Type:", "combo box")
+        win.combo_select("Type:", "logical:")
         newname = "a-lvm-pool"
         name.text = "a-lvm-pool"
-        typ.click()
-        win.find_fuzzy("LVM", "menu item").click()
-        srcname = win.find_fuzzy("Volgroup", "combo")
-        srcnametext = win.find_fuzzy("pool-source-name-text")
-        uiutils.check(lambda: srcnametext.text == "testvg1")
-        srcname.click_combo_entry()
-        win.find_fuzzy("testvg2", "menu item").click()
+
+        win.combo_check_default("Volgroup", "testvg1")
+        win.combo_select("Volgroup", "testvg2")
         finish.click()
         hostwin.find(newname, "table cell")
 
         # Test a scsi pool
         win = self._open_create_win(hostwin)
-        typ = win.find("Type:", "combo box")
+        win.combo_select("Type:", "scsi:")
         newname = "a-scsi-pool"
         name.text = "a-scsi-pool"
-        typ.click()
-        win.find_fuzzy("SCSI Host Adapter", "menu item").click()
-        win.find_fuzzy("Source Adapter:", "combo").click_combo_entry()
-        win.find_fuzzy("host2", "menu item").click()
+        win.combo_select("Source Adapter:", "host2")
         finish.click()
         hostwin.find(newname, "table cell")
 
@@ -130,8 +119,7 @@ class CreatePool(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         newname = "a-ceph-pool"
         name.text = "a-ceph-pool"
-        typ.click()
-        win.find_fuzzy("RADOS Block", "menu item").click()
+        win.combo_select("Type:", "rbd:")
         win.find_fuzzy("Host Name:", "text").text = "example.com:1234"
         win.find_fuzzy("pool-source-name-text", "text").typeText("frob")
         finish.click()

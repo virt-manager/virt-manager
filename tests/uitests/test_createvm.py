@@ -49,16 +49,13 @@ class NewVM(uiutils.UITestCase):
         self.app.root.find("File", "menu").click()
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
-        win.find_fuzzy("Hypervisor", "combo box").click()
-        win.find_fuzzy("Custom URI", "menu item").click()
+        win.combo_select("Hypervisor", "Custom URI")
         win.find("uri-entry", "text").text = "test:///default"
         win.find("Connect", "push button").click()
 
         # Open the new VM wizard, select a connection
         newvm = self._open_create_wizard()
-        combo = newvm.find("create-conn")
-        combo.click()
-        combo.find_fuzzy("testdriver.xml").click()
+        newvm.combo_select("create-conn", ".*testdriver.xml.*")
         self.forward(newvm)
 
         # Verify media-combo contents for testdriver.xml
@@ -72,8 +69,7 @@ class NewVM(uiutils.UITestCase):
         self.back(newvm)
         back = newvm.find_fuzzy("Back", "button")
         uiutils.check(lambda: not back.sensitive)
-        combo.click()
-        combo.find_fuzzy("test default").click()
+        newvm.combo_select("create-conn", ".*test default.*")
         self.forward(newvm)
         cdrom.click_combo_entry()
         uiutils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
@@ -312,9 +308,8 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
-        newvm.find_fuzzy("Architecture", "combo").click()
-        newvm.find_fuzzy("ppc64", "menu item").click()
-        newvm.find_fuzzy("pseries", "menu item")
+        newvm.combo_select("Architecture", ".*ppc64.*")
+        newvm.combo_check_default("Machine Type", ".*pseries.*")
 
         newvm.find_fuzzy("Import", "radio").click()
         newvm.find_fuzzy(None,
@@ -517,8 +512,7 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Architecture options", "toggle").click()
-        newvm.find_fuzzy("Xen Type", "combo").click()
-        newvm.find_fuzzy("paravirt", "menu item").click()
+        newvm.combo_select("Xen Type", ".*paravirt.*")
 
         newvm.find_fuzzy("Import", "radio").click()
         newvm.find_fuzzy(None,
@@ -729,9 +723,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
-        combo = newvm.find(None, "combo box", "Network source:")
-        # For some reason atspi reports the internal combo value
-        uiutils.check(lambda: combo.name == "user")
+        newvm.combo_check_default("net-source", "Usermode")
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
@@ -752,9 +744,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
-        combo = newvm.find(None, "combo box", "Network source:")
-        # For some reason atspi reports the internal combo value
-        uiutils.check(lambda: combo.name == 'bridge')
+        newvm.combo_check_default("net-source", "Bridge")
         warnlabel = newvm.find_fuzzy("suitable default network", "label")
         uiutils.check(lambda: warnlabel.onscreen)
         newvm.find("Device name:", "text").text = "foobr0"
@@ -807,9 +797,8 @@ class NewVM(uiutils.UITestCase):
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
-        combo = newvm.find(None, "combo box", "Network source:")
-        # For some reason atspi reports the internal combo value
-        uiutils.check(lambda: combo.name == 'bridge')
+        newvm.find("Network selection", "toggle button").click_expander()
+        newvm.combo_check_default("net-source", "Bridge")
         devname = newvm.find("Device name:", "text")
         uiutils.check(lambda: devname.text == "testsuitebr0")
 

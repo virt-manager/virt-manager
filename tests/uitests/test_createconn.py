@@ -39,20 +39,15 @@ class VMMConnect(uiutils.UITestCase):
         uiutils.check(lambda: user.showing is host.showing is True)
 
         # Select all HV options
-        hvcombo = win.find_fuzzy("Hypervisor", "combo box")
-        def _click_hv(hvname):
-            hvcombo.click()
-            hvcombo.find_fuzzy(hvname, "menu item").click()
-        _click_hv("user session")
-        _click_hv("QEMU/KVM")
-        _click_hv("Xen")
-        _click_hv("Bhyve")
-        _click_hv("Virtuozzo")
-        _click_hv("LXC")
+        win.combo_select("Hypervisor", "QEMU/KVM user session")
+        win.combo_select("Hypervisor", r"^QEMU/KVM$")
+        win.combo_select("Hypervisor", "Xen")
+        win.combo_select("Hypervisor", "Bhyve")
+        win.combo_select("Hypervisor", "Virtuozzo")
+        win.combo_select("Hypervisor", r".*LXC.*")
 
         # Test a simple selection
-        win.find_fuzzy("Hypervisor", "combo box").click()
-        win.find_fuzzy("QEMU/KVM user session", "menu item").click()
+        win.combo_select("Hypervisor", "QEMU/KVM user session")
         uiutils.check(lambda: user.showing is host.showing is False)
         uiutils.check(lambda: urilabel.text == "qemu:///session")
 
@@ -67,7 +62,7 @@ class VMMConnect(uiutils.UITestCase):
         uiutils.check(lambda: ":///session" not in urilabel.text)
 
         # Relaunch the dialog, confirm it doesn't overwrite content
-        _click_hv("LXC")
+        win.combo_select("Hypervisor", ".*LXC.*")
         uiutils.check(lambda: "lxc" in urilabel.text)
         self.app.root.find("File", "menu").click()
         self.app.root.find("Add Connection...", "menu item").click()
@@ -76,7 +71,7 @@ class VMMConnect(uiutils.UITestCase):
 
         # Enter a failing URI, make sure error is raised, and we can
         # fall back to the dialog
-        _click_hv("Xen")
+        win.combo_select("Hypervisor", "Xen")
         remote.click()
         user.text = "fribuser"
         connect.click()
@@ -111,7 +106,7 @@ class VMMConnect(uiutils.UITestCase):
         self.app.root.find("File", "menu").click()
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
-        _click_hv("Custom URI")
+        win.combo_select("Hypervisor", "Custom URI")
         urientry.text = "test:///default"
         connect.click()
 
@@ -120,7 +115,7 @@ class VMMConnect(uiutils.UITestCase):
         self.app.root.find("File", "menu").click()
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
-        _click_hv("Custom URI")
+        win.combo_select("Hypervisor", "Custom URI")
         urientry.text = "test:///default"
         connect.click()
 

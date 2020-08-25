@@ -18,8 +18,7 @@ class VMMMigrate(uiutils.UITestCase):
         self.app.root.find("File", "menu").click()
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
-        win.find_fuzzy("Hypervisor", "combo box").click()
-        win.find_fuzzy("Custom URI", "menu item").click()
+        win.combo_select("Hypervisor", "Custom URI")
         win.find("uri-entry", "text").text = "test:///default"
         win.find("Connect", "push button").click()
 

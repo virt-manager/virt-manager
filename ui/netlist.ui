@@ -84,6 +84,11 @@
         <property name="halign">start</property>
         <property name="hexpand">False</property>
         <signal name="changed" handler="on_net_source_changed" swapped="no"/>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="net-source-atkobject">
+            <property name="AtkObject::accessible-name">net-source</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>

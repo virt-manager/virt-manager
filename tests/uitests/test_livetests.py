@@ -178,8 +178,7 @@ class Console(uiutils.UITestCase):
         uiutils.check(lambda: tab.showing)
         tab.find("Select or create", "radio button").click()
         tab.find("storage-entry").text = fname
-        tab.find("Bus type:", "combo box").click()
-        tab.find("SCSI", "menu item").click()
+        tab.combo_select("Bus type:", "SCSI")
         addhw.find("Finish", "push button").click()
 
         # Verify permission dialog pops up, ask to change
