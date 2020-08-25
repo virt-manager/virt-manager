@@ -170,29 +170,21 @@ def _label_for_device(dev):
         if dev.device == "floppy":
             return _("Floppy %(index)d") % {"index": dev.disk_bus_index}
 
+        busstr = ""
         if dev.bus:
             busstr = vmmAddHardware.disk_pretty_bus(dev.bus)
-            if dev.device == "cdrom":
-                return _("%(bus)s CDROM %(index)d") % {
-                    "bus": busstr,
-                    "index": dev.disk_bus_index,
-                }
-            elif dev.device == "disk":
-                return _("%(bus)s Disk %(index)d") % {
-                    "bus": busstr,
-                    "index": dev.disk_bus_index,
-                }
-            return _("%(bus)s %(device)s %(index)d") % {
+        if dev.device == "cdrom":
+            return _("%(bus)s CDROM %(index)d") % {
                 "bus": busstr,
-                "device": dev.device.capitalize(),
                 "index": dev.disk_bus_index,
             }
-
-        if dev.device == "cdrom":
-            return _("CDROM %(index)d") % {"index": dev.disk_bus_index}
         elif dev.device == "disk":
-            return _("Disk %(index)d") % {"index": dev.disk_bus_index}
-        return _("%(device)s %(index)d") % {
+            return _("%(bus)s Disk %(index)d") % {
+                "bus": busstr,
+                "index": dev.disk_bus_index,
+            }
+        return _("%(bus)s %(device)s %(index)d") % {
+            "bus": busstr,
             "device": dev.device.capitalize(),
             "index": dev.disk_bus_index,
         }
@@ -1063,9 +1055,9 @@ class vmmDetails(vmmGObjectUI):
                 self.refresh_panic_page(dev)
             elif pagetype == HW_LIST_TYPE_VSOCK:
                 self.refresh_vsock_page(dev)
-            else:
+            else:  # pragma: no cover
                 pagetype = -1
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error refreshing hardware page: %s") % str(e))
             # Don't return, we want the rest of the bits to run regardless
 
@@ -1106,7 +1098,7 @@ class vmmDetails(vmmGObjectUI):
                 self.addhw = vmmAddHardware(self.vm)
 
             self.addhw.show(self.topwin)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err((_("Error launching hardware dialog: %s") %
                                str(e)))
     def remove_non_disk(self, devobj):
@@ -1175,11 +1167,9 @@ class vmmDetails(vmmGObjectUI):
     # Details/Hardware listeners #
     ##############################
 
-    def _browse_file(self, callback, is_media=False, reason=None):
+    def _browse_file(self, callback, reason=None):
         if not reason:
             reason = self.config.CONFIG_DIR_IMAGE
-            if is_media:
-                reason = self.config.CONFIG_DIR_ISO_MEDIA
 
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
@@ -1573,7 +1563,7 @@ class vmmDetails(vmmGObjectUI):
             auto = self.widget("boot-autostart")
             try:
                 self.vm.set_autostart(auto.get_active())
-            except Exception as e:
+            except Exception as e:  # pragma: no cover
                 self.err.show_err(
                     (_("Error changing autostart value: %s") % str(e)))
                 return False
@@ -2334,7 +2324,7 @@ class vmmDetails(vmmGObjectUI):
         heads = vid.heads
         try:
             ramlabel = ram and "%d MiB" % (int(ram) // 1024) or "-"
-        except Exception:
+        except Exception:  # pragma: no cover
             ramlabel = "-"
 
         self.widget("video-ram").set_text(ramlabel)
@@ -2418,7 +2408,7 @@ class vmmDetails(vmmGObjectUI):
         try:
             # Older libvirt versions return None if not supported
             autoval = self.vm.get_autostart()
-        except libvirt.libvirtError:
+        except libvirt.libvirtError:  # pragma: no cover
             autoval = None
 
         # Autostart
