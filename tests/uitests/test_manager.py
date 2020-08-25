@@ -141,7 +141,10 @@ class Manager(uiutils.UITestCase):
         _drag(details)
 
         # Close the connection
+        self.sleep(1)
+        manager.click()
         c = manager.find_fuzzy("testdriver.xml", "table cell")
+        c.click()
         c.click(button=3)
         self.app.root.find("conn-disconnect", "menu item").click()
 

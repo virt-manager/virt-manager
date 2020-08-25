@@ -299,6 +299,52 @@ class NewVM(uiutils.UITestCase):
         self.app.root.find_fuzzy("fedora10 on", "frame")
         uiutils.check(lambda: not newvm.showing)
 
+    def testNewKVMQ35(self):
+        """
+        New VM that should default to Q35
+        """
+        self.app.uri = tests.utils.URIs.kvm
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        self.forward(newvm)
+        newvm.find_fuzzy(None,
+            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
+        newvm.find("oslist-entry").text = "fedora30"
+        popover = newvm.find("oslist-popover")
+        popover.find("include-eol").click()
+        popover.find_fuzzy("Fedora 30").click()
+        self.forward(newvm)
+        self.forward(newvm)
+
+        # Select customize wizard, we will use this VM to
+        # hit some PPC64 code paths elsewhere
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
+        vmname = "fedora30"
+        details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+        # Tweak some Overview settings
+        details.combo_check_default("Chipset:", "Q35")
+        details.combo_check_default("Firmware:", "BIOS")
+        details.combo_select("Firmware:", ".*x86_64.*")
+        details.find("config-apply").click()
+
+        # Add another network device
+        details.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("Network", "table cell").click()
+        tab = addhw.find("network-tab", None)
+        uiutils.check(lambda: tab.showing)
+        addhw.find("Finish", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: details.active)
+
+        # Finish
+        details.find_fuzzy("Begin Installation", "button").click()
+        uiutils.check(lambda: details.dead)
+        self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
 
     def testNewPPC64(self):
         """
@@ -311,18 +357,47 @@ class NewVM(uiutils.UITestCase):
         newvm.combo_select("Architecture", ".*ppc64.*")
         newvm.combo_check_default("Machine Type", ".*pseries.*")
 
-        newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
+        newvm.find_fuzzy("Manual", "radio").click()
         self.forward(newvm)
         newvm.find("oslist-entry").text = "generic"
         newvm.find("oslist-popover").find_fuzzy("generic").click()
-        self.forward(newvm, check=False)
         self.forward(newvm)
-        newvm.find_fuzzy("Finish", "button").click()
+        self.forward(newvm)
+        # Disable storage, we add some via customize
+        newvm.find_fuzzy("Enable storage", "check box").click()
+        self.forward(newvm)
 
+        # Select customize wizard, we will use this VM to
+        # hit some PPC64 code paths elsewhere
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
+        details = self.app.root.find_fuzzy("vm-ppc64 on", "frame")
+
+        # Add a TPM SPAPR device
+        details.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("TPM", "table cell").click()
+        tab = addhw.find("tpm-tab", None)
+        uiutils.check(lambda: tab.showing)
+        addhw.find("Finish", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: details.active)
+
+        # Add a SCSI disk which also adds virtio-scsi controller
+        details.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("Storage", "table cell").click()
+        tab = addhw.find("storage-tab", None)
+        uiutils.check(lambda: tab.showing)
+        tab.combo_select("Bus type:", "SCSI")
+        addhw.find("Finish", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: details.active)
+
+        # Finish
+        details.find_fuzzy("Begin Installation", "button").click()
+        uiutils.check(lambda: details.dead)
         self.app.root.find_fuzzy("vm-ppc64 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
 
     def testNewVMAArch64UEFI(self):
         """
@@ -427,10 +502,29 @@ class NewVM(uiutils.UITestCase):
         self.back(newvm)
         self.forward(newvm)
         self.forward(newvm)
-        newvm.find_fuzzy("Finish", "button").click()
 
+        # Select customize wizard, we will use this VM to hit specific
+        # code paths
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
+        vmname = "container1"
+        details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+        # Check that addhw container options are disabled
+        details.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("PCI Host Device", "table cell").click()
+        # Ensure the error label is showing
+        label = addhw.find("Not supported for containers")
+        uiutils.check(lambda: label.onscreen)
+        addhw.find("Cancel", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: details.active)
+
+        # Finish
+        details.find_fuzzy("Begin Installation", "button").click()
         uiutils.check(lambda: not newvm.showing)
-        self.app.root.find_fuzzy("container1 on", "frame")
+        self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
 
     def testNewVMContainerTree(self):
@@ -523,9 +617,9 @@ class NewVM(uiutils.UITestCase):
         newvm.combo_select("Xen Type", ".*paravirt.*")
 
         newvm.find_fuzzy("Import", "radio").click()
+        self.forward(newvm)
         newvm.find_fuzzy(None,
             "text", "existing storage").text = "/dev/default-pool/testvol1.img"
-        self.forward(newvm)
         newvm.find("oslist-entry").text = "generic"
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
@@ -757,9 +851,29 @@ class NewVM(uiutils.UITestCase):
         uiutils.check(lambda: warnlabel.onscreen)
         newvm.find("Device name:", "text").text = "foobr0"
 
+        # Select customize wizard, we will use this VM to hit specific
+        # code paths
+        newvm.find_fuzzy("Customize", "check").click()
         newvm.find_fuzzy("Finish", "button").click()
-        self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        vmname = "vm1"
+        details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+        # Check that addhw hostdev drop down is empty
+        details.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("USB Host Device", "table cell").click()
+        tab = addhw.find("host-tab", None)
+        uiutils.check(lambda: tab.showing)
+        cell = tab.find("No Devices", "table cell")
+        uiutils.check(lambda: cell.selected)
+        addhw.find("Cancel", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: details.active)
+
+        # Finish
+        details.find_fuzzy("Begin Installation", "button").click()
+        uiutils.check(lambda: details.dead)
+        self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
     def testNewVMInactiveNetwork(self):
         """

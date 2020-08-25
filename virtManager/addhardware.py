@@ -217,7 +217,7 @@ class vmmAddHardware(vmmGObjectUI):
         is_local = not self.conn.is_remote()
         have_storage = (is_local or self.conn.support.conn_storage())
         storage_tooltip = None
-        if not have_storage:
+        if not have_storage:  # pragma: no cover
             storage_tooltip = _("Connection does not support storage"
                                 " management.")
 
@@ -383,13 +383,8 @@ class vmmAddHardware(vmmGObjectUI):
         if did_hotplug and not hotplug_err:
             return True
 
-        if len(define_args) > 1:
-            msg = _("Some changes may require a guest shutdown "
-                    "to take effect.")
-        else:
-            msg = _("These changes will take effect after "
-                    "the next guest shutdown.")
-
+        msg = _("These changes will take effect after "
+                "the next guest shutdown.")
         dtype = (hotplug_err and
                  Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
         hotplug_msg = ""
@@ -494,8 +489,6 @@ class vmmAddHardware(vmmGObjectUI):
             if guest.type in ["qemu", "kvm", "test"]:
                 ret.append("sd")
                 ret.append("virtio")
-                if "scsi" not in ret:
-                    ret.append("scsi")
 
         if guest.conn.is_xen() or guest.conn.is_test():
             ret.append("xen")
@@ -564,22 +557,6 @@ class vmmAddHardware(vmmGObjectUI):
             DeviceRng.TYPE_RANDOM: _("Random"),
             DeviceRng.TYPE_EGD: _("Entropy Gathering Daemon"),
             DeviceRng.TYPE_BUILTIN: _("Builtin RNG"),
-        }
-        return labels.get(val, val)
-
-    @staticmethod
-    def rng_pretty_backend_type(val):
-        labels = {
-            "udp": "UDP",
-            "tcp": "TCP",
-        }
-        return labels.get(val, val)
-
-    @staticmethod
-    def rng_pretty_mode(val):
-        labels = {
-            "bind": _("Bind"),
-            "connect": _("Connect"),
         }
         return labels.get(val, val)
 
@@ -683,7 +660,7 @@ class vmmAddHardware(vmmGObjectUI):
         def safeint(val, fmt="%.3d"):
             try:
                 int(val)
-            except Exception:
+            except Exception:  # pragma: no cover
                 return str(val)
             return fmt % int(val)
 
@@ -1104,7 +1081,7 @@ class vmmAddHardware(vmmGObjectUI):
                 return _("PCI Device")
             return _("USB Device")
 
-        raise RuntimeError("Unknown page %s" % page)
+        raise RuntimeError("Unknown page %s" % page)  # pragma: no cover
 
     def _set_page_title(self, page):
         title = self._dev_to_title(page)
@@ -1156,7 +1133,7 @@ class vmmAddHardware(vmmGObjectUI):
     def _change_tpm_device_type(self, src):
         devtype = uiutil.get_list_selection(src)
         if devtype is None:
-            return
+            return  # pragma: no cover
 
         dev = DeviceTpm(self.conn.get_backend())
         dev.type = devtype
@@ -1284,7 +1261,7 @@ class vmmAddHardware(vmmGObjectUI):
             try:
                 pool = self.conn.get_pool(poolname)
                 self.idle_add(pool.refresh)
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error looking up pool=%s for refresh after "
                     "storage creation.", poolname, exc_info=True)
 
@@ -1336,13 +1313,9 @@ class vmmAddHardware(vmmGObjectUI):
                 return False
 
         # Alter persistent config
-        try:
-            if controller is not None:
-                self.vm.add_device(controller)
-            self.vm.add_device(dev)
-        except Exception as e:
-            self.err.show_err(_("Error adding device: %s") % str(e))
-            return True
+        if controller is not None:
+            self.vm.add_device(controller)
+        self.vm.add_device(dev)
 
         return False
 
@@ -1395,7 +1368,7 @@ class vmmAddHardware(vmmGObjectUI):
         names = []
         nodedev = getattr(dev, "vmm_nodedev", None)
         if not nodedev:
-            return
+            return  # pragma: no cover
 
         for vm in self.conn.list_vms():
             for hostdev in vm.xmlobj.devices.hostdev:
@@ -1418,7 +1391,8 @@ class vmmAddHardware(vmmGObjectUI):
             self._netlist.validate_device(dev)
 
         if dev.DEVICE_TYPE == "hostdev":
-            self._validate_hostdev_collision(dev)
+            if self._validate_hostdev_collision(dev) is False:
+                return False
 
         dev.validate()
 
@@ -1566,11 +1540,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         if not listen or listen == "none":
             dev.listen = "none"
-        elif listen == "address":
+        else:
             dev.listen = addr
             dev.port = port
-        else:
-            raise ValueError(_("invalid listen type"))
 
         return dev
 

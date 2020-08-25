@@ -149,6 +149,8 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Bus type:", "VirtIO")
         tab.find("Advanced options", "toggle button").click_expander()
         tab.combo_select("Cache mode:", "none")
+        tab.combo_select("Discard mode:", "ignore")
+        tab.combo_select("Detect zeroes:", "unmap")
         # Size too big
         tab.find("GiB", "spin button").text = "2000"
         self._finish(addhw, check=None)
@@ -415,7 +417,10 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "USB Host Device", "host-tab")
         tab.find_fuzzy("HP Dup USB 1", "table cell").click()
         self._finish(addhw, check=None)
+        self._click_alert_button("device is already in use by", "No")
+        self._finish(addhw, check=None)
         self._click_alert_button("device is already in use by", "Yes")
+        uiutils.check(lambda: details.active)
 
         # Add USB device dup2
         self._open_addhw_window(details)
@@ -468,7 +473,9 @@ class AddHardware(uiutils.UITestCase):
         # Add spicevmc channel
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Channel", "char-tab")
-        combo = tab.combo_select("Device Type:", ".*spicevmc.*")
+        tab.combo_check_default("char-target-name", ".*redhat.spice.0.*")
+        tab.combo_select("char-target-name", ".*webdav.*")
+        tab.combo_select("char-target-name", ".*org.qemu.guest_agent*")
         self._finish(addhw, check=details)
 
 
@@ -558,12 +565,29 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Mode:", "Passthrough")
         self._finish(addhw, check=details)
 
+        # Add TPM emulated
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "TPM", "tpm-tab")
+        self._finish(addhw, check=details)
+
     def testAddHWMisc2(self):
         """
         Add some more simple devices"
         """
         details = self._open_details_window()
         addhw = self._open_addhw_window(details)
+
+        # Add usb controller, to make usbredir work
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        tab.combo_select("Type:", "USB")
+        self._finish(addhw, check=details)
+
+        # Add usb redir
+        self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "USB Redirection", "usbredir-tab")
+        tab.combo_select("Type:", "Spice")
+        self._finish(addhw, check=details)
 
         # Add basic filesystem
         self._open_addhw_window(details)
@@ -572,7 +596,7 @@ class AddHardware(uiutils.UITestCase):
         tab.find("Target path:", "text").text = "/foo/target"
         self._finish(addhw, check=details)
 
-        # Add TPM
+        # Add TPM passthrough
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "TPM", "tpm-tab")
         tab.combo_select("Model:", "TIS")
@@ -599,6 +623,28 @@ class AddHardware(uiutils.UITestCase):
         tab.find("vsock-cid").text = "7"
         self._finish(addhw, check=details)
 
+    def testAddHWUSBNone(self):
+        """
+        Test some special case handling when VM has controller usb model='none'
+        """
+        details = self._open_details_window(
+                "test alternate devs title", shutdown=True)
+        addhw = self._open_addhw_window(details)
+
+        # Add usb controller
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        tab.combo_select("Type:", "USB")
+        self._finish(addhw, check=details)
+
+        # Trigger a libvirt error to test error handling
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Controller", "controller-tab")
+        combo = tab.find("Type:", "combo box")
+        combo.find(None, "text").text = "foobar"
+        self._finish(addhw, check=None)
+        self._click_alert_button("Unable to add device", "Close")
+        uiutils.check(lambda: addhw.active)
 
     def testAddHWCornerCases(self):
         """
