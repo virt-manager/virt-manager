@@ -60,10 +60,7 @@ class MediaChange(uiutils.UITestCase):
         combo.find(r"Fedora12_media \(/dev/sr0\)")
         entry.click()
         tab.find("Browse", "push button").click()
-        browsewin = self.app.root.find("vmm-storage-browser")
-        browsewin.find_fuzzy("default-pool", "table cell").click()
-        browsewin.find_fuzzy("backingl1.img", "table cell").click()
-        browsewin.find("Choose Volume", "push button").click()
+        self._select_storagebrowser_volume("default-pool", "backingl1.img")
         appl.click()
         # Check 'already in use' dialog
         self._click_alert_button("already in use by", "Yes")

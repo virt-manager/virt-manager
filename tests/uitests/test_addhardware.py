@@ -556,6 +556,7 @@ class AddHardware(uiutils.UITestCase):
         source = tab.find("Source path:", "text")
         source.text = "/foo/source"
         tab.find("Browse...", "push button").click()
+        # Specific testing for dir vol handling for filesystem browse
         browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find_fuzzy("default-pool", "table cell").click()
         browsewin.find_fuzzy("bochs-vol", "table cell").click()

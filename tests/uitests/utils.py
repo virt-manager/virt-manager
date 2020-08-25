@@ -103,11 +103,16 @@ class UITestCase(unittest.TestCase):
         alert.find(button_text, "push button").click()
         check(lambda: not alert.active)
 
-    def _select_storagebrowser_volume(self, pool, vol):
+    def _select_storagebrowser_volume(self, pool, vol, doubleclick=False):
         browsewin = self.app.root.find("vmm-storage-browser")
         browsewin.find_fuzzy(pool, "table cell").click()
-        browsewin.find_fuzzy(vol, "table cell").click()
-        browsewin.find_fuzzy("Choose Volume").click()
+        volcell = browsewin.find_fuzzy(vol, "table cell")
+        if doubleclick:
+            volcell.doubleClick()
+        else:
+            volcell.click()
+            browsewin.find_fuzzy("Choose Volume").click()
+        check(lambda: not browsewin.active)
 
     def _walkUIList(self, win, lst, error_cb, reverse=False):
         """

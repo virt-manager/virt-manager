@@ -87,9 +87,8 @@ class CreateVol(uiutils.UITestCase):
         chooser = self.app.root.find(
                 "Locate existing storage", "file chooser")
         chooser.keyCombo("<alt>F4")
-        browsewin.find_fuzzy("default-pool", "table cell").click()
-        browsewin.find("bochs-vol", "table cell").doubleClick()
-        uiutils.check(lambda: not browsewin.active)
+        self._select_storagebrowser_volume(
+                "default-pool", "bochs-vol", doubleclick=True)
         backingstore = win.find("backing-store")
         uiutils.check(lambda: "bochs-vol" in backingstore.text)
         finish.click()
@@ -131,10 +130,7 @@ class CreateVol(uiutils.UITestCase):
         name.text = newname
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
-        browsewin = self.app.root.find("vmm-storage-browser")
-        browsewin.find_fuzzy("disk-pool", "table cell").click()
-        browsewin.find("diskvol7", "table cell").click()
-        browsewin.find("Choose Volume").click()
+        self._select_storagebrowser_volume("disk-pool", "diskvol7")
         finish.click()
         vollist.find(newname)
 
