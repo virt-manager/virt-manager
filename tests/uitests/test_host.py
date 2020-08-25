@@ -39,7 +39,7 @@ class Host(uiutils.UITestCase):
         delete = win.find("net-delete", "push button")
         stop = win.find("net-stop", "push button")
         stop.click()
-        uiutils.check_in_loop(lambda: delete.sensitive)
+        uiutils.check(lambda: delete.sensitive)
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
         origdev = "virbr0"
@@ -47,7 +47,8 @@ class Host(uiutils.UITestCase):
         xmleditor.text = xmleditor.text.replace(origdev, newdev)
         finish.click()
         win.find("Details", "page tab").click()
-        self.assertEqual(win.find("net-device").text, newdev)
+        netdev = win.find("net-device")
+        uiutils.check(lambda: netdev.text == newdev)
 
         # Rename it
         win.find("default", "table cell").click()
@@ -90,7 +91,7 @@ class Host(uiutils.UITestCase):
         delete = win.find("pool-delete", "push button")
         stop = win.find("pool-stop", "push button")
         stop.click()
-        uiutils.check_in_loop(lambda: delete.sensitive)
+        uiutils.check(lambda: delete.sensitive)
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
         origpath = "/dev/default-pool"
@@ -98,7 +99,8 @@ class Host(uiutils.UITestCase):
         xmleditor.text = xmleditor.text.replace(origpath, newpath)
         finish.click()
         win.find("Details", "page tab").click()
-        self.assertEqual(win.find("pool-location").text, newpath)
+        poolloc = win.find("pool-location")
+        uiutils.check(lambda: poolloc.text == newpath)
 
         # Rename it
         win.find("default", "table cell").click()
@@ -124,18 +126,18 @@ class Host(uiutils.UITestCase):
 
         vol1 = vollist.find("backingl1.img", "table cell")
         vol2 = vollist.find("UPPER", "table cell")
-        assert vol1.onscreen
-        assert not vol2.onscreen
+        uiutils.check(lambda: vol1.onscreen)
+        uiutils.check(lambda: not vol2.onscreen)
         win.find("Size", "table column header").click()
         win.find("Size", "table column header").click()
-        uiutils.check_in_loop(lambda: not vol1.onscreen)
-        assert vol2.onscreen
+        uiutils.check(lambda: not vol1.onscreen)
+        uiutils.check(lambda: vol2.onscreen)
 
         vol2.click(button=3)
         self.app.root.find("Copy Volume Path", "menu item").click()
         from gi.repository import Gdk, Gtk
         clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
-        assert clipboard.wait_for_text() == "/dev/default-pool/UPPER"
+        uiutils.check(lambda: clipboard.wait_for_text() == "/dev/default-pool/UPPER")
 
     def testHostConn(self):
         """
@@ -146,7 +148,7 @@ class Host(uiutils.UITestCase):
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click(button=3)
         self.app.root.find("conn-disconnect", "menu item").click()
-        uiutils.check_in_loop(lambda: "Not Connected" in c.text)
+        uiutils.check(lambda: "Not Connected" in c.text)
 
         # Open Host Details from right click menu
         c.click(button=3)
@@ -168,15 +170,15 @@ class Host(uiutils.UITestCase):
         # Open the manager window
         win.find("File", "menu").click()
         win.find("View Manager", "menu item").click()
-        uiutils.check_in_loop(lambda: manager.active)
+        uiutils.check(lambda: manager.active)
         # Confirm connection row is named differently in manager
         manager.find("FOOBAR", "table cell")
 
         # Close the manager
         manager.keyCombo("<alt>F4")
-        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check(lambda: win.active)
 
         # Quit app from the file menu
         win.find("File", "menu").click()
         win.find("Quit", "menu item").click()
-        uiutils.check_in_loop(lambda: not self.app.is_running())
+        uiutils.check(lambda: not self.app.is_running())

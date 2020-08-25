@@ -23,7 +23,7 @@ class VMMMigrate(uiutils.UITestCase):
         win.find("uri-entry", "text").text = "test:///default"
         win.find("Connect", "push button").click()
 
-        uiutils.check_in_loop(lambda: win.showing is False)
+        uiutils.check(lambda: win.showing is False)
         c = self.app.root.find("test-many-devices", "table cell")
         c.click(button=3)
         self.app.root.find("Migrate...", "menu item").click()
@@ -34,4 +34,4 @@ class VMMMigrate(uiutils.UITestCase):
         self._click_alert_button(
                 "the.connection.driver:.virDomainMigrate", "Close")
         mig.find("Cancel", "push button").click()
-        uiutils.check_in_loop(lambda: not mig.showing)
+        uiutils.check(lambda: not mig.showing)

@@ -24,16 +24,16 @@ class VMMPrefs(uiutils.UITestCase):
         consoletab = win.find("console-tab")
         feedbacktab = win.find("feedback-tab")
 
-        uiutils.check_in_loop(lambda: not feedbacktab.onscreen)
+        uiutils.check(lambda: not feedbacktab.onscreen)
         tab = generaltab
-        uiutils.check_in_loop(lambda: tab.onscreen)
+        uiutils.check(lambda: tab.onscreen)
         tab.find_fuzzy("Enable system tray", "check").click()
         tab.find_fuzzy("Enable XML").click()
         tab.find_fuzzy("libguestfs VM").click()
 
         win.find("Polling", "page tab").click()
         tab = pollingtab
-        uiutils.check_in_loop(lambda: tab.onscreen)
+        uiutils.check(lambda: tab.onscreen)
         tab.find_fuzzy(None, "check box", "Poll CPU").click()
         tab.find_fuzzy(None, "check box", "Poll Disk").click()
         tab.find_fuzzy(None, "check box", "Poll Memory").click()
@@ -45,7 +45,7 @@ class VMMPrefs(uiutils.UITestCase):
         win.find("New VM", "page tab").click()
         tab = newvmtab
         newvmtab.print_nodes()
-        uiutils.check_in_loop(lambda: tab.onscreen)
+        uiutils.check(lambda: tab.onscreen)
         tab.find_fuzzy(None, "check box", "sound device").click()
         tab.find(None, "combo box", "CPU default:").click()
         tab.find_fuzzy("Copy host", "menu item").click()
@@ -58,7 +58,7 @@ class VMMPrefs(uiutils.UITestCase):
 
         win.find("Console", "page tab").click()
         tab = consoletab
-        uiutils.check_in_loop(lambda: tab.onscreen)
+        uiutils.check(lambda: tab.onscreen)
         tab.find(None, "combo box", "SPICE USB").click()
         tab.find_fuzzy("Manual redirect", "menu item").click()
         tab.find_fuzzy(None, "combo box", "Resize guest").click()
@@ -89,7 +89,7 @@ class VMMPrefs(uiutils.UITestCase):
 
         win.find("Feedback", "page tab").click()
         tab = feedbacktab
-        uiutils.check_in_loop(lambda: tab.onscreen)
+        uiutils.check(lambda: tab.onscreen)
         tab.find_fuzzy(None, "check box", "Force Poweroff").click()
         tab.find_fuzzy(None, "check box", "Poweroff/Reboot").click()
         tab.find_fuzzy(None, "check box", "Pause").click()
@@ -101,7 +101,7 @@ class VMMPrefs(uiutils.UITestCase):
         win.find_fuzzy("Enable system tray", "check").click()
 
         win.find_fuzzy("Close", "push button").click()
-        uiutils.check_in_loop(lambda: win.visible is False)
+        uiutils.check(lambda: win.visible is False)
 
 
     def testPrefsXMLEditor(self):
@@ -114,10 +114,10 @@ class VMMPrefs(uiutils.UITestCase):
         detailswin.find("XML", "page tab").click()
         uiutils.drag(detailswin, 400, 400)
         warnlabel = detailswin.find_fuzzy("XML editing is disabled")
-        self.assertTrue(warnlabel.visible)
+        uiutils.check(lambda: warnlabel.visible)
         origtext = xmleditor.text
         xmleditor.typeText("1234abcd")
-        self.assertEqual(xmleditor.text, origtext)
+        uiutils.check(lambda: xmleditor.text == origtext)
 
         managerwin.grabFocus()
         managerwin.click()
@@ -126,7 +126,7 @@ class VMMPrefs(uiutils.UITestCase):
         prefswin = self.app.root.find_fuzzy("Preferences", "frame")
         prefswin.find_fuzzy("Enable XML").click()
         prefswin.find_fuzzy("Close", "push button").click()
-        uiutils.check_in_loop(lambda: prefswin.visible is False)
+        uiutils.check(lambda: prefswin.visible is False)
 
         managerwin.keyCombo("<alt>F4")
         detailswin.click()
@@ -134,7 +134,7 @@ class VMMPrefs(uiutils.UITestCase):
             "><title>FOOTITLE</title>", 1)
         finish.click()
         detailswin.find("Details", "page tab").click()
-        uiutils.check_in_loop(lambda:
+        uiutils.check(lambda:
                 detailswin.find("Title:", "text").text == "FOOTITLE")
 
     def testPrefsKeyfile(self):

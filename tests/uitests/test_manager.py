@@ -31,18 +31,18 @@ class Manager(uiutils.UITestCase):
         smenu.click()
         force.click()
         self._click_alert_button("Are you sure you want", "Yes")
-        uiutils.check_in_loop(lambda: run.sensitive, timeout=5)
+        uiutils.check(lambda: run.sensitive, timeout=5)
 
         run.click()
-        uiutils.check_in_loop(lambda: not run.sensitive, timeout=5)
+        uiutils.check(lambda: not run.sensitive, timeout=5)
         pause.click()
-        uiutils.check_in_loop(lambda: pause.checked, timeout=5)
+        uiutils.check(lambda: pause.checked, timeout=5)
         smenu.click()
         save.click()
-        uiutils.check_in_loop(lambda: run.sensitive, timeout=5)
-        self.assertTrue("Saved" in c.text)
+        uiutils.check(lambda: run.sensitive, timeout=5)
+        uiutils.check(lambda: "Saved" in c.text)
         run.click()
-        uiutils.check_in_loop(lambda: shutdown.sensitive, timeout=5)
+        uiutils.check(lambda: shutdown.sensitive, timeout=5)
 
     def testVMLifecycle(self):
         self._testVMLifecycle()
@@ -146,26 +146,26 @@ class Manager(uiutils.UITestCase):
         self.app.root.find("conn-disconnect", "menu item").click()
 
         # Ensure all those windows aren't showing
-        uiutils.check_in_loop(lambda: not migrate.showing)
-        uiutils.check_in_loop(lambda: not clone.showing)
-        uiutils.check_in_loop(lambda: not create.showing)
-        uiutils.check_in_loop(lambda: not details.showing)
-        uiutils.check_in_loop(lambda: not delete.showing)
+        uiutils.check(lambda: not migrate.showing)
+        uiutils.check(lambda: not clone.showing)
+        uiutils.check(lambda: not create.showing)
+        uiutils.check(lambda: not details.showing)
+        uiutils.check(lambda: not delete.showing)
 
         # Delete the connection, ensure the host dialog disappears
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click(button=3)
         self.app.root.find("conn-delete", "menu item").click()
         self._click_alert_button("will remove the connection", "Yes")
-        uiutils.check_in_loop(lambda: not host.showing)
+        uiutils.check(lambda: not host.showing)
 
     def testManagerDefaultStartup(self):
         self.app.open(use_uri=False)
         manager = self.app.topwin
         errlabel = manager.find("error-label")
-        uiutils.check_in_loop(
+        uiutils.check(
                 lambda: "Checking for virtualization" in errlabel.text)
-        uiutils.check_in_loop(
+        uiutils.check(
                 lambda: "File->Add Connection" in errlabel.text)
-        uiutils.check_in_loop(
+        uiutils.check(
                 lambda: "appropriate QEMU/KVM" in errlabel.text)

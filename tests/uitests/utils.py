@@ -94,14 +94,14 @@ class UITestCase(unittest.TestCase):
         if shutdown:
             win.find("Shut Down", "push button").click()
             run = win.find("Run", "push button")
-            check_in_loop(lambda: run.sensitive)
+            check(lambda: run.sensitive)
         return win
 
     def _click_alert_button(self, label_text, button_text):
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy(label_text, "label")
         alert.find(button_text, "push button").click()
-        check_in_loop(lambda: not alert.active)
+        check(lambda: not alert.active)
 
     def _select_storagebrowser_volume(self, pool, vol):
         browsewin = self.app.root.find("vmm-storage-browser")
@@ -132,7 +132,7 @@ class UITestCase(unittest.TestCase):
                     idx += cells_per_selection
                     continue
 
-            self.assertTrue(cell.state_selected)
+            check(lambda: cell.state_selected)
             dogtail.rawinput.pressKey(reverse and "Up" or "Down")
 
             if not win.active:
@@ -145,9 +145,9 @@ class UITestCase(unittest.TestCase):
             idx += cells_per_selection
             if idx >= len(all_cells):
                 # Last cell, selection shouldn't have changed
-                self.assertTrue(cell.state_selected)
+                check(lambda: cell.state_selected)
             else:
-                self.assertTrue(not cell.state_selected)
+                check(lambda: not cell.state_selected)
 
     def _test_xmleditor_interactions(self, win, finish):
         """
@@ -162,7 +162,7 @@ class UITestCase(unittest.TestCase):
         win.find("Details", "page tab").click()
         # Select 'No', meaning don't abandon changes
         self._click_alert_button("changes will be lost", "No")
-        check_in_loop(lambda: xmleditor.showing)
+        check(lambda: xmleditor.showing)
 
         # Click the finish button, but our bogus change should trigger error
         finish.click()
@@ -171,7 +171,7 @@ class UITestCase(unittest.TestCase):
         # Try unapplied changes again, this time abandon our changes
         win.find("Details", "page tab").click()
         self._click_alert_button("changes will be lost", "Yes")
-        check_in_loop(lambda: not xmleditor.showing)
+        check(lambda: not xmleditor.showing)
 
 
 class _FuzzyPredicate(dogtail.predicate.Predicate):
@@ -235,7 +235,7 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
                     self._name, self._roleName, self._labeller_text, e)
 
 
-def check_in_loop(func, timeout=2):
+def check(func, timeout=2):
     """
     Run the passed func in a loop every .1 seconds until timeout is hit or
     the func returns True.
@@ -329,7 +329,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         screen, helps reduce some test flakiness
         """
         # pylint: disable=arguments-differ,signature-differs
-        check_in_loop(lambda: self.onscreen)
+        check(lambda: self.onscreen)
         dogtail.tree.Node.click(self, *args, **kwargs)
 
     def bring_on_screen(self, key_name="Down", max_tries=100):
@@ -368,7 +368,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         # before we return them. This ensures the window is actually onscreen
         # so it sidesteps a lot of race conditions
         if ret.roleName in ["frame", "dialog", "alert"] and check_active:
-            check_in_loop(lambda: ret.active)
+            check(lambda: ret.active)
         return ret
 
     def find_fuzzy(self, name, roleName=None, labeller_text=None):

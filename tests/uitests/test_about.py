@@ -26,4 +26,4 @@ class VMMAbout(uiutils.UITestCase):
             print("Current year=%s not in about.ui dialog!" % curyear)
 
         win.keyCombo("<ESC>")
-        uiutils.check_in_loop(lambda: win.visible is False)
+        uiutils.check(lambda: win.visible is False)
