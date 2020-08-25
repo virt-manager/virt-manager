@@ -360,10 +360,9 @@ class NewVM(uiutils.UITestCase):
         TCG = newvm.find_fuzzy("TCG", "menu item")
         uiutils.check(lambda: KVM.focused)
         uiutils.check(lambda: TCG.showing)
+        self.pressKey("Esc")
 
         # Validate some initial defaults
-        newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy("Import", "radio").click()
         local = newvm.find_fuzzy("Local", "radio")
         uiutils.check(lambda: not local.sensitive)
         newvm.find_fuzzy("Machine Type", "combo").click()
@@ -372,11 +371,20 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Machine Type", "combo").click()
         self.sleep(.2)
         newvm.find("virt", "menu item").click()
+        self.sleep(.5)
+        importradio = newvm.find("Import", "radio")
+        importradio.click()
+        uiutils.check(lambda: importradio.checked)
         self.forward(newvm)
 
         # Set the import media details
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = "/dev/default-pool/default-vol"
+        importentry = newvm.find_fuzzy(None, "text", "existing storage")
+        # For some reason 'Import' doesn't take effect sometimes
+        # And we end up in 'Manual' install mode, this will
+        # make it explicit when it fails
+        uiutils.check(lambda: importentry.onscreen)
+
+        importentry.text = "/dev/default-pool/default-vol"
         # Make sure the info box shows up
         newvm.find("Kernel/initrd settings can be configured")
         newvm.find("oslist-entry").text = "generic"
