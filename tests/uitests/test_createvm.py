@@ -157,13 +157,9 @@ class NewVM(uiutils.UITestCase):
 
         # Select a fake iso
         newvm.find_fuzzy("install-iso-browse", "button").click()
-        browser = self.app.root.find("vmm-storage-browser")
-        browser.find_fuzzy("default-pool", "table cell").click()
-        browser.find_fuzzy("iso-vol", "table cell").click()
-        browser.find_fuzzy("Choose Volume", "button").click()
+        self._select_storagebrowser_volume("default-pool", "iso-vol")
 
         osentry = newvm.find("oslist-entry")
-        uiutils.check(lambda: browser.showing is False)
         uiutils.check(lambda: osentry.text == "None detected")
 
         # Change distro to win8
@@ -659,8 +655,8 @@ class NewVM(uiutils.UITestCase):
         # Verify default disk storage was actually created. This has some
         # special handling in domain.py
         tab.find("Browse", "push button").click()
-        browsewin = self.app.root.find("vmm-storage-browser")
-        browsewin.find("%s.qcow2" % vmname, "table cell")
+        browser = self.app.root.find("vmm-storage-browser")
+        browser.find("%s.qcow2" % vmname, "table cell")
 
 
     def testNewVMRemote(self):
@@ -707,10 +703,7 @@ class NewVM(uiutils.UITestCase):
         uiutils.check(lambda: not browsewin.active)
         # Reopen, select storage
         newvm.find("install-import-browse").click()
-        browsewin = self.app.root.find("vmm-storage-browser")
-        browsewin.find_fuzzy("default-pool", "table cell").click()
-        browsewin.find_fuzzy("bochs-vol", "table cell").click()
-        browsewin.find("Choose Volume").click()
+        self._select_storagebrowser_volume("default-pool", "bochs-vol")
         uiutils.check(
                 lambda: importtext.text == "/dev/default-pool/bochs-vol")
 
