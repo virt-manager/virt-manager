@@ -424,36 +424,29 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def char_pretty_channel_name(val):
-        if val == DeviceChannel.CHANNEL_NAME_SPICE:
-            return "spice"
-        if val == DeviceChannel.CHANNEL_NAME_QEMUGA:
-            return "qemu-ga"
-        if val == DeviceChannel.CHANNEL_NAME_LIBGUESTFS:
-            return "libguestfs"
-        if val == DeviceChannel.CHANNEL_NAME_SPICE_WEBDAV:
-            return "spice-webdav"
-        return None
+        labels = {
+            DeviceChannel.CHANNEL_NAME_SPICE: "spice",
+            DeviceChannel.CHANNEL_NAME_QEMUGA: "qemu-ga",
+            DeviceChannel.CHANNEL_NAME_LIBGUESTFS: "libguestfs",
+            DeviceChannel.CHANNEL_NAME_SPICE_WEBDAV: "spice-webdav",
+        }
+        return labels.get(val, None)
 
     @staticmethod
-    def char_pretty_type(ctype):
+    def char_pretty_type(val):
         """
         Return a human readable description of the passed char type
         """
-        if ctype == DeviceSerial.TYPE_PTY:
-            return _("Pseudo TTY")
-        elif ctype == DeviceSerial.TYPE_FILE:
-            return _("Output to a file")
-        elif ctype == DeviceSerial.TYPE_TCP:
-            return _("TCP net console")
-        elif ctype == DeviceSerial.TYPE_UDP:
-            return _("UDP net console")
-        elif ctype == DeviceSerial.TYPE_UNIX:
-            return _("UNIX socket")
-        elif ctype == DeviceSerial.TYPE_SPICEVMC:
-            return _("Spice agent")
-        elif ctype == DeviceSerial.TYPE_SPICEPORT:
-            return _("Spice port")
-        return ctype
+        labels = {
+            DeviceSerial.TYPE_PTY: _("Pseudo TTY"),
+            DeviceSerial.TYPE_FILE: _("Output to a file"),
+            DeviceSerial.TYPE_TCP: _("TCP net console"),
+            DeviceSerial.TYPE_UDP: _("UDP net console"),
+            DeviceSerial.TYPE_UNIX: _("UNIX socket"),
+            DeviceSerial.TYPE_SPICEVMC: _("Spice agent"),
+            DeviceSerial.TYPE_SPICEPORT: _("Spice port"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
     def controller_recommended_types():
@@ -463,21 +456,19 @@ class vmmAddHardware(vmmGObjectUI):
                 DeviceController.TYPE_CCID]
 
     @staticmethod
-    def controller_pretty_type(ctype):
-        pretty_mappings = {
-            DeviceController.TYPE_IDE:             _("IDE"),
-            DeviceController.TYPE_FDC:              _("Floppy"),
-            DeviceController.TYPE_SCSI:            _("SCSI"),
-            DeviceController.TYPE_SATA:            _("SATA"),
-            DeviceController.TYPE_VIRTIOSERIAL:    _("VirtIO Serial"),
-            DeviceController.TYPE_USB:             _("USB"),
-            DeviceController.TYPE_PCI:             _("PCI"),
-            DeviceController.TYPE_CCID:            _("CCID"),
-            DeviceController.TYPE_XENBUS:          _("xenbus"),
+    def controller_pretty_type(val):
+        labels = {
+            DeviceController.TYPE_IDE: _("IDE"),
+            DeviceController.TYPE_FDC: _("Floppy"),
+            DeviceController.TYPE_SCSI: _("SCSI"),
+            DeviceController.TYPE_SATA: _("SATA"),
+            DeviceController.TYPE_VIRTIOSERIAL: _("VirtIO Serial"),
+            DeviceController.TYPE_USB: _("USB"),
+            DeviceController.TYPE_PCI: _("PCI"),
+            DeviceController.TYPE_CCID: _("CCID"),
+            DeviceController.TYPE_XENBUS: _("xenbus"),
         }
-        if ctype not in pretty_mappings:
-            return ctype
-        return pretty_mappings[ctype]
+        return labels.get(val, val)
 
     @staticmethod
     def controller_pretty_desc(dev):
@@ -541,54 +532,56 @@ class vmmAddHardware(vmmGObjectUI):
         return bus_mappings.get(bus, bus)
 
     @staticmethod
-    def tpm_pretty_type(tpm_type):
-        if tpm_type == DeviceTpm.TYPE_PASSTHROUGH:
-            return _("Passthrough device")
-        if tpm_type == DeviceTpm.TYPE_EMULATOR:
-            return _("Emulated device")
-        return tpm_type
+    def tpm_pretty_type(val):
+        labels = {
+            DeviceTpm.TYPE_PASSTHROUGH: _("Passthrough device"),
+            DeviceTpm.TYPE_EMULATOR: _("Emulated device"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
-    def tpm_pretty_model(tpm_model):
-        if tpm_model == DeviceTpm.MODEL_TIS:
-            return _("TIS")
-        if tpm_model == DeviceTpm.MODEL_CRB:
-            return _("CRB")
-        if tpm_model == DeviceTpm.MODEL_SPAPR:
-            return _("SPAPR")
-        return tpm_model
+    def tpm_pretty_model(val):
+        labels = {
+            DeviceTpm.MODEL_TIS: _("TIS"),
+            DeviceTpm.MODEL_CRB: _("CRB"),
+            DeviceTpm.MODEL_SPAPR: _("SPAPR"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
-    def panic_pretty_model(panic_model):
-        if panic_model == DevicePanic.MODEL_ISA:
-            return _("ISA")
-        elif panic_model == DevicePanic.MODEL_PSERIES:
-            return _("pSeries")
-        elif panic_model == DevicePanic.MODEL_HYPERV:
-            return _("Hyper-V")
-        elif panic_model == DevicePanic.MODEL_S390:
-            return _("s390")
-        return panic_model
+    def panic_pretty_model(val):
+        labels = {
+            DevicePanic.MODEL_ISA: _("ISA"),
+            DevicePanic.MODEL_PSERIES: _("pSeries"),
+            DevicePanic.MODEL_HYPERV: _("Hyper-V"),
+            DevicePanic.MODEL_S390: _("s390"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
-    def rng_pretty_type(rng_type):
-        if rng_type == DeviceRng.TYPE_RANDOM:
-            return _("Random")
-        if rng_type == DeviceRng.TYPE_EGD:
-            return _("Entropy Gathering Daemon")
-        if rng_type == DeviceRng.TYPE_BUILTIN:
-            return _("Builtin RNG")
-        return rng_type
+    def rng_pretty_type(val):
+        labels = {
+            DeviceRng.TYPE_RANDOM: _("Random"),
+            DeviceRng.TYPE_EGD: _("Entropy Gathering Daemon"),
+            DeviceRng.TYPE_BUILTIN: _("Builtin RNG"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
-    def rng_pretty_backend_type(backend_type):
-        return {"udp": "UDP",
-                "tcp": "TCP"}.get(backend_type) or backend_type
+    def rng_pretty_backend_type(val):
+        labels = {
+            "udp": "UDP",
+            "tcp": "TCP",
+        }
+        return labels.get(val, val)
 
     @staticmethod
-    def rng_pretty_mode(mode):
-        return {"bind": _("Bind"),
-                "connect": _("Connect")}.get(mode) or mode
+    def rng_pretty_mode(val):
+        labels = {
+            "bind": _("Bind"),
+            "connect": _("Connect"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
     def sound_recommended_models(_guest):
@@ -602,20 +595,16 @@ class vmmAddHardware(vmmGObjectUI):
         return ret
 
     @staticmethod
-    def watchdog_pretty_action(action):
-        if action == DeviceWatchdog.ACTION_RESET:
-            return _("Forcefully reset the guest")
-        if action == DeviceWatchdog.ACTION_SHUTDOWN:
-            return _("Gracefully shutdown the guest")
-        if action == DeviceWatchdog.ACTION_POWEROFF:
-            return _("Forcefully power off the guest")
-        if action == DeviceWatchdog.ACTION_PAUSE:
-            return _("Pause the guest")
-        if action == DeviceWatchdog.ACTION_NONE:
-            return _("No action")
-        if action == DeviceWatchdog.ACTION_DUMP:
-            return _("Dump guest memory core")
-        return action
+    def watchdog_pretty_action(val):
+        labels = {
+            DeviceWatchdog.ACTION_RESET: _("Forcefully reset the guest"),
+            DeviceWatchdog.ACTION_SHUTDOWN: _("Gracefully shutdown the guest"),
+            DeviceWatchdog.ACTION_POWEROFF: _("Forcefully power off the guest"),
+            DeviceWatchdog.ACTION_PAUSE: _("Pause the guest"),
+            DeviceWatchdog.ACTION_NONE: _("No action"),
+            DeviceWatchdog.ACTION_DUMP: _("Dump guest memory core"),
+        }
+        return labels.get(val, val)
 
     @staticmethod
     def input_pretty_name(typ, bus):
