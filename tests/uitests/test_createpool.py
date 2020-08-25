@@ -13,7 +13,7 @@ class CreatePool(uiutils.UITestCase):
         hostwin.find("pool-add", "push button").click()
         win = self.app.root.find(
                 "Add a New Storage Pool", "frame")
-        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check(lambda: win.active)
         return win
 
 
@@ -32,20 +32,20 @@ class CreatePool(uiutils.UITestCase):
             # Enter the filename and select it
             chooser.find(usepath, "table cell").click()
             obutton = chooser.find("Open", "push button")
-            uiutils.check_in_loop(lambda: obutton.sensitive)
+            uiutils.check(lambda: obutton.sensitive)
             obutton.click()
-            uiutils.check_in_loop(lambda: not chooser.showing)
-            uiutils.check_in_loop(lambda: win.active)
+            uiutils.check(lambda: not chooser.showing)
+            uiutils.check(lambda: win.active)
 
         # Create a simple default dir pool
-        self.assertEqual(name.text, "pool")
+        uiutils.check(lambda: name.text == "pool")
         newname = "a-test-new-pool"
         name.text = newname
         finish.click()
 
         # Select the new object in the host window, then do
         # stop->start->stop->delete, for lifecycle testing
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
         delete = hostwin.find("pool-delete", "push button")
         start = hostwin.find("pool-start", "push button")
@@ -53,20 +53,20 @@ class CreatePool(uiutils.UITestCase):
 
         cell.click()
         stop.click()
-        uiutils.check_in_loop(lambda: start.sensitive)
+        uiutils.check(lambda: start.sensitive)
         start.click()
-        uiutils.check_in_loop(lambda: stop.sensitive)
+        uiutils.check(lambda: stop.sensitive)
         stop.click()
-        uiutils.check_in_loop(lambda: delete.sensitive)
+        uiutils.check(lambda: delete.sensitive)
 
         # Delete it, clicking 'No' first
         delete.click()
         self._click_alert_button("permanently delete the pool", "No")
-        uiutils.check_in_loop(lambda: not cell.dead)
+        uiutils.check(lambda: not cell.dead)
         delete.click()
         self._click_alert_button("permanently delete the pool", "Yes")
         # Ensure it's gone
-        uiutils.check_in_loop(lambda: cell.dead)
+        uiutils.check(lambda: cell.dead)
 
         # Test a disk pool
         win = self._open_create_win(hostwin)
@@ -108,7 +108,7 @@ class CreatePool(uiutils.UITestCase):
         win.find_fuzzy("LVM", "menu item").click()
         srcname = win.find_fuzzy("Volgroup", "combo")
         srcnametext = win.find_fuzzy("pool-source-name-text")
-        uiutils.check_in_loop(lambda: srcnametext.text == "testvg1")
+        uiutils.check(lambda: srcnametext.text == "testvg1")
         srcname.click_combo_entry()
         win.find_fuzzy("testvg2", "menu item").click()
         finish.click()
@@ -140,7 +140,7 @@ class CreatePool(uiutils.UITestCase):
         # Ensure host window closes fine
         hostwin.click()
         hostwin.keyCombo("<ctrl>w")
-        uiutils.check_in_loop(lambda: not hostwin.showing and
+        uiutils.check(lambda: not hostwin.showing and
                 not hostwin.active)
 
 
@@ -160,7 +160,7 @@ class CreatePool(uiutils.UITestCase):
         xmleditor.text = xmleditor.text.replace(
                 ">%s<" % tmpname, ">%s<" % newname)
         finish.click()
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
         cell.click()
 
@@ -168,4 +168,4 @@ class CreatePool(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         self._test_xmleditor_interactions(win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check_in_loop(lambda: not win.visible)
+        uiutils.check(lambda: not win.visible)

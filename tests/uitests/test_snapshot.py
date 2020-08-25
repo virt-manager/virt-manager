@@ -49,17 +49,17 @@ class Snapshots(uiutils.UITestCase):
         win.find(snapname, "table cell").click()
         snaprun.click()
         self._click_alert_button("run the snapshot '%s'" % snapname, "No")
-        uiutils.check_in_loop(lambda: not vmrun.sensitive)
+        uiutils.check(lambda: not vmrun.sensitive)
         snaprun.click()
         self._click_alert_button("run the snapshot '%s'" % snapname, "Yes")
-        uiutils.check_in_loop(lambda: vmrun.sensitive)
+        uiutils.check(lambda: vmrun.sensitive)
 
         # Start paused snapshot
         snapname = "snap-paused"
         win.find(snapname, "table cell").click()
         snaprun.click()
         self._click_alert_button("run the snapshot '%s'" % snapname, "Yes")
-        uiutils.check_in_loop(lambda: vmpause.checked)
+        uiutils.check(lambda: vmpause.checked)
 
         # Edit snapshot
         descui = win.find("snapshot-description")
@@ -67,7 +67,7 @@ class Snapshots(uiutils.UITestCase):
         descui.text = desc
         win.find("snapshot-apply", "push button").click()
         win.find("snapshot-refresh", "push button").click()
-        uiutils.check_in_loop(lambda: descui.text == desc)
+        uiutils.check(lambda: descui.text == desc)
         # Apply by clicking away
         desc += " ROUND2"
         descui.text = desc
@@ -81,17 +81,17 @@ class Snapshots(uiutils.UITestCase):
         newwin.find("Name:", "text").text = snapname
         newwin.find("Description:", "text").text = "testdesc"
         newwin.find("Finish", "push button").click()
-        uiutils.check_in_loop(lambda: not newwin.showing)
+        uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname, "table cell")
-        uiutils.check_in_loop(lambda: newc.state_selected)
+        uiutils.check(lambda: newc.state_selected)
 
         # Delete it
         win.find("snapshot-delete", "push button").click()
         self._click_alert_button("permanently delete", "No")
-        uiutils.check_in_loop(lambda: not newc.dead)
+        uiutils.check(lambda: not newc.dead)
         win.find("snapshot-delete", "push button").click()
         self._click_alert_button("permanently delete", "Yes")
-        uiutils.check_in_loop(lambda: newc.dead)
+        uiutils.check(lambda: newc.dead)
 
         # Recreate another snapshot with the same name
         win.find("snapshot-add", "push button").click()
@@ -99,13 +99,13 @@ class Snapshots(uiutils.UITestCase):
         snapname = "testnewsnap"
         newwin.find("Name:", "text").text = snapname
         newwin.find("Finish", "push button").click()
-        uiutils.check_in_loop(lambda: not newwin.showing)
+        uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname, "table cell")
-        uiutils.check_in_loop(lambda: newc.state_selected)
+        uiutils.check(lambda: newc.state_selected)
 
         # Switch out of window
         win.find("Details", "radio button").click()
-        uiutils.check_in_loop(lambda: not snaprun.showing)
+        uiutils.check(lambda: not snaprun.showing)
 
     def testSnapshotMisc1(self):
         """
@@ -123,20 +123,20 @@ class Snapshots(uiutils.UITestCase):
         # Create new snapshot
         win.find("snapshot-add", "push button").click()
         self._click_alert_button("not become part of the snapshot", "Cancel")
-        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check(lambda: win.active)
         win.find("snapshot-add", "push button").click()
         self._click_alert_button("not become part of the snapshot", "OK")
         newwin = self.app.root.find("Create snapshot", "frame")
         snapname1 = "testnewsnap1"
         newwin.find("Name:", "text").text = snapname1
         newwin.find("Finish", "push button").click()
-        uiutils.check_in_loop(lambda: not newwin.showing)
+        uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname1, "table cell")
-        uiutils.check_in_loop(lambda: newc.state_selected)
+        uiutils.check(lambda: newc.state_selected)
 
         # Start the VM, create another snapshot
         vmrun.click()
-        uiutils.check_in_loop(lambda: not vmrun.sensitive)
+        uiutils.check(lambda: not vmrun.sensitive)
         win.find("snapshot-add", "push button").click()
         newwin = self.app.root.find("Create snapshot", "frame")
         # Force validation error
@@ -151,16 +151,16 @@ class Snapshots(uiutils.UITestCase):
         snapname2 = "testnewsnap2"
         newwin.find("Name:", "text").text = snapname2
         newwin.find("Finish", "push button").click()
-        uiutils.check_in_loop(lambda: not newwin.showing)
+        uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname2, "table cell")
-        uiutils.check_in_loop(lambda: newc.state_selected)
+        uiutils.check(lambda: newc.state_selected)
 
         # Trigger another managed save warning
         smenu = win.find("Menu", "toggle button")
         smenu.click()
         save = smenu.find("Save", "menu item")
         save.click()
-        uiutils.check_in_loop(lambda: vmrun.sensitive)
+        uiutils.check(lambda: vmrun.sensitive)
         win.find(snapname1, "table cell").click(button=3)
         self.app.root.find("Start snapshot", "menu item").click()
         self._click_alert_button("run the snapshot '%s'" % snapname1, "Yes")
@@ -178,6 +178,6 @@ class Snapshots(uiutils.UITestCase):
         self.releaseKey("Shift_L")
         win.find("snapshot-delete").click()
         self._click_alert_button("permanently delete", "Yes")
-        uiutils.check_in_loop(lambda: cell1.dead)
-        uiutils.check_in_loop(lambda: cell2.dead)
-        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check(lambda: cell1.dead)
+        uiutils.check(lambda: cell2.dead)
+        uiutils.check(lambda: win.active)

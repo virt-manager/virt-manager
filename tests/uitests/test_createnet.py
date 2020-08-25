@@ -30,14 +30,14 @@ class CreateNet(uiutils.UITestCase):
         # Create a simple default network
         name = win.find("Name:", "text")
         finish = win.find("Finish", "push button")
-        self.assertEqual(name.text, "network")
+        uiutils.check(lambda: name.text == "network")
         newname = "a-test-new-net"
         name.text = newname
         finish.click()
 
         # Select the new network in the host window, then do
         # stop->start->stop->delete, for lifecycle testing
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
         delete = hostwin.find("net-delete", "push button")
         start = hostwin.find("net-start", "push button")
@@ -45,20 +45,20 @@ class CreateNet(uiutils.UITestCase):
 
         cell.click()
         stop.click()
-        uiutils.check_in_loop(lambda: start.sensitive)
+        uiutils.check(lambda: start.sensitive)
         start.click()
-        uiutils.check_in_loop(lambda: stop.sensitive)
+        uiutils.check(lambda: stop.sensitive)
         stop.click()
-        uiutils.check_in_loop(lambda: delete.sensitive)
+        uiutils.check(lambda: delete.sensitive)
 
         # Delete it, clicking No first
         delete.click()
         self._click_alert_button("permanently delete the network", "No")
-        uiutils.check_in_loop(lambda: not cell.dead)
+        uiutils.check(lambda: not cell.dead)
         delete.click()
         self._click_alert_button("permanently delete the network", "Yes")
         # Ensure it's gone
-        uiutils.check_in_loop(lambda: cell.dead)
+        uiutils.check(lambda: cell.dead)
 
 
     def testCreateNetXMLEditor(self):
@@ -80,7 +80,7 @@ class CreateNet(uiutils.UITestCase):
         xmleditor.text = xmleditor.text.replace(
                 ">%s<" % tmpname, ">%s<" % newname)
         finish.click()
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
         cell.click()
 
@@ -88,12 +88,12 @@ class CreateNet(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         self._test_xmleditor_interactions(win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check_in_loop(lambda: not win.visible)
+        uiutils.check(lambda: not win.visible)
 
         # Ensure host window closes fine
         hostwin.click()
         hostwin.keyCombo("<ctrl>w")
-        uiutils.check_in_loop(lambda: not hostwin.showing and
+        uiutils.check(lambda: not hostwin.showing and
                 not hostwin.active)
 
     def testCreateNetMulti(self):
@@ -112,8 +112,10 @@ class CreateNet(uiutils.UITestCase):
         win.find("Isolated", "menu item").click()
         win.find("IPv4 configuration").click_expander()
         win.find("ipv4-network").text = "192.168.100.0/25"
-        assert win.find("ipv4-start").text == "192.168.100.64"
-        assert win.find("ipv4-end").text == "192.168.100.126"
+        ipv4start = win.find("ipv4-start")
+        ipv4end = win.find("ipv4-end")
+        uiutils.check(lambda: ipv4start.text == "192.168.100.64")
+        uiutils.check(lambda: ipv4end.text == "192.168.100.126")
         win.find("Enable DHCPv4").click()
         win.find("Enable IPv4").click()
         win.find("IPv6 configuration").click_expander()
@@ -134,16 +136,16 @@ class CreateNet(uiutils.UITestCase):
         self._click_alert_button("Error creating virtual network", "Close")
         win.find("ipv6-end").text = "fd00:beef:10:6::1:f1"
         finish.click()
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
 
         # More option work
         win = self._open_create_win(hostwin)
         win.find("Name:", "text").text = "newnet2"
         devicelist = win.find("net-devicelist")
-        uiutils.check_in_loop(lambda: not devicelist.visible)
+        uiutils.check(lambda: not devicelist.visible)
         win.find("net-mode").click()
         win.find("SR-IOV", "menu item").click()
-        uiutils.check_in_loop(lambda: devicelist.visible)
+        uiutils.check(lambda: devicelist.visible)
         # Just confirm this is here
         win.find("No available device", "menu item")
         win.find("net-mode").click()
@@ -152,7 +154,7 @@ class CreateNet(uiutils.UITestCase):
         win.find("Physical device", "menu item").click()
         win.find("net-device").text = "fakedev0"
         finish.click()
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
 
     def testCreateNetSRIOV(self):
         """

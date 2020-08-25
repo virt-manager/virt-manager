@@ -13,7 +13,7 @@ class CreateVol(uiutils.UITestCase):
         hostwin.find("vol-new", "push button").click()
         win = self.app.root.find(
                 "Add a Storage Volume", "frame")
-        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check(lambda: win.active)
         return win
 
 
@@ -34,7 +34,7 @@ class CreateVol(uiutils.UITestCase):
         name = win.find("Name:", "text")
 
         # Create a default qcow2 volume
-        self.assertEqual(name.text, "vol")
+        uiutils.check(lambda: name.text == "vol")
         newname = "a-newvol"
         name.text = newname
         win.find("Max Capacity:", "spin button").text = "10.5"
@@ -49,11 +49,11 @@ class CreateVol(uiutils.UITestCase):
         volcell = vollist.find(newname + ".qcow2")
         hostwin.find("vol-delete", "push button").click()
         self._click_alert_button("permanently delete the volume", "Yes")
-        uiutils.check_in_loop(lambda: volcell.dead)
+        uiutils.check(lambda: volcell.dead)
 
         # Ensure host window closes fine
         hostwin.keyCombo("<ctrl>w")
-        uiutils.check_in_loop(lambda: not hostwin.showing and
+        uiutils.check(lambda: not hostwin.showing and
                 not hostwin.active)
 
     def testCreateVolMisc(self):
@@ -79,7 +79,7 @@ class CreateVol(uiutils.UITestCase):
         browsewin = self.app.root.find("vmm-storage-browser")
         # Test cancel button
         browsewin.find("Cancel", "push button").click()
-        uiutils.check_in_loop(lambda: not browsewin.active)
+        uiutils.check(lambda: not browsewin.active)
         win.find("Browse...").click()
         browsewin = self.app.root.find("vmm-storage-browser")
         # Test browse local opening
@@ -89,8 +89,9 @@ class CreateVol(uiutils.UITestCase):
         chooser.keyCombo("<alt>F4")
         browsewin.find_fuzzy("default-pool", "table cell").click()
         browsewin.find("bochs-vol", "table cell").doubleClick()
-        uiutils.check_in_loop(lambda: not browsewin.active)
-        assert "bochs-vol" in win.find("backing-store").text
+        uiutils.check(lambda: not browsewin.active)
+        backingstore = win.find("backing-store")
+        uiutils.check(lambda: "bochs-vol" in backingstore.text)
         finish.click()
         vollist.find(newname)
 
@@ -106,15 +107,15 @@ class CreateVol(uiutils.UITestCase):
         alloc.text = "50.0"
         alloc.click()
         self.pressKey("Enter")
-        uiutils.check_in_loop(lambda: cap.text == "50.0")
+        uiutils.check(lambda: cap.text == "50.0")
         cap.text = "1.0"
         cap.click()
         self.pressKey("Enter")
-        uiutils.check_in_loop(lambda: alloc.text == "1.0")
+        uiutils.check(lambda: alloc.text == "1.0")
         alloc.text = "0.5"
         alloc.click()
         self.pressKey("Enter")
-        assert cap.text == "1.0"
+        uiutils.check(lambda: cap.text == "1.0")
 
         finish.click()
         self._click_alert_button("Error validating volume", "Close")
@@ -157,11 +158,11 @@ class CreateVol(uiutils.UITestCase):
         xmleditor.text = xmleditor.text.replace(
                 ">%s.qcow2<" % tmpname, ">%s<" % newname)
         finish.click()
-        uiutils.check_in_loop(lambda: hostwin.active)
+        uiutils.check(lambda: hostwin.active)
         vollist.find(newname)
 
         # Do standard xmleditor tests
         win = self._open_create_win(hostwin)
         self._test_xmleditor_interactions(win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check_in_loop(lambda: not win.visible)
+        uiutils.check(lambda: not win.visible)

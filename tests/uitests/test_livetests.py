@@ -58,16 +58,16 @@ class Console(uiutils.UITestCase):
         """
         win = self.app.topwin
         con = win.find("console-gfx-viewport")
-        self.assertTrue(con.showing)
+        uiutils.check(lambda: con.showing)
 
         win.find("Virtual Machine", "menu").click()
         win.find("Take Screenshot", "menu item").click()
         chooser = self.app.root.find(None, "file chooser")
         fname = chooser.find("Name", "text").text
         self.pressKey("Enter")
-        uiutils.check_in_loop(lambda: os.path.exists(fname))
+        uiutils.check(lambda: os.path.exists(fname))
         os.unlink(fname)
-        self.assertTrue(lambda: win.active)
+        uiutils.check(lambda: win.active)
 
         win.find("Send Key", "menu").click()
         win.find(r"Ctrl\+Alt\+F1", "menu item").click()
@@ -81,25 +81,25 @@ class Console(uiutils.UITestCase):
         win.find("^View$", "menu").click()
         win.find("Resize to VM", "menu item").click()
         newsize = win.size
-        self.assertTrue(oldsize != newsize)
+        uiutils.check(lambda: oldsize != newsize)
 
         # Fullscreen testing
         win.find("^View$", "menu").click()
         win.find("Fullscreen", "check menu item").click()
         fstb = win.find("Fullscreen Toolbar")
-        self.assertTrue(fstb.showing)
-        self.assertTrue(win.size != newsize)
+        uiutils.check(lambda: fstb.showing)
+        uiutils.check(lambda: win.size != newsize)
 
         # Wait for toolbar to hide, then reveal it again
-        uiutils.check_in_loop(lambda: not fstb.showing, timeout=5)
+        uiutils.check(lambda: not fstb.showing, timeout=5)
         self.point(win.position[0] + win.size[0] / 2, 0)
-        uiutils.check_in_loop(lambda: fstb.showing)
+        uiutils.check(lambda: fstb.showing)
 
         # Click stuff and exit fullscreen
         win.find("Fullscreen Send Key").click()
         self.pressKey("Escape")
         win.find("Fullscreen Exit").click()
-        self.assertTrue(win.size == newsize)
+        uiutils.check(lambda: win.size == newsize)
 
     @_vm_wrapper("uitests-vnc-standard")
     def testConsoleVNCStandard(self):
@@ -115,9 +115,9 @@ class Console(uiutils.UITestCase):
         """
         win = self.app.topwin
         con = win.find("console-gfx-viewport")
-        self.assertTrue(not con.showing)
+        uiutils.check(lambda: not con.showing)
         passwd = win.find("Password:", "password text")
-        uiutils.check_in_loop(lambda: passwd.showing)
+        uiutils.check(lambda: passwd.showing)
 
         # Check wrong password handling
         passwd.typeText("xx")
@@ -127,7 +127,7 @@ class Console(uiutils.UITestCase):
         # Check proper password
         passwd.typeText("goodp")
         win.find("Login", "push button").click()
-        uiutils.check_in_loop(lambda: con.showing)
+        uiutils.check(lambda: con.showing)
 
     @_vm_wrapper("uitests-vnc-password")
     def testConsoleVNCPassword(self):
@@ -144,9 +144,9 @@ class Console(uiutils.UITestCase):
         """
         win = self.app.topwin
         term = win.find("Serial Terminal")
-        self.assertTrue(term.showing)
+        uiutils.check(lambda: term.showing)
         term.typeText("help\n")
-        self.assertTrue("COMMANDS" in term.text)
+        uiutils.check(lambda: "COMMANDS" in term.text)
 
 
     @_vm_wrapper("uitests-spice-specific")
@@ -157,7 +157,7 @@ class Console(uiutils.UITestCase):
         """
         win = self.app.topwin
         con = win.find("console-gfx-viewport")
-        self.assertTrue(con.showing)
+        uiutils.check(lambda: con.showing)
 
         # Just ensure the dialog pops up, can't really test much more
         # than that
@@ -175,7 +175,7 @@ class Console(uiutils.UITestCase):
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
         addhw.find("Storage", "table cell").click()
         tab = addhw.find("storage-tab", None)
-        uiutils.check_in_loop(lambda: tab.showing)
+        uiutils.check(lambda: tab.showing)
         tab.find("Select or create", "radio button").click()
         tab.find("storage-entry").text = fname
         tab.find("Bus type:", "combo box").click()
@@ -187,33 +187,33 @@ class Console(uiutils.UITestCase):
                 "The emulator may not have search permissions", "Yes")
 
         # Verify no errors
-        uiutils.check_in_loop(lambda: not addhw.showing)
-        uiutils.check_in_loop(lambda: win.active)
+        uiutils.check(lambda: not addhw.showing)
+        uiutils.check(lambda: win.active)
 
         # Hot unplug the disk
         win.find("SCSI Disk 1", "table cell").click()
         tab = win.find("disk-tab", None)
-        uiutils.check_in_loop(lambda: tab.showing)
+        uiutils.check(lambda: tab.showing)
         win.find("config-remove").click()
         delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         delete.find_fuzzy("Delete", "button").click()
-        uiutils.check_in_loop(lambda: not delete.active)
-        assert os.path.exists(fname)
+        uiutils.check(lambda: not delete.active)
+        uiutils.check(lambda: os.path.exists(fname))
 
         # Change CDROM
         win.find("IDE CDROM 1", "table cell").click()
         tab = win.find("disk-tab", None)
         entry = win.find("media-entry")
         appl = win.find("config-apply")
-        uiutils.check_in_loop(lambda: tab.showing)
+        uiutils.check(lambda: tab.showing)
         entry.text = fname
         appl.click()
-        uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertTrue(entry.text == fname)
+        uiutils.check(lambda: not appl.sensitive)
+        uiutils.check(lambda: entry.text == fname)
         entry.click_secondary_icon()
         appl.click()
-        uiutils.check_in_loop(lambda: not appl.sensitive)
-        self.assertTrue(not entry.text)
+        uiutils.check(lambda: not appl.sensitive)
+        uiutils.check(lambda: not entry.text)
 
 
     @_vm_wrapper("uitests-hotplug")
