@@ -9,8 +9,10 @@ from gi.repository import GLib
 
 from virtinst import log
 
+from ..baseclass import vmmGObject
 
-class vmmSecret(object):
+
+class _vmmSecret(object):
     def __init__(self, name, secret=None, attributes=None):
         self.name = name
         self.secret = secret
@@ -22,9 +24,19 @@ class vmmSecret(object):
         return self.name
 
 
-class vmmKeyring(object):
+class vmmKeyring(vmmGObject):
+    """
+    freedesktop Secret API abstraction
+    """
+    @classmethod
+    def get_instance(cls):
+        if not cls._instance:
+            cls._instance = vmmKeyring()
+        return cls._instance
 
     def __init__(self):
+        vmmGObject.__init__(self)
+
         self._collection = None
 
         try:
@@ -46,15 +58,10 @@ class vmmKeyring(object):
         except Exception:
             log.exception("Error determining keyring")
 
+    def _cleanup(self):
+        pass
 
-    ##############
-    # Public API #
-    ##############
-
-    def is_available(self):
-        return not (self._collection is None)
-
-    def add_secret(self, secret):
+    def _add_secret(self, secret):
         ret = None
         try:
             props = {
@@ -74,7 +81,7 @@ class vmmKeyring(object):
 
         return ret
 
-    def del_secret(self, _id):
+    def _del_secret(self, _id):
         try:
             path = self._collection.get_object_path() + "/" + str(_id)
             iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
@@ -84,7 +91,7 @@ class vmmKeyring(object):
         except Exception:
             log.exception("Failed to delete keyring secret")
 
-    def get_secret(self, _id):
+    def _get_secret(self, _id):
         ret = None
         try:
             path = self._collection.get_object_path() + "/" + str(_id)
@@ -104,8 +111,62 @@ class vmmKeyring(object):
                     continue
                 attrs["%s" % key] = "%s" % val
 
-            ret = vmmSecret(label, secret, attrs)
+            ret = _vmmSecret(label, secret, attrs)
         except Exception:
             log.exception("Failed to get keyring secret id=%s", _id)
 
         return ret
+
+
+    ##############
+    # Public API #
+    ##############
+
+    def is_available(self):
+        return not (self._collection is None)
+
+    def _get_secret_name(self, vm):
+        return "vm-console-" + vm.get_uuid()
+
+    def get_console_password(self, vm):
+        if not self.is_available():
+            return ("", "")
+
+        username, keyid = vm.get_console_password()
+
+        if keyid == -1:
+            return ("", "")
+
+        secret = self._get_secret(keyid)
+        if secret is None or secret.get_name() != self._get_secret_name(vm):
+            return ("", "")
+
+        if (secret.attributes.get("hvuri", None) != vm.conn.get_uri() or
+            secret.attributes.get("uuid", None) != vm.get_uuid()):
+            return ("", "")
+
+        return (secret.get_secret(), username or "")
+
+    def set_console_password(self, vm, password, username=""):
+        if not self.is_available():
+            return
+
+        secret = _vmmSecret(self._get_secret_name(vm), password,
+                           {"uuid": vm.get_uuid(),
+                            "hvuri": vm.conn.get_uri()})
+        keyid = self._add_secret(secret)
+        if keyid is None:
+            return
+
+        vm.set_console_password(username, keyid)
+
+    def del_console_password(self, vm):
+        if not self.is_available():
+            return
+
+        ignore, keyid = vm.get_console_password()
+        if keyid == -1:
+            return
+
+        self._del_secret(keyid)
+        vm.del_console_password()
