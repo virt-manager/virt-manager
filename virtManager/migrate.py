@@ -125,8 +125,6 @@ class vmmMigrateDialog(vmmGObjectUI):
             row2 = model[iter2]
             if row1[COL_URI] is None:
                 return -1
-            if row2[COL_URI] is None:
-                return 1
             return _cmp(row1[COL_LABEL], row2[COL_LABEL])
         model.set_sort_func(COL_LABEL, _sorter)
 
@@ -362,7 +360,7 @@ class vmmMigrateDialog(vmmGObjectUI):
                 uri = self.widget("migrate-tunnel-uri").get_text()
             else:
                 uri = self._build_regular_migrate_uri()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             details = "".join(traceback.format_exc())
             self.err.show_err((_("Uncaught error validating input: %s") %
                                str(e)),
@@ -390,9 +388,6 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def _cancel_migration(self, asyncjob, vm):
         log.debug("Cancelling migrate job")
-        if not vm:
-            return
-
         try:
             vm.abort_job()
         except Exception as e:
@@ -400,8 +395,7 @@ class vmmMigrateDialog(vmmGObjectUI):
             asyncjob.show_warning(_("Error cancelling migrate job: %s") % e)
             return
 
-        asyncjob.job_canceled = True
-        return
+        asyncjob.job_canceled = True  # pragma: no cover
 
     def _async_migrate(self, asyncjob,
             origvm, origdconn, migrate_uri, tunnel, unsafe, temporary):

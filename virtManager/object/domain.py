@@ -1419,7 +1419,14 @@ class vmmDomain(vmmLibvirtObject):
         if dest_uri and not tunnel:
             params[libvirt.VIR_MIGRATE_PARAM_URI] = dest_uri
 
-        if tunnel:
+        if self.conn.is_test() and "TESTSUITE-FAKE" in (dest_uri or ""):
+            # If using the test driver and a special URI, fake successful
+            # migration so we can test more of the migration wizard
+            time.sleep(3)
+            xml = self.get_xml_to_define()
+            destconn.define_domain(xml).create()
+            self.delete()
+        elif tunnel:
             self._backend.migrateToURI3(dest_uri, params, flags)
         else:
             self._backend.migrate3(libvirt_destconn, params, flags)

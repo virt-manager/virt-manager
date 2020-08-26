@@ -176,6 +176,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <signal name="changed" handler="on_migrate_dest_changed" swapped="no"/>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="migrate-dest-atkobject">
+                            <property name="AtkObject::accessible-name">conn-combo</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -253,6 +258,11 @@
                                         <property name="halign">start</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_migrate_set_address_toggled" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="migrate-set-address-atkobject">
+                                            <property name="AtkObject::accessible-name">address-check</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -267,6 +277,11 @@
                                         <property name="halign">start</property>
                                         <property name="draw_indicator">True</property>
                                         <signal name="toggled" handler="on_migrate_set_port_toggled" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="migrate-set-port-atkobject">
+                                            <property name="AtkObject::accessible-name">port-check</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -319,6 +334,11 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="invisible_char">●</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="migrate-address-atkobject">
+                                                <property name="AtkObject::accessible-name">address-text</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
