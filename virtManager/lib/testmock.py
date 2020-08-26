@@ -40,6 +40,8 @@ class CLITestOptionsClass:
 
     * test-managed-save: Triggers a couple conditions for testing
         managed save issues
+
+    * test-vm-run-fail: Make VM run fail, so we can test the error path
     """
     def __init__(self, test_options_str, test_first_run):
         optset = set()
@@ -72,6 +74,7 @@ class CLITestOptionsClass:
         self.break_setfacl = _get("break-setfacl")
         self.config_libguestfs = _get("config-libguestfs")
         self.test_managed_save = _get("test-managed-save")
+        self.test_vm_run_fail = _get("test-vm-run-fail")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

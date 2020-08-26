@@ -161,6 +161,18 @@ class Manager(uiutils.UITestCase):
         self._click_alert_button("remove the saved state", "Yes")
         uiutils.check(lambda: not run.sensitive)
 
+    def testManagerVMRunFail(self):
+        # Force VM startup to fail so we can test the error path
+        self.app.open(extra_opts=["--test-options=test-vm-run-fail"])
+
+        manager = self.app.topwin
+
+        c = manager.find("test-clone-simple", "table cell")
+        c.click()
+        manager.find("Run", "push button").click()
+        self._click_alert_button("fake error", "Close")
+
+
     def testManagerColumns(self):
         # Enable all stat options
         # Need to expand the window size so all columns are onscreen
