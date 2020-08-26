@@ -130,6 +130,7 @@ def test_suse():
 
 
 def test_mageia():
+    _test("mageia/5", "mageia5", initrd="all.rdz")
     _test("mageia/8", initrd="all.rdz")
 
 

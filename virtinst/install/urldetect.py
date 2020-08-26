@@ -796,9 +796,9 @@ class _MageiaDistro(_DistroTree):
             if not content:
                 return False
 
-            m = re.match("^Mageia (\d+) .*", content)
+            m = re.match(r"^Mageia (\d+) .*", content)
             if not m:
-                return False
+                return False  # pragma: no cover
 
             cache.mageia_version = m.group(1)
 
