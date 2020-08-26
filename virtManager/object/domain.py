@@ -1319,7 +1319,8 @@ class vmmDomain(vmmLibvirtObject):
     @vmmLibvirtObject.lifecycle_action
     def startup(self):
         has_managed = self.has_managed_save()
-        if has_managed and self.config.CLITestOptions.test_managed_save:
+        if (self.config.CLITestOptions.test_vm_run_fail or
+           (has_managed and self.config.CLITestOptions.test_managed_save)):
             raise RuntimeError("fake error for managed save")
 
         self._backend.create()

@@ -29,10 +29,7 @@ class vmmMeter(virtinst.progress.BaseMeter):
 
 
     def _do_start(self, now=None):
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
+        text = self.text or self.basename
         if self.size is None:
             out = "    %5sB" % (0)
             self._vmm_pulse(out, text)
@@ -42,12 +39,9 @@ class vmmMeter(virtinst.progress.BaseMeter):
         self.started = True
 
     def _do_update(self, amount_read, now=None):
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
+        text = self.text or self.basename
         fread = virtinst.progress.format_number(amount_read)
-        if self.size is None:
+        if self.size is None:  # pragma: no cover
             out = "    %5sB" % (fread)
             self._vmm_pulse(out, text)
         else:
@@ -56,10 +50,7 @@ class vmmMeter(virtinst.progress.BaseMeter):
             self._vmm_fraction(frac, out, text)
 
     def _do_end(self, amount_read, now=None):
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
+        text = self.text or self.basename
         fread = virtinst.progress.format_number(amount_read)
         if self.size is None:
             out = "    %5sB" % (fread)
@@ -78,7 +69,7 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
         if (isinstance(e, libvirt.libvirtError) and
             asyncjob.can_cancel() and
             asyncjob.job_canceled):
-            return
+            return  # pragma: no cover
 
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
@@ -180,7 +171,6 @@ class vmmAsyncJob(vmmGObjectUI):
         self._bg_thread.daemon = True
 
         self.builder.connect_signals({
-            "on_async_job_delete_event": self._on_window_delete,
             "on_async_job_cancel_clicked": self._on_cancel,
         })
 
@@ -205,27 +195,22 @@ class vmmAsyncJob(vmmGObjectUI):
         # pbar idle callbacks and cancel routine which is invoked from the
         # main thread
         if self.job_canceled and not canceling:
-            return
+            return  # pragma: no cover
         self.widget("pbar-stage").set_text(text)
 
-    def _hide_warning(self):
-        self.widget("warning-box").hide()
 
 
     ################
     # UI listeners #
     ################
 
-    def _on_window_delete(self, ignore1=None, ignore2=None):
-        return 1
-
     def _on_cancel(self, ignore1=None, ignore2=None):
         if not self.cancel_cb or not self._bg_thread.is_alive():
-            return
+            return  # pragma: no cover
 
         self.cancel_cb(*self.cancel_args)
-        if self.job_canceled:
-            self._hide_warning()
+        if self.job_canceled:  # pragma: no cover
+            self.widget("warning-box").hide()
             self._set_stage_text(_("Cancelling job..."), canceling=True)
 
 
@@ -300,14 +285,14 @@ class vmmAsyncJob(vmmGObjectUI):
     @idle_wrapper
     def _pbar_do_pulse(self):
         if not self.builder:
-            return
+            return  # pragma: no cover
         self.widget("pbar").pulse()
 
     @idle_wrapper
     def _pbar_pulse(self, progress="", stage=None):
         self._is_pulsing = True
         if not self.builder:
-            return
+            return  # pragma: no cover
         self.widget("pbar").set_text(progress)
         self._set_stage_text(stage or _("Processing..."))
 
@@ -315,21 +300,19 @@ class vmmAsyncJob(vmmGObjectUI):
     def _pbar_fraction(self, frac, progress, stage=None):
         self._is_pulsing = False
         if not self.builder:
-            return
+            return  # pragma: no cover
         self._set_stage_text(stage or _("Processing..."))
         self.widget("pbar").set_text(progress)
 
-        if frac > 1:
-            frac = 1.0
-        if frac < 0:
-            frac = 0
+        frac = min(frac, 1)
+        frac = max(frac, 0)
         self.widget("pbar").set_fraction(frac)
 
     @idle_wrapper
     def _pbar_done(self, progress, stage=None):
         self._is_pulsing = False
         if not self.builder:
-            return
+            return  # pragma: no cover
         self._set_stage_text(stage or _("Completed"))
         self.widget("pbar").set_text(progress)
         self.widget("pbar").set_fraction(1)
