@@ -19,6 +19,132 @@ def _inspection_error(_errstr):
     return data
 
 
+def _perform_inspection(conn, vm):
+    """
+    Perform the actual guestfs interaction and return results in
+    a vmmInspectionData object
+    """
+    import guestfs  # pylint: disable=import-error
+
+    g = guestfs.GuestFS(close_on_exit=False, python_return_dict=True)
+    prettyvm = conn.get_uri() + ":" + vm.get_name()
+    try:
+        g.add_libvirt_dom(vm.get_backend(), readonly=1)
+        g.launch()
+    except Exception as e:
+        log.debug("%s: Error launching libguestfs appliance: %s",
+                prettyvm, str(e))
+        return _inspection_error(
+                _("Error launching libguestfs appliance: %s") % str(e))
+
+    log.debug("%s: inspection appliance connected", prettyvm)
+
+    # Inspect the operating system.
+    roots = g.inspect_os()
+    if len(roots) == 0:
+        log.debug("%s: no operating systems found", prettyvm)
+        return _inspection_error(
+                _("Inspection found no operating systems."))
+
+    # Arbitrarily pick the first root device.
+    root = roots[0]
+
+    # Inspection results.
+    os_type = g.inspect_get_type(root)  # eg. "linux"
+    distro = g.inspect_get_distro(root)  # eg. "fedora"
+    major_version = g.inspect_get_major_version(root)  # eg. 14
+    minor_version = g.inspect_get_minor_version(root)  # eg. 0
+    hostname = g.inspect_get_hostname(root)  # string
+    product_name = g.inspect_get_product_name(root)  # string
+    product_variant = g.inspect_get_product_variant(root)  # string
+    package_format = g.inspect_get_package_format(root)  # string
+
+    # For inspect_list_applications and inspect_get_icon we
+    # require that the guest filesystems are mounted.  However
+    # don't fail if this is not possible (I'm looking at you,
+    # FreeBSD).
+    filesystems_mounted = False
+    # Mount up the disks, like guestfish --ro -i.
+
+    # Sort keys by length, shortest first, so that we end up
+    # mounting the filesystems in the correct order.
+    mps = g.inspect_get_mountpoints(root)
+
+    mps = sorted(mps.items(), key=lambda k: len(k[0]))
+    for mp, dev in mps:
+        try:
+            g.mount_ro(dev, mp)
+            filesystems_mounted = True
+        except Exception:
+            log.exception("%s: exception mounting %s on %s "
+                              "(ignored)",
+                              prettyvm, dev, mp)
+
+    icon = None
+    apps = None
+    if filesystems_mounted:
+        # string containing PNG data
+        icon = g.inspect_get_icon(root, favicon=0, highquality=1)
+        if icon is None or len(icon) == 0:
+            # no high quality icon, try a low quality one
+            icon = g.inspect_get_icon(root, favicon=0, highquality=0)
+            if icon is None or len(icon) == 0:
+                icon = None
+
+        # Inspection applications.
+        try:
+            gapps = g.inspect_list_applications2(root)
+            # applications listing worked, so make apps a real list
+            # (instead of None)
+            apps = []
+            for gapp in gapps:
+                app = vmmInspectionApplication()
+                if gapp["app2_name"]:
+                    app.name = gapp["app2_name"]
+                if gapp["app2_display_name"]:
+                    app.display_name = gapp["app2_display_name"]
+                app.epoch = gapp["app2_epoch"]
+                if gapp["app2_version"]:
+                    app.version = gapp["app2_version"]
+                if gapp["app2_release"]:
+                    app.release = gapp["app2_release"]
+                if gapp["app2_summary"]:
+                    app.summary = gapp["app2_summary"]
+                if gapp["app2_description"]:
+                    app.description = gapp["app2_description"]
+                apps.append(app)
+        except Exception:
+            log.exception("%s: exception while listing apps (ignored)",
+                              prettyvm)
+
+    # Force the libguestfs handle to close right now.
+    del g
+
+    # Log what we found.
+    log.debug("%s: detected operating system: %s %s %d.%d (%s) (%s)",
+                  prettyvm, os_type, distro, major_version, minor_version,
+                  product_name, package_format)
+    log.debug("hostname: %s", hostname)
+    if icon:
+        log.debug("icon: %d bytes", len(icon))
+    if apps:
+        log.debug("# apps: %d", len(apps))
+
+    data = vmmInspectionData()
+    data.os_type = str(os_type)
+    data.distro = str(distro)
+    data.major_version = int(major_version)
+    data.minor_version = int(minor_version)
+    data.hostname = str(hostname)
+    data.product_name = str(product_name)
+    data.product_variant = str(product_variant)
+    data.icon = icon
+    data.applications = list(apps or [])
+    data.package_format = str(package_format)
+
+    return data
+
+
 class vmmInspection(vmmGObject):
     _libguestfs_installed = None
 
@@ -164,125 +290,7 @@ class vmmInspection(vmmGObject):
         if conn.is_test():
             return _inspection_error("Cannot inspect VM on test connection")
 
-        import guestfs  # pylint: disable=import-error
-
-        g = guestfs.GuestFS(close_on_exit=False, python_return_dict=True)
-        prettyvm = conn.get_uri() + ":" + vm.get_name()
-        try:
-            g.add_libvirt_dom(vm.get_backend(), readonly=1)
-            g.launch()
-        except Exception as e:
-            log.debug("%s: Error launching libguestfs appliance: %s",
-                    prettyvm, str(e))
-            return _inspection_error(
-                    _("Error launching libguestfs appliance: %s") % str(e))
-
-        log.debug("%s: inspection appliance connected", prettyvm)
-
-        # Inspect the operating system.
-        roots = g.inspect_os()
-        if len(roots) == 0:
-            log.debug("%s: no operating systems found", prettyvm)
-            return _inspection_error(
-                    _("Inspection found no operating systems."))
-
-        # Arbitrarily pick the first root device.
-        root = roots[0]
-
-        # Inspection results.
-        os_type = g.inspect_get_type(root)  # eg. "linux"
-        distro = g.inspect_get_distro(root)  # eg. "fedora"
-        major_version = g.inspect_get_major_version(root)  # eg. 14
-        minor_version = g.inspect_get_minor_version(root)  # eg. 0
-        hostname = g.inspect_get_hostname(root)  # string
-        product_name = g.inspect_get_product_name(root)  # string
-        product_variant = g.inspect_get_product_variant(root)  # string
-        package_format = g.inspect_get_package_format(root)  # string
-
-        # For inspect_list_applications and inspect_get_icon we
-        # require that the guest filesystems are mounted.  However
-        # don't fail if this is not possible (I'm looking at you,
-        # FreeBSD).
-        filesystems_mounted = False
-        # Mount up the disks, like guestfish --ro -i.
-
-        # Sort keys by length, shortest first, so that we end up
-        # mounting the filesystems in the correct order.
-        mps = g.inspect_get_mountpoints(root)
-
-        mps = sorted(mps.items(), key=lambda k: len(k[0]))
-        for mp, dev in mps:
-            try:
-                g.mount_ro(dev, mp)
-                filesystems_mounted = True
-            except Exception:
-                log.exception("%s: exception mounting %s on %s "
-                                  "(ignored)",
-                                  prettyvm, dev, mp)
-
-        icon = None
-        apps = None
-        if filesystems_mounted:
-            # string containing PNG data
-            icon = g.inspect_get_icon(root, favicon=0, highquality=1)
-            if icon is None or len(icon) == 0:
-                # no high quality icon, try a low quality one
-                icon = g.inspect_get_icon(root, favicon=0, highquality=0)
-                if icon is None or len(icon) == 0:
-                    icon = None
-
-            # Inspection applications.
-            try:
-                gapps = g.inspect_list_applications2(root)
-                # applications listing worked, so make apps a real list
-                # (instead of None)
-                apps = []
-                for gapp in gapps:
-                    app = vmmInspectionApplication()
-                    if gapp["app2_name"]:
-                        app.name = gapp["app2_name"]
-                    if gapp["app2_display_name"]:
-                        app.display_name = gapp["app2_display_name"]
-                    app.epoch = gapp["app2_epoch"]
-                    if gapp["app2_version"]:
-                        app.version = gapp["app2_version"]
-                    if gapp["app2_release"]:
-                        app.release = gapp["app2_release"]
-                    if gapp["app2_summary"]:
-                        app.summary = gapp["app2_summary"]
-                    if gapp["app2_description"]:
-                        app.description = gapp["app2_description"]
-                    apps.append(app)
-            except Exception:
-                log.exception("%s: exception while listing apps (ignored)",
-                                  prettyvm)
-
-        # Force the libguestfs handle to close right now.
-        del g
-
-        # Log what we found.
-        log.debug("%s: detected operating system: %s %s %d.%d (%s) (%s)",
-                      prettyvm, os_type, distro, major_version, minor_version,
-                      product_name, package_format)
-        log.debug("hostname: %s", hostname)
-        if icon:
-            log.debug("icon: %d bytes", len(icon))
-        if apps:
-            log.debug("# apps: %d", len(apps))
-
-        data = vmmInspectionData()
-        data.os_type = str(os_type)
-        data.distro = str(distro)
-        data.major_version = int(major_version)
-        data.minor_version = int(minor_version)
-        data.hostname = str(hostname)
-        data.product_name = str(product_name)
-        data.product_variant = str(product_variant)
-        data.icon = icon
-        data.applications = list(apps or [])
-        data.package_format = str(package_format)
-
-        return data
+        return _perform_inspection(conn, vm)
 
 
     ##############
