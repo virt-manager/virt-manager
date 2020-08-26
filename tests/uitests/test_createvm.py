@@ -231,6 +231,14 @@ class NewVM(uiutils.UITestCase):
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
+        # Change NIC mac
+        vmwindow.find_fuzzy("NIC", "table cell").click()
+        tab = vmwindow.find("network-tab")
+        tab.print_nodes()
+        tab.find("mac-entry", "text").text = "00:11:00:11:00:11"
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+
         # Start the install, close via the VM window
         vmwindow.find_fuzzy("Begin Installation", "button").click()
         uiutils.check(lambda: newvm.showing is False)
@@ -510,6 +518,20 @@ class NewVM(uiutils.UITestCase):
         vmname = "container1"
         details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
+        # Tweak init values
+        details.find("Boot Options", "table cell").click()
+        tab = details.find("boot-tab")
+        tab.print_nodes()
+        tab.find("Init path:", "text").text = ""
+        tab.find("Init args:", "text").text = "some args"
+        appl = details.find("config-apply")
+        appl.click()
+        self._click_alert_button("init path must be specified", "OK")
+        uiutils.check(lambda: appl.sensitive)
+        tab.find("Init path:", "text").text = "/some/path"
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+
         # Check that addhw container options are disabled
         details.find("add-hardware", "push button").click()
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
@@ -525,6 +547,71 @@ class NewVM(uiutils.UITestCase):
         details.find_fuzzy("Begin Installation", "button").click()
         uiutils.check(lambda: not newvm.showing)
         self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+    def testNewVMCustomizeCancel(self):
+        """
+        Test cancelling out of the customize wizard
+        """
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("Manual", "radio").click()
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        self.forward(newvm)
+
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
+        vmname = "vm1"
+        details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+        details.find("Cancel Installation", "push button").click()
+        self._click_alert_button("abort the installation", "No")
+        uiutils.check(lambda: details.active)
+        details.find("Cancel Installation", "push button").click()
+        self._click_alert_button("abort the installation", "Yes")
+        uiutils.check(lambda: not details.active)
+        uiutils.check(lambda: not newvm.active)
+
+    def testNewVMCustomizeMisc(self):
+        """
+        Some specific customize logic paths
+        """
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("Manual", "radio").click()
+        self.forward(newvm)
+        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+        self.forward(newvm)
+
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
+        vmname = "vm1"
+        details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+        # Test name change
+        tab = details.find("overview-tab")
+        nametext = tab.find("Name:", "text")
+        nametext.text = "foonewname"
+        details.find("config-apply").click()
+        self.app.root.find_fuzzy("foonewname", "frame")
+
+        # Trigger XML failure to hit some codepaths
+        nametext.text = ""
+        details.find("Begin Installation").click()
+        self._click_alert_button("unapplied changes", "Yes")
+        self._click_alert_button("name must be specified", "Close")
+        uiutils.check(lambda: details.showing)
+
+        # Discard XML change and continue with install
+        details.find("Begin Installation").click()
+        self._click_alert_button("unapplied changes", "No")
+        uiutils.check(lambda: not details.showing)
+        uiutils.check(lambda: not newvm.showing)
+        self.app.root.find_fuzzy("foonewname on", "frame")
 
 
     def testNewVMContainerTree(self):

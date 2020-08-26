@@ -41,14 +41,15 @@ def _make_fake_data():
     for prefix in ["test_app1_", "test_app2_"]:
         import time
         app = vmmInspectionApplication()
-        app.description = prefix + "description"
-        app.name = prefix + "name"
-        app.display_name = prefix + "display_name"
+        if "app1" in prefix:
+            app.display_name = prefix + "display_name"
+            app.summary = prefix + "summary-" + str(time.time())
+        else:
+            app.name = prefix + "name"
+            app.description = prefix + "description-" + str(time.time()) + "\n"
         app.epoch = 1
         app.version = "2"
         app.release = "3"
-        app.summary = prefix + "summary-" + str(time.time())
-        app.description = prefix + "description-" + str(time.time())
         data.applications.append(app)
 
     return data

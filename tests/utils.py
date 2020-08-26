@@ -79,6 +79,7 @@ class _URIs(object):
         _uri_qemu = _m("qemu:///system")
         _kvm_x86_caps = _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-domcaps.xml")
         self.kvm = _uri_qemu + _kvm_x86_caps
+        self.kvm_cpu_insecure = _uri_qemu + _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-insecure-domcaps.xml")
         self.kvm_remote = _m("qemu+tls://fakeuri.example.com/system") + _kvm_x86_caps
         self.kvm_session = _m("qemu:///session") + _kvm_x86_caps
 
