@@ -67,7 +67,7 @@ def _get_inspection_icon_pixbuf(vm, w, h):
         pb.write(png_data)
         pb.close()
         return pb.get_pixbuf()
-    except Exception:
+    except Exception:  # pragma: no cover
         log.exception("Error loading inspection icon data")
         vm.inspection.icon = None
         return None
@@ -159,10 +159,10 @@ class vmmManager(vmmGObjectUI):
 
         # Initialize stat polling columns based on global polling
         # preferences (we want signal handlers for this)
-        self.enable_polling(COL_GUEST_CPU)
-        self.enable_polling(COL_DISK)
-        self.enable_polling(COL_NETWORK)
-        self.enable_polling(COL_MEM)
+        self._config_polling_change_cb(COL_GUEST_CPU)
+        self._config_polling_change_cb(COL_DISK)
+        self._config_polling_change_cb(COL_NETWORK)
+        self._config_polling_change_cb(COL_MEM)
 
         connmanager = vmmConnectionManager.get_instance()
         connmanager.connect("conn-added", self._conn_added)
@@ -248,16 +248,16 @@ class vmmManager(vmmGObjectUI):
         # that disable the associated vmlist widgets if reporting is disabled
         self.add_gsettings_handle(
             self.config.on_stats_enable_cpu_poll_changed(
-                self.enable_polling, COL_GUEST_CPU))
+                self._config_polling_change_cb, COL_GUEST_CPU))
         self.add_gsettings_handle(
             self.config.on_stats_enable_disk_poll_changed(
-                self.enable_polling, COL_DISK))
+                self._config_polling_change_cb, COL_DISK))
         self.add_gsettings_handle(
             self.config.on_stats_enable_net_poll_changed(
-                self.enable_polling, COL_NETWORK))
+                self._config_polling_change_cb, COL_NETWORK))
         self.add_gsettings_handle(
             self.config.on_stats_enable_memory_poll_changed(
-                self.enable_polling, COL_MEM))
+                self._config_polling_change_cb, COL_MEM))
 
         self.toggle_guest_cpu_usage_visible_widget()
         self.toggle_host_cpu_usage_visible_widget()
@@ -471,23 +471,17 @@ class vmmManager(vmmGObjectUI):
     def show_vm(self, _src):
         vmmenu.VMActionUI.show(self, self.current_vm())
 
-    def _conn_open_completed(self, _conn, ConnectError):
-        if ConnectError:
-            msg, details, title = ConnectError
-            self.err.show_err(msg, details, title)
-
     def row_activated(self, _src, *args):
         ignore = args
         conn = self.current_conn()
         vm = self.current_vm()
         if conn is None:
-            return
+            return  # pragma: no cover
 
         if vm:
             self.show_vm(_src)
         elif conn.is_disconnected():
-            conn.connect_once("open-completed", self._conn_open_completed)
-            conn.open()
+            self.open_conn()
         else:
             self.show_host(_src)
 
@@ -540,8 +534,14 @@ class vmmManager(vmmGObjectUI):
     def open_conn(self, ignore=None):
         conn = self.current_conn()
         if conn.is_disconnected():
+            conn.connect_once("open-completed", self._conn_open_completed_cb)
             conn.open()
             return True
+
+    def _conn_open_completed_cb(self, _conn, ConnectError):
+        if ConnectError:
+            msg, details, title = ConnectError
+            self.err.show_err(msg, details, title)
 
 
     ####################################
@@ -654,19 +654,24 @@ class vmmManager(vmmGObjectUI):
         for vm in conn.list_vms():
             self.vm_added(conn, vm.get_connkey())
 
+    def _remove_child_rows(self, row):
+        child = self.model.iter_children(row.iter)
+        while child is not None:  # pragma: no cover
+            # vm-removed signals should handle this, this is a fallback
+            # in case something goes wrong
+            self.model.remove(child)
+            child = self.model.iter_children(row.iter)
+
     def _conn_removed(self, _src, uri):
         conn_row = None
         for row in self.model:
             if row[ROW_IS_CONN] and row[ROW_HANDLE].get_uri() == uri:
                 conn_row = row
                 break
-        if conn_row is None:
+        if conn_row is None:  # pragma: no cover
             return
 
-        child = self.model.iter_children(conn_row.iter)
-        while child is not None:
-            self.model.remove(child)
-            child = self.model.iter_children(conn_row.iter)
+        self._remove_child_rows(conn_row)
         self.model.remove(conn_row.iter)
 
 
@@ -676,14 +681,14 @@ class vmmManager(vmmGObjectUI):
 
     def vm_row_updated(self, vm):
         row = self.get_row(vm)
-        if row is None:
+        if row is None:  # pragma: no cover
             return
         self.model.row_changed(row.path, row.iter)
 
     def vm_changed(self, vm):
         row = self.get_row(vm)
         if row is None:
-            return
+            return  # pragma: no cover
 
         try:
             if vm == self.current_vm():
@@ -699,7 +704,7 @@ class vmmManager(vmmGObjectUI):
 
             desc = vm.get_description()
             row[ROW_HINT] = xmlutil.xml_escape(desc)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             if vm.conn.support.is_libvirt_error_no_domain(e):
                 return
             raise
@@ -709,7 +714,7 @@ class vmmManager(vmmGObjectUI):
     def vm_inspection_changed(self, vm):
         row = self.get_row(vm)
         if row is None:
-            return
+            return  # pragma: no cover
 
         new_icon = _get_inspection_icon_pixbuf(vm, 16, 16)
         row[ROW_INSPECTION_OS_ICON] = new_icon
@@ -724,7 +729,7 @@ class vmmManager(vmmGObjectUI):
         sel = self.widget("vm-list").get_selection()
         for row in self.model:
             if not row[ROW_IS_CONN]:
-                continue
+                continue  # pragma: no cover
             conn = row[ROW_HANDLE]
 
             if conn.get_uri() == uri:
@@ -740,10 +745,7 @@ class vmmManager(vmmGObjectUI):
         row[ROW_HINT] = self._build_conn_hint(conn)
 
         if not conn.is_active():
-            child = self.model.iter_children(row.iter)
-            while child is not None:
-                self.model.remove(child)
-                child = self.model.iter_children(row.iter)
+            self._remove_child_rows(row)
 
         self.conn_row_updated(conn)
         self.update_current_selection()
@@ -819,7 +821,7 @@ class vmmManager(vmmGObjectUI):
 
         tup = vmlist.get_path_at_pos(int(event.x), int(event.y))
         if tup is None:
-            return False
+            return False  # pragma: no cover
         path = tup[0]
 
         self.popup_vm_menu(self.model, self.model.get_iter(path), event)
@@ -888,7 +890,7 @@ class vmmManager(vmmGObjectUI):
 
         return _cmp(obj1.network_traffic_rate(), obj2.network_traffic_rate())
 
-    def enable_polling(self, column):
+    def _config_polling_change_cb(self, column):
         # pylint: disable=redefined-variable-type
         if column == COL_GUEST_CPU:
             widgn = ["menu_view_stats_guest_cpu", "menu_view_stats_host_cpu"]
@@ -910,8 +912,7 @@ class vmmManager(vmmGObjectUI):
             if do_enable:
                 widget.set_sensitive(True)
             else:
-                if widget.get_active():
-                    widget.set_active(False)
+                widget.set_active(False)
                 widget.set_sensitive(False)
                 tool_text = _("Disabled in preferences dialog.")
             widget.set_tooltip_text(tool_text)
