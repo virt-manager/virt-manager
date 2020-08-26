@@ -255,13 +255,18 @@ def check(func, timeout=2):
         time.sleep(interval)
 
 
+def _title_coordinates(win):
+    x = win.position[0] + (win.size[0] / 2)
+    y = win.position[1] + 10
+    return x, y
+
+
 def drag(win, x, y):
     """
     Drag a window to the x/y coordinates
     """
     win.click()
-    clickX = win.position[0] + win.size[0] / 2
-    clickY = win.position[1] + 10
+    clickX, clickY = _title_coordinates(win)
     dogtail.rawinput.drag((clickX, clickY), (x, y))
 
 
@@ -326,6 +331,18 @@ class VMMDogtailNode(dogtail.tree.Node):
         button = 1
         clickX = self.position[0] + 10
         clickY = self.position[1] + 5
+        dogtail.rawinput.click(clickX, clickY, button)
+
+    def click_title(self):
+        """
+        Helper to click a window title bar, hitting the horizontal
+        center of the bar
+        """
+        if self.roleName not in ["frame", "alert"]:
+            raise RuntimeError("Can't use click_title() on type=%s" %
+                    self.roleName)
+        button = 1
+        clickX, clickY = _title_coordinates(self)
         dogtail.rawinput.click(clickX, clickY, button)
 
     def click(self, *args, **kwargs):

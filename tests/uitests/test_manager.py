@@ -37,6 +37,8 @@ class Manager(uiutils.UITestCase):
         uiutils.check(lambda: not run.sensitive, timeout=5)
         pause.click()
         uiutils.check(lambda: pause.checked, timeout=5)
+        pause.click()
+        uiutils.check(lambda: not pause.checked, timeout=5)
         smenu.click()
         save.click()
         uiutils.check(lambda: run.sensitive, timeout=5)
@@ -62,6 +64,8 @@ class Manager(uiutils.UITestCase):
 
     def testManagerColumns(self):
         # Enable all stat options
+        # Need to expand the window size so all columns are onscreen
+        self.app.open(keyfile="winsize.ini")
         self.app.root.find("Edit", "menu").click()
         self.app.root.find("Preferences", "menu item").click()
         win = self.app.root.find_fuzzy("Preferences", "frame")
@@ -72,26 +76,51 @@ class Manager(uiutils.UITestCase):
         win.find("Close", "push button").click()
 
         manager = self.app.topwin
-        manager.find("View", "menu").click()
-        manager.find("Graph", "menu").point()
-        manager.find("Host CPU", "check menu item").click()
-        manager.find("View", "menu").click()
-        manager.find("Graph", "menu").point()
-        manager.find("Memory Usage", "check menu item").click()
-        manager.find("View", "menu").click()
-        manager.find("Graph", "menu").point()
-        manager.find("Disk I/O", "check menu item").click()
-        manager.find("View", "menu").click()
-        manager.find("Graph", "menu").point()
-        manager.find("Network I/O", "check menu item").click()
+        def _test_sort(name):
+            col = manager.find(name, "table column header")
+            uiutils.check(lambda: col.onscreen)
+            # Trigger sorting
+            col.click()
+            col.click()
 
-        # Verify columns showed up
-        manager.find("Name", "table column header")
-        manager.find("CPU usage", "table column header")
-        manager.find("Host CPU usage", "table column header")
-        manager.find("Memory usage", "table column header")
-        manager.find("Disk I/O", "table column header")
-        manager.find("Network I/O", "table column header")
+        def _click_column_menu(name):
+            manager.find("View", "menu").click()
+            menu = manager.find("Graph", "menu")
+            menu.point()
+            menu.find_fuzzy(name, "check menu item").click()
+
+        def _test_column(name):
+            _click_column_menu(name)
+            _test_sort(name)
+
+        _test_sort("Name")
+        _click_column_menu("Guest CPU")
+        _click_column_menu("Guest CPU")
+        _test_sort("CPU usage")
+        _test_column("Host CPU")
+        _test_column("Memory")
+        _test_column("Disk I/O")
+        _test_column("Network I/O")
+
+    def testManagerWindowReposition(self):
+        """
+        Restore previous position when window is reopened
+        """
+        manager = self.app.topwin
+        host = self._open_host_window("Storage")
+
+        # Double click title to maximize
+        manager.click_title()
+        manager.click_title()
+        newx = manager.position[0]
+        newy = manager.position[1]
+        manager.keyCombo("<alt>F4")
+        host.click_title()
+        host.find("File", "menu").click()
+        host.find("View Manager", "menu item").click()
+        uiutils.check(lambda: manager.showing)
+        assert manager.position == (newx, newy)
+
 
     def testManagerWindowCleanup(self):
         """
@@ -115,7 +144,8 @@ class Manager(uiutils.UITestCase):
 
         # Open clone dialog
         c = manager.find("test-clone", "table cell")
-        c.click(button=3)
+        c.click()
+        self.pressKey("Menu")
         self.app.root.find("Clone...", "menu item").click()
         clone = self.app.root.find("Clone Virtual Machine", "frame")
         _drag(clone)
@@ -133,7 +163,9 @@ class Manager(uiutils.UITestCase):
         _drag(create)
 
         # Open host
-        host = self._open_host_window("Virtual Networks")
+        c = manager.find_fuzzy("testdriver.xml", "table cell")
+        c.doubleClick()
+        host = self.app.root.find_fuzzy("Connection Details", "frame")
         _drag(host)
 
         # Open details
@@ -146,6 +178,7 @@ class Manager(uiutils.UITestCase):
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click()
         c.click(button=3)
+        print("\n\n\nCLICKING DISCONNECT\n\n\n")
         self.app.root.find("conn-disconnect", "menu item").click()
 
         # Ensure all those windows aren't showing
@@ -172,3 +205,14 @@ class Manager(uiutils.UITestCase):
                 lambda: "File->Add Connection" in errlabel.text)
         uiutils.check(
                 lambda: "appropriate QEMU/KVM" in errlabel.text)
+
+        manager.find("File", "menu").click()
+        manager.find("Quit", "menu item").click()
+
+    def testManagerConnOpenFail(self):
+        self.app.open(keyfile="baduri.ini")
+        manager = self.app.topwin
+        manager.find_fuzzy("bad uri", "table cell").doubleClick()
+        uiutils.check(lambda: not manager.active)
+        self._click_alert_button("Unable to connect", "Close")
+        uiutils.check(lambda: manager.active)
