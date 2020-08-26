@@ -62,6 +62,105 @@ class Manager(uiutils.UITestCase):
 
         self._testVMLifecycle()
 
+    def testVMLifecycleExtra(self):
+        """
+        Test vmmenu lifecycle options
+        """
+        self.app.open(keyfile="confirm-all.ini")
+        manager = self.app.topwin
+
+        def confirm_is_running():
+            run = manager.find("Run", "push button")
+            uiutils.check(lambda: not run.sensitive)
+
+        def confirm_is_shutdown():
+            shutdown = manager.find("Shut Down", "push button")
+            uiutils.check(lambda: not shutdown.sensitive)
+
+        def confirm_is_paused():
+            pause = manager.find("Pause", "toggle button")
+            uiutils.check(lambda: pause.checked)
+
+        def confirm_not_paused():
+            pause = manager.find("Pause", "toggle button")
+            uiutils.check(lambda: not pause.checked)
+
+        def test_action(action, shutdown=True, confirm=True):
+            def _select():
+                cell = manager.find("test-many-devices", "table cell")
+                cell.click(button=3)
+                menu = self.app.root.find("vm-action-menu")
+                uiutils.check(lambda: menu.onscreen)
+                if shutdown:
+                    smenu = menu.find("Shut Down", "menu")
+                    smenu.click()
+                    uiutils.check(lambda: smenu.onscreen)
+                    item = smenu.find(action, "menu item")
+                else:
+                    item = menu.find(action, "menu item")
+                uiutils.check(lambda: item.onscreen)
+                item.click()
+
+            _select()
+            if confirm:
+                self._click_alert_button("Are you sure", "No")
+                _select()
+                self._click_alert_button("Are you sure", "Yes")
+
+
+        test_action("Force Reset")
+        confirm_is_running()
+        test_action("Reboot")
+        confirm_is_running()
+        test_action("Shut Down")
+        confirm_is_shutdown()
+        test_action("Run", shutdown=False, confirm=False)
+        confirm_is_running()
+        test_action("Force Off")
+        confirm_is_shutdown()
+        test_action("Run", shutdown=False, confirm=False)
+        confirm_is_running()
+        test_action("Pause", shutdown=False)
+        confirm_is_paused()
+        test_action("Resume", shutdown=False, confirm=False)
+        confirm_not_paused()
+        test_action("Save")
+        confirm_is_shutdown()
+        test_action("Restore", shutdown=False, confirm=False)
+        confirm_is_running()
+
+    def testManagedManagedSaveCornerCases(self):
+        """
+        Test managed save special behavior
+        """
+        self.app.open(extra_opts=["--test-options=test-managed-save"])
+
+        manager = self.app.topwin
+        run = manager.find("Run", "push button")
+        smenu = manager.find("Menu", "toggle button")
+        save = manager.find("Save", "menu item")
+
+        c = manager.find("test-many-devices", "table cell")
+        c.click()
+
+        # Save it, attempt a cancel operation
+        smenu.click()
+        save.click()
+        progwin = self.app.root.find("Saving Virtual Machine", "frame")
+        # Attempt cancel which will fail, then find the error message
+        progwin.find("Cancel", "push button").click()
+        progwin.find("Error cancelling save job")
+        uiutils.check(lambda: not progwin.showing, timeout=5)
+        uiutils.check(lambda: run.sensitive)
+
+        # Restore will fail and offer to remove managed save
+        run.click()
+        self._click_alert_button("remove the saved state", "No")
+        uiutils.check(lambda: run.sensitive)
+        run.click()
+        self._click_alert_button("remove the saved state", "Yes")
+        uiutils.check(lambda: not run.sensitive)
+
     def testManagerColumns(self):
         # Enable all stat options
         # Need to expand the window size so all columns are onscreen

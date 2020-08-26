@@ -1318,9 +1318,12 @@ class vmmDomain(vmmLibvirtObject):
 
     @vmmLibvirtObject.lifecycle_action
     def startup(self):
-        sync_time = self.has_managed_save()
+        has_managed = self.has_managed_save()
+        if has_managed and self.config.CLITestOptions.test_managed_save:
+            raise RuntimeError("fake error for managed save")
+
         self._backend.create()
-        if sync_time:
+        if has_managed:
             self._async_set_time()
 
     @vmmLibvirtObject.lifecycle_action
@@ -1365,6 +1368,8 @@ class vmmDomain(vmmLibvirtObject):
         if meter:
             start_job_progress_thread(self, meter, _("Saving domain to disk"))
 
+        if self.config.CLITestOptions.test_managed_save:
+            time.sleep(3)
         self._backend.managedSave(0)
 
     def has_managed_save(self):
