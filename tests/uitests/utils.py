@@ -294,7 +294,7 @@ class VMMDogtailNode(dogtail.tree.Node):
         # function to check whether we can click a widget. We may click
         # anywhere within the widget and clicks outside the screen bounds are
         # silently ignored.
-        if self.roleName in ["menu", "menu item", "frame"]:
+        if self.roleName in ["frame"]:
             return True
         screen = Gdk.Screen.get_default()
         return (self.position[0] >= 0 and
