@@ -129,9 +129,12 @@ def test_suse():
             kernel="linux64")
 
 
+def test_mageia():
+    _test("mageia/8", initrd="all.rdz")
+
+
 def test_misc():
     _test("generic")
-    _test("magaeia", initrd="all.rdz")
 
     with pytest.raises(ValueError) as e:
         _test("empty")
