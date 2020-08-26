@@ -19,6 +19,41 @@ def _inspection_error(_errstr):
     return data
 
 
+def _make_fake_data():
+    """
+    Return fake vmmInspectionData for use with the test driver
+    """
+    data = vmmInspectionData()
+    data.os_type = "test_os_type"
+    data.distro = "test_distro"
+    data.major_version = 123
+    data.minor_version = 456
+    data.hostname = "test_hostname"
+    data.product_name = "test_product_name"
+    data.product_variant = "test_product_variant"
+
+    from gi.repository import Gtk
+    icontheme = Gtk.IconTheme.get_default()
+    icon = icontheme.lookup_icon("vm_new", Gtk.IconSize.LARGE_TOOLBAR, 0)
+    data.icon = open(icon.get_filename(), "rb").read()
+
+    data.applications = []
+    for prefix in ["test_app1_", "test_app2_"]:
+        import time
+        app = vmmInspectionApplication()
+        app.description = prefix + "description"
+        app.name = prefix + "name"
+        app.display_name = prefix + "display_name"
+        app.epoch = 1
+        app.version = "2"
+        app.release = "3"
+        app.summary = prefix + "summary-" + str(time.time())
+        app.description = prefix + "description-" + str(time.time())
+        data.applications.append(app)
+
+    return data
+
+
 def _perform_inspection(conn, vm):
     """
     Perform the actual guestfs interaction and return results in
@@ -288,7 +323,7 @@ class vmmInspection(vmmGObject):
             return _inspection_error(
                     _("Cannot inspect VM on remote connection"))
         if conn.is_test():
-            return _inspection_error("Cannot inspect VM on test connection")
+            return _make_fake_data()
 
         return _perform_inspection(conn, vm)
 
