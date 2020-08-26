@@ -30,6 +30,7 @@ class _DistroCache(object):
         self.suse_content = None
         self.checked_for_suse_content = False
         self.debian_media_type = None
+        self.mageia_version = None
 
         self.libosinfo_os_variant = None
         self.libosinfo_mediaobj = None
@@ -790,12 +791,29 @@ class _MageiaDistro(_DistroTree):
 
     @classmethod
     def is_valid(cls, cache):
-        return cache.content_regex("VERSION", ".*Mageia.*")
+        if not cache.mageia_version:
+            content = cache.acquire_file_content("VERSION")
+            if not content:
+                return False
+
+            m = re.match("^Mageia (\d+) .*", content)
+            if not m:
+                return False
+
+            cache.mageia_version = m.group(1)
+
+        return bool(cache.mageia_version)
 
     def _set_manual_kernel_paths(self):
         self._kernel_paths += [
             ("isolinux/%s/vmlinuz" % self.arch,
              "isolinux/%s/all.rdz" % self.arch)]
+
+    def _detect_version(self):
+        # version is just an integer
+        variant = "mageia" + self.cache.mageia_version
+        if OSDB.lookup_os(variant):
+            return variant
 
 
 class _GenericTreeinfoDistro(_DistroTree):
