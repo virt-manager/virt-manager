@@ -14,7 +14,6 @@ from virtinst import DomainCpu
 from virtinst import log
 
 from .lib.inspection import vmmInspection
-from .lib.keyring import vmmKeyring, vmmSecret
 
 
 CSSDATA = """
@@ -206,7 +205,7 @@ class vmmConfig(object):
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access
         # the keyring
-        self.keyring = None
+        self._keyring = None
 
         self.default_graphics_from_config = BuildConfig.default_graphics
         self.default_hvs = BuildConfig.default_hvs
@@ -700,57 +699,3 @@ class vmmConfig(object):
 
         log.debug("saving directory for type=%s to %s", key, folder)
         self.conf.set("/paths/%s-default" % key, folder)
-
-    # Keyring / VNC password dealings
-    def get_secret_name(self, vm):
-        return "vm-console-" + vm.get_uuid()
-
-    def has_keyring(self):
-        if self.keyring is None:
-            self.keyring = vmmKeyring()
-        return self.keyring.is_available()
-
-    def get_console_password(self, vm):
-        if not self.has_keyring():
-            return ("", "")
-
-        username, keyid = vm.get_console_password()
-
-        if keyid == -1:
-            return ("", "")
-
-        secret = self.keyring.get_secret(keyid)
-        if secret is None or secret.get_name() != self.get_secret_name(vm):
-            return ("", "")
-
-        if (secret.attributes.get("hvuri", None) != vm.conn.get_uri() or
-            secret.attributes.get("uuid", None) != vm.get_uuid()):
-            return ("", "")
-
-        return (secret.get_secret(), username or "")
-
-    def set_console_password(self, vm, password, username=""):
-        if not self.has_keyring():
-            return
-
-        secret = vmmSecret(self.get_secret_name(vm), password,
-                           {"uuid": vm.get_uuid(),
-                            "hvuri": vm.conn.get_uri()})
-        keyid = self.keyring.add_secret(secret)
-        if keyid is None:
-            return
-
-        vm.set_console_password(username, keyid)
-
-    def del_console_password(self, vm):
-        if not self.has_keyring():
-            return
-
-        ignore, keyid = vm.get_console_password()
-
-        if keyid == -1:
-            return
-
-        self.keyring.del_secret(keyid)
-
-        vm.del_console_password()

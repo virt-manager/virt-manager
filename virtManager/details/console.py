@@ -14,6 +14,7 @@ from .serialcon import vmmSerialConsole
 from .sshtunnels import ConnectionInfo
 from .viewers import SpiceViewer, VNCViewer, have_spice_gtk
 from ..baseclass import vmmGObject, vmmGObjectUI
+from ..lib.keyring import vmmKeyring
 from ..vmwindow import DETAILS_PAGE_CONSOLE
 
 
@@ -608,7 +609,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
 
     def _activate_auth_page(self, withPassword, withUsername):
-        (pw, username) = self.config.get_console_password(self.vm)
+        (pw, username) = vmmKeyring.get_instance().get_console_password(self.vm)
 
         self.widget("console-auth-password").set_visible(withPassword)
         self.widget("label-auth-password").set_visible(withPassword)
@@ -619,11 +620,11 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-auth-username").set_text(username)
         self.widget("console-auth-password").set_text(pw)
 
-        self.widget("console-auth-remember").set_sensitive(
-                bool(self.config.has_keyring()))
-        if self.config.has_keyring():
-            self.widget("console-auth-remember").set_active(
-                    bool(withPassword and pw) or (withUsername and username))
+        has_keyring = vmmKeyring.get_instance().is_available()
+        remember = bool(withPassword and pw) or (withUsername and username)
+        remember = has_keyring and remember
+        self.widget("console-auth-remember").set_sensitive(has_keyring)
+        self.widget("console-auth-remember").set_active(remember)
 
         self.widget("console-pages").set_current_page(
             _CONSOLE_PAGE_AUTHENTICATE)
@@ -749,10 +750,10 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer.console_set_username(username.get_text())
 
         if self.widget("console-auth-remember").get_active():
-            self.config.set_console_password(self.vm, passwd.get_text(),
-                                             username.get_text())
+            vmmKeyring.get_instance().set_console_password(
+                    self.vm, passwd.get_text(), username.get_text())
         else:
-            self.config.del_console_password(self.vm)
+            vmmKeyring.get_instance().del_console_password(self.vm)
 
 
     ##########################
