@@ -37,6 +37,9 @@ class CLITestOptionsClass:
 
     * config-libguestfs: Override the first-run default of
         disabling libguestfs support, so it is enabled
+
+    * test-managed-save: Triggers a couple conditions for testing
+        managed save issues
     """
     def __init__(self, test_options_str, test_first_run):
         optset = set()
@@ -68,6 +71,7 @@ class CLITestOptionsClass:
         self.gsettings_keyfile = _get_value("gsettings-keyfile")
         self.break_setfacl = _get("break-setfacl")
         self.config_libguestfs = _get("config-libguestfs")
+        self.test_managed_save = _get("test-managed-save")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

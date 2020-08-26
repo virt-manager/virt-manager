@@ -69,6 +69,7 @@ class VMShutdownMenu(_VMMenu):
         self._add_action(_("Sa_ve"), "save", VMActionUI.save,
                 iconname=Gtk.STOCK_SAVE)
 
+        self.get_accessible().set_name("vmm-shutdown-menu")
         self.show_all()
 
     def update_widget_states(self, vm):
@@ -84,13 +85,6 @@ class VMShutdownMenu(_VMMenu):
             name = getattr(child, "vmm_widget_name", None)
             if name in statemap:
                 child.set_sensitive(statemap[name])
-
-            if name == "reset":
-                child.set_tooltip_text(None)
-                if vm and not vm.conn.support.conn_domain_reset():
-                    child.set_tooltip_text(_("Hypervisor does not support "
-                        "domain reset."))
-                    child.set_sensitive(False)
 
 
 class VMActionMenu(_VMMenu):
@@ -120,6 +114,7 @@ class VMActionMenu(_VMMenu):
             self._add_action(Gtk.STOCK_OPEN, "show",
                 VMActionUI.show, iconname=None)
 
+        self.get_accessible().set_name("vm-action-menu")
         self.show_all()
 
     def update_widget_states(self, vm):
@@ -161,7 +156,7 @@ class VMActionUI(object):
     def save_cancel(asyncjob, vm):
         log.debug("Cancelling save job")
         if not vm:
-            return
+            return  # pragma: no cover
 
         try:
             vm.abort_job()
@@ -170,8 +165,7 @@ class VMActionUI(object):
             asyncjob.show_warning(_("Error cancelling save job: %s") % str(e))
             return
 
-        asyncjob.job_canceled = True
-        return
+        asyncjob.job_canceled = True  # pragma: no cover
 
     @staticmethod
     def save(src, vm):
@@ -187,7 +181,7 @@ class VMActionUI(object):
         def cb(asyncjob):
             vm.save(meter=asyncjob.get_meter())
         def finish_cb(error, details):
-            if error is not None:
+            if error is not None:  # pragma: no cover
                 error = _("Error saving domain: %s") % error
                 src.err.show_err(error, details=details)
 
@@ -255,7 +249,7 @@ class VMActionUI(object):
                 try:
                     vm.remove_saved_image()
                     VMActionUI.run(src, vm)
-                except Exception as e:
+                except Exception as e:  # pragma: no cover
                     src.err.show_err(_("Error removing domain state: %s")
                                      % str(e))
 

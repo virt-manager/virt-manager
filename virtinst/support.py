@@ -254,7 +254,6 @@ class SupportCache:
     conn_domain_capabilities = _make(
         function="virConnect.getDomainCapabilities",
         run_args=(None, None, None, None))
-    conn_domain_reset = _make(version="0.9.7", hv_version={"qemu": 0})
     conn_vmport = _make(
         version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
     conn_mem_stats_period = _make(
