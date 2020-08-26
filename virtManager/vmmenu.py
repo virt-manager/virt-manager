@@ -181,7 +181,7 @@ class VMActionUI(object):
             return
 
         _cancel_cb = None
-        if vm.getjobinfo_supported:
+        if vm.supports_domain_job_info():
             _cancel_cb = (VMActionUI.save_cancel, vm)
 
         def cb(asyncjob):

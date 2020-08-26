@@ -372,7 +372,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.set_finish_cursor()
 
         cancel_cb = None
-        if self.vm.getjobinfo_supported:
+        if self.vm.supports_domain_job_info():
             cancel_cb = (self._cancel_migration, self.vm)
 
         if uri:

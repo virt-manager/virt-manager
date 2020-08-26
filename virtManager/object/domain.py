@@ -57,7 +57,7 @@ def start_job_progress_thread(vm, meter, progtext):
 
         return True
 
-    if vm.getjobinfo_supported:
+    if vm.supports_domain_job_info():
         t = threading.Thread(target=jobinfo_cb,
                              name="job progress reporting",
                              args=())
@@ -371,9 +371,11 @@ class vmmDomain(vmmLibvirtObject):
     # Support checks #
     ##################
 
-    def _get_getjobinfo_supported(self):
+    def supports_domain_job_info(self):
+        if self.conn.is_test():
+            # jobinfo isn't actually supported but this tests more code
+            return True
         return self.conn.support.domain_job_info(self._backend)
-    getjobinfo_supported = property(_get_getjobinfo_supported)
 
     def snapshots_supported(self):
         if not self.conn.support.domain_list_snapshots(self._backend):
