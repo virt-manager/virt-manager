@@ -562,16 +562,18 @@ class VMMDogtailApp(object):
             self._proc = None
             return
 
-        # Wait for shutdown for 1 second, with 20 checks
-        for ignore in range(20):
-            time.sleep(.05)
-            if self._proc.poll() is not None:
-                self._proc = None
-                return
+        def _wait_for_exit():
+            # Wait for shutdown for 2 sec
+            waittime = 2
+            for ignore in range(int(waittime / .05)):
+                time.sleep(.05)
+                if self._proc.poll() is not None:
+                    self._proc = None
+                    return True
+
+        if _wait_for_exit():
+            return
 
         log.warning("App didn't exit gracefully from SIGINT. Killing...")
-        try:
-            self._proc.kill()
-        finally:
-            time.sleep(1)
-        self._proc = None
+        self._proc.kill()
+        _wait_for_exit()
