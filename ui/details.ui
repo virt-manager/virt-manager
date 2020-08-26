@@ -2942,8 +2942,9 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
-                                    <property name="label" translatable="yes">MAC address:</property>
+                                    <property name="label" translatable="yes">_MAC address:</property>
                                     <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">network-mac-entry</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -3022,6 +3023,11 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <signal name="changed" handler="on_network_mac_entry_changed" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="network-mac-entry-atkobject">
+                                            <property name="AtkObject::accessible-name">mac-entry</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -4611,6 +4617,11 @@
                                     <child internal-child="entry">
                                       <object class="GtkEntry" id="tpm-model-text">
                                         <property name="can_focus">True</property>
+                                      </object>
+                                    </child>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tpm-model-atkobject">
+                                        <property name="AtkObject::accessible-name">tpm-model</property>
                                       </object>
                                     </child>
                                   </object>

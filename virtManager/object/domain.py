@@ -108,9 +108,9 @@ class vmmDomainSnapshot(vmmLibvirtObject):
         return self._backend.getName()
 
     def _conn_tick_poll_param(self):
-        return None
+        return None  # pragma: no cover
     def class_name(self):
-        return "snapshot"
+        return "snapshot"  # pragma: no cover
 
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
@@ -138,17 +138,14 @@ class vmmDomainSnapshot(vmmLibvirtObject):
             "crashed": libvirt.VIR_DOMAIN_CRASHED,
             "pmsuspended": getattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
         }
-
-        if state == "disk-snapshot" or state not in statemap:
-            state = "shutoff"
-        return statemap.get(state, libvirt.VIR_DOMAIN_NOSTATE)
+        return statemap.get(state, libvirt.VIR_DOMAIN_SHUTOFF)
 
     def run_status(self):
         status = self._state_str_to_int()
         return LibvirtEnumMap.pretty_run_status(status, False)
     def run_status_icon_name(self):
         status = self._state_str_to_int()
-        if status not in LibvirtEnumMap.VM_STATUS_ICONS:
+        if status not in LibvirtEnumMap.VM_STATUS_ICONS:  # pragma: no cover
             log.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
@@ -314,7 +311,8 @@ class vmmDomain(vmmLibvirtObject):
             # We don't want virt-manager to track Domain-0 since it
             # doesn't work with our UI. Raising an error will ensures it
             # is blacklisted.
-            raise RuntimeError("Can't track Domain-0 as a vmmDomain")
+            raise RuntimeError(  # pragma: no cover
+                    "Can't track Domain-0 as a vmmDomain")
 
 
     ###########################
@@ -352,12 +350,6 @@ class vmmDomain(vmmLibvirtObject):
             if dev.type == "spicevmc":
                 return True
         return False
-
-    def get_id_pretty(self):
-        i = self.get_id()
-        if i < 0:
-            return "-"
-        return str(i)
 
     def has_nvram(self):
         return bool(self.get_xmlobj().os.loader_ro is True and
@@ -427,12 +419,19 @@ class vmmDomain(vmmLibvirtObject):
         # If we are removing multiple dev from an active VM, a double
         # attempt may result in a lookup failure. If device is present
         # in the active XML, assume all is good.
-        if self.get_xmlobj().find_device(origdev):
+        if self.get_xmlobj().find_device(origdev):  # pragma: no cover
             log.debug("Device in active config but not inactive config.")
             return
 
-        raise RuntimeError(_("Could not find specified device in the "
-                             "inactive VM configuration: %s") % repr(origdev))
+        raise RuntimeError(  # pragma: no cover
+                _("Could not find specified device in the "
+                  "inactive VM configuration: %s") % repr(origdev))
+
+    def _process_device_define(self, editdev, xmlobj, do_hotplug):
+        if do_hotplug:
+            self.hotplug(device=editdev)
+        else:
+            self._redefine_xmlobj(xmlobj)
 
     def _copy_nvram_file(self, new_name):
         """
@@ -464,6 +463,8 @@ class vmmDomain(vmmLibvirtObject):
     ##############################
 
     def rename_domain(self, new_name):
+        Guest.validate_name(self.conn.get_backend(), str(new_name))
+
         new_nvram = None
         old_nvram = None
         if self.has_nvram():
@@ -510,7 +511,7 @@ class vmmDomain(vmmLibvirtObject):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, False)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if con:
             rmcon = xmlobj.find_device(con)
@@ -531,11 +532,16 @@ class vmmDomain(vmmLibvirtObject):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         xmlobj.devices.replace_child(editdev, newdev)
         self._redefine_xmlobj(xmlobj)
         return editdev, newdev
+
+
+    ##########################
+    # non-device XML editing #
+    ##########################
 
     def define_cpu(self, vcpus=_SENTINEL,
             model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
@@ -643,7 +649,7 @@ class vmmDomain(vmmLibvirtObject):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if path != _SENTINEL:
             editdev.path = path
@@ -667,10 +673,7 @@ class vmmDomain(vmmLibvirtObject):
         if bus != _SENTINEL:
             editdev.change_bus(self.xmlobj, bus)
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_network(self, devobj, do_hotplug,
             ntype=_SENTINEL, source=_SENTINEL,
@@ -679,7 +682,7 @@ class vmmDomain(vmmLibvirtObject):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if ntype != _SENTINEL:
             editdev.source = None
@@ -699,10 +702,7 @@ class vmmDomain(vmmLibvirtObject):
         if linkstate != _SENTINEL:
             editdev.link_state = "up" if linkstate else "down"
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_graphics(self, devobj, do_hotplug,
             listen=_SENTINEL, addr=_SENTINEL, port=_SENTINEL,
@@ -711,7 +711,7 @@ class vmmDomain(vmmLibvirtObject):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if addr != _SENTINEL or listen != _SENTINEL:
             if listen == "none":
@@ -729,32 +729,26 @@ class vmmDomain(vmmLibvirtObject):
         if rendernode != _SENTINEL:
             editdev.rendernode = rendernode
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_sound(self, devobj, do_hotplug, model=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if model != _SENTINEL:
             if editdev.model != model:
                 editdev.address.clear()
             editdev.model = model
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_video(self, devobj, do_hotplug, model=_SENTINEL, accel3d=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if model != _SENTINEL and model != editdev.model:
             editdev.model = model
@@ -772,17 +766,14 @@ class vmmDomain(vmmLibvirtObject):
         if accel3d != _SENTINEL:
             editdev.accel3d = accel3d
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_watchdog(self, devobj, do_hotplug,
             model=_SENTINEL, action=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if model != _SENTINEL:
             if editdev.model != model:
@@ -792,32 +783,26 @@ class vmmDomain(vmmLibvirtObject):
         if action != _SENTINEL:
             editdev.action = action
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_smartcard(self, devobj, do_hotplug, model=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if model != _SENTINEL:
             editdev.mode = model
             editdev.type = None
             editdev.type = editdev.default_type()
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_controller(self, devobj, do_hotplug, model=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         def _change_model():
             if editdev.type == "usb":
@@ -849,16 +834,13 @@ class vmmDomain(vmmLibvirtObject):
         if model != _SENTINEL:
             _change_model()
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_filesystem(self, devobj, do_hotplug, newdev=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if newdev != _SENTINEL:
             # pylint: disable=maybe-no-member
@@ -872,56 +854,44 @@ class vmmDomain(vmmLibvirtObject):
             editdev.source = newdev.source
             editdev.target = newdev.target
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
 
     def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if rom_bar != _SENTINEL:
             editdev.rom_bar = rom_bar
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_tpm(self, devobj, do_hotplug, model=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if model != _SENTINEL:
             editdev.model = model
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_vsock(self, devobj, do_hotplug,
             auto_cid=_SENTINEL, cid=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
-            return
+            return  # pragma: no cover
 
         if auto_cid != _SENTINEL:
             editdev.auto_cid = auto_cid
         if cid != _SENTINEL:
             editdev.cid = cid
 
-        if do_hotplug:
-            self.hotplug(device=editdev)
-        else:
-            self._redefine_xmlobj(xmlobj)
+        self._process_device_define(editdev, xmlobj, do_hotplug)
 
 
     ####################
@@ -1375,12 +1345,12 @@ class vmmDomain(vmmLibvirtObject):
 
     def has_managed_save(self):
         if not self.managedsave_supported:
-            return False
+            return False  # pragma: no cover
 
         if self._has_managed_save is None:
             try:
                 self._has_managed_save = self._backend.hasManagedSaveImage(0)
-            except Exception as e:
+            except Exception as e:    # pragma: no cover
                 if self.conn.support.is_libvirt_error_no_domain(e):
                     return False
                 raise
@@ -1389,7 +1359,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def remove_saved_image(self):
         if not self.has_managed_save():
-            return
+            return   # pragma: no cover
         self._backend.managedSaveRemove(0)
         self._has_managed_save = None
 
@@ -1494,9 +1464,9 @@ class vmmDomain(vmmLibvirtObject):
 
     def _normalize_status(self, status):
         if status == libvirt.VIR_DOMAIN_NOSTATE:
-            return libvirt.VIR_DOMAIN_RUNNING
+            return libvirt.VIR_DOMAIN_RUNNING  # pragma: no cover
         elif status == libvirt.VIR_DOMAIN_BLOCKED:
-            return libvirt.VIR_DOMAIN_RUNNING
+            return libvirt.VIR_DOMAIN_RUNNING  # pragma: no cover
         return status
 
     def is_active(self):
@@ -1534,7 +1504,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def run_status_icon_name(self):
         status = self.status()
-        if status not in LibvirtEnumMap.VM_STATUS_ICONS:
+        if status not in LibvirtEnumMap.VM_STATUS_ICONS:  # pragma: no cover
             log.debug("Unknown status %s, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
@@ -1642,7 +1612,7 @@ class vmmDomainVirtinst(vmmDomain):
     def get_uuid(self):
         return self._backend.uuid
     def get_id(self):
-        return -1
+        return -1  # pragma: no cover
     def has_managed_save(self):
         return False
 
@@ -1750,4 +1720,5 @@ class vmmDomainVirtinst(vmmDomain):
         self._redefine_xml_internal(self._orig_xml or "", xmlobj.get_xml())
 
     def rename_domain(self, new_name):
+        Guest.validate_name(self._backend.conn, str(new_name))
         self.define_name(new_name)

@@ -53,6 +53,10 @@ class MediaChange(uiutils.UITestCase):
         combo.click_combo_entry()
         combo.find(path)
         entry.click()
+        # Use the storage browser to select new floppy storage
+        tab.find("Browse", "push button").click()
+        self._select_storagebrowser_volume("default-pool", "iso-vol")
+        appl.click()
 
         # Browse for image
         hw.find("IDE CDROM 1", "table cell").click()
@@ -61,8 +65,11 @@ class MediaChange(uiutils.UITestCase):
         entry.click()
         tab.find("Browse", "push button").click()
         self._select_storagebrowser_volume("default-pool", "backingl1.img")
-        appl.click()
         # Check 'already in use' dialog
+        appl.click()
+        self._click_alert_button("already in use by", "No")
+        uiutils.check(lambda: appl.sensitive)
+        appl.click()
         self._click_alert_button("already in use by", "Yes")
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda: "backing" in entry.text)

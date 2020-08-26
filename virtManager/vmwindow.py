@@ -220,7 +220,7 @@ class vmmVMWindow(vmmGObjectUI):
     def _close(self):
         fs = self.widget("details-menu-view-fullscreen")
         if fs.get_active():
-            fs.set_active(False)
+            fs.set_active(False)  # pragma: no cover
 
         if not self.is_visible():
             return
@@ -268,7 +268,7 @@ class vmmVMWindow(vmmGObjectUI):
 
     def window_resized(self, ignore, ignore2):
         if not self.is_visible():
-            return
+            return  # pragma: no cover
         self._window_size = self.topwin.get_size()
 
     def control_fullscreen(self, src):
@@ -282,12 +282,8 @@ class vmmVMWindow(vmmGObjectUI):
 
         active = src.get_active()
         self.config.set_details_show_toolbar(active)
-
-        if (active and not
-            self.widget("details-menu-view-fullscreen").get_active()):
-            self.widget("toolbar-box").show()
-        else:
-            self.widget("toolbar-box").hide()
+        fsactive = self.widget("details-menu-view-fullscreen").get_active()
+        self.widget("toolbar-box").set_visible(active and not fsactive)
 
     def details_console_changed(self, src):
         if self.ignoreDetails:
@@ -304,7 +300,7 @@ class vmmVMWindow(vmmGObjectUI):
         pages = self.widget("details-pages")
         if pages.get_current_page() == DETAILS_PAGE_DETAILS:
             if self._details.vmwindow_has_unapplied_changes():
-                self.sync_details_console_view(True)
+                self.sync_details_console_view(pages.get_current_page())
                 return
             self._details.disable_apply()
 
@@ -534,13 +530,13 @@ class vmmVMWindow(vmmGObjectUI):
             dialog_type=Gtk.FileChooserAction.SAVE,
             browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
             default_name=default)
-        if not path:
+        if not path:  # pragma: no cover
             log.debug("No screenshot path given, skipping save.")
             return
 
         filename = path
         if not filename.endswith(".png"):
-            filename += ".png"
+            filename += ".png"  # pragma: no cover
         open(filename, "wb").write(ret)
 
 

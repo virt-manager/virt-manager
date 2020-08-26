@@ -190,10 +190,8 @@ def _label_for_device(dev):
         }
 
     if devtype == "interface":
-        if dev.macaddr:
-            return _("NIC %(mac)s") % {"mac": dev.macaddr[-9:]}
-        else:
-            return _("NIC")
+        mac = dev.macaddr[-9:] or ""
+        return _("NIC %(mac)s") % {"mac": mac}
 
     if devtype == "input":
         if dev.type == "tablet":
@@ -202,31 +200,26 @@ def _label_for_device(dev):
             return _("Mouse")
         elif dev.type == "keyboard":
             return _("Keyboard")
-        return _("Input")
+        return _("Input")  # pragma: no cover
 
     if devtype == "serial":
-        if dev.target_port is not None:
-            return _("Serial %(num)d") % {"num": int(dev.target_port) + 1}
-        return _("Serial")
+        port = dev.target_port or 0
+        return _("Serial %(num)d") % {"num": port + 1}
 
     if devtype == "parallel":
-        if dev.target_port is not None:
-            return _("Parallel %(num)d") % {"num": int(dev.target_port) + 1}
-        return _("Parallel")
+        port = dev.target_port or 0
+        return _("Parallel %(num)d") % {"num": port + 1}
 
     if devtype == "console":
-        if dev.target_port is not None:
-            return _("Console %(num)d") % {"num": int(dev.target_port) + 1}
-        return _("Console")
+        port = dev.target_port or 0
+        return _("Console %(num)d") % {"num": port + 1}
 
     if devtype == "channel":
         name = vmmAddHardware.char_pretty_channel_name(dev.target_name)
         if name:
             return _("Channel %(name)s") % {"name": name}
         pretty_type = vmmAddHardware.char_pretty_type(dev.type)
-        if pretty_type:
-            return _("Channel %(type)s") % {"type": pretty_type}
-        return _("Channel")
+        return _("Channel %(type)s") % {"type": pretty_type}
 
     if devtype == "graphics":
         pretty = vmmGraphicsDetails.graphics_pretty_type_simple(dev.type)
@@ -290,9 +283,7 @@ def _icon_for_device(dev):
         return "input-mouse"
 
     if devtype == "redirdev":
-        if dev.bus == "usb":
-            return "device_usb"
-        return "device_pci"
+        return "device_usb"
 
     if devtype == "hostdev":
         if dev.type == "usb":
@@ -331,7 +322,7 @@ def _get_performance_icon_name():
     # fallback to system-run if it is missing
     icon = "utilities-system-monitor"
     if not Gtk.IconTheme.get_default().has_icon(icon):
-        icon = "system-run"
+        icon = "system-run"  # pragma: no cover
     return icon
 
 
@@ -916,7 +907,7 @@ class vmmDetails(vmmGObjectUI):
         # force select the list entry before showing popup_menu
         path_tuple = widget.get_path_at_pos(int(event.x), int(event.y))
         if path_tuple is None:
-            return False
+            return False  # pragma: no cover
         path = path_tuple[0]
         _iter = widget.get_model().get_iter(path)
         widget.get_selection().select_iter(_iter)
@@ -939,6 +930,17 @@ class vmmDetails(vmmGObjectUI):
         return uiutil.get_list_selected_row(self.widget("hw-list"))
 
     def has_unapplied_changes(self, row):
+        """
+        This is a bit confusing.
+
+        * If there are now changes pending, we return False
+        * If there are changes pending, we prompt the user whether
+          they want to apply them. If they say no, return False
+        * If the applying the changes succeeds, return False
+        * Return True if applying the changes failed. In this
+          case the caller should attempt to abort the action they
+          are trying to perform, if possible
+        """
         if not row:
             return False
 
@@ -1086,23 +1088,29 @@ class vmmDetails(vmmGObjectUI):
         except Exception as e:  # pragma: no cover
             self.err.show_err((_("Error launching hardware dialog: %s") %
                                str(e)))
-    def remove_non_disk(self, devobj):
+
+    def _remove_non_disk(self, devobj):
         if not self.err.chkbox_helper(self.config.get_confirm_removedev,
                 self.config.set_confirm_removedev,
                 text1=(_("Are you sure you want to remove this device?"))):
             return
-        self.remove_device(devobj)
 
-    def remove_disk(self, disk):
+        success = vmmDeleteStorage.remove_devobj_internal(
+                self.vm, self.err, devobj)
+        if not success:
+            return
+        self.disable_apply()
+
+    def _remove_disk(self, disk):
         dialog = vmmDeleteStorage(disk)
         dialog.show(self.topwin, self.vm)
 
     def remove_xml_dev(self, src_ignore):
         devobj = self.get_hw_row()[HW_LIST_COL_DEVICE]
         if devobj.DEVICE_TYPE == "disk":
-            self.remove_disk(devobj)
+            self._remove_disk(devobj)
         else:
-            self.remove_non_disk(devobj)
+            self._remove_non_disk(devobj)
 
 
     ############################
@@ -1288,7 +1296,7 @@ class vmmDetails(vmmGObjectUI):
         ignore = src
         row = self.get_boot_selection()
         if not row:
-            return
+            return  # pragma: no cover
 
         row_key = row[BOOT_KEY]
         boot_order = self.get_config_boot_order()
@@ -1780,11 +1788,6 @@ class vmmDetails(vmmGObjectUI):
                                           kwargs, self.vm, self.err,
                                           devobj=devobj)
 
-    # Device removal
-    def remove_device(self, devobj):
-        success = vmmDeleteStorage.remove_devobj_internal(self.vm, self.err, devobj)
-        if success:
-            self.disable_apply()
 
     #######################
     # vmwindow Public API #
@@ -2195,14 +2198,12 @@ class vmmDetails(vmmGObjectUI):
         self.vsockdetails.set_dev(dev)
 
     def refresh_char_page(self, chardev):
-        char_type = chardev.DEVICE_TYPE.capitalize()
+        char_type = chardev.DEVICE_TYPE
         target_port = chardev.target_port
         dev_type = chardev.type or "pty"
         primary = self.vm.serial_is_console_dup(chardev)
-        show_target_type = not (chardev.DEVICE_TYPE in
-                                ["serial", "parallel"])
+        show_target_type = not (char_type in ["serial", "parallel"])
 
-        typelabel = ""
         if char_type == "serial":
             typelabel = _("Serial Device")
         elif char_type == "parallel":
