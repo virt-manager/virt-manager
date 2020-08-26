@@ -35,6 +35,8 @@ class CLITestOptionsClass:
         This is hit via the directory search permissions checking
         for disk image usage for qemu
 
+    * config-libguestfs: Override the first-run default of
+        disabling libguestfs support, so it is enabled
     """
     def __init__(self, test_options_str, test_first_run):
         optset = set()
@@ -65,6 +67,7 @@ class CLITestOptionsClass:
         self.xmleditor_enabled = _get("xmleditor-enabled")
         self.gsettings_keyfile = _get_value("gsettings-keyfile")
         self.break_setfacl = _get("break-setfacl")
+        self.config_libguestfs = _get("config-libguestfs")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)
