@@ -217,7 +217,6 @@ class vmmMigrateDialog(vmmGObjectUI):
         self.widget("migrate-finish").set_tooltip_text(tooltip)
 
         address = ""
-        address_warning = ""
         tunnel_warning = ""
         tunnel_uri = ""
 
@@ -235,18 +234,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
             address = destconn.libvirt_gethostname()
 
-            if self._is_localhost(address):
-                address_warning = _("The destination's hostname is "
-                    "'localhost', which will be rejected by libvirt. "
-                    "You must configure the destination to have a valid "
-                    "publicly accessible hostname.")
-                address_warning = ("<span size='small'>%s</span>" %
-                    address_warning)
-
         self.widget("migrate-address").set_text(address)
-        uiutil.set_grid_row_visible(
-            self.widget("migrate-address-warning-box"), bool(address_warning))
-        self.widget("migrate-address-warning-label").set_markup(address_warning)
 
         self.widget("migrate-tunnel-uri").set_text(tunnel_uri)
         uiutil.set_grid_row_visible(
@@ -281,9 +269,6 @@ class vmmMigrateDialog(vmmGObjectUI):
     ###########################
     # destconn combo handling #
     ###########################
-
-    def _is_localhost(self, addr):
-        return not addr or addr.startswith("localhost")
 
     def _build_dest_row(self, destconn):
         driver = self.conn.get_driver()
