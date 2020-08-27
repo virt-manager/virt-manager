@@ -133,6 +133,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password").set_text("")
         self.widget("graphics-password").set_sensitive(False)
         self.widget("graphics-password-chk").set_active(False)
+        self.widget("graphics-opengl").set_active(False)
+        self._sync_opengl_ui()
 
     def get_values(self):
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
@@ -146,6 +148,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
 
         gl = self.widget("graphics-opengl").get_active()
         rendernode = uiutil.get_list_selection(self.widget("graphics-rendernode"))
+        if not self.widget("graphics-rendernode").get_visible():
+            rendernode = None
 
         return gtype, port, listen, addr, passwd, gl, rendernode
 
@@ -261,11 +265,15 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self._show_rows_from_type()
         self.emit("changed-listen")
 
-    def _change_opengl(self, ignore):
+    def _sync_opengl_ui(self):
         uiutil.set_grid_row_visible(
                 self.widget("graphics-rendernode"),
                 self.widget("graphics-opengl").get_active())
+
+    def _change_opengl(self, ignore):
+        self._sync_opengl_ui()
         self.emit("changed-opengl")
+        self.emit("changed-rendernode")
 
     def _change_port_auto(self, ignore):
         self.widget("graphics-port-auto").set_inconsistent(False)
