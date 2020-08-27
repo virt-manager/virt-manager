@@ -217,8 +217,7 @@ class Details(uiutils.UITestCase):
         tab.find_fuzzy("Manually set", "check").click()
         uiutils.check(lambda: not sockets.sensitive)
         appl.click()
-        # Currently generates an error
-        # uiutils.check(lambda: not appl.sensitive)
+        uiutils.check(lambda: not appl.sensitive)
 
 
     def testDetailsEditDomain2(self):

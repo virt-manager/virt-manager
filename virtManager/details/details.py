@@ -1438,13 +1438,10 @@ class vmmDetails(vmmGObjectUI):
 
         if self._edited(EDIT_TOPOLOGY):
             do_top = self.widget("cpu-topology-enable").get_active()
+            kwargs["clear_topology"] = not do_top
             kwargs["sockets"] = self.widget("cpu-sockets").get_value()
             kwargs["cores"] = self.widget("cpu-cores").get_value()
             kwargs["threads"] = self.widget("cpu-threads").get_value()
-            if not do_top:
-                kwargs["sockets"] = None
-                kwargs["cores"] = None
-                kwargs["threads"] = None
 
         return vmmAddHardware.change_config_helper(self.vm.define_cpu,
                                           kwargs, self.vm, self.err)
