@@ -326,19 +326,6 @@ def _chipset_label_from_machine(machine):
     return "i440FX"
 
 
-def _warn_cpu_thread_topo(threads, cpu_model):
-    if (threads < 2):
-        return False
-
-    non_ht_cpus = ["athlon", "phenom", "opteron"]
-
-    for cpu in non_ht_cpus:
-        if (cpu in cpu_model.lower()):
-            return True
-
-    return False
-
-
 def _get_performance_icon_name():
     # This icon isn't in standard adwaita-icon-theme, so
     # fallback to system-run if it is missing
@@ -468,7 +455,7 @@ class vmmDetails(vmmGObjectUI):
             "on_details_inspection_refresh_clicked": self.inspection_refresh,
 
             "on_cpu_vcpus_changed": self._config_vcpus_changed_cb,
-            "on_cpu_model_changed": lambda *x: self.config_cpu_model_changed(x),
+            "on_cpu_model_changed": lambda *x: self.enable_apply(x, EDIT_CPU),
             "on_cpu_copy_host_clicked": self.on_cpu_copy_host_clicked,
             "on_cpu_secure_toggled": self.on_cpu_secure_toggled,
             "on_cpu_cores_changed": self.config_cpu_topology_changed,
@@ -1240,15 +1227,6 @@ class vmmDetails(vmmGObjectUI):
     def on_cpu_secure_toggled(self, ignore):
         self.enable_apply(EDIT_CPU)
 
-    def config_cpu_model_changed(self, ignore):
-        # Warn about hyper-threading setting
-        cpu_model = self.get_config_cpu_model()
-        threads = self.widget("cpu-threads").get_value()
-        warn_ht = _warn_cpu_thread_topo(threads, cpu_model)
-        self.widget("cpu-topology-warn-box").set_visible(warn_ht)
-
-        self.enable_apply(EDIT_CPU)
-
     def config_cpu_topology_changed(self, ignore=None):
         manual_top = self.widget("cpu-topology-table").is_sensitive()
         self.widget("cpu-vcpus").set_sensitive(not manual_top)
@@ -1261,12 +1239,6 @@ class vmmDetails(vmmGObjectUI):
             if uiutil.spin_get_helper(self.widget("cpu-vcpus")) > total:
                 self.widget("cpu-vcpus").set_value(total)
             self.widget("cpu-vcpus").set_value(total)
-
-            # Warn about hyper-threading setting
-            cpu_model = self.get_config_cpu_model()
-            warn_ht = _warn_cpu_thread_topo(threads, cpu_model)
-            self.widget("cpu-topology-warn-box").set_visible(warn_ht)
-
         else:
             vcpus = uiutil.spin_get_helper(self.widget("cpu-vcpus"))
             self.widget("cpu-sockets").set_value(vcpus or 1)
@@ -2048,11 +2020,6 @@ class vmmDetails(vmmGObjectUI):
             uiutil.set_list_selection(
                 self.widget("cpu-model"),
                 virtinst.DomainCpu.SPECIAL_MODE_HV_DEFAULT, column=2)
-
-        # Warn about hyper-threading setting
-        cpu_model = self.get_config_cpu_model()
-        warn_ht = _warn_cpu_thread_topo(threads, cpu_model)
-        self.widget("cpu-topology-warn-box").set_visible(warn_ht)
 
         is_host = (cpu.mode == "host-model")
         self.widget("cpu-copy-host").set_active(bool(is_host))
