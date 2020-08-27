@@ -44,6 +44,13 @@ class Snapshots(uiutils.UITestCase):
         vmpause = win.find("Pause", "toggle button")
         snaprun = win.find("snapshot-start", "push button")
 
+        # Start already running snapshot
+        snapname = "internal-root"
+        win.find(snapname, "table cell").click()
+        snaprun.click()
+        self._click_alert_button("run the snapshot '%s'" % snapname, "Yes")
+        uiutils.check(lambda: not vmrun.sensitive)
+
         # Start offline snapshot
         snapname = "offline-root"
         win.find(snapname, "table cell").click()

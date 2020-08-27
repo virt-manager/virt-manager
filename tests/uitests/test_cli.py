@@ -107,5 +107,18 @@ class VMMCLI(uiutils.UITestCase):
         uiutils.check(lambda: not self.app.is_running())
 
     def testCLITraceLibvirt(self):
-        self.app.open(extra_opts=["--trace-libvirt=mainloop"])
-        self.sleep(5)
+        # Just test this for code coverage
+        self.app.open(keyfile="allstats.ini",
+                extra_opts=["--trace-libvirt=mainloop"])
+        # Give it a little time to work
+        self.sleep(2)
+        uiutils.check(lambda: self.app.topwin.active)
+
+    def testCLILeakDebug(self):
+        # Just test this for code coverage
+        self.app.open(keyfile="allstats.ini",
+                extra_opts=["--test-options=leak-debug"])
+        self.sleep(2)
+        # Give it a little time to work
+        uiutils.check(lambda: self.app.topwin.active)
+        self.app.topwin.keyCombo("<alt>F4")

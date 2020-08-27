@@ -276,8 +276,9 @@ class _vmmDomainSetTimeThread(vmmGObject):
 
         # Only run the API for qemu and test drivers, they are the only ones
         # that support it. This will save spamming logs with error output.
-        if not self._domain.conn.is_qemu() and not self._domain.conn.is_test():
-            return
+        if (not self._domain.conn.is_qemu() and
+            not self._domain.conn.is_test()):
+            return  # pragma: no cover
 
         # For qemu, only run the API if the VM has the qemu guest agent in
         # the XML.
@@ -304,30 +305,32 @@ class _vmmDomainSetTimeThread(vmmGObject):
         self._thread = None
         self._do_cancel.clear()
 
+    def _wait_for_agent(self):
+        # Setting time of a qemu domain can only work if an agent is
+        # defined and online. We only get here if one is defined. So wait
+        # for it to come online now.
+        waited = 0
+        while waited < self._maxwait and not self._domain.agent_ready():
+            if waited == 0:
+                log.debug("Waiting for qemu guest agent to come online...")
+
+            # sleep some time and potentially abort
+            if self._do_cancel.wait(self._sleep):
+                return
+
+            waited += self._sleep
+
+        if not self._domain.agent_ready():  # pragma: no cover
+            log.debug("Giving up on qemu guest agent for time sync")
+            return
+
     def _do_loop(self):
         """
         Run the domain's set time operation. Potentially wait for a guest agent
         to come online beforehand.
         """
         if self._domain.conn.is_qemu():
-            # Setting time of a qemu domain can only work if an agent is
-            # defined and online. We only get here if one is defined. So wait
-            # for it to come online now.
-            waited = 0
-            while waited < self._maxwait and not self._domain.agent_ready():
-                if waited == 0:
-                    log.debug("Waiting for qemu guest agent to come online...")
-
-                # sleep some time and potentially abort
-                if self._do_cancel.wait(self._sleep):
-                    return
-
-                waited += self._sleep
-
-            if not self._domain.agent_ready():
-                log.debug("Giving up on qemu guest agent for time sync")
-                return
-
+            self._wait_for_agent()
         self._domain.set_time()
 
     def _cleanup(self):
@@ -369,6 +372,8 @@ class vmmDomain(vmmLibvirtObject):
         for snap in self._snapshot_list or []:
             snap.cleanup()
         self._snapshot_list = None
+        self._set_time_thread.cleanup()
+        self._set_time_thread = None
         vmmLibvirtObject._cleanup(self)
 
     def _init_libvirt_state(self):
@@ -556,7 +561,7 @@ class vmmDomain(vmmLibvirtObject):
             if new_nvram:
                 try:
                     new_nvram.get_vol_object().delete(0)
-                except Exception as warn:
+                except Exception as warn:  # pragma: no cover
                     log.debug("rename failed and new nvram was not "
                                   "removed: '%s'", warn)
             raise error
@@ -564,7 +569,7 @@ class vmmDomain(vmmLibvirtObject):
         if new_nvram:
             try:
                 old_nvram.get_vol_object().delete(0)
-            except Exception as warn:
+            except Exception as warn:  # pragma: no cover
                 log.debug("old nvram file was not removed: '%s'", warn)
 
             self.define_overview(nvram=new_nvram.path)
@@ -1059,7 +1064,9 @@ class vmmDomain(vmmLibvirtObject):
     def job_info(self):
         if self.conn.is_test():
             return testmock.fake_job_info()
-        return self._backend.jobInfo()
+        # It's tough to hit this via uitests because it depends
+        # on the job lasting more than a second
+        return self._backend.jobInfo()  # pragma: no cover
     def abort_job(self):
         self._backend.abortJob()
 
@@ -1168,7 +1175,7 @@ class vmmDomain(vmmLibvirtObject):
             self._backend.setTime(time={"seconds": seconds,
                                         "nseconds": nseconds})
             log.debug("Successfully set guest time")
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.debug("Failed to set time: %s", e)
 
     def _async_set_time(self):
@@ -1256,7 +1263,7 @@ class vmmDomain(vmmLibvirtObject):
 
         consoles = self.xmlobj.devices.console
         if not consoles:
-            return False
+            return False  # pragma: no cover
 
         console = consoles[0]
         if (console.type == serial.type and

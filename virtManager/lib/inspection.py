@@ -19,10 +19,13 @@ def _inspection_error(_errstr):
     return data
 
 
-def _make_fake_data():
+def _make_fake_data(vm):
     """
     Return fake vmmInspectionData for use with the test driver
     """
+    if not vm.xmlobj.devices.disk:
+        return _inspection_error("Fake test error no disks")
+
     data = vmmInspectionData()
     data.os_type = "test_os_type"
     data.distro = "test_distro"
@@ -324,7 +327,7 @@ class vmmInspection(vmmGObject):
             return _inspection_error(
                     _("Cannot inspect VM on remote connection"))
         if conn.is_test():
-            return _make_fake_data()
+            return _make_fake_data(vm)
 
         return _perform_inspection(conn, vm)
 

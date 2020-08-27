@@ -160,7 +160,8 @@ class Host(uiutils.UITestCase):
         win.find_fuzzy("Network", "tab").click()
         win.find_fuzzy("Overview", "tab").click()
 
-        # Unset autoconnect
+        # Toggle autoconnect
+        win.find("Autoconnect:", "check box").click()
         win.find("Autoconnect:", "check box").click()
 
         # Change the name, verify that title bar changed

@@ -1,6 +1,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+from tests import utils
 from tests.uitests import utils as uiutils
 
 
@@ -47,6 +48,8 @@ class Manager(uiutils.UITestCase):
         uiutils.check(lambda: shutdown.sensitive, timeout=5)
 
     def testVMLifecycle(self):
+        # qemu hits some different domain code paths for setTime
+        self.app.uri = utils.URIs.kvm
         self._testVMLifecycle()
 
     def testVMNoEventsLifecycle(self):
@@ -130,7 +133,7 @@ class Manager(uiutils.UITestCase):
         test_action("Restore", shutdown=False, confirm=False)
         confirm_is_running()
 
-    def testManagedManagedSaveCornerCases(self):
+    def testManagerSaveCancelError(self):
         """
         Test managed save special behavior
         """
@@ -161,6 +164,32 @@ class Manager(uiutils.UITestCase):
         run.click()
         self._click_alert_button("remove the saved state", "Yes")
         uiutils.check(lambda: not run.sensitive)
+
+    def testManagerQEMUSetTime(self):
+        """
+        Fake qemu setTime behavior for code coverage
+        """
+        self.app.uri = utils.URIs.kvm
+        manager = self.app.topwin
+        run = manager.find("Run", "push button")
+        smenu = manager.find("Menu", "toggle button")
+        save = manager.find("Save", "menu item")
+
+        c = manager.find("test alternate devs title", "table cell")
+        c.click()
+
+        # Save -> resume -> save
+        smenu.click()
+        save.click()
+        uiutils.check(lambda: run.sensitive)
+        self.sleep(1)
+        run.click()
+        uiutils.check(lambda: not run.sensitive)
+        self.sleep(1)
+        smenu.click()
+        save.click()
+        uiutils.check(lambda: run.sensitive)
+        self.sleep(1)
 
     def testManagerVMRunFail(self):
         # Force VM startup to fail so we can test the error path
@@ -220,6 +249,10 @@ class Manager(uiutils.UITestCase):
         """
         manager = self.app.topwin
         host = self._open_host_window("Storage")
+        fmenu = host.find("File", "menu")
+        fmenu.click()
+        fmenu.find("View Manager", "menu item").click()
+        uiutils.check(lambda: manager.active)
 
         # Double click title to maximize
         manager.click_title()

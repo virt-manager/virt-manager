@@ -42,3 +42,14 @@ class VMMInspection(uiutils.UITestCase):
         assert "test_app1_summary" in nodestr1
         tab.find("Refresh", "push button").click()
         uiutils.check(lambda: apps.fmt_nodes() != nodestr1)
+
+        details.keyCombo("<alt>F4")
+        uiutils.check(lambda: not details.showing)
+
+        # Open a VM with no disks which will report an inspection error
+        self.app.root.find_fuzzy("test\n", "table cell").doubleClick()
+        details = self.app.root.find("test on", "frame")
+        details.find("Details", "radio button").click()
+        details.find("OS information", "table cell").click()
+        tab = details.find("os-tab")
+        tab.find_fuzzy("Fake test error no disks")

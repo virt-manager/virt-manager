@@ -49,13 +49,18 @@ class Details(uiutils.UITestCase):
         # Select XML editor, and reverse walk the list
         win.find("XML", "page tab").click()
         self._walkUIList(win, lst, lambda: False, reverse=True)
+        return win
 
     def testDetailsHardwareSmokeTest(self):
         self._testSmokeTest(None)
 
     def testDetailsHardwareSmokeTestAlternate(self):
         self.app.open(keyfile="allstats.ini")
-        self._testSmokeTest("test alternate devs title")
+        win = self._testSmokeTest("test alternate devs title")
+        win.find("Details", "page tab").click()
+        self._select_hw(win, "Performance", "performance-tab")
+        # Wait for perf signals to trigger, to cover more code
+        self.sleep(2)
 
     def _testRename(self, origname, newname):
         # Enable all stats prefs to hit some extra code
@@ -66,8 +71,16 @@ class Details(uiutils.UITestCase):
         win.find("Overview", "table cell").click()
 
         oldcell = self.app.root.find_fuzzy(origname, "table cell")
+        badname = "foo/bar"
+        win.find("Name:", "text").set_text(badname)
+        appl = win.find("config-apply")
+        appl.click()
+        self._click_alert_button(badname, "Close")
+
+        # Actual name change
         win.find("Name:", "text").set_text(newname)
-        win.find("config-apply", "push button").click()
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
 
         # Confirm lists were updated
         self.app.root.find("%s on" % newname, "frame")
@@ -91,7 +104,6 @@ class Details(uiutils.UITestCase):
         self.app.root.find_fuzzy(origname, "table cell").click()
         b = self.app.root.find("Shut Down", "push button")
         b.click()
-        # This insures the VM finished shutting down
         uiutils.check(lambda: b.sensitive is False)
 
         self._testRename(origname, "test-new-name")
@@ -102,7 +114,9 @@ class Details(uiutils.UITestCase):
         """
         self.app.uri = tests.utils.URIs.kvm
         win = self._open_details_window(vmname="test", shutdown=True)
-        self.app.topwin.click_title()
+        fmenu = win.find("File", "menu")
+        fmenu.click()
+        fmenu.find("View Manager").click()
         # Double run to hit a show() codepath
         win = self._open_details_window(vmname="test")
         uiutils.check(lambda: win.active)
@@ -308,6 +322,30 @@ class Details(uiutils.UITestCase):
         tab = self._select_hw(win, "Boot Options", "boot-tab")
         uiutils.check(lambda: "backing" in initrd.text)
 
+    def testDetailsAlternateEdits(self):
+        """
+        Some specific handling via test-alternate-devs
+        """
+        win = self._open_details_window(vmname="test alternate devs title")
+
+        # tests the console dup removal
+        self._select_hw(win, "Serial 1", "char-tab")
+        win.find("config-remove").click()
+        self._click_alert_button("Are you sure", "Yes")
+        self._click_alert_button("take effect after", "OK")
+        self._stop_vm(win)
+
+    def testDetailsEmptyBoot(self):
+        """
+        Check boot handling when VM has no devices
+        """
+        win = self._open_details_window(vmname="test-state-crashed")
+        self._select_hw(win, "Boot Options", "boot-tab")
+        win.find("No bootable devices")
+
+        # Add in switching back to the console view to hit a vmwindow path
+        win.find("Console", "radio button").click()
+
     def testDetailsEditDiskNet(self):
         """
         Test disk and network devices
@@ -398,8 +436,7 @@ class Details(uiutils.UITestCase):
         """
         Test all other devices
         """
-        win = self._open_details_window(vmname="test-many-devices",
-                shutdown=True)
+        win = self._open_details_window(vmname="test-many-devices")
         appl = win.find("config-apply", "push button")
 
         # Fail to hotremove
@@ -504,6 +541,10 @@ class Details(uiutils.UITestCase):
         uiutils.check(lambda: not appl.sensitive)
         tab = self._select_hw(win, "Controller USB 0", "controller-tab")
         tab.combo_select("controller-model", "USB 3")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+        tab = self._select_hw(win, "Controller USB 0", "controller-tab")
+        tab.find("controller-model").find(None, "text").text = "piix3-uhci"
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 

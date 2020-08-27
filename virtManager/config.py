@@ -4,8 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import os
-
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -151,18 +149,25 @@ class vmmConfig(object):
             "local_title":    _("Locate existing storage"),
             "dialog_type":    Gtk.FileChooserAction.SAVE,
             "choose_button":  Gtk.STOCK_OPEN,
+            "gsettings_key": "image",
+        },
+
+        CONFIG_DIR_SCREENSHOT: {
+            "gsettings_key": "screenshot",
         },
 
         CONFIG_DIR_ISO_MEDIA: {
             "enable_create":  False,
             "storage_title":  _("Locate ISO media volume"),
             "local_title":    _("Locate ISO media"),
+            "gsettings_key": "media",
         },
 
         CONFIG_DIR_FLOPPY_MEDIA: {
             "enable_create":  False,
             "storage_title":  _("Locate floppy media volume"),
             "local_title":    _("Locate floppy media"),
+            "gsettings_key": "media",
         },
 
         CONFIG_DIR_FS: {
@@ -367,11 +372,9 @@ class vmmConfig(object):
     def on_keys_combination_changed(self, cb):
         return self.conf.notify_add("/console/grab-keys", cb)
 
-    # This key is not intended to be exposed in the UI yet
+    # This key is not intended to be exposed in the UI yet (maybe ever)
     def get_keyboard_grab_default(self):
         return self.conf.get("/console/grab-keyboard")
-    def set_keyboard_grab_default(self, val):
-        self.conf.set("/console/grab-keyboard", val)
     def on_keyboard_grab_default_changed(self, cb):
         return self.conf.notify_add("/console/grab-keyboard", cb)
 
@@ -422,8 +425,6 @@ class vmmConfig(object):
 
 
     # Libguestfs VM inspection
-    def on_libguestfs_inspect_vms_changed(self, cb):
-        return self.conf.notify_add("/enable-libguestfs-vm-inspection", cb)
     def get_libguestfs_inspect_vms(self):
         if self.CLITestOptions.config_libguestfs:
             return True
@@ -439,9 +440,7 @@ class vmmConfig(object):
         return 120
     def get_stats_update_interval(self):
         interval = self.conf.get("/stats/update-interval")
-        if interval < 1:
-            return 1
-        return interval
+        return max(interval, 1)
     def set_stats_update_interval(self, interval):
         self.conf.set("/stats/update-interval", interval)
     def on_stats_update_interval_changed(self, cb):
@@ -482,20 +481,16 @@ class vmmConfig(object):
     def get_console_accels(self):
         console_pref = self.conf.get("/console/enable-accels")
         if console_pref is None:
-            console_pref = False
+            console_pref = False  # pragma: no cover
         return console_pref
     def set_console_accels(self, pref):
         self.conf.set("/console/enable-accels", pref)
 
-    def on_console_scaling_changed(self, cb):
-        return self.conf.notify_add("/console/scaling", cb)
     def get_console_scaling(self):
         return self.conf.get("/console/scaling")
     def set_console_scaling(self, pref):
         self.conf.set("/console/scaling", pref)
 
-    def on_console_resizeguest_changed(self, cb):
-        return self.conf.notify_add("/console/resize-guest", cb)
     def get_console_resizeguest(self):
         val = self.conf.get("/console/resize-guest")
         if val == -1:
@@ -513,20 +508,10 @@ class vmmConfig(object):
     def get_details_show_toolbar(self):
         res = self.conf.get("/details/show-toolbar")
         if res is None:
-            res = True
+            res = True  # pragma: no cover
         return res
     def set_details_show_toolbar(self, state):
         self.conf.set("/details/show-toolbar", state)
-
-    # VM details default size
-    def get_details_window_size(self):
-        w = self.conf.get("/details/window_width")
-        h = self.conf.get("/details/window_height")
-        return (w, h)
-    def set_details_window_size(self, w, h):
-        self.conf.set("/details/window_width", w)
-        self.conf.set("/details/window_height", h)
-
 
     # New VM preferences
     def get_new_vm_sound(self):
@@ -537,7 +522,7 @@ class vmmConfig(object):
     def get_graphics_type(self, raw=False):
         ret = self.conf.get("/new-vm/graphics-type")
         if ret not in ["system", "vnc", "spice"]:
-            ret = "system"
+            ret = "system"  # pragma: no cover
         if ret == "system" and not raw:
             return self.default_graphics_from_config
         return ret
@@ -547,9 +532,7 @@ class vmmConfig(object):
     def get_add_spice_usbredir(self, raw=False):
         ret = self.conf.get("/new-vm/add-spice-usbredir")
         if ret not in ["system", "yes", "no"]:
-            ret = "system"
-        if not raw and self.get_graphics_type() != "spice":
-            return "no"
+            ret = "system"  # pragma: no cover
         if ret == "system" and not raw:
             return self.default_add_spice_usbredir
         return ret
@@ -559,7 +542,7 @@ class vmmConfig(object):
     def get_default_storage_format(self, raw=False):
         ret = self.conf.get("/new-vm/storage-format")
         if ret not in ["default", "raw", "qcow2"]:
-            ret = "default"
+            ret = "default"  # pragma: no cover
         if ret == "default" and not raw:
             return self.default_storage_format_from_config
         return ret
@@ -570,7 +553,7 @@ class vmmConfig(object):
         ret = self.conf.get("/new-vm/cpu-default")
 
         if ret not in DomainCpu.SPECIAL_MODES:
-            ret = DomainCpu.SPECIAL_MODE_APP_DEFAULT
+            ret = DomainCpu.SPECIAL_MODE_APP_DEFAULT  # pragma: no cover
         return ret
     def set_default_cpu_setting(self, val):
         self.conf.set("/new-vm/cpu-default", val.lower())
@@ -579,15 +562,13 @@ class vmmConfig(object):
     # URL/Media path history
     def _url_add_helper(self, gsettings_path, url):
         maxlength = 10
-        urls = self.conf.get(gsettings_path)
-        if urls is None:
-            urls = []
+        urls = self.conf.get(gsettings_path) or []
 
         if urls.count(url) == 0 and len(url) > 0 and not url.isspace():
             # The url isn't already in the list, so add it
             urls.insert(0, url)
             if len(urls) > maxlength:
-                del urls[len(urls) - 1]
+                del urls[len(urls) - 1]  # pragma: no cover
             self.conf.set(gsettings_path, urls)
 
     def add_container_url(self, url):
@@ -613,7 +594,7 @@ class vmmConfig(object):
         current_list = self.get_perms_fix_ignore() or []
         for path in pathlist:
             if path in current_list:
-                continue
+                continue  # pragma: no cover
             current_list.append(path)
         self.conf.set("/paths/perms-fix-ignore", current_list)
     def get_perms_fix_ignore(self):
@@ -654,9 +635,7 @@ class vmmConfig(object):
         return ((uris is not None) and (uri in uris))
 
     def set_conn_autoconnect(self, uri, val):
-        uris = self.conf.get("/connections/autoconnect")
-        if uris is None:
-            uris = []
+        uris = self.conf.get("/connections/autoconnect") or []
         if not val and uri in uris:
             uris.remove(uri)
         elif val and uri not in uris:
@@ -666,36 +645,23 @@ class vmmConfig(object):
 
 
     # Default directory location dealings
-    def _get_default_dir_key(self, _type):
-        if (_type in [self.CONFIG_DIR_ISO_MEDIA,
-                      self.CONFIG_DIR_FLOPPY_MEDIA]):
-            return "media"
-        if (_type in [self.CONFIG_DIR_IMAGE,
-                      self.CONFIG_DIR_SCREENSHOT]):
-            return _type
-        return None
-
     def get_default_directory(self, conn, _type):
         ignore = conn
-        key = self._get_default_dir_key(_type)
+        browsedata = self.browse_reason_data.get(_type, {})
+        key = browsedata.get("gsettings_key", None)
         path = None
 
         if key:
             path = self.conf.get("/paths/%s-default" % key)
 
-        if not path:
-            if (_type == self.CONFIG_DIR_IMAGE or
-                _type == self.CONFIG_DIR_ISO_MEDIA or
-                _type == self.CONFIG_DIR_FLOPPY_MEDIA):
-                path = os.getcwd()
-
         log.debug("directory for type=%s returning=%s", _type, path)
         return path
 
     def set_default_directory(self, folder, _type):
-        key = self._get_default_dir_key(_type)
+        browsedata = self.browse_reason_data.get(_type, {})
+        key = browsedata.get("gsettings_key", None)
         if not key:
-            return
+            return  # pragma: no cover
 
         log.debug("saving directory for type=%s to %s", key, folder)
         self.conf.set("/paths/%s-default" % key, folder)

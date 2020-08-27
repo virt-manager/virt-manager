@@ -462,8 +462,8 @@ class vmmVMWindow(vmmGObjectUI):
             vmmenu.VMActionUI.resume(self, self.vm)
 
     def control_vm_menu(self, src_ignore):
-        can_usb = bool(self.console.details_viewer_has_usb_redirection() and
-                       self.vm.has_spicevmc_type_redirdev())
+        can_usb = bool(self.vm.has_spicevmc_type_redirdev() and
+                       self.console.details_viewer_has_usb_redirection())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
     def control_vm_run(self, src_ignore):
