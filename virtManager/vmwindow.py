@@ -144,8 +144,6 @@ class vmmVMWindow(vmmGObjectUI):
         # Deliberately keep all this after signal connection
         self.vm.connect("state-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
-        self.vm.connect("inspection-changed",
-                lambda *x: self._details.refresh_os_page())
 
         self.refresh_vm_state()
         self.activate_default_page()
@@ -302,9 +300,9 @@ class vmmVMWindow(vmmGObjectUI):
             if self._details.vmwindow_has_unapplied_changes():
                 self.sync_details_console_view(pages.get_current_page())
                 return
-            self._details.disable_apply()
 
         if is_details:
+            self._details.vmwindow_show_details()
             pages.set_current_page(DETAILS_PAGE_DETAILS)
         elif is_snapshot:
             self.snapshots.show_page()
