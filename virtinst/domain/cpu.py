@@ -57,13 +57,43 @@ class _CPUFeature(XMLBuilder):
     policy = XMLProperty("./@policy")
 
 
+class _CPUTopology(XMLBuilder):
+    """
+    Class for generating <cpu> <topology> XML
+    """
+    XML_NAME = "topology"
+    _XML_PROP_ORDER = ["sockets", "cores", "threads"]
+
+    sockets = XMLProperty("./@sockets", is_int=True)
+    cores = XMLProperty("./@cores", is_int=True)
+    threads = XMLProperty("./@threads", is_int=True)
+
+    def set_defaults_from_vcpus(self, vcpus):
+        if not self.sockets:
+            if not self.cores:
+                self.sockets = vcpus // self.threads
+            else:
+                self.sockets = vcpus // self.cores
+
+        if not self.cores:
+            if not self.threads:
+                self.cores = vcpus // self.sockets
+            else:
+                self.cores = vcpus // (self.sockets * self.threads)
+
+        if not self.threads:
+            self.threads = vcpus // (self.sockets * self.cores)
+
+        return
+
+
 class DomainCpu(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
     XML_NAME = "cpu"
     _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
-                       "sockets", "cores", "threads", "features"]
+            "topology", "features"]
 
     secure = True
 
@@ -207,13 +237,15 @@ class DomainCpu(XMLBuilder):
         Determine the CPU count represented by topology, or 1 if
         no topology is set
         """
-        return (self.sockets or 1) * (self.cores or 1) * (self.threads or 1)
+        return ((self.topology.sockets or 1) *
+                (self.topology.cores or 1) *
+                (self.topology.threads or 1))
 
     def has_topology(self):
         """
         Return True if any topology info is set
         """
-        return bool(self.sockets or self.cores or self.threads)
+        return bool(self.topology.get_xml())
 
     def set_topology_defaults(self, vcpus):
         """
@@ -223,28 +255,14 @@ class DomainCpu(XMLBuilder):
         """
         if not self.has_topology():
             return
-
-        if not self.sockets:
-            if not self.cores:
-                self.sockets = vcpus // self.threads
-            else:
-                self.sockets = vcpus // self.cores
-
-        if not self.cores:
-            if not self.threads:
-                self.cores = vcpus // self.sockets
-            else:
-                self.cores = vcpus // (self.sockets * self.threads)
-
-        if not self.threads:
-            self.threads = vcpus // (self.sockets * self.cores)
-
-        return
+        self.topology.set_defaults_from_vcpus(vcpus)
 
 
     ##################
     # XML properties #
     ##################
+
+    topology = XMLChildProperty(_CPUTopology, is_single=True)
 
     model = XMLProperty("./model")
     model_fallback = XMLProperty("./model/@fallback")
@@ -252,10 +270,6 @@ class DomainCpu(XMLBuilder):
     match = XMLProperty("./@match")
     vendor = XMLProperty("./vendor")
     mode = XMLProperty("./@mode")
-
-    sockets = XMLProperty("./topology/@sockets", is_int=True)
-    cores = XMLProperty("./topology/@cores", is_int=True)
-    threads = XMLProperty("./topology/@threads", is_int=True)
 
 
     ##################

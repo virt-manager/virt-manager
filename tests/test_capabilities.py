@@ -33,9 +33,9 @@ class TestCapabilities(unittest.TestCase):
 
         self.assertEqual(caps.host.cpu.model, "core2duo")
         self.assertEqual(caps.host.cpu.vendor, "Intel")
-        self.assertEqual(caps.host.cpu.threads, 3)
-        self.assertEqual(caps.host.cpu.cores, 5)
-        self.assertEqual(caps.host.cpu.sockets, 7)
+        self.assertEqual(caps.host.cpu.topology.threads, 3)
+        self.assertEqual(caps.host.cpu.topology.cores, 5)
+        self.assertEqual(caps.host.cpu.topology.sockets, 7)
 
     def testCapsUtilFuncs(self):
         caps_with_kvm = self._buildCaps("test-qemu-with-kvm.xml")

@@ -2222,9 +2222,9 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("disable", None, lookup_cb=None, cb=cls.set_feature_cb)
         cls.add_arg("forbid", None, lookup_cb=None, cb=cls.set_feature_cb)
 
-        cls.add_arg("topology.sockets", "sockets")
-        cls.add_arg("topology.cores", "cores")
-        cls.add_arg("topology.threads", "threads")
+        cls.add_arg("topology.sockets", "topology.sockets")
+        cls.add_arg("topology.cores", "topology.cores")
+        cls.add_arg("topology.threads", "topology.threads")
 
         # Options for CPU.cells config
         cls.add_arg("numa.cell[0-9]*.id", "id",
@@ -2407,9 +2407,9 @@ class ParserVCPU(VirtCLIParser):
         cls.add_arg("vcpus", "vcpus", cb=cls.noset_cb)
 
         # Further CPU options should be added to --cpu
-        cls.add_arg("sockets", "cpu.sockets")
-        cls.add_arg("cores", "cpu.cores")
-        cls.add_arg("threads", "cpu.threads")
+        cls.add_arg("sockets", "cpu.topology.sockets")
+        cls.add_arg("cores", "cpu.topology.cores")
+        cls.add_arg("threads", "cpu.topology.threads")
 
         # <domain><vcpu> options
         cls.add_arg("vcpu", "vcpus")

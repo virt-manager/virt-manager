@@ -20,8 +20,8 @@
   </features>
   <clock offset="utc"/>
   <cpu mode="custom" match="exact">
+    <topology cores="4" sockets="1" threads="1"/>
     <model fallback="allow">foobar</model>
-    <topology sockets="1" cores="4" threads="1"/>
     <feature policy="forbid" name="x2apic"/>
   </cpu>
   <seclabel type="static" model="testSecurity">
