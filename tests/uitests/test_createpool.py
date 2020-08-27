@@ -40,7 +40,7 @@ class CreatePool(uiutils.UITestCase):
         # Create a simple default dir pool
         uiutils.check(lambda: name.text == "pool")
         newname = "a-test-new-pool"
-        name.text = newname
+        name.set_text(newname)
         finish.click()
 
         # Select the new object in the host window, then do
@@ -72,7 +72,7 @@ class CreatePool(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         win.combo_select("Type:", "disk:")
         newname = "a-disk-pool"
-        name.text = "a-disk-pool"
+        name.set_text("a-disk-pool")
         win.find("source-browse").click()
         _browse_local_path("Choose source path", "console")
         finish.click()
@@ -82,16 +82,16 @@ class CreatePool(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         win.combo_select("Type:", "iscsi:")
         newname = "a-iscsi-pool"
-        name.text = "a-iscsi-pool"
+        name.set_text("a-iscsi-pool")
         win.find("target-browse").click()
         _browse_local_path("Choose target directory", "by-path")
         finish.click()
         # Catch example error
         self._click_alert_button("source host name", "Close")
-        win.find("Host Name:", "text").text = "example.com"
-        win.find("pool-source-path-text").text = "foo-iqn"
+        win.find("Host Name:", "text").set_text("example.com")
+        win.find("pool-source-path-text").set_text("foo-iqn")
         win.find_fuzzy("Initiator IQN:", "check").click()
-        win.find("iqn-text", "text").text = "initiator-foo"
+        win.find("iqn-text", "text").set_text("initiator-foo")
         finish.click()
         hostwin.find(newname, "table cell")
 
@@ -99,7 +99,7 @@ class CreatePool(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         win.combo_select("Type:", "logical:")
         newname = "a-lvm-pool"
-        name.text = "a-lvm-pool"
+        name.set_text("a-lvm-pool")
 
         win.combo_check_default("Volgroup", "testvg1")
         win.combo_select("Volgroup", "testvg2")
@@ -110,7 +110,7 @@ class CreatePool(uiutils.UITestCase):
         win = self._open_create_win(hostwin)
         win.combo_select("Type:", "scsi:")
         newname = "a-scsi-pool"
-        name.text = "a-scsi-pool"
+        name.set_text("a-scsi-pool")
         win.combo_select("Source Adapter:", "host2")
         finish.click()
         hostwin.find(newname, "table cell")
@@ -118,9 +118,9 @@ class CreatePool(uiutils.UITestCase):
         # Test a ceph pool
         win = self._open_create_win(hostwin)
         newname = "a-ceph-pool"
-        name.text = "a-ceph-pool"
+        name.set_text("a-ceph-pool")
         win.combo_select("Type:", "rbd:")
-        win.find_fuzzy("Host Name:", "text").text = "example.com:1234"
+        win.find_fuzzy("Host Name:", "text").set_text("example.com:1234")
         win.find_fuzzy("pool-source-name-text", "text").typeText("frob")
         finish.click()
         uiutils.check(lambda: not win.showing)
@@ -143,11 +143,11 @@ class CreatePool(uiutils.UITestCase):
         # Create a new obj with XML edited name, verify it worked
         tmpname = "objtmpname"
         newname = "froofroo"
-        name.text = tmpname
+        name.set_text(tmpname)
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
-        xmleditor.text = xmleditor.text.replace(
-                ">%s<" % tmpname, ">%s<" % newname)
+        newtext = xmleditor.text.replace(">%s<" % tmpname, ">%s<" % newname)
+        xmleditor.set_text(newtext)
         finish.click()
         uiutils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")

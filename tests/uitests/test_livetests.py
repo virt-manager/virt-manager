@@ -177,7 +177,7 @@ class Console(uiutils.UITestCase):
         tab = addhw.find("storage-tab", None)
         uiutils.check(lambda: tab.showing)
         tab.find("Select or create", "radio button").click()
-        tab.find("storage-entry").text = fname
+        tab.find("storage-entry").set_text(fname)
         tab.combo_select("Bus type:", "SCSI")
         addhw.find("Finish", "push button").click()
 
@@ -205,7 +205,7 @@ class Console(uiutils.UITestCase):
         entry = win.find("media-entry")
         appl = win.find("config-apply")
         uiutils.check(lambda: tab.showing)
-        entry.text = fname
+        entry.set_text(fname)
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda: entry.text == fname)

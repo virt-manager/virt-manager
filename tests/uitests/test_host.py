@@ -44,7 +44,7 @@ class Host(uiutils.UITestCase):
         xmleditor = win.find("XML editor")
         origdev = "virbr0"
         newdev = "virbr77"
-        xmleditor.text = xmleditor.text.replace(origdev, newdev)
+        xmleditor.set_text(xmleditor.text.replace(origdev, newdev))
         finish.click()
         win.find("Details", "page tab").click()
         netdev = win.find("net-device")
@@ -52,7 +52,7 @@ class Host(uiutils.UITestCase):
 
         # Rename it
         win.find("default", "table cell").click()
-        win.find("net-name").text = "newsort-default"
+        win.find("net-name").set_text("newsort-default")
         finish.click()
 
         # Change autostart, trigger it by clicking away
@@ -96,7 +96,7 @@ class Host(uiutils.UITestCase):
         xmleditor = win.find("XML editor")
         origpath = "/dev/default-pool"
         newpath = "/dev/foo/bar/baz"
-        xmleditor.text = xmleditor.text.replace(origpath, newpath)
+        xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
         finish.click()
         win.find("Details", "page tab").click()
         poolloc = win.find("pool-location")
@@ -104,7 +104,7 @@ class Host(uiutils.UITestCase):
 
         # Rename it
         win.find("default", "table cell").click()
-        win.find("pool-name").text = "newsort-default"
+        win.find("pool-name").set_text("newsort-default")
         finish.click()
 
         # Change autostart. Trigger it by clicking on new cell
@@ -164,7 +164,7 @@ class Host(uiutils.UITestCase):
         win.find("Autoconnect:", "check box").click()
 
         # Change the name, verify that title bar changed
-        win.find("Name:", "text").text = "FOOBAR"
+        win.find("Name:", "text").set_text("FOOBAR")
         self.app.root.find("FOOBAR Connection Details", "frame")
 
         # Open the manager window

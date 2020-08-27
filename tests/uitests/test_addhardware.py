@@ -152,10 +152,10 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Discard mode:", "ignore")
         tab.combo_select("Detect zeroes:", "unmap")
         # Size too big
-        tab.find("GiB", "spin button").text = "2000"
+        tab.find("GiB", "spin button").set_text("2000")
         self._finish(addhw, check=None)
         self._click_alert_button("not enough free space", "Close")
-        tab.find("GiB", "spin button").text = "1.5"
+        tab.find("GiB", "spin button").set_text("1.5")
         self._finish(addhw, check=details)
 
         # Managed storage tests
@@ -172,7 +172,7 @@ class AddHardware(uiutils.UITestCase):
         browse.find("vol-new", "push button").click()
         newvol = self.app.root.find("Add a Storage Volume", "frame")
         newname = "a-newvol"
-        newvol.find("Name:", "text").text = newname
+        newvol.find("Name:", "text").set_text(newname)
         newvol.find("Finish", "push button").click()
         uiutils.check(lambda: not newvol.showing)
         volcell = browse.find(newname, "table cell")
@@ -221,7 +221,7 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Device type:", "Floppy device")
         diskradio = tab.find_fuzzy("Create a disk image", "radio")
         uiutils.check(lambda: not diskradio.sensitive)
-        tab.find("storage-entry").text = "/dev/default-pool/bochs-vol"
+        tab.find("storage-entry").set_text("/dev/default-pool/bochs-vol")
         self._finish(addhw, check=details)
 
         # empty cdrom
@@ -244,7 +244,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo1.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
         self._click_alert_button("emulator may not have", "No")
         uiutils.check(lambda: details.active)
@@ -254,7 +254,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo2.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
         alert = self.app.root.find_fuzzy("vmm dialog", "alert")
         alert.find_fuzzy("Don't ask", "check box").click()
@@ -266,7 +266,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo3.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=details)
 
     @_search_permissions_decorator
@@ -282,7 +282,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo1.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
         self._click_alert_button("emulator may not have", "Yes")
         uiutils.check(lambda: details.active)
@@ -292,7 +292,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo3.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=details)
 
     @_search_permissions_decorator
@@ -309,7 +309,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo1.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
         self._click_alert_button("emulator may not have", "Yes")
         alert = self.app.root.find("vmm dialog", "alert")
@@ -323,7 +323,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         path = tmpdir + "/foo2.img"
-        tab.find("storage-entry").text = path
+        tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=details)
 
     def testAddNetworks(self):
@@ -336,7 +336,7 @@ class AddHardware(uiutils.UITestCase):
         # Basic network + opts
         tab = self._select_hw(addhw, "Network", "network-tab")
         tab.combo_select("net-source", "Virtual network 'default'")
-        tab.find("MAC Address Field", "text").text = "00:11:00:11:00:11"
+        tab.find("MAC Address Field", "text").set_text("00:11:00:11:00:11")
         tab.combo_select("Device model:", "virtio")
         self._finish(addhw, check=details)
 
@@ -344,7 +344,7 @@ class AddHardware(uiutils.UITestCase):
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Network", "network-tab")
         tab.combo_select("net-source", "Macvtap device...")
-        tab.find("Device name:", "text").text = "macvtapfoo7"
+        tab.find("Device name:", "text").set_text("macvtapfoo7")
         self._finish(addhw, check=details)
 
         # Manual bridge. Also trigger MAC collision
@@ -352,14 +352,14 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Network", "network-tab")
         tab.find("mac-address-enable", "check box").click()
         tab.combo_select("net-source", "Bridge device...")
-        tab.find("Device name:", "text").text = "zbr0"
+        tab.find("Device name:", "text").set_text("zbr0")
         self._finish(addhw, check=None)
         # Check MAC validation error
         self._click_alert_button("00:11:22:33:44:55", "Close")
 
         # Fix MAC
         tab.find("mac-address-enable", "check box").click()
-        tab.find("MAC Address Field", "text").text = "00:11:0A:11:00:11"
+        tab.find("MAC Address Field", "text").set_text("00:11:0A:11:00:11")
         self._finish(addhw, check=details)
 
 
@@ -376,7 +376,7 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Listen type:", "Address")
         tab.combo_select("Address:", "All interfaces")
         tab.find("graphics-port-auto", "check").click()
-        tab.find("graphics-port", "spin button").text = "1234"
+        tab.find("graphics-port", "spin button").set_text("1234")
         tab.find("Password:", "check").click()
         passwd = tab.find_fuzzy("graphics-password", "text")
         newpass = "foobar"
@@ -388,7 +388,7 @@ class AddHardware(uiutils.UITestCase):
         self._finish(addhw, check=None)
         # Catch a port error
         self._click_alert_button("Port must be above 5900", "Close")
-        tab.find("graphics-port", "spin button").text = "5920"
+        tab.find("graphics-port", "spin button").set_text("5920")
         self._finish(addhw, check=details)
 
         # Spice regular example
@@ -462,7 +462,7 @@ class AddHardware(uiutils.UITestCase):
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Serial", "char-tab")
         tab.combo_select("Device Type:", "Output to a file")
-        tab.find("Path:", "text").text = "/tmp/foo.log"
+        tab.find("Path:", "text").set_text("/tmp/foo.log")
         self._finish(addhw, check=details)
 
         self._open_addhw_window(details)
@@ -495,7 +495,7 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Format:", "qcow2")
 
         source = tab.find("Source path:", "text")
-        source.text = "/foo/source"
+        source.set_text("/foo/source")
         tab.find("Browse...", "push button").click()
         # Specific testing for dir vol handling for filesystem browse
         browsewin = self.app.root.find("vmm-storage-browser")
@@ -513,18 +513,18 @@ class AddHardware(uiutils.UITestCase):
         tab.find_fuzzy("Export filesystem", "check").click()
         # Use this to test some error.py logic for truncating large errors
         badtarget = "a" * 1024
-        tab.find("Target path:", "text").text = badtarget
+        tab.find("Target path:", "text").set_text(badtarget)
         self._finish(addhw, check=None)
         self._click_alert_button("aaa...", "Close")
-        tab.find("Target path:", "text").text = "/foo/target"
+        tab.find("Target path:", "text").set_text("/foo/target")
         self._finish(addhw, check=details)
 
         # Add RAM type
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Filesystem", "filesystem-tab")
         tab.combo_select("Type:", "Ram")
-        tab.find("Usage:", "spin button").text = "12345"
-        tab.find("Target path:", "text").text = "/mem"
+        tab.find("Usage:", "spin button").set_text("12345")
+        tab.find("Target path:", "text").set_text("/mem")
         self._finish(addhw, check=details)
 
 
@@ -592,8 +592,8 @@ class AddHardware(uiutils.UITestCase):
         # Add basic filesystem
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Filesystem", "filesystem-tab")
-        tab.find("Source path:", "text").text = "/foo/source"
-        tab.find("Target path:", "text").text = "/foo/target"
+        tab.find("Source path:", "text").set_text("/foo/source")
+        tab.find("Target path:", "text").set_text("/foo/target")
         self._finish(addhw, check=details)
 
         # Add TPM passthrough
@@ -601,13 +601,13 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "TPM", "tpm-tab")
         tab.combo_select("Model:", "TIS")
         tab.combo_select("Backend:", "Passthrough")
-        tab.find("Device Path:", "text").text = "/tmp/foo"
+        tab.find("Device Path:", "text").set_text("/tmp/foo")
         self._finish(addhw, check=details)
 
         # Add RNG
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "RNG", "rng-tab")
-        tab.find("Host Device:", "text").text = "/dev/random"
+        tab.find("Host Device:", "text").set_text("/dev/random")
         self._finish(addhw, check=details)
 
         # Add Panic
@@ -620,7 +620,7 @@ class AddHardware(uiutils.UITestCase):
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "VirtIO VSOCK", "vsock-tab")
         tab.find("vsock-auto").click()
-        tab.find("vsock-cid").text = "7"
+        tab.find("vsock-cid").set_text("7")
         self._finish(addhw, check=details)
 
     def testAddHWUSBNone(self):
@@ -641,7 +641,7 @@ class AddHardware(uiutils.UITestCase):
         addhw = self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Controller", "controller-tab")
         combo = tab.find("Type:", "combo box")
-        combo.find(None, "text").text = "foobar"
+        combo.find(None, "text").set_text("foobar")
         self._finish(addhw, check=None)
         self._click_alert_button("Unable to add device", "Close")
         uiutils.check(lambda: addhw.active)
@@ -691,14 +691,14 @@ class AddHardware(uiutils.UITestCase):
         xmleditor = win.find("XML editor")
         origpath = "/var/lib/libvirt/images/test-clone-simple.qcow2"
         newpath = "/FOO/XMLEDIT/test1.img"
-        xmleditor.text = xmleditor.text.replace(origpath, newpath)
+        xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
         self._finish(win, check=None)
         self._click_alert_button("non-existent path", "Close")
 
         # Undo the bad change, change bus/target
-        xmleditor.text = xmleditor.text.replace(newpath, origpath)
-        xmleditor.text = xmleditor.text.replace("hdb", "xvda")
-        xmleditor.text = xmleditor.text.replace("ide", "xen")
+        xmleditor.set_text(xmleditor.text.replace(newpath, origpath))
+        xmleditor.set_text(xmleditor.text.replace("hdb", "xvda"))
+        xmleditor.set_text(xmleditor.text.replace("ide", "xen"))
         self._finish(win, check=details)
 
         # Verify the changes applied

@@ -57,7 +57,7 @@ class Manager(uiutils.UITestCase):
         self.app.root.find("Preferences", "menu item").click()
         win = self.app.root.find_fuzzy("Preferences", "frame")
         win.find("Polling", "page tab").click()
-        win.find("cpu-poll").text = "1"
+        win.find("cpu-poll").set_text("1")
         win.find("Close", "push button").click()
 
         self._testVMLifecycle()

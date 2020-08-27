@@ -77,14 +77,14 @@ class VMMConnect(uiutils.UITestCase):
         # fall back to the dialog
         win.combo_select("Hypervisor", "Xen")
         remote.click()
-        user.text = "fribuser"
+        user.set_text("fribuser")
         connect.click()
         self._click_alert_button("hostname is required", "OK")
         fakeipv6 = "fe80::1"
-        host.text = fakeipv6
+        host.set_text(fakeipv6)
         uiutils.check(lambda: urilabel.text == "xen+ssh://fribuser@[%s]/" % fakeipv6)
         fakehost = "ix8khfyidontexistkdjur.com"
-        host.text = fakehost + ":12345"
+        host.set_text(fakehost + ":12345")
         uiutils.check(lambda: urilabel.text == "xen+ssh://fribuser@%s:12345/" % fakehost)
         connect.click()
 
@@ -111,7 +111,7 @@ class VMMConnect(uiutils.UITestCase):
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
         win.combo_select("Hypervisor", "Custom URI")
-        urientry.text = "test:///default"
+        urientry.set_text("test:///default")
         connect.click()
 
         # Do it again to make sure things don't explode
@@ -120,7 +120,7 @@ class VMMConnect(uiutils.UITestCase):
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
         win.combo_select("Hypervisor", "Custom URI")
-        urientry.text = "test:///default"
+        urientry.set_text("test:///default")
         connect.click()
 
         # Try various connect/disconnect routines

@@ -36,8 +36,8 @@ class CreateVol(uiutils.UITestCase):
         # Create a default qcow2 volume
         uiutils.check(lambda: name.text == "vol")
         newname = "a-newvol"
-        name.text = newname
-        win.find("Max Capacity:", "spin button").text = "10.5"
+        name.set_text(newname)
+        win.find("Max Capacity:", "spin button").set_text("10.5")
         finish.click()
 
         # Delete it, clicking 'No' first
@@ -70,7 +70,7 @@ class CreateVol(uiutils.UITestCase):
 
         # Create a qcow2 with backing file
         newname = "aaa-qcow2-backing.qcow2"
-        name.text = newname
+        name.set_text(newname)
         win.combo_select("Format:", "qcow2")
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
@@ -95,19 +95,19 @@ class CreateVol(uiutils.UITestCase):
         # Create a raw volume with some size tweaking
         win = self._open_create_win(hostwin)
         # Using previous name so we collide
-        name.text = newname
+        name.set_text(newname)
         win.combo_select("Format:", "raw")
         cap = win.find("Max Capacity:", "spin button")
         alloc = win.find("Allocation:", "spin button")
-        alloc.text = "50.0"
+        alloc.set_text("50.0")
         alloc.click()
         self.pressKey("Enter")
         uiutils.check(lambda: cap.text == "50.0")
-        cap.text = "1.0"
+        cap.set_text("1.0")
         cap.click()
         self.pressKey("Enter")
         uiutils.check(lambda: alloc.text == "1.0")
-        alloc.text = "0.5"
+        alloc.set_text("0.5")
         alloc.click()
         self.pressKey("Enter")
         uiutils.check(lambda: cap.text == "1.0")
@@ -115,7 +115,7 @@ class CreateVol(uiutils.UITestCase):
         finish.click()
         self._click_alert_button("Error validating volume", "Close")
         newname = "a-newvol.raw"
-        name.text = newname
+        name.set_text(newname)
         finish.click()
         vollist.find(newname)
 
@@ -123,7 +123,7 @@ class CreateVol(uiutils.UITestCase):
         hostwin.find("disk-pool", "table cell").click()
         win = self._open_create_win(hostwin)
         newname = "aaa-lvm"
-        name.text = newname
+        name.set_text(newname)
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
         self._select_storagebrowser_volume("disk-pool", "diskvol7")
@@ -144,11 +144,12 @@ class CreateVol(uiutils.UITestCase):
         # Create a new obj with XML edited name, verify it worked
         tmpname = "objtmpname"
         newname = "aafroofroo"
-        name.text = tmpname
+        name.set_text(tmpname)
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
-        xmleditor.text = xmleditor.text.replace(
-                ">%s.qcow2<" % tmpname, ">%s<" % newname)
+        newtext = xmleditor.text.replace(
+                        ">%s.qcow2<" % tmpname, ">%s<" % newname)
+        xmleditor.set_text(newtext)
         finish.click()
         uiutils.check(lambda: hostwin.active)
         vollist.find(newname)
