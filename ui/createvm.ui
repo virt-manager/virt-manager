@@ -1078,6 +1078,11 @@ User shouldn't see this.</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="invisible_char">●</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="install-import-entry-atkobject">
+                                                <property name="AtkObject::accessible-name">import-entry</property>
+                                              </object>
+                                            </child>
                                           </object>
                                           <packing>
                                             <property name="expand">True</property>

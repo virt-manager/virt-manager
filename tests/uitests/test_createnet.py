@@ -32,7 +32,7 @@ class CreateNet(uiutils.UITestCase):
         finish = win.find("Finish", "push button")
         uiutils.check(lambda: name.text == "network")
         newname = "a-test-new-net"
-        name.text = newname
+        name.set_text(newname)
         finish.click()
 
         # Select the new network in the host window, then do
@@ -74,11 +74,11 @@ class CreateNet(uiutils.UITestCase):
         # Create a new obj with XML edited name, verify it worked
         tmpname = "objtmpname"
         newname = "froofroo"
-        name.text = tmpname
+        name.set_text(tmpname)
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
-        xmleditor.text = xmleditor.text.replace(
-                ">%s<" % tmpname, ">%s<" % newname)
+        newtext = xmleditor.text.replace(">%s<" % tmpname, ">%s<" % newname)
+        xmleditor.set_text(newtext)
         finish.click()
         uiutils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
@@ -107,11 +107,11 @@ class CreateNet(uiutils.UITestCase):
         finish = win.find("Finish", "push button")
 
         # Create a network with a bunch of options
-        win.find("Name:", "text").text = "default"
+        win.find("Name:", "text").set_text("default")
         win.find("net-mode").click()
         win.find("Isolated", "menu item").click()
         win.find("IPv4 configuration").click_expander()
-        win.find("ipv4-network").text = "192.168.100.0/25"
+        win.find("ipv4-network").set_text("192.168.100.0/25")
         ipv4start = win.find("ipv4-start")
         ipv4end = win.find("ipv4-end")
         uiutils.check(lambda: ipv4start.text == "192.168.100.64")
@@ -121,26 +121,26 @@ class CreateNet(uiutils.UITestCase):
         win.find("IPv6 configuration").click_expander()
         win.find("Enable IPv6").click()
         win.find("Enable DHCPv6").click()
-        win.find("ipv6-network").text = "fd00:beef:10:6::1/64"
-        win.find("ipv6-start").text = "fd00:beef:10:6::1:1"
-        win.find("ipv6-end").text = "bad"
+        win.find("ipv6-network").set_text("fd00:beef:10:6::1/64")
+        win.find("ipv6-start").set_text("fd00:beef:10:6::1:1")
+        win.find("ipv6-end").set_text("bad")
         win.find("DNS domain name").click_expander()
         win.find("Custom").click()
-        win.find("domain-custom").text = "mydomain"
+        win.find("domain-custom").set_text("mydomain")
         finish.click()
         # Name collision validation
         self._click_alert_button("in use by another network", "Close")
-        win.find("Name:", "text").text = "newnet1"
+        win.find("Name:", "text").set_text("newnet1")
         finish.click()
         # XML define error
         self._click_alert_button("Error creating virtual network", "Close")
-        win.find("ipv6-end").text = "fd00:beef:10:6::1:f1"
+        win.find("ipv6-end").set_text("fd00:beef:10:6::1:f1")
         finish.click()
         uiutils.check(lambda: hostwin.active)
 
         # More option work
         win = self._open_create_win(hostwin)
-        win.find("Name:", "text").text = "newnet2"
+        win.find("Name:", "text").set_text("newnet2")
         devicelist = win.find("net-devicelist")
         uiutils.check(lambda: not devicelist.visible)
         win.find("net-mode").click()
@@ -152,7 +152,7 @@ class CreateNet(uiutils.UITestCase):
         win.find("Routed", "menu item").click()
         win.find("net-forward").click()
         win.find("Physical device", "menu item").click()
-        win.find("net-device").text = "fakedev0"
+        win.find("net-device").set_text("fakedev0")
         finish.click()
         uiutils.check(lambda: hostwin.active)
 

@@ -64,13 +64,13 @@ class Snapshots(uiutils.UITestCase):
         # Edit snapshot
         descui = win.find("snapshot-description")
         desc = "TESTSNAP"
-        descui.text = desc
+        descui.set_text(desc)
         win.find("snapshot-apply", "push button").click()
         win.find("snapshot-refresh", "push button").click()
         uiutils.check(lambda: descui.text == desc)
         # Apply by clicking away
         desc += " ROUND2"
-        descui.text = desc
+        descui.set_text(desc)
         win.find("internal-root", "table cell").click()
         self._click_alert_button("There are unapplied changes", "Yes")
 
@@ -78,8 +78,8 @@ class Snapshots(uiutils.UITestCase):
         win.find("snapshot-add", "push button").click()
         newwin = self.app.root.find("Create snapshot", "frame")
         snapname = "testnewsnap"
-        newwin.find("Name:", "text").text = snapname
-        newwin.find("Description:", "text").text = "testdesc"
+        newwin.find("Name:", "text").set_text(snapname)
+        newwin.find("Description:", "text").set_text("testdesc")
         newwin.find("Finish", "push button").click()
         uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname, "table cell")
@@ -97,7 +97,7 @@ class Snapshots(uiutils.UITestCase):
         win.find("snapshot-add", "push button").click()
         newwin = self.app.root.find("Create snapshot", "frame")
         snapname = "testnewsnap"
-        newwin.find("Name:", "text").text = snapname
+        newwin.find("Name:", "text").set_text(snapname)
         newwin.find("Finish", "push button").click()
         uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname, "table cell")
@@ -128,7 +128,7 @@ class Snapshots(uiutils.UITestCase):
         self._click_alert_button("not become part of the snapshot", "OK")
         newwin = self.app.root.find("Create snapshot", "frame")
         snapname1 = "testnewsnap1"
-        newwin.find("Name:", "text").text = snapname1
+        newwin.find("Name:", "text").set_text(snapname1)
         newwin.find("Finish", "push button").click()
         uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname1, "table cell")
@@ -140,16 +140,16 @@ class Snapshots(uiutils.UITestCase):
         win.find("snapshot-add", "push button").click()
         newwin = self.app.root.find("Create snapshot", "frame")
         # Force validation error
-        newwin.find("Name:", "text").text = "bad name"
+        newwin.find("Name:", "text").set_text("bad name")
         newwin.find("Finish", "push button").click()
         self._click_alert_button("validating snapshot", "OK")
         # Force name collision
-        newwin.find("Name:", "text").text = snapname1
+        newwin.find("Name:", "text").set_text(snapname1)
         newwin.find("Finish", "push button").click()
         self._click_alert_button(snapname1, "Close")
         # Make it succeed
         snapname2 = "testnewsnap2"
-        newwin.find("Name:", "text").text = snapname2
+        newwin.find("Name:", "text").set_text(snapname2)
         newwin.find("Finish", "push button").click()
         uiutils.check(lambda: not newwin.showing)
         newc = win.find(snapname2, "table cell")

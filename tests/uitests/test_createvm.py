@@ -50,7 +50,7 @@ class NewVM(uiutils.UITestCase):
         self.app.root.find("Add Connection...", "menu item").click()
         win = self.app.root.find_fuzzy("Add Connection", "dialog")
         win.combo_select("Hypervisor", "Custom URI")
-        win.find("uri-entry", "text").text = "test:///default"
+        win.find("uri-entry", "text").set_text("test:///default")
         win.find("Connect", "push button").click()
 
         # Open the new VM wizard, select a connection
@@ -148,7 +148,7 @@ class NewVM(uiutils.UITestCase):
         # test entry activation too
         entry = newvm.find("media-entry")
         entry.click()
-        entry.text = "/dev/sr0"
+        entry.set_text("/dev/sr0")
         self.pressKey("Enter")
 
         # Select a fake iso
@@ -161,7 +161,7 @@ class NewVM(uiutils.UITestCase):
         # Change distro to win8
         newvm.find_fuzzy("Automatically detect", "check").click()
         osentry.click()
-        osentry.text = "windows 8"
+        osentry.set_text("windows 8")
         popover = newvm.find("oslist-popover")
         uiutils.check(lambda: popover.onscreen)
         # Verify Escape resets the text entry
@@ -169,7 +169,7 @@ class NewVM(uiutils.UITestCase):
         uiutils.check(lambda: not popover.onscreen)
         uiutils.check(lambda: osentry.text == "")
         # Re-enter text
-        osentry.text = "windows 8"
+        osentry.set_text("windows 8")
         uiutils.check(lambda: popover.onscreen)
         popover.find_fuzzy("include-eol").click()
         popover.find_fuzzy(r"\(win8\)").click()
@@ -177,7 +177,7 @@ class NewVM(uiutils.UITestCase):
         foundtext = osentry.text
         # Start typing again, and exit, make sure it resets to previous entry
         osentry.click()
-        osentry.text = "foo"
+        osentry.set_text("foo")
         uiutils.check(lambda: popover.onscreen)
         self.pressKey("Escape")
         uiutils.check(lambda: not popover.onscreen)
@@ -221,7 +221,7 @@ class NewVM(uiutils.UITestCase):
         appl = vmwindow.find("config-apply", "push button")
         hwlist = vmwindow.find("hw-list")
         tab = vmwindow.find("disk-tab")
-        tab.find("Disk bus:", "text").text = "usb"
+        tab.find("Disk bus:", "text").set_text("usb")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         # Device is now 'USB Disk 1'
@@ -235,7 +235,7 @@ class NewVM(uiutils.UITestCase):
         vmwindow.find_fuzzy("NIC", "table cell").click()
         tab = vmwindow.find("network-tab")
         tab.print_nodes()
-        tab.find("mac-entry", "text").text = "00:11:00:11:00:11"
+        tab.find("mac-entry", "text").set_text("00:11:00:11:00:11")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -263,9 +263,9 @@ class NewVM(uiutils.UITestCase):
 
         url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
         oslabel = "Fedora 10"
-        newvm.find("install-url-entry").text = url
+        newvm.find("install-url-entry").set_text(url)
         newvm.find("install-urlopts-expander").click_expander()
-        newvm.find("install-urlopts-entry").text = "foo=bar"
+        newvm.find("install-urlopts-entry").set_text("foo=bar")
 
         uiutils.check(lambda: osentry.text == oslabel, timeout=10)
 
@@ -316,9 +316,8 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Import", "radio").click()
         self.forward(newvm)
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
-        newvm.find("oslist-entry").text = "fedora30"
+        newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+        newvm.find("oslist-entry").set_text("fedora30")
         popover = newvm.find("oslist-popover")
         popover.find("include-eol").click()
         popover.find_fuzzy("Fedora 30").click()
@@ -367,7 +366,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Manual", "radio").click()
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
@@ -418,9 +417,9 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
 
         newvm.find_fuzzy("Automatically detect", "check").click()
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
-        newvm.find("media-entry").text = "/dev/default-pool/testvol1.img"
+        newvm.find("media-entry").set_text("/dev/default-pool/testvol1.img")
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Enable storage", "check box").click()
@@ -460,17 +459,10 @@ class NewVM(uiutils.UITestCase):
         uiutils.check(lambda: importradio.checked)
         self.forward(newvm)
 
-        # Set the import media details
-        importentry = newvm.find_fuzzy(None, "text", "existing storage")
-        # For some reason 'Import' doesn't take effect sometimes
-        # And we end up in 'Manual' install mode, this will
-        # make it explicit when it fails
-        uiutils.check(lambda: importentry.onscreen)
-
-        importentry.text = "/dev/default-pool/default-vol"
+        newvm.find("import-entry").set_text("/dev/default-pool/default-vol")
         # Make sure the info box shows up
         newvm.find("Kernel/initrd settings can be configured")
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm, check=False)
 
@@ -496,7 +488,7 @@ class NewVM(uiutils.UITestCase):
 
         # Set custom init
         apptext = newvm.find_fuzzy(None, "text", "application path")
-        apptext.text = ""
+        apptext.set_text("")
         self.forward(newvm, check=False)
         self._click_alert_button("path is required", "OK")
         newvm.find("install-app-browse").click()
@@ -522,13 +514,13 @@ class NewVM(uiutils.UITestCase):
         details.find("Boot Options", "table cell").click()
         tab = details.find("boot-tab")
         tab.print_nodes()
-        tab.find("Init path:", "text").text = ""
-        tab.find("Init args:", "text").text = "some args"
+        tab.find("Init path:", "text").set_text("")
+        tab.find("Init args:", "text").set_text("some args")
         appl = details.find("config-apply")
         appl.click()
         self._click_alert_button("init path must be specified", "OK")
         uiutils.check(lambda: appl.sensitive)
-        tab.find("Init path:", "text").text = "/some/path"
+        tab.find("Init path:", "text").set_text("/some/path")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -555,7 +547,7 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Manual", "radio").click()
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
@@ -581,7 +573,7 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Manual", "radio").click()
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
@@ -595,12 +587,12 @@ class NewVM(uiutils.UITestCase):
         # Test name change
         tab = details.find("overview-tab")
         nametext = tab.find("Name:", "text")
-        nametext.text = "foonewname"
+        nametext.set_text("foonewname")
         details.find("config-apply").click()
         self.app.root.find_fuzzy("foonewname", "frame")
 
         # Trigger XML failure to hit some codepaths
-        nametext.text = ""
+        nametext.set_text("")
         details.find("Begin Installation").click()
         self._click_alert_button("unapplied changes", "Yes")
         self._click_alert_button("name must be specified", "Close")
@@ -626,7 +618,7 @@ class NewVM(uiutils.UITestCase):
 
         # Set directory path
         dirtext = newvm.find_fuzzy(None, "text", "root directory")
-        dirtext.text = ""
+        dirtext.set_text("")
         self.forward(newvm, check=False)
         self._click_alert_button("path is required", "OK")
 
@@ -654,7 +646,7 @@ class NewVM(uiutils.UITestCase):
 
         # Set directory path
         newvm.find_fuzzy(None,
-            "text", "container template").text = "centos-6-x86_64"
+            "text", "container template").set_text("centos-6-x86_64")
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -680,9 +672,9 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Create OS directory", "check box").click()
         rootdir = newvm.find_fuzzy(None, "text", "root directory")
         uiutils.check(lambda: ".local/share/libvirt" in rootdir.text)
-        rootdir.text = tmpdir.name
-        newvm.find("install-oscontainer-source-uri").text = "docker://alpine"
-        newvm.find("install-oscontainer-root-passwd").text = "foobar"
+        rootdir.set_text(tmpdir.name)
+        newvm.find("install-oscontainer-source-uri").set_text("docker://alpine")
+        newvm.find("install-oscontainer-root-passwd").set_text("foobar")
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -705,9 +697,8 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Import", "radio").click()
         self.forward(newvm)
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
@@ -722,14 +713,14 @@ class NewVM(uiutils.UITestCase):
             _newvm = self._open_create_wizard()
             _newvm.find_fuzzy("Manual", "radio").click()
             self.forward(_newvm)
-            _newvm.find("oslist-entry").text = "generic"
+            _newvm.find("oslist-entry").set_text("generic")
             _newvm.find("oslist-popover").find_fuzzy("generic").click()
             self.forward(_newvm)
             self.forward(_newvm)
             self.forward(_newvm)
 
             # '/' in name will trigger libvirt error
-            _newvm.find_fuzzy("Name", "text").text = "test/bad"
+            _newvm.find_fuzzy("Name", "text").set_text("test/bad")
             _newvm.find_fuzzy("Finish", "button").click()
             self._click_alert_button("Unable to complete install", "Close")
             return _newvm
@@ -744,9 +735,9 @@ class NewVM(uiutils.UITestCase):
         newvm = dofail()
         self.back(newvm)
         newvm.find_fuzzy("Select or create", "radio").click()
-        newvm.find("storage-entry").text = "/dev/default-pool/somenewvol1"
+        newvm.find("storage-entry").set_text("/dev/default-pool/somenewvol1")
         self.forward(newvm)
-        newvm.find_fuzzy("Name", "text").text = "test-foo"
+        newvm.find_fuzzy("Name", "text").set_text("test-foo")
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("test-foo on", "frame")
@@ -766,20 +757,20 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Forward", "button").click()
         nonexistpath = "/dev/foovmm-idontexist"
         existpath = "/dev/default-pool/testvol1.img"
-        newvm.find("media-entry").text = nonexistpath
+        newvm.find("media-entry").set_text(nonexistpath)
         uiutils.check(
                 lambda: newvm.find("oslist-entry").text == "None detected")
         newvm.find_fuzzy("Automatically detect", "check").click()
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm, check=False)
         self._click_alert_button("Error setting installer", "OK")
-        newvm.find("media-entry").text = existpath
+        newvm.find("media-entry").set_text(existpath)
         self.forward(newvm)
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Customize", "check").click()
-        newvm.find_fuzzy("Name", "text").text = vmname
+        newvm.find_fuzzy("Name", "text").set_text(vmname)
         newvm.find_fuzzy("Finish", "button").click()
 
         # Change a VM setting and verify it
@@ -791,8 +782,9 @@ class NewVM(uiutils.UITestCase):
         bootmenu = tab.find("Enable boot menu", "check box")
         uiutils.check(lambda: not bootmenu.checked)
         win.find("XML", "page tab").click()
-        xmleditor.text = xmleditor.text.replace(
+        newtext = xmleditor.text.replace(
                 "<os>", "<os><bootmenu enable='yes'/>")
+        xmleditor.set_text(newtext)
         finish.click()
         win.find("Details", "page tab").click()
         uiutils.check(lambda: bootmenu.checked)
@@ -804,7 +796,7 @@ class NewVM(uiutils.UITestCase):
         newbrname = "BRFAKE"
         newx = xmleditor.text.replace("network", "bridge")
         newx = newx.replace('bridge="default"', "bridge='%s'" % newbrname)
-        xmleditor.text = newx
+        xmleditor.set_text(newx)
         finish.click()
 
         # Finish install.
@@ -851,14 +843,14 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Import", "radio").click()
         self.forward(newvm)
-        importtext = newvm.find_fuzzy(None, "text", "existing storage")
+        importtext = newvm.find("import-entry")
 
         # Click forward, hitting missing OS error
         self.forward(newvm, check=False)
         self._click_alert_button("select an OS", "OK")
 
         # Set OS
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
 
         # Click forward, hitting missing Import path error
@@ -866,12 +858,12 @@ class NewVM(uiutils.UITestCase):
         self._click_alert_button("import is required", "OK")
 
         # Click forward, but Import path doesn't exist
-        importtext.text = "/dev/default-pool/idontexist"
+        importtext.set_text("/dev/default-pool/idontexist")
         self.forward(newvm, check=False)
         self._click_alert_button("import path must point", "OK")
 
         # Click forward, but Import path is in use, and exit
-        importtext.text = "/dev/default-pool/default-vol"
+        importtext.set_text("/dev/default-pool/default-vol")
         self.forward(newvm, check=False)
         self._click_alert_button("in use", "No")
 
@@ -905,10 +897,9 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = "/dev/default-pool/testvol1.img"
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
@@ -926,17 +917,16 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = __file__
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("import-entry").set_text(__file__)
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
         newvm.combo_check_default("net-source", "Bridge")
         warnlabel = newvm.find_fuzzy("suitable default network", "label")
         uiutils.check(lambda: warnlabel.onscreen)
-        newvm.find("Device name:", "text").text = "foobr0"
+        newvm.find("Device name:", "text").set_text("foobr0")
 
         # Select customize wizard, we will use this VM to hit specific
         # code paths
@@ -977,10 +967,9 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = __file__
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("import-entry").set_text(__file__)
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)
@@ -999,10 +988,9 @@ class NewVM(uiutils.UITestCase):
         newvm = self._open_create_wizard()
 
         newvm.find_fuzzy("Import", "radio").click()
-        newvm.find_fuzzy(None,
-            "text", "existing storage").text = __file__
         self.forward(newvm)
-        newvm.find("oslist-entry").text = "generic"
+        newvm.find("import-entry").set_text(__file__)
+        newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm)
         self.forward(newvm)

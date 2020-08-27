@@ -20,7 +20,7 @@ class VMMMigrate(uiutils.UITestCase):
         manager.find("Add Connection...", "menu item").click()
         win = manager.find_fuzzy("Add Connection", "dialog")
         win.combo_select("Hypervisor", "Custom URI")
-        win.find("uri-entry", "text").text = uri
+        win.find("uri-entry", "text").set_text(uri)
         win.find("Connect", "push button").click()
         uiutils.check(lambda: win.showing is False)
 
@@ -92,7 +92,7 @@ class VMMMigrate(uiutils.UITestCase):
 
         # Run it and check some values
         mig = self._open_migrate("test-many-devices")
-        mig.find("address-text").text = "TESTSUITE-FAKE"
+        mig.find("address-text").set_text("TESTSUITE-FAKE")
 
         mig.find("Migrate", "push button").click()
         progwin = self.app.root.find("Migrating VM", "frame")

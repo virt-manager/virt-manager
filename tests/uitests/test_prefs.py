@@ -40,7 +40,7 @@ class VMMPrefs(uiutils.UITestCase):
         tab.find("Poll Network", "check box").click()
         period = tab.find_fuzzy("cpu-poll", "spin button")
         period.click()
-        period.text = "5"
+        period.set_text("5")
 
         win.find("New VM", "page tab").click()
         tab = newvmtab
@@ -122,8 +122,8 @@ class VMMPrefs(uiutils.UITestCase):
 
         managerwin.keyCombo("<alt>F4")
         detailswin.click()
-        xmleditor.text = xmleditor.text.replace(">",
-            "><title>FOOTITLE</title>", 1)
+        newtext = xmleditor.text.replace(">", "><title>FOOTITLE</title>", 1)
+        xmleditor.set_text(newtext)
         finish.click()
         detailswin.find("Details", "page tab").click()
         uiutils.check(lambda:

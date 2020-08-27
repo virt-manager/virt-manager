@@ -32,10 +32,9 @@ class MediaChange(uiutils.UITestCase):
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda: not entry.text)
-        appl.click()
 
         # Enter /dev/fdb, after apply it should change to pretty label
-        entry.text = "/dev/fdb"
+        entry.set_text("/dev/fdb")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda:
@@ -43,7 +42,7 @@ class MediaChange(uiutils.UITestCase):
 
         # Specify manual path
         path = "/tmp/aaaaaaaaaaaaaaaaaaaaaaa.img"
-        entry.text = path
+        entry.set_text(path)
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda: entry.text == path)
@@ -73,7 +72,7 @@ class MediaChange(uiutils.UITestCase):
         self._click_alert_button("already in use by", "Yes")
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda: "backing" in entry.text)
-        entry.text = ""
+        entry.set_text("")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         uiutils.check(lambda: not entry.text)
@@ -91,7 +90,7 @@ class MediaChange(uiutils.UITestCase):
         # CDROM + physical
         hw.find("IDE CDROM 1", "table cell").click()
         uiutils.check(lambda: not entry.text)
-        entry.text = "/dev/sr0"
+        entry.set_text("/dev/sr0")
         appl.click()
         self._click_alert_button("changes will take effect", "OK")
         uiutils.check(lambda: not appl.sensitive)

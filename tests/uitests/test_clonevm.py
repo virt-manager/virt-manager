@@ -63,18 +63,18 @@ class CloneVM(uiutils.UITestCase):
         """
         win = self._open_window("test-clone-simple")
         win.find_fuzzy(None,
-            "text", "Name").text = "test-new-vm"
+            "text", "Name").set_text("test-new-vm")
 
         win.find("Details...", "push button").click()
         macwin = self.app.root.find("Change MAC address", "dialog")
         macwin.find(None,
-                "text", "New MAC:").text = "00:16:3e:cc:cf:05"
+                "text", "New MAC:").set_text("00:16:3e:cc:cf:05")
         macwin.find("OK", "push button").click()
 
         win.combo_select("Clone this disk.*", "Details...")
         stgwin = self.app.root.find("Change storage path", "dialog")
         stgwin.find(None, "text",
-                "New Path:").text = "/dev/default-pool/my-new-path"
+                "New Path:").set_text("/dev/default-pool/my-new-path")
         stgwin.find("OK", "push button").click()
 
         win.find("Clone", "push button").click()

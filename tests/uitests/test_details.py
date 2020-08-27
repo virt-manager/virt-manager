@@ -66,7 +66,7 @@ class Details(uiutils.UITestCase):
         win.find("Overview", "table cell").click()
 
         oldcell = self.app.root.find_fuzzy(origname, "table cell")
-        win.find("Name:", "text").text = newname
+        win.find("Name:", "text").set_text(newname)
         win.find("config-apply", "push button").click()
 
         # Confirm lists were updated
@@ -117,7 +117,7 @@ class Details(uiutils.UITestCase):
 
         # Make a change and then trigger unapplied change warning
         tab = self._select_hw(win, "Overview", "overview-tab")
-        tab.find("Name:", "text").text = ""
+        tab.find("Name:", "text").set_text("")
         uiutils.check(lambda: appl.sensitive)
         run = win.find("Run", "push button")
         run.click()
@@ -152,8 +152,8 @@ class Details(uiutils.UITestCase):
 
         # Overview description
         tab = self._select_hw(win, "Overview", "overview-tab")
-        tab.find("Description:", "text").text = "hey new description"
-        tab.find("Title:", "text").text = "hey new title"
+        tab.find("Description:", "text").set_text("hey new description")
+        tab.find("Title:", "text").set_text("hey new title")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -162,7 +162,7 @@ class Details(uiutils.UITestCase):
 
         # Memory
         tab = self._select_hw(win, "Memory", "memory-tab")
-        tab.find("Memory allocation:", "spin button").text = "300"
+        tab.find("Memory allocation:", "spin button").set_text("300")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -185,18 +185,18 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         copyhost = tab.find("Copy host", "check box")
-        uiutils.check(lambda: copyhost.selected)
+        uiutils.check(lambda: copyhost.checked)
         copyhost.click()
         tab.find("cpu-model").click_combo_entry()
         tab.find("Hypervisor Default", "menu item").click()
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
-        tab.find("cpu-model").text = "host-passthrough"
+        tab.find("cpu-model").find(None, "text").text = "host-passthrough"
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
         # vCPUs
-        tab.find("vCPU allocation:", "spin button").text = "50"
+        tab.find("vCPU allocation:", "spin button").set_text("50")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -238,7 +238,7 @@ class Details(uiutils.UITestCase):
         self.pressKey("Down")
         popover = win.find("oslist-popover")
         popover.find("include-eol").click()
-        entry.text = "fedora12"
+        entry.set_text("fedora12")
         popover.find_fuzzy("fedora12").bring_on_screen().click()
         uiutils.check(lambda: not popover.visible)
         uiutils.check(lambda: entry.text == "Fedora 12")
@@ -257,13 +257,14 @@ class Details(uiutils.UITestCase):
             dogtail.rawinput.click(x, y, button)
 
         tab = self._select_hw(win, "Boot Options", "boot-tab")
-        self._stop_vm(win)
         tab.find_fuzzy("Start virtual machine on host", "check box").click()
         tab.find("Enable boot menu", "check box").click()
-        check_bootorder(tab.find("SCSI Disk 1", "table cell"))
+        tab.find("SCSI Disk 1", "table cell").click()
         tab.find("boot-movedown", "push button").click()
         tab.find("Floppy 1", "table cell").click()
         tab.find("boot-moveup", "push button").click()
+        check_bootorder(tab.find("NIC :33:44", "table cell"))
+        check_bootorder(tab.find("PCI 0003:", "table cell"))
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -271,7 +272,7 @@ class Details(uiutils.UITestCase):
         tab.find_fuzzy("Direct kernel boot", "toggle button").click_expander()
         tab.find_fuzzy("Enable direct kernel", "check box").click()
 
-        tab.find("Kernel args:", "text").text = "console=ttyS0"
+        tab.find("Kernel args:", "text").set_text("console=ttyS0")
         appl.click()
         self._click_alert_button("arguments without specifying", "OK")
         uiutils.check(lambda: win.active)
@@ -322,9 +323,9 @@ class Details(uiutils.UITestCase):
         tab.find("Shareable:", "check box").click()
         tab.find("Readonly:", "check box").click()
         tab.find("Advanced options", "toggle button").click_expander()
-        tab.find("Cache mode:", "text").text = "unsafe"
-        tab.find("Discard mode:", "text").text = "unmap"
-        tab.find("Detect zeroes:", "text").text = "unmap"
+        tab.find("Cache mode:", "text").set_text("unsafe")
+        tab.find("Discard mode:", "text").set_text("unmap")
+        tab.find("Detect zeroes:", "text").set_text("unmap")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -337,7 +338,7 @@ class Details(uiutils.UITestCase):
         self.pressKey("Home")
         tab.find_fuzzy("Macvtap device...",
                        "menu item").bring_on_screen().click()
-        tab.find("Device name:", "text").text = "fakedev12"
+        tab.find("Device name:", "text").set_text("fakedev12")
         tab.combo_select("Device model:", "rtl8139")
         tab.find("Link state:", "check box").click()
         appl.click()
@@ -347,11 +348,11 @@ class Details(uiutils.UITestCase):
         src.click()
         tab.find_fuzzy("Bridge device...",
                        "menu item").bring_on_screen().click()
-        tab.find("Device name:", "text").text = ""
+        tab.find("Device name:", "text").set_text("")
         appl.click()
         # Check validation error
         self._click_alert_button("Error changing VM configuration", "Close")
-        tab.find("Device name:", "text").text = "zbr0"
+        tab.find("Device name:", "text").set_text("zbr0")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -381,7 +382,7 @@ class Details(uiutils.UITestCase):
         tab.combo_select("Type:", "VNC")
         tab.combo_select("Listen type:", "Address")
         tab.find("graphics-port-auto", "check").click()
-        tab.find("graphics-port", "spin button").text = "6001"
+        tab.find("graphics-port", "spin button").set_text("6001")
         tab.find("Password:", "check").click()
         passwd = tab.find_fuzzy("graphics-password", "text")
         newpass = "foobar"
@@ -391,7 +392,7 @@ class Details(uiutils.UITestCase):
 
         # Sound device
         tab = self._select_hw(win, "Sound sb16", "sound-tab")
-        tab.find("Model:", "text").text = "ac97"
+        tab.find("Model:", "text").set_text("ac97")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
         # Test non-disk removal
@@ -415,7 +416,7 @@ class Details(uiutils.UITestCase):
 
         # Video device
         tab = self._select_hw(win, "Video VMVGA", "video-tab")
-        tab.find("Model:", "text").text = "virtio"
+        tab.find("Model:", "text").set_text("virtio")
         tab.find("3D acceleration:", "check box").click()
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
@@ -423,7 +424,7 @@ class Details(uiutils.UITestCase):
 
         # Watchdog
         tab = self._select_hw(win, "Watchdog", "watchdog-tab")
-        tab.find("Model:", "text").text = "diag288"
+        tab.find("Model:", "text").set_text("diag288")
         tab.find("Action:", "text").click()
         self.pressKey("Down")
         appl.click()
@@ -458,8 +459,8 @@ class Details(uiutils.UITestCase):
         tab = self._select_hw(win, "Filesystem /target/", "filesystem-tab")
         tab.combo_select("Driver:", "Path")
         tab.combo_select("Write Policy:", "Immediate")
-        tab.find("Source path:", "text").text = "/frib1"
-        tab.find("Target path:", "text").text = "newtarget"
+        tab.find("Source path:", "text").set_text("/frib1")
+        tab.find("Target path:", "text").set_text("newtarget")
         tab.find_fuzzy("Export filesystem", "check box").click()
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
@@ -482,7 +483,7 @@ class Details(uiutils.UITestCase):
         addr = tab.find("vsock-cid")
         auto = tab.find("vsock-auto")
         uiutils.check(lambda: addr.text == "5")
-        addr.text = "7"
+        addr.set_text("7")
         appl.click()
         uiutils.check(lambda: addr.text == "7")
         uiutils.check(lambda: not appl.sensitive)
@@ -524,9 +525,7 @@ class Details(uiutils.UITestCase):
 
         # Attempt to apply changes when skipping away, but they fail
         tab.find("Advanced options", "toggle button").click_expander()
-        cacheui = tab.find("Cache mode:", "text")
-        origcache = cacheui.text
-        cacheui.text = "badcachemode"
+        tab.find("Cache mode:", "text").set_text("badcachemode")
         hwlist.find("CPUs", "table cell").click()
         self._click_alert_button("There are unapplied changes", "Yes")
         self._click_alert_button("badcachemode", "Close")
@@ -577,7 +576,7 @@ class Details(uiutils.UITestCase):
 
         # Unapplied changes should warn when switching to XML tab
         tab = self._select_hw(win, "Overview", "overview-tab")
-        tab.find("Description:", "text").text = "hey new description"
+        tab.find("Description:", "text").set_text("hey new description")
         win.find("XML", "page tab").click()
         # Select 'No', meaning don't abandon changes
         self._click_alert_button("changes will be lost", "No")
@@ -589,7 +588,7 @@ class Details(uiutils.UITestCase):
         uiutils.check(lambda: not tab.showing)
 
         # Verify addhardware right click works
-        cell = win.find("Overview", "table cell").click(button=3)
+        win.find("Overview", "table cell").click(button=3)
         self.app.root.find("Add Hardware", "menu item").click()
         self.app.root.find("Add New Virtual Hardware", "frame")
 
@@ -605,7 +604,7 @@ class Details(uiutils.UITestCase):
         # Edit vcpu count and verify it's reflected in CPU page
         tab = self._select_hw(win, "CPUs", "cpu-tab")
         win.find("XML", "page tab").click()
-        xmleditor.text = xmleditor.text.replace(">5</vcpu", ">8</vcpu")
+        xmleditor.set_text(xmleditor.text.replace(">5</vcpu", ">8</vcpu"))
         finish.click()
         win.find("Details", "page tab").click()
         vcpualloc = tab.find("vCPU allocation:", "spin button")
@@ -616,7 +615,7 @@ class Details(uiutils.UITestCase):
         win.find("XML", "page tab").click()
         origpath = "/dev/default-pool/test-clone-simple.img"
         newpath = "/path/FOOBAR"
-        xmleditor.text = xmleditor.text.replace(origpath, newpath)
+        xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
         finish.click()
         win.find("Details", "page tab").click()
         disksrc = win.find("disk-source-path")

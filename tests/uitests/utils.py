@@ -161,7 +161,7 @@ class UITestCase(unittest.TestCase):
         # Click the tab, make a bogus XML edit
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
-        xmleditor.text = xmleditor.text.replace("<", "<FOO", 1)
+        xmleditor.set_text(xmleditor.text.replace("<", "<FOO", 1))
 
         # Trying to click away should warn that there's unapplied changes
         win.find("Details", "page tab").click()
@@ -302,10 +302,35 @@ class VMMDogtailNode(dogtail.tree.Node):
                 self.position[1] >= 0 and
                 self.position[1] + self.size[1] < screen.get_height())
 
+    def check_onscreen(self):
+        """
+        Check in a loop that the widget is onscreen
+        """
+        check(lambda: self.onscreen)
+
+    def check_sensitive(self):
+        """
+        Check whether interactive widgets are sensitive or not
+        """
+        valid_types = [
+            "push button",
+            "toggle button",
+            "check button",
+            "combo box",
+            "menu item",
+            "text",
+            "menu",
+        ]
+        if self.roleName not in valid_types:
+            return True
+        check(lambda: self.sensitive)
+
     def click_secondary_icon(self):
         """
         Helper for clicking the secondary icon of a text entry
         """
+        self.check_onscreen()
+        self.check_sensitive()
         button = 1
         clickX = self.position[0] + self.size[0] - 10
         clickY = self.position[1] + (self.size[1] / 2)
@@ -318,6 +343,8 @@ class VMMDogtailNode(dogtail.tree.Node):
         Using a small, hardcoded offset may not work on some themes (e.g. when
         running virt-manager on KDE)
         """
+        self.check_onscreen()
+        self.check_sensitive()
         button = 1
         clickX = self.position[0] + self.size[0] - self.size[1] / 4
         clickY = self.position[1] + self.size[1] / 2
@@ -328,6 +355,8 @@ class VMMDogtailNode(dogtail.tree.Node):
         Helper for clicking expander, hitting the text part to actually
         open it. Basically clicks top left corner with some indent
         """
+        self.check_onscreen()
+        self.check_sensitive()
         button = 1
         clickX = self.position[0] + 10
         clickY = self.position[1] + 5
@@ -351,8 +380,15 @@ class VMMDogtailNode(dogtail.tree.Node):
         screen, helps reduce some test flakiness
         """
         # pylint: disable=arguments-differ,signature-differs
-        check(lambda: self.onscreen)
+        self.check_onscreen()
+        self.check_sensitive()
         dogtail.tree.Node.click(self, *args, **kwargs)
+
+    def set_text(self, text):
+        self.check_onscreen()
+        self.check_sensitive()
+        assert hasattr(self, "text")
+        self.text = text
 
     def bring_on_screen(self, key_name="Down", max_tries=100):
         """
