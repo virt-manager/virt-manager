@@ -19,18 +19,11 @@ from virtinst import log
 from .libvirtobject import vmmLibvirtObject
 from ..baseclass import vmmGObject
 from ..lib.libvirtenummap import LibvirtEnumMap
+from ..lib import testmock
 
 
 class _SENTINEL(object):
     pass
-
-
-def _fake_job_info():
-    import random
-    total = 1024 * 1024 * 1024
-    fakepcent = random.choice(range(1, 100))
-    remaining = ((total / 100) * fakepcent)
-    return [None, None, None, total, None, remaining]
 
 
 def start_job_progress_thread(vm, meter, progtext):
@@ -69,6 +62,87 @@ def start_job_progress_thread(vm, meter, progtext):
                              args=())
         t.daemon = True
         t.start()
+
+
+class _IPFetcher:
+    """
+    Helper class to contain all IP fetching and processing logic
+    """
+    def __init__(self):
+        self._cache = None
+
+    def refresh(self, vm, iface):
+        self._cache = {"qemuga": {}, "arp": {}}
+
+        if iface.type == "network":
+            net = vm.conn.get_net(iface.source)
+            if net:
+                net.get_dhcp_leases(refresh=True)
+
+        if not vm.is_active():
+            return
+
+        if vm.agent_ready():
+            self._cache["qemuga"] = vm.get_interface_addresses(
+                iface,
+                libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
+
+        arp_flag = getattr(libvirt,
+            "VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_ARP", 3)
+        self._cache["arp"] = vm.get_interface_addresses(iface, arp_flag)
+
+    def get(self, vm, iface):
+        if self._cache is None:
+            self.refresh(vm, iface)
+
+        qemuga = self._cache["qemuga"]
+        arp = self._cache["arp"]
+        leases = []
+        if iface.type == "network":
+            net = vm.conn.get_net(iface.source)
+            if net:
+                leases = net.get_dhcp_leases()
+
+        def extract_dom(addrs):
+            ipv4 = None
+            ipv6 = None
+            if addrs["hwaddr"] == iface.macaddr:
+                for addr in (addrs["addrs"] or []):
+                    if addr["type"] == 0:
+                        ipv4 = addr["addr"]
+                    elif (addr["type"] == 1 and
+                          not str(addr["addr"]).startswith("fe80")):
+                        ipv6 = addr["addr"] + "/" + str(addr["prefix"])
+            return ipv4, ipv6
+
+        def extract_lease(lease):
+            ipv4 = None
+            ipv6 = None
+            mac = lease["mac"]
+            if vm.conn.is_test():
+                # Hack it to match our interface for UI testing
+                mac = iface.macaddr
+            if mac == iface.macaddr:
+                if lease["type"] == 0:
+                    ipv4 = lease["ipaddr"]
+                elif lease["type"] == 1:
+                    ipv6 = lease["ipaddr"]
+            return ipv4, ipv6
+
+
+        for datalist in [list(qemuga.values()), leases, list(arp.values())]:
+            ipv4 = None
+            ipv6 = None
+            for data in datalist:
+                if "expirytime" in data:
+                    tmpipv4, tmpipv6 = extract_lease(data)
+                else:
+                    tmpipv4, tmpipv6 = extract_dom(data)
+                ipv4 = tmpipv4 or ipv4
+                ipv6 = tmpipv6 or ipv6
+            if ipv4 or ipv6:
+                return ipv4, ipv6
+        return None, None
 
 
 class vmmInspectionApplication(object):
@@ -283,7 +357,7 @@ class vmmDomain(vmmLibvirtObject):
         self._autostart = None
         self._domain_caps = None
         self._status_reason = None
-        self._ip_cache = None
+        self._ipfetcher = _IPFetcher()
 
         self.managedsave_supported = False
         self._domain_state_supported = False
@@ -984,7 +1058,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def job_info(self):
         if self.conn.is_test():
-            return _fake_job_info()
+            return testmock.fake_job_info()
         return self._backend.jobInfo()
     def abort_job(self):
         self._backend.abortJob()
@@ -1045,85 +1119,35 @@ class vmmDomain(vmmLibvirtObject):
         """
         Return connected state of an agent.
         """
-        # we need to get a fresh agent channel object on each call so it
-        # reflects the current state
         dev = self._get_agent()
-        return dev and dev.target_state == "connected"
+        if not dev:
+            return False
 
-    def refresh_interface_addresses(self, iface):
-        self._ip_cache = {"qemuga": {}, "arp": {}}
-        if iface.type == "network":
-            net = self.conn.get_net(iface.source)
-            if net:
-                net.get_dhcp_leases(refresh=True)
-        if not self.is_active():
-            return
-
-        if self.agent_ready():
-            self._ip_cache["qemuga"] = self._get_interface_addresses(
-                libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
-
-        arp_flag = getattr(libvirt,
-            "VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_ARP", 3)
-        self._ip_cache["arp"] = self._get_interface_addresses(arp_flag)
-
-    def _get_interface_addresses(self, source):
-        log.debug("Calling interfaceAddresses source=%s", source)
-        try:
-            return self._backend.interfaceAddresses(source)
-        except Exception as e:
-            log.debug("interfaceAddresses failed: %s", str(e))
-        return {}
-
-    def get_interface_addresses(self, iface):
-        if self._ip_cache is None:
-            self.refresh_interface_addresses(iface)
-
-        qemuga = self._ip_cache["qemuga"]
-        arp = self._ip_cache["arp"]
-        leases = []
-        if iface.type == "network":
-            net = self.conn.get_net(iface.source)
-            if net:
-                leases = net.get_dhcp_leases()
-
-        def extract_dom(info):
-            ipv4 = None
-            ipv6 = None
-            for addrs in info.values():
-                if addrs["hwaddr"] != iface.macaddr:
-                    continue
-                if not addrs["addrs"]:
-                    continue
-                for addr in addrs["addrs"]:
-                    if addr["type"] == 0:
-                        ipv4 = addr["addr"]
-                    elif (addr["type"] == 1 and
-                          not str(addr["addr"]).startswith("fe80")):
-                        ipv6 = addr["addr"] + "/" + str(addr["prefix"])
-            return ipv4, ipv6
-
-        def extract_lease(info):
-            ipv4 = None
-            ipv6 = None
-            if info["mac"] == iface.macaddr:
-                if info["type"] == 0:
-                    ipv4 = info["ipaddr"]
-                elif info["type"] == 1:
-                    ipv6 = info["ipaddr"]
-            return ipv4, ipv6
-
-        for ips in ([qemuga] + leases + [arp]):
-            if "expirytime" in ips:
-                ipv4, ipv6 = extract_lease(ips)
-            else:
-                ipv4, ipv6 = extract_dom(ips)
-            if ipv4 or ipv6:
-                return ipv4, ipv6
-        return None, None
+        target_state = dev.target_state
+        if self.conn.is_test():
+            # test driver doesn't report 'connected' state so hack it here
+            target_state = "connected"
+        return target_state == "connected"
 
     def refresh_snapshots(self):
         self._snapshot_list = None
+
+    def get_interface_addresses(self, iface, source):
+        ret = {}
+        log.debug("Calling interfaceAddresses source=%s", source)
+        try:
+            ret = self._backend.interfaceAddresses(source)
+        except Exception as e:
+            log.debug("interfaceAddresses failed: %s", str(e))
+        if self.conn.is_test():
+            ret = testmock.fake_interface_addresses(iface, source)
+        return ret
+
+    def get_ips(self, iface):
+        return self._ipfetcher.get(self, iface)
+
+    def refresh_ips(self, iface):
+        return self._ipfetcher.refresh(self, iface)
 
     def set_time(self):
         """

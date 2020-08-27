@@ -734,6 +734,16 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
       </model>
     </video>
 
+    <!-- mock connected qemu agent and NIC for IP UI testing -->
+    <interface type='bridge'>
+      <source bridge='blahbr0'/>
+      <mac address='22:11:11:11:72:72'/>
+    </interface>
+    <channel type='unix'>
+      <source mode='bind' path='/tmp/qemuga.sock'/>
+      <target type='virtio' name='org.qemu.guest_agent.0' state='connected'/>
+    </channel>
+
     <!-- To test enable USB in addhw -->
     <controller type='usb' model='none'/>
   </devices>
