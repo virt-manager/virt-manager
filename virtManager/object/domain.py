@@ -559,9 +559,9 @@ class vmmDomain(vmmLibvirtObject):
             guest.vcpu_current = int(vcpus)
 
         if sockets != _SENTINEL:
-            guest.cpu.sockets = sockets
-            guest.cpu.cores = cores
-            guest.cpu.threads = threads
+            guest.cpu.topology.sockets = sockets
+            guest.cpu.topology.cores = cores
+            guest.cpu.topology.threads = threads
 
         if secure != _SENTINEL or model != _SENTINEL:
             guest.cpu.secure = secure
@@ -1204,9 +1204,6 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().title
     def get_description(self):
         return self.get_xmlobj().description
-
-    def get_cpu_config(self):
-        return self.get_xmlobj().cpu
 
     def get_boot_order(self):
         legacy = not self.can_use_device_boot_order()

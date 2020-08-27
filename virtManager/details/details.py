@@ -1939,13 +1939,13 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_config_cpu(self):
         # Set topology first, because it impacts vcpus values
-        cpu = self.vm.get_cpu_config()
-        show_top = bool(cpu.sockets or cpu.cores or cpu.threads)
+        cpu = self.vm.xmlobj.cpu
+        show_top = cpu.has_topology()
         self.widget("cpu-topology-enable").set_active(show_top)
 
-        sockets = cpu.sockets or 1
-        cores = cpu.cores or 1
-        threads = cpu.threads or 1
+        sockets = cpu.topology.sockets or 1
+        cores = cpu.topology.cores or 1
+        threads = cpu.topology.threads or 1
 
         self.widget("cpu-sockets").set_value(sockets)
         self.widget("cpu-cores").set_value(cores)

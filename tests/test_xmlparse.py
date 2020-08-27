@@ -195,10 +195,10 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.set_model(guest, "qemu64")
         check("model", "qemu64")
         check("vendor", "Intel", "qemuvendor")
-        check("threads", 2, 1)
-        check("cores", 5, 3)
-        guest.cpu.sockets = 4.0
-        check("sockets", 4)
+        check("topology.threads", 2, 1)
+        check("topology.cores", 5, 3)
+        guest.cpu.topology.sockets = 4.0
+        check("topology.sockets", 4)
 
         check = self._make_checker(guest.cpu.features[0])
         check("name", "x2apic")
@@ -292,7 +292,7 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.set_model(guest, "foobar")
         check("model", "foobar")
         check("model_fallback", None, "allow")
-        check("cores", None, 4)
+        check("topology.cores", None, 4)
         guest.cpu.add_feature("x2apic", "forbid")
         guest.cpu.set_topology_defaults(guest.vcpus)
         self.assertTrue(guest.cpu.get_xml().startswith("<cpu"))

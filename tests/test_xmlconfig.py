@@ -145,25 +145,27 @@ class TestXMLMisc(unittest.TestCase):
         # Test CPU topology determining
         cpu = virtinst.DomainCpu(self.conn)
         cpu.set_topology_defaults(6)
-        assert cpu.sockets is None
+        assert cpu.topology.sockets is None
 
-        cpu.sockets = "2"
+        cpu.topology.sockets = "2"
         cpu.set_topology_defaults(6)
-        self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 3, 1])
+        def get_top(_c):
+            return [_c.topology.sockets, _c.topology.cores, _c.topology.threads]
+        self.assertEqual(get_top(cpu), [2, 3, 1])
 
         cpu = virtinst.DomainCpu(self.conn)
-        cpu.cores = "4"
+        cpu.topology.cores = "4"
         cpu.set_topology_defaults(9)
-        self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [2, 4, 1])
+        self.assertEqual(get_top(cpu), [2, 4, 1])
 
         cpu = virtinst.DomainCpu(self.conn)
-        cpu.threads = "3"
+        cpu.topology.threads = "3"
         cpu.set_topology_defaults(14)
-        self.assertEqual([cpu.sockets, cpu.cores, cpu.threads], [4, 1, 3])
+        self.assertEqual(get_top(cpu), [4, 1, 3])
 
         cpu = virtinst.DomainCpu(self.conn)
-        cpu.sockets = 5
-        cpu.cores = 2
+        cpu.topology.sockets = 5
+        cpu.topology.cores = 2
         self.assertEqual(cpu.vcpus_from_topology(), 10)
 
         cpu = virtinst.DomainCpu(self.conn)
