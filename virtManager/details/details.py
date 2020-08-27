@@ -1412,11 +1412,12 @@ class vmmDetails(vmmGObjectUI):
             elif pagetype is HW_LIST_TYPE_VSOCK:
                 success = self.config_vsock_apply(dev)
         except Exception as e:
-            return self.err.show_err(_("Error applying changes: %s") % e)
+            self.err.show_err(_("Error applying changes: %s") % e)
 
         if success is not False:
             self.disable_apply()
-        return True
+            success = True
+        return success
 
     def get_text(self, widgetname, strip=True, checksens=False):
         widget = self.widget(widgetname)
