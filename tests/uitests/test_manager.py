@@ -68,37 +68,38 @@ class Manager(uiutils.UITestCase):
         """
         self.app.open(keyfile="confirm-all.ini")
         manager = self.app.topwin
+        run = manager.find("Run", "push button")
+        shutdown = manager.find("Shut Down", "push button")
+        pause = manager.find("Pause", "toggle button")
 
         def confirm_is_running():
-            run = manager.find("Run", "push button")
             uiutils.check(lambda: not run.sensitive)
 
         def confirm_is_shutdown():
-            shutdown = manager.find("Shut Down", "push button")
             uiutils.check(lambda: not shutdown.sensitive)
 
         def confirm_is_paused():
-            pause = manager.find("Pause", "toggle button")
             uiutils.check(lambda: pause.checked)
 
         def confirm_not_paused():
-            pause = manager.find("Pause", "toggle button")
             uiutils.check(lambda: not pause.checked)
 
         def test_action(action, shutdown=True, confirm=True):
             def _select():
-                cell = manager.find("test-many-devices", "table cell")
+                cell = manager.find("test\n", "table cell")
                 cell.click(button=3)
                 menu = self.app.root.find("vm-action-menu")
                 uiutils.check(lambda: menu.onscreen)
                 if shutdown:
                     smenu = menu.find("Shut Down", "menu")
-                    smenu.click()
+                    smenu.point()
                     uiutils.check(lambda: smenu.onscreen)
                     item = smenu.find(action, "menu item")
                 else:
                     item = menu.find(action, "menu item")
                 uiutils.check(lambda: item.onscreen)
+                item.point()
+                self.sleep(.3)
                 item.click()
 
             _select()
