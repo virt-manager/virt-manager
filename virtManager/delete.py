@@ -342,8 +342,7 @@ class vmmDeleteStorage(_vmmDeleteBase):
         # Try to hot remove
         detach_err = ()
         try:
-            if vm.is_active():
-                vm.detach_device(devobj)
+            vm.detach_device(devobj)
         except Exception as e:
             log.debug("Device could not be hotUNplugged: %s", str(e))
             detach_err = (str(e), "".join(traceback.format_exc()))

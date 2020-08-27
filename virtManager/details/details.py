@@ -683,7 +683,7 @@ class vmmDetails(vmmGObjectUI):
             warn_icon.set_tooltip_text(
                 _("Libvirt or hypervisor does not support UEFI."))
         elif not uefipaths:
-            warn_icon.set_tooltip_text(
+            warn_icon.set_tooltip_text(  # pragma: no cover
                 _("Libvirt did not detect any UEFI/OVMF firmware image "
                   "installed on the host."))
 
@@ -982,7 +982,7 @@ class vmmDetails(vmmGObjectUI):
 
         pagetype = self._get_hw_row()[HW_LIST_COL_TYPE]
         if pagetype is None:
-            return
+            return  # pragma: no cover
 
         if self.widget("config-apply").get_sensitive():
             # Apply button sensitive means user is making changes, don't
@@ -1046,6 +1046,10 @@ class vmmDetails(vmmGObjectUI):
                 self.vm, self.err, devobj)
         if not success:
             return
+
+        # This call here means when the vm config changes and triggers
+        # refresh event, the UI page will be updated, rather than leaving
+        # it untouched because it thinks changes are in progress
         self._disable_apply()
 
     def _remove_disk(self, disk):
@@ -1233,7 +1237,7 @@ class vmmDetails(vmmGObjectUI):
 
         if new_idx < 0 or new_idx >= len(boot_order):
             # Somehow we went out of bounds
-            return
+            return  # pragma: no cover
 
         boot_list = self.widget("boot-list")
         model = boot_list.get_model()
@@ -1814,19 +1818,17 @@ class vmmDetails(vmmGObjectUI):
 
         # Machine settings
         machtype = self.vm.get_machtype() or _("Unknown")
+        self.widget("machine-type-label").set_text(machtype)
         if self.widget("machine-type").is_visible():
             uiutil.set_list_selection(
                 self.widget("machine-type"), machtype)
-        elif self.widget("machine-type-label").is_visible():
-            self.widget("machine-type-label").set_text(machtype)
 
         # Chipset
         chipset = _chipset_label_from_machine(machtype)
+        self.widget("overview-chipset-label").set_text(chipset)
         if self.widget("overview-chipset").is_visible():
             uiutil.set_list_selection(
                 self.widget("overview-chipset"), chipset)
-        elif self.widget("overview-chipset-label").is_visible():
-            self.widget("overview-chipset-label").set_text(chipset)
 
     def _refresh_os_page(self):
         self._os_list.select_os(self.vm.xmlobj.osinfo)
@@ -2165,7 +2167,7 @@ class vmmDetails(vmmGObjectUI):
             typelabel = _("Console Device")
         elif char_type == "channel":
             typelabel = _("Channel Device")
-        else:
+        else:  # pragma: no cover
             typelabel = _("%s Device") % char_type.capitalize()
 
         if (target_port is not None and

@@ -234,7 +234,6 @@ class NewVM(uiutils.UITestCase):
         # Change NIC mac
         vmwindow.find_fuzzy("NIC", "table cell").click()
         tab = vmwindow.find("network-tab")
-        tab.print_nodes()
         tab.find("mac-entry", "text").set_text("00:11:00:11:00:11")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
@@ -307,9 +306,73 @@ class NewVM(uiutils.UITestCase):
         self.app.root.find_fuzzy("fedora10 on", "frame")
         uiutils.check(lambda: not newvm.showing)
 
-    def testNewKVMQ35(self):
+    def testNewKVMQ35Tweaks(self):
         """
-        New VM that should default to Q35
+        New VM that should default to Q35, but tweak things a bunch
+        """
+        self.app.uri = tests.utils.URIs.kvm
+        newvm = self._open_create_wizard()
+
+        newvm.find_fuzzy("Import", "radio").click()
+        self.forward(newvm)
+        newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+        newvm.find("oslist-entry").set_text("fedora30")
+        popover = newvm.find("oslist-popover")
+        popover.find("include-eol").click()
+        popover.find_fuzzy("Fedora 30").click()
+        self.forward(newvm)
+        self.forward(newvm)
+
+        # Select customize wizard, we will use this VM to
+        # hit some code paths elsewhere
+        newvm.find_fuzzy("Customize", "check").click()
+        newvm.find_fuzzy("Finish", "button").click()
+        vmname = "fedora30"
+        details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
+        appl = details.find("config-apply")
+
+        # Tweak some Overview settings
+        details.combo_check_default("Chipset:", "Q35")
+        details.combo_check_default("Firmware:", "BIOS")
+
+        # Switch i440FX and back
+        details.combo_select("Chipset:", "i440FX")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+        details.combo_select("Chipset:", "Q35")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+        # Switch to UEFI, back to BIOS, back to UEFI
+        details.combo_select("Firmware:", ".*x86_64.*")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+        # Switch back to BIOS
+        details.combo_select("Firmware:", "BIOS")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+        # Switch back to UEFI
+        details.combo_select("Firmware:", ".*x86_64.*")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+
+        # Add another network device
+        details.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("Network", "table cell").click()
+        tab = addhw.find("network-tab", None)
+        uiutils.check(lambda: tab.showing)
+        addhw.find("Finish", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: details.active)
+
+        # Finish
+        details.find_fuzzy("Begin Installation", "button").click()
+        uiutils.check(lambda: details.dead)
+        self.app.root.find_fuzzy("%s on" % vmname, "frame")
+
+    def testNewKVMQ35UEFI(self):
+        """
+        New VM that should default to Q35, and set UEFI
         """
         self.app.uri = tests.utils.URIs.kvm
         newvm = self._open_create_wizard()
@@ -331,27 +394,16 @@ class NewVM(uiutils.UITestCase):
         vmname = "fedora30"
         details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
-        # Tweak some Overview settings
+        # Change to UEFI
         details.combo_check_default("Chipset:", "Q35")
         details.combo_check_default("Firmware:", "BIOS")
         details.combo_select("Firmware:", ".*x86_64.*")
         details.find("config-apply").click()
 
-        # Add another network device
-        details.find("add-hardware", "push button").click()
-        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
-        addhw.find("Network", "table cell").click()
-        tab = addhw.find("network-tab", None)
-        uiutils.check(lambda: tab.showing)
-        addhw.find("Finish", "push button").click()
-        uiutils.check(lambda: not addhw.active)
-        uiutils.check(lambda: details.active)
-
         # Finish
         details.find_fuzzy("Begin Installation", "button").click()
         uiutils.check(lambda: details.dead)
         self.app.root.find_fuzzy("%s on" % vmname, "frame")
-
 
     def testNewPPC64(self):
         """
@@ -379,6 +431,13 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Customize", "check").click()
         newvm.find_fuzzy("Finish", "button").click()
         details = self.app.root.find_fuzzy("vm-ppc64 on", "frame")
+
+        tab = details.find("overview-tab")
+        tab.combo_check_default("machine-combo", "pseries")
+        tab.combo_select("machine-combo", "pseries-2.1")
+        appl = details.find("config-apply")
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
 
         # Add a TPM SPAPR device
         details.find("add-hardware", "push button").click()
@@ -513,7 +572,6 @@ class NewVM(uiutils.UITestCase):
         # Tweak init values
         details.find("Boot Options", "table cell").click()
         tab = details.find("boot-tab")
-        tab.print_nodes()
         tab.find("Init path:", "text").set_text("")
         tab.find("Init args:", "text").set_text("some args")
         appl = details.find("config-apply")
@@ -772,11 +830,28 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Customize", "check").click()
         newvm.find_fuzzy("Name", "text").set_text(vmname)
         newvm.find_fuzzy("Finish", "button").click()
-
-        # Change a VM setting and verify it
         win = self.app.root.find_fuzzy("%s on" % vmname, "frame")
         xmleditor = win.find("XML editor")
         finish = win.find("config-apply")
+
+        # Change a device setting with the XML editor
+        win.find_fuzzy("IDE Disk 1", "table cell").click()
+        tab = win.find("disk-tab")
+        win.find("XML", "page tab").click()
+        # Change the disk path via the XML editor
+        fname = vmname + ".qcow2"
+        uiutils.check(lambda: fname in xmleditor.text)
+        newx = xmleditor.text.replace(fname, "default-vol")
+        xmleditor.set_text(newx)
+        appl = win.find("config-apply")
+        # This is kindof a bug, changing path in XML editor in Customize
+        # doesn't take effect for storage with creation parameters, but
+        # it's a pain to fix.
+        appl.click()
+        uiutils.check(lambda: not appl.sensitive)
+        uiutils.check(lambda: vmname in xmleditor.text)
+
+        # Change a VM setting and verify it
         win.find_fuzzy("Boot", "table cell").click()
         tab = win.find("boot-tab")
         bootmenu = tab.find("Enable boot menu", "check box")
@@ -832,7 +907,6 @@ class NewVM(uiutils.UITestCase):
         tab.find("Browse", "push button").click()
         browser = self.app.root.find("vmm-storage-browser")
         browser.find("%s.qcow2" % vmname, "table cell")
-
 
     def testNewVMRemote(self):
         """

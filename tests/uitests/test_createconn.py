@@ -17,8 +17,7 @@ class VMMConnect(uiutils.UITestCase):
         # Start with connection delete
         c = self.app.root.find("test testdriver.xml", "table cell")
         c.click(button=3)
-        self.app.root.find("conn-disconnect",
-                             "menu item").click()
+        self.app.root.find("conn-disconnect", "menu item").click()
         uiutils.check(lambda: "Not Connected" in c.text)
         c.click(button=3)
         self.app.root.find("conn-delete", "menu item").click()
@@ -138,3 +137,8 @@ class VMMConnect(uiutils.UITestCase):
         c.doubleClick()
         c = self.app.root.find("test default", "table cell")
         c.click()
+        # Delete it
+        c.click(button=3)
+        self.app.root.find("conn-delete", "menu item").click()
+        self._click_alert_button("will remove the connection", "Yes")
+        uiutils.check(lambda: c.dead)
