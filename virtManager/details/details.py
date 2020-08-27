@@ -679,8 +679,6 @@ class vmmDetails(vmmGObjectUI):
 
         if show_machine:
             for machine in machines:
-                if machine == "none":
-                    continue
                 machtype_model.append([machine])
 
         self.widget("machine-type").set_visible(self.is_customize_dialog)
