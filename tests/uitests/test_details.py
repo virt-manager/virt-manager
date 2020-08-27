@@ -328,7 +328,6 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
-
         # Network values w/ macvtap manual
         tab = self._select_hw(win, "NIC :54:32:10", "network-tab")
         tab.find("IP address", "push button").click()
@@ -355,6 +354,36 @@ class Details(uiutils.UITestCase):
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
+    def testDetailsNetIPAddress(self):
+        """
+        Test all the IP code paths with a few mock cases
+        """
+        win = self._open_details_window(vmname="test-many-devices")
+        def check_ip(*args):
+            for ip in args:
+                tab.find_fuzzy(ip, "label")
+
+        # First case has a virtual network, so hits the leases path
+        tab = self._select_hw(win, "NIC :54:32:10", "network-tab")
+        check_ip("10.0.0.2", "fd00:beef::2")
+        tab.find("IP address:", "push button").click()
+        check_ip("10.0.0.2", "fd00:beef::2")
+
+        # Next case has a missing virtual network, so hits the arp path
+        tab = self._select_hw(win, "NIC :11:11:11", "network-tab")
+        check_ip("Unknown")
+        tab.find("IP address:", "push button").click()
+        check_ip("10.0.0.3")
+
+        win.keyCombo("<alt>F4")
+        uiutils.check(lambda: not win.showing)
+        self.app.topwin.click_title()
+
+        # Tests the fake qemu guest agent path
+        win = self._open_details_window(vmname="test alternate devs title")
+        tab = self._select_hw(win, "NIC :11:72:72", "network-tab")
+        check_ip("10.0.0.1", "fd00:beef::1/128")
+
 
     def testDetailsEditDevices1(self):
         """
@@ -363,6 +392,22 @@ class Details(uiutils.UITestCase):
         win = self._open_details_window(vmname="test-many-devices",
                 shutdown=True)
         appl = win.find("config-apply", "push button")
+
+        # Fail to hotremove
+        tab = self._select_hw(win, "Floppy 1", "disk-tab")
+        share = tab.find("Shareable", "check box")
+        share.click()
+        uiutils.check(lambda: appl.sensitive)
+        win.find("config-remove").click()
+        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
+        delete.find_fuzzy("Delete", "button").click()
+        self._click_alert_button("change will take effect", "OK")
+        uiutils.check(lambda: not delete.showing)
+        uiutils.check(lambda: appl.sensitive)
+        uiutils.check(lambda: share.checked)
+        win.find("config-cancel").click()
+
+        self._stop_vm(win)
 
         # Graphics simple VNC -> SPICE
         tab = self._select_hw(win, "Display VNC", "graphics-tab")

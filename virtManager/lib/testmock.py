@@ -4,6 +4,59 @@
 # See the COPYING file in the top-level directory.
 
 
+def fake_job_info():
+    import random
+    total = 1024 * 1024 * 1024
+    fakepcent = random.choice(range(1, 100))
+    remaining = ((total / 100) * fakepcent)
+    return [None, None, None, total, None, remaining]
+
+
+def fake_interface_addresses(iface, source):
+    import libvirt
+    mac = iface.macaddr
+    if source == libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT:
+        ret = {
+            'enp1s0': {'hwaddr': mac, 'addrs': [
+                {'addr': '10.0.0.1', 'prefix': 24, 'type': 0},
+                {'addr': 'fd00:beef::1', 'prefix': 128, 'type': 1},
+                {'addr': 'fe80::1', 'prefix': 64, 'type': 1}],
+            },
+            'lo': {'hwaddr': '00:00:00:00:00:00', 'addrs': [
+                {'addr': '127.0.0.1', 'prefix': 8, 'type': 0},
+                {'addr': '::1', 'prefix': 128, 'type': 1}],
+            },
+        }
+    else:
+        ret = {'vnet0': {'hwaddr': mac, 'addrs': [
+            {'addr': '10.0.0.3', 'prefix': 0, 'type': 0}],
+        }}
+    return ret
+
+
+def fake_dhcp_leases():
+    ret = [{
+        'clientid': 'XXX',
+        'expirytime': 1598570993,
+        'hostname': None,
+        'iaid': '1448103320',
+        'iface': 'virbr1',
+        'ipaddr': 'fd00:beef::2',
+        'mac': 'BAD',
+        'prefix': 64,
+        'type': 1}, {
+        'clientid': 'YYY',
+        'expirytime': 1598570993,
+        'hostname': None,
+        'iaid': None,
+        'iface': 'virbr1',
+        'ipaddr': '10.0.0.2',
+        'mac': 'NOPE',
+        'prefix': 24,
+        'type': 0}]
+    return ret
+
+
 class CLITestOptionsClass:
     """
     Helper class for parsing and tracking --test-* options.

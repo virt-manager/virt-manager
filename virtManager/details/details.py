@@ -1265,7 +1265,7 @@ class vmmDetails(vmmGObjectUI):
         self._browse_file(cb, reason=reason)
 
     def _set_network_ip_details(self, net):
-        ipv4, ipv6 = self.vm.get_interface_addresses(net)
+        ipv4, ipv6 = self.vm.get_ips(net)
         label = ipv4 or ""
         if ipv6:
             if label:
@@ -1275,7 +1275,7 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_ip(self):
         net = self._get_hw_row()[HW_LIST_COL_DEVICE]
-        self.vm.refresh_interface_addresses(net)
+        self.vm.refresh_ips(net)
         self._set_network_ip_details(net)
 
 

@@ -10,6 +10,7 @@ from virtinst import log
 from virtinst import Network
 
 from .libvirtobject import vmmLibvirtObject
+from ..lib import testmock
 
 
 def _make_addr_str(addrStr, prefix, netmaskStr):
@@ -88,11 +89,14 @@ class vmmNetwork(vmmLibvirtObject):
         self._backend.setAutostart(value)
 
     def _refresh_dhcp_leases(self):
+        ret = []
         try:
-            self._leases = self._backend.DHCPLeases()
+            ret = self._backend.DHCPLeases()
         except Exception as e:
             log.debug("Error getting %s DHCP leases: %s", self, str(e))
-            self._leases = []
+            if self.conn.is_test():
+                ret = testmock.fake_dhcp_leases()
+        self._leases = ret
 
     def get_dhcp_leases(self, refresh=False):
         if self._leases is None or refresh:
