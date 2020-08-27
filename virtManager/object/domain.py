@@ -984,15 +984,6 @@ class vmmDomain(vmmLibvirtObject):
 
     def open_graphics_fd(self):
         flags = 0
-
-        # Ugly workaround for VNC bug where the display cannot be opened
-        # if the listen type is "none".  This bug was fixed in QEMU-2.9.0.
-        graphics = self.xmlobj.devices.graphics[0]
-        if (graphics.type == "vnc" and
-                graphics.get_first_listen_type() == "none" and
-                not self.conn.support.conn_vnc_none_auth()):
-            flags = libvirt.VIR_DOMAIN_OPEN_GRAPHICS_SKIPAUTH
-
         return self._backend.openGraphicsFD(0, flags)
 
     def list_snapshots(self):
