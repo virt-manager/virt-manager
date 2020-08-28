@@ -1,6 +1,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import unittest.mock
+
 from tests.uitests import utils as uiutils
 
 
@@ -122,3 +124,28 @@ class VMMCLI(uiutils.UITestCase):
         # Give it a little time to work
         uiutils.check(lambda: self.app.topwin.active)
         self.app.topwin.keyCombo("<alt>F4")
+
+    def testCLINoFirstRun(self):
+        # Test a simple case of loading without any config override
+        self.app.open(first_run=False, use_uri=False)
+        self.sleep(2)
+        uiutils.check(lambda: self.app.topwin.showing)
+
+    def testCLINoFork(self):
+        # Test app without forking
+        self.app.open(first_run=False, use_uri=False, no_fork=False)
+        assert self.app.wait_for_exit() is True
+        uiutils.check(lambda: self.app.topwin.showing)
+        self.app.topwin.keyCombo("<alt>F4")
+
+    def testCLIGTKArgs(self):
+        # Ensure gtk arg passthrough works
+        self.app.open(extra_opts=["--gtk-debug=misc"])
+        uiutils.check(lambda: self.app.topwin.showing)
+        self.app.topwin.keyCombo("<alt>F4")
+
+    @unittest.mock.patch.dict('os.environ', {"DISPLAY": ""})
+    def testCLINoDisplay(self):
+        # Ensure missing display exits
+        self.app.open(will_fail=True)
+        self.app.wait_for_exit()
