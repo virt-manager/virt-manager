@@ -31,7 +31,7 @@ warnings.simplefilter("ignore")
 
 try:
     gi.check_version("3.22.0")
-except (ValueError, AttributeError):
+except (ValueError, AttributeError):  # pragma: no cover
     print("pygobject3 3.22.0 or later is required.")
     sys.exit(1)
 
@@ -63,7 +63,7 @@ def _import_gtk(leftovers):
         from gi.repository import Gtk
         leftovers = sys.argv[1:]
 
-        if Gtk.check_version(3, 22, 0):
+        if Gtk.check_version(3, 22, 0):  # pragma: no cover
             print("gtk3 3.22.0 or later is required.")
             sys.exit(1)
 
@@ -74,7 +74,7 @@ def _import_gtk(leftovers):
         # This ensures we can init gsettings correctly
         from . import config
         ignore = config
-    except Exception as e:
+    except Exception as e:  # pragma: no cover
         # Don't just let the exception raise here. abrt reports bugs
         # when users mess up su/sudo and DISPLAY isn't set. Printing
         # it avoids the issue
@@ -111,7 +111,8 @@ def drop_tty():
     # tty. This prevents libvirt's SSH tunnels from prompting
     # for user input if SSH keys/agent aren't configured.
     if os.fork() != 0:
-        os._exit(0)  # pylint: disable=protected-access
+        # pylint: disable=protected-access
+        os._exit(0)  # pragma: no cover
 
     os.setsid()
 
@@ -121,7 +122,7 @@ def drop_stdio():
     for fd in range(0, 2):
         try:
             os.close(fd)
-        except OSError:
+        except OSError:  # pragma: no cover
             pass
 
     os.open(os.devnull, os.O_RDWR)
@@ -260,7 +261,7 @@ def main():
         show_window = vmmEngine.CLI_SHOW_DOMAIN_DELETE
         domain = options.show_domain_delete
 
-    if show_window and options.uri is None:
+    if show_window and options.uri is None:  # pragma: no cover
         raise RuntimeError("can't use --show-* options without --connect")
 
     skip_autostart = False
@@ -288,9 +289,9 @@ def main():
 def runcli():
     try:
         main()
-    except KeyboardInterrupt:
+    except KeyboardInterrupt:  # pragma: no cover
         log.debug("Received KeyboardInterrupt. Exiting application.")
     except Exception as run_e:
         if "Gtk" not in globals():
-            raise
+            raise  # pragma: no cover
         _show_startup_error(str(run_e), "".join(traceback.format_exc()))

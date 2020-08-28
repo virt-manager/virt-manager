@@ -542,10 +542,11 @@ class VMMDogtailApp(object):
 
     def open(self, extra_opts=None, check_already_running=True, use_uri=True,
             window_name=None, xmleditor_enabled=False, keyfile=None,
-            break_setfacl=False):
+            break_setfacl=False, first_run=True, no_fork=True,
+            will_fail=False):
         extra_opts = extra_opts or []
 
-        if tests.utils.TESTCONFIG.debug:
+        if tests.utils.TESTCONFIG.debug and no_fork:
             stdout = sys.stdout
             stderr = sys.stderr
             extra_opts.append("--debug")
@@ -554,9 +555,11 @@ class VMMDogtailApp(object):
             stderr = open(os.devnull)
 
         cmd = [sys.executable]
-        cmd += [os.path.join(os.getcwd(), "virt-manager"),
-                "--test-first-run",
-                "--no-fork"]
+        cmd += [os.path.join(os.getcwd(), "virt-manager")]
+        if no_fork:
+            cmd += ["--no-fork"]
+        if first_run:
+            cmd += ["--test-first-run"]
         if use_uri:
             cmd += ["--connect", self.uri]
 
@@ -581,8 +584,19 @@ class VMMDogtailApp(object):
         if check_already_running:
             self.error_if_already_running()
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
-        self._root = dogtail.tree.root.application("virt-manager")
-        self._topwin = self._root.find(window_name, "(frame|dialog|alert)")
+        if not will_fail:
+            self._root = dogtail.tree.root.application("virt-manager")
+            self._topwin = self._root.find(window_name, "(frame|dialog|alert)")
+
+    def wait_for_exit(self):
+        # Wait for shutdown for 2 sec
+        waittime = 2
+        for ignore in range(int(waittime / .05)):
+            time.sleep(.05)
+            if self._proc.poll() is not None:
+                self._proc = None
+                return True
+        return False
 
     def stop(self):
         """
@@ -598,18 +612,9 @@ class VMMDogtailApp(object):
             self._proc = None
             return
 
-        def _wait_for_exit():
-            # Wait for shutdown for 2 sec
-            waittime = 2
-            for ignore in range(int(waittime / .05)):
-                time.sleep(.05)
-                if self._proc.poll() is not None:
-                    self._proc = None
-                    return True
-
-        if _wait_for_exit():
+        if self.wait_for_exit():
             return
 
         log.warning("App didn't exit gracefully from SIGINT. Killing...")
         self._proc.kill()
-        _wait_for_exit()
+        self.wait_for_exit()
