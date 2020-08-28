@@ -299,8 +299,7 @@ class vmmConsolePages(vmmGObjectUI):
             return True
 
         for serial in self._serial_consoles:
-            if (serial.terminal and
-                serial.terminal.get_property("has-focus")):
+            if serial.has_focus():
                 return True
 
     def _disable_modifiers(self):
@@ -903,13 +902,11 @@ class vmmConsolePages(vmmGObjectUI):
 
         if not serial:
             serial = vmmSerialConsole(self.vm, target_port, name)
-            serial.terminal.connect("focus-in-event",
-                                    self._viewer_focus_changed)
-            serial.terminal.connect("focus-out-event",
-                                    self._viewer_focus_changed)
+            serial.set_focus_callbacks(self._viewer_focus_changed,
+                                       self._viewer_focus_changed)
 
             title = Gtk.Label(label=name)
-            self.widget("serial-pages").append_page(serial.box, title)
+            self.widget("serial-pages").append_page(serial.get_box(), title)
             self._serial_consoles.append(serial)
 
         serial.open_console()
