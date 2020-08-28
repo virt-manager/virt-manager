@@ -39,10 +39,6 @@ class VirtinstConnection(object):
     - simplified API wrappers that handle new and old ways of doing things
     """
     @staticmethod
-    def libvirt_new_enough_for_virtmanager(version):
-        return _real_local_libvirt_version() >= version
-
-    @staticmethod
     def get_app_cache_dir():
         ret = os.environ.get("XDG_CACHE_HOME")
         if not ret:
