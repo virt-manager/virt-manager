@@ -442,6 +442,13 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       </source>
       <boot order='9'/>
     </hostdev>
+    <!-- used for duplicate 'device in use' testing in uitests -->
+    <hostdev mode='subsystem' type='usb' managed='yes'>
+      <source>
+        <product id='0x7e04'/>
+        <vendor id='0x03f0'/>
+      </source>
+    </hostdev>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
         <address bus='0x00' slot='0x19' function="0x0"/>
@@ -889,98 +896,9 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
 
 
 <domain type='test'>
-  <name>test-xenpv-kernel</name>
-  <uuid>596a5d2171f48fb2e068e2386a5c413e</uuid>
-  <os>
-    <type>xen</type>
-    <kernel>/var/lib/xen/vmlinuz.2Dn2YT</kernel>
-    <initrd>/var/lib/xen/initrd.img.0u-Vhq</initrd>
-    <cmdline>method=http://download.fedora.devel.redhat.com/pub/fedora/linux/core/test/5.91/x86_64/os</cmdline>
-  </os>
-  <memory>430080</memory>
-  <vcpu>2</vcpu>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>destroy</on_reboot>
-  <on_crash>destroy</on_crash>
-  <devices>
-    <disk type='file' device='disk'>
-      <source file='/root/some.img'/>
-      <target dev='xvda'/>
-    </disk>
-    <console tty='/dev/pts/4'/>
-  </devices>
-</domain>
-
-
-<domain type='test'>
-  <name>test-duplicate-usb</name>
-  <uuid>4a64cc71-19c4-2fd0-2323-3050abaea3c3</uuid>
-  <memory>8388608</memory>
-  <currentMemory>2097152</currentMemory>
-  <vcpu>2</vcpu>
-  <os>
-    <type arch='i686'>hvm</type>
-    <boot dev='hd'/>
-  </os>
-  <clock offset='utc'/>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>destroy</on_crash>
-  <devices>
-    <hostdev mode='subsystem' type='usb' managed='yes'>
-      <source>
-        <product id='0x7e04'/>
-        <vendor id='0x03f0'/>
-      </source>
-    </hostdev>
-  </devices>
-</domain>
-
-<domain type='test'>
-  <name>test-spapr-xml</name>
-  <uuid>2754dd7b-ac8a-4850-aec0-1f3fcd43235b</uuid>
-  <memory unit='KiB'>524288</memory>
-  <vcpu placement='static'>1</vcpu>
-  <os>
-    <type arch='i686'>hvm</type>
-    <boot dev='hd'/>
-  </os>
-  <devices>
-    <console type='pty'>
-      <address type="spapr-vio"/>
-    </console>
-    <serial type="pty">
-      <address type="spapr-vio"/>
-    </serial>
-    <serial type="pty">
-      <address type="spapr-vio"/>
-    </serial>
-
-    <disk type="file" device="disk">
-      <source file="/tmp/scsidisk.img"/>
-      <target dev="sda" bus="scsi"/>
-      <address type="drive" controller="1"/>
-    </disk>
-
-    <interface type='user'>
-      <mac address='22:11:11:11:11:FA'/>
-      <model>spapr-vlan</model>
-      <address type="spapr-vio"/>
-    </interface>
-
-    <controller type="scsi" index="1">
-      <address type="spapr-vio"/>
-    </controller>
-    <controller type="scsi" index="0">
-      <address type="spapr-vio"/>
-    </controller>
-  </devices>
-</domain>
-
-
-<domain type='test'>
   <name>test-hyperv-uefi</name>
   <uuid>4a64cc71-19c4-2fd0-2323-f050941ea3c3</uuid>
+  <description>Used for testing specific win7 hyperv+uefi incompatibility via virt-xml</description>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/7"/>

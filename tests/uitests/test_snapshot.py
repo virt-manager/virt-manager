@@ -113,6 +113,8 @@ class Snapshots(uiutils.UITestCase):
         """
         manager = self.app.topwin
         manager.find("vm-list").click()
+        for ignore in range(8):
+            self.pressKey("Down")
         vmname = "test-state-managedsave"
         cell = manager.find_fuzzy(vmname, "table cell")
         cell.bring_on_screen()
