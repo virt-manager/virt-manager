@@ -19,7 +19,6 @@ class TestConn(unittest.TestCase):
         # Misc API checks
         conn = cli.getConnection("test:///default")
         conn.invalidate_caps()
-        assert conn.libvirt_new_enough_for_virtmanager(1000) is True
         assert conn.is_open() is True
         assert conn.is_container_only() is False
         assert conn.is_openvz() is False
