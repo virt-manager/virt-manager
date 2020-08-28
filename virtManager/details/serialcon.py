@@ -15,7 +15,7 @@ from virtinst import log
 try:
     gi.require_version("Vte", "2.91")
     log.debug("Using VTE API 2.91")
-except ValueError:
+except ValueError:  # pragma: no cover
     gi.require_version("Vte", "2.90")
     log.debug("Using VTE API 2.90")
 from gi.repository import Vte
@@ -48,7 +48,7 @@ class ConsoleConnection(vmmGObject):
         terminal = opaque
 
         if (events & libvirt.VIR_EVENT_HANDLE_ERROR or
-            events & libvirt.VIR_EVENT_HANDLE_HANGUP):
+            events & libvirt.VIR_EVENT_HANDLE_HANGUP):  # pragma: no cover
             log.debug("Received stream ERROR/HANGUP, closing console")
             self.close()
             return
@@ -56,12 +56,12 @@ class ConsoleConnection(vmmGObject):
         if events & libvirt.VIR_EVENT_HANDLE_READABLE:
             try:
                 got = self.stream.recv(1024 * 100)
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.exception("Error receiving stream data")
                 self.close()
                 return
 
-            if got == -2:
+            if got == -2:  # pragma: no cover
                 # This is basically EAGAIN
                 return
             if len(got) == 0:
@@ -79,12 +79,12 @@ class ConsoleConnection(vmmGObject):
 
             try:
                 done = self.stream.send(self.terminalToStream.encode())
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.exception("Error sending stream data")
                 self.close()
                 return
 
-            if done == -2:
+            if done == -2:  # pragma: no cover
                 # This is basically EAGAIN
                 return
 
@@ -96,12 +96,9 @@ class ConsoleConnection(vmmGObject):
                                             libvirt.VIR_STREAM_EVENT_HANGUP)
 
 
-    def is_open(self):
-        return self.stream is not None
-
     def open(self, dev, terminal):
         if self.stream:
-            self.close()
+            return
 
         name = dev and dev.alias.name or None
         log.debug("Opening console stream for dev=%s alias=%s",
@@ -124,11 +121,11 @@ class ConsoleConnection(vmmGObject):
         if self.stream:
             try:
                 self.stream.eventRemoveCallback()
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.exception("Error removing stream callback")
             try:
                 self.stream.finish()
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.exception("Error finishing stream")
 
         self.stream = None
@@ -142,7 +139,7 @@ class ConsoleConnection(vmmGObject):
         ignore = terminal
 
         if self.stream is None:
-            return
+            return  # pragma: no cover
 
         self.terminalToStream += text
         if self.terminalToStream:
@@ -153,7 +150,7 @@ class ConsoleConnection(vmmGObject):
 
     def display_data(self, terminal):
         if not self.streamToTerminal:
-            return
+            return  # pragma: no cover
 
         terminal.feed(self.streamToTerminal)
         self.streamToTerminal = b""
@@ -215,6 +212,7 @@ class vmmSerialConsole(vmmGObject):
 
     def init_popup(self):
         self.serial_popup = Gtk.Menu()
+        self.serial_popup.get_accessible().set_name("serial-popup-menu")
 
         self.serial_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY,
                                                             None)
@@ -279,8 +277,7 @@ class vmmSerialConsole(vmmGObject):
 
     def open_console(self):
         try:
-            if not self.console.is_open():
-                self.console.open(self.lookup_dev(), self.terminal)
+            self.console.open(self.lookup_dev(), self.terminal)
             self.box.set_current_page(0)
             return True
         except Exception as e:
@@ -288,7 +285,7 @@ class vmmSerialConsole(vmmGObject):
             self.show_error(_("Error connecting to text console: %s") % e)
             try:
                 self.console.close()
-            except Exception:
+            except Exception:  # pragma: no cover
                 pass
 
         return False
@@ -301,6 +298,7 @@ class vmmSerialConsole(vmmGObject):
 
     def lookup_dev(self):
         devs = self.vm.get_serialcon_devices()
+        found = None
         for dev in devs:
             port = dev.get_xml_idx()
             path = dev.source.path
@@ -310,12 +308,15 @@ class vmmSerialConsole(vmmGObject):
                     log.debug("Serial console '%s' path changed to %s",
                                   self.target_port, path)
                 self.lastpath = path
-                return dev
+                found = dev
+                break
 
-        log.debug("No devices found for serial target port '%s'",
+        if not found:  # pragma: no cover
+            log.debug("No devices found for serial target port '%s'",
                       self.target_port)
-        self.lastpath = None
-        return None
+            self.lastpath = None
+        return found
+
 
     #######################
     # Popup menu handling #

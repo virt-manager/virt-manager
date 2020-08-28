@@ -12,7 +12,7 @@ from tests.uitests import utils as uiutils
 
 def _vm_wrapper(vmname, uri="qemu:///system"):
     """
-    Decorator to open a transient VM and clean it up
+    Decorator to define+start a VM and clean it up on exit
     """
     def wrap1(fn):
         def wrapper(self, *args, **kwargs):
@@ -148,6 +148,36 @@ class Console(uiutils.UITestCase):
         term.typeText("help\n")
         uiutils.check(lambda: "COMMANDS" in term.text)
 
+        term.doubleClick()
+        term.click(button=3)
+        menu = self.app.root.find("serial-popup-menu")
+        menu.find("Copy", "menu item").click()
+
+        term.click()
+        term.click(button=3)
+        menu = self.app.root.find("serial-popup-menu")
+        menu.find("Paste", "menu item").click()
+
+        win.find("Details", "radio button").click()
+        win.find("Console", "radio button").click()
+        smenu = win.find("Menu", "toggle button")
+        smenu.click()
+        smenu.find("Force Off", "menu item").click()
+        self._click_alert_button("you sure", "Yes")
+        view = self.app.root.find("^View$", "menu")
+        view.click()
+        # Triggers some tooltip cases
+        textmenu = view.find("Text Consoles", "menu")
+        textmenu.point()
+        uiutils.check(lambda: textmenu.showing)
+        item = textmenu.find("Text Console 1")
+        uiutils.check(lambda: not item.sensitive)
+
+        # Restart the guest to trigger reconnect code
+        view.click()
+        win.find("Run", "push button").click()
+        term = win.find("Serial Terminal")
+        uiutils.check(lambda: term.showing)
 
     @_vm_wrapper("uitests-spice-specific")
     def testConsoleSpiceSpecific(self):

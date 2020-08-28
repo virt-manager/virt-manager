@@ -314,8 +314,17 @@ class Details(uiutils.UITestCase):
         """
         win = self._open_details_window(vmname="test-many-devices")
         appl = win.find("config-apply", "push button")
-        self._stop_vm(win)
 
+        # Quick test to hit some serialcon.py paths
+        viewmenu = win.find("^View$", "menu")
+        viewmenu.click()
+        textmenu = viewmenu.find("Text Consoles", "menu")
+        textmenu.point()
+        conitem = textmenu.find("Serial 1")
+        uiutils.check(lambda: not conitem.sensitive)
+        viewmenu.click()
+
+        self._stop_vm(win)
 
         # Disk options
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
