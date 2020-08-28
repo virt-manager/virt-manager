@@ -563,18 +563,17 @@ class vmmConsolePages(vmmGObjectUI):
             self._activate_unavailable_page(_("Guest is not running."))
 
     def _close_viewer(self):
-        if self._viewer is None:
-            return
-
-        self._viewer.console_remove_display_from_widget(
-            self.widget("console-gfx-viewport"))
-        self._viewer.cleanup()
-        self._viewer = None
-
         self._leave_fullscreen()
 
         for serial in self._serial_consoles:
             serial.close()
+
+        if self._viewer is None:
+            return
+        self._viewer.console_remove_display_from_widget(
+            self.widget("console-gfx-viewport"))
+        self._viewer.cleanup()
+        self._viewer = None
 
     def _update_vm_widget_states(self):
         page = self.widget("console-pages").get_current_page()
