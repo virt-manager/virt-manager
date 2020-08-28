@@ -10,7 +10,7 @@ from virtinst import log
 from tests.uitests import utils as uiutils
 
 
-def _vm_wrapper(vmname, uri="qemu:///system"):
+def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
     """
     Decorator to define+start a VM and clean it up on exit
     """
@@ -25,7 +25,9 @@ def _vm_wrapper(vmname, uri="qemu:///system"):
                 dom.create()
                 self.app.uri = uri
                 self.conn = conn
-                self.app.open(extra_opts=["--show-domain-console", vmname])
+                extra_opts = (opts or [])
+                extra_opts += ["--show-domain-console", vmname]
+                self.app.open(extra_opts=extra_opts)
                 fn(self, *args, **kwargs)
             finally:
                 try:
@@ -47,6 +49,7 @@ class Console(uiutils.UITestCase):
     """
 
     conn = None
+    extraopts = None
 
     ##############
     # Test cases #
@@ -101,6 +104,19 @@ class Console(uiutils.UITestCase):
         win.find("Fullscreen Exit").click()
         uiutils.check(lambda: win.size == newsize)
 
+        # Tweak scaling
+        win.click_title()
+        win.click_title()
+        win.find("^View$", "menu").click()
+        scalemenu = win.find("Scale Display", "menu")
+        scalemenu.point()
+        scalemenu.find("Always", "radio menu item").click()
+        win.find("^View$", "menu").click()
+        scalemenu = win.find("Scale Display", "menu")
+        scalemenu.point()
+        scalemenu.find("Never", "radio menu item").click()
+        self.sleep(.5)
+
     @_vm_wrapper("uitests-vnc-standard")
     def testConsoleVNCStandard(self):
         return self._checkConsoleStandard()
@@ -123,11 +139,42 @@ class Console(uiutils.UITestCase):
         passwd.typeText("xx")
         win.find("Login", "push button").click()
         self._click_alert_button("Viewer authentication error", "OK")
+        savecheck = win.find("Save this password", "check box")
+        if not savecheck.checked:
+            savecheck.click()
+        passwd.typeText("yy")
+        self.pressKey("Enter")
+        self._click_alert_button("Viewer authentication error", "OK")
 
         # Check proper password
+        passwd.text = ""
         passwd.typeText("goodp")
         win.find("Login", "push button").click()
         uiutils.check(lambda: con.showing)
+
+        # Restart VM to retrigger console connect
+        smenu = win.find("Menu", "toggle button")
+        smenu.click()
+        smenu.find("Force Off", "menu item").click()
+        self._click_alert_button("you sure", "Yes")
+        win.find("Run", "push button").click()
+        uiutils.check(lambda: passwd.showing)
+        # Password should be filled in
+        uiutils.check(lambda: bool(passwd.text))
+        # Uncheck 'Save password' and login, which will delete it from keyring
+        savecheck.click()
+        win.find("Login", "push button").click()
+        uiutils.check(lambda: con.showing)
+
+        # Restart VM to retrigger console connect
+        smenu = win.find("Menu", "toggle button")
+        smenu.click()
+        smenu.find("Force Off", "menu item").click()
+        self._click_alert_button("you sure", "Yes")
+        win.find("Run", "push button").click()
+        uiutils.check(lambda: passwd.showing)
+        # Password should be empty now
+        uiutils.check(lambda: not bool(passwd.text))
 
     @_vm_wrapper("uitests-vnc-password")
     def testConsoleVNCPassword(self):
@@ -179,7 +226,7 @@ class Console(uiutils.UITestCase):
         term = win.find("Serial Terminal")
         uiutils.check(lambda: term.showing)
 
-    @_vm_wrapper("uitests-spice-specific")
+    @_vm_wrapper("uitests-spice-specific", opts=["--test-options=spice-agent"])
     def testConsoleSpiceSpecific(self):
         """
         Spice specific behavior. Has lots of devices that will open
@@ -193,8 +240,32 @@ class Console(uiutils.UITestCase):
         # than that
         win.find("Virtual Machine", "menu").click()
         win.find("Redirect USB", "menu item").click()
-        self.app.root.find("Select USB devices for redirection", "label")
 
+        usbwin = self.app.root.find("vmm dialog", "alert")
+        usbwin.find("Select USB devices for redirection", "label")
+        usbwin.find("SPICE CD", "check box").click()
+        chooser = self.app.root.find(None, "file chooser")
+        # Find the cwd bookmark on the left
+        chooser.find("virt-manager", "label").click()
+        chooser.find("virt-manager", "label").click()
+        chooser.find("COPYING").click()
+        self.pressKey("Enter")
+        uiutils.check(lambda: not chooser.showing)
+        usbwin.find("Close", "push button").click()
+
+        # Test fake guest resize behavior
+        def _click_auto():
+            vmenu = win.find("^View$", "menu")
+            vmenu.click()
+            smenu = vmenu.find("Scale Display", "menu")
+            smenu.point()
+            smenu.find("Auto resize VM", "check menu item").click()
+        _click_auto()
+        win.click_title()
+        win.click_title()
+        _click_auto()
+        win.click_title()
+        win.click_title()
 
     def _testLiveHotplug(self, fname):
         win = self.app.topwin

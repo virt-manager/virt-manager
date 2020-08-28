@@ -234,7 +234,7 @@ class vmmEngine(vmmGObject):
         We serialize conn autostart, so polkit/ssh-askpass doesn't spam
         """
         if self._exiting:
-            return
+            return  # pragma: no cover
 
         connections_queue = queue.Queue()
         auto_conns = [conn.get_uri() for conn in self._connobjs.values() if
@@ -366,7 +366,7 @@ class vmmEngine(vmmGObject):
             ignore1, ignore2, conn, kwargs = self._tick_queue.get()
             try:
                 conn.tick_from_engine(**kwargs)
-            except Exception:
+            except Exception:  # pragma: no cover
                 # Don't attempt to show any UI error here, since it
                 # can cause dialogs to appear from nowhere if say
                 # libvirtd is shut down
@@ -376,7 +376,6 @@ class vmmEngine(vmmGObject):
             # Need to clear reference to make leak check happy
             conn = None
             self._tick_queue.task_done()
-        return 1
 
 
     #####################################
@@ -423,7 +422,7 @@ class vmmEngine(vmmGObject):
         Public call, manager/details/... use this to force exit the app
         """
         if self._exiting:
-            return
+            return  # pragma: no cover
 
         self._exiting = True
 
@@ -438,7 +437,7 @@ class vmmEngine(vmmGObject):
                     # Engine will always appear to leak
                     objs.remove(self.object_key)
 
-                    for name in objs:
+                    for name in objs:  # pragma: no cover
                         log.debug("LEAK: %s", name)
 
                 log.debug("Exiting app normally.")
@@ -516,7 +515,7 @@ class vmmEngine(vmmGObject):
                               self.CLI_SHOW_DOMAIN_CONSOLE,
                               self.CLI_SHOW_DOMAIN_DELETE]):
             self._cli_show_vm_helper(uri, clistr, show_window)
-        else:
+        else:  # pragma: no cover
             raise RuntimeError("Unknown cli window command '%s'" %
                 show_window)
 

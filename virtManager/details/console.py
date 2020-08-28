@@ -81,7 +81,7 @@ class _TimedRevealer(vmmGObject):
 
     def _schedule_unreveal_timeout(self, timeout):
         if self._timeout_id:
-            return
+            return  # pragma: no cover
 
         def cb():
             self._revealer.set_reveal_child(False)
@@ -437,7 +437,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _resizeguest_ui_changed_cb(self, src):
         if not src.get_sensitive():
-            return
+            return  # pragma: no cover
 
         val = int(self.widget("details-menu-view-resizeguest").get_active())
         self.vm.set_console_resizeguest(val)
@@ -446,9 +446,9 @@ class vmmConsolePages(vmmGObjectUI):
     def _do_size_to_vm(self, src_ignore):
         # Resize the console to best fit the VM resolution
         if not self._viewer:
-            return
+            return  # pragma: no cover
         if not self._viewer.console_get_desktop_resolution():
-            return
+            return  # pragma: no cover
 
         top_w, top_h = self.topwin.get_size()
         viewer_alloc = self.widget("console-gfx-scroll").get_allocation()
@@ -654,7 +654,7 @@ class vmmConsolePages(vmmGObjectUI):
         if not self.vm:
             # This is triggered via cleanup + idle_add, so vm might
             # disappear and spam the logs
-            return
+            return  # pragma: no cover
 
         pagenum = self.widget("console-pages").get_current_page()
         paused = self.vm.is_paused()
@@ -690,7 +690,7 @@ class vmmConsolePages(vmmGObjectUI):
             gdev = gdevs and gdevs[0] or None
             if gdev:
                 ginfo = ConnectionInfo(self.vm.conn, gdev)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
             log.exception("Getting graphics console failed: %s", str(e))
@@ -720,12 +720,10 @@ class vmmConsolePages(vmmGObjectUI):
             if ginfo.gtype == "vnc":
                 viewer_class = VNCViewer
             elif ginfo.gtype == "spice":
-                if have_spice_gtk:
-                    viewer_class = SpiceViewer
-                else:
+                if not have_spice_gtk:  # pragma: no cover
                     raise RuntimeError("Error opening Spice console, "
                                        "SpiceClientGtk missing")
-
+                viewer_class = SpiceViewer
 
             self._viewer = viewer_class(self.vm, ginfo)
             self._connect_viewer_signals()
@@ -880,7 +878,7 @@ class vmmConsolePages(vmmGObjectUI):
         menu = self.widget("details-menu-view-serial-list").get_submenu()
         for child in menu.get_children():
             if isinstance(child, Gtk.SeparatorMenuItem):
-                break
+                break  # pragma: no cover
             if child.get_sensitive():
                 child.toggled()
                 break
