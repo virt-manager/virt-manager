@@ -55,11 +55,11 @@ class vmmKeyring(vmmGObject):
                                 "org.freedesktop.Secret.Collection", None)
 
             log.debug("Using keyring session %s", self._session)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Error determining keyring")
 
     def _cleanup(self):
-        pass
+        pass  # pragma: no cover
 
     def _add_secret(self, secret):
         ret = None
@@ -76,7 +76,7 @@ class vmmKeyring(vmmGObject):
             _id = self._collection.CreateItem("(a{sv}(oayays)b)",
                                               props, params, replace)[0]
             ret = int(_id.rsplit("/")[-1])
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Failed to add keyring secret")
 
         return ret
@@ -112,7 +112,7 @@ class vmmKeyring(vmmGObject):
                 attrs["%s" % key] = "%s" % val
 
             ret = _vmmSecret(label, secret, attrs)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Failed to get keyring secret id=%s", _id)
 
         return ret
@@ -130,7 +130,7 @@ class vmmKeyring(vmmGObject):
 
     def get_console_password(self, vm):
         if not self.is_available():
-            return ("", "")
+            return ("", "")  # pragma: no cover
 
         username, keyid = vm.get_console_password()
 
@@ -139,30 +139,30 @@ class vmmKeyring(vmmGObject):
 
         secret = self._get_secret(keyid)
         if secret is None or secret.get_name() != self._get_secret_name(vm):
-            return ("", "")
+            return ("", "")  # pragma: no cover
 
         if (secret.attributes.get("hvuri", None) != vm.conn.get_uri() or
             secret.attributes.get("uuid", None) != vm.get_uuid()):
-            return ("", "")
+            return ("", "")  # pragma: no cover
 
         return (secret.get_secret(), username or "")
 
     def set_console_password(self, vm, password, username=""):
         if not self.is_available():
-            return
+            return  # pragma: no cover
 
         secret = _vmmSecret(self._get_secret_name(vm), password,
                            {"uuid": vm.get_uuid(),
                             "hvuri": vm.conn.get_uri()})
         keyid = self._add_secret(secret)
         if keyid is None:
-            return
+            return  # pragma: no cover
 
         vm.set_console_password(username, keyid)
 
     def del_console_password(self, vm):
         if not self.is_available():
-            return
+            return  # pragma: no cover
 
         ignore, keyid = vm.get_console_password()
         if keyid == -1:

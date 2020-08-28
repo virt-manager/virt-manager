@@ -380,9 +380,11 @@ class VNCViewer(Viewer):
         return self._display.is_open()
 
     def _get_scaling(self):
-        return self._display.get_scaling()
+        if self._display:
+            return self._display.get_scaling()
     def _set_scaling(self, scaling):
-        return self._display.set_scaling(scaling)
+        if self._display:
+            return self._display.set_scaling(scaling)
 
     def _get_grab_keys(self):
         return self._display.get_grab_keys().as_string()
@@ -431,11 +433,11 @@ class VNCViewer(Viewer):
         return False
 
     def _get_usb_widget(self):
-        return None
+        return None  # pragma: no cover
     def _has_usb_redirection(self):
         return False
     def _has_agent(self):
-        return False
+        return False  # pragma: no cover
 
 
     #######################
@@ -696,7 +698,8 @@ class SpiceViewer(Viewer):
     def _has_agent(self):
         if not self._main_channel:
             return False
-        return self._main_channel.get_property("agent-connected")
+        return (self._main_channel.get_property("agent-connected") or
+                self.config.CLITestOptions.spice_agent)
 
     def _open_host(self):
         host, port, tlsport = self._ginfo.get_conn_host()
@@ -727,9 +730,11 @@ class SpiceViewer(Viewer):
             self._spice_session.connect()
 
     def _get_scaling(self):
-        return self._display.get_property("scaling")
+        if self._display:
+            return self._display.get_property("scaling")
     def _set_scaling(self, scaling):
-        self._display.set_property("scaling", scaling)
+        if self._display:
+            self._display.set_property("scaling", scaling)
 
     def _set_resizeguest(self, val):
         if self._display:

@@ -95,6 +95,8 @@ class CLITestOptionsClass:
         managed save issues
 
     * test-vm-run-fail: Make VM run fail, so we can test the error path
+
+    * spice-agent: Make spice-agent detection return true in viewer.py
     """
     def __init__(self, test_options_str, test_first_run):
         optset = set()
@@ -128,6 +130,7 @@ class CLITestOptionsClass:
         self.config_libguestfs = _get("config-libguestfs")
         self.test_managed_save = _get("test-managed-save")
         self.test_vm_run_fail = _get("test-vm-run-fail")
+        self.spice_agent = _get("spice-agent")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)
