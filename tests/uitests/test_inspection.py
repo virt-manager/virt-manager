@@ -28,7 +28,7 @@ class VMMInspection(uiutils.UITestCase):
 
         # Use the test suite inspection mocking to test parts
         # of the UI that interact with inspection data
-        self.app.open(extra_opts=["--test-options=config-libguestfs"])
+        self.app.open(enable_libguestfs=True)
         details = self._open_details_window("test-clone")
         details.find("OS information", "table cell").click()
         tab = details.find("os-tab")

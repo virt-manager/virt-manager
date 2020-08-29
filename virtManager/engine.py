@@ -133,9 +133,9 @@ class vmmEngine(vmmGObject):
 
         tryuri = vmmCreateConn.default_uri()
         log.debug("Probed default URI=%s", tryuri)
-        if self.config.CLITestOptions.first_run:
-            log.debug("--test-first-run, using uri=None to trigger error")
-            tryuri = None
+        if self.config.CLITestOptions.firstrun_uri is not None:
+            tryuri = self.config.CLITestOptions.firstrun_uri or None
+            log.debug("Using test-options firstrun_uri=%s", tryuri)
 
         manager = self._get_manager()
         msg = connectauth.setup_first_uri(self.config, tryuri)

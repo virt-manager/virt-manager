@@ -543,7 +543,8 @@ class VMMDogtailApp(object):
     def open(self, extra_opts=None, check_already_running=True, use_uri=True,
             window_name=None, xmleditor_enabled=False, keyfile=None,
             break_setfacl=False, first_run=True, no_fork=True,
-            will_fail=False):
+            will_fail=False, enable_libguestfs=False,
+            firstrun_uri=None, fake_systemd_success=True):
         extra_opts = extra_opts or []
 
         if tests.utils.TESTCONFIG.debug and no_fork:
@@ -558,16 +559,25 @@ class VMMDogtailApp(object):
         cmd += [os.path.join(os.getcwd(), "virt-manager")]
         if no_fork:
             cmd += ["--no-fork"]
-        if first_run:
-            cmd += ["--test-first-run"]
         if use_uri:
             cmd += ["--connect", self.uri]
 
-        testoptions = []
+        if first_run:
+            cmd.append("--test-options=first-run")
+            if not firstrun_uri:
+                firstrun_uri = ""
+        if firstrun_uri is not None:
+            cmd.append("--test-options=firstrun-uri=%s" % firstrun_uri)
         if xmleditor_enabled:
-            testoptions.append("xmleditor-enabled")
+            cmd.append("--test-options=xmleditor-enabled")
         if break_setfacl:
-            testoptions.append("break-setfacl")
+            cmd.append("--test-options=break-setfacl")
+        if enable_libguestfs is True:
+            cmd.append("--test-options=enable-libguestfs")
+        if enable_libguestfs is False:
+            cmd.append("--test-options=disable-libguestfs")
+        if fake_systemd_success:
+            cmd.append("--test-options=fake-systemd-success")
         if keyfile:
             import atexit
             import tempfile
@@ -575,10 +585,8 @@ class VMMDogtailApp(object):
             tempname = tempfile.mktemp(prefix="virtmanager-uitests-keyfile")
             open(tempname, "w").write(open(keyfile).read())
             atexit.register(lambda: os.unlink(tempname))
-            testoptions.append("gsettings-keyfile=%s" % tempname)
+            cmd.append("--test-options=gsettings-keyfile=%s" % tempname)
 
-        if testoptions:
-            cmd += ["--test-options=%s" % ",".join(testoptions)]
         cmd += extra_opts
 
         if check_already_running:

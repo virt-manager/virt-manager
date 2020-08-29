@@ -127,13 +127,14 @@ class VMMCLI(uiutils.UITestCase):
 
     def testCLINoFirstRun(self):
         # Test a simple case of loading without any config override
-        self.app.open(first_run=False, use_uri=False)
+        self.app.open(first_run=False, enable_libguestfs=None, use_uri=False)
         self.sleep(2)
         uiutils.check(lambda: self.app.topwin.showing)
 
     def testCLINoFork(self):
         # Test app without forking
-        self.app.open(first_run=False, use_uri=False, no_fork=False)
+        self.app.open(first_run=False, enable_libguestfs=None,
+                use_uri=False, no_fork=False)
         assert self.app.wait_for_exit() is True
         uiutils.check(lambda: self.app.topwin.showing)
         self.app.topwin.keyCombo("<alt>F4")

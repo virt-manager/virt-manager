@@ -206,6 +206,10 @@ class vmmConfig(object):
         self.CLITestOptions = CLITestOptions
         if self.CLITestOptions.xmleditor_enabled:
             self.set_xmleditor_enabled(True)
+        if self.CLITestOptions.enable_libguestfs:
+            self.set_libguestfs_inspect_vms(True)
+        if self.CLITestOptions.disable_libguestfs:
+            self.set_libguestfs_inspect_vms(False)
 
         # We don't create it straight away, since we don't want
         # to block the app pending user authorization to access
@@ -426,10 +430,6 @@ class vmmConfig(object):
 
     # Libguestfs VM inspection
     def get_libguestfs_inspect_vms(self):
-        if self.CLITestOptions.config_libguestfs:
-            return True
-        if self.CLITestOptions.first_run:
-            return False
         return self.conf.get("/enable-libguestfs-vm-inspection")
     def set_libguestfs_inspect_vms(self, val):
         self.conf.set("/enable-libguestfs-vm-inspection", val)

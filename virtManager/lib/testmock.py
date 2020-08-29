@@ -3,6 +3,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+# This file is a collection of code used for testing
+# code paths primarily via our uitests/
+
+import os
+
 
 def fake_job_info():
     import random
@@ -62,12 +67,13 @@ class CLITestOptionsClass:
     Helper class for parsing and tracking --test-* options.
     The suboptions are:
 
-    * first-run: Run the app with fresh gsettings values and
-        no config changes saved to disk, among a few other tweaks.
-        Heavily used by the UI test suite.
+    * first-run: Run the app with fresh gsettings values saved to
+        a keyfile, mimicking a first app run. Also sets
+        GSETTINGS to use memory backend, in case any other app
+        preferences would be affected. The ui testsuite sets this
+        for most tests.
 
-    * xmleditor-enabled: Force the xmleditor preference on if
-        using first-run. Used by the test suite
+    * xmleditor-enabled: Force the xmleditor gsettings preference on.
 
     * gsettings-keyfile: Override the gsettings values with those
         from the passed in keyfile, to test with different default
@@ -88,8 +94,8 @@ class CLITestOptionsClass:
         This is hit via the directory search permissions checking
         for disk image usage for qemu
 
-    * config-libguestfs: Override the first-run default of
-        disabling libguestfs support, so it is enabled
+    * enable-libguestfs: Force enable the libguestfs gsetting
+    * disable-libguestfs: Force disable the libguestfs gsetting
 
     * test-managed-save: Triggers a couple conditions for testing
         managed save issues
@@ -97,16 +103,19 @@ class CLITestOptionsClass:
     * test-vm-run-fail: Make VM run fail, so we can test the error path
 
     * spice-agent: Make spice-agent detection return true in viewer.py
+
+    * firstrun-uri: If set, use this as the initial connection URI
+        if we are doing firstrun testing
+    * fake-systemd-success: If doing firstrun testing, fake that
+        systemd checks for libvirtd succeeded
     """
-    def __init__(self, test_options_str, test_first_run):
+    def __init__(self, test_options_str):
         optset = set()
         for optstr in test_options_str:
             optset.update(set(optstr.split(",")))
 
-        self._parse(optset)
-        if test_first_run:
-            self.first_run = True
-        self._process()
+        first_run = self._parse(optset)
+        self._process(first_run)
 
     def _parse(self, optset):
         def _get(optname):
@@ -121,25 +130,33 @@ class CLITestOptionsClass:
                     optset.remove(opt)
                     return opt.split("=", 1)[1]
 
-        self.first_run = _get("first-run")
+        first_run = _get("first-run")
         self.leak_debug = _get("leak-debug")
         self.no_events = _get("no-events")
         self.xmleditor_enabled = _get("xmleditor-enabled")
         self.gsettings_keyfile = _get_value("gsettings-keyfile")
         self.break_setfacl = _get("break-setfacl")
-        self.config_libguestfs = _get("config-libguestfs")
+        self.disable_libguestfs = _get("disable-libguestfs")
+        self.enable_libguestfs = _get("enable-libguestfs")
         self.test_managed_save = _get("test-managed-save")
         self.test_vm_run_fail = _get("test-vm-run-fail")
         self.spice_agent = _get("spice-agent")
+        self.firstrun_uri = _get_value("firstrun-uri")
+        self.fake_systemd_success = _get("fake-systemd-success")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)
 
-    def _process(self):
-        if self.first_run and not self.gsettings_keyfile:
+        return first_run
+
+    def _process(self, first_run):
+        if first_run:
+            # So other settings like gtk are reset and not affected
+            os.environ["GSETTINGS_BACKEND"] = "memory"
+
+        if first_run and not self.gsettings_keyfile:
             import atexit
             import tempfile
-            import os
             filename = tempfile.mktemp(prefix="virtmanager-firstrun-keyfile")
             self.gsettings_keyfile = filename
             atexit.register(lambda: os.unlink(filename))
