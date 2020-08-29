@@ -377,18 +377,12 @@ class vmmConnection(vmmGObject):
 
         pretty_map = {
             "esx":        "ESX",
-            "gsx":        "GSX",
-            "libxl":      "libxl",
             "lxc":        "LXC",
             "openvz":     "OpenVZ",
-            "phyp":       "phyp",
             "qemu":       "QEMU/KVM",
-            "test":       "test",
-            "uml":        "UML",
-            "vbox":       "VBox",
+            "vbox":       "Virtualbox",
             "vmware":     "VMWare",
             "xen":        "Xen",
-            "xenapi":     "XenAPI",
         }
 
         hv = pretty_map.get(self.get_driver(), self.get_driver())
@@ -399,8 +393,6 @@ class vmmConnection(vmmGObject):
 
         if path == "/session":
             ret += " " + _("User session")
-        elif path == "/embed":
-            ret += " " + _("Embedded session")
         elif (path and path != "/system" and os.path.basename(path)):
             # Used by test URIs to report what XML file they are using
             ret += " %s" % os.path.basename(path)
