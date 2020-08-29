@@ -784,9 +784,6 @@ class vmmConsolePages(vmmGObjectUI):
         else:
             self._enable_modifiers()
 
-    def _viewer_auth_rejected(self, ignore, errmsg):
-        self._activate_unavailable_page(errmsg)
-
     def _viewer_auth_error(self, ignore, errmsg, viewer_will_disconnect):
         errmsg = _("Viewer authentication error: %s") % errmsg
         self.err.val_err(errmsg)
@@ -852,7 +849,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.connect("connected", self._viewer_connected)
         self._viewer.connect("disconnected", self._viewer_disconnected)
         self._viewer.connect("auth-error", self._viewer_auth_error)
-        self._viewer.connect("auth-rejected", self._viewer_auth_rejected)
         self._viewer.connect("need-auth", self._viewer_need_auth)
         self._viewer.connect("agent-connected", self._viewer_agent_connected)
         self._viewer.connect("usb-redirect-error",

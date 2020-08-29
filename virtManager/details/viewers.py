@@ -45,7 +45,6 @@ class Viewer(vmmGObject):
         "connected": (vmmGObject.RUN_FIRST, None, []),
         "disconnected": (vmmGObject.RUN_FIRST, None, [str, str]),
         "auth-error": (vmmGObject.RUN_FIRST, None, [str, bool]),
-        "auth-rejected": (vmmGObject.RUN_FIRST, None, [str]),
         "need-auth": (vmmGObject.RUN_FIRST, None, [bool, bool]),
         "agent-connected": (vmmGObject.RUN_FIRST, None, []),
         "usb-redirect-error": (vmmGObject.RUN_FIRST, None, [str]),
@@ -338,19 +337,6 @@ class VNCViewer(Viewer):
         for idx in range(int(credList.n_values)):
             values.append(credList.get_nth(idx))
 
-        for cred in values:
-            if cred in [GtkVnc.DisplayCredential.PASSWORD,
-                        GtkVnc.DisplayCredential.USERNAME,
-                        GtkVnc.DisplayCredential.CLIENTNAME]:
-                continue
-
-            errmsg = (_("Unable to provide requested credentials to the VNC "
-                "server.\n The credential type %s is not supported") %
-                str(cred.value_name))
-
-            self.emit("auth-rejected", errmsg)
-            return
-
         withUsername = False
         withPassword = False
         for cred in values:
@@ -359,8 +345,15 @@ class VNCViewer(Viewer):
                 withPassword = True
             elif cred == GtkVnc.DisplayCredential.USERNAME:
                 withUsername = True
-            elif cred == GtkVnc.DisplayCredential.CLIENTNAME:
+            elif cred == GtkVnc.DisplayCredential.CLIENTNAME:  # pragma: no cover
                 self._display.set_credential(cred, "libvirt-vnc")
+            else:  # pragma: no cover
+                errmsg = (
+                        _("Unable to provide requested credentials to the VNC server.\n"
+                        "The credential type %s is not supported") %
+                        str(cred.value_name))
+                self.emit("auth-error", errmsg, True)
+                return
 
         if withUsername or withPassword:
             self.emit("need-auth", withPassword, withUsername)
