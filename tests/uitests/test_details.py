@@ -717,3 +717,156 @@ class Details(uiutils.UITestCase):
 
         # Do standard xmleditor tests
         self._test_xmleditor_interactions(win, finish)
+
+    def testDetailsConsoleChecksSSH(self):
+        """
+        Trigger a bunch of console connection failures to hit
+        various details/* code paths
+        """
+        fakeuri = "qemu+ssh://foouser@256.256.256.256:1234/system"
+        uri = tests.utils.URIs.test_full + ",fakeuri=%s" % fakeuri
+        self.app.uri = uri
+        self.app.open(xmleditor_enabled=True)
+
+        self.app.topwin.find("test\n", "table cell").doubleClick()
+        win = self.app.root.find("test on", "frame")
+        conpages = win.find("console-pages")
+        run = win.find("Run", "push button")
+        shutdown = win.find("Shut Down", "push button")
+        conbtn = win.find("Console", "radio button")
+        detailsbtn = win.find("Details", "radio button")
+
+        def _run():
+            win.click_title()
+            run.click()
+            uiutils.check(lambda: not run.sensitive)
+        def _stop():
+            shutdown.click()
+            uiutils.check(lambda: not shutdown.sensitive)
+        def _checkcon(msg):
+            conbtn.click()
+            uiutils.check(lambda: conpages.showing)
+            conpages.find(msg)
+        def _check_textconsole_menu(msg):
+            vmenu = win.find("^View$", "menu")
+            vmenu.click()
+            tmenu = win.find("Text Consoles", "menu")
+            tmenu.point()
+            tmenu.find(msg, "menu item")
+            vmenu.click()
+
+        # Check initial state
+        _checkcon("Graphical console not configured")
+        _stop()
+        _check_textconsole_menu("No graphical console available")
+
+        # Add a SDL graphics device which can't be displayed
+        detailsbtn.click()
+        win.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("Graphics", "table cell").click()
+        addhw.find("XML", "page tab").click()
+        dev = '<graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>'
+        addhw.find("XML editor").text = dev
+        addhw.find("Finish", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: win.active)
+        _run()
+        _checkcon("Cannot display graphical console type")
+
+        def _change_gfx_xml(_xml):
+            detailsbtn.click()
+            win.find("Display ", "table cell").click()
+            win.find("XML", "page tab").click()
+            win.find("XML editor").set_text(_xml)
+            win.find("config-apply").click()
+
+        # Listening from some other address
+        _stop()
+        xml = '<graphics type="spice" listen="0.0.0.0" port="6000" tlsPort="6001"/>'
+        _change_gfx_xml(xml)
+        _run()
+        _checkcon(".*resolving.*256.256.256.256.*")
+
+        # Listening from some other address
+        _stop()
+        xml = '<graphics type="spice" listen="257.0.0.1" port="6000"/>'
+        _change_gfx_xml(xml)
+        _run()
+        _checkcon(".*resolving.*257.0.0.1.*")
+
+        # Hit a specific error about tls only and ssh
+        _stop()
+        xml = '<graphics type="spice" tlsPort="60001" autoport="no"/>'
+        _change_gfx_xml(xml)
+        _run()
+        _checkcon(".*configured for TLS only.*")
+
+        # Fake a socket connection
+        _stop()
+        xml = '<graphics type="vnc" socket="/tmp/foobar.sock"/>'
+        _change_gfx_xml(xml)
+        _run()
+        _checkcon(".*SSH tunnel error output.*")
+
+        # Add a listen type='none' check
+        _stop()
+        xml = '<graphics type="spice"><listen type="none"/></graphics>'
+        _change_gfx_xml(xml)
+        _run()
+        _checkcon(".*local file descriptor.*")
+
+        # Add a local list + port check
+        _stop()
+        xml = '<graphics type="spice" listen="127.0.0.1" port="6000" tlsPort="60001"/>'
+        _change_gfx_xml(xml)
+        _run()
+        _checkcon(".*SSH tunnel error output.*")
+
+    def testDetailsConsoleChecksTCP(self):
+        """
+        Hit a specific warning when the connection has
+        non-SSH transport but the guest config is only listening locally
+        """
+        fakeuri = "qemu+tcp://foouser@256.256.256.256:1234/system"
+        uri = tests.utils.URIs.test_full + ",fakeuri=%s" % fakeuri
+        self.app.uri = uri
+        self.app.open(xmleditor_enabled=True)
+
+        self.app.topwin.find("test\n", "table cell").doubleClick()
+        win = self.app.root.find("test on", "frame")
+        conpages = win.find("console-pages")
+        run = win.find("Run", "push button")
+        shutdown = win.find("Shut Down", "push button")
+        conbtn = win.find("Console", "radio button")
+        detailsbtn = win.find("Details", "radio button")
+
+        def _run():
+            win.click_title()
+            run.click()
+            uiutils.check(lambda: not run.sensitive)
+        def _stop():
+            shutdown.click()
+            uiutils.check(lambda: not shutdown.sensitive)
+        def _checkcon(msg):
+            conbtn.click()
+            uiutils.check(lambda: conpages.showing)
+            conpages.find(msg)
+
+        # Check initial state
+        _checkcon("Graphical console not configured")
+        _stop()
+
+        # Add a SDL graphics device which can't be displayed
+        detailsbtn.click()
+        win.find("add-hardware", "push button").click()
+        addhw = self.app.root.find("Add New Virtual Hardware", "frame")
+        addhw.find("Graphics", "table cell").click()
+        addhw.find("XML", "page tab").click()
+        dev = '<graphics type="vnc" port="6000" address="127.0.0.1"/>'
+        addhw.find("XML editor").text = dev
+        addhw.find("Finish", "push button").click()
+        uiutils.check(lambda: not addhw.active)
+        uiutils.check(lambda: win.active)
+        _run()
+        _checkcon(".*configured to listen locally.*")

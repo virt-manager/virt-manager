@@ -108,6 +108,10 @@ class CLITestOptionsClass:
         if we are doing firstrun testing
     * fake-systemd-success: If doing firstrun testing, fake that
         systemd checks for libvirtd succeeded
+    * fake-vnc-username: Fake VNC username auth request
+    * fake-console-resolution: Fake viewer console resolution response.
+        Spice doesn't return values here when we are just testing
+        against seabios in uitests, this fakes it to hit more code paths
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -143,6 +147,8 @@ class CLITestOptionsClass:
         self.spice_agent = _get("spice-agent")
         self.firstrun_uri = _get_value("firstrun-uri")
         self.fake_systemd_success = _get("fake-systemd-success")
+        self.fake_vnc_username = _get("fake-vnc-username")
+        self.fake_console_resolution = _get("fake-console-resolution")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

@@ -148,7 +148,7 @@ class _Tunnel(object):
 
     def close(self):
         if self._closed:
-            return
+            return  # pragma: no cover
         self._closed = True
 
         log.debug("Close tunnel PID=%s ERRFD=%s",
@@ -168,7 +168,7 @@ class _Tunnel(object):
         while True:
             try:
                 new = self._errfd.recv(1024)
-            except Exception:
+            except Exception:  # pragma: no cover
                 break
 
             if not new:
@@ -180,11 +180,11 @@ class _Tunnel(object):
 
     def open(self, argv, sshfd):
         if self._closed:
-            return
+            return  # pragma: no cover
 
         errfds = socket.socketpair()
         pid = os.fork()
-        if pid == 0:
+        if pid == 0:  # pragma: no cover
             errfds[0].close()
 
             os.dup2(sshfd.fileno(), 0)

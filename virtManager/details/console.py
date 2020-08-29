@@ -350,8 +350,12 @@ class vmmConsolePages(vmmGObjectUI):
     def _scroll_size_allocate(self, src_ignore, req):
         if not self._viewer:
             return
-        if not self._viewer.console_get_desktop_resolution():
-            return
+
+        res = self._viewer.console_get_desktop_resolution()
+        if res is None:
+            if not self.config.CLITestOptions.fake_console_resolution:
+                return
+            res = (800, 600)
 
         scroll = self.widget("console-gfx-scroll")
         is_scale = self._viewer.console_get_scaling()
@@ -362,7 +366,7 @@ class vmmConsolePages(vmmGObjectUI):
         align_ratio = float(req.width) / float(req.height)
 
         # pylint: disable=unpacking-non-sequence
-        desktop_w, desktop_h = self._viewer.console_get_desktop_resolution()
+        desktop_w, desktop_h = res
         desktop_ratio = float(desktop_w) / float(desktop_h)
 
         if is_scale:
@@ -556,7 +560,7 @@ class vmmConsolePages(vmmGObjectUI):
     ##########################
 
     def _show_vm_status_unavailable(self):
-        if self.vm.is_crashed():
+        if self.vm.is_crashed():  # pragma: no cover
             self._activate_unavailable_page(_("Guest has crashed."))
         else:
             self._activate_unavailable_page(_("Guest is not running."))
@@ -778,7 +782,7 @@ class vmmConsolePages(vmmGObjectUI):
         force_accel = self.config.get_console_accels()
 
         if force_accel:
-            self._enable_modifiers()
+            self._enable_modifiers()  # pragma: no cover
         elif self._someone_has_focus():
             self._disable_modifiers()
         else:
@@ -800,14 +804,15 @@ class vmmConsolePages(vmmGObjectUI):
         self._activate_auth_page(withPassword, withUsername)
 
     def _viewer_agent_connected(self, ignore):
-        self._refresh_resizeguest_from_settings()
+        self._refresh_resizeguest_from_settings()  # pragma: no cover
 
     def _viewer_usb_redirect_error(self, ignore, errstr):
-        self.err.show_err(_("USB redirection error"),
-            text2=str(errstr), modal=True)
+        self.err.show_err(
+                _("USB redirection error"),
+                text2=str(errstr), modal=True)  # pragma: no cover
 
     def _viewer_disconnected_set_page(self, errdetails, ssherr):
-        if self.vm.is_runable():
+        if self.vm.is_runable():  # pragma: no cover
             # Exit was probably for legitimate reasons
             self._show_vm_status_unavailable()
             return

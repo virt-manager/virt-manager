@@ -28,7 +28,7 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 extra_opts = (opts or [])
                 extra_opts += ["--show-domain-console", vmname]
                 self.app.open(extra_opts=extra_opts)
-                fn(self, *args, **kwargs)
+                fn(self, dom, *args, **kwargs)
             finally:
                 try:
                     self.app.stop()
@@ -55,7 +55,7 @@ class Console(uiutils.UITestCase):
     # Test cases #
     ##############
 
-    def _checkConsoleStandard(self):
+    def _checkConsoleStandard(self, dom):
         """
         Shared logic for general console handling
         """
@@ -97,12 +97,24 @@ class Console(uiutils.UITestCase):
         uiutils.check(lambda: not fstb.showing, timeout=5)
         self.point(win.position[0] + win.size[0] / 2, 0)
         uiutils.check(lambda: fstb.showing)
+        # Move it off and have it hide again
+        win.point()
+        uiutils.check(lambda: not fstb.showing, timeout=5)
+        self.point(win.position[0] + win.size[0] / 2, 0)
+        uiutils.check(lambda: fstb.showing)
 
         # Click stuff and exit fullscreen
         win.find("Fullscreen Send Key").click()
         self.pressKey("Escape")
         win.find("Fullscreen Exit").click()
         uiutils.check(lambda: win.size == newsize)
+
+        # Trigger pointer grab, verify title was updated
+        win.click()
+        uiutils.check(lambda: "Control_L" in win.name)
+        # Ungrab
+        win.keyCombo("<ctrl><alt>")
+        uiutils.check(lambda: "Control_L" not in win.name)
 
         # Tweak scaling
         win.click_title()
@@ -115,15 +127,20 @@ class Console(uiutils.UITestCase):
         scalemenu = win.find("Scale Display", "menu")
         scalemenu.point()
         scalemenu.find("Never", "radio menu item").click()
-        self.sleep(.5)
+        win.find("^View$", "menu").click()
+        scalemenu = win.find("Scale Display", "menu")
+        scalemenu.point()
+        scalemenu.find("Only", "radio menu item").click()
+
+        dom.destroy()
+        win.find("Guest is not running.")
 
     @_vm_wrapper("uitests-vnc-standard")
-    def testConsoleVNCStandard(self):
-        return self._checkConsoleStandard()
+    def testConsoleVNCStandard(self, dom):
+        return self._checkConsoleStandard(dom)
     @_vm_wrapper("uitests-spice-standard")
-    def testConsoleSpiceStandard(self):
-        return self._checkConsoleStandard()
-
+    def testConsoleSpiceStandard(self, dom):
+        return self._checkConsoleStandard(dom)
 
     def _checkPassword(self):
         """
@@ -177,12 +194,32 @@ class Console(uiutils.UITestCase):
         uiutils.check(lambda: not bool(passwd.text))
 
     @_vm_wrapper("uitests-vnc-password")
-    def testConsoleVNCPassword(self):
+    def testConsoleVNCPassword(self, dom):
+        ignore = dom
         return self._checkPassword()
     @_vm_wrapper("uitests-spice-password")
-    def testConsoleSpicePassword(self):
+    def testConsoleSpicePassword(self, dom):
+        ignore = dom
         return self._checkPassword()
 
+    @_vm_wrapper("uitests-vnc-password",
+                 opts=["--test-options=fake-vnc-username"])
+    def testConsoleVNCPasswordUsername(self, dom):
+        ignore = dom
+        win = self.app.topwin
+        con = win.find("console-gfx-viewport")
+        uiutils.check(lambda: not con.showing)
+        passwd = win.find("Password:", "password text")
+        uiutils.check(lambda: passwd.showing)
+        username = win.find("Username:", "text")
+        uiutils.check(lambda: username.showing)
+
+        # Since we are mocking the username, sending the credentials
+        # is ignored, so with the correct password this succeeds
+        username.text = "fakeuser"
+        passwd.typeText("goodp")
+        win.find("Login", "push button").click()
+        uiutils.check(lambda: con.showing)
 
     @_vm_wrapper("uitests-vnc-socket")
     def testConsoleVNCSocket(self, dom):
@@ -205,10 +242,11 @@ class Console(uiutils.UITestCase):
         uiutils.check(lambda: con.showing)
 
     @_vm_wrapper("uitests-lxc-serial", uri="lxc:///")
-    def testConsoleLXCSerial(self):
+    def testConsoleLXCSerial(self, dom):
         """
         Ensure LXC has serial open, and we can send some data
         """
+        ignore = dom
         win = self.app.topwin
         term = win.find("Serial Terminal")
         uiutils.check(lambda: term.showing)
@@ -246,12 +284,15 @@ class Console(uiutils.UITestCase):
         term = win.find("Serial Terminal")
         uiutils.check(lambda: term.showing)
 
-    @_vm_wrapper("uitests-spice-specific", opts=["--test-options=spice-agent"])
-    def testConsoleSpiceSpecific(self):
+    @_vm_wrapper("uitests-spice-specific",
+            opts=["--test-options=spice-agent",
+                  "--test-options=fake-console-resolution"])
+    def testConsoleSpiceSpecific(self, dom):
         """
         Spice specific behavior. Has lots of devices that will open
         channels, spice GL + local config, and usbredir
         """
+        ignore = dom
         win = self.app.topwin
         con = win.find("console-gfx-viewport")
         uiutils.check(lambda: con.showing)
@@ -337,11 +378,12 @@ class Console(uiutils.UITestCase):
 
 
     @_vm_wrapper("uitests-hotplug")
-    def testLiveHotplug(self):
+    def testLiveHotplug(self, dom):
         """
         Live test for basic hotplugging and media change, as well as
         testing our auto-poolify magic
         """
+        ignore = dom
         import tempfile
         tmpdir = tempfile.TemporaryDirectory(prefix="uitests-tmp")
         dname = tmpdir.name

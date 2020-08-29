@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
@@ -18,9 +18,6 @@
     </accel-groups>
     <signal name="configure-event" handler="on_vmm_details_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_vmm_details_delete_event" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="vbox2">
         <property name="visible">True</property>
@@ -772,6 +769,11 @@
                     <property name="tab_fill">False</property>
                   </packing>
                 </child>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="console-pages-atkobject">
+                    <property name="AtkObject::accessible-name">console-pages</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -820,6 +822,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
