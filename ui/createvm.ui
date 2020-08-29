@@ -911,6 +911,11 @@ bar</property>
                                             </child>
                                           </object>
                                         </child>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="install-url-combo-atkobject">
+                                            <property name="AtkObject::accessible-name">install-url-combo</property>
+                                          </object>
+                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
@@ -1505,11 +1510,12 @@ connections is not yet supported.&lt;/small&gt;</property>
                                               <object class="GtkGrid">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
+                                                <property name="row_spacing">6</property>
+                                                <property name="column_spacing">6</property>
                                                 <child>
                                                   <object class="GtkLabel">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="margin_right">10</property>
                                                     <property name="label" translatable="yes">Username:</property>
                                                   </object>
                                                   <packing>
@@ -1521,7 +1527,6 @@ connections is not yet supported.&lt;/small&gt;</property>
                                                   <object class="GtkLabel">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
-                                                    <property name="margin_right">10</property>
                                                     <property name="label" translatable="yes">Password:</property>
                                                   </object>
                                                   <packing>
@@ -1533,6 +1538,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                                   <object class="GtkEntry" id="install-oscontainer-source-user">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="install-oscontainer-source-user-atkobject">
+                                                        <property name="AtkObject::accessible-name">bootstrap-registry-user</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
@@ -1546,6 +1556,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                                                     <property name="visibility">False</property>
                                                     <property name="invisible_char">●</property>
                                                     <property name="input_purpose">password</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="install-oscontainer-source-passwd-atkobject">
+                                                        <property name="AtkObject::accessible-name">bootstrap-registry-password</property>
+                                                      </object>
+                                                    </child>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
