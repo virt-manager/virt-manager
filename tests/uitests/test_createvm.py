@@ -45,13 +45,53 @@ class NewVM(uiutils.UITestCase):
         """
         Test the wizard's multiple connection handling
         """
-        # Add an extra connection for test:///default
-        self.app.root.find("File", "menu").click()
-        self.app.root.find("Add Connection...", "menu item").click()
-        win = self.app.root.find_fuzzy("Add Connection", "dialog")
-        win.combo_select("Hypervisor", "Custom URI")
-        win.find("uri-entry", "text").set_text("test:///default")
-        win.find("Connect", "push button").click()
+        manager = self.app.topwin
+
+        def _add_conn(uri):
+            manager.find("File", "menu").click()
+            manager.find("Add Connection...", "menu item").click()
+            win = self.app.root.find_fuzzy("Add Connection", "dialog")
+            win.combo_select("Hypervisor", "Custom URI")
+            win.find("uri-entry", "text").set_text(uri)
+            win.find("Connect", "push button").click()
+
+        def _stop_conn(txt):
+            c = manager.find(txt, "table cell")
+            c.click()
+            c.click(button=3)
+            self.app.root.find("conn-disconnect", "menu item").click()
+            uiutils.check(lambda: "Not Connected" in c.text)
+
+        # Check the dialog shows 'no connection' error
+        _stop_conn("test testdriver.xml")
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("No active connection to install on")
+        newvm.keyCombo("<alt>F4")
+        uiutils.check(lambda: manager.active)
+
+        # Check the xen PV only startup warning
+        def _capsopt(fname):
+            capsdir = tests.utils.DATADIR + "/capabilities/"
+            return ",caps=" + capsdir + fname
+
+        # Test empty qemu connection
+        _add_conn(tests.utils.URIs.kvm + _capsopt("test-empty.xml"))
+        newvm = self._open_create_wizard()
+        newvm.find(".*No hypervisor options were found.*KVM kernel modules.*")
+        newvm.click_title()
+        newvm.keyCombo("<alt>F4")
+        _stop_conn("QEMU/KVM")
+
+        _add_conn(tests.utils.URIs.kvm_session +
+                _capsopt("test-qemu-no-kvm.xml"))
+        newvm = self._open_create_wizard()
+        newvm.find(".*KVM is not available.*")
+        newvm.click_title()
+        newvm.keyCombo("<alt>F4")
+
+        _add_conn(tests.utils.URIs.lxc)
+        _add_conn(tests.utils.URIs.test_full)
+        _add_conn(tests.utils.URIs.test_default)
 
         # Open the new VM wizard, select a connection
         newvm = self._open_create_wizard()
@@ -64,15 +104,26 @@ class NewVM(uiutils.UITestCase):
         cdrom.click_combo_entry()
         cdrom.find_fuzzy(r"\(/dev/sr1\)")
         entry.click()
+        # Launch this so we can verify storage browser is reset too
+        newvm.find_fuzzy("install-iso-browse", "button").click()
+        self._select_storagebrowser_volume("default-pool", "iso-vol")
+        newvm.find_fuzzy("Automatically detect", "check").click()
+        newvm.find("oslist-entry").set_text("generic")
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
 
         # Back up, select test:///default, verify media-combo is now empty
-        self.back(newvm)
-        back = newvm.find_fuzzy("Back", "button")
-        uiutils.check(lambda: not back.sensitive)
+        newvm.click_title()
+        newvm.keyCombo("<alt>F4")
+        newvm = self._open_create_wizard()
         newvm.combo_select("create-conn", ".*test default.*")
         self.forward(newvm)
         cdrom.click_combo_entry()
+        cdrom.print_nodes()
         uiutils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
+        newvm.find_fuzzy("install-iso-browse", "button").click()
+        browsewin = self.app.root.find("vmm-storage-browser")
+        uiutils.check(lambda: "disk-pool" not in browsewin.fmt_nodes())
 
     def testNewVMManualDefault(self):
         """
@@ -115,6 +166,15 @@ class NewVM(uiutils.UITestCase):
         self.sleep(.5)
         self.forward(newvm)
         self.sleep(.5)
+
+
+        # Empty triggers a specific codepath
+        newvm.find_fuzzy("Name", "text").set_text("")
+        # Name collision failure
+        newvm.find_fuzzy("Name", "text").set_text("test-many-devices")
+        newvm.find_fuzzy("Finish", "button").click()
+        self._click_alert_button("in use", "OK")
+        newvm.find_fuzzy("Name", "text").set_text("vm1")
         newvm.find_fuzzy("Finish", "button").click()
 
         # Delete it from the VM window
@@ -129,8 +189,48 @@ class NewVM(uiutils.UITestCase):
         # Verify delete dialog and VM dialog are now gone
         uiutils.check(lambda: vmwindow.showing is False)
 
+    def testNewVMStorage(self):
+        """
+        Test some storage specific paths
+        """
+        newvm = self._open_create_wizard()
 
-    def testNewVMCDROM(self):
+        newvm.find_fuzzy("Manual", "radio").click()
+        self.forward(newvm)
+        newvm.find("oslist-entry").set_text("generic")
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
+        self.forward(newvm)
+        self.forward(newvm)
+
+        # Trigger size validation failure
+        sizetext = newvm.find(None, "spin button", "GiB")
+        sizetext.set_text("10000000")
+        self.forward(newvm, check=False)
+        self._click_alert_button("Storage parameter error", "OK")
+        sizetext.set_text("1")
+
+        # Use the storage browser to select a local file
+        storagetext = newvm.find("storage-entry")
+        newvm.find_fuzzy("Select or create", "radio").click()
+        newvm.find("storage-browse").click()
+        browse = self.app.root.find("vmm-storage-browser")
+        browse.find("Browse Local", "push button").click()
+        chooser = self.app.root.find(
+                "Locate existing storage", "file chooser")
+        fname = "COPYING"
+        chooser.find(fname, "table cell").click()
+        chooser.find("Open", "push button").click()
+        uiutils.check(lambda: newvm.active)
+        uiutils.check(lambda: "COPYING" in storagetext.text)
+
+        # Start the install
+        self.forward(newvm)
+        newvm.find("Finish", "push button").click()
+        self.app.root.find_fuzzy("vm1 on", "frame")
+        uiutils.check(lambda: not newvm.showing)
+
+
+    def testNewVMCDROMRegular(self):
         """
         Create a new CDROM VM, choosing distro win8, and do some basic
         'Customize before install' before exiting
@@ -145,8 +245,15 @@ class NewVM(uiutils.UITestCase):
         combo.click_combo_entry()
         combo.find(r"No media detected \(/dev/sr1\)")
         combo.find(r"Fedora12_media \(/dev/sr0\)").click()
-        # test entry activation too
+
+        # Catch validation error
         entry = newvm.find("media-entry")
+        entry.click()
+        entry.set_text("")
+        self.forward(newvm, check=False)
+        self._click_alert_button("media selection is required", "OK")
+
+        # test entry activation too
         entry.click()
         entry.set_text("/dev/sr0")
         self.pressKey("Enter")
@@ -246,6 +353,24 @@ class NewVM(uiutils.UITestCase):
         vmwindow.find_fuzzy("Quit", "menu item").click()
         uiutils.check(lambda: self.app.is_running())
 
+    def testNewVMCDROMDetect(self):
+        """
+        CDROM with detection
+        """
+        cdrom = tests.utils.DATADIR + "/cli/fake-win7.iso"
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("Local install media", "radio").click()
+        self.forward(newvm)
+        newvm.find("media-entry").click()
+        newvm.find("media-entry").set_text(cdrom)
+        # Use forward to trigger detection
+        self.forward(newvm)
+        self.forward(newvm)
+        self.forward(newvm)
+        newvm.find("Finish", "push button").click()
+        self.app.root.find_fuzzy("win7 on", "frame")
+        uiutils.check(lambda: not newvm.showing)
+
 
     def testNewVMURL(self):
         """
@@ -260,9 +385,15 @@ class NewVM(uiutils.UITestCase):
         osentry = newvm.find("oslist-entry")
         uiutils.check(lambda: osentry.text.startswith("Waiting"))
 
+        newvm.find("install-url-entry").set_text("")
+        self.forward(newvm, check=False)
+        self._click_alert_button("tree is required", "OK")
+
         url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
         oslabel = "Fedora 10"
         newvm.find("install-url-entry").set_text(url)
+        newvm.find("install-url-entry").click()
+        self.pressKey("Enter")
         newvm.find("install-urlopts-expander").click_expander()
         newvm.find("install-urlopts-entry").set_text("foo=bar")
 
@@ -303,8 +434,17 @@ class NewVM(uiutils.UITestCase):
             "Creating Virtual Machine", "frame")
         uiutils.check(lambda: not progress.showing, timeout=120)
 
-        self.app.root.find_fuzzy("fedora10 on", "frame")
+        details = self.app.root.find_fuzzy("fedora10 on", "frame")
         uiutils.check(lambda: not newvm.showing)
+
+        # Re-run the newvm wizard, check that URL was remembered
+        details.keyCombo("<alt>F4")
+        newvm = self._open_create_wizard()
+        newvm.find_fuzzy("Network Install", "radio").click()
+        self.forward(newvm)
+        urlcombo = newvm.find("install-url-combo")
+        uiutils.check(lambda: urlcombo.showing)
+        uiutils.check(lambda: url in urlcombo.fmt_nodes())
 
     def testNewKVMQ35Tweaks(self):
         """
@@ -700,11 +840,16 @@ class NewVM(uiutils.UITestCase):
 
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Container", "radio").click()
+        newvm.find_fuzzy("Virtual machine", "radio").click()
+        newvm.find_fuzzy("Container", "radio").click()
         self.forward(newvm)
 
         # Set directory path
-        newvm.find_fuzzy(None,
-            "text", "container template").set_text("centos-6-x86_64")
+        templatetext = newvm.find_fuzzy(None, "text", "container template")
+        templatetext.set_text("")
+        self.forward(newvm, check=False)
+        self._click_alert_button("template name is required", "OK")
+        templatetext.set_text("centos-6-x86_64")
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -728,11 +873,42 @@ class NewVM(uiutils.UITestCase):
         import tempfile
         tmpdir = tempfile.TemporaryDirectory()
         newvm.find_fuzzy("Create OS directory", "check box").click()
+
+        uritext = newvm.find("install-oscontainer-source-uri")
+        uritext.text = ""
+        self.forward(newvm, check=False)
+        self._click_alert_button("Source URL is required", "OK")
+        uritext.text = "docker://alpine"
+
         rootdir = newvm.find_fuzzy(None, "text", "root directory")
         uiutils.check(lambda: ".local/share/libvirt" in rootdir.text)
+        rootdir.set_text("/dev/null")
+        self.forward(newvm, check=False)
+        self._click_alert_button("not directory", "OK")
+        rootdir.set_text("/root")
+        self.forward(newvm, check=False)
+        self._click_alert_button("No write permissions", "OK")
+        rootdir.set_text("/tmp")
+        self.forward(newvm, check=False)
+        self._click_alert_button("directory is not empty", "No")
         rootdir.set_text(tmpdir.name)
-        newvm.find("install-oscontainer-source-uri").set_text("docker://alpine")
         newvm.find("install-oscontainer-root-passwd").set_text("foobar")
+        # Invalid credentials to trigger failure
+        newvm.find("Credentials", "toggle button").click_expander()
+        newvm.find("bootstrap-registry-user").set_text("foo")
+        self.forward(newvm, check=None)
+        self._click_alert_button("Please specify password", "OK")
+        newvm.find("bootstrap-registry-password").set_text("bar")
+
+        self.forward(newvm)
+        self.forward(newvm)
+        newvm.find_fuzzy("Finish", "button").click()
+        self._click_alert_button("virt-bootstrap did not complete", "Close")
+        self.back(newvm)
+        self.back(newvm)
+        newvm.find("bootstrap-registry-user").set_text("")
+        newvm.find("bootstrap-registry-password").set_text("")
+
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
@@ -784,7 +960,13 @@ class NewVM(uiutils.UITestCase):
             return _newvm
 
         newvm = dofail()
-
+        pathlabel = newvm.find(".*test/bad.qcow2")
+        generatedpath = pathlabel.text
+        # Changing VM name should not generate a new path
+        newvm.find_fuzzy("Name", "text").set_text("test/badfoo")
+        uiutils.check(lambda: pathlabel.text == generatedpath)
+        newvm.find_fuzzy("Finish", "button").click()
+        self._click_alert_button("Unable to complete install", "Close")
         # Closing dialog should trigger storage cleanup path
         newvm.find_fuzzy("Cancel", "button").click()
         uiutils.check(lambda: not newvm.visible)
@@ -793,6 +975,7 @@ class NewVM(uiutils.UITestCase):
         newvm = dofail()
         self.back(newvm)
         newvm.find_fuzzy("Select or create", "radio").click()
+
         newvm.find("storage-entry").set_text("/dev/default-pool/somenewvol1")
         self.forward(newvm)
         newvm.find_fuzzy("Name", "text").set_text("test-foo")
@@ -919,14 +1102,6 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         importtext = newvm.find("import-entry")
 
-        # Click forward, hitting missing OS error
-        self.forward(newvm, check=False)
-        self._click_alert_button("select an OS", "OK")
-
-        # Set OS
-        newvm.find("oslist-entry").set_text("generic")
-        newvm.find("oslist-popover").find_fuzzy("generic").click()
-
         # Click forward, hitting missing Import path error
         self.forward(newvm, check=False)
         self._click_alert_button("import is required", "OK")
@@ -935,9 +1110,17 @@ class NewVM(uiutils.UITestCase):
         importtext.set_text("/dev/default-pool/idontexist")
         self.forward(newvm, check=False)
         self._click_alert_button("import path must point", "OK")
+        importtext.set_text("/dev/default-pool/default-vol")
+
+        # Click forward, hitting missing OS error
+        self.forward(newvm, check=False)
+        self._click_alert_button("select an OS", "OK")
+
+        # Set OS
+        newvm.find("oslist-entry").set_text("generic")
+        newvm.find("oslist-popover").find_fuzzy("generic").click()
 
         # Click forward, but Import path is in use, and exit
-        importtext.set_text("/dev/default-pool/default-vol")
         self.forward(newvm, check=False)
         self._click_alert_button("in use", "No")
 

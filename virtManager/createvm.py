@@ -280,7 +280,7 @@ class vmmCreateVM(vmmGObjectUI):
         if self._storage_browser:
             self._storage_browser.cleanup()
             self._storage_browser = None
-        if self._netlist:
+        if self._netlist:  # pragma: no cover
             self._netlist.cleanup()
             self._netlist = None
         if self._mediacombo:
@@ -411,9 +411,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         def _populate_media_model(media_model, urls):
             media_model.clear()
-            if urls is None:
-                return
-            for url in urls:
+            for url in (urls or []):
                 media_model.append([url])
 
         # Install local
@@ -518,7 +516,7 @@ class vmmCreateVM(vmmGObjectUI):
             if not can_remote_url:
                 tree_tt = _("Libvirt version does not "
                             "support remote URL installs.")
-            if not is_storage_capable:
+            if not is_storage_capable:  # pragma: no cover
                 local_tt = _("Connection does not support storage management.")
                 import_tt = local_tt
 
@@ -540,7 +538,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         if not (is_container_only or
                 [w for w in virt_methods if w.get_sensitive()]):
-            return self._show_startup_error(
+            return self._show_startup_error(  # pragma: no cover
                     _("No install methods available for this connection."),
                     hideinstall=False)
 
@@ -790,7 +788,7 @@ class vmmCreateVM(vmmGObjectUI):
         prios = ["x86_64", "i686", "aarch64", "armv7l", "ppc64", "ppc64le",
             "s390x"]
         if self.conn.caps.host.cpu.arch not in prios:
-            prios = []
+            prios = []  # pragma: no cover
         for p in prios[:]:
             if p not in archs:
                 prios.remove(p)
@@ -862,7 +860,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         for p in prios[:]:
             if p not in machines:
-                prios.remove(p)
+                prios.remove(p)  # pragma: no cover
             else:
                 machines.remove(p)
         if prios:
@@ -907,7 +905,7 @@ class vmmCreateVM(vmmGObjectUI):
         no_conns = (len(model) == 0)
 
         if default < 0 and not no_conns:
-            default = 0
+            default = 0  # pragma: no cover
 
         activeuri = ""
         activedesc = ""
@@ -1207,7 +1205,7 @@ class vmmCreateVM(vmmGObjectUI):
 
     def _detect_os_toggled_cb(self, src):
         if not src.is_visible():
-            return
+            return  # pragma: no cover
 
         # We are only here if the user explicitly changed detection UI
         dodetect = src.get_active()
@@ -1450,7 +1448,7 @@ class vmmCreateVM(vmmGObjectUI):
                 return self._validate_storage_page()
             elif pagenum == PAGE_FINISH:
                 return self._validate_final_page()
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.err.show_err(_("Uncaught error validating install "
                                 "parameters: %s") % str(e))
             return
@@ -1472,7 +1470,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Validate destination path
         if not os.path.exists(fs):
-            return
+            return  # pragma: no cover
 
         if not os.path.isdir(fs):
             msg = _("Destination path is not directory: %s") % fs
@@ -1501,11 +1499,6 @@ class vmmCreateVM(vmmGObjectUI):
         fs = None
         template = None
         osobj = self._os_list.get_selected_os()
-
-        if not self._is_container_install() and not osobj:
-            msg = _("You must select an OS.")
-            msg += "\n\n" + self._os_list.eol_text
-            return self.err.val_err(msg)
 
         if instmethod == INSTALL_PAGE_ISO:
             media = self._get_config_local_media()
@@ -1559,6 +1552,11 @@ class vmmCreateVM(vmmGObjectUI):
             if not template:
                 return self.err.val_err(_("A template name is required."))
 
+        if not self._is_container_install() and not osobj:
+            msg = _("You must select an OS.")
+            msg += "\n\n" + self._os_list.eol_text
+            return self.err.val_err(msg)
+
         # Build the installer and Guest instance
         try:
             if init:
@@ -1592,7 +1590,7 @@ class vmmCreateVM(vmmGObjectUI):
             name = virtinst.Guest.generate_name(guest)
             virtinst.Guest.validate_name(self._gdata.conn, name)
             self._gdata.name = name
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             return self.err.val_err(_("Error setting default name."), e)
 
         self.widget("create-vm-name").set_text(self._gdata.name)
@@ -1710,10 +1708,8 @@ class vmmCreateVM(vmmGObjectUI):
             if self._is_default_storage():
                 log.debug("User changed VM name and using default "
                     "storage, re-validating with new default storage path.")
-                # User changed the name and we are using default storage
-                # which depends on the VM name. Revalidate things
                 if not self._validate_storage_page():
-                    return False
+                    return False  # pragma: no cover
 
         macaddr = virtinst.DeviceInterface.generate_mac(
             self.conn.get_backend())
@@ -1742,9 +1738,9 @@ class vmmCreateVM(vmmGObjectUI):
         cdrom, location = self._get_config_detectable_media()
 
         if self._detect_os_in_progress:
-            return
+            return  # pragma: no cover
         if not is_install_page:
-            return
+            return  # pragma: no cover
         if not cdrom and not location:
             return
         if not self._is_os_detect_active():
@@ -1832,7 +1828,7 @@ class vmmCreateVM(vmmGObjectUI):
                 return
 
             distro = thread_results.get_distro()
-        except Exception:
+        except Exception:  # pragma: no cover
             distro = None
             log.exception("Error in distro detect timeout")
 
@@ -1847,7 +1843,7 @@ class vmmCreateVM(vmmGObjectUI):
         if not self._is_os_detect_active():
             # If the user changed the OS detect checkbox in the meantime,
             # don't update the UI
-            return
+            return  # pragma: no cover
 
         if distro:
             self._os_list.select_os(virtinst.OSDB.lookup_os(distro))
@@ -1867,7 +1863,7 @@ class vmmCreateVM(vmmGObjectUI):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
         if self._validate(page) is not True:
-            return False
+            return
 
         log.debug("Starting create finish() sequence")
         self._gdata.failed_guest = None
@@ -1888,7 +1884,7 @@ class vmmCreateVM(vmmGObjectUI):
 
             log.debug("User requested 'customize', launching dialog")
             self._show_customize_dialog(guest, installer)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             self.reset_finish_cursor()
             self.err.show_err(_("Error starting installation: %s") % str(e))
             return
@@ -1908,7 +1904,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         def customize_finished_cb(src, vdomain):
             if not self.is_visible():
-                return
+                return  # pragma: no cover
             log.debug("User finished customize dialog, starting install")
             self._gdata.failed_guest = None
             self._start_install(vdomain.get_backend(), installer)
@@ -2000,7 +1996,7 @@ class vmmCreateVM(vmmGObjectUI):
 
             pool = disk.get_parent_pool()
             if not pool:
-                continue
+                continue  # pragma: no cover
 
             poolname = pool.name()
             if poolname not in refresh_pools:
@@ -2024,7 +2020,7 @@ class vmmCreateVM(vmmGObjectUI):
             time.sleep(.1)
 
         if not foundvm:
-            raise RuntimeError(
+            raise RuntimeError(  # pragma: no cover
                 _("VM '%s' didn't show up after expected time.") % guest.name)
         vm = foundvm
 
@@ -2032,7 +2028,7 @@ class vmmCreateVM(vmmGObjectUI):
             # Domain is already shutdown, but no error was raised.
             # Probably means guest had no 'install' phase, as in
             # for live cds. Try to restart the domain.
-            vm.startup()
+            vm.startup()  # pragma: no cover
         elif installer.has_install_phase():
             # Register a status listener, which will restart the
             # guest after the install has finished
@@ -2047,7 +2043,7 @@ class vmmCreateVM(vmmGObjectUI):
             try:
                 pool = self.conn.get_pool(poolname)
                 self.idle_add(pool.refresh)
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error looking up pool=%s for refresh after "
                     "VM creation.", poolname, exc_info=True)
 
@@ -2057,25 +2053,27 @@ class vmmCreateVM(vmmGObjectUI):
         Watch the domain that we are installing, waiting for the state
         to change, so we can restart it as needed
         """
-        if vm.is_crashed():
+        if vm.is_crashed():  # pragma: no cover
             log.debug("VM crashed, cancelling install plans.")
             return True
 
         if not vm.is_shutoff():
-            return
+            return  # pragma: no cover
 
         if vm.get_install_abort():
             log.debug("User manually shutdown VM, not restarting "
                           "guest after install.")
             return True
 
-        try:
+        # Hitting this from the test suite is hard because we can't force
+        # the test driver VM to stop behind virt-manager's back
+        try:  # pragma: no cover
             log.debug("Install should be completed, starting VM.")
             vm.startup()
-        except Exception as e:
-            self.err.show_err(_("Error continue install: %s") % str(e))
+        except Exception as e:  # pragma: no cover
+            self.err.show_err(_("Error continuing install: %s") % str(e))
 
-        return True
+        return True  # pragma: no cover
 
 
     def _create_directory_tree(self, asyncjob, meter, bootstrap_args):
