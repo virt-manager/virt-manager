@@ -16,7 +16,7 @@ try:
     from gi.repository import SpiceClientGtk
     from gi.repository import SpiceClientGLib
     have_spice_gtk = True
-except (ValueError, ImportError):
+except (ValueError, ImportError):  # pragma: no cover
     have_spice_gtk = False
 
 from virtinst import log
@@ -131,7 +131,7 @@ class Viewer(vmmGObject):
         if self._ginfo.gtlsport and not self._ginfo.gport:
             # This makes spice loop requesting an fd. Disable until spice is
             # fixed: https://bugzilla.redhat.com/show_bug.cgi?id=1334071
-            return None
+            return None  # pragma: no cover
 
         if not self._vm.conn.support.domain_open_graphics():
             return None
@@ -334,6 +334,9 @@ class VNCViewer(Viewer):
         for idx in range(int(credList.n_values)):
             values.append(credList.get_nth(idx))
 
+        if self.config.CLITestOptions.fake_vnc_username:
+            values.append(GtkVnc.DisplayCredential.USERNAME)
+
         withUsername = False
         withPassword = False
         for cred in values:
@@ -378,23 +381,23 @@ class VNCViewer(Viewer):
 
     def _refresh_grab_keys(self):
         if not self._display:
-            return
+            return  # pragma: no cover
 
         try:
             keys = self.config.get_keys_combination()
             if not keys:
-                return
+                return  # pragma: no cover
 
             try:
                 keys = [int(k) for k in keys.split(',')]
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
 
             seq = GtkVnc.GrabSequence.new(keys)
             self._display.set_grab_keys(seq)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
@@ -403,7 +406,7 @@ class VNCViewer(Viewer):
 
     def _refresh_keyboard_grab_default(self):
         if not self._display:
-            return
+            return  # pragma: no cover
         self._display.set_keyboard_grab(self.config.get_keyboard_grab_default())
 
     def _get_desktop_resolution(self):
@@ -508,7 +511,7 @@ class SpiceViewer(Viewer):
             autoredir = self.config.get_auto_usbredir()
             if autoredir:
                 gtk_session.set_property("auto-usbredir", True)
-        except Exception:
+        except Exception:  # pragma: no cover
             self._usbdev_manager = None
             log.debug("Error initializing spice usb device manager",
                 exc_info=True)
@@ -559,7 +562,7 @@ class SpiceViewer(Viewer):
             # Can happen if we close the details window and clear self._tunnels
             # while initially connecting to spice and channel FD requests
             # are still rolling in
-            return
+            return  # pragma: no cover
 
         log.debug("Requesting fd for channel: %s", channel)
         channel.connect_after("channel-event", self._fd_channel_event_cb)
@@ -585,7 +588,7 @@ class SpiceViewer(Viewer):
                 not self._display):
             channel_id = channel.get_property("channel-id")
 
-            if channel_id != 0:
+            if channel_id != 0:  # pragma: no cover
                 log.debug("Spice multi-head unsupported")
                 return
 
@@ -601,7 +604,7 @@ class SpiceViewer(Viewer):
             self._audio = SpiceClientGLib.Audio.get(self._spice_session, None)
 
     def _agent_connected_cb(self, src, val):
-        self.emit("agent-connected")
+        self.emit("agent-connected")  # pragma: no cover
 
 
     ################################
@@ -626,23 +629,23 @@ class SpiceViewer(Viewer):
 
     def _refresh_grab_keys(self):
         if not self._display:
-            return
+            return  # pragma: no cover
 
         try:
             keys = self.config.get_keys_combination()
             if not keys:
-                return
+                return  # pragma: no cover
 
             try:
                 keys = [int(k) for k in keys.split(',')]
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error in grab_keys configuration in Gsettings",
                               exc_info=True)
                 return
 
             seq = SpiceClientGtk.GrabSequence.new(keys)
             self._display.set_grab_keys(seq)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.debug("Error when getting the grab keys combination: %s",
                           str(e))
 
@@ -652,7 +655,7 @@ class SpiceViewer(Viewer):
 
     def _refresh_keyboard_grab_default(self):
         if not self._display:
-            return
+            return  # pragma: no cover
         self._display.set_property("grab-keyboard",
             self.config.get_keyboard_grab_default())
 
@@ -663,7 +666,7 @@ class SpiceViewer(Viewer):
 
     def _has_agent(self):
         if not self._main_channel:
-            return False
+            return False  # pragma: no cover
         return (self._main_channel.get_property("agent-connected") or
                 self.config.CLITestOptions.spice_agent)
 
@@ -686,14 +689,14 @@ class SpiceViewer(Viewer):
         self._spice_session.open_fd(fd)
 
     def _set_username(self, cred):
-        ignore = cred
+        ignore = cred  # pragma: no cover
     def _set_password(self, cred):
         self._spice_session.set_property("password", cred)
         fd = self._get_fd_for_open()
         if fd is not None:
             self._spice_session.open_fd(fd)
         else:
-            self._spice_session.connect()
+            self._spice_session.connect()  # pragma: no cover
 
     def _get_scaling(self):
         if self._display:
@@ -709,17 +712,17 @@ class SpiceViewer(Viewer):
     def _get_resizeguest(self):
         if self._display:
             return self._display.get_property("resize-guest")
-        return False
+        return False  # pragma: no cover
 
     def _usbdev_redirect_error(self, spice_usbdev_widget, spice_usb_device,
-            errstr):
+            errstr):  # pragma: no cover
         ignore = spice_usbdev_widget
         ignore = spice_usb_device
         self.emit("usb-redirect-error", errstr)
 
     def _get_usb_widget(self):
         if not self._spice_session:
-            return
+            return  # pragma: no cover
 
         usbwidget = SpiceClientGtk.UsbDeviceWidget.new(self._spice_session,
             None)
@@ -728,7 +731,7 @@ class SpiceViewer(Viewer):
 
     def _has_usb_redirection(self):
         if not self._spice_session or not self._usbdev_manager:
-            return False
+            return False  # pragma: no cover
 
         for c in self._spice_session.get_channels():
             if c.__class__ is SpiceClientGLib.UsbredirChannel:
