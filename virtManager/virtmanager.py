@@ -131,11 +131,6 @@ def parse_commandline():
     parser.add_argument("--trace-libvirt", choices=["all", "mainloop"],
         help=argparse.SUPPRESS)
 
-    # Don't load any connections on startup to test first run
-    # PackageKit integration
-    parser.add_argument("--test-first-run",
-        help=argparse.SUPPRESS, action="store_true")
-
     # comma separated string of options to tweak app behavior,
     # for manual and automated testing config
     parser.add_argument("--test-options", action='append',
@@ -184,13 +179,10 @@ def main():
                 mainloop=(options.trace_libvirt == "mainloop"),
                 regex=None)
 
-    CLITestOptions = CLITestOptionsClass(options.test_options,
-            options.test_first_run)
+    CLITestOptions = CLITestOptionsClass(options.test_options)
 
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir
-    if CLITestOptions.first_run:
-        os.environ["GSETTINGS_BACKEND"] = "memory"
 
     # Now we've got basic environment up & running we can fork
     do_drop_stdio = False
