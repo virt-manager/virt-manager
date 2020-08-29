@@ -74,17 +74,6 @@ def _import_gtk(leftovers):
         # This ensures we can init gsettings correctly
         from . import config
         ignore = config
-    except Exception as e:  # pragma: no cover
-        # Don't just let the exception raise here. abrt reports bugs
-        # when users mess up su/sudo and DISPLAY isn't set. Printing
-        # it avoids the issue
-        display = os.environ.get("DISPLAY", "")
-        msg = str(e)
-        if display:
-            msg += ": Could not open display: %s" % display
-        log.debug("".join(traceback.format_exc()))
-        print(msg)
-        sys.exit(1)
     finally:
         sys.argv = origargv
 
