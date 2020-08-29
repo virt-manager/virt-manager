@@ -5,8 +5,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import socket
-
 from gi.repository import Gdk
 from gi.repository import GObject
 
@@ -284,7 +282,6 @@ class VNCViewer(Viewer):
     def __init__(self, *args, **kwargs):
         Viewer.__init__(self, *args, **kwargs)
         self._display = None
-        self._sockfd = None
         self._desktop_resolution = None
 
 
@@ -365,9 +362,6 @@ class VNCViewer(Viewer):
 
     def close(self):
         self._display.close()
-        if self._sockfd:
-            self._sockfd.close()
-            self._sockfd = None
 
     def _is_open(self):
         return self._display.is_open()
@@ -443,29 +437,8 @@ class VNCViewer(Viewer):
 
     def _open_host(self):
         host, port, ignore = self._ginfo.get_conn_host()
-
-        if not self._ginfo.gsocket:
-            log.debug("VNC connecting to host=%s port=%s", host, port)
-            self._display.open_host(host, port)
-            return
-
-        log.debug("VNC connecting to socket=%s", self._ginfo.gsocket)
-        try:
-            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            sock.connect(self._ginfo.gsocket)
-            self._sockfd = sock
-        except Exception as e:
-            raise RuntimeError(
-                _("Error opening socket path '%(path)s': %(error)s") % {
-                    "path": self._ginfo.gsocket,
-                    "error": e,
-                })
-
-        fd = self._sockfd.fileno()
-        if fd < 0:
-            raise RuntimeError((_("Error opening socket path '%s'") %
-                                self._ginfo.gsocket) + " fd=%s" % fd)
-        self._open_fd(fd)
+        log.debug("VNC connecting to host=%s port=%s", host, port)
+        self._display.open_host(host, port)
 
     def _open_fd(self, fd):
         self._display.open_fd(fd)

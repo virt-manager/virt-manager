@@ -184,6 +184,26 @@ class Console(uiutils.UITestCase):
         return self._checkPassword()
 
 
+    @_vm_wrapper("uitests-vnc-socket")
+    def testConsoleVNCSocket(self, dom):
+        ignore = dom
+        win = self.app.topwin
+        con = win.find("console-gfx-viewport")
+        uiutils.check(lambda: con.showing)
+
+        def _click_textconsole_menu(msg):
+            vmenu = win.find("^View$", "menu")
+            vmenu.click()
+            tmenu = win.find("Text Consoles", "menu")
+            tmenu.point()
+            tmenu.find(msg, "radio menu item").click()
+
+        # A bit of an extra test, make sure selecting Graphical Console works
+        _click_textconsole_menu("Text Console 1")
+        uiutils.check(lambda: not con.showing)
+        _click_textconsole_menu("Graphical Console")
+        uiutils.check(lambda: con.showing)
+
     @_vm_wrapper("uitests-lxc-serial", uri="lxc:///")
     def testConsoleLXCSerial(self):
         """

@@ -1,0 +1,15 @@
+<domain type="kvm">
+  <name>uitests-vnc-socket</name>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <devices>
+    <graphics type="vnc" socket="/tmp/vmm-uitests-vnc.sock"/>
+    <console type='pty'/>
+  </devices>
+</domain>
+
