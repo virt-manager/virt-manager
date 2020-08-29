@@ -42,17 +42,17 @@ class VMMCLI(uiutils.UITestCase):
         uiutils.check(lambda: self.app.is_running() is False)
 
     def testShowPerformance(self):
-        self.app.open(extra_opts=["--show-domain-performance",
-            "test-clone-simple"])
+        domid = "1"
+        self.app.open(extra_opts=["--show-domain-performance", domid])
 
-        uiutils.check(lambda: "test-clone-simple on" in self.app.topwin.name)
-        rlabel = self.app.topwin.find_fuzzy("Guest is not running", "label")
-        uiutils.check(lambda: not rlabel.showing)
+        uiutils.check(lambda: "test on" in self.app.topwin.name)
         cpulabel = self.app.topwin.find_fuzzy("CPU usage", "label")
         uiutils.check(lambda: cpulabel.showing)
 
     def testShowConsole(self):
-        self.app.open(extra_opts=["--show-domain-console", "test-clone-simple"])
+        # UUID of test-clone-simple
+        uuid = "12345678-1234-ffff-1234-12345678ffff"
+        self.app.open(extra_opts=["--show-domain-console", uuid])
 
         uiutils.check(lambda: "test-clone-simple on" in self.app.topwin.name)
         rlabel = self.app.topwin.find_fuzzy("Guest is not running", "label")
@@ -81,15 +81,25 @@ class VMMCLI(uiutils.UITestCase):
         Test the remote app dbus connection
         """
         self.app.open()
-        newapp = uiutils.VMMDogtailApp("test:///default")
-        newapp.open(check_already_running=False)
-        uiutils.check(lambda: not newapp.is_running())
-        import dogtail.tree
-        vapps = [a for a in dogtail.tree.root.applications() if
-                 a.name == "virt-manager"]
-        uiutils.check(lambda: len(vapps) == 1)
+        uiutils.check(lambda: "testdriver" in self.app.topwin.fmt_nodes())
+        uiutils.check(lambda: "test default" not in self.app.topwin.fmt_nodes())
 
-        self.app.topwin.find("test default", "table cell")
+        def _run_remote(opts):
+            newapp = uiutils.VMMDogtailApp("test:///default")
+            newapp.open(check_already_running=False,
+                    extra_opts=opts)
+            uiutils.check(lambda: not newapp.is_running())
+            import dogtail.tree
+            vapps = [a for a in dogtail.tree.root.applications() if
+                     a.name == "virt-manager"]
+            uiutils.check(lambda: len(vapps) == 1)
+            # Ensure connection showed up
+            self.app.topwin.find("test default", "table cell")
+
+        _run_remote([])
+        # Run remote again to trigger engine.py code when a connection
+        # is already there and connected
+        _run_remote(["--show-domain-console=test"])
 
     def testShowCLIError(self):
         # Unknown option
@@ -107,6 +117,17 @@ class VMMCLI(uiutils.UITestCase):
         self.app = uiutils.VMMDogtailApp(baduri)
         self._click_alert_button(baduri, "Close")
         uiutils.check(lambda: not self.app.is_running())
+
+    def testCLIFirstRunURIGood(self):
+        # Emulate first run with a URI that will succeed
+        self.app.open(use_uri=False, firstrun_uri="test:///default")
+        self.app.root.find("test default", "table cell")
+
+    def testCLIFirstRunURIBad(self):
+        # Emulate first run with a URI that will succeed
+        self.app.open(use_uri=False, firstrun_uri="bad:///uri")
+        self.app.topwin.find("bad uri", "table cell")
+        self._click_alert_button("bad:///uri", "Close")
 
     def testCLITraceLibvirt(self):
         # Just test this for code coverage

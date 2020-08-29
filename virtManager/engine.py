@@ -175,7 +175,7 @@ class vmmEngine(vmmGObject):
         def conn_open_completed(_conn, ConnectError):
             # Explicitly ignore connection errors, we've done that
             # for a while and it can be noisy
-            if ConnectError is not None:
+            if ConnectError is not None:  # pragma: no cover
                 log.debug("Autostart connection error: %s",
                               ConnectError.details)
             add_next_to_queue()
@@ -186,8 +186,8 @@ class vmmEngine(vmmGObject):
                 if uri is None:
                     return
                 if self._exiting:
-                    return
-                if uri not in self._connobjs:
+                    return  # pragma: no cover
+                if uri not in self._connobjs:  # pragma: no cover
                     add_next_to_queue()
                     continue
 
@@ -266,7 +266,7 @@ class vmmEngine(vmmGObject):
         self._timer = self.timeout_add(interval, self._tick)
 
     def _add_obj_to_tick_queue(self, obj, isprio, **kwargs):
-        if self._tick_queue.full():
+        if self._tick_queue.full():  # pragma: no cover
             if not self._tick_thread_slow:
                 log.debug("Tick is slow, not running at requested rate.")
                 self._tick_thread_slow = True
