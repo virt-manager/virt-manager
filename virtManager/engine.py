@@ -4,10 +4,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import os
 import queue
 import threading
-import time
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -131,89 +129,17 @@ class vmmEngine(vmmGObject):
         line, try to determine a default URI and open it, first checking
         if libvirt is running
         """
-        manager = self._get_manager()
+        from .lib import connectauth
 
-        log.debug("Trying to start libvirtd through systemd")
-        unitname = "libvirtd.service"
-        libvirtd_installed = False
-        libvirtd_active = False
-        unitpath = None
-
-        # Fetch all units from systemd
-        try:
-            bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-            systemd = Gio.DBusProxy.new_sync(bus, 0, None,
-                                     "org.freedesktop.systemd1",
-                                     "/org/freedesktop/systemd1",
-                                     "org.freedesktop.systemd1.Manager", None)
-            units = systemd.ListUnits()
-            log.debug("Successfully listed units via systemd")
-        except Exception:
-            units = []
-            log.exception("Couldn't connect to systemd")
-            libvirtd_installed = os.path.exists("/var/run/libvirt")
-            libvirtd_active = os.path.exists("/var/run/libvirt/libvirt-sock")
-
-        # Check if libvirtd is installed and running
-        for unitinfo in units:
-            if unitinfo[0] != unitname:
-                continue
-            libvirtd_installed = True
-            libvirtd_active = unitinfo[3] == "active"
-            unitpath = unitinfo[6]
-            break
-
-        log.debug("libvirtd_installed=%s libvirtd_active=%s unitpath=%s",
-                libvirtd_installed, libvirtd_active, unitpath)
-
-        # If it's not running, try to start it
-        try:
-            if unitpath and libvirtd_installed and not libvirtd_active:
-                unit = Gio.DBusProxy.new_sync(
-                        bus, 0, None,
-                        "org.freedesktop.systemd1", unitpath,
-                        "org.freedesktop.systemd1.Unit", None)
-                if not self.config.CLITestOptions.first_run:
-                    unit.Start("(s)", "fail")
-                    time.sleep(2)
-                    libvirtd_active = True
-        except Exception:
-            log.exception("Error starting libvirtd")
-
+        tryuri = vmmCreateConn.default_uri()
+        log.debug("Probed default URI=%s", tryuri)
         if self.config.CLITestOptions.first_run:
             log.debug("--test-first-run, using uri=None to trigger error")
             tryuri = None
-        else:
-            tryuri = vmmCreateConn.default_uri()
-            log.debug("Probed default URI=%s", tryuri)
 
-        # Manager fail message
-        msg = ""
-        if not libvirtd_installed:
-            msg += _("The libvirtd service does not appear to be installed. "
-                     "Install and run the libvirtd service to manage "
-                     "virtualization on this host.")
-        elif not libvirtd_active:
-            msg += _("libvirtd is installed but not running. Start the "
-                     "libvirtd service to manage virtualization on this host.")
-
-        if not tryuri or "qemu" not in tryuri:
-            if msg:
-                msg += "\n\n"
-            msg += _("Could not detect a default hypervisor. Make "
-                    "sure the appropriate QEMU/KVM virtualization "
-                    "packages are installed to manage virtualization "
-                    "on this host.")
-
+        manager = self._get_manager()
+        msg = connectauth.setup_first_uri(self.config, tryuri)
         if msg:
-            msg += "\n\n"
-            msg += _("A virtualization connection can be manually "
-                     "added via File->Add Connection")
-
-
-        if (tryuri is None or
-            not libvirtd_installed or
-            not libvirtd_active):
             manager.set_startup_error(msg)
             return
 
