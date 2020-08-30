@@ -570,10 +570,8 @@ class vmmCreateVM(vmmGObjectUI):
 
         self._capsinfo = None
         self.conn.invalidate_caps()
-        self._change_caps()
-        is_local = not self.conn.is_remote()
 
-        if not self._capsinfo.guest.has_install_options():
+        if not self.conn.caps.has_install_options():
             error = _("No hypervisor options were found for this "
                       "connection.")
 
@@ -583,6 +581,8 @@ class vmmCreateVM(vmmGObjectUI):
                            "installed on your machine, or the KVM kernel "
                            "modules are not loaded.")
             return self._show_startup_error(error)
+
+        self._change_caps()
 
         # A bit out of order, but populate the xen/virt/arch/machine lists
         # so we can work with a default.
@@ -625,6 +625,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Allow container bootstrap only for local connection and
         # only if virt-bootstrap is installed. Otherwise, show message.
+        is_local = not self.conn.is_remote()
         vb_installed = is_virt_bootstrap_installed()
         vb_enabled = is_local and vb_installed
 
@@ -691,7 +692,7 @@ class vmmCreateVM(vmmGObjectUI):
         self.conn.connect("state-changed", self._conn_state_changed)
 
         try:
-            self._populate_conn_state()
+            return self._populate_conn_state()
         except Exception as e:  # pragma: no cover
             log.exception("Error setting create wizard conn state.")
             return self._show_startup_error(str(e))

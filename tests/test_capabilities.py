@@ -43,8 +43,8 @@ class TestCapabilities(unittest.TestCase):
         caps_empty = self._buildCaps("test-empty.xml")
 
         def test_utils(caps, has_guests, is_kvm):
+            assert caps.has_install_options() == has_guests
             if caps.guests:
-                self.assertEqual(caps.guests[0].has_install_options(), has_guests)
                 self.assertEqual(caps.guests[0].is_kvm_available(), is_kvm)
 
         test_utils(caps_empty, False, False)

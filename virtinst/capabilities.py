@@ -148,12 +148,6 @@ class _CapsGuest(XMLBuilder):
                 ret.append(m.canonical)
         return ret
 
-    def has_install_options(self):
-        """
-        Return True if there are any install options available
-        """
-        return bool(len(self.domains) > 0)
-
     def is_kvm_available(self):
         """
         Return True if kvm guests can be installed
@@ -257,6 +251,15 @@ class Capabilities(XMLBuilder):
 
         # Fallback, just return last item in list
         return domains[-1]
+
+    def has_install_options(self):
+        """
+        Return True if there are any install options available
+        """
+        for guest in self.guests:
+            if guest.domains:
+                return True
+        return False
 
     def guest_lookup(self, os_type=None, arch=None, typ=None, machine=None):
         """
