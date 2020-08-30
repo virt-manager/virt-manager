@@ -198,7 +198,8 @@ class _vmmDeleteBase(vmmGObjectUI):
             storage_errors = self._async_delete_paths(paths, conn, meter)
 
             self._delete_vm(vm)
-        except Exception as e:
+            vm.conn.schedule_priority_tick(pollvm=True)
+        except Exception as e:  # pragma: no cover
             error = _("Error deleting virtual machine '%(vm)s': %(error)s") % {
                         "vm": vm.get_name(),
                         "error": str(e),
@@ -214,7 +215,7 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         # We had extra storage errors. If there was another error message,
         # errors to it. Otherwise, build the main error around them.
-        if details:
+        if details:  # pragma: no cover
             details += "\n\n"
             details += _("Additionally, there were errors removing"
                                     " certain storage devices: \n")
@@ -226,7 +227,6 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         if error:
             asyncjob.set_error(error, details)
-        vm.conn.schedule_priority_tick(pollvm=True)
 
     def _async_delete_paths(self, paths, conn, meter):
         storage_errors = []
@@ -335,7 +335,7 @@ class vmmDeleteStorage(_vmmDeleteBase):
         # Define the change
         try:
             vm.remove_device(devobj)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             err.show_err(_("Error Removing Device: %s") % str(e))
             return
 
@@ -516,9 +516,16 @@ def _prepare_storage_list(storage_list):
     chkbox = Gtk.CellRendererToggle()
     chkbox.connect('toggled', _storage_item_toggled, storage_list)
     confirmCol.pack_start(chkbox, False)
-    confirmCol.add_attribute(chkbox, 'active', STORAGE_ROW_CONFIRM)
-    confirmCol.add_attribute(chkbox, 'inconsistent',
-                             STORAGE_ROW_CANT_DELETE)
+    def sensitive_cb(column, cell, model, _iter, data):
+        row = model[_iter]
+        inconsistent = row[STORAGE_ROW_CANT_DELETE]
+        sensitive = not inconsistent
+        active = row[STORAGE_ROW_CONFIRM]
+        chk = column.get_cells()[0]
+        chk.set_property('inconsistent', inconsistent)
+        chk.set_property('active', active)
+        chk.set_property('sensitive', sensitive)
+    confirmCol.set_cell_data_func(chkbox, sensitive_cb)
     confirmCol.set_sort_column_id(STORAGE_ROW_CANT_DELETE)
 
     path_txt = Gtk.CellRendererText()
@@ -550,16 +557,15 @@ def _storage_item_toggled(src, index, storage_list):
 
 def _can_delete(conn, vol, path):
     """Is the passed path even deleteable"""
-    ret = True
     msg = None
 
     if vol:
         # Managed storage
         pool_type = vol.get_parent_pool().get_type()
         if pool_type == virtinst.StoragePool.TYPE_ISCSI:
-            msg = _("Cannot delete iSCSI share.")
+            msg = _("Cannot delete iSCSI share.")  # pragma: no cover
         elif pool_type == virtinst.StoragePool.TYPE_SCSI:
-            msg = _("Cannot delete SCSI device.")
+            msg = _("Cannot delete SCSI device.")  # pragma: no cover
     else:
         if conn.is_remote():
             msg = _("Cannot delete unmanaged remote storage.")
@@ -567,50 +573,42 @@ def _can_delete(conn, vol, path):
             msg = _("Path does not exist.")
         elif not os.access(os.path.dirname(path), os.W_OK):
             msg = _("No write access to parent directory.")
-        elif stat.S_ISBLK(os.stat(path)[stat.ST_MODE]):
+        elif stat.S_ISBLK(os.stat(path)[stat.ST_MODE]):  # pragma: no cover
             msg = _("Cannot delete unmanaged block device.")
 
-    if msg:
-        ret = False
-
-    return (ret, msg)
+    can_delete = bool(not msg)
+    return (can_delete, msg)
 
 
 def _do_we_default(conn, vm_name, vol, diskdata):
     """ Returns (do we delete by default?, info string if not)"""
-    info = ""
-
-    def append_str(str1, str2, delim="\n"):
-        if not str2:
-            return str1
-        if str1:
-            str1 += delim
-        str1 += str2
-        return str1
+    info = []
 
     if diskdata.ro:
-        info = append_str(info, _("Storage is read-only."))
+        info.append(_("Storage is read-only."))
     elif not vol and not os.access(diskdata.path, os.W_OK):
-        info = append_str(info, _("No write access to path."))
+        info.append(_("No write access to path."))
 
     if diskdata.shared:
-        info = append_str(info, _("Storage is marked as shareable."))
+        info.append(_("Storage is marked as shareable."))
 
     if not info and diskdata.is_media:
-        info = append_str(info, _("Storage is a media device."))
+        info.append(_("Storage is a media device."))
 
     try:
         names = virtinst.DeviceDisk.path_in_use_by(conn.get_backend(),
                 diskdata.path)
 
         if len(names) > 1:
-            namestr = ""
             names.remove(vm_name)
-            for name in names:
-                namestr = append_str(namestr, name, delim="\n- ")
-            info = append_str(info, _("Storage is in use by the following "
-                                      "virtual machines:\n- %s " % namestr))
-    except Exception as e:
+            namestr = "\n- ".join(names)
+            msg = _("Storage is in use by the following virtual machines")
+            msg += "\n- " + namestr
+            info.append(msg)
+    except Exception as e:  # pragma: no cover
         log.exception("Failed checking disk conflict: %s", str(e))
+        info.append(_("Failed to check disk usage conflict."))
 
-    return (not info, info)
+    infostr = "\n".join(info)
+    do_default = bool(not infostr)
+    return (do_default, infostr)

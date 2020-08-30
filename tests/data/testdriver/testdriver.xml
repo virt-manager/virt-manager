@@ -204,10 +204,14 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <source dir='/tmp'/>
       <target dev='fdb' bus='fdc'/>
     </disk>
+    <disk type='dir' device='floppy'>
+      <source dir='/dev/default-pool/test-clone-simple.img'/>
+      <target dev='fdc' bus='fdc'/>
+    </disk>
 
     <!-- bus ide -->
     <disk type='file' device='disk'>
-      <source file='/tmp/foobar'/>
+      <source file='/tmp/virt-manager-uitests/tmp1'/>
       <target dev='hda' bus='ide'/>
       <iotune>
         <read_bytes_sec>5242880</read_bytes_sec>
@@ -321,7 +325,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <!-- bus xen -->
     <disk type='file' device='disk'>
       <driver name='tap' type='qcow' cache="writethrough"/>
-      <source file='/tmp/foobar4'/>
+      <source file='/dev/default-pool/test-clone-simple.img'/>
       <target dev='xvdc' bus='xen'/>
     </disk>
 
