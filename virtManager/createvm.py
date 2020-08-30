@@ -596,18 +596,7 @@ class vmmCreateVM(vmmGObjectUI):
                      self.widget("machine").get_visible())
         uiutil.set_grid_row_visible(self.widget("arch-expander"), show_arch)
 
-        if self.conn.is_xen():
-            has_hvm_guests = False
-            for g in self.conn.caps.guests:
-                if g.os_type == "hvm":
-                    has_hvm_guests = True
-
-            if not has_hvm_guests:
-                error = _("Host is not advertising support for full "
-                          "virtualization. Install options may be limited.")
-                self._show_startup_warning(error)
-
-        elif self.conn.is_qemu():
+        if self.conn.is_qemu():
             if not self._capsinfo.guest.is_kvm_available():
                 error = _("KVM is not available. This may mean the KVM "
                  "package is not installed, or the KVM kernel modules "
