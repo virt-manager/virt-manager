@@ -7,6 +7,7 @@ import libvirt
 
 from virtinst import log
 
+import tests
 from tests.uitests import utils as uiutils
 
 
@@ -17,8 +18,7 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
     def wrap1(fn):
         def wrapper(self, *args, **kwargs):
             self.app.error_if_already_running()
-            xmlfile = "%s/data/live/%s.xml" % (
-                    os.path.dirname(__file__), vmname)
+            xmlfile = "%s/live/%s.xml" % (tests.utils.UITESTDATADIR, vmname)
             conn = libvirt.open(uri)
             dom = conn.defineXML(open(xmlfile).read())
             try:

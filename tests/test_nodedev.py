@@ -22,6 +22,8 @@ funky_chars_xml = """
 </device>
 """
 
+DATADIR = utils.DATADIR + "/nodedev/"
+
 
 class TestNodeDev(unittest.TestCase):
     @property
@@ -34,7 +36,7 @@ class TestNodeDev(unittest.TestCase):
         return NodeDevice(self.conn, xml)
 
     def _testNode2DeviceCompare(self, nodename, devfile, nodedev=None):
-        devfile = os.path.join("tests/data/nodedev/devxml", devfile)
+        devfile = os.path.join(DATADIR, "devxml", devfile)
         if not nodedev:
             nodedev = self._nodeDevFromName(nodename)
 

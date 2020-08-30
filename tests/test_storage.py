@@ -14,7 +14,7 @@ from tests import utils
 # pylint: disable=protected-access
 # Access to protected member, needed to unittest stuff
 
-basepath = os.path.join(os.getcwd(), "tests", "data", "storage")
+BASEPATH = os.path.join(utils.DATADIR, "storage")
 
 
 def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
@@ -53,7 +53,7 @@ def removePool(poolobj):
 
 def poolCompare(pool_inst):
     pool_inst.validate()
-    filename = os.path.join(basepath, pool_inst.name + ".xml")
+    filename = os.path.join(BASEPATH, pool_inst.name + ".xml")
     out_expect = pool_inst.get_xml()
 
     if not os.path.exists(filename):
@@ -94,7 +94,7 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
         vol_inst.name = volname
 
     vol_inst.validate()
-    filename = os.path.join(basepath, vol_inst.name + ".xml")
+    filename = os.path.join(BASEPATH, vol_inst.name + ".xml")
     utils.diff_compare(vol_inst.get_xml(), filename)
     return vol_inst.install(meter=False)
 

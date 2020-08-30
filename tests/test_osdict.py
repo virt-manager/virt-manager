@@ -3,7 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import os
 import unittest
 
 from virtinst import Guest
@@ -81,7 +80,7 @@ class TestOSDB(unittest.TestCase):
             assert str(e).endswith("URL location")
 
         # Trigger an error path for code coverage
-        self.assertEqual(OSDB.guess_os_by_tree(os.getcwd()), None)
+        self.assertEqual(OSDB.guess_os_by_tree(utils.TESTDIR), None)
 
     def test_kernel_url(self):
         def _c(name):
