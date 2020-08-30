@@ -28,7 +28,7 @@ DISKPOOL = "/dev/disk-pool"
 
 local_files = [FILE1, FILE2]
 
-clonexml_dir = os.path.join(os.getcwd(), "tests/data/clone")
+CLONEXML_DIR = os.path.join(utils.DATADIR, "clone")
 
 
 class TestClone(unittest.TestCase):
@@ -45,7 +45,7 @@ class TestClone(unittest.TestCase):
                skip_list=None, compare=True, conn=None,
                clone_disks_file=None):
         """Helper for comparing clone input/output from 2 xml files"""
-        infile = os.path.join(clonexml_dir, filebase + "-in.xml")
+        infile = os.path.join(CLONEXML_DIR, filebase + "-in.xml")
         in_content = open(infile).read()
 
         if not conn:
@@ -100,7 +100,7 @@ class TestClone(unittest.TestCase):
 
     def _clone_compare(self, cloneobj, outbase, clone_disks_file=None):
         """Helps compare output from passed clone instance with an xml file"""
-        outfile = os.path.join(clonexml_dir, outbase + "-out.xml")
+        outfile = os.path.join(CLONEXML_DIR, outbase + "-out.xml")
 
         cloneobj.setup_original()
         cloneobj.setup_clone()
@@ -115,7 +115,7 @@ class TestClone(unittest.TestCase):
     def _clone_define(self, filebase):
         """Take the valid output xml and attempt to define it on the
            connection to ensure we don't get any errors"""
-        outfile = os.path.join(clonexml_dir, filebase + "-out.xml")
+        outfile = os.path.join(CLONEXML_DIR, filebase + "-out.xml")
         outxml = open(outfile).read()
         conn = utils.URIs.open_testdriver_cached()
         utils.test_create(conn, outxml)
@@ -149,7 +149,7 @@ class TestClone(unittest.TestCase):
     def testCloneStorageCrossPool(self):
         conn = utils.URIs.open_test_remote()
         clone_disks_file = os.path.join(
-                clonexml_dir, "cross-pool-disks-out.xml")
+                CLONEXML_DIR, "cross-pool-disks-out.xml")
         disks = ["%s/new1.img" % POOL2, "%s/new2.img" % POOL1]
         self._clone("cross-pool", disks=disks,
                 clone_disks_file=clone_disks_file, conn=conn)

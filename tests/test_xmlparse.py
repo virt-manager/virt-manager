@@ -12,7 +12,7 @@ import virtinst
 from tests import utils
 
 
-DATADIR = "tests/data/xmlparse/"
+DATADIR = utils.DATADIR + "/xmlparse/"
 
 
 def sanitize_file_xml(xml):
@@ -1277,7 +1277,7 @@ class XMLParseTest(unittest.TestCase):
 
     def testISCSIPool(self):
         basename = "pool-iscsi"
-        infile = "tests/data/storage/%s.xml" % basename
+        infile = utils.DATADIR + "/storage/%s.xml" % basename
         outfile = DATADIR + "%s-out.xml" % basename
         pool = virtinst.StoragePool(self.conn, parsexml=open(infile).read())
 
@@ -1291,7 +1291,7 @@ class XMLParseTest(unittest.TestCase):
 
     def testGlusterPool(self):
         basename = "pool-gluster"
-        infile = "tests/data/storage/%s.xml" % basename
+        infile = utils.DATADIR + "/storage/%s.xml" % basename
         outfile = DATADIR + "%s-out.xml" % basename
         pool = virtinst.StoragePool(self.conn, parsexml=open(infile).read())
 

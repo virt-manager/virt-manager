@@ -15,8 +15,8 @@ def _search_permissions_decorator(fn):
     def wrapper(self, *args, **kwargs):
         # Generate capabilities XML from a template, with out
         # UID/GID inserted as the intended emulator permissions
-        capsfile = (os.path.dirname(__file__) +
-                "/data/capabilities/dac-caps-template.xml")
+        capsfile = (tests.utils.UITESTDATADIR +
+                "/capabilities/dac-caps-template.xml")
         capsdata = open(capsfile).read() % {
                 "UID": os.getuid(), "GID": os.getgid()}
         tmpcaps = tempfile.NamedTemporaryFile(

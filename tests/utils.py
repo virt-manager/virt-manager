@@ -34,6 +34,11 @@ class _TestConfig(object):
 
 
 TESTCONFIG = _TestConfig()
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
+TOPDIR = os.path.dirname(TESTDIR)
+DATADIR = os.path.join(TESTDIR, "data")
+UITESTDIR = os.path.join(TESTDIR, "uitests")
+UITESTDATADIR = os.path.join(UITESTDIR, "data")
 
 
 def has_old_osinfo():
@@ -52,7 +57,7 @@ class _URIs(object):
         self._testdriver_error = None
         self._testdriver_default = None
 
-        _capspath = "%s/tests/data/capabilities/" % os.getcwd()
+        _capspath = DATADIR + "/capabilities/"
         def _domcaps(path):
             return ",domcaps=" + _capspath + path
         def _caps(path):
@@ -61,7 +66,7 @@ class _URIs(object):
         _testtmpl = "__virtinst_test__test://%s,predictable"
         self.test_default = _testtmpl % "/default"
 
-        _testdriverdir = (os.path.dirname(__file__) + "/data/testdriver/")
+        _testdriverdir = DATADIR + "/testdriver/"
         self.test_full = _testtmpl % (_testdriverdir + "testdriver.xml")
         self.test_suite = _testtmpl % (_testdriverdir + "testsuite.xml")
         self.test_defaultpool_collision = _testtmpl % (

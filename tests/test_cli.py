@@ -32,7 +32,8 @@ os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
-XMLDIR = "tests/data/cli"
+_ABSXMLDIR = utils.DATADIR + "/cli"
+XMLDIR = os.path.relpath(_ABSXMLDIR, utils.TOPDIR)
 OLD_OSINFO = utils.has_old_osinfo()
 NO_OSINFO_UNATTEND = not unattended.OSInstallScript.have_new_libosinfo()
 HAS_ISOINFO = shutil.which("isoinfo")

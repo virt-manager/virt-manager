@@ -12,7 +12,7 @@ from virtinst import Capabilities
 from virtinst import DomainCapabilities
 
 
-DATADIR = "tests/data/capabilities"
+DATADIR = utils.DATADIR + "/capabilities"
 
 
 class TestCapabilities(unittest.TestCase):
