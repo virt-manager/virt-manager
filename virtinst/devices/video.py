@@ -42,8 +42,6 @@ class DeviceVideo(Device):
         if (guest.is_uefi() and
             guest.lookup_domcaps().supports_video_bochs()):
             return "bochs"
-        if guest.conn.is_qemu():
-            return "qxl"
         return "vga"
 
     def set_defaults(self, guest):
