@@ -26,11 +26,13 @@ class _CPUCell(XMLBuilder):
     Class for generating <cpu><numa> child <cell> XML
     """
     XML_NAME = "cell"
-    _XML_PROP_ORDER = ["id", "cpus", "memory"]
+    _XML_PROP_ORDER = ["id", "cpus", "memory", "memAccess", "discard"]
 
     id = XMLProperty("./@id", is_int=True)
     cpus = XMLProperty("./@cpus")
     memory = XMLProperty("./@memory", is_int=True)
+    memAccess = XMLProperty("./@memAccess")
+    discard = XMLProperty("./@discard")
     siblings = XMLChildProperty(_CPUCellSibling, relative_xpath="./distances")
 
 

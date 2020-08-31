@@ -2231,6 +2231,10 @@ class ParserCPU(VirtCLIParser):
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.cpus", "cpus", can_comma=True,
                     find_inst_cb=cls.cell_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.memAccess", "memAccess",
+                    find_inst_cb=cls.cell_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.discard", "discard",
+                    find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.memory", "memory",
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.id", "id",
