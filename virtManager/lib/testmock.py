@@ -112,6 +112,7 @@ class CLITestOptionsClass:
     * fake-console-resolution: Fake viewer console resolution response.
         Spice doesn't return values here when we are just testing
         against seabios in uitests, this fakes it to hit more code paths
+    * fake-systray: Enable the fake systray window
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -149,6 +150,7 @@ class CLITestOptionsClass:
         self.fake_systemd_success = _get("fake-systemd-success")
         self.fake_vnc_username = _get("fake-vnc-username")
         self.fake_console_resolution = _get("fake-console-resolution")
+        self.fake_systray = _get("fake-systray")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)
