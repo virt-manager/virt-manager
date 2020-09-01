@@ -664,7 +664,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         self._netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("netdev-ui-align").add(self._netlist.top_box)
-        self._netlist.connect("changed", self._netdev_changed)
         self._netlist.reset_state()
 
     def _conn_state_changed(self, conn):
@@ -980,7 +979,10 @@ class vmmCreateVM(vmmGObjectUI):
         self.widget("summary-cpu").set_text(cpu)
         self._populate_summary_storage()
 
-        self._netdev_changed(None)
+        ignore, nsource, ignore = self._netlist.get_network_selection()
+        expand = not nsource
+        if expand:
+            self.widget("advanced-expander").set_expanded(True)
 
 
     ################################
@@ -1245,13 +1247,6 @@ class vmmCreateVM(vmmGObjectUI):
         except Exception:  # pragma: no cover
             log.debug("Error generating storage path on name change "
                 "for name=%s", newname, exc_info=True)
-
-
-    def _netdev_changed(self, ignore):
-        ignore, nsource, ignore = self._netlist.get_network_selection()
-        expand = not nsource
-        if expand:
-            self.widget("advanced-expander").set_expanded(True)
 
 
     # Enable/Disable container source URL entry on checkbox click
