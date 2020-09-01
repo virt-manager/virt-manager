@@ -310,8 +310,7 @@ class vmmSystray(vmmGObject):
         conn.connect("state-changed", self._rebuild_menu)
         self._rebuild_menu()
 
-    def _vm_added_cb(self, conn, connkey):
-        vm = conn.get_vm(connkey)
+    def _vm_added_cb(self, conn, vm):
         vm.connect("state-changed", self._rebuild_menu)
         self._rebuild_menu()
 

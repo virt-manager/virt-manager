@@ -90,7 +90,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         if oldvm:
             oldvm.conn.disconnect_by_obj(self)
         if newvm:
-            newvm.conn.connect("vm-removed", self._vm_removed)
+            newvm.conn.connect("vm-removed", self._vm_removed_cb)
         self.vm = newvm
 
     def _reset_state(self):
@@ -125,8 +125,8 @@ class _vmmDeleteBase(vmmGObjectUI):
     def _finish_clicked_cb(self, src):
         self._finish()
 
-    def _vm_removed(self, _conn, connkey):
-        if self.vm.get_connkey() == connkey:
+    def _vm_removed_cb(self, _conn, vm):
+        if self.vm == vm:
             self.close()
 
     def _toggle_remove_storage(self, src):

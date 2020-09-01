@@ -367,7 +367,7 @@ class vmmHostNets(vmmGObjectUI):
     def _conn_state_changed_cb(self, conn):
         self._refresh_conn_state()
 
-    def _conn_nets_changed_cb(self, src, connkey):
+    def _conn_nets_changed_cb(self, src, net):
         self._populate_networks()
 
     def _net_state_changed_cb(self, net):

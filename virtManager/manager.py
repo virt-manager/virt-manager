@@ -548,11 +548,7 @@ class vmmManager(vmmGObjectUI):
     # VM add/remove management methods #
     ####################################
 
-    def vm_added(self, conn, connkey):
-        vm = conn.get_vm(connkey)
-        if not vm:
-            return  # pragma: no cover
-
+    def vm_added(self, conn, vm):
         vm_row = self._build_row(None, vm)
         conn_row = self.get_row(conn)
         self.model.append(conn_row.iter, vm_row)
@@ -564,12 +560,11 @@ class vmmManager(vmmGObjectUI):
         # Expand a connection when adding a vm to it
         self.widget("vm-list").expand_row(conn_row.path, False)
 
-    def vm_removed(self, conn, connkey):
+    def vm_removed(self, conn, vm):
         parent = self.get_row(conn).iter
         for rowidx in range(self.model.iter_n_children(parent)):
             rowiter = self.model.iter_nth_child(parent, rowidx)
-            vm = self.model[rowiter][ROW_HANDLE]
-            if vm.get_connkey() == connkey:
+            if self.model[rowiter][ROW_HANDLE] == vm:
                 self.model.remove(rowiter)
                 break
 
@@ -652,7 +647,7 @@ class vmmManager(vmmGObjectUI):
         conn.connect("state-changed", self.conn_state_changed)
 
         for vm in conn.list_vms():
-            self.vm_added(conn, vm.get_connkey())
+            self.vm_added(conn, vm)
 
     def _remove_child_rows(self, row):
         child = self.model.iter_children(row.iter)
