@@ -53,6 +53,7 @@
               <object class="GtkEntry" id="graphics-password">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="halign">start</property>
                 <property name="visibility">False</property>
                 <property name="invisible_char">●</property>
                 <signal name="changed" handler="on_graphics_password_changed" swapped="no"/>
@@ -297,45 +298,34 @@
       </packing>
     </child>
     <child>
-      <object class="GtkGrid" id="graphics-opengl-box">
+      <object class="GtkGrid" id="graphics-opengl-subopts-box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="row_spacing">3</property>
+        <property name="halign">start</property>
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">6</property>
         <child>
-          <object class="GtkBox" id="box77">
+          <object class="GtkImage">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="spacing">3</property>
-            <child>
-              <object class="GtkCheckButton" id="graphics-opengl">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="on_graphics_opengl_toggled" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="graphics-opengl-warn">
-                <property name="can_focus">False</property>
-                <property name="stock">gtk-dialog-warning</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="valign">start</property>
+            <property name="stock">gtk-dialog-warning</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="valign">start</property>
+            <property name="stock">gtk-dialog-warning</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
@@ -360,14 +350,63 @@
           </object>
           <packing>
             <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="graphics-warn-virtio">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">OpenGL only works with 'virtio' graphics with '3D acceleration' enabled</property>
+            <property name="wrap">True</property>
+            <attributes>
+              <attribute name="scale" value="0.80000000000000004"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
             <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="graphics-warn-listen">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">OpenGL only works with 'Listen type' value 'none'</property>
+            <property name="wrap">True</property>
+            <attributes>
+              <attribute name="scale" value="0.80000000000000004"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
+        <property name="top_attach">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="graphics-opengl">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="draw_indicator">True</property>
+        <signal name="toggled" handler="on_graphics_opengl_toggled" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
         <property name="top_attach">5</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>
