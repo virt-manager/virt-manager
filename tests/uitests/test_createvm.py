@@ -119,7 +119,6 @@ class NewVM(uiutils.UITestCase):
         newvm.combo_select("create-conn", ".*test default.*")
         self.forward(newvm)
         cdrom.click_combo_entry()
-        cdrom.print_nodes()
         uiutils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
         newvm.find_fuzzy("install-iso-browse", "button").click()
         browsewin = self.app.root.find("vmm-storage-browser")

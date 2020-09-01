@@ -323,7 +323,6 @@ class Manager(uiutils.UITestCase):
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click()
         c.click(button=3)
-        print("\n\n\nCLICKING DISCONNECT\n\n\n")
         self.app.root.find("conn-disconnect", "menu item").click()
 
         # Ensure all those windows aren't showing
