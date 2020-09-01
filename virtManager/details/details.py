@@ -2239,19 +2239,6 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_video_page(self, vid):
         model = vid.model
-        if model == "qxl" and vid.vgamem:
-            ram = vid.vgamem
-        else:
-            ram = vid.vram
-        heads = vid.heads
-        try:
-            ramlabel = ram and "%d MiB" % (int(ram) // 1024) or "-"
-        except Exception:  # pragma: no cover
-            ramlabel = "-"
-
-        self.widget("video-ram").set_text(ramlabel)
-        self.widget("video-heads").set_text(heads and str(heads) or "-")
-
         uiutil.set_list_selection(self.widget("video-model"), model)
 
         if vid.accel3d is None:
