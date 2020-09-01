@@ -57,9 +57,6 @@ class Viewer(vmmGObject):
 
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
-        self.add_gsettings_handle(
-            self.config.on_keyboard_grab_default_changed(
-            self._refresh_keyboard_grab_default))
 
         self.connect("add-display-widget", self._common_init)
 
@@ -90,7 +87,6 @@ class Viewer(vmmGObject):
 
     def _common_init(self, ignore1, ignore2):
         self._refresh_grab_keys()
-        self._refresh_keyboard_grab_default()
 
         self._display.connect("size-allocate",
             self._make_signal_proxy("size-allocate"))
@@ -175,8 +171,6 @@ class Viewer(vmmGObject):
         raise NotImplementedError()
 
     def _refresh_grab_keys(self):
-        raise NotImplementedError()
-    def _refresh_keyboard_grab_default(self):
         raise NotImplementedError()
 
     def _open_host(self):
@@ -403,11 +397,6 @@ class VNCViewer(Viewer):
 
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys])
-
-    def _refresh_keyboard_grab_default(self):
-        if not self._display:
-            return  # pragma: no cover
-        self._display.set_keyboard_grab(self.config.get_keyboard_grab_default())
 
     def _get_desktop_resolution(self):
         return self._desktop_resolution
@@ -652,12 +641,6 @@ class SpiceViewer(Viewer):
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys],
                                       SpiceClientGtk.DisplayKeyEvent.CLICK)
-
-    def _refresh_keyboard_grab_default(self):
-        if not self._display:
-            return  # pragma: no cover
-        self._display.set_property("grab-keyboard",
-            self.config.get_keyboard_grab_default())
 
     def _get_desktop_resolution(self):
         if not self._display_channel:
