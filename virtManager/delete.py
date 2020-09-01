@@ -33,16 +33,6 @@ class _vmmDeleteBase(vmmGObjectUI):
     """
     Base class for both types of VM/device storage deleting wizards
     """
-    @classmethod
-    def show_instance(cls, parentobj, vm):
-        try:
-            if not cls._instance:
-                cls._instance = vmmDeleteDialog()
-            cls._instance.show(parentobj.topwin, vm)
-        except Exception as e:  # pragma: no cover
-            parentobj.err.show_err(
-                    _("Error launching delete dialog: %s") % str(e))
-
     def __init__(self):
         vmmGObjectUI.__init__(self, "delete.ui", "vmm-delete")
         self.vm = None
@@ -282,6 +272,16 @@ class vmmDeleteDialog(_vmmDeleteBase):
     """
     Dialog for deleting a VM and optionally its storage
     """
+    @classmethod
+    def show_instance(cls, parentobj, vm):
+        try:
+            if not cls._instance:
+                cls._instance = vmmDeleteDialog()
+            cls._instance.show(parentobj.topwin, vm)
+        except Exception as e:  # pragma: no cover
+            parentobj.err.show_err(
+                    _("Error launching delete dialog: %s") % str(e))
+
     def _get_dialog_title(self):
         return _("Delete Virtual Machine")
 
