@@ -96,8 +96,8 @@ class vmmHostNets(vmmGObjectUI):
         self._xmleditor.connect("xml-reset",
                 self._xmleditor_xml_reset_cb)
 
-        # [ unique, label, icon name, icon size, is_active ]
-        netListModel = Gtk.ListStore(str, str, str, int, bool)
+        # [ netobj, label, icon name, icon size, is_active ]
+        netListModel = Gtk.ListStore(object, str, str, int, bool)
         self.widget("net-list").set_model(netListModel)
 
         sel = self.widget("net-list").get_selection()
@@ -148,8 +148,7 @@ class vmmHostNets(vmmGObjectUI):
         self._set_error_page(_("Connection not active."))
 
     def _current_network(self):
-        connkey = uiutil.get_list_selection(self.widget("net-list"))
-        return connkey and self.conn.get_net(connkey)
+        return uiutil.get_list_selection(self.widget("net-list"))
 
     def _set_error_page(self, msg):
         self.widget("network-pages").set_current_page(1)
@@ -187,14 +186,13 @@ class vmmHostNets(vmmGObjectUI):
             for net in self.conn.list_nets():
                 net.disconnect_by_obj(self)
                 net.connect("state-changed", self._net_state_changed_cb)
-                model.append([net.get_connkey(), net.get_name(), "network-idle",
+                model.append([net, net.get_name(), "network-idle",
                               Gtk.IconSize.LARGE_TOOLBAR,
                               bool(net.is_active())])
         finally:
             net_list.set_model(model)
 
-        uiutil.set_list_selection(net_list,
-            curnet and curnet.get_connkey() or None)
+        uiutil.set_list_selection(net_list, curnet)
 
     def _populate_net_ipv4_state(self, net):
         (netstr, (dhcpstart, dhcpend)) = net.get_ipv4_network()
@@ -373,12 +371,12 @@ class vmmHostNets(vmmGObjectUI):
     def _net_state_changed_cb(self, net):
         # Update net state inline in the tree model
         for row in self.widget("net-list").get_model():
-            if row[0] == net.get_connkey():
+            if row[0] == net:
                 row[4] = net.is_active()
 
         # If refreshed network is the current net, refresh the UI
         curnet = self._current_network()
-        if curnet and curnet.get_connkey() == net.get_connkey():
+        if curnet == net:
             self._refresh_current_network()
 
     def _net_selected_cb(self, selection):

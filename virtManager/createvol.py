@@ -17,7 +17,7 @@ from .xmleditor import vmmXMLEditor
 
 class vmmCreateVolume(vmmGObjectUI):
     __gsignals__ = {
-        "vol-created": (vmmGObjectUI.RUN_FIRST, None, [str, str]),
+        "vol-created": (vmmGObjectUI.RUN_FIRST, None, [object, object]),
     }
 
     def __init__(self, conn, parent_pool):
@@ -284,7 +284,8 @@ class vmmCreateVolume(vmmGObjectUI):
     ##################
 
     def _pool_refreshed_cb(self, pool, volname):
-        self.emit("vol-created", pool.get_connkey(), volname)
+        vol = pool.get_volume_by_name(volname)
+        self.emit("vol-created", pool, vol)
 
     def _finish_cb(self, error, details, vol):
         self.reset_finish_cursor()

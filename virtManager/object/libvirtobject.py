@@ -18,12 +18,12 @@ class vmmLibvirtObject(vmmGObject):
     _STATUS_ACTIVE = 1
     _STATUS_INACTIVE = 2
 
-    def __init__(self, conn, backend, key, parseclass):
+    def __init__(self, conn, backend, name, parseclass):
         vmmGObject.__init__(self)
         self._conn = conn
         self._backend = backend
-        self._key = key
         self._parseclass = parseclass
+        self._name = name
 
         self.__initialized = False
         self.__status = None
@@ -35,11 +35,6 @@ class vmmLibvirtObject(vmmGObject):
         # These should be set by the child classes if necessary
         self._inactive_xml_flags = 0
         self._active_xml_flags = 0
-
-        # Cache object name. We may need to do this even
-        # before init_libvirt_state since it might be needed ahead of time.
-        self._name = None
-        self.get_name()
 
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
@@ -94,8 +89,6 @@ class vmmLibvirtObject(vmmGObject):
 
     def get_backend(self):
         return self._backend
-    def get_connkey(self):
-        return self._key
 
     def is_domain(self):
         return self.class_name() == "domain"
@@ -111,7 +104,6 @@ class vmmLibvirtObject(vmmGObject):
         self._backend = newbackend
 
     def define_name(self, newname):
-        oldconnkey = self.get_connkey()
         oldname = self.get_xmlobj().name
 
         self.ensure_latest_xml()
@@ -126,10 +118,10 @@ class vmmLibvirtObject(vmmGObject):
         newxml = xmlobj.get_xml()
 
         try:
-            self._key = newname
-            self.conn.rename_object(self, origxml, newxml, oldconnkey)
+            self._name = newname
+            self.conn.rename_object(self, origxml, newxml)
         except Exception:  # pragma: no cover
-            self._key = oldname
+            self._name = oldname
             raise
         finally:
             self.__force_refresh_xml()
@@ -163,12 +155,7 @@ class vmmLibvirtObject(vmmGObject):
         ignore = force
 
     def get_name(self):
-        if self._name is None:
-            self._name = self._backend_get_name()
         return self._name
-
-    def _backend_get_name(self):
-        return self._backend.name()
 
     def tick(self, stats_update=True):
         ignore = stats_update
@@ -361,8 +348,6 @@ class vmmLibvirtObject(vmmGObject):
         Mark cached XML as invalid. Subclasses may extend this
         to invalidate any specific caches of their own
         """
-        self._name = None
-
         # While for events we do want to clear cached XML values like
         # _name, the XML is never invalid.
         self._is_xml_valid = self._using_events()

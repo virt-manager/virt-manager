@@ -240,14 +240,14 @@ class vmmStoragePool(vmmLibvirtObject):
     # Volume handling #
     ###################
 
+    def get_volume_by_name(self, name):
+        for vol in self.get_volumes():
+            if vol.get_name() == name:
+                return vol
+
     def get_volumes(self):
         self._update_volumes(force=False)
         return self._volumes[:]
-
-    def get_volume(self, key):
-        for vol in self.get_volumes():
-            if vol.get_connkey() == key:
-                return vol
 
     def _update_volumes(self, force):
         if not self.is_active():
@@ -256,7 +256,7 @@ class vmmStoragePool(vmmLibvirtObject):
         if not force and self._volumes is not None:
             return
 
-        keymap = dict((o.get_connkey(), o) for o in self._volumes or [])
+        keymap = dict((o.get_name(), o) for o in self._volumes or [])
         def cb(obj, key):
             return vmmStorageVolume(self.conn, obj, key)
         (dummy1, dummy2, allvols) = pollhelpers.fetch_volumes(

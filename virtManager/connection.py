@@ -44,7 +44,7 @@ class _ObjectList(vmmGObject):
         self._objects = []
 
     def _blacklist_key(self, obj):
-        return str(obj.__class__) + obj.get_connkey()
+        return str(obj.__class__) + obj.get_name()
 
     def add_blacklist(self, obj):
         """
@@ -108,7 +108,7 @@ class _ObjectList(vmmGObject):
             # lock the whole time to prevent a 'time of check' issue
             for checkobj in self._objects:
                 if (checkobj.__class__ == obj.__class__ and
-                    checkobj.get_connkey() == obj.get_connkey()):
+                    checkobj.get_name() == obj.get_name()):
                     return False
             if obj in self._objects:
                 return False
@@ -123,13 +123,13 @@ class _ObjectList(vmmGObject):
         with self._lock:
             return [o for o in self._objects if o.__class__ is classobj]
 
-    def lookup_object(self, classobj, connkey):
+    def lookup_object(self, classobj, name):
         """
-        Lookup an object with the passed classobj + connkey
+        Lookup an object with the passed classobj + name
         """
         # Doesn't require locking, since get_objects_for_class covers us
         for obj in self.get_objects_for_class(classobj):
-            if obj.get_connkey() == connkey:
+            if obj.get_name() == name:
                 return obj
         return None
 
@@ -284,7 +284,7 @@ class vmmConnection(vmmGObject):
             name = obj.name()
             self.schedule_priority_tick(pollpool=True)
             def compare_cb():
-                return bool(self.get_pool(name))
+                return bool(self.get_pool_by_name(name))
             self._wait_for_condition(compare_cb)
         self._backend.cb_cache_new_pool = cache_new_pool
 
@@ -502,23 +502,23 @@ class vmmConnection(vmmGObject):
     # Libvirt object lookup methods #
     #################################
 
-    def get_vm(self, connkey):
-        return self._objects.lookup_object(vmmDomain, connkey)
+    def get_vm_by_name(self, name):
+        return self._objects.lookup_object(vmmDomain, name)
     def list_vms(self):
         return self._objects.get_objects_for_class(vmmDomain)
 
-    def get_net(self, connkey):
-        return self._objects.lookup_object(vmmNetwork, connkey)
+    def get_net_by_name(self, name):
+        return self._objects.lookup_object(vmmNetwork, name)
     def list_nets(self):
         return self._objects.get_objects_for_class(vmmNetwork)
 
-    def get_pool(self, connkey):
-        return self._objects.lookup_object(vmmStoragePool, connkey)
+    def get_pool_by_name(self, name):
+        return self._objects.lookup_object(vmmStoragePool, name)
     def list_pools(self):
         return self._objects.get_objects_for_class(vmmStoragePool)
 
-    def get_nodedev(self, connkey):
-        return self._objects.lookup_object(vmmNodeDevice, connkey)
+    def get_nodedev_by_name(self, name):
+        return self._objects.lookup_object(vmmNodeDevice, name)
     def list_nodedevs(self):
         return self._objects.get_objects_for_class(vmmNodeDevice)
 
@@ -557,8 +557,7 @@ class vmmConnection(vmmGObject):
     def define_pool(self, xml):
         return self._backend.storagePoolDefineXML(xml, 0)
 
-    def rename_object(self, obj, origxml, newxml, oldconnkey):
-        ignore = oldconnkey
+    def rename_object(self, obj, origxml, newxml):
         if obj.is_domain():
             define_cb = self.define_domain
         elif obj.is_pool():
@@ -620,7 +619,7 @@ class vmmConnection(vmmGObject):
         name = domain.name()
         log.debug("domain xmlmisc event: domain=%s event=%s args=%s",
                 name, eventstr, args)
-        obj = self.get_vm(name)
+        obj = self.get_vm_by_name(name)
         if not obj:
             return
 
@@ -634,7 +633,7 @@ class vmmConnection(vmmGObject):
         log.debug("domain lifecycle event: domain=%s %s", name,
                 LibvirtEnumMap.domain_lifecycle_str(state, reason))
 
-        obj = self.get_vm(name)
+        obj = self.get_vm_by_name(name)
 
         if obj:
             self.idle_add(obj.recache_from_event_loop)
@@ -649,7 +648,7 @@ class vmmConnection(vmmGObject):
         log.debug("domain agent lifecycle event: domain=%s %s", name,
                 LibvirtEnumMap.domain_agent_lifecycle_str(state, reason))
 
-        obj = self.get_vm(name)
+        obj = self.get_vm_by_name(name)
 
         if obj:
             self.idle_add(obj.recache_from_event_loop)
@@ -663,7 +662,7 @@ class vmmConnection(vmmGObject):
         name = network.name()
         log.debug("network lifecycle event: network=%s %s",
                 name, LibvirtEnumMap.network_lifecycle_str(state, reason))
-        obj = self.get_net(name)
+        obj = self.get_net_by_name(name)
 
         if obj:
             self.idle_add(obj.recache_from_event_loop)
@@ -679,7 +678,7 @@ class vmmConnection(vmmGObject):
         log.debug("storage pool lifecycle event: pool=%s %s",
             name, LibvirtEnumMap.storage_lifecycle_str(state, reason))
 
-        obj = self.get_pool(name)
+        obj = self.get_pool_by_name(name)
 
         if obj:
             self.idle_add(obj.recache_from_event_loop)
@@ -693,7 +692,7 @@ class vmmConnection(vmmGObject):
         name = pool.name()
         log.debug("storage pool refresh event: pool=%s", name)
 
-        obj = self.get_pool(name)
+        obj = self.get_pool_by_name(name)
 
         if not obj:
             return
@@ -718,7 +717,7 @@ class vmmConnection(vmmGObject):
         name = dev.name()
         log.debug("node device update event: nodedev=%s", name)
 
-        obj = self.get_nodedev(name)
+        obj = self.get_nodedev_by_name(name)
 
         if obj:
             self.idle_add(obj.recache_from_event_loop)
@@ -1106,9 +1105,9 @@ class vmmConnection(vmmGObject):
                 pollcb = pollhelpers.fetch_vms
 
 
-            keymap = dict((o.get_connkey(), o) for o in objs)
-            def cb(obj, key):
-                return cls(self, obj, key)
+            keymap = dict((o.get_name(), o) for o in objs)
+            def cb(obj, name):
+                return cls(self, obj, name)
             if dopoll:
                 gone, new, master = pollcb(self._backend, keymap, cb)
             else:

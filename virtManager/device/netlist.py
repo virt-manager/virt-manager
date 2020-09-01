@@ -17,18 +17,16 @@ NET_ROW_SOURCE = 1
 NET_ROW_LABEL = 2
 NET_ROW_SENSITIVE = 3
 NET_ROW_MANUAL = 4
-NET_ROW_CONNKEY = 5
 
 
 def _build_row(nettype, source_name,
-        label, is_sensitive, manual=False, connkey=None):
+        label, is_sensitive, manual=False):
     row = []
     row.insert(NET_ROW_TYPE, nettype)
     row.insert(NET_ROW_SOURCE, source_name)
     row.insert(NET_ROW_LABEL, label)
     row.insert(NET_ROW_SENSITIVE, is_sensitive)
     row.insert(NET_ROW_MANUAL, manual)
-    row.insert(NET_ROW_CONNKEY, connkey)
     return row
 
 
@@ -94,7 +92,6 @@ class vmmNetworkList(vmmGObjectUI):
         fields.insert(NET_ROW_LABEL, str)
         fields.insert(NET_ROW_SENSITIVE, bool)
         fields.insert(NET_ROW_MANUAL, bool)
-        fields.insert(NET_ROW_CONNKEY, str)
 
         model = Gtk.ListStore(*fields)
         combo = self.widget("net-source")
@@ -121,9 +118,8 @@ class vmmNetworkList(vmmGObjectUI):
             if net.get_xmlobj().virtualport_type == "openvswitch":
                 label += " (OpenVSwitch)"
 
-            rows.append(_build_row(
-                nettype, net.get_name(), label, True,
-                connkey=net.get_connkey()))
+            row = _build_row(nettype, net.get_name(), label, True)
+            rows.append(row)
 
         return rows
 
@@ -190,10 +186,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         netobj = None
         if net.type == virtinst.DeviceInterface.TYPE_VIRTUAL:
-            for n in self.conn.list_nets():
-                if n.get_name() == devname:
-                    netobj = n
-                    break
+            netobj = self.conn.get_net_by_name(devname)
 
         if not netobj or netobj.is_active():
             return

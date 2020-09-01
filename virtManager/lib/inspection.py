@@ -247,7 +247,7 @@ class vmmInspection(vmmGObject):
         self._uris.append(uri)
         conn.connect("vm-added", self._vm_added_cb)
         for vm in conn.list_vms():
-            self._vm_added_cb(conn, vm.get_connkey())
+            self._vm_added_cb(conn, vm.get_name())
 
     def _conn_removed_cb(self, connmanager, uri):
         self._uris.remove(uri)
@@ -259,7 +259,7 @@ class vmmInspection(vmmGObject):
             log.debug("ignore libvirt/guestfs temporary VM %s", name)
             return
 
-        self._q.put((conn.get_uri(), vm.get_connkey()))
+        self._q.put((conn.get_uri(), vm.get_name()))
 
     def _start(self):
         self._thread = threading.Thread(
@@ -282,17 +282,17 @@ class vmmInspection(vmmGObject):
             if data is None:
                 log.debug("libguestfs queue vm=None, exiting thread")
                 return
-            uri, connkey = data
-            self._process_vm(uri, connkey)
+            uri, vmname = data
+            self._process_vm(uri, vmname)
             self._q.task_done()
 
-    def _process_vm(self, uri, connkey):
+    def _process_vm(self, uri, vmname):
         connmanager = vmmConnectionManager.get_instance()
         conn = connmanager.conns.get(uri)
         if not conn:
             return
 
-        vm = conn.get_vm(connkey)
+        vm = conn.get_vm_by_name(vmname)
         if not vm:
             return
 
@@ -344,4 +344,4 @@ class vmmInspection(vmmGObject):
         # as the data itself will be replaced once the new
         # results are available.
         self._cached_data.pop(vm.get_uuid(), None)
-        self._q.put((vm.conn.get_uri(), vm.get_connkey()))
+        self._q.put((vm.conn.get_uri(), vm.get_name()))

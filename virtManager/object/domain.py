@@ -75,7 +75,7 @@ class _IPFetcher:
         self._cache = {"qemuga": {}, "arp": {}}
 
         if iface.type == "network":
-            net = vm.conn.get_net(iface.source)
+            net = vm.conn.get_net_by_name(iface.source)
             if net:
                 net.get_dhcp_leases(refresh=True)
 
@@ -99,7 +99,7 @@ class _IPFetcher:
         arp = self._cache["arp"]
         leases = []
         if iface.type == "network":
-            net = vm.conn.get_net(iface.source)
+            net = vm.conn.get_net_by_name(iface.source)
             if net:
                 leases = net.get_dhcp_leases()
 
@@ -183,9 +183,6 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     ##########################
     # Required class methods #
     ##########################
-
-    def _backend_get_name(self):
-        return self._backend.getName()
 
     def _conn_tick_poll_param(self):
         return None  # pragma: no cover
