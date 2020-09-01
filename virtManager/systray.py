@@ -19,7 +19,7 @@ from .connmanager import vmmConnectionManager
 try:
     # pylint: disable=ungrouped-imports
     from gi.repository import AppIndicator3
-except Exception:
+except Exception:  # pragma: no cover
     AppIndicator3 = None
 
 
@@ -48,7 +48,7 @@ def _conn_disconnect_cb(src, uri):
         conn.close()
 
 
-def _has_appindicator_dbus():
+def _has_appindicator_dbus():  # pragma: no cover
     try:
         bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
         dbus = Gio.DBusProxy.new_sync(bus, 0, None,
@@ -66,7 +66,7 @@ def _has_appindicator_dbus():
 
 
 _USING_APPINDICATOR = False
-if AppIndicator3:
+if AppIndicator3:  # pragma: no cover
     if not _has_appindicator_dbus():
         log.debug("AppIndicator3 is available, but didn't "
                               "find any dbus watcher.")
@@ -90,7 +90,7 @@ class _Systray(object):
         raise NotImplementedError()
 
 
-class _SystrayIndicator(_Systray):
+class _SystrayIndicator(_Systray):  # pragma: no cover
     """
     UI backend for appindicator
     """
@@ -121,7 +121,7 @@ class _SystrayIndicator(_Systray):
         self._icon.set_status(AppIndicator3.IndicatorStatus.PASSIVE)
 
 
-class _SystrayStatusIcon(_Systray):
+class _SystrayStatusIcon(_Systray):  # pragma: no cover
     """
     UI backend for Gtk StatusIcon
     """
@@ -153,9 +153,45 @@ class _SystrayStatusIcon(_Systray):
         self._icon.set_visible(False)
 
 
+class _SystrayWindow(_Systray):
+    """
+    A mock systray implementation that shows its own top level window,
+    so we can test more of the infrastructure in our ui tests
+    """
+    def __init__(self):
+        self._window = None
+        self._menu = None
+        self._init_ui()
 
-def _cmp(a, b):
-    return ((a > b) - (a < b))
+    def _init_ui(self):
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.DIALOG)
+
+        box = Gtk.EventBox()
+        box.add(image)
+        box.connect("button-press-event", self._popup_cb)
+
+        self._window = Gtk.Window()
+        self._window.set_size_request(100, 100)
+        self._window.get_accessible().set_name("vmm-fake-systray")
+        self._window.add(box)
+
+    def is_embedded(self):
+        return self._window.is_visible()
+
+    def set_menu(self, menu):
+        self._menu = menu
+
+    def _popup_cb(self, src, event):
+        if event.button == 1:
+            _toggle_manager()
+        else:
+            self._menu.popup_at_pointer(event)
+
+    def show(self):
+        self._window.show_all()
+    def hide(self):
+        self._window.hide()
 
 
 class _TrayMainMenu(vmmGObject):
@@ -183,6 +219,7 @@ class _TrayMainMenu(vmmGObject):
         Build the top level conn list menu when clicking the icon
         """
         menu = Gtk.Menu()
+        menu.get_accessible().set_name("vmm-systray-menu")
         menu.add(Gtk.SeparatorMenuItem())
 
         exit_item = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_QUIT, None)
@@ -362,7 +399,7 @@ class vmmSystray(vmmGObject):
         return cls._instance
 
     @staticmethod
-    def systray_disabled_message():
+    def systray_disabled_message():  # pragma: no cover
         if "WAYLAND_DISPLAY" not in os.environ:
             return
         if _USING_APPINDICATOR:
@@ -389,8 +426,9 @@ class vmmSystray(vmmGObject):
     def _cleanup(self):
         self._hide_systray()
         self._systray = None
-        self._mainmenu.cleanup()
-        self._mainmenu = None
+        if self._mainmenu:
+            self._mainmenu.cleanup()
+            self._mainmenu = None
 
 
     ###########################
@@ -398,9 +436,6 @@ class vmmSystray(vmmGObject):
     ###########################
 
     def _init_mainmenu(self):
-        if self._mainmenu:
-            return
-
         self._mainmenu = _TrayMainMenu()
         connmanager = vmmConnectionManager.get_instance()
         connmanager.connect("conn-added", self._conn_added_cb)
@@ -410,9 +445,11 @@ class vmmSystray(vmmGObject):
 
     def _show_systray(self):
         if not self._systray:
-            if _USING_APPINDICATOR:
+            if self.config.CLITestOptions.fake_systray:
+                self._systray = _SystrayWindow()
+            elif _USING_APPINDICATOR:  # pragma: no cover
                 self._systray = _SystrayIndicator()
-            else:
+            else:  # pragma: no cover
                 self._systray = _SystrayStatusIcon()
             self._init_mainmenu()
             self._systray.set_menu(self._mainmenu.get_menu())
