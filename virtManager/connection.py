@@ -140,14 +140,14 @@ class _ObjectList(vmmGObject):
 
 class vmmConnection(vmmGObject):
     __gsignals__ = {
-        "vm-added": (vmmGObject.RUN_FIRST, None, [str]),
-        "vm-removed": (vmmGObject.RUN_FIRST, None, [str]),
-        "net-added": (vmmGObject.RUN_FIRST, None, [str]),
-        "net-removed": (vmmGObject.RUN_FIRST, None, [str]),
-        "pool-added": (vmmGObject.RUN_FIRST, None, [str]),
-        "pool-removed": (vmmGObject.RUN_FIRST, None, [str]),
-        "nodedev-added": (vmmGObject.RUN_FIRST, None, [str]),
-        "nodedev-removed": (vmmGObject.RUN_FIRST, None, [str]),
+        "vm-added": (vmmGObject.RUN_FIRST, None, [object]),
+        "vm-removed": (vmmGObject.RUN_FIRST, None, [object]),
+        "net-added": (vmmGObject.RUN_FIRST, None, [object]),
+        "net-removed": (vmmGObject.RUN_FIRST, None, [object]),
+        "pool-added": (vmmGObject.RUN_FIRST, None, [object]),
+        "pool-removed": (vmmGObject.RUN_FIRST, None, [object]),
+        "nodedev-added": (vmmGObject.RUN_FIRST, None, [object]),
+        "nodedev-removed": (vmmGObject.RUN_FIRST, None, [object]),
         "resources-sampled": (vmmGObject.RUN_FIRST, None, []),
         "state-changed": (vmmGObject.RUN_FIRST, None, []),
         "open-completed": (vmmGObject.RUN_FIRST, None, [object]),
@@ -1000,13 +1000,13 @@ class vmmConnection(vmmGObject):
 
     def _remove_object_signal(self, obj):
         if obj.is_domain():
-            self.emit("vm-removed", obj.get_connkey())
+            self.emit("vm-removed", obj)
         elif obj.is_network():
-            self.emit("net-removed", obj.get_connkey())
+            self.emit("net-removed", obj)
         elif obj.is_pool():
-            self.emit("pool-removed", obj.get_connkey())
+            self.emit("pool-removed", obj)
         elif obj.is_nodedev():
-            self.emit("nodedev-removed", obj.get_connkey())
+            self.emit("nodedev-removed", obj)
 
     def _gone_object_signals(self, gone_objects):
         """
@@ -1061,13 +1061,13 @@ class vmmConnection(vmmGObject):
                 log.debug("%s=%s status=%s added", class_name,
                     obj.get_name(), obj.run_status())
             if obj.is_domain():
-                self.emit("vm-added", obj.get_connkey())
+                self.emit("vm-added", obj)
             elif obj.is_network():
-                self.emit("net-added", obj.get_connkey())
+                self.emit("net-added", obj)
             elif obj.is_pool():
-                self.emit("pool-added", obj.get_connkey())
+                self.emit("pool-added", obj)
             elif obj.is_nodedev():
-                self.emit("nodedev-added", obj.get_connkey())
+                self.emit("nodedev-added", obj)
         finally:
             if self._init_object_event:
                 self._init_object_count -= 1

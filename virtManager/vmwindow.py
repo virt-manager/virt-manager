@@ -63,7 +63,7 @@ class vmmVMWindow(vmmGObjectUI):
             pages = self.widget("details-pages")
             pages.set_current_page(DETAILS_PAGE_DETAILS)
         else:
-            self.conn.connect("vm-removed", self._vm_removed)
+            self.conn.connect("vm-removed", self._vm_removed_cb)
 
         self._mediacombo = None
 
@@ -187,8 +187,8 @@ class vmmVMWindow(vmmGObjectUI):
             return
         self.emit("customize-finished", self.vm)
 
-    def _vm_removed(self, _conn, connkey):
-        if self.vm.get_connkey() == connkey:
+    def _vm_removed_cb(self, _conn, vm):
+        if self.vm == vm:
             self.cleanup()
 
     def _customize_cancel(self):

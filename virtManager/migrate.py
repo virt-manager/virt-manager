@@ -85,8 +85,8 @@ class vmmMigrateDialog(vmmGObjectUI):
         self._set_vm(None)
         return 1
 
-    def _vm_removed(self, _conn, connkey):
-        if self.vm.get_connkey() == connkey:
+    def _vm_removed_cb(self, _conn, vm):
+        if self.vm == vm:
             self.close()
 
     def _set_vm(self, newvm):
@@ -94,7 +94,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         if oldvm:
             oldvm.conn.disconnect_by_obj(self)
         if newvm:
-            newvm.conn.connect("vm-removed", self._vm_removed)
+            newvm.conn.connect("vm-removed", self._vm_removed_cb)
         self.vm = newvm
 
 

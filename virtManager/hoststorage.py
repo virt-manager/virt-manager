@@ -671,7 +671,7 @@ class vmmHostStorage(vmmGObjectUI):
     def _conn_state_changed_cb(self, conn):
         self._refresh_conn_state()
 
-    def _conn_pools_changed_cb(self, src, connkey):
+    def _conn_pools_changed_cb(self, src, pool):
         self._populate_pools()
 
     def _pool_selected_cb(self, selection):

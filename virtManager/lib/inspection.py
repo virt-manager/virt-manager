@@ -252,14 +252,14 @@ class vmmInspection(vmmGObject):
     def _conn_removed_cb(self, connmanager, uri):
         self._uris.remove(uri)
 
-    def _vm_added_cb(self, conn, connkey):
+    def _vm_added_cb(self, conn, vm):
         # Called by the main thread whenever a VM is added to vmlist.
-        if connkey.startswith("guestfs-"):
-            log.debug("ignore libvirt/guestfs temporary VM %s",
-                          connkey)
+        name = vm.get_name()
+        if name.startswith("guestfs-"):
+            log.debug("ignore libvirt/guestfs temporary VM %s", name)
             return
 
-        self._q.put((conn.get_uri(), connkey))
+        self._q.put((conn.get_uri(), vm.get_connkey()))
 
     def _start(self):
         self._thread = threading.Thread(
