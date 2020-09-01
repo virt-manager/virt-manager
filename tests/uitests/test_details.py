@@ -472,6 +472,7 @@ class Details(uiutils.UITestCase):
         tab.combo_select("Type:", "VNC")
         tab.combo_select("Listen type:", "Address")
         tab.find("graphics-port-auto", "check").click()
+        tab.find("graphics-port-auto", "check").click()
         tab.find("graphics-port", "spin button").set_text("6001")
         tab.find("Password:", "check").click()
         passwd = tab.find_fuzzy("graphics-password", "text")

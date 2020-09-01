@@ -2096,7 +2096,9 @@ class vmmDetails(vmmGObjectUI):
                 _("Hypervisor does not support removing this device"))
 
     def _refresh_graphics_page(self, gfx):
-        title = self.gfxdetails.set_dev(gfx)
+        pretty_type = vmmGraphicsDetails.graphics_pretty_type_simple(gfx.type)
+        title = (_("%(graphicstype)s Server") % {"graphicstype": pretty_type})
+        self.gfxdetails.set_dev(gfx)
         self.widget("graphics-title").set_markup("<b>%s</b>" % title)
 
     def _refresh_sound_page(self, sound):
