@@ -55,8 +55,6 @@ class vmmNodeDevice(vmmLibvirtObject):
         return self._backend.XMLDesc(flags)
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
-    def _backend_get_name(self):
-        return self.get_connkey()
     def _using_events(self):
         return self.conn.using_node_device_events
 

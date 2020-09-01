@@ -60,7 +60,7 @@ class TestConn(unittest.TestCase):
         # Add coverage for conn fetch_* handling, and pollhelpers
         conn = cli.getConnection("test:///default")
         objmap = {}
-        def build_cb(obj, connkey):
+        def build_cb(obj, name):
             return obj
 
         gone, new, master = pollhelpers.fetch_nets(conn, {}, build_cb)

@@ -26,7 +26,7 @@ EDIT_POOL_XML,
 ) = list(range(3))
 
 VOL_NUM_COLUMNS = 7
-(VOL_COLUMN_KEY,
+(VOL_COLUMN_HANDLE,
  VOL_COLUMN_NAME,
  VOL_COLUMN_CAPACITY,
  VOL_COLUMN_SIZESTR,
@@ -35,7 +35,7 @@ VOL_NUM_COLUMNS = 7
  VOL_COLUMN_SENSITIVE) = range(VOL_NUM_COLUMNS)
 
 POOL_NUM_COLUMNS = 4
-(POOL_COLUMN_CONNKEY,
+(POOL_COLUMN_HANDLE,
  POOL_COLUMN_LABEL,
  POOL_COLUMN_ISACTIVE,
  POOL_COLUMN_PERCENT) = range(POOL_NUM_COLUMNS)
@@ -184,8 +184,8 @@ class vmmHostStorage(vmmGObjectUI):
         self._volmenu.add(volCopyPath)
 
         # Volume list
-        # [key, name, sizestr, capacity, format, in use by string, sensitive]
-        volListModel = Gtk.ListStore(str, str, str, str, str, str, bool)
+        # [obj, name, sizestr, capacity, format, in use by string, sensitive]
+        volListModel = Gtk.ListStore(object, str, str, str, str, str, bool)
         self.widget("vol-list").set_model(volListModel)
 
         volCol = Gtk.TreeViewColumn(_("Volumes"))
@@ -225,9 +225,9 @@ class vmmHostStorage(vmmGObjectUI):
             Gtk.SortType.ASCENDING)
 
         # Init pool list
-        # [connkey, label, pool.is_active(), percent string]
+        # [pool object, label, pool.is_active(), percent string]
         pool_list = self.widget("pool-list")
-        poolListModel = Gtk.ListStore(str, str, bool, str)
+        poolListModel = Gtk.ListStore(object, str, bool, str)
         pool_list.set_model(poolListModel)
 
         poolCol = Gtk.TreeViewColumn(_("Storage Pools"))
@@ -281,33 +281,27 @@ class vmmHostStorage(vmmGObjectUI):
         self._set_error_page(_("Connection not active."))
 
     def _current_pool(self):
-        connkey = uiutil.get_list_selection(self.widget("pool-list"))
-        return connkey and self.conn.get_pool(connkey)
+        return uiutil.get_list_selection(self.widget("pool-list"))
 
     def _current_vol(self):
         pool = self._current_pool()
         if not pool:
             return None  # pragma: no cover
+        return uiutil.get_list_selection(self.widget("vol-list"))
 
-        connkey = uiutil.get_list_selection(self.widget("vol-list"))
-        return connkey and pool.get_volume(connkey)
-
-    def _update_pool_row(self, connkey):
+    def _update_pool_row(self, pool):
         for row in self.widget("pool-list").get_model():
-            if row[POOL_COLUMN_CONNKEY] != connkey:
+            if row[POOL_COLUMN_HANDLE] != pool:
                 continue
 
             # Update active sensitivity and percent available for passed key
-            pool = self.conn.get_pool(connkey)
             row[POOL_COLUMN_ISACTIVE] = pool.is_active()
             row[POOL_COLUMN_PERCENT] = _get_pool_size_percent(pool)
             break
 
         curpool = self._current_pool()
-        if not curpool or curpool.get_connkey() != connkey:
-            return
-
-        self._refresh_current_pool()
+        if curpool == pool:
+            self._refresh_current_pool()
 
     def _populate_pool_state(self, pool):
         auto = pool.get_autostart()
@@ -394,7 +388,7 @@ class vmmHostStorage(vmmGObjectUI):
                 label = "%s\n<span size='small'>%s</span>" % (name, typ)
 
                 row = [None] * POOL_NUM_COLUMNS
-                row[POOL_COLUMN_CONNKEY] = pool.get_connkey()
+                row[POOL_COLUMN_HANDLE] = pool
                 row[POOL_COLUMN_LABEL] = label
                 row[POOL_COLUMN_ISACTIVE] = pool.is_active()
                 row[POOL_COLUMN_PERCENT] = _get_pool_size_percent(pool)
@@ -403,8 +397,7 @@ class vmmHostStorage(vmmGObjectUI):
         finally:
             pool_list.set_model(model)
 
-        uiutil.set_list_selection(pool_list,
-            curpool and curpool.get_connkey() or None)
+        uiutil.set_list_selection(pool_list, curpool)
 
     def _populate_vols(self):
         list_widget = self.widget("vol-list")
@@ -418,8 +411,6 @@ class vmmHostStorage(vmmGObjectUI):
         vscroll_percent = vadj.get_value() // max(vadj.get_upper(), 1)
 
         for vol in vols:
-            key = vol.get_connkey()
-
             try:
                 path = vol.get_target_path()
                 name = vol.get_pretty_name(pool.get_type())
@@ -428,7 +419,7 @@ class vmmHostStorage(vmmGObjectUI):
                 fmt = vol.get_format() or ""
             except Exception:  # pragma: no cover
                 log.debug("Error getting volume info for '%s', "
-                              "hiding it", key, exc_info=True)
+                              "hiding it", name, exc_info=True)
                 continue
 
             namestr = None
@@ -448,7 +439,7 @@ class vmmHostStorage(vmmGObjectUI):
                 sensitive = self._vol_sensitive_cb(fmt)
 
             row = [None] * VOL_NUM_COLUMNS
-            row[VOL_COLUMN_KEY] = key
+            row[VOL_COLUMN_HANDLE] = vol
             row[VOL_COLUMN_NAME] = name
             row[VOL_COLUMN_SIZESTR] = sizestr
             row[VOL_COLUMN_CAPACITY] = cap
@@ -635,16 +626,14 @@ class vmmHostStorage(vmmGObjectUI):
     def _vol_list_row_activated_cb(self, src, treeiter, viewcol):
         self.emit("volume-chosen", self._current_vol())
 
-    def _vol_created_cb(self, src, pool_connkey, volname):
+    def _vol_created_cb(self, src, pool, vol):
         # The vol list will have already been updated, since this
         # signal arrives only after pool-refreshed. So all we do here is
         # select the vol we just created.
-        pool = self._current_pool()
-        if not pool or pool.get_connkey() != pool_connkey:
+        curpool = self._current_pool()
+        if curpool != pool:
             return  # pragma: no cover
-
-        # Select the new volume
-        uiutil.set_list_selection(self.widget("vol-list"), volname)
+        uiutil.set_list_selection(self.widget("vol-list"), vol)
 
     def _pool_autostart_changed_cb(self, src):
         self._enable_pool_apply(EDIT_POOL_AUTOSTART)
@@ -666,7 +655,7 @@ class vmmHostStorage(vmmGObjectUI):
         self.emit("cancel-clicked")
 
     def _pool_changed_cb(self, pool):
-        self._update_pool_row(pool.get_connkey())
+        self._update_pool_row(pool)
 
     def _conn_state_changed_cb(self, conn):
         self._refresh_conn_state()

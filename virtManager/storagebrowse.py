@@ -37,8 +37,8 @@ class vmmStorageBrowser(vmmGObjectUI):
         if not self._first_run:
             self._first_run = True
             pool = self.conn.get_default_pool()
-            uiutil.set_list_selection(self.storagelist.widget("pool-list"),
-                pool and pool.get_connkey() or None)
+            uiutil.set_list_selection(
+                    self.storagelist.widget("pool-list"), pool)
 
         self.topwin.set_transient_for(parent)
         self.topwin.present()

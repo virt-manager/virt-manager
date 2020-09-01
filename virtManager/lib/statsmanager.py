@@ -450,6 +450,6 @@ class vmmStatsManager(vmmGObject):
         self._latest_all_stats = self._get_all_stats(conn)
 
     def get_vm_statslist(self, vm):
-        if vm.get_connkey() not in self._vm_stats:
-            self._vm_stats[vm.get_connkey()] = _VMStatsList()
-        return self._vm_stats[vm.get_connkey()]
+        if vm.get_name() not in self._vm_stats:
+            self._vm_stats[vm.get_name()] = _VMStatsList()
+        return self._vm_stats[vm.get_name()]

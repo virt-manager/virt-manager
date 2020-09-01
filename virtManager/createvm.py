@@ -2036,7 +2036,7 @@ class vmmCreateVM(vmmGObjectUI):
         # Kick off pool updates
         for poolname in refresh_pools:
             try:
-                pool = self.conn.get_pool(poolname)
+                pool = self.conn.get_pool_by_name(poolname)
                 self.idle_add(pool.refresh)
             except Exception:  # pragma: no cover
                 log.debug("Error looking up pool=%s for refresh after "
