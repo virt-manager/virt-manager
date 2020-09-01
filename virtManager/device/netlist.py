@@ -345,7 +345,6 @@ class vmmNetworkList(vmmGObjectUI):
                 netlist.set_active_iter(row.iter)
                 return
 
-        print(default_idx)
         netlist.set_active(default_idx)
 
 
