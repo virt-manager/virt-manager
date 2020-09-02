@@ -55,9 +55,8 @@ class _ObjectList(vmmGObject):
         :returns: number of added object to list
         """
         key = self._blacklist_key(obj)
-        if self.in_blacklist(obj):
-            self._blacklist[key] += 1
-        self._blacklist[key] = 1
+        count = self._blacklist.get(key, 0)
+        self._blacklist[key] = count + 1
         return self._blacklist[key]
 
     def remove_blacklist(self, obj):
@@ -65,7 +64,8 @@ class _ObjectList(vmmGObject):
         :param obj: vmmLibvirtObject to remove from blacklist
         :returns: True if object was blacklisted or False otherwise.
         """
-        return bool(self._blacklist.pop(self._blacklist_key(obj), 0))
+        key = self._blacklist_key(obj)
+        return bool(self._blacklist.pop(key, 0))
 
     def in_blacklist(self, obj):
         """
@@ -75,7 +75,8 @@ class _ObjectList(vmmGObject):
         :param obj: vmmLibvirtObject to check
         :returns: True if object is blacklisted
         """
-        return self._blacklist.get(self._blacklist_key(obj), 0) > _ObjectList.BLACKLIST_COUNT
+        key = self._blacklist_key(obj)
+        return self._blacklist.get(key, 0) >= _ObjectList.BLACKLIST_COUNT
 
     def remove(self, obj):
         """
@@ -1042,14 +1043,10 @@ class vmmConnection(vmmGObject):
             if initialize_failed:
                 log.debug("Blacklisting %s=%s", class_name, obj.get_name())
                 count = self._objects.add_blacklist(obj)
-                if count <= _ObjectList.BLACKLIST_COUNT:
-                    log.debug("Object added in blacklist, count=%d", count)
-                else:
-                    log.debug("Object already blacklisted?")
+                log.debug("Object added in blacklist, count=%d", count)
                 return
-            else:
-                self._objects.remove_blacklist(obj)
 
+            self._objects.remove_blacklist(obj)
             if not self._objects.add(obj):
                 log.debug("New %s=%s requested, but it's already tracked.",
                     class_name, obj.get_name())

@@ -113,6 +113,10 @@ class CLITestOptionsClass:
         Spice doesn't return values here when we are just testing
         against seabios in uitests, this fakes it to hit more code paths
     * fake-systray: Enable the fake systray window
+    * object-blacklist=NAME: Make object initialize for that name
+        fail to test some connection code paths
+    * conn-crash: Test connection abruptly closing like when
+        libvirtd is restarted.
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -151,6 +155,8 @@ class CLITestOptionsClass:
         self.fake_vnc_username = _get("fake-vnc-username")
         self.fake_console_resolution = _get("fake-console-resolution")
         self.fake_systray = _get("fake-systray")
+        self.object_blacklist = _get_value("object-blacklist")
+        self.conn_crash = _get("conn-crash")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

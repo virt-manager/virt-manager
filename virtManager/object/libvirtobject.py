@@ -174,6 +174,9 @@ class vmmLibvirtObject(vmmGObject):
 
         initialize_failed = False
         try:
+            if self.config.CLITestOptions.object_blacklist == self._name:
+                raise RuntimeError("fake initialization error")
+
             self._init_libvirt_state()
         except Exception:  # pragma: no cover
             log.debug("Error initializing libvirt state for %s", self,
