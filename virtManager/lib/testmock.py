@@ -95,6 +95,17 @@ def schedule_fake_nodedev_event(conn, lifecycle_cb, update_cb):
     conn.timeout_add(2000, update_cb_wrapper)
 
 
+def fake_openauth(conn, cb, data):
+    ignore = conn
+    import libvirt
+    creds = [
+        [libvirt.VIR_CRED_USERNAME, "Username", None, None, None],
+        [libvirt.VIR_CRED_PASSPHRASE, "Password", None, None, None],
+    ]
+    cb(creds, data)
+    assert all([bool(cred[4]) for cred in creds])
+
+
 class CLITestOptionsClass:
     """
     Helper class for parsing and tracking --test-* options.
@@ -152,6 +163,8 @@ class CLITestOptionsClass:
         libvirtd is restarted.
     * fake-agent-event: Fake a qemu guest agent API event
     * fake-nodedev-event: Fake nodedev API events
+    * fake-openauth: Fake user+pass response from libvirt openauth,
+        for testing the TCP URI auth dialog
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -194,6 +207,7 @@ class CLITestOptionsClass:
         self.conn_crash = _get("conn-crash")
         self.fake_agent_event = _get_value("fake-agent-event")
         self.fake_nodedev_event = _get_value("fake-nodedev-event")
+        self.fake_openauth = _get("fake-openauth")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

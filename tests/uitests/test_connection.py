@@ -55,3 +55,53 @@ class UITestConnection(uiutils.UITestCase):
         manager = self.app.topwin
         self.sleep(2.5)
         uiutils.check(lambda: manager.active)
+
+    def testConnectionOpenauth(self):
+        self.app.open(
+            extra_opts=["--test-options=fake-openauth"],
+            window_name="Authentication required")
+
+        dialog = self.app.root.find("Authentication required")
+        def _run():
+            username = dialog.find("Username:.*entry")
+            password = dialog.find("Password:.*entry")
+            username.click()
+            username.text = "foo"
+            self.pressKey("Enter")
+            uiutils.check(lambda: password.focused)
+            password.typeText("bar")
+
+
+        _run()
+        dialog.find("OK", "push button").click()
+        uiutils.check(lambda: not dialog.showing)
+        manager = self.app.root.find("Virtual Machine Manager", "frame")
+        manager.find("^test testdriver.xml$", "table cell")
+
+        # Disconnect and reconnect to trigger it again
+        def _retrigger_connection():
+            manager.click()
+            c = manager.find_fuzzy("testdriver.xml", "table cell")
+            c.click()
+            c.click(button=3)
+            self.app.root.find("conn-disconnect", "menu item").click()
+            manager.click()
+            c = manager.find_fuzzy("testdriver.xml", "table cell")
+            c.click()
+            c.click(button=3)
+            self.app.root.find("conn-connect", "menu item").click()
+
+        _retrigger_connection()
+        dialog = self.app.root.find("Authentication required")
+        _run()
+        self.pressKey("Enter")
+        uiutils.check(lambda: not dialog.showing)
+        manager = self.app.root.find("Virtual Machine Manager", "frame")
+        manager.find("^test testdriver.xml$", "table cell")
+
+        _retrigger_connection()
+        dialog = self.app.root.find("Authentication required")
+        dialog.find("Cancel", "push button").click()
+        uiutils.check(lambda: not dialog.showing)
+        self._click_alert_button("Unable to connect", "Close")
+        manager.find("test testdriver.xml - Not Connected", "table cell")

@@ -911,7 +911,11 @@ class vmmConnection(vmmGObject):
         exc = None
 
         try:
-            self._backend.open(connectauth.creds_dialog, self)
+            cb = connectauth.creds_dialog
+            data = self
+            if self.config.CLITestOptions.fake_openauth:
+                testmock.fake_openauth(self, cb, data)
+            self._backend.open(cb, data)
             return True, None
         except Exception as e:
             exc = e

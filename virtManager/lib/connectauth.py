@@ -75,7 +75,7 @@ class _vmmConnectAuth(vmmGObjectUI):
             noecho = credtype in [
                     libvirt.VIR_CRED_PASSPHRASE,
                     libvirt.VIR_CRED_NOECHOPROMPT]
-            if not prompt:
+            if not prompt:  # pragma: no cover
                 raise RuntimeError("No prompt for auth credtype=%s" % credtype)
 
             prompt += ": "
@@ -84,6 +84,7 @@ class _vmmConnectAuth(vmmGObjectUI):
             uiutil.set_grid_row_visible(label, True)
             label.set_text(prompt)
             entry.set_visibility(not noecho)
+            entry.get_accessible().set_name(prompt + " entry")
 
     def run(self):
         self.topwin.show()
@@ -96,7 +97,6 @@ class _vmmConnectAuth(vmmGObjectUI):
         self.creds[0][4] = self.entry1.get_text()
         if self.entry2.get_visible():
             self.creds[1][4] = self.entry2.get_text()
-        self.topwin.destroy()
         return 0
 
     def _ok_cb(self, src):
@@ -126,7 +126,8 @@ def creds_dialog(creds, cbdata):
             _conn = cbdata
             dialogobj = _vmmConnectAuth(creds)
             ret = dialogobj.run()
-        except Exception:
+            dialogobj.cleanup()
+        except Exception:  # pragma: no cover
             log.exception("Error from creds dialog")
             ret = -1
         retipc.append(ret)
