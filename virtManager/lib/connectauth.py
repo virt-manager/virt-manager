@@ -23,26 +23,23 @@ from . import uiutil
 
 def do_we_have_session():
     pid = os.getpid()
-    try:
-        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-    except Exception:
-        log.exception("Error getting system bus handle")
-        return
 
-    # Check systemd
-    try:
+    ret = False
+    try:  # pragma: no cover
+        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
         manager = Gio.DBusProxy.new_sync(bus, 0, None,
                         "org.freedesktop.login1",
                         "/org/freedesktop/login1",
                         "org.freedesktop.login1.Manager", None)
 
-        ret = manager.GetSessionByPID("(u)", pid)
-        log.debug("Found login1 session=%s", ret)
-        return True
-    except Exception:
-        log.exception("Couldn't connect to logind")
+        # This raises an error exception
+        out = manager.GetSessionByPID("(u)", pid)
+        log.debug("Found login1 session=%s", out)
+        ret = True
+    except Exception:  # pragma: no cover
+        log.exception("Failure talking to logind")
 
-    return False
+    return ret
 
 
 class _vmmConnectAuth(vmmGObjectUI):
@@ -152,12 +149,12 @@ def connect_error(conn, errmsg, tb, warnconsole):
     if conn.is_remote():
         log.debug("connect_error: conn transport=%s",
             conn.get_uri_transport())
-        if re.search(r"nc: .* -- 'U'", tb):
+        if re.search(r"nc: .* -- 'U'", tb):  # pragma: no cover
             hint += _("The remote host requires a version of netcat/nc "
                       "which supports the -U option.")
             show_errmsg = False
         elif (conn.get_uri_transport() == "ssh" and
-              re.search(r"askpass", tb)):
+                re.search(r"askpass", tb)):  # pragma: no cover
 
             hint += _("Configure SSH key access for the remote host, "
                       "or install an SSH askpass package locally.")
@@ -166,7 +163,7 @@ def connect_error(conn, errmsg, tb, warnconsole):
             hint += _("Verify that the 'libvirtd' daemon is running "
                       "on the remote host.")
 
-    elif conn.is_xen():
+    elif conn.is_xen():  # pragma: no cover
         hint += _("Verify that:\n"
                   " - A Xen host kernel was booted\n"
                   " - The Xen service has been started")
@@ -178,7 +175,7 @@ def connect_error(conn, errmsg, tb, warnconsole):
                       "may not be able to connect to libvirt as a "
                       "regular user. Try running as root.")
             show_errmsg = False
-        elif re.search(r"libvirt-sock", tb):
+        elif re.search(r"libvirt-sock", tb):  # pragma: no cover
             hint += _("Verify that the 'libvirtd' daemon is running.")
             show_errmsg = False
 
@@ -222,7 +219,7 @@ def _start_libvirtd(config):
                                  "org.freedesktop.systemd1.Manager", None)
         units = systemd.ListUnits()
         log.debug("Successfully listed units via systemd")
-    except Exception:
+    except Exception:  # pragma: no cover
         units = []
         log.exception("Couldn't connect to systemd")
         libvirtd_installed = os.path.exists("/var/run/libvirt")
@@ -242,7 +239,7 @@ def _start_libvirtd(config):
 
     # If it's not running, try to start it
     try:
-        if unitpath and libvirtd_installed and not libvirtd_active:
+        if unitpath and libvirtd_installed and not libvirtd_active:  # pragma: no cover
             unit = Gio.DBusProxy.new_sync(
                     bus, 0, None,
                     "org.freedesktop.systemd1", unitpath,
@@ -251,7 +248,7 @@ def _start_libvirtd(config):
                 unit.Start("(s)", "fail")
                 time.sleep(2)
                 libvirtd_active = True
-    except Exception:
+    except Exception:  # pragma: no cover
         log.exception("Error starting libvirtd")
 
     return libvirtd_installed, libvirtd_active
@@ -268,17 +265,17 @@ def setup_first_uri(config, tryuri):
 
     # Manager fail message
     msg = ""
-    if not libvirtd_installed:
+    if not libvirtd_installed:  # pragma: no cover
         msg += _("The libvirtd service does not appear to be installed. "
                  "Install and run the libvirtd service to manage "
                  "virtualization on this host.")
-    elif not libvirtd_active:
+    elif not libvirtd_active:  # pragma: no cover
         msg += _("libvirtd is installed but not running. Start the "
                  "libvirtd service to manage virtualization on this host.")
 
     if not tryuri or "qemu" not in tryuri:
         if msg:
-            msg += "\n\n"
+            msg += "\n\n"  # pragma: no cover
         msg += _("Could not detect a default hypervisor. Make "
                 "sure the appropriate QEMU/KVM virtualization "
                 "packages are installed to manage virtualization "
