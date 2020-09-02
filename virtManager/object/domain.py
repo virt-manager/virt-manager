@@ -1388,7 +1388,7 @@ class vmmDomain(vmmLibvirtObject):
 
 
     def migrate(self, destconn, dest_uri=None,
-            tunnel=False, unsafe=False, temporary=False, meter=None):
+            tunnel=False, unsafe=False, temporary=False, xml=None, meter=None):
         self._cancel_set_time()
         self._install_abort = True
 
@@ -1417,12 +1417,15 @@ class vmmDomain(vmmLibvirtObject):
         params = {}
         if dest_uri and not tunnel:
             params[libvirt.VIR_MIGRATE_PARAM_URI] = dest_uri
+        if xml:
+            params[libvirt.VIR_MIGRATE_PARAM_DEST_XML] = xml
 
         if self.conn.is_test() and "TESTSUITE-FAKE" in (dest_uri or ""):
             # If using the test driver and a special URI, fake successful
             # migration so we can test more of the migration wizard
             time.sleep(3)
-            xml = self.get_xml_to_define()
+            if not xml:
+                xml = self.get_xml_to_define()
             destconn.define_domain(xml).create()
             self.delete()
         elif tunnel:

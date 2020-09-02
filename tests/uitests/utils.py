@@ -265,7 +265,9 @@ def drag(win, x, y):
     """
     Drag a window to the x/y coordinates
     """
-    win.click()
+    time.sleep(.5)
+    win.click_title()
+    time.sleep(.5)
     clickX, clickY = _title_coordinates(win)
     dogtail.rawinput.drag((clickX, clickY), (x, y))
 

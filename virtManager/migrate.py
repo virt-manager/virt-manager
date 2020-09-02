@@ -17,6 +17,7 @@ from .asyncjob import vmmAsyncJob
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
 from .object.domain import vmmDomain
+from .xmleditor import vmmXMLEditor
 
 
 NUM_COLS = 3
@@ -40,6 +41,12 @@ class vmmMigrateDialog(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "migrate.ui", "vmm-migrate")
         self.vm = None
 
+        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
+                self.widget("details-box-align"),
+                self.widget("details-box"))
+        self._xmleditor.connect("xml-requested",
+                self._xmleditor_xml_requested_cb)
+
         self.builder.connect_signals({
             "on_vmm_migrate_delete_event": self._delete_event,
             "on_migrate_cancel_clicked": self._cancel_clicked,
@@ -58,6 +65,8 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def _cleanup(self):
         self.vm = None
+        self._xmleditor.cleanup()
+        self._xmleditor = None
 
     @property
     def _connobjs(self):
@@ -147,6 +156,8 @@ class vmmMigrateDialog(vmmGObjectUI):
             self.widget("migrate-temporary-label").get_tooltip_text())
 
     def _reset_state(self):
+        self._xmleditor.reset_state()
+
         title_str = _("<span size='large'>Migrate '%(vm)s'</span>") % {
             "vm": xmlutil.xml_escape(self.vm.get_name()),
         }
@@ -348,6 +359,11 @@ class vmmMigrateDialog(vmmGObjectUI):
 
     def _finish(self):
         try:
+            xml = None
+            if self._xmleditor.is_xml_selected():
+                xml = self._xmleditor.get_xml()
+                log.debug("Using XML from xmleditor:\n%s", xml)
+
             row = uiutil.get_list_selected_row(self.widget("migrate-dest"))
             destlabel = row[COL_LABEL]
             destconn = self._connobjs.get(row[COL_URI])
@@ -378,7 +394,7 @@ class vmmMigrateDialog(vmmGObjectUI):
 
         progWin = vmmAsyncJob(
             self._async_migrate,
-            [self.vm, destconn, uri, tunnel, unsafe, temporary],
+            [self.vm, destconn, uri, tunnel, unsafe, temporary, xml],
             self._finish_cb, [destconn],
             _("Migrating VM '%s'") % self.vm.get_name(),
             (_("Migrating VM '%(name)s' to %(host)s. This may take a while.") %
@@ -398,7 +414,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         asyncjob.job_canceled = True  # pragma: no cover
 
     def _async_migrate(self, asyncjob,
-            origvm, origdconn, migrate_uri, tunnel, unsafe, temporary):
+            origvm, origdconn, migrate_uri, tunnel, unsafe, temporary, xml):
         meter = asyncjob.get_meter()
 
         srcconn = origvm.conn
@@ -410,5 +426,12 @@ class vmmMigrateDialog(vmmGObjectUI):
         log.debug("Migrating vm=%s from %s to %s", vm.get_name(),
                       srcconn.get_uri(), dstconn.get_uri())
 
-        vm.migrate(dstconn, migrate_uri, tunnel, unsafe, temporary,
+        vm.migrate(dstconn, migrate_uri, tunnel, unsafe, temporary, xml,
             meter=meter)
+
+    ################
+    # UI listeners #
+    ################
+
+    def _xmleditor_xml_requested_cb(self, src):
+        self._xmleditor.set_xml(self.vm.xmlobj.get_xml())
