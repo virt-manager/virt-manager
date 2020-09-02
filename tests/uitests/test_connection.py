@@ -47,3 +47,11 @@ class UITestConnection(uiutils.UITestCase):
         self.sleep(1)
         manager.find(r"^test testdriver.xml - Not Connected", "table cell")
         uiutils.check(lambda: manager.active)
+
+    def testConnectionFakeEvents(self):
+        self.app.open(
+            extra_opts=["--test-options=fake-nodedev-event=computer",
+                        "--test-options=fake-agent-event=test-many-devices"])
+        manager = self.app.topwin
+        self.sleep(2.5)
+        uiutils.check(lambda: manager.active)

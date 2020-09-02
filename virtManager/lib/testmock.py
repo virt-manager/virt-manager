@@ -62,6 +62,39 @@ def fake_dhcp_leases():
     return ret
 
 
+def schedule_fake_agent_event(conn, cb):
+    import libvirt
+    vmname = conn.config.CLITestOptions.fake_agent_event
+    backend = conn.get_backend()
+    state = libvirt.VIR_CONNECT_DOMAIN_EVENT_AGENT_LIFECYCLE_STATE_CONNECTED
+    reason = libvirt.VIR_CONNECT_DOMAIN_EVENT_AGENT_LIFECYCLE_REASON_CHANNEL
+
+    def time_cb():
+        dom = backend.lookupByName(vmname)
+        cb(backend, dom, state, reason, None)
+
+    conn.timeout_add(1000, time_cb)
+
+
+def schedule_fake_nodedev_event(conn, lifecycle_cb, update_cb):
+    import libvirt
+    nodename = conn.config.CLITestOptions.fake_nodedev_event
+    backend = conn.get_backend()
+
+    def lifecycle_cb_wrapper():
+        nodedev = backend.nodeDeviceLookupByName(nodename)
+        state = libvirt.VIR_NODE_DEVICE_EVENT_CREATED
+        reason = 0
+        lifecycle_cb(backend, nodedev, state, reason, None)
+
+    def update_cb_wrapper():
+        nodedev = backend.nodeDeviceLookupByName(nodename)
+        update_cb(backend, nodedev, None)
+
+    conn.timeout_add(1000, lifecycle_cb_wrapper)
+    conn.timeout_add(2000, update_cb_wrapper)
+
+
 class CLITestOptionsClass:
     """
     Helper class for parsing and tracking --test-* options.
@@ -117,6 +150,8 @@ class CLITestOptionsClass:
         fail to test some connection code paths
     * conn-crash: Test connection abruptly closing like when
         libvirtd is restarted.
+    * fake-agent-event: Fake a qemu guest agent API event
+    * fake-nodedev-event: Fake nodedev API events
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -157,6 +192,8 @@ class CLITestOptionsClass:
         self.fake_systray = _get("fake-systray")
         self.object_blacklist = _get_value("object-blacklist")
         self.conn_crash = _get("conn-crash")
+        self.fake_agent_event = _get_value("fake-agent-event")
+        self.fake_nodedev_event = _get_value("fake-nodedev-event")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

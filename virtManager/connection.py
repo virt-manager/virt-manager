@@ -16,6 +16,7 @@ from virtinst import log
 from virtinst import pollhelpers
 
 from .lib import connectauth
+from .lib import testmock
 from .baseclass import vmmGObject
 from .lib.libvirtenummap import LibvirtEnumMap
 from .object.domain import vmmDomain
@@ -754,6 +755,10 @@ class vmmConnection(vmmGObject):
                 self._domain_cb_ids.append(
                     self.get_backend().domainEventRegisterAny(
                     None, eventid, cb, eventname))
+
+                if (eventname == "VIR_DOMAIN_EVENT_ID_AGENT_LIFECYCLE" and
+                    self.config.CLITestOptions.fake_agent_event):
+                    testmock.schedule_fake_agent_event(self, cb)
             except Exception as e:  # pragma: no cover
                 log.debug("Error registering %s event: %s",
                     eventname, e)
@@ -802,12 +807,19 @@ class vmmConnection(vmmGObject):
 
             eventid = getattr(libvirt, "VIR_NODE_DEVICE_EVENT_ID_LIFECYCLE", 0)
             updateid = getattr(libvirt, "VIR_NODE_DEVICE_EVENT_ID_UPDATE", 1)
+            lifecycle_cb = self._node_device_lifecycle_event
+            update_cb = self._node_device_update_event
+
             self._node_device_cb_ids.append(
                 self.get_backend().nodeDeviceEventRegisterAny(
-                None, eventid, self._node_device_lifecycle_event, None))
+                None, eventid, lifecycle_cb, None))
             self._node_device_cb_ids.append(
                 self.get_backend().nodeDeviceEventRegisterAny(
-                None, updateid, self._node_device_update_event, None))
+                None, updateid, update_cb, None))
+
+            if self.config.CLITestOptions.fake_nodedev_event:
+                testmock.schedule_fake_nodedev_event(self,
+                        lifecycle_cb, update_cb)
 
             self.using_node_device_events = True
             log.debug("Using node device events")
