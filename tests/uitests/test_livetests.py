@@ -27,7 +27,9 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 self.conn = conn
                 extra_opts = (opts or [])
                 extra_opts += ["--show-domain-console", vmname]
-                self.app.open(extra_opts=extra_opts)
+                # Enable stats for more code coverage
+                keyfile = "statsonly.ini"
+                self.app.open(extra_opts=extra_opts, keyfile=keyfile)
                 fn(self, dom, *args, **kwargs)
             finally:
                 try:

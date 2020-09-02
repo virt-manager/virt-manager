@@ -112,8 +112,6 @@ class _ObjectList(vmmGObject):
                 if (checkobj.__class__ == obj.__class__ and
                     checkobj.get_name() == obj.get_name()):
                     return False
-            if obj in self._objects:
-                return False
 
             self._objects.append(obj)
             return True
@@ -249,7 +247,7 @@ class vmmConnection(vmmGObject):
             if compare_cb():
                 return
             if (cur_time - start_time) >= timeout:
-                return
+                return  # pragma: no cover
 
             if is_main_thread:
                 if Gtk.events_pending():
@@ -311,7 +309,7 @@ class vmmConnection(vmmGObject):
 
     def host_active_processor_count(self):
         if not self._backend.is_open() or self._hostinfo is None:
-            return 0
+            return 0  # pragma: no cover
         return self._hostinfo[2]
 
 
@@ -348,21 +346,21 @@ class vmmConnection(vmmGObject):
         uri = self.get_uri().replace("/", "_")
         ret = os.path.join(self._backend.get_app_cache_dir(), uri)
         if not os.path.exists(ret):
-            os.makedirs(ret, 0o755)
+            os.makedirs(ret, 0o755)  # pragma: no cover
         return ret
 
     def get_default_storage_format(self):
         raw = self.config.get_default_storage_format(raw=True)
         if raw != "default":
-            return raw
+            return raw  # pragma: no cover
 
         fmt = self.config.get_default_storage_format()
         if fmt != "qcow2":
-            return fmt
+            return fmt  # pragma: no cover
 
         if self.support.conn_default_qcow2():
             return fmt
-        return None
+        return None  # pragma: no cover
 
 
     ####################################
@@ -582,7 +580,7 @@ class vmmConnection(vmmGObject):
                 log.debug("Error defining new name %s XML",
                     obj.class_name(), exc_info=True)
                 newobj = define_cb(origxml)
-            except Exception as fixerr:
+            except Exception as fixerr:  # pragma: no cover
                 log.debug("Failed to redefine original %s!",
                     obj.class_name(), exc_info=True)
                 msg = _("%(object)s rename failed. Attempting to recover also "
@@ -622,10 +620,8 @@ class vmmConnection(vmmGObject):
         log.debug("domain xmlmisc event: domain=%s event=%s args=%s",
                 name, eventstr, args)
         obj = self.get_vm_by_name(name)
-        if not obj:
-            return
-
-        self.idle_add(obj.recache_from_event_loop)
+        if obj:
+            self.idle_add(obj.recache_from_event_loop)
 
     def _domain_lifecycle_event(self, conn, domain, state, reason, userdata):
         ignore = conn
@@ -655,7 +651,7 @@ class vmmConnection(vmmGObject):
         if obj:
             self.idle_add(obj.recache_from_event_loop)
         else:
-            self.schedule_priority_tick(pollvm=True, force=True)
+            self.schedule_priority_tick(pollvm=True, force=True)  # pragma: no cover
 
     def _network_lifecycle_event(self, conn, network, state, reason, userdata):
         ignore = conn
@@ -863,14 +859,14 @@ class vmmConnection(vmmGObject):
         self._stats = []
 
         if self._init_object_event:
-            self._init_object_event.clear()
+            self._init_object_event.clear()  # pragma: no cover
 
         for obj in self._objects.all_objects():
             self._objects.remove(obj)
             try:
                 self._remove_object_signal(obj)
                 obj.cleanup()
-            except Exception as e:  # pramga: no cover
+            except Exception as e:  # pragma: no cover
                 log.debug("Failed to cleanup %s: %s", obj, e)
         self._objects.cleanup()
         self._objects = _ObjectList()
@@ -893,6 +889,9 @@ class vmmConnection(vmmGObject):
         self._backend.cb_fetch_all_nodedevs = None
         self._backend.cb_fetch_all_vols = None
         self._backend.cb_cache_new_pool = None
+
+        self.statsmanager.cleanup()
+        self.statsmanager = None
 
     def open(self):
         if not self.is_disconnected():
@@ -931,7 +930,7 @@ class vmmConnection(vmmGObject):
                 libvirt_error_message = exc.get_error_message()
 
         if (libvirt_error_code ==
-            getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None)):
+            getattr(libvirt, "VIR_ERR_AUTH_CANCELLED", None)):  # pragma: no cover
             log.debug("User cancelled auth, not raising any error.")
             return False, None
 
@@ -999,19 +998,19 @@ class vmmConnection(vmmGObject):
             log.debug("Building default pool failed: %s", str(e))
 
     def _open_thread(self):
-        ConnectError = None
         try:
             is_active, ConnectError = self._do_open()
             if is_active:
                 self._populate_initial_state()
-
-            self.idle_add(self._change_state, is_active and
-                self._STATE_ACTIVE or self._STATE_DISCONNECTED)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             is_active = False
-            self._schedule_close()
             ConnectError = connectauth.connect_error(self, str(e),
                     "".join(traceback.format_exc()), False)
+
+        if is_active:
+            self.idle_add(self._change_state, self._STATE_ACTIVE)
+        else:
+            self._schedule_close()
 
         self.idle_emit("open-completed", ConnectError)
 
@@ -1041,10 +1040,7 @@ class vmmConnection(vmmGObject):
 
         for obj in gone_objects:
             class_name = obj.class_name()
-            try:
-                name = obj.get_name()
-            except Exception:
-                name = str(obj)
+            name = obj.get_name()
 
             if not self._objects.remove(obj):
                 log.debug("Requested removal of %s=%s, but it's "
@@ -1241,9 +1237,10 @@ class vmmConnection(vmmGObject):
                      libvirt.VIR_ERR_SYSTEM_ERROR)):
                     # Try a simple getInfo call to see if conn was dropped
                     self._backend.getInfo()
-                    log.debug("vm tick raised system error but "
-                                  "connection doesn't seem to have dropped. "
-                                  "Ignoring.")
+                    log.debug(  # pragma: no cover
+                            "vm tick raised system error but "
+                            "connection doesn't seem to have dropped. "
+                            "Ignoring.")
 
         if stats_update:
             self._recalculate_stats(
@@ -1258,7 +1255,7 @@ class vmmConnection(vmmGObject):
         expected = self.config.get_stats_history_length()
         current = len(self._stats)
         if current > expected:
-            del self._stats[expected:current]
+            del self._stats[expected:current]  # pragma: no cover
 
         mem = 0
         cpuTime = 0
@@ -1339,7 +1336,7 @@ class vmmConnection(vmmGObject):
         vector = []
         statslen = self.config.get_stats_history_length() + 1
         if limit is not None:
-            statslen = min(statslen, limit)
+            statslen = min(statslen, limit)  # pragma: no cover
 
         for i in range(statslen):
             if i < len(self._stats):
@@ -1385,7 +1382,7 @@ class vmmConnection(vmmGObject):
     def set_config_pretty_name(self, value):
         cfgname = self._get_config_pretty_name()
         if value == cfgname:
-            return
+            return  # pragma: no cover
         if not cfgname and value == self.get_pretty_desc():
             # Don't encode the default connection value into gconf right
             # away, require the user to edit it first
