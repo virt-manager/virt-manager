@@ -105,3 +105,8 @@ class UITestConnection(uiutils.UITestCase):
         uiutils.check(lambda: not dialog.showing)
         self._click_alert_button("Unable to connect", "Close")
         manager.find("test testdriver.xml - Not Connected", "table cell")
+
+    def testConnectionSessionError(self):
+        self.app.open(
+            extra_opts=["--test-options=fake-session-error"])
+        self._click_alert_button("Could not detect a local session", "Close")

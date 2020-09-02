@@ -165,6 +165,8 @@ class CLITestOptionsClass:
     * fake-nodedev-event: Fake nodedev API events
     * fake-openauth: Fake user+pass response from libvirt openauth,
         for testing the TCP URI auth dialog
+    * fake-session-error: Fake a connection open error that
+        triggers logind session lookup
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -208,6 +210,7 @@ class CLITestOptionsClass:
         self.fake_agent_event = _get_value("fake-agent-event")
         self.fake_nodedev_event = _get_value("fake-nodedev-event")
         self.fake_openauth = _get("fake-openauth")
+        self.fake_session_error = _get("fake-session-error")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

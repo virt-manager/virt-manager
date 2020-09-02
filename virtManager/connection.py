@@ -915,6 +915,11 @@ class vmmConnection(vmmGObject):
             data = self
             if self.config.CLITestOptions.fake_openauth:
                 testmock.fake_openauth(self, cb, data)
+            if self.config.CLITestOptions.fake_session_error:
+                lerr = libvirt.libvirtError("fake session error")
+                lerr.err = [libvirt.VIR_ERR_AUTH_FAILED, None,
+                            "fake session error not authorized"]
+                raise lerr
             self._backend.open(cb, data)
             return True, None
         except Exception as e:
@@ -935,8 +940,9 @@ class vmmConnection(vmmGObject):
             log.debug("Looks like we might have failed policykit "
                           "auth. Checking to see if we have a valid "
                           "console session")
-            if (not self.is_remote() and
-                not connectauth.do_we_have_session()):
+            if not self.is_remote():
+                warnconsole = bool(not connectauth.do_we_have_session())
+            if self.config.CLITestOptions.fake_session_error:
                 warnconsole = True
 
         ConnectError = connectauth.connect_error(
