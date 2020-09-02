@@ -38,3 +38,12 @@ class UITestConnection(uiutils.UITestCase):
         self.sleep(.5)
         uiutils.check(
                 lambda: "test-many-devices" not in self.app.topwin.fmt_nodes())
+
+    def testConnectionConnCrash(self):
+        self.app.open(
+            extra_opts=["--test-options=conn-crash"])
+        manager = self.app.topwin
+
+        self.sleep(1)
+        manager.find(r"^test testdriver.xml - Not Connected", "table cell")
+        uiutils.check(lambda: manager.active)
