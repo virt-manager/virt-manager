@@ -1205,6 +1205,12 @@ class vmmConnection(vmmGObject):
                 elif obj.is_nodedev() and not pollnodedev:
                     continue
 
+                if self.config.CLITestOptions.conn_crash:
+                    self._backend.close()
+                    e = libvirt.libvirtError("fake error")
+                    e.err = [libvirt.VIR_ERR_SYSTEM_ERROR]
+                    raise e
+
                 obj.tick(stats_update=stats_update)
             except Exception as e:
                 log.exception("Tick for %s failed", obj)
