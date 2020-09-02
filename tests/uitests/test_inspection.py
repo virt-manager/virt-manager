@@ -29,6 +29,8 @@ class VMMInspection(uiutils.UITestCase):
         # Use the test suite inspection mocking to test parts
         # of the UI that interact with inspection data
         self.app.open(enable_libguestfs=True)
+        manager = self.app.topwin
+
         details = self._open_details_window("test-clone")
         details.find("OS information", "table cell").click()
         tab = details.find("os-tab")
@@ -53,3 +55,18 @@ class VMMInspection(uiutils.UITestCase):
         details.find("OS information", "table cell").click()
         tab = details.find("os-tab")
         tab.find_fuzzy("Fake test error no disks")
+
+        # Closing and reopening a connection triggers some libguest
+        # cache reading
+        details.keyCombo("<alt>F4")
+        manager.click()
+        c = manager.find_fuzzy("testdriver.xml", "table cell")
+        c.click()
+        c.click(button=3)
+        self.app.root.find("conn-disconnect", "menu item").click()
+        manager.click()
+        c = manager.find_fuzzy("testdriver.xml", "table cell")
+        c.click()
+        c.click(button=3)
+        self.app.root.find("conn-connect", "menu item").click()
+        self.sleep(2)

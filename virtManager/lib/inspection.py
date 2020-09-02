@@ -58,7 +58,7 @@ def _make_fake_data(vm):
     return data
 
 
-def _perform_inspection(conn, vm):
+def _perform_inspection(conn, vm):  # pragma: no cover
     """
     Perform the actual guestfs interaction and return results in
     a vmmInspectionData object
@@ -191,7 +191,7 @@ class vmmInspection(vmmGObject):
     def get_instance(cls):
         if not cls._instance:
             if not cls.libguestfs_installed():
-                return None
+                return None  # pragma: no cover
             cls._instance = vmmInspection()
         return cls._instance
 
@@ -202,10 +202,10 @@ class vmmInspection(vmmGObject):
                 import guestfs as ignore  # pylint: disable=import-error
                 log.debug("python guestfs is installed")
                 cls._libguestfs_installed = True
-            except ImportError:
+            except ImportError:  # pragma: no cover
                 log.debug("python guestfs is not installed")
                 cls._libguestfs_installed = False
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("error importing guestfs",
                         exc_info=True)
                 cls._libguestfs_installed = False
@@ -230,7 +230,7 @@ class vmmInspection(vmmGObject):
         connmanager.connect("conn-added", self._conn_added_cb)
         connmanager.connect("conn-removed", self._conn_removed_cb)
         for conn in connmanager.conns.values():
-            self._conn_added_cb(connmanager, conn)
+            self._conn_added_cb(connmanager, conn)  # pragma: no cover
 
         self._start()
 
@@ -242,11 +242,11 @@ class vmmInspection(vmmGObject):
     def _conn_added_cb(self, connmanager, conn):
         uri = conn.get_uri()
         if uri in self._uris:
-            return
+            return  # pragma: no cover
 
         self._uris.append(uri)
         conn.connect("vm-added", self._vm_added_cb)
-        for vm in conn.list_vms():
+        for vm in conn.list_vms():  # pragma: no cover
             self._vm_added_cb(conn, vm.get_name())
 
     def _conn_removed_cb(self, connmanager, uri):
@@ -255,7 +255,7 @@ class vmmInspection(vmmGObject):
     def _vm_added_cb(self, conn, vm):
         # Called by the main thread whenever a VM is added to vmlist.
         name = vm.get_name()
-        if name.startswith("guestfs-"):
+        if name.startswith("guestfs-"):  # pragma: no cover
             log.debug("ignore libvirt/guestfs temporary VM %s", name)
             return
 
@@ -290,11 +290,11 @@ class vmmInspection(vmmGObject):
         connmanager = vmmConnectionManager.get_instance()
         conn = connmanager.conns.get(uri)
         if not conn:
-            return
+            return  # pragma: no cover
 
         vm = conn.get_vm_by_name(vmname)
         if not vm:
-            return
+            return  # pragma: no cover
 
         # Try processing a single VM, keeping into account whether it was
         # visited already, and whether there are cached data for it.
@@ -313,7 +313,7 @@ class vmmInspection(vmmGObject):
 
         try:
             data = self._inspect_vm(conn, vm)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             data = _inspection_error(_("Error inspection VM: %s") % str(e))
             log.exception("%s: exception while processing", prettyvm)
 
@@ -321,15 +321,15 @@ class vmmInspection(vmmGObject):
 
     def _inspect_vm(self, conn, vm):
         if self._thread is None:
-            return
+            return  # pragma: no cover
 
-        if conn.is_remote():
+        if conn.is_remote():  # pragma: no cover
             return _inspection_error(
                     _("Cannot inspect VM on remote connection"))
         if conn.is_test():
             return _make_fake_data(vm)
 
-        return _perform_inspection(conn, vm)
+        return _perform_inspection(conn, vm)  # pragma: no cover
 
 
     ##############
