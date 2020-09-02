@@ -102,7 +102,6 @@ class VMMMigrate(uiutils.UITestCase):
         uiutils.check(lambda: not progwin.showing, timeout=5)
         uiutils.check(lambda: not mig.showing)
 
-
     def testMigrateConnMismatch(self):
         # Add a possible target but disconnect it
         self.app.uri = utils.URIs.test_default
@@ -120,3 +119,35 @@ class VMMMigrate(uiutils.UITestCase):
         mig.find("conn-combo").find("No usable", "menu item")
         mig.keyCombo("<alt>F4")
         uiutils.check(lambda: not mig.showing)
+
+    def testMigrateXMLEditor(self):
+        self.app.open(xmleditor_enabled=True)
+        manager = self.app.topwin
+
+        # Add an additional connection
+        self._add_conn("test:///default")
+
+        # Run it and check some values
+        vmname = "test-many-devices"
+        win = self._open_migrate(vmname)
+        win.find("address-text").set_text("TESTSUITE-FAKE")
+
+        # Create a new obj with XML edited name, verify it worked
+        newname = "aafroofroo"
+        win.find("XML", "page tab").click()
+        xmleditor = win.find("XML editor")
+        newtext = xmleditor.text.replace(
+                ">%s<" % vmname, ">%s<" % newname)
+        xmleditor.set_text(newtext)
+        win.find("Migrate", "push button").click()
+        uiutils.check(lambda: not win.showing, timeout=10)
+
+        manager.find(newname, "table cell")
+
+        # Do standard xmleditor tests
+        win = self._open_migrate(vmname)
+        win.find("address-text").set_text("TESTSUITE-FAKE")
+        finish = win.find("Migrate", "push button")
+        self._test_xmleditor_interactions(win, finish)
+        win.find("Cancel", "push button").click()
+        uiutils.check(lambda: not win.visible)
