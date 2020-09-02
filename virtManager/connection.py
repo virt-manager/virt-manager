@@ -1291,39 +1291,11 @@ class vmmConnection(vmmGObject):
         vmmEngine.get_instance().schedule_priority_tick(self, kwargs)
 
     def tick_from_engine(self, *args, **kwargs):
-        e = None
         try:
             self._tick(*args, **kwargs)
-        except Exception as err:
-            e = err
-
-        if e is None:
-            return
-
-        from_remote = getattr(libvirt, "VIR_FROM_REMOTE", None)
-        from_rpc = getattr(libvirt, "VIR_FROM_RPC", None)
-        sys_error = getattr(libvirt, "VIR_ERR_SYSTEM_ERROR", None)
-        internal_error = getattr(libvirt, "VIR_ERR_INTERNAL_ERROR", None)
-
-        dom = -1
-        code = -1
-        if isinstance(e, libvirt.libvirtError):
-            # pylint: disable=no-member
-            dom = e.get_error_domain()
-            code = e.get_error_code()
-
-        log.debug("Error polling connection %s",
-            self.get_uri(), exc_info=True)
-
-        if (dom in [from_remote, from_rpc] and
-            code in [sys_error, internal_error]):
-            e = None
-            log.debug("Not showing user error since libvirtd "
-                "appears to have stopped.")
-
-        self._schedule_close()
-        if e:
-            raise e  # pylint: disable=raising-bad-type
+        except Exception:
+            self._schedule_close()
+            raise
 
 
     ########################
