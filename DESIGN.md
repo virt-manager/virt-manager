@@ -105,6 +105,8 @@ Some examples:
   * [hiding viewer window borders](https://www.redhat.com/archives/virt-tools-list/2019-January/msg00000.html)
   * [keypress delay](https://bugzilla.redhat.com/show_bug.cgi?id=1410943)
   * [SPICE/QXL multidisplay support](https://bugzilla.redhat.com/show_bug.cgi?id=885806)
+  * support for [manual key combinations](https://bugzilla.redhat.com/show_bug.cgi?id=1014666), or adding custom values.
+  * Any feature that goes beyond what virt-viewer or other clients provide. virt-manager should not be the home for clever console/viewer behavior
 
 * UI scalability features to manage large amounts of VMs
   * [custom manager columns for VM organizing](https://www.redhat.com/archives/virt-tools-list/2019-April/msg00059.html)
