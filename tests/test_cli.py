@@ -1298,13 +1298,14 @@ c.add_compare("--add-device --network default --os-variant http://fedoraproject.
 # virt-clone tests #
 ####################
 
-_CLONE_UNMANAGED = "--original-xml %s/clone-disk.xml" % XMLDIR
-_CLONE_MANAGED = "--original-xml %s/clone-disk-managed.xml" % XMLDIR
-_CLONE_NOEXIST = "--original-xml %s/clone-disk-noexist.xml" % XMLDIR
-_CLONE_NVRAM = "--original-xml %s/clone-nvram-auto.xml" % XMLDIR
-_CLONE_NVRAM_NEWPOOL = "--original-xml %s/clone-nvram-newpool.xml" % XMLDIR
-_CLONE_NVRAM_MISSING = "--original-xml %s/clone-nvram-missing.xml" % XMLDIR
-_CLONE_EMPTY = "--original-xml %s/clone-empty.xml" % XMLDIR
+_CLONEXMLDIR = XMLDIR + "/clone"
+_CLONE_UNMANAGED = "--original-xml %s/clone-disk.xml" % _CLONEXMLDIR
+_CLONE_MANAGED = "--original-xml %s/clone-disk-managed.xml" % _CLONEXMLDIR
+_CLONE_NOEXIST = "--original-xml %s/clone-disk-noexist.xml" % _CLONEXMLDIR
+_CLONE_NVRAM = "--original-xml %s/clone-nvram-auto.xml" % _CLONEXMLDIR
+_CLONE_NVRAM_NEWPOOL = "--original-xml %s/clone-nvram-newpool.xml" % _CLONEXMLDIR
+_CLONE_NVRAM_MISSING = "--original-xml %s/clone-nvram-missing.xml" % _CLONEXMLDIR
+_CLONE_EMPTY = "--original-xml %s/clone-empty.xml" % _CLONEXMLDIR
 
 vclon = App("virt-clone")
 c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
@@ -1318,6 +1319,7 @@ c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone", "clone-auto1")
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone", "clone-auto2")
 c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM + " --auto-clone", "clone-nvram")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM + " --auto-clone --nvram /nvram/my-custom-path", "clone-nvram-path")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_MISSING + " --auto-clone", "nvram-missing")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
@@ -1333,14 +1335,14 @@ c.add_invalid("-n clonetest " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11
 c.add_invalid("--auto-clone")  # Just the auto flag
 c.add_invalid(_CLONE_EMPTY + " --file foo")  # Didn't specify new name
 c.add_invalid(_CLONE_EMPTY + " --auto-clone -n test")  # new name raises error
-c.add_invalid("-o test --auto-clone", grep="shutoff")  # VM is running, but --clone-running isn't passed
+c.add_invalid("-o test --auto-clone", grep="shutoff")  # VM is running
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s")  # Should complain about overwriting existing file
 c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-full --auto-clone", grep="not enough free space")  # catch failure of clone path setting
 
 
 c = vclon.add_category("general", "-n clonetest")
-c.add_valid("-o test --clone-running --auto-clone --replace")  # Auto flag, no storage, --replace is redundant
+c.add_valid(_CLONE_EMPTY + " --auto-clone --replace")  # --replace but it doesn't matter, should be safely ignored
 c.add_valid(_CLONE_EMPTY + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # Nodisk, but with spurious files passed
 c.add_valid(_CLONE_EMPTY + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --prompt")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s")  # XML File with 2 disks
@@ -1350,18 +1352,17 @@ c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s
 c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s")  # XML w/ managed storage, specify managed path
 c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s --reflink")  # XML w/ managed storage, specify managed path, use --reflink option
-c.add_valid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
-c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone -n test --auto-clone --replace")  # Overwriting existing running VM
+c.add_valid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools
+c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone -n test --auto-clone --replace", "replace")  # Overwriting existing running VM
+c.add_valid(_CLONE_MANAGED + " --auto-clone --force-copy fda")  # force copy empty floppy drive
 c.add_invalid(_CLONE_EMPTY + " foobar")  # Positional arguments error
 c.add_invalid("-o idontexist")  # Non-existent vm name
 c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto flag,
 c.add_invalid(_CLONE_EMPTY + " -n test")  # Colliding new name
 c.add_invalid(_CLONE_UNMANAGED + "")  # XML file with several disks, but non specified
-c.add_invalid(_CLONE_UNMANAGED + " --file virt-install --file %(EXISTIMG1)s")  # XML w/ disks, overwriting existing files with no --preserve
-c.add_invalid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=hdc")  # XML w/ disks, force copy but not enough disks passed
-c.add_invalid(_CLONE_MANAGED + " --file /tmp/clonevol")  # XML w/ managed storage, specify unmanaged path (should fail)
-c.add_invalid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s")  # XML w/ non-existent storage, WITHOUT --preserve
-c.add_valid(_CLONE_MANAGED + " --auto-clone --force-copy fda")  # force copy empty floppy drive
+c.add_invalid(_CLONE_UNMANAGED + " --file virt-install", grep="overwrite the existing path 'virt-install'")  # XML w/ disks, overwriting existing files with no --preserve
+c.add_invalid(_CLONE_MANAGED + " --file /tmp/clonevol", grep="matching name 'default-vol'")  # will attempt to clone across pools, which test driver doesn't support
+c.add_invalid(_CLONE_NOEXIST + " --auto-clone", grep="'/i/really/dont/exist' does not exist.")  # XML w/ non-existent storage, WITHOUT --preserve
 
 
 

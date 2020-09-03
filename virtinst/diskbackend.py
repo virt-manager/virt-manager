@@ -517,7 +517,7 @@ class CloneStorageCreator(_StorageCreator):
         if self.get_dev_type() == "block":
             avail = _get_size(self._path)  # pragma: no cover
         else:
-            vfs = os.statvfs(os.path.dirname(self._path))
+            vfs = os.statvfs(os.path.dirname(os.path.abspath(self._path)))
             avail = vfs.f_frsize * vfs.f_bavail
         need = int(self._size) * 1024 * 1024 * 1024
         if need > avail:  # pragma: no cover
