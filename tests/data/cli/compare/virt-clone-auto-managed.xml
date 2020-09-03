@@ -1,0 +1,25 @@
+<domain type="test">
+  <name>origtest-clone</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type="file" device="disk">
+      <target dev="hda" bus="ide"/>
+      <source file="/dev/default-pool/default-vol-clone"/>
+    </disk>
+    <disk type="file" device="floppy">
+      <target dev="fda" bus="fdc"/>
+      <readonly/>
+    </disk>
+  </devices>
+</domain>

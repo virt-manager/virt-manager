@@ -1,6 +1,6 @@
 <domain type="test">
-  <name>test-clone1</name>
-  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <name>test-newclone</name>
+  <uuid>12345678-12F4-1234-1234-123456789AFA</uuid>
   <memory unit="KiB">409600</memory>
   <currentMemory unit="KiB">204800</currentMemory>
   <vcpu placement="static">5</vcpu>
@@ -21,7 +21,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="block" device="floppy">
       <driver type="vmdk"/>
-      <source dev="/dev/disk-pool/diskvol1-clone"/>
+      <source dev="/dev/disk-pool/newclone1.img"/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
@@ -44,12 +44,12 @@
       <address type="drive" controller="0" bus="0" target="0" unit="2"/>
     </disk>
     <disk type="file" device="disk">
-      <source file="/dev/default-pool/default-vol-clone"/>
+      <source file="/dev/default-pool/newclone3.img"/>
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="file" device="disk">
-      <source file="/dev/default-pool/testvol9-clone.img"/>
+      <source file="/dev/default-pool/testvol9.img"/>
       <target dev="hdb" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
     </disk>
@@ -58,12 +58,12 @@
     <controller type="ide" index="0"/>
     <controller type="virtio-serial" index="0"/>
     <interface type="network">
-      <mac address="00:11:22:33:44:55"/>
+      <mac address="12:34:56:1A:B2:C3"/>
       <source network="default"/>
       <model type="e1000"/>
     </interface>
     <interface type="user">
-      <mac address="00:11:22:33:44:55"/>
+      <mac address="12:34:56:1A:B7:C3"/>
     </interface>
     <parallel type="file">
       <source path="/tmp/foo.log"/>
