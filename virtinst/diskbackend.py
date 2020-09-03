@@ -436,11 +436,8 @@ class _StorageCreator(_StorageBase):
             if self.get_dev_type() == "network":
                 self._path = self._vol_install.name
             else:
-                sep = "/"
-                if xmlobj.target_path == "" or xmlobj.target_path[-1] == '/':
-                    sep = ""
-                self._path = (xmlobj.target_path + sep +
-                              self._vol_install.name)
+                self._path = os.path.join(
+                        xmlobj.target_path, self._vol_install.name)
         return self._path
 
     def get_vol_install(self):
