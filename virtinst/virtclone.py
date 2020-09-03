@@ -138,6 +138,8 @@ def parse_args():
     # Just used for clone tests
     misc.add_argument("--clone-running", action="store_true",
                       default=False, help=argparse.SUPPRESS)
+    misc.add_argument("--__test-nodry", action="store_true",
+                      default=False, help=argparse.SUPPRESS)
 
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True)
 
@@ -197,9 +199,11 @@ def main(conn=None):
     # setup design object
     design.setup_clone()
 
+    run = True
     if options.xmlonly:
+        run = options.__test_nodry
         print_stdout(design.clone_xml, do_force=True)
-    else:
+    if run:
         design.start_duplicate(cli.get_meter())
 
     print_stdout("")

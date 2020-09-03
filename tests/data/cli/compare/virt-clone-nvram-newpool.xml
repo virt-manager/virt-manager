@@ -1,0 +1,23 @@
+<domain type="kvm">
+  <name>clone-orig-clone</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>262144</memory>
+  <currentMemory>262144</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686" machine="pc">hvm</type>
+    <boot dev="cdrom"/>
+    <loader readonly="yes" type="pflash">/usr/share/ovmf/ovmf-efi.fd</loader>
+    <nvram>/nvram-newpool/clone-orig-clone_VARS.fd</nvram>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/bin/qemu-kvm</emulator>
+  </devices>
+</domain>

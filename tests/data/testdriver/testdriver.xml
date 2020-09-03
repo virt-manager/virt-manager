@@ -867,6 +867,12 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
     <parallel type='file'>
       <source path='/tmp/foo.log'/>
     </parallel>
+    <graphics type="vnc" port="6000" listen="127.0.0.1">
+      <listen type="address" address="127.0.0.1"/>
+    </graphics>
+    <video>
+      <model type="cirrus" vram="16384" heads="1" primary="yes"/>
+    </video>
     <channel type='unix'>
       <source mode='bind' path='/var/lib/libvirt/qemu/channel/target/test-for-clone/org.qemu.guest_agent.0'/>
       <target type='virtio' name='org.qemu.guest_agent.0'/>

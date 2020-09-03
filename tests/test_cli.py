@@ -404,6 +404,7 @@ class App(object):
             elif self.appname == "virt-clone":
                 if "--print-xml" not in cli:
                     args += " --print-xml"
+                    args += " --__test-nodry"
 
         return args
 
@@ -1301,6 +1302,8 @@ _CLONE_UNMANAGED = "--original-xml %s/clone-disk.xml" % XMLDIR
 _CLONE_MANAGED = "--original-xml %s/clone-disk-managed.xml" % XMLDIR
 _CLONE_NOEXIST = "--original-xml %s/clone-disk-noexist.xml" % XMLDIR
 _CLONE_NVRAM = "--original-xml %s/clone-nvram-auto.xml" % XMLDIR
+_CLONE_NVRAM_NEWPOOL = "--original-xml %s/clone-nvram-newpool.xml" % XMLDIR
+_CLONE_NVRAM_MISSING = "--original-xml %s/clone-nvram-missing.xml" % XMLDIR
 _CLONE_EMPTY = "--original-xml %s/clone-empty.xml" % XMLDIR
 
 vclon = App("virt-clone")
@@ -1314,10 +1317,14 @@ c.add_invalid(_CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage,
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone", "clone-auto1")
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone", "clone-auto2")
-c.add_valid("--connect %(URI-KVM)s " + _CLONE_NVRAM + " --auto-clone")  # hits a particular nvram code path
-c.add_valid(_CLONE_EMPTY + " --auto-clone --uuid 12345678-12F4-1234-1234-123456789AFA --reflink --mac 12:34:56:1A:B2:C3")  # Auto flag, no storage
-c.add_valid(_CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
-c.add_valid(_CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage
+c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM + " --auto-clone", "clone-nvram")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_MISSING + " --auto-clone", "nvram-missing")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
+c.add_compare(_CLONE_EMPTY + " --auto-clone --print-xml", "empty")  # Auto flag, no storage
+c.add_compare("--connect %(URI-KVM)s -o test-clone-simple --auto -f /foo.img --print-xml", "cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
+c.add_compare(_CLONE_MANAGED + " --auto-clone", "auto-managed")  # Auto flag w/ managed storage
+c.add_compare(_CLONE_UNMANAGED + " --auto-clone", "auto-unmanaged")  # Auto flag w/ local storage
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --nonsparse")  # Auto flag, actual VM, skip state check
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
@@ -1329,6 +1336,7 @@ c.add_invalid(_CLONE_EMPTY + " --auto-clone -n test")  # new name raises error
 c.add_invalid("-o test --auto-clone", grep="shutoff")  # VM is running, but --clone-running isn't passed
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s")  # Should complain about overwriting existing file
 c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
+c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-full --auto-clone", grep="not enough free space")  # catch failure of clone path setting
 
 
 c = vclon.add_category("general", "-n clonetest")
@@ -1341,7 +1349,7 @@ c.add_valid(_CLONE_UNMANAGED + " --file virt-install --file %(EXISTIMG1)s --pres
 c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --file %(NEWCLONEIMG3)s --force-copy=hdc")  # XML w/ disks, force copy a readonly target
 c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s")  # XML w/ managed storage, specify managed path
-c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s --reflink")  # XML w/ managed storage, specify managed path
+c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s --reflink")  # XML w/ managed storage, specify managed path, use --reflink option
 c.add_valid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools# Libvirt test driver doesn't support cloning across pools# XML w/ non-existent storage, with --preserve
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone -n test --auto-clone --replace")  # Overwriting existing running VM
 c.add_invalid(_CLONE_EMPTY + " foobar")  # Positional arguments error
