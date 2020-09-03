@@ -1,6 +1,6 @@
 <domain type="kvm">
-  <name>clone-new</name>
-  <uuid>12345678-1234-1234-1234-123456789012</uuid>
+  <name>clone-orig-clone</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <memory>262144</memory>
   <currentMemory>262144</currentMemory>
   <vcpu>1</vcpu>
@@ -8,7 +8,7 @@
     <type arch="i686" machine="pc">hvm</type>
     <boot dev="cdrom"/>
     <loader readonly="yes" type="pflash">/usr/share/ovmf/ovmf-efi.fd</loader>
-    <nvram>/nvram-newpool/clone-new_VARS.fd</nvram>
+    <nvram>/nvram/my-custom-path</nvram>
   </os>
   <features>
     <acpi/>

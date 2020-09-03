@@ -1,0 +1,83 @@
+<domain type="test">
+  <name>test</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory unit="KiB">409600</memory>
+  <currentMemory unit="KiB">204800</currentMemory>
+  <vcpu placement="static">5</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <loader type="rom">/usr/lib/xen/boot/hvmloader</loader>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+  </features>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
+    <disk type="block" device="floppy">
+      <driver type="vmdk"/>
+      <source dev="/dev/disk-pool/diskvol1-clone"/>
+      <target dev="fda" bus="fdc"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+    </disk>
+    <disk type="block" device="disk">
+      <source dev="/dev/disk-pool/diskvol2"/>
+      <target dev="sda" bus="scsi"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+    </disk>
+    <disk type="file" device="cdrom">
+      <target dev="sdb" bus="scsi"/>
+      <readonly/>
+      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
+    </disk>
+    <disk type="block" device="disk">
+      <driver type="qcow2"/>
+      <source dev="/dev/default-pool/collidevol1.img"/>
+      <target dev="sdc" bus="scsi"/>
+      <shareable/>
+      <address type="drive" controller="0" bus="0" target="0" unit="2"/>
+    </disk>
+    <disk type="file" device="disk">
+      <source file="/dev/default-pool/default-vol-clone"/>
+      <target dev="hda" bus="ide"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+    </disk>
+    <disk type="file" device="disk">
+      <source file="/dev/default-pool/testvol9-clone.img"/>
+      <target dev="hdb" bus="ide"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
+    </disk>
+    <controller type="scsi" index="0"/>
+    <controller type="fdc" index="0"/>
+    <controller type="ide" index="0"/>
+    <controller type="virtio-serial" index="0"/>
+    <interface type="network">
+      <mac address="00:11:22:33:44:55"/>
+      <source network="default"/>
+      <model type="e1000"/>
+    </interface>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+    </interface>
+    <parallel type="file">
+      <source path="/tmp/foo.log"/>
+      <target port="0"/>
+    </parallel>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <graphics type="vnc" port="-1" listen="127.0.0.1">
+      <listen type="address" address="127.0.0.1"/>
+    </graphics>
+    <video>
+      <model type="cirrus" vram="16384" heads="1" primary="yes"/>
+    </video>
+  </devices>
+</domain>

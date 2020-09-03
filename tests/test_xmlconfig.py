@@ -315,3 +315,15 @@ class TestXMLMisc(unittest.TestCase):
         newdisk.path = newdisk.path
         newdisk.set_local_disk_to_clone(srcdisk, True)
         newdisk.build_storage(None)
+
+        newdisk = virtinst.DeviceDisk(conn)
+        newdisk.type = "block"
+        newdisk.path = "/dev/foo/idontexist"
+        assert newdisk.get_size() == 0
+
+        conn = utils.URIs.open_testdriver_cached()
+        volpath = "/dev/default-pool/test-clone-simple.img"
+        assert virtinst.DeviceDisk.path_definitely_exists(conn, volpath)
+        disk = virtinst.DeviceDisk(conn)
+        disk.path = volpath
+        assert disk.get_size()

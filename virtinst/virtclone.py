@@ -14,71 +14,54 @@ from .cloner import Cloner
 from .logger import log
 
 
-# General input gathering functions
-def get_clone_name(new_name, auto_clone, design):
-    if not new_name and auto_clone:
-        # Generate a name to use
-        new_name = design.generate_clone_name()
-        log.debug("Auto-generated clone name '%s'", new_name)
-
-    if not new_name:
-        fail(_("A name is required for the new virtual machine,"
-            " use '--name NEW_VM_NAME' to specify one."))
-    design.clone_name = new_name
-
-
-def get_original_guest(guest_name, origfile, design):
-    origxml = None
-    if origfile:
-        f = open(origfile, "r")
-        origxml = f.read()
-        f.close()
-
-        try:
-            design.original_xml = origxml
-            return
-        except (ValueError, RuntimeError) as e:  # pragma: no cover
-            fail(e)
-
-    if not guest_name:
+def _process_src(options):
+    src_name = options.src_name
+    src_xml = None
+    if options.original_xml:
+        src_xml = open(options.original_xml).read()
+    elif not src_name:
         fail(_("An original machine name is required,"
-            " use '--original ORIGINAL_GUEST' and try again."))
-    design.original_guest = guest_name
+            " use '--original src_name' and try again."))
+    return src_name, src_xml
 
 
-def get_clone_macaddr(new_mac, design):
-    if new_mac is None or new_mac[0] == "RANDOM":
+def _process_macs(options, cloner):
+    new_macs = options.new_mac
+    if not new_macs or new_macs[0] == "RANDOM":
         return
-    design.clone_macs = new_mac
 
-    for mac in design.clone_macs:
-        cli.validate_mac(design.conn, mac)
+    for mac in new_macs:
+        cli.validate_mac(cloner.conn, mac)
+
+    for iface in cloner.new_guest.devices.interface[:]:
+        iface.macaddr = new_macs.pop(0)
 
 
-def get_clone_diskfile(new_diskfiles, design, preserve, auto_clone):
-    if new_diskfiles is None:
-        new_diskfiles = [None]
+def _process_disks(options, cloner):
+    newpaths = (options.new_diskfile or [])[:]
 
-    newidx = 0
-    clonepaths = []
-    for origpath in [d.path for d in design.original_disks]:
-        if len(new_diskfiles) <= newidx:
-            # Extend the new/passed paths list with None if it's not
-            # long enough
-            new_diskfiles.append(None)
-        newpath = new_diskfiles[newidx]
+    diskinfos = cloner.get_diskinfos_to_clone()
+    for diskinfo in diskinfos:
+        origpath = diskinfo.disk.path
+        newpath = None
+        if newpaths:
+            newpath = newpaths.pop(0)
+        elif options.auto_clone:
+            break
 
         if origpath is None:
             newpath = None
-        elif newpath is None and auto_clone:
-            newpath = design.generate_clone_disk_path(origpath)
+        allow_create = options.overwrite
+        diskinfo.set_clone_path(newpath, allow_create, options.sparse)
 
-        clonepaths.append(newpath)
-        newidx += 1
-    design.clone_paths = clonepaths
 
-    for disk in design.clone_disks:
-        cli.validate_disk(disk, warn_overwrite=not preserve)
+def _validate_disks(options, cloner):
+    # Extra CLI validation for specified disks
+    warn_overwrite = options.overwrite
+    for diskinfo in cloner.get_diskinfos():
+        if not diskinfo.clone_disk:
+            continue
+        cli.validate_disk(diskinfo.clone_disk, warn_overwrite=warn_overwrite)
 
 
 def parse_args():
@@ -93,7 +76,7 @@ def parse_args():
     cli.add_connect_option(parser)
 
     geng = parser.add_argument_group(_("General Options"))
-    geng.add_argument("-o", "--original", dest="original_guest",
+    geng.add_argument("-o", "--original", dest="src_name",
                     help=_("Name of the original guest to clone."))
     geng.add_argument("--original-xml",
                     help=_("XML file to use as the original guest."))
@@ -121,10 +104,12 @@ def parse_args():
                     default=True,
                     help=_("Do not use a sparse file for the clone's "
                            "disk image"))
-    stog.add_argument("--preserve-data", action="store_false",
-                    dest="preserve", default=True,
-                    help=_("Do not clone storage, new disk images specified "
-                           "via --file are preserved unchanged"))
+    stog.add_argument("--preserve-data", dest="overwrite",
+            action="store_false", default=True,
+            help=_("Do not clone storage contents to specified file paths, "
+                   "their contents will be left untouched. "
+                   "This requires specifying existing paths for "
+                   "every clonable disk image."))
     stog.add_argument("--nvram", dest="new_nvram",
                       help=_("New file to use as storage for nvram VARS"))
 
@@ -136,9 +121,7 @@ def parse_args():
     misc = parser.add_argument_group(_("Miscellaneous Options"))
 
     # Just used for clone tests
-    misc.add_argument("--clone-running", action="store_true",
-                      default=False, help=argparse.SUPPRESS)
-    misc.add_argument("--__test-nodry", action="store_true",
+    misc.add_argument("--__test-nodry", action="store_true", dest="test_nodry",
                       default=False, help=argparse.SUPPRESS)
 
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True)
@@ -146,7 +129,6 @@ def parse_args():
     cli.autocomplete(parser)
 
     return parser.parse_args()
-
 
 
 def main(conn=None):
@@ -167,47 +149,49 @@ def main(conn=None):
         fail(_("Either --auto-clone or --file is required,"
                " use '--auto-clone or --file' and try again."))
 
-    design = Cloner(conn)
+    src_name, src_xml = _process_src(options)
+    cloner = Cloner(conn, src_name, src_xml)
 
-    design.clone_running = options.clone_running
-    design.replace = bool(options.replace)
-    get_original_guest(options.original_guest, options.original_xml,
-                       design)
-    get_clone_name(options.new_name, options.auto_clone, design)
+    cloner.set_replace(bool(options.replace))
+    cloner.set_reflink(bool(options.reflink))
+    cloner.set_sparse(bool(options.sparse))
+    cloner.set_overwrite(bool(options.overwrite))
 
-    get_clone_macaddr(options.new_mac, design)
     if options.new_uuid is not None:
-        design.clone_uuid = options.new_uuid
-    if options.reflink is True:
-        design.reflink = True
-    for i in options.target or []:
-        design.force_target = i
-    for i in options.skip_copy or []:
-        design.skip_target = i
-    design.clone_sparse = options.sparse
-    design.preserve = options.preserve
+        cloner.set_clone_uuid(options.new_uuid)
+    if options.new_nvram:
+        cloner.set_nvram_path(options.new_nvram)
 
-    design.clone_nvram = options.new_nvram
+    force_targets = options.target or []
+    skip_targets = options.skip_copy or []
+    for diskinfo in cloner.get_diskinfos():
+        if diskinfo.disk.target in force_targets:
+            diskinfo.set_clone_requested(True)
+        if diskinfo.disk.target in skip_targets:
+            diskinfo.set_clone_requested(False)
 
-    # This determines the devices that need to be cloned, so that
-    # get_clone_diskfile knows how many new disk paths it needs
-    design.setup_original()
+    if options.new_name:
+        cloner.set_clone_name(options.new_name)
+    elif not options.auto_clone:
+        fail(_("A name is required for the new virtual machine,"
+            " use '--name NEW_VM_NAME' to specify one."))
 
-    get_clone_diskfile(options.new_diskfile, design,
-                       not options.preserve, options.auto_clone)
+    _process_macs(options, cloner)
+    _process_disks(options, cloner)
 
-    # setup design object
-    design.setup_clone()
+    cloner.prepare()
+
+    _validate_disks(options, cloner)
 
     run = True
     if options.xmlonly:
-        run = options.__test_nodry
-        print_stdout(design.clone_xml, do_force=True)
+        run = options.test_nodry
+        print_stdout(cloner.new_guest.get_xml(), do_force=True)
     if run:
-        design.start_duplicate(cli.get_meter())
+        cloner.start_duplicate(cli.get_meter())
 
     print_stdout("")
-    print_stdout(_("Clone '%s' created successfully.") % design.clone_name)
+    print_stdout(_("Clone '%s' created successfully.") % cloner.new_guest.name)
     log.debug("end clone")
     return 0
 
