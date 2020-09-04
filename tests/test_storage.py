@@ -85,12 +85,10 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
     vol_inst.permissions.group = "10736"
 
     if input_vol:
-        vol_inst.input_vol = input_vol
-        vol_inst.sync_input_vol()
+        vol_inst.set_input_vol(input_vol)
     elif clone_vol:
         vol_inst = StorageVolume(conn, parsexml=clone_vol.XMLDesc(0))
-        vol_inst.input_vol = clone_vol
-        vol_inst.sync_input_vol()
+        vol_inst.set_input_vol(clone_vol)
         vol_inst.name = volname
 
     vol_inst.validate()

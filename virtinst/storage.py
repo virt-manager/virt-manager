@@ -520,29 +520,25 @@ class StorageVolume(_StorageObject):
             parsexml=self._pool.XMLDesc(0))
     pool = property(_get_pool, _set_pool)
 
-    def _get_input_vol(self):
+    @property
+    def input_vol(self):
         return self._input_vol
-    def _set_input_vol(self, vol):
+    def set_input_vol(self, vol):
         self._input_vol = vol
-    input_vol = property(_get_input_vol, _set_input_vol)
-
-    def _get_reflink(self):
-        return self._reflink
-    def _set_reflink(self, reflink):
-        self._reflink = reflink
-    reflink = property(_get_reflink, _set_reflink)
-
-    def sync_input_vol(self, only_format=False):
-        # Pull parameters from input vol into this class
         parsevol = StorageVolume(self.conn,
                                  parsexml=self._input_vol.XMLDesc(0))
 
         self.format = parsevol.format
         self.capacity = parsevol.capacity
         self.allocation = parsevol.allocation
-        if only_format:
-            return
-        self.pool = self._input_vol.storagePoolLookupByVolume()
+        if not self._pool:
+            self.pool = self._input_vol.storagePoolLookupByVolume()
+
+    def _get_reflink(self):
+        return self._reflink
+    def _set_reflink(self, reflink):
+        self._reflink = reflink
+    reflink = property(_get_reflink, _set_reflink)
 
 
     ##########################

@@ -18,7 +18,6 @@ from .guest import Guest
 from .devices import DeviceInterface
 from .devices import DeviceDisk
 from .logger import log
-from .storage import StorageVolume
 from .devices import DeviceChannel
 
 
@@ -114,21 +113,14 @@ def _lookup_vm(conn, name):
 
 
 def _build_clone_vol_install(orig_disk, clone_disk):
+    # We set a stub size for initial creation
+    # set_input_vol will overwrite it
+    size = .000001
+    sparse = False
     vol_install = DeviceDisk.build_vol_install(
         orig_disk.conn, os.path.basename(clone_disk.path),
-        clone_disk.get_parent_pool(), .000001, False)
-    vol_install.input_vol = orig_disk.get_vol_object()
-
-    # Source and dest are managed. If they share the same pool,
-    # replace vol_install with a CloneVolume instance, otherwise
-    # simply set input_vol on the dest vol_install
-    if (vol_install.pool.name() ==
-        orig_disk.get_parent_pool().name()):
-        vol_install.sync_input_vol()
-    else:
-        # Cross pool cloning
-        # Sync only the format of the image.
-        vol_install.sync_input_vol(only_format=True)
+        clone_disk.get_parent_pool(), size, sparse)
+    vol_install.set_input_vol(orig_disk.get_vol_object())
 
     return vol_install
 
@@ -217,7 +209,7 @@ class _CloneDiskInfo:
             self.check_clonable()
 
         try:
-            self.clone_disk = _build_clone_disk(
+            self.clone_disk = Cloner.build_clone_disk(
                     self.disk, path, allow_create, sparse)
         except Exception as e:
             log.debug("Error setting clone path.", exc_info=True)
@@ -236,6 +228,10 @@ class Cloner(object):
     @staticmethod
     def generate_clone_disk_path(conn, origname, newname, origpath):
         return _generate_clone_disk_path(conn, origname, newname, origpath)
+
+    @staticmethod
+    def build_clone_disk(orig_disk, clonepath, allow_create, sparse):
+        return _build_clone_disk(orig_disk, clonepath, allow_create, sparse)
 
     def __init__(self, conn, src_name=None, src_xml=None):
         self.conn = conn

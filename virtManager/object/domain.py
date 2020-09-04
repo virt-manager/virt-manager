@@ -520,23 +520,18 @@ class vmmDomain(vmmLibvirtObject):
         We need to do this copy magic because there is no Libvirt storage API
         to rename storage volume.
         """
+        from virtinst import Cloner
         old_nvram = DeviceDisk(self.conn.get_backend())
         old_nvram.path = self.get_xmlobj().os.nvram
 
         nvram_dir = os.path.dirname(old_nvram.path)
-        new_nvram_path = os.path.join(nvram_dir, "%s_VARS.fd" % new_name)
-        new_nvram = DeviceDisk(self.conn.get_backend())
+        new_nvram_path = os.path.join(nvram_dir,
+                "%s_VARS.fd" % os.path.basename(new_name))
 
-        nvram_install = DeviceDisk.build_vol_install(
-                self.conn.get_backend(), os.path.basename(new_nvram_path),
-                old_nvram.get_parent_pool(), old_nvram.get_size(), False)
-        nvram_install.input_vol = old_nvram.get_vol_object()
-        nvram_install.sync_input_vol(only_format=True)
+        new_nvram = Cloner.build_clone_disk(
+                old_nvram, new_nvram_path, True, False)
 
-        new_nvram.set_vol_install(nvram_install)
-        new_nvram.validate()
         new_nvram.build_storage(None)
-
         return new_nvram, old_nvram
 
 
@@ -563,13 +558,15 @@ class vmmDomain(vmmLibvirtObject):
                                   "removed: '%s'", warn)
             raise error
 
-        if new_nvram:
-            try:
-                old_nvram.get_vol_object().delete(0)
-            except Exception as warn:  # pragma: no cover
-                log.debug("old nvram file was not removed: '%s'", warn)
+        if not new_nvram:
+            return
 
-            self.define_overview(nvram=new_nvram.path)
+        try:
+            old_nvram.get_vol_object().delete(0)
+        except Exception as warn:  # pragma: no cover
+            log.debug("old nvram file was not removed: '%s'", warn)
+
+        self.define_overview(nvram=new_nvram.path)
 
     # Device Add/Remove
     def add_device(self, devobj):
