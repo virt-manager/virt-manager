@@ -675,6 +675,10 @@ class DeviceDisk(Device):
         if vol_object is None and path is None:
             path = self._get_xmlpath()
 
+        if path and not vol_object and not parent_pool:
+            (vol_object, parent_pool) = diskbackend.manage_path(
+                    self.conn, path)
+
         self._change_backend(path, vol_object, parent_pool)
 
     def set_local_disk_to_clone(self, disk, sparse):

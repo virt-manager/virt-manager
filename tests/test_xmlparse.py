@@ -1587,6 +1587,23 @@ class XMLParseTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             disk.validate()
 
+        # Ensure set_backend_for_existing_path resolves a path
+        # to its existing storage volume
+        xml = ("<disk type='file' device='disk'>"
+            "<source file='/dev/default-pool/default-vol'/>"
+            "</disk>")
+        conn = utils.URIs.open_testdriver_cached()
+        disk = virtinst.DeviceDisk(conn, parsexml=xml)
+        disk.set_backend_for_existing_path()
+        assert disk.get_vol_object()
+
+        # Verify set_backend_for_existing_path doesn't error
+        # for a variety of disks
+        dom = conn.lookupByName("test-many-devices")
+        guest = virtinst.Guest(conn, parsexml=dom.XMLDesc(0))
+        for disk in guest.devices.disk:
+            disk.set_backend_for_existing_path()
+
     def testGuestXMLDeviceMatch(self):
         """
         Test Guest.find_device and Device.compare_device

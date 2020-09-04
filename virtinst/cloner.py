@@ -194,8 +194,7 @@ class _CloneDiskInfo:
 
     def check_clonable(self):
         try:
-            # This forces DeviceDisk to resolve the storage backend
-            self.disk.path = self.disk.path
+            self.disk.set_backend_for_existing_path()
             if self.disk.wants_storage_creation():
                 raise ValueError(
                         _("Disk path '%s' does not exist.") % self.disk.path)
