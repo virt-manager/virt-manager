@@ -208,11 +208,13 @@ class _CloneDiskInfo:
         self.disk.set_backend_for_existing_path()
         self.new_disk = None
 
-        self._do_share_reason = _get_shareable_msg(self.disk)
+        self._share_msg = _get_shareable_msg(self.disk)
+        self._cloneable_msg = -1
+        self._newpath_msg = None
 
         self._action = None
         self.set_clone_requested()
-        if self._do_share_reason:
+        if self.get_share_msg():
             self.set_share_requested()
 
     def is_clone_requested(self):
@@ -222,38 +224,51 @@ class _CloneDiskInfo:
     def is_preserve_requested(self):
         return self._action in [self._ACTION_PRESERVE]
 
+    def _set_action(self, action):
+        if action != self._action:
+            self._action = action
     def set_clone_requested(self):
-        self._action = self._ACTION_CLONE
+        self._set_action(self._ACTION_CLONE)
     def set_share_requested(self):
-        self._action = self._ACTION_SHARE
+        self._set_action(self._ACTION_SHARE)
     def set_preserve_requested(self):
-        self._action = self._ACTION_PRESERVE
-
-    def check_cloneable(self):
-        try:
-            msg = _get_cloneable_msg(self.disk)
-            if msg:
-                raise ValueError(msg)
-        except Exception as e:
-            log.debug("Exception processing clone original path", exc_info=True)
-            err = _("Could not determine original disk information: %s" % str(e))
-            raise ValueError(err) from None
+        self._set_action(self._ACTION_PRESERVE)
 
     def set_new_path(self, path, sparse):
         allow_create = not self.is_preserve_requested()
         if allow_create:
-            self.check_cloneable()
+            msg = self.get_cloneable_msg()
+            if msg:
+                return
 
         try:
             self.new_disk = Cloner.build_clone_disk(
                     self.disk, path, allow_create, sparse)
         except Exception as e:
             log.debug("Error setting clone path.", exc_info=True)
-            raise ValueError(
-                _("Could not use path '%(path)s' for cloning: %(error)s") % {
-                    "path": path,
-                    "error": str(e),
-                })
+            err = (_("Could not use path '%(path)s' for cloning: %(error)s") %
+                    {"path": path, "error": str(e)})
+            self._newpath_msg = err
+
+    def get_share_msg(self):
+        return self._share_msg
+    def get_cloneable_msg(self):
+        if self._cloneable_msg == -1:
+            self._cloneable_msg = _get_cloneable_msg(self.disk)
+        return self._cloneable_msg
+    def get_newpath_msg(self):
+        return self._newpath_msg
+
+    def raise_error(self):
+        if self.is_clone_requested() and self.get_cloneable_msg():
+            msg = self.get_cloneable_msg()
+            err = _("Could not determine original disk information: %s" % msg)
+            raise ValueError(err)
+        if self.is_share_requested():
+            return
+        if self.get_newpath_msg():
+            msg = self.get_newpath_msg()
+            raise ValueError(msg)
 
 
 class Cloner(object):
@@ -452,6 +467,7 @@ class Cloner(object):
             # can copy. It's valid for nvram to not exist at VM define
             # time, libvirt will create it for us
             diskinfo.set_new_path(new_nvram_path, self._sparse)
+            diskinfo.raise_error()
             diskinfo.new_disk.get_vol_install().reflink = self._reflink
         else:
             # There's no action to perform for this case, so drop it
@@ -481,6 +497,9 @@ class Cloner(object):
                          self.new_guest.name,
                          orig_disk.path)
                 diskinfo.set_new_path(newpath, self._sparse)
+                if not diskinfo.new_disk:
+                    # We hit an error, clients will raise it later
+                    continue
 
             new_disk = diskinfo.new_disk
             assert new_disk
