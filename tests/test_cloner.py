@@ -34,8 +34,8 @@ def test_clone_unmanaged():
 
     diskinfos = cloner.get_diskinfos_to_clone()
     assert len(diskinfos) == 2
-    diskinfos[0].set_clone_path(tmp1.name, True, False)
-    diskinfos[1].set_clone_path(tmp2.name, True, False)
+    diskinfos[0].set_new_path(tmp1.name, True, False)
+    diskinfos[1].set_new_path(tmp2.name, True, False)
 
     cloner.prepare()
     cloner.start_duplicate(None)
