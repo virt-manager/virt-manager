@@ -52,11 +52,13 @@ def _process_disks(options, cloner):
         if origpath is None:
             newpath = None
         diskinfo.set_new_path(newpath, options.sparse)
+        diskinfo.raise_error()
 
 
 def _validate_disks(cloner):
     # Extra CLI validation for specified disks
     for diskinfo in cloner.get_diskinfos():
+        diskinfo.raise_error()
         if not diskinfo.new_disk:
             continue
         warn_overwrite = not diskinfo.is_preserve_requested()
