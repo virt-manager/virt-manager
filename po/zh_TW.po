@@ -16,14 +16,14 @@
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Cheng-Chia Tseng <pswo10680@gmail.com>, 2018. #zanata
 # Ting-Wei Lan <lantw44@gmail.com>, 2019. #zanata
-# Whired Planck <fungdaat31@outlook.com>, 2020.
+# Whired Planck <fungdaat31@outlook.com>, 2020, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
 "PO-Revision-Date: 2022-03-09 18:02+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -328,8 +328,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>複製 <u>不</u> 修改客戶機作業系統內容。如果需要做一些配"
-"置\n"
+"<span size='small'>複製 <u>不</u> 修改客戶機作業系統內容。"
+"如果需要做一些配置\n"
 "比如修改密碼或設定靜態 IP 位址，請查看 virt-sysprep(1) 工具。</span>"
 
 #: ui/clone.ui:706
@@ -1635,8 +1635,9 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"隧道遷移直接透過 libvirtd 連接通道，而不是由虛擬機管理程式打開一個單獨的網路"
-"連接到目標。 源 libvirt 實例直接連接到目標 libvirt 實例。\n"
+"隧道遷移直接透過 libvirtd "
+"連接通道，而不是由虛擬機管理程式打開一個單獨的網路連接到目標。 源 libvirt "
+"實例直接連接到目標 libvirt 實例。\n"
 "\n"
 "由於不需要開放額外的防火牆埠，因此可以簡化配置。如果啟用 libvirt 連接加密， "
 "還可以加密遷移流量。但它很難由 SSH 來完成資料傳輸工作。"
@@ -1703,8 +1704,7 @@ msgstr "裝置名稱(_V)："
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
-msgstr ""
-"<small>在多數配置中，macvtap 不能為主機到客戶機的網路通信工作。</small>"
+msgstr "<small>在多數配置中，macvtap 不能為主機到客戶機的網路通信工作。</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
@@ -1861,9 +1861,8 @@ msgstr "更改…"
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
-msgstr ""
-"當改變客戶機視窗大小時，請修改其解析度。僅適用於使用 Spice 和桌面代理正確配置"
-"的客戶機。"
+msgstr "當改變客戶機視窗大小時，請修改其解析度。僅適用於使用 Spice "
+"和桌面代理正確配置的客戶機。"
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
@@ -2125,9 +2124,8 @@ msgstr "客戶機 CID(_I)："
 msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
-msgstr ""
-"<small>XML 編輯已在「偏好設定」 中被禁用。僅當知道自己在做什麼時才啟用它。</"
-"small>"
+msgstr "<small>XML 編輯已在「偏好設定」 "
+"中被禁用。僅當知道自己在做什麼時才啟用它。</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
@@ -2925,9 +2923,8 @@ msgstr "這通常是因為電腦沒有安裝 QEMU 或 KVM，或者沒有載入 K
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
-msgstr ""
-"KVM 不可用。這可能是因為沒有安裝 KVM 套裝軟體，或者沒有載入 KVM 核心模組。虛"
-"擬系統可能性能會很差。"
+msgstr "KVM 不可用。這可能是因為沒有安裝 KVM 套裝軟體，或者沒有載入 KVM "
+"核心模組。虛擬系統可能性能會很差。"
 
 #: virtManager/createvm.py:649
 #, python-format
@@ -3834,18 +3831,16 @@ msgstr ""
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
-msgstr ""
-"確定要應用快照 '%(name)s' 嗎？所有自最後一次快照建立以來的對磁碟的更改都會被"
-"丟棄。"
+msgstr "確定要應用快照 '%(name)s' "
+"嗎？所有自最後一次快照建立以來的對磁碟的更改都會被丟棄。"
 
 #: virtManager/details/snapshots.py:657
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
-msgstr ""
-"確定要應用快照 '%(name)s' 嗎？所有自最後一次快照建立以來對磁碟和配置的更改都"
-"會被丟棄。"
+msgstr "確定要應用快照 '%(name)s' "
+"嗎？所有自最後一次快照建立以來對磁碟和配置的更改都會被丟棄。"
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -3860,9 +3855,9 @@ msgid ""
 "result in extensive filesystem corruption. Therefore the saved state will be "
 "removed before restoring the snapshot."
 msgstr ""
-"快照 '%s' 僅包含磁碟狀態，沒有記憶體狀態。還原快照將使現有的儲存狀態保持原"
-"狀，從而有效地在正在執行的系統下切換磁碟。之後再執行域可能會導致大量文件系統"
-"損壞。因此，在還原快照之前，將移除儲存的狀態。"
+"快照 '%s' 僅包含磁碟狀態，沒有記憶體狀態。還原快照將使現有的儲存狀態保持原狀"
+"，從而有效地在正在執行的系統下切換磁碟。之後再執行域可能會導致大量文件系統損"
+"壞。因此，在還原快照之前，將移除儲存的狀態。"
 
 #: virtManager/details/snapshots.py:683
 msgid "Running snapshot"
@@ -3925,8 +3920,7 @@ msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
-msgstr ""
-"客戶機位於具有 '%s' 傳輸的遠端主機上，但僅配置為在本機監聽。要遠端連接，需要"
+msgstr "客戶機位於具有 '%s' 傳輸的遠端主機上，但僅配置為在本機監聽。要遠端連接，需要"
 "更改客戶機的監聽地址。"
 
 #: virtManager/details/viewers.py:351
@@ -4331,8 +4325,8 @@ msgid ""
 "running as root."
 msgstr ""
 "無法檢測本機工作階段：如果正在透過 ssh-X 或 VNC 執行虛擬系統管理器（virt-"
-"manager），可能無法以一般使用者身份連接 libvirt，。請嘗試以 root 使用者身份執"
-"行。"
+"manager），可能無法以一般使用者身份連接 libvirt，。請嘗試以 root "
+"使用者身份執行。"
 
 #: virtManager/lib/connectauth.py:180
 msgid "Verify that the 'libvirtd' daemon is running."
@@ -4351,17 +4345,15 @@ msgstr "虛擬機管理器連線失敗"
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
-msgstr ""
-"libvirtd 服務似乎沒有安裝。請安裝並執行 libvirtd 服務以管理此主機上的虛擬化服"
-"務。"
+msgstr "libvirtd 服務似乎沒有安裝。請安裝並執行 libvirtd "
+"服務以管理此主機上的虛擬化服務。"
 
 #: virtManager/lib/connectauth.py:225
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
-msgstr ""
-"無法檢測到預設虛擬機管理程式。確保全裝了合適的 QEMU/KVM 虛擬化套裝軟體以管理"
-"此主機上的虛擬化服務。"
+msgstr "無法檢測到預設虛擬機管理程式。確保全裝了合適的 QEMU/KVM "
+"虛擬化套裝軟體以管理此主機上的虛擬化服務。"
 
 #: virtManager/lib/connectauth.py:232
 msgid ""
@@ -4604,8 +4596,7 @@ msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
-msgstr ""
-"透過隧道遷移需要一個可遠端存取的 libvirt URI，但已選的連接是一個本機 URI。"
+msgstr "透過隧道遷移需要一個可遠端存取的 libvirt URI，但已選的連接是一個本機 URI。"
 "Libvirt 將會拒絕遷移，除非添加一個埠轉發。"
 
 #: virtManager/migrate.py:292
@@ -5081,16 +5072,15 @@ msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"主機不支援機器 '%(machine)s' 的域類型 %(domain)s 用於 '%(arch)s' 架構的虛擬化"
-"類型 '%(virttype)s'"
+"主機不支援機器 '%(machine)s' 的域類型 %(domain)s 用於 '%(arch)s' "
+"架構的虛擬化類型 '%(virttype)s'"
 
 #: virtinst/capabilities.py:301
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
-msgstr ""
-"主機不支援域類型 %(domain)s 用於 '%(arch)s' 架構的虛擬化類型 '%(virttype)s'"
+msgstr "主機不支援域類型 %(domain)s 用於 '%(arch)s' 架構的虛擬化類型 '%(virttype)s'"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5118,9 +5108,8 @@ msgstr ""
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
-msgstr ""
-"%(path)s 可能不能被虛擬機管理程式訪問。將需要授予 '%(user)s' 使用者搜尋以下目"
-"錄的權限：%(dirs)s"
+msgstr "%(path)s 可能不能被虛擬機管理程式訪問。將需要授予 '%(user)s' "
+"使用者搜尋以下目錄的權限：%(dirs)s"
 
 #: virtinst/cli.py:318
 #, python-format
@@ -5537,8 +5526,8 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 "配置虛擬系統啟動安全性設定（例如：SEV 記憶體加密）。範例：\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
+"BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:902
@@ -5638,8 +5627,7 @@ msgstr "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
-msgstr ""
-"無法連接到圖形控制台：沒有安裝 virt-viewer。請安裝 'virt-viewer' 套裝軟體。"
+msgstr "無法連接到圖形控制台：沒有安裝 virt-viewer。請安裝 'virt-viewer' 套裝軟體。"
 
 #: virtinst/cli.py:1922
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
@@ -5757,9 +5745,8 @@ msgstr "必須為非現有卷 '%s' 指定大小"
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
-msgstr ""
-"不知道如何為路徑 '%s' 建立儲存。首先使用 libvirt API 將父目錄作為儲存池來管"
-"理。"
+msgstr "不知道如何為路徑 '%s' 建立儲存。首先使用 libvirt API "
+"將父目錄作為儲存池來管理。"
 
 #: virtinst/devices/disk.py:376
 msgid "Format attribute not supported for this volume type"
@@ -5959,8 +5946,7 @@ msgstr "找不到安裝樹的核心。"
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
-msgstr ""
-"除非傳遞了額外的核心參數來將安裝程式指向網路可訪問的安裝樹，否則目錄樹的安裝"
+msgstr "除非傳遞了額外的核心參數來將安裝程式指向網路可訪問的安裝樹，否則目錄樹的安裝"
 "通常不起作用。"
 
 #: virtinst/install/unattended.py:63
@@ -6004,8 +5990,8 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
-"作業系統 '%(osname)s' 不支援 '%(profilename)s' 配置檔案的無人值守安裝。可用的"
-"配置檔案：%(profiles)s"
+"作業系統 '%(osname)s' 不支援 '%(profilename)s' "
+"配置檔案的無人值守安裝。可用的配置檔案：%(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -6134,8 +6120,7 @@ msgstr "正在分配 '%s'"
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
-msgstr ""
-"儲存池中沒有足夠空間來建立卷。(%(mem1)s M 需要的空間 > %(mem2)s M 可用空間)"
+msgstr "儲存池中沒有足夠空間來建立卷。(%(mem1)s M 需要的空間 > %(mem2)s M 可用空間)"
 
 #: virtinst/storage.py:734
 #, python-format
@@ -6143,8 +6128,7 @@ msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
-msgstr ""
-"當卷已經被全部分配後，需要的卷容量將超過可用池空間。(%(mem1)s M 需要的容量 > "
+msgstr "當卷已經被全部分配後，需要的卷容量將超過可用池空間。(%(mem1)s M 需要的容量 > "
 "%(mem2)s M 可用容量)"
 
 #: virtinst/virtclone.py:20
@@ -6166,9 +6150,10 @@ msgid ""
 msgstr ""
 "複製一個虛擬機，需修改如 MAC 地址，名稱等所有主機端唯一的配置。\n"
 "\n"
-"虛擬機的內容並沒有改變：virt-clone 不修改任何客戶機系統內部的配置，它只複製磁"
-"碟和主機端的修改。所以像修改密碼，修改靜態 IP 地址等操作都在本工具複製範圍"
-"內。如何修改此類型的配置，請參考 virt-sysprep(1)。"
+"虛擬機的內容並沒有改變：virt-clone "
+"不修改任何客戶機系統內部的配置，它只複製磁碟和主機端的修改。所以像修改密碼，"
+"修改靜態 IP 地址等操作都在本工具複製範圍內。如何修改此類型的配置，請參考 "
+"virt-sysprep(1)。"
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
 msgid "General Options"
@@ -6208,16 +6193,16 @@ msgstr "為新客戶機使用新的磁碟鏡像文件"
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
-msgstr ""
-"強制複製裝置(例如：如果 'hdc' 是唯讀光碟機裝置，則使用 --force-copy=hdc)"
+msgstr "強制複製裝置(例如：如果 'hdc' 是唯讀光碟機裝置，則使用 --force-copy=hdc)"
 
 #: virtinst/virtclone.py:99
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
-"跳過裝置目標的複製。 （例如，如果 'vda' 是不想複製的磁碟，並且不想在新虛擬系"
-"統中使用相同的路徑，請使用 --skip-copy=vda 選項）"
+"跳過裝置目標的複製。 （例如，如果 'vda' "
+"是不想複製的磁碟，並且不想在新虛擬系統中使用相同的路徑，請使用 --skip-"
+"copy=vda 選項）"
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6228,8 +6213,7 @@ msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
-msgstr ""
-"不要將儲存內容複製到指定的文件路徑，它們的內容將保持不變。這要求為每個可複製"
+msgstr "不要將儲存內容複製到指定的文件路徑，它們的內容將保持不變。這要求為每個可複製"
 "磁碟映像指定現有路徑。"
 
 #: virtinst/virtclone.py:113
@@ -6276,9 +6260,8 @@ msgstr "根據使用者要求取消安裝"
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
-msgstr ""
-"-c 後指定的內容似乎是一個 libvirt URI。您是想使用 --connect 選項嗎？如果不"
-"是，請改用 --cdrom"
+msgstr "-c 後指定的內容似乎是一個 libvirt URI。您是想使用 --connect "
+"選項嗎？如果不是，請改用 --cdrom"
 
 #: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
@@ -6325,9 +6308,8 @@ msgstr ""
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
-msgstr ""
-"CDROM 介質預設情況下不輸出訊息到文字控制台，所以可能看不到安裝的輸出。可能需"
-"要使用 --location 選項。"
+msgstr "CDROM 介質預設情況下不輸出訊息到文字控制台，所以可能看不到安裝的輸出。"
+"可能需要使用 --location 選項。"
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6338,8 +6320,7 @@ msgstr "請參考 man 手冊以了解使用 --location 選項與 CDROM 介質的
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
-msgstr ""
-"為作業系統 %(osname)s 請求的記憶體大小 %(mem1)s MiB 小於建議值 %(mem2)s MiB"
+msgstr "為作業系統 %(osname)s 請求的記憶體大小 %(mem1)s MiB 小於建議值 %(mem2)s MiB"
 
 #: virtinst/virtinstall.py:353
 #, python-format
@@ -6556,8 +6537,7 @@ msgstr "光碟機安裝介質"
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
-msgstr ""
-"發行版安裝 URL，例如：https://host/path。請參見手冊頁獲取有關特定發行的範例。"
+msgstr "發行版安裝 URL，例如：https://host/path。請參見手冊頁獲取有關特定發行的範例。"
 
 #: virtinst/virtinstall.py:1024
 msgid "Boot from the network using the PXE protocol"
@@ -6668,8 +6648,7 @@ msgid ""
 msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
-msgstr[0] ""
-"需要 '--edit %(number)s' 選項，但 XML 文件中僅存在 %(max)s --%(type)s 物件"
+msgstr[0] "需要 '--edit %(number)s' 選項，但 XML 文件中僅存在 %(max)s --%(type)s 物件"
 
 #: virtinst/virtxml.py:107
 #, python-format
@@ -6965,8 +6944,7 @@ msgstr "根據使用者要求丟棄"
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
-msgstr ""
-"XML 文件中沒有預期的根元素名稱 '%(expectname)s'，而已找到 '%(foundname)s'"
+msgstr "XML 文件中沒有預期的根元素名稱 '%(expectname)s'，而已找到 '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:487
