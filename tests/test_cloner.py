@@ -32,10 +32,10 @@ def test_clone_unmanaged():
     xml = xml.replace("/tmp/__virtinst_cli_exist2.img", inp2)
     cloner = Cloner(conn, src_xml=xml)
 
-    diskinfos = cloner.get_diskinfos_to_clone()
+    diskinfos = cloner.get_nonshare_diskinfos()
     assert len(diskinfos) == 2
-    diskinfos[0].set_new_path(tmp1.name, True, False)
-    diskinfos[1].set_new_path(tmp2.name, True, False)
+    diskinfos[0].set_new_path(tmp1.name, False)
+    diskinfos[1].set_new_path(tmp2.name, False)
 
     cloner.prepare()
     cloner.start_duplicate(None)
