@@ -20,7 +20,7 @@ def test_clone_unmanaged():
     actually copies data
     """
     xmlpath = CLI_XMLDIR + "clone-disk.xml"
-    conn = utils.URIs.open_testdriver_cached()
+    conn = utils.URIs.open_testdefault_cached()
     xml = open(xmlpath).read()
 
     tmp1 = tempfile.NamedTemporaryFile()

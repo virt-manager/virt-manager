@@ -64,9 +64,14 @@ class _URIs(object):
             return ",caps=" + _capspath + path
 
         _testtmpl = "__virtinst_test__test://%s,predictable"
-        self.test_default = _testtmpl % "/default"
-
         _testdriverdir = DATADIR + "/testdriver/"
+        # We don't use actual test:///default, which saves state
+        # for the lifetime of the process which can cause weird
+        # trickling effects for the testsuite. We use our own
+        # test XML which roughly matches test:///default, and then
+        # fake the URI
+        self.test_default = _testtmpl % (_testdriverdir + "testdefault.xml") + ",fakeuri=test:///default"
+
         self.test_full = _testtmpl % (_testdriverdir + "testdriver.xml")
         self.test_suite = _testtmpl % (_testdriverdir + "testsuite.xml")
         self.test_defaultpool_collision = _testtmpl % (
