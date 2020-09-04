@@ -168,9 +168,9 @@ def _build_clone_disk(orig_disk, clonepath, allow_create, sparse):
     return new_disk
 
 
-def _get_clonable_msg(disk):
+def _get_cloneable_msg(disk):
     """
-    If the disk storage is not clonable, return a string explaining why
+    If the disk storage is not cloneable, return a string explaining why
     """
     if disk.wants_storage_creation():
         return _("Disk path '%s' does not exist.") % disk.path
@@ -227,9 +227,9 @@ class _CloneDiskInfo:
     def set_preserve_requested(self):
         self._action = self._ACTION_PRESERVE
 
-    def check_clonable(self):
+    def check_cloneable(self):
         try:
-            msg = _get_clonable_msg(self.disk)
+            msg = _get_cloneable_msg(self.disk)
             if msg:
                 raise ValueError(msg)
         except Exception as e:
@@ -240,7 +240,7 @@ class _CloneDiskInfo:
     def set_new_path(self, path, sparse):
         allow_create = not self.is_preserve_requested()
         if allow_create:
-            self.check_clonable()
+            self.check_cloneable()
 
         try:
             self.new_disk = Cloner.build_clone_disk(
