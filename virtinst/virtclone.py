@@ -52,16 +52,16 @@ def _process_disks(options, cloner):
         if origpath is None:
             newpath = None
         allow_create = options.overwrite
-        diskinfo.set_clone_path(newpath, allow_create, options.sparse)
+        diskinfo.set_new_path(newpath, allow_create, options.sparse)
 
 
 def _validate_disks(options, cloner):
     # Extra CLI validation for specified disks
     warn_overwrite = options.overwrite
     for diskinfo in cloner.get_diskinfos():
-        if not diskinfo.clone_disk:
+        if not diskinfo.new_disk:
             continue
-        cli.validate_disk(diskinfo.clone_disk, warn_overwrite=warn_overwrite)
+        cli.validate_disk(diskinfo.new_disk, warn_overwrite=warn_overwrite)
 
 
 def parse_args():
