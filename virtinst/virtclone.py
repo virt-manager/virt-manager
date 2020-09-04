@@ -109,7 +109,7 @@ def parse_args():
             help=_("Do not clone storage contents to specified file paths, "
                    "their contents will be left untouched. "
                    "This requires specifying existing paths for "
-                   "every clonable disk image."))
+                   "every cloneable disk image."))
     stog.add_argument("--nvram", dest="new_nvram",
                       help=_("New file to use as storage for nvram VARS"))
 
