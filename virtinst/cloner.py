@@ -168,42 +168,77 @@ def _build_clone_disk(orig_disk, clonepath, allow_create, sparse):
     return new_disk
 
 
+def _get_clonable_msg(disk):
+    """
+    If the disk storage is not clonable, return a string explaining why
+    """
+    if disk.wants_storage_creation():
+        return _("Disk path '%s' does not exist.") % disk.path
+
+
+def _get_shareable_msg(disk):
+    if not disk.path:
+        return _("No storage to clone.")
+    if disk.read_only:
+        return _("Read Only")
+    if disk.shareable:
+        return _("Marked as shareable")
+
+
 class _CloneDiskInfo:
     """
     Class that tracks some additional information about how we want
     to default handle each disk of the source VM
+
+    For any source disk there's 3 main scenarios:
+
+    * clone: Copy contents from src to dst. If dst path doesn't
+            exist we attempt to create it. If it exists we overwrite it
+    * preserve: Destination path is an existing, and no copying is performed.
+    * share: Original disk XML is used unchanged for the new disk
     """
+    _ACTION_SHARE = 1
+    _ACTION_CLONE = 2
+    _ACTION_PRESERVE = 3
+
     def __init__(self, srcdisk):
         self.disk = DeviceDisk(srcdisk.conn, parsexml=srcdisk.get_xml())
-        self._do_clone = self._do_we_clone_default()
+        self.disk.set_backend_for_existing_path()
         self.new_disk = None
 
-    def is_clone_requested(self):
-        return self._do_clone
-    def set_clone_requested(self, val):
-        self._do_clone = val
+        self._do_share_reason = _get_shareable_msg(self.disk)
 
-    def _do_we_clone_default(self):
-        if not self.disk.path:
-            return False
-        if self.disk.read_only:
-            return False
-        if self.disk.shareable:
-            return False
-        return True
+        self._action = None
+        self.set_clone_requested()
+        if self._do_share_reason:
+            self.set_share_requested()
+
+    def is_clone_requested(self):
+        return self._action in [self._ACTION_CLONE]
+    def is_share_requested(self):
+        return self._action in [self._ACTION_SHARE]
+    def is_preserve_requested(self):
+        return self._action in [self._ACTION_PRESERVE]
+
+    def set_clone_requested(self):
+        self._action = self._ACTION_CLONE
+    def set_share_requested(self):
+        self._action = self._ACTION_SHARE
+    def set_preserve_requested(self):
+        self._action = self._ACTION_PRESERVE
 
     def check_clonable(self):
         try:
-            self.disk.set_backend_for_existing_path()
-            if self.disk.wants_storage_creation():
-                raise ValueError(
-                        _("Disk path '%s' does not exist.") % self.disk.path)
+            msg = _get_clonable_msg(self.disk)
+            if msg:
+                raise ValueError(msg)
         except Exception as e:
             log.debug("Exception processing clone original path", exc_info=True)
             err = _("Could not determine original disk information: %s" % str(e))
             raise ValueError(err) from None
 
-    def set_new_path(self, path, allow_create, sparse):
+    def set_new_path(self, path, sparse):
+        allow_create = not self.is_preserve_requested()
         if allow_create:
             self.check_clonable()
 
@@ -238,13 +273,12 @@ class Cloner(object):
         self._src_guest = None
         self._new_guest = None
         self._diskinfos = []
+        self._nvram_diskinfo = None
         self._init_src(src_name, src_xml)
 
         self._new_nvram_path = None
-        self._nvram_disk = None
 
         self._sparse = True
-        self._overwrite = True
         self._replace = False
         self._reflink = False
 
@@ -280,6 +314,11 @@ class Cloner(object):
             disk = diskinfo.disk
             log.debug("Wants cloning: size=%s path=%s",
                     disk.get_size(), disk.path)
+
+        if self._src_guest.os.nvram:
+            old_nvram = DeviceDisk(self.conn)
+            old_nvram.path = self._new_guest.os.nvram
+            self._nvram_diskinfo = _CloneDiskInfo(old_nvram)
 
     def _init_new_guest(self):
         """
@@ -331,6 +370,10 @@ class Cloner(object):
         """
         return self._new_guest
 
+    @property
+    def nvram_diskinfo(self):
+        return self._nvram_diskinfo
+
     def set_clone_name(self, name):
         self._new_guest.name = name
 
@@ -365,11 +408,12 @@ class Cloner(object):
         """
         return self._diskinfos[:]
 
-    def get_diskinfos_to_clone(self):
+    def get_nonshare_diskinfos(self):
         """
         Return a list of _CloneDiskInfo that are tagged for cloning
         """
-        return [di for di in self.get_diskinfos() if di.is_clone_requested()]
+        return [di for di in self.get_diskinfos() if
+                not di.is_share_requested()]
 
     def set_nvram_path(self, val):
         """
@@ -378,43 +422,40 @@ class Cloner(object):
         """
         self._new_nvram_path = val
 
-    def set_overwrite(self, flg):
-        """
-        If False, no data is copied to the destination disks by default.
-        Storage may be created, but it is empty.
-        """
-        self._overwrite = flg
-
 
     ######################
     # Functional methods #
     ######################
 
     def _prepare_nvram(self):
+        if not self._nvram_diskinfo:
+            return
+
         new_nvram_path = self._new_nvram_path
         if new_nvram_path is None:
             nvram_dir = os.path.dirname(self._new_guest.os.nvram)
             new_nvram_path = os.path.join(
                     nvram_dir, "%s_VARS.fd" % self._new_guest.name)
 
+        diskinfo = self._nvram_diskinfo
+        new_nvram = DeviceDisk(self.conn)
+        new_nvram.path = new_nvram_path
         old_nvram = DeviceDisk(self.conn)
-        old_nvram.path = self._new_guest.os.nvram
-        nvram = DeviceDisk(self.conn)
-        nvram.path = new_nvram_path
-        diskinfo = _CloneDiskInfo(old_nvram)
-        allow_create = self._overwrite
+        old_nvram.path = diskinfo.disk.path
 
-        if (allow_create and
-            nvram.wants_storage_creation() and
-            old_nvram.get_vol_object()):
+        if (diskinfo.is_clone_requested() and
+            new_nvram.wants_storage_creation() and
+            diskinfo.disk.get_vol_object()):
             # We only run validation if there's some existing nvram we
             # can copy. It's valid for nvram to not exist at VM define
             # time, libvirt will create it for us
-            diskinfo.set_new_path(new_nvram_path, allow_create, self._sparse)
-            self._nvram_disk = diskinfo.new_disk
-            self._nvram_disk.get_vol_install().reflink = self._reflink
+            diskinfo.set_new_path(new_nvram_path, self._sparse)
+            diskinfo.new_disk.get_vol_install().reflink = self._reflink
+        else:
+            # There's no action to perform for this case, so drop it
+            self._nvram_diskinfo = None
 
-        self._new_guest.os.nvram = nvram.path
+        self._new_guest.os.nvram = new_nvram.path
 
 
     def prepare(self):
@@ -428,7 +469,7 @@ class Cloner(object):
         except ValueError as e:
             raise ValueError(_("Invalid name for new guest: %s") % e)
 
-        for diskinfo in self.get_diskinfos_to_clone():
+        for diskinfo in self.get_nonshare_diskinfos():
             orig_disk = diskinfo.disk
 
             if not diskinfo.new_disk:
@@ -437,8 +478,7 @@ class Cloner(object):
                          self.conn, self.src_name,
                          self.new_guest.name,
                          orig_disk.path)
-                diskinfo.set_new_path(newpath,
-                        self._overwrite, self._sparse)
+                diskinfo.set_new_path(newpath, self._sparse)
 
             new_disk = diskinfo.new_disk
             assert new_disk
@@ -460,8 +500,7 @@ class Cloner(object):
             xmldisk.driver_type = orig_disk.driver_type
             xmldisk.path = new_disk.path
 
-        if self._new_guest.os.nvram:
-            self._prepare_nvram()
+        self._prepare_nvram()
 
         # Save altered clone xml
         log.debug("Clone guest xml is\n%s", self._new_guest.get_xml())
@@ -483,12 +522,14 @@ class Cloner(object):
             # Define domain early to catch any xml errors before duping storage
             dom = self.conn.defineXML(self._new_guest.get_xml())
 
-            if self._overwrite:
-                diskinfos = self.get_diskinfos_to_clone()
-                for dst_dev in [d.new_disk for d in diskinfos]:
-                    dst_dev.build_storage(meter)
-                if self._nvram_disk:
-                    self._nvram_disk.build_storage(meter)
+            diskinfos = self.get_diskinfos()
+            if self._nvram_diskinfo:
+                diskinfos.append(self._nvram_diskinfo)
+
+            for diskinfo in diskinfos:
+                if not diskinfo.is_clone_requested():
+                    continue
+                diskinfo.new_disk.build_storage(meter)
         except Exception as e:
             log.debug("Duplicate failed: %s", str(e))
             if dom:

@@ -40,7 +40,7 @@ def _process_macs(options, cloner):
 def _process_disks(options, cloner):
     newpaths = (options.new_diskfile or [])[:]
 
-    diskinfos = cloner.get_diskinfos_to_clone()
+    diskinfos = cloner.get_nonshare_diskinfos()
     for diskinfo in diskinfos:
         origpath = diskinfo.disk.path
         newpath = None
@@ -51,17 +51,17 @@ def _process_disks(options, cloner):
 
         if origpath is None:
             newpath = None
-        allow_create = options.overwrite
-        diskinfo.set_new_path(newpath, allow_create, options.sparse)
+        diskinfo.set_new_path(newpath, options.sparse)
 
 
-def _validate_disks(options, cloner):
+def _validate_disks(cloner):
     # Extra CLI validation for specified disks
-    warn_overwrite = options.overwrite
     for diskinfo in cloner.get_diskinfos():
         if not diskinfo.new_disk:
             continue
-        cli.validate_disk(diskinfo.new_disk, warn_overwrite=warn_overwrite)
+        warn_overwrite = not diskinfo.is_preserve_requested()
+        cli.validate_disk(diskinfo.new_disk,
+                warn_overwrite=warn_overwrite)
 
 
 def parse_args():
@@ -104,8 +104,8 @@ def parse_args():
                     default=True,
                     help=_("Do not use a sparse file for the clone's "
                            "disk image"))
-    stog.add_argument("--preserve-data", dest="overwrite",
-            action="store_false", default=True,
+    stog.add_argument("--preserve-data", dest="preserve",
+            action="store_true", default=False,
             help=_("Do not clone storage contents to specified file paths, "
                    "their contents will be left untouched. "
                    "This requires specifying existing paths for "
@@ -155,7 +155,6 @@ def main(conn=None):
     cloner.set_replace(bool(options.replace))
     cloner.set_reflink(bool(options.reflink))
     cloner.set_sparse(bool(options.sparse))
-    cloner.set_overwrite(bool(options.overwrite))
 
     if options.new_uuid is not None:
         cloner.set_clone_uuid(options.new_uuid)
@@ -166,9 +165,15 @@ def main(conn=None):
     skip_targets = options.skip_copy or []
     for diskinfo in cloner.get_diskinfos():
         if diskinfo.disk.target in force_targets:
-            diskinfo.set_clone_requested(True)
+            diskinfo.set_clone_requested()
         if diskinfo.disk.target in skip_targets:
-            diskinfo.set_clone_requested(False)
+            diskinfo.set_share_requested()
+
+    if options.preserve:
+        for diskinfo in cloner.get_nonshare_diskinfos():
+            diskinfo.set_preserve_requested()
+        if cloner.nvram_diskinfo:
+            cloner.nvram_diskinfo.set_preserve_requested()
 
     if options.new_name:
         cloner.set_clone_name(options.new_name)
@@ -181,7 +186,7 @@ def main(conn=None):
 
     cloner.prepare()
 
-    _validate_disks(options, cloner)
+    _validate_disks(cloner)
 
     run = True
     if options.xmlonly:
