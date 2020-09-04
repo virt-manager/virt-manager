@@ -62,7 +62,7 @@ class TestURI(unittest.TestCase):
         self.assertEqual(conn.conn_version(), 1)
         self.assertEqual(conn.local_libvirt_version(), 2)
 
-        conn = tests.utils.URIs.open_testdefault_cached()
+        conn = tests.utils.URIs.openconn("test:///default")
         # Add some support tests with it
         with self.assertRaises(ValueError) as cm:
             conn.support.domain_xml_inactive("foo")
