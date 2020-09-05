@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 from virtinst import log
+from virtinst import xmlutil
 
 from ..baseclass import vmmGObject
 
@@ -43,11 +44,7 @@ class vmmLibvirtObject(vmmGObject):
                           obj)
             return
 
-        import difflib
-        diff = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                            newxml.splitlines(1),
-                                            fromfile="Original XML",
-                                            tofile="New XML"))
+        diff = xmlutil.diff(origxml, newxml, "Original XML", "New XML")
         log.debug("Redefining %s with XML diff:\n%s", obj, diff)
 
     @staticmethod
