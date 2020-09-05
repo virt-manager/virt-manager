@@ -14,6 +14,7 @@ import libvirt
 
 from . import generatename
 from . import progress
+from . import xmlutil
 from .guest import Guest
 from .devices import DeviceInterface
 from .devices import DeviceDisk
@@ -503,7 +504,9 @@ class Cloner(object):
         self._prepare_nvram()
 
         # Save altered clone xml
-        log.debug("Clone guest xml is\n%s", self._new_guest.get_xml())
+        diff = xmlutil.diff(self._src_guest.get_xml(),
+                self._new_guest.get_xml())
+        log.debug("Clone guest xml diff:\n%s", diff)
 
     def start_duplicate(self, meter=None):
         """
