@@ -42,3 +42,14 @@ def test_clone_unmanaged():
 
     assert open(tmp1.name).read() == open(inp1).read()
     assert open(tmp2.name).read() == open(inp2).read()
+
+
+def test_generate_name():
+    conn = utils.URIs.open_testdriver_cached()
+    def _g(n):
+        return Cloner.generate_clone_name(conn, n)
+
+    assert _g("test") == "test-clone1"
+    assert _g("test-clone-simple") == "test-clone-simple-clone"
+    assert _g("test-clone-simple-clone") == "test-clone-simple-clone1"
+    assert _g("test-clone-simple-clone5") == "test-clone-simple-clone6"
