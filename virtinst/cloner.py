@@ -53,15 +53,16 @@ def _generate_clone_name(conn, basename):
     If the orig name is "foo-clone", we don't want the clone to be
     "foo-clone-clone", we want "foo-clone1"
     """
-    match = re.search("-clone[1-9]*$", basename)
+    regex = r"-clone[1-9]*$"
+    match = re.search(regex, basename)
     start_num = 1
     force_num = False
     if match:
         num_match = re.search("[1-9]+$", match.group())
+        force_num = True
         if num_match:
             start_num = int(str(num_match.group())) + 1
-            force_num = True
-        basename = basename.replace(match.group(), "")
+        basename = basename[:match.start()]
 
     def cb(n):
         return generatename.check_libvirt_collision(
