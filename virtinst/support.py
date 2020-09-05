@@ -258,7 +258,7 @@ class SupportCache:
         version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
     conn_mem_stats_period = _make(
         function="virDomain.setMemoryStatsPeriod",
-        version="1.1.1", hv_version={"qemu": 0})
+        version="1.1.1", hv_version={"qemu": 0, "test": "5.6.0"})
     # spice GL is actually enabled with libvirt 1.3.3, but 3.1.0 is the
     # first version that sorts out the qemu:///system + cgroup issues
     conn_graphics_listen_none = _make(version="2.0.0")

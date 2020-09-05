@@ -65,7 +65,7 @@ class _VMStatsList(vmmGObject):
     def append_stats(self, newstats):
         expected = self.config.get_stats_history_length()
         current = len(self._stats)
-        if current > expected:
+        if current > expected:  # pragma: no cover
             del(self._stats[expected:current])
 
         def _calculate_rate(record_name):
@@ -132,6 +132,8 @@ class vmmStatsManager(vmmGObject):
 
 
     def _cleanup(self):
+        for statslist in self._vm_stats.values():
+            statslist.cleanup()
         self._latest_all_stats = None
 
 
@@ -202,7 +204,7 @@ class vmmStatsManager(vmmGObject):
                 rx = io[0]
                 tx = io[4]
                 return rx, tx
-        except libvirt.libvirtError as err:
+        except libvirt.libvirtError as err:  # pragma: no cover
             if vm.conn.support.is_error_nosupport(err):
                 log.debug("conn does not support interfaceStats")
                 self._net_stats_supported = False
@@ -216,7 +218,7 @@ class vmmStatsManager(vmmGObject):
             else:
                 log.debug("Aren't running, don't add to skiplist")
 
-        return 0, 0
+        return 0, 0  # pragma: no cover
 
     def _sample_net_stats(self, vm, allstats):
         rx = 0
@@ -229,7 +231,7 @@ class vmmStatsManager(vmmGObject):
             return rx, tx
 
         if allstats:
-            for key in allstats.keys():
+            for key in allstats.keys():  # pragma: no cover
                 if re.match(r"net.[0-9]+.rx.bytes", key):
                     rx += allstats[key]
                 if re.match(r"net.[0-9]+.tx.bytes", key):
@@ -239,9 +241,9 @@ class vmmStatsManager(vmmGObject):
         for iface in vm.get_interface_devices_norefresh():
             dev = iface.target_dev
             if not dev:
-                continue
+                continue  # pragma: no cover
             if dev in statslist.stats_net_skip:
-                continue
+                continue  # pragma: no cover
 
             devrx, devtx = self._old_net_stats_helper(vm, dev)
             rx += devrx
@@ -262,7 +264,7 @@ class vmmStatsManager(vmmGObject):
                 rd = io[1]
                 wr = io[3]
                 return rd, wr
-        except libvirt.libvirtError as err:
+        except libvirt.libvirtError as err:  # pragma: no cover
             if vm.conn.support.is_error_nosupport(err):
                 log.debug("conn does not support blockStats")
                 self._disk_stats_supported = False
@@ -276,7 +278,7 @@ class vmmStatsManager(vmmGObject):
             else:
                 log.debug("Aren't running, don't add to skiplist")
 
-        return 0, 0
+        return 0, 0  # pragma: no cover
 
     def _sample_disk_stats(self, vm, allstats):
         rd = 0
@@ -304,16 +306,16 @@ class vmmStatsManager(vmmGObject):
                     rd = io[1]
                     wr = io[3]
                     return rd, wr
-            except libvirt.libvirtError as e:
+            except libvirt.libvirtError as e:  # pragma: no cover
                 log.debug("LXC style disk stats not supported: %s", e)
                 self._disk_stats_lxc_supported = False
 
         for disk in vm.get_disk_devices_norefresh():
             dev = disk.target
             if not dev:
-                continue
+                continue  # pragma: no cover
             if dev in statslist.stats_disk_skip:
-                continue
+                continue  # pragma: no cover
 
             diskrd, diskwr = self._old_disk_stats_helper(vm, dev)
             rd += diskrd
@@ -335,13 +337,13 @@ class vmmStatsManager(vmmGObject):
         # Only works for virtio balloon
         if not any([b for b in vm.get_xmlobj().devices.memballoon if
                     b.model == "virtio"]):
-            return
+            return  # pragma: no cover
 
         try:
             secs = 5
             vm.get_backend().setMemoryStatsPeriod(secs,
                 libvirt.VIR_DOMAIN_AFFECT_LIVE)
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             log.debug("Error setting memstats period: %s", e)
 
     def _old_mem_stats_helper(self, vm):
@@ -351,7 +353,7 @@ class vmmStatsManager(vmmGObject):
             stats = vm.get_backend().memoryStats()
             totalmem = stats.get("actual", 1)
             curmem = max(0, totalmem - stats.get("unused", totalmem))
-        except libvirt.libvirtError as err:
+        except libvirt.libvirtError as err:  # pragma: no cover
             if vm.conn.support.is_error_nosupport(err):
                 log.debug("conn does not support memoryStats")
                 self._mem_stats_supported = False
@@ -405,7 +407,7 @@ class vmmStatsManager(vmmGObject):
         if self.config.get_stats_enable_net_poll():
             statflags |= libvirt.VIR_DOMAIN_STATS_INTERFACE
         if statflags == 0:
-            return {}
+            return {}  # pragma: no cover
 
         ret = {}
         try:
@@ -420,7 +422,7 @@ class vmmStatsManager(vmmGObject):
             if conn.support.is_error_nosupport(err):
                 log.debug("conn does not support getAllDomainStats()")
                 self._all_stats_supported = False
-            else:
+            else:  # pragma: no cover
                 log.debug("Error call getAllDomainStats(): %s", err)
         return ret
 
