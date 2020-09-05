@@ -68,3 +68,11 @@ def set_prop_path(obj, prop_path, value):
 
 def in_testsuite():
     return "VIRTINST_TEST_SUITE" in os.environ
+
+
+def diff(origstr, newstr, fromfile="Original", tofile="New"):
+    import difflib
+    dlist = difflib.unified_diff(
+            origstr.splitlines(1), newstr.splitlines(1),
+            fromfile=fromfile, tofile=tofile)
+    return "".join(dlist)

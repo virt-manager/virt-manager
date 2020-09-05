@@ -9,11 +9,10 @@ import re
 import urllib.parse
 
 from .logger import log
+from . import xmlutil
 
 
 def sanitize_xml_for_test_define(xml):
-    import difflib
-
     orig = xml
     xml = re.sub("arch=\".*\"", "arch=\"i686\"", xml)
     xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
@@ -21,8 +20,7 @@ def sanitize_xml_for_test_define(xml):
     xml = re.sub(">exe<", ">hvm<", xml)
     xml = re.sub(">linux<", ">xen<", xml)
 
-    diff = "\n".join(difflib.unified_diff(orig.split("\n"),
-                                          xml.split("\n")))
+    diff = xmlutil.diff(orig, xml)
     if diff:
         log.debug("virtinst test sanitizing diff\n:%s", diff)
     return xml

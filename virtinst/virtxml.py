@@ -5,7 +5,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import difflib
 import sys
 
 import libvirt
@@ -37,16 +36,13 @@ def prompt_yes_or_no(msg):
 
 
 def get_diff(origxml, newxml):
-    ret = "".join(difflib.unified_diff(origxml.splitlines(1),
-                                       newxml.splitlines(1),
-                                       fromfile="Original XML",
-                                       tofile="Altered XML"))
+    diff = xmlutil.diff(origxml, newxml, "Original XML", "Altered XML")
 
-    if ret:
-        log.debug("XML diff:\n%s", ret)
+    if diff:
+        log.debug("XML diff:\n%s", diff)
     else:
         log.debug("No XML diff, didn't generate any change.")
-    return ret
+    return diff
 
 
 def set_os_variant(options, guest):

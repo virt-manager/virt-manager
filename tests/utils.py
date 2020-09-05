@@ -3,7 +3,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import difflib
 import os
 import sys
 import unittest
@@ -11,8 +10,9 @@ import unittest
 import libvirt
 
 import virtinst
-from virtinst import cli
 import virtinst.uri
+from virtinst import cli
+from virtinst import xmlutil
 
 
 # pylint: disable=protected-access
@@ -231,10 +231,8 @@ def diff_compare(actual_out, filename=None, expect_out=None):
             open(filename, "w").write(actual_out)
         expect_out = open(filename).read()
 
-    diff = "".join(difflib.unified_diff(expect_out.splitlines(1),
-                                        actual_out.splitlines(1),
-                                        fromfile=filename or '',
-                                        tofile="Generated Output"))
+    diff = xmlutil.diff(expect_out, actual_out,
+            filename or '', "Generated output")
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)
 
