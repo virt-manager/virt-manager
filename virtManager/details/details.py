@@ -52,14 +52,9 @@ from ..delete import vmmDeleteStorage
  EDIT_KERNEL,
  EDIT_INIT,
 
- EDIT_DISK_RO,
- EDIT_DISK_SHARE,
- EDIT_DISK_REMOVABLE,
- EDIT_DISK_CACHE,
- EDIT_DISK_DISCARD,
- EDIT_DISK_DETECT_ZEROES,
  EDIT_DISK_BUS,
  EDIT_DISK_PATH,
+ EDIT_DISK,
 
  EDIT_SOUND_MODEL,
 
@@ -94,7 +89,7 @@ from ..delete import vmmDeleteStorage
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 49)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 44)
 
 
 # Columns in hw list model
@@ -404,6 +399,11 @@ class vmmDetails(vmmGObjectUI):
         self.vsockdetails.connect("changed-auto-cid", _e(EDIT_VSOCK_AUTO))
         self.vsockdetails.connect("changed-cid", _e(EDIT_VSOCK_CID))
 
+        self._addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
+        self.widget("storage-advanced-align").add(
+                self._addstorage.advanced_top_box)
+        self._addstorage.connect("changed", _e(EDIT_DISK))
+
         self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
                 self.widget("hw-panel-align"),
                 self.widget("hw-panel"))
@@ -467,12 +467,6 @@ class vmmDetails(vmmGObjectUI):
 
 
             "on_disk_source_browse_clicked": self._disk_source_browse_clicked_cb,
-            "on_disk_readonly_changed": _e(EDIT_DISK_RO),
-            "on_disk_shareable_changed": _e(EDIT_DISK_SHARE),
-            "on_disk_removable_changed": _e(EDIT_DISK_REMOVABLE),
-            "on_disk_cache_combo_changed": _e(EDIT_DISK_CACHE),
-            "on_disk_discard_combo_changed": _e(EDIT_DISK_DISCARD),
-            "on_disk_detect_zeroes_combo_changed": _e(EDIT_DISK_DETECT_ZEROES),
             "on_disk_bus_combo_changed": _e(EDIT_DISK_BUS),
 
             "on_network_model_combo_changed": _e(EDIT_NET_MODEL),
@@ -809,18 +803,6 @@ class vmmDetails(vmmGObjectUI):
         model.append([None, None, None, True])
         for name in domcaps.get_cpu_models():
             model.append([name, name, name, False])
-
-        # Disk cache combo
-        disk_cache = self.widget("disk-cache")
-        vmmAddHardware.build_disk_cache_combo(self.vm, disk_cache)
-
-        # Discard combo
-        combo = self.widget("disk-discard")
-        vmmAddHardware.build_disk_discard_combo(self.vm, combo)
-
-        # Detect zeroes combo
-        combo = self.widget("disk-detect-zeroes")
-        vmmAddHardware.build_disk_detect_zeroes_combo(self.vm, combo)
 
         # Disk bus combo
         disk_bus = self.widget("disk-bus")
@@ -1521,27 +1503,9 @@ class vmmDetails(vmmGObjectUI):
             vmmAddStorage.check_path_search(self, self.conn, path)
             kwargs["path"] = path or None
 
-        if self._edited(EDIT_DISK_RO):
-            kwargs["readonly"] = self.widget("disk-readonly").get_active()
-
-        if self._edited(EDIT_DISK_SHARE):
-            kwargs["shareable"] = self.widget("disk-shareable").get_active()
-
-        if self._edited(EDIT_DISK_REMOVABLE):
-            kwargs["removable"] = bool(
-                self.widget("disk-removable").get_active())
-
-        if self._edited(EDIT_DISK_CACHE):
-            kwargs["cache"] = uiutil.get_list_selection(
-                self.widget("disk-cache"))
-
-        if self._edited(EDIT_DISK_DISCARD):
-            kwargs["discard"] = uiutil.get_list_selection(
-                self.widget("disk-discard"))
-
-        if self._edited(EDIT_DISK_DETECT_ZEROES):
-            kwargs["detect_zeroes"] = uiutil.get_list_selection(
-                self.widget("disk-detect-zeroes"))
+        if self._edited(EDIT_DISK):
+            vals = self._addstorage.get_values()
+            kwargs.update(vals)
 
         if self._edited(EDIT_DISK_BUS):
             kwargs["bus"] = uiutil.get_list_selection(
@@ -2004,13 +1968,7 @@ class vmmDetails(vmmGObjectUI):
     def _refresh_disk_page(self, disk):
         path = disk.path
         devtype = disk.device
-        ro = disk.read_only
-        share = disk.shareable
         bus = disk.bus
-        removable = disk.removable
-        cache = disk.driver_cache
-        discard = disk.driver_discard
-        detect_zeroes = disk.driver_detect_zeroes
 
         size = "-"
         if path:
@@ -2019,31 +1977,11 @@ class vmmDetails(vmmGObjectUI):
             if vol:
                 size = vol.get_pretty_capacity()
 
-        is_usb = (bus == "usb")
-
-        can_set_removable = (is_usb and (self.conn.is_qemu() or
-                                         self.conn.is_test()))
-        if removable is None:
-            removable = False
-        else:
-            can_set_removable = True
 
         pretty_name = _label_for_device(disk)
 
         self.widget("disk-target-type").set_text(pretty_name)
-
-        self.widget("disk-readonly").set_active(ro)
-        self.widget("disk-readonly").set_sensitive(not disk.is_cdrom())
-        self.widget("disk-shareable").set_active(share)
-        self.widget("disk-removable").set_active(removable)
-        uiutil.set_grid_row_visible(self.widget("disk-removable"),
-                                       can_set_removable)
-
         self.widget("disk-size").set_text(size)
-        uiutil.set_list_selection(self.widget("disk-cache"), cache)
-        uiutil.set_list_selection(self.widget("disk-discard"), discard)
-        uiutil.set_list_selection(self.widget("disk-detect-zeroes"),
-                                  detect_zeroes)
 
         vmmAddHardware.populate_disk_bus_combo(self.vm, devtype,
             self.widget("disk-bus").get_model())
@@ -2059,6 +1997,8 @@ class vmmDetails(vmmGObjectUI):
         if is_removable:
             self._mediacombo.reset_state(is_floppy=disk.is_floppy())
             self._mediacombo.set_path(path or "")
+
+        self._addstorage.set_dev(disk)
 
     def _refresh_network_page(self, net):
         vmmAddHardware.populate_network_model_combo(

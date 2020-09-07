@@ -333,6 +333,7 @@ class NewVM(uiutils.UITestCase):
         # Device is now 'USB Disk 1'
         c = hwlist.find("USB Disk 1", "table cell")
         uiutils.check(lambda: c.state_selected)
+        tab.find("Advanced options", "toggle button").click_expander()
         tab.find("Removable:", "check box").click()
         appl.click()
         uiutils.check(lambda: not appl.sensitive)

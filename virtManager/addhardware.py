@@ -46,24 +46,6 @@ from .xmleditor import vmmXMLEditor
  PAGE_VSOCK) = range(17)
 
 
-def _build_combo(combo, values, default_value=None, sort=True):
-    """
-    Helper to build a combo with model schema [xml value, label]
-    """
-    model = Gtk.ListStore(object, str)
-    combo.set_model(model)
-    uiutil.init_combo_text_column(combo, 1)
-    if sort:
-        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
-    for xmlval, label in values:
-        model.append([xmlval, label])
-    if default_value:
-        uiutil.set_list_selection(combo, default_value)
-    elif len(model):
-        combo.set_active(0)
-
-
 class vmmAddHardware(vmmGObjectUI):
     def __init__(self, vm):
         vmmGObjectUI.__init__(self, "addhardware.ui", "vmm-add-hardware")
@@ -89,6 +71,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self.addstorage.top_box)
+        self.widget("storage-advanced-align").add(
+                self.addstorage.advanced_top_box)
         self.addstorage.connect("browse-clicked", self._browse_storage_cb)
 
         self._vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
@@ -191,16 +175,12 @@ class vmmAddHardware(vmmGObjectUI):
         # Individual HW page UI
         self.build_disk_bus_combo(self.vm, self.widget("storage-bustype"))
         self._build_disk_device_combo()
-        self.build_disk_cache_combo(self.vm, self.widget("storage-cache"))
-        self.build_disk_discard_combo(self.vm, self.widget("storage-discard"))
-        self.build_disk_detect_zeroes_combo(self.vm,
-            self.widget("storage-detect-zeroes"))
         self.build_network_model_combo(self.vm, self.widget("net-model"))
         self._build_input_combo()
         self.build_sound_combo(self.vm, self.widget("sound-model"))
         self._build_hostdev_treeview()
         self.build_video_combo(self.vm, self.widget("video-model"))
-        _build_combo(self.widget("char-device-type"), [])
+        uiutil.build_simple_combo(self.widget("char-device-type"), [])
         self._build_char_target_type_combo()
         self._build_char_target_name_combo()
         self.build_watchdogmodel_combo(self.vm, self.widget("watchdog-model"))
@@ -209,7 +189,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._build_redir_type_combo()
         self._build_tpm_type_combo(self.vm)
         self._build_panic_model_combo()
-        _build_combo(self.widget("controller-model"), [])
+        uiutil.build_simple_combo(self.widget("controller-model"), [])
         self._build_controller_type_combo()
 
 
@@ -301,8 +281,6 @@ class vmmAddHardware(vmmGObjectUI):
         # Storage params
         self.widget("storage-devtype").set_active(0)
         self.widget("storage-devtype").emit("changed")
-        self.widget("storage-cache").set_active(0)
-        self.widget("disk-advanced-expander").set_expanded(False)
         self.addstorage.reset_state()
 
 
@@ -710,29 +688,8 @@ class vmmAddHardware(vmmGObjectUI):
         target_list.set_active(0)
 
     @staticmethod
-    def build_disk_cache_combo(_vm, combo):
-        values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.CACHE_MODES:
-            values.append([m, m])
-        _build_combo(combo, values, sort=False)
-
-    @staticmethod
-    def build_disk_discard_combo(_vm, combo):
-        values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.DISCARD_MODES:
-            values.append([m, m])
-        _build_combo(combo, values, sort=False)
-
-    @staticmethod
-    def build_disk_detect_zeroes_combo(_vm, combo):
-        values = [[None, _("Hypervisor default")]]
-        for m in DeviceDisk.DETECT_ZEROES_MODES:
-            values.append([m, m])
-        _build_combo(combo, values, sort=False)
-
-    @staticmethod
     def build_disk_bus_combo(_vm, combo):
-        _build_combo(combo, [])
+        uiutil.build_simple_combo(combo, [])
 
     @staticmethod
     def populate_disk_bus_combo(vm, devtype, model):
@@ -759,7 +716,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def build_network_model_combo(vm, combo):
-        _build_combo(combo, [])
+        uiutil.build_simple_combo(combo, [])
         vmmAddHardware.populate_network_model_combo(vm, combo)
 
 
@@ -774,7 +731,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         cvals = [((t, b), vmmAddHardware.input_pretty_name(t, b))
                  for t, b in devices]
-        _build_combo(self.widget("input-type"), cvals)
+        uiutil.build_simple_combo(self.widget("input-type"), cvals)
 
 
     @staticmethod
@@ -784,7 +741,7 @@ class vmmAddHardware(vmmGObjectUI):
             values.append([m, vmmAddHardware.sound_pretty_model(m)])
 
         default = DeviceSound.default_model(vm.xmlobj)
-        _build_combo(combo, values, default_value=default)
+        uiutil.build_simple_combo(combo, values, default_value=default)
 
 
     def _build_hostdev_treeview(self):
@@ -833,7 +790,7 @@ class vmmAddHardware(vmmGObjectUI):
         if not values:
             values.append([None, _("Hypervisor default")])
         default = DeviceVideo.default_model(vm.xmlobj)
-        _build_combo(combo, values, default_value=default)
+        uiutil.build_simple_combo(combo, values, default_value=default)
 
 
     def _build_char_target_type_combo(self):
@@ -842,13 +799,13 @@ class vmmAddHardware(vmmGObjectUI):
             values.append(["virtio", "VirtIO"])
         else:
             values.append([None, _("Hypervisor default")])
-        _build_combo(self.widget("char-target-type"), values)
+        uiutil.build_simple_combo(self.widget("char-target-type"), values)
 
     def _build_char_target_name_combo(self):
         values = []
         for n in DeviceChannel.CHANNEL_NAMES:
             values.append([n, n])
-        _build_combo(self.widget("char-target-name"), values)
+        uiutil.build_simple_combo(self.widget("char-target-name"), values)
 
     def _populate_char_device_type_combo(self):
         char_class = self._get_char_class()
@@ -865,14 +822,14 @@ class vmmAddHardware(vmmGObjectUI):
         values = []
         for m in DeviceWatchdog.MODELS:
             values.append([m, m.upper()])
-        _build_combo(combo, values, default_value=DeviceWatchdog.MODEL_I6300)
+        uiutil.build_simple_combo(combo, values, default_value=DeviceWatchdog.MODEL_I6300)
 
     @staticmethod
     def build_watchdogaction_combo(_vm, combo):
         values = []
         for m in DeviceWatchdog.ACTIONS:
             values.append([m, vmmAddHardware.watchdog_pretty_action(m)])
-        _build_combo(combo, values, default_value=DeviceWatchdog.ACTION_RESET)
+        uiutil.build_simple_combo(combo, values, default_value=DeviceWatchdog.ACTION_RESET)
 
 
     @staticmethod
@@ -881,27 +838,27 @@ class vmmAddHardware(vmmGObjectUI):
             ["passthrough", _("Passthrough")],
             ["host", _("Host")],
         ]
-        _build_combo(combo, values)
+        uiutil.build_simple_combo(combo, values)
 
 
     def _build_redir_type_combo(self):
         values = [["spicevmc", _("Spice channel")]]
-        _build_combo(self.widget("usbredir-list"), values)
+        uiutil.build_simple_combo(self.widget("usbredir-list"), values)
 
 
     def _build_tpm_type_combo(self, vm):
         values = []
         for t in DeviceTpm.TYPES:
             values.append([t, vmmAddHardware.tpm_pretty_type(t)])
-        _build_combo(self.widget("tpm-type"), values)
+        uiutil.build_simple_combo(self.widget("tpm-type"), values)
         values = []
         for t in vmmAddHardware._get_tpm_model_list(vm, None):
             values.append([t, vmmAddHardware.tpm_pretty_model(t)])
-        _build_combo(self.widget("tpm-model"), values)
+        uiutil.build_simple_combo(self.widget("tpm-model"), values)
         values = []
         for t in DeviceTpm.VERSIONS:
             values.append([t, t])
-        _build_combo(self.widget("tpm-version"), values,
+        uiutil.build_simple_combo(self.widget("tpm-version"), values,
                 default_value=DeviceTpm.VERSION_2_0)
 
     @staticmethod
@@ -929,7 +886,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def build_tpm_model_combo(vm, combo, tpmversion):
-        _build_combo(combo, [])
+        uiutil.build_simple_combo(combo, [])
         vmmAddHardware.populate_tpm_model_combo(vm, combo, tpmversion)
 
 
@@ -939,7 +896,7 @@ class vmmAddHardware(vmmGObjectUI):
             values.append([m, vmmAddHardware.panic_pretty_model(m)])
 
         default = DevicePanic.get_default_model(self.vm.get_xmlobj())
-        _build_combo(self.widget("panic-model"), values, default_value=default)
+        uiutil.build_simple_combo(self.widget("panic-model"), values, default_value=default)
 
 
     def _build_controller_type_combo(self):
@@ -947,7 +904,7 @@ class vmmAddHardware(vmmGObjectUI):
         for t in vmmAddHardware.controller_recommended_types():
             values.append([t, vmmAddHardware.controller_pretty_type(t)])
 
-        _build_combo(self.widget("controller-type"), values,
+        uiutil.build_simple_combo(self.widget("controller-type"), values,
                 default_value=DeviceController.TYPE_SCSI)
 
     @staticmethod
@@ -1483,24 +1440,12 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("storage-bustype"))
         device = uiutil.get_list_selection(
             self.widget("storage-devtype"))
-        cache = uiutil.get_list_selection(
-            self.widget("storage-cache"))
-        discard = uiutil.get_list_selection(
-            self.widget("storage-discard"))
-        detect_zeroes = uiutil.get_list_selection(
-            self.widget("storage-detect-zeroes"))
 
         disk = self.addstorage.build_device(self.vm.get_name(),
             collideguest=self.vm.xmlobj, device=device)
 
         used = []
         disk.bus = bus
-        if cache:
-            disk.driver_cache = cache
-        if discard:
-            disk.driver_discard = discard
-        if detect_zeroes:
-            disk.driver_detect_zeroes = detect_zeroes
 
         # Generate target
         disks = (self.vm.xmlobj.devices.disk +

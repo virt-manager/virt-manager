@@ -13,11 +13,21 @@ from virtinst import log
 from ..lib import uiutil
 from ..baseclass import vmmGObjectUI
 
+(
+    _EDIT_CACHE,
+    _EDIT_DISCARD,
+    _EDIT_DETECT_ZEROES,
+    _EDIT_RO,
+    _EDIT_SHARE,
+    _EDIT_REMOVABLE,
+) = range(1, 7)
+
 
 class vmmAddStorage(vmmGObjectUI):
     __gsignals__ = {
         "browse-clicked": (vmmGObjectUI.RUN_FIRST, None, [object]),
-        "storage-toggled": (vmmGObjectUI.RUN_FIRST, None, [object])
+        "storage-toggled": (vmmGObjectUI.RUN_FIRST, None, [object]),
+        "changed": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     def __init__(self, conn, builder, topwin):
@@ -25,12 +35,26 @@ class vmmAddStorage(vmmGObjectUI):
                               builder=builder, topwin=topwin)
         self.conn = conn
 
+        def _e(edittype):
+            def signal_cb(*args):
+                self._change_cb(edittype)
+            return signal_cb
+
         self.builder.connect_signals({
             "on_storage_browse_clicked": self._browse_storage,
             "on_storage_select_toggled": self._toggle_storage_select,
+            "on_disk_cache_combo_changed": _e(_EDIT_CACHE),
+            "on_disk_discard_combo_changed": _e(_EDIT_DISCARD),
+            "on_disk_detect_zeroes_combo_changed": _e(_EDIT_DETECT_ZEROES),
+            "on_disk_readonly_changed": _e(_EDIT_RO),
+            "on_disk_shareable_changed": _e(_EDIT_SHARE),
+            "on_disk_removable_changed": _e(_EDIT_REMOVABLE),
         })
 
+        self._active_edits = []
         self.top_box = self.widget("storage-box")
+        self.advanced_top_box = self.widget("storage-advanced-box")
+        self._init_ui()
 
     def _cleanup(self):
         self.conn = None
@@ -66,6 +90,28 @@ class vmmAddStorage(vmmGObjectUI):
                     pretty_storage(max_storage))
         hd_label = ("<span>%s</span>" % hd_label)
         widget.set_markup(hd_label)
+
+    def _init_ui(self):
+        # Disk cache combo
+        values = [[None, _("Hypervisor default")]]
+        for m in virtinst.DeviceDisk.CACHE_MODES:
+            values.append([m, m])
+        uiutil.build_simple_combo(
+                self.widget("disk-cache"), values, sort=False)
+
+        # Discard combo
+        values = [[None, _("Hypervisor default")]]
+        for m in virtinst.DeviceDisk.DISCARD_MODES:
+            values.append([m, m])
+        uiutil.build_simple_combo(
+                self.widget("disk-discard"), values, sort=False)
+
+        # Detect zeroes combo
+        values = [[None, _("Hypervisor default")]]
+        for m in virtinst.DeviceDisk.DETECT_ZEROES_MODES:
+            values.append([m, m])
+        uiutil.build_simple_combo(
+                self.widget("disk-detect-zeroes"), values, sort=False)
 
 
     ##############
@@ -122,10 +168,19 @@ class vmmAddStorage(vmmGObjectUI):
 
     def reset_state(self):
         self._update_host_space()
+        self._active_edits = []
         self.widget("storage-create").set_active(True)
         self.widget("storage-size").set_value(20)
         self.widget("storage-entry").set_text("")
         self.widget("storage-create-box").set_sensitive(True)
+        self.widget("disk-cache").set_active(0)
+        self.widget("disk-discard").set_active(0)
+        self.widget("disk-detect-zeroes").set_active(0)
+        self.widget("storage-advanced").set_expanded(False)
+        self.widget("disk-readonly").set_active(False)
+        self.widget("disk-shareable").set_active(False)
+        self.widget("disk-removable").set_active(False)
+        uiutil.set_grid_row_visible(self.widget("disk-removable"), False)
 
         storage_tooltip = None
 
@@ -170,6 +225,18 @@ class vmmAddStorage(vmmGObjectUI):
         disk = virtinst.DeviceDisk(self.conn.get_backend())
         disk.path = path or None
         disk.device = device
+        vals = self.get_values()
+
+        if vals.get("cache") is not None:
+            disk.driver_cache = vals.get("cache")
+        if vals.get("discard") is not None:
+            disk.driver_discard = vals.get("discard")
+        if vals.get("detect_zeroes") is not None:
+            disk.driver_detect_zeroes = vals.get("detect_zeroes")
+        if vals.get("readonly") is not None:
+            disk.read_only = vals.get("readonly")
+        if vals.get("shareable") is not None:
+            disk.shareable = vals.get("shareable")
 
         if disk.wants_storage_creation():
             pool = disk.get_parent_pool()
@@ -212,6 +279,65 @@ class vmmAddStorage(vmmGObjectUI):
         self.check_path_search(self, self.conn, disk.path)
 
 
+    ##################
+    # Device editing #
+    ##################
+
+    def set_dev(self, disk):
+        cache = disk.driver_cache
+        discard = disk.driver_discard
+        detect_zeroes = disk.driver_detect_zeroes
+        ro = disk.read_only
+        share = disk.shareable
+        removable = disk.removable
+
+        is_usb = (disk.bus == "usb")
+        can_set_removable = (is_usb and (self.conn.is_qemu() or
+                                         self.conn.is_test()))
+        if removable is None:
+            removable = False
+        else:
+            can_set_removable = True
+
+        uiutil.set_list_selection(self.widget("disk-cache"), cache)
+        uiutil.set_list_selection(self.widget("disk-discard"), discard)
+        uiutil.set_list_selection(
+                self.widget("disk-detect-zeroes"), detect_zeroes)
+
+        self.widget("disk-readonly").set_active(ro)
+        self.widget("disk-readonly").set_sensitive(not disk.is_cdrom())
+        self.widget("disk-shareable").set_active(share)
+        self.widget("disk-removable").set_active(removable)
+        uiutil.set_grid_row_visible(
+                self.widget("disk-removable"), can_set_removable)
+
+        # This comes last
+        self._active_edits = []
+
+
+    def get_values(self):
+        ret = {}
+
+        if _EDIT_CACHE in self._active_edits:
+            ret["cache"] = uiutil.get_list_selection(
+                    self.widget("disk-cache"))
+        if _EDIT_DISCARD in self._active_edits:
+            ret["discard"] = uiutil.get_list_selection(
+                    self.widget("disk-discard"))
+        if _EDIT_DETECT_ZEROES in self._active_edits:
+            ret["detect_zeroes"] = uiutil.get_list_selection(
+                    self.widget("disk-detect-zeroes"))
+        if _EDIT_RO in self._active_edits:
+            ret["readonly"] = self.widget("disk-readonly").get_active()
+        if _EDIT_SHARE in self._active_edits:
+            ret["shareable"] = self.widget("disk-shareable").get_active()
+        if _EDIT_REMOVABLE in self._active_edits:
+            ret["removable"] = bool(
+                self.widget("disk-removable").get_active())
+
+        return ret
+
+
     #############
     # Listeners #
     #############
@@ -223,3 +349,8 @@ class vmmAddStorage(vmmGObjectUI):
         act = src.get_active()
         self.widget("storage-browse-box").set_sensitive(act)
         self.emit("storage-toggled", src)
+
+    def _change_cb(self, edittype):
+        if edittype not in self._active_edits:
+            self._active_edits.append(edittype)
+        self.emit("changed")

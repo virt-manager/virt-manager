@@ -366,12 +366,12 @@ class Details(uiutils.UITestCase):
 
         # Disk options
         tab = self._select_hw(win, "IDE Disk 1", "disk-tab")
+        tab.find("Advanced options", "toggle button").click_expander()
         tab.find("Shareable:", "check box").click()
         tab.find("Readonly:", "check box").click()
-        tab.find("Advanced options", "toggle button").click_expander()
-        tab.find("Cache mode:", "text").set_text("unsafe")
-        tab.find("Discard mode:", "text").set_text("unmap")
-        tab.find("Detect zeroes:", "text").set_text("unmap")
+        tab.combo_select("Cache mode:", "unsafe")
+        tab.combo_select("Discard mode:", "unmap")
+        tab.combo_select("Detect zeroes:", "unmap")
         appl.click()
         uiutils.check(lambda: not appl.sensitive)
 
@@ -441,6 +441,7 @@ class Details(uiutils.UITestCase):
 
         # Fail to hotremove
         tab = self._select_hw(win, "Floppy 1", "disk-tab")
+        tab.find("Advanced options", "toggle button").click_expander()
         share = tab.find("Shareable", "check box")
         share.click()
         uiutils.check(lambda: appl.sensitive)
@@ -620,7 +621,7 @@ class Details(uiutils.UITestCase):
 
         # Attempt to apply changes when skipping away, but they fail
         tab.find("Advanced options", "toggle button").click_expander()
-        tab.find("Cache mode:", "text").set_text("badcachemode")
+        tab.find("Cache mode:", "combo").find(None, "text").set_text("badcachemode")
         hwlist.find("CPUs", "table cell").click()
         self._click_alert_button("There are unapplied changes", "Yes")
         self._click_alert_button("badcachemode", "Close")

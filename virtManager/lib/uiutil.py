@@ -176,3 +176,21 @@ def pretty_mem(val):
         return "%2.2f GiB" % (val / (1024.0 * 1024.0))
     else:
         return "%2.0f MiB" % (val / 1024.0)
+
+
+def build_simple_combo(combo, values, default_value=None, sort=True):
+    """
+    Helper to build a combo with model schema [xml value, label]
+    """
+    model = Gtk.ListStore(object, str)
+    combo.set_model(model)
+    init_combo_text_column(combo, 1)
+    if sort:
+        model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+
+    for xmlval, label in values:
+        model.append([xmlval, label])
+    if default_value:
+        set_list_selection(combo, default_value)
+    elif len(model):
+        combo.set_active(0)
