@@ -148,6 +148,8 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.combo_select("Bus type:", "VirtIO")
         tab.find("Advanced options", "toggle button").click_expander()
+        tab.find("Shareable:", "check box").click()
+        tab.find("Readonly:", "check box").click()
         tab.combo_select("Cache mode:", "none")
         tab.combo_select("Discard mode:", "ignore")
         tab.combo_select("Detect zeroes:", "unmap")
