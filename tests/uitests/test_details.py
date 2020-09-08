@@ -369,6 +369,7 @@ class Details(uiutils.UITestCase):
         tab.find("Advanced options", "toggle button").click_expander()
         tab.find("Shareable:", "check box").click()
         tab.find("Readonly:", "check box").click()
+        tab.find("Serial:", "text").set_text("1234-ABCD")
         tab.combo_select("Cache mode:", "unsafe")
         tab.combo_select("Discard mode:", "unmap")
         tab.combo_select("Detect zeroes:", "unmap")

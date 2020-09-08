@@ -726,7 +726,8 @@ class vmmDomain(vmmLibvirtObject):
     def define_disk(self, devobj, do_hotplug,
             path=_SENTINEL, readonly=_SENTINEL,
             shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
-            discard=_SENTINEL, detect_zeroes=_SENTINEL, bus=_SENTINEL):
+            discard=_SENTINEL, detect_zeroes=_SENTINEL, bus=_SENTINEL,
+            serial=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -744,6 +745,8 @@ class vmmDomain(vmmLibvirtObject):
         if removable != _SENTINEL:
             editdev.removable = removable
 
+        if serial != _SENTINEL:
+            editdev.serial = serial or None
         if cache != _SENTINEL:
             editdev.driver_cache = cache or None
         if discard != _SENTINEL:

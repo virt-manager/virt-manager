@@ -20,7 +20,8 @@ from ..baseclass import vmmGObjectUI
     _EDIT_RO,
     _EDIT_SHARE,
     _EDIT_REMOVABLE,
-) = range(1, 7)
+    _EDIT_SERIAL,
+) = range(1, 8)
 
 
 class vmmAddStorage(vmmGObjectUI):
@@ -49,6 +50,7 @@ class vmmAddStorage(vmmGObjectUI):
             "on_disk_readonly_changed": _e(_EDIT_RO),
             "on_disk_shareable_changed": _e(_EDIT_SHARE),
             "on_disk_removable_changed": _e(_EDIT_REMOVABLE),
+            "on_disk_serial_changed": _e(_EDIT_SERIAL),
         })
 
         self._active_edits = []
@@ -176,6 +178,7 @@ class vmmAddStorage(vmmGObjectUI):
         self.widget("disk-cache").set_active(0)
         self.widget("disk-discard").set_active(0)
         self.widget("disk-detect-zeroes").set_active(0)
+        self.widget("disk-serial").set_text("")
         self.widget("storage-advanced").set_expanded(False)
         self.widget("disk-readonly").set_active(False)
         self.widget("disk-shareable").set_active(False)
@@ -237,6 +240,8 @@ class vmmAddStorage(vmmGObjectUI):
             disk.read_only = vals.get("readonly")
         if vals.get("shareable") is not None:
             disk.shareable = vals.get("shareable")
+        if vals.get("serial") is not None:
+            disk.serial = vals.get("serial")
 
         if disk.wants_storage_creation():
             pool = disk.get_parent_pool()
@@ -290,6 +295,7 @@ class vmmAddStorage(vmmGObjectUI):
         ro = disk.read_only
         share = disk.shareable
         removable = disk.removable
+        serial = disk.serial
 
         is_usb = (disk.bus == "usb")
         can_set_removable = (is_usb and (self.conn.is_qemu() or
@@ -304,6 +310,7 @@ class vmmAddStorage(vmmGObjectUI):
         uiutil.set_list_selection(
                 self.widget("disk-detect-zeroes"), detect_zeroes)
 
+        self.widget("disk-serial").set_text(serial or "")
         self.widget("disk-readonly").set_active(ro)
         self.widget("disk-readonly").set_sensitive(not disk.is_cdrom())
         self.widget("disk-shareable").set_active(share)
@@ -334,6 +341,8 @@ class vmmAddStorage(vmmGObjectUI):
         if _EDIT_REMOVABLE in self._active_edits:
             ret["removable"] = bool(
                 self.widget("disk-removable").get_active())
+        if _EDIT_SERIAL in self._active_edits:
+            ret["serial"] = self.widget("disk-serial").get_text()
 
         return ret
 
