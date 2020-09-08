@@ -34,6 +34,8 @@ os.environ["DISPLAY"] = ":3.4"
 TMP_IMAGE_DIR = "/tmp/__virtinst_cli_"
 _ABSXMLDIR = utils.DATADIR + "/cli"
 XMLDIR = os.path.relpath(_ABSXMLDIR, utils.TOPDIR)
+MEDIA_DIR = os.path.relpath(utils.DATADIR + "/fakemedia", utils.TOPDIR)
+UNATTENDED_DIR = XMLDIR + "/unattended"
 OLD_OSINFO = utils.has_old_osinfo()
 NO_OSINFO_UNATTEND = not unattended.OSInstallScript.have_new_libosinfo()
 HAS_ISOINFO = shutil.which("isoinfo")
@@ -79,16 +81,16 @@ TEST_DATA = {
     'EXISTIMG2': "/dev/default-pool/testvol2.img",
     'EXISTIMG3': EXIST_FILES[0],
     'EXISTIMG4': EXIST_FILES[1],
-    'ISOTREE': "%s/fake-fedora17-tree.iso" % XMLDIR,
-    'ISOLABEL': "%s/fake-centos65-label.iso" % XMLDIR,
-    'ISO-NO-OS': "%s/fake-no-osinfo.iso" % XMLDIR,
-    'ISO-WIN7': "%s/fake-win7.iso" % XMLDIR,
-    'ISO-F26-NETINST': "%s/fake-f26-netinst.iso" % XMLDIR,
-    'ISO-F29-LIVE': "%s/fake-f29-live.iso" % XMLDIR,
-    'TREEDIR': "%s/fakefedoratree" % XMLDIR,
+    'ISOTREE': "%s/fake-fedora17-tree.iso" % MEDIA_DIR,
+    'ISOLABEL': "%s/fake-centos65-label.iso" % MEDIA_DIR,
+    'ISO-NO-OS': "%s/fake-no-osinfo.iso" % MEDIA_DIR,
+    'ISO-WIN7': "%s/fake-win7.iso" % MEDIA_DIR,
+    'ISO-F26-NETINST': "%s/fake-f26-netinst.iso" % MEDIA_DIR,
+    'ISO-F29-LIVE': "%s/fake-f29-live.iso" % MEDIA_DIR,
+    'TREEDIR': "%s/fakefedoratree" % MEDIA_DIR,
     'COLLIDE': "/dev/default-pool/collidevol1.img",
-    'ADMIN-PASSWORD-FILE': "%s/admin-password.txt" % XMLDIR,
-    'USER-PASSWORD-FILE': "%s/user-password.txt" % XMLDIR,
+    'ADMIN-PASSWORD-FILE': "%s/admin-password.txt" % UNATTENDED_DIR,
+    'USER-PASSWORD-FILE': "%s/user-password.txt" % UNATTENDED_DIR,
 }
 
 
@@ -1300,7 +1302,7 @@ c.add_compare("--add-device --network default --os-variant http://fedoraproject.
 # virt-clone tests #
 ####################
 
-_CLONEXMLDIR = XMLDIR + "/clone"
+_CLONEXMLDIR = XMLDIR + "/virtclone"
 _CLONE_UNMANAGED = "--original-xml %s/clone-disk.xml" % _CLONEXMLDIR
 _CLONE_MANAGED = "--original-xml %s/clone-disk-managed.xml" % _CLONEXMLDIR
 _CLONE_NOEXIST = "--original-xml %s/clone-disk-noexist.xml" % _CLONEXMLDIR

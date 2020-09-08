@@ -11,7 +11,7 @@ from tests import utils
 from virtinst import Cloner
 
 
-CLI_XMLDIR = utils.DATADIR + "/cli/clone/"
+CLI_XMLDIR = utils.DATADIR + "/cli/virtclone/"
 
 
 def test_clone_unmanaged():
