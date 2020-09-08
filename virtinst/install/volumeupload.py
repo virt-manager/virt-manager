@@ -7,7 +7,6 @@
 import os
 
 from .. import progress
-from .. import xmlutil
 from ..devices import DeviceDisk
 from ..logger import log
 from ..storage import StoragePool, StorageVolume
@@ -129,36 +128,24 @@ def _upload_file(conn, meter, destpool, src):
     return vol
 
 
-def upload_kernel_initrd(conn, scratchdir, system_scratchdir,
-                         meter, kernel, initrd):
+def upload_paths(conn, system_scratchdir, meter, pathlist):
     """
-    Upload kernel/initrd media to remote connection if necessary
+    Upload passed paths to the connection scratchdir
     """
-    tmpvols = []
-
-    if (not conn.is_remote() and
-        (conn.is_unprivileged() or scratchdir == system_scratchdir) and
-        not xmlutil.in_testsuite()):
-        # We have access to system scratchdir, don't jump through hoops
-        log.debug("Have access to preferred scratchdir so"
-                    " nothing to upload")  # pragma: no cover
-        return kernel, initrd, tmpvols  # pragma: no cover
-
-    if not conn.support_remote_url_install():
-        # Needed for the test_urls suite
-        log.debug("Media upload not supported")  # pragma: no cover
-        return kernel, initrd, tmpvols  # pragma: no cover
-
     # Build pool
     log.debug("Uploading kernel/initrd media")
     pool = _build_pool(conn, meter, system_scratchdir)
 
-    kvol = _upload_file(conn, meter, pool, kernel)
-    newkernel = kvol.path()
-    tmpvols.append(kvol)
+    tmpvols = []
+    newpaths = []
+    try:
+        for path in pathlist:
+            vol = _upload_file(conn, meter, pool, path)
+            newpaths.append(vol.path())
+            tmpvols.append(vol)
+    except Exception:  # pragma: no cover
+        for vol in tmpvols:
+            vol.delete(0)
+        raise
 
-    ivol = _upload_file(conn, meter, pool, initrd)
-    newinitrd = ivol.path()
-    tmpvols.append(ivol)
-
-    return newkernel, newinitrd, tmpvols
+    return newpaths, tmpvols

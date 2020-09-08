@@ -10,6 +10,7 @@ import os
 
 from . import cloudinit
 from . import unattended
+from . import volumeupload
 from .installertreemedia import InstallerTreeMedia
 from .installerinject import perform_cdrom_injections
 from ..domain import DomainOs
@@ -17,6 +18,7 @@ from ..devices import DeviceDisk
 from ..osdict import OSDB
 from ..logger import log
 from .. import progress
+from .. import xmlutil
 
 
 def _make_testsuite_path(path):
@@ -59,6 +61,7 @@ class Installer(object):
         self._install_cdrom_device_added = False
         self._unattended_install_cdrom_device = None
         self._tmpfiles = []
+        self._tmpvols = []
         self._defaults_are_set = False
         self._unattended_data = None
         self._cloudinit_data = None
@@ -266,11 +269,50 @@ class Installer(object):
             guest.currentMemory = ram
 
 
-    ##########################
-    # Internal API overrides #
-    ##########################
+    ################
+    # Internal API #
+    ################
+
+    def _should_upload_media(self, guest):
+        """
+        Return True if we should upload media to the connection scratchdir.
+        This doesn't consider if there is any media to upload, just whether
+        we _should_ upload if there _is_ media.
+        """
+        scratchdir = InstallerTreeMedia.make_scratchdir(guest)
+        system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
+
+        if self.conn.is_remote():
+            return True
+        if self.conn.is_unprivileged():
+            return False
+        if scratchdir == system_scratchdir:
+            return False  # pragma: no cover
+        return True
+
+    def _upload_media(self, guest, meter, paths):
+        system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
+
+        if (not self._should_upload_media(guest) and
+            not xmlutil.in_testsuite()):
+            # We have access to system scratchdir, don't jump through hoops
+            log.debug("Have access to preferred scratchdir so"
+                        " nothing to upload")  # pragma: no cover
+            return paths  # pragma: no cover
+
+        if not guest.conn.support_remote_url_install():
+            # Needed for the test_urls suite
+            log.debug("Media upload not supported")  # pragma: no cover
+            return paths  # pragma: no cover
+
+        newpaths, tmpvols = volumeupload.upload_paths(
+                guest.conn, system_scratchdir, meter, paths)
+        self._tmpvols += tmpvols
+        return newpaths
 
     def _prepare_unattended_data(self, guest, meter, scripts):
+        scratchdir = InstallerTreeMedia.make_scratchdir(guest)
+
         injections = []
         for script in scripts:
             expected_filename = script.get_expected_filename()
@@ -283,14 +325,14 @@ class Installer(object):
 
         drivers_location = guest.osinfo.get_pre_installable_drivers_location(
                 guest.os.arch)
-        drivers = unattended.download_drivers(drivers_location,
-                InstallerTreeMedia.make_scratchdir(guest), meter)
+        drivers = unattended.download_drivers(
+                drivers_location, scratchdir, meter)
         injections.extend(drivers)
         self._tmpfiles.extend([driverpair[0] for driverpair in drivers])
 
-        iso = perform_cdrom_injections(injections,
-                InstallerTreeMedia.make_scratchdir(guest))
+        iso = perform_cdrom_injections(injections, scratchdir)
         self._tmpfiles.append(iso)
+        iso = self._upload_media(guest, meter, [iso])[0]
         self._add_unattended_install_cdrom_device(guest, iso)
 
     def _prepare_unattended_scripts(self, guest, meter):
@@ -303,9 +345,6 @@ class Installer(object):
             os_tree = self._treemedia.get_os_tree(guest, meter)
             injection_method = "initrd"
         else:
-            if self.conn.is_remote():
-                raise RuntimeError("Unattended method=cdrom installs are "
-                        "not yet supported for remote connections.")
             if not guest.osinfo.is_windows():
                 log.warning("Attempting unattended method=cdrom injection "
                         "for a non-windows OS. If this doesn't work, try "
@@ -318,6 +357,25 @@ class Installer(object):
                 guest, self._unattended_data, url,
                 os_media, os_tree, injection_method)
 
+    def _prepare_treemedia(self, guest, meter, unattended_scripts):
+        kernel, initrd, kernel_args = self._treemedia.prepare(guest, meter,
+                unattended_scripts)
+
+        paths = [kernel, initrd]
+        kernel, initrd = self._upload_media(guest, meter, paths)
+        self._treemedia_bootconfig = (kernel, initrd, kernel_args)
+
+    def _prepare_cloudinit(self, guest, meter):
+        scratchdir = InstallerTreeMedia.make_scratchdir(guest)
+        filepairs = cloudinit.create_files(scratchdir, self._cloudinit_data)
+        for filepair in filepairs:
+            self._tmpfiles.append(filepair[0])
+
+        iso = perform_cdrom_injections(filepairs, scratchdir, cloudinit=True)
+        self._tmpfiles.append(iso)
+        iso = self._upload_media(guest, meter, [iso])[0]
+        self._add_unattended_install_cdrom_device(guest, iso)
+
     def _prepare(self, guest, meter):
         if self._is_reinstall:
             self._pre_reinstall_xml = guest.get_xml()
@@ -327,22 +385,27 @@ class Installer(object):
             unattended_scripts = self._prepare_unattended_scripts(guest, meter)
 
         if self._treemedia:
-            self._treemedia_bootconfig = self._treemedia.prepare(guest, meter,
-                    unattended_scripts)
+            self._prepare_treemedia(guest, meter, unattended_scripts)
 
         elif unattended_scripts:
             self._prepare_unattended_data(guest, meter, unattended_scripts)
 
         elif self._cloudinit_data:
-            self._install_cloudinit(guest)
+            self._prepare_cloudinit(guest, meter)
 
     def _cleanup(self, guest):
         if self._treemedia:
             self._treemedia.cleanup(guest)
 
+        for vol in self._tmpvols:
+            log.debug("Removing volume '%s'", vol.name())
+            vol.delete(0)
+        self._tmpvols = []
+
         for f in self._tmpfiles:
             log.debug("Removing %s", str(f))
             os.unlink(f)
+        self._tmpfiles = []
 
     def _get_postinstall_bootdev(self, guest):
         if self.cdrom and self._no_install:
@@ -419,9 +482,10 @@ class Installer(object):
         for to perform this install.
         """
         search_paths = []
-        if (self._treemedia or
-            self._cloudinit_data or
-            self._unattended_data):
+        if ((self._treemedia or
+             self._cloudinit_data or
+             self._unattended_data) and
+             not self._should_upload_media(guest)):
             search_paths.append(InstallerTreeMedia.make_scratchdir(guest))
         if self._cdrom_path():
             search_paths.append(self._cdrom_path())
@@ -478,20 +542,6 @@ class Installer(object):
 
     def set_cloudinit_data(self, cloudinit_data):
         self._cloudinit_data = cloudinit_data
-
-    def _install_cloudinit(self, guest):
-        filepairs = cloudinit.create_files(
-                InstallerTreeMedia.make_scratchdir(guest),
-                self._cloudinit_data)
-        for filepair in filepairs:
-            self._tmpfiles.append(filepair[0])
-
-        iso = perform_cdrom_injections(
-                filepairs,
-                InstallerTreeMedia.make_scratchdir(guest),
-                cloudinit=True)
-        self._tmpfiles.append(iso)
-        self._add_unattended_install_cdrom_device(guest, iso)
 
     def has_cloudinit(self):
         return bool(self._cloudinit_data)

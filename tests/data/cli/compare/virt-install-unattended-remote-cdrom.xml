@@ -1,4 +1,4 @@
-<domain type="kvm">
+<domain type="test">
   <name>win7</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
@@ -10,42 +10,33 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="x86_64" machine="q35">hvm</type>
+    <type arch="i686">hvm</type>
     <boot dev="cdrom"/>
   </os>
   <features>
-    <acpi/>
-    <apic/>
+    <pae/>
     <hyperv>
       <relaxed state="on"/>
       <vapic state="on"/>
       <spinlocks state="on" retries="8191"/>
     </hyperv>
   </features>
-  <cpu mode="host-model"/>
-  <clock offset="localtime">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-    <timer name="hypervclock" present="yes"/>
-  </clock>
+  <clock offset="localtime"/>
   <on_reboot>destroy</on_reboot>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="cdrom">
-      <driver name="qemu"/>
-      <source file="tests/data/fakemedia/fake-win7.iso"/>
-      <target dev="sda" bus="sata"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
-      <driver name="qemu" type="raw"/>
       <source file="/VIRTINST-TESTSUITE/unattended.iso"/>
-      <target dev="sdb" bus="sata"/>
+      <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
@@ -58,23 +49,14 @@
     <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <interface type="bridge">
-      <source bridge="testsuitebr0"/>
+    <interface type="user">
       <mac address="00:11:22:33:44:55"/>
-      <model type="virtio"/>
+      <model type="e1000"/>
     </interface>
     <console type="pty"/>
-    <channel type="unix">
-      <source mode="bind"/>
-      <target type="virtio" name="org.qemu.guest_agent.0"/>
-    </channel>
-    <memballoon model="virtio"/>
-    <rng model="virtio">
-      <backend model="random">/dev/urandom</backend>
-    </rng>
   </devices>
 </domain>
-<domain type="kvm">
+<domain type="test">
   <name>win7</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
@@ -86,39 +68,31 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="x86_64" machine="q35">hvm</type>
+    <type arch="i686">hvm</type>
     <boot dev="cdrom"/>
   </os>
   <features>
-    <acpi/>
-    <apic/>
+    <pae/>
     <hyperv>
       <relaxed state="on"/>
       <vapic state="on"/>
       <spinlocks state="on" retries="8191"/>
     </hyperv>
   </features>
-  <cpu mode="host-model"/>
-  <clock offset="localtime">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-    <timer name="hypervclock" present="yes"/>
-  </clock>
+  <clock offset="localtime"/>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="cdrom">
-      <driver name="qemu"/>
-      <source file="tests/data/fakemedia/fake-win7.iso"/>
-      <target dev="sda" bus="sata"/>
+      <source file="/dev/default-pool/testvol1.img"/>
+      <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
-      <target dev="sdb" bus="sata"/>
+      <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
@@ -131,19 +105,10 @@
     <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
-    <interface type="bridge">
-      <source bridge="testsuitebr0"/>
+    <interface type="user">
       <mac address="00:11:22:33:44:55"/>
-      <model type="virtio"/>
+      <model type="e1000"/>
     </interface>
     <console type="pty"/>
-    <channel type="unix">
-      <source mode="bind"/>
-      <target type="virtio" name="org.qemu.guest_agent.0"/>
-    </channel>
-    <memballoon model="virtio"/>
-    <rng model="virtio">
-      <backend model="random">/dev/urandom</backend>
-    </rng>
   </devices>
 </domain>
