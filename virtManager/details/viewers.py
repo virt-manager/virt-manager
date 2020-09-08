@@ -475,7 +475,6 @@ class SpiceViewer(Viewer):
         Viewer.__init__(self, *args, **kwargs)
         self._spice_session = None
         self._display = None
-        self._audio = None
         self._main_channel = None
         self._display_channel = None
         self._usbdev_manager = None
@@ -610,11 +609,6 @@ class SpiceViewer(Viewer):
             self._init_widget()
             self.emit("connected")
 
-        elif (type(channel) in [SpiceClientGLib.PlaybackChannel,
-                                SpiceClientGLib.RecordChannel] and
-                                not self._audio):
-            self._audio = SpiceClientGLib.Audio.get(self._spice_session, None)
-
     def _agent_connected_cb(self, src, val):
         self.emit("agent-connected")  # pragma: no cover
 
@@ -628,7 +622,6 @@ class SpiceViewer(Viewer):
             _SIGS.disconnect_obj_signals(self._spice_session)
             self._spice_session.disconnect()
         self._spice_session = None
-        self._audio = None
         if self._display:
             self._display.destroy()
         self._display = None
