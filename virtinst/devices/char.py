@@ -123,6 +123,24 @@ class _DeviceChar(Device):
 
 
 class DeviceConsole(_DeviceChar):
+    @staticmethod
+    def get_console_duplicate(guest, serial):
+        """
+        Determine if the passed serial device has a duplicate
+        <console> device in the passed Guest
+        """
+        if serial.DEVICE_TYPE != "serial":
+            return
+
+        consoles = guest.devices.console
+        if not consoles:
+            return  # pragma: no cover
+
+        console = consoles[0]
+        if (console.type == serial.type and
+            (console.target_type is None or console.target_type == "serial")):
+            return console
+
     XML_NAME = "console"
 
 

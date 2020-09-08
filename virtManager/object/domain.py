@@ -10,6 +10,7 @@ import threading
 
 import libvirt
 
+from virtinst import DeviceConsole
 from virtinst import DeviceController
 from virtinst import DeviceDisk
 from virtinst import DomainSnapshot
@@ -1256,18 +1257,7 @@ class vmmDomain(vmmLibvirtObject):
         return xmlobj.devices.disk
 
     def serial_is_console_dup(self, serial):
-        if serial.DEVICE_TYPE != "serial":
-            return False
-
-        consoles = self.xmlobj.devices.console
-        if not consoles:
-            return False  # pragma: no cover
-
-        console = consoles[0]
-        if (console.type == serial.type and
-            (console.target_type is None or console.target_type == "serial")):
-            return True
-        return False
+        return DeviceConsole.get_console_duplicate(self.xmlobj, serial)
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
