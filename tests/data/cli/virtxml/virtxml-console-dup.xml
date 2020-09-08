@@ -1,0 +1,17 @@
+<domain type='test'>
+  <name>test-char-dup-remove</name>
+  <memory unit='KiB'>8294400</memory>
+  <currentMemory unit='KiB'>8294400</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <devices>
+    <serial type='pty'>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+  </devices>
+</domain>
+
