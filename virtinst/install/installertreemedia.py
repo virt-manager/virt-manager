@@ -9,7 +9,6 @@ import os
 from . import urldetect
 from . import urlfetcher
 from .installerinject import perform_initrd_injections
-from .kernelupload import upload_kernel_initrd
 from .. import progress
 from ..devices import DeviceDisk
 from ..logger import log
@@ -127,7 +126,6 @@ class InstallerTreeMedia(object):
         self._cached_data = None
 
         self._tmpfiles = []
-        self._tmpvols = []
 
         if self._install_kernel or self._install_initrd:
             self._media_type = MEDIA_KERNEL
@@ -204,6 +202,8 @@ class InstallerTreeMedia(object):
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, cache, fetcher):
+        ignore = guest
+
         def _check_kernel_pairs():
             for kpath, ipath in cache.kernel_pairs:
                 if fetcher.hasFile(kpath) and fetcher.hasFile(ipath):
@@ -220,12 +220,6 @@ class InstallerTreeMedia(object):
         perform_initrd_injections(initrd,
                                   self._initrd_injections,
                                   fetcher.scratchdir)
-
-        system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
-        kernel, initrd, tmpvols = upload_kernel_initrd(
-                guest.conn, fetcher.scratchdir, system_scratchdir,
-                fetcher.meter, kernel, initrd)
-        self._tmpvols += tmpvols
 
         return kernel, initrd
 
@@ -294,11 +288,6 @@ class InstallerTreeMedia(object):
             log.debug("Removing %s", str(f))
             os.unlink(f)
 
-        for vol in self._tmpvols:
-            log.debug("Removing volume '%s'", vol.name())
-            vol.delete(0)
-
-        self._tmpvols = []
         self._tmpfiles = []
 
     def set_initrd_injections(self, initrd_injections):

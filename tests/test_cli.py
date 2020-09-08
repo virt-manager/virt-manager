@@ -920,7 +920,9 @@ c.add_compare("--location %(TREEDIR)s --unattended", "osinfo-unattended-treeapis
 c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s", "osinfo-win7-unattended", prerun_check=no_osinfo_unattended_win_drivers_cb)  # unattended install for win7
 c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
 c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
+c.add_compare("--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended", "unattended-remote-cdrom")
 c.add_valid("--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
+c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location http://example.foo", grep="user-password")  # will trigger user-password required error
@@ -928,7 +930,6 @@ c.add_invalid("--os-variant debian9 --unattended profile=FRIBBER,admin-password-
 c.add_invalid("--os-variant fedora29 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
 c.add_invalid("--os-variant msdos --unattended profile=desktop --location http://example.com")  # msdos doesn't support unattended install
 c.add_invalid("--os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
-c.add_invalid("--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended")  # --unattended method=cdrom rejected for remote connections
 c.add_invalid("--install fedora29 --unattended user-login=root", grep="as user-login")  # will trigger an invalid user-login error
 
 
@@ -972,6 +973,7 @@ c.add_compare("--arch s390x --machine s390-ccw-virtio --connect " + utils.URIs.k
 
 # qemu:///session tests
 c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", prerun_check=has_old_osinfo)
+c.add_valid("--connect " + utils.URIs.kvm_session + " --install fedora21", prerun_check=has_old_osinfo)  # hits some get_search_paths and media_upload code paths
 
 # misc KVM config tests
 c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_isoinfo)  # --location with an unknown ISO but manually specified kernel paths
