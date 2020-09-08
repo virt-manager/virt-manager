@@ -40,7 +40,7 @@ class vmmXMLEditor(vmmGObjectUI):
         self._curpage = _PAGE_DETAILS
         self._srcxml = ""
         self._srcview = None
-        self._srcbuf = None
+        self._srcbuff = None
         self._init_ui()
 
         self.details_changed = False
@@ -51,7 +51,8 @@ class vmmXMLEditor(vmmGObjectUI):
 
 
     def _cleanup(self):
-        pass
+        self._srcview.destroy()
+        self._srcbuff = None
 
 
     ###########

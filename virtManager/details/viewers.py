@@ -440,6 +440,34 @@ class VNCViewer(Viewer):
 # Spice viewer class #
 ######################
 
+class _SignalTracker:
+    # Helper class to more conveniently connect and disconnect signals
+    # from spice objects. This ensures we don't leave circular references
+    # at object destroy time
+    def __init__(self):
+        self._sigmap = {}
+
+    def _add_hid(self, obj, hid):
+        if obj not in self._sigmap:
+            self._sigmap[obj] = []
+        self._sigmap[obj].append(hid)
+
+    def connect(self, obj, name, handler, *args):
+        hid = GObject.GObject.connect(obj, name, handler, *args)
+        self._add_hid(obj, hid)
+
+    def connect_after(self, obj, name, handler, *args):
+        hid = GObject.GObject.connect_after(obj, name, handler, *args)
+        self._add_hid(obj, hid)
+
+    def disconnect_obj_signals(self, obj):
+        for hid in self._sigmap.get(obj, []):
+            GObject.GObject.disconnect(obj, hid)
+
+
+_SIGS = _SignalTracker()
+
+
 class SpiceViewer(Viewer):
     viewer_type = "spice"
 
@@ -449,9 +477,9 @@ class SpiceViewer(Viewer):
         self._display = None
         self._audio = None
         self._main_channel = None
-        self._main_channel_hids = []
         self._display_channel = None
         self._usbdev_manager = None
+        self._channels = set()
 
 
     ###################
@@ -472,30 +500,25 @@ class SpiceViewer(Viewer):
         else:
             self.emit("pointer-ungrab")
 
-    def _close_main_channel(self):
-        for i in self._main_channel_hids:
-            self._main_channel.handler_disconnect(i)
-        self._main_channel_hids = []
-        self._main_channel = None
-
     def _create_spice_session(self):
         self._spice_session = SpiceClientGLib.Session()
         SpiceClientGLib.set_session_option(self._spice_session)
         gtk_session = SpiceClientGtk.GtkSession.get(self._spice_session)
         gtk_session.set_property("auto-clipboard", True)
 
-        GObject.GObject.connect(self._spice_session, "channel-new",
-                                self._channel_new_cb)
+        _SIGS.connect(self._spice_session, "channel-new", self._channel_new_cb)
 
         # Distros might have usb redirection compiled out, like OpenBSD
         # https://bugzilla.redhat.com/show_bug.cgi?id=1348479
         try:
             self._usbdev_manager = SpiceClientGLib.UsbDeviceManager.get(
                                         self._spice_session)
-            self._usbdev_manager.connect("auto-connect-failed",
-                                        self._usbdev_redirect_error)
-            self._usbdev_manager.connect("device-error",
-                                        self._usbdev_redirect_error)
+            _SIGS.connect(
+                    self._usbdev_manager, "auto-connect-failed",
+                    self._usbdev_redirect_error)
+            _SIGS.connect(
+                    self._usbdev_manager, "device-error",
+                    self._usbdev_redirect_error)
 
             autoredir = self.config.get_auto_usbredir()
             if autoredir:
@@ -560,18 +583,18 @@ class SpiceViewer(Viewer):
         channel.open_fd(fd)
 
     def _channel_new_cb(self, session, channel):
-        GObject.GObject.connect(channel, "open-fd",
-                                self._channel_open_fd_request)
+        self._channels.add(channel)
+        _SIGS.connect(channel, "open-fd", self._channel_open_fd_request)
 
         if (isinstance(channel, SpiceClientGLib.MainChannel) and
             not self._main_channel):
             self._main_channel = channel
-            hid = self._main_channel.connect_after("channel-event",
+            _SIGS.connect_after(
+                self._main_channel, "channel-event",
                 self._main_channel_event_cb)
-            self._main_channel_hids.append(hid)
-            hid = self._main_channel.connect_after("notify::agent-connected",
+            _SIGS.connect_after(
+                self._main_channel, "notify::agent-connected",
                 self._agent_connected_cb)
-            self._main_channel_hids.append(hid)
 
         elif (type(channel) == SpiceClientGLib.DisplayChannel and
                 not self._display):
@@ -602,6 +625,7 @@ class SpiceViewer(Viewer):
 
     def close(self):
         if self._spice_session is not None:
+            _SIGS.disconnect_obj_signals(self._spice_session)
             self._spice_session.disconnect()
         self._spice_session = None
         self._audio = None
@@ -610,7 +634,13 @@ class SpiceViewer(Viewer):
         self._display = None
         self._display_channel = None
 
-        self._close_main_channel()
+        for channel in self._channels:
+            _SIGS.disconnect_obj_signals(channel)
+        self._channels = None
+
+        self._main_channel = None
+
+        _SIGS.disconnect_obj_signals(self._usbdev_manager)
         self._usbdev_manager = None
 
     def _is_open(self):

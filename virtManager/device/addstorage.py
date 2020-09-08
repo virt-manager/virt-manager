@@ -60,6 +60,8 @@ class vmmAddStorage(vmmGObjectUI):
 
     def _cleanup(self):
         self.conn = None
+        self.top_box.destroy()
+        self.advanced_top_box.destroy()
 
 
     ##########################

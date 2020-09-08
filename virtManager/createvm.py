@@ -1890,8 +1890,11 @@ class vmmCreateVM(vmmGObjectUI):
 
         # We can re-enter this: cleanup() -> close() -> "details-closed"
         window = self._customize_window
+        virtinst_domain = self._customize_window.vm
         self._customize_window = None
         window.cleanup()
+        virtinst_domain.cleanup()
+        virtinst_domain = None
 
     def _show_customize_dialog(self, origguest, installer):
         orig_vdomain = vmmDomainVirtinst(self.conn,

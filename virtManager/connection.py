@@ -1068,6 +1068,7 @@ class vmmConnection(vmmGObject):
             if not self._objects.add(obj):
                 log.debug("New %s=%s requested, but it's already tracked.",
                     class_name, obj.get_name())
+                obj.cleanup()
                 return
 
             if not obj.is_nodedev():
