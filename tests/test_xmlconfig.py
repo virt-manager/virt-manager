@@ -120,13 +120,13 @@ class TestXMLMisc(unittest.TestCase):
         # Simple sanity test to make sure detect_distro works. test-urls
         # does much more exhaustive testing but it's only run occasionally
         i = _make_installer(
-            location=utils.DATADIR + "/cli/fakefedoratree")
+            location=utils.DATADIR + "/fakemedia/fakefedoratree")
         g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "fedora17")
 
         i = _make_installer(
-            location=utils.DATADIR + "/cli/fakerhel6tree")
+            location=utils.DATADIR + "/fakemedia/fakerhel6tree")
         g = _make_guest()
         v = i.detect_distro(g)
         self.assertEqual(v, "rhel6.0")

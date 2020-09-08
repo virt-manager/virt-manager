@@ -29,7 +29,7 @@ def _map_mock_url_to_file(url):
     elif url.endswith("treeinfo"):
         # If the url is requesting treeinfo, give a fake treeinfo from
         # our testsuite data
-        fn = ("%s/data/cli/fakerhel6tree/.treeinfo" %
+        fn = ("%s/data/fakemedia/fakerhel6tree/.treeinfo" %
                 os.path.abspath(os.path.dirname(__file__)))
     else:
         # Otherwise just copy this file
