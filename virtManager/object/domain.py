@@ -434,9 +434,10 @@ class vmmDomain(vmmLibvirtObject):
         return False
 
     def has_nvram(self):
-        return bool(self.get_xmlobj().os.loader_ro is True and
-                    self.get_xmlobj().os.loader_type == "pflash" and
-                    self.get_xmlobj().os.nvram)
+        return bool(self.get_xmlobj().os.firmware == 'efi' or
+                    (self.get_xmlobj().os.loader_ro is True and
+                     self.get_xmlobj().os.loader_type == "pflash" and
+                     self.get_xmlobj().os.nvram))
 
     def is_persistent(self):
         return bool(self._backend.isPersistent())
