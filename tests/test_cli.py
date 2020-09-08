@@ -1137,6 +1137,8 @@ c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
 # virt-xml tests #
 ##################
 
+_VIRTXMLDIR = XMLDIR + "/virtxml/"
+
 vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
@@ -1153,8 +1155,8 @@ c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-va
 c.add_invalid("domain-idontexist --edit --cpu host-passthrough --start", grep="Could not find domain")
 c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Cannot mix --update")
 c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't know how to --update for --events")
-c.add_invalid("--edit --cpu host-passthrough --confirm", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"), grep="Can't use --confirm with stdin")
-c.add_invalid("--edit --cpu host-passthrough --update", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"), grep="Can't use --update with stdin")
+c.add_invalid("--edit --cpu host-passthrough --confirm", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"), grep="Can't use --confirm with stdin")
+c.add_invalid("--edit --cpu host-passthrough --update", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"), grep="Can't use --update with stdin")
 c.add_invalid("--edit --cpu host-passthrough", grep="A domain must be specified")
 c.add_invalid("test-state-shutoff --cpu mode=idontexist --start --edit --no-define --confirm", grep="Failed starting domain", input_text="yes")
 c.add_invalid("test --cpu host-passthrough", grep="One of --edit, ")  # conflicting --edit options
@@ -1172,7 +1174,7 @@ c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option
 c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
 c.add_invalid("test --edit --boot network,cdrom --define --no-define")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
-c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(XMLDIR + "/virtxml-stdin-edit.xml"))  # stdin test
+c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200,device0.read_bytes_sec=10000,device0.write_bytes_sec=10000,device0.read_iops_sec=20000,device0.write_iops_sec=20000", "build-blkiotune")
@@ -1181,7 +1183,7 @@ c.add_compare("--connect %(URI-KVM)s --build-xml --disk %(EXISTIMG1)s", "build-d
 c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup
 c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response", input_text="yes")  # prompt response, also using domid lookup
-c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(XMLDIR + "/virtxml-qemu-commandline-clear.xml"))
+c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(_VIRTXMLDIR + "virtxml-qemu-commandline-clear.xml"))
 c.add_compare("--connect %(URI-KVM)s test-hyperv-uefi --edit --boot uefi", "hyperv-uefi-collision")
 c.add_compare("--connect %(URI-KVM)s test-many-devices --edit --cpu host-copy", "edit-cpu-host-copy")
 
