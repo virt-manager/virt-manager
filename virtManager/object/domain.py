@@ -1659,6 +1659,11 @@ class vmmDomainVirtinst(vmmDomain):
     def _get_backend_status(self):
         return libvirt.VIR_DOMAIN_SHUTOFF
 
+    def _cleanup(self):
+        self._orig_backend = None
+        self._installer = None
+        super()._cleanup()
+
 
     ################
     # XML handling #

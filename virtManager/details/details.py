@@ -532,6 +532,10 @@ class vmmDetails(vmmGObjectUI):
         self.vsockdetails = None
         self._xmleditor.cleanup()
         self._xmleditor = None
+        self._addstorage.cleanup()
+        self._addstorage = None
+        self._os_list.cleanup()
+        self._os_list = None
 
 
     ##########################
