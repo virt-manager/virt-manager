@@ -396,16 +396,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         self.topwin.set_title(title)
 
-    def _someone_has_focus(self):
-        if (self._viewer and
-            self._viewer.console_has_focus() and
-            self._viewer.console_is_open()):
-            return True
-
-        for serial in self._serial_consoles:
-            if serial.has_focus():
-                return True
-
     def _disable_modifiers(self):
         if self._gtk_settings_accel is not None:
             return
@@ -876,8 +866,18 @@ class vmmConsolePages(vmmGObjectUI):
     def _viewer_allocate_cb(self, src, ignore):
         self.widget("console-gfx-scroll").queue_resize()
 
-    def _viewer_focus_changed(self, ignore1=None, ignore2=None):
-        if self._someone_has_focus():
+    def _viewer_keyboard_grab_cb(self, src):
+        self._viewer_sync_modifiers()
+
+    def _serial_focus_changed_cb(self, src, event):
+        self._viewer_sync_modifiers()
+
+    def _viewer_sync_modifiers(self):
+        serial_has_focus = any([s.has_focus() for s in self._serial_consoles])
+        viewer_keyboard_grab = (self._viewer and
+                self._viewer.console_has_keyboard_grab())
+
+        if serial_has_focus or viewer_keyboard_grab:
             self._disable_modifiers()
         else:
             self._enable_modifiers()
@@ -926,7 +926,7 @@ class vmmConsolePages(vmmGObjectUI):
         log.debug("Viewer disconnected")
 
         # Make sure modifiers are set correctly
-        self._viewer_focus_changed()
+        self._viewer_sync_modifiers()
 
         self._viewer_disconnected_set_page(errdetails, ssherr)
         self._refresh_resizeguest_from_settings()
@@ -936,15 +936,15 @@ class vmmConsolePages(vmmGObjectUI):
         self._activate_viewer_page()
 
         # Make sure modifiers are set correctly
-        self._viewer_focus_changed()
+        self._viewer_sync_modifiers()
 
     def _connect_viewer_signals(self):
         self._viewer.connect("add-display-widget", self._viewer_add_display)
         self._viewer.connect("pointer-grab", self._pointer_grabbed)
         self._viewer.connect("pointer-ungrab", self._pointer_ungrabbed)
         self._viewer.connect("size-allocate", self._viewer_allocate_cb)
-        self._viewer.connect("focus-in-event", self._viewer_focus_changed)
-        self._viewer.connect("focus-out-event", self._viewer_focus_changed)
+        self._viewer.connect("keyboard-grab", self._viewer_keyboard_grab_cb)
+        self._viewer.connect("keyboard-ungrab", self._viewer_keyboard_grab_cb)
         self._viewer.connect("connected", self._viewer_connected)
         self._viewer.connect("disconnected", self._viewer_disconnected)
         self._viewer.connect("auth-error", self._viewer_auth_error)
@@ -985,8 +985,8 @@ class vmmConsolePages(vmmGObjectUI):
 
         if not serial:
             serial = vmmSerialConsole(self.vm, target_port, name)
-            serial.set_focus_callbacks(self._viewer_focus_changed,
-                                       self._viewer_focus_changed)
+            serial.set_focus_callbacks(self._serial_focus_changed_cb,
+                                       self._serial_focus_changed_cb)
 
             title = Gtk.Label(label=name)
             self.widget("serial-pages").append_page(serial.get_box(), title)

@@ -36,10 +36,10 @@ class Viewer(vmmGObject):
     __gsignals__ = {
         "add-display-widget": (vmmGObject.RUN_FIRST, None, [object]),
         "size-allocate": (vmmGObject.RUN_FIRST, None, [object]),
-        "focus-in-event": (vmmGObject.RUN_FIRST, None, [object]),
-        "focus-out-event": (vmmGObject.RUN_FIRST, None, [object]),
         "pointer-grab": (vmmGObject.RUN_FIRST, None, []),
         "pointer-ungrab": (vmmGObject.RUN_FIRST, None, []),
+        "keyboard-grab": (vmmGObject.RUN_FIRST, None, []),
+        "keyboard-ungrab": (vmmGObject.RUN_FIRST, None, []),
         "connected": (vmmGObject.RUN_FIRST, None, []),
         "disconnected": (vmmGObject.RUN_FIRST, None, [str, str]),
         "auth-error": (vmmGObject.RUN_FIRST, None, [str, bool]),
@@ -54,6 +54,7 @@ class Viewer(vmmGObject):
         self._vm = vm
         self._ginfo = ginfo
         self._tunnels = SSHTunnels(self._ginfo)
+        self._keyboard_grab = False
 
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
@@ -90,10 +91,6 @@ class Viewer(vmmGObject):
 
         self._display.connect("size-allocate",
             self._make_signal_proxy("size-allocate"))
-        self._display.connect("focus-in-event",
-            self._make_signal_proxy("focus-in-event"))
-        self._display.connect("focus-out-event",
-            self._make_signal_proxy("focus-out-event"))
 
 
 
@@ -210,6 +207,8 @@ class Viewer(vmmGObject):
         return self._grab_focus()
     def console_has_focus(self):
         return self._has_focus()
+    def console_has_keyboard_grab(self):
+        return bool(self._display and self._keyboard_grab)
     def console_set_size_request(self, *args, **kwargs):
         return self._set_size_request(*args, **kwargs)
     def console_size_allocate(self, *args, **kwargs):
@@ -297,6 +296,8 @@ class VNCViewer(Viewer):
             self._make_signal_proxy("pointer-grab"))
         self._display.connect("vnc-pointer-ungrab",
             self._make_signal_proxy("pointer-ungrab"))
+        self._display.connect("vnc-keyboard-grab", self._keyboard_grab_cb)
+        self._display.connect("vnc-keyboard-ungrab", self._keyboard_ungrab_cb)
 
         self._display.connect("vnc-auth-credential", self._auth_credential)
         self._display.connect("vnc-auth-failure", self._auth_failure_cb)
@@ -305,6 +306,14 @@ class VNCViewer(Viewer):
         self._display.connect("vnc-desktop-resize", self._desktop_resize)
 
         self._display.show()
+
+    def _keyboard_grab_cb(self, src):
+        self._keyboard_grab = True
+        self.emit("keyboard-grab")
+
+    def _keyboard_ungrab_cb(self, src):
+        self._keyboard_grab = False
+        self.emit("keyboard-ungrab")
 
     def _connected_cb(self, ignore):
         self._tunnels.unlock()
@@ -485,19 +494,27 @@ class SpiceViewer(Viewer):
     # Private helpers #
     ###################
 
-    def _init_widget(self):
-        self.emit("add-display-widget", self._display)
-        self._display.realize()
-
-        self._display.connect("mouse-grab", self._mouse_grab_event)
-
-        self._display.show()
-
-    def _mouse_grab_event(self, ignore, grab):
+    def _mouse_grab_cb(self, src, grab):
         if grab:
             self.emit("pointer-grab")
         else:
             self.emit("pointer-ungrab")
+
+    def _keyboard_grab_cb(self, src, grab):
+        self._keyboard_grab = grab
+        if grab:
+            self.emit("keyboard-grab")
+        else:
+            self.emit("keyboard-ungrab")
+
+    def _init_widget(self):
+        self.emit("add-display-widget", self._display)
+        self._display.realize()
+
+        self._display.connect("mouse-grab", self._mouse_grab_cb)
+        self._display.connect("keyboard-grab", self._keyboard_grab_cb)
+
+        self._display.show()
 
     def _create_spice_session(self):
         self._spice_session = SpiceClientGLib.Session()
