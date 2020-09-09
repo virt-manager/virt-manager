@@ -53,6 +53,15 @@ class Console(uiutils.UITestCase):
     conn = None
     extraopts = None
 
+    def _destroy(self, win):
+        smenu = win.find("Menu", "toggle button")
+        smenu.click()
+        smenu.find("Force Off", "menu item").click()
+        self._click_alert_button("you sure", "Yes")
+        run = win.find("Run", "push button")
+        uiutils.check(lambda: run.sensitive)
+
+
     ##############
     # Test cases #
     ##############
@@ -134,8 +143,17 @@ class Console(uiutils.UITestCase):
         scalemenu.point()
         scalemenu.find("Only", "radio menu item").click()
 
+        # Check that modifiers don't work
+        win.click()
+        self.sleep(1)
+        win.keyCombo("<ctrl>w")
+        uiutils.check(lambda: win.showing)
         dom.destroy()
         win.find("Guest is not running.")
+        win.click_title()
+        self.sleep(1)
+        win.keyCombo("<ctrl>w")
+        uiutils.check(lambda: not win.showing)
 
     @_vm_wrapper("uitests-vnc-standard")
     def testConsoleVNCStandard(self, dom):
@@ -172,10 +190,7 @@ class Console(uiutils.UITestCase):
         uiutils.check(lambda: con.showing)
 
         # Restart VM to retrigger console connect
-        smenu = win.find("Menu", "toggle button")
-        smenu.click()
-        smenu.find("Force Off", "menu item").click()
-        self._click_alert_button("you sure", "Yes")
+        self._destroy(win)
         win.find("Run", "push button").click()
         uiutils.check(lambda: passwd.showing)
         # Password should be filled in
@@ -186,10 +201,7 @@ class Console(uiutils.UITestCase):
         uiutils.check(lambda: con.showing)
 
         # Restart VM to retrigger console connect
-        smenu = win.find("Menu", "toggle button")
-        smenu.click()
-        smenu.find("Force Off", "menu item").click()
-        self._click_alert_button("you sure", "Yes")
+        self._destroy(win)
         win.find("Run", "push button").click()
         uiutils.check(lambda: passwd.showing)
         # Password should be empty now
@@ -267,10 +279,7 @@ class Console(uiutils.UITestCase):
 
         win.find("Details", "radio button").click()
         win.find("Console", "radio button").click()
-        smenu = win.find("Menu", "toggle button")
-        smenu.click()
-        smenu.find("Force Off", "menu item").click()
-        self._click_alert_button("you sure", "Yes")
+        self._destroy(win)
         view = self.app.root.find("^View$", "menu")
         view.click()
         # Triggers some tooltip cases
@@ -285,6 +294,18 @@ class Console(uiutils.UITestCase):
         win.find("Run", "push button").click()
         term = win.find("Serial Terminal")
         uiutils.check(lambda: term.showing)
+
+        # Ensure ctrl+w doesn't close the window, modifiers are disabled
+        term.click()
+        win.keyCombo("<ctrl>w")
+        uiutils.check(lambda: win.showing)
+        # Shut it down, ensure <ctrl>w works again
+        self._destroy(win)
+        win.click_title()
+        self.sleep(1)
+        win.keyCombo("<ctrl>w")
+        uiutils.check(lambda: not win.showing)
+
 
     @_vm_wrapper("uitests-spice-specific",
             opts=["--test-options=spice-agent",
