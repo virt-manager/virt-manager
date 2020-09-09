@@ -233,12 +233,12 @@ class Console(uiutils.UITestCase):
         def _click_textconsole_menu(msg):
             vmenu = win.find("^View$", "menu")
             vmenu.click()
-            tmenu = win.find("Text Consoles", "menu")
+            tmenu = win.find("Consoles", "menu")
             tmenu.point()
             tmenu.find(msg, "radio menu item").click()
 
         # A bit of an extra test, make sure selecting Graphical Console works
-        _click_textconsole_menu("Text Console 1")
+        _click_textconsole_menu("Serial 1")
         uiutils.check(lambda: not con.showing)
         _click_textconsole_menu("Graphical Console")
         uiutils.check(lambda: con.showing)
@@ -274,7 +274,7 @@ class Console(uiutils.UITestCase):
         view = self.app.root.find("^View$", "menu")
         view.click()
         # Triggers some tooltip cases
-        textmenu = view.find("Text Consoles", "menu")
+        textmenu = view.find("Consoles", "menu")
         textmenu.point()
         uiutils.check(lambda: textmenu.showing)
         item = textmenu.find("Text Console 1")

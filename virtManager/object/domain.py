@@ -1268,8 +1268,6 @@ class vmmDomain(vmmLibvirtObject):
         # used and clutters the UI
         return self.xmlobj.get_bootable_devices(exclude_redirdev=True)
 
-    def get_serialcon_devices(self):
-        return self.xmlobj.devices.serial + self.xmlobj.devices.console
 
     ############################
     # Domain lifecycle methods #
