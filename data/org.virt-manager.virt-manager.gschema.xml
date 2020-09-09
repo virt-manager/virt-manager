@@ -25,6 +25,12 @@
       <summary>Automatically resize guest when window size changes</summary>
       <description>Automatically change guest resolution along with virt-manager window. Only works with spice with a vdagent set up. -1 = global default, 0 = off, 1 = on.</description>
     </key>
+
+    <key name="autoconnect" type="i">
+      <default>-1</default>
+      <summary>Autoconnect to the default VM console when the VM window is opened</summary>
+      <description>Autoconnect to the default VM console when the VM window is opened. Users may want to turn this off if they prefer to use another viewer app for their VMs, and don't want virt-manager to interfere, but they still want to use virt-manager's details. -1 = global default, 0 = off, 1 = on</description>
+    </key>
   </schema>
 
 
@@ -221,6 +227,12 @@
       <default>true</default>
       <summary>Enable SPICE Auto USB redirection in console window</summary>
       <description>Whether to enable SPICE Auto USB redirection while connected to the guest console.</description>
+    </key>
+
+    <key name="autoconnect" type="b">
+      <default>true</default>
+      <summary>Autoconnect to the default VM console when the VM window is opened</summary>
+      <description>Autoconnect to the default VM console when the VM window is opened. Users may want to turn this off if they prefer to use another viewer app for their VMs, and don't want virt-manager to interfere, but they still want to use virt-manager's details.</description>
     </key>
   </schema>
 

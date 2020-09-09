@@ -25,7 +25,8 @@ from ..lib.keyring import vmmKeyring
 # console-gfx-pages IDs
 (_GFX_PAGE_VIEWER,
  _GFX_PAGE_AUTH,
- _GFX_PAGE_UNAVAILABLE) = range(3)
+ _GFX_PAGE_UNAVAILABLE,
+ _GFX_PAGE_CONNECT) = range(4)
 
 
 class _TimedRevealer(vmmGObject):
@@ -317,6 +318,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Initialize display widget
         self._viewer = None
+        self._viewer_connect_clicked = False
         self._in_fullscreen = False
 
         # Fullscreen toolbar
@@ -350,6 +352,7 @@ class vmmConsolePages(vmmGObjectUI):
             "on_console_pages_switch_page": self._page_changed_cb,
             "on_console_auth_password_activate": self._auth_login_cb,
             "on_console_auth_login_clicked": self._auth_login_cb,
+            "on_console_connect_button_clicked": self._connect_button_clicked_cb,
         })
 
         self.widget("console-gfx-scroll").connect("size-allocate",
@@ -370,12 +373,6 @@ class vmmConsolePages(vmmGObjectUI):
         for serial in self._serial_consoles:
             serial.cleanup()
         self._serial_consoles = []
-
-
-    ##########################
-    # Initialization helpers #
-    ##########################
-
 
 
     #################
@@ -596,6 +593,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _close_viewer(self):
         self._leave_fullscreen()
+        self._viewer_connect_clicked = False
 
         for serial in self._serial_consoles:
             serial.close()
@@ -679,6 +677,9 @@ class vmmConsolePages(vmmGObjectUI):
         if self._viewer:
             self._viewer.console_grab_focus()
 
+    def _activate_gfx_connect_page(self):
+        self.widget("console-gfx-pages").set_current_page(_GFX_PAGE_CONNECT)
+
     def _viewer_is_visible(self):
         is_visible = self.widget("console-pages").is_visible()
         cpage = self.widget("console-pages").get_current_page()
@@ -731,6 +732,11 @@ class vmmConsolePages(vmmGObjectUI):
                      % ginfo.gtype)
 
             self._activate_gfx_unavailable_page(msg)
+            return
+
+        if (not self.vm.get_console_autoconnect() and
+            not self._viewer_connect_clicked):
+            self._activate_gfx_connect_page()
             return
 
         self._activate_gfx_unavailable_page(
@@ -941,6 +947,10 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _auth_login_cb(self, src):
         self._set_credentials()
+
+    def _connect_button_clicked_cb(self, src):
+        self._viewer_connect_clicked = True
+        self._init_viewer()
 
     def _page_changed_cb(self, src, origpage, newpage):
         # Hide the contents of all other pages, so they don't screw

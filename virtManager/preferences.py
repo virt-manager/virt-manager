@@ -42,6 +42,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_console_scaling()
         self.refresh_console_resizeguest()
         self.refresh_console_autoredir()
+        self.refresh_console_autoconnect()
         self.refresh_new_vm_sound()
         self.refresh_graphics_type()
         self.refresh_add_spice_usbredir()
@@ -70,6 +71,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_console_resizeguest_changed": self.change_console_resizeguest,
             "on_prefs_console_autoredir_changed": self.change_console_autoredir,
+            "on_prefs_console_autoconnect_toggled": self.change_console_autoconnect,
             "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
             "on_prefs_add_spice_usbredir_changed": self.change_add_spice_usbredir,
@@ -230,6 +232,9 @@ class vmmPreferences(vmmGObjectUI):
         combo = self.widget("prefs-console-autoredir")
         val = self.config.get_auto_usbredir()
         uiutil.set_list_selection(combo, val)
+    def refresh_console_autoconnect(self):
+        val = self.config.get_console_autoconnect()
+        self.widget("prefs-console-autoconnect").set_active(val)
 
     def refresh_new_vm_sound(self):
         self.widget("prefs-new-vm-sound").set_active(
@@ -378,6 +383,8 @@ class vmmPreferences(vmmGObjectUI):
     def change_console_autoredir(self, box):
         val = uiutil.get_list_selection(box)
         self.config.set_auto_usbredir(val)
+    def change_console_autoconnect(self, src):
+        self.config.set_console_autoconnect(bool(src.get_active()))
 
     def change_new_vm_sound(self, src):
         self.config.set_new_vm_sound(src.get_active())

@@ -255,6 +255,24 @@ class Console(uiutils.UITestCase):
         _click_textconsole_menu("Graphical Console")
         uiutils.check(lambda: con.showing)
 
+    @_vm_wrapper("uitests-spice-standard")
+    def testConsoleAutoconnect(self, dom):
+        ignore = dom
+        win = self.app.topwin
+        con = win.find("console-gfx-viewport")
+        uiutils.check(lambda: con.showing)
+
+        # Disable autoconnect
+        vmenu = win.find("^View$", "menu")
+        vmenu.click()
+        vmenu.find("Autoconnect").click()
+        dom.destroy()
+        self.sleep(1)
+        dom.create()
+        uiutils.check(lambda: not con.showing)
+        win.find("Connect to console", "push button").click()
+        uiutils.check(lambda: con.showing)
+
     @_vm_wrapper("uitests-lxc-serial", uri="lxc:///")
     def testConsoleLXCSerial(self, dom):
         """
