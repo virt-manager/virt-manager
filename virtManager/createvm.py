@@ -1404,7 +1404,6 @@ class vmmCreateVM(vmmGObjectUI):
 
             self.widget("create-finish").grab_focus()
 
-        self._set_page_num_text(pagenum)
         self.widget("create-back").set_sensitive(pagenum != PAGE_NAME)
         self.widget("create-forward").set_visible(pagenum != PAGE_FINISH)
         self.widget("create-finish").set_visible(pagenum == PAGE_FINISH)
@@ -1414,6 +1413,8 @@ class vmmCreateVM(vmmGObjectUI):
         for nr in range(self.widget("create-pages").get_n_pages()):
             page = self.widget("create-pages").get_nth_page(nr)
             page.set_visible(nr == pagenum)
+
+        self._set_page_num_text(pagenum)
 
 
     ############################
