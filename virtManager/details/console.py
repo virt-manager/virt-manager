@@ -185,6 +185,111 @@ class vmmOverlayToolbar:
         self._send_key_button.set_sensitive(can_sendkey)
 
 
+class _ConsoleMenu:
+    """
+    Helper class for building the text/graphical console menu list
+    """
+
+    ################
+    # Internal API #
+    ################
+
+    def _build_serial_menu_items(self, vm):
+        devs = vmmSerialConsole.get_serialcon_devices(vm)
+        if len(devs) == 0:
+            return [[_("No text console available"), None, None]]
+
+        ret = []
+        for dev in devs:
+            if dev.DEVICE_TYPE == "console":
+                label = _("Text Console %d") % (dev.get_xml_idx() + 1)
+            else:
+                label = _("Serial %d") % (dev.get_xml_idx() + 1)
+
+            tooltip = vmmSerialConsole.can_connect(vm, dev)
+            ret.append([label, dev, tooltip])
+        return ret
+
+    def _build_graphical_menu_items(self, vm):
+        devs = vm.xmlobj.devices.graphics
+        if len(devs) == 0:
+            return [[_("No graphical console available"), None, None]]
+
+        from ..device.gfxdetails import vmmGraphicsDetails
+
+        ret = []
+        for idx, dev in enumerate(devs):
+            label = (_("Graphical Console") + " " +
+                     vmmGraphicsDetails.graphics_pretty_type_simple(dev.type))
+
+            tooltip = None
+            if idx > 0:
+                label += " %s" % (idx + 1)
+                tooltip = _("virt-manager does not support more "
+                            "than one graphical console")
+
+            ret.append([label, dev, tooltip])
+        return ret
+
+
+    ##############
+    # Public API #
+    ##############
+
+    def rebuild_menu(self, vm, submenu, toggled_cb):
+        oldlabel = None
+        for child in submenu.get_children():
+            if hasattr(child, 'get_active') and child.get_active():
+                oldlabel = child.get_label()
+            submenu.remove(child)
+
+        graphics = self._build_graphical_menu_items(vm)
+        serials = self._build_serial_menu_items(vm)
+
+        # Use label == None to tell the loop to add a separator
+        items = graphics + [[None, None, None]] + serials
+
+        last_item = None
+        for (label, dev, tooltip) in items:
+            if label is None:
+                submenu.add(Gtk.SeparatorMenuItem())
+                continue
+
+            cb = toggled_cb
+            cbdata = dev
+            sensitive = dev and not tooltip
+
+            active = False
+            if oldlabel is None and sensitive:
+                # Select the first selectable option
+                oldlabel = label
+            if label == oldlabel:
+                active = True
+
+            item = Gtk.RadioMenuItem()
+            if last_item is None:
+                last_item = item
+            else:
+                item.join_group(last_item)
+
+            item.set_label(label)
+            item.set_active(active and sensitive)
+            if cbdata and sensitive:
+                item.connect("toggled", cb, cbdata)
+
+            item.set_sensitive(sensitive)
+            item.set_tooltip_text(tooltip or None)
+            submenu.add(item)
+
+        submenu.show_all()
+
+    def activate_default(self, menu):
+        for child in menu.get_children():
+            if child.get_sensitive() and hasattr(child, "toggled"):
+                child.toggled()
+                break
+
+
 class vmmConsolePages(vmmGObjectUI):
     """
     Handles all the complex UI handling dictated by the spice/vnc widgets
@@ -222,6 +327,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-pages").set_show_tabs(False)
         self.widget("serial-pages").set_show_tabs(False)
 
+        self._consolemenu = _ConsoleMenu()
         self._serial_consoles = []
         self._init_menus()
 
@@ -268,7 +374,7 @@ class vmmConsolePages(vmmGObjectUI):
         # Serial list menu
         smenu = Gtk.Menu()
         smenu.connect("show", self._populate_serial_menu)
-        self.widget("details-menu-view-serial-list").set_submenu(smenu)
+        self.widget("details-menu-view-console-list").set_submenu(smenu)
 
         # Keycombo menu (ctrl+alt+del etc.)
         self.widget("details-menu-send-key").set_submenu(self._keycombo_menu)
@@ -866,28 +972,18 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _activate_default_console_page(self):
         """
-        Find the default graphical or serial console for the VM
+        Toggle default console page from the menu
         """
-        if (self.vm.xmlobj.devices.graphics or
-            not self.vm.get_serialcon_devices()):
-            return
-
         # We iterate through the 'console' menu and activate the first
-        # valid entry... it's the easiest thing to do to hit all the right
-        # code paths.
+        # valid entry... hacky but it works
         self._populate_serial_menu()
-        menu = self.widget("details-menu-view-serial-list").get_submenu()
-        for child in menu.get_children():
-            if isinstance(child, Gtk.SeparatorMenuItem):
-                break  # pragma: no cover
-            if child.get_sensitive():
-                child.toggled()
-                break
+        menu = self.widget("details-menu-view-console-list").get_submenu()
+        self._consolemenu.activate_default(menu)
 
     def _console_menu_toggled(self, src, dev):
         self.widget("details-pages").set_current_page(DETAILS_PAGE_CONSOLE)
 
-        if dev.DEVICE_TYPE == "graphics":
+        if dev and dev.DEVICE_TYPE == "graphics":
             self.widget("console-pages").set_current_page(_CONSOLE_PAGE_VIEWER)
             return
 
@@ -913,89 +1009,11 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-pages").set_current_page(_CONSOLE_PAGE_SERIAL)
         self.widget("serial-pages").set_current_page(page_idx)
 
-    def _build_serial_menu_items(self, menu_item_cb):
-        devs = self.vm.get_serialcon_devices()
-        if len(devs) == 0:
-            menu_item_cb(_("No text console available"),
-                         radio=False, sensitive=False)
-            return
-
-        active_label = None
-        if (self.widget("console-pages").get_current_page() ==
-                _CONSOLE_PAGE_SERIAL):
-            serial_page = self.widget("serial-pages").get_current_page()
-            if len(self._serial_consoles) > serial_page:
-                active_label = self._serial_consoles[serial_page].name
-
-        for dev in devs:
-            if dev.DEVICE_TYPE == "console":
-                label = _("Text Console %d") % (dev.get_xml_idx() + 1)
-            else:
-                label = _("Serial %d") % (dev.get_xml_idx() + 1)
-
-            tooltip = vmmSerialConsole.can_connect(self.vm, dev)
-            sensitive = not bool(tooltip)
-
-            active = (sensitive and label == active_label)
-            menu_item_cb(label, sensitive=sensitive, active=active,
-                tooltip=tooltip, cb=self._console_menu_toggled, cbdata=dev)
-
-    def _build_graphical_menu_items(self, menu_item_cb):
-        devs = self.vm.xmlobj.devices.graphics
-        if len(devs) == 0:
-            menu_item_cb(_("No graphical console available"),
-                         radio=False, sensitive=False)
-            return
-
-        from ..device.gfxdetails import vmmGraphicsDetails
-
-        active = (self.widget("console-pages").get_current_page() !=
-                _CONSOLE_PAGE_SERIAL)
-        for idx, dev in enumerate(devs):
-            label = (_("Graphical Console") + " " +
-                     vmmGraphicsDetails.graphics_pretty_type_simple(dev.type))
-
-            sensitive = True
-            tooltip = None
-            if idx > 0:
-                label += " %s" % (idx + 1)
-                sensitive = False
-                tooltip = _("virt-manager does not support more "
-                            "that one graphical console")
-
-            menu_item_cb(label, active=active,
-                sensitive=sensitive, tooltip=tooltip,
-                cb=self._console_menu_toggled, cbdata=dev)
-
     def _populate_serial_menu(self, ignore=None):
-        src = self.widget("details-menu-view-serial-list").get_submenu()
-        for child in src:
-            src.remove(child)
+        submenu = self.widget("details-menu-view-console-list").get_submenu()
+        self._consolemenu.rebuild_menu(
+                self.vm, submenu, self._console_menu_toggled)
 
-        def menu_item_cb(label, sensitive=True, active=False,
-                         radio=True, tooltip=None, cb=None, cbdata=None):
-            if radio:
-                item = Gtk.RadioMenuItem(menu_item_cb.radio_group)
-                if menu_item_cb.radio_group is None:
-                    menu_item_cb.radio_group = item
-                item.set_label(label)
-            else:
-                item = Gtk.MenuItem.new_with_label(label)
-
-            item.set_sensitive(sensitive)
-            if active:
-                item.set_active(True)
-            if tooltip:
-                item.set_tooltip_text(tooltip)
-            if cb and sensitive:
-                item.connect("toggled", cb, cbdata)
-            src.add(item)
-        menu_item_cb.radio_group = None
-
-        self._build_serial_menu_items(menu_item_cb)
-        src.add(Gtk.SeparatorMenuItem())
-        self._build_graphical_menu_items(menu_item_cb)
-        src.show_all()
 
 
     ###########################

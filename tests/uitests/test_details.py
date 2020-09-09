@@ -356,7 +356,7 @@ class Details(uiutils.UITestCase):
         # Quick test to hit some serialcon.py paths
         viewmenu = win.find("^View$", "menu")
         viewmenu.click()
-        textmenu = viewmenu.find("Text Consoles", "menu")
+        textmenu = viewmenu.find("Consoles", "menu")
         textmenu.point()
         conitem = textmenu.find("Serial 1")
         uiutils.check(lambda: not conitem.sensitive)
@@ -753,9 +753,9 @@ class Details(uiutils.UITestCase):
         def _check_textconsole_menu(msg):
             vmenu = win.find("^View$", "menu")
             vmenu.click()
-            tmenu = win.find("Text Consoles", "menu")
+            tmenu = win.find("Consoles", "menu")
             tmenu.point()
-            tmenu.find(msg, "menu item")
+            tmenu.find(msg, ".*menu item.*")
             vmenu.click()
 
         # Check initial state

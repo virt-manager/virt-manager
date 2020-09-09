@@ -186,6 +186,15 @@ class vmmSerialConsole(vmmGObject):
 
         return err
 
+    @staticmethod
+    def get_serialcon_devices(vm):
+        serials = vm.xmlobj.devices.serial
+        consoles = vm.xmlobj.devices.console
+        if serials and vm.serial_is_console_dup(serials[0]):
+            consoles.pop(0)
+        return serials + consoles
+
+
     def __init__(self, vm, target_port, name):
         vmmGObject.__init__(self)
 
@@ -290,7 +299,7 @@ class vmmSerialConsole(vmmGObject):
         self._box.set_current_page(1)
 
     def _lookup_dev(self):
-        devs = self.vm.get_serialcon_devices()
+        devs = vmmSerialConsole.get_serialcon_devices(self.vm)
         found = None
         for dev in devs:
             port = dev.get_xml_idx()
