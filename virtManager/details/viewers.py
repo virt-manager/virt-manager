@@ -101,14 +101,10 @@ class Viewer(vmmGObject):
     def _grab_focus(self):
         if self._display:
             self._display.grab_focus()
-    def _has_focus(self):
-        return self._display and self._display.get_property("has-focus")
     def _set_size_request(self, *args, **kwargs):
         return self._display.set_size_request(*args, **kwargs)
     def _size_allocate(self, *args, **kwargs):
         return self._display.size_allocate(*args, **kwargs)
-    def _get_visible(self):
-        return self._display and self._display.get_visible()
 
     def _get_pixbuf(self):
         return self._display.get_pixbuf()
@@ -205,16 +201,12 @@ class Viewer(vmmGObject):
 
     def console_grab_focus(self):
         return self._grab_focus()
-    def console_has_focus(self):
-        return self._has_focus()
     def console_has_keyboard_grab(self):
         return bool(self._display and self._keyboard_grab)
     def console_set_size_request(self, *args, **kwargs):
         return self._set_size_request(*args, **kwargs)
     def console_size_allocate(self, *args, **kwargs):
         return self._size_allocate(*args, **kwargs)
-    def console_get_visible(self):
-        return self._get_visible()
 
     def console_get_pixbuf(self):
         return self._get_pixbuf()
@@ -236,7 +228,7 @@ class Viewer(vmmGObject):
     def console_get_desktop_resolution(self):
         ret = self._get_desktop_resolution()
         if not ret:
-            return ret
+            return ret  # pragma: no cover
 
         # Don't pass on bogus resolutions
         if (ret[0] == 0) or (ret[1] == 0):
@@ -684,7 +676,7 @@ class SpiceViewer(Viewer):
 
     def _get_desktop_resolution(self):
         if not self._display_channel:
-            return None
+            return None  # pragma: no cover
         return self._display_channel.get_properties("width", "height")
 
     def _has_agent(self):

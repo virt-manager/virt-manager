@@ -12,6 +12,7 @@ from virtinst import log
 from . import vmmenu
 from .baseclass import vmmGObjectUI
 from .engine import vmmEngine
+from .details.console import vmmConsolePages
 from .details.details import vmmDetails
 from .details.snapshots import vmmSnapshotPage
 
@@ -65,14 +66,17 @@ class vmmVMWindow(vmmGObjectUI):
         else:
             self.conn.connect("vm-removed", self._vm_removed_cb)
 
-        self._mediacombo = None
-
         self.ignoreDetails = False
 
-        from .details.console import vmmConsolePages
-        self.console = vmmConsolePages(self.vm, self.builder, self.topwin)
+        self._console = vmmConsolePages(self.vm, self.builder, self.topwin)
+        self.widget("console-placeholder").add(self._console.top_box)
+        self._console.connect("page-changed", self._console_page_changed_cb)
+        self._console.connect("leave-fullscreen",
+                self._console_leave_fullscreen_cb)
+
         self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self.snapshots.top_box)
+
         self._details = vmmDetails(self.vm, self.builder, self.topwin,
                 self.is_customize_dialog)
         self.widget("details-placeholder").add(self._details.top_box)
@@ -119,31 +123,30 @@ class vmmVMWindow(vmmGObjectUI):
 
             "on_details_pages_switch_page": self.switch_page,
 
-            # Listeners stored in vmmConsolePages
-            "on_details_menu_view_fullscreen_activate": (
-                self.console.details_toggle_fullscreen),
-            "on_details_menu_view_size_to_vm_activate": (
-                self.console.details_size_to_vm),
-            "on_details_menu_view_scale_always_toggled": (
-                self.console.details_scaling_ui_changed_cb),
-            "on_details_menu_view_scale_fullscreen_toggled": (
-                self.console.details_scaling_ui_changed_cb),
-            "on_details_menu_view_scale_never_toggled": (
-                self.console.details_scaling_ui_changed_cb),
-            "on_details_menu_view_resizeguest_toggled": (
-                self.console.details_resizeguest_ui_changed_cb),
-
-            "on_console_pages_switch_page": (
-                self.console.details_page_changed),
-            "on_console_auth_password_activate": (
-                self.console.details_auth_login),
-            "on_console_auth_login_clicked": (
-                self.console.details_auth_login),
+            "on_details_menu_view_fullscreen_activate": self._fullscreen_changed_cb,
+            "on_details_menu_view_size_to_vm_activate": self._size_to_vm_cb,
+            "on_details_menu_view_scale_always_toggled": self._scaling_ui_changed_cb,
+            "on_details_menu_view_scale_fullscreen_toggled": self._scaling_ui_changed_cb,
+            "on_details_menu_view_scale_never_toggled": self._scaling_ui_changed_cb,
+            "on_details_menu_view_resizeguest_toggled": self._resizeguest_ui_changed_cb,
         })
 
         # Deliberately keep all this after signal connection
         self.vm.connect("state-changed", self.refresh_vm_state)
         self.vm.connect("resources-sampled", self.refresh_resources)
+
+        self._console_page_changed_cb(None)
+        self._console_refresh_scaling_from_settings()
+
+        self.add_gsettings_handle(
+            self.vm.on_console_scaling_changed(
+                self._console_refresh_scaling_from_settings))
+
+        self._console_refresh_resizeguest_from_settings()
+        self.add_gsettings_handle(
+            self.vm.on_console_resizeguest_changed(
+                self._console_refresh_resizeguest_from_settings))
+
 
         self.refresh_vm_state()
         self.activate_default_page()
@@ -154,8 +157,8 @@ class vmmVMWindow(vmmGObjectUI):
         return self.vm.conn
 
     def _cleanup(self):
-        self.console.cleanup()
-        self.console = None
+        self._console.cleanup()
+        self._console = None
         self.snapshots.cleanup()
         self.snapshots = None
         self._details.cleanup()
@@ -224,11 +227,10 @@ class vmmVMWindow(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        if self.console.details_viewer_is_visible():
-            try:
-                self.console.details_close_viewer()
-            except Exception:  # pragma: no cover
-                log.error("Failure when disconnecting from desktop server")
+        try:
+            self._console.vmwindow_close_viewer()
+        except Exception:  # pragma: no cover
+            log.error("Failure when disconnecting from desktop server")
 
         self.emit("closed")
         vmmEngine.get_instance().decrement_window_counter()
@@ -258,6 +260,14 @@ class vmmVMWindow(vmmGObjectUI):
         self.widget("details-pages").set_show_tabs(False)
         self.widget("details-menu-view-toolbar").set_active(
                                     self.config.get_details_show_toolbar())
+
+        # Keycombo menu (ctrl+alt+del etc.)
+        self.widget("details-menu-send-key").set_submenu(
+                self._console.vmwindow_get_keycombo_menu())
+
+        # Serial list menu
+        self.widget("details-menu-view-console-list").set_submenu(
+                self._console.vmwindow_get_console_list_menu())
 
 
     ##########################
@@ -342,7 +352,7 @@ class vmmVMWindow(vmmGObjectUI):
         self.page_refresh(newpage)
 
         self.sync_details_console_view(newpage)
-        self.console.details_refresh_can_fullscreen()
+        self._console_page_changed_cb(None)
 
     def change_run_text(self, can_restore):
         if can_restore:
@@ -395,9 +405,7 @@ class vmmVMWindow(vmmGObjectUI):
         self.page_refresh(details.get_current_page())
 
         self._details.vmwindow_refresh_vm_state()
-        self.console.details_update_widget_states()
-        if not run:
-            self.activate_default_console_page()
+        self._console.vmwindow_refresh_vm_state()
 
 
     #############################
@@ -412,15 +420,7 @@ class vmmVMWindow(vmmGObjectUI):
         vmmEngine.get_instance().exit_app()
 
     def activate_default_console_page(self):
-        pages = self.widget("details-pages")
-
-        # console.activate_default_console_page() will as a side effect
-        # switch to DETAILS_PAGE_CONSOLE. However this code path is triggered
-        # when the user runs a VM while they are focused on the details page,
-        # and we don't want to switch pages out from under them.
-        origpage = pages.get_current_page()
-        self.console.details_activate_default_console_page()
-        pages.set_current_page(origpage)
+        self._console.vmwindow_activate_default_console_page()
 
     # activate_* are called from engine.py via CLI options
     def activate_default_page(self):
@@ -463,7 +463,7 @@ class vmmVMWindow(vmmGObjectUI):
 
     def control_vm_menu(self, src_ignore):
         can_usb = bool(self.vm.has_spicevmc_type_redirdev() and
-                       self.console.details_viewer_has_usb_redirection())
+                       self._console.vmwindow_viewer_has_usb_redirection())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
 
     def control_vm_run(self, src_ignore):
@@ -485,7 +485,7 @@ class vmmVMWindow(vmmGObjectUI):
         ignore = src
         spice_usbdev_dialog = self.err
 
-        spice_usbdev_widget = self.console.details_viewer_get_usb_widget()
+        spice_usbdev_widget = self._console.vmwindow_viewer_get_usb_widget()
         if not spice_usbdev_widget:  # pragma: no cover
             self.err.show_err(_("Error initializing spice USB device widget"))
             return
@@ -496,7 +496,7 @@ class vmmVMWindow(vmmGObjectUI):
                                       buttons=Gtk.ButtonsType.CLOSE)
 
     def _take_screenshot(self):
-        image = self.console.details_viewer_get_pixbuf()
+        image = self._console.vmwindow_viewer_get_pixbuf()
 
         metadata = {
             'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
@@ -563,3 +563,100 @@ class vmmVMWindow(vmmGObjectUI):
     def page_refresh(self, page):
         if page == DETAILS_PAGE_DETAILS:
             self._details.vmwindow_page_refresh()
+
+
+    #########################
+    # Console page handling #
+    #########################
+
+    def _console_page_changed_cb(self, src):
+        if not self.vm:
+            # This is triggered via cleanup + idle_add, so vm might
+            # disappear and spam the logs
+            return  # pragma: no cover
+
+        paused = self.vm.is_paused()
+        is_viewer = self._console.vmwindow_get_viewer_is_visible()
+        can_usb = self._console.vmwindow_get_can_usb_redirect()
+
+        self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
+        self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
+        keycombo_menu = self._console.vmwindow_get_keycombo_menu()
+
+        can_sendkey = (is_viewer and not paused)
+        for c in keycombo_menu.get_children():
+            c.set_sensitive(can_sendkey)
+
+        self._console_refresh_can_fullscreen()
+        self._console_refresh_resizeguest_from_settings()
+
+    def _console_refresh_can_fullscreen(self):
+        allow_fullscreen = self._console.vmwindow_get_viewer_is_visible()
+
+        self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
+        self.widget("details-menu-view-fullscreen").set_sensitive(
+            allow_fullscreen)
+
+    def _console_refresh_scaling_from_settings(self):
+        scale_type = self.vm.get_console_scaling()
+        self.widget("details-menu-view-scale-always").set_active(
+            scale_type == self.config.CONSOLE_SCALE_ALWAYS)
+        self.widget("details-menu-view-scale-never").set_active(
+            scale_type == self.config.CONSOLE_SCALE_NEVER)
+        self.widget("details-menu-view-scale-fullscreen").set_active(
+            scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
+
+        self._console.vmwindow_sync_scaling_with_display()
+
+    def _scaling_ui_changed_cb(self, src):
+        # Called from details.py
+        if not src.get_active():
+            return
+
+        scale_type = 0
+        if src == self.widget("details-menu-view-scale-always"):
+            scale_type = self.config.CONSOLE_SCALE_ALWAYS
+        elif src == self.widget("details-menu-view-scale-fullscreen"):
+            scale_type = self.config.CONSOLE_SCALE_FULLSCREEN
+        elif src == self.widget("details-menu-view-scale-never"):
+            scale_type = self.config.CONSOLE_SCALE_NEVER
+
+        self.vm.set_console_scaling(scale_type)
+
+    def _fullscreen_changed_cb(self, src):
+        do_fullscreen = src.get_active()
+        self.widget("control-fullscreen").set_active(do_fullscreen)
+        self._console.vmwindow_set_fullscreen(do_fullscreen)
+
+        self.widget("details-menubar").set_visible(not do_fullscreen)
+
+        show_toolbar = not do_fullscreen
+        if not self.widget("details-menu-view-toolbar").get_active():
+            show_toolbar = False  # pragma: no cover
+        self.widget("toolbar-box").set_visible(show_toolbar)
+
+    def _resizeguest_ui_changed_cb(self, src):
+        if not src.get_sensitive():
+            return  # pragma: no cover
+
+        val = int(self.widget("details-menu-view-resizeguest").get_active())
+        self.vm.set_console_resizeguest(val)
+        self._console.vmwindow_sync_resizeguest_with_display()
+
+    def _console_refresh_resizeguest_from_settings(self):
+        tooltip = self._console.vmwindow_get_resizeguest_tooltip()
+        val = self.vm.get_console_resizeguest()
+        widget = self.widget("details-menu-view-resizeguest")
+        widget.set_tooltip_text(tooltip)
+        widget.set_sensitive(not bool(tooltip))
+        if not tooltip:
+            self.widget("details-menu-view-resizeguest").set_active(bool(val))
+
+        self._console.vmwindow_sync_resizeguest_with_display()
+
+    def _size_to_vm_cb(self, src):
+        self._console.vmwindow_set_size_to_vm()
+
+    def _console_leave_fullscreen_cb(self, src):
+        # This will trigger de-fullscreening in a roundabout way
+        self.widget("control-fullscreen").set_active(False)

@@ -16,6 +16,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from virtinst import log
+from virtinst import xmlutil
 
 from . import config
 
@@ -305,7 +306,10 @@ class vmmGObjectUI(vmmGObject):
     err = property(_get_err)
 
     def widget(self, name):
-        return self.builder.get_object(name)
+        ret = self.builder.get_object(name)
+        if not ret:
+            raise xmlutil.DevError("Did not find widget name=%s" % name)
+        return ret
 
     def cleanup(self):
         if self.__cleaned_up:
