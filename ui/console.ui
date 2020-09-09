@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <object class="GtkImage" id="image70">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-apply</property>
+  </object>
   <object class="GtkNotebook" id="console-pages">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
@@ -282,6 +287,32 @@
             <property name="tab_fill">False</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkButton" id="console-connect-button">
+            <property name="label" translatable="yes">_Connect to console</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="on_console_connect_button_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label">Connect</property>
+          </object>
+          <packing>
+            <property name="position">3</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="position">2</property>
@@ -303,10 +334,5 @@
         <property name="AtkObject::accessible-name">console-pages</property>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="image70">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-apply</property>
   </object>
 </interface>

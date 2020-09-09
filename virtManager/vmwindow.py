@@ -128,6 +128,7 @@ class vmmVMWindow(vmmGObjectUI):
             "on_details_menu_view_scale_fullscreen_toggled": self._scaling_ui_changed_cb,
             "on_details_menu_view_scale_never_toggled": self._scaling_ui_changed_cb,
             "on_details_menu_view_resizeguest_toggled": self._resizeguest_ui_changed_cb,
+            "on_details_menu_view_autoconnect_activate": self._autoconnect_ui_changed_cb,
         })
 
         # Deliberately keep all this after signal connection
@@ -146,6 +147,10 @@ class vmmVMWindow(vmmGObjectUI):
             self.vm.on_console_resizeguest_changed(
                 self._console_refresh_resizeguest_from_settings))
 
+        self._console_refresh_autoconnect_from_settings()
+        self.add_gsettings_handle(
+            self.vm.on_console_autoconnect_changed(
+                self._console_refresh_autoconnect_from_settings))
 
         self.refresh_vm_state()
         self.activate_default_page()
@@ -670,6 +675,14 @@ class vmmVMWindow(vmmGObjectUI):
             self.widget("details-menu-view-resizeguest").set_active(bool(val))
 
         self._console.vmwindow_sync_resizeguest_with_display()
+
+    def _autoconnect_ui_changed_cb(self, src):
+        val = int(self.widget("details-menu-view-autoconnect").get_active())
+        self.vm.set_console_autoconnect(val)
+
+    def _console_refresh_autoconnect_from_settings(self):
+        val = self.vm.get_console_autoconnect()
+        self.widget("details-menu-view-autoconnect").set_active(val)
 
     def _size_to_vm_cb(self, src):
         self._console.vmwindow_set_size_to_vm()

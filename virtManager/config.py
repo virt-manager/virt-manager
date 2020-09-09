@@ -487,6 +487,11 @@ class vmmConfig(object):
     def set_auto_usbredir(self, state):
         self.conf.set("/console/auto-redirect", state)
 
+    def get_console_autoconnect(self):
+        return bool(self.conf.get("/console/autoconnect"))
+    def set_console_autoconnect(self, val):
+        return self.conf.set("/console/autoconnect", val)
+
     # Show VM details toolbar
     def get_details_show_toolbar(self):
         res = self.conf.get("/details/show-toolbar")

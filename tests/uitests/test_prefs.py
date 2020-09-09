@@ -57,6 +57,7 @@ class VMMPrefs(uiutils.UITestCase):
         tab.combo_select("SPICE USB", "Manual redirect")
         tab.combo_select("Resize guest", "On")
         tab.combo_select("Graphical console scaling", "Always")
+        tab.find("Console autoconnect", "check box").click()
 
         tab.find("Change...", "push button").click()
         keyframe = self.app.root.find_fuzzy("Configure grab", "dialog")
