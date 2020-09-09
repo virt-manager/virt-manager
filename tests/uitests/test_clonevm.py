@@ -40,7 +40,10 @@ class CloneVM(uiutils.UITestCase):
         # Launch wizard via right click menu
         c = self.app.root.find_fuzzy(vmname, "table cell")
         c.click(button=3)
-        self.app.root.find("Clone...", "menu item").click()
+        item = self.app.root.find("Clone...", "menu item")
+        item.point()
+        self.sleep(.5)
+        item.click()
         return self.app.root.find("Clone Virtual Machine", "frame")
 
     def _get_all_rows(self, win):
