@@ -357,7 +357,7 @@ class NewVM(uiutils.UITestCase):
         """
         CDROM with detection
         """
-        cdrom = tests.utils.DATADIR + "/cli/fake-win7.iso"
+        cdrom = tests.utils.DATADIR + "/fakemedia/fake-win7.iso"
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("Local install media", "radio").click()
         self.forward(newvm)
