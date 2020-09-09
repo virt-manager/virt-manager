@@ -83,11 +83,10 @@ class vmmVMWindow(vmmGObjectUI):
 
         # Set default window size
         w, h = self.vm.get_details_window_size()
-        if w <= 0:
-            w = 800
-        if h <= 0:
-            h = 600
-        self.topwin.set_default_size(w, h)
+        if w <= 0 or h <= 0:
+            self._set_initial_window_size()
+        else:
+            self.topwin.set_default_size(w, h)
         self._window_size = None
 
         self._shutdownmenu = None
@@ -189,6 +188,24 @@ class vmmVMWindow(vmmGObjectUI):
         if self._details.vmwindow_has_unapplied_changes():
             return
         self.emit("customize-finished", self.vm)
+
+    def _set_initial_window_size(self):
+        """
+        We want the window size for new windows to be 1024x768 viewer
+        size, plus whatever it takes to fit the toolbar+menubar, etc.
+        To achieve this, we force the display box to the desired size
+        with set_size_request, wait for the window to report it has
+        been resized, and then unset the hardcoded size request so
+        the user can manually resize the window however they want.
+        """
+        w = 1024
+        h = 768
+        hid = []
+        def win_cb(src, event):
+            self.widget("details-pages").set_size_request(-1, -1)
+            self.topwin.disconnect(hid[0])
+        self.widget("details-pages").set_size_request(w, h)
+        hid.append(self.topwin.connect("configure-event", win_cb))
 
     def _vm_removed_cb(self, _conn, vm):
         if self.vm == vm:

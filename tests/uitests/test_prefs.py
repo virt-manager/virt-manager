@@ -103,15 +103,14 @@ class VMMPrefs(uiutils.UITestCase):
         xmleditor = detailswin.find("XML editor")
 
         detailswin.find("XML", "page tab").click()
-        uiutils.drag(detailswin, 400, 400)
         warnlabel = detailswin.find_fuzzy("XML editing is disabled")
         uiutils.check(lambda: warnlabel.visible)
         origtext = xmleditor.text
         xmleditor.typeText("1234abcd")
         uiutils.check(lambda: xmleditor.text == origtext)
 
+        managerwin.click_title()
         managerwin.grabFocus()
-        managerwin.click()
         managerwin.find("Edit", "menu").click()
         managerwin.find("Preferences", "menu item").click()
         prefswin = self.app.root.find_fuzzy("Preferences", "frame")
