@@ -39,7 +39,6 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_xmleditor()
         self.refresh_libguestfs()
         self.refresh_update_interval()
-        self.refresh_console_accels()
         self.refresh_console_scaling()
         self.refresh_console_resizeguest()
         self.refresh_console_autoredir()
@@ -68,7 +67,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_xmleditor_toggled": self.change_xmleditor,
             "on_prefs_libguestfs_toggled": self.change_libguestfs,
             "on_prefs_stats_update_interval_changed": self.change_update_interval,
-            "on_prefs_console_accels_toggled": self.change_console_accels,
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_console_resizeguest_changed": self.change_console_resizeguest,
             "on_prefs_console_autoredir_changed": self.change_console_autoredir,
@@ -220,9 +218,6 @@ class vmmPreferences(vmmGObjectUI):
         self.widget("prefs-stats-update-interval").set_value(
             self.config.get_stats_update_interval())
 
-    def refresh_console_accels(self):
-        self.widget("prefs-console-accels").set_active(
-            self.config.get_console_accels())
     def refresh_console_scaling(self):
         combo = self.widget("prefs-console-scaling")
         val = self.config.get_console_scaling()
@@ -375,8 +370,6 @@ class vmmPreferences(vmmGObjectUI):
     def change_update_interval(self, src):
         self.config.set_stats_update_interval(src.get_value_as_int())
 
-    def change_console_accels(self, src):
-        self.config.set_console_accels(src.get_active())
     def change_console_scaling(self, box):
         self.config.set_console_scaling(box.get_active())
     def change_console_resizeguest(self, box):

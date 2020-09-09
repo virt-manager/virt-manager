@@ -347,8 +347,6 @@ class vmmConsolePages(vmmGObjectUI):
         self.add_gsettings_handle(
             self.vm.on_console_resizeguest_changed(
                 self._refresh_resizeguest_from_settings))
-        self.add_gsettings_handle(
-            self.config.on_console_accels_changed(self._refresh_enable_accel))
 
 
     def _cleanup(self):
@@ -437,10 +435,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         for g in self._accel_groups:
             self.topwin.add_accel_group(g)
-
-    def _refresh_enable_accel(self):
-        # Make sure modifiers are up to date
-        self._viewer_focus_changed()
 
     def _do_send_key(self, src, keys):
         ignore = src
@@ -838,8 +832,6 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer = viewer_class(self.vm, ginfo)
             self._connect_viewer_signals()
 
-            self._refresh_enable_accel()
-
             self._viewer.console_open()
         except Exception as e:
             log.exception("Error connection to graphical console")
@@ -885,11 +877,7 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-gfx-scroll").queue_resize()
 
     def _viewer_focus_changed(self, ignore1=None, ignore2=None):
-        force_accel = self.config.get_console_accels()
-
-        if force_accel:
-            self._enable_modifiers()  # pragma: no cover
-        elif self._someone_has_focus():
+        if self._someone_has_focus():
             self._disable_modifiers()
         else:
             self._enable_modifiers()
