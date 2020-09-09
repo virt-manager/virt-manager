@@ -469,17 +469,6 @@ class vmmConfig(object):
     def on_stats_enable_memory_poll_changed(self, cb, row=None):
         return self.conf.notify_add("/stats/enable-memory-poll", cb, row)
 
-    # VM Console preferences
-    def on_console_accels_changed(self, cb):
-        return self.conf.notify_add("/console/enable-accels", cb)
-    def get_console_accels(self):
-        console_pref = self.conf.get("/console/enable-accels")
-        if console_pref is None:
-            console_pref = False  # pragma: no cover
-        return console_pref
-    def set_console_accels(self, pref):
-        self.conf.set("/console/enable-accels", pref)
-
     def get_console_scaling(self):
         return self.conf.get("/console/scaling")
     def set_console_scaling(self, pref):
