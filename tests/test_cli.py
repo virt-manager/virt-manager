@@ -1143,6 +1143,7 @@ c.add_valid("--pxe --autoconsole text", grep="text console command: virsh")  # f
 c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="text console command: virsh")  # make sure we notify about text console
 c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
+c.add_invalid("--pxe --autoconsole text --wait -1", grep="exceeded specified time limit")  # hits a specific code path where we skip console waitpid
 
 
 ##################

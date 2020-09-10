@@ -7,6 +7,7 @@
 
 import argparse
 import atexit
+import os
 import sys
 import time
 import select
@@ -607,6 +608,19 @@ def _sleep(secs):
         time.sleep(secs)  # pragma: no cover
 
 
+def _set_default_wait(autoconsole, options):
+    if (options.wait is not None or
+        autoconsole.has_console_cb() or
+        not autoconsole.is_default()):
+        return
+
+    # If there isn't any console to actually connect up,
+    # default to --wait -1 to get similarish behavior
+    log.warning(_("No console to launch for the guest, "
+        "defaulting to --wait -1"))
+    options.wait = -1
+
+
 class WaitHandler:
     """
     Helper class for handling the --wait option sleeping and time tracking
@@ -681,100 +695,80 @@ def _print_cloudinit_passwd(installer):
     select.select(stdins, [], [], timeout)
 
 
-def start_install(guest, installer, options):
-    autoconsole = cli.parse_autoconsole(options, guest, installer)
-    show_console_warnings(installer, autoconsole)
+def _connect_console(guest, instdomain, autoconsole, wait):
+    """
+    Launched the passed console callback for the already defined
+    domain. If domain isn't running, return an error.
+    """
+    console_cb = autoconsole.get_console_cb()
+    if not console_cb:
+        return
 
-    conscb = autoconsole.get_console_cb()
-    if autoconsole.is_default() and not conscb and options.wait is None:
-        # If there isn't any console to actually connect up,
-        # default to --wait -1 to get similarish behavior
-        log.warning(_("No console to launch for the guest, "
-            "defaulting to --wait -1"))
-        options.wait = -1
+    child = console_cb(guest)
+    if not wait:
+        return
 
-    waithandler = WaitHandler(options.wait)
-    meter = cli.get_meter()
-    log.debug("Guest.has_install_phase: %s", installer.has_install_phase())
-
-    # we've got everything -- try to start the install
-    print_stdout(_("\nStarting install..."))
-    _print_cloudinit_passwd(installer)
-    waithandler.start()
-
+    # If we connected the console, wait for it to finish
     try:
-        try:
-            domain = installer.start_install(
-                    guest, meter=meter,
-                    doboot=not options.noreboot,
-                    transient=options.transient)
-        except:  # noqa
-            virtinst.Installer.cleanup_created_disks(guest, meter)
-            raise
+        errcode = os.waitpid(child, 0)[1]
+    except OSError as e:  # pragma: no cover
+        log.debug("waitpid error: %s", e)
 
-        if options.destroy_on_exit:
+    if errcode:
+        log.warning(_("Console command returned failure."))
+
+    instdomain.handle_destroy_on_exit()
+
+
+class _InstalledDomain:
+    """
+    Wrapper for the domain object after the initial install creation
+    """
+    def __init__(self, domain, transient, destroy_on_exit):
+        self._domain = domain
+        self._transient = transient
+        self._destroy_on_exit = destroy_on_exit
+
+        if destroy_on_exit:
             atexit.register(_destroy_on_exit, domain)
 
-        cli.connect_console(guest, domain, conscb,
-                waithandler.wait_for_console_to_exit,
-                options.destroy_on_exit)
-        check_domain(installer, domain, conscb, options.transient, waithandler)
+    def handle_destroy_on_exit(self):
+        if self._destroy_on_exit and self._domain.isActive():
+            log.debug("console exited and destroy_on_exit passed, destroying")
+            self._domain.destroy()
 
-        print_stdout(_("Domain creation completed."))
-        if not options.transient and not domain.isActive():
-            if options.noreboot or not installer.has_install_phase():
-                print_stdout(  # pragma: no cover
-                    _("You can restart your domain by running:\n  %s") %
-                    cli.virsh_start_cmd(guest))
-            else:
-                print_stdout(_("Restarting guest."))
-                domain.create()
-                cli.connect_console(guest, domain, conscb, True,
-                        options.destroy_on_exit)
-
-        if virtinst.xmlutil.in_testsuite() and options.destroy_on_exit:
-            # Helps with unit testing
-            _destroy_on_exit(domain)
-    except KeyboardInterrupt:  # pragma: no cover
-        log.debug("", exc_info=True)
-        print_stderr(_("Domain install interrupted."))
-        raise
-    except Exception as e:
-        fail(e, do_exit=False)
-        cli.install_fail(guest)
-
-
-
-def check_domain(installer, domain, conscb, transient, waithandler):
-    """
-    Make sure domain ends up in expected state, and wait if for install
-    to complete if requested
-    """
-    def check_domain_inactive():
+    def check_inactive(self):
         try:
-            dominfo = domain.info()
+            dominfo = self._domain.info()
             state = dominfo[0]
 
             if state == libvirt.VIR_DOMAIN_CRASHED:
                 fail(_("Domain has crashed."))  # pragma: no cover
 
-            return not domain.isActive()
+            return not self._domain.isActive()
         except libvirt.libvirtError as e:
-            if transient and e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN:
+            if (self._transient and
+                e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN):
                 log.debug("transient VM shutdown and disappeared.")
                 return True
             raise  # pragma: no cover
 
-    if check_domain_inactive():
+
+def _wait_for_domain(installer, instdomain, autoconsole, waithandler):
+    """
+    Make sure domain ends up in expected state, and wait if for install
+    to complete if requested
+    """
+    if instdomain.check_inactive():
         return
 
-    if bool(conscb):
+    if bool(autoconsole.get_console_cb()):
         # We are trying to detect if the VM shutdown, or the user
         # just closed the console and the VM is still running. In the
         # the former case, libvirt may not have caught up yet with the
         # VM having exited, so wait a bit and check again
         _sleep(2)
-        if check_domain_inactive():
+        if instdomain.check_inactive():
             return  # pragma: no cover
 
     # If we reach here, the VM still appears to be running.
@@ -799,7 +793,7 @@ def check_domain(installer, domain, conscb, transient, waithandler):
 
     # Wait loop
     while True:
-        if check_domain_inactive():  # pragma: no cover
+        if instdomain.check_inactive():  # pragma: no cover
             print_stdout(_("Domain has shutdown. Continuing."))
             break
 
@@ -809,6 +803,77 @@ def check_domain(installer, domain, conscb, transient, waithandler):
                 _("Installation has exceeded specified time limit. "
                   "Exiting application."))
             sys.exit(1)
+
+
+def _process_domain(domain, guest, installer, waithandler, autoconsole,
+        transient, destroy_on_exit, noreboot):
+    """
+    Handle the pieces of the install process after the initial VM startup
+    """
+    instdomain = _InstalledDomain(domain, transient, destroy_on_exit)
+
+    _connect_console(guest, instdomain, autoconsole,
+            waithandler.wait_for_console_to_exit)
+
+    _wait_for_domain(installer, instdomain, autoconsole, waithandler)
+    print_stdout(_("Domain creation completed."))
+
+    if transient:
+        return
+    if domain.isActive():
+        return
+
+    if noreboot or not installer.has_install_phase():
+        print_stdout(  # pragma: no cover
+            _("You can restart your domain by running:\n  %s") %
+            cli.virsh_start_cmd(guest))
+        return
+
+    print_stdout(_("Restarting guest."))
+    domain.create()
+    _connect_console(guest, instdomain, autoconsole, True)
+
+
+def start_install(guest, installer, options):
+    """
+    Process all the install workflow specific options, and kick off
+    the Installer process
+    """
+    autoconsole = cli.parse_autoconsole(options, guest, installer)
+    show_console_warnings(installer, autoconsole)
+    _set_default_wait(autoconsole, options)
+    waithandler = WaitHandler(options.wait)
+    meter = cli.get_meter()
+
+    # we've got everything -- try to start the install
+    print_stdout(_("\nStarting install..."))
+    _print_cloudinit_passwd(installer)
+    waithandler.start()
+
+    try:
+        try:
+            domain = installer.start_install(
+                    guest, meter=meter,
+                    doboot=not options.noreboot,
+                    transient=options.transient)
+        except:  # noqa
+            virtinst.Installer.cleanup_created_disks(guest, meter)
+            raise
+
+        _process_domain(domain, guest, installer,
+                waithandler, autoconsole, options.transient,
+                options.destroy_on_exit, options.noreboot)
+
+        if virtinst.xmlutil.in_testsuite() and options.destroy_on_exit:
+            # Helps with unit testing
+            _destroy_on_exit(domain)
+    except KeyboardInterrupt:  # pragma: no cover
+        log.debug("", exc_info=True)
+        print_stderr(_("Domain install interrupted."))
+        raise
+    except Exception as e:
+        fail(e, do_exit=False)
+        cli.install_fail(guest)
 
 
 ########################

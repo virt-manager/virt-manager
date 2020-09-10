@@ -421,32 +421,6 @@ def _txt_console(guest):
     return _run_console(message, args)
 
 
-def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
-    """
-    Launched the passed console callback for the already defined
-    domain. If domain isn't running, return an error.
-    """
-    child = None
-    if consolecb:
-        child = consolecb(guest)
-
-    if not child or not wait:
-        return
-
-    # If we connected the console, wait for it to finish
-    try:
-        errcode = os.waitpid(child, 0)[1]
-    except OSError as e:  # pragma: no cover
-        log.debug("waitpid error: %s", e)
-
-    if errcode:
-        log.warning(_("Console command returned failure."))
-
-    if destroy_on_exit and domain.isActive():
-        log.debug("console exited and destroy_on_exit passed, destroying")
-        domain.destroy()
-
-
 def get_meter():
     import virtinst.progress
     quiet = (get_global_state().quiet or xmlutil.in_testsuite())
@@ -1837,6 +1811,8 @@ class _AutoconsoleData(object):
     def is_default(self):
         return self._is_default
 
+    def has_console_cb(self):
+        return bool(self.get_console_cb())
     def get_console_cb(self):
         if self.is_graphical():
             return _gfx_console
