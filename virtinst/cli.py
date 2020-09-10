@@ -3669,6 +3669,10 @@ class ParserInput(VirtCLIParser):
         cls.add_arg("bus", "bus", ignore_default=True)
 
 
+###################
+# --iommu parsing #
+###################
+
 class ParserIommu(VirtCLIParser):
     cli_arg_name = "iommu"
     guest_propname = "devices.iommu"
