@@ -109,8 +109,6 @@ class _VMStatsList(vmmGObject):
         return vector
 
     def get_in_out_vector(self, name1, name2, limit, ceil):
-        if ceil is None:
-            ceil = max(self.get_record(name1), self.get_record(name2), 10.0)
         return (self.get_vector(name1, limit, ceil=ceil),
                 self.get_vector(name2, limit, ceil=ceil))
 
