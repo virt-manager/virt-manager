@@ -30,8 +30,9 @@ def testCheckXMLBuilderProps():
             if p not in virtinst.xmlbuilder._seenprops]
     msg = None
     try:
-        assert fail == []
-    except AssertionError:
+        if fail:
+            raise RuntimeError(str(fail))
+    except Exception:
         msg = "".join(traceback.format_exc()) + "\n\n"
         msg += ("This means that there are XML properties that are\n"
                 "untested in the test suite. This could be caused\n"

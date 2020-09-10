@@ -264,6 +264,39 @@
     <filesystem type="file" accessmode="squash">
       <source file="/tmp/somefile.img"/>
       <target dir="/mount/point"/>
+      <driver format="qcow2" type="path" wrpolicy="immediate"/>
+    </filesystem>
+    <filesystem type="mount" accessmode="mapped">
+      <target dir="/"/>
+      <source dir="/"/>
+    </filesystem>
+    <filesystem type="template" accessmode="mapped">
+      <target dir="/"/>
+      <source name="foo"/>
+    </filesystem>
+    <filesystem type="file" accessmode="mapped">
+      <target dir="/"/>
+      <source file="foo.img"/>
+    </filesystem>
+    <filesystem type="volume" model="virtio" multidevs="remap" accessmode="mapped">
+      <readonly/>
+      <space_hard_limit>1234</space_hard_limit>
+      <space_soft_limit>500</space_soft_limit>
+      <source pool="pool1" volume="vol"/>
+      <target dir="/foo"/>
+      <binary path="/foo/virtiofsd" xattr="off">
+        <cache mode="always"/>
+        <lock posix="off" flock="on"/>
+      </binary>
+      <driver name="virtiofs" queue="3"/>
+    </filesystem>
+    <filesystem type="block" accessmode="mapped">
+      <source dev="/dev/foo"/>
+      <target dir="/"/>
+    </filesystem>
+    <filesystem type="ram" accessmode="mapped">
+      <target dir="/"/>
+      <source units="MiB" usage="1024"/>
     </filesystem>
     <interface type="user">
       <source portgroup="foo"/>

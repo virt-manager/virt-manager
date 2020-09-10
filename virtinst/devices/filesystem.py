@@ -35,37 +35,58 @@ class DeviceFilesystem(Device):
 
     _type_prop = XMLProperty("./@type")
     accessmode = XMLProperty("./@accessmode")
-    wrpolicy = XMLProperty("./driver/@wrpolicy")
-    driver = XMLProperty("./driver/@type")
-    format = XMLProperty("./driver/@format")
-
+    model = XMLProperty("./@model")
     readonly = XMLProperty("./readonly", is_bool=True)
+    multidevs = XMLProperty("./@multidevs")
+    space_hard_limit = XMLProperty("./space_hard_limit")
+    space_soft_limit = XMLProperty("./space_soft_limit")
 
-    units = XMLProperty("./source/@units")
-    target = XMLProperty("./target/@dir")
+    driver_wrpolicy = XMLProperty("./driver/@wrpolicy")
+    driver_type = XMLProperty("./driver/@type")
+    driver_format = XMLProperty("./driver/@format")
+    driver_queue = XMLProperty("./driver/@queue")
+    driver_name = XMLProperty("./driver/@name")
 
-    _source_dir = XMLProperty("./source/@dir")
-    _source_name = XMLProperty("./source/@name")
-    _source_file = XMLProperty("./source/@file")
-    _source_dev = XMLProperty("./source/@dev")
-    _source_usage = XMLProperty("./source/@usage")
+    target_dir = XMLProperty("./target/@dir")
+
+    source_dir = XMLProperty("./source/@dir")
+    source_name = XMLProperty("./source/@name")
+    source_file = XMLProperty("./source/@file")
+    source_dev = XMLProperty("./source/@dev")
+    source_usage = XMLProperty("./source/@usage")
+    source_units = XMLProperty("./source/@units")
+    source_pool = XMLProperty("./source/@pool")
+    source_volume = XMLProperty("./source/@volume")
+
+    binary_path = XMLProperty("./binary/@path")
+    binary_xattr = XMLProperty("./binary/@xattr", is_onoff=True)
+    binary_cache_mode = XMLProperty("./binary/cache/@mode")
+    binary_lock_posix = XMLProperty("./binary/lock/@posix", is_onoff=True)
+    binary_lock_flock = XMLProperty("./binary/lock/@flock", is_onoff=True)
+
     def _type_to_source_prop(self):
         if self.type == DeviceFilesystem.TYPE_TEMPLATE:
-            return "_source_name"
+            return "source_name"
         elif self.type == DeviceFilesystem.TYPE_FILE:
-            return "_source_file"
+            return "source_file"
         elif self.type == DeviceFilesystem.TYPE_BLOCK:
-            return "_source_dev"
+            return "source_dev"
         elif self.type == DeviceFilesystem.TYPE_RAM:
-            return "_source_usage"
+            return "source_usage"
         else:
-            return "_source_dir"
+            return "source_dir"
 
     def _get_source(self):
         return getattr(self, self._type_to_source_prop())
     def _set_source(self, val):
         return setattr(self, self._type_to_source_prop(), val)
     source = property(_get_source, _set_source)
+
+    def _get_target(self):
+        return self.target_dir
+    def _set_target(self, val):
+        self.target_dir = val
+    target = property(_get_target, _set_target)
 
     def _get_type(self):
         return getattr(self, '_type_prop')

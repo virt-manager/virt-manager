@@ -932,11 +932,11 @@ class vmmDomain(vmmLibvirtObject):
             # pylint: disable=maybe-no-member
             editdev.type = newdev.type
             editdev.accessmode = newdev.accessmode
-            editdev.wrpolicy = newdev.wrpolicy
-            editdev.driver = newdev.driver
-            editdev.format = newdev.format
+            editdev.driver_wrpolicy = newdev.driver_wrpolicy
+            editdev.driver_type = newdev.driver_type
+            editdev.driver_format = newdev.driver_format
             editdev.readonly = newdev.readonly
-            editdev.units = newdev.units
+            editdev.source_units = newdev.source_units
             editdev.source = newdev.source
             editdev.target = newdev.target
 

@@ -871,7 +871,7 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
-    def testAlterFilesystems(self):
+    def _testAlterFilesystems(self):
         guest, outfile = self._get_test_content("change-filesystems")
 
         dev1 = guest.devices.filesystem[0]
@@ -885,8 +885,8 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev1)
         check("type", None, "mount")
         check("accessmode", None, "passthrough")
-        check("driver", "handle", None)
-        check("wrpolicy", None, None)
+        check("driver_type", "handle", None)
+        check("driver_wrpolicy", None, None)
         check("source", "/foo/bar", "/new/path")
         check("target", "/bar/baz", "/new/target")
 
@@ -899,21 +899,21 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev3)
         check("type", "mount", None)
         check("accessmode", "squash", None)
-        check("driver", "path", "handle")
-        check("wrpolicy", "immediate", None)
+        check("driver_type", "path", "handle")
+        check("driver_wrpolicy", "immediate", None)
         check("readonly", False, True)
 
         check = self._make_checker(dev4)
         check("type", "mount", None)
         check("accessmode", "mapped", None)
-        check("driver", "path", "handle")
-        check("wrpolicy", None, "immediate")
+        check("driver_type", "path", "handle")
+        check("driver_wrpolicy", None, "immediate")
         check("readonly", False, True)
 
         check = self._make_checker(dev5)
         check("type", "ram")
         check("source", "1024", 123)
-        check("units", "MB", "KiB")
+        check("source_units", "MB", "KiB")
 
         check = self._make_checker(dev6)
         check("source", "/foo/bar", "/dev/new")
@@ -923,8 +923,8 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(dev7)
         check("type", "file")
         check("accessmode", "passthrough", None)
-        check("driver", "nbd", "loop")
-        check("format", "qcow", "raw")
+        check("driver_type", "nbd", "loop")
+        check("driver_format", "qcow", "raw")
         check("source", "/foo/bar.img", "/foo/bar.raw")
         check("readonly", False, True)
 

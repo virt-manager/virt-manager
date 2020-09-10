@@ -160,9 +160,9 @@ class vmmFSDetails(vmmGObjectUI):
 
         self.set_config_value("fs-type", dev.type)
         self.set_config_value("fs-mode", dev.accessmode)
-        self.set_config_value("fs-driver", dev.driver)
-        self.set_config_value("fs-wrpolicy", dev.wrpolicy)
-        self.set_config_value("fs-format", dev.format)
+        self.set_config_value("fs-driver", dev.driver_type)
+        self.set_config_value("fs-wrpolicy", dev.driver_wrpolicy)
+        self.set_config_value("fs-format", dev.driver_format)
         if dev.type != DeviceFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
         else:
@@ -280,7 +280,7 @@ class vmmFSDetails(vmmGObjectUI):
         dev = DeviceFilesystem(conn)
         if fstype == DeviceFilesystem.TYPE_RAM:
             dev.source = usage
-            dev.units = 'MiB'
+            dev.source_units = 'MiB'
         else:
             dev.source = source
         dev.target = target
@@ -292,13 +292,13 @@ class vmmFSDetails(vmmGObjectUI):
         if readonly:
             dev.readonly = readonly
         if driver:
-            dev.driver = driver
+            dev.driver_type = driver
             if driver == DeviceFilesystem.DRIVER_LOOP:
-                dev.format = "raw"
+                dev.driver_format = "raw"
             elif driver == DeviceFilesystem.DRIVER_NBD:
-                dev.format = fsformat
+                dev.driver_format = fsformat
         if wrpolicy:
-            dev.wrpolicy = wrpolicy
+            dev.driver_wrpolicy = wrpolicy
 
         dev.validate()
         return dev

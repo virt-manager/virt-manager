@@ -681,7 +681,13 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on
 --filesystem template_name,/,type=template,mode=passthrough
---filesystem type=file,source=/tmp/somefile.img,target=/mount/point,accessmode=squash
+--filesystem type=file,source=/tmp/somefile.img,target=/mount/point,accessmode=squash,driver.format=qcow2,driver.type=path,driver.wrpolicy=immediate
+--filesystem type-mount,source.dir=/,target=/
+--filesystem type=template,source.name=foo,target=/
+--filesystem type=file,source.file=foo.img,target=/
+--filesystem type=volume,model=virtio,multidevs=remap,readonly=on,space_hard_limit=1234,space_soft_limit=500,source.pool=pool1,source.volume=vol,driver.name=virtiofs,driver.queue=3,binary.path=/foo/virtiofsd,binary.xattr=off,binary.cache.mode=always,binary.lock.posix=off,binary.lock.flock=on,target.dir=/foo
+--filesystem type=block,source.dev=/dev/foo,target.dir=/
+--filesystem type=ram,source.usage=1024,source.units=MiB,target=/
 
 --soundhw default
 --sound ac97
