@@ -377,8 +377,7 @@ def validate_disk(dev, warn_overwrite=False):
     check_path_search(dev.conn, dev.path)
 
 
-def _run_console(domain, message, args):
-    ignore = domain
+def _run_console(message, args):
     log.debug("Running: %s", " ".join(args))
     argstr = " ".join([shlex.quote(a) for a in args])
     print_stdout(message % {"command": argstr})
@@ -399,7 +398,7 @@ def _run_console(domain, message, args):
         os._exit(1)  # pragma: no cover
 
 
-def _gfx_console(guest, domain):
+def _gfx_console(guest):
     args = ["virt-viewer",
             "--connect", guest.conn.uri,
             "--wait", guest.name]
@@ -410,16 +409,16 @@ def _gfx_console(guest, domain):
     if guest.has_gl() or guest.has_listen_none():
         args.append("--attach")
 
-    return _run_console(domain, message, args)
+    return _run_console(message, args)
 
 
-def _txt_console(guest, domain):
+def _txt_console(guest):
     args = ["virsh",
             "--connect", guest.conn.uri,
             "console", guest.name]
     message = _("Running text console command: %(command)s")
 
-    return _run_console(domain, message, args)
+    return _run_console(message, args)
 
 
 def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
@@ -429,7 +428,7 @@ def connect_console(guest, domain, consolecb, wait, destroy_on_exit):
     """
     child = None
     if consolecb:
-        child = consolecb(guest, domain)
+        child = consolecb(guest)
 
     if not child or not wait:
         return
