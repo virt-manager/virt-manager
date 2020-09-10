@@ -679,7 +679,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev /dev/pty7,type=misc
 
 
---filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off
+--filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on
 --filesystem template_name,/,type=template,mode=passthrough
 --filesystem type=file,source=/tmp/somefile.img,target=/mount/point,accessmode=squash
 

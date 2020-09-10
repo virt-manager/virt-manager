@@ -252,7 +252,7 @@
     </controller>
     <controller type="xenbus" maxGrantFrames="64"/>
     <filesystem type="mount" accessmode="mapped">
-      <driver ats="on" iommu="off"/>
+      <driver ats="on" iommu="off" packed="on"/>
       <alias name="testfsalias"/>
       <source dir="/source"/>
       <target dir="/target"/>
