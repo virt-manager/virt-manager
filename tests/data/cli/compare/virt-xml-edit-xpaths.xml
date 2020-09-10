@@ -1,0 +1,26 @@
+-<domain type="test">
++<domain type="test" foo="bar">
+   <name>test-for-virtxml</name>
+   <uuid>12345678-12f4-1234-1234-123456789012</uuid>
+   <description>Test VM for virtxml cli tests
+@@
+     </libosinfo:libosinfo>
+   </metadata>
+   <memory unit="KiB">4194304</memory>
+-  <currentMemory unit="KiB">4194304</currentMemory>
+   <blkiotune>
+     <weight>100</weight>
+     <device>
+@@
+     <dhCert>AQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAA</dhCert>
+     <session>IHAVENOIDEABUTJUSTPROVIDINGASTRING</session>
+   </launchSecurity>
++  <new>
++    <element>
++      <test>1</test>
++    </element>
++  </new>
+ </domain>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.

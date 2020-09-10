@@ -7,6 +7,7 @@
 import libxml2
 
 from . import xmlutil
+from .logger import log
 
 # pylint: disable=protected-access
 
@@ -313,7 +314,12 @@ class _Libxml2API(_XMLBase):
 
     def _find(self, fullxpath):
         xpath = _XPath(fullxpath).xpath
-        node = self._ctx.xpathEval(xpath)
+        try:
+            node = self._ctx.xpathEval(xpath)
+        except Exception as e:
+            log.debug("fullxpath=%s xpath=%s eval failed",
+                    fullxpath, xpath, exc_info=True)
+            raise RuntimeError("%s %s" % (fullxpath, str(e))) from None
         return (node and node[0] or None)
 
     def count(self, xpath):

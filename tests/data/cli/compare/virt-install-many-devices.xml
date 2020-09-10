@@ -1,4 +1,4 @@
-<domain type="kvm">
+<domain type="kvm" foo="bar">
   <name>fedora</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
@@ -419,8 +419,10 @@
     <tpm model="tpm-crb">
       <backend type="emulator" version="2.0"/>
     </tpm>
-    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority"/>
-    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+    <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority">
+      <ab>cd</ab>
+    </graphics>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes" ef="hg">
       <image compression="off"/>
     </graphics>
     <graphics type="vnc" port="5950" keymap="ja" listen="1.2.3.4" passwd="foo"/>
@@ -609,4 +611,10 @@
     <qemu:arg value="bar"/>
     <qemu:env name="DISPLAY" value=":0.1"/>
   </qemu:commandline>
+  <baz>wib</baz>
+  <deleteme/>
+  <t1>
+    <t2 foo="123"/>
+  </t1>
+  <barenode/>
 </domain>
