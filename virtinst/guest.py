@@ -277,7 +277,7 @@ class Guest(XMLBuilder):
     memoryBacking = XMLChildProperty(DomainMemoryBacking, is_single=True)
     idmap = XMLChildProperty(DomainIdmap, is_single=True)
     resource = XMLChildProperty(DomainResource, is_single=True)
-    sysinfo = XMLChildProperty(DomainSysinfo, is_single=True)
+    sysinfo = XMLChildProperty(DomainSysinfo)
     launchSecurity = XMLChildProperty(DomainLaunchSecurity, is_single=True)
     _metadata = XMLChildProperty(DomainMetadata, is_single=True)
 

@@ -540,6 +540,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --sysinfo type=smbios,baseBoard_manufacturer="Acme Corp.",baseBoard_product=Motherboard,baseBoard_version=A01,baseBoard_serial=1234-5678,baseBoard_asset=Tag,baseBoard_location=Chassis
 --sysinfo type=smbios,chassis.manufacturer="Chassis Corp.",chassis.serial=1234chassis,chassis.asset=chasset,chassis.sku=chassku,chassis.version=4.0
 --sysinfo type=smbios,oemStrings.entry2="complicated parsing, foo=bar",oemStrings.entry1=test1,oemStrings.entry0=test0
+
 --pm suspend_to_mem=yes,suspend_to_disk=no
 --resource partition=/virtualmachines/production
 --events on_poweroff=destroy,on_reboot=restart,on_crash=preserve,on_lockfailure=ignore
@@ -576,6 +577,7 @@ c.add_compare("""
 --memballoon default
 
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
+--sysinfo type=fwcfg,entry0.name=foo,entry0.file=bar,entry0=baz
 """, "singleton-config-3", predefine_check="5.7.0")
 
 

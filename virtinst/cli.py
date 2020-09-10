@@ -2837,13 +2837,24 @@ class ParserSysinfo(VirtCLIParser):
         "baseBoard.location": "baseBoard_location",
     }
 
-    def _parse(self, inst):
+    def parse(self, inst):
         if self.optstr and 'type' not in self.optdict:
             # If any string specified, default to type=smbios otherwise
             # libvirt errors. User args can still override this though
             self.optdict['type'] = 'smbios'
 
-        return super()._parse(inst)
+        # Previously libvirt treated sysinfo as a singleton object, but
+        # that changed with fwcfg support. Our cli would merge all options
+        # together but now needs to support multiple. Maintain sorta
+        # backcompat behavior by mergin options if 'type' matches
+        if not inst:
+            typ = self.optdict["type"]
+            for sysinfo in self.guest.sysinfo:
+                if sysinfo.type == typ:
+                    inst = sysinfo
+                    break
+
+        return super().parse(inst)
 
 
     ###################
@@ -2873,6 +2884,14 @@ class ParserSysinfo(VirtCLIParser):
         list_propname = "oemStrings"  # sysinfo.oemStrings
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
+
+    def entry_find_inst_cb(self, *args, **kwargs):
+        # pylint: disable=protected-access
+        cliarg = "entry"  # entry[0-9]*
+        list_propname = "entries"  # sysinfo.entries
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
 
     @classmethod
     def _init_class(cls, **kwargs):
@@ -2909,8 +2928,15 @@ class ParserSysinfo(VirtCLIParser):
         cls.add_arg("chassis.asset", "chassis_asset")
         cls.add_arg("chassis.sku", "chassis_sku")
 
-        cls.add_arg("oemStrings.entry[0-9]", "value", can_comma=True,
+        cls.add_arg("oemStrings.entry[0-9]*", "value", can_comma=True,
                     find_inst_cb=cls.oem_find_inst_cb)
+
+        cls.add_arg("entry[0-9]*", "value", can_comma=True,
+                    find_inst_cb=cls.entry_find_inst_cb)
+        cls.add_arg("entry[0-9]*.name", "name", can_comma=True,
+                    find_inst_cb=cls.entry_find_inst_cb)
+        cls.add_arg("entry[0-9]*.file", "file", can_comma=True,
+                    find_inst_cb=cls.entry_find_inst_cb)
 
 
 ##############################
