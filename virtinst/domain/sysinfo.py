@@ -10,7 +10,13 @@ from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 class _SysinfoEntry(XMLBuilder):
     XML_NAME = "entry"
+    name = XMLProperty("./@name")
     value = XMLProperty(".")
+    file = XMLProperty("./@file")
+
+
+class _SysinfoOemString(_SysinfoEntry):
+    pass
 
 
 class DomainSysinfo(XMLBuilder):
@@ -57,4 +63,6 @@ class DomainSysinfo(XMLBuilder):
     chassis_asset = XMLProperty("./chassis/entry[@name='asset']")
     chassis_sku = XMLProperty("./chassis/entry[@name='sku']")
 
-    oemStrings = XMLChildProperty(_SysinfoEntry, relative_xpath="./oemStrings")
+    oemStrings = XMLChildProperty(
+            _SysinfoOemString, relative_xpath="./oemStrings")
+    entries = XMLChildProperty(_SysinfoEntry)
