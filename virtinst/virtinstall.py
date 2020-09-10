@@ -699,16 +699,18 @@ def start_install(guest, installer, options):
 
     # we've got everything -- try to start the install
     print_stdout(_("\nStarting install..."))
+    _print_cloudinit_passwd(installer)
+    waithandler.start()
 
-    domain = None
     try:
-        _print_cloudinit_passwd(installer)
-
-        waithandler.start()
-
-        domain = installer.start_install(guest, meter=meter,
-                doboot=not options.noreboot,
-                transient=options.transient)
+        try:
+            domain = installer.start_install(
+                    guest, meter=meter,
+                    doboot=not options.noreboot,
+                    transient=options.transient)
+        except:  # noqa
+            virtinst.Installer.cleanup_created_disks(guest, meter)
+            raise
 
         if options.destroy_on_exit:
             atexit.register(_destroy_on_exit, domain)
@@ -730,19 +732,17 @@ def start_install(guest, installer, options):
                 cli.connect_console(guest, domain, conscb, True,
                         options.destroy_on_exit)
 
+        if virtinst.xmlutil.in_testsuite() and options.destroy_on_exit:
+            # Helps with unit testing
+            _destroy_on_exit(domain)
     except KeyboardInterrupt:  # pragma: no cover
         log.debug("", exc_info=True)
         print_stderr(_("Domain install interrupted."))
         raise
     except Exception as e:
         fail(e, do_exit=False)
-        if domain is None:
-            virtinst.Installer.cleanup_created_disks(guest, meter)
         cli.install_fail(guest)
 
-    if virtinst.xmlutil.in_testsuite() and options.destroy_on_exit:
-        # Helps with unit testing
-        _destroy_on_exit(domain)
 
 
 def check_domain(installer, domain, conscb, transient, waithandler):
