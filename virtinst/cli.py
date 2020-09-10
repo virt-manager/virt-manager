@@ -3029,6 +3029,7 @@ def _add_common_device_args(cls,
     if virtio_options:
         _add_arg("driver.ats", "virtio_driver.ats", is_onoff=True)
         _add_arg("driver.iommu", "virtio_driver.iommu", is_onoff=True)
+        _add_arg("driver.packed", "virtio_driver.packed", is_onoff=True)
 
 
 def _add_device_seclabel_args(cls, list_propname, prefix=""):

@@ -16,6 +16,7 @@ class DeviceVirtioDriver(XMLBuilder):
     XML_NAME = "driver"
     ats = XMLProperty("./@ats", is_onoff=True)
     iommu = XMLProperty("./@iommu", is_onoff=True)
+    packed = XMLProperty("./@packed", is_onoff=True)
 
 
 class DeviceSeclabel(XMLBuilder):
