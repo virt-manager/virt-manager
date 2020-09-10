@@ -26,6 +26,35 @@ _allprops = []
 _seenprops = []
 
 
+class XMLManualAction(object):
+    """
+    Helper class for tracking and performing the user requested manual
+    XML action
+    """
+    ACTION_CREATE = 1
+    ACTION_DELETE = 2
+    ACTION_SET = 3
+    def __init__(self, xpath, value=None, action=-1):
+        self.xpath = xpath
+        self._value = value
+
+        self._action = self.ACTION_SET
+        if action != -1:
+            self._action = action
+
+    def perform(self, xmlstate):
+        xpath = self.xpath
+        if xpath.startswith("."):
+            xpath = xmlstate.make_abs_xpath(self.xpath)
+        if self._action == self.ACTION_DELETE:
+            setval = False
+        elif self._action == self.ACTION_CREATE:
+            setval = True
+        else:
+            setval = self._value
+        xmlstate.xmlapi.set_xpath_content(xpath, setval)
+
+
 class _XMLPropertyCache(object):
     """
     Cache lookup tables mapping classes to their associated
@@ -489,6 +518,7 @@ class XMLBuilder(object):
 
         self._validate_xmlbuilder()
         self._initial_child_parse()
+        self._manual_actions = []
 
     def _validate_xmlbuilder(self):
         # This is one time validation we run once per XMLBuilder class
@@ -614,6 +644,13 @@ class XMLBuilder(object):
         if "[" not in xpath:
             return 0
         return int(xpath.rsplit("[", 1)[1].strip("]")) - 1
+
+    def add_xml_manual_action(self, manualaction):
+        """
+        Register a manual XML action to perform at the end of the
+        XML building step. Triggered via --xml on the command line
+        """
+        self._manual_actions.append(manualaction)
 
 
     ################
@@ -796,3 +833,6 @@ class XMLBuilder(object):
             elif key in childprops:
                 for obj in xmlutil.listify(getattr(self, key)):
                     obj._add_parse_bits(self._xmlstate.xmlapi)
+
+        for manualaction in self._manual_actions:
+            manualaction.perform(self._xmlstate)

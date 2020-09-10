@@ -170,6 +170,48 @@ Use --sysinfo=? to see a list of all available sub options.
 Complete details at L<https://libvirt.org/formatdomain.html#elementsSysinfo>
 and L<https://libvirt.org/formatdomain.html#elementsOSBIOS> for B<smbios> XML element.
 
+=item B<--xml> ARGS
+
+Make direct edits to the generated XML using XPath syntax. Take an example like
+
+  virt-install --xml ./@foo=bar --xml ./newelement/subelement=1
+
+This will alter the generated XML to contain:
+
+  <domain foo='bar' ...>
+    ...
+    <newelement>
+      <subelement>1</subelement>
+    </newelement>
+  </domain>
+
+The --xml option has 4 sub options:
+
+=over 2
+
+=item --xml xpath.set=XPATH[=VALUE]
+
+The default behavior if no explicit suboption is set. Takes the form XPATH=VALUE
+unless paired with B<xpath.value>. See below for how value is interpreted.
+
+=item --xml xpath.value=VALUE
+
+B<xpath.set> will be interpreted only as the XPath string, and B<xpath.value> will
+be used as the value to set. May help sidestep problems if the string you need to
+set contains a '=' equals sign.
+
+If value is empty, it's treated as unsetting that particular node.
+
+=item --xml xpath.create=XPATH
+
+Create the node as an empty element. Needed for boolean elements like <readonly/>
+
+=item --xml xpath.delete=XPATH
+
+Delete the entire node specified by the xpath, and all its children
+
+=back
+
 =item B<--qemu-commandline> ARGS
 
 Pass options directly to the qemu emulator. Only works for the libvirt qemu driver. The option can take a string of arguments, for example:

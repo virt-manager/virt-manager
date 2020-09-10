@@ -480,7 +480,7 @@ def get_domain_and_guest(conn, domstr):
 
 def _get_completer_parsers():
     return VIRT_PARSERS + [ParserCheck, ParserLocation,
-            ParserUnattended, ParserInstall, ParserCloudInit]
+            ParserUnattended, ParserInstall, ParserCloudInit, ParserXML]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -915,6 +915,14 @@ def add_os_variant_option(parser, virtinstall):
 
     osg.add_argument("--os-variant", help=msg)
     return osg
+
+
+def add_xml_option(grp):
+    grp.add_argument("--xml", action="append", default=[],
+            help=_("Perform raw XML XPath options on the final XML. Example:\n"
+                   "--xml ./cpu/@mode=host-passthrough\n"
+                   "--xml ./devices/disk[2]/serial=new-serial\n"
+                   "--xml xpath.delete=./clock"))
 
 
 #############################################
@@ -1533,6 +1541,73 @@ class VirtCLIParser(metaclass=_InitClass):
 
     def noset_cb(self, inst, val, virtarg):
         """Do nothing callback"""
+
+
+#################
+# --xml parsing #
+#################
+
+class _XMLCLIInstance:
+    """
+    Helper class to parse --xml content into.
+    Generates XMLManualAction which actually performs the work
+    """
+    def __init__(self):
+        self.xpath_delete = None
+        self.xpath_set = None
+        self.xpath_create = None
+        self.xpath_value = None
+
+    def build_action(self):
+        from .xmlbuilder import XMLManualAction
+        if self.xpath_delete:
+            return XMLManualAction(self.xpath_delete,
+                    action=XMLManualAction.ACTION_DELETE)
+        if self.xpath_create:
+            return XMLManualAction(self.xpath_create,
+                    action=XMLManualAction.ACTION_CREATE)
+
+        xpath = self.xpath_set
+        if self.xpath_value:
+            val = self.xpath_value
+        else:
+            if "=" not in str(xpath):
+                fail("%s: Setting xpath must be in the form of XPATH=VALUE" %
+                        xpath)
+            xpath, val = xpath.rsplit("=", 1)
+        return XMLManualAction(xpath, val or None)
+
+
+class ParserXML(VirtCLIParser):
+    cli_arg_name = "xml"
+    supports_clearxml = False
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        cls.add_arg("xpath.delete", "xpath_delete", can_comma=True)
+        cls.add_arg("xpath.set", "xpath_set", can_comma=True)
+        cls.add_arg("xpath.create", "xpath_create", can_comma=True)
+        cls.add_arg("xpath.value", "xpath_value", can_comma=True)
+
+    def _parse(self, inst):
+        if not self.optstr.startswith("xpath."):
+            self.optdict.clear()
+            self.optdict["xpath.set"] = self.optstr
+
+        super()._parse(inst)
+
+
+def parse_xmlcli(guest, options):
+    """
+    Parse --xml option strings and add the resulting XMLManualActions
+    to the Guest instance
+    """
+    for optstr in options.xml:
+        inst = _XMLCLIInstance()
+        ParserXML(optstr).parse(inst)
+        manualaction = inst.build_action()
+        guest.add_xml_manual_action(manualaction)
 
 
 ########################

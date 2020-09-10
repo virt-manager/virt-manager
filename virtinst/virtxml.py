@@ -127,7 +127,7 @@ def check_action_collision(options):
 
 def check_xmlopt_collision(options):
     collisions = []
-    for parserclass in cli.VIRT_PARSERS:
+    for parserclass in cli.VIRT_PARSERS + [cli.ParserXML]:
         if getattr(options, parserclass.cli_arg_name):
             collisions.append(parserclass)
 
@@ -297,9 +297,18 @@ def update_changes(domain, devs, action, confirm):
 
 def prepare_changes(xmlobj, options, parserclass):
     origxml = xmlobj.get_xml()
+    has_edit = options.edit != -1
+    is_xmlcli = parserclass is cli.ParserXML
 
-    if options.edit != -1:
-        devs = action_edit(xmlobj, options, parserclass)
+    if is_xmlcli and not has_edit:
+        fail(_("--xml can only be used with --edit"))
+
+    if has_edit:
+        if is_xmlcli:
+            devs = []
+            cli.parse_xmlcli(xmlobj, options)
+        else:
+            devs = action_edit(xmlobj, options, parserclass)
         action = "update"
 
     elif options.add_device:
@@ -391,6 +400,7 @@ def parse_args():
     cli.add_metadata_option(g)
     cli.add_memory_option(g)
     cli.vcpu_cli_options(g, editexample=True)
+    cli.add_xml_option(g)
     cli.add_guest_xml_options(g)
     cli.add_boot_options(g)
     cli.add_device_options(g)

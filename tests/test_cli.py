@@ -722,6 +722,15 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"
 --qemu-commandline="-set device.video0.driver=virtio-vga"
 --qemu-commandline args="-foo bar"
+
+--xml /domain/@foo=bar
+--xml xpath.set=./baz,xpath.value=wib
+--xml ./deleteme/deleteme2/deleteme3=foo
+--xml ./t1/t2/@foo=123
+--xml ./devices/graphics[1]/ab=cd
+--xml ./devices/graphics[2]/@ef=hg
+--xml xpath.create=./barenode
+--xml xpath.delete=./deleteme/deleteme2
 """, "many-devices", predefine_check="5.3.0")
 
 
@@ -831,6 +840,8 @@ c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
 c.add_invalid("--connect %(URI-KVM)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
 c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machine=pc
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
+c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
+c.add_invalid("--xml /@foo=bar", grep="/@foo xmlXPathEval")  # failure processing xpath
 
 
 
@@ -1186,6 +1197,7 @@ c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update 
 c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
 c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
 c.add_invalid("test --edit --boot network,cdrom --define --no-define")
+c.add_invalid("test --add-device --xml ./@foo=bar", grep="--xml can only be used with --edit")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # stdin test
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
@@ -1203,6 +1215,7 @@ c.add_compare("--connect %(URI-KVM)s test-many-devices --edit --cpu host-copy", 
 
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define")
+c.add_compare("""--xml ./@foo=bar --xml xpath.delete=./currentMemory --xml ./new/element/test=1""", "edit-xpaths")
 c.add_compare("""--metadata name=foo-my-new-name,os_name=fedora13,uuid=12345678-12F4-1234-1234-123456789AFA,description="hey this is my
 new
 very,very=new desc\\\'",title="This is my,funky=new title" """, "edit-simple-metadata")

@@ -553,12 +553,14 @@ def _build_options_guest(conn, options):
     # Fill in guest from the command line content
     set_explicit_guest_options(options, guest)
     cli.parse_option_strings(options, guest, None)
+    cli.parse_xmlcli(guest, options)
 
     # Call set_capabilities_defaults explicitly here rather than depend
     # on set_defaults calling it. Installer setup needs filled in values.
     # However we want to do it after parse_option_strings to ensure
     # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
+
     return guest
 
 
@@ -946,6 +948,7 @@ def parse_args():
     cli.add_memory_option(geng, backcompat=True)
     cli.vcpu_cli_options(geng)
     cli.add_metadata_option(geng)
+    cli.add_xml_option(geng)
     geng.add_argument("-u", "--uuid", help=argparse.SUPPRESS)
     geng.add_argument("--description", help=argparse.SUPPRESS)
 
