@@ -4096,8 +4096,37 @@ class ParserFilesystem(VirtCLIParser):
 
         cls.add_arg("type", "type")
         cls.add_arg("accessmode", "accessmode")
+        cls.add_arg("model", "model")
+        cls.add_arg("multidevs", "multidevs")
+        cls.add_arg("readonly", "readonly", is_onoff=True)
+        cls.add_arg("space_hard_limit", "space_hard_limit")
+        cls.add_arg("space_soft_limit", "space_soft_limit")
+
         cls.add_arg("source", "source")
         cls.add_arg("target", "target")
+
+        cls.add_arg("source.file", "source_file")
+        cls.add_arg("source.dir", "source_dir")
+        cls.add_arg("source.dev", "source_dev")
+        cls.add_arg("source.name", "source_name")
+        cls.add_arg("source.pool", "source_pool")
+        cls.add_arg("source.volume", "source_volume")
+        cls.add_arg("source.units", "source_units")
+        cls.add_arg("source.usage", "source_usage")
+
+        cls.add_arg("target.dir", "target_dir")
+
+        cls.add_arg("binary.path", "binary_path")
+        cls.add_arg("binary.xattr", "binary_xattr", is_onoff=True)
+        cls.add_arg("binary.cache.mode", "binary_cache_mode")
+        cls.add_arg("binary.lock.posix", "binary_lock_posix", is_onoff=True)
+        cls.add_arg("binary.lock.flock", "binary_lock_flock", is_onoff=True)
+
+        cls.add_arg("driver.format", "driver_format")
+        cls.add_arg("driver.name", "driver_name")
+        cls.add_arg("driver.queue", "driver_queue")
+        cls.add_arg("driver.type", "driver_type")
+        cls.add_arg("driver.wrpolicy", "driver_wrpolicy")
 
 
 ###################
