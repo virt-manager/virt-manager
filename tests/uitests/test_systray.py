@@ -2,10 +2,10 @@
 # See the COPYING file in the top-level directory.
 
 import tests.utils
-from tests.uitests import utils as uiutils
+from . import lib
 
 
-class Systray(uiutils.UITestCase):
+class Systray(lib.testcase.UITestCase):
     """
     UI tests for virt-manager's systray using a fake testing backend
     """
@@ -22,7 +22,7 @@ class Systray(uiutils.UITestCase):
 
         manager = self.app.topwin
         systray = self.app.root.find("vmm-fake-systray", check_active=False)
-        uiutils.drag(manager, 1000, 1000)
+        manager.drag(1000, 1000)
 
         # Add a connection to trigger systray update
         uri = tests.utils.URIs.kvm
@@ -36,8 +36,8 @@ class Systray(uiutils.UITestCase):
         # Hide the manager
         systray.click_title()
         systray.click()
-        uiutils.check(lambda: not manager.showing)
-        uiutils.check(lambda: self.app.is_running())
+        lib.utils.check(lambda: not manager.showing)
+        lib.utils.check(lambda: self.app.is_running())
 
         systray.click(button=3)
         menu = self.app.root.find("vmm-systray-menu")
@@ -45,21 +45,21 @@ class Systray(uiutils.UITestCase):
         def _get_conn_action(connstr, actionstr):
             if not menu.showing:
                 systray.click(button=3)
-            uiutils.check(lambda: menu.showing)
+            lib.utils.check(lambda: menu.showing)
             connmenu = menu.find(connstr, "menu")
             connmenu.point()
             return connmenu.find(actionstr, "menu")
 
         def _check_conn_action(connstr, actionstr):
             item = _get_conn_action(connstr, actionstr)
-            uiutils.check(lambda: item.showing)
+            lib.utils.check(lambda: item.showing)
             systray.click(button=3)
-            uiutils.check(lambda: not menu.showing)
+            lib.utils.check(lambda: not menu.showing)
 
         def _do_conn_action(connstr, actionstr):
             item = _get_conn_action(connstr, actionstr)
             item.click()
-            uiutils.check(lambda: not menu.showing)
+            lib.utils.check(lambda: not menu.showing)
 
         def _get_vm_action(connstr, vmname, action):
             vmenu = _get_conn_action(connstr, vmname)
@@ -68,14 +68,14 @@ class Systray(uiutils.UITestCase):
 
         def _check_vm_action(connstr, vmname, action):
             item = _get_vm_action(connstr, vmname, action)
-            uiutils.check(lambda: item.showing)
+            lib.utils.check(lambda: item.showing)
             systray.click(button=3)
-            uiutils.check(lambda: not menu.showing)
+            lib.utils.check(lambda: not menu.showing)
 
         def _do_vm_action(connstr, vmname, action):
             item = _get_vm_action(connstr, vmname, action)
             item.click()
-            uiutils.check(lambda: not menu.showing)
+            lib.utils.check(lambda: not menu.showing)
 
         # Right click start a connection
         _check_conn_action("QEMU/KVM", "Disconnect")
@@ -90,8 +90,8 @@ class Systray(uiutils.UITestCase):
 
         # Reshow the manager
         systray.click()
-        uiutils.check(lambda: manager.showing)
-        uiutils.check(lambda: self.app.is_running())
+        lib.utils.check(lambda: manager.showing)
+        lib.utils.check(lambda: self.app.is_running())
 
         # Close from the menu
         systray.click_title()
@@ -99,7 +99,7 @@ class Systray(uiutils.UITestCase):
         menu = self.app.root.find("vmm-systray-menu")
         menu.find("Quit", "menu item").click()
 
-        uiutils.check(lambda: not self.app.is_running())
+        lib.utils.check(lambda: not self.app.is_running())
 
     def testSystrayToggle(self):
         self.app.open(
@@ -116,9 +116,9 @@ class Systray(uiutils.UITestCase):
         # Close the system tray
         prefs.click_title()
         prefs.find_fuzzy("Enable system tray", "check").click()
-        uiutils.check(lambda: not systray.showing)
+        lib.utils.check(lambda: not systray.showing)
 
         # Close the manager
         manager.click_title()
         manager.keyCombo("<alt>F4")
-        uiutils.check(lambda: not self.app.is_running())
+        lib.utils.check(lambda: not self.app.is_running())

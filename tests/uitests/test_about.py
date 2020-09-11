@@ -3,10 +3,10 @@
 
 import datetime
 
-from tests.uitests import utils as uiutils
+from . import lib
 
 
-class VMMAbout(uiutils.UITestCase):
+class VMMAbout(lib.testcase.UITestCase):
     """
     UI tests for the 'About' dialog
     """
@@ -26,4 +26,4 @@ class VMMAbout(uiutils.UITestCase):
             print("Current year=%s not in about.ui dialog!" % curyear)
 
         win.keyCombo("<ESC>")
-        uiutils.check(lambda: win.visible is False)
+        lib.utils.check(lambda: win.visible is False)

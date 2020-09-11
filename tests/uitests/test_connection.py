@@ -1,10 +1,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from tests.uitests import utils as uiutils
+from . import lib
 
 
-class UITestConnection(uiutils.UITestCase):
+class UITestConnection(lib.testcase.UITestCase):
     """
     UI tests for various connection.py related bits
     """
@@ -27,16 +27,16 @@ class UITestConnection(uiutils.UITestCase):
             delete = self.app.root.find_fuzzy("Delete", "frame")
             delete.find("Delete associated", "check box").click()
             delete.find("Delete", "push button").click()
-            uiutils.check(lambda: cell.dead)
-            uiutils.check(lambda: manager.active)
+            lib.utils.check(lambda: cell.dead)
+            lib.utils.check(lambda: manager.active)
 
-        uiutils.check(
+        lib.utils.check(
                 lambda: "test-many-devices" not in self.app.topwin.fmt_nodes())
         _delete_vm("test-arm-kernel")
         _delete_vm("test alternate")
         _delete_vm("test-clone-simple")
-        self.sleep(.5)
-        uiutils.check(
+        self.app.sleep(.5)
+        lib.utils.check(
                 lambda: "test-many-devices" not in self.app.topwin.fmt_nodes())
 
     def testConnectionConnCrash(self):
@@ -44,17 +44,17 @@ class UITestConnection(uiutils.UITestCase):
             extra_opts=["--test-options=conn-crash"])
         manager = self.app.topwin
 
-        self.sleep(1)
+        self.app.sleep(1)
         manager.find(r"^test testdriver.xml - Not Connected", "table cell")
-        uiutils.check(lambda: manager.active)
+        lib.utils.check(lambda: manager.active)
 
     def testConnectionFakeEvents(self):
         self.app.open(
             extra_opts=["--test-options=fake-nodedev-event=computer",
                         "--test-options=fake-agent-event=test-many-devices"])
         manager = self.app.topwin
-        self.sleep(2.5)
-        uiutils.check(lambda: manager.active)
+        self.app.sleep(2.5)
+        lib.utils.check(lambda: manager.active)
 
     def testConnectionOpenauth(self):
         self.app.open(
@@ -67,14 +67,14 @@ class UITestConnection(uiutils.UITestCase):
             password = dialog.find("Password:.*entry")
             username.click()
             username.text = "foo"
-            self.pressKey("Enter")
-            uiutils.check(lambda: password.focused)
+            self.app.rawinput.pressKey("Enter")
+            lib.utils.check(lambda: password.focused)
             password.typeText("bar")
 
 
         _run()
         dialog.find("OK", "push button").click()
-        uiutils.check(lambda: not dialog.showing)
+        lib.utils.check(lambda: not dialog.showing)
         manager = self.app.root.find("Virtual Machine Manager", "frame")
         manager.find("^test testdriver.xml$", "table cell")
 
@@ -94,19 +94,19 @@ class UITestConnection(uiutils.UITestCase):
         _retrigger_connection()
         dialog = self.app.root.find("Authentication required")
         _run()
-        self.pressKey("Enter")
-        uiutils.check(lambda: not dialog.showing)
+        self.app.rawinput.pressKey("Enter")
+        lib.utils.check(lambda: not dialog.showing)
         manager = self.app.root.find("Virtual Machine Manager", "frame")
         manager.find("^test testdriver.xml$", "table cell")
 
         _retrigger_connection()
         dialog = self.app.root.find("Authentication required")
         dialog.find("Cancel", "push button").click()
-        uiutils.check(lambda: not dialog.showing)
-        self._click_alert_button("Unable to connect", "Close")
+        lib.utils.check(lambda: not dialog.showing)
+        self.app.click_alert_button("Unable to connect", "Close")
         manager.find("test testdriver.xml - Not Connected", "table cell")
 
     def testConnectionSessionError(self):
         self.app.open(
             extra_opts=["--test-options=fake-session-error"])
-        self._click_alert_button("Could not detect a local session", "Close")
+        self.app.click_alert_button("Could not detect a local session", "Close")

@@ -1,11 +1,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from tests import utils
-from tests.uitests import utils as uiutils
+import tests.utils
+from . import lib
 
 
-class Manager(uiutils.UITestCase):
+class Manager(lib.testcase.UITestCase):
     """
     UI tests for manager window, and basic VM lifecycle stuff
     """
@@ -31,25 +31,25 @@ class Manager(uiutils.UITestCase):
         c.click()
         smenu.click()
         force.click()
-        self._click_alert_button("Are you sure you want", "Yes")
-        uiutils.check(lambda: run.sensitive, timeout=5)
+        self.app.click_alert_button("Are you sure you want", "Yes")
+        lib.utils.check(lambda: run.sensitive, timeout=5)
 
         run.click()
-        uiutils.check(lambda: not run.sensitive, timeout=5)
+        lib.utils.check(lambda: not run.sensitive, timeout=5)
         pause.click()
-        uiutils.check(lambda: pause.checked, timeout=5)
+        lib.utils.check(lambda: pause.checked, timeout=5)
         pause.click()
-        uiutils.check(lambda: not pause.checked, timeout=5)
+        lib.utils.check(lambda: not pause.checked, timeout=5)
         smenu.click()
         save.click()
-        uiutils.check(lambda: run.sensitive, timeout=5)
-        uiutils.check(lambda: "Saved" in c.text)
+        lib.utils.check(lambda: run.sensitive, timeout=5)
+        lib.utils.check(lambda: "Saved" in c.text)
         run.click()
-        uiutils.check(lambda: shutdown.sensitive, timeout=5)
+        lib.utils.check(lambda: shutdown.sensitive, timeout=5)
 
     def testVMLifecycle(self):
         # qemu hits some different domain code paths for setTime
-        self.app.uri = utils.URIs.kvm
+        self.app.uri = tests.utils.URIs.kvm
         self._testVMLifecycle()
 
     def testVMNoEventsLifecycle(self):
@@ -76,40 +76,40 @@ class Manager(uiutils.UITestCase):
         pause = manager.find("Pause", "toggle button")
 
         def confirm_is_running():
-            uiutils.check(lambda: not run.sensitive)
+            lib.utils.check(lambda: not run.sensitive)
 
         def confirm_is_shutdown():
-            uiutils.check(lambda: not shutdown.sensitive)
+            lib.utils.check(lambda: not shutdown.sensitive)
 
         def confirm_is_paused():
-            uiutils.check(lambda: pause.checked)
+            lib.utils.check(lambda: pause.checked)
 
         def confirm_not_paused():
-            uiutils.check(lambda: not pause.checked)
+            lib.utils.check(lambda: not pause.checked)
 
         def test_action(action, shutdown=True, confirm=True):
             def _select():
                 cell = manager.find("test\n", "table cell")
                 cell.click(button=3)
                 menu = self.app.root.find("vm-action-menu")
-                uiutils.check(lambda: menu.onscreen)
+                lib.utils.check(lambda: menu.onscreen)
                 if shutdown:
                     smenu = menu.find("Shut Down", "menu")
                     smenu.point()
-                    uiutils.check(lambda: smenu.onscreen)
+                    lib.utils.check(lambda: smenu.onscreen)
                     item = smenu.find(action, "menu item")
                 else:
                     item = menu.find(action, "menu item")
-                uiutils.check(lambda: item.onscreen)
+                lib.utils.check(lambda: item.onscreen)
                 item.point()
-                self.sleep(.3)
+                self.app.sleep(.3)
                 item.click()
 
             _select()
             if confirm:
-                self._click_alert_button("Are you sure", "No")
+                self.app.click_alert_button("Are you sure", "No")
                 _select()
-                self._click_alert_button("Are you sure", "Yes")
+                self.app.click_alert_button("Are you sure", "Yes")
 
 
         test_action("Force Reset")
@@ -154,22 +154,22 @@ class Manager(uiutils.UITestCase):
         # Attempt cancel which will fail, then find the error message
         progwin.find("Cancel", "push button").click()
         progwin.find("Error cancelling save job")
-        uiutils.check(lambda: not progwin.showing, timeout=5)
-        uiutils.check(lambda: run.sensitive)
+        lib.utils.check(lambda: not progwin.showing, timeout=5)
+        lib.utils.check(lambda: run.sensitive)
 
         # Restore will fail and offer to remove managed save
         run.click()
-        self._click_alert_button("remove the saved state", "No")
-        uiutils.check(lambda: run.sensitive)
+        self.app.click_alert_button("remove the saved state", "No")
+        lib.utils.check(lambda: run.sensitive)
         run.click()
-        self._click_alert_button("remove the saved state", "Yes")
-        uiutils.check(lambda: not run.sensitive)
+        self.app.click_alert_button("remove the saved state", "Yes")
+        lib.utils.check(lambda: not run.sensitive)
 
     def testManagerQEMUSetTime(self):
         """
         Fake qemu setTime behavior for code coverage
         """
-        self.app.uri = utils.URIs.kvm
+        self.app.uri = tests.utils.URIs.kvm
         manager = self.app.topwin
         run = manager.find("Run", "push button")
         smenu = manager.find("Menu", "toggle button")
@@ -181,15 +181,15 @@ class Manager(uiutils.UITestCase):
         # Save -> resume -> save
         smenu.click()
         save.click()
-        uiutils.check(lambda: run.sensitive)
-        self.sleep(1)
+        lib.utils.check(lambda: run.sensitive)
+        self.app.sleep(1)
         run.click()
-        uiutils.check(lambda: not run.sensitive)
-        self.sleep(1)
+        lib.utils.check(lambda: not run.sensitive)
+        self.app.sleep(1)
         smenu.click()
         save.click()
-        uiutils.check(lambda: run.sensitive)
-        self.sleep(1)
+        lib.utils.check(lambda: run.sensitive)
+        self.app.sleep(1)
 
     def testManagerVMRunFail(self):
         # Force VM startup to fail so we can test the error path
@@ -200,7 +200,7 @@ class Manager(uiutils.UITestCase):
         c = manager.find("test-clone-simple", "table cell")
         c.click()
         manager.find("Run", "push button").click()
-        self._click_alert_button("fake error", "Close")
+        self.app.click_alert_button("fake error", "Close")
 
 
     def testManagerColumns(self):
@@ -219,7 +219,7 @@ class Manager(uiutils.UITestCase):
         manager = self.app.topwin
         def _test_sort(name):
             col = manager.find(name, "table column header")
-            uiutils.check(lambda: col.onscreen)
+            lib.utils.check(lambda: col.onscreen)
             # Trigger sorting
             col.click()
             col.click()
@@ -248,11 +248,11 @@ class Manager(uiutils.UITestCase):
         Restore previous position when window is reopened
         """
         manager = self.app.topwin
-        host = self._open_host_window("Storage")
+        host = self.app.open_host_window("Storage")
         fmenu = host.find("File", "menu")
         fmenu.click()
         fmenu.find("View Manager", "menu item").click()
-        uiutils.check(lambda: manager.active)
+        lib.utils.check(lambda: manager.active)
 
         # Double click title to maximize
         manager.click_title()
@@ -263,7 +263,7 @@ class Manager(uiutils.UITestCase):
         host.click_title()
         host.find("File", "menu").click()
         host.find("View Manager", "menu item").click()
-        uiutils.check(lambda: manager.showing)
+        lib.utils.check(lambda: manager.showing)
         assert manager.position == (newx, newy)
 
 
@@ -276,7 +276,7 @@ class Manager(uiutils.UITestCase):
             """
             Drag a window so it's not obscuring the manager window
             """
-            uiutils.drag(win, 1000, 1000)
+            win.drag(1000, 1000)
 
         manager = self.app.topwin
 
@@ -290,7 +290,7 @@ class Manager(uiutils.UITestCase):
         # Open clone dialog
         c = manager.find("test-clone", "table cell")
         c.click()
-        self.pressKey("Menu")
+        self.app.rawinput.pressKey("Menu")
         self.app.root.find("Clone...", "menu item").click()
         clone = self.app.root.find("Clone Virtual Machine", "frame")
         _drag(clone)
@@ -314,11 +314,11 @@ class Manager(uiutils.UITestCase):
         _drag(host)
 
         # Open details
-        details = self._open_details_window("test-many-devices")
+        details = self.app.open_details_window("test-many-devices")
         _drag(details)
 
         # Close the connection
-        self.sleep(1)
+        self.app.sleep(1)
         manager.click()
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click()
@@ -326,28 +326,28 @@ class Manager(uiutils.UITestCase):
         self.app.root.find("conn-disconnect", "menu item").click()
 
         # Ensure all those windows aren't showing
-        uiutils.check(lambda: not migrate.showing)
-        uiutils.check(lambda: not clone.showing)
-        uiutils.check(lambda: not create.showing)
-        uiutils.check(lambda: not details.showing)
-        uiutils.check(lambda: not delete.showing)
+        lib.utils.check(lambda: not migrate.showing)
+        lib.utils.check(lambda: not clone.showing)
+        lib.utils.check(lambda: not create.showing)
+        lib.utils.check(lambda: not details.showing)
+        lib.utils.check(lambda: not delete.showing)
 
         # Delete the connection, ensure the host dialog disappears
         c = manager.find_fuzzy("testdriver.xml", "table cell")
         c.click(button=3)
         self.app.root.find("conn-delete", "menu item").click()
-        self._click_alert_button("will remove the connection", "Yes")
-        uiutils.check(lambda: not host.showing)
+        self.app.click_alert_button("will remove the connection", "Yes")
+        lib.utils.check(lambda: not host.showing)
 
     def testManagerDefaultStartup(self):
         self.app.open(use_uri=False)
         manager = self.app.topwin
         errlabel = manager.find("error-label")
-        uiutils.check(
+        lib.utils.check(
                 lambda: "Checking for virtualization" in errlabel.text)
-        uiutils.check(
+        lib.utils.check(
                 lambda: "File->Add Connection" in errlabel.text)
-        uiutils.check(
+        lib.utils.check(
                 lambda: "appropriate QEMU/KVM" in errlabel.text)
 
         manager.find("File", "menu").click()
@@ -357,6 +357,6 @@ class Manager(uiutils.UITestCase):
         self.app.open(keyfile="baduri.ini")
         manager = self.app.topwin
         manager.find_fuzzy("bad uri", "table cell").doubleClick()
-        uiutils.check(lambda: not manager.active)
-        self._click_alert_button("Unable to connect", "Close")
-        uiutils.check(lambda: manager.active)
+        lib.utils.check(lambda: not manager.active)
+        self.app.click_alert_button("Unable to connect", "Close")
+        lib.utils.check(lambda: manager.active)
