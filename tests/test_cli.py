@@ -1141,7 +1141,7 @@ c.add_valid("--pxe --nographics --transient", grep="text console command: virsh"
 c.add_valid("--pxe --nographics --autoconsole graphical", grep="graphical console command: virt-viewer")  # force --autoconsole graphical
 c.add_valid("--pxe --autoconsole text", grep="text console command: virsh")  # force --autoconsole text
 c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
-c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="text console command: virsh")  # make sure we notify about text console
+c.add_valid("--pxe", grep="User stopped the VM", env={"VIRTINST_TESTSUITE_HACK_DESTROY": "1"})  # fake the user destroying the VM, we should print a specific message and not reboot the VM
 c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
 c.add_invalid("--pxe --autoconsole text --wait -1", grep="exceeded specified time limit")  # hits a specific code path where we skip console waitpid
 
