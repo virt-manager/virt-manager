@@ -606,17 +606,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer = None
 
     def _refresh_vm_state(self):
-        cpage = self.widget("console-pages").get_current_page()
-
-        if self.vm.is_runable():
-            self._show_vm_status_unavailable()
-            return
-
-        viewer_initialized = (self._viewer and self._viewer.console_is_open())
-        if cpage == _CONSOLE_PAGE_UNAVAILABLE and not viewer_initialized:
-            # If we are in this condition it should mean the VM was
-            # just started, so connect to the default page
-            self._activate_default_console_page()
+        self._activate_default_console_page()
 
 
     ###########################
@@ -757,7 +747,7 @@ class vmmConsolePages(vmmGObjectUI):
 
             self._viewer.console_open()
         except Exception as e:
-            log.exception("Error connection to graphical console")
+            log.exception("Error connecting to graphical console")
             self._activate_gfx_unavailable_page(
                     _("Error connecting to graphical console:\n%s") % e)
 
@@ -889,22 +879,9 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer_usb_redirect_error)
 
 
-    ###########################
-    # Serial console handling #
-    ###########################
-
-    def _activate_default_console_page(self):
-        """
-        Toggle default console page from the menu
-        """
-        # We iterate through the 'console' menu and activate the first
-        # valid entry... hacky but it works
-        self._populate_console_list_menu()
-        found = self._consolemenu.activate_default(self._console_list_menu)
-        if not found:
-            # Calling this with dev=None will trigger _init_viewer
-            # which shows some meaningful errors
-            self._console_list_menu_toggled(None, None)
+    ##############################
+    # Console list menu handling #
+    ##############################
 
     def _console_list_menu_toggled(self, src, dev):
         if not dev or dev.DEVICE_TYPE == "graphics":
@@ -939,6 +916,33 @@ class vmmConsolePages(vmmGObjectUI):
         self._consolemenu.rebuild_menu(
                 self.vm, self._console_list_menu,
                 self._console_list_menu_toggled)
+
+    def _toggle_first_console_menu_item(self):
+        # We iterate through the 'console' menu and activate the first
+        # valid entry... hacky but it works
+        self._populate_console_list_menu()
+        found = self._consolemenu.activate_default(self._console_list_menu)
+        if not found:
+            # Calling this with dev=None will trigger _init_viewer
+            # which shows some meaningful errors
+            self._console_list_menu_toggled(None, None)
+
+    def _activate_default_console_page(self):
+        if self.vm.is_runable():
+            self._show_vm_status_unavailable()
+            return
+
+        viewer_initialized = (self._viewer and self._viewer.console_is_open())
+        if viewer_initialized:
+            return
+
+        cpage = self.widget("console-pages").get_current_page()
+        if cpage != _CONSOLE_PAGE_UNAVAILABLE:
+            return
+
+        # If we are in this condition it should mean the VM was
+        # just started, so connect to the default page
+        self._toggle_first_console_menu_item()
 
 
     ################
