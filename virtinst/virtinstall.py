@@ -737,6 +737,15 @@ class _InstalledDomain:
             log.debug("console exited and destroy_on_exit passed, destroying")
             self._domain.destroy()
 
+    def domain_was_destroyed(self):
+        try:
+            state, reason = self._domain.state()
+            return (state == libvirt.VIR_DOMAIN_SHUTOFF and
+                    reason in [libvirt.VIR_DOMAIN_SHUTOFF_DESTROYED,
+                               libvirt.VIR_DOMAIN_SHUTOFF_SAVED])
+        except Exception:  # pragma: no cover
+            log.debug("Error checking VM shutdown reason", exc_info=True)
+
     def check_inactive(self):
         try:
             dominfo = self._domain.info()
@@ -805,6 +814,12 @@ def _wait_for_domain(installer, instdomain, autoconsole, waithandler):
             sys.exit(1)
 
 
+def _testsuite_hack_destroy(domain):
+    # Trigger specific behavior checking if user destroyed the domain
+    if os.environ.get("VIRTINST_TESTSUITE_HACK_DESTROY"):
+        domain.destroy()
+
+
 def _process_domain(domain, guest, installer, waithandler, autoconsole,
         transient, destroy_on_exit, noreboot):
     """
@@ -815,6 +830,7 @@ def _process_domain(domain, guest, installer, waithandler, autoconsole,
     _connect_console(guest, instdomain, autoconsole,
             waithandler.wait_for_console_to_exit)
 
+    _testsuite_hack_destroy(domain)
     _wait_for_domain(installer, instdomain, autoconsole, waithandler)
     print_stdout(_("Domain creation completed."))
 
@@ -827,6 +843,10 @@ def _process_domain(domain, guest, installer, waithandler, autoconsole,
         print_stdout(  # pragma: no cover
             _("You can restart your domain by running:\n  %s") %
             cli.virsh_start_cmd(guest))
+        return
+
+    if instdomain.domain_was_destroyed() and not destroy_on_exit:
+        print_stdout(_("User stopped the VM. Not rebooting."))
         return
 
     print_stdout(_("Restarting guest."))
