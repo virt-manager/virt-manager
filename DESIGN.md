@@ -113,6 +113,7 @@ Some examples:
   * [organizing VMs into collections/groups](https://bugzilla.redhat.com/show_bug.cgi?id=1193303) ([and another](https://bugzilla.redhat.com/show_bug.cgi?id=1548879))
   * multiselect operations on VMs/other objects ([like storage](https://bugzilla.redhat.com/show_bug.cgi?id=1698879))
   * hiding offline VMs or other view options
+  * [Advanced VM name search support](https://github.com/virt-manager/virt-manager/issues/147). Note: GTK provides some support already: in the manager window, CTRL+F to open a searchbox, searches match from the beginning of VMs only, use arrow keys to jump between matches. Use VM 'title' field to customize how it is named in the manager window.
 
 
 ## Use of the bug tracker
