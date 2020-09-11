@@ -50,8 +50,8 @@ Recommends: libvirt-daemon-config-network
 Suggests: python3-libguestfs
 
 BuildRequires: gettext
-BuildRequires: /usr/bin/pod2man
 BuildRequires: python3-devel
+BuildRequires: python3-docutils
 
 
 %description

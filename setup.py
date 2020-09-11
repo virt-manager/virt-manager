@@ -129,11 +129,6 @@ class my_build_i18n(distutils.command.build.build):
 
 
 class my_build(distutils.command.build.build):
-    """
-    Create simple shell wrappers for /usr/bin/ tools to point to /usr/share
-    Compile .pod file
-    """
-
     def _make_bin_wrappers(self):
         template = """#!/usr/bin/env python3
 
@@ -166,25 +161,25 @@ from %(pkgname)s import %(filename)s
 
 
     def _make_man_pages(self):
-        for path in glob.glob("man/*.pod"):
+        from distutils.spawn import find_executable
+        rstbin = find_executable("rst2man")
+        if not rstbin:
+            rstbin = find_executable("rst2man.py")
+        if not rstbin:
+            sys.exit("Didn't find rst2man or rst2man.py")
+
+        for path in glob.glob("man/*.rst"):
             base = os.path.basename(path)
             appname = os.path.splitext(base)[0]
             newpath = os.path.join(os.path.dirname(path),
                                    appname + ".1")
 
             print("Generating %s" % newpath)
-            ret = os.system('pod2man '
-                            '--center "Virtual Machine Manager" '
-                            '--release %s --name %s '
-                            '< %s > %s' % (BuildConfig.version,
-                                           appname.upper(),
-                                           path, newpath))
-            if ret != 0:
-                raise RuntimeError("Generating '%s' failed." % newpath)
+            out = subprocess.check_output([rstbin, "--strict", path])
+            open(newpath, "wb").write(out)
 
-        if os.system("grep -IRq 'Hey!' man/") == 0:
-            raise RuntimeError("man pages have errors in them! "
-                               "(grep for 'Hey!')")
+            self.distribution.data_files.append(
+                ('share/man/man1', (newpath,)))
 
     def _build_icons(self):
         for size in glob.glob(os.path.join("data/icons", "*")):
@@ -375,7 +370,7 @@ class CheckPylint(distutils.core.Command):
 
         spellfiles = lintfiles[:]
         spellfiles += list(glob.glob("*.md"))
-        spellfiles += list(glob.glob("man/*.pod"))
+        spellfiles += list(glob.glob("man/*.rst"))
         spellfiles += ["data/virt-manager.appdata.xml.in",
                        "data/virt-manager.desktop.in",
                        "data/org.virt-manager.virt-manager.gschema.xml",
