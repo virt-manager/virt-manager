@@ -57,7 +57,7 @@ class Details(lib.testcase.UITestCase):
         return win
 
     def testDetailsHardwareSmokeTest(self):
-        self._testSmokeTest(None)
+        self._testSmokeTest("test-many-devices")
 
     def testDetailsHardwareSmokeTestAlternate(self):
         self.app.open(keyfile="allstats.ini")
