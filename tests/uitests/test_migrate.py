@@ -1,11 +1,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from tests import utils
-from tests.uitests import utils as uiutils
+import tests.utils
+from . import lib
 
 
-class VMMMigrate(uiutils.UITestCase):
+class VMMMigrate(lib.testcase.UITestCase):
     """
     UI tests for the migrate dialog
     """
@@ -22,7 +22,7 @@ class VMMMigrate(uiutils.UITestCase):
         win.combo_select("Hypervisor", "Custom URI")
         win.find("uri-entry", "text").set_text(uri)
         win.find("Connect", "push button").click()
-        uiutils.check(lambda: win.showing is False)
+        lib.utils.check(lambda: win.showing is False)
 
     def _open_migrate(self, vmname):
         c = self.app.root.find(vmname, "table cell")
@@ -32,28 +32,28 @@ class VMMMigrate(uiutils.UITestCase):
 
     def testMigrateQemu(self):
         # Use fake qemu connections
-        self.app.uri = utils.URIs.kvm
-        self._add_conn(utils.URIs.test_default +
+        self.app.uri = tests.utils.URIs.kvm
+        self._add_conn(tests.utils.URIs.test_default +
                 ",fakeuri=qemu+tcp://fakehost/system")
 
         # Run default migrate
         mig = self._open_migrate("test-many-devices")
         mig.find("Migrate", "push button").click()
-        self._click_alert_button(
+        self.app.click_alert_button(
                 "the.connection.driver:.virDomainMigrate", "Close")
         mig.find("Cancel", "push button").click()
-        uiutils.check(lambda: not mig.showing)
+        lib.utils.check(lambda: not mig.showing)
 
         # Run with deselected URI
         mig = self._open_migrate("test-many-devices")
         mig.find("address-check").click()
         label = mig.find("Let libvirt decide")
-        uiutils.check(lambda: label.onscreen)
+        lib.utils.check(lambda: label.onscreen)
         mig.find("Migrate", "push button").click()
-        self._click_alert_button(
+        self.app.click_alert_button(
                 "the.connection.driver:.virDomainMigrate", "Close")
         mig.find("Cancel", "push button").click()
-        uiutils.check(lambda: not mig.showing)
+        lib.utils.check(lambda: not mig.showing)
 
         # Run with tunnelled and other options
         mig = self._open_migrate("test-many-devices")
@@ -63,25 +63,25 @@ class VMMMigrate(uiutils.UITestCase):
         mig.find("Temporary", "check box").click()
 
         mig.find("Migrate", "push button").click()
-        self._click_alert_button("p2p migration", "Close")
+        self.app.click_alert_button("p2p migration", "Close")
         mig.find("Cancel", "push button").click()
-        uiutils.check(lambda: not mig.showing)
+        lib.utils.check(lambda: not mig.showing)
 
     def testMigrateXen(self):
         # Use fake xen connections
-        self.app.uri = utils.URIs.test_full + ",fakeuri=xen:///"
+        self.app.uri = tests.utils.URIs.test_full + ",fakeuri=xen:///"
 
-        fakeremotexen = (utils.URIs.test_default +
+        fakeremotexen = (tests.utils.URIs.test_default +
                 ",fakeuri=xen+tcp://fakehost/")
         self._add_conn(fakeremotexen)
 
         # Run default migrate
         mig = self._open_migrate("test-many-devices")
         mig.find("Migrate", "push button").click()
-        self._click_alert_button(
+        self.app.click_alert_button(
                 "the.connection.driver:.virDomainMigrate", "Close")
         mig.find("Cancel", "push button").click()
-        uiutils.check(lambda: not mig.showing)
+        lib.utils.check(lambda: not mig.showing)
 
     def testMigrateMock(self):
         """
@@ -99,26 +99,26 @@ class VMMMigrate(uiutils.UITestCase):
         # Attempt cancel which will fail, then find the error message
         progwin.find("Cancel", "push button").click()
         progwin.find("Error cancelling migrate job")
-        uiutils.check(lambda: not progwin.showing, timeout=5)
-        uiutils.check(lambda: not mig.showing)
+        lib.utils.check(lambda: not progwin.showing, timeout=5)
+        lib.utils.check(lambda: not mig.showing)
 
     def testMigrateConnMismatch(self):
         # Add a possible target but disconnect it
-        self.app.uri = utils.URIs.test_default
+        self.app.uri = tests.utils.URIs.test_default
         c = self.app.root.find("test default", "table cell")
         c.click(button=3)
         self.app.root.find("conn-disconnect", "menu item").click()
 
         # Add a mismatched hv connection
-        fakexen = utils.URIs.test_empty + ",fakeuri=xen:///"
+        fakexen = tests.utils.URIs.test_empty + ",fakeuri=xen:///"
         self._add_conn(fakexen)
 
         # Open dialog and confirm no conns are available
-        self._add_conn(utils.URIs.test_full)
+        self._add_conn(tests.utils.URIs.test_full)
         mig = self._open_migrate("test-many-devices")
         mig.find("conn-combo").find("No usable", "menu item")
         mig.keyCombo("<alt>F4")
-        uiutils.check(lambda: not mig.showing)
+        lib.utils.check(lambda: not mig.showing)
 
     def testMigrateXMLEditor(self):
         self.app.open(xmleditor_enabled=True)
@@ -140,7 +140,7 @@ class VMMMigrate(uiutils.UITestCase):
                 ">%s<" % vmname, ">%s<" % newname)
         xmleditor.set_text(newtext)
         win.find("Migrate", "push button").click()
-        uiutils.check(lambda: not win.showing, timeout=10)
+        lib.utils.check(lambda: not win.showing, timeout=10)
 
         manager.find(newname, "table cell")
 
@@ -148,6 +148,6 @@ class VMMMigrate(uiutils.UITestCase):
         win = self._open_migrate(vmname)
         win.find("address-text").set_text("TESTSUITE-FAKE")
         finish = win.find("Migrate", "push button")
-        self._test_xmleditor_interactions(win, finish)
+        lib.utils.test_xmleditor_interactions(self.app, win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check(lambda: not win.visible)
+        lib.utils.check(lambda: not win.visible)

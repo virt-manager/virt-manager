@@ -1,10 +1,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from tests.uitests import utils as uiutils
+from . import lib
 
 
-class CreateVol(uiutils.UITestCase):
+class CreateVol(lib.testcase.UITestCase):
     """
     UI tests for the createvol wizard
     """
@@ -13,7 +13,7 @@ class CreateVol(uiutils.UITestCase):
         hostwin.find("vol-new", "push button").click()
         win = self.app.root.find(
                 "Add a Storage Volume", "frame")
-        uiutils.check(lambda: win.active)
+        lib.utils.check(lambda: win.active)
         return win
 
 
@@ -25,7 +25,7 @@ class CreateVol(uiutils.UITestCase):
         """
         Create default volume, clean it up
         """
-        hostwin = self._open_host_window("Storage")
+        hostwin = self.app.open_host_window("Storage")
         poolcell = hostwin.find("default-pool", "table cell")
         poolcell.click()
         vollist = hostwin.find("vol-list", "table")
@@ -34,7 +34,7 @@ class CreateVol(uiutils.UITestCase):
         name = win.find("Name:", "text")
 
         # Create a default qcow2 volume
-        uiutils.check(lambda: name.text == "vol")
+        lib.utils.check(lambda: name.text == "vol")
         newname = "a-newvol"
         name.set_text(newname)
         win.find("Max Capacity:", "spin button").set_text("10.5")
@@ -45,22 +45,22 @@ class CreateVol(uiutils.UITestCase):
         volcell.click()
         hostwin.find("vol-refresh", "push button").click()
         hostwin.find("vol-delete", "push button").click()
-        self._click_alert_button("permanently delete the volume", "No")
+        self.app.click_alert_button("permanently delete the volume", "No")
         volcell = vollist.find(newname + ".qcow2")
         hostwin.find("vol-delete", "push button").click()
-        self._click_alert_button("permanently delete the volume", "Yes")
-        uiutils.check(lambda: volcell.dead)
+        self.app.click_alert_button("permanently delete the volume", "Yes")
+        lib.utils.check(lambda: volcell.dead)
 
         # Ensure host window closes fine
         hostwin.keyCombo("<ctrl>w")
-        uiutils.check(lambda: not hostwin.showing and
+        lib.utils.check(lambda: not hostwin.showing and
                 not hostwin.active)
 
     def testCreateVolMisc(self):
         """
         Cover all createvol options
         """
-        hostwin = self._open_host_window("Storage")
+        hostwin = self.app.open_host_window("Storage")
         poolcell = hostwin.find("default-pool", "table cell")
         poolcell.click()
         win = self._open_create_win(hostwin)
@@ -77,7 +77,7 @@ class CreateVol(uiutils.UITestCase):
         browsewin = self.app.root.find("vmm-storage-browser")
         # Test cancel button
         browsewin.find("Cancel", "push button").click()
-        uiutils.check(lambda: not browsewin.active)
+        lib.utils.check(lambda: not browsewin.active)
         win.find("Browse...").click()
         browsewin = self.app.root.find("vmm-storage-browser")
         # Test browse local opening
@@ -85,10 +85,10 @@ class CreateVol(uiutils.UITestCase):
         chooser = self.app.root.find(
                 "Locate existing storage", "file chooser")
         chooser.keyCombo("<alt>F4")
-        self._select_storagebrowser_volume(
+        self.app.select_storagebrowser_volume(
                 "default-pool", "bochs-vol", doubleclick=True)
         backingstore = win.find("backing-store")
-        uiutils.check(lambda: "bochs-vol" in backingstore.text)
+        lib.utils.check(lambda: "bochs-vol" in backingstore.text)
         finish.click()
         vollist.find(newname)
 
@@ -101,19 +101,19 @@ class CreateVol(uiutils.UITestCase):
         alloc = win.find("Allocation:", "spin button")
         alloc.set_text("50.0")
         alloc.click()
-        self.pressKey("Enter")
-        uiutils.check(lambda: cap.text == "50.0")
+        self.app.rawinput.pressKey("Enter")
+        lib.utils.check(lambda: cap.text == "50.0")
         cap.set_text("1.0")
         cap.click()
-        self.pressKey("Enter")
-        uiutils.check(lambda: alloc.text == "1.0")
+        self.app.rawinput.pressKey("Enter")
+        lib.utils.check(lambda: alloc.text == "1.0")
         alloc.set_text("0.5")
         alloc.click()
-        self.pressKey("Enter")
-        uiutils.check(lambda: cap.text == "1.0")
+        self.app.rawinput.pressKey("Enter")
+        lib.utils.check(lambda: cap.text == "1.0")
 
         finish.click()
-        self._click_alert_button("Error validating volume", "Close")
+        self.app.click_alert_button("Error validating volume", "Close")
         newname = "a-newvol.raw"
         name.set_text(newname)
         finish.click()
@@ -126,14 +126,14 @@ class CreateVol(uiutils.UITestCase):
         name.set_text(newname)
         win.find("Backing store").click_expander()
         win.find("Browse...").click()
-        self._select_storagebrowser_volume("disk-pool", "diskvol7")
+        self.app.select_storagebrowser_volume("disk-pool", "diskvol7")
         finish.click()
         vollist.find(newname)
 
 
     def testCreateVolXMLEditor(self):
         self.app.open(xmleditor_enabled=True)
-        hostwin = self._open_host_window("Storage")
+        hostwin = self.app.open_host_window("Storage")
         poolcell = hostwin.find("default-pool", "table cell")
         poolcell.click()
         win = self._open_create_win(hostwin)
@@ -151,11 +151,11 @@ class CreateVol(uiutils.UITestCase):
                         ">%s.qcow2<" % tmpname, ">%s<" % newname)
         xmleditor.set_text(newtext)
         finish.click()
-        uiutils.check(lambda: hostwin.active)
+        lib.utils.check(lambda: hostwin.active)
         vollist.find(newname)
 
         # Do standard xmleditor tests
         win = self._open_create_win(hostwin)
-        self._test_xmleditor_interactions(win, finish)
+        lib.utils.test_xmleditor_interactions(self.app, win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check(lambda: not win.visible)
+        lib.utils.check(lambda: not win.visible)

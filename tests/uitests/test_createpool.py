@@ -1,10 +1,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from tests.uitests import utils as uiutils
+from . import lib
 
 
-class CreatePool(uiutils.UITestCase):
+class CreatePool(lib.testcase.UITestCase):
     """
     UI tests for the createpool wizard
     """
@@ -13,7 +13,7 @@ class CreatePool(uiutils.UITestCase):
         hostwin.find("pool-add", "push button").click()
         win = self.app.root.find(
                 "Add a New Storage Pool", "frame")
-        uiutils.check(lambda: win.active)
+        lib.utils.check(lambda: win.active)
         return win
 
 
@@ -22,7 +22,7 @@ class CreatePool(uiutils.UITestCase):
     ##############
 
     def testCreatePools(self):
-        hostwin = self._open_host_window("Storage")
+        hostwin = self.app.open_host_window("Storage")
         win = self._open_create_win(hostwin)
         finish = win.find("Finish", "push button")
         name = win.find("Name:", "text")
@@ -32,20 +32,20 @@ class CreatePool(uiutils.UITestCase):
             # Enter the filename and select it
             chooser.find(usepath, "table cell").click()
             obutton = chooser.find("Open", "push button")
-            uiutils.check(lambda: obutton.sensitive)
+            lib.utils.check(lambda: obutton.sensitive)
             obutton.click()
-            uiutils.check(lambda: not chooser.showing)
-            uiutils.check(lambda: win.active)
+            lib.utils.check(lambda: not chooser.showing)
+            lib.utils.check(lambda: win.active)
 
         # Create a simple default dir pool
-        uiutils.check(lambda: name.text == "pool")
+        lib.utils.check(lambda: name.text == "pool")
         newname = "a-test-new-pool"
         name.set_text(newname)
         finish.click()
 
         # Select the new object in the host window, then do
         # stop->start->stop->delete, for lifecycle testing
-        uiutils.check(lambda: hostwin.active)
+        lib.utils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
         delete = hostwin.find("pool-delete", "push button")
         start = hostwin.find("pool-start", "push button")
@@ -53,20 +53,20 @@ class CreatePool(uiutils.UITestCase):
 
         cell.click()
         stop.click()
-        uiutils.check(lambda: start.sensitive)
+        lib.utils.check(lambda: start.sensitive)
         start.click()
-        uiutils.check(lambda: stop.sensitive)
+        lib.utils.check(lambda: stop.sensitive)
         stop.click()
-        uiutils.check(lambda: delete.sensitive)
+        lib.utils.check(lambda: delete.sensitive)
 
         # Delete it, clicking 'No' first
         delete.click()
-        self._click_alert_button("permanently delete the pool", "No")
-        uiutils.check(lambda: not cell.dead)
+        self.app.click_alert_button("permanently delete the pool", "No")
+        lib.utils.check(lambda: not cell.dead)
         delete.click()
-        self._click_alert_button("permanently delete the pool", "Yes")
+        self.app.click_alert_button("permanently delete the pool", "Yes")
         # Ensure it's gone
-        uiutils.check(lambda: cell.dead)
+        lib.utils.check(lambda: cell.dead)
 
         # Test a disk pool
         win = self._open_create_win(hostwin)
@@ -87,7 +87,7 @@ class CreatePool(uiutils.UITestCase):
         _browse_local_path("Choose target directory", "by-path")
         finish.click()
         # Catch example error
-        self._click_alert_button("source host name", "Close")
+        self.app.click_alert_button("source host name", "Close")
         win.find("Host Name:", "text").set_text("example.com")
         win.find("pool-source-path-text").set_text("foo-iqn")
         win.find_fuzzy("Initiator IQN:", "check").click()
@@ -123,19 +123,19 @@ class CreatePool(uiutils.UITestCase):
         win.find_fuzzy("Host Name:", "text").set_text("example.com:1234")
         win.find_fuzzy("pool-source-name-text", "text").typeText("frob")
         finish.click()
-        uiutils.check(lambda: not win.showing)
-        uiutils.check(lambda: hostwin.active)
+        lib.utils.check(lambda: not win.showing)
+        lib.utils.check(lambda: hostwin.active)
         hostwin.find(newname, "table cell")
 
         # Ensure host window closes fine
         hostwin.click()
         hostwin.keyCombo("<ctrl>w")
-        uiutils.check(lambda: not hostwin.showing)
+        lib.utils.check(lambda: not hostwin.showing)
 
 
     def testCreatePoolXMLEditor(self):
         self.app.open(xmleditor_enabled=True)
-        hostwin = self._open_host_window("Storage")
+        hostwin = self.app.open_host_window("Storage")
         win = self._open_create_win(hostwin)
         finish = win.find("Finish", "push button")
         name = win.find("Name:", "text")
@@ -149,12 +149,12 @@ class CreatePool(uiutils.UITestCase):
         newtext = xmleditor.text.replace(">%s<" % tmpname, ">%s<" % newname)
         xmleditor.set_text(newtext)
         finish.click()
-        uiutils.check(lambda: hostwin.active)
+        lib.utils.check(lambda: hostwin.active)
         cell = hostwin.find(newname, "table cell")
         cell.click()
 
         # Do standard xmleditor tests
         win = self._open_create_win(hostwin)
-        self._test_xmleditor_interactions(win, finish)
+        lib.utils.test_xmleditor_interactions(self.app, win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check(lambda: not win.visible)
+        lib.utils.check(lambda: not win.visible)

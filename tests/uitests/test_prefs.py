@@ -1,10 +1,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-from tests.uitests import utils as uiutils
+from . import lib
 
 
-class VMMPrefs(uiutils.UITestCase):
+class VMMPrefs(lib.testcase.UITestCase):
     """
     UI tests for the preferences dialog
     """
@@ -24,16 +24,16 @@ class VMMPrefs(uiutils.UITestCase):
         consoletab = win.find("console-tab")
         feedbacktab = win.find("feedback-tab")
 
-        uiutils.check(lambda: not feedbacktab.onscreen)
+        lib.utils.check(lambda: not feedbacktab.onscreen)
         tab = generaltab
-        uiutils.check(lambda: tab.onscreen)
+        lib.utils.check(lambda: tab.onscreen)
         tab.find_fuzzy("Enable system tray", "check").click()
         tab.find_fuzzy("Enable XML").click()
         tab.find_fuzzy("libguestfs VM").click()
 
         win.find("Polling", "page tab").click()
         tab = pollingtab
-        uiutils.check(lambda: tab.onscreen)
+        lib.utils.check(lambda: tab.onscreen)
         tab.find("Poll CPU", "check box").click()
         tab.find("Poll Disk", "check box").click()
         tab.find("Poll Memory", "check box").click()
@@ -44,7 +44,7 @@ class VMMPrefs(uiutils.UITestCase):
 
         win.find("New VM", "page tab").click()
         tab = newvmtab
-        uiutils.check(lambda: tab.onscreen)
+        lib.utils.check(lambda: tab.onscreen)
         tab.find("Add sound device", "check box").click()
         tab.combo_select("CPU default:", "Copy host")
         tab.combo_select("Storage format:", "Raw")
@@ -53,7 +53,7 @@ class VMMPrefs(uiutils.UITestCase):
 
         win.find("Console", "page tab").click()
         tab = consoletab
-        uiutils.check(lambda: tab.onscreen)
+        lib.utils.check(lambda: tab.onscreen)
         tab.combo_select("SPICE USB", "Manual redirect")
         tab.combo_select("Resize guest", "On")
         tab.combo_select("Graphical console scaling", "Always")
@@ -65,23 +65,23 @@ class VMMPrefs(uiutils.UITestCase):
         # On certain environments pressing "Alt_L" and
         # clicking a window starts window drag operation.
         # Work around by pushing both Control and Alt.
-        self.holdKey("Control_L")
-        self.holdKey("Alt_L")
-        self.holdKey("Z")
+        self.app.rawinput.holdKey("Control_L")
+        self.app.rawinput.holdKey("Alt_L")
+        self.app.rawinput.holdKey("Z")
 
         # Test releasekey handler
-        self.releaseKey("Z")
-        self.holdKey("Z")
+        self.app.rawinput.releaseKey("Z")
+        self.app.rawinput.holdKey("Z")
         try:
             keyframe.find_fuzzy("OK", "push button").click()
         finally:
-            self.releaseKey("Z")
-            self.releaseKey("Alt_L")
-            self.releaseKey("Control_L")
+            self.app.rawinput.releaseKey("Z")
+            self.app.rawinput.releaseKey("Alt_L")
+            self.app.rawinput.releaseKey("Control_L")
 
         win.find("Feedback", "page tab").click()
         tab = feedbacktab
-        uiutils.check(lambda: tab.onscreen)
+        lib.utils.check(lambda: tab.onscreen)
         tab.find("Force Poweroff", "check box").click()
         tab.find("Poweroff/Reboot", "check box").click()
         tab.find("Pause", "check box").click()
@@ -93,22 +93,22 @@ class VMMPrefs(uiutils.UITestCase):
         win.find_fuzzy("Enable system tray", "check").click()
 
         win.find_fuzzy("Close", "push button").click()
-        uiutils.check(lambda: win.visible is False)
+        lib.utils.check(lambda: win.visible is False)
 
 
     def testPrefsXMLEditor(self):
         managerwin = self.app.topwin
-        uiutils.drag(managerwin, 0, 200)
-        detailswin = self._open_details_window(vmname="test-clone-simple")
+        managerwin.drag(0, 200)
+        detailswin = self.app.open_details_window("test-clone-simple")
         finish = detailswin.find("config-apply")
         xmleditor = detailswin.find("XML editor")
 
         detailswin.find("XML", "page tab").click()
         warnlabel = detailswin.find_fuzzy("XML editing is disabled")
-        uiutils.check(lambda: warnlabel.visible)
+        lib.utils.check(lambda: warnlabel.visible)
         origtext = xmleditor.text
         xmleditor.typeText("1234abcd")
-        uiutils.check(lambda: xmleditor.text == origtext)
+        lib.utils.check(lambda: xmleditor.text == origtext)
 
         managerwin.click_title()
         managerwin.grabFocus()
@@ -117,7 +117,7 @@ class VMMPrefs(uiutils.UITestCase):
         prefswin = self.app.root.find_fuzzy("Preferences", "frame")
         prefswin.find_fuzzy("Enable XML").click()
         prefswin.find_fuzzy("Close", "push button").click()
-        uiutils.check(lambda: prefswin.visible is False)
+        lib.utils.check(lambda: prefswin.visible is False)
 
         managerwin.keyCombo("<alt>F4")
         detailswin.click()
@@ -125,7 +125,7 @@ class VMMPrefs(uiutils.UITestCase):
         xmleditor.set_text(newtext)
         finish.click()
         detailswin.find("Details", "page tab").click()
-        uiutils.check(lambda:
+        lib.utils.check(lambda:
                 detailswin.find("Title:", "text").text == "FOOTITLE")
 
     def testPrefsKeyfile(self):

@@ -3,7 +3,7 @@
 
 import pytest
 
-from tests.uitests import utils as uiutils
+from . import lib
 
 try:
     import guestfs
@@ -13,7 +13,7 @@ except Exception:
     HAS_LIBGUESTFS = False
 
 
-class VMMInspection(uiutils.UITestCase):
+class VMMInspection(lib.testcase.UITestCase):
     """
     UI tests for the libguestfs inspection infrastructure
     """
@@ -31,22 +31,22 @@ class VMMInspection(uiutils.UITestCase):
         self.app.open(enable_libguestfs=True)
         manager = self.app.topwin
 
-        details = self._open_details_window("test-clone")
+        details = self.app.open_details_window("test-clone")
         details.find("OS information", "table cell").click()
         tab = details.find("os-tab")
 
         tab.find("Application", "toggle").click_expander()
         apps = tab.find("inspection-apps")
-        uiutils.check(lambda: apps.onscreen)
+        lib.utils.check(lambda: apps.onscreen)
         apps.click_expander()
 
         nodestr1 = apps.fmt_nodes()
         assert "test_app1_summary" in nodestr1
         tab.find("Refresh", "push button").click()
-        uiutils.check(lambda: apps.fmt_nodes() != nodestr1)
+        lib.utils.check(lambda: apps.fmt_nodes() != nodestr1)
 
         details.keyCombo("<alt>F4")
-        uiutils.check(lambda: not details.showing)
+        lib.utils.check(lambda: not details.showing)
 
         # Open a VM with no disks which will report an inspection error
         self.app.root.find_fuzzy("test\n", "table cell").doubleClick()
@@ -69,4 +69,4 @@ class VMMInspection(uiutils.UITestCase):
         c.click()
         c.click(button=3)
         self.app.root.find("conn-connect", "menu item").click()
-        self.sleep(2)
+        self.app.sleep(2)

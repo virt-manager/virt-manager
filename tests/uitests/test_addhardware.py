@@ -5,7 +5,7 @@ import os
 import tempfile
 
 import tests
-from tests.uitests import utils as uiutils
+from . import lib
 
 
 def _search_permissions_decorator(fn):
@@ -40,7 +40,7 @@ def _search_permissions_decorator(fn):
     return wrapper
 
 
-class AddHardware(uiutils.UITestCase):
+class AddHardware(lib.testcase.UITestCase):
     """
     UI tests for virt-manager's VM addhardware window
     """
@@ -48,8 +48,6 @@ class AddHardware(uiutils.UITestCase):
     ###################
     # Private helpers #
     ###################
-
-    _default_vmname = "test-clone-simple"
 
     def _open_addhw_window(self, details):
         details.find("add-hardware", "push button").click()
@@ -59,14 +57,14 @@ class AddHardware(uiutils.UITestCase):
     def _select_hw(self, addhw, hwname, tabname):
         addhw.find(hwname, "table cell").click()
         tab = addhw.find(tabname, None)
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         return tab
 
     def _finish(self, addhw, check):
         addhw.find("Finish", "push button").click()
-        uiutils.check(lambda: not addhw.active)
+        lib.utils.check(lambda: not addhw.active)
         if check:
-            uiutils.check(lambda: check.active)
+            lib.utils.check(lambda: check.active)
 
 
     ##############
@@ -77,7 +75,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Add various controller configs
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Default SCSI
@@ -106,13 +104,13 @@ class AddHardware(uiutils.UITestCase):
         tab.combo_select("Model:", "USB 3")
         # Can't add more than 1 USB controller, so finish isn't sensitive
         finish = addhw.find("Finish", "push button")
-        uiutils.check(lambda: not finish.sensitive)
+        lib.utils.check(lambda: not finish.sensitive)
 
     def testAddCephDisk(self):
         """
         Add a disk with a ceph volume, ensure it maps correctly
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Select ceph volume for disk
@@ -128,15 +126,15 @@ class AddHardware(uiutils.UITestCase):
         # Check disk details, make sure it correctly selected volume
         details.find("IDE Disk 2", "table cell").click()
         tab = details.find("disk-tab")
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         disk_path = tab.find("disk-source-path")
-        uiutils.check(lambda: "rbd://" in disk_path.text)
+        lib.utils.check(lambda: "rbd://" in disk_path.text)
 
     def testAddDisks(self):
         """
         Add various disk configs and test storage browser
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Default disk
@@ -157,7 +155,7 @@ class AddHardware(uiutils.UITestCase):
         # Size too big
         tab.find("GiB", "spin button").set_text("2000")
         self._finish(addhw, check=None)
-        self._click_alert_button("not enough free space", "Close")
+        self.app.click_alert_button("not enough free space", "Close")
         tab.find("GiB", "spin button").set_text("1.5")
         self._finish(addhw, check=details)
 
@@ -166,7 +164,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
         self._finish(addhw, check=None)
-        self._click_alert_button("storage path must be specified", "OK")
+        self.app.click_alert_button("storage path must be specified", "OK")
         tab.find("storage-browse", "push button").click()
         browse = self.app.root.find("vmm-storage-browser")
 
@@ -177,15 +175,15 @@ class AddHardware(uiutils.UITestCase):
         newname = "a-newvol"
         newvol.find("Name:", "text").set_text(newname)
         newvol.find("Finish", "push button").click()
-        uiutils.check(lambda: not newvol.showing)
+        lib.utils.check(lambda: not newvol.showing)
         volcell = browse.find(newname, "table cell")
-        uiutils.check(lambda: volcell.selected)
+        lib.utils.check(lambda: volcell.selected)
         browse.find("vol-refresh", "push button").click()
         volcell = browse.find(newname, "table cell")
-        uiutils.check(lambda: volcell.selected)
+        lib.utils.check(lambda: volcell.selected)
         browse.find("vol-delete", "push button").click()
-        self._click_alert_button("permanently delete the volume", "Yes")
-        uiutils.check(lambda: volcell.dead)
+        self.app.click_alert_button("permanently delete the volume", "Yes")
+        lib.utils.check(lambda: volcell.dead)
 
         # Test browse local
         browse.find("Browse Local", "push button").click()
@@ -198,10 +196,10 @@ class AddHardware(uiutils.UITestCase):
         fname = "COPYING"
         chooser.find(fname, "table cell").click()
         chooser.find("Open", "push button").click()
-        uiutils.check(lambda: not chooser.showing)
-        uiutils.check(lambda: addhw.active)
+        lib.utils.check(lambda: not chooser.showing)
+        lib.utils.check(lambda: addhw.active)
         storageent = tab.find("storage-entry")
-        uiutils.check(lambda: ("/" + fname) in storageent.text)
+        lib.utils.check(lambda: ("/" + fname) in storageent.text)
 
         # Reopen dialog, select a volume, etic
         tab.find("storage-browse", "push button").click()
@@ -210,12 +208,12 @@ class AddHardware(uiutils.UITestCase):
         browse.find_fuzzy("disk-pool", "table cell").click()
         browse.find("diskvol1", "table cell").click()
         browse.find("Choose Volume", "push button").click()
-        uiutils.check(lambda: "/diskvol1" in storageent.text)
+        lib.utils.check(lambda: "/diskvol1" in storageent.text)
         self._finish(addhw, check=None)
-        self._click_alert_button("already in use by", "No")
+        self.app.click_alert_button("already in use by", "No")
         self._finish(addhw, check=None)
-        self._click_alert_button("already in use by", "Yes")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("already in use by", "Yes")
+        lib.utils.check(lambda: details.active)
 
 
         # choose file for floppy
@@ -223,7 +221,7 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "Storage", "storage-tab")
         tab.combo_select("Device type:", "Floppy device")
         diskradio = tab.find_fuzzy("Create a disk image", "radio")
-        uiutils.check(lambda: not diskradio.sensitive)
+        lib.utils.check(lambda: not diskradio.sensitive)
         tab.find("storage-entry").set_text("/dev/default-pool/bochs-vol")
         self._finish(addhw, check=details)
 
@@ -240,7 +238,7 @@ class AddHardware(uiutils.UITestCase):
         Test search permissions 'no' and checkbox case
         """
         self.app.uri = uri
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
 
         # Say 'No' but path should still work due to test driver
         addhw = self._open_addhw_window(details)
@@ -249,8 +247,8 @@ class AddHardware(uiutils.UITestCase):
         path = tmpdir + "/foo1.img"
         tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
-        self._click_alert_button("emulator may not have", "No")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("emulator may not have", "No")
+        lib.utils.check(lambda: details.active)
 
         # Say 'don't ask again'
         addhw = self._open_addhw_window(details)
@@ -261,8 +259,8 @@ class AddHardware(uiutils.UITestCase):
         self._finish(addhw, check=None)
         alert = self.app.root.find_fuzzy("vmm dialog", "alert")
         alert.find_fuzzy("Don't ask", "check box").click()
-        self._click_alert_button("emulator may not have", "No")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("emulator may not have", "No")
+        lib.utils.check(lambda: details.active)
 
         # Confirm it doesn't ask about path again
         addhw = self._open_addhw_window(details)
@@ -278,7 +276,7 @@ class AddHardware(uiutils.UITestCase):
         Select 'Yes' for search perms fixing
         """
         self.app.uri = uri
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
 
         # Say 'Yes'
         addhw = self._open_addhw_window(details)
@@ -287,8 +285,8 @@ class AddHardware(uiutils.UITestCase):
         path = tmpdir + "/foo1.img"
         tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
-        self._click_alert_button("emulator may not have", "Yes")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("emulator may not have", "Yes")
+        lib.utils.check(lambda: details.active)
 
         # Confirm it doesn't ask about path again
         addhw = self._open_addhw_window(details)
@@ -305,7 +303,7 @@ class AddHardware(uiutils.UITestCase):
         """
         self.app.uri = uri
         self.app.open(break_setfacl=True)
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
 
         # Say 'Yes' and it should fail, then blacklist the paths
         addhw = self._open_addhw_window(details)
@@ -314,12 +312,12 @@ class AddHardware(uiutils.UITestCase):
         path = tmpdir + "/foo1.img"
         tab.find("storage-entry").set_text(path)
         self._finish(addhw, check=None)
-        self._click_alert_button("emulator may not have", "Yes")
+        self.app.click_alert_button("emulator may not have", "Yes")
         alert = self.app.root.find("vmm dialog", "alert")
         alert.find_fuzzy("Errors were encountered", "label")
         alert.find_fuzzy("Don't ask", "check box").click()
         alert.find_fuzzy("OK", "push button").click()
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: details.active)
 
         # Confirm it doesn't ask about path again
         addhw = self._open_addhw_window(details)
@@ -333,7 +331,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Test various network configs
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Basic network + opts
@@ -358,7 +356,7 @@ class AddHardware(uiutils.UITestCase):
         tab.find("Device name:", "text").set_text("zbr0")
         self._finish(addhw, check=None)
         # Check MAC validation error
-        self._click_alert_button("00:11:22:33:44:55", "Close")
+        self.app.click_alert_button("00:11:22:33:44:55", "Close")
 
         # Fix MAC
         tab.find("mac-address-enable", "check box").click()
@@ -370,7 +368,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Graphics device testing
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # VNC example
@@ -385,12 +383,12 @@ class AddHardware(uiutils.UITestCase):
         newpass = "foobar"
         passwd.typeText(newpass)
         tab.find("Show password", "check").click()
-        uiutils.check(lambda: passwd.text == newpass)
+        lib.utils.check(lambda: passwd.text == newpass)
         tab.find("Show password", "check").click()
-        uiutils.check(lambda: passwd.text != newpass)
+        lib.utils.check(lambda: passwd.text != newpass)
         self._finish(addhw, check=None)
         # Catch a port error
-        self._click_alert_button("Port must be above 5900", "Close")
+        self.app.click_alert_button("Port must be above 5900", "Close")
         tab.find("graphics-port", "spin button").set_text("5920")
         self._finish(addhw, check=details)
 
@@ -413,25 +411,25 @@ class AddHardware(uiutils.UITestCase):
         """
         Add a few different USB and PCI devices
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Add USB device dup1
         tab = self._select_hw(addhw, "USB Host Device", "host-tab")
         tab.find_fuzzy("HP Dup USB 1", "table cell").click()
         self._finish(addhw, check=None)
-        self._click_alert_button("device is already in use by", "No")
+        self.app.click_alert_button("device is already in use by", "No")
         self._finish(addhw, check=None)
-        self._click_alert_button("device is already in use by", "Yes")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("device is already in use by", "Yes")
+        lib.utils.check(lambda: details.active)
 
         # Add USB device dup2
         self._open_addhw_window(details)
         tab = self._select_hw(addhw, "USB Host Device", "host-tab")
         tab.find_fuzzy("HP Dup USB 2", "table cell").click()
         self._finish(addhw, check=None)
-        self._click_alert_button("device is already in use by", "Yes")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("device is already in use by", "Yes")
+        lib.utils.check(lambda: details.active)
 
         # Add another USB device
         self._open_addhw_window(details)
@@ -444,15 +442,15 @@ class AddHardware(uiutils.UITestCase):
         tab = self._select_hw(addhw, "PCI Host Device", "host-tab")
         tab.find_fuzzy("(Interface eth0)", "table cell").click()
         self._finish(addhw, check=None)
-        self._click_alert_button("device is already in use by", "Yes")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("device is already in use by", "Yes")
+        lib.utils.check(lambda: details.active)
 
 
     def testAddChars(self):
         """
         Add a bunch of char devices
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Add console device
@@ -488,7 +486,7 @@ class AddHardware(uiutils.UITestCase):
         """
         self.app.uri = tests.utils.URIs.lxc
 
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Add File+nbd share
@@ -505,12 +503,12 @@ class AddHardware(uiutils.UITestCase):
         browsewin.find_fuzzy("default-pool", "table cell").click()
         browsewin.find_fuzzy("bochs-vol", "table cell").click()
         choose = browsewin.find("Choose Volume")
-        uiutils.check(lambda: not choose.sensitive)
+        lib.utils.check(lambda: not choose.sensitive)
         browsewin.find_fuzzy("dir-vol", "table cell").click()
-        uiutils.check(lambda: choose.sensitive)
+        lib.utils.check(lambda: choose.sensitive)
         choose.click()
-        uiutils.check(lambda: addhw.active)
-        uiutils.check(
+        lib.utils.check(lambda: addhw.active)
+        lib.utils.check(
                 lambda: source.text == "/dev/default-pool/dir-vol")
 
         tab.find_fuzzy("Export filesystem", "check").click()
@@ -518,7 +516,7 @@ class AddHardware(uiutils.UITestCase):
         badtarget = "a" * 1024
         tab.find("Target path:", "text").set_text(badtarget)
         self._finish(addhw, check=None)
-        self._click_alert_button("aaa...", "Close")
+        self.app.click_alert_button("aaa...", "Close")
         tab.find("Target path:", "text").set_text("/foo/target")
         self._finish(addhw, check=details)
 
@@ -535,7 +533,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Add some simple devices
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Add input
@@ -577,7 +575,7 @@ class AddHardware(uiutils.UITestCase):
         """
         Add some more simple devices"
         """
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         addhw = self._open_addhw_window(details)
 
         # Add usb controller, to make usbredir work
@@ -630,8 +628,8 @@ class AddHardware(uiutils.UITestCase):
         """
         Test some special case handling when VM has controller usb model='none'
         """
-        details = self._open_details_window(
-                "test alternate devs title", shutdown=True)
+        details = self.app.open_details_window("test alternate devs title",
+                shutdown=True)
         addhw = self._open_addhw_window(details)
 
         # Add usb controller
@@ -646,14 +644,14 @@ class AddHardware(uiutils.UITestCase):
         combo = tab.find("Type:", "combo box")
         combo.find(None, "text").set_text("foobar")
         self._finish(addhw, check=None)
-        self._click_alert_button("Unable to add device", "Close")
-        uiutils.check(lambda: addhw.active)
+        self.app.click_alert_button("Unable to add device", "Close")
+        lib.utils.check(lambda: addhw.active)
 
     def testAddHWCornerCases(self):
         """
         Random addhardware related tests
         """
-        details = self._open_details_window("test-many-devices")
+        details = self.app.open_details_window("test-many-devices")
         addhw = self._open_addhw_window(details)
 
         # Test cancel
@@ -668,7 +666,7 @@ class AddHardware(uiutils.UITestCase):
                 "label")
         alert.find("Details", "toggle button").click_expander()
         alert.find("No", "push button").click()
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: details.active)
 
         # Test live adding, error dialog, click yes
         self._open_addhw_window(details)
@@ -679,14 +677,14 @@ class AddHardware(uiutils.UITestCase):
                 "label")
         alert.find("Details", "toggle button").click_expander()
         alert.find("Yes", "push button").click()
-        uiutils.check(lambda: alert.dead)
+        lib.utils.check(lambda: alert.dead)
 
     def testAddHWXMLEdit(self):
         """
         Test XML editor integration
         """
         self.app.open(xmleditor_enabled=True)
-        details = self._open_details_window()
+        details = self.app.open_details_window("test-clone-simple")
         win = self._open_addhw_window(details)
 
         # Disk test, change path and make sure we error it is missing
@@ -696,7 +694,7 @@ class AddHardware(uiutils.UITestCase):
         newpath = "/FOO/XMLEDIT/test1.img"
         xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
         self._finish(win, check=None)
-        self._click_alert_button("non-existent path", "Close")
+        self.app.click_alert_button("non-existent path", "Close")
 
         # Undo the bad change, change bus/target
         xmleditor.set_text(xmleditor.text.replace(newpath, origpath))
@@ -706,7 +704,7 @@ class AddHardware(uiutils.UITestCase):
 
         # Verify the changes applied
         details.find("Xen Disk 1").click()
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: details.active)
         win = self._open_addhw_window(details)
         tab = self._select_hw(win, "Storage", "storage-tab")
         tab.find_fuzzy("Select or create", "radio").click()
@@ -718,12 +716,12 @@ class AddHardware(uiutils.UITestCase):
         # Select XML, switch to new dev type, verify we change focus
         win.find("XML", "page tab").click()
         xmleditor = win.find("XML editor")
-        uiutils.check(lambda: xmleditor.showing)
+        lib.utils.check(lambda: xmleditor.showing)
         tab = self._select_hw(win, "Network", "network-tab")
-        uiutils.check(lambda: not xmleditor.showing)
+        lib.utils.check(lambda: not xmleditor.showing)
 
         # Do standard xmleditor tests
         finish = win.find("Finish", "push button")
-        self._test_xmleditor_interactions(win, finish)
+        lib.utils.test_xmleditor_interactions(self.app, win, finish)
         win.find("Cancel", "push button").click()
-        uiutils.check(lambda: not win.visible)
+        lib.utils.check(lambda: not win.visible)

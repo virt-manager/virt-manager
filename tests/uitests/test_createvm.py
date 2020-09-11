@@ -4,11 +4,11 @@
 import unittest.mock
 
 import tests
-from tests.uitests import utils as uiutils
+from . import lib
 
 
 
-class NewVM(uiutils.UITestCase):
+class NewVM(lib.testcase.UITestCase):
     """
     UI tests for virt-manager's NewVM wizard
     """
@@ -27,14 +27,14 @@ class NewVM(uiutils.UITestCase):
         oldtext = pagenumlabel.text
         newvm.find_fuzzy("Forward", "button").click()
         if check:
-            uiutils.check(lambda: pagenumlabel.text != oldtext)
+            lib.utils.check(lambda: pagenumlabel.text != oldtext)
 
     def back(self, newvm, check=True):
         pagenumlabel = newvm.find("pagenum-label")
         oldtext = pagenumlabel.text
         newvm.find_fuzzy("Back", "button").click()
         if check:
-            uiutils.check(lambda: pagenumlabel.text != oldtext)
+            lib.utils.check(lambda: pagenumlabel.text != oldtext)
 
 
     ##############
@@ -60,14 +60,14 @@ class NewVM(uiutils.UITestCase):
             c.click()
             c.click(button=3)
             self.app.root.find("conn-disconnect", "menu item").click()
-            uiutils.check(lambda: "Not Connected" in c.text)
+            lib.utils.check(lambda: "Not Connected" in c.text)
 
         # Check the dialog shows 'no connection' error
         _stop_conn("test testdriver.xml")
         newvm = self._open_create_wizard()
         newvm.find_fuzzy("No active connection to install on")
         newvm.keyCombo("<alt>F4")
-        uiutils.check(lambda: manager.active)
+        lib.utils.check(lambda: manager.active)
 
         # Check the xen PV only startup warning
         def _capsopt(fname):
@@ -106,7 +106,7 @@ class NewVM(uiutils.UITestCase):
         entry.click()
         # Launch this so we can verify storage browser is reset too
         newvm.find_fuzzy("install-iso-browse", "button").click()
-        self._select_storagebrowser_volume("default-pool", "iso-vol")
+        self.app.select_storagebrowser_volume("default-pool", "iso-vol")
         newvm.find_fuzzy("Automatically detect", "check").click()
         newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
@@ -119,10 +119,10 @@ class NewVM(uiutils.UITestCase):
         newvm.combo_select("create-conn", ".*test default.*")
         self.forward(newvm)
         cdrom.click_combo_entry()
-        uiutils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
+        lib.utils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
         newvm.find_fuzzy("install-iso-browse", "button").click()
         browsewin = self.app.root.find("vmm-storage-browser")
-        uiutils.check(lambda: "disk-pool" not in browsewin.fmt_nodes())
+        lib.utils.check(lambda: "disk-pool" not in browsewin.fmt_nodes())
 
     def testNewVMManualDefault(self):
         """
@@ -134,37 +134,37 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Manual", "radio").click()
         self.forward(newvm)
         osentry = newvm.find("oslist-entry")
-        uiutils.check(lambda: not osentry.text)
+        lib.utils.check(lambda: not osentry.text)
 
         # Make sure we throw an error if no OS selected
         self.forward(newvm, check=False)
-        self._click_alert_button("You must select", "OK")
+        self.app.click_alert_button("You must select", "OK")
 
         # Test activating the osentry to grab the popover selection
         osentry.click()
         osentry.typeText("generic")
         newvm.find("oslist-popover")
         osentry.click()
-        self.pressKey("Enter")
-        uiutils.check(lambda: osentry.text == "Generic OS")
+        self.app.rawinput.pressKey("Enter")
+        lib.utils.check(lambda: osentry.text == "Generic OS")
 
         # Verify back+forward still keeps Generic selected
-        self.sleep(.5)
+        self.app.sleep(.5)
         self.back(newvm)
-        self.sleep(.5)
+        self.app.sleep(.5)
         self.forward(newvm)
-        self.sleep(.5)
-        uiutils.check(lambda: "Generic" in osentry.text)
-        uiutils.check(lambda: osentry.onscreen)
+        self.app.sleep(.5)
+        lib.utils.check(lambda: "Generic" in osentry.text)
+        lib.utils.check(lambda: osentry.onscreen)
 
         # The sleeps shouldn't be required, but this test continues to be
         # flakey, so this is an attempt to fix it.
         self.forward(newvm)
-        self.sleep(.5)
+        self.app.sleep(.5)
         self.forward(newvm)
-        self.sleep(.5)
+        self.app.sleep(.5)
         self.forward(newvm)
-        self.sleep(.5)
+        self.app.sleep(.5)
 
 
         # Empty triggers a specific codepath
@@ -172,7 +172,7 @@ class NewVM(uiutils.UITestCase):
         # Name collision failure
         newvm.find_fuzzy("Name", "text").set_text("test-many-devices")
         newvm.find_fuzzy("Finish", "button").click()
-        self._click_alert_button("in use", "OK")
+        self.app.click_alert_button("in use", "OK")
         newvm.find_fuzzy("Name", "text").set_text("vm1")
         newvm.find_fuzzy("Finish", "button").click()
 
@@ -183,10 +183,10 @@ class NewVM(uiutils.UITestCase):
 
         delete = self.app.root.find_fuzzy("Delete", "frame")
         delete.find_fuzzy("Delete", "button").click()
-        self._click_alert_button("Are you sure", "Yes")
+        self.app.click_alert_button("Are you sure", "Yes")
 
         # Verify delete dialog and VM dialog are now gone
-        uiutils.check(lambda: vmwindow.showing is False)
+        lib.utils.check(lambda: vmwindow.showing is False)
 
     def testNewVMStorage(self):
         """
@@ -205,7 +205,7 @@ class NewVM(uiutils.UITestCase):
         sizetext = newvm.find(None, "spin button", "GiB")
         sizetext.set_text("10000000")
         self.forward(newvm, check=False)
-        self._click_alert_button("Storage parameter error", "OK")
+        self.app.click_alert_button("Storage parameter error", "OK")
         sizetext.set_text("1")
 
         # Use the storage browser to select a local file
@@ -219,14 +219,14 @@ class NewVM(uiutils.UITestCase):
         fname = "COPYING"
         chooser.find(fname, "table cell").click()
         chooser.find("Open", "push button").click()
-        uiutils.check(lambda: newvm.active)
-        uiutils.check(lambda: "COPYING" in storagetext.text)
+        lib.utils.check(lambda: newvm.active)
+        lib.utils.check(lambda: "COPYING" in storagetext.text)
 
         # Start the install
         self.forward(newvm)
         newvm.find("Finish", "push button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
 
     def testNewVMCDROMRegular(self):
@@ -250,49 +250,49 @@ class NewVM(uiutils.UITestCase):
         entry.click()
         entry.set_text("")
         self.forward(newvm, check=False)
-        self._click_alert_button("media selection is required", "OK")
+        self.app.click_alert_button("media selection is required", "OK")
 
         # test entry activation too
         entry.click()
         entry.set_text("/dev/sr0")
-        self.pressKey("Enter")
+        self.app.rawinput.pressKey("Enter")
 
         # Select a fake iso
         newvm.find_fuzzy("install-iso-browse", "button").click()
-        self._select_storagebrowser_volume("default-pool", "iso-vol")
+        self.app.select_storagebrowser_volume("default-pool", "iso-vol")
 
         osentry = newvm.find("oslist-entry")
-        uiutils.check(lambda: osentry.text == "None detected")
+        lib.utils.check(lambda: osentry.text == "None detected")
 
         # Change distro to win8
         newvm.find_fuzzy("Automatically detect", "check").click()
         osentry.click()
         osentry.set_text("windows 8")
         popover = newvm.find("oslist-popover")
-        uiutils.check(lambda: popover.onscreen)
+        lib.utils.check(lambda: popover.onscreen)
         # Verify Escape resets the text entry
-        self.pressKey("Escape")
-        uiutils.check(lambda: not popover.onscreen)
-        uiutils.check(lambda: osentry.text == "")
+        self.app.rawinput.pressKey("Escape")
+        lib.utils.check(lambda: not popover.onscreen)
+        lib.utils.check(lambda: osentry.text == "")
         # Re-enter text
         osentry.set_text("windows 8")
-        uiutils.check(lambda: popover.onscreen)
+        lib.utils.check(lambda: popover.onscreen)
         popover.find_fuzzy("include-eol").click()
         popover.find_fuzzy(r"\(win8\)").click()
-        uiutils.check(lambda: not popover.onscreen)
+        lib.utils.check(lambda: not popover.onscreen)
         foundtext = osentry.text
         # Start typing again, and exit, make sure it resets to previous entry
         osentry.click()
         osentry.set_text("foo")
-        uiutils.check(lambda: popover.onscreen)
-        self.pressKey("Escape")
-        uiutils.check(lambda: not popover.onscreen)
-        uiutils.check(lambda: osentry.text == foundtext)
+        lib.utils.check(lambda: popover.onscreen)
+        self.app.rawinput.pressKey("Escape")
+        lib.utils.check(lambda: not popover.onscreen)
+        lib.utils.check(lambda: osentry.text == foundtext)
         self.forward(newvm)
 
         # Verify that CPU values are non-default
         cpus = newvm.find("cpus", "spin button")
-        uiutils.check(lambda: int(cpus.text) > 1, timeout=5)
+        lib.utils.check(lambda: int(cpus.text) > 1, timeout=5)
         self.forward(newvm)
         self.forward(newvm)
 
@@ -304,7 +304,7 @@ class NewVM(uiutils.UITestCase):
         vmwindow = self.app.root.find_fuzzy("win8 on", "frame")
         vmwindow.find_fuzzy("IDE CDROM", "table cell").click()
         mediaent = vmwindow.find("media-entry")
-        uiutils.check(lambda: "iso-vol" in mediaent.text)
+        lib.utils.check(lambda: "iso-vol" in mediaent.text)
 
         # Change boot autostart
         vmwindow.find_fuzzy("Boot", "table cell").click()
@@ -320,7 +320,7 @@ class NewVM(uiutils.UITestCase):
         vmwindow.find("add-hardware", "push button").click()
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
         addhw.find("Finish", "push button").click()
-        uiutils.check(lambda: vmwindow.active)
+        lib.utils.check(lambda: vmwindow.active)
 
         # Select the new disk, change the bus to USB
         vmwindow.find_fuzzy("IDE Disk 2", "table cell").click()
@@ -329,29 +329,29 @@ class NewVM(uiutils.UITestCase):
         tab = vmwindow.find("disk-tab")
         tab.find("Disk bus:", "text").set_text("usb")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
         # Device is now 'USB Disk 1'
         c = hwlist.find("USB Disk 1", "table cell")
-        uiutils.check(lambda: c.state_selected)
+        lib.utils.check(lambda: c.state_selected)
         tab.find("Advanced options", "toggle button").click_expander()
         tab.find("Removable:", "check box").click()
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
 
         # Change NIC mac
         vmwindow.find_fuzzy("NIC", "table cell").click()
         tab = vmwindow.find("network-tab")
         tab.find("mac-entry", "text").set_text("00:11:00:11:00:11")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
 
         # Start the install, close via the VM window
         vmwindow.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: newvm.showing is False)
+        lib.utils.check(lambda: newvm.showing is False)
         vmwindow = self.app.root.find_fuzzy("win8 on", "frame")
         vmwindow.find_fuzzy("File", "menu").click()
         vmwindow.find_fuzzy("Quit", "menu item").click()
-        uiutils.check(lambda: self.app.is_running())
+        lib.utils.check(lambda: self.app.is_running())
 
     def testNewVMCDROMDetect(self):
         """
@@ -369,7 +369,7 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         newvm.find("Finish", "push button").click()
         self.app.root.find_fuzzy("win7 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
 
     def testNewVMURL(self):
@@ -383,46 +383,46 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Network Install", "radio").click()
         self.forward(newvm)
         osentry = newvm.find("oslist-entry")
-        uiutils.check(lambda: osentry.text.startswith("Waiting"))
+        lib.utils.check(lambda: osentry.text.startswith("Waiting"))
 
         newvm.find("install-url-entry").set_text("")
         self.forward(newvm, check=False)
-        self._click_alert_button("tree is required", "OK")
+        self.app.click_alert_button("tree is required", "OK")
 
         url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
         oslabel = "Fedora 10"
         newvm.find("install-url-entry").set_text(url)
         newvm.find("install-url-entry").click()
-        self.pressKey("Enter")
+        self.app.rawinput.pressKey("Enter")
         newvm.find("install-urlopts-expander").click_expander()
         newvm.find("install-urlopts-entry").set_text("foo=bar")
 
-        uiutils.check(lambda: osentry.text == oslabel, timeout=10)
+        lib.utils.check(lambda: osentry.text == oslabel, timeout=10)
 
         # Move forward, then back, ensure OS stays selected
         self.forward(newvm)
         self.back(newvm)
-        uiutils.check(lambda: osentry.text == oslabel)
+        lib.utils.check(lambda: osentry.text == oslabel)
 
         # Disable autodetect, make sure OS still selected
         newvm.find_fuzzy("Automatically detect", "check").click()
-        uiutils.check(lambda: osentry.text == oslabel)
+        lib.utils.check(lambda: osentry.text == oslabel)
         self.forward(newvm)
         self.back(newvm)
 
         # Ensure the EOL field was selected
         osentry.click()
-        self.pressKey("Down")
+        self.app.rawinput.pressKey("Down")
         popover = newvm.find("oslist-popover")
-        uiutils.check(lambda: popover.showing)
+        lib.utils.check(lambda: popover.showing)
         includeeol = newvm.find("include-eol", "check")
-        uiutils.check(lambda: includeeol.isChecked)
+        lib.utils.check(lambda: includeeol.isChecked)
 
         # Re-enable autodetect, check for detecting text
         newvm.find_fuzzy("Automatically detect", "check").click()
-        uiutils.check(lambda: not popover.showing)
-        uiutils.check(lambda: "Detecting" in osentry.text)
-        uiutils.check(lambda: osentry.text == oslabel, timeout=10)
+        lib.utils.check(lambda: not popover.showing)
+        lib.utils.check(lambda: "Detecting" in osentry.text)
+        lib.utils.check(lambda: osentry.text == oslabel, timeout=10)
 
         # Progress the install
         self.forward(newvm)
@@ -432,10 +432,10 @@ class NewVM(uiutils.UITestCase):
 
         progress = self.app.root.find_fuzzy(
             "Creating Virtual Machine", "frame")
-        uiutils.check(lambda: not progress.showing, timeout=120)
+        lib.utils.check(lambda: not progress.showing, timeout=120)
 
         details = self.app.root.find_fuzzy("fedora10 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
         # Re-run the newvm wizard, check that URL was remembered
         details.keyCombo("<alt>F4")
@@ -443,8 +443,8 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Network Install", "radio").click()
         self.forward(newvm)
         urlcombo = newvm.find("install-url-combo")
-        uiutils.check(lambda: urlcombo.showing)
-        uiutils.check(lambda: url in urlcombo.fmt_nodes())
+        lib.utils.check(lambda: urlcombo.showing)
+        lib.utils.check(lambda: url in urlcombo.fmt_nodes())
 
     def testNewKVMQ35Tweaks(self):
         """
@@ -478,36 +478,36 @@ class NewVM(uiutils.UITestCase):
         # Switch i440FX and back
         details.combo_select("Chipset:", "i440FX")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
         details.combo_select("Chipset:", "Q35")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
         # Switch to UEFI, back to BIOS, back to UEFI
         details.combo_select("Firmware:", ".*x86_64.*")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
         # Switch back to BIOS
         details.combo_select("Firmware:", "BIOS")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
         # Switch back to UEFI
         details.combo_select("Firmware:", ".*x86_64.*")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
 
         # Add another network device
         details.find("add-hardware", "push button").click()
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
         addhw.find("Network", "table cell").click()
         tab = addhw.find("network-tab", None)
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         addhw.find("Finish", "push button").click()
-        uiutils.check(lambda: not addhw.active)
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: not addhw.active)
+        lib.utils.check(lambda: details.active)
 
         # Finish
         details.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: details.dead)
+        lib.utils.check(lambda: details.dead)
         self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
     def testNewKVMQ35UEFI(self):
@@ -542,7 +542,7 @@ class NewVM(uiutils.UITestCase):
 
         # Finish
         details.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: details.dead)
+        lib.utils.check(lambda: details.dead)
         self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
     def testNewPPC64(self):
@@ -577,32 +577,32 @@ class NewVM(uiutils.UITestCase):
         tab.combo_select("machine-combo", "pseries-2.1")
         appl = details.find("config-apply")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
 
         # Add a TPM SPAPR device
         details.find("add-hardware", "push button").click()
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
         addhw.find("TPM", "table cell").click()
         tab = addhw.find("tpm-tab", None)
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         addhw.find("Finish", "push button").click()
-        uiutils.check(lambda: not addhw.active)
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: not addhw.active)
+        lib.utils.check(lambda: details.active)
 
         # Add a SCSI disk which also adds virtio-scsi controller
         details.find("add-hardware", "push button").click()
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
         addhw.find("Storage", "table cell").click()
         tab = addhw.find("storage-tab", None)
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         tab.combo_select("Bus type:", "SCSI")
         addhw.find("Finish", "push button").click()
-        uiutils.check(lambda: not addhw.active)
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: not addhw.active)
+        lib.utils.check(lambda: details.active)
 
         # Finish
         details.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: details.dead)
+        lib.utils.check(lambda: details.dead)
         self.app.root.find_fuzzy("vm-ppc64 on", "frame")
 
     def testNewVMAArch64UEFI(self):
@@ -626,7 +626,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
     def testNewVMArmKernel(self):
         """
@@ -639,23 +639,23 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Virt Type", "combo").click()
         KVM = newvm.find_fuzzy("KVM", "menu item")
         TCG = newvm.find_fuzzy("TCG", "menu item")
-        uiutils.check(lambda: KVM.focused)
-        uiutils.check(lambda: TCG.showing)
-        self.pressKey("Esc")
+        lib.utils.check(lambda: KVM.focused)
+        lib.utils.check(lambda: TCG.showing)
+        self.app.rawinput.pressKey("Esc")
 
         # Validate some initial defaults
         local = newvm.find_fuzzy("Local", "radio")
-        uiutils.check(lambda: not local.sensitive)
+        lib.utils.check(lambda: not local.sensitive)
         newvm.find_fuzzy("Machine Type", "combo").click()
-        self.sleep(.2)
+        self.app.sleep(.2)
         newvm.find_fuzzy("canon", "menu item").click()
         newvm.find_fuzzy("Machine Type", "combo").click()
-        self.sleep(.2)
+        self.app.sleep(.2)
         newvm.find("virt", "menu item").click()
-        self.sleep(.5)
+        self.app.sleep(.5)
         importradio = newvm.find("Import", "radio")
         importradio.click()
-        uiutils.check(lambda: importradio.checked)
+        lib.utils.check(lambda: importradio.checked)
         self.forward(newvm)
 
         newvm.find("import-entry").set_text("/dev/default-pool/default-vol")
@@ -666,12 +666,12 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm, check=False)
 
         # Disk collision box pops up, hit ok
-        self._click_alert_button("in use", "Yes")
+        self.app.click_alert_button("in use", "Yes")
 
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
 
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
         self.app.root.find_fuzzy("vm1 on", "frame")
 
 
@@ -689,10 +689,10 @@ class NewVM(uiutils.UITestCase):
         apptext = newvm.find_fuzzy(None, "text", "application path")
         apptext.set_text("")
         self.forward(newvm, check=False)
-        self._click_alert_button("path is required", "OK")
+        self.app.click_alert_button("path is required", "OK")
         newvm.find("install-app-browse").click()
-        self._select_storagebrowser_volume("default-pool", "aaa-unused.qcow2")
-        uiutils.check(lambda: "aaa-unused.qcow2" in apptext.text)
+        self.app.select_storagebrowser_volume("default-pool", "aaa-unused.qcow2")
+        lib.utils.check(lambda: "aaa-unused.qcow2" in apptext.text)
 
         self.forward(newvm)
         self.forward(newvm)
@@ -716,11 +716,11 @@ class NewVM(uiutils.UITestCase):
         tab.find("Init args:", "text").set_text("some args")
         appl = details.find("config-apply")
         appl.click()
-        self._click_alert_button("init path must be specified", "OK")
-        uiutils.check(lambda: appl.sensitive)
+        self.app.click_alert_button("init path must be specified", "OK")
+        lib.utils.check(lambda: appl.sensitive)
         tab.find("Init path:", "text").set_text("/some/path")
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: not appl.sensitive)
 
         # Check that addhw container options are disabled
         details.find("add-hardware", "push button").click()
@@ -728,14 +728,14 @@ class NewVM(uiutils.UITestCase):
         addhw.find("PCI Host Device", "table cell").click()
         # Ensure the error label is showing
         label = addhw.find("Not supported for containers")
-        uiutils.check(lambda: label.onscreen)
+        lib.utils.check(lambda: label.onscreen)
         addhw.find("Cancel", "push button").click()
-        uiutils.check(lambda: not addhw.active)
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: not addhw.active)
+        lib.utils.check(lambda: details.active)
 
         # Finish
         details.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
         self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
     def testNewVMCustomizeCancel(self):
@@ -757,12 +757,12 @@ class NewVM(uiutils.UITestCase):
         details = self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
         details.find("Cancel Installation", "push button").click()
-        self._click_alert_button("abort the installation", "No")
-        uiutils.check(lambda: details.active)
+        self.app.click_alert_button("abort the installation", "No")
+        lib.utils.check(lambda: details.active)
         details.find("Cancel Installation", "push button").click()
-        self._click_alert_button("abort the installation", "Yes")
-        uiutils.check(lambda: not details.active)
-        uiutils.check(lambda: not newvm.active)
+        self.app.click_alert_button("abort the installation", "Yes")
+        lib.utils.check(lambda: not details.active)
+        lib.utils.check(lambda: not newvm.active)
 
     def testNewVMCustomizeMisc(self):
         """
@@ -792,15 +792,15 @@ class NewVM(uiutils.UITestCase):
         # Trigger XML failure to hit some codepaths
         nametext.set_text("")
         details.find("Begin Installation").click()
-        self._click_alert_button("unapplied changes", "Yes")
-        self._click_alert_button("name must be specified", "Close")
-        uiutils.check(lambda: details.showing)
+        self.app.click_alert_button("unapplied changes", "Yes")
+        self.app.click_alert_button("name must be specified", "Close")
+        lib.utils.check(lambda: details.showing)
 
         # Discard XML change and continue with install
         details.find("Begin Installation").click()
-        self._click_alert_button("unapplied changes", "No")
-        uiutils.check(lambda: not details.showing)
-        uiutils.check(lambda: not newvm.showing)
+        self.app.click_alert_button("unapplied changes", "No")
+        lib.utils.check(lambda: not details.showing)
+        lib.utils.check(lambda: not newvm.showing)
         self.app.root.find_fuzzy("foonewname on", "frame")
 
 
@@ -818,17 +818,17 @@ class NewVM(uiutils.UITestCase):
         dirtext = newvm.find_fuzzy(None, "text", "root directory")
         dirtext.set_text("")
         self.forward(newvm, check=False)
-        self._click_alert_button("path is required", "OK")
+        self.app.click_alert_button("path is required", "OK")
 
         newvm.find("install-oscontainer-browse").click()
-        self._select_storagebrowser_volume("default-pool", "dir-vol")
-        uiutils.check(lambda: "dir-vol" in dirtext.text)
+        self.app.select_storagebrowser_volume("default-pool", "dir-vol")
+        lib.utils.check(lambda: "dir-vol" in dirtext.text)
 
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
 
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
         self.app.root.find_fuzzy("container1 on", "frame")
 
 
@@ -848,14 +848,14 @@ class NewVM(uiutils.UITestCase):
         templatetext = newvm.find_fuzzy(None, "text", "container template")
         templatetext.set_text("")
         self.forward(newvm, check=False)
-        self._click_alert_button("template name is required", "OK")
+        self.app.click_alert_button("template name is required", "OK")
         templatetext.set_text("centos-6-x86_64")
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("container1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
 
     def testNewVMContainerBootstrap(self):
@@ -877,33 +877,33 @@ class NewVM(uiutils.UITestCase):
         uritext = newvm.find("install-oscontainer-source-uri")
         uritext.text = ""
         self.forward(newvm, check=False)
-        self._click_alert_button("Source URL is required", "OK")
+        self.app.click_alert_button("Source URL is required", "OK")
         uritext.text = "docker://alpine"
 
         rootdir = newvm.find_fuzzy(None, "text", "root directory")
-        uiutils.check(lambda: ".local/share/libvirt" in rootdir.text)
+        lib.utils.check(lambda: ".local/share/libvirt" in rootdir.text)
         rootdir.set_text("/dev/null")
         self.forward(newvm, check=False)
-        self._click_alert_button("not directory", "OK")
+        self.app.click_alert_button("not directory", "OK")
         rootdir.set_text("/root")
         self.forward(newvm, check=False)
-        self._click_alert_button("No write permissions", "OK")
+        self.app.click_alert_button("No write permissions", "OK")
         rootdir.set_text("/tmp")
         self.forward(newvm, check=False)
-        self._click_alert_button("directory is not empty", "No")
+        self.app.click_alert_button("directory is not empty", "No")
         rootdir.set_text(tmpdir.name)
         newvm.find("install-oscontainer-root-passwd").set_text("foobar")
         # Invalid credentials to trigger failure
         newvm.find("Credentials", "toggle button").click_expander()
         newvm.find("bootstrap-registry-user").set_text("foo")
         self.forward(newvm, check=None)
-        self._click_alert_button("Please specify password", "OK")
+        self.app.click_alert_button("Please specify password", "OK")
         newvm.find("bootstrap-registry-password").set_text("bar")
 
         self.forward(newvm)
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
-        self._click_alert_button("virt-bootstrap did not complete", "Close")
+        self.app.click_alert_button("virt-bootstrap did not complete", "Close")
         self.back(newvm)
         self.back(newvm)
         newvm.find("bootstrap-registry-user").set_text("")
@@ -913,9 +913,9 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         newvm.find_fuzzy("Finish", "button").click()
         prog = self.app.root.find("Creating Virtual Machine", "frame")
-        uiutils.check(lambda: not prog.showing, timeout=30)
+        lib.utils.check(lambda: not prog.showing, timeout=30)
 
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
         self.app.root.find_fuzzy("container1 on", "frame")
 
 
@@ -939,7 +939,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
 
     def testNewVMInstallFail(self):
@@ -956,7 +956,7 @@ class NewVM(uiutils.UITestCase):
             # '/' in name will trigger libvirt error
             _newvm.find_fuzzy("Name", "text").set_text("test/bad")
             _newvm.find_fuzzy("Finish", "button").click()
-            self._click_alert_button("Unable to complete install", "Close")
+            self.app.click_alert_button("Unable to complete install", "Close")
             return _newvm
 
         newvm = dofail()
@@ -964,12 +964,12 @@ class NewVM(uiutils.UITestCase):
         generatedpath = pathlabel.text
         # Changing VM name should not generate a new path
         newvm.find_fuzzy("Name", "text").set_text("test/badfoo")
-        uiutils.check(lambda: pathlabel.text == generatedpath)
+        lib.utils.check(lambda: pathlabel.text == generatedpath)
         newvm.find_fuzzy("Finish", "button").click()
-        self._click_alert_button("Unable to complete install", "Close")
+        self.app.click_alert_button("Unable to complete install", "Close")
         # Closing dialog should trigger storage cleanup path
         newvm.find_fuzzy("Cancel", "button").click()
-        uiutils.check(lambda: not newvm.visible)
+        lib.utils.check(lambda: not newvm.visible)
 
         # Run again
         newvm = dofail()
@@ -982,7 +982,7 @@ class NewVM(uiutils.UITestCase):
         newvm.find_fuzzy("Finish", "button").click()
 
         self.app.root.find_fuzzy("test-foo on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
 
     def testNewVMCustomizeXMLEdit(self):
@@ -999,13 +999,13 @@ class NewVM(uiutils.UITestCase):
         nonexistpath = "/dev/foovmm-idontexist"
         existpath = "/dev/default-pool/testvol1.img"
         newvm.find("media-entry").set_text(nonexistpath)
-        uiutils.check(
+        lib.utils.check(
                 lambda: newvm.find("oslist-entry").text == "None detected")
         newvm.find_fuzzy("Automatically detect", "check").click()
         newvm.find("oslist-entry").set_text("generic")
         newvm.find("oslist-popover").find_fuzzy("generic").click()
         self.forward(newvm, check=False)
-        self._click_alert_button("Error setting installer", "OK")
+        self.app.click_alert_button("Error setting installer", "OK")
         newvm.find("media-entry").set_text(existpath)
         self.forward(newvm)
         self.forward(newvm)
@@ -1023,7 +1023,7 @@ class NewVM(uiutils.UITestCase):
         win.find("XML", "page tab").click()
         # Change the disk path via the XML editor
         fname = vmname + ".qcow2"
-        uiutils.check(lambda: fname in xmleditor.text)
+        lib.utils.check(lambda: fname in xmleditor.text)
         newx = xmleditor.text.replace(fname, "default-vol")
         xmleditor.set_text(newx)
         appl = win.find("config-apply")
@@ -1031,21 +1031,21 @@ class NewVM(uiutils.UITestCase):
         # doesn't take effect for storage with creation parameters, but
         # it's a pain to fix.
         appl.click()
-        uiutils.check(lambda: not appl.sensitive)
-        uiutils.check(lambda: vmname in xmleditor.text)
+        lib.utils.check(lambda: not appl.sensitive)
+        lib.utils.check(lambda: vmname in xmleditor.text)
 
         # Change a VM setting and verify it
         win.find_fuzzy("Boot", "table cell").click()
         tab = win.find("boot-tab")
         bootmenu = tab.find("Enable boot menu", "check box")
-        uiutils.check(lambda: not bootmenu.checked)
+        lib.utils.check(lambda: not bootmenu.checked)
         win.find("XML", "page tab").click()
         newtext = xmleditor.text.replace(
                 "<os>", "<os><bootmenu enable='yes'/>")
         xmleditor.set_text(newtext)
         finish.click()
         win.find("Details", "page tab").click()
-        uiutils.check(lambda: bootmenu.checked)
+        lib.utils.check(lambda: bootmenu.checked)
 
         # Change a device setting with the XML editor
         win.find_fuzzy("NIC", "table cell").click()
@@ -1059,7 +1059,7 @@ class NewVM(uiutils.UITestCase):
 
         # Finish install.
         win.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: win.dead)
+        lib.utils.check(lambda: win.dead)
         win = self.app.root.find_fuzzy("%s on" % vmname, "frame")
         win.find("Details", "radio button").click()
 
@@ -1067,23 +1067,23 @@ class NewVM(uiutils.UITestCase):
         win.find_fuzzy("Boot", "table cell").click()
         tab = win.find("boot-tab")
         bootmenu = tab.find("Enable boot menu", "check box")
-        uiutils.check(lambda: bootmenu.checked)
+        lib.utils.check(lambda: bootmenu.checked)
 
         # Verify device change stuck
         win.find_fuzzy("NIC", "table cell").click()
         tab = win.find("network-tab")
         devname = tab.find("Device name:", "text")
-        uiutils.check(lambda: devname.text == newbrname)
+        lib.utils.check(lambda: devname.text == newbrname)
 
         # Verify install media is handled correctly after XML customize
         win.find_fuzzy("IDE CDROM 1", "table cell").click()
         tab = win.find("disk-tab")
         mediaent = tab.find("media-entry")
-        uiutils.check(lambda: mediaent.text == existpath)
+        lib.utils.check(lambda: mediaent.text == existpath)
         win.find("Shut Down", "push button").click()
         run = win.find("Run", "push button")
-        uiutils.check(lambda: run.sensitive)
-        uiutils.check(lambda: mediaent.text == "")
+        lib.utils.check(lambda: run.sensitive)
+        lib.utils.check(lambda: mediaent.text == "")
 
         # Verify default disk storage was actually created. This has some
         # special handling in domain.py
@@ -1104,17 +1104,17 @@ class NewVM(uiutils.UITestCase):
 
         # Click forward, hitting missing Import path error
         self.forward(newvm, check=False)
-        self._click_alert_button("import is required", "OK")
+        self.app.click_alert_button("import is required", "OK")
 
         # Click forward, but Import path doesn't exist
         importtext.set_text("/dev/default-pool/idontexist")
         self.forward(newvm, check=False)
-        self._click_alert_button("import path must point", "OK")
+        self.app.click_alert_button("import path must point", "OK")
         importtext.set_text("/dev/default-pool/default-vol")
 
         # Click forward, hitting missing OS error
         self.forward(newvm, check=False)
-        self._click_alert_button("select an OS", "OK")
+        self.app.click_alert_button("select an OS", "OK")
 
         # Set OS
         newvm.find("oslist-entry").set_text("generic")
@@ -1122,21 +1122,21 @@ class NewVM(uiutils.UITestCase):
 
         # Click forward, but Import path is in use, and exit
         self.forward(newvm, check=False)
-        self._click_alert_button("in use", "No")
+        self.app.click_alert_button("in use", "No")
 
         # storagebrowser bits
         newvm.find("install-import-browse").click()
         browsewin = self.app.root.find("vmm-storage-browser")
         # Insensitive for remote connection
         browselocal = browsewin.find("Browse Local")
-        uiutils.check(lambda: browselocal.sensitive is False)
+        lib.utils.check(lambda: browselocal.sensitive is False)
         # Close the browser and reopen
         browsewin.find("Cancel").click()
-        uiutils.check(lambda: not browsewin.active)
+        lib.utils.check(lambda: not browsewin.active)
         # Reopen, select storage
         newvm.find("install-import-browse").click()
-        self._select_storagebrowser_volume("default-pool", "bochs-vol")
-        uiutils.check(
+        self.app.select_storagebrowser_volume("default-pool", "bochs-vol")
+        lib.utils.check(
                 lambda: importtext.text == "/dev/default-pool/bochs-vol")
 
         self.forward(newvm)
@@ -1144,7 +1144,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
     def testNewVMSession(self):
         """
@@ -1164,7 +1164,7 @@ class NewVM(uiutils.UITestCase):
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)
 
     def testNewVMEmptyConn(self):
         """
@@ -1182,7 +1182,7 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
         newvm.combo_check_default("net-source", "Bridge")
         warnlabel = newvm.find_fuzzy("suitable default network", "label")
-        uiutils.check(lambda: warnlabel.onscreen)
+        lib.utils.check(lambda: warnlabel.onscreen)
         newvm.find("Device name:", "text").set_text("foobr0")
 
         # Select customize wizard, we will use this VM to hit specific
@@ -1197,16 +1197,16 @@ class NewVM(uiutils.UITestCase):
         addhw = self.app.root.find("Add New Virtual Hardware", "frame")
         addhw.find("USB Host Device", "table cell").click()
         tab = addhw.find("host-tab", None)
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         cell = tab.find("No Devices", "table cell")
-        uiutils.check(lambda: cell.selected)
+        lib.utils.check(lambda: cell.selected)
         addhw.find("Cancel", "push button").click()
-        uiutils.check(lambda: not addhw.active)
-        uiutils.check(lambda: details.active)
+        lib.utils.check(lambda: not addhw.active)
+        lib.utils.check(lambda: details.active)
 
         # Finish
         details.find_fuzzy("Begin Installation", "button").click()
-        uiutils.check(lambda: details.dead)
+        lib.utils.check(lambda: details.dead)
         self.app.root.find_fuzzy("%s on" % vmname, "frame")
 
     def testNewVMInactiveNetwork(self):
@@ -1214,7 +1214,7 @@ class NewVM(uiutils.UITestCase):
         Test with an inactive 'default' network
         """
         self.app.uri = tests.utils.URIs.test_default
-        hostwin = self._open_host_window("Virtual Networks",
+        hostwin = self.app.open_host_window("Virtual Networks",
                 conn_label="test default")
         cell = hostwin.find("default", "table cell")
         cell.click()
@@ -1232,8 +1232,8 @@ class NewVM(uiutils.UITestCase):
         self.forward(newvm)
 
         newvm.find_fuzzy("Finish", "button").click()
-        self._click_alert_button("start the network", "Yes")
-        uiutils.check(lambda: not newvm.showing)
+        self.app.click_alert_button("start the network", "Yes")
+        lib.utils.check(lambda: not newvm.showing)
 
     @unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE": "1"})
     def testNewVMDefaultBridge(self):
@@ -1254,8 +1254,8 @@ class NewVM(uiutils.UITestCase):
         newvm.find("Network selection", "toggle button").click_expander()
         newvm.combo_check_default("net-source", "Bridge")
         devname = newvm.find("Device name:", "text")
-        uiutils.check(lambda: devname.text == "testsuitebr0")
+        lib.utils.check(lambda: devname.text == "testsuitebr0")
 
         newvm.find_fuzzy("Finish", "button").click()
         self.app.root.find_fuzzy("vm1 on", "frame")
-        uiutils.check(lambda: not newvm.showing)
+        lib.utils.check(lambda: not newvm.showing)

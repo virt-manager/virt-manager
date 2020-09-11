@@ -4,8 +4,8 @@
 import os
 import shutil
 
-from tests.uitests import utils as uiutils
 import tests.utils
+from . import lib
 
 
 class _DeleteRow:
@@ -40,7 +40,7 @@ def _create_testdriver_path(fn):
     return wrapper
 
 
-class Delete(uiutils.UITestCase):
+class Delete(lib.testcase.UITestCase):
     """
     UI tests for virt-manager's VM delete window
     """
@@ -74,7 +74,7 @@ class Delete(uiutils.UITestCase):
                 return
             alert.find("Yes", "push button").click()
         if not expect_fail:
-            uiutils.check(lambda: not delete.showing)
+            lib.utils.check(lambda: not delete.showing)
 
     def _get_all_rows(self, delete):
         slist = delete.find("storage-list")
@@ -124,7 +124,7 @@ class Delete(uiutils.UITestCase):
             chkcell.click()
             chkcell.click()
             chkcell.click()
-            uiutils.check(lambda: chkcell.checked)
+            lib.utils.check(lambda: chkcell.checked)
 
         paths = []
         if defpath:
@@ -139,7 +139,7 @@ class Delete(uiutils.UITestCase):
         browser = self._open_storage_browser()
         browser.find_fuzzy("default-pool", "table cell").click()
         browser.find("vol-refresh", "push button").click()
-        uiutils.check(lambda: "overlay.img" not in browser.fmt_nodes())
+        lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
         browser.find("sharevol.img", "table cell")
 
     @_create_testdriver_path
@@ -174,10 +174,10 @@ class Delete(uiutils.UITestCase):
         os.chmod(os.path.dirname(tmppath), 0o555)
         delete = self.app.root.find_fuzzy("Delete", "frame")
         self._finish(delete, paths, expect_fail=True, click_no=True)
-        uiutils.check(lambda: delete.active)
+        lib.utils.check(lambda: delete.active)
         self._finish(delete, paths, expect_fail=True)
         assert os.path.exists(tmppath)
-        self._click_alert_button("Errors encountered", "Close")
+        self.app.click_alert_button("Errors encountered", "Close")
 
     def testDeleteRemoteManyDevices(self):
         """
@@ -194,10 +194,10 @@ class Delete(uiutils.UITestCase):
         chk = delete.find("Delete associated", "check box")
         slist = delete.find("storage-list")
 
-        uiutils.check(lambda: chk.checked)
+        lib.utils.check(lambda: chk.checked)
         chk.click()
-        uiutils.check(lambda: not chk.checked)
-        uiutils.check(lambda: not slist.showing)
+        lib.utils.check(lambda: not chk.checked)
+        lib.utils.check(lambda: not slist.showing)
 
         self._finish(delete, None)
 
@@ -205,7 +205,7 @@ class Delete(uiutils.UITestCase):
         browser = self._open_storage_browser()
         browser.find_fuzzy("default-pool", "table cell").click()
         browser.find("vol-refresh", "push button").click()
-        self.sleep(.5)
+        self.app.sleep(.5)
         browser.find("overlay.img", "table cell")
         browser.find("sharevol.img", "table cell")
 
@@ -214,7 +214,7 @@ class Delete(uiutils.UITestCase):
         Verify successful device remove with storage doesn't
         touch host storage
         """
-        details = self._open_details_window("test-many-devices",
+        details = self.app.open_details_window("test-many-devices",
                 shutdown=True)
 
         hwlist = details.find("hw-list")
@@ -223,12 +223,12 @@ class Delete(uiutils.UITestCase):
         c.bring_on_screen()
         c.click()
         tab = details.find("disk-tab")
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         details.find("config-remove").click()
 
         delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         chk = delete.find("Delete associated", "check box")
-        uiutils.check(lambda: not chk.checked)
+        lib.utils.check(lambda: not chk.checked)
         self._finish(delete, [])
         details.click()
         details.keyCombo("<alt>F4")
@@ -236,14 +236,14 @@ class Delete(uiutils.UITestCase):
         browser = self._open_storage_browser()
         browser.find_fuzzy("default-pool", "table cell").click()
         browser.find("vol-refresh", "push button").click()
-        self.sleep(.5)
+        self.app.sleep(.5)
         browser.find("overlay.img", "table cell")
 
     def testDeleteDeviceWithStorage(self):
         """
         Verify successful device remove deletes storage
         """
-        details = self._open_details_window("test-many-devices",
+        details = self.app.open_details_window("test-many-devices",
                 shutdown=True)
 
         hwlist = details.find("hw-list")
@@ -252,14 +252,14 @@ class Delete(uiutils.UITestCase):
         c.bring_on_screen()
         c.click()
         tab = details.find("disk-tab")
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         details.find("config-remove").click()
 
         delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         chk = delete.find("Delete associated", "check box")
-        uiutils.check(lambda: not chk.checked)
+        lib.utils.check(lambda: not chk.checked)
         chk.click()
-        uiutils.check(lambda: chk.checked)
+        lib.utils.check(lambda: chk.checked)
         path = "/dev/default-pool/overlay.img"
         delete.find_fuzzy(path)
         self._finish(delete, [path])
@@ -269,13 +269,13 @@ class Delete(uiutils.UITestCase):
         browser = self._open_storage_browser()
         browser.find_fuzzy("default-pool", "table cell").click()
         browser.find("vol-refresh", "push button").click()
-        uiutils.check(lambda: "overlay.img" not in browser.fmt_nodes())
+        lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
 
     def testDeleteDeviceFail(self):
         """
         Verify failed device remove does not touch storage
         """
-        details = self._open_details_window("test-many-devices")
+        details = self.app.open_details_window("test-many-devices")
 
         hwlist = details.find("hw-list")
         hwlist.click()
@@ -283,18 +283,18 @@ class Delete(uiutils.UITestCase):
         c.bring_on_screen()
         c.click()
         tab = details.find("disk-tab")
-        uiutils.check(lambda: tab.showing)
+        lib.utils.check(lambda: tab.showing)
         details.find("config-remove").click()
 
         delete = self.app.root.find_fuzzy("Remove Disk", "frame")
         chk = delete.find("Delete associated", "check box")
-        uiutils.check(lambda: not chk.checked)
+        lib.utils.check(lambda: not chk.checked)
         chk.click()
-        uiutils.check(lambda: chk.checked)
+        lib.utils.check(lambda: chk.checked)
         path = "/dev/default-pool/overlay.img"
         delete.find_fuzzy(path)
         self._finish(delete, [path], expect_fail=True)
-        self._click_alert_button("Storage will not be.*deleted", "OK")
+        self.app.click_alert_button("Storage will not be.*deleted", "OK")
         details.click()
         details.keyCombo("<alt>F4")
 
@@ -302,5 +302,5 @@ class Delete(uiutils.UITestCase):
         browser = self._open_storage_browser()
         browser.find_fuzzy("default-pool", "table cell").click()
         browser.find("vol-refresh", "push button").click()
-        self.sleep(.5)
+        self.app.sleep(.5)
         browser.find("overlay.img", "table cell")
