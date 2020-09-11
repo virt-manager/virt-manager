@@ -14,9 +14,15 @@ class Details(uiutils.UITestCase):
         c = win.find(hwname, "table cell")
         if not c.onscreen:
             hwlist = win.find("hw-list")
+            hwlist.point()
             hwlist.click()
-            while not c.onscreen:
-                self.pressKey("Down")
+            import dogtail.rawinput
+            dogtail.rawinput.keyCombo("<ctrl>f")
+            searchentry = self.app.root.find(None, "window").find(None, "text")
+            searchentry.set_text(hwname)
+            uiutils.check(lambda: c.onscreen)
+            uiutils.check(lambda: c.state_selected)
+            self.pressKey("Enter")
         c.click()
         tab = win.find(tabname, None)
         uiutils.check(lambda: tab.showing)

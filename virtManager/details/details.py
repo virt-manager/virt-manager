@@ -960,22 +960,19 @@ class vmmDetails(vmmGObjectUI):
     #######################
 
     def vmwindow_resources_refreshed(self):
-        if self._get_hw_row()[HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS:
+        row = self._get_hw_row()
+        if row and row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS:
             self._refresh_stats_page()
 
     def vmwindow_page_refresh(self):
         self._repopulate_hw_list()
-
-        pagetype = self._get_hw_row()[HW_LIST_COL_TYPE]
-        if pagetype is None:
-            return  # pragma: no cover
 
         if self.widget("config-apply").get_sensitive():
             # Apply button sensitive means user is making changes, don't
             # erase them
             return
 
-        self._refresh_page(pagetype=pagetype)
+        self._refresh_page()
 
     def vmwindow_activate_performance_page(self):
         index = 0
@@ -1681,16 +1678,19 @@ class vmmDetails(vmmGObjectUI):
     # Details page refreshers #
     ###########################
 
-    def _refresh_page(self, pagetype=None):
-        if pagetype is None:
-            pagetype = self._get_hw_row()[HW_LIST_COL_TYPE]
+    def _refresh_page(self):
+        row = self._get_hw_row()
+        if not row:
+            return  # pragma: no cover
+
+        pagetype = row[HW_LIST_COL_TYPE]
 
         self.widget("config-remove").set_sensitive(True)
         self.widget("config-remove").set_tooltip_text(
                 _("Remove this device from the virtual machine"))
 
         try:
-            dev = self._get_hw_row()[HW_LIST_COL_DEVICE]
+            dev = row[HW_LIST_COL_DEVICE]
             if dev:
                 self._xmleditor.set_xml(_unindent_device_xml(dev.get_xml()))
             else:
@@ -1742,8 +1742,6 @@ class vmmDetails(vmmGObjectUI):
                 self._refresh_panic_page(dev)
             elif pagetype == HW_LIST_TYPE_VSOCK:
                 self._refresh_vsock_page(dev)
-            else:  # pragma: no cover
-                pagetype = -1
         except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error refreshing hardware page: %s") % str(e))
             # Don't return, we want the rest of the bits to run regardless
