@@ -2,6 +2,13 @@
 <!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">10240000</property>
+    <property name="value">50</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">25</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment16">
     <property name="upper">10000000</property>
     <property name="value">1000</property>
@@ -1659,13 +1666,28 @@
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
                                     <property name="valign">center</property>
-                                    <property name="label" translatable="yes">Memory a_llocation:</property>
+                                    <property name="label" translatable="yes">Current a_llocation:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">mem-memory</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label307">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">end</property>
+                                    <property name="valign">center</property>
+                                    <property name="label" translatable="yes">Ma_ximum allocation:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">mem-maxmem</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1743,6 +1765,55 @@
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="hbox47">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="valign">center</property>
+                                    <property name="spacing">3</property>
+                                    <child>
+                                      <object class="GtkSpinButton" id="mem-maxmem">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">●</property>
+                                        <property name="text" translatable="yes">50</property>
+                                        <property name="adjustment">adjustment1</property>
+                                        <property name="climb_rate">2</property>
+                                        <property name="numeric">True</property>
+                                        <property name="update_policy">if-valid</property>
+                                        <property name="value">50</property>
+                                        <signal name="changed" handler="on_mem_maxmem_changed" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="mem-maxmem-atkobject">
+                                            <property name="AtkObject::accessible-name">Max Memory Select</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label346">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">MiB</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">2</property>
                                   </packing>
                                 </child>
                               </object>

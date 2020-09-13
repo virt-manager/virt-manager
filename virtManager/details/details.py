@@ -447,7 +447,8 @@ class vmmDetails(vmmGObjectUI):
             "on_cpu_sockets_changed": self._cpu_topology_changed_cb,
             "on_cpu_threads_changed": self._cpu_topology_changed_cb,
             "on_cpu_topology_enable_toggled": self._cpu_topology_enable_cb,
-            "on_mem_memory_changed": _e(EDIT_MEM),
+            "on_mem_maxmem_changed": _e(EDIT_MEM),
+            "on_mem_memory_changed": self._curmem_changed_cb,
 
             "on_boot_list_changed": self._boot_list_changed_cb,
             "on_boot_moveup_clicked": self._boot_moveup_clicked_cb,
@@ -1126,6 +1127,17 @@ class vmmDetails(vmmGObjectUI):
     def _os_list_name_selected_cb(self, src, osobj):
         self._enable_apply(EDIT_OS_NAME)
 
+    def _curmem_changed_cb(self, src):
+        self._enable_apply(EDIT_MEM)
+        maxadj = self.widget("mem-maxmem")
+        mem = uiutil.spin_get_helper(self.widget("mem-memory"))
+
+        if maxadj.get_value() < mem:
+            maxadj.set_value(mem)
+
+        ignore, upper = maxadj.get_range()
+        maxadj.set_range(mem, upper)
+
     def _config_vcpus_changed_cb(self, src):
         self._enable_apply(EDIT_VCPUS)
 
@@ -1435,13 +1447,22 @@ class vmmDetails(vmmGObjectUI):
 
     def _apply_memory(self):
         kwargs = {}
+        hotplug_args = {}
 
         if self._edited(EDIT_MEM):
-            memory = uiutil.spin_get_helper(self.widget("mem-memory"))
-            kwargs["memory"] = int(memory) * 1024
+            maxmem = uiutil.spin_get_helper(self.widget("mem-maxmem"))
+            curmem = uiutil.spin_get_helper(self.widget("mem-memory"))
+            curmem = int(curmem) * 1024
+            maxmem = int(maxmem) * 1024
 
-        return vmmAddHardware.change_config_helper(self.vm.define_memory,
-                                          kwargs, self.vm, self.err)
+            kwargs["memory"] = curmem
+            kwargs["maxmem"] = maxmem
+            hotplug_args["memory"] = kwargs["memory"]
+            hotplug_args["maxmem"] = kwargs["maxmem"]
+
+        return vmmAddHardware.change_config_helper(
+                self.vm.define_memory, kwargs, self.vm, self.err,
+                hotplug_args=hotplug_args)
 
     def _apply_boot_options(self):
         kwargs = {}
@@ -1960,12 +1981,15 @@ class vmmDetails(vmmGObjectUI):
     def _refresh_config_memory(self):
         host_mem_widget = self.widget("state-host-memory")
         host_mem = self.vm.conn.host_memory_size() // 1024
-        vm_cur_mem = self.vm.xmlobj.memory / 1024.0
+        vm_cur_mem = self.vm.xmlobj.currentMemory / 1024.0
+        vm_max_mem = self.vm.xmlobj.memory / 1024.0
 
         host_mem_widget.set_text("%d MiB" % (int(round(host_mem))))
 
         curmem = self.widget("mem-memory")
+        maxmem = self.widget("mem-maxmem")
         curmem.set_value(int(round(vm_cur_mem)))
+        maxmem.set_value(int(round(vm_max_mem)))
 
     def _refresh_disk_page(self, disk):
         path = disk.path
