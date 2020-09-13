@@ -91,6 +91,7 @@ class vmmAddHardware(vmmGObjectUI):
             "on_hw_list_changed": self._hw_selected_cb,
 
             "on_storage_devtype_changed": self._change_storage_devtype,
+            "on_storage_bustype_changed": self._storage_bus_changed_cb,
 
             "on_mac_address_clicked": self._change_macaddr_use,
 
@@ -1080,6 +1081,11 @@ class vmmAddHardware(vmmGObjectUI):
             allow_create)
         if not allow_create:
             self.addstorage.widget("storage-select").set_active(True)
+
+    def _storage_bus_changed_cb(self, src):
+        bus = uiutil.get_list_selection(
+            self.widget("storage-bustype"))
+        self.addstorage.set_disk_bus(bus)
 
     def _change_macaddr_use(self, ignore=None):
         if self.widget("mac-address").get_active():

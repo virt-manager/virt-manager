@@ -159,6 +159,14 @@ class AddHardware(lib.testcase.UITestCase):
         tab.find("GiB", "spin button").set_text("1.5")
         self._finish(addhw, check=details)
 
+        # USB disk with removable setting
+        addhw = self._open_addhw_window(details)
+        tab = self._select_hw(addhw, "Storage", "storage-tab")
+        tab.combo_select("Bus type:", "USB")
+        tab.find("Advanced options", "toggle button").click_expander()
+        tab.find("Removable:", "check box").click()
+        self._finish(addhw, check=details)
+
         # Managed storage tests
         addhw = self._open_addhw_window(details)
         tab = self._select_hw(addhw, "Storage", "storage-tab")

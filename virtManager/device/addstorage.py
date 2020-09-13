@@ -244,6 +244,9 @@ class vmmAddStorage(vmmGObjectUI):
             disk.shareable = vals.get("shareable")
         if vals.get("serial") is not None:
             disk.serial = vals.get("serial")
+        if (vals.get("removable") is not None and
+            self.widget("disk-removable").get_visible()):
+            disk.removable = vals.get("removable")
 
         if disk.wants_storage_creation():
             pool = disk.get_parent_pool()
@@ -290,6 +293,11 @@ class vmmAddStorage(vmmGObjectUI):
     # Device editing #
     ##################
 
+    def set_disk_bus(self, bus):
+        show_removable = (bus == "usb")
+        uiutil.set_grid_row_visible(
+                self.widget("disk-removable"), show_removable)
+
     def set_dev(self, disk):
         cache = disk.driver_cache
         discard = disk.driver_discard
@@ -299,13 +307,7 @@ class vmmAddStorage(vmmGObjectUI):
         removable = disk.removable
         serial = disk.serial
 
-        is_usb = (disk.bus == "usb")
-        can_set_removable = (is_usb and (self.conn.is_qemu() or
-                                         self.conn.is_test()))
-        if removable is None:
-            removable = False
-        else:
-            can_set_removable = True
+        self.set_disk_bus(disk.bus)
 
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
         uiutil.set_list_selection(self.widget("disk-discard"), discard)
@@ -317,8 +319,6 @@ class vmmAddStorage(vmmGObjectUI):
         self.widget("disk-readonly").set_sensitive(not disk.is_cdrom())
         self.widget("disk-shareable").set_active(share)
         self.widget("disk-removable").set_active(removable)
-        uiutil.set_grid_row_visible(
-                self.widget("disk-removable"), can_set_removable)
 
         # This comes last
         self._active_edits = []
