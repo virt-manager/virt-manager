@@ -119,3 +119,8 @@ def test_ui_translatable_atknames():
             (atkstr, atkstr))
     err += " ".join(failures)
     raise AssertionError(err)
+
+
+def test_appstream_validate():
+    subprocess.check_call(["appstream-util", "validate",
+        "data/virt-manager.appdata.xml.in"])
