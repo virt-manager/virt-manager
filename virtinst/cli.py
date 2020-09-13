@@ -3350,6 +3350,14 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("source.name", "source_name")
         cls.add_arg("source.protocol", "source_protocol")
         cls.add_arg("source.startupPolicy", "startup_policy")
+        # type=nvme source props
+        cls.add_arg("source.type", "source_type")
+        cls.add_arg("source.namespace", "source_namespace")
+        cls.add_arg("source.managed", "source_managed", is_onoff=True)
+        cls.add_arg("source.address.domain", "source_address.domain")
+        cls.add_arg("source.address.bus", "source_address.bus")
+        cls.add_arg("source.address.slot", "source_address.slot")
+        cls.add_arg("source.address.function", "source_address.function")
 
         cls.add_arg("source.host[0-9]*.name", "name",
                     find_inst_cb=cls.host_find_inst_cb)

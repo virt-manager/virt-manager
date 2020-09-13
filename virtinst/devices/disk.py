@@ -13,7 +13,7 @@ from ..logger import log
 from .. import diskbackend
 from .. import progress
 from .. import xmlutil
-from .device import Device, DeviceSeclabel
+from .device import Device, DeviceAddress, DeviceSeclabel
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
@@ -38,6 +38,10 @@ class _Host(XMLBuilder):
     port = XMLProperty("./@port", is_int=True)
     transport = XMLProperty("./@transport")
     socket = XMLProperty("./@socket")
+
+
+class _DiskSourceAddress(DeviceAddress):
+    pass
 
 
 class DeviceDisk(Device):
@@ -299,6 +303,7 @@ class DeviceDisk(Device):
         "source_volume", "source_pool", "source_protocol", "source_name",
         "source_host_name", "source_host_port",
         "source_host_transport", "source_host_socket",
+        "source_type", "source_managed", "source_namespace", "source_address",
         "target", "bus",
     ]
 
@@ -426,6 +431,12 @@ class DeviceDisk(Device):
     source_host_port = XMLProperty("./source/host/@port", is_int=True)
     source_host_transport = XMLProperty("./source/host/@transport")
     source_host_socket = XMLProperty("./source/host/@socket")
+
+    source_type = XMLProperty("./source/@type")
+    source_managed = XMLProperty("./source/@managed", is_yesno=True)
+    source_namespace = XMLProperty("./source/@namespace", is_int=True)
+    source_address = XMLChildProperty(
+            _DiskSourceAddress, is_single=True, relative_xpath="./source")
 
     def _set_source_network_from_url(self, uri):
         from ..uri import URI
@@ -696,7 +707,12 @@ class DeviceDisk(Device):
         return self.device == self.DEVICE_DISK
 
     def can_be_empty(self):
-        return self.is_floppy() or self.is_cdrom()
+        if self.is_floppy() or self.is_cdrom():
+            return True
+        if self.type in ["file", "block", "dir", "volume", "network"]:
+            return False
+        # Don't error for unknown types
+        return True
 
     def _change_backend(self, path, vol_object, parent_pool):
         backend = diskbackend.StorageBackend(self.conn, path,

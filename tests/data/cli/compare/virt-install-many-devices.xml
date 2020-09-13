@@ -237,6 +237,12 @@
       <source dir="/"/>
       <target dev="vdt" bus="virtio"/>
     </disk>
+    <disk type="nvme" device="disk">
+      <source type="pci" managed="no" namespace="2">
+        <address domain="1" bus="2" slot="0" function="0"/>
+      </source>
+      <target dev="vdu" bus="virtio"/>
+    </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>
     </controller>

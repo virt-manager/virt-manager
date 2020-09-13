@@ -619,6 +619,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --disk path=%(EXISTIMG1)s,type=dir
 --disk path=/fooroot.img,size=.0001
 --disk source.dir=/
+--disk type=nvme,source.type=pci,source.managed=no,source.namespace=2,source.address.domain=0x0001,source.address.bus=0x02,source.address.slot=0x00,source.address.function=0x0
 
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3,filterref=foobar,rom.bar=off,rom.file=/some/rom,source.portgroup=foo
