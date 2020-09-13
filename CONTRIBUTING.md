@@ -2,17 +2,13 @@
 
 ## Bug reporting
 
-The preferred place for bug reports is bugzilla.redhat.com. This
-is documented more at https://virt-manager.org/bugs/
-
-Small issues can be reported in the
-[github issue tracker](https://github.com/virt-manager/virt-manager/issues).
-Anything that's non-trivial, or is a feature request, should be filed in
-bugzilla.
+We use our [github issue tracker](https://github.com/virt-manager/virt-manager/issues)
+for bug reporting. Previously we used bugzilla.redhat.com but nowadays
+github is preferred.
 
 Please only file issues if they apply to the latest version of
 virt-manager. If you are using an older version from a distro,
-please file a bug with them.
+please file a bug in your distro's bug tracker..
 
 When filing a bug, please reproduce the issue with the `--debug`
 flag passed to the tool and attach the full output in the bug
