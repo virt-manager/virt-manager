@@ -180,7 +180,6 @@ class Details(lib.testcase.UITestCase):
         tab = self._select_hw(win, "Memory", "memory-tab")
         curmem = tab.find("Current allocation:", "spin button")
         maxmem = tab.find("Maximum allocation:", "spin button")
-        maxmemtext = maxmem.text
         curmem.set_text("2000")
         appl.click()
         lib.utils.check(lambda: not appl.sensitive)
