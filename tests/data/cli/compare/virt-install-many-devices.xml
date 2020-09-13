@@ -38,9 +38,9 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
-    <disk type="file" device="disk">
+    <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="writeback" io="threads" iothread="3"/>
-      <source file="/dev/default-pool/UPPER"/>
+      <source dev="/dev/default-pool/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>
       <wwn>123456789abcdefa</wwn>
@@ -231,6 +231,11 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/fooroot.img"/>
       <target dev="vds" bus="virtio"/>
+    </disk>
+    <disk type="dir" device="disk">
+      <driver name="qemu"/>
+      <source dir="/"/>
+      <target dev="vdt" bus="virtio"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>

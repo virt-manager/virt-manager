@@ -294,7 +294,7 @@ class DeviceDisk(Device):
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_detect_zeroes",
         "driver_io", "error_policy",
-        "_source_file", "_source_dev", "_source_dir",
+        "source_file", "source_dev", "source_dir",
         "auth_username", "auth_secret_type", "auth_secret_uuid",
         "source_volume", "source_pool", "source_protocol", "source_name",
         "source_host_name", "source_host_port",
@@ -406,9 +406,9 @@ class DeviceDisk(Device):
     # XML source media handling #
     #############################
 
-    _source_file = XMLProperty("./source/@file")
-    _source_dev = XMLProperty("./source/@dev")
-    _source_dir = XMLProperty("./source/@dir")
+    source_file = XMLProperty("./source/@file")
+    source_dev = XMLProperty("./source/@dev")
+    source_dir = XMLProperty("./source/@dir")
 
     source_pool = XMLProperty("./source/@pool")
     source_volume = XMLProperty("./source/@volume")
@@ -526,9 +526,9 @@ class DeviceDisk(Device):
         """
         Unset all XML properties that describe the actual source media
         """
-        self._source_file = None
-        self._source_dev = None
-        self._source_dir = None
+        self.source_file = None
+        self.source_dev = None
+        self.source_dir = None
         self.source_volume = None
         self.source_pool = None
         self.source_name = None
@@ -541,11 +541,11 @@ class DeviceDisk(Device):
     def _disk_type_to_object_prop_name(self):
         disk_type = self.type
         if disk_type == DeviceDisk.TYPE_BLOCK:
-            return "_source_dev"
+            return "source_dev"
         elif disk_type == DeviceDisk.TYPE_DIR:
-            return "_source_dir"
+            return "source_dir"
         elif disk_type == DeviceDisk.TYPE_FILE:
-            return "_source_file"
+            return "source_file"
         return None
 
 
@@ -553,12 +553,12 @@ class DeviceDisk(Device):
     # they don't have any special properties aside from needing to match
     # 'type' value with the source property used.
     def _get_xmlpath(self):
-        if self._source_file:
-            return self._source_file
-        if self._source_dev:
-            return self._source_dev
-        if self._source_dir:
-            return self._source_dir
+        if self.source_file:
+            return self.source_file
+        if self.source_dev:
+            return self.source_dev
+        if self.source_dir:
+            return self.source_dir
         return None
     def _set_xmlpath(self, val):
         self._clear_source_xml()

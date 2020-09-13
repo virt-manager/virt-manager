@@ -591,8 +591,8 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --cpu none
 --iothreads 5
 
---disk /dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3
---disk %(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
+--disk type=block,source.dev=/dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3
+--disk source.file=%(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,discard=unmap,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba
 --disk size=1
 --disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered,rawio=yes
@@ -618,6 +618,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --disk size=.0001,pool=disk-pool
 --disk path=%(EXISTIMG1)s,type=dir
 --disk path=/fooroot.img,size=.0001
+--disk source.dir=/
 
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3,filterref=foobar,rom.bar=off,rom.file=/some/rom,source.portgroup=foo

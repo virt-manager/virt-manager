@@ -3342,6 +3342,9 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("cache", "driver_cache", cb=cls.noset_cb)
 
         # More standard XML props
+        cls.add_arg("source.dir", "source_dir")
+        cls.add_arg("source.file", "source_file")
+        cls.add_arg("source.dev", "source_dev")
         cls.add_arg("source.pool", "source_pool")
         cls.add_arg("source.volume", "source_volume")
         cls.add_arg("source.name", "source_name")
