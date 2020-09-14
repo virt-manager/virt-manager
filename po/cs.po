@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-08-27 06:10+0000\n"
-"PO-Revision-Date: 2020-07-29 12:29+0000\n"
+"PO-Revision-Date: 2020-08-31 06:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.2.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:127
@@ -1712,7 +1712,7 @@ msgstr ""
 
 #: ui/netlist.ui:121
 msgid "<small>Failed to find a suitable default network.</small>"
-msgstr ""
+msgstr "<small>Nepodařilo se najít vhodnou výchozí síť.</small>"
 
 #: ui/netlist.ui:147
 msgid "_Network source:"
@@ -2463,10 +2463,9 @@ msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
 #: virtManager/addhardware.py:607
-#, fuzzy, python-format
-#| msgid "Generic %(bus)s %(type)s"
+#, python-format
 msgid "%(input_bus)s %(input_type)s"
-msgstr "Obecné %(bus)s %(type)s"
+msgstr "%(input_bus)s %(input_type)s"
 
 #: virtManager/addhardware.py:702 virtManager/clone.py:105
 msgid "Disk device"
