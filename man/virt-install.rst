@@ -966,8 +966,8 @@ GUEST OS OPTIONS
 ================
 
 
-``--os-variant``
-^^^^^^^^^^^^^^^^
+``--os-variant``, ``--osinfo``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Syntax:** ``--os-variant`` OS_VARIANT
 

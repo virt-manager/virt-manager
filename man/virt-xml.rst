@@ -180,7 +180,7 @@ These options decide what action to take after altering the XML. In the common c
 GUEST OS OPTIONS
 ================
 
-``--os-variant`` OS_VARIANT
+``--os-variant``, ``--osinfo`` OS_VARIANT
     Optimize the guest configuration for a specific operating system (ex.
     'fedora29', 'rhel7', 'win10'). While not required, specifying this
     options is HIGHLY RECOMMENDED, as it can greatly increase performance
