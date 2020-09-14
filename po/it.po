@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-07 06:10+0000\n"
-"PO-Revision-Date: 2020-09-01 15:04+0000\n"
+"PO-Revision-Date: 2020-09-08 06:26+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:133
@@ -251,26 +251,20 @@ msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>Clona macchina virtuale</span>"
 
 #: ui/clone.ui:127
-#, fuzzy
-#| msgid "Original host:"
 msgid "Original VM:"
-msgstr "Host originale:"
+msgstr "VM originale:"
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
-msgstr "C_onnessione:"
+msgstr "Connessione:"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "Storage:"
 
 #: ui/clone.ui:285
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
-msgstr "Dettagli..."
+msgstr "_Dettagli..."
 
 #: ui/clone.ui:354
 msgid ""
@@ -1295,6 +1289,8 @@ msgstr ""
 #: ui/gfxdetails.ui:362
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
+"OpenGL funziona solo con grafica \"VirtIO\" con \"Accelerazione 3D\" "
+"abilitato"
 
 #: ui/gfxdetails.ui:378
 msgid "OpenGL only works with 'Listen type' value 'none'"
@@ -2562,37 +2558,32 @@ msgid "Disk target: %s"
 msgstr ""
 
 #: virtManager/clone.py:111
-#, fuzzy, python-format
-#| msgid "Original host:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Host originale:"
+msgstr "Percorso originale: %s"
 
 #: virtManager/clone.py:113
-#, fuzzy, python-format
-#| msgid "New _Path:"
+#, python-format
 msgid "New path: %s"
-msgstr "Nuovo _percorso:"
+msgstr "Nuovo percorso: %s"
 
 #: virtManager/clone.py:117
-#, fuzzy, python-format
-#| msgid "Storage is marked as shareable."
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "Lo storage è contrassegnato come condivisibile."
+msgstr "Lo storage può essere condiviso in modo sicuro: %(reason)s"
 
 #: virtManager/clone.py:121
 msgid "Sharing this storage is potentially dangerous."
-msgstr ""
+msgstr "Condividere questo storage è potenzialmente pericoloso."
 
 #: virtManager/clone.py:124
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr ""
+msgstr "Lo storage non può essere clonato: %(reason)s"
 
 #: virtManager/clone.py:136
-#, fuzzy
-#| msgid "No storage to clone."
 msgid "No storage."
-msgstr "Nessuno storage da clonare."
+msgstr "Nessuno storage."
 
 #: virtManager/clone.py:141
 #, python-format
@@ -2609,10 +2600,8 @@ msgid "Error launching clone dialog: %s"
 msgstr "Errore nell'avvio della finestra di clonazione: %s"
 
 #: virtManager/clone.py:275
-#, fuzzy
-#| msgid "C_lone"
 msgid "Clone"
-msgstr "C_lona"
+msgstr "Clona"
 
 #: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
@@ -2628,29 +2617,22 @@ msgstr ""
 "questo percorso?"
 
 #: virtManager/clone.py:486
-#, fuzzy
-#| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
-msgstr "Saltare dischi può causare la sovrascrittura di dati."
+msgstr "Condividere storage può causare la sovrascrittura di dati."
 
 #: virtManager/clone.py:487
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"I dischi seguenti non verranno clonati:\n"
+"I dispositivi di dischi seguenti saranno condivisi con %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "L'esecuzione del nuovo guest potrebbe comportare la sovrascrittura di dati "
-"in queste immagini disco."
+"in queste immagini di disco."
 
 #: virtManager/clone.py:502
 #, python-format
@@ -2658,10 +2640,9 @@ msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Errore nella clonazione della macchina virtuale '%(vm)s': %(error)s"
 
 #: virtManager/clone.py:560
-#, fuzzy, python-format
-#| msgid "Error changing pool settings: %s"
+#, python-format
 msgid "Error with clone settings: %s"
-msgstr "Errore nella modifica delle impostazioni del pool: %s"
+msgstr "Errore con le impostazioni di clonazione: %s"
 
 #: virtManager/clone.py:565
 #, python-format
@@ -5646,10 +5627,8 @@ msgid "Read Only"
 msgstr "Sola lettura"
 
 #: virtinst/cloner.py:187
-#, fuzzy
-#| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
-msgstr "Lo storage è contrassegnato come condivisibile."
+msgstr "Contrassegnato come condivisibile"
 
 #: virtinst/cloner.py:249
 #, python-format
@@ -6103,16 +6082,12 @@ msgstr ""
 "> %(mem2)s M disponibili)."
 
 #: virtinst/virtclone.py:23
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
 "È richiesto un nome macchina originale. Utilizzare '--original "
-"GUEST_ORIGINALE' e riprovare."
+"nome_sorgente' e riprovare."
 
 #: virtinst/virtclone.py:70
 msgid ""
