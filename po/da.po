@@ -7,21 +7,22 @@
 # Keld Simonsen <keld@rap.dk>, 2007
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
+# scootergrisen <scootergrisen@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-07-21 06:11+0000\n"
-"PO-Revision-Date: 2017-02-05 04:05+0000\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Danish (http://www.transifex.com/projects/p/virt-manager/"
-"language/da/)\n"
+"PO-Revision-Date: 2020-07-24 17:29+0000\n"
+"Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
+"Language-Team: Danish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.1.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:127
@@ -2466,14 +2467,12 @@ msgid "%s Device"
 msgstr "%s enhed"
 
 #: virtManager/addhardware.py:1122
-#, fuzzy
 msgid "PCI Device"
-msgstr "%s enhed"
+msgstr "PCI-enhed"
 
 #: virtManager/addhardware.py:1123
-#, fuzzy
 msgid "USB Device"
-msgstr "%s enhed"
+msgstr "USB-enhed"
 
 #: virtManager/addhardware.py:1251
 #, python-format
@@ -2612,10 +2611,9 @@ msgid "Virtual Network %(netdevice)s (%(mac)s)"
 msgstr ""
 
 #: virtManager/clone.py:340
-#, fuzzy, python-format
-#| msgid "Virtual Network"
+#, python-format
 msgid "Virtual Network (%(mac)s)"
-msgstr "Virtuelt netværk"
+msgstr "Virtuelt netværk (%(mac)s)"
 
 #: virtManager/clone.py:346
 #, python-format
@@ -2688,10 +2686,9 @@ msgstr ""
 "Afvikling af den nye gæst vil kunne overskrive data i disse diskafbildninger."
 
 #: virtManager/clone.py:822
-#, fuzzy, python-format
-#| msgid "Error creating virtual machine clone '%s': %s"
+#, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
-msgstr "Fejl ved oprettelse af virtuel maskine klon '%s': %s"
+msgstr "Fejl ved oprettelse af virtuel maskine klon '%(vm)s': %(error)s"
 
 #: virtManager/clone.py:838 virtManager/migrate.py:382
 #, python-format
@@ -2704,12 +2701,13 @@ msgid "Creating virtual machine clone '%s'"
 msgstr "Opretter virtuel maskine klon '%s'"
 
 #: virtManager/clone.py:847
-#, fuzzy, python-format
-#| msgid " and selected storage (this may take a while)"
+#, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
-msgstr "og valgt lager (dette kan tage et øjeblik)"
+msgstr ""
+"Opretter virtuel maskine-klonen '%s' og valgte lager (det kan tage et "
+"øjeblik)"
 
 #: virtManager/config.py:144
 msgid "Locate or create storage volume"
@@ -2918,10 +2916,9 @@ msgid "Error launching create dialog: %s"
 msgstr ""
 
 #: virtManager/createvm.py:309
-#, fuzzy, python-format
-#| msgid "Error"
+#, python-format
 msgid "Error: %s"
-msgstr "Fejl"
+msgstr "Fejl: %s"
 
 #: virtManager/createvm.py:315 virtManager/createvm.py:320
 #, python-format
@@ -2982,8 +2979,7 @@ msgid "Up to %(maxmem)s available on the host"
 msgstr "Op til %(maxmem)s til rådighed på værten"
 
 #: virtManager/createvm.py:662
-#, fuzzy, python-format
-#| msgid "Up to %(numcpus)d available"
+#, python-format
 msgid "Up to %(numcpus)d available"
 msgid_plural "Up to %(numcpus)d available"
 msgstr[0] "Op til %(numcpus)d til rådighed"
@@ -3151,10 +3147,9 @@ msgid "None detected"
 msgstr ""
 
 #: virtManager/createvm.py:1922
-#, fuzzy, python-format
-#| msgid "Error starting installation: "
+#, python-format
 msgid "Error starting installation: %s"
-msgstr "Fejl ved start af installation:"
+msgstr "Fejl ved start af installation: %s"
 
 #: virtManager/createvm.py:1962
 #, python-format
@@ -3221,10 +3216,9 @@ msgid ""
 msgstr ""
 
 #: virtManager/delete.py:202
-#, fuzzy, python-format
-#| msgid "Error deleting virtual machine '%s': %s"
+#, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
-msgstr "Fejl ved sletning af virtuel maskine '%s': %s"
+msgstr "Fejl ved sletning af virtuel maskine '%(vm)s': %(error)s"
 
 #: virtManager/delete.py:219
 msgid "Additionally, there were errors removing certain storage devices: \n"
@@ -3387,12 +3381,13 @@ msgid "Connecting to graphical console for guest"
 msgstr ""
 
 #: virtManager/details/console.py:740
-#, fuzzy, python-format
-#| msgid "Error creating virtual machine clone '%s': %s"
+#, python-format
 msgid ""
 "Error connecting to graphical console:\n"
 "%s"
-msgstr "Fejl ved oprettelse af virtuel maskine klon '%s': %s"
+msgstr ""
+"Fejl ved oprettelse af forbindelse til grafisk konsol:\n"
+"%s"
 
 #: virtManager/details/console.py:794
 #, python-format
@@ -3448,22 +3443,19 @@ msgid "Floppy %(index)d"
 msgstr ""
 
 #: virtManager/details/details.py:176
-#, fuzzy, python-format
-#| msgid "USB Redirection"
+#, python-format
 msgid "%(bus)s CDROM %(index)d"
-msgstr "USB omdirigering"
+msgstr "%(bus)s CDROM %(index)d"
 
 #: virtManager/details/details.py:181
-#, fuzzy, python-format
-#| msgid "USB Redirection"
+#, python-format
 msgid "%(bus)s Disk %(index)d"
-msgstr "USB omdirigering"
+msgstr "%(bus)s Disk %(index)d"
 
 #: virtManager/details/details.py:185
-#, fuzzy, python-format
-#| msgid "USB Redirection"
+#, python-format
 msgid "%(bus)s %(device)s %(index)d"
-msgstr "USB omdirigering"
+msgstr "%(bus)s %(device)s %(index)d"
 
 #: virtManager/details/details.py:192
 #, python-format
@@ -3476,10 +3468,9 @@ msgid "Disk %(index)d"
 msgstr ""
 
 #: virtManager/details/details.py:195
-#, fuzzy, python-format
-#| msgid "USB Redirection"
+#, python-format
 msgid "%(device)s %(index)d"
-msgstr "USB omdirigering"
+msgstr "%(device)s %(index)d"
 
 #: virtManager/details/details.py:202
 #, python-format
@@ -3533,10 +3524,9 @@ msgid "Display %s"
 msgstr "Skærm %s"
 
 #: virtManager/details/details.py:243
-#, fuzzy, python-format
-#| msgid "USB Redirection"
+#, python-format
 msgid "%(bus)s Redirector %(index)d"
-msgstr "USB omdirigering"
+msgstr "%(bus)s Omdirigering %(index)d"
 
 #: virtManager/details/details.py:250
 #, python-format
@@ -3549,10 +3539,9 @@ msgid "Video %s"
 msgstr ""
 
 #: virtManager/details/details.py:254
-#, fuzzy, python-format
-#| msgid "Filesystem %s"
+#, python-format
 msgid "Filesystem %(path)s"
-msgstr "Filsystem %s"
+msgstr "Filsystem %(path)s"
 
 #: virtManager/details/details.py:258
 #, python-format
@@ -4054,11 +4043,11 @@ msgstr "Filsystem parameter fejl"
 
 #: virtManager/device/gfxdetails.py:78
 msgid "Spice server"
-msgstr "Spice server"
+msgstr "Spice-server"
 
 #: virtManager/device/gfxdetails.py:79
 msgid "VNC server"
-msgstr "VNC server"
+msgstr "VNC-server"
 
 #: virtManager/device/gfxdetails.py:86
 msgid "Address"
@@ -4158,10 +4147,9 @@ msgid ""
 msgstr ""
 
 #: virtManager/device/netlist.py:214
-#, fuzzy, python-format
-#| msgid "Create a new virtual network"
+#, python-format
 msgid "Could not start virtual network '%(device)s': %(error)s"
-msgstr "Opret et nyt virtuelt netværk"
+msgstr "Kunne ikke starte virtuelt netværk '%(device)s': %(error)s"
 
 #: virtManager/device/vsockdetails.py:61
 msgid "CID"
@@ -4598,22 +4586,19 @@ msgid ""
 msgstr ""
 
 #: virtManager/manager.py:581
-#, fuzzy, python-format
-#| msgid "Double click to connect"
+#, python-format
 msgid "%(uri)s (Double click to connect)"
-msgstr "Dobbeltklik for at tilslutte"
+msgstr "%(uri)s (dobbeltklik for at tilslutte)"
 
 #: virtManager/manager.py:588
-#, fuzzy, python-format
-#| msgid "Not Connected"
+#, python-format
 msgid "%(connection)s - Not Connected"
-msgstr "Ikke tilsluttet"
+msgstr "%(connection)s - Ikke tilsluttet"
 
 #: virtManager/manager.py:590
-#, fuzzy, python-format
-#| msgid "Connecting..."
+#, python-format
 msgid "%(connection)s - Connecting..."
-msgstr "Tilslutter..."
+msgstr "%(connection)s - Tilslutter..."
 
 #: virtManager/manager.py:764 virtManager/vmwindow.py:355
 msgid "_Restore"
@@ -4669,10 +4654,9 @@ msgid "%(uri)s (Hypervisors do not match)"
 msgstr ""
 
 #: virtManager/migrate.py:300
-#, fuzzy, python-format
-#| msgid "Disconnected"
+#, python-format
 msgid "%(uri)s (Disconnected)"
-msgstr "Afbrudt"
+msgstr "%(uri)s (Afbrudt)"
 
 #: virtManager/migrate.py:302
 #, python-format
@@ -4968,7 +4952,7 @@ msgstr "Gemmer virtuel maskine"
 
 #: virtManager/vmmenu.py:197
 msgid "Saving virtual machine memory to disk "
-msgstr "Gemmer virtuel maskines hukommelse til disk"
+msgstr "Gemmer virtuel maskines hukommelse til disk "
 
 #: virtManager/vmmenu.py:206
 #, python-format
@@ -4999,10 +4983,9 @@ msgid "Error unpausing domain"
 msgstr ""
 
 #: virtManager/vmmenu.py:242
-#, fuzzy, python-format
-#| msgid "Error Removing Device: %s"
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Fejl ved fjernelse af enheden: %s"
+msgstr "Fejl ved gendannelse af domæne: %s"
 
 #: virtManager/vmmenu.py:245
 msgid ""
@@ -5939,10 +5922,8 @@ msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 
 #: virtinst/osdict.py:377
-#, fuzzy
-#| msgid "Generic"
 msgid "Generic OS"
-msgstr "Standard"
+msgstr "Generisk OS"
 
 #: virtinst/osdict.py:665
 #, python-format
@@ -6521,10 +6502,9 @@ msgid "Start '%s' with the changed XML?"
 msgstr ""
 
 #: virtinst/virtxml.py:246 virtinst/virtxml.py:512
-#, fuzzy, python-format
-#| msgid "Migrating domain"
+#, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
-msgstr "Migrerer domæne"
+msgstr "Kunne ikke starte domænet '%(domain)s': %(error)s"
 
 #: virtinst/virtxml.py:251 virtinst/virtxml.py:516
 #, python-format
@@ -6532,10 +6512,9 @@ msgid "Domain '%s' started successfully."
 msgstr ""
 
 #: virtinst/virtxml.py:283
-#, fuzzy, python-format
-#| msgid "Error adding device: %s"
+#, python-format
 msgid "Error attempting device action %(action)s: %(error)s"
-msgstr "Fejl ved tilføjelse af enheden: %s"
+msgstr "Fejl ved forsøg for enhedshandlingen %(action)s: %(error)s"
 
 #: virtinst/virtxml.py:289
 #, python-format
