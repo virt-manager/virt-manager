@@ -419,7 +419,7 @@ class vmmHostStorage(vmmGObjectUI):
                 fmt = vol.get_format() or ""
             except Exception:  # pragma: no cover
                 log.debug("Error getting volume info for '%s', "
-                              "hiding it", name, exc_info=True)
+                              "hiding it", vol, exc_info=True)
                 continue
 
             namestr = None
