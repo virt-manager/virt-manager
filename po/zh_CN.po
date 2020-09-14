@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-09 06:10+0000\n"
+"POT-Creation-Date: 2020-09-11 06:10+0000\n"
 "PO-Revision-Date: 2020-09-11 09:01+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -268,7 +268,7 @@ msgstr "请稍候..."
 msgid "Processing..."
 msgstr "处理中..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:143 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "详情(_D)"
 
@@ -343,6 +343,40 @@ msgstr "为虚拟机克隆生成新磁盘(_L)"
 msgid "_Browse..."
 msgstr "浏览(_B)..."
 
+#: ui/console.ui:21 ui/console.ui:267
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>终端当前不可用</b>"
+
+#: ui/console.ui:61 virtManager/addhardware.py:223
+msgid "Serial"
+msgstr "串口"
+
+#: ui/console.ui:128
+msgid "_Password:"
+msgstr "密码(_P)："
+
+#: ui/console.ui:142 ui/createconn.ui:208
+msgid "_Username:"
+msgstr "用户名(_U)："
+
+#: ui/console.ui:177
+msgid "_Login"
+msgstr "登录(_L)"
+
+#: ui/console.ui:192
+msgid "_Save this password in your keyring"
+msgstr "将密码保存到钥匙环(_S)"
+
+#: ui/console.ui:196
+msgid "Check to save password, uncheck to forget password."
+msgstr "选中以保存密码，取消选中以忘记密码。"
+
+#: ui/console.ui:292
+#, fuzzy
+#| msgid "TCP net console"
+msgid "_Connect to console"
+msgstr "TCP 网络控制台"
+
 #: ui/createconn.ui:13
 msgid "Add Connection"
 msgstr "添加连接"
@@ -366,10 +400,6 @@ msgstr "自动连接(_A)："
 #: ui/createconn.ui:191
 msgid "H_ostname:"
 msgstr "主机名(_O)："
-
-#: ui/createconn.ui:208 ui/vmwindow.ui:599
-msgid "_Username:"
-msgstr "用户名(_U)："
 
 #: ui/createconn.ui:242
 msgid ""
@@ -1300,11 +1330,11 @@ msgstr "OpenGL 仅适用于 '侦听类型' 值为 '无' 的情况"
 msgid "Connection Details"
 msgstr "连接详情"
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:34
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ui/host.ui:43 ui/vmwindow.ui:43
+#: ui/host.ui:43 ui/vmwindow.ui:38
 msgid "_View Manager"
 msgstr "查看管理器(_V)"
 
@@ -1462,7 +1492,7 @@ msgstr "连接详情(_C)"
 msgid "_Virtual Machine Details"
 msgstr "虚拟机详情(_V)"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:123
+#: ui/manager.ui:172 ui/vmwindow.ui:118
 msgid "_View"
 msgstr "查看(_V)"
 
@@ -1510,17 +1540,17 @@ msgstr "显示虚拟机控制台及详情"
 msgid "_Open"
 msgstr "打开(_O)"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:341
+#: ui/manager.ui:332 ui/vmwindow.ui:345
 msgid "Power on the virtual machine"
 msgstr "打开虚拟机"
 
 #: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:351
+#: virtManager/vmwindow.py:383
 msgid "_Run"
 msgstr "运行(_R)"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:356 virtManager/manager.py:798
-#: virtManager/vmwindow.py:379
+#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
+#: virtManager/vmwindow.py:411
 msgid "Pause the virtual machine"
 msgstr "暂停虚拟机"
 
@@ -1528,11 +1558,11 @@ msgstr "暂停虚拟机"
 msgid "_Pause"
 msgstr "暂停(_P)"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:371
+#: ui/manager.ui:364 ui/vmwindow.ui:375
 msgid "Shut down the virtual machine"
 msgstr "关闭虚拟系统"
 
-#: ui/manager.ui:365 ui/vmwindow.ui:372 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "关机(_S)"
@@ -1785,26 +1815,11 @@ msgstr "捕获快捷键(_A)："
 msgid "Not supported"
 msgstr "尚不支持"
 
-#: ui/preferences.ui:686 ui/preferences.ui:700
-msgid ""
-"When the guest graphical console has keyboard focus, do not disable "
-"shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
-"disabled to ensure that typing in the guest does not accidentally perform an "
-"operation in virt-manager's console window."
-msgstr ""
-"当在客户机的图形控制台使用键盘时，请不要禁用控制台窗口菜单的快捷键 (Alt+F -> "
-"文件 等等)。通常禁用这些快捷键，是为了保证不会在虚拟机中打字时，意外操作 "
-"virt-manager 控制台窗口。"
-
-#: ui/preferences.ui:702
-msgid "_Force console shortcuts:"
-msgstr "强制控制台快捷键(_F)："
-
-#: ui/preferences.ui:713
+#: ui/preferences.ui:683
 msgid "Change..."
 msgstr "更改..."
 
-#: ui/preferences.ui:730
+#: ui/preferences.ui:700
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -1812,55 +1827,67 @@ msgstr ""
 "当改变客户机窗口大小时，请修改其分辨率。仅适用于使用 Spice 和桌面代理正确配置"
 "的客户机。"
 
-#: ui/preferences.ui:732
+#: ui/preferences.ui:702
 msgid "_Resize guest with window:"
 msgstr "调整客户机窗口大小(_R)："
 
-#: ui/preferences.ui:758
+#: ui/preferences.ui:728
 msgid "SPICE _USB Redirection:"
 msgstr "SPICE USB 重定向(_U)："
 
-#: ui/preferences.ui:786
+#: ui/preferences.ui:752
+msgid ""
+"If disabled, the VM window will not automatically connect to the running VM "
+"graphical console."
+msgstr ""
+
+#: ui/preferences.ui:754
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "Console autoconnec_t:"
+msgstr "自动连接(_A)："
+
+#: ui/preferences.ui:784
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>图形控制台</b>"
 
-#: ui/preferences.ui:804
+#: ui/preferences.ui:802
 msgid "Conso_le"
 msgstr "控制台(_L)"
 
-#: ui/preferences.ui:836
+#: ui/preferences.ui:834
 msgid "_Force Poweroff:"
 msgstr "强制关机时(_F)："
 
-#: ui/preferences.ui:863
+#: ui/preferences.ui:861
 msgid "Poweroff/_Reboot/Save:"
 msgstr "关机/重启/保存时(_R)："
 
-#: ui/preferences.ui:877
+#: ui/preferences.ui:875
 msgid "_Pause:"
 msgstr "暂停时(_P)："
 
-#: ui/preferences.ui:930
+#: ui/preferences.ui:928
 msgid "Device re_moval:"
 msgstr "移除设备时(_M)："
 
-#: ui/preferences.ui:944
+#: ui/preferences.ui:942
 msgid "_Unapplied changes:"
 msgstr "有未应用的更改时(_U)："
 
-#: ui/preferences.ui:971
+#: ui/preferences.ui:969
 msgid "_Deleting storage:"
 msgstr "删除存储时(_D)："
 
-#: ui/preferences.ui:1002
+#: ui/preferences.ui:1000
 msgid "<b>Confirmations</b>"
 msgstr "<b>确认操作</b>"
 
-#: ui/preferences.ui:1008
+#: ui/preferences.ui:1006
 msgid "feedback-tab"
 msgstr "feedback-tab"
 
-#: ui/preferences.ui:1020
+#: ui/preferences.ui:1018
 msgid "Feed_back"
 msgstr "操作反馈(_B)"
 
@@ -1924,141 +1951,125 @@ msgstr "<span size='large'>创建快照</span>"
 msgid "_Description:"
 msgstr "描述(_D)："
 
-#: ui/vmwindow.ui:13
+#: ui/vmwindow.ui:8
 msgid "Virtual Machine"
 msgstr "虚拟机"
 
-#: ui/vmwindow.ui:84
+#: ui/vmwindow.ui:79
 msgid "Virtual _Machine"
 msgstr "虚拟机(_M)"
 
-#: ui/vmwindow.ui:100
+#: ui/vmwindow.ui:95
 msgid "_Take Screenshot"
 msgstr "截屏(_T)"
 
-#: ui/vmwindow.ui:109
+#: ui/vmwindow.ui:104
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr "重定向主机 USB 设备到使用 SPICE 图形的虚拟机。"
 
-#: ui/vmwindow.ui:110
+#: ui/vmwindow.ui:105
 msgid "_Redirect USB device"
 msgstr "重定向 USB 设备(_R)"
 
-#: ui/vmwindow.ui:132
+#: ui/vmwindow.ui:127
 msgid "_Console"
 msgstr "控制台(_C)"
 
-#: ui/vmwindow.ui:154
+#: ui/vmwindow.ui:149
 msgid "Sna_pshots"
 msgstr "快照(_P)"
 
-#: ui/vmwindow.ui:171
+#: ui/vmwindow.ui:166
 msgid "_Fullscreen"
 msgstr "全屏(_F)"
 
-#: ui/vmwindow.ui:180
+#: ui/vmwindow.ui:175
 msgid "_Resize to VM"
 msgstr "适应虚拟机尺寸(_R)"
 
-#: ui/vmwindow.ui:189
+#: ui/vmwindow.ui:184
 msgid "_Scale Display"
 msgstr "缩放显示(_S)"
 
-#: ui/vmwindow.ui:199
+#: ui/vmwindow.ui:194
 msgid "_Always"
 msgstr "总是(_A)"
 
-#: ui/vmwindow.ui:209
+#: ui/vmwindow.ui:204
 msgid "_Only when Fullscreen"
 msgstr "仅全屏时(_O)"
 
-#: ui/vmwindow.ui:220
+#: ui/vmwindow.ui:215
 msgid "_Never"
 msgstr "从不(_N)"
 
-#: ui/vmwindow.ui:237
+#: ui/vmwindow.ui:232
 msgid "Auto _resize VM with window"
 msgstr "自动调整虚拟系统窗口大小(_R)"
 
-#: ui/vmwindow.ui:250
-msgid "_Text Consoles"
-msgstr "文本控制台(_T)"
+#: ui/vmwindow.ui:245
+#, fuzzy
+#| msgid "Console"
+msgid "Co_nsoles"
+msgstr "控制台"
 
-#: ui/vmwindow.ui:264
+#: ui/vmwindow.ui:253
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "_Autoconnect"
+msgstr "自动连接(_A)："
+
+#: ui/vmwindow.ui:268
 msgid "T_oolbar"
 msgstr "工具条(_O)"
 
-#: ui/vmwindow.ui:278
+#: ui/vmwindow.ui:282
 msgid "Send _Key"
 msgstr "发送按键(_K)"
 
-#: ui/vmwindow.ui:301
+#: ui/vmwindow.ui:305
 msgid "Show the graphical console"
 msgstr "显示图形控制台"
 
-#: ui/vmwindow.ui:302 virtManager/addhardware.py:231
+#: ui/vmwindow.ui:306 virtManager/addhardware.py:231
 msgid "Console"
 msgstr "控制台"
 
-#: ui/vmwindow.ui:316
+#: ui/vmwindow.ui:320
 msgid "Show virtual hardware details"
 msgstr "显示虚拟硬件详情"
 
-#: ui/vmwindow.ui:317 virtManager/error.py:352
+#: ui/vmwindow.ui:321 virtManager/error.py:352
 msgid "Details"
 msgstr "详情"
 
-#: ui/vmwindow.ui:342
+#: ui/vmwindow.ui:346
 msgid "Run"
 msgstr "运行"
 
-#: ui/vmwindow.ui:357
+#: ui/vmwindow.ui:361
 msgid "Pause"
 msgstr "暂停"
 
-#: ui/vmwindow.ui:395
+#: ui/vmwindow.ui:399
 msgid "Snapshots"
 msgstr "快照"
 
-#: ui/vmwindow.ui:409
+#: ui/vmwindow.ui:413
 msgid "Switch to fullscreen view"
 msgstr "切换到全屏"
 
-#: ui/vmwindow.ui:434
+#: ui/vmwindow.ui:438
 msgid "Begin Installation"
 msgstr "开始安装"
 
-#: ui/vmwindow.ui:436
+#: ui/vmwindow.ui:440
 msgid "_Begin Installation"
 msgstr "开始安装(_B)"
 
-#: ui/vmwindow.ui:451
+#: ui/vmwindow.ui:455
 msgid "_Cancel Installation"
 msgstr "取消安装(_C)"
-
-#: ui/vmwindow.ui:512
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>终端当前不可用</b>"
-
-#: ui/vmwindow.ui:548
-msgid "_Password:"
-msgstr "密码(_P)："
-
-#: ui/vmwindow.ui:576
-msgid "_Save this password in your keyring"
-msgstr "将密码保存到钥匙环(_S)"
-
-#: ui/vmwindow.ui:580
-msgid "Check to save password, uncheck to forget password."
-msgstr "选中以保存密码，取消选中以忘记密码。"
-
-#: ui/vmwindow.ui:622
-msgid "_Login"
-msgstr "登录(_L)"
-
-#: ui/vmwindow.ui:720 virtManager/addhardware.py:223
-msgid "Serial"
-msgstr "串口"
 
 #: ui/vsockdetails.ui:22
 msgid "Guest C_ID:"
@@ -2945,34 +2956,34 @@ msgstr "等待安装介质/源"
 msgid "Error populating summary page: %s"
 msgstr "填写摘要页面出错： %s"
 
-#: virtManager/createvm.py:1447
+#: virtManager/createvm.py:1448
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "验证安装参数时未捕获的错误：%s"
 
-#: virtManager/createvm.py:1458
+#: virtManager/createvm.py:1459
 msgid "Source URL is required"
 msgstr "必须输入源 URL"
 
-#: virtManager/createvm.py:1463
+#: virtManager/createvm.py:1464
 msgid "Please specify password for accessing source registry"
 msgstr "请指定访问源注册表的密码"
 
-#: virtManager/createvm.py:1471
+#: virtManager/createvm.py:1472
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr "目标路径不是目录：%s"
 
-#: virtManager/createvm.py:1474
+#: virtManager/createvm.py:1475
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr "没有目录路径的写权限：%s"
 
-#: virtManager/createvm.py:1481
+#: virtManager/createvm.py:1482
 msgid "OS root directory is not empty"
 msgstr "操作系统根目录不为空"
 
-#: virtManager/createvm.py:1482
+#: virtManager/createvm.py:1483
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
@@ -2981,93 +2992,93 @@ msgstr ""
 "由于文件冲突，在非空目录中创建根文件系统可能会失败。\n"
 "要继续吗？"
 
-#: virtManager/createvm.py:1501
+#: virtManager/createvm.py:1502
 msgid "An install media selection is required."
 msgstr "需要选择安装介质。"
 
-#: virtManager/createvm.py:1509
+#: virtManager/createvm.py:1510
 msgid "An install tree is required."
 msgstr "需要安装树。"
 
-#: virtManager/createvm.py:1517
+#: virtManager/createvm.py:1518
 msgid "A storage path to import is required."
 msgstr "需要导入的存储路径。"
 
-#: virtManager/createvm.py:1523
+#: virtManager/createvm.py:1524
 msgid "The import path must point to an existing storage."
 msgstr "导入路径必须指向现有存储。"
 
-#: virtManager/createvm.py:1529
+#: virtManager/createvm.py:1530
 msgid "An application path is required."
 msgstr "需要应用程序路径。"
 
-#: virtManager/createvm.py:1534
+#: virtManager/createvm.py:1535
 msgid "An OS directory path is required."
 msgstr "需要操作系统路径。"
 
-#: virtManager/createvm.py:1548
+#: virtManager/createvm.py:1549
 msgid "A template name is required."
 msgstr "必须输入模板名称。"
 
-#: virtManager/createvm.py:1551
+#: virtManager/createvm.py:1552
 msgid "You must select an OS."
 msgstr "必须选择一个操作系统。"
 
-#: virtManager/createvm.py:1581
+#: virtManager/createvm.py:1582
 msgid "Error setting installer parameters."
 msgstr "设定安装程序参数出错。"
 
-#: virtManager/createvm.py:1589
+#: virtManager/createvm.py:1590
 msgid "Error setting default name."
 msgstr "设置默认名称出错。"
 
-#: virtManager/createvm.py:1680
+#: virtManager/createvm.py:1681
 msgid "Storage parameter error."
 msgstr "存储参数错误。"
 
-#: virtManager/createvm.py:1702
+#: virtManager/createvm.py:1703
 msgid "Invalid guest name"
 msgstr "客户机名称无效"
 
-#: virtManager/createvm.py:1785
+#: virtManager/createvm.py:1786
 msgid "Detecting..."
 msgstr "检测中..."
 
-#: virtManager/createvm.py:1847
+#: virtManager/createvm.py:1848
 msgid "None detected"
 msgstr "未检测到"
 
-#: virtManager/createvm.py:1884
+#: virtManager/createvm.py:1885
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "启动安装时出错：%s"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1928
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "无法完成安装：'%s'"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1968
 msgid "Creating Virtual Machine"
 msgstr "创建虚拟机"
 
-#: virtManager/createvm.py:1968
+#: virtManager/createvm.py:1969
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr "现已创建虚拟机。分配磁盘存储和搜索安装程序映像需要几分钟方可完成。"
 
-#: virtManager/createvm.py:2022
+#: virtManager/createvm.py:2023
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "虚拟系统 '%s' 在预期时间之后未出现。"
 
-#: virtManager/createvm.py:2072
+#: virtManager/createvm.py:2073
 #, python-format
 msgid "Error continuing install: %s"
 msgstr "继续安装时出错：%s"
 
-#: virtManager/createvm.py:2085
+#: virtManager/createvm.py:2086
 msgid "Bootstraping container"
 msgstr "Bootstraping 容器"
 
@@ -3235,55 +3246,83 @@ msgstr "以下虚拟系统在使用存储"
 msgid "Failed to check disk usage conflict."
 msgstr "无法检查磁盘使用冲突。"
 
-#: virtManager/details/console.py:149
+#: virtManager/details/console.py:153
 msgid "Leave fullscreen"
 msgstr "退出全屏"
 
-#: virtManager/details/console.py:158
+#: virtManager/details/console.py:162
 msgid "Send key combination"
 msgstr "发送组合键"
 
-#: virtManager/details/console.py:282
+#: virtManager/details/console.py:201
+msgid "No text console available"
+msgstr "没有可用的文本控制台"
+
+#: virtManager/details/console.py:206
+#, python-format
+msgid "Text Console %d"
+msgstr "文本控制台 %d"
+
+#: virtManager/details/console.py:208
+#, python-format
+msgid "Serial %d"
+msgstr "序列 %d"
+
+#: virtManager/details/console.py:217
+msgid "No graphical console available"
+msgstr "没有可用的图形控制台"
+
+#: virtManager/details/console.py:223
+msgid "Graphical Console"
+msgstr "图形控制台"
+
+#: virtManager/details/console.py:229
+#, fuzzy
+#| msgid "virt-manager does not support more that one graphical console"
+msgid "virt-manager does not support more than one graphical console"
+msgstr "virt-manager 不支持多个图形控制台"
+
+#: virtManager/details/console.py:383
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s - %(connection-name)s"
 
-#: virtManager/details/console.py:289
+#: virtManager/details/console.py:390
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "按 %s 释放光标。"
 
-#: virtManager/details/console.py:420
+#: virtManager/details/console.py:507
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "'%s' 显卡类型不支持自动调整大小。"
 
-#: virtManager/details/console.py:423
+#: virtManager/details/console.py:510
 msgid "Guest agent is not available."
 msgstr "客户机代理不可用。"
 
-#: virtManager/details/console.py:564
+#: virtManager/details/console.py:590
 msgid "Guest has crashed."
 msgstr "客户机已崩溃。"
 
-#: virtManager/details/console.py:566
+#: virtManager/details/console.py:592
 msgid "Guest is not running."
 msgstr "客户机未运行。"
 
-#: virtManager/details/console.py:706
+#: virtManager/details/console.py:724
 msgid "Graphical console not configured for guest"
 msgstr "没有为虚拟机系统配置图形控制台"
 
-#: virtManager/details/console.py:713
+#: virtManager/details/console.py:731
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "无法显示图形控制台类型 '%s'"
 
-#: virtManager/details/console.py:720
+#: virtManager/details/console.py:743
 msgid "Connecting to graphical console for guest"
 msgstr "为虚拟机系统连接到图形控制台"
 
-#: virtManager/details/console.py:741
+#: virtManager/details/console.py:762
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3292,53 +3331,27 @@ msgstr ""
 "连接到图形控制台出错：\n"
 "%s"
 
-#: virtManager/details/console.py:792
+#: virtManager/details/console.py:819
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "查看器身份验证错误： %s"
 
-#: virtManager/details/console.py:811
+#: virtManager/details/console.py:841
 msgid "USB redirection error"
 msgstr "USB 重定向错误"
 
-#: virtManager/details/console.py:820
+#: virtManager/details/console.py:850
 msgid "Viewer was disconnected."
 msgstr "查看器已断开连接。"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:856
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH 隧道输出出错：%s"
 
-#: virtManager/details/console.py:831 virtManager/details/console.py:1016
+#: virtManager/details/console.py:861 virtManager/details/console.py:979
 msgid "Viewer disconnected."
 msgstr "查看器断开连接。"
-
-#: virtManager/details/console.py:919
-msgid "No text console available"
-msgstr "没有可用的文本控制台"
-
-#: virtManager/details/console.py:932
-#, python-format
-msgid "Text Console %d"
-msgstr "文本控制台 %d"
-
-#: virtManager/details/console.py:934
-#, python-format
-msgid "Serial %d"
-msgstr "序列 %d"
-
-#: virtManager/details/console.py:946
-msgid "No graphical console available"
-msgstr "没有可用的图形控制台"
-
-#: virtManager/details/console.py:955
-msgid "Graphical Console"
-msgstr "图形控制台"
-
-#: virtManager/details/console.py:963
-msgid "virt-manager does not support more that one graphical console"
-msgstr "virt-manager 不支持多个图形控制台"
 
 #: virtManager/details/details.py:166
 #, python-format
@@ -3673,7 +3686,7 @@ msgstr "不活动的虚拟机不能使用串口控制台"
 msgid "Console for device type '%s' is not supported"
 msgstr "不支持设备类型为 '%s' 的控制台"
 
-#: virtManager/details/serialcon.py:341
+#: virtManager/details/serialcon.py:350
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "连接到文本控制台时出错：%s"
@@ -3862,7 +3875,7 @@ msgstr ""
 "客户机位于具有 '%s' 传输的远程主机上，但仅配置为在本地监听。要远程连接，需要"
 "更改客户机的监听地址。"
 
-#: virtManager/details/viewers.py:346
+#: virtManager/details/viewers.py:347
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3871,7 +3884,7 @@ msgstr ""
 "无法向 VNC 服务器提供其要求的凭证。\n"
 "不支持的凭证类型 %s"
 
-#: virtManager/details/viewers.py:559
+#: virtManager/details/viewers.py:568
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "遭遇 SPICE %(error-name)s 错误"
@@ -4453,11 +4466,11 @@ msgstr "%(connection)s - 未连接"
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s - 连接中......"
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:349
+#: virtManager/manager.py:759 virtManager/vmwindow.py:381
 msgid "_Restore"
 msgstr "恢复(_R)"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:377
+#: virtManager/manager.py:796 virtManager/vmwindow.py:409
 msgid "Resume the virtual machine"
 msgstr "恢复虚拟机"
 
@@ -4561,11 +4574,11 @@ msgstr "快照需要客户机已分配至少一个可写的 qcow2 磁盘镜像�
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "在非活动的 虚拟系统 配置中找不到指定的设备：%s"
 
-#: virtManager/object/domain.py:1357
+#: virtManager/object/domain.py:1355
 msgid "Saving domain to disk"
 msgstr "正在将域保存到磁盘"
 
-#: virtManager/object/domain.py:1409
+#: virtManager/object/domain.py:1407
 msgid "Migrating domain"
 msgstr "正在迁移域"
 
@@ -4886,37 +4899,37 @@ msgstr "这将立即重置虚拟系统而无需关闭操作系统，并可能造
 msgid "Error resetting domain"
 msgstr "重置域出错"
 
-#: virtManager/vmwindow.py:45
+#: virtManager/vmwindow.py:46
 #, python-format
 msgid "Error launching details: %s"
 msgstr "启动详情出错：%s"
 
-#: virtManager/vmwindow.py:198
+#: virtManager/vmwindow.py:223
 msgid "This will abort the installation. Are you sure?"
 msgstr "这将中止安装。确定吗？"
 
-#: virtManager/vmwindow.py:389
+#: virtManager/vmwindow.py:421
 msgid "Manage VM snapshots"
 msgstr "管理虚拟机快照"
 
-#: virtManager/vmwindow.py:482
+#: virtManager/vmwindow.py:504
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "截图错误： %s"
 
-#: virtManager/vmwindow.py:490
+#: virtManager/vmwindow.py:512
 msgid "Error initializing spice USB device widget"
 msgstr "初始化 Spice USB 设备部件时出错"
 
-#: virtManager/vmwindow.py:494
+#: virtManager/vmwindow.py:516
 msgid "Select USB devices for redirection"
 msgstr "选择需要重定向的 USB 设备"
 
-#: virtManager/vmwindow.py:526
+#: virtManager/vmwindow.py:548
 msgid "Save Virtual Machine Screenshot"
 msgstr "保存虚拟机截屏"
 
-#: virtManager/vmwindow.py:527
+#: virtManager/vmwindow.py:549
 msgid "PNG files"
 msgstr "PNG 文件"
 
@@ -6027,7 +6040,9 @@ msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
-msgstr "不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆磁盘映像指定现有路径。"
+msgstr ""
+"不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆"
+"磁盘映像指定现有路径。"
 
 #: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
@@ -6647,6 +6662,22 @@ msgstr "必须为 %s 指定名称"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名称 '%(name)s' 不能包含 '%(char)s' 字符。"
+
+#~ msgid ""
+#~ "When the guest graphical console has keyboard focus, do not disable "
+#~ "shortcuts for console window menus (Alt+F -> File, etc.) Normally these "
+#~ "are disabled to ensure that typing in the guest does not accidentally "
+#~ "perform an operation in virt-manager's console window."
+#~ msgstr ""
+#~ "当在客户机的图形控制台使用键盘时，请不要禁用控制台窗口菜单的快捷键 (Alt+F "
+#~ "-> 文件 等等)。通常禁用这些快捷键，是为了保证不会在虚拟机中打字时，意外操"
+#~ "作 virt-manager 控制台窗口。"
+
+#~ msgid "_Force console shortcuts:"
+#~ msgstr "强制控制台快捷键(_F)："
+
+#~ msgid "_Text Consoles"
+#~ msgstr "文本控制台(_T)"
 
 #~ msgid "<b>Ad_vanced options</b>"
 #~ msgstr "<b>高级选项(_V)</b>"

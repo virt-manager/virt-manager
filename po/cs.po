@@ -17,11 +17,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-09 06:10+0000\n"
+"POT-Creation-Date: 2020-09-11 06:10+0000\n"
 "PO-Revision-Date: 2020-09-11 09:01+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -254,7 +254,7 @@ msgstr "Vyčkejte…"
 msgid "Processing..."
 msgstr "Zpracování…"
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:143 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "Po_drobnosti"
 
@@ -334,6 +334,42 @@ msgstr "Vytvořit nový disk (k_lon) na virtuálním stroji"
 msgid "_Browse..."
 msgstr "_Procházet…"
 
+#: ui/console.ui:21 ui/console.ui:267
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>Konzole není momentálně k dispozici</b>"
+
+# auto translated by TM merge from project: FreeIPA, version: ipa-4-5, DocId:
+# po/ipa
+#: ui/console.ui:61 virtManager/addhardware.py:223
+msgid "Serial"
+msgstr "Sériový"
+
+#: ui/console.ui:128
+msgid "_Password:"
+msgstr "Heslo:"
+
+#: ui/console.ui:142 ui/createconn.ui:208
+msgid "_Username:"
+msgstr "_Uživatelské jméno:"
+
+#: ui/console.ui:177
+msgid "_Login"
+msgstr "Přih_lásit"
+
+#: ui/console.ui:192
+msgid "_Save this password in your keyring"
+msgstr "Uložit he_slo do klíčenky"
+
+#: ui/console.ui:196
+msgid "Check to save password, uncheck to forget password."
+msgstr "Zaškrtněte pro zapamatování hesla, zrušte zaškrtnutí pro zapomenutí."
+
+#: ui/console.ui:292
+#, fuzzy
+#| msgid "TCP net console"
+msgid "_Connect to console"
+msgstr "TCP síťová konzole"
+
 #: ui/createconn.ui:13
 msgid "Add Connection"
 msgstr "Přidat spojení"
@@ -357,10 +393,6 @@ msgstr "_Automatické připojení:"
 #: ui/createconn.ui:191
 msgid "H_ostname:"
 msgstr "Název str_oje:"
-
-#: ui/createconn.ui:208 ui/vmwindow.ui:599
-msgid "_Username:"
-msgstr "_Uživatelské jméno:"
 
 #: ui/createconn.ui:242
 msgid ""
@@ -1319,11 +1351,11 @@ msgstr ""
 msgid "Connection Details"
 msgstr "Podrobnosti o připojení"
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:34
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
 msgid "_File"
 msgstr "_Soubor"
 
-#: ui/host.ui:43 ui/vmwindow.ui:43
+#: ui/host.ui:43 ui/vmwindow.ui:38
 msgid "_View Manager"
 msgstr "Zobrazit sprá_vu strojů"
 
@@ -1483,7 +1515,7 @@ msgstr "_Podrobnosti o spojení"
 msgid "_Virtual Machine Details"
 msgstr "Podrobnosti _virtuálního stroje"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:123
+#: ui/manager.ui:172 ui/vmwindow.ui:118
 msgid "_View"
 msgstr "_Zobrazit"
 
@@ -1531,17 +1563,17 @@ msgstr "Zobrazit konzoli a podrobnosti virtuálního stroje"
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:341
+#: ui/manager.ui:332 ui/vmwindow.ui:345
 msgid "Power on the virtual machine"
 msgstr "Zapnout virtuální stroj"
 
 #: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:351
+#: virtManager/vmwindow.py:383
 msgid "_Run"
 msgstr "_Spustit"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:356 virtManager/manager.py:798
-#: virtManager/vmwindow.py:379
+#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
+#: virtManager/vmwindow.py:411
 msgid "Pause the virtual machine"
 msgstr "Pozastavit virtuální stroj"
 
@@ -1549,11 +1581,11 @@ msgstr "Pozastavit virtuální stroj"
 msgid "_Pause"
 msgstr "_Uspat"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:371
+#: ui/manager.ui:364 ui/vmwindow.ui:375
 msgid "Shut down the virtual machine"
 msgstr "Vypnout virtuální stroj"
 
-#: ui/manager.ui:365 ui/vmwindow.ui:372 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "Vypnout"
@@ -1817,27 +1849,11 @@ msgstr "Zachytáv_at klávesy:"
 msgid "Not supported"
 msgstr "Nepodporováno"
 
-#: ui/preferences.ui:686 ui/preferences.ui:700
-msgid ""
-"When the guest graphical console has keyboard focus, do not disable "
-"shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
-"disabled to ensure that typing in the guest does not accidentally perform an "
-"operation in virt-manager's console window."
-msgstr ""
-"Když má grafická konzole hosta zaměření klávesnice, nevypínat klávesové "
-"zkratky pro nabídky okna konzole (Alt+F -> Soubor, atd.) Normálně jsou "
-"vypnuté aby bylo zajištěno, že to co napíšete v hostovi neprovede náhodnou "
-"operaci v okně konzole virt-manager."
-
-#: ui/preferences.ui:702
-msgid "_Force console shortcuts:"
-msgstr "Vynutit klávesové zkratky konzole:"
-
-#: ui/preferences.ui:713
+#: ui/preferences.ui:683
 msgid "Change..."
 msgstr "Změnit…"
 
-#: ui/preferences.ui:730
+#: ui/preferences.ui:700
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -1845,57 +1861,69 @@ msgstr ""
 "Při změně velikosti okna s hostem změnit rozlišení v hostovi. Funguje pouze "
 "u správně nastavených hostů používajících spice a desktopového agenta."
 
-#: ui/preferences.ui:732
+#: ui/preferences.ui:702
 msgid "_Resize guest with window:"
 msgstr "Přizpůsobovat _rozlišení v hostovi oknu:"
 
-#: ui/preferences.ui:758
+#: ui/preferences.ui:728
 msgid "SPICE _USB Redirection:"
 msgstr "SPICE _USB přesměrování:"
 
-#: ui/preferences.ui:786
+#: ui/preferences.ui:752
+msgid ""
+"If disabled, the VM window will not automatically connect to the running VM "
+"graphical console."
+msgstr ""
+
+#: ui/preferences.ui:754
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "Console autoconnec_t:"
+msgstr "_Automatické připojení:"
+
+#: ui/preferences.ui:784
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>Grafické konzole</b>"
 
-#: ui/preferences.ui:804
+#: ui/preferences.ui:802
 msgid "Conso_le"
 msgstr "Konzo_le"
 
-#: ui/preferences.ui:836
+#: ui/preferences.ui:834
 msgid "_Force Poweroff:"
 msgstr "_Vynutit vypnutí:"
 
-#: ui/preferences.ui:863
+#: ui/preferences.ui:861
 msgid "Poweroff/_Reboot/Save:"
 msgstr "Vypnout/_Restartovat/Uložit:"
 
-#: ui/preferences.ui:877
+#: ui/preferences.ui:875
 msgid "_Pause:"
 msgstr "_Pozastavit:"
 
-#: ui/preferences.ui:930
+#: ui/preferences.ui:928
 msgid "Device re_moval:"
 msgstr "Odebrá_ní zařízení:"
 
-#: ui/preferences.ui:944
+#: ui/preferences.ui:942
 msgid "_Unapplied changes:"
 msgstr "Ne_uplatněné změny:"
 
-#: ui/preferences.ui:971
+#: ui/preferences.ui:969
 msgid "_Deleting storage:"
 msgstr "Mazání úložiště:"
 
-#: ui/preferences.ui:1002
+#: ui/preferences.ui:1000
 msgid "<b>Confirmations</b>"
 msgstr "<b>Potvrzení</b>"
 
-#: ui/preferences.ui:1008
+#: ui/preferences.ui:1006
 #, fuzzy
 #| msgid "Feed_back"
 msgid "feedback-tab"
 msgstr "Zpětná vaz_ba"
 
-#: ui/preferences.ui:1020
+#: ui/preferences.ui:1018
 msgid "Feed_back"
 msgstr "Zpětná vaz_ba"
 
@@ -1959,144 +1987,126 @@ msgstr "<span size='large'>Pořídit zachycený stav</span>"
 msgid "_Description:"
 msgstr "_Popis:"
 
-#: ui/vmwindow.ui:13
+#: ui/vmwindow.ui:8
 msgid "Virtual Machine"
 msgstr "Virtuální stroj"
 
-#: ui/vmwindow.ui:84
+#: ui/vmwindow.ui:79
 msgid "Virtual _Machine"
 msgstr "_Virtuální stroj"
 
-#: ui/vmwindow.ui:100
+#: ui/vmwindow.ui:95
 msgid "_Take Screenshot"
 msgstr "Pořídi_t snímek obrazovky"
 
-#: ui/vmwindow.ui:109
+#: ui/vmwindow.ui:104
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr ""
 "Přesměrovat USB zařízení hostitele do virtuálního stroje se SPICE grafikou."
 
-#: ui/vmwindow.ui:110
+#: ui/vmwindow.ui:105
 msgid "_Redirect USB device"
 msgstr "Přesmě_rované USB zařízení"
 
-#: ui/vmwindow.ui:132
+#: ui/vmwindow.ui:127
 msgid "_Console"
 msgstr "_Konzole"
 
-#: ui/vmwindow.ui:154
+#: ui/vmwindow.ui:149
 msgid "Sna_pshots"
 msgstr "_Zachycené stavy"
 
-#: ui/vmwindow.ui:171
+#: ui/vmwindow.ui:166
 msgid "_Fullscreen"
 msgstr "_Celá obrazovka"
 
-#: ui/vmwindow.ui:180
+#: ui/vmwindow.ui:175
 msgid "_Resize to VM"
 msgstr "Up_ravit velikost podle virt. stroje"
 
-#: ui/vmwindow.ui:189
+#: ui/vmwindow.ui:184
 msgid "_Scale Display"
 msgstr "_Upravit měřítko zobrazení"
 
-#: ui/vmwindow.ui:199
+#: ui/vmwindow.ui:194
 msgid "_Always"
 msgstr "_Vždy"
 
-#: ui/vmwindow.ui:209
+#: ui/vmwindow.ui:204
 msgid "_Only when Fullscreen"
 msgstr "P_ouze když na celou obrazovku"
 
-#: ui/vmwindow.ui:220
+#: ui/vmwindow.ui:215
 msgid "_Never"
 msgstr "_Nikdy"
 
-#: ui/vmwindow.ui:237
+#: ui/vmwindow.ui:232
 msgid "Auto _resize VM with window"
 msgstr "Automaticky měnit _rozlišení ve virt. stroji podle velikosti okna"
 
-#: ui/vmwindow.ui:250
-msgid "_Text Consoles"
-msgstr "_Textové konzole"
+#: ui/vmwindow.ui:245
+#, fuzzy
+#| msgid "Console"
+msgid "Co_nsoles"
+msgstr "Konzole"
 
-#: ui/vmwindow.ui:264
+#: ui/vmwindow.ui:253
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "_Autoconnect"
+msgstr "_Automatické připojení:"
+
+#: ui/vmwindow.ui:268
 msgid "T_oolbar"
 msgstr "Nástr_ojová lišta"
 
-#: ui/vmwindow.ui:278
+#: ui/vmwindow.ui:282
 msgid "Send _Key"
 msgstr "Poslat _klávesu"
 
-#: ui/vmwindow.ui:301
+#: ui/vmwindow.ui:305
 msgid "Show the graphical console"
 msgstr "Zobrazit grafickou konzoli"
 
-#: ui/vmwindow.ui:302 virtManager/addhardware.py:231
+#: ui/vmwindow.ui:306 virtManager/addhardware.py:231
 msgid "Console"
 msgstr "Konzole"
 
-#: ui/vmwindow.ui:316
+#: ui/vmwindow.ui:320
 msgid "Show virtual hardware details"
 msgstr "Zobrazit podrobnosti o virtuálním hardware"
 
-#: ui/vmwindow.ui:317 virtManager/error.py:352
+#: ui/vmwindow.ui:321 virtManager/error.py:352
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: ui/vmwindow.ui:342
+#: ui/vmwindow.ui:346
 msgid "Run"
 msgstr "Spustit"
 
-#: ui/vmwindow.ui:357
+#: ui/vmwindow.ui:361
 msgid "Pause"
 msgstr "Pozastavit"
 
-#: ui/vmwindow.ui:395
+#: ui/vmwindow.ui:399
 msgid "Snapshots"
 msgstr "Zachycené stavy"
 
-#: ui/vmwindow.ui:409
+#: ui/vmwindow.ui:413
 msgid "Switch to fullscreen view"
 msgstr "Zobrazit přes celou obrazovku"
 
-#: ui/vmwindow.ui:434
+#: ui/vmwindow.ui:438
 msgid "Begin Installation"
 msgstr "Zahájit instalaci"
 
-#: ui/vmwindow.ui:436
+#: ui/vmwindow.ui:440
 msgid "_Begin Installation"
 msgstr "_Zahájit instalaci"
 
-#: ui/vmwindow.ui:451
+#: ui/vmwindow.ui:455
 msgid "_Cancel Installation"
 msgstr "Zrušit instala_ci"
-
-#: ui/vmwindow.ui:512
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>Konzole není momentálně k dispozici</b>"
-
-#: ui/vmwindow.ui:548
-msgid "_Password:"
-msgstr "Heslo:"
-
-#: ui/vmwindow.ui:576
-msgid "_Save this password in your keyring"
-msgstr "Uložit he_slo do klíčenky"
-
-#: ui/vmwindow.ui:580
-msgid "Check to save password, uncheck to forget password."
-msgstr "Zaškrtněte pro zapamatování hesla, zrušte zaškrtnutí pro zapomenutí."
-
-#: ui/vmwindow.ui:622
-msgid "_Login"
-msgstr "Přih_lásit"
-
-# auto translated by TM merge from project: FreeIPA, version: ipa-4-5, DocId:
-# po/ipa
-#: ui/vmwindow.ui:720 virtManager/addhardware.py:223
-msgid "Serial"
-msgstr "Sériový"
 
 #: ui/vsockdetails.ui:22
 msgid "Guest C_ID:"
@@ -3010,34 +3020,34 @@ msgstr "Čeká se na instalační médium/zdroj"
 msgid "Error populating summary page: %s"
 msgstr "Chyba při sestavování stránky souhrnu: %s"
 
-#: virtManager/createvm.py:1447
+#: virtManager/createvm.py:1448
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "Nepodchycená chyba při ověřování správnosti parametrů instalace: %s"
 
-#: virtManager/createvm.py:1458
+#: virtManager/createvm.py:1459
 msgid "Source URL is required"
 msgstr "Je třeba zdrojová URL"
 
-#: virtManager/createvm.py:1463
+#: virtManager/createvm.py:1464
 msgid "Please specify password for accessing source registry"
 msgstr "Zadejte heslo pro přístup do zdrojového registru"
 
-#: virtManager/createvm.py:1471
+#: virtManager/createvm.py:1472
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr "Cílové umístění není složka: %s"
 
-#: virtManager/createvm.py:1474
+#: virtManager/createvm.py:1475
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr "Do umístění složky není přístup pro zápis: %s"
 
-#: virtManager/createvm.py:1481
+#: virtManager/createvm.py:1482
 msgid "OS root directory is not empty"
 msgstr "Kořenová složka operačního systému není prázdná"
 
-#: virtManager/createvm.py:1482
+#: virtManager/createvm.py:1483
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
@@ -3047,77 +3057,77 @@ msgstr ""
 "kvůli konfliktům s existujícími soubory.\n"
 "Opravdu chcete pokračovat?"
 
-#: virtManager/createvm.py:1501
+#: virtManager/createvm.py:1502
 msgid "An install media selection is required."
 msgstr "Je třeba vybrat instalační médium."
 
-#: virtManager/createvm.py:1509
+#: virtManager/createvm.py:1510
 msgid "An install tree is required."
 msgstr "Je třeba instalačního stromu."
 
-#: virtManager/createvm.py:1517
+#: virtManager/createvm.py:1518
 msgid "A storage path to import is required."
 msgstr "Je třeba popis úložiště pro import."
 
-#: virtManager/createvm.py:1523
+#: virtManager/createvm.py:1524
 msgid "The import path must point to an existing storage."
 msgstr "Je třeba, aby popis umístění importu odkazoval na existující úložiště."
 
-#: virtManager/createvm.py:1529
+#: virtManager/createvm.py:1530
 msgid "An application path is required."
 msgstr "Je třeba popis umístění aplikace."
 
-#: virtManager/createvm.py:1534
+#: virtManager/createvm.py:1535
 msgid "An OS directory path is required."
 msgstr "Je třeba popis umístění složky operačního systému."
 
-#: virtManager/createvm.py:1548
+#: virtManager/createvm.py:1549
 msgid "A template name is required."
 msgstr "Je třeba zadat název šablony."
 
-#: virtManager/createvm.py:1551
+#: virtManager/createvm.py:1552
 msgid "You must select an OS."
 msgstr "Je třeba vybrat operační systém."
 
-#: virtManager/createvm.py:1581
+#: virtManager/createvm.py:1582
 msgid "Error setting installer parameters."
 msgstr "Chyba při nastavování parametrů instalátoru."
 
-#: virtManager/createvm.py:1589
+#: virtManager/createvm.py:1590
 msgid "Error setting default name."
 msgstr "Chyba při nastavování výchozího názvu."
 
-#: virtManager/createvm.py:1680
+#: virtManager/createvm.py:1681
 msgid "Storage parameter error."
 msgstr "Chyba v parametru úložiště."
 
-#: virtManager/createvm.py:1702
+#: virtManager/createvm.py:1703
 msgid "Invalid guest name"
 msgstr "Neplatný název hosta"
 
-#: virtManager/createvm.py:1785
+#: virtManager/createvm.py:1786
 msgid "Detecting..."
 msgstr "Zjišťování…"
 
-#: virtManager/createvm.py:1847
+#: virtManager/createvm.py:1848
 msgid "None detected"
 msgstr "Žádné nezjištěno"
 
-#: virtManager/createvm.py:1884
+#: virtManager/createvm.py:1885
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "Chyba při spouštění instalace: %s"
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1928
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nelze dokončit instalaci: „%s“"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1968
 msgid "Creating Virtual Machine"
 msgstr "Vytváření virtuálního stroje"
 
-#: virtManager/createvm.py:1968
+#: virtManager/createvm.py:1969
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3125,17 +3135,17 @@ msgstr ""
 "Virtuální stroj je nyní vytvářen. Přiřazení diskového úložiště a získání "
 "instalačních obrazů může několik minut trvat."
 
-#: virtManager/createvm.py:2022
+#: virtManager/createvm.py:2023
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "Virt. stroj „%s“ se neobjevil v očekávaném čase."
 
-#: virtManager/createvm.py:2072
+#: virtManager/createvm.py:2073
 #, python-format
 msgid "Error continuing install: %s"
 msgstr "Chyba při pokračování instalace: %s"
 
-#: virtManager/createvm.py:2085
+#: virtManager/createvm.py:2086
 msgid "Bootstraping container"
 msgstr "Spouštění kontejneru"
 
@@ -3305,55 +3315,83 @@ msgstr "Úložiště už využívají následující virtuální stroje"
 msgid "Failed to check disk usage conflict."
 msgstr "Nepodařilo se zkontrolovat konflikt využití disku."
 
-#: virtManager/details/console.py:149
+#: virtManager/details/console.py:153
 msgid "Leave fullscreen"
 msgstr "Opustit režim celé obrazovky"
 
-#: virtManager/details/console.py:158
+#: virtManager/details/console.py:162
 msgid "Send key combination"
 msgstr "Odeslat kombinace kláves"
 
-#: virtManager/details/console.py:282
+#: virtManager/details/console.py:201
+msgid "No text console available"
+msgstr "Není dostupná žádná textová konzole"
+
+#: virtManager/details/console.py:206
+#, python-format
+msgid "Text Console %d"
+msgstr "Textová konzole %d"
+
+#: virtManager/details/console.py:208
+#, python-format
+msgid "Serial %d"
+msgstr "Sériové %d"
+
+#: virtManager/details/console.py:217
+msgid "No graphical console available"
+msgstr "Není dostupná žádná grafická konzole"
+
+#: virtManager/details/console.py:223
+msgid "Graphical Console"
+msgstr "Grafická konzole"
+
+#: virtManager/details/console.py:229
+#, fuzzy
+#| msgid "virt-manager does not support more that one graphical console"
+msgid "virt-manager does not support more than one graphical console"
+msgstr "virt-manager nepodporuje více než jednu grafickou konzoli"
+
+#: virtManager/details/console.py:383
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s na %(connection-name)s"
 
-#: virtManager/details/console.py:289
+#: virtManager/details/console.py:390
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Pro uvolnění ukazatel myši stiskněte %s."
 
-#: virtManager/details/console.py:420
+#: virtManager/details/console.py:507
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "Grafika typu „%s“ nepodporuje automatickou změnu rozlišení."
 
-#: virtManager/details/console.py:423
+#: virtManager/details/console.py:510
 msgid "Guest agent is not available."
 msgstr "Agent v hostovi není k dispozici."
 
-#: virtManager/details/console.py:564
+#: virtManager/details/console.py:590
 msgid "Guest has crashed."
 msgstr "Host zhavaroval."
 
-#: virtManager/details/console.py:566
+#: virtManager/details/console.py:592
 msgid "Guest is not running."
 msgstr "Host není spuštěný."
 
-#: virtManager/details/console.py:706
+#: virtManager/details/console.py:724
 msgid "Graphical console not configured for guest"
 msgstr "Grafická konzole pro tohoto hosta nebyla nastavena"
 
-#: virtManager/details/console.py:713
+#: virtManager/details/console.py:731
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Nelze zobrazit grafickou konzoli typu „%s“"
 
-#: virtManager/details/console.py:720
+#: virtManager/details/console.py:743
 msgid "Connecting to graphical console for guest"
 msgstr "Připojuje se ke grafické konzoli hosta"
 
-#: virtManager/details/console.py:741
+#: virtManager/details/console.py:762
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3362,53 +3400,27 @@ msgstr ""
 "Chyba při připojování ke grafické konzoli:\n"
 "%s"
 
-#: virtManager/details/console.py:792
+#: virtManager/details/console.py:819
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Chyba ověření totožnosti prohlížeče: %s"
 
-#: virtManager/details/console.py:811
+#: virtManager/details/console.py:841
 msgid "USB redirection error"
 msgstr "Chyba přesměrování USB"
 
-#: virtManager/details/console.py:820
+#: virtManager/details/console.py:850
 msgid "Viewer was disconnected."
 msgstr "Prohlížeč byl odpojen."
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:856
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Chybový výstup SSH tunelu: %s"
 
-#: virtManager/details/console.py:831 virtManager/details/console.py:1016
+#: virtManager/details/console.py:861 virtManager/details/console.py:979
 msgid "Viewer disconnected."
 msgstr "Prohlížeč se odpojil."
-
-#: virtManager/details/console.py:919
-msgid "No text console available"
-msgstr "Není dostupná žádná textová konzole"
-
-#: virtManager/details/console.py:932
-#, python-format
-msgid "Text Console %d"
-msgstr "Textová konzole %d"
-
-#: virtManager/details/console.py:934
-#, python-format
-msgid "Serial %d"
-msgstr "Sériové %d"
-
-#: virtManager/details/console.py:946
-msgid "No graphical console available"
-msgstr "Není dostupná žádná grafická konzole"
-
-#: virtManager/details/console.py:955
-msgid "Graphical Console"
-msgstr "Grafická konzole"
-
-#: virtManager/details/console.py:963
-msgid "virt-manager does not support more that one graphical console"
-msgstr "virt-manager nepodporuje více než jednu grafickou konzoli"
 
 #: virtManager/details/details.py:166
 #, python-format
@@ -3749,7 +3761,7 @@ msgstr "U neaktivního hosta není sériová konzole k dispozici"
 msgid "Console for device type '%s' is not supported"
 msgstr "Konzole není pro zařízení typu „%s“ podporována"
 
-#: virtManager/details/serialcon.py:341
+#: virtManager/details/serialcon.py:350
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Chyba při připojování k textové konzoli: %s"
@@ -3947,7 +3959,7 @@ msgstr ""
 "pouze pro očekávání spojení místně. Pro připojení na dálku je třeba změnit "
 "adresu na které bude host očekávat spojení."
 
-#: virtManager/details/viewers.py:346
+#: virtManager/details/viewers.py:347
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3956,7 +3968,7 @@ msgstr ""
 "Nedaří se poskytnout požadované přihlašovací údaje VNC serveru.\n"
 "Typ přihlašovacích údajů %s není podporován"
 
-#: virtManager/details/viewers.py:559
+#: virtManager/details/viewers.py:568
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Došlo ke SPICE %(error-name)s"
@@ -4556,11 +4568,11 @@ msgstr "%(connection)s – není připojeno"
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s – připojování…"
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:349
+#: virtManager/manager.py:759 virtManager/vmwindow.py:381
 msgid "_Restore"
 msgstr "_Obnovit"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:377
+#: virtManager/manager.py:796 virtManager/vmwindow.py:409
 msgid "Resume the virtual machine"
 msgstr "Navázat v chodu virtuálního stroje"
 
@@ -4669,11 +4681,11 @@ msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Dané zařízení se v nastavení neaktivního virt. stroje nedaří nalézt: %s"
 
-#: virtManager/object/domain.py:1357
+#: virtManager/object/domain.py:1355
 msgid "Saving domain to disk"
 msgstr "Ukládání domény na disk"
 
-#: virtManager/object/domain.py:1409
+#: virtManager/object/domain.py:1407
 msgid "Migrating domain"
 msgstr "Přesouvání domény"
 
@@ -5000,37 +5012,37 @@ msgstr ""
 msgid "Error resetting domain"
 msgstr "Chyba při restartování domény"
 
-#: virtManager/vmwindow.py:45
+#: virtManager/vmwindow.py:46
 #, python-format
 msgid "Error launching details: %s"
 msgstr "Chyba při spouštění podrobností: %s"
 
-#: virtManager/vmwindow.py:198
+#: virtManager/vmwindow.py:223
 msgid "This will abort the installation. Are you sure?"
 msgstr "Toto přeruší instalaci. Opravdu to chcete?"
 
-#: virtManager/vmwindow.py:389
+#: virtManager/vmwindow.py:421
 msgid "Manage VM snapshots"
 msgstr "Spravovat zachycené stavy virt. stroje"
 
-#: virtManager/vmwindow.py:482
+#: virtManager/vmwindow.py:504
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Chyba při pořizování zachyceného stavu: %s"
 
-#: virtManager/vmwindow.py:490
+#: virtManager/vmwindow.py:512
 msgid "Error initializing spice USB device widget"
 msgstr "Chyba při inicializaci ovládacího prvku spice USB zařízení"
 
-#: virtManager/vmwindow.py:494
+#: virtManager/vmwindow.py:516
 msgid "Select USB devices for redirection"
 msgstr "Vyberte USB zařízení pro přesměrování"
 
-#: virtManager/vmwindow.py:526
+#: virtManager/vmwindow.py:548
 msgid "Save Virtual Machine Screenshot"
 msgstr "Uložit snímek obrazovky virtuálního stroje"
 
-#: virtManager/vmwindow.py:527
+#: virtManager/vmwindow.py:549
 msgid "PNG files"
 msgstr "PNG soubory"
 
@@ -6848,6 +6860,23 @@ msgstr "Je třeba zadat název pro %s"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "název %(objecttype)s „%(name)s“ nemůže obsahovat znak „%(char)s“."
+
+#~ msgid ""
+#~ "When the guest graphical console has keyboard focus, do not disable "
+#~ "shortcuts for console window menus (Alt+F -> File, etc.) Normally these "
+#~ "are disabled to ensure that typing in the guest does not accidentally "
+#~ "perform an operation in virt-manager's console window."
+#~ msgstr ""
+#~ "Když má grafická konzole hosta zaměření klávesnice, nevypínat klávesové "
+#~ "zkratky pro nabídky okna konzole (Alt+F -> Soubor, atd.) Normálně jsou "
+#~ "vypnuté aby bylo zajištěno, že to co napíšete v hostovi neprovede "
+#~ "náhodnou operaci v okně konzole virt-manager."
+
+#~ msgid "_Force console shortcuts:"
+#~ msgstr "Vynutit klávesové zkratky konzole:"
+
+#~ msgid "_Text Consoles"
+#~ msgstr "_Textové konzole"
 
 #~ msgid "<b>Ad_vanced options</b>"
 #~ msgstr "<b>Pokročilé _volby</b>"

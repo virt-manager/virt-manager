@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-09 06:10+0000\n"
+"POT-Creation-Date: 2020-09-11 06:10+0000\n"
 "PO-Revision-Date: 2020-06-22 02:40+0000\n"
 "Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/virt-"
@@ -275,7 +275,7 @@ msgstr "Veuillez patienter quelques instants…"
 msgid "Processing..."
 msgstr "Traitement en cours…"
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:143 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "_Détails"
 
@@ -355,6 +355,40 @@ msgstr "Créer un nouveau disque (c_lone) pour la machine virtuelle"
 msgid "_Browse..."
 msgstr "_Parcourir…"
 
+#: ui/console.ui:21 ui/console.ui:267
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>La console est actuellement indisponible</b>"
+
+#: ui/console.ui:61 virtManager/addhardware.py:223
+msgid "Serial"
+msgstr "Port série"
+
+#: ui/console.ui:128
+msgid "_Password:"
+msgstr "Mot de _passe :"
+
+#: ui/console.ui:142 ui/createconn.ui:208
+msgid "_Username:"
+msgstr "Nom d’_utilisateur :"
+
+#: ui/console.ui:177
+msgid "_Login"
+msgstr "_Identifiant de connexion"
+
+#: ui/console.ui:192
+msgid "_Save this password in your keyring"
+msgstr "_Sauvegarder ce mot de passe dans votre porte-clés"
+
+#: ui/console.ui:196
+msgid "Check to save password, uncheck to forget password."
+msgstr "Cocher pour sauvegarder le mot de passe, sinon décocher."
+
+#: ui/console.ui:292
+#, fuzzy
+#| msgid "TCP net console"
+msgid "_Connect to console"
+msgstr "Console réseau TCP"
+
 #: ui/createconn.ui:13
 msgid "Add Connection"
 msgstr "Ajouter une connexion"
@@ -378,10 +412,6 @@ msgstr "Connexion _automatique :"
 #: ui/createconn.ui:191
 msgid "H_ostname:"
 msgstr "N_om de l’hôte :"
-
-#: ui/createconn.ui:208 ui/vmwindow.ui:599
-msgid "_Username:"
-msgstr "Nom d’_utilisateur :"
 
 #: ui/createconn.ui:242
 msgid ""
@@ -1332,11 +1362,11 @@ msgstr ""
 msgid "Connection Details"
 msgstr "Détails de la connexion"
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:34
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
 msgid "_File"
 msgstr "_Fichier"
 
-#: ui/host.ui:43 ui/vmwindow.ui:43
+#: ui/host.ui:43 ui/vmwindow.ui:38
 msgid "_View Manager"
 msgstr "_Voir le gestionnaire"
 
@@ -1494,7 +1524,7 @@ msgstr "Détails de la _connexion"
 msgid "_Virtual Machine Details"
 msgstr "Détails de la machine _virtuelle"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:123
+#: ui/manager.ui:172 ui/vmwindow.ui:118
 msgid "_View"
 msgstr "_Afficher"
 
@@ -1542,17 +1572,17 @@ msgstr "Afficher la console et les détails de la machine virtuelle"
 msgid "_Open"
 msgstr "_Ouvrir"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:341
+#: ui/manager.ui:332 ui/vmwindow.ui:345
 msgid "Power on the virtual machine"
 msgstr "Démarrer la machine virtuelle"
 
 #: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:351
+#: virtManager/vmwindow.py:383
 msgid "_Run"
 msgstr "_Démarrer"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:356 virtManager/manager.py:798
-#: virtManager/vmwindow.py:379
+#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
+#: virtManager/vmwindow.py:411
 msgid "Pause the virtual machine"
 msgstr "Suspendre la machine virtuelle"
 
@@ -1560,11 +1590,11 @@ msgstr "Suspendre la machine virtuelle"
 msgid "_Pause"
 msgstr "Sus_pendre"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:371
+#: ui/manager.ui:364 ui/vmwindow.ui:375
 msgid "Shut down the virtual machine"
 msgstr "Eteindre la machine virtuelle"
 
-#: ui/manager.ui:365 ui/vmwindow.ui:372 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "_Éteindre"
@@ -1826,28 +1856,11 @@ msgstr "Obt_enir les clés :"
 msgid "Not supported"
 msgstr "Non pris en charge"
 
-#: ui/preferences.ui:686 ui/preferences.ui:700
-msgid ""
-"When the guest graphical console has keyboard focus, do not disable "
-"shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
-"disabled to ensure that typing in the guest does not accidentally perform an "
-"operation in virt-manager's console window."
-msgstr ""
-"Lorsque la console graphique de l’invité a le focus du clavier, ne pas "
-"désactiver les raccourcis de menus pour la fenêtre de la console (Alt+F -> "
-"Fichier, etc.) Ceux-ci sont habituellement désactivés afin d’assurer que la "
-"saisie du clavier dans l’invité n’exécute pas une opération dans la fenêtre "
-"de console de Virt-manager."
-
-#: ui/preferences.ui:702
-msgid "_Force console shortcuts:"
-msgstr "_Forcer les raccourcis de la console :"
-
-#: ui/preferences.ui:713
+#: ui/preferences.ui:683
 msgid "Change..."
 msgstr "Modifier…"
 
-#: ui/preferences.ui:730
+#: ui/preferences.ui:700
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -1856,57 +1869,69 @@ msgstr ""
 "l’invité est modifiée. Ne fonctionne qu’avec un invité configuré "
 "correctement et utilisant spice et l’agent de bureau."
 
-#: ui/preferences.ui:732
+#: ui/preferences.ui:702
 msgid "_Resize guest with window:"
 msgstr "Redimensionner l’invité avec la fenêtre :"
 
-#: ui/preferences.ui:758
+#: ui/preferences.ui:728
 msgid "SPICE _USB Redirection:"
 msgstr "Redirection _USB SPICE :"
 
-#: ui/preferences.ui:786
+#: ui/preferences.ui:752
+msgid ""
+"If disabled, the VM window will not automatically connect to the running VM "
+"graphical console."
+msgstr ""
+
+#: ui/preferences.ui:754
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "Console autoconnec_t:"
+msgstr "Connexion _automatique :"
+
+#: ui/preferences.ui:784
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>Consoles graphiques</b>"
 
-#: ui/preferences.ui:804
+#: ui/preferences.ui:802
 msgid "Conso_le"
 msgstr "Conso_le"
 
-#: ui/preferences.ui:836
+#: ui/preferences.ui:834
 msgid "_Force Poweroff:"
 msgstr "_Forcer l’extinction :"
 
-#: ui/preferences.ui:863
+#: ui/preferences.ui:861
 msgid "Poweroff/_Reboot/Save:"
 msgstr "Éteindre/_Redémarrer/Sauvegarder :"
 
-#: ui/preferences.ui:877
+#: ui/preferences.ui:875
 msgid "_Pause:"
 msgstr "Sus_pendre :"
 
-#: ui/preferences.ui:930
+#: ui/preferences.ui:928
 msgid "Device re_moval:"
 msgstr "_Retrait de périphérique :"
 
-#: ui/preferences.ui:944
+#: ui/preferences.ui:942
 msgid "_Unapplied changes:"
 msgstr "Modifications non appliquées :"
 
-#: ui/preferences.ui:971
+#: ui/preferences.ui:969
 msgid "_Deleting storage:"
 msgstr "Suppression de stockage :"
 
-#: ui/preferences.ui:1002
+#: ui/preferences.ui:1000
 msgid "<b>Confirmations</b>"
 msgstr "<b>Confirmations</b>"
 
-#: ui/preferences.ui:1008
+#: ui/preferences.ui:1006
 #, fuzzy
 #| msgid "Feed_back"
 msgid "feedback-tab"
 msgstr "Commentaires"
 
-#: ui/preferences.ui:1020
+#: ui/preferences.ui:1018
 msgid "Feed_back"
 msgstr "Commentaires"
 
@@ -1970,143 +1995,127 @@ msgstr ""
 msgid "_Description:"
 msgstr "_Description :"
 
-#: ui/vmwindow.ui:13
+#: ui/vmwindow.ui:8
 msgid "Virtual Machine"
 msgstr "Machine virtuelle"
 
-#: ui/vmwindow.ui:84
+#: ui/vmwindow.ui:79
 msgid "Virtual _Machine"
 msgstr "_Machine virtuelle"
 
-#: ui/vmwindow.ui:100
+#: ui/vmwindow.ui:95
 msgid "_Take Screenshot"
 msgstr "_Prendre une capture d’écran"
 
-#: ui/vmwindow.ui:109
+#: ui/vmwindow.ui:104
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr ""
 "Rediriger le périphérique USB de l’hôte vers la machine virtuelle avec les "
 "schémas SPICE."
 
-#: ui/vmwindow.ui:110
+#: ui/vmwindow.ui:105
 msgid "_Redirect USB device"
 msgstr "_Rediriger un périphérique USB"
 
-#: ui/vmwindow.ui:132
+#: ui/vmwindow.ui:127
 msgid "_Console"
 msgstr "_Console"
 
-#: ui/vmwindow.ui:154
+#: ui/vmwindow.ui:149
 msgid "Sna_pshots"
 msgstr "_Instantanés"
 
-#: ui/vmwindow.ui:171
+#: ui/vmwindow.ui:166
 msgid "_Fullscreen"
 msgstr "_Plein écran"
 
-#: ui/vmwindow.ui:180
+#: ui/vmwindow.ui:175
 msgid "_Resize to VM"
 msgstr "_Redimensionner à la taille de la VM"
 
-#: ui/vmwindow.ui:189
+#: ui/vmwindow.ui:184
 msgid "_Scale Display"
 msgstr "Mettre à l’_échelle l’affichage"
 
-#: ui/vmwindow.ui:199
+#: ui/vmwindow.ui:194
 msgid "_Always"
 msgstr "_Toujours"
 
-#: ui/vmwindow.ui:209
+#: ui/vmwindow.ui:204
 msgid "_Only when Fullscreen"
 msgstr "_Seulement si plein écran"
 
-#: ui/vmwindow.ui:220
+#: ui/vmwindow.ui:215
 msgid "_Never"
 msgstr "_Jamais"
 
-#: ui/vmwindow.ui:237
+#: ui/vmwindow.ui:232
 msgid "Auto _resize VM with window"
 msgstr "Ajustement automatique de la machine virtuelle à la fenêtre"
 
-#: ui/vmwindow.ui:250
-msgid "_Text Consoles"
-msgstr "Consoles _texte"
+#: ui/vmwindow.ui:245
+#, fuzzy
+#| msgid "Console"
+msgid "Co_nsoles"
+msgstr "Console"
 
-#: ui/vmwindow.ui:264
+#: ui/vmwindow.ui:253
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "_Autoconnect"
+msgstr "Connexion _automatique :"
+
+#: ui/vmwindow.ui:268
 msgid "T_oolbar"
 msgstr "Barre d’_outils"
 
-#: ui/vmwindow.ui:278
+#: ui/vmwindow.ui:282
 msgid "Send _Key"
 msgstr "Touche d’envoi"
 
-#: ui/vmwindow.ui:301
+#: ui/vmwindow.ui:305
 msgid "Show the graphical console"
 msgstr "Afficher la console graphique"
 
-#: ui/vmwindow.ui:302 virtManager/addhardware.py:231
+#: ui/vmwindow.ui:306 virtManager/addhardware.py:231
 msgid "Console"
 msgstr "Console"
 
-#: ui/vmwindow.ui:316
+#: ui/vmwindow.ui:320
 msgid "Show virtual hardware details"
 msgstr "Afficher les détails du matériel virtuel"
 
-#: ui/vmwindow.ui:317 virtManager/error.py:352
+#: ui/vmwindow.ui:321 virtManager/error.py:352
 msgid "Details"
 msgstr "Détails"
 
-#: ui/vmwindow.ui:342
+#: ui/vmwindow.ui:346
 msgid "Run"
 msgstr "Démarrer"
 
-#: ui/vmwindow.ui:357
+#: ui/vmwindow.ui:361
 msgid "Pause"
 msgstr "Suspendre"
 
-#: ui/vmwindow.ui:395
+#: ui/vmwindow.ui:399
 msgid "Snapshots"
 msgstr "Instantanés"
 
-#: ui/vmwindow.ui:409
+#: ui/vmwindow.ui:413
 msgid "Switch to fullscreen view"
 msgstr "Basculer vers la vue plein écran"
 
-#: ui/vmwindow.ui:434
+#: ui/vmwindow.ui:438
 msgid "Begin Installation"
 msgstr "Commencer l’installation"
 
-#: ui/vmwindow.ui:436
+#: ui/vmwindow.ui:440
 msgid "_Begin Installation"
 msgstr "_Commencer l’installation"
 
-#: ui/vmwindow.ui:451
+#: ui/vmwindow.ui:455
 msgid "_Cancel Installation"
 msgstr "_Annuler l’installation"
-
-#: ui/vmwindow.ui:512
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>La console est actuellement indisponible</b>"
-
-#: ui/vmwindow.ui:548
-msgid "_Password:"
-msgstr "Mot de _passe :"
-
-#: ui/vmwindow.ui:576
-msgid "_Save this password in your keyring"
-msgstr "_Sauvegarder ce mot de passe dans votre porte-clés"
-
-#: ui/vmwindow.ui:580
-msgid "Check to save password, uncheck to forget password."
-msgstr "Cocher pour sauvegarder le mot de passe, sinon décocher."
-
-#: ui/vmwindow.ui:622
-msgid "_Login"
-msgstr "_Identifiant de connexion"
-
-#: ui/vmwindow.ui:720 virtManager/addhardware.py:223
-msgid "Serial"
-msgstr "Port série"
 
 #: ui/vsockdetails.ui:22
 msgid "Guest C_ID:"
@@ -3049,36 +3058,36 @@ msgstr "Attente du média ou de la source d’installation"
 msgid "Error populating summary page: %s"
 msgstr "Erreur lors du remplissage de la page de résumé : %s"
 
-#: virtManager/createvm.py:1447
+#: virtManager/createvm.py:1448
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr ""
 "Erreur non interceptée lors de la validation des paramètres d’installation : "
 "%s"
 
-#: virtManager/createvm.py:1458
+#: virtManager/createvm.py:1459
 msgid "Source URL is required"
 msgstr "L’URL source est requise"
 
-#: virtManager/createvm.py:1463
+#: virtManager/createvm.py:1464
 msgid "Please specify password for accessing source registry"
 msgstr "Veuillez renseigner un mot de passe pour accéder au registre source"
 
-#: virtManager/createvm.py:1471
+#: virtManager/createvm.py:1472
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr "Le chemin de destination n’est pas un dossier : %s"
 
-#: virtManager/createvm.py:1474
+#: virtManager/createvm.py:1475
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr "Pas de permission d’écriture pour le chemin du dossier : %s"
 
-#: virtManager/createvm.py:1481
+#: virtManager/createvm.py:1482
 msgid "OS root directory is not empty"
 msgstr "Le dossier racine du système d’exploitation n’est pas vide"
 
-#: virtManager/createvm.py:1482
+#: virtManager/createvm.py:1483
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
@@ -3088,79 +3097,79 @@ msgstr ""
 "échouer à cause de conflits de fichiers.\n"
 "Voulez-vous continuer ?"
 
-#: virtManager/createvm.py:1501
+#: virtManager/createvm.py:1502
 msgid "An install media selection is required."
 msgstr "Une sélection de média d’installation est requise."
 
-#: virtManager/createvm.py:1509
+#: virtManager/createvm.py:1510
 msgid "An install tree is required."
 msgstr "Un arbre d’installation est requis."
 
-#: virtManager/createvm.py:1517
+#: virtManager/createvm.py:1518
 msgid "A storage path to import is required."
 msgstr "Un chemin de stockage pour importer est requis."
 
-#: virtManager/createvm.py:1523
+#: virtManager/createvm.py:1524
 msgid "The import path must point to an existing storage."
 msgstr ""
 "Le chemin d’importation doit pointer sur un espace de stockage existant."
 
-#: virtManager/createvm.py:1529
+#: virtManager/createvm.py:1530
 msgid "An application path is required."
 msgstr "Un chemin d’application est requis."
 
-#: virtManager/createvm.py:1534
+#: virtManager/createvm.py:1535
 msgid "An OS directory path is required."
 msgstr "Un chemin de dossier de système d’exploitation est requis."
 
-#: virtManager/createvm.py:1548
+#: virtManager/createvm.py:1549
 msgid "A template name is required."
 msgstr "Un nom de modèle est nécessaire."
 
-#: virtManager/createvm.py:1551
+#: virtManager/createvm.py:1552
 msgid "You must select an OS."
 msgstr "Vous devez sélectionner un système d’exploitation."
 
-#: virtManager/createvm.py:1581
+#: virtManager/createvm.py:1582
 msgid "Error setting installer parameters."
 msgstr "Erreur lors de la définition des paramètres de l’installeur."
 
-#: virtManager/createvm.py:1589
+#: virtManager/createvm.py:1590
 msgid "Error setting default name."
 msgstr "Erreur lors de la définition du nom par défaut."
 
-#: virtManager/createvm.py:1680
+#: virtManager/createvm.py:1681
 msgid "Storage parameter error."
 msgstr "Erreur dans les paramètres du stockage."
 
-#: virtManager/createvm.py:1702
+#: virtManager/createvm.py:1703
 msgid "Invalid guest name"
 msgstr "Nom de l’invité non valide"
 
-#: virtManager/createvm.py:1785
+#: virtManager/createvm.py:1786
 msgid "Detecting..."
 msgstr "Détection en cours…"
 
-#: virtManager/createvm.py:1847
+#: virtManager/createvm.py:1848
 msgid "None detected"
 msgstr "Aucun détecté"
 
-#: virtManager/createvm.py:1884
+#: virtManager/createvm.py:1885
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "Erreur lors du démarrage de l’installation : "
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1928
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Impossible de terminer l’installation : « %s »"
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1968
 msgid "Creating Virtual Machine"
 msgstr "Création d’une machine virtuelle"
 
-#: virtManager/createvm.py:1968
+#: virtManager/createvm.py:1969
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3169,19 +3178,19 @@ msgstr ""
 "stockage disque et la récupération des images d’installation peuvent prendre "
 "quelques minutes."
 
-#: virtManager/createvm.py:2022
+#: virtManager/createvm.py:2023
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr ""
 "La machine virtuelle \"%s\" ne s’est pas affichée à la fin du temps imparti."
 
-#: virtManager/createvm.py:2072
+#: virtManager/createvm.py:2073
 #, fuzzy, python-format
 #| msgid "Error continue install: %s"
 msgid "Error continuing install: %s"
 msgstr "Erreur lors de la validation de l’installation : %s"
 
-#: virtManager/createvm.py:2085
+#: virtManager/createvm.py:2086
 msgid "Bootstraping container"
 msgstr "Conteneur d’amorçage"
 
@@ -3366,57 +3375,85 @@ msgstr ""
 msgid "Failed to check disk usage conflict."
 msgstr ""
 
-#: virtManager/details/console.py:149
+#: virtManager/details/console.py:153
 msgid "Leave fullscreen"
 msgstr "Quitter le plein écran"
 
-#: virtManager/details/console.py:158
+#: virtManager/details/console.py:162
 msgid "Send key combination"
 msgstr "Envoyer la combinaison de touches"
 
-#: virtManager/details/console.py:282
+#: virtManager/details/console.py:201
+msgid "No text console available"
+msgstr "Aucune console texte disponible"
+
+#: virtManager/details/console.py:206
+#, python-format
+msgid "Text Console %d"
+msgstr "Console texte %d"
+
+#: virtManager/details/console.py:208
+#, python-format
+msgid "Serial %d"
+msgstr "Console série %d"
+
+#: virtManager/details/console.py:217
+msgid "No graphical console available"
+msgstr "Aucune console graphique disponible"
+
+#: virtManager/details/console.py:223
+msgid "Graphical Console"
+msgstr "Console graphique"
+
+#: virtManager/details/console.py:229
+#, fuzzy
+#| msgid "virt-manager does not support more that one graphical console"
+msgid "virt-manager does not support more than one graphical console"
+msgstr "virt-manager ne prend pas en charge plus d’une console graphique"
+
+#: virtManager/details/console.py:383
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s sur %(connection-name)s"
 
-#: virtManager/details/console.py:289
+#: virtManager/details/console.py:390
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Appuyer sur %s pour libérer le pointeur."
 
-#: virtManager/details/console.py:420
+#: virtManager/details/console.py:507
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 "Le type d’affichage « %s » ne prend pas en charge le redimensionnement "
 "automatique."
 
-#: virtManager/details/console.py:423
+#: virtManager/details/console.py:510
 msgid "Guest agent is not available."
 msgstr "L’agent invité n’est pas disponible."
 
-#: virtManager/details/console.py:564
+#: virtManager/details/console.py:590
 msgid "Guest has crashed."
 msgstr "L’invité a planté."
 
-#: virtManager/details/console.py:566
+#: virtManager/details/console.py:592
 msgid "Guest is not running."
 msgstr "L’invité est à l’arrêt."
 
-#: virtManager/details/console.py:706
+#: virtManager/details/console.py:724
 msgid "Graphical console not configured for guest"
 msgstr "Console graphique non configurée pour l’invité"
 
-#: virtManager/details/console.py:713
+#: virtManager/details/console.py:731
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Impossible d’afficher le type de console graphique « %s »"
 
-#: virtManager/details/console.py:720
+#: virtManager/details/console.py:743
 msgid "Connecting to graphical console for guest"
 msgstr "Connexion à la console graphique en cours pour l’invité"
 
-#: virtManager/details/console.py:741
+#: virtManager/details/console.py:762
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3424,53 +3461,27 @@ msgid ""
 "%s"
 msgstr "Erreur lors de la connexion à la console graphique"
 
-#: virtManager/details/console.py:792
+#: virtManager/details/console.py:819
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Erreur d’authentification de l’afficheur : %s"
 
-#: virtManager/details/console.py:811
+#: virtManager/details/console.py:841
 msgid "USB redirection error"
 msgstr "Erreur de redirection USB"
 
-#: virtManager/details/console.py:820
+#: virtManager/details/console.py:850
 msgid "Viewer was disconnected."
 msgstr "Le visionneur a été déconnecté."
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:856
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Sortie d’erreur du tunnel SSH : %s"
 
-#: virtManager/details/console.py:831 virtManager/details/console.py:1016
+#: virtManager/details/console.py:861 virtManager/details/console.py:979
 msgid "Viewer disconnected."
 msgstr "Visionneur déconnecté."
-
-#: virtManager/details/console.py:919
-msgid "No text console available"
-msgstr "Aucune console texte disponible"
-
-#: virtManager/details/console.py:932
-#, python-format
-msgid "Text Console %d"
-msgstr "Console texte %d"
-
-#: virtManager/details/console.py:934
-#, python-format
-msgid "Serial %d"
-msgstr "Console série %d"
-
-#: virtManager/details/console.py:946
-msgid "No graphical console available"
-msgstr "Aucune console graphique disponible"
-
-#: virtManager/details/console.py:955
-msgid "Graphical Console"
-msgstr "Console graphique"
-
-#: virtManager/details/console.py:963
-msgid "virt-manager does not support more that one graphical console"
-msgstr "virt-manager ne prend pas en charge plus d’une console graphique"
 
 #: virtManager/details/details.py:166
 #, fuzzy, python-format
@@ -3832,7 +3843,7 @@ msgid "Console for device type '%s' is not supported"
 msgstr ""
 "La console pour le type de périphérique « %s » n’est pas prise en charge"
 
-#: virtManager/details/serialcon.py:341
+#: virtManager/details/serialcon.py:350
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Erreur lors de la connexion à la console texte : %s"
@@ -4024,7 +4035,7 @@ msgstr ""
 "uniquement configuré pour écouter localement. Pour vous connecter à "
 "distance, vous devrez modifier l’adresse d’écoute de l’invité."
 
-#: virtManager/details/viewers.py:346
+#: virtManager/details/viewers.py:347
 #, fuzzy, python-format
 #| msgid ""
 #| "Unable to provide requested credentials to the VNC server.\n"
@@ -4036,7 +4047,7 @@ msgstr ""
 "Impossible de fournir les identifiants requis au serveur VNC.\n"
 " Le type d’identifiants %s n’est pas pris en charge"
 
-#: virtManager/details/viewers.py:559
+#: virtManager/details/viewers.py:568
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Erreur SPICE %(error-name)s rencontrée"
@@ -4648,11 +4659,11 @@ msgstr "Connexion inactive."
 msgid "%(connection)s - Connecting..."
 msgstr "Connexion…"
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:349
+#: virtManager/manager.py:759 virtManager/vmwindow.py:381
 msgid "_Restore"
 msgstr "_Restaurer"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:377
+#: virtManager/manager.py:796 virtManager/vmwindow.py:409
 msgid "Resume the virtual machine"
 msgstr "Faire reprendre la machine virtuelle"
 
@@ -4767,11 +4778,11 @@ msgstr ""
 "Impossible de trouver le périphérique spécifié dans la configuration de la "
 "VM inactive : %s"
 
-#: virtManager/object/domain.py:1357
+#: virtManager/object/domain.py:1355
 msgid "Saving domain to disk"
 msgstr "Sauvegarde du domaine sur le disque"
 
-#: virtManager/object/domain.py:1409
+#: virtManager/object/domain.py:1407
 msgid "Migrating domain"
 msgstr "Migration du domaine"
 
@@ -5097,37 +5108,37 @@ msgstr ""
 msgid "Error resetting domain"
 msgstr "Erreur lors de la réinitialisation du domaine"
 
-#: virtManager/vmwindow.py:45
+#: virtManager/vmwindow.py:46
 #, python-format
 msgid "Error launching details: %s"
 msgstr "Erreur lors du lancement des détails : %s"
 
-#: virtManager/vmwindow.py:198
+#: virtManager/vmwindow.py:223
 msgid "This will abort the installation. Are you sure?"
 msgstr "Cela arrêtera l’installation. Souhaitez-vous continuer ?"
 
-#: virtManager/vmwindow.py:389
+#: virtManager/vmwindow.py:421
 msgid "Manage VM snapshots"
 msgstr "Gérer les instantanés des VM"
 
-#: virtManager/vmwindow.py:482
+#: virtManager/vmwindow.py:504
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Erreur lors de la prise de copie d’écran : %s"
 
-#: virtManager/vmwindow.py:490
+#: virtManager/vmwindow.py:512
 msgid "Error initializing spice USB device widget"
 msgstr "Erreur lors de l’initialisation du widget du périphérique USB SPICE"
 
-#: virtManager/vmwindow.py:494
+#: virtManager/vmwindow.py:516
 msgid "Select USB devices for redirection"
 msgstr "Sélectionner les périphériques USB pour la redirection"
 
-#: virtManager/vmwindow.py:526
+#: virtManager/vmwindow.py:548
 msgid "Save Virtual Machine Screenshot"
 msgstr "Enregistrer la capture d’écran de la machine virtuelle"
 
-#: virtManager/vmwindow.py:527
+#: virtManager/vmwindow.py:549
 msgid "PNG files"
 msgstr "Fichiers PNG"
 
@@ -7008,6 +7019,24 @@ msgstr "Un nom doit être spécifié pour le %s"
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s nom « %s » ne peut contenir le caractère « %s »."
+
+#~ msgid ""
+#~ "When the guest graphical console has keyboard focus, do not disable "
+#~ "shortcuts for console window menus (Alt+F -> File, etc.) Normally these "
+#~ "are disabled to ensure that typing in the guest does not accidentally "
+#~ "perform an operation in virt-manager's console window."
+#~ msgstr ""
+#~ "Lorsque la console graphique de l’invité a le focus du clavier, ne pas "
+#~ "désactiver les raccourcis de menus pour la fenêtre de la console (Alt+F -"
+#~ "> Fichier, etc.) Ceux-ci sont habituellement désactivés afin d’assurer "
+#~ "que la saisie du clavier dans l’invité n’exécute pas une opération dans "
+#~ "la fenêtre de console de Virt-manager."
+
+#~ msgid "_Force console shortcuts:"
+#~ msgstr "_Forcer les raccourcis de la console :"
+
+#~ msgid "_Text Consoles"
+#~ msgstr "Consoles _texte"
 
 #~ msgid "<b>Ad_vanced options</b>"
 #~ msgstr "<b>Options avancées</b>"

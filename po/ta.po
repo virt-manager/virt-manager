@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-09 06:10+0000\n"
+"POT-Creation-Date: 2020-09-11 06:10+0000\n"
 "PO-Revision-Date: 2017-02-05 04:03+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Tamil (http://www.transifex.com/projects/p/virt-manager/"
@@ -245,7 +245,7 @@ msgstr "சில கணங்கள் காத்திருக்கவு�
 msgid "Processing..."
 msgstr "நடைபெறுகிறது..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:143 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "விவரங்கள் (_D)"
 
@@ -324,6 +324,40 @@ msgstr "மெய்நிகர் கணினிக்கு ஒரு பு
 msgid "_Browse..."
 msgstr "உலாவுதல் (_B)..."
 
+#: ui/console.ui:21 ui/console.ui:267
+msgid "<b>The console is currently unavailable</b>"
+msgstr "<b>பணிமுனை தற்போது இல்லை</b>"
+
+#: ui/console.ui:61 virtManager/addhardware.py:223
+msgid "Serial"
+msgstr ""
+
+#: ui/console.ui:128
+msgid "_Password:"
+msgstr "கடவுச்சொல் (_P):"
+
+#: ui/console.ui:142 ui/createconn.ui:208
+msgid "_Username:"
+msgstr "பயனர் பெயர் (_U):"
+
+#: ui/console.ui:177
+msgid "_Login"
+msgstr "புகுபதிவு (_L)"
+
+#: ui/console.ui:192
+msgid "_Save this password in your keyring"
+msgstr "உங்கள் keyringஇல் இந்த கடவுச்சொல்லை சேமி (_S)"
+
+#: ui/console.ui:196
+msgid "Check to save password, uncheck to forget password."
+msgstr ""
+
+#: ui/console.ui:292
+#, fuzzy
+#| msgid "TCP net console"
+msgid "_Connect to console"
+msgstr "TCP net பணியகம்"
+
 #: ui/createconn.ui:13
 msgid "Add Connection"
 msgstr "இணைப்பு சேர்"
@@ -347,10 +381,6 @@ msgstr "தானியக்க இணைப்பு (_A):"
 #: ui/createconn.ui:191
 msgid "H_ostname:"
 msgstr "புரவலன்பெயர்(_o):"
-
-#: ui/createconn.ui:208 ui/vmwindow.ui:599
-msgid "_Username:"
-msgstr "பயனர் பெயர் (_U):"
 
 #: ui/createconn.ui:242
 msgid ""
@@ -1286,11 +1316,11 @@ msgstr ""
 msgid "Connection Details"
 msgstr "இணைப்பு விவரங்கள்"
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:34
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
 msgid "_File"
 msgstr "கோப்பு (_F)"
 
-#: ui/host.ui:43 ui/vmwindow.ui:43
+#: ui/host.ui:43 ui/vmwindow.ui:38
 msgid "_View Manager"
 msgstr "மேலாளரைக் காட்டு (_V)"
 
@@ -1448,7 +1478,7 @@ msgstr "இணைப்பு விவரங்கள் (_C)"
 msgid "_Virtual Machine Details"
 msgstr "மெய்நிகர் கணினி விவரங்கள் (_V)"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:123
+#: ui/manager.ui:172 ui/vmwindow.ui:118
 msgid "_View"
 msgstr "காட்சி (_V)"
 
@@ -1496,17 +1526,17 @@ msgstr "மெய்நிகர் கணினி பணிமுனை மற
 msgid "_Open"
 msgstr "திற (_O)"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:341
+#: ui/manager.ui:332 ui/vmwindow.ui:345
 msgid "Power on the virtual machine"
 msgstr "மெய்நிகர் கணினியை "
 
 #: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:351
+#: virtManager/vmwindow.py:383
 msgid "_Run"
 msgstr "இயக்கவும் (_R)"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:356 virtManager/manager.py:798
-#: virtManager/vmwindow.py:379
+#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
+#: virtManager/vmwindow.py:411
 msgid "Pause the virtual machine"
 msgstr "மெய்நிகர் கணினியை இடைநிறுத்து"
 
@@ -1514,11 +1544,11 @@ msgstr "மெய்நிகர் கணினியை இடைநிறு�
 msgid "_Pause"
 msgstr "இடை நிறுத்தம் (_P)"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:371
+#: ui/manager.ui:364 ui/vmwindow.ui:375
 msgid "Shut down the virtual machine"
 msgstr ""
 
-#: ui/manager.ui:365 ui/vmwindow.ui:372 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "பணி நிறுத்தம் (_S)"
@@ -1757,27 +1787,11 @@ msgstr "விசைகளைப் பிடித்துக்கொள்: 
 msgid "Not supported"
 msgstr "ஆதரவு இல்லை"
 
-#: ui/preferences.ui:686 ui/preferences.ui:700
-msgid ""
-"When the guest graphical console has keyboard focus, do not disable "
-"shortcuts for console window menus (Alt+F -> File, etc.) Normally these are "
-"disabled to ensure that typing in the guest does not accidentally perform an "
-"operation in virt-manager's console window."
-msgstr ""
-"விருந்தினர் வரைபொருள் பணிமுனை விசைப்பலகை கவனத்தில் இருக்கும் போது, பணிமுனை சாளர "
-"மெனுக்களுக்கான குறுக்குவழிகளை (Alt+F -> கோப்பு போன்றவை) முடக்க வேண்டாம், வழக்கமாக "
-"விருந்தினர் கணினியில் தட்டச்சு செய்யும் போது அந்த விசைகள் virt-manager பணிமுனையில் "
-"எதிர்பாரா விதமாக ஏதேனும் செயல்களை செய்துவிடாமல் இருப்பதற்காக முடக்கப்படும்."
-
-#: ui/preferences.ui:702
-msgid "_Force console shortcuts:"
-msgstr "கன்சோல் குறுக்குவழிகளை நிர்ப்பந்திக்கவும் (_F):"
-
-#: ui/preferences.ui:713
+#: ui/preferences.ui:683
 msgid "Change..."
 msgstr "மாற்று..."
 
-#: ui/preferences.ui:730
+#: ui/preferences.ui:700
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -1786,57 +1800,69 @@ msgstr ""
 "மற்றும் டெஸ்க்டாப் ஏஜன்ட்டைப் பயன்படுத்தும் முறையாக அமைவாக்கம் செய்யப்பட்ட விருந்தினருக்கு "
 "மட்டுமே செயல்படும்."
 
-#: ui/preferences.ui:732
+#: ui/preferences.ui:702
 msgid "_Resize guest with window:"
 msgstr "சாளரத்துடன் விருந்தினரை மறுஅளவீடு செய்யவும் (_R):"
 
-#: ui/preferences.ui:758
+#: ui/preferences.ui:728
 msgid "SPICE _USB Redirection:"
 msgstr ""
 
-#: ui/preferences.ui:786
+#: ui/preferences.ui:752
+msgid ""
+"If disabled, the VM window will not automatically connect to the running VM "
+"graphical console."
+msgstr ""
+
+#: ui/preferences.ui:754
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "Console autoconnec_t:"
+msgstr "தானியக்க இணைப்பு (_A):"
+
+#: ui/preferences.ui:784
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>வரைபொருள் பணிமுனைகள்</b>"
 
-#: ui/preferences.ui:804
+#: ui/preferences.ui:802
 msgid "Conso_le"
 msgstr "பணியகம் (_l)"
 
-#: ui/preferences.ui:836
+#: ui/preferences.ui:834
 msgid "_Force Poweroff:"
 msgstr "கட்டாய பணிநிறுத்தம் (_F):"
 
-#: ui/preferences.ui:863
+#: ui/preferences.ui:861
 msgid "Poweroff/_Reboot/Save:"
 msgstr "பவர்ஆஃப்/மறுதுவக்கு /சேமி (_R):"
 
-#: ui/preferences.ui:877
+#: ui/preferences.ui:875
 msgid "_Pause:"
 msgstr "இடை நிறுத்தம் (_P):"
 
-#: ui/preferences.ui:930
+#: ui/preferences.ui:928
 msgid "Device re_moval:"
 msgstr "சாதன நீக்கம் (_m):"
 
-#: ui/preferences.ui:944
+#: ui/preferences.ui:942
 msgid "_Unapplied changes:"
 msgstr "செயல்படுத்தாத மாற்றங்கள்: (_U)"
 
-#: ui/preferences.ui:971
+#: ui/preferences.ui:969
 msgid "_Deleting storage:"
 msgstr "சேமிப்பகத்தை அழிக்கிறது (_D):"
 
-#: ui/preferences.ui:1002
+#: ui/preferences.ui:1000
 msgid "<b>Confirmations</b>"
 msgstr "<b>உறுதிபடுத்தல்கள்</b>"
 
-#: ui/preferences.ui:1008
+#: ui/preferences.ui:1006
 #, fuzzy
 #| msgid "Feed_back"
 msgid "feedback-tab"
 msgstr "கருத்து (_b)"
 
-#: ui/preferences.ui:1020
+#: ui/preferences.ui:1018
 msgid "Feed_back"
 msgstr "கருத்து (_b)"
 
@@ -1901,142 +1927,126 @@ msgstr ""
 msgid "_Description:"
 msgstr "விளக்கம் (_D):"
 
-#: ui/vmwindow.ui:13
+#: ui/vmwindow.ui:8
 msgid "Virtual Machine"
 msgstr "மெய்நிகர் கணினி"
 
-#: ui/vmwindow.ui:84
+#: ui/vmwindow.ui:79
 msgid "Virtual _Machine"
 msgstr "மெய்நிகர் கணினி (_M)"
 
-#: ui/vmwindow.ui:100
+#: ui/vmwindow.ui:95
 msgid "_Take Screenshot"
 msgstr "திரைப்பிடிப்பு எடுக்கவும் (_T)"
 
-#: ui/vmwindow.ui:109
+#: ui/vmwindow.ui:104
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr "வழங்கி USB சாதனத்தை SPICE கிராபிக்ஸுடன் மெய்நிகர் கணினிக்குத் திருப்பிவிடு."
 
-#: ui/vmwindow.ui:110
+#: ui/vmwindow.ui:105
 msgid "_Redirect USB device"
 msgstr "USB சாதனத்தைத் திருப்பிவிடு (_R)"
 
-#: ui/vmwindow.ui:132
+#: ui/vmwindow.ui:127
 msgid "_Console"
 msgstr "பணிமுனை (_C)"
 
-#: ui/vmwindow.ui:154
+#: ui/vmwindow.ui:149
 msgid "Sna_pshots"
 msgstr "ஸ்னாப்ஷாட்டுகள் (_p)"
 
-#: ui/vmwindow.ui:171
+#: ui/vmwindow.ui:166
 msgid "_Fullscreen"
 msgstr "முழுத்திரை (_F)"
 
-#: ui/vmwindow.ui:180
+#: ui/vmwindow.ui:175
 msgid "_Resize to VM"
 msgstr "VMக்கு மறுஅளவிடு (_R)"
 
-#: ui/vmwindow.ui:189
+#: ui/vmwindow.ui:184
 msgid "_Scale Display"
 msgstr "காட்சியின் அளவு (_S)"
 
-#: ui/vmwindow.ui:199
+#: ui/vmwindow.ui:194
 msgid "_Always"
 msgstr "எப்போதும் (_A)"
 
-#: ui/vmwindow.ui:209
+#: ui/vmwindow.ui:204
 msgid "_Only when Fullscreen"
 msgstr "முழுத்திரையின் போது மட்டும் (_O)"
 
-#: ui/vmwindow.ui:220
+#: ui/vmwindow.ui:215
 msgid "_Never"
 msgstr "இல்லை (_N)"
 
-#: ui/vmwindow.ui:237
+#: ui/vmwindow.ui:232
 msgid "Auto _resize VM with window"
 msgstr "VM ஐ சாளரத்துடன் தானியக்கமாக மறுஅளவீடு செய்யவும் (_r)"
 
-#: ui/vmwindow.ui:250
-msgid "_Text Consoles"
-msgstr "உரை பணிமுனைகள் (_T)"
+#: ui/vmwindow.ui:245
+#, fuzzy
+#| msgid "Console"
+msgid "Co_nsoles"
+msgstr "பணிமுனை"
 
-#: ui/vmwindow.ui:264
+#: ui/vmwindow.ui:253
+#, fuzzy
+#| msgid "_Autoconnect:"
+msgid "_Autoconnect"
+msgstr "தானியக்க இணைப்பு (_A):"
+
+#: ui/vmwindow.ui:268
 msgid "T_oolbar"
 msgstr "கருவிப்பட்டை (_o)"
 
-#: ui/vmwindow.ui:278
+#: ui/vmwindow.ui:282
 msgid "Send _Key"
 msgstr "விசையை அனுப்பு (_K)"
 
-#: ui/vmwindow.ui:301
+#: ui/vmwindow.ui:305
 msgid "Show the graphical console"
 msgstr "வரைகலை பணிமுனையைக் காட்டு"
 
-#: ui/vmwindow.ui:302 virtManager/addhardware.py:231
+#: ui/vmwindow.ui:306 virtManager/addhardware.py:231
 msgid "Console"
 msgstr "பணிமுனை"
 
-#: ui/vmwindow.ui:316
+#: ui/vmwindow.ui:320
 msgid "Show virtual hardware details"
 msgstr "மெய்நிகர் வன்பொருள் விவரங்களைக் காட்டு"
 
-#: ui/vmwindow.ui:317 virtManager/error.py:352
+#: ui/vmwindow.ui:321 virtManager/error.py:352
 msgid "Details"
 msgstr "விவரங்கள்"
 
-#: ui/vmwindow.ui:342
+#: ui/vmwindow.ui:346
 msgid "Run"
 msgstr "இயக்கவும்"
 
-#: ui/vmwindow.ui:357
+#: ui/vmwindow.ui:361
 msgid "Pause"
 msgstr "இடைநிறுத்தம்"
 
-#: ui/vmwindow.ui:395
+#: ui/vmwindow.ui:399
 msgid "Snapshots"
 msgstr "ஸ்னாப்ஷாட்டுகள்"
 
-#: ui/vmwindow.ui:409
+#: ui/vmwindow.ui:413
 msgid "Switch to fullscreen view"
 msgstr "முழுத்திரைக் காட்சிக்கு நகர்"
 
-#: ui/vmwindow.ui:434
+#: ui/vmwindow.ui:438
 msgid "Begin Installation"
 msgstr "நிறுவலைத் தொடங்கு"
 
-#: ui/vmwindow.ui:436
+#: ui/vmwindow.ui:440
 msgid "_Begin Installation"
 msgstr "நிறுவலைத் தொடங்கு (_B)"
 
-#: ui/vmwindow.ui:451
+#: ui/vmwindow.ui:455
 #, fuzzy
 msgid "_Cancel Installation"
 msgstr "நிறுவலைத் தொடங்கு (_B)"
-
-#: ui/vmwindow.ui:512
-msgid "<b>The console is currently unavailable</b>"
-msgstr "<b>பணிமுனை தற்போது இல்லை</b>"
-
-#: ui/vmwindow.ui:548
-msgid "_Password:"
-msgstr "கடவுச்சொல் (_P):"
-
-#: ui/vmwindow.ui:576
-msgid "_Save this password in your keyring"
-msgstr "உங்கள் keyringஇல் இந்த கடவுச்சொல்லை சேமி (_S)"
-
-#: ui/vmwindow.ui:580
-msgid "Check to save password, uncheck to forget password."
-msgstr ""
-
-#: ui/vmwindow.ui:622
-msgid "_Login"
-msgstr "புகுபதிவு (_L)"
-
-#: ui/vmwindow.ui:720 virtManager/addhardware.py:223
-msgid "Serial"
-msgstr ""
 
 #: ui/vsockdetails.ui:22
 msgid "Guest C_ID:"
@@ -2956,112 +2966,112 @@ msgstr ""
 msgid "Error populating summary page: %s"
 msgstr "சுருக்கவிவரப் பக்கத்தைத் தயார் செய்வதில் பிழை: %s"
 
-#: virtManager/createvm.py:1447
+#: virtManager/createvm.py:1448
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "உருப்படிகளை நிறுவும் உள்ள செல்லுபடியாகும்ீட்டின் போது பிடிக்கப்படாத பிழை: %s"
 
-#: virtManager/createvm.py:1458
+#: virtManager/createvm.py:1459
 msgid "Source URL is required"
 msgstr ""
 
-#: virtManager/createvm.py:1463
+#: virtManager/createvm.py:1464
 msgid "Please specify password for accessing source registry"
 msgstr ""
 
-#: virtManager/createvm.py:1471
+#: virtManager/createvm.py:1472
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1474
+#: virtManager/createvm.py:1475
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1481
+#: virtManager/createvm.py:1482
 msgid "OS root directory is not empty"
 msgstr ""
 
-#: virtManager/createvm.py:1482
+#: virtManager/createvm.py:1483
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
 
-#: virtManager/createvm.py:1501
+#: virtManager/createvm.py:1502
 msgid "An install media selection is required."
 msgstr "ஒரு நிறுவப்பட்ட ஊடக்கப் பாதை தேவைப்படுகிறது."
 
-#: virtManager/createvm.py:1509
+#: virtManager/createvm.py:1510
 msgid "An install tree is required."
 msgstr "ஒரு நிறுவப்பட்ட மரம்் தேவைப்படுகிறது."
 
-#: virtManager/createvm.py:1517
+#: virtManager/createvm.py:1518
 msgid "A storage path to import is required."
 msgstr "இறக்குமதி செய்வதற்கு ஒரு சேமிப்பகப் பாதை தேவை."
 
-#: virtManager/createvm.py:1523
+#: virtManager/createvm.py:1524
 msgid "The import path must point to an existing storage."
 msgstr ""
 
-#: virtManager/createvm.py:1529
+#: virtManager/createvm.py:1530
 msgid "An application path is required."
 msgstr "பயன்பாட்டின் பாதை தேவை."
 
-#: virtManager/createvm.py:1534
+#: virtManager/createvm.py:1535
 msgid "An OS directory path is required."
 msgstr "ஒரு OS சேமிப்பகப் பாதை தேவை."
 
-#: virtManager/createvm.py:1548
+#: virtManager/createvm.py:1549
 msgid "A template name is required."
 msgstr ""
 
-#: virtManager/createvm.py:1551
+#: virtManager/createvm.py:1552
 msgid "You must select an OS."
 msgstr ""
 
-#: virtManager/createvm.py:1581
+#: virtManager/createvm.py:1582
 msgid "Error setting installer parameters."
 msgstr "நிறுவி அளவுருக்களை அமைப்பதில் பிழை."
 
-#: virtManager/createvm.py:1589
+#: virtManager/createvm.py:1590
 msgid "Error setting default name."
 msgstr "முன்னிருப்பு பெயரை அமைக்கும் போது பிழை."
 
-#: virtManager/createvm.py:1680
+#: virtManager/createvm.py:1681
 msgid "Storage parameter error."
 msgstr "சேமிப்பக அளவுரு பிழை."
 
-#: virtManager/createvm.py:1702
+#: virtManager/createvm.py:1703
 msgid "Invalid guest name"
 msgstr ""
 
-#: virtManager/createvm.py:1785
+#: virtManager/createvm.py:1786
 msgid "Detecting..."
 msgstr ""
 
-#: virtManager/createvm.py:1847
+#: virtManager/createvm.py:1848
 msgid "None detected"
 msgstr ""
 
-#: virtManager/createvm.py:1884
+#: virtManager/createvm.py:1885
 #, fuzzy, python-format
 #| msgid "Error starting installation: "
 msgid "Error starting installation: %s"
 msgstr "நிறுவலைத் தொடங்குவதில் பிழை: "
 
-#: virtManager/createvm.py:1927
+#: virtManager/createvm.py:1928
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "'%s' நிறுவலை முடிக்க இயலவில்லை: "
 
-#: virtManager/createvm.py:1967
+#: virtManager/createvm.py:1968
 msgid "Creating Virtual Machine"
 msgstr "மெய்நிகர் கணினியை உருவாக்குகிறது"
 
-#: virtManager/createvm.py:1968
+#: virtManager/createvm.py:1969
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3069,18 +3079,18 @@ msgstr ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 
-#: virtManager/createvm.py:2022
+#: virtManager/createvm.py:2023
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "எதிர்பார்க்கப்பட்ட நேரத்திற்குப் பிறகும் VM '%s' காண்பிக்கப்படவில்லை."
 
-#: virtManager/createvm.py:2072
+#: virtManager/createvm.py:2073
 #, fuzzy, python-format
 #| msgid "Error continue install: %s"
 msgid "Error continuing install: %s"
 msgstr "நிறுவலைத் தொடர்வதில் பிழை: %s"
 
-#: virtManager/createvm.py:2085
+#: virtManager/createvm.py:2086
 msgid "Bootstraping container"
 msgstr ""
 
@@ -3257,55 +3267,81 @@ msgstr ""
 msgid "Failed to check disk usage conflict."
 msgstr ""
 
-#: virtManager/details/console.py:149
+#: virtManager/details/console.py:153
 msgid "Leave fullscreen"
 msgstr "முழுத்திரையை விட்டு வெளியேறு"
 
-#: virtManager/details/console.py:158
+#: virtManager/details/console.py:162
 msgid "Send key combination"
 msgstr "விசைச் சேர்க்கையை அனுப்பு"
 
-#: virtManager/details/console.py:282
+#: virtManager/details/console.py:201
+msgid "No text console available"
+msgstr "உரை பணிமுனை எதுவும் இல்லை"
+
+#: virtManager/details/console.py:206
+#, python-format
+msgid "Text Console %d"
+msgstr ""
+
+#: virtManager/details/console.py:208
+#, python-format
+msgid "Serial %d"
+msgstr ""
+
+#: virtManager/details/console.py:217
+msgid "No graphical console available"
+msgstr "வரைபொருள் பணிமுனை இல்லை"
+
+#: virtManager/details/console.py:223
+msgid "Graphical Console"
+msgstr ""
+
+#: virtManager/details/console.py:229
+msgid "virt-manager does not support more than one graphical console"
+msgstr ""
+
+#: virtManager/details/console.py:383
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr ""
 
-#: virtManager/details/console.py:289
+#: virtManager/details/console.py:390
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "சுட்டியை விடுவிக்க %s ஐ அழுத்தவும்."
 
-#: virtManager/details/console.py:420
+#: virtManager/details/console.py:507
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "கிராஃபிக் வகை '%s' தானியங்கு மறுஅளவிடுதலை ஆதரிக்காது."
 
-#: virtManager/details/console.py:423
+#: virtManager/details/console.py:510
 msgid "Guest agent is not available."
 msgstr "விருந்தினர் ஏஜன்ட் கிடைக்கவில்லை."
 
-#: virtManager/details/console.py:564
+#: virtManager/details/console.py:590
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:566
+#: virtManager/details/console.py:592
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:706
+#: virtManager/details/console.py:724
 msgid "Graphical console not configured for guest"
 msgstr "விருந்தினருக்காக வரைகலை பணிமுனை கட்டமைக்கப்படவில்லை"
 
-#: virtManager/details/console.py:713
+#: virtManager/details/console.py:731
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "'%s' வரைபொருள் சாதன முனை வகையைக் காண்பிக்க முடியாது"
 
-#: virtManager/details/console.py:720
+#: virtManager/details/console.py:743
 msgid "Connecting to graphical console for guest"
 msgstr "விருந்தினருக்கான வரைகலைப் பணிமுனையை இணைக்கிறது"
 
-#: virtManager/details/console.py:741
+#: virtManager/details/console.py:762
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3313,52 +3349,26 @@ msgid ""
 "%s"
 msgstr "வரைபொருள் பணிமுனையுடன் இணைப்பதில் பிழை"
 
-#: virtManager/details/console.py:792
+#: virtManager/details/console.py:819
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: virtManager/details/console.py:811
+#: virtManager/details/console.py:841
 msgid "USB redirection error"
 msgstr "USB திருப்பிவிடல் பிழை"
 
-#: virtManager/details/console.py:820
+#: virtManager/details/console.py:850
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:856
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:831 virtManager/details/console.py:1016
+#: virtManager/details/console.py:861 virtManager/details/console.py:979
 msgid "Viewer disconnected."
-msgstr ""
-
-#: virtManager/details/console.py:919
-msgid "No text console available"
-msgstr "உரை பணிமுனை எதுவும் இல்லை"
-
-#: virtManager/details/console.py:932
-#, python-format
-msgid "Text Console %d"
-msgstr ""
-
-#: virtManager/details/console.py:934
-#, python-format
-msgid "Serial %d"
-msgstr ""
-
-#: virtManager/details/console.py:946
-msgid "No graphical console available"
-msgstr "வரைபொருள் பணிமுனை இல்லை"
-
-#: virtManager/details/console.py:955
-msgid "Graphical Console"
-msgstr ""
-
-#: virtManager/details/console.py:963
-msgid "virt-manager does not support more that one graphical console"
 msgstr ""
 
 #: virtManager/details/details.py:166
@@ -3706,7 +3716,7 @@ msgstr "செயலிலா விருந்தினருக்கு இ�
 msgid "Console for device type '%s' is not supported"
 msgstr ""
 
-#: virtManager/details/serialcon.py:341
+#: virtManager/details/serialcon.py:350
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "உரை பணிமுனையை இணைப்பதில் பிழை: %s"
@@ -3890,14 +3900,14 @@ msgid ""
 "listen address."
 msgstr ""
 
-#: virtManager/details/viewers.py:346
+#: virtManager/details/viewers.py:347
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
 
-#: virtManager/details/viewers.py:559
+#: virtManager/details/viewers.py:568
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
@@ -4476,11 +4486,11 @@ msgstr "இணைப்பு செயலில் இல்லை."
 msgid "%(connection)s - Connecting..."
 msgstr "இணைக்கிறது..."
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:349
+#: virtManager/manager.py:759 virtManager/vmwindow.py:381
 msgid "_Restore"
 msgstr "மீட்டமை (_R)"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:377
+#: virtManager/manager.py:796 virtManager/vmwindow.py:409
 msgid "Resume the virtual machine"
 msgstr ""
 
@@ -4587,11 +4597,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "செயல்படா VM அமைவாக்கத்தில் குறிப்பிட்ட சாதனத்தைக் கண்டறிய முடியவில்லை: %s"
 
-#: virtManager/object/domain.py:1357
+#: virtManager/object/domain.py:1355
 msgid "Saving domain to disk"
 msgstr "களத்தை வட்டில் சேமிக்கிறது"
 
-#: virtManager/object/domain.py:1409
+#: virtManager/object/domain.py:1407
 msgid "Migrating domain"
 msgstr "களத்தை நகர்த்துகிறது"
 
@@ -4916,12 +4926,12 @@ msgstr ""
 msgid "Error resetting domain"
 msgstr "டொமைனை மீட்டமைப்பதில் பிழை"
 
-#: virtManager/vmwindow.py:45
+#: virtManager/vmwindow.py:46
 #, python-format
 msgid "Error launching details: %s"
 msgstr "விவரங்களை துவக்குவதில் பிழை: %s"
 
-#: virtManager/vmwindow.py:198
+#: virtManager/vmwindow.py:223
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
 msgstr ""
@@ -4931,28 +4941,28 @@ msgstr ""
 "\n"
 "இதனை செய்ய வேண்டுமா?"
 
-#: virtManager/vmwindow.py:389
+#: virtManager/vmwindow.py:421
 msgid "Manage VM snapshots"
 msgstr "VM ஸ்னாப்ஷாட்டுகளை நிர்வகிக்கவும்"
 
-#: virtManager/vmwindow.py:482
+#: virtManager/vmwindow.py:504
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "ஸ்னாப்ஷாட்டை எடுக்கையில் பிழை: %s"
 
-#: virtManager/vmwindow.py:490
+#: virtManager/vmwindow.py:512
 msgid "Error initializing spice USB device widget"
 msgstr "ஸ்பைஸ் USB சாதன விட்ஜெட்டைத் துவக்குவதில் பிழை"
 
-#: virtManager/vmwindow.py:494
+#: virtManager/vmwindow.py:516
 msgid "Select USB devices for redirection"
 msgstr "திருப்பிவிடலுக்கான USB சாதனங்களைத் தேர்ந்தெடுக்கவும்"
 
-#: virtManager/vmwindow.py:526
+#: virtManager/vmwindow.py:548
 msgid "Save Virtual Machine Screenshot"
 msgstr "மெய்நிகர் கணினி திரைப்பிடிப்பை சேமிக்கவும்"
 
-#: virtManager/vmwindow.py:527
+#: virtManager/vmwindow.py:549
 msgid "PNG files"
 msgstr ""
 
@@ -6667,6 +6677,23 @@ msgstr ""
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s பெயரான '%s' இல் '%s' எழுத்து இருக்கக்கூடாது."
+
+#~ msgid ""
+#~ "When the guest graphical console has keyboard focus, do not disable "
+#~ "shortcuts for console window menus (Alt+F -> File, etc.) Normally these "
+#~ "are disabled to ensure that typing in the guest does not accidentally "
+#~ "perform an operation in virt-manager's console window."
+#~ msgstr ""
+#~ "விருந்தினர் வரைபொருள் பணிமுனை விசைப்பலகை கவனத்தில் இருக்கும் போது, பணிமுனை சாளர "
+#~ "மெனுக்களுக்கான குறுக்குவழிகளை (Alt+F -> கோப்பு போன்றவை) முடக்க வேண்டாம், வழக்கமாக "
+#~ "விருந்தினர் கணினியில் தட்டச்சு செய்யும் போது அந்த விசைகள் virt-manager பணிமுனையில் "
+#~ "எதிர்பாரா விதமாக ஏதேனும் செயல்களை செய்துவிடாமல் இருப்பதற்காக முடக்கப்படும்."
+
+#~ msgid "_Force console shortcuts:"
+#~ msgstr "கன்சோல் குறுக்குவழிகளை நிர்ப்பந்திக்கவும் (_F):"
+
+#~ msgid "_Text Consoles"
+#~ msgstr "உரை பணிமுனைகள் (_T)"
 
 #~ msgid "<b>Ad_vanced options</b>"
 #~ msgstr "<b>மேம்பட்ட விருப்பங்கள்</b> (_v)"
