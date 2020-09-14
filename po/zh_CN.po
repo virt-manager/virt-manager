@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-09 06:10+0000\n"
-"PO-Revision-Date: 2020-09-04 07:29+0000\n"
+"PO-Revision-Date: 2020-09-11 09:01+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -249,10 +249,8 @@ msgid "Removab_le:"
 msgstr "可移动(_L)："
 
 #: ui/addstorage.ui:435
-#, fuzzy
-#| msgid "Serial"
 msgid "Seria_l:"
-msgstr "串口"
+msgstr "串口(_L)："
 
 #: ui/addstorage.ui:461
 msgid "Advanced _options"
@@ -283,26 +281,20 @@ msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>克隆虚拟系统</span>"
 
 #: ui/clone.ui:127
-#, fuzzy
-#| msgid "Original host:"
 msgid "Original VM:"
-msgstr "原主机："
+msgstr "原虚拟系统："
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
-msgstr "连接(_O)："
+msgstr "连接："
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "存储："
 
 #: ui/clone.ui:285
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
-msgstr "详情..."
+msgstr "详情(_D)..."
 
 #: ui/clone.ui:354
 msgid ""
@@ -1298,11 +1290,11 @@ msgstr "监听类型(_I)："
 
 #: ui/gfxdetails.ui:362
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
-msgstr ""
+msgstr "OpenGL 仅适用于启用了 '3D 加速' 的 'virtio' 显卡"
 
 #: ui/gfxdetails.ui:378
 msgid "OpenGL only works with 'Listen type' value 'none'"
-msgstr ""
+msgstr "OpenGL 仅适用于 '侦听类型' 值为 '无' 的情况"
 
 #: ui/host.ui:10
 msgid "Connection Details"
@@ -2538,40 +2530,35 @@ msgstr "没有存储要克隆。"
 #: virtManager/clone.py:110
 #, python-format
 msgid "Disk target: %s"
-msgstr ""
+msgstr "磁盘目标：%s"
 
 #: virtManager/clone.py:111
-#, fuzzy, python-format
-#| msgid "Original host:"
+#, python-format
 msgid "Original path: %s"
-msgstr "原主机："
+msgstr "原路径：%s"
 
 #: virtManager/clone.py:113
-#, fuzzy, python-format
-#| msgid "New _Path:"
+#, python-format
 msgid "New path: %s"
-msgstr "新路径(_P)："
+msgstr "新路径：%s"
 
 #: virtManager/clone.py:117
-#, fuzzy, python-format
-#| msgid "Storage is marked as shareable."
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "将存储标记为可共享。"
+msgstr "存储可被安全共享：%(reason)s"
 
 #: virtManager/clone.py:121
 msgid "Sharing this storage is potentially dangerous."
-msgstr ""
+msgstr "共享该存储有潜在的危险。"
 
 #: virtManager/clone.py:124
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr ""
+msgstr "存储不可克隆：%(reason)s"
 
 #: virtManager/clone.py:136
-#, fuzzy
-#| msgid "No storage to clone."
 msgid "No storage."
-msgstr "没有存储要克隆。"
+msgstr "没有存储。"
 
 #: virtManager/clone.py:141
 #, python-format
@@ -2588,10 +2575,8 @@ msgid "Error launching clone dialog: %s"
 msgstr "启动克隆对话框时出错：%s"
 
 #: virtManager/clone.py:275
-#, fuzzy
-#| msgid "C_lone"
 msgid "Clone"
-msgstr "克隆(_L)"
+msgstr "克隆"
 
 #: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
@@ -2604,27 +2589,20 @@ msgid ""
 msgstr "使用现有映像将覆盖克隆过程中的路径。确定要使用这个路径吗？"
 
 #: virtManager/clone.py:486
-#, fuzzy
-#| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
-msgstr "跳过磁盘可导致数据被覆盖。"
+msgstr "共享存储可能导致数据被覆盖。"
 
 #: virtManager/clone.py:487
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"不会克隆下列磁盘设备：\n"
+"下列磁盘设备将与 %(vmname)s 共享：\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "运行新虚拟机系统将会覆盖这些磁盘映像中的数据。"
 
 #: virtManager/clone.py:502
@@ -2633,10 +2611,9 @@ msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "创建虚拟机克隆时出错“%(vm)s”：%(error)s"
 
 #: virtManager/clone.py:560
-#, fuzzy, python-format
-#| msgid "Error changing pool settings: %s"
+#, python-format
 msgid "Error with clone settings: %s"
-msgstr "修改池设置时出错：%s"
+msgstr "克隆设置出错：%s"
 
 #: virtManager/clone.py:565
 #, python-format
@@ -5543,10 +5520,8 @@ msgid "Read Only"
 msgstr "只读"
 
 #: virtinst/cloner.py:187
-#, fuzzy
-#| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
-msgstr "将存储标记为可共享。"
+msgstr "已标记为可共享"
 
 #: virtinst/cloner.py:249
 #, python-format
@@ -5973,14 +5948,10 @@ msgstr ""
 "%(mem2)s M 可用容量)"
 
 #: virtinst/virtclone.py:23
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
-msgstr "必须指定原始机器名，使用 '--original ORIGINAL_GUEST' 选项并重试。"
+msgstr "必须指定原始机器名，使用 '--original src_name' 选项并重试。"
 
 #: virtinst/virtclone.py:70
 msgid ""
@@ -6056,7 +6027,7 @@ msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
-msgstr ""
+msgstr "不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆磁盘映像指定现有路径。"
 
 #: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
