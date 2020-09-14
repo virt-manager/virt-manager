@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-13 06:11+0000\n"
-"PO-Revision-Date: 2020-09-14 08:29+0000\n"
+"PO-Revision-Date: 2020-09-14 15:05+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/sv/>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -774,7 +774,7 @@ msgstr "CPU:er:"
 
 #: ui/createvm.ui:2258
 msgid "OS:"
-msgstr ""
+msgstr "OS:"
 
 #: ui/createvm.ui:2387
 msgid "N_etwork selection"
@@ -790,7 +790,7 @@ msgstr "Lägg till en lagringsvolym"
 
 #: ui/createvol.ui:71
 msgid "<span size='large'>Create storage volume</span>"
-msgstr ""
+msgstr "<span size='large'>Skapa lagringsvolym</span>"
 
 #: ui/createvol.ui:127
 msgid "Create a storage unit to be used directly by a virtual machine."
@@ -937,10 +937,8 @@ msgid "Logical host CPUs:"
 msgstr "Logisk värds processorantal:"
 
 #: ui/details.ui:1239
-#, fuzzy
-#| msgid "_Allocation:"
 msgid "vCPU a_llocation:"
-msgstr "_Allokering:"
+msgstr "vCPU-a_llokering:"
 
 #: ui/details.ui:1256
 msgid "2"
@@ -997,7 +995,7 @@ msgstr "<b>To_pologi</b>"
 
 #: ui/details.ui:1662
 msgid "Memory a_llocation:"
-msgstr ""
+msgstr "Minnesa_llokering:"
 
 #: ui/details.ui:1677
 msgid "Total host memory:"
@@ -1093,7 +1091,7 @@ msgstr "Diskb_uss:"
 
 #: ui/details.ui:2604
 msgid "disk-bus-label"
-msgstr ""
+msgstr "diskbussetikett"
 
 #: ui/details.ui:2647
 msgid "<b>Virtual Disk</b>"
@@ -1137,22 +1135,16 @@ msgid "<b>Sound Device</b>"
 msgstr "<b>Ljudenhet</b>"
 
 #: ui/details.ui:3285
-#, fuzzy
-#| msgid "label"
 msgid "label506"
-msgstr "etikett"
+msgstr "etikett506"
 
 #: ui/details.ui:3298 ui/details.ui:3335
-#, fuzzy
-#| msgid "label"
 msgid "label508"
-msgstr "etikett"
+msgstr "etikett508"
 
 #: ui/details.ui:3348
-#, fuzzy
-#| msgid "label"
 msgid "label507"
-msgstr "etikett"
+msgstr "etikett507"
 
 #: ui/details.ui:3373
 msgid "Source host:"
@@ -1319,10 +1311,11 @@ msgstr "L_yssningstyp:"
 #: ui/gfxdetails.ui:362
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
+"OpenGL fungerar bara med ”virtio”-grafik med ”3D-acceleration” aktiverat"
 
 #: ui/gfxdetails.ui:378
 msgid "OpenGL only works with 'Listen type' value 'none'"
-msgstr ""
+msgstr "OpenGL fungerar bara när ”Lyssningstyp” har värdet ”none”"
 
 #: ui/host.ui:10
 msgid "Connection Details"
@@ -1571,15 +1564,15 @@ msgstr "Migrera den virtuella maskinen"
 
 #: ui/migrate.ui:107
 msgid "Migrating VM:"
-msgstr ""
+msgstr "Migrerar VM:"
 
 #: ui/migrate.ui:123
 msgid "Original host:"
-msgstr ""
+msgstr "Ursprungsvärd:"
 
 #: ui/migrate.ui:139
 msgid "New _host:"
-msgstr ""
+msgstr "Ny _värd:"
 
 #: ui/migrate.ui:234
 msgid "_Address:"
@@ -1675,7 +1668,7 @@ msgstr "_Migrera"
 
 #: ui/netlist.ui:16
 msgid "De_vice name:"
-msgstr ""
+msgstr "En_hetsnamn:"
 
 #: ui/netlist.ui:62
 msgid ""
@@ -1688,6 +1681,8 @@ msgstr ""
 #: ui/netlist.ui:121
 msgid "<small>Failed to find a suitable default network.</small>"
 msgstr ""
+"<small>Misslyckades att hitta ett lämpligt "
+"standardnätverksgränssnitt.</small>"
 
 #: ui/netlist.ui:147
 msgid "_Network source:"
@@ -1699,6 +1694,9 @@ msgid ""
 "Try selecting the next most recent version displayed,\n"
 "or use the \"Generic OS\" entry."
 msgstr ""
+"Kan du inte hitta opertivsystemet du letar efter?\n"
+"Prova att välja den näst senaste versionen som visas\n"
+"eller använd valet ”Generellt OS”."
 
 #: ui/oslist.ui:107
 msgid "Include end of life operating systems"
@@ -1847,12 +1845,12 @@ msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"Om avaktiverat kommer VM-fönstret inte att automatiskt ansluta till den "
+"körande VM:ens grafiska konsol."
 
 #: ui/preferences.ui:754
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "Console autoconnec_t:"
-msgstr "_Autoanslut:"
+msgstr "Autoanslu_t till konsolen:"
 
 #: ui/preferences.ui:784
 msgid "<b>Graphical Consoles</b>"
@@ -1891,10 +1889,8 @@ msgid "<b>Confirmations</b>"
 msgstr "<b>Bekräftelser</b>"
 
 #: ui/preferences.ui:1006
-#, fuzzy
-#| msgid "Feed_back"
 msgid "feedback-tab"
-msgstr "Åter_koppling"
+msgstr "återkopplingsflik"
 
 #: ui/preferences.ui:1018
 msgid "Feed_back"
@@ -1954,7 +1950,7 @@ msgstr "Skapa ögonblicksbild"
 
 #: ui/snapshotsnew.ui:57
 msgid "<span size='large'>Create snapshot</span>"
-msgstr ""
+msgstr "<span size='large'>Skapa ögonblicksbild</span>"
 
 #: ui/snapshotsnew.ui:138
 msgid "_Description:"
@@ -2017,10 +2013,8 @@ msgid "Auto _resize VM with window"
 msgstr "_Ändra automatiskt storlek på VM med fönstret"
 
 #: ui/vmwindow.ui:245
-#, fuzzy
-#| msgid "Console"
 msgid "Co_nsoles"
-msgstr "Konsol"
+msgstr "Ko_nsoler"
 
 #: ui/vmwindow.ui:253
 #, fuzzy
@@ -6075,10 +6069,8 @@ msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr "Okänt OS-namn ”%s”.  Se ”osinfo-query os” för giltiga värden."
 
 #: virtinst/osdict.py:378
-#, fuzzy
-#| msgid "Generic"
 msgid "Generic OS"
-msgstr "Generisk"
+msgstr "Generellt OS"
 
 #: virtinst/osdict.py:666
 #, python-format
