@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-07 06:10+0000\n"
-"PO-Revision-Date: 2020-09-07 14:34+0000\n"
+"PO-Revision-Date: 2020-09-09 07:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -249,26 +249,20 @@ msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>Naklonovat virtuální stroj</span>"
 
 #: ui/clone.ui:127
-#, fuzzy
-#| msgid "Original host:"
 msgid "Original VM:"
-msgstr "Původní hostitel:"
+msgstr "Původní virt. stroj:"
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
-msgstr "Přip_ojení:"
+msgstr "Připojení:"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "Úložiště:"
 
 #: ui/clone.ui:285
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
-msgstr "Podrobnosti…"
+msgstr "Po_drobnosti…"
 
 #: ui/clone.ui:354
 msgid ""
@@ -2590,40 +2584,35 @@ msgstr "Žádné úložiště ke klonování."
 #: virtManager/clone.py:110
 #, python-format
 msgid "Disk target: %s"
-msgstr ""
+msgstr "Cíl disku: %s"
 
 #: virtManager/clone.py:111
-#, fuzzy, python-format
-#| msgid "Original host:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Původní hostitel:"
+msgstr "Původní popis umístění: %s"
 
 #: virtManager/clone.py:113
-#, fuzzy, python-format
-#| msgid "New _Path:"
+#, python-format
 msgid "New path: %s"
-msgstr "Nový _popis umístění:"
+msgstr "Nový popis umístění: %s"
 
 #: virtManager/clone.py:117
-#, fuzzy, python-format
-#| msgid "Storage is marked as shareable."
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "Úložiště je označené jako možné sdílet."
+msgstr "Úložiště je bezpečné sdílet: %(reason)s"
 
 #: virtManager/clone.py:121
 msgid "Sharing this storage is potentially dangerous."
-msgstr ""
+msgstr "Sdílení tohoto úložiště je potenciálně nebezpečné."
 
 #: virtManager/clone.py:124
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr ""
+msgstr "Úložiště není možné klonovat: %(reason)s"
 
 #: virtManager/clone.py:136
-#, fuzzy
-#| msgid "No storage to clone."
 msgid "No storage."
-msgstr "Žádné úložiště ke klonování."
+msgstr "Žádné úložiště."
 
 #: virtManager/clone.py:141
 #, python-format
@@ -2640,10 +2629,8 @@ msgid "Error launching clone dialog: %s"
 msgstr "Chyba při spouštění dialogu klonování: %s"
 
 #: virtManager/clone.py:275
-#, fuzzy
-#| msgid "C_lone"
 msgid "Clone"
-msgstr "K_lonovat"
+msgstr "Klonovat"
 
 #: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
@@ -2658,27 +2645,20 @@ msgstr ""
 "Opravdu chcete použít toto umístění?"
 
 #: virtManager/clone.py:486
-#, fuzzy
-#| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
-msgstr "Přeskočení disků může způsobit přepsání dat."
+msgstr "Sdílení úložiště může způsobit přepsání dat."
 
 #: virtManager/clone.py:487
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Následující disková zařízení nebudou klonovány:\n"
+"Následující disková zařízení budou sdílena s %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Spuštění nového hosta by přepsalo data v těchto obrazech disků."
 
 #: virtManager/clone.py:502
@@ -2687,10 +2667,9 @@ msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Chyba při vytváření klonu virtuálního stroje „%(vm)s“: %(error)s"
 
 #: virtManager/clone.py:560
-#, fuzzy, python-format
-#| msgid "Error changing pool settings: %s"
+#, python-format
 msgid "Error with clone settings: %s"
-msgstr "Chyba při měnění nastavení fondu: %s"
+msgstr "Chyba s nastavením klonu: %s"
 
 #: virtManager/clone.py:565
 #, python-format
@@ -5668,10 +5647,8 @@ msgid "Read Only"
 msgstr "Pouze pro čtení"
 
 #: virtinst/cloner.py:187
-#, fuzzy
-#| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
-msgstr "Úložiště je označené jako možné sdílet."
+msgstr "Označeno jako možné sdílet"
 
 #: virtinst/cloner.py:249
 #, python-format
@@ -6123,16 +6100,12 @@ msgstr ""
 "dostupný na fondu. (%(mem1)s M požadovaná kapacita > %(mem2)s M k dispozici)"
 
 #: virtinst/virtclone.py:23
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
 "Je třeba zadat původní název virtuálního stroje, použijte pro to „--original "
-"PUVODNI_HOST“."
+"nazev_zdroje“ a zkuste to znovu."
 
 #: virtinst/virtclone.py:70
 msgid ""
@@ -6219,6 +6192,9 @@ msgid ""
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
+"Neklonovat obsah úložiště do zadaných souborových popisů umístění, jejich "
+"obsah zůstane nedotčen. Toto vyžaduje zadání existujících popisů umístění "
+"pro každý z obrazů disku, který je možné klonovat."
 
 #: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
