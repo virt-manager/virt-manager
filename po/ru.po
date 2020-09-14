@@ -20,11 +20,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-21 06:11+0000\n"
+"POT-Creation-Date: 2020-08-13 06:10+0000\n"
 "PO-Revision-Date: 2020-08-06 08:29+0000\n"
 "Last-Translator: Olesya Gerasimenko <gammaray@basealt.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/ru/>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -41,7 +41,8 @@ msgstr "Менеджер виртуальных машин"
 
 #: data/virt-manager.appdata.xml.in:7
 msgid "Graphically manage KVM, Xen, or LXC via libvirt"
-msgstr "Графический интерфейс для управления KVM, Xen или LXC с помощью libvirt"
+msgstr ""
+"Графический интерфейс для управления KVM, Xen или LXC с помощью libvirt"
 
 #: data/virt-manager.appdata.xml.in:9
 msgid ""
@@ -300,8 +301,8 @@ msgid ""
 msgstr ""
 "<span size='small'>Клонирование <u>НЕ</u> изменяет содержимое гостевой ОС. "
 "Если требуется изменить\n"
-"пароли или статические адреса, это можно сделать с помощью virt-"
-"sysprep(1).</span>"
+"пароли или статические адреса, это можно сделать с помощью virt-sysprep(1).</"
+"span>"
 
 #: ui/clone.ui:544
 msgid "C_lone"
@@ -721,7 +722,8 @@ msgstr "В_ыберите операционную систему для уст�
 
 #: ui/createvm.ui:1750
 msgid "A_utomatically detect from the installation media / source"
-msgstr "А_втоматически определить по носителю / источнику пакетов для установки"
+msgstr ""
+"А_втоматически определить по носителю / источнику пакетов для установки"
 
 #: ui/createvm.ui:1799
 msgid "Install"
@@ -1857,8 +1859,8 @@ msgid ""
 "disabled to ensure that typing in the guest does not accidentally perform an "
 "operation in virt-manager's console window."
 msgstr ""
-"Не отключать комбинации клавиш для главного меню окна (Alt+F -> Файл и т.д.)"
-", даже если фокус клавиатуры находится в графической консоли гостевой "
+"Не отключать комбинации клавиш для главного меню окна (Alt+F -> Файл и т."
+"д.), даже если фокус клавиатуры находится в графической консоли гостевой "
 "системы. Обычно они отключаются во избежание выполнения действий в окне virt-"
 "manager при попытке взаимодействия с гостевой системой."
 
@@ -2142,8 +2144,8 @@ msgid ""
 "what you are doing.</small>"
 msgstr ""
 "<small>Редактирование XML отключено в диалоге «Настройки». Включайте этот "
-"параметр только в том случае, если полностью уверены в том, что "
-"делаете.</small>"
+"параметр только в том случае, если полностью уверены в том, что делаете.</"
+"small>"
 
 #: ui/xmleditor.ui:121
 msgid "_XML"
@@ -3358,8 +3360,8 @@ msgstr "Ошибка удаления виртуальной машины «%(vm
 #: virtManager/delete.py:219
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
-"Кроме того, имели место ошибки при удалении определённых устройств хранения:"
-"\n"
+"Кроме того, имели место ошибки при удалении определённых устройств "
+"хранения:\n"
 
 #: virtManager/delete.py:223
 msgid "Errors encountered while removing certain storage devices."
@@ -3798,7 +3800,8 @@ msgstr "Необходимо указать путь инициализации"
 #: virtManager/details/details.py:1623 virtManager/device/addstorage.py:212
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
-msgstr "Диск «%(path)s» уже используется другими гостевыми системами %(names)s."
+msgstr ""
+"Диск «%(path)s» уже используется другими гостевыми системами %(names)s."
 
 #: virtManager/details/details.py:1627 virtManager/device/addstorage.py:216
 msgid "Do you really want to use the disk?"
@@ -4589,7 +4592,8 @@ msgstr ""
 
 #: virtManager/lib/connectauth.py:165
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
-msgstr "Убедитесь, что на удалённом узле запущена внутренняя служба «libvirtd»."
+msgstr ""
+"Убедитесь, что на удалённом узле запущена внутренняя служба «libvirtd»."
 
 #: virtManager/lib/connectauth.py:169
 msgid ""
@@ -5425,8 +5429,8 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
-"Конфигурация автоматического подключения к консоли гостевой системы. Пример:"
-"\n"
+"Конфигурация автоматического подключения к консоли гостевой системы. "
+"Пример:\n"
 "--autoconsole text\n"
 "--autoconsole graphical\n"
 "--autoconsole none"
@@ -5779,8 +5783,8 @@ msgid ""
 msgstr ""
 "Конфигурация защиты при запуске ВМ (например, с помощью шифрования памяти "
 "SEV). Пример:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
-"BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:908
@@ -6300,16 +6304,16 @@ msgstr ""
 "Неизвестное название ОС — «%s». Со списком корректных значений можно "
 "ознакомиться с помощью команды «osinfo-query os»."
 
-#: virtinst/osdict.py:377
+#: virtinst/osdict.py:378
 msgid "Generic OS"
 msgstr "Стандартная ОС"
 
-#: virtinst/osdict.py:665
+#: virtinst/osdict.py:666
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "ОС «%s» не имеет URL-адреса расположения"
 
-#: virtinst/osdict.py:677
+#: virtinst/osdict.py:678
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6477,8 +6481,8 @@ msgid ""
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 "Пропустить копирование цели устройства. (Например, если не следует "
-"копировать диск «vda» и использовать тот же путь в новой ВМ, используйте "
-"--skip-copy=vda)"
+"копировать диск «vda» и использовать тот же путь в новой ВМ, используйте --"
+"skip-copy=vda)"
 
 #: virtinst/virtclone.py:122
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6720,7 +6724,8 @@ msgstr "Домен ещё работает. Вероятно, выполняет
 
 #: virtinst/virtinstall.py:792
 msgid "You can reconnect to the console to complete the installation process."
-msgstr "Можно заново подключиться к консоли, чтобы завершить процесс установки."
+msgstr ""
+"Можно заново подключиться к консоли, чтобы завершить процесс установки."
 
 #: virtinst/virtinstall.py:803
 msgid "Domain has shutdown. Continuing."
@@ -6879,8 +6884,8 @@ msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgstr ""
-"Запрашивается «--edit %(number)s», но XML содержит только объект %(max)s "
-"--%(type)s"
+"Запрашивается «--edit %(number)s», но XML содержит только объект %(max)s --"
+"%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -7106,7 +7111,8 @@ msgstr "--update не может использоваться вместе со 
 
 #: virtinst/virtxml.py:488
 msgid "The VM is not running, --update is inapplicable."
-msgstr "Виртуальная машина не запущена — использовать параметр --update нельзя."
+msgstr ""
+"Виртуальная машина не запущена — использовать параметр --update нельзя."
 
 #: virtinst/virtxml.py:521
 msgid "Changes will take effect after the domain is fully powered off."

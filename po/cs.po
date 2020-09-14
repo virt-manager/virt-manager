@@ -17,11 +17,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-07-21 06:11+0000\n"
+"POT-Creation-Date: 2020-08-13 06:10+0000\n"
 "PO-Revision-Date: 2020-07-29 12:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6000,7 +6000,8 @@ msgstr "Pro neexistující umístění „%s“."
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] "V případě sběrnice „%(bus)s“ je podporován pouze %(number)s disk"
-msgstr[1] "V případě sběrnice „%(bus)s“ jsou podporovány pouze %(number)s disky"
+msgstr[1] ""
+"V případě sběrnice „%(bus)s“ jsou podporovány pouze %(number)s disky"
 msgstr[2] "V případě sběrnice „%(bus)s“ je podporováno pouze %(number)s disků"
 
 #: virtinst/devices/filesystem.py:104
@@ -6069,7 +6070,8 @@ msgstr "Klonování %(srcfile)s"
 #: virtinst/diskbackend.py:625
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
-msgstr "Chyba klonování obrazu disku %(inputpath)s na %(outputpath)s: %(error)s"
+msgstr ""
+"Chyba klonování obrazu disku %(inputpath)s na %(outputpath)s: %(error)s"
 
 #: virtinst/domain/cpu.py:190
 msgid "No host CPU reported in capabilities"
@@ -6302,16 +6304,16 @@ msgstr ""
 "Neznámý název operačního systému „%s“. Platné hodnoty získáte spuštěním "
 "`osinfo-query os`"
 
-#: virtinst/osdict.py:377
+#: virtinst/osdict.py:378
 msgid "Generic OS"
 msgstr "Obecný operační systém"
 
-#: virtinst/osdict.py:665
+#: virtinst/osdict.py:666
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "Operační systém „%s“ nemá URL umístění"
 
-#: virtinst/osdict.py:677
+#: virtinst/osdict.py:678
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6379,8 +6381,8 @@ msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
-"Ve fondu úložiště není dostatek volného místa pro vytvoření svazku. (%(mem1)"
-"s M přiřazení požadováno > %(mem2)s M k dispozici)"
+"Ve fondu úložiště není dostatek volného místa pro vytvoření svazku. "
+"(%(mem1)s M přiřazení požadováno > %(mem2)s M k dispozici)"
 
 #: virtinst/storage.py:740
 #, python-format
@@ -6480,8 +6482,8 @@ msgid ""
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 "Přeskočit kopii cíle zařízení (např. pokud je „vda“ disk, který nechcete "
-"zkopírovat a použít stejný popis umístění v novém virt. stroji, použijte "
-"--skip-copy=vda)"
+"zkopírovat a použít stejný popis umístění v novém virt. stroji, použijte --"
+"skip-copy=vda)"
 
 #: virtinst/virtclone.py:122
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6875,8 +6877,8 @@ msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgstr ""
-"je požadováno „--edit %(number)s“ ale v XML je pouze objekt %(max)s "
-"--%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML je pouze objekt %(max)s --"
+"%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
