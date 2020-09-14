@@ -969,20 +969,33 @@ GUEST OS OPTIONS
 ``--os-variant``, ``--osinfo``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Syntax:** ``--os-variant`` OS_VARIANT
+**Syntax:** ``--os-variant`` [OS_VARIANT|OPT1=VAL1,...]
 
 Optimize the guest configuration for a specific operating system (ex.
 'fedora29', 'rhel7', 'win10'). While not required, specifying this
 options is HIGHLY RECOMMENDED, as it can greatly increase performance
 by specifying virtio among other guest tweaks.
 
-By default, virt-install will attempt to auto detect this value from
-the install media (currently only supported for URL installs). Autodetection
-can be disabled with the special value 'none'. Autodetection can be
-forced with the special value 'auto'.
+The simplest usage is ``--os-variant OS-NAME``, for example
+``--os-variant fedora32``. ``--os-variant`` supports explicit suboption
+syntax as well:
+
+``name=``, ``short-id=``
+    The OS name/short-id from libosinfo. Examples: ``fedora32``, ``win10``
+
+``id=``
+    The full URL style libosinfo ID. For example, ``name=win10`` is
+    the same as ``id=http://microsoft.com/win/10``
+
+``detect=on|off``
+    Whether virt-install should attempt OS detection from the specified
+    install media. Detection is presently only attempted for URL and
+    CDROM installs, and is not 100% reliable.
+
+By default, virt-install will use ``--os-variant detect=on``.
 
 Use the command "osinfo-query os" to get the list of the accepted OS
-variants.
+variant names.
 
 
 

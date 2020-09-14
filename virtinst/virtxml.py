@@ -51,8 +51,8 @@ def set_os_variant(options, guest):
         return
 
     osdata = cli.parse_os_variant(options.os_variant)
-    if osdata.name:
-        guest.set_os_name(osdata.name)
+    if osdata.get_name():
+        guest.set_os_name(osdata.get_name())
 
 
 def defined_xml_is_unchanged(conn, domain, original_xml):

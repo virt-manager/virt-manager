@@ -361,8 +361,7 @@ def show_guest_warnings(options, guest, osdata):
     # Limit it to hvm x86 guests which presently our defaults
     # only really matter for
     if (guest.osinfo.name == "generic" and
-        not osdata.is_none and
-        not osdata.name == "generic" and
+        not osdata.is_generic_requested() and
         guest.os.is_x86() and guest.os.is_hvm()):
         log.warning(_("No operating system detected, VM performance may "
             "suffer. Specify an OS with --os-variant for optimal results."))
@@ -535,12 +534,12 @@ def installer_detect_distro(guest, installer, osdata):
         # OS name has to be set firstly whenever --os-variant is passed,
         # otherwise it won't be respected when the installer creates the
         # Distro Store.
-        if osdata.name:
-            guest.set_os_name(osdata.name)
+        if osdata.get_name():
+            guest.set_os_name(osdata.get_name())
 
         # This also validates the install location
         autodistro = installer.detect_distro(guest)
-        if osdata.is_auto and autodistro:
+        if osdata.is_detect() and autodistro:
             guest.set_os_name(autodistro)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
@@ -566,9 +565,7 @@ def _build_options_guest(conn, options):
 
 def build_guest_instance(conn, options):
     installdata = cli.parse_install(options.install)
-    osdata = cli.parse_os_variant(options.os_variant)
-    if installdata.os:
-        osdata.set_installdata_name(installdata.os)
+    osdata = cli.parse_os_variant(options.os_variant or installdata.os)
 
     if options.reinstall:
         dummy1, guest, dummy2 = cli.get_domain_and_guest(conn, options.reinstall)

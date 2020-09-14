@@ -1,14 +1,9 @@
 <domain type="test">
-  <name>rhel6.0</name>
+  <name>vm1</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <metadata>
-    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
-      <libosinfo:os id="http://redhat.com/rhel/6.0"/>
-    </libosinfo:libosinfo>
-  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>2</vcpu>
+  <vcpu>1</vcpu>
   <os>
     <type arch="i686">hvm</type>
     <kernel>/VIRTINST-TESTSUITE/vmlinuz</kernel>
@@ -44,16 +39,11 @@
   </devices>
 </domain>
 <domain type="test">
-  <name>rhel6.0</name>
+  <name>vm1</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <metadata>
-    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
-      <libosinfo:os id="http://redhat.com/rhel/6.0"/>
-    </libosinfo:libosinfo>
-  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>2</vcpu>
+  <vcpu>1</vcpu>
   <os>
     <type arch="i686">hvm</type>
     <boot dev="hd"/>

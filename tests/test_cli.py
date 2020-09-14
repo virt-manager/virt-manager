@@ -861,15 +861,14 @@ c.add_valid("--location location=%(TREEDIR)s")  # Directory tree URL install
 c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
 c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
 c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
-c.add_valid("--paravirt --location %(TREEDIR)s --os-variant none")  # Paravirt location with --os-variant none
 c.add_valid("--location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3")  # HVM windows install with disk
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --print-step 2")  # HVM windows install, print 3rd stage XML
 c.add_valid("--pxe --autostart")  # --autostart flag
 c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
-c.add_compare("--pxe --print-step all", "simple-pxe")  # Diskless PXE install
-c.add_compare("--location ftp://example.com", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
-c.add_compare("--location https://foobar.com", "fake-http")  # fake https:// install using urlfetcher.py mocking
+c.add_compare("--pxe --print-step all --os-variant none", "simple-pxe")  # Diskless PXE install
+c.add_compare("--location ftp://example.com --os-variant auto", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
+c.add_compare("--location https://foobar.com --os-variant detect=no", "fake-http")  # fake https:// install using urlfetcher.py mocking, but also hit --os-variant detect=no
 c.add_compare("--connect %(URI-KVM)s --install fedora26", "osinfo-url")  # getting URL from osinfo
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
@@ -884,7 +883,7 @@ c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL locati
 c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for ambiguous -c and --cdrom collision
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
-c.add_invalid("--os-variant foo://bar", grep="Unknown libosinfo ID")  # bad full id
+c.add_invalid("--os-variant id=foo://bar", grep="Unknown libosinfo ID")  # bad full id
 c.add_invalid("--location http://testsuitefail.com", grep="installable distribution")  # will trigger a particular mock failure
 
 
@@ -897,8 +896,8 @@ c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
 c.add_valid("--hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
 c.add_compare("-c %(EXISTIMG2)s --osinfo win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
-c.add_compare("--connect %(URI-KVM)s --install fedora26 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified
-c.add_compare("--connect %(URI-KVM)s --pxe --os-variant debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
+c.add_compare("--connect %(URI-KVM)s --install fedora26 --os-variant fedora27 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified, and making sure we don't overwrite --os-variant
+c.add_compare("--connect %(URI-KVM)s --pxe --os-variant short-id=debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
 c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
 c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
@@ -979,7 +978,7 @@ c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TRE
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
-c.add_compare("--os-variant ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
+c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 
 # ppc64 tests

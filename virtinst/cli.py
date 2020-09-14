@@ -480,7 +480,8 @@ def get_domain_and_guest(conn, domstr):
 
 def _get_completer_parsers():
     return VIRT_PARSERS + [ParserCheck, ParserLocation,
-            ParserUnattended, ParserInstall, ParserCloudInit, ParserXML]
+            ParserUnattended, ParserInstall, ParserCloudInit, ParserXML,
+            ParserOSVariant]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -1790,42 +1791,66 @@ def parse_location(optstr):
 ########################
 
 class OSVariantData(object):
-    def __init__(self, os_variant):
-        self._rawstr = os_variant
-        self._default_auto = True
+    def __init__(self):
         self._name = None
-        if not self._rawstr:
+        self._id = None
+        self._detect = False
+
+    def set_compat_str(self, rawstr):
+        if rawstr is None or rawstr == "auto":
+            # The default behavior
+            self._detect = True
             return
 
-        self._default_auto = False
-        if self.is_none or self.is_auto:
-            return
-        if "://" in self._rawstr:
-            osobj = OSDB.lookup_os_by_full_id(self._rawstr, raise_error=True)
+        if rawstr == "none":
+            self._name = "generic"
+        elif "://" in rawstr:
+            self._id = rawstr
         else:
-            osobj = OSDB.lookup_os(self._rawstr, raise_error=True)
-        self._name = osobj.name
+            self._name = rawstr
 
-    def set_installdata_name(self, name):
-        # osname set via --install os=X, but if --os-variant also
-        # explicitly set, we don't want to overwrite it
-        if self._default_auto:
-            self._default_auto = False
-            self._name = name
+    def validate(self):
+        osobj = None
+        if self._id:
+            osobj = OSDB.lookup_os_by_full_id(self._id, raise_error=True)
+        elif self._name:
+            osobj = OSDB.lookup_os(self._name, raise_error=True)
+        if osobj:
+            self._name = osobj.name
 
-    @property
-    def is_none(self):
-        return self._rawstr == "none"
-    @property
-    def is_auto(self):
-        return self._rawstr == "auto" or self._default_auto
-    @property
-    def name(self):
+    def is_generic_requested(self):
+        return self._detect is False or self._name == "generic"
+    def is_detect(self):
+        return self._detect
+    def get_name(self):
         return self._name
 
 
+class ParserOSVariant(VirtCLIParser):
+    cli_arg_name = "os-variant"
+    supports_clearxml = False
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        cls.add_arg("name", "_name")
+        cls.add_arg("short-id", "_name")
+        cls.add_arg("id", "_id")
+        cls.add_arg("detect", "_detect", is_onoff=True)
+
+    def parse(self, inst):
+        if "=" not in str(self.optstr):
+            inst.set_compat_str(self.optstr)
+            return
+        return super().parse(inst)
+
+
 def parse_os_variant(optstr):
-    return OSVariantData(optstr)
+    data = OSVariantData()
+    parser = ParserOSVariant(optstr)
+    parser.parse(data)
+    data.validate()
+    return data
 
 
 ###########################

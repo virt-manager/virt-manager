@@ -194,6 +194,8 @@ GUEST OS OPTIONS
     Use the command "osinfo-query os" to get the list of the accepted OS
     variants.
 
+    See virt-install(1) documentation for more details about ``--os-variant``
+
 
 XML OPTIONS
 ===========
