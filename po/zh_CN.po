@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-01 06:10+0000\n"
-"PO-Revision-Date: 2020-08-31 06:29+0000\n"
+"POT-Creation-Date: 2020-08-31 06:05+0000\n"
+"PO-Revision-Date: 2020-09-04 07:29+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.2.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:127
@@ -372,7 +372,7 @@ msgstr "连接(_N)"
 
 #: ui/createconn.ui:100
 msgid "_Hypervisor:"
-msgstr "管理程序(_H)："
+msgstr "虚拟机管理程序(_H)："
 
 #: ui/createconn.ui:122
 msgid "Connect to _remote host over SSH"
@@ -873,7 +873,7 @@ msgstr "<b>基本详情</b>"
 
 #: ui/details.ui:391
 msgid "Hypervisor:"
-msgstr "管理程序："
+msgstr "虚拟机管理程序："
 
 #: ui/details.ui:403
 msgid "Architecture:"
@@ -897,7 +897,7 @@ msgstr "固件(_W)："
 
 #: ui/details.ui:649
 msgid "<b>Hypervisor Details</b>"
-msgstr "<b>管理程序详情</b>"
+msgstr "<b>虚拟机管理程序详情</b>"
 
 #: ui/details.ui:723
 msgid "<b>Operating Sys_tem</b>"
@@ -1606,11 +1606,10 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"隧道迁移直接通过 libvirtd 连接通道，而不是由 hypervisor 打开一个单独的网络连"
-"接到目标。 源 libvirt 实例直接连接到目标 libvirt 实例。\n"
+"隧道迁移直接通过 libvirtd 连接通道，而不是由虚拟机管理程序打开一个单独的网络连接到目标。 源 libvirt 实例直接连接到目标 "
+"libvirt 实例。\n"
 "\n"
-"由于不需要开放额外的防火墙端口，因此可以简化配置。如果启用 libvirt 连接加"
-"密， 还可以加密迁移流量。但它很难由 SSH 来完成数据传输工作。"
+"由于不需要开放额外的防火墙端口，因此可以简化配置。如果启用 libvirt 连接加密， 还可以加密迁移流量。但它很难由 SSH 来完成数据传输工作。"
 
 #: ui/migrate.ui:470
 msgid "_URI:"
@@ -2433,7 +2432,7 @@ msgstr "LUN 直连"
 #: virtManager/addhardware.py:964 virtManager/device/gfxdetails.py:94
 #: virtManager/preferences.py:183
 msgid "Hypervisor default"
-msgstr "管理程序默认"
+msgstr "虚拟机管理程序默认"
 
 #: virtManager/addhardware.py:824
 msgid "No Devices Available"
@@ -2441,7 +2440,7 @@ msgstr "无设备可用"
 
 #: virtManager/addhardware.py:881
 msgid "Passthrough"
-msgstr "传递"
+msgstr "直通"
 
 #: virtManager/addhardware.py:882
 msgid "Host"
@@ -2949,7 +2948,7 @@ msgstr "没有可在这个连接中使用的安装方法。"
 
 #: virtManager/createvm.py:573
 msgid "No hypervisor options were found for this connection."
-msgstr "没有找到这个连接的 hypervisor 选项。"
+msgstr "没有找到这个连接的虚拟机管理器选项。"
 
 #: virtManager/createvm.py:578
 msgid ""
@@ -3153,8 +3152,7 @@ msgid "VM '%s' didn't show up after expected time."
 msgstr "虚拟系统 '%s' 在预期时间之后未出现。"
 
 #: virtManager/createvm.py:2074
-#, fuzzy, python-format
-#| msgid "Error continue install: %s"
+#, python-format
 msgid "Error continuing install: %s"
 msgstr "继续安装时出错：%s"
 
@@ -3311,18 +3309,12 @@ msgid "Storage is a media device."
 msgstr "存储是一种媒体设备。"
 
 #: virtManager/delete.py:605
-#, fuzzy
-#| msgid ""
-#| "Storage is in use by the following virtual machines:\n"
-#| "- %s "
 msgid "Storage is in use by the following virtual machines"
-msgstr ""
-"以下虚拟机在使用存储：\n"
-"- %s "
+msgstr "以下虚拟系统在使用存储"
 
 #: virtManager/delete.py:610
 msgid "Failed to check disk usage conflict."
-msgstr ""
+msgstr "无法检查磁盘使用冲突。"
 
 #: virtManager/details/console.py:149
 msgid "Leave fullscreen"
@@ -3539,7 +3531,7 @@ msgstr "删除硬件(_R)"
 
 #: virtManager/details/details.py:684
 msgid "Libvirt or hypervisor does not support UEFI."
-msgstr "Libvirt 或虚拟机管理器不支持 UEFI。"
+msgstr "Libvirt 或虚拟机管理程序不支持 UEFI。"
 
 #: virtManager/details/details.py:687
 msgid ""
@@ -3560,7 +3552,7 @@ msgstr "应用程序默认值"
 
 #: virtManager/details/details.py:805
 msgid "Hypervisor Default"
-msgstr "管理程序默认值"
+msgstr "虚拟机管理程序默认值"
 
 #: virtManager/details/details.py:807
 msgid "Clear CPU configuration"
@@ -3947,10 +3939,7 @@ msgstr ""
 "更改客户机的监听地址。"
 
 #: virtManager/details/viewers.py:352
-#, fuzzy, python-format
-#| msgid ""
-#| "Unable to provide requested credentials to the VNC server.\n"
-#| " The credential type %s is not supported"
+#, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
@@ -5086,9 +5075,7 @@ msgstr ""
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
-msgstr ""
-"%(path)s 可能不能被管理程序访问。将需要授予 '%(user)s' 用户搜索以下目录的权"
-"限：%(dirs)s"
+msgstr "%(path)s 可能不能被虚拟机管理程序访问。将需要授予 '%(user)s' 用户搜索以下目录的权限：%(dirs)s"
 
 #: virtinst/cli.py:318
 #, python-format
@@ -6449,7 +6436,7 @@ msgstr "这个客户机应该是一个容器客户机"
 
 #: virtinst/virtinstall.py:951
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
-msgstr "要使用的管理程序名称 (kvm, qemu, xen, ...)"
+msgstr "要使用的虚拟机管理程序名称 (kvm, qemu, xen, ...)"
 
 #: virtinst/virtinstall.py:952
 msgid "The CPU architecture to simulate"
