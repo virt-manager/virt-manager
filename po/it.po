@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-07-21 06:11+0000\n"
-"PO-Revision-Date: 2020-07-19 06:41+0000\n"
+"PO-Revision-Date: 2020-07-27 09:42+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1882,9 +1882,8 @@ msgid "_Resize guest with window:"
 msgstr "_Ridimensionare guest con la finestra:"
 
 #: ui/preferences.ui:746
-#, fuzzy
 msgid "SPICE _USB Redirection:"
-msgstr "Redirezione _USB di Spice:"
+msgstr "Reindirizzamento _USB di Spice:"
 
 #: ui/preferences.ui:774
 msgid "<b>Graphical Consoles</b>"
@@ -2549,7 +2548,7 @@ msgstr "Dispositivo watchdog"
 
 #: virtManager/addhardware.py:1102
 msgid "Filesystem Passthrough"
-msgstr "Filesystem Passthrough"
+msgstr "Passthrough filesystem"
 
 #: virtManager/addhardware.py:1110
 msgid "Random Number Generator"
@@ -2963,7 +2962,7 @@ msgstr "La creazione della rete virtuale può richiedere del tempo..."
 
 #: virtManager/createpool.py:227
 msgid "Sou_rce Name:"
-msgstr ""
+msgstr "Nome so_rgente:"
 
 #: virtManager/createpool.py:227
 msgid "Volg_roup Name:"
@@ -2979,7 +2978,7 @@ msgstr "IQN _sorgente:"
 
 #: virtManager/createpool.py:233
 msgid "_Source Adapter:"
-msgstr ""
+msgstr "Adattatore _sorgente:"
 
 #: virtManager/createpool.py:342
 msgid ""
@@ -3885,6 +3884,8 @@ msgstr "Dispositivo %s fisico"
 #: virtManager/details/details.py:2355
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
+"Non è possibile rimuovere l'ultimo dispositivo video mentre è collegata la "
+"grafica o un display."
 
 #: virtManager/details/details.py:2381
 #, python-format
@@ -4026,6 +4027,11 @@ msgid ""
 "the same as having forced the system off mid-flight. It is recommended to "
 "snapshot either the running or shut down system instead."
 msgstr ""
+"Il dominio è al momento salvato. A causa di limitazioni tecniche quello "
+"stato salvato della memoria non farà parte dello snapshot. Eseguirlo in "
+"seguito sarà come aver spento in modo forzato il sistema. Si raccomanda di "
+"effettuare uno snapshot del sistema quando in esecuzione oppure quando "
+"spento."
 
 #: virtManager/details/snapshots.py:660
 #, python-format
@@ -4253,7 +4259,7 @@ msgstr ""
 
 #: virtManager/device/gfxdetails.py:236
 msgid "Spice GL requires VirtIO graphics configured with accel3d."
-msgstr ""
+msgstr "Spice GL richiede la grafica VirtIO configurata con l'accelerazione 3D."
 
 #: virtManager/device/gfxdetails.py:239
 msgid "Graphics listen type does not support spice GL."
@@ -5041,7 +5047,7 @@ msgstr "Solo redirezione manuale"
 
 #: virtManager/preferences.py:140
 msgid "Auto redirect on USB attach"
-msgstr ""
+msgstr "Redireziona autom. all'inserimento USB"
 
 #: virtManager/preferences.py:162
 msgid "No"
@@ -5509,6 +5515,10 @@ msgid ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 msgstr ""
+"Configura le impostazioni del display del guest. Es.:\n"
+"--graphics spice\n"
+"--graphics vnc,port=5901,listen=0.0.0.0\n"
+"--graphics none\n"
 
 #: virtinst/cli.py:724
 msgid ""
@@ -5599,7 +5609,6 @@ msgstr ""
 "--smartcard mode=passthrough"
 
 #: virtinst/cli.py:795
-#, fuzzy
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5869,7 +5878,7 @@ msgstr "Valore non corretto per 'size': %s"
 #: virtinst/cli.py:3164
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
-msgstr "Valore di '%(optionname)s' sconosciuto: '%(string)s'"
+msgstr "Valore '%(string)s' di '%(optionname)s' sconosciuto"
 
 #: virtinst/cli.py:3179
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -5997,7 +6006,7 @@ msgstr "L'host non supporta Spice GL"
 #: virtinst/devices/hostdev.py:57
 #, python-format
 msgid "Unknown node device type %s"
-msgstr "Tipo di dispositivo nodo sconosciuto %s"
+msgstr "Tipo di dispositivo nodo %s sconosciuto"
 
 #: virtinst/devices/interface.py:171
 #, python-format
@@ -6676,12 +6685,12 @@ msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
-"Riavviare il dominio eseguendo:\n"
+"È possibile riavviare il dominio eseguendo:\n"
 "  %s"
 
 #: virtinst/virtinstall.py:728
 msgid "Restarting guest."
-msgstr "Riavvio guest in corso."
+msgstr "Riavvio del guest."
 
 #: virtinst/virtinstall.py:735
 msgid "Domain install interrupted."
@@ -6719,7 +6728,7 @@ msgstr "Esecuzione di prova completata con successo"
 #: virtinst/virtinstall.py:830
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
-msgstr "Step XML sconosciuto '%s', deve essere 1, 2 oppure all"
+msgstr "Step XML '%s' sconosciuto, deve essere 1, 2 oppure all"
 
 #: virtinst/virtinstall.py:837
 msgid "Requested installation does not have XML step 2"
@@ -7020,6 +7029,8 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
+"Scrivi l'XML creato per dispositivi. Il dominio è opzionale ma raccomandato "
+"per avere valori predefiniti ideali."
 
 #: virtinst/virtxml.py:359
 msgid "Output options"
