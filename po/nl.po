@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-07-21 06:11+0000\n"
-"PO-Revision-Date: 2020-07-20 12:29+0000\n"
+"PO-Revision-Date: 2020-07-22 18:29+0000\n"
 "Last-Translator: Geert Warrink <geert.warrink@onsnet.nu>\n"
-"Language-Team: Dutch <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/nl/>\n"
+"Language-Team: Dutch <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -263,7 +263,7 @@ msgstr "Geen opslag te klonen"
 
 #: ui/clone.ui:359 ui/createvm.ui:2224
 msgid "Storage:"
-msgstr ""
+msgstr "Opslag:"
 
 #: ui/clone.ui:449
 msgid ""
@@ -284,6 +284,10 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
+"<span size='small'>Klonen verandert de gast OS-inhoud <u>niet</u>. Als je "
+"dingen moet doen zoals\n"
+"het wijzigen van wachtwoorden of statische IP-adressen, zie dan het virt-"
+"sysprep (1) gereedschap.</span>"
 
 #: ui/clone.ui:544
 msgid "C_lone"
@@ -312,15 +316,15 @@ msgstr "Verander opslag pad"
 
 #: ui/clone.ui:955 ui/hoststorage.ui:424
 msgid "Size:"
-msgstr ""
+msgstr "Grootte:"
 
 #: ui/clone.ui:971
 msgid "Target:"
-msgstr ""
+msgstr "Doel:"
 
 #: ui/clone.ui:988 ui/createvol.ui:441 ui/details.ui:4617
 msgid "Path:"
-msgstr ""
+msgstr "Pad:"
 
 #: ui/clone.ui:1010
 msgid "Existing disk"
@@ -328,7 +332,7 @@ msgstr "Bestaande schijf"
 
 #: ui/clone.ui:1042
 msgid "New _Path:"
-msgstr ""
+msgstr "Nieuw _Pad:"
 
 #: ui/clone.ui:1056
 msgid "Create a new disk (c_lone) for the virtual machine"
@@ -352,7 +356,7 @@ msgstr "_Hypervisor:"
 
 #: ui/createconn.ui:122
 msgid "Connect to _remote host over SSH"
-msgstr ""
+msgstr "Verbind met host _op afstand met SSH"
 
 #: ui/createconn.ui:141
 msgid "_Autoconnect:"
@@ -373,10 +377,14 @@ msgid ""
 "guests will not be available. Networking options\n"
 "are very limited. </small>"
 msgstr ""
+"<small>QEMU gebruikersmodussessie is niet de standaard\n"
+"virt-manager. Het is waarschijnlijk dat een reeds bestaande\n"
+"QEMU/KVM gasten niet beschikbaar zullen zijn.\n"
+"Netwerkopties zijn zeer beperkt.</small>"
 
 #: ui/createconn.ui:267
 msgid "Cu_stom URI:"
-msgstr ""
+msgstr "Aangepa_ste URI:"
 
 #: ui/createconn.ui:316
 msgid "Generated URI:"
@@ -388,23 +396,23 @@ msgstr "Een nieuw virtueel netwerk aanmaken"
 
 #: ui/createnet.ui:63
 msgid "<span size='large'>Create virtual network</span>"
-msgstr ""
+msgstr "<span size='large'>Creëer virtueel netwerk</span>"
 
 #: ui/createnet.ui:154
 msgid "Fo_rward to:"
-msgstr ""
+msgstr "Doo_rsturen naar:"
 
 #: ui/createnet.ui:168
 msgid "Device _List:"
-msgstr ""
+msgstr "Apparaat_list:"
 
 #: ui/createnet.ui:242
 msgid "De_vice:"
-msgstr ""
+msgstr "A_pparaat:"
 
 #: ui/createnet.ui:280
 msgid "_Enable IPv4"
-msgstr ""
+msgstr "Schak_el IPv4 in"
 
 #: ui/createnet.ui:323 ui/createnet.ui:526
 msgid "_Network:"
@@ -412,39 +420,39 @@ msgstr "_Netwerk:"
 
 #: ui/createnet.ui:400 ui/createnet.ui:601
 msgid "Start:"
-msgstr ""
+msgstr "Start:"
 
 #: ui/createnet.ui:412 ui/createnet.ui:613
 msgid "End:"
-msgstr ""
+msgstr "Einde:"
 
 #: ui/createnet.ui:421
 msgid "Enable DHCPv4"
-msgstr ""
+msgstr "Schakel DHCPv4 in"
 
 #: ui/createnet.ui:458 ui/hostnets.ui:372
 msgid "<b>IPv_4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv_4 configuratie</b>"
 
 #: ui/createnet.ui:483
 msgid "_Enable IPv6"
-msgstr ""
+msgstr "_Schakel IPv6 in"
 
 #: ui/createnet.ui:622
 msgid "Enable DHCPv6"
-msgstr ""
+msgstr "Schakel DHCPv6 in"
 
 #: ui/createnet.ui:659 ui/hostnets.ui:524
 msgid "<b>IPv_6 configuration</b>"
-msgstr ""
+msgstr "<b>IPv_6 configuratie</b>"
 
 #: ui/createnet.ui:702
 msgid "Use net_work name"
-msgstr ""
+msgstr "Gebruik net_werknaam"
 
 #: ui/createnet.ui:720
 msgid "Cust_om"
-msgstr ""
+msgstr "Aange_past"
 
 #: ui/createnet.ui:741
 msgid "<b>DNS domain name</b>"
