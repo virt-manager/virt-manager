@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-07 06:10+0000\n"
-"PO-Revision-Date: 2020-09-07 14:34+0000\n"
+"PO-Revision-Date: 2020-09-08 06:26+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -249,26 +249,20 @@ msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>Клонування віртуальної машини</span>"
 
 #: ui/clone.ui:127
-#, fuzzy
-#| msgid "Original host:"
 msgid "Original VM:"
-msgstr "Початковий вузол:"
+msgstr "Початкова ВМ:"
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
-msgstr "З'_єднання:"
+msgstr "З'єднання:"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "Сховище даних:"
 
 #: ui/clone.ui:285
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
-msgstr "Подробиці…"
+msgstr "_Подробиці…"
 
 #: ui/clone.ui:354
 msgid ""
@@ -2558,40 +2552,35 @@ msgstr "Немає сховища даних для клонування."
 #: virtManager/clone.py:110
 #, python-format
 msgid "Disk target: %s"
-msgstr ""
+msgstr "Дискова ціль: %s"
 
 #: virtManager/clone.py:111
-#, fuzzy, python-format
-#| msgid "Original host:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Початковий вузол:"
+msgstr "Початковий шлях: %s"
 
 #: virtManager/clone.py:113
-#, fuzzy, python-format
-#| msgid "New _Path:"
+#, python-format
 msgid "New path: %s"
-msgstr "Новий _шлях:"
+msgstr "Новий шлях: %s"
 
 #: virtManager/clone.py:117
-#, fuzzy, python-format
-#| msgid "Storage is marked as shareable."
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "Сховище позначено як спільне."
+msgstr "Сховище є безпечним для оприлюднення: %(reason)s"
 
 #: virtManager/clone.py:121
 msgid "Sharing this storage is potentially dangerous."
-msgstr ""
+msgstr "Оприлюднення цього сховища даних є потенційно небезпечним."
 
 #: virtManager/clone.py:124
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr ""
+msgstr "Сховище є непридатним до клонування: %(reason)s"
 
 #: virtManager/clone.py:136
-#, fuzzy
-#| msgid "No storage to clone."
 msgid "No storage."
-msgstr "Немає сховища даних для клонування."
+msgstr "Немає сховища."
 
 #: virtManager/clone.py:141
 #, python-format
@@ -2608,10 +2597,8 @@ msgid "Error launching clone dialog: %s"
 msgstr "Помилка під час спроби запусти діалогове вікно клонування: %s"
 
 #: virtManager/clone.py:275
-#, fuzzy
-#| msgid "C_lone"
 msgid "Clone"
-msgstr "К_лонувати"
+msgstr "Клонувати"
 
 #: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
@@ -2626,29 +2613,21 @@ msgstr ""
 "шляху під час клонування. Ви справді бажаєте скористатися цим каталогом?"
 
 #: virtManager/clone.py:486
-#, fuzzy
-#| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
-msgstr "Пропускання дисків може призвести до перезапису даних."
+msgstr "Оприлюднення сховища може призвести до перезапису даних."
 
 #: virtManager/clone.py:487
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Дискові пристрої з наведеного нижче списку не буде клоновано:\n"
+"Разом із %(vmname)s буде надано у спільне користування такі диск:\n"
 "\n"
-"%s\n"
-"Запуск нової гостьової системи може призвести до перезапису даних на образах "
-"цих дисків."
+"%(pathlist)s\n"
+"Запуск нової гостьової системи може перезаписати дані на цих образах дисків."
 
 #: virtManager/clone.py:502
 #, python-format
@@ -2656,10 +2635,9 @@ msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Помилка під час створення клону віртуальної машини «%(vm)s»: %(error)s"
 
 #: virtManager/clone.py:560
-#, fuzzy, python-format
-#| msgid "Error changing pool settings: %s"
+#, python-format
 msgid "Error with clone settings: %s"
-msgstr "Помилка під час спроби змінити параметри резервного сховища: %s"
+msgstr "Помилка у параметрах клонування: %s"
 
 #: virtManager/clone.py:565
 #, python-format
@@ -5666,10 +5644,8 @@ msgid "Read Only"
 msgstr "Лише для читання"
 
 #: virtinst/cloner.py:187
-#, fuzzy
-#| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
-msgstr "Сховище позначено як спільне."
+msgstr "Позначено як придатне до оприлюднення"
 
 #: virtinst/cloner.py:249
 #, python-format
@@ -6130,16 +6106,12 @@ msgstr ""
 "розміщення. (Потрібний об'єм %(mem1)s МБ > доступно %(mem2)s МБ)"
 
 #: virtinst/virtclone.py:23
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
 "Слід вказати назву початкової віртуальної машини. Вкажіть «--original "
-"ПОЧАТКОВА_ГОСТЬОВА» і повторіть спробу."
+"назва_джерела» і повторіть спробу."
 
 #: virtinst/virtclone.py:70
 msgid ""
@@ -6225,6 +6197,9 @@ msgid ""
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
+"Не клонувати вміст сховища даних до вказаних шляхів до файлів, вміст цих "
+"файлів лишиться незмінним. Це потребує зазначення наявних шляхів для кожного "
+"придатного до клонування образу диска."
 
 #: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
