@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-03 06:10+0000\n"
+"POT-Creation-Date: 2020-09-07 06:10+0000\n"
 "PO-Revision-Date: 2017-02-05 04:02+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Telugu (http://www.transifex.com/projects/p/virt-manager/"
@@ -142,7 +142,7 @@ msgstr "పరికరము రకము (_T):"
 msgid "T_ype:"
 msgstr "రకము (_y):"
 
-#: ui/addhardware.ui:885 ui/clone.ui:376 ui/createnet.ui:217
+#: ui/addhardware.ui:885 ui/clone.ui:184 ui/createnet.ui:217
 #: ui/createpool.ui:329 ui/createvm.ui:2159 ui/createvol.ui:189
 #: ui/details.ui:216 ui/host.ui:181 ui/snapshotsnew.ui:110
 msgid "_Name:"
@@ -235,46 +235,31 @@ msgstr "వివరాలు (_D)"
 msgid "Clone Virtual Machine"
 msgstr "వర్చ్యువల్ మిషన్‌ను క్లోన్‌చేయుము"
 
-#: ui/clone.ui:56
+#: ui/clone.ui:53
 msgid "<span size='large'>Clone virtual machine</span>"
 msgstr ""
 
-#: ui/clone.ui:130
-msgid "Create clone based on:"
-msgstr "దీనిపై ఆధారపడి క్లోన్ సృష్టించు:"
-
-#: ui/clone.ui:142
-msgid "Destination host:"
-msgstr "గమ్యపు అతిధేయ కు అనుసంధానం కోల్పోయింది:"
-
-#: ui/clone.ui:192
-msgid "No networking devices"
-msgstr "ఏ నెట్వర్కింగ్ పరికరములు లేవు"
-
-#: ui/clone.ui:228
-msgid "Networking:"
+#: ui/clone.ui:127
+msgid "Original VM:"
 msgstr ""
 
-#: ui/clone.ui:251
-msgid "No storage to clone"
-msgstr "క్లోన్ చేయుటకు యెటువంటి నిల్వలేదు"
+#: ui/clone.ui:139
+#, fuzzy
+#| msgid "C_onnection:"
+msgid "Connection:"
+msgstr "అనుసంధానము (_o):"
 
-#: ui/clone.ui:359 ui/createvm.ui:2241
+#: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr ""
 
-#: ui/clone.ui:449
-msgid ""
-"<span size='small'>Cloning creates a new, independent copy of the original "
-"disk. Sharing\n"
-"uses the existing disk image for both the original and the new machine.</"
-"span>"
-msgstr ""
-"<span size='small'>క్లోనింగ్ అనునది డిస్కు యొక్క కొత్త, స్వతంత్ర నకలును సృష్టిస్తుంది. బాగస్వామ్య "
-"పరచుట\n"
-"వున్న డిస్కు ప్రతిబింబమును వాస్తవ మరియు కొత్త మిషన్ రెంటికి వుపయోగిస్తుంది.</span>"
+#: ui/clone.ui:285
+#, fuzzy
+#| msgid "Details..."
+msgid "_Details..."
+msgstr "వివరాలు..."
 
-#: ui/clone.ui:489
+#: ui/clone.ui:354
 msgid ""
 "<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If "
 "you need to do things\n"
@@ -284,56 +269,39 @@ msgstr ""
 "<span size='small'>క్లోనింగ్ అతిథి OS విషయాలను <u>మార్చదు</u>. మీరు ఏమన్నా చెయ్యాలంటే\n"
 "సంకేతపదాలు మార్చడం లేదా స్టాటిక్ ఐపిలు మార్చడం వంటివి, virt-sysprep(1) సాధనం చూడండి.</span>"
 
-#: ui/clone.ui:544
+#: ui/clone.ui:409
 msgid "C_lone"
 msgstr "క్లోన్ (_l)"
 
-#: ui/clone.ui:579
-msgid "Change MAC address"
-msgstr "MAC చిరునామా మార్చుము"
-
-#: ui/clone.ui:715
-msgid "New _MAC:"
-msgstr "కొత్త _MAC:"
-
-#: ui/clone.ui:752 ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377
-#: ui/details.ui:4507 ui/details.ui:4663
-msgid "Type:"
-msgstr "రకము:"
-
-#: ui/clone.ui:769
-msgid "MAC:"
-msgstr "MAC:"
-
-#: ui/clone.ui:813
+#: ui/clone.ui:447
 msgid "Change storage path"
 msgstr "నిల్వ పాత్ మార్చుము"
 
-#: ui/clone.ui:955 ui/hoststorage.ui:434
+#: ui/clone.ui:585 ui/hoststorage.ui:434
 msgid "Size:"
 msgstr ""
 
-#: ui/clone.ui:971
+#: ui/clone.ui:601
 msgid "Target:"
 msgstr ""
 
-#: ui/clone.ui:988 ui/createvol.ui:438 ui/details.ui:4519
+#: ui/clone.ui:618 ui/createvol.ui:438 ui/details.ui:4519
 msgid "Path:"
 msgstr "పాత్:"
 
-#: ui/clone.ui:1010
+#: ui/clone.ui:640
 msgid "Existing disk"
 msgstr "ఉన్న డిస్కు"
 
-#: ui/clone.ui:1042
+#: ui/clone.ui:671
 msgid "New _Path:"
 msgstr ""
 
-#: ui/clone.ui:1056
+#: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్ కొరకు కొత్త డిస్కును (క్లోన్) సృష్టించుము (_l)"
 
-#: ui/clone.ui:1084 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/fsdetails.ui:202
 msgid "_Browse..."
 msgstr "బ్రౌజు... (_B)"
 
@@ -716,7 +684,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "ఈ వర్చ్యువల్ మిషన్‌ కొరకు నిల్వను చేతనము చేయుము (_E)"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:232
-#: virtManager/addhardware.py:1045
+#: virtManager/addhardware.py:1045 virtManager/clone.py:276
 msgid "Storage"
 msgstr "నిల్వ"
 
@@ -1103,6 +1071,11 @@ msgstr ""
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>వర్చ్యువల్ నెట్వర్కు ఇంటర్‌ఫేస్</b>"
 
+#: ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377 ui/details.ui:4507
+#: ui/details.ui:4663
+msgid "Type:"
+msgstr "రకము:"
+
 #: ui/details.ui:3221
 msgid "Mode:"
 msgstr "తీరు:"
@@ -1189,7 +1162,7 @@ msgstr "<b>నియంత్రిక</b>"
 msgid "<b>Filesystem</b>"
 msgstr "<b>ఫైల్‌సిస్టమ్</b>"
 
-#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:387
+#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:391
 msgid "M_ode:"
 msgstr "రీతి (_o):"
 
@@ -1274,7 +1247,7 @@ msgstr "చిరునామా (_e):"
 msgid "Pa_ssword:"
 msgstr "సంకేతపదం (_s):"
 
-#: ui/gfxdetails.ui:150 ui/migrate.ui:244
+#: ui/gfxdetails.ui:150 ui/migrate.ui:248
 msgid "_Port:"
 msgstr "పోర్టు (_P):"
 
@@ -1550,31 +1523,31 @@ msgstr "మూసివేయి (_S)"
 msgid "Migrate the virtual machine"
 msgstr "వర్చ్యువల్ మిషన్‌ను వలసపంపుము"
 
-#: ui/migrate.ui:103
+#: ui/migrate.ui:107
 msgid "Migrating VM:"
 msgstr ""
 
-#: ui/migrate.ui:119
+#: ui/migrate.ui:123
 msgid "Original host:"
 msgstr ""
 
-#: ui/migrate.ui:135
+#: ui/migrate.ui:139
 msgid "New _host:"
 msgstr ""
 
-#: ui/migrate.ui:230
+#: ui/migrate.ui:234
 msgid "_Address:"
 msgstr "చిరునామా (_A):"
 
-#: ui/migrate.ui:300
+#: ui/migrate.ui:304
 msgid "0"
 msgstr "0"
 
-#: ui/migrate.ui:314 ui/migrate.ui:354
+#: ui/migrate.ui:318 ui/migrate.ui:358
 msgid "Let libvirt decide"
 msgstr ""
 
-#: ui/migrate.ui:383
+#: ui/migrate.ui:387
 msgid ""
 "Tunnel migration through the libvirtd connection channel, rather than having "
 "the hypervisor open a separate network connection to the destination. The "
@@ -1586,15 +1559,15 @@ msgid ""
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
 
-#: ui/migrate.ui:470
+#: ui/migrate.ui:474
 msgid "_URI:"
 msgstr ""
 
-#: ui/migrate.ui:507
+#: ui/migrate.ui:511
 msgid "<b>Connectivity</b>"
 msgstr "<b>అనుసంధానత</b>"
 
-#: ui/migrate.ui:538
+#: ui/migrate.ui:542
 msgid ""
 "By default libvirt will refuse to migrate a VM for certain configurations "
 "that could lead to malfunctioning guests, like if a disk's cache mode is not "
@@ -1603,11 +1576,11 @@ msgid ""
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
 
-#: ui/migrate.ui:542
+#: ui/migrate.ui:546
 msgid "A_llow unsafe:"
 msgstr ""
 
-#: ui/migrate.ui:568
+#: ui/migrate.ui:572
 msgid ""
 "By default, the migrated VM config is removed from the source host, and "
 "saved persistently on the destination host. The destination host is "
@@ -1619,15 +1592,15 @@ msgid ""
 "is shutdown."
 msgstr ""
 
-#: ui/migrate.ui:572
+#: ui/migrate.ui:576
 msgid "_Temporary move:"
 msgstr ""
 
-#: ui/migrate.ui:602
+#: ui/migrate.ui:606
 msgid "Advanced options"
 msgstr "ఆధునిక ఐచ్చికములు"
 
-#: ui/migrate.ui:649
+#: ui/migrate.ui:655
 msgid "_Migrate"
 msgstr "వలసపంపు (_M)"
 
@@ -2377,7 +2350,7 @@ msgstr ""
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:702 virtManager/clone.py:105
+#: virtManager/addhardware.py:702
 msgid "Disk device"
 msgstr "డిస్క్ లేదా పరికరం"
 
@@ -2523,125 +2496,72 @@ msgstr "పని రద్దుచేయుచున్నది..."
 msgid "Completed"
 msgstr "పూర్తైనది"
 
-#: virtManager/clone.py:52
+#: virtManager/clone.py:28 virtinst/cloner.py:183
 msgid "No storage to clone."
 msgstr "క్లోన్ చేయుటకు నిల్వలేదు."
 
-#: virtManager/clone.py:57
-msgid "Cannot clone unmanaged remote storage."
-msgstr "నిర్వహించని దూరస్థ నిల్వను క్లోను చేయలేదు."
-
-#: virtManager/clone.py:60
-msgid ""
-"Block devices to clone must be libvirt\n"
-"managed storage volumes."
-msgstr ""
-"నిరుద్ద పరికరాల క్లోన్ తప్పక libvirt\n"
-"నిర్వాహిత నిల్వ వాల్యూమ్స్ అవ్వాలి."
-
-#: virtManager/clone.py:63 virtManager/delete.py:575
-msgid "No write access to parent directory."
-msgstr "పేరెంటు డైరెక్టరీనకు వ్రాయు యాక్సెస్ లేదు."
-
-#: virtManager/clone.py:65 virtManager/delete.py:573
-msgid "Path does not exist."
-msgstr "పాత్ లేదు."
-
-#: virtManager/clone.py:71
+#: virtManager/clone.py:110
 #, python-format
-msgid "Cannot clone %s storage pool."
+msgid "Disk target: %s"
 msgstr ""
 
-#: virtManager/clone.py:95
-msgid "Removable"
-msgstr "తీసివేయదగిన"
-
-#: virtManager/clone.py:98
-msgid "Read Only"
-msgstr "చదువుట మాత్రమే"
-
-#: virtManager/clone.py:100
-msgid "No write access"
-msgstr "వ్రాయు యాక్సెస్ లేదు"
-
-#: virtManager/clone.py:109
-msgid "Shareable"
-msgstr "పంచుకొనదగిన"
-
-#: virtManager/clone.py:127
+#: virtManager/clone.py:111
 #, python-format
-msgid "Error launching clone dialog: %s"
+msgid "Original path: %s"
 msgstr ""
 
-#: virtManager/clone.py:292 virtManager/clone.py:561
-msgid "Details..."
-msgstr "వివరాలు..."
-
-#: virtManager/clone.py:320
+#: virtManager/clone.py:113
 #, fuzzy, python-format
-#| msgid "Usermode"
-msgid "Usermode (%(mac)s)"
-msgstr "వినియోగదారిరీతి"
+#| msgid "Deleting path '%s'"
+msgid "New path: %s"
+msgstr "పాత్ '%s' తొలగించుచున్నది"
 
-#: virtManager/clone.py:330
+#: virtManager/clone.py:117
 #, fuzzy, python-format
-#| msgid "%(currentmem)s of %(maxmem)s"
-msgid "%(netmode)s (%(mac)s)"
-msgstr "%(maxmem)s లో %(currentmem)s"
+#| msgid "Storage is marked as shareable."
+msgid "Storage is safe to share: %(reason)s"
+msgstr "నిల్వ భాగస్వామ్యపరచదగినదిగా గుర్తుంచబడింది."
 
-#: virtManager/clone.py:335
-#, fuzzy, python-format
-#| msgid "Virtual Network is not active."
-msgid "Virtual Network %(netdevice)s (%(mac)s)"
-msgstr "వర్చ్యువల్ నెట్వర్కు క్రియాశీలముగా లేదు."
+#: virtManager/clone.py:121
+msgid "Sharing this storage is potentially dangerous."
+msgstr ""
 
-#: virtManager/clone.py:340
-#, fuzzy, python-format
-#| msgid "_Virtual Networks"
-msgid "Virtual Network (%(mac)s)"
-msgstr "వర్చ్యువల్ నెట్వర్కులు (_V)"
-
-#: virtManager/clone.py:346
+#: virtManager/clone.py:124
 #, python-format
-msgid "%(nettype)s %(netdevice)s (%(mac)s)"
+msgid "Storage is not cloneable: %(reason)s"
 msgstr ""
 
-#: virtManager/clone.py:352
-#, python-format
-msgid "%(nettype)s (%(mac)s)"
-msgstr ""
+#: virtManager/clone.py:136
+#, fuzzy
+#| msgid "No storage to clone."
+msgid "No storage."
+msgstr "క్లోన్ చేయుటకు నిల్వలేదు."
 
-#: virtManager/clone.py:422
-msgid "Nothing to clone."
-msgstr "క్లోనుచేయుటకు యేమి లేదు"
-
-#: virtManager/clone.py:553
-msgid "Clone this disk"
-msgstr "ఈ డిస్కును క్లోను చేయుము"
-
-#: virtManager/clone.py:557
+#: virtManager/clone.py:141
 #, python-format
 msgid "Share disk with %s"
 msgstr "%s తో డిస్కును భాగస్వామ్యపరచుము"
 
-#: virtManager/clone.py:569
-msgid "Storage cannot be shared or cloned."
-msgstr "నిల్వ భాగస్వామ్యపరచబడదు లేదా క్లోన్ చేయబడదు."
+#: virtManager/clone.py:143
+msgid "Clone this disk"
+msgstr "ఈ డిస్కును క్లోను చేయుము"
 
-#: virtManager/clone.py:627
-msgid "One or more disks cannot be cloned or shared."
-msgstr "ఒకటి లేదా యెక్కువ డిస్కులు క్లోనుచేయబడవు లేదా భాగస్వామ్యపరచబడవు."
-
-#: virtManager/clone.py:712
+#: virtManager/clone.py:181
 #, python-format
-msgid "Error changing MAC address: %s"
-msgstr "MAC చిరునామా మార్చుటలో దోషము: %s"
+msgid "Error launching clone dialog: %s"
+msgstr ""
 
-#: virtManager/clone.py:738
+#: virtManager/clone.py:275
+#, fuzzy
+#| msgid "C_lone"
+msgid "Clone"
+msgstr "క్లోన్ (_l)"
+
+#: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
 msgstr "ఉన్న దస్త్రమును క్లోనింగ్ తిరిగివ్రాస్తుంది"
 
-#: virtManager/clone.py:740
+#: virtManager/clone.py:457
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2649,21 +2569,23 @@ msgstr ""
 "ఉన్న ప్రతిబింబమును వుపయోగించుటవలన క్లోనింగు ప్రక్రియనందు పాత్‌ను తిరిగివ్రాస్తుంది. మీరు ఖచ్చితంగా ఈ "
 "పాత్‌ను వుపయోగించాలని అనుకొనుచున్నారా?"
 
-#: virtManager/clone.py:752
-#, python-format
-msgid "Error changing storage path: %s"
-msgstr "నిల్వ పాత్‌ను మార్చుటలో దోషము: %s"
-
-#: virtManager/clone.py:804
-msgid "Skipping disks may cause data to be overwritten."
+#: virtManager/clone.py:486
+#, fuzzy
+#| msgid "Skipping disks may cause data to be overwritten."
+msgid "Sharing storage may cause data to be overwritten."
 msgstr "డిస్కులను వదిలివేయుట డాటా తిరిగివ్రాయబడుటకు కారణం కావచ్చును."
 
-#: virtManager/clone.py:805
-#, python-format
+#: virtManager/clone.py:487
+#, fuzzy, python-format
+#| msgid ""
+#| "The following disk devices will not be cloned:\n"
+#| "\n"
+#| "%s\n"
+#| "Running the new guest could overwrite data in these disk images."
 msgid ""
-"The following disk devices will not be cloned:\n"
+"The following disk devices will be shared with %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 "ఈ క్రింది డిస్కు పరికరములు క్లోనుచేయబడవు:\n"
@@ -2671,23 +2593,24 @@ msgstr ""
 "%s\n"
 "కొత్త గెస్టును నడుపుట అనునది ఈ డిస్కు ప్రతిబింబముల నందలి డాటాను తిరిగివ్రాయగలదు."
 
-#: virtManager/clone.py:822
+#: virtManager/clone.py:502
 #, fuzzy, python-format
 #| msgid "Error creating virtual machine clone '%s': %s"
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "వర్చ్యువల్ మిషన్ క్లోన్ '%s' సృష్టించుటలో దోషము: %s"
 
-#: virtManager/clone.py:838 virtManager/migrate.py:365
-#, python-format
-msgid "Uncaught error validating input: %s"
-msgstr "ఇన్‌పుట్ విలువీకరణకు దొరకని దోషము: %s"
+#: virtManager/clone.py:560
+#, fuzzy, python-format
+#| msgid "Error changing pool settings: %s"
+msgid "Error with clone settings: %s"
+msgstr "నెట్‌వర్క్ అమరికలు: %s"
 
-#: virtManager/clone.py:843
+#: virtManager/clone.py:565
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "వర్చ్యువల్ మిషన్ క్లోనును సృష్టించుచున్నది '%s'"
 
-#: virtManager/clone.py:847
+#: virtManager/clone.py:570
 #, fuzzy, python-format
 #| msgid " and selected storage (this may take a while)"
 msgid ""
@@ -3281,6 +3204,14 @@ msgstr ""
 #: virtManager/delete.py:571
 msgid "Cannot delete unmanaged remote storage."
 msgstr "నిర్వహించని దూరస్థ నిల్వను తొలగించలేక పోయింది."
+
+#: virtManager/delete.py:573
+msgid "Path does not exist."
+msgstr "పాత్ లేదు."
+
+#: virtManager/delete.py:575
+msgid "No write access to parent directory."
+msgstr "పేరెంటు డైరెక్టరీనకు వ్రాయు యాక్సెస్ లేదు."
 
 #: virtManager/delete.py:577
 msgid "Cannot delete unmanaged block device."
@@ -4279,26 +4210,26 @@ msgstr ""
 msgid "Error changing pool settings: %s"
 msgstr "నెట్‌వర్క్ అమరికలు: %s"
 
-#: virtManager/lib/connectauth.py:52
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:155
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:161
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:165
+#: virtManager/lib/connectauth.py:163
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:169
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4308,45 +4239,45 @@ msgstr ""
 " - ఒక Xen అతిథేయి కెర్నల్ బూటైందని\n"
 " -Xen సేవ ప్రారంభమైందని"
 
-#: virtManager/lib/connectauth.py:175
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:181
+#: virtManager/lib/connectauth.py:179
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' డెమోన్ నడుస్తోందని నిర్థారించుము."
 
-#: virtManager/lib/connectauth.py:184
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:196
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "వర్చ్యువల్ కంప్యూటరు నిర్వాహక అనుసంధానం విఫలమైంది"
 
-#: virtManager/lib/connectauth.py:271
+#: virtManager/lib/connectauth.py:269
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:275
+#: virtManager/lib/connectauth.py:273
 msgid ""
 "libvirtd is installed but not running. Start the libvirtd service to manage "
 "virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:281
+#: virtManager/lib/connectauth.py:279
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:288
+#: virtManager/lib/connectauth.py:286
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4545,71 +4476,76 @@ msgstr ""
 msgid "Disabled in preferences dialog."
 msgstr "అభీష్టాల డైలాగునందు అచేతనపరచబడింది."
 
-#: virtManager/migrate.py:37
+#: virtManager/migrate.py:38
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "మైగ్రేట్ డైలాగ్ ఆరంభించుటలో దోషం: %s"
 
-#: virtManager/migrate.py:135
+#: virtManager/migrate.py:144
 msgid "Direct"
 msgstr ""
 
-#: virtManager/migrate.py:136
+#: virtManager/migrate.py:145
 msgid "Tunnelled"
 msgstr ""
 
-#: virtManager/migrate.py:150
+#: virtManager/migrate.py:161
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
 msgstr ""
 
-#: virtManager/migrate.py:211
+#: virtManager/migrate.py:222
 msgid "A valid destination connection must be selected."
 msgstr "చెల్లునటువంటి గమ్యపు అనుసంధానము తప్పక యెంపికచేయవలెను."
 
-#: virtManager/migrate.py:226
+#: virtManager/migrate.py:237
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
 
-#: virtManager/migrate.py:281
+#: virtManager/migrate.py:292
 #, python-format
 msgid "%(uri)s (Hypervisors do not match)"
 msgstr ""
 
-#: virtManager/migrate.py:283
+#: virtManager/migrate.py:294
 #, fuzzy, python-format
 #| msgid "Disconnected"
 msgid "%(uri)s (Disconnected)"
 msgstr "అననుసంధానించిన"
 
-#: virtManager/migrate.py:285
+#: virtManager/migrate.py:296
 #, python-format
 msgid "%(uri)s (Same connection)"
 msgstr ""
 
-#: virtManager/migrate.py:302
+#: virtManager/migrate.py:313
 msgid "No usable connections available."
 msgstr ""
 
-#: virtManager/migrate.py:342
+#: virtManager/migrate.py:353
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "అతిథిని మైగ్రేట్ చేయలేదు: %s"
 
-#: virtManager/migrate.py:383
+#: virtManager/migrate.py:381
+#, python-format
+msgid "Uncaught error validating input: %s"
+msgstr "ఇన్‌పుట్ విలువీకరణకు దొరకని దోషము: %s"
+
+#: virtManager/migrate.py:399
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s'ను వలసపంపుచున్నది"
 
-#: virtManager/migrate.py:384
+#: virtManager/migrate.py:400
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
 
-#: virtManager/migrate.py:395
+#: virtManager/migrate.py:411
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "మైగ్రేట్ పనిని రద్దుచేయుటలో దోషం: %s"
@@ -4635,11 +4571,11 @@ msgstr "స్నప్‌షాట్ కొరకు కనీసం వొక
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "తెలుపబడిన పరికరాన్ని క్రియాహీన VM ఆకృతీకరణ నందు కనుగొనలేక పోయింది: %s"
 
-#: virtManager/object/domain.py:1366
+#: virtManager/object/domain.py:1363
 msgid "Saving domain to disk"
 msgstr "డొమైన్‌ డిస్కును దాచుచున్నది"
 
-#: virtManager/object/domain.py:1418
+#: virtManager/object/domain.py:1415
 msgid "Migrating domain"
 msgstr "డొమైన్‌ను వలసపంపుచున్నది"
 
@@ -5519,66 +5455,61 @@ msgstr "vol=poolname/volname తో నిల్వ వాల్యామ్ త
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:46
+#: virtinst/cloner.py:45
 #, fuzzy, python-format
 #| msgid "Could not remove old vm '%s': %s"
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "పాత vm '%s' తీసివేయలేదు: %s"
 
-#: virtinst/cloner.py:127
+#: virtinst/cloner.py:113
 #, python-format
-msgid "Invalid name for new guest: %s"
-msgstr "కొత్త అతిథి కొరకు చెల్లని పేరు: %s"
+msgid "Domain '%s' was not found."
+msgstr "డొమైన్ '%s' కనబడలేదు."
 
-#: virtinst/cloner.py:163
+#: virtinst/cloner.py:157
+#, python-format
+msgid "Clone onto existing storage volume is not currently supported: '%s'"
+msgstr "ఉన్న నిల్వ వాల్యుమ్‌పై క్లోన్ చేయుట ప్రస్తుతం తోడ్పాటులేదు: '%s'"
+
+#: virtinst/cloner.py:178
+#, python-format
+msgid "Disk path '%s' does not exist."
+msgstr ""
+
+#: virtinst/cloner.py:185
+msgid "Read Only"
+msgstr "చదువుట మాత్రమే"
+
+#: virtinst/cloner.py:187
+#, fuzzy
+#| msgid "Storage is marked as shareable."
+msgid "Marked as shareable"
+msgstr "నిల్వ భాగస్వామ్యపరచదగినదిగా గుర్తుంచబడింది."
+
+#: virtinst/cloner.py:249
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "పాత్ '%s' ను క్లోనింగ్ కొరకు వుపయోగించలేక పోయింది: %s"
 
-#: virtinst/cloner.py:283
-#, fuzzy
-#| msgid "Original guest name or xml is required."
-msgid "Original guest name or XML is required."
-msgstr "వాస్తవ అతిథి పేరు లేదా xml అవసరమైంది."
-
-#: virtinst/cloner.py:306
-msgid "Domain to clone must be shutoff."
-msgstr ""
-
-#: virtinst/cloner.py:328
-#, python-format
-msgid "Clone onto existing storage volume is not currently supported: '%s'"
-msgstr "ఉన్న నిల్వ వాల్యుమ్‌పై క్లోన్ చేయుట ప్రస్తుతం తోడ్పాటులేదు: '%s'"
-
-#: virtinst/cloner.py:402
-#, python-format
-msgid ""
-"More disks to clone than new paths specified. (%(passed)d specified, "
-"%(need)d needed"
-msgstr ""
-"తెలుపబడిన కొత్త పాత్‌ల కన్నా క్లోన్ చేయుటకు మరిన్ని డిస్కులు. (%(passed)d తెలిపెను, %(need)d "
-"అవసరమైను"
-
-#: virtinst/cloner.py:416
-msgid ""
-"Setting the graphics device port to autoport, in order to avoid conflicting."
-msgstr "గ్రాఫిక్స్ పరికరం పోర్టును ఆటోపోర్టునకు అమర్చెను, వైరుధ్యం తప్పించుటకు"
-
-#: virtinst/cloner.py:578
-#, python-format
-msgid "Disk path '%s' does not exist."
-msgstr ""
-
-#: virtinst/cloner.py:583
+#: virtinst/cloner.py:265
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "వాస్తవ డిస్కు సమాచారం నిర్ణయించలేక పోయింది: %s"
 
-#: virtinst/cloner.py:621
+#: virtinst/cloner.py:316
+msgid "Domain to clone must be shutoff."
+msgstr ""
+
+#: virtinst/cloner.py:351
+msgid ""
+"Setting the graphics device port to autoport, in order to avoid conflicting."
+msgstr "గ్రాఫిక్స్ పరికరం పోర్టును ఆటోపోర్టునకు అమర్చెను, వైరుధ్యం తప్పించుటకు"
+
+#: virtinst/cloner.py:488
 #, python-format
-msgid "Domain '%s' was not found."
-msgstr "డొమైన్ '%s' కనబడలేదు."
+msgid "Invalid name for new guest: %s"
+msgstr "కొత్త అతిథి కొరకు చెల్లని పేరు: %s"
 
 #: virtinst/devices/disk.py:218
 #, python-format
@@ -5598,17 +5529,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "ఈ వాల్యూమ్ రకానికి ఫార్మాట్ యాట్రిబ్యూట్ తోడ్పాటునీయదు"
 
-#: virtinst/devices/disk.py:731
+#: virtinst/devices/disk.py:735
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "పరికర రకం '%s' కు పాత్ అవసరం"
 
-#: virtinst/devices/disk.py:739
+#: virtinst/devices/disk.py:743
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "నాన్-ఎగ్జిస్టెంట్ పాత్ '%s' కొరకు నిల్వ సృష్టి పారామితులు తెలుపండి."
 
-#: virtinst/devices/disk.py:853
+#: virtinst/devices/disk.py:857
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5645,34 +5576,34 @@ msgstr "నిల్వ %(path)s వుపయోగించలేదు: %(err)
 msgid "Permissions on '%s' did not stick"
 msgstr "'%s' పైని అనుమతులు స్టిక్ కాలేదు"
 
-#: virtinst/diskbackend.py:528
+#: virtinst/diskbackend.py:525
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
 "అతిథి నడుచునప్పుడు స్పార్స్ ఫైలుకు పూర్తిగా కేటాయించుటకు ఫైల్‌సిస్టమ్ తగినంత ఖాళీ జాగా కలిగివుండబోదు."
 
-#: virtinst/diskbackend.py:533
+#: virtinst/diskbackend.py:530
 msgid "There is not enough free space to create the disk."
 msgstr "డిస్కును సృష్టించుటకు అక్కడ తగినంత ఖాళీ జాగా లేదు."
 
-#: virtinst/diskbackend.py:538
+#: virtinst/diskbackend.py:535
 #, fuzzy, python-format
 #| msgid " %d M requested > %d M available"
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr " %d M అవసరమైంది > %d M అందుబాటులోవుంది"
 
-#: virtinst/diskbackend.py:545
+#: virtinst/diskbackend.py:542
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "లేని డిస్కు '%s' కొరకు పరిమాణం అవసరం"
 
-#: virtinst/diskbackend.py:555
+#: virtinst/diskbackend.py:552
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s క్లోనింగ్"
 
-#: virtinst/diskbackend.py:625
+#: virtinst/diskbackend.py:622
 #, fuzzy, python-format
 #| msgid "Error cloning diskimage %s to %s: %s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
@@ -5918,7 +5849,7 @@ msgstr ""
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "అప్రమేయ నిల్వ పూల్‌ '%s'ను సృష్టించలేకపోయింది: %s"
 
-#: virtinst/storage.py:220 virtinst/storage.py:554
+#: virtinst/storage.py:220 virtinst/storage.py:550
 msgid "Storage object"
 msgstr "నిల్వ ఆబ్జక్టు"
 
@@ -5947,23 +5878,23 @@ msgstr "నిల్వ పూల్‌ను ప్రారంభించల�
 msgid "Could not set pool autostart flag: %s"
 msgstr "పూల్ స్యయంచాలకప్రారంభం ఫ్లాగ్ అమర్చలేక పోయింది: %s"
 
-#: virtinst/storage.py:560
+#: virtinst/storage.py:556
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "పేరు '%s' యిప్పటికే వేరొక వాల్యముచే వుపయోగంలో వుంది."
 
-#: virtinst/storage.py:649
+#: virtinst/storage.py:645
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "స్పేర్స్ లాజికల్ వాల్యూమ్స్ తోడ్పాటులేదు, సామర్ధ్యంకు సమానమైన కేటాయింపు అమర్చుతోంది"
 
-#: virtinst/storage.py:695
+#: virtinst/storage.py:691
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s' కేటాయిస్తోంది"
 
-#: virtinst/storage.py:733
+#: virtinst/storage.py:729
 #, fuzzy, python-format
 #| msgid ""
 #| "There is not enough free space on the storage pool to create the volume. "
@@ -5975,7 +5906,7 @@ msgstr ""
 "వాల్యూమ్ సృష్టించుటకు నిల్వ పూల్‌పై తగినంత ఖాళీ జాగా లేదు. (%d M అభ్యర్ధించిన కేటాయింపు > %d M "
 "అందుబాటులోవుంది)"
 
-#: virtinst/storage.py:740
+#: virtinst/storage.py:736
 #, fuzzy, python-format
 #| msgid ""
 #| "The requested volume capacity will exceed the available pool space when "
@@ -5988,19 +5919,13 @@ msgstr ""
 "వాల్యూమ్ పూర్తిగా కేటాయించబడినప్పుడు అభ్యర్ధించిన వాల్యూమ్ సామర్ధ్యం అనునది అందుబాటులోని పూల్ జాగాను "
 "దాటును. (%d M అభ్యర్ధించిన సామర్ధ్యం > %d M అందుబాటులోవుంది)"
 
-#: virtinst/virtclone.py:25
+#: virtinst/virtclone.py:23
 msgid ""
-"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
-"specify one."
+"An original machine name is required, use '--original src_name' and try "
+"again."
 msgstr ""
 
-#: virtinst/virtclone.py:44
-msgid ""
-"An original machine name is required, use '--original ORIGINAL_GUEST' and "
-"try again."
-msgstr ""
-
-#: virtinst/virtclone.py:85
+#: virtinst/virtclone.py:70
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6017,41 +5942,41 @@ msgstr ""
 "అతిధేయ వైపు మార్పులు చేయును. సంకేతపదాలు మార్చడం, స్టాటిక్ ఐపి చిరునామా మార్చడం, మొదలైనవి. ఈ రకమైన "
 "మార్పుల కొరకు, virt-sysprep(1) చూడండి."
 
-#: virtinst/virtclone.py:95 virtinst/virtinstall.py:858
+#: virtinst/virtclone.py:80 virtinst/virtinstall.py:858
 msgid "General Options"
 msgstr "సర్వసామన్యమైన ఐచ్ఛికాలు"
 
-#: virtinst/virtclone.py:97
+#: virtinst/virtclone.py:82
 msgid "Name of the original guest to clone."
 msgstr ""
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:84
 msgid "XML file to use as the original guest."
 msgstr "వాస్తవ అతిథి వలె వుపయోగించుటకు XML ఫైలు."
 
-#: virtinst/virtclone.py:101
+#: virtinst/virtclone.py:86
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr "వాస్తవ అతిథి ఆకృతీకరణనుండి క్లోన్ పేరు మరియు నిల్వ పాత్‌లను స్వయంచాలకంగా జనియింపచేయి."
 
-#: virtinst/virtclone.py:104
+#: virtinst/virtclone.py:89
 msgid "Name for the new guest"
 msgstr "కొత్త అతిథి కొరకు పేరు"
 
-#: virtinst/virtclone.py:107
+#: virtinst/virtclone.py:92
 msgid "use btrfs COW lightweight copy"
 msgstr ""
 
-#: virtinst/virtclone.py:109
+#: virtinst/virtclone.py:94
 msgid "Storage Configuration"
 msgstr "నిల్వ ఆకృతీకరణ"
 
-#: virtinst/virtclone.py:111
+#: virtinst/virtclone.py:96
 msgid "New file to use as the disk image for the new guest"
 msgstr "కొత్త అతిథి కొరకు డిస్కు ప్రతిరూపంగా వుపయోగించుటకు కొత్త ఫైలు"
 
-#: virtinst/virtclone.py:114
+#: virtinst/virtclone.py:99
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6059,53 +5984,60 @@ msgstr ""
 "పరికరాలు నకలుతీయుటకు బలవంతంచేయి (ఉదా, 'hdc' చదువుటమాత్రమే cdrom పరికరం అయితే, --force-"
 "copy=hdc)"
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:102
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 
-#: virtinst/virtclone.py:122
+#: virtinst/virtclone.py:107
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "క్లోన్ యొక్క డిస్కు ప్రతిరూపం కొరకు స్పేర్స్ ఫైలు వుపయోగించదు"
 
-#: virtinst/virtclone.py:126
+#: virtinst/virtclone.py:111
 msgid ""
-"Do not clone storage, new disk images specified via --file are preserved "
-"unchanged"
-msgstr "నిల్వ క్లోన్ చేయవద్దు, --file ద్వారా తెలిపిన కొత్త డిస్కు ప్రతిరూపాలు మారకుండా నిలిపివుంచబడతాయి"
+"Do not clone storage contents to specified file paths, their contents will "
+"be left untouched. This requires specifying existing paths for every "
+"cloneable disk image."
+msgstr ""
 
-#: virtinst/virtclone.py:129
+#: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
 msgstr ""
 
-#: virtinst/virtclone.py:131
+#: virtinst/virtclone.py:118
 msgid "Networking Configuration"
 msgstr "నెట్వర్కింగ్ ఆకృతీకరణ"
 
-#: virtinst/virtclone.py:133
+#: virtinst/virtclone.py:120
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr "క్లోన్ అతిథి కొరకు కొత్త స్థిర MAC చిరునామా. యాదృశ్చికంగా జనియింపచేసిన MAC అప్రమేయం"
 
-#: virtinst/virtclone.py:136 virtinst/virtinstall.py:962
-#: virtinst/virtxml.py:394
+#: virtinst/virtclone.py:123 virtinst/virtinstall.py:962
+#: virtinst/virtxml.py:390
 msgid "Miscellaneous Options"
 msgstr "వివిధములైన ఐచ్ఛికాలు"
 
-#: virtinst/virtclone.py:165
+#: virtinst/virtclone.py:151
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
 
-#: virtinst/virtclone.py:206
+#: virtinst/virtclone.py:183
+msgid ""
+"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
+"specify one."
+msgstr ""
+
+#: virtinst/virtclone.py:201
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "క్లోన్ '%s' విజయవంతంగా సృష్టించబడెను."
 
-#: virtinst/virtclone.py:217 virtinst/virtinstall.py:1071
+#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1071
 msgid "Installation aborted at user request"
 msgstr "వాడుకరి అభ్యర్ధనపై సంస్థాపన విరమించబడెను"
 
@@ -6411,52 +6343,52 @@ msgstr ""
 msgid "Minutes to wait for install to complete."
 msgstr "సంస్థాపన పూర్తగుటకు వేచివుండవలసిన నిమిషాలు."
 
-#: virtinst/virtxml.py:36
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "'yes' లేదా 'no' ప్రవేశపెట్టండి"
 
-#: virtinst/virtxml.py:84
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "చెల్లని --edit ఐచ్చికం '%s'"
 
-#: virtinst/virtxml.py:87
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr ""
 
-#: virtinst/virtxml.py:90
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgstr ""
 
-#: virtinst/virtxml.py:108
+#: virtinst/virtxml.py:104
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:120
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s ఒకటి తెలుపాలి."
 
-#: virtinst/virtxml.py:127
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "Conflicting options %s"
 msgstr "విభేదిస్తున్న ఐచ్చికాలు %s"
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:134
 msgid "No change specified."
 msgstr "ఏ మార్పు తెలుపలేదు."
 
-#: virtinst/virtxml.py:140
+#: virtinst/virtxml.py:136
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "ఒక మార్పు ఆపరేషన్ మాత్రమే తెలిపెను (విభేదిస్తున్న ఐచ్చికాలు %s)"
 
-#: virtinst/virtxml.py:153
+#: virtinst/virtxml.py:149
 #, fuzzy, python-format
 #| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgid ""
@@ -6464,87 +6396,87 @@ msgid ""
 "'--edit'"
 msgstr "'--edit %s' కు --%s తో అర్థంలేదు, ఖాళీ '--edit' ఉపయోగించు"
 
-#: virtinst/virtxml.py:158
+#: virtinst/virtxml.py:154
 msgid "--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:165
+#: virtinst/virtxml.py:161
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device ను --%s తో ఉపయోగించలేదు"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:172
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--add-device ను --%s తో ఉపయోగించలేదు"
 
-#: virtinst/virtxml.py:179
+#: virtinst/virtxml.py:175
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 
-#: virtinst/virtxml.py:192
+#: virtinst/virtxml.py:188
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml అనునది --%s కు తోడ్పాటులేదు"
 
-#: virtinst/virtxml.py:195
+#: virtinst/virtxml.py:191
 msgid "--os-variant is not supported with --build-xml"
 msgstr ""
 
-#: virtinst/virtxml.py:221
+#: virtinst/virtxml.py:217
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "'%s' ను మార్చిన XML తో నిర్వచించాలా?"
 
-#: virtinst/virtxml.py:229
+#: virtinst/virtxml.py:225
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "డొమైన్ '%s' విజయవంతంగా నిర్వచించబడెను."
 
-#: virtinst/virtxml.py:236
+#: virtinst/virtxml.py:232
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:246 virtinst/virtxml.py:512
+#: virtinst/virtxml.py:242 virtinst/virtxml.py:508
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "డొమైన్ ప్రారంభించుటలో దోషం"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:516
+#: virtinst/virtxml.py:247 virtinst/virtxml.py:512
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:283
+#: virtinst/virtxml.py:279
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device action %(action)s: %(error)s"
 msgstr "పరికరం దోషం %s: %s"
 
-#: virtinst/virtxml.py:289
+#: virtinst/virtxml.py:285
 #, python-format
 msgid "Device %s successful."
 msgstr "పరికరం %s సఫలమైంది."
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:309
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:332
+#: virtinst/virtxml.py:328
 msgid "Edit libvirt XML using command line options."
 msgstr "కమాండ్ లైన్ ఐచ్చికాలు ఉపయోగించి లిబ్‌వర్ట్ XML సరిచేయి"
 
-#: virtinst/virtxml.py:338
+#: virtinst/virtxml.py:334
 msgid "Domain name, id, or uuid"
 msgstr "డొమైన్ పేరు, ఐడి లేదా యుయుఐడి"
 
-#: virtinst/virtxml.py:340
+#: virtinst/virtxml.py:336
 msgid "XML actions"
 msgstr "XML చర్యలు"
 
-#: virtinst/virtxml.py:342
+#: virtinst/virtxml.py:338
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6558,7 +6490,7 @@ msgstr ""
 "--edit all --disk ... (edit all disk devices)\n"
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 
-#: virtinst/virtxml.py:348
+#: virtinst/virtxml.py:344
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6570,7 +6502,7 @@ msgstr ""
 "--remove-device --disk all (remove all disks)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:353
+#: virtinst/virtxml.py:349
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6578,17 +6510,17 @@ msgstr ""
 "తెలిపిన పరికరం జతచేయి. ఉదాహరణ:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:352
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:359
+#: virtinst/virtxml.py:355
 msgid "Output options"
 msgstr "అవుట్పుట్ ఐచ్చికాలు"
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:357
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6600,71 +6532,71 @@ msgstr ""
 "With --remove-device, this is a hotunplug operation.\n"
 "With --edit, this is an update device operation."
 
-#: virtinst/virtxml.py:367
+#: virtinst/virtxml.py:363
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr "డొమైన్ నిర్వచనం బలవంతం. --print ఐచ్చికం తెలిపితే అవసరం."
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:366
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:373
+#: virtinst/virtxml.py:369
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:371
 msgid "Only print the requested change, in diff format"
 msgstr "అభ్యర్దించిన మార్పు మాత్రమే ముద్రించ, diff ఫార్మాట్‌లో"
 
-#: virtinst/virtxml.py:377
+#: virtinst/virtxml.py:373
 msgid "Only print the requested change, in full XML format"
 msgstr "అభ్యర్ధించిన మార్పు మాత్రమే ముద్రించు, XML ఫార్మాట్‌లో"
 
-#: virtinst/virtxml.py:379
+#: virtinst/virtxml.py:375
 msgid "Require confirmation before saving any results."
 msgstr "ఫలితాలను దాచుటకు ముందు నిర్థారణ కావాలి"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:379
 msgid "XML options"
 msgstr "XML ఐచ్చికాలు"
 
-#: virtinst/virtxml.py:422
+#: virtinst/virtxml.py:418
 msgid "Can't use --confirm with stdin input."
 msgstr "--confirm ను stdin ఇన్పుట్‌తో ఉపయోగించలేదు."
 
-#: virtinst/virtxml.py:424
+#: virtinst/virtxml.py:420
 msgid "Can't use --update with stdin input."
 msgstr "--update ను stdin ఇన్పుట్‌తో ఉపయోగించలేదు."
 
-#: virtinst/virtxml.py:427
+#: virtinst/virtxml.py:423
 msgid "A domain must be specified"
 msgstr "డొమైన్ తప్పక తెలుపాలి"
 
-#: virtinst/virtxml.py:455
+#: virtinst/virtxml.py:451
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--update ను --%s కొరకు ఎలా చేయాలో తెలియదు"
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:476
 msgid "Cannot mix --update and --start"
 msgstr ""
 
-#: virtinst/virtxml.py:488
+#: virtinst/virtxml.py:484
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:521
+#: virtinst/virtxml.py:517
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:523
+#: virtinst/virtxml.py:519
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:536
+#: virtinst/virtxml.py:532
 msgid "Aborted at user request"
 msgstr "వాడుకరి అభ్యర్ధన వద్ద విరమించబడెను"
 
@@ -6686,6 +6618,109 @@ msgstr ""
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s వడపోత నామము '%s' '%s' అక్షరమును కలిగివుండక పోవచ్చును."
+
+#~ msgid "Create clone based on:"
+#~ msgstr "దీనిపై ఆధారపడి క్లోన్ సృష్టించు:"
+
+#~ msgid "Destination host:"
+#~ msgstr "గమ్యపు అతిధేయ కు అనుసంధానం కోల్పోయింది:"
+
+#~ msgid "No networking devices"
+#~ msgstr "ఏ నెట్వర్కింగ్ పరికరములు లేవు"
+
+#~ msgid "No storage to clone"
+#~ msgstr "క్లోన్ చేయుటకు యెటువంటి నిల్వలేదు"
+
+#~ msgid ""
+#~ "<span size='small'>Cloning creates a new, independent copy of the "
+#~ "original disk. Sharing\n"
+#~ "uses the existing disk image for both the original and the new machine.</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size='small'>క్లోనింగ్ అనునది డిస్కు యొక్క కొత్త, స్వతంత్ర నకలును సృష్టిస్తుంది. "
+#~ "బాగస్వామ్య పరచుట\n"
+#~ "వున్న డిస్కు ప్రతిబింబమును వాస్తవ మరియు కొత్త మిషన్ రెంటికి వుపయోగిస్తుంది.</span>"
+
+#~ msgid "Change MAC address"
+#~ msgstr "MAC చిరునామా మార్చుము"
+
+#~ msgid "New _MAC:"
+#~ msgstr "కొత్త _MAC:"
+
+#~ msgid "MAC:"
+#~ msgstr "MAC:"
+
+#~ msgid "Cannot clone unmanaged remote storage."
+#~ msgstr "నిర్వహించని దూరస్థ నిల్వను క్లోను చేయలేదు."
+
+#~ msgid ""
+#~ "Block devices to clone must be libvirt\n"
+#~ "managed storage volumes."
+#~ msgstr ""
+#~ "నిరుద్ద పరికరాల క్లోన్ తప్పక libvirt\n"
+#~ "నిర్వాహిత నిల్వ వాల్యూమ్స్ అవ్వాలి."
+
+#~ msgid "Removable"
+#~ msgstr "తీసివేయదగిన"
+
+#~ msgid "No write access"
+#~ msgstr "వ్రాయు యాక్సెస్ లేదు"
+
+#~ msgid "Shareable"
+#~ msgstr "పంచుకొనదగిన"
+
+#, fuzzy
+#~| msgid "Usermode"
+#~ msgid "Usermode (%(mac)s)"
+#~ msgstr "వినియోగదారిరీతి"
+
+#, fuzzy
+#~| msgid "%(currentmem)s of %(maxmem)s"
+#~ msgid "%(netmode)s (%(mac)s)"
+#~ msgstr "%(maxmem)s లో %(currentmem)s"
+
+#, fuzzy
+#~| msgid "Virtual Network is not active."
+#~ msgid "Virtual Network %(netdevice)s (%(mac)s)"
+#~ msgstr "వర్చ్యువల్ నెట్వర్కు క్రియాశీలముగా లేదు."
+
+#, fuzzy
+#~| msgid "_Virtual Networks"
+#~ msgid "Virtual Network (%(mac)s)"
+#~ msgstr "వర్చ్యువల్ నెట్వర్కులు (_V)"
+
+#~ msgid "Nothing to clone."
+#~ msgstr "క్లోనుచేయుటకు యేమి లేదు"
+
+#~ msgid "Storage cannot be shared or cloned."
+#~ msgstr "నిల్వ భాగస్వామ్యపరచబడదు లేదా క్లోన్ చేయబడదు."
+
+#~ msgid "One or more disks cannot be cloned or shared."
+#~ msgstr "ఒకటి లేదా యెక్కువ డిస్కులు క్లోనుచేయబడవు లేదా భాగస్వామ్యపరచబడవు."
+
+#~ msgid "Error changing MAC address: %s"
+#~ msgstr "MAC చిరునామా మార్చుటలో దోషము: %s"
+
+#~ msgid "Error changing storage path: %s"
+#~ msgstr "నిల్వ పాత్‌ను మార్చుటలో దోషము: %s"
+
+#, fuzzy
+#~| msgid "Original guest name or xml is required."
+#~ msgid "Original guest name or XML is required."
+#~ msgstr "వాస్తవ అతిథి పేరు లేదా xml అవసరమైంది."
+
+#~ msgid ""
+#~ "More disks to clone than new paths specified. (%(passed)d specified, "
+#~ "%(need)d needed"
+#~ msgstr ""
+#~ "తెలుపబడిన కొత్త పాత్‌ల కన్నా క్లోన్ చేయుటకు మరిన్ని డిస్కులు. (%(passed)d తెలిపెను, %(need)d "
+#~ "అవసరమైను"
+
+#~ msgid ""
+#~ "Do not clone storage, new disk images specified via --file are preserved "
+#~ "unchanged"
+#~ msgstr ""
+#~ "నిల్వ క్లోన్ చేయవద్దు, --file ద్వారా తెలిపిన కొత్త డిస్కు ప్రతిరూపాలు మారకుండా నిలిపివుంచబడతాయి"
 
 #~ msgid "RAM:"
 #~ msgstr "RAM:"

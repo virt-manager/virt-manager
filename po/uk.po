@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-03 06:10+0000\n"
+"POT-Creation-Date: 2020-09-07 06:10+0000\n"
 "PO-Revision-Date: 2020-09-07 14:34+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -153,7 +153,7 @@ msgstr "_Тип пристрою:"
 msgid "T_ype:"
 msgstr "Т_ип:"
 
-#: ui/addhardware.ui:885 ui/clone.ui:376 ui/createnet.ui:217
+#: ui/addhardware.ui:885 ui/clone.ui:184 ui/createnet.ui:217
 #: ui/createpool.ui:329 ui/createvm.ui:2159 ui/createvol.ui:189
 #: ui/details.ui:216 ui/host.ui:181 ui/snapshotsnew.ui:110
 msgid "_Name:"
@@ -244,47 +244,33 @@ msgstr "По_дробиці"
 msgid "Clone Virtual Machine"
 msgstr "Клонувати віртуальну машину"
 
-#: ui/clone.ui:56
+#: ui/clone.ui:53
 msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>Клонування віртуальної машини</span>"
 
-#: ui/clone.ui:130
-msgid "Create clone based on:"
-msgstr "Створити клон, заснований на:"
+#: ui/clone.ui:127
+#, fuzzy
+#| msgid "Original host:"
+msgid "Original VM:"
+msgstr "Початковий вузол:"
 
-#: ui/clone.ui:142
-msgid "Destination host:"
-msgstr "Вузол призначення:"
+#: ui/clone.ui:139
+#, fuzzy
+#| msgid "C_onnection:"
+msgid "Connection:"
+msgstr "З'_єднання:"
 
-#: ui/clone.ui:192
-msgid "No networking devices"
-msgstr "Немає мережевих пристроїв"
-
-#: ui/clone.ui:228
-msgid "Networking:"
-msgstr "Мережа:"
-
-#: ui/clone.ui:251
-msgid "No storage to clone"
-msgstr "Немає сховища даних для клонування"
-
-#: ui/clone.ui:359 ui/createvm.ui:2241
+#: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "Сховище даних:"
 
-#: ui/clone.ui:449
-msgid ""
-"<span size='small'>Cloning creates a new, independent copy of the original "
-"disk. Sharing\n"
-"uses the existing disk image for both the original and the new machine.</"
-"span>"
-msgstr ""
-"<span size='small'>Клонування створює нову, незалежну копію початкового "
-"диска.\n"
-"Спільний доступ надає змогу використовувати вже створений образ диска "
-"одночасно для початкової та нової машини.</span>"
+#: ui/clone.ui:285
+#, fuzzy
+#| msgid "Details..."
+msgid "_Details..."
+msgstr "Подробиці…"
 
-#: ui/clone.ui:489
+#: ui/clone.ui:354
 msgid ""
 "<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If "
 "you need to do things\n"
@@ -296,56 +282,39 @@ msgstr ""
 "паролі або статичні адреси IP тощо, будь ласка, скористайтеся програмою virt-"
 "sysprep(1).</span>"
 
-#: ui/clone.ui:544
+#: ui/clone.ui:409
 msgid "C_lone"
 msgstr "К_лонувати"
 
-#: ui/clone.ui:579
-msgid "Change MAC address"
-msgstr "Змінити MAC-адресу"
-
-#: ui/clone.ui:715
-msgid "New _MAC:"
-msgstr "Нова а_дреса MAC:"
-
-#: ui/clone.ui:752 ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377
-#: ui/details.ui:4507 ui/details.ui:4663
-msgid "Type:"
-msgstr "Тип:"
-
-#: ui/clone.ui:769
-msgid "MAC:"
-msgstr "MAC:"
-
-#: ui/clone.ui:813
+#: ui/clone.ui:447
 msgid "Change storage path"
 msgstr "Змінити шлях до сховища даних"
 
-#: ui/clone.ui:955 ui/hoststorage.ui:434
+#: ui/clone.ui:585 ui/hoststorage.ui:434
 msgid "Size:"
 msgstr "Розмір:"
 
-#: ui/clone.ui:971
+#: ui/clone.ui:601
 msgid "Target:"
 msgstr "Ціль:"
 
-#: ui/clone.ui:988 ui/createvol.ui:438 ui/details.ui:4519
+#: ui/clone.ui:618 ui/createvol.ui:438 ui/details.ui:4519
 msgid "Path:"
 msgstr "Шлях:"
 
-#: ui/clone.ui:1010
+#: ui/clone.ui:640
 msgid "Existing disk"
 msgstr "Вже створений диск"
 
-#: ui/clone.ui:1042
+#: ui/clone.ui:671
 msgid "New _Path:"
 msgstr "Новий _шлях:"
 
-#: ui/clone.ui:1056
+#: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr "Створити диск (_клонувати) для віртуальної машини"
 
-#: ui/clone.ui:1084 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/fsdetails.ui:202
 msgid "_Browse..."
 msgstr "Ви_брати…"
 
@@ -742,7 +711,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "_Увімкнути сховища для цієї віртуальної машини"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:232
-#: virtManager/addhardware.py:1045
+#: virtManager/addhardware.py:1045 virtManager/clone.py:276
 msgid "Storage"
 msgstr "Сховище даних"
 
@@ -1131,6 +1100,11 @@ msgstr "IP-_адреса:"
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Інтерфейс віртуальної мережі</b>"
 
+#: ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377 ui/details.ui:4507
+#: ui/details.ui:4663
+msgid "Type:"
+msgstr "Тип:"
+
 #: ui/details.ui:3221
 msgid "Mode:"
 msgstr "Режим:"
@@ -1211,7 +1185,7 @@ msgstr "<b>Контролер</b>"
 msgid "<b>Filesystem</b>"
 msgstr "<b>Файлова система</b>"
 
-#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:387
+#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:391
 msgid "M_ode:"
 msgstr "_Режим:"
 
@@ -1296,7 +1270,7 @@ msgstr "А_дреса:"
 msgid "Pa_ssword:"
 msgstr "П_ароль:"
 
-#: ui/gfxdetails.ui:150 ui/migrate.ui:244
+#: ui/gfxdetails.ui:150 ui/migrate.ui:248
 msgid "_Port:"
 msgstr "_Порт:"
 
@@ -1572,31 +1546,31 @@ msgstr "_Завершити роботу"
 msgid "Migrate the virtual machine"
 msgstr "Перенесення віртуальної машини"
 
-#: ui/migrate.ui:103
+#: ui/migrate.ui:107
 msgid "Migrating VM:"
 msgstr "Перенесення ВМ:"
 
-#: ui/migrate.ui:119
+#: ui/migrate.ui:123
 msgid "Original host:"
 msgstr "Початковий вузол:"
 
-#: ui/migrate.ui:135
+#: ui/migrate.ui:139
 msgid "New _host:"
 msgstr "Новий _вузол:"
 
-#: ui/migrate.ui:230
+#: ui/migrate.ui:234
 msgid "_Address:"
 msgstr "_Адреса:"
 
-#: ui/migrate.ui:300
+#: ui/migrate.ui:304
 msgid "0"
 msgstr "0"
 
-#: ui/migrate.ui:314 ui/migrate.ui:354
+#: ui/migrate.ui:318 ui/migrate.ui:358
 msgid "Let libvirt decide"
 msgstr "Вирішує libvirt"
 
-#: ui/migrate.ui:383
+#: ui/migrate.ui:387
 msgid ""
 "Tunnel migration through the libvirtd connection channel, rather than having "
 "the hypervisor open a separate network connection to the destination. The "
@@ -1617,15 +1591,15 @@ msgstr ""
 "ваше з'єднання libvirt зашифровано. Втім, таку схему важко змусити "
 "працювати, якщо для передавання використовується SSH."
 
-#: ui/migrate.ui:470
+#: ui/migrate.ui:474
 msgid "_URI:"
 msgstr "_Адреса:"
 
-#: ui/migrate.ui:507
+#: ui/migrate.ui:511
 msgid "<b>Connectivity</b>"
 msgstr "<b>Можливість з'єднання</b>"
 
-#: ui/migrate.ui:538
+#: ui/migrate.ui:542
 msgid ""
 "By default libvirt will refuse to migrate a VM for certain configurations "
 "that could lead to malfunctioning guests, like if a disk's cache mode is not "
@@ -1640,11 +1614,11 @@ msgstr ""
 "Вмикання цього параметра призводить до того, що libvirt пропустить "
 "відповідні перевірки."
 
-#: ui/migrate.ui:542
+#: ui/migrate.ui:546
 msgid "A_llow unsafe:"
 msgstr "До_зволити небезпечне:"
 
-#: ui/migrate.ui:568
+#: ui/migrate.ui:572
 msgid ""
 "By default, the migrated VM config is removed from the source host, and "
 "saved persistently on the destination host. The destination host is "
@@ -1663,15 +1637,15 @@ msgstr ""
 "джерело зберігає копію налаштувань ВМ, а поточна копія, що пересувається на "
 "призначення, є лише тимчасовою, вона зникне при вимиканні системи."
 
-#: ui/migrate.ui:572
+#: ui/migrate.ui:576
 msgid "_Temporary move:"
 msgstr "_Тимчасове пересування:"
 
-#: ui/migrate.ui:602
+#: ui/migrate.ui:606
 msgid "Advanced options"
 msgstr "Додаткові параметри"
 
-#: ui/migrate.ui:649
+#: ui/migrate.ui:655
 msgid "_Migrate"
 msgstr "П_еренести"
 
@@ -2432,7 +2406,7 @@ msgstr "PS/2"
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:702 virtManager/clone.py:105
+#: virtManager/addhardware.py:702
 msgid "Disk device"
 msgstr "Дисковий пристрій"
 
@@ -2577,121 +2551,73 @@ msgstr "Скасування завдання…"
 msgid "Completed"
 msgstr "Завершено"
 
-#: virtManager/clone.py:52
+#: virtManager/clone.py:28 virtinst/cloner.py:183
 msgid "No storage to clone."
 msgstr "Немає сховища даних для клонування."
 
-#: virtManager/clone.py:57
-msgid "Cannot clone unmanaged remote storage."
-msgstr "Неможливо клонувати некероване віддалене сховище."
-
-#: virtManager/clone.py:60
-msgid ""
-"Block devices to clone must be libvirt\n"
-"managed storage volumes."
+#: virtManager/clone.py:110
+#, python-format
+msgid "Disk target: %s"
 msgstr ""
-"Блокові пристрої для клонування мають бути\n"
-"керованими томами сховищ libvirt."
 
-#: virtManager/clone.py:63 virtManager/delete.py:575
-msgid "No write access to parent directory."
-msgstr "Немає доступу до запису до каталогу вищого рівня."
+#: virtManager/clone.py:111
+#, fuzzy, python-format
+#| msgid "Original host:"
+msgid "Original path: %s"
+msgstr "Початковий вузол:"
 
-#: virtManager/clone.py:65 virtManager/delete.py:573
-msgid "Path does not exist."
-msgstr "Шляху не існує."
+#: virtManager/clone.py:113
+#, fuzzy, python-format
+#| msgid "New _Path:"
+msgid "New path: %s"
+msgstr "Новий _шлях:"
 
-#: virtManager/clone.py:71
+#: virtManager/clone.py:117
+#, fuzzy, python-format
+#| msgid "Storage is marked as shareable."
+msgid "Storage is safe to share: %(reason)s"
+msgstr "Сховище позначено як спільне."
+
+#: virtManager/clone.py:121
+msgid "Sharing this storage is potentially dangerous."
+msgstr ""
+
+#: virtManager/clone.py:124
 #, python-format
-msgid "Cannot clone %s storage pool."
-msgstr "Неможливо клонувати буфер сховища даних %s."
+msgid "Storage is not cloneable: %(reason)s"
+msgstr ""
 
-#: virtManager/clone.py:95
-msgid "Removable"
-msgstr "Портативний пристрій"
+#: virtManager/clone.py:136
+#, fuzzy
+#| msgid "No storage to clone."
+msgid "No storage."
+msgstr "Немає сховища даних для клонування."
 
-#: virtManager/clone.py:98
-msgid "Read Only"
-msgstr "Лише для читання"
-
-#: virtManager/clone.py:100
-msgid "No write access"
-msgstr "Без доступу до запису"
-
-#: virtManager/clone.py:109
-msgid "Shareable"
-msgstr "Загальне"
-
-#: virtManager/clone.py:127
-#, python-format
-msgid "Error launching clone dialog: %s"
-msgstr "Помилка під час спроби запусти діалогове вікно клонування: %s"
-
-#: virtManager/clone.py:292 virtManager/clone.py:561
-msgid "Details..."
-msgstr "Подробиці…"
-
-#: virtManager/clone.py:320
-#, python-format
-msgid "Usermode (%(mac)s)"
-msgstr "Режим користувача (%(mac)s)"
-
-#: virtManager/clone.py:330
-#, python-format
-msgid "%(netmode)s (%(mac)s)"
-msgstr "%(netmode)s (%(mac)s)"
-
-#: virtManager/clone.py:335
-#, python-format
-msgid "Virtual Network %(netdevice)s (%(mac)s)"
-msgstr "Віртуальна мережа %(netdevice)s (%(mac)s)"
-
-#: virtManager/clone.py:340
-#, python-format
-msgid "Virtual Network (%(mac)s)"
-msgstr "Віртуальна мережа (%(mac)s)"
-
-#: virtManager/clone.py:346
-#, python-format
-msgid "%(nettype)s %(netdevice)s (%(mac)s)"
-msgstr "%(nettype)s %(netdevice)s (%(mac)s)"
-
-#: virtManager/clone.py:352
-#, python-format
-msgid "%(nettype)s (%(mac)s)"
-msgstr "%(nettype)s (%(mac)s)"
-
-#: virtManager/clone.py:422
-msgid "Nothing to clone."
-msgstr "Нічого клонувати."
-
-#: virtManager/clone.py:553
-msgid "Clone this disk"
-msgstr "Клонувати цей диск"
-
-#: virtManager/clone.py:557
+#: virtManager/clone.py:141
 #, python-format
 msgid "Share disk with %s"
 msgstr "Спільний диск з %s"
 
-#: virtManager/clone.py:569
-msgid "Storage cannot be shared or cloned."
-msgstr "Сховище даних не може бути спільним або клонованим."
+#: virtManager/clone.py:143
+msgid "Clone this disk"
+msgstr "Клонувати цей диск"
 
-#: virtManager/clone.py:627
-msgid "One or more disks cannot be cloned or shared."
-msgstr "Один або декілька дисків не можуть бути клонованими або спільними."
-
-#: virtManager/clone.py:712
+#: virtManager/clone.py:181
 #, python-format
-msgid "Error changing MAC address: %s"
-msgstr "Помилка під час спроби зміни MAC-адреси: %s"
+msgid "Error launching clone dialog: %s"
+msgstr "Помилка під час спроби запусти діалогове вікно клонування: %s"
 
-#: virtManager/clone.py:738
+#: virtManager/clone.py:275
+#, fuzzy
+#| msgid "C_lone"
+msgid "Clone"
+msgstr "К_лонувати"
+
+#: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
 msgstr "Клонування призведе до перезапису вже створеного файла"
 
-#: virtManager/clone.py:740
+#: virtManager/clone.py:457
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2699,21 +2625,23 @@ msgstr ""
 "Використання вже створеного образу призведе до перезапису даних у каталозі "
 "шляху під час клонування. Ви справді бажаєте скористатися цим каталогом?"
 
-#: virtManager/clone.py:752
-#, python-format
-msgid "Error changing storage path: %s"
-msgstr "Помилка під час спроби зміни шляху до сховища даних: %s"
-
-#: virtManager/clone.py:804
-msgid "Skipping disks may cause data to be overwritten."
+#: virtManager/clone.py:486
+#, fuzzy
+#| msgid "Skipping disks may cause data to be overwritten."
+msgid "Sharing storage may cause data to be overwritten."
 msgstr "Пропускання дисків може призвести до перезапису даних."
 
-#: virtManager/clone.py:805
-#, python-format
+#: virtManager/clone.py:487
+#, fuzzy, python-format
+#| msgid ""
+#| "The following disk devices will not be cloned:\n"
+#| "\n"
+#| "%s\n"
+#| "Running the new guest could overwrite data in these disk images."
 msgid ""
-"The following disk devices will not be cloned:\n"
+"The following disk devices will be shared with %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 "Дискові пристрої з наведеного нижче списку не буде клоновано:\n"
@@ -2722,22 +2650,23 @@ msgstr ""
 "Запуск нової гостьової системи може призвести до перезапису даних на образах "
 "цих дисків."
 
-#: virtManager/clone.py:822
+#: virtManager/clone.py:502
 #, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Помилка під час створення клону віртуальної машини «%(vm)s»: %(error)s"
 
-#: virtManager/clone.py:838 virtManager/migrate.py:365
-#, python-format
-msgid "Uncaught error validating input: %s"
-msgstr "Під час перевірки джерела даних сталася невідома помилка: %s"
+#: virtManager/clone.py:560
+#, fuzzy, python-format
+#| msgid "Error changing pool settings: %s"
+msgid "Error with clone settings: %s"
+msgstr "Помилка під час спроби змінити параметри резервного сховища: %s"
 
-#: virtManager/clone.py:843
+#: virtManager/clone.py:565
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Створення клону віртуальної машини «%s»"
 
-#: virtManager/clone.py:847
+#: virtManager/clone.py:570
 #, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
@@ -3337,6 +3266,14 @@ msgstr "Неможливо вилучити пристрій SCSI."
 #: virtManager/delete.py:571
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Неможливо вилучити некероване віддалене сховище."
+
+#: virtManager/delete.py:573
+msgid "Path does not exist."
+msgstr "Шляху не існує."
+
+#: virtManager/delete.py:575
+msgid "No write access to parent directory."
+msgstr "Немає доступу до запису до каталогу вищого рівня."
 
 #: virtManager/delete.py:577
 msgid "Cannot delete unmanaged block device."
@@ -4349,18 +4286,18 @@ msgstr "Помилка під час спроби вилучення тому «
 msgid "Error changing pool settings: %s"
 msgstr "Помилка під час спроби змінити параметри резервного сховища: %s"
 
-#: virtManager/lib/connectauth.py:52
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "Слід пройти розпізнавання"
 
-#: virtManager/lib/connectauth.py:155
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "Для роботи з віддаленим вузлом потрібна версія netcat/nc з підтримкою "
 "параметра -U."
 
-#: virtManager/lib/connectauth.py:161
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4368,11 +4305,11 @@ msgstr ""
 "Налаштуйте доступ до віддаленого вузла за допомогою ключа SSH або встановіть "
 "пакунок askpass SSH локально."
 
-#: virtManager/lib/connectauth.py:165
+#: virtManager/lib/connectauth.py:163
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr "Перевірте, чи запущено фонову службу «libvirtd» на віддаленому вузлі."
 
-#: virtManager/lib/connectauth.py:169
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4382,7 +4319,7 @@ msgstr ""
 " - завантажено на вузлі ядро з підтримкою Xen;\n"
 " - запущено службу Xen."
 
-#: virtManager/lib/connectauth.py:175
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4393,20 +4330,20 @@ msgstr ""
 "libvirt від імені звичайного користувача. Спробуйте віддати команди від "
 "імені адміністратора (root)."
 
-#: virtManager/lib/connectauth.py:181
+#: virtManager/lib/connectauth.py:179
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "Перевірте, чи запущено фонову службу «libvirtd»."
 
-#: virtManager/lib/connectauth.py:184
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Не вдалося з'єднатися з libvirt %s."
 
-#: virtManager/lib/connectauth.py:196
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Помилка з'єднання з інструментом керування віртуальними машинами"
 
-#: virtManager/lib/connectauth.py:271
+#: virtManager/lib/connectauth.py:269
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
@@ -4414,7 +4351,7 @@ msgstr ""
 "Здається, службу libvirtd не встановлено. Встановіть і запустіть службу "
 "libvirtd для керування віртуалізацією на цій основній системі."
 
-#: virtManager/lib/connectauth.py:275
+#: virtManager/lib/connectauth.py:273
 msgid ""
 "libvirtd is installed but not running. Start the libvirtd service to manage "
 "virtualization on this host."
@@ -4422,7 +4359,7 @@ msgstr ""
 "libvirtd встановлено, але не запущено. Запустіть службу libvirtd для "
 "керування віртуалізацією на цій основній системі."
 
-#: virtManager/lib/connectauth.py:281
+#: virtManager/lib/connectauth.py:279
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
@@ -4431,7 +4368,7 @@ msgstr ""
 "належні пакунки віртуалізації QEMU/KVM для керування віртуалізацією на цій "
 "системі."
 
-#: virtManager/lib/connectauth.py:288
+#: virtManager/lib/connectauth.py:286
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4629,29 +4566,29 @@ msgstr "Відновити віртуальну машину"
 msgid "Disabled in preferences dialog."
 msgstr "Вимкнено у вікні налаштування."
 
-#: virtManager/migrate.py:37
+#: virtManager/migrate.py:38
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Помилка під час спроби відкриття діалогового вікна перенесення: %s"
 
-#: virtManager/migrate.py:135
+#: virtManager/migrate.py:144
 msgid "Direct"
 msgstr "Безпосередній"
 
-#: virtManager/migrate.py:136
+#: virtManager/migrate.py:145
 msgid "Tunnelled"
 msgstr "Тунельований"
 
-#: virtManager/migrate.py:150
+#: virtManager/migrate.py:161
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
 msgstr "<span size='large'>Перенесення «%(vm)s»</span>"
 
-#: virtManager/migrate.py:211
+#: virtManager/migrate.py:222
 msgid "A valid destination connection must be selected."
 msgstr "Слід вибрати коректне з'єднання призначення."
 
-#: virtManager/migrate.py:226
+#: virtManager/migrate.py:237
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
@@ -4661,42 +4598,47 @@ msgstr ""
 "але вибране з'єднання є локальною адресою. Libvirt відмовить у виконанні "
 "завдання, якщо ви не додасте спосіб передавання даних."
 
-#: virtManager/migrate.py:281
+#: virtManager/migrate.py:292
 #, python-format
 msgid "%(uri)s (Hypervisors do not match)"
 msgstr "%(uri)s (невідповідність гіпервізорів)"
 
-#: virtManager/migrate.py:283
+#: virtManager/migrate.py:294
 #, python-format
 msgid "%(uri)s (Disconnected)"
 msgstr "%(uri)s (від'єднано)"
 
-#: virtManager/migrate.py:285
+#: virtManager/migrate.py:296
 #, python-format
 msgid "%(uri)s (Same connection)"
 msgstr "%(uri)s (те саме з'єднання)"
 
-#: virtManager/migrate.py:302
+#: virtManager/migrate.py:313
 msgid "No usable connections available."
 msgstr "Немає придатних до використання з'єднань."
 
-#: virtManager/migrate.py:342
+#: virtManager/migrate.py:353
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "Не вдалося перенести гостьову систему: %s"
 
-#: virtManager/migrate.py:383
+#: virtManager/migrate.py:381
+#, python-format
+msgid "Uncaught error validating input: %s"
+msgstr "Під час перевірки джерела даних сталася невідома помилка: %s"
+
+#: virtManager/migrate.py:399
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "Перенесення ВМ «%s»"
 
-#: virtManager/migrate.py:384
+#: virtManager/migrate.py:400
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
 "Переносимо ВМ «%(name)s» до %(host)s. Перенесення може тривати певний час."
 
-#: virtManager/migrate.py:395
+#: virtManager/migrate.py:411
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "Помилка під час скасування завдання з перенесення: %s"
@@ -4726,11 +4668,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "Не вдалося знайти вказаний пристрій у неактивних налаштуваннях ВМ: %s"
 
-#: virtManager/object/domain.py:1366
+#: virtManager/object/domain.py:1363
 msgid "Saving domain to disk"
 msgstr "Збереження домену на диск"
 
-#: virtManager/object/domain.py:1418
+#: virtManager/object/domain.py:1415
 msgid "Migrating domain"
 msgstr "Перенесення домену"
 
@@ -5697,66 +5639,63 @@ msgstr ""
 msgid "Expected PCI format string for '%s'"
 msgstr "«%s» мало бути рядком у форматі PCI"
 
-#: virtinst/cloner.py:46
+#: virtinst/cloner.py:45
 #, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "Не вдалося вилучити стару віртуальну машину «%(vm)s»: %(error)s"
 
-#: virtinst/cloner.py:127
+#: virtinst/cloner.py:113
 #, python-format
-msgid "Invalid name for new guest: %s"
-msgstr "Некоректна назва нової гостьової системи: %s"
+msgid "Domain '%s' was not found."
+msgstr "Домену «%s» не знайдено."
 
-#: virtinst/cloner.py:163
-#, python-format
-msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Не вдалося використати адресу «%(path)s» для клонування: %(error)s"
-
-#: virtinst/cloner.py:283
-msgid "Original guest name or XML is required."
-msgstr "Слід вказати початкову назву гостьової системи або XML."
-
-#: virtinst/cloner.py:306
-msgid "Domain to clone must be shutoff."
-msgstr "Домен для клонування має бути вимкнено."
-
-#: virtinst/cloner.py:328
+#: virtinst/cloner.py:157
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "Підтримки клонування на вже створений том сховища даних у поточній версії не "
 "передбачено: «%s»"
 
-#: virtinst/cloner.py:402
+#: virtinst/cloner.py:178
 #, python-format
-msgid ""
-"More disks to clone than new paths specified. (%(passed)d specified, "
-"%(need)d needed"
-msgstr ""
-"Ви наказали клонувати більше дисків, ніж вказали адрес для зберігання даних. "
-"(вказано %(passed)d, потрібно%(need)d)"
+msgid "Disk path '%s' does not exist."
+msgstr "Шляху на диску «%s» не існує."
 
-#: virtinst/cloner.py:416
+#: virtinst/cloner.py:185
+msgid "Read Only"
+msgstr "Лише для читання"
+
+#: virtinst/cloner.py:187
+#, fuzzy
+#| msgid "Storage is marked as shareable."
+msgid "Marked as shareable"
+msgstr "Сховище позначено як спільне."
+
+#: virtinst/cloner.py:249
+#, python-format
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
+msgstr "Не вдалося використати адресу «%(path)s» для клонування: %(error)s"
+
+#: virtinst/cloner.py:265
+#, python-format
+msgid "Could not determine original disk information: %s"
+msgstr "Не вдалося визначити дані початкового диска: %s"
+
+#: virtinst/cloner.py:316
+msgid "Domain to clone must be shutoff."
+msgstr "Домен для клонування має бути вимкнено."
+
+#: virtinst/cloner.py:351
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Встановлюємо для порту графічного пристрою значення autoport з метою "
 "уникнення конфліктів."
 
-#: virtinst/cloner.py:578
+#: virtinst/cloner.py:488
 #, python-format
-msgid "Disk path '%s' does not exist."
-msgstr "Шляху на диску «%s» не існує."
-
-#: virtinst/cloner.py:583
-#, python-format
-msgid "Could not determine original disk information: %s"
-msgstr "Не вдалося визначити дані початкового диска: %s"
-
-#: virtinst/cloner.py:621
-#, python-format
-msgid "Domain '%s' was not found."
-msgstr "Домену «%s» не знайдено."
+msgid "Invalid name for new guest: %s"
+msgstr "Некоректна назва нової гостьової системи: %s"
 
 #: virtinst/devices/disk.py:218
 #, python-format
@@ -5777,19 +5716,19 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Атрибут формату не підтримується для цього типу томів"
 
-#: virtinst/devices/disk.py:731
+#: virtinst/devices/disk.py:735
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Для пристрою типу «%s» слід вказати адресу"
 
-#: virtinst/devices/disk.py:739
+#: virtinst/devices/disk.py:743
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Для шляху «%s», якого ще не існує, слід вказати параметри створення сховища "
 "даних."
 
-#: virtinst/devices/disk.py:853
+#: virtinst/devices/disk.py:857
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5828,7 +5767,7 @@ msgstr "Неможливо використати сховище даних %(pa
 msgid "Permissions on '%s' did not stick"
 msgstr "Права доступу до «%s» не було застосовано"
 
-#: virtinst/diskbackend.py:528
+#: virtinst/diskbackend.py:525
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -5836,26 +5775,26 @@ msgstr ""
 "На файловій системі недостатньо вільного місця для повного розміщення "
 "розрідженого файла під час роботи гостьової системи."
 
-#: virtinst/diskbackend.py:533
+#: virtinst/diskbackend.py:530
 msgid "There is not enough free space to create the disk."
 msgstr "Для створення цього диска недостатньо вільного місця."
 
-#: virtinst/diskbackend.py:538
+#: virtinst/diskbackend.py:535
 #, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr "Запит %(mem1)s МБ > Доступно %(mem2)s МБ"
 
-#: virtinst/diskbackend.py:545
+#: virtinst/diskbackend.py:542
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "для неіснуючого диска «%s» слід вказати параметр розміру (size)"
 
-#: virtinst/diskbackend.py:555
+#: virtinst/diskbackend.py:552
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "Клонування %(srcfile)s"
 
-#: virtinst/diskbackend.py:625
+#: virtinst/diskbackend.py:622
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -6124,7 +6063,7 @@ msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr ""
 "Не вдалося створити типове резервне сховище даних «%(path)s»: %(error)s"
 
-#: virtinst/storage.py:220 virtinst/storage.py:554
+#: virtinst/storage.py:220 virtinst/storage.py:550
 msgid "Storage object"
 msgstr "Об'єкт сховища даних"
 
@@ -6153,12 +6092,12 @@ msgstr "Не вдалося запустити резервне сховище �
 msgid "Could not set pool autostart flag: %s"
 msgstr "Не вдалося встановити прапорець автозапуску буфера: %s"
 
-#: virtinst/storage.py:560
+#: virtinst/storage.py:556
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Назву «%s» вже використано для іншого тому."
 
-#: virtinst/storage.py:649
+#: virtinst/storage.py:645
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -6166,12 +6105,12 @@ msgstr ""
 "Підтримки розріджених логічних томів не передбачено, встановлюємо розподіл, "
 "відповідний до місткості"
 
-#: virtinst/storage.py:695
+#: virtinst/storage.py:691
 #, python-format
 msgid "Allocating '%s'"
 msgstr "Розміщення «%s»"
 
-#: virtinst/storage.py:733
+#: virtinst/storage.py:729
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
@@ -6180,7 +6119,7 @@ msgstr ""
 "На резервному сховищі даних недостатньо місця для створення тому. (Для "
 "розміщення потрібно %(mem1)s МБ > доступно %(mem2)s МБ)"
 
-#: virtinst/storage.py:740
+#: virtinst/storage.py:736
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6190,23 +6129,19 @@ msgstr ""
 "Потрібний об'єм пам'яті для тому перевищить доступний об'єм після повного "
 "розміщення. (Потрібний об'єм %(mem1)s МБ > доступно %(mem2)s МБ)"
 
-#: virtinst/virtclone.py:25
+#: virtinst/virtclone.py:23
+#, fuzzy
+#| msgid ""
+#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
+#| "try again."
 msgid ""
-"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
-"specify one."
-msgstr ""
-"Для нової віртуальної машини слід вказати назву. Для цього скористайтеся "
-"параметром «--name НАЗВА_НОВОЇ_ВМ»."
-
-#: virtinst/virtclone.py:44
-msgid ""
-"An original machine name is required, use '--original ORIGINAL_GUEST' and "
-"try again."
+"An original machine name is required, use '--original src_name' and try "
+"again."
 msgstr ""
 "Слід вказати назву початкової віртуальної машини. Вкажіть «--original "
 "ПОЧАТКОВА_ГОСТЬОВА» і повторіть спробу."
 
-#: virtinst/virtclone.py:85
+#: virtinst/virtclone.py:70
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6226,19 +6161,19 @@ msgstr ""
 "статичної адреси IP тощо не можна виконати за допомогою цієї програми. Для "
 "внесення змін подібного роду слід скористатися virt-sysprep(1)."
 
-#: virtinst/virtclone.py:95 virtinst/virtinstall.py:858
+#: virtinst/virtclone.py:80 virtinst/virtinstall.py:858
 msgid "General Options"
 msgstr "Загальні параметри"
 
-#: virtinst/virtclone.py:97
+#: virtinst/virtclone.py:82
 msgid "Name of the original guest to clone."
 msgstr "Назва початкової гостьової системи для клонування."
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:84
 msgid "XML file to use as the original guest."
 msgstr "Файл XML, який слід використовувати як початкову гостьову систему."
 
-#: virtinst/virtclone.py:101
+#: virtinst/virtclone.py:86
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
@@ -6246,24 +6181,24 @@ msgstr ""
 "Автоматично створити назву клону і шляхи до сховища даних з налаштувань "
 "початкової гостьової системи."
 
-#: virtinst/virtclone.py:104
+#: virtinst/virtclone.py:89
 msgid "Name for the new guest"
 msgstr "Назва нової гостьової системи"
 
-#: virtinst/virtclone.py:107
+#: virtinst/virtclone.py:92
 msgid "use btrfs COW lightweight copy"
 msgstr "використовувати невибагливу копію COW у btrfs"
 
-#: virtinst/virtclone.py:109
+#: virtinst/virtclone.py:94
 msgid "Storage Configuration"
 msgstr "Налаштування сховища даних"
 
-#: virtinst/virtclone.py:111
+#: virtinst/virtclone.py:96
 msgid "New file to use as the disk image for the new guest"
 msgstr ""
 "Новий файл, який слід використати як образ диска для нової гостьової системи"
 
-#: virtinst/virtclone.py:114
+#: virtinst/virtclone.py:99
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6271,7 +6206,7 @@ msgstr ""
 "Примусово копіювати пристрої (наприклад, якщо «hdc» є придатним лише для "
 "читання пристроєм cdrom, --force-copy=hdc)"
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:102
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
@@ -6280,27 +6215,26 @@ msgstr ""
 "вам не потрібно копіювати і використовувати той самий шлях у новій ВМ — "
 "просто скористайтеся --skip-copy=vda)"
 
-#: virtinst/virtclone.py:122
+#: virtinst/virtclone.py:107
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "Не використовувати розріджений файл для клону образу диска"
 
-#: virtinst/virtclone.py:126
+#: virtinst/virtclone.py:111
 msgid ""
-"Do not clone storage, new disk images specified via --file are preserved "
-"unchanged"
+"Do not clone storage contents to specified file paths, their contents will "
+"be left untouched. This requires specifying existing paths for every "
+"cloneable disk image."
 msgstr ""
-"Не клонувати сховище даних, образи нових дисків, вказані за допомогою "
-"параметра --file, змінено не буде"
 
-#: virtinst/virtclone.py:129
+#: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
 msgstr "Новий файл, який слід використовувати як сховище для VARS nvram"
 
-#: virtinst/virtclone.py:131
+#: virtinst/virtclone.py:118
 msgid "Networking Configuration"
 msgstr "Налаштування роботи у мережі"
 
-#: virtinst/virtclone.py:133
+#: virtinst/virtclone.py:120
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
@@ -6308,12 +6242,12 @@ msgstr ""
 "Нова фіксована MAC-адреса для клонованої гостьової системи. Типовою є "
 "випадково створена MAC-адреса."
 
-#: virtinst/virtclone.py:136 virtinst/virtinstall.py:962
-#: virtinst/virtxml.py:394
+#: virtinst/virtclone.py:123 virtinst/virtinstall.py:962
+#: virtinst/virtxml.py:390
 msgid "Miscellaneous Options"
 msgstr "Інші параметри"
 
-#: virtinst/virtclone.py:165
+#: virtinst/virtclone.py:151
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
@@ -6321,12 +6255,20 @@ msgstr ""
 "Слід вказати --auto-clone або --file, скористайтеся --auto-clone або --file "
 "і повторіть спробу."
 
-#: virtinst/virtclone.py:206
+#: virtinst/virtclone.py:183
+msgid ""
+"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
+"specify one."
+msgstr ""
+"Для нової віртуальної машини слід вказати назву. Для цього скористайтеся "
+"параметром «--name НАЗВА_НОВОЇ_ВМ»."
+
+#: virtinst/virtclone.py:201
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "Клон «%s» успішно створено."
 
-#: virtinst/virtclone.py:217 virtinst/virtinstall.py:1071
+#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1071
 msgid "Installation aborted at user request"
 msgstr "Встановлення перервано на вимогу користувача"
 
@@ -6665,21 +6607,21 @@ msgstr "Примусово вимкнути домен після закритт
 msgid "Minutes to wait for install to complete."
 msgstr "Час у хвилинах, протягом якого слід чекати на завершення встановлення."
 
-#: virtinst/virtxml.py:36
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "Введіть «yes» («так») або «no» («ні»)."
 
-#: virtinst/virtxml.py:84
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Некоректний параметр --edit «%s»"
 
-#: virtinst/virtxml.py:87
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr "У XML не знайдено об'єктів --%s"
 
-#: virtinst/virtxml.py:90
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6688,31 +6630,31 @@ msgstr ""
 "Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
 "%(type)s"
 
-#: virtinst/virtxml.py:108
+#: virtinst/virtxml.py:104
 #, python-format
 msgid "No matching objects found for %s"
 msgstr "Не знайдено відповідних об'єктів для %s"
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:120
 #, python-format
 msgid "One of %s must be specified."
 msgstr "Слід вказати один з %s."
 
-#: virtinst/virtxml.py:127
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Конфлікт параметрів %s"
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:134
 msgid "No change specified."
 msgstr "Не вказано жодної зміни."
 
-#: virtinst/virtxml.py:140
+#: virtinst/virtxml.py:136
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "Можна вказувати лише одну дію зі зміни (конфлікт параметрів %s)"
 
-#: virtinst/virtxml.py:153
+#: virtinst/virtxml.py:149
 #, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
@@ -6721,88 +6663,88 @@ msgstr ""
 "«--edit %(option)s» не має сенсу, якщо вказано --%(objecttype)s. Не "
 "використовуйте аргумент: «--edit»"
 
-#: virtinst/virtxml.py:158
+#: virtinst/virtxml.py:154
 msgid "--os-variant is not supported with --edit"
 msgstr "якщо використано --edit, не можна використовувати --os-variant"
 
-#: virtinst/virtxml.py:165
+#: virtinst/virtxml.py:161
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "Не можна використовувати --add-device, якщо вказано --%s"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:172
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Не можна використовувати --remove-device, якщо використано --%s"
 
-#: virtinst/virtxml.py:179
+#: virtinst/virtxml.py:175
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 "якщо використано --remove-device, не можна використовувати --os-variant"
 
-#: virtinst/virtxml.py:192
+#: virtinst/virtxml.py:188
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "Підтримки --build-xml для --%s не передбачено"
 
-#: virtinst/virtxml.py:195
+#: virtinst/virtxml.py:191
 msgid "--os-variant is not supported with --build-xml"
 msgstr "якщо використано --build-xml, не можна використовувати --os-variant"
 
-#: virtinst/virtxml.py:221
+#: virtinst/virtxml.py:217
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Визначити «%s» зі зміненим XML?"
 
-#: virtinst/virtxml.py:229
+#: virtinst/virtxml.py:225
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Домен «%s» успішно визначено."
 
-#: virtinst/virtxml.py:236
+#: virtinst/virtxml.py:232
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "Запустити «%s» зі зміненим XML?"
 
-#: virtinst/virtxml.py:246 virtinst/virtxml.py:512
+#: virtinst/virtxml.py:242 virtinst/virtxml.py:508
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Не вдалося запустити домен «%(domain)s»: %(error)s"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:516
+#: virtinst/virtxml.py:247 virtinst/virtxml.py:512
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Домен «%s» успішно запущено."
 
-#: virtinst/virtxml.py:283
+#: virtinst/virtxml.py:279
 #, python-format
 msgid "Error attempting device action %(action)s: %(error)s"
 msgstr ""
 "Помилка під час спроби виконання дії над пристроєм %(action)s: %(error)s"
 
-#: virtinst/virtxml.py:289
+#: virtinst/virtxml.py:285
 #, python-format
 msgid "Device %s successful."
 msgstr "Для пристрою успішно виконано дію %s."
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:309
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "Немає різниці у XML. Зміни, на які надійшов запит, ні на що не вплинуть."
 
-#: virtinst/virtxml.py:332
+#: virtinst/virtxml.py:328
 msgid "Edit libvirt XML using command line options."
 msgstr "Редагувати XML libvirt за допомогою параметрів командного рядка."
 
-#: virtinst/virtxml.py:338
+#: virtinst/virtxml.py:334
 msgid "Domain name, id, or uuid"
 msgstr "Назва домену, id або uuid"
 
-#: virtinst/virtxml.py:340
+#: virtinst/virtxml.py:336
 msgid "XML actions"
 msgstr "Дії XML"
 
-#: virtinst/virtxml.py:342
+#: virtinst/virtxml.py:338
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6816,7 +6758,7 @@ msgstr ""
 "--edit all --disk ... (редагувати усі дискові пристрої)\n"
 "--edit target=hda --disk ... (редагувати диск «hda»)\n"
 
-#: virtinst/virtxml.py:348
+#: virtinst/virtxml.py:344
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6828,7 +6770,7 @@ msgstr ""
 "--remove-device --disk all (вилучити усі диски)\n"
 "--remove-device --disk /якийсь/шлях"
 
-#: virtinst/virtxml.py:353
+#: virtinst/virtxml.py:349
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6836,7 +6778,7 @@ msgstr ""
 "Додати вказаний пристрій. Приклад:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:352
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -6844,11 +6786,11 @@ msgstr ""
 "Вивести зібраний XML пристрою. Домен можна не вказувати, але рекомендуємо "
 "його вказати, щоб забезпечити оптимальні типові параметри."
 
-#: virtinst/virtxml.py:359
+#: virtinst/virtxml.py:355
 msgid "Output options"
 msgstr "Налаштування виведення"
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:357
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6860,71 +6802,71 @@ msgstr ""
 "З --remove-device ця дія буде інтерактивним вилученням.\n"
 "З --edit ця дія буде дією з оновлення пристрою."
 
-#: virtinst/virtxml.py:367
+#: virtinst/virtxml.py:363
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Примусове визначення домену. Потрібне, лише якщо вказано параметр --print."
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:366
 msgid "Force not defining the domain."
 msgstr "Примусово не визначаємо домен."
 
-#: virtinst/virtxml.py:373
+#: virtinst/virtxml.py:369
 msgid "Start the domain."
 msgstr "Запустити домен."
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:371
 msgid "Only print the requested change, in diff format"
 msgstr "Лише вивести потрібну зміну у повному форматі diff"
 
-#: virtinst/virtxml.py:377
+#: virtinst/virtxml.py:373
 msgid "Only print the requested change, in full XML format"
 msgstr "Лише вивести потрібну зміну у повному форматі XML"
 
-#: virtinst/virtxml.py:379
+#: virtinst/virtxml.py:375
 msgid "Require confirmation before saving any results."
 msgstr "Для збереження будь-яких результатів потрібне підтвердження."
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:379
 msgid "XML options"
 msgstr "Параметри XML"
 
-#: virtinst/virtxml.py:422
+#: virtinst/virtxml.py:418
 msgid "Can't use --confirm with stdin input."
 msgstr ""
 "Не можна використовувати --confirm зі стандартним джерелом вхідних даних "
 "(stdin)."
 
-#: virtinst/virtxml.py:424
+#: virtinst/virtxml.py:420
 msgid "Can't use --update with stdin input."
 msgstr ""
 "Не можна використовувати --update зі стандартним джерелом вхідних даних "
 "(stdin)."
 
-#: virtinst/virtxml.py:427
+#: virtinst/virtxml.py:423
 msgid "A domain must be specified"
 msgstr "Слід вказати домен"
 
-#: virtinst/virtxml.py:455
+#: virtinst/virtxml.py:451
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "Спосіб використання --update для --%s невідомий"
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:476
 msgid "Cannot mix --update and --start"
 msgstr "Не можна одночасно вказувати --update і --start"
 
-#: virtinst/virtxml.py:488
+#: virtinst/virtxml.py:484
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 "Віртуальну машину не запущено — застосовувати параметр --update не можна."
 
-#: virtinst/virtxml.py:521
+#: virtinst/virtxml.py:517
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Зміни буде застосовано після того, як домен буде повністю вимкнено."
 
-#: virtinst/virtxml.py:523
+#: virtinst/virtxml.py:519
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6932,7 +6874,7 @@ msgstr ""
 "XML не змінено після визначення домену. Ймовірно, ви змінили значення так, "
 "що воно збіглося із типовим значенням у libvirt."
 
-#: virtinst/virtxml.py:536
+#: virtinst/virtxml.py:532
 msgid "Aborted at user request"
 msgstr "Перервано на вимогу користувача"
 
@@ -6956,6 +6898,113 @@ msgstr "Для %s слід вказати назву"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "У %(objecttype)s назва «%(name)s» не повинна містити символу «%(char)s»."
+
+#~ msgid "Create clone based on:"
+#~ msgstr "Створити клон, заснований на:"
+
+#~ msgid "Destination host:"
+#~ msgstr "Вузол призначення:"
+
+#~ msgid "No networking devices"
+#~ msgstr "Немає мережевих пристроїв"
+
+#~ msgid "Networking:"
+#~ msgstr "Мережа:"
+
+#~ msgid "No storage to clone"
+#~ msgstr "Немає сховища даних для клонування"
+
+#~ msgid ""
+#~ "<span size='small'>Cloning creates a new, independent copy of the "
+#~ "original disk. Sharing\n"
+#~ "uses the existing disk image for both the original and the new machine.</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size='small'>Клонування створює нову, незалежну копію початкового "
+#~ "диска.\n"
+#~ "Спільний доступ надає змогу використовувати вже створений образ диска "
+#~ "одночасно для початкової та нової машини.</span>"
+
+#~ msgid "Change MAC address"
+#~ msgstr "Змінити MAC-адресу"
+
+#~ msgid "New _MAC:"
+#~ msgstr "Нова а_дреса MAC:"
+
+#~ msgid "MAC:"
+#~ msgstr "MAC:"
+
+#~ msgid "Cannot clone unmanaged remote storage."
+#~ msgstr "Неможливо клонувати некероване віддалене сховище."
+
+#~ msgid ""
+#~ "Block devices to clone must be libvirt\n"
+#~ "managed storage volumes."
+#~ msgstr ""
+#~ "Блокові пристрої для клонування мають бути\n"
+#~ "керованими томами сховищ libvirt."
+
+#~ msgid "Cannot clone %s storage pool."
+#~ msgstr "Неможливо клонувати буфер сховища даних %s."
+
+#~ msgid "Removable"
+#~ msgstr "Портативний пристрій"
+
+#~ msgid "No write access"
+#~ msgstr "Без доступу до запису"
+
+#~ msgid "Shareable"
+#~ msgstr "Загальне"
+
+#~ msgid "Usermode (%(mac)s)"
+#~ msgstr "Режим користувача (%(mac)s)"
+
+#~ msgid "%(netmode)s (%(mac)s)"
+#~ msgstr "%(netmode)s (%(mac)s)"
+
+#~ msgid "Virtual Network %(netdevice)s (%(mac)s)"
+#~ msgstr "Віртуальна мережа %(netdevice)s (%(mac)s)"
+
+#~ msgid "Virtual Network (%(mac)s)"
+#~ msgstr "Віртуальна мережа (%(mac)s)"
+
+#~ msgid "%(nettype)s %(netdevice)s (%(mac)s)"
+#~ msgstr "%(nettype)s %(netdevice)s (%(mac)s)"
+
+#~ msgid "%(nettype)s (%(mac)s)"
+#~ msgstr "%(nettype)s (%(mac)s)"
+
+#~ msgid "Nothing to clone."
+#~ msgstr "Нічого клонувати."
+
+#~ msgid "Storage cannot be shared or cloned."
+#~ msgstr "Сховище даних не може бути спільним або клонованим."
+
+#~ msgid "One or more disks cannot be cloned or shared."
+#~ msgstr "Один або декілька дисків не можуть бути клонованими або спільними."
+
+#~ msgid "Error changing MAC address: %s"
+#~ msgstr "Помилка під час спроби зміни MAC-адреси: %s"
+
+#~ msgid "Error changing storage path: %s"
+#~ msgstr "Помилка під час спроби зміни шляху до сховища даних: %s"
+
+#~ msgid "Original guest name or XML is required."
+#~ msgstr "Слід вказати початкову назву гостьової системи або XML."
+
+#~ msgid ""
+#~ "More disks to clone than new paths specified. (%(passed)d specified, "
+#~ "%(need)d needed"
+#~ msgstr ""
+#~ "Ви наказали клонувати більше дисків, ніж вказали адрес для зберігання "
+#~ "даних. (вказано %(passed)d, потрібно%(need)d)"
+
+#~ msgid ""
+#~ "Do not clone storage, new disk images specified via --file are preserved "
+#~ "unchanged"
+#~ msgstr ""
+#~ "Не клонувати сховище даних, образи нових дисків, вказані за допомогою "
+#~ "параметра --file, змінено не буде"
 
 #~ msgid "RAM:"
 #~ msgstr "RAM:"
