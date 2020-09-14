@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-03 06:10+0000\n"
+"POT-Creation-Date: 2020-09-07 06:10+0000\n"
 "PO-Revision-Date: 2020-09-07 14:33+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -153,7 +153,7 @@ msgstr "_Typ urządzenia:"
 msgid "T_ype:"
 msgstr "_Typ:"
 
-#: ui/addhardware.ui:885 ui/clone.ui:376 ui/createnet.ui:217
+#: ui/addhardware.ui:885 ui/clone.ui:184 ui/createnet.ui:217
 #: ui/createpool.ui:329 ui/createvm.ui:2159 ui/createvol.ui:189
 #: ui/details.ui:216 ui/host.ui:181 ui/snapshotsnew.ui:110
 msgid "_Name:"
@@ -244,46 +244,33 @@ msgstr "_Szczegóły"
 msgid "Clone Virtual Machine"
 msgstr "Sklonowanie maszyny wirtualnej"
 
-#: ui/clone.ui:56
+#: ui/clone.ui:53
 msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>Sklonowanie maszyny wirtualnej</span>"
 
-#: ui/clone.ui:130
-msgid "Create clone based on:"
-msgstr "Utworzenie klona na podstawie:"
+#: ui/clone.ui:127
+#, fuzzy
+#| msgid "Original host:"
+msgid "Original VM:"
+msgstr "Oryginalny gospodarz:"
 
-#: ui/clone.ui:142
-msgid "Destination host:"
-msgstr "Gospodarz docelowy:"
+#: ui/clone.ui:139
+#, fuzzy
+#| msgid "C_onnection:"
+msgid "Connection:"
+msgstr "P_ołączenie:"
 
-#: ui/clone.ui:192
-msgid "No networking devices"
-msgstr "Brak urządzeń sieciowych"
-
-#: ui/clone.ui:228
-msgid "Networking:"
-msgstr "Sieć:"
-
-#: ui/clone.ui:251
-msgid "No storage to clone"
-msgstr "Brak pamięci masowej do sklonowania"
-
-#: ui/clone.ui:359 ui/createvm.ui:2241
+#: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "Pamięć masowa:"
 
-#: ui/clone.ui:449
-msgid ""
-"<span size='small'>Cloning creates a new, independent copy of the original "
-"disk. Sharing\n"
-"uses the existing disk image for both the original and the new machine.</"
-"span>"
-msgstr ""
-"<span size='small'>Klonowanie utworzy nową, niezależną kopię oryginalnego\n"
-"dysku. Współdzielenie używa istniejącego obrazu dysku dla nowej i starej\n"
-"maszyny.</span>"
+#: ui/clone.ui:285
+#, fuzzy
+#| msgid "Details..."
+msgid "_Details..."
+msgstr "Szczegóły…"
 
-#: ui/clone.ui:489
+#: ui/clone.ui:354
 msgid ""
 "<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If "
 "you need to do things\n"
@@ -295,56 +282,39 @@ msgstr ""
 "zmienić hasła lub statyczne adresy IP, to należy użyć narzędzia virt-"
 "sysprep(1).</span>"
 
-#: ui/clone.ui:544
+#: ui/clone.ui:409
 msgid "C_lone"
 msgstr "Sk_lonuj"
 
-#: ui/clone.ui:579
-msgid "Change MAC address"
-msgstr "Zmiana adresu MAC"
-
-#: ui/clone.ui:715
-msgid "New _MAC:"
-msgstr "Nowy adres _MAC:"
-
-#: ui/clone.ui:752 ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377
-#: ui/details.ui:4507 ui/details.ui:4663
-msgid "Type:"
-msgstr "Typ:"
-
-#: ui/clone.ui:769
-msgid "MAC:"
-msgstr "Adres MAC:"
-
-#: ui/clone.ui:813
+#: ui/clone.ui:447
 msgid "Change storage path"
 msgstr "Zmiana ścieżki pamięci masowej"
 
-#: ui/clone.ui:955 ui/hoststorage.ui:434
+#: ui/clone.ui:585 ui/hoststorage.ui:434
 msgid "Size:"
 msgstr "Rozmiar:"
 
-#: ui/clone.ui:971
+#: ui/clone.ui:601
 msgid "Target:"
 msgstr "Cel:"
 
-#: ui/clone.ui:988 ui/createvol.ui:438 ui/details.ui:4519
+#: ui/clone.ui:618 ui/createvol.ui:438 ui/details.ui:4519
 msgid "Path:"
 msgstr "Ścieżka:"
 
-#: ui/clone.ui:1010
+#: ui/clone.ui:640
 msgid "Existing disk"
 msgstr "Istniejący dysk"
 
-#: ui/clone.ui:1042
+#: ui/clone.ui:671
 msgid "New _Path:"
 msgstr "Nowa ś_cieżka:"
 
-#: ui/clone.ui:1056
+#: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr "Utworzenie nowego dysku (k_lona) dla maszyny wirtualnej"
 
-#: ui/clone.ui:1084 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/fsdetails.ui:202
 msgid "_Browse..."
 msgstr "_Przeglądaj…"
 
@@ -741,7 +711,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "Włącz_enie pamięci masowej dla tej maszyny wirtualnej"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:232
-#: virtManager/addhardware.py:1045
+#: virtManager/addhardware.py:1045 virtManager/clone.py:276
 msgid "Storage"
 msgstr "Pamięć masowa"
 
@@ -1131,6 +1101,11 @@ msgstr "Adres I_P:"
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Wirtualny interfejs sieciowy</b>"
 
+#: ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377 ui/details.ui:4507
+#: ui/details.ui:4663
+msgid "Type:"
+msgstr "Typ:"
+
 #: ui/details.ui:3221
 msgid "Mode:"
 msgstr "Tryb:"
@@ -1211,7 +1186,7 @@ msgstr "<b>Kontroler</b>"
 msgid "<b>Filesystem</b>"
 msgstr "<b>System plików</b>"
 
-#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:387
+#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:391
 msgid "M_ode:"
 msgstr "_Tryb:"
 
@@ -1296,7 +1271,7 @@ msgstr "Adr_es:"
 msgid "Pa_ssword:"
 msgstr "Ha_sło:"
 
-#: ui/gfxdetails.ui:150 ui/migrate.ui:244
+#: ui/gfxdetails.ui:150 ui/migrate.ui:248
 msgid "_Port:"
 msgstr "_Port:"
 
@@ -1572,31 +1547,31 @@ msgstr "Wyłą_cz"
 msgid "Migrate the virtual machine"
 msgstr "Migruje maszynę wirtualną"
 
-#: ui/migrate.ui:103
+#: ui/migrate.ui:107
 msgid "Migrating VM:"
 msgstr "Migrowanie maszyny wirtualnej:"
 
-#: ui/migrate.ui:119
+#: ui/migrate.ui:123
 msgid "Original host:"
 msgstr "Oryginalny gospodarz:"
 
-#: ui/migrate.ui:135
+#: ui/migrate.ui:139
 msgid "New _host:"
 msgstr "Nowy g_ospodarz:"
 
-#: ui/migrate.ui:230
+#: ui/migrate.ui:234
 msgid "_Address:"
 msgstr "_Adres:"
 
-#: ui/migrate.ui:300
+#: ui/migrate.ui:304
 msgid "0"
 msgstr "0"
 
-#: ui/migrate.ui:314 ui/migrate.ui:354
+#: ui/migrate.ui:318 ui/migrate.ui:358
 msgid "Let libvirt decide"
 msgstr "Decyzja biblioteki libvirt"
 
-#: ui/migrate.ui:383
+#: ui/migrate.ui:387
 msgid ""
 "Tunnel migration through the libvirtd connection channel, rather than having "
 "the hypervisor open a separate network connection to the destination. The "
@@ -1617,15 +1592,15 @@ msgstr ""
 "z biblioteką libvirt jest zaszyfrowane. Używanie tego jednocześnie "
 "z transportem SSH może być trudne."
 
-#: ui/migrate.ui:470
+#: ui/migrate.ui:474
 msgid "_URI:"
 msgstr "Adres _URI:"
 
-#: ui/migrate.ui:507
+#: ui/migrate.ui:511
 msgid "<b>Connectivity</b>"
 msgstr "<b>Łączność</b>"
 
-#: ui/migrate.ui:538
+#: ui/migrate.ui:542
 msgid ""
 "By default libvirt will refuse to migrate a VM for certain configurations "
 "that could lead to malfunctioning guests, like if a disk's cache mode is not "
@@ -1639,11 +1614,11 @@ msgstr ""
 "\n"
 "Włączenie tej opcji każe bibliotece libvirt pominąć sprawdzanie tego."
 
-#: ui/migrate.ui:542
+#: ui/migrate.ui:546
 msgid "A_llow unsafe:"
 msgstr "_Zezwolenie na niezabezpieczoną migrację:"
 
-#: ui/migrate.ui:568
+#: ui/migrate.ui:572
 msgid ""
 "By default, the migrated VM config is removed from the source host, and "
 "saved persistently on the destination host. The destination host is "
@@ -1663,15 +1638,15 @@ msgstr ""
 "wirtualnej, a działająca kopia przenoszona do celu jest tylko tymczasowa, "
 "i zniknie po jej wyłączeniu."
 
-#: ui/migrate.ui:572
+#: ui/migrate.ui:576
 msgid "_Temporary move:"
 msgstr "_Przeniesienie tymczasowe:"
 
-#: ui/migrate.ui:602
+#: ui/migrate.ui:606
 msgid "Advanced options"
 msgstr "Zaawansowane opcje"
 
-#: ui/migrate.ui:649
+#: ui/migrate.ui:655
 msgid "_Migrate"
 msgstr "_Migruj"
 
@@ -2430,7 +2405,7 @@ msgstr "PS/2"
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_type)s %(input_bus)s"
 
-#: virtManager/addhardware.py:702 virtManager/clone.py:105
+#: virtManager/addhardware.py:702
 msgid "Disk device"
 msgstr "Urządzenie dyskowe"
 
@@ -2574,122 +2549,73 @@ msgstr "Anulowanie zadania…"
 msgid "Completed"
 msgstr "Ukończono"
 
-#: virtManager/clone.py:52
+#: virtManager/clone.py:28 virtinst/cloner.py:183
 msgid "No storage to clone."
 msgstr "Brak pamięci masowej do sklonowania."
 
-#: virtManager/clone.py:57
-msgid "Cannot clone unmanaged remote storage."
-msgstr "Nie można sklonować niezarządzanej zdalnej pamięci masowej."
-
-#: virtManager/clone.py:60
-msgid ""
-"Block devices to clone must be libvirt\n"
-"managed storage volumes."
+#: virtManager/clone.py:110
+#, python-format
+msgid "Disk target: %s"
 msgstr ""
-"Urządzenia blokowe do klonowania powinny\n"
-"być woluminami pamięci masowych zarządzanymi\n"
-"przez bibliotekę libvirt."
 
-#: virtManager/clone.py:63 virtManager/delete.py:575
-msgid "No write access to parent directory."
-msgstr "Brak uprawnienia do zapisu do katalogu nadrzędnego."
+#: virtManager/clone.py:111
+#, fuzzy, python-format
+#| msgid "Original host:"
+msgid "Original path: %s"
+msgstr "Oryginalny gospodarz:"
 
-#: virtManager/clone.py:65 virtManager/delete.py:573
-msgid "Path does not exist."
-msgstr "Ścieżka nie istnieje."
+#: virtManager/clone.py:113
+#, fuzzy, python-format
+#| msgid "New _Path:"
+msgid "New path: %s"
+msgstr "Nowa ś_cieżka:"
 
-#: virtManager/clone.py:71
+#: virtManager/clone.py:117
+#, fuzzy, python-format
+#| msgid "Storage is marked as shareable."
+msgid "Storage is safe to share: %(reason)s"
+msgstr "Pamięć masowa jest oznaczona jako współdzielona."
+
+#: virtManager/clone.py:121
+msgid "Sharing this storage is potentially dangerous."
+msgstr ""
+
+#: virtManager/clone.py:124
 #, python-format
-msgid "Cannot clone %s storage pool."
-msgstr "Nie można sklonować puli pamięci masowej %s."
+msgid "Storage is not cloneable: %(reason)s"
+msgstr ""
 
-#: virtManager/clone.py:95
-msgid "Removable"
-msgstr "Wymienne"
+#: virtManager/clone.py:136
+#, fuzzy
+#| msgid "No storage to clone."
+msgid "No storage."
+msgstr "Brak pamięci masowej do sklonowania."
 
-#: virtManager/clone.py:98
-msgid "Read Only"
-msgstr "Tylko do odczytu"
-
-#: virtManager/clone.py:100
-msgid "No write access"
-msgstr "Brak uprawnienia do zapisu"
-
-#: virtManager/clone.py:109
-msgid "Shareable"
-msgstr "Współdzielone"
-
-#: virtManager/clone.py:127
-#, python-format
-msgid "Error launching clone dialog: %s"
-msgstr "Błąd podczas uruchamiania okna dialogowego klonowania: %s"
-
-#: virtManager/clone.py:292 virtManager/clone.py:561
-msgid "Details..."
-msgstr "Szczegóły…"
-
-#: virtManager/clone.py:320
-#, python-format
-msgid "Usermode (%(mac)s)"
-msgstr "Tryb użytkownika (%(mac)s)"
-
-#: virtManager/clone.py:330
-#, python-format
-msgid "%(netmode)s (%(mac)s)"
-msgstr "%(netmode)s (%(mac)s)"
-
-#: virtManager/clone.py:335
-#, python-format
-msgid "Virtual Network %(netdevice)s (%(mac)s)"
-msgstr "Sieć wirtualna %(netdevice)s (%(mac)s)"
-
-#: virtManager/clone.py:340
-#, python-format
-msgid "Virtual Network (%(mac)s)"
-msgstr "Sieć wirtualna (%(mac)s)"
-
-#: virtManager/clone.py:346
-#, python-format
-msgid "%(nettype)s %(netdevice)s (%(mac)s)"
-msgstr "%(nettype)s %(netdevice)s (%(mac)s)"
-
-#: virtManager/clone.py:352
-#, python-format
-msgid "%(nettype)s (%(mac)s)"
-msgstr "%(nettype)s (%(mac)s)"
-
-#: virtManager/clone.py:422
-msgid "Nothing to clone."
-msgstr "Nie ma nic do sklonowania."
-
-#: virtManager/clone.py:553
-msgid "Clone this disk"
-msgstr "Sklonuj ten dysk"
-
-#: virtManager/clone.py:557
+#: virtManager/clone.py:141
 #, python-format
 msgid "Share disk with %s"
 msgstr "Współdziel dysk z %s"
 
-#: virtManager/clone.py:569
-msgid "Storage cannot be shared or cloned."
-msgstr "Pamięć masowa nie może być współdzielona lub klonowana."
+#: virtManager/clone.py:143
+msgid "Clone this disk"
+msgstr "Sklonuj ten dysk"
 
-#: virtManager/clone.py:627
-msgid "One or more disks cannot be cloned or shared."
-msgstr "Jeden lub więcej dysków nie może być klonowany lub współdzielony."
-
-#: virtManager/clone.py:712
+#: virtManager/clone.py:181
 #, python-format
-msgid "Error changing MAC address: %s"
-msgstr "Błąd podczas zmieniania adresu MAC: %s"
+msgid "Error launching clone dialog: %s"
+msgstr "Błąd podczas uruchamiania okna dialogowego klonowania: %s"
 
-#: virtManager/clone.py:738
+#: virtManager/clone.py:275
+#, fuzzy
+#| msgid "C_lone"
+msgid "Clone"
+msgstr "Sk_lonuj"
+
+#: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
 msgstr "Klonowanie zastąpi istniejący plik"
 
-#: virtManager/clone.py:740
+#: virtManager/clone.py:457
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2697,21 +2623,23 @@ msgstr ""
 "Użycie istniejącego obrazu zastąpi ścieżkę podczas procesu klonowania. Na "
 "pewno użyć tej ścieżki?"
 
-#: virtManager/clone.py:752
-#, python-format
-msgid "Error changing storage path: %s"
-msgstr "Błąd podczas zmieniania ścieżki do pamięci masowej: %s"
-
-#: virtManager/clone.py:804
-msgid "Skipping disks may cause data to be overwritten."
+#: virtManager/clone.py:486
+#, fuzzy
+#| msgid "Skipping disks may cause data to be overwritten."
+msgid "Sharing storage may cause data to be overwritten."
 msgstr "Pominięcie dysków może spowodować zastąpienie danych."
 
-#: virtManager/clone.py:805
-#, python-format
+#: virtManager/clone.py:487
+#, fuzzy, python-format
+#| msgid ""
+#| "The following disk devices will not be cloned:\n"
+#| "\n"
+#| "%s\n"
+#| "Running the new guest could overwrite data in these disk images."
 msgid ""
-"The following disk devices will not be cloned:\n"
+"The following disk devices will be shared with %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 "Następujące urządzenia dysków nie zostaną sklonowane:\n"
@@ -2719,22 +2647,23 @@ msgstr ""
 "%s\n"
 "Uruchomienie nowego gościa może zastąpić dane w tych obrazach dysków."
 
-#: virtManager/clone.py:822
+#: virtManager/clone.py:502
 #, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Błąd podczas tworzenia klona maszyny wirtualnej „%(vm)s”: %(error)s"
 
-#: virtManager/clone.py:838 virtManager/migrate.py:365
-#, python-format
-msgid "Uncaught error validating input: %s"
-msgstr "Nieprzechwycony błąd podczas sprawdzania wejścia: %s"
+#: virtManager/clone.py:560
+#, fuzzy, python-format
+#| msgid "Error changing pool settings: %s"
+msgid "Error with clone settings: %s"
+msgstr "Błąd podczas zmieniania ustawień puli: %s"
 
-#: virtManager/clone.py:843
+#: virtManager/clone.py:565
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Tworzenie klona maszyny wirtualnej „%s”"
 
-#: virtManager/clone.py:847
+#: virtManager/clone.py:570
 #, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
@@ -3330,6 +3259,14 @@ msgstr "Nie można usunąć urządzenia SCSI."
 #: virtManager/delete.py:571
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Nie można usunąć niezarządzanej zdalnej pamięci masowej."
+
+#: virtManager/delete.py:573
+msgid "Path does not exist."
+msgstr "Ścieżka nie istnieje."
+
+#: virtManager/delete.py:575
+msgid "No write access to parent directory."
+msgstr "Brak uprawnienia do zapisu do katalogu nadrzędnego."
 
 #: virtManager/delete.py:577
 msgid "Cannot delete unmanaged block device."
@@ -4332,17 +4269,17 @@ msgstr "Błąd podczas usuwania woluminu „%s”"
 msgid "Error changing pool settings: %s"
 msgstr "Błąd podczas zmieniania ustawień puli: %s"
 
-#: virtManager/lib/connectauth.py:52
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "Wymagane jest uwierzytelnienie"
 
-#: virtManager/lib/connectauth.py:155
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "Zdalny gospodarz wymaga wersji poleceń netcat/nc obsługujących opcję -U."
 
-#: virtManager/lib/connectauth.py:161
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4350,13 +4287,13 @@ msgstr ""
 "Proszę skonfigurować dostęp do zdalnego gospodarza kluczem SSH lub "
 "zainstalować pakiet askpass dla SSH lokalnie."
 
-#: virtManager/lib/connectauth.py:165
+#: virtManager/lib/connectauth.py:163
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 "Proszę sprawdzić, czy usługa „libvirtd” jest uruchomiona na zdalnym "
 "gospodarzu."
 
-#: virtManager/lib/connectauth.py:169
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4366,7 +4303,7 @@ msgstr ""
 " • Jądro gospodarza Xen zostało uruchomione\n"
 " • Usługa Xen została uruchomiona"
 
-#: virtManager/lib/connectauth.py:175
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4376,20 +4313,20 @@ msgstr ""
 "przez ssh -X lub VNC, to nie będzie można połączyć się z biblioteką libvirt "
 "jako zwykły użytkownik. Proszę spróbować uruchomić jako root."
 
-#: virtManager/lib/connectauth.py:181
+#: virtManager/lib/connectauth.py:179
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "Proszę sprawdzić, czy usługa „libvirtd” jest uruchomiona."
 
-#: virtManager/lib/connectauth.py:184
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Nie można połączyć się z biblioteką libvirt %s."
 
-#: virtManager/lib/connectauth.py:196
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Połączenie menedżera maszyn wirtualnych się nie powiodło"
 
-#: virtManager/lib/connectauth.py:271
+#: virtManager/lib/connectauth.py:269
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
@@ -4397,7 +4334,7 @@ msgstr ""
 "Usługa libvirtd nie jest zainstalowana. Proszę ją zainstalować i uruchomić, "
 "aby zarządzać wirtualizacją na tym gospodarzu."
 
-#: virtManager/lib/connectauth.py:275
+#: virtManager/lib/connectauth.py:273
 msgid ""
 "libvirtd is installed but not running. Start the libvirtd service to manage "
 "virtualization on this host."
@@ -4405,7 +4342,7 @@ msgstr ""
 "Usługa libvirtd jest zainstalowana, ale nie jest uruchomiona. Proszę ją "
 "uruchomić, aby zarządzać wirtualizacją na tym gospodarzu."
 
-#: virtManager/lib/connectauth.py:281
+#: virtManager/lib/connectauth.py:279
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
@@ -4414,7 +4351,7 @@ msgstr ""
 "pakiety wirtualizacji QEMU/KVM są zainstalowane, aby zarządzać wirtualizacją "
 "na tym gospodarzu."
 
-#: virtManager/lib/connectauth.py:288
+#: virtManager/lib/connectauth.py:286
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4611,29 +4548,29 @@ msgstr "Wznawia maszynę wirtualną"
 msgid "Disabled in preferences dialog."
 msgstr "Wyłączono w oknie dialogowym preferencji."
 
-#: virtManager/migrate.py:37
+#: virtManager/migrate.py:38
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Błąd podczas uruchamiania okna dialogowego migracji: %s"
 
-#: virtManager/migrate.py:135
+#: virtManager/migrate.py:144
 msgid "Direct"
 msgstr "Bezpośrednio"
 
-#: virtManager/migrate.py:136
+#: virtManager/migrate.py:145
 msgid "Tunnelled"
 msgstr "Tunelowanie"
 
-#: virtManager/migrate.py:150
+#: virtManager/migrate.py:161
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
 msgstr "<span size='large'>Migracja „%(vm)s”</span>"
 
-#: virtManager/migrate.py:211
+#: virtManager/migrate.py:222
 msgid "A valid destination connection must be selected."
 msgstr "Należy wybrać prawidłowe połączenie docelowe."
 
-#: virtManager/migrate.py:226
+#: virtManager/migrate.py:237
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
@@ -4643,42 +4580,47 @@ msgstr ""
 "libvirt , ale wybrane połączenie jest lokalnym adresem URI. Biblioteka "
 "libvirt odrzuci go, jeśli nie dodany zostanie transport."
 
-#: virtManager/migrate.py:281
+#: virtManager/migrate.py:292
 #, python-format
 msgid "%(uri)s (Hypervisors do not match)"
 msgstr "%(uri)s (nadzorcy się nie zgadzają)"
 
-#: virtManager/migrate.py:283
+#: virtManager/migrate.py:294
 #, python-format
 msgid "%(uri)s (Disconnected)"
 msgstr "%(uri)s (rozłączono)"
 
-#: virtManager/migrate.py:285
+#: virtManager/migrate.py:296
 #, python-format
 msgid "%(uri)s (Same connection)"
 msgstr "%(uri)s (to samo połączenie)"
 
-#: virtManager/migrate.py:302
+#: virtManager/migrate.py:313
 msgid "No usable connections available."
 msgstr "Brak dostępnych używalnych połączeń."
 
-#: virtManager/migrate.py:342
+#: virtManager/migrate.py:353
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "Nie można migrować gościa: %s"
 
-#: virtManager/migrate.py:383
+#: virtManager/migrate.py:381
+#, python-format
+msgid "Uncaught error validating input: %s"
+msgstr "Nieprzechwycony błąd podczas sprawdzania wejścia: %s"
+
+#: virtManager/migrate.py:399
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "Migrowanie maszyny wirtualnej „%s”"
 
-#: virtManager/migrate.py:384
+#: virtManager/migrate.py:400
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
 "Migrowanie maszyny wirtualnej „%(name)s” do %(host)s. Może to chwilę zająć."
 
-#: virtManager/migrate.py:395
+#: virtManager/migrate.py:411
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "Błąd podczas anulowania zadania migracji: %s"
@@ -4710,11 +4652,11 @@ msgstr ""
 "Nie można odnaleźć podanego urządzenie w nieaktywnej konfiguracji maszyny "
 "wirtualnej: %s"
 
-#: virtManager/object/domain.py:1366
+#: virtManager/object/domain.py:1363
 msgid "Saving domain to disk"
 msgstr "Zapisywanie domeny na dysku"
 
-#: virtManager/object/domain.py:1418
+#: virtManager/object/domain.py:1415
 msgid "Migrating domain"
 msgstr "Migrowanie domeny"
 
@@ -5668,65 +5610,62 @@ msgstr ""
 msgid "Expected PCI format string for '%s'"
 msgstr "Oczekiwano ciągu w formacie PCI dla „%s”"
 
-#: virtinst/cloner.py:46
+#: virtinst/cloner.py:45
 #, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "Nie można usunąć starej maszyny wirtualnej „%(vm)s”: %(error)s"
 
-#: virtinst/cloner.py:127
+#: virtinst/cloner.py:113
 #, python-format
-msgid "Invalid name for new guest: %s"
-msgstr "Nieprawidłowa nazwa nowego gościa: %s"
+msgid "Domain '%s' was not found."
+msgstr "Nie odnaleziono domeny „%s”."
 
-#: virtinst/cloner.py:163
-#, python-format
-msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Nie można użyć ścieżki „%(path)s” do sklonowania: %(error)s"
-
-#: virtinst/cloner.py:283
-msgid "Original guest name or XML is required."
-msgstr "Oryginalna nazwa gościa lub XML są wymagane."
-
-#: virtinst/cloner.py:306
-msgid "Domain to clone must be shutoff."
-msgstr "Domena do sklonowania musi być wyłączona."
-
-#: virtinst/cloner.py:328
+#: virtinst/cloner.py:157
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "Klonowanie do istniejącego woluminu pamięci masowej jest obecnie "
 "nieobsługiwane: „%s”"
 
-#: virtinst/cloner.py:402
+#: virtinst/cloner.py:178
 #, python-format
-msgid ""
-"More disks to clone than new paths specified. (%(passed)d specified, "
-"%(need)d needed"
-msgstr ""
-"Podano więcej dysków do klonowania niż nowych ścieżek. (%(passed)d podano, "
-"%(need)d jest wymaganych"
+msgid "Disk path '%s' does not exist."
+msgstr "Ścieżka do dysku „%s” nie istnieje."
 
-#: virtinst/cloner.py:416
+#: virtinst/cloner.py:185
+msgid "Read Only"
+msgstr "Tylko do odczytu"
+
+#: virtinst/cloner.py:187
+#, fuzzy
+#| msgid "Storage is marked as shareable."
+msgid "Marked as shareable"
+msgstr "Pamięć masowa jest oznaczona jako współdzielona."
+
+#: virtinst/cloner.py:249
+#, python-format
+msgid "Could not use path '%(path)s' for cloning: %(error)s"
+msgstr "Nie można użyć ścieżki „%(path)s” do sklonowania: %(error)s"
+
+#: virtinst/cloner.py:265
+#, python-format
+msgid "Could not determine original disk information: %s"
+msgstr "Nie można ustalić informacji o oryginalnym dysku: %s"
+
+#: virtinst/cloner.py:316
+msgid "Domain to clone must be shutoff."
+msgstr "Domena do sklonowania musi być wyłączona."
+
+#: virtinst/cloner.py:351
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Ustawianie portu urządzenia graficznego na autoport, aby uniknąć konfliktu."
 
-#: virtinst/cloner.py:578
+#: virtinst/cloner.py:488
 #, python-format
-msgid "Disk path '%s' does not exist."
-msgstr "Ścieżka do dysku „%s” nie istnieje."
-
-#: virtinst/cloner.py:583
-#, python-format
-msgid "Could not determine original disk information: %s"
-msgstr "Nie można ustalić informacji o oryginalnym dysku: %s"
-
-#: virtinst/cloner.py:621
-#, python-format
-msgid "Domain '%s' was not found."
-msgstr "Nie odnaleziono domeny „%s”."
+msgid "Invalid name for new guest: %s"
+msgstr "Nieprawidłowa nazwa nowego gościa: %s"
 
 #: virtinst/devices/disk.py:218
 #, python-format
@@ -5746,19 +5685,19 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Atrybut formatu nie jest obsługiwany dla tego typu woluminu"
 
-#: virtinst/devices/disk.py:731
+#: virtinst/devices/disk.py:735
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Typ urządzenia „%s” wymaga ścieżki"
 
-#: virtinst/devices/disk.py:739
+#: virtinst/devices/disk.py:743
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Należy podać parametry tworzenia pamięci masowej dla nieistniejącej ścieżki "
 "„%s”."
 
-#: virtinst/devices/disk.py:853
+#: virtinst/devices/disk.py:857
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5796,7 +5735,7 @@ msgstr "Nie można użyć pamięci masowej %(path)s: %(err)s"
 msgid "Permissions on '%s' did not stick"
 msgstr "Uprawnienia „%s” się nie utrzymały"
 
-#: virtinst/diskbackend.py:528
+#: virtinst/diskbackend.py:525
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -5804,26 +5743,26 @@ msgstr ""
 "System plików nie będzie miał wystarczającej ilości wolnego miejsca, aby "
 "w pełni przydzielić plik zapasowy, kiedy gość jest uruchomiony."
 
-#: virtinst/diskbackend.py:533
+#: virtinst/diskbackend.py:530
 msgid "There is not enough free space to create the disk."
 msgstr "Nie ma wystarczającej ilości wolnego miejsca na dysku."
 
-#: virtinst/diskbackend.py:538
+#: virtinst/diskbackend.py:535
 #, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr "%(mem1)s M zażądano > %(mem2)s M dostępne"
 
-#: virtinst/diskbackend.py:545
+#: virtinst/diskbackend.py:542
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "rozmiar jest wymagany dla nieistniejącego dysku „%s”"
 
-#: virtinst/diskbackend.py:555
+#: virtinst/diskbackend.py:552
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "Klonowanie %(srcfile)s"
 
-#: virtinst/diskbackend.py:625
+#: virtinst/diskbackend.py:622
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -6095,7 +6034,7 @@ msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr ""
 "Nie można utworzyć domyślnej puli pamięci masowej „%(path)s”: %(error)s"
 
-#: virtinst/storage.py:220 virtinst/storage.py:554
+#: virtinst/storage.py:220 virtinst/storage.py:550
 msgid "Storage object"
 msgstr "Obiekt pamięci masowej"
 
@@ -6124,12 +6063,12 @@ msgstr "Nie można uruchomić puli pamięci masowej: %s"
 msgid "Could not set pool autostart flag: %s"
 msgstr "Nie można ustawić flagi automatycznego uruchamiania puli: %s"
 
-#: virtinst/storage.py:560
+#: virtinst/storage.py:556
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Nazwa „%s” jest już używana przez inny wolumin."
 
-#: virtinst/storage.py:649
+#: virtinst/storage.py:645
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -6137,12 +6076,12 @@ msgstr ""
 "Zapasowe woluminy logiczne nie są obsługiwane, ustawianie przydzielenia do "
 "pojemności"
 
-#: virtinst/storage.py:695
+#: virtinst/storage.py:691
 #, python-format
 msgid "Allocating '%s'"
 msgstr "Przydzielanie „%s”"
 
-#: virtinst/storage.py:733
+#: virtinst/storage.py:729
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
@@ -6151,7 +6090,7 @@ msgstr ""
 "Nie ma wystarczającej ilości wolnego miejsca w puli pamięci masowej, aby "
 "utworzyć wolumin (%(mem1)s M żądanego przydziału > %(mem2)s M dostępne)."
 
-#: virtinst/storage.py:740
+#: virtinst/storage.py:736
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6162,23 +6101,19 @@ msgstr ""
 "jest w pełni przydzielony (%(mem1)s M żądanego przydziału > %(mem2)s M "
 "dostępne)."
 
-#: virtinst/virtclone.py:25
+#: virtinst/virtclone.py:23
+#, fuzzy
+#| msgid ""
+#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
+#| "try again."
 msgid ""
-"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
-"specify one."
-msgstr ""
-"Nazwa nowej maszyny wirtualnej jest wymagana, należy użyć „--name "
-"NAZWA_NOWEJ_MASZYNY” do jej podania."
-
-#: virtinst/virtclone.py:44
-msgid ""
-"An original machine name is required, use '--original ORIGINAL_GUEST' and "
-"try again."
+"An original machine name is required, use '--original src_name' and try "
+"again."
 msgstr ""
 "Pierwotna nazwa maszyny jest wymagana, należy użyć „--original "
 "PIERWOTNY_GOŚĆ” i spróbować ponownie."
 
-#: virtinst/virtclone.py:85
+#: virtinst/virtclone.py:70
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6198,19 +6133,19 @@ msgstr ""
 "jest poza zakresem działań tego narzędzia. Do wprowadzania tego typu zmian "
 "należy użyć programu virt-sysprep(1)."
 
-#: virtinst/virtclone.py:95 virtinst/virtinstall.py:858
+#: virtinst/virtclone.py:80 virtinst/virtinstall.py:858
 msgid "General Options"
 msgstr "Ogólne opcje"
 
-#: virtinst/virtclone.py:97
+#: virtinst/virtclone.py:82
 msgid "Name of the original guest to clone."
 msgstr "Nazwa oryginalnego gościa do sklonowania."
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:84
 msgid "XML file to use as the original guest."
 msgstr "Plik XML do użycia jako oryginalny gość."
 
-#: virtinst/virtclone.py:101
+#: virtinst/virtclone.py:86
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
@@ -6218,23 +6153,23 @@ msgstr ""
 "Automatyczne utwórz nazwę klona i ścieżki pamięci masowej z oryginalnej "
 "konfiguracji gościa."
 
-#: virtinst/virtclone.py:104
+#: virtinst/virtclone.py:89
 msgid "Name for the new guest"
 msgstr "Nazwa nowego gościa"
 
-#: virtinst/virtclone.py:107
+#: virtinst/virtclone.py:92
 msgid "use btrfs COW lightweight copy"
 msgstr "używa lekkiego kopiowania COW systemu plików btrfs"
 
-#: virtinst/virtclone.py:109
+#: virtinst/virtclone.py:94
 msgid "Storage Configuration"
 msgstr "Konfiguracja pamięci masowej"
 
-#: virtinst/virtclone.py:111
+#: virtinst/virtclone.py:96
 msgid "New file to use as the disk image for the new guest"
 msgstr "Nowy plik do użycia jako obraz dysku dla nowego gościa"
 
-#: virtinst/virtclone.py:114
+#: virtinst/virtclone.py:99
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6242,7 +6177,7 @@ msgstr ""
 "Wymusza skopiowanie urządzeń (np. jeśli „hdc” jest urządzeniem CD-ROM tylko "
 "do odczytu, to należy użyć --force-copy=hdc)"
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:102
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
@@ -6251,27 +6186,26 @@ msgstr ""
 "ma zostać skopiowany, a w nowej maszynie wirtualnej nie ma być używana ta "
 "sama ścieżka, to należy użyć --skip-copy=vda)"
 
-#: virtinst/virtclone.py:122
+#: virtinst/virtclone.py:107
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "Nie używa plików zapasowych dla obrazu dysku klona"
 
-#: virtinst/virtclone.py:126
+#: virtinst/virtclone.py:111
 msgid ""
-"Do not clone storage, new disk images specified via --file are preserved "
-"unchanged"
+"Do not clone storage contents to specified file paths, their contents will "
+"be left untouched. This requires specifying existing paths for every "
+"cloneable disk image."
 msgstr ""
-"Bez klonowania pamięci masowej, nowe obrazy dysków podane przez --file są "
-"zachowane niezmienione"
 
-#: virtinst/virtclone.py:129
+#: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
 msgstr "Nowy plik do użycia jako pamięć masowa dla ZMIENNYCH NVRAM"
 
-#: virtinst/virtclone.py:131
+#: virtinst/virtclone.py:118
 msgid "Networking Configuration"
 msgstr "Konfiguracja sieci"
 
-#: virtinst/virtclone.py:133
+#: virtinst/virtclone.py:120
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
@@ -6279,12 +6213,12 @@ msgstr ""
 "Nowy stały adres MAC dla sklonowanego gościa. Domyślnie jest to losowo "
 "utworzony adres MAC"
 
-#: virtinst/virtclone.py:136 virtinst/virtinstall.py:962
-#: virtinst/virtxml.py:394
+#: virtinst/virtclone.py:123 virtinst/virtinstall.py:962
+#: virtinst/virtxml.py:390
 msgid "Miscellaneous Options"
 msgstr "Różne opcje"
 
-#: virtinst/virtclone.py:165
+#: virtinst/virtclone.py:151
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
@@ -6292,12 +6226,20 @@ msgstr ""
 "Wymagana jest opcja --auto-clone lub --file, należy użyć „--auto-clone lub --"
 "file” i spróbować ponownie."
 
-#: virtinst/virtclone.py:206
+#: virtinst/virtclone.py:183
+msgid ""
+"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
+"specify one."
+msgstr ""
+"Nazwa nowej maszyny wirtualnej jest wymagana, należy użyć „--name "
+"NAZWA_NOWEJ_MASZYNY” do jej podania."
+
+#: virtinst/virtclone.py:201
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "Klon „%s” został pomyślnie utworzony."
 
-#: virtinst/virtclone.py:217 virtinst/virtinstall.py:1071
+#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1071
 msgid "Installation aborted at user request"
 msgstr "Instalacja została przerwana na żądanie użytkownika"
 
@@ -6630,21 +6572,21 @@ msgstr "Wymuszanie wyłączenia domeny po zamknięciu przeglądarki konsoli."
 msgid "Minutes to wait for install to complete."
 msgstr "Minuty oczekiwania na ukończenie instalacji."
 
-#: virtinst/virtxml.py:36
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "Proszę wpisać „yes” lub „no”."
 
-#: virtinst/virtxml.py:84
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Nieprawidłowa opcja --edit „%s”"
 
-#: virtinst/virtxml.py:87
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr "Nie odnaleziono obiektów --%s w pliku XML"
 
-#: virtinst/virtxml.py:90
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6653,31 +6595,31 @@ msgstr ""
 "Zażądano „--edit %(number)s”, ale w pliku XML jest tylko obiekt %(max)s --"
 "%(type)s"
 
-#: virtinst/virtxml.py:108
+#: virtinst/virtxml.py:104
 #, python-format
 msgid "No matching objects found for %s"
 msgstr "Nie odnaleziono pasujących obiektów dla %s"
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:120
 #, python-format
 msgid "One of %s must be specified."
 msgstr "Należy podać jedno z %s."
 
-#: virtinst/virtxml.py:127
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Opcje %s są sprzeczne"
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:134
 msgid "No change specified."
 msgstr "Nie podano żadnej zmiany."
 
-#: virtinst/virtxml.py:140
+#: virtinst/virtxml.py:136
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "Można podać tylko jedno działanie zmiany (opcje %s są sprzeczne)"
 
-#: virtinst/virtxml.py:153
+#: virtinst/virtxml.py:149
 #, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
@@ -6686,86 +6628,86 @@ msgstr ""
 "„--edit %(option)s” nie ma sensu z --%(objecttype)s, należy użyć tylko "
 "pustego „--edit”"
 
-#: virtinst/virtxml.py:158
+#: virtinst/virtxml.py:154
 msgid "--os-variant is not supported with --edit"
 msgstr "--os-variant nie jest obsługiwane z --edit"
 
-#: virtinst/virtxml.py:165
+#: virtinst/virtxml.py:161
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "Nie można używać --add-device razem z --%s"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:172
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Nie można używać --remove-device razem z --%s"
 
-#: virtinst/virtxml.py:179
+#: virtinst/virtxml.py:175
 msgid "--os-variant is not supported with --remove-device"
 msgstr "--os-variant nie jest obsługiwane z --remove-device"
 
-#: virtinst/virtxml.py:192
+#: virtinst/virtxml.py:188
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml nie jest obsługiwane dla --%s"
 
-#: virtinst/virtxml.py:195
+#: virtinst/virtxml.py:191
 msgid "--os-variant is not supported with --build-xml"
 msgstr "--os-variant nie jest obsługiwane z --build-xml"
 
-#: virtinst/virtxml.py:221
+#: virtinst/virtxml.py:217
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Określić „%s” za pomocą zmienionego pliku XML?"
 
-#: virtinst/virtxml.py:229
+#: virtinst/virtxml.py:225
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Pomyślnie określono domenę „%s”."
 
-#: virtinst/virtxml.py:236
+#: virtinst/virtxml.py:232
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "Uruchomić „%s” za pomocą zmienionego pliku XML?"
 
-#: virtinst/virtxml.py:246 virtinst/virtxml.py:512
+#: virtinst/virtxml.py:242 virtinst/virtxml.py:508
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Uruchomienie domeny „%(domain)s” się nie powiodło: %(error)s"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:516
+#: virtinst/virtxml.py:247 virtinst/virtxml.py:512
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Pomyślnie uruchomiono domenę „%s”."
 
-#: virtinst/virtxml.py:283
+#: virtinst/virtxml.py:279
 #, python-format
 msgid "Error attempting device action %(action)s: %(error)s"
 msgstr "Błąd podczas próbowania działania urządzenia %(action)s: %(error)s"
 
-#: virtinst/virtxml.py:289
+#: virtinst/virtxml.py:285
 #, python-format
 msgid "Device %s successful."
 msgstr "Pomyślne urządzenie %s."
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:309
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr "Nie utworzono różnicy kodu XML. Żądane zmiany nie będą uwzględnione."
 
-#: virtinst/virtxml.py:332
+#: virtinst/virtxml.py:328
 msgid "Edit libvirt XML using command line options."
 msgstr ""
 "Modyfikowanie pliku XML biblioteki libvirt za pomocą opcji wiersza poleceń."
 
-#: virtinst/virtxml.py:338
+#: virtinst/virtxml.py:334
 msgid "Domain name, id, or uuid"
 msgstr "Nazwa, identyfikator lub UUID domeny"
 
-#: virtinst/virtxml.py:340
+#: virtinst/virtxml.py:336
 msgid "XML actions"
 msgstr "Działania pliku XML"
 
-#: virtinst/virtxml.py:342
+#: virtinst/virtxml.py:338
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6779,7 +6721,7 @@ msgstr ""
 "--edit all --disk ... (modyfikuje wszystkie urządzenia dyskowe)\n"
 "--edit target=hda --disk ... (modyfikuje dysk „hda”)\n"
 
-#: virtinst/virtxml.py:348
+#: virtinst/virtxml.py:344
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6791,7 +6733,7 @@ msgstr ""
 "--remove-device --disk all (usuwa wszystkie dyski)\n"
 "--remove-device --disk /jakaś/ścieżka"
 
-#: virtinst/virtxml.py:353
+#: virtinst/virtxml.py:349
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6799,7 +6741,7 @@ msgstr ""
 "Dodaje podane urządzenie. Przykłady:\n"
 "--add-device --disk …"
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:352
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -6807,11 +6749,11 @@ msgstr ""
 "Wypisuje kod XML budowanego urządzenia. Domena jest opcjonalna, ale zalecana "
 "w celu zapewnienia optymalnych wartości domyślnych."
 
-#: virtinst/virtxml.py:359
+#: virtinst/virtxml.py:355
 msgid "Output options"
 msgstr "Opcje wyjścia"
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:357
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6825,66 +6767,66 @@ msgstr ""
 "działania.\n"
 "Za pomocą opcji --edit jest to działanie aktualizacji urządzenia."
 
-#: virtinst/virtxml.py:367
+#: virtinst/virtxml.py:363
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Wymusza określenie domeny. Jest wymagane tylko, jeśli podano opcję --print."
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:366
 msgid "Force not defining the domain."
 msgstr "Wymusza nieokreślenie domeny."
 
-#: virtinst/virtxml.py:373
+#: virtinst/virtxml.py:369
 msgid "Start the domain."
 msgstr "Uruchamia domenę."
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:371
 msgid "Only print the requested change, in diff format"
 msgstr "Wyświetlanie tylko żądanej zmiany (w formacie różnicy)"
 
-#: virtinst/virtxml.py:377
+#: virtinst/virtxml.py:373
 msgid "Only print the requested change, in full XML format"
 msgstr "Wyświetlanie tylko żądanej zmiany (w pełnym formacie XML)"
 
-#: virtinst/virtxml.py:379
+#: virtinst/virtxml.py:375
 msgid "Require confirmation before saving any results."
 msgstr "Wymaganie potwierdzenia przed zapisaniem wyników."
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:379
 msgid "XML options"
 msgstr "Opcje pliku XML"
 
-#: virtinst/virtxml.py:422
+#: virtinst/virtxml.py:418
 msgid "Can't use --confirm with stdin input."
 msgstr "Nie można używać --confirm razem ze standardowym wejściem."
 
-#: virtinst/virtxml.py:424
+#: virtinst/virtxml.py:420
 msgid "Can't use --update with stdin input."
 msgstr "Nie można używać --update razem ze standardowym wejściem."
 
-#: virtinst/virtxml.py:427
+#: virtinst/virtxml.py:423
 msgid "A domain must be specified"
 msgstr "Należy podać domenę"
 
-#: virtinst/virtxml.py:455
+#: virtinst/virtxml.py:451
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "Nie wiadomo, jak użyć --update dla --%s"
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:476
 msgid "Cannot mix --update and --start"
 msgstr "Nie można mieszać --update i --start"
 
-#: virtinst/virtxml.py:488
+#: virtinst/virtxml.py:484
 msgid "The VM is not running, --update is inapplicable."
 msgstr "Maszyna wirtualna nie jest uruchomiona, --update nie ma zastosowania."
 
-#: virtinst/virtxml.py:521
+#: virtinst/virtxml.py:517
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Zmiany zostaną uwzględnione po pełnym wyłączeniu domeny."
 
-#: virtinst/virtxml.py:523
+#: virtinst/virtxml.py:519
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6892,7 +6834,7 @@ msgstr ""
 "Kod XML nie uległ zmianie po określeniu domeny. Mogła zostać zmieniona "
 "wartość domyślnie ustawiana przez bibliotekę libvirt."
 
-#: virtinst/virtxml.py:536
+#: virtinst/virtxml.py:532
 msgid "Aborted at user request"
 msgstr "Przerwano na żądanie użytkownika"
 
@@ -6915,6 +6857,114 @@ msgstr "Należy podać nazwę dla %s"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s nazwa „%(name)s” nie może zawierać znaku „%(char)s”."
+
+#~ msgid "Create clone based on:"
+#~ msgstr "Utworzenie klona na podstawie:"
+
+#~ msgid "Destination host:"
+#~ msgstr "Gospodarz docelowy:"
+
+#~ msgid "No networking devices"
+#~ msgstr "Brak urządzeń sieciowych"
+
+#~ msgid "Networking:"
+#~ msgstr "Sieć:"
+
+#~ msgid "No storage to clone"
+#~ msgstr "Brak pamięci masowej do sklonowania"
+
+#~ msgid ""
+#~ "<span size='small'>Cloning creates a new, independent copy of the "
+#~ "original disk. Sharing\n"
+#~ "uses the existing disk image for both the original and the new machine.</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size='small'>Klonowanie utworzy nową, niezależną kopię "
+#~ "oryginalnego\n"
+#~ "dysku. Współdzielenie używa istniejącego obrazu dysku dla nowej i starej\n"
+#~ "maszyny.</span>"
+
+#~ msgid "Change MAC address"
+#~ msgstr "Zmiana adresu MAC"
+
+#~ msgid "New _MAC:"
+#~ msgstr "Nowy adres _MAC:"
+
+#~ msgid "MAC:"
+#~ msgstr "Adres MAC:"
+
+#~ msgid "Cannot clone unmanaged remote storage."
+#~ msgstr "Nie można sklonować niezarządzanej zdalnej pamięci masowej."
+
+#~ msgid ""
+#~ "Block devices to clone must be libvirt\n"
+#~ "managed storage volumes."
+#~ msgstr ""
+#~ "Urządzenia blokowe do klonowania powinny\n"
+#~ "być woluminami pamięci masowych zarządzanymi\n"
+#~ "przez bibliotekę libvirt."
+
+#~ msgid "Cannot clone %s storage pool."
+#~ msgstr "Nie można sklonować puli pamięci masowej %s."
+
+#~ msgid "Removable"
+#~ msgstr "Wymienne"
+
+#~ msgid "No write access"
+#~ msgstr "Brak uprawnienia do zapisu"
+
+#~ msgid "Shareable"
+#~ msgstr "Współdzielone"
+
+#~ msgid "Usermode (%(mac)s)"
+#~ msgstr "Tryb użytkownika (%(mac)s)"
+
+#~ msgid "%(netmode)s (%(mac)s)"
+#~ msgstr "%(netmode)s (%(mac)s)"
+
+#~ msgid "Virtual Network %(netdevice)s (%(mac)s)"
+#~ msgstr "Sieć wirtualna %(netdevice)s (%(mac)s)"
+
+#~ msgid "Virtual Network (%(mac)s)"
+#~ msgstr "Sieć wirtualna (%(mac)s)"
+
+#~ msgid "%(nettype)s %(netdevice)s (%(mac)s)"
+#~ msgstr "%(nettype)s %(netdevice)s (%(mac)s)"
+
+#~ msgid "%(nettype)s (%(mac)s)"
+#~ msgstr "%(nettype)s (%(mac)s)"
+
+#~ msgid "Nothing to clone."
+#~ msgstr "Nie ma nic do sklonowania."
+
+#~ msgid "Storage cannot be shared or cloned."
+#~ msgstr "Pamięć masowa nie może być współdzielona lub klonowana."
+
+#~ msgid "One or more disks cannot be cloned or shared."
+#~ msgstr "Jeden lub więcej dysków nie może być klonowany lub współdzielony."
+
+#~ msgid "Error changing MAC address: %s"
+#~ msgstr "Błąd podczas zmieniania adresu MAC: %s"
+
+#~ msgid "Error changing storage path: %s"
+#~ msgstr "Błąd podczas zmieniania ścieżki do pamięci masowej: %s"
+
+#~ msgid "Original guest name or XML is required."
+#~ msgstr "Oryginalna nazwa gościa lub XML są wymagane."
+
+#~ msgid ""
+#~ "More disks to clone than new paths specified. (%(passed)d specified, "
+#~ "%(need)d needed"
+#~ msgstr ""
+#~ "Podano więcej dysków do klonowania niż nowych ścieżek. (%(passed)d "
+#~ "podano, %(need)d jest wymaganych"
+
+#~ msgid ""
+#~ "Do not clone storage, new disk images specified via --file are preserved "
+#~ "unchanged"
+#~ msgstr ""
+#~ "Bez klonowania pamięci masowej, nowe obrazy dysków podane przez --file są "
+#~ "zachowane niezmienione"
 
 #~ msgid "RAM:"
 #~ msgstr "RAM:"

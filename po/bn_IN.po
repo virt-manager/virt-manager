@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-03 06:10+0000\n"
+"POT-Creation-Date: 2020-09-07 06:10+0000\n"
 "PO-Revision-Date: 2017-02-05 04:04+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Bengali (India) (http://www.transifex.com/projects/p/virt-"
@@ -141,7 +141,7 @@ msgstr "ডিভাইসের ধরন: (_T)"
 msgid "T_ype:"
 msgstr "ধরন (_y):"
 
-#: ui/addhardware.ui:885 ui/clone.ui:376 ui/createnet.ui:217
+#: ui/addhardware.ui:885 ui/clone.ui:184 ui/createnet.ui:217
 #: ui/createpool.ui:329 ui/createvm.ui:2159 ui/createvol.ui:189
 #: ui/details.ui:216 ui/host.ui:181 ui/snapshotsnew.ui:110
 msgid "_Name:"
@@ -234,47 +234,31 @@ msgstr "বিবরণ (_D)"
 msgid "Clone Virtual Machine"
 msgstr "ভার্চুয়াল মেশিন ক্লোন করুন"
 
-#: ui/clone.ui:56
+#: ui/clone.ui:53
 msgid "<span size='large'>Clone virtual machine</span>"
 msgstr ""
 
-#: ui/clone.ui:130
-msgid "Create clone based on:"
-msgstr "এর ভিত্তিতে ক্লোন নির্মাণ করুন:"
-
-#: ui/clone.ui:142
-msgid "Destination host:"
-msgstr "গন্তব্য হোস্ট:"
-
-#: ui/clone.ui:192
-msgid "No networking devices"
-msgstr "নেটওয়ার্ক ব্যবস্থার নতুন ডিভাইস"
-
-#: ui/clone.ui:228
-msgid "Networking:"
+#: ui/clone.ui:127
+msgid "Original VM:"
 msgstr ""
 
-#: ui/clone.ui:251
-msgid "No storage to clone"
-msgstr "ক্লোন করার যোগ্য কোনো সংগ্রহস্থল উপস্থিত নেই"
+#: ui/clone.ui:139
+#, fuzzy
+#| msgid "C_onnection:"
+msgid "Connection:"
+msgstr "সংযোগ: (_o)"
 
-#: ui/clone.ui:359 ui/createvm.ui:2241
+#: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr ""
 
-#: ui/clone.ui:449
-msgid ""
-"<span size='small'>Cloning creates a new, independent copy of the original "
-"disk. Sharing\n"
-"uses the existing disk image for both the original and the new machine.</"
-"span>"
-msgstr ""
-"<span size='small'>ক্লোনিংয়ের ফলে, মূল ডিস্কের একটি নতুন ও স্বত্বন্ত্র প্রতিলিপি "
-"নির্মাণ করা হবে। য়ৌথ ব্যবাহরের\n"
-"ক্ষেত্রে, মূল ও নতুন মেশিন দুটিতেই বর্তমানে উপস্থিত ডিস্কের ইমেজ ব্যবহার করা হবে।</"
-"span>"
+#: ui/clone.ui:285
+#, fuzzy
+#| msgid "Details..."
+msgid "_Details..."
+msgstr "বিবরণ..."
 
-#: ui/clone.ui:489
+#: ui/clone.ui:354
 msgid ""
 "<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If "
 "you need to do things\n"
@@ -285,56 +269,39 @@ msgstr ""
 "স্ট্যাটিক IP পরিবর্তনের মতো কাজ অাপনাকে করতে হলে, দয়া করে virt-sysprep(1) টুল "
 "দেখুন</span>"
 
-#: ui/clone.ui:544
+#: ui/clone.ui:409
 msgid "C_lone"
 msgstr "ক্লোন করুন (_l)"
 
-#: ui/clone.ui:579
-msgid "Change MAC address"
-msgstr "MAC ঠিকানা পরিবর্তন করুন"
-
-#: ui/clone.ui:715
-msgid "New _MAC:"
-msgstr "নতুন MAC: (_M)"
-
-#: ui/clone.ui:752 ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377
-#: ui/details.ui:4507 ui/details.ui:4663
-msgid "Type:"
-msgstr "ধরন:"
-
-#: ui/clone.ui:769
-msgid "MAC:"
-msgstr "MAC:"
-
-#: ui/clone.ui:813
+#: ui/clone.ui:447
 msgid "Change storage path"
 msgstr "উৎসের পাথ পরিবর্তন করুন"
 
-#: ui/clone.ui:955 ui/hoststorage.ui:434
+#: ui/clone.ui:585 ui/hoststorage.ui:434
 msgid "Size:"
 msgstr ""
 
-#: ui/clone.ui:971
+#: ui/clone.ui:601
 msgid "Target:"
 msgstr ""
 
-#: ui/clone.ui:988 ui/createvol.ui:438 ui/details.ui:4519
+#: ui/clone.ui:618 ui/createvol.ui:438 ui/details.ui:4519
 msgid "Path:"
 msgstr "পাথ:"
 
-#: ui/clone.ui:1010
+#: ui/clone.ui:640
 msgid "Existing disk"
 msgstr "উপস্থিত ডিস্ক"
 
-#: ui/clone.ui:1042
+#: ui/clone.ui:671
 msgid "New _Path:"
 msgstr ""
 
-#: ui/clone.ui:1056
+#: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr "ভার্চুয়াল মেশিনের জন্য নতুন ডিস্ক (ক্লোন) নির্মাণ করুন (_l)"
 
-#: ui/clone.ui:1084 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/fsdetails.ui:202
 msgid "_Browse..."
 msgstr "ব্রাউজ করুন...(_B)"
 
@@ -716,7 +683,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "এই ভার্চুয়াল মেশিনের জন্য সংগ্রহস্থল সক্রিয় করুন (_E)"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:232
-#: virtManager/addhardware.py:1045
+#: virtManager/addhardware.py:1045 virtManager/clone.py:276
 msgid "Storage"
 msgstr "সংগ্রহস্থল"
 
@@ -1105,6 +1072,11 @@ msgstr ""
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>ভার্চুয়াল নেটওয়ার্ক ইন্টারফেস</b>"
 
+#: ui/details.ui:3208 ui/details.ui:4064 ui/details.ui:4377 ui/details.ui:4507
+#: ui/details.ui:4663
+msgid "Type:"
+msgstr "ধরন:"
+
 #: ui/details.ui:3221
 msgid "Mode:"
 msgstr "মোড:"
@@ -1191,7 +1163,7 @@ msgstr "<b>কনট্রোলার</b>"
 msgid "<b>Filesystem</b>"
 msgstr "<b>ফাইল-সিস্টেম</b>"
 
-#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:387
+#: ui/details.ui:4279 ui/fsdetails.ui:240 ui/migrate.ui:391
 msgid "M_ode:"
 msgstr "মোড: (_o)"
 
@@ -1276,7 +1248,7 @@ msgstr "ঠিকানা (_e):"
 msgid "Pa_ssword:"
 msgstr "পাসওয়ার্ড: (_s)"
 
-#: ui/gfxdetails.ui:150 ui/migrate.ui:244
+#: ui/gfxdetails.ui:150 ui/migrate.ui:248
 msgid "_Port:"
 msgstr "পোর্ট: (_P)"
 
@@ -1552,31 +1524,31 @@ msgstr "বন্ধ করুন (_S)"
 msgid "Migrate the virtual machine"
 msgstr "ভার্চুয়াল মেশিন মাইগ্রেট করুন"
 
-#: ui/migrate.ui:103
+#: ui/migrate.ui:107
 msgid "Migrating VM:"
 msgstr ""
 
-#: ui/migrate.ui:119
+#: ui/migrate.ui:123
 msgid "Original host:"
 msgstr ""
 
-#: ui/migrate.ui:135
+#: ui/migrate.ui:139
 msgid "New _host:"
 msgstr ""
 
-#: ui/migrate.ui:230
+#: ui/migrate.ui:234
 msgid "_Address:"
 msgstr "ঠিকানা: (_A)"
 
-#: ui/migrate.ui:300
+#: ui/migrate.ui:304
 msgid "0"
 msgstr "0"
 
-#: ui/migrate.ui:314 ui/migrate.ui:354
+#: ui/migrate.ui:318 ui/migrate.ui:358
 msgid "Let libvirt decide"
 msgstr ""
 
-#: ui/migrate.ui:383
+#: ui/migrate.ui:387
 msgid ""
 "Tunnel migration through the libvirtd connection channel, rather than having "
 "the hypervisor open a separate network connection to the destination. The "
@@ -1588,15 +1560,15 @@ msgid ""
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
 
-#: ui/migrate.ui:470
+#: ui/migrate.ui:474
 msgid "_URI:"
 msgstr ""
 
-#: ui/migrate.ui:507
+#: ui/migrate.ui:511
 msgid "<b>Connectivity</b>"
 msgstr "<b>সংযোগ ব্যবস্থা</b>"
 
-#: ui/migrate.ui:538
+#: ui/migrate.ui:542
 msgid ""
 "By default libvirt will refuse to migrate a VM for certain configurations "
 "that could lead to malfunctioning guests, like if a disk's cache mode is not "
@@ -1605,11 +1577,11 @@ msgid ""
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
 
-#: ui/migrate.ui:542
+#: ui/migrate.ui:546
 msgid "A_llow unsafe:"
 msgstr ""
 
-#: ui/migrate.ui:568
+#: ui/migrate.ui:572
 msgid ""
 "By default, the migrated VM config is removed from the source host, and "
 "saved persistently on the destination host. The destination host is "
@@ -1621,15 +1593,15 @@ msgid ""
 "is shutdown."
 msgstr ""
 
-#: ui/migrate.ui:572
+#: ui/migrate.ui:576
 msgid "_Temporary move:"
 msgstr ""
 
-#: ui/migrate.ui:602
+#: ui/migrate.ui:606
 msgid "Advanced options"
 msgstr "উন্নত বিকল্প"
 
-#: ui/migrate.ui:649
+#: ui/migrate.ui:655
 msgid "_Migrate"
 msgstr "মাইগ্রেট করুন (_M)"
 
@@ -2381,7 +2353,7 @@ msgstr ""
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:702 virtManager/clone.py:105
+#: virtManager/addhardware.py:702
 msgid "Disk device"
 msgstr "ডিস্ক ডিভাইস"
 
@@ -2527,125 +2499,72 @@ msgstr "কাজ বাতিল করা হচ্ছে..."
 msgid "Completed"
 msgstr "সমাপ্ত"
 
-#: virtManager/clone.py:52
+#: virtManager/clone.py:28 virtinst/cloner.py:183
 msgid "No storage to clone."
 msgstr "ক্লোন করার যোগ্য কোনো সংগ্রহস্থল উপলব্ধ নয়।"
 
-#: virtManager/clone.py:57
-msgid "Cannot clone unmanaged remote storage."
-msgstr "অপরিচালিত দূরবর্তী সংগ্রহস্থল ক্লোন করা সম্ভব নয়।"
-
-#: virtManager/clone.py:60
-msgid ""
-"Block devices to clone must be libvirt\n"
-"managed storage volumes."
-msgstr ""
-"ক্লোন করার জন্য চিহ্নিত ব্লক ডিভাইসগুলি\n"
-"libvirt পরিচালিত সংগ্রহের ভলিউম হওয়া আবশ্যক।"
-
-#: virtManager/clone.py:63 virtManager/delete.py:575
-msgid "No write access to parent directory."
-msgstr "ঊর্ধ্বতন ডিরেক্টরির মধ্যে লেখার অনুমতি নেই।"
-
-#: virtManager/clone.py:65 virtManager/delete.py:573
-msgid "Path does not exist."
-msgstr "পাথ বর্তমানে উপস্থিত নয়।"
-
-#: virtManager/clone.py:71
+#: virtManager/clone.py:110
 #, python-format
-msgid "Cannot clone %s storage pool."
+msgid "Disk target: %s"
 msgstr ""
 
-#: virtManager/clone.py:95
-msgid "Removable"
-msgstr "অপসারণযোগ্য"
-
-#: virtManager/clone.py:98
-msgid "Read Only"
-msgstr "শুধুমাত্র পাঠযোগ্য"
-
-#: virtManager/clone.py:100
-msgid "No write access"
-msgstr "লেখার অনুমতি অনুপস্থিত"
-
-#: virtManager/clone.py:109
-msgid "Shareable"
-msgstr "যৌথ ব্যবহারযোগ্য"
-
-#: virtManager/clone.py:127
+#: virtManager/clone.py:111
 #, python-format
-msgid "Error launching clone dialog: %s"
+msgid "Original path: %s"
 msgstr ""
 
-#: virtManager/clone.py:292 virtManager/clone.py:561
-msgid "Details..."
-msgstr "বিবরণ..."
-
-#: virtManager/clone.py:320
+#: virtManager/clone.py:113
 #, fuzzy, python-format
-#| msgid "Usermode"
-msgid "Usermode (%(mac)s)"
-msgstr "ইউজার-মোড"
+#| msgid "Deleting path '%s'"
+msgid "New path: %s"
+msgstr "'%s' পাথ মুছে ফেলা হচ্ছে"
 
-#: virtManager/clone.py:330
+#: virtManager/clone.py:117
 #, fuzzy, python-format
-#| msgid "%(currentmem)s of %(maxmem)s"
-msgid "%(netmode)s (%(mac)s)"
-msgstr "%(currentmem)s, সর্বমোট %(maxmem)s"
+#| msgid "Storage is marked as shareable."
+msgid "Storage is safe to share: %(reason)s"
+msgstr "যৌথ ব্যবহারের জন্য সংগ্রহস্থলটি চিহ্নিত করা হয়েছে।"
 
-#: virtManager/clone.py:335
-#, fuzzy, python-format
-#| msgid "Virtual Network is not active."
-msgid "Virtual Network %(netdevice)s (%(mac)s)"
-msgstr "ভার্চুয়াল নেটওয়ার্ক বর্তমানে নিষ্ক্রিয়।"
+#: virtManager/clone.py:121
+msgid "Sharing this storage is potentially dangerous."
+msgstr ""
 
-#: virtManager/clone.py:340
-#, fuzzy, python-format
-#| msgid "_Virtual Networks"
-msgid "Virtual Network (%(mac)s)"
-msgstr "ভার্চুয়াল নেটওয়ার্ক (_V)"
-
-#: virtManager/clone.py:346
+#: virtManager/clone.py:124
 #, python-format
-msgid "%(nettype)s %(netdevice)s (%(mac)s)"
+msgid "Storage is not cloneable: %(reason)s"
 msgstr ""
 
-#: virtManager/clone.py:352
-#, python-format
-msgid "%(nettype)s (%(mac)s)"
-msgstr ""
+#: virtManager/clone.py:136
+#, fuzzy
+#| msgid "No storage to clone."
+msgid "No storage."
+msgstr "ক্লোন করার যোগ্য কোনো সংগ্রহস্থল উপলব্ধ নয়।"
 
-#: virtManager/clone.py:422
-msgid "Nothing to clone."
-msgstr "ক্লোন করার উদ্দেশ্যে কিছুই উপস্থিত নেই।"
-
-#: virtManager/clone.py:553
-msgid "Clone this disk"
-msgstr "এই ডিস্ক ক্লোন করা হবে"
-
-#: virtManager/clone.py:557
+#: virtManager/clone.py:141
 #, python-format
 msgid "Share disk with %s"
 msgstr "%s-র সাথে যৌথরূপে ডিস্ক ব্যবহৃত হবে"
 
-#: virtManager/clone.py:569
-msgid "Storage cannot be shared or cloned."
-msgstr "সংগ্রহস্থল ক্লোন করা ও যৌথরূপে ব্যবহার করা যাবে না।"
+#: virtManager/clone.py:143
+msgid "Clone this disk"
+msgstr "এই ডিস্ক ক্লোন করা হবে"
 
-#: virtManager/clone.py:627
-msgid "One or more disks cannot be cloned or shared."
-msgstr "এক অথবা একাধিক ডিস্ক ক্লোন করা ও যৌথরূপে ব্যবহার করা যাবে না।"
-
-#: virtManager/clone.py:712
+#: virtManager/clone.py:181
 #, python-format
-msgid "Error changing MAC address: %s"
-msgstr "MAC ঠিকানা পরিবর্তন করতে ত্রুটি: %s"
+msgid "Error launching clone dialog: %s"
+msgstr ""
 
-#: virtManager/clone.py:738
+#: virtManager/clone.py:275
+#, fuzzy
+#| msgid "C_lone"
+msgid "Clone"
+msgstr "ক্লোন করুন (_l)"
+
+#: virtManager/clone.py:456
 msgid "Cloning will overwrite the existing file"
 msgstr "ক্লোন করা হলে, বর্তমান ফাইলটি মুছে যাবে"
 
-#: virtManager/clone.py:740
+#: virtManager/clone.py:457
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2653,21 +2572,23 @@ msgstr ""
 "উপস্থিত ইমেজ প্রয়োগ করা হলে, ক্লোন করার সময় পাথটি নতুন করে লেখা হবে। আপনি কি "
 "নিশ্চিতরূপে এই পাথ ব্যবহার করতে ইচ্ছুক?"
 
-#: virtManager/clone.py:752
-#, python-format
-msgid "Error changing storage path: %s"
-msgstr "সংগ্রহস্থলের পাথ পরিবর্তন করতে ত্রুটি: %s"
-
-#: virtManager/clone.py:804
-msgid "Skipping disks may cause data to be overwritten."
+#: virtManager/clone.py:486
+#, fuzzy
+#| msgid "Skipping disks may cause data to be overwritten."
+msgid "Sharing storage may cause data to be overwritten."
 msgstr "ডিস্ক উপেক্ষা করা হলে পুনরোরো তথ্য নতুন করে লেখার সম্ভাবনা রয়েছে।"
 
-#: virtManager/clone.py:805
-#, python-format
+#: virtManager/clone.py:487
+#, fuzzy, python-format
+#| msgid ""
+#| "The following disk devices will not be cloned:\n"
+#| "\n"
+#| "%s\n"
+#| "Running the new guest could overwrite data in these disk images."
 msgid ""
-"The following disk devices will not be cloned:\n"
+"The following disk devices will be shared with %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 "নিম্নলিখিত ডিস্ক ডিভাইসগুলি ক্লোন করা হবে না:\n"
@@ -2676,23 +2597,24 @@ msgstr ""
 "নতুন গেস্ট চালানো হলে, এই ডিস্ক ইমেজের মধ্যে উপস্থিত তথ্যগুলি মুছে নতুন করে লেখা হতে "
 "পারে।"
 
-#: virtManager/clone.py:822
+#: virtManager/clone.py:502
 #, fuzzy, python-format
 #| msgid "Error creating virtual machine clone '%s': %s"
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "ভার্চুয়াল মেশিনের ক্লোন '%s' নির্মাণ করতে ব্যর্থ: %s"
 
-#: virtManager/clone.py:838 virtManager/migrate.py:365
-#, python-format
-msgid "Uncaught error validating input: %s"
-msgstr "ইনপুট করা তথ্য যাচাই করার সময় উৎপন্ন ত্রুটির ব্যবস্থাপনা করা হয়নি: %s"
+#: virtManager/clone.py:560
+#, fuzzy, python-format
+#| msgid "Error changing pool settings: %s"
+msgid "Error with clone settings: %s"
+msgstr "পুল সেটিং পরিবর্তনে ত্রুটি: %s"
 
-#: virtManager/clone.py:843
+#: virtManager/clone.py:565
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "ভার্চুয়াল মেশিনের ক্লোন '%s' নির্মাণ করা হয়েছে"
 
-#: virtManager/clone.py:847
+#: virtManager/clone.py:570
 #, fuzzy, python-format
 #| msgid " and selected storage (this may take a while)"
 msgid ""
@@ -3288,6 +3210,14 @@ msgstr ""
 #: virtManager/delete.py:571
 msgid "Cannot delete unmanaged remote storage."
 msgstr "অপরিচালিত দূরবর্তী সংগ্রহস্থল মুছে ফেলা সম্ভব নয়।"
+
+#: virtManager/delete.py:573
+msgid "Path does not exist."
+msgstr "পাথ বর্তমানে উপস্থিত নয়।"
+
+#: virtManager/delete.py:575
+msgid "No write access to parent directory."
+msgstr "ঊর্ধ্বতন ডিরেক্টরির মধ্যে লেখার অনুমতি নেই।"
 
 #: virtManager/delete.py:577
 msgid "Cannot delete unmanaged block device."
@@ -4289,26 +4219,26 @@ msgstr ""
 msgid "Error changing pool settings: %s"
 msgstr "পুল সেটিং পরিবর্তনে ত্রুটি: %s"
 
-#: virtManager/lib/connectauth.py:52
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:155
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:161
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:165
+#: virtManager/lib/connectauth.py:163
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:169
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4318,45 +4248,45 @@ msgstr ""
 " - একটি Xen হোস্ট কার্নেল বুট হয়েছে\n"
 " - Xen পরিষেবা শুরু হয়েছে"
 
-#: virtManager/lib/connectauth.py:175
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:181
+#: virtManager/lib/connectauth.py:179
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' ডিমন যে চলছে তা যাচাই করুন।"
 
-#: virtManager/lib/connectauth.py:184
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:196
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "ভার্চুয়াল মেশিন ম্যানেজার সংযোগ বিফল"
 
-#: virtManager/lib/connectauth.py:271
+#: virtManager/lib/connectauth.py:269
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:275
+#: virtManager/lib/connectauth.py:273
 msgid ""
 "libvirtd is installed but not running. Start the libvirtd service to manage "
 "virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:281
+#: virtManager/lib/connectauth.py:279
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:288
+#: virtManager/lib/connectauth.py:286
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4555,71 +4485,76 @@ msgstr ""
 msgid "Disabled in preferences dialog."
 msgstr "পছন্দসই বৈশিষ্ট্যের ডায়লগ বক্সের মধ্যে নিষ্ক্রিয় করা হয়েছে।"
 
-#: virtManager/migrate.py:37
+#: virtManager/migrate.py:38
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "মাইগ্রেট ডায়লগ আরম্ভ করতে ত্রুটি: %s"
 
-#: virtManager/migrate.py:135
+#: virtManager/migrate.py:144
 msgid "Direct"
 msgstr ""
 
-#: virtManager/migrate.py:136
+#: virtManager/migrate.py:145
 msgid "Tunnelled"
 msgstr ""
 
-#: virtManager/migrate.py:150
+#: virtManager/migrate.py:161
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
 msgstr ""
 
-#: virtManager/migrate.py:211
+#: virtManager/migrate.py:222
 msgid "A valid destination connection must be selected."
 msgstr "গন্তব্যস্থলের একটি বৈধ সংযোগ নির্বাচন করা আবশ্যক।"
 
-#: virtManager/migrate.py:226
+#: virtManager/migrate.py:237
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
 
-#: virtManager/migrate.py:281
+#: virtManager/migrate.py:292
 #, python-format
 msgid "%(uri)s (Hypervisors do not match)"
 msgstr ""
 
-#: virtManager/migrate.py:283
+#: virtManager/migrate.py:294
 #, fuzzy, python-format
 #| msgid "Disconnected"
 msgid "%(uri)s (Disconnected)"
 msgstr "বিচ্ছিন্ন"
 
-#: virtManager/migrate.py:285
+#: virtManager/migrate.py:296
 #, python-format
 msgid "%(uri)s (Same connection)"
 msgstr ""
 
-#: virtManager/migrate.py:302
+#: virtManager/migrate.py:313
 msgid "No usable connections available."
 msgstr ""
 
-#: virtManager/migrate.py:342
+#: virtManager/migrate.py:353
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "গেস্ট সিস্টেম মাইগ্রেট করতে ব্যর্থ: %s"
 
-#: virtManager/migrate.py:383
+#: virtManager/migrate.py:381
+#, python-format
+msgid "Uncaught error validating input: %s"
+msgstr "ইনপুট করা তথ্য যাচাই করার সময় উৎপন্ন ত্রুটির ব্যবস্থাপনা করা হয়নি: %s"
+
+#: virtManager/migrate.py:399
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "VM '%s' মাইগ্রেট করা হচ্ছে"
 
-#: virtManager/migrate.py:384
+#: virtManager/migrate.py:400
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
 
-#: virtManager/migrate.py:395
+#: virtManager/migrate.py:411
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "মাইগ্রেশনের কাজ বাতিল করতে ত্রুটি: %s"
@@ -4649,11 +4584,11 @@ msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "নিষ্ক্রিয় ভার্চুয়াল মেশিনের কনফিগারেশনের মধ্যে নির্দিষ্ট ডিভাইসটি পাওয়া যায়নি: %s"
 
-#: virtManager/object/domain.py:1366
+#: virtManager/object/domain.py:1363
 msgid "Saving domain to disk"
 msgstr "ডিস্কের মধ্যে ডোমেইন সংরক্ষণ করা হচ্ছে"
 
-#: virtManager/object/domain.py:1418
+#: virtManager/object/domain.py:1415
 msgid "Migrating domain"
 msgstr "ডোমেইন মাইগ্রেট করা হচ্ছে"
 
@@ -5548,66 +5483,61 @@ msgstr "সংগ্রহস্থলের ভলিউম অবশ্যই 
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:46
+#: virtinst/cloner.py:45
 #, fuzzy, python-format
 #| msgid "Could not remove old vm '%s': %s"
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "পুরনো vm '%s' সরানো যায়নি: %s"
 
-#: virtinst/cloner.py:127
+#: virtinst/cloner.py:113
 #, python-format
-msgid "Invalid name for new guest: %s"
-msgstr "নতুন গেস্টের নাম অবৈধ: %s"
+msgid "Domain '%s' was not found."
+msgstr "ডোমেন '%s' খঁজে পাওয়া যায়নি।"
 
-#: virtinst/cloner.py:163
+#: virtinst/cloner.py:157
+#, python-format
+msgid "Clone onto existing storage volume is not currently supported: '%s'"
+msgstr "বিদ্যমান সংগ্রহস্থল ভলিউমে ক্লোন বর্তমানে সমর্থিত নয়: '%s'"
+
+#: virtinst/cloner.py:178
+#, python-format
+msgid "Disk path '%s' does not exist."
+msgstr ""
+
+#: virtinst/cloner.py:185
+msgid "Read Only"
+msgstr "শুধুমাত্র পাঠযোগ্য"
+
+#: virtinst/cloner.py:187
+#, fuzzy
+#| msgid "Storage is marked as shareable."
+msgid "Marked as shareable"
+msgstr "যৌথ ব্যবহারের জন্য সংগ্রহস্থলটি চিহ্নিত করা হয়েছে।"
+
+#: virtinst/cloner.py:249
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "ক্লোনিংয়ের জন্য '%s' পাথ ব্যবহার করা যায়নি: %s"
 
-#: virtinst/cloner.py:283
-#, fuzzy
-#| msgid "Original guest name or xml is required."
-msgid "Original guest name or XML is required."
-msgstr "প্রকৃত গেস্ট নাম বা xml প্রয়োজন।"
-
-#: virtinst/cloner.py:306
-msgid "Domain to clone must be shutoff."
-msgstr ""
-
-#: virtinst/cloner.py:328
-#, python-format
-msgid "Clone onto existing storage volume is not currently supported: '%s'"
-msgstr "বিদ্যমান সংগ্রহস্থল ভলিউমে ক্লোন বর্তমানে সমর্থিত নয়: '%s'"
-
-#: virtinst/cloner.py:402
-#, python-format
-msgid ""
-"More disks to clone than new paths specified. (%(passed)d specified, "
-"%(need)d needed"
-msgstr ""
-"যতগুলি নতুন পাথ উল্লেখ করা হয়েছে তার থেকে বেশি ডিস্ক ক্লোন করতে হবে। (%(passed)d "
-"উল্লেখ করা হয়েছে, %(need)d প্রয়োজনীয়"
-
-#: virtinst/cloner.py:416
-msgid ""
-"Setting the graphics device port to autoport, in order to avoid conflicting."
-msgstr "বিরোধ এড়াতে গ্র্যাফিক্স ডিভাইস পোর্ট autoport এ সেট করা হচ্ছে।"
-
-#: virtinst/cloner.py:578
-#, python-format
-msgid "Disk path '%s' does not exist."
-msgstr ""
-
-#: virtinst/cloner.py:583
+#: virtinst/cloner.py:265
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "প্রকৃত ডিস্ক তথ্য নির্ধারণ করা যায়নি: %s"
 
-#: virtinst/cloner.py:621
+#: virtinst/cloner.py:316
+msgid "Domain to clone must be shutoff."
+msgstr ""
+
+#: virtinst/cloner.py:351
+msgid ""
+"Setting the graphics device port to autoport, in order to avoid conflicting."
+msgstr "বিরোধ এড়াতে গ্র্যাফিক্স ডিভাইস পোর্ট autoport এ সেট করা হচ্ছে।"
+
+#: virtinst/cloner.py:488
 #, python-format
-msgid "Domain '%s' was not found."
-msgstr "ডোমেন '%s' খঁজে পাওয়া যায়নি।"
+msgid "Invalid name for new guest: %s"
+msgstr "নতুন গেস্টের নাম অবৈধ: %s"
 
 #: virtinst/devices/disk.py:218
 #, python-format
@@ -5627,18 +5557,18 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "এই ভলিউম ধরনের ক্ষেত্রে ফর্ম্যাট অ্যাট্রিবিউট সমর্থিত নয়"
 
-#: virtinst/devices/disk.py:731
+#: virtinst/devices/disk.py:735
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "ডিভাইস ধরন '%s' এর একটি পাথের প্রয়োজন"
 
-#: virtinst/devices/disk.py:739
+#: virtinst/devices/disk.py:743
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "বিদ্যমান নয় এমন পাথ '%s' -এর জন্য অবশ্যই স্টোরেজ তৈরির প্যারামিটার উল্লেখ করতে হবে।"
 
-#: virtinst/devices/disk.py:853
+#: virtinst/devices/disk.py:857
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5675,7 +5605,7 @@ msgstr "%(path)s সংগ্রহস্থল ব্যবহার করা 
 msgid "Permissions on '%s' did not stick"
 msgstr "'%s' এ অনুমতি স্থায়ী নয়"
 
-#: virtinst/diskbackend.py:528
+#: virtinst/diskbackend.py:525
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -5683,27 +5613,27 @@ msgstr ""
 "গেস্ট চলার সময়ে স্পার্স ফাইল সম্পূর্ণ ভাবে নির্দিষ্টকরণ করতে ফাইলসিস্টেমে পর্যাপ্ত খালি "
 "স্থান থাকবে না।"
 
-#: virtinst/diskbackend.py:533
+#: virtinst/diskbackend.py:530
 msgid "There is not enough free space to create the disk."
 msgstr "ডিস্ক তৈরি করার জন্য পর্যাপ্ত খালি স্থান নেই।"
 
-#: virtinst/diskbackend.py:538
+#: virtinst/diskbackend.py:535
 #, fuzzy, python-format
 #| msgid " %d M requested > %d M available"
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr " %d M অনুরোধ জানানো > %d M উপলব্ধ"
 
-#: virtinst/diskbackend.py:545
+#: virtinst/diskbackend.py:542
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "'%s' অস্তিত্বহীন ডিস্কের জন্য মাপ প্রয়োজনীয়"
 
-#: virtinst/diskbackend.py:555
+#: virtinst/diskbackend.py:552
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s ক্লোন করা হচ্ছে"
 
-#: virtinst/diskbackend.py:625
+#: virtinst/diskbackend.py:622
 #, fuzzy, python-format
 #| msgid "Error cloning diskimage %s to %s: %s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
@@ -5949,7 +5879,7 @@ msgstr ""
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "ডিফল্ট সংগ্রহস্থলের পুল '%s' নির্মাণ করা যায়নি: %s"
 
-#: virtinst/storage.py:220 virtinst/storage.py:554
+#: virtinst/storage.py:220 virtinst/storage.py:550
 msgid "Storage object"
 msgstr "সংগ্রহস্থল অবজেক্ট"
 
@@ -5978,23 +5908,23 @@ msgstr "সংগ্রহস্থল পুল প্রারম্ভ কর
 msgid "Could not set pool autostart flag: %s"
 msgstr "পুল স্বয়ং-প্রারম্ভ ফ্ল্যাগ সেট করা যায়নি: %s"
 
-#: virtinst/storage.py:560
+#: virtinst/storage.py:556
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "'%s' নাম অপর ভলিউম দ্বারা ইতিমধ্যেই ব্যবহৃত হচ্ছে।"
 
-#: virtinst/storage.py:649
+#: virtinst/storage.py:645
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "লজিক্যাল ভলিউম স্পার্স করা সমর্থিত নয়, নির্দিষ্টকরণ সক্ষমতার সমানে সেট করে"
 
-#: virtinst/storage.py:695
+#: virtinst/storage.py:691
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s' নির্দিষ্ট করা হচ্ছে"
 
-#: virtinst/storage.py:733
+#: virtinst/storage.py:729
 #, fuzzy, python-format
 #| msgid ""
 #| "There is not enough free space on the storage pool to create the volume. "
@@ -6006,7 +5936,7 @@ msgstr ""
 "ভলিউম তৈরি করার জন্য সংগ্রহস্থল পুলে পর্যাপ্ত খালি জায়গা নেই। (%d M অনুরোধ জানানো "
 "নির্দিষ্টকরণ > %d M উপলব্ধ)"
 
-#: virtinst/storage.py:740
+#: virtinst/storage.py:736
 #, fuzzy, python-format
 #| msgid ""
 #| "The requested volume capacity will exceed the available pool space when "
@@ -6019,19 +5949,13 @@ msgstr ""
 "ভলিউম সম্পূর্ণ ভাবে নির্দিষ্ট করা হলে, অনুরোধ জানানো ভলিউম সক্ষমতা উপলব্ধ পুল জায়গা "
 "ছাড়িয়ে যাবে। (%d M অনুরোধ জানানো সক্ষমতা > %d M উপলব্ধ)"
 
-#: virtinst/virtclone.py:25
+#: virtinst/virtclone.py:23
 msgid ""
-"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
-"specify one."
+"An original machine name is required, use '--original src_name' and try "
+"again."
 msgstr ""
 
-#: virtinst/virtclone.py:44
-msgid ""
-"An original machine name is required, use '--original ORIGINAL_GUEST' and "
-"try again."
-msgstr ""
-
-#: virtinst/virtclone.py:85
+#: virtinst/virtclone.py:70
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6050,42 +5974,42 @@ msgstr ""
 "সরঞ্জামের সাহায্যে পাসওয়ার্ড পরিবর্তন, স্ট্যাটিক অাইপি ঠিকানা পরিবর্তন, ইত্যাদি সম্ভব "
 "নয়। এই ধরনের পরিবর্তনের জন্য, দয়া করে virt-sysprep(1) দেখুন।"
 
-#: virtinst/virtclone.py:95 virtinst/virtinstall.py:858
+#: virtinst/virtclone.py:80 virtinst/virtinstall.py:858
 msgid "General Options"
 msgstr "সাধারণ বিকল্প"
 
-#: virtinst/virtclone.py:97
+#: virtinst/virtclone.py:82
 msgid "Name of the original guest to clone."
 msgstr ""
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:84
 msgid "XML file to use as the original guest."
 msgstr "প্রকৃত গেস্ট হিসাবে যে XML ফাইল ব্যবহার করতে হবে।"
 
-#: virtinst/virtclone.py:101
+#: virtinst/virtclone.py:86
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
 "প্রকৃত গেস্ট কনফিগারেশন থেকে ক্লোন নাম এবং স্টোরেজ পাথ স্বয়ংক্রিয় ভাবে প্রস্তুত করুন।"
 
-#: virtinst/virtclone.py:104
+#: virtinst/virtclone.py:89
 msgid "Name for the new guest"
 msgstr "নতুন গেস্টের নাম"
 
-#: virtinst/virtclone.py:107
+#: virtinst/virtclone.py:92
 msgid "use btrfs COW lightweight copy"
 msgstr ""
 
-#: virtinst/virtclone.py:109
+#: virtinst/virtclone.py:94
 msgid "Storage Configuration"
 msgstr "সংগ্রহস্থল কনফিগারেশন"
 
-#: virtinst/virtclone.py:111
+#: virtinst/virtclone.py:96
 msgid "New file to use as the disk image for the new guest"
 msgstr "নতুন গেস্টের জন্য ডিস্ক ছবি হিসাবে যে নতুন ফাইল ব্যবহার করতে হবে"
 
-#: virtinst/virtclone.py:114
+#: virtinst/virtclone.py:99
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6093,56 +6017,61 @@ msgstr ""
 "ডিভাইসগুলি অনুলিপি করতে বলপ্রয়োগ করুন (উদাঃ যদি 'hdc' একটি readonly cdrom ডিভাইস "
 "হলে, --force-copy=hdc)"
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:102
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 
-#: virtinst/virtclone.py:122
+#: virtinst/virtclone.py:107
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "ক্লোনের ডিস্ক ছবির জন্য একটি স্পার্স ফাইল ব্যবহার করবেন না"
 
-#: virtinst/virtclone.py:126
+#: virtinst/virtclone.py:111
 msgid ""
-"Do not clone storage, new disk images specified via --file are preserved "
-"unchanged"
+"Do not clone storage contents to specified file paths, their contents will "
+"be left untouched. This requires specifying existing paths for every "
+"cloneable disk image."
 msgstr ""
-"স্টোরেজ ক্লোন করবেন না, --file এর মাধ্যমে উল্লিখিত নতুন ডিস্ক ছবিগুলি অপরিবর্তিত "
-"ভাবে সংরক্ষিত হয়"
 
-#: virtinst/virtclone.py:129
+#: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
 msgstr ""
 
-#: virtinst/virtclone.py:131
+#: virtinst/virtclone.py:118
 msgid "Networking Configuration"
 msgstr "নেটওয়ার্ক সংক্রান্ত কনফিগারেশন"
 
-#: virtinst/virtclone.py:133
+#: virtinst/virtclone.py:120
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
 "ক্লোন গেস্টের জন্য নতুন নির্দিষ্ট MAC ঠিকানা। ডিফল্ট হল এক অনির্দিষ্ট ভাবে প্রস্তুত MAC"
 
-#: virtinst/virtclone.py:136 virtinst/virtinstall.py:962
-#: virtinst/virtxml.py:394
+#: virtinst/virtclone.py:123 virtinst/virtinstall.py:962
+#: virtinst/virtxml.py:390
 msgid "Miscellaneous Options"
 msgstr "বিবিধ বিকল্প"
 
-#: virtinst/virtclone.py:165
+#: virtinst/virtclone.py:151
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
 
-#: virtinst/virtclone.py:206
+#: virtinst/virtclone.py:183
+msgid ""
+"A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
+"specify one."
+msgstr ""
+
+#: virtinst/virtclone.py:201
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "'%s' ক্লোন সফলভাবে তৈরি হয়েছে।"
 
-#: virtinst/virtclone.py:217 virtinst/virtinstall.py:1071
+#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1071
 msgid "Installation aborted at user request"
 msgstr "ব্যবহারকারীর অনুরোধের ভিত্তিতে ইনস্টলেশান পরিত্যাগ করা হয়েছে"
 
@@ -6452,52 +6381,52 @@ msgstr ""
 msgid "Minutes to wait for install to complete."
 msgstr "ইনস্টল সম্পূর্ণ হতে খুব অল্প সময় বাকি অাছে।"
 
-#: virtinst/virtxml.py:36
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "দয়া করে 'হ্যাঁ' বা 'না' দিন।"
 
-#: virtinst/virtxml.py:84
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "অবৈধ --edit বিকল্প '%s'"
 
-#: virtinst/virtxml.py:87
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr ""
 
-#: virtinst/virtxml.py:90
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgstr ""
 
-#: virtinst/virtxml.py:108
+#: virtinst/virtxml.py:104
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:120
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s -এর একটি অবশ্যই উল্লেখ করতে হবে।"
 
-#: virtinst/virtxml.py:127
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "Conflicting options %s"
 msgstr "বিরোধমূলক বিকল্প %s"
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:134
 msgid "No change specified."
 msgstr "কোনো পরিবর্তন উল্লেখ করা হয়নি।"
 
-#: virtinst/virtxml.py:140
+#: virtinst/virtxml.py:136
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "শুধুমাত্র একটি পরিবর্তন অপারেশন উল্লেখ করা যেতে পারে (বিরোধমূলক বিকল্প %s)"
 
-#: virtinst/virtxml.py:153
+#: virtinst/virtxml.py:149
 #, fuzzy, python-format
 #| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgid ""
@@ -6505,87 +6434,87 @@ msgid ""
 "'--edit'"
 msgstr "'--edit %s' --%s -এর ক্ষেত্রে অর্থপূর্ণ নয়, শুধু খালি '--edit' ব্যবহার করুন"
 
-#: virtinst/virtxml.py:158
+#: virtinst/virtxml.py:154
 msgid "--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:165
+#: virtinst/virtxml.py:161
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device --%s -এর সংগে ব্যবহার করা সম্ভব নয়"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:172
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device --%s -এর সাথে ব্যবহার করা সম্ভব নয়"
 
-#: virtinst/virtxml.py:179
+#: virtinst/virtxml.py:175
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 
-#: virtinst/virtxml.py:192
+#: virtinst/virtxml.py:188
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml --%s -এর ক্ষেত্রে সমর্থিত নয়"
 
-#: virtinst/virtxml.py:195
+#: virtinst/virtxml.py:191
 msgid "--os-variant is not supported with --build-xml"
 msgstr ""
 
-#: virtinst/virtxml.py:221
+#: virtinst/virtxml.py:217
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "পরিবর্তিত XML দিয়ে '%s' নির্দিষ্ট করবেন?"
 
-#: virtinst/virtxml.py:229
+#: virtinst/virtxml.py:225
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "ডোমেন '%s' সফলভাবে নির্দিষ্ট করা হয়েছে।"
 
-#: virtinst/virtxml.py:236
+#: virtinst/virtxml.py:232
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:246 virtinst/virtxml.py:512
+#: virtinst/virtxml.py:242 virtinst/virtxml.py:508
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "ডোমেইন আরম্ভ করতে ব্যর্থ"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:516
+#: virtinst/virtxml.py:247 virtinst/virtxml.py:512
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:283
+#: virtinst/virtxml.py:279
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device action %(action)s: %(error)s"
 msgstr "%s ডিভাইসের প্রচেষ্টার সময়ে সমস্যা হয়েছে: %s"
 
-#: virtinst/virtxml.py:289
+#: virtinst/virtxml.py:285
 #, python-format
 msgid "Device %s successful."
 msgstr "ডিভাইস %s অসফল।"
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:309
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:332
+#: virtinst/virtxml.py:328
 msgid "Edit libvirt XML using command line options."
 msgstr "কম্যান্ড লাইন বিকল্প ব্যবহার করে, libvirt XML সম্পাদনা করুন।"
 
-#: virtinst/virtxml.py:338
+#: virtinst/virtxml.py:334
 msgid "Domain name, id, or uuid"
 msgstr "ডোমেন নাম, অাইডি, বা uuid"
 
-#: virtinst/virtxml.py:340
+#: virtinst/virtxml.py:336
 msgid "XML actions"
 msgstr "XML কাজ"
 
-#: virtinst/virtxml.py:342
+#: virtinst/virtxml.py:338
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6599,7 +6528,7 @@ msgstr ""
 "--edit all --disk ... (সকল ডিস্ক ডিভাইস সম্পাদনা)\n"
 "--edit target=hda --disk ... (ডিস্ক 'hda' সম্পাদনা)\n"
 
-#: virtinst/virtxml.py:348
+#: virtinst/virtxml.py:344
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6611,7 +6540,7 @@ msgstr ""
 "--remove-device --disk all (সকল ডিস্ক সরান)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:353
+#: virtinst/virtxml.py:349
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6619,17 +6548,17 @@ msgstr ""
 "নির্দিষ্ট ডিভাইস যোগ করুন। উদাহরণ:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:352
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:359
+#: virtinst/virtxml.py:355
 msgid "Output options"
 msgstr "অাউটপুট বিকল্প"
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:357
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6641,73 +6570,73 @@ msgstr ""
 "--remove-device দিয়ে, এটি একটি হটঅানপ্লাগ অপারেশন।\n"
 "--edit দিয়ে, এটি একটি অাপডেট ডিভাইস অপারেশন।"
 
-#: virtinst/virtxml.py:367
+#: virtinst/virtxml.py:363
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "ডোমেন নির্দিষ্ট করতে বলপ্রয়োগ করুন। a --print বিকল্প নির্দিষ্ট করা থাকলে তবেই "
 "প্রয়োজনীয়।"
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:366
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:373
+#: virtinst/virtxml.py:369
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:371
 msgid "Only print the requested change, in diff format"
 msgstr "অনুরোধ জানানো পরিবর্তনটি একটি অালাদা ফর্ম্যাটে প্রিন্ট করুন"
 
-#: virtinst/virtxml.py:377
+#: virtinst/virtxml.py:373
 msgid "Only print the requested change, in full XML format"
 msgstr "শুধুমাত্র অনুরোধা জানানো পরিবর্তনটি সম্পূর্ণ XML ফর্ম্যাটে প্রিন্ট করুন"
 
-#: virtinst/virtxml.py:379
+#: virtinst/virtxml.py:375
 msgid "Require confirmation before saving any results."
 msgstr "কোনো ফলাফল সংরক্ষণ করার পূর্বে নিশ্চিতকরণের প্রয়োজন।"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:379
 msgid "XML options"
 msgstr "XML বিকল্প"
 
-#: virtinst/virtxml.py:422
+#: virtinst/virtxml.py:418
 msgid "Can't use --confirm with stdin input."
 msgstr "--confirm, stdin ইনপুট ছাড়া ব্যবহার করা সম্ভব নয়।"
 
-#: virtinst/virtxml.py:424
+#: virtinst/virtxml.py:420
 msgid "Can't use --update with stdin input."
 msgstr "--update, stdin ইনপুটের সাথে ব্যবহার করা সম্ভব নয়।"
 
-#: virtinst/virtxml.py:427
+#: virtinst/virtxml.py:423
 msgid "A domain must be specified"
 msgstr "অবশ্যই একটি ডোমেন উল্লেখ করতে হবে"
 
-#: virtinst/virtxml.py:455
+#: virtinst/virtxml.py:451
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--update for --%s -এর পদ্ধতি অজানা"
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:476
 msgid "Cannot mix --update and --start"
 msgstr ""
 
-#: virtinst/virtxml.py:488
+#: virtinst/virtxml.py:484
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:521
+#: virtinst/virtxml.py:517
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:523
+#: virtinst/virtxml.py:519
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:536
+#: virtinst/virtxml.py:532
 msgid "Aborted at user request"
 msgstr "ব্যবহারকারীর অনুরোধে পরিত্যাগ করা হয়েছে"
 
@@ -6729,6 +6658,111 @@ msgstr ""
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s নাম '%s' এ '%s'  অক্ষর থাকতে পারে না।"
+
+#~ msgid "Create clone based on:"
+#~ msgstr "এর ভিত্তিতে ক্লোন নির্মাণ করুন:"
+
+#~ msgid "Destination host:"
+#~ msgstr "গন্তব্য হোস্ট:"
+
+#~ msgid "No networking devices"
+#~ msgstr "নেটওয়ার্ক ব্যবস্থার নতুন ডিভাইস"
+
+#~ msgid "No storage to clone"
+#~ msgstr "ক্লোন করার যোগ্য কোনো সংগ্রহস্থল উপস্থিত নেই"
+
+#~ msgid ""
+#~ "<span size='small'>Cloning creates a new, independent copy of the "
+#~ "original disk. Sharing\n"
+#~ "uses the existing disk image for both the original and the new machine.</"
+#~ "span>"
+#~ msgstr ""
+#~ "<span size='small'>ক্লোনিংয়ের ফলে, মূল ডিস্কের একটি নতুন ও স্বত্বন্ত্র প্রতিলিপি "
+#~ "নির্মাণ করা হবে। য়ৌথ ব্যবাহরের\n"
+#~ "ক্ষেত্রে, মূল ও নতুন মেশিন দুটিতেই বর্তমানে উপস্থিত ডিস্কের ইমেজ ব্যবহার করা হবে।</"
+#~ "span>"
+
+#~ msgid "Change MAC address"
+#~ msgstr "MAC ঠিকানা পরিবর্তন করুন"
+
+#~ msgid "New _MAC:"
+#~ msgstr "নতুন MAC: (_M)"
+
+#~ msgid "MAC:"
+#~ msgstr "MAC:"
+
+#~ msgid "Cannot clone unmanaged remote storage."
+#~ msgstr "অপরিচালিত দূরবর্তী সংগ্রহস্থল ক্লোন করা সম্ভব নয়।"
+
+#~ msgid ""
+#~ "Block devices to clone must be libvirt\n"
+#~ "managed storage volumes."
+#~ msgstr ""
+#~ "ক্লোন করার জন্য চিহ্নিত ব্লক ডিভাইসগুলি\n"
+#~ "libvirt পরিচালিত সংগ্রহের ভলিউম হওয়া আবশ্যক।"
+
+#~ msgid "Removable"
+#~ msgstr "অপসারণযোগ্য"
+
+#~ msgid "No write access"
+#~ msgstr "লেখার অনুমতি অনুপস্থিত"
+
+#~ msgid "Shareable"
+#~ msgstr "যৌথ ব্যবহারযোগ্য"
+
+#, fuzzy
+#~| msgid "Usermode"
+#~ msgid "Usermode (%(mac)s)"
+#~ msgstr "ইউজার-মোড"
+
+#, fuzzy
+#~| msgid "%(currentmem)s of %(maxmem)s"
+#~ msgid "%(netmode)s (%(mac)s)"
+#~ msgstr "%(currentmem)s, সর্বমোট %(maxmem)s"
+
+#, fuzzy
+#~| msgid "Virtual Network is not active."
+#~ msgid "Virtual Network %(netdevice)s (%(mac)s)"
+#~ msgstr "ভার্চুয়াল নেটওয়ার্ক বর্তমানে নিষ্ক্রিয়।"
+
+#, fuzzy
+#~| msgid "_Virtual Networks"
+#~ msgid "Virtual Network (%(mac)s)"
+#~ msgstr "ভার্চুয়াল নেটওয়ার্ক (_V)"
+
+#~ msgid "Nothing to clone."
+#~ msgstr "ক্লোন করার উদ্দেশ্যে কিছুই উপস্থিত নেই।"
+
+#~ msgid "Storage cannot be shared or cloned."
+#~ msgstr "সংগ্রহস্থল ক্লোন করা ও যৌথরূপে ব্যবহার করা যাবে না।"
+
+#~ msgid "One or more disks cannot be cloned or shared."
+#~ msgstr "এক অথবা একাধিক ডিস্ক ক্লোন করা ও যৌথরূপে ব্যবহার করা যাবে না।"
+
+#~ msgid "Error changing MAC address: %s"
+#~ msgstr "MAC ঠিকানা পরিবর্তন করতে ত্রুটি: %s"
+
+#~ msgid "Error changing storage path: %s"
+#~ msgstr "সংগ্রহস্থলের পাথ পরিবর্তন করতে ত্রুটি: %s"
+
+#, fuzzy
+#~| msgid "Original guest name or xml is required."
+#~ msgid "Original guest name or XML is required."
+#~ msgstr "প্রকৃত গেস্ট নাম বা xml প্রয়োজন।"
+
+#~ msgid ""
+#~ "More disks to clone than new paths specified. (%(passed)d specified, "
+#~ "%(need)d needed"
+#~ msgstr ""
+#~ "যতগুলি নতুন পাথ উল্লেখ করা হয়েছে তার থেকে বেশি ডিস্ক ক্লোন করতে হবে। "
+#~ "(%(passed)d উল্লেখ করা হয়েছে, %(need)d প্রয়োজনীয়"
+
+#~ msgid ""
+#~ "Do not clone storage, new disk images specified via --file are preserved "
+#~ "unchanged"
+#~ msgstr ""
+#~ "স্টোরেজ ক্লোন করবেন না, --file এর মাধ্যমে উল্লিখিত নতুন ডিস্ক ছবিগুলি অপরিবর্তিত "
+#~ "ভাবে সংরক্ষিত হয়"
 
 #~ msgid "RAM:"
 #~ msgstr "RAM:"
