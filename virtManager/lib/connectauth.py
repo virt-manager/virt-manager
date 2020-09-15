@@ -7,6 +7,7 @@
 import collections
 import os
 import re
+import shutil
 import time
 
 from gi.repository import GLib
@@ -202,65 +203,12 @@ def connect_error(conn, errmsg, tb, warnconsole):
 # App first run connection setup #
 ##################################
 
-def _start_libvirtd(config):
-    log.debug("Trying to start libvirtd through systemd")
-
-    unitname = "libvirtd.service"
-    libvirtd_installed = False
-    libvirtd_active = False
-    unitpath = None
-
-    # Fetch all units from systemd
-    try:
-        bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-        systemd = Gio.DBusProxy.new_sync(bus, 0, None,
-                                 "org.freedesktop.systemd1",
-                                 "/org/freedesktop/systemd1",
-                                 "org.freedesktop.systemd1.Manager", None)
-        units = systemd.ListUnits()
-        log.debug("Successfully listed units via systemd")
-    except Exception:  # pragma: no cover
-        units = []
-        log.exception("Couldn't connect to systemd")
-        libvirtd_installed = os.path.exists("/var/run/libvirt")
-        libvirtd_active = os.path.exists("/var/run/libvirt/libvirt-sock")
-
-    # Check if libvirtd is installed and running
-    for unitinfo in units:
-        if unitinfo[0] != unitname:
-            continue
-        libvirtd_installed = True
-        libvirtd_active = unitinfo[3] == "active"
-        unitpath = unitinfo[6]
-        break
-
-    log.debug("libvirtd_installed=%s libvirtd_active=%s unitpath=%s",
-            libvirtd_installed, libvirtd_active, unitpath)
-
-    # If it's not running, try to start it
-    try:
-        if unitpath and libvirtd_installed and not libvirtd_active:  # pragma: no cover
-            unit = Gio.DBusProxy.new_sync(
-                    bus, 0, None,
-                    "org.freedesktop.systemd1", unitpath,
-                    "org.freedesktop.systemd1.Unit", None)
-            if config.CLITestOptions.fake_systemd_success:
-                unit.Start("(s)", "fail")
-                time.sleep(2)
-                libvirtd_active = True
-    except Exception:  # pragma: no cover
-        log.exception("Error starting libvirtd")
-
-    return libvirtd_installed, libvirtd_active
-
-
 def setup_first_uri(config, tryuri):
-    libvirtd_installed, libvirtd_active = _start_libvirtd(config)
-    if config.CLITestOptions.fake_systemd_success:
-        libvirtd_installed = True
-        libvirtd_active = True
+    libvirtd_installed = bool(shutil.which("libvirtd"))
+    if config.CLITestOptions.fake_no_libvirtd:
+        libvirtd_installed = False
 
-    if tryuri and libvirtd_installed and libvirtd_active:
+    if tryuri and libvirtd_installed:
         return
 
     # Manager fail message
@@ -269,9 +217,6 @@ def setup_first_uri(config, tryuri):
         msg += _("The libvirtd service does not appear to be installed. "
                  "Install and run the libvirtd service to manage "
                  "virtualization on this host.")
-    elif not libvirtd_active:  # pragma: no cover
-        msg += _("libvirtd is installed but not running. Start the "
-                 "libvirtd service to manage virtualization on this host.")
 
     if not tryuri or "qemu" not in tryuri:
         if msg:
@@ -286,7 +231,4 @@ def setup_first_uri(config, tryuri):
         msg += _("A virtualization connection can be manually "
                  "added via File->Add Connection")
 
-    if (tryuri is None or
-        not libvirtd_installed or
-        not libvirtd_active):
-        return msg
+    return msg or None

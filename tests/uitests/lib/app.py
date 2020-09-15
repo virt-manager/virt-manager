@@ -159,7 +159,7 @@ class VMMDogtailApp(object):
             window_name=None, xmleditor_enabled=False, keyfile=None,
             break_setfacl=False, first_run=True, no_fork=True,
             will_fail=False, enable_libguestfs=False,
-            firstrun_uri=None, fake_systemd_success=True):
+            firstrun_uri=None):
         extra_opts = extra_opts or []
 
         if tests.utils.TESTCONFIG.debug and no_fork:
@@ -191,8 +191,6 @@ class VMMDogtailApp(object):
             cmd.append("--test-options=enable-libguestfs")
         if enable_libguestfs is False:
             cmd.append("--test-options=disable-libguestfs")
-        if fake_systemd_success:
-            cmd.append("--test-options=fake-systemd-success")
         if keyfile:
             import atexit
             import tempfile

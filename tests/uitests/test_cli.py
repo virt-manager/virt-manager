@@ -123,10 +123,22 @@ class VMMCLI(lib.testcase.UITestCase):
         self.app.root.find("test default", "table cell")
 
     def testCLIFirstRunURIBad(self):
-        # Emulate first run with a URI that will succeed
+        # Emulate first run with a URI that will not succeed
         self.app.open(use_uri=False, firstrun_uri="bad:///uri")
         self.app.topwin.find("bad uri", "table cell")
         self.app.click_alert_button("bad:///uri", "Close")
+
+    def testCLIFirstRunNoLibvirtd(self):
+        # Emulate first run with no libvirtd detected
+        self.app.open(use_uri=False, firstrun_uri="bad:///uri",
+                extra_opts=["--test-options=fake-no-libvirtd"])
+        errlabel = self.app.topwin.find("error-label")
+        lib.utils.check(
+                lambda: "Checking for virtualization" in errlabel.text)
+        lib.utils.check(
+                lambda: "libvirtd service does not appear" in errlabel.text)
+        lib.utils.check(
+                lambda: "detect a default hypervisor" in errlabel.text)
 
     def testCLITraceLibvirt(self):
         # Just test this for code coverage
