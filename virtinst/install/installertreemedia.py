@@ -66,11 +66,9 @@ class InstallerTreeMedia(object):
                     "like HTTP, or manually mount the NFS share and install "
                     "from the local directory mount point.")
 
-            raise ValueError(
-                _("Validating install media '%(media)s' failed: %(error)s") % {
-                    "media": str(path),
-                    "error": str(e),
-                })
+            msg = (_("Validating install media '%(media)s' failed: %(error)s") %
+                    {"media": str(path), "error": str(e)})
+            raise ValueError(msg) from None
 
     @staticmethod
     def get_system_scratchdir(guest):

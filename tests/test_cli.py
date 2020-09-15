@@ -299,6 +299,7 @@ class Command(object):
                     dom = conn.defineXML(domxml)
                     dom.undefine()
                 except Exception as e:
+                    # pylint: disable=raise-missing-from
                     raise AssertionError("Bad XML:\n%s\n\nError was: %s: %s" %
                             (domxml, e.__class__.__name__, str(e)))
 

@@ -207,6 +207,7 @@ def test_create(testconn, xml, define_func="defineXML"):
         func = getattr(testconn, define_func)
         obj = func(xml)
     except Exception as e:
+        # pylint: disable=raise-missing-from
         raise RuntimeError(str(e) + "\n" + xml)
 
     try:
