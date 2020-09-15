@@ -7,9 +7,9 @@ import subprocess
 import sys
 import time
 
+from gi.repository import Gio
 import dogtail.rawinput
 import dogtail.tree
-from gi.repository import Gio
 
 from virtinst import log
 import tests.utils
