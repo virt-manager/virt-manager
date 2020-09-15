@@ -1,5 +1,44 @@
 # Virtual Machine Manager News
 
+## Release 3.0.0 (September 15, 2020)
+- virt-install --cloud-init support (Athina Plaskasoviti, Cole Robinson)
+- The virt-convert tool has been removed. Please use virt-v2v instead
+- A handful of UI XML configuration options have been removed. The XML
+  editor can be used instead. For a larger discussion see this thread:
+  https://www.redhat.com/archives/virt-tools-list/2019-June/msg00117.html
+- The 'New VM' UI now has a 'Manual Install' option which creates a VM
+  without any required install media
+- In the 'New VM' UI, the network/pxe install option has been removed. If
+  you need network boot, choose 'Manual Install' and set the boot device after
+  initial VM creation
+- 'Clone VM' UI has been reworked and simplified
+- 'Migrate VM' UI now has an XML editor for the destination VM
+- Global and per-vm option to disable graphical console autoconnect. This
+  makes it easier to use virt-manager alongside another client like virt-
+  viewer
+- virt-manager: set guest time after VM restore (Michael Weiser)
+- virt-manager: option to delete storage when removing disk device (Lily
+  Nie)
+- virt-manager: show warnings if snapshot operation is unsafe (Michael
+  Weiser)
+- Unattended install improvements (Fabiano Fidêncio)
+- cli: new --xml XPATH=VAL option for making direct XML changes
+- virt-install: new --reinstall=DOMAIN option
+- virt-install: new --autoconsole text|graphical|none option
+- virt-install: new --os-variant detect=on,require=on suboptions
+- cli: --clock, --keywrap, --blkiotune, --cputune additions (Athina
+  Plaskasoviti)
+- cli: add --features kvm.hint-dedicated.state= (Menno Lageman)
+- cli:--iommu option (Menno Lageman)
+- cli: Add --graphics websocket= support (Petr Benes)
+- cli: Add --disk type=nvme source.* suboptions
+- cli: Fill in all --filesystem suboptions
+- Translation string improvements (Pino Toscano)
+- Convert from .pod to .rst for man pages
+- Switch to pytest as our test runner
+- Massively improved unittest and uitest code coverage
+- Now using github issues as our bug tracker
+
 ## Release 2.2.1 (July 03, 2019)
 - CVE-2019-10183: Replace --unattended user-password and admin-password with
   user-password-file and admin-password-file (Fabiano Fidêncio)
