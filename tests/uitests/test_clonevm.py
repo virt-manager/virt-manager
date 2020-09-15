@@ -38,7 +38,12 @@ class CloneVM(lib.testcase.UITestCase):
 
     def _open_window(self, vmname):
         # Launch wizard via right click menu
-        c = self.app.root.find_fuzzy(vmname, "table cell")
+        manager = self.app.topwin
+        manager.click_title()
+        lib.utils.check(lambda: manager.active)
+        c = manager.find_fuzzy(vmname, "table cell")
+        self.app.sleep(.3)
+        c.click()
         c.click(button=3)
         item = self.app.root.find("Clone...", "menu item")
         item.point()
