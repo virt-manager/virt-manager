@@ -1795,6 +1795,7 @@ class OSVariantData(object):
         self._name = None
         self._id = None
         self._detect = False
+        self._require = False
 
     def set_compat_str(self, rawstr):
         if rawstr is None or rawstr == "auto":
@@ -1822,6 +1823,8 @@ class OSVariantData(object):
         return self._detect is False or self._name == "generic"
     def is_detect(self):
         return self._detect
+    def is_require(self):
+        return self._require
     def get_name(self):
         return self._name
 
@@ -1837,6 +1840,7 @@ class ParserOSVariant(VirtCLIParser):
         cls.add_arg("short-id", "_name")
         cls.add_arg("id", "_id")
         cls.add_arg("detect", "_detect", is_onoff=True)
+        cls.add_arg("require", "_require", is_onoff=True)
 
     def parse(self, inst):
         if "=" not in str(self.optstr):

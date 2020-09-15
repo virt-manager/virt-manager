@@ -869,7 +869,10 @@ c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
 c.add_compare("--pxe --print-step all --os-variant none", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com --os-variant auto", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
 c.add_compare("--location https://foobar.com --os-variant detect=no", "fake-http")  # fake https:// install using urlfetcher.py mocking, but also hit --os-variant detect=no
+c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7", "os-detect-success-fallback")  # os detection succeeds, so fallback should be ignored
+c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--connect %(URI-KVM)s --install fedora26", "osinfo-url")  # getting URL from osinfo
+c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="An --os-variant is required")  # No os-variant detected, but require=yes
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
 c.add_invalid("--livecd")  # LiveCD with no media

@@ -992,7 +992,29 @@ syntax as well:
     install media. Detection is presently only attempted for URL and
     CDROM installs, and is not 100% reliable.
 
-By default, virt-install will use ``--os-variant detect=on``.
+``require=on|off``
+    If ``on``, virt-install errors if no OS value is set or detected.
+
+
+Some interesting examples:
+
+``--os-variant detect=on,require=on``
+    This tells virt-install to attempt detection from install media,
+    but explicitly fail if that does not succeed. This will ensure
+    your virt-install invocations don't fallback to a poorly performing
+    config
+
+``--os-variant detect=on,name=OSNAME``
+    Attempt OS detection from install media, but if that fails, use
+    OSNAME as a fallback.
+
+
+By default, virt-install will do ``--os-variant detect=on,name=generic``,
+using the detected OS if found, and falling back to the stub ``generic``
+value otherwise, and printing a warning.
+
+If any manual ``--os-variant`` value is specified, the default is
+all settings off or unset.
 
 Use the command "osinfo-query os" to get the list of the accepted OS
 variant names.
