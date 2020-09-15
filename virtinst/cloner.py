@@ -41,11 +41,9 @@ def _replace_vm(conn, name):
         log.debug("Undefining guest '%s'", name)
         vm.undefine()
     except libvirt.libvirtError as e:  # pragma: no cover
-        raise RuntimeError(
-            _("Could not remove old vm '%(vm)s': %(error)s") % {
-                "vm": name,
-                "error": str(e),
-            })
+        msg = (_("Could not remove old vm '%(vm)s': %(error)s") % {
+                "vm": name, "error": str(e)})
+        raise RuntimeError(msg) from None
 
 
 def _generate_clone_name(conn, basename):
@@ -485,7 +483,8 @@ class Cloner(object):
                                 check_collision=not self._replace,
                                 validate=False)
         except ValueError as e:
-            raise ValueError(_("Invalid name for new guest: %s") % e)
+            msg = _("Invalid name for new guest: %s") % e
+            raise ValueError(msg) from None
 
         for diskinfo in self.get_nonshare_diskinfos():
             orig_disk = diskinfo.disk

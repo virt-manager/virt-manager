@@ -593,7 +593,7 @@ class vmmConnection(vmmGObject):
                             "origerror": str(renameerr),
                             "recovererror": str(fixerr),
                         }
-                raise RuntimeError(msg)
+                raise RuntimeError(msg) from None
             raise
         finally:
             if newobj:

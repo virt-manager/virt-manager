@@ -144,7 +144,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
                 os.makedirs(vi_dir, 0o751)
             except IOError as e:
                 raise RuntimeError("Could not create directory %s: %s" %
-                                   (vi_dir, e))
+                                   (vi_dir, e)) from None
 
         if (logfile and
             os.path.exists(logfile) and
@@ -1116,8 +1116,8 @@ class _VirtCLIArgument(object):
             if self.propname:
                 xmlutil.get_prop_path(inst, self.propname)
         except AttributeError:  # pragma: no cover
-            raise xmlutil.DevError(
-                    "obj=%s does not have member=%s" % (inst, self.propname))
+            msg = "obj=%s does not have member=%s" % (inst, self.propname)
+            raise xmlutil.DevError(msg) from None
 
         if self._virtarg.cb:
             self._virtarg.cb(parser, inst, self.val, self)

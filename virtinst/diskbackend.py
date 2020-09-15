@@ -619,12 +619,13 @@ class CloneStorageCreator(_StorageCreator):
                     if i < size_bytes:
                         meter.update(i)
             except OSError as e:  # pragma: no cover
+                log.debug("Error while cloning", exc_info=True)
                 msg = (_("Error cloning diskimage "
                          "%(inputpath)s to %(outputpath)s: %(error)s") %
                          {"inputpath": self._input_path,
                           "outputpath": self._output_path,
                           "error": str(e)})
-                raise RuntimeError(msg)
+                raise RuntimeError(msg) from None
         finally:
             if src_fd is not None:
                 os.close(src_fd)

@@ -162,11 +162,10 @@ class StoragePool(_StorageObject):
             defpool.install(build=True, create=True, autostart=True)
             return defpool
         except Exception as e:  # pragma: no cover
-            raise RuntimeError(
-                _("Couldn't create default storage pool '%(path)s': %(error)s") % {
-                    "path": path,
-                    "error": str(e),
-                })
+            log.debug("Error building default pool", exc_info=True)
+            msg = (_("Couldn't create default storage pool '%(path)s': %(error)s") %
+                    {"path": path, "error": str(e)})
+            raise RuntimeError(msg) from None
 
     @staticmethod
     def lookup_pool_by_path(conn, path):
@@ -386,7 +385,8 @@ class StoragePool(_StorageObject):
         try:
             pool = self.conn.storagePoolDefineXML(xml, 0)
         except Exception as e:  # pragma: no cover
-            raise RuntimeError(_("Could not define storage pool: %s") % str(e))
+            msg = _("Could not define storage pool: %s") % str(e)
+            raise RuntimeError(msg) from None
 
         errmsg = None
         if build:
@@ -706,8 +706,9 @@ class StorageVolume(_StorageObject):
             return vol
         except Exception as e:
             log.debug("Error creating storage volume", exc_info=True)
-            raise RuntimeError("Couldn't create storage volume "
-                               "'%s': '%s'" % (self.name, str(e)))
+            msg = ("Couldn't create storage volume '%s': '%s'" % (
+                self.name, str(e)))
+            raise RuntimeError(msg) from None
         finally:
             event.set()
             t.join()
