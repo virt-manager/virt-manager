@@ -34,7 +34,7 @@ def start_job_progress_thread(vm, meter, progtext):
         while True:
             time.sleep(.5)
 
-            if not current_thread.isAlive():
+            if not current_thread.is_alive():
                 return
 
             try:
