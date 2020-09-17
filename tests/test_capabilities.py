@@ -6,6 +6,8 @@
 import os
 import unittest
 
+import pytest
+
 from tests import utils
 
 from virtinst import Capabilities
@@ -52,8 +54,10 @@ class TestCapabilities(unittest.TestCase):
         test_utils(caps_no_kvm, True, False)
 
         # Small test for extra unittest coverage
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError, match=r".*virtualization type 'xen'.*"):
             caps_empty.guest_lookup(os_type="linux")
+        with pytest.raises(ValueError, match=r".*not support any.*"):
+            caps_empty.guest_lookup()
 
     def testCapsNuma(self):
         cells = self._buildCaps("lxc.xml").host.topology.cells
