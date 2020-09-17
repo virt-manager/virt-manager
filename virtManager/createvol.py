@@ -144,10 +144,11 @@ class vmmCreateVolume(vmmGObjectUI):
         self.widget("vol-capacity").set_range(0.1, 1000000)
         self.widget("vol-capacity").set_value(default_cap)
 
-        self.widget("vol-parent-name").set_markup(
-                        "<b>" + self._parent_pool.get_name() + "'s</b>")
-        self.widget("vol-parent-space").set_text(
-                        self._parent_pool.get_pretty_available())
+        self.widget("vol-parent-info").set_markup(
+                        _("<b>%(volume)s's</b> available space: %(size)s") % {
+                            "volume": self._parent_pool.get_name(),
+                            "size": self._parent_pool.get_pretty_available(),
+                        })
 
 
     ###################
