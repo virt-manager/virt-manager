@@ -257,19 +257,30 @@ def start_domain_transient(conn, xmlobj, devs, action, confirm):
 
 
 def update_changes(domain, devs, action, confirm):
+    if action == "hotplug":
+        msg_confirm = _("%(xml)s\n\nHotplug this device to the guest "
+                        "'%(domain)s'?")
+        msg_success = _("Device hotplug successful.")
+        msg_fail = _("Error attempting device hotplug: %(error)s")
+    elif action == "hotunplug":
+        msg_confirm = _("%(xml)s\n\nHotunplug this device from the guest "
+                        "'%(domain)s'?")
+        msg_success = _("Device hotunplug successful.")
+        msg_fail = _("Error attempting device hotunplug: %(error)s")
+    elif action == "update":
+        msg_confirm = _("%(xml)s\n\nUpdate this device for the guest "
+                        "'%(domain)s'?")
+        msg_success = _("Device update successful.")
+        msg_fail = _("Error attempting device update: %(error)s")
+
     for dev in devs:
         xml = dev.get_xml()
 
         if confirm:
-            if action == "hotplug":
-                prep = "to"
-            elif action == "hotunplug":
-                prep = "from"
-            else:
-                prep = "for"
-
-            msg = ("%s\n\n%s this device %s guest '%s'?" %
-                   (xml, action.capitalize(), prep, domain.name()))
+            msg = msg_confirm % {
+                "xml": xml,
+                "domain": domain.name(),
+            }
             if not prompt_yes_or_no(msg):
                 continue
 
@@ -284,13 +295,10 @@ def update_changes(domain, devs, action, confirm):
             elif action == "update":
                 domain.updateDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
         except libvirt.libvirtError as e:
-            fail(_("Error attempting device action %(action)s: %(error)s") % {
-                     "action": action,
-                     "error": e,
-                 })
+            fail(msg_fail % {"error": e})
 
         # Test driver doesn't support device hotplug so we can't reach this
-        print_stdout(_("Device %s successful.") % action)  # pragma: no cover
+        print_stdout(msg_success)  # pragma: no cover
         if confirm:  # pragma: no cover
             print_stdout("")
 
