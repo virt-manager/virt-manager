@@ -56,8 +56,9 @@ def check_cdrom_option_error(options):
 
     if options.cdrom_short:
         if "://" in options.cdrom_short:
-            fail("-c specified with what looks like a libvirt URI. "
-                 "Did you mean to use --connect? If not, use --cdrom instead")
+            fail(_("-c specified with what looks like a libvirt URI. "
+                   "Did you mean to use --connect? If not, use --cdrom "
+                   "instead"))
         options.cdrom = options.cdrom_short
 
 
