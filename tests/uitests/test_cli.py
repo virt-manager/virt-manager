@@ -24,7 +24,7 @@ class VMMCLI(lib.testcase.UITestCase):
     def testShowHost(self):
         self.app.open(extra_opts=["--show-host-summary"])
 
-        lib.utils.check(lambda: self.app.topwin.name == "test testdriver.xml Connection Details")
+        lib.utils.check(lambda: self.app.topwin.name == "test testdriver.xml - Connection Details")
         nametext = self.app.topwin.find_fuzzy("Name:", "text")
         lib.utils.check(lambda: nametext.text == "test testdriver.xml")
         self.app.topwin.keyCombo("<alt>F4")
