@@ -84,8 +84,11 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
             fail(_("No --%s objects found in the XML") %
                 parserclass.cli_arg_name)
         if len(objlist) < abs(idx):
-            fail(_("'--edit %(number)s' requested but there's only %(max)s "
-                   "--%(type)s object in the XML") %
+            fail(ngettext("'--edit %(number)s' requested but there's only "
+                          "%(max)s --%(type)s object in the XML",
+                          "'--edit %(number)s' requested but there are only "
+                          "%(max)s --%(type)s objects in the XML",
+                          len(objlist)) %
                 {"number": idx, "max": len(objlist),
                  "type": parserclass.cli_arg_name})
 
