@@ -292,27 +292,37 @@ class Capabilities(XMLBuilder):
 
         guest = self._guestForOSType(os_type, arch)
         if not guest:
-            archstr = _("for arch '%s'") % arch
-            if not arch:
-                archstr = ""
-
-            osstr = _("virtualization type '%s'") % os_type
-            if not os_type:
-                osstr = _("any virtualization options")
-
-            raise ValueError(_("Host does not support %(virttype)s %(arch)s") %
-                               {'virttype': osstr, 'arch': archstr})
+            if arch and os_type:
+                msg = (_("Host does not support virtualization type "
+                         "'%(virttype)s' for architecture '%(arch)s'") %
+                         {'virttype': os_type, 'arch': arch})
+            elif arch:
+                msg = (_("Host does not support any virtualization options "
+                         "for architecture '%(arch)s'") %
+                         {'arch': arch})
+            elif os_type:
+                msg = (_("Host does not support virtualization type "
+                         "'%(virttype)s'") %
+                         {'virttype': os_type})
+            else:
+                msg = _("Host does not support any virtualization options")
+            raise ValueError(msg)
 
         domain = self._bestDomainType(guest, typ, machine)
         if domain is None:
-            machinestr = " with machine '%s'" % machine
-            if not machine:
-                machinestr = ""
-            raise ValueError(_("Host does not support domain type %(domain)s"
-                               "%(machine)s for virtualization type "
-                               "'%(virttype)s' arch '%(arch)s'") %
-                               {'domain': typ, 'virttype': guest.os_type,
-                                'arch': guest.arch, 'machine': machinestr})
+            if machine:
+                msg = (_("Host does not support domain type %(domain)s with "
+                         "machine '%(machine)s' for virtualization type "
+                         "'%(virttype)s' with architecture '%(arch)s'") %
+                         {'domain': typ, 'virttype': guest.os_type,
+                         'arch': guest.arch, 'machine': machine})
+            else:
+                msg = (_("Host does not support domain type %(domain)s for "
+                         "virtualization type '%(virttype)s' with "
+                         "architecture '%(arch)s'") %
+                         {'domain': typ, 'virttype': guest.os_type,
+                         'arch': guest.arch})
+            raise ValueError(msg)
 
         capsinfo = _CapsInfo(self.conn, guest, domain)
         return capsinfo
