@@ -42,7 +42,9 @@ def _show_startup_error(msg, details):
     from .error import vmmErrorDialog
     err = vmmErrorDialog.get_instance()
     title = _("Error starting Virtual Machine Manager")
-    err.show_err(title + ": " + msg,
+    errmsg = (_("Error starting Virtual Machine Manager: %(error)s") %
+              {"error": msg})
+    err.show_err(errmsg,
                  details=details,
                  title=title,
                  modal=True,
