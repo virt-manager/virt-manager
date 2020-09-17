@@ -884,7 +884,7 @@ c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)
 c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
 c.add_invalid("--install winxp", grep="does not have a URL location")  # no URL for winxp
 c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL location for the architecture 'i686")  # there's no URL for i686
-c.add_invalid("-c foo --cdrom bar", grep="Cannot specify both -c")  # check for ambiguous -c and --cdrom collision
+c.add_invalid("-c foo --cdrom bar", grep="Cannot use -c")  # check for ambiguous -c and --cdrom collision
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
 c.add_invalid("--os-variant id=foo://bar", grep="Unknown libosinfo ID")  # bad full id
@@ -1182,7 +1182,7 @@ c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="
 c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant is not supported")
 c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-variant is not supported")
 c.add_invalid("domain-idontexist --edit --cpu host-passthrough --start", grep="Could not find domain")
-c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Cannot mix --update")
+c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Cannot use --update")
 c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't know how to --update for --events")
 c.add_invalid("--edit --cpu host-passthrough --confirm", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"), grep="Can't use --confirm with stdin")
 c.add_invalid("--edit --cpu host-passthrough --update", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"), grep="Can't use --update with stdin")
