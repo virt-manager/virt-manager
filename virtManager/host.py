@@ -35,8 +35,6 @@ class vmmHost(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "host.ui", "vmm-host")
         self.conn = conn
 
-        self._orig_title = self.topwin.get_title()
-
         # Set default window size
         w, h = self.conn.get_details_window_size()
         if w <= 0:
@@ -177,7 +175,8 @@ class vmmHost(vmmGObjectUI):
         conn_active = self.conn.is_active()
 
         self.topwin.set_title(
-            self.conn.get_pretty_desc() + " " + self._orig_title)
+            _("%(connection)s - Connection Details") %
+            {"connection": self.conn.get_pretty_desc()})
         if not self.widget("overview-name").has_focus():
             self.widget("overview-name").set_text(self.conn.get_pretty_desc())
 

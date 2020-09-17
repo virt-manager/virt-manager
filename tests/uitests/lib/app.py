@@ -53,7 +53,7 @@ class VMMDogtailApp(object):
         self.root.find_fuzzy("Edit", "menu").click()
         self.root.find_fuzzy("Connection Details", "menu item").click()
         win = self.root.find_fuzzy(
-                "%s Connection Details" % conn_label, "frame")
+                "%s - Connection Details" % conn_label, "frame")
         win.find_fuzzy(tab, "page tab").click()
         return win
 

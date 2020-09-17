@@ -166,7 +166,7 @@ class Host(lib.testcase.UITestCase):
 
         # Change the name, verify that title bar changed
         win.find("Name:", "text").set_text("FOOBAR")
-        self.app.root.find("FOOBAR Connection Details", "frame")
+        self.app.root.find("FOOBAR - Connection Details", "frame")
 
         # Open the manager window
         win.find("File", "menu").click()
