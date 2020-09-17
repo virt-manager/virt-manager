@@ -10,7 +10,7 @@ import sys
 import libvirt
 
 from . import cli
-from .cli import fail, print_stdout, print_stderr
+from .cli import fail, fail_conflicting, print_stdout, print_stderr
 from .devices import DeviceConsole
 from .guest import Guest
 from .logger import log
@@ -499,7 +499,7 @@ def main(conn=None):
     performed_update = False
     if options.update:
         if options.update and options.start:
-            fail(_("Cannot mix --update and --start"))
+            fail_conflicting("--update", "--start")
 
         if vm_is_running:
             devs, action = prepare_changes(active_xmlobj, options, parserclass)

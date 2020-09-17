@@ -16,7 +16,7 @@ import libvirt
 
 import virtinst
 from . import cli
-from .cli import fail, print_stdout, print_stderr
+from .cli import fail, fail_conflicting, print_stdout, print_stderr
 from . import Network
 from .guest import Guest
 from .logger import log
@@ -52,7 +52,7 @@ def supports_pxe(guest):
 
 def check_cdrom_option_error(options):
     if options.cdrom_short and options.cdrom:
-        fail("Cannot specify both -c and --cdrom")
+        fail_conflicting("-c", "--cdrom")
 
     if options.cdrom_short:
         if "://" in options.cdrom_short:
@@ -176,7 +176,7 @@ def convert_old_networks(options):
     bridges = virtinst.xmlutil.listify(options.bridge)
 
     if bridges and networks:
-        fail(_("Cannot mix both --bridge and --network arguments"))
+        fail_conflicting("--bridge", "--network")
 
     if bridges:
         # Convert old --bridges to --networks
