@@ -474,6 +474,16 @@ def get_domain_and_guest(conn, domstr):
     return (domain, inactive_xmlobj, active_xmlobj)
 
 
+def fail_conflicting(option1, option2):
+    # translators: option1 and option2 are command line options,
+    # e.g. -a or --disk
+    msg = _("Cannot use %(option1)s and %(option2)s at the same time") % {
+        "option1": option1,
+        "option2": option2,
+    }
+    fail(msg)
+
+
 ###########################
 # bash completion helpers #
 ###########################
