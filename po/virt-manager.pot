@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-15 06:10+0000\n"
+"POT-Creation-Date: 2020-09-17 06:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2443,7 +2443,7 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: virtManager/clone.py:28 virtinst/cloner.py:183
+#: virtManager/clone.py:28 virtinst/cloner.py:181
 msgid "No storage to clone."
 msgstr ""
 
@@ -4078,71 +4078,65 @@ msgstr ""
 msgid "Error changing pool settings: %s"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:49
+#: virtManager/lib/connectauth.py:50
 msgid "Authentication required"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:153
+#: virtManager/lib/connectauth.py:154
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:159
+#: virtManager/lib/connectauth.py:160
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:163
+#: virtManager/lib/connectauth.py:164
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:167
+#: virtManager/lib/connectauth.py:168
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:173
+#: virtManager/lib/connectauth.py:174
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:179
+#: virtManager/lib/connectauth.py:180
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:182
+#: virtManager/lib/connectauth.py:183
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:194
+#: virtManager/lib/connectauth.py:195
 msgid "Virtual Machine Manager Connection Failure"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:269
+#: virtManager/lib/connectauth.py:217
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:273
-msgid ""
-"libvirtd is installed but not running. Start the libvirtd service to manage "
-"virtualization on this host."
-msgstr ""
-
-#: virtManager/lib/connectauth.py:279
+#: virtManager/lib/connectauth.py:224
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:286
+#: virtManager/lib/connectauth.py:231
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -5262,54 +5256,54 @@ msgstr ""
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:45
+#: virtinst/cloner.py:44
 #, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr ""
 
-#: virtinst/cloner.py:113
+#: virtinst/cloner.py:111
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr ""
 
-#: virtinst/cloner.py:157
+#: virtinst/cloner.py:155
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:178
+#: virtinst/cloner.py:176
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: virtinst/cloner.py:185
+#: virtinst/cloner.py:183
 msgid "Read Only"
 msgstr ""
 
-#: virtinst/cloner.py:187
+#: virtinst/cloner.py:185
 msgid "Marked as shareable"
 msgstr ""
 
-#: virtinst/cloner.py:249
+#: virtinst/cloner.py:247
 #, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr ""
 
-#: virtinst/cloner.py:265
+#: virtinst/cloner.py:263
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr ""
 
-#: virtinst/cloner.py:316
+#: virtinst/cloner.py:314
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:351
+#: virtinst/cloner.py:349
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
-#: virtinst/cloner.py:488
+#: virtinst/cloner.py:486
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr ""
@@ -5402,7 +5396,7 @@ msgstr ""
 msgid "Cloning %(srcfile)s"
 msgstr ""
 
-#: virtinst/diskbackend.py:622
+#: virtinst/diskbackend.py:623
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -5484,29 +5478,29 @@ msgstr ""
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:70
+#: virtinst/install/installertreemedia.py:69
 #, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:119
+#: virtinst/install/installertreemedia.py:117
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:122
+#: virtinst/install/installertreemedia.py:120
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:145
+#: virtinst/install/installertreemedia.py:143
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:212
+#: virtinst/install/installertreemedia.py:210
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:270
+#: virtinst/install/installertreemedia.py:268
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -5574,17 +5568,17 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:69
+#: virtinst/install/urlfetcher.py:68
 #, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:76
+#: virtinst/install/urlfetcher.py:74
 #, python-format
 msgid "Retrieving file %s..."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:249
+#: virtinst/install/urlfetcher.py:246
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr ""
@@ -5642,16 +5636,16 @@ msgstr ""
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr ""
 
-#: virtinst/storage.py:220 virtinst/storage.py:550
+#: virtinst/storage.py:219 virtinst/storage.py:550
 msgid "Storage object"
 msgstr ""
 
-#: virtinst/storage.py:226
+#: virtinst/storage.py:225
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr ""
 
-#: virtinst/storage.py:389
+#: virtinst/storage.py:388
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr ""
@@ -5687,14 +5681,14 @@ msgstr ""
 msgid "Allocating '%s'"
 msgstr ""
 
-#: virtinst/storage.py:729
+#: virtinst/storage.py:730
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
 
-#: virtinst/storage.py:736
+#: virtinst/storage.py:737
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
