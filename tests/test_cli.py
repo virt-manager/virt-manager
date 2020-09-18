@@ -648,7 +648,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0,address.multifunction=on
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master.startport=2
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4
---controller scsi,,model=virtio-scsi,driver_queues=4,driver.queues=4,driver.iothread=2
+--controller scsi,,model=virtio-scsi,driver_queues=4,driver.queues=4,driver.iothread=2,vectors=15
 --controller xenbus,maxGrantFrames=64
 
 --input type=keyboard,bus=usb
