@@ -252,104 +252,6 @@ class XMLParseTest(unittest.TestCase):
         assert guest.is_full_os_container() is False
         self._alter_compare(guest.get_xml(), outfile)
 
-    def testSeclabel(self):
-        guest, outfile = self._get_test_content("change-seclabel")
-
-        check = self._make_checker(guest.seclabels[0])
-        check("type", "static", "none")
-        check("model", "selinux", "apparmor")
-        check("label", "foolabel", "barlabel")
-        check("baselabel", None, "baselabel")
-        check("relabel", None, False)
-
-        guest.remove_child(guest.seclabels[1])
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterMinimalGuest(self):
-        guest, outfile = self._get_test_content("change-minimal-guest")
-
-        check = self._make_checker(guest.features)
-        check("acpi", False, True)
-        check("pae", False)
-        assert guest.features.get_xml().startswith("<features")
-
-        check = self._make_checker(guest.clock)
-        check("offset", None, "utc")
-        assert guest.clock.get_xml().startswith("<clock") is True
-
-        seclabel = virtinst.DomainSeclabel(guest.conn)
-        guest.add_child(seclabel)
-        seclabel.model = "testSecurity"
-        seclabel.type = "static"
-        seclabel.label = "frob"
-        assert guest.seclabels[0].get_xml().startswith("<seclabel")
-
-        check = self._make_checker(guest.cpu)
-        check("model", None)
-        guest.cpu.set_model(guest, "foobar")
-        check("model", "foobar")
-        check("model_fallback", None, "allow")
-        check("topology.cores", None, 4)
-        guest.cpu.add_feature("x2apic", "forbid")
-        guest.cpu.set_topology_defaults(guest.vcpus)
-        assert guest.cpu.get_xml().startswith("<cpu") is True
-        assert guest.cpu.get_xml_id() == "./cpu"
-        assert guest.cpu.get_xml_idx() == 0
-        assert guest.get_xml_id() == "."
-        assert guest.get_xml_idx() == 0
-
-        assert guest.os.get_xml().startswith("<os") is True
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterBootMulti(self):
-        guest, outfile = self._get_test_content("change-boot-multi")
-
-        check = self._make_checker(guest.os)
-        check("bootorder", ['hd', 'fd', 'cdrom', 'network'], ["cdrom"])
-        check("enable_bootmenu", False, True)
-        check("kernel", None, "/foo.img")
-        check("initrd", None, "/bar.img")
-        check("dtb", None, "/baz.dtb")
-        check("kernel_args", None, "ks=foo.ks")
-
-        guest.os.set_initargs_string("foo bar")
-        guest.os.set_initargs_string("baz wibble")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterBootKernel(self):
-        guest, outfile = self._get_test_content("change-boot-kernel")
-
-        check = self._make_checker(guest.os)
-        check("bootorder", [], ["network", "hd", "fd"])
-        check("enable_bootmenu", None)
-        check("kernel", "/boot/vmlinuz", None)
-
-        check("initrd", "/boot/initrd", None)
-        check("kernel_args", "location", None)
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterBootUEFI(self):
-        guest, outfile = self._get_test_content("change-boot-uefi")
-
-        check = self._make_checker(guest.os)
-        check("bootorder", [], ["network", "hd", "fd"])
-        check("loader_ro", None, True)
-        check("loader_type", None, "pflash")
-        check("nvram", None, "/tmp/nvram_store")
-        check("nvram_template", None, "/tmp/template")
-        check("loader", None, "OVMF_CODE.fd")
-
-        check("kernel", "/boot/vmlinuz", None)
-
-        check("initrd", "/boot/initrd", None)
-        check("kernel_args", "location", None)
-
-        self._alter_compare(guest.get_xml(), outfile)
-
     def testAlterCpuMode(self):
         xml = open(DATADIR + "change-cpumode-in.xml").read()
         outfile = DATADIR + "change-cpumode-out.xml"
@@ -607,7 +509,7 @@ class XMLParseTest(unittest.TestCase):
 
         self._alter_compare(guest.get_xml(), outfile)
 
-    def testAlterControllers(self):
+    def _testAlterControllers(self):
         guest, outfile = self._get_test_content("change-controllers")
 
         dev1 = guest.devices.controller[0]
@@ -687,413 +589,6 @@ class XMLParseTest(unittest.TestCase):
         check("instanceid", "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b",
                             "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa4f")
 
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterInputs(self):
-        guest, outfile = self._get_test_content("change-inputs")
-
-        dev1 = guest.devices.input[0]
-        dev2 = guest.devices.input[1]
-
-        check = self._make_checker(dev1)
-        check("type", "mouse", "tablet")
-        check("bus", "ps2", "usb")
-
-        check = self._make_checker(dev2)
-        check("type", "tablet", "mouse")
-        check("bus", "usb", "xen")
-        check("bus", "xen", "usb")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterGraphics(self):
-        guest, outfile = self._get_test_content("change-graphics")
-
-        dev1 = guest.devices.graphics[0]
-        dev2 = guest.devices.graphics[1]
-        dev3 = guest.devices.graphics[2]
-        dev4 = guest.devices.graphics[3]
-        dev5 = guest.devices.graphics[4]
-        dev6 = guest.devices.graphics[5]
-
-        check = self._make_checker(dev1)
-        check("type", "vnc")
-        check("passwd", "foobar", "newpass")
-        check("port", 100, 6000)
-        check("listen", "0.0.0.0", "1.2.3.4")
-        check("keymap", None, "en-us")
-
-        check = self._make_checker(dev2)
-        check("type", "vnc")
-        check("xauth", "/tmp/.Xauthority", "fooauth")
-        check("display", "1:2", "6:1")
-
-        check = self._make_checker(dev3)
-        check("type", "rdp", "vnc")
-        check("listen", "1.1.2.3", None)
-
-        check = self._make_checker(dev4)
-        check("type", "vnc")
-        check("port", -1)
-        check("socket", "/tmp/foobar", "/var/lib/libvirt/socket/foo")
-
-        check = self._make_checker(dev5)
-        check("autoport", True, False)
-        check = self._make_checker(dev5.listens[0])
-        dev5.listens[0].type = "none"
-        assert guest.has_listen_none() is True
-        check("type", "none", "foo", "network")
-        check("network", "Bobsnetwork", "mynewnet")
-
-        check = self._make_checker(dev6.listens[0])
-        check("type", "address")
-        check("address", "0.0.0.0")
-        check = self._make_checker(dev6)
-        check("type", "spice")
-        check("passwd", "foobar", "newpass")
-        check("connected", None, "disconnect")
-        check("port", 100, 6000)
-        check("tlsPort", 101, 6001)
-        check("listen", "0.0.0.0", "1.2.3.4")
-        check("channel_inputs_mode", "insecure", "secure")
-        check("channel_main_mode", "secure", "any")
-        check("channel_record_mode", "any", "insecure")
-        check("channel_display_mode", "any", "secure")
-        check("channel_cursor_mode", "any", "any")
-        check("channel_playback_mode", "any", "insecure")
-        check("passwdValidTo", "2010-04-09T15:51:00", "2011-01-07T19:08:00")
-        check("defaultMode", None, "secure")
-        check("image_compression", None, "auto_glz")
-        check("streaming_mode", None, "filter")
-        check("clipboard_copypaste", None, True)
-        check("mouse_mode", None, "client")
-        check("filetransfer_enable", None, False)
-        check("gl", None, True)
-        check("rendernode", None, "/dev/dri/foo")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterVideos(self):
-        guest, outfile = self._get_test_content("change-videos")
-
-        dev1 = guest.devices.video[0]
-        dev2 = guest.devices.video[1]
-        dev3 = guest.devices.video[2]
-
-        check = self._make_checker(dev1)
-        check("model", "vmvga", "vga")
-        check("vram", None, 1000)
-        check("heads", None, 1)
-
-        check = self._make_checker(dev2)
-        check("model", "cirrus", "vmvga")
-        check("vram", 10240, None)
-        check("heads", 3, 5)
-
-        check = self._make_checker(dev3)
-        check("model", "cirrus", "cirrus", "qxl")
-        check("ram", None, 100)
-        check("vgamem", None, 8192)
-        check("accel3d", None, True)
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterHostdevs(self):
-        infile  = DATADIR + "change-hostdevs-in.xml"
-        outfile = DATADIR + "change-hostdevs-out.xml"
-        guest = virtinst.Guest(self.conn,
-                               parsexml=open(infile).read())
-
-        dev1 = guest.devices.hostdev[0]
-        dev2 = guest.devices.hostdev[1]
-        dev3 = guest.devices.hostdev[2]
-        dev4 = guest.devices.hostdev[3]
-        dev5 = guest.devices.hostdev[4]
-        dev6 = guest.devices.hostdev[5]
-        dev7 = guest.devices.hostdev[6]
-
-        check = self._make_checker(dev1)
-        check("type", "usb", "foo", "usb")
-        check("managed", True, False)
-        check("mode", "subsystem", None)
-        check("vendor", "0x4321", "0x1111")
-        check("product", "0x1234", "0x2222")
-        check("bus", None, "1")
-        check("device", None, "2")
-
-        check = self._make_checker(dev2)
-        check("type", "usb")
-        check("managed", False, True)
-        check("mode", "capabilities", "subsystem")
-        check("bus", "0x12", "0x56")
-        check("device", "0x34", "0x78")
-
-        check = self._make_checker(dev3)
-        check("type", "pci")
-        check("managed", True, True)
-        check("mode", "subsystem", "subsystem")
-        check("domain", "0x0", "0x4")
-        check("bus", "0x1", "0x5")
-        check("slot", "0x2", "0x6")
-        check("function", "0x3", "0x7")
-        check("driver_name", None, "vfio")
-        check("rom_bar", None, True)
-
-        check = self._make_checker(dev4)
-        check("type", "scsi")
-        check("scsi_adapter", "scsi_host0", "foo")
-        check("scsi_bus", 0, 1)
-        check("scsi_target", 0, 2)
-        check("scsi_unit", 0, 3)
-
-        check = self._make_checker(dev5)
-        check("type", "net")
-        check("net_interface", "wlan0", "eth0")
-
-        check = self._make_checker(dev6)
-        check("type", "misc")
-        check("misc_char", "/dev/net/tun", "/dev/null")
-
-        check = self._make_checker(dev7)
-        check("type", "storage")
-        check("storage_block", "/dev/sdf", "/dev/fd0")
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterWatchdogs(self):
-        guest, outfile = self._get_test_content("change-watchdogs")
-
-        dev1 = guest.devices.watchdog[0]
-        check = self._make_checker(dev1)
-        check("model", "ib700", "i6300esb")
-        check("action", "none", "poweroff")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def _testAlterFilesystems(self):
-        guest, outfile = self._get_test_content("change-filesystems")
-
-        dev1 = guest.devices.filesystem[0]
-        dev2 = guest.devices.filesystem[1]
-        dev3 = guest.devices.filesystem[2]
-        dev4 = guest.devices.filesystem[3]
-        dev5 = guest.devices.filesystem[4]
-        dev6 = guest.devices.filesystem[5]
-        dev7 = guest.devices.filesystem[6]
-
-        check = self._make_checker(dev1)
-        check("type", None, "mount")
-        check("accessmode", None, "passthrough")
-        check("driver_type", "handle", None)
-        check("driver_wrpolicy", None, None)
-        check("source", "/foo/bar", "/new/path")
-        check("target", "/bar/baz", "/new/target")
-
-        check = self._make_checker(dev2)
-        check("type", "template")
-        check("accessmode", None, "mapped")
-        check("source", "template_fedora", "template_new")
-        check("target", "/bar/baz")
-
-        check = self._make_checker(dev3)
-        check("type", "mount", None)
-        check("accessmode", "squash", None)
-        check("driver_type", "path", "handle")
-        check("driver_wrpolicy", "immediate", None)
-        check("readonly", False, True)
-
-        check = self._make_checker(dev4)
-        check("type", "mount", None)
-        check("accessmode", "mapped", None)
-        check("driver_type", "path", "handle")
-        check("driver_wrpolicy", None, "immediate")
-        check("readonly", False, True)
-
-        check = self._make_checker(dev5)
-        check("type", "ram")
-        check("source", "1024", 123)
-        check("source_units", "MB", "KiB")
-
-        check = self._make_checker(dev6)
-        check("source", "/foo/bar", "/dev/new")
-        check("readonly", False, True)
-        check("type", "block", "file")
-
-        check = self._make_checker(dev7)
-        check("type", "file")
-        check("accessmode", "passthrough", None)
-        check("driver_type", "nbd", "loop")
-        check("driver_format", "qcow", "raw")
-        check("source", "/foo/bar.img", "/foo/bar.raw")
-        check("readonly", False, True)
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterSounds(self):
-        infile  = DATADIR + "change-sounds-in.xml"
-        outfile = DATADIR + "change-sounds-out.xml"
-        guest = virtinst.Guest(self.conn,
-                               parsexml=open(infile).read())
-
-        dev1 = guest.devices.sound[0]
-        dev2 = guest.devices.sound[1]
-        dev3 = guest.devices.sound[2]
-
-        check = self._make_checker(dev1)
-        check("model", "sb16", "ac97")
-
-        check = self._make_checker(dev2)
-        check("model", "es1370", "es1370")
-
-        check = self._make_checker(dev3)
-        check("model", "ac97", "sb16")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterAddr(self):
-        guest, outfile = self._get_test_content("change-addr")
-
-        dev1 = guest.devices.disk[0]
-        dev2 = guest.devices.controller[0]
-        dev3 = guest.devices.channel[0]
-        dev4 = guest.devices.disk[1]
-        dev5 = guest.devices.memory[0]
-
-        check = self._make_checker(dev1.address)
-        check("type", "drive", "pci")
-        check("type", "pci", "drive")
-        check("controller", 3, 1)
-        check("bus", 5, 4)
-        check("target", None, 7)
-        check("unit", 33, 32)
-        check = self._make_checker(dev1.alias)
-        check("name", "foo2", None)
-
-        check = self._make_checker(dev2.address)
-        dev2.address.domain = "0x0010"
-        assert dev2.address.domain == 16
-        check("type", "pci")
-        check("domain", 16, 1)
-        check("bus", 0, 4)
-        check("slot", 4, 10)
-        check("function", 7, 6)
-        check = self._make_checker(dev2.alias)
-        check("name", None, "frob")
-
-        check = self._make_checker(dev3.address)
-        check("type", "virtio-serial")
-        check("controller", 0)
-        check("bus", 0)
-        check("port", 2, 4)
-        check = self._make_checker(dev3.alias)
-        check("name", "channel0", "channel1")
-
-        dev4.address.clear()
-
-        check = self._make_checker(dev5.address)
-        check("type", "dimm")
-        check("slot", 0, 2)
-        check("base", None, "0x1000")
-        # Need to remove this since the testdriver doesn't support
-        # memory devices?
-        guest.remove_device(dev5)
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterSmartCard(self):
-        guest, outfile = self._get_test_content("change-smartcard")
-
-        dev1 = guest.devices.smartcard[0]
-        dev2 = guest.devices.smartcard[1]
-        dev3 = guest.devices.smartcard[2]
-        dev4 = guest.devices.smartcard[3]
-
-        check = self._make_checker(dev1)
-        check("type", None, "tcp")
-
-        check = self._make_checker(dev2)
-        check("mode", "passthrough", "host")
-        check("type", "spicevmc", None)
-
-        check = self._make_checker(dev3)
-        check("type", "tcp")
-        check("source.host", "127.0.0.1")
-        check("source.service", 2001)
-        check("source.protocol", "raw", "telnet")
-
-        check = self._make_checker(dev4)
-        check("type", "unix")
-        check("source.path", "/tmp/smartcard.sock")
-        check("source.mode", "bind")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterRedirdev(self):
-        guest, outfile = self._get_test_content("change-redirdev")
-
-        dev1 = guest.devices.redirdev[0]
-        dev2 = guest.devices.redirdev[1]
-
-        check = self._make_checker(dev1)
-        check("bus", "usb", "baz", "usb")
-        check("source.host", "foo", "bar")
-        check("source.service", 12, 42)
-
-        check = self._make_checker(dev2)
-        check("type", "tcp", "spicevmc")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterTPM(self):
-        guest, outfile = self._get_test_content("change-tpm")
-
-        dev1 = guest.devices.tpm[0]
-
-        check = self._make_checker(dev1)
-        check("type", "passthrough", "foo", "passthrough")
-        check("model", "tpm-tis", "tpm-crb", "tpm-tis")
-        check("device_path", "/dev/tpm0", "frob")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterRNG_EGD(self):
-        guest, outfile = self._get_test_content("change-rng-egd")
-
-        dev1 = guest.devices.rng[0]
-
-        check = self._make_checker(dev1)
-        check("backend_model", "egd")
-        check("backend_type", "udp", "udp")
-
-        check("source.connect_host", "1.2.3.4", "1.2.3.5")
-        check("source.connect_service", 1234, 1235)
-        check("source.bind_host", None, None)
-        check("source.bind_service", 1233, 1236)
-
-        check("rate_bytes", "1234", "4321")
-        check("rate_period", "2000", "2001")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testAlterRNG_Random(self):
-        guest, outfile = self._get_test_content("change-rng-random")
-
-        dev1 = guest.devices.rng[0]
-
-        check = self._make_checker(dev1)
-        check("backend_model", "random", "random")
-        check("model", "virtio", "virtio")
-        check("device", "/dev/random", "/dev/hwrng")
-
-        self._alter_compare(guest.get_xml(), outfile)
-
-    def testPanicDevice(self):
-        guest, outfile = self._get_test_content("change-panic-device")
-
-        dev1 = guest.devices.panic[0]
-
-        check = self._make_checker(dev1)
-        check("address.type", "isa", None, "isa")
-        check("address.iobase", "0x505", None, "0x506")
         self._alter_compare(guest.get_xml(), outfile)
 
     def testQEMUXMLNS(self):
@@ -1503,7 +998,10 @@ class XMLParseTest(unittest.TestCase):
         with pytest.raises(ValueError):
             dev.scsi_bus = "goodbye"
 
-    def testXMLCoverage(self):
+    def testXMLBuilderCoverage(self):
+        """
+        Test XMLBuilder corner cases
+        """
         with pytest.raises(RuntimeError, match=".*'foo'.*"):
             # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml="<foo/>")
@@ -1512,9 +1010,8 @@ class XMLParseTest(unittest.TestCase):
             # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml=-1)
 
-        from virtinst import xmlutil
-        with pytest.raises(xmlutil.DevError):
-            raise xmlutil.DevError("for coverage")
+        with pytest.raises(virtinst.xmlutil.DevError):
+            raise virtinst.xmlutil.DevError("for coverage")
 
         with pytest.raises(ValueError):
             virtinst.DeviceDisk.validate_generic_name("objtype", None)
@@ -1523,8 +1020,36 @@ class XMLParseTest(unittest.TestCase):
             virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar")
 
         # Test property __repr__ for code coverage
-        assert str(virtinst.DeviceDisk.address)
-        assert str(virtinst.DeviceDisk.driver_cache)
+        assert "DeviceAddress" in str(virtinst.DeviceDisk.address)
+        assert "./driver/@cache" in str(virtinst.DeviceDisk.driver_cache)
+
+        # Conversion of 0x value into int
+        xml = """
+            <controller type='scsi'>
+              <address type='pci' bus='0x00' slot='0x04' function='0x7'/>
+            </controller>
+        """
+        dev = virtinst.DeviceController(self.conn, parsexml=xml)
+        assert dev.address.slot == 4
+
+        # Some XML formatting and get_xml_* corner cases
+        conn = utils.URIs.openconn(utils.URIs.test_suite)
+        xml = conn.lookupByName("test-for-virtxml").XMLDesc(0)
+        guest = virtinst.Guest(conn, parsexml=xml)
+
+        assert guest.features.get_xml().startswith("<features")
+        assert guest.clock.get_xml().startswith("<clock")
+        assert guest.seclabels[0].get_xml().startswith("<seclabel")
+        assert guest.cpu.get_xml().startswith("<cpu")
+        assert guest.os.get_xml().startswith("<os")
+        assert guest.cpu.get_xml_id() == "./cpu"
+        assert guest.cpu.get_xml_idx() == 0
+        assert guest.get_xml_id() == "."
+        assert guest.get_xml_idx() == 0
+
+        assert guest.devices.disk[1].get_xml_id() == "./devices/disk[2]"
+        assert guest.devices.disk[1].get_xml_idx() == 1
+
 
     def testReplaceChildParse(self):
         buildfile = DATADIR + "replace-child-build.xml"
@@ -1674,3 +1199,9 @@ class XMLParseTest(unittest.TestCase):
         guest.cpu.model = "idontexist"
         guest.cpu._validate_default_host_model_only(guest)
         assert guest.cpu.model is None
+
+    def testOSXMLInitargsRemove(self):
+        guest = virtinst.Guest(self.conn)
+        guest.os.set_initargs_string("foo bar")
+        guest.os.set_initargs_string("baz wibble")
+        assert [i.val for i in guest.os.initargs] == ["baz", "wibble"]

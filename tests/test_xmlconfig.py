@@ -50,13 +50,6 @@ def _make_guest(conn=None, os_variant=None):
     return g
 
 
-def _make_installer(location=None, conn=None):
-    conn = conn or utils.URIs.open_testdriver_cached()
-    cdrom = not location and "/dev/null" or None
-    inst = virtinst.Installer(conn, location=location, cdrom=cdrom)
-    return inst
-
-
 class TestXMLMisc(unittest.TestCase):
     """
     Misc tests for various XML special behavior. These should only aim for
@@ -66,20 +59,6 @@ class TestXMLMisc(unittest.TestCase):
     @property
     def conn(self):
         return utils.URIs.open_testdefault_cached()
-
-    def _compare(self, guest, filebase, do_install):
-        filename = os.path.join("tests/data/xmlconfig", filebase + ".xml")
-
-        installer = _make_installer(conn=guest.conn)
-        inst_xml, boot_xml = installer.start_install(
-                guest, return_xml=True, dry=True)
-        if do_install:
-            actualXML = inst_xml
-        else:
-            actualXML = boot_xml
-
-        utils.diff_compare(actualXML, filename)
-        utils.test_create(guest.conn, actualXML)
 
     def testDiskNumbers(self):
         # Various testing our target generation
@@ -113,31 +92,6 @@ class TestXMLMisc(unittest.TestCase):
         assert disk.generate_target(['hda']) == 'hdb'
         assert disk.generate_target(['hdb', 'sda']) == 'hdc'
         assert disk.generate_target(['hda', 'hdd']) == 'hdb'
-
-    def testQuickTreeinfo(self):
-        # Simple sanity test to make sure detect_distro works. test-urls
-        # does much more exhaustive testing but it's only run occasionally
-        i = _make_installer(
-            location=utils.DATADIR + "/fakemedia/fakefedoratree")
-        g = _make_guest()
-        v = i.detect_distro(g)
-        assert v == "fedora17"
-
-        i = _make_installer(
-            location=utils.DATADIR + "/fakemedia/fakerhel6tree")
-        g = _make_guest()
-        v = i.detect_distro(g)
-        assert v == "rhel6.0"
-
-    def testCDROMInsert(self):
-        # After set_install_defaults, cdrom media should be inserted
-        i = _make_installer()
-        g = _make_guest()
-        i.set_install_defaults(g)
-        for disk in g.devices.disk:
-            if disk.device == "cdrom" and disk.path == "/dev/null":
-                return
-        raise AssertionError("Didn't find inserted cdrom media")
 
     def testCPUTopology(self):
         # Test CPU topology determining
@@ -182,17 +136,16 @@ class TestXMLMisc(unittest.TestCase):
         assert xml1 == xml2
 
     def test_guest_osinfo_metadata(self):
-        g = _make_guest()
-        assert g.osinfo.name == "generic"
-        g.set_os_name("fedora17")
-        assert g.osinfo.name == "fedora17"
-
-        g = _make_guest()
-        g._metadata.libosinfo.os_id = "http://fedoraproject.org/fedora/20"  # pylint: disable=protected-access
+        """
+        Test that reading an unknown OS ID from guest XML will not blow up
+        """
+        # pylint: disable=protected-access
+        g = virtinst.Guest(utils.URIs.open_testdefault_cached())
+        g._metadata.libosinfo.os_id = "http://fedoraproject.org/fedora/20"
         assert g.osinfo.name == "fedora20"
 
-        g = _make_guest()
-        g._metadata.libosinfo.os_id = "http://example.com/idontexit"  # pylint: disable=protected-access
+        g = virtinst.Guest(utils.URIs.open_testdefault_cached())
+        g._metadata.libosinfo.os_id = "http://example.com/idontexit"
         assert g.osinfo.name == "generic"
 
     def test_dir_searchable(self):

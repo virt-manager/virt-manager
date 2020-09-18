@@ -1148,6 +1148,7 @@ c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent 
 c = vinst.add_category("console-tests", "--nodisks")
 c.add_valid("--pxe", grep="graphical console command: virt-viewer")  # mock default graphics+virt-viewer usage
 c.add_valid("--pxe --graphics spice,gl=on", grep="--attach")  # using virt-viewer --attach option for gl
+c.add_valid("--pxe --graphics listen=none", grep="--attach")  # using virt-viewer --attach option for listen 'none'
 c.add_valid("--pxe --destroy-on-exit", grep="Restarting guest.\n")  # destroy-on-exit
 c.add_valid("--pxe --transient --destroy-on-exit", grep="Domain creation completed.")  # destroy-on-exit + transient
 c.add_valid("--pxe --graphics vnc --noreboot", grep="graphical console command: virt-viewer")  # mock virt-viewer waiting, with noreboot magic
