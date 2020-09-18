@@ -365,6 +365,11 @@
       <address type="ccw" cssid="0xfe" ssid="0" devno="01"/>
       <boot order="15" loadparm="SYSTEM1"/>
     </interface>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="vmxnet3"/>
+    </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="host" type="tcp"/>
     <smartcard mode="passthrough" type="spicevmc"/>

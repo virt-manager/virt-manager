@@ -287,7 +287,8 @@ class XMLParseTest(unittest.TestCase):
         self._alter_compare(guest.get_xml(), outfile)
 
         # Hits a codepath when domcaps don't provide the needed info
-        guest = virtinst.Guest(self.conn, xml)
+        emptyconn = utils.URIs.open_testdefault_cached()
+        guest = virtinst.Guest(emptyconn, xml)
         guest.cpu.check_security_features(guest)
         assert guest.cpu.secure is False
 
@@ -1138,23 +1139,3 @@ class XMLParseTest(unittest.TestCase):
 
         # Little test for DeviceAddress.pretty_desc
         assert devs[-1].address.pretty_desc() == "0:0:0:3"
-
-    def testCPUHostModelOnly(self):
-        """
-        Hit the validation paths for default HOST_MODEL_ONLY
-        """
-        guest = virtinst.Guest(self.kvmconn)
-        guest.x86_cpu_default = guest.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
-        guest.set_defaults(guest)
-        assert guest.cpu.model == "Opteron_G4"
-
-        # pylint: disable=protected-access
-        guest.cpu.model = "idontexist"
-        guest.cpu._validate_default_host_model_only(guest)
-        assert guest.cpu.model is None
-
-    def testOSXMLInitargsRemove(self):
-        guest = virtinst.Guest(self.conn)
-        guest.os.set_initargs_string("foo bar")
-        guest.os.set_initargs_string("baz wibble")
-        assert [i.val for i in guest.os.initargs] == ["baz", "wibble"]
