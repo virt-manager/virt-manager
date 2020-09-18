@@ -7,6 +7,8 @@ import glob
 import traceback
 import unittest
 
+import pytest
+
 import virtinst
 
 from tests import utils
@@ -70,12 +72,12 @@ class XMLParseTest(unittest.TestCase):
         set newval, and make sure it is returned properly
         """
         curval = virtinst.xmlutil.get_prop_path(obj, param)
-        self.assertEqual(initval, curval)
+        assert initval == curval
 
         for newval in args:
             virtinst.xmlutil.set_prop_path(obj, param, newval)
             curval = virtinst.xmlutil.get_prop_path(obj, param)
-            self.assertEqual(newval, curval)
+            assert newval == curval
 
     def _make_checker(self, obj):
         def check(name, initval, *args):
@@ -135,10 +137,10 @@ class XMLParseTest(unittest.TestCase):
         check("os_id", "http://fedoraproject.org/fedora/17")
         guest.set_os_name("fedora10")
         check("os_id", "http://fedoraproject.org/fedora/10")
-        self.assertEqual(guest.osinfo.name, "fedora10")
+        assert guest.osinfo.name == "fedora10"
         guest.set_os_name("generic")
         check("os_id", None, "frib")
-        self.assertEqual(guest.osinfo.name, "generic")
+        assert guest.osinfo.name == "generic"
 
         check = self._make_checker(guest.clock)
         check("offset", "utc", "localtime")
@@ -169,8 +171,7 @@ class XMLParseTest(unittest.TestCase):
         check("kernel_args", None)
 
         guest.os.set_initargs_string("foo 'bar baz' frib")
-        self.assertEqual([i.val for i in guest.os.initargs],
-            ["foo", "bar baz", "frib"])
+        assert [i.val for i in guest.os.initargs] == ["foo", "bar baz", "frib"]
 
         check = self._make_checker(guest.features)
         check("acpi", True, False)
@@ -205,8 +206,7 @@ class XMLParseTest(unittest.TestCase):
         check("policy", "force", "disable")
         rmfeat = guest.cpu.features[3]
         guest.cpu.remove_child(rmfeat)
-        self.assertEqual(rmfeat.get_xml(),
-                          """<feature name="foo" policy="bar"/>\n""")
+        assert rmfeat.get_xml() == """<feature name="foo" policy="bar"/>\n"""
         guest.cpu.add_feature("addfeature")
 
         check = self._make_checker(guest.numatune)
@@ -272,20 +272,18 @@ class XMLParseTest(unittest.TestCase):
         check = self._make_checker(guest.features)
         check("acpi", False, True)
         check("pae", False)
-        self.assertTrue(
-            guest.features.get_xml().startswith("<features"))
+        assert guest.features.get_xml().startswith("<features")
 
         check = self._make_checker(guest.clock)
         check("offset", None, "utc")
-        self.assertTrue(guest.clock.get_xml().startswith("<clock"))
+        assert guest.clock.get_xml().startswith("<clock") is True
 
         seclabel = virtinst.DomainSeclabel(guest.conn)
         guest.add_child(seclabel)
         seclabel.model = "testSecurity"
         seclabel.type = "static"
         seclabel.label = "frob"
-        self.assertTrue(
-            guest.seclabels[0].get_xml().startswith("<seclabel"))
+        assert guest.seclabels[0].get_xml().startswith("<seclabel")
 
         check = self._make_checker(guest.cpu)
         check("model", None)
@@ -295,13 +293,13 @@ class XMLParseTest(unittest.TestCase):
         check("topology.cores", None, 4)
         guest.cpu.add_feature("x2apic", "forbid")
         guest.cpu.set_topology_defaults(guest.vcpus)
-        self.assertTrue(guest.cpu.get_xml().startswith("<cpu"))
-        self.assertEqual(guest.cpu.get_xml_id(), "./cpu")
-        self.assertEqual(guest.cpu.get_xml_idx(), 0)
-        self.assertEqual(guest.get_xml_id(), ".")
-        self.assertEqual(guest.get_xml_idx(), 0)
+        assert guest.cpu.get_xml().startswith("<cpu") is True
+        assert guest.cpu.get_xml_id() == "./cpu"
+        assert guest.cpu.get_xml_idx() == 0
+        assert guest.get_xml_id() == "."
+        assert guest.get_xml_idx() == 0
 
-        self.assertTrue(guest.os.get_xml().startswith("<os"))
+        assert guest.os.get_xml().startswith("<os") is True
 
         self._alter_compare(guest.get_xml(), outfile)
 
@@ -495,40 +493,40 @@ class XMLParseTest(unittest.TestCase):
         iface_2 = guest.devices.interface[1]
         redirdev_1 = guest.devices.redirdev[0]
 
-        self.assertEqual(guest.os.bootorder, ['hd'])
-        self.assertEqual(disk_1.boot.order, None)
-        self.assertEqual(disk_2.boot.order, 10)
-        self.assertEqual(disk_3.boot.order, 10)
-        self.assertEqual(disk_4.boot.order, 1)
-        self.assertEqual(iface_1.boot.order, 2)
-        self.assertEqual(iface_2.boot.order, None)
-        self.assertEqual(redirdev_1.boot.order, 3)
+        assert guest.os.bootorder == ['hd']
+        assert disk_1.boot.order is None
+        assert disk_2.boot.order == 10
+        assert disk_3.boot.order == 10
+        assert disk_4.boot.order == 1
+        assert iface_1.boot.order == 2
+        assert iface_2.boot.order is None
+        assert redirdev_1.boot.order == 3
 
         guest.reorder_boot_order(disk_1, 1)
 
-        self.assertEqual(guest.os.bootorder, [])
-        self.assertEqual(disk_1.boot.order, 1)
-        self.assertEqual(disk_2.boot.order, 10)
-        self.assertEqual(disk_3.boot.order, 10)
+        assert guest.os.bootorder == []
+        assert disk_1.boot.order == 1
+        assert disk_2.boot.order == 10
+        assert disk_3.boot.order == 10
         # verify that the used algorithm preserves the order of
         # records with equal boot indices
-        self.assertIs(disk_2, guest.devices.disk[1])
-        self.assertIs(disk_3, guest.devices.disk[2])
-        self.assertEqual(disk_4.boot.order, 2)
-        self.assertEqual(iface_1.boot.order, 3)
-        self.assertEqual(iface_2.boot.order, None)
-        self.assertEqual(redirdev_1.boot.order, 4)
+        assert disk_2 is guest.devices.disk[1]
+        assert disk_3 is guest.devices.disk[2]
+        assert disk_4.boot.order == 2
+        assert iface_1.boot.order == 3
+        assert iface_2.boot.order is None
+        assert redirdev_1.boot.order == 4
 
         try:
             self._alter_compare(guest.get_xml(), outfile)
         except RuntimeError as error:
-            self.assertIn("unsupported configuration", str(error))
+            assert "unsupported configuration" in str(error)
 
         guest.reorder_boot_order(disk_2, 10)
-        self.assertEqual(disk_2.boot.order, 10)
-        self.assertEqual(disk_3.boot.order, 11)
-        self.assertIs(disk_2, guest.devices.disk[1])
-        self.assertIs(disk_3, guest.devices.disk[2])
+        assert disk_2.boot.order == 10
+        assert disk_3.boot.order == 11
+        assert disk_2 is guest.devices.disk[1]
+        assert disk_3 is guest.devices.disk[2]
 
         outfile = self._gen_outfile_path("change-devices-bootorder-fixed")
         self._alter_compare(guest.get_xml(), outfile)
@@ -538,7 +536,7 @@ class XMLParseTest(unittest.TestCase):
                """<target dev="hda" bus="ide"/></disk>\n""")
         d = virtinst.DeviceDisk(self.conn, parsexml=xml)
         self._set_and_check(d, "target", "hda", "hdb")
-        self.assertEqual(xml.replace("hda", "hdb"), d.get_xml())
+        assert xml.replace("hda", "hdb") == d.get_xml()
 
     def testAlterChars(self):
         guest, outfile = self._get_test_content("change-chars")
@@ -604,8 +602,8 @@ class XMLParseTest(unittest.TestCase):
         check("source.channel", "org.spice-space.webdav.0", "test.1")
         check("target_type", "virtio")
         check("target_name", "org.spice-space.webdav.0", "test.2")
-        self.assertEqual(channel3.get_xml_id(), "./devices/channel[3]")
-        self.assertEqual(channel3.get_xml_idx(), 2)
+        assert channel3.get_xml_id() == "./devices/channel[3]"
+        assert channel3.get_xml_idx() == 2
 
         self._alter_compare(guest.get_xml(), outfile)
 
@@ -972,7 +970,7 @@ class XMLParseTest(unittest.TestCase):
 
         check = self._make_checker(dev2.address)
         dev2.address.domain = "0x0010"
-        self.assertEqual(dev2.address.domain, 16)
+        assert dev2.address.domain == 16
         check("type", "pci")
         check("domain", 16, 1)
         check("bus", 0, 4)
@@ -1111,8 +1109,8 @@ class XMLParseTest(unittest.TestCase):
         guest.xmlns_qemu.args.add_new().value = "additional-arg"
         arg0 = guest.xmlns_qemu.args[0]
         guest.xmlns_qemu.remove_child(guest.xmlns_qemu.args[0])
-        self.assertEqual(arg0.get_xml(),
-                "<qemu:arg xmlns:qemu=\"http://libvirt.org/schemas/domain/qemu/1.0\" value=\"-somenewarg\"/>\n")
+        x = "<qemu:arg xmlns:qemu=\"http://libvirt.org/schemas/domain/qemu/1.0\" value=\"-somenewarg\"/>\n"
+        assert arg0.get_xml() == x
 
         check = self._make_checker(guest.xmlns_qemu.envs[0])
         check("name", "SOMEENV")
@@ -1188,8 +1186,8 @@ class XMLParseTest(unittest.TestCase):
     def testGuestBootorder(self):
         guest, outfile = self._get_test_content("bootorder", kvm=True)
 
-        self.assertEqual(guest.get_boot_order(), ['./devices/disk[1]'])
-        self.assertEqual(guest.get_boot_order(legacy=True), ['hd'])
+        assert guest.get_boot_order() == ['./devices/disk[1]']
+        assert guest.get_boot_order(legacy=True) == ['hd']
 
         legacy_order = ['hd', 'fd', 'cdrom', 'network']
         dev_order = ['./devices/disk[1]',
@@ -1197,12 +1195,12 @@ class XMLParseTest(unittest.TestCase):
                  './devices/disk[2]',
                  './devices/interface[1]']
         guest.set_boot_order(legacy_order, legacy=True)
-        self.assertEqual(guest.get_boot_order(), dev_order)
-        self.assertEqual(guest.get_boot_order(legacy=True), legacy_order)
+        assert guest.get_boot_order() == dev_order
+        assert guest.get_boot_order(legacy=True) == legacy_order
 
         guest.set_boot_order(dev_order)
-        self.assertEqual(guest.get_boot_order(), dev_order)
-        self.assertEqual(guest.get_boot_order(legacy=True), [])
+        assert guest.get_boot_order() == dev_order
+        assert guest.get_boot_order(legacy=True) == []
 
         self._alter_compare(guest.get_xml(), outfile)
 
@@ -1372,25 +1370,25 @@ class XMLParseTest(unittest.TestCase):
         check("macaddr", None, "52:54:00:69:eb:FF")
         check("virtualport_type", None, "openvswitch")
 
-        self.assertEqual(len(net.portgroups), 2)
+        assert len(net.portgroups) == 2
         check = self._make_checker(net.portgroups[0])
         check("name", "engineering", "foo")
         check("default", True, False)
 
-        self.assertEqual(len(net.ips), 4)
+        assert len(net.ips) == 4
         check = self._make_checker(net.ips[0])
         check("address", "192.168.7.1", "192.168.8.1")
         check("netmask", "255.255.255.0", "255.255.254.0")
-        self.assertEqual(net.can_pxe(), False)
+        assert net.can_pxe() is False
         check("tftp", None, "/var/lib/tftproot")
         check("bootp_file", None, "pxeboot.img")
         check("bootp_server", None, "1.2.3.4")
-        self.assertEqual(net.can_pxe(), True)
+        assert net.can_pxe() is True
 
         check = self._make_checker(net.forward)
         check("mode", "nat", "route")
         check("dev", None, "eth22")
-        self.assertEqual(net.can_pxe(), True)
+        assert net.can_pxe() is True
 
         check = self._make_checker(net.ips[0].ranges[0])
         check("start", "192.168.7.128", "192.168.8.128")
@@ -1430,7 +1428,7 @@ class XMLParseTest(unittest.TestCase):
         check("mode", "open")
         check("dev", None)
 
-        self.assertEqual(len(net.ips), 1)
+        assert len(net.ips) == 1
         check = self._make_checker(net.ips[0])
         check("address", "192.168.100.1", "192.168.101.1")
         check("netmask", "255.255.255.0", "255.255.254.0")
@@ -1493,37 +1491,35 @@ class XMLParseTest(unittest.TestCase):
             "  <source><address bus='hello'/></source>\n</hostdev>")
         dev = virtinst.DeviceHostdev(self.conn, parsexml=xml)
 
-        self.assertEqual(dev.managed, "foo")
-        self.assertEqual(dev.rom_bar, "wibble")
-        self.assertEqual(dev.scsi_bus, "hello")
+        assert dev.managed == "foo"
+        assert dev.rom_bar == "wibble"
+        assert dev.scsi_bus == "hello"
 
         dev.managed = "test1"
         dev.rom_bar = "test2"
-        self.assertEqual(dev.managed, "test1")
-        self.assertEqual(dev.rom_bar, "test2")
+        assert dev.managed == "test1"
+        assert dev.rom_bar == "test2"
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             dev.scsi_bus = "goodbye"
 
     def testXMLCoverage(self):
-        with self.assertRaises(RuntimeError) as cm:
+        with pytest.raises(RuntimeError, match=".*'foo'.*"):
             # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml="<foo/>")
-        self.assertTrue("'foo'" in str(cm.exception))
 
-        with self.assertRaises(Exception) as cm:
+        with pytest.raises(Exception, match=".*xmlParseDoc.*"):
             # Ensure we validate root element
             virtinst.DeviceDisk(self.conn, parsexml=-1)
-        self.assertTrue("xmlParseDoc" in str(cm.exception))
 
         from virtinst import xmlutil
-        with self.assertRaises(xmlutil.DevError):
+        with pytest.raises(xmlutil.DevError):
             raise xmlutil.DevError("for coverage")
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             virtinst.DeviceDisk.validate_generic_name("objtype", None)
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar")
 
         # Test property __repr__ for code coverage
@@ -1568,7 +1564,7 @@ class XMLParseTest(unittest.TestCase):
         disk.validate()
         disk.is_size_conflict()
         disk.build_storage(None)
-        self.assertTrue(getattr(disk, "_storage_backend").is_stub())
+        assert getattr(disk, "_storage_backend").is_stub() is True
 
         # Stub backend coverage testing
         backend = getattr(disk, "_storage_backend")
@@ -1582,9 +1578,9 @@ class XMLParseTest(unittest.TestCase):
         assert backend.get_parent_pool() is None
 
         disk.set_backend_for_existing_path()
-        self.assertFalse(getattr(disk, "_storage_backend").is_stub())
+        assert getattr(disk, "_storage_backend").is_stub() is False
 
-        with self.assertRaises(ValueError):
+        with pytest.raises(ValueError):
             disk.validate()
 
         # Ensure set_backend_for_existing_path resolves a path

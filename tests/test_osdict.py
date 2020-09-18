@@ -32,10 +32,10 @@ class TestOSDB(unittest.TestCase):
         conn = utils.URIs.open_testdefault_cached()
         guest = Guest(conn)
         res = OSDB.lookup_os("generic").get_recommended_resources()
-        self.assertEqual(res.get_recommended_ram(guest.os.arch), None)
+        assert res.get_recommended_ram(guest.os.arch) is None
 
         res = OSDB.lookup_os("fedora21").get_recommended_resources()
-        self.assertEqual(res.get_recommended_ncpus(guest.os.arch), 2)
+        assert res.get_recommended_ncpus(guest.os.arch) == 2
 
     def test_urldetct_matching_distros(self):
         # pylint: disable=protected-access
@@ -80,7 +80,7 @@ class TestOSDB(unittest.TestCase):
             assert str(e).endswith("URL location")
 
         # Trigger an error path for code coverage
-        self.assertEqual(OSDB.guess_os_by_tree(utils.TESTDIR), None)
+        assert OSDB.guess_os_by_tree(utils.TESTDIR) is None
 
     def test_kernel_url(self):
         def _c(name):
@@ -89,25 +89,25 @@ class TestOSDB(unittest.TestCase):
                 self.skipTest("osinfo-db doesn't have '%s'" % name)
             return osobj.get_kernel_url_arg()
 
-        self.assertEqual(_c("rhel7-unknown"), "inst.repo")
-        self.assertEqual(_c("rhel6-unknown"), "method")
-        self.assertEqual(_c("fedora-rawhide"), "inst.repo")
-        self.assertEqual(_c("fedora20"), "inst.repo")
-        self.assertEqual(_c("generic"), None)
-        self.assertEqual(_c("win10"), None)
-        self.assertEqual(_c("sle15"), "install")
+        assert _c("rhel7-unknown") == "inst.repo"
+        assert _c("rhel6-unknown") == "method"
+        assert _c("fedora-rawhide") == "inst.repo"
+        assert _c("fedora20") == "inst.repo"
+        assert _c("generic") is None
+        assert _c("win10") is None
+        assert _c("sle15") == "install"
 
     def test_related_to(self):
         # pylint: disable=protected-access
         win10 = OSDB.lookup_os("win10")
-        self.assertTrue(win10._is_related_to("winxp"))
-        self.assertTrue(win10._is_related_to("win10"))
-        self.assertTrue(win10._is_related_to("fedora26") is False)
+        assert win10._is_related_to("winxp") is True
+        assert win10._is_related_to("win10") is True
+        assert win10._is_related_to("fedora26") is False
 
     def test_drivers(self):
         win7 = OSDB.lookup_os("win7")
         generic = OSDB.lookup_os("generic")
-        self.assertFalse(generic.supports_unattended_drivers("x86_64"))
-        self.assertTrue(win7.supports_unattended_drivers("x86_64"))
-        self.assertFalse(win7.supports_unattended_drivers("fakearch"))
-        self.assertTrue(win7.get_pre_installable_drivers_location("x86_64"))
+        assert generic.supports_unattended_drivers("x86_64") is False
+        assert win7.supports_unattended_drivers("x86_64") is True
+        assert win7.supports_unattended_drivers("fakearch") is False
+        assert win7.get_pre_installable_drivers_location("x86_64")

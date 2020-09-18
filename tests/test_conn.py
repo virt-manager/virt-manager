@@ -5,6 +5,8 @@ import os
 import unittest
 import unittest.mock
 
+import pytest
+
 from virtinst import cli
 from virtinst import pollhelpers
 from virtinst import StoragePool
@@ -44,7 +46,7 @@ class TestConn(unittest.TestCase):
         assert conn.is_privileged() == (os.getuid() == 0)
 
         # Hit fakuuri validation error, for old style opts
-        with self.assertRaises(RuntimeError):
+        with pytest.raises(RuntimeError):
             cli.getConnection(fakeuri + ",qemu")
 
     @unittest.mock.patch.dict(os.environ,

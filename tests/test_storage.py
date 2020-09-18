@@ -195,7 +195,7 @@ class TestStorage(unittest.TestCase):
     def testMisc(self):
         # Misc coverage testing
         vol = StorageVolume(self.conn)
-        self.assertTrue(vol.is_size_conflict()[0] is False)
+        assert vol.is_size_conflict()[0] is False
 
         fullconn = utils.URIs.open_testdriver_cached()
         glusterpool = fullconn.storagePoolLookupByName("gluster-pool")
@@ -203,21 +203,20 @@ class TestStorage(unittest.TestCase):
 
         glustervol = StorageVolume(fullconn)
         glustervol.pool = glusterpool
-        self.assertTrue(glustervol.supports_format() is True)
+        assert glustervol.supports_format() is True
 
         diskvol = StorageVolume(fullconn)
         diskvol.pool = diskpool
-        self.assertTrue(diskvol.supports_format() is False)
+        assert diskvol.supports_format() is False
 
         glusterpool.destroy()
         StoragePool.ensure_pool_is_running(glusterpool)
 
         # Check pool collision detection
-        self.assertEqual(
-                StoragePool.find_free_name(fullconn, "gluster-pool"),
-                "gluster-pool-1")
+        name = StoragePool.find_free_name(fullconn, "gluster-pool")
+        assert name == "gluster-pool-1"
 
     def testEnumerateLogical(self):
         lst = StoragePool.pool_list_from_sources(self.conn,
                                                  StoragePool.TYPE_LOGICAL)
-        self.assertEqual(lst, ["testvg1", "testvg2"])
+        assert lst == ["testvg1", "testvg2"]
