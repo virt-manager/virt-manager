@@ -5,9 +5,9 @@
 
 import os
 import sys
-import unittest
 
 import libvirt
+import pytest
 
 import virtinst
 import virtinst.uri
@@ -16,7 +16,6 @@ from virtinst import xmlutil
 
 
 # pylint: disable=protected-access
-# Access to protected member, needed to unittest stuff
 
 class _TestConfig(object):
     """
@@ -138,7 +137,7 @@ class _URIs(object):
                 print(self._testdriver_error, file=sys.stderr)
 
         if is_testdriver_xml and self._testdriver_error:
-            raise unittest.SkipTest(self._testdriver_error)
+            pytest.skip(self._testdriver_error)
 
         uri = conn._open_uri
 

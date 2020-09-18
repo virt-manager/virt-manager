@@ -10,7 +10,8 @@ import shlex
 import shutil
 import sys
 import traceback
-import unittest
+
+import pytest
 
 try:
     import argcomplete
@@ -155,7 +156,7 @@ class SkipChecks:
             msg = "Skipping check due to version < %s" % check
 
         if skip:
-            raise unittest.case.SkipTest(msg)
+            raise pytest.skip(msg)
 
     def prerun_skip(self, conn):
         self._check(conn, self.prerun_check)
@@ -338,15 +339,8 @@ class Command(object):
         if self.compare_file:
             self._check_compare_file(conn, output)
 
-    def run(self, tests):
-        err = None
-
-        try:
-            self._run()
-        except AssertionError as e:
-            err = self.cmdstr + "\n" + str(e)
-        if err:
-            tests.fail(err)
+    def run(self):
+        self._run()
 
 
 class _CategoryProxy(object):
@@ -1453,32 +1447,35 @@ _add_argcomplete_cmd("virt-xml --sound mode", "model")
 ##############
 
 
-class CLIMiscTests(unittest.TestCase):
-    @utils.run_without_testsuite_hacks
-    def test_virtinstall_no_testsuite(self):
-        """
-        Run virt-install stub command without the testsuite hacks, to test
-        some code paths like proper logging etc.
-        """
-        cmd = Command(
-                "virt-install --connect %s "
-                "--test-stub-command --noautoconsole" %
-                (utils.URIs.test_suite))
-        cmd.run(self)
+@utils.run_without_testsuite_hacks
+def test_virtinstall_no_testsuite():
+    """
+    Run virt-install stub command without the testsuite hacks, to test
+    some code paths like proper logging etc.
+    """
+    cmd = Command(
+            "virt-install --connect %s "
+            "--test-stub-command --noautoconsole" %
+            (utils.URIs.test_suite))
+    cmd.run()
 
 
 #########################
 # Test runner functions #
 #########################
 
-newidx = 0
-curtest = 0
+_CURTEST = 0
 
 
 def setup():
     """
     Create initial test files/dirs
     """
+    global _CURTEST
+    _CURTEST += 1
+    if _CURTEST != 1:
+        return
+
     for i in EXIST_FILES:
         open(i, "a")
 
@@ -1500,40 +1497,41 @@ def cleanup(clean_all=True):
             os.unlink(i)
 
 
-class CLITests(unittest.TestCase):
-    def setUp(self):
-        global curtest
-        curtest += 1
-        # Only run this for first test
-        if curtest == 1:
+def _create_testfunc(cmd, do_setup):
+    def cmdtemplate():
+        if do_setup:
             setup()
-
-    def tearDown(self):
-        # Only run this on the last test
-        if curtest == newidx:
-            cleanup()
+        cmd.run()
+    return cmdtemplate
 
 
-def maketest(cmd):
-    def cmdtemplate(self, _cmdobj):
-        _cmdobj.run(self)
-    return lambda s: cmdtemplate(s, cmd)
+def _make_testcases():
+    """
+    Turn all the registered cli strings into test functions that
+    the test runner can scoop up
+    """
+    cmdlist = []
+    cmdlist += vinst.cmds
+    cmdlist += vclon.cmds
+    cmdlist += vixml.cmds
+    cmdlist += ARGCOMPLETE_CMDS
 
-_cmdlist = []
-_cmdlist += vinst.cmds
-_cmdlist += vclon.cmds
-_cmdlist += vixml.cmds
-_cmdlist += ARGCOMPLETE_CMDS
+    newidx = 0
+    for cmd in cmdlist:
+        newidx += 1
+        # Generate numbered names like testCLI%d
+        name = "testCLI%.4d" % newidx
 
-# Generate numbered names like testCLI%d
-for _cmd in _cmdlist:
-    newidx += 1
-    _name = "testCLI%.4d" % newidx
-    if _cmd.compare_file:
-        _base = os.path.splitext(os.path.basename(_cmd.compare_file))[0]
-        _name += _base.replace("-", "_")
-    else:
-        _name += os.path.basename(_cmd.app.replace("-", "_"))
-    setattr(CLITests, _name, maketest(_cmd))
+        if cmd.compare_file:
+            base = os.path.splitext(os.path.basename(cmd.compare_file))[0]
+            name += base.replace("-", "_")
+        else:
+            name += os.path.basename(cmd.app.replace("-", "_"))
 
+        do_setup = newidx == 1
+        testfunc = _create_testfunc(cmd, do_setup)
+        globals()[name] = testfunc
+
+
+_make_testcases()
 atexit.register(cleanup)

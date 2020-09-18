@@ -6,7 +6,6 @@
 import os
 import re
 import sys
-import unittest
 
 import pytest
 
@@ -126,7 +125,7 @@ def _testGuest(testdata, guest):
 
     msg = _skipmsg(testdata)
     if msg:
-        raise unittest.SkipTest(msg)
+        raise pytest.skip(msg)
 
     installer = Installer(guest.conn, location=url)
     try:
@@ -190,23 +189,21 @@ def _testURL(testdata):
         _testGuest(testdata, xenguest)
 
 
-# Register tests to be picked up by unittest
-class URLTests(unittest.TestCase):
-    def test001BadURL(self):
-        badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
+def test001BadURL():
+    badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
 
-        with pytest.raises(ValueError, match=".*maybe you mistyped.*"):
-            installer = Installer(hvmguest.conn, location=badurl)
-            installer.detect_distro(hvmguest)
+    with pytest.raises(ValueError, match=".*maybe you mistyped.*"):
+        installer = Installer(hvmguest.conn, location=badurl)
+        installer.detect_distro(hvmguest)
 
-        # Non-existent cdrom fails
-        with pytest.raises(ValueError, match=".*non-existent path.*"):
-            installer = Installer(hvmguest.conn, cdrom="/not/exist/foobar")
-            assert installer.detect_distro(hvmguest) is None
-
-        # Ensure existing but non-distro file doesn't error
-        installer = Installer(hvmguest.conn, cdrom="/dev/null")
+    # Non-existent cdrom fails
+    with pytest.raises(ValueError, match=".*non-existent path.*"):
+        installer = Installer(hvmguest.conn, cdrom="/not/exist/foobar")
         assert installer.detect_distro(hvmguest) is None
+
+    # Ensure existing but non-distro file doesn't error
+    installer = Installer(hvmguest.conn, cdrom="/dev/null")
+    assert installer.detect_distro(hvmguest) is None
 
 
 def _make_tests():
@@ -238,7 +235,7 @@ def _make_tests():
     for key, testdata in sorted(urls.items()):
         def _make_wrapper(d):
             return lambda _self: _testURL(d)
-        methodname = "testURL%s" % key.replace("-", "_")
-        setattr(URLTests, methodname, _make_wrapper(testdata))
+        methodname = "test_URL%s" % key.replace("-", "_")
+        globals()[methodname] = _make_wrapper(testdata)
 
 _make_tests()
