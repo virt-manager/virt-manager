@@ -16,11 +16,13 @@ gi.require_version('Atspi', '2.0')
 import dogtail.config
 import dogtail.utils
 
-# Perform 5 search attempts if a widget lookup fails (default 20)
-dogtail.config.config.searchCutoffCount = 5
+# find() backoff handling
+dogtail.config.config.searchBackoffDuration = .1
+dogtail.config.config.searchCutoffCount = 20
 
 # Use .1 second delay between each action (default 1)
 dogtail.config.config.actionDelay = .1
+dogtail.config.config.defaultDelay = .1
 
 # Turn off needlessly noisy debugging
 DOGTAIL_DEBUG = False

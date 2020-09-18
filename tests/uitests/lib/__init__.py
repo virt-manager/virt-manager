@@ -5,4 +5,3 @@ from . import _dogtailinit
 from . import _node
 from . import app
 from . import utils
-from . import testcase

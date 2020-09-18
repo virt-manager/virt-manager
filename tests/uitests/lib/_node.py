@@ -210,7 +210,17 @@ class _VMMDogtailNode(dogtail.tree.Node):
         # pylint: disable=arguments-differ,signature-differs
         self.check_onscreen()
         self.check_sensitive()
-        dogtail.tree.Node.click(self, *args, **kwargs)
+        super().click(*args, **kwargs)
+
+    def point(self, *args, **kwargs):
+        # pylint: disable=signature-differs
+        super().point(*args, **kwargs)
+
+        if (self.roleName == "menu" and
+            self.accessible_parent.roleName == "menu"):
+            # Widget is a submenu, make sure the item is in selected
+            # state before we return
+            utils.check(lambda: self.state_selected)
 
     def set_text(self, text):
         self.check_onscreen()
@@ -231,12 +241,29 @@ class _VMMDogtailNode(dogtail.tree.Node):
                 raise RuntimeError("Could not bring widget on screen")
         return self
 
+    def window_maximize(self):
+        assert self.roleName in ["frame", "dialog"]
+        utils.check(lambda: self.active)
+        self.click_title()
+        s1 = self.size
+        self.keyCombo("<alt>F10")
+        utils.check(lambda: self.size != s1)
+        self.grabFocus()
+
+    def window_close(self):
+        assert self.roleName in ["frame", "alert", "dialog"]
+        self.click_title()
+        utils.check(lambda: self.active)
+        self.keyCombo("<alt>F4")
+        utils.check(lambda: not self.showing)
+
 
     #########################
     # Widget search helpers #
     #########################
 
-    def find(self, name, roleName=None, labeller_text=None, check_active=True):
+    def find(self, name, roleName=None, labeller_text=None,
+            check_active=True, recursive=True):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
@@ -244,7 +271,7 @@ class _VMMDogtailNode(dogtail.tree.Node):
         pred = _FuzzyPredicate(name, roleName, labeller_text)
 
         try:
-            ret = self.findChild(pred)
+            ret = self.findChild(pred, recursive=recursive)
         except dogtail.tree.SearchError:
             raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
                 "roleName='%s' labeller_text='%s'" %
@@ -324,6 +351,9 @@ class _VMMDogtailNode(dogtail.tree.Node):
         if to figure out the roleName for the object you are looking for
         """
         print(self.fmt_nodes())
+
+    def print_states(self):
+        print([s.value_nick for s in self.getState().get_states()])
 
 
 # This is the same hack dogtail uses to extend the Accessible class.

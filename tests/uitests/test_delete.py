@@ -23,7 +23,7 @@ class _DeleteRow:
 
 
 def _create_testdriver_path(fn):
-    def wrapper(self, *args, **kwargs):
+    def wrapper(app, *args, **kwargs):
         # This special path is hardcoded in test-many-devices
         tmppath = "/tmp/virt-manager-uitests/tmp1"
         tmpdir = os.path.dirname(tmppath)
@@ -32,7 +32,7 @@ def _create_testdriver_path(fn):
                 os.mkdir(tmpdir)
             open(tmppath, "w").write("foo")
             os.chmod(tmppath, 0o444)
-            return fn(self, tmppath, *args, **kwargs)
+            return fn(app, tmppath, *args, **kwargs)
         finally:
             if os.path.exists(tmpdir):
                 os.chmod(tmpdir, 0o777)
@@ -40,267 +40,276 @@ def _create_testdriver_path(fn):
     return wrapper
 
 
-class Delete(lib.testcase.UITestCase):
-    """
-    UI tests for virt-manager's VM delete window
-    """
-    def _open_storage_browser(self):
-        self.app.root.find("New", "push button").click()
-        newvm = self.app.root.find("New VM", "frame")
-        newvm.find_fuzzy("Local install media", "radio").click()
-        newvm.find_fuzzy("Forward", "button").click()
-        newvm.find_fuzzy("install-iso-browse", "button").click()
-        return self.app.root.find("vmm-storage-browser")
+def _open_storage_browser(app):
+    app.root.find("New", "push button").click()
+    newvm = app.find_window("New VM")
+    newvm.find_fuzzy("Local install media", "radio").click()
+    newvm.find_fuzzy("Forward", "button").click()
+    newvm.find_fuzzy("install-iso-browse", "button").click()
+    return app.root.find("vmm-storage-browser")
 
-    def _open_delete(self, vmname):
-        manager = self.app.topwin
-        cell = manager.find(vmname, "table cell")
-        cell.click()
-        cell.click(button=3)
-        menu = self.app.root.find("vm-action-menu")
-        menu.find("Delete", "menu item").click()
 
-        return self.app.root.find_fuzzy("Delete", "frame")
+def _open_delete(app, vmname):
+    app.manager_vm_action(vmname, delete=True)
+    return app.find_window("Delete")
 
-    def _finish(self, delete, paths, expect_fail=False, click_no=False):
-        delete.find_fuzzy("Delete", "button").click()
-        if paths:
-            alert = self.app.root.find("vmm dialog", "alert")
-            alert.find_fuzzy("Are you sure")
-            for path in paths:
-                alert.find_fuzzy(path)
-            if click_no:
-                alert.find("No", "push button").click()
-                return
-            alert.find("Yes", "push button").click()
-        if not expect_fail:
-            lib.utils.check(lambda: not delete.showing)
 
-    def _get_all_rows(self, delete):
+def _finish(app, delete, paths, expect_fail=False, click_no=False):
+    delete.find_fuzzy("Delete", "button").click()
+    if paths:
+        alert = app.root.find("vmm dialog", "alert")
+        alert.find_fuzzy("Are you sure")
+        for path in paths:
+            alert.find_fuzzy(path)
+        if click_no:
+            alert.find("No", "push button").click()
+            return
+        alert.find("Yes", "push button").click()
+    if not expect_fail:
+        lib.utils.check(lambda: not delete.showing)
+
+
+def _get_all_rows(delete):
+    slist = delete.find("storage-list")
+    def pred(node):
+        return node.roleName == "table cell"
+    cells = slist.findChildren(pred, isLambda=True)
+
+    idx = 0
+    rows = []
+    while idx < len(cells):
+        rows.append(_DeleteRow(*cells[idx:idx + 4]))
+        idx += 4
+    return rows
+
+
+################################################
+# UI tests for virt-manager's VM delete window #
+################################################
+
+def _testDeleteManyDevices(app,
+        nondefault_path=None, delete_nondefault=False,
+        skip_finish=False):
+    delete = _open_delete(app, "test-many-devices")
+
+    rows = _get_all_rows(delete)
+    selected_rows = [r.path for r in rows if r.default]
+    undeletable_rows = [r.path for r in rows if r.undeletable]
+    notdefault_rows = [r.path for r in rows if r.notdefault]
+
+    defpath = "/dev/default-pool/overlay.img"
+    nondefault_path2 = "/dev/default-pool/sharevol.img"
+
+    assert selected_rows == [defpath]
+    if nondefault_path:
+        assert nondefault_path in notdefault_rows
+    assert nondefault_path2 in notdefault_rows
+    assert "/dev/fda" in undeletable_rows
+
+    if delete_nondefault:
+        # Click the selector for the nondefault path
+        found = [r for r in rows if r.path == nondefault_path]
+        assert len(found) == 1
         slist = delete.find("storage-list")
-        def pred(node):
-            return node.roleName == "table cell"
-        cells = slist.findChildren(pred, isLambda=True)
+        slist.click()
+        chkcell = found[0].chkcell
+        chkcell.bring_on_screen()
+        chkcell.click()
+        chkcell.click()
+        chkcell.click()
+        lib.utils.check(lambda: chkcell.checked)
 
-        idx = 0
-        rows = []
-        while idx < len(cells):
-            rows.append(_DeleteRow(*cells[idx:idx + 4]))
-            idx += 4
-        return rows
+    paths = []
+    if defpath:
+        paths.append(defpath)
+    if delete_nondefault:
+        paths.append(nondefault_path)
+    if skip_finish:
+        return paths
+    _finish(app, delete, paths)
+
+    # Confirm
+    browser = _open_storage_browser(app)
+    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find("vol-refresh", "push button").click()
+    lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
+    browser.find("sharevol.img", "table cell")
 
 
-    ##############
-    # Test cases #
-    ##############
+@_create_testdriver_path
+def testDeleteManyDevices(app, tmppath):
+    """
+    Hit a specific case of a path not selected by default
+    because the permissions are readonly
+    """
+    _testDeleteManyDevices(app, nondefault_path=tmppath)
 
-    def _testDeleteManyDevices(self,
-            nondefault_path=None, delete_nondefault=False,
-            skip_finish=False):
-        delete = self._open_delete("test-many-devices")
 
-        rows = self._get_all_rows(delete)
-        selected_rows = [r.path for r in rows if r.default]
-        undeletable_rows = [r.path for r in rows if r.undeletable]
-        notdefault_rows = [r.path for r in rows if r.notdefault]
+@_create_testdriver_path
+def testDeleteNondefaultOverride(app, tmppath):
+    """
+    Path not selected by default, but we select it,
+    which will cause it to be manually unlinked
+    """
+    _testDeleteManyDevices(app,
+            nondefault_path=tmppath,
+            delete_nondefault=True)
+    assert not os.path.exists(tmppath)
 
-        defpath = "/dev/default-pool/overlay.img"
-        nondefault_path2 = "/dev/default-pool/sharevol.img"
 
-        assert selected_rows == [defpath]
-        if nondefault_path:
-            assert nondefault_path in notdefault_rows
-        assert nondefault_path2 in notdefault_rows
-        assert "/dev/fda" in undeletable_rows
+@_create_testdriver_path
+def testDeleteFailure(app, tmppath):
+    """
+    After launching the wizard we change permissions to make
+    file deletion fail
+    """
+    paths = _testDeleteManyDevices(app,
+            nondefault_path=tmppath,
+            delete_nondefault=True,
+            skip_finish=True)
+    os.chmod(os.path.dirname(tmppath), 0o555)
+    delete = app.find_window("Delete")
+    _finish(app, delete, paths, expect_fail=True, click_no=True)
+    lib.utils.check(lambda: delete.active)
+    _finish(app, delete, paths, expect_fail=True)
+    assert os.path.exists(tmppath)
+    app.click_alert_button("Errors encountered", "Close")
 
-        if delete_nondefault:
-            # Click the selector for the nondefault path
-            found = [r for r in rows if r.path == nondefault_path]
-            assert len(found) == 1
-            slist = delete.find("storage-list")
-            slist.click()
-            chkcell = found[0].chkcell
-            chkcell.bring_on_screen()
-            chkcell.click()
-            chkcell.click()
-            chkcell.click()
-            lib.utils.check(lambda: chkcell.checked)
+    # Ensure disconnecting will close the dialog
+    manager = app.topwin
+    manager.window_maximize()
+    win = _open_delete(app, "test-clone")
+    manager.click_title()
+    app.manager_conn_disconnect("test testdriver.xml")
+    lib.utils.check(lambda: not win.showing)
 
-        paths = []
-        if defpath:
-            paths.append(defpath)
-        if delete_nondefault:
-            paths.append(nondefault_path)
-        if skip_finish:
-            return paths
-        self._finish(delete, paths)
 
-        # Confirm
-        browser = self._open_storage_browser()
-        browser.find_fuzzy("default-pool", "table cell").click()
-        browser.find("vol-refresh", "push button").click()
-        lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
-        browser.find("sharevol.img", "table cell")
+def testDeleteRemoteManyDevices(app):
+    """
+    Test with a remote VM to hit a certain code path
+    """
+    app.uri = tests.utils.URIs.kvm_remote
+    _testDeleteManyDevices(app)
 
-    @_create_testdriver_path
-    def testDeleteManyDevices(self, tmppath):
-        """
-        Hit a specific case of a path not selected by default
-        because the permissions are readonly
-        """
-        self._testDeleteManyDevices(nondefault_path=tmppath)
 
-    @_create_testdriver_path
-    def testDeleteNondefaultOverride(self, tmppath):
-        """
-        Path not selected by default, but we select it,
-        which will cause it to be manually unlinked
-        """
-        self._testDeleteManyDevices(
-                nondefault_path=tmppath,
-                delete_nondefault=True)
-        assert not os.path.exists(tmppath)
+def testDeleteSkipStorage(app):
+    """
+    Test VM delete with all storage skipped
+    """
+    delete = _open_delete(app, "test-many-devices")
+    chk = delete.find("Delete associated", "check box")
+    slist = delete.find("storage-list")
 
-    @_create_testdriver_path
-    def testDeleteFailure(self, tmppath):
-        """
-        After launching the wizard we change permissions to make
-        file deletion fail
-        """
-        paths = self._testDeleteManyDevices(
-                nondefault_path=tmppath,
-                delete_nondefault=True,
-                skip_finish=True)
-        os.chmod(os.path.dirname(tmppath), 0o555)
-        delete = self.app.root.find_fuzzy("Delete", "frame")
-        self._finish(delete, paths, expect_fail=True, click_no=True)
-        lib.utils.check(lambda: delete.active)
-        self._finish(delete, paths, expect_fail=True)
-        assert os.path.exists(tmppath)
-        self.app.click_alert_button("Errors encountered", "Close")
+    lib.utils.check(lambda: chk.checked)
+    chk.click()
+    lib.utils.check(lambda: not chk.checked)
+    lib.utils.check(lambda: not slist.showing)
 
-    def testDeleteRemoteManyDevices(self):
-        """
-        Test with a remote VM to hit a certain code path
-        """
-        self.app.uri = tests.utils.URIs.kvm_remote
-        self._testDeleteManyDevices()
+    _finish(app, delete, None)
 
-    def testDeleteSkipStorage(self):
-        """
-        Test VM delete with all storage skipped
-        """
-        delete = self._open_delete("test-many-devices")
-        chk = delete.find("Delete associated", "check box")
-        slist = delete.find("storage-list")
+    # Confirm nothing was deleted compare to the default selections
+    browser = _open_storage_browser(app)
+    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find("vol-refresh", "push button").click()
+    app.sleep(.5)
+    browser.find("overlay.img", "table cell")
+    browser.find("sharevol.img", "table cell")
 
-        lib.utils.check(lambda: chk.checked)
-        chk.click()
-        lib.utils.check(lambda: not chk.checked)
-        lib.utils.check(lambda: not slist.showing)
 
-        self._finish(delete, None)
+def testDeleteDeviceNoStorage(app):
+    """
+    Verify successful device remove with storage doesn't
+    touch host storage
+    """
+    details = app.manager_open_details("test-many-devices",
+            shutdown=True)
 
-        # Confirm nothing was deleted compare to the default selections
-        browser = self._open_storage_browser()
-        browser.find_fuzzy("default-pool", "table cell").click()
-        browser.find("vol-refresh", "push button").click()
-        self.app.sleep(.5)
-        browser.find("overlay.img", "table cell")
-        browser.find("sharevol.img", "table cell")
+    hwlist = details.find("hw-list")
+    hwlist.click()
+    c = hwlist.find("USB Disk 1")
+    c.bring_on_screen()
+    c.click()
+    tab = details.find("disk-tab")
+    lib.utils.check(lambda: tab.showing)
+    details.find("config-remove").click()
 
-    def testDeleteDeviceNoStorage(self):
-        """
-        Verify successful device remove with storage doesn't
-        touch host storage
-        """
-        details = self.app.open_details_window("test-many-devices",
-                shutdown=True)
+    delete = app.find_window("Remove Disk")
+    chk = delete.find("Delete associated", "check box")
+    lib.utils.check(lambda: not chk.checked)
+    _finish(app, delete, [])
+    details.click()
+    details.keyCombo("<alt>F4")
 
-        hwlist = details.find("hw-list")
-        hwlist.click()
-        c = hwlist.find("USB Disk 1")
-        c.bring_on_screen()
-        c.click()
-        tab = details.find("disk-tab")
-        lib.utils.check(lambda: tab.showing)
-        details.find("config-remove").click()
+    browser = _open_storage_browser(app)
+    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find("vol-refresh", "push button").click()
+    app.sleep(.5)
+    browser.find("overlay.img", "table cell")
 
-        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
-        chk = delete.find("Delete associated", "check box")
-        lib.utils.check(lambda: not chk.checked)
-        self._finish(delete, [])
-        details.click()
-        details.keyCombo("<alt>F4")
 
-        browser = self._open_storage_browser()
-        browser.find_fuzzy("default-pool", "table cell").click()
-        browser.find("vol-refresh", "push button").click()
-        self.app.sleep(.5)
-        browser.find("overlay.img", "table cell")
+def testDeleteDeviceWithStorage(app):
+    """
+    Verify successful device remove deletes storage
+    """
+    details = app.manager_open_details("test-many-devices",
+            shutdown=True)
 
-    def testDeleteDeviceWithStorage(self):
-        """
-        Verify successful device remove deletes storage
-        """
-        details = self.app.open_details_window("test-many-devices",
-                shutdown=True)
+    hwlist = details.find("hw-list")
+    hwlist.click()
+    c = hwlist.find("USB Disk 1")
+    c.bring_on_screen()
+    c.click()
+    tab = details.find("disk-tab")
+    lib.utils.check(lambda: tab.showing)
+    details.find("config-remove").click()
 
-        hwlist = details.find("hw-list")
-        hwlist.click()
-        c = hwlist.find("USB Disk 1")
-        c.bring_on_screen()
-        c.click()
-        tab = details.find("disk-tab")
-        lib.utils.check(lambda: tab.showing)
-        details.find("config-remove").click()
+    delete = app.find_window("Remove Disk")
+    chk = delete.find("Delete associated", "check box")
+    lib.utils.check(lambda: not chk.checked)
+    chk.click()
+    lib.utils.check(lambda: chk.checked)
+    path = "/dev/default-pool/overlay.img"
+    delete.find_fuzzy(path)
+    _finish(app, delete, [path])
+    details.click()
+    details.keyCombo("<alt>F4")
 
-        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
-        chk = delete.find("Delete associated", "check box")
-        lib.utils.check(lambda: not chk.checked)
-        chk.click()
-        lib.utils.check(lambda: chk.checked)
-        path = "/dev/default-pool/overlay.img"
-        delete.find_fuzzy(path)
-        self._finish(delete, [path])
-        details.click()
-        details.keyCombo("<alt>F4")
+    browser = _open_storage_browser(app)
+    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find("vol-refresh", "push button").click()
+    lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
 
-        browser = self._open_storage_browser()
-        browser.find_fuzzy("default-pool", "table cell").click()
-        browser.find("vol-refresh", "push button").click()
-        lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
 
-    def testDeleteDeviceFail(self):
-        """
-        Verify failed device remove does not touch storage
-        """
-        details = self.app.open_details_window("test-many-devices")
+def testDeleteDeviceFail(app):
+    """
+    Verify failed device remove does not touch storage
+    """
+    details = app.manager_open_details("test-many-devices")
 
-        hwlist = details.find("hw-list")
-        hwlist.click()
-        c = hwlist.find("USB Disk 1")
-        c.bring_on_screen()
-        c.click()
-        tab = details.find("disk-tab")
-        lib.utils.check(lambda: tab.showing)
-        details.find("config-remove").click()
+    hwlist = details.find("hw-list")
+    hwlist.click()
+    c = hwlist.find("USB Disk 1")
+    c.bring_on_screen()
+    c.click()
+    tab = details.find("disk-tab")
+    lib.utils.check(lambda: tab.showing)
+    details.find("config-remove").click()
 
-        delete = self.app.root.find_fuzzy("Remove Disk", "frame")
-        chk = delete.find("Delete associated", "check box")
-        lib.utils.check(lambda: not chk.checked)
-        chk.click()
-        lib.utils.check(lambda: chk.checked)
-        path = "/dev/default-pool/overlay.img"
-        delete.find_fuzzy(path)
-        self._finish(delete, [path], expect_fail=True)
-        self.app.click_alert_button("Storage will not be.*deleted", "OK")
-        details.click()
-        details.keyCombo("<alt>F4")
+    delete = app.find_window("Remove Disk")
+    chk = delete.find("Delete associated", "check box")
+    lib.utils.check(lambda: not chk.checked)
+    chk.click()
+    lib.utils.check(lambda: chk.checked)
+    path = "/dev/default-pool/overlay.img"
+    delete.find_fuzzy(path)
+    _finish(app, delete, [path], expect_fail=True)
+    app.click_alert_button("Storage will not be.*deleted", "OK")
+    details.click()
+    details.keyCombo("<alt>F4")
 
-        # Verify file still exists
-        browser = self._open_storage_browser()
-        browser.find_fuzzy("default-pool", "table cell").click()
-        browser.find("vol-refresh", "push button").click()
-        self.app.sleep(.5)
-        browser.find("overlay.img", "table cell")
+    # Verify file still exists
+    browser = _open_storage_browser(app)
+    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find("vol-refresh", "push button").click()
+    app.sleep(.5)
+    browser.find("overlay.img", "table cell")
