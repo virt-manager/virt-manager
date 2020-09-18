@@ -11,11 +11,6 @@ from ..logger import log
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-def _get_mode_prop(channel_type):
-    xpath = "./channel[@name='%s']/@mode" % channel_type
-    return XMLProperty(xpath)
-
-
 def _validate_port(name, val):
     if val is None:
         return val
@@ -44,13 +39,6 @@ class DeviceGraphics(Device):
     TYPE_RDP = "rdp"
     TYPE_SPICE = "spice"
 
-    CHANNEL_TYPE_MAIN     = "main"
-    CHANNEL_TYPE_DISPLAY  = "display"
-    CHANNEL_TYPE_INPUTS   = "inputs"
-    CHANNEL_TYPE_CURSOR   = "cursor"
-    CHANNEL_TYPE_PLAYBACK = "playback"
-    CHANNEL_TYPE_RECORD   = "record"
-
     _XML_PROP_ORDER = ["type", "gl", "_port", "_tlsPort", "autoport", "websocket",
                        "keymap", "_listen",
                        "passwd", "display", "xauth"]
@@ -77,13 +65,6 @@ class DeviceGraphics(Device):
 
     autoport = XMLProperty("./@autoport", is_yesno=True)
     websocket = XMLProperty("./@websocket", is_int=True)
-
-    channel_main_mode = _get_mode_prop(CHANNEL_TYPE_MAIN)
-    channel_display_mode = _get_mode_prop(CHANNEL_TYPE_DISPLAY)
-    channel_inputs_mode = _get_mode_prop(CHANNEL_TYPE_INPUTS)
-    channel_cursor_mode = _get_mode_prop(CHANNEL_TYPE_CURSOR)
-    channel_playback_mode = _get_mode_prop(CHANNEL_TYPE_PLAYBACK)
-    channel_record_mode = _get_mode_prop(CHANNEL_TYPE_RECORD)
 
     xauth = XMLProperty("./@xauth")
     display = XMLProperty("./@display")
