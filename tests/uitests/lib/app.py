@@ -24,6 +24,7 @@ class VMMDogtailApp(object):
         self._proc = None
         self._root = None
         self._topwin = None
+        self._manager = None
         self.uri = uri
 
 
@@ -37,6 +38,11 @@ class VMMDogtailApp(object):
     def sleep(self, *args, **kwargs):
         return time.sleep(*args, **kwargs)
 
+    def find_window(self, name, roleName=None):
+        if roleName is None:
+            roleName = "(frame|dialog|alert|window)"
+        return self.root.find(name=name, roleName=roleName, recursive=False)
+
     rawinput = dogtail.rawinput
     tree = dogtail.tree
 
@@ -45,27 +51,16 @@ class VMMDogtailApp(object):
     # virt-manager specific helpers #
     #################################
 
-    def open_host_window(self, tab, conn_label="test testdriver.xml"):
-        """
-        Helper to open host connection window and switch to a tab
-        """
-        self.root.find_fuzzy(conn_label, "table cell").click()
-        self.root.find_fuzzy("Edit", "menu").click()
-        self.root.find_fuzzy("Connection Details", "menu item").click()
-        win = self.root.find_fuzzy(
-                "%s - Connection Details" % conn_label, "frame")
-        win.find_fuzzy(tab, "page tab").click()
-        return win
+    def get_manager(self):
+        if not self._manager:
+            self._manager = self.find_window("Virtual Machine Manager")
+        return self._manager
 
-    def open_details_window(self, vmname, shutdown=False, double=False):
-        if double:
-            self.root.find_fuzzy(vmname, "table cell").doubleClick()
-        else:
-            self.root.find_fuzzy(vmname, "table cell").click(button=3)
-            self.root.find("Open", "menu item").click()
-
-        win = self.root.find("%s on" % vmname, "frame")
-        win.find("Details", "radio button").click()
+    def find_details_window(self, vmname,
+            click_details=False, shutdown=False):
+        win = self.find_window("%s on" % vmname, "frame")
+        if click_details:
+            win.find("Details", "radio button").click()
         if shutdown:
             win.find("Shut Down", "push button").click()
             run = win.find("Run", "push button")
@@ -73,13 +68,13 @@ class VMMDogtailApp(object):
         return win
 
     def click_alert_button(self, label_text, button_text):
-        alert = self.root.find("vmm dialog", "alert")
+        alert = self.find_window("vmm dialog", "alert")
         alert.find_fuzzy(label_text, "label")
         alert.find(button_text, "push button").click()
         utils.check(lambda: not alert.active)
 
     def select_storagebrowser_volume(self, pool, vol, doubleclick=False):
-        browsewin = self.root.find("vmm-storage-browser")
+        browsewin = self.find_window("vmm-storage-browser")
         browsewin.find_fuzzy(pool, "table cell").click()
         volcell = browsewin.find_fuzzy(vol, "table cell")
         if doubleclick:
@@ -88,6 +83,134 @@ class VMMDogtailApp(object):
             volcell.click()
             browsewin.find_fuzzy("Choose Volume").click()
         utils.check(lambda: not browsewin.active)
+
+
+    ##########################
+    # manager window helpers #
+    ##########################
+
+    def manager_open_createconn(self):
+        manager = self.get_manager()
+        manager.find("File", "menu").click()
+        manager.find("Add Connection...", "menu item").click()
+        win = self.root.find("Add Connection", "dialog")
+        return win
+
+    def manager_createconn(self, uri):
+        win = self.manager_open_createconn()
+        win.combo_select("Hypervisor", "Custom URI")
+        win.find("uri-entry", "text").set_text(uri)
+        win.find("Connect", "push button").click()
+        utils.check(lambda: win.showing is False)
+
+    def manager_get_conn_cell(self, conn_label):
+        return self.get_manager().find(conn_label, "table cell")
+
+    def manager_conn_connect(self, conn_label):
+        c = self.manager_get_conn_cell(conn_label)
+        c.click(button=3)
+        self.root.find("conn-connect", "menu item").click()
+        utils.check(lambda: "Not Connected" not in c.text)
+        return c
+
+    def manager_conn_disconnect(self, conn_label):
+        c = self.manager_get_conn_cell(conn_label)
+        c.click(button=3)
+        self.root.find("conn-disconnect", "menu item").click()
+        utils.check(lambda: "Not Connected" in c.text)
+        return c
+
+    def manager_conn_delete(self, conn_label):
+        c = self.manager_get_conn_cell(conn_label)
+        c.click(button=3)
+        self.root.find("conn-delete", "menu item").click()
+        self.click_alert_button("will remove the connection", "Yes")
+        utils.check(lambda: c.dead)
+
+    def manager_vm_action(self, vmname, confirm_click_no=False,
+            run=False, shutdown=False, destroy=False, reset=False,
+            reboot=False, pause=False, resume=False, save=False,
+            restore=False, clone=False, migrate=False, delete=False,
+            details=False):
+        manager = self.get_manager()
+        vmcell = manager.find(vmname + "\n", "table cell")
+
+        if run:
+            action = "Run"
+        if shutdown:
+            action = "Shut Down"
+        if reboot:
+            action = "Reboot"
+        if reset:
+            action = "Force Reset"
+        if destroy:
+            action = "Force Off"
+        if pause:
+            action = "Pause"
+        if resume:
+            action = "Resume"
+        if save:
+            action = "Save"
+        if restore:
+            action = "Restore"
+        if clone:
+            action = "Clone"
+        if migrate:
+            action = "Migrate"
+        if delete:
+            action = "Delete"
+        if details:
+            action = "Open"
+
+        needs_shutdown = shutdown or destroy or reset or reboot or save
+        needs_confirm = needs_shutdown or pause
+
+        def _do_click():
+            vmcell.click()
+            vmcell.click(button=3)
+            menu = self.root.find("vm-action-menu")
+            utils.check(lambda: menu.onscreen)
+            if needs_shutdown:
+                smenu = menu.find("Shut Down", "menu")
+                smenu.point()
+                utils.check(lambda: smenu.onscreen)
+                item = smenu.find(action, "menu item")
+            else:
+                item = menu.find(action, "menu item")
+            utils.check(lambda: item.onscreen)
+            item.point()
+            utils.check(lambda: item.state_selected)
+            item.click()
+            return menu
+
+        m = _do_click()
+        if needs_confirm:
+            if confirm_click_no:
+                self.click_alert_button("Are you sure", "No")
+                m = _do_click()
+            self.click_alert_button("Are you sure", "Yes")
+        utils.check(lambda: not m.onscreen)
+
+    def manager_open_clone(self, vmname):
+        self.manager_vm_action(vmname, clone=True)
+        return self.find_window("Clone Virtual Machine")
+
+    def manager_open_details(self, vmname, shutdown=False):
+        self.manager_vm_action(vmname, details=True)
+        win = self.find_details_window(vmname,
+                shutdown=shutdown, click_details=True)
+        return win
+
+    def manager_open_host(self, tab, conn_label="test testdriver.xml"):
+        """
+        Helper to open host connection window and switch to a tab
+        """
+        self.root.find_fuzzy(conn_label, "table cell").click()
+        self.root.find_fuzzy("Edit", "menu").click()
+        self.root.find_fuzzy("Connection Details", "menu item").click()
+        win = self.find_window("%s - Connection Details" % conn_label)
+        win.find_fuzzy(tab, "page tab").click()
+        return win
 
 
     ###########################
@@ -156,7 +279,7 @@ class VMMDogtailApp(object):
             window_name=None, xmleditor_enabled=False, keyfile=None,
             break_setfacl=False, first_run=True, no_fork=True,
             will_fail=False, enable_libguestfs=False,
-            firstrun_uri=None):
+            firstrun_uri=None, show_console=None):
         extra_opts = extra_opts or []
         uri = uri or self.uri
 
@@ -174,6 +297,8 @@ class VMMDogtailApp(object):
             cmd += ["--no-fork"]
         if use_uri:
             cmd += ["--connect", uri]
+        if show_console:
+            cmd += ["--show-domain-console=%s" % show_console]
 
         if first_run:
             cmd.append("--test-options=first-run")
@@ -205,4 +330,4 @@ class VMMDogtailApp(object):
         self._proc = subprocess.Popen(cmd, stdout=stdout, stderr=stderr)
         if not will_fail:
             self._root = dogtail.tree.root.application("virt-manager")
-            self._topwin = self._root.find(window_name, "(frame|dialog|alert)")
+            self._topwin = self.find_window(window_name)

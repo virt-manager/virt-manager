@@ -1377,7 +1377,7 @@ class vmmDomain(vmmLibvirtObject):
             start_job_progress_thread(self, meter, _("Saving domain to disk"))
 
         if self.config.CLITestOptions.test_managed_save:
-            time.sleep(3)
+            time.sleep(1.2)
         self._backend.managedSave(0)
 
     def has_managed_save(self):
@@ -1437,7 +1437,7 @@ class vmmDomain(vmmLibvirtObject):
         if self.conn.is_test() and "TESTSUITE-FAKE" in (dest_uri or ""):
             # If using the test driver and a special URI, fake successful
             # migration so we can test more of the migration wizard
-            time.sleep(3)
+            time.sleep(1.2)
             if not xml:
                 xml = self.get_xml_to_define()
             destconn.define_domain(xml).create()

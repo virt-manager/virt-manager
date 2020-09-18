@@ -1185,7 +1185,7 @@ class vmmConnection(vmmGObject):
         if self.is_disconnected():
             return  # pragma: no cover
         if self.is_connecting() and not force:
-            return
+            return  # pragma: no cover
 
         # We need to set this before the event check, since stats polling
         # is independent of events
