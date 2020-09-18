@@ -1050,7 +1050,6 @@ class XMLParseTest(unittest.TestCase):
         assert guest.devices.disk[1].get_xml_id() == "./devices/disk[2]"
         assert guest.devices.disk[1].get_xml_idx() == 1
 
-
     def testReplaceChildParse(self):
         buildfile = DATADIR + "replace-child-build.xml"
         parsefile = DATADIR + "replace-child-parse.xml"
@@ -1078,52 +1077,6 @@ class XMLParseTest(unittest.TestCase):
                 parsexml=mkdisk("sdw").get_xml())
         guest.devices.replace_child(guest.devices.disk[4], newdisk)
         utils.diff_compare(guest.get_xml(), parsefile)
-
-    def testDiskBackend(self):
-        # Test that calling validate() on parsed disk XML doesn't attempt
-        # to verify the path exists. Assume it's a working config
-        xml = ("<disk type='file' device='disk'>"
-            "<source file='/A/B/C/D/NOPE'/>"
-            "</disk>")
-        disk = virtinst.DeviceDisk(self.conn, parsexml=xml)
-        disk.validate()
-        disk.is_size_conflict()
-        disk.build_storage(None)
-        assert getattr(disk, "_storage_backend").is_stub() is True
-
-        # Stub backend coverage testing
-        backend = getattr(disk, "_storage_backend")
-        assert disk.get_parent_pool() is None
-        assert disk.get_vol_object() is None
-        assert disk.get_vol_install() is None
-        assert disk.get_size() == 0
-        assert backend.get_vol_xml() is None
-        assert backend.get_dev_type() == "file"
-        assert backend.get_driver_type() is None
-        assert backend.get_parent_pool() is None
-
-        disk.set_backend_for_existing_path()
-        assert getattr(disk, "_storage_backend").is_stub() is False
-
-        with pytest.raises(ValueError):
-            disk.validate()
-
-        # Ensure set_backend_for_existing_path resolves a path
-        # to its existing storage volume
-        xml = ("<disk type='file' device='disk'>"
-            "<source file='/dev/default-pool/default-vol'/>"
-            "</disk>")
-        conn = utils.URIs.open_testdriver_cached()
-        disk = virtinst.DeviceDisk(conn, parsexml=xml)
-        disk.set_backend_for_existing_path()
-        assert disk.get_vol_object()
-
-        # Verify set_backend_for_existing_path doesn't error
-        # for a variety of disks
-        dom = conn.lookupByName("test-many-devices")
-        guest = virtinst.Guest(conn, parsexml=dom.XMLDesc(0))
-        for disk in guest.devices.disk:
-            disk.set_backend_for_existing_path()
 
     def testGuestXMLDeviceMatch(self):
         """
