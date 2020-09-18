@@ -86,35 +86,33 @@ class TestXMLMisc(unittest.TestCase):
         #
         # Note: using single quotes in strings to avoid
         # codespell flagging the 'ba' assert
-        self.assertEqual('a', DeviceDisk.num_to_target(1))
-        self.assertEqual('b', DeviceDisk.num_to_target(2))
-        self.assertEqual('z', DeviceDisk.num_to_target(26))
-        self.assertEqual('aa', DeviceDisk.num_to_target(27))
-        self.assertEqual('ab', DeviceDisk.num_to_target(28))
-        self.assertEqual('az', DeviceDisk.num_to_target(52))
-        self.assertEqual('ba', DeviceDisk.num_to_target(53))
-        self.assertEqual('zz', DeviceDisk.num_to_target(27 * 26))
-        self.assertEqual('aaa', DeviceDisk.num_to_target(27 * 26 + 1))
+        assert DeviceDisk.num_to_target(1) == 'a'
+        assert DeviceDisk.num_to_target(2) == 'b'
+        assert DeviceDisk.num_to_target(26) == 'z'
+        assert DeviceDisk.num_to_target(27) == 'aa'
+        assert DeviceDisk.num_to_target(28) == 'ab'
+        assert DeviceDisk.num_to_target(52) == 'az'
+        assert DeviceDisk.num_to_target(53) == 'ba'
+        assert DeviceDisk.num_to_target(27 * 26) == 'zz'
+        assert DeviceDisk.num_to_target(27 * 26 + 1) == 'aaa'
 
-        self.assertEqual(DeviceDisk.target_to_num('hda'), 0)
-        self.assertEqual(DeviceDisk.target_to_num('hdb'), 1)
-        self.assertEqual(DeviceDisk.target_to_num('sdz'), 25)
-        self.assertEqual(DeviceDisk.target_to_num('sdaa'), 26)
-        self.assertEqual(DeviceDisk.target_to_num('vdab'), 27)
-        self.assertEqual(DeviceDisk.target_to_num('vdaz'), 51)
-        self.assertEqual(DeviceDisk.target_to_num('xvdba'), 52)
-        self.assertEqual(DeviceDisk.target_to_num('xvdzz'),
-            26 * (25 + 1) + 25)
-        self.assertEqual(DeviceDisk.target_to_num('xvdaaa'),
-            26 * 26 * 1 + 26 * 1 + 0)
+        assert DeviceDisk.target_to_num('hda') == 0
+        assert DeviceDisk.target_to_num('hdb') == 1
+        assert DeviceDisk.target_to_num('sdz') == 25
+        assert DeviceDisk.target_to_num('sdaa') == 26
+        assert DeviceDisk.target_to_num('vdab') == 27
+        assert DeviceDisk.target_to_num('vdaz') == 51
+        assert DeviceDisk.target_to_num('xvdba') == 52
+        assert DeviceDisk.target_to_num('xvdzz') == 26 * (25 + 1) + 25
+        assert DeviceDisk.target_to_num('xvdaaa') == 26 * 26 * 1 + 26 * 1 + 0
 
         disk = virtinst.DeviceDisk(self.conn)
         disk.bus = 'ide'
 
-        self.assertEqual('hda', disk.generate_target([]))
-        self.assertEqual('hdb', disk.generate_target(['hda']))
-        self.assertEqual('hdc', disk.generate_target(['hdb', 'sda']))
-        self.assertEqual('hdb', disk.generate_target(['hda', 'hdd']))
+        assert disk.generate_target([]) == 'hda'
+        assert disk.generate_target(['hda']) == 'hdb'
+        assert disk.generate_target(['hdb', 'sda']) == 'hdc'
+        assert disk.generate_target(['hda', 'hdd']) == 'hdb'
 
     def testQuickTreeinfo(self):
         # Simple sanity test to make sure detect_distro works. test-urls
@@ -123,13 +121,13 @@ class TestXMLMisc(unittest.TestCase):
             location=utils.DATADIR + "/fakemedia/fakefedoratree")
         g = _make_guest()
         v = i.detect_distro(g)
-        self.assertEqual(v, "fedora17")
+        assert v == "fedora17"
 
         i = _make_installer(
             location=utils.DATADIR + "/fakemedia/fakerhel6tree")
         g = _make_guest()
         v = i.detect_distro(g)
-        self.assertEqual(v, "rhel6.0")
+        assert v == "rhel6.0"
 
     def testCDROMInsert(self):
         # After set_install_defaults, cdrom media should be inserted
@@ -151,25 +149,25 @@ class TestXMLMisc(unittest.TestCase):
         cpu.set_topology_defaults(6)
         def get_top(_c):
             return [_c.topology.sockets, _c.topology.cores, _c.topology.threads]
-        self.assertEqual(get_top(cpu), [2, 3, 1])
+        assert get_top(cpu) == [2, 3, 1]
 
         cpu = virtinst.DomainCpu(self.conn)
         cpu.topology.cores = "4"
         cpu.set_topology_defaults(9)
-        self.assertEqual(get_top(cpu), [2, 4, 1])
+        assert get_top(cpu) == [2, 4, 1]
 
         cpu = virtinst.DomainCpu(self.conn)
         cpu.topology.threads = "3"
         cpu.set_topology_defaults(14)
-        self.assertEqual(get_top(cpu), [4, 1, 3])
+        assert get_top(cpu) == [4, 1, 3]
 
         cpu = virtinst.DomainCpu(self.conn)
         cpu.topology.sockets = 5
         cpu.topology.cores = 2
-        self.assertEqual(cpu.vcpus_from_topology(), 10)
+        assert cpu.vcpus_from_topology() == 10
 
         cpu = virtinst.DomainCpu(self.conn)
-        self.assertEqual(cpu.vcpus_from_topology(), 1)
+        assert cpu.vcpus_from_topology() == 1
 
     def test_set_defaults_double(self):
         """
@@ -181,21 +179,21 @@ class TestXMLMisc(unittest.TestCase):
         xml1 = g.get_xml()
         g.set_defaults(None)
         xml2 = g.get_xml()
-        self.assertEqual(xml1, xml2)
+        assert xml1 == xml2
 
     def test_guest_osinfo_metadata(self):
         g = _make_guest()
-        self.assertEqual(g.osinfo.name, "generic")
+        assert g.osinfo.name == "generic"
         g.set_os_name("fedora17")
-        self.assertEqual(g.osinfo.name, "fedora17")
+        assert g.osinfo.name == "fedora17"
 
         g = _make_guest()
         g._metadata.libosinfo.os_id = "http://fedoraproject.org/fedora/20"  # pylint: disable=protected-access
-        self.assertEqual(g.osinfo.name, "fedora20")
+        assert g.osinfo.name == "fedora20"
 
         g = _make_guest()
         g._metadata.libosinfo.os_id = "http://example.com/idontexit"  # pylint: disable=protected-access
-        self.assertEqual(g.osinfo.name, "generic")
+        assert g.osinfo.name == "generic"
 
     def test_dir_searchable(self):
         # Normally the dir searchable test is skipped in the unittest,
@@ -216,22 +214,22 @@ class TestXMLMisc(unittest.TestCase):
             # Invalid uid
             _set_caps_baselabel_uid(-1)
             searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
-            self.assertEqual(searchdata.uid, None)
+            assert searchdata.uid is None
 
             # Use our uid, verify it shows we have expected access
             _set_caps_baselabel_uid(os.getuid())
             searchdata = virtinst.DeviceDisk.check_path_search(conn,
                     tmpdir + "/footest")
-            self.assertEqual(searchdata.uid, os.getuid())
-            self.assertEqual(searchdata.fixlist, [])
+            assert searchdata.uid == os.getuid()
+            assert searchdata.fixlist == []
 
             # Remove perms on the tmpdir, now it should report failures
             os.chmod(tmpdir, 0o000)
             searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
-            self.assertEqual(searchdata.fixlist, [tmpdir])
+            assert searchdata.fixlist == [tmpdir]
 
             errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
-            self.assertTrue(not bool(errdict))
+            assert not bool(errdict)
 
             # Mock setfacl to definitely fail
             with unittest.mock.patch("virtinst.diskbackend.SETFACL",
@@ -259,15 +257,15 @@ class TestXMLMisc(unittest.TestCase):
 
         testuuid = virtinst.Guest.generate_uuid(self.conn)
         randomuuid = virtinst.Guest.generate_uuid(testconn)
-        self.assertTrue(randomuuid != testuuid)
-        self.assertTrue(len(randomuuid) == len(testuuid))
+        assert randomuuid != testuuid
+        assert len(randomuuid) == len(testuuid)
 
         testmac = virtinst.DeviceInterface.generate_mac(self.conn)
         randommac = virtinst.DeviceInterface.generate_mac(testconn)
         qemumac = virtinst.DeviceInterface.generate_mac(kvmconn)
-        self.assertTrue(randommac != testmac)
-        self.assertTrue(qemumac != testmac)
-        self.assertTrue(len(randommac) == len(testmac))
+        assert randommac != testmac
+        assert qemumac != testmac
+        assert len(randommac) == len(testmac)
 
         # Ensure check_mac_in_use doesn't error on None
         virtinst.DeviceInterface.check_mac_in_use(self.conn, None)

@@ -5,6 +5,8 @@
 
 import unittest
 
+import pytest
+
 from virtinst import URI
 
 import tests
@@ -19,16 +21,16 @@ class TestURI(unittest.TestCase):
                  hostname='', query='', fragment='',
                  is_ipv6=False, host_is_ipv4_string=False):
         uriinfo = URI(uri)
-        self.assertEqual(scheme, uriinfo.scheme)
-        self.assertEqual(transport, uriinfo.transport)
-        self.assertEqual(port, uriinfo.port)
-        self.assertEqual(username, uriinfo.username)
-        self.assertEqual(path, uriinfo.path)
-        self.assertEqual(hostname, uriinfo.hostname)
-        self.assertEqual(query, uriinfo.query)
-        self.assertEqual(fragment, uriinfo.fragment)
-        self.assertEqual(is_ipv6, uriinfo.is_ipv6)
-        self.assertEqual(host_is_ipv4_string, uriinfo.host_is_ipv4_string)
+        assert scheme == uriinfo.scheme
+        assert transport == uriinfo.transport
+        assert port == uriinfo.port
+        assert username == uriinfo.username
+        assert path == uriinfo.path
+        assert hostname == uriinfo.hostname
+        assert query == uriinfo.query
+        assert fragment == uriinfo.fragment
+        assert is_ipv6 == uriinfo.is_ipv6
+        assert host_is_ipv4_string == uriinfo.host_is_ipv4_string
 
     def testURIs(self):
         self._compare("lxc://", scheme="lxc")
@@ -59,15 +61,14 @@ class TestURI(unittest.TestCase):
     def test_magicuri_connver(self):
         uri = tests.utils.URIs.test_default + ",connver=1,libver=2"
         conn = tests.utils.URIs.openconn(uri)
-        self.assertEqual(conn.conn_version(), 1)
-        self.assertEqual(conn.local_libvirt_version(), 2)
+        assert conn.conn_version() == 1
+        assert conn.local_libvirt_version() == 2
 
         conn = tests.utils.URIs.openconn("test:///default")
         # Add some support tests with it
-        with self.assertRaises(ValueError) as cm:
+        with pytest.raises(ValueError,
+                match=".*type <class 'libvirt.virDomain'>.*"):
             conn.support.domain_xml_inactive("foo")
-        self.assertTrue("must be of type <class 'libvirt.virDomain'>" in
-                str(cm.exception))
 
         # pylint: disable=protected-access
         from virtinst import support
@@ -75,16 +76,16 @@ class TestURI(unittest.TestCase):
             check = support._SupportCheck(**kwargs)
             return check(conn)
 
-        self.assertFalse(_run(function="virNope.Foo"))
-        self.assertFalse(_run(function="virDomain.IDontExist"))
-        self.assertTrue(_run(function="virDomain.isActive"))
-        self.assertFalse(_run(function="virConnect.getVersion",
-            flag="SOME_FLAG_DOESNT_EXIST"))
-        self.assertFalse(_run(version="1000.0.0"))
-        self.assertFalse(_run(hv_version={"test": "1000.0.0"}))
-        self.assertFalse(_run(hv_libvirt_version={"test": "1000.0.0"}))
-        self.assertFalse(_run(hv_libvirt_version={"qemu": "1.2.3"}))
-        self.assertTrue(_run(hv_libvirt_version={"qemu": "1.2.3", "all": 0}))
+        assert _run(function="virNope.Foo") is False
+        assert _run(function="virDomain.IDontExist") is False
+        assert _run(function="virDomain.isActive") is True
+        assert _run(function="virConnect.getVersion",
+            flag="SOME_FLAG_DOESNT_EXIST") is False
+        assert _run(version="1000.0.0") is False
+        assert _run(hv_version={"test": "1000.0.0"}) is False
+        assert _run(hv_libvirt_version={"test": "1000.0.0"}) is False
+        assert _run(hv_libvirt_version={"qemu": "1.2.3"}) is False
+        assert _run(hv_libvirt_version={"qemu": "1.2.3", "all": 0}) is True
 
         dom = conn.lookupByName("test")
-        self.assertTrue(conn.support.domain_xml_inactive(dom))
+        assert conn.support.domain_xml_inactive(dom) is True

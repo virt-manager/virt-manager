@@ -30,14 +30,13 @@ class TestCapabilities(unittest.TestCase):
 
         caps = self._buildCaps(filename)
         for f in host_feature_list:
-            self.assertEqual(
-                    f in [feat.name for feat in caps.host.cpu.features], True)
+            assert f in [feat.name for feat in caps.host.cpu.features]
 
-        self.assertEqual(caps.host.cpu.model, "core2duo")
-        self.assertEqual(caps.host.cpu.vendor, "Intel")
-        self.assertEqual(caps.host.cpu.topology.threads, 3)
-        self.assertEqual(caps.host.cpu.topology.cores, 5)
-        self.assertEqual(caps.host.cpu.topology.sockets, 7)
+        assert caps.host.cpu.model == "core2duo"
+        assert caps.host.cpu.vendor == "Intel"
+        assert caps.host.cpu.topology.threads == 3
+        assert caps.host.cpu.topology.cores == 5
+        assert caps.host.cpu.topology.sockets == 7
 
     def testCapsUtilFuncs(self):
         caps_with_kvm = self._buildCaps("test-qemu-with-kvm.xml")
@@ -47,7 +46,7 @@ class TestCapabilities(unittest.TestCase):
         def test_utils(caps, has_guests, is_kvm):
             assert caps.has_install_options() == has_guests
             if caps.guests:
-                self.assertEqual(caps.guests[0].is_kvm_available(), is_kvm)
+                assert caps.guests[0].is_kvm_available() == is_kvm
 
         test_utils(caps_empty, False, False)
         test_utils(caps_with_kvm, True, True)
@@ -61,9 +60,9 @@ class TestCapabilities(unittest.TestCase):
 
     def testCapsNuma(self):
         cells = self._buildCaps("lxc.xml").host.topology.cells
-        self.assertEqual(len(cells), 1)
-        self.assertEqual(len(cells[0].cpus), 8)
-        self.assertEqual(cells[0].cpus[3].id, '3')
+        assert len(cells) == 1
+        assert len(cells[0].cpus) == 8
+        assert cells[0].cpus[3].id == '3'
 
 
     ##############################
@@ -74,27 +73,26 @@ class TestCapabilities(unittest.TestCase):
         xml = open(DATADIR + "/test-domcaps.xml").read()
         caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
-        self.assertEqual(caps.os.loader.supported, True)
-        self.assertEqual(caps.os.loader.get_values(),
-            ["/foo/bar", "/tmp/my_path"])
-        self.assertEqual(caps.os.loader.enum_names(), ["type", "readonly"])
-        self.assertEqual(caps.os.loader.get_enum("type").get_values(),
-            ["rom", "pflash"])
+        assert caps.os.loader.supported is True
+        assert caps.os.loader.get_values() == ["/foo/bar", "/tmp/my_path"]
+        assert caps.os.loader.enum_names() == ["type", "readonly"]
+        assert caps.os.loader.get_enum("type").get_values() == [
+                "rom", "pflash"]
 
     def testDomainCapabilitiesx86(self):
         xml = open(DATADIR + "/kvm-x86_64-domcaps.xml").read()
         caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
-        self.assertEqual(caps.machine, "pc-i440fx-2.1")
-        self.assertEqual(caps.arch, "x86_64")
-        self.assertEqual(caps.domain, "kvm")
-        self.assertEqual(caps.path, "/bin/qemu-system-x86_64")
+        assert caps.machine == "pc-i440fx-2.1"
+        assert caps.arch == "x86_64"
+        assert caps.domain == "kvm"
+        assert caps.path == "/bin/qemu-system-x86_64"
 
         custom_mode = caps.cpu.get_mode("custom")
-        self.assertTrue(bool(custom_mode))
+        assert bool(custom_mode)
         cpu_model = custom_mode.get_model("Opteron_G4")
-        self.assertTrue(bool(cpu_model))
-        self.assertTrue(cpu_model.usable)
+        assert bool(cpu_model)
+        assert cpu_model.usable
 
         models = caps.get_cpu_models()
         assert len(models) > 10

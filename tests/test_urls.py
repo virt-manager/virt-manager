@@ -8,6 +8,8 @@ import re
 import sys
 import unittest
 
+import pytest
+
 from tests import utils
 
 import virtinst.progress
@@ -193,20 +195,18 @@ class URLTests(unittest.TestCase):
     def test001BadURL(self):
         badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
 
-        with self.assertRaises(ValueError) as cm:
+        with pytest.raises(ValueError, match=".*maybe you mistyped.*"):
             installer = Installer(hvmguest.conn, location=badurl)
             installer.detect_distro(hvmguest)
-        self.assertTrue("maybe you mistyped" in str(cm.exception))
 
         # Non-existent cdrom fails
-        with self.assertRaises(ValueError) as cm:
+        with pytest.raises(ValueError, match=".*non-existent path.*"):
             installer = Installer(hvmguest.conn, cdrom="/not/exist/foobar")
-            self.assertEqual(None, installer.detect_distro(hvmguest))
-        self.assertTrue("non-existent path" in str(cm.exception))
+            assert installer.detect_distro(hvmguest) is None
 
         # Ensure existing but non-distro file doesn't error
         installer = Installer(hvmguest.conn, cdrom="/dev/null")
-        self.assertEqual(None, installer.detect_distro(hvmguest))
+        assert installer.detect_distro(hvmguest) is None
 
 
 def _make_tests():
