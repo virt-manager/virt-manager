@@ -629,6 +629,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network user,model=virtio,address.type=spapr-vio,address.reg=0x500,link.state=no
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock,address.type=pci,address.bus=0x00,address.slot=0x10,address.function=0x0,address.domain=0x0000
 --network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
+--network model=vmxnet3
 
 --graphics sdl
 --graphics spice,keymap=none
