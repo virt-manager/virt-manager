@@ -5,7 +5,6 @@
 
 import os
 import tempfile
-import unittest
 
 import pytest
 
@@ -50,8 +49,8 @@ def test_disk_numtotarget():
     assert disk.generate_target(['hda', 'hdd']) == 'hdb'
 
 
-def test_disk_dir_searchable():
-    # Normally the dir searchable test is skipped in the unittest,
+def test_disk_dir_searchable(monkeypatch):
+    # Normally the dir searchable test is skipped in the test suite,
     # but let's contrive an example that should trigger all the code
     # to ensure it isn't horribly broken
     conn = utils.URIs.open_kvm()
@@ -87,8 +86,8 @@ def test_disk_dir_searchable():
         assert not bool(errdict)
 
         # Mock setfacl to definitely fail
-        with unittest.mock.patch("virtinst.diskbackend.SETFACL",
-                "getfacl"):
+        with monkeypatch.context() as m:
+            m.setattr("virtinst.diskbackend.SETFACL", "getfacl")
             errdict = virtinst.DeviceDisk.fix_path_search(searchdata)
 
     finally:

@@ -5,7 +5,6 @@
 
 import os
 import sys
-import unittest
 
 
 _alldistros = {}
@@ -89,16 +88,8 @@ def _test_distro(distro):
     os.system(cmd)
 
 
-_printinitrd = False
-
-
-class InjectTests(unittest.TestCase):
-    def setUp(self):
-        global _printinitrd
-        if _printinitrd:
-            return
-
-        print("""
+def _print_intro():
+    print("""
 
 
 This is an interactive test suite.
@@ -108,18 +99,26 @@ injections, that will cause installs to quickly fail. Look for the
 failure pattern to confirm that initrd injections are working as expected.
 
 """)
-        prompt()
-        _printinitrd = True
+    prompt()
+
+
+def _build_testfunc(dobj, do_setup):
+    def testfunc():
+        if do_setup:
+            _print_intro()
+        _test_distro(dobj)
+    return testfunc
 
 
 def _make_tests():
-    def _make_check_cb(_d):
-        return lambda s: _test_distro(_d)
-
     idx = 0
     for dname, dobj in _alldistros.items():
         idx += 1
-        setattr(InjectTests, "testInitrd%.3d_%s" %
-                (idx, dname.replace("-", "_")), _make_check_cb(dobj))
+        name = "testInitrd%.3d_%s" % (idx, dname.replace("-", "_"))
+
+        do_setup = idx == 1
+        testfunc = _build_testfunc(dobj, do_setup)
+        globals()[name] = testfunc
+
 
 _make_tests()

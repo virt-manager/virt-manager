@@ -4,7 +4,6 @@
 # See the COPYING file in the top-level directory.
 
 import os
-import unittest
 
 from virtinst import StoragePool, StorageVolume
 from virtinst import log
@@ -12,7 +11,6 @@ from virtinst import log
 from tests import utils
 
 # pylint: disable=protected-access
-# Access to protected member, needed to unittest stuff
 
 BASEPATH = os.path.join(utils.DATADIR, "storage")
 
@@ -97,126 +95,148 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
     return vol_inst.install(meter=False)
 
 
-class TestStorage(unittest.TestCase):
-    @property
-    def conn(self):
-        return utils.URIs.open_testdefault_cached()
+##############
+# Test cases #
+##############
 
-    def testDirPool(self):
-        poolobj = createPool(self.conn,
-                             StoragePool.TYPE_DIR, "pool-dir")
-        invol = createVol(self.conn, poolobj)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "input", input_vol=invol)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "clone", clone_vol=invol)
-        removePool(poolobj)
+def testDirPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+                         StoragePool.TYPE_DIR, "pool-dir")
+    invol = createVol(conn, poolobj)
+    createVol(conn, poolobj,
+              volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj,
+              volname=invol.name() + "clone", clone_vol=invol)
+    removePool(poolobj)
 
-    def testFSPool(self):
-        poolobj = createPool(self.conn,
-                             StoragePool.TYPE_FS, "pool-fs")
-        invol = createVol(self.conn, poolobj)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "input", input_vol=invol)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "clone", clone_vol=invol)
-        removePool(poolobj)
 
-    def testNetFSPool(self):
-        poolobj = createPool(self.conn,
-                             StoragePool.TYPE_NETFS, "pool-netfs")
-        invol = createVol(self.conn, poolobj)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "input", input_vol=invol)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "clone", clone_vol=invol)
-        removePool(poolobj)
+def testFSPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+                         StoragePool.TYPE_FS, "pool-fs")
+    invol = createVol(conn, poolobj)
+    createVol(conn, poolobj,
+              volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj,
+              volname=invol.name() + "clone", clone_vol=invol)
+    removePool(poolobj)
 
-    def testLVPool(self):
-        poolobj = createPool(self.conn,
-                             StoragePool.TYPE_LOGICAL,
-                             "pool-logical",
-                             source_name="pool-logical")
-        invol = createVol(self.conn, poolobj)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "input", input_vol=invol)
-        createVol(self.conn,
-                  poolobj, volname=invol.name() + "clone", clone_vol=invol)
-        removePool(poolobj)
 
-        # Test parsing source name for target path
-        poolobj = createPool(self.conn, StoragePool.TYPE_LOGICAL,
-                   "pool-logical-target-srcname",
-                   target_path="/dev/vgfoobar")
-        removePool(poolobj)
+def testNetFSPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+                         StoragePool.TYPE_NETFS, "pool-netfs")
+    invol = createVol(conn, poolobj)
+    createVol(conn, poolobj,
+              volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj,
+              volname=invol.name() + "clone", clone_vol=invol)
+    removePool(poolobj)
 
-        # Test with source name
-        poolobj = createPool(self.conn,
-                   StoragePool.TYPE_LOGICAL, "pool-logical-srcname",
-                   source_name="vgname")
-        removePool(poolobj)
 
-    def testDiskPool(self):
-        poolobj = createPool(self.conn,
-                             StoragePool.TYPE_DISK,
-                             "pool-disk", fmt="auto",
-                             target_path="/some/target/path")
-        invol = createVol(self.conn, poolobj)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "input", input_vol=invol)
-        createVol(self.conn, poolobj,
-                  volname=invol.name() + "clone", clone_vol=invol)
-        removePool(poolobj)
+def testLVPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+                         StoragePool.TYPE_LOGICAL,
+                         "pool-logical",
+                         source_name="pool-logical")
+    invol = createVol(conn, poolobj)
+    createVol(conn, poolobj,
+              volname=invol.name() + "input", input_vol=invol)
+    createVol(conn,
+              poolobj, volname=invol.name() + "clone", clone_vol=invol)
+    removePool(poolobj)
 
-    def testISCSIPool(self):
-        poolobj = createPool(self.conn,
-                   StoragePool.TYPE_ISCSI, "pool-iscsi",
-                   iqn="foo.bar.baz.iqn")
-        removePool(poolobj)
+    # Test parsing source name for target path
+    poolobj = createPool(conn, StoragePool.TYPE_LOGICAL,
+               "pool-logical-target-srcname",
+               target_path="/dev/vgfoobar")
+    removePool(poolobj)
 
-    def testSCSIPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_SCSI, "pool-scsi")
-        removePool(poolobj)
+    # Test with source name
+    poolobj = createPool(conn,
+               StoragePool.TYPE_LOGICAL, "pool-logical-srcname",
+               source_name="vgname")
+    removePool(poolobj)
 
-    def testMpathPool(self):
-        poolobj = createPool(self.conn, StoragePool.TYPE_MPATH, "pool-mpath")
-        removePool(poolobj)
 
-    def testGlusterPool(self):
-        poolobj = createPool(self.conn,
-                StoragePool.TYPE_GLUSTER, "pool-gluster")
-        removePool(poolobj)
+def testDiskPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+                         StoragePool.TYPE_DISK,
+                         "pool-disk", fmt="auto",
+                         target_path="/some/target/path")
+    invol = createVol(conn, poolobj)
+    createVol(conn, poolobj,
+              volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj,
+              volname=invol.name() + "clone", clone_vol=invol)
+    removePool(poolobj)
 
-    def testRBDPool(self):
-        poolobj = createPool(self.conn,
-                StoragePool.TYPE_RBD, "pool-rbd")
-        removePool(poolobj)
 
-    def testMisc(self):
-        # Misc coverage testing
-        vol = StorageVolume(self.conn)
-        assert vol.is_size_conflict()[0] is False
+def testISCSIPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+               StoragePool.TYPE_ISCSI, "pool-iscsi",
+               iqn="foo.bar.baz.iqn")
+    removePool(poolobj)
 
-        fullconn = utils.URIs.open_testdriver_cached()
-        glusterpool = fullconn.storagePoolLookupByName("gluster-pool")
-        diskpool = fullconn.storagePoolLookupByName("disk-pool")
 
-        glustervol = StorageVolume(fullconn)
-        glustervol.pool = glusterpool
-        assert glustervol.supports_format() is True
+def testSCSIPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn, StoragePool.TYPE_SCSI, "pool-scsi")
+    removePool(poolobj)
 
-        diskvol = StorageVolume(fullconn)
-        diskvol.pool = diskpool
-        assert diskvol.supports_format() is False
 
-        glusterpool.destroy()
-        StoragePool.ensure_pool_is_running(glusterpool)
+def testMpathPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn, StoragePool.TYPE_MPATH, "pool-mpath")
+    removePool(poolobj)
 
-        # Check pool collision detection
-        name = StoragePool.find_free_name(fullconn, "gluster-pool")
-        assert name == "gluster-pool-1"
 
-    def testEnumerateLogical(self):
-        lst = StoragePool.pool_list_from_sources(self.conn,
-                                                 StoragePool.TYPE_LOGICAL)
-        assert lst == ["testvg1", "testvg2"]
+def testGlusterPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+            StoragePool.TYPE_GLUSTER, "pool-gluster")
+    removePool(poolobj)
+
+
+def testRBDPool():
+    conn = utils.URIs.open_testdefault_cached()
+    poolobj = createPool(conn,
+            StoragePool.TYPE_RBD, "pool-rbd")
+    removePool(poolobj)
+
+
+def testMisc():
+    conn = utils.URIs.open_testdefault_cached()
+    # Misc coverage testing
+    vol = StorageVolume(conn)
+    assert vol.is_size_conflict()[0] is False
+
+    fullconn = utils.URIs.open_testdriver_cached()
+    glusterpool = fullconn.storagePoolLookupByName("gluster-pool")
+    diskpool = fullconn.storagePoolLookupByName("disk-pool")
+
+    glustervol = StorageVolume(fullconn)
+    glustervol.pool = glusterpool
+    assert glustervol.supports_format() is True
+
+    diskvol = StorageVolume(fullconn)
+    diskvol.pool = diskpool
+    assert diskvol.supports_format() is False
+
+    glusterpool.destroy()
+    StoragePool.ensure_pool_is_running(glusterpool)
+
+    # Check pool collision detection
+    name = StoragePool.find_free_name(fullconn, "gluster-pool")
+    assert name == "gluster-pool-1"
+
+
+def testEnumerateLogical():
+    conn = utils.URIs.open_testdefault_cached()
+    lst = StoragePool.pool_list_from_sources(conn,
+                                             StoragePool.TYPE_LOGICAL)
+    assert lst == ["testvg1", "testvg2"]
