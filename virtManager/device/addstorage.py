@@ -251,14 +251,18 @@ class vmmAddStorage(vmmGObjectUI):
         if disk.wants_storage_creation():
             pool = disk.get_parent_pool()
             size = uiutil.spin_get_helper(self.widget("storage-size"))
-            sparse = False
+            fmt = self.conn.get_default_storage_format()
+
+            # If the user changed the default disk format to raw, assume
+            # they want to maximize performance, so fully allocate the
+            # disk image. Otherwise use sparse
+            sparse = fmt != 'raw'
 
             vol_install = virtinst.DeviceDisk.build_vol_install(
                 disk.conn, os.path.basename(disk.path), pool,
                 size, sparse)
             disk.set_vol_install(vol_install)
 
-            fmt = self.conn.get_default_storage_format()
             if disk.get_vol_install().supports_format():
                 log.debug("Using default prefs format=%s for path=%s",
                     fmt, disk.path)
