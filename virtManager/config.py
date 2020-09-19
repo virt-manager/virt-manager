@@ -501,11 +501,6 @@ class vmmConfig(object):
         self.conf.set("/details/show-toolbar", state)
 
     # New VM preferences
-    def get_new_vm_sound(self):
-        return self.conf.get("/new-vm/add-sound")
-    def set_new_vm_sound(self, state):
-        self.conf.set("/new-vm/add-sound", state)
-
     def get_graphics_type(self, raw=False):
         ret = self.conf.get("/new-vm/graphics-type")
         if ret not in ["system", "vnc", "spice"]:

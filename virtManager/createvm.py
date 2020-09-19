@@ -1424,7 +1424,6 @@ class vmmCreateVM(vmmGObjectUI):
         gdata = _GuestData(self.conn.get_backend(), self._capsinfo)
 
         gdata.default_graphics_type = self.config.get_graphics_type()
-        gdata.skip_default_sound = not self.config.get_new_vm_sound()
         gdata.x86_cpu_default = self.config.get_default_cpu_setting()
 
         return gdata
