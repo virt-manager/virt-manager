@@ -43,7 +43,6 @@ def testPrefsAll(app):
     tab.find("Add sound device", "check box").click()
     tab.combo_select("CPU default:", "Copy host")
     tab.combo_select("Storage format:", "Raw")
-    tab.combo_select("prefs-add-spice-usbredir", "No")
     tab.combo_select("Graphics type", "VNC")
 
     win.find("Console", "page tab").click()

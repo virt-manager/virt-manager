@@ -94,7 +94,6 @@ class _GuestData:
 
         self.default_graphics_type = None
         self.skip_default_sound = None
-        self.skip_default_usbredir = None
         self.x86_cpu_default = None
 
         self.disk = None
@@ -1426,8 +1425,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         gdata.default_graphics_type = self.config.get_graphics_type()
         gdata.skip_default_sound = not self.config.get_new_vm_sound()
-        gdata.skip_default_usbredir = (
-            self.config.get_add_spice_usbredir() == "no")
         gdata.x86_cpu_default = self.config.get_default_cpu_setting()
 
         return gdata

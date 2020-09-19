@@ -45,7 +45,6 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_console_autoconnect()
         self.refresh_new_vm_sound()
         self.refresh_graphics_type()
-        self.refresh_add_spice_usbredir()
         self.refresh_storage_format()
         self.refresh_cpu_default()
         self.refresh_cpu_poll()
@@ -74,7 +73,6 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_console_autoconnect_toggled": self.change_console_autoconnect,
             "on_prefs_new_vm_sound_toggled": self.change_new_vm_sound,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
-            "on_prefs_add_spice_usbredir_changed": self.change_add_spice_usbredir,
             "on_prefs_storage_format_changed": self.change_storage_format,
             "on_prefs_cpu_default_changed": self.change_cpu_default,
             "on_prefs_stats_enable_cpu_toggled": self.change_cpu_poll,
@@ -150,16 +148,6 @@ class vmmPreferences(vmmGObjectUI):
         for row in [["system", _("System default (%s)") %
                      self.config.default_graphics_from_config],
                     ["vnc", "VNC"], ["spice", "Spice"]]:
-            model.append(row)
-        combo.set_model(model)
-        uiutil.init_combo_text_column(combo, 1)
-
-        combo = self.widget("prefs-add-spice-usbredir")
-        # [gsettings value, string]
-        model = Gtk.ListStore(str, str)
-        for row in [["system", _("System default (%s)") %
-                     self.config.default_add_spice_usbredir],
-                    ["yes", _("Yes")], ["no", _("No")]]:
             model.append(row)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
@@ -243,10 +231,6 @@ class vmmPreferences(vmmGObjectUI):
         combo = self.widget("prefs-graphics-type")
         gtype = self.config.get_graphics_type(raw=True)
         uiutil.set_list_selection(combo, gtype)
-    def refresh_add_spice_usbredir(self):
-        combo = self.widget("prefs-add-spice-usbredir")
-        val = self.config.get_add_spice_usbredir(raw=True)
-        uiutil.set_list_selection(combo, val)
     def refresh_storage_format(self):
         combo = self.widget("prefs-storage-format")
         val = self.config.get_default_storage_format(raw=True)
@@ -391,11 +375,6 @@ class vmmPreferences(vmmGObjectUI):
     def change_graphics_type(self, src):
         val = uiutil.get_list_selection(src)
         self.config.set_graphics_type(val)
-        uiutil.set_grid_row_visible(
-            self.widget("prefs-add-spice-usbredir"),
-            self.config.get_graphics_type() == "spice")
-    def change_add_spice_usbredir(self, src):
-        self.config.set_add_spice_usbredir(uiutil.get_list_selection(src))
     def change_storage_format(self, src):
         typ = uiutil.get_list_selection(src) or "default"
         self.config.set_storage_format(typ.lower())
