@@ -121,13 +121,8 @@ class VMMDogtailApp(object):
 
     def wait_for_exit(self):
         # Wait for shutdown for 2 sec
-        waittime = 2
-        for ignore in range(int(waittime / .05)):
-            time.sleep(.05)
-            if self._proc.poll() is not None:
-                self._proc = None
-                return True
-        return False
+        waittime = 5
+        self._proc.wait(timeout=waittime)
 
     def stop(self):
         """
@@ -143,24 +138,27 @@ class VMMDogtailApp(object):
             self._proc = None
             return
 
-        if self.wait_for_exit():
-            return
-
-        log.warning("App didn't exit gracefully from SIGINT. Killing...")
-        self._proc.kill()
-        self.wait_for_exit()
+        try:
+            self.wait_for_exit()
+        except subprocess.TimeoutExpired:
+            log.warning("App didn't exit gracefully from SIGINT. Killing...")
+            self._proc.kill()
+            self.wait_for_exit()
+            raise
 
 
     #####################################
     # virt-manager launching entrypoint #
     #####################################
 
-    def open(self, extra_opts=None, check_already_running=True, use_uri=True,
+    def open(self, uri=None,
+            extra_opts=None, check_already_running=True, use_uri=True,
             window_name=None, xmleditor_enabled=False, keyfile=None,
             break_setfacl=False, first_run=True, no_fork=True,
             will_fail=False, enable_libguestfs=False,
             firstrun_uri=None):
         extra_opts = extra_opts or []
+        uri = uri or self.uri
 
         if tests.utils.TESTCONFIG.debug and no_fork:
             stdout = sys.stdout
@@ -175,7 +173,7 @@ class VMMDogtailApp(object):
         if no_fork:
             cmd += ["--no-fork"]
         if use_uri:
-            cmd += ["--connect", self.uri]
+            cmd += ["--connect", uri]
 
         if first_run:
             cmd.append("--test-options=first-run")
