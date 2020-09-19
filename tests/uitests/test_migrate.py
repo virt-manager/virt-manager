@@ -48,7 +48,7 @@ class VMMMigrate(lib.testcase.UITestCase):
         mig = self._open_migrate("test-many-devices")
         mig.find("address-check").click()
         label = mig.find("Let libvirt decide")
-        lib.utils.check(lambda: label.onscreen)
+        label.check_onscreen()
         mig.find("Migrate", "push button").click()
         self.app.click_alert_button(
                 "the.connection.driver:.virDomainMigrate", "Close")

@@ -112,6 +112,12 @@ class _VMMDogtailNode(dogtail.tree.Node):
         """
         utils.check(lambda: self.onscreen)
 
+    def check_not_onscreen(self):
+        """
+        Check in a loop that the widget is not onscreen
+        """
+        utils.check(lambda: not self.onscreen)
+
     def check_sensitive(self):
         """
         Check whether interactive widgets are sensitive or not

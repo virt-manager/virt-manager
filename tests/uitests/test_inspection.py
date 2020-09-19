@@ -37,7 +37,7 @@ class VMMInspection(lib.testcase.UITestCase):
 
         tab.find("Application", "toggle").click_expander()
         apps = tab.find("inspection-apps")
-        lib.utils.check(lambda: apps.onscreen)
+        apps.check_onscreen()
         apps.click_expander()
 
         nodestr1 = apps.fmt_nodes()

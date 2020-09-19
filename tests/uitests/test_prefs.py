@@ -24,16 +24,16 @@ class VMMPrefs(lib.testcase.UITestCase):
         consoletab = win.find("console-tab")
         feedbacktab = win.find("feedback-tab")
 
-        lib.utils.check(lambda: not feedbacktab.onscreen)
+        feedbacktab.check_not_onscreen()
         tab = generaltab
-        lib.utils.check(lambda: tab.onscreen)
+        tab.check_onscreen()
         tab.find_fuzzy("Enable system tray", "check").click()
         tab.find_fuzzy("Enable XML").click()
         tab.find_fuzzy("libguestfs VM").click()
 
         win.find("Polling", "page tab").click()
         tab = pollingtab
-        lib.utils.check(lambda: tab.onscreen)
+        tab.check_onscreen()
         tab.find("Poll CPU", "check box").click()
         tab.find("Poll Disk", "check box").click()
         tab.find("Poll Memory", "check box").click()
@@ -44,7 +44,7 @@ class VMMPrefs(lib.testcase.UITestCase):
 
         win.find("New VM", "page tab").click()
         tab = newvmtab
-        lib.utils.check(lambda: tab.onscreen)
+        tab.check_onscreen()
         tab.find("Add sound device", "check box").click()
         tab.combo_select("CPU default:", "Copy host")
         tab.combo_select("Storage format:", "Raw")
@@ -53,7 +53,7 @@ class VMMPrefs(lib.testcase.UITestCase):
 
         win.find("Console", "page tab").click()
         tab = consoletab
-        lib.utils.check(lambda: tab.onscreen)
+        tab.check_onscreen()
         tab.combo_select("SPICE USB", "Manual redirect")
         tab.combo_select("Resize guest", "On")
         tab.combo_select("Graphical console scaling", "Always")
@@ -81,7 +81,7 @@ class VMMPrefs(lib.testcase.UITestCase):
 
         win.find("Feedback", "page tab").click()
         tab = feedbacktab
-        lib.utils.check(lambda: tab.onscreen)
+        tab.check_onscreen()
         tab.find("Force Poweroff", "check box").click()
         tab.find("Poweroff/Reboot", "check box").click()
         tab.find("Pause", "check box").click()

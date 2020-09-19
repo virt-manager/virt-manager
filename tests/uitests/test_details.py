@@ -19,7 +19,7 @@ class Details(lib.testcase.UITestCase):
             self.app.rawinput.keyCombo("<ctrl>f")
             searchentry = self.app.root.find(None, "window").find(None, "text")
             searchentry.set_text(hwname)
-            lib.utils.check(lambda: c.onscreen)
+            c.check_onscreen()
             lib.utils.check(lambda: c.state_selected)
             self.app.rawinput.pressKey("Enter")
         c.click()
