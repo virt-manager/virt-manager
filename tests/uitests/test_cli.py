@@ -16,22 +16,27 @@ class VMMCLI(lib.testcase.UITestCase):
     ##############
 
     def testShowNewVM(self):
-        self.app.open(extra_opts=["--show-domain-creator"])
+        self.app.open(
+                uri="test:///default",
+                extra_opts=["--show-domain-creator"])
         lib.utils.check(lambda: self.app.topwin.name == "New VM")
         self.app.topwin.keyCombo("<alt>F4")
-        lib.utils.check(lambda: self.app.is_running() is False)
+        self.app.wait_for_exit()
 
     def testShowHost(self):
-        self.app.open(extra_opts=["--show-host-summary"])
+        self.app.open(
+                uri="test:///default",
+                extra_opts=["--show-host-summary"])
 
-        lib.utils.check(lambda: self.app.topwin.name == "test testdriver.xml - Connection Details")
+        lib.utils.check(lambda: self.app.topwin.name == "test default - Connection Details")
         nametext = self.app.topwin.find_fuzzy("Name:", "text")
-        lib.utils.check(lambda: nametext.text == "test testdriver.xml")
+        lib.utils.check(lambda: nametext.text == "test default")
         self.app.topwin.keyCombo("<alt>F4")
-        lib.utils.check(lambda: self.app.is_running() is False)
+        self.app.wait_for_exit()
 
     def testShowDetails(self):
-        self.app.open(extra_opts=["--show-domain-editor", "test-clone-simple"])
+        self.app.open(
+                extra_opts=["--show-domain-editor", "test-clone-simple"])
 
         lib.utils.check(lambda: "test-clone-simple on" in self.app.topwin.name)
         rlabel = self.app.topwin.find_fuzzy("Guest is not running", "label")
@@ -39,11 +44,13 @@ class VMMCLI(lib.testcase.UITestCase):
         addhw = self.app.topwin.find_fuzzy("add-hardware", "button")
         lib.utils.check(lambda: addhw.showing)
         self.app.topwin.keyCombo("<alt>F4")
-        lib.utils.check(lambda: self.app.is_running() is False)
+        self.app.wait_for_exit()
 
     def testShowPerformance(self):
         domid = "1"
-        self.app.open(extra_opts=["--show-domain-performance", domid])
+        self.app.open(
+                uri="test:///default",
+                extra_opts=["--show-domain-performance", domid])
 
         lib.utils.check(lambda: "test on" in self.app.topwin.name)
         cpulabel = self.app.topwin.find_fuzzy("CPU usage", "label")
@@ -52,7 +59,8 @@ class VMMCLI(lib.testcase.UITestCase):
     def testShowConsole(self):
         # UUID of test-clone-simple
         uuid = "12345678-1234-ffff-1234-12345678ffff"
-        self.app.open(extra_opts=["--show-domain-console", uuid])
+        self.app.open(
+                extra_opts=["--show-domain-console", uuid])
 
         lib.utils.check(lambda: "test-clone-simple on" in self.app.topwin.name)
         rlabel = self.app.topwin.find_fuzzy("Guest is not running", "label")
@@ -62,18 +70,16 @@ class VMMCLI(lib.testcase.UITestCase):
 
     def testShowDelete(self):
         self.app.open(
-                extra_opts=["--show-domain-delete", "test-clone"],
+                uri="test:///default",
+                extra_opts=["--show-domain-delete", "test"],
                 window_name="Delete")
         # Ensure details opened too
-        self.app.root.find("test-clone on", "frame",
+        self.app.root.find("test on", "frame",
                 check_active=False)
 
         delete = self.app.topwin
         delete.find_fuzzy("Delete", "button").click()
-        self.app.click_alert_button("Are you sure", "Yes")
-
-        # Ensure app exits
-        lib.utils.check(lambda: not self.app.is_running())
+        self.app.wait_for_exit()
 
 
     def testShowRemoteDBusConnect(self):
@@ -102,12 +108,15 @@ class VMMCLI(lib.testcase.UITestCase):
 
     def testShowCLIError(self):
         # Unknown option
-        self.app.open(extra_opts=["--idontexist"])
+        self.app.open(
+                extra_opts=["--idontexist"])
         self.app.click_alert_button("Unhandled command line", "Close")
         lib.utils.check(lambda: not self.app.is_running())
 
         # Missing VM
-        self.app.open(extra_opts=["--show-domain-delete", "IDONTEXIST"])
+        self.app.open(
+                uri="test:///default",
+                extra_opts=["--show-domain-delete", "IDONTEXIST"])
         self.app.click_alert_button("does not have VM", "Close")
         lib.utils.check(lambda: not self.app.is_running())
 
@@ -120,11 +129,13 @@ class VMMCLI(lib.testcase.UITestCase):
     def testCLIFirstRunURIGood(self):
         # Emulate first run with a URI that will succeed
         self.app.open(use_uri=False, firstrun_uri="test:///default")
+        self.app.sleep(1)
         self.app.root.find("test default", "table cell")
 
     def testCLIFirstRunURIBad(self):
         # Emulate first run with a URI that will not succeed
         self.app.open(use_uri=False, firstrun_uri="bad:///uri")
+        self.app.sleep(1)
         self.app.topwin.find("bad uri", "table cell")
         self.app.click_alert_button("bad:///uri", "Close")
 
@@ -156,6 +167,7 @@ class VMMCLI(lib.testcase.UITestCase):
         # Give it a little time to work
         lib.utils.check(lambda: self.app.topwin.active)
         self.app.topwin.keyCombo("<alt>F4")
+        self.app.wait_for_exit()
 
     def testCLINoFirstRun(self):
         # Test a simple case of loading without any config override
@@ -167,15 +179,16 @@ class VMMCLI(lib.testcase.UITestCase):
         # Test app without forking
         self.app.open(first_run=False, enable_libguestfs=None,
                 use_uri=False, no_fork=False)
-        assert self.app.wait_for_exit() is True
+        self.app.wait_for_exit()
         lib.utils.check(lambda: self.app.topwin.showing)
         self.app.topwin.keyCombo("<alt>F4")
+        # Wait for app to exit, we don't have any other way
+        self.app.sleep(2)
 
     def testCLIGTKArgs(self):
         # Ensure gtk arg passthrough works
         self.app.open(extra_opts=["--gtk-debug=misc"])
         lib.utils.check(lambda: self.app.topwin.showing)
-        self.app.topwin.keyCombo("<alt>F4")
 
     @unittest.mock.patch.dict('os.environ', {"DISPLAY": ""})
     def testCLINoDisplay(self):
