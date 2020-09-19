@@ -221,7 +221,6 @@ class vmmConfig(object):
 
         self.default_storage_format_from_config = "qcow2"
         self.default_console_resizeguest = 0
-        self.default_add_spice_usbredir = "yes"
 
         self._objects = []
         self.color_insensitive = None
@@ -516,16 +515,6 @@ class vmmConfig(object):
         return ret
     def set_graphics_type(self, gtype):
         self.conf.set("/new-vm/graphics-type", gtype.lower())
-
-    def get_add_spice_usbredir(self, raw=False):
-        ret = self.conf.get("/new-vm/add-spice-usbredir")
-        if ret not in ["system", "yes", "no"]:
-            ret = "system"  # pragma: no cover
-        if ret == "system" and not raw:
-            return self.default_add_spice_usbredir
-        return ret
-    def set_add_spice_usbredir(self, val):
-        self.conf.set("/new-vm/add-spice-usbredir", val)
 
     def get_default_storage_format(self, raw=False):
         ret = self.conf.get("/new-vm/storage-format")

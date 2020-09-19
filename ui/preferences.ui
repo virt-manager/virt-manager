@@ -127,6 +127,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="halign">start</property>
                             <property name="use_underline">True</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="on_prefs_xmleditor_toggled" swapped="no"/>
@@ -439,7 +440,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -462,7 +463,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -509,7 +510,7 @@ identical CPUs in order to migrate the VM.</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
+                                <property name="top_attach">3</property>
                               </packing>
                             </child>
                             <child>
@@ -520,39 +521,7 @@ identical CPUs in order to migrate the VM.</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label27">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="label" translatable="yes">Add Spice _USB
-Redirection:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">prefs-add-spice-usbredir</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBox" id="prefs-add-spice-usbredir">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="valign">start</property>
-                                <signal name="changed" handler="on_prefs_add_spice_usbredir_changed" swapped="no"/>
-                                <child internal-child="accessible">
-                                  <object class="AtkObject" id="prefs-add-spice-usbredir-atkobject">
-                                    <property name="AtkObject::accessible-name">prefs-add-spice-usbredir</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
+                                <property name="top_attach">3</property>
                               </packing>
                             </child>
                           </object>
