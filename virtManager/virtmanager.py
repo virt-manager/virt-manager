@@ -22,13 +22,6 @@ from virtinst import log
 
 from .lib.testmock import CLITestOptionsClass
 
-# This is massively heavy handed, but I can't figure out any way to shut
-# up the slew of gtk deprecation warnings that clog up our very useful
-# stdout --debug output. Of course we could drop use of deprecated APIs,
-# but it's a serious quantity of churn
-import warnings  # pylint: disable=wrong-import-order
-warnings.simplefilter("ignore")
-
 try:
     gi.check_version("3.22.0")
 except (ValueError, AttributeError):  # pragma: no cover

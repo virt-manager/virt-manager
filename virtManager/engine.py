@@ -83,8 +83,8 @@ class vmmEngine(vmmGObject):
 
 
     def _cleanup(self):
-        if self._timer is not None:
-            GLib.source_remove(self._timer)
+        # self._timer should be automatically cleaned up
+        pass
 
 
     #################
