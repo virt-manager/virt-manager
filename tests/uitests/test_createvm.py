@@ -190,12 +190,11 @@ def testNewVMStorage(app):
     _forward(newvm)
     _forward(newvm)
 
-    # Trigger size validation failure
+    # qcow2 default shouldn't trigger size error
     sizetext = newvm.find(None, "spin button", "GiB")
     sizetext.set_text("10000000")
-    _forward(newvm, check=False)
-    app.click_alert_button("Storage parameter error", "OK")
-    sizetext.set_text("1")
+    _forward(newvm)
+    _back(newvm)
 
     # Use the storage browser to select a local file
     storagetext = newvm.find("storage-entry")

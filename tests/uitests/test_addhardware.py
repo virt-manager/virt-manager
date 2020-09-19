@@ -155,11 +155,8 @@ def testAddDisks(app):
     tab.combo_select("Cache mode:", "none")
     tab.combo_select("Discard mode:", "ignore")
     tab.combo_select("Detect zeroes:", "unmap")
-    # Size too big
-    tab.find("GiB", "spin button").set_text("2000")
-    _finish(addhw, check=None)
-    app.click_alert_button("not enough free space", "Close")
-    tab.find("GiB", "spin button").set_text("1.5")
+    # High number but we are non-sparse by default so it won't complain
+    tab.find("GiB", "spin button").set_text("200000")
     _finish(addhw, check=details)
 
     # USB disk with removable setting
