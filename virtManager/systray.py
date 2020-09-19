@@ -18,6 +18,8 @@ from .connmanager import vmmConnectionManager
 
 try:
     # pylint: disable=ungrouped-imports
+    import gi
+    gi.require_version('AppIndicator3', '0.1')
     from gi.repository import AppIndicator3
 except Exception:  # pragma: no cover
     AppIndicator3 = None

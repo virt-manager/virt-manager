@@ -9,7 +9,6 @@ import traceback
 
 from gi.repository import Gdk
 from gi.repository import GLib
-from gi.repository import Vte
 
 import libvirt
 
@@ -319,6 +318,7 @@ class vmmAsyncJob(vmmGObjectUI):
 
     @idle_wrapper
     def details_enable(self):
+        from gi.repository import Vte
         self._details_widget = Vte.Terminal()
         self.widget("details-box").add(self._details_widget)
         self._details_widget.set_visible(True)
