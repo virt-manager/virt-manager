@@ -126,12 +126,12 @@ class Host(lib.testcase.UITestCase):
 
         vol1 = vollist.find("backingl1.img", "table cell")
         vol2 = vollist.find("UPPER", "table cell")
-        lib.utils.check(lambda: vol1.onscreen)
-        lib.utils.check(lambda: not vol2.onscreen)
+        vol1.check_onscreen()
+        vol2.check_not_onscreen()
         win.find("Size", "table column header").click()
         win.find("Size", "table column header").click()
-        lib.utils.check(lambda: not vol1.onscreen)
-        lib.utils.check(lambda: vol2.onscreen)
+        vol1.check_not_onscreen()
+        vol2.check_onscreen()
 
         vol2.click(button=3)
         self.app.root.find("Copy Volume Path", "menu item").click()

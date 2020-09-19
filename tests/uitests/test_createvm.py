@@ -155,7 +155,7 @@ class NewVM(lib.testcase.UITestCase):
         self.forward(newvm)
         self.app.sleep(.5)
         lib.utils.check(lambda: "Generic" in osentry.text)
-        lib.utils.check(lambda: osentry.onscreen)
+        osentry.check_onscreen()
 
         # The sleeps shouldn't be required, but this test continues to be
         # flakey, so this is an attempt to fix it.
@@ -269,24 +269,24 @@ class NewVM(lib.testcase.UITestCase):
         osentry.click()
         osentry.set_text("windows 8")
         popover = newvm.find("oslist-popover")
-        lib.utils.check(lambda: popover.onscreen)
+        popover.check_onscreen()
         # Verify Escape resets the text entry
         self.app.rawinput.pressKey("Escape")
-        lib.utils.check(lambda: not popover.onscreen)
+        popover.check_not_onscreen()
         lib.utils.check(lambda: osentry.text == "")
         # Re-enter text
         osentry.set_text("windows 8")
-        lib.utils.check(lambda: popover.onscreen)
+        popover.check_onscreen()
         popover.find_fuzzy("include-eol").click()
         popover.find_fuzzy(r"\(win8\)").click()
-        lib.utils.check(lambda: not popover.onscreen)
+        popover.check_not_onscreen()
         foundtext = osentry.text
         # Start typing again, and exit, make sure it resets to previous entry
         osentry.click()
         osentry.set_text("foo")
-        lib.utils.check(lambda: popover.onscreen)
+        popover.check_onscreen()
         self.app.rawinput.pressKey("Escape")
-        lib.utils.check(lambda: not popover.onscreen)
+        popover.check_not_onscreen()
         lib.utils.check(lambda: osentry.text == foundtext)
         self.forward(newvm)
 
@@ -728,7 +728,7 @@ class NewVM(lib.testcase.UITestCase):
         addhw.find("PCI Host Device", "table cell").click()
         # Ensure the error label is showing
         label = addhw.find("Not supported for containers")
-        lib.utils.check(lambda: label.onscreen)
+        label.check_onscreen()
         addhw.find("Cancel", "push button").click()
         lib.utils.check(lambda: not addhw.active)
         lib.utils.check(lambda: details.active)
@@ -1182,7 +1182,7 @@ class NewVM(lib.testcase.UITestCase):
         self.forward(newvm)
         newvm.combo_check_default("net-source", "Bridge")
         warnlabel = newvm.find_fuzzy("suitable default network", "label")
-        lib.utils.check(lambda: warnlabel.onscreen)
+        warnlabel.check_onscreen()
         newvm.find("Device name:", "text").set_text("foobr0")
 
         # Select customize wizard, we will use this VM to hit specific

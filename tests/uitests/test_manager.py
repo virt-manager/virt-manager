@@ -92,15 +92,15 @@ class Manager(lib.testcase.UITestCase):
                 cell = manager.find("test\n", "table cell")
                 cell.click(button=3)
                 menu = self.app.root.find("vm-action-menu")
-                lib.utils.check(lambda: menu.onscreen)
+                menu.check_onscreen()
                 if shutdown:
                     smenu = menu.find("Shut Down", "menu")
                     smenu.point()
-                    lib.utils.check(lambda: smenu.onscreen)
+                    smenu.check_onscreen()
                     item = smenu.find(action, "menu item")
                 else:
                     item = menu.find(action, "menu item")
-                lib.utils.check(lambda: item.onscreen)
+                item.check_onscreen()
                 item.point()
                 self.app.sleep(.3)
                 item.click()
@@ -219,7 +219,7 @@ class Manager(lib.testcase.UITestCase):
         manager = self.app.topwin
         def _test_sort(name):
             col = manager.find(name, "table column header")
-            lib.utils.check(lambda: col.onscreen)
+            col.check_onscreen()
             # Trigger sorting
             col.click()
             col.click()
