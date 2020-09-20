@@ -219,6 +219,9 @@ def testDetailsEditDomain1(app):
     tab.find("Hypervisor Default", "menu item").click()
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
+    tab.find("cpu-model").find(None, "text").text = "foobar"
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
     tab.find("cpu-model").find(None, "text").text = "host-passthrough"
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)

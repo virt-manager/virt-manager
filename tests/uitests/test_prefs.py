@@ -40,7 +40,7 @@ def testPrefsAll(app):
     win.find("New VM", "page tab").click()
     tab = newvmtab
     tab.check_onscreen()
-    tab.combo_select("CPU default:", "Copy host")
+    tab.combo_select("CPU default:", "host-passthrough")
     tab.combo_select("Storage format:", "Raw")
     tab.combo_select("Graphics type", "VNC")
 
