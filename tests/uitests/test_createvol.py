@@ -28,15 +28,15 @@ def testCreateVolDefault(app):
     name = win.find("Name:", "text")
 
     # Create a default qcow2 volume
-    lib.utils.check(lambda: name.text == "vol")
-    newname = "a-newvol"
-    name.set_text(newname)
-    win.find("Max Capacity:", "spin button").set_text("10.5")
+    newname = "vol"
+    lib.utils.check(lambda: name.text == newname)
+    sparse = win.find("Allocate", "check box")
+    lib.utils.check(lambda: not sparse.checked)
     finish.click()
 
     # Delete it, clicking 'No' first
     volcell = vollist.find(newname + ".qcow2")
-    volcell.click()
+    volcell.bring_on_screen()
     hostwin.find("vol-refresh", "push button").click()
     hostwin.find("vol-delete", "push button").click()
     app.click_alert_button("permanently delete the volume", "No")
@@ -92,20 +92,8 @@ def testCreateVolMisc(app):
     # Using previous name so we collide
     name.set_text(newname)
     win.combo_select("Format:", "raw")
-    cap = win.find("Max Capacity:", "spin button")
-    alloc = win.find("Allocation:", "spin button")
-    alloc.set_text("50.0")
-    alloc.click()
-    app.rawinput.pressKey("Enter")
-    lib.utils.check(lambda: cap.text == "50.0")
-    cap.set_text("1.0")
-    cap.click()
-    app.rawinput.pressKey("Enter")
-    lib.utils.check(lambda: alloc.text == "1.0")
-    alloc.set_text("0.5")
-    alloc.click()
-    app.rawinput.pressKey("Enter")
-    lib.utils.check(lambda: cap.text == "1.0")
+    sparse = win.find("Allocate", "check box")
+    lib.utils.check(lambda: sparse.checked)
 
     finish.click()
     app.click_alert_button("Error validating volume", "Close")
@@ -122,6 +110,7 @@ def testCreateVolMisc(app):
     win.find("Backing store").click_expander()
     win.find("Browse...").click()
     app.select_storagebrowser_volume("disk-pool", "diskvol7")
+    sparse.check_not_onscreen()
     finish.click()
     vollist.find(newname)
 

@@ -41,9 +41,6 @@ class vmmCreateVolume(vmmGObjectUI):
 
             "on_vol_name_changed": self._vol_name_changed_cb,
             "on_vol_format_changed": self._vol_format_changed_cb,
-            "on_backing_store_changed": self._backing_storage_changed_cb,
-            "on_vol_allocation_value_changed": self._vol_allocation_changed_cb,
-            "on_vol_capacity_value_changed": self._vol_capacity_changed_cb,
             "on_backing_browse_clicked": self._browse_backing_clicked_cb,
         })
         self.bind_escape_key_close()
@@ -127,22 +124,17 @@ class vmmCreateVolume(vmmGObjectUI):
         self.widget("vol-name").grab_focus()
         self.widget("vol-name").emit("changed")
 
-        default_alloc = 0
-        default_cap = 20
-
         self.widget("backing-store").set_text("")
-        alloc = default_alloc
-        if not self._can_alloc():
-            alloc = default_cap
-        self._show_alloc()
+        self.widget("vol-nonsparse").set_active(
+                not self._should_default_sparse())
+        self._show_sparse()
         self._show_backing()
         self.widget("backing-expander").set_expanded(False)
 
-        self.widget("vol-allocation").set_range(0,
-            int(self._parent_pool.get_available() / 1024 / 1024 / 1024))
-        self.widget("vol-allocation").set_value(alloc)
+        pool_avail = int(self._parent_pool.get_available() / 1024 / 1024 / 1024)
+        default_cap = 20
         self.widget("vol-capacity").set_range(0.1, 1000000)
-        self.widget("vol-capacity").set_value(default_cap)
+        self.widget("vol-capacity").set_value(min(default_cap, pool_avail))
 
         self.widget("vol-parent-info").set_markup(
                         _("<b>%(volume)s's</b> available space: %(size)s") % {
@@ -183,25 +175,16 @@ class vmmCreateVolume(vmmGObjectUI):
         return StorageVolume.get_file_extension_for_format(
             self._get_config_format())
 
-    def _can_only_sparse(self):
-        if self._get_config_format() == "qcow2":
-            return True
-        if (self.widget("backing-store").is_visible() and
-            self.widget("backing-store").get_text()):
-            return True
-        return False
+    def _should_default_sparse(self):
+        return self._get_config_format() == "qcow2"
 
-    def _can_alloc(self):
-        if self._can_only_sparse():
-            return False
-        if self._parent_pool.get_type() == "logical":
-            # Sparse LVM volumes don't auto grow, so alloc=0 is useless
-            return False
-        return True
+    def _can_sparse(self):
+        dtype = self._parent_pool.xmlobj.get_disk_type()
+        return dtype == StorageVolume.TYPE_FILE
 
-    def _show_alloc(self):
+    def _show_sparse(self):
         uiutil.set_grid_row_visible(
-            self.widget("vol-allocation"), self._can_alloc())
+            self.widget("vol-nonsparse"), self._can_sparse())
 
     def _can_backing(self):
         if self._parent_pool.get_type() == "logical":
@@ -252,13 +235,13 @@ class vmmCreateVolume(vmmGObjectUI):
         suffix = self.widget("vol-name-suffix").get_text()
         volname = name + suffix
         fmt = self._get_config_format()
-        alloc = self.widget("vol-allocation").get_value()
         cap = self.widget("vol-capacity").get_value()
+        nonsparse = self.widget("vol-nonsparse").get_active()
         backing = self.widget("backing-store").get_text()
-        if not self.widget("vol-allocation").get_visible():
+
+        alloc = 0
+        if nonsparse:
             alloc = cap
-            if self._can_only_sparse():
-                alloc = 0
 
         vol = self._make_stub_vol()
         vol.name = volname
@@ -341,27 +324,11 @@ class vmmCreateVolume(vmmGObjectUI):
         self._xmleditor.set_xml(xmlobj and xmlobj.get_xml() or "")
 
     def _vol_format_changed_cb(self, src):
-        self._show_alloc()
+        self._show_sparse()
+        self.widget("vol-nonsparse").set_active(
+                not self._should_default_sparse())
         self._show_backing()
         self.widget("vol-name").emit("changed")
-
-    def _vol_capacity_changed_cb(self, src):
-        alloc_widget = self.widget("vol-allocation")
-
-        cap = src.get_value()
-        alloc = self.widget("vol-allocation").get_value()
-
-        if cap < alloc:
-            alloc_widget.set_value(cap)
-
-    def _vol_allocation_changed_cb(self, src):
-        cap_widget = self.widget("vol-capacity")
-
-        alloc = src.get_value()
-        cap = cap_widget.get_value()
-
-        if alloc > cap:
-            cap_widget.set_value(alloc)
 
     def _vol_name_changed_cb(self, src):
         text = src.get_text()
@@ -373,9 +340,6 @@ class vmmCreateVolume(vmmGObjectUI):
 
     def _browse_backing_clicked_cb(self, src):
         self._browse_file()
-
-    def _backing_storage_changed_cb(self, src):
-        self._show_alloc()
 
     def _create_clicked_cb(self, src):
         self._finish()
