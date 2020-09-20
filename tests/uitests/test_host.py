@@ -174,7 +174,7 @@ def testHostConn(app):
     manager.find("FOOBAR", "table cell")
 
     # Close the manager
-    manager.keyCombo("<alt>F4")
+    manager.window_close()
     lib.utils.check(lambda: win.active)
 
     # Quit app from the file menu

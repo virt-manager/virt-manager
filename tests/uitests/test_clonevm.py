@@ -98,24 +98,27 @@ def testCloneMulti(app):
     # Clone 'test-clone', check some results, make sure clone works
     manager = app.topwin
     manager.window_maximize()
+
+    # Shutdown this VM to prep for later
+    manager.find("test-many-devices").click()
+    sbutton = manager.find("Shut Down", "push button")
+    sbutton.click()
+    lib.utils.check(lambda: not sbutton.sensitive)
+
+    # Do a basic clone
     win = app.manager_open_clone("test-clone")
     win.find("Clone", "push button").click()
     lib.utils.check(lambda: not win.showing)
-    app.topwin.find("test-clone1", "table cell")
+    manager.find("test-clone1", "table cell")
 
     # Check test-many-devices which will not work, but confirm
     # it errors gracefully
-    app.topwin.find("test-many-devices").click()
-    sbutton = app.topwin.find("Shut Down", "push button")
-    sbutton.click()
-    lib.utils.check(lambda: not sbutton.sensitive)
-    app.sleep(.5)
     win = app.manager_open_clone("test-many-devices")
     win.find("Clone", "push button").click()
     app.click_alert_button("No such file or", "Close")
 
     # Ensure disconnecting will close the dialog
-    manager.click_title()
+    manager.grab_focus()
     app.manager_conn_disconnect("test testdriver.xml")
     lib.utils.check(lambda: not win.showing)
 
@@ -190,8 +193,7 @@ def testCloneError(app):
     win = app.manager_open_clone("test-clone-full")
     win.find("Clone", "push button").click()
     app.click_alert_button("not enough free space", "Close")
-    lib.utils.check(lambda: win.showing)
-    win.keyCombo("<alt>F4")
+    win.window_close()
 
     win = app.manager_open_clone("test-clone-simple")
     badname = "test/foo"
@@ -229,8 +231,7 @@ def testCloneNonmanaged(app):
     win.find("Details", "page tab").click()
     disksrc = win.find("disk-source-path")
     lib.utils.check(lambda: disksrc.text == newpath)
-    win.keyCombo("<alt>F4")
-    lib.utils.check(lambda: not win.active)
+    win.window_close()
 
     lib.utils.check(lambda: manager.active)
     win = app.manager_open_clone("test-clone-simple")

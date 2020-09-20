@@ -2,7 +2,6 @@
 # See the COPYING file in the top-level directory.
 
 import re
-import time
 
 from gi.repository import Gdk
 
@@ -17,16 +16,20 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
     """
     Object dogtail/pyatspi want for node searching.
     """
-    def __init__(self, name=None, roleName=None, labeller_text=None):
+    def __init__(self, name=None, roleName=None, labeller_text=None,
+            focusable=False, onscreen=False):
         """
         :param name: Match node.name or node.labeller.text if
             labeller_text not specified
         :param roleName: Match node.roleName
         :param labeller_text: Match node.labeller.text
+        :param focusable: Ensure node is focusable
         """
         self._name = name
         self._roleName = roleName
         self._labeller_text = labeller_text
+        self._focusable = focusable
+        self._onscreen = onscreen
 
         self._name_pattern = None
         self._role_pattern = None
@@ -67,11 +70,27 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
             if (self._labeller_text and
                     not self._labeller_pattern.match(labeller)):
                 return
+            if (self._focusable and not
+                    (node.focusable and
+                     node.onscreen and
+                     node.sensitive and
+                     node.roleName not in ["page tab list", "radio button"])):
+                return False
             return True
         except Exception as e:
             log.debug(
                     "got predicate exception name=%s role=%s labeller=%s: %s",
                     self._name, self._roleName, self._labeller_text, e)
+
+
+def _debug_decorator(fn):
+    def _cb(self, *args, **kwargs):
+        try:
+            return fn(self, *args, **kwargs)
+        except Exception:
+            print("node=%s\nstates=%s" % (self, self.print_states()))
+            raise
+    return _cb
 
 
 class _VMMDogtailNode(dogtail.tree.Node):
@@ -106,18 +125,28 @@ class _VMMDogtailNode(dogtail.tree.Node):
                 self.position[1] >= 0 and
                 self.position[1] + self.size[1] < screen.get_height())
 
+    @_debug_decorator
     def check_onscreen(self):
         """
         Check in a loop that the widget is onscreen
         """
         utils.check(lambda: self.onscreen)
 
+    @_debug_decorator
     def check_not_onscreen(self):
         """
         Check in a loop that the widget is not onscreen
         """
         utils.check(lambda: not self.onscreen)
 
+    @_debug_decorator
+    def check_focused(self):
+        """
+        Check in a loop that the widget is focused
+        """
+        utils.check(lambda: self.focused)
+
+    @_debug_decorator
     def check_sensitive(self):
         """
         Check whether interactive widgets are sensitive or not
@@ -192,16 +221,6 @@ class _VMMDogtailNode(dogtail.tree.Node):
         clickX, clickY = self.title_coordinates()
         dogtail.rawinput.click(clickX, clickY, button)
 
-    def drag(self, x, y):
-        """
-        Drag a window to the x/y coordinates
-        """
-        time.sleep(.5)
-        self.click_title()
-        time.sleep(.5)
-        clickX, clickY = self.title_coordinates()
-        dogtail.rawinput.drag((clickX, clickY), (x, y))
-
     def click(self, *args, **kwargs):
         """
         click wrapper, give up to a second for widget to appear on
@@ -243,19 +262,32 @@ class _VMMDogtailNode(dogtail.tree.Node):
 
     def window_maximize(self):
         assert self.roleName in ["frame", "dialog"]
-        utils.check(lambda: self.active)
-        self.click_title()
+        self.grab_focus()
         s1 = self.size
         self.keyCombo("<alt>F10")
         utils.check(lambda: self.size != s1)
-        self.grabFocus()
+        self.grab_focus()
 
     def window_close(self):
-        assert self.roleName in ["frame", "alert", "dialog"]
-        self.click_title()
-        utils.check(lambda: self.active)
+        assert self.roleName in ["frame", "alert", "dialog", "file chooser"]
+        self.grab_focus()
         self.keyCombo("<alt>F4")
         utils.check(lambda: not self.showing)
+
+    def window_find_focusable_child(self):
+        return self.find(None, focusable=True)
+
+    def grab_focus(self):
+        if self.roleName in ["frame", "alert", "dialog", "file chooser"]:
+            child = self.window_find_focusable_child()
+            child.grab_focus()
+            utils.check(lambda: self.active)
+            return
+
+        self.check_onscreen()
+        assert self.focusable
+        self.grabFocus()
+        self.check_focused()
 
 
     #########################
@@ -263,12 +295,12 @@ class _VMMDogtailNode(dogtail.tree.Node):
     #########################
 
     def find(self, name, roleName=None, labeller_text=None,
-            check_active=True, recursive=True):
+            check_active=True, recursive=True, focusable=False):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
         """
-        pred = _FuzzyPredicate(name, roleName, labeller_text)
+        pred = _FuzzyPredicate(name, roleName, labeller_text, focusable)
 
         try:
             ret = self.findChild(pred, recursive=recursive)

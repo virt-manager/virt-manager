@@ -14,7 +14,7 @@ def testShowNewVM(app):
             uri="test:///default",
             extra_opts=["--show-domain-creator"])
     lib.utils.check(lambda: app.topwin.name == "New VM")
-    app.topwin.keyCombo("<alt>F4")
+    app.topwin.window_close()
     app.wait_for_exit()
 
 
@@ -26,7 +26,7 @@ def testShowHost(app):
     lib.utils.check(lambda: app.topwin.name == "test default - Connection Details")
     nametext = app.topwin.find_fuzzy("Name:", "text")
     lib.utils.check(lambda: nametext.text == "test default")
-    app.topwin.keyCombo("<alt>F4")
+    app.topwin.window_close()
     app.wait_for_exit()
 
 
@@ -39,7 +39,7 @@ def testShowDetails(app):
     lib.utils.check(lambda: not rlabel.showing)
     addhw = app.topwin.find_fuzzy("add-hardware", "button")
     lib.utils.check(lambda: addhw.showing)
-    app.topwin.keyCombo("<alt>F4")
+    app.topwin.window_close()
     app.wait_for_exit()
 
 
@@ -78,7 +78,6 @@ def testShowDelete(app):
     delete = app.topwin
     delete.find_fuzzy("Delete", "button").click()
     app.wait_for_exit()
-
 
 
 def testShowRemoteDBusConnect(app):
@@ -130,14 +129,12 @@ def testShowCLIError(app):
 def testCLIFirstRunURIGood(app):
     # Emulate first run with a URI that will succeed
     app.open(use_uri=False, firstrun_uri="test:///default")
-    app.sleep(1)
     app.root.find("test default", "table cell")
 
 
 def testCLIFirstRunURIBad(app):
     # Emulate first run with a URI that will not succeed
     app.open(use_uri=False, firstrun_uri="bad:///uri")
-    app.sleep(1)
     app.topwin.find("bad uri", "table cell")
     app.click_alert_button("bad:///uri", "Close")
 
@@ -158,27 +155,25 @@ def testCLIFirstRunNoLibvirtd(app):
 def testCLITraceLibvirt(app):
     # Just test this for code coverage
     app.open(keyfile="allstats.ini",
-            extra_opts=["--trace-libvirt=mainloop"])
-    # Give it a little time to work
-    app.sleep(2)
+             extra_opts=["--trace-libvirt=mainloop",
+                         "--test-options=short-poll"])
+    app.sleep(.5)  # Give time for polling to trigger
     lib.utils.check(lambda: app.topwin.active)
 
 
 def testCLILeakDebug(app):
     # Just test this for code coverage
     app.open(keyfile="allstats.ini",
-            extra_opts=["--test-options=leak-debug"])
-    app.sleep(2)
-    # Give it a little time to work
-    lib.utils.check(lambda: app.topwin.active)
-    app.topwin.keyCombo("<alt>F4")
+             extra_opts=["--test-options=leak-debug",
+                         "--test-options=short-poll"])
+    app.sleep(.5)  # Give time for polling to trigger
+    app.topwin.window_close()
     app.wait_for_exit()
 
 
 def testCLINoFirstRun(app):
     # Test a simple case of loading without any config override
     app.open(first_run=False, enable_libguestfs=None, use_uri=False)
-    app.sleep(2)
     lib.utils.check(lambda: app.topwin.showing)
 
 
@@ -187,10 +182,8 @@ def testCLINoFork(app):
     app.open(first_run=False, enable_libguestfs=None,
             use_uri=False, no_fork=False)
     app.wait_for_exit()
-    lib.utils.check(lambda: app.topwin.showing)
-    app.topwin.keyCombo("<alt>F4")
-    # Wait for app to exit, we don't have any other way
-    app.sleep(2)
+    app.topwin.window_close()
+    lib.utils.check(lambda: not app.has_dbus())
 
 
 def testCLIGTKArgs(app):

@@ -62,6 +62,7 @@ def _checkConsoleStandard(app, dom):
     """
     Shared logic for general console handling
     """
+    ignore = dom
     win = app.topwin
     con = win.find("console-gfx-viewport")
     lib.utils.check(lambda: con.showing)
@@ -134,17 +135,7 @@ def _checkConsoleStandard(app, dom):
     scalemenu.point()
     scalemenu.find("Only", "radio menu item").click()
 
-    # Check that modifiers don't work
-    win.click()
-    app.sleep(1)
-    win.keyCombo("<ctrl>w")
-    lib.utils.check(lambda: win.showing)
-    dom.destroy()
-    win.find("Guest is not running.")
-    win.click_title()
-    app.sleep(1)
-    win.keyCombo("<ctrl>w")
-    lib.utils.check(lambda: not win.showing)
+    win.window_close()
 
 
 @_vm_wrapper("uitests-vnc-standard")
@@ -155,6 +146,37 @@ def testConsoleVNCStandard(app, dom):
 @_vm_wrapper("uitests-spice-standard")
 def testConsoleSpiceStandard(app, dom):
     return _checkConsoleStandard(app, dom)
+
+
+def _checkConsoleFocus(app, dom):
+    """
+    Shared logic for console keyboard grab handling
+    """
+    win = app.topwin
+    con = win.find("console-gfx-viewport")
+    lib.utils.check(lambda: con.showing)
+
+    # Check that modifiers don't work when console grabs pointer
+    win.click()
+    app.sleep(.5)  # make sure window code has time to adjust modifiers
+    win.keyCombo("<ctrl>w")
+    lib.utils.check(lambda: win.showing)
+    dom.destroy()
+    win.find("Guest is not running.")
+    win.grab_focus()
+    app.sleep(.5)  # make sure window code has time to adjust modifiers
+    win.keyCombo("<ctrl>w")
+    lib.utils.check(lambda: not win.showing)
+
+
+@_vm_wrapper("uitests-vnc-standard")
+def testConsoleVNCFocus(app, dom):
+    return _checkConsoleFocus(app, dom)
+
+
+@_vm_wrapper("uitests-spice-standard")
+def testConsoleSpiceFocus(app, dom):
+    return _checkConsoleFocus(app, dom)
 
 
 def _checkPassword(app):
@@ -247,8 +269,7 @@ def testConsoleVNCSocket(app, dom):
         vmenu.click()
         tmenu = win.find("Consoles", "menu")
         tmenu.point()
-        # We need to sleep to give the menu time to dynamically populate
-        app.sleep(.5)
+        app.sleep(.5)  # give console menu time to dynamically populate
         tmenu.find(msg, "radio menu item").click()
 
     # A bit of an extra test, make sure selecting Graphical Console works
@@ -270,10 +291,14 @@ def testConsoleAutoconnect(app, dom):
     vmenu.click()
     vmenu.find("Autoconnect").click()
     dom.destroy()
-    app.sleep(1)
+    label = win.find("Guest is not running.")
+    label.check_onscreen()
     dom.create()
+    label.check_not_onscreen()
+    button = win.find("Connect to console", "push button")
+    button.check_onscreen()
     lib.utils.check(lambda: not con.showing)
-    win.find("Connect to console", "push button").click()
+    button.click()
     lib.utils.check(lambda: con.showing)
 
 
@@ -282,7 +307,6 @@ def testConsoleLXCSerial(app, dom):
     """
     Ensure LXC has serial open, and we can send some data
     """
-    ignore = dom
     win = app.topwin
     term = win.find("Serial Terminal")
     lib.utils.check(lambda: term.showing)
@@ -308,7 +332,7 @@ def testConsoleLXCSerial(app, dom):
     textmenu = view.find("Consoles", "menu")
     textmenu.point()
     lib.utils.check(lambda: textmenu.showing)
-    app.sleep(.5)
+    app.sleep(.5)  # give console menu time to dynamically populate
     item = textmenu.find("Text Console 1")
     lib.utils.check(lambda: not item.sensitive)
 
@@ -324,8 +348,9 @@ def testConsoleLXCSerial(app, dom):
     lib.utils.check(lambda: win.showing)
     # Shut it down, ensure <ctrl>w works again
     _destroy(app, win)
+    lib.utils.check(lambda: not dom.isActive())
     win.click_title()
-    app.sleep(1)
+    app.sleep(.3)  # make sure window code has time to adjust modifiers
     win.keyCombo("<ctrl>w")
     lib.utils.check(lambda: not win.showing)
 
@@ -368,6 +393,7 @@ def testConsoleSpiceSpecific(app, dom):
         smenu.point()
         smenu.find("Auto resize VM", "check menu item").click()
     _click_auto()
+    win.click_title()
     win.window_maximize()
     _click_auto()
     win.click_title()

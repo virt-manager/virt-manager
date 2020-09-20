@@ -229,13 +229,16 @@ class VMMDogtailApp(object):
             self.open()
         return self._topwin
 
-    def error_if_already_running(self):
-        # Ensure virt-manager isn't already running
+    def has_dbus(self):
         dbus = Gio.DBusProxy.new_sync(
                 Gio.bus_get_sync(Gio.BusType.SESSION, None), 0, None,
                 "org.freedesktop.DBus", "/org/freedesktop/DBus",
                 "org.freedesktop.DBus", None)
-        if "org.virt-manager.virt-manager" in dbus.ListNames():
+        return "org.virt-manager.virt-manager" in dbus.ListNames()
+
+    def error_if_already_running(self):
+        # Ensure virt-manager isn't already running
+        if self.has_dbus():
             raise RuntimeError("virt-manager is already running. "
                     "Close it before running this test suite.")
 

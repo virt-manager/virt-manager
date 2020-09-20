@@ -12,19 +12,19 @@ from . import lib
 def testSystrayFake(app):
     app.open(
             keyfile="systray.ini",
-            extra_opts=["--test-options=fake-systray"],
-            window_name="Virtual Machine Manager")
+            extra_opts=["--test-options=fake-systray"])
 
-    manager = app.topwin
     systray = app.root.find("vmm-fake-systray", check_active=False)
-    manager.drag(1000, 1000)
+    systray.grab_focus()
+    manager = app.root.find("Virtual Machine Manager", check_active=False)
 
     # Add a connection to trigger systray update
     uri = tests.utils.URIs.kvm
+    manager.grab_focus()
     app.manager_createconn(uri=uri)
 
     # Hide the manager
-    systray.click_title()
+    systray.grab_focus()
     systray.click()
     lib.utils.check(lambda: not manager.showing)
     lib.utils.check(lambda: app.is_running())
@@ -81,12 +81,13 @@ def testSystrayFake(app):
     _check_vm_action("QEMU/KVM", "test-arm-kernel", "Resume")
 
     # Reshow the manager
+    systray.grab_focus()
     systray.click()
     lib.utils.check(lambda: manager.showing)
     lib.utils.check(lambda: app.is_running())
 
     # Close from the menu
-    systray.click_title()
+    systray.grab_focus()
     systray.click(button=3)
     menu = app.root.find("vmm-systray-menu")
     menu.find("Quit", "menu item").click()
@@ -97,21 +98,22 @@ def testSystrayFake(app):
 def testSystrayToggle(app):
     app.open(
             keyfile="systray.ini",
-            extra_opts=["--test-options=fake-systray"],
-            window_name="Virtual Machine Manager")
+            extra_opts=["--test-options=fake-systray"])
 
-    manager = app.topwin
     systray = app.root.find("vmm-fake-systray", check_active=False)
+    systray.grab_focus()
+    manager = app.root.find("Virtual Machine Manager", check_active=False)
+    manager.grab_focus()
+
     manager.find("Edit", "menu").click()
     manager.find("Preferences", "menu item").click()
     prefs = app.find_window("Preferences")
 
     # Close the system tray
-    prefs.click_title()
+    prefs.grab_focus()
     prefs.find_fuzzy("Enable system tray", "check").click()
     lib.utils.check(lambda: not systray.showing)
 
     # Close the manager
-    manager.click_title()
-    manager.keyCombo("<alt>F4")
+    manager.window_close()
     lib.utils.check(lambda: not app.is_running())
