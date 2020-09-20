@@ -60,10 +60,9 @@ def testNewVMMultiConnection(app):
     """
     manager = app.topwin
 
-    def _add_conn(uri):
-        return app.manager_createconn(uri)
-
     # Check the dialog shows 'no connection' error
+    app.sleep(1)  # give some time for the connection to connect
+    manager.grab_focus()
     app.manager_conn_disconnect("test testdriver.xml")
     newvm = _open_newvm(app)
     newvm.find_fuzzy("No active connection to install on")
@@ -74,6 +73,9 @@ def testNewVMMultiConnection(app):
     def _capsopt(fname):
         capsdir = tests.utils.DATADIR + "/capabilities/"
         return ",caps=" + capsdir + fname
+
+    def _add_conn(uri):
+        return app.manager_createconn(uri)
 
     # Test empty qemu connection
     _add_conn(tests.utils.URIs.kvm + _capsopt("test-empty.xml"))
@@ -1191,6 +1193,7 @@ def testNewVMSession(app):
     manager = app.topwin
     manager.window_maximize()
     newvm = _open_newvm(app)
+    app.sleep(.5)  # newvm focus grab avoidance
     manager.grab_focus()
     app.manager_conn_disconnect(".*session.*")
     lib.utils.check(lambda: not newvm.showing)
