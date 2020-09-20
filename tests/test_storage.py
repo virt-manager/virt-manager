@@ -221,7 +221,7 @@ def testMisc():
 
     glustervol = StorageVolume(fullconn)
     glustervol.pool = glusterpool
-    assert glustervol.supports_format() is True
+    assert glustervol.supports_format() is False
 
     diskvol = StorageVolume(fullconn)
     diskvol.pool = diskpool

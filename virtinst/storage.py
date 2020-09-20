@@ -621,11 +621,7 @@ class StorageVolume(_StorageObject):
     ######################
 
     def supports_format(self):
-        if self.file_type == self.TYPE_FILE:
-            return True
-        if self._pool_xml.type == StoragePool.TYPE_GLUSTER:
-            return True
-        return False
+        return self.file_type == self.TYPE_FILE
 
 
     ##################
