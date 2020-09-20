@@ -799,12 +799,16 @@ class vmmDetails(vmmGObjectUI):
         cpu_model.set_entry_text_column(0)
         cpu_model.set_row_separator_func(sep_func, None)
         model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-        model.append([_("Application Default"), "1",
+        model.append([_("Application Default"), "01",
             virtinst.DomainCpu.SPECIAL_MODE_APP_DEFAULT, False])
-        model.append([_("Hypervisor Default"), "2",
+        model.append([_("Hypervisor Default"), "02",
             virtinst.DomainCpu.SPECIAL_MODE_HV_DEFAULT, False])
-        model.append([_("Clear CPU configuration"), "3",
+        model.append([_("Clear CPU configuration"), "03",
             virtinst.DomainCpu.SPECIAL_MODE_CLEAR, False])
+        model.append(["host-model", "04",
+            virtinst.DomainCpu.SPECIAL_MODE_HOST_MODEL, False])
+        model.append(["host-passthrough", "05",
+            virtinst.DomainCpu.SPECIAL_MODE_HOST_PASSTHROUGH, False])
         model.append([None, None, None, True])
         for name in domcaps.get_cpu_models():
             model.append([name, name, name, False])

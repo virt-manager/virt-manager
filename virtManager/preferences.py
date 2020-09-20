@@ -169,8 +169,8 @@ class vmmPreferences(vmmGObjectUI):
             [DomainCpu.SPECIAL_MODE_HV_DEFAULT, _("Hypervisor default")],
             [DomainCpu.SPECIAL_MODE_HOST_MODEL_ONLY,
                 _("Nearest host CPU model")],
-            [DomainCpu.SPECIAL_MODE_HOST_MODEL,
-                _("Copy host CPU definition")]]:
+            [DomainCpu.SPECIAL_MODE_HOST_MODEL, "host-model"],
+            [DomainCpu.SPECIAL_MODE_HOST_PASSTHROUGH, "host-passthrough"]]:
             model.append(row)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
