@@ -142,7 +142,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="row_spacing">4</property>
+                            <property name="row_spacing">6</property>
                             <property name="column_spacing">6</property>
                             <child>
                               <object class="GtkBox" id="hbox10">
@@ -284,8 +284,7 @@
                               <object class="GtkGrid" id="table2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="border_width">8</property>
-                                <property name="row_spacing">4</property>
+                                <property name="row_spacing">6</property>
                                 <property name="column_spacing">6</property>
                                 <child>
                                   <object class="GtkSpinButton" id="vol-capacity">
@@ -297,40 +296,10 @@
                                     <property name="climb_rate">10</property>
                                     <property name="digits">1</property>
                                     <property name="value">1</property>
-                                    <signal name="value-changed" handler="on_vol_capacity_value_changed" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkSpinButton" id="vol-allocation">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="invisible_char">●</property>
-                                    <property name="text" translatable="yes">1.0</property>
-                                    <property name="adjustment">adjustment1</property>
-                                    <property name="climb_rate">10</property>
-                                    <property name="digits">1</property>
-                                    <property name="value">1</property>
-                                    <signal name="value-changed" handler="on_vol_allocation_value_changed" swapped="no"/>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="top_attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label9">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">GiB</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">2</property>
-                                    <property name="top_attach">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -350,7 +319,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="halign">end</property>
-                                    <property name="label" translatable="yes">Max Ca_pacity:</property>
+                                    <property name="label" translatable="yes">Ca_pacity:</property>
                                     <property name="use_underline">True</property>
                                     <property name="mnemonic_widget">vol-capacity</property>
                                   </object>
@@ -360,13 +329,27 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label7">
+                                  <object class="GtkCheckButton" id="vol-nonsparse">
+                                    <property name="label" translatable="yes">_Allocate entire volume now</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="width">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="halign">end</property>
-                                    <property name="label" translatable="yes">_Allocation:</property>
-                                    <property name="use_underline">True</property>
-                                    <property name="mnemonic_widget">vol-allocation</property>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -391,16 +374,20 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="vexpand">False</property>
+                            <property name="expanded">True</property>
                             <child>
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_top">4</property>
                                 <property name="column_spacing">6</property>
                                 <child>
                                   <object class="GtkLabel" id="label11">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Path:</property>
+                                    <property name="label" translatable="yes">Pa_th:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">backing-store</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
@@ -412,7 +399,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="hexpand">True</property>
-                                    <signal name="changed" handler="on_backing_store_changed" swapped="no"/>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="backing-store-atkobject">
                                         <property name="AtkObject::accessible-name">backing-store</property>
@@ -426,11 +412,12 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="backing-browse">
-                                    <property name="label" translatable="yes">Browse...</property>
+                                    <property name="label" translatable="yes">_Browse...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="image">image2</property>
+                                    <property name="use_underline">True</property>
                                     <signal name="clicked" handler="on_backing_browse_clicked" swapped="no"/>
                                   </object>
                                   <packing>
@@ -445,7 +432,8 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">False</property>
-                                <property name="label" translatable="yes">Backing store</property>
+                                <property name="label" translatable="yes">_Backing store</property>
+                                <property name="use_underline">True</property>
                               </object>
                             </child>
                           </object>
