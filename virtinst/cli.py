@@ -1840,7 +1840,7 @@ class OSVariantData(object):
 
 
 class ParserOSVariant(VirtCLIParser):
-    cli_arg_name = "os-variant"
+    cli_arg_name = "os_variant"
     supports_clearxml = False
 
     @classmethod
