@@ -166,17 +166,13 @@ class _SystrayWindow(_Systray):
         self._init_ui()
 
     def _init_ui(self):
-        image = Gtk.Image()
-        image.set_from_stock(Gtk.STOCK_ADD, Gtk.IconSize.DIALOG)
-
-        box = Gtk.EventBox()
-        box.add(image)
-        box.connect("button-press-event", self._popup_cb)
+        button = Gtk.Button.new_from_stock(Gtk.STOCK_ADD)
+        button.connect("button-press-event", self._popup_cb)
 
         self._window = Gtk.Window()
         self._window.set_size_request(100, 100)
         self._window.get_accessible().set_name("vmm-fake-systray")
-        self._window.add(box)
+        self._window.add(button)
 
     def is_embedded(self):
         return self._window.is_visible()

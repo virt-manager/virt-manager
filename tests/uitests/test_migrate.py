@@ -108,8 +108,7 @@ def testMigrateConnMismatch(app):
     mig.find("conn-combo").find("No usable", "menu item")
 
     # Test explicit dialog 'delete'
-    mig.keyCombo("<alt>F4")
-    lib.utils.check(lambda: not mig.showing)
+    mig.window_close()
 
     # Ensure disconnecting will close the dialog
     manager.click_title()

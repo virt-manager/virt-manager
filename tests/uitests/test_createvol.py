@@ -79,7 +79,7 @@ def testCreateVolMisc(app):
     browsewin.find("Browse Local", "push button").click()
     chooser = app.root.find(
             "Locate existing storage", "file chooser")
-    chooser.keyCombo("<alt>F4")
+    chooser.window_close()
     app.select_storagebrowser_volume(
             "default-pool", "bochs-vol", doubleclick=True)
     backingstore = win.find("backing-store")

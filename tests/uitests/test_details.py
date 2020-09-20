@@ -64,8 +64,7 @@ def testDetailsHardwareSmokeTestAlternate(app):
     win = _testSmokeTest(app, "test alternate devs title")
     win.find("Details", "page tab").click()
     _select_hw(app, win, "Performance", "performance-tab")
-    # Wait for perf signals to trigger, to cover more code
-    app.sleep(2)
+    app.sleep(.2)  # wait for polling to trigger perf updates
 
 
 def _testRename(app, win, origname, newname):
@@ -128,8 +127,7 @@ def testDetailsStateMisc(app):
     # View Manager option
     win.find("File", "menu").click()
     win.find("View Manager", "menu item").click()
-    lib.utils.check(lambda: app.topwin.active)
-    app.topwin.keyCombo("<alt>F4")
+    app.topwin.window_close()
     lib.utils.check(lambda: win.active)
 
     # Make a change and then trigger unapplied change warning
@@ -443,9 +441,8 @@ def testDetailsNetIPAddress(app):
     tab.find("IP address:", "push button").click()
     check_ip("10.0.0.3")
 
-    win.keyCombo("<alt>F4")
-    lib.utils.check(lambda: not win.showing)
-    app.topwin.click_title()
+    win.window_close()
+    app.topwin.grab_focus()
 
     # Tests the fake qemu guest agent path
     win = app.manager_open_details("test alternate devs title")

@@ -804,7 +804,7 @@ class vmmManager(vmmGObjectUI):
 
     def popup_vm_menu_key(self, widget_ignore, event):
         if Gdk.keyval_name(event.keyval) != "Menu":
-            return False
+            return False  # pragma: no cover
 
         model, treeiter = self.widget("vm-list").get_selection().get_selected()
         self.popup_vm_menu(model, treeiter, event)

@@ -92,7 +92,6 @@ def testPrefsAll(app):
 
 def testPrefsXMLEditor(app):
     managerwin = app.topwin
-    managerwin.drag(0, 200)
     detailswin = app.manager_open_details("test-clone-simple")
     finish = detailswin.find("config-apply")
     xmleditor = detailswin.find("XML editor")
@@ -104,8 +103,7 @@ def testPrefsXMLEditor(app):
     xmleditor.typeText("1234abcd")
     lib.utils.check(lambda: xmleditor.text == origtext)
 
-    managerwin.click_title()
-    managerwin.grabFocus()
+    managerwin.grab_focus()
     managerwin.find("Edit", "menu").click()
     managerwin.find("Preferences", "menu item").click()
     prefswin = app.find_window("Preferences")
@@ -113,8 +111,8 @@ def testPrefsXMLEditor(app):
     prefswin.find_fuzzy("Close", "push button").click()
     lib.utils.check(lambda: prefswin.visible is False)
 
-    managerwin.keyCombo("<alt>F4")
-    detailswin.click()
+    managerwin.window_close()
+    detailswin.grab_focus()
     newtext = xmleditor.text.replace(">", "><title>FOOTITLE</title>", 1)
     xmleditor.set_text(newtext)
     finish.click()

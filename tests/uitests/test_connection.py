@@ -25,17 +25,17 @@ def testConnectionBlacklist(app):
     _delete_vm("test-arm-kernel")
     _delete_vm("test-clone-full")
     _delete_vm("test-clone-simple")
-    app.sleep(.5)
+    app.sleep(.5)  # Give events time to register to hit full blacklist path
     lib.utils.check(
             lambda: "test-many-devices" not in app.topwin.fmt_nodes())
 
 
 def testConnectionConnCrash(app):
     app.open(
-        extra_opts=["--test-options=conn-crash"])
+        extra_opts=["--test-options=conn-crash",
+                    "--test-options=short-poll"])
     manager = app.topwin
 
-    app.sleep(1)
     manager.find(r"^test testdriver.xml - Not Connected", "table cell")
     lib.utils.check(lambda: manager.active)
 
@@ -43,9 +43,10 @@ def testConnectionConnCrash(app):
 def testConnectionFakeEvents(app):
     app.open(
         extra_opts=["--test-options=fake-nodedev-event=computer",
-                    "--test-options=fake-agent-event=test-many-devices"])
+                    "--test-options=fake-agent-event=test-many-devices",
+                    "--test-options=short-poll"])
     manager = app.topwin
-    app.sleep(2.5)
+    app.sleep(1.2)  # needs a second to hit both nodedev/agent event paths
     lib.utils.check(lambda: manager.active)
 
 

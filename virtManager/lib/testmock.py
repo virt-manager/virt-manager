@@ -73,7 +73,7 @@ def schedule_fake_agent_event(conn, cb):
         dom = backend.lookupByName(vmname)
         cb(backend, dom, state, reason, None)
 
-    conn.timeout_add(1000, time_cb)
+    conn.timeout_add(500, time_cb)
 
 
 def schedule_fake_nodedev_event(conn, lifecycle_cb, update_cb):
@@ -91,8 +91,8 @@ def schedule_fake_nodedev_event(conn, lifecycle_cb, update_cb):
         nodedev = backend.nodeDeviceLookupByName(nodename)
         update_cb(backend, nodedev, None)
 
-    conn.timeout_add(1000, lifecycle_cb_wrapper)
-    conn.timeout_add(2000, update_cb_wrapper)
+    conn.timeout_add(500, lifecycle_cb_wrapper)
+    conn.timeout_add(1000, update_cb_wrapper)
 
 
 def fake_openauth(conn, cb, data):
@@ -167,6 +167,8 @@ class CLITestOptionsClass:
         for testing the TCP URI auth dialog
     * fake-session-error: Fake a connection open error that
         triggers logind session lookup
+    * short-poll: Use a polling interval of only .1 seconds to speed
+        up the uitests a bit
     """
     def __init__(self, test_options_str):
         optset = set()
@@ -211,6 +213,7 @@ class CLITestOptionsClass:
         self.fake_nodedev_event = _get_value("fake-nodedev-event")
         self.fake_openauth = _get("fake-openauth")
         self.fake_session_error = _get("fake-session-error")
+        self.short_poll = _get("short-poll")
 
         if optset:  # pragma: no cover
             raise RuntimeError("Unknown --test-options keys: %s" % optset)

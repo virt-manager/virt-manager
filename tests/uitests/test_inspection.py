@@ -40,8 +40,7 @@ def testInspectionMock(app):
     tab.find("Refresh", "push button").click()
     lib.utils.check(lambda: apps.fmt_nodes() != nodestr1)
 
-    details.keyCombo("<alt>F4")
-    lib.utils.check(lambda: not details.showing)
+    details.window_close()
 
     # Open a VM with no disks which will report an inspection error
     app.root.find_fuzzy("test\n", "table cell").doubleClick()
@@ -53,8 +52,10 @@ def testInspectionMock(app):
 
     # Closing and reopening a connection triggers some libguest
     # cache reading
-    details.keyCombo("<alt>F4")
+    details.window_close()
     manager.click()
+    c = manager.find("test testdriver.xml", "table cell")
     app.manager_conn_disconnect("test testdriver.xml")
+    lib.utils.check(lambda: "Not Connected" in c.text)
     app.manager_conn_connect("test testdriver.xml")
-    app.sleep(2)
+    lib.utils.check(lambda: "Not Connected" not in c.text)

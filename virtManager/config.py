@@ -432,6 +432,8 @@ class vmmConfig(object):
     def get_stats_history_length(self):
         return 120
     def get_stats_update_interval(self):
+        if self.CLITestOptions.short_poll:
+            return .1
         interval = self.conf.get("/stats/update-interval")
         return max(interval, 1)
     def set_stats_update_interval(self, interval):

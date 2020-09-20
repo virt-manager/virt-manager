@@ -18,20 +18,36 @@ def _open_newvm(app):
     return app.find_window("New VM")
 
 
-def _forward(newvm, check=True):
+def _nav(newvm, forward, back, check):
     pagenumlabel = newvm.find("pagenum-label")
     oldtext = pagenumlabel.text
-    newvm.find_fuzzy("Forward", "button").click()
+    ignore = back
+
+    # Clicking is tough to manage, because when clicking
+    # rapidly in succession the create wizard has a few
+    # cases of stealing focus to better help the user
+    # navigate the wizard, but this is very racy and
+    # tough to deal with hear. Luckily accelerators
+    # don't care too much about focus
+    if forward:
+        button = newvm.find("Forward", "push button")
+        combo = "<alt>f"
+    else:
+        button = newvm.find("Back", "push button")
+        combo = "<alt>b"
+
+    button.check_onscreen()
+    button.keyCombo(combo)
     if check:
         lib.utils.check(lambda: pagenumlabel.text != oldtext)
+
+
+def _forward(newvm, check=True):
+    _nav(newvm, forward=True, back=False, check=check)
 
 
 def _back(newvm, check=True):
-    pagenumlabel = newvm.find("pagenum-label")
-    oldtext = pagenumlabel.text
-    newvm.find_fuzzy("Back", "button").click()
-    if check:
-        lib.utils.check(lambda: pagenumlabel.text != oldtext)
+    _nav(newvm, forward=False, back=True, check=check)
 
 
 ############################################
@@ -51,7 +67,7 @@ def testNewVMMultiConnection(app):
     app.manager_conn_disconnect("test testdriver.xml")
     newvm = _open_newvm(app)
     newvm.find_fuzzy("No active connection to install on")
-    newvm.keyCombo("<alt>F4")
+    newvm.window_close()
     lib.utils.check(lambda: manager.active)
 
     # Check the xen PV only startup warning
@@ -63,18 +79,14 @@ def testNewVMMultiConnection(app):
     _add_conn(tests.utils.URIs.kvm + _capsopt("test-empty.xml"))
     newvm = _open_newvm(app)
     newvm.find(".*No hypervisor options were found.*KVM kernel modules.*")
-    newvm.click()
-    newvm.click_title()
-    newvm.keyCombo("<alt>F4")
+    newvm.window_close()
     app.manager_conn_disconnect("QEMU/KVM")
 
     _add_conn(tests.utils.URIs.kvm_session +
             _capsopt("test-qemu-no-kvm.xml"))
     newvm = _open_newvm(app)
     newvm.find(".*KVM is not available.*")
-    newvm.click()
-    newvm.click_title()
-    newvm.keyCombo("<alt>F4")
+    newvm.window_close()
 
     _add_conn(tests.utils.URIs.lxc)
     _add_conn(tests.utils.URIs.test_full)
@@ -100,8 +112,7 @@ def testNewVMMultiConnection(app):
     _forward(newvm)
 
     # Back up, select test:///default, verify media-combo is now empty
-    newvm.click_title()
-    newvm.keyCombo("<alt>F4")
+    newvm.window_close()
     newvm = _open_newvm(app)
     newvm.combo_select("create-conn", ".*test default.*")
     _forward(newvm)
@@ -137,22 +148,13 @@ def testNewVMManualDefault(app):
     lib.utils.check(lambda: osentry.text == "Generic OS")
 
     # Verify back+forward still keeps Generic selected
-    app.sleep(.5)
     _back(newvm)
-    app.sleep(.5)
     _forward(newvm)
-    app.sleep(.5)
     lib.utils.check(lambda: "Generic" in osentry.text)
     osentry.check_onscreen()
-
-    # The sleeps shouldn't be required, but this test continues to be
-    # flakey, so this is an attempt to fix it.
     _forward(newvm)
-    app.sleep(.5)
     _forward(newvm)
-    app.sleep(.5)
     _forward(newvm)
-    app.sleep(.5)
 
 
     # Empty triggers a specific codepath
@@ -236,8 +238,13 @@ def testNewVMCDROMRegular(app):
 
     # Catch validation error
     entry = newvm.find("media-entry")
+    lib.utils.check(lambda: "/dev/sr0" in entry.text)
     entry.click()
     entry.set_text("")
+    # Something about entry.set_text is flakey with focus,
+    # this stuff is to try and fix focus
+    app.rawinput.pressKey("Escape")
+    newvm.click_title()
     _forward(newvm, check=False)
     app.click_alert_button("media selection is required", "OK")
 
@@ -428,7 +435,7 @@ def testNewVMURL(app):
     lib.utils.check(lambda: not newvm.showing)
 
     # Re-run the newvm wizard, check that URL was remembered
-    details.keyCombo("<alt>F4")
+    details.window_close()
     newvm = _open_newvm(app)
     newvm.find_fuzzy("Network Install", "radio").click()
     _forward(newvm)
@@ -643,12 +650,9 @@ def testNewVMArmKernel(app):
     local = newvm.find_fuzzy("Local", "radio")
     lib.utils.check(lambda: not local.sensitive)
     newvm.find_fuzzy("Machine Type", "combo").click()
-    app.sleep(.2)
     newvm.find_fuzzy("canon", "menu item").click()
     newvm.find_fuzzy("Machine Type", "combo").click()
-    app.sleep(.2)
     newvm.find("virt", "menu item").click()
-    app.sleep(.5)
     importradio = newvm.find("Import", "radio")
     importradio.click()
     lib.utils.check(lambda: importradio.checked)
@@ -1181,14 +1185,13 @@ def testNewVMSession(app):
     newvm.find_fuzzy("Finish", "button").click()
     details = app.find_details_window("vm1")
     lib.utils.check(lambda: not newvm.showing)
-    app.sleep(1)
     details.window_close()
 
     # Ensure disconnecting will close the dialog
     manager = app.topwin
     manager.window_maximize()
     newvm = _open_newvm(app)
-    manager.click_title()
+    manager.grab_focus()
     app.manager_conn_disconnect(".*session.*")
     lib.utils.check(lambda: not newvm.showing)
 

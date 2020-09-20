@@ -211,7 +211,6 @@ def testDeleteSkipStorage(app):
     browser = _open_storage_browser(app)
     browser.find_fuzzy("default-pool", "table cell").click()
     browser.find("vol-refresh", "push button").click()
-    app.sleep(.5)
     browser.find("overlay.img", "table cell")
     browser.find("sharevol.img", "table cell")
 
@@ -237,13 +236,11 @@ def testDeleteDeviceNoStorage(app):
     chk = delete.find("Delete associated", "check box")
     lib.utils.check(lambda: not chk.checked)
     _finish(app, delete, [])
-    details.click()
-    details.keyCombo("<alt>F4")
+    details.window_close()
 
     browser = _open_storage_browser(app)
     browser.find_fuzzy("default-pool", "table cell").click()
     browser.find("vol-refresh", "push button").click()
-    app.sleep(.5)
     browser.find("overlay.img", "table cell")
 
 
@@ -271,8 +268,7 @@ def testDeleteDeviceWithStorage(app):
     path = "/dev/default-pool/overlay.img"
     delete.find_fuzzy(path)
     _finish(app, delete, [path])
-    details.click()
-    details.keyCombo("<alt>F4")
+    details.window_close()
 
     browser = _open_storage_browser(app)
     browser.find_fuzzy("default-pool", "table cell").click()
@@ -304,12 +300,10 @@ def testDeleteDeviceFail(app):
     delete.find_fuzzy(path)
     _finish(app, delete, [path], expect_fail=True)
     app.click_alert_button("Storage will not be.*deleted", "OK")
-    details.click()
-    details.keyCombo("<alt>F4")
+    details.window_close()
 
     # Verify file still exists
     browser = _open_storage_browser(app)
     browser.find_fuzzy("default-pool", "table cell").click()
     browser.find("vol-refresh", "push button").click()
-    app.sleep(.5)
     browser.find("overlay.img", "table cell")

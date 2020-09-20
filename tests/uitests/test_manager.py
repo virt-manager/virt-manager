@@ -50,16 +50,8 @@ def testVMLifecycle(app):
 
 
 def testVMNoEventsLifecycle(app):
-    app.open(extra_opts=["--test-options=no-events"])
-
-    # Change preferences timeout to 1 second
-    app.root.find("Edit", "menu").click()
-    app.root.find("Preferences", "menu item").click()
-    win = app.find_window("Preferences")
-    win.find("Polling", "page tab").click()
-    win.find("cpu-poll").set_text("1")
-    win.find("Close", "push button").click()
-
+    app.open(extra_opts=["--test-options=no-events",
+                         "--test-options=short-poll"])
     _testVMLifecycle(app)
 
 
@@ -161,14 +153,14 @@ def testManagerQEMUSetTime(app):
     smenu.click()
     save.click()
     lib.utils.check(lambda: run.sensitive)
-    app.sleep(1)
+    app.sleep(1)  # give settime thread time to run
     run.click()
     lib.utils.check(lambda: not run.sensitive)
-    app.sleep(1)
+    app.sleep(1)  # give settime thread time to run
     smenu.click()
     save.click()
     lib.utils.check(lambda: run.sensitive)
-    app.sleep(1)
+    app.sleep(1)  # give settime thread time to run
 
 
 def testManagerVMRunFail(app):
@@ -239,7 +231,7 @@ def testManagerWindowReposition(app):
     manager.window_maximize()
     newx = manager.position[0]
     newy = manager.position[1]
-    manager.keyCombo("<alt>F4")
+    manager.window_close()
     host.click_title()
     host.find("File", "menu").click()
     host.find("View Manager", "menu item").click()
@@ -253,14 +245,7 @@ def testManagerWindowCleanup(app):
     Open migrate, clone, delete, newvm, details, host windows, close the
     connection, make sure they all disappear
     """
-    def _drag(win):
-        """
-        Drag a window so it's not obscuring the manager window
-        """
-        win.drag(1000, 1000)
-
     manager = app.topwin
-    app.sleep(1)
     manager.window_maximize()
 
     # Open delete window hitting a special code path, then close it
@@ -268,8 +253,7 @@ def testManagerWindowCleanup(app):
     manager.find("Edit", "menu").click()
     manager.find("Delete", "menu item").click()
     delete = app.root.find_fuzzy("Delete", "frame")
-    app.sleep(.5)
-    delete.click_title()
+    delete.find("storage-list").grab_focus()
     delete.window_close()
 
     # Open Clone window hitting a special code path, then close it
@@ -277,30 +261,22 @@ def testManagerWindowCleanup(app):
     app.rawinput.pressKey("Menu")
     app.root.find("Clone...", "menu item").click()
     clone = app.find_window("Clone Virtual Machine")
-    app.sleep(.5)
-    clone.click_title()
     clone.window_close()
 
     # Open host
+    manager.grab_focus()
     c = manager.find_fuzzy("testdriver.xml", "table cell")
-    c.click()
-    app.sleep(.5)
     c.doubleClick()
     host = app.find_window("test testdriver.xml - Connection Details")
-    _drag(host)
 
     # Open details
+    manager.grab_focus()
     c = manager.find("test-many-devices", "table cell")
-    c.click()
-    app.sleep(.5)
     c.doubleClick()
     details = app.find_details_window("test-many-devices")
-    _drag(details)
 
     # Close the connection
-    app.sleep(.5)
-    manager.click_title()
-    app.sleep(.5)
+    manager.grab_focus()
     app.manager_conn_disconnect("test testdriver.xml")
 
     # Ensure all those windows aren't showing
