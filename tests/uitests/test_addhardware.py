@@ -553,10 +553,21 @@ def testAddHWMisc1(app):
     """
     Add some simple devices
     """
-    details = _open_app(app, "test-clone-simple")
+    details = _open_app(app, "test-clone-simple",
+            keyfile="rawdefault.ini")
+
+    # Disk, verify that raw will fully allocate by default
     addhw = _open_addhw(app, details)
+    tab = _select_hw(addhw, "Storage", "storage-tab")
+    # Size too big
+    tab.find("GiB", "spin button").set_text("200000")
+    _finish(addhw, check=None)
+    app.click_alert_button("not enough free space", "Close")
+    tab.find("GiB", "spin button").set_text("1.5")
+    _finish(addhw, check=details)
 
     # Add input
+    addhw = _open_addhw(app, details)
     tab = _select_hw(addhw, "Input", "input-tab")
     tab.combo_select("Type:", "EvTouch")
     _finish(addhw, check=details)

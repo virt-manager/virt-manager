@@ -616,6 +616,7 @@ def testNewVMAArch64UEFI(app):
     newvm.find("media-entry").set_text("/dev/default-pool/testvol1.img")
     _forward(newvm)
     _forward(newvm)
+    # Disable storage, this triggers a livecd code path in createvm.py
     newvm.find_fuzzy("Enable storage", "check box").click()
     _forward(newvm)
     newvm.find_fuzzy("Finish", "button").click()
@@ -767,6 +768,7 @@ def testNewVMCustomizeMisc(app):
     """
     Some specific customize logic paths
     """
+    app.open(keyfile="rawdefault.ini")
     newvm = _open_newvm(app)
     newvm.find_fuzzy("Manual", "radio").click()
     _forward(newvm)
@@ -774,6 +776,14 @@ def testNewVMCustomizeMisc(app):
     newvm.find("oslist-popover").find_fuzzy("generic").click()
     _forward(newvm)
     _forward(newvm)
+
+    # Raw default will be non-sparse, should trigger size error
+    sizetext = newvm.find(None, "spin button", "GiB")
+    sizetext.set_text("10000000")
+    _forward(newvm, check=False)
+    app.click_alert_button("Storage parameter error", "OK")
+    sizetext.set_text("1")
+
     _forward(newvm)
 
     newvm.find_fuzzy("Customize", "check").click()
