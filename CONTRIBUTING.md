@@ -1,18 +1,32 @@
 # Contribute to virt-manager
 
+## Run code from git
+
+Generally virt-* tools can be run straight from git. For example
+for virt-manager:
+
+```
+git clone https://github.com/virt-manager/virt-manager
+cd virt-manager
+./virt-manager --debug
+```
+
+The other tools like `virt-install` should work similarly. This
+expects you already have a distro provided version of virt-manager
+installed which pulled in all the necessary dependencies. If not,
+see [INSTALL.md](INSTALL.md) for more hints about finding the
+correct dependencies.
+
 ## Bug reporting
 
-We use our [github issue tracker](https://github.com/virt-manager/virt-manager/issues)
-for bug reporting. Previously we used bugzilla.redhat.com but nowadays
-github is preferred.
+Bug reports should go to our [github issue tracker](https://github.com/virt-manager/virt-manager/issues).
 
-Please only file issues if they apply to the latest version of
-virt-manager. If you are using an older version from a distro,
-please file a bug in your distro's bug tracker..
+The bug tracker is for issues affecting the latest code only.
+If you are using a distro provided package like from Ubuntu or
+Fedora, please file a bug in their bug tracker.
 
-When filing a bug, please reproduce the issue with the `--debug`
-flag passed to the tool and attach the full output in the bug
-report.
+If you suspect the bug also affects upstream code, please confirm
+it by running the latest code using the steps above.
 
 
 ## Writing patches
