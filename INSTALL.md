@@ -6,6 +6,9 @@ changes, it can be done from the source directory:
 ./virt-manager
 ```
 
+For more details on that, see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+
 To install the software into `/usr/local` (usually), you can do:
 ```sh
 ./setup.py install
