@@ -589,6 +589,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.widget("console-gfx-viewport"))
         self._viewer.cleanup()
         self._viewer = None
+        log.debug("Viewer disconnected")
 
     def _refresh_vm_state(self):
         self._activate_default_console_page()
@@ -963,7 +964,7 @@ class vmmConsolePages(vmmGObjectUI):
     def vmwindow_viewer_get_pixbuf(self):
         return self._viewer.console_get_pixbuf()
 
-    def vmwindow_close_viewer(self):
+    def vmwindow_close(self):
         return self._activate_vm_unavailable_page(
                 _("Viewer disconnected."))
     def vmwindow_get_title_message(self):

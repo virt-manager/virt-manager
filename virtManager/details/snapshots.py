@@ -420,7 +420,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.vm.refresh_snapshots()
         self._populate_snapshot_list(select_name)
 
-    def show_page(self):
+    def vmwindow_refresh_vm_state(self):
         if not self._initial_populate:
             self._populate_snapshot_list()
 
