@@ -975,12 +975,31 @@ class vmmDetails(vmmGObjectUI):
     # vmwindow Public API #
     #######################
 
+    def _refresh_vm_state(self):
+        active = self.vm.is_active()
+        self.widget("overview-name").set_editable(not active)
+
+        reason = self.vm.run_status_reason()
+        if reason:
+            status = "%s (%s)" % (self.vm.run_status(), reason)
+        else:
+            status = self.vm.run_status()
+        self.widget("overview-status-text").set_text(status)
+        self.widget("overview-status-icon").set_from_icon_name(
+                            self.vm.run_status_icon_name(),
+                            Gtk.IconSize.BUTTON)
+
     def vmwindow_resources_refreshed(self):
         row = self._get_hw_row()
         if row and row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_STATS:
             self._refresh_stats_page()
 
-    def vmwindow_page_refresh(self):
+    def vmwindow_refresh_vm_state(self, is_current_page):
+        if not is_current_page:
+            self._disable_apply()
+            return
+
+        self._refresh_vm_state()
         self._repopulate_hw_list()
 
         if self.widget("config-apply").get_sensitive():
@@ -1002,23 +1021,8 @@ class vmmDetails(vmmGObjectUI):
     def vmwindow_has_unapplied_changes(self):
         return self._has_unapplied_changes(self._get_hw_row())
 
-    def vmwindow_refresh_vm_state(self):
-        active = self.vm.is_active()
-        self.widget("overview-name").set_editable(not active)
-
-        reason = self.vm.run_status_reason()
-        if reason:
-            status = "%s (%s)" % (self.vm.run_status(), reason)
-        else:
-            status = self.vm.run_status()
-        self.widget("overview-status-text").set_text(status)
-        self.widget("overview-status-icon").set_from_icon_name(
-                            self.vm.run_status_icon_name(),
-                            Gtk.IconSize.BUTTON)
-
-    def vmwindow_show_details(self):
-        # When vmwindow switches to use, refresh the current page
-        self._refresh_page()
+    def vmwindow_close(self):
+        self._disable_apply()
 
 
     ##############################

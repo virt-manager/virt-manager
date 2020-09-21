@@ -251,10 +251,8 @@ class vmmVMWindow(vmmGObjectUI):
             return
 
         self.topwin.hide()
-        try:
-            self._console.vmwindow_close_viewer()
-        except Exception:  # pragma: no cover
-            log.error("Failure when disconnecting from desktop server")
+        self._console.vmwindow_close()
+        self._details.vmwindow_close()
 
         self.emit("closed")
         vmmEngine.get_instance().decrement_window_counter()
@@ -336,10 +334,8 @@ class vmmVMWindow(vmmGObjectUI):
                 return
 
         if is_details:
-            self._details.vmwindow_show_details()
             pages.set_current_page(DETAILS_PAGE_DETAILS)
         elif is_snapshot:
-            self._snapshots.show_page()
             pages.set_current_page(DETAILS_PAGE_SNAPSHOTS)
         else:
             pages.set_current_page(DETAILS_PAGE_CONSOLE)
@@ -438,8 +434,6 @@ class vmmVMWindow(vmmGObjectUI):
         self.widget("control-snapshots").set_tooltip_text(tooltip)
 
         self._refresh_current_page()
-        self._details.vmwindow_refresh_vm_state()
-        self._console.vmwindow_refresh_vm_state()
 
 
     #############################
@@ -584,10 +578,15 @@ class vmmVMWindow(vmmGObjectUI):
             self._details.vmwindow_resources_refreshed()
 
     def _refresh_current_page(self, newpage=None):
-        if not newpage:
-            newpage = self.widget("details-pages").get_current_page()
-        if newpage == DETAILS_PAGE_DETAILS:
-            self._details.vmwindow_page_refresh()
+        newpage = newpage or self.widget("details-pages").get_current_page()
+
+        is_details = newpage == DETAILS_PAGE_DETAILS
+        self._details.vmwindow_refresh_vm_state(is_details)
+
+        if newpage == DETAILS_PAGE_CONSOLE:
+            self._console.vmwindow_refresh_vm_state()
+        elif newpage == DETAILS_PAGE_SNAPSHOTS:
+            self._snapshots.vmwindow_refresh_vm_state()
 
 
     #########################
@@ -698,10 +697,12 @@ class vmmVMWindow(vmmGObjectUI):
         self._refresh_title()
 
     def _vm_state_changed_cb(self, src):
-        self._refresh_vm_state()
+        if self.is_visible():
+            self._refresh_vm_state()
 
     def _resources_sampled_cb(self, src):
-        self._refresh_resources()
+        if self.is_visible():
+            self._refresh_resources()
 
     def _console_page_changed_cb(self, src):
         self._sync_console_page_menu_state()
