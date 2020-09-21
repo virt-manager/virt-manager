@@ -299,6 +299,7 @@ class vmmConsolePages(vmmGObjectUI):
     __gsignals__ = {
         "page-changed": (vmmGObjectUI.RUN_FIRST, None, []),
         "leave-fullscreen": (vmmGObjectUI.RUN_FIRST, None, []),
+        "change-title": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     def __init__(self, vm, builder, topwin):
@@ -308,8 +309,6 @@ class vmmConsolePages(vmmGObjectUI):
         self.vm = vm
         self.top_box = self.widget("console-pages")
         self._pointer_is_grabbed = False
-        self._change_title()
-        self.vm.connect("state-changed", self._change_title)
 
         # State for disabling modifiers when keyboard is grabbed
         self._accel_groups = Gtk.accel_groups_from_object(self.topwin)
@@ -378,20 +377,6 @@ class vmmConsolePages(vmmGObjectUI):
     #################
     # Internal APIs #
     #################
-
-    def _change_title(self, ignore1=None):
-        title = (_("%(vm-name)s on %(connection-name)s") % {
-            "vm-name": self.vm.get_name_or_title(),
-            "connection-name": self.vm.conn.get_pretty_desc(),
-        })
-
-        if self._pointer_is_grabbed and self._viewer:
-            keystr = self._viewer.console_get_grab_keys()
-            keymsg = _("Press %s to release pointer.") % keystr
-
-            title = keymsg + " " + title
-
-        self.topwin.set_title(title)
 
     def _disable_modifiers(self):
         if self._gtk_settings_accel is not None:
@@ -780,11 +765,11 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _pointer_grabbed(self, ignore):
         self._pointer_is_grabbed = True
-        self._change_title()
+        self.emit("change-title")
 
     def _pointer_ungrabbed(self, ignore):
         self._pointer_is_grabbed = False
-        self._change_title()
+        self.emit("change-title")
 
     def _viewer_allocate_cb(self, src, ignore):
         self.widget("console-gfx-scroll").queue_resize()
@@ -981,6 +966,10 @@ class vmmConsolePages(vmmGObjectUI):
     def vmwindow_close_viewer(self):
         return self._activate_vm_unavailable_page(
                 _("Viewer disconnected."))
+    def vmwindow_get_title_message(self):
+        if self._pointer_is_grabbed and self._viewer:
+            keystr = self._viewer.console_get_grab_keys()
+            return _("Press %s to release pointer.") % keystr
 
     def vmwindow_activate_default_console_page(self):
         return self._activate_default_console_page()
