@@ -568,17 +568,6 @@ class vmmVMWindow(vmmGObjectUI):
         details = self.widget("details-pages")
         page = details.get_current_page()
 
-        # If the dialog is visible, we want to make sure the XML is always
-        # up to date
-        try:
-            if self.is_visible():
-                self.vm.ensure_latest_xml()
-        except Exception as e:  # pragma: no cover
-            if self.conn.support.is_libvirt_error_no_domain(e):
-                self.close()
-                return
-            raise
-
         if page == DETAILS_PAGE_DETAILS:
             self._details.vmwindow_resources_refreshed()
 
