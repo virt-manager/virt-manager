@@ -144,6 +144,7 @@ def _calculate_disk_bus_index(disklist):
     # Iterate through all disks and calculate what number they are
     # This sets disk.disk_bus_index which is not a standard property
     idx_mapping = {}
+    ret = []
     for dev in disklist:
         devtype = dev.device
         bus = dev.bus
@@ -152,18 +153,19 @@ def _calculate_disk_bus_index(disklist):
         if key not in idx_mapping:
             idx_mapping[key] = 1
 
-        dev.disk_bus_index = idx_mapping[key]
+        disk_bus_index = idx_mapping[key]
         idx_mapping[key] += 1
+        ret.append((dev, disk_bus_index))
 
-    return disklist
+    return ret
 
 
-def _label_for_device(dev):
+def _label_for_device(dev, disk_bus_index):
     devtype = dev.DEVICE_TYPE
 
     if devtype == "disk":
         if dev.device == "floppy":
-            return _("Floppy %(index)d") % {"index": dev.disk_bus_index}
+            return _("Floppy %(index)d") % {"index": disk_bus_index}
 
         busstr = ""
         if dev.bus:
@@ -171,17 +173,17 @@ def _label_for_device(dev):
         if dev.device == "cdrom":
             return _("%(bus)s CDROM %(index)d") % {
                 "bus": busstr,
-                "index": dev.disk_bus_index,
+                "index": disk_bus_index,
             }
         elif dev.device == "disk":
             return _("%(bus)s Disk %(index)d") % {
                 "bus": busstr,
-                "index": dev.disk_bus_index,
+                "index": disk_bus_index,
             }
         return _("%(bus)s %(device)s %(index)d") % {
             "bus": busstr,
             "device": dev.device.capitalize(),
-            "index": dev.disk_bus_index,
+            "index": disk_bus_index,
         }
 
     if devtype == "interface":
@@ -903,6 +905,15 @@ class vmmDetails(vmmGObjectUI):
 
     def _get_hw_row(self):
         return uiutil.get_list_selected_row(self.widget("hw-list"))
+
+    def _get_hw_row_for_device(self, dev):
+        for row in self.widget("hw-list").get_model():
+            if row[HW_LIST_COL_DEVICE] is dev:
+                return row
+
+    def _get_hw_row_label_for_device(self, dev):
+        row = self._get_hw_row_for_device(dev)
+        return row and row[HW_LIST_COL_LABEL] or ""
 
     def _has_unapplied_changes(self, row):
         """
@@ -2007,8 +2018,7 @@ class vmmDetails(vmmGObjectUI):
             if vol:
                 size = vol.get_pretty_capacity()
 
-
-        pretty_name = _label_for_device(disk)
+        pretty_name = self._get_hw_row_label_for_device(disk)
 
         self.widget("disk-target-type").set_text(pretty_name)
         self.widget("disk-size").set_text(size)
@@ -2082,7 +2092,8 @@ class vmmDetails(vmmGObjectUI):
         if rd.type == 'tcp':
             address = "%s:%s" % (rd.source.host, rd.source.service)
 
-        self.widget("redir-title").set_markup(_label_for_device(rd))
+        title = self._get_hw_row_label_for_device(rd)
+        self.widget("redir-title").set_markup(title)
         self.widget("redir-type").set_text(
                 vmmAddHardware.redirdev_pretty_type(rd.type))
 
@@ -2246,7 +2257,7 @@ class vmmDetails(vmmGObjectUI):
             model.clear()
             disks = controller.get_attached_devices(self.vm.xmlobj)
             for disk in disks:
-                name = _label_for_device(disk)
+                name = self._get_hw_row_label_for_device(disk)
                 infoStr = _("%(device)s on %(address)s") % {
                     "device": name,
                     "address": disk.address.pretty_desc(),
@@ -2362,8 +2373,11 @@ class vmmDetails(vmmGObjectUI):
 
         ret = []
         for dev in self.vm.get_bootable_devices():
-            icon = _icon_for_device(dev)
-            label = _label_for_device(dev)
+            row = self._get_hw_row_for_device(dev)
+            if not row:
+                continue  # pragma: no cover
+            label = row[HW_LIST_COL_LABEL]
+            icon = row[HW_LIST_COL_ICON_NAME]
 
             ret.append([dev.get_xml_id(), label, icon, False, True])
 
@@ -2445,12 +2459,12 @@ class vmmDetails(vmmGObjectUI):
 
             return origdev.get_xml_id() == newdev.get_xml_id()
 
-        def update_hwlist(hwtype, dev):
+        def update_hwlist(hwtype, dev, disk_bus_index=None):
             """
             See if passed hw is already in list, and if so, update info.
             If not in list, add it!
             """
-            label = _label_for_device(dev)
+            label = _label_for_device(dev, disk_bus_index)
             icon = _icon_for_device(dev)
 
             currentDevices.append(dev)
@@ -2478,8 +2492,9 @@ class vmmDetails(vmmGObjectUI):
         if serials and consoles and self.vm.serial_is_console_dup(serials[0]):
             consoles.pop(0)
 
-        for dev in _calculate_disk_bus_index(self.vm.xmlobj.devices.disk):
-            update_hwlist(HW_LIST_TYPE_DISK, dev)
+        disks = self.vm.xmlobj.devices.disk
+        for dev, _disk_bus_index in _calculate_disk_bus_index(disks):
+            update_hwlist(HW_LIST_TYPE_DISK, dev, _disk_bus_index)
         for dev in self.vm.xmlobj.devices.interface:
             update_hwlist(HW_LIST_TYPE_NIC, dev)
         for dev in self.vm.xmlobj.devices.input:
