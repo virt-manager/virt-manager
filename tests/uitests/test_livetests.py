@@ -159,13 +159,13 @@ def _checkConsoleFocus(app, dom):
     # Check that modifiers don't work when console grabs pointer
     win.click()
     app.sleep(.5)  # make sure window code has time to adjust modifiers
-    win.keyCombo("<ctrl>w")
+    win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: win.showing)
     dom.destroy()
     win.find("Guest is not running.")
     win.grab_focus()
     app.sleep(.5)  # make sure window code has time to adjust modifiers
-    win.keyCombo("<ctrl>w")
+    win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: not win.showing)
 
 
@@ -344,14 +344,14 @@ def testConsoleLXCSerial(app, dom):
 
     # Ensure ctrl+w doesn't close the window, modifiers are disabled
     term.click()
-    win.keyCombo("<ctrl>w")
+    win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: win.showing)
-    # Shut it down, ensure <ctrl>w works again
+    # Shut it down, ensure accelerator works again
     _destroy(app, win)
     lib.utils.check(lambda: not dom.isActive())
     win.click_title()
     app.sleep(.3)  # make sure window code has time to adjust modifiers
-    win.keyCombo("<ctrl>w")
+    win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: not win.showing)
 
 
