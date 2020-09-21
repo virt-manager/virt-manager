@@ -74,8 +74,8 @@ class vmmVMWindow(vmmGObjectUI):
         self._console.connect("leave-fullscreen",
                 self._console_leave_fullscreen_cb)
 
-        self.snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
-        self.widget("snapshot-placeholder").add(self.snapshots.top_box)
+        self._snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
+        self.widget("snapshot-placeholder").add(self._snapshots.top_box)
 
         self._details = vmmDetails(self.vm, self.builder, self.topwin,
                 self.is_customize_dialog)
@@ -120,7 +120,7 @@ class vmmVMWindow(vmmGObjectUI):
             "on_details_menu_view_console_toggled": self.details_console_changed,
             "on_details_menu_view_snapshots_toggled": self.details_console_changed,
 
-            "on_details_pages_switch_page": self.switch_page,
+            "on_details_pages_switch_page": self._details_page_switch_cb,
 
             "on_details_menu_view_fullscreen_activate": self._fullscreen_changed_cb,
             "on_details_menu_view_size_to_vm_activate": self._size_to_vm_cb,
@@ -132,10 +132,10 @@ class vmmVMWindow(vmmGObjectUI):
         })
 
         # Deliberately keep all this after signal connection
-        self.vm.connect("state-changed", self.refresh_vm_state)
-        self.vm.connect("resources-sampled", self.refresh_resources)
+        self.vm.connect("state-changed", self._vm_state_changed_cb)
+        self.vm.connect("resources-sampled", self._resources_sampled_cb)
 
-        self._console_page_changed_cb(None)
+        self._sync_console_page_menu_state()
         self._console_refresh_scaling_from_settings()
 
         self.add_gsettings_handle(
@@ -152,7 +152,7 @@ class vmmVMWindow(vmmGObjectUI):
             self.vm.on_console_autoconnect_changed(
                 self._console_refresh_autoconnect_from_settings))
 
-        self.refresh_vm_state()
+        self._refresh_vm_state()
         self.activate_default_page()
 
 
@@ -163,8 +163,8 @@ class vmmVMWindow(vmmGObjectUI):
     def _cleanup(self):
         self._console.cleanup()
         self._console = None
-        self.snapshots.cleanup()
-        self.snapshots = None
+        self._snapshots.cleanup()
+        self._snapshots = None
         self._details.cleanup()
         self._details = None
         self._shutdownmenu.destroy()
@@ -186,7 +186,7 @@ class vmmVMWindow(vmmGObjectUI):
             return
 
         vmmEngine.get_instance().increment_window_counter()
-        self.refresh_vm_state()
+        self._refresh_vm_state()
 
     def customize_finish(self, src):
         ignore = src
@@ -330,19 +330,19 @@ class vmmVMWindow(vmmGObjectUI):
         pages = self.widget("details-pages")
         if pages.get_current_page() == DETAILS_PAGE_DETAILS:
             if self._details.vmwindow_has_unapplied_changes():
-                self.sync_details_console_view(pages.get_current_page())
+                self._sync_toolbar_page_buttons(pages.get_current_page())
                 return
 
         if is_details:
             self._details.vmwindow_show_details()
             pages.set_current_page(DETAILS_PAGE_DETAILS)
         elif is_snapshot:
-            self.snapshots.show_page()
+            self._snapshots.show_page()
             pages.set_current_page(DETAILS_PAGE_SNAPSHOTS)
         else:
             pages.set_current_page(DETAILS_PAGE_CONSOLE)
 
-    def sync_details_console_view(self, newpage):
+    def _sync_toolbar_page_buttons(self, newpage):
         details = self.widget("control-vm-details")
         details_menu = self.widget("details-menu-view-details")
         console = self.widget("control-vm-console")
@@ -366,15 +366,14 @@ class vmmVMWindow(vmmGObjectUI):
         finally:
             self.ignoreDetails = False
 
-    def switch_page(self, notebook=None, ignore2=None, newpage=None):
+    def _details_page_switch_cb(self, notebook, pagewidget, newpage):
         for i in range(notebook.get_n_pages()):
             w = notebook.get_nth_page(i)
             w.set_visible(i == newpage)
 
-        self.page_refresh(newpage)
-
-        self.sync_details_console_view(newpage)
-        self._console_page_changed_cb(None)
+        self._refresh_current_page(newpage)
+        self._sync_toolbar_page_buttons(newpage)
+        self._sync_console_page_menu_state()
 
     def change_run_text(self, can_restore):
         if can_restore:
@@ -386,7 +385,7 @@ class vmmVMWindow(vmmGObjectUI):
         self.widget("details-vm-menu").get_submenu().change_run_text(text)
         self.widget("control-run").set_label(strip_text)
 
-    def refresh_vm_state(self, ignore=None):
+    def _refresh_vm_state(self):
         vm = self.vm
 
         self.widget("details-menu-view-toolbar").set_active(
@@ -423,9 +422,7 @@ class vmmVMWindow(vmmGObjectUI):
             tooltip += "\n" + errmsg
         self.widget("control-snapshots").set_tooltip_text(tooltip)
 
-        details = self.widget("details-pages")
-        self.page_refresh(details.get_current_page())
-
+        self._refresh_current_page()
         self._details.vmwindow_refresh_vm_state()
         self._console.vmwindow_refresh_vm_state()
 
@@ -564,15 +561,17 @@ class vmmVMWindow(vmmGObjectUI):
     # Details page refresh #
     ########################
 
-    def refresh_resources(self, ignore):
+    def _refresh_resources(self):
         details = self.widget("details-pages")
         page = details.get_current_page()
 
         if page == DETAILS_PAGE_DETAILS:
             self._details.vmwindow_resources_refreshed()
 
-    def page_refresh(self, page):
-        if page == DETAILS_PAGE_DETAILS:
+    def _refresh_current_page(self, newpage=None):
+        if not newpage:
+            newpage = self.widget("details-pages").get_current_page()
+        if newpage == DETAILS_PAGE_DETAILS:
             self._details.vmwindow_page_refresh()
 
 
@@ -580,7 +579,7 @@ class vmmVMWindow(vmmGObjectUI):
     # Console page handling #
     #########################
 
-    def _console_page_changed_cb(self, src):
+    def _sync_console_page_menu_state(self):
         if not self.vm:
             # This is triggered via cleanup + idle_add, so vm might
             # disappear and spam the logs
@@ -679,3 +678,12 @@ class vmmVMWindow(vmmGObjectUI):
     def _console_leave_fullscreen_cb(self, src):
         # This will trigger de-fullscreening in a roundabout way
         self.widget("control-fullscreen").set_active(False)
+
+    def _vm_state_changed_cb(self, src):
+        self._refresh_vm_state()
+
+    def _resources_sampled_cb(self, src):
+        self._refresh_resources()
+
+    def _console_page_changed_cb(self, src):
+        self._sync_console_page_menu_state()
