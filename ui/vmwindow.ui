@@ -3,6 +3,16 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAccelGroup" id="accelgroup1"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-close</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-quit</property>
+  </object>
   <object class="GtkWindow" id="vmm-vmwindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Virtual Machine</property>
@@ -48,24 +58,28 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="close4">
-                        <property name="label">gtk-close</property>
+                        <property name="label">_Close</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="image">image1</property>
+                        <property name="use_stock">False</property>
                         <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_details_menu_close_activate" swapped="no"/>
+                        <accelerator key="w" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="quit3">
-                        <property name="label">gtk-quit</property>
+                        <property name="label">_Quit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="image">image2</property>
+                        <property name="use_stock">False</property>
                         <property name="accel_group">accelgroup1</property>
                         <signal name="activate" handler="on_details_menu_quit_activate" swapped="no"/>
+                        <accelerator key="q" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
