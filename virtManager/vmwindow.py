@@ -73,6 +73,8 @@ class vmmVMWindow(vmmGObjectUI):
         self._console.connect("page-changed", self._console_page_changed_cb)
         self._console.connect("leave-fullscreen",
                 self._console_leave_fullscreen_cb)
+        self._console.connect("change-title",
+                self._console_change_title_cb)
 
         self._snapshots = vmmSnapshotPage(self.vm, self.builder, self.topwin)
         self.widget("snapshot-placeholder").add(self._snapshots.top_box)
@@ -385,8 +387,21 @@ class vmmVMWindow(vmmGObjectUI):
         self.widget("details-vm-menu").get_submenu().change_run_text(text)
         self.widget("control-run").set_label(strip_text)
 
+    def _refresh_title(self):
+        title = (_("%(vm-name)s on %(connection-name)s") % {
+            "vm-name": self.vm.get_name_or_title(),
+            "connection-name": self.vm.conn.get_pretty_desc(),
+        })
+
+        grabmsg = self._console.vmwindow_get_title_message()
+        if grabmsg:
+            title = grabmsg + " " + title
+
+        self.topwin.set_title(title)
+
     def _refresh_vm_state(self):
         vm = self.vm
+        self._refresh_title()
 
         self.widget("details-menu-view-toolbar").set_active(
             self.config.get_details_show_toolbar())
@@ -678,6 +693,9 @@ class vmmVMWindow(vmmGObjectUI):
     def _console_leave_fullscreen_cb(self, src):
         # This will trigger de-fullscreening in a roundabout way
         self.widget("control-fullscreen").set_active(False)
+
+    def _console_change_title_cb(self, src):
+        self._refresh_title()
 
     def _vm_state_changed_cb(self, src):
         self._refresh_vm_state()
