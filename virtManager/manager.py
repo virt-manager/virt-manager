@@ -98,6 +98,7 @@ class vmmManager(vmmGObjectUI):
         self.vmmenu = vmmenu.VMActionMenu(self, self.current_vm)
         self.shutdownmenu = vmmenu.VMShutdownMenu(self, self.current_vm)
         self.connmenu = Gtk.Menu()
+        self.connmenu.get_accessible().set_name("conn-menu")
         self.connmenu_items = {}
 
         self.builder.connect_signals({

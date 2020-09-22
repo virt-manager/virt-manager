@@ -176,12 +176,8 @@ def testDeleteFailure(app, tmppath):
     app.click_alert_button("Errors encountered", "Close")
 
     # Ensure disconnecting will close the dialog
-    manager = app.topwin
-    manager.window_maximize()
     win = _open_delete(app, "test-clone")
-    manager.click_title()
-    app.manager_conn_disconnect("test testdriver.xml")
-    lib.utils.check(lambda: not win.showing)
+    app.manager_test_conn_window_cleanup("test testdriver.xml", win)
 
 
 def testDeleteRemoteManyDevices(app):
