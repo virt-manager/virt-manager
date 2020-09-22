@@ -509,10 +509,10 @@ def testDetailsEditDevices1(app):
     tab.find("Model:", "text").set_text("ac97")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
-    # Test non-disk removal
-    win.find("config-remove").click()
     cell = win.find("Sound ac97", "table cell")
     oldtext = cell.text
+    # Test non-disk removal
+    win.find("config-remove").click()
     app.click_alert_button("Are you sure", "No")
     lib.utils.check(lambda: cell.state_selected)
     cell.click(button=3)
