@@ -38,10 +38,11 @@ class VMMDogtailApp(object):
     def sleep(self, *args, **kwargs):
         return time.sleep(*args, **kwargs)
 
-    def find_window(self, name, roleName=None):
+    def find_window(self, name, roleName=None, check_active=True):
         if roleName is None:
             roleName = "(frame|dialog|alert|window)"
-        return self.root.find(name=name, roleName=roleName, recursive=False)
+        return self.root.find(name=name, roleName=roleName,
+                recursive=False, check_active=check_active)
 
     rawinput = dogtail.rawinput
     tree = dogtail.tree
@@ -51,9 +52,10 @@ class VMMDogtailApp(object):
     # virt-manager specific helpers #
     #################################
 
-    def get_manager(self):
+    def get_manager(self, check_active=True):
         if not self._manager:
-            self._manager = self.find_window("Virtual Machine Manager")
+            self._manager = self.find_window("Virtual Machine Manager",
+                    check_active=check_active)
         return self._manager
 
     def find_details_window(self, vmname,
@@ -115,15 +117,19 @@ class VMMDogtailApp(object):
 
     def manager_conn_disconnect(self, conn_label):
         c = self.manager_get_conn_cell(conn_label)
+        c.click()
+        utils.check(lambda: c.state_selected)
         c.click(button=3)
-        self.root.find("conn-disconnect", "menu item").click()
+        menu = self.root.find("conn-menu", "menu")
+        menu.find("conn-disconnect", "menu item").click()
         utils.check(lambda: "Not Connected" in c.text)
         return c
 
     def manager_conn_delete(self, conn_label):
         c = self.manager_get_conn_cell(conn_label)
         c.click(button=3)
-        self.root.find("conn-delete", "menu item").click()
+        menu = self.root.find("conn-menu", "menu")
+        menu.find("conn-delete", "menu item").click()
         self.click_alert_button("will remove the connection", "Yes")
         utils.check(lambda: c.dead)
 
@@ -211,6 +217,14 @@ class VMMDogtailApp(object):
         win = self.find_window("%s - Connection Details" % conn_label)
         win.find_fuzzy(tab, "page tab").click()
         return win
+
+    def manager_test_conn_window_cleanup(self, conn_label, childwin):
+        # Give time for the child window to appear and possibly grab focus
+        self.sleep(1)
+        self.get_manager(check_active=False)
+        dogtail.rawinput.drag(childwin.title_coordinates(), (1000, 1000))
+        self.manager_conn_disconnect(conn_label)
+        utils.check(lambda: not childwin.showing)
 
 
     ###########################

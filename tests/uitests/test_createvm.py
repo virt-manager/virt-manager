@@ -1190,13 +1190,8 @@ def testNewVMSession(app):
     details.window_close()
 
     # Ensure disconnecting will close the dialog
-    manager = app.topwin
-    manager.window_maximize()
     newvm = _open_newvm(app)
-    app.sleep(.5)  # newvm focus grab avoidance
-    manager.grab_focus()
-    app.manager_conn_disconnect(".*session.*")
-    lib.utils.check(lambda: not newvm.showing)
+    app.manager_test_conn_window_cleanup(".*session.*", newvm)
 
 
 def testNewVMEmptyConn(app):
