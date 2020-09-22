@@ -12,16 +12,19 @@ import virtinst
 from ..lib import uiutil
 from ..baseclass import vmmGObjectUI
 
+_EDIT_GFX_ENUM = range(1, 6)
+(
+    _EDIT_GFX_TYPE,
+    _EDIT_GFX_LISTEN,
+    _EDIT_GFX_PORT,
+    _EDIT_GFX_OPENGL,
+    _EDIT_GFX_PASSWD,
+) = _EDIT_GFX_ENUM
+
 
 class vmmGraphicsDetails(vmmGObjectUI):
     __gsignals__ = {
-        "changed-password": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-port": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-type": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-listen": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-address": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-opengl": (vmmGObjectUI.RUN_FIRST, None, []),
-        "changed-rendernode": (vmmGObjectUI.RUN_FIRST, None, []),
+        "changed": (vmmGObjectUI.RUN_FIRST, None, []),
     }
 
     def __init__(self, vm, builder, topwin):
@@ -30,18 +33,24 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.vm = vm
         self.conn = vm.conn
 
-        self.builder.connect_signals({
-            "on_graphics_type_changed": self._change_graphics_type,
-            "on_graphics_port_auto_toggled": self._change_port_auto,
-            "on_graphics_use_password": self._change_password_cb,
-            "on_graphics_show_password": self._show_password_cb,
+        self._active_edits = []
 
-            "on_graphics_listen_type_changed": self._change_graphics_listen,
-            "on_graphics_password_changed": lambda ignore: self.emit("changed-password"),
-            "on_graphics_address_changed": lambda ignore: self.emit("changed-address"),
-            "on_graphics_port_changed": lambda ignore: self.emit("changed-port"),
-            "on_graphics_opengl_toggled": self._change_opengl,
-            "on_graphics_rendernode_changed": lambda ignore: self.emit("changed-rendernode")
+        def _e(edittype):
+            def signal_cb(*args):
+                self._change_cb(edittype)
+            return signal_cb
+
+        self.builder.connect_signals({
+            "on_graphics_show_password": self._show_password_cb,
+            "on_graphics_port_auto_toggled": self._change_port_auto,
+            "on_graphics_opengl_toggled": _e(_EDIT_GFX_OPENGL),
+            "on_graphics_type_changed": _e(_EDIT_GFX_TYPE),
+            "on_graphics_use_password": _e(_EDIT_GFX_PASSWD),
+            "on_graphics_listen_type_changed": _e(_EDIT_GFX_LISTEN),
+            "on_graphics_password_changed": _e(_EDIT_GFX_PASSWD),
+            "on_graphics_address_changed": _e(_EDIT_GFX_LISTEN),
+            "on_graphics_port_changed": _e(_EDIT_GFX_PORT),
+            "on_graphics_rendernode_changed": _e(_EDIT_GFX_OPENGL),
         })
 
         self._init_ui()
@@ -108,11 +117,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
                 rendernode = drm.get_devnode().path
                 model.append([rendernode, i.pretty_name()])
 
-    def _get_config_graphics_ports(self):
-        port = uiutil.spin_get_helper(self.widget("graphics-port"))
-        if self.widget("graphics-port-auto").get_active():
-            port = -1
-        return port
 
     ##############
     # UI syncing #
@@ -197,30 +201,10 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password-chk").set_active(False)
         self.widget("graphics-opengl").set_active(False)
         self._sync_ui()
-
-    def get_values(self):
-        gtype = uiutil.get_list_selection(self.widget("graphics-type"))
-        port = self._get_config_graphics_ports()
-        listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
-        addr = uiutil.get_list_selection(self.widget("graphics-address"))
-
-        passwd = self.widget("graphics-password").get_text()
-        if not self.widget("graphics-password-chk").get_active():
-            passwd = None
-
-        glval = self.widget("graphics-opengl").get_active()
-        if not self.widget("graphics-opengl").is_visible():
-            glval = None
-
-        rendernode = uiutil.get_list_selection(self.widget("graphics-rendernode"))
-        if not self.widget("graphics-rendernode").is_visible():
-            rendernode = None
-
-        return gtype, port, listen, addr, passwd, glval, rendernode
+        self._active_edits = []
 
     def set_dev(self, gfx):
         self.reset_state()
-
         portval = gfx.port
         portautolabel = _("A_uto")
 
@@ -244,8 +228,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         uiutil.set_list_selection(self.widget("graphics-type"), gtype)
 
         use_passwd = gfx.passwd is not None
-        self.widget("graphics-password").set_text(gfx.passwd or "")
         self.widget("graphics-password-chk").set_active(use_passwd)
+        self.widget("graphics-password").set_text(gfx.passwd or "")
 
         listentype = gfx.get_first_listen_type()
         uiutil.set_list_selection(
@@ -264,32 +248,79 @@ class vmmGraphicsDetails(vmmGObjectUI):
             uiutil.set_list_selection(
                    self.widget("graphics-rendernode"), renderval)
 
+        # This comes last
+        self._active_edits = []
+
+    def get_values(self):
+        ret = {}
+
+        glval = self.widget("graphics-opengl").get_active()
+        if not self.widget("graphics-opengl").is_visible():
+            glval = None
+
+        rendernode = uiutil.get_list_selection(self.widget("graphics-rendernode"))
+        if not self.widget("graphics-rendernode").is_visible():
+            rendernode = None
+
+        passwd = self.widget("graphics-password").get_text()
+        if not self.widget("graphics-password-chk").get_active():
+            passwd = None
+
+        port = uiutil.spin_get_helper(self.widget("graphics-port"))
+        if self.widget("graphics-port-auto").get_active():
+            port = -1
+
+        listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
+        addr = uiutil.get_list_selection(self.widget("graphics-address"))
+        if listen and listen != "none":
+            listen = addr
+        else:
+            port = None
+
+        gtype = uiutil.get_list_selection(self.widget("graphics-type"))
+
+        if _EDIT_GFX_TYPE in self._active_edits:
+            ret["gtype"] = gtype
+        if _EDIT_GFX_PORT in self._active_edits:
+            ret["port"] = port
+        if _EDIT_GFX_LISTEN in self._active_edits:
+            ret["listen"] = listen
+        if _EDIT_GFX_PASSWD in self._active_edits:
+            ret["passwd"] = passwd
+        if _EDIT_GFX_OPENGL in self._active_edits:
+            ret["gl"] = glval
+            ret["rendernode"] = rendernode
+
+        return ret
+
+    def build_device(self):
+        self._active_edits = _EDIT_GFX_ENUM[:]
+        values = self.get_values()
+        dev = virtinst.DeviceGraphics(self.conn.get_backend())
+
+        dev.type = values["gtype"]
+        dev.passwd = values["passwd"]
+        dev.gl = values["gl"]
+        dev.rendernode = values["rendernode"]
+        dev.listen = values["listen"]
+        dev.port = values["port"]
+
+        return dev
+
 
     #############
     # Listeners #
     #############
 
-    def _change_graphics_type(self, ignore):
+    def _change_cb(self, edittype):
         self._sync_ui()
-        self.emit("changed-type")
-
-    def _change_graphics_listen(self, ignore):
-        self._sync_ui()
-        self.emit("changed-listen")
-
-    def _change_opengl(self, ignore):
-        self._sync_ui()
-        self.emit("changed-opengl")
-        self.emit("changed-rendernode")
+        if edittype not in self._active_edits:
+            self._active_edits.append(edittype)
+        self.emit("changed")
 
     def _change_port_auto(self, ignore):
         self.widget("graphics-port-auto").set_inconsistent(False)
-        self._sync_ui()
-        self.emit("changed-port")
-
-    def _change_password_cb(self, src):
-        self._sync_ui()
-        self.emit("changed-password")
+        self._change_cb(_EDIT_GFX_PORT)
 
     def _show_password_cb(self, src):
         self._sync_ui()

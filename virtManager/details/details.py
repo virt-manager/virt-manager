@@ -65,13 +65,7 @@ from ..delete import vmmDeleteStorage
  EDIT_NET_MAC,
  EDIT_NET_LINKSTATE,
 
- EDIT_GFX_PASSWD,
- EDIT_GFX_TYPE,
- EDIT_GFX_LISTEN,
- EDIT_GFX_ADDRESS,
- EDIT_GFX_PORT,
- EDIT_GFX_OPENGL,
- EDIT_GFX_RENDERNODE,
+ EDIT_GFX,
 
  EDIT_VIDEO_MODEL,
  EDIT_VIDEO_3D,
@@ -89,7 +83,7 @@ from ..delete import vmmDeleteStorage
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 44)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 38)
 
 
 # Columns in hw list model
@@ -383,13 +377,7 @@ class vmmDetails(vmmGObjectUI):
         self.gfxdetails = vmmGraphicsDetails(
             self.vm, self.builder, self.topwin)
         self.widget("graphics-align").add(self.gfxdetails.top_box)
-        self.gfxdetails.connect("changed-type", _e(EDIT_GFX_TYPE))
-        self.gfxdetails.connect("changed-port", _e(EDIT_GFX_PORT))
-        self.gfxdetails.connect("changed-opengl", _e(EDIT_GFX_OPENGL))
-        self.gfxdetails.connect("changed-rendernode", _e(EDIT_GFX_RENDERNODE))
-        self.gfxdetails.connect("changed-listen", _e(EDIT_GFX_LISTEN))
-        self.gfxdetails.connect("changed-address", _e(EDIT_GFX_ADDRESS))
-        self.gfxdetails.connect("changed-password", _e(EDIT_GFX_PASSWD))
+        self.gfxdetails.connect("changed", _e(EDIT_GFX))
 
         self.netlist = vmmNetworkList(self.conn, self.builder, self.topwin)
         self.widget("network-source-label-align").add(self.netlist.top_label)
@@ -1604,25 +1592,9 @@ class vmmDetails(vmmGObjectUI):
                                           devobj=devobj)
 
     def _apply_graphics(self, devobj):
-        (gtype, port, listen,
-         addr, passwd, gl, rendernode) = self.gfxdetails.get_values()
-
         kwargs = {}
-
-        if self._edited(EDIT_GFX_PASSWD):
-            kwargs["passwd"] = passwd
-        if self._edited(EDIT_GFX_LISTEN):
-            kwargs["listen"] = listen
-        if self._edited(EDIT_GFX_ADDRESS) or self._edited(EDIT_GFX_LISTEN):
-            kwargs["addr"] = addr
-        if self._edited(EDIT_GFX_PORT) or self._edited(EDIT_GFX_LISTEN):
-            kwargs["port"] = port
-        if self._edited(EDIT_GFX_OPENGL):
-            kwargs["gl"] = gl
-        if self._edited(EDIT_GFX_RENDERNODE):
-            kwargs["rendernode"] = rendernode
-        if self._edited(EDIT_GFX_TYPE):
-            kwargs["gtype"] = gtype
+        if self._edited(EDIT_GFX):
+            kwargs = self.gfxdetails.get_values()
 
         return vmmAddHardware.change_config_helper(self.vm.define_graphics,
                                           kwargs, self.vm, self.err,

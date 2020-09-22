@@ -9,7 +9,7 @@ import traceback
 from gi.repository import Gtk
 
 from virtinst import (DeviceChannel, DeviceConsole,
-        DeviceController, DeviceDisk, DeviceGraphics, DeviceHostdev,
+        DeviceController, DeviceDisk, DeviceHostdev,
         DeviceInput, DeviceInterface, DevicePanic, DeviceParallel,
         DeviceRedirdev, DeviceRng, DeviceSerial, DeviceSmartcard,
         DeviceSound, DeviceTpm, DeviceVideo, DeviceVsock, DeviceWatchdog)
@@ -1481,21 +1481,7 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _build_graphics(self):
-        (gtype, port, listen,
-         addr, passwd, gl, rendernode) = self._gfxdetails.get_values()
-        dev = DeviceGraphics(self.conn.get_backend())
-        dev.type = gtype
-        dev.passwd = passwd
-        dev.gl = gl
-        dev.rendernode = rendernode
-
-        if not listen or listen == "none":
-            dev.listen = "none"
-        else:
-            dev.listen = addr
-            dev.port = port
-
-        return dev
+        return self._gfxdetails.build_device()
 
     def _build_sound(self):
         smodel = uiutil.get_list_selection(self.widget("sound-model"))

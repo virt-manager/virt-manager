@@ -792,7 +792,7 @@ class vmmDomain(vmmLibvirtObject):
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_graphics(self, devobj, do_hotplug,
-            listen=_SENTINEL, addr=_SENTINEL, port=_SENTINEL,
+            listen=_SENTINEL, port=_SENTINEL,
             passwd=_SENTINEL, gtype=_SENTINEL,
             gl=_SENTINEL, rendernode=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
@@ -800,11 +800,8 @@ class vmmDomain(vmmLibvirtObject):
         if not editdev:
             return  # pragma: no cover
 
-        if addr != _SENTINEL or listen != _SENTINEL:
-            if listen == "none":
-                editdev.listen = listen
-            else:
-                editdev.listen = addr
+        if listen != _SENTINEL:
+            editdev.listen = listen
         if port != _SENTINEL:
             editdev.port = port
         if passwd != _SENTINEL:
