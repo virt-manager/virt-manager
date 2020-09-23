@@ -316,7 +316,7 @@ def testAddDiskSearchPermsFail(app, uri, tmpdir):
     details = _open_app(app, "test-clone-simple",
             break_setfacl=True)
 
-    # Say 'Yes' and it should fail, then blacklist the paths
+    # Say 'Yes' and it should fail, then denylist the paths
     addhw = _open_addhw(app, details)
     tab = _select_hw(addhw, "Storage", "storage-tab")
     tab.find_fuzzy("Select or create", "radio").click()

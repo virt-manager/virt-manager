@@ -393,7 +393,7 @@ class vmmDomain(vmmLibvirtObject):
             self.get_uuid() == "00000000-0000-0000-0000-000000000000"):
             # We don't want virt-manager to track Domain-0 since it
             # doesn't work with our UI. Raising an error will ensures it
-            # is blacklisted.
+            # is denylisted.
             raise RuntimeError(  # pragma: no cover
                     "Can't track Domain-0 as a vmmDomain")
 

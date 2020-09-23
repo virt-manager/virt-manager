@@ -10,7 +10,7 @@ from . import lib
 
 def testConnectionBlacklist(app):
     app.open(
-        extra_opts=["--test-options=object-blacklist=test-many-devices"])
+        extra_opts=["--test-options=object-denylist=test-many-devices"])
     manager = app.topwin
 
     def _delete_vm(vmname):
@@ -25,7 +25,7 @@ def testConnectionBlacklist(app):
     _delete_vm("test-arm-kernel")
     _delete_vm("test-clone-full")
     _delete_vm("test-clone-simple")
-    app.sleep(.5)  # Give events time to register to hit full blacklist path
+    app.sleep(.5)  # Give events time to register to hit full denylist path
     lib.utils.check(
             lambda: "test-many-devices" not in app.topwin.fmt_nodes())
 

@@ -38,46 +38,46 @@ class _ObjectList(vmmGObject):
         vmmGObject.__init__(self)
 
         self._objects = []
-        self._blacklist = {}
+        self._denylist = {}
         self._lock = threading.Lock()
 
     def _cleanup(self):
         self._objects = []
 
-    def _blacklist_key(self, obj):
+    def _denylist_key(self, obj):
         return str(obj.__class__) + obj.get_name()
 
-    def add_blacklist(self, obj):
+    def add_denylist(self, obj):
         """
-        Add an object to the blacklist. Basically a list of objects we
+        Add an object to the denylist. Basically a list of objects we
         choose not to poll, because they threw an error at init time
 
-        :param obj: vmmLibvirtObject to blacklist
+        :param obj: vmmLibvirtObject to denylist
         :returns: number of added object to list
         """
-        key = self._blacklist_key(obj)
-        count = self._blacklist.get(key, 0)
-        self._blacklist[key] = count + 1
-        return self._blacklist[key]
+        key = self._denylist_key(obj)
+        count = self._denylist.get(key, 0)
+        self._denylist[key] = count + 1
+        return self._denylist[key]
 
-    def remove_blacklist(self, obj):
+    def remove_denylist(self, obj):
         """
-        :param obj: vmmLibvirtObject to remove from blacklist
-        :returns: True if object was blacklisted or False otherwise.
+        :param obj: vmmLibvirtObject to remove from denylist
+        :returns: True if object was denylisted or False otherwise.
         """
-        key = self._blacklist_key(obj)
-        return bool(self._blacklist.pop(key, 0))
+        key = self._denylist_key(obj)
+        return bool(self._denylist.pop(key, 0))
 
-    def in_blacklist(self, obj):
+    def in_denylist(self, obj):
         """
-        If an object is in list only once don't consider it blacklisted,
+        If an object is in list only once don't consider it denylisted,
         give it one more chance.
 
         :param obj: vmmLibvirtObject to check
-        :returns: True if object is blacklisted
+        :returns: True if object is denylisted
         """
-        key = self._blacklist_key(obj)
-        return self._blacklist.get(key, 0) >= _ObjectList.BLACKLIST_COUNT
+        key = self._denylist_key(obj)
+        return self._denylist.get(key, 0) >= _ObjectList.BLACKLIST_COUNT
 
     def remove(self, obj):
         """
@@ -90,7 +90,7 @@ class _ObjectList(vmmGObject):
             # Identity check is sufficient here, since we should never be
             # asked to remove an object that wasn't at one point in the list.
             if obj not in self._objects:
-                return self.remove_blacklist(obj)
+                return self.remove_denylist(obj)
 
             self._objects.remove(obj)
             return True
@@ -1060,11 +1060,11 @@ class vmmConnection(vmmGObject):
 
             if initialize_failed:
                 log.debug("Blacklisting %s=%s", class_name, obj.get_name())
-                count = self._objects.add_blacklist(obj)
-                log.debug("Object added in blacklist, count=%d", count)
+                count = self._objects.add_denylist(obj)
+                log.debug("Object added in denylist, count=%d", count)
                 return
 
-            self._objects.remove_blacklist(obj)
+            self._objects.remove_denylist(obj)
             if not self._objects.add(obj):
                 log.debug("New %s=%s requested, but it's already tracked.",
                     class_name, obj.get_name())
@@ -1134,7 +1134,7 @@ class vmmConnection(vmmGObject):
 
             gone_objects.extend(gone)
             preexisting_objects.extend([o for o in master if o not in new])
-            new = [n for n in new if not self._objects.in_blacklist(n)]
+            new = [n for n in new if not self._objects.in_denylist(n)]
             return new
 
         new_vms = _process_objects("vms")

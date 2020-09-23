@@ -72,7 +72,7 @@ def _host_default_bridge():
         return dev  # pragma: no cover
 
     # Old style, peth0 == phys dev, eth0 == netloop, xenbr0 == bridge,
-    # vif0.0 == netloop enslaved, eth0 == default route
+    # vif0.0 == netloop attached, eth0 == default route
     try:
         defn = int(dev[-1])
     except Exception:  # pragma: no cover

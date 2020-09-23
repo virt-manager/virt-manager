@@ -1247,7 +1247,7 @@ Connect the guest to the host network. Examples for specifying the network type:
     Tell virt-install not to add any default network interface.
 
 If ``--network`` is omitted a single NIC will be created in the guest. If
-there is a bridge device in the host with a physical interface enslaved,
+there is a bridge device in the host with a physical interface attached,
 that will be used for connectivity. Failing that, the virtual network
 called ``default`` will be used. This option can be specified multiple
 times to setup more than one NIC.
