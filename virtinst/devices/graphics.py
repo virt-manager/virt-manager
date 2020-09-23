@@ -132,7 +132,7 @@ class DeviceGraphics(Device):
     def _spice_supported(self):
         if not self.conn.is_qemu() and not self.conn.is_test():
             return False
-        # Spice has issues on some host arches, like ppc, so whitelist it
+        # Spice has issues on some host arches, like ppc, so allow it
         if self.conn.caps.host.cpu.arch not in ["i686", "x86_64"]:
             return False
         return True

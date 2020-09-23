@@ -171,7 +171,7 @@ class vmmLibvirtObject(vmmGObject):
 
         initialize_failed = False
         try:
-            if self.config.CLITestOptions.object_blacklist == self._name:
+            if self.config.CLITestOptions.object_denylist == self._name:
                 raise RuntimeError("fake initialization error")
 
             self._init_libvirt_state()

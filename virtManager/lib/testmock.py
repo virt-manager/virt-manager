@@ -157,7 +157,7 @@ class CLITestOptionsClass:
         Spice doesn't return values here when we are just testing
         against seabios in uitests, this fakes it to hit more code paths
     * fake-systray: Enable the fake systray window
-    * object-blacklist=NAME: Make object initialize for that name
+    * object-denylist=NAME: Make object initialize for that name
         fail to test some connection code paths
     * conn-crash: Test connection abruptly closing like when
         libvirtd is restarted.
@@ -207,7 +207,7 @@ class CLITestOptionsClass:
         self.fake_vnc_username = _get("fake-vnc-username")
         self.fake_console_resolution = _get("fake-console-resolution")
         self.fake_systray = _get("fake-systray")
-        self.object_blacklist = _get_value("object-blacklist")
+        self.object_denylist = _get_value("object-denylist")
         self.conn_crash = _get("conn-crash")
         self.fake_agent_event = _get_value("fake-agent-event")
         self.fake_nodedev_event = _get_value("fake-nodedev-event")
