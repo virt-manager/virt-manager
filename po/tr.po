@@ -14,21 +14,22 @@
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017. #zanata
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018. #zanata
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
+# Oğuz Ersen <oguz@ersen.moe>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-02-27 13:16+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/tr/>\n"
+"PO-Revision-Date: 2022-03-09 18:02+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 4.11\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -3210,8 +3211,7 @@ msgstr "Aygıt Kaldırılırken Hata Oluştu: %s"
 
 #: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
-msgstr ""
-"Bu değişiklik konuğun bir sonraki kapanışından sonra geçerli olacaktır."
+msgstr "Bu değişiklik konuğun bir sonraki kapanışından sonra geçerli olacaktır."
 
 #: virtManager/delete.py:357
 msgid "Storage will not be deleted."
@@ -3854,8 +3854,7 @@ msgstr ""
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
-msgstr ""
-"Dosya sisteminin bozulmasını önlemek için kaydedilen durum kaldırılacak"
+msgstr "Dosya sisteminin bozulmasını önlemek için kaydedilen durum kaldırılacak"
 
 #: virtManager/details/snapshots.py:669
 #, python-format
@@ -3986,8 +3985,7 @@ msgstr "Bir daha bu dizinler hakkında soru sorma."
 #: virtManager/device/addstorage.py:148
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
-msgstr ""
-"Aşağıdaki dizinler için izinler değiştirilirken hatalarla karşılaşıldı:"
+msgstr "Aşağıdaki dizinler için izinler değiştirilirken hatalarla karşılaşıldı:"
 
 #: virtManager/device/addstorage.py:267
 msgid "A storage path must be specified."
@@ -5569,8 +5567,8 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 "SM başlatma güvenliğini yapılandır (örn. SEV bellek şifreleme). Örnek:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
+"BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:902
@@ -5895,9 +5893,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
-"Topoloji tarafından dolaylı olarak belirtilen toplam CPU (soket=%(sockets)d "
-"* zar=%(dies)d * çekirdek=%(cores)d * iş parçacığı=%(threads)d == "
-"%(total)d,) vCPU sayısıyla (%(vcpus)d) eşleşmiyor"
+"Topoloji tarafından dolaylı olarak belirtilen toplam CPU (soket=%(sockets)d *"
+" zar=%(dies)d * çekirdek=%(cores)d * iş parçacığı=%(threads)d == %(total)d,) "
+"vCPU sayısıyla (%(vcpus)d) eşleşmiyor"
 
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
@@ -6012,8 +6010,7 @@ msgstr ""
 #: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
-msgstr ""
-"%(osname)s, oturum açmak için '%(loginname)s' kullanıcısını kullanamaz."
+msgstr "%(osname)s, oturum açmak için '%(loginname)s' kullanıcısını kullanamaz."
 
 #: virtinst/install/unattended.py:74
 #, python-format
@@ -6268,8 +6265,8 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
-"Aygıtları kopyalamaya zorla (örn. 'hdc' salt okunur bir cdrom aygıtıysa, --"
-"force-copy=hdc)"
+"Aygıtları kopyalamaya zorla (örn. 'hdc' salt okunur bir cdrom aygıtıysa, "
+"--force-copy=hdc)"
 
 #: virtinst/virtclone.py:99
 msgid ""
@@ -6319,8 +6316,8 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
-"--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya "
-"'--file' kullanın ve tekrar deneyin."
+"--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya '"
+"--file' kullanın ve tekrar deneyin."
 
 #: virtinst/virtclone.py:179
 msgid ""
