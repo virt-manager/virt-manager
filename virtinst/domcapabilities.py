@@ -45,8 +45,12 @@ class _CapsBlock(_HasValues):
         return [e.name for e in self.enums]
 
     def get_enum(self, name):
-        d = dict((e.name, e) for e in self.enums)
-        return d[name]
+        for enum in self.enums:
+            if enum.name == name:
+                return enum
+        # Didn't find a match. Could be talking to older libvirt, or
+        # driver with incomplete info. Return a stub enum
+        return _Enum(self.conn)
 
 
 def _make_capsblock(xml_root_name):
