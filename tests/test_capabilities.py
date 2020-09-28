@@ -80,6 +80,7 @@ def testDomainCapabilities():
     assert caps.os.loader.enum_names() == ["type", "readonly"]
     assert caps.os.loader.get_enum("type").get_values() == [
             "rom", "pflash"]
+    assert caps.os.loader.get_enum("idontexist").get_values() == []
 
 
 def testDomainCapabilitiesx86():
