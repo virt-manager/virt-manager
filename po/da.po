@@ -13,16 +13,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-13 06:11+0000\n"
-"PO-Revision-Date: 2020-07-24 17:29+0000\n"
+"PO-Revision-Date: 2020-09-16 15:29+0000\n"
 "Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
-"Language-Team: Danish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/da/>\n"
+"Language-Team: Danish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:133
@@ -132,10 +132,8 @@ msgid "_Name:"
 msgstr "_Navn:"
 
 #: ui/addhardware.ui:823
-#, fuzzy
-#| msgid "Target name:"
 msgid "char-target-name"
-msgstr "Destinationsnavn:"
+msgstr ""
 
 #: ui/addhardware.ui:836
 msgid "_Auto socket:"
@@ -259,20 +257,16 @@ msgid "Original VM:"
 msgstr ""
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "Connecting"
 msgid "Connection:"
-msgstr "Forbinder"
+msgstr "Forbindelse:"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr ""
 
 #: ui/clone.ui:285
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
-msgstr "Detaljer..."
+msgstr "_Detaljer..."
 
 #: ui/clone.ui:354
 msgid ""
@@ -2542,21 +2536,16 @@ msgid "Sharing storage may cause data to be overwritten."
 msgstr ""
 
 #: virtManager/clone.py:487
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Følgende diskenheder vil ikke blive klonet:\n"
+"Følgende diskenheder deles med %(vmname)s:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Afvikling af den nye gæst vil kunne overskrive data i disse diskafbildninger."
 
 #: virtManager/clone.py:502
