@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-21 06:11+0000\n"
-"PO-Revision-Date: 2020-09-21 11:29+0000\n"
+"PO-Revision-Date: 2020-09-24 19:29+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/sv/>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -805,26 +805,20 @@ msgid "GiB"
 msgstr "GiB"
 
 #: ui/createvol.ui:322
-#, fuzzy
-#| msgid "Max Ca_pacity:"
 msgid "Ca_pacity:"
-msgstr "Maxka_pacitet:"
+msgstr "Ka_pacitet:"
 
 #: ui/createvol.ui:333
-#, fuzzy
-#| msgid "Locate directory volume"
 msgid "_Allocate entire volume now"
-msgstr "Lokalisera katalogvolym"
+msgstr "_Allokera hela volymen nu"
 
 #: ui/createvol.ui:388
 msgid "Pa_th:"
-msgstr ""
+msgstr "Sök_väg:"
 
 #: ui/createvol.ui:435
-#, fuzzy
-#| msgid "Backing store"
 msgid "_Backing store"
-msgstr "Bakomliggande lager"
+msgstr "_Bakomliggande lager"
 
 #: ui/delete.ui:9 virtManager/delete.py:286
 msgid "Delete Virtual Machine"
@@ -2475,7 +2469,7 @@ msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr ""
-"Den här enheten kan inte knytas till den påslagna maskinen.  Vill du göra "
+"Den här enheten kan inte knytas till den påslagna maskinen. Vill du göra "
 "enheten tillgänglig efter nästa avstängning av gästen?"
 
 #: virtManager/addhardware.py:1292
@@ -2583,7 +2577,7 @@ msgid ""
 "Are you sure you want to use this path?"
 msgstr ""
 "Användning av en befintlig bild kommer att skriva över sökvägen under "
-"kloningsprocessen.  Är du säker på att du vill använda denna sökväg?"
+"kloningsprocessen. Är du säker på att du vill använda denna sökväg?"
 
 #: virtManager/clone.py:486
 msgid "Sharing storage may cause data to be overwritten."
@@ -2674,7 +2668,7 @@ msgid ""
 "\n"
 "Recover error: %(recovererror)s"
 msgstr ""
-"%(boject)s namnbyte misslyckades. Försök att återställa misslyckades också.\n"
+"%(object)s namnbyte misslyckades. Försök att återställa misslyckades också.\n"
 "\n"
 "Ursprungligt fel: %(origerror)s\n"
 "\n"
@@ -2872,8 +2866,8 @@ msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
-"KVM är inte tillgängligt.  Detta kan betyda att KVM-paketet inte är "
-"installerat, eller att KVM-kärnmodulen inte lästs in.  Dina virtuella "
+"KVM är inte tillgängligt. Detta kan betyda att KVM-paketet inte är "
+"installerat, eller att KVM-kärnmodulen inte lästs in. Dina virtuella "
 "maskiner kan fungera dåligt."
 
 #: virtManager/createvm.py:641
@@ -3059,7 +3053,7 @@ msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
-"Den virtuella maskinen skapas nu.  Att tilldela disklagring och hämta "
+"Den virtuella maskinen skapas nu. Att tilldela disklagring och hämta "
 "installationsavbilden kan ta några minuter att slutföra."
 
 #: virtManager/createvm.py:2019
@@ -3686,7 +3680,7 @@ msgstr "Seriekonsol är inte tillgänglig för en inaktiv gäst"
 #: virtManager/details/serialcon.py:185
 #, python-format
 msgid "Console for device type '%s' is not supported"
-msgstr "Konsol för enhetstypen ”%s” stödjs inte."
+msgstr "Konsol för enhetstypen ”%s” stödjs inte"
 
 #: virtManager/details/serialcon.py:350
 #, python-format
@@ -3885,8 +3879,8 @@ msgid ""
 "listen address."
 msgstr ""
 "Gästen är på en fjärrvärd med transporten ”%s” men är endast konfigurerad "
-"att lyssna lokalt.  För att fjärransluta behöver du ändra \n"
-"adressen gästen lyssnar på."
+"att lyssna lokalt. För att fjärransluta behöver du ändra adressen gästen "
+"lyssnar på."
 
 #: virtManager/details/viewers.py:347
 #, python-format
@@ -4007,7 +4001,7 @@ msgstr "Virtuellt nätverk är inte aktivt."
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
-msgstr "Virtuellt nätverk ”%s” är inte aktivt.  Vill du starta nätverket nu?"
+msgstr "Virtuellt nätverk ”%s” är inte aktivt. Vill du starta nätverket nu?"
 
 #: virtManager/device/netlist.py:207
 #, python-format
@@ -4033,7 +4027,7 @@ msgstr "Valideringsfel: %s"
 
 #: virtManager/error.py:180
 msgid "There are unapplied changes. Would you like to apply them now?"
-msgstr "Det finns ändringar som inte verkställts.  Vill du verkställa dem nu?"
+msgstr "Det finns ändringar som inte verkställts. Vill du verkställa dem nu?"
 
 #: virtManager/error.py:182
 msgid "Don't warn me again."
@@ -4263,7 +4257,7 @@ msgid ""
 "running as root."
 msgstr ""
 "Kunde inte hitta en lokal session: om man kör virt-manager över ssh -X eller "
-"VNC kan man kanske inte ansluta till libvirt som en vanlig användare.  Prova "
+"VNC kan man kanske inte ansluta till libvirt som en vanlig användare. Prova "
 "att köra som root."
 
 #: virtManager/lib/connectauth.py:180
@@ -4284,7 +4278,7 @@ msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
-"Tjänsten libvirtd verkar inte vara installerad.  Installera och kör tjänsten "
+"Tjänsten libvirtd verkar inte vara installerad. Installera och kör tjänsten "
 "libvirtd för att hantera virtualisering på denna värd."
 
 #: virtManager/lib/connectauth.py:224
@@ -4292,9 +4286,9 @@ msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
-"Kunde inte upptäcka någon standard-hypervisor.  Se till att de lämpliga "
-"QEMU-/KVM-virtualiseringspaketen är installerade för att hantera "
-"virtualisering på denna värd."
+"Kunde inte upptäcka någon standard-hypervisor. Se till att de lämpliga QEMU-/"
+"KVM-virtualiseringspaketen är installerade för att hantera virtualisering på "
+"denna värd."
 
 #: virtManager/lib/connectauth.py:231
 msgid ""
@@ -4523,7 +4517,7 @@ msgid ""
 "add a transport."
 msgstr ""
 "En på avstånd åtkomlig libvirt-URI behövs för tunnlad migrering, men den "
-"valda anslutningen är en lokal URI.  Libvirt kommer avvisa detta om du inte "
+"valda anslutningen är en lokal URI. Libvirt kommer avvisa detta om du inte "
 "lägger till en transport."
 
 #: virtManager/migrate.py:292
@@ -4563,7 +4557,7 @@ msgstr "Migrerar VM ”%s”"
 #: virtManager/migrate.py:400
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
-msgstr "Migrerar VM ”%(name)s” till %(name)s. Detta kan ta en stund."
+msgstr "Migrerar VM ”%(name)s” till %(host)s. Detta kan ta en stund."
 
 #: virtManager/migrate.py:411
 #, python-format
@@ -4866,7 +4860,7 @@ msgid ""
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
-"Domänen kunde inte återställas.  Vill du\n"
+"Domänen kunde inte återställas. Vill du\n"
 "ta bort det sparade tillståndet och utföra\n"
 "en normal uppstart?"
 
@@ -4925,7 +4919,7 @@ msgstr "Fel vid start av detaljer: %s"
 
 #: virtManager/vmwindow.py:223
 msgid "This will abort the installation. Are you sure?"
-msgstr "Detta kommer att avbryta installationen.  Är du säker?"
+msgstr "Detta kommer att avbryta installationen. Är du säker?"
 
 #: virtManager/vmwindow.py:421
 msgid "Manage VM snapshots"
@@ -4959,14 +4953,14 @@ msgstr "Det finns ändringar som inte verkställts."
 #: virtManager/xmleditor.py:119
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
-"Dina ändringar kommer gå förlorade om du lämnar denna flik.  Vill du "
+"Dina ändringar kommer gå förlorade om du lämnar denna flik. Vill du "
 "verkligen lämna denna flik?"
 
 #: virtManager/xmleditor.py:132
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
-"Dina XML-ändringar kommer gå förlorade om du lämnar denna flik.  Vill du "
+"Dina XML-ändringar kommer gå förlorade om du lämnar denna flik. Vill du "
 "verkligen lämna denna flik?"
 
 #: virtinst/capabilities.py:296
@@ -5129,7 +5123,7 @@ msgid ""
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
-"Aktivera eller avaktivera valideringskontroller.  Exempel:\n"
+"Aktivera eller avaktivera valideringskontroller. Exempel:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 
@@ -5147,7 +5141,7 @@ msgid ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
-"Konfigurera gästmetadata.  Ex:\n"
+"Konfigurera gästmetadata. Ex:\n"
 "--metadata name=foo,title=\"Min fina rubrik\",uuid=…\n"
 "--metadata description=\"Min fina långa beskrivning\""
 
@@ -5157,7 +5151,7 @@ msgid ""
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
-"Konfigurera allokering av gästminne.  Ex:\n"
+"Konfigurera allokering av gästminne. Ex:\n"
 "--memory 1024 (i MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
@@ -5179,7 +5173,7 @@ msgid ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
-"CPU-modell och -funktioner.  T.ex:\n"
+"CPU-modell och -funktioner. T.ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
@@ -5190,7 +5184,7 @@ msgid ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 msgstr ""
-"Konfigurera inställningar för gästens display.  Ex:\n"
+"Konfigurera inställningar för gästens display. T.ex.:\n"
 "--graphics spice\n"
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
@@ -5204,7 +5198,7 @@ msgid ""
 "--network none\n"
 "--network help"
 msgstr ""
-"Konfigurera en gästs nätverksgränssnitt.  Ex:\n"
+"Konfigurera en gästs nätverksgränssnitt. T.ex.:\n"
 "--network bridge=minbr0\n"
 "--network network=mitt_libvirt_virtuella_nät\n"
 "--network network=mittnät,model=virtio,mac=00:11...\n"
@@ -5217,7 +5211,7 @@ msgid ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
-"Konfigurera en styrenhet för gästen.  Ex:\n"
+"Konfigurera en styrenhet för gästen. T.ex.:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 
@@ -5227,7 +5221,7 @@ msgid ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
-"Konfigurera en inmatningsenhet för gästen.  Ex:\n"
+"Konfigurera en inmatningsenhet för gästen. T.ex.:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
@@ -5257,7 +5251,7 @@ msgid ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
-"Skicka värdkataloger till gästen.  Ex: \n"
+"Skicka värdkataloger till gästen. T.ex.: \n"
 "--filesystem /min/käll/kat,/kat/i/gästen\n"
 "--filesystem mallnamn,/,type=template"
 
@@ -5278,7 +5272,7 @@ msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
-"Konfigurera en smartkortenhet på gästen.  Ex:\n"
+"Konfigurera en smartkortenhet på gästen. T.ex.:\n"
 "--smartcard mode=passthrough"
 
 #: virtinst/cli.py:779
@@ -5286,7 +5280,7 @@ msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
-"Konfigurera en omdirigeringsenhet för gästen.  Ex:\n"
+"Konfigurera en omdirigeringsenhet för gästen. T.ex.:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: virtinst/cli.py:783
@@ -5294,7 +5288,7 @@ msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
-"Konfigurera en memballoon-enhet för gästen.  Ex:\n"
+"Konfigurera en memballoon-enhet för gästen. T.ex.:\n"
 "--memballoon model=virtio"
 
 #: virtinst/cli.py:787
@@ -5302,7 +5296,7 @@ msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
-"Konfigurera en TPM-enhet för gästen.  Ex:\n"
+"Konfigurera en TPM-enhet för gästen. T.ex.:\n"
 "--tpm /dev/tpm"
 
 #: virtinst/cli.py:791
@@ -5310,7 +5304,7 @@ msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
-"Konfigurera en gäst-RNG-enhet.  T.ex:\n"
+"Konfigurera en gäst-RNG-enhet. T.ex:\n"
 "--rng /dev/urandom"
 
 #: virtinst/cli.py:795
@@ -5318,7 +5312,7 @@ msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
-"Konfigurera en panikenhet för gästen.  Ex:\n"
+"Konfigurera en panikenhet för gästen. T.ex.:\n"
 "--panic default"
 
 #: virtinst/cli.py:799
@@ -5326,7 +5320,7 @@ msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
-"Konfigurera en minnesenhet för gästen.  T.ex:\n"
+"Konfigurera en minnesenhet för gästen. T.ex:\n"
 "--memdev dimm,target.size=1024"
 
 #: virtinst/cli.py:803
@@ -5335,7 +5329,7 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
-"Konfigurera vsock-uttag på gästen.  Ex:\n"
+"Konfigurera vsock-uttag på gästen. T.ex.:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
@@ -5382,7 +5376,7 @@ msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Sätt policyn för minnesuppbackning för domänprocessen.  Ex:\n"
+"Sätt policyn för minnesuppbackning för domänprocessen. T.ex.:\n"
 "--memorybacking hugepages=on"
 
 #: virtinst/cli.py:849
@@ -5391,7 +5385,7 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
-"Sätt domänens <features>-XML.  Ex:\n"
+"Sätt domänens <features>-XML. T.ex.:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
@@ -5400,7 +5394,7 @@ msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
-"Sätt domänens <clock>-XML.  Ex:\n"
+"Sätt domänens <clock>-XML. T.ex.:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: virtinst/cli.py:860
@@ -5421,7 +5415,7 @@ msgid ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
-"Konfigurera SMBIOS systeminformation.  T.ex.:\n"
+"Konfigurera SMBIOS systeminformation. T.ex.:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MinTllverkare,bios.version=1.2.3-,…\n"
 
@@ -5442,9 +5436,9 @@ msgid ""
 "dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 msgstr ""
-"Konfigurera VM-startsäkerhet (t.ex. SEV-minneskryptering).  Ex:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
+"Konfigurera VM-startsäkerhet (t.ex. SEV-minneskryptering). T.ex.:\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
+"BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:892
@@ -5453,7 +5447,7 @@ msgid ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
-"Konfigurera startinställningar för gästen.  Ex:\n"
+"Konfigurera startinställningar för gästen. T.ex.:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (för behållare)"
 
@@ -5462,7 +5456,7 @@ msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
-"Aktivera användarnamnrymder för LXC-behållare.  Ex:\n"
+"Aktivera användarnamnrymder för LXC-behållare. T.ex.:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: virtinst/cli.py:908
@@ -5473,7 +5467,7 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
-"Ange lagring med diverse flaggor.  Ex.\n"
+"Ange lagring med diverse flaggor. T.ex.\n"
 "--disk size=10 (ny 10GiB avbild på standardplatsen)\n"
 "--disk /min/befintliga/disk,cache=none\n"
 "--disk device=cdrom,bus=scsi\n"
@@ -5543,11 +5537,11 @@ msgid ""
 "install the 'virt-viewer' package."
 msgstr ""
 "Kan inte ansluta till den grafiska konsolen: virt-viewer är inte "
-"installerad.  Installera paketet “virt-viewer”."
+"installerad. Installera paketet “virt-viewer”."
 
 #: virtinst/cli.py:1903
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
-msgstr "Grafik begärd men DISPLAY inte satt.  Kör inte virt-viewer."
+msgstr "Grafik begärd men DISPLAY inte satt. Kör inte virt-viewer."
 
 #: virtinst/cli.py:1914
 #, python-format
@@ -5637,8 +5631,8 @@ msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
-"Vet inte hur man skapar lagring för sökvägen ”%s”.  Använd libvirt-API:er "
-"för att hantera föräldrakatalogen som en pool först."
+"Vet inte hur man skapar lagring för sökvägen ”%s”. Använd libvirt-API:er för "
+"att hantera föräldrakatalogen som en pool först."
 
 #: virtinst/devices/disk.py:250
 msgid "Format attribute not supported for this volume type"
@@ -5908,10 +5902,9 @@ msgstr ""
 "Se manualsidan för virt-install för exempel för olika distributioner."
 
 #: virtinst/install/urlfetcher.py:68
-#, fuzzy, python-format
-#| msgid "Couldn't acquire file %s: %s"
+#, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
-msgstr "Kunde inte få tag i filen %s: %s"
+msgstr "Kunde inte få tag i filen %(url)s: %(error)s"
 
 #: virtinst/install/urlfetcher.py:74
 #, python-format
@@ -5919,10 +5912,9 @@ msgid "Retrieving file %s..."
 msgstr "Hämtar filen %s …"
 
 #: virtinst/install/urlfetcher.py:246
-#, fuzzy, python-format
-#| msgid "Opening URL %s failed: %s."
+#, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
-msgstr "Att öppna URL:en %s misslyckades: %s."
+msgstr "Att öppna URL:en %(url)s misslyckades: %(error)s"
 
 #: virtinst/install/volumeupload.py:109
 #, python-format
@@ -5945,21 +5937,18 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "Okänt libosinfo-ID ”%s”"
 
 #: virtinst/osdict.py:234
-#, fuzzy, python-format
-#| msgid ""
-#| "OS name '%s' is deprecated, using '%s' instead. This alias will be "
-#| "removed in the future."
+#, python-format
 msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
 "will be removed in the future."
 msgstr ""
-"OS-namnet ”%s” bör undvikas, använder ”%s” istället.  Detta alias kommer tas "
-"bort i framtiden."
+"OS-namnet ”%(oldname)s” bör undvikas, använder ”%(newname)s” istället. Detta "
+"alias kommer tas bort i framtiden."
 
 #: virtinst/osdict.py:242
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
-msgstr "Okänt OS-namn ”%s”.  Se ”osinfo-query os” för giltiga värden."
+msgstr "Okänt OS-namn ”%s”. Se ”osinfo-query os” för giltiga värden."
 
 #: virtinst/osdict.py:378
 msgid "Generic OS"
@@ -5971,18 +5960,16 @@ msgid "OS '%s' does not have a URL location"
 msgstr "OS:et ”%s” har inte en URL-plats"
 
 #: virtinst/osdict.py:678
-#, fuzzy, python-format
-#| msgid "OS '%s' does not have a URL location for the %s architecture"
+#, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
-msgstr "OS:et ”%s” har inte en URL-plats för arkitekturen %s"
+msgstr "OS:et ”%(osname)s” har inte en URL-plats för arkitekturen %(archname)s"
 
 #: virtinst/storage.py:166
-#, fuzzy, python-format
-#| msgid "Couldn't create default storage pool '%s': %s"
+#, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr "Kunde inte skapa standardlagringspool ”%s”: %s"
+msgstr "Kunde inte skapa standardlagringspool ”%(path)s”: %(error)s"
 
 #: virtinst/storage.py:219 virtinst/storage.py:550
 msgid "Storage object"
@@ -6031,41 +6018,32 @@ msgid "Allocating '%s'"
 msgstr "Allokerar ”%s”"
 
 #: virtinst/storage.py:726
-#, fuzzy, python-format
-#| msgid ""
-#| "There is not enough free space on the storage pool to create the volume. "
-#| "(%d M requested allocation > %d M available)"
+#, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
 "Det finns inte tillräckligt med fritt utrymme i lagringspoolen för att skapa "
-"volymen.  (%d M begärd allokering > %d M tillgänglig)"
+"volymen. (%(mem1)s M begärd allokering > %(mem2)s M tillgänglig)"
 
 #: virtinst/storage.py:733
-#, fuzzy, python-format
-#| msgid ""
-#| "The requested volume capacity will exceed the available pool space when "
-#| "the volume is fully allocated. (%d M requested capacity > %d M available)"
+#, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
 msgstr ""
 "Den begärda volymkapaciteten kommer överskrida det tillgängliga poolutrymmet "
-"när volymen är helt allokerad.  (%d M begärd kapacitet > %d M tillgänglig)"
+"när volymen är helt allokerad. (%(mem1)s M begärd kapacitet > %(mem2)s M "
+"tillgänglig)"
 
 #: virtinst/virtclone.py:23
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
-"En namn på en originalmaskin behövs, använd ”--original ORIGINALGÄST” och "
-"försök igen."
+"En namn på en originalmaskin behövs, använd ”--original källnamn” och försök "
+"igen."
 
 #: virtinst/virtclone.py:70
 msgid ""
@@ -6082,9 +6060,9 @@ msgstr ""
 "som MAC-adress, namn, etc.\n"
 "\n"
 "VM-innehållet ändras INTE: virt-clone ändrar inte någonting _inuti_ gäst-OS:"
-"et, den duplicerar diskar och gör ändringar på värdsidan.  Så saker som att "
+"et, den duplicerar diskar och gör ändringar på värdsidan. Så saker som att "
 "ändra lösenord, ändra statisk IP-adress, etc. ligger utanför ramen för detta "
-"verktyg.  För dessa typer av ändringar, se virt-sysprep(1)."
+"verktyg. För dessa typer av ändringar, se virt-sysprep(1)."
 
 #: virtinst/virtclone.py:80 virtinst/virtinstall.py:949
 msgid "General Options"
@@ -6092,7 +6070,7 @@ msgstr "Allmänna flaggor"
 
 #: virtinst/virtclone.py:82
 msgid "Name of the original guest to clone."
-msgstr ""
+msgstr "Namnet på originalgästen att klona."
 
 #: virtinst/virtclone.py:84
 msgid "XML file to use as the original guest."
@@ -6135,7 +6113,7 @@ msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
-"Hoppa över kopiering av enhetsmålet.  (t.ex., om ”vda” är en disk du inte "
+"Hoppa över kopiering av enhetsmålet. (t.ex., om ”vda” är en disk du inte "
 "vill kopiera och använda samma sökväg i den nya VM:en, använd --skip-"
 "copy=vda)"
 
@@ -6149,6 +6127,9 @@ msgid ""
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
+"Klona inte lagringsinnehållet till den angivna filsökvägen, deras innehåll "
+"kommer lämnas orört. Detta kräver att man anger en befintlig sökväg för "
+"varje klonbar diskavbild."
 
 #: virtinst/virtclone.py:116
 msgid "New file to use as storage for nvram VARS"
@@ -6163,7 +6144,7 @@ msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
-"Ny fast MAC-adress för klongästen.  Standard är en slumpvis genererad MAC"
+"Ny fast MAC-adress för klongästen. Standard är en slumpvis genererad MAC"
 
 #: virtinst/virtclone.py:123 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:419
@@ -6200,6 +6181,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"-c angivet med vad som ser ut som en libvirt-URI. Avsåg du att använda --"
+"connect? OM inte, använd --cdrom istället"
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
@@ -6210,7 +6193,7 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
-"Kan inte blanda --file, --nosparse eller --file-size med flaggor --disk.  "
+"Kan inte blanda --file, --nosparse eller --file-size med flaggor --disk. "
 "Använd --disk SÖKVÄG[,size=STORLEK][,sparse=yes|no]"
 
 #: virtinst/virtinstall.py:225
@@ -6244,39 +6227,38 @@ msgid ""
 "will not see text install output. You might want to use --location."
 msgstr ""
 "CDROM-media skriver inte till textkonsolen som standard, så du kommer "
-"sannolikt inte se utdata från textinstallationen.  Du kanske vill använda --"
-"location."
+"sannolikt inte se utdata från textinstallationen. Du kanske vill använda "
+"--location."
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "Se manualsidan för exempel på användning av --location med CDROM-media"
 
 #: virtinst/virtinstall.py:348
-#, fuzzy, python-format
-#| msgid ""
-#| "Requested memory %s MiB is less than the recommended %s MiB for OS %s"
+#, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
-"Det begärda minnet %s MiB är mindre än det rekommenderade %s MiB för OS %s"
+"Det begärda minnet %(mem1)s MiB är mindre än det rekommenderade %(mem2)s MiB "
+"för OS %(osname)s"
 
 #: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
-msgstr "Det begärda minnet %s MiB är abnormt lågt.  Försökte du ange GiB?"
+msgstr "Det begärda minnet %s MiB är abnormt lågt. Försökte du ange GiB?"
 
 #: virtinst/virtinstall.py:360
 msgid "The guest's network configuration may not support PXE"
-msgstr ""
+msgstr "Gästnätverkskonfigurationen stödjer möjligen inte PXE"
 
 #: virtinst/virtinstall.py:367
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
 msgstr ""
-"Inget operativsystem hittat, VM-prestanda kan bli lidande.  Ange ett OS med "
+"Inget operativsystem hittat, VM-prestanda kan bli lidande. Ange ett OS med "
 "--os-variant för optimalt resultat."
 
 #: virtinst/virtinstall.py:380
@@ -6292,7 +6274,7 @@ msgstr "Använder standard --name {vm_name}"
 #: virtinst/virtinstall.py:469
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
-msgstr ""
+msgstr "Använder standard för behållare --memory {megabytes}"
 
 #: virtinst/virtinstall.py:488
 #, python-brace-format
@@ -6311,38 +6293,37 @@ msgstr "Fel vid validering av installationsplats: %s"
 
 #: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
-msgstr ""
+msgstr "En --os-variant krävs, men inget värde sattes eller upptäcktes."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "Ingen konsol att starta för gästen, gör som standard --wait -1"
 
 #: virtinst/virtinstall.py:661
-#, fuzzy
-#| msgid "Waiting%(time_string)s for installation to complete."
 msgid "Waiting for the installation to complete."
-msgstr "Väntar%(time_string)s på att installationen skall färdigställas."
+msgstr "Väntar på att installationen skall färdigställas."
 
 #: virtinst/virtinstall.py:662
-#, fuzzy, python-format
-#| msgid "Waiting%(time_string)s for installation to complete."
+#, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] "Väntar%(time_string)s på att installationen skall färdigställas."
-msgstr[1] "Väntar%(time_string)s på att installationen skall färdigställas."
+msgstr[0] "Väntar %(minutes)d minut på att installationen skall färdigställas."
+msgstr[1] "Väntar %(minutes)d minuter på att installationen skall färdigställas."
 
 #: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
-msgstr ""
+msgstr "Lösenord för första root-inloggning är: %s"
 
 #: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
+"Installationen kommer fortsätta om 10 sekunder (tryck Enter för att hoppa "
+"över) …"
 
 #: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
-msgstr ""
+msgstr "Konsolkommandot returnerade ett misslyckande."
 
 #: virtinst/virtinstall.py:761
 msgid "Domain has crashed."
@@ -6350,20 +6331,21 @@ msgstr "Domänen har kraschat."
 
 #: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
-msgstr ""
+msgstr "Domänen kör fortfarande. En installation kan vara på gång."
 
 #: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
+"Du kan återansluta till konsolen för att avsluta installationsprocessen."
 
 #: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
-msgstr "Domänen har stängt ner.  Fortsätter."
+msgstr "Domänen har stängt ner. Fortsätter."
 
 #: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
-"Installationen har överskridit den angivna tidsgränsen.  Avslutar programmet."
+"Installationen har överskridit den angivna tidsgränsen. Avslutar programmet."
 
 #: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
@@ -6380,7 +6362,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
-msgstr ""
+msgstr "Användaren stoppande VM:en. Startar inte om."
 
 #: virtinst/virtinstall.py:858
 msgid "Restarting guest."
@@ -6432,8 +6414,8 @@ msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
-"URL för distributionsinstallation, t.ex. https://värd/sökväg.  Se "
-"manualsidan för specifika distributioner."
+"URL för distributionsinstallation, t.ex. https://värd/sökväg. Se manualsidan "
+"för specifika distributioner."
 
 #: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
@@ -6467,10 +6449,12 @@ msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
+"Installera om en befintlig VM. Endast installationsflaggor används, alla "
+"andra VM-konfigurationsflaggor ignoreras."
 
 #: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
-msgstr ""
+msgstr "Utför en molnavbildsinstallation, konfigurerar cloud-init"
 
 #: virtinst/virtinstall.py:997
 msgid "Device Options"
@@ -6514,7 +6498,7 @@ msgstr "Låt domänen starta automatiskt när värden startar."
 
 #: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
-msgstr "Skapa en transient domän"
+msgstr "Skapa en transient domän."
 
 #: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
@@ -6539,22 +6523,24 @@ msgid "No --%s objects found in the XML"
 msgstr "Inga --%s objekt funna i XML:en"
 
 #: virtinst/virtxml.py:87
-#, fuzzy, python-format
-#| msgid "--edit %s requested but there's only %s --%s object in the XML"
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
-msgstr[0] "--edit %s begärd med det finns bara %s --%s objekt i XML:en"
-msgstr[1] "--edit %s begärd med det finns bara %s --%s objekt i XML:en"
+msgstr[0] ""
+"”--edit %(number)s” begärd med det finns bara %(max)s --%(type)s objekt i "
+"XML:en"
+msgstr[1] ""
+"”--edit %(number)s” begärd med det finns bara %(max)s --%(type)s objekt i "
+"XML:en"
 
 #: virtinst/virtxml.py:108
-#, fuzzy, python-format
-#| msgid "No matching objects found for --%s %s"
+#, python-format
 msgid "No matching objects found for %s"
-msgstr "Inga matchande objekt funna för --%s %s"
+msgstr "Inga matchande objekt funna för %s"
 
 #: virtinst/virtxml.py:124
 #, python-format
@@ -6576,12 +6562,13 @@ msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "Endast en ändringsoperation kan anges (motstridiga flaggor %s)"
 
 #: virtinst/virtxml.py:153
-#, fuzzy, python-format
-#| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
+#, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
 "'--edit'"
-msgstr "'--edit %s är inte meningsfullt med --%s, använd bara en tom  ”--edit”"
+msgstr ""
+"”--edit %(option)s” är inte meningsfullt med --%(objecttype)s, använd bara "
+"en tom ”--edit”"
 
 #: virtinst/virtxml.py:158
 msgid "--os-variant is not supported with --edit"
@@ -6626,10 +6613,9 @@ msgid "Start '%s' with the changed XML?"
 msgstr "Starta ”%s” med den ändrade XML:en?"
 
 #: virtinst/virtxml.py:253 virtinst/virtxml.py:537
-#, fuzzy, python-format
-#| msgid "Failed starting domain '%s': %s"
+#, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
-msgstr "Misslyckades att starta domänen ”%s”: %s"
+msgstr "Misslyckades att starta domänen ”%(domain)s”: %(error)s"
 
 #: virtinst/virtxml.py:258 virtinst/virtxml.py:541
 #, python-format
@@ -6643,18 +6629,18 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Koppla in denna enhet under drift till gästen ”%(domain)s”?"
 
 #: virtinst/virtxml.py:266
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotplug successful."
-msgstr "Enheten %s lyckades."
+msgstr "Inkoppling av enheten under drift lyckades."
 
 #: virtinst/virtxml.py:267
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "Fel vid försök av enhet %s: %s"
+msgstr "Fel vid försök av inkoppling av enhet under drift: %(error)s"
 
 #: virtinst/virtxml.py:269
 #, python-format
@@ -6663,18 +6649,18 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Koppla ur denna enhet under drift från gästen ”%(domain)s”?"
 
 #: virtinst/virtxml.py:271
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotunplug successful."
-msgstr "Enheten %s lyckades."
+msgstr "Urkoppling av enheten under drift lyckades."
 
 #: virtinst/virtxml.py:272
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Fel vid försök av enhet %s: %s"
+msgstr "Fel vid försök av urkoppling av enhet under drift: %(error)s"
 
 #: virtinst/virtxml.py:274
 #, python-format
@@ -6683,27 +6669,27 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Uppdatera denna enhet för gästen ”%(domain)s”?"
 
 #: virtinst/virtxml.py:276
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device update successful."
-msgstr "Enheten %s lyckades."
+msgstr "Enhetsuppdateringen lyckades."
 
 #: virtinst/virtxml.py:277
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "Fel vid försök av enhet %s: %s"
+msgstr "Fel vid försök till enhetsuppdatering: %(error)s"
 
 #: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml kan bara användas med --edit"
 
 #: virtinst/virtxml.py:337
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
-"Ingen XML-diff genererades.  De begärda ändringarna kommer inte ha någon "
+"Ingen XML-diff genererades. De begärda ändringarna kommer inte ha någon "
 "effekt."
 
 #: virtinst/virtxml.py:356
@@ -6739,7 +6725,7 @@ msgid ""
 "--remove-device --disk all (remove all disks)\n"
 "--remove-device --disk /some/path"
 msgstr ""
-"Ta bort den angivna enheten.  Exempel:\n"
+"Ta bort den angivna enheten. Exempel:\n"
 "--remove-device --disk 1 (ta bort första disken)\n"
 "--remove-device --disk all (ta bort alla diskar)\n"
 "--remove-device --disk /någon/sökväg"
@@ -6749,7 +6735,7 @@ msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
-"Lägg till den angivna enheten.  Exempel:\n"
+"Lägg till den angivna enheten. Exempel:\n"
 "--add-device --disk …"
 
 #: virtinst/virtxml.py:380
@@ -6757,7 +6743,7 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
-"Utdatabyggd enhets-XML.  Domänen är frivillig men rekommenderas för att "
+"Utdatabyggd enhets-XML. Domänen är frivillig men rekommenderas för att "
 "säkerställa optimala standardvärden."
 
 #: virtinst/virtxml.py:383
@@ -6780,7 +6766,7 @@ msgstr ""
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
-"Framtvinga definitionen av domänen.  Behövs endast om en flagga --print "
+"Framtvinga definitionen av domänen. Behövs endast om en flagga --print "
 "angavs."
 
 #: virtinst/virtxml.py:394
@@ -6837,20 +6823,21 @@ msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
-"XML ändrades inte efter domänen definierades.  Du kan ha ändrat ett värde "
-"som libvirt sätter som standard."
+"XML ändrades inte efter domänen definierades. Du kan ha ändrat ett värde som "
+"libvirt sätter som standard."
 
 #: virtinst/virtxml.py:561
 msgid "Aborted at user request"
 msgstr "Avbrutet på användarens begäran"
 
 #: virtinst/xmlapi.py:191
-#, fuzzy, python-format
-#| msgid "XML did not have expected root element name '%s', found '%s'"
+#, python-format
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
-msgstr "XML:en har inte det förväntade rotelementnamnet ”%s”, hittade ”%s”"
+msgstr ""
+"XML:en har inte det förväntade rotelementnamnet ”%(expectname)s”, hittade "
+"”%(foundname)s”"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:487
@@ -6859,10 +6846,9 @@ msgid "A name must be specified for the %s"
 msgstr "Ett namn måste anges för %s"
 
 #: virtinst/xmlbuilder.py:492
-#, fuzzy, python-format
-#| msgid "%s name '%s' can not contain '%s' character."
+#, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
-msgstr "%s namn ”%s” kan inte innehålla ”%s”-tecken."
+msgstr "%(objecttype)s namn ”%(name)s” kan inte innehålla ”%(char)s”-tecken."
 
 #~ msgid "_Allocation:"
 #~ msgstr "_Allokering:"
