@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-19 06:10+0000\n"
+"POT-Creation-Date: 2020-09-21 06:11+0000\n"
 "PO-Revision-Date: 2020-09-05 10:29+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -34,7 +34,7 @@ msgstr ""
 "X-Generator: Weblate 4.2.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
-#: ui/manager.ui:23 virtManager/systray.py:133
+#: ui/manager.ui:23 virtManager/systray.py:135
 msgid "Virtual Machine Manager"
 msgstr "虛擬系統管理器"
 
@@ -183,7 +183,7 @@ msgid "panic"
 msgstr "panic"
 
 #: ui/addhardware.ui:1525 ui/createnet.ui:831 ui/createpool.ui:487
-#: ui/createvm.ui:2477 ui/createvol.ui:496 ui/snapshotsnew.ui:271
+#: ui/createvm.ui:2477 ui/createvol.ui:484 ui/snapshotsnew.ui:271
 msgid "_Finish"
 msgstr "完成(_F)"
 
@@ -249,7 +249,7 @@ msgstr "操作進行中"
 msgid "Please wait a few moments..."
 msgstr "請稍候..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:297 virtManager/asyncjob.py:304
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
 msgid "Processing..."
 msgstr "處理中..."
 
@@ -313,7 +313,7 @@ msgstr "大小："
 msgid "Target:"
 msgstr "目標："
 
-#: ui/clone.ui:618 ui/createvol.ui:403 ui/details.ui:4386
+#: ui/clone.ui:618 ui/details.ui:4386
 msgid "Path:"
 msgstr "路徑："
 
@@ -329,7 +329,7 @@ msgstr "新路徑(_P)："
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr "為虛擬機複製生成新磁碟(_L)"
 
-#: ui/clone.ui:719 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:202
 msgid "_Browse..."
 msgstr "瀏覽(_B)..."
 
@@ -742,7 +742,7 @@ msgstr "CPU 數(_P)："
 msgid "(Insert host mem)"
 msgstr "(插入主機記憶體)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2420
+#: ui/createvm.ui:1995 virtManager/details/details.py:2424
 msgid "Memory"
 msgstr "記憶體"
 
@@ -803,28 +803,34 @@ msgstr "建立由虛擬機直接使用的儲存單元。"
 msgid "<b>Storage Volume Quota</b>"
 msgstr "<b>儲存卷配額</b>"
 
-#: ui/createvol.ui:295 ui/createvol.ui:312
+#: ui/createvol.ui:294
 msgid "1.0"
 msgstr "1.0"
 
-#: ui/createvol.ui:329 ui/createvol.ui:341
+#: ui/createvol.ui:310
 msgid "GiB"
 msgstr "GiB"
 
-#: ui/createvol.ui:353
-msgid "Max Ca_pacity:"
+#: ui/createvol.ui:322
+#, fuzzy
+#| msgid "Max Ca_pacity:"
+msgid "Ca_pacity:"
 msgstr "最大容量(_P)："
 
-#: ui/createvol.ui:367
-msgid "_Allocation:"
-msgstr "分配(_A)："
+#: ui/createvol.ui:333
+#, fuzzy
+#| msgid "Locate directory volume"
+msgid "_Allocate entire volume now"
+msgstr "定位目錄卷"
 
-#: ui/createvol.ui:429
-msgid "Browse..."
-msgstr "瀏覽..."
+#: ui/createvol.ui:388
+msgid "Pa_th:"
+msgstr ""
 
-#: ui/createvol.ui:448
-msgid "Backing store"
+#: ui/createvol.ui:435
+#, fuzzy
+#| msgid "Backing store"
+msgid "_Backing store"
 msgstr "後備儲存"
 
 #: ui/delete.ui:9 virtManager/delete.py:286
@@ -1705,63 +1711,59 @@ msgstr "啟用 libguestfs 虛擬機自檢(_T)"
 msgid "Enable _XML editing"
 msgstr "啟用 XML 編輯(_X)"
 
-#: ui/preferences.ui:147
+#: ui/preferences.ui:148
 msgid "<b>General</b>"
 msgstr "<b>一般</b>"
 
-#: ui/preferences.ui:162
+#: ui/preferences.ui:163
 msgid "_General"
 msgstr "一般(_G)"
 
-#: ui/preferences.ui:195
+#: ui/preferences.ui:196
 msgid "Poll _Disk I/O"
 msgstr "輪詢磁碟 I/O(_D)"
 
-#: ui/preferences.ui:223
+#: ui/preferences.ui:224
 msgid "Poll _Network I/O"
 msgstr "輪詢網路 I/O(_N)"
 
-#: ui/preferences.ui:251
+#: ui/preferences.ui:252
 msgid "Poll _Memory stats"
 msgstr "輪詢記憶體統計(_M)"
 
-#: ui/preferences.ui:279
+#: ui/preferences.ui:280
 msgid "_Update status every"
 msgstr "更新狀態間隔(_U)"
 
-#: ui/preferences.ui:316
+#: ui/preferences.ui:317
 msgid "seconds"
 msgstr "秒"
 
-#: ui/preferences.ui:335
+#: ui/preferences.ui:336
 msgid "Poll C_PU usage"
 msgstr "輪詢 CPU 使用率(_P)"
 
-#: ui/preferences.ui:366
+#: ui/preferences.ui:367
 msgid "<b>Stats Options</b>"
 msgstr "<b>統計選項</b>"
 
-#: ui/preferences.ui:384
+#: ui/preferences.ui:385
 msgid "P_olling"
 msgstr "輪詢(_O)"
 
-#: ui/preferences.ui:421
+#: ui/preferences.ui:422
 msgid "Gra_phics type:"
 msgstr "顯示類型(_P)："
 
-#: ui/preferences.ui:434 ui/preferences.ui:460
+#: ui/preferences.ui:435 ui/preferences.ui:461
 msgid "Default storage format for new disk images."
 msgstr "新磁碟鏡像的預設儲存格式。"
 
-#: ui/preferences.ui:436
+#: ui/preferences.ui:437
 msgid "_Storage format:"
 msgstr "儲存格式(_S)："
 
-#: ui/preferences.ui:489
-msgid "_Add sound device:"
-msgstr "添加音訊裝置(_A)："
-
-#: ui/preferences.ui:502
+#: ui/preferences.ui:473
 msgid ""
 "Default CPU setting for new VMs. This is typically a tradeoff between "
 "performance\n"
@@ -1773,43 +1775,35 @@ msgstr ""
 "之間折衷的辦法：如果使用 'copy host' 選項，伺服器將需要\n"
 "相同的 CPU 型號，用於遷移虛擬系統。"
 
-#: ui/preferences.ui:506
+#: ui/preferences.ui:477
 msgid "CPU _default:"
 msgstr "CPU 預設值(_D)："
 
-#: ui/preferences.ui:531
-msgid ""
-"Add Spice _USB\n"
-"Redirection:"
-msgstr ""
-"添加 Spice USB\n"
-"重定向(_U)："
-
-#: ui/preferences.ui:566
+#: ui/preferences.ui:505
 msgid "<b>New VM Defaults</b>"
 msgstr "<b>建立虛擬系統預設值</b>"
 
-#: ui/preferences.ui:591
+#: ui/preferences.ui:530
 msgid "N_ew VM"
 msgstr "建立虛擬系統(_E)"
 
-#: ui/preferences.ui:622
+#: ui/preferences.ui:561
 msgid "Graphical console _scaling:"
 msgstr "圖形主控臺縮放(_S)："
 
-#: ui/preferences.ui:640
+#: ui/preferences.ui:579
 msgid "Gr_ab keys:"
 msgstr "捕獲快捷鍵(_A)："
 
-#: ui/preferences.ui:655
+#: ui/preferences.ui:594
 msgid "Not supported"
 msgstr "尚不支援"
 
-#: ui/preferences.ui:683
+#: ui/preferences.ui:622
 msgid "Change..."
 msgstr "更改..."
 
-#: ui/preferences.ui:700
+#: ui/preferences.ui:639
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -1817,63 +1811,63 @@ msgstr ""
 "當改變客端視窗大小時，請修改其解析度。僅適用於使用 Spice 和桌面代理正確配置的"
 "客端。"
 
-#: ui/preferences.ui:702
+#: ui/preferences.ui:641
 msgid "_Resize guest with window:"
 msgstr "調整客端視窗大小(_R)："
 
-#: ui/preferences.ui:728
+#: ui/preferences.ui:667
 msgid "SPICE _USB Redirection:"
 msgstr "SPICE USB 重定向(_U)："
 
-#: ui/preferences.ui:752
+#: ui/preferences.ui:691
 msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
 
-#: ui/preferences.ui:754
+#: ui/preferences.ui:693
 #, fuzzy
 #| msgid "_Autoconnect:"
 msgid "Console autoconnec_t:"
 msgstr "自動連接(_A)："
 
-#: ui/preferences.ui:784
+#: ui/preferences.ui:723
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>圖形主控臺</b>"
 
-#: ui/preferences.ui:802
+#: ui/preferences.ui:741
 msgid "Conso_le"
 msgstr "主控臺(_L)"
 
-#: ui/preferences.ui:834
+#: ui/preferences.ui:773
 msgid "_Force Poweroff:"
 msgstr "強制關機時(_F)："
 
-#: ui/preferences.ui:861
+#: ui/preferences.ui:800
 msgid "Poweroff/_Reboot/Save:"
 msgstr "關機/重啟/儲存時(_R)："
 
-#: ui/preferences.ui:875
+#: ui/preferences.ui:814
 msgid "_Pause:"
 msgstr "暫停時(_P)："
 
-#: ui/preferences.ui:928
+#: ui/preferences.ui:867
 msgid "Device re_moval:"
 msgstr "移除裝置時(_M)："
 
-#: ui/preferences.ui:942
+#: ui/preferences.ui:881
 msgid "_Unapplied changes:"
 msgstr "有未應用的更改時(_U)："
 
-#: ui/preferences.ui:969
+#: ui/preferences.ui:908
 msgid "_Deleting storage:"
 msgstr "刪除儲存時(_D)："
 
-#: ui/preferences.ui:1000
+#: ui/preferences.ui:939
 msgid "<b>Confirmations</b>"
 msgstr "<b>確認操作</b>"
 
-#: ui/preferences.ui:1018
+#: ui/preferences.ui:957
 msgid "Feed_back"
 msgstr "操作回饋(_B)"
 
@@ -2082,7 +2076,7 @@ msgstr "啟動 '關於' 對話框出錯：%s"
 msgid "Hardware"
 msgstr "硬體"
 
-#: virtManager/addhardware.py:202 virtManager/createvm.py:520
+#: virtManager/addhardware.py:202 virtManager/createvm.py:519
 #: virtManager/device/addstorage.py:199
 msgid "Connection does not support storage management."
 msgstr "連接不支援儲存管理。"
@@ -2227,7 +2221,7 @@ msgstr "Spice 埠"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2356
+#: virtManager/addhardware.py:436 virtManager/details/details.py:2360
 msgid "Floppy"
 msgstr "軟碟"
 
@@ -2398,7 +2392,7 @@ msgstr "LUN 直連"
 #: virtManager/addhardware.py:802 virtManager/addhardware.py:922
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
 #: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:94
-#: virtManager/preferences.py:183
+#: virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "虛擬機管理程式預設"
 
@@ -2446,7 +2440,7 @@ msgstr "隨機數生成器"
 msgid "VM Sockets"
 msgstr "虛擬系統通訊端"
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2139
+#: virtManager/addhardware.py:1035 virtManager/details/details.py:2143
 #, python-format
 msgid "%s Device"
 msgstr "%s 裝置"
@@ -2512,11 +2506,11 @@ msgstr "確實要使用這個裝置嗎？"
 msgid "Error building device XML: %s"
 msgstr "構建裝置 XML 時出錯：%s"
 
-#: virtManager/asyncjob.py:214
+#: virtManager/asyncjob.py:213
 msgid "Cancelling job..."
 msgstr "正在取消任務......"
 
-#: virtManager/asyncjob.py:316
+#: virtManager/asyncjob.py:315
 msgid "Completed"
 msgstr "已完成"
 
@@ -2749,7 +2743,7 @@ msgid "Name '%s' already in use by another network."
 msgstr "名稱 '%s' 已被其他網路使用。"
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:318
-#: virtManager/createvol.py:280
+#: virtManager/createvol.py:263
 #, python-format
 msgid "Error building XML: %s"
 msgstr "構建 XML 時出錯：%s"
@@ -2828,22 +2822,22 @@ msgstr "%.1f GiB"
 msgid "%d MiB"
 msgstr "%d MiB"
 
-#: virtManager/createvm.py:182
+#: virtManager/createvm.py:181
 #, python-format
 msgid "Error launching create dialog: %s"
 msgstr "啟動建立對話框時出錯：%s"
 
-#: virtManager/createvm.py:309
+#: virtManager/createvm.py:308
 #, python-format
 msgid "Error: %s"
 msgstr "錯誤：%s"
 
-#: virtManager/createvm.py:315 virtManager/createvm.py:320
+#: virtManager/createvm.py:314 virtManager/createvm.py:319
 #, python-format
 msgid "<span size='small'>Warning: %s</span>"
 msgstr "<span size='small'>警告：%s</span>"
 
-#: virtManager/createvm.py:491
+#: virtManager/createvm.py:490
 #, python-format
 msgid ""
 "Failed to setup UEFI: %s\n"
@@ -2852,34 +2846,34 @@ msgstr ""
 "無法設定 UEFI：%s\n"
 "安裝選項受到限制。"
 
-#: virtManager/createvm.py:517
+#: virtManager/createvm.py:516
 msgid "Libvirt version does not support remote URL installs."
 msgstr "Libvirt 版本不支援遠端 URL 安裝。"
 
-#: virtManager/createvm.py:524
+#: virtManager/createvm.py:523
 msgid "CDROM/ISO installs not available for paravirt guests."
 msgstr "CDROM/ISO 安裝不可用於半虛擬虛擬機系統。"
 
-#: virtManager/createvm.py:527
+#: virtManager/createvm.py:526
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "架構 '%s' 不可安裝"
 
-#: virtManager/createvm.py:542
+#: virtManager/createvm.py:541
 msgid "No install methods available for this connection."
 msgstr "沒有可在這個連線中使用的安裝方法。"
 
-#: virtManager/createvm.py:573
+#: virtManager/createvm.py:572
 msgid "No hypervisor options were found for this connection."
 msgstr "沒有找到這個連接的虛擬機管理程式選項。"
 
-#: virtManager/createvm.py:578
+#: virtManager/createvm.py:577
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr "這通常是因為電腦沒有安裝 QEMU 或 KVM，或者沒有載入 KVM 核心模組。"
 
-#: virtManager/createvm.py:599
+#: virtManager/createvm.py:598
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -2887,104 +2881,104 @@ msgstr ""
 "KVM 不可用。這可能是因為沒有安裝 KVM 軟體包，或者沒有載入 KVM 核心模組。虛擬"
 "系統可能性能會很差。"
 
-#: virtManager/createvm.py:642
+#: virtManager/createvm.py:641
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "主機中最多有 %(maxmem)s 可用"
 
-#: virtManager/createvm.py:650
+#: virtManager/createvm.py:649
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgid_plural "Up to %(numcpus)d available"
 msgstr[0] "最多可用 %(numcpus)d"
 
-#: virtManager/createvm.py:688
+#: virtManager/createvm.py:687
 msgid "No active connection to install on."
 msgstr "沒有活動連接可用於安裝。"
 
-#: virtManager/createvm.py:948 virtManager/details/details.py:1789
+#: virtManager/createvm.py:947 virtManager/details/details.py:1793
 #: virtManager/device/gfxdetails.py:87 virtinst/domcapabilities.py:223
 msgid "None"
 msgstr "無"
 
-#: virtManager/createvm.py:962
+#: virtManager/createvm.py:961
 msgid "Local CDROM/ISO"
 msgstr "本機光碟機/映像"
 
-#: virtManager/createvm.py:964
+#: virtManager/createvm.py:963
 msgid "URL Install Tree"
 msgstr "URL 安裝樹"
 
-#: virtManager/createvm.py:966
+#: virtManager/createvm.py:965
 msgid "Import existing OS image"
 msgstr "匯入現有作業系統映像"
 
-#: virtManager/createvm.py:968
+#: virtManager/createvm.py:967
 msgid "Manual install"
 msgstr "手動安裝"
 
-#: virtManager/createvm.py:970
+#: virtManager/createvm.py:969
 msgid "Application container"
 msgstr "應用程式容器"
 
-#: virtManager/createvm.py:972
+#: virtManager/createvm.py:971
 msgid "Operating system container"
 msgstr "作業系統容器"
 
-#: virtManager/createvm.py:974
+#: virtManager/createvm.py:973
 msgid "Virtuozzo container"
 msgstr "Virtuozzo 容器"
 
-#: virtManager/createvm.py:1123
+#: virtManager/createvm.py:1122
 msgid "Removing disk images"
 msgstr "正在刪除磁碟鏡像"
 
-#: virtManager/createvm.py:1124
+#: virtManager/createvm.py:1123
 msgid "Removing disk images we created for this virtual machine."
 msgstr "正在刪除由程式為該虛擬機建立的磁碟鏡像。"
 
-#: virtManager/createvm.py:1318
+#: virtManager/createvm.py:1317
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "步驟 %(current_page)d，共 %(max_page)d 步"
 
-#: virtManager/createvm.py:1327
+#: virtManager/createvm.py:1326
 msgid "Waiting for install media / source"
 msgstr "等待安裝介質/源"
 
-#: virtManager/createvm.py:1401
+#: virtManager/createvm.py:1400
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "填寫摘要頁面出錯： %s"
 
-#: virtManager/createvm.py:1448
+#: virtManager/createvm.py:1444
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "驗證安裝參數時未捕獲的錯誤：%s"
 
-#: virtManager/createvm.py:1459
+#: virtManager/createvm.py:1455
 msgid "Source URL is required"
 msgstr "必須輸入源 URL"
 
-#: virtManager/createvm.py:1464
+#: virtManager/createvm.py:1460
 msgid "Please specify password for accessing source registry"
 msgstr "請指定訪問源註冊表的密碼"
 
-#: virtManager/createvm.py:1472
+#: virtManager/createvm.py:1468
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr "目標路徑不是目錄：%s"
 
-#: virtManager/createvm.py:1475
+#: virtManager/createvm.py:1471
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr "沒有目錄路徑的寫權限：%s"
 
-#: virtManager/createvm.py:1482
+#: virtManager/createvm.py:1478
 msgid "OS root directory is not empty"
 msgstr "作業系統根目錄不為空"
 
-#: virtManager/createvm.py:1483
+#: virtManager/createvm.py:1479
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
@@ -2993,116 +2987,116 @@ msgstr ""
 "由於檔案衝突，在非空目錄中建立根檔案系統可能會失敗。\n"
 "要繼續嗎？"
 
-#: virtManager/createvm.py:1502
+#: virtManager/createvm.py:1498
 msgid "An install media selection is required."
 msgstr "需要選擇安裝介質。"
 
-#: virtManager/createvm.py:1510
+#: virtManager/createvm.py:1506
 msgid "An install tree is required."
 msgstr "需要安裝樹。"
 
-#: virtManager/createvm.py:1518
+#: virtManager/createvm.py:1514
 msgid "A storage path to import is required."
 msgstr "需要匯入的儲存路徑。"
 
-#: virtManager/createvm.py:1524
+#: virtManager/createvm.py:1520
 msgid "The import path must point to an existing storage."
 msgstr "匯入路徑必須指向現有儲存。"
 
-#: virtManager/createvm.py:1530
+#: virtManager/createvm.py:1526
 msgid "An application path is required."
 msgstr "需要應用程式路徑。"
 
-#: virtManager/createvm.py:1535
+#: virtManager/createvm.py:1531
 msgid "An OS directory path is required."
 msgstr "需要作業系統路徑。"
 
-#: virtManager/createvm.py:1549
+#: virtManager/createvm.py:1545
 msgid "A template name is required."
 msgstr "必須輸入模板名稱。"
 
-#: virtManager/createvm.py:1552
+#: virtManager/createvm.py:1548
 msgid "You must select an OS."
 msgstr "必須選擇一個作業系統。"
 
-#: virtManager/createvm.py:1582
+#: virtManager/createvm.py:1578
 msgid "Error setting installer parameters."
 msgstr "設定安裝程式參數出錯。"
 
-#: virtManager/createvm.py:1590
+#: virtManager/createvm.py:1586
 msgid "Error setting default name."
 msgstr "設定預設名稱出錯。"
 
-#: virtManager/createvm.py:1681
+#: virtManager/createvm.py:1677
 msgid "Storage parameter error."
 msgstr "儲存參數錯誤。"
 
-#: virtManager/createvm.py:1703
+#: virtManager/createvm.py:1699
 msgid "Invalid guest name"
 msgstr "客端名稱無效"
 
-#: virtManager/createvm.py:1786
+#: virtManager/createvm.py:1782
 msgid "Detecting..."
 msgstr "檢測中..."
 
-#: virtManager/createvm.py:1848
+#: virtManager/createvm.py:1844
 msgid "None detected"
 msgstr "未檢測到"
 
-#: virtManager/createvm.py:1885
+#: virtManager/createvm.py:1881
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "啟動安裝時出錯：%s"
 
-#: virtManager/createvm.py:1928
+#: virtManager/createvm.py:1924
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "無法完成安裝：'%s'"
 
-#: virtManager/createvm.py:1968
+#: virtManager/createvm.py:1964
 msgid "Creating Virtual Machine"
 msgstr "建立虛擬機"
 
-#: virtManager/createvm.py:1969
+#: virtManager/createvm.py:1965
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr "現已建立虛擬機。分配磁碟儲存和搜尋安裝程式映像需要幾分鐘方可完成。"
 
-#: virtManager/createvm.py:2023
+#: virtManager/createvm.py:2019
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "虛擬系統 '%s' 在預期時間之後未出現。"
 
-#: virtManager/createvm.py:2073
+#: virtManager/createvm.py:2069
 #, python-format
 msgid "Error continuing install: %s"
 msgstr "繼續安裝時發生錯誤：%s"
 
-#: virtManager/createvm.py:2086
+#: virtManager/createvm.py:2082
 msgid "Bootstraping container"
 msgstr "Bootstraping 容器"
 
-#: virtManager/createvol.py:148
+#: virtManager/createvol.py:140
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
 msgstr ""
 
-#: virtManager/createvol.py:295
+#: virtManager/createvol.py:278
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "建立卷出錯：%s"
 
-#: virtManager/createvol.py:311
+#: virtManager/createvol.py:294
 #, python-format
 msgid "Error validating volume: %s"
 msgstr "驗證券時出錯：%s"
 
-#: virtManager/createvol.py:316
+#: virtManager/createvol.py:299
 msgid "Creating storage volume..."
 msgstr "建立儲存卷......"
 
-#: virtManager/createvol.py:317
+#: virtManager/createvol.py:300
 msgid "Creating the storage volume may take a while..."
 msgstr "建立儲存卷可能需要一些時間......"
 
@@ -3496,190 +3490,190 @@ msgstr "管理程式預設值"
 msgid "Clear CPU configuration"
 msgstr "清除 CPU 配置"
 
-#: virtManager/details/details.py:820
+#: virtManager/details/details.py:824
 msgid "Disk bus:"
 msgstr "磁碟匯流排："
 
-#: virtManager/details/details.py:1020
+#: virtManager/details/details.py:1024
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "啟動硬體對話時出錯：%s"
 
-#: virtManager/details/details.py:1026
+#: virtManager/details/details.py:1030
 msgid "Are you sure you want to remove this device?"
 msgstr "確定要刪除這個裝置嗎？"
 
-#: virtManager/details/details.py:1273 virtManager/details/details.py:1788
-#: virtManager/details/details.py:1807 virtManager/details/details.py:2001
+#: virtManager/details/details.py:1277 virtManager/details/details.py:1792
+#: virtManager/details/details.py:1811 virtManager/details/details.py:2005
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "不明"
 
-#: virtManager/details/details.py:1355
+#: virtManager/details/details.py:1359
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "應用更改時出錯：%s"
 
-#: virtManager/details/details.py:1476
+#: virtManager/details/details.py:1480
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "更改自動啟動值出錯：%s"
 
-#: virtManager/details/details.py:1493
+#: virtManager/details/details.py:1497
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "不指定核心路徑就無法設定 initrd"
 
-#: virtManager/details/details.py:1496
+#: virtManager/details/details.py:1500
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "不指定核心路徑就不能設定核心參數"
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1507
 msgid "An init path must be specified"
 msgstr "必須指定 init 路徑"
 
-#: virtManager/details/details.py:1517 virtManager/device/addstorage.py:281
+#: virtManager/details/details.py:1521 virtManager/device/addstorage.py:285
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "磁碟 \"%(path)s\" 已被其他客端 %(names)s 使用"
 
-#: virtManager/details/details.py:1521 virtManager/device/addstorage.py:285
+#: virtManager/details/details.py:1525 virtManager/device/addstorage.py:289
 msgid "Do you really want to use the disk?"
 msgstr "確實要使用這個磁碟嗎？"
 
-#: virtManager/details/details.py:1711
+#: virtManager/details/details.py:1715
 msgid "Remove this device from the virtual machine"
 msgstr "從虛擬機刪除此裝置"
 
-#: virtManager/details/details.py:1767
+#: virtManager/details/details.py:1771
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "重新整理硬體頁面時出錯：%s"
 
-#: virtManager/details/details.py:1862
+#: virtManager/details/details.py:1866
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1874
+#: virtManager/details/details.py:1878
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s 讀取"
 
-#: virtManager/details/details.py:1875
+#: virtManager/details/details.py:1879
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s 寫入"
 
-#: virtManager/details/details.py:1878
+#: virtManager/details/details.py:1882
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s 入站"
 
-#: virtManager/details/details.py:1879
+#: virtManager/details/details.py:1883
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s 出站"
 
-#: virtManager/details/details.py:1881 virtManager/details/details.py:1882
-#: virtManager/details/details.py:1883 virtManager/details/details.py:1884
+#: virtManager/details/details.py:1885 virtManager/details/details.py:1886
+#: virtManager/details/details.py:1887 virtManager/details/details.py:1888
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "禁用"
 
-#: virtManager/details/details.py:1892
+#: virtManager/details/details.py:1896
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s / %(total-memory)s"
 
-#: virtManager/details/details.py:2051
+#: virtManager/details/details.py:2055
 msgid "Absolute Movement"
 msgstr "絕對移動"
 
-#: virtManager/details/details.py:2053
+#: virtManager/details/details.py:2057
 msgid "Relative Movement"
 msgstr "相對移動"
 
-#: virtManager/details/details.py:2062 virtManager/details/details.py:2236
-#: virtManager/details/details.py:2239
+#: virtManager/details/details.py:2066 virtManager/details/details.py:2240
+#: virtManager/details/details.py:2243
 msgid "Hypervisor does not support removing this device"
 msgstr "虛擬機管理程式不支援刪除此裝置"
 
-#: virtManager/details/details.py:2066
+#: virtManager/details/details.py:2070
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s 伺服器"
 
-#: virtManager/details/details.py:2131
+#: virtManager/details/details.py:2135
 msgid "Serial Device"
 msgstr "串列埠裝置"
 
-#: virtManager/details/details.py:2133
+#: virtManager/details/details.py:2137
 msgid "Parallel Device"
 msgstr "並口裝置"
 
-#: virtManager/details/details.py:2135
+#: virtManager/details/details.py:2139
 msgid "Console Device"
 msgstr "主控臺裝置"
 
-#: virtManager/details/details.py:2137
+#: virtManager/details/details.py:2141
 msgid "Channel Device"
 msgstr "通道裝置"
 
-#: virtManager/details/details.py:2147
+#: virtManager/details/details.py:2151
 msgid "Primary Console"
 msgstr "主主控臺"
 
-#: virtManager/details/details.py:2203
+#: virtManager/details/details.py:2207
 #, python-format
 msgid "Physical %s Device"
 msgstr "物理 %s 裝置"
 
-#: virtManager/details/details.py:2220
+#: virtManager/details/details.py:2224
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr "連接了圖形/顯示器後，無法移除最後一個視訊裝置。"
 
-#: virtManager/details/details.py:2246
+#: virtManager/details/details.py:2250
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s 於 %(address)s"
 
-#: virtManager/details/details.py:2252 virtManager/details/details.py:2262
+#: virtManager/details/details.py:2256 virtManager/details/details.py:2266
 msgid "Cannot remove controller while devices are attached."
 msgstr "連接裝置後無法移除控制器。"
 
-#: virtManager/details/details.py:2353
+#: virtManager/details/details.py:2357
 msgid "Hard Disk"
 msgstr "硬碟"
 
-#: virtManager/details/details.py:2354
+#: virtManager/details/details.py:2358
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2355
+#: virtManager/details/details.py:2359
 msgid "Network (PXE)"
 msgstr "網路（PXE）"
 
-#: virtManager/details/details.py:2367
+#: virtManager/details/details.py:2371
 msgid "No bootable devices"
 msgstr "沒有可引導裝置"
 
-#: virtManager/details/details.py:2414
+#: virtManager/details/details.py:2418
 msgid "Overview"
 msgstr "概況"
 
-#: virtManager/details/details.py:2415
+#: virtManager/details/details.py:2419
 msgid "OS information"
 msgstr "系統訊息"
 
-#: virtManager/details/details.py:2417
+#: virtManager/details/details.py:2421
 msgid "Performance"
 msgstr "性能"
 
-#: virtManager/details/details.py:2419
+#: virtManager/details/details.py:2423
 msgid "CPUs"
 msgstr "CPU 數"
 
-#: virtManager/details/details.py:2421
+#: virtManager/details/details.py:2425
 msgid "Boot Options"
 msgstr "引導選項"
 
@@ -3918,7 +3912,7 @@ msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "為以下目錄更改權限時遇到問題："
 
-#: virtManager/device/addstorage.py:274
+#: virtManager/device/addstorage.py:278
 msgid "A storage path must be specified."
 msgstr "必須指定儲存路徑。"
 
@@ -4668,69 +4662,57 @@ msgstr "輸入以開始搜尋..."
 msgid "Error launching preferences: %s"
 msgstr "啟動屬性出錯：%s"
 
-#: virtManager/preferences.py:114
+#: virtManager/preferences.py:110
 msgid "Never"
 msgstr "從不"
 
-#: virtManager/preferences.py:115
+#: virtManager/preferences.py:111
 msgid "Fullscreen only"
 msgstr "只使用全螢幕"
 
-#: virtManager/preferences.py:116
+#: virtManager/preferences.py:112
 msgid "Always"
 msgstr "總是"
 
-#: virtManager/preferences.py:125
+#: virtManager/preferences.py:121
 msgid "Off"
 msgstr "關"
 
-#: virtManager/preferences.py:126
+#: virtManager/preferences.py:122
 msgid "On"
 msgstr "開"
 
-#: virtManager/preferences.py:128 virtManager/preferences.py:150
-#: virtManager/preferences.py:160 virtManager/preferences.py:170
+#: virtManager/preferences.py:124 virtManager/preferences.py:146
+#: virtManager/preferences.py:156
 #, python-format
 msgid "System default (%s)"
 msgstr "系統預設 (%s)"
 
-#: virtManager/preferences.py:139
+#: virtManager/preferences.py:135
 msgid "Manual redirect only"
 msgstr "僅手動重定向"
 
-#: virtManager/preferences.py:140
+#: virtManager/preferences.py:136
 msgid "Auto redirect on USB attach"
 msgstr "USB 連接時自動重定向"
 
-#: virtManager/preferences.py:162
-msgid "No"
-msgstr "否"
-
-#: virtManager/preferences.py:162
-msgid "Yes"
-msgstr "是"
-
-#: virtManager/preferences.py:182
+#: virtManager/preferences.py:168
 msgid "Application default"
 msgstr "應用預設"
 
-#: virtManager/preferences.py:185
+#: virtManager/preferences.py:171
 msgid "Nearest host CPU model"
 msgstr "最接近主機的 CPU 模型"
 
-#: virtManager/preferences.py:187
-msgid "Copy host CPU definition"
-msgstr "複製主機 CPU 定義"
-
-#: virtManager/preferences.py:195
+#: virtManager/preferences.py:181
 msgid "python libguestfs support is not installed"
 msgstr "未安裝 Python libguestfs 支援"
 
-#: virtManager/preferences.py:328
+#: virtManager/preferences.py:307
 msgid "Configure grab key combination"
 msgstr "配置 grab 組合鍵"
 
-#: virtManager/preferences.py:337
+#: virtManager/preferences.py:316
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -4740,7 +4722,7 @@ msgstr ""
 "要確認選擇，\n"
 "請在按下所需鍵的同時單擊「確定」按鈕。"
 
-#: virtManager/preferences.py:340
+#: virtManager/preferences.py:319
 msgid "Please press desired grab key combination"
 msgstr "請按下所需的捕獲組合鍵"
 
@@ -4752,15 +4734,15 @@ msgstr "無法在遠端連線中使用本機儲存。"
 msgid "Choose Storage Volume"
 msgstr "選擇儲存卷"
 
-#: virtManager/systray.py:104
+#: virtManager/systray.py:106
 msgid "_Show Virtual Machine Manager"
 msgstr "顯示虛擬系統管理器"
 
-#: virtManager/virtmanager.py:44
+#: virtManager/virtmanager.py:37
 msgid "Error starting Virtual Machine Manager"
 msgstr "啟動虛擬系統管理器出錯"
 
-#: virtManager/virtmanager.py:45
+#: virtManager/virtmanager.py:38
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error starting Virtual Machine Manager: %(error)s"
@@ -5654,7 +5636,7 @@ msgstr[0] "僅支援匯流排 '%(bus)s' 的 %(number)s 個磁碟"
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr "目標檔案系統 '%s' 必須為絕對路徑"
 
-#: virtinst/devices/graphics.py:25
+#: virtinst/devices/graphics.py:20
 #, python-format
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 必須在 5900 以上，或設為 -1 自動分配"
@@ -5986,18 +5968,18 @@ msgstr "不能設定池自動啟動標誌：%s"
 msgid "Name '%s' already in use by another volume."
 msgstr "名稱 '%s' 已經被另一個卷使用。"
 
-#: virtinst/storage.py:645
+#: virtinst/storage.py:641
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr "不支援稀疏邏輯卷，將分配設置的容量"
 
-#: virtinst/storage.py:691
+#: virtinst/storage.py:687
 #, python-format
 msgid "Allocating '%s'"
 msgstr "正在分配 '%s'"
 
-#: virtinst/storage.py:730
+#: virtinst/storage.py:726
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
@@ -6005,7 +5987,7 @@ msgid ""
 msgstr ""
 "儲存池中沒有足夠空間來建立卷。(%(mem1)s M 需要的空間 > %(mem2)s M 可用空間)"
 
-#: virtinst/storage.py:737
+#: virtinst/storage.py:733
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6790,6 +6772,31 @@ msgstr "必須為 %s 指定名稱"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名稱 '%(name)s' 不能包含 '%(char)s' 字元。"
+
+#~ msgid "_Allocation:"
+#~ msgstr "分配(_A)："
+
+#~ msgid "Browse..."
+#~ msgstr "瀏覽..."
+
+#~ msgid "_Add sound device:"
+#~ msgstr "添加音訊裝置(_A)："
+
+#~ msgid ""
+#~ "Add Spice _USB\n"
+#~ "Redirection:"
+#~ msgstr ""
+#~ "添加 Spice USB\n"
+#~ "重定向(_U)："
+
+#~ msgid "No"
+#~ msgstr "否"
+
+#~ msgid "Yes"
+#~ msgstr "是"
+
+#~ msgid "Copy host CPU definition"
+#~ msgstr "複製主機 CPU 定義"
 
 #~ msgid "available space:"
 #~ msgstr "可用空間："
