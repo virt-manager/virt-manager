@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-15 06:10+0000\n"
-"PO-Revision-Date: 2020-09-11 09:01+0000\n"
+"PO-Revision-Date: 2020-09-19 10:08+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -368,10 +368,8 @@ msgid "Check to save password, uncheck to forget password."
 msgstr "选中以保存密码，取消选中以忘记密码。"
 
 #: ui/console.ui:292
-#, fuzzy
-#| msgid "TCP net console"
 msgid "_Connect to console"
-msgstr "TCP 网络控制台"
+msgstr "连接到控制台(_C)"
 
 #: ui/createconn.ui:13
 msgid "Add Connection"
@@ -1502,7 +1500,7 @@ msgstr "查看(_V)"
 
 #: ui/manager.ui:181
 msgid "_Graph"
-msgstr "图形(_G)"
+msgstr "图表(_G)"
 
 #: ui/manager.ui:191
 msgid "_Guest CPU Usage"
@@ -1843,13 +1841,11 @@ msgstr "SPICE USB 重定向(_U)："
 msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
-msgstr ""
+msgstr "如果禁用，虚拟系统窗口将不会自动连接到正在运行的虚拟系统图形控制台。"
 
 #: ui/preferences.ui:754
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "Console autoconnec_t:"
-msgstr "自动连接(_A)："
+msgstr "自动连接控制台(_T)："
 
 #: ui/preferences.ui:784
 msgid "<b>Graphical Consoles</b>"
@@ -2008,16 +2004,12 @@ msgid "Auto _resize VM with window"
 msgstr "自动调整虚拟系统窗口大小(_R)"
 
 #: ui/vmwindow.ui:245
-#, fuzzy
-#| msgid "Console"
 msgid "Co_nsoles"
-msgstr "控制台"
+msgstr "控制台(_N)"
 
 #: ui/vmwindow.ui:253
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "_Autoconnect"
-msgstr "自动连接(_A)："
+msgstr "自动连接(_A)"
 
 #: ui/vmwindow.ui:268
 msgid "T_oolbar"
@@ -2135,7 +2127,7 @@ msgstr "并口"
 
 #: virtManager/addhardware.py:234
 msgid "Channel"
-msgstr "信道"
+msgstr "通道"
 
 #: virtManager/addhardware.py:238
 msgid "USB Host Device"
@@ -3277,8 +3269,6 @@ msgid "Graphical Console"
 msgstr "图形控制台"
 
 #: virtManager/details/console.py:229
-#, fuzzy
-#| msgid "virt-manager does not support more that one graphical console"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager 不支持多个图形控制台"
 
@@ -5454,6 +5444,10 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
+"在最终 XML 上执行原始 XML XPath 选项。 示例：\n"
+"--xml ./cpu/@mode=host-passthrough\n"
+"--xml ./devices/disk[2]/serial=new-serial\n"
+"--xml xpath.delete=./clock"
 
 #: virtinst/cli.py:953
 #, python-format
@@ -6263,7 +6257,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:854
 msgid "User stopped the VM. Not rebooting."
-msgstr ""
+msgstr "用户停止了虚拟系统。没有重启。"
 
 #: virtinst/virtinstall.py:857
 msgid "Restarting guest."
@@ -6522,7 +6516,7 @@ msgstr "设备 %s 成功。"
 
 #: virtinst/virtxml.py:304
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml 仅可和 --edit 搭配使用"
 
 #: virtinst/virtxml.py:326
 msgid "No XML diff was generated. The requested changes will have no effect."
