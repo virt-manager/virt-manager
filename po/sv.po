@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-19 06:10+0000\n"
-"PO-Revision-Date: 2020-09-19 10:08+0000\n"
+"PO-Revision-Date: 2020-09-21 11:29+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/sv/>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,10 +46,10 @@ msgid ""
 "management API."
 msgstr ""
 "Hanteraren för virtuella maskiner tillhandahåller ett grafiskt verktyg för "
-"att administrera virtuella maskiner för KVM, Xen och LXC.  Starta, stoppa, "
+"att administrera virtuella maskiner för KVM, Xen och LXC. Starta, stoppa, "
 "lägg till eller ta bort virtuella enheter, anslit till en grafisk eller "
 "seriell konsol och se statistik över resursanvändningen för befintliga VM:er "
-"på lokala eller fjärrmaskiner.  Använder libvirt som API i bakänden."
+"på lokala eller fjärrmaskiner. Använder libvirt som API i bakänden."
 
 #: data/virt-manager.appdata.xml.in:20
 msgid "Main manager window"
@@ -283,10 +283,10 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>Kloning ändrar <u>inte</u> gäst-OS:ets innehåll.  Om du "
+"<span size='small'>Kloning ändrar <u>inte</u> gäst-OS:ets innehåll. Om du "
 "behöver göra saker\n"
-"som att ändra lösenord eller statiska IP:n, se då verktyget virt-sysprep(1)."
-"</span>"
+"som att ändra lösenord eller statiska IP:n, se då verktyget virt-"
+"sysprep(1).</span>"
 
 #: ui/clone.ui:409
 msgid "C_lone"
@@ -388,8 +388,8 @@ msgid ""
 "are very limited. </small>"
 msgstr ""
 "<small>En QEMU användarlägessession är inte standard för\n"
-"virt-manager.  Det är troligt att eventuella befintliga QEMU/KVM-\n"
-"gäster inte kommer vara tillgängliga.  Nätverksalternativen\n"
+"virt-manager. Det är troligt att eventuella befintliga QEMU/KVM-\n"
+"gäster inte kommer vara tillgängliga. Nätverksalternativen\n"
 "är väldigt begränsade. </small>"
 
 #: ui/createconn.ui:267
@@ -644,7 +644,7 @@ msgid ""
 "please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
 "\">virt-bootstrap</a></small>"
 msgstr ""
-"<small>OS:ets katalogträd måste finnas först.  För att göra det möjligt att "
+"<small>OS:ets katalogträd måste finnas först. För att göra det möjligt att "
 "skapa OS:ets katalogträd,\n"
 "installera <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
 "bootstrap</a></small>"
@@ -655,7 +655,7 @@ msgid ""
 "tree for remote\n"
 "connections is not yet supported.</small>"
 msgstr ""
-"<small>OS:ets katalogträd måste finnas först.  Att skapa OS:ets katalogträd "
+"<small>OS:ets katalogträd måste finnas först. Att skapa OS:ets katalogträd "
 "för fjärranslutningar\n"
 "stödjs inte ännu.</small>"
 
@@ -986,16 +986,12 @@ msgid "<b>To_pology</b>"
 msgstr "<b>To_pologi</b>"
 
 #: ui/details.ui:1669
-#, fuzzy
-#| msgid "vCPU a_llocation:"
 msgid "Current a_llocation:"
-msgstr "vCPU-a_llokering:"
+msgstr "Nuvarande a_llokering:"
 
 #: ui/details.ui:1684
-#, fuzzy
-#| msgid "Memory a_llocation:"
 msgid "Ma_ximum allocation:"
-msgstr "Minnesa_llokering:"
+msgstr "Maximal a_llokering:"
 
 #: ui/details.ui:1699
 msgid "Total host memory:"
@@ -1594,13 +1590,12 @@ msgid ""
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
 "Tunnla migration genom libvirtd-förbindelsekanalen, snarare än att låta "
-"hypervisorn öppna en separat nätverksförbindelse till destinationen.  "
-"Källans libvirt-instans ansluter direkt till destinationens libvirt-"
-"instans.\n"
+"hypervisorn öppna en separat nätverksförbindelse till destinationen. Källans "
+"libvirt-instans ansluter direkt till destinationens libvirt-instans.\n"
 "\n"
 "Detta kan förenkla uppsättningen eftersom inga ytterligare brandväggsportar "
 "behöver vara öppna, och kommer kryptera migrationstrafiken om din libvirt-"
-"förbindelse är krypterad.  Men det kan vara svårt att få detta att fungera "
+"förbindelse är krypterad. Men det kan vara svårt att få detta att fungera "
 "med SSH-transport."
 
 #: ui/migrate.ui:474
@@ -1642,7 +1637,7 @@ msgid ""
 "is shutdown."
 msgstr ""
 "Som standard tas den migrerade VM:s konfiguration bort från källvärden, och "
-"sparas varaktigt på destinationsvärden.  Destinationsvärden anses vara det "
+"sparas varaktigt på destinationsvärden. Destinationsvärden anses vara det "
 "nya hemmet för VM:n.\n"
 "\n"
 "Om ”temporary” väljs anses migrationen bara vara en tillfällig flytt: "
@@ -1778,7 +1773,7 @@ msgid ""
 "will need\n"
 "identical CPUs in order to migrate the VM."
 msgstr ""
-"Standard CPU-inställningar för nya VM.  Detta är typiskt en avvägning mellan "
+"Standard CPU-inställningar för nya VM. Detta är typiskt en avvägning mellan "
 "prestanda\n"
 "och migrationskompatibilitet: om alternativet ”kopiera värd” används kommer "
 "dina servrar\n"
@@ -1825,8 +1820,8 @@ msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
-"Ändra gästupplösningen när gästfönstrets storlek ändras.  Fungerar endast "
-"med ordentligt konfigurerade gäster som använder spice och skrivbordsagenten."
+"Ändra gästupplösningen när gästfönstrets storlek ändras. Fungerar endast med "
+"ordentligt konfigurerade gäster som använder spice och skrivbordsagenten."
 
 #: ui/preferences.ui:702
 msgid "_Resize guest with window:"
@@ -2073,7 +2068,7 @@ msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
 msgstr ""
-"<small>XML-redigering är avaktiverat i ”Inställningar”.  Aktivera det endast "
+"<small>XML-redigering är avaktiverat i ”Inställningar”. Aktivera det endast "
 "om du vet vad du gör.</small>"
 
 #: ui/xmleditor.ui:121
@@ -2361,7 +2356,7 @@ msgstr "Dumpa gästens minneskärna"
 
 #: virtManager/addhardware.py:568
 msgid "EvTouch USB Graphics Tablet"
-msgstr "EvTouch USB Graphics Tablet"
+msgstr "EvTouch USB ritplatta"
 
 #: virtManager/addhardware.py:571 virtManager/details/details.py:197
 msgid "Keyboard"
@@ -3090,7 +3085,7 @@ msgstr "Startar upp behållaren"
 #: virtManager/createvol.py:148
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
-msgstr ""
+msgstr "<b>%(volume)ss</b> tillgängliga utrymme: %(size)s"
 
 #: virtManager/createvol.py:295
 #, python-format
@@ -4065,10 +4060,9 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s av %(maxmem)s"
 
 #: virtManager/host.py:178
-#, fuzzy, python-format
-#| msgid "%(connection)s - Connecting..."
+#, python-format
 msgid "%(connection)s - Connection Details"
-msgstr "%(connection)s – Ansluter …"
+msgstr "%(connection)s – Anslutningsdetaljer"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4789,10 +4783,10 @@ msgid "Error starting Virtual Machine Manager"
 msgstr "Fel när administrationsprogram för virtuella maskiner startades"
 
 #: virtManager/virtmanager.py:45
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Fel när administrationsprogram för virtuella maskiner startades"
+msgstr ""
+"Fel när administrationsprogram för virtuella maskiner startades: %(error)s"
 
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -4994,63 +4988,48 @@ msgstr ""
 "verkligen lämna denna flik?"
 
 #: virtinst/capabilities.py:296
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"Värden stödjer inte domäntypen %(domain)s%(machine)s för "
-"virtualiseringstypen ”%(virttype)s“ arkitekturen ”%(arch)s”"
+"Värden stödjer inte virtualiseringstypen ”%(virttype)s“ för arkitekturen "
+"”%(arch)s”"
 
 #: virtinst/capabilities.py:300
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
-"Värden stödjer inte domäntypen %(domain)s%(machine)s för "
-"virtualiseringstypen ”%(virttype)s“ arkitekturen ”%(arch)s”"
+"Värden stödjer inte några virtualiseringsalternativ för arkitekturen "
+"”%(arch)s”"
 
 #: virtinst/capabilities.py:304
-#, fuzzy, python-format
-#| msgid "Host does not support %(virttype)s %(arch)s"
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "Värden stödjer inte %(virttype)s %(arch)s"
+msgstr "Värden stödjer inte virtualiseringstypen ”%(virttype)s”"
 
 #: virtinst/capabilities.py:308
-#, fuzzy
-#| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
-msgstr "några virtualiseringsalternativ"
+msgstr "Värden stödjer inte några virtualiseringsalternativ"
 
 #: virtinst/capabilities.py:314
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Värden stödjer inte domäntypen %(domain)s%(machine)s för "
-"virtualiseringstypen ”%(virttype)s“ arkitekturen ”%(arch)s”"
+"Värden stödjer inte domäntypen %(domain)s med maskinen ”%(machine)s” för "
+"virtualiseringstypen ”%(virttype)s“ med arkitekturen ”%(arch)s”"
 
 #: virtinst/capabilities.py:320
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Värden stödjer inte domäntypen %(domain)s%(machine)s för "
-"virtualiseringstypen ”%(virttype)s“ arkitekturen ”%(arch)s”"
+"Värden stödjer inte domäntypen %(domain)s för virtualiseringstypen "
+"”%(virttype)s“ med arkitekturen ”%(arch)s”"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5119,7 +5098,7 @@ msgstr "Kunde inte hitta domänen ”%(domain)s”: %(error)s"
 #: virtinst/cli.py:480
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "Det går inte att använda %(option1)s och %(option2)s på samma gång"
 
 #: virtinst/cli.py:581 virtinst/cli.py:584
 msgid "Connect to hypervisor with libvirt URI"
@@ -5745,10 +5724,9 @@ msgid "There is not enough free space to create the disk."
 msgstr "Det finns inte tillräckligt med fritt utrymme för att skapa disken."
 
 #: virtinst/diskbackend.py:535
-#, fuzzy, python-format
-#| msgid " %d M requested > %d M available"
+#, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
-msgstr " %d M begärt > %d M tillgängligt"
+msgstr "%(mem1)s M begärt > %(mem2)s M tillgängligt"
 
 #: virtinst/diskbackend.py:542
 #, python-format
@@ -5761,10 +5739,10 @@ msgid "Cloning %(srcfile)s"
 msgstr "Klonar %(srcfile)s"
 
 #: virtinst/diskbackend.py:623
-#, fuzzy, python-format
-#| msgid "Error cloning diskimage %s to %s: %s"
+#, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
-msgstr "Fel när diskavbilden %s klonades till %s: %s"
+msgstr ""
+"Fel när diskavbilden %(inputpath)s klonades till %(outputpath)s: %(error)s"
 
 #: virtinst/domain/cpu.py:222
 msgid "No host CPU reported in capabilities"
@@ -5830,11 +5808,12 @@ msgid "Removing disk '%s'"
 msgstr "Tar bort disken ”%s”"
 
 #: virtinst/install/installer.py:264
-#, fuzzy, python-format
-#| msgid "Overriding memory to %s MiB needed for %s network install."
+#, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
-msgstr "Åsidosätter minnet till %s MiB som behövs för %s-nätverksinstallation."
+msgstr ""
+"Åsidosätter minnet till %(number)s MiB som behövs för "
+"%(osname)s-nätverksinstallation."
 
 #: virtinst/install/installer.py:625
 msgid "Creating domain..."
@@ -5845,10 +5824,9 @@ msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "Domäntypen ”vz” stödjer inte transienta installationer."
 
 #: virtinst/install/installertreemedia.py:69
-#, fuzzy, python-format
-#| msgid "Validating install media '%s' failed: %s"
+#, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
-msgstr "Validering av installationsmediumet ”%s” misslyckades: %s"
+msgstr "Validering av installationsmediumet ”%(media)s” misslyckades: %(error)s"
 
 #: virtinst/install/installertreemedia.py:117
 msgid "location kernel/initrd may only be specified with a location URL/path"
@@ -5879,7 +5857,7 @@ msgstr ""
 #: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
-msgstr ""
+msgstr "%(osname)s kan inte använda ”%(loginname)s” som användarinloggning."
 
 #: virtinst/install/unattended.py:74
 #, python-format
@@ -5898,11 +5876,12 @@ msgstr ""
 "installationer."
 
 #: virtinst/install/unattended.py:198
-#, fuzzy, python-format
-#| msgid "OS '%s' does not support required injection method '%s'"
+#, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
-msgstr "OS:et ”%s” stödjer inte den begärda injiceringsmetoden ”%s”"
+msgstr ""
+"OS:et ”%(osname)s” stödjer inte den begärda injiceringsmetoden "
+"”%(methodname)s”"
 
 #: virtinst/install/unattended.py:335
 #, python-format
@@ -5915,16 +5894,13 @@ msgid "OS '%s' does not support unattended installation."
 msgstr "OS:et ”%s” stödjer inte obevakad installation."
 
 #: virtinst/install/unattended.py:355
-#, fuzzy, python-format
-#| msgid ""
-#| "OS '%s' does not support unattended installation for the '%s' profile. "
-#| "Available profiles: %s"
+#, python-format
 msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
-"OS:et ”%s” stödjer inte obevakad installation för profilen ”%s”.  "
-"Tillgängliga profiler: %s"
+"OS:et ”%(osname)s” stödjer inte obevakad installation för profilen "
+"”%(profilename)s”. Tillgängliga profiler: %(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -5938,21 +5914,13 @@ msgstr "URL:en kunde inte nås, kanske du skrev fel?"
 #: virtinst/install/urldetect.py:313
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
-msgstr ""
+msgstr "Kunde inte hitta en installerabar distribution på URL:en ”%s”"
 
 #: virtinst/install/urldetect.py:317
-#, fuzzy
-#| msgid ""
-#| "Could not find an installable distribution at '%s'%s\n"
-#| "\n"
-#| "The location must be the root directory of an install tree.\n"
-#| "See virt-install man page for various distro examples."
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
 msgstr ""
-"Kunde inte hitta en installerbar distribution på ”%s”%s\n"
-"\n"
 "Platsen måste vara rotkatalogen i ett installationsträd.\n"
 "Se manualsidan för virt-install för exempel för olika distributioner."
 
