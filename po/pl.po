@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-19 06:10+0000\n"
-"PO-Revision-Date: 2020-09-14 16:05+0000\n"
+"PO-Revision-Date: 2020-09-19 10:41+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -992,16 +992,12 @@ msgid "<b>To_pology</b>"
 msgstr "<b>To_pologia</b>"
 
 #: ui/details.ui:1669
-#, fuzzy
-#| msgid "vCPU a_llocation:"
 msgid "Current a_llocation:"
-msgstr "_Przydział procesorów wirtualnych:"
+msgstr "_Obecny przydział:"
 
 #: ui/details.ui:1684
-#, fuzzy
-#| msgid "Memory a_llocation:"
 msgid "Ma_ximum allocation:"
-msgstr "Przy_dział pamięci:"
+msgstr "_Maksymalny przydział:"
 
 #: ui/details.ui:1699
 msgid "Total host memory:"
@@ -3105,7 +3101,7 @@ msgstr "Zakładanie kontenera"
 #: virtManager/createvol.py:148
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
-msgstr ""
+msgstr "<b>Dostępne miejsce na woluminie %(volume)s</b>: %(size)s"
 
 #: virtManager/createvol.py:295
 #, python-format
@@ -4083,10 +4079,9 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s z %(maxmem)s"
 
 #: virtManager/host.py:178
-#, fuzzy, python-format
-#| msgid "%(connection)s - Connecting..."
+#, python-format
 msgid "%(connection)s - Connection Details"
-msgstr "%(connection)s — łączenie…"
+msgstr "%(connection)s — informacje o połączeniu"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4815,10 +4810,9 @@ msgid "Error starting Virtual Machine Manager"
 msgstr "Błąd podczas uruchamiania menedżera maszyn wirtualnych"
 
 #: virtManager/virtmanager.py:45
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Błąd podczas uruchamiania menedżera maszyn wirtualnych"
+msgstr "Błąd podczas uruchamiania menedżera maszyn wirtualnych: %(error)s"
 
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -5016,63 +5010,48 @@ msgstr ""
 "Opuszczenie tej karty spowoduje utratę zmian kodu XML. Na pewno to zrobić?"
 
 #: virtinst/capabilities.py:296
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"Gospodarz nie obsługuje typu domeny %(domain)s%(machine)s dla typu "
-"wirtualizacji „%(virttype)s” architektury „%(arch)s”"
+"Gospodarz nie obsługuje typu wirtualizacji „%(virttype)s” dla architektury "
+"„%(arch)s”"
 
 #: virtinst/capabilities.py:300
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
-"Gospodarz nie obsługuje typu domeny %(domain)s%(machine)s dla typu "
-"wirtualizacji „%(virttype)s” architektury „%(arch)s”"
+"Gospodarz nie obsługuje żadnych opcji wirtualizacji dla architektury "
+"„%(arch)s”"
 
 #: virtinst/capabilities.py:304
-#, fuzzy, python-format
-#| msgid "Host does not support %(virttype)s %(arch)s"
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "Gospodarz nie obsługuje %(virttype)s %(arch)s"
+msgstr "Gospodarz nie obsługuje typu wirtualizacji „%(virttype)s”"
 
 #: virtinst/capabilities.py:308
-#, fuzzy
-#| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
-msgstr "wszystkie opcje wirtualizacji"
+msgstr "Gospodarz nie obsługuje żadnych opcji wirtualizacji"
 
 #: virtinst/capabilities.py:314
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Gospodarz nie obsługuje typu domeny %(domain)s%(machine)s dla typu "
-"wirtualizacji „%(virttype)s” architektury „%(arch)s”"
+"Gospodarz nie obsługuje typu domeny %(domain)s za pomocą maszyny "
+"„%(machine)s” dla typu wirtualizacji „%(virttype)s” z architekturą „%(arch)s”"
 
 #: virtinst/capabilities.py:320
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Gospodarz nie obsługuje typu domeny %(domain)s%(machine)s dla typu "
-"wirtualizacji „%(virttype)s” architektury „%(arch)s”"
+"Gospodarz nie obsługuje typu domeny %(domain)s dla typu wirtualizacji "
+"„%(virttype)s” z architekturą „%(arch)s”"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5140,7 +5119,7 @@ msgstr "Nie można odnaleźć domeny „%(domain)s”: %(error)s"
 #: virtinst/cli.py:480
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "Nie można używać opcji %(option1)s i %(option2)s jednocześnie"
 
 #: virtinst/cli.py:581 virtinst/cli.py:584
 msgid "Connect to hypervisor with libvirt URI"
@@ -6276,6 +6255,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"Podano opcję -c z adresem URI biblioteki libvirt. Czy chodziło o opcję --"
+"connect? Jeśli nie, to należy użyć opcji --cdrom zamiast tego"
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
@@ -6396,6 +6377,8 @@ msgstr "Błąd podczas sprawdzania położenia instalacji: %s"
 #: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
 msgstr ""
+"Wymagana jest opcja --os-variant, ale nie ustawiono ani nie wykryto żadnej "
+"wartości."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6630,10 +6613,7 @@ msgid "No --%s objects found in the XML"
 msgstr "Nie odnaleziono obiektów --%s w pliku XML"
 
 #: virtinst/virtxml.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
@@ -6641,14 +6621,14 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
-"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko obiekt %(max)s --"
-"%(type)s"
+"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko %(max)s obiekt "
+"--%(type)s"
 msgstr[1] ""
-"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko obiekt %(max)s --"
-"%(type)s"
+"Zażądano „--edit %(number)s”, ale w pliku XML jest są tylko %(max)s obiekty "
+"--%(type)s"
 msgstr[2] ""
-"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko obiekt %(max)s --"
-"%(type)s"
+"Zażądano „--edit %(number)s”, ale w pliku XML jest tylko %(max)s obiektów "
+"--%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -6742,18 +6722,19 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Podłączyć to urządzenie w czasie działania do gościa „%(domain)s”?"
 
 #: virtinst/virtxml.py:266
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotplug successful."
-msgstr "Pomyślne urządzenie %s."
+msgstr "Pomyślnie podłączono urządzenie w czasie działania."
 
 #: virtinst/virtxml.py:267
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "Błąd podczas próbowania działania urządzenia %(action)s: %(error)s"
+msgstr ""
+"Błąd podczas próbowania podłączenia urządzenia w czasie działania: %(error)s"
 
 #: virtinst/virtxml.py:269
 #, python-format
@@ -6762,18 +6743,19 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Odłączyć to urządzenie w czasie działania od gościa „%(domain)s”?"
 
 #: virtinst/virtxml.py:271
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotunplug successful."
-msgstr "Pomyślne urządzenie %s."
+msgstr "Pomyślne odłączono urządzenie w czasie działania."
 
 #: virtinst/virtxml.py:272
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Błąd podczas próbowania działania urządzenia %(action)s: %(error)s"
+msgstr ""
+"Błąd podczas próbowania odłączenia urządzenia w czasie działania: %(error)s"
 
 #: virtinst/virtxml.py:274
 #, python-format
@@ -6782,18 +6764,18 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Zaktualizować to urządzenie dla gościa „%(domain)s”?"
 
 #: virtinst/virtxml.py:276
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device update successful."
-msgstr "Pomyślne urządzenie %s."
+msgstr "Pomyślne zaktualizowano urządzenie."
 
 #: virtinst/virtxml.py:277
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "Błąd podczas próbowania działania urządzenia %(action)s: %(error)s"
+msgstr "Błąd podczas próbowania aktualizacji urządzenia: %(error)s"
 
 #: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
