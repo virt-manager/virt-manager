@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-19 06:10+0000\n"
-"PO-Revision-Date: 2020-09-14 08:29+0000\n"
+"PO-Revision-Date: 2020-09-19 10:50+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1006,16 +1006,12 @@ msgid "<b>To_pology</b>"
 msgstr "<b>To_pologie</b>"
 
 #: ui/details.ui:1669
-#, fuzzy
-#| msgid "vCPU a_llocation:"
 msgid "Current a_llocation:"
-msgstr "Přidě_lení virtuálních procesorů:"
+msgstr "Stávající přidě_lení:"
 
 #: ui/details.ui:1684
-#, fuzzy
-#| msgid "Memory a_llocation:"
 msgid "Ma_ximum allocation:"
-msgstr "Přidě_lení operační paměti:"
+msgstr "Ma_ximální přidělení:"
 
 #: ui/details.ui:1699
 msgid "Total host memory:"
@@ -3134,7 +3130,7 @@ msgstr "Spouštění kontejneru"
 #: virtManager/createvol.py:148
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
-msgstr ""
+msgstr "prostor k dispozici na <b>%(volume)s</b>: %(size)s"
 
 #: virtManager/createvol.py:295
 #, python-format
@@ -4114,10 +4110,9 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s z %(maxmem)s"
 
 #: virtManager/host.py:178
-#, fuzzy, python-format
-#| msgid "%(connection)s - Connecting..."
+#, python-format
 msgid "%(connection)s - Connection Details"
-msgstr "%(connection)s – připojování…"
+msgstr "%(connection)s – podrobnosti o připojení"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4850,10 +4845,9 @@ msgid "Error starting Virtual Machine Manager"
 msgstr "Chyba při spouštění Správy virtuálních strojů"
 
 #: virtManager/virtmanager.py:45
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Chyba při spouštění Správy virtuálních strojů"
+msgstr "Chyba při spouštění Správy virtuálních strojů: %(error)s"
 
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -5052,63 +5046,47 @@ msgstr ""
 "panel?"
 
 #: virtinst/capabilities.py:296
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"Hostitel nepodporuje doménu typu %(domain)s%(machine)s pro typ virtualizace "
-"„%(virttype)s“ architekturu „%(arch)s“"
+"Hostitel nepodporuje virtualizaci typu „%(virttype)s“ pro architekturu "
+"„%(arch)s“"
 
 #: virtinst/capabilities.py:300
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
-"Hostitel nepodporuje doménu typu %(domain)s%(machine)s pro typ virtualizace "
-"„%(virttype)s“ architekturu „%(arch)s“"
+"Hostitel nepodporuje žádnou možnost virtualizace pro architekturu „%(arch)s“"
 
 #: virtinst/capabilities.py:304
-#, fuzzy, python-format
-#| msgid "Host does not support %(virttype)s %(arch)s"
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "Hostitel nepodporuje %(virttype)s %(arch)s"
+msgstr "Hostitel nepodporuje typ virtualizace „%(virttype)s“"
 
 #: virtinst/capabilities.py:308
-#, fuzzy
-#| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
-msgstr "jakékoli možnosti virtualizace"
+msgstr "Hostitel nepodporuje žádné možnosti virtualizace"
 
 #: virtinst/capabilities.py:314
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Hostitel nepodporuje doménu typu %(domain)s%(machine)s pro typ virtualizace "
-"„%(virttype)s“ architekturu „%(arch)s“"
+"Hostitel nepodporuje doménu typu %(domain)s se strojem „%(machine)s“ pro typ "
+"virtualizace „%(virttype)s“ s architekturou „%(arch)s“"
 
 #: virtinst/capabilities.py:320
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Hostitel nepodporuje doménu typu %(domain)s%(machine)s pro typ virtualizace "
-"„%(virttype)s“ architekturu „%(arch)s“"
+"Hostitel nepodporuje doménu typu %(domain)s% pro typ virtualizace "
+"„%(virttype)s“ s architekturou „%(arch)s“"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5177,7 +5155,7 @@ msgstr "Nedaří se nalézt virt. doménu „%(domain)s“: %(error)s"
 #: virtinst/cli.py:480
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "Volby %(option1)s a %(option2)s není možné použít současně"
 
 #: virtinst/cli.py:581 virtinst/cli.py:584
 msgid "Connect to hypervisor with libvirt URI"
@@ -5605,6 +5583,10 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
+"Provést nezpracované XML XPath volby na konečném XML. Příklad:\n"
+"--xml ./cpu/@mode=host-passthrough\n"
+"--xml ./devices/disk[2]/serial=new-serial\n"
+"--xml xpath.delete=./clock"
 
 #: virtinst/cli.py:963
 #, python-format
@@ -6291,6 +6273,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"-c zadáno s něčím, co vypadá jako URI libvirt. Měli jste na mysli --connect? "
+"Pokud ne, použijte namísto toho --cdrom"
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
@@ -6411,6 +6395,7 @@ msgstr "Chyba při ověřování instalačního umístění: %s"
 #: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
 msgstr ""
+"Je zapotřebí --os-variant, ale není nastavená nebo zjištěná žádná hodnota."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6476,7 +6461,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
-msgstr ""
+msgstr "Uživatel virt. stroj zastavil. Nebude restartován."
 
 #: virtinst/virtinstall.py:858
 msgid "Restarting guest."
@@ -6638,10 +6623,7 @@ msgid "No --%s objects found in the XML"
 msgstr "V XML nenalezeny žádné --%s objekty"
 
 #: virtinst/virtxml.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
@@ -6649,14 +6631,14 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
-"je požadováno „--edit %(number)s“ ale v XML je pouze objekt %(max)s --"
-"%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML je pouze objekt %(max)s "
+"--%(type)s"
 msgstr[1] ""
-"je požadováno „--edit %(number)s“ ale v XML je pouze objekt %(max)s --"
-"%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML jsou pouze objekty %(max)s "
+"--%(type)s"
 msgstr[2] ""
-"je požadováno „--edit %(number)s“ ale v XML je pouze objekt %(max)s --"
-"%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML je pouze objektů %(max)s "
+"--%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -6750,18 +6732,18 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Připojit toto zařízení za chodu k hostovi „%(domain)s“?"
 
 #: virtinst/virtxml.py:266
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotplug successful."
-msgstr "Zařízení %s úspěšné."
+msgstr "Připojení zařízení za chodu úspěšné."
 
 #: virtinst/virtxml.py:267
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "Chyba při pokusu o akci zařízení %(action)s: %(error)s"
+msgstr "Chyba při pokusu o připojení zařízení za chodu: %(error)s"
 
 #: virtinst/virtxml.py:269
 #, python-format
@@ -6770,18 +6752,18 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Odpojit toto zařízení za chodu z hosta „%(domain)s“?"
 
 #: virtinst/virtxml.py:271
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotunplug successful."
-msgstr "Zařízení %s úspěšné."
+msgstr "Odpojení zařízení za chodu úspěšné."
 
 #: virtinst/virtxml.py:272
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Chyba při pokusu o akci zařízení %(action)s: %(error)s"
+msgstr "Chyba při pokusu o odpojení zařízení za chodu: %(error)s"
 
 #: virtinst/virtxml.py:274
 #, python-format
@@ -6790,22 +6772,22 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Aktualizovat toto zařízení pro hosta „%(domain)s“?"
 
 #: virtinst/virtxml.py:276
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device update successful."
-msgstr "Zařízení %s úspěšné."
+msgstr "Aktualizace zařízení úspěšná."
 
 #: virtinst/virtxml.py:277
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "Chyba při pokusu o akci zařízení %(action)s: %(error)s"
+msgstr "Chyba při pokusu o aktualizaci zařízení: %(error)s"
 
 #: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml je možné použít pouze ve spojení s --edit"
 
 #: virtinst/virtxml.py:337
 msgid "No XML diff was generated. The requested changes will have no effect."
