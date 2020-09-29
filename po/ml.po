@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-21 06:11+0000\n"
+"POT-Creation-Date: 2020-09-29 06:13+0000\n"
 "PO-Revision-Date: 2017-02-05 04:06+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Malayalam (http://www.transifex.com/projects/p/virt-manager/"
@@ -237,7 +237,7 @@ msgstr "ദയവായി കാത്തിരിക്കുക..."
 msgid "Processing..."
 msgstr "പ്റക്റിയ നടക്കുന്നു..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "_വിശദവിവരങ്ങള്‍"
 
@@ -563,8 +563,8 @@ msgstr "ഏത് തരം _Virt:"
 msgid "Architecture options"
 msgstr "ആര്‍ക്കിറ്റക്ചര്‍ ഐച്ഛികങ്ങള്‍"
 
-#: ui/createvm.ui:773 virtManager/details/details.py:739
-#: virtManager/manager.py:328 virtManager/oslist.py:65
+#: ui/createvm.ui:773 virtManager/details/details.py:729
+#: virtManager/manager.py:329 virtManager/oslist.py:65
 msgid "Name"
 msgstr "പേര്"
 
@@ -709,7 +709,7 @@ msgstr "_CPUs:"
 msgid "(Insert host mem)"
 msgstr "(ഹോസ്റ്റ് മെമ്മറി ചേര്‍ക്കുക)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2424
+#: ui/createvm.ui:1995 virtManager/details/details.py:2414
 msgid "Memory"
 msgstr "മെമ്മറി"
 
@@ -1280,38 +1280,38 @@ msgstr "രഹ_സ്യവാക്ക്:"
 msgid "_Port:"
 msgstr "_പോര്‍ട്ട്: "
 
-#: ui/gfxdetails.ui:166 ui/vsockdetails.ui:38
-#: virtManager/device/gfxdetails.py:225
+#: ui/gfxdetails.ui:167 ui/vsockdetails.ui:38
+#: virtManager/device/gfxdetails.py:209
 msgid "A_uto"
 msgstr "_ഓട്ടോ"
 
-#: ui/gfxdetails.ui:191 ui/vsockdetails.ui:63
+#: ui/gfxdetails.ui:192 ui/vsockdetails.ui:63
 msgid "5900"
 msgstr "5900"
 
-#: ui/gfxdetails.ui:259
+#: ui/gfxdetails.ui:260
 #, fuzzy
 #| msgid "_Open"
 msgid "Open_GL:"
 msgstr "_തുറക്കുക"
 
-#: ui/gfxdetails.ui:273
+#: ui/gfxdetails.ui:274
 msgid "L_isten type:"
 msgstr ""
 
-#: ui/gfxdetails.ui:362
+#: ui/gfxdetails.ui:363
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
 
-#: ui/gfxdetails.ui:378
+#: ui/gfxdetails.ui:379
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr ""
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:39
 msgid "_File"
 msgstr "ഫയല്‍ (_F)"
 
-#: ui/host.ui:43 ui/vmwindow.ui:38
+#: ui/host.ui:43 ui/vmwindow.ui:48
 msgid "_View Manager"
 msgstr "നിരീക്ഷകനെ _കാണുക"
 
@@ -1469,7 +1469,7 @@ msgstr "_കണക്ഷന്‍ വിവരണങ്ങള്‍"
 msgid "_Virtual Machine Details"
 msgstr "_വിര്‍ച്ച്വല്‍ മഷീന്‍ വിശദാംശങ്ങള്‍"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:118
+#: ui/manager.ui:172 ui/vmwindow.ui:132
 msgid "_View"
 msgstr "കാഴ്ച (_V)"
 
@@ -1517,17 +1517,17 @@ msgstr "നിങ്ങളുടെ വിര്‍ച്ച്വല്‍ മ�
 msgid "_Open"
 msgstr "_തുറക്കുക"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:345
+#: ui/manager.ui:332 ui/vmwindow.ui:359
 msgid "Power on the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ ഓണ്‍ ചെയ്യുക"
 
-#: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:383
+#: ui/manager.ui:333 virtManager/manager.py:762 virtManager/vmmenu.py:95
+#: virtManager/vmwindow.py:380
 msgid "_Run"
 msgstr "പ്രവര്‍ത്തിപ്പിക്കുക (_R)"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
-#: virtManager/vmwindow.py:411
+#: ui/manager.ui:348 ui/vmwindow.ui:374 virtManager/manager.py:799
+#: virtManager/vmwindow.py:421
 msgid "Pause the virtual machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ തല്‍ക്കാലത്തേക്ക് നിര്‍ത്തുക"
 
@@ -1535,11 +1535,11 @@ msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ തല്‍�
 msgid "_Pause"
 msgstr "താല്‍ക്കാലികമായി നിര്‍ത്തുക (_P)"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:375
+#: ui/manager.ui:364 ui/vmwindow.ui:389
 msgid "Shut down the virtual machine"
 msgstr ""
 
-#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:390 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "_അടച്ചു പൂട്ടുക"
@@ -1890,123 +1890,123 @@ msgstr ""
 msgid "_Description:"
 msgstr "വി_വരണം:"
 
-#: ui/vmwindow.ui:8
+#: ui/vmwindow.ui:18
 msgid "Virtual Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ "
 
-#: ui/vmwindow.ui:79
+#: ui/vmwindow.ui:93
 msgid "Virtual _Machine"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീന്‍ (_M)"
 
-#: ui/vmwindow.ui:95
+#: ui/vmwindow.ui:109
 msgid "_Take Screenshot"
 msgstr "സ്ക്രീന്‍ ഷോട്ട് എടുക്കുക (_T)"
 
-#: ui/vmwindow.ui:104
+#: ui/vmwindow.ui:118
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr ""
 
-#: ui/vmwindow.ui:105
+#: ui/vmwindow.ui:119
 msgid "_Redirect USB device"
 msgstr "യുഎസ്ബി ഡിവൈസ് റീ_ഡയറക്ട് ചെയ്യുക"
 
-#: ui/vmwindow.ui:127
+#: ui/vmwindow.ui:141
 msgid "_Console"
 msgstr "_കണ്‍സോള്‍ "
 
-#: ui/vmwindow.ui:149
+#: ui/vmwindow.ui:163
 msgid "Sna_pshots"
 msgstr "സ്നാപ്പ്ഷോട്ടു_കള്‍"
 
-#: ui/vmwindow.ui:166
+#: ui/vmwindow.ui:180
 msgid "_Fullscreen"
 msgstr "_സ്ക്രീന്‍ പൂര്‍ണ്ണ വലിപ്പത്തില്‍"
 
-#: ui/vmwindow.ui:175
+#: ui/vmwindow.ui:189
 msgid "_Resize to VM"
 msgstr "VM-ന്റെ വ്യാപ്തിയായി _മാറ്റുക"
 
-#: ui/vmwindow.ui:184
+#: ui/vmwindow.ui:198
 msgid "_Scale Display"
 msgstr "_പ്രദര്‍ശനം അളക്കുക"
 
-#: ui/vmwindow.ui:194
+#: ui/vmwindow.ui:208
 msgid "_Always"
 msgstr "_എപ്പോഴും"
 
-#: ui/vmwindow.ui:204
+#: ui/vmwindow.ui:218
 msgid "_Only when Fullscreen"
 msgstr "സ്ക്രീന്‍ പൂര്‍ണ്ണവലിപ്പത്തിലുള്ളപ്പോള്‍ _മാത്രം"
 
-#: ui/vmwindow.ui:215
+#: ui/vmwindow.ui:229
 msgid "_Never"
 msgstr "_ഒരിക്കലും ഇല്ല"
 
-#: ui/vmwindow.ui:232
+#: ui/vmwindow.ui:246
 msgid "Auto _resize VM with window"
 msgstr ""
 
-#: ui/vmwindow.ui:245
+#: ui/vmwindow.ui:259
 #, fuzzy
 #| msgid "Console"
 msgid "Co_nsoles"
 msgstr "കണ്‍സോള്‍ "
 
-#: ui/vmwindow.ui:253
+#: ui/vmwindow.ui:267
 #, fuzzy
 #| msgid "_Autoconnect:"
 msgid "_Autoconnect"
 msgstr "_സ്വയംകണക്ട് ചെയ്യുക:"
 
-#: ui/vmwindow.ui:268
+#: ui/vmwindow.ui:282
 msgid "T_oolbar"
 msgstr "_ടൂള്‍ബാര്‍"
 
-#: ui/vmwindow.ui:282
+#: ui/vmwindow.ui:296
 msgid "Send _Key"
 msgstr "_കീ അയയ്ക്കുക"
 
-#: ui/vmwindow.ui:305
+#: ui/vmwindow.ui:319
 msgid "Show the graphical console"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ കാണിക്കുക"
 
-#: ui/vmwindow.ui:306 virtManager/addhardware.py:232
+#: ui/vmwindow.ui:320 virtManager/addhardware.py:232
 msgid "Console"
 msgstr "കണ്‍സോള്‍ "
 
-#: ui/vmwindow.ui:320
+#: ui/vmwindow.ui:334
 msgid "Show virtual hardware details"
 msgstr "പുതിയ വിര്‍ച്ച്വല്‍ ഹാര്‍ഡ്‌വെയര്‍ കാണിക്കുക"
 
-#: ui/vmwindow.ui:321 virtManager/error.py:352
+#: ui/vmwindow.ui:335 virtManager/error.py:352
 msgid "Details"
 msgstr "വിശദവിവരങ്ങള്‍"
 
-#: ui/vmwindow.ui:346
+#: ui/vmwindow.ui:360
 msgid "Run"
 msgstr "പ്രവര്‍ത്തിപ്പിക്കുക"
 
-#: ui/vmwindow.ui:361
+#: ui/vmwindow.ui:375
 msgid "Pause"
 msgstr "തല്‍ക്കാലികമായി നിര്‍ത്തുക"
 
-#: ui/vmwindow.ui:399
+#: ui/vmwindow.ui:413
 msgid "Snapshots"
 msgstr "സ്നാപ്പ്ഷോട്ടുകള്‍"
 
-#: ui/vmwindow.ui:413
+#: ui/vmwindow.ui:427
 msgid "Switch to fullscreen view"
 msgstr "പൂര്‍ണ്ണ സ്ക്രീന്‍ കാഴ്ചയിലേക്ക് മാറുക"
 
-#: ui/vmwindow.ui:438
+#: ui/vmwindow.ui:452
 msgid "Begin Installation"
 msgstr "ഇന്‍സ്റ്റലേഷന്‍ ആരംഭിയ്ക്കുക"
 
-#: ui/vmwindow.ui:440
+#: ui/vmwindow.ui:454
 msgid "_Begin Installation"
 msgstr "ഇന്‍സ്റ്റലേഷന്‍ _ആരംഭിയ്ക്കുക"
 
-#: ui/vmwindow.ui:455
+#: ui/vmwindow.ui:469
 #, fuzzy
 msgid "_Cancel Installation"
 msgstr "ഇന്‍സ്റ്റലേഷന്‍ _ആരംഭിയ്ക്കുക"
@@ -2030,7 +2030,7 @@ msgstr ""
 msgid "Error launching 'About' dialog: %s"
 msgstr "'സംബന്ധിച്ചു്' ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/addhardware.py:160 virtManager/details/details.py:612
+#: virtManager/addhardware.py:160 virtManager/details/details.py:602
 msgid "Hardware"
 msgstr ""
 
@@ -2049,7 +2049,7 @@ msgid "Network"
 msgstr "നെറ്റ്‍വര്‍ക്ക്"
 
 #: virtManager/addhardware.py:217 virtManager/addhardware.py:1009
-#: virtManager/details/details.py:198
+#: virtManager/details/details.py:194
 msgid "Input"
 msgstr "ഇന്‍പുട്ട്"
 
@@ -2099,7 +2099,7 @@ msgstr ""
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt പതിപ്പ് വീഡിയോ ഡിവൈസുകളെ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:258
+#: virtManager/addhardware.py:254 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "വാച്ച്ഡോഗ്"
@@ -2109,7 +2109,7 @@ msgid "Filesystem"
 msgstr ""
 
 #: virtManager/addhardware.py:258 virtManager/addhardware.py:1021
-#: virtManager/details/details.py:256
+#: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "സ്മാര്‍ട്ട്കാര്‍ഡ്"
 
@@ -2121,12 +2121,12 @@ msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍"
 msgid "TPM"
 msgstr "ടിപിഎം"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:248
+#: virtManager/addhardware.py:264 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "RNG"
 
 #: virtManager/addhardware.py:265 virtManager/addhardware.py:1029
-#: virtManager/details/details.py:255
+#: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "പാനിക്ക് നോട്ടിഫയര്‍"
 
@@ -2134,7 +2134,7 @@ msgstr "പാനിക്ക് നോട്ടിഫയര്‍"
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr ""
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:257
+#: virtManager/addhardware.py:268 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr ""
 
@@ -2181,7 +2181,7 @@ msgstr "സ്പെയിസ് പോര്‍ട്ട്"
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2360
+#: virtManager/addhardware.py:436 virtManager/details/details.py:2347
 msgid "Floppy"
 msgstr ""
 
@@ -2310,15 +2310,15 @@ msgstr ""
 msgid "EvTouch USB Graphics Tablet"
 msgstr "ഇവി ടച്ച് യുഎസ്ബി ഗ്രാഫിക്സ് ടാബ്ലറ്റ്"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:197
+#: virtManager/addhardware.py:571 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "കീബോര്‍ഡ്"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:195
+#: virtManager/addhardware.py:572 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "മൌസ്"
 
-#: virtManager/addhardware.py:573 virtManager/details/details.py:193
+#: virtManager/addhardware.py:573 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "ടാബ്ലറ്റ്"
 
@@ -2351,7 +2351,7 @@ msgstr ""
 #: virtManager/addhardware.py:711 virtManager/addhardware.py:792
 #: virtManager/addhardware.py:802 virtManager/addhardware.py:922
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:94
+#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:103
 #: virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "ഹൈപ്പര്‍വൈസര്‍ ഡിഫോള്‍ട്ട്"
@@ -2400,7 +2400,7 @@ msgstr "റാന്‍ഡം നംബര്‍ ജനറേറ്റര്‍"
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2143
+#: virtManager/addhardware.py:1035 virtManager/details/details.py:2130
 #, python-format
 msgid "%s Device"
 msgstr "%s ഡിവൈസ്"
@@ -2859,8 +2859,8 @@ msgstr[1] "%(numcpus)d വരെ ലഭ്യമാണു്"
 msgid "No active connection to install on."
 msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്യുന്നതിനായി സജീവമായ കണക്ഷന്‍ ലഭ്യമല്ല."
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1793
-#: virtManager/device/gfxdetails.py:87 virtinst/domcapabilities.py:223
+#: virtManager/createvm.py:947 virtManager/details/details.py:1780
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:227
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
@@ -3254,47 +3254,37 @@ msgstr ""
 msgid "virt-manager does not support more than one graphical console"
 msgstr ""
 
-#: virtManager/details/console.py:383
-#, python-format
-msgid "%(vm-name)s on %(connection-name)s"
-msgstr ""
-
-#: virtManager/details/console.py:390
-#, python-format
-msgid "Press %s to release pointer."
-msgstr "പോയിന്റര്‍ വിടുവിയ്ക്കുന്നതിനായി %s അമര്‍ത്തുക."
-
-#: virtManager/details/console.py:507
+#: virtManager/details/console.py:492
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr ""
 
-#: virtManager/details/console.py:510
+#: virtManager/details/console.py:495
 msgid "Guest agent is not available."
 msgstr "ഗസ്റ്റ് ഏജന്റ് ലഭ്യമല്ല."
 
-#: virtManager/details/console.py:590
+#: virtManager/details/console.py:575
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:592
+#: virtManager/details/console.py:577
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:714
+#: virtManager/details/console.py:700
 msgid "Graphical console not configured for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ ക്രമികരിച്ചിട്ടില്ല"
 
-#: virtManager/details/console.py:721
+#: virtManager/details/console.py:707
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "'%s' എന്ന ഗ്രാഫിക്കല്‍ കണ്‍സോള്‍ രീതി ലഭ്യമാക്കുന്നതില്‍ സാധ്യമല്ല"
 
-#: virtManager/details/console.py:733
+#: virtManager/details/console.py:719
 msgid "Connecting to graphical console for guest"
 msgstr "ഗസ്റ്റിനുള്ള ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: virtManager/details/console.py:752
+#: virtManager/details/console.py:738
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3302,361 +3292,366 @@ msgid ""
 "%s"
 msgstr "ഗ്രാഫിക്കല്‍ കണ്‍സോളിലേക്കു് കണക്ട് ചെയ്യുന്നു"
 
-#: virtManager/details/console.py:809
+#: virtManager/details/console.py:795
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: virtManager/details/console.py:831
+#: virtManager/details/console.py:817
 msgid "USB redirection error"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍ പിശക്"
 
-#: virtManager/details/console.py:840
+#: virtManager/details/console.py:826
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:846
+#: virtManager/details/console.py:832
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:851 virtManager/details/console.py:983
+#: virtManager/details/console.py:837 virtManager/details/console.py:969
 msgid "Viewer disconnected."
 msgstr ""
 
-#: virtManager/details/details.py:166
+#: virtManager/details/console.py:973
+#, python-format
+msgid "Press %s to release pointer."
+msgstr "പോയിന്റര്‍ വിടുവിയ്ക്കുന്നതിനായി %s അമര്‍ത്തുക."
+
+#: virtManager/details/details.py:162
 #, fuzzy, python-format
 #| msgid "Floppy device"
 msgid "Floppy %(index)d"
 msgstr "ഫ്ലോപ്പി ഡിവൈസ്"
 
-#: virtManager/details/details.py:172
+#: virtManager/details/details.py:168
 #, fuzzy, python-format
 #| msgid "USB Redirection"
 msgid "%(bus)s CDROM %(index)d"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍"
 
-#: virtManager/details/details.py:177
+#: virtManager/details/details.py:173
 #, fuzzy, python-format
 #| msgid "USB Redirection"
 msgid "%(bus)s Disk %(index)d"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍"
 
-#: virtManager/details/details.py:181
+#: virtManager/details/details.py:177
 #, fuzzy, python-format
 #| msgid "USB Redirection"
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍"
 
-#: virtManager/details/details.py:189
+#: virtManager/details/details.py:185
 #, python-format
 msgid "NIC %(mac)s"
 msgstr ""
 
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:198
 #, python-format
 msgid "Serial %(num)d"
 msgstr ""
 
-#: virtManager/details/details.py:206
+#: virtManager/details/details.py:202
 #, python-format
 msgid "Parallel %(num)d"
 msgstr ""
 
-#: virtManager/details/details.py:210
+#: virtManager/details/details.py:206
 #, fuzzy, python-format
 #| msgid "Console"
 msgid "Console %(num)d"
 msgstr "കണ്‍സോള്‍ "
 
-#: virtManager/details/details.py:215
+#: virtManager/details/details.py:211
 #, fuzzy, python-format
 #| msgid "Channel Device"
 msgid "Channel %(name)s"
 msgstr "ചാനല്‍ ഡിവൈസ്"
 
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:213
 #, fuzzy, python-format
 #| msgid "Channel Device"
 msgid "Channel %(type)s"
 msgstr "ചാനല്‍ ഡിവൈസ്"
 
-#: virtManager/details/details.py:221
+#: virtManager/details/details.py:217
 #, python-format
 msgid "Display %s"
 msgstr "%s കാണിക്കുക"
 
-#: virtManager/details/details.py:223
+#: virtManager/details/details.py:219
 #, fuzzy, python-format
 #| msgid "USB Redirection"
 msgid "%(bus)s Redirector %(index)d"
 msgstr "യുഎസ്ബി റീഡയറക്ഷന്‍"
 
-#: virtManager/details/details.py:230
+#: virtManager/details/details.py:226
 #, python-format
 msgid "Sound %s"
 msgstr ""
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:228
 #, python-format
 msgid "Video %s"
 msgstr "വീഡിയോ %s"
 
-#: virtManager/details/details.py:234
+#: virtManager/details/details.py:230
 #, fuzzy, python-format
 #| msgid "Filesystem %s"
 msgid "Filesystem %(path)s"
 msgstr "ഫയല്‍സിസ്റ്റം %s"
 
-#: virtManager/details/details.py:238
+#: virtManager/details/details.py:234
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr ""
 
-#: virtManager/details/details.py:242
+#: virtManager/details/details.py:238
 #, python-format
 msgid "Controller %(controller)s"
 msgstr ""
 
-#: virtManager/details/details.py:247
+#: virtManager/details/details.py:243
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "RNG %(device)s"
 msgstr "സിഡിറോം ഡിവൈസ്"
 
-#: virtManager/details/details.py:251
+#: virtManager/details/details.py:247
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "TPM %(device)s"
 msgstr "സിഡിറോം ഡിവൈസ്"
 
-#: virtManager/details/details.py:252
+#: virtManager/details/details.py:248
 #, python-format
 msgid "TPM v%(version)s"
 msgstr ""
 
-#: virtManager/details/details.py:550
+#: virtManager/details/details.py:540
 msgid "_Add Hardware"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ _ചേര്‍ക്കുക"
 
-#: virtManager/details/details.py:560
+#: virtManager/details/details.py:550
 msgid "_Remove Hardware"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ _നീക്കം ചെയ്യുക"
 
-#: virtManager/details/details.py:683
+#: virtManager/details/details.py:673
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt അല്ലെങ്കില്‍ ഹൈപ്പര്‍വൈസര്‍ യുഇഎഫ്ഐ പിന്തുണയ്ക്കുന്നില്ല."
 
-#: virtManager/details/details.py:686
+#: virtManager/details/details.py:676
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: virtManager/details/details.py:691
+#: virtManager/details/details.py:681
 msgid "UEFI not found"
 msgstr ""
 
-#: virtManager/details/details.py:740
+#: virtManager/details/details.py:730
 msgid "Version"
 msgstr "പതിപ്പു്"
 
-#: virtManager/details/details.py:802
+#: virtManager/details/details.py:792
 msgid "Application Default"
 msgstr "ആപ്ലിക്കേഷന്‍ ഡീഫോള്‍ട്ട്"
 
-#: virtManager/details/details.py:804
+#: virtManager/details/details.py:794
 msgid "Hypervisor Default"
 msgstr "ഹൈപ്പര്‍വൈസര്‍ ഡീഫോള്‍ട്ട്"
 
-#: virtManager/details/details.py:806
+#: virtManager/details/details.py:796
 msgid "Clear CPU configuration"
 msgstr "സിപിയു ക്രമീകരണം വെടിപ്പാക്കുക"
 
-#: virtManager/details/details.py:824
+#: virtManager/details/details.py:814
 msgid "Disk bus:"
 msgstr ""
 
-#: virtManager/details/details.py:1024
+#: virtManager/details/details.py:1027
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ ഡയലോഗ് ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/details/details.py:1030
+#: virtManager/details/details.py:1033
 msgid "Are you sure you want to remove this device?"
 msgstr "നിങ്ങള്‍ക്ക് ഈ ഡിവൈസ് നീക്കം ചെയ്യണമെന്നുറപ്പാണോ?"
 
-#: virtManager/details/details.py:1277 virtManager/details/details.py:1792
-#: virtManager/details/details.py:1811 virtManager/details/details.py:2005
+#: virtManager/details/details.py:1280 virtManager/details/details.py:1779
+#: virtManager/details/details.py:1798 virtManager/details/details.py:1992
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: virtManager/details/details.py:1359
+#: virtManager/details/details.py:1362
 #, python-format
 msgid "Error applying changes: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1480
+#: virtManager/details/details.py:1483
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "ഓട്ടോസ്റ്റാര്‍ട്ട് മൂല്ല്യം മാറ്റുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/details/details.py:1497
+#: virtManager/details/details.py:1500
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "ഒരു കേര്‍ണല്‍ പാഥ് വ്യക്തമാക്കാതെ initrd സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1503
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "ഒരു കേര്‍ണല്‍ പാഥ് വ്യക്തമാക്കാതെ കേര്‍ണല്‍ ആര്‍ഗ്യുമെന്റുകള്‍ സജ്ജമാക്കുവാന്‍ സാധ്യമല്ല"
 
-#: virtManager/details/details.py:1507
+#: virtManager/details/details.py:1510
 msgid "An init path must be specified"
 msgstr "ഒരു init പാഥ് നല്‍കേണ്ടതുണ്ടു്"
 
-#: virtManager/details/details.py:1521 virtManager/device/addstorage.py:285
+#: virtManager/details/details.py:1524 virtManager/device/addstorage.py:285
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "ഡിസ്ക് %s നിലവില്‍ മറ്റു് %s ഗസ്റ്റുകള്‍ ഉപയോഗിയ്ക്കുന്നു."
 
-#: virtManager/details/details.py:1525 virtManager/device/addstorage.py:289
+#: virtManager/details/details.py:1528 virtManager/device/addstorage.py:289
 msgid "Do you really want to use the disk?"
 msgstr "നിങ്ങള്‍ക്കു് ഡിസ്ക് ഉപയോഗിക്കണമോ?"
 
-#: virtManager/details/details.py:1715
+#: virtManager/details/details.py:1702
 msgid "Remove this device from the virtual machine"
 msgstr ""
 
-#: virtManager/details/details.py:1771
+#: virtManager/details/details.py:1758
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "ഹാര്‍ഡ്‌വെയര്‍ താള്‍ പുതുക്കുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/details/details.py:1866
+#: virtManager/details/details.py:1853
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: virtManager/details/details.py:1878
+#: virtManager/details/details.py:1865
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr ""
 
-#: virtManager/details/details.py:1879
+#: virtManager/details/details.py:1866
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr ""
 
-#: virtManager/details/details.py:1882
+#: virtManager/details/details.py:1869
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr ""
 
-#: virtManager/details/details.py:1883
+#: virtManager/details/details.py:1870
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr ""
 
-#: virtManager/details/details.py:1885 virtManager/details/details.py:1886
-#: virtManager/details/details.py:1887 virtManager/details/details.py:1888
+#: virtManager/details/details.py:1872 virtManager/details/details.py:1873
+#: virtManager/details/details.py:1874 virtManager/details/details.py:1875
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "പ്രവര്‍ത്തന രഹിതം"
 
-#: virtManager/details/details.py:1896
+#: virtManager/details/details.py:1883
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: virtManager/details/details.py:2055
+#: virtManager/details/details.py:2041
 msgid "Absolute Movement"
 msgstr "ആബ്സല്യൂട്ട് മൂവ്മെന്റ്"
 
-#: virtManager/details/details.py:2057
+#: virtManager/details/details.py:2043
 msgid "Relative Movement"
 msgstr "റിലേറ്റീവ് മൂവ്മെന്റ്"
 
-#: virtManager/details/details.py:2066 virtManager/details/details.py:2240
-#: virtManager/details/details.py:2243
+#: virtManager/details/details.py:2052 virtManager/details/details.py:2227
+#: virtManager/details/details.py:2230
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: virtManager/details/details.py:2070
+#: virtManager/details/details.py:2056
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s സര്‍വര്‍"
 
-#: virtManager/details/details.py:2135
+#: virtManager/details/details.py:2122
 msgid "Serial Device"
 msgstr "സീരിയല്‍ ഡിവൈസ്"
 
-#: virtManager/details/details.py:2137
+#: virtManager/details/details.py:2124
 msgid "Parallel Device"
 msgstr "പാരലല്‍ ഡിവൈസ്"
 
-#: virtManager/details/details.py:2139
+#: virtManager/details/details.py:2126
 msgid "Console Device"
 msgstr "കണ്‍സോള്‍ ഡിവൈസ്"
 
-#: virtManager/details/details.py:2141
+#: virtManager/details/details.py:2128
 msgid "Channel Device"
 msgstr "ചാനല്‍ ഡിവൈസ്"
 
-#: virtManager/details/details.py:2151
+#: virtManager/details/details.py:2138
 msgid "Primary Console"
 msgstr "പ്രൈമറി കണ്‍സോള്‍"
 
-#: virtManager/details/details.py:2207
+#: virtManager/details/details.py:2194
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: virtManager/details/details.py:2224
+#: virtManager/details/details.py:2211
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2250
+#: virtManager/details/details.py:2237
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr ""
 
-#: virtManager/details/details.py:2256 virtManager/details/details.py:2266
+#: virtManager/details/details.py:2243 virtManager/details/details.py:2253
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2357
+#: virtManager/details/details.py:2344
 msgid "Hard Disk"
 msgstr ""
 
-#: virtManager/details/details.py:2358
+#: virtManager/details/details.py:2345
 msgid "CDROM"
 msgstr ""
 
-#: virtManager/details/details.py:2359
+#: virtManager/details/details.py:2346
 msgid "Network (PXE)"
 msgstr ""
 
-#: virtManager/details/details.py:2371
+#: virtManager/details/details.py:2361
 msgid "No bootable devices"
 msgstr "ബൂട്ട് ചെയ്യുവാന്‍ സാധ്യമായ ഡിവൈസുകളില്ല"
 
-#: virtManager/details/details.py:2418
+#: virtManager/details/details.py:2408
 msgid "Overview"
 msgstr "ഓവര്‍ വ്യൂ"
 
-#: virtManager/details/details.py:2419
+#: virtManager/details/details.py:2409
 msgid "OS information"
 msgstr "ഒഎസ് വിവരം"
 
-#: virtManager/details/details.py:2421
+#: virtManager/details/details.py:2411
 msgid "Performance"
 msgstr ""
 
-#: virtManager/details/details.py:2423
+#: virtManager/details/details.py:2413
 msgid "CPUs"
 msgstr ""
 
-#: virtManager/details/details.py:2425
+#: virtManager/details/details.py:2415
 msgid "Boot Options"
 msgstr ""
 
@@ -3850,7 +3845,7 @@ msgid ""
 "The credential type %s is not supported"
 msgstr ""
 
-#: virtManager/details/viewers.py:568
+#: virtManager/details/viewers.py:569
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
@@ -3890,31 +3885,31 @@ msgstr "_മാതൃക:"
 msgid "_Source path:"
 msgstr "ശ്രോ_തസ്സിലേക്കുള്ള പാഥ്:"
 
-#: virtManager/device/gfxdetails.py:78
+#: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
 msgstr "സ്പയിസ് സര്‍വര്‍"
 
-#: virtManager/device/gfxdetails.py:79
+#: virtManager/device/gfxdetails.py:88
 msgid "VNC server"
 msgstr "വിഎന്‍സി സര്‍വര്‍"
 
-#: virtManager/device/gfxdetails.py:86
+#: virtManager/device/gfxdetails.py:95
 msgid "Address"
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:95
+#: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
 msgstr "പ്രാദേശിക ഹോസ്റ്റ് മാത്രം"
 
-#: virtManager/device/gfxdetails.py:96
+#: virtManager/device/gfxdetails.py:105
 msgid "All interfaces"
 msgstr "എല്ലാ സംയോജകഘടകങ്ങളും"
 
-#: virtManager/device/gfxdetails.py:103
+#: virtManager/device/gfxdetails.py:112
 msgid "Auto"
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:232
+#: virtManager/device/gfxdetails.py:216
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr ""
@@ -4371,31 +4366,31 @@ msgstr ""
 msgid "Error launching manager: %s"
 msgstr "പാലകനെ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/manager.py:301
+#: virtManager/manager.py:302
 msgid "D_etails"
 msgstr "_വിവരങ്ങള്‍"
 
-#: virtManager/manager.py:378
+#: virtManager/manager.py:379
 msgid "CPU usage"
 msgstr "CPU ഉപയോഗം"
 
-#: virtManager/manager.py:379
+#: virtManager/manager.py:380
 msgid "Host CPU usage"
 msgstr "ഹോസ്റ്റ് സിപിയു ഉപയോഗം"
 
-#: virtManager/manager.py:380
+#: virtManager/manager.py:381
 msgid "Memory usage"
 msgstr "മെമ്മറി ഉപയോഗം"
 
-#: virtManager/manager.py:381
+#: virtManager/manager.py:382
 msgid "Disk I/O"
 msgstr "ഡിസ്ക് I/O"
 
-#: virtManager/manager.py:382
+#: virtManager/manager.py:383
 msgid "Network I/O"
 msgstr "നെറ്റ്‌വര്‍ക്ക് I/O"
 
-#: virtManager/manager.py:497
+#: virtManager/manager.py:498
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -4409,33 +4404,33 @@ msgstr ""
 "\n"
 "നിങ്ങള്‍ക്കുറപ്പാണോ?"
 
-#: virtManager/manager.py:574
+#: virtManager/manager.py:575
 #, fuzzy, python-format
 #| msgid "Double click to connect"
 msgid "%(uri)s (Double click to connect)"
 msgstr "കണക്ട് ചെയ്യുന്നതിനായി ഡബിള്‍ ക്ലിക്ക് ചെയ്യുക"
 
-#: virtManager/manager.py:581
+#: virtManager/manager.py:582
 #, fuzzy, python-format
 #| msgid "Connection not active."
 msgid "%(connection)s - Not Connected"
 msgstr "കണക്ഷന്‍ സജീവമല്ല."
 
-#: virtManager/manager.py:583
+#: virtManager/manager.py:584
 #, fuzzy, python-format
 #| msgid "Connecting..."
 msgid "%(connection)s - Connecting..."
 msgstr "കണക്ട് ചെയ്യുന്നു..."
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:381
+#: virtManager/manager.py:760 virtManager/vmwindow.py:378
 msgid "_Restore"
 msgstr "_വീണ്ടെടുക്കുക"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:409
+#: virtManager/manager.py:797 virtManager/vmwindow.py:419
 msgid "Resume the virtual machine"
 msgstr ""
 
-#: virtManager/manager.py:912
+#: virtManager/manager.py:913
 msgid "Disabled in preferences dialog."
 msgstr "മുന്‍ഗണനകള്‍ക്കുള്ള ഡയലോഗില്‍ പ്രവര്‍ത്തന രഹിതമാക്കിയിരിക്കുന്നു."
 
@@ -4534,11 +4529,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "സജീവമല്ലാത്ത വിഎം ക്രമീകരണത്തില്‍ വ്യക്തമാക്കിയ ഡിവൈസ് ലഭ്യമല്ല: %s"
 
-#: virtManager/object/domain.py:1377
+#: virtManager/object/domain.py:1374
 msgid "Saving domain to disk"
 msgstr "ഡിസ്കിലേക്കു് ഡൊമെയിന്‍ സൂക്ഷിയ്ക്കുന്നു"
 
-#: virtManager/object/domain.py:1429
+#: virtManager/object/domain.py:1426
 msgid "Migrating domain"
 msgstr "ഡൊമെിന്‍ നീക്കുന്നു"
 
@@ -4861,7 +4856,7 @@ msgstr "ഡൊമെയിന്‍ വീണ്ടും സജ്ജമാക�
 msgid "Error launching details: %s"
 msgstr "വിശദവിവരങ്ങള്‍ ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/vmwindow.py:223
+#: virtManager/vmwindow.py:225
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
 msgstr ""
@@ -4870,28 +4865,33 @@ msgstr ""
 "\n"
 "നിങ്ങള്‍ക്കുറപ്പാണോ?"
 
-#: virtManager/vmwindow.py:421
+#: virtManager/vmwindow.py:387
+#, python-format
+msgid "%(vm-name)s on %(connection-name)s"
+msgstr ""
+
+#: virtManager/vmwindow.py:431
 msgid "Manage VM snapshots"
 msgstr "വിഎം സ്നാപ്പ്ഷോട്ടുകള്‍ കൈകാര്യം ചെയ്യുക"
 
-#: virtManager/vmwindow.py:504
+#: virtManager/vmwindow.py:510
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "സ്ക്രീന്‍ഷോട്ട് എടുക്കുന്നതില്‍ പിശക്: %s"
 
-#: virtManager/vmwindow.py:512
+#: virtManager/vmwindow.py:518
 msgid "Error initializing spice USB device widget"
 msgstr "സ്പയിസ് യുഎസ്ബി ഡിവൈസ് വിഡ്ജറ്റ് ആരംഭിയ്ക്കുന്നതില്‍ പിശക്"
 
-#: virtManager/vmwindow.py:516
+#: virtManager/vmwindow.py:522
 msgid "Select USB devices for redirection"
 msgstr "റീഡയറക്ഷനു വേണ്ടി യുഎസ്ബി ഡിവൈസുകള്‍ തെരഞ്ഞെടുക്കുക"
 
-#: virtManager/vmwindow.py:548
+#: virtManager/vmwindow.py:554
 msgid "Save Virtual Machine Screenshot"
 msgstr "വിര്‍ച്ച്വല്‍ മഷീനിന്‍റെ സ്ക്രീന്‍ഷോട്ട് സൂക്ഷിക്കുക"
 
-#: virtManager/vmwindow.py:549
+#: virtManager/vmwindow.py:555
 msgid "PNG files"
 msgstr ""
 
@@ -5608,21 +5608,21 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: virtinst/domcapabilities.py:222
+#: virtinst/domcapabilities.py:226
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:228
+#: virtinst/domcapabilities.py:232
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:231
+#: virtinst/domcapabilities.py:235
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:307
+#: virtinst/domcapabilities.py:311
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
