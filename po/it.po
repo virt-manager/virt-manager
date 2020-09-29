@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-13 06:11+0000\n"
-"PO-Revision-Date: 2020-09-14 08:29+0000\n"
+"PO-Revision-Date: 2020-09-16 15:29+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5543,6 +5543,10 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
+"Esegue operazioni XPath sull'XML finale. Esempio:\n"
+"--xml ./cpu/@mode=host-passthrough\n"
+"--xml ./devices/disk[2]/serial=new-serial\n"
+"--xml xpath.delete=./clock"
 
 #: virtinst/cli.py:952
 #, python-format
@@ -6417,7 +6421,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:851
 msgid "User stopped the VM. Not rebooting."
-msgstr ""
+msgstr "L'utente ha fermato la VM; non viene riavviata."
 
 #: virtinst/virtinstall.py:854
 msgid "Restarting guest."
@@ -6688,7 +6692,7 @@ msgstr "Dispositivo %s con esito positivo."
 
 #: virtinst/virtxml.py:304
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml può essere usato solo con --edit"
 
 #: virtinst/virtxml.py:326
 msgid "No XML diff was generated. The requested changes will have no effect."
