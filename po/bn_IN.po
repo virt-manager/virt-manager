@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-15 06:10+0000\n"
+"POT-Creation-Date: 2020-09-19 06:10+0000\n"
 "PO-Revision-Date: 2017-02-05 04:04+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Bengali (India) (http://www.transifex.com/projects/p/virt-"
@@ -168,7 +168,7 @@ msgid "panic"
 msgstr "প্যানিক"
 
 #: ui/addhardware.ui:1525 ui/createnet.ui:831 ui/createpool.ui:487
-#: ui/createvm.ui:2477 ui/createvol.ui:531 ui/snapshotsnew.ui:271
+#: ui/createvm.ui:2477 ui/createvol.ui:496 ui/snapshotsnew.ui:271
 msgid "_Finish"
 msgstr "সমাপ্তি (_F)"
 
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Target:"
 msgstr ""
 
-#: ui/clone.ui:618 ui/createvol.ui:438 ui/details.ui:4386
+#: ui/clone.ui:618 ui/createvol.ui:403 ui/details.ui:4386
 msgid "Path:"
 msgstr "পাথ:"
 
@@ -776,31 +776,27 @@ msgstr "সরাসরি ভার্চুয়াল মেশিন দ্ব
 msgid "<b>Storage Volume Quota</b>"
 msgstr "<b>স্টোরেজ ভলিউম কোটা</b>"
 
-#: ui/createvol.ui:283
-msgid "available space:"
-msgstr "উপলব্ধ স্থান:"
-
-#: ui/createvol.ui:330 ui/createvol.ui:347
+#: ui/createvol.ui:295 ui/createvol.ui:312
 msgid "1.0"
 msgstr "1.0"
 
-#: ui/createvol.ui:364 ui/createvol.ui:376
+#: ui/createvol.ui:329 ui/createvol.ui:341
 msgid "GiB"
 msgstr "GiB"
 
-#: ui/createvol.ui:388
+#: ui/createvol.ui:353
 msgid "Max Ca_pacity:"
 msgstr "সর্বাধিক ধারণক্ষমতা: (_p)"
 
-#: ui/createvol.ui:402
+#: ui/createvol.ui:367
 msgid "_Allocation:"
 msgstr "বরাদ্দকরণ: (_A)"
 
-#: ui/createvol.ui:464
+#: ui/createvol.ui:429
 msgid "Browse..."
 msgstr "ব্রাউজ করুন..."
 
-#: ui/createvol.ui:483
+#: ui/createvol.ui:448
 msgid "Backing store"
 msgstr "ব্যাকিং স্টোর"
 
@@ -1310,10 +1306,6 @@ msgstr ""
 #: ui/gfxdetails.ui:378
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr ""
-
-#: ui/host.ui:10
-msgid "Connection Details"
-msgstr "সংযোগের বিবরণ"
 
 #: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
 msgid "_File"
@@ -2505,7 +2497,7 @@ msgstr "কাজ বাতিল করা হচ্ছে..."
 msgid "Completed"
 msgstr "সমাপ্ত"
 
-#: virtManager/clone.py:28 virtinst/cloner.py:183
+#: virtManager/clone.py:28 virtinst/cloner.py:181
 msgid "No storage to clone."
 msgstr "ক্লোন করার যোগ্য কোনো সংগ্রহস্থল উপলব্ধ নয়।"
 
@@ -2744,7 +2736,7 @@ msgid "Name '%s' already in use by another network."
 msgstr "'%s' নাম অপর নেটওয়ার্ক দ্বারা ইতিমধ্যেই ব্যবহৃত হচ্ছে।"
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:318
-#: virtManager/createvol.py:279
+#: virtManager/createvol.py:280
 #, python-format
 msgid "Error building XML: %s"
 msgstr ""
@@ -3086,21 +3078,26 @@ msgstr "ইনস্টলেশনে এগিয়ে যেতে সমস্
 msgid "Bootstraping container"
 msgstr ""
 
-#: virtManager/createvol.py:294
+#: virtManager/createvol.py:148
+#, python-format
+msgid "<b>%(volume)s's</b> available space: %(size)s"
+msgstr ""
+
+#: virtManager/createvol.py:295
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "ভলিউম নির্মাণ করতে ত্রুটি: %s"
 
-#: virtManager/createvol.py:310
+#: virtManager/createvol.py:311
 #, python-format
 msgid "Error validating volume: %s"
 msgstr ""
 
-#: virtManager/createvol.py:315
+#: virtManager/createvol.py:316
 msgid "Creating storage volume..."
 msgstr "সংগ্রহস্থলের ভলিউম নির্মাণ করা হচ্ছে..."
 
-#: virtManager/createvol.py:316
+#: virtManager/createvol.py:317
 msgid "Creating the storage volume may take a while..."
 msgstr "সংগ্রহস্থলের ভলিউম নির্মাণ করতে কিচু সময় ব্যয় হতে পারে..."
 
@@ -4053,10 +4050,16 @@ msgstr "পুনরায় জিজ্ঞাসা করা হবে না"
 msgid "Error launching host dialog: %s"
 msgstr "হোস্ট ডায়লগ আরম্ভ করতে ত্রুটি: %s"
 
-#: virtManager/host.py:170
+#: virtManager/host.py:168
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s, সর্বমোট %(maxmem)s"
+
+#: virtManager/host.py:178
+#, fuzzy, python-format
+#| msgid "Connecting..."
+msgid "%(connection)s - Connection Details"
+msgstr "সংযোগ করা হচ্ছে... "
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4225,26 +4228,26 @@ msgstr ""
 msgid "Error changing pool settings: %s"
 msgstr "পুল সেটিং পরিবর্তনে ত্রুটি: %s"
 
-#: virtManager/lib/connectauth.py:49
+#: virtManager/lib/connectauth.py:50
 msgid "Authentication required"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:153
+#: virtManager/lib/connectauth.py:154
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:159
+#: virtManager/lib/connectauth.py:160
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:163
+#: virtManager/lib/connectauth.py:164
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:167
+#: virtManager/lib/connectauth.py:168
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4254,45 +4257,39 @@ msgstr ""
 " - একটি Xen হোস্ট কার্নেল বুট হয়েছে\n"
 " - Xen পরিষেবা শুরু হয়েছে"
 
-#: virtManager/lib/connectauth.py:173
+#: virtManager/lib/connectauth.py:174
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:179
+#: virtManager/lib/connectauth.py:180
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "'libvirtd' ডিমন যে চলছে তা যাচাই করুন।"
 
-#: virtManager/lib/connectauth.py:182
+#: virtManager/lib/connectauth.py:183
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:194
+#: virtManager/lib/connectauth.py:195
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "ভার্চুয়াল মেশিন ম্যানেজার সংযোগ বিফল"
 
-#: virtManager/lib/connectauth.py:269
+#: virtManager/lib/connectauth.py:217
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:273
-msgid ""
-"libvirtd is installed but not running. Start the libvirtd service to manage "
-"virtualization on this host."
-msgstr ""
-
-#: virtManager/lib/connectauth.py:279
+#: virtManager/lib/connectauth.py:224
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:286
+#: virtManager/lib/connectauth.py:231
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4771,6 +4768,12 @@ msgstr "ভার্চুয়াল মেশিন ম্যানেজার 
 msgid "Error starting Virtual Machine Manager"
 msgstr "ভার্চুয়াল মেশিন ম্যানেজার আরম্ভ করতে সমস্যা"
 
+#: virtManager/virtmanager.py:45
+#, fuzzy, python-format
+#| msgid "Error starting Virtual Machine Manager"
+msgid "Error starting Virtual Machine Manager: %(error)s"
+msgstr "ভার্চুয়াল মেশিন ম্যানেজার আরম্ভ করতে সমস্যা"
+
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
 msgstr "পুনরায় বুট করুন (_R)"
@@ -4973,30 +4976,61 @@ msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 
-#: virtinst/capabilities.py:295
-#, python-format
-msgid "for arch '%s'"
-msgstr "'%s' অার্কের জন্য"
+#: virtinst/capabilities.py:296
+#, fuzzy, python-format
+#| msgid ""
+#| "Host does not support domain type %(domain)s%(machine)s for "
+#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+msgid ""
+"Host does not support virtualization type '%(virttype)s' for architecture "
+"'%(arch)s'"
+msgstr ""
+"হোস্ট সমর্থন করে না, ডোমেন ধরন %(domain)s%(machine)s, ভার্টুয়ালাইজেশন ধরন "
+"'%(virttype)s' arch '%(arch)s' এর জন্য"
 
-#: virtinst/capabilities.py:299
-#, python-format
-msgid "virtualization type '%s'"
-msgstr "ভার্টুয়ালাইজেশন ধরন '%s'"
+#: virtinst/capabilities.py:300
+#, fuzzy, python-format
+#| msgid ""
+#| "Host does not support domain type %(domain)s%(machine)s for "
+#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+msgid ""
+"Host does not support any virtualization options for architecture '%(arch)s'"
+msgstr ""
+"হোস্ট সমর্থন করে না, ডোমেন ধরন %(domain)s%(machine)s, ভার্টুয়ালাইজেশন ধরন "
+"'%(virttype)s' arch '%(arch)s' এর জন্য"
 
-#: virtinst/capabilities.py:301
-msgid "any virtualization options"
-msgstr "যেকোনো ভার্টুয়ালাইজেশন বিকল্প"
-
-#: virtinst/capabilities.py:303
-#, python-format
-msgid "Host does not support %(virttype)s %(arch)s"
+#: virtinst/capabilities.py:304
+#, fuzzy, python-format
+#| msgid "Host does not support %(virttype)s %(arch)s"
+msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "হোস্ট %(virttype)s %(arch)s সমর্থন করে না"
 
-#: virtinst/capabilities.py:311
-#, python-format
+#: virtinst/capabilities.py:308
+#, fuzzy
+#| msgid "any virtualization options"
+msgid "Host does not support any virtualization options"
+msgstr "যেকোনো ভার্টুয়ালাইজেশন বিকল্প"
+
+#: virtinst/capabilities.py:314
+#, fuzzy, python-format
+#| msgid ""
+#| "Host does not support domain type %(domain)s%(machine)s for "
+#| "virtualization type '%(virttype)s' arch '%(arch)s'"
 msgid ""
-"Host does not support domain type %(domain)s%(machine)s for virtualization "
-"type '%(virttype)s' arch '%(arch)s'"
+"Host does not support domain type %(domain)s with machine '%(machine)s' for "
+"virtualization type '%(virttype)s' with architecture '%(arch)s'"
+msgstr ""
+"হোস্ট সমর্থন করে না, ডোমেন ধরন %(domain)s%(machine)s, ভার্টুয়ালাইজেশন ধরন "
+"'%(virttype)s' arch '%(arch)s' এর জন্য"
+
+#: virtinst/capabilities.py:320
+#, fuzzy, python-format
+#| msgid ""
+#| "Host does not support domain type %(domain)s%(machine)s for "
+#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+msgid ""
+"Host does not support domain type %(domain)s for virtualization type "
+"'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
 "হোস্ট সমর্থন করে না, ডোমেন ধরন %(domain)s%(machine)s, ভার্টুয়ালাইজেশন ধরন "
 "'%(virttype)s' arch '%(arch)s' এর জন্য"
@@ -5067,11 +5101,18 @@ msgstr ""
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "'%s' ডোমেন খুঁজে পাওয়া গেল না: %s"
 
-#: virtinst/cli.py:571 virtinst/cli.py:574
+#. translators: option1 and option2 are command line options,
+#. e.g. -a or --disk
+#: virtinst/cli.py:480
+#, python-format
+msgid "Cannot use %(option1)s and %(option2)s at the same time"
+msgstr ""
+
+#: virtinst/cli.py:581 virtinst/cli.py:584
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "libvirt URI দিয়ে hypervisor সংযোগ করুন"
 
-#: virtinst/cli.py:589
+#: virtinst/cli.py:599
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5079,46 +5120,46 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:595
+#: virtinst/cli.py:605
 msgid "Don't automatically try to connect to the guest console"
 msgstr "গেস্ট কনসোলে স্বয়ংক্রিয় ভাবে সংযোগ করার চেষ্টা করবেন না"
 
-#: virtinst/cli.py:599
+#: virtinst/cli.py:609
 msgid "Don't boot guest after completing install."
 msgstr "ইনস্টল সম্পন্ন করার পরে গেস্ট বুট করবেন না।"
 
-#: virtinst/cli.py:603
+#: virtinst/cli.py:613
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "নামের বিরোধে টিক চিহ্ন দেবেন না, একই নাম দিয়ে কোনো গেস্ট ওভাররাইড করবেন না।"
 
-#: virtinst/cli.py:610
+#: virtinst/cli.py:620
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "গেস্ট তৈরি করার পরিবর্তে প্রস্তুত ডোমেন XML প্রিন্ট করুন।"
 
-#: virtinst/cli.py:629
+#: virtinst/cli.py:639
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "ইনস্টল প্রক্রিয়ার মধ্য দিয়ে যান, কিন্তু ডিভাইস তৈরি করবেন না বা গেস্ট নির্দিষ্ট করবেন "
 "না।"
 
-#: virtinst/cli.py:634
+#: virtinst/cli.py:644
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: virtinst/cli.py:638
+#: virtinst/cli.py:648
 msgid "Suppress non-error output"
 msgstr "non-error অাউটপুট সাবপ্রেস করুন"
 
-#: virtinst/cli.py:640
+#: virtinst/cli.py:650
 msgid "Print debugging information"
 msgstr "ডিবাগিং তথ্য মুদ্রণ করুন"
 
-#: virtinst/cli.py:646
+#: virtinst/cli.py:656
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5128,14 +5169,14 @@ msgstr ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 
-#: virtinst/cli.py:654
+#: virtinst/cli.py:664
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
 
-#: virtinst/cli.py:667
+#: virtinst/cli.py:677
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5143,14 +5184,14 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
 
-#: virtinst/cli.py:676
+#: virtinst/cli.py:686
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
 
-#: virtinst/cli.py:689
+#: virtinst/cli.py:699
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5158,7 +5199,7 @@ msgid ""
 "--graphics none\n"
 msgstr ""
 
-#: virtinst/cli.py:698
+#: virtinst/cli.py:708
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5174,41 +5215,41 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:709
+#: virtinst/cli.py:719
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
 
-#: virtinst/cli.py:714
+#: virtinst/cli.py:724
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: virtinst/cli.py:719
+#: virtinst/cli.py:729
 msgid "Configure a guest serial device"
 msgstr "একটি গেস্ট সিরিয়াল ডিভাইস কনফিগার করুন"
 
-#: virtinst/cli.py:722
+#: virtinst/cli.py:732
 msgid "Configure a guest parallel device"
 msgstr "একটি গেস্ট প্যারালাল ডিভাইস কনফিগার করুন"
 
-#: virtinst/cli.py:725
+#: virtinst/cli.py:735
 msgid "Configure a guest communication channel"
 msgstr "একটি গেস্ট যোগাযোগ চ্যানেল কনফিগার করুন"
 
-#: virtinst/cli.py:728
+#: virtinst/cli.py:738
 msgid "Configure a text console connection between the guest and host"
 msgstr "গেস্ট এবং হোস্টের মধ্যে একটি পরীক্ষা কনসোল সংযোগ কনফিগার করুন"
 
-#: virtinst/cli.py:732
+#: virtinst/cli.py:742
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr "গেস্টের সাথে ভাগ করার জন্য ফিজিক্যাল USB/PCI/etc হোস্ট ডিভাইস কনফিগার করুন"
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:750
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5218,19 +5259,19 @@ msgstr ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 
-#: virtinst/cli.py:748
+#: virtinst/cli.py:758
 msgid "Configure guest sound device emulation"
 msgstr "গেস্ট সাউন্ড ডিভাইস ইমিউলেশন কনফিগার করুন"
 
-#: virtinst/cli.py:759
+#: virtinst/cli.py:769
 msgid "Configure a guest watchdog device"
 msgstr "একটি গেস্ট ওয়াচ-ডগ ডিভাইস কনফিগার করুন"
 
-#: virtinst/cli.py:762
+#: virtinst/cli.py:772
 msgid "Configure guest video hardware."
 msgstr "গেস্ট ভিডিও হার্ডওয়্যার কনফিগার করুন।"
 
-#: virtinst/cli.py:765
+#: virtinst/cli.py:775
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5238,7 +5279,7 @@ msgstr ""
 "একটি গেস্ট স্মার্টকার্ড ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:769
+#: virtinst/cli.py:779
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5246,7 +5287,7 @@ msgstr ""
 "একটি গেস্ট পুনঃনির্দেশ ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:773
+#: virtinst/cli.py:783
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5254,7 +5295,7 @@ msgstr ""
 "একটি গেস্ট memballoon ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:777
+#: virtinst/cli.py:787
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5262,13 +5303,13 @@ msgstr ""
 "একটি গেস্ট TPM ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:781
+#: virtinst/cli.py:791
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:795
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5276,54 +5317,54 @@ msgstr ""
 "একটি গেস্ট প্যানিক ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--panic default"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:799
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:803
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:798
+#: virtinst/cli.py:808
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:815
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:819
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:823
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:828
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:822
+#: virtinst/cli.py:832
 msgid "Tune NUMA policy for the domain process."
 msgstr "ডোমেন প্রক্রিয়ার জন্য NUMA নীতি।"
 
-#: virtinst/cli.py:826
+#: virtinst/cli.py:836
 msgid "Tune memory policy for the domain process."
 msgstr "ডোমেন প্রক্রিয়ার জন্য মেমরি নীতি টিউন করুন।"
 
-#: virtinst/cli.py:830
+#: virtinst/cli.py:840
 msgid "Tune blkio policy for the domain process."
 msgstr "ডোমেন প্রক্রিয়ার জন্য blkio নীতি টিউন করুন।"
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:844
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5331,14 +5372,14 @@ msgstr ""
 "ডোমেন প্রক্রিয়ার জন্য মেমরি ব্যাকিং নীতি সেট করুন। উদাঃ\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:839
+#: virtinst/cli.py:849
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:845
+#: virtinst/cli.py:855
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5346,33 +5387,33 @@ msgstr ""
 "ডোমেন <clock> XML সেট করুন। উদাঃ\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:860
 msgid "Configure VM power management features"
 msgstr "VM পাওয়ার ব্যবস্থাপনা বৈশিষ্ট্য কনফিগার করুন"
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:864
 msgid "Configure VM lifecycle management policy"
 msgstr "VM লাইফ-সাইকেল ব্যবস্থাপনা নীতি কনফিগার করুন"
 
-#: virtinst/cli.py:858
+#: virtinst/cli.py:868
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "VM রিসোর্স বিভাজন কনফিগার করুন (cgroups)"
 
-#: virtinst/cli.py:862
+#: virtinst/cli.py:872
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:878
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:884
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5380,7 +5421,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:892
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5390,13 +5431,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:898
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:898
+#: virtinst/cli.py:908
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5405,26 +5446,26 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:906
+#: virtinst/cli.py:916
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:909
+#: virtinst/cli.py:919
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:911
+#: virtinst/cli.py:921
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:913
+#: virtinst/cli.py:923
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:923
+#: virtinst/cli.py:933
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5432,12 +5473,12 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:953
+#: virtinst/cli.py:963
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s অবশ্যই 'yes' বা 'no'"
 
-#: virtinst/cli.py:1138
+#: virtinst/cli.py:1148
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5445,17 +5486,17 @@ msgid ""
 msgstr ""
 "ডিভাইস ধরন '%(device_type)s' বিশিষ্টতা '%(property_name)s' মেলানোর পদ্ধতি অজানা"
 
-#: virtinst/cli.py:1450
+#: virtinst/cli.py:1460
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1506 virtinst/cli.py:1537
+#: virtinst/cli.py:1516 virtinst/cli.py:1547
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1886
+#: virtinst/cli.py:1896
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5463,88 +5504,88 @@ msgstr ""
 "গ্র্যাফিক্যাল কনসোলে সংযোগ করতে ব্যর্থ: virt-viewer ইনস্টল করা নেই। অনুগ্রহ করে "
 "'virt-viewer' প্যাকেজ ইনস্টল করুন।"
 
-#: virtinst/cli.py:1893
+#: virtinst/cli.py:1903
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "গ্র্যাফিক্সের অনুরোধ জানানো হয়েছে কিন্তু প্রদর্শন সেট করা নেই। virt-viewer চলছে না।"
 
-#: virtinst/cli.py:1904
+#: virtinst/cli.py:1914
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3261
+#: virtinst/cli.py:3271
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' এর অনুপযুক্ত মান: %s"
 
-#: virtinst/cli.py:3274
+#: virtinst/cli.py:3284
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "অজানা '%s' মান '%s'"
 
-#: virtinst/cli.py:3289
+#: virtinst/cli.py:3299
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "সংগ্রহস্থলের ভলিউম অবশ্যই vol=poolname/volname দিয়ে উল্লেখ করতে হবে"
 
-#: virtinst/cli.py:3727
+#: virtinst/cli.py:3737
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:45
+#: virtinst/cloner.py:44
 #, fuzzy, python-format
 #| msgid "Could not remove old vm '%s': %s"
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "পুরনো vm '%s' সরানো যায়নি: %s"
 
-#: virtinst/cloner.py:113
+#: virtinst/cloner.py:111
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr "ডোমেন '%s' খঁজে পাওয়া যায়নি।"
 
-#: virtinst/cloner.py:157
+#: virtinst/cloner.py:155
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr "বিদ্যমান সংগ্রহস্থল ভলিউমে ক্লোন বর্তমানে সমর্থিত নয়: '%s'"
 
-#: virtinst/cloner.py:178
+#: virtinst/cloner.py:176
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: virtinst/cloner.py:185
+#: virtinst/cloner.py:183
 msgid "Read Only"
 msgstr "শুধুমাত্র পাঠযোগ্য"
 
-#: virtinst/cloner.py:187
+#: virtinst/cloner.py:185
 #, fuzzy
 #| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
 msgstr "যৌথ ব্যবহারের জন্য সংগ্রহস্থলটি চিহ্নিত করা হয়েছে।"
 
-#: virtinst/cloner.py:249
+#: virtinst/cloner.py:247
 #, fuzzy, python-format
 #| msgid "Could not use path '%s' for cloning: %s"
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "ক্লোনিংয়ের জন্য '%s' পাথ ব্যবহার করা যায়নি: %s"
 
-#: virtinst/cloner.py:265
+#: virtinst/cloner.py:263
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "প্রকৃত ডিস্ক তথ্য নির্ধারণ করা যায়নি: %s"
 
-#: virtinst/cloner.py:316
+#: virtinst/cloner.py:314
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:351
+#: virtinst/cloner.py:349
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr "বিরোধ এড়াতে গ্র্যাফিক্স ডিভাইস পোর্ট autoport এ সেট করা হচ্ছে।"
 
-#: virtinst/cloner.py:488
+#: virtinst/cloner.py:486
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "নতুন গেস্টের নাম অবৈধ: %s"
@@ -5643,7 +5684,7 @@ msgstr "'%s' অস্তিত্বহীন ডিস্কের জন্�
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s ক্লোন করা হচ্ছে"
 
-#: virtinst/diskbackend.py:622
+#: virtinst/diskbackend.py:623
 #, fuzzy, python-format
 #| msgid "Error cloning diskimage %s to %s: %s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
@@ -5726,29 +5767,29 @@ msgstr "ডোমেন তৈরি করা হচ্ছে..."
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:70
+#: virtinst/install/installertreemedia.py:69
 #, fuzzy, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr "ইনস্টল অবস্থান যাচাইকরণে ত্রুটি: %s"
 
-#: virtinst/install/installertreemedia.py:119
+#: virtinst/install/installertreemedia.py:117
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:122
+#: virtinst/install/installertreemedia.py:120
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:145
+#: virtinst/install/installertreemedia.py:143
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:212
+#: virtinst/install/installertreemedia.py:210
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:270
+#: virtinst/install/installertreemedia.py:268
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -5816,18 +5857,18 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:69
+#: virtinst/install/urlfetcher.py:68
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "%s ফাইল প্রাপ্ত করা যায়নি: %s"
 
-#: virtinst/install/urlfetcher.py:76
+#: virtinst/install/urlfetcher.py:74
 #, python-format
 msgid "Retrieving file %s..."
 msgstr "%s ফাইল উদ্ধার করা হচ্ছে..."
 
-#: virtinst/install/urlfetcher.py:249
+#: virtinst/install/urlfetcher.py:246
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"
@@ -5889,16 +5930,16 @@ msgstr ""
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "ডিফল্ট সংগ্রহস্থলের পুল '%s' নির্মাণ করা যায়নি: %s"
 
-#: virtinst/storage.py:220 virtinst/storage.py:550
+#: virtinst/storage.py:219 virtinst/storage.py:550
 msgid "Storage object"
 msgstr "সংগ্রহস্থল অবজেক্ট"
 
-#: virtinst/storage.py:226
+#: virtinst/storage.py:225
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "'%s' নাম অপর পুল দ্বারা ইতিমধ্যেই ব্যবহৃত হচ্ছে।"
 
-#: virtinst/storage.py:389
+#: virtinst/storage.py:388
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "সংগ্রহস্থল পুল নির্দিষ্ট করা যায়নি: %s"
@@ -5934,7 +5975,7 @@ msgstr "লজিক্যাল ভলিউম স্পার্স করা
 msgid "Allocating '%s'"
 msgstr "'%s' নির্দিষ্ট করা হচ্ছে"
 
-#: virtinst/storage.py:729
+#: virtinst/storage.py:730
 #, fuzzy, python-format
 #| msgid ""
 #| "There is not enough free space on the storage pool to create the volume. "
@@ -5946,7 +5987,7 @@ msgstr ""
 "ভলিউম তৈরি করার জন্য সংগ্রহস্থল পুলে পর্যাপ্ত খালি জায়গা নেই। (%d M অনুরোধ জানানো "
 "নির্দিষ্টকরণ > %d M উপলব্ধ)"
 
-#: virtinst/storage.py:736
+#: virtinst/storage.py:737
 #, fuzzy, python-format
 #| msgid ""
 #| "The requested volume capacity will exceed the available pool space when "
@@ -5984,7 +6025,7 @@ msgstr ""
 "সরঞ্জামের সাহায্যে পাসওয়ার্ড পরিবর্তন, স্ট্যাটিক অাইপি ঠিকানা পরিবর্তন, ইত্যাদি সম্ভব "
 "নয়। এই ধরনের পরিবর্তনের জন্য, দয়া করে virt-sysprep(1) দেখুন।"
 
-#: virtinst/virtclone.py:80 virtinst/virtinstall.py:948
+#: virtinst/virtclone.py:80 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "সাধারণ বিকল্প"
 
@@ -6059,8 +6100,8 @@ msgid ""
 msgstr ""
 "ক্লোন গেস্টের জন্য নতুন নির্দিষ্ট MAC ঠিকানা। ডিফল্ট হল এক অনির্দিষ্ট ভাবে প্রস্তুত MAC"
 
-#: virtinst/virtclone.py:123 virtinst/virtinstall.py:1053
-#: virtinst/virtxml.py:408
+#: virtinst/virtclone.py:123 virtinst/virtinstall.py:1054
+#: virtinst/virtxml.py:419
 msgid "Miscellaneous Options"
 msgstr "বিবিধ বিকল্প"
 
@@ -6081,15 +6122,21 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "'%s' ক্লোন সফলভাবে তৈরি হয়েছে।"
 
-#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1162
+#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1163
 msgid "Installation aborted at user request"
 msgstr "ব্যবহারকারীর অনুরোধের ভিত্তিতে ইনস্টলেশান পরিত্যাগ করা হয়েছে"
 
-#: virtinst/virtinstall.py:126
+#: virtinst/virtinstall.py:59
+msgid ""
+"-c specified with what looks like a libvirt URI. Did you mean to use --"
+"connect? If not, use --cdrom instead"
+msgstr ""
+
+#: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
 msgstr "স্টোরেজ এবং ব্যবহার নির্দিষ্ট করা যায় না --nodisks"
 
-#: virtinst/virtinstall.py:130
+#: virtinst/virtinstall.py:131
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -6097,28 +6144,24 @@ msgstr ""
 "--disk বিকল্পের সংগে mix --file, --nonsparse, বা --file-size করা যায় না। --"
 "disk PATH[,size=SIZE][,sparse=yes|no] ব্যবহার করুন"
 
-#: virtinst/virtinstall.py:179
-msgid "Cannot mix both --bridge and --network arguments"
-msgstr "--bridge এবং --network অার্গুমেন্ট মেশানো যায় না"
-
-#: virtinst/virtinstall.py:224
+#: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "--graphics এবং পুরনো শৈলীর গ্র্যাফিক্যাল বিকল্প মেশানো যায় না"
 
-#: virtinst/virtinstall.py:228
+#: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 "VNC, SDL, --graphics বা --nographics এর মধ্যে একটির বেশি উল্লেখ করা যায় না"
 
-#: virtinst/virtinstall.py:311
+#: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
 msgstr "--memory পরিমাণ MiB তে প্রয়োজন"
 
-#: virtinst/virtinstall.py:315
+#: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr "--disk স্টোরেজ অবশ্যই উল্লেখ করতে হবে (--disk none দিয়ে ওভাররাইড করুন)"
 
-#: virtinst/virtinstall.py:319
+#: virtinst/virtinstall.py:320
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6127,7 +6170,7 @@ msgstr ""
 "ইনস্টল করার এক পদ্ধতি অবশ্যই নির্দিষ্ট করতে হবে\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:331
+#: virtinst/virtinstall.py:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6135,28 +6178,28 @@ msgstr ""
 "CDROM মিডিয়া ডিফল্ট ভাবে টেক্সট কনসোলে মুদ্রণ করে না, তাই অাপনি সম্ভবত টেক্সট "
 "ইনস্টল অাউটপুট দেখবেন না। অাপনি  --location ব্যবহার করতে চাইতে পারেন।"
 
-#: virtinst/virtinstall.py:334
+#: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "CDROM মিডিয়া দিয়ে --location ব্যবহারের উদাহরণের জন্য ম্যান পৃষ্ঠা দেখুন"
 
-#: virtinst/virtinstall.py:347
+#: virtinst/virtinstall.py:348
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
 
-#: virtinst/virtinstall.py:352
+#: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
 
-#: virtinst/virtinstall.py:359
+#: virtinst/virtinstall.py:360
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
 
-#: virtinst/virtinstall.py:366
+#: virtinst/virtinstall.py:367
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
@@ -6164,51 +6207,51 @@ msgstr ""
 "কোনো অপারেটিং সিস্টেম সনাক্ত করা হয়নি, VM পারফরমেন্স প্রভাবিত হতে পারে। সর্বোত্তম "
 "ফলাফলের জন্য --os-variant সমেত একটি OS নির্দিষ্ট করুন।"
 
-#: virtinst/virtinstall.py:379
+#: virtinst/virtinstall.py:380
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr ""
 
-#: virtinst/virtinstall.py:458
+#: virtinst/virtinstall.py:459
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr ""
 
-#: virtinst/virtinstall.py:468
+#: virtinst/virtinstall.py:469
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:487
+#: virtinst/virtinstall.py:488
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:502
+#: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 
-#: virtinst/virtinstall.py:548
+#: virtinst/virtinstall.py:549
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "ইনস্টল অবস্থান যাচাইকরণে ত্রুটি: %s"
 
-#: virtinst/virtinstall.py:551
+#: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
 msgstr ""
 
-#: virtinst/virtinstall.py:624
+#: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "গেস্টের জন্য কোনো কনসোল লঞ্চ করার নেই, --wait -1 হল ডিফল্ট"
 
-#: virtinst/virtinstall.py:660
+#: virtinst/virtinstall.py:661
 #, fuzzy
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting for the installation to complete."
 msgstr "ইনস্টল সম্পূর্ণ হতে খুব অল্প সময় বাকি অাছে।"
 
-#: virtinst/virtinstall.py:661
+#: virtinst/virtinstall.py:662
 #, fuzzy, python-format
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting %(minutes)d minute for the installation to complete."
@@ -6216,60 +6259,60 @@ msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "ইনস্টল সম্পূর্ণ হতে খুব অল্প সময় বাকি অাছে।"
 msgstr[1] "ইনস্টল সম্পূর্ণ হতে খুব অল্প সময় বাকি অাছে।"
 
-#: virtinst/virtinstall.py:684
+#: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:696
+#: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:723
+#: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/virtinstall.py:760
+#: virtinst/virtinstall.py:761
 msgid "Domain has crashed."
 msgstr "ডোমেন ক্র্যাশ করেছে।"
 
-#: virtinst/virtinstall.py:790
+#: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:800
+#: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:811
+#: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
 msgstr "ডোমেন শাটডাউন হয়েছে। জারি রয়েছে।"
 
-#: virtinst/virtinstall.py:817
+#: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "ইনস্টলেশানের নির্দিষ্ট সময় সীমা পার হয়ে গেছে। অ্যাপ্লিকেশন থেকে প্রস্থান করা হচ্ছে।"
 
-#: virtinst/virtinstall.py:840
+#: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
 msgstr ""
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:850
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:854
+#: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 
-#: virtinst/virtinstall.py:857
+#: virtinst/virtinstall.py:858
 msgid "Restarting guest."
 msgstr ""
 
-#: virtinst/virtinstall.py:874
+#: virtinst/virtinstall.py:875
 msgid ""
 "\n"
 "Starting install..."
@@ -6277,129 +6320,129 @@ msgstr ""
 "\n"
 "ইনস্টল শুরু করা হচ্ছে..."
 
-#: virtinst/virtinstall.py:897
+#: virtinst/virtinstall.py:898
 msgid "Domain install interrupted."
 msgstr "ডোমেন ইনস্টল বাধাপ্রাপ্ত হয়েছে।"
 
-#: virtinst/virtinstall.py:916
+#: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
 msgstr "ড্রাই রান সফল ভাবে সম্পন্ন হয়েছে"
 
-#: virtinst/virtinstall.py:920
+#: virtinst/virtinstall.py:921
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: virtinst/virtinstall.py:927
+#: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
 msgstr "অনুরোধ জানানো ইনস্টলেশনে XML ধাপ 2 নেই"
 
-#: virtinst/virtinstall.py:944
+#: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
 msgstr "নির্দিষ্ট ইনস্টল মিডিয়া থেকে একটি নতুন ভার্টুয়াল মেশিন তৈরি করুন।"
 
-#: virtinst/virtinstall.py:950
+#: virtinst/virtinstall.py:951
 msgid "Name of the guest instance"
 msgstr "গেস্ট দৃষ্টান্তের নাম"
 
-#: virtinst/virtinstall.py:958
+#: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
 msgstr "ইনস্টলেশন পদ্ধতি বিকল্প"
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
 msgstr "CD-ROM ইনস্টলেশান মিডিয়া"
 
-#: virtinst/virtinstall.py:962
+#: virtinst/virtinstall.py:963
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE প্রোটোকল ব্যবহার করে নেটওয়ার্ক থেকে বুট করুন"
 
-#: virtinst/virtinstall.py:967
+#: virtinst/virtinstall.py:968
 msgid "Build guest around an existing disk image"
 msgstr "একটি বিদ্যমান ডিস্ক ছবিকে ঘিরে গেস্ট গড়ে তুলুন"
 
-#: virtinst/virtinstall.py:970
+#: virtinst/virtinstall.py:971
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "--location থেকে বুট হওয়া ইনস্টল কার্নালে যে অতিরিক্ত অার্গুমেন্ট পাস করতে হবে"
 
-#: virtinst/virtinstall.py:973
+#: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
 msgstr "--location থেকে প্রদত্ত ফাইল initrd এর রুটে যোগ করুন"
 
-#: virtinst/virtinstall.py:975
+#: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:977
+#: virtinst/virtinstall.py:978
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:979
+#: virtinst/virtinstall.py:980
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:982
+#: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:996
+#: virtinst/virtinstall.py:997
 msgid "Device Options"
 msgstr "ডিভাইস বিকল্প"
 
-#: virtinst/virtinstall.py:1026
+#: virtinst/virtinstall.py:1027
 msgid "Guest Configuration Options"
 msgstr "গেস্ট কনফিগারেশন বিকল্প"
 
-#: virtinst/virtinstall.py:1030
+#: virtinst/virtinstall.py:1031
 msgid "Virtualization Platform Options"
 msgstr "ভার্টুয়ালাইজেশন প্ল্যাটফর্ম বিকল্প"
 
-#: virtinst/virtinstall.py:1034
+#: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
 msgstr "এই গেস্ট সম্পূর্ণ ভাবে ভার্টুয়ালাইজড গেস্ট হবে"
 
-#: virtinst/virtinstall.py:1037
+#: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
 msgstr "এই গেস্ট এক প্যারাভার্টুয়ালাইজড গেস্ট হবে"
 
-#: virtinst/virtinstall.py:1040
+#: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
 msgstr "এই গেস্ট এক কন্টেনার গেস্ট হবে"
 
-#: virtinst/virtinstall.py:1042
+#: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "যে হাইপার-ভাইজর নাম ব্যবহার করতে হবে (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1043
+#: virtinst/virtinstall.py:1044
 msgid "The CPU architecture to simulate"
 msgstr "যে CPU অার্কিটেকচার সিমুলেট করতে হবে"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1045
 msgid "The machine type to emulate"
 msgstr "যে মেশিন ধরন ইমুলেট করতে হবে"
 
-#: virtinst/virtinstall.py:1055
+#: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
 msgstr "হোস্ট বুট অাপের ক্ষেত্রে ডোমেন অটো-স্টার্ট।"
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
 msgstr ""
 
-#: virtinst/virtinstall.py:1059
+#: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:1062
+#: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
 msgstr "ইনস্টল সম্পূর্ণ হতে খুব অল্প সময় বাকি অাছে।"
 
@@ -6422,33 +6465,37 @@ msgstr ""
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
-msgstr ""
+msgid_plural ""
+"'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
+"in the XML"
+msgstr[0] ""
+msgstr[1] ""
 
-#: virtinst/virtxml.py:105
+#: virtinst/virtxml.py:108
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:121
+#: virtinst/virtxml.py:124
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s -এর একটি অবশ্যই উল্লেখ করতে হবে।"
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:127
 #, python-format
 msgid "Conflicting options %s"
 msgstr "বিরোধমূলক বিকল্প %s"
 
-#: virtinst/virtxml.py:135
+#: virtinst/virtxml.py:138
 msgid "No change specified."
 msgstr "কোনো পরিবর্তন উল্লেখ করা হয়নি।"
 
-#: virtinst/virtxml.py:137
+#: virtinst/virtxml.py:140
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "শুধুমাত্র একটি পরিবর্তন অপারেশন উল্লেখ করা যেতে পারে (বিরোধমূলক বিকল্প %s)"
 
-#: virtinst/virtxml.py:150
+#: virtinst/virtxml.py:153
 #, fuzzy, python-format
 #| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgid ""
@@ -6456,91 +6503,140 @@ msgid ""
 "'--edit'"
 msgstr "'--edit %s' --%s -এর ক্ষেত্রে অর্থপূর্ণ নয়, শুধু খালি '--edit' ব্যবহার করুন"
 
-#: virtinst/virtxml.py:155
+#: virtinst/virtxml.py:158
 msgid "--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:162
+#: virtinst/virtxml.py:165
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device --%s -এর সংগে ব্যবহার করা সম্ভব নয়"
 
-#: virtinst/virtxml.py:173
+#: virtinst/virtxml.py:176
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device --%s -এর সাথে ব্যবহার করা সম্ভব নয়"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:179
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 
-#: virtinst/virtxml.py:196
+#: virtinst/virtxml.py:199
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml --%s -এর ক্ষেত্রে সমর্থিত নয়"
 
-#: virtinst/virtxml.py:199
+#: virtinst/virtxml.py:202
 msgid "--os-variant is not supported with --build-xml"
 msgstr ""
 
-#: virtinst/virtxml.py:225
+#: virtinst/virtxml.py:228
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "পরিবর্তিত XML দিয়ে '%s' নির্দিষ্ট করবেন?"
 
-#: virtinst/virtxml.py:233
+#: virtinst/virtxml.py:236
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "ডোমেন '%s' সফলভাবে নির্দিষ্ট করা হয়েছে।"
 
-#: virtinst/virtxml.py:240
+#: virtinst/virtxml.py:243
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:250 virtinst/virtxml.py:526
+#: virtinst/virtxml.py:253 virtinst/virtxml.py:537
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "ডোমেইন আরম্ভ করতে ব্যর্থ"
 
-#: virtinst/virtxml.py:255 virtinst/virtxml.py:530
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:541
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:287
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
-msgid "Error attempting device action %(action)s: %(error)s"
-msgstr "%s ডিভাইসের প্রচেষ্টার সময়ে সমস্যা হয়েছে: %s"
-
-#: virtinst/virtxml.py:293
+#: virtinst/virtxml.py:264
 #, python-format
-msgid "Device %s successful."
+msgid ""
+"%(xml)s\n"
+"\n"
+"Hotplug this device to the guest '%(domain)s'?"
+msgstr ""
+
+#: virtinst/virtxml.py:266
+#, fuzzy
+#| msgid "Device %s successful."
+msgid "Device hotplug successful."
 msgstr "ডিভাইস %s অসফল।"
 
-#: virtinst/virtxml.py:304
+#: virtinst/virtxml.py:267
+#, fuzzy, python-format
+#| msgid "Error attempting device %s: %s"
+msgid "Error attempting device hotplug: %(error)s"
+msgstr "%s ডিভাইসের প্রচেষ্টার সময়ে সমস্যা হয়েছে: %s"
+
+#: virtinst/virtxml.py:269
+#, python-format
+msgid ""
+"%(xml)s\n"
+"\n"
+"Hotunplug this device from the guest '%(domain)s'?"
+msgstr ""
+
+#: virtinst/virtxml.py:271
+#, fuzzy
+#| msgid "Device %s successful."
+msgid "Device hotunplug successful."
+msgstr "ডিভাইস %s অসফল।"
+
+#: virtinst/virtxml.py:272
+#, fuzzy, python-format
+#| msgid "Error attempting device %s: %s"
+msgid "Error attempting device hotunplug: %(error)s"
+msgstr "%s ডিভাইসের প্রচেষ্টার সময়ে সমস্যা হয়েছে: %s"
+
+#: virtinst/virtxml.py:274
+#, python-format
+msgid ""
+"%(xml)s\n"
+"\n"
+"Update this device for the guest '%(domain)s'?"
+msgstr ""
+
+#: virtinst/virtxml.py:276
+#, fuzzy
+#| msgid "Device %s successful."
+msgid "Device update successful."
+msgstr "ডিভাইস %s অসফল।"
+
+#: virtinst/virtxml.py:277
+#, fuzzy, python-format
+#| msgid "Error attempting device %s: %s"
+msgid "Error attempting device update: %(error)s"
+msgstr "%s ডিভাইসের প্রচেষ্টার সময়ে সমস্যা হয়েছে: %s"
+
+#: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:326
+#: virtinst/virtxml.py:337
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:345
+#: virtinst/virtxml.py:356
 msgid "Edit libvirt XML using command line options."
 msgstr "কম্যান্ড লাইন বিকল্প ব্যবহার করে, libvirt XML সম্পাদনা করুন।"
 
-#: virtinst/virtxml.py:351
+#: virtinst/virtxml.py:362
 msgid "Domain name, id, or uuid"
 msgstr "ডোমেন নাম, অাইডি, বা uuid"
 
-#: virtinst/virtxml.py:353
+#: virtinst/virtxml.py:364
 msgid "XML actions"
 msgstr "XML কাজ"
 
-#: virtinst/virtxml.py:355
+#: virtinst/virtxml.py:366
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6554,7 +6650,7 @@ msgstr ""
 "--edit all --disk ... (সকল ডিস্ক ডিভাইস সম্পাদনা)\n"
 "--edit target=hda --disk ... (ডিস্ক 'hda' সম্পাদনা)\n"
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:372
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6566,7 +6662,7 @@ msgstr ""
 "--remove-device --disk all (সকল ডিস্ক সরান)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:366
+#: virtinst/virtxml.py:377
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6574,17 +6670,17 @@ msgstr ""
 "নির্দিষ্ট ডিভাইস যোগ করুন। উদাহরণ:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:369
+#: virtinst/virtxml.py:380
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:372
+#: virtinst/virtxml.py:383
 msgid "Output options"
 msgstr "অাউটপুট বিকল্প"
 
-#: virtinst/virtxml.py:374
+#: virtinst/virtxml.py:385
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6596,73 +6692,69 @@ msgstr ""
 "--remove-device দিয়ে, এটি একটি হটঅানপ্লাগ অপারেশন।\n"
 "--edit দিয়ে, এটি একটি অাপডেট ডিভাইস অপারেশন।"
 
-#: virtinst/virtxml.py:380
+#: virtinst/virtxml.py:391
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "ডোমেন নির্দিষ্ট করতে বলপ্রয়োগ করুন। a --print বিকল্প নির্দিষ্ট করা থাকলে তবেই "
 "প্রয়োজনীয়।"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:394
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:386
+#: virtinst/virtxml.py:397
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:388
+#: virtinst/virtxml.py:399
 msgid "Only print the requested change, in diff format"
 msgstr "অনুরোধ জানানো পরিবর্তনটি একটি অালাদা ফর্ম্যাটে প্রিন্ট করুন"
 
-#: virtinst/virtxml.py:390
+#: virtinst/virtxml.py:401
 msgid "Only print the requested change, in full XML format"
 msgstr "শুধুমাত্র অনুরোধা জানানো পরিবর্তনটি সম্পূর্ণ XML ফর্ম্যাটে প্রিন্ট করুন"
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:403
 msgid "Require confirmation before saving any results."
 msgstr "কোনো ফলাফল সংরক্ষণ করার পূর্বে নিশ্চিতকরণের প্রয়োজন।"
 
-#: virtinst/virtxml.py:396
+#: virtinst/virtxml.py:407
 msgid "XML options"
 msgstr "XML বিকল্প"
 
-#: virtinst/virtxml.py:436
+#: virtinst/virtxml.py:447
 msgid "Can't use --confirm with stdin input."
 msgstr "--confirm, stdin ইনপুট ছাড়া ব্যবহার করা সম্ভব নয়।"
 
-#: virtinst/virtxml.py:438
+#: virtinst/virtxml.py:449
 msgid "Can't use --update with stdin input."
 msgstr "--update, stdin ইনপুটের সাথে ব্যবহার করা সম্ভব নয়।"
 
-#: virtinst/virtxml.py:441
+#: virtinst/virtxml.py:452
 msgid "A domain must be specified"
 msgstr "অবশ্যই একটি ডোমেন উল্লেখ করতে হবে"
 
-#: virtinst/virtxml.py:469
+#: virtinst/virtxml.py:480
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--update for --%s -এর পদ্ধতি অজানা"
 
-#: virtinst/virtxml.py:494
-msgid "Cannot mix --update and --start"
-msgstr ""
-
-#: virtinst/virtxml.py:502
+#: virtinst/virtxml.py:513
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:535
+#: virtinst/virtxml.py:546
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:537
+#: virtinst/virtxml.py:548
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:550
+#: virtinst/virtxml.py:561
 msgid "Aborted at user request"
 msgstr "ব্যবহারকারীর অনুরোধে পরিত্যাগ করা হয়েছে"
 
@@ -6684,6 +6776,21 @@ msgstr ""
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s নাম '%s' এ '%s'  অক্ষর থাকতে পারে না।"
+
+#~ msgid "available space:"
+#~ msgstr "উপলব্ধ স্থান:"
+
+#~ msgid "Connection Details"
+#~ msgstr "সংযোগের বিবরণ"
+
+#~ msgid "for arch '%s'"
+#~ msgstr "'%s' অার্কের জন্য"
+
+#~ msgid "virtualization type '%s'"
+#~ msgstr "ভার্টুয়ালাইজেশন ধরন '%s'"
+
+#~ msgid "Cannot mix both --bridge and --network arguments"
+#~ msgstr "--bridge এবং --network অার্গুমেন্ট মেশানো যায় না"
 
 #, fuzzy
 #~| msgid "Target name:"

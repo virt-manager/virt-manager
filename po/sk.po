@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-15 06:10+0000\n"
+"POT-Creation-Date: 2020-09-19 06:10+0000\n"
 "PO-Revision-Date: 2017-02-05 04:18+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Slovak (http://www.transifex.com/projects/p/virt-manager/"
@@ -170,7 +170,7 @@ msgid "panic"
 msgstr ""
 
 #: ui/addhardware.ui:1525 ui/createnet.ui:831 ui/createpool.ui:487
-#: ui/createvm.ui:2477 ui/createvol.ui:531 ui/snapshotsnew.ui:271
+#: ui/createvm.ui:2477 ui/createvol.ui:496 ui/snapshotsnew.ui:271
 msgid "_Finish"
 msgstr "_Dokončiť"
 
@@ -299,7 +299,7 @@ msgstr ""
 msgid "Target:"
 msgstr ""
 
-#: ui/clone.ui:618 ui/createvol.ui:438 ui/details.ui:4386
+#: ui/clone.ui:618 ui/createvol.ui:403 ui/details.ui:4386
 msgid "Path:"
 msgstr ""
 
@@ -776,31 +776,27 @@ msgstr ""
 msgid "<b>Storage Volume Quota</b>"
 msgstr ""
 
-#: ui/createvol.ui:283
-msgid "available space:"
-msgstr "dostupné miesto:"
-
-#: ui/createvol.ui:330 ui/createvol.ui:347
+#: ui/createvol.ui:295 ui/createvol.ui:312
 msgid "1.0"
 msgstr ""
 
-#: ui/createvol.ui:364 ui/createvol.ui:376
+#: ui/createvol.ui:329 ui/createvol.ui:341
 msgid "GiB"
 msgstr ""
 
-#: ui/createvol.ui:388
+#: ui/createvol.ui:353
 msgid "Max Ca_pacity:"
 msgstr "Max. ka_pacita:"
 
-#: ui/createvol.ui:402
+#: ui/createvol.ui:367
 msgid "_Allocation:"
 msgstr "_Rezervované:"
 
-#: ui/createvol.ui:464
+#: ui/createvol.ui:429
 msgid "Browse..."
 msgstr ""
 
-#: ui/createvol.ui:483
+#: ui/createvol.ui:448
 msgid "Backing store"
 msgstr ""
 
@@ -1307,10 +1303,6 @@ msgstr ""
 #: ui/gfxdetails.ui:378
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr ""
-
-#: ui/host.ui:10
-msgid "Connection Details"
-msgstr "Podrobnosti spojenia"
 
 #: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
 msgid "_File"
@@ -2498,7 +2490,7 @@ msgstr "Ruší sa úloha..."
 msgid "Completed"
 msgstr "Hotovo"
 
-#: virtManager/clone.py:28 virtinst/cloner.py:183
+#: virtManager/clone.py:28 virtinst/cloner.py:181
 msgid "No storage to clone."
 msgstr "Neexistuje úložisko pre naklonovanie."
 
@@ -2725,7 +2717,7 @@ msgid "Name '%s' already in use by another network."
 msgstr ""
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:318
-#: virtManager/createvol.py:279
+#: virtManager/createvol.py:280
 #, python-format
 msgid "Error building XML: %s"
 msgstr ""
@@ -3069,21 +3061,26 @@ msgstr "Chyba pri pokračovaní inštalácie: %s"
 msgid "Bootstraping container"
 msgstr ""
 
-#: virtManager/createvol.py:294
+#: virtManager/createvol.py:148
+#, python-format
+msgid "<b>%(volume)s's</b> available space: %(size)s"
+msgstr ""
+
+#: virtManager/createvol.py:295
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "Chyba pri vytváraní zväzku: %s"
 
-#: virtManager/createvol.py:310
+#: virtManager/createvol.py:311
 #, python-format
 msgid "Error validating volume: %s"
 msgstr ""
 
-#: virtManager/createvol.py:315
+#: virtManager/createvol.py:316
 msgid "Creating storage volume..."
 msgstr "Vytvára sa zväzok úložiska..."
 
-#: virtManager/createvol.py:316
+#: virtManager/createvol.py:317
 msgid "Creating the storage volume may take a while..."
 msgstr "Vytváranie zväzku úložiska môže chvíľu trvať..."
 
@@ -4043,10 +4040,16 @@ msgstr "Už sa ma viac nepýtať"
 msgid "Error launching host dialog: %s"
 msgstr ""
 
-#: virtManager/host.py:170
+#: virtManager/host.py:168
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s z %(maxmem)s"
+
+#: virtManager/host.py:178
+#, fuzzy, python-format
+#| msgid "Connecting..."
+msgid "%(connection)s - Connection Details"
+msgstr "Pripája sa..."
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4215,71 +4218,65 @@ msgstr ""
 msgid "Error changing pool settings: %s"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:49
+#: virtManager/lib/connectauth.py:50
 msgid "Authentication required"
 msgstr "Vyžadované je overenie totožnosti"
 
-#: virtManager/lib/connectauth.py:153
+#: virtManager/lib/connectauth.py:154
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:159
+#: virtManager/lib/connectauth.py:160
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:163
+#: virtManager/lib/connectauth.py:164
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:167
+#: virtManager/lib/connectauth.py:168
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:173
+#: virtManager/lib/connectauth.py:174
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:179
+#: virtManager/lib/connectauth.py:180
 msgid "Verify that the 'libvirtd' daemon is running."
 msgstr "Overte si, že démon „libvirtd“ je spustený."
 
-#: virtManager/lib/connectauth.py:182
+#: virtManager/lib/connectauth.py:183
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:194
+#: virtManager/lib/connectauth.py:195
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Zlyhanie pripojenia k správcovi virtuálnych počítačov"
 
-#: virtManager/lib/connectauth.py:269
+#: virtManager/lib/connectauth.py:217
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:273
-msgid ""
-"libvirtd is installed but not running. Start the libvirtd service to manage "
-"virtualization on this host."
-msgstr ""
-
-#: virtManager/lib/connectauth.py:279
+#: virtManager/lib/connectauth.py:224
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:286
+#: virtManager/lib/connectauth.py:231
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4762,6 +4759,12 @@ msgstr ""
 msgid "Error starting Virtual Machine Manager"
 msgstr "Chyba pri spúšťaní Správcu virtuálnych počítačov"
 
+#: virtManager/virtmanager.py:45
+#, fuzzy, python-format
+#| msgid "Error starting Virtual Machine Manager"
+msgid "Error starting Virtual Machine Manager: %(error)s"
+msgstr "Chyba pri spúšťaní Správcu virtuálnych počítačov"
+
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
 msgstr "_Reštartovať"
@@ -4954,30 +4957,46 @@ msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 
-#: virtinst/capabilities.py:295
-#, python-format
-msgid "for arch '%s'"
-msgstr ""
-
-#: virtinst/capabilities.py:299
-#, python-format
-msgid "virtualization type '%s'"
-msgstr ""
-
-#: virtinst/capabilities.py:301
-msgid "any virtualization options"
-msgstr ""
-
-#: virtinst/capabilities.py:303
-#, python-format
-msgid "Host does not support %(virttype)s %(arch)s"
-msgstr ""
-
-#: virtinst/capabilities.py:311
+#: virtinst/capabilities.py:296
 #, python-format
 msgid ""
-"Host does not support domain type %(domain)s%(machine)s for virtualization "
-"type '%(virttype)s' arch '%(arch)s'"
+"Host does not support virtualization type '%(virttype)s' for architecture "
+"'%(arch)s'"
+msgstr ""
+
+#: virtinst/capabilities.py:300
+#, python-format
+msgid ""
+"Host does not support any virtualization options for architecture '%(arch)s'"
+msgstr ""
+
+#: virtinst/capabilities.py:304
+#, python-format
+msgid "Host does not support virtualization type '%(virttype)s'"
+msgstr ""
+
+#: virtinst/capabilities.py:308
+#, fuzzy
+#| msgid ""
+#| "Host is not advertising support for full virtualization. Install options "
+#| "may be limited."
+msgid "Host does not support any virtualization options"
+msgstr ""
+"Hostiteľ neponúka podporu plnej virtualizácie. Možnosti inštalácie môžu byť "
+"obmedzené."
+
+#: virtinst/capabilities.py:314
+#, python-format
+msgid ""
+"Host does not support domain type %(domain)s with machine '%(machine)s' for "
+"virtualization type '%(virttype)s' with architecture '%(arch)s'"
+msgstr ""
+
+#: virtinst/capabilities.py:320
+#, python-format
+msgid ""
+"Host does not support domain type %(domain)s for virtualization type "
+"'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
 
 #: virtinst/cli.py:107
@@ -5037,11 +5056,18 @@ msgstr ""
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "Nepodarilo sa nájsť doménu „%s“: %s"
 
-#: virtinst/cli.py:571 virtinst/cli.py:574
+#. translators: option1 and option2 are command line options,
+#. e.g. -a or --disk
+#: virtinst/cli.py:480
+#, python-format
+msgid "Cannot use %(option1)s and %(option2)s at the same time"
+msgstr ""
+
+#: virtinst/cli.py:581 virtinst/cli.py:584
 msgid "Connect to hypervisor with libvirt URI"
 msgstr ""
 
-#: virtinst/cli.py:589
+#: virtinst/cli.py:599
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5049,57 +5075,57 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:595
+#: virtinst/cli.py:605
 msgid "Don't automatically try to connect to the guest console"
 msgstr ""
 
-#: virtinst/cli.py:599
+#: virtinst/cli.py:609
 msgid "Don't boot guest after completing install."
 msgstr ""
 
-#: virtinst/cli.py:603
+#: virtinst/cli.py:613
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 
-#: virtinst/cli.py:610
+#: virtinst/cli.py:620
 msgid "Print the generated domain XML rather than create the guest."
 msgstr ""
 
-#: virtinst/cli.py:629
+#: virtinst/cli.py:639
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 
-#: virtinst/cli.py:634
+#: virtinst/cli.py:644
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: virtinst/cli.py:638
+#: virtinst/cli.py:648
 msgid "Suppress non-error output"
 msgstr ""
 
-#: virtinst/cli.py:640
+#: virtinst/cli.py:650
 msgid "Print debugging information"
 msgstr ""
 
-#: virtinst/cli.py:646
+#: virtinst/cli.py:656
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
 
-#: virtinst/cli.py:654
+#: virtinst/cli.py:664
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
 
-#: virtinst/cli.py:667
+#: virtinst/cli.py:677
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5107,14 +5133,14 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
 
-#: virtinst/cli.py:676
+#: virtinst/cli.py:686
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
 
-#: virtinst/cli.py:689
+#: virtinst/cli.py:699
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5122,7 +5148,7 @@ msgid ""
 "--graphics none\n"
 msgstr ""
 
-#: virtinst/cli.py:698
+#: virtinst/cli.py:708
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5132,66 +5158,66 @@ msgid ""
 "--network help"
 msgstr ""
 
-#: virtinst/cli.py:709
+#: virtinst/cli.py:719
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 msgstr ""
 
-#: virtinst/cli.py:714
+#: virtinst/cli.py:724
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: virtinst/cli.py:719
+#: virtinst/cli.py:729
 msgid "Configure a guest serial device"
 msgstr ""
 
-#: virtinst/cli.py:722
+#: virtinst/cli.py:732
 msgid "Configure a guest parallel device"
 msgstr ""
 
-#: virtinst/cli.py:725
+#: virtinst/cli.py:735
 msgid "Configure a guest communication channel"
 msgstr ""
 
-#: virtinst/cli.py:728
+#: virtinst/cli.py:738
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
 
-#: virtinst/cli.py:732
+#: virtinst/cli.py:742
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:750
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
 
-#: virtinst/cli.py:748
+#: virtinst/cli.py:758
 msgid "Configure guest sound device emulation"
 msgstr ""
 
-#: virtinst/cli.py:759
+#: virtinst/cli.py:769
 msgid "Configure a guest watchdog device"
 msgstr ""
 
-#: virtinst/cli.py:762
+#: virtinst/cli.py:772
 msgid "Configure guest video hardware."
 msgstr ""
 
-#: virtinst/cli.py:765
+#: virtinst/cli.py:775
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 
-#: virtinst/cli.py:769
+#: virtinst/cli.py:779
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5199,123 +5225,123 @@ msgstr ""
 "Nastavte zariadenie presmerovania hosťa. Napr.:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:773
+#: virtinst/cli.py:783
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
-#: virtinst/cli.py:777
+#: virtinst/cli.py:787
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
-#: virtinst/cli.py:781
+#: virtinst/cli.py:791
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:795
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:799
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:803
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:798
+#: virtinst/cli.py:808
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:815
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:819
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:823
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:828
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:822
+#: virtinst/cli.py:832
 msgid "Tune NUMA policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:826
+#: virtinst/cli.py:836
 msgid "Tune memory policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:830
+#: virtinst/cli.py:840
 msgid "Tune blkio policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:844
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
 
-#: virtinst/cli.py:839
+#: virtinst/cli.py:849
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:845
+#: virtinst/cli.py:855
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:860
 msgid "Configure VM power management features"
 msgstr ""
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:864
 msgid "Configure VM lifecycle management policy"
 msgstr ""
 
-#: virtinst/cli.py:858
+#: virtinst/cli.py:868
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr ""
 
-#: virtinst/cli.py:862
+#: virtinst/cli.py:872
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:878
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:884
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5323,20 +5349,20 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:892
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:898
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:898
+#: virtinst/cli.py:908
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5345,26 +5371,26 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:906
+#: virtinst/cli.py:916
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:909
+#: virtinst/cli.py:919
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:911
+#: virtinst/cli.py:921
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:913
+#: virtinst/cli.py:923
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:923
+#: virtinst/cli.py:933
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5372,114 +5398,114 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:953
+#: virtinst/cli.py:963
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr ""
 
-#: virtinst/cli.py:1138
+#: virtinst/cli.py:1148
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: virtinst/cli.py:1450
+#: virtinst/cli.py:1460
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1506 virtinst/cli.py:1537
+#: virtinst/cli.py:1516 virtinst/cli.py:1547
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1886
+#: virtinst/cli.py:1896
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
 
-#: virtinst/cli.py:1893
+#: virtinst/cli.py:1903
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1904
+#: virtinst/cli.py:1914
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3261
+#: virtinst/cli.py:3271
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr ""
 
-#: virtinst/cli.py:3274
+#: virtinst/cli.py:3284
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr ""
 
-#: virtinst/cli.py:3289
+#: virtinst/cli.py:3299
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 
-#: virtinst/cli.py:3727
+#: virtinst/cli.py:3737
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:45
+#: virtinst/cloner.py:44
 #, fuzzy, python-format
 #| msgid "Could not find domain '%s': %s"
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "Nepodarilo sa nájsť doménu „%s“: %s"
 
-#: virtinst/cloner.py:113
+#: virtinst/cloner.py:111
 #, python-format
 msgid "Domain '%s' was not found."
 msgstr ""
 
-#: virtinst/cloner.py:157
+#: virtinst/cloner.py:155
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:178
+#: virtinst/cloner.py:176
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: virtinst/cloner.py:185
+#: virtinst/cloner.py:183
 msgid "Read Only"
 msgstr "Iba na čítanie"
 
-#: virtinst/cloner.py:187
+#: virtinst/cloner.py:185
 #, fuzzy
 #| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
 msgstr "Úložisko je označené ako zdielateľné."
 
-#: virtinst/cloner.py:249
+#: virtinst/cloner.py:247
 #, fuzzy, python-format
 #| msgid "Error opening socket path '%s': %s"
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "Chyba pri otváraní cesty k socketu „%s“: %s"
 
-#: virtinst/cloner.py:265
+#: virtinst/cloner.py:263
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr ""
 
-#: virtinst/cloner.py:316
+#: virtinst/cloner.py:314
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:351
+#: virtinst/cloner.py:349
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
-#: virtinst/cloner.py:488
+#: virtinst/cloner.py:486
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr ""
@@ -5573,7 +5599,7 @@ msgstr ""
 msgid "Cloning %(srcfile)s"
 msgstr ""
 
-#: virtinst/diskbackend.py:622
+#: virtinst/diskbackend.py:623
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -5655,30 +5681,30 @@ msgstr "Vytvára sa doména..."
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:70
+#: virtinst/install/installertreemedia.py:69
 #, fuzzy, python-format
 #| msgid "Error validating install location: %s"
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr "Chyba pri validácii umiestnenia inštalácie: %s"
 
-#: virtinst/install/installertreemedia.py:119
+#: virtinst/install/installertreemedia.py:117
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:122
+#: virtinst/install/installertreemedia.py:120
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:145
+#: virtinst/install/installertreemedia.py:143
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:212
+#: virtinst/install/installertreemedia.py:210
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:270
+#: virtinst/install/installertreemedia.py:268
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -5746,17 +5772,17 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:69
+#: virtinst/install/urlfetcher.py:68
 #, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:76
+#: virtinst/install/urlfetcher.py:74
 #, python-format
 msgid "Retrieving file %s..."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:249
+#: virtinst/install/urlfetcher.py:246
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr ""
@@ -5817,16 +5843,16 @@ msgstr ""
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "Nebolo možné vytvoriť predvolené zoskupenie úložísk „%s“: %s"
 
-#: virtinst/storage.py:220 virtinst/storage.py:550
+#: virtinst/storage.py:219 virtinst/storage.py:550
 msgid "Storage object"
 msgstr ""
 
-#: virtinst/storage.py:226
+#: virtinst/storage.py:225
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr ""
 
-#: virtinst/storage.py:389
+#: virtinst/storage.py:388
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr ""
@@ -5862,14 +5888,14 @@ msgstr ""
 msgid "Allocating '%s'"
 msgstr "Vyhradzuje sa „%s“"
 
-#: virtinst/storage.py:729
+#: virtinst/storage.py:730
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
 
-#: virtinst/storage.py:736
+#: virtinst/storage.py:737
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -5901,7 +5927,7 @@ msgid ""
 "sysprep(1)."
 msgstr ""
 
-#: virtinst/virtclone.py:80 virtinst/virtinstall.py:948
+#: virtinst/virtclone.py:80 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "Všeobecné nastavenia"
 
@@ -5972,8 +5998,8 @@ msgid ""
 "MAC"
 msgstr ""
 
-#: virtinst/virtclone.py:123 virtinst/virtinstall.py:1053
-#: virtinst/virtxml.py:408
+#: virtinst/virtclone.py:123 virtinst/virtinstall.py:1054
+#: virtinst/virtxml.py:419
 msgid "Miscellaneous Options"
 msgstr "Rôzne nastavenia"
 
@@ -5998,15 +6024,21 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "Klon „%s“ bol úspešne vytvorený."
 
-#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1162
+#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1163
 msgid "Installation aborted at user request"
 msgstr "Inštalácia prerušená na žiadosť používateľa"
 
-#: virtinst/virtinstall.py:126
+#: virtinst/virtinstall.py:59
+msgid ""
+"-c specified with what looks like a libvirt URI. Did you mean to use --"
+"connect? If not, use --cdrom instead"
+msgstr ""
+
+#: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
 msgstr "Nie je možné zadať úložisko a zároveň použiť --nodisks"
 
-#: virtinst/virtinstall.py:130
+#: virtinst/virtinstall.py:131
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -6014,64 +6046,60 @@ msgstr ""
 "Nie je možné miešať voľby --file, --nonsparse alebo --file-size s voľbou --"
 "disk. Použite --disk CESTA[,size=VEĽKOSŤ][,sparse=yes|no]"
 
-#: virtinst/virtinstall.py:179
-msgid "Cannot mix both --bridge and --network arguments"
-msgstr "Nie je možné použiť --bridge s voľbou --network"
-
-#: virtinst/virtinstall.py:224
+#: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "Nie je možné použiť --graphics s voľbami starého štýlu pre grafiku"
 
-#: virtinst/virtinstall.py:228
+#: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 "Nie je možné určiť viac ako jednu z možností VNC, SDL, --graphics a --"
 "nographics"
 
-#: virtinst/virtinstall.py:311
+#: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
 msgstr "--memory s veľkosťou v MiB je požadované"
 
-#: virtinst/virtinstall.py:315
+#: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: virtinst/virtinstall.py:319
+#: virtinst/virtinstall.py:320
 #, python-format
 msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
 msgstr ""
 
-#: virtinst/virtinstall.py:331
+#: virtinst/virtinstall.py:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
 
-#: virtinst/virtinstall.py:334
+#: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 "Príklady použidia --location s médiom CDROM sú uvedené v manuálovej stránke"
 
-#: virtinst/virtinstall.py:347
+#: virtinst/virtinstall.py:348
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
 
-#: virtinst/virtinstall.py:352
+#: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
 
-#: virtinst/virtinstall.py:359
+#: virtinst/virtinstall.py:360
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
 
-#: virtinst/virtinstall.py:366
+#: virtinst/virtinstall.py:367
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
@@ -6079,51 +6107,51 @@ msgstr ""
 "Operačný systém nebol detegovaný, výkon VM môže byť nedostatočný. Pre "
 "optimálne výsledky zadajte OS voľbou --os-variant."
 
-#: virtinst/virtinstall.py:379
+#: virtinst/virtinstall.py:380
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr ""
 
-#: virtinst/virtinstall.py:458
+#: virtinst/virtinstall.py:459
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr ""
 
-#: virtinst/virtinstall.py:468
+#: virtinst/virtinstall.py:469
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:487
+#: virtinst/virtinstall.py:488
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:502
+#: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 
-#: virtinst/virtinstall.py:548
+#: virtinst/virtinstall.py:549
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Chyba pri validácii umiestnenia inštalácie: %s"
 
-#: virtinst/virtinstall.py:551
+#: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
 msgstr ""
 
-#: virtinst/virtinstall.py:624
+#: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: virtinst/virtinstall.py:660
+#: virtinst/virtinstall.py:661
 #, fuzzy
 #| msgid "Domain creation completed."
 msgid "Waiting for the installation to complete."
 msgstr "Vytváranie domény dokončené."
 
-#: virtinst/virtinstall.py:661
+#: virtinst/virtinstall.py:662
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
@@ -6131,45 +6159,45 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: virtinst/virtinstall.py:684
+#: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:696
+#: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:723
+#: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/virtinstall.py:760
+#: virtinst/virtinstall.py:761
 #, fuzzy
 msgid "Domain has crashed."
 msgstr "Doména zlyhala."
 
-#: virtinst/virtinstall.py:790
+#: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:800
+#: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:811
+#: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
 msgstr "Doména bola vypnutá. Pokračuje sa."
 
-#: virtinst/virtinstall.py:817
+#: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "Inštalácia prekročila určený časový limit. Aplikácia sa ukončí."
 
-#: virtinst/virtinstall.py:840
+#: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
 msgstr "Vytváranie domény dokončené."
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:850
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6178,15 +6206,15 @@ msgstr ""
 "Doménu môžete reštartovať spustením:\n"
 "%s"
 
-#: virtinst/virtinstall.py:854
+#: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 
-#: virtinst/virtinstall.py:857
+#: virtinst/virtinstall.py:858
 msgid "Restarting guest."
 msgstr "Hosť sa reštartuje."
 
-#: virtinst/virtinstall.py:874
+#: virtinst/virtinstall.py:875
 msgid ""
 "\n"
 "Starting install..."
@@ -6194,129 +6222,129 @@ msgstr ""
 "\n"
 "Spúšťa sa inštalácia..."
 
-#: virtinst/virtinstall.py:897
+#: virtinst/virtinstall.py:898
 msgid "Domain install interrupted."
 msgstr "Inštalácia domény prerušená."
 
-#: virtinst/virtinstall.py:916
+#: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
 msgstr "Skúšobný beh prebehol úspešne."
 
-#: virtinst/virtinstall.py:920
+#: virtinst/virtinstall.py:921
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: virtinst/virtinstall.py:927
+#: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
 msgstr ""
 
-#: virtinst/virtinstall.py:944
+#: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
 msgstr "Vytvoriť nový virtuálny počítač z určeného inštalačného média."
 
-#: virtinst/virtinstall.py:950
+#: virtinst/virtinstall.py:951
 msgid "Name of the guest instance"
 msgstr "Názov hosťovskej inštancie"
 
-#: virtinst/virtinstall.py:958
+#: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
 msgstr "Možnosti metódy inštalácie"
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
 msgstr "Inštalačné médium CD-ROM"
 
-#: virtinst/virtinstall.py:962
+#: virtinst/virtinstall.py:963
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
 msgstr "Zaviesť systém zo siete protokolom PXE"
 
-#: virtinst/virtinstall.py:967
+#: virtinst/virtinstall.py:968
 msgid "Build guest around an existing disk image"
 msgstr "Zostaviť hosťa na základe existujúceho obrazu disku"
 
-#: virtinst/virtinstall.py:970
+#: virtinst/virtinstall.py:971
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "Dodatočné parametre pre inštalačné jadro spustené voľbou --location"
 
-#: virtinst/virtinstall.py:973
+#: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
 msgstr "Pridať zadaný súbor do koreňa initrd z umiestnenia --location"
 
-#: virtinst/virtinstall.py:975
+#: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:977
+#: virtinst/virtinstall.py:978
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:979
+#: virtinst/virtinstall.py:980
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:982
+#: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:996
+#: virtinst/virtinstall.py:997
 msgid "Device Options"
 msgstr "Voľby zariadenia"
 
-#: virtinst/virtinstall.py:1026
+#: virtinst/virtinstall.py:1027
 msgid "Guest Configuration Options"
 msgstr "Voľby konfigurácie hosťa"
 
-#: virtinst/virtinstall.py:1030
+#: virtinst/virtinstall.py:1031
 msgid "Virtualization Platform Options"
 msgstr "Voľby virtualizačnej platformy"
 
-#: virtinst/virtinstall.py:1034
+#: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
 msgstr "Tento hosť by mal byť plne virtualizovaný hosť"
 
-#: virtinst/virtinstall.py:1037
+#: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
 msgstr "Tento hosť by mal byť paravirtualizovaný hosť"
 
-#: virtinst/virtinstall.py:1040
+#: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
 msgstr "Tento hosť by mal byť kontajnerový hosť"
 
-#: virtinst/virtinstall.py:1042
+#: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Názov hypervízora, ktorý sa použije (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1043
+#: virtinst/virtinstall.py:1044
 msgid "The CPU architecture to simulate"
 msgstr "Architektúra CPU na simuláciu"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1045
 msgid "The machine type to emulate"
 msgstr "Typ počítača, ktorý bude emulovaný"
 
-#: virtinst/virtinstall.py:1055
+#: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
 msgstr "Doména sa má naštartovať po spustení hostiteľa."
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
 msgstr "Vytvoriť dočasnú doménu."
 
-#: virtinst/virtinstall.py:1059
+#: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:1062
+#: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
 msgstr ""
 
@@ -6339,33 +6367,38 @@ msgstr ""
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
-msgstr ""
+msgid_plural ""
+"'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
+"in the XML"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: virtinst/virtxml.py:105
+#: virtinst/virtxml.py:108
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:121
+#: virtinst/virtxml.py:124
 #, python-format
 msgid "One of %s must be specified."
 msgstr ""
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:127
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Protikladné voľby %s"
 
-#: virtinst/virtxml.py:135
+#: virtinst/virtxml.py:138
 msgid "No change specified."
 msgstr "Nebola určená žiadna zmena."
 
-#: virtinst/virtxml.py:137
+#: virtinst/virtxml.py:140
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "Iba jedna operácia zmeny je povolená (protikladné voľby %s)"
 
-#: virtinst/virtxml.py:150
+#: virtinst/virtxml.py:153
 #, fuzzy, python-format
 #| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgid ""
@@ -6373,91 +6406,140 @@ msgid ""
 "'--edit'"
 msgstr "„--edit %s“ nedáva význam s --%s, stačí použiť prázdne „--edit“"
 
-#: virtinst/virtxml.py:155
+#: virtinst/virtxml.py:158
 msgid "--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:162
+#: virtinst/virtxml.py:165
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "Nie je možné použiť --add-device s --%s"
 
-#: virtinst/virtxml.py:173
+#: virtinst/virtxml.py:176
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Nie je možné použiť --remove-device s --%s"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:179
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 
-#: virtinst/virtxml.py:196
+#: virtinst/virtxml.py:199
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml nie je podporované pre --%s"
 
-#: virtinst/virtxml.py:199
+#: virtinst/virtxml.py:202
 msgid "--os-variant is not supported with --build-xml"
 msgstr ""
 
-#: virtinst/virtxml.py:225
+#: virtinst/virtxml.py:228
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Definovať „%s“ na základe zmeneného XML?"
 
-#: virtinst/virtxml.py:233
+#: virtinst/virtxml.py:236
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Doména „%s“ bola úspešne definovaná."
 
-#: virtinst/virtxml.py:240
+#: virtinst/virtxml.py:243
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:250 virtinst/virtxml.py:526
+#: virtinst/virtxml.py:253 virtinst/virtxml.py:537
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Chyba pri spúšťaní domény"
 
-#: virtinst/virtxml.py:255 virtinst/virtxml.py:530
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:541
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:287
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
-msgid "Error attempting device action %(action)s: %(error)s"
-msgstr "Chyba pri pokuse o zariadenie %s: %s"
-
-#: virtinst/virtxml.py:293
+#: virtinst/virtxml.py:264
 #, python-format
-msgid "Device %s successful."
+msgid ""
+"%(xml)s\n"
+"\n"
+"Hotplug this device to the guest '%(domain)s'?"
+msgstr ""
+
+#: virtinst/virtxml.py:266
+#, fuzzy
+#| msgid "Device %s successful."
+msgid "Device hotplug successful."
 msgstr "Zariadenie %s úspešné."
 
-#: virtinst/virtxml.py:304
+#: virtinst/virtxml.py:267
+#, fuzzy, python-format
+#| msgid "Error attempting device %s: %s"
+msgid "Error attempting device hotplug: %(error)s"
+msgstr "Chyba pri pokuse o zariadenie %s: %s"
+
+#: virtinst/virtxml.py:269
+#, python-format
+msgid ""
+"%(xml)s\n"
+"\n"
+"Hotunplug this device from the guest '%(domain)s'?"
+msgstr ""
+
+#: virtinst/virtxml.py:271
+#, fuzzy
+#| msgid "Device %s successful."
+msgid "Device hotunplug successful."
+msgstr "Zariadenie %s úspešné."
+
+#: virtinst/virtxml.py:272
+#, fuzzy, python-format
+#| msgid "Error attempting device %s: %s"
+msgid "Error attempting device hotunplug: %(error)s"
+msgstr "Chyba pri pokuse o zariadenie %s: %s"
+
+#: virtinst/virtxml.py:274
+#, python-format
+msgid ""
+"%(xml)s\n"
+"\n"
+"Update this device for the guest '%(domain)s'?"
+msgstr ""
+
+#: virtinst/virtxml.py:276
+#, fuzzy
+#| msgid "Device %s successful."
+msgid "Device update successful."
+msgstr "Zariadenie %s úspešné."
+
+#: virtinst/virtxml.py:277
+#, fuzzy, python-format
+#| msgid "Error attempting device %s: %s"
+msgid "Error attempting device update: %(error)s"
+msgstr "Chyba pri pokuse o zariadenie %s: %s"
+
+#: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:326
+#: virtinst/virtxml.py:337
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:345
+#: virtinst/virtxml.py:356
 msgid "Edit libvirt XML using command line options."
 msgstr "Editovať XML pre libvirt použitím nástrojov príkazového riadku."
 
-#: virtinst/virtxml.py:351
+#: virtinst/virtxml.py:362
 msgid "Domain name, id, or uuid"
 msgstr "Názov domény, id alebo uuid"
 
-#: virtinst/virtxml.py:353
+#: virtinst/virtxml.py:364
 msgid "XML actions"
 msgstr "XML akcie"
 
-#: virtinst/virtxml.py:355
+#: virtinst/virtxml.py:366
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6466,7 +6548,7 @@ msgid ""
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:372
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6474,23 +6556,23 @@ msgid ""
 "--remove-device --disk /some/path"
 msgstr ""
 
-#: virtinst/virtxml.py:366
+#: virtinst/virtxml.py:377
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
-#: virtinst/virtxml.py:369
+#: virtinst/virtxml.py:380
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:372
+#: virtinst/virtxml.py:383
 msgid "Output options"
 msgstr "Voľby výstupu"
 
-#: virtinst/virtxml.py:374
+#: virtinst/virtxml.py:385
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6498,71 +6580,67 @@ msgid ""
 "With --edit, this is an update device operation."
 msgstr ""
 
-#: virtinst/virtxml.py:380
+#: virtinst/virtxml.py:391
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:394
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:386
+#: virtinst/virtxml.py:397
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:388
+#: virtinst/virtxml.py:399
 msgid "Only print the requested change, in diff format"
 msgstr ""
 
-#: virtinst/virtxml.py:390
+#: virtinst/virtxml.py:401
 msgid "Only print the requested change, in full XML format"
 msgstr ""
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:403
 msgid "Require confirmation before saving any results."
 msgstr ""
 
-#: virtinst/virtxml.py:396
+#: virtinst/virtxml.py:407
 msgid "XML options"
 msgstr "Voľby XML"
 
-#: virtinst/virtxml.py:436
+#: virtinst/virtxml.py:447
 msgid "Can't use --confirm with stdin input."
 msgstr ""
 
-#: virtinst/virtxml.py:438
+#: virtinst/virtxml.py:449
 msgid "Can't use --update with stdin input."
 msgstr ""
 
-#: virtinst/virtxml.py:441
+#: virtinst/virtxml.py:452
 msgid "A domain must be specified"
 msgstr ""
 
-#: virtinst/virtxml.py:469
+#: virtinst/virtxml.py:480
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr ""
 
-#: virtinst/virtxml.py:494
-msgid "Cannot mix --update and --start"
-msgstr ""
-
-#: virtinst/virtxml.py:502
+#: virtinst/virtxml.py:513
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:535
+#: virtinst/virtxml.py:546
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:537
+#: virtinst/virtxml.py:548
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:550
+#: virtinst/virtxml.py:561
 msgid "Aborted at user request"
 msgstr "Predčasne ukončené na žiadosť používateľa"
 
@@ -6583,6 +6661,15 @@ msgstr ""
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
+
+#~ msgid "available space:"
+#~ msgstr "dostupné miesto:"
+
+#~ msgid "Connection Details"
+#~ msgstr "Podrobnosti spojenia"
+
+#~ msgid "Cannot mix both --bridge and --network arguments"
+#~ msgstr "Nie je možné použiť --bridge s voľbou --network"
 
 #~ msgid "_Force console shortcuts:"
 #~ msgstr "_Vynútiť skratky konzoly:"
@@ -6674,13 +6761,6 @@ msgstr ""
 
 #~ msgid "MAC address:"
 #~ msgstr "MAC adresa:"
-
-#~ msgid ""
-#~ "Host is not advertising support for full virtualization. Install options "
-#~ "may be limited."
-#~ msgstr ""
-#~ "Hostiteľ neponúka podporu plnej virtualizácie. Možnosti inštalácie môžu "
-#~ "byť obmedzené."
 
 #, fuzzy
 #~| msgid "Error opening socket path '%s': %s"
