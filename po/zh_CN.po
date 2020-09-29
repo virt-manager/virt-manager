@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-29 06:13+0000\n"
-"PO-Revision-Date: 2020-09-21 11:29+0000\n"
+"POT-Creation-Date: 2020-09-23 06:11+0000\n"
+"PO-Revision-Date: 2020-09-28 16:29+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -815,26 +815,20 @@ msgid "GiB"
 msgstr "GiB"
 
 #: ui/createvol.ui:322
-#, fuzzy
-#| msgid "Max Ca_pacity:"
 msgid "Ca_pacity:"
-msgstr "最大容量(_P)："
+msgstr "容量(_P)："
 
 #: ui/createvol.ui:333
-#, fuzzy
-#| msgid "Locate directory volume"
 msgid "_Allocate entire volume now"
-msgstr "定位目录卷"
+msgstr "立即分配整个卷(_A)"
 
 #: ui/createvol.ui:388
 msgid "Pa_th:"
-msgstr ""
+msgstr "路径(_T)："
 
 #: ui/createvol.ui:435
-#, fuzzy
-#| msgid "Backing store"
 msgid "_Backing store"
-msgstr "后备存储"
+msgstr "后备存储(_B)"
 
 #: ui/delete.ui:9 virtManager/delete.py:286
 msgid "Delete Virtual Machine"
@@ -4914,39 +4908,26 @@ msgid ""
 msgstr "如果离开这个标签页，对 XML 的更改将会丢失。确定要离开吗？"
 
 #: virtinst/capabilities.py:296
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
-msgstr ""
-"主机不支持虚拟化类型 '%(virttype)s' 架构 '%(arch)s' 的域类型 %(domain)s"
-"%(machine)s"
+msgstr "主机不支持架构 '%(arch)s' 的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/capabilities.py:300
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
-msgstr ""
-"主机不支持虚拟化类型 '%(virttype)s' 架构 '%(arch)s' 的域类型 %(domain)s"
-"%(machine)s"
+msgstr "主机不支持架构 '%(arch)s' 的任何虚拟化选项"
 
 #: virtinst/capabilities.py:304
-#, fuzzy, python-format
-#| msgid "Host does not support %(virttype)s %(arch)s"
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "主机不支持 %(virttype)s %(arch)s"
+msgstr "主机不支持虚拟化类型 %(virttype)s"
 
 #: virtinst/capabilities.py:308
-#, fuzzy
-#| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
-msgstr "任意虚拟化选项"
+msgstr "主机不支持任何虚拟化选项"
 
 #: virtinst/capabilities.py:314
 #, fuzzy, python-format
