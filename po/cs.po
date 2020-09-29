@@ -17,11 +17,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-21 06:11+0000\n"
+"POT-Creation-Date: 2020-09-29 06:13+0000\n"
 "PO-Revision-Date: 2020-09-22 16:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -248,7 +248,7 @@ msgstr "Vyčkejte…"
 msgid "Processing..."
 msgstr "Zpracování…"
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "Po_drobnosti"
 
@@ -583,8 +583,8 @@ msgstr "Typ _virtualizace:"
 msgid "Architecture options"
 msgstr "Volby architektury"
 
-#: ui/createvm.ui:773 virtManager/details/details.py:739
-#: virtManager/manager.py:328 virtManager/oslist.py:65
+#: ui/createvm.ui:773 virtManager/details/details.py:729
+#: virtManager/manager.py:329 virtManager/oslist.py:65
 msgid "Name"
 msgstr "Název"
 
@@ -745,7 +745,7 @@ msgstr "_Procesory:"
 msgid "(Insert host mem)"
 msgstr "(Vložit paměť hosta)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2424
+#: ui/createvm.ui:1995 virtManager/details/details.py:2414
 msgid "Memory"
 msgstr "Operační paměť"
 
@@ -1309,39 +1309,39 @@ msgstr "He_slo:"
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ui/gfxdetails.ui:166 ui/vsockdetails.ui:38
-#: virtManager/device/gfxdetails.py:225
+#: ui/gfxdetails.ui:167 ui/vsockdetails.ui:38
+#: virtManager/device/gfxdetails.py:209
 msgid "A_uto"
 msgstr "A_utomaticky"
 
-#: ui/gfxdetails.ui:191 ui/vsockdetails.ui:63
+#: ui/gfxdetails.ui:192 ui/vsockdetails.ui:63
 msgid "5900"
 msgstr "5900"
 
-#: ui/gfxdetails.ui:259
+#: ui/gfxdetails.ui:260
 msgid "Open_GL:"
 msgstr "Open_GL:"
 
-#: ui/gfxdetails.ui:273
+#: ui/gfxdetails.ui:274
 msgid "L_isten type:"
 msgstr "Typ očekávání spojení:"
 
-#: ui/gfxdetails.ui:362
+#: ui/gfxdetails.ui:363
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
 "OpenGL funguje pouze s grafikou „virtio“ se zapnutou volbou „3D akcelerace“"
 
-#: ui/gfxdetails.ui:378
+#: ui/gfxdetails.ui:379
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr ""
 "OpenGL funguje pouze tehdy, pokud je u volby „Typ očekávání spojení“ hodnota "
 "„žádné“"
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:39
 msgid "_File"
 msgstr "_Soubor"
 
-#: ui/host.ui:43 ui/vmwindow.ui:38
+#: ui/host.ui:43 ui/vmwindow.ui:48
 msgid "_View Manager"
 msgstr "Zobrazit sprá_vu strojů"
 
@@ -1501,7 +1501,7 @@ msgstr "_Podrobnosti o spojení"
 msgid "_Virtual Machine Details"
 msgstr "Podrobnosti _virtuálního stroje"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:118
+#: ui/manager.ui:172 ui/vmwindow.ui:132
 msgid "_View"
 msgstr "_Zobrazit"
 
@@ -1549,17 +1549,17 @@ msgstr "Zobrazit konzoli a podrobnosti virtuálního stroje"
 msgid "_Open"
 msgstr "_Otevřít"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:345
+#: ui/manager.ui:332 ui/vmwindow.ui:359
 msgid "Power on the virtual machine"
 msgstr "Zapnout virtuální stroj"
 
-#: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:383
+#: ui/manager.ui:333 virtManager/manager.py:762 virtManager/vmmenu.py:95
+#: virtManager/vmwindow.py:380
 msgid "_Run"
 msgstr "_Spustit"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
-#: virtManager/vmwindow.py:411
+#: ui/manager.ui:348 ui/vmwindow.ui:374 virtManager/manager.py:799
+#: virtManager/vmwindow.py:421
 msgid "Pause the virtual machine"
 msgstr "Pozastavit virtuální stroj"
 
@@ -1567,11 +1567,11 @@ msgstr "Pozastavit virtuální stroj"
 msgid "_Pause"
 msgstr "_Uspat"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:375
+#: ui/manager.ui:364 ui/vmwindow.ui:389
 msgid "Shut down the virtual machine"
 msgstr "Vypnout virtuální stroj"
 
-#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:390 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "Vypnout"
@@ -1955,120 +1955,120 @@ msgstr "<span size='large'>Pořídit zachycený stav</span>"
 msgid "_Description:"
 msgstr "_Popis:"
 
-#: ui/vmwindow.ui:8
+#: ui/vmwindow.ui:18
 msgid "Virtual Machine"
 msgstr "Virtuální stroj"
 
-#: ui/vmwindow.ui:79
+#: ui/vmwindow.ui:93
 msgid "Virtual _Machine"
 msgstr "_Virtuální stroj"
 
-#: ui/vmwindow.ui:95
+#: ui/vmwindow.ui:109
 msgid "_Take Screenshot"
 msgstr "Pořídi_t snímek obrazovky"
 
-#: ui/vmwindow.ui:104
+#: ui/vmwindow.ui:118
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr ""
 "Přesměrovat USB zařízení hostitele do virtuálního stroje se SPICE grafikou."
 
-#: ui/vmwindow.ui:105
+#: ui/vmwindow.ui:119
 msgid "_Redirect USB device"
 msgstr "Přesmě_rované USB zařízení"
 
-#: ui/vmwindow.ui:127
+#: ui/vmwindow.ui:141
 msgid "_Console"
 msgstr "_Konzole"
 
-#: ui/vmwindow.ui:149
+#: ui/vmwindow.ui:163
 msgid "Sna_pshots"
 msgstr "_Zachycené stavy"
 
-#: ui/vmwindow.ui:166
+#: ui/vmwindow.ui:180
 msgid "_Fullscreen"
 msgstr "_Celá obrazovka"
 
-#: ui/vmwindow.ui:175
+#: ui/vmwindow.ui:189
 msgid "_Resize to VM"
 msgstr "Up_ravit velikost podle virt. stroje"
 
-#: ui/vmwindow.ui:184
+#: ui/vmwindow.ui:198
 msgid "_Scale Display"
 msgstr "_Upravit měřítko zobrazení"
 
-#: ui/vmwindow.ui:194
+#: ui/vmwindow.ui:208
 msgid "_Always"
 msgstr "_Vždy"
 
-#: ui/vmwindow.ui:204
+#: ui/vmwindow.ui:218
 msgid "_Only when Fullscreen"
 msgstr "P_ouze když na celou obrazovku"
 
-#: ui/vmwindow.ui:215
+#: ui/vmwindow.ui:229
 msgid "_Never"
 msgstr "_Nikdy"
 
-#: ui/vmwindow.ui:232
+#: ui/vmwindow.ui:246
 msgid "Auto _resize VM with window"
 msgstr "Automaticky měnit _rozlišení ve virt. stroji podle velikosti okna"
 
-#: ui/vmwindow.ui:245
+#: ui/vmwindow.ui:259
 msgid "Co_nsoles"
 msgstr "Ko_nzole"
 
-#: ui/vmwindow.ui:253
+#: ui/vmwindow.ui:267
 msgid "_Autoconnect"
 msgstr "_Automatické připojení"
 
-#: ui/vmwindow.ui:268
+#: ui/vmwindow.ui:282
 msgid "T_oolbar"
 msgstr "Nástr_ojová lišta"
 
-#: ui/vmwindow.ui:282
+#: ui/vmwindow.ui:296
 msgid "Send _Key"
 msgstr "Poslat _klávesu"
 
-#: ui/vmwindow.ui:305
+#: ui/vmwindow.ui:319
 msgid "Show the graphical console"
 msgstr "Zobrazit grafickou konzoli"
 
-#: ui/vmwindow.ui:306 virtManager/addhardware.py:232
+#: ui/vmwindow.ui:320 virtManager/addhardware.py:232
 msgid "Console"
 msgstr "Konzole"
 
-#: ui/vmwindow.ui:320
+#: ui/vmwindow.ui:334
 msgid "Show virtual hardware details"
 msgstr "Zobrazit podrobnosti o virtuálním hardware"
 
-#: ui/vmwindow.ui:321 virtManager/error.py:352
+#: ui/vmwindow.ui:335 virtManager/error.py:352
 msgid "Details"
 msgstr "Podrobnosti"
 
-#: ui/vmwindow.ui:346
+#: ui/vmwindow.ui:360
 msgid "Run"
 msgstr "Spustit"
 
-#: ui/vmwindow.ui:361
+#: ui/vmwindow.ui:375
 msgid "Pause"
 msgstr "Pozastavit"
 
-#: ui/vmwindow.ui:399
+#: ui/vmwindow.ui:413
 msgid "Snapshots"
 msgstr "Zachycené stavy"
 
-#: ui/vmwindow.ui:413
+#: ui/vmwindow.ui:427
 msgid "Switch to fullscreen view"
 msgstr "Zobrazit přes celou obrazovku"
 
-#: ui/vmwindow.ui:438
+#: ui/vmwindow.ui:452
 msgid "Begin Installation"
 msgstr "Zahájit instalaci"
 
-#: ui/vmwindow.ui:440
+#: ui/vmwindow.ui:454
 msgid "_Begin Installation"
 msgstr "_Zahájit instalaci"
 
-#: ui/vmwindow.ui:455
+#: ui/vmwindow.ui:469
 msgid "_Cancel Installation"
 msgstr "Zrušit instala_ci"
 
@@ -2095,7 +2095,7 @@ msgstr "Chyba při spouštění dialogu „O aplikaci“: %s"
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/addhardware.py:160 virtManager/details/details.py:612
+#: virtManager/addhardware.py:160 virtManager/details/details.py:602
 msgid "Hardware"
 msgstr "Hardware"
 
@@ -2114,7 +2114,7 @@ msgid "Network"
 msgstr "Síť"
 
 #: virtManager/addhardware.py:217 virtManager/addhardware.py:1009
-#: virtManager/details/details.py:198
+#: virtManager/details/details.py:194
 msgid "Input"
 msgstr "Vstup"
 
@@ -2166,7 +2166,7 @@ msgstr "Zobrazení"
 msgid "Libvirt version does not support video devices."
 msgstr "Tato verze libvirt nepodporuje video zařízení."
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:258
+#: virtManager/addhardware.py:254 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "Resetátor"
@@ -2178,7 +2178,7 @@ msgid "Filesystem"
 msgstr "Souborový systém"
 
 #: virtManager/addhardware.py:258 virtManager/addhardware.py:1021
-#: virtManager/details/details.py:256
+#: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "Smartcard"
 
@@ -2190,12 +2190,12 @@ msgstr "Přesměrování USB"
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:248
+#: virtManager/addhardware.py:264 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "RNG"
 
 #: virtManager/addhardware.py:265 virtManager/addhardware.py:1029
-#: virtManager/details/details.py:255
+#: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "Oznamování paniky"
 
@@ -2203,7 +2203,7 @@ msgstr "Oznamování paniky"
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Nepodporováno pro tuto kombinaci hypervizor/libvirt/architektura."
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:257
+#: virtManager/addhardware.py:268 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
@@ -2250,7 +2250,7 @@ msgstr "IDE"
 
 # auto translated by TM merge from project: Fedora Websites, version:
 # boot.fedoraproject.org, DocId: po/boot.fedoraproject.org
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2360
+#: virtManager/addhardware.py:436 virtManager/details/details.py:2347
 msgid "Floppy"
 msgstr "Disketa"
 
@@ -2383,15 +2383,15 @@ msgstr "Grafický USB tablet EvTouch"
 
 # auto translated by TM merge from project: IBus-Chewing, version: master,
 # DocId: ibus-chewing
-#: virtManager/addhardware.py:571 virtManager/details/details.py:197
+#: virtManager/addhardware.py:571 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "Klávesnice"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:195
+#: virtManager/addhardware.py:572 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "Myš"
 
-#: virtManager/addhardware.py:573 virtManager/details/details.py:193
+#: virtManager/addhardware.py:573 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "Tablet"
 
@@ -2424,7 +2424,7 @@ msgstr "LUN export do hosta"
 #: virtManager/addhardware.py:711 virtManager/addhardware.py:792
 #: virtManager/addhardware.py:802 virtManager/addhardware.py:922
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:94
+#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:103
 #: virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "Výchozí hypervizoru"
@@ -2477,7 +2477,7 @@ msgstr "Generátor náhodných čísel"
 msgid "VM Sockets"
 msgstr "Patic ve virt. stroji"
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2143
+#: virtManager/addhardware.py:1035 virtManager/details/details.py:2130
 #, python-format
 msgid "%s Device"
 msgstr "Zařízení %s"
@@ -2929,8 +2929,8 @@ msgstr[2] "Je k dispozici až %(numcpus)d"
 msgid "No active connection to install on."
 msgstr "Žádné aktivní spojení na které nainstalovat."
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1793
-#: virtManager/device/gfxdetails.py:87 virtinst/domcapabilities.py:223
+#: virtManager/createvm.py:947 virtManager/details/details.py:1780
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:227
 msgid "None"
 msgstr "Žádný"
 
@@ -3318,47 +3318,37 @@ msgstr "Grafická konzole"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager nepodporuje více než jednu grafickou konzoli"
 
-#: virtManager/details/console.py:383
-#, python-format
-msgid "%(vm-name)s on %(connection-name)s"
-msgstr "%(vm-name)s na %(connection-name)s"
-
-#: virtManager/details/console.py:390
-#, python-format
-msgid "Press %s to release pointer."
-msgstr "Pro uvolnění ukazatel myši stiskněte %s."
-
-#: virtManager/details/console.py:507
+#: virtManager/details/console.py:492
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "Grafika typu „%s“ nepodporuje automatickou změnu rozlišení."
 
-#: virtManager/details/console.py:510
+#: virtManager/details/console.py:495
 msgid "Guest agent is not available."
 msgstr "Agent v hostovi není k dispozici."
 
-#: virtManager/details/console.py:590
+#: virtManager/details/console.py:575
 msgid "Guest has crashed."
 msgstr "Host zhavaroval."
 
-#: virtManager/details/console.py:592
+#: virtManager/details/console.py:577
 msgid "Guest is not running."
 msgstr "Host není spuštěný."
 
-#: virtManager/details/console.py:714
+#: virtManager/details/console.py:700
 msgid "Graphical console not configured for guest"
 msgstr "Grafická konzole pro tohoto hosta nebyla nastavena"
 
-#: virtManager/details/console.py:721
+#: virtManager/details/console.py:707
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Nelze zobrazit grafickou konzoli typu „%s“"
 
-#: virtManager/details/console.py:733
+#: virtManager/details/console.py:719
 msgid "Connecting to graphical console for guest"
 msgstr "Připojuje se ke grafické konzoli hosta"
 
-#: virtManager/details/console.py:752
+#: virtManager/details/console.py:738
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3367,355 +3357,360 @@ msgstr ""
 "Chyba při připojování ke grafické konzoli:\n"
 "%s"
 
-#: virtManager/details/console.py:809
+#: virtManager/details/console.py:795
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Chyba ověření totožnosti prohlížeče: %s"
 
-#: virtManager/details/console.py:831
+#: virtManager/details/console.py:817
 msgid "USB redirection error"
 msgstr "Chyba přesměrování USB"
 
-#: virtManager/details/console.py:840
+#: virtManager/details/console.py:826
 msgid "Viewer was disconnected."
 msgstr "Prohlížeč byl odpojen."
 
-#: virtManager/details/console.py:846
+#: virtManager/details/console.py:832
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Chybový výstup SSH tunelu: %s"
 
-#: virtManager/details/console.py:851 virtManager/details/console.py:983
+#: virtManager/details/console.py:837 virtManager/details/console.py:969
 msgid "Viewer disconnected."
 msgstr "Prohlížeč se odpojil."
 
-#: virtManager/details/details.py:166
+#: virtManager/details/console.py:973
+#, python-format
+msgid "Press %s to release pointer."
+msgstr "Pro uvolnění ukazatel myši stiskněte %s."
+
+#: virtManager/details/details.py:162
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "Disketová mechanika %(index)d"
 
-#: virtManager/details/details.py:172
+#: virtManager/details/details.py:168
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%(bus)s CDROM %(index)d"
 
-#: virtManager/details/details.py:177
+#: virtManager/details/details.py:173
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "%(bus)s disk %(index)d"
 
-#: virtManager/details/details.py:181
+#: virtManager/details/details.py:177
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(bus)s %(device)s %(index)d"
 
-#: virtManager/details/details.py:189
+#: virtManager/details/details.py:185
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "Síť. rozhr. %(mac)s"
 
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:198
 #, python-format
 msgid "Serial %(num)d"
 msgstr "Sériový port %(num)d"
 
-#: virtManager/details/details.py:206
+#: virtManager/details/details.py:202
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "Paralelní port %(num)d"
 
-#: virtManager/details/details.py:210
+#: virtManager/details/details.py:206
 #, python-format
 msgid "Console %(num)d"
 msgstr "Textová konzole %(num)d"
 
-#: virtManager/details/details.py:215
+#: virtManager/details/details.py:211
 #, python-format
 msgid "Channel %(name)s"
 msgstr "Kanál %(name)s"
 
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:213
 #, python-format
 msgid "Channel %(type)s"
 msgstr "Kanál %(type)s"
 
-#: virtManager/details/details.py:221
+#: virtManager/details/details.py:217
 #, python-format
 msgid "Display %s"
 msgstr "Obrazovka %s"
 
-#: virtManager/details/details.py:223
+#: virtManager/details/details.py:219
 #, python-format
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%(bus)s přesměrování %(index)d"
 
-#: virtManager/details/details.py:230
+#: virtManager/details/details.py:226
 #, python-format
 msgid "Sound %s"
 msgstr "Zvuk %s"
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:228
 #, python-format
 msgid "Video %s"
 msgstr "Video %s"
 
-#: virtManager/details/details.py:234
+#: virtManager/details/details.py:230
 #, python-format
 msgid "Filesystem %(path)s"
 msgstr "Souborový systém %(path)s"
 
-#: virtManager/details/details.py:238
+#: virtManager/details/details.py:234
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr "Řadič %(controller)s %(index)s"
 
-#: virtManager/details/details.py:242
+#: virtManager/details/details.py:238
 #, python-format
 msgid "Controller %(controller)s"
 msgstr "Řadič %(controller)s"
 
-#: virtManager/details/details.py:247
+#: virtManager/details/details.py:243
 #, python-format
 msgid "RNG %(device)s"
 msgstr "Gen. náhodných čísel %(device)s"
 
-#: virtManager/details/details.py:251
+#: virtManager/details/details.py:247
 #, python-format
 msgid "TPM %(device)s"
 msgstr "TPM %(device)s"
 
-#: virtManager/details/details.py:252
+#: virtManager/details/details.py:248
 #, python-format
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:550
+#: virtManager/details/details.py:540
 msgid "_Add Hardware"
 msgstr "Přid_at hardware"
 
-#: virtManager/details/details.py:560
+#: virtManager/details/details.py:550
 msgid "_Remove Hardware"
 msgstr "Odeb_rat hardware"
 
-#: virtManager/details/details.py:683
+#: virtManager/details/details.py:673
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Vámi používané libvirt nebo hypervizor nepodporuje UEFI."
 
-#: virtManager/details/details.py:686
+#: virtManager/details/details.py:676
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr "Libvirt na hostiteli nezjištěn žádný obraz s UEFI/OVMF firmware."
 
-#: virtManager/details/details.py:691
+#: virtManager/details/details.py:681
 msgid "UEFI not found"
 msgstr "UEFI nenalezeno"
 
-#: virtManager/details/details.py:740
+#: virtManager/details/details.py:730
 msgid "Version"
 msgstr "Verze"
 
-#: virtManager/details/details.py:802
+#: virtManager/details/details.py:792
 msgid "Application Default"
 msgstr "Výchozí pro aplikaci"
 
-#: virtManager/details/details.py:804
+#: virtManager/details/details.py:794
 msgid "Hypervisor Default"
 msgstr "Výchozí pro hypervizor"
 
-#: virtManager/details/details.py:806
+#: virtManager/details/details.py:796
 msgid "Clear CPU configuration"
 msgstr "Vyčistit nastavení procesoru"
 
-#: virtManager/details/details.py:824
+#: virtManager/details/details.py:814
 msgid "Disk bus:"
 msgstr "Sběrnice disku:"
 
-#: virtManager/details/details.py:1024
+#: virtManager/details/details.py:1027
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Chyba při spouštění dialogu o hardware: %s"
 
-#: virtManager/details/details.py:1030
+#: virtManager/details/details.py:1033
 msgid "Are you sure you want to remove this device?"
 msgstr "Opravdu chcete odebrat toto zařízení?"
 
-#: virtManager/details/details.py:1277 virtManager/details/details.py:1792
-#: virtManager/details/details.py:1811 virtManager/details/details.py:2005
+#: virtManager/details/details.py:1280 virtManager/details/details.py:1779
+#: virtManager/details/details.py:1798 virtManager/details/details.py:1992
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: virtManager/details/details.py:1359
+#: virtManager/details/details.py:1362
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Chyba při uplatňování změn: %s"
 
-#: virtManager/details/details.py:1480
+#: virtManager/details/details.py:1483
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Chyba při změně hodnoty automatického spouštění: %s"
 
-#: virtManager/details/details.py:1497
+#: virtManager/details/details.py:1500
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Nelze nastavit initrd a neuvést popis umístění jádra"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1503
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Nelze nastavit argumenty jádra a neuvést popis umístění jádra"
 
-#: virtManager/details/details.py:1507
+#: virtManager/details/details.py:1510
 msgid "An init path must be specified"
 msgstr "Je třeba uvést popis umístění init"
 
-#: virtManager/details/details.py:1521 virtManager/device/addstorage.py:285
+#: virtManager/details/details.py:1524 virtManager/device/addstorage.py:285
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "Disk „%(path)s“ je už používán jiným hostem %(names)s"
 
-#: virtManager/details/details.py:1525 virtManager/device/addstorage.py:289
+#: virtManager/details/details.py:1528 virtManager/device/addstorage.py:289
 msgid "Do you really want to use the disk?"
 msgstr "Skutečně chcete použít disk?"
 
-#: virtManager/details/details.py:1715
+#: virtManager/details/details.py:1702
 msgid "Remove this device from the virtual machine"
 msgstr "Odebrat toto zařízení z virtuálního stroje"
 
-#: virtManager/details/details.py:1771
+#: virtManager/details/details.py:1758
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Chyba při znovunačítání seznamu hardware: %s"
 
-#: virtManager/details/details.py:1866
+#: virtManager/details/details.py:1853
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s …"
 
-#: virtManager/details/details.py:1878
+#: virtManager/details/details.py:1865
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s čtení"
 
-#: virtManager/details/details.py:1879
+#: virtManager/details/details.py:1866
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s zápis"
 
-#: virtManager/details/details.py:1882
+#: virtManager/details/details.py:1869
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s příchozí"
 
-#: virtManager/details/details.py:1883
+#: virtManager/details/details.py:1870
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s odchozí"
 
-#: virtManager/details/details.py:1885 virtManager/details/details.py:1886
-#: virtManager/details/details.py:1887 virtManager/details/details.py:1888
+#: virtManager/details/details.py:1872 virtManager/details/details.py:1873
+#: virtManager/details/details.py:1874 virtManager/details/details.py:1875
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "Vypnutý"
 
-#: virtManager/details/details.py:1896
+#: virtManager/details/details.py:1883
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s z %(total-memory)s"
 
-#: virtManager/details/details.py:2055
+#: virtManager/details/details.py:2041
 msgid "Absolute Movement"
 msgstr "Absolutně měřený pohyb"
 
-#: virtManager/details/details.py:2057
+#: virtManager/details/details.py:2043
 msgid "Relative Movement"
 msgstr "Relativní pohyb"
 
-#: virtManager/details/details.py:2066 virtManager/details/details.py:2240
-#: virtManager/details/details.py:2243
+#: virtManager/details/details.py:2052 virtManager/details/details.py:2227
+#: virtManager/details/details.py:2230
 msgid "Hypervisor does not support removing this device"
 msgstr "Hypervizor nepodporuje odebrání tohoto zařízení"
 
-#: virtManager/details/details.py:2070
+#: virtManager/details/details.py:2056
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s server"
 
-#: virtManager/details/details.py:2135
+#: virtManager/details/details.py:2122
 msgid "Serial Device"
 msgstr "Seriové zařízení"
 
-#: virtManager/details/details.py:2137
+#: virtManager/details/details.py:2124
 msgid "Parallel Device"
 msgstr "Paralelní zařízení"
 
-#: virtManager/details/details.py:2139
+#: virtManager/details/details.py:2126
 msgid "Console Device"
 msgstr "Zařízení konzole"
 
-#: virtManager/details/details.py:2141
+#: virtManager/details/details.py:2128
 msgid "Channel Device"
 msgstr "Zařízení kanálu"
 
-#: virtManager/details/details.py:2151
+#: virtManager/details/details.py:2138
 msgid "Primary Console"
 msgstr "Hlavní konzole"
 
-#: virtManager/details/details.py:2207
+#: virtManager/details/details.py:2194
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fyzické %s zařízení"
 
-#: virtManager/details/details.py:2224
+#: virtManager/details/details.py:2211
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Pokud je je připojená grafika/zobrazení, není možné odebrat poslední "
 "zbývající video zařízení."
 
-#: virtManager/details/details.py:2250
+#: virtManager/details/details.py:2237
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s na %(address)s"
 
-#: virtManager/details/details.py:2256 virtManager/details/details.py:2266
+#: virtManager/details/details.py:2243 virtManager/details/details.py:2253
 msgid "Cannot remove controller while devices are attached."
 msgstr "Když jsou k němu připojená zařízení, nelze řadič odebrat."
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/details/details.py:2357
+#: virtManager/details/details.py:2344
 msgid "Hard Disk"
 msgstr "Pevný disk"
 
-#: virtManager/details/details.py:2358
+#: virtManager/details/details.py:2345
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2359
+#: virtManager/details/details.py:2346
 msgid "Network (PXE)"
 msgstr "Síť (PXE)"
 
-#: virtManager/details/details.py:2371
+#: virtManager/details/details.py:2361
 msgid "No bootable devices"
 msgstr "Žádná zaveditelná zařízení"
 
-#: virtManager/details/details.py:2418
+#: virtManager/details/details.py:2408
 msgid "Overview"
 msgstr "Přehled"
 
-#: virtManager/details/details.py:2419
+#: virtManager/details/details.py:2409
 msgid "OS information"
 msgstr "Informace o operačním systému"
 
 # auto translated by TM merge from project: anaconda, version: rhel6-branch,
 # DocId: anaconda
-#: virtManager/details/details.py:2421
+#: virtManager/details/details.py:2411
 msgid "Performance"
 msgstr "Výkon"
 
-#: virtManager/details/details.py:2423
+#: virtManager/details/details.py:2413
 msgid "CPUs"
 msgstr "Procesory"
 
-#: virtManager/details/details.py:2425
+#: virtManager/details/details.py:2415
 msgid "Boot Options"
 msgstr "Předvolby zavádění"
 
@@ -3935,7 +3930,7 @@ msgstr ""
 "Nedaří se poskytnout požadované přihlašovací údaje VNC serveru.\n"
 "Typ přihlašovacích údajů %s není podporován"
 
-#: virtManager/details/viewers.py:568
+#: virtManager/details/viewers.py:569
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Došlo ke SPICE %(error-name)s"
@@ -3975,35 +3970,35 @@ msgstr "Šablona:"
 msgid "_Source path:"
 msgstr "Zdrojové umí_stění:"
 
-#: virtManager/device/gfxdetails.py:78
+#: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
 msgstr "Spice server"
 
-#: virtManager/device/gfxdetails.py:79
+#: virtManager/device/gfxdetails.py:88
 msgid "VNC server"
 msgstr "VNC server"
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/device/gfxdetails.py:86
+#: virtManager/device/gfxdetails.py:95
 msgid "Address"
 msgstr "Adresa"
 
-#: virtManager/device/gfxdetails.py:95
+#: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
 msgstr "Pouze tento stroj"
 
-#: virtManager/device/gfxdetails.py:96
+#: virtManager/device/gfxdetails.py:105
 msgid "All interfaces"
 msgstr "Všechna rozhraní"
 
 # auto translated by TM merge from project: IBus-Chewing, version: master,
 # DocId: ibus-chewing
-#: virtManager/device/gfxdetails.py:103
+#: virtManager/device/gfxdetails.py:112
 msgid "Auto"
 msgstr "automaticky"
 
-#: virtManager/device/gfxdetails.py:232
+#: virtManager/device/gfxdetails.py:216
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr "A_uto maticky (port %(port)d)"
@@ -4478,31 +4473,31 @@ msgstr "Chyba při spouštění správy: %s"
 
 # auto translated by TM merge from project: gnome-abrt, version: master,
 # DocId: gnome-abrt
-#: virtManager/manager.py:301
+#: virtManager/manager.py:302
 msgid "D_etails"
 msgstr "Podrobnosti"
 
-#: virtManager/manager.py:378
+#: virtManager/manager.py:379
 msgid "CPU usage"
 msgstr "Vytížení procesoru"
 
-#: virtManager/manager.py:379
+#: virtManager/manager.py:380
 msgid "Host CPU usage"
 msgstr "Vytížení procesoru hostitele"
 
-#: virtManager/manager.py:380
+#: virtManager/manager.py:381
 msgid "Memory usage"
 msgstr "Využití operační paměti"
 
-#: virtManager/manager.py:381
+#: virtManager/manager.py:382
 msgid "Disk I/O"
 msgstr "Diskový vstup/výst."
 
-#: virtManager/manager.py:382
+#: virtManager/manager.py:383
 msgid "Network I/O"
 msgstr "Síťový vstup/výst."
 
-#: virtManager/manager.py:497
+#: virtManager/manager.py:498
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -4517,30 +4512,30 @@ msgstr ""
 "\n"
 "Opravdu to chcete?"
 
-#: virtManager/manager.py:574
+#: virtManager/manager.py:575
 #, python-format
 msgid "%(uri)s (Double click to connect)"
 msgstr "%(uri)s (připojíte se dvojklikem)"
 
-#: virtManager/manager.py:581
+#: virtManager/manager.py:582
 #, python-format
 msgid "%(connection)s - Not Connected"
 msgstr "%(connection)s – není připojeno"
 
-#: virtManager/manager.py:583
+#: virtManager/manager.py:584
 #, python-format
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s – připojování…"
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:381
+#: virtManager/manager.py:760 virtManager/vmwindow.py:378
 msgid "_Restore"
 msgstr "_Obnovit"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:409
+#: virtManager/manager.py:797 virtManager/vmwindow.py:419
 msgid "Resume the virtual machine"
 msgstr "Navázat v chodu virtuálního stroje"
 
-#: virtManager/manager.py:912
+#: virtManager/manager.py:913
 msgid "Disabled in preferences dialog."
 msgstr "Vypnuto v dialogu předvoleb."
 
@@ -4645,11 +4640,11 @@ msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Dané zařízení se v nastavení neaktivního virt. stroje nedaří nalézt: %s"
 
-#: virtManager/object/domain.py:1377
+#: virtManager/object/domain.py:1374
 msgid "Saving domain to disk"
 msgstr "Ukládání domény na disk"
 
-#: virtManager/object/domain.py:1429
+#: virtManager/object/domain.py:1426
 msgid "Migrating domain"
 msgstr "Přesouvání domény"
 
@@ -4972,32 +4967,37 @@ msgstr "Chyba při restartování domény"
 msgid "Error launching details: %s"
 msgstr "Chyba při spouštění podrobností: %s"
 
-#: virtManager/vmwindow.py:223
+#: virtManager/vmwindow.py:225
 msgid "This will abort the installation. Are you sure?"
 msgstr "Toto přeruší instalaci. Opravdu to chcete?"
 
-#: virtManager/vmwindow.py:421
+#: virtManager/vmwindow.py:387
+#, python-format
+msgid "%(vm-name)s on %(connection-name)s"
+msgstr "%(vm-name)s na %(connection-name)s"
+
+#: virtManager/vmwindow.py:431
 msgid "Manage VM snapshots"
 msgstr "Spravovat zachycené stavy virt. stroje"
 
-#: virtManager/vmwindow.py:504
+#: virtManager/vmwindow.py:510
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Chyba při pořizování zachyceného stavu: %s"
 
-#: virtManager/vmwindow.py:512
+#: virtManager/vmwindow.py:518
 msgid "Error initializing spice USB device widget"
 msgstr "Chyba při inicializaci ovládacího prvku spice USB zařízení"
 
-#: virtManager/vmwindow.py:516
+#: virtManager/vmwindow.py:522
 msgid "Select USB devices for redirection"
 msgstr "Vyberte USB zařízení pro přesměrování"
 
-#: virtManager/vmwindow.py:548
+#: virtManager/vmwindow.py:554
 msgid "Save Virtual Machine Screenshot"
 msgstr "Uložit snímek obrazovky virtuálního stroje"
 
-#: virtManager/vmwindow.py:549
+#: virtManager/vmwindow.py:555
 msgid "PNG files"
 msgstr "PNG soubory"
 
@@ -5793,21 +5793,21 @@ msgstr "Zabezpečení SEV spouštění vyžaduje Q35 UEFI stroj"
 msgid "SEV launch security is not supported on this platform"
 msgstr "Zabezpečení SEV spouštění není na této platformě podporováno"
 
-#: virtinst/domcapabilities.py:222
+#: virtinst/domcapabilities.py:226
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:228
+#: virtinst/domcapabilities.py:232
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:231
+#: virtinst/domcapabilities.py:235
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Uživatelsky určené: %(path)s"
 
-#: virtinst/domcapabilities.py:307
+#: virtinst/domcapabilities.py:311
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Nepodařilo se získat expandované XML procesoru: %s"

@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-21 06:11+0000\n"
+"POT-Creation-Date: 2020-09-29 06:13+0000\n"
 "PO-Revision-Date: 2020-09-24 19:29+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/sv/>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -248,7 +248,7 @@ msgstr "Var god vänta..."
 msgid "Processing..."
 msgstr "Arbetar..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "_Detaljer"
 
@@ -576,8 +576,8 @@ msgstr "_Virt-typ:"
 msgid "Architecture options"
 msgstr "Arkitekturalternativ"
 
-#: ui/createvm.ui:773 virtManager/details/details.py:739
-#: virtManager/manager.py:328 virtManager/oslist.py:65
+#: ui/createvm.ui:773 virtManager/details/details.py:729
+#: virtManager/manager.py:329 virtManager/oslist.py:65
 msgid "Name"
 msgstr "Namn"
 
@@ -735,7 +735,7 @@ msgstr "C_PU:er:"
 msgid "(Insert host mem)"
 msgstr "(Infoga värdminne)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2424
+#: ui/createvm.ui:1995 virtManager/details/details.py:2414
 msgid "Memory"
 msgstr "Minne"
 
@@ -1287,37 +1287,37 @@ msgstr "L_ösenord:"
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ui/gfxdetails.ui:166 ui/vsockdetails.ui:38
-#: virtManager/device/gfxdetails.py:225
+#: ui/gfxdetails.ui:167 ui/vsockdetails.ui:38
+#: virtManager/device/gfxdetails.py:209
 msgid "A_uto"
 msgstr "A_uto"
 
-#: ui/gfxdetails.ui:191 ui/vsockdetails.ui:63
+#: ui/gfxdetails.ui:192 ui/vsockdetails.ui:63
 msgid "5900"
 msgstr "5900"
 
-#: ui/gfxdetails.ui:259
+#: ui/gfxdetails.ui:260
 msgid "Open_GL:"
 msgstr "Open_GL:"
 
-#: ui/gfxdetails.ui:273
+#: ui/gfxdetails.ui:274
 msgid "L_isten type:"
 msgstr "L_yssningstyp:"
 
-#: ui/gfxdetails.ui:362
+#: ui/gfxdetails.ui:363
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
 "OpenGL fungerar bara med ”virtio”-grafik med ”3D-acceleration” aktiverat"
 
-#: ui/gfxdetails.ui:378
+#: ui/gfxdetails.ui:379
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr "OpenGL fungerar bara när ”Lyssningstyp” har värdet ”none”"
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:39
 msgid "_File"
 msgstr "_Fil"
 
-#: ui/host.ui:43 ui/vmwindow.ui:38
+#: ui/host.ui:43 ui/vmwindow.ui:48
 msgid "_View Manager"
 msgstr "_Vyhanterare"
 
@@ -1475,7 +1475,7 @@ msgstr "_Anslutningsdetaljer"
 msgid "_Virtual Machine Details"
 msgstr "_Virtuell maskins detaljer"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:118
+#: ui/manager.ui:172 ui/vmwindow.ui:132
 msgid "_View"
 msgstr "_Visa"
 
@@ -1523,17 +1523,17 @@ msgstr "Visa den virtuella maskinens konsol och detaljer"
 msgid "_Open"
 msgstr "_Öppna"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:345
+#: ui/manager.ui:332 ui/vmwindow.ui:359
 msgid "Power on the virtual machine"
 msgstr "Slå på den virtuella maskinen"
 
-#: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:383
+#: ui/manager.ui:333 virtManager/manager.py:762 virtManager/vmmenu.py:95
+#: virtManager/vmwindow.py:380
 msgid "_Run"
 msgstr "_Kör"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
-#: virtManager/vmwindow.py:411
+#: ui/manager.ui:348 ui/vmwindow.ui:374 virtManager/manager.py:799
+#: virtManager/vmwindow.py:421
 msgid "Pause the virtual machine"
 msgstr "Pausa den virtuella maskinen"
 
@@ -1541,11 +1541,11 @@ msgstr "Pausa den virtuella maskinen"
 msgid "_Pause"
 msgstr "_Pausa"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:375
+#: ui/manager.ui:364 ui/vmwindow.ui:389
 msgid "Shut down the virtual machine"
 msgstr "Stäng av den virtuella maskinen"
 
-#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:390 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "_Stäng av"
@@ -1931,119 +1931,119 @@ msgstr "<span size='large'>Skapa ögonblicksbild</span>"
 msgid "_Description:"
 msgstr "_Beskrivning:"
 
-#: ui/vmwindow.ui:8
+#: ui/vmwindow.ui:18
 msgid "Virtual Machine"
 msgstr "Virtuell maskin"
 
-#: ui/vmwindow.ui:79
+#: ui/vmwindow.ui:93
 msgid "Virtual _Machine"
 msgstr "Virtuell _maskin"
 
-#: ui/vmwindow.ui:95
+#: ui/vmwindow.ui:109
 msgid "_Take Screenshot"
 msgstr "_Ta skärmdump"
 
-#: ui/vmwindow.ui:104
+#: ui/vmwindow.ui:118
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr "Omdirigera en värd-USB-enhet till en virtuell maskin med SPICE-grafik."
 
-#: ui/vmwindow.ui:105
+#: ui/vmwindow.ui:119
 msgid "_Redirect USB device"
 msgstr "_Omdirigera USB-enhet"
 
-#: ui/vmwindow.ui:127
+#: ui/vmwindow.ui:141
 msgid "_Console"
 msgstr "_Konsol"
 
-#: ui/vmwindow.ui:149
+#: ui/vmwindow.ui:163
 msgid "Sna_pshots"
 msgstr "_Ögonblicksbild"
 
-#: ui/vmwindow.ui:166
+#: ui/vmwindow.ui:180
 msgid "_Fullscreen"
 msgstr "_Helskärm"
 
-#: ui/vmwindow.ui:175
+#: ui/vmwindow.ui:189
 msgid "_Resize to VM"
 msgstr "_Ändra storlek till VM"
 
-#: ui/vmwindow.ui:184
+#: ui/vmwindow.ui:198
 msgid "_Scale Display"
 msgstr "_Skala displayen"
 
-#: ui/vmwindow.ui:194
+#: ui/vmwindow.ui:208
 msgid "_Always"
 msgstr "_Alltid"
 
-#: ui/vmwindow.ui:204
+#: ui/vmwindow.ui:218
 msgid "_Only when Fullscreen"
 msgstr "_Endast i helskärmsläge"
 
-#: ui/vmwindow.ui:215
+#: ui/vmwindow.ui:229
 msgid "_Never"
 msgstr "_Aldrig"
 
-#: ui/vmwindow.ui:232
+#: ui/vmwindow.ui:246
 msgid "Auto _resize VM with window"
 msgstr "_Ändra automatiskt storlek på VM med fönstret"
 
-#: ui/vmwindow.ui:245
+#: ui/vmwindow.ui:259
 msgid "Co_nsoles"
 msgstr "Ko_nsoler"
 
-#: ui/vmwindow.ui:253
+#: ui/vmwindow.ui:267
 msgid "_Autoconnect"
 msgstr "_Autoanslut"
 
-#: ui/vmwindow.ui:268
+#: ui/vmwindow.ui:282
 msgid "T_oolbar"
 msgstr "_Verktygsrad"
 
-#: ui/vmwindow.ui:282
+#: ui/vmwindow.ui:296
 msgid "Send _Key"
 msgstr "Skicka _tangent"
 
-#: ui/vmwindow.ui:305
+#: ui/vmwindow.ui:319
 msgid "Show the graphical console"
 msgstr "Visa den grafiska konsolen"
 
-#: ui/vmwindow.ui:306 virtManager/addhardware.py:232
+#: ui/vmwindow.ui:320 virtManager/addhardware.py:232
 msgid "Console"
 msgstr "Konsol"
 
-#: ui/vmwindow.ui:320
+#: ui/vmwindow.ui:334
 msgid "Show virtual hardware details"
 msgstr "Visa detaljer om virtuell hårdvara"
 
-#: ui/vmwindow.ui:321 virtManager/error.py:352
+#: ui/vmwindow.ui:335 virtManager/error.py:352
 msgid "Details"
 msgstr "Detaljer"
 
-#: ui/vmwindow.ui:346
+#: ui/vmwindow.ui:360
 msgid "Run"
 msgstr "Kör"
 
-#: ui/vmwindow.ui:361
+#: ui/vmwindow.ui:375
 msgid "Pause"
 msgstr "Pausa"
 
-#: ui/vmwindow.ui:399
+#: ui/vmwindow.ui:413
 msgid "Snapshots"
 msgstr "Ögonblicksbilder"
 
-#: ui/vmwindow.ui:413
+#: ui/vmwindow.ui:427
 msgid "Switch to fullscreen view"
 msgstr "Växla till helskärmsläge"
 
-#: ui/vmwindow.ui:438
+#: ui/vmwindow.ui:452
 msgid "Begin Installation"
 msgstr "Påbörja installationen"
 
-#: ui/vmwindow.ui:440
+#: ui/vmwindow.ui:454
 msgid "_Begin Installation"
 msgstr "_Börja installation"
 
-#: ui/vmwindow.ui:455
+#: ui/vmwindow.ui:469
 msgid "_Cancel Installation"
 msgstr "_Avbryt installationen"
 
@@ -2068,7 +2068,7 @@ msgstr "_XML"
 msgid "Error launching 'About' dialog: %s"
 msgstr "Fel vid start av ”Om”-dialogen: %s"
 
-#: virtManager/addhardware.py:160 virtManager/details/details.py:612
+#: virtManager/addhardware.py:160 virtManager/details/details.py:602
 msgid "Hardware"
 msgstr "Hårdvara"
 
@@ -2087,7 +2087,7 @@ msgid "Network"
 msgstr "Nätverk"
 
 #: virtManager/addhardware.py:217 virtManager/addhardware.py:1009
-#: virtManager/details/details.py:198
+#: virtManager/details/details.py:194
 msgid "Input"
 msgstr "Inmatning"
 
@@ -2137,7 +2137,7 @@ msgstr "Video"
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt-versionen stödjer inte videoenheter."
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:258
+#: virtManager/addhardware.py:254 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "Vakthund"
@@ -2147,7 +2147,7 @@ msgid "Filesystem"
 msgstr "Filsystem"
 
 #: virtManager/addhardware.py:258 virtManager/addhardware.py:1021
-#: virtManager/details/details.py:256
+#: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "Smartkort"
 
@@ -2159,12 +2159,12 @@ msgstr "USB-omdirigering"
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:248
+#: virtManager/addhardware.py:264 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "RNG"
 
 #: virtManager/addhardware.py:265 virtManager/addhardware.py:1029
-#: virtManager/details/details.py:255
+#: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "Paniknotifierare"
 
@@ -2172,7 +2172,7 @@ msgstr "Paniknotifierare"
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Stödjs inte för denna kombination av hypervisor/libvirt/arch."
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:257
+#: virtManager/addhardware.py:268 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
@@ -2217,7 +2217,7 @@ msgstr "Spice-port"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2360
+#: virtManager/addhardware.py:436 virtManager/details/details.py:2347
 msgid "Floppy"
 msgstr "Floppy"
 
@@ -2346,15 +2346,15 @@ msgstr "Dumpa gästens minneskärna"
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB ritplatta"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:197
+#: virtManager/addhardware.py:571 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "Tangentbord"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:195
+#: virtManager/addhardware.py:572 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "Mus"
 
-#: virtManager/addhardware.py:573 virtManager/details/details.py:193
+#: virtManager/addhardware.py:573 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "Platta"
 
@@ -2387,7 +2387,7 @@ msgstr "LUN-passage"
 #: virtManager/addhardware.py:711 virtManager/addhardware.py:792
 #: virtManager/addhardware.py:802 virtManager/addhardware.py:922
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:94
+#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:103
 #: virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "Hypervisor-standard"
@@ -2436,7 +2436,7 @@ msgstr "Slumptalsgenerator"
 msgid "VM Sockets"
 msgstr "VM-uttag"
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2143
+#: virtManager/addhardware.py:1035 virtManager/details/details.py:2130
 #, python-format
 msgid "%s Device"
 msgstr "%s-enhet"
@@ -2886,8 +2886,8 @@ msgstr[1] "Upp till %(numcpus)d finns"
 msgid "No active connection to install on."
 msgstr "Ingen aktiv anslutning att installera på."
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1793
-#: virtManager/device/gfxdetails.py:87 virtinst/domcapabilities.py:223
+#: virtManager/createvm.py:947 virtManager/details/details.py:1780
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:227
 msgid "None"
 msgstr "Ingen"
 
@@ -3274,47 +3274,37 @@ msgstr "Grafisk konsol"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager stödjer inte mer än en grafisk konsol"
 
-#: virtManager/details/console.py:383
-#, python-format
-msgid "%(vm-name)s on %(connection-name)s"
-msgstr "%(vm-name)s på %(connection-name)s"
-
-#: virtManager/details/console.py:390
-#, python-format
-msgid "Press %s to release pointer."
-msgstr "Tryck %s för att släppa pekaren."
-
-#: virtManager/details/console.py:507
+#: virtManager/details/console.py:492
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "Grafiktypen ”%s” stödjer inte automatisk storleksändring."
 
-#: virtManager/details/console.py:510
+#: virtManager/details/console.py:495
 msgid "Guest agent is not available."
 msgstr "Gästagenten är inte tillgänglig."
 
-#: virtManager/details/console.py:590
+#: virtManager/details/console.py:575
 msgid "Guest has crashed."
 msgstr "Gästen har kraschat."
 
-#: virtManager/details/console.py:592
+#: virtManager/details/console.py:577
 msgid "Guest is not running."
 msgstr "Gästen kör inte."
 
-#: virtManager/details/console.py:714
+#: virtManager/details/console.py:700
 msgid "Graphical console not configured for guest"
 msgstr "Den grafiska konsolen är inte konfigurerad för gästen"
 
-#: virtManager/details/console.py:721
+#: virtManager/details/console.py:707
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Kan inte visa grafisk konsol av typen ”%s”"
 
-#: virtManager/details/console.py:733
+#: virtManager/details/console.py:719
 msgid "Connecting to graphical console for guest"
 msgstr "Ansluter till grafisk konsol för gästen"
 
-#: virtManager/details/console.py:752
+#: virtManager/details/console.py:738
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3323,353 +3313,358 @@ msgstr ""
 "Fel vid anslutning till den grafiska konsolen:\n"
 "%s"
 
-#: virtManager/details/console.py:809
+#: virtManager/details/console.py:795
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Fel i visarautentisering: %s"
 
-#: virtManager/details/console.py:831
+#: virtManager/details/console.py:817
 msgid "USB redirection error"
 msgstr "Fel i USB-omdirigering"
 
-#: virtManager/details/console.py:840
+#: virtManager/details/console.py:826
 msgid "Viewer was disconnected."
 msgstr "Visaren kopplades ifrån."
 
-#: virtManager/details/console.py:846
+#: virtManager/details/console.py:832
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH-tunnelns felutskrift: %s"
 
-#: virtManager/details/console.py:851 virtManager/details/console.py:983
+#: virtManager/details/console.py:837 virtManager/details/console.py:969
 msgid "Viewer disconnected."
 msgstr "Visaren är frånkopplad."
 
-#: virtManager/details/details.py:166
+#: virtManager/details/console.py:973
+#, python-format
+msgid "Press %s to release pointer."
+msgstr "Tryck %s för att släppa pekaren."
+
+#: virtManager/details/details.py:162
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "Floppy %(index)d"
 
-#: virtManager/details/details.py:172
+#: virtManager/details/details.py:168
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%(bus)s CDROM %(index)d"
 
-#: virtManager/details/details.py:177
+#: virtManager/details/details.py:173
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "%(bus)s disk %(index)d"
 
-#: virtManager/details/details.py:181
+#: virtManager/details/details.py:177
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(bus)s %(device)s %(index)d"
 
-#: virtManager/details/details.py:189
+#: virtManager/details/details.py:185
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "NIC %(mac)s"
 
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:198
 #, python-format
 msgid "Serial %(num)d"
 msgstr "Seriell %(num)d"
 
-#: virtManager/details/details.py:206
+#: virtManager/details/details.py:202
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "Parallell %(num)d"
 
-#: virtManager/details/details.py:210
+#: virtManager/details/details.py:206
 #, python-format
 msgid "Console %(num)d"
 msgstr "Konsol %(num)d"
 
-#: virtManager/details/details.py:215
+#: virtManager/details/details.py:211
 #, python-format
 msgid "Channel %(name)s"
 msgstr "Kanal %(name)s"
 
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:213
 #, python-format
 msgid "Channel %(type)s"
 msgstr "Kanal %(type)s"
 
-#: virtManager/details/details.py:221
+#: virtManager/details/details.py:217
 #, python-format
 msgid "Display %s"
 msgstr "Display %s"
 
-#: virtManager/details/details.py:223
+#: virtManager/details/details.py:219
 #, python-format
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%(bus)s omdirigerare %(index)d"
 
-#: virtManager/details/details.py:230
+#: virtManager/details/details.py:226
 #, python-format
 msgid "Sound %s"
 msgstr "Ljud %s"
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:228
 #, python-format
 msgid "Video %s"
 msgstr "Video %s"
 
-#: virtManager/details/details.py:234
+#: virtManager/details/details.py:230
 #, python-format
 msgid "Filesystem %(path)s"
 msgstr "Filsystem %(path)s"
 
-#: virtManager/details/details.py:238
+#: virtManager/details/details.py:234
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr "Styrenhet %(controller)s %(index)s"
 
-#: virtManager/details/details.py:242
+#: virtManager/details/details.py:238
 #, python-format
 msgid "Controller %(controller)s"
 msgstr "Styrenhet %(controller)s"
 
-#: virtManager/details/details.py:247
+#: virtManager/details/details.py:243
 #, python-format
 msgid "RNG %(device)s"
 msgstr "RNG %(device)s"
 
-#: virtManager/details/details.py:251
+#: virtManager/details/details.py:247
 #, python-format
 msgid "TPM %(device)s"
 msgstr "TPM %(device)s"
 
-#: virtManager/details/details.py:252
+#: virtManager/details/details.py:248
 #, python-format
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:550
+#: virtManager/details/details.py:540
 msgid "_Add Hardware"
 msgstr "_Lägg till maskinvara"
 
-#: virtManager/details/details.py:560
+#: virtManager/details/details.py:550
 msgid "_Remove Hardware"
 msgstr "_Ta bort maskinvara"
 
-#: virtManager/details/details.py:683
+#: virtManager/details/details.py:673
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt eller hypervisorn stödjer inte UEFI."
 
-#: virtManager/details/details.py:686
+#: virtManager/details/details.py:676
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirtd hittade inte någon UEFI/OVMF-avbild för fast programvara "
 "installerad på värden."
 
-#: virtManager/details/details.py:691
+#: virtManager/details/details.py:681
 msgid "UEFI not found"
 msgstr "UEFI hittades inte"
 
-#: virtManager/details/details.py:740
+#: virtManager/details/details.py:730
 msgid "Version"
 msgstr "Version"
 
-#: virtManager/details/details.py:802
+#: virtManager/details/details.py:792
 msgid "Application Default"
 msgstr "Programstandard"
 
-#: virtManager/details/details.py:804
+#: virtManager/details/details.py:794
 msgid "Hypervisor Default"
 msgstr "Hypervisor-standard"
 
-#: virtManager/details/details.py:806
+#: virtManager/details/details.py:796
 msgid "Clear CPU configuration"
 msgstr "Nollställ CPU-konfigurationen"
 
-#: virtManager/details/details.py:824
+#: virtManager/details/details.py:814
 msgid "Disk bus:"
 msgstr "Diskbuss:"
 
-#: virtManager/details/details.py:1024
+#: virtManager/details/details.py:1027
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Fel vid start av hårdvarudialog: %s"
 
-#: virtManager/details/details.py:1030
+#: virtManager/details/details.py:1033
 msgid "Are you sure you want to remove this device?"
 msgstr "Vill du verkligen ta bort denna enhet?"
 
-#: virtManager/details/details.py:1277 virtManager/details/details.py:1792
-#: virtManager/details/details.py:1811 virtManager/details/details.py:2005
+#: virtManager/details/details.py:1280 virtManager/details/details.py:1779
+#: virtManager/details/details.py:1798 virtManager/details/details.py:1992
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Okänd"
 
-#: virtManager/details/details.py:1359
+#: virtManager/details/details.py:1362
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Fel när ändringar verkställdes: %s"
 
-#: virtManager/details/details.py:1480
+#: virtManager/details/details.py:1483
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Fel när automatstartvärdet ändrades: %s"
 
-#: virtManager/details/details.py:1497
+#: virtManager/details/details.py:1500
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Kan inte sätta initrd utan att ange en sökväg till en kärna"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1503
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Kan inte sätta kärnargument utan att ange en sökväg till en kärna"
 
-#: virtManager/details/details.py:1507
+#: virtManager/details/details.py:1510
 msgid "An init path must be specified"
 msgstr "Sökväg till init måste anges"
 
-#: virtManager/details/details.py:1521 virtManager/device/addstorage.py:285
+#: virtManager/details/details.py:1524 virtManager/device/addstorage.py:285
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "Disken %(path)s används redan av andra gäster %(names)s"
 
-#: virtManager/details/details.py:1525 virtManager/device/addstorage.py:289
+#: virtManager/details/details.py:1528 virtManager/device/addstorage.py:289
 msgid "Do you really want to use the disk?"
 msgstr "Vill du verkligen att använda disken?"
 
-#: virtManager/details/details.py:1715
+#: virtManager/details/details.py:1702
 msgid "Remove this device from the virtual machine"
 msgstr "Ta bort denna enhet från den virtuella maskinen"
 
-#: virtManager/details/details.py:1771
+#: virtManager/details/details.py:1758
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Fel uppdatering av hårdvarusida: %s"
 
-#: virtManager/details/details.py:1866
+#: virtManager/details/details.py:1853
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s …"
 
-#: virtManager/details/details.py:1878
+#: virtManager/details/details.py:1865
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s lästa"
 
-#: virtManager/details/details.py:1879
+#: virtManager/details/details.py:1866
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s skrivet"
 
-#: virtManager/details/details.py:1882
+#: virtManager/details/details.py:1869
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s på"
 
-#: virtManager/details/details.py:1883
+#: virtManager/details/details.py:1870
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s ut"
 
-#: virtManager/details/details.py:1885 virtManager/details/details.py:1886
-#: virtManager/details/details.py:1887 virtManager/details/details.py:1888
+#: virtManager/details/details.py:1872 virtManager/details/details.py:1873
+#: virtManager/details/details.py:1874 virtManager/details/details.py:1875
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "Avaktiverat"
 
-#: virtManager/details/details.py:1896
+#: virtManager/details/details.py:1883
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s av %(total-memory)s"
 
-#: virtManager/details/details.py:2055
+#: virtManager/details/details.py:2041
 msgid "Absolute Movement"
 msgstr "Absolut rörelse"
 
-#: virtManager/details/details.py:2057
+#: virtManager/details/details.py:2043
 msgid "Relative Movement"
 msgstr "Relativ rörelse"
 
-#: virtManager/details/details.py:2066 virtManager/details/details.py:2240
-#: virtManager/details/details.py:2243
+#: virtManager/details/details.py:2052 virtManager/details/details.py:2227
+#: virtManager/details/details.py:2230
 msgid "Hypervisor does not support removing this device"
 msgstr "Hypervisorn stödjer inte att ta bort denna enhet"
 
-#: virtManager/details/details.py:2070
+#: virtManager/details/details.py:2056
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s-server"
 
-#: virtManager/details/details.py:2135
+#: virtManager/details/details.py:2122
 msgid "Serial Device"
 msgstr "Seriell enhet"
 
-#: virtManager/details/details.py:2137
+#: virtManager/details/details.py:2124
 msgid "Parallel Device"
 msgstr "Parallell enhet"
 
-#: virtManager/details/details.py:2139
+#: virtManager/details/details.py:2126
 msgid "Console Device"
 msgstr "Konsolenhet"
 
-#: virtManager/details/details.py:2141
+#: virtManager/details/details.py:2128
 msgid "Channel Device"
 msgstr "Kanalenhet"
 
-#: virtManager/details/details.py:2151
+#: virtManager/details/details.py:2138
 msgid "Primary Console"
 msgstr "Primär konsol"
 
-#: virtManager/details/details.py:2207
+#: virtManager/details/details.py:2194
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fysisk %s-enhet"
 
-#: virtManager/details/details.py:2224
+#: virtManager/details/details.py:2211
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Det går inte att ta bort den sista videoenheten medan Graphics/Display är "
 "inkopplad."
 
-#: virtManager/details/details.py:2250
+#: virtManager/details/details.py:2237
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s på %(address)s"
 
-#: virtManager/details/details.py:2256 virtManager/details/details.py:2266
+#: virtManager/details/details.py:2243 virtManager/details/details.py:2253
 msgid "Cannot remove controller while devices are attached."
 msgstr "Kan inte ta bort styrenhet medans enheter är inkopplade."
 
-#: virtManager/details/details.py:2357
+#: virtManager/details/details.py:2344
 msgid "Hard Disk"
 msgstr "Hårddisk"
 
-#: virtManager/details/details.py:2358
+#: virtManager/details/details.py:2345
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2359
+#: virtManager/details/details.py:2346
 msgid "Network (PXE)"
 msgstr "Nätverk (PXE)"
 
-#: virtManager/details/details.py:2371
+#: virtManager/details/details.py:2361
 msgid "No bootable devices"
 msgstr "Inga startbara enheter"
 
-#: virtManager/details/details.py:2418
+#: virtManager/details/details.py:2408
 msgid "Overview"
 msgstr "Översikt"
 
-#: virtManager/details/details.py:2419
+#: virtManager/details/details.py:2409
 msgid "OS information"
 msgstr "OS-information"
 
-#: virtManager/details/details.py:2421
+#: virtManager/details/details.py:2411
 msgid "Performance"
 msgstr "Prestanda"
 
-#: virtManager/details/details.py:2423
+#: virtManager/details/details.py:2413
 msgid "CPUs"
 msgstr "CPU:er"
 
-#: virtManager/details/details.py:2425
+#: virtManager/details/details.py:2415
 msgid "Boot Options"
 msgstr "Startalternativ"
 
@@ -3891,7 +3886,7 @@ msgstr ""
 "Kan inte ge de begärda kreditiven till VNC-servern.\n"
 "Kreditivtypen %s stödjs inte"
 
-#: virtManager/details/viewers.py:568
+#: virtManager/details/viewers.py:569
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Stötte på SPICE %(error-name)s"
@@ -3931,31 +3926,31 @@ msgstr "_Mall:"
 msgid "_Source path:"
 msgstr "_Källsökväg:"
 
-#: virtManager/device/gfxdetails.py:78
+#: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
 msgstr "Spice-server"
 
-#: virtManager/device/gfxdetails.py:79
+#: virtManager/device/gfxdetails.py:88
 msgid "VNC server"
 msgstr "VNCserver"
 
-#: virtManager/device/gfxdetails.py:86
+#: virtManager/device/gfxdetails.py:95
 msgid "Address"
 msgstr "Adress"
 
-#: virtManager/device/gfxdetails.py:95
+#: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
 msgstr "Endast lokal värd"
 
-#: virtManager/device/gfxdetails.py:96
+#: virtManager/device/gfxdetails.py:105
 msgid "All interfaces"
 msgstr "Alla gränssnitt"
 
-#: virtManager/device/gfxdetails.py:103
+#: virtManager/device/gfxdetails.py:112
 msgid "Auto"
 msgstr "Automatiskt"
 
-#: virtManager/device/gfxdetails.py:232
+#: virtManager/device/gfxdetails.py:216
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr "A_uto (port %(port)d)"
@@ -4422,31 +4417,31 @@ msgstr "Panikslagen"
 msgid "Error launching manager: %s"
 msgstr "Fel vid start av hanterare: %s"
 
-#: virtManager/manager.py:301
+#: virtManager/manager.py:302
 msgid "D_etails"
 msgstr "_Detaljer"
 
-#: virtManager/manager.py:378
+#: virtManager/manager.py:379
 msgid "CPU usage"
 msgstr "Processoranvändning"
 
-#: virtManager/manager.py:379
+#: virtManager/manager.py:380
 msgid "Host CPU usage"
 msgstr "Värdprocessoranvändning"
 
-#: virtManager/manager.py:380
+#: virtManager/manager.py:381
 msgid "Memory usage"
 msgstr "Minnesanvändning"
 
-#: virtManager/manager.py:381
+#: virtManager/manager.py:382
 msgid "Disk I/O"
 msgstr "Disk-I/O"
 
-#: virtManager/manager.py:382
+#: virtManager/manager.py:383
 msgid "Network I/O"
 msgstr "Nätverks-I/O"
 
-#: virtManager/manager.py:497
+#: virtManager/manager.py:498
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -4461,30 +4456,30 @@ msgstr ""
 "\n"
 "Är du säker?"
 
-#: virtManager/manager.py:574
+#: virtManager/manager.py:575
 #, python-format
 msgid "%(uri)s (Double click to connect)"
 msgstr "%(uri)s (Dubbelklicka för att ansluta)"
 
-#: virtManager/manager.py:581
+#: virtManager/manager.py:582
 #, python-format
 msgid "%(connection)s - Not Connected"
 msgstr "%(connection)s – Inte ansluten"
 
-#: virtManager/manager.py:583
+#: virtManager/manager.py:584
 #, python-format
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s – Ansluter …"
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:381
+#: virtManager/manager.py:760 virtManager/vmwindow.py:378
 msgid "_Restore"
 msgstr "_Återställ"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:409
+#: virtManager/manager.py:797 virtManager/vmwindow.py:419
 msgid "Resume the virtual machine"
 msgstr "Återuppta den virtuella maskinen"
 
-#: virtManager/manager.py:912
+#: virtManager/manager.py:913
 msgid "Disabled in preferences dialog."
 msgstr "Avaktiverat i inställningsdialogen."
 
@@ -4589,11 +4584,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "Kunde inte hitta angiven enhet i den inaktiva VM-konfigurationen: %s"
 
-#: virtManager/object/domain.py:1377
+#: virtManager/object/domain.py:1374
 msgid "Saving domain to disk"
 msgstr "Spara domän till disk"
 
-#: virtManager/object/domain.py:1429
+#: virtManager/object/domain.py:1426
 msgid "Migrating domain"
 msgstr "Migrera domän"
 
@@ -4917,32 +4912,37 @@ msgstr "Fel vid återställning av domänen"
 msgid "Error launching details: %s"
 msgstr "Fel vid start av detaljer: %s"
 
-#: virtManager/vmwindow.py:223
+#: virtManager/vmwindow.py:225
 msgid "This will abort the installation. Are you sure?"
 msgstr "Detta kommer att avbryta installationen. Är du säker?"
 
-#: virtManager/vmwindow.py:421
+#: virtManager/vmwindow.py:387
+#, python-format
+msgid "%(vm-name)s on %(connection-name)s"
+msgstr "%(vm-name)s på %(connection-name)s"
+
+#: virtManager/vmwindow.py:431
 msgid "Manage VM snapshots"
 msgstr "Hantera VM-ögonblicksbilder"
 
-#: virtManager/vmwindow.py:504
+#: virtManager/vmwindow.py:510
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Fel när en skärmbild togs: %s"
 
-#: virtManager/vmwindow.py:512
+#: virtManager/vmwindow.py:518
 msgid "Error initializing spice USB device widget"
 msgstr "Fel vid initiering av enhetswidgeten för spice USB"
 
-#: virtManager/vmwindow.py:516
+#: virtManager/vmwindow.py:522
 msgid "Select USB devices for redirection"
 msgstr "Välj USB-enheter att omdirigeras"
 
-#: virtManager/vmwindow.py:548
+#: virtManager/vmwindow.py:554
 msgid "Save Virtual Machine Screenshot"
 msgstr "Spara skärmdumpar för virtuell maskin"
 
-#: virtManager/vmwindow.py:549
+#: virtManager/vmwindow.py:555
 msgid "PNG files"
 msgstr "PNG-filer"
 
@@ -5437,8 +5437,8 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 "Konfigurera VM-startsäkerhet (t.ex. SEV-minneskryptering). T.ex.:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
-"BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:892
@@ -5736,21 +5736,21 @@ msgstr "SEV-startsäkerhet kräver en Q35 UEFI-maskin"
 msgid "SEV launch security is not supported on this platform"
 msgstr "SEV-startsäkerhet stödjs inte på denna plattform"
 
-#: virtinst/domcapabilities.py:222
+#: virtinst/domcapabilities.py:226
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:228
+#: virtinst/domcapabilities.py:232
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:231
+#: virtinst/domcapabilities.py:235
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Anpassad: %(path)s"
 
-#: virtinst/domcapabilities.py:307
+#: virtinst/domcapabilities.py:311
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Misslyckades att få expanderad CPU-XML: %s"
@@ -6227,8 +6227,8 @@ msgid ""
 "will not see text install output. You might want to use --location."
 msgstr ""
 "CDROM-media skriver inte till textkonsolen som standard, så du kommer "
-"sannolikt inte se utdata från textinstallationen. Du kanske vill använda "
-"--location."
+"sannolikt inte se utdata från textinstallationen. Du kanske vill använda --"
+"location."
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6258,8 +6258,8 @@ msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
 msgstr ""
-"Inget operativsystem hittat, VM-prestanda kan bli lidande. Ange ett OS med "
-"--os-variant för optimalt resultat."
+"Inget operativsystem hittat, VM-prestanda kan bli lidande. Ange ett OS med --"
+"os-variant för optimalt resultat."
 
 #: virtinst/virtinstall.py:380
 #, python-brace-format
@@ -6308,7 +6308,8 @@ msgstr "Väntar på att installationen skall färdigställas."
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "Väntar %(minutes)d minut på att installationen skall färdigställas."
-msgstr[1] "Väntar %(minutes)d minuter på att installationen skall färdigställas."
+msgstr[1] ""
+"Väntar %(minutes)d minuter på att installationen skall färdigställas."
 
 #: virtinst/virtinstall.py:685
 #, python-format

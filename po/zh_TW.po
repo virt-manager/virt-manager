@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-21 06:11+0000\n"
+"POT-Creation-Date: 2020-09-29 06:13+0000\n"
 "PO-Revision-Date: 2020-09-05 10:29+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -253,7 +253,7 @@ msgstr "請稍候..."
 msgid "Processing..."
 msgstr "處理中..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:138 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "詳情(_D)"
 
@@ -587,8 +587,8 @@ msgstr "虛擬類型(_V)："
 msgid "Architecture options"
 msgstr "架構選項"
 
-#: ui/createvm.ui:773 virtManager/details/details.py:739
-#: virtManager/manager.py:328 virtManager/oslist.py:65
+#: ui/createvm.ui:773 virtManager/details/details.py:729
+#: virtManager/manager.py:329 virtManager/oslist.py:65
 msgid "Name"
 msgstr "名稱"
 
@@ -742,7 +742,7 @@ msgstr "CPU 數(_P)："
 msgid "(Insert host mem)"
 msgstr "(插入主機記憶體)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2424
+#: ui/createvm.ui:1995 virtManager/details/details.py:2414
 msgid "Memory"
 msgstr "記憶體"
 
@@ -1302,36 +1302,36 @@ msgstr "密碼(_S)："
 msgid "_Port:"
 msgstr "埠(_P)："
 
-#: ui/gfxdetails.ui:166 ui/vsockdetails.ui:38
-#: virtManager/device/gfxdetails.py:225
+#: ui/gfxdetails.ui:167 ui/vsockdetails.ui:38
+#: virtManager/device/gfxdetails.py:209
 msgid "A_uto"
 msgstr "自動(_U)"
 
-#: ui/gfxdetails.ui:191 ui/vsockdetails.ui:63
+#: ui/gfxdetails.ui:192 ui/vsockdetails.ui:63
 msgid "5900"
 msgstr "5900"
 
-#: ui/gfxdetails.ui:259
+#: ui/gfxdetails.ui:260
 msgid "Open_GL:"
 msgstr "OpenGL(_G)："
 
-#: ui/gfxdetails.ui:273
+#: ui/gfxdetails.ui:274
 msgid "L_isten type:"
 msgstr "監聽類型(_I)："
 
-#: ui/gfxdetails.ui:362
+#: ui/gfxdetails.ui:363
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
 
-#: ui/gfxdetails.ui:378
+#: ui/gfxdetails.ui:379
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr ""
 
-#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:29
+#: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:39
 msgid "_File"
 msgstr "檔案(_F)"
 
-#: ui/host.ui:43 ui/vmwindow.ui:38
+#: ui/host.ui:43 ui/vmwindow.ui:48
 msgid "_View Manager"
 msgstr "查看管理器(_V)"
 
@@ -1489,7 +1489,7 @@ msgstr "連接詳情(_C)"
 msgid "_Virtual Machine Details"
 msgstr "虛擬機詳情(_V)"
 
-#: ui/manager.ui:172 ui/vmwindow.ui:118
+#: ui/manager.ui:172 ui/vmwindow.ui:132
 msgid "_View"
 msgstr "查看(_V)"
 
@@ -1537,17 +1537,17 @@ msgstr "顯示虛擬機主控臺及詳情"
 msgid "_Open"
 msgstr "打開(_O)"
 
-#: ui/manager.ui:332 ui/vmwindow.ui:345
+#: ui/manager.ui:332 ui/vmwindow.ui:359
 msgid "Power on the virtual machine"
 msgstr "打開虛擬機"
 
-#: ui/manager.ui:333 virtManager/manager.py:761 virtManager/vmmenu.py:95
-#: virtManager/vmwindow.py:383
+#: ui/manager.ui:333 virtManager/manager.py:762 virtManager/vmmenu.py:95
+#: virtManager/vmwindow.py:380
 msgid "_Run"
 msgstr "執行(_R)"
 
-#: ui/manager.ui:348 ui/vmwindow.ui:360 virtManager/manager.py:798
-#: virtManager/vmwindow.py:411
+#: ui/manager.ui:348 ui/vmwindow.ui:374 virtManager/manager.py:799
+#: virtManager/vmwindow.py:421
 msgid "Pause the virtual machine"
 msgstr "暫停虛擬機"
 
@@ -1555,11 +1555,11 @@ msgstr "暫停虛擬機"
 msgid "_Pause"
 msgstr "暫停(_P)"
 
-#: ui/manager.ui:364 ui/vmwindow.ui:375
+#: ui/manager.ui:364 ui/vmwindow.ui:389
 msgid "Shut down the virtual machine"
 msgstr "關閉虛擬系統"
 
-#: ui/manager.ui:365 ui/vmwindow.ui:376 virtManager/vmmenu.py:65
+#: ui/manager.ui:365 ui/vmwindow.ui:390 virtManager/vmmenu.py:65
 #: virtManager/vmmenu.py:101
 msgid "_Shut Down"
 msgstr "關機(_S)"
@@ -1931,123 +1931,123 @@ msgstr "<span size='large'>建立快照</span>"
 msgid "_Description:"
 msgstr "描述(_D)："
 
-#: ui/vmwindow.ui:8
+#: ui/vmwindow.ui:18
 msgid "Virtual Machine"
 msgstr "虛擬機"
 
-#: ui/vmwindow.ui:79
+#: ui/vmwindow.ui:93
 msgid "Virtual _Machine"
 msgstr "虛擬機(_M)"
 
-#: ui/vmwindow.ui:95
+#: ui/vmwindow.ui:109
 msgid "_Take Screenshot"
 msgstr "截圖(_T)"
 
-#: ui/vmwindow.ui:104
+#: ui/vmwindow.ui:118
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr "重定向主機 USB 裝置到使用 SPICE 圖形的虛擬機。"
 
-#: ui/vmwindow.ui:105
+#: ui/vmwindow.ui:119
 msgid "_Redirect USB device"
 msgstr "重定向 USB 裝置(_R)"
 
-#: ui/vmwindow.ui:127
+#: ui/vmwindow.ui:141
 msgid "_Console"
 msgstr "主控臺(_C)"
 
-#: ui/vmwindow.ui:149
+#: ui/vmwindow.ui:163
 msgid "Sna_pshots"
 msgstr "快照(_P)"
 
-#: ui/vmwindow.ui:166
+#: ui/vmwindow.ui:180
 msgid "_Fullscreen"
 msgstr "全螢幕(_F)"
 
-#: ui/vmwindow.ui:175
+#: ui/vmwindow.ui:189
 msgid "_Resize to VM"
 msgstr "適應虛擬機尺寸(_R)"
 
-#: ui/vmwindow.ui:184
+#: ui/vmwindow.ui:198
 msgid "_Scale Display"
 msgstr "縮放顯示(_S)"
 
-#: ui/vmwindow.ui:194
+#: ui/vmwindow.ui:208
 msgid "_Always"
 msgstr "總是(_A)"
 
-#: ui/vmwindow.ui:204
+#: ui/vmwindow.ui:218
 msgid "_Only when Fullscreen"
 msgstr "僅全螢幕時(_O)"
 
-#: ui/vmwindow.ui:215
+#: ui/vmwindow.ui:229
 msgid "_Never"
 msgstr "從不(_N)"
 
-#: ui/vmwindow.ui:232
+#: ui/vmwindow.ui:246
 msgid "Auto _resize VM with window"
 msgstr "自動調整虛擬系統視窗大小(_R)"
 
-#: ui/vmwindow.ui:245
+#: ui/vmwindow.ui:259
 #, fuzzy
 #| msgid "Console"
 msgid "Co_nsoles"
 msgstr "主控臺"
 
-#: ui/vmwindow.ui:253
+#: ui/vmwindow.ui:267
 #, fuzzy
 #| msgid "_Autoconnect:"
 msgid "_Autoconnect"
 msgstr "自動連接(_A)："
 
-#: ui/vmwindow.ui:268
+#: ui/vmwindow.ui:282
 msgid "T_oolbar"
 msgstr "工具條(_O)"
 
-#: ui/vmwindow.ui:282
+#: ui/vmwindow.ui:296
 msgid "Send _Key"
 msgstr "發送按鍵(_K)"
 
-#: ui/vmwindow.ui:305
+#: ui/vmwindow.ui:319
 msgid "Show the graphical console"
 msgstr "顯示圖形主控臺"
 
-#: ui/vmwindow.ui:306 virtManager/addhardware.py:232
+#: ui/vmwindow.ui:320 virtManager/addhardware.py:232
 msgid "Console"
 msgstr "主控臺"
 
-#: ui/vmwindow.ui:320
+#: ui/vmwindow.ui:334
 msgid "Show virtual hardware details"
 msgstr "顯示虛擬硬體詳情"
 
-#: ui/vmwindow.ui:321 virtManager/error.py:352
+#: ui/vmwindow.ui:335 virtManager/error.py:352
 msgid "Details"
 msgstr "詳情"
 
-#: ui/vmwindow.ui:346
+#: ui/vmwindow.ui:360
 msgid "Run"
 msgstr "執行"
 
-#: ui/vmwindow.ui:361
+#: ui/vmwindow.ui:375
 msgid "Pause"
 msgstr "暫停"
 
-#: ui/vmwindow.ui:399
+#: ui/vmwindow.ui:413
 msgid "Snapshots"
 msgstr "快照"
 
-#: ui/vmwindow.ui:413
+#: ui/vmwindow.ui:427
 msgid "Switch to fullscreen view"
 msgstr "切換到全螢幕"
 
-#: ui/vmwindow.ui:438
+#: ui/vmwindow.ui:452
 msgid "Begin Installation"
 msgstr "開始安裝"
 
-#: ui/vmwindow.ui:440
+#: ui/vmwindow.ui:454
 msgid "_Begin Installation"
 msgstr "開始安裝(_B)"
 
-#: ui/vmwindow.ui:455
+#: ui/vmwindow.ui:469
 msgid "_Cancel Installation"
 msgstr "取消安裝(_C)"
 
@@ -2072,7 +2072,7 @@ msgstr "XML(_X)"
 msgid "Error launching 'About' dialog: %s"
 msgstr "啟動 '關於' 對話框出錯：%s"
 
-#: virtManager/addhardware.py:160 virtManager/details/details.py:612
+#: virtManager/addhardware.py:160 virtManager/details/details.py:602
 msgid "Hardware"
 msgstr "硬體"
 
@@ -2091,7 +2091,7 @@ msgid "Network"
 msgstr "網路"
 
 #: virtManager/addhardware.py:217 virtManager/addhardware.py:1009
-#: virtManager/details/details.py:198
+#: virtManager/details/details.py:194
 msgid "Input"
 msgstr "輸入"
 
@@ -2141,7 +2141,7 @@ msgstr "視訊"
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt 版本不支援視訊裝置。"
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:258
+#: virtManager/addhardware.py:254 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "看門狗"
@@ -2151,7 +2151,7 @@ msgid "Filesystem"
 msgstr "檔案系統"
 
 #: virtManager/addhardware.py:258 virtManager/addhardware.py:1021
-#: virtManager/details/details.py:256
+#: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "智慧卡"
 
@@ -2163,12 +2163,12 @@ msgstr "USB 重新定向"
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:248
+#: virtManager/addhardware.py:264 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "隨機數生成器"
 
 #: virtManager/addhardware.py:265 virtManager/addhardware.py:1029
-#: virtManager/details/details.py:255
+#: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "Panic 通知器"
 
@@ -2176,7 +2176,7 @@ msgstr "Panic 通知器"
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "不支援此虛擬機管理程式/libvirt/ 架構組合。"
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:257
+#: virtManager/addhardware.py:268 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
@@ -2221,7 +2221,7 @@ msgstr "Spice 埠"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2360
+#: virtManager/addhardware.py:436 virtManager/details/details.py:2347
 msgid "Floppy"
 msgstr "軟碟"
 
@@ -2350,15 +2350,15 @@ msgstr "轉儲客端記憶體核心"
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB 圖形數位板"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:197
+#: virtManager/addhardware.py:571 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "鍵盤"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:195
+#: virtManager/addhardware.py:572 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "滑鼠"
 
-#: virtManager/addhardware.py:573 virtManager/details/details.py:193
+#: virtManager/addhardware.py:573 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "繪圖板"
 
@@ -2391,7 +2391,7 @@ msgstr "LUN 直連"
 #: virtManager/addhardware.py:711 virtManager/addhardware.py:792
 #: virtManager/addhardware.py:802 virtManager/addhardware.py:922
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:94
+#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:103
 #: virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "虛擬機管理程式預設"
@@ -2440,7 +2440,7 @@ msgstr "隨機數生成器"
 msgid "VM Sockets"
 msgstr "虛擬系統通訊端"
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2143
+#: virtManager/addhardware.py:1035 virtManager/details/details.py:2130
 #, python-format
 msgid "%s Device"
 msgstr "%s 裝置"
@@ -2896,8 +2896,8 @@ msgstr[0] "最多可用 %(numcpus)d"
 msgid "No active connection to install on."
 msgstr "沒有活動連接可用於安裝。"
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1793
-#: virtManager/device/gfxdetails.py:87 virtinst/domcapabilities.py:223
+#: virtManager/createvm.py:947 virtManager/details/details.py:1780
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:227
 msgid "None"
 msgstr "無"
 
@@ -3282,47 +3282,37 @@ msgstr "圖形主控臺"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager 不支援多個圖形主控臺"
 
-#: virtManager/details/console.py:383
-#, python-format
-msgid "%(vm-name)s on %(connection-name)s"
-msgstr "%(vm-name)s - %(connection-name)s"
-
-#: virtManager/details/console.py:390
-#, python-format
-msgid "Press %s to release pointer."
-msgstr "按 %s 釋放游標。"
-
-#: virtManager/details/console.py:507
+#: virtManager/details/console.py:492
 #, python-format
 msgid "Graphics type '%s' does not support auto resize."
 msgstr "'%s' 顯示卡類型不支援自動調整大小。"
 
-#: virtManager/details/console.py:510
+#: virtManager/details/console.py:495
 msgid "Guest agent is not available."
 msgstr "客端代理不可用。"
 
-#: virtManager/details/console.py:590
+#: virtManager/details/console.py:575
 msgid "Guest has crashed."
 msgstr "客端已崩潰。"
 
-#: virtManager/details/console.py:592
+#: virtManager/details/console.py:577
 msgid "Guest is not running."
 msgstr "客端未執行。"
 
-#: virtManager/details/console.py:714
+#: virtManager/details/console.py:700
 msgid "Graphical console not configured for guest"
 msgstr "沒有為虛擬機系統配置圖形主控臺"
 
-#: virtManager/details/console.py:721
+#: virtManager/details/console.py:707
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "無法顯示圖形主控臺類型 '%s'"
 
-#: virtManager/details/console.py:733
+#: virtManager/details/console.py:719
 msgid "Connecting to graphical console for guest"
 msgstr "為虛擬機系統連接到圖形主控臺"
 
-#: virtManager/details/console.py:752
+#: virtManager/details/console.py:738
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3331,349 +3321,354 @@ msgstr ""
 "連接到圖形主控臺出錯：\n"
 "%s"
 
-#: virtManager/details/console.py:809
+#: virtManager/details/console.py:795
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "查看器身份驗證錯誤： %s"
 
-#: virtManager/details/console.py:831
+#: virtManager/details/console.py:817
 msgid "USB redirection error"
 msgstr "USB 重定向錯誤"
 
-#: virtManager/details/console.py:840
+#: virtManager/details/console.py:826
 msgid "Viewer was disconnected."
 msgstr "查看器已斷開連接。"
 
-#: virtManager/details/console.py:846
+#: virtManager/details/console.py:832
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH 隧道輸出出錯：%s"
 
-#: virtManager/details/console.py:851 virtManager/details/console.py:983
+#: virtManager/details/console.py:837 virtManager/details/console.py:969
 msgid "Viewer disconnected."
 msgstr "查看器斷開連接。"
 
-#: virtManager/details/details.py:166
+#: virtManager/details/console.py:973
+#, python-format
+msgid "Press %s to release pointer."
+msgstr "按 %s 釋放游標。"
+
+#: virtManager/details/details.py:162
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "軟碟 %(index)d"
 
-#: virtManager/details/details.py:172
+#: virtManager/details/details.py:168
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%(bus)s CDROM %(index)d"
 
-#: virtManager/details/details.py:177
+#: virtManager/details/details.py:173
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "%(bus)s 磁碟 %(index)d"
 
-#: virtManager/details/details.py:181
+#: virtManager/details/details.py:177
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(bus)s %(device)s %(index)d"
 
-#: virtManager/details/details.py:189
+#: virtManager/details/details.py:185
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "NIC %(mac)s"
 
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:198
 #, python-format
 msgid "Serial %(num)d"
 msgstr "串列埠 %(num)d"
 
-#: virtManager/details/details.py:206
+#: virtManager/details/details.py:202
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "並口 %(num)d"
 
-#: virtManager/details/details.py:210
+#: virtManager/details/details.py:206
 #, python-format
 msgid "Console %(num)d"
 msgstr "主控臺 %(num)d"
 
-#: virtManager/details/details.py:215
+#: virtManager/details/details.py:211
 #, python-format
 msgid "Channel %(name)s"
 msgstr "信道 %(name)s"
 
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:213
 #, python-format
 msgid "Channel %(type)s"
 msgstr "信道 %(type)s"
 
-#: virtManager/details/details.py:221
+#: virtManager/details/details.py:217
 #, python-format
 msgid "Display %s"
 msgstr "顯示協議 %s"
 
-#: virtManager/details/details.py:223
+#: virtManager/details/details.py:219
 #, python-format
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%(bus)s 轉發器 %(index)d"
 
-#: virtManager/details/details.py:230
+#: virtManager/details/details.py:226
 #, python-format
 msgid "Sound %s"
 msgstr "音效卡 %s"
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:228
 #, python-format
 msgid "Video %s"
 msgstr "顯示卡 %s"
 
-#: virtManager/details/details.py:234
+#: virtManager/details/details.py:230
 #, python-format
 msgid "Filesystem %(path)s"
 msgstr "檔案系統 %(path)s"
 
-#: virtManager/details/details.py:238
+#: virtManager/details/details.py:234
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr "控制器 %(controller)s %(index)s"
 
-#: virtManager/details/details.py:242
+#: virtManager/details/details.py:238
 #, python-format
 msgid "Controller %(controller)s"
 msgstr "控制器 %(controller)s"
 
-#: virtManager/details/details.py:247
+#: virtManager/details/details.py:243
 #, python-format
 msgid "RNG %(device)s"
 msgstr "RNG %(device)s"
 
-#: virtManager/details/details.py:251
+#: virtManager/details/details.py:247
 #, python-format
 msgid "TPM %(device)s"
 msgstr "TPM %(device)s"
 
-#: virtManager/details/details.py:252
+#: virtManager/details/details.py:248
 #, python-format
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:550
+#: virtManager/details/details.py:540
 msgid "_Add Hardware"
 msgstr "添加硬體(_A)"
 
-#: virtManager/details/details.py:560
+#: virtManager/details/details.py:550
 msgid "_Remove Hardware"
 msgstr "刪除硬體(_R)"
 
-#: virtManager/details/details.py:683
+#: virtManager/details/details.py:673
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt 或虛擬機管理器不支援 UEFI。"
 
-#: virtManager/details/details.py:686
+#: virtManager/details/details.py:676
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr "Libvirt 未檢測到安裝在主機上的任何 UEFI/O虛擬系統F 韌體鏡像。"
 
-#: virtManager/details/details.py:691
+#: virtManager/details/details.py:681
 msgid "UEFI not found"
 msgstr "UEFI 未找到"
 
-#: virtManager/details/details.py:740
+#: virtManager/details/details.py:730
 msgid "Version"
 msgstr "版本"
 
-#: virtManager/details/details.py:802
+#: virtManager/details/details.py:792
 msgid "Application Default"
 msgstr "應用程式預設值"
 
-#: virtManager/details/details.py:804
+#: virtManager/details/details.py:794
 msgid "Hypervisor Default"
 msgstr "管理程式預設值"
 
-#: virtManager/details/details.py:806
+#: virtManager/details/details.py:796
 msgid "Clear CPU configuration"
 msgstr "清除 CPU 配置"
 
-#: virtManager/details/details.py:824
+#: virtManager/details/details.py:814
 msgid "Disk bus:"
 msgstr "磁碟匯流排："
 
-#: virtManager/details/details.py:1024
+#: virtManager/details/details.py:1027
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "啟動硬體對話時出錯：%s"
 
-#: virtManager/details/details.py:1030
+#: virtManager/details/details.py:1033
 msgid "Are you sure you want to remove this device?"
 msgstr "確定要刪除這個裝置嗎？"
 
-#: virtManager/details/details.py:1277 virtManager/details/details.py:1792
-#: virtManager/details/details.py:1811 virtManager/details/details.py:2005
+#: virtManager/details/details.py:1280 virtManager/details/details.py:1779
+#: virtManager/details/details.py:1798 virtManager/details/details.py:1992
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "不明"
 
-#: virtManager/details/details.py:1359
+#: virtManager/details/details.py:1362
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "應用更改時出錯：%s"
 
-#: virtManager/details/details.py:1480
+#: virtManager/details/details.py:1483
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "更改自動啟動值出錯：%s"
 
-#: virtManager/details/details.py:1497
+#: virtManager/details/details.py:1500
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "不指定核心路徑就無法設定 initrd"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1503
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "不指定核心路徑就不能設定核心參數"
 
-#: virtManager/details/details.py:1507
+#: virtManager/details/details.py:1510
 msgid "An init path must be specified"
 msgstr "必須指定 init 路徑"
 
-#: virtManager/details/details.py:1521 virtManager/device/addstorage.py:285
+#: virtManager/details/details.py:1524 virtManager/device/addstorage.py:285
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "磁碟 \"%(path)s\" 已被其他客端 %(names)s 使用"
 
-#: virtManager/details/details.py:1525 virtManager/device/addstorage.py:289
+#: virtManager/details/details.py:1528 virtManager/device/addstorage.py:289
 msgid "Do you really want to use the disk?"
 msgstr "確實要使用這個磁碟嗎？"
 
-#: virtManager/details/details.py:1715
+#: virtManager/details/details.py:1702
 msgid "Remove this device from the virtual machine"
 msgstr "從虛擬機刪除此裝置"
 
-#: virtManager/details/details.py:1771
+#: virtManager/details/details.py:1758
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "重新整理硬體頁面時出錯：%s"
 
-#: virtManager/details/details.py:1866
+#: virtManager/details/details.py:1853
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1878
+#: virtManager/details/details.py:1865
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s 讀取"
 
-#: virtManager/details/details.py:1879
+#: virtManager/details/details.py:1866
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s 寫入"
 
-#: virtManager/details/details.py:1882
+#: virtManager/details/details.py:1869
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s 入站"
 
-#: virtManager/details/details.py:1883
+#: virtManager/details/details.py:1870
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s 出站"
 
-#: virtManager/details/details.py:1885 virtManager/details/details.py:1886
-#: virtManager/details/details.py:1887 virtManager/details/details.py:1888
+#: virtManager/details/details.py:1872 virtManager/details/details.py:1873
+#: virtManager/details/details.py:1874 virtManager/details/details.py:1875
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "禁用"
 
-#: virtManager/details/details.py:1896
+#: virtManager/details/details.py:1883
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s / %(total-memory)s"
 
-#: virtManager/details/details.py:2055
+#: virtManager/details/details.py:2041
 msgid "Absolute Movement"
 msgstr "絕對移動"
 
-#: virtManager/details/details.py:2057
+#: virtManager/details/details.py:2043
 msgid "Relative Movement"
 msgstr "相對移動"
 
-#: virtManager/details/details.py:2066 virtManager/details/details.py:2240
-#: virtManager/details/details.py:2243
+#: virtManager/details/details.py:2052 virtManager/details/details.py:2227
+#: virtManager/details/details.py:2230
 msgid "Hypervisor does not support removing this device"
 msgstr "虛擬機管理程式不支援刪除此裝置"
 
-#: virtManager/details/details.py:2070
+#: virtManager/details/details.py:2056
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s 伺服器"
 
-#: virtManager/details/details.py:2135
+#: virtManager/details/details.py:2122
 msgid "Serial Device"
 msgstr "串列埠裝置"
 
-#: virtManager/details/details.py:2137
+#: virtManager/details/details.py:2124
 msgid "Parallel Device"
 msgstr "並口裝置"
 
-#: virtManager/details/details.py:2139
+#: virtManager/details/details.py:2126
 msgid "Console Device"
 msgstr "主控臺裝置"
 
-#: virtManager/details/details.py:2141
+#: virtManager/details/details.py:2128
 msgid "Channel Device"
 msgstr "通道裝置"
 
-#: virtManager/details/details.py:2151
+#: virtManager/details/details.py:2138
 msgid "Primary Console"
 msgstr "主主控臺"
 
-#: virtManager/details/details.py:2207
+#: virtManager/details/details.py:2194
 #, python-format
 msgid "Physical %s Device"
 msgstr "物理 %s 裝置"
 
-#: virtManager/details/details.py:2224
+#: virtManager/details/details.py:2211
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr "連接了圖形/顯示器後，無法移除最後一個視訊裝置。"
 
-#: virtManager/details/details.py:2250
+#: virtManager/details/details.py:2237
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s 於 %(address)s"
 
-#: virtManager/details/details.py:2256 virtManager/details/details.py:2266
+#: virtManager/details/details.py:2243 virtManager/details/details.py:2253
 msgid "Cannot remove controller while devices are attached."
 msgstr "連接裝置後無法移除控制器。"
 
-#: virtManager/details/details.py:2357
+#: virtManager/details/details.py:2344
 msgid "Hard Disk"
 msgstr "硬碟"
 
-#: virtManager/details/details.py:2358
+#: virtManager/details/details.py:2345
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2359
+#: virtManager/details/details.py:2346
 msgid "Network (PXE)"
 msgstr "網路（PXE）"
 
-#: virtManager/details/details.py:2371
+#: virtManager/details/details.py:2361
 msgid "No bootable devices"
 msgstr "沒有可引導裝置"
 
-#: virtManager/details/details.py:2418
+#: virtManager/details/details.py:2408
 msgid "Overview"
 msgstr "概況"
 
-#: virtManager/details/details.py:2419
+#: virtManager/details/details.py:2409
 msgid "OS information"
 msgstr "系統訊息"
 
-#: virtManager/details/details.py:2421
+#: virtManager/details/details.py:2411
 msgid "Performance"
 msgstr "性能"
 
-#: virtManager/details/details.py:2423
+#: virtManager/details/details.py:2413
 msgid "CPUs"
 msgstr "CPU 數"
 
-#: virtManager/details/details.py:2425
+#: virtManager/details/details.py:2415
 msgid "Boot Options"
 msgstr "引導選項"
 
@@ -3884,7 +3879,7 @@ msgstr ""
 "無法將請求的憑據提供給 VNC 伺服器。\n"
 "不支援憑據類型 %s"
 
-#: virtManager/details/viewers.py:568
+#: virtManager/details/viewers.py:569
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "遭遇 SPICE %(error-name)s 錯誤"
@@ -3924,31 +3919,31 @@ msgstr "模板(_m)："
 msgid "_Source path:"
 msgstr "源路徑(_S)："
 
-#: virtManager/device/gfxdetails.py:78
+#: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
 msgstr "Spice 伺服器"
 
-#: virtManager/device/gfxdetails.py:79
+#: virtManager/device/gfxdetails.py:88
 msgid "VNC server"
 msgstr "VNC 伺服器"
 
-#: virtManager/device/gfxdetails.py:86
+#: virtManager/device/gfxdetails.py:95
 msgid "Address"
 msgstr "地址"
 
-#: virtManager/device/gfxdetails.py:95
+#: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
 msgstr "僅本機主機"
 
-#: virtManager/device/gfxdetails.py:96
+#: virtManager/device/gfxdetails.py:105
 msgid "All interfaces"
 msgstr "所有介面"
 
-#: virtManager/device/gfxdetails.py:103
+#: virtManager/device/gfxdetails.py:112
 msgid "Auto"
 msgstr "自動"
 
-#: virtManager/device/gfxdetails.py:232
+#: virtManager/device/gfxdetails.py:216
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr "自動（埠 %(port)d）(_U)"
@@ -4411,31 +4406,31 @@ msgstr "Panicked"
 msgid "Error launching manager: %s"
 msgstr "啟動管理器出錯：%s"
 
-#: virtManager/manager.py:301
+#: virtManager/manager.py:302
 msgid "D_etails"
 msgstr "詳情(_e)"
 
-#: virtManager/manager.py:378
+#: virtManager/manager.py:379
 msgid "CPU usage"
 msgstr "CPU 使用率"
 
-#: virtManager/manager.py:379
+#: virtManager/manager.py:380
 msgid "Host CPU usage"
 msgstr "主機 CPU 使用率"
 
-#: virtManager/manager.py:380
+#: virtManager/manager.py:381
 msgid "Memory usage"
 msgstr "記憶體用量"
 
-#: virtManager/manager.py:381
+#: virtManager/manager.py:382
 msgid "Disk I/O"
 msgstr "磁碟 I/O"
 
-#: virtManager/manager.py:382
+#: virtManager/manager.py:383
 msgid "Network I/O"
 msgstr "網路 I/O"
 
-#: virtManager/manager.py:497
+#: virtManager/manager.py:498
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -4450,30 +4445,30 @@ msgstr ""
 "\n"
 "確定要這樣做嗎？"
 
-#: virtManager/manager.py:574
+#: virtManager/manager.py:575
 #, python-format
 msgid "%(uri)s (Double click to connect)"
 msgstr "%(uri)s（雙擊進行連接）"
 
-#: virtManager/manager.py:581
+#: virtManager/manager.py:582
 #, python-format
 msgid "%(connection)s - Not Connected"
 msgstr "%(connection)s - 未連接"
 
-#: virtManager/manager.py:583
+#: virtManager/manager.py:584
 #, python-format
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s - 連線中......"
 
-#: virtManager/manager.py:759 virtManager/vmwindow.py:381
+#: virtManager/manager.py:760 virtManager/vmwindow.py:378
 msgid "_Restore"
 msgstr "復原(_R)"
 
-#: virtManager/manager.py:796 virtManager/vmwindow.py:409
+#: virtManager/manager.py:797 virtManager/vmwindow.py:419
 msgid "Resume the virtual machine"
 msgstr "復原虛擬機"
 
-#: virtManager/manager.py:912
+#: virtManager/manager.py:913
 msgid "Disabled in preferences dialog."
 msgstr "在屬性對話中禁用。"
 
@@ -4573,11 +4568,11 @@ msgstr "快照需要客端已分配至少一個可寫的 qcow2 磁碟鏡像。"
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "在非活動的 虛擬系統 配置中找不到指定的裝置：%s"
 
-#: virtManager/object/domain.py:1377
+#: virtManager/object/domain.py:1374
 msgid "Saving domain to disk"
 msgstr "正在將域儲存到磁碟"
 
-#: virtManager/object/domain.py:1429
+#: virtManager/object/domain.py:1426
 msgid "Migrating domain"
 msgstr "正在遷移域"
 
@@ -4897,32 +4892,37 @@ msgstr "重設域出錯"
 msgid "Error launching details: %s"
 msgstr "啟動詳情出錯：%s"
 
-#: virtManager/vmwindow.py:223
+#: virtManager/vmwindow.py:225
 msgid "This will abort the installation. Are you sure?"
 msgstr "這將中止安裝。確定嗎？"
 
-#: virtManager/vmwindow.py:421
+#: virtManager/vmwindow.py:387
+#, python-format
+msgid "%(vm-name)s on %(connection-name)s"
+msgstr "%(vm-name)s - %(connection-name)s"
+
+#: virtManager/vmwindow.py:431
 msgid "Manage VM snapshots"
 msgstr "管理虛擬機快照"
 
-#: virtManager/vmwindow.py:504
+#: virtManager/vmwindow.py:510
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "截圖錯誤： %s"
 
-#: virtManager/vmwindow.py:512
+#: virtManager/vmwindow.py:518
 msgid "Error initializing spice USB device widget"
 msgstr "初始化 Spice USB 裝置部件時出錯"
 
-#: virtManager/vmwindow.py:516
+#: virtManager/vmwindow.py:522
 msgid "Select USB devices for redirection"
 msgstr "選擇需要重定向的 USB 裝置"
 
-#: virtManager/vmwindow.py:548
+#: virtManager/vmwindow.py:554
 msgid "Save Virtual Machine Screenshot"
 msgstr "儲存虛擬機截圖"
 
-#: virtManager/vmwindow.py:549
+#: virtManager/vmwindow.py:555
 msgid "PNG files"
 msgstr "PNG 檔案"
 
@@ -5707,21 +5707,21 @@ msgstr "SEV 啟動安全性設定需要電腦支援 Q35 UEFI"
 msgid "SEV launch security is not supported on this platform"
 msgstr "此平臺不支援 SEV 啟動安全性設定"
 
-#: virtinst/domcapabilities.py:222
+#: virtinst/domcapabilities.py:226
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:228
+#: virtinst/domcapabilities.py:232
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:231
+#: virtinst/domcapabilities.py:235
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "自訂： %(path)s"
 
-#: virtinst/domcapabilities.py:307
+#: virtinst/domcapabilities.py:311
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "獲取擴展的 CPU XML 失敗：%s"
