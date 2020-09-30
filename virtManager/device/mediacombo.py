@@ -153,6 +153,7 @@ class vmmMediaCombo(vmmGObjectUI):
         if not self._rows_inited:
             self._init_rows()
 
+        self._entry.set_text("")
         model = self._combo.get_model()
         model.clear()
 
