@@ -234,7 +234,7 @@ def _make_tests():
 
     for key, testdata in sorted(urls.items()):
         def _make_wrapper(d):
-            return lambda _self: _testURL(d)
+            return lambda: _testURL(d)
         methodname = "test_URL%s" % key.replace("-", "_")
         globals()[methodname] = _make_wrapper(testdata)
 
