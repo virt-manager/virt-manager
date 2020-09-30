@@ -64,7 +64,7 @@ def testDetailsHardwareSmokeTestAlternate(app):
     win = _testSmokeTest(app, "test alternate devs title")
     win.find("Details", "page tab").click()
     _select_hw(app, win, "Performance", "performance-tab")
-    app.sleep(.2)  # wait for polling to trigger perf updates
+    app.sleep(1)  # wait for polling to trigger perf updates
 
 
 def _testRename(app, win, origname, newname):
