@@ -1,5 +1,14 @@
 # Virtual Machine Manager News
 
+## Release 3.1.0 (September 30, 2020)
+- Return to using qcow2 sparse by default with libvirt 5.0.0+
+- Make VM window shortcuts less likely to conflict with guest usage
+- Fix 3.0.0 regression with spice audio
+- createvol: Add explicit option for qcow2 non-sparse
+- Unconditionally add USB redirdev to new VMs when using SPICE
+- Unconditionally add sound devices to new VMs
+- Translation string improvements (Pino Toscano)
+
 ## Release 3.0.0 (September 15, 2020)
 - virt-install --cloud-init support (Athina Plaskasoviti, Cole Robinson)
 - The virt-convert tool has been removed. Please use virt-v2v instead
