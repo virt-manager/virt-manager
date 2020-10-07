@@ -605,6 +605,26 @@ class SpiceViewer(Viewer):
                 self._main_channel, "notify::agent-connected",
                 self._agent_connected_cb)
 
+        elif (type(channel) == SpiceClientGLib.InputsChannel and
+                not self._display):
+            # If there is no video output initialse display with inputs
+            # only. DisplayChannel doesn't exist so connection never occurs.
+            if not any([v for v in self._vm.get_xmlobj().devices.video if
+                    v.model == "none"]):
+                return	# pragma: no cover
+
+            channel_id = channel.get_property("channel-id")
+
+            if channel_id != 0:  # pragma: no cover
+                log.debug("Spice multi-head unsupported")
+                return
+
+            self._display_channel = channel
+            self._display = SpiceClientGtk.Display.new(self._spice_session,
+                                                      channel_id)
+            self._init_widget()
+            self.emit("connected")
+
         elif (type(channel) == SpiceClientGLib.DisplayChannel and
                 not self._display):
             channel_id = channel.get_property("channel-id")
@@ -685,7 +705,7 @@ class SpiceViewer(Viewer):
                                       SpiceClientGtk.DisplayKeyEvent.CLICK)
 
     def _get_desktop_resolution(self):
-        if not self._display_channel:
+        if not (type(self._display_channel) == SpiceClientGLib.DisplayChannel):
             return None  # pragma: no cover
         return self._display_channel.get_properties("width", "height")
 
