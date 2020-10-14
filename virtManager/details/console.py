@@ -667,6 +667,11 @@ class vmmConsolePages(vmmGObjectUI):
             gpage == _GFX_PAGE_VIEWER and
             self._viewer and self._viewer.console_is_open())
 
+    def _viewer_can_auto_clipboard(self):
+        return (self._viewer_is_visible() and
+                self._viewer.console_has_auto_clipboard() and
+                self.vm.has_spicevmc_type_channel())
+
     def _viewer_can_usb_redirect(self):
         return (self._viewer_is_visible() and
                 self._viewer.console_has_usb_redirection() and
@@ -732,6 +737,7 @@ class vmmConsolePages(vmmGObjectUI):
             self._connect_viewer_signals()
 
             self._viewer.console_open()
+            self._viewer.console_set_auto_clipboard(self.vm.get_console_auto_clipboard())
         except Exception as e:
             log.exception("Error connecting to graphical console")
             self._activate_gfx_unavailable_page(
@@ -955,6 +961,11 @@ class vmmConsolePages(vmmGObjectUI):
     ###########################
     # API used by vmmVMWindow #
     ###########################
+
+    def vmwindow_get_can_auto_clipboard(self):
+        return self._viewer_can_auto_clipboard()
+    def vmwindow_viewer_set_auto_clipboard(self, enabled):
+        self._viewer.console_set_auto_clipboard(enabled)
 
     def vmwindow_viewer_has_usb_redirection(self):
         return bool(self._viewer and

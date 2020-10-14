@@ -42,6 +42,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_console_scaling()
         self.refresh_console_resizeguest()
         self.refresh_console_autoredir()
+        self.refresh_console_autoclipboard()
         self.refresh_console_autoconnect()
         self.refresh_graphics_type()
         self.refresh_storage_format()
@@ -69,6 +70,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_console_scaling_changed": self.change_console_scaling,
             "on_prefs_console_resizeguest_changed": self.change_console_resizeguest,
             "on_prefs_console_autoredir_changed": self.change_console_autoredir,
+            "on_prefs_console_autoclipboard_changed": self.change_console_autoclipboard,
             "on_prefs_console_autoconnect_toggled": self.change_console_autoconnect,
             "on_prefs_graphics_type_changed": self.change_graphics_type,
             "on_prefs_storage_format_changed": self.change_storage_format,
@@ -134,6 +136,18 @@ class vmmPreferences(vmmGObjectUI):
         vals = {
             False: _("Manual redirect only"),
             True: _("Auto redirect on USB attach"),
+        }
+        for key, val in vals.items():
+            model.append([key, val])
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 1)
+
+        combo = self.widget("prefs-console-autoclipboard")
+        # [gsettings value, string]
+        model = Gtk.ListStore(bool, str)
+        vals = {
+            False: _("Disabled by default"),
+            True: _("Enabled by default"),
         }
         for key, val in vals.items():
             model.append([key, val])
@@ -217,6 +231,10 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_console_autoredir(self):
         combo = self.widget("prefs-console-autoredir")
         val = self.config.get_auto_usbredir()
+        uiutil.set_list_selection(combo, val)
+    def refresh_console_autoclipboard(self):
+        combo = self.widget("prefs-console-autoclipboard")
+        val = self.config.get_auto_clipboard()
         uiutil.set_list_selection(combo, val)
     def refresh_console_autoconnect(self):
         val = self.config.get_console_autoconnect()
@@ -362,6 +380,9 @@ class vmmPreferences(vmmGObjectUI):
     def change_console_autoredir(self, box):
         val = uiutil.get_list_selection(box)
         self.config.set_auto_usbredir(val)
+    def change_console_autoclipboard(self, box):
+        val = uiutil.get_list_selection(box)
+        self.config.set_auto_clipboard(val)
     def change_console_autoconnect(self, src):
         self.config.set_console_autoconnect(bool(src.get_active()))
 

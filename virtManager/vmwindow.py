@@ -116,6 +116,7 @@ class vmmVMWindow(vmmGObjectUI):
             "on_details_menu_virtual_manager_activate": self.control_vm_menu,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_usb_redirection": self.control_vm_usb_redirection,
+            "on_details_menu_autoclipboard_toggled": self.control_vm_auto_clipboard,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
             "on_details_menu_view_manager_activate": self.view_manager,
             "on_details_menu_view_details_toggled": self.details_console_changed,
@@ -138,8 +139,8 @@ class vmmVMWindow(vmmGObjectUI):
         self.vm.connect("resources-sampled", self._resources_sampled_cb)
 
         self._sync_console_page_menu_state()
-        self._console_refresh_scaling_from_settings()
 
+        self._console_refresh_scaling_from_settings()
         self.add_gsettings_handle(
             self.vm.on_console_scaling_changed(
                 self._console_refresh_scaling_from_settings))
@@ -153,6 +154,11 @@ class vmmVMWindow(vmmGObjectUI):
         self.add_gsettings_handle(
             self.vm.on_console_autoconnect_changed(
                 self._console_refresh_autoconnect_from_settings))
+
+        self._console_refresh_auto_clipboard_from_settings()
+        self.add_gsettings_handle(
+            self.vm.on_console_auto_clipboard_changed(
+                self._console_refresh_auto_clipboard_from_settings))
 
         self._refresh_vm_state()
         self.activate_default_page()
@@ -490,6 +496,10 @@ class vmmVMWindow(vmmGObjectUI):
             vmmenu.VMActionUI.resume(self, self.vm)
 
     def control_vm_menu(self, src_ignore):
+        can_auto_clipboard = bool(self.vm.has_spicevmc_type_channel() and
+                                  self._console.vmwindow_get_can_auto_clipboard())
+        self.widget("details-menu-auto-clipboard").set_sensitive(can_auto_clipboard)
+
         can_usb = bool(self.vm.has_spicevmc_type_redirdev() and
                        self._console.vmwindow_viewer_has_usb_redirection())
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
@@ -522,6 +532,14 @@ class vmmVMWindow(vmmGObjectUI):
         spice_usbdev_dialog.show_info(_("Select USB devices for redirection"),
                                       widget=spice_usbdev_widget,
                                       buttons=Gtk.ButtonsType.CLOSE)
+
+    def control_vm_auto_clipboard(self, src):
+        if not src.get_sensitive():
+            return  # pragma: no cover
+
+        val = bool(self.widget("details-menu-auto-clipboard").get_active())
+        self.vm.set_console_auto_clipboard(val)
+        self._console.vmwindow_viewer_set_auto_clipboard(val)
 
     def _take_screenshot(self):
         image = self._console.vmwindow_viewer_get_pixbuf()
@@ -601,9 +619,11 @@ class vmmVMWindow(vmmGObjectUI):
 
         paused = self.vm.is_paused()
         is_viewer = self._console.vmwindow_get_viewer_is_visible()
+        can_auto_clipboard = self._console.vmwindow_get_can_auto_clipboard()
         can_usb = self._console.vmwindow_get_can_usb_redirect()
 
         self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
+        self.widget("details-menu-auto-clipboard").set_sensitive(can_auto_clipboard)
         self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
         keycombo_menu = self._console.vmwindow_get_keycombo_menu()
 
@@ -631,6 +651,10 @@ class vmmVMWindow(vmmGObjectUI):
             scale_type == self.config.CONSOLE_SCALE_FULLSCREEN)
 
         self._console.vmwindow_sync_scaling_with_display()
+
+    def _console_refresh_auto_clipboard_from_settings(self):
+        val = self.vm.get_console_auto_clipboard()
+        self.widget("details-menu-auto-clipboard").set_active(val)
 
     def _scaling_ui_changed_cb(self, src):
         # Called from details.py

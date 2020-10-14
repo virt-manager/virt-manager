@@ -184,6 +184,11 @@ class Viewer(vmmGObject):
     def _get_resizeguest(self):
         raise NotImplementedError()
 
+    def _has_auto_clipboard(self):
+        raise NotImplementedError()
+    def _set_auto_clipboard(self, val):
+        raise NotImplementedError()
+
     def _get_usb_widget(self):
         raise NotImplementedError()
     def _has_usb_redirection(self):
@@ -244,6 +249,11 @@ class Viewer(vmmGObject):
         return self._get_resizeguest()
     def console_set_resizeguest(self, val):
         return self._set_resizeguest(val)
+
+    def console_has_auto_clipboard(self):
+        return self._has_auto_clipboard()
+    def console_set_auto_clipboard(self, val):
+        self._set_auto_clipboard(val)
 
     def console_get_usb_widget(self):
         return self._get_usb_widget()
@@ -474,6 +484,7 @@ class SpiceViewer(Viewer):
 
     def __init__(self, *args, **kwargs):
         Viewer.__init__(self, *args, **kwargs)
+        self._gtk_session = None
         self._spice_session = None
         self._display = None
         self._audio = None
@@ -512,8 +523,7 @@ class SpiceViewer(Viewer):
     def _create_spice_session(self):
         self._spice_session = SpiceClientGLib.Session()
         SpiceClientGLib.set_session_option(self._spice_session)
-        gtk_session = SpiceClientGtk.GtkSession.get(self._spice_session)
-        gtk_session.set_property("auto-clipboard", True)
+        self._gtk_session = SpiceClientGtk.GtkSession.get(self._spice_session)
 
         _SIGS.connect(self._spice_session, "channel-new", self._channel_new_cb)
 
@@ -531,7 +541,7 @@ class SpiceViewer(Viewer):
 
             autoredir = self.config.get_auto_usbredir()
             if autoredir:
-                gtk_session.set_property("auto-usbredir", True)
+                self._gtk_session.set_property("auto-usbredir", True)
         except Exception:  # pragma: no cover
             self._usbdev_manager = None
             log.debug("Error initializing spice usb device manager",
@@ -738,6 +748,19 @@ class SpiceViewer(Viewer):
         if self._display:
             return self._display.get_property("resize-guest")
         return False  # pragma: no cover
+
+    def _has_auto_clipboard(self):
+        if not self._spice_session:
+            return False  # pragma: no cover
+
+        for c in self._spice_session.get_channels():
+            if c.__class__ is SpiceClientGLib.MainChannel:
+                return True
+        return False
+
+    def _set_auto_clipboard(self, val):
+        if self._gtk_session:
+            self._gtk_session.set_property("auto-clipboard", val)
 
     def _usbdev_redirect_error(self, spice_usbdev_widget, spice_usb_device,
             errstr):  # pragma: no cover

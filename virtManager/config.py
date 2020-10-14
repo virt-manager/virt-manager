@@ -488,6 +488,11 @@ class vmmConfig(object):
     def set_auto_usbredir(self, state):
         self.conf.set("/console/auto-redirect", state)
 
+    def get_auto_clipboard(self):
+        return bool(self.conf.get("/console/auto-clipboard"))
+    def set_auto_clipboard(self, state):
+        self.conf.set("/console/auto-clipboard", state)
+
     def get_console_autoconnect(self):
         return bool(self.conf.get("/console/autoconnect"))
     def set_console_autoconnect(self, val):

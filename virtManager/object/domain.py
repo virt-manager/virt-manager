@@ -427,6 +427,13 @@ class vmmDomain(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
+    def has_spicevmc_type_channel(self):
+        devs = self.xmlobj.devices.channel
+        for dev in devs:
+            if dev.type == "spicevmc":
+                return True
+        return False
+
     def has_spicevmc_type_redirdev(self):
         devs = self.xmlobj.devices.redirdev
         for dev in devs:
@@ -1579,6 +1586,17 @@ class vmmDomain(vmmLibvirtObject):
         ret = self.config.get_pervm(self.get_uuid(), "/resize-guest")
         if ret == -1:
             return self.config.get_console_resizeguest()
+        return ret
+
+    def on_console_auto_clipboard_changed(self, *args, **kwargs):
+        return self.config.listen_pervm(self.get_uuid(), "/auto-clipboard",
+                                        *args, **kwargs)
+    def set_console_auto_clipboard(self, value):
+        self.config.set_pervm(self.get_uuid(), "/auto-clipboard", value)
+    def get_console_auto_clipboard(self):
+        ret = self.config.get_pervm(self.get_uuid(), "/auto-clipboard")
+        if ret == -1:
+            return self.config.get_auto_clipboard()
         return ret
 
     def on_console_autoconnect_changed(self, *args, **kwargs):

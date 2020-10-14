@@ -688,6 +688,32 @@ identical CPUs in order to migrate the VM.</property>
                           <object class="GtkLabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">If disabled, the VM window will not automatically enabled clipboard sync with the running VM.</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">SPICE _clipboard sync:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">prefs-console-autoclipboard</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="prefs-console-autoclipboard">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <signal name="changed" handler="on_prefs_console_autoclipboard_changed" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
                             <property name="tooltip_text" translatable="yes">If disabled, the VM window will not automatically connect to the running VM graphical console.</property>
                             <property name="halign">start</property>
                             <property name="label" translatable="yes">Console autoconnec_t:</property>
@@ -696,7 +722,7 @@ identical CPUs in order to migrate the VM.</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">5</property>
                           </packing>
                         </child>
                         <child>
@@ -709,7 +735,7 @@ identical CPUs in order to migrate the VM.</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">4</property>
+                            <property name="top_attach">5</property>
                           </packing>
                         </child>
                       </object>
