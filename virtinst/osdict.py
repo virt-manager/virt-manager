@@ -183,13 +183,13 @@ class _OSDB(object):
     # Internal APIs #
     #################
 
-    def _make_default_variants(self):
-        ret = {}
-
-        # Generic variant
-        v = _OsVariant(None)
-        ret[v.name] = v
-        return ret
+    def _make_default_variants(self, allvariants):
+        # Add our custom generic variant
+        o = Libosinfo.Os()
+        o.set_param("short-id", "generic")
+        o.set_param("name", _("Generic OS"))
+        v = _OsVariant(o)
+        allvariants[v.name] = v
 
     @property
     def _os_loader(self):
@@ -204,7 +204,7 @@ class _OSDB(object):
     def _all_variants(self):
         if not self.__all_variants:
             loader = self._os_loader
-            allvariants = self._make_default_variants()
+            allvariants = {}
             db = loader.get_db()
             oslist = db.get_os_list()
             for o in _OsinfoIter(oslist):
@@ -212,6 +212,7 @@ class _OSDB(object):
                 for name in osi.get_short_ids():
                     allvariants[name] = osi
 
+            self._make_default_variants(allvariants)
             self.__all_variants = allvariants
         return self.__all_variants
 
@@ -365,20 +366,18 @@ class _OsResources:
 class _OsVariant(object):
     def __init__(self, o):
         self._os = o
-        self._family = self._os and self._os.get_family() or None
 
-        self._short_ids = ["generic"]
-        if self._os:
-            self._short_ids = [self._os.get_short_id()]
-            if hasattr(self._os, "get_short_id_list"):
-                self._short_ids = self._os.get_short_id_list()
+        self._short_ids = [self._os.get_short_id()]
+        if hasattr(self._os, "get_short_id_list"):
+            self._short_ids = self._os.get_short_id_list()
         self.name = self._short_ids[0]
 
-        self.full_id = self._os and self._os.get_id() or None
-        self.label = self._os and self._os.get_name() or _("Generic OS")
-        self.codename = self._os and self._os.get_codename() or ""
-        self.distro = self._os and self._os.get_distro() or ""
-        self.version = self._os and self._os.get_version() or None
+        self._family = self._os.get_family()
+        self.full_id = self._os.get_id()
+        self.label = self._os.get_name()
+        self.codename = self._os.get_codename() or ""
+        self.distro = self._os.get_distro() or ""
+        self.version = self._os.get_version()
 
         self.eol = self._get_eol()
 
@@ -393,9 +392,6 @@ class _OsVariant(object):
     def _is_related_to(self, related_os_list, osobj=None,
             check_derives=True, check_upgrades=True, check_clones=True):
         osobj = osobj or self._os
-        if not osobj:
-            return False
-
         if osobj.get_short_id() in related_os_list:
             return True
 
@@ -426,8 +422,6 @@ class _OsVariant(object):
         return False
 
     def _get_all_devices(self):
-        if not self._os:
-            return []
         return list(_OsinfoIter(self._os.get_all_devices()))
 
     def _device_filter(self, devids=None, cls=None, extra_devs=None):
@@ -454,12 +448,12 @@ class _OsVariant(object):
     ###############
 
     def _get_eol(self):
-        eol = self._os and self._os.get_eol_date() or None
-        rel = self._os and self._os.get_release_date() or None
+        eol = self._os.get_eol_date()
+        rel = self._os.get_release_date()
 
         # We can use os.get_release_status() & osinfo.ReleaseStatus.ROLLING
         # if we require libosinfo >= 1.4.0.
-        release_status = self._os and self._os.get_param_value(
+        release_status = self._os.get_param_value(
                 Libosinfo.OS_PROP_RELEASE_STATUS) or None
 
         def _glib_to_datetime(glibdate):
@@ -489,7 +483,7 @@ class _OsVariant(object):
         return self._os
 
     def is_generic(self):
-        return self._os is None
+        return self.name == "generic"
 
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']
@@ -513,7 +507,7 @@ class _OsVariant(object):
 
     def supports_usbtablet(self, extra_devs=None):
         # If no OS specified, still default to tablet
-        if not self._os:
+        if self.is_generic():
             return True
 
         devids = ["http://usb.org/usb/80ee/0021"]
@@ -582,8 +576,8 @@ class _OsVariant(object):
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def get_recommended_resources(self):
-        minimum = self._os and self._os.get_minimum_resources() or None
-        recommended = self._os and self._os.get_recommended_resources() or None
+        minimum = self._os.get_minimum_resources()
+        recommended = self._os.get_recommended_resources()
         return _OsResources(minimum, recommended)
 
     def get_network_install_required_ram(self, guest):
@@ -599,9 +593,6 @@ class _OsVariant(object):
         Kernel argument name the distro's installer uses to reference
         a network source, possibly bypassing some installer prompts
         """
-        if not self._os:
-            return None
-
         # SUSE distros
         if self.distro in ["caasp", "sle", "sled", "sles", "opensuse"]:
             return "install"
@@ -657,9 +648,7 @@ class _OsVariant(object):
         return None
 
     def get_location(self, arch, profile=None):
-        treelist = []
-        if self._os:
-            treelist = list(_OsinfoIter(self._os.get_tree_list()))
+        treelist = list(_OsinfoIter(self._os.get_tree_list()))
 
         if not treelist:
             raise RuntimeError(
@@ -680,14 +669,9 @@ class _OsVariant(object):
             {"osname": self.name, "archname": arch})
 
     def get_install_script_list(self):
-        if not self._os:
-            return []  # pragma: no cover
         return list(_OsinfoIter(self._os.get_install_script_list()))
 
     def _get_installable_drivers(self, arch):
-        if not self._os:
-            return []
-
         installable_drivers = []
         device_drivers = list(_OsinfoIter(self._os.get_device_drivers()))
         for device_driver in device_drivers:
