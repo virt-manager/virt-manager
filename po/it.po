@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-09-29 06:13+0000\n"
-"PO-Revision-Date: 2020-09-24 19:29+0000\n"
+"PO-Revision-Date: 2020-10-15 18:15+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,8 +48,7 @@ msgstr ""
 "macchine virtuali KVM, Xen e LXC. Avviare, fermare, aggiungere e rimuovere "
 "dispositivi virtuali, connettersi con una console grafica o testuale, "
 "visualizzare statistiche sull'utilizzo delle risorse di VM esistenti su "
-"macchine locali o remote. Utilizza libvirt come API backend per "
-"l'amministrazione."
+"macchine locali o remote. Utilizza libvirt come interfaccia di gestione."
 
 #: data/virt-manager.appdata.xml.in:20
 msgid "Main manager window"
@@ -390,7 +389,7 @@ msgid ""
 "guests will not be available. Networking options\n"
 "are very limited. </small>"
 msgstr ""
-"<small>La sessione usermode QEMU non è quella predefinita\n"
+"<small>La sessione utente QEMU non è quella predefinita\n"
 "di virt-manager. È probabile che i guest QEMU/KVM\n"
 "preesistenti non siano disponibili. Le opzioni di rete\n"
 "sono molto limitate. </small>"
@@ -529,7 +528,7 @@ msgstr "Indicare come si desidera installare il sistema operativo"
 
 #: ui/createvm.ui:276
 msgid "_Local install media (ISO image or CDROM)"
-msgstr "Media d'installazione _locale (immagine ISO o CDROM)"
+msgstr "Supporto d'installazione _locale (immagine ISO o CDROM)"
 
 #: ui/createvm.ui:294
 msgid "Network _Install (HTTP, HTTPS, or FTP)"
@@ -823,10 +822,8 @@ msgid "Pa_th:"
 msgstr "Pe_rcorso:"
 
 #: ui/createvol.ui:435
-#, fuzzy
-#| msgid "_Deleting storage:"
 msgid "_Backing store"
-msgstr "_Eliminazione di storage:"
+msgstr ""
 
 #: ui/delete.ui:9 virtManager/delete.py:286
 msgid "Delete Virtual Machine"
@@ -1634,7 +1631,7 @@ msgstr ""
 
 #: ui/migrate.ui:546
 msgid "A_llow unsafe:"
-msgstr "Con_senti non protetto:"
+msgstr "Con_senti non sicuro:"
 
 #: ui/migrate.ui:572
 msgid ""
@@ -1647,13 +1644,12 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"Normalmente la configurazione della macchina virtuale viene rimossa "
-"dall’host di origine e salvata definitivamente sull’host di destinazione. "
-"L’host di destinazione è considerato la nuova \"casa\" della macchina "
-"virtuale.\n"
+"Normalmente la configurazione della macchina virtuale viene rimossa dall’"
+"host sorgente e salvata definitivamente sull’host di destinazione. L’host di "
+"destinazione è considerato la nuova \"casa\" della macchina virtuale.\n"
 "\n"
 "Se \"Spostamento temporaneo\" è attivato, la migrazione è considerata solo "
-"un trasferimento temporaneo: l’host di origine mantiene una copia della "
+"un trasferimento temporaneo: l’host sorgente mantiene una copia della "
 "configurazione della macchina virtuale e la copia in esecuzione trasferita a "
 "destinazione è solo temporanea e scompare all’arresto."
 
@@ -1709,7 +1705,7 @@ msgstr "Preferenze"
 
 #: ui/preferences.ui:48
 msgid "Enable _system tray icon"
-msgstr "Abilitare icona nell'area di notifica di _sistema"
+msgstr "Abilitare l'icona nell'area di notifica di _sistema"
 
 #: ui/preferences.ui:69
 msgid "Enable libgues_tfs VM introspection"
@@ -1795,7 +1791,7 @@ msgstr "<b>Impostazioni predefinite per nuove macchine virtuali</b>"
 
 #: ui/preferences.ui:530
 msgid "N_ew VM"
-msgstr "N_uova macchina virtuale"
+msgstr "N_uove macchine virtuali"
 
 #: ui/preferences.ui:561
 msgid "Graphical console _scaling:"
@@ -1811,7 +1807,7 @@ msgstr "Non supportato"
 
 #: ui/preferences.ui:622
 msgid "Change..."
-msgstr "Modifica..."
+msgstr "Cambia..."
 
 #: ui/preferences.ui:639
 msgid ""
@@ -1820,7 +1816,7 @@ msgid ""
 msgstr ""
 "Modificare la risoluzione del guest quando viene cambiata la dimensione "
 "della finestra del guest. Funziona solo con un guest adeguatamente "
-"configurato utilizzando spice e desktop agent."
+"configurato utilizzando Spice e l'agente per il desktop."
 
 #: ui/preferences.ui:641
 msgid "_Resize guest with window:"
@@ -1912,7 +1908,7 @@ msgstr "<small><i>Questo è l’ultimo snapshot applicato.</i></small>"
 
 #: ui/snapshots.ui:387 ui/snapshots.ui:388
 msgid "Create new snapshot"
-msgstr "Creare un nuovo snapshot"
+msgstr "Crea un nuovo snapshot"
 
 #: ui/snapshots.ui:414
 msgid "Run selected snapshot"
@@ -2054,7 +2050,7 @@ msgstr "Avvio installazione"
 
 #: ui/vmwindow.ui:454
 msgid "_Begin Installation"
-msgstr "_Avvio installazione"
+msgstr "_Avvia installazione"
 
 #: ui/vmwindow.ui:469
 msgid "_Cancel Installation"
@@ -2641,7 +2637,7 @@ msgstr ""
 
 #: virtManager/config.py:148
 msgid "Locate or create storage volume"
-msgstr "Trova o crea uno storage volume"
+msgstr "Trova o crea un volume di storage"
 
 #: virtManager/config.py:149
 msgid "Locate existing storage"
@@ -2649,7 +2645,7 @@ msgstr "Trova storage esistente"
 
 #: virtManager/config.py:161
 msgid "Locate ISO media volume"
-msgstr "Trova volume immagine ISO"
+msgstr "Trova volume di immagine ISO"
 
 #: virtManager/config.py:162
 msgid "Locate ISO media"
@@ -2657,7 +2653,7 @@ msgstr "Trova immagine ISO"
 
 #: virtManager/config.py:168
 msgid "Locate floppy media volume"
-msgstr "Trova volume del supporto floppy"
+msgstr "Trova volume di supporto floppy"
 
 #: virtManager/config.py:169
 msgid "Locate floppy media"
@@ -2691,9 +2687,9 @@ msgstr ""
 "Rinominazione di '%(object)s' fallita. Anche il tentativo di ripristino è "
 "fallito.\n"
 "\n"
-"Errore orginale: %(origerror)s\n"
+"Errore originale: %(origerror)s\n"
 "\n"
-"Errore ripristino: %(recovererror)s"
+"Errore durante il ripristino: %(recovererror)s"
 
 #: virtManager/createconn.py:56
 #, python-format
@@ -2923,7 +2919,7 @@ msgstr "URL dell'albero di installazione"
 
 #: virtManager/createvm.py:965
 msgid "Import existing OS image"
-msgstr "Importa immagine OS esistente"
+msgstr "Importa immagine SO esistente"
 
 #: virtManager/createvm.py:967
 msgid "Manual install"
@@ -3012,7 +3008,7 @@ msgstr "Occorre specificare l'albero di installazione."
 
 #: virtManager/createvm.py:1514
 msgid "A storage path to import is required."
-msgstr "Occorre specificare un percorso di storage da importare."
+msgstr "Occorre specificare il percorso di storage da importare."
 
 #: virtManager/createvm.py:1520
 msgid "The import path must point to an existing storage."
@@ -3020,11 +3016,11 @@ msgstr "Il percorso di importazione deve puntare ad uno storage esistente."
 
 #: virtManager/createvm.py:1526
 msgid "An application path is required."
-msgstr "Il percorso dell'applicazione è obbligatorio."
+msgstr "Occorre specificare il percorso dell'applicazione."
 
 #: virtManager/createvm.py:1531
 msgid "An OS directory path is required."
-msgstr "Il percorso della directory del sistema operativo è obbligatorio."
+msgstr "Occorre specificare il percorso della directory del sistema operativo."
 
 #: virtManager/createvm.py:1545
 msgid "A template name is required."
@@ -3177,7 +3173,7 @@ msgstr ""
 #: virtManager/delete.py:297
 #, python-format
 msgid "Deleting virtual machine '%s'"
-msgstr "Eliminazione macchina virtuale '%s'"
+msgstr "Eliminazione della macchina virtuale '%s'"
 
 #: virtManager/delete.py:339
 #, python-format
@@ -3236,7 +3232,7 @@ msgstr "Impossibile eliminare il dispositivo SCSI."
 
 #: virtManager/delete.py:571
 msgid "Cannot delete unmanaged remote storage."
-msgstr "Impossibile eliminare storage remoto unmanaged."
+msgstr "Impossibile eliminare storage remoto non gestito."
 
 #: virtManager/delete.py:573
 msgid "Path does not exist."
@@ -3491,7 +3487,7 @@ msgstr "libvirt o l’hypervisor non supporta l’interfaccia UEFI."
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
-"libvirt non rileva immagini del firmware UEFI/OVMF installate sull’host."
+"libvirt non ha rilevato immagini di firmware UEFI/OVMF installate sull’host."
 
 #: virtManager/details/details.py:681
 msgid "UEFI not found"
@@ -3918,7 +3914,7 @@ msgstr ""
 #: virtManager/details/viewers.py:569
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
-msgstr "Incontrato SPICE %(error-name)s"
+msgstr "Si è verificato \"%(error-name)s\" di SPICE"
 
 #: virtManager/device/addstorage.py:93
 #, python-format
@@ -4021,13 +4017,13 @@ msgstr "Dispositivo macvtap..."
 
 #: virtManager/device/netlist.py:194
 msgid "Virtual Network is not active."
-msgstr "La rete virtuale è inattiva."
+msgstr "La rete virtuale non è attiva."
 
 #: virtManager/device/netlist.py:195
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
-msgstr "La rete virtuale '%s' è inattiva. Si desidera avviare la rete ora?"
+msgstr "La rete virtuale '%s' non è attiva. Si desidera avviare la rete ora?"
 
 #: virtManager/device/netlist.py:207
 #, python-format
@@ -4084,7 +4080,7 @@ msgstr "Reti"
 
 #: virtManager/hostnets.py:140
 msgid "Libvirt connection does not support virtual network management."
-msgstr "La connessione libvirt non supporta la gestione della rete virtuale."
+msgstr "La connessione libvirt non supporta la gestione delle reti virtuali."
 
 #: virtManager/hostnets.py:148 virtManager/hoststorage.py:281
 msgid "Connection not active."
@@ -4184,11 +4180,11 @@ msgstr "Crea un nuovo volume"
 
 #: virtManager/hoststorage.py:343
 msgid "Pool does not support volume creation"
-msgstr "Pool non supporta la creazione di un volume"
+msgstr "Il pool non supporta la creazione di volumi"
 
 #: virtManager/hoststorage.py:358
 msgid "No storage pool selected."
-msgstr "Nessuno storage pool selezionato."
+msgstr "Nessun pool di storage selezionato."
 
 #: virtManager/hoststorage.py:367
 #, python-format
@@ -4299,7 +4295,7 @@ msgstr "Impossibile connettersi a libvirt %s."
 
 #: virtManager/lib/connectauth.py:195
 msgid "Virtual Machine Manager Connection Failure"
-msgstr "Impossibile stabilire un collegamento al Virtual Machine Manager"
+msgstr "Errore di connessione di Virtual Machine Manager"
 
 #: virtManager/lib/connectauth.py:217
 msgid ""
@@ -4785,7 +4781,7 @@ msgstr "Selezionare volume di storage"
 
 #: virtManager/systray.py:106
 msgid "_Show Virtual Machine Manager"
-msgstr "Vi_sualizza il Manger della Macchina Virtuale"
+msgstr "Vi_sualizza il Virtual Machine Manager"
 
 #: virtManager/virtmanager.py:37
 msgid "Error starting Virtual Machine Manager"
@@ -5007,7 +5003,7 @@ msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"L'host non supporta il tipo di virtualizzazione '%(virttype)s' e "
+"L'host non supporta il tipo di virtualizzazione '%(virttype)s' per "
 "l'architettura '%(arch)s'"
 
 #: virtinst/capabilities.py:300
@@ -5414,8 +5410,8 @@ msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Imposta i criteri di supporto della memoria per il processo del dominio. "
-"Es.:\n"
+"Imposta i criteri della memoria di supporto per il processo del dominio. Es.:"
+"\n"
 "--memorybacking hugepages=on"
 
 #: virtinst/cli.py:849
@@ -6472,7 +6468,7 @@ msgstr "Nome dell'istanza guest"
 
 #: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
-msgstr "Opzioni Metodo di Installazione"
+msgstr "Opzioni della modalità di installazione"
 
 #: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
@@ -6546,7 +6542,7 @@ msgstr "Questo guest dovrebbe essere un guest paravirtualizzato"
 
 #: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
-msgstr "Il guest deve essere un guest contenitore"
+msgstr "Questo guest dovrebbe essere un guest container"
 
 #: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
