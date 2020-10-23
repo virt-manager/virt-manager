@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-29 06:13+0000\n"
+"POT-Creation-Date: 2020-10-23 06:14+0000\n"
 "PO-Revision-Date: 2018-11-22 04:54+0000\n"
 "Last-Translator: Máximo Castañeda Riloba <mcrcctm@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/virt-manager/"
@@ -6065,12 +6065,18 @@ msgstr "%s corresponde a dispositivos de múltiples nodos"
 msgid "Did not find a matching node device for '%s'"
 msgstr "No se ha encontrado un dispositivo de nodo coincidente para '%s'"
 
-#: virtinst/osdict.py:228
+#: virtinst/osdict.py:190
+#, fuzzy
+#| msgid "Generic"
+msgid "Generic OS"
+msgstr "Generico"
+
+#: virtinst/osdict.py:229
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr ""
 
-#: virtinst/osdict.py:234
+#: virtinst/osdict.py:235
 #, fuzzy, python-format
 #| msgid ""
 #| "OS name '%s' is deprecated, using '%s' instead. This alias will be "
@@ -6082,25 +6088,19 @@ msgstr ""
 "El nombre de SO '%s' está obsoleto, se usará '%s'. Este alias se eliminará "
 "en el futuro."
 
-#: virtinst/osdict.py:242
+#: virtinst/osdict.py:243
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 "Nombre de sistema operativo desconocido (%s). Consulte `osinfo-query os` "
 "para nombre válidos."
 
-#: virtinst/osdict.py:378
-#, fuzzy
-#| msgid "Generic"
-msgid "Generic OS"
-msgstr "Generico"
-
-#: virtinst/osdict.py:666
+#: virtinst/osdict.py:655
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:678
+#: virtinst/osdict.py:667
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "

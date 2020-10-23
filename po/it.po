@@ -15,11 +15,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-29 06:13+0000\n"
+"POT-Creation-Date: 2020-10-23 06:14+0000\n"
 "PO-Revision-Date: 2020-10-15 18:15+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1644,9 +1644,10 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"Normalmente la configurazione della macchina virtuale viene rimossa dall’"
-"host sorgente e salvata definitivamente sull’host di destinazione. L’host di "
-"destinazione è considerato la nuova \"casa\" della macchina virtuale.\n"
+"Normalmente la configurazione della macchina virtuale viene rimossa "
+"dall’host sorgente e salvata definitivamente sull’host di destinazione. "
+"L’host di destinazione è considerato la nuova \"casa\" della macchina "
+"virtuale.\n"
 "\n"
 "Se \"Spostamento temporaneo\" è attivato, la migrazione è considerata solo "
 "un trasferimento temporaneo: l’host sorgente mantiene una copia della "
@@ -5410,8 +5411,8 @@ msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Imposta i criteri della memoria di supporto per il processo del dominio. Es.:"
-"\n"
+"Imposta i criteri della memoria di supporto per il processo del dominio. "
+"Es.:\n"
 "--memorybacking hugepages=on"
 
 #: virtinst/cli.py:849
@@ -5975,12 +5976,16 @@ msgstr "%s corrisponde a dispositivi a nodi multipli"
 msgid "Did not find a matching node device for '%s'"
 msgstr "Impossibile trovare un nodo corrispondente a '%s'"
 
-#: virtinst/osdict.py:228
+#: virtinst/osdict.py:190
+msgid "Generic OS"
+msgstr "SO generico"
+
+#: virtinst/osdict.py:229
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "ID di libosinfo '%s' sconosciuto"
 
-#: virtinst/osdict.py:234
+#: virtinst/osdict.py:235
 #, python-format
 msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
@@ -5989,23 +5994,19 @@ msgstr ""
 "Il nome di sistema operativo '%(oldname)s' è deprecato, sarà usato "
 "'%(newname)s' al suo posto. Questo alias sarà rimosso in futuro."
 
-#: virtinst/osdict.py:242
+#: virtinst/osdict.py:243
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 "Il nome di sistema operativo '%s' è sconosciuto. Consultare `osinfo-query "
 "os` per i valori validi."
 
-#: virtinst/osdict.py:378
-msgid "Generic OS"
-msgstr "SO generico"
-
-#: virtinst/osdict.py:666
+#: virtinst/osdict.py:655
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:678
+#: virtinst/osdict.py:667
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
