@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-29 06:13+0000\n"
+"POT-Creation-Date: 2020-10-23 06:14+0000\n"
 "PO-Revision-Date: 2020-06-22 02:40+0000\n"
 "Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/virt-"
@@ -6167,12 +6167,18 @@ msgstr "%s correspond à plusieurs périphériques nœud"
 msgid "Did not find a matching node device for '%s'"
 msgstr "Le périphérique nœud ne correspond pas à « %s »"
 
-#: virtinst/osdict.py:228
+#: virtinst/osdict.py:190
+#, fuzzy
+#| msgid "Generic"
+msgid "Generic OS"
+msgstr "Générique"
+
+#: virtinst/osdict.py:229
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "Identifiant libosinfo inconnu : « %s »"
 
-#: virtinst/osdict.py:234
+#: virtinst/osdict.py:235
 #, fuzzy, python-format
 #| msgid ""
 #| "OS name '%s' is deprecated, using '%s' instead. This alias will be "
@@ -6184,25 +6190,19 @@ msgstr ""
 "Le nom de l’OS « %s » est déprécié, utilisation de « %s » en remplacement. "
 "Cet alias sera supprimé dans le futur."
 
-#: virtinst/osdict.py:242
+#: virtinst/osdict.py:243
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 "Le nom de l’OS est inconnu : « %s ». Lisez `osinfo-query os` pour les "
 "valeurs valides."
 
-#: virtinst/osdict.py:378
-#, fuzzy
-#| msgid "Generic"
-msgid "Generic OS"
-msgstr "Générique"
-
-#: virtinst/osdict.py:666
+#: virtinst/osdict.py:655
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "L’OS « %s » n’a pas d’emplacement d’URL"
 
-#: virtinst/osdict.py:678
+#: virtinst/osdict.py:667
 #, fuzzy, python-format
 #| msgid "OS '%s' does not have a URL location for the %s architecture"
 msgid ""

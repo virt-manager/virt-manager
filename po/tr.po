@@ -18,11 +18,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-23 06:11+0000\n"
+"POT-Creation-Date: 2020-10-23 06:14+0000\n"
 "PO-Revision-Date: 2020-10-06 14:30+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/tr/>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3790,7 +3790,8 @@ msgstr ""
 
 #: virtManager/details/snapshots.py:676
 msgid "Saved state will be removed to avoid filesystem corruption"
-msgstr "Dosya sisteminin bozulmasını önlemek için kaydedilen durum kaldırılacak"
+msgstr ""
+"Dosya sisteminin bozulmasını önlemek için kaydedilen durum kaldırılacak"
 
 #: virtManager/details/snapshots.py:677
 #, python-format
@@ -3913,7 +3914,8 @@ msgstr "Bir daha bu dizinler hakkında soru sorma."
 #: virtManager/device/addstorage.py:157
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
-msgstr "Aşağıdaki dizinler için izinler değiştirilirken hatalarla karşılaşıldı:"
+msgstr ""
+"Aşağıdaki dizinler için izinler değiştirilirken hatalarla karşılaşıldı:"
 
 #: virtManager/device/addstorage.py:278
 msgid "A storage path must be specified."
@@ -5442,8 +5444,8 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 "SM başlatma güvenliğini yapılandır (örn. SEV bellek şifreleme). Örnek:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
-"BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:892
@@ -5840,7 +5842,8 @@ msgstr ""
 #: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
-msgstr "%(osname)s, oturum açmak için '%(loginname)s' kullanıcısını kullanamaz."
+msgstr ""
+"%(osname)s, oturum açmak için '%(loginname)s' kullanıcısını kullanamaz."
 
 #: virtinst/install/unattended.py:74
 #, python-format
@@ -5936,12 +5939,16 @@ msgstr "%s birden fazla düğüm aygıtına karşılık geliyor"
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' için eşleşen bir düğüm aygıtı bulunmadı"
 
-#: virtinst/osdict.py:228
+#: virtinst/osdict.py:190
+msgid "Generic OS"
+msgstr "Genel İS"
+
+#: virtinst/osdict.py:229
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "Bilinmeyen libosinfo kimliği '%s'"
 
-#: virtinst/osdict.py:234
+#: virtinst/osdict.py:235
 #, python-format
 msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
@@ -5950,23 +5957,19 @@ msgstr ""
 "'%(oldname)s' İS adı kullanımdan kaldırıldı, onun yerine '%(newname)s' "
 "kullanılıyor. Bu takma ad gelecekte kaldırılacak."
 
-#: virtinst/osdict.py:242
+#: virtinst/osdict.py:243
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 "Bilinmeyen İS adı '%s'. Geçerli değerler için `osinfo-query os` komutuna "
 "bakın."
 
-#: virtinst/osdict.py:378
-msgid "Generic OS"
-msgstr "Genel İS"
-
-#: virtinst/osdict.py:666
+#: virtinst/osdict.py:655
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "'%s' işletim sistemi bir URL konumuna sahip değil"
 
-#: virtinst/osdict.py:678
+#: virtinst/osdict.py:667
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6114,8 +6117,8 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
-"Aygıtları kopyalamaya zorla (örn. 'hdc' salt okunur bir cdrom aygıtıysa, "
-"--force-copy=hdc)"
+"Aygıtları kopyalamaya zorla (örn. 'hdc' salt okunur bir cdrom aygıtıysa, --"
+"force-copy=hdc)"
 
 #: virtinst/virtclone.py:102
 msgid ""
@@ -6165,8 +6168,8 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
-"--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya '"
-"--file' kullanın ve tekrar deneyin."
+"--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya "
+"'--file' kullanın ve tekrar deneyin."
 
 #: virtinst/virtclone.py:183
 msgid ""

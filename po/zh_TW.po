@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-09-29 06:13+0000\n"
+"POT-Creation-Date: 2020-10-23 06:14+0000\n"
 "PO-Revision-Date: 2020-09-05 10:29+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -5894,12 +5894,16 @@ msgstr "%s 會對應多個節點裝置"
 msgid "Did not find a matching node device for '%s'"
 msgstr "不能為 '%s' 找到匹配的節點裝置"
 
-#: virtinst/osdict.py:228
+#: virtinst/osdict.py:190
+msgid "Generic OS"
+msgstr "通用作業系統"
+
+#: virtinst/osdict.py:229
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "不明的 libosinfo ID '%s'"
 
-#: virtinst/osdict.py:234
+#: virtinst/osdict.py:235
 #, python-format
 msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
@@ -5908,21 +5912,17 @@ msgstr ""
 "作業系統名稱不推薦使用 '%(oldname)s'，將改用為 '%(newname)s'。該別名將來會被"
 "移除。"
 
-#: virtinst/osdict.py:242
+#: virtinst/osdict.py:243
 #, python-format
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr "不明的作業系統名稱 '%s'。請參見 `osinfo-query os` 獲取有效的值。"
 
-#: virtinst/osdict.py:378
-msgid "Generic OS"
-msgstr "通用作業系統"
-
-#: virtinst/osdict.py:666
+#: virtinst/osdict.py:655
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "作業系統 '%s' 沒有 URL 位置"
 
-#: virtinst/osdict.py:678
+#: virtinst/osdict.py:667
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
