@@ -204,7 +204,8 @@ def connect_error(conn, errmsg, tb, warnconsole):
 ##################################
 
 def setup_first_uri(config, tryuri):
-    libvirtd_installed = bool(shutil.which("libvirtd"))
+    # Add /usr/sbin to the path in case non-root user launches virt-manager
+    libvirtd_installed = bool(shutil.which("libvirtd", path=os.environ['PATH'] + os.pathsep + "/usr/sbin"))
     if config.CLITestOptions.fake_no_libvirtd:
         libvirtd_installed = False
 
