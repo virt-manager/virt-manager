@@ -198,6 +198,7 @@ class DomainCapabilities(XMLBuilder):
             r".*edk2-aarch64-code\.fd",  # upstream qemu
         ],
         "armv7l": [
+            r".*AAVMF32_CODE\.fd",  # Debian qemu-efi-arm package
             r".*arm/QEMU_EFI.*",  # fedora, gerd's firmware repo
             r".*edk2-arm-code\.fd"  # upstream qemu
         ],
