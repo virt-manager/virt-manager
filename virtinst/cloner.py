@@ -174,6 +174,8 @@ def _get_cloneable_msg(disk):
     """
     if disk.wants_storage_creation():
         return _("Disk path '%s' does not exist.") % disk.path
+    if (disk.type == "network" and not disk.get_vol_object()):
+        return _("Disk type '%s' is not cloneable.") % disk.type
 
 
 def _get_shareable_msg(disk):

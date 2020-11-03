@@ -1336,6 +1336,8 @@ _CLONE_NVRAM = "--original-xml %s/clone-nvram-auto.xml" % _CLONEXMLDIR
 _CLONE_NVRAM_NEWPOOL = "--original-xml %s/clone-nvram-newpool.xml" % _CLONEXMLDIR
 _CLONE_NVRAM_MISSING = "--original-xml %s/clone-nvram-missing.xml" % _CLONEXMLDIR
 _CLONE_EMPTY = "--original-xml %s/clone-empty.xml" % _CLONEXMLDIR
+_CLONE_NET = "--original-xml %s/clone-net.xml" % _CLONEXMLDIR
+
 
 vclon = App("virt-clone")
 c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
@@ -1371,6 +1373,7 @@ c.add_invalid("-o test --auto-clone", grep="shutoff")  # VM is running
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s")  # Should complain about overwriting existing file
 c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-full --auto-clone", grep="not enough free space")  # catch failure of clone path setting
+c.add_invalid(_CLONE_NET + " --auto-clone", grep="'network' is not cloneable")
 
 
 c = vclon.add_category("general", "-n clonetest")

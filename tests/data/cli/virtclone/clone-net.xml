@@ -1,0 +1,29 @@
+<domain type='test' id='1'>
+  <name>origtest</name>
+  <uuid>db69fa1f-eef0-e567-3c20-3ef16f10376b</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <disk type='network' device='disk'>
+      <driver name='qemu' type='raw' cache='none' io='native'/>
+      <auth username='libvirt'>
+        <secret type='ceph' uuid='11111111-2222-3333-4444-55556666777'/>
+      </auth>
+      <source protocol='rbd' name='vms/foo1'>
+        <host name='host1' port='6789'/>
+        <host name='host2' port='6789'/>
+        <host name='host3' port='6789'/>
+      </source>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+  </devices>
+</domain>
