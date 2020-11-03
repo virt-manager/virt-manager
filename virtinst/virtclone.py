@@ -11,7 +11,6 @@ import sys
 from . import cli
 from .cli import fail, print_stdout, print_stderr
 from .cloner import Cloner
-from .logger import log
 
 
 def _process_src(options):
@@ -195,10 +194,9 @@ def main(conn=None):
         print_stdout(cloner.new_guest.get_xml(), do_force=True)
     if run:
         cloner.start_duplicate(cli.get_meter())
+        print_stdout("")
+        print_stdout(_("Clone '%s' created successfully.") % cloner.new_guest.name)
 
-    print_stdout("")
-    print_stdout(_("Clone '%s' created successfully.") % cloner.new_guest.name)
-    log.debug("end clone")
     return 0
 
 
