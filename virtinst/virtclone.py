@@ -146,8 +146,7 @@ def main(conn=None):
     conn = cli.getConnection(options.connect, conn=conn)
 
     if (options.new_diskfile is None and
-        options.auto_clone is False and
-        options.xmlonly is False):
+        options.auto_clone is False):
         fail(_("Either --auto-clone or --file is required,"
                " use '--auto-clone or --file' and try again."))
 
