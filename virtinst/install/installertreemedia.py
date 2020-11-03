@@ -94,8 +94,7 @@ class InstallerTreeMedia(object):
         if (guest.conn.is_unprivileged() or
             not os.path.exists(system_scratchdir) or
             not os.access(system_scratchdir, os.W_OK)):
-            if not os.path.exists(user_scratchdir):
-                os.makedirs(user_scratchdir, 0o751)  # pragma: no cover
+            os.makedirs(user_scratchdir, 0o751, exist_ok=True)
             return user_scratchdir
 
         return system_scratchdir  # pragma: no cover
