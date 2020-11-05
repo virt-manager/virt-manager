@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-10-23 06:14+0000\n"
+"POT-Creation-Date: 2020-11-05 06:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2425,7 +2425,7 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: virtManager/clone.py:28 virtinst/cloner.py:181
+#: virtManager/clone.py:28 virtinst/cloner.py:183
 msgid "No storage to clone."
 msgstr ""
 
@@ -2781,7 +2781,7 @@ msgid "No active connection to install on."
 msgstr ""
 
 #: virtManager/createvm.py:947 virtManager/details/details.py:1780
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:227
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:228
 msgid "None"
 msgstr ""
 
@@ -4111,19 +4111,19 @@ msgstr ""
 msgid "Virtual Machine Manager Connection Failure"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:217
+#: virtManager/lib/connectauth.py:218
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:224
+#: virtManager/lib/connectauth.py:225
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:231
+#: virtManager/lib/connectauth.py:232
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -5278,34 +5278,39 @@ msgstr ""
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: virtinst/cloner.py:183
-msgid "Read Only"
+#: virtinst/cloner.py:178
+#, python-format
+msgid "Disk type '%s' is not cloneable."
 msgstr ""
 
 #: virtinst/cloner.py:185
+msgid "Read Only"
+msgstr ""
+
+#: virtinst/cloner.py:187
 msgid "Marked as shareable"
 msgstr ""
 
-#: virtinst/cloner.py:247
+#: virtinst/cloner.py:249
 #, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr ""
 
-#: virtinst/cloner.py:263
+#: virtinst/cloner.py:265
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr ""
 
-#: virtinst/cloner.py:314
+#: virtinst/cloner.py:316
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:349
+#: virtinst/cloner.py:351
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
-#: virtinst/cloner.py:486
+#: virtinst/cloner.py:488
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr ""
@@ -5419,21 +5424,21 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: virtinst/domcapabilities.py:226
+#: virtinst/domcapabilities.py:227
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:232
+#: virtinst/domcapabilities.py:233
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:235
+#: virtinst/domcapabilities.py:236
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:311
+#: virtinst/domcapabilities.py:312
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
@@ -5485,24 +5490,24 @@ msgstr ""
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:117
+#: virtinst/install/installertreemedia.py:116
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:120
+#: virtinst/install/installertreemedia.py:119
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:143
+#: virtinst/install/installertreemedia.py:142
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:210
+#: virtinst/install/installertreemedia.py:209
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:268
+#: virtinst/install/installertreemedia.py:267
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -5698,13 +5703,13 @@ msgid ""
 "available)"
 msgstr ""
 
-#: virtinst/virtclone.py:23
+#: virtinst/virtclone.py:22
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
 
-#: virtinst/virtclone.py:70
+#: virtinst/virtclone.py:69
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -5716,100 +5721,100 @@ msgid ""
 "sysprep(1)."
 msgstr ""
 
-#: virtinst/virtclone.py:80 virtinst/virtinstall.py:949
+#: virtinst/virtclone.py:79 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr ""
 
-#: virtinst/virtclone.py:82
+#: virtinst/virtclone.py:81
 msgid "Name of the original guest to clone."
 msgstr ""
 
-#: virtinst/virtclone.py:84
+#: virtinst/virtclone.py:83
 msgid "XML file to use as the original guest."
 msgstr ""
 
-#: virtinst/virtclone.py:86
+#: virtinst/virtclone.py:85
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
 
-#: virtinst/virtclone.py:89
+#: virtinst/virtclone.py:88
 msgid "Name for the new guest"
 msgstr ""
 
-#: virtinst/virtclone.py:92
+#: virtinst/virtclone.py:91
 msgid "use btrfs COW lightweight copy"
 msgstr ""
 
-#: virtinst/virtclone.py:94
+#: virtinst/virtclone.py:93
 msgid "Storage Configuration"
 msgstr ""
 
-#: virtinst/virtclone.py:96
+#: virtinst/virtclone.py:95
 msgid "New file to use as the disk image for the new guest"
 msgstr ""
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:98
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
 
-#: virtinst/virtclone.py:102
+#: virtinst/virtclone.py:101
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 
-#: virtinst/virtclone.py:107
+#: virtinst/virtclone.py:106
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr ""
 
-#: virtinst/virtclone.py:111
+#: virtinst/virtclone.py:110
 msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
 
-#: virtinst/virtclone.py:116
+#: virtinst/virtclone.py:115
 msgid "New file to use as storage for nvram VARS"
 msgstr ""
 
-#: virtinst/virtclone.py:118
+#: virtinst/virtclone.py:117
 msgid "Networking Configuration"
 msgstr ""
 
-#: virtinst/virtclone.py:120
+#: virtinst/virtclone.py:119
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
 
-#: virtinst/virtclone.py:123 virtinst/virtinstall.py:1054
+#: virtinst/virtclone.py:122 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:419
 msgid "Miscellaneous Options"
 msgstr ""
 
-#: virtinst/virtclone.py:151
+#: virtinst/virtclone.py:149
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
 
-#: virtinst/virtclone.py:183
+#: virtinst/virtclone.py:181
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
 msgstr ""
 
-#: virtinst/virtclone.py:201
+#: virtinst/virtclone.py:198
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr ""
 
-#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1163
+#: virtinst/virtclone.py:209 virtinst/virtinstall.py:1163
 msgid "Installation aborted at user request"
 msgstr ""
 
