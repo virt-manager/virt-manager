@@ -192,7 +192,16 @@ class VirtinstConnection(object):
     def _fetch_all_pools_raw(self):
         dummy1, dummy2, ret = pollhelpers.fetch_pools(
             self, {}, lambda obj, ignore: obj)
-        return [self._build_pool_raw(poolobj) for poolobj in ret]
+        pools = []
+        for poolobj in ret:
+            # TOCTOU race: a pool may go away in between enumeration and inspection
+            try:
+                pool = self._build_pool_raw(poolobj)
+            except libvirt.libvirtError as e:  # pragma: no cover
+                log.debug("Fetching pool XML failed: %s", e)
+                continue
+            pools.append(pool)
+        return pools
 
     def _fetch_all_nodedevs_raw(self):
         dummy1, dummy2, ret = pollhelpers.fetch_nodedevs(
@@ -202,7 +211,12 @@ class VirtinstConnection(object):
 
     def _fetch_vols_raw(self, poolxmlobj):
         ret = []
-        pool = self._libvirtconn.storagePoolLookupByName(poolxmlobj.name)
+        # TOCTOU race: a volume may go away in between enumeration and inspection
+        try:
+            pool = self._libvirtconn.storagePoolLookupByName(poolxmlobj.name)
+        except libvirt.libvirtError as e:  # pragma: no cover
+            return ret
+
         if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
             return ret
 
@@ -213,7 +227,7 @@ class VirtinstConnection(object):
             try:
                 xml = vol.XMLDesc(0)
                 ret.append(StorageVolume(weakref.proxy(self), parsexml=xml))
-            except Exception as e:  # pragma: no cover
+            except libvirt.libvirtError as e:  # pragma: no cover
                 log.debug("Fetching volume XML failed: %s", e)
         return ret
 
