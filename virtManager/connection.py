@@ -872,7 +872,7 @@ class vmmConnection(vmmGObject):
         self._objects = _ObjectList()
 
         closeret = self._backend.close()
-        if closeret == 1 and self.config.CLITestOptions.leak_debug:
+        if closeret == 1:
             log.debug(  # pragma: no cover
                     "LEAK: conn close() returned 1, "
                     "meaning refs may have leaked.")
