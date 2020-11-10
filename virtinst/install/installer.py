@@ -496,6 +496,12 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
+        if self.has_cloudinit() or self.has_unattended():
+            # These cases require post-boot altering to remove the
+            # temporary media. It isn't really an install phase and more
+            # like a 'final_xml' phase but we don't have a real abstraction
+            # for that yet
+            return True
         if self._no_install:
             return False
         return bool(self._cdrom or
@@ -544,6 +550,8 @@ class Installer(object):
 
     def has_cloudinit(self):
         return bool(self._cloudinit_data)
+    def has_unattended(self):
+        return bool(self._unattended_data)
 
     def get_generated_password(self):
         if self._cloudinit_data:
