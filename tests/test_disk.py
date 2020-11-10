@@ -208,3 +208,21 @@ def test_disk_diskbackend_parse():
     guest = virtinst.Guest(conn, parsexml=dom.XMLDesc(0))
     for disk in guest.devices.disk:
         disk.set_backend_for_existing_path()
+
+
+def test_disk_rbd_path():
+    conn = utils.URIs.open_testdriver_cached()
+    diskxml1 = """
+    <disk type="network" device="disk">
+      <source protocol="rbd" name="rbd-sourcename/some-rbd-vol">
+        <host name="ceph-mon-1.example.com" port="6789"/>
+        <host name="ceph-mon-2.example.com" port="6789"/>
+        <host name="ceph-mon-3.example.com" port="6789"/>
+      </source>
+      <target dev="vdag" bus="virtio"/>
+    </disk>
+    """
+
+    disk1 = virtinst.DeviceDisk(conn, parsexml=diskxml1)
+    disk1.set_backend_for_existing_path()
+    assert disk1.get_vol_object().name() == "some-rbd-vol"

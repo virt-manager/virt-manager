@@ -130,7 +130,7 @@ def testAddCephDisk(app):
     tab = details.find("disk-tab")
     lib.utils.check(lambda: tab.showing)
     disk_path = tab.find("disk-source-path")
-    lib.utils.check(lambda: "rbd://" in disk_path.text)
+    lib.utils.check(lambda: "rbd-sourcename/some-rbd-vol" in disk_path.text)
 
 
 def testAddDisks(app):

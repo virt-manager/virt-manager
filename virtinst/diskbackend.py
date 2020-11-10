@@ -125,6 +125,17 @@ def _can_auto_manage(path):
     return True
 
 
+def _get_storage_search_path(path):
+    # If the passed path is one of our artificial rbd:// style
+    # URIs, parse out the path component, since that is what is needed
+    # for looking up storage volumes by target path
+    from .uri import URI
+    uriobj = URI(path)
+    if uriobj.scheme == "rbd":
+        return uriobj.path.strip("/")
+    return path
+
+
 def manage_path(conn, path):
     """
     If path is not managed, try to create a storage pool to probe the path
@@ -136,7 +147,9 @@ def manage_path(conn, path):
 
     if not path_is_url(path) and not path_is_network_vol(conn, path):
         path = os.path.abspath(path)
-    vol, pool = _check_if_path_managed(conn, path)
+
+    searchpath = _get_storage_search_path(path)
+    vol, pool = _check_if_path_managed(conn, searchpath)
     if vol or pool or not _can_auto_manage(path):
         return vol, pool
 
