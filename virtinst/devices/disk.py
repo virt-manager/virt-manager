@@ -109,6 +109,7 @@ class DeviceDisk(Device):
             - username we checked for or None if not applicable
             - uid we checked for or None if not application
         """
+        log.debug("DeviceDisk.check_path_search path=%s", path)
         class SearchData(object):
             def __init__(self):
                 self.user = None
@@ -116,7 +117,7 @@ class DeviceDisk(Device):
                 self.fixlist = []
 
         searchdata = SearchData()
-        if path is None:
+        if not path:
             return searchdata
 
         if conn.is_remote():

@@ -65,6 +65,13 @@ def test_disk_dir_searchable(monkeypatch):
     tmpobj = tempfile.TemporaryDirectory(prefix="virtinst-test-search")
     tmpdir = tmpobj.name
     try:
+        # path="" should trigger early return
+        searchdata = virtinst.DeviceDisk.check_path_search(conn, "")
+        assert searchdata.uid is None
+        # path=None should trigger early return
+        searchdata = virtinst.DeviceDisk.check_path_search(conn, None)
+        assert searchdata.uid is None
+
         # Invalid uid
         _set_caps_baselabel_uid(-1)
         searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir)
