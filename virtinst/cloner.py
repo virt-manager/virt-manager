@@ -174,8 +174,20 @@ def _get_cloneable_msg(disk):
     """
     if disk.wants_storage_creation():
         return _("Disk path '%s' does not exist.") % disk.get_source_path()
-    if (disk.type == "network" and not disk.get_vol_object()):
-        return _("Disk type '%s' is not cloneable.") % disk.type
+
+    if disk.type == "network":
+        proto = disk.source.protocol
+        if proto not in ["rbd"]:
+            return _("Disk network type '%s' is not cloneable.") % proto
+        disk.set_backend_for_existing_path()
+        if not disk.get_vol_object():
+            return _("Cloning disk network type '%s' requires "
+                     "managed storage.") % proto
+        else:
+            # This case, rbd with managed storage, is implementable. It
+            # requires open coding a bunch of work in cloner, or reworking
+            # other disk code to add unique URIs for rbd volumes and pools
+            return _("Cloning rbd volumes is not yet supported.")
 
 
 def _get_shareable_msg(disk):
