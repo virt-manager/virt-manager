@@ -115,7 +115,7 @@ def testCloneMulti(app):
     # it errors gracefully
     win = app.manager_open_clone("test-many-devices")
     win.find("Clone", "push button").click()
-    app.click_alert_button("No such file or", "Close")
+    app.click_alert_button("relative.sock", "Cancel")
 
     # Ensure disconnecting will close the dialog
     manager.grab_focus()
