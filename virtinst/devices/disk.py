@@ -444,190 +444,17 @@ class DeviceDisk(Device):
             self.conn, self._get_xmlpath(), self._xmltype, self.driver_type)
 
 
-    #############################
-    # Public property-esque API #
-    #############################
-
-    def _get_path(self):
-        if (self._storage_backend.is_stub() and not
-            self._storage_backend.get_path()):
-            self._resolve_storage_backend()
-        return self._storage_backend.get_path()
-    def _set_path(self, newpath):
-        if self._storage_backend.will_create_storage():
-            raise xmlutil.DevError(
-                    "Can't change disk path if storage creation info "
-                    "has been set.")
-
-        # User explicitly changed 'path', so try to lookup its storage
-        # object since we may need it
-        (vol_object, parent_pool) = diskbackend.manage_path(self.conn, newpath)
-
-        self._change_backend(newpath, vol_object, parent_pool)
-        self._set_xmlpath(self.path)
-    path = property(_get_path, _set_path)
-
-    def set_backend_for_existing_path(self):
-        # This is an entry point for parsexml Disk instances to request
-        # a _storage_backend to be initialized from the XML path. That
-        # will cause validate() to actually validate the path exists.
-        # We need this so addhw XML editing will still validate the disk path
-        if self._storage_backend.is_stub():
-            self._resolve_storage_backend()
-
-    def set_vol_object(self, vol_object, parent_pool):
-        log.debug("disk.set_vol_object: volxml=\n%s",
-            vol_object.XMLDesc(0))
-        log.debug("disk.set_vol_object: poolxml=\n%s",
-            parent_pool.XMLDesc(0))
-        self._change_backend(None, vol_object, parent_pool)
-        self._set_xmlpath(self.path)
-
-    def set_vol_install(self, vol_install):
-        log.debug("disk.set_vol_install: name=%s poolxml=\n%s",
-            vol_install.name, vol_install.pool.XMLDesc(0))
-        self._storage_backend = diskbackend.ManagedStorageCreator(
-            self.conn, vol_install)
-        self._set_xmlpath(self.path)
-
-    def get_vol_object(self):
-        return self._storage_backend.get_vol_object()
-    def get_vol_install(self):
-        return self._storage_backend.get_vol_install()
-    def get_parent_pool(self):
-        return self._storage_backend.get_parent_pool()
-    def get_size(self):
-        return self._storage_backend.get_size()
-
-
-    #############################
-    # Internal defaults helpers #
-    #############################
-
-    def _get_default_driver_name(self):
-        if not self.path:
-            return None
-
-        # Recommended xen defaults from here:
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1171550#c9
-        # If type block, use name=phy. Otherwise do the same as qemu
-        if self.conn.is_xen() and self.type == self.TYPE_BLOCK:
-            return self.DRIVER_NAME_PHY
-        if self.conn.support.conn_disk_driver_name_qemu():
-            return self.DRIVER_NAME_QEMU
-        return None
-
-    def _get_default_driver_type(self):
-        """
-        Set driver type from passed parameters
-
-        Where possible, we want to force /driver/@type = "raw" if installing
-        a QEMU VM. Without telling QEMU to expect a raw file, the emulator
-        is forced to autodetect, which has security implications:
-
-        https://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
-        """
-        if self.driver_name != self.DRIVER_NAME_QEMU:
-            return None
-
-        drvtype = self._storage_backend.get_driver_type()
-        return _qemu_sanitize_drvtype(self.type, drvtype)
-
-
-    #############################
-    # XML source media handling #
-    #############################
-
-    source = XMLChildProperty(_DiskSource, is_single=True)
-
-    def _set_source_network_from_storage(self, volxml, poolxml):
-        self.type = "network"
-        if poolxml.auth_type:
-            self.auth_username = poolxml.auth_username
-            self.auth_secret_type = poolxml.auth_type
-            self.auth_secret_uuid = poolxml.auth_secret_uuid
-
-        self.source.set_network_from_storage(volxml, poolxml)
-
-    def _set_network_source_from_backend(self):
-        if (self._storage_backend.get_vol_object() or
-            self._storage_backend.get_vol_install()):
-            volxml = self._storage_backend.get_vol_xml()
-            poolxml = self._storage_backend.get_parent_pool_xml()
-            self._set_source_network_from_storage(volxml, poolxml)
-        elif self._storage_backend.get_path():
-            self.source.set_from_url(self._storage_backend.get_path())
-
-    def _get_default_type(self):
-        if self.source.pool or self.source.volume:
-            return DeviceDisk.TYPE_VOLUME
-        if not self._storage_backend.is_stub():
-            return self._storage_backend.get_dev_type()
-        if self.source.protocol:
-            return DeviceDisk.TYPE_NETWORK
-        return self.TYPE_FILE
-
-
-    def _disk_type_to_object_prop_name(self):
-        disk_type = self.type
-        if disk_type == DeviceDisk.TYPE_BLOCK:
-            return "dev"
-        elif disk_type == DeviceDisk.TYPE_DIR:
-            return "dir"
-        elif disk_type == DeviceDisk.TYPE_FILE:
-            return "file"
-        return None
-
-
-    # _xmlpath is an abstraction for source file/block/dir paths, since
-    # they don't have any special properties aside from needing to match
-    # 'type' value with the source property used.
-    def _get_xmlpath(self):
-        if self.source.file:
-            return self.source.file
-        if self.source.dev:
-            return self.source.dev
-        if self.source.dir:
-            return self.source.dir
-        return None
-    def _set_xmlpath(self, val):
-        self.source.clear_source()
-
-        if self._storage_backend.get_dev_type() == "network":
-            self._set_network_source_from_backend()
-            return
-
-        propname = self._disk_type_to_object_prop_name()
-        if not propname:
-            return
-        return setattr(self.source, propname, val)
-
-
     ##################
     # XML properties #
     ##################
 
-    # type, device, driver_name, driver_type handling
-    # These are all weirdly intertwined so require some special handling
-    def _get_type(self):
-        if self._xmltype:
-            return self._xmltype
-        return self._get_default_type()
-    def _set_type(self, val):
-        self._xmltype = val
-    type = property(_get_type, _set_type)
     _xmltype = XMLProperty("./@type")
-
-    def _get_device(self):
-        if self._device:
-            return self._device
-        return self.DEVICE_DISK
-    def _set_device(self, val):
-        self._device = val
-    device = property(_get_device, _set_device)
     _device = XMLProperty("./@device")
+
     driver_name = XMLProperty("./driver/@name")
     driver_type = XMLProperty("./driver/@type")
+
+    source = XMLChildProperty(_DiskSource, is_single=True)
 
     auth_username = XMLProperty("./auth/@username")
     auth_secret_type = XMLProperty("./auth/secret/@type")
@@ -679,11 +506,86 @@ class DeviceDisk(Device):
     reservations_source_mode = XMLProperty("./source/reservations/source/@mode")
 
 
-    #################################
-    # Validation assistance methods #
-    #################################
+    #############################
+    # Internal defaults helpers #
+    #############################
+
+    def _get_default_type(self):
+        if self.source.pool or self.source.volume:
+            return DeviceDisk.TYPE_VOLUME
+        if not self._storage_backend.is_stub():
+            return self._storage_backend.get_dev_type()
+        if self.source.protocol:
+            return DeviceDisk.TYPE_NETWORK
+        return self.TYPE_FILE
+
+    def _get_default_driver_name(self):
+        if not self.path:
+            return None
+
+        # Recommended xen defaults from here:
+        # https://bugzilla.redhat.com/show_bug.cgi?id=1171550#c9
+        # If type block, use name=phy. Otherwise do the same as qemu
+        if self.conn.is_xen() and self.type == self.TYPE_BLOCK:
+            return self.DRIVER_NAME_PHY
+        if self.conn.support.conn_disk_driver_name_qemu():
+            return self.DRIVER_NAME_QEMU
+        return None
+
+    def _get_default_driver_type(self):
+        """
+        Set driver type from passed parameters
+
+        Where possible, we want to force /driver/@type = "raw" if installing
+        a QEMU VM. Without telling QEMU to expect a raw file, the emulator
+        is forced to autodetect, which has security implications:
+
+        https://lists.gnu.org/archive/html/qemu-devel/2008-04/msg00675.html
+        """
+        if self.driver_name != self.DRIVER_NAME_QEMU:
+            return None
+
+        drvtype = self._storage_backend.get_driver_type()
+        return _qemu_sanitize_drvtype(self.type, drvtype)
+
+    def _get_type(self):
+        if self._xmltype:
+            return self._xmltype
+        return self._get_default_type()
+    def _set_type(self, val):
+        self._xmltype = val
+    type = property(_get_type, _set_type)
+
+    def _get_device(self):
+        if self._device:
+            return self._device
+        return self.DEVICE_DISK
+    def _set_device(self, val):
+        self._device = val
+    device = property(_get_device, _set_device)
+
+
+    ############################
+    # Storage backend handling #
+    ############################
+
+    def _change_backend(self, path, vol_object, parent_pool):
+        backend = diskbackend.StorageBackend(self.conn, path,
+                                             vol_object, parent_pool)
+        self._storage_backend = backend
+
+    def set_backend_for_existing_path(self):
+        # This is an entry point for parsexml Disk instances to request
+        # a _storage_backend to be initialized from the XML path. That
+        # will cause validate() to actually validate the path exists.
+        # We need this so addhw XML editing will still validate the disk path
+        if self._storage_backend.is_stub():
+            self._resolve_storage_backend()
 
     def _resolve_storage_backend(self):
+        """
+        Convert the relevant <source> XML values into self._storage_backend
+        """
         path = None
         vol_object = None
         parent_pool = None
@@ -714,12 +616,114 @@ class DeviceDisk(Device):
 
         self._change_backend(path, vol_object, parent_pool)
 
+    def _get_path(self):
+        if (self._storage_backend.is_stub() and not
+            self._storage_backend.get_path()):
+            self._resolve_storage_backend()
+        return self._storage_backend.get_path()
+    def _set_path(self, newpath):
+        if self._storage_backend.will_create_storage():
+            raise xmlutil.DevError(
+                    "Can't change disk path if storage creation info "
+                    "has been set.")
+
+        # User explicitly changed 'path', so try to lookup its storage
+        # object since we may need it
+        (vol_object, parent_pool) = diskbackend.manage_path(self.conn, newpath)
+
+        self._change_backend(newpath, vol_object, parent_pool)
+        self._set_xmlpath(self.path)
+    path = property(_get_path, _set_path)
+
+    def set_vol_object(self, vol_object, parent_pool):
+        log.debug("disk.set_vol_object: volxml=\n%s",
+            vol_object.XMLDesc(0))
+        log.debug("disk.set_vol_object: poolxml=\n%s",
+            parent_pool.XMLDesc(0))
+        self._change_backend(None, vol_object, parent_pool)
+        self._set_xmlpath(self.path)
+
+    def set_vol_install(self, vol_install):
+        log.debug("disk.set_vol_install: name=%s poolxml=\n%s",
+            vol_install.name, vol_install.pool.XMLDesc(0))
+        self._storage_backend = diskbackend.ManagedStorageCreator(
+            self.conn, vol_install)
+        self._set_xmlpath(self.path)
+
+    def get_vol_object(self):
+        return self._storage_backend.get_vol_object()
+    def get_vol_install(self):
+        return self._storage_backend.get_vol_install()
+    def get_parent_pool(self):
+        return self._storage_backend.get_parent_pool()
+    def get_size(self):
+        return self._storage_backend.get_size()
+
+
+    def _set_source_network_from_storage(self, volxml, poolxml):
+        self.type = "network"
+        if poolxml.auth_type:
+            self.auth_username = poolxml.auth_username
+            self.auth_secret_type = poolxml.auth_type
+            self.auth_secret_uuid = poolxml.auth_secret_uuid
+
+        self.source.set_network_from_storage(volxml, poolxml)
+
+    def _set_network_source_from_backend(self):
+        if (self._storage_backend.get_vol_object() or
+            self._storage_backend.get_vol_install()):
+            volxml = self._storage_backend.get_vol_xml()
+            poolxml = self._storage_backend.get_parent_pool_xml()
+            self._set_source_network_from_storage(volxml, poolxml)
+        elif self._storage_backend.get_path():
+            self.source.set_from_url(self._storage_backend.get_path())
+
+    def _disk_type_to_object_prop_name(self):
+        disk_type = self.type
+        if disk_type == DeviceDisk.TYPE_BLOCK:
+            return "dev"
+        elif disk_type == DeviceDisk.TYPE_DIR:
+            return "dir"
+        elif disk_type == DeviceDisk.TYPE_FILE:
+            return "file"
+        return None
+
+
+    # _xmlpath is an abstraction for source file/block/dir paths, since
+    # they don't have any special properties aside from needing to match
+    # 'type' value with the source property used.
+    def _get_xmlpath(self):
+        if self.source.file:
+            return self.source.file
+        if self.source.dev:
+            return self.source.dev
+        if self.source.dir:
+            return self.source.dir
+        return None
+
+    def _set_xmlpath(self, val):
+        self.source.clear_source()
+
+        if self._storage_backend.get_dev_type() == "network":
+            self._set_network_source_from_backend()
+            return
+
+        propname = self._disk_type_to_object_prop_name()
+        if not propname:
+            return
+        return setattr(self.source, propname, val)
+
     def set_local_disk_to_clone(self, disk, sparse):
         """
         Set a path to manually clone (as in, not through libvirt)
         """
         self._storage_backend = diskbackend.CloneStorageCreator(self.conn,
             self.path, disk.path, disk.get_size(), sparse)
+
+
+    #####################
+    # Utility functions #
+    #####################
 
     def is_cdrom(self):
         return self.device == self.DEVICE_CDROM
@@ -736,27 +740,6 @@ class DeviceDisk(Device):
         # Don't error for unknown types
         return True
 
-    def _change_backend(self, path, vol_object, parent_pool):
-        backend = diskbackend.StorageBackend(self.conn, path,
-                                             vol_object, parent_pool)
-        self._storage_backend = backend
-
-    def sync_path_props(self):
-        """
-        Fills in the values of type, driver_type, and driver_name for
-        the associated backing storage. This needs to be manually called
-        if changing an existing disk's media.
-        """
-        path = self._get_xmlpath()
-
-        self.type = self._get_default_type()
-        self.driver_name = self._get_default_driver_name()
-        self.driver_type = self._get_default_driver_type()
-
-        # Need to retrigger this if self.type changed
-        if path:
-            self._set_xmlpath(path)
-
     def wants_storage_creation(self):
         """
         If true, this disk needs storage creation parameters or things
@@ -764,24 +747,10 @@ class DeviceDisk(Device):
         """
         return not self._storage_backend.exists()
 
-    def validate(self):
-        if self.path is None:
-            if self._source_volume_err:
-                raise RuntimeError(self._source_volume_err)
 
-            if not self.can_be_empty():
-                raise ValueError(_("Device type '%s' requires a path") %
-                                 self.device)
-
-            return
-
-        if (not self._storage_backend.exists() and
-            not self._storage_backend.will_create_storage()):
-            raise ValueError(
-                _("Must specify storage creation parameters for "
-                  "non-existent path '%s'.") % self.path)
-
-        self._storage_backend.validate()
+    ####################
+    # Storage building #
+    ####################
 
     def build_storage(self, meter):
         """
@@ -802,6 +771,30 @@ class DeviceDisk(Device):
 
         parent_pool = self.get_vol_install().pool
         self._change_backend(None, vol_object, parent_pool)
+
+
+    ######################
+    # validation helpers #
+    ######################
+
+    def validate(self):
+        if self.path is None:
+            if self._source_volume_err:
+                raise RuntimeError(self._source_volume_err)
+
+            if not self.can_be_empty():
+                raise ValueError(_("Device type '%s' requires a path") %
+                                 self.device)
+
+            return
+
+        if (not self._storage_backend.exists() and
+            not self._storage_backend.will_create_storage()):
+            raise ValueError(
+                _("Must specify storage creation parameters for "
+                  "non-existent path '%s'.") % self.path)
+
+        self._storage_backend.validate()
 
     def is_size_conflict(self):
         """
@@ -827,6 +820,26 @@ class DeviceDisk(Device):
                                   read_only=self.read_only)
         return ret
 
+
+    ###########################
+    # Misc functional helpers #
+    ###########################
+
+    def sync_path_props(self):
+        """
+        Fills in the values of type, driver_type, and driver_name for
+        the associated backing storage. This needs to be manually called
+        if changing an existing disk's media.
+        """
+        path = self._get_xmlpath()
+
+        self.type = self._get_default_type()
+        self.driver_name = self._get_default_driver_name()
+        self.driver_type = self._get_default_driver_type()
+
+        # Need to retrigger this if self.type changed
+        if path:
+            self._set_xmlpath(path)
 
     def get_target_prefix(self):
         """
@@ -856,7 +869,6 @@ class DeviceDisk(Device):
             return _return("hd")
         # sata, scsi, usb, sd
         return _return("sd")
-
 
     def generate_target(self, skip_targets):
         """
@@ -922,9 +934,9 @@ class DeviceDisk(Device):
         self.generate_target(used)
 
 
-    ##################
-    # Default config #
-    ##################
+    #########################
+    # set_defaults handling #
+    #########################
 
     def _default_bus(self, guest):
         if self.is_floppy():
