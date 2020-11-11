@@ -3355,8 +3355,8 @@ class ParserDisk(VirtCLIParser):
     ###################
 
     def host_find_inst_cb(self, *args, **kwargs):
-        cliarg = "listens"  # host[0-9]*
-        list_propname = "hosts"  # disk.hosts
+        cliarg = "hosts"  # host[0-9]*
+        list_propname = "source.hosts"  # disk.hosts
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
@@ -3381,22 +3381,22 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("cache", "driver_cache", cb=cls.noset_cb)
 
         # More standard XML props
-        cls.add_arg("source.dir", "source_dir")
-        cls.add_arg("source.file", "source_file")
-        cls.add_arg("source.dev", "source_dev")
-        cls.add_arg("source.pool", "source_pool")
-        cls.add_arg("source.volume", "source_volume")
-        cls.add_arg("source.name", "source_name")
-        cls.add_arg("source.protocol", "source_protocol")
+        cls.add_arg("source.dir", "source.dir")
+        cls.add_arg("source.file", "source.file")
+        cls.add_arg("source.dev", "source.dev")
+        cls.add_arg("source.pool", "source.pool")
+        cls.add_arg("source.volume", "source.volume")
+        cls.add_arg("source.name", "source.name")
+        cls.add_arg("source.protocol", "source.protocol")
         cls.add_arg("source.startupPolicy", "startup_policy")
         # type=nvme source props
-        cls.add_arg("source.type", "source_type")
-        cls.add_arg("source.namespace", "source_namespace")
-        cls.add_arg("source.managed", "source_managed", is_onoff=True)
-        cls.add_arg("source.address.domain", "source_address.domain")
-        cls.add_arg("source.address.bus", "source_address.bus")
-        cls.add_arg("source.address.slot", "source_address.slot")
-        cls.add_arg("source.address.function", "source_address.function")
+        cls.add_arg("source.type", "source.type")
+        cls.add_arg("source.namespace", "source.namespace")
+        cls.add_arg("source.managed", "source.managed", is_onoff=True)
+        cls.add_arg("source.address.domain", "source.address.domain")
+        cls.add_arg("source.address.bus", "source.address.bus")
+        cls.add_arg("source.address.slot", "source.address.slot")
+        cls.add_arg("source.address.function", "source.address.function")
 
         cls.add_arg("source.host[0-9]*.name", "name",
                     find_inst_cb=cls.host_find_inst_cb)

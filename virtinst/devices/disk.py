@@ -44,6 +44,136 @@ class _DiskSourceAddress(DeviceAddress):
     pass
 
 
+class _DiskSource(XMLBuilder):
+    """
+    Class representing disk <source> block, and various helpers
+    that only operate on <source> contents
+    """
+    _XML_PROP_ORDER = [
+        "file", "dev", "dir",
+        "volume", "pool", "protocol", "name", "hosts",
+        "type", "managed", "namespace", "address"]
+    XML_NAME = "source"
+
+    file = XMLProperty("./@file")
+    dev = XMLProperty("./@dev")
+    dir = XMLProperty("./@dir")
+
+    pool = XMLProperty("./@pool")
+    volume = XMLProperty("./@volume")
+
+    hosts = XMLChildProperty(_Host)
+
+    name = XMLProperty("./@name")
+    protocol = XMLProperty("./@protocol")
+
+    type = XMLProperty("./@type")
+    managed = XMLProperty("./@managed", is_yesno=True)
+    namespace = XMLProperty("./@namespace", is_int=True)
+    address = XMLChildProperty(_DiskSourceAddress, is_single=True)
+
+    def set_from_url(self, uri):
+        """
+        For a passed in path URI like gluster:// or https://, split it
+        up and set the <disk> properties directly
+        """
+        from ..uri import URI
+        uriobj = URI(uri)
+
+        if uriobj.scheme:
+            self.protocol = uriobj.scheme
+        if ((uriobj.hostname or uriobj.port or uriobj.transport) and
+            not self.hosts):
+            self.hosts.add_new()
+        if uriobj.transport:
+            self.hosts[0].transport = uriobj.transport
+        if uriobj.hostname:
+            self.hosts[0].name = uriobj.hostname
+        if uriobj.port:
+            self.hosts[0].port = uriobj.port
+        if uriobj.path:
+            if self.hosts and self.hosts[0].transport:
+                self.hosts[0].socket = uriobj.path
+            else:
+                self.name = uriobj.path
+                if self.name.startswith("/"):
+                    self.name = self.name[1:]
+
+    def build_url_from_network(self):
+        """
+        Build a URL from network contents of <source>
+        """
+        host = _Host(self.conn)
+        if self.hosts:
+            host = self.hosts[0]
+
+        ret = self.protocol or "unknown"
+        if host.transport:
+            ret += "+%s" % host.transport
+        ret += "://"
+        if host.name:
+            ret += host.name
+            if host.port:
+                ret += ":" + str(host.port)
+        if self.name:
+            if not self.name.startswith("/"):
+                ret += "/"
+            ret += self.name
+        elif host.socket:
+            if not host.socket.startswith("/"):
+                ret += "/"
+            ret += host.socket
+        return ret
+
+    def clear_source(self):
+        """
+        Unset all XML properties that describe the actual source media
+        """
+        self.file = None
+        self.dev = None
+        self.dir = None
+        self.volume = None
+        self.pool = None
+        self.name = None
+        self.protocol = None
+        for h in self.hosts[:]:
+            self.remove_child(h)
+
+    def set_network_from_storage(self, volxml, poolxml):
+        """
+        For the passed pool + vol object combo representing a network
+        volume, set the <source> elements directly
+        """
+        is_iscsi_direct = poolxml.type == "iscsi-direct"
+        protocol = poolxml.type
+        if is_iscsi_direct:
+            protocol = "iscsi"
+
+        self.protocol = protocol
+        for idx, poolhost in enumerate(poolxml.hosts):
+            if len(self.hosts) < (idx + 1):
+                self.hosts.add_new()
+            self.hosts[idx].name = poolhost.name
+            self.hosts[idx].port = poolhost.port
+
+        path = ""
+        if is_iscsi_direct:
+            # Vol path is like this:
+            # ip-10.66.144.87:3260-iscsi-iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1
+            # Always seems to have -iscsi- embedded in it
+            if "-iscsi-iqn." in volxml.target_path:
+                path = volxml.target_path.split("-iscsi-", 1)[-1]
+        else:
+            if poolxml.source_name:
+                path += poolxml.source_name
+                if poolxml.source_path:
+                    path += poolxml.source_path
+                if not path.endswith('/'):
+                    path += "/"
+            path += volxml.name
+        self.name = path or None
+
+
 class DeviceDisk(Device):
     XML_NAME = "disk"
 
@@ -299,12 +429,8 @@ class DeviceDisk(Device):
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_detect_zeroes",
         "driver_io", "error_policy",
-        "source_file", "source_dev", "source_dir",
         "auth_username", "auth_secret_type", "auth_secret_uuid",
-        "source_volume", "source_pool", "source_protocol", "source_name",
-        "source_host_name", "source_host_port",
-        "source_host_transport", "source_host_socket",
-        "source_type", "source_managed", "source_namespace", "source_address",
+        "source",
         "target", "bus",
     ]
 
@@ -412,90 +538,16 @@ class DeviceDisk(Device):
     # XML source media handling #
     #############################
 
-    source_file = XMLProperty("./source/@file")
-    source_dev = XMLProperty("./source/@dev")
-    source_dir = XMLProperty("./source/@dir")
-
-    source_pool = XMLProperty("./source/@pool")
-    source_volume = XMLProperty("./source/@volume")
-
-    auth_username = XMLProperty("./auth/@username")
-    auth_secret_type = XMLProperty("./auth/secret/@type")
-    auth_secret_uuid = XMLProperty("./auth/secret/@uuid")
-
-    hosts = XMLChildProperty(_Host, relative_xpath="./source")
-
-    source_name = XMLProperty("./source/@name")
-    source_protocol = XMLProperty("./source/@protocol")
-    # Technically multiple host lines can be listed
-    source_host_name = XMLProperty("./source/host/@name")
-    source_host_port = XMLProperty("./source/host/@port", is_int=True)
-    source_host_transport = XMLProperty("./source/host/@transport")
-    source_host_socket = XMLProperty("./source/host/@socket")
-
-    source_type = XMLProperty("./source/@type")
-    source_managed = XMLProperty("./source/@managed", is_yesno=True)
-    source_namespace = XMLProperty("./source/@namespace", is_int=True)
-    source_address = XMLChildProperty(
-            _DiskSourceAddress, is_single=True, relative_xpath="./source")
-
-    def _set_source_network_from_url(self, uri):
-        from ..uri import URI
-        uriobj = URI(uri)
-
-        if uriobj.scheme:
-            self.source_protocol = uriobj.scheme
-        if uriobj.transport:
-            self.source_host_transport = uriobj.transport
-        if uriobj.hostname:
-            self.source_host_name = uriobj.hostname
-        if uriobj.port:
-            self.source_host_port = uriobj.port
-        if uriobj.path:
-            if self.source_host_transport:
-                self.source_host_socket = uriobj.path
-            else:
-                self.source_name = uriobj.path
-                if self.source_name.startswith("/"):
-                    self.source_name = self.source_name[1:]
+    source = XMLChildProperty(_DiskSource, is_single=True)
 
     def _set_source_network_from_storage(self, volxml, poolxml):
-        is_iscsi_direct = poolxml.type == "iscsi-direct"
-        protocol = poolxml.type
-        if is_iscsi_direct:
-            protocol = "iscsi"
-
-        self.source_protocol = protocol
+        self.type = "network"
         if poolxml.auth_type:
             self.auth_username = poolxml.auth_username
             self.auth_secret_type = poolxml.auth_type
             self.auth_secret_uuid = poolxml.auth_secret_uuid
-        if poolxml.hosts:
-            self.source_host_name = poolxml.hosts[0].name
-            self.source_host_port = poolxml.hosts[0].port
-            for host in poolxml.hosts:
-                obj = self.hosts.add_new()
-                obj.name = host.name
-                obj.port = host.port
 
-        path = ""
-        if is_iscsi_direct:
-            # Vol path is like this:
-            # ip-10.66.144.87:3260-iscsi-iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1
-            # Always seems to have -iscsi- embedded in it
-            if "-iscsi-iqn." in volxml.target_path:
-                path = volxml.target_path.split("-iscsi-", 1)[-1]
-        else:
-            if poolxml.source_name:
-                path += poolxml.source_name
-                if poolxml.source_path:
-                    path += poolxml.source_path
-                if not path.endswith('/'):
-                    path += "/"
-            path += volxml.name
-        self.source_name = path or None
-
-        self.type = "network"
+        self.source.set_network_from_storage(volxml, poolxml)
 
     def _set_network_source_from_backend(self):
         if (self._storage_backend.get_vol_object() or
@@ -504,60 +556,26 @@ class DeviceDisk(Device):
             poolxml = self._storage_backend.get_parent_pool_xml()
             self._set_source_network_from_storage(volxml, poolxml)
         elif self._storage_backend.get_path():
-            self._set_source_network_from_url(self._storage_backend.get_path())
-
-    def _build_url_from_network_source(self):
-        ret = self.source_protocol or "unknown"
-        if self.source_host_transport:
-            ret += "+%s" % self.source_host_transport
-        ret += "://"
-        if self.source_host_name:
-            ret += self.source_host_name
-            if self.source_host_port:
-                ret += ":" + str(self.source_host_port)
-        if self.source_name:
-            if not self.source_name.startswith("/"):
-                ret += "/"
-            ret += self.source_name
-        elif self.source_host_socket:
-            if not self.source_host_socket.startswith("/"):
-                ret += "/"
-            ret += self.source_host_socket
-        return ret
+            self.source.set_from_url(self._storage_backend.get_path())
 
     def _get_default_type(self):
-        if self.source_pool or self.source_volume:
+        if self.source.pool or self.source.volume:
             return DeviceDisk.TYPE_VOLUME
         if not self._storage_backend.is_stub():
             return self._storage_backend.get_dev_type()
-        if self.source_protocol:
+        if self.source.protocol:
             return DeviceDisk.TYPE_NETWORK
         return self.TYPE_FILE
 
-    def _clear_source_xml(self):
-        """
-        Unset all XML properties that describe the actual source media
-        """
-        self.source_file = None
-        self.source_dev = None
-        self.source_dir = None
-        self.source_volume = None
-        self.source_pool = None
-        self.source_name = None
-        self.source_protocol = None
-        self.source_host_name = None
-        self.source_host_port = None
-        self.source_host_transport = None
-        self.source_host_socket = None
 
     def _disk_type_to_object_prop_name(self):
         disk_type = self.type
         if disk_type == DeviceDisk.TYPE_BLOCK:
-            return "source_dev"
+            return "dev"
         elif disk_type == DeviceDisk.TYPE_DIR:
-            return "source_dir"
+            return "dir"
         elif disk_type == DeviceDisk.TYPE_FILE:
-            return "source_file"
+            return "file"
         return None
 
 
@@ -565,15 +583,15 @@ class DeviceDisk(Device):
     # they don't have any special properties aside from needing to match
     # 'type' value with the source property used.
     def _get_xmlpath(self):
-        if self.source_file:
-            return self.source_file
-        if self.source_dev:
-            return self.source_dev
-        if self.source_dir:
-            return self.source_dir
+        if self.source.file:
+            return self.source.file
+        if self.source.dev:
+            return self.source.dev
+        if self.source.dir:
+            return self.source.dir
         return None
     def _set_xmlpath(self, val):
-        self._clear_source_xml()
+        self.source.clear_source()
 
         if self._storage_backend.get_dev_type() == "network":
             self._set_network_source_from_backend()
@@ -582,7 +600,7 @@ class DeviceDisk(Device):
         propname = self._disk_type_to_object_prop_name()
         if not propname:
             return
-        return setattr(self, propname, val)
+        return setattr(self.source, propname, val)
 
 
     ##################
@@ -611,6 +629,9 @@ class DeviceDisk(Device):
     driver_name = XMLProperty("./driver/@name")
     driver_type = XMLProperty("./driver/@type")
 
+    auth_username = XMLProperty("./auth/@username")
+    auth_secret_type = XMLProperty("./auth/secret/@type")
+    auth_secret_uuid = XMLProperty("./auth/secret/@uuid")
 
     snapshot_policy = XMLProperty("./@snapshot")
 
@@ -671,18 +692,18 @@ class DeviceDisk(Device):
 
         if self.type == DeviceDisk.TYPE_NETWORK:
             # Fill in a completed URL for virt-manager UI, path comparison, etc
-            path = self._build_url_from_network_source()
+            path = self.source.build_url_from_network()
 
         if typ == DeviceDisk.TYPE_VOLUME:
             try:
                 parent_pool = self.conn.storagePoolLookupByName(
-                    self.source_pool)
+                    self.source.pool)
                 vol_object = parent_pool.storageVolLookupByName(
-                    self.source_volume)
+                    self.source.volume)
             except Exception as e:
                 self._source_volume_err = str(e)
                 log.debug("Error fetching source pool=%s vol=%s",
-                    self.source_pool, self.source_volume, exc_info=True)
+                    self.source.pool, self.source.volume, exc_info=True)
 
         if vol_object is None and path is None:
             path = self._get_xmlpath()

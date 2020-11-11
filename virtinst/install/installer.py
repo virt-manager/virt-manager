@@ -187,7 +187,7 @@ class Installer(object):
         if self.conn.in_testsuite():
             # Hack to set just the XML path differently for the test suite.
             # Setting this via regular 'path' will error that it doesn't exist
-            dev.source_file = _make_testsuite_path(location)
+            dev.source.file = _make_testsuite_path(location)
 
     def _remove_unattended_install_cdrom_device(self, guest):
         dummy = guest
