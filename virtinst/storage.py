@@ -478,9 +478,10 @@ class StorageVolume(_StorageObject):
                     break
 
             for disk in collideguest.devices.disk:
-                if (pooltarget and disk.path and
-                    os.path.dirname(disk.path) == pooltarget):
-                    collidelist.append(os.path.basename(disk.path))
+                checkpath = disk.get_source_path()
+                if (pooltarget and checkpath and
+                    os.path.dirname(checkpath) == pooltarget):
+                    collidelist.append(os.path.basename(checkpath))
 
         def cb(tryname):
             if tryname in collidelist:

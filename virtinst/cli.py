@@ -338,19 +338,21 @@ def validate_mac(conn, macaddr):
 
 
 def validate_disk(dev, warn_overwrite=False):
-    def check_path_exists(dev):
+    path = dev.get_source_path()
+
+    def check_path_exists():
         """
         Prompt if disk file already exists and preserve mode is not used
         """
         if not warn_overwrite:
             return
-        if not DeviceDisk.path_definitely_exists(dev.conn, dev.path):
+        if not DeviceDisk.path_definitely_exists(dev.conn, path):
             return
         _optional_fail(
-            _("This will overwrite the existing path '%s'") % dev.path,
+            _("This will overwrite the existing path '%s'") % path,
             "path_exists")
 
-    def check_inuse_conflict(dev):
+    def check_inuse_conflict():
         """
         Check if disk is inuse by another guest
         """
@@ -359,10 +361,10 @@ def validate_disk(dev, warn_overwrite=False):
             return
 
         msg = (_("Disk %(path)s is already in use by other guests %(names)s.") %
-            {"path": dev.path, "names": names})
+            {"path": path, "names": names})
         _optional_fail(msg, "path_in_use")
 
-    def check_size_conflict(dev):
+    def check_size_conflict():
         """
         Check if specified size exceeds available storage
         """
@@ -371,10 +373,10 @@ def validate_disk(dev, warn_overwrite=False):
         if not isfatal and errmsg:
             _optional_fail(errmsg, "disk_size", warn_on_skip=False)
 
-    check_path_exists(dev)
-    check_inuse_conflict(dev)
-    check_size_conflict(dev)
-    check_path_search(dev.conn, dev.path)
+    check_path_exists()
+    check_inuse_conflict()
+    check_size_conflict()
+    check_path_search(dev.conn, path)
 
 
 def _run_console(message, args):
@@ -3310,7 +3312,7 @@ class ParserDisk(VirtCLIParser):
         if (size and
             not volname and
             not poolname and
-            not inst.path and
+            inst.is_empty() and
             inst.type == inst.TYPE_FILE):
             # Saw something like --disk size=X, have it imply pool=default
             poolname = "default"
@@ -3335,7 +3337,7 @@ class ParserDisk(VirtCLIParser):
             (fmt or size or sparse or backing_store)):
             if not poolobj:
                 poolobj = inst.get_parent_pool()
-                newvolname = os.path.basename(inst.path)
+                newvolname = os.path.basename(inst.get_source_path())
             if poolobj and not fmt:
                 fmt = _get_default_image_format(self.guest.conn, poolobj)
             if newvolname is None:
@@ -3353,6 +3355,11 @@ class ParserDisk(VirtCLIParser):
     ###################
     # Option handling #
     ###################
+
+    def set_path_cb(self, inst, val, virtarg):
+        inst.set_source_path(val)
+    def path_lookup_cb(self, inst, val, virtarg):
+        return inst.get_source_path() == val
 
     def host_find_inst_cb(self, *args, **kwargs):
         cliarg = "hosts"  # host[0-9]*
@@ -3409,7 +3416,9 @@ class ParserDisk(VirtCLIParser):
 
         _add_device_seclabel_args(cls, "seclabels")
 
-        cls.add_arg("path", "path")
+        cls.add_arg("path", None,
+                cb=cls.set_path_cb,
+                lookup_cb=cls.path_lookup_cb)
         cls.add_arg("device", "device")
         cls.add_arg("snapshot", "snapshot_policy")
         cls.add_arg("sgio", "sgio")

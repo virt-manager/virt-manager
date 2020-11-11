@@ -279,7 +279,8 @@ def testAlterDisk():
 
     disk = _get_disk("hda")
     check = _make_checker(disk)
-    check("path", "/tmp/test.img", "/dev/foo/null")
+    assert disk.get_source_path() == "/tmp/test.img"
+    disk.set_source_path("/dev/foo/null")
     disk.sync_path_props()
     check("driver_name", None, "test")
     check("driver_type", None, "raw")
@@ -297,7 +298,8 @@ def testAlterDisk():
     disk = _get_disk("hdc")
     check = _make_checker(disk)
     check("type", "block", "dir", "file", "block")
-    check("path", "/dev/null", None)
+    assert disk.get_source_path() == "/dev/null"
+    disk.set_source_path(None)
     disk.sync_path_props()
     check("device", "cdrom", "floppy")
     check("read_only", True, False)
@@ -314,12 +316,12 @@ def testAlterDisk():
 
     disk = _get_disk("sda")
     check = _make_checker(disk)
-    check("path", None, "http://[1:2:3:4:5:6:7:8]:1122/my/file")
+    disk.set_source_path("http://[1:2:3:4:5:6:7:8]:1122/my/file")
     disk.sync_path_props()
 
     disk = _get_disk("fda")
     check = _make_checker(disk)
-    check("path", None, "/dev/default-pool/default-vol")
+    disk.set_source_path("/dev/default-pool/default-vol")
     disk.sync_path_props()
     check("startup_policy", None, "optional")
     check("shareable", False, True)
@@ -349,7 +351,7 @@ def testAlterDisk():
     hcheck = _make_checker(disk.source.hosts[0])
     hcheck("name", "mon1.example.org", "diff.example.org")
     hcheck("port", 6321, 1234)
-    check("path", "gluster://diff.example.org:1234/new-val/vol")
+    assert disk.get_source_path() == "gluster://diff.example.org:1234/new-val/vol"
 
     disk = _get_disk("vdd")
     check = _make_checker(disk)
@@ -357,7 +359,7 @@ def testAlterDisk():
     check("source.protocol", "nbd")
     hcheck("transport", "unix")
     hcheck("socket", "/var/run/nbdsock")
-    check("path", "nbd+unix:///var/run/nbdsock")
+    assert disk.get_source_path() == "nbd+unix:///var/run/nbdsock"
 
     _alter_compare(conn, guest.get_xml(), outfile)
 
@@ -613,29 +615,25 @@ def testChangeKVMMedia():
     guest, outfile = _get_test_content(kvmconn, "change-media")
 
     disk = guest.devices.disk[0]
-    check = _make_checker(disk)
-    check("path", None, "/dev/default-pool/default-vol")
+    disk.set_source_path("/dev/default-pool/default-vol")
     disk.sync_path_props()
 
     disk = guest.devices.disk[1]
-    check = _make_checker(disk)
-    check("path", None, "/dev/default-pool/default-vol")
-    check("path", "/dev/default-pool/default-vol", "/dev/disk-pool/diskvol1")
+    disk.set_source_path("/dev/default-pool/default-vol")
+    assert disk.get_source_path() == "/dev/default-pool/default-vol"
+    disk.set_source_path("/dev/disk-pool/diskvol1")
     disk.sync_path_props()
 
     disk = guest.devices.disk[2]
-    check = _make_checker(disk)
-    check("path", None, "/dev/disk-pool/diskvol1")
+    disk.set_source_path("/dev/disk-pool/diskvol1")
     disk.sync_path_props()
 
     disk = guest.devices.disk[3]
-    check = _make_checker(disk)
-    check("path", None, "/dev/default-pool/default-vol")
+    disk.set_source_path("/dev/default-pool/default-vol")
     disk.sync_path_props()
 
     disk = guest.devices.disk[4]
-    check = _make_checker(disk)
-    check("path", None, "/dev/disk-pool/diskvol1")
+    disk.set_source_path("/dev/disk-pool/diskvol1")
     disk.sync_path_props()
 
     _alter_compare(kvmconn, guest.get_xml(), outfile)

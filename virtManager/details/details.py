@@ -1983,7 +1983,7 @@ class vmmDetails(vmmGObjectUI):
         maxmem.set_value(int(round(vm_max_mem)))
 
     def _refresh_disk_page(self, disk):
-        path = disk.path
+        path = disk.get_source_path()
         devtype = disk.device
         bus = disk.bus
 

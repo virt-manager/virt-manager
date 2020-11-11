@@ -465,7 +465,7 @@ class vmmDomain(vmmLibvirtObject):
         for disk in self.get_disk_devices_norefresh():
             if disk.read_only:
                 continue
-            if not disk.path:
+            if disk.is_empty():
                 continue
             if disk.driver_type == "qcow2":
                 seen_qcow2 = True
@@ -524,9 +524,9 @@ class vmmDomain(vmmLibvirtObject):
         """
         from virtinst import Cloner
         old_nvram = DeviceDisk(self.conn.get_backend())
-        old_nvram.path = self.get_xmlobj().os.nvram
+        old_nvram.set_source_path(self.get_xmlobj().os.nvram)
 
-        nvram_dir = os.path.dirname(old_nvram.path)
+        nvram_dir = os.path.dirname(old_nvram.get_source_path())
         new_nvram_path = os.path.join(nvram_dir,
                 "%s_VARS.fd" % os.path.basename(new_name))
 
@@ -568,7 +568,7 @@ class vmmDomain(vmmLibvirtObject):
         except Exception as warn:  # pragma: no cover
             log.debug("old nvram file was not removed: '%s'", warn)
 
-        self.define_overview(nvram=new_nvram.path)
+        self.define_overview(nvram=new_nvram.get_source_path())
 
     # Device Add/Remove
     def add_device(self, devobj):
@@ -737,7 +737,7 @@ class vmmDomain(vmmLibvirtObject):
             return  # pragma: no cover
 
         if path != _SENTINEL:
-            editdev.path = path
+            editdev.set_source_path(path)
             if not do_hotplug:
                 editdev.sync_path_props()
 
@@ -1698,7 +1698,7 @@ class vmmDomainVirtinst(vmmDomain):
         lose the storage creation info. This syncs that info across
         to the new DeviceDisk
         """
-        if origdisk.path != newdisk.path:
+        if origdisk.get_source_path() != newdisk.get_source_path():
             return
 
         if origdisk.get_vol_object():

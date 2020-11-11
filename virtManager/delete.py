@@ -419,7 +419,7 @@ class _DiskData:
         """
         return _DiskData(
                 disk.target,
-                disk.path,
+                disk.get_source_path(),
                 disk.read_only,
                 disk.shareable,
                 disk.device in ["cdrom", "floppy"])

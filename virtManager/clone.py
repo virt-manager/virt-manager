@@ -24,7 +24,7 @@ def _get_cloneable_msg(diskinfo):
     """Is the passed path even clone-able"""
     if diskinfo.get_cloneable_msg():
         return diskinfo.get_cloneable_msg()
-    if not diskinfo.disk.path:
+    if diskinfo.disk.is_empty():
         return _("No storage to clone.")
 
 
@@ -45,7 +45,8 @@ class _StorageInfo:
         self.cloneable_msg = _get_cloneable_msg(diskinfo)
 
         self._manual_path = None
-        self._generated_path = diskinfo.new_disk and diskinfo.new_disk.path
+        self._generated_path = (diskinfo.new_disk and
+                diskinfo.new_disk.get_source_path())
         if not self._generated_path:
             self._reset_generated_path()
 
@@ -66,7 +67,7 @@ class _StorageInfo:
     def get_target(self):
         return self._orig_disk.target
     def get_orig_disk_path(self):
-        return self._orig_disk.path
+        return self._orig_disk.get_source_path()
     def get_new_disk_path(self):
         if self._manual_path:
             return self._manual_path
@@ -87,7 +88,7 @@ class _StorageInfo:
             self._orig_disk.conn,
             self._orig_vm_name,
             self._new_vm_name,
-            self._orig_disk.path)
+            self._orig_disk.get_source_path())
 
     def set_values_on_diskinfo(self, diskinfo):
         if not self._is_clone_requested:
@@ -129,7 +130,7 @@ class _StorageInfo:
         lines = []
 
         line = ""
-        path = self._orig_disk.path
+        path = self.get_orig_disk_path()
         if path:
             line += path
         else:

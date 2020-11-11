@@ -228,7 +228,7 @@ class vmmAddStorage(vmmGObjectUI):
                 path = self.widget("storage-entry").get_text().strip()
 
         disk = virtinst.DeviceDisk(self.conn.get_backend())
-        disk.path = path or None
+        disk.set_source_path(path or None)
         disk.device = device
         vals = self.get_values()
 
@@ -249,6 +249,7 @@ class vmmAddStorage(vmmGObjectUI):
             disk.removable = vals.get("removable")
 
         if disk.wants_storage_creation():
+            path = disk.get_source_path()
             pool = disk.get_parent_pool()
             size = uiutil.spin_get_helper(self.widget("storage-size"))
             fmt = self.conn.get_default_storage_format()
@@ -259,38 +260,39 @@ class vmmAddStorage(vmmGObjectUI):
             sparse = fmt != 'raw'
 
             vol_install = virtinst.DeviceDisk.build_vol_install(
-                disk.conn, os.path.basename(disk.path), pool,
+                disk.conn, os.path.basename(path), pool,
                 size, sparse)
             disk.set_vol_install(vol_install)
 
             if disk.get_vol_install().supports_format():
                 log.debug("Using default prefs format=%s for path=%s",
-                    fmt, disk.path)
+                    fmt, path)
                 disk.get_vol_install().format = fmt
             else:
                 log.debug("path=%s can not use default prefs format=%s, "
-                        "not setting it", disk.path, fmt)  # pragma: no cover
+                        "not setting it", path, fmt)  # pragma: no cover
 
         return disk
 
     def validate_device(self, disk):
-        if not disk.path and disk.device in ["disk", "lun"]:
+        if disk.is_empty() and disk.device in ["disk", "lun"]:
             return self.err.val_err(_("A storage path must be specified."))
 
         disk.validate()
+        path = disk.get_source_path()
 
         # Disk collision
         names = disk.is_conflict_disk()
         if names:
             msg = (_("Disk '%(path)s' is already in use by other "
                    "guests %(names)s") %
-                   {"path": disk.path, "names": names})
+                   {"path": path, "names": names})
             res = self.err.yes_no(msg,
                     _("Do you really want to use the disk?"))
             if not res:
                 return False
 
-        self.check_path_search(self, self.conn, disk.path)
+        self.check_path_search(self, self.conn, path)
 
 
     ##################

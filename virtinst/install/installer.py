@@ -98,9 +98,10 @@ class Installer(object):
         clean_disks = [d for d in guest.devices.disk if d.storage_was_created]
 
         for disk in clean_disks:
+            path = disk.get_source_path()
             log.debug("Removing created disk path=%s vol_object=%s",
-                disk.path, disk.get_vol_object())
-            name = os.path.basename(disk.path)
+                path, disk.get_vol_object())
+            name = os.path.basename(path)
 
             try:
                 meter.start(size=None, text=_("Removing disk '%s'") % name)
@@ -110,7 +111,7 @@ class Installer(object):
                 else:  # pragma: no cover
                     # This case technically shouldn't happen here, but
                     # it's here in case future assumptions change
-                    os.unlink(disk.path)
+                    os.unlink(path)
 
                 meter.end(0)
             except Exception as e:  # pragma: no cover
@@ -126,7 +127,7 @@ class Installer(object):
     def _make_cdrom_device(self, path):
         dev = DeviceDisk(self.conn)
         dev.device = dev.DEVICE_CDROM
-        dev.path = path
+        dev.set_source_path(path)
         dev.sync_path_props()
         dev.validate()
         return dev
@@ -148,7 +149,7 @@ class Installer(object):
             cdroms = [d for d in guest.devices.disk if d.is_cdrom()]
             if cdroms:
                 dev = cdroms[0]
-                dev.path = self._cdrom_path()
+                dev.set_source_path(self._cdrom_path())
                 return
 
         dev = self._make_cdrom_device(self._cdrom_path())
@@ -170,8 +171,9 @@ class Installer(object):
             # Keep media attached for windows which has a multi stage install
             return
         for disk in guest.devices.disk:
-            if disk.is_cdrom() and disk.path == self._cdrom_path():
-                disk.path = None
+            if (disk.is_cdrom() and
+                disk.get_source_path() == self._cdrom_path()):
+                disk.set_source_path(None)
                 disk.sync_path_props()
                 break
 
@@ -194,7 +196,7 @@ class Installer(object):
         if not self._unattended_install_cdrom_device:
             return
 
-        self._unattended_install_cdrom_device.path = None
+        self._unattended_install_cdrom_device.set_source_path(None)
         self._unattended_install_cdrom_device.sync_path_props()
 
     def _build_boot_order(self, guest, bootdev):

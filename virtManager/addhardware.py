@@ -1366,10 +1366,10 @@ class vmmAddHardware(vmmGObjectUI):
         dev = devclass(srcdev.conn, parsexml=xml)
 
         if srcdev.DEVICE_TYPE == "disk":
-            if (srcdev.path == dev.path and
+            if (srcdev.get_source_path() == dev.get_source_path() and
                 srcdev.get_vol_install()):
                 dev.set_vol_install(srcdev.get_vol_install())
-            elif dev.path:
+            elif dev.get_source_path():
                 # Needed to convince disk.validate() to validate a passed path
                 dev.set_backend_for_existing_path()
 

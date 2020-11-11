@@ -319,12 +319,13 @@ class DeviceDisk(Device):
                     continue
 
             for disk in vm.devices.disk:
-                if disk.path in vols and vm.name not in ret:
+                checkpath = disk.get_source_path()
+                if checkpath in vols and vm.name not in ret:
                     # VM uses the path indirectly via backing store
                     ret.append(vm.name)
                     break
 
-                if disk.path != path:
+                if checkpath != path:
                     continue
 
                 if shareable and disk.shareable:
@@ -520,7 +521,7 @@ class DeviceDisk(Device):
         return self.TYPE_FILE
 
     def _get_default_driver_name(self):
-        if not self.path:
+        if self.is_empty():
             return None
 
         # Recommended xen defaults from here:
@@ -616,12 +617,19 @@ class DeviceDisk(Device):
 
         self._change_backend(path, vol_object, parent_pool)
 
-    def _get_path(self):
+    def get_source_path(self):
+        """
+        Source path is a single string representation of the disk source
+        storage. For regular storage this is a FS path. For type=network
+        this is a reconstructed URL. In some cases like rbd:// this may
+        be an entirely synthetic URL format
+        """
         if (self._storage_backend.is_stub() and not
             self._storage_backend.get_path()):
             self._resolve_storage_backend()
         return self._storage_backend.get_path()
-    def _set_path(self, newpath):
+
+    def set_source_path(self, newpath):
         if self._storage_backend.will_create_storage():
             raise xmlutil.DevError(
                     "Can't change disk path if storage creation info "
@@ -632,8 +640,7 @@ class DeviceDisk(Device):
         (vol_object, parent_pool) = diskbackend.manage_path(self.conn, newpath)
 
         self._change_backend(newpath, vol_object, parent_pool)
-        self._set_xmlpath(self.path)
-    path = property(_get_path, _set_path)
+        self._set_xmlpath(self.get_source_path())
 
     def set_vol_object(self, vol_object, parent_pool):
         log.debug("disk.set_vol_object: volxml=\n%s",
@@ -641,14 +648,14 @@ class DeviceDisk(Device):
         log.debug("disk.set_vol_object: poolxml=\n%s",
             parent_pool.XMLDesc(0))
         self._change_backend(None, vol_object, parent_pool)
-        self._set_xmlpath(self.path)
+        self._set_xmlpath(self.get_source_path())
 
     def set_vol_install(self, vol_install):
         log.debug("disk.set_vol_install: name=%s poolxml=\n%s",
             vol_install.name, vol_install.pool.XMLDesc(0))
         self._storage_backend = diskbackend.ManagedStorageCreator(
             self.conn, vol_install)
-        self._set_xmlpath(self.path)
+        self._set_xmlpath(self.get_source_path())
 
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()
@@ -718,12 +725,17 @@ class DeviceDisk(Device):
         Set a path to manually clone (as in, not through libvirt)
         """
         self._storage_backend = diskbackend.CloneStorageCreator(self.conn,
-            self.path, disk.path, disk.get_size(), sparse)
+            self.get_source_path(),
+            disk.get_source_path(),
+            disk.get_size(), sparse)
 
 
     #####################
     # Utility functions #
     #####################
+
+    def is_empty(self):
+        return not bool(self.get_source_path())
 
     def is_cdrom(self):
         return self.device == self.DEVICE_CDROM
@@ -778,7 +790,7 @@ class DeviceDisk(Device):
     ######################
 
     def validate(self):
-        if self.path is None:
+        if self.is_empty():
             if self._source_volume_err:
                 raise RuntimeError(self._source_volume_err)
 
@@ -792,7 +804,7 @@ class DeviceDisk(Device):
             not self._storage_backend.will_create_storage()):
             raise ValueError(
                 _("Must specify storage creation parameters for "
-                  "non-existent path '%s'.") % self.path)
+                  "non-existent path '%s'.") % self.get_source_path())
 
         self._storage_backend.validate()
 
@@ -815,7 +827,7 @@ class DeviceDisk(Device):
 
         :returns: list of colliding VM names
         """
-        ret = self.path_in_use_by(self.conn, self.path,
+        ret = self.path_in_use_by(self.conn, self.get_source_path(),
                                   shareable=self.shareable,
                                   read_only=self.read_only)
         return ret

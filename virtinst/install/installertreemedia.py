@@ -55,9 +55,9 @@ class InstallerTreeMedia(object):
         try:
             dev = DeviceDisk(conn)
             dev.device = dev.DEVICE_CDROM
-            dev.path = path
+            dev.set_source_path(path)
             dev.validate()
-            return dev.path
+            return dev.get_source_path()
         except Exception as e:
             log.debug("Error validating install location", exc_info=True)
             if path.startswith("nfs:"):

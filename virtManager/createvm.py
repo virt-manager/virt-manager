@@ -939,7 +939,7 @@ class vmmCreateVM(vmmGObjectUI):
             if disk.wants_storage_creation():
                 storagesize = "%s" % _pretty_storage(disk.get_size())
             if not path:
-                path = disk.path
+                path = disk.get_source_path()
             storagepath = (storagetmpl % path)
         elif fs:
             storagepath = storagetmpl % fs.source
@@ -1648,7 +1648,7 @@ class vmmCreateVM(vmmGObjectUI):
         elif self._is_default_storage():
             if failed_disk:
                 # Don't generate a new path if the install failed
-                path = failed_disk.path
+                path = failed_disk.get_source_path()
                 path_already_created = failed_disk.storage_was_created
                 if do_log:
                     log.debug("Reusing failed disk path=%s "

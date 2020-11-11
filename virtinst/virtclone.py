@@ -41,7 +41,7 @@ def _process_disks(options, cloner):
 
     diskinfos = cloner.get_nonshare_diskinfos()
     for diskinfo in diskinfos:
-        origpath = diskinfo.disk.path
+        origpath = diskinfo.disk.get_source_path()
         newpath = None
         if newpaths:
             newpath = newpaths.pop(0)

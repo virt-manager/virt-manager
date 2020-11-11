@@ -118,7 +118,7 @@ def _build_clone_vol_install(orig_disk, new_disk):
     size = .000001
     sparse = False
     vol_install = DeviceDisk.build_vol_install(
-        orig_disk.conn, os.path.basename(new_disk.path),
+        orig_disk.conn, os.path.basename(new_disk.get_source_path()),
         new_disk.get_parent_pool(), size, sparse)
     vol_install.set_input_vol(orig_disk.get_vol_object())
 
@@ -132,7 +132,7 @@ def _build_clone_disk(orig_disk, clonepath, allow_create, sparse):
         device = DeviceDisk.DEVICE_CDROM
 
     new_disk = DeviceDisk(conn)
-    new_disk.path = clonepath
+    new_disk.set_source_path(clonepath)
     new_disk.device = device
 
     if not allow_create:
@@ -147,13 +147,13 @@ def _build_clone_disk(orig_disk, clonepath, allow_create, sparse):
         # so must be a common case.
         if (conn.is_remote() or
             new_disk.type != new_disk.TYPE_BLOCK or
-            not orig_disk.path or
-            not os.access(orig_disk.path, os.R_OK) or
-            not new_disk.path or
-            not os.access(new_disk.path, os.W_OK)):
+            not orig_disk.get_source_path() or
+            not os.access(orig_disk.get_source_path(), os.R_OK) or
+            not new_disk.get_source_path() or
+            not os.access(new_disk.get_source_path(), os.W_OK)):
             raise RuntimeError(
                 _("Clone onto existing storage volume is not "
-                  "currently supported: '%s'") % new_disk.path)
+                  "currently supported: '%s'") % new_disk.get_source_path())
 
     if (orig_disk.get_vol_object() and
         new_disk.wants_storage_creation()):
@@ -161,7 +161,7 @@ def _build_clone_disk(orig_disk, clonepath, allow_create, sparse):
         if not sparse:
             vol_install.allocation = vol_install.capacity
         new_disk.set_vol_install(vol_install)
-    elif orig_disk.path:
+    elif orig_disk.get_source_path():
         new_disk.set_local_disk_to_clone(orig_disk, sparse)
 
     new_disk.validate()
@@ -173,13 +173,13 @@ def _get_cloneable_msg(disk):
     If the disk storage is not cloneable, return a string explaining why
     """
     if disk.wants_storage_creation():
-        return _("Disk path '%s' does not exist.") % disk.path
+        return _("Disk path '%s' does not exist.") % disk.get_source_path()
     if (disk.type == "network" and not disk.get_vol_object()):
         return _("Disk type '%s' is not cloneable.") % disk.type
 
 
 def _get_shareable_msg(disk):
-    if not disk.path:
+    if disk.is_empty():
         return _("No storage to clone.")
     if disk.read_only:
         return _("Read Only")
@@ -330,11 +330,11 @@ class Cloner(object):
         for diskinfo in [d for d in self._diskinfos if d.is_clone_requested()]:
             disk = diskinfo.disk
             log.debug("Wants cloning: size=%s path=%s",
-                    disk.get_size(), disk.path)
+                    disk.get_size(), disk.get_source_path())
 
         if self._src_guest.os.nvram:
             old_nvram = DeviceDisk(self.conn)
-            old_nvram.path = self._new_guest.os.nvram
+            old_nvram.set_source_path(self._new_guest.os.nvram)
             self._nvram_diskinfo = _CloneDiskInfo(old_nvram)
 
     def _init_new_guest(self):
@@ -456,9 +456,9 @@ class Cloner(object):
 
         diskinfo = self._nvram_diskinfo
         new_nvram = DeviceDisk(self.conn)
-        new_nvram.path = new_nvram_path
+        new_nvram.set_source_path(new_nvram_path)
         old_nvram = DeviceDisk(self.conn)
-        old_nvram.path = diskinfo.disk.path
+        old_nvram.set_source_path(diskinfo.disk.get_source_path())
 
         if (diskinfo.is_clone_requested() and
             new_nvram.wants_storage_creation() and
@@ -473,7 +473,7 @@ class Cloner(object):
             # There's no action to perform for this case, so drop it
             self._nvram_diskinfo = None
 
-        self._new_guest.os.nvram = new_nvram.path
+        self._new_guest.os.nvram = new_nvram.get_source_path()
 
 
     def prepare(self):
@@ -496,7 +496,7 @@ class Cloner(object):
                 newpath = Cloner.generate_clone_disk_path(
                          self.conn, self.src_name,
                          self.new_guest.name,
-                         orig_disk.path)
+                         orig_disk.get_source_path())
                 diskinfo.set_new_path(newpath, self._sparse)
                 if not diskinfo.new_disk:
                     # We hit an error, clients will raise it later
@@ -505,7 +505,7 @@ class Cloner(object):
             new_disk = diskinfo.new_disk
             assert new_disk
             log.debug("Cloning srcpath=%s dstpath=%s",
-                    orig_disk.path, new_disk.path)
+                    orig_disk.get_source_path(), new_disk.get_source_path())
 
             if self._reflink:
                 vol_install = new_disk.get_vol_install()
@@ -516,11 +516,11 @@ class Cloner(object):
                     xmldisk = disk
 
             # Change the XML
-            xmldisk.path = None
+            xmldisk.set_source_path(None)
             xmldisk.type = new_disk.type
             xmldisk.driver_name = orig_disk.driver_name
             xmldisk.driver_type = orig_disk.driver_type
-            xmldisk.path = new_disk.path
+            xmldisk.set_source_path(new_disk.get_source_path())
 
         self._prepare_nvram()
 

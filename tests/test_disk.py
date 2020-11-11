@@ -126,7 +126,7 @@ def test_disk_diskbackend_misc():
     conn = utils.URIs.openconn("test:///default")
     if os.path.exists("/dev/loop0"):
         disk = virtinst.DeviceDisk(conn)
-        disk.path = "/dev/loop0"
+        disk.set_source_path("/dev/loop0")
         assert disk.type == "block"
         disk.get_size()
 
@@ -135,31 +135,31 @@ def test_disk_diskbackend_misc():
     open(tmpinput.name, "wb").write(b'\0' * 10000)
 
     srcdisk = virtinst.DeviceDisk(conn)
-    srcdisk.path = tmpinput.name
+    srcdisk.set_source_path(tmpinput.name)
 
     newdisk = virtinst.DeviceDisk(conn)
     tmpoutput = tempfile.NamedTemporaryFile()
     os.unlink(tmpoutput.name)
-    newdisk.path = tmpoutput.name
+    newdisk.set_source_path(tmpoutput.name)
     newdisk.set_local_disk_to_clone(srcdisk, True)
     newdisk.build_storage(None)
 
     # Test cloning onto existing disk
     newdisk = virtinst.DeviceDisk(conn, parsexml=newdisk.get_xml())
-    newdisk.path = newdisk.path
+    newdisk.set_source_path(newdisk.get_source_path())
     newdisk.set_local_disk_to_clone(srcdisk, True)
     newdisk.build_storage(None)
 
     newdisk = virtinst.DeviceDisk(conn)
     newdisk.type = "block"
-    newdisk.path = "/dev/foo/idontexist"
+    newdisk.set_source_path("/dev/foo/idontexist")
     assert newdisk.get_size() == 0
 
     conn = utils.URIs.open_testdriver_cached()
     volpath = "/dev/default-pool/test-clone-simple.img"
     assert virtinst.DeviceDisk.path_definitely_exists(conn, volpath)
     disk = virtinst.DeviceDisk(conn)
-    disk.path = volpath
+    disk.set_source_path(volpath)
     assert disk.get_size()
 
 
