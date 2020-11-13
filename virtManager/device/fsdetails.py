@@ -53,16 +53,6 @@ class vmmFSDetails(vmmGObjectUI):
             self.storage_browser.cleanup()
             self.storage_browser = None
 
-    def show_pair_combo(self, basename, show_combo):
-        combo = self.widget(basename + "-combo")
-        label = self.widget(basename + "-label")
-
-        combo.set_visible(show_combo)
-        label.set_visible(not show_combo)
-
-    def show_check_button(self, basename, show):
-        check = self.widget(basename)
-        check.set_visible(show)
 
     ##########################
     # Initialization methods #
