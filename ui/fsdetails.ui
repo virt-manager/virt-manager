@@ -7,117 +7,12 @@
     <property name="step-increment">100</property>
     <property name="page-increment">1000</property>
   </object>
-  <!-- n-columns=3 n-rows=8 -->
+  <!-- n-columns=2 n-rows=8 -->
   <object class="GtkGrid" id="vmm-fs-details">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="row-spacing">6</property>
     <property name="column-spacing">6</property>
-    <child>
-      <object class="GtkBox" id="fs-type-box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <child>
-          <object class="GtkComboBox" id="fs-type-combo">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <signal name="changed" handler="on_fs_type_combo_changed" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="fs-type-label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="label">Passthrough</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="fs-mode-box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <child>
-          <object class="GtkComboBox" id="fs-mode-combo">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <signal name="changed" handler="on_fs_mode_combo_changed" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="fs-mode-label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">Default</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="fs-driver-box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <child>
-          <object class="GtkComboBox" id="fs-driver-combo">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <signal name="changed" handler="on_fs_driver_combo_changed" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="fs-driver-label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">Default</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">1</property>
-      </packing>
-    </child>
     <child>
       <object class="GtkEntry" id="fs-target">
         <property name="visible">True</property>
@@ -335,40 +230,16 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="fs-format-box">
+      <object class="GtkComboBox" id="fs-format-combo">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <child>
-          <object class="GtkComboBox" id="fs-format-combo">
-            <property name="visible">True</property>
+        <property name="halign">start</property>
+        <property name="has-entry">True</property>
+        <signal name="changed" handler="on_fs_format_combo_changed" swapped="no"/>
+        <child internal-child="entry">
+          <object class="GtkEntry">
             <property name="can-focus">False</property>
-            <property name="has-entry">True</property>
-            <signal name="changed" handler="on_fs_format_combo_changed" swapped="no"/>
-            <child internal-child="entry">
-              <object class="GtkEntry" id="fs-format-entry">
-                <property name="can-focus">True</property>
-                <property name="width-chars">10</property>
-              </object>
-            </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="fs-format-label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">Default</property>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
       <packing>
@@ -377,28 +248,40 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkComboBox" id="fs-mode-combo">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <signal name="changed" handler="on_fs_mode_combo_changed" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
+      </packing>
     </child>
     <child>
-      <placeholder/>
+      <object class="GtkComboBox" id="fs-driver-combo">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <signal name="changed" handler="on_fs_driver_combo_changed" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+      </packing>
     </child>
     <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
+      <object class="GtkComboBox" id="fs-type-combo">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <signal name="changed" handler="on_fs_type_combo_changed" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
+      </packing>
     </child>
   </object>
 </interface>

@@ -95,7 +95,6 @@ class vmmFSDetails(vmmGObjectUI):
                  DeviceFilesystem.TYPE_RAM], sort=False)
         else:
             simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
-            self.widget("fs-type-label").set_text(DeviceFilesystem.TYPE_MOUNT)
 
         simple_store_set("fs-mode-combo", DeviceFilesystem.MODES + [None])
 
@@ -109,8 +108,7 @@ class vmmFSDetails(vmmGObjectUI):
         simple_store_set("fs-driver-combo", drivers + [None])
 
         simple_store_set("fs-format-combo", ["raw", "qcow2"], capitalize=False)
-        self.show_pair_combo("fs-type", self.conn.is_container_only())
-        self.show_check_button("fs-readonly",
+        self.widget("fs-readonly").set_visible(
                 self.conn.is_qemu() or
                 self.conn.is_test() or
                 self.conn.is_lxc())
@@ -130,8 +128,6 @@ class vmmFSDetails(vmmGObjectUI):
                                          check_visible=True)
 
     def get_config_fs_type(self):
-        if self.widget("fs-type-label").is_visible():
-            return self.widget("fs-type-label").get_text()
         return uiutil.get_list_selection(self.widget("fs-type-combo"),
                                          check_visible=True)
 
@@ -150,10 +146,15 @@ class vmmFSDetails(vmmGObjectUI):
     def set_dev(self, dev):
         self._dev = dev
 
-        self.set_config_value("fs-type", dev.type)
-        self.set_config_value("fs-mode", dev.accessmode)
-        self.set_config_value("fs-driver", dev.driver_type)
-        self.set_config_value("fs-format", dev.driver_format)
+        uiutil.set_list_selection(
+                self.widget("fs-type-combo"), dev.type)
+        uiutil.set_list_selection(
+                self.widget("fs-mode-combo"), dev.accessmode)
+        uiutil.set_list_selection(
+                self.widget("fs-driver-combo"), dev.driver_type)
+        uiutil.set_list_selection(
+                self.widget("fs-format-combo"), dev.driver_format)
+
         if dev.type != DeviceFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
         else:
@@ -161,15 +162,9 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-target").set_text(dev.target or "")
         self.widget("fs-readonly").set_active(dev.readonly)
 
-        self.show_pair_combo("fs-type", self.conn.is_container_only())
+        uiutil.set_grid_row_visible(
+                self.widget("fs-type-combo"), self.conn.is_container_only())
 
-    def set_config_value(self, name, value):
-        combo = self.widget("%s-combo" % name)
-        label = self.widget("%s-label" % name)
-
-        uiutil.set_list_selection(combo, value)
-        if label:
-            label.set_text(value or "default")
 
     # listeners
     def notify_change(self, ignore):
@@ -188,7 +183,7 @@ class vmmFSDetails(vmmGObjectUI):
         show_mode = bool(ismount and
             (fsdriver == DeviceFilesystem.DRIVER_PATH or
             fsdriver is None))
-        uiutil.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
+        uiutil.set_grid_row_visible(self.widget("fs-mode-combo"), show_mode)
 
         show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
         uiutil.set_grid_row_visible(
@@ -198,8 +193,8 @@ class vmmFSDetails(vmmGObjectUI):
 
         show_format = bool(
             fsdriver == DeviceFilesystem.DRIVER_NBD)
-        uiutil.set_grid_row_visible(self.widget("fs-format-box"), show_format)
-        self.show_pair_combo("fs-format", True)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-format-combo"), show_format)
 
         show_mode_combo = False
         show_driver_combo = False
@@ -214,8 +209,10 @@ class vmmFSDetails(vmmGObjectUI):
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)
-        self.show_pair_combo("fs-mode", show_mode_combo)
-        self.show_pair_combo("fs-driver", show_driver_combo)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-mode-combo"), show_mode_combo)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-driver-combo"), show_driver_combo)
 
     def change_field(self, src):
         self.update_fs_rows()
