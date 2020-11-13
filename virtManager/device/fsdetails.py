@@ -34,7 +34,6 @@ class vmmFSDetails(vmmGObjectUI):
             "on_fs_driver_combo_changed": self.change_field,
             "on_fs_source_browse_clicked": self.browse_fs_source,
             "on_fs_mode_combo_changed": self.notify_change,
-            "on_fs_wrpolicy_combo_changed": self.notify_change,
             "on_fs_readonly_toggled": self.notify_change,
             "on_fs_format_combo_changed": self.notify_change,
             "on_fs_source_changed": self.notify_change,
@@ -110,8 +109,6 @@ class vmmFSDetails(vmmGObjectUI):
         simple_store_set("fs-driver-combo", drivers + [None])
 
         simple_store_set("fs-format-combo", ["raw", "qcow2"], capitalize=False)
-        simple_store_set("fs-wrpolicy-combo",
-                DeviceFilesystem.WRPOLICIES + [None])
         self.show_pair_combo("fs-type", self.conn.is_container_only())
         self.show_check_button("fs-readonly",
                 self.conn.is_qemu() or
@@ -123,7 +120,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-mode-combo").set_active(0)
         self.widget("fs-driver-combo").set_active(0)
         self.widget("fs-format-combo").set_active(0)
-        self.widget("fs-wrpolicy-combo").set_active(0)
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
         self.widget("fs-readonly").set_active(False)
@@ -131,10 +127,6 @@ class vmmFSDetails(vmmGObjectUI):
     # Getters
     def get_config_fs_mode(self):
         return uiutil.get_list_selection(self.widget("fs-mode-combo"),
-                                         check_visible=True)
-
-    def get_config_fs_wrpolicy(self):
-        return uiutil.get_list_selection(self.widget("fs-wrpolicy-combo"),
                                          check_visible=True)
 
     def get_config_fs_type(self):
@@ -161,7 +153,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.set_config_value("fs-type", dev.type)
         self.set_config_value("fs-mode", dev.accessmode)
         self.set_config_value("fs-driver", dev.driver_type)
-        self.set_config_value("fs-wrpolicy", dev.driver_wrpolicy)
         self.set_config_value("fs-format", dev.driver_format)
         if dev.type != DeviceFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source)
@@ -199,12 +190,6 @@ class vmmFSDetails(vmmGObjectUI):
             fsdriver is None))
         uiutil.set_grid_row_visible(self.widget("fs-mode-box"), show_mode)
 
-        show_wrpol = bool(ismount and
-            fsdriver and (fsdriver == DeviceFilesystem.DRIVER_PATH or
-            fsdriver == DeviceFilesystem.DRIVER_HANDLE))
-        uiutil.set_grid_row_visible(self.widget("fs-wrpolicy-box"),
-                                       show_wrpol)
-
         show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
         uiutil.set_grid_row_visible(
             self.widget("fs-ram-source-box"), show_ram_source)
@@ -218,7 +203,6 @@ class vmmFSDetails(vmmGObjectUI):
 
         show_mode_combo = False
         show_driver_combo = False
-        show_wrpolicy_combo = self.conn.is_qemu() or self.conn.is_test()
         if fstype == DeviceFilesystem.TYPE_TEMPLATE:
             source_text = _("Te_mplate:")
         else:
@@ -232,7 +216,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-source-title").set_use_underline(True)
         self.show_pair_combo("fs-mode", show_mode_combo)
         self.show_pair_combo("fs-driver", show_driver_combo)
-        self.show_pair_combo("fs-wrpolicy", show_wrpolicy_combo)
 
     def change_field(self, src):
         self.update_fs_rows()
@@ -275,7 +258,6 @@ class vmmFSDetails(vmmGObjectUI):
         readonly = self.get_config_fs_readonly()
         driver = self.get_config_fs_driver()
         fsformat = self.get_config_fs_format()
-        wrpolicy = self.get_config_fs_wrpolicy()
 
         dev = DeviceFilesystem(conn)
         if fstype == DeviceFilesystem.TYPE_RAM:
@@ -297,8 +279,6 @@ class vmmFSDetails(vmmGObjectUI):
                 dev.driver_format = "raw"
             elif driver == DeviceFilesystem.DRIVER_NBD:
                 dev.driver_format = fsformat
-        if wrpolicy:
-            dev.driver_wrpolicy = wrpolicy
 
         dev.validate()
         return dev

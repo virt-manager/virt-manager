@@ -577,7 +577,6 @@ def testDetailsEditDevices2(app):
     # Filesystem tweaks
     tab = _select_hw(app, win, "Filesystem /target/", "filesystem-tab")
     tab.combo_select("Driver:", "Path")
-    tab.combo_select("Write Policy:", "Immediate")
     tab.find("Source path:", "text").set_text("/frib1")
     tab.find("Target path:", "text").set_text("newtarget")
     tab.find_fuzzy("Export filesystem", "check box").click()

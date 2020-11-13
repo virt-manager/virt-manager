@@ -24,9 +24,6 @@ class DeviceFilesystem(Device):
     MODE_SQUASH = "squash"
     MODES = [MODE_PASSTHROUGH, MODE_MAPPED, MODE_SQUASH]
 
-    WRPOLICY_IMM = "immediate"
-    WRPOLICIES = [WRPOLICY_IMM]
-
     DRIVER_PATH = "path"
     DRIVER_HANDLE = "handle"
     DRIVER_LOOP = "loop"
