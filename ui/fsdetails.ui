@@ -248,15 +248,21 @@
       </packing>
     </child>
     <child>
-      <object class="GtkComboBox" id="fs-mode-combo">
+      <object class="GtkComboBox" id="fs-type-combo">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <signal name="changed" handler="on_fs_mode_combo_changed" swapped="no"/>
+        <property name="has-entry">True</property>
+        <signal name="changed" handler="on_fs_type_combo_changed" swapped="no"/>
+        <child internal-child="entry">
+          <object class="GtkEntry">
+            <property name="can-focus">False</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
@@ -264,7 +270,13 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
+        <property name="has-entry">True</property>
         <signal name="changed" handler="on_fs_driver_combo_changed" swapped="no"/>
+        <child internal-child="entry">
+          <object class="GtkEntry">
+            <property name="can-focus">False</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>
@@ -272,15 +284,21 @@
       </packing>
     </child>
     <child>
-      <object class="GtkComboBox" id="fs-type-combo">
+      <object class="GtkComboBox" id="fs-mode-combo">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <signal name="changed" handler="on_fs_type_combo_changed" swapped="no"/>
+        <property name="has-entry">True</property>
+        <signal name="changed" handler="on_fs_mode_combo_changed" swapped="no"/>
+        <child internal-child="entry">
+          <object class="GtkEntry">
+            <property name="can-focus">False</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">0</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
   </object>

@@ -1645,7 +1645,7 @@ class vmmDetails(vmmGObjectUI):
         kwargs = {}
 
         if self._edited(EDIT_FS):
-            kwargs["newdev"] = self.fsDetails.build_xmlobj()
+            kwargs["newdev"] = self.fsDetails.update_device(devobj)
 
         return vmmAddHardware.change_config_helper(self.vm.define_filesystem,
                                           kwargs, self.vm, self.err,
@@ -2269,7 +2269,6 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_filesystem_page(self, dev):
         self.fsDetails.set_dev(dev)
-        self.fsDetails.update_fs_rows()
 
     def _refresh_boot_page(self):
         # Refresh autostart

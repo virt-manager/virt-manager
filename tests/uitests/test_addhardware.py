@@ -507,8 +507,8 @@ def testAddLXCFilesystem(app):
 
     # Add File+nbd share
     tab = _select_hw(addhw, "Filesystem", "filesystem-tab")
-    tab.combo_select("Type:", "File")
-    tab.combo_select("Driver:", "Nbd")
+    tab.combo_select("Type:", "file")
+    tab.combo_select("Driver:", "nbd")
     tab.combo_select("Format:", "qcow2")
 
     source = tab.find("Source path:", "text")
@@ -539,7 +539,7 @@ def testAddLXCFilesystem(app):
     # Add RAM type
     _open_addhw(app, details)
     tab = _select_hw(addhw, "Filesystem", "filesystem-tab")
-    tab.combo_select("Type:", "Ram")
+    tab.combo_select("Type:", "ram")
     tab.find("Usage:", "spin button").set_text("12345")
     tab.find("Target path:", "text").set_text("/mem")
     _finish(addhw, check=details)

@@ -19,14 +19,11 @@ class DeviceFilesystem(Device):
     TYPE_BLOCK = "block"
     TYPE_RAM = "ram"
 
-    MODE_PASSTHROUGH = "passthrough"
     MODE_MAPPED = "mapped"
     MODE_SQUASH = "squash"
-    MODES = [MODE_PASSTHROUGH, MODE_MAPPED, MODE_SQUASH]
 
     DRIVER_LOOP = "loop"
     DRIVER_NBD = "nbd"
-
 
     _type_prop = XMLProperty("./@type")
     accessmode = XMLProperty("./@accessmode")

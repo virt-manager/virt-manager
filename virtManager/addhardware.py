@@ -1538,7 +1538,7 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _build_filesystem(self):
-        return self._fsdetails.build_xmlobj()
+        return self._fsdetails.build_device()
 
     def _build_smartcard(self):
         mode = uiutil.get_list_selection(self.widget("smartcard-mode"))

@@ -14,6 +14,19 @@ from ..baseclass import vmmGObjectUI
 from ..storagebrowse import vmmStorageBrowser
 
 
+_EDIT_FS_ENUM = range(1, 9)
+(
+    _EDIT_FS_TYPE,
+    _EDIT_FS_DRIVER,
+    _EDIT_FS_SOURCE,
+    _EDIT_FS_RAM_SOURCE,
+    _EDIT_FS_MODE,
+    _EDIT_FS_READONLY,
+    _EDIT_FS_TARGET,
+    _EDIT_FS_FORMAT,
+) = _EDIT_FS_ENUM
+
+
 class vmmFSDetails(vmmGObjectUI):
     __gsignals__ = {
         "changed": (vmmGObjectUI.RUN_FIRST, None, [])
@@ -26,54 +39,54 @@ class vmmFSDetails(vmmGObjectUI):
         self.vm = vm
         self.conn = vm.conn
 
-        self._dev = None
-        self.storage_browser = None
+        self._storage_browser = None
+        self._active_edits = []
+
+        def _e(edittype):
+            def signal_cb(*args):
+                self._change_cb(edittype)
+            return signal_cb
 
         self.builder.connect_signals({
-            "on_fs_type_combo_changed": self.change_field,
-            "on_fs_driver_combo_changed": self.change_field,
-            "on_fs_source_browse_clicked": self.browse_fs_source,
-            "on_fs_mode_combo_changed": self.notify_change,
-            "on_fs_readonly_toggled": self.notify_change,
-            "on_fs_format_combo_changed": self.notify_change,
-            "on_fs_source_changed": self.notify_change,
-            "on_fs_ram_source_changed": self.notify_change,
-            "on_fs_target_changed": self.notify_change,
+            "on_fs_source_browse_clicked": self._browse_fs_source_cb,
+            "on_fs_type_combo_changed": _e(_EDIT_FS_TYPE),
+            "on_fs_driver_combo_changed": _e(_EDIT_FS_DRIVER),
+            "on_fs_mode_combo_changed": _e(_EDIT_FS_MODE),
+            "on_fs_readonly_toggled": _e(_EDIT_FS_READONLY),
+            "on_fs_format_combo_changed": _e(_EDIT_FS_FORMAT),
+            "on_fs_source_changed": _e(_EDIT_FS_SOURCE),
+            "on_fs_ram_source_changed": _e(_EDIT_FS_RAM_SOURCE),
+            "on_fs_target_changed": _e(_EDIT_FS_TARGET),
         })
 
-        self.set_initial_state()
+        self._init_ui()
         self.top_box = self.widget("vmm-fs-details")
 
     def _cleanup(self):
         self.vm = None
         self.conn = None
-        self._dev = None
 
-        if self.storage_browser:
-            self.storage_browser.cleanup()
-            self.storage_browser = None
+        if self._storage_browser:
+            self._storage_browser.cleanup()
+            self._storage_browser = None
 
 
     ##########################
     # Initialization methods #
     ##########################
 
-    def set_initial_state(self):
-        def simple_store_set(comboname, values, sort=True, capitalize=True):
+    def _init_ui(self):
+        def simple_store_set(comboname, values):
             combo = self.widget(comboname)
             # [XML value, label]
             model = Gtk.ListStore(str, str)
             combo.set_model(model)
             uiutil.init_combo_text_column(combo, 1)
-            if sort:
-                model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
 
             for xmlval in values:
                 label = xmlval
                 if xmlval is None:
-                    label = "Default"
-                if capitalize:
-                    label = label.capitalize()
+                    label = _("Hypervisor default")
                 model.append([xmlval, label])
 
         # Filesystem widgets
@@ -82,23 +95,71 @@ class vmmFSDetails(vmmGObjectUI):
                 [DeviceFilesystem.TYPE_MOUNT,
                  DeviceFilesystem.TYPE_FILE,
                  DeviceFilesystem.TYPE_BLOCK,
-                 DeviceFilesystem.TYPE_RAM], sort=False)
+                 DeviceFilesystem.TYPE_RAM])
         else:
             simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
 
-        simple_store_set("fs-mode-combo", DeviceFilesystem.MODES + [None])
+        simple_store_set("fs-mode-combo",
+                [DeviceFilesystem.MODE_MAPPED,
+                 DeviceFilesystem.MODE_SQUASH,
+                 None])
 
-        drivers = []
-        if self.conn.is_lxc() or self.conn.is_test():
-            drivers += [DeviceFilesystem.DRIVER_LOOP,
-                 DeviceFilesystem.DRIVER_NBD]
-        simple_store_set("fs-driver-combo", drivers + [None])
+        simple_store_set("fs-driver-combo",
+                [DeviceFilesystem.DRIVER_LOOP,
+                 DeviceFilesystem.DRIVER_NBD,
+                 None])
 
-        simple_store_set("fs-format-combo", ["raw", "qcow2"], capitalize=False)
+        simple_store_set("fs-format-combo", ["raw", "qcow2"])
         self.widget("fs-readonly").set_visible(
                 self.conn.is_qemu() or
                 self.conn.is_test() or
                 self.conn.is_lxc())
+
+
+    ##############
+    # UI syncing #
+    ##############
+
+    def _sync_ui(self):
+        fstype = uiutil.get_list_selection(self.widget("fs-type-combo"))
+        fsdriver = uiutil.get_list_selection(self.widget("fs-driver-combo"))
+        ismount = bool(fstype == DeviceFilesystem.TYPE_MOUNT)
+
+        show_mode = bool(ismount)
+        uiutil.set_grid_row_visible(self.widget("fs-mode-combo"), show_mode)
+
+        show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
+        uiutil.set_grid_row_visible(
+            self.widget("fs-ram-source-box"), show_ram_source)
+        uiutil.set_grid_row_visible(
+            self.widget("fs-source-box"), not show_ram_source)
+
+        show_format = bool(
+            fsdriver == DeviceFilesystem.DRIVER_NBD)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-format-combo"), show_format)
+
+        show_driver_combo = fstype == DeviceFilesystem.TYPE_FILE
+        show_mode_combo = (fstype == DeviceFilesystem.TYPE_MOUNT and
+                (self.conn.is_qemu() or self.conn.is_test()))
+
+        if fstype == DeviceFilesystem.TYPE_TEMPLATE:
+            source_text = _("Te_mplate:")
+        else:
+            source_text = _("_Source path:")
+
+        self.widget("fs-source-title").set_text(source_text)
+        self.widget("fs-source-title").set_use_underline(True)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-mode-combo"), show_mode_combo)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-driver-combo"), show_driver_combo)
+
+
+
+    ##############
+    # Public API #
+    ##############
 
     def reset_state(self):
         self.widget("fs-type-combo").set_active(0)
@@ -108,30 +169,11 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-source").set_text("")
         self.widget("fs-target").set_text("")
         self.widget("fs-readonly").set_active(False)
+        self._sync_ui()
+        self._active_edits = []
 
-    # Getters
-    def get_config_fs_mode(self):
-        return uiutil.get_list_selection(self.widget("fs-mode-combo"),
-                                         check_visible=True)
-
-    def get_config_fs_type(self):
-        return uiutil.get_list_selection(self.widget("fs-type-combo"),
-                                         check_visible=True)
-
-    def get_config_fs_readonly(self):
-        return self.widget("fs-readonly").get_active()
-
-    def get_config_fs_driver(self):
-        return uiutil.get_list_selection(self.widget("fs-driver-combo"),
-                                         check_visible=True)
-
-    def get_config_fs_format(self):
-        return uiutil.get_list_selection(self.widget("fs-format-combo"),
-                                         check_visible=True)
-
-    # Setters
     def set_dev(self, dev):
-        self._dev = dev
+        self.reset_state()
 
         uiutil.set_list_selection(
                 self.widget("fs-type-combo"), dev.type)
@@ -149,58 +191,68 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-target").set_text(dev.target or "")
         self.widget("fs-readonly").set_active(dev.readonly)
 
-        uiutil.set_grid_row_visible(
-                self.widget("fs-type-combo"), self.conn.is_container_only())
+        self._active_edits = []
 
 
-    # listeners
-    def notify_change(self, ignore):
-        self.emit("changed")
+    ###################
+    # Device building #
+    ###################
 
-    def browse_fs_source(self, ignore1):
-        self._browse_file(self.widget("fs-source"), isdir=True)
+    def _set_values(self, dev):
+        fstype = uiutil.get_list_selection(self.widget("fs-type-combo"))
+        usage = uiutil.spin_get_helper(self.widget("fs-ram-source-spin"))
 
-    def update_fs_rows(self):
-        fstype = self.get_config_fs_type()
-        fsdriver = self.get_config_fs_driver()
-        ismount = bool(
-                fstype == DeviceFilesystem.TYPE_MOUNT or
-                self.conn.is_qemu() or self.conn.is_test())
+        source = self.widget("fs-source").get_text()
+        target = self.widget("fs-target").get_text()
+        readonly = self.widget("fs-readonly").get_active()
 
-        show_mode = bool(ismount)
-        uiutil.set_grid_row_visible(self.widget("fs-mode-combo"), show_mode)
+        fsformat = uiutil.get_list_selection(self.widget("fs-format-combo"))
+        if not self.widget("fs-format-combo").get_visible():
+            fsformat = None
 
-        show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
-        uiutil.set_grid_row_visible(
-            self.widget("fs-ram-source-box"), show_ram_source)
-        uiutil.set_grid_row_visible(
-            self.widget("fs-source-box"), not show_ram_source)
+        mode = uiutil.get_list_selection(self.widget("fs-mode-combo"))
+        if not self.widget("fs-mode-combo").get_visible():
+            mode = None
 
-        show_format = bool(
-            fsdriver == DeviceFilesystem.DRIVER_NBD)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-format-combo"), show_format)
+        driver = uiutil.get_list_selection(self.widget("fs-driver-combo"))
+        if not self.widget("fs-driver-combo").get_visible():
+            driver = None
 
-        show_mode_combo = False
-        show_driver_combo = False
-        if fstype == DeviceFilesystem.TYPE_TEMPLATE:
-            source_text = _("Te_mplate:")
-        else:
-            source_text = _("_Source path:")
-            show_mode_combo = self.conn.is_qemu() or self.conn.is_test()
-            show_driver_combo = (self.conn.is_lxc() or
-                                 self.conn.is_test())
+        if _EDIT_FS_TYPE in self._active_edits:
+            dev.type = fstype
+        if (_EDIT_FS_RAM_SOURCE in self._active_edits or
+            _EDIT_FS_SOURCE in self._active_edits):
+            if fstype == DeviceFilesystem.TYPE_RAM:
+                dev.source = usage
+                dev.source_units = 'MiB'
+            else:
+                dev.source = source
+        if _EDIT_FS_TARGET in self._active_edits:
+            dev.target = target
+        if _EDIT_FS_MODE in self._active_edits:
+            dev.accessmode = mode
+        if _EDIT_FS_READONLY in self._active_edits:
+            dev.readonly = readonly
+        if _EDIT_FS_DRIVER in self._active_edits:
+            dev.driver_type = driver
+        if _EDIT_FS_FORMAT in self._active_edits:
+            dev.driver_format = fsformat
 
-        self.widget("fs-source-title").set_text(source_text)
-        self.widget("fs-source-title").set_use_underline(True)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-mode-combo"), show_mode_combo)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-driver-combo"), show_driver_combo)
+    def build_device(self):
+        self._active_edits = _EDIT_FS_ENUM[:]
 
-    def change_field(self, src):
-        self.update_fs_rows()
-        self.notify_change(src)
+        conn = self.conn.get_backend()
+        dev = DeviceFilesystem(conn)
+        self._set_values(dev)
+
+        dev.validate_target(dev.target)
+        dev.validate()
+        return dev
+
+    def update_device(self, dev):
+        newdev = DeviceFilesystem(dev.conn, parsexml=dev.get_xml())
+        self._set_values(newdev)
+        return newdev
 
 
     ####################
@@ -216,54 +268,23 @@ class vmmFSDetails(vmmGObjectUI):
                   self.config.CONFIG_DIR_FS or
                   self.config.CONFIG_DIR_IMAGE)
 
-        if self.storage_browser is None:
-            self.storage_browser = vmmStorageBrowser(self.conn)
+        if self._storage_browser is None:
+            self._storage_browser = vmmStorageBrowser(self.conn)
 
-        self.storage_browser.set_finish_cb(set_storage_cb)
-        self.storage_browser.set_browse_reason(reason)
+        self._storage_browser.set_finish_cb(set_storage_cb)
+        self._storage_browser.set_browse_reason(reason)
+        self._storage_browser.show(self.topwin.get_ancestor(Gtk.Window))
 
-        self.storage_browser.show(self.topwin.get_ancestor(Gtk.Window))
 
+    #############
+    # Listeners #
+    #############
 
-    ###################
-    # Device building #
-    ###################
+    def _change_cb(self, edittype):
+        self._sync_ui()
+        if edittype not in self._active_edits:
+            self._active_edits.append(edittype)
+        self.emit("changed")
 
-    def _build_xmlobj(self):
-        conn = self.conn.get_backend()
-        source = self.widget("fs-source").get_text()
-        target = self.widget("fs-target").get_text()
-        usage = uiutil.spin_get_helper(self.widget("fs-ram-source-spin"))
-        mode = self.get_config_fs_mode()
-        fstype = self.get_config_fs_type()
-        readonly = self.get_config_fs_readonly()
-        driver = self.get_config_fs_driver()
-        fsformat = self.get_config_fs_format()
-
-        dev = DeviceFilesystem(conn)
-        if fstype == DeviceFilesystem.TYPE_RAM:
-            dev.source = usage
-            dev.source_units = 'MiB'
-        else:
-            dev.source = source
-        dev.target = target
-        dev.validate_target(target)
-        if mode:
-            dev.accessmode = mode
-        if fstype:
-            dev.type = fstype
-        if readonly:
-            dev.readonly = readonly
-        if driver:
-            dev.driver_type = driver
-            if driver == DeviceFilesystem.DRIVER_LOOP:
-                dev.driver_format = "raw"
-            elif driver == DeviceFilesystem.DRIVER_NBD:
-                dev.driver_format = fsformat
-
-        dev.validate()
-        return dev
-
-    def build_xmlobj(self):
-        self._dev = self._build_xmlobj()
-        return self._dev
+    def _browse_fs_source_cb(self, src):
+        self._browse_file(self.widget("fs-source"), isdir=True)
