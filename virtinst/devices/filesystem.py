@@ -24,7 +24,6 @@ class DeviceFilesystem(Device):
     MODE_SQUASH = "squash"
     MODES = [MODE_PASSTHROUGH, MODE_MAPPED, MODE_SQUASH]
 
-    DRIVER_PATH = "path"
     DRIVER_LOOP = "loop"
     DRIVER_NBD = "nbd"
 

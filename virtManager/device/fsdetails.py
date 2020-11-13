@@ -99,8 +99,6 @@ class vmmFSDetails(vmmGObjectUI):
         simple_store_set("fs-mode-combo", DeviceFilesystem.MODES + [None])
 
         drivers = []
-        if self.conn.is_qemu() or self.conn.is_test():
-            drivers += [DeviceFilesystem.DRIVER_PATH]
         if self.conn.is_lxc() or self.conn.is_test():
             drivers += [DeviceFilesystem.DRIVER_LOOP,
                  DeviceFilesystem.DRIVER_NBD]
@@ -179,9 +177,7 @@ class vmmFSDetails(vmmGObjectUI):
                 fstype == DeviceFilesystem.TYPE_MOUNT or
                 self.conn.is_qemu() or self.conn.is_test())
 
-        show_mode = bool(ismount and
-            (fsdriver == DeviceFilesystem.DRIVER_PATH or
-            fsdriver is None))
+        show_mode = bool(ismount)
         uiutil.set_grid_row_visible(self.widget("fs-mode-combo"), show_mode)
 
         show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
@@ -202,8 +198,7 @@ class vmmFSDetails(vmmGObjectUI):
         else:
             source_text = _("_Source path:")
             show_mode_combo = self.conn.is_qemu() or self.conn.is_test()
-            show_driver_combo = (self.conn.is_qemu() or
-                                 self.conn.is_lxc() or
+            show_driver_combo = (self.conn.is_lxc() or
                                  self.conn.is_test())
 
         self.widget("fs-source-title").set_text(source_text)
