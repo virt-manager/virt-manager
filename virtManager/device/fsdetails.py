@@ -100,8 +100,7 @@ class vmmFSDetails(vmmGObjectUI):
 
         drivers = []
         if self.conn.is_qemu() or self.conn.is_test():
-            drivers += [DeviceFilesystem.DRIVER_PATH,
-                    DeviceFilesystem.DRIVER_HANDLE]
+            drivers += [DeviceFilesystem.DRIVER_PATH]
         if self.conn.is_lxc() or self.conn.is_test():
             drivers += [DeviceFilesystem.DRIVER_LOOP,
                  DeviceFilesystem.DRIVER_NBD]
