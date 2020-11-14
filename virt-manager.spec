@@ -7,7 +7,7 @@
 # End local config
 
 Name: virt-manager
-Version: 3.1.0
+Version: 3.2.0
 Release: 1%{?dist}
 %global verrel %{version}-%{release}
 

@@ -1,5 +1,10 @@
 # Virtual Machine Manager News
 
+## Release 3.2.0 (November 14, 2020)
+- Slim down filesystem device editor UI
+- Fix TOCTTOU virt-install bugs (Martin Pitt)
+- Several other bug fixes
+
 ## Release 3.1.0 (September 30, 2020)
 - Return to using qcow2 sparse by default with libvirt 5.0.0+
 - Make VM window shortcuts less likely to conflict with guest usage
