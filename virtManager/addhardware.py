@@ -316,7 +316,6 @@ class vmmAddHardware(vmmGObjectUI):
         self._gfxdetails.reset_state()
         self._vsockdetails.reset_state()
 
-
     @staticmethod
     def change_config_helper(define_func, define_args, vm, err,
             devobj=None, hotplug_args=None):
