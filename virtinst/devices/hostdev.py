@@ -4,6 +4,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+from ..logger import log
+
 from .device import Device
 from ..nodedev import NodeDevice
 from ..xmlbuilder import XMLProperty
@@ -13,6 +15,8 @@ class DeviceHostdev(Device):
     XML_NAME = "hostdev"
 
     def set_from_nodedev(self, nodedev):
+        log.debug("set_from_nodedev xml=\n%s", nodedev.get_xml())
+
         if nodedev.device_type == NodeDevice.CAPABILITY_TYPE_PCI:
             self.type = "pci"
             self.domain = nodedev.domain
