@@ -23,6 +23,11 @@ try:
     from gi.repository import AppIndicator3
 except Exception:  # pragma: no cover
     AppIndicator3 = None
+    try:
+        gi.require_version('AyatanaAppIndicator3', '0.1')
+        from gi.repository import AyatanaAppIndicator3 as AppIndicator3
+    except Exception:  # pragma: no cover
+        AppIndicator3 = None
 
 
 def _toggle_manager(*args, **kwargs):
