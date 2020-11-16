@@ -6,6 +6,7 @@
 
 import os
 
+import gi
 from gi.repository import Gio
 from gi.repository import Gtk
 
@@ -16,16 +17,22 @@ from . import vmmenu
 from .baseclass import vmmGObject
 from .connmanager import vmmConnectionManager
 
-try:
-    # pylint: disable=ungrouped-imports
-    import gi
-    gi.require_version('AppIndicator3', '0.1')
-    from gi.repository import AppIndicator3
+
+# pylint: disable=ungrouped-imports
+# Prefer AyatantaAppIndicator3 which is the modern maintained
+# appindicator library.
+try:  # pragma: no cover
+    # pylint: disable=no-name-in-module
+    gi.require_version('AyatanaAppIndicator3', '0.1')
+    from gi.repository import AyatanaAppIndicator3 as AppIndicator3
 except Exception:  # pragma: no cover
     AppIndicator3 = None
-    try:
-        gi.require_version('AyatanaAppIndicator3', '0.1')
-        from gi.repository import AyatanaAppIndicator3 as AppIndicator3
+
+if not AppIndicator3:
+    try:  # pragma: no cover
+        # pylint: disable=no-name-in-module
+        gi.require_version('AppIndicator3', '0.1')
+        from gi.repository import AppIndicator3
     except Exception:  # pragma: no cover
         AppIndicator3 = None
 
@@ -74,6 +81,7 @@ def _has_appindicator_dbus():  # pragma: no cover
 
 _USING_APPINDICATOR = False
 if AppIndicator3:  # pragma: no cover
+    log.debug("Imported AppIndicator3=%s", AppIndicator3)
     if not _has_appindicator_dbus():
         log.debug("AppIndicator3 is available, but didn't "
                               "find any dbus watcher.")
