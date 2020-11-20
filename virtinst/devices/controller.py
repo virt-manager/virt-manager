@@ -78,6 +78,13 @@ class DeviceController(Device):
 
     master_startport = XMLProperty("./master/@startport", is_int=True)
 
+    target_chassisNr = XMLProperty("./target/@chassisNr", is_int=True)
+    target_chassis = XMLProperty("./target/@chassis", is_int=True)
+    target_port = XMLProperty("./target/@port", is_int=True)
+    target_hotplug = XMLProperty("./target/@hotplug", is_onoff=True)
+    target_busNr = XMLProperty("./target/@busNr", is_int=True)
+    target_index = XMLProperty("./target/@index", is_int=True)
+    target_node = XMLProperty("./target/node", is_int=True)
 
     def _get_attached_disk_devices(self, guest):
         ret = []

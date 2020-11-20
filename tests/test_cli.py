@@ -645,6 +645,10 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller usb,model=ich9-uhci3,address=0:0:4.2,index=0,master=4
 --controller scsi,,model=virtio-scsi,driver_queues=4,driver.queues=4,driver.iothread=2,vectors=15
 --controller xenbus,maxGrantFrames=64
+--controller pci,index=0,model=pcie-root-port,target.chassis=1,target.port=1,target.hotplug=off
+--controller pci,index=1,model=pci-root,target.index=1
+--controller pci,index=2,model=pci-bridge,target.chassisNr=1
+--controller pci,index=3,model=pci-expander-bus,target.busNr=252,target.node=1
 
 --input type=keyboard,bus=usb
 --input tablet

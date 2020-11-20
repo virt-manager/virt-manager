@@ -262,6 +262,20 @@
       <driver queues="4" iothread="2"/>
     </controller>
     <controller type="xenbus" maxGrantFrames="64"/>
+    <controller type="pci" index="0" model="pcie-root-port">
+      <target chassis="1" port="1" hotplug="off"/>
+    </controller>
+    <controller type="pci" index="1" model="pci-root">
+      <target index="1"/>
+    </controller>
+    <controller type="pci" index="2" model="pci-bridge">
+      <target chassisNr="1"/>
+    </controller>
+    <controller type="pci" index="3" model="pci-expander-bus">
+      <target busNr="252">
+        <node>1</node>
+      </target>
+    </controller>
     <filesystem type="mount" accessmode="mapped">
       <driver ats="on" iommu="off" packed="on"/>
       <alias name="testfsalias"/>
