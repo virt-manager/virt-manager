@@ -3758,6 +3758,13 @@ class ParserController(VirtCLIParser):
         cls.add_arg("master.startport", "master_startport")
         cls.add_arg("driver.iothread", "driver_iothread")
         cls.add_arg("driver.queues", "driver_queues")
+        cls.add_arg("target.chassisNr", "target_chassisNr")
+        cls.add_arg("target.chassis", "target_chassis")
+        cls.add_arg("target.port", "target_port")
+        cls.add_arg("target.hotplug", "target_hotplug")
+        cls.add_arg("target.busNr", "target_busNr")
+        cls.add_arg("target.index", "target_index")
+        cls.add_arg("target.node", "target_node")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
 
