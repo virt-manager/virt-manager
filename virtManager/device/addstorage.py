@@ -310,7 +310,7 @@ class vmmAddStorage(vmmGObjectUI):
         detect_zeroes = disk.driver_detect_zeroes
         ro = disk.read_only
         share = disk.shareable
-        removable = disk.removable
+        removable = bool(disk.removable)
         serial = disk.serial
 
         self.set_disk_bus(disk.bus)
