@@ -182,8 +182,16 @@ class VirtinstConnection(object):
     def _fetch_all_domains_raw(self):
         dummy1, dummy2, ret = pollhelpers.fetch_vms(
             self, {}, lambda obj, ignore: obj)
-        return [Guest(weakref.proxy(self), parsexml=obj.XMLDesc(0))
-                for obj in ret]
+        domains = []
+        for obj in ret:
+            # TOCTOU race: a domain may go away in between enumeration and inspection
+            try:
+                xml = obj.XMLDesc(0)
+            except libvirt.libvirtError as e:  # pragma: no cover
+                log.debug("Fetching domain XML failed: %s", e)
+                continue
+            domains.append(Guest(weakref.proxy(self), parsexml=xml))
+        return domains
 
     def _build_pool_raw(self, poolobj):
         return StoragePool(weakref.proxy(self),
