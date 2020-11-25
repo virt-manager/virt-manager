@@ -118,7 +118,7 @@ machine).
 
 %if 0%{?py_byte_compile:1}
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python_Appendix/#manual-bytecompilation
-%py_byte_compile %{python3} %{buildroot}%{_datadir}/virt-manager/
+%py_byte_compile %{__python3} %{buildroot}%{_datadir}/virt-manager/
 %endif
 
 # Replace '#!/usr/bin/env python3' with '#!/usr/bin/python3'
