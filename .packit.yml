@@ -1,0 +1,16 @@
+---
+upstream_project_url: https://github.com/virt-manager/virt-manager
+
+jobs:
+  - job: copr_build
+    trigger: commit
+    metadata:
+      targets:
+        - fedora-all
+        - epel-8-x86_64
+  - job: tests
+    trigger: commit
+    metadata:
+      targets:
+        - fedora-all
+        - epel-8-x86_64
