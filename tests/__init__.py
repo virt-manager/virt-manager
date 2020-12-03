@@ -10,6 +10,10 @@ import os
 os.environ["VIRTINST_TEST_SUITE"] = "1"
 # Need to do this before we import argcomplete
 os.environ.pop("_ARC_DEBUG", None)
+# Make sure the test suite uses an English locale, as we need to match
+# error/status messages
+os.environ["LANG"] = "en_US.UTF-8"
+os.environ.pop("LANGUAGE", None)
 
 # pylint: disable=wrong-import-position
 from virtinst import buildconfig
