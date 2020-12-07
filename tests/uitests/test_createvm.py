@@ -147,7 +147,7 @@ def testNewVMManualDefault(app):
     newvm.find("oslist-popover")
     osentry.click()
     app.rawinput.pressKey("Enter")
-    lib.utils.check(lambda: osentry.text == "Generic OS")
+    lib.utils.check(lambda: "Generic" in osentry.text)
 
     # Verify back+forward still keeps Generic selected
     _back(newvm)
