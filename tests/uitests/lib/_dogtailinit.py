@@ -38,9 +38,6 @@ sys.excepthook = sys.__excepthook__
 # unittest.installHandler magic
 signal.signal(signal.SIGINT, signal.getsignal(signal.SIGINT))
 
-# Needed so labels are matched in english
-os.environ['LANG'] = 'en_US.UTF-8'
-
 os.environ.pop("VIRTINST_TEST_SUITE", None)
 
 if not dogtail.utils.isA11yEnabled():
