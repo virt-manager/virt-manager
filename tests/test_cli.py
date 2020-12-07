@@ -28,7 +28,6 @@ from tests import setup_logging
 from tests import virtinstall, virtclone, virtxml
 from tests import utils
 
-os.environ["LANG"] = "en_US.UTF-8"
 os.environ["HOME"] = "/tmp"
 os.environ["DISPLAY"] = ":3.4"
 
