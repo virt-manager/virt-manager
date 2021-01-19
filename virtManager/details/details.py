@@ -921,6 +921,7 @@ class vmmDetails(vmmGObjectUI):
         if not self.widget("config-apply").get_sensitive():
             return False
 
+        log.debug("Unapplied changes active_edits=%s", self._active_edits)
         if not self.err.confirm_unapplied_changes():
             return False
 
