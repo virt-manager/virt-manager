@@ -30,6 +30,8 @@ class DeviceTpm(Device):
     model = XMLProperty("./@model")
     device_path = XMLProperty("./backend/device/@path")
     encryption_secret = XMLProperty("./backend/encryption/@secret")
+    persistent_state = XMLProperty(
+            "./backend/@persistent_state", is_yesno=True)
 
 
     ##################
