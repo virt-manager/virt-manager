@@ -692,7 +692,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --soundhw default
 --sound ac97
---sound codec0.type=micro,codec1.type=duplex,codec2.type=output
+--sound codec0.type=micro,codec1.type=duplex,codec2.type=output,audio.id=2
 
 --video cirrus
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65
