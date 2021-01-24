@@ -201,7 +201,7 @@
       <model type="bochs"/>
     </video>
     <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio" autodeflate="on">
+    <memballoon model="virtio" autodeflate="on" freePageReporting="on">
       <stats period="10"/>
     </memballoon>
     <rng model="virtio">
@@ -445,7 +445,7 @@
       <model type="bochs"/>
     </video>
     <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio" autodeflate="on">
+    <memballoon model="virtio" autodeflate="on" freePageReporting="on">
       <stats period="10"/>
     </memballoon>
     <rng model="virtio">
