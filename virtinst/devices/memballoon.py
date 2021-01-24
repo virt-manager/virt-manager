@@ -15,6 +15,7 @@ class DeviceMemballoon(Device):
     model = XMLProperty("./@model")
     autodeflate = XMLProperty("./@autodeflate", is_onoff=True)
     stats_period = XMLProperty("./stats/@period", is_int=True)
+    freePageReporting = XMLProperty("./@freePageReporting", is_onoff=True)
 
 
     ##################
