@@ -12,6 +12,7 @@ from ..xmlbuilder import XMLProperty
 
 class DeviceFilesystem(Device):
     XML_NAME = "filesystem"
+    _XML_PROP_ORDER = ["_type_prop", "accessmode", "fmode", "dmode"]
 
     TYPE_MOUNT = "mount"
     TYPE_TEMPLATE = "template"
@@ -28,8 +29,11 @@ class DeviceFilesystem(Device):
     _type_prop = XMLProperty("./@type")
     accessmode = XMLProperty("./@accessmode")
     model = XMLProperty("./@model")
-    readonly = XMLProperty("./readonly", is_bool=True)
     multidevs = XMLProperty("./@multidevs")
+    fmode = XMLProperty("./@fmode")
+    dmode = XMLProperty("./@dmode")
+
+    readonly = XMLProperty("./readonly", is_bool=True)
     space_hard_limit = XMLProperty("./space_hard_limit")
     space_soft_limit = XMLProperty("./space_soft_limit")
 

@@ -4218,6 +4218,8 @@ class ParserFilesystem(VirtCLIParser):
         cls.add_arg("readonly", "readonly", is_onoff=True)
         cls.add_arg("space_hard_limit", "space_hard_limit")
         cls.add_arg("space_soft_limit", "space_soft_limit")
+        cls.add_arg("fmode", "fmode")
+        cls.add_arg("dmode", "dmode")
 
         cls.add_arg("source", "source")
         cls.add_arg("target", "target")

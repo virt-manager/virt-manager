@@ -542,7 +542,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --controller usb3
 --controller scsi,model=virtio-scsi
 --graphics vnc
---filesystem /foo/source,/bar/target
+--filesystem /foo/source,/bar/target,fmode=0123,dmode=0345
 --memballoon virtio,autodeflate=on,stats.period=10
 --watchdog ib700,action=pause
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555
