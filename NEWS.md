@@ -353,7 +353,7 @@
 
 - Allow renaming an offline VM
 - Spice password support (Marc-André Lureau)
-- Allow editting NIC `<virtualport>` settings (Gerhard Stenzel)
+- Allow editing NIC `<virtualport>` settings (Gerhard Stenzel)
 - Allow enabling/disabling individual CPU features
 - Allow easily changing graphics type between VNC and SPICE for existing
   VM
@@ -525,7 +525,7 @@ in the background to avoid blocking the whole UI.
 This release introduces the ability to manage multiple remote machines,
 using either SSH+public keys, or TLS+x509 certificates to connect and
 authenticate. The main user interface is re-worked to show multiple
-hosts in a tree view, remebering connections across restarts. It is
+hosts in a tree view, remembering connections across restarts. It is
 not currently possible to create new guests with a remote host connection.
 This capability will be added in a future release. The guest VNC console
 implementation has been replaced with the GTK-VNC widget for greatly
@@ -590,7 +590,7 @@ the UI in approximately 20 languages - thanks to the Fedora i18n
 team for excellent progress on this. It is now possible to control
 the virt-manager UI with command line arguments as well as the DBus
 API & it DBus activation is no longer used by default which fixes
-interaction with GNOME keyring & AT-SPI accesibility. Numerous
+interaction with GNOME keyring & AT-SPI accessibility. Numerous
 UI issues were fixed / clarified, particularly in the graphical 
 console and new VM creation wizard.
 
