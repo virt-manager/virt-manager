@@ -258,7 +258,7 @@ class _ConsoleMenu:
 
             cb = toggled_cb
             cbdata = dev
-            sensitive = dev and not tooltip
+            sensitive = bool(dev and not tooltip)
 
             active = False
             if oldlabel is None and sensitive:
