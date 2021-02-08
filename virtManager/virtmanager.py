@@ -22,10 +22,15 @@ from virtinst import log
 
 from .lib.testmock import CLITestOptionsClass
 
+# pygobject commit that I believe universally changed bool arguments
+# to handle passed None. Without this, None usage keeps slipping into
+# the code, so add the requirement.
+# https://github.com/GNOME/pygobject/commit/6c69fc7b582ec1fd3faef4de3fade9a0cb7f8c05
+_PYGOBJECT_VERSION = "3.31.3"
 try:
-    gi.check_version("3.22.0")
+    gi.check_version(_PYGOBJECT_VERSION)
 except (ValueError, AttributeError):  # pragma: no cover
-    print("pygobject3 3.22.0 or later is required.")
+    print("pygobject3 %s or later is required." % _PYGOBJECT_VERSION)
     sys.exit(1)
 
 
