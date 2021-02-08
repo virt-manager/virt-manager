@@ -19,7 +19,7 @@ Source0: https://virt-manager.org/download/sources/%{name}/%{name}-%{version}.ta
 
 
 Requires: virt-manager-common = %{verrel}
-Requires: python3-gobject
+Requires: python3-gobject >= 3.31.3
 Requires: gtk3 >= 3.22.0
 Requires: libvirt-glib >= 0.0.9
 Requires: gtk-vnc2
