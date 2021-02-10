@@ -1186,7 +1186,7 @@ c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't k
 c.add_invalid("--edit --cpu host-passthrough --confirm", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"), grep="Can't use --confirm with stdin")
 c.add_invalid("--edit --cpu host-passthrough --update", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"), grep="Can't use --update with stdin")
 c.add_invalid("--edit --cpu host-passthrough", grep="A domain must be specified")
-c.add_invalid("test-state-shutoff --cpu mode=idontexist --start --edit --no-define --confirm", grep="Failed starting domain", input_text="yes")
+c.add_invalid("test-state-shutoff --cpu mode=idontexist --start --edit --no-define --confirm", grep="Failed starting domain 'test-state-shutoff'", input_text="yes")
 c.add_invalid("test --cpu host-passthrough", grep="One of --edit, ")  # conflicting --edit options
 c.add_invalid("test --edit --add-device --disk path=foo", grep="Conflicting options --edit, --add-device")
 c.add_invalid("test --edit 0 --disk path=", grep="Invalid --edit option '0'")
