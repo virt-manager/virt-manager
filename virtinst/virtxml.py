@@ -251,7 +251,7 @@ def start_domain_transient(conn, xmlobj, devs, action, confirm):
         dom = conn.createXML(xmlobj.get_xml())
     except libvirt.libvirtError as e:
         fail(_("Failed starting domain '%(domain)s': %(error)s") % {
-                 "vm": xmlobj.name,
+                 "domain": xmlobj.name,
                  "error": e,
              })
     else:
