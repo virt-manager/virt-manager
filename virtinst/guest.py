@@ -844,7 +844,14 @@ class Guest(XMLBuilder):
             return
 
         dev = DeviceConsole(self.conn)
-        dev.type = dev.TYPE_PTY
+        if self.conn.is_bhyve():
+            nmdm_dev_prefix = '/dev/nmdm{}'.format(self.generate_uuid(self.conn))
+            dev.type = dev.TYPE_NMDM
+            dev.source.master = nmdm_dev_prefix + 'A'
+            dev.source.slave = nmdm_dev_prefix + 'B'
+        else:
+            dev.type = dev.TYPE_PTY
+
         if self.os.is_s390x():
             dev.target_type = "sclp"
         self.add_device(dev)
