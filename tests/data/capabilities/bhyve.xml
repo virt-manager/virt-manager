@@ -1,0 +1,48 @@
+<capabilities>
+
+  <host>
+    <cpu>
+      <arch>x86_64</arch>
+      <model>Skylake-Client-IBRS</model>
+      <vendor>Intel</vendor>
+      <topology sockets='1' dies='1' cores='6' threads='1'/>
+      <feature name='ds'/>
+      <feature name='acpi'/>
+      <feature name='ss'/>
+      <feature name='ht'/>
+      <feature name='tm'/>
+      <feature name='pbe'/>
+      <feature name='dtes64'/>
+      <feature name='monitor'/>
+      <feature name='ds_cpl'/>
+      <feature name='vmx'/>
+      <feature name='smx'/>
+      <feature name='est'/>
+      <feature name='tm2'/>
+      <feature name='xtpr'/>
+      <feature name='pdcm'/>
+      <feature name='osxsave'/>
+      <feature name='tsc_adjust'/>
+      <feature name='clflushopt'/>
+      <feature name='intel-pt'/>
+      <feature name='stibp'/>
+      <feature name='xsaves'/>
+      <feature name='pdpe1gb'/>
+      <feature name='invtsc'/>
+    </cpu>
+    <power_management/>
+    <iommu support='no'/>
+  </host>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='x86_64'>
+      <wordsize>64</wordsize>
+      <emulator>bhyve</emulator>
+      <domain type='bhyve'/>
+    </arch>
+  </guest>
+
+</capabilities>
+
+

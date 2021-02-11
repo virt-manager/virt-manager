@@ -1,0 +1,35 @@
+<domain type="bhyve">
+  <name>foobhyve</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/27"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <devices>
+    <emulator>bhyve</emulator>
+    <disk type="file" device="disk">
+      <source file="/var/lib/libvirt/images/foobhyve.img"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="pty"/>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="vga"/>
+    </video>
+  </devices>
+</domain>

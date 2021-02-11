@@ -84,6 +84,7 @@ class _URIs(object):
         self.xen = _m("xen:///") + _caps("xen-rhel5.4.xml")
         self.lxc = _m("lxc:///") + _caps("lxc.xml")
         self.vz = _m("vz:///") + _caps("vz.xml")
+        self.bhyve = _m("bhyve:///") + _caps("bhyve.xml") + _domcaps("bhyve-domcaps.xml")
 
         _uri_qemu = _m("qemu:///system")
         _kvm_x86_caps = _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-domcaps.xml")
