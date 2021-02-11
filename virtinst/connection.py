@@ -408,6 +408,8 @@ class VirtinstConnection(object):
     def is_vz(self):
         return (self._uriobj.scheme.startswith("vz") or
                 self._uriobj.scheme.startswith("parallels"))
+    def is_bhyve(self):
+        return self._uriobj.scheme.startswith("bhyve")
 
 
     #########################
