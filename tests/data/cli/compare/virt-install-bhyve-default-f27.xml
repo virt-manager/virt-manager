@@ -11,6 +11,7 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/local/share/uefi-firmware/BHYVE_UEFI.fd</loader>
     <boot dev="hd"/>
   </os>
   <clock offset="utc"/>

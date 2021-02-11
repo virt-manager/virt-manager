@@ -512,7 +512,7 @@ class Guest(XMLBuilder):
         arm+machvirt prefers UEFI since it's required for traditional
         install methods
         """
-        return self.os.is_arm_machvirt()
+        return self.os.is_arm_machvirt() or self.conn.is_bhyve()
 
     def get_uefi_path(self):
         """
