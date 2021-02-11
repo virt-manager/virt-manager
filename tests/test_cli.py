@@ -1115,6 +1115,15 @@ c.add_compare("""
 
 
 
+########################
+# bhyve specific tests #
+########################
+
+c = vinst.add_category("bhyve", "--name foobhyve --noautoconsole --connect " + utils.URIs.bhyve)
+c.add_compare("--os-variant fedora27", "bhyve-default-f27")
+
+
+
 
 #####################################
 # Device option back compat testing #
