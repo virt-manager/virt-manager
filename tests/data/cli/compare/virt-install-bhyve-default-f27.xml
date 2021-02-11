@@ -26,7 +26,9 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="e1000"/>
     </interface>
-    <console type="pty"/>
+    <console type="nmdm">
+      <source master="/dev/nmdm00000000-1111-2222-3333-444444444444A" slave="/dev/nmdm00000000-1111-2222-3333-444444444444B"/>
+    </console>
     <input type="tablet" bus="usb"/>
     <graphics type="vnc" port="-1"/>
     <video>
