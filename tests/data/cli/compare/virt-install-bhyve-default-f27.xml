@@ -18,7 +18,7 @@
     <emulator>bhyve</emulator>
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/foobhyve.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="sda" bus="sata"/>
     </disk>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>

@@ -972,6 +972,9 @@ class DeviceDisk(Device):
             return "sd"
         if guest.os.is_q35():
             return "sata"
+        if self.conn.is_bhyve():
+            # IDE bus is not supported by bhyve
+            return "sata"
         return "ide"
 
     def set_defaults(self, guest):
