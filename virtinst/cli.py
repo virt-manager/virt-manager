@@ -2350,6 +2350,12 @@ class ParserCputune(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def vcpusched_find_inst_cb(self, *args, **kwargs):
+        cliarg = "vcpusched"  # vcpusched[0-9]*
+        list_propname = "vcpusched"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     def cachetune_find_inst_cb(self, *args, **kwargs):
         cliarg = "cachetune"  # cachetune[0-9]*
         list_propname = "cachetune"
@@ -2388,6 +2394,12 @@ class ParserCputune(VirtCLIParser):
                     find_inst_cb=cls.vcpu_find_inst_cb)
         cls.add_arg("vcpupin[0-9]*.cpuset", "cpuset", can_comma=True,
                     find_inst_cb=cls.vcpu_find_inst_cb)
+        cls.add_arg("vcpusched[0-9]*.vcpus", "vcpus", can_comma=True,
+                    find_inst_cb=cls.vcpusched_find_inst_cb)
+        cls.add_arg("vcpusched[0-9]*.scheduler", "scheduler",
+                    find_inst_cb=cls.vcpusched_find_inst_cb)
+        cls.add_arg("vcpusched[0-9]*.priority", "priority",
+                    find_inst_cb=cls.vcpusched_find_inst_cb)
         cls.add_arg("cachetune[0-9]*.vcpus", "vcpus",
                     find_inst_cb=cls.cachetune_find_inst_cb)
         cls.add_arg("cachetune[0-9]*.cache[0-9]*.level", "level",

@@ -237,6 +237,7 @@
     <memorytune vcpus="0-3">
       <node id="0" bandwidth="60"/>
     </memorytune>
+    <vcpusched vcpus="0-3,^2" scheduler="fifo" priority="95"/>
   </cputune>
 </domain>
 <domain type="kvm">
@@ -481,5 +482,6 @@
     <memorytune vcpus="0-3">
       <node id="0" bandwidth="60"/>
     </memorytune>
+    <vcpusched vcpus="0-3,^2" scheduler="fifo" priority="95"/>
   </cputune>
 </domain>
