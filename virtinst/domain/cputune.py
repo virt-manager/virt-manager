@@ -63,13 +63,26 @@ class _MemoryTuneCPU(XMLBuilder):
     nodes = XMLChildProperty(_NodeCPU)
 
 
+class _VCPUSched(XMLBuilder):
+    """
+    Class for generating <cputune> child <vcpusched> XML
+    """
+    XML_NAME = "vcpusched"
+    _XML_PROP_ORDER = ["vcpus", "scheduler", "priority"]
+
+    vcpus = XMLProperty("./@vcpus")
+    scheduler = XMLProperty("./@scheduler")
+    priority = XMLProperty("./@priority", is_int=True)
+
+
 class DomainCputune(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["vcpus", "cachetune", "memorytune"]
+    _XML_PROP_ORDER = ["vcpus", "cachetune", "memorytune", "vcpusched"]
 
     vcpus = XMLChildProperty(_VCPUPin)
     cachetune = XMLChildProperty(_CacheTuneCPU)
     memorytune = XMLChildProperty(_MemoryTuneCPU)
+    vcpusched = XMLChildProperty(_VCPUSched)
