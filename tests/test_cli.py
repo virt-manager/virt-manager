@@ -1120,7 +1120,8 @@ c.add_compare("""
 ########################
 
 c = vinst.add_category("bhyve", "--name foobhyve --noautoconsole --connect " + utils.URIs.bhyve)
-c.add_compare("--os-variant fedora27 --boot uefi", "bhyve-default-f27")
+c.add_compare("--boot uefi --disk none --ram 256 --pxe", "bhyve-uefi")
+c.add_compare("--os-variant fedora27", "bhyve-default-f27")
 
 
 
