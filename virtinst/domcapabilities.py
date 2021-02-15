@@ -211,20 +211,17 @@ class DomainCapabilities(XMLBuilder):
         if not self.arch_can_uefi():
             return  # pragma: no cover
 
+        firmware_files = [f.value for f in self.os.loader.values]
         if self.conn.is_bhyve():
-            firmware_files = [f.value for f in self.os.loader.values]
-            if not firmware_files:
-                return
-
             for firmware_file in firmware_files:
                 if 'BHYVE_UEFI.fd' in firmware_file:
                     return firmware_file
-
-            return firmware_files[0]
+            return (firmware_files and
+                    firmware_files[0] or None)  # pragma: no cover
 
         patterns = self._uefi_arch_patterns.get(self.arch)
         for pattern in patterns:
-            for path in [v.value for v in self.os.loader.values]:
+            for path in firmware_files:
                 if re.match(pattern, path):
                     return path
 

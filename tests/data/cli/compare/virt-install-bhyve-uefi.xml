@@ -1,0 +1,59 @@
+<domain type="bhyve">
+  <name>foobhyve</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>262144</memory>
+  <currentMemory>262144</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/local/share/uefi-firmware/BHYVE_UEFI.fd</loader>
+    <boot dev="network"/>
+  </os>
+  <clock offset="utc"/>
+  <on_reboot>destroy</on_reboot>
+  <devices>
+    <emulator>bhyve</emulator>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="nmdm">
+      <source master="/dev/nmdm00000000-1111-2222-3333-444444444444A" slave="/dev/nmdm00000000-1111-2222-3333-444444444444B"/>
+    </console>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="vga"/>
+    </video>
+  </devices>
+</domain>
+<domain type="bhyve">
+  <name>foobhyve</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>262144</memory>
+  <currentMemory>262144</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="x86_64">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/local/share/uefi-firmware/BHYVE_UEFI.fd</loader>
+    <boot dev="network"/>
+  </os>
+  <clock offset="utc"/>
+  <devices>
+    <emulator>bhyve</emulator>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="nmdm">
+      <source master="/dev/nmdm00000000-1111-2222-3333-444444444444A" slave="/dev/nmdm00000000-1111-2222-3333-444444444444B"/>
+    </console>
+    <input type="tablet" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="vga"/>
+    </video>
+  </devices>
+</domain>
