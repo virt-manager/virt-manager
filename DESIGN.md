@@ -102,7 +102,8 @@ Some examples:
   * VNC bit depth config
   * advanced mouse/keyboard grab support
   * advanced SPICE viewer options
-  * [hiding viewer window borders](https://www.redhat.com/archives/virt-tools-list/2019-January/msg00000.html)
+  * [hiding viewer window borders/decorations](https://www.redhat.com/archives/virt-tools-list/2019-January/msg00000.html) [(and another)](https://github.com/virt-manager/virt-manager/pull/233)
+  * [hiding window menu bar](https://bugzilla.redhat.com/show_bug.cgi?id=1091311)
   * [keypress delay](https://bugzilla.redhat.com/show_bug.cgi?id=1410943)
   * [SPICE/QXL multidisplay support](https://bugzilla.redhat.com/show_bug.cgi?id=885806)
   * support for [manual key combinations](https://bugzilla.redhat.com/show_bug.cgi?id=1014666), or adding custom values.
