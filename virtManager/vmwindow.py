@@ -22,6 +22,9 @@ from .details.snapshots import vmmSnapshotPage
  DETAILS_PAGE_CONSOLE,
  DETAILS_PAGE_SNAPSHOTS) = range(3)
 
+(CONSOLE_DISPLAY_WINDOWED,
+ CONSOLE_DISPLAY_UNDECORATED_WINDOW,
+ CONSOLE_DISPLAY_FULLSCREEN) = range(3)
 
 class vmmVMWindow(vmmGObjectUI):
     __gsignals__ = {
@@ -93,6 +96,7 @@ class vmmVMWindow(vmmGObjectUI):
 
         self._shutdownmenu = None
         self._vmmenu = None
+        self._console_display_mode = CONSOLE_DISPLAY_WINDOWED
         self.init_menus()
 
         self.builder.connect_signals({
@@ -108,7 +112,7 @@ class vmmVMWindow(vmmGObjectUI):
             "on_control_run_clicked": self.control_vm_run,
             "on_control_shutdown_clicked": self.control_vm_shutdown,
             "on_control_pause_toggled": self.control_vm_pause,
-            "on_control_fullscreen_toggled": self.control_fullscreen,
+            "on_control_fullscreen_toggled": self._toolbar_fullscreen_changed_cb,
 
             "on_details_customize_finish_clicked": self.customize_finish,
             "on_details_cancel_customize_clicked": self._customize_cancel_clicked,
@@ -125,6 +129,7 @@ class vmmVMWindow(vmmGObjectUI):
             "on_details_pages_switch_page": self._details_page_switch_cb,
 
             "on_details_menu_view_fullscreen_activate": self._fullscreen_changed_cb,
+            "on_details_menu_view_undecorated_window_activate": self._undecorated_window_changed_cb,
             "on_details_menu_view_size_to_vm_activate": self._size_to_vm_cb,
             "on_details_menu_view_scale_always_toggled": self._scaling_ui_changed_cb,
             "on_details_menu_view_scale_fullscreen_toggled": self._scaling_ui_changed_cb,
@@ -301,10 +306,6 @@ class vmmVMWindow(vmmGObjectUI):
             return  # pragma: no cover
         self._window_size = self.topwin.get_size()
 
-    def control_fullscreen(self, src):
-        menu = self.widget("details-menu-view-fullscreen")
-        if src.get_active() != menu.get_active():
-            menu.set_active(src.get_active())
 
     def toggle_toolbar(self, src):
         if self.is_customize_dialog:
@@ -312,7 +313,7 @@ class vmmVMWindow(vmmGObjectUI):
 
         active = src.get_active()
         self.config.set_details_show_toolbar(active)
-        fsactive = self.widget("details-menu-view-fullscreen").get_active()
+        fsactive = self.widget("details-menu-view-fullscreen").get_active() or self.widget("details-menu-view-undecorated-window").get_active()
         self.widget("toolbar-box").set_visible(active and not fsactive)
 
     def details_console_changed(self, src):
@@ -620,6 +621,8 @@ class vmmVMWindow(vmmGObjectUI):
         self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
         self.widget("details-menu-view-fullscreen").set_sensitive(
             allow_fullscreen)
+        self.widget("details-menu-view-undecorated-window").set_sensitive(
+            allow_fullscreen)
 
     def _console_refresh_scaling_from_settings(self):
         scale_type = self.vm.get_console_scaling()
@@ -647,23 +650,73 @@ class vmmVMWindow(vmmGObjectUI):
 
         self.vm.set_console_scaling(scale_type)
 
-    def _fullscreen_changed_cb(self, src):
-        do_fullscreen = src.get_active()
-        self.widget("control-fullscreen").set_active(do_fullscreen)
+    def _toolbar_fullscreen_changed_cb(self, src):
+        if src.get_active():
+            
+            if self._console_display_mode == CONSOLE_DISPLAY_WINDOWED:
+                # toggled in the toolbar, we switch to full screen mode by
+                # activating the "fullscreen" menu item
 
-        if do_fullscreen:
-            self.topwin.fullscreen()
+                self.widget('details-menu-view-undecorated-window').set_active(False)
+                self.widget('details-menu-view-fullscreen').set_active(True)
+            else:
+                # the toolbar button was activated in fullscreen/undecorated
+                # window mode, no need to do anything
+                pass
         else:
+        
+            if self._console_display_mode != CONSOLE_DISPLAY_WINDOWED:
+                # we left full-screen mode because of the "overlaid" exit
+                # button, which deactivates the toolbar button, let's deactivate
+                # the related menu elements as well.
+                
+                self.widget('details-menu-view-undecorated-window').set_active(False)
+                self.widget('details-menu-view-fullscreen').set_active(False)
+            else:
+                # the toolbar button cannot be deactivated in windowed mode
+                # (as it is not visible), unless programatically, let's not do anything
+                pass
+
+    def _fullscreen_changed_cb(self, src):
+        if src.get_active():
+            self._toggle_display_mode(CONSOLE_DISPLAY_FULLSCREEN)
+        else:
+            self._toggle_display_mode(CONSOLE_DISPLAY_WINDOWED)
+
+    def _undecorated_window_changed_cb(self, src):
+        if src.get_active():
+            self._toggle_display_mode(CONSOLE_DISPLAY_UNDECORATED_WINDOW)
+        else:
+            self._toggle_display_mode(CONSOLE_DISPLAY_WINDOWED)
+    
+    def _toggle_display_mode(self, mode):
+        print("toggle_display_mode", mode, 'previous mode', self._console_display_mode)
+    
+        if self._console_display_mode == mode:
+            return
+        decoration_needed = (mode == CONSOLE_DISPLAY_WINDOWED)
+        console_in_fullscreen = (mode != CONSOLE_DISPLAY_WINDOWED)
+
+        
+        if mode == CONSOLE_DISPLAY_FULLSCREEN:
+            self.topwin.fullscreen()
+        elif mode == CONSOLE_DISPLAY_WINDOWED:
             self.topwin.unfullscreen()
+            self.topwin.set_decorated(True)
+        elif mode == CONSOLE_DISPLAY_UNDECORATED_WINDOW:
+            self.topwin.set_decorated(False)
 
-        self._console.vmwindow_set_fullscreen(do_fullscreen)
+        self._console.vmwindow_set_fullscreen(console_in_fullscreen)
 
-        self.widget("details-menubar").set_visible(not do_fullscreen)
+        self.widget("details-menubar").set_visible(decoration_needed)
 
-        show_toolbar = not do_fullscreen
+        show_toolbar = decoration_needed
         if not self.widget("details-menu-view-toolbar").get_active():
             show_toolbar = False  # pragma: no cover
         self.widget("toolbar-box").set_visible(show_toolbar)
+        self._console_display_mode = mode
+        self.widget("control-fullscreen").set_active(console_in_fullscreen)
+        
 
     def _resizeguest_ui_changed_cb(self, src):
         if not src.get_sensitive():
