@@ -650,6 +650,12 @@ class vmmVMWindow(vmmGObjectUI):
     def _fullscreen_changed_cb(self, src):
         do_fullscreen = src.get_active()
         self.widget("control-fullscreen").set_active(do_fullscreen)
+
+        if do_fullscreen:
+            self.topwin.fullscreen()
+        else:
+            self.topwin.unfullscreen()
+
         self._console.vmwindow_set_fullscreen(do_fullscreen)
 
         self.widget("details-menubar").set_visible(not do_fullscreen)

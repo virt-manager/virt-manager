@@ -556,12 +556,10 @@ class vmmConsolePages(vmmGObjectUI):
     def _change_fullscreen(self, do_fullscreen):
         if do_fullscreen:
             self._in_fullscreen = True
-            self.topwin.fullscreen()
             self._overlay_toolbar_fullscreen.timed_revealer.force_reveal(True)
         else:
             self._in_fullscreen = False
             self._overlay_toolbar_fullscreen.timed_revealer.force_reveal(False)
-            self.topwin.unfullscreen()
 
         self._sync_scaling_with_display()
 
