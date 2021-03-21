@@ -87,7 +87,12 @@ class vmmKeyring(vmmGObject):
             iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
                                            "org.freedesktop.secrets", path,
                                            "org.freedesktop.Secret.Item", None)
-            iface.Delete("(s)", "/")
+            prompt = iface.Delete()
+            if prompt != "/":
+                iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
+                                               "org.freedesktop.secrets", prompt,
+                                               "org.freedesktop.Secret.Prompt", None)
+                iface.Prompt("(s)", "")
         except Exception:
             log.exception("Failed to delete keyring secret")
 
