@@ -1597,14 +1597,14 @@ class vmmDomain(vmmLibvirtObject):
         ret = self.config.get_pervm(self.get_uuid(), "/vm-window-size")
         return ret
 
-    def get_console_password(self):
-        return self.config.get_pervm(self.get_uuid(), "/console-password")
-    def set_console_password(self, username, keyid):
-        return self.config.set_pervm(self.get_uuid(), "/console-password",
-                                     (username, keyid))
-    def del_console_password(self):
-        return self.config.set_pervm(self.get_uuid(), "/console-password",
-                                     ("", -1))
+    def get_console_username(self):
+        return self.config.get_pervm(self.get_uuid(), "/console-username")
+    def set_console_username(self, username):
+        return self.config.set_pervm(self.get_uuid(), "/console-username",
+                                     username)
+    def del_console_username(self):
+        return self.config.set_pervm(self.get_uuid(), "/console-username",
+                                     "")
 
     def get_cache_dir(self):
         ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())

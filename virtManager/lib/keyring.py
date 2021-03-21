@@ -61,8 +61,19 @@ class vmmKeyring(vmmGObject):
     def _cleanup(self):
         pass  # pragma: no cover
 
+    def _find_secret_item_path(self, uuid, hvuri):
+        attributes = {
+            "uuid": uuid,
+            "hvuri": hvuri,
+        }
+        unlocked, locked = self._service.SearchItems("(a{ss})", attributes)
+        if not unlocked:
+            if locked:
+                log.warning("Item found, but it's locked")
+            return None
+        return unlocked[0]
+
     def _add_secret(self, secret):
-        ret = None
         try:
             props = {
                 "org.freedesktop.Secret.Item.Label": GLib.Variant("s", secret.get_name()),
@@ -73,17 +84,17 @@ class vmmKeyring(vmmGObject):
                       "text/plain; charset=utf8")
             replace = True
 
-            _id = self._collection.CreateItem("(a{sv}(oayays)b)",
-                                              props, params, replace)[0]
-            ret = int(_id.rsplit("/")[-1])
+            self._collection.CreateItem("(a{sv}(oayays)b)",
+                                              props, params, replace)
         except Exception:  # pragma: no cover
             log.exception("Failed to add keyring secret")
 
-        return ret
-
-    def _del_secret(self, _id):
+    def _del_secret(self, uuid, hvuri):
         try:
-            path = self._collection.get_object_path() + "/" + str(_id)
+            path = self._find_secret_item_path(uuid, hvuri)
+            if path is None:
+                return None
+
             iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
                                            "org.freedesktop.secrets", path,
                                            "org.freedesktop.Secret.Item", None)
@@ -96,10 +107,13 @@ class vmmKeyring(vmmGObject):
         except Exception:
             log.exception("Failed to delete keyring secret")
 
-    def _get_secret(self, _id):
+    def _get_secret(self, uuid, hvuri):
         ret = None
         try:
-            path = self._collection.get_object_path() + "/" + str(_id)
+            path = self._find_secret_item_path(uuid, hvuri)
+            if path is None:
+                return None
+
             iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
                                     "org.freedesktop.secrets", path,
                                     "org.freedesktop.Secret.Item", None)
@@ -118,7 +132,7 @@ class vmmKeyring(vmmGObject):
 
             ret = _vmmSecret(label, secret, attrs)
         except Exception:  # pragma: no cover
-            log.exception("Failed to get keyring secret id=%s", _id)
+            log.exception("Failed to get keyring secret uuid=%r hvuri=%r", uuid, hvuri)
 
         return ret
 
@@ -137,41 +151,26 @@ class vmmKeyring(vmmGObject):
         if not self.is_available():
             return ("", "")  # pragma: no cover
 
-        username, keyid = vm.get_console_password()
-
-        if keyid == -1:
-            return ("", "")
-
-        secret = self._get_secret(keyid)
-        if secret is None or secret.get_name() != self._get_secret_name(vm):
+        secret = self._get_secret(vm.get_uuid(), vm.conn.get_uri())
+        if secret is None:
             return ("", "")  # pragma: no cover
 
-        if (secret.attributes.get("hvuri", None) != vm.conn.get_uri() or
-            secret.attributes.get("uuid", None) != vm.get_uuid()):
-            return ("", "")  # pragma: no cover
-
-        return (secret.get_secret(), username or "")
+        return (secret.get_secret(), vm.get_console_username() or "")
 
     def set_console_password(self, vm, password, username=""):
         if not self.is_available():
             return  # pragma: no cover
 
+
         secret = _vmmSecret(self._get_secret_name(vm), password,
                            {"uuid": vm.get_uuid(),
                             "hvuri": vm.conn.get_uri()})
-        keyid = self._add_secret(secret)
-        if keyid is None:
-            return  # pragma: no cover
-
-        vm.set_console_password(username, keyid)
+        vm.set_console_username(username)
+        self._add_secret(secret)
 
     def del_console_password(self, vm):
         if not self.is_available():
             return  # pragma: no cover
 
-        ignore, keyid = vm.get_console_password()
-        if keyid == -1:
-            return
-
-        self._del_secret(keyid)
-        vm.del_console_password()
+        self._del_secret(vm.get_uuid(), vm.conn.get_uri())
+        vm.del_console_username()
