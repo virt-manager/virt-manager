@@ -73,6 +73,14 @@ class vmmKeyring(vmmGObject):
             return None
         return unlocked[0]
 
+    def _do_prompt_if_needed(self, path):
+        if path == "/":
+            return
+        iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
+                                       "org.freedesktop.secrets", path,
+                                       "org.freedesktop.Secret.Prompt", None)
+        iface.Prompt("(s)", "")
+
     def _add_secret(self, secret):
         try:
             props = {
@@ -84,8 +92,10 @@ class vmmKeyring(vmmGObject):
                       "text/plain; charset=utf8")
             replace = True
 
-            self._collection.CreateItem("(a{sv}(oayays)b)",
+            _, prompt = self._collection.CreateItem("(a{sv}(oayays)b)",
                                               props, params, replace)
+            self._do_prompt_if_needed(prompt)
+
         except Exception:  # pragma: no cover
             log.exception("Failed to add keyring secret")
 
@@ -99,11 +109,7 @@ class vmmKeyring(vmmGObject):
                                            "org.freedesktop.secrets", path,
                                            "org.freedesktop.Secret.Item", None)
             prompt = iface.Delete()
-            if prompt != "/":
-                iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
-                                               "org.freedesktop.secrets", prompt,
-                                               "org.freedesktop.Secret.Prompt", None)
-                iface.Prompt("(s)", "")
+            self._do_prompt_if_needed(prompt)
         except Exception:
             log.exception("Failed to delete keyring secret")
 
