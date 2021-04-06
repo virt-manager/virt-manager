@@ -366,7 +366,14 @@ class CheckPylint(distutils.core.Command):
         import pylint.lint
         import pycodestyle
 
-        lintfiles = ["setup.py", "virtinst", "virtManager", "tests"]
+        lintfiles = [
+            "setup.py",
+            "tests",
+            "virtinst",
+            # Put this first so pylint learns what Gtk version we
+            # want to lint against
+            "virtManager/virtmanager.py",
+            "virtManager"]
 
         spellfiles = lintfiles[:]
         spellfiles += list(glob.glob("*.md"))
