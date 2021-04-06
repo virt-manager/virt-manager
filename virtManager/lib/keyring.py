@@ -69,17 +69,19 @@ class vmmKeyring(vmmGObject):
         unlocked, locked = self._service.SearchItems("(a{ss})", attributes)
         if not unlocked:
             if locked:
-                log.warning("Item found, but it's locked")
+                log.warning(  # pragma: no cover
+                        "Item found, but it's locked")
             return None
         return unlocked[0]
 
     def _do_prompt_if_needed(self, path):
         if path == "/":
             return
-        iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
-                                       "org.freedesktop.secrets", path,
-                                       "org.freedesktop.Secret.Prompt", None)
-        iface.Prompt("(s)", "")
+        iface = Gio.DBusProxy.new_sync(  # pragma: no cover
+                self._dbus, 0, None,
+                "org.freedesktop.secrets", path,
+                "org.freedesktop.Secret.Prompt", None)
+        iface.Prompt("(s)", "")  # pragma: no cover
 
     def _add_secret(self, secret):
         try:
@@ -92,10 +94,9 @@ class vmmKeyring(vmmGObject):
                       "text/plain; charset=utf8")
             replace = True
 
-            _, prompt = self._collection.CreateItem("(a{sv}(oayays)b)",
+            dummy, prompt = self._collection.CreateItem("(a{sv}(oayays)b)",
                                               props, params, replace)
             self._do_prompt_if_needed(prompt)
-
         except Exception:  # pragma: no cover
             log.exception("Failed to add keyring secret")
 
@@ -110,7 +111,7 @@ class vmmKeyring(vmmGObject):
                                            "org.freedesktop.Secret.Item", None)
             prompt = iface.Delete()
             self._do_prompt_if_needed(prompt)
-        except Exception:
+        except Exception:  # pragma: no cover
             log.exception("Failed to delete keyring secret")
 
     def _get_secret(self, uuid, hvuri):
