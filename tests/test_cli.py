@@ -692,7 +692,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --soundhw default
 --sound ac97
---sound codec0.type=micro,codec1.type=duplex,codec2.type=output,audio.id=2
+--sound codec0.type=micro,codec1.type=duplex,codec2.type=output
 
 --video cirrus
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65
@@ -1220,6 +1220,7 @@ c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.w
 c.add_compare("--build-xml --idmap clearxml=no,uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
 c.add_compare("--connect %(URI-KVM)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
 c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
+c.add_compare("--build-xml --sound hda,audio.id=2", "build-sound")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup
 c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response", input_text="yes")  # prompt response, also using domid lookup
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(_VIRTXMLDIR + "virtxml-qemu-commandline-clear.xml"))
