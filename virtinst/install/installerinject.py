@@ -45,10 +45,12 @@ def _run_initrd_commands(initrd, tempdir):
 
 
 def _run_iso_commands(iso, tempdir, cloudinit=False):
-    # Some distros do not link mkisofs to genisoimage (or vice-versa). As a
-    # result of this, we have to actually check for both programs and use the
-    # most appropriate one.
-    programs = ["genisoimage", "mkisofs"]
+    # These three programs all behave similarly for our needs, and
+    # different distros only have some available. xorriso is apparently
+    # the actively maintained variant that should be available everywhere
+    # and without any license issues. Some more info here:
+    # https://wiki.debian.org/genisoimage
+    programs = ["xorrisofs", "genisoimage", "mkisofs"]
     for program in programs:
         if shutil.which(program):
             break
