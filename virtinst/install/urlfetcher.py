@@ -26,7 +26,7 @@ class _ISOReader:
     def __init__(self, location):
         self._location = location
 
-    def grabFile(self, url):
+    def grabFile(self, url, scratchdir):
         raise NotImplementedError()
     def hasFile(self, url):
         raise NotImplementedError()
@@ -43,18 +43,48 @@ class _ISOinfoReader(_ISOReader):
     def _make_file_list(self):
         cmd = ["isoinfo", "-J", "-i", self._location, "-f"]
 
-        log.debug("Running isoinfo: %s", cmd)
+        log.debug("Generating iso filelist: %s", cmd)
         output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
         return output.splitlines(False)
 
-    def grabFile(self, url):
+    def grabFile(self, url, scratchdir):
+        ignore = scratchdir
         cmd = ["isoinfo", "-J", "-i", self._location, "-x", url]
 
-        log.debug("Running isoinfo: %s", cmd)
+        log.debug("Extracting iso file: %s", cmd)
         return subprocess.check_output(cmd)
 
     def hasFile(self, url):
         return url.encode("ascii") in self._cache_file_list
+
+
+class _XorrisoReader(_ISOReader):
+    def __init__(self, location):
+        super().__init__(location)
+        self._cache_file_list = self._make_file_list()
+
+    def _make_file_list(self):
+        delim = "VIRTINST_BEGINLIST"
+        cmd = ["xorriso", "-indev", self._location, "-print", delim, "-find"]
+
+        log.debug("Generating iso filelist: %s", cmd)
+        output = subprocess.check_output(cmd,
+                stderr=subprocess.DEVNULL, text=True)
+        return output.split(delim, 1)[1].strip().splitlines()
+
+    def grabFile(self, url, scratchdir):
+        tmp = tempfile.NamedTemporaryFile(
+                prefix="virtinst-iso", suffix="-" + os.path.basename(url),
+                dir=scratchdir)
+
+        cmd = ["xorriso", "-osirrox", "on", "-indev", self._location,
+               "-extract", url, tmp.name]
+        log.debug("Extracting iso file: %s", cmd)
+        subprocess.check_output(cmd)
+        return open(tmp.name, "rb").read()
+
+    def hasFile(self, url):
+        return ("'.%s'" % url) in self._cache_file_list
 
 
 ###########################
@@ -349,23 +379,17 @@ class _ISOURLFetcher(_URLFetcher):
 
     def _get_isoreader(self):
         if not self._isoreader:
-            self._isoreader = _ISOinfoReader(self.location)
+            self._isoreader = _XorrisoReader(self.location)
         return self._isoreader
 
     def _grabber(self, url):
-        """
-        Use isoinfo to grab the file
-        """
         if not self._hasFile(url):
             raise RuntimeError("iso doesn't have file=%s" % url)
 
-        output = self._get_isoreader().grabFile(url)
+        output = self._get_isoreader().grabFile(url, self.scratchdir)
         return io.BytesIO(output), len(output)
 
     def _hasFile(self, url):
-        """
-        Use isoinfo to list and search for the file
-        """
         return self._get_isoreader().hasFile(url)
 
 

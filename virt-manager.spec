@@ -72,8 +72,8 @@ Requires: python3-requests
 Requires: libosinfo >= 0.2.10
 # Required for gobject-introspection infrastructure
 Requires: python3-gobject-base
-# Required for pulling files from iso media with isoinfo
-Requires: genisoimage
+# Required for pulling files from iso media
+Requires: xorriso
 
 %description common
 Common files used by the different virt-manager interfaces, as well as

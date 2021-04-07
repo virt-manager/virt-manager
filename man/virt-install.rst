@@ -617,7 +617,7 @@ ftp://host/path
     An FTP server location containing an installable distribution image.
 
 ISO
-    Probe the ISO and extract files using 'isoinfo'
+    Extract files directly from the ISO path
 
 DIRECTORY
     Path to a local directory containing an installable distribution image.

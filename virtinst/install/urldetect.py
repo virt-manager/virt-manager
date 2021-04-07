@@ -40,9 +40,9 @@ class _DistroCache(object):
         if path not in self._filecache:
             try:
                 content = self._fetcher.acquireFileContent(path)
-            except ValueError:
+            except ValueError as e:
                 content = None
-                log.debug("Failed to acquire file=%s", path)
+                log.debug("Failed to acquire file=%s: %s", path, e)
             self._filecache[path] = content
         return self._filecache[path]
 
