@@ -224,12 +224,12 @@ class _vmmDeleteBase(vmmGObjectUI):
         for path in paths:
             try:
                 log.debug("Deleting path: %s", path)
-                meter.start(text=_("Deleting path '%s'") % path)
+                meter.start(_("Deleting path '%s'") % path, None)
                 self._async_delete_path(conn, path, meter)
             except Exception as e:
                 storage_errors.append((str(e),
                                           "".join(traceback.format_exc())))
-            meter.end(0)
+            meter.end()
         return storage_errors
 
     def _async_delete_path(self, conn, path, ignore):

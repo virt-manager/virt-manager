@@ -104,11 +104,10 @@ class _URLFetcher(object):
 
         log.debug("Fetching URI: %s", url)
         self.meter.start(
-            text=_("Retrieving file %s...") % os.path.basename(filename),
-            size=size)
+            _("Retrieving file %s...") % os.path.basename(filename), size)
 
-        total = self._write(urlobj, fileobj)
-        self.meter.end(total)
+        self._write(urlobj, fileobj)
+        self.meter.end()
 
     def _write(self, urlobj, fileobj):
         """

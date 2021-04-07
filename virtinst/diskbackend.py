@@ -411,8 +411,8 @@ class _StorageBase(object):
     def will_create_storage(self):
         raise NotImplementedError()
 
-    def create(self, progresscb):
-        ignore = progresscb  # pragma: no cover
+    def create(self, meter):
+        ignore = meter  # pragma: no cover
         raise xmlutil.DevError(
             "%s can't create storage" % self.__class__.__name__)
 
@@ -435,7 +435,7 @@ class _StorageCreator(_StorageBase):
     # Public API #
     ##############
 
-    def create(self, progresscb):
+    def create(self, meter):
         raise NotImplementedError
     def validate(self):
         raise NotImplementedError
@@ -495,8 +495,8 @@ class ManagedStorageCreator(_StorageCreator):
         self._pool = vol_install.pool
         self._vol_install = vol_install
 
-    def create(self, progresscb):
-        return self._vol_install.install(meter=progresscb)
+    def create(self, meter):
+        return self._vol_install.install(meter=meter)
     def is_size_conflict(self):
         return self._vol_install.is_size_conflict()
     def validate(self):
@@ -561,16 +561,15 @@ class CloneStorageCreator(_StorageCreator):
         if msg:
             log.warning(msg)  # pragma: no cover
 
-    def create(self, progresscb):
+    def create(self, meter):
         text = (_("Cloning %(srcfile)s") %
                 {'srcfile': os.path.basename(self._input_path)})
 
         size_bytes = int(self.get_size() * 1024 * 1024 * 1024)
-        progresscb.start(filename=self._output_path, size=size_bytes,
-                         text=text)
+        meter.start(text, size_bytes)
 
         # Plain file clone
-        self._clone_local(progresscb, size_bytes)
+        self._clone_local(meter, size_bytes)
 
     def _clone_local(self, meter, size_bytes):
         if self._input_path == "/dev/null":  # pragma: no cover
@@ -618,7 +617,7 @@ class CloneStorageCreator(_StorageCreator):
                     l = os.read(src_fd, clone_block_size)
                     s = len(l)
                     if s == 0:
-                        meter.end(size_bytes)
+                        meter.end()
                         break
                     # check sequence of zeros
                     if sparse and zeros == l:
@@ -626,7 +625,7 @@ class CloneStorageCreator(_StorageCreator):
                     else:
                         b = os.write(dst_fd, l)
                         if s != b:  # pragma: no cover
-                            meter.end(i)
+                            meter.end()
                             break
                     i += s
                     if i < size_bytes:

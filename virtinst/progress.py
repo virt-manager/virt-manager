@@ -95,7 +95,6 @@ class BaseMeter:
     def __init__(self):
         self.update_period = 0.3  # seconds
 
-        self.filename = None
         self.url = None
         self.basename = None
         self.text = None
@@ -106,19 +105,17 @@ class BaseMeter:
         self.last_update_time = None
         self.re = RateEstimator()
 
-    def start(self, filename=None, url=None, basename=None,
-              size=None, now=None, text=None):
-        self.filename = filename
-        self.url = url
-        self.basename = basename
+    def set_text(self, text):
+        self.text = text
+
+    def start(self, text, size):
         self.text = text
 
         self.size = size
         if size is not None:
             self.fsize = format_number(size) + 'B'
 
-        if now is None:
-            now = time.time()
+        now = time.time()
         self.start_time = now
         self.re.start(size, now)
         self.last_amount_read = 0
@@ -143,13 +140,8 @@ class BaseMeter:
     def _do_update(self, amount_read, now=None):
         pass
 
-    def end(self, amount_read, now=None):
-        if now is None:
-            now = time.time()
-        self.re.update(amount_read, now)
-        self.last_amount_read = amount_read
-        self.last_update_time = now
-        self._do_end(amount_read, now)
+    def end(self):
+        self._do_end(self.last_amount_read, self.last_update_time)
 
     def _do_end(self, amount_read, now=None):
         pass

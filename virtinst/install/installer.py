@@ -104,7 +104,7 @@ class Installer(object):
             name = os.path.basename(path)
 
             try:
-                meter.start(size=None, text=_("Removing disk '%s'") % name)
+                meter.start(_("Removing disk '%s'") % name, None)
 
                 if disk.get_vol_object():
                     disk.get_vol_object().delete()
@@ -113,7 +113,7 @@ class Installer(object):
                     # it's here in case future assumptions change
                     os.unlink(path)
 
-                meter.end(0)
+                meter.end()
             except Exception as e:  # pragma: no cover
                 log.debug("Failed to remove disk '%s'",
                     name, exc_info=True)
@@ -634,7 +634,7 @@ class Installer(object):
         """
         meter_label = _("Creating domain...")
         meter = progress.ensure_meter(meter)
-        meter.start(size=None, text=meter_label)
+        meter.start(meter_label, None)
         needs_boot = doboot or self.has_install_phase()
 
         if guest.type == "vz" and not self._is_reinstall:
@@ -655,6 +655,7 @@ class Installer(object):
                           domain.XMLDesc(0))
         except Exception as e:  # pragma: no cover
             log.debug("Error fetching XML from libvirt object: %s", e)
+        meter.end()
         return domain
 
     def _flag_autostart(self, domain):
