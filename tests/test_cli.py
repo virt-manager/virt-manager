@@ -38,7 +38,7 @@ MEDIA_DIR = os.path.relpath(utils.DATADIR + "/fakemedia", utils.TOPDIR)
 UNATTENDED_DIR = XMLDIR + "/unattended"
 OLD_OSINFO = utils.has_old_osinfo()
 NO_OSINFO_UNATTEND = not unattended.OSInstallScript.have_new_libosinfo()
-HAS_ISOINFO = shutil.which("isoinfo")
+HAS_xorriso = shutil.which("xorriso")
 
 # We use this check as a surrogate for a released libosinfo with a bug
 # fix we need to get full test coverage
@@ -99,9 +99,9 @@ def has_old_osinfo():
         return "osinfo is too old"
 
 
-def missing_isoinfo():
-    if not HAS_ISOINFO:
-        return "isoinfo not installed"
+def missing_xorriso():
+    if not HAS_xorriso:
+        return "xorriso not installed"
 
 
 def no_osinfo_unattend_cb():
@@ -1001,8 +1001,8 @@ c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-varia
 c.add_valid("--connect " + utils.URIs.kvm_session + " --install fedora21", prerun_check=has_old_osinfo)  # hits some get_search_paths and media_upload code paths
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_isoinfo)  # --location with an unknown ISO but manually specified kernel paths
-c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_isoinfo)  # Using --location iso mounting
+c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_xorriso)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5.4 --cloud-init none", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --install kernel=%(ISO-WIN7)s,initrd=%(ISOLABEL)s,kernel_args='foo bar' --os-variant rhel6.4 --unattended none", "kvm-rhel6")  # RHEL6 defaults. ISO paths are just to point at existing files
