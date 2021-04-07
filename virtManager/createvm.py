@@ -2079,9 +2079,9 @@ class vmmCreateVM(vmmGObjectUI):
         import logging
         import virtBootstrap
 
-        meter.start(text=_("Bootstraping container"), size=100)
+        meter.start(_("Bootstraping container"), 100)
         def progress_update_cb(prog):
-            meter.text = _(prog['status'])
+            meter.change_meter_text(_(prog['status']))
             meter.update(prog['value'])
 
         asyncjob.details_enable()

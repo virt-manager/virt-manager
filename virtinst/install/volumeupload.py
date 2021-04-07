@@ -105,8 +105,7 @@ def _upload_file(conn, meter, destpool, src):
 
         # Start transfer
         total = 0
-        meter.start(size=size,
-                    text=_("Transferring %s") % os.path.basename(src))
+        meter.start(_("Transferring %s") % os.path.basename(src), size)
         while True:
             blocksize = 1024 * 1024  # 1 MiB
             data = fileobj.read(blocksize)
@@ -119,7 +118,7 @@ def _upload_file(conn, meter, destpool, src):
 
         # Cleanup
         stream.finish()
-        meter.end(size)
+        meter.end()
     except Exception:  # pragma: no cover
         vol.delete(0)
         raise

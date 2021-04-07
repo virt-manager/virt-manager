@@ -47,9 +47,8 @@ def start_job_progress_thread(vm, meter, progtext):
                 if not data_total:
                     continue  # pragma: no cover
 
-                if not meter.started:
-                    meter.start(size=data_total,
-                                text=progtext)
+                if not meter.is_started():
+                    meter.start(progtext, data_total)
 
                 progress = data_total - data_remaining
                 meter.update(progress)

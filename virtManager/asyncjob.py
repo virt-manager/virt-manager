@@ -17,47 +17,61 @@ import virtinst.progress
 from .baseclass import vmmGObjectUI
 
 
-class vmmMeter(virtinst.progress.BaseMeter):
-    def __init__(self, cb_pulse, cb_fraction, cb_done):
+class _vmmMeter(virtinst.progress.BaseMeter):
+    def __init__(self, pbar_pulse, pbar_fraction, pbar_done):
         virtinst.progress.BaseMeter.__init__(self)
-        self.started = False
 
-        self._vmm_pulse = cb_pulse
-        self._vmm_fraction = cb_fraction
-        self._vmm_done = cb_done
+        self._pbar_pulse = pbar_pulse
+        self._pbar_fraction = pbar_fraction
+        self._pbar_done = pbar_done
+        self._started = False
 
 
-    def _do_start(self, now=None):
-        text = self.text or self.basename
-        if self.size is None:
-            out = "    %5sB" % (0)
-            self._vmm_pulse(out, text)
-        else:
-            out = "%3i%% %5sB" % (0, 0)
-            self._vmm_fraction(0, out, text)
-        self.started = True
+    #################
+    # Internal APIs #
+    #################
 
-    def _do_update(self, amount_read, now=None):
-        text = self.text or self.basename
+    def _write(self, amount_read):
         fread = virtinst.progress.format_number(amount_read)
-        if self.size is None:  # pragma: no cover
+        if self.size is None:
             out = "    %5sB" % (fread)
-            self._vmm_pulse(out, text)
+            self._pbar_pulse(out, self.text)
         else:
             frac = self.re.fraction_read()
             out = "%3i%% %5sB" % (frac * 100, fread)
-            self._vmm_fraction(frac, out, text)
+            self._pbar_fraction(frac, out, self.text)
 
-    def _do_end(self, amount_read, now=None):
-        text = self.text or self.basename
-        fread = virtinst.progress.format_number(amount_read)
-        if self.size is None:
-            out = "    %5sB" % (fread)
-            self._vmm_pulse(out, text)
-        else:
-            out = "%3i%% %5sB" % (100, fread)
-            self._vmm_done(out, text)
-        self.started = False
+
+    #############################################
+    # Public APIs specific to virt-manager code #
+    #############################################
+
+    def change_meter_text(self, text):
+        self.text = text
+        self._write(0)
+
+    def is_started(self):
+        return bool(self._started)
+
+
+    ###################
+    # Meter overrides #
+    ###################
+
+    def start(self, *args, **kwargs):
+        self._started = True
+        super().start(*args, **kwargs)
+        self._write(0)
+
+    def update(self, amount_read):  # pylint: disable=arguments-differ
+        super().update(amount_read)
+        self._write(amount_read)
+
+    def end(self):
+        self._started = False
+        super().end()
+        self._write(0)
+        self._pbar_done()
 
 
 def cb_wrapper(callback, asyncjob, *args, **kwargs):
@@ -219,9 +233,9 @@ class vmmAsyncJob(vmmGObjectUI):
 
     def get_meter(self):
         if not self._meter:
-            self._meter = vmmMeter(self._pbar_pulse,
-                                   self._pbar_fraction,
-                                   self._pbar_done)
+            self._meter = _vmmMeter(self._pbar_pulse,
+                                    self._pbar_fraction,
+                                    self._pbar_done)
         return self._meter
 
     def set_error(self, error, details):
@@ -308,13 +322,8 @@ class vmmAsyncJob(vmmGObjectUI):
         self.widget("pbar").set_fraction(frac)
 
     @idle_wrapper
-    def _pbar_done(self, progress, stage=None):
+    def _pbar_done(self):
         self._is_pulsing = False
-        if not self.builder:
-            return  # pragma: no cover
-        self._set_stage_text(stage or _("Completed"))
-        self.widget("pbar").set_text(progress)
-        self.widget("pbar").set_fraction(1)
 
     @idle_wrapper
     def details_enable(self):

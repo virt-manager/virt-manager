@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="vmm-progress">
-    <property name="can_focus">False</property>
-    <property name="border_width">12</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">12</property>
     <property name="title" translatable="yes">Operation in progress</property>
     <property name="resizable">False</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="default_width">300</property>
-    <property name="default_height">200</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="urgency_hint">True</property>
+    <property name="window-position">center-on-parent</property>
+    <property name="default-width">300</property>
+    <property name="default-height">200</property>
+    <property name="type-hint">dialog</property>
+    <property name="skip-taskbar-hint">True</property>
+    <property name="urgency-hint">True</property>
     <property name="deletable">False</property>
     <child>
       <object class="GtkBox" id="vbox13">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">5</property>
         <child>
           <object class="GtkBox" id="hbox50">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <child>
               <object class="GtkImage" id="image99">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="valign">start</property>
-                <property name="margin_start">3</property>
-                <property name="margin_end">3</property>
-                <property name="margin_top">10</property>
-                <property name="margin_bottom">10</property>
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <property name="stock">gtk-dialog-info</property>
                 <property name="icon_size">6</property>
               </object>
@@ -45,12 +45,12 @@
             <child>
               <object class="GtkLabel" id="pbar-text">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="label" translatable="yes">Please wait a few moments...</property>
                 <property name="wrap">True</property>
-                <property name="max_width_chars">50</property>
+                <property name="max-width-chars">50</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -67,14 +67,14 @@
         </child>
         <child>
           <object class="GtkBox" id="warning-box">
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage" id="warning-icon">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="margin_start">3</property>
-                <property name="margin_end">3</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
                 <property name="stock">gtk-dialog-warning</property>
               </object>
               <packing>
@@ -85,12 +85,12 @@
             </child>
             <child>
               <object class="GtkLabel" id="warning-text">
-                <property name="width_request">400</property>
+                <property name="width-request">400</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label">some warning</property>
                 <property name="wrap">True</property>
-                <property name="max_width_chars">40</property>
+                <property name="max-width-chars">40</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -108,13 +108,13 @@
         <child>
           <object class="GtkLabel" id="pbar-stage">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
-            <property name="margin_start">3</property>
-            <property name="margin_end">3</property>
-            <property name="margin_top">3</property>
-            <property name="margin_bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
             <property name="label" translatable="yes">Processing...</property>
           </object>
           <packing>
@@ -126,8 +126,9 @@
         <child>
           <object class="GtkProgressBar" id="pbar">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="pulse_step">0.10000000149</property>
+            <property name="can-focus">False</property>
+            <property name="pulse-step">0.10000000149</property>
+            <property name="show-text">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -138,21 +139,21 @@
         <child>
           <object class="GtkBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkButton" id="cancel-async-job">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-stock">True</property>
                 <signal name="clicked" handler="on_async_job_cancel_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="pack_type">end</property>
+                <property name="pack-type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -160,21 +161,21 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">4</property>
           </packing>
         </child>
         <child>
           <object class="GtkExpander" id="details">
-            <property name="can_focus">True</property>
-            <property name="resize_toplevel">True</property>
+            <property name="can-focus">True</property>
+            <property name="resize-toplevel">True</property>
             <child>
               <object class="GtkScrolledWindow" id="details-box">
-                <property name="width_request">380</property>
-                <property name="height_request">200</property>
+                <property name="width-request">380</property>
+                <property name="height-request">200</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="shadow_type">in</property>
+                <property name="can-focus">True</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -183,10 +184,10 @@
             <child type="label">
               <object class="GtkLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes">_Details</property>
-                <property name="use_underline">True</property>
-                <property name="track_visited_links">False</property>
+                <property name="use-underline">True</property>
+                <property name="track-visited-links">False</property>
               </object>
             </child>
           </object>
@@ -197,9 +198,6 @@
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

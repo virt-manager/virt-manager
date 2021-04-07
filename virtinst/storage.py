@@ -684,8 +684,7 @@ class StorageVolume(_StorageObject):
 
         try:
             t.start()
-            meter.start(size=self.capacity,
-                        text=_("Allocating '%s'") % self.name)
+            meter.start(_("Allocating '%s'") % self.name, self.capacity)
 
             if self.conn.is_really_test():
                 # Test suite doesn't support any flags, so reset them
@@ -698,7 +697,7 @@ class StorageVolume(_StorageObject):
                 log.debug("Using vol create flags=%s", createflags)
                 vol = self.pool.createXML(xml, createflags)
 
-            meter.end(self.capacity)
+            meter.end()
             log.debug("Storage volume '%s' install complete.", self.name)
             return vol
         except Exception as e:
