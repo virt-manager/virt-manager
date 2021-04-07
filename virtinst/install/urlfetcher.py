@@ -18,6 +18,45 @@ import requests
 from ..logger import log
 
 
+#########################
+# isoreader abstraction #
+#########################
+
+class _ISOReader:
+    def __init__(self, location):
+        self._location = location
+
+    def grabFile(self, url):
+        raise NotImplementedError()
+    def hasFile(self, url):
+        raise NotImplementedError()
+
+
+class _ISOinfoReader(_ISOReader):
+    """
+    Handle reading reading files off an iso
+    """
+    def __init__(self, location):
+        super().__init__(location)
+        self._cache_file_list = self._make_file_list()
+
+    def _make_file_list(self):
+        cmd = ["isoinfo", "-J", "-i", self._location, "-f"]
+
+        log.debug("Running isoinfo: %s", cmd)
+        output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
+        return output.splitlines(False)
+
+    def grabFile(self, url):
+        cmd = ["isoinfo", "-J", "-i", self._location, "-x", url]
+
+        log.debug("Running isoinfo: %s", cmd)
+        return subprocess.check_output(cmd)
+
+    def hasFile(self, url):
+        return url.encode("ascii") in self._cache_file_list
+
+
 ###########################
 # Fetcher implementations #
 ###########################
@@ -302,39 +341,32 @@ class _LocalURLFetcher(_URLFetcher):
 
 
 class _ISOURLFetcher(_URLFetcher):
-    _cache_file_list = None
+    _isoreader = None
     _is_iso = True
 
     def _make_full_url(self, filename):
         return os.path.join("/", filename)
+
+    def _get_isoreader(self):
+        if not self._isoreader:
+            self._isoreader = _ISOinfoReader(self.location)
+        return self._isoreader
 
     def _grabber(self, url):
         """
         Use isoinfo to grab the file
         """
         if not self._hasFile(url):
-            raise RuntimeError("isoinfo didn't find file=%s" % url)
+            raise RuntimeError("iso doesn't have file=%s" % url)
 
-        cmd = ["isoinfo", "-J", "-i", self.location, "-x", url]
-
-        log.debug("Running isoinfo: %s", cmd)
-        output = subprocess.check_output(cmd)
-
+        output = self._get_isoreader().grabFile(url)
         return io.BytesIO(output), len(output)
 
     def _hasFile(self, url):
         """
         Use isoinfo to list and search for the file
         """
-        if not self._cache_file_list:
-            cmd = ["isoinfo", "-J", "-i", self.location, "-f"]
-
-            log.debug("Running isoinfo: %s", cmd)
-            output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
-
-            self._cache_file_list = output.splitlines(False)
-
-        return url.encode("ascii") in self._cache_file_list
+        return self._get_isoreader().hasFile(url)
 
 
 class DirectFetcher(_URLFetcher):
