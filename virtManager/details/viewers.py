@@ -408,8 +408,11 @@ class VNCViewer(Viewer):
         self._display.set_credential(GtkVnc.DisplayCredential.PASSWORD, cred)
 
     def _set_resizeguest(self, val):
-        ignore = val
+        if hasattr(self._display, "set_allow_resize"):
+            self._display.set_allow_resize(val)
     def _get_resizeguest(self):
+        if hasattr(self._display, "set_allow_resize"):
+            return self._display.get_allow_resize()
         return False
 
     def _get_usb_widget(self):

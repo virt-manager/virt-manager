@@ -5,8 +5,11 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import gi
+gi.require_version('GtkVnc', '2.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
+from gi.repository import GtkVnc
 
 from virtinst import log
 
@@ -487,12 +490,12 @@ class vmmConsolePages(vmmGObjectUI):
     def _viewer_get_resizeguest_tooltip(self):
         tooltip = ""
         if self._viewer:
-            if self._viewer.viewer_type != "spice":
-                tooltip = (
-                    _("Graphics type '%s' does not support auto resize.") %
-                    self._viewer.viewer_type)
-            elif not self._viewer.console_has_agent():
-                tooltip = _("Guest agent is not available.")
+            if self._viewer.viewer_type == "spice":
+                if not self._viewer.has_agent():
+                    tooltip = _("Guest agent is not available.")
+            elif self._viewer.viewer_type == "vnc":
+                if not hasattr(GtkVnc.Display, "set_allow_resize"):
+                    tooltip = _("GTK-VNC viewer is too old")
         return tooltip
 
     def _sync_resizeguest_with_display(self):
