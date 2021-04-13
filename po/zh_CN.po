@@ -21,13 +21,13 @@
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Huacai Chen <chenhuacai@gmail.com>, 2020.
 # Pavel Hrdina <phrdina@redhat.com>, 2020.
-# Whired Planck <fungdaat31@outlook.com>, 2020.
+# Whired Planck <fungdaat31@outlook.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-11-15 06:09+0000\n"
-"PO-Revision-Date: 2020-09-28 16:29+0000\n"
+"POT-Creation-Date: 2021-02-17 06:10+0000\n"
+"PO-Revision-Date: 2021-03-12 22:01+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:135
@@ -189,11 +189,11 @@ msgstr "版本(_V)："
 
 #: ui/addhardware.ui:1358 ui/details.ui:4588
 msgid "rng"
-msgstr "rng"
+msgstr "随机数生成器"
 
 #: ui/addhardware.ui:1409 ui/details.ui:4664
 msgid "panic"
-msgstr "panic"
+msgstr "恐慌（Panic）"
 
 #: ui/addhardware.ui:1525 ui/createnet.ui:831 ui/createpool.ui:487
 #: ui/createvm.ui:2477 ui/createvol.ui:484 ui/snapshotsnew.ui:271
@@ -922,7 +922,7 @@ msgstr "<b>内存用量</b>"
 
 #: ui/details.ui:1060
 msgid "0 KiBytes/s 0 KiBytes/s"
-msgstr "0 KiBytes/s 0 KiBytes/s"
+msgstr "0 千字节/秒 0 千字节/秒"
 
 #: ui/details.ui:1077
 msgid "<b>Disk I/O</b>"
@@ -2753,7 +2753,7 @@ msgstr "源适配器(_S)："
 #: virtManager/createpool.py:332
 #, python-format
 msgid "Error creating pool: %s"
-msgstr "创建池错误：%s"
+msgstr "创建池时出错：%s"
 
 #: virtManager/createpool.py:356
 #, python-format
@@ -3286,7 +3286,7 @@ msgstr ""
 #: virtManager/details/console.py:795
 #, python-format
 msgid "Viewer authentication error: %s"
-msgstr "查看器身份验证错误： %s"
+msgstr "查看器身份验证出错： %s"
 
 #: virtManager/details/console.py:817
 msgid "USB redirection error"
@@ -4067,7 +4067,7 @@ msgstr "启动网络向导：%s"
 #: virtManager/hostnets.py:336
 #, python-format
 msgid "Error changing network settings: %s"
-msgstr "修改网络设置错误：%s"
+msgstr "更改网络设置时出错：%s"
 
 #: virtManager/hoststorage.py:178
 msgid "Copy Volume Path"
@@ -4490,7 +4490,7 @@ msgstr "无法迁移虚拟机：%s"
 #: virtManager/migrate.py:381
 #, python-format
 msgid "Uncaught error validating input: %s"
-msgstr "确认输入时未捕获的错误：%s"
+msgstr "未捕获的错误验证输入：%s"
 
 #: virtManager/migrate.py:399
 #, python-format
@@ -4867,7 +4867,7 @@ msgstr "管理虚拟机快照"
 #: virtManager/vmwindow.py:510
 #, python-format
 msgid "Error taking screenshot: %s"
-msgstr "截图错误： %s"
+msgstr "截屏时出错： %s"
 
 #: virtManager/vmwindow.py:518
 msgid "Error initializing spice USB device widget"
@@ -4921,28 +4921,19 @@ msgid "Host does not support any virtualization options"
 msgstr "主机不支持任何虚拟化选项"
 
 #: virtinst/capabilities.py:314
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"主机不支持虚拟化类型 '%(virttype)s' 架构 '%(arch)s' 的域类型 %(domain)s"
-"%(machine)s"
+"主机不支持机器 '%(machine)s' 的域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/capabilities.py:320
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
-msgstr ""
-"主机不支持虚拟化类型 '%(virttype)s' 架构 '%(arch)s' 的域类型 %(domain)s"
-"%(machine)s"
+msgstr "主机不支持域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5009,7 +5000,7 @@ msgstr "不能找到域 '%(domain)s'：%(error)s"
 #: virtinst/cli.py:482
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "不可同时使用 %(option1)s 和 %(option2)s 命令行选项"
 
 #: virtinst/cli.py:583 virtinst/cli.py:586
 msgid "Connect to hypervisor with libvirt URI"
@@ -5514,21 +5505,18 @@ msgid "Disk path '%s' does not exist."
 msgstr "磁盘路径 '%s' 不存在。"
 
 #: virtinst/cloner.py:181
-#, fuzzy, python-format
-#| msgid "Architecture '%s' is not installable"
+#, python-format
 msgid "Disk network type '%s' is not cloneable."
-msgstr "架构 '%s' 不可安装"
+msgstr "磁盘网络类型 '%s' 不可克隆。"
 
 #: virtinst/cloner.py:184
 #, python-format
 msgid "Cloning disk network type '%s' requires managed storage."
-msgstr ""
+msgstr "克隆磁盘网络类型 '%s' 需要托管存储。"
 
 #: virtinst/cloner.py:190
-#, fuzzy
-#| msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgid "Cloning rbd volumes is not yet supported."
-msgstr "目前不支持克隆到现有存储卷：'%s'"
+msgstr "尚不支持克隆 RBD 卷。"
 
 #: virtinst/cloner.py:197
 msgid "Read Only"
@@ -5814,7 +5802,7 @@ msgstr "正在使用无人值守安装配置文件 '%s'"
 
 #: virtinst/install/urldetect.py:311
 msgid "The URL could not be accessed, maybe you mistyped?"
-msgstr "URL 无法访问，是否输入错误？"
+msgstr "URL 无法访问，是否输入有误？"
 
 #: virtinst/install/urldetect.py:313
 #, python-format
@@ -6090,7 +6078,7 @@ msgstr "根据用户要求取消安装"
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
-msgstr ""
+msgstr "-c 后指定的内容似乎是一个 libvirt URI。您是想使用 --connect 选项吗？如果不是，请改用 --cdrom"
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
@@ -6199,7 +6187,7 @@ msgstr "验证安装位置出错：%s"
 
 #: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
-msgstr ""
+msgstr "需要 --os-variant 指定值，但是没有设置或检测到任何值。"
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6419,19 +6407,14 @@ msgid "No --%s objects found in the XML"
 msgstr "在 XML 配置中，未找到 --%s 对象"
 
 #: virtinst/virtxml.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
-msgstr[0] ""
-"需要 '--edit %(number)s' 选项，但该选项只适用于 XML 配置中的 %(max)s --"
-"%(type)s 对象"
+msgstr[0] "需要 '--edit %(number)s' 选项，但 XML 文件中仅存在 %(max)s --%(type)s 对象"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -6523,18 +6506,18 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"要将此设备热插入到客户机 '%(domain)s' 中吗？"
 
 #: virtinst/virtxml.py:266
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotplug successful."
-msgstr "设备 %s 成功。"
+msgstr "设备热插入成功。"
 
 #: virtinst/virtxml.py:267
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "尝试连接设备 %(action)s 时错误：%(error)s"
+msgstr "尝试热插入设备时出错：%(error)s"
 
 #: virtinst/virtxml.py:269
 #, python-format
@@ -6543,18 +6526,18 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"要将此设备从客户机 '%(domain)s' 中热拔出吗？"
 
 #: virtinst/virtxml.py:271
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotunplug successful."
-msgstr "设备 %s 成功。"
+msgstr "设备热拔出成功。"
 
 #: virtinst/virtxml.py:272
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "尝试连接设备 %(action)s 时错误：%(error)s"
+msgstr "尝试热拔出设备时出错：%(error)s"
 
 #: virtinst/virtxml.py:274
 #, python-format
@@ -6563,18 +6546,18 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"要为客户机 '%(domain)s' 更新此设备吗？"
 
 #: virtinst/virtxml.py:276
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device update successful."
-msgstr "设备 %s 成功。"
+msgstr "设备更新成功。"
 
 #: virtinst/virtxml.py:277
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "尝试连接设备 %(action)s 时错误：%(error)s"
+msgstr "尝试更新设备时出错：%(error)s"
 
 #: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
