@@ -19,13 +19,14 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2019. #zanata
 # José Lemos Neto <lemosjosex@protonmail.com>, 2020.
 # Lucas Fernandes <lucas.af88@gmail.com>, 2021.
+# Gustavo Costa <xfgusta@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-02-17 06:10+0000\n"
-"PO-Revision-Date: 2021-01-04 03:36+0000\n"
-"Last-Translator: Lucas Fernandes <lucas.af88@gmail.com>\n"
+"PO-Revision-Date: 2021-03-01 15:40+0000\n"
+"Last-Translator: Gustavo Costa <xfgusta@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -33,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.4\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -1533,7 +1534,7 @@ msgstr "Novo(a)"
 
 #: ui/manager.ui:315
 msgid "Show the virtual machine console and details"
-msgstr "Mostrar  o console e os detalhes da máquina virtual "
+msgstr "Mostrar o console e os detalhes da máquina virtual"
 
 #: ui/manager.ui:317
 msgid "_Open"
@@ -1819,7 +1820,7 @@ msgid ""
 msgstr ""
 "Alterar a resolução do convidado quando o tamanho da janela do convidado é "
 "alterado. Funciona somente com convidados configurados de forma adequada "
-"usando spice e o agente da área de trabalho.  "
+"usando spice e o agente da área de trabalho."
 
 #: ui/preferences.ui:641
 msgid "_Resize guest with window:"
@@ -2543,10 +2544,9 @@ msgid "Disk target: %s"
 msgstr ""
 
 #: virtManager/clone.py:112
-#, fuzzy, python-format
-#| msgid "Ke_rnel path:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Caminho do ke_rnel:"
+msgstr "Caminho original: %s"
 
 #: virtManager/clone.py:114
 #, fuzzy, python-format
@@ -2555,10 +2555,9 @@ msgid "New path: %s"
 msgstr "Deletando o caminho '%s'"
 
 #: virtManager/clone.py:118
-#, fuzzy, python-format
-#| msgid "Storage is marked as shareable."
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "O armazenamento está marcado como compartilhavel."
+msgstr "O armazenamento é seguro para compartilhar: %(reason)s"
 
 #: virtManager/clone.py:122
 msgid "Sharing this storage is potentially dangerous."
@@ -2633,10 +2632,9 @@ msgstr ""
 "disco."
 
 #: virtManager/clone.py:503
-#, fuzzy, python-format
-#| msgid "Error creating virtual machine clone '%s': %s"
+#, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
-msgstr "Erro na criação da máquina virtual clone '%s': %s"
+msgstr "Erro ao criar clone de máquina virtual '%(vm)s': %(error)s"
 
 #: virtManager/clone.py:561
 #, fuzzy, python-format
@@ -2650,12 +2648,13 @@ msgid "Creating virtual machine clone '%s'"
 msgstr "Criando clone de máquina virtual '%s'"
 
 #: virtManager/clone.py:571
-#, fuzzy, python-format
-#| msgid " and selected storage (this may take a while)"
+#, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
-msgstr " e armazenamento selecionado (isso pode levar algum tempo)"
+msgstr ""
+"Criando o clone da máquina virtual '%s' e o armazenamento selecionado (isso "
+"pode demorar um pouco)"
 
 #: virtManager/config.py:148
 msgid "Locate or create storage volume"
@@ -2858,10 +2857,9 @@ msgid "Error launching create dialog: %s"
 msgstr ""
 
 #: virtManager/createvm.py:308
-#, fuzzy, python-format
-#| msgid "Error"
+#, python-format
 msgid "Error: %s"
-msgstr "Erro"
+msgstr "Erro: %s"
 
 #: virtManager/createvm.py:314 virtManager/createvm.py:319
 #, python-format
@@ -2921,11 +2919,10 @@ msgid "Up to %(maxmem)s available on the host"
 msgstr "Até %(maxmem)s disponíveis no host"
 
 #: virtManager/createvm.py:649
-#, fuzzy, python-format
-#| msgid "Up to %(numcpus)d available"
+#, python-format
 msgid "Up to %(numcpus)d available"
 msgid_plural "Up to %(numcpus)d available"
-msgstr[0] "Até %(numcpus)d disponíveis"
+msgstr[0] "Até %(numcpus)d disponível"
 msgstr[1] "Até %(numcpus)d disponíveis"
 
 #: virtManager/createvm.py:687
@@ -3082,10 +3079,9 @@ msgid "None detected"
 msgstr ""
 
 #: virtManager/createvm.py:1881
-#, fuzzy, python-format
-#| msgid "Error starting installation: "
+#, python-format
 msgid "Error starting installation: %s"
-msgstr "Erro ao iniciar a instalação:"
+msgstr "Erro ao iniciar a instalação: %s"
 
 #: virtManager/createvm.py:1924
 #, python-format
@@ -3159,10 +3155,9 @@ msgstr ""
 "%s "
 
 #: virtManager/delete.py:193
-#, fuzzy, python-format
-#| msgid "Error deleting virtual machine '%s': %s"
+#, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
-msgstr "Erro ao deletar a máquina virtual '%s':%s"
+msgstr "Erro ao deletar a máquina virtual '%(vm)s': %(error)s"
 
 #: virtManager/delete.py:210
 msgid "Additionally, there were errors removing certain storage devices: \n"
@@ -3287,14 +3282,8 @@ msgid "Storage is a media device."
 msgstr "Armazenamento é um dispositivo de mídia."
 
 #: virtManager/delete.py:605
-#, fuzzy
-#| msgid ""
-#| "Storage is in use by the following virtual machines:\n"
-#| "- %s "
 msgid "Storage is in use by the following virtual machines"
-msgstr ""
-"O armazenamento está em uso pelas seguintes máquinas virtuais:\n"
-"- %s "
+msgstr "O armazenamento está em uso pelas seguintes máquinas virtuais"
 
 #: virtManager/delete.py:610
 msgid "Failed to check disk usage conflict."
@@ -3368,12 +3357,13 @@ msgid "Connecting to graphical console for guest"
 msgstr "Conectando ao console gráfico para o convidado"
 
 #: virtManager/details/console.py:738
-#, fuzzy, python-format
-#| msgid "Error connecting to graphical console"
+#, python-format
 msgid ""
 "Error connecting to graphical console:\n"
 "%s"
-msgstr "Erro ao conectar ao console gráfico"
+msgstr ""
+"Erro ao conectar ao console gráfico:\n"
+"%s"
 
 #: virtManager/details/console.py:795
 #, python-format
@@ -3403,10 +3393,9 @@ msgid "Press %s to release pointer."
 msgstr "Pressione %s para liberar o ponteiro"
 
 #: virtManager/details/details.py:162
-#, fuzzy, python-format
-#| msgid "Floppy device"
+#, python-format
 msgid "Floppy %(index)d"
-msgstr "Dispositivo de disquete"
+msgstr "Disquete %(index)d"
 
 #: virtManager/details/details.py:168
 #, fuzzy, python-format
@@ -3421,10 +3410,9 @@ msgid "%(bus)s Disk %(index)d"
 msgstr "%s Redirecionador %s"
 
 #: virtManager/details/details.py:177
-#, fuzzy, python-format
-#| msgid "%s Redirector %s"
+#, python-format
 msgid "%(bus)s %(device)s %(index)d"
-msgstr "%s Redirecionador %s"
+msgstr "%(bus)s %(device)s %(index)d"
 
 #: virtManager/details/details.py:185
 #, python-format
@@ -3432,34 +3420,29 @@ msgid "NIC %(mac)s"
 msgstr ""
 
 #: virtManager/details/details.py:198
-#, fuzzy, python-format
-#| msgid "Serial %d"
+#, python-format
 msgid "Serial %(num)d"
-msgstr "Serial %d"
+msgstr "Serial %(num)d"
 
 #: virtManager/details/details.py:202
-#, fuzzy, python-format
-#| msgid "Parallel"
+#, python-format
 msgid "Parallel %(num)d"
-msgstr "Paralelo(a)"
+msgstr "Paralelo %(num)d"
 
 #: virtManager/details/details.py:206
-#, fuzzy, python-format
-#| msgid "Text Console %d"
+#, python-format
 msgid "Console %(num)d"
-msgstr "Console baseado em texto %d"
+msgstr "Console %(num)d"
 
 #: virtManager/details/details.py:211
-#, fuzzy, python-format
-#| msgid "Channel"
+#, python-format
 msgid "Channel %(name)s"
-msgstr "Canal"
+msgstr "Canal %(name)s"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel"
+#, python-format
 msgid "Channel %(type)s"
-msgstr "Canal"
+msgstr "Canal %(type)s"
 
 #: virtManager/details/details.py:217
 #, python-format
@@ -3483,10 +3466,9 @@ msgid "Video %s"
 msgstr "Vídeo %s"
 
 #: virtManager/details/details.py:230
-#, fuzzy, python-format
-#| msgid "Filesystem %s"
+#, python-format
 msgid "Filesystem %(path)s"
-msgstr "Sistema de arquivos %s"
+msgstr "Sistema de arquivos %(path)s"
 
 #: virtManager/details/details.py:234
 #, python-format
@@ -3499,16 +3481,14 @@ msgid "Controller %(controller)s"
 msgstr ""
 
 #: virtManager/details/details.py:243
-#, fuzzy, python-format
-#| msgid "CDROM device"
+#, python-format
 msgid "RNG %(device)s"
-msgstr "Dispositivo CDROM"
+msgstr "RNG %(device)s"
 
 #: virtManager/details/details.py:247
-#, fuzzy, python-format
-#| msgid "CDROM device"
+#, python-format
 msgid "TPM %(device)s"
-msgstr "Dispositivo CDROM"
+msgstr "TPM %(device)s"
 
 #: virtManager/details/details.py:248
 #, python-format
@@ -3532,7 +3512,7 @@ msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirt não detectou nenhuma imagem de firmware UEFI/OVMF inslatada neste "
-"host.  "
+"host."
 
 #: virtManager/details/details.py:681
 msgid "UEFI not found"
@@ -3598,10 +3578,9 @@ msgid "An init path must be specified"
 msgstr "Um caminho de inicialização deve ser especificado"
 
 #: virtManager/details/details.py:1527 virtManager/device/addstorage.py:287
-#, fuzzy, python-format
-#| msgid "Disk %s is already in use by other guests %s."
+#, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
-msgstr "O disco %s já está sendo usado por outros convidados %s. "
+msgstr "O disco %(path)s já está sendo usado por outros convidados %(names)s."
 
 #: virtManager/details/details.py:1531 virtManager/device/addstorage.py:291
 msgid "Do you really want to use the disk?"
@@ -3838,28 +3817,23 @@ msgid ""
 msgstr ""
 
 #: virtManager/details/snapshots.py:661
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
-#| "snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"Você tem certeza que deseja executar o snapshot '%s'? Todas as alterações %s "
-"desde que o último snapshot foi criado serão descartadas.  "
+"Você tem certeza que deseja executar o snapshot '%(name)s'? Todas as "
+"alterações de disco desde a criação do último snapshot serão descartadas."
 
 #: virtManager/details/snapshots.py:665
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
-#| "snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"Você tem certeza que deseja executar o snapshot '%s'? Todas as alterações %s "
-"desde que o último snapshot foi criado serão descartadas.  "
+"Você tem certeza que deseja executar o snapshot '%(name)s'? Todas as "
+"alterações de disco e configuração desde a criação do último snapshot serão "
+"descartadas."
 
 #: virtManager/details/snapshots.py:676
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -4073,10 +4047,9 @@ msgstr ""
 "A rede virtual '%s' não está ativa. Você gostaria de iniciar a rede agora?"
 
 #: virtManager/device/netlist.py:207
-#, fuzzy, python-format
-#| msgid "Could not start virtual network '%s': %s"
+#, python-format
 msgid "Could not start virtual network '%(device)s': %(error)s"
-msgstr "Não foi possível iniciar a rede virtual '%s': %s"
+msgstr "Não foi possível iniciar a rede virtual '%(device)s': %(error)s"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4219,10 +4192,9 @@ msgid "Libvirt connection does not support storage management."
 msgstr "A conexão do Libvirt não suporta o gerenciamento de armazenamento."
 
 #: virtManager/hoststorage.py:315
-#, fuzzy, python-format
-#| msgid "%s Free / <i>%s In Use</i>"
+#, python-format
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
-msgstr "%s Livre / <i>%s Em Uso</i>"
+msgstr "%(bytesfree)s livre / <i>%(bytesinuse)s> em uso</i>"
 
 #: virtManager/hoststorage.py:336
 msgid "Create new volume"
@@ -4593,16 +4565,14 @@ msgid "%(uri)s (Hypervisors do not match)"
 msgstr "Os hipervisores não coincidem "
 
 #: virtManager/migrate.py:294
-#, fuzzy, python-format
-#| msgid "Disconnected"
+#, python-format
 msgid "%(uri)s (Disconnected)"
-msgstr "Desconectado"
+msgstr "%(uri)s (desconectado)"
 
 #: virtManager/migrate.py:296
-#, fuzzy, python-format
-#| msgid "Same connection"
+#, python-format
 msgid "%(uri)s (Same connection)"
-msgstr "Mesma conexão"
+msgstr "%(uri)s (mesma conexão)"
 
 #: virtManager/migrate.py:313
 msgid "No usable connections available."
@@ -4624,10 +4594,9 @@ msgid "Migrating VM '%s'"
 msgstr "Migrando VM '%s'"
 
 #: virtManager/migrate.py:400
-#, fuzzy, python-format
-#| msgid "Migrating VM '%s' to %s. This may take a while."
+#, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
-msgstr "Migrando a MV '%s' para %s. Isto pode levar algum tempo. "
+msgstr "Migrando a MV '%(name)s' para %(host)s. Isso pode levar algum tempo."
 
 #: virtManager/migrate.py:411
 #, python-format
@@ -4831,10 +4800,9 @@ msgid "Error starting Virtual Machine Manager"
 msgstr "Erro ao iniciar o Gerenciador de Máquina Virtual"
 
 #: virtManager/virtmanager.py:43
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Erro ao iniciar o Gerenciador de Máquina Virtual"
+msgstr "Erro ao iniciar o Gerenciador de Máquina Virtual: %(error)s"
 
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -4922,10 +4890,9 @@ msgid "Error unpausing domain"
 msgstr "Erro ao liberar o dominio"
 
 #: virtManager/vmmenu.py:236
-#, fuzzy, python-format
-#| msgid "Error restoring domain"
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Erro a restaurar o domínio"
+msgstr "Erro a restaurar o domínio: %s"
 
 #: virtManager/vmmenu.py:239
 msgid ""
@@ -5783,10 +5750,9 @@ msgid "There is not enough free space to create the disk."
 msgstr "Não existe espaço livre suficiente para criar o disco."
 
 #: virtinst/diskbackend.py:548
-#, fuzzy, python-format
-#| msgid " %d M requested > %d M available"
+#, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
-msgstr " %d M solicitados > %d M disponível"
+msgstr "%(mem1)s M solicitados > %(mem2)s M disponível"
 
 #: virtinst/diskbackend.py:555
 #, python-format
@@ -6401,12 +6367,11 @@ msgid "Waiting for the installation to complete."
 msgstr "Minutos a aguardar para a instalação ser concluída. "
 
 #: virtinst/virtinstall.py:662
-#, fuzzy, python-format
-#| msgid "Minutes to wait for install to complete."
+#, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] "Minutos a aguardar para a instalação ser concluída. "
-msgstr[1] "Minutos a aguardar para a instalação ser concluída. "
+msgstr[0] "%(minutes)d minuto para a instalação ser concluída."
+msgstr[1] "%(minutes)d minutos para a instalação ser concluída."
 
 #: virtinst/virtinstall.py:685
 #, python-format
