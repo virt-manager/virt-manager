@@ -16,15 +16,16 @@
 # yuliya <ypoyarko@redhat.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Olesya Gerasimenko <gammaray@basealt.ru>, 2020.
+# Dmitry Astankov <mornie@basealt.ru>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-11-17 06:10+0000\n"
-"PO-Revision-Date: 2020-08-06 08:29+0000\n"
-"Last-Translator: Olesya Gerasimenko <gammaray@basealt.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ru/>\n"
+"PO-Revision-Date: 2021-01-15 10:26+0000\n"
+"Last-Translator: Dmitry Astankov <mornie@basealt.ru>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +33,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Weblate 4.1.1\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -241,10 +242,8 @@ msgid "Removab_le:"
 msgstr "Съёмн_ое:"
 
 #: ui/addstorage.ui:435
-#, fuzzy
-#| msgid "Serial"
 msgid "Seria_l:"
-msgstr "Последовательное"
+msgstr "_Последовательный:"
 
 #: ui/addstorage.ui:461
 msgid "Advanced _options"
@@ -275,26 +274,20 @@ msgid "<span size='large'>Clone virtual machine</span>"
 msgstr "<span size='large'>Клонирование виртуальной машины</span>"
 
 #: ui/clone.ui:127
-#, fuzzy
-#| msgid "Original host:"
 msgid "Original VM:"
-msgstr "Исходный узел:"
+msgstr "Исходная виртуальная машина:"
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
-msgstr "П_одключение:"
+msgstr "Подключение:"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
 msgstr "Хранилище:"
 
 #: ui/clone.ui:285
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
-msgstr "Подробности..."
+msgstr "_Подробности..."
 
 #: ui/clone.ui:354
 msgid ""
@@ -374,10 +367,8 @@ msgstr ""
 "Установите флажок, чтобы сохранить пароль, снимите, чтобы не сохранять его."
 
 #: ui/console.ui:292
-#, fuzzy
-#| msgid "TCP net console"
 msgid "_Connect to console"
-msgstr "Сетевая консоль TCP"
+msgstr "Подключиться к _консоли"
 
 #: ui/createconn.ui:13
 msgid "Add Connection"
@@ -830,26 +821,20 @@ msgid "GiB"
 msgstr "ГиБ"
 
 #: ui/createvol.ui:322
-#, fuzzy
-#| msgid "Max Ca_pacity:"
 msgid "Ca_pacity:"
-msgstr "_Максимум:"
+msgstr "Ё_мкость:"
 
 #: ui/createvol.ui:333
-#, fuzzy
-#| msgid "Locate directory volume"
 msgid "_Allocate entire volume now"
-msgstr "Расположение тома каталогов"
+msgstr "_Выделить память сразу на всём томе"
 
 #: ui/createvol.ui:388
 msgid "Pa_th:"
-msgstr ""
+msgstr "П_уть:"
 
 #: ui/createvol.ui:435
-#, fuzzy
-#| msgid "Backing store"
 msgid "_Backing store"
-msgstr "Резервирование"
+msgstr "_Резервное хранилище"
 
 #: ui/delete.ui:9 virtManager/delete.py:286
 msgid "Delete Virtual Machine"
@@ -1019,16 +1004,12 @@ msgid "<b>To_pology</b>"
 msgstr "<b>То_пология</b>"
 
 #: ui/details.ui:1669
-#, fuzzy
-#| msgid "vCPU a_llocation:"
 msgid "Current a_llocation:"
-msgstr "_Выделено виртуальных процессоров:"
+msgstr "_Текущее выделение памяти:"
 
 #: ui/details.ui:1684
-#, fuzzy
-#| msgid "Memory a_llocation:"
 msgid "Ma_ximum allocation:"
-msgstr "В_ыделение памяти:"
+msgstr "_Максимальное выделение памяти:"
 
 #: ui/details.ui:1699
 msgid "Total host memory:"
@@ -1335,10 +1316,14 @@ msgstr "Т_ип ожидания:"
 #: ui/gfxdetails.ui:363
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
+"Работа OpenGL возможна только при типе графики «virtio» с включённым "
+"параметром «Ускорение 3D»"
 
 #: ui/gfxdetails.ui:379
 msgid "OpenGL only works with 'Listen type' value 'none'"
 msgstr ""
+"Работа OpenGL возможна только при параметре «Тип ожидания», установленном в "
+"значение «Нет»"
 
 #: ui/host.ui:34 ui/manager.ui:48 ui/vmwindow.ui:39
 msgid "_File"
@@ -1695,7 +1680,7 @@ msgstr ""
 
 #: ui/netlist.ui:121
 msgid "<small>Failed to find a suitable default network.</small>"
-msgstr ""
+msgstr "<small>Не удалось найти подходящую сеть по умолчанию.</small>"
 
 #: ui/netlist.ui:147
 msgid "_Network source:"
@@ -1848,12 +1833,12 @@ msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"Если флажок не установлен, окно виртуальной машины не будет автоматически "
+"подключаться к запущенной графической консоли виртуальной машины."
 
 #: ui/preferences.ui:693
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "Console autoconnec_t:"
-msgstr "_Подключаться автоматически:"
+msgstr "Автоматическое _подключение к консоли:"
 
 #: ui/preferences.ui:723
 msgid "<b>Graphical Consoles</b>"
@@ -2014,16 +1999,12 @@ msgid "Auto _resize VM with window"
 msgstr "Масштабировать _ВМ вместе с окном"
 
 #: ui/vmwindow.ui:259
-#, fuzzy
-#| msgid "Console"
 msgid "Co_nsoles"
-msgstr "Консоль"
+msgstr "_Консоли"
 
 #: ui/vmwindow.ui:267
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "_Autoconnect"
-msgstr "_Подключаться автоматически:"
+msgstr "_Автоматическое подключение"
 
 #: ui/vmwindow.ui:282
 msgid "T_oolbar"
@@ -2395,10 +2376,9 @@ msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
 #: virtManager/addhardware.py:585
-#, fuzzy, python-format
-#| msgid "Generic %(bus)s %(type)s"
+#, python-format
 msgid "%(input_bus)s %(input_type)s"
-msgstr "Стандартный %(type)s %(bus)s"
+msgstr "%(input_bus)s %(input_type)s"
 
 #: virtManager/addhardware.py:680
 msgid "Disk device"
@@ -2551,40 +2531,35 @@ msgstr "Отсутствует хранилище для клонировани�
 #: virtManager/clone.py:111
 #, python-format
 msgid "Disk target: %s"
-msgstr ""
+msgstr "Назначение диска: %s"
 
 #: virtManager/clone.py:112
-#, fuzzy, python-format
-#| msgid "Original host:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Исходный узел:"
+msgstr "Исходный путь: %s"
 
 #: virtManager/clone.py:114
-#, fuzzy, python-format
-#| msgid "New _Path:"
+#, python-format
 msgid "New path: %s"
-msgstr "Новый _путь:"
+msgstr "Новый путь: %s"
 
 #: virtManager/clone.py:118
-#, fuzzy, python-format
-#| msgid "Storage is marked as shareable."
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "Хранилище отмечено как общее."
+msgstr "Предоставление общего доступа к хранилищу безопасно: %(reason)s"
 
 #: virtManager/clone.py:122
 msgid "Sharing this storage is potentially dangerous."
-msgstr ""
+msgstr "Предоставление общего доступа к данному хранилищу потенциально опасно."
 
 #: virtManager/clone.py:125
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr ""
+msgstr "Клонирование хранилища невозможно: %(reason)s"
 
 #: virtManager/clone.py:137
-#, fuzzy
-#| msgid "No storage to clone."
 msgid "No storage."
-msgstr "Отсутствует хранилище для клонирования."
+msgstr "Нет хранилища."
 
 #: virtManager/clone.py:142
 #, python-format
@@ -2601,10 +2576,8 @@ msgid "Error launching clone dialog: %s"
 msgstr "Ошибка запуска диалога клонирования: %s"
 
 #: virtManager/clone.py:276
-#, fuzzy
-#| msgid "C_lone"
 msgid "Clone"
-msgstr "К_лонировать"
+msgstr "Клонировать"
 
 #: virtManager/clone.py:457
 msgid "Cloning will overwrite the existing file"
@@ -2619,29 +2592,23 @@ msgstr ""
 "Действительно использовать этот путь?"
 
 #: virtManager/clone.py:487
-#, fuzzy
-#| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
-msgstr "Пропуск дисков может привести к перезаписи данных."
+msgstr ""
+"Предоставление общего доступа к хранилищу может привести к перезаписи данных."
 
 #: virtManager/clone.py:488
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Следующие дисковые устройства не будут клонированы:\n"
+"%(vmname)s получит доступ к следующим дисковым устройствам:\n"
 "\n"
-"%s\n"
-"Запуск новой гостевой системы может перезаписать данные на этих дисковых "
-"образах."
+"%(pathlist)s\n"
+"Запуск новой гостевой системы может привести к перезаписи данных на этих "
+"дисковых образах."
 
 #: virtManager/clone.py:503
 #, python-format
@@ -2649,10 +2616,9 @@ msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Ошибка создания клона виртуальной машины «%(vm)s»: %(error)s"
 
 #: virtManager/clone.py:561
-#, fuzzy, python-format
-#| msgid "Error changing pool settings: %s"
+#, python-format
 msgid "Error with clone settings: %s"
-msgstr "Ошибка изменения настроек пула: %s"
+msgstr "Ошибка параметров клонирования: %s"
 
 #: virtManager/clone.py:566
 #, python-format
@@ -3116,10 +3082,9 @@ msgstr ""
 "Виртуальная машина «%s» не сообщила о себе на протяжении ожидаемого времени."
 
 #: virtManager/createvm.py:2069
-#, fuzzy, python-format
-#| msgid "Error continue install: %s"
+#, python-format
 msgid "Error continuing install: %s"
-msgstr "Ошибка при попытке продолжения установки: %s"
+msgstr "Ошибка продолжения установки: %s"
 
 #: virtManager/createvm.py:2082
 msgid "Bootstraping container"
@@ -3128,7 +3093,7 @@ msgstr "Начальная загрузка контейнера"
 #: virtManager/createvol.py:140
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
-msgstr ""
+msgstr "Свободное место тома <b>%(volume)s</b>: %(size)s"
 
 #: virtManager/createvol.py:278
 #, python-format
@@ -3293,18 +3258,12 @@ msgid "Storage is a media device."
 msgstr "Хранилище является устройством носителя данных."
 
 #: virtManager/delete.py:605
-#, fuzzy
-#| msgid ""
-#| "Storage is in use by the following virtual machines:\n"
-#| "- %s "
 msgid "Storage is in use by the following virtual machines"
-msgstr ""
-"Хранилище используется следующими виртуальными машинами:\n"
-"- %s "
+msgstr "Хранилище используется следующими виртуальными машинами"
 
 #: virtManager/delete.py:610
 msgid "Failed to check disk usage conflict."
-msgstr ""
+msgstr "Не удалось проверить конфликт использования диска."
 
 #: virtManager/details/console.py:153
 msgid "Leave fullscreen"
@@ -3337,10 +3296,8 @@ msgid "Graphical Console"
 msgstr "Графическая консоль"
 
 #: virtManager/details/console.py:229
-#, fuzzy
-#| msgid "virt-manager does not support more that one graphical console"
 msgid "virt-manager does not support more than one graphical console"
-msgstr "virt-manager поддерживает только одну графическую консоль"
+msgstr "virt-manager поддерживает не более одной графической консоли"
 
 #: virtManager/details/console.py:492
 #, python-format
@@ -3949,16 +3906,13 @@ msgstr ""
 "соединения следует изменить адрес ожидания данных в гостевой системе."
 
 #: virtManager/details/viewers.py:347
-#, fuzzy, python-format
-#| msgid ""
-#| "Unable to provide requested credentials to the VNC server.\n"
-#| " The credential type %s is not supported"
+#, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
 "Не удалось предоставить учётные данные серверу VNC.\n"
-"%s не поддерживается."
+"Тип учётных данных %s не поддерживается."
 
 #: virtManager/details/viewers.py:569
 #, python-format
@@ -4117,10 +4071,9 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s из %(maxmem)s"
 
 #: virtManager/host.py:178
-#, fuzzy, python-format
-#| msgid "%(connection)s - Connecting..."
+#, python-format
 msgid "%(connection)s - Connection Details"
-msgstr "%(connection)s — подключение..."
+msgstr "%(connection)s — сведения о подключении"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4836,10 +4789,9 @@ msgid "Error starting Virtual Machine Manager"
 msgstr "Ошибка запуска менеджера виртуальных машин"
 
 #: virtManager/virtmanager.py:38
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Ошибка запуска менеджера виртуальных машин"
+msgstr "Ошибка запуска диспетчера виртуальных машин: %(error)s"
 
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -5046,63 +4998,48 @@ msgstr ""
 "покинуть эту вкладку?"
 
 #: virtinst/capabilities.py:296
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"Хост не поддерживает домены %(domain)s%(machine)s для виртуализации типа "
-"«%(virttype)s» (архитектура «%(arch)s»)"
+"Узел не поддерживает виртуализацию типа «%(virttype)s» для архитектуры "
+"«%(arch)s»"
 
 #: virtinst/capabilities.py:300
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
-"Хост не поддерживает домены %(domain)s%(machine)s для виртуализации типа "
-"«%(virttype)s» (архитектура «%(arch)s»)"
+"Узел не поддерживает никакие параметры виртуализации для архитектуры "
+"«%(arch)s»"
 
 #: virtinst/capabilities.py:304
-#, fuzzy, python-format
-#| msgid "Host does not support %(virttype)s %(arch)s"
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "Хост не поддерживает %(virttype)s %(arch)s"
+msgstr "Узел не поддерживает виртуализацию типа «%(virttype)s»"
 
 #: virtinst/capabilities.py:308
-#, fuzzy
-#| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
-msgstr "любые параметры виртуализации"
+msgstr "Узел не поддерживает никакие параметры виртуализации"
 
 #: virtinst/capabilities.py:314
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Хост не поддерживает домены %(domain)s%(machine)s для виртуализации типа "
-"«%(virttype)s» (архитектура «%(arch)s»)"
+"Узел не поддерживает домены типа %(domain)s с машиной «%(machine)s» для "
+"виртуализации типа «%(virttype)s» с архитектурой «%(arch)s»"
 
 #: virtinst/capabilities.py:320
-#, fuzzy, python-format
-#| msgid ""
-#| "Host does not support domain type %(domain)s%(machine)s for "
-#| "virtualization type '%(virttype)s' arch '%(arch)s'"
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Хост не поддерживает домены %(domain)s%(machine)s для виртуализации типа "
-"«%(virttype)s» (архитектура «%(arch)s»)"
+"Узел не поддерживает домены типа %(domain)s для виртуализации типа "
+"«%(virttype)s» с архитектурой «%(arch)s»"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5173,7 +5110,7 @@ msgstr "Не удалось найти домен «%(domain)s»: %(error)s"
 #: virtinst/cli.py:482
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "Одновременное использование %(option1)s и %(option2)s невозможно"
 
 #: virtinst/cli.py:583 virtinst/cli.py:586
 msgid "Connect to hypervisor with libvirt URI"
@@ -5606,6 +5543,10 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
+"Применить параметры XPath исходного XML к конечному XML. Пример:\n"
+"--xml ./cpu/@mode=host-passthrough\n"
+"--xml ./devices/disk[2]/serial=new-serial\n"
+"--xml xpath.delete=./clock"
 
 #: virtinst/cli.py:965
 #, python-format
@@ -5690,31 +5631,27 @@ msgid "Disk path '%s' does not exist."
 msgstr "Путь «%s» не существует."
 
 #: virtinst/cloner.py:181
-#, fuzzy, python-format
-#| msgid "Architecture '%s' is not installable"
+#, python-format
 msgid "Disk network type '%s' is not cloneable."
-msgstr "Архитектура «%s» не подходит для установки."
+msgstr "Клонирование диска с сетевым типом «%s» невозможно."
 
 #: virtinst/cloner.py:184
 #, python-format
 msgid "Cloning disk network type '%s' requires managed storage."
 msgstr ""
+"Для клонирования диска с сетевым типом «%s» необходимо управляемое хранилище."
 
 #: virtinst/cloner.py:190
-#, fuzzy
-#| msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgid "Cloning rbd volumes is not yet supported."
-msgstr "Клонирование на существующий том не поддерживается: «%s»"
+msgstr "Клонирование RBD-томов пока не поддерживается."
 
 #: virtinst/cloner.py:197
 msgid "Read Only"
 msgstr "Только чтение"
 
 #: virtinst/cloner.py:199
-#, fuzzy
-#| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
-msgstr "Хранилище отмечено как общее."
+msgstr "Отмечено как общее"
 
 #: virtinst/cloner.py:261
 #, python-format
@@ -6169,10 +6106,6 @@ msgstr ""
 "размещения (требуется %(mem1)s МБ > доступно %(mem2)s МБ)."
 
 #: virtinst/virtclone.py:22
-#, fuzzy
-#| msgid ""
-#| "An original machine name is required, use '--original ORIGINAL_GUEST' and "
-#| "try again."
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
@@ -6265,6 +6198,9 @@ msgid ""
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
+"Не клонировать содержимое хранилища по указанным путям, их содержимое "
+"останется без изменений. Для этого необходимо указать существующие пути для "
+"каждого клонируемого образа диска."
 
 #: virtinst/virtclone.py:115
 msgid "New file to use as storage for nvram VARS"
@@ -6318,6 +6254,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"Параметр «-c» указан c URI-адресом libvirt. Возможно, имелось в виду "
+"«--connect»? Если нет, используйте «--cdrom»."
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
@@ -6440,6 +6378,8 @@ msgstr "Ошибка при проверке места установки: %s"
 #: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
 msgstr ""
+"Необходим параметр «--os-variant», но его значение не указано или не "
+"обнаружено."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6510,6 +6450,8 @@ msgstr ""
 #: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
+"Виртуальная машина остановлена пользователем. Перезагрузка произведена не "
+"будет."
 
 #: virtinst/virtinstall.py:858
 msgid "Restarting guest."
@@ -6671,10 +6613,7 @@ msgid "No --%s objects found in the XML"
 msgstr "XML не содержит объектов --%s"
 
 #: virtinst/virtxml.py:87
-#, fuzzy, python-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
@@ -6682,17 +6621,17 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
-"Запрашивается «--edit %(number)s», но XML содержит только объект %(max)s --"
-"%(type)s"
+"Запрашивается «--edit %(number)s», но XML содержит только %(max)s объект "
+"типа --%(type)s"
 msgstr[1] ""
-"Запрашивается «--edit %(number)s», но XML содержит только объект %(max)s --"
-"%(type)s"
+"Запрашивается «--edit %(number)s», но XML содержит только %(max)s объекта "
+"типа --%(type)s"
 msgstr[2] ""
-"Запрашивается «--edit %(number)s», но XML содержит только объект %(max)s --"
-"%(type)s"
+"Запрашивается «--edit %(number)s», но XML содержит только %(max)s объектов "
+"типа --%(type)s"
 msgstr[3] ""
-"Запрашивается «--edit %(number)s», но XML содержит только объект %(max)s --"
-"%(type)s"
+"Запрашивается «--edit %(number)s», но XML содержит только %(max)s объект "
+"типа --%(type)s"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -6787,18 +6726,18 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Выполнить горячее подключение устройства к гостевой системе «%(domain)s»?"
 
 #: virtinst/virtxml.py:266
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotplug successful."
-msgstr "Действие над устройством выполнено: %s"
+msgstr "Горячее подключение устройства успешно завершено."
 
 #: virtinst/virtxml.py:267
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "Ошибка устройства при попытке %(action)s: %(error)s"
+msgstr "Ошибка при попытке горячего подключения устройства: %(error)s"
 
 #: virtinst/virtxml.py:269
 #, python-format
@@ -6807,18 +6746,18 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Выполнить горячее отключение устройства от гостевой системы «%(domain)s»?"
 
 #: virtinst/virtxml.py:271
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device hotunplug successful."
-msgstr "Действие над устройством выполнено: %s"
+msgstr "Горячее отключение устройства успешно завершено."
 
 #: virtinst/virtxml.py:272
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Ошибка устройства при попытке %(action)s: %(error)s"
+msgstr "Ошибка при попытке горячего отключения устройства: %(error)s"
 
 #: virtinst/virtxml.py:274
 #, python-format
@@ -6827,22 +6766,22 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Обновить устройство для гостевой системы «%(domain)s»?"
 
 #: virtinst/virtxml.py:276
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device update successful."
-msgstr "Действие над устройством выполнено: %s"
+msgstr "Обновление устройства успешно завершено."
 
 #: virtinst/virtxml.py:277
-#, fuzzy, python-format
-#| msgid "Error attempting device action %(action)s: %(error)s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "Ошибка устройства при попытке %(action)s: %(error)s"
+msgstr "Ошибка при попытке обновления устройства: %(error)s"
 
 #: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml может использоваться только вместе с --edit"
 
 #: virtinst/virtxml.py:337
 msgid "No XML diff was generated. The requested changes will have no effect."
