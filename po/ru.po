@@ -21,11 +21,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-11-17 06:10+0000\n"
+"POT-Creation-Date: 2021-02-11 06:11+0000\n"
 "PO-Revision-Date: 2021-01-15 10:26+0000\n"
 "Last-Translator: Dmitry Astankov <mornie@basealt.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/ru/>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -750,7 +750,7 @@ msgstr "П_роцессоры:"
 msgid "(Insert host mem)"
 msgstr "(укажите объём памяти)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2403
+#: ui/createvm.ui:1995 virtManager/details/details.py:2404
 msgid "Memory"
 msgstr "Память"
 
@@ -2229,7 +2229,7 @@ msgstr "Порт SPICE"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:435 virtManager/details/details.py:2336
+#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr "Дисковод"
 
@@ -2448,7 +2448,7 @@ msgstr "Генератор случайных чисел"
 msgid "VM Sockets"
 msgstr "Сокеты ВМ"
 
-#: virtManager/addhardware.py:1034 virtManager/details/details.py:2120
+#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
 #, python-format
 msgid "%s Device"
 msgstr "Устройство %s"
@@ -2904,7 +2904,7 @@ msgstr[3] "Макс. количество — %(numcpus)d"
 msgid "No active connection to install on."
 msgstr "Нет активных соединений для установки."
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1770
+#: virtManager/createvm.py:947 virtManager/details/details.py:1771
 #: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:228
 msgid "None"
 msgstr "Нет"
@@ -3509,189 +3509,189 @@ msgstr "Очистить конфигурацию"
 msgid "Disk bus:"
 msgstr "Шина диска:"
 
-#: virtManager/details/details.py:1027
+#: virtManager/details/details.py:1028
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Ошибка запуска диалога оборудования: %s"
 
-#: virtManager/details/details.py:1033
+#: virtManager/details/details.py:1034
 msgid "Are you sure you want to remove this device?"
 msgstr "Действительно удалить это устройство?"
 
-#: virtManager/details/details.py:1280 virtManager/details/details.py:1769
-#: virtManager/details/details.py:1788 virtManager/details/details.py:1982
+#: virtManager/details/details.py:1281 virtManager/details/details.py:1770
+#: virtManager/details/details.py:1789 virtManager/details/details.py:1983
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: virtManager/details/details.py:1362
+#: virtManager/details/details.py:1363
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Ошибка при применении изменений: %s"
 
-#: virtManager/details/details.py:1486
+#: virtManager/details/details.py:1487
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Ошибка изменения значения автозапуска: %s"
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1504
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Конфигурация initrd требует указания пути к ядру"
 
-#: virtManager/details/details.py:1506
+#: virtManager/details/details.py:1507
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Для установки аргументов ядра необходимо указать путь к ядру"
 
-#: virtManager/details/details.py:1513
+#: virtManager/details/details.py:1514
 msgid "An init path must be specified"
 msgstr "Необходимо указать путь инициализации"
 
-#: virtManager/details/details.py:1526 virtManager/device/addstorage.py:287
+#: virtManager/details/details.py:1527 virtManager/device/addstorage.py:287
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr ""
 "Диск «%(path)s» уже используется другими гостевыми системами %(names)s."
 
-#: virtManager/details/details.py:1530 virtManager/device/addstorage.py:291
+#: virtManager/details/details.py:1531 virtManager/device/addstorage.py:291
 msgid "Do you really want to use the disk?"
 msgstr "Действительно использовать этот диск?"
 
-#: virtManager/details/details.py:1692
+#: virtManager/details/details.py:1693
 msgid "Remove this device from the virtual machine"
 msgstr "Удалить это устройство из виртуальной машины"
 
-#: virtManager/details/details.py:1748
+#: virtManager/details/details.py:1749
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Ошибка обновления страницы оборудования: %s"
 
-#: virtManager/details/details.py:1843
+#: virtManager/details/details.py:1844
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1855
+#: virtManager/details/details.py:1856
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "прочитано %(received)d %(units)s"
 
-#: virtManager/details/details.py:1856
+#: virtManager/details/details.py:1857
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "записано %(transferred)d %(units)s"
 
-#: virtManager/details/details.py:1859
+#: virtManager/details/details.py:1860
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "получено %(received)d %(units)s"
 
-#: virtManager/details/details.py:1860
+#: virtManager/details/details.py:1861
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "отправлено %(transferred)d %(units)s"
 
-#: virtManager/details/details.py:1862 virtManager/details/details.py:1863
-#: virtManager/details/details.py:1864 virtManager/details/details.py:1865
+#: virtManager/details/details.py:1863 virtManager/details/details.py:1864
+#: virtManager/details/details.py:1865 virtManager/details/details.py:1866
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "Отключено"
 
-#: virtManager/details/details.py:1873
+#: virtManager/details/details.py:1874
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s из %(total-memory)s"
 
-#: virtManager/details/details.py:2031
+#: virtManager/details/details.py:2032
 msgid "Absolute Movement"
 msgstr "Абсолютное движение"
 
-#: virtManager/details/details.py:2033
+#: virtManager/details/details.py:2034
 msgid "Relative Movement"
 msgstr "Относительное движение"
 
-#: virtManager/details/details.py:2042 virtManager/details/details.py:2217
-#: virtManager/details/details.py:2220
+#: virtManager/details/details.py:2043 virtManager/details/details.py:2218
+#: virtManager/details/details.py:2221
 msgid "Hypervisor does not support removing this device"
 msgstr "Гипервизор не поддерживает удаление этого устройства"
 
-#: virtManager/details/details.py:2046
+#: virtManager/details/details.py:2047
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "Сервер %(graphicstype)s"
 
-#: virtManager/details/details.py:2112
+#: virtManager/details/details.py:2113
 msgid "Serial Device"
 msgstr "Последовательное устройство"
 
-#: virtManager/details/details.py:2114
+#: virtManager/details/details.py:2115
 msgid "Parallel Device"
 msgstr "Параллельное устройство"
 
-#: virtManager/details/details.py:2116
+#: virtManager/details/details.py:2117
 msgid "Console Device"
 msgstr "Консоль"
 
-#: virtManager/details/details.py:2118
+#: virtManager/details/details.py:2119
 msgid "Channel Device"
 msgstr "Канальное устройство"
 
-#: virtManager/details/details.py:2128
+#: virtManager/details/details.py:2129
 msgid "Primary Console"
 msgstr "Основная консоль"
 
-#: virtManager/details/details.py:2184
+#: virtManager/details/details.py:2185
 #, python-format
 msgid "Physical %s Device"
 msgstr "Физическое устройство %s"
 
-#: virtManager/details/details.py:2201
+#: virtManager/details/details.py:2202
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Нельзя удалить последнее видеоустройство, пока с системой соединены "
 "графическое устройство или дисплей."
 
-#: virtManager/details/details.py:2227
+#: virtManager/details/details.py:2228
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s по адресу %(address)s"
 
-#: virtManager/details/details.py:2233 virtManager/details/details.py:2243
+#: virtManager/details/details.py:2234 virtManager/details/details.py:2244
 msgid "Cannot remove controller while devices are attached."
 msgstr "Нельзя удалить контроллер, пока устройства подключены."
 
-#: virtManager/details/details.py:2333
+#: virtManager/details/details.py:2334
 msgid "Hard Disk"
 msgstr "Жесткий диск"
 
-#: virtManager/details/details.py:2334
+#: virtManager/details/details.py:2335
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2335
+#: virtManager/details/details.py:2336
 msgid "Network (PXE)"
 msgstr "Сеть (PXE)"
 
-#: virtManager/details/details.py:2350
+#: virtManager/details/details.py:2351
 msgid "No bootable devices"
 msgstr "Нет загрузочных устройств"
 
-#: virtManager/details/details.py:2397
+#: virtManager/details/details.py:2398
 msgid "Overview"
 msgstr "Обзор"
 
-#: virtManager/details/details.py:2398
+#: virtManager/details/details.py:2399
 msgid "OS information"
 msgstr "Информация об ОС"
 
-#: virtManager/details/details.py:2400
+#: virtManager/details/details.py:2401
 msgid "Performance"
 msgstr "Производительность"
 
-#: virtManager/details/details.py:2402
+#: virtManager/details/details.py:2403
 msgid "CPUs"
 msgstr "Процессоры"
 
-#: virtManager/details/details.py:2404
+#: virtManager/details/details.py:2405
 msgid "Boot Options"
 msgstr "Параметры загрузки"
 
@@ -4784,11 +4784,11 @@ msgstr "Выбор тома хранилища"
 msgid "_Show Virtual Machine Manager"
 msgstr "_Показать менеджер виртуальных машин"
 
-#: virtManager/virtmanager.py:37
+#: virtManager/virtmanager.py:42
 msgid "Error starting Virtual Machine Manager"
 msgstr "Ошибка запуска менеджера виртуальных машин"
 
-#: virtManager/virtmanager.py:38
+#: virtManager/virtmanager.py:43
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Ошибка запуска диспетчера виртуальных машин: %(error)s"
@@ -5718,7 +5718,7 @@ msgstr[1] "Только %(number)s диска поддерживаются дл�
 msgstr[2] "Только %(number)s дисков поддерживаются для шины «%(bus)s»"
 msgstr[3] "Только %(number)s диск поддерживается для шины «%(bus)s»"
 
-#: virtinst/devices/filesystem.py:117
+#: virtinst/devices/filesystem.py:121
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr "«%s» должен содержать абсолютный путь."
@@ -6254,8 +6254,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
-"Параметр «-c» указан c URI-адресом libvirt. Возможно, имелось в виду "
-"«--connect»? Если нет, используйте «--cdrom»."
+"Параметр «-c» указан c URI-адресом libvirt. Возможно, имелось в виду «--"
+"connect»? Если нет, используйте «--cdrom»."
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"

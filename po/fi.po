@@ -13,11 +13,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-11-17 06:10+0000\n"
+"POT-Creation-Date: 2021-02-11 06:11+0000\n"
 "PO-Revision-Date: 2021-02-11 14:40+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -639,8 +639,8 @@ msgid ""
 "\">virt-bootstrap</a></small>"
 msgstr ""
 "<small>Käyttöjärjestelmän hakemistopuun on jo oltava olemassa. Asentaaksesi\n"
-"käyttöjärjestelmän hakemistopuun luomisen, ota käyttöön <a href=\"https"
-"://github.com/virt-manager/virt-bootstrap\">virt-bootstrap</a></small>"
+"käyttöjärjestelmän hakemistopuun luomisen, ota käyttöön <a href=\"https://"
+"github.com/virt-manager/virt-bootstrap\">virt-bootstrap</a></small>"
 
 #: ui/createvm.ui:1401
 msgid ""
@@ -728,7 +728,7 @@ msgstr "Suo_rittimet:"
 msgid "(Insert host mem)"
 msgstr "(Syötä isäntämuisti)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2403
+#: ui/createvm.ui:1995 virtManager/details/details.py:2404
 msgid "Memory"
 msgstr "Muisti"
 
@@ -932,7 +932,8 @@ msgstr "2"
 
 #: ui/details.ui:1304
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr "<small>VCPU-laitteiden ylikäyttö voi vahingoittaa suorituskykyä</small>"
+msgstr ""
+"<small>VCPU-laitteiden ylikäyttö voi vahingoittaa suorituskykyä</small>"
 
 #: ui/details.ui:1335
 msgid "<b>CPUs</b>"
@@ -2203,7 +2204,7 @@ msgstr "Spice-portti"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:435 virtManager/details/details.py:2336
+#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr "Levyke"
 
@@ -2422,7 +2423,7 @@ msgstr "Satunnaislukugeneraattori"
 msgid "VM Sockets"
 msgstr "Virtuaalikoneen pistokkeet"
 
-#: virtManager/addhardware.py:1034 virtManager/details/details.py:2120
+#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
 #, python-format
 msgid "%s Device"
 msgstr "Laite %s"
@@ -2874,7 +2875,7 @@ msgstr[1] "Saatavilla enintään %(numcpus)d"
 msgid "No active connection to install on."
 msgstr "Ei aktiivista yhteyttä, johon asenta."
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1770
+#: virtManager/createvm.py:947 virtManager/details/details.py:1771
 #: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:228
 msgid "None"
 msgstr "Ei mitään"
@@ -3473,187 +3474,187 @@ msgstr "Tyhjennä suorittimen määritykset"
 msgid "Disk bus:"
 msgstr "Levyväylä:"
 
-#: virtManager/details/details.py:1027
+#: virtManager/details/details.py:1028
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Virhe käynnistäessä laitteistoikkunaa: %s"
 
-#: virtManager/details/details.py:1033
+#: virtManager/details/details.py:1034
 msgid "Are you sure you want to remove this device?"
 msgstr "Haluatko poistaa tämän laitteen?"
 
-#: virtManager/details/details.py:1280 virtManager/details/details.py:1769
-#: virtManager/details/details.py:1788 virtManager/details/details.py:1982
+#: virtManager/details/details.py:1281 virtManager/details/details.py:1770
+#: virtManager/details/details.py:1789 virtManager/details/details.py:1983
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: virtManager/details/details.py:1362
+#: virtManager/details/details.py:1363
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Virhe muutosten käyttöönotossa: %s"
 
-#: virtManager/details/details.py:1486
+#: virtManager/details/details.py:1487
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Virhe muuttaessa automaattikäynnistyksen arvoa: %s"
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1504
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Initrd:tä ei voi asettaa määrittämättä kernelin polkua"
 
-#: virtManager/details/details.py:1506
+#: virtManager/details/details.py:1507
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Ytimen argumentteja ei voi asettaa määrittelemättä ytimen polkua"
 
-#: virtManager/details/details.py:1513
+#: virtManager/details/details.py:1514
 msgid "An init path must be specified"
 msgstr "Init-polku tulee määrittää"
 
-#: virtManager/details/details.py:1526 virtManager/device/addstorage.py:287
+#: virtManager/details/details.py:1527 virtManager/device/addstorage.py:287
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "Levy '%(path)s' on jo muiden vieraiden käytössä %(names)s"
 
-#: virtManager/details/details.py:1530 virtManager/device/addstorage.py:291
+#: virtManager/details/details.py:1531 virtManager/device/addstorage.py:291
 msgid "Do you really want to use the disk?"
 msgstr "Haluatko käyttää levyä?"
 
-#: virtManager/details/details.py:1692
+#: virtManager/details/details.py:1693
 msgid "Remove this device from the virtual machine"
 msgstr "Poista tämä laite virtuaalikoneesta"
 
-#: virtManager/details/details.py:1748
+#: virtManager/details/details.py:1749
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Virhe päivittäessä laitteistosivua: %s"
 
-#: virtManager/details/details.py:1843
+#: virtManager/details/details.py:1844
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1855
+#: virtManager/details/details.py:1856
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s luettu"
 
-#: virtManager/details/details.py:1856
+#: virtManager/details/details.py:1857
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s kirjoitus"
 
-#: virtManager/details/details.py:1859
+#: virtManager/details/details.py:1860
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s sisään"
 
-#: virtManager/details/details.py:1860
+#: virtManager/details/details.py:1861
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s ulos"
 
-#: virtManager/details/details.py:1862 virtManager/details/details.py:1863
-#: virtManager/details/details.py:1864 virtManager/details/details.py:1865
+#: virtManager/details/details.py:1863 virtManager/details/details.py:1864
+#: virtManager/details/details.py:1865 virtManager/details/details.py:1866
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "Poistettu käytöstä"
 
-#: virtManager/details/details.py:1873
+#: virtManager/details/details.py:1874
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s/%(total-memory)s"
 
-#: virtManager/details/details.py:2031
+#: virtManager/details/details.py:2032
 msgid "Absolute Movement"
 msgstr "Absoluuttinen liikkuminen"
 
-#: virtManager/details/details.py:2033
+#: virtManager/details/details.py:2034
 msgid "Relative Movement"
 msgstr "Suhteellinen liikkuminen"
 
-#: virtManager/details/details.py:2042 virtManager/details/details.py:2217
-#: virtManager/details/details.py:2220
+#: virtManager/details/details.py:2043 virtManager/details/details.py:2218
+#: virtManager/details/details.py:2221
 msgid "Hypervisor does not support removing this device"
 msgstr "Hypervisor ei tue tämän laitteen poistamista"
 
-#: virtManager/details/details.py:2046
+#: virtManager/details/details.py:2047
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s-palvelin"
 
-#: virtManager/details/details.py:2112
+#: virtManager/details/details.py:2113
 msgid "Serial Device"
 msgstr "Sarjalaite"
 
-#: virtManager/details/details.py:2114
+#: virtManager/details/details.py:2115
 msgid "Parallel Device"
 msgstr "Rinnakkaislaite"
 
-#: virtManager/details/details.py:2116
+#: virtManager/details/details.py:2117
 msgid "Console Device"
 msgstr "Konsolilaite"
 
-#: virtManager/details/details.py:2118
+#: virtManager/details/details.py:2119
 msgid "Channel Device"
 msgstr "Kanavalaite"
 
-#: virtManager/details/details.py:2128
+#: virtManager/details/details.py:2129
 msgid "Primary Console"
 msgstr "Ensisijainen konsoli"
 
-#: virtManager/details/details.py:2184
+#: virtManager/details/details.py:2185
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fyysinen %s laite"
 
-#: virtManager/details/details.py:2201
+#: virtManager/details/details.py:2202
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Viimeistä videolaitetta ei voida poistaa, kun grafiikka/näyttö on liitettynä."
 
-#: virtManager/details/details.py:2227
+#: virtManager/details/details.py:2228
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s %(address)s:lla"
 
-#: virtManager/details/details.py:2233 virtManager/details/details.py:2243
+#: virtManager/details/details.py:2234 virtManager/details/details.py:2244
 msgid "Cannot remove controller while devices are attached."
 msgstr "Ohjainta ei voida poistaa, kun laitteet ovat liitettyinä."
 
-#: virtManager/details/details.py:2333
+#: virtManager/details/details.py:2334
 msgid "Hard Disk"
 msgstr "Kiintolevy"
 
-#: virtManager/details/details.py:2334
+#: virtManager/details/details.py:2335
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2335
+#: virtManager/details/details.py:2336
 msgid "Network (PXE)"
 msgstr "Verkko (PXE)"
 
-#: virtManager/details/details.py:2350
+#: virtManager/details/details.py:2351
 msgid "No bootable devices"
 msgstr "Ei käynnistettäviä laitteita"
 
-#: virtManager/details/details.py:2397
+#: virtManager/details/details.py:2398
 msgid "Overview"
 msgstr "Yleistiedot"
 
-#: virtManager/details/details.py:2398
+#: virtManager/details/details.py:2399
 msgid "OS information"
 msgstr "Käyttöjärjestelmän tiedot"
 
-#: virtManager/details/details.py:2400
+#: virtManager/details/details.py:2401
 msgid "Performance"
 msgstr "Suorituskyky"
 
-#: virtManager/details/details.py:2402
+#: virtManager/details/details.py:2403
 msgid "CPUs"
 msgstr "Suorittimet"
 
-#: virtManager/details/details.py:2404
+#: virtManager/details/details.py:2405
 msgid "Boot Options"
 msgstr "Käynnistysvalinnat"
 
@@ -4742,11 +4743,11 @@ msgstr "Valitse tallennustilan taltio"
 msgid "_Show Virtual Machine Manager"
 msgstr "_Näytä virtuaalikoneiden hallitsin"
 
-#: virtManager/virtmanager.py:37
+#: virtManager/virtmanager.py:42
 msgid "Error starting Virtual Machine Manager"
 msgstr "Virhe käynnistäessä Virtuaalikoneiden hallitsinta"
 
-#: virtManager/virtmanager.py:38
+#: virtManager/virtmanager.py:43
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Virhe käynnistäessä Virtuaalikoneiden hallitsinta: %(error)s"
@@ -5423,10 +5424,10 @@ msgid ""
 "dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 msgstr ""
-"Määritä virtuaalikoneen käynnistysturva (esim. SEV-muistin salaus. Esimerkki:"
-"\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
-"BASE64CERT\n"
+"Määritä virtuaalikoneen käynnistysturva (esim. SEV-muistin salaus. "
+"Esimerkki:\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:894
@@ -5665,10 +5666,11 @@ msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] "Vain %(number)s levy väylälle '%(bus)s' tuetaan"
 msgstr[1] "Vain %(number)s levyä väylälle '%(bus)s' tuetaan"
 
-#: virtinst/devices/filesystem.py:117
+#: virtinst/devices/filesystem.py:121
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
-msgstr "Kohteena olevan tiedostojärjestelmän '%s' on oltava absoluuttinen polku"
+msgstr ""
+"Kohteena olevan tiedostojärjestelmän '%s' on oltava absoluuttinen polku"
 
 #: virtinst/devices/graphics.py:20
 #, python-format
@@ -5856,7 +5858,8 @@ msgstr "%s vaatii järjestelmänvalvojan salasanan määrittämisen."
 
 #: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
-msgstr "libosinfo tai osinfo-db on liian vanha tukemaan valvomatonta asennusta."
+msgstr ""
+"libosinfo tai osinfo-db on liian vanha tukemaan valvomatonta asennusta."
 
 #: virtinst/install/unattended.py:198
 #, python-format
@@ -5948,8 +5951,8 @@ msgid ""
 "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This alias "
 "will be removed in the future."
 msgstr ""
-"Käyttöjärjestelmän nimi '%(oldname)s' on vanhentunut ja käyttää '%(newname)"
-"s' sen sijaan. Alias poistetaan tulevaisuudessa."
+"Käyttöjärjestelmän nimi '%(oldname)s' on vanhentunut ja käyttää "
+"'%(newname)s' sen sijaan. Alias poistetaan tulevaisuudessa."
 
 #: virtinst/osdict.py:243
 #, python-format
@@ -6235,8 +6238,8 @@ msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
-"Pyydetty muisti %(mem1)s Mit on vähemmän kuin käyttöjärjestelmälle %(osname)"
-"s suositeltu %(mem2)s Mit"
+"Pyydetty muisti %(mem1)s Mit on vähemmän kuin käyttöjärjestelmälle "
+"%(osname)s suositeltu %(mem2)s Mit"
 
 #: virtinst/virtinstall.py:353
 #, python-format
@@ -6549,7 +6552,8 @@ msgstr "Ei muutosta määritetty."
 #: virtinst/virtxml.py:140
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
-msgstr "Vain yksi muutostoimi voidaan määrittää (ristiriitaiset vaihtoehdot %s)"
+msgstr ""
+"Vain yksi muutostoimi voidaan määrittää (ristiriitaiset vaihtoehdot %s)"
 
 #: virtinst/virtxml.py:153
 #, python-format
