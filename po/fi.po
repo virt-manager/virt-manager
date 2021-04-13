@@ -15,16 +15,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-02-17 06:10+0000\n"
-"PO-Revision-Date: 2021-02-16 05:40+0000\n"
-"Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fi/>\n"
+"PO-Revision-Date: 2021-03-26 15:01+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.5.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -67,7 +67,7 @@ msgstr "Hallitse virtuaalikoneita"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
-msgstr "Tekijänoikeus (C) 2006-2020 Red Hat Inc."
+msgstr "Tekijänoikeus (C) 2006–2020 Red Hat Inc."
 
 #: ui/about.ui:11
 msgid "Powered by libvirt"
@@ -213,7 +213,7 @@ msgstr "Tunnista _nollat:"
 
 #: ui/addstorage.ui:352
 msgid "R_eadonly:"
-msgstr "Vain luku:"
+msgstr "_Luku-vain:"
 
 #: ui/addstorage.ui:366
 msgid "Sharea_ble:"
@@ -362,7 +362,7 @@ msgstr "_Yhdistä"
 
 #: ui/createconn.ui:100
 msgid "_Hypervisor:"
-msgstr "_Hypervisor:"
+msgstr "_Hypervisori:"
 
 #: ui/createconn.ui:122
 msgid "Connect to _remote host over SSH"
@@ -861,7 +861,7 @@ msgstr "<b>Perustiedot</b>"
 
 #: ui/details.ui:398
 msgid "Hypervisor:"
-msgstr "Hypervisor:"
+msgstr "Hypervisori:"
 
 #: ui/details.ui:410
 msgid "Architecture:"
@@ -1246,7 +1246,7 @@ msgstr "<b>Paniikki-ilmoittaja</b>"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
-msgstr "_Vie tiedostojärjestelmä \"vain luku\"-liitoksena"
+msgstr "_Vie tiedostojärjestelmä vain-luku-liitoksena"
 
 #: ui/fsdetails.ui:115
 msgid "_Driver:"
@@ -1506,7 +1506,7 @@ msgstr "Uusi"
 
 #: ui/manager.ui:315
 msgid "Show the virtual machine console and details"
-msgstr "Näytä virtuaalikoneen konsoli ja tiedot"
+msgstr "Näytä virtuaalikoneen konsoli ja yksityiskohdat"
 
 #: ui/manager.ui:317
 msgid "_Open"
@@ -1677,7 +1677,7 @@ msgstr ""
 
 #: ui/oslist.ui:107
 msgid "Include end of life operating systems"
-msgstr "Sisällytä käyttöjärjestelmien käyttöiän loppu"
+msgstr "Sisällytä käyttöjärjestelmien elinkaaren loppu"
 
 #: ui/preferences.ui:14
 msgid "Preferences"
@@ -1999,7 +1999,7 @@ msgstr "Konsoli"
 
 #: ui/vmwindow.ui:334
 msgid "Show virtual hardware details"
-msgstr "Näytä virtuaalilaitteiston tiedot"
+msgstr "Näytä virtuaalilaitteiston yksityiskohdat"
 
 #: ui/vmwindow.ui:335 virtManager/error.py:352
 msgid "Details"
@@ -2312,7 +2312,7 @@ msgstr "Pakota vieraan nollaaminen"
 
 #: virtManager/addhardware.py:556
 msgid "Gracefully shutdown the guest"
-msgstr "Sulje vieras sulavasti"
+msgstr "Sammuta vieras sulavasti"
 
 #: virtManager/addhardware.py:557
 msgid "Forcefully power off the guest"
@@ -2581,6 +2581,7 @@ msgid ""
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
 "Seuraavat levylaitteet jaetaan %(vmname)s:n kanssa:\n"
+"\n"
 "%(pathlist)s\n"
 "Uuden vieraan suorittaminen voi korvata näiden levykuvien tiedot."
 
@@ -2903,7 +2904,7 @@ msgstr "Sovellussäiliö"
 
 #: virtManager/createvm.py:971
 msgid "Operating system container"
-msgstr "Käyttöjärjestelmäsäiliö"
+msgstr "Käyttöjärjestelmäkontti"
 
 #: virtManager/createvm.py:973
 msgid "Virtuozzo container"
@@ -2964,7 +2965,7 @@ msgid ""
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
-"Juuritiedostojärjestelmän luominen ei-tyhjään hakemistoon saattaa "
+"Juuritiedostojärjestelmän luominen ei-tyhjään hakemistoon saattaa\n"
 "epäonnistua tiedostoristiriitojen vuoksi. Haluatko jatkaa?"
 
 #: virtManager/createvm.py:1498
@@ -3212,7 +3213,7 @@ msgstr "Hallitsematonta lohkolaitetta ei voi poistaa."
 
 #: virtManager/delete.py:588
 msgid "Storage is read-only."
-msgstr "Tallennustila on \"vain luku\"-muotoa."
+msgstr "Tallennustila on vain-luku:na."
 
 #: virtManager/delete.py:590
 msgid "No write access to path."
@@ -3949,7 +3950,7 @@ msgstr "Auto_maattinen (Port %(port)d)"
 
 #: virtManager/device/mediacombo.py:67
 msgid "No media selected"
-msgstr "Ei mediaa valittu"
+msgstr "Ei mediaa valittuna"
 
 #: virtManager/device/mediacombo.py:100
 msgid "Media Unknown"
@@ -5173,7 +5174,7 @@ msgid ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 msgstr ""
-"Määritä vieraanäyttöasetukset. Esimerkki:\n"
+"Määritä vieraan näyttöasetukset. Esimerkki:\n"
 "--graphics spice\n"
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
@@ -5599,7 +5600,7 @@ msgstr "rbd-taltioiden kloonausta ei vielä tueta."
 
 #: virtinst/cloner.py:197
 msgid "Read Only"
-msgstr "Vain luku"
+msgstr "Vain-luku"
 
 #: virtinst/cloner.py:199
 msgid "Marked as shareable"
@@ -5894,7 +5895,7 @@ msgstr "Käytetään valvomatonta profiilia '%s'"
 
 #: virtinst/install/urldetect.py:311
 msgid "The URL could not be accessed, maybe you mistyped?"
-msgstr "URL-osoitetta ei voitu saavuta; ehkä kirjoitit väärin."
+msgstr "URL:ta ei voitu saavuta; ehkä kirjoitit väärin?"
 
 #: virtinst/install/urldetect.py:313
 #, python-format
@@ -6118,8 +6119,8 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
-"Pakota laitteiden kopiointi (esim. jos \"hdc\" on vain luku cdrom-laite, --"
-"force-copy=hdc)"
+"Pakota laitteiden kopiointi (esim. jos 'hdc' on vain-luku-cd-rom-laite, "
+"'--force-copy=hdc')"
 
 #: virtinst/virtclone.py:101
 msgid ""
