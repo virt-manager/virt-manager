@@ -14,11 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-02-11 06:11+0000\n"
+"POT-Creation-Date: 2021-02-17 06:10+0000\n"
 "PO-Revision-Date: 2021-02-16 05:40+0000\n"
 "Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2877,7 +2877,7 @@ msgid "No active connection to install on."
 msgstr "Ei aktiivista yhteyttä, johon asenta."
 
 #: virtManager/createvm.py:947 virtManager/details/details.py:1771
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:228
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:236
 msgid "None"
 msgstr "Ei mitään"
 
@@ -5540,23 +5540,23 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr "Tuntematon autokonsolityyppi '%s'"
 
-#: virtinst/cli.py:3273
+#: virtinst/cli.py:3285
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Virheellinen arvo 'koko':lle: %s"
 
-#: virtinst/cli.py:3286
+#: virtinst/cli.py:3298
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Tuntematon '%(optionname)s' arvo '%(string)s'"
 
-#: virtinst/cli.py:3301
+#: virtinst/cli.py:3313
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Tallennustilan taltio on määritettävä seuraavasti: vol=varannon nimi/taltion "
 "nimi"
 
-#: virtinst/cli.py:3746
+#: virtinst/cli.py:3758
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Odotettu PCI-muotoinen merkkijono '%s':lle"
@@ -5747,21 +5747,21 @@ msgstr "SEV-käynnistysturva vaatii Q35 UEFI -koneen"
 msgid "SEV launch security is not supported on this platform"
 msgstr "SEV-käynnistysturvaa ei tueta tällä alustalla"
 
-#: virtinst/domcapabilities.py:227
+#: virtinst/domcapabilities.py:235
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:233
+#: virtinst/domcapabilities.py:241
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:236
+#: virtinst/domcapabilities.py:244
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Mukautettu: %(path)s"
 
-#: virtinst/domcapabilities.py:312
+#: virtinst/domcapabilities.py:320
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Laajennetun suorittimen XML:n saaminen epäonnistui: %s"
@@ -6118,8 +6118,8 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
-"Pakota laitteiden kopiointi (esim. jos \"hdc\" on vain luku cdrom-laite, "
-"--force-copy=hdc)"
+"Pakota laitteiden kopiointi (esim. jos \"hdc\" on vain luku cdrom-laite, --"
+"force-copy=hdc)"
 
 #: virtinst/virtclone.py:101
 msgid ""
@@ -6216,8 +6216,8 @@ msgstr ""
 #: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
-"Ei voi määritellä enempää kuin yhden vaihtoehdon: VNC, SDL, --graphics tai "
-"--nographics"
+"Ei voi määritellä enempää kuin yhden vaihtoehdon: VNC, SDL, --graphics tai --"
+"nographics"
 
 #: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
@@ -6444,8 +6444,8 @@ msgstr "Rakenna vierasjärjestelmä olemassa olevan levykuvan ympärille"
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
-"Muita argumentteja välitettäväksi asennus ytimelle joka on käynnistetty "
-"--location"
+"Muita argumentteja välitettäväksi asennus ytimelle joka on käynnistetty --"
+"location"
 
 #: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
