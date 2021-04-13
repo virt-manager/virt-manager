@@ -9,15 +9,16 @@
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2018. #zanata
 # Ricky Tigg <ricky.tigg@gmail.com>, 2020, 2021.
+# Jan Kuparinen <copper_fin@hotmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-02-11 06:11+0000\n"
-"PO-Revision-Date: 2021-02-11 14:40+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fi/>\n"
+"PO-Revision-Date: 2021-02-16 05:40+0000\n"
+"Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4648,7 +4649,7 @@ msgstr "Gluster-tiedostojärjestelmä"
 
 #: virtManager/object/storagepool.py:34
 msgid "RADOS Block Device/Ceph"
-msgstr ""
+msgstr "RADOS Lohkolaite/Ceph"
 
 #: virtManager/object/storagepool.py:35
 msgid "Sheepdog Filesystem"
@@ -5034,7 +5035,7 @@ msgstr ""
 #: virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
-msgstr ""
+msgstr " (Käytä --check %s=off tai --check all=off ohittaaksesi)"
 
 #: virtinst/cli.py:352
 #, python-format
@@ -5675,7 +5676,7 @@ msgstr ""
 #: virtinst/devices/graphics.py:20
 #, python-format
 msgid "%s must be above 5900, or -1 for auto allocation"
-msgstr ""
+msgstr "%s täytyy olla yli 5900, tai -1 automaattiseen varaukseen"
 
 #: virtinst/devices/hostdev.py:61
 #, python-format
@@ -5816,11 +5817,11 @@ msgstr "Asennusmedian '%(media)s' vahvistaminen epäonnistui: %(error)s"
 
 #: virtinst/install/installertreemedia.py:116
 msgid "location kernel/initrd may only be specified with a location URL/path"
-msgstr ""
+msgstr "paikka kernel/initrd voidaan määrittää vain paikka URL/path:n kanssa"
 
 #: virtinst/install/installertreemedia.py:119
 msgid "location kernel/initrd must be be specified as a pair"
-msgstr ""
+msgstr "paikka kernel/initrd täytyy antaa parina"
 
 #: virtinst/install/installertreemedia.py:142
 #, python-format
@@ -5865,7 +5866,7 @@ msgstr ""
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
-msgstr ""
+msgstr "OS '%(osname)s' ei tue pyydettyä injektiometodia '%(methodname)s'"
 
 #: virtinst/install/unattended.py:335
 #, python-format
@@ -5883,6 +5884,8 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
+"OS '%(osname)s' ei tue '%(profilename)s' profiilin valvomatonta asennusta. "
+"Saatavilla olevat profiilit: %(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -5971,7 +5974,7 @@ msgstr "Käyttöjärjestelmällä '%s' ei ole URL-sijaintia"
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
-msgstr ""
+msgstr "OS '%(osname)s' ei ole URL paikkaa arkkitehtuurille '%(archname)s'"
 
 #: virtinst/storage.py:166
 #, python-format
@@ -6051,6 +6054,8 @@ msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
+"Alkuperäisen koneen nimi vaaditaan, käytä '--original lähteen_nimi' ja yritä "
+"uudelleen."
 
 #: virtinst/virtclone.py:69
 msgid ""
@@ -6098,7 +6103,7 @@ msgstr "Uuden vierasjärjestelmän nimi"
 
 #: virtinst/virtclone.py:91
 msgid "use btrfs COW lightweight copy"
-msgstr ""
+msgstr "käytä btrfs COW kevyttä kopiointia"
 
 #: virtinst/virtclone.py:93
 msgid "Storage Configuration"
@@ -6113,12 +6118,16 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
+"Pakota laitteiden kopiointi (esim. jos \"hdc\" on vain luku cdrom-laite, "
+"--force-copy=hdc)"
 
 #: virtinst/virtclone.py:101
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
+"Ohita kopio laitekohteesta. (esim. jos 'vda' on levy, jota et halua kopioida "
+"ja käyttää samaa polkua uudessa virtuaalikoneessa, käytä --skip-copy=vda)"
 
 #: virtinst/virtclone.py:106
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6159,6 +6168,8 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
+"Joko --auto-clone tai --file vaaditaan, käytä '--auto-clone tai --file' ja "
+"yritä uudelleen."
 
 #: virtinst/virtclone.py:181
 msgid ""
@@ -6182,6 +6193,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"-c määritelty, joka näyttää libvirt-URI:lta. Tarkoititko käyttää --connect? "
+"Jos et, käytä sen sijaan --cdrom"
 
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
@@ -6192,14 +6205,19 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
+"Ei voi sekoittaa --file, --nonsparse, tai --file-size --disk vaihtoehtojen "
+"kanssa. Käytä --disk POLKU[,size=KOKO][,sparse=yes|no]"
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr ""
+"Ei voi sekoittaa --graphics vanhan tyylisten grafiikan vaihtoehtojen kanssa"
 
 #: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
+"Ei voi määritellä enempää kuin yhden vaihtoehdon: VNC, SDL, --graphics tai "
+"--nographics"
 
 #: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
@@ -6264,27 +6282,27 @@ msgstr ""
 #: virtinst/virtinstall.py:380
 #, python-brace-format
 msgid "Using {osname} --location {url}"
-msgstr ""
+msgstr "Käytetään {osname} --location {url}"
 
 #: virtinst/virtinstall.py:459
 #, python-brace-format
 msgid "Using default --name {vm_name}"
-msgstr ""
+msgstr "Käytetään oletuksena --name {vm_name}"
 
 #: virtinst/virtinstall.py:469
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
-msgstr ""
+msgstr "Käytetään kontin oletusarvoja --memory {megabytes}"
 
 #: virtinst/virtinstall.py:488
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
-msgstr ""
+msgstr "Käytetään {os_name} oletusarvoja --memory {megabytes}"
 
 #: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
-msgstr ""
+msgstr "Käytetään {os_name} oletusarvoa --disk {disk_options}"
 
 #: virtinst/virtinstall.py:549
 #, python-format
@@ -6293,11 +6311,11 @@ msgstr "Virhe vahvistaessa asennussijaintia: %s"
 
 #: virtinst/virtinstall.py:552
 msgid "An --os-variant is required, but no value was set or detected."
-msgstr ""
+msgstr "--Os-variant vaaditaan, mutta arvoa ei asetettu eikä havaittu."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
-msgstr ""
+msgstr "Ei vieraalle käynnistettävää konsolia, ajetaan oletuksena --wait -1"
 
 #: virtinst/virtinstall.py:661
 msgid "Waiting for the installation to complete."
@@ -6388,7 +6406,7 @@ msgstr "Tuntematon XML-vaihepyyntö '%s', on oltava 1, 2 tai kaikki"
 
 #: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
-msgstr ""
+msgstr "Pyydetyllä asennuksella ei ole XML vaihtetta 2"
 
 #: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
@@ -6426,10 +6444,12 @@ msgstr "Rakenna vierasjärjestelmä olemassa olevan levykuvan ympärille"
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
+"Muita argumentteja välitettäväksi asennus ytimelle joka on käynnistetty "
+"--location"
 
 #: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
-msgstr ""
+msgstr "Lisää annettu tiedosto initrd:n roottiin --location:sta"
 
 #: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
@@ -6517,7 +6537,7 @@ msgstr "Virheellinen --edit-valinta '%s'"
 #: virtinst/virtxml.py:84
 #, python-format
 msgid "No --%s objects found in the XML"
-msgstr ""
+msgstr "Yhtään --%s objektia ei löydetty XML:stä"
 
 #: virtinst/virtxml.py:87
 #, python-format
@@ -6528,7 +6548,11 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
+"'--edit %(number)s' pyydetty, mutta XML:ssä on vain %(max)s --%(type)s "
+"objekti"
 msgstr[1] ""
+"'--edit %(number)s' pyydetty, mutta XML:ssä on vain %(max)s --%(type)s "
+"objektia"
 
 #: virtinst/virtxml.py:108
 #, python-format
@@ -6561,38 +6585,40 @@ msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
 "'--edit'"
 msgstr ""
+"'--edit %(option)s' on merkityksetön käytettäessä --%(objecttype)s, käytä "
+"sen sijaan tyhjää '--edit'"
 
 #: virtinst/virtxml.py:158
 msgid "--os-variant is not supported with --edit"
-msgstr ""
+msgstr "--os-variant ei tueta --edit parametrin kanssa"
 
 #: virtinst/virtxml.py:165
 #, python-format
 msgid "Cannot use --add-device with --%s"
-msgstr ""
+msgstr "Ei pysty käyttämään --add-device --%s:n kanssa"
 
 #: virtinst/virtxml.py:176
 #, python-format
 msgid "Cannot use --remove-device with --%s"
-msgstr ""
+msgstr "Ei pysty käyttämään --remove-device --%s:n kanssa"
 
 #: virtinst/virtxml.py:179
 msgid "--os-variant is not supported with --remove-device"
-msgstr ""
+msgstr "--os-variant ei tueta --remove-device parametrin kanssa"
 
 #: virtinst/virtxml.py:199
 #, python-format
 msgid "--build-xml not supported for --%s"
-msgstr ""
+msgstr "--build-xml ei tueta --%s:lle"
 
 #: virtinst/virtxml.py:202
 msgid "--os-variant is not supported with --build-xml"
-msgstr ""
+msgstr "--os-variant ei tueta --build-xml kanssa"
 
 #: virtinst/virtxml.py:228
 #, python-format
 msgid "Define '%s' with the changed XML?"
-msgstr ""
+msgstr "Määrittele '%s' muuttuneella XML:llä?"
 
 #: virtinst/virtxml.py:236
 #, python-format
@@ -6602,7 +6628,7 @@ msgstr "Toimialue '%s' määritetty onnistuneesti."
 #: virtinst/virtxml.py:243
 #, python-format
 msgid "Start '%s' with the changed XML?"
-msgstr ""
+msgstr "Aloita '%s' muuttuneella XML:llä?"
 
 #: virtinst/virtxml.py:253 virtinst/virtxml.py:537
 #, python-format
@@ -6627,7 +6653,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:266
 msgid "Device hotplug successful."
-msgstr ""
+msgstr "Laitteen yhdistäminen käynnissä olevaan laitteeseen onnistui."
 
 #: virtinst/virtxml.py:267
 #, python-format
@@ -6647,7 +6673,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:271
 msgid "Device hotunplug successful."
-msgstr ""
+msgstr "Laitteen irroittaminen käynnissä olevasta laitteesta onnistui."
 
 #: virtinst/virtxml.py:272
 #, python-format
@@ -6676,15 +6702,15 @@ msgstr "Virhe yritettäessä laitteen päivitystä: %(error)s"
 
 #: virtinst/virtxml.py:315
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml voidaan käyttää vain --edit:n kanssa"
 
 #: virtinst/virtxml.py:337
 msgid "No XML diff was generated. The requested changes will have no effect."
-msgstr ""
+msgstr "XML-diff:iä ei luotu. Pyydetyillä muutoksilla ei ole vaikutusta."
 
 #: virtinst/virtxml.py:356
 msgid "Edit libvirt XML using command line options."
-msgstr ""
+msgstr "Muokkaa libvirt-XML:ää käyttäen komentokehoitteen vaihtoehtoja."
 
 #: virtinst/virtxml.py:362
 msgid "Domain name, id, or uuid"
@@ -6702,6 +6728,11 @@ msgid ""
 "--edit all --disk ... (edit all disk devices)\n"
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
+"Muokkaa VM XML:ää. Esimerkkejä:\n"
+"--edit --disk ...     (muokkaa ensimmäistä levylaitetta)\n"
+"--edit 2 --disk ...   (muokkaa toista levylaitetta)\n"
+"--edit all --disk ... (muokkaa kaikkia levylaitteita)\n"
+"--edit target=hda --disk ... (muokkaa levyä 'hda')\n"
 
 #: virtinst/virtxml.py:372
 msgid ""
@@ -6780,11 +6811,11 @@ msgstr "XML-valinnat"
 
 #: virtinst/virtxml.py:447
 msgid "Can't use --confirm with stdin input."
-msgstr ""
+msgstr "--confirm ei voi käyttää oletus sisääntulon kanssa."
 
 #: virtinst/virtxml.py:449
 msgid "Can't use --update with stdin input."
-msgstr ""
+msgstr "--update ei voi käyttää oletus sisääntulon kanssa."
 
 #: virtinst/virtxml.py:452
 msgid "A domain must be specified"
@@ -6797,7 +6828,7 @@ msgstr "Ei tiedä miten '--update' --%s:lle"
 
 #: virtinst/virtxml.py:513
 msgid "The VM is not running, --update is inapplicable."
-msgstr ""
+msgstr "Virtuaalikone ei ole käynnissä, --update ei ole sovellettavissa."
 
 #: virtinst/virtxml.py:546
 msgid "Changes will take effect after the domain is fully powered off."
@@ -6822,17 +6853,19 @@ msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
+"XML ei sisältänyt oletettua juurielementtiä '%(expectname)s', löytyi "
+"'%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:487
 #, python-format
 msgid "A name must be specified for the %s"
-msgstr ""
+msgstr "Nimi täytyy antaa %s:lle"
 
 #: virtinst/xmlbuilder.py:492
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
-msgstr ""
+msgstr "%(objecttype)s nimi '%(name)s' ei voi sisältää '%(char)s' merkkejä."
 
 #~ msgid "Default"
 #~ msgstr "Oletus"
