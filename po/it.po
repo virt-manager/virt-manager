@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2020-11-17 06:10+0000\n"
-"PO-Revision-Date: 2020-11-15 21:35+0000\n"
+"PO-Revision-Date: 2020-12-02 09:49+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1553,7 +1553,7 @@ msgstr "Migra la macchina virtuale"
 
 #: ui/migrate.ui:107
 msgid "Migrating VM:"
-msgstr "Migrazione VM:"
+msgstr "VM da migrare:"
 
 #: ui/migrate.ui:123
 msgid "Original host:"
@@ -1635,10 +1635,10 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"Normalmente la configurazione della macchina virtuale viene rimossa "
-"dall’host sorgente e salvata definitivamente sull’host di destinazione. "
-"L’host di destinazione è considerato la nuova \"casa\" della macchina "
-"virtuale.\n"
+"Normalmente la configurazione della macchina virtuale migrata viene rimossa "
+"dall’host sorgente e salvata definitivamente sull’host di destinazione. L’"
+"host di destinazione è considerato la nuova \"casa\" della macchina virtuale."
+"\n"
 "\n"
 "Se \"Spostamento temporaneo\" è attivato, la migrazione è considerata solo "
 "un trasferimento temporaneo: l’host sorgente mantiene una copia della "
@@ -5619,10 +5619,9 @@ msgid "Disk path '%s' does not exist."
 msgstr "Il percorso del disco '%s' non esiste."
 
 #: virtinst/cloner.py:181
-#, fuzzy, python-format
-#| msgid "Architecture '%s' is not installable"
+#, python-format
 msgid "Disk network type '%s' is not cloneable."
-msgstr "L'architettura '%s' non si può installare"
+msgstr "Il tipo di disco di rete '%s' non si può installare."
 
 #: virtinst/cloner.py:184
 #, python-format
@@ -5630,12 +5629,8 @@ msgid "Cloning disk network type '%s' requires managed storage."
 msgstr ""
 
 #: virtinst/cloner.py:190
-#, fuzzy
-#| msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgid "Cloning rbd volumes is not yet supported."
-msgstr ""
-"La clonazione in un volume di storage esistente non è al momento supportata: "
-"'%s'"
+msgstr "La clonazione di volumi rbd non è al momento supportata."
 
 #: virtinst/cloner.py:197
 msgid "Read Only"
