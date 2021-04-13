@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-10-23 06:14+0000\n"
+"POT-Creation-Date: 2020-11-15 06:09+0000\n"
 "PO-Revision-Date: 2020-10-06 14:30+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
@@ -95,7 +95,7 @@ msgid "_Bus type:"
 msgstr "_Veri yolu türü:"
 
 #: ui/addhardware.ui:263 ui/addhardware.ui:532 ui/addhardware.ui:1145
-#: ui/createpool.ui:354 ui/fsdetails.ui:226 ui/gfxdetails.ui:106
+#: ui/createpool.ui:354 ui/fsdetails.ui:87 ui/gfxdetails.ui:106
 msgid "_Type:"
 msgstr "_Tür:"
 
@@ -319,7 +319,7 @@ msgstr "Yeni _Yol:"
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr "Sanal makine için yeni bir disk(k_lon) oluşturun"
 
-#: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:63
 msgid "_Browse..."
 msgstr "_Göz at..."
 
@@ -734,7 +734,7 @@ msgstr "C_PU:"
 msgid "(Insert host mem)"
 msgstr "(Ana makine belleğini gir)"
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2414
+#: ui/createvm.ui:1995 virtManager/details/details.py:2403
 msgid "Memory"
 msgstr "Bellek"
 
@@ -743,7 +743,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "Bu sanal makine için depolamayı etkinleştir"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1003 virtManager/clone.py:276
+#: virtManager/addhardware.py:1002 virtManager/clone.py:277
 msgid "Storage"
 msgstr "Depolama"
 
@@ -998,7 +998,7 @@ msgstr "Toplam ana makine belleği:"
 msgid "50"
 msgstr "50"
 
-#: ui/details.ui:1756 ui/details.ui:1805 ui/fsdetails.ui:357
+#: ui/details.ui:1756 ui/details.ui:1805 ui/fsdetails.ui:204
 msgid "MiB"
 msgstr "MiB"
 
@@ -1195,7 +1195,7 @@ msgstr "<b>Denetleyici</b>"
 msgid "<b>Filesystem</b>"
 msgstr "<b>Dosya Sistemi</b>"
 
-#: ui/details.ui:4146 ui/fsdetails.ui:240 ui/migrate.ui:391
+#: ui/details.ui:4146 ui/fsdetails.ui:101 ui/migrate.ui:391
 msgid "M_ode:"
 msgstr "M_od:"
 
@@ -1243,28 +1243,19 @@ msgstr "panic-model"
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>Panik Bildirici</b>"
 
-#: ui/fsdetails.ui:71 ui/fsdetails.ui:106 ui/fsdetails.ui:141
-#: ui/fsdetails.ui:413
-msgid "Default"
-msgstr "Öntanımlı"
-
-#: ui/fsdetails.ui:169
+#: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
 msgstr "Dosya sistemini salt okunur bağlama noktası olarak dışa a_ktar"
 
-#: ui/fsdetails.ui:254
+#: ui/fsdetails.ui:115
 msgid "_Driver:"
 msgstr "_Sürücü:"
 
-#: ui/fsdetails.ui:268
-msgid "_Write Policy:"
-msgstr "_Yazma Politikası:"
-
-#: ui/fsdetails.ui:296
+#: ui/fsdetails.ui:143
 msgid "Ta_rget path:"
 msgstr "He_def yol:"
 
-#: ui/fsdetails.ui:376
+#: ui/fsdetails.ui:223
 msgid "_Format:"
 msgstr "_Biçim:"
 
@@ -2072,16 +2063,16 @@ msgstr "Donanım"
 msgid "Connection does not support storage management."
 msgstr "Bağlantı depolama yönetimini desteklememektedir."
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1004
 msgid "Controller"
 msgstr "Denetleyici"
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1006
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr "Ağ"
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1009
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1008
 #: virtManager/details/details.py:194
 msgid "Input"
 msgstr "Girdi"
@@ -2092,11 +2083,11 @@ msgstr "Girdi"
 msgid "Not supported for this guest type."
 msgstr "Bu konuk türü için desteklenmiyor."
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1011
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1010
 msgid "Graphics"
 msgstr "Grafikler"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1013
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1012
 msgid "Sound"
 msgstr "Ses"
 
@@ -2141,16 +2132,16 @@ msgstr "Gözlemci"
 msgid "Filesystem"
 msgstr "Dosya Sistemi"
 
-#: virtManager/addhardware.py:258 virtManager/addhardware.py:1021
+#: virtManager/addhardware.py:258 virtManager/addhardware.py:1020
 #: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "Akıllı Kart"
 
-#: virtManager/addhardware.py:260 virtManager/addhardware.py:1023
+#: virtManager/addhardware.py:260 virtManager/addhardware.py:1022
 msgid "USB Redirection"
 msgstr "USB Yönlendirme"
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1025
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1024
 msgid "TPM"
 msgstr "TPM"
 
@@ -2158,7 +2149,7 @@ msgstr "TPM"
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1029
+#: virtManager/addhardware.py:265 virtManager/addhardware.py:1028
 #: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "Panik Bildirici"
@@ -2171,281 +2162,281 @@ msgstr "Bu hipervizör/libvirt/mimari birleşimi için desteklenmiyor."
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:340
+#: virtManager/addhardware.py:339
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "SM yapılandırması değiştirilirken hata: %s"
 
-#: virtManager/addhardware.py:365
+#: virtManager/addhardware.py:364
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 "Bu değişiklikler konuğun bir sonraki kapanışından sonra geçerli olacaktır."
 
-#: virtManager/addhardware.py:415
+#: virtManager/addhardware.py:414
 msgid "Pseudo TTY"
 msgstr "Sözde (Pseudo) TTY"
 
-#: virtManager/addhardware.py:416
+#: virtManager/addhardware.py:415
 msgid "Output to a file"
 msgstr "Bir dosyaya çıktı al"
 
-#: virtManager/addhardware.py:417
+#: virtManager/addhardware.py:416
 msgid "TCP net console"
 msgstr "TCP ağ konsolu"
 
-#: virtManager/addhardware.py:418
+#: virtManager/addhardware.py:417
 msgid "UDP net console"
 msgstr "UDP ağ konsolu"
 
-#: virtManager/addhardware.py:419
+#: virtManager/addhardware.py:418
 msgid "UNIX socket"
 msgstr "UNIX soketi"
 
-#: virtManager/addhardware.py:420
+#: virtManager/addhardware.py:419
 msgid "Spice agent"
 msgstr "Spice aracısı"
 
-#: virtManager/addhardware.py:421
+#: virtManager/addhardware.py:420
 msgid "Spice port"
 msgstr "Spice bağlantı noktası"
 
-#: virtManager/addhardware.py:435 virtManager/addhardware.py:496
+#: virtManager/addhardware.py:434 virtManager/addhardware.py:495
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2347
+#: virtManager/addhardware.py:435 virtManager/details/details.py:2336
 msgid "Floppy"
 msgstr "Disket"
 
-#: virtManager/addhardware.py:437 virtManager/addhardware.py:498
+#: virtManager/addhardware.py:436 virtManager/addhardware.py:497
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:438 virtManager/addhardware.py:497
+#: virtManager/addhardware.py:437 virtManager/addhardware.py:496
 msgid "SATA"
 msgstr "SATA"
 
-#: virtManager/addhardware.py:439
+#: virtManager/addhardware.py:438
 msgid "VirtIO Serial"
 msgstr "VirtIO Seri"
 
-#: virtManager/addhardware.py:440 virtManager/addhardware.py:500
-#: virtManager/addhardware.py:578
+#: virtManager/addhardware.py:439 virtManager/addhardware.py:499
+#: virtManager/addhardware.py:577
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:441
+#: virtManager/addhardware.py:440
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:442
+#: virtManager/addhardware.py:441
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:443
+#: virtManager/addhardware.py:442
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:451 virtManager/addhardware.py:921
+#: virtManager/addhardware.py:450 virtManager/addhardware.py:920
 msgid "VirtIO SCSI"
 msgstr "VirtIO SCSI"
 
-#: virtManager/addhardware.py:454
+#: virtManager/addhardware.py:453
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:499
+#: virtManager/addhardware.py:498
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
+#: virtManager/addhardware.py:500 virtManager/addhardware.py:578
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:502 virtManager/addhardware.py:580
+#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:509
+#: virtManager/addhardware.py:508
 msgid "Passthrough device"
 msgstr "Geçiş (passthrough) aygıtı"
 
-#: virtManager/addhardware.py:510
+#: virtManager/addhardware.py:509
 msgid "Emulated device"
 msgstr "Öykünülmüş (emulated) aygıt"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:516
 msgid "TIS"
 msgstr "TIS"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:517
 msgid "CRB"
 msgstr "CRB"
 
-#: virtManager/addhardware.py:519
+#: virtManager/addhardware.py:518
 msgid "SPAPR"
 msgstr "SPAPR"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:525
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:526
 msgid "pSeries"
 msgstr "pSeries"
 
-#: virtManager/addhardware.py:528
+#: virtManager/addhardware.py:527
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: virtManager/addhardware.py:529
+#: virtManager/addhardware.py:528
 msgid "s390"
 msgstr "s390"
 
-#: virtManager/addhardware.py:536
+#: virtManager/addhardware.py:535
 msgid "Random"
 msgstr "Rastgele"
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:536
 msgid "Entropy Gathering Daemon"
 msgstr "Entropi Toplama Hizmeti"
 
-#: virtManager/addhardware.py:538
+#: virtManager/addhardware.py:537
 msgid "Builtin RNG"
 msgstr "Yerleşik Rastgele Sayı Üreteci"
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:555
 msgid "Forcefully reset the guest"
 msgstr "Konuğu zorla sıfırla"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:556
 msgid "Gracefully shutdown the guest"
 msgstr "Konuğu düzgün bir şekilde kapat"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:557
 msgid "Forcefully power off the guest"
 msgstr "Konuğu zorla kapat"
 
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:558
 msgid "Pause the guest"
 msgstr "Konuğu duraklat"
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:559
 msgid "No action"
 msgstr "Eylem yok"
 
-#: virtManager/addhardware.py:561
+#: virtManager/addhardware.py:560
 msgid "Dump guest memory core"
 msgstr "Konuğun bellek içeriğini dök"
 
-#: virtManager/addhardware.py:568
+#: virtManager/addhardware.py:567
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouct USB Grafik Tableti"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:193
+#: virtManager/addhardware.py:570 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "Klavye"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:191
+#: virtManager/addhardware.py:571 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "Fare"
 
-#: virtManager/addhardware.py:573 virtManager/details/details.py:189
+#: virtManager/addhardware.py:572 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "Tablet"
 
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:576
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:586
+#: virtManager/addhardware.py:585
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:681
+#: virtManager/addhardware.py:680
 msgid "Disk device"
 msgstr "Disk sürücü"
 
-#: virtManager/addhardware.py:683
+#: virtManager/addhardware.py:682
 msgid "CDROM device"
 msgstr "CDROM sürücü"
 
-#: virtManager/addhardware.py:685
+#: virtManager/addhardware.py:684
 msgid "Floppy device"
 msgstr "Disket sürücü"
 
-#: virtManager/addhardware.py:688
+#: virtManager/addhardware.py:687
 msgid "LUN Passthrough"
 msgstr "LUN geçişi (passthrough)"
 
-#: virtManager/addhardware.py:711 virtManager/addhardware.py:792
-#: virtManager/addhardware.py:802 virtManager/addhardware.py:922
+#: virtManager/addhardware.py:710 virtManager/addhardware.py:791
+#: virtManager/addhardware.py:801 virtManager/addhardware.py:921
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:103
-#: virtManager/preferences.py:169
+#: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
+#: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "Hipervizör öntanımlı değeri"
 
-#: virtManager/addhardware.py:782
+#: virtManager/addhardware.py:781
 msgid "No Devices Available"
 msgstr "Uygun Aygıt Yok"
 
-#: virtManager/addhardware.py:839
+#: virtManager/addhardware.py:838
 msgid "Passthrough"
 msgstr "Geçiş (passthrough)"
 
-#: virtManager/addhardware.py:840
+#: virtManager/addhardware.py:839
 msgid "Host"
 msgstr "Ana makine"
 
-#: virtManager/addhardware.py:846
+#: virtManager/addhardware.py:845
 msgid "Spice channel"
 msgstr "Spice kanalı"
 
-#: virtManager/addhardware.py:918
+#: virtManager/addhardware.py:917
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:919
+#: virtManager/addhardware.py:918
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:1015
+#: virtManager/addhardware.py:1014
 msgid "Video Device"
 msgstr "Video Aygıtı"
 
-#: virtManager/addhardware.py:1017
+#: virtManager/addhardware.py:1016
 msgid "Watchdog Device"
 msgstr "Gözlemci Aygıt"
 
-#: virtManager/addhardware.py:1019
+#: virtManager/addhardware.py:1018
 msgid "Filesystem Passthrough"
 msgstr "Dosya Sistemi Geçişi (Passthrough)"
 
-#: virtManager/addhardware.py:1027
+#: virtManager/addhardware.py:1026
 msgid "Random Number Generator"
 msgstr "Rastgele Sayı Üreteci"
 
-#: virtManager/addhardware.py:1031
+#: virtManager/addhardware.py:1030
 msgid "VM Sockets"
 msgstr "SM Soketleri"
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2130
+#: virtManager/addhardware.py:1034 virtManager/details/details.py:2120
 #, python-format
 msgid "%s Device"
 msgstr "%s Aygıtı"
 
-#: virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:1038
 msgid "PCI Device"
 msgstr "PCI Aygıtı"
 
-#: virtManager/addhardware.py:1040
+#: virtManager/addhardware.py:1039
 msgid "USB Device"
 msgstr "USB Aygıtı"
 
-#: virtManager/addhardware.py:1173
+#: virtManager/addhardware.py:1172
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2456,11 +2447,11 @@ msgstr ""
 "Birden fazla USB denetleyicisinin eklenmesi desteklenmiyor.\n"
 "USB denetleyici türünü SM ayrıntıları ekranında değiştirebilirsiniz."
 
-#: virtManager/addhardware.py:1265
+#: virtManager/addhardware.py:1264
 msgid "Are you sure you want to add this device?"
 msgstr "Bu aygıtı eklemek istediğinize emin misiniz?"
 
-#: virtManager/addhardware.py:1268
+#: virtManager/addhardware.py:1267
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2468,34 +2459,34 @@ msgstr ""
 "Bu aygıt çalışmakta olan bir makineye takılamadı. Konuğun bir sonraki "
 "kapanmasından sonra aygıtı kullanılabilir kılmak ister misiniz?"
 
-#: virtManager/addhardware.py:1292
+#: virtManager/addhardware.py:1291
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Aygıt eklenemedi: %s"
 
-#: virtManager/addhardware.py:1313
+#: virtManager/addhardware.py:1312
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "Aygıt parametreleri doğrulanırken hata oluştu: %s"
 
-#: virtManager/addhardware.py:1319
+#: virtManager/addhardware.py:1318
 msgid "Creating device"
 msgstr "Aygıt oluşturuluyor"
 
-#: virtManager/addhardware.py:1320
+#: virtManager/addhardware.py:1319
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "Aygıta bağlı olarak bu işlemin tamamlanması birkaç dakika sürebilir."
 
-#: virtManager/addhardware.py:1342
+#: virtManager/addhardware.py:1341
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Aygıt zaten diğer konuklar (%s) tarafından kullanılıyor"
 
-#: virtManager/addhardware.py:1344
+#: virtManager/addhardware.py:1343
 msgid "Do you really want to use the device?"
 msgstr "Aygıtı gerçekten kullanmak istiyor musunuz?"
 
-#: virtManager/addhardware.py:1389
+#: virtManager/addhardware.py:1388
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "Aygıt XML'i derlenirken hata oluştu: %s"
@@ -2508,66 +2499,66 @@ msgstr "İş iptal ediliyor..."
 msgid "Completed"
 msgstr "Tamamlandı"
 
-#: virtManager/clone.py:28 virtinst/cloner.py:181
+#: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
 msgstr "Klonlanacak depolama yok."
 
-#: virtManager/clone.py:110
+#: virtManager/clone.py:111
 #, python-format
 msgid "Disk target: %s"
 msgstr "Disk hedefi: %s"
 
-#: virtManager/clone.py:111
+#: virtManager/clone.py:112
 #, python-format
 msgid "Original path: %s"
 msgstr "Asıl yol: %s"
 
-#: virtManager/clone.py:113
+#: virtManager/clone.py:114
 #, python-format
 msgid "New path: %s"
 msgstr "Yeni yol: %s"
 
-#: virtManager/clone.py:117
+#: virtManager/clone.py:118
 #, python-format
 msgid "Storage is safe to share: %(reason)s"
 msgstr "Depolamanın paylaşılması güvenli: %(reason)s"
 
-#: virtManager/clone.py:121
+#: virtManager/clone.py:122
 msgid "Sharing this storage is potentially dangerous."
 msgstr "Bu depolamayı paylaşmak tehlikeli olabilir."
 
-#: virtManager/clone.py:124
+#: virtManager/clone.py:125
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
 msgstr "Depolama klonlanamaz: %(reason)s"
 
-#: virtManager/clone.py:136
+#: virtManager/clone.py:137
 msgid "No storage."
 msgstr "Depolama yok."
 
-#: virtManager/clone.py:141
+#: virtManager/clone.py:142
 #, python-format
 msgid "Share disk with %s"
 msgstr "Diski %s ile paylaş"
 
-#: virtManager/clone.py:143
+#: virtManager/clone.py:144
 msgid "Clone this disk"
 msgstr "Bu diski klonla"
 
-#: virtManager/clone.py:181
+#: virtManager/clone.py:182
 #, python-format
 msgid "Error launching clone dialog: %s"
 msgstr "Klonlama iletişim kutusu başlatılırken hata oluştu: %s"
 
-#: virtManager/clone.py:275
+#: virtManager/clone.py:276
 msgid "Clone"
 msgstr "Klonla"
 
-#: virtManager/clone.py:456
+#: virtManager/clone.py:457
 msgid "Cloning will overwrite the existing file"
 msgstr "Klonlama eylemi var olan dosya üzerine yazmaya sebebiyet verecek"
 
-#: virtManager/clone.py:457
+#: virtManager/clone.py:458
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2575,11 +2566,11 @@ msgstr ""
 "Var olan bir kalıbı kullanmak, klonlama işlemi sırasında yolun üzerine "
 "yazacaktır. Bu yolu kullanmak istediğinizden emin misiniz?"
 
-#: virtManager/clone.py:486
+#: virtManager/clone.py:487
 msgid "Sharing storage may cause data to be overwritten."
 msgstr "Depolamayı paylaşmak verilerin üzerine yazılmasına neden olabilir."
 
-#: virtManager/clone.py:487
+#: virtManager/clone.py:488
 #, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
@@ -2592,22 +2583,22 @@ msgstr ""
 "%(pathlist)s\n"
 "Yeni konuğu çalıştırmak, bu disk kalıbındaki verilerin üzerine yazabilir."
 
-#: virtManager/clone.py:502
+#: virtManager/clone.py:503
 #, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "'%(vm)s' sanal makinesi klonu oluşturulurken hata oluştu: %(error)s"
 
-#: virtManager/clone.py:560
+#: virtManager/clone.py:561
 #, python-format
 msgid "Error with clone settings: %s"
 msgstr "Klonlama ayarlarında hata: %s"
 
-#: virtManager/clone.py:565
+#: virtManager/clone.py:566
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Sanal makine klonu oluşturuluyor '%s'"
 
-#: virtManager/clone.py:570
+#: virtManager/clone.py:571
 #, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
@@ -2883,8 +2874,8 @@ msgstr[1] "%(numcpus)d'e kadar kullanılabilir"
 msgid "No active connection to install on."
 msgstr "Kurulum yapılacak etkin bağlantı yok."
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1780
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:227
+#: virtManager/createvm.py:947 virtManager/details/details.py:1770
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:228
 msgid "None"
 msgstr "Yok"
 
@@ -3493,8 +3484,8 @@ msgstr "Donanım iletişim kutusu başlatılırken hata oluştu: %s"
 msgid "Are you sure you want to remove this device?"
 msgstr "Bu aygıtı kaldırmak istediğinizden emin misiniz?"
 
-#: virtManager/details/details.py:1280 virtManager/details/details.py:1779
-#: virtManager/details/details.py:1798 virtManager/details/details.py:1992
+#: virtManager/details/details.py:1280 virtManager/details/details.py:1769
+#: virtManager/details/details.py:1788 virtManager/details/details.py:1982
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Bilinmeyen"
@@ -3504,167 +3495,167 @@ msgstr "Bilinmeyen"
 msgid "Error applying changes: %s"
 msgstr "Değişiklikler uygulanırken hata oluştu: %s"
 
-#: virtManager/details/details.py:1483
+#: virtManager/details/details.py:1486
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Otomatik başlatma değeri değiştirilirken hata oluştu: %s"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1503
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Bir çekirdek yolu belirtmeden initrd ayarlanamaz"
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1506
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Bir çekirdek yolu belirtmeden çekirdek argümanları ayarlanamaz"
 
-#: virtManager/details/details.py:1510
+#: virtManager/details/details.py:1513
 msgid "An init path must be specified"
 msgstr "Bir başlatma yolu belirtilmelidir"
 
-#: virtManager/details/details.py:1524 virtManager/device/addstorage.py:285
+#: virtManager/details/details.py:1526 virtManager/device/addstorage.py:287
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr ""
 "'%(path)s' diski zaten diğer konuklar (%(names)s) tarafından kullanılıyor"
 
-#: virtManager/details/details.py:1528 virtManager/device/addstorage.py:289
+#: virtManager/details/details.py:1530 virtManager/device/addstorage.py:291
 msgid "Do you really want to use the disk?"
 msgstr "Diski gerçekten kullanmak istiyor musunuz?"
 
-#: virtManager/details/details.py:1702
+#: virtManager/details/details.py:1692
 msgid "Remove this device from the virtual machine"
 msgstr "Bu aygıtı sanal makineden kaldır"
 
-#: virtManager/details/details.py:1758
+#: virtManager/details/details.py:1748
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Donanım sayfası yenilenirken hata oluştu: %s"
 
-#: virtManager/details/details.py:1853
+#: virtManager/details/details.py:1843
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1865
+#: virtManager/details/details.py:1855
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s okuma"
 
-#: virtManager/details/details.py:1866
+#: virtManager/details/details.py:1856
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s yazma"
 
-#: virtManager/details/details.py:1869
+#: virtManager/details/details.py:1859
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s gelen"
 
-#: virtManager/details/details.py:1870
+#: virtManager/details/details.py:1860
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s giden"
 
-#: virtManager/details/details.py:1872 virtManager/details/details.py:1873
-#: virtManager/details/details.py:1874 virtManager/details/details.py:1875
+#: virtManager/details/details.py:1862 virtManager/details/details.py:1863
+#: virtManager/details/details.py:1864 virtManager/details/details.py:1865
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: virtManager/details/details.py:1883
+#: virtManager/details/details.py:1873
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s / %(total-memory)s"
 
-#: virtManager/details/details.py:2041
+#: virtManager/details/details.py:2031
 msgid "Absolute Movement"
 msgstr "Mutlak Hareket"
 
-#: virtManager/details/details.py:2043
+#: virtManager/details/details.py:2033
 msgid "Relative Movement"
 msgstr "Göreceli Hareket"
 
-#: virtManager/details/details.py:2052 virtManager/details/details.py:2227
-#: virtManager/details/details.py:2230
+#: virtManager/details/details.py:2042 virtManager/details/details.py:2217
+#: virtManager/details/details.py:2220
 msgid "Hypervisor does not support removing this device"
 msgstr "Hipervizör bu aygıtı kaldırmayı desteklemiyor"
 
-#: virtManager/details/details.py:2056
+#: virtManager/details/details.py:2046
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s Sunucu"
 
-#: virtManager/details/details.py:2122
+#: virtManager/details/details.py:2112
 msgid "Serial Device"
 msgstr "Seri Aygıt"
 
-#: virtManager/details/details.py:2124
+#: virtManager/details/details.py:2114
 msgid "Parallel Device"
 msgstr "Paralel Aygıt"
 
-#: virtManager/details/details.py:2126
+#: virtManager/details/details.py:2116
 msgid "Console Device"
 msgstr "Konsol Aygıtı"
 
-#: virtManager/details/details.py:2128
+#: virtManager/details/details.py:2118
 msgid "Channel Device"
 msgstr "Kanal Aygıtı"
 
-#: virtManager/details/details.py:2138
+#: virtManager/details/details.py:2128
 msgid "Primary Console"
 msgstr "Birincil Konsol"
 
-#: virtManager/details/details.py:2194
+#: virtManager/details/details.py:2184
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fiziksel %s Aygıtı"
 
-#: virtManager/details/details.py:2211
+#: virtManager/details/details.py:2201
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr "Grafik/Ekran bağlıyken son video aygıtı kaldırılamaz."
 
-#: virtManager/details/details.py:2237
+#: virtManager/details/details.py:2227
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(address)s üzerinde %(device)s"
 
-#: virtManager/details/details.py:2243 virtManager/details/details.py:2253
+#: virtManager/details/details.py:2233 virtManager/details/details.py:2243
 msgid "Cannot remove controller while devices are attached."
 msgstr "Aygıtlar takılıyken denetleyici kaldırılamaz."
 
-#: virtManager/details/details.py:2344
+#: virtManager/details/details.py:2333
 msgid "Hard Disk"
 msgstr "Sabit Disk"
 
-#: virtManager/details/details.py:2345
+#: virtManager/details/details.py:2334
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2346
+#: virtManager/details/details.py:2335
 msgid "Network (PXE)"
 msgstr "Ağ (PXE)"
 
-#: virtManager/details/details.py:2361
+#: virtManager/details/details.py:2350
 msgid "No bootable devices"
 msgstr "Önyüklenebilir aygıt yok"
 
-#: virtManager/details/details.py:2408
+#: virtManager/details/details.py:2397
 msgid "Overview"
 msgstr "Genel Bakış"
 
-#: virtManager/details/details.py:2409
+#: virtManager/details/details.py:2398
 msgid "OS information"
 msgstr "İS bilgileri"
 
-#: virtManager/details/details.py:2411
+#: virtManager/details/details.py:2400
 msgid "Performance"
 msgstr "Performans"
 
-#: virtManager/details/details.py:2413
+#: virtManager/details/details.py:2402
 msgid "CPUs"
 msgstr "CPU'lar"
 
-#: virtManager/details/details.py:2415
+#: virtManager/details/details.py:2404
 msgid "Boot Options"
 msgstr "Önyükleme Seçenekleri"
 
@@ -3917,15 +3908,15 @@ msgid ""
 msgstr ""
 "Aşağıdaki dizinler için izinler değiştirilirken hatalarla karşılaşıldı:"
 
-#: virtManager/device/addstorage.py:278
+#: virtManager/device/addstorage.py:279
 msgid "A storage path must be specified."
 msgstr "Bir depolama yolu belirtmek zorunludur."
 
-#: virtManager/device/fsdetails.py:223
+#: virtManager/device/fsdetails.py:147
 msgid "Te_mplate:"
 msgstr "Ş_ablon:"
 
-#: virtManager/device/fsdetails.py:225
+#: virtManager/device/fsdetails.py:149
 msgid "_Source path:"
 msgstr "_Kaynak yolu:"
 
@@ -4273,7 +4264,7 @@ msgstr "libvirt %s ile bağlantı kurulamıyor."
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtual Machine Manager Bağlantı Hatası"
 
-#: virtManager/lib/connectauth.py:217
+#: virtManager/lib/connectauth.py:218
 msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
@@ -4281,7 +4272,7 @@ msgstr ""
 "libvirtd hizmeti kurulu görünmüyor. Bu ana makinede sanallaştırmayı yönetmek "
 "için libvirtd hizmetini kurun ve çalıştırın."
 
-#: virtManager/lib/connectauth.py:224
+#: virtManager/lib/connectauth.py:225
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
@@ -4290,7 +4281,7 @@ msgstr ""
 "yönetmek için uygun QEMU/KVM sanallaştırma paketlerinin kurulu olduğundan "
 "emin olun."
 
-#: virtManager/lib/connectauth.py:231
+#: virtManager/lib/connectauth.py:232
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4592,11 +4583,11 @@ msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Etkin olmayan sanal makine yapılandırmasında belirtilen aygıt bulunamadı: %s"
 
-#: virtManager/object/domain.py:1374
+#: virtManager/object/domain.py:1373
 msgid "Saving domain to disk"
 msgstr "Alan diske kaydediliyor"
 
-#: virtManager/object/domain.py:1426
+#: virtManager/object/domain.py:1425
 msgid "Migrating domain"
 msgstr "Alan taşınıyor"
 
@@ -5051,44 +5042,44 @@ msgstr ""
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (Geçersiz kılmak için --check %s=off veya --check all=off kullanın)"
 
-#: virtinst/cli.py:350
+#: virtinst/cli.py:352
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Bu, mevcut '%s' yolunun üzerine yazacak"
 
-#: virtinst/cli.py:361
+#: virtinst/cli.py:363
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr ""
 "%(path)s diski zaten diğer konuklar (%(names)s) tarafından kullanılıyor."
 
-#: virtinst/cli.py:405
+#: virtinst/cli.py:407
 #, python-format
 msgid "Running graphical console command: %(command)s"
 msgstr "Grafiksel konsol komutu çalıştırılıyor: %(command)s"
 
-#: virtinst/cli.py:419
+#: virtinst/cli.py:421
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr "Metin konsolu komutu çalıştırılıyor: %(command)s"
 
-#: virtinst/cli.py:461
+#: virtinst/cli.py:463
 #, python-format
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "'%(domain)s' etki alanı bulunamadı: %(error)s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
-#: virtinst/cli.py:480
+#: virtinst/cli.py:482
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
 msgstr "%(option1)s ve %(option2)s seçenekleri aynı anda kullanılamaz"
 
-#: virtinst/cli.py:581 virtinst/cli.py:584
+#: virtinst/cli.py:583 virtinst/cli.py:586
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Libvirt URI ile hipervizöre bağlan"
 
-#: virtinst/cli.py:599
+#: virtinst/cli.py:601
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5100,30 +5091,30 @@ msgstr ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 
-#: virtinst/cli.py:605
+#: virtinst/cli.py:607
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Konuk konsoluna otomatik olarak bağlanmayı deneme"
 
-#: virtinst/cli.py:609
+#: virtinst/cli.py:611
 msgid "Don't boot guest after completing install."
 msgstr "Kurulum tamamlandıktan sonra konuğu başlatma."
 
-#: virtinst/cli.py:613
+#: virtinst/cli.py:615
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "Ad çakışmasını denetleme, aynı ada sahip herhangi bir konuğun üzerine yaz."
 
-#: virtinst/cli.py:620
+#: virtinst/cli.py:622
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Konuk oluşturmak yerine, oluşturulan etki alanı XML'ini yazdır."
 
-#: virtinst/cli.py:639
+#: virtinst/cli.py:641
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Kurulum sürecini gözden geçir, ancak aygıt oluşturma veya konuğu tanımlama."
 
-#: virtinst/cli.py:644
+#: virtinst/cli.py:646
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5133,15 +5124,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:648
+#: virtinst/cli.py:650
 msgid "Suppress non-error output"
 msgstr "Hata olmayan çıktıyı gösterme"
 
-#: virtinst/cli.py:650
+#: virtinst/cli.py:652
 msgid "Print debugging information"
 msgstr "Hata ayıklama bilgilerini yazdır"
 
-#: virtinst/cli.py:656
+#: virtinst/cli.py:658
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5151,7 +5142,7 @@ msgstr ""
 "--metadata name=foo,title=\"Benim güzel başlığım\",uuid=...\n"
 "--metadata description=\"Benim güzel uzun tanımım\""
 
-#: virtinst/cli.py:664
+#: virtinst/cli.py:666
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -5161,7 +5152,7 @@ msgstr ""
 "--memory 1024 (MiB olarak)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: virtinst/cli.py:677
+#: virtinst/cli.py:679
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5173,7 +5164,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 
-#: virtinst/cli.py:686
+#: virtinst/cli.py:688
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -5183,7 +5174,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: virtinst/cli.py:699
+#: virtinst/cli.py:701
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5195,7 +5186,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: virtinst/cli.py:708
+#: virtinst/cli.py:710
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5211,7 +5202,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:719
+#: virtinst/cli.py:721
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5221,7 +5212,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller virtio-scsi\n"
 
-#: virtinst/cli.py:724
+#: virtinst/cli.py:726
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5231,28 +5222,28 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:729
+#: virtinst/cli.py:731
 msgid "Configure a guest serial device"
 msgstr "Konuk seri aygıtı yapılandır"
 
-#: virtinst/cli.py:732
+#: virtinst/cli.py:734
 msgid "Configure a guest parallel device"
 msgstr "Konuk paralel aygıtı yapılandır"
 
-#: virtinst/cli.py:735
+#: virtinst/cli.py:737
 msgid "Configure a guest communication channel"
 msgstr "Konuk iletişim kanalı yapılandır"
 
-#: virtinst/cli.py:738
+#: virtinst/cli.py:740
 msgid "Configure a text console connection between the guest and host"
 msgstr "Konuk ve ana makine arasında bir metin konsolu bağlantısı yapılandır"
 
-#: virtinst/cli.py:742
+#: virtinst/cli.py:744
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Konukla paylaşılacak fiziksel USB/PCI/vb. ana makine aygıtlarını yapılandır"
 
-#: virtinst/cli.py:750
+#: virtinst/cli.py:752
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5262,19 +5253,19 @@ msgstr ""
 "--filesystem /kaynak/dizinim,/konuk/dizini\n"
 "--filesystem şablon_adı,/,type=template"
 
-#: virtinst/cli.py:758
+#: virtinst/cli.py:760
 msgid "Configure guest sound device emulation"
 msgstr "Konuk ses aygıtı öykünmesini yapılandır"
 
-#: virtinst/cli.py:769
+#: virtinst/cli.py:771
 msgid "Configure a guest watchdog device"
 msgstr "Konuk için bir gözlemci aygıt yapılandır"
 
-#: virtinst/cli.py:772
+#: virtinst/cli.py:774
 msgid "Configure guest video hardware."
 msgstr "Konuk video donanımını yapılandır."
 
-#: virtinst/cli.py:775
+#: virtinst/cli.py:777
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5282,7 +5273,7 @@ msgstr ""
 "Konuk akıllı kart aygıtını yapılandır. Örnek:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:779
+#: virtinst/cli.py:781
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5290,7 +5281,7 @@ msgstr ""
 "Konuk yönlendirme aygıtı yapılandır. Örnek:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:783
+#: virtinst/cli.py:785
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5298,7 +5289,7 @@ msgstr ""
 "Konuk bellek balonu aygıtı yapılandır. Örnek:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:787
+#: virtinst/cli.py:789
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5306,7 +5297,7 @@ msgstr ""
 "Konuk TPM aygıtı yapılandır. Örnek:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:791
+#: virtinst/cli.py:793
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -5314,7 +5305,7 @@ msgstr ""
 "Konuk RNG aygıtı yapılandır. Örnek:\n"
 "--rng /dev/urandom"
 
-#: virtinst/cli.py:795
+#: virtinst/cli.py:797
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5322,7 +5313,7 @@ msgstr ""
 "Konuk panik aygıtı yapılandır. Örnek:\n"
 "--panic default"
 
-#: virtinst/cli.py:799
+#: virtinst/cli.py:801
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -5330,7 +5321,7 @@ msgstr ""
 "Konuk bellek aygıtı yapılandır. Örnek:\n"
 "--memdev dimm,target.size=1024"
 
-#: virtinst/cli.py:803
+#: virtinst/cli.py:805
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -5340,7 +5331,7 @@ msgstr ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
-#: virtinst/cli.py:808
+#: virtinst/cli.py:810
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
@@ -5348,37 +5339,37 @@ msgstr ""
 "IOMMU aygıtı yapılandır. Örnek:\n"
 "--iommu model=intel,driver.aw_bits=48"
 
-#: virtinst/cli.py:815
+#: virtinst/cli.py:817
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "Etki alanı <iothreads> ve <iothreadids> yapılandırmasını ayarla."
 
-#: virtinst/cli.py:819
+#: virtinst/cli.py:821
 msgid "Set domain seclabel configuration."
 msgstr "Etki alanı seclabel yapılandırmasını ayarla."
 
-#: virtinst/cli.py:823
+#: virtinst/cli.py:825
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 "Konuğu S390 şifreleme anahtarı yönetimi işlemlerini gerçekleştirecek şekilde "
 "ayarla."
 
-#: virtinst/cli.py:828
+#: virtinst/cli.py:830
 msgid "Tune CPU parameters for the domain process."
 msgstr "Etki alanı işlemi için CPU parametrelerini ayarla."
 
-#: virtinst/cli.py:832
+#: virtinst/cli.py:834
 msgid "Tune NUMA policy for the domain process."
 msgstr "Etki alanı işlemi için NUMA politikasını ayarla."
 
-#: virtinst/cli.py:836
+#: virtinst/cli.py:838
 msgid "Tune memory policy for the domain process."
 msgstr "Etki alanı işlemi için bellek politikasını ayarla."
 
-#: virtinst/cli.py:840
+#: virtinst/cli.py:842
 msgid "Tune blkio policy for the domain process."
 msgstr "Etki alanı işlemi için blkio politikasını ayarla."
 
-#: virtinst/cli.py:844
+#: virtinst/cli.py:846
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5386,7 +5377,7 @@ msgstr ""
 "Etki alanı işlemi için bellek yedekleme politikasını ayarla. Örnek:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:849
+#: virtinst/cli.py:851
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -5396,7 +5387,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: virtinst/cli.py:855
+#: virtinst/cli.py:857
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5404,19 +5395,19 @@ msgstr ""
 "Etki alanının <clock> XML etiketini ayarla. Örnek:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:860
+#: virtinst/cli.py:862
 msgid "Configure VM power management features"
 msgstr "SM güç yönetimi özelliklerini yapılandır"
 
-#: virtinst/cli.py:864
+#: virtinst/cli.py:866
 msgid "Configure VM lifecycle management policy"
 msgstr "SM yaşam döngüsü yönetimi politikasını yapılandır"
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:870
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "SM kaynak bölümlendirmesini (cgroups) yapılandır"
 
-#: virtinst/cli.py:872
+#: virtinst/cli.py:874
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -5426,7 +5417,7 @@ msgstr ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=Sağlayıcım,bios.version=1.2.3,...\n"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:880
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
@@ -5436,7 +5427,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:884
+#: virtinst/cli.py:886
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5448,7 +5439,7 @@ msgstr ""
 "dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
-#: virtinst/cli.py:892
+#: virtinst/cli.py:894
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5458,7 +5449,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (konteynerler için)"
 
-#: virtinst/cli.py:898
+#: virtinst/cli.py:900
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
@@ -5466,7 +5457,7 @@ msgstr ""
 "LXC konteyneri için kullanıcı ad uzayını etkinleştir. Örnek:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
-#: virtinst/cli.py:908
+#: virtinst/cli.py:910
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5480,19 +5471,19 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:916
+#: virtinst/cli.py:918
 msgid "OS options"
 msgstr "İS seçenekleri"
 
-#: virtinst/cli.py:919
+#: virtinst/cli.py:921
 msgid "The OS being installed in the guest."
 msgstr "Konukta kurulan işletim sistemi."
 
-#: virtinst/cli.py:921
+#: virtinst/cli.py:923
 msgid "The OS installed in the guest."
 msgstr "Konukta kurulu işletim sistemi."
 
-#: virtinst/cli.py:923
+#: virtinst/cli.py:925
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5502,7 +5493,7 @@ msgstr ""
 "Örnek değerler: fedora29, rhel7.0, win10, ...\n"
 "Tam liste için 'osinfo-query os' komutuna bakın."
 
-#: virtinst/cli.py:933
+#: virtinst/cli.py:935
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5514,12 +5505,12 @@ msgstr ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 
-#: virtinst/cli.py:963
+#: virtinst/cli.py:965
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s 'yes' veya 'no' olmalı"
 
-#: virtinst/cli.py:1148
+#: virtinst/cli.py:1150
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5528,17 +5519,17 @@ msgstr ""
 "'%(device_type)s' aygıt türü '%(property_name)s' özelliği ile nasıl "
 "eşleştirileceği bilinmiyor"
 
-#: virtinst/cli.py:1460
+#: virtinst/cli.py:1462
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr "Bilinmeyen %(optionflag)s seçenekleri: %(string)s"
 
-#: virtinst/cli.py:1516 virtinst/cli.py:1547
+#: virtinst/cli.py:1518 virtinst/cli.py:1549
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Hata: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1896
+#: virtinst/cli.py:1898
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5546,31 +5537,31 @@ msgstr ""
 "Grafiksel konsola bağlanılamıyor: virt-viewer kurulu değil. Lütfen 'virt-"
 "viewer' paketini kurun."
 
-#: virtinst/cli.py:1903
+#: virtinst/cli.py:1905
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Grafikler istendi ancak DISPLAY ayarlanmadı. virt-viewer çalıştırılmıyor."
 
-#: virtinst/cli.py:1914
+#: virtinst/cli.py:1916
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Bilinmeyen otomatik konsol türü '%s'"
 
-#: virtinst/cli.py:3271
+#: virtinst/cli.py:3273
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' için uygun olmayan değer: %s"
 
-#: virtinst/cli.py:3284
+#: virtinst/cli.py:3286
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Bilinmeyen '%(optionname)s' değeri '%(string)s'"
 
-#: virtinst/cli.py:3299
+#: virtinst/cli.py:3301
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Depolama birimi vol=havuzadı/birimadı olarak belirtilmelidir"
 
-#: virtinst/cli.py:3737
+#: virtinst/cli.py:3746
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "'%s' için PCI biçim dizgesi bekleniyor"
@@ -5595,46 +5586,63 @@ msgstr "Var olan depolama birimine klonlama şu anda desteklenmiyor: '%s'"
 msgid "Disk path '%s' does not exist."
 msgstr "'%s' disk yolu mevcut değil."
 
-#: virtinst/cloner.py:183
+#: virtinst/cloner.py:181
+#, fuzzy, python-format
+#| msgid "Architecture '%s' is not installable"
+msgid "Disk network type '%s' is not cloneable."
+msgstr "'%s' mimarisi kurulabilir değil"
+
+#: virtinst/cloner.py:184
+#, python-format
+msgid "Cloning disk network type '%s' requires managed storage."
+msgstr ""
+
+#: virtinst/cloner.py:190
+#, fuzzy
+#| msgid "Clone onto existing storage volume is not currently supported: '%s'"
+msgid "Cloning rbd volumes is not yet supported."
+msgstr "Var olan depolama birimine klonlama şu anda desteklenmiyor: '%s'"
+
+#: virtinst/cloner.py:197
 msgid "Read Only"
 msgstr "Salt Okunur"
 
-#: virtinst/cloner.py:185
+#: virtinst/cloner.py:199
 msgid "Marked as shareable"
 msgstr "Paylaşılabilir olarak işaretlendi"
 
-#: virtinst/cloner.py:247
+#: virtinst/cloner.py:261
 #, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "'%(path)s' yolu klonlamak için kullanılamadı: %(error)s"
 
-#: virtinst/cloner.py:263
+#: virtinst/cloner.py:277
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "Asıl disk bilgileri belirlenemedi: %s"
 
-#: virtinst/cloner.py:314
+#: virtinst/cloner.py:328
 msgid "Domain to clone must be shutoff."
 msgstr "Klonlanacak alan kapatılmalıdır."
 
-#: virtinst/cloner.py:349
+#: virtinst/cloner.py:363
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Çakışmayı önlemek için grafik aygıtı bağlantı noktası otomatik bağlantı "
 "noktasına ayarlanıyor."
 
-#: virtinst/cloner.py:486
+#: virtinst/cloner.py:500
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "Yeni konuk için geçersiz ad: %s"
 
-#: virtinst/devices/disk.py:222
+#: virtinst/devices/disk.py:354
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr "Var olmayan '%s' birimi için boyut belirtilmelidir"
 
-#: virtinst/devices/disk.py:227
+#: virtinst/devices/disk.py:359
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -5643,29 +5651,29 @@ msgstr ""
 "'%s' yolu için nasıl depolama oluşturulacağı bilinmiyor. İlk önce ana dizini "
 "bir havuz olarak yönetmek için libvirt API'lerini kullanın."
 
-#: virtinst/devices/disk.py:250
+#: virtinst/devices/disk.py:382
 msgid "Format attribute not supported for this volume type"
 msgstr "Bu birim türü için biçim özniteliği desteklenmiyor"
 
-#: virtinst/devices/disk.py:751
+#: virtinst/devices/disk.py:798
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "'%s' aygıt türü bir yol gerektiriyor"
 
-#: virtinst/devices/disk.py:759
+#: virtinst/devices/disk.py:806
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Var olmayan '%s' yolu için depolama oluşturma parametreleri belirtilmelidir."
 
-#: virtinst/devices/disk.py:873
+#: virtinst/devices/disk.py:919
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] "'%(bus)s' veri yolu için yalnızca %(number)s disk destekleniyor"
 msgstr[1] "'%(bus)s' veri yolu için yalnızca %(number)s disk destekleniyor"
 
-#: virtinst/devices/filesystem.py:125
+#: virtinst/devices/filesystem.py:117
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr "'%s' dosya sistemi hedefi mutlak bir yol olmalıdır"
@@ -5675,7 +5683,7 @@ msgstr "'%s' dosya sistemi hedefi mutlak bir yol olmalıdır"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 5900'ün üzerinde veya otomatik ayırma için -1 olmalıdır"
 
-#: virtinst/devices/hostdev.py:57
+#: virtinst/devices/hostdev.py:61
 #, python-format
 msgid "Unknown node device type %s"
 msgstr "Bilinmeyen düğüm aygıtı türü %s"
@@ -5690,12 +5698,12 @@ msgstr "'%s' MAC adresi başka bir sanal makine tarafından kullanılıyor."
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "%(path)s depolama alanı kullanılamıyor: %(err)s"
 
-#: virtinst/diskbackend.py:275
+#: virtinst/diskbackend.py:288
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "'%s' üzerinde izinler değiştirilemedi"
 
-#: virtinst/diskbackend.py:525
+#: virtinst/diskbackend.py:538
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -5703,26 +5711,26 @@ msgstr ""
 "Dosya sistemi, konuk çalışırken seyrek dosyayı tam olarak ayırmak için "
 "yeterli boş alana sahip olmayacak."
 
-#: virtinst/diskbackend.py:530
+#: virtinst/diskbackend.py:543
 msgid "There is not enough free space to create the disk."
 msgstr "Diski oluşturmak için yeterli boş alan yok."
 
-#: virtinst/diskbackend.py:535
+#: virtinst/diskbackend.py:548
 #, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr "%(mem1)s M istenen > %(mem2)s M kullanılabilir"
 
-#: virtinst/diskbackend.py:542
+#: virtinst/diskbackend.py:555
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "var olmayan '%s' diski için boyut gerekli"
 
-#: virtinst/diskbackend.py:552
+#: virtinst/diskbackend.py:565
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s klonlanıyor"
 
-#: virtinst/diskbackend.py:623
+#: virtinst/diskbackend.py:636
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -5745,21 +5753,21 @@ msgstr "SEV başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
 msgid "SEV launch security is not supported on this platform"
 msgstr "SEV başlatma güvenliği bu platformda desteklenmiyor"
 
-#: virtinst/domcapabilities.py:226
+#: virtinst/domcapabilities.py:227
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:232
+#: virtinst/domcapabilities.py:233
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:235
+#: virtinst/domcapabilities.py:236
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Özel: %(path)s"
 
-#: virtinst/domcapabilities.py:311
+#: virtinst/domcapabilities.py:312
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Genişletilmiş CPU XML'i alınamadı: %s"
@@ -5787,12 +5795,12 @@ msgstr "'%s' mimarisi için UEFI'nin nasıl ayarlanacağı bilinmiyor"
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "'%s' mimarisi için herhangi bir UEFI ikili dosya yolu bulunamadı"
 
-#: virtinst/install/installer.py:106
+#: virtinst/install/installer.py:107
 #, python-format
 msgid "Removing disk '%s'"
 msgstr "'%s' diski kaldırılıyor"
 
-#: virtinst/install/installer.py:264
+#: virtinst/install/installer.py:266
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
@@ -5800,11 +5808,11 @@ msgstr ""
 "Ağ üzerinden %(osname)s kurulumu için bellek miktarı %(number)s MiB olarak "
 "değiştiriliyor."
 
-#: virtinst/install/installer.py:625
+#: virtinst/install/installer.py:635
 msgid "Creating domain..."
 msgstr "Alan oluşturuluyor..."
 
-#: virtinst/install/installer.py:632
+#: virtinst/install/installer.py:642
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "'vz' etki alanı türü geçici kurulumları desteklemiyor."
 
@@ -5813,25 +5821,25 @@ msgstr "'vz' etki alanı türü geçici kurulumları desteklemiyor."
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr "'%(media)s' kurulum ortamı doğrulanamadı: %(error)s"
 
-#: virtinst/install/installertreemedia.py:117
+#: virtinst/install/installertreemedia.py:116
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 "Çekirdek/initrd konumu yalnızca bir konum URL'si/yolu ile belirtilebilir"
 
-#: virtinst/install/installertreemedia.py:120
+#: virtinst/install/installertreemedia.py:119
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr "Çekirdek/initrd konumu bir çift olarak belirtilmelidir"
 
-#: virtinst/install/installertreemedia.py:143
+#: virtinst/install/installertreemedia.py:142
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr "Uzak bağlantıda kurulum ağacına erişilemiyor: %s"
 
-#: virtinst/install/installertreemedia.py:210
+#: virtinst/install/installertreemedia.py:209
 msgid "Couldn't find kernel for install tree."
 msgstr "Kurulum ağacı için çekirdek bulunamadı."
 
-#: virtinst/install/installertreemedia.py:268
+#: virtinst/install/installertreemedia.py:267
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -5983,7 +5991,7 @@ msgstr ""
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "'%(path)s' öntanımlı depolama havuzu oluşturulamadı: %(error)s"
 
-#: virtinst/storage.py:219 virtinst/storage.py:550
+#: virtinst/storage.py:219 virtinst/storage.py:551
 msgid "Storage object"
 msgstr "Depolama nesnesi"
 
@@ -6012,12 +6020,12 @@ msgstr "Depolama havuzu başlatılamadı: %s"
 msgid "Could not set pool autostart flag: %s"
 msgstr "Havuz otomatik başlatma işareti ayarlanamadı: %s"
 
-#: virtinst/storage.py:556
+#: virtinst/storage.py:557
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "'%s' adı zaten başka bir birim tarafından kullanılıyor."
 
-#: virtinst/storage.py:641
+#: virtinst/storage.py:642
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -6025,12 +6033,12 @@ msgstr ""
 "Seyrek mantıksal birimler desteklenmiyor, ayırma miktarı kapasiteye eşit "
 "olarak ayarlanıyor"
 
-#: virtinst/storage.py:687
+#: virtinst/storage.py:688
 #, python-format
 msgid "Allocating '%s'"
 msgstr "'%s' ayrılıyor"
 
-#: virtinst/storage.py:726
+#: virtinst/storage.py:727
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
@@ -6039,7 +6047,7 @@ msgstr ""
 "Depolama havuzunda birimi oluşturmak için yeterli boş alan yok. (%(mem1)s M "
 "talep edilen ayırma > %(mem2)s M kullanılabilir)"
 
-#: virtinst/storage.py:733
+#: virtinst/storage.py:734
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6049,14 +6057,14 @@ msgstr ""
 "Birim tam olarak ayrıldığında, istenen birim kapasitesi kullanılabilir havuz "
 "alanını aşacak. (%(mem1)s M istenen ayırma > %(mem2)s M kullanılabilir)"
 
-#: virtinst/virtclone.py:23
+#: virtinst/virtclone.py:22
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
 "Asıl makine adı gerekli, '--original kaynak_ad' kullanın ve tekrar deneyin."
 
-#: virtinst/virtclone.py:70
+#: virtinst/virtclone.py:69
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6076,19 +6084,19 @@ msgstr ""
 "şeyler bu aracın kapsamı dışındadır. Bu tür değişiklikler için lütfen virt-"
 "sysprep(1) komutuna bakın."
 
-#: virtinst/virtclone.py:80 virtinst/virtinstall.py:949
+#: virtinst/virtclone.py:79 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "Genel Seçenekler"
 
-#: virtinst/virtclone.py:82
+#: virtinst/virtclone.py:81
 msgid "Name of the original guest to clone."
 msgstr "Klonlanacak asıl konuğun adı."
 
-#: virtinst/virtclone.py:84
+#: virtinst/virtclone.py:83
 msgid "XML file to use as the original guest."
 msgstr "Asıl konuk olarak kullanılacak XML dosyası."
 
-#: virtinst/virtclone.py:86
+#: virtinst/virtclone.py:85
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
@@ -6096,23 +6104,23 @@ msgstr ""
 "Asıl konuk yapılandırmasından klon adını ve depolama yollarını otomatik "
 "olarak oluştur."
 
-#: virtinst/virtclone.py:89
+#: virtinst/virtclone.py:88
 msgid "Name for the new guest"
 msgstr "Yeni konuk için ad"
 
-#: virtinst/virtclone.py:92
+#: virtinst/virtclone.py:91
 msgid "use btrfs COW lightweight copy"
 msgstr "btrfs COW hafif kopyasını kullan"
 
-#: virtinst/virtclone.py:94
+#: virtinst/virtclone.py:93
 msgid "Storage Configuration"
 msgstr "Depolama Yapılandırması"
 
-#: virtinst/virtclone.py:96
+#: virtinst/virtclone.py:95
 msgid "New file to use as the disk image for the new guest"
 msgstr "Yeni konuk için disk kalıbı olarak kullanılacak yeni dosya"
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:98
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6120,7 +6128,7 @@ msgstr ""
 "Aygıtları kopyalamaya zorla (örn. 'hdc' salt okunur bir cdrom aygıtıysa, --"
 "force-copy=hdc)"
 
-#: virtinst/virtclone.py:102
+#: virtinst/virtclone.py:101
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
@@ -6128,11 +6136,11 @@ msgstr ""
 "Aygıt hedefini kopyalamayı atla. (örn. 'vda' kopyalamak istemediğiniz bir "
 "diskse ve yeni SM'de aynı yolu kullanıyorsa, --skip-copy=vda kullanın)"
 
-#: virtinst/virtclone.py:107
+#: virtinst/virtclone.py:106
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "Klonun disk kalıbı için seyrek dosya kullanma"
 
-#: virtinst/virtclone.py:111
+#: virtinst/virtclone.py:110
 msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
@@ -6142,15 +6150,15 @@ msgstr ""
 "dokunulmadan bırakılacak. Bu, klonlanabilir her disk kalıbı için var olan "
 "yolların belirtilmesini gerektirir."
 
-#: virtinst/virtclone.py:116
+#: virtinst/virtclone.py:115
 msgid "New file to use as storage for nvram VARS"
 msgstr "nvram VARS için depolama alanı olarak kullanılacak yeni dosya"
 
-#: virtinst/virtclone.py:118
+#: virtinst/virtclone.py:117
 msgid "Networking Configuration"
 msgstr "Ağ Yapılandırması"
 
-#: virtinst/virtclone.py:120
+#: virtinst/virtclone.py:119
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
@@ -6158,12 +6166,12 @@ msgstr ""
 "Klonlanan konuk için yeni sabit MAC adresi. Öntanımlı olarak, rastgele bir "
 "MAC adresi oluşturulur"
 
-#: virtinst/virtclone.py:123 virtinst/virtinstall.py:1054
+#: virtinst/virtclone.py:122 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:419
 msgid "Miscellaneous Options"
 msgstr "Çeşitli Seçenekler"
 
-#: virtinst/virtclone.py:151
+#: virtinst/virtclone.py:149
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
@@ -6171,7 +6179,7 @@ msgstr ""
 "--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya "
 "'--file' kullanın ve tekrar deneyin."
 
-#: virtinst/virtclone.py:183
+#: virtinst/virtclone.py:181
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
@@ -6179,12 +6187,12 @@ msgstr ""
 "Yeni sanal makine için bir ad gerekli, belirtmek için '--name YENİ_SM_ADI' "
 "seçeneğini kullanın."
 
-#: virtinst/virtclone.py:201
+#: virtinst/virtclone.py:198
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "'%s' klonu başarıyla oluşturuldu."
 
-#: virtinst/virtclone.py:212 virtinst/virtinstall.py:1163
+#: virtinst/virtclone.py:209 virtinst/virtinstall.py:1163
 msgid "Installation aborted at user request"
 msgstr "Kurulum kullanıcı isteği üzerine sonlandırıldı"
 
@@ -6865,6 +6873,12 @@ msgstr "%s için bir ad belirtilmelidir"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s adı '%(name)s' '%(char)s' karakterini içeremez."
+
+#~ msgid "Default"
+#~ msgstr "Öntanımlı"
+
+#~ msgid "_Write Policy:"
+#~ msgstr "_Yazma Politikası:"
 
 #~ msgid "_Allocation:"
 #~ msgstr "_Ayrılan:"
