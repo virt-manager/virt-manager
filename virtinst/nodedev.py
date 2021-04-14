@@ -40,6 +40,7 @@ class NodeDevice(XMLBuilder):
     CAPABILITY_TYPE_SCSIBUS = "scsi_host"
     CAPABILITY_TYPE_SCSIDEV = "scsi"
     CAPABILITY_TYPE_DRM = "drm"
+    CAPABILITY_TYPE_MDEV = "mdev"
 
     @staticmethod
     def lookupNodedevFromString(conn, idstring):
@@ -167,6 +168,9 @@ class NodeDevice(XMLBuilder):
                 return d
         if len(self.devnodes) > 0:
             return self.devnodes[0]
+
+    # type='mdev' options
+    type_id = XMLProperty("./capability/type/@id")
 
 
 def _AddressStringToHostdev(conn, addrstr):

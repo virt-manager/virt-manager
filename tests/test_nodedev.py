@@ -126,6 +126,36 @@ def testDRMDevice():
     assert dev.get_devnode("frob")
 
 
+def testDASDMdev():
+    conn = utils.URIs.open_testdriver_cached()
+    devname = "mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110"
+    dev = _nodeDevFromName(conn, devname)
+    assert dev.name == devname
+    assert dev.parent == "css_0_0_0023"
+    assert dev.device_type == "mdev"
+    assert dev.type_id == "vfio_ccw-io"
+
+
+def testAPQNMdev():
+    conn = utils.URIs.open_testdriver_cached()
+    devname = "mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9"
+    dev = _nodeDevFromName(conn, devname)
+    assert dev.name == devname
+    assert dev.parent == "ap_matrix"
+    assert dev.device_type == "mdev"
+    assert dev.type_id == "vfio_ap-passthrough"
+
+
+def testPCIMdev():
+    conn = utils.URIs.open_testdriver_cached()
+    devname = "mdev_4b20d080_1b54_4048_85b3_a6a62d165c01"
+    dev = _nodeDevFromName(conn, devname)
+    assert dev.name == devname
+    assert dev.parent == "pci_0000_06_00_0"
+    assert dev.device_type == "mdev"
+    assert dev.type_id == "nvidia-11"
+
+
 # NodeDevice 2 Device XML tests
 
 def testNodeDev2USB1():

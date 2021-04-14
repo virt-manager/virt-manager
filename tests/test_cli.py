@@ -678,6 +678,9 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev wlan0,type=net
 --hostdev /dev/vdz,type=storage
 --hostdev /dev/pty7,type=misc
+--hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110,address.type=ccw,address.cssid=0xfe,address.ssid=0x1,address.devno=0x0008
+--hostdev mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9
+--hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
 
 
 --filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on

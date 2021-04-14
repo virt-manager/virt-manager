@@ -606,6 +606,25 @@
         <char>/dev/pty7</char>
       </source>
     </hostdev>
+    <hostdev mode="subsystem" type="mdev" managed="no" model="vfio-ccw">
+      <address type="ccw" cssid="0xfe" ssid="0x1" devno="0x0008"/>
+      <source>
+        <address uuid="8e37ee90-2b51-45e3-9b25-bf8283c03110"/>
+      </source>
+    </hostdev>
+    <hostdev mode="subsystem" type="mdev" managed="no" model="vfio-ap">
+      <source>
+        <address uuid="11f92c9d-b0b0-4016-b306-a8071277f8b9"/>
+      </source>
+    </hostdev>
+    <hostdev mode="subsystem" type="mdev" managed="yes" model="vfio-pci" display="off" ramfb="off">
+      <address type="pci" domain="0" bus="1" slot="1" function="0">
+        <zpci uid="0x0001" fid="0x00000001"/>
+      </address>
+      <source>
+        <address uuid="4b20d080-1b54-4048-85b3-a6a62d165c01"/>
+      </source>
+    </hostdev>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="tcp">
       <source host="localhost" service="4000"/>

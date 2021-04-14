@@ -3645,5 +3645,45 @@ ba</description>
   </capability>
 </device>
 
+<device>
+  <name>mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110</name>
+  <path>/sys/devices/css0/0.0.0023/8e37ee90-2b51-45e3-9b25-bf8283c03110</path>
+  <parent>css_0_0_0023</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+  <capability type='mdev'>
+    <type id='vfio_ccw-io'/>
+    <iommuGroup number='0'/>
+  </capability>
+</device>
+
+<device>
+  <name>mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9</name>
+  <path>/sys/devices/vfio_ap/matrix/11f92c9d-b0b0-4016-b306-a8071277f8b9</path>
+  <parent>ap_matrix</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+  <capability type='mdev'>
+    <type id='vfio_ap-passthrough'/>
+    <iommuGroup number='2'/>
+    <attr name='assign_adapter' value='1'/>
+    <attr name='assign_domain' value='2'/>
+  </capability>
+</device>
+
+<device>
+  <name>mdev_4b20d080_1b54_4048_85b3_a6a62d165c01</name>
+  <path>/sys/devices/pci0000:00/0000:00:02.0/4b20d080-1b54-4048-85b3-a6a62d165c01</path>
+  <parent>pci_0000_06_00_0</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+ <capability type='mdev'>
+    <type id='nvidia-11'/>
+    <iommuGroup number='12'/>
+  </capability>
+</device>
 
 </node>
