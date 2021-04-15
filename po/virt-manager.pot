@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2020-11-13 06:09+0000\n"
+"POT-Creation-Date: 2021-05-19 06:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
-#: ui/manager.ui:23 virtManager/systray.py:135
+#: ui/manager.ui:23 virtManager/systray.py:148
 msgid "Virtual Machine Manager"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgid "_Bus type:"
 msgstr ""
 
 #: ui/addhardware.ui:263 ui/addhardware.ui:532 ui/addhardware.ui:1145
-#: ui/createpool.ui:354 ui/fsdetails.ui:226 ui/gfxdetails.ui:106
+#: ui/createpool.ui:354 ui/fsdetails.ui:87 ui/gfxdetails.ui:106
 msgid "_Type:"
 msgstr ""
 
@@ -161,7 +161,7 @@ msgstr ""
 msgid "panic"
 msgstr ""
 
-#: ui/addhardware.ui:1525 ui/createnet.ui:831 ui/createpool.ui:487
+#: ui/addhardware.ui:1525 ui/createnet.ui:829 ui/createpool.ui:487
 #: ui/createvm.ui:2477 ui/createvol.ui:484 ui/snapshotsnew.ui:271
 msgid "_Finish"
 msgstr ""
@@ -298,7 +298,7 @@ msgstr ""
 msgid "Create a new disk (c_lone) for the virtual machine"
 msgstr ""
 
-#: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:202
+#: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:63
 msgid "_Browse..."
 msgstr ""
 
@@ -390,55 +390,55 @@ msgstr ""
 msgid "Device _List:"
 msgstr ""
 
-#: ui/createnet.ui:249
+#: ui/createnet.ui:248
 msgid "De_vice:"
 msgstr ""
 
-#: ui/createnet.ui:292
+#: ui/createnet.ui:291
 msgid "_Enable IPv4"
 msgstr ""
 
-#: ui/createnet.ui:335 ui/createnet.ui:553
+#: ui/createnet.ui:334 ui/createnet.ui:552
 msgid "_Network:"
 msgstr ""
 
-#: ui/createnet.ui:427 ui/createnet.ui:643
+#: ui/createnet.ui:426 ui/createnet.ui:642
 msgid "Start:"
 msgstr ""
 
-#: ui/createnet.ui:439 ui/createnet.ui:655
+#: ui/createnet.ui:438 ui/createnet.ui:654
 msgid "End:"
 msgstr ""
 
-#: ui/createnet.ui:448
+#: ui/createnet.ui:447
 msgid "Enable DHCPv4"
 msgstr ""
 
-#: ui/createnet.ui:485 ui/hostnets.ui:358
+#: ui/createnet.ui:484 ui/hostnets.ui:358
 msgid "<b>IPv_4 configuration</b>"
 msgstr ""
 
-#: ui/createnet.ui:510
+#: ui/createnet.ui:509
 msgid "_Enable IPv6"
 msgstr ""
 
-#: ui/createnet.ui:664
+#: ui/createnet.ui:663
 msgid "Enable DHCPv6"
 msgstr ""
 
-#: ui/createnet.ui:701 ui/hostnets.ui:485
+#: ui/createnet.ui:700 ui/hostnets.ui:485
 msgid "<b>IPv_6 configuration</b>"
 msgstr ""
 
-#: ui/createnet.ui:749
+#: ui/createnet.ui:747
 msgid "Use net_work name"
 msgstr ""
 
-#: ui/createnet.ui:767
+#: ui/createnet.ui:765
 msgid "Cust_om"
 msgstr ""
 
-#: ui/createnet.ui:788
+#: ui/createnet.ui:786
 msgid "<b>DNS domain name</b>"
 msgstr ""
 
@@ -696,7 +696,7 @@ msgstr ""
 msgid "(Insert host mem)"
 msgstr ""
 
-#: ui/createvm.ui:1995 virtManager/details/details.py:2414
+#: ui/createvm.ui:1995 virtManager/details/details.py:2404
 msgid "Memory"
 msgstr ""
 
@@ -705,7 +705,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr ""
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1003 virtManager/clone.py:277
+#: virtManager/addhardware.py:1002 virtManager/clone.py:277
 msgid "Storage"
 msgstr ""
 
@@ -960,7 +960,7 @@ msgstr ""
 msgid "50"
 msgstr ""
 
-#: ui/details.ui:1756 ui/details.ui:1805 ui/fsdetails.ui:357
+#: ui/details.ui:1756 ui/details.ui:1805 ui/fsdetails.ui:204
 msgid "MiB"
 msgstr ""
 
@@ -1157,7 +1157,7 @@ msgstr ""
 msgid "<b>Filesystem</b>"
 msgstr ""
 
-#: ui/details.ui:4146 ui/fsdetails.ui:240 ui/migrate.ui:391
+#: ui/details.ui:4146 ui/fsdetails.ui:101 ui/migrate.ui:391
 msgid "M_ode:"
 msgstr ""
 
@@ -1205,28 +1205,19 @@ msgstr ""
 msgid "<b>Panic Notifier</b>"
 msgstr ""
 
-#: ui/fsdetails.ui:71 ui/fsdetails.ui:106 ui/fsdetails.ui:141
-#: ui/fsdetails.ui:413
-msgid "Default"
-msgstr ""
-
-#: ui/fsdetails.ui:169
+#: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
 msgstr ""
 
-#: ui/fsdetails.ui:254
+#: ui/fsdetails.ui:115
 msgid "_Driver:"
 msgstr ""
 
-#: ui/fsdetails.ui:268
-msgid "_Write Policy:"
-msgstr ""
-
-#: ui/fsdetails.ui:296
+#: ui/fsdetails.ui:143
 msgid "Ta_rget path:"
 msgstr ""
 
-#: ui/fsdetails.ui:376
+#: ui/fsdetails.ui:223
 msgid "_Format:"
 msgstr ""
 
@@ -1995,16 +1986,16 @@ msgstr ""
 msgid "Connection does not support storage management."
 msgstr ""
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1004
 msgid "Controller"
 msgstr ""
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1006
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr ""
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1009
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1008
 #: virtManager/details/details.py:194
 msgid "Input"
 msgstr ""
@@ -2015,11 +2006,11 @@ msgstr ""
 msgid "Not supported for this guest type."
 msgstr ""
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1011
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1010
 msgid "Graphics"
 msgstr ""
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1013
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1012
 msgid "Sound"
 msgstr ""
 
@@ -2064,16 +2055,16 @@ msgstr ""
 msgid "Filesystem"
 msgstr ""
 
-#: virtManager/addhardware.py:258 virtManager/addhardware.py:1021
+#: virtManager/addhardware.py:258 virtManager/addhardware.py:1020
 #: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr ""
 
-#: virtManager/addhardware.py:260 virtManager/addhardware.py:1023
+#: virtManager/addhardware.py:260 virtManager/addhardware.py:1022
 msgid "USB Redirection"
 msgstr ""
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1025
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1024
 msgid "TPM"
 msgstr ""
 
@@ -2081,7 +2072,7 @@ msgstr ""
 msgid "RNG"
 msgstr ""
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1029
+#: virtManager/addhardware.py:265 virtManager/addhardware.py:1028
 #: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr ""
@@ -2094,280 +2085,280 @@ msgstr ""
 msgid "VirtIO VSOCK"
 msgstr ""
 
-#: virtManager/addhardware.py:340
+#: virtManager/addhardware.py:339
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:365
+#: virtManager/addhardware.py:364
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 
-#: virtManager/addhardware.py:415
+#: virtManager/addhardware.py:414
 msgid "Pseudo TTY"
 msgstr ""
 
-#: virtManager/addhardware.py:416
+#: virtManager/addhardware.py:415
 msgid "Output to a file"
 msgstr ""
 
-#: virtManager/addhardware.py:417
+#: virtManager/addhardware.py:416
 msgid "TCP net console"
 msgstr ""
 
-#: virtManager/addhardware.py:418
+#: virtManager/addhardware.py:417
 msgid "UDP net console"
 msgstr ""
 
-#: virtManager/addhardware.py:419
+#: virtManager/addhardware.py:418
 msgid "UNIX socket"
 msgstr ""
 
-#: virtManager/addhardware.py:420
+#: virtManager/addhardware.py:419
 msgid "Spice agent"
 msgstr ""
 
-#: virtManager/addhardware.py:421
+#: virtManager/addhardware.py:420
 msgid "Spice port"
 msgstr ""
 
-#: virtManager/addhardware.py:435 virtManager/addhardware.py:496
+#: virtManager/addhardware.py:434 virtManager/addhardware.py:495
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:436 virtManager/details/details.py:2347
+#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr ""
 
-#: virtManager/addhardware.py:437 virtManager/addhardware.py:498
+#: virtManager/addhardware.py:436 virtManager/addhardware.py:497
 msgid "SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:438 virtManager/addhardware.py:497
+#: virtManager/addhardware.py:437 virtManager/addhardware.py:496
 msgid "SATA"
 msgstr ""
 
-#: virtManager/addhardware.py:439
+#: virtManager/addhardware.py:438
 msgid "VirtIO Serial"
 msgstr ""
 
-#: virtManager/addhardware.py:440 virtManager/addhardware.py:500
-#: virtManager/addhardware.py:578
+#: virtManager/addhardware.py:439 virtManager/addhardware.py:499
+#: virtManager/addhardware.py:577
 msgid "USB"
 msgstr ""
 
-#: virtManager/addhardware.py:441
+#: virtManager/addhardware.py:440
 msgid "PCI"
 msgstr ""
 
-#: virtManager/addhardware.py:442
+#: virtManager/addhardware.py:441
 msgid "CCID"
 msgstr ""
 
-#: virtManager/addhardware.py:443
+#: virtManager/addhardware.py:442
 msgid "xenbus"
 msgstr ""
 
-#: virtManager/addhardware.py:451 virtManager/addhardware.py:921
+#: virtManager/addhardware.py:450 virtManager/addhardware.py:920
 msgid "VirtIO SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:454
+#: virtManager/addhardware.py:453
 msgid "PCIe"
 msgstr ""
 
-#: virtManager/addhardware.py:499
+#: virtManager/addhardware.py:498
 msgid "SD"
 msgstr ""
 
-#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
+#: virtManager/addhardware.py:500 virtManager/addhardware.py:578
 msgid "VirtIO"
 msgstr ""
 
-#: virtManager/addhardware.py:502 virtManager/addhardware.py:580
+#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
 msgid "Xen"
 msgstr ""
 
-#: virtManager/addhardware.py:509
+#: virtManager/addhardware.py:508
 msgid "Passthrough device"
 msgstr ""
 
-#: virtManager/addhardware.py:510
+#: virtManager/addhardware.py:509
 msgid "Emulated device"
 msgstr ""
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:516
 msgid "TIS"
 msgstr ""
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:517
 msgid "CRB"
 msgstr ""
 
-#: virtManager/addhardware.py:519
+#: virtManager/addhardware.py:518
 msgid "SPAPR"
 msgstr ""
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:525
 msgid "ISA"
 msgstr ""
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:526
 msgid "pSeries"
 msgstr ""
 
-#: virtManager/addhardware.py:528
+#: virtManager/addhardware.py:527
 msgid "Hyper-V"
 msgstr ""
 
-#: virtManager/addhardware.py:529
+#: virtManager/addhardware.py:528
 msgid "s390"
 msgstr ""
 
-#: virtManager/addhardware.py:536
+#: virtManager/addhardware.py:535
 msgid "Random"
 msgstr ""
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:536
 msgid "Entropy Gathering Daemon"
 msgstr ""
 
-#: virtManager/addhardware.py:538
+#: virtManager/addhardware.py:537
 msgid "Builtin RNG"
 msgstr ""
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:555
 msgid "Forcefully reset the guest"
 msgstr ""
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:556
 msgid "Gracefully shutdown the guest"
 msgstr ""
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:557
 msgid "Forcefully power off the guest"
 msgstr ""
 
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:558
 msgid "Pause the guest"
 msgstr ""
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:559
 msgid "No action"
 msgstr ""
 
-#: virtManager/addhardware.py:561
+#: virtManager/addhardware.py:560
 msgid "Dump guest memory core"
 msgstr ""
 
-#: virtManager/addhardware.py:568
+#: virtManager/addhardware.py:567
 msgid "EvTouch USB Graphics Tablet"
 msgstr ""
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:193
+#: virtManager/addhardware.py:570 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr ""
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:191
+#: virtManager/addhardware.py:571 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr ""
 
-#: virtManager/addhardware.py:573 virtManager/details/details.py:189
+#: virtManager/addhardware.py:572 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr ""
 
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:576
 msgid "PS/2"
 msgstr ""
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:586
+#: virtManager/addhardware.py:585
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:681
+#: virtManager/addhardware.py:680
 msgid "Disk device"
 msgstr ""
 
-#: virtManager/addhardware.py:683
+#: virtManager/addhardware.py:682
 msgid "CDROM device"
 msgstr ""
 
-#: virtManager/addhardware.py:685
+#: virtManager/addhardware.py:684
 msgid "Floppy device"
 msgstr ""
 
-#: virtManager/addhardware.py:688
+#: virtManager/addhardware.py:687
 msgid "LUN Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:711 virtManager/addhardware.py:792
-#: virtManager/addhardware.py:802 virtManager/addhardware.py:922
+#: virtManager/addhardware.py:710 virtManager/addhardware.py:791
+#: virtManager/addhardware.py:801 virtManager/addhardware.py:921
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/gfxdetails.py:103
-#: virtManager/preferences.py:169
+#: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
+#: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr ""
 
-#: virtManager/addhardware.py:782
+#: virtManager/addhardware.py:781
 msgid "No Devices Available"
 msgstr ""
 
-#: virtManager/addhardware.py:839
+#: virtManager/addhardware.py:838
 msgid "Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:840
+#: virtManager/addhardware.py:839
 msgid "Host"
 msgstr ""
 
-#: virtManager/addhardware.py:846
+#: virtManager/addhardware.py:845
 msgid "Spice channel"
 msgstr ""
 
-#: virtManager/addhardware.py:918
+#: virtManager/addhardware.py:917
 msgid "USB 3"
 msgstr ""
 
-#: virtManager/addhardware.py:919
+#: virtManager/addhardware.py:918
 msgid "USB 2"
 msgstr ""
 
-#: virtManager/addhardware.py:1015
+#: virtManager/addhardware.py:1014
 msgid "Video Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1017
+#: virtManager/addhardware.py:1016
 msgid "Watchdog Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1019
+#: virtManager/addhardware.py:1018
 msgid "Filesystem Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:1027
+#: virtManager/addhardware.py:1026
 msgid "Random Number Generator"
 msgstr ""
 
-#: virtManager/addhardware.py:1031
+#: virtManager/addhardware.py:1030
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1035 virtManager/details/details.py:2130
+#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
 #, python-format
 msgid "%s Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:1038
 msgid "PCI Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1040
+#: virtManager/addhardware.py:1039
 msgid "USB Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1173
+#: virtManager/addhardware.py:1172
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2375,44 +2366,44 @@ msgid ""
 "You can change the USB controller type in the VM details screen."
 msgstr ""
 
-#: virtManager/addhardware.py:1265
+#: virtManager/addhardware.py:1264
 msgid "Are you sure you want to add this device?"
 msgstr ""
 
-#: virtManager/addhardware.py:1268
+#: virtManager/addhardware.py:1267
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr ""
 
-#: virtManager/addhardware.py:1292
+#: virtManager/addhardware.py:1291
 #, python-format
 msgid "Unable to add device: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1313
+#: virtManager/addhardware.py:1312
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1319
+#: virtManager/addhardware.py:1318
 msgid "Creating device"
 msgstr ""
 
-#: virtManager/addhardware.py:1320
+#: virtManager/addhardware.py:1319
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 
-#: virtManager/addhardware.py:1342
+#: virtManager/addhardware.py:1341
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1344
+#: virtManager/addhardware.py:1343
 msgid "Do you really want to use the device?"
 msgstr ""
 
-#: virtManager/addhardware.py:1389
+#: virtManager/addhardware.py:1388
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
@@ -2780,8 +2771,8 @@ msgstr[1] ""
 msgid "No active connection to install on."
 msgstr ""
 
-#: virtManager/createvm.py:947 virtManager/details/details.py:1780
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:228
+#: virtManager/createvm.py:947 virtManager/details/details.py:1771
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:236
 msgid "None"
 msgstr ""
 
@@ -3364,186 +3355,186 @@ msgstr ""
 msgid "Disk bus:"
 msgstr ""
 
-#: virtManager/details/details.py:1027
+#: virtManager/details/details.py:1028
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1033
+#: virtManager/details/details.py:1034
 msgid "Are you sure you want to remove this device?"
 msgstr ""
 
-#: virtManager/details/details.py:1280 virtManager/details/details.py:1779
-#: virtManager/details/details.py:1798 virtManager/details/details.py:1992
+#: virtManager/details/details.py:1281 virtManager/details/details.py:1770
+#: virtManager/details/details.py:1789 virtManager/details/details.py:1983
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr ""
 
-#: virtManager/details/details.py:1362
+#: virtManager/details/details.py:1363
 #, python-format
 msgid "Error applying changes: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1483
+#: virtManager/details/details.py:1487
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1504
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1507
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 
-#: virtManager/details/details.py:1510
+#: virtManager/details/details.py:1514
 msgid "An init path must be specified"
 msgstr ""
 
-#: virtManager/details/details.py:1524 virtManager/device/addstorage.py:287
+#: virtManager/details/details.py:1527 virtManager/device/addstorage.py:287
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr ""
 
-#: virtManager/details/details.py:1528 virtManager/device/addstorage.py:291
+#: virtManager/details/details.py:1531 virtManager/device/addstorage.py:291
 msgid "Do you really want to use the disk?"
 msgstr ""
 
-#: virtManager/details/details.py:1702
+#: virtManager/details/details.py:1693
 msgid "Remove this device from the virtual machine"
 msgstr ""
 
-#: virtManager/details/details.py:1758
+#: virtManager/details/details.py:1749
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1853
+#: virtManager/details/details.py:1844
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: virtManager/details/details.py:1865
+#: virtManager/details/details.py:1856
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr ""
 
-#: virtManager/details/details.py:1866
+#: virtManager/details/details.py:1857
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr ""
 
-#: virtManager/details/details.py:1869
+#: virtManager/details/details.py:1860
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr ""
 
-#: virtManager/details/details.py:1870
+#: virtManager/details/details.py:1861
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr ""
 
-#: virtManager/details/details.py:1872 virtManager/details/details.py:1873
-#: virtManager/details/details.py:1874 virtManager/details/details.py:1875
+#: virtManager/details/details.py:1863 virtManager/details/details.py:1864
+#: virtManager/details/details.py:1865 virtManager/details/details.py:1866
 #: virtManager/hostnets.py:210 virtManager/hostnets.py:232
 msgid "Disabled"
 msgstr ""
 
-#: virtManager/details/details.py:1883
+#: virtManager/details/details.py:1874
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: virtManager/details/details.py:2041
+#: virtManager/details/details.py:2032
 msgid "Absolute Movement"
 msgstr ""
 
-#: virtManager/details/details.py:2043
+#: virtManager/details/details.py:2034
 msgid "Relative Movement"
 msgstr ""
 
-#: virtManager/details/details.py:2052 virtManager/details/details.py:2227
-#: virtManager/details/details.py:2230
+#: virtManager/details/details.py:2043 virtManager/details/details.py:2218
+#: virtManager/details/details.py:2221
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: virtManager/details/details.py:2056
+#: virtManager/details/details.py:2047
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr ""
 
-#: virtManager/details/details.py:2122
+#: virtManager/details/details.py:2113
 msgid "Serial Device"
 msgstr ""
 
-#: virtManager/details/details.py:2124
+#: virtManager/details/details.py:2115
 msgid "Parallel Device"
 msgstr ""
 
-#: virtManager/details/details.py:2126
+#: virtManager/details/details.py:2117
 msgid "Console Device"
 msgstr ""
 
-#: virtManager/details/details.py:2128
+#: virtManager/details/details.py:2119
 msgid "Channel Device"
 msgstr ""
 
-#: virtManager/details/details.py:2138
+#: virtManager/details/details.py:2129
 msgid "Primary Console"
 msgstr ""
 
-#: virtManager/details/details.py:2194
+#: virtManager/details/details.py:2185
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: virtManager/details/details.py:2211
+#: virtManager/details/details.py:2202
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2237
+#: virtManager/details/details.py:2228
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr ""
 
-#: virtManager/details/details.py:2243 virtManager/details/details.py:2253
+#: virtManager/details/details.py:2234 virtManager/details/details.py:2244
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2344
+#: virtManager/details/details.py:2334
 msgid "Hard Disk"
 msgstr ""
 
-#: virtManager/details/details.py:2345
+#: virtManager/details/details.py:2335
 msgid "CDROM"
 msgstr ""
 
-#: virtManager/details/details.py:2346
+#: virtManager/details/details.py:2336
 msgid "Network (PXE)"
 msgstr ""
 
-#: virtManager/details/details.py:2361
+#: virtManager/details/details.py:2351
 msgid "No bootable devices"
 msgstr ""
 
-#: virtManager/details/details.py:2408
+#: virtManager/details/details.py:2398
 msgid "Overview"
 msgstr ""
 
-#: virtManager/details/details.py:2409
+#: virtManager/details/details.py:2399
 msgid "OS information"
 msgstr ""
 
-#: virtManager/details/details.py:2411
+#: virtManager/details/details.py:2401
 msgid "Performance"
 msgstr ""
 
-#: virtManager/details/details.py:2413
+#: virtManager/details/details.py:2403
 msgid "CPUs"
 msgstr ""
 
-#: virtManager/details/details.py:2415
+#: virtManager/details/details.py:2405
 msgid "Boot Options"
 msgstr ""
 
@@ -3769,11 +3760,11 @@ msgstr ""
 msgid "A storage path must be specified."
 msgstr ""
 
-#: virtManager/device/fsdetails.py:223
+#: virtManager/device/fsdetails.py:147
 msgid "Te_mplate:"
 msgstr ""
 
-#: virtManager/device/fsdetails.py:225
+#: virtManager/device/fsdetails.py:149
 msgid "_Source path:"
 msgstr ""
 
@@ -4408,11 +4399,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: virtManager/object/domain.py:1374
+#: virtManager/object/domain.py:1373
 msgid "Saving domain to disk"
 msgstr ""
 
-#: virtManager/object/domain.py:1426
+#: virtManager/object/domain.py:1425
 msgid "Migrating domain"
 msgstr ""
 
@@ -4566,15 +4557,15 @@ msgstr ""
 msgid "Choose Storage Volume"
 msgstr ""
 
-#: virtManager/systray.py:106
+#: virtManager/systray.py:119
 msgid "_Show Virtual Machine Manager"
 msgstr ""
 
-#: virtManager/virtmanager.py:37
+#: virtManager/virtmanager.py:42
 msgid "Error starting Virtual Machine Manager"
 msgstr ""
 
-#: virtManager/virtmanager.py:38
+#: virtManager/virtmanager.py:43
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr ""
@@ -5239,21 +5230,21 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3273
+#: virtinst/cli.py:3285
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr ""
 
-#: virtinst/cli.py:3286
+#: virtinst/cli.py:3298
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr ""
 
-#: virtinst/cli.py:3301
+#: virtinst/cli.py:3313
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 
-#: virtinst/cli.py:3746
+#: virtinst/cli.py:3758
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5357,7 +5348,7 @@ msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] ""
 msgstr[1] ""
 
-#: virtinst/devices/filesystem.py:125
+#: virtinst/devices/filesystem.py:121
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr ""
@@ -5367,7 +5358,12 @@ msgstr ""
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr ""
 
-#: virtinst/devices/hostdev.py:57
+#: virtinst/devices/hostdev.py:82
+#, python-format
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr ""
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr ""
@@ -5433,21 +5429,21 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: virtinst/domcapabilities.py:227
+#: virtinst/domcapabilities.py:235
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:233
+#: virtinst/domcapabilities.py:241
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:236
+#: virtinst/domcapabilities.py:244
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:312
+#: virtinst/domcapabilities.py:320
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
@@ -5604,12 +5600,12 @@ msgstr ""
 msgid "Transferring %s"
 msgstr ""
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr ""
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr ""
