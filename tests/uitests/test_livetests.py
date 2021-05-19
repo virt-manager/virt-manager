@@ -4,6 +4,7 @@
 import os
 
 import libvirt
+import pytest
 
 from virtinst import log
 
@@ -386,6 +387,32 @@ def testConsoleSpiceSpecific(app, dom):
     usbwin.find("Close", "push button").click()
 
     # Test fake guest resize behavior
+    def _click_auto():
+        vmenu = win.find("^View$", "menu")
+        vmenu.click()
+        smenu = vmenu.find("Scale Display", "menu")
+        smenu.point()
+        smenu.find("Auto resize VM", "check menu item").click()
+    _click_auto()
+    win.click_title()
+    win.window_maximize()
+    _click_auto()
+    win.click_title()
+    win.click_title()
+
+
+@_vm_wrapper("uitests-vnc-standard")
+def testVNCSpecific(app, dom):
+    from gi.repository import GtkVnc
+    if not hasattr(GtkVnc.Display, "set_allow_resize"):
+        pytest.skip("GtkVnc is too old")
+
+    ignore = dom
+    win = app.topwin
+    con = win.find("console-gfx-viewport")
+    lib.utils.check(lambda: con.showing)
+
+    # Test guest resize behavior
     def _click_auto():
         vmenu = win.find("^View$", "menu")
         vmenu.click()
