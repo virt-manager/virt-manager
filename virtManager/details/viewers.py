@@ -413,7 +413,7 @@ class VNCViewer(Viewer):
     def _get_resizeguest(self):
         if hasattr(self._display, "set_allow_resize"):
             return self._display.get_allow_resize()  # pylint: disable=no-member
-        return False
+        return False  # pragma: no cover
 
     def _get_usb_widget(self):
         return None  # pragma: no cover
