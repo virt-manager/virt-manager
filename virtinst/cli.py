@@ -3252,6 +3252,7 @@ class ParserDisk(VirtCLIParser):
         "snapshot": "snapshot_policy",
         "target.dev": "target",
         "target.removable": "removable",
+        "target.rotation_rate": "rotation_rate",
 
         "driver.discard": "discard",
         "driver.detect_zeroes": "detect_zeroes",
@@ -3443,6 +3444,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("target.bus", "bus")
         cls.add_arg("target.removable", "removable", is_onoff=True)
         cls.add_arg("target.dev", "target")
+        cls.add_arg("target.rotation_rate", "rotation_rate")
 
         cls.add_arg("driver.cache", "driver_cache")
         cls.add_arg("driver.discard", "driver_discard")
