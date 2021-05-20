@@ -180,6 +180,7 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _async_delete(self, asyncjob, vm, paths):
         details = ""
+        storage_errors = []
         try:
             self._destroy_vm(vm)
 
