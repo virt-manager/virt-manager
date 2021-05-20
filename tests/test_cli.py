@@ -597,7 +597,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file
 --disk source.protocol=http,source.host0.name=exampl2.com,source.host.port=8000,source.name=/path/to/my/file
 --disk source.protocol=nbd,source.host.transport=unix,source.host.socket=/tmp/socket
---disk source.protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi,logical_block_size=512,physical_block_size=512,blockio.logical_block_size=512,blockio.physical_block_size=512,target.dev=sdz
+--disk source.protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi,logical_block_size=512,physical_block_size=512,blockio.logical_block_size=512,blockio.physical_block_size=512,target.dev=sdz,rotation_rate=5000
 --disk gluster://192.168.1.100/test-volume/some/dir/test-gluster.qcow2
 --disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on,address.type=usb,address.bus=0,address.port=2
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo
@@ -606,7 +606,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk,bus=usb,target.removable=yes
 --disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol,boot.order=10,boot.loadparm=5
 --disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
-source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client
+source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client,target.rotation_rate=6000
 --disk vol=iscsi-direct/unit:0:0:1
 --disk size=.0001,format=raw
 --disk size=.0001,pool=disk-pool

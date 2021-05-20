@@ -148,7 +148,7 @@
       <source protocol="nbd">
         <host transport="unix" socket="/tmp/socket"/>
       </source>
-      <target dev="sdz" bus="scsi"/>
+      <target dev="sdz" bus="scsi" rotation_rate="5000"/>
       <blockio logical_block_size="512" physical_block_size="512"/>
     </disk>
     <disk type="network" device="disk">
@@ -203,7 +203,7 @@
           <source type="unix" path="/var/run/test/pr-helper0.sock" mode="client"/>
         </reservations>
       </source>
-      <target dev="sdae" bus="scsi"/>
+      <target dev="sdae" bus="scsi" rotation_rate="6000"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
