@@ -103,8 +103,9 @@ class _URLFetcher(object):
             raise ValueError(msg) from None
 
         log.debug("Fetching URI: %s", url)
-        self.meter.start(
-            _("Retrieving file %s...") % os.path.basename(filename), size)
+        msg = _("Retrieving '%(filename)s'") % {
+                "filename": os.path.basename(filename)}
+        self.meter.start(msg, size)
 
         self._write(urlobj, fileobj)
         self.meter.end()
