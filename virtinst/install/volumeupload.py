@@ -105,7 +105,9 @@ def _upload_file(conn, meter, destpool, src):
 
         # Start transfer
         total = 0
-        meter.start(_("Transferring %s") % os.path.basename(src), size)
+        msg = _("Transferring '%(filename)s'") % {
+                "filename": os.path.basename(src)}
+        meter.start(msg, size)
         while True:
             blocksize = 1024 * 1024  # 1 MiB
             data = fileobj.read(blocksize)

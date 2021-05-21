@@ -684,7 +684,8 @@ class StorageVolume(_StorageObject):
 
         try:
             t.start()
-            meter.start(_("Allocating '%s'") % self.name, self.capacity)
+            msg = _("Allocating '%(filename)s'") % {"filename": self.name}
+            meter.start(msg, self.capacity)
 
             if self.conn.is_really_test():
                 # Test suite doesn't support any flags, so reset them
