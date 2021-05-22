@@ -246,9 +246,8 @@ class vmmHostNets(vmmGObjectUI):
         uiutil.set_grid_row_visible(self.widget("net-name-domain"),
                                        bool(net.get_name_domain()))
 
-        state = active and _("Active") or _("Inactive")
         icon = (active and ICON_RUNNING or ICON_SHUTOFF)
-        self.widget("net-state").set_text(state)
+        self.widget("net-state").set_text(net.run_status())
         self.widget("net-state-icon").set_from_icon_name(icon,
                                                          Gtk.IconSize.BUTTON)
 

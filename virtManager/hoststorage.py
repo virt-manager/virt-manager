@@ -320,8 +320,7 @@ class vmmHostStorage(vmmGObjectUI):
         self.widget("pool-state-icon").set_from_icon_name(
                 ((active and ICON_RUNNING) or ICON_SHUTOFF),
                 Gtk.IconSize.BUTTON)
-        self.widget("pool-state").set_text(
-                (active and _("Active")) or _("Inactive"))
+        self.widget("pool-state").set_text(pool.run_status())
         self.widget("pool-autostart").set_label(_("On Boot"))
         self.widget("pool-autostart").set_active(auto)
 
