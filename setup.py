@@ -12,19 +12,21 @@ if sys.version_info.major < 3:
 import glob
 import os
 from pathlib import Path
+import shutil
+import sysconfig
 import subprocess
 
-import distutils
+# distutils will be deprecated in python 3.12 in favor of setuptools,
+# but as of this writing there's standard no setuptools way to extend the
+# 'build' or 'build_scripts' commands which are the only standard
+# commands we trigger.
 import distutils.command.build
-import distutils.command.install
-import distutils.command.install_data
-import distutils.command.install_egg_info
-import distutils.dist
-import distutils.log
-import distutils.sysconfig
 
+import setuptools
+import setuptools.command.install
+import setuptools.command.install_egg_info
 
-sysprefix = distutils.sysconfig.get_config_var("prefix")
+SYSPREFIX = sysconfig.get_config_var("prefix")
 
 
 def _import_buildconfig():
@@ -58,7 +60,7 @@ _appdata_files = [
 ]
 
 
-class my_build_i18n(distutils.command.build.build):
+class my_build_i18n(setuptools.Command):
     """
     Add our desktop files to the list, saves us having to track setup.cfg
     """
@@ -161,10 +163,9 @@ from %(pkgname)s import %(filename)s
 
 
     def _make_man_pages(self):
-        from distutils.spawn import find_executable
-        rstbin = find_executable("rst2man")
+        rstbin = shutil.which("rst2man")
         if not rstbin:
-            rstbin = find_executable("rst2man.py")
+            rstbin = shutil.which("rst2man.py")
         if not rstbin:
             sys.exit("Didn't find rst2man or rst2man.py")
 
@@ -230,7 +231,7 @@ from %(pkgname)s import %(filename)s
         distutils.command.build.build.run(self)
 
 
-class my_egg_info(distutils.command.install_egg_info.install_egg_info):
+class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
     """
     Disable egg_info installation, seems pointless for a non-library
     """
@@ -238,19 +239,19 @@ class my_egg_info(distutils.command.install_egg_info.install_egg_info):
         pass
 
 
-class my_install(distutils.command.install.install):
+class my_install(setuptools.command.install.install):
     """
     Error if we weren't 'configure'd with the correct install prefix
     """
     def finalize_options(self):
         if self.prefix is None:
-            if BuildConfig.prefix != sysprefix:
-                print("Using configured prefix=%s instead of sysprefix=%s" % (
-                    BuildConfig.prefix, sysprefix))
+            if BuildConfig.prefix != SYSPREFIX:
+                print("Using configured prefix=%s instead of SYSPREFIX=%s" % (
+                    BuildConfig.prefix, SYSPREFIX))
                 self.prefix = BuildConfig.prefix
             else:
-                print("Using sysprefix=%s" % sysprefix)
-                self.prefix = sysprefix
+                print("Using SYSPREFIX=%s" % SYSPREFIX)
+                self.prefix = SYSPREFIX
 
         elif self.prefix != BuildConfig.prefix:
             print("Install prefix=%s doesn't match configure prefix=%s\n"
@@ -258,30 +259,28 @@ class my_install(distutils.command.install.install):
                   (self.prefix, BuildConfig.prefix))
             sys.exit(1)
 
-        distutils.command.install.install.finalize_options(self)
+        setuptools.command.install.install.finalize_options(self)
 
-
-class my_install_data(distutils.command.install_data.install_data):
     def run(self):
-        distutils.command.install_data.install_data.run(self)
-
         if not self.distribution.no_update_icon_cache:
-            distutils.log.info("running gtk-update-icon-cache")
-            icon_path = os.path.join(self.install_dir, "share/icons/hicolor")
+            print("running gtk-update-icon-cache")
+            icon_path = os.path.join(self.install_data, "share/icons/hicolor")
             self.spawn(["gtk-update-icon-cache", "-q", "-t", icon_path])
 
         if not self.distribution.no_compile_schemas:
-            distutils.log.info("compiling gsettings schemas")
-            gschema_install = os.path.join(self.install_dir,
+            print("compiling gsettings schemas")
+            gschema_install = os.path.join(self.install_data,
                 "share/glib-2.0/schemas")
             self.spawn(["glib-compile-schemas", gschema_install])
+
+        setuptools.command.install.install.run(self)
 
 
 ###################
 # Custom commands #
 ###################
 
-class my_rpm(distutils.core.Command):
+class my_rpm(setuptools.Command):
     user_options = []
     description = "Build RPMs and output to the source directory."
 
@@ -303,7 +302,7 @@ class my_rpm(distutils.core.Command):
         subprocess.check_call(cmd)
 
 
-class configure(distutils.core.Command):
+class configure(setuptools.Command):
     user_options = [
         ("prefix=", None, "installation prefix"),
         ("default-graphics=", None,
@@ -319,7 +318,7 @@ class configure(distutils.core.Command):
         pass
 
     def initialize_options(self):
-        self.prefix = sysprefix
+        self.prefix = SYSPREFIX
         self.default_graphics = None
         self.default_hvs = None
 
@@ -337,7 +336,7 @@ class configure(distutils.core.Command):
         print("Generated %s" % BuildConfig.cfgpath)
 
 
-class TestCommand(distutils.core.Command):
+class TestCommand(setuptools.Command):
     user_options = []
     description = "DEPRECATED: Use `pytest`. See CONTRIBUTING.md"
     def finalize_options(self):
@@ -349,7 +348,7 @@ class TestCommand(distutils.core.Command):
                  "See CONTRIBUTING.md for more info.")
 
 
-class CheckPylint(distutils.core.Command):
+class CheckPylint(setuptools.Command):
     user_options = [
         ("jobs=", "j", "use multiple processes to speed up Pylint"),
     ]
@@ -419,8 +418,8 @@ class CheckPylint(distutils.core.Command):
         pylint.lint.Run(lintfiles + pylint_opts)
 
 
-class VMMDistribution(distutils.dist.Distribution):
-    global_options = distutils.dist.Distribution.global_options + [
+class VMMDistribution(setuptools.dist.Distribution):
+    global_options = setuptools.dist.Distribution.global_options + [
         ("no-update-icon-cache", None, "Don't run gtk-update-icon-cache"),
         ("no-compile-schemas", None, "Don't compile gsettings schemas"),
     ]
@@ -428,10 +427,10 @@ class VMMDistribution(distutils.dist.Distribution):
     def __init__(self, *args, **kwargs):
         self.no_update_icon_cache = False
         self.no_compile_schemas = False
-        distutils.dist.Distribution.__init__(self, *args, **kwargs)
+        setuptools.dist.Distribution.__init__(self, *args, **kwargs)
 
 
-class ExtractMessages(distutils.core.Command):
+class ExtractMessages(setuptools.Command):
     user_options = [
     ]
     description = "Extract the translation messages"
@@ -483,7 +482,7 @@ class ExtractMessages(distutils.core.Command):
         self.spawn(cmd)
 
 
-distutils.core.setup(
+setuptools.setup(
     name="virt-manager",
     version=BuildConfig.version,
     author="Cole Robinson",
@@ -534,7 +533,6 @@ distutils.core.setup(
         'build_i18n': my_build_i18n,
 
         'install': my_install,
-        'install_data': my_install_data,
         'install_egg_info': my_egg_info,
 
         'configure': configure,
