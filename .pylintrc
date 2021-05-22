@@ -10,6 +10,8 @@ enable=fixme
 [MASTER]
 # Don't pickle any data for cross run comparison reports
 persistent=no
+# Make sure pylint checks against gtk3
+init-hook="import gi; gi.require_version('Gtk', '3.0')"
 
 
 [REPORTS]
