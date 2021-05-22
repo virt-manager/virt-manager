@@ -52,6 +52,7 @@ Suggests: python3-libguestfs
 BuildRequires: gettext
 BuildRequires: python3-devel
 BuildRequires: python3-docutils
+BuildRequires: python3-setuptools
 
 
 %description
