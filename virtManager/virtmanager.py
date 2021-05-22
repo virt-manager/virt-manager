@@ -13,6 +13,8 @@ import sys
 import traceback
 
 import gi
+gi.require_version("Gdk", "3.0")
+gi.require_version("Gtk", "3.0")
 gi.require_version('LibvirtGLib', '1.0')
 from gi.repository import LibvirtGLib
 
@@ -59,7 +61,6 @@ def _import_gtk(leftovers):
     origargv = sys.argv
     try:
         sys.argv = origargv[:1] + leftovers[:]
-        gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
         leftovers = sys.argv[1:]
 
