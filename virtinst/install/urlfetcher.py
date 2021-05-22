@@ -22,45 +22,9 @@ from ..logger import log
 # isoreader abstraction #
 #########################
 
-class _ISOReader:
+class _XorrisoReader():
     def __init__(self, location):
         self._location = location
-
-    def grabFile(self, url, scratchdir):
-        raise NotImplementedError()
-    def hasFile(self, url):
-        raise NotImplementedError()
-
-
-class _ISOinfoReader(_ISOReader):
-    """
-    Handle reading reading files off an iso
-    """
-    def __init__(self, location):
-        super().__init__(location)
-        self._cache_file_list = self._make_file_list()
-
-    def _make_file_list(self):
-        cmd = ["isoinfo", "-J", "-i", self._location, "-f"]
-
-        log.debug("Generating iso filelist: %s", cmd)
-        output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
-        return output.splitlines(False)
-
-    def grabFile(self, url, scratchdir):
-        ignore = scratchdir
-        cmd = ["isoinfo", "-J", "-i", self._location, "-x", url]
-
-        log.debug("Extracting iso file: %s", cmd)
-        return subprocess.check_output(cmd)
-
-    def hasFile(self, url):
-        return url.encode("ascii") in self._cache_file_list
-
-
-class _XorrisoReader(_ISOReader):
-    def __init__(self, location):
-        super().__init__(location)
         self._cache_file_list = self._make_file_list()
 
     def _make_file_list(self):
