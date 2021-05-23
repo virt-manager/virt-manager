@@ -20,7 +20,8 @@ jobs:
           rpm-build \
           dnf-plugins-core \
           glibc-langpack-en \
-          python3-pytest python3-pytest-cov
+          python3-pytest python3-pytest-cov \
+          python3-tqdm
 
         dnf copr enable -y @virtmaint-sig/virt-preview
         dnf install -y virt-install
