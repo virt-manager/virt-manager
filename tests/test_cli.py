@@ -608,7 +608,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
 source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client,target.rotation_rate=6000
 --disk vol=iscsi-direct/unit:0:0:1
---disk size=.0001,format=raw
+--disk size=.0001,format=raw,transient=on,transient.shareBacking=yes
 --disk size=.0001,pool=disk-pool
 --disk path=%(EXISTIMG1)s,type=dir
 --disk path=/fooroot.img,size=.0001,transient=on
