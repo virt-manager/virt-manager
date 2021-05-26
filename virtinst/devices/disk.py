@@ -475,6 +475,7 @@ class DeviceDisk(Device):
 
     read_only = XMLProperty("./readonly", is_bool=True)
     shareable = XMLProperty("./shareable", is_bool=True)
+    transient = XMLProperty("./transient", is_bool=True)
     driver_cache = XMLProperty("./driver/@cache")
     driver_discard = XMLProperty("./driver/@discard")
     driver_detect_zeroes = XMLProperty("./driver/@detect_zeroes")

@@ -231,6 +231,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/fooroot.img"/>
       <target dev="vds" bus="virtio"/>
+      <transient/>
     </disk>
     <disk type="dir" device="disk">
       <driver name="qemu"/>

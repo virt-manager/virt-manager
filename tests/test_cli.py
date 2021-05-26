@@ -611,7 +611,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --disk size=.0001,format=raw
 --disk size=.0001,pool=disk-pool
 --disk path=%(EXISTIMG1)s,type=dir
---disk path=/fooroot.img,size=.0001
+--disk path=/fooroot.img,size=.0001,transient=on
 --disk source.dir=/
 --disk type=nvme,source.type=pci,source.managed=no,source.namespace=2,source.address.domain=0x0001,source.address.bus=0x02,source.address.slot=0x00,source.address.function=0x0
 
