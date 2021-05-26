@@ -3440,6 +3440,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("wwn", "wwn")
         cls.add_arg("readonly", "read_only", is_onoff=True)
         cls.add_arg("shareable", "shareable", is_onoff=True)
+        cls.add_arg("transient", "transient", is_onoff=True)
 
         cls.add_arg("target.bus", "bus")
         cls.add_arg("target.removable", "removable", is_onoff=True)
