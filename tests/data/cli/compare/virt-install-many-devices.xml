@@ -216,6 +216,7 @@
       <driver name="qemu" type="raw"/>
       <source file="/var/lib/libvirt/images/disk.img"/>
       <target dev="vdp" bus="virtio"/>
+      <transient shareBacking="yes"/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="none" io="native"/>
