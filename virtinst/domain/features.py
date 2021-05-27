@@ -37,6 +37,7 @@ class DomainFeatures(XMLBuilder):
     vmport = XMLProperty("./vmport/@state", is_onoff=True)
     kvm_hidden = XMLProperty("./kvm/hidden/@state", is_onoff=True)
     kvm_hint_dedicated = XMLProperty("./kvm/hint-dedicated/@state", is_onoff=True)
+    kvm_poll_control = XMLProperty("./kvm/poll-control/@state", is_onoff=True)
     pvspinlock = XMLProperty("./pvspinlock/@state", is_onoff=True)
 
     smm = XMLProperty("./smm/@state", is_onoff=True)

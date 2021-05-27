@@ -557,7 +557,7 @@ c.add_compare("""
 --vcpus vcpu.current=3,maxvcpus=4,vcpu.placement=auto
 --memory hotplugmemorymax=2048,hotplugmemoryslots=2
 --disk none
---features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on
+--features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on
 --clock rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
 --boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,loader_ro=yes,loader.type=rom,loader=/tmp/foo
 --memorybacking access.mode=shared,source.type=anonymous,hugepages=on
