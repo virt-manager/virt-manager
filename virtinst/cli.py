@@ -2782,6 +2782,7 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("vmport.state", "vmport", is_onoff=True)
         cls.add_arg("kvm.hidden.state", "kvm_hidden", is_onoff=True)
         cls.add_arg("kvm.hint-dedicated.state", "kvm_hint_dedicated", is_onoff=True)
+        cls.add_arg("kvm.poll-control.state", "kvm_poll_control", is_onoff=True)
         cls.add_arg("pvspinlock.state", "pvspinlock", is_onoff=True)
 
         cls.add_arg("gic.version", "gic_version")
