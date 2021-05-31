@@ -82,7 +82,7 @@ class DeviceHostdev(Device):
                         _("Don't know how to generate nodedev for mdev type id '%s'") %
                         nodedev.type_id)
 
-            self.uuid = nodedev.name[5:].replace('_', '-')
+            self.uuid = nodedev.get_mdev_uuid()
 
         else:
             raise ValueError(_("Unknown node device type %s") % nodedev)
