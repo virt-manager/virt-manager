@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 import os
+import uuid
 
 from .logger import log
 from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
@@ -23,6 +24,16 @@ def _compare_int(nodedev_val, hostdev_val):
     nodedev_val = _intify(nodedev_val)
     hostdev_val = _intify(hostdev_val)
     return (nodedev_val == hostdev_val or hostdev_val == -1)
+
+
+def _compare_uuid(nodedev_val, hostdev_val):
+    try:
+        nodedev_val = uuid.UUID(nodedev_val)
+        hostdev_val = uuid.UUID(hostdev_val)
+    except Exception:  # pragma: no cover
+        return -1
+
+    return (nodedev_val == hostdev_val)
 
 
 class DevNode(XMLBuilder):
@@ -82,6 +93,9 @@ class NodeDevice(XMLBuilder):
     parent = XMLProperty("./parent")
     device_type = XMLProperty("./capability/@type")
 
+    def get_mdev_uuid(self):
+        return self.name[5:].replace('_', '-')
+
     def compare_to_hostdev(self, hostdev):
         if self.device_type == "pci":
             if hostdev.type != "pci":
@@ -100,6 +114,12 @@ class NodeDevice(XMLBuilder):
                 _compare_int(self.vendor_id, hostdev.vendor) and
                 _compare_int(self.bus, hostdev.bus) and
                 _compare_int(self.device, hostdev.device))
+
+        if self.device_type == "mdev":
+            if hostdev.type != "mdev":
+                return False
+
+            return _compare_uuid(self.get_mdev_uuid(), hostdev.uuid)
 
         return False
 
