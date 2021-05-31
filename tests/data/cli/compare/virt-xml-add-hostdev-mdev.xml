@@ -1,0 +1,14 @@
+     <vsock model="virtio">
+       <cid auto="no" address="5"/>
+     </vsock>
++    <hostdev mode="subsystem" type="mdev" managed="no" model="vfio-ccw">
++      <source>
++        <address uuid="8e37ee90-2b51-45e3-9b25-bf8283c03110"/>
++      </source>
++    </hostdev>
+   </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
+   <keywrap>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.

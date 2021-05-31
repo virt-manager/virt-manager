@@ -1288,6 +1288,7 @@ c.add_compare("--edit mac=00:11:7f:33:44:55 --network target=nic55", "edit-selec
 c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder")
 c.add_compare("--edit path=/dev/null --disk path=,target=fdb,boot_order=12", "edit-disk-unset")  # --disk matching, using empty value to unset path
 c.add_compare("--edit --memballoon none", "edit-disable-memballoon")
+c.add_compare("--edit address.devno=0x0002 --hostdev address.devno=0x0008", "edit-hostdev-mdev")
 
 c = vixml.add_category("edit and start selection", "test-state-shutoff --print-diff --start")
 c.add_compare("--define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder")
@@ -1322,6 +1323,8 @@ c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all")
 c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name")
 c.add_compare("--remove-device --memballoon all", "remove-memballoon")
+c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev")
+c.add_compare("--remove-device --hostdev mdev_b1ae8bf6_38b0_4c81_9d44_78ce3f520496", "remove-hostdev-mdev")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
 c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
@@ -1332,6 +1335,7 @@ c.add_compare("--define --add-device --host-device usb_device_4b3_4485_noserial"
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic-start")
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage-start")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path-start")
+c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev-start")
 
 c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM)s test --print-diff --define")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS (none) from XML
