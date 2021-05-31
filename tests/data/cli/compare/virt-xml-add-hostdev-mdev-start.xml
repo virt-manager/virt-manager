@@ -1,0 +1,12 @@
+       <model type="cirrus" vram="16384" heads="1" primary="yes"/>
+     </video>
+     <memballoon model="virtio"/>
++    <hostdev mode="subsystem" type="mdev" managed="no" model="vfio-ccw">
++      <source>
++        <address uuid="8e37ee90-2b51-45e3-9b25-bf8283c03110"/>
++      </source>
++    </hostdev>
+   </devices>
+ </domain>
+
+Domain 'test-state-shutoff' started successfully.

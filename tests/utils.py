@@ -232,7 +232,7 @@ def diff_compare(actual_out, filename=None, expect_out=None):
             open(filename, "w").write(actual_out)
         expect_out = open(filename).read()
 
-    diff = xmlutil.diff(expect_out, actual_out,
+    diff = xmlutil.diff(expect_out.rstrip(), actual_out.rstrip(),
             filename or '', "Generated output")
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)

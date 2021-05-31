@@ -259,6 +259,12 @@
       </source>
       <rom bar='off'/>
     </hostdev>
+    <hostdev mode="subsystem" type="mdev" managed="no" model="vfio-ccw">
+      <source>
+        <address uuid="b1ae8bf6-38b0-4c81-9d44-78ce3f520496"/>
+      </source>
+      <address type='ccw' cssid='0xfe' ssid='0x0' devno='0x0002'/>
+    </hostdev>
 
     <serial type='null'/>
 
@@ -734,6 +740,32 @@
     <device>3</device>
     <product id='0x4485'>Serial Converter</product>
     <vendor id='0x04b3'>IBM Corp.</vendor>
+  </capability>
+</device>
+
+<device>
+  <name>mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110</name>
+  <path>/sys/devices/css0/0.0.0023/8e37ee90-2b51-45e3-9b25-bf8283c03110</path>
+  <parent>css_0_0_0023</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+  <capability type='mdev'>
+    <type id='vfio_ccw-io'/>
+    <iommuGroup number='0'/>
+  </capability>
+</device>
+
+<device>
+  <name>mdev_b1ae8bf6_38b0_4c81_9d44_78ce3f520496</name>
+  <path>/sys/devices/css0/0.0.0023/b1ae8bf6-38b0-4c81-9d44-78ce3f520496</path>
+  <parent>css_0_0_0023</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+  <capability type='mdev'>
+    <type id='vfio_ccw-io'/>
+    <iommuGroup number='0'/>
   </capability>
 </device>
 

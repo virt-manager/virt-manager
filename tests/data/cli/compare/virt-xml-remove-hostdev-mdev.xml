@@ -1,0 +1,15 @@
+       </source>
+       <rom bar="off"/>
+     </hostdev>
+-    <hostdev mode="subsystem" type="mdev" managed="no" model="vfio-ccw">
+-      <source>
+-        <address uuid="b1ae8bf6-38b0-4c81-9d44-78ce3f520496"/>
+-      </source>
+-      <address type="ccw" cssid="0xfe" ssid="0x0" devno="0x0002"/>
+-    </hostdev>
+     <redirdev bus="usb" type="tcp">
+       <source mode="connect" host="localhost" service="4000"/>
+       <protocol type="raw"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.
