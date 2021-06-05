@@ -924,7 +924,7 @@ class Guest(XMLBuilder):
             return
         if self.os.is_container() and not self.conn.is_vz():
             return
-        if self.os.arch not in ["x86_64", "i686", "ppc64", "ppc64le"]:
+        if self.os.arch not in ["x86_64", "i686", "ppc64", "ppc64le", "aarch64"]:
             return
         self.add_device(DeviceGraphics(self.conn))
 
