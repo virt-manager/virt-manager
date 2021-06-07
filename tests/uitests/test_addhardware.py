@@ -459,6 +459,12 @@ def testAddHosts(app):
     app.click_alert_button("device is already in use by", "Yes")
     lib.utils.check(lambda: details.active)
 
+    # Add MDEV device
+    _open_addhw(app, details)
+    tab = _select_hw(addhw, "MDEV Host Device", "host-tab")
+    tab.find_fuzzy("mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110",
+                   "table cell").click()
+    _finish(addhw, check=details)
 
 
 def testAddChars(app):

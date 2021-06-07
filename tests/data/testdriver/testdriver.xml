@@ -3646,6 +3646,27 @@ ba</description>
 </device>
 
 <device>
+  <name>css_0_0_0023</name>
+  <path>/sys/devices/css0/0.0.0023</path>
+  <parent>computer</parent>
+  <driver>
+    <name>vfio_ccw</name>
+  </driver>
+  <capability type='css'>
+    <cssid>0x0</cssid>
+    <ssid>0x0</ssid>
+    <devno>0x0023</devno>
+    <capability type='mdev_types'>
+      <type id='vfio_ccw-io'>
+        <name>I/O subchannel (Non-QDIO)</name>
+        <deviceAPI>vfio-ccw</deviceAPI>
+        <availableInstances>0</availableInstances>
+      </type>
+    </capability>
+  </capability>
+</device>
+
+<device>
   <name>mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110</name>
   <path>/sys/devices/css0/0.0.0023/8e37ee90-2b51-45e3-9b25-bf8283c03110</path>
   <parent>css_0_0_0023</parent>
@@ -3655,6 +3676,24 @@ ba</description>
   <capability type='mdev'>
     <type id='vfio_ccw-io'/>
     <iommuGroup number='0'/>
+  </capability>
+</device>
+
+<device>
+  <name>ap_matrix</name>
+  <path>/sys/devices/vfio_ap/matrix</path>
+  <parent>computer</parent>
+  <driver>
+    <name>vfio_ap</name>
+  </driver>
+  <capability type='ap_matrix'>
+    <capability type='mdev_types'>
+      <type id='vfio_ap-passthrough'>
+        <name>VFIO AP Passthrough Device</name>
+        <deviceAPI>vfio-ap</deviceAPI>
+        <availableInstances>65536</availableInstances>
+      </type>
+    </capability>
   </capability>
 </device>
 
