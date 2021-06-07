@@ -249,6 +249,10 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("PCI Host Device"), "system-run", PAGE_HOSTDEV,
                       nodedev_enabled, nodedev_errstr, "pci")
 
+        add_hw_option(_("MDEV Host Device"), "system-run", PAGE_HOSTDEV,
+                      self.conn.support.conn_nodedev(),
+                      _("Connection does not support host device enumeration"),
+                      "mdev")
         add_hw_option(_("Video"), "video-display", PAGE_VIDEO, True,
                       _("Libvirt version does not support video devices."))
         add_hw_option(_("Watchdog"), "device_pci", PAGE_WATCHDOG,
@@ -656,6 +660,9 @@ class vmmAddHardware(vmmGObjectUI):
                       (dehex(hostdev.domain), dehex(hostdev.bus),
                        dehex(hostdev.slot), dehex(hostdev.function)))
 
+        elif hostdev.uuid:
+            label += " %s" % (str(hostdev.uuid))
+
         return label
 
 
@@ -774,6 +781,12 @@ class vmmAddHardware(vmmGObjectUI):
                 for subdev in netdevs:
                     if dev.xmlobj.name == subdev.xmlobj.parent:
                         prettyname += " (%s)" % subdev.pretty_name()
+
+            if devtype == "mdev":
+                for parentdev in self.conn.list_nodedevs():
+                    if dev.xmlobj.parent == parentdev.xmlobj.name:
+                        prettyname = "%s %s" % (
+                                parentdev.pretty_name(), prettyname)
 
             model.append([dev.xmlobj, prettyname])
 
@@ -981,11 +994,13 @@ class vmmAddHardware(vmmGObjectUI):
 
         if page == PAGE_HOSTDEV:
             # Need to do this here, since we share the hostdev page
-            # between two different HW options
+            # between different HW options
             row = self._get_hw_selection()
             devtype = "usb_device"
             if row and row[5] == "pci":
                 devtype = "pci"
+            if row and row[5] == "mdev":
+                devtype = "mdev"
             self._populate_hostdev_model(devtype)
 
         if page == PAGE_CONTROLLER:
@@ -1036,6 +1051,8 @@ class vmmAddHardware(vmmGObjectUI):
             row = self._get_hw_selection()
             if row and row[5] == "pci":
                 return _("PCI Device")
+            if row and row[5] == "mdev":
+                return _("MDEV Device")
             return _("USB Device")
 
         raise RuntimeError("Unknown page %s" % page)  # pragma: no cover
