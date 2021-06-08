@@ -100,6 +100,7 @@ class _Devices(_CapsBlock):
     hostdev = XMLChildProperty(_make_capsblock("hostdev"), is_single=True)
     disk = XMLChildProperty(_make_capsblock("disk"), is_single=True)
     video = XMLChildProperty(_make_capsblock("video"), is_single=True)
+    graphics = XMLChildProperty(_make_capsblock("graphics"), is_single=True)
 
 
 class _Features(_CapsBlock):
@@ -349,6 +350,18 @@ class DomainCapabilities(XMLBuilder):
         """
         models = self.devices.video.get_enum("modelType").get_values()
         return bool("bochs" in models)
+
+    def supports_graphics_spice(self):
+        if not self.devices.graphics.supported:
+            # domcaps is too old, or the driver doesn't advertise graphics
+            # support. Use our pre-existing logic
+            if not self.conn.is_qemu() and not self.conn.is_test():
+                return False
+            return self.conn.caps.host.cpu.arch in ["i686", "x86_64"]
+
+        types = self.devices.graphics.get_enum("type").get_values()
+        return bool("spice" in types)
+
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
