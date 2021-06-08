@@ -70,7 +70,6 @@ Requires: python3-argcomplete
 Requires: python3-libvirt
 Requires: python3-libxml2
 Requires: python3-requests
-Requires: python3-tqdm
 Requires: libosinfo >= 0.2.10
 # Required for gobject-introspection infrastructure
 Requires: python3-gobject-base
