@@ -3,6 +3,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import io
+import os
+import unittest
+
 import virtinst
 
 from tests import utils
@@ -124,3 +128,74 @@ def test_misc_cpu_cornercases():
     guest.cpu.model = "idontexist"
     guest.cpu._validate_default_host_model_only(guest)
     assert guest.cpu.model is None
+
+
+def test_misc_meter():
+    """
+    Test coverage of our urlgrabber meter copy
+    """
+    # pylint: disable=protected-access
+    from virtinst import _progresspriv
+
+    def _test_meter_values(m, startval=10000, text="Meter text test"):
+        with unittest.mock.patch("time.time", return_value=1.0):
+            m.start(text, startval)
+        with unittest.mock.patch("time.time", return_value=1.1):
+            m.update(0)
+        with unittest.mock.patch("time.time", return_value=1.5):
+            m.update(0)
+        with unittest.mock.patch("time.time", return_value=2.0):
+            m.update(100)
+        with unittest.mock.patch("time.time", return_value=3.0):
+            m.update(200)
+        with unittest.mock.patch("time.time", return_value=4.0):
+            m.update(2000)
+        with unittest.mock.patch("time.time", return_value=5.0):
+            m.update(4000)
+        with unittest.mock.patch("time.time", return_value=6.0):
+            m.end()
+
+    # Basic output testing
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _test_meter_values(meter)
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter1.txt"))
+
+    # Fake having a longer terminal, it affects output a bit
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _progresspriv._term_width_val = 120
+    _test_meter_values(meter)
+    _progresspriv._term_width_val = 80
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter2.txt"))
+
+    # meter with size=None
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _test_meter_values(meter, None)
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter3.txt"))
+
+    # meter with size=None and small terminal size
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _progresspriv._term_width_val = 11
+    _test_meter_values(meter, None, "1234567890")
+    assert meter.re.fraction_read() is None
+    _progresspriv._term_width_val = 80
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter4.txt"))
+
+    # meter with size exceeded by the update() values
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _test_meter_values(meter, 200)
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter5.txt"))
+
+    # meter with size 0
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _test_meter_values(meter, 0)
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter6.txt"))
+
+    # BaseMeter coverage
+    meter = _progresspriv.BaseMeter()
+    _test_meter_values(meter)

@@ -10,12 +10,11 @@
 # we are just copying this for now.
 
 
-import sys
-import time
-import math
 import fcntl
 import struct
+import sys
 import termios
+import time
 
 
 # Code from https://mail.python.org/pipermail/python-list/2000-May/033365.html
@@ -24,11 +23,8 @@ def terminal_width(fd=1):
     try:
         buf = 'abcdefgh'
         buf = fcntl.ioctl(fd, termios.TIOCGWINSZ, buf)
-        ret = struct.unpack('hhhh', buf)[1]
-        if ret == 0:
-            return 80
-        # Add minimum too?
-        return ret
+        ret = struct.unpack('hhhh', buf)[1]  # pragma: no cover
+        return ret or 80  # pragma: no cover
     except IOError:
         return 80
 
@@ -66,9 +62,7 @@ class TerminalLine:
     def rest_split(self, fixed, elements=2):
         """ After a fixed length, split the rest of the line length among
             a number of different elements (default=2). """
-        if self.llen < fixed:
-            return 0
-        return (self.llen - fixed) // elements
+        return max(self.llen - fixed, 0) // elements
 
     def add(self, element, full_len=None):
         """ If there is room left in the line, above min_len, add element.
@@ -93,70 +87,47 @@ class BaseMeter:
     def __init__(self):
         self.update_period = 0.3  # seconds
 
-        self.url = None
-        self.basename = None
         self.text = None
         self.size = None
         self.start_time = None
-        self.fsize = None
         self.last_amount_read = 0
         self.last_update_time = None
         self.re = RateEstimator()
 
-    def set_text(self, text):
-        self.text = text
-
     def start(self, text, size):
         self.text = text
-
         self.size = size
-        if size is not None:
-            self.fsize = format_number(size) + 'B'
+        assert type(size) in [int, type(None)]
+        assert self.text is not None
 
         now = time.time()
         self.start_time = now
         self.re.start(size, now)
         self.last_amount_read = 0
         self.last_update_time = now
-        self._do_start(now)
 
-    def _do_start(self, now=None):
-        pass
-
-    def update(self, amount_read, now=None):
+    def update(self, amount_read):
         # for a real gui, you probably want to override and put a call
         # to your mainloop iteration function here
-        if now is None:
-            now = time.time()
+        assert type(amount_read) is int
+
+        now = time.time()
         if (not self.last_update_time or
                 (now >= self.last_update_time + self.update_period)):
             self.re.update(amount_read, now)
             self.last_amount_read = amount_read
             self.last_update_time = now
-            self._do_update(amount_read, now)
+            self._do_update(amount_read)
 
-    def _do_update(self, amount_read, now=None):
+    def _do_update(self, amount_read):
         pass
 
     def end(self):
-        self._do_end(self.last_amount_read, self.last_update_time)
+        self._do_end()
 
-    def _do_end(self, amount_read, now=None):
+    def _do_end(self):
         pass
 
-
-#  This is kind of a hack, but progress is gotten from grabber which doesn't
-# know about the total size to download. So we do this so we can get the data
-# out of band here. This will be "fixed" one way or anther soon.
-_text_meter_total_size = 0
-_text_meter_sofar_size = 0
-
-
-def text_meter_total_size(size, downloaded=0):
-    global _text_meter_total_size
-    global _text_meter_sofar_size
-    _text_meter_total_size = size
-    _text_meter_sofar_size = downloaded
 
 #
 #       update: No size (minimal: 17 chars)
@@ -230,20 +201,11 @@ class TextMeter(BaseMeter):
         BaseMeter.__init__(self)
         self.output = output
 
-    def _do_update(self, amount_read, now=None):
+    def _do_update(self, amount_read):
         etime = self.re.elapsed_time()
         fread = format_number(amount_read)
-        # self.size = None
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
 
         ave_dl = format_number(self.re.average_rate())
-        sofar_size = None
-        if _text_meter_total_size:
-            sofar_size = _text_meter_sofar_size + amount_read
-            sofar_pc = (sofar_size * 100) // _text_meter_total_size
 
         # Include text + ui_rate in minimal
         tl = TerminalLine(8, 8 + 1 + 8)
@@ -254,7 +216,7 @@ class TextMeter(BaseMeter):
             ui_time = tl.add('  %s' % format_time(etime, use_hours))
             ui_end = tl.add(' ' * 5)
             ui_rate = tl.add(' %5sB/s' % ave_dl)
-            out = '%-*.*s%s%s%s%s\r' % (tl.rest(), tl.rest(), text,
+            out = '%-*.*s%s%s%s%s\r' % (tl.rest(), tl.rest(), self.text,
                                         ui_rate, ui_size, ui_time, ui_end)
         else:
             rtime = self.re.remaining_time()
@@ -264,35 +226,23 @@ class TextMeter(BaseMeter):
             ui_time = tl.add('  %s' % frtime)
             ui_end = tl.add(' ETA ')
 
-            if sofar_size is None:
-                ui_sofar_pc = ''
-            else:
-                ui_sofar_pc = tl.add(' (%i%%)' % sofar_pc,
-                                     full_len=len(" (100%)"))
-
             ui_pc = tl.add(' %2i%%' % (frac * 100))
             ui_rate = tl.add(' %5sB/s' % ave_dl)
             # Make text grow a bit before we start growing the bar too
             blen = 4 + tl.rest_split(8 + 8 + 4)
             ui_bar = _term_add_bar(tl, blen, frac)
-            out = '\r%-*.*s%s%s%s%s%s%s%s\r' % (
-                tl.rest(), tl.rest(), text,
-                ui_sofar_pc, ui_pc, ui_bar,
+            out = '\r%-*.*s%s%s%s%s%s%s\r' % (
+                tl.rest(), tl.rest(), self.text,
+                ui_pc, ui_bar,
                 ui_rate, ui_size, ui_time, ui_end
             )
 
         self.output.write(out)
         self.output.flush()
 
-    def _do_end(self, amount_read, now=None):
-        global _text_meter_total_size
-        global _text_meter_sofar_size
-
+    def _do_end(self):
+        amount_read = self.last_amount_read
         total_size = format_number(amount_read)
-        if self.text is not None:
-            text = self.text
-        else:
-            text = self.basename
 
         tl = TerminalLine(8)
         # For big screens, make it more readable.
@@ -301,28 +251,15 @@ class TextMeter(BaseMeter):
         ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(),
                                               use_hours))
         ui_end, not_done = _term_add_end(tl, self.size, amount_read)
-        out = '\r%-*.*s%s%s%s\n' % (tl.rest(), tl.rest(), text,
+        dummy = not_done
+        out = '\r%-*.*s%s%s%s\n' % (tl.rest(), tl.rest(), self.text,
                                     ui_size, ui_time, ui_end)
         self.output.write(out)
         self.output.flush()
 
-        # Don't add size to the sofar size until we have all of it.
-        # If we don't have a size, then just pretend/hope we got all of it.
-        if not_done:
-            return
-
-        if _text_meter_total_size:
-            _text_meter_sofar_size += amount_read
-        if _text_meter_total_size <= _text_meter_sofar_size:
-            _text_meter_total_size = 0
-            _text_meter_sofar_size = 0
-
-
-text_progress_meter = TextMeter
 
 ######################################################################
 # support classes and functions
-
 
 class RateEstimator:
     def __init__(self, timescale=5.0):
@@ -333,22 +270,14 @@ class RateEstimator:
         self.last_amount_read = 0
         self.ave_rate = None
 
-    def start(self, total=None, now=None):
-        if now is None:
-            now = time.time()
+    def start(self, total, now):
         self.total = total
         self.start_time = now
         self.last_update_time = now
         self.last_amount_read = 0
         self.ave_rate = None
 
-    def update(self, amount_read, now=None):
-        if now is None:
-            now = time.time()
-        # libcurl calls the progress callback when fetching headers
-        # too, thus amount_read = 0 .. hdr_size .. 0 .. content_size.
-        # Occasionally we miss the 2nd zero and report avg speed < 0.
-        # Handle read_diff < 0 here. BZ 1001767.
+    def update(self, amount_read, now):
         if amount_read == 0 or amount_read < self.last_amount_read:
             # if we just started this file, all bets are off
             self.last_update_time = now
@@ -386,10 +315,9 @@ class RateEstimator:
         (can be None for unknown transfer size)"""
         if self.total is None:
             return None
-        elif self.total == 0:
-            return 1.0
-        else:
-            return float(self.last_amount_read) / self.total
+        if self.total == 0:
+            return 1.0  # pragma: no cover
+        return float(self.last_amount_read) / self.total
 
     #########################################################################
     # support methods
@@ -413,36 +341,15 @@ class RateEstimator:
 
         try:
             recent_rate = read_diff / time_diff
-        except ZeroDivisionError:
+        except ZeroDivisionError:  # pragma: no cover
             recent_rate = None
         if last_ave is None:
             return recent_rate
-        elif recent_rate is None:
-            return last_ave
+        if recent_rate is None:
+            return last_ave  # pragma: no cover
 
         # at this point, both last_ave and recent_rate are numbers
         return epsilon * recent_rate + (1 - epsilon) * last_ave
-
-    def _round_remaining_time(self, rt, start_time=15.0):
-        """round the remaining time, depending on its size
-        If rt is between n*start_time and (n+1)*start_time round downward
-        to the nearest multiple of n (for any counting number n).
-        If rt < start_time, round down to the nearest 1.
-        For example (for start_time = 15.0):
-         2.7  -> 2.0
-         25.2 -> 25.0
-         26.4 -> 26.0
-         35.3 -> 34.0
-         63.6 -> 60.0
-        """
-
-        if rt < 0:
-            return 0.0
-        shift = int(math.log(rt / start_time) / math.log(2))
-        rt = int(rt)
-        if shift <= 0:
-            return rt
-        return float(int(rt) >> shift << shift)
 
 
 def format_time(seconds, use_hours=0):
@@ -452,7 +359,7 @@ def format_time(seconds, use_hours=0):
         else:
             return '--:--'
     elif seconds == float('inf'):
-        return 'Infinite'
+        return 'Infinite'  # pragma: no cover
     else:
         seconds = int(seconds)
         minutes = seconds // 60
@@ -465,7 +372,7 @@ def format_time(seconds, use_hours=0):
             return '%02i:%02i' % (minutes, seconds)
 
 
-def format_number(number, SI=0, space=' '):
+def format_number(number):
     """Turn numbers into human-readable metric-like numbers"""
     symbols = ['',  # (none)
                'k',  # kilo
@@ -477,11 +384,7 @@ def format_number(number, SI=0, space=' '):
                'Z',  # zetta
                'Y']  # yotta
 
-    if SI:
-        step = 1000.0
-    else:
-        step = 1024.0
-
+    step = 1024.0
     thresh = 999
     depth = 0
     max_depth = len(symbols) - 1
@@ -505,4 +408,4 @@ def format_number(number, SI=0, space=' '):
     else:
         fmt = '%.0f%s%s'
 
-    return(fmt % (float(number or 0), space, symbols[depth]))
+    return fmt % (float(number or 0), " ", symbols[depth])
