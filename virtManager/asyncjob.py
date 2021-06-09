@@ -56,11 +56,6 @@ class _vmmMeter(virtinst.progress.Meter):
     # Public APIs specific to virt-manager code #
     #############################################
 
-    def change_meter_text(self, text):
-        self._text = text
-        self._tqdm.desc = text
-        self._write()
-
     def is_started(self):
         return bool(self._tqdm)
 
