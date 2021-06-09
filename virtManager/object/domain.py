@@ -39,9 +39,8 @@ def start_job_progress_thread(vm, meter, progtext):
 
             try:
                 jobinfo = vm.job_info()
-                data_total      = float(jobinfo[3])
-                # data_processed  = float(jobinfo[4])
-                data_remaining  = float(jobinfo[5])
+                data_total      = int(jobinfo[3])
+                data_remaining  = int(jobinfo[5])
 
                 # data_total is 0 if the job hasn't started yet
                 if not data_total:
