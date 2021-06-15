@@ -131,7 +131,6 @@ done
 
 
 %files
-%doc README.md COPYING NEWS.md
 %{_bindir}/%{name}
 
 %{_mandir}/man1/%{name}.1*
@@ -148,8 +147,10 @@ done
 
 
 %files common -f %{name}.lang
-%dir %{_datadir}/%{name}
+%license COPYING
+%doc README.md NEWS.md
 
+%dir %{_datadir}/%{name}
 %{_datadir}/%{name}/virtinst
 
 
