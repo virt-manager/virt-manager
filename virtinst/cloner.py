@@ -195,7 +195,7 @@ def _get_shareable_msg(disk):
         return _("No storage to clone.")
     if disk.read_only:
         return _("Read Only")
-    if disk.shareable:
+    if disk.shareable or disk.transient_shareBacking:
         return _("Marked as shareable")
 
 
