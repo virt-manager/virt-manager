@@ -4030,13 +4030,18 @@ class ParserMemdev(VirtCLIParser):
 
         cls.add_arg("model", "model")
         cls.add_arg("access", "access")
+        cls.add_arg("discard", "discard", is_onoff=True)
         cls.add_arg("target.size", "target.size", cb=cls.set_target_size)
         cls.add_arg("target.node", "target.node")
         cls.add_arg("target.label_size", "target.label_size",
                 cb=cls.set_target_size)
+        cls.add_arg("target.readonly", "target.readonly", is_onoff=True)
         cls.add_arg("source.pagesize", "source.pagesize")
         cls.add_arg("source.path", "source.path")
         cls.add_arg("source.nodemask", "source.nodemask", can_comma=True)
+        cls.add_arg("source.pmem", "source.pmem", is_onoff=True)
+        cls.add_arg("source.alignsize", "source.alignsize",
+                cb=cls.set_target_size)
 
 
 ########################
