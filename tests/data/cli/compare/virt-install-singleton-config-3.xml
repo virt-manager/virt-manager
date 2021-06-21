@@ -130,7 +130,7 @@
     <panic model="isa">
       <address type="isa" iobase="0x500" irq="5"/>
     </panic>
-    <memory model="dimm" access="private">
+    <memory model="dimm" access="private" discard="yes">
       <source>
         <pagesize>4</pagesize>
         <nodemask>1-2</nodemask>
@@ -145,6 +145,8 @@
       <address type="dimm" slot="1" base="0x100000000"/>
       <source>
         <path>/path/to/nvdimm</path>
+        <pmem/>
+        <alignsize>2097152</alignsize>
       </source>
       <target>
         <size>524288</size>
@@ -152,6 +154,7 @@
         <label>
           <size>131072</size>
         </label>
+        <readonly/>
       </target>
     </memory>
     <vsock model="virtio">

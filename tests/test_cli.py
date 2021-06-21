@@ -565,8 +565,8 @@ c.add_compare("""
 --rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
 --cpu topology.sockets=1,topology.cores=3,topology.threads=2,cell0.cpus=0,cell0.memory=1048576
- --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2
- --memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1
+--memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2,discard=on
+--memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1,source.pmem=on,source.alignsize=2048,target.readonly=on
 --vsock auto_cid=on
 --memballoon default
 
