@@ -122,12 +122,6 @@ machine).
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/virt-manager/
 %endif
 
-# Replace '#!/usr/bin/env python3' with '#!/usr/bin/python3'
-# The format is ideal for upstream, but not a distro. See:
-# https://fedoraproject.org/wiki/Features/SystemPythonExecutablesUseSystemPython
-for f in $(find %{buildroot} -type f -executable -print); do
-    sed -i "1 s|^#!/usr/bin/env python3|#!%{__python3}|" $f || :
-done
 
 
 %files
