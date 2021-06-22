@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-#
 # Copyright(c) FUJITSU Limited 2007.
 #
 # This work is licensed under the GNU GPLv2 or later.

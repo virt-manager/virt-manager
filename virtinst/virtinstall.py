@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-#
 # Copyright 2005-2014 Red Hat, Inc.
 #
 # This work is licensed under the GNU GPLv2 or later.
