@@ -187,7 +187,9 @@ class vmmGraphicsDetails(vmmGObjectUI):
     ##############
 
     def reset_state(self):
-        self.widget("graphics-type").set_active(0)
+        uiutil.set_list_selection(
+                self.widget("graphics-type"),
+                self.config.get_graphics_type())
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
 
