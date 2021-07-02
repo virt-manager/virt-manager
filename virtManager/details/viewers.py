@@ -7,6 +7,7 @@
 
 from gi.repository import Gdk
 from gi.repository import GObject
+from gi.repository import Notify
 
 import gi
 gi.require_version('GtkVnc', '2.0')
@@ -59,6 +60,7 @@ class Viewer(vmmGObject):
         self._ginfo = ginfo
         self._tunnels = SSHTunnels(self._ginfo)
         self._keyboard_grab = False
+        Notify.init("virt-manager")
 
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
@@ -504,8 +506,14 @@ class SpiceViewer(Viewer):
     def _keyboard_grab_cb(self, src, grab):
         self._keyboard_grab = grab
         if grab:
+            n = Notify.Notification.new("virt-manager", "keyboard grabbed")
+            n.set_timeout(2000)
+            n.show()
             self.emit("keyboard-grab")
         else:
+            n = Notify.Notification.new("virt-manager", "keyboard ungrabbed")
+            n.set_timeout(2000)
+            n.show()
             self.emit("keyboard-ungrab")
 
     def _init_widget(self):
