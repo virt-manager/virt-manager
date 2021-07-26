@@ -80,9 +80,12 @@ class DomainCputune(XMLBuilder):
     Class for generating <cpu> XML
     """
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["vcpus", "cachetune", "memorytune", "vcpusched"]
+    _XML_PROP_ORDER = ["vcpus", "emulatorpin_cpuset", "cachetune",
+            "memorytune", "vcpusched"]
 
     vcpus = XMLChildProperty(_VCPUPin)
     cachetune = XMLChildProperty(_CacheTuneCPU)
     memorytune = XMLChildProperty(_MemoryTuneCPU)
     vcpusched = XMLChildProperty(_VCPUSched)
+
+    emulatorpin_cpuset = XMLProperty("./emulatorpin/@cpuset")
