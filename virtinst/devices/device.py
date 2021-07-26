@@ -148,6 +148,7 @@ class Device(XMLBuilder):
             "tpm":           ["type", "xmlindex"],
             "rng":           ["backend_model", "xmlindex"],
             "panic":         ["model", "xmlindex"],
+            "shmem":         ["name", "xmlindex"],
             "vsock":         ["model", "xmlindex"],
             "memballoon":    ["model", "xmlindex"],
             "iommu":         ["model", "xmlindex"],

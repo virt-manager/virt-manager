@@ -27,7 +27,7 @@ class _DomainDevices(XMLBuilder):
             'smartcard', 'serial', 'parallel', 'console', 'channel',
             'input', 'tpm', 'graphics', 'sound', 'video', 'hostdev',
             'redirdev', 'watchdog', 'memballoon', 'rng', 'panic',
-            'memory', 'vsock', 'iommu']
+            'shmem', 'memory', 'vsock', 'iommu']
 
 
     disk = XMLChildProperty(DeviceDisk)
@@ -50,6 +50,7 @@ class _DomainDevices(XMLBuilder):
     memballoon = XMLChildProperty(DeviceMemballoon)
     rng = XMLChildProperty(DeviceRng)
     panic = XMLChildProperty(DevicePanic)
+    shmem = XMLChildProperty(DeviceShMem)
     memory = XMLChildProperty(DeviceMemory)
     vsock = XMLChildProperty(DeviceVsock)
     iommu = XMLChildProperty(DeviceIommu)

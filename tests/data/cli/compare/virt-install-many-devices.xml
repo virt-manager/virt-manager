@@ -647,6 +647,16 @@
     <panic model="isa">
       <address type="isa" iobase="507"/>
     </panic>
+    <shmem name="my_shmem0" role="peer">
+      <model type="ivshmem-plain"/>
+      <size unit="M">4</size>
+    </shmem>
+    <shmem name="shmem_server">
+      <model type="ivshmem-doorbell"/>
+      <size unit="M">2</size>
+      <server path="/tmp/socket-shmemm"/>
+      <msi vectors="32" ioeventfd="on"/>
+    </shmem>
     <vsock model="virtio">
       <cid address="17"/>
     </vsock>

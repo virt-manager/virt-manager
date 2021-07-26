@@ -214,6 +214,10 @@
     <panic model="isa">
       <address type="isa" iobase="0x506"/>
     </panic>
+    <shmem name="shmem0" role="master">
+      <model type="ivshmem-plain"/>
+      <size unit="M">8</size>
+    </shmem>
     <iommu model="intel">
       <driver aw_bits="48" intremap="off" caching_mode="on" eim="off" iotlb="off"/>
     </iommu>
@@ -459,6 +463,10 @@
     <panic model="isa">
       <address type="isa" iobase="0x506"/>
     </panic>
+    <shmem name="shmem0" role="master">
+      <model type="ivshmem-plain"/>
+      <size unit="M">8</size>
+    </shmem>
     <iommu model="intel">
       <driver aw_bits="48" intremap="off" caching_mode="on" eim="off" iotlb="off"/>
     </iommu>

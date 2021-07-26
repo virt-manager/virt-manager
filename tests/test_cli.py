@@ -498,6 +498,7 @@ c.add_compare("""
 --watchdog default
 --tpm /dev/tpm0
 --rng /dev/random
+--shmem shmem0
 --vsock default
 """, "singleton-config-1")
 
@@ -548,6 +549,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 --panic iobase=0x506
+--shmem shmem0,role=master,model.type=ivshmem-plain,size=8,size.unit=M
 --iommu model=intel,driver.aw_bits=48,driver.caching_mode=on,driver.eim=off,driver.intremap=off,driver.iotlb=off
 """, "singleton-config-2")
 
@@ -716,6 +718,9 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=
 
 --panic iobase=507
+
+--shmem name=my_shmem0,role=peer,model.type=ivshmem-plain,size=4,size.unit=M
+--shmem name=shmem_server,model.type=ivshmem-doorbell,size=2,size.unit=M,server.path=/tmp/socket-shmemm,msi.vectors=32,msi.ioeventfd=on
 
 --vsock cid=17
 
