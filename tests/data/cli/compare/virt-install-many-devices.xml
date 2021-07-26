@@ -39,7 +39,7 @@
   <devices>
     <emulator>/usr/bin/qemu-kvm</emulator>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="writeback" io="threads" iothread="3"/>
+      <driver name="qemu" type="raw" cache="writeback" io="threads" iothread="3" queues="8"/>
       <source dev="/dev/default-pool/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>
