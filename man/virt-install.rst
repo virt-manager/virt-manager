@@ -1886,6 +1886,19 @@ Complete details at https://libvirt.org/formatdomain.html#elementsPanic
 
 
 
+``--shmem``
+^^^^^^^^^^^
+
+**Syntax:** ``--shmem`` NAME[,OPTS]
+
+Attach a shared memory device to the guest. The name must not contain ``/`` and must
+not be directory-specific to ``.`` or ``..``
+
+Use --shmem=? to see a list of all available sub options.
+Complete details at https://libvirt.org/formatdomain.html#shared-memory-device
+
+
+
 ``--memdev``
 ^^^^^^^^^^^^
 
