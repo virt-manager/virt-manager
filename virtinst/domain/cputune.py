@@ -16,6 +16,14 @@ class _VCPUPin(XMLBuilder):
     vcpu = XMLProperty("./@vcpu", is_int=True)
     cpuset = XMLProperty("./@cpuset")
 
+class _EmulatorPin(XMLBuilder):
+    """
+    Class for generating <cputune> child <emulatorpin> XML
+    """
+    XML_NAME = "emulatorpin"
+
+    cpuset = XMLProperty("./@cpuset")
+
 
 class _CacheCPU(XMLBuilder):
     """
@@ -80,9 +88,11 @@ class DomainCputune(XMLBuilder):
     Class for generating <cpu> XML
     """
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["vcpus", "cachetune", "memorytune", "vcpusched"]
+    _XML_PROP_ORDER = ["vcpus", "emulatorpin", "cachetune",
+            "memorytune", "vcpusched"]
 
     vcpus = XMLChildProperty(_VCPUPin)
+    emulatorpin = XMLChildProperty(_EmulatorPin, is_single=True)
     cachetune = XMLChildProperty(_CacheTuneCPU)
     memorytune = XMLChildProperty(_MemoryTuneCPU)
     vcpusched = XMLChildProperty(_VCPUSched)
