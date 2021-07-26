@@ -232,6 +232,7 @@
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
     <emulatorpin cpuset="1,7"/>
+    <iothreadpin iothread="1" cpuset="1,7"/>
     <cachetune vcpus="0-3">
       <cache level="3" id="0" type="both" size="3" unit="MiB"/>
     </cachetune>
@@ -478,6 +479,7 @@
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
     <emulatorpin cpuset="1,7"/>
+    <iothreadpin iothread="1" cpuset="1,7"/>
     <cachetune vcpus="0-3">
       <cache level="3" id="0" type="both" size="3" unit="MiB"/>
     </cachetune>
