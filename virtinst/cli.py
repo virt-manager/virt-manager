@@ -3457,6 +3457,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("driver.copy_on_read", "driver_copy_on_read", is_onoff=True)
         cls.add_arg("driver.io", "driver_io")
         cls.add_arg("driver.iothread", "driver_iothread")
+        cls.add_arg("driver.queues", "driver_queues")
         cls.add_arg("driver.error_policy", "error_policy")
 
         cls.add_arg("iotune.read_bytes_sec", "iotune_rbs")
