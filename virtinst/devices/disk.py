@@ -429,7 +429,7 @@ class DeviceDisk(Device):
         "_xmltype", "_device", "snapshot_policy",
         "driver_name", "driver_type",
         "driver_cache", "driver_discard", "driver_detect_zeroes",
-        "driver_io", "error_policy",
+        "driver_io", "driver_iothread", "driver_queues", "error_policy",
         "auth_username", "auth_secret_type", "auth_secret_uuid",
         "source",
         "target", "bus",
@@ -482,6 +482,7 @@ class DeviceDisk(Device):
     driver_detect_zeroes = XMLProperty("./driver/@detect_zeroes")
     driver_io = XMLProperty("./driver/@io")
     driver_iothread = XMLProperty("./driver/@iothread", is_int=True)
+    driver_queues = XMLProperty("./driver/@queues", is_int=True)
 
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
