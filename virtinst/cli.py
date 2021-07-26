@@ -796,6 +796,10 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--panic", action="append",
                     help=_("Configure a guest panic device. Ex:\n"
                            "--panic default"))
+    ParserShMem.register()
+    devg.add_argument("--shmem", action="append",
+                    help=_("Configure a guest shared memory device. Ex:\n"
+                           "--shmem name=shmem0"))
     ParserMemdev.register()
     devg.add_argument("--memdev", action="append",
                     help=_("Configure a guest memory device. Ex:\n"
@@ -4105,6 +4109,33 @@ class ParserPanic(VirtCLIParser):
         _add_common_device_args(cls)
 
         cls.add_arg("model", "model", ignore_default=True)
+
+
+###################
+# --shmem parsing #
+###################
+
+class ParserShMem(VirtCLIParser):
+    cli_arg_name = "shmem"
+    guest_propname = "devices.shmem"
+    remove_first = "name"
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+        _add_common_device_args(cls)
+
+        cls.add_arg("name", "name")
+        cls.add_arg("role", "role")
+
+        cls.add_arg("model.type", "type")
+
+        cls.add_arg("size", "size")
+        cls.add_arg("size.unit", "size_unit")
+
+        cls.add_arg("server.path", "server_path")
+        cls.add_arg("msi.vectors", "msi_vectors")
+        cls.add_arg("msi.ioeventfd", "msi_ioeventfd")
 
 
 ###################

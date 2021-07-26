@@ -17,10 +17,11 @@ from .iommu import DeviceIommu
 from .memballoon import DeviceMemballoon
 from .memory import DeviceMemory
 from .panic import DevicePanic
-from .smartcard import DeviceSmartcard
-from .sound import DeviceSound
 from .redirdev import DeviceRedirdev
 from .rng import DeviceRng
+from .shmem import DeviceShMem
+from .smartcard import DeviceSmartcard
+from .sound import DeviceSound
 from .tpm import DeviceTpm
 from .video import DeviceVideo
 from .vsock import DeviceVsock

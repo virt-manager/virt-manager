@@ -243,6 +243,7 @@ XML OPTIONS
 * ``--tpm``
 * ``--rng``
 * ``--panic``
+* ``--shmem``
 * ``--memdev``
 
 These options alter the XML for a single class of XML elements. More complete documentation is found in virt-install(1).
