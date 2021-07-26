@@ -2394,6 +2394,7 @@ class ParserCputune(VirtCLIParser):
                     find_inst_cb=cls.vcpu_find_inst_cb)
         cls.add_arg("vcpupin[0-9]*.cpuset", "cpuset", can_comma=True,
                     find_inst_cb=cls.vcpu_find_inst_cb)
+        cls.add_arg("emulatorpin.cpuset", "emulatorpin_cpuset", can_comma=True)
         cls.add_arg("vcpusched[0-9]*.vcpus", "vcpus", can_comma=True,
                     find_inst_cb=cls.vcpusched_find_inst_cb)
         cls.add_arg("vcpusched[0-9]*.scheduler", "scheduler",

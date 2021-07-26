@@ -231,6 +231,7 @@
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
+    <emulatorpin cpuset="1,7"/>
     <cachetune vcpus="0-3">
       <cache level="3" id="0" type="both" size="3" unit="MiB"/>
     </cachetune>
@@ -476,6 +477,7 @@
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
     <vcpupin vcpu="0" cpuset="0-3"/>
+    <emulatorpin cpuset="1,7"/>
     <cachetune vcpus="0-3">
       <cache level="3" id="0" type="both" size="3" unit="MiB"/>
     </cachetune>
