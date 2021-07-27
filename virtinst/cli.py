@@ -4043,6 +4043,7 @@ class ParserMemdev(VirtCLIParser):
         cls.add_arg("model", "model")
         cls.add_arg("access", "access")
         cls.add_arg("discard", "discard", is_onoff=True)
+        cls.add_arg("uuid", "uuid")
         cls.add_arg("target.size", "target.size", cb=cls.set_target_size)
         cls.add_arg("target.node", "target.node")
         cls.add_arg("target.label_size", "target.label_size",
