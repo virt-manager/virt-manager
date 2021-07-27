@@ -566,7 +566,7 @@ c.add_compare("""
 --panic default,,address.type=isa,address.iobase=0x500,address.irq=5
 --cpu topology.sockets=1,topology.cores=3,topology.threads=2,cell0.cpus=0,cell0.memory=1048576
 --memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2,discard=on
---memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1,source.pmem=on,source.alignsize=2048,target.readonly=on,uuid=11111111-2222-aaaa-bbbb-ccccddddeeee
+--memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1,source.pmem=on,source.alignsize=2048,target.readonly=on
 --vsock auto_cid=on
 --memballoon default
 
@@ -846,6 +846,7 @@ c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machi
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
 c.add_invalid("--xml /@foo=bar", grep="/@foo xmlXPathEval")  # failure processing xpath
+c.add_invalid("--memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.node=0,target.label_size=1,alias.name=mymemdev3,uuid=11111111-2222-aaaa-bbbb-ccccddddeeee", grep="UUID is not supported")  # hit a specific libvirt code path that proves --memdev uuid=XXX works
 
 
 
