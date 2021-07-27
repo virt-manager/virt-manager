@@ -652,6 +652,9 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --input type=keyboard,bus=usb
 --input tablet
 --input mouse
+--input mouse,bus=virtio,model=virtio-non-transitional
+--input passthrough,source.evdev=/dev/input/event1,bus=virtio
+--input evdev,source.dev=/dev/input/event1234,source.repeat=on,source.grab=all,source.grabToggle=ctrl-ctrl
 
 --serial char_type=tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2,alias.name=testalias7
