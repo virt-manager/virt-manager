@@ -448,6 +448,13 @@
     <input type="keyboard" bus="usb"/>
     <input type="tablet" bus="usb"/>
     <input type="mouse" bus="ps2"/>
+    <input type="mouse" bus="virtio" model="virtio-non-transitional"/>
+    <input type="passthrough" bus="virtio">
+      <source evdev="/dev/input/event1"/>
+    </input>
+    <input type="evdev">
+      <source dev="/dev/input/event1234" repeat="on" grab="all" grabToggle="ctrl-ctrl"/>
+    </input>
     <tpm model="tpm-crb">
       <backend type="emulator" version="2.0"/>
     </tpm>
