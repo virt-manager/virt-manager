@@ -851,7 +851,7 @@ c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machi
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
 c.add_invalid("--xml /@foo=bar", grep="/@foo xmlXPathEval")  # failure processing xpath
-c.add_invalid("--memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.node=0,target.label_size=1,alias.name=mymemdev3,uuid=11111111-2222-aaaa-bbbb-ccccddddeeee", grep="UUID is not supported")  # hit a specific libvirt code path that proves --memdev uuid=XXX works
+c.add_invalid("--memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.node=0,target.label_size=1,alias.name=mymemdev3,uuid=11111111-2222-aaaa-bbbb-ccccddddeeee", grep="UUID is not supported", prerun_check="7.5.0")  # hit a specific libvirt code path that proves --memdev uuid=XXX works
 
 
 
