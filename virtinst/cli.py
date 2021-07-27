@@ -3818,6 +3818,13 @@ class ParserInput(VirtCLIParser):
 
         cls.add_arg("type", "type", ignore_default=True)
         cls.add_arg("bus", "bus", ignore_default=True)
+        cls.add_arg("model", "model")
+
+        cls.add_arg("source.evdev", "source_evdev")
+        cls.add_arg("source.dev", "source_dev")
+        cls.add_arg("source.repeat", "source_repeat")
+        cls.add_arg("source.grab", "source_grab")
+        cls.add_arg("source.grabToggle", "source_grabToggle")
 
 
 ###################
