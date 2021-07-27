@@ -42,6 +42,7 @@ class DeviceMemory(Device):
     model = XMLProperty("./@model")
     access = XMLProperty("./@access")
     discard = XMLProperty("./@discard", is_yesno=True)
+    uuid = XMLProperty("./uuid")
 
     source = XMLChildProperty(_DeviceMemorySource, is_single=True)
     target = XMLChildProperty(_DeviceMemoryTarget, is_single=True)
