@@ -2669,8 +2669,10 @@ class ParserBoot(VirtCLIParser):
 
         cls.add_arg("kernel", "kernel")
         cls.add_arg("initrd", "initrd")
-        cls.add_arg("dtb", "dtb")
         cls.add_arg("cmdline", "kernel_args", can_comma=True)
+        cls.add_arg("dtb", "dtb")
+        cls.add_arg("acpi.table", "acpi_tb")
+        cls.add_arg("acpi.table.type", "acpi_tb_type")
 
         cls.add_arg("firmware", "firmware")
         cls.add_arg("firmware.feature[0-9]*.enabled", "enabled",
