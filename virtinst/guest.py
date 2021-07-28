@@ -182,7 +182,8 @@ class Guest(XMLBuilder):
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "vcpu_current", "vcpu_placement",
         "vcpu_cpuset", "vcpulist", "numatune", "resource", "sysinfo",
-        "bootloader", "os", "idmap", "features", "cpu", "clock",
+        "bootloader", "bootloader_args", "os", "idmap",
+        "features", "cpu", "clock",
         "on_poweroff", "on_reboot", "on_crash",
         "pm", "emulator", "devices", "launchSecurity", "seclabels", "keywrap"]
 
@@ -254,6 +255,7 @@ class Guest(XMLBuilder):
     id = XMLProperty("./@id", is_int=True)
     type = XMLProperty("./@type")
     bootloader = XMLProperty("./bootloader")
+    bootloader_args = XMLProperty("./bootloader_args")
     description = XMLProperty("./description")
     title = XMLProperty("./title")
     emulator = XMLProperty("./devices/emulator")
