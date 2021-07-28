@@ -759,6 +759,7 @@ c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-se
 c.add_compare("--boot firmware=bios,loader=/path/to/loader,loader.readonly=yes,loader.secure=no,loader.type=rom,bios.rebootTimeout=5000,bootmenu.enable=yes,bootmenu.timeout=5000", "boot-guest-loader-bios")
 c.add_compare("--boot firmware=efi,loader=/path/to/loader,loader.readonly=yes,loader.secure=yes,loader.type=pflash,bios.useserial=yes,nvram=/path/to/nvram", "boot-guest-loader-efi")
 c.add_compare("--boot bootloader=/usr/bin/pygrub,bootloader_args='--append single'", "boot-host-loader")
+c.add_compare("--boot kernel=/path/to/kernel,initrd=/path/to/initrd,cmdline='console=ttyS0',dtb=/path/to/dtb,acpi.table=/path/to/slic.dat,acpi.table.type=slic", "boot-direct-kernel")
 
 
 

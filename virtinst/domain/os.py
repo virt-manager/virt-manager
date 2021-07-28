@@ -101,6 +101,14 @@ class DomainOs(XMLBuilder):
     # <domain> rather than <domain><os>, they are handled via callbacks in
     # the CLI. This is just a placeholder to remind of that fact.
 
+    # Direct kernel boot
+    kernel = XMLProperty("./kernel", do_abspath=True)
+    initrd = XMLProperty("./initrd", do_abspath=True)
+    kernel_args = XMLProperty("./cmdline")
+    dtb = XMLProperty("./dtb", do_abspath=True)
+    acpi_tb = XMLProperty("./acpi/table", do_abspath=True)
+    acpi_tb_type = XMLProperty("./acpi/table/@type")
+
     initargs = XMLChildProperty(_InitArg)
     def set_initargs_string(self, argstring):
         import shlex
@@ -109,11 +117,6 @@ class DomainOs(XMLBuilder):
         for val in shlex.split(argstring):
             obj = self.initargs.add_new()
             obj.val = val
-
-    kernel = XMLProperty("./kernel", do_abspath=True)
-    initrd = XMLProperty("./initrd", do_abspath=True)
-    dtb = XMLProperty("./dtb", do_abspath=True)
-    kernel_args = XMLProperty("./cmdline")
 
     init = XMLProperty("./init")
     initdir = XMLProperty("./initdir")
