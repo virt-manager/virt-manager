@@ -12,6 +12,12 @@ class _InitArg(XMLBuilder):
     val = XMLProperty(".")
 
 
+class _InitEnv(XMLBuilder):
+    XML_NAME = "initenv"
+    name = XMLProperty("./@name")
+    value = XMLProperty(".")
+
+
 class _BootDevice(XMLBuilder):
     XML_NAME = "boot"
     dev = XMLProperty("./@dev")
@@ -109,7 +115,13 @@ class DomainOs(XMLBuilder):
     acpi_tb = XMLProperty("./acpi/table", do_abspath=True)
     acpi_tb_type = XMLProperty("./acpi/table/@type")
 
+    # Container boot
+    init = XMLProperty("./init")
     initargs = XMLChildProperty(_InitArg)
+    initenvs = XMLChildProperty(_InitEnv)
+    initdir = XMLProperty("./initdir")
+    inituser = XMLProperty("./inituser")
+    initgroup = XMLProperty("./initgroup")
     def set_initargs_string(self, argstring):
         import shlex
         for obj in self.initargs:
@@ -118,10 +130,6 @@ class DomainOs(XMLBuilder):
             obj = self.initargs.add_new()
             obj.val = val
 
-    init = XMLProperty("./init")
-    initdir = XMLProperty("./initdir")
-    inituser = XMLProperty("./inituser")
-    initgroup = XMLProperty("./initgroup")
     loader = XMLProperty("./loader")
     loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
     loader_type = XMLProperty("./loader/@type")

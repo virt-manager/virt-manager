@@ -1,0 +1,36 @@
+<domain type="test">
+  <name>vm1</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <initdir>/my/custom/cwd</initdir>
+    <inituser>tester</inituser>
+    <initgroup>1000</initgroup>
+    <boot dev="hd"/>
+    <init>/bin/systemd</init>
+    <initarg>--unit</initarg>
+    <initarg>emergency.service</initarg>
+    <initenv name="MYENV">some value</initenv>
+    <initenv name="FOO">bar</initenv>
+  </os>
+  <features>
+    <pae/>
+  </features>
+  <clock offset="utc"/>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <controller type="usb" model="none"/>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="pty"/>
+  </devices>
+</domain>
