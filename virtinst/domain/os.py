@@ -96,6 +96,11 @@ class DomainOs(XMLBuilder):
     bios_rebootTimeout = XMLProperty("./bios/@rebootTimeout", is_int=True)
     bios_useserial = XMLProperty("./bios/@useserial", is_yesno=True)
 
+    # Host bootloader
+    # Since the elements for a host bootloader are actually directly under
+    # <domain> rather than <domain><os>, they are handled via callbacks in
+    # the CLI. This is just a placeholder to remind of that fact.
+
     initargs = XMLChildProperty(_InitArg)
     def set_initargs_string(self, argstring):
         import shlex

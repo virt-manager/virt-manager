@@ -2614,6 +2614,9 @@ class ParserBoot(VirtCLIParser):
     def set_bootloader_cb(self, inst, val, virtarg):
         self.guest.bootloader = val
 
+    def set_bootloader_args_cb(self, inst, val, virtarg):
+        self.guest.bootloader_args = val
+
     def set_domain_type_cb(self, inst, val, virtarg):
         self.guest.type = val
 
@@ -2653,6 +2656,8 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("arch", "arch")
         cls.add_arg("bootloader", None, lookup_cb=None,
                 cb=cls.set_bootloader_cb)
+        cls.add_arg("bootloader_args", None, lookup_cb=None,
+                cb=cls.set_bootloader_args_cb)
         cls.add_arg("domain_type", None, lookup_cb=None,
                 cb=cls.set_domain_type_cb)
         cls.add_arg("emulator", None, lookup_cb=None,
