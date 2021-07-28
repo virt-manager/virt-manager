@@ -78,6 +78,7 @@ class DomainOs(XMLBuilder):
                        "initdir", "inituser", "initgroup",
                        "kernel_args", "dtb", "bootdevs", "smbios_mode"]
 
+    # BIOS bootloader
     def _get_bootorder(self):
         return [dev.dev for dev in self.bootdevs]
     def _set_bootorder(self, newdevs):
@@ -87,8 +88,13 @@ class DomainOs(XMLBuilder):
         for d in newdevs:
             dev = self.bootdevs.add_new()
             dev.dev = d
-    bootdevs = XMLChildProperty(_BootDevice)
     bootorder = property(_get_bootorder, _set_bootorder)
+    bootdevs = XMLChildProperty(_BootDevice)
+    smbios_mode = XMLProperty("./smbios/@mode")
+    bootmenu_enable = XMLProperty("./bootmenu/@enable", is_yesno=True)
+    bootmenu_timeout = XMLProperty("./bootmenu/@timeout", is_int=True)
+    bios_rebootTimeout = XMLProperty("./bios/@rebootTimeout", is_int=True)
+    bios_useserial = XMLProperty("./bios/@useserial", is_yesno=True)
 
     initargs = XMLChildProperty(_InitArg)
     def set_initargs_string(self, argstring):
@@ -98,10 +104,6 @@ class DomainOs(XMLBuilder):
         for val in shlex.split(argstring):
             obj = self.initargs.add_new()
             obj.val = val
-
-    enable_bootmenu = XMLProperty("./bootmenu/@enable", is_yesno=True)
-    rebootTimeout = XMLProperty("./bios/@rebootTimeout")
-    useserial = XMLProperty("./bios/@useserial", is_yesno=True)
 
     kernel = XMLProperty("./kernel", do_abspath=True)
     initrd = XMLProperty("./initrd", do_abspath=True)
@@ -116,7 +118,6 @@ class DomainOs(XMLBuilder):
     loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
     loader_type = XMLProperty("./loader/@type")
     loader_secure = XMLProperty("./loader/@secure", is_yesno=True)
-    smbios_mode = XMLProperty("./smbios/@mode")
     nvram = XMLProperty("./nvram", do_abspath=True)
     nvram_template = XMLProperty("./nvram/@template")
     arch = XMLProperty("./type/@arch")

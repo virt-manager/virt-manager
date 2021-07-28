@@ -563,7 +563,7 @@ c.add_compare("""
 --disk none
 --features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on
 --clock rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
---boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,loader_ro=yes,loader.type=rom,loader=/tmp/foo
+--boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,bootmenu.timeout=5000,loader_ro=yes,loader.type=rom,loader=/tmp/foo
 --memorybacking access.mode=shared,source.type=anonymous,hugepages=on
 --graphics spice,gl=yes
 --rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
@@ -756,6 +756,8 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 c = vinst.add_category("boot", "--nographics --noautoconsole --import --disk none --controller usb,model=none")
 c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-secure")
+c.add_compare("--boot firmware=bios,loader=/path/to/loader,loader.readonly=yes,loader.secure=no,loader.type=rom,bios.rebootTimeout=5000,bootmenu.enable=yes,bootmenu.timeout=5000", "boot-guest-loader-bios")
+c.add_compare("--boot firmware=efi,loader=/path/to/loader,loader.readonly=yes,loader.secure=yes,loader.type=pflash,bios.useserial=yes,nvram=/path/to/nvram", "boot-guest-loader-efi")
 
 
 

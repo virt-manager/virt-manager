@@ -2674,9 +2674,10 @@ class ParserBoot(VirtCLIParser):
                     find_inst_cb=cls.feature_find_inst_cb)
         cls.add_arg("boot[0-9]*.dev", "dev",
                     find_inst_cb=cls.boot_find_inst_cb)
-        cls.add_arg("bootmenu.enable", "enable_bootmenu", is_onoff=True)
-        cls.add_arg("bios.useserial", "useserial", is_onoff=True)
-        cls.add_arg("bios.rebootTimeout", "rebootTimeout")
+        cls.add_arg("bootmenu.enable", "bootmenu_enable", is_onoff=True)
+        cls.add_arg("bootmenu.timeout", "bootmenu_timeout")
+        cls.add_arg("bios.useserial", "bios_useserial", is_onoff=True)
+        cls.add_arg("bios.rebootTimeout", "bios_rebootTimeout")
         cls.add_arg("init", "init")
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
         cls.add_arg("initarg[0-9]*", "val",
