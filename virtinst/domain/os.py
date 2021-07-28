@@ -17,6 +17,14 @@ class _BootDevice(XMLBuilder):
     dev = XMLProperty("./@dev")
 
 
+class _FirmwareFeature(XMLBuilder):
+    XML_NAME = "feature"
+    _XML_PROP_ORDER = ["enabled", "name"]
+
+    enabled = XMLProperty("./@enabled", is_yesno=True)
+    name = XMLProperty("./@name")
+
+
 class DomainOs(XMLBuilder):
     """
     Class for generating boot device related XML
@@ -115,6 +123,7 @@ class DomainOs(XMLBuilder):
     machine = XMLProperty("./type/@machine")
     os_type = XMLProperty("./type")
     firmware = XMLProperty("./@firmware")
+    firmware_features = XMLChildProperty(_FirmwareFeature, relative_xpath="./firmware")
 
 
     ##################

@@ -101,6 +101,10 @@
     <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
     <bios rebootTimeout="3"/>
+    <firmware>
+      <feature enabled="yes" name="secure-boot"/>
+      <feature enabled="no" name="enrolled-keys"/>
+    </firmware>
     <initarg>foo=bar</initarg>
     <initarg>baz=woo</initarg>
   </os>
@@ -352,6 +356,10 @@
     <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
     <bios rebootTimeout="3"/>
+    <firmware>
+      <feature enabled="yes" name="secure-boot"/>
+      <feature enabled="no" name="enrolled-keys"/>
+    </firmware>
     <initarg>foo=bar</initarg>
     <initarg>baz=woo</initarg>
   </os>

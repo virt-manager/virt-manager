@@ -2632,6 +2632,12 @@ class ParserBoot(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def feature_find_inst_cb(self, *args, **kwargs):
+        cliarg = "feature"  # firmware.feature[0-9]*
+        list_propname = "firmware_features"  # os.firmware_features
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
@@ -2662,6 +2668,10 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("cmdline", "kernel_args", can_comma=True)
 
         cls.add_arg("firmware", "firmware")
+        cls.add_arg("firmware.feature[0-9]*.enabled", "enabled",
+                    find_inst_cb=cls.feature_find_inst_cb, is_onoff=True)
+        cls.add_arg("firmware.feature[0-9]*.name", "name",
+                    find_inst_cb=cls.feature_find_inst_cb)
         cls.add_arg("boot[0-9]*.dev", "dev",
                     find_inst_cb=cls.boot_find_inst_cb)
         cls.add_arg("bootmenu.enable", "enable_bootmenu", is_onoff=True)
