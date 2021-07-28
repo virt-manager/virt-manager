@@ -78,13 +78,30 @@ class DomainOs(XMLBuilder):
     def is_riscv_virt(self):
         return self.is_riscv() and str(self.machine).startswith("virt")
 
-    XML_NAME = "os"
-    _XML_PROP_ORDER = ["arch", "os_type", "loader", "loader_ro", "loader_type",
-                       "nvram", "nvram_template", "kernel", "initrd",
-                       "initdir", "inituser", "initgroup",
-                       "kernel_args", "dtb", "bootdevs", "smbios_mode"]
+    ##################
+    # XML properties #
+    ##################
 
-    # BIOS bootloader
+    XML_NAME = "os"
+    _XML_PROP_ORDER = [
+            "firmware", "os_type", "arch", "machine", "firmware_features",
+            "loader", "loader_ro", "loader_secure", "loader_type",
+            "nvram", "nvram_template",
+            "init", "initargs", "initenvs", "initdir", "inituser", "initgroup",
+            "kernel", "initrd", "kernel_args", "dtb", "acpi_tb", "acpi_tb_type",
+            "bootdevs", "bootmenu_enable", "bootmenu_timeout",
+            "bios_useserial", "bios_rebootTimeout", "smbios_mode"]
+
+    # Shared/Generic boot options
+    os_type = XMLProperty("./type")
+    arch = XMLProperty("./type/@arch")
+    machine = XMLProperty("./type/@machine")
+    loader = XMLProperty("./loader")
+    loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
+    loader_type = XMLProperty("./loader/@type")
+    loader_secure = XMLProperty("./loader/@secure", is_yesno=True)
+
+    # BIOS bootloader options
     def _get_bootorder(self):
         return [dev.dev for dev in self.bootdevs]
     def _set_bootorder(self, newdevs):
@@ -96,18 +113,22 @@ class DomainOs(XMLBuilder):
             dev.dev = d
     bootorder = property(_get_bootorder, _set_bootorder)
     bootdevs = XMLChildProperty(_BootDevice)
-    smbios_mode = XMLProperty("./smbios/@mode")
+    firmware = XMLProperty("./@firmware")
+    firmware_features = XMLChildProperty(_FirmwareFeature, relative_xpath="./firmware")
+    nvram = XMLProperty("./nvram", do_abspath=True)
+    nvram_template = XMLProperty("./nvram/@template")
     bootmenu_enable = XMLProperty("./bootmenu/@enable", is_yesno=True)
     bootmenu_timeout = XMLProperty("./bootmenu/@timeout", is_int=True)
-    bios_rebootTimeout = XMLProperty("./bios/@rebootTimeout", is_int=True)
     bios_useserial = XMLProperty("./bios/@useserial", is_yesno=True)
+    bios_rebootTimeout = XMLProperty("./bios/@rebootTimeout", is_int=True)
+    smbios_mode = XMLProperty("./smbios/@mode")
 
-    # Host bootloader
+    # Host bootloader options
     # Since the elements for a host bootloader are actually directly under
     # <domain> rather than <domain><os>, they are handled via callbacks in
     # the CLI. This is just a placeholder to remind of that fact.
 
-    # Direct kernel boot
+    # Direct kernel boot options
     kernel = XMLProperty("./kernel", do_abspath=True)
     initrd = XMLProperty("./initrd", do_abspath=True)
     kernel_args = XMLProperty("./cmdline")
@@ -115,7 +136,7 @@ class DomainOs(XMLBuilder):
     acpi_tb = XMLProperty("./acpi/table", do_abspath=True)
     acpi_tb_type = XMLProperty("./acpi/table/@type")
 
-    # Container boot
+    # Container boot options
     init = XMLProperty("./init")
     initargs = XMLChildProperty(_InitArg)
     initenvs = XMLChildProperty(_InitEnv)
@@ -129,18 +150,6 @@ class DomainOs(XMLBuilder):
         for val in shlex.split(argstring):
             obj = self.initargs.add_new()
             obj.val = val
-
-    loader = XMLProperty("./loader")
-    loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
-    loader_type = XMLProperty("./loader/@type")
-    loader_secure = XMLProperty("./loader/@secure", is_yesno=True)
-    nvram = XMLProperty("./nvram", do_abspath=True)
-    nvram_template = XMLProperty("./nvram/@template")
-    arch = XMLProperty("./type/@arch")
-    machine = XMLProperty("./type/@machine")
-    os_type = XMLProperty("./type")
-    firmware = XMLProperty("./@firmware")
-    firmware_features = XMLChildProperty(_FirmwareFeature, relative_xpath="./firmware")
 
 
     ##################

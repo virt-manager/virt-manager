@@ -6,7 +6,7 @@
   <vcpu>1</vcpu>
   <os firmware="bios">
     <type arch="i686">hvm</type>
-    <loader readonly="yes" type="rom" secure="no">/path/to/loader</loader>
+    <loader readonly="yes" secure="no" type="rom">/path/to/loader</loader>
     <boot dev="hd"/>
     <bootmenu enable="yes" timeout="5000"/>
     <bios rebootTimeout="5000"/>

@@ -6,15 +6,15 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <initdir>/my/custom/cwd</initdir>
-    <inituser>tester</inituser>
-    <initgroup>1000</initgroup>
-    <boot dev="hd"/>
     <init>/bin/systemd</init>
     <initarg>--unit</initarg>
     <initarg>emergency.service</initarg>
     <initenv name="MYENV">some value</initenv>
     <initenv name="FOO">bar</initenv>
+    <initdir>/my/custom/cwd</initdir>
+    <inituser>tester</inituser>
+    <initgroup>1000</initgroup>
+    <boot dev="hd"/>
   </os>
   <features>
     <pae/>
