@@ -102,6 +102,7 @@ class vmmLibvirtObject(vmmGObject):
 
     def define_name(self, newname):
         oldname = self.get_xmlobj().name
+        oldautostart = self.get_autostart()
 
         self.ensure_latest_xml()
         xmlobj = self._make_xmlobj_to_define()
@@ -117,6 +118,7 @@ class vmmLibvirtObject(vmmGObject):
         try:
             self._name = newname
             self.conn.rename_object(self, origxml, newxml)
+            self.set_autostart(oldautostart)
         except Exception:  # pragma: no cover
             self._name = oldname
             raise
