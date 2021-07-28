@@ -13,8 +13,8 @@
     <loader>/foo/loader</loader>
     <boot dev="fd"/>
     <init>/sbin/init</init>
-    <bootmenu enable="no"/>
-    <bios useserial="yes"/>
+    <bootmenu enable="no" timeout="30000"/>
+    <bios useserial="yes" rebootTimeout="-1"/>
     <initarg>foo</initarg>
     <initarg>bar baz</initarg>
     <initarg>frib</initarg>
