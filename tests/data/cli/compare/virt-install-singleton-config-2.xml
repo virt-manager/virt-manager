@@ -93,20 +93,20 @@
   <bootloader>/new/bootld</bootloader>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader>/foo/bar</loader>
-    <initdir>/my/custom/cwd</initdir>
-    <inituser>tester</inituser>
-    <initgroup>1000</initgroup>
-    <boot dev="network"/>
-    <smbios mode="sysinfo"/>
-    <bootmenu enable="no"/>
-    <bios rebootTimeout="3"/>
     <firmware>
       <feature enabled="yes" name="secure-boot"/>
       <feature enabled="no" name="enrolled-keys"/>
     </firmware>
+    <loader>/foo/bar</loader>
     <initarg>foo=bar</initarg>
     <initarg>baz=woo</initarg>
+    <initdir>/my/custom/cwd</initdir>
+    <inituser>tester</inituser>
+    <initgroup>1000</initgroup>
+    <boot dev="network"/>
+    <bootmenu enable="no"/>
+    <bios rebootTimeout="3"/>
+    <smbios mode="sysinfo"/>
   </os>
   <idmap>
     <uid start="0" target="1000" count="10"/>
@@ -345,7 +345,13 @@
   <bootloader>/new/bootld</bootloader>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
+    <firmware>
+      <feature enabled="yes" name="secure-boot"/>
+      <feature enabled="no" name="enrolled-keys"/>
+    </firmware>
     <loader>/foo/bar</loader>
+    <initarg>foo=bar</initarg>
+    <initarg>baz=woo</initarg>
     <initdir>/my/custom/cwd</initdir>
     <inituser>tester</inituser>
     <initgroup>1000</initgroup>
@@ -353,15 +359,9 @@
     <boot dev="fd"/>
     <boot dev="hd"/>
     <boot dev="network"/>
-    <smbios mode="sysinfo"/>
     <bootmenu enable="no"/>
     <bios rebootTimeout="3"/>
-    <firmware>
-      <feature enabled="yes" name="secure-boot"/>
-      <feature enabled="no" name="enrolled-keys"/>
-    </firmware>
-    <initarg>foo=bar</initarg>
-    <initarg>baz=woo</initarg>
+    <smbios mode="sysinfo"/>
   </os>
   <idmap>
     <uid start="0" target="1000" count="10"/>
