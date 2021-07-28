@@ -703,7 +703,7 @@ class vmmDomain(vmmLibvirtObject):
             guest.set_boot_order(boot_order, legacy=legacy)
 
         if boot_menu != _SENTINEL:
-            guest.os.enable_bootmenu = bool(boot_menu)
+            guest.os.bootmenu_enable = bool(boot_menu)
         if init != _SENTINEL:
             guest.os.init = init
             guest.os.set_initargs_string(initargs)
@@ -1259,7 +1259,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def get_boot_menu(self):
         guest = self.get_xmlobj()
-        return bool(guest.os.enable_bootmenu)
+        return bool(guest.os.bootmenu_enable)
     def get_boot_kernel_info(self):
         guest = self.get_xmlobj()
         return (guest.os.kernel, guest.os.initrd,
