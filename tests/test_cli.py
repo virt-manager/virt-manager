@@ -519,6 +519,8 @@ cache.mode=emulate,cache.level=3
 --iothreads iothreads=2,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6
 --boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo",initdir=/my/custom/cwd,inituser=tester,initgroup=1000,firmware=efi
+--boot firmware.feature0.enabled=true,firmware.feature0.name=secure-boot
+--boot firmware.feature1.enabled=off,firmware.feature1.name=enrolled-keys
 --idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
 --seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
 --seclabel type=dynamic,label=012:345
@@ -551,7 +553,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --panic iobase=0x506
 --shmem shmem0,role=master,model.type=ivshmem-plain,size=8,size.unit=M
 --iommu model=intel,driver.aw_bits=48,driver.caching_mode=on,driver.eim=off,driver.intremap=off,driver.iotlb=off
-""", "singleton-config-2")
+""", "singleton-config-2", predefine_check="7.2.0")
 
 
 # Test the implied defaults for gl=yes setting virgl=on
