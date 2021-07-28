@@ -540,6 +540,8 @@ class vmmDomain(vmmLibvirtObject):
     ##############################
 
     def rename_domain(self, new_name):
+        if new_name == self.get_name():
+            return
         Guest.validate_name(self.conn.get_backend(), str(new_name))
 
         new_nvram = None
