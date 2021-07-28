@@ -2635,6 +2635,12 @@ class ParserBoot(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def initenv_find_inst_cb(self, *args, **kwargs):
+        cliarg = "initenv"  # initenv[0-9]*
+        list_propname = "initenvs"  # os.initenvs
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     def feature_find_inst_cb(self, *args, **kwargs):
         cliarg = "feature"  # firmware.feature[0-9]*
         list_propname = "firmware_features"  # os.firmware_features
@@ -2689,6 +2695,10 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
         cls.add_arg("initarg[0-9]*", "val",
                     find_inst_cb=cls.initarg_find_inst_cb)
+        cls.add_arg("initenv[0-9]*", "value",
+                    find_inst_cb=cls.initenv_find_inst_cb)
+        cls.add_arg("initenv[0-9]*.name", "name",
+                    find_inst_cb=cls.initenv_find_inst_cb)
         cls.add_arg("initdir", "initdir")
         cls.add_arg("inituser", "inituser")
         cls.add_arg("initgroup", "initgroup")
