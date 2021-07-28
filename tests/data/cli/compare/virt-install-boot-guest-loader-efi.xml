@@ -6,7 +6,7 @@
   <vcpu>1</vcpu>
   <os firmware="efi">
     <type arch="i686">hvm</type>
-    <loader readonly="yes" type="pflash" secure="yes">/path/to/loader</loader>
+    <loader readonly="yes" secure="yes" type="pflash">/path/to/loader</loader>
     <nvram>/path/to/nvram</nvram>
     <boot dev="hd"/>
     <bios useserial="yes"/>

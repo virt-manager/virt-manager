@@ -4,8 +4,8 @@
 -    <loader type="rom">/usr/lib/xen/boot/hvmloader</loader>
 +    <loader type="rom" readonly="yes" secure="no">foo.bar</loader>
 +    <nvram>/test/nvram.img</nvram>
-+    <bios useserial="yes"/>
 +    <init>/bin/bash</init>
++    <bios useserial="yes"/>
    </os>
    <idmap>
      <uid start="0" target="1000" count="10"/>

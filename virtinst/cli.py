@@ -2659,7 +2659,9 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("network", None, lookup_cb=None, cb=cls.noset_cb)
 
         # UEFI depends on these bits, so set them first
+        cls.add_arg("os_type", "os_type")
         cls.add_arg("arch", "arch")
+        cls.add_arg("machine", "machine")
         cls.add_arg("bootloader", None, lookup_cb=None,
                 cb=cls.set_bootloader_cb)
         cls.add_arg("bootloader_args", None, lookup_cb=None,
@@ -2670,9 +2672,30 @@ class ParserBoot(VirtCLIParser):
                 cb=cls.set_emulator_cb)
         cls.add_arg("uefi", None, lookup_cb=None,
                 cb=cls.set_uefi_cb)
-        cls.add_arg("os_type", "os_type")
-        cls.add_arg("machine", "machine")
 
+        # Common/Shared boot options
+        cls.add_arg("loader", "loader")
+        cls.add_arg("loader.readonly", "loader_ro", is_onoff=True)
+        cls.add_arg("loader.type", "loader_type")
+        cls.add_arg("loader.secure", "loader_secure", is_onoff=True)
+
+        # Guest-Based bootloader options
+        cls.add_arg("firmware", "firmware")
+        cls.add_arg("firmware.feature[0-9]*.enabled", "enabled",
+                    find_inst_cb=cls.feature_find_inst_cb, is_onoff=True)
+        cls.add_arg("firmware.feature[0-9]*.name", "name",
+                    find_inst_cb=cls.feature_find_inst_cb)
+        cls.add_arg("nvram", "nvram")
+        cls.add_arg("nvram.template", "nvram_template")
+        cls.add_arg("boot[0-9]*.dev", "dev",
+                    find_inst_cb=cls.boot_find_inst_cb)
+        cls.add_arg("bootmenu.enable", "bootmenu_enable", is_onoff=True)
+        cls.add_arg("bootmenu.timeout", "bootmenu_timeout")
+        cls.add_arg("bios.useserial", "bios_useserial", is_onoff=True)
+        cls.add_arg("bios.rebootTimeout", "bios_rebootTimeout")
+        cls.add_arg("smbios.mode", "smbios_mode")
+
+        # Direct kernel boot options
         cls.add_arg("kernel", "kernel")
         cls.add_arg("initrd", "initrd")
         cls.add_arg("cmdline", "kernel_args", can_comma=True)
@@ -2680,17 +2703,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("acpi.table", "acpi_tb")
         cls.add_arg("acpi.table.type", "acpi_tb_type")
 
-        cls.add_arg("firmware", "firmware")
-        cls.add_arg("firmware.feature[0-9]*.enabled", "enabled",
-                    find_inst_cb=cls.feature_find_inst_cb, is_onoff=True)
-        cls.add_arg("firmware.feature[0-9]*.name", "name",
-                    find_inst_cb=cls.feature_find_inst_cb)
-        cls.add_arg("boot[0-9]*.dev", "dev",
-                    find_inst_cb=cls.boot_find_inst_cb)
-        cls.add_arg("bootmenu.enable", "bootmenu_enable", is_onoff=True)
-        cls.add_arg("bootmenu.timeout", "bootmenu_timeout")
-        cls.add_arg("bios.useserial", "bios_useserial", is_onoff=True)
-        cls.add_arg("bios.rebootTimeout", "bios_rebootTimeout")
+        # Container boot options
         cls.add_arg("init", "init")
         cls.add_arg("initargs", "initargs", cb=cls.set_initargs_cb)
         cls.add_arg("initarg[0-9]*", "val",
@@ -2702,13 +2715,6 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("initdir", "initdir")
         cls.add_arg("inituser", "inituser")
         cls.add_arg("initgroup", "initgroup")
-        cls.add_arg("loader", "loader")
-        cls.add_arg("loader.readonly", "loader_ro", is_onoff=True)
-        cls.add_arg("loader.type", "loader_type")
-        cls.add_arg("loader.secure", "loader_secure", is_onoff=True)
-        cls.add_arg("nvram", "nvram")
-        cls.add_arg("nvram.template", "nvram_template")
-        cls.add_arg("smbios.mode", "smbios_mode")
 
 
 ###################
