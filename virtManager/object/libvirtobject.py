@@ -4,6 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import libvirt
 from virtinst import log
 from virtinst import xmlutil
 
@@ -102,28 +103,25 @@ class vmmLibvirtObject(vmmGObject):
 
     def define_name(self, newname):
         oldname = self.get_xmlobj().name
-
-        self.ensure_latest_xml()
-        xmlobj = self._make_xmlobj_to_define()
-        if xmlobj.name == newname:
-            return  # pragma: no cover
-
         log.debug("Changing %s name from %s to %s",
                       self, oldname, newname)
-        origxml = xmlobj.get_xml()
-        xmlobj.name = newname
-        newxml = xmlobj.get_xml()
+        try:
+            conn = libvirt.open(self._conn._uri)
+        except libvirt.libvirtError:
+            print('Failed to open connection to the hypervisor')
+            raise
 
         try:
+            dom = conn.lookupByName(oldname)
+            dom.rename(newname)
             self._name = newname
-            self.conn.rename_object(self, origxml, newxml)
-        except Exception:  # pragma: no cover
+        except libvirt.libvirtError:
             self._name = oldname
             raise
         finally:
             self.__force_refresh_xml()
 
-
+            
     #############################################################
     # Functions that should probably be overridden in sub class #
     #############################################################
