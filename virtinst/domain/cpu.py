@@ -64,12 +64,15 @@ class _CPUTopology(XMLBuilder):
     Class for generating <cpu> <topology> XML
     """
     XML_NAME = "topology"
-    _XML_PROP_ORDER = ["sockets", "cores", "threads"]
+    _XML_PROP_ORDER = ["sockets", "dies", "cores", "threads"]
 
     sockets = XMLProperty("./@sockets", is_int=True)
+    dies = XMLProperty("./@dies", is_int=True)
     cores = XMLProperty("./@cores", is_int=True)
     threads = XMLProperty("./@threads", is_int=True)
 
+    # While `dies` is optional and defaults to 1 if omitted,
+    # `sockets`, `cores`, and `threads` are mandatory.
     def set_defaults_from_vcpus(self, vcpus):
         if not self.sockets:
             if not self.cores:
