@@ -2322,6 +2322,7 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("forbid", None, lookup_cb=None, cb=cls.set_feature_cb)
 
         cls.add_arg("topology.sockets", "topology.sockets")
+        cls.add_arg("topology.dies", "topology.dies")
         cls.add_arg("topology.cores", "topology.cores")
         cls.add_arg("topology.threads", "topology.threads")
 
