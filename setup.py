@@ -366,12 +366,12 @@ class CheckPylint(setuptools.Command):
         import pycodestyle
 
         lintfiles = [
-            "setup.py",
-            "tests",
-            "virtinst",
             # Put this first so pylint learns what Gtk version we
             # want to lint against
             "virtManager/virtmanager.py",
+            "setup.py",
+            "tests",
+            "virtinst",
             "virtManager"]
 
         spellfiles = lintfiles[:]
