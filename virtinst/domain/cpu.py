@@ -94,8 +94,8 @@ class DomainCpu(XMLBuilder):
     Class for generating <cpu> XML
     """
     XML_NAME = "cpu"
-    _XML_PROP_ORDER = ["mode", "match", "model", "vendor",
-            "topology", "features"]
+    _XML_PROP_ORDER = ["mode", "match", "check", "migratable",
+            "model", "vendor", "topology", "features"]
 
     secure = True
 
@@ -272,6 +272,8 @@ class DomainCpu(XMLBuilder):
     match = XMLProperty("./@match")
     vendor = XMLProperty("./vendor")
     mode = XMLProperty("./@mode")
+    check = XMLProperty("./@check")
+    migratable = XMLProperty("./@migratable", is_onoff=True)
 
 
     ##################

@@ -506,7 +506,7 @@ c.add_compare("""
 c.add_compare("""--pxe
 --memory 512,maxmemory=1024
 --vcpus 9
---cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,mode=custom,\
+--cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,mode=custom,check=partial,\
 cell.id=0,cell.cpus=1,2,3,cell.memory=1024,\
 cell1.id=1,cell1.memory=256,cell1.cpus=5-8,\
 numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.cpus=4,numa.cell2.memAccess=shared,numa.cell2.discard=no,\
@@ -785,6 +785,7 @@ c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.c
 c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
 c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default", precompare_check="5.1.0")  # default CPU for old QEMU where we cannot use host-model
+c.add_compare("--cpu host-passthrough,migratable=on", "cpu-host-passthrough-migratable")  # Passthrough with migratable attribute
 
 
 
