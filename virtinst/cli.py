@@ -2305,8 +2305,12 @@ class ParserCPU(VirtCLIParser):
         # 'secure' needs to be parsed before 'model'
         cls.add_arg("secure", "secure", is_onoff=True)
         cls.add_arg("model", "model", cb=cls.set_model_cb)
+
         cls.add_arg("mode", "mode")
         cls.add_arg("match", "match")
+        cls.add_arg("check", "check")
+        cls.add_arg("migratable", "migratable", is_onoff=True)
+
         cls.add_arg("vendor", "vendor")
         cls.add_arg("cache.mode", "cache.mode")
         cls.add_arg("cache.level", "cache.level")

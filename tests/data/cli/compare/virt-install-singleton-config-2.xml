@@ -128,7 +128,7 @@
     </kvm>
     <vmcoreinfo state="on"/>
   </features>
-  <cpu mode="custom" match="strict">
+  <cpu mode="custom" match="strict" check="partial">
     <model>foobar</model>
     <vendor>meee</vendor>
     <feature policy="force" name="x2apic"/>
@@ -401,7 +401,7 @@
     </kvm>
     <vmcoreinfo state="on"/>
   </features>
-  <cpu mode="custom" match="strict">
+  <cpu mode="custom" match="strict" check="partial">
     <model>foobar</model>
     <vendor>meee</vendor>
     <feature policy="force" name="x2apic"/>
