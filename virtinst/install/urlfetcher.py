@@ -44,7 +44,7 @@ class _XorrisoReader():
         cmd = ["xorriso", "-osirrox", "on", "-indev", self._location,
                "-extract", url, tmp.name]
         log.debug("Extracting iso file: %s", cmd)
-        subprocess.check_output(cmd)
+        subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
         return open(tmp.name, "rb").read()
 
     def hasFile(self, url):
