@@ -309,11 +309,14 @@
       <readonly/>
       <space_hard_limit>1234</space_hard_limit>
       <space_soft_limit>500</space_soft_limit>
-      <source pool="pool1" volume="vol"/>
+      <source pool="pool1" volume="vol">
+        <socket>/tmp/foo.sock</socket>
+      </source>
       <target dir="/foo"/>
       <binary path="/foo/virtiofsd" xattr="off">
         <cache mode="always"/>
         <lock posix="off" flock="on"/>
+        <sandbox mode="chroot"/>
       </binary>
       <driver name="virtiofs" queue="3"/>
     </filesystem>

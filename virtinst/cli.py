@@ -4342,6 +4342,7 @@ class ParserFilesystem(VirtCLIParser):
         cls.add_arg("source.volume", "source_volume")
         cls.add_arg("source.units", "source_units")
         cls.add_arg("source.usage", "source_usage")
+        cls.add_arg("source.socket", "source_socket")
 
         cls.add_arg("target.dir", "target_dir")
 
@@ -4350,6 +4351,7 @@ class ParserFilesystem(VirtCLIParser):
         cls.add_arg("binary.cache.mode", "binary_cache_mode")
         cls.add_arg("binary.lock.posix", "binary_lock_posix", is_onoff=True)
         cls.add_arg("binary.lock.flock", "binary_lock_flock", is_onoff=True)
+        cls.add_arg("binary.sandbox.mode", "binary_sandbox_mode")
 
         cls.add_arg("driver.format", "driver_format")
         cls.add_arg("driver.name", "driver_name")
