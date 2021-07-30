@@ -53,12 +53,14 @@ class DeviceFilesystem(Device):
     source_units = XMLProperty("./source/@units")
     source_pool = XMLProperty("./source/@pool")
     source_volume = XMLProperty("./source/@volume")
+    source_socket = XMLProperty("./source/socket")
 
     binary_path = XMLProperty("./binary/@path")
     binary_xattr = XMLProperty("./binary/@xattr", is_onoff=True)
     binary_cache_mode = XMLProperty("./binary/cache/@mode")
     binary_lock_posix = XMLProperty("./binary/lock/@posix", is_onoff=True)
     binary_lock_flock = XMLProperty("./binary/lock/@flock", is_onoff=True)
+    binary_sandbox_mode = XMLProperty("./binary/sandbox/@mode")
 
     def _type_to_source_prop(self):
         if self.type == DeviceFilesystem.TYPE_TEMPLATE:

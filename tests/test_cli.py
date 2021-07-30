@@ -696,7 +696,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --filesystem type-mount,source.dir=/,target=/
 --filesystem type=template,source.name=foo,target=/
 --filesystem type=file,source.file=foo.img,target=/
---filesystem type=volume,model=virtio,multidevs=remap,readonly=on,space_hard_limit=1234,space_soft_limit=500,source.pool=pool1,source.volume=vol,driver.name=virtiofs,driver.queue=3,binary.path=/foo/virtiofsd,binary.xattr=off,binary.cache.mode=always,binary.lock.posix=off,binary.lock.flock=on,target.dir=/foo
+--filesystem type=volume,model=virtio,multidevs=remap,readonly=on,space_hard_limit=1234,space_soft_limit=500,source.pool=pool1,source.volume=vol,driver.name=virtiofs,driver.queue=3,binary.path=/foo/virtiofsd,binary.xattr=off,binary.cache.mode=always,binary.lock.posix=off,binary.lock.flock=on,target.dir=/foo,binary.sandbox.mode=chroot,source.socket=/tmp/foo.sock
 --filesystem type=block,source.dev=/dev/foo,target.dir=/
 --filesystem type=ram,source.usage=1024,source.units=MiB,target=/
 
