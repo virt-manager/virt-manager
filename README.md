@@ -21,7 +21,7 @@ code from a git checkout, you can launch any of the commands like:
 
 ## Contact
 
- - All comments / suggestions / patches should be directed to the
+ - Discussions and big patch series should go to the
    [virt-tools-list](https://www.redhat.com/mailman/listinfo/virt-tools-list)
    mailing list.
  - For IRC we use #virt on OFTC.
