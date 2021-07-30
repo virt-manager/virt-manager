@@ -4196,7 +4196,7 @@ class ParserVsock(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
-        _add_common_device_args(cls)
+        _add_common_device_args(cls, virtio_options=True)
 
         cls.add_arg("model", "model", ignore_default=True)
         cls.add_arg("cid.auto", "auto_cid", is_onoff=True)
