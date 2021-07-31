@@ -96,6 +96,12 @@ class vmmLibvirtObject(vmmGObject):
     def is_nodedev(self):
         return self.class_name() == "nodedev"
 
+    def get_autostart(self):  # pragma: no cover
+        pass
+    def set_autostart(self, val):  # pragma: no cover
+        ignore = val
+        pass
+
     def change_name_backend(self, newbackend):
         # Used for changing the backing object after a rename
         self._backend = newbackend
@@ -118,12 +124,13 @@ class vmmLibvirtObject(vmmGObject):
         try:
             self._name = newname
             self.conn.rename_object(self, origxml, newxml)
-            self.set_autostart(oldautostart)
         except Exception:  # pragma: no cover
             self._name = oldname
             raise
         finally:
             self.__force_refresh_xml()
+
+        self.set_autostart(oldautostart)
 
 
     #############################################################
