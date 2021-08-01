@@ -36,3 +36,6 @@ class DomainMemoryBacking(XMLBuilder):
     allocation_mode = XMLProperty("./allocation/@mode")
 
     pages = XMLChildProperty(_HugepagesPage, relative_xpath="./hugepages")
+
+    def is_shared_access(self):
+        return self.access_mode == "shared"
