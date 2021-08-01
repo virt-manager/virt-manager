@@ -111,6 +111,10 @@ class _Features(_CapsBlock):
     sev = XMLChildProperty(_SEV, is_single=True)
 
 
+class _MemoryBacking(_CapsBlock):
+    XML_NAME = "memoryBacking"
+
+
 ###############
 # CPU classes #
 ###############
@@ -380,12 +384,20 @@ class DomainCapabilities(XMLBuilder):
         types = self.devices.filesystem.get_enum("driverType").get_values()
         return bool("virtiofs" in types)
 
+    def supports_memorybacking_memfd(self):
+        """
+        Return True if libvirt advertises support for memfd memory backend
+        """
+        sourceTypes = self.memorybacking.get_enum("sourceType").get_values()
+        return bool("memfd" in sourceTypes)
+
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
     cpu = XMLChildProperty(_CPU, is_single=True)
     devices = XMLChildProperty(_Devices, is_single=True)
     features = XMLChildProperty(_Features, is_single=True)
+    memorybacking = XMLChildProperty(_MemoryBacking, is_single=True)
 
     arch = XMLProperty("./arch")
     domain = XMLProperty("./domain")
