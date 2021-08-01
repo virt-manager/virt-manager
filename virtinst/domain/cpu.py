@@ -418,6 +418,14 @@ class DomainCpu(XMLBuilder):
                 return True
         return False
 
+    def all_shared_memAccess_cells(self):
+        if not self.cells:
+            return False
+        for cell in self.cells:
+            if cell.memAccess != "shared":
+                return False
+        return True
+
 
     ##################
     # Default config #
