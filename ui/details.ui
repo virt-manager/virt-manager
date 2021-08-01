@@ -1816,6 +1816,20 @@
                                     <property name="top_attach">2</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="shared-memory">
+                                    <property name="label" translatable="yes">Shared memory access</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_mem_shared_access_toggled" swapped="no"/>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">3</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>

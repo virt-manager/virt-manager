@@ -626,7 +626,8 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_cpu(self, vcpus=_SENTINEL,
             model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
-            cores=_SENTINEL, threads=_SENTINEL, clear_topology=_SENTINEL):
+            cores=_SENTINEL, threads=_SENTINEL, memAccess=_SENTINEL,
+            clear_topology=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
         if vcpus != _SENTINEL:
@@ -646,6 +647,11 @@ class vmmDomain(vmmLibvirtObject):
                 guest.cpu.set_special_mode(guest, model)
             else:
                 guest.cpu.set_model(guest, model)
+
+        if memAccess != _SENTINEL:
+            for cell in guest.cpu.cells:
+                cell.memAccess = memAccess
+
         self._redefine_xmlobj(guest)
 
     def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
@@ -655,6 +661,15 @@ class vmmDomain(vmmLibvirtObject):
             guest.currentMemory = int(memory)
         if maxmem != _SENTINEL:
             guest.memory = int(maxmem)
+        self._redefine_xmlobj(guest)
+
+    def define_memorybacking(self, source_type=_SENTINEL, access_mode=_SENTINEL):
+        guest = self._make_xmlobj_to_define()
+
+        if source_type != _SENTINEL:
+            guest.memoryBacking.source_type = source_type
+        if access_mode != _SENTINEL:
+            guest.memoryBacking.access_mode = access_mode
         self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
