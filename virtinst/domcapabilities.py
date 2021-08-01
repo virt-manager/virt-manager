@@ -373,6 +373,13 @@ class DomainCapabilities(XMLBuilder):
         types = self.devices.graphics.get_enum("type").get_values()
         return bool("spice" in types)
 
+    def supports_filesystem_virtiofs(self):
+        """
+        Return True if libvirt advertises support for virtiofs
+        """
+        types = self.devices.filesystem.get_enum("driverType").get_values()
+        return bool("virtiofs" in types)
+
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
