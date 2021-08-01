@@ -102,6 +102,7 @@ class _Devices(_CapsBlock):
     video = XMLChildProperty(_make_capsblock("video"), is_single=True)
     graphics = XMLChildProperty(_make_capsblock("graphics"), is_single=True)
     tpm = XMLChildProperty(_make_capsblock("tpm"), is_single=True)
+    filesystem = XMLChildProperty(_make_capsblock("filesystem"), is_single=True)
 
 
 class _Features(_CapsBlock):
