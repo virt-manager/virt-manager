@@ -2335,7 +2335,7 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("numa.cell[0-9]*.memAccess", "memAccess",
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.discard", "discard",
-                    find_inst_cb=cls.cell_find_inst_cb)
+                    find_inst_cb=cls.cell_find_inst_cb, is_onoff=True)
         cls.add_arg("numa.cell[0-9]*.memory", "memory",
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.unit", "unit",
