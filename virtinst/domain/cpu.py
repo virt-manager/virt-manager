@@ -33,7 +33,7 @@ class _CPUCell(XMLBuilder):
     memory = XMLProperty("./@memory", is_int=True)
     unit = XMLProperty("./@unit")
     memAccess = XMLProperty("./@memAccess")
-    discard = XMLProperty("./@discard")
+    discard = XMLProperty("./@discard", is_yesno=True)
     siblings = XMLChildProperty(_CPUCellSibling, relative_xpath="./distances")
 
 
