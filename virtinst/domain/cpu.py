@@ -10,9 +10,10 @@ from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 from .. import xmlutil
 
 
-class _CPUCellSibling(XMLBuilder):
+class _NUMACellSibling(XMLBuilder):
     """
-    Class for generating <distances> <sibling> nodes
+    Class for generating <cpu><numa><cell><distances> child nodes <sibling>,
+    describing the distances to other NUMA cells.
     """
     XML_NAME = "sibling"
     _XML_PROP_ORDER = ["id", "value"]
@@ -21,9 +22,30 @@ class _CPUCellSibling(XMLBuilder):
     value = XMLProperty("./@value", is_int=True)
 
 
-class _CPUCell(XMLBuilder):
+class _NUMACellCache(XMLBuilder):
     """
-    Class for generating <cpu><numa> child <cell> XML
+    Class for generating <cpu><numa><cell> child nodes <cache>, describing
+    caches for NUMA cells.
+    """
+    XML_NAME = "cache"
+    _XML_PROP_ORDER = ["level", "associativity", "policy",
+            "size_value", "size_unit", "line_value", "line_unit"]
+
+    level = XMLProperty("./@level", is_int=True)
+    associativity = XMLProperty("./@associativity")
+    policy = XMLProperty("./@policy")
+
+    size_value = XMLProperty("./size/@value", is_int=True)
+    size_unit = XMLProperty("./size/@unit")
+
+    line_value = XMLProperty("./line/@value", is_int=True)
+    line_unit = XMLProperty("./line/@unit")
+
+
+class _NUMACell(XMLBuilder):
+    """
+    Class for generating <cpu><numa> child nodes <cell> XML, describing NUMA
+    cells.
     """
     XML_NAME = "cell"
     _XML_PROP_ORDER = ["id", "cpus", "memory", "memAccess", "discard"]
@@ -34,7 +56,8 @@ class _CPUCell(XMLBuilder):
     unit = XMLProperty("./@unit")
     memAccess = XMLProperty("./@memAccess")
     discard = XMLProperty("./@discard", is_yesno=True)
-    siblings = XMLChildProperty(_CPUCellSibling, relative_xpath="./distances")
+    siblings = XMLChildProperty(_NUMACellSibling, relative_xpath="./distances")
+    caches = XMLChildProperty(_NUMACellCache)
 
 
 class _CPUCache(XMLBuilder):
@@ -204,7 +227,7 @@ class DomainCpu(XMLBuilder):
         feature.policy = policy
     features = XMLChildProperty(_CPUFeature)
 
-    cells = XMLChildProperty(_CPUCell, relative_xpath="./numa")
+    cells = XMLChildProperty(_NUMACell, relative_xpath="./numa")
     cache = XMLChildProperty(_CPUCache, is_single=True)
 
     def copy_host_cpu(self, guest):

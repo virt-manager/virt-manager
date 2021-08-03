@@ -513,6 +513,8 @@ numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.unit=KiB,numa.cell2.cpus=4,numa
 cell0.distances.sibling0.id=0,cell0.distances.sibling0.value=10,\
 cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
 numa.cell1.distances.sibling0.id=0,numa.cell1.distances.sibling0.value=21,\
+numa.cell2.cache0.level=1,numa.cell2.cache0.associativity=direct,numa.cell2.cache0.policy=writeback,\
+numa.cell2.cache0.size.value=256,numa.cell2.cache0.size.unit=KiB,numa.cell2.cache0.line.value=256,numa.cell2.cache0.line.unit=KiB,\
 cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3
 --cputune shares=2048,period=1000000,quota=-1,global_period=1000000,global_quota=-1,emulator_period=1000000,emulator_quota=-1,iothread_period=1000000,iothread_quota=-1,\
