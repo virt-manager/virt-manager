@@ -509,7 +509,7 @@ c.add_compare("""--pxe
 --cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,mode=custom,check=partial,\
 cell.id=0,cell.cpus=1,2,3,cell.memory=1024,\
 cell1.id=1,cell1.memory=256,cell1.cpus=5-8,\
-numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.cpus=4,numa.cell2.memAccess=shared,numa.cell2.discard=no,\
+numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.unit=KiB,numa.cell2.cpus=4,numa.cell2.memAccess=shared,numa.cell2.discard=no,\
 cell0.distances.sibling0.id=0,cell0.distances.sibling0.value=10,\
 cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
 numa.cell1.distances.sibling0.id=0,numa.cell1.distances.sibling0.value=21,\
