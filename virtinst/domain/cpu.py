@@ -31,6 +31,7 @@ class _CPUCell(XMLBuilder):
     id = XMLProperty("./@id", is_int=True)
     cpus = XMLProperty("./@cpus")
     memory = XMLProperty("./@memory", is_int=True)
+    unit = XMLProperty("./@unit")
     memAccess = XMLProperty("./@memAccess")
     discard = XMLProperty("./@discard")
     siblings = XMLChildProperty(_CPUCellSibling, relative_xpath="./distances")
