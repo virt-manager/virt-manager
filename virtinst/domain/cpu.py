@@ -60,6 +60,42 @@ class _NUMACell(XMLBuilder):
     caches = XMLChildProperty(_NUMACellCache)
 
 
+class _NUMALatency(XMLBuilder):
+    """
+    Class for generating <cpu><numa><cell><interconnects> child nodes
+    <latency>, describing latency between two NUMA memory nodes.
+    """
+    XML_NAME = "latency"
+    _XML_PROP_ORDER = ["initiator", "target", "cache", "type", "value", "unit"]
+
+    initiator = XMLProperty("./@initiator", is_int=True)
+    target = XMLProperty("./@target", is_int=True)
+    cache = XMLProperty("./@cache", is_int=True)
+    type = XMLProperty("./@type")
+    value = XMLProperty("./@value", is_int=True)
+    unit = XMLProperty("./@unit")
+
+
+class _NUMABandwidth(XMLBuilder):
+    """
+    Class for generating <cpu><numa><cell><interconnects> child nodes
+    <bandwidth>, describing bandwidth between two NUMA memory nodes.
+    """
+    XML_NAME = "bandwidth"
+    _XML_PROP_ORDER = ["initiator", "target", "cache", "type", "value", "unit"]
+
+    # Note: The documentation only mentions <latency> nodes havin a cache=
+    # attribute, but <bandwidth> and <latency> nodes are otherwise identical
+    # and libvirt will happily accept XML with a cache= attribute on
+    # <bandwidth> nodes as well, so let's leave it here for now.
+    initiator = XMLProperty("./@initiator", is_int=True)
+    target = XMLProperty("./@target", is_int=True)
+    cache = XMLProperty("./@cache", is_int=True)
+    type = XMLProperty("./@type")
+    value = XMLProperty("./@value", is_int=True)
+    unit = XMLProperty("./@unit")
+
+
 class _CPUCache(XMLBuilder):
     """
     Class for generating <cpu> child <cache> XML
@@ -228,6 +264,8 @@ class DomainCpu(XMLBuilder):
     features = XMLChildProperty(_CPUFeature)
 
     cells = XMLChildProperty(_NUMACell, relative_xpath="./numa")
+    latencies = XMLChildProperty(_NUMALatency, relative_xpath="./numa/interconnects")
+    bandwidths = XMLChildProperty(_NUMABandwidth, relative_xpath="./numa/interconnects")
     cache = XMLChildProperty(_CPUCache, is_single=True)
 
     def copy_host_cpu(self, guest):
@@ -295,6 +333,7 @@ class DomainCpu(XMLBuilder):
 
     model = XMLProperty("./model")
     model_fallback = XMLProperty("./model/@fallback")
+    model_vendor_id = XMLProperty("./model/@vendor_id")
 
     match = XMLProperty("./@match")
     vendor = XMLProperty("./vendor")

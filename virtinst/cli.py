@@ -2282,6 +2282,18 @@ class ParserCPU(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(inst, *args, **kwargs)
 
+    def latency_find_inst_cb(self, *args, **kwargs):
+        cliarg = "latency"  # latency[0-9]*
+        list_propname = "latencies"  # cpu.latencies
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
+    def bandwidth_find_inst_cb(self, *args, **kwargs):
+        cliarg = "bandwidth"  # bandwidth[0-9]*
+        list_propname = "bandwidths"  # cpu.bandwidths
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     def set_model_cb(self, inst, val, virtarg):
         if val == "host":
             val = inst.SPECIAL_MODE_HOST_MODEL
@@ -2314,6 +2326,10 @@ class ParserCPU(VirtCLIParser):
         # 'secure' needs to be parsed before 'model'
         cls.add_arg("secure", "secure", is_onoff=True)
         cls.add_arg("model", "model", cb=cls.set_model_cb)
+        # 'model.fallback' must be parsed after 'model' as it may otherwise be
+        # overridden
+        cls.add_arg("model.fallback", "model_fallback")
+        cls.add_arg("model.vendor_id", "model_vendor_id")
 
         cls.add_arg("mode", "mode")
         cls.add_arg("match", "match")
@@ -2369,6 +2385,32 @@ class ParserCPU(VirtCLIParser):
                     find_inst_cb=cls.cell_cache_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.cache[0-9]*.line.unit", "line_unit",
                     find_inst_cb=cls.cell_cache_find_inst_cb)
+
+        cls.add_arg("numa.interconnects.latency[0-9]*.initiator", "initiator",
+                    find_inst_cb=cls.latency_find_inst_cb)
+        cls.add_arg("numa.interconnects.latency[0-9]*.target", "target",
+                    find_inst_cb=cls.latency_find_inst_cb)
+        cls.add_arg("numa.interconnects.latency[0-9]*.cache", "cache",
+                    find_inst_cb=cls.latency_find_inst_cb)
+        cls.add_arg("numa.interconnects.latency[0-9]*.type", "type",
+                    find_inst_cb=cls.latency_find_inst_cb)
+        cls.add_arg("numa.interconnects.latency[0-9]*.value", "value",
+                    find_inst_cb=cls.latency_find_inst_cb)
+        cls.add_arg("numa.interconnects.latency[0-9]*.unit", "unit",
+                    find_inst_cb=cls.latency_find_inst_cb)
+
+        cls.add_arg("numa.interconnects.bandwidth[0-9]*.initiator", "initiator",
+                    find_inst_cb=cls.bandwidth_find_inst_cb)
+        cls.add_arg("numa.interconnects.bandwidth[0-9]*.target", "target",
+                    find_inst_cb=cls.bandwidth_find_inst_cb)
+        cls.add_arg("numa.interconnects.bandwidth[0-9]*.type", "type",
+                    find_inst_cb=cls.bandwidth_find_inst_cb)
+        cls.add_arg("numa.interconnects.bandwidth[0-9]*.cache", "cache",
+                    find_inst_cb=cls.bandwidth_find_inst_cb)
+        cls.add_arg("numa.interconnects.bandwidth[0-9]*.value", "value",
+                    find_inst_cb=cls.bandwidth_find_inst_cb)
+        cls.add_arg("numa.interconnects.bandwidth[0-9]*.unit", "unit",
+                    find_inst_cb=cls.bandwidth_find_inst_cb)
 
 
 #####################
