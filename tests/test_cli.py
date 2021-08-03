@@ -513,6 +513,8 @@ numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.unit=KiB,numa.cell2.cpus=4,numa
 cell0.distances.sibling0.id=0,cell0.distances.sibling0.value=10,\
 cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
 numa.cell1.distances.sibling0.id=0,numa.cell1.distances.sibling0.value=21,\
+numa.cell2.cache0.level=1,numa.cell2.cache0.associativity=direct,numa.cell2.cache0.policy=writeback,\
+numa.cell2.cache0.size.value=256,numa.cell2.cache0.size.unit=KiB,numa.cell2.cache0.line.value=256,numa.cell2.cache0.line.unit=KiB,\
 cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,emulatorpin.cpuset=1,7,iothreadpin0.iothread=1,iothreadpin0.cpuset=1,7,cachetune0.vcpus=0-3,cachetune0.cache0.level=3,cachetune0.cache0.id=0,cachetune0.cache0.type=both,cachetune0.cache0.size=3,cachetune0.cache0.unit=MiB,memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60,vcpusched0.vcpus=0-3,^2,vcpusched0.scheduler=fifo,vcpusched0.priority=95

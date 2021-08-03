@@ -2263,12 +2263,21 @@ class ParserCPU(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
-    def sibling_find_inst_cb(self, inst, *args, **kwargs):
+    def cell_sibling_find_inst_cb(self, inst, *args, **kwargs):
         cell = self.cell_find_inst_cb(inst, *args, **kwargs)
         inst = cell
 
         cliarg = "sibling"  # cell[0-9]*.distances.sibling[0-9]*
         list_propname = "siblings"  # cell.siblings
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(inst, *args, **kwargs)
+
+    def cell_cache_find_inst_cb(self, inst, *args, **kwargs):
+        cell = self.cell_find_inst_cb(inst, *args, **kwargs)
+        inst = cell
+
+        cliarg = "cache"  # cell[0-9]*.cache[0-9]*
+        list_propname = "caches"  # cell.caches
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(inst, *args, **kwargs)
 
@@ -2341,9 +2350,24 @@ class ParserCPU(VirtCLIParser):
                     find_inst_cb=cls.cell_find_inst_cb)
 
         cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.id", "id",
-                    find_inst_cb=cls.sibling_find_inst_cb)
+                    find_inst_cb=cls.cell_sibling_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.value", "value",
-                    find_inst_cb=cls.sibling_find_inst_cb)
+                    find_inst_cb=cls.cell_sibling_find_inst_cb)
+
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.level", "level",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.associativity", "associativity",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.policy", "policy",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.size.value", "size_value",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.size.unit", "size_unit",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.line.value", "line_value",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.cache[0-9]*.line.unit", "line_unit",
+                    find_inst_cb=cls.cell_cache_find_inst_cb)
 
 
 #####################

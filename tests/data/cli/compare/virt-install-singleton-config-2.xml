@@ -153,7 +153,12 @@
           <sibling id="1" value="10"/>
         </distances>
       </cell>
-      <cell id="2" cpus="4" memory="256" memAccess="shared" discard="no" unit="KiB"/>
+      <cell id="2" cpus="4" memory="256" memAccess="shared" discard="no" unit="KiB">
+        <cache level="1" associativity="direct" policy="writeback">
+          <size value="256" unit="KiB"/>
+          <line value="256" unit="KiB"/>
+        </cache>
+      </cell>
     </numa>
   </cpu>
   <clock offset="utc">
@@ -408,7 +413,12 @@
           <sibling id="1" value="10"/>
         </distances>
       </cell>
-      <cell id="2" cpus="4" memory="256" memAccess="shared" discard="no" unit="KiB"/>
+      <cell id="2" cpus="4" memory="256" memAccess="shared" discard="no" unit="KiB">
+        <cache level="1" associativity="direct" policy="writeback">
+          <size value="256" unit="KiB"/>
+          <line value="256" unit="KiB"/>
+        </cache>
+      </cell>
     </numa>
   </cpu>
   <clock offset="utc">
