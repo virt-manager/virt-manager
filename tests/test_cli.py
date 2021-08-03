@@ -516,6 +516,10 @@ numa.cell1.distances.sibling0.id=0,numa.cell1.distances.sibling0.value=21,\
 numa.cell2.cache0.level=1,numa.cell2.cache0.associativity=direct,numa.cell2.cache0.policy=writeback,\
 numa.cell2.cache0.size.value=256,numa.cell2.cache0.size.unit=KiB,numa.cell2.cache0.line.value=256,numa.cell2.cache0.line.unit=KiB,\
 cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
+numa.interconnects.latency0.initiator=0,numa.interconnects.latency0.target=0,numa.interconnects.latency0.type=access,numa.interconnects.latency0.value=5,\
+numa.interconnects.latency1.initiator=0,numa.interconnects.latency1.target=2,numa.interconnects.latency1.cache=1,numa.interconnects.latency1.type=access,numa.interconnects.latency1.value=10,numa.interconnects.latency1.unit=ns,\
+numa.interconnects.bandwidth0.initiator=0,numa.interconnects.bandwidth0.target=0,numa.interconnects.bandwidth0.type=access,numa.interconnects.bandwidth0.value=204800,\
+numa.interconnects.bandwidth1.initiator=0,numa.interconnects.bandwidth1.target=2,numa.interconnects.bandwidth1.cache=1,numa.interconnects.bandwidth1.type=access,numa.interconnects.bandwidth1.value=409600,numa.interconnects.bandwidth1.unit=KiB,\
 cache.mode=emulate,cache.level=3
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,emulatorpin.cpuset=1,7,iothreadpin0.iothread=1,iothreadpin0.cpuset=1,7,cachetune0.vcpus=0-3,cachetune0.cache0.level=3,cachetune0.cache0.id=0,cachetune0.cache0.type=both,cachetune0.cache0.size=3,cachetune0.cache0.unit=MiB,memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60,vcpusched0.vcpus=0-3,^2,vcpusched0.scheduler=fifo,vcpusched0.priority=95
 --iothreads iothreads=2,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
@@ -788,6 +792,8 @@ c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
 c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default", precompare_check="5.1.0")  # default CPU for old QEMU where we cannot use host-model
 c.add_compare("--cpu host-passthrough,migratable=on", "cpu-host-passthrough-migratable")  # Passthrough with migratable attribute
+c.add_compare("--cpu host-model,model.fallback=forbid", "cpu-host-model-no-fallback")  # Host-Model with fallback disabled
+c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=GenuineIntel", "cpu-model")  # Specific CPU with fallback enabled
 
 
 
