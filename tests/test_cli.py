@@ -520,7 +520,7 @@ numa.interconnects.latency0.initiator=0,numa.interconnects.latency0.target=0,num
 numa.interconnects.latency1.initiator=0,numa.interconnects.latency1.target=2,numa.interconnects.latency1.cache=1,numa.interconnects.latency1.type=access,numa.interconnects.latency1.value=10,numa.interconnects.latency1.unit=ns,\
 numa.interconnects.bandwidth0.initiator=0,numa.interconnects.bandwidth0.target=0,numa.interconnects.bandwidth0.type=access,numa.interconnects.bandwidth0.value=204800,\
 numa.interconnects.bandwidth1.initiator=0,numa.interconnects.bandwidth1.target=2,numa.interconnects.bandwidth1.cache=1,numa.interconnects.bandwidth1.type=access,numa.interconnects.bandwidth1.value=409600,numa.interconnects.bandwidth1.unit=KiB,\
-cache.mode=emulate,cache.level=3
+cache.level=3,cache.mode=emulate
 --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,emulatorpin.cpuset=1,7,iothreadpin0.iothread=1,iothreadpin0.cpuset=1,7,cachetune0.vcpus=0-3,cachetune0.cache0.level=3,cachetune0.cache0.id=0,cachetune0.cache0.type=both,cachetune0.cache0.size=3,cachetune0.cache0.unit=MiB,memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60,vcpusched0.vcpus=0-3,^2,vcpusched0.scheduler=fifo,vcpusched0.priority=95
 --iothreads iothreads=2,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6

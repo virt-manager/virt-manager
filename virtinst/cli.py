@@ -2220,6 +2220,11 @@ class ParserCPU(VirtCLIParser):
         "numa.cell[0-9]*.memory": "cell[0-9]*.memory",
     }
 
+
+    ###################
+    # Special parsing #
+    ###################
+
     def _convert_old_feature_options(self):
         # For old CLI compat, --cpu force=foo,force=bar should force
         # enable 'foo' and 'bar' features, but that doesn't fit with the
@@ -2253,9 +2258,9 @@ class ParserCPU(VirtCLIParser):
         return super()._parse(inst)
 
 
-    ###################
-    # Option handling #
-    ###################
+    #################################
+    # Option multi-instance finders #
+    #################################
 
     def cell_find_inst_cb(self, *args, **kwargs):
         cliarg = "cell"  # cell[0-9]*
@@ -2293,6 +2298,11 @@ class ParserCPU(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+
+    #############################
+    # Option handling callbacks #
+    #############################
+
     def set_model_cb(self, inst, val, virtarg):
         if val == "host":
             val = inst.SPECIAL_MODE_HOST_MODEL
@@ -2329,16 +2339,21 @@ class ParserCPU(VirtCLIParser):
         # overridden
         cls.add_arg("model.fallback", "model_fallback")
         cls.add_arg("model.vendor_id", "model_vendor_id")
+        cls.add_arg("vendor", "vendor")
 
         cls.add_arg("mode", "mode")
         cls.add_arg("match", "match")
         cls.add_arg("check", "check")
         cls.add_arg("migratable", "migratable", is_onoff=True)
 
-        cls.add_arg("vendor", "vendor")
-        cls.add_arg("cache.mode", "cache.mode")
+        cls.add_arg("topology.sockets", "topology.sockets")
+        cls.add_arg("topology.dies", "topology.dies")
+        cls.add_arg("topology.cores", "topology.cores")
+        cls.add_arg("topology.threads", "topology.threads")
         cls.add_arg("cache.level", "cache.level")
+        cls.add_arg("cache.mode", "cache.mode")
 
+        # CPU features
         # These are handled specially in _parse
         cls.add_arg("force", None, lookup_cb=None, cb=cls.set_feature_cb)
         cls.add_arg("require", None, lookup_cb=None, cb=cls.set_feature_cb)
@@ -2346,30 +2361,24 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("disable", None, lookup_cb=None, cb=cls.set_feature_cb)
         cls.add_arg("forbid", None, lookup_cb=None, cb=cls.set_feature_cb)
 
-        cls.add_arg("topology.sockets", "topology.sockets")
-        cls.add_arg("topology.dies", "topology.dies")
-        cls.add_arg("topology.cores", "topology.cores")
-        cls.add_arg("topology.threads", "topology.threads")
-
-        # Options for CPU.cells config
+        # NUMA cells
         cls.add_arg("numa.cell[0-9]*.id", "id",
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.cpus", "cpus", can_comma=True,
+                    find_inst_cb=cls.cell_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.memory", "memory",
+                    find_inst_cb=cls.cell_find_inst_cb)
+        cls.add_arg("numa.cell[0-9]*.unit", "unit",
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.memAccess", "memAccess",
                     find_inst_cb=cls.cell_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.discard", "discard",
                     find_inst_cb=cls.cell_find_inst_cb, is_onoff=True)
-        cls.add_arg("numa.cell[0-9]*.memory", "memory",
-                    find_inst_cb=cls.cell_find_inst_cb)
-        cls.add_arg("numa.cell[0-9]*.unit", "unit",
-                    find_inst_cb=cls.cell_find_inst_cb)
-
         cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.id", "id",
                     find_inst_cb=cls.cell_sibling_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.distances.sibling[0-9]*.value", "value",
                     find_inst_cb=cls.cell_sibling_find_inst_cb)
-
+        # NUMA cell caches
         cls.add_arg("numa.cell[0-9]*.cache[0-9]*.level", "level",
                     find_inst_cb=cls.cell_cache_find_inst_cb)
         cls.add_arg("numa.cell[0-9]*.cache[0-9]*.associativity", "associativity",
@@ -2385,6 +2394,7 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("numa.cell[0-9]*.cache[0-9]*.line.unit", "line_unit",
                     find_inst_cb=cls.cell_cache_find_inst_cb)
 
+        # Interconnections between NUMA cells
         cls.add_arg("numa.interconnects.latency[0-9]*.initiator", "initiator",
                     find_inst_cb=cls.latency_find_inst_cb)
         cls.add_arg("numa.interconnects.latency[0-9]*.target", "target",
@@ -2397,7 +2407,6 @@ class ParserCPU(VirtCLIParser):
                     find_inst_cb=cls.latency_find_inst_cb)
         cls.add_arg("numa.interconnects.latency[0-9]*.unit", "unit",
                     find_inst_cb=cls.latency_find_inst_cb)
-
         cls.add_arg("numa.interconnects.bandwidth[0-9]*.initiator", "initiator",
                     find_inst_cb=cls.bandwidth_find_inst_cb)
         cls.add_arg("numa.interconnects.bandwidth[0-9]*.target", "target",
