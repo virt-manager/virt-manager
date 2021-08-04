@@ -131,6 +131,7 @@
   <cpu mode="custom" match="strict" check="partial">
     <model>foobar</model>
     <vendor>meee</vendor>
+    <cache level="3" mode="emulate"/>
     <feature policy="force" name="x2apic"/>
     <feature policy="force" name="x2apicagain"/>
     <feature policy="require" name="reqtest"/>
@@ -140,12 +141,6 @@
     <feature policy="forbid" name="foo"/>
     <feature policy="forbid" name="bar"/>
     <numa>
-      <interconnects>
-        <bandwidth initiator="0" target="0" type="access" value="204800"/>
-        <bandwidth initiator="0" target="2" cache="1" type="access" value="409600" unit="KiB"/>
-        <latency initiator="0" target="0" type="access" value="5"/>
-        <latency initiator="0" target="2" cache="1" type="access" value="10" unit="ns"/>
-      </interconnects>
       <cell id="0" cpus="1,2,3" memory="1024">
         <distances>
           <sibling id="0" value="10"/>
@@ -158,14 +153,19 @@
           <sibling id="1" value="10"/>
         </distances>
       </cell>
-      <cell id="2" cpus="4" memory="256" memAccess="shared" discard="no" unit="KiB">
+      <cell id="2" cpus="4" memory="256" unit="KiB" memAccess="shared" discard="no">
         <cache level="1" associativity="direct" policy="writeback">
           <size value="256" unit="KiB"/>
           <line value="256" unit="KiB"/>
         </cache>
       </cell>
+      <interconnects>
+        <latency initiator="0" target="0" type="access" value="5"/>
+        <latency initiator="0" target="2" cache="1" type="access" value="10" unit="ns"/>
+        <bandwidth initiator="0" target="0" type="access" value="204800"/>
+        <bandwidth initiator="0" target="2" cache="1" type="access" value="409600" unit="KiB"/>
+      </interconnects>
     </numa>
-    <cache mode="emulate" level="3"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="merge"/>
@@ -415,6 +415,7 @@
   <cpu mode="custom" match="strict" check="partial">
     <model>foobar</model>
     <vendor>meee</vendor>
+    <cache level="3" mode="emulate"/>
     <feature policy="force" name="x2apic"/>
     <feature policy="force" name="x2apicagain"/>
     <feature policy="require" name="reqtest"/>
@@ -424,12 +425,6 @@
     <feature policy="forbid" name="foo"/>
     <feature policy="forbid" name="bar"/>
     <numa>
-      <interconnects>
-        <bandwidth initiator="0" target="0" type="access" value="204800"/>
-        <bandwidth initiator="0" target="2" cache="1" type="access" value="409600" unit="KiB"/>
-        <latency initiator="0" target="0" type="access" value="5"/>
-        <latency initiator="0" target="2" cache="1" type="access" value="10" unit="ns"/>
-      </interconnects>
       <cell id="0" cpus="1,2,3" memory="1024">
         <distances>
           <sibling id="0" value="10"/>
@@ -442,14 +437,19 @@
           <sibling id="1" value="10"/>
         </distances>
       </cell>
-      <cell id="2" cpus="4" memory="256" memAccess="shared" discard="no" unit="KiB">
+      <cell id="2" cpus="4" memory="256" unit="KiB" memAccess="shared" discard="no">
         <cache level="1" associativity="direct" policy="writeback">
           <size value="256" unit="KiB"/>
           <line value="256" unit="KiB"/>
         </cache>
       </cell>
+      <interconnects>
+        <latency initiator="0" target="0" type="access" value="5"/>
+        <latency initiator="0" target="2" cache="1" type="access" value="10" unit="ns"/>
+        <bandwidth initiator="0" target="0" type="access" value="204800"/>
+        <bandwidth initiator="0" target="2" cache="1" type="access" value="409600" unit="KiB"/>
+      </interconnects>
     </numa>
-    <cache mode="emulate" level="3"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="merge"/>
