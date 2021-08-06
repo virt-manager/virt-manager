@@ -2399,6 +2399,17 @@ class ParserCputune(VirtCLIParser):
     @classmethod
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
+        # Resource quotas
+        cls.add_arg("shares", "shares")
+        cls.add_arg("period", "period")
+        cls.add_arg("quota", "quota")
+        cls.add_arg("global_period", "global_period")
+        cls.add_arg("global_quota", "global_quota")
+        cls.add_arg("emulator_period", "emulator_period")
+        cls.add_arg("emulator_quota", "emulator_quota")
+        cls.add_arg("iothread_period", "iothread_period")
+        cls.add_arg("iothread_quota", "iothread_quota")
+
         # Options for CPU.vcpus config
         cls.add_arg("vcpupin[0-9]*.vcpu", "vcpu",
                     find_inst_cb=cls.vcpu_find_inst_cb)

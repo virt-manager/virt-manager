@@ -238,6 +238,15 @@
   </keywrap>
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
+    <shares>2048</shares>
+    <period>1000000</period>
+    <quota>-1</quota>
+    <global_period>1000000</global_period>
+    <global_quota>-1</global_quota>
+    <emulator_period>1000000</emulator_period>
+    <emulator_quota>-1</emulator_quota>
+    <iothread_period>1000000</iothread_period>
+    <iothread_quota>-1</iothread_quota>
     <vcpupin vcpu="0" cpuset="0-3"/>
     <emulatorpin cpuset="1,7"/>
     <iothreadpin iothread="1" cpuset="1,7"/>
@@ -493,6 +502,15 @@
   </keywrap>
   <on_lockfailure>ignore</on_lockfailure>
   <cputune>
+    <shares>2048</shares>
+    <period>1000000</period>
+    <quota>-1</quota>
+    <global_period>1000000</global_period>
+    <global_quota>-1</global_quota>
+    <emulator_period>1000000</emulator_period>
+    <emulator_quota>-1</emulator_quota>
+    <iothread_period>1000000</iothread_period>
+    <iothread_quota>-1</iothread_quota>
     <vcpupin vcpu="0" cpuset="0-3"/>
     <emulatorpin cpuset="1,7"/>
     <iothreadpin iothread="1" cpuset="1,7"/>
