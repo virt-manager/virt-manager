@@ -32,6 +32,34 @@ class _IOThreadPin(XMLBuilder):
     cpuset = XMLProperty("./@cpuset")
 
 
+##############
+# Scheduling #
+##############
+
+class _VCPUSched(XMLBuilder):
+    """
+    Class for generating <cputune> child <vcpusched> XML
+    """
+    XML_NAME = "vcpusched"
+    _XML_PROP_ORDER = ["vcpus", "scheduler", "priority"]
+
+    vcpus = XMLProperty("./@vcpus")
+    scheduler = XMLProperty("./@scheduler")
+    priority = XMLProperty("./@priority", is_int=True)
+
+
+class _IOThreadSched(XMLBuilder):
+    """
+    Class for generating <cputune> child <iothreadsched> XML
+    """
+    XML_NAME = "iothreadsched"
+    _XML_PROP_ORDER = ["iothreads", "scheduler", "priority"]
+
+    iothreads = XMLProperty("./@iothreads")
+    scheduler = XMLProperty("./@scheduler")
+    priority = XMLProperty("./@priority", is_int=True)
+
+
 class _CacheCPU(XMLBuilder):
     """
     Class for generating <cachetune> child <cache> XML
@@ -78,18 +106,6 @@ class _MemoryTuneCPU(XMLBuilder):
     nodes = XMLChildProperty(_NodeCPU)
 
 
-class _VCPUSched(XMLBuilder):
-    """
-    Class for generating <cputune> child <vcpusched> XML
-    """
-    XML_NAME = "vcpusched"
-    _XML_PROP_ORDER = ["vcpus", "scheduler", "priority"]
-
-    vcpus = XMLProperty("./@vcpus")
-    scheduler = XMLProperty("./@scheduler")
-    priority = XMLProperty("./@priority", is_int=True)
-
-
 class DomainCputune(XMLBuilder):
     """
     Class for generating <cpu> XML
@@ -98,7 +114,8 @@ class DomainCputune(XMLBuilder):
     _XML_PROP_ORDER = ["shares", "period", "quota", "global_period", "global_quota",
             "emulator_period", "emulator_quota", "iothread_period", "iothread_quota",
             "vcpupins", "emulatorpin_cpuset", "iothreadpins",
-            "cachetunes", "memorytunes", "vcpuscheds"]
+            "emulatorsched_scheduler", "emulatorsched_priority", "vcpuscheds", "iothreadscheds",
+            "cachetunes", "memorytunes"]
 
     # Resource quotas
     shares = XMLProperty("./shares", is_int=True)
@@ -115,6 +132,12 @@ class DomainCputune(XMLBuilder):
     vcpupins = XMLChildProperty(_VCPUPin)
     emulatorpin_cpuset = XMLProperty("./emulatorpin/@cpuset")
     iothreadpins = XMLChildProperty(_IOThreadPin)
+
+    # Scheduling
+    emulatorsched_scheduler = XMLProperty("./emulatorsched/@scheduler")
+    emulatorsched_priority = XMLProperty("./emulatorsched/@priority", is_int=True)
+    vcpuscheds = XMLChildProperty(_VCPUSched)
+    iothreadscheds = XMLChildProperty(_IOThreadSched)
+
     cachetunes = XMLChildProperty(_CacheTuneCPU)
     memorytunes = XMLChildProperty(_MemoryTuneCPU)
-    vcpuscheds = XMLChildProperty(_VCPUSched)
