@@ -515,7 +515,11 @@ cell0.distances.sibling1.id=1,cell0.distances.sibling1.value=21,\
 numa.cell1.distances.sibling0.id=0,numa.cell1.distances.sibling0.value=21,\
 cell1.distances.sibling1.id=1,cell1.distances.sibling1.value=10,\
 cache.mode=emulate,cache.level=3
---cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,emulatorpin.cpuset=1,7,iothreadpin0.iothread=1,iothreadpin0.cpuset=1,7,cachetune0.vcpus=0-3,cachetune0.cache0.level=3,cachetune0.cache0.id=0,cachetune0.cache0.type=both,cachetune0.cache0.size=3,cachetune0.cache0.unit=MiB,memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60,vcpusched0.vcpus=0-3,^2,vcpusched0.scheduler=fifo,vcpusched0.priority=95
+--cputune shares=2048,period=1000000,quota=-1,global_period=1000000,global_quota=-1,emulator_period=1000000,emulator_quota=-1,iothread_period=1000000,iothread_quota=-1,\
+vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,emulatorpin.cpuset=1,7,iothreadpin0.iothread=1,iothreadpin0.cpuset=1,7,\
+cachetune0.vcpus=0-3,cachetune0.cache0.level=3,cachetune0.cache0.id=0,cachetune0.cache0.type=both,cachetune0.cache0.size=3,cachetune0.cache0.unit=MiB,\
+memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60,\
+vcpusched0.vcpus=0-3,^2,vcpusched0.scheduler=fifo,vcpusched0.priority=95
 --iothreads iothreads=2,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6
 --boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo",initdir=/my/custom/cwd,inituser=tester,initgroup=1000,firmware=efi

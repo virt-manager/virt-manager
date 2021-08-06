@@ -91,8 +91,23 @@ class DomainCputune(XMLBuilder):
     Class for generating <cpu> XML
     """
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["vcpus", "emulatorpin_cpuset", "iothreadpin",
+    _XML_PROP_ORDER = ["shares", "period", "quota",
+            "global_period", "global_quota",
+            "emulator_period", "emulator_quota",
+            "iothread_period", "iothread_quota",
+            "vcpus", "emulatorpin_cpuset", "iothreadpin",
              "cachetune", "memorytune", "vcpusched"]
+
+    # Resource quotas
+    shares = XMLProperty("./shares", is_int=True)
+    period = XMLProperty("./period", is_int=True)
+    quota = XMLProperty("./quota", is_int=True)
+    global_period = XMLProperty("./global_period", is_int=True)
+    global_quota = XMLProperty("./global_quota", is_int=True)
+    emulator_period = XMLProperty("./emulator_period", is_int=True)
+    emulator_quota = XMLProperty("./emulator_quota", is_int=True)
+    iothread_period = XMLProperty("./iothread_period", is_int=True)
+    iothread_quota = XMLProperty("./iothread_quota", is_int=True)
 
     vcpus = XMLChildProperty(_VCPUPin)
     iothreadpin = XMLChildProperty(_IOThreadPin)
