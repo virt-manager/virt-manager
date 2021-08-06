@@ -6,6 +6,10 @@
 from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
 
+###############
+# CPU Pinning #
+###############
+
 class _VCPUPin(XMLBuilder):
     """
     Class for generating <cputune> child <vcpupin> XML
@@ -91,12 +95,10 @@ class DomainCputune(XMLBuilder):
     Class for generating <cpu> XML
     """
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["shares", "period", "quota",
-            "global_period", "global_quota",
-            "emulator_period", "emulator_quota",
-            "iothread_period", "iothread_quota",
-            "vcpus", "emulatorpin_cpuset", "iothreadpin",
-             "cachetune", "memorytune", "vcpusched"]
+    _XML_PROP_ORDER = ["shares", "period", "quota", "global_period", "global_quota",
+            "emulator_period", "emulator_quota", "iothread_period", "iothread_quota",
+            "vcpupins", "emulatorpin_cpuset", "iothreadpins",
+            "cachetunes", "memorytunes", "vcpuscheds"]
 
     # Resource quotas
     shares = XMLProperty("./shares", is_int=True)
@@ -109,10 +111,10 @@ class DomainCputune(XMLBuilder):
     iothread_period = XMLProperty("./iothread_period", is_int=True)
     iothread_quota = XMLProperty("./iothread_quota", is_int=True)
 
-    vcpus = XMLChildProperty(_VCPUPin)
-    iothreadpin = XMLChildProperty(_IOThreadPin)
-    cachetune = XMLChildProperty(_CacheTuneCPU)
-    memorytune = XMLChildProperty(_MemoryTuneCPU)
-    vcpusched = XMLChildProperty(_VCPUSched)
-
+    # CPU Pinning
+    vcpupins = XMLChildProperty(_VCPUPin)
     emulatorpin_cpuset = XMLProperty("./emulatorpin/@cpuset")
+    iothreadpins = XMLChildProperty(_IOThreadPin)
+    cachetunes = XMLChildProperty(_CacheTuneCPU)
+    memorytunes = XMLChildProperty(_MemoryTuneCPU)
+    vcpuscheds = XMLChildProperty(_VCPUSched)
