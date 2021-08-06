@@ -2366,6 +2366,12 @@ class ParserCputune(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def iothreadsched_find_inst_cb(self, *args, **kwargs):
+        cliarg = "iothreadsched"  # iothreadsched[0-9]*
+        list_propname = "iothreadscheds"  # cputune.iothreadscheds
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     def cachetune_find_inst_cb(self, *args, **kwargs):
         cliarg = "cachetune"  # cachetune[0-9]*
         list_propname = "cachetunes"  # cputune.cachetunes
@@ -2420,12 +2426,23 @@ class ParserCputune(VirtCLIParser):
                     find_inst_cb=cls.iothreadpin_find_inst_cb)
         cls.add_arg("iothreadpin[0-9]*.cpuset", "cpuset", can_comma=True,
                     find_inst_cb=cls.iothreadpin_find_inst_cb)
+
+        # Scheduling
+        cls.add_arg("emulatorsched.scheduler", "emulatorsched_scheduler")
+        cls.add_arg("emulatorsched.priority", "emulatorsched_priority")
         cls.add_arg("vcpusched[0-9]*.vcpus", "vcpus", can_comma=True,
                     find_inst_cb=cls.vcpusched_find_inst_cb)
         cls.add_arg("vcpusched[0-9]*.scheduler", "scheduler",
                     find_inst_cb=cls.vcpusched_find_inst_cb)
         cls.add_arg("vcpusched[0-9]*.priority", "priority",
                     find_inst_cb=cls.vcpusched_find_inst_cb)
+        cls.add_arg("iothreadsched[0-9]*.iothreads", "iothreads", can_comma=True,
+                    find_inst_cb=cls.iothreadsched_find_inst_cb)
+        cls.add_arg("iothreadsched[0-9]*.scheduler", "scheduler",
+                    find_inst_cb=cls.iothreadsched_find_inst_cb)
+        cls.add_arg("iothreadsched[0-9]*.priority", "priority",
+                    find_inst_cb=cls.iothreadsched_find_inst_cb)
+
         cls.add_arg("cachetune[0-9]*.vcpus", "vcpus",
                     find_inst_cb=cls.cachetune_find_inst_cb)
         cls.add_arg("cachetune[0-9]*.cache[0-9]*.level", "level",
