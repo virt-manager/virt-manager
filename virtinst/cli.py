@@ -2348,27 +2348,27 @@ class ParserCputune(VirtCLIParser):
     remove_first = "model"
     stub_none = False
 
-    def vcpu_find_inst_cb(self, *args, **kwargs):
+    def vcpupin_find_inst_cb(self, *args, **kwargs):
         cliarg = "vcpupin"  # vcpupin[0-9]*
-        list_propname = "vcpus"
+        list_propname = "vcpupins"  # cputune.vcpupins
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     def iothreadpin_find_inst_cb(self, *args, **kwargs):
         cliarg = "iothreadpin"  # iothreadpin[0-9]*
-        list_propname = "iothreadpin"
+        list_propname = "iothreadpins"  # cputune.iothreadpins
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     def vcpusched_find_inst_cb(self, *args, **kwargs):
         cliarg = "vcpusched"  # vcpusched[0-9]*
-        list_propname = "vcpusched"
+        list_propname = "vcpuscheds"  # cputune.vcpuscheds
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
     def cachetune_find_inst_cb(self, *args, **kwargs):
         cliarg = "cachetune"  # cachetune[0-9]*
-        list_propname = "cachetune"
+        list_propname = "cachetunes"  # cputune.cachetunes
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
@@ -2383,7 +2383,7 @@ class ParserCputune(VirtCLIParser):
 
     def memorytune_find_inst_cb(self, *args, **kwargs):
         cliarg = "memorytune"  # memorytune[0-9]*
-        list_propname = "memorytune"
+        list_propname = "memorytunes"  # cputune.memorytunes
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
@@ -2412,9 +2412,9 @@ class ParserCputune(VirtCLIParser):
 
         # Options for CPU.vcpus config
         cls.add_arg("vcpupin[0-9]*.vcpu", "vcpu",
-                    find_inst_cb=cls.vcpu_find_inst_cb)
+                    find_inst_cb=cls.vcpupin_find_inst_cb)
         cls.add_arg("vcpupin[0-9]*.cpuset", "cpuset", can_comma=True,
-                    find_inst_cb=cls.vcpu_find_inst_cb)
+                    find_inst_cb=cls.vcpupin_find_inst_cb)
         cls.add_arg("emulatorpin.cpuset", "emulatorpin_cpuset", can_comma=True)
         cls.add_arg("iothreadpin[0-9]*.iothread", "iothread",
                     find_inst_cb=cls.iothreadpin_find_inst_cb)
