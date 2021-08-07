@@ -254,7 +254,14 @@
     <vcpusched vcpus="0-3,^2" scheduler="fifo" priority="95"/>
     <iothreadsched iothreads="1,2" scheduler="fifo" priority="90"/>
     <cachetune vcpus="0-3">
-      <cache level="3" id="0" type="both" size="3" unit="MiB"/>
+      <cache id="0" level="3" type="both" size="3" unit="MiB"/>
+      <cache id="1" level="3" type="both" size="3" unit="MiB"/>
+      <monitor level="3" vcpus="2"/>
+      <monitor level="3" vcpus="0-3,^2"/>
+    </cachetune>
+    <cachetune vcpus="4-5">
+      <monitor level="3" vcpus="4"/>
+      <monitor level="3" vcpus="5"/>
     </cachetune>
     <memorytune vcpus="0-3">
       <node id="0" bandwidth="60"/>
@@ -520,7 +527,14 @@
     <vcpusched vcpus="0-3,^2" scheduler="fifo" priority="95"/>
     <iothreadsched iothreads="1,2" scheduler="fifo" priority="90"/>
     <cachetune vcpus="0-3">
-      <cache level="3" id="0" type="both" size="3" unit="MiB"/>
+      <cache id="0" level="3" type="both" size="3" unit="MiB"/>
+      <cache id="1" level="3" type="both" size="3" unit="MiB"/>
+      <monitor level="3" vcpus="2"/>
+      <monitor level="3" vcpus="0-3,^2"/>
+    </cachetune>
+    <cachetune vcpus="4-5">
+      <monitor level="3" vcpus="4"/>
+      <monitor level="3" vcpus="5"/>
     </cachetune>
     <memorytune vcpus="0-3">
       <node id="0" bandwidth="60"/>
