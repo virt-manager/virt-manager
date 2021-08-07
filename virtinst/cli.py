@@ -2387,6 +2387,15 @@ class ParserCputune(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(inst, *args, **kwargs)
 
+    def monitor_find_inst_cb(self, inst, *args, **kwargs):
+        cachetune = self.cachetune_find_inst_cb(inst, *args, **kwargs)
+        inst = cachetune
+
+        cliarg = "monitor"  # cachetune[0-9]*.monitor[0-9]*
+        list_propname = "monitors"  # cachetune.monitors
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(inst, *args, **kwargs)
+
     def memorytune_find_inst_cb(self, *args, **kwargs):
         cliarg = "memorytune"  # memorytune[0-9]*
         list_propname = "memorytunes"  # cputune.memorytunes
@@ -2443,11 +2452,12 @@ class ParserCputune(VirtCLIParser):
         cls.add_arg("iothreadsched[0-9]*.priority", "priority",
                     find_inst_cb=cls.iothreadsched_find_inst_cb)
 
+        # CPU Cache & Memory Tunables
         cls.add_arg("cachetune[0-9]*.vcpus", "vcpus",
-                    find_inst_cb=cls.cachetune_find_inst_cb)
-        cls.add_arg("cachetune[0-9]*.cache[0-9]*.level", "level",
-                    find_inst_cb=cls.cache_find_inst_cb)
+                    find_inst_cb=cls.cachetune_find_inst_cb, can_comma=True)
         cls.add_arg("cachetune[0-9]*.cache[0-9]*.id", "id",
+                    find_inst_cb=cls.cache_find_inst_cb)
+        cls.add_arg("cachetune[0-9]*.cache[0-9]*.level", "level",
                     find_inst_cb=cls.cache_find_inst_cb)
         cls.add_arg("cachetune[0-9]*.cache[0-9]*.type", "type",
                     find_inst_cb=cls.cache_find_inst_cb)
@@ -2455,8 +2465,12 @@ class ParserCputune(VirtCLIParser):
                     find_inst_cb=cls.cache_find_inst_cb)
         cls.add_arg("cachetune[0-9]*.cache[0-9]*.unit", "unit",
                     find_inst_cb=cls.cache_find_inst_cb)
+        cls.add_arg("cachetune[0-9]*.monitor[0-9]*.level", "level",
+                    find_inst_cb=cls.monitor_find_inst_cb)
+        cls.add_arg("cachetune[0-9]*.monitor[0-9]*.vcpus", "vcpus",
+                    find_inst_cb=cls.monitor_find_inst_cb, can_comma=True)
         cls.add_arg("memorytune[0-9]*.vcpus", "vcpus",
-                    find_inst_cb=cls.memorytune_find_inst_cb)
+                    find_inst_cb=cls.memorytune_find_inst_cb, can_comma=True)
         cls.add_arg("memorytune[0-9]*.node[0-9]*.id", "id",
                     find_inst_cb=cls.node_find_inst_cb)
         cls.add_arg("memorytune[0-9]*.node[0-9]*.bandwidth", "bandwidth",
