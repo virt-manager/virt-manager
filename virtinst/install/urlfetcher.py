@@ -33,7 +33,7 @@ class _XorrisoReader():
 
         log.debug("Generating iso filelist: %s", cmd)
         output = subprocess.check_output(cmd,
-                stderr=subprocess.DEVNULL, text=True)
+                stderr=subprocess.DEVNULL, universal_newlines=True)
         return output.split(delim, 1)[1].strip().splitlines()
 
     def grabFile(self, url, scratchdir):
