@@ -479,7 +479,7 @@ c.add_compare("""
 --memorybacking hugepages=on
 --features apic=off
 --clock offset=localtime
---resource /virtualmachines/production
+--resource /virtualmachines/production,fibrechannel.appid=myapplication
 --events on_crash=restart
 --metadata genid_enable=yes
 --sysinfo host
