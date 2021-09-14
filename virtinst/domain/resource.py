@@ -14,6 +14,7 @@ class DomainResource(XMLBuilder):
     """
 
     XML_NAME = "resource"
-    _XML_PROP_ORDER = ["partition"]
+    _XML_PROP_ORDER = ["partition", "fibrechannel_appid"]
 
     partition = XMLProperty("./partition")
+    fibrechannel_appid = XMLProperty("./fibrechannel/@appid")

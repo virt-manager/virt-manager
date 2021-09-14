@@ -2003,6 +2003,7 @@ class ParserResource(VirtCLIParser):
     def _init_class(cls, **kwargs):
         VirtCLIParser._init_class(**kwargs)
         cls.add_arg("partition", "partition")
+        cls.add_arg("fibrechannel.appid", "fibrechannel_appid", can_comma=True)
 
 
 ######################
