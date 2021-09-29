@@ -1756,6 +1756,7 @@ class ParserCloudInit(VirtCLIParser):
         cls.add_arg("ssh-key", "ssh_key")
         cls.add_arg("user-data", "user_data")
         cls.add_arg("meta-data", "meta_data")
+        cls.add_arg("network-config", "network_config")
 
 
 def parse_cloud_init(optstr):

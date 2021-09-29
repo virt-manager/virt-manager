@@ -878,6 +878,9 @@ Sub options are:
     Specify a public key to inject into the guest, providing ssh access to the
     unprivileged account. Example: ssh-key=/home/user/.ssh/id_rsa.pub
 
+``network-config=``
+    Specify a cloud-init netowrk-config file to add directly to the iso.
+
 
 
 ``--boot``
