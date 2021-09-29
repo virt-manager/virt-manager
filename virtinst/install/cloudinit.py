@@ -20,6 +20,7 @@ class CloudInitData():
     ssh_key = None
     user_data = None
     meta_data = None
+    network_config = None
 
     def _generate_password(self):
         if not self.generated_root_password:
@@ -91,14 +92,27 @@ def _create_userdata_content(cloudinit_data):
     return content
 
 
+def _create_network_config_content(cloudinit_data):
+    content = ""
+    if cloudinit_data.network_config:
+        log.debug("Using network-config content from path=%s",
+                  cloudinit_data.network_config)
+        content = open(cloudinit_data.network_config).read()
+    return content
+
+
 def create_files(scratchdir, cloudinit_data):
     metadata = _create_metadata_content(cloudinit_data)
     userdata = _create_userdata_content(cloudinit_data)
 
+    datas = [(metadata, "meta-data"), (userdata, "user-data")]
+    network_config = _create_network_config_content(cloudinit_data)
+    if network_config:
+        datas.append((network_config, 'network-config'))
+
     filepairs = []
     try:
-        for content, destfile in [(metadata, "meta-data"),
-                                  (userdata, "user-data")]:
+        for content, destfile in datas:
             fileobj = tempfile.NamedTemporaryFile(
                     prefix="virtinst-", suffix=("-%s" % destfile),
                     dir=scratchdir, delete=False)
