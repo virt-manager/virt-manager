@@ -517,7 +517,7 @@ now tunnel connections to the VNC server over SSH. It avoids prompting
 for SSH passwords on the console. Handling of VNC connections & retries
 is made more robust. There is support for changing CDROM media on the
 fly (requires suitably updated libvirt). There is ability to PXE boot
-install fullyvirtualized guests. Connetions to hypervisors are opened
+install fullyvirtualized guests. Connections to hypervisors are opened
 in the background to avoid blocking the whole UI.
 
 ## Release 0.5.0
