@@ -162,7 +162,7 @@ These options decide what action to take after altering the XML. In the common c
 
 
 ``--start``
-    Start the VM after performing the requeseted changes. If combined with --no-define, this will create transient VM boot with the requested changes.
+    Start the VM after performing the requested changes. If combined with --no-define, this will create transient VM boot with the requested changes.
 
 
 ``--print-diff``

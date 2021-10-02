@@ -490,7 +490,7 @@ apic, eoi, privnet, and hyperv features. Some examples:
     Enable APIC PV EOI
 
 ``--features hyperv.vapic.state=on,hyperv.spinlocks.state=off``
-    Enable hypver VAPIC, but disable spinlocks
+    Enable hyperv VAPIC, but disable spinlocks
 
 ``--features kvm.hidden.state=on``
     Allow the KVM hypervisor signature to be hidden from the guest
@@ -589,7 +589,7 @@ INSTALLATION OPTIONS
 **Syntax:** ``--cdrom`` PATH
 
 ISO file or CDROM device to use for VM install media. After install,
-the the virtual CDROM device will remain attached to the VM, but with
+the virtual CDROM device will remain attached to the VM, but with
 the ISO or host path media ejected.
 
 
@@ -1233,7 +1233,7 @@ Connect the guest to the host network. Examples for specifying the network type:
     can be listed, created, deleted using the ``virsh`` command line tool. In
     an unmodified install of ``libvirt`` there is usually a virtual network
     with a name of ``default``. Use a virtual network if the host has dynamic
-    networking (eg NetworkManager), or using wireless. The guest will be
+    networking (e.g. NetworkManager), or using wireless. The guest will be
     NATed to the LAN by whichever connection is active.
 
 ``type=direct,source=IFACE[,source.mode=MODE]``
