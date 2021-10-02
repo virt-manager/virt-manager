@@ -61,7 +61,7 @@ The following options are accepted when running ``virt-manager``
 DIALOG WINDOW OPTIONS
 =====================
 
-For these options, only the requested window will be shown, the manaer
+For these options, only the requested window will be shown, the manager
 window will not be run in this case. Connection autostart will also
 be disabled. All these options require specifying a manual ``--connect``
 URI.
