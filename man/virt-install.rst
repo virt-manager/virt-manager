@@ -1225,7 +1225,7 @@ Connect the guest to the host network. Examples for specifying the network type:
 ``bridge=BRIDGE``
     Connect to a bridge device in the host called ``BRIDGE``. Use this option if
     the host has static networking config & the guest requires full outbound
-    and inbound connectivity  to/from the LAN. Also use this if live migration
+    and inbound connectivity to/from the LAN. Also use this if live migration
     will be used with this guest.
 
 ``network=NAME``
