@@ -232,7 +232,7 @@
 - OVMF/AAVMF Support (Laszlo Ersek, Giuseppe Scrivano, Cole Robinson)
 - Improved support for AArch64 qemu/kvm
 - virt-install: Support `--disk type=network` parameters
-- virt-install: Make `--disk`  just work
+- virt-install: Make `--disk` just work
 - virt-install: Add `--disk sgio=` option (Giuseppe Scrivano)
 - addhardware: default to an existing bus when adding a new disk
   (Giuseppe Scrivano)
@@ -552,7 +552,7 @@ to the hypervisor.
 The release introduces online help for all windows / dialogs in the
 application, to explain usage & operation of key functions. Auto-popup
 of consoles was fixed for existing inactive domains. Additional control
-operations are available on the right-click menu in the VM list. A 
+operations are available on the right-click menu in the VM list. A
 handful of other minor bug fixes are also applied.
 
 ## Release 0.3.1
@@ -591,7 +591,7 @@ team for excellent progress on this. It is now possible to control
 the virt-manager UI with command line arguments as well as the DBus
 API & it DBus activation is no longer used by default which fixes
 interaction with GNOME keyring & AT-SPI accessibility. Numerous
-UI issues were fixed / clarified, particularly in the graphical 
+UI issues were fixed / clarified, particularly in the graphical
 console and new VM creation wizard.
 
 
