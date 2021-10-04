@@ -270,8 +270,8 @@ class vmmStoragePool(vmmLibvirtObject):
     # XML/config operations #
     #########################
 
-    def set_autostart(self, value):
-        self._backend.setAutostart(value)
+    def set_autostart(self, val):
+        self._backend.setAutostart(val)
     def get_autostart(self):
         return self._backend.autostart()
 

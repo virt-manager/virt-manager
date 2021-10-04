@@ -129,7 +129,7 @@ class vmmKeyring(vmmGObject):
             label = iface.get_cached_property("Label").unpack().strip("'")
             dbusattrs = iface.get_cached_property("Attributes").unpack()
 
-            secret = u"".join([chr(c) for c in secretbytes])
+            secret = "".join([chr(c) for c in secretbytes])
 
             attrs = {}
             for key, val in dbusattrs.items():

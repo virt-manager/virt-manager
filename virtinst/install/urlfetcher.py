@@ -179,7 +179,6 @@ class _URLFetcher(object):
         Grab the passed filename from self.location and save it to
         a temporary file, returning the temp filename
         """
-        # pylint: disable=redefined-variable-type
         fn = None
         try:
             fileobj = tempfile.NamedTemporaryFile(

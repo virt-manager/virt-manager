@@ -633,8 +633,8 @@ class vmmCreateVM(vmmGObjectUI):
             "install-oscontainer-source": vb_enabled,
             "install-oscontainer-rootpw-box": vb_enabled
             }
-        for w in oscontainer_widget_conf:
-            self.widget(w).set_visible(oscontainer_widget_conf[w])
+        for wname, val in oscontainer_widget_conf.items():
+            self.widget(wname).set_visible(val)
 
         # Memory
         memory = int(self.conn.host_memory_size())

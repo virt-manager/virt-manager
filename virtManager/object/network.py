@@ -85,8 +85,8 @@ class vmmNetwork(vmmLibvirtObject):
 
     def get_autostart(self):
         return self._backend.autostart()
-    def set_autostart(self, value):
-        self._backend.setAutostart(value)
+    def set_autostart(self, val):
+        self._backend.setAutostart(val)
 
     def _refresh_dhcp_leases(self):
         ret = []

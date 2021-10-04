@@ -222,7 +222,7 @@ class VirtinstConnection(object):
         # TOCTOU race: a volume may go away in between enumeration and inspection
         try:
             pool = self._libvirtconn.storagePoolLookupByName(poolxmlobj.name)
-        except libvirt.libvirtError as e:  # pragma: no cover
+        except libvirt.libvirtError:  # pragma: no cover
             return ret
 
         if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
