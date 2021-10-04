@@ -3,7 +3,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import imp
+import importlib
 import os
 
 # Need to do this before any tests or virtinst import
@@ -18,8 +18,9 @@ os.environ.pop("LANGUAGE", None)
 # pylint: disable=wrong-import-position
 from virtinst import buildconfig
 from virtinst import log, reset_logging
+
 # This sets all the cli bits back to their defaults
-imp.reload(buildconfig)
+importlib.reload(buildconfig)
 
 from tests import utils
 
