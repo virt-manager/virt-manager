@@ -966,7 +966,7 @@ def _on_off_convert(key, val):
     val = _raw_on_off_convert(val)
     if val is not None:
         return val
-    raise fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
+    fail(_("%(key)s must be 'yes' or 'no'") % {"key": key})
 
 
 class _SuboptCheckerClass:

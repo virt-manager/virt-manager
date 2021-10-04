@@ -52,7 +52,7 @@ def _check_function(function, flag, run_args, data):
             return False
         if bool(flag_tuple):  # pragma: no cover
             return False
-    except Exception as e:  # pragma: no cover
+    except Exception:  # pragma: no cover
         # Other python exceptions likely mean the bindings are horked
         return False
     return True

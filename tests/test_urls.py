@@ -154,8 +154,8 @@ def _testGuest(testdata, guest):
     # to fetch files for that part
     treemedia = installer._treemedia  # pylint: disable=protected-access
     fetcher = treemedia._cached_fetcher  # pylint: disable=protected-access
-    def fakeAcquireFile(filename):
-        log.debug("Fake acquiring %s", filename)
+    def fakeAcquireFile(filename, fullurl=None):
+        log.debug("Fake acquiring filename=%s fullurl=%s", filename, fullurl)
         return filename
     fetcher.acquireFile = fakeAcquireFile
 

@@ -141,6 +141,7 @@ class _DistroCache(object):
         update = 0
         version = _safeint(verstr)
         if verstr.count(".") >= 1:
+            # pylint: disable=no-member
             version = _safeint(verstr.split(".")[0])
             update = _safeint(verstr.split(".")[1])
 

@@ -97,10 +97,9 @@ class vmmLibvirtObject(vmmGObject):
         return self.class_name() == "nodedev"
 
     def get_autostart(self):  # pragma: no cover
-        pass
+        return False
     def set_autostart(self, val):  # pragma: no cover
         ignore = val
-        pass
 
     def change_name_backend(self, newbackend):
         # Used for changing the backing object after a rename

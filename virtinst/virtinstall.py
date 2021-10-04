@@ -73,7 +73,7 @@ def convert_old_printxml(options):
 def convert_old_sound(options):
     if not options.sound:
         return
-    for idx in range(len(options.sound)):
+    for idx, dummy in enumerate(options.sound):
         if options.sound[idx] is None:
             options.sound[idx] = "default"
 
