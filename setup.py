@@ -10,6 +10,7 @@ if sys.version_info.major < 3:
     sys.exit(1)
 
 import glob
+import importlib.util
 import os
 from pathlib import Path
 import shutil
@@ -33,18 +34,14 @@ def _import_buildconfig():
     # A bit of crazyness to import the buildconfig file without importing
     # the rest of virtinst, so the build process doesn't require all the
     # runtime deps to be installed
-    import warnings
-
-    # 'imp' is deprecated. We use it elsewhere though too. Deal with using
-    # the modern replacement when we replace all usage
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning)
-        import imp
-        buildconfig = imp.load_source('buildconfig', 'virtinst/buildconfig.py')
-        if "libvirt" in sys.modules:
-            raise RuntimeError("Found libvirt in sys.modules. setup.py should "
-                    "not import virtinst.")
-        return buildconfig.BuildConfig
+    spec = importlib.util.spec_from_file_location(
+            'buildconfig', 'virtinst/buildconfig.py')
+    buildconfig = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(buildconfig)
+    if "libvirt" in sys.modules:
+        raise RuntimeError("Found libvirt in sys.modules. setup.py should "
+                "not import virtinst.")
+    return buildconfig.BuildConfig
 
 
 BuildConfig = _import_buildconfig()
