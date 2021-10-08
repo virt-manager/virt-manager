@@ -787,9 +787,12 @@ class StorageBackend(_StorageBase):
 
     def get_driver_type(self):
         if self._vol_object:
-            ret = self.get_vol_xml().format
-            if ret != "unknown":
-                return ret
+            if self.get_parent_pool_xml().type != "disk":
+                ret = self.get_vol_xml().format
+                if ret != "unknown":
+                    return ret
+            else:
+                return "raw"
         return None
 
     def validate(self):
