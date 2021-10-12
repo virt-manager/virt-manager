@@ -3,6 +3,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
 import sys
 
 import libvirt
@@ -296,11 +297,11 @@ def update_changes(domain, devs, action, confirm):
             elif action == "update":
                 domain.updateDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
         except libvirt.libvirtError as e:
-            fail(msg_fail % {"error": e})
+            if "VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL" not in os.environ:
+                fail(msg_fail % {"error": e})
 
-        # Test driver doesn't support device hotplug so we can't reach this
-        print_stdout(msg_success)  # pragma: no cover
-        if confirm:  # pragma: no cover
+        print_stdout(msg_success)
+        if confirm:
             print_stdout("")
 
 
@@ -511,8 +512,7 @@ def main(conn=None):
                 _("The VM is not running, --update is inapplicable."))
         if not options.define:
             # --update and --no-define passed, so we are done
-            # It's hard to hit this case with the test suite
-            return 0  # pragma: no cover
+            return 0
 
     original_xml = inactive_xmlobj.get_xml()
     devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
