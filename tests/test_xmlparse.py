@@ -1030,11 +1030,11 @@ def testXMLBuilderCoverage():
     xml = conn.lookupByName("test-for-virtxml").XMLDesc(0)
     guest = virtinst.Guest(conn, parsexml=xml)
 
-    assert guest.features.get_xml().startswith("<features")
-    assert guest.clock.get_xml().startswith("<clock")
+    assert guest.features.get_xml().startswith("  <features")
+    assert guest.clock.get_xml().startswith("  <clock")
     assert guest.seclabels[0].get_xml().startswith("<seclabel")
-    assert guest.cpu.get_xml().startswith("<cpu")
-    assert guest.os.get_xml().startswith("<os")
+    assert guest.cpu.get_xml().startswith("  <cpu")
+    assert guest.os.get_xml().startswith("  <os")
     assert guest.cpu.get_xml_id() == "./cpu"
     assert guest.cpu.get_xml_idx() == 0
     assert guest.get_xml_id() == "."
