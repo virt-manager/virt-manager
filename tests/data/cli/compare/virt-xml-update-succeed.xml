@@ -1,0 +1,35 @@
+--- Original XML
++++ Altered XML
+@@ -13,5 +13,9 @@
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
++    <interface type="user">
++      <mac address="00:11:22:33:44:55"/>
++      <model type="e1000"/>
++    </interface>
+   </devices>
+ </domain>
+
+<interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+
+
+Hotplug this device to the guest 'test'? (y/n): Device hotplug successful.
+
+--- Original XML
++++ Altered XML
+@@ -13,5 +13,9 @@
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
++    <interface type="user">
++      <mac address="00:11:22:33:44:55"/>
++      <model type="e1000"/>
++    </interface>
+   </devices>
+ </domain>
+
+Define 'test' with the changed XML? (y/n): Domain 'test' defined successfully.
