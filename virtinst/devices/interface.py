@@ -110,6 +110,25 @@ def _default_bridge(conn):
     return ret
 
 
+_MAC_COUNTER = 0
+
+
+def _testsuite_mac():
+    # Generate predictable mac addresses for the test suite
+    # For some tests, we need to make sure that different mac addresses
+    # would _not_ be generated in normal operations, so we add some magic
+    # here to increment the generated address with a special env variable
+    global _MAC_COUNTER
+
+    base = "00:11:22:33:44:55"
+    ret = base[:-1] + str(int(base[-1]) + _MAC_COUNTER)
+    _MAC_COUNTER += 1
+
+    if "VIRTINST_TEST_SUITE_INCREMENT_MACADDR" not in os.environ:
+        _MAC_COUNTER = 0
+    return ret
+
+
 class _VirtualPort(XMLBuilder):
     XML_NAME = "virtualport"
 
@@ -139,8 +158,7 @@ class DeviceInterface(Device):
         the connection.
         """
         if conn.fake_conn_predictable():
-            # Testing hack
-            return "00:11:22:33:44:55"
+            return _testsuite_mac()
 
         for ignore in range(256):
             mac = _random_mac(conn)
