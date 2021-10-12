@@ -586,7 +586,14 @@ class XMLBuilder(object):
         self._add_parse_bits(xmlapi)
         ret = xmlapi.get_xml(self._xmlstate.make_abs_xpath("."))
 
-        if ret and not ret.endswith("\n"):
+        if not ret:
+            return ret
+
+        lastline = ret.rstrip().splitlines()[-1]
+        if not ret.startswith(" ") and lastline.startswith(" "):
+            ret = lastline.split("<")[0] + ret
+
+        if not ret.endswith("\n"):
             ret += "\n"
         return ret
 
