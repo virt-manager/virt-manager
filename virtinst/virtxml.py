@@ -159,14 +159,20 @@ def action_edit(guest, options, parserclass):
     return cli.parse_option_strings(options, guest, inst, editing=True)
 
 
-def action_add_device(guest, options, parserclass):
+def action_add_device(guest, options, parserclass, devs):
     if not parserclass.prop_is_list(guest):
         fail(_("Cannot use --add-device with --%s") % parserclass.cli_arg_name)
     set_os_variant(options, guest)
-    devs = cli.parse_option_strings(options, guest, None)
-    devs = xmlutil.listify(devs)
-    for dev in devs:
-        dev.set_defaults(guest)
+
+    if devs:
+        for dev in devs:
+            guest.add_device(dev)
+    else:
+        devs = cli.parse_option_strings(options, guest, None)
+        devs = xmlutil.listify(devs)
+        for dev in devs:
+            dev.set_defaults(guest)
+
     return devs
 
 
@@ -305,8 +311,15 @@ def update_changes(domain, devs, action, confirm):
             print_stdout("")
 
 
-def prepare_changes(xmlobj, options, parserclass):
-    origxml = xmlobj.get_xml()
+def prepare_changes(orig_xmlobj, options, parserclass, devs=None):
+    """
+    Parse the command line device/XML arguments, and apply the changes to
+    a copy of the passed in xmlobj.
+
+    :returns: (list of device objects, action string, altered xmlobj)
+    """
+    origxml = orig_xmlobj.get_xml()
+    xmlobj = orig_xmlobj.__class__(conn=orig_xmlobj.conn, parsexml=origxml)
     has_edit = options.edit != -1
     is_xmlcli = parserclass is cli.ParserXML
 
@@ -322,7 +335,7 @@ def prepare_changes(xmlobj, options, parserclass):
         action = "update"
 
     elif options.add_device:
-        devs = action_add_device(xmlobj, options, parserclass)
+        devs = action_add_device(xmlobj, options, parserclass, devs)
         action = "hotplug"
 
     elif options.remove_device:
@@ -342,7 +355,7 @@ def prepare_changes(xmlobj, options, parserclass):
     elif options.print_xml:
         print_stdout(newxml)
 
-    return devs, action
+    return devs, action, xmlobj
 
 
 #######################
@@ -498,13 +511,14 @@ def main(conn=None):
             print_stdout(dev.get_xml())
         return 0
 
+    devs = None
     performed_update = False
     if options.update:
         if options.update and options.start:
             fail_conflicting("--update", "--start")
-
         if vm_is_running:
-            devs, action = prepare_changes(active_xmlobj, options, parserclass)
+            devs, action, dummy = prepare_changes(
+                    active_xmlobj, options, parserclass)
             update_changes(domain, devs, action, options.confirm)
             performed_update = True
         else:
@@ -515,14 +529,15 @@ def main(conn=None):
             return 0
 
     original_xml = inactive_xmlobj.get_xml()
-    devs, action = prepare_changes(inactive_xmlobj, options, parserclass)
+    devs, action, xmlobj_to_define = prepare_changes(
+            inactive_xmlobj, options, parserclass, devs=devs)
     if not options.define:
         if options.start:
-            start_domain_transient(conn, inactive_xmlobj, devs,
+            start_domain_transient(conn, xmlobj_to_define, devs,
                                    action, options.confirm)
         return 0
 
-    dom = define_changes(conn, inactive_xmlobj,
+    dom = define_changes(conn, xmlobj_to_define,
                          devs, action, options.confirm)
     if not dom:
         # --confirm user said 'no'
