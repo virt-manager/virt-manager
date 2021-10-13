@@ -2017,6 +2017,45 @@ ba</description>
   </volume>
 </pool>
 
+<pool type='disk'>
+  <name>pool-disk</name>
+  <uuid>f426a5fe-d5b7-4086-a30d-95e32731cbb7</uuid>
+  <capacity unit='bytes'>2088960</capacity>
+  <allocation unit='bytes'>1304576</allocation>
+  <available unit='bytes'>783360</available>
+  <source>
+    <device path='/dev/sdfg'>
+      <freeExtent start='1305600' end='2088960'/>
+    </device>
+    <format type='dos'/>
+  </source>
+  <target>
+    <path>/dev/pool-disk</path>
+  </target>
+
+  <volume type='block'>
+    <name>sdfg1</name>
+    <key>/dev/sdfg1</key>
+    <source>
+      <device path='/dev/sdfg'>
+        <extent start='1024' end='1305600'/>
+      </device>
+    </source>
+    <capacity unit='bytes'>1304576</capacity>
+    <allocation unit='bytes'>1304576</allocation>
+    <physical unit='bytes'>1304576</physical>
+    <target>
+      <path>/dev/sda1</path>
+      <format type='none'/>
+      <permissions>
+        <mode>0660</mode>
+        <owner>0</owner>
+        <group>6</group>
+        <label>system_u:object_r:fixed_disk_device_t:s0</label>
+      </permissions>
+    </target>
+  </volume>
+</pool>
 
 <pool type='logical'>
   <name>disk-pool</name>
