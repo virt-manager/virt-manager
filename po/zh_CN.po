@@ -26,8 +26,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-06-11 06:14+0000\n"
-"PO-Revision-Date: 2021-03-12 22:01+0000\n"
+"POT-Creation-Date: 2021-06-09 06:23+0000\n"
+"PO-Revision-Date: 2021-06-13 15:04+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.1\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -404,7 +404,8 @@ msgid ""
 msgstr ""
 "<small>QEMU 用户模式会话不是 virt-manager 的\n"
 "默认选项。它可能导致任何已存在的 QEMU/KVM\n"
-"客户机不可用。网络选项也非常有限。</small>"
+"客户机不可用。\n"
+"网络选项也非常有限。</small>"
 
 #: ui/createconn.ui:267
 msgid "Cu_stom URI:"
@@ -1095,7 +1096,7 @@ msgstr "磁盘总线(_U)："
 
 #: ui/details.ui:2675
 msgid "disk-bus-label"
-msgstr "disk-bus-label"
+msgstr "磁盘总线标签"
 
 #: ui/details.ui:2718
 msgid "<b>Virtual Disk</b>"
@@ -3842,7 +3843,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "GTK-VNC 查看器过旧"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -5603,10 +5604,9 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 必须在 5900 以上，或设为 -1 自动分配"
 
 #: virtinst/devices/hostdev.py:82
-#, fuzzy, python-format
-#| msgid "Don't know how to setup UEFI for arch '%s'"
+#, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
-msgstr "不知如何为架构 '%s' 安装 UEFI"
+msgstr "不知如何为 mdev 类型 ID '%s' 生成 nodedev"
 
 #: virtinst/devices/hostdev.py:88
 #, python-format
@@ -5837,10 +5837,9 @@ msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "无法获得文件 %(url)s：%(error)s"
 
 #: virtinst/install/urlfetcher.py:106
-#, fuzzy, python-format
-#| msgid "Retrieving file %s..."
+#, python-format
 msgid "Retrieving '%(filename)s'"
-msgstr "搜索文件 %s......"
+msgstr "正在检索 ' %(filename)s'"
 
 #: virtinst/install/urlfetcher.py:279
 #, python-format
@@ -5848,10 +5847,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "打开 URL %(url)s 失败：%(error)s"
 
 #: virtinst/install/volumeupload.py:108
-#, fuzzy, python-format
-#| msgid "Transferring %s"
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "传输 %s"
+msgstr "正在传输 '%(filename)s'"
 
 #: virtinst/nodedev.py:254
 #, python-format
@@ -5944,10 +5942,9 @@ msgid ""
 msgstr "不支持稀疏逻辑卷，将分配设置的容量"
 
 #: virtinst/storage.py:687
-#, fuzzy, python-format
-#| msgid "Allocating '%s'"
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "正在分配 '%s'"
+msgstr "正在分配 '%(filename)s'"
 
 #: virtinst/storage.py:727
 #, python-format
