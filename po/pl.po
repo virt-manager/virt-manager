@@ -4,30 +4,30 @@
 #
 # Translators:
 # Cole Robinson <crobinso@redhat.com>, 2011
-# Piotr Drąg <piotrdrag@gmail.com>, 2006,2011-2015, 2020.
+# Piotr Drąg <piotrdrag@gmail.com>, 2006,2011-2015, 2020, 2021.
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020.
-# Piotr Drąg <piotrdrag@gmail.com>, 2020. #zanata
+# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020, 2021.
+# Piotr Drąg <piotrdrag@gmail.com>, 2020. #zanata, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-05-29 07:26+0000\n"
-"PO-Revision-Date: 2020-11-15 23:15+0000\n"
+"PO-Revision-Date: 2021-05-29 15:34+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3.2\n"
+"X-Generator: Weblate 4.6.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -3883,7 +3883,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "Przeglądarka GTK-VNC jest za stara"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -5699,10 +5699,9 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s musi wynosić ponad 5900 lub -1 dla automatycznego przydzielenia"
 
 #: virtinst/devices/hostdev.py:82
-#, fuzzy, python-format
-#| msgid "Don't know how to setup UEFI for arch '%s'"
+#, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
-msgstr "Nie wiadomo, jak skonfigurować UEFI dla architektury „%s”"
+msgstr "Nie wiadomo, jak utworzyć nodedev dla identyfikatora typu mdev „%s”"
 
 #: virtinst/devices/hostdev.py:88
 #, python-format
@@ -5954,10 +5953,9 @@ msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Nie można pobrać pliku %(url)s: %(error)s"
 
 #: virtinst/install/urlfetcher.py:106
-#, fuzzy, python-format
-#| msgid "Retrieving file %s..."
+#, python-format
 msgid "Retrieving '%(filename)s'"
-msgstr "Pobieranie pliku %s…"
+msgstr "Pobieranie „%(filename)s”"
 
 #: virtinst/install/urlfetcher.py:279
 #, python-format
@@ -5965,10 +5963,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Otwarcie adresu URL %(url)s się nie powiodło: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
-#, fuzzy, python-format
-#| msgid "Transferring %s"
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "Przesyłanie %s"
+msgstr "Przesyłanie „%(filename)s”"
 
 #: virtinst/nodedev.py:234
 #, python-format
@@ -6068,10 +6065,9 @@ msgstr ""
 "pojemności"
 
 #: virtinst/storage.py:687
-#, fuzzy, python-format
-#| msgid "Allocating '%s'"
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "Przydzielanie „%s”"
+msgstr "Przydzielanie „%(filename)s”"
 
 #: virtinst/storage.py:727
 #, python-format
