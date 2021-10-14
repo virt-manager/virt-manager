@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2020-09-22 16:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
@@ -244,11 +244,11 @@ msgstr "Provádí se požadovaná operace"
 msgid "Please wait a few moments..."
 msgstr "Vyčkejte…"
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 msgid "Processing..."
 msgstr "Zpracování…"
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "Po_drobnosti"
 
@@ -832,7 +832,7 @@ msgstr "Popis umís_tění:"
 msgid "_Backing store"
 msgstr "Úložiště, na _kterém se nachází"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
 msgstr "Smazat virtuální stroj"
 
@@ -1451,7 +1451,6 @@ msgid "Apply pool changes"
 msgstr "Uplatnit změny fondu"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 msgid "Active"
 msgstr "Aktivní"
@@ -2536,13 +2535,9 @@ msgstr "Opravdu chcete použít toto zařízení?"
 msgid "Error building device XML: %s"
 msgstr "Chyba při sestavování XML pro zařízení: %s"
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 msgid "Cancelling job..."
 msgstr "Rušení úkolu…"
-
-#: virtManager/asyncjob.py:315
-msgid "Completed"
-msgstr "Dokončeno"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
@@ -3142,136 +3137,136 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Chyba při mazání virtuálního stroje „%(vm)s“: %(error)s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Dále se vyskytly chyby při odebírání některých úložných zařízení: \n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Došlo k chybám při odebírání některých zařízení úložiště."
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "Mazání umístění „%s“"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Chyba při spouštění dialogu mazání: %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr "Smazat „%(vmname)s“"
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
 "Maže se virtuální stroj „%s“ a vybraného úložiště (to může chvíli trvat)"
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Mazání virtuálního stroje „%s“"
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Chyba při odebírání zařízení: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr "Tato změna se projeví po příštím vypnutí hosta."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr "Úložiště nebude smazáno."
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "Zařízení nemohlo být odebráno ze spuštěného stroje"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr "Odebrat diskové zařízení"
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr "Odebrat diskové zařízení „%(target)s“"
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 "Odebírá se diskové zařízení „%s“ a označené úložiště (toto může chvíli trvat)"
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr "Odebírá se diskové zařízení „%s“"
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "Cíl"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "Popis umístění úložiště"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 msgid "Cannot delete iSCSI share."
 msgstr "iSCSI sdílení není možné smazat."
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
 msgstr "SCSI zařízení není možné smazat."
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Nespravované vzdálené úložiště není možné smazat."
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 msgid "Path does not exist."
 msgstr "Umístění neexistuje."
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 msgid "No write access to parent directory."
 msgstr "Nedostatečná oprávnění pro zápis do nadřazené složky."
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
 msgstr "Nespravované blokové zařízení není možné smazat."
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 msgid "Storage is read-only."
 msgstr "Úložiště je pouze pro čtení."
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 msgid "No write access to path."
 msgstr "Do umístění není přístup pro zápis."
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
 msgstr "Úložiště je označené jako možné sdílet."
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 msgid "Storage is a media device."
 msgstr "Úložiště je zařízení média."
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 msgid "Storage is in use by the following virtual machines"
 msgstr "Úložiště už využívají následující virtuální stroje"
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
 msgstr "Nepodařilo se zkontrolovat konflikt využití disku."
 
@@ -3309,37 +3304,28 @@ msgstr "Grafická konzole"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager nepodporuje více než jednu grafickou konzoli"
 
-#: virtManager/details/console.py:492
-#, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "Grafika typu „%s“ nepodporuje automatickou změnu rozlišení."
-
-#: virtManager/details/console.py:495
-msgid "Guest agent is not available."
-msgstr "Agent v hostovi není k dispozici."
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 msgid "Guest has crashed."
 msgstr "Host zhavaroval."
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 msgid "Guest is not running."
 msgstr "Host není spuštěný."
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 msgid "Graphical console not configured for guest"
 msgstr "Grafická konzole pro tohoto hosta nebyla nastavena"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Nelze zobrazit grafickou konzoli typu „%s“"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 msgid "Connecting to graphical console for guest"
 msgstr "Připojuje se ke grafické konzoli hosta"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3348,29 +3334,29 @@ msgstr ""
 "Chyba při připojování ke grafické konzoli:\n"
 "%s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Chyba ověření totožnosti prohlížeče: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "Chyba přesměrování USB"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr "Prohlížeč byl odpojen."
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Chybový výstup SSH tunelu: %s"
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 msgid "Viewer disconnected."
 msgstr "Prohlížeč se odpojil."
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Pro uvolnění ukazatel myši stiskněte %s."
@@ -3912,7 +3898,7 @@ msgstr ""
 "pouze pro očekávání spojení místně. Pro připojení na dálku je třeba změnit "
 "adresu na které bude host očekávat spojení."
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3921,10 +3907,18 @@ msgstr ""
 "Nedaří se poskytnout požadované přihlašovací údaje VNC serveru.\n"
 "Typ přihlašovacích údajů %s není podporován"
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Došlo ke SPICE %(error-name)s"
+
+#: virtManager/details/viewers.py:750
+msgid "Guest agent is not available."
+msgstr "Agent v hostovi není k dispozici."
 
 #: virtManager/device/addstorage.py:93
 #, python-format
@@ -4014,8 +4008,7 @@ msgstr "Uživatelské síťování"
 msgid "Virtual network"
 msgstr "Virtuální síť"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 msgid "Inactive"
 msgstr "Neaktivní"
 
@@ -4119,36 +4112,36 @@ msgstr "Izolovaná síť, směrování pouze v rámci ní"
 msgid "Isolated network, routing disabled"
 msgstr "Izolovaná síť, směrování vypnuto"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 msgid "On Boot"
 msgstr "Při startu"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Opravdu chcete nadobro smazat síť %s?"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "Chyba při mazání sítě „%s“"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "Chyba při spouštění sítě „%s“"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "Chyba při zastavování sítě „%s“"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Chyba při spouštění průvodce nastavením sítě: „%s“"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "Chyba při změně nastavení sítě: %s"
@@ -4186,69 +4179,69 @@ msgstr "Libvirt připojení nepodporuje správu úložišť."
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "%(bytesfree)s volné / <i>%(bytesinuse)s použito</i>"
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 msgid "Create new volume"
 msgstr "Vytvořit nový oddíl"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 msgid "Pool does not support volume creation"
 msgstr "Fond nepodporuje vytvoření svazku"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 msgid "No storage pool selected."
 msgstr "Nebylo vybráno úložiště."
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Chyba při výběru úložiště: %s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Chyba při zastavování fondu „%s“"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Chyba při spouštění fondu „%s“"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Chyba při spouštění průvodce fondem: %s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Opravdu chcete nadobro smazat fond %s?"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Chyba při mazání fondu „%s“"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Chyba při znovunačítání fondu „%s“"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Chyba při spouštění průvodce svazkem: %s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Opravdu chcete trvale smazat svazek %s?"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Chyba při mazání svazku „%s“"
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Chyba při měnění nastavení fondu: %s"
@@ -4605,11 +4598,11 @@ msgstr "Přesouvá se virt. stroj „%(name)s“ na %(host)s. To může chvíli 
 msgid "Error cancelling migrate job: %s"
 msgstr "Chyba při rušení migrace: %s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 msgid "Libvirt connection does not support snapshots."
 msgstr "Toto libvirt spojení nepodporuje zachycené stavy."
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4617,7 +4610,7 @@ msgstr ""
 "Zachycené stavy jsou k dispozici pouze pokud jsou všechny obrazy disků "
 "hosta, do kterých může zapisovat, ve formátu qcow2."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4625,17 +4618,17 @@ msgstr ""
 "Zachycené stavy vyžadují alespoň jeden zapisovatelný qcow2 obraz disku "
 "přidělený hostovi."
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Dané zařízení se v nastavení neaktivního virt. stroje nedaří nalézt: %s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 msgid "Saving domain to disk"
 msgstr "Ukládání domény na disk"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 msgid "Migrating domain"
 msgstr "Přesouvání domény"
 
@@ -4798,11 +4791,11 @@ msgstr "Vyberte svazek úložiště"
 msgid "_Show Virtual Machine Manager"
 msgstr "Zobrazit správu virtuálních strojů"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "Chyba při spouštění Správy virtuálních strojů"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Chyba při spouštění Správy virtuálních strojů: %(error)s"
@@ -5593,21 +5586,21 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr "Neznámý typ autoconsole „%s“"
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Nesprávná hodnota pro „velikost“: %s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Neznámá „%(optionname)s“ hodnota „%(string)s“"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Svazek úložiště je třeba zadat jako vol=nazev_fondu/nazev_svazku"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Očekáván řetězec v PCI formátu pro „%s“"
@@ -5701,17 +5694,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Pro tento typ svazku není atribut formátu podporován"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Typ zařízení „%s“ vyžaduje popis umístění"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "Pro neexistující umístění „%s“."
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5732,7 +5725,13 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr ""
 "Je třeba, aby %s bylo vyšší než 5900 (nebo -1 pro automatické přiřazení)"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+#| msgid "Don't know how to setup UEFI for arch '%s'"
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "Není známo jak nastavit UEFI pro architekturu „%s“"
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr "Neznámý typ zařízení uzlu %s"
@@ -5779,7 +5778,7 @@ msgstr "pro neexistující disk „%s“ je třeba zadat velikost"
 msgid "Cloning %(srcfile)s"
 msgstr "Klonování %(srcfile)s"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -5965,32 +5964,34 @@ msgstr ""
 "Je třeba, aby umístění bylo kořenová složka instalačního stromu.\n"
 "Příklady pro různé distribuce jsou uvedeny v manuálové stránce virt-install."
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Nedaří se získat soubor %(url)s: %(error)s"
 
-#: virtinst/install/urlfetcher.py:74
-#, python-format
-msgid "Retrieving file %s..."
+#: virtinst/install/urlfetcher.py:106
+#, fuzzy, python-format
+#| msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "Získávání souboru %s…"
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Otevírání URL adresy %(url)s se nezdařilo: %(error)s"
 
-#: virtinst/install/volumeupload.py:109
-#, python-format
-msgid "Transferring %s"
+#: virtinst/install/volumeupload.py:108
+#, fuzzy, python-format
+#| msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "Přenášení %s"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s odpovídá vícero uzlům zařízení"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Nenalezeno odpovídající zařízení uzlu pro „%s“"
@@ -6082,9 +6083,10 @@ msgstr ""
 "Sparse logické svazky nejsou podporované, nastavuje se přidělení stejná jako "
 "kapacita"
 
-#: virtinst/storage.py:688
-#, python-format
-msgid "Allocating '%s'"
+#: virtinst/storage.py:687
+#, fuzzy, python-format
+#| msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "Přiřazování „%s“"
 
 #: virtinst/storage.py:727
@@ -6929,6 +6931,12 @@ msgstr "Je třeba zadat název pro %s"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "název %(objecttype)s „%(name)s“ nemůže obsahovat znak „%(char)s“."
+
+#~ msgid "Completed"
+#~ msgstr "Dokončeno"
+
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "Grafika typu „%s“ nepodporuje automatickou změnu rozlišení."
 
 #~ msgid "Default"
 #~ msgstr "Výchozí"

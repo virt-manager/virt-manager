@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2020-12-28 00:36+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
@@ -243,12 +243,12 @@ msgstr "Operasi sedang berlangsung"
 msgid "Please wait a few moments..."
 msgstr "Mohon tunggu beberapa saat ..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 #, fuzzy
 msgid "Processing..."
 msgstr "Memproses..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 #, fuzzy
 msgid "_Details"
 msgstr "Rincian Tugas"
@@ -955,7 +955,7 @@ msgstr "Pa_th:"
 msgid "_Backing store"
 msgstr "_Backing store"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 #, fuzzy
 msgid "Delete Virtual Machine"
 msgstr "Hapus Mesin Virtual"
@@ -1736,7 +1736,6 @@ msgid "Apply pool changes"
 msgstr "Terapkan perubahan pangkalan"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 #, fuzzy
 msgid "Active"
@@ -3010,15 +3009,10 @@ msgstr "Anda yakin ingin menggunakan perangkat ini?"
 msgid "Error building device XML: %s"
 msgstr "Galat membuat XML perangkat: %s"
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 #, fuzzy
 msgid "Cancelling job..."
 msgstr "Membatalkan pekerjaan ..."
-
-#: virtManager/asyncjob.py:315
-#, fuzzy
-msgid "Completed"
-msgstr "Selesai"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 #, fuzzy
@@ -3702,39 +3696,39 @@ msgid ""
 "%s"
 msgstr "Jalur berikut akan dihapus:&#10;&#10; %s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Kesalahan menghapus mesin virtual '% (vm) s':% (error) s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 #, fuzzy
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "Selain itu, ada kesalahan saat menghapus perangkat penyimpanan tertentu: \n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 #, fuzzy
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Terjadi kesalahan saat melepas perangkat penyimpanan tertentu."
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, fuzzy, python-format
 msgid "Deleting path '%s'"
 msgstr "Menghapus jalur '%s'"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, fuzzy, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Galat meluncurkan dialog hapus: %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, fuzzy, python-format
 msgid "Delete '%(vmname)s'"
 msgstr "Hapus '% (vmname) s'"
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, fuzzy, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
@@ -3742,119 +3736,119 @@ msgstr ""
 "Menghapus mesin virtual '%s' dan penyimpanan yang dipilih (ini mungkin "
 "membutuhkan waktu beberapa saat)"
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, fuzzy, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Menghapus mesin virtual '[1]'."
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, fuzzy, python-format
 msgid "Error Removing Device: %s"
 msgstr "Galat Menghapus Perangkat: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 #, fuzzy
 msgid "This change will take effect after the next guest shutdown."
 msgstr "Perubahan ini akan berlaku setelah penghentian tamu berikutnya."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 #, fuzzy
 msgid "Storage will not be deleted."
 msgstr "Penyimpanan tidak akan dihapus."
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 #, fuzzy
 msgid "Device could not be removed from the running machine"
 msgstr "Perangkat tidak dapat dihapus dari mesin yang sedang berjalan"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 #, fuzzy
 msgid "Remove Disk Device"
 msgstr "Hapus Perangkat Disk"
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, fuzzy, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr "Hapus perangkat disk '% (target) s'"
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, fuzzy, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 "Menghapus perangkat disk '%s' dan penyimpanan yang dipilih (ini mungkin "
 "membutuhkan waktu beberapa saat)"
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, fuzzy, python-format
 msgid "Removing disk device '%s'"
 msgstr "Menghapus perangkat disk '%s'"
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 #, fuzzy
 msgid "Target"
 msgstr "Target"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 #, fuzzy
 msgid "Storage Path"
 msgstr "penyimpanan"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 #, fuzzy
 msgid "Cannot delete iSCSI share."
 msgstr "Tidak dapat menghapus share iSCSI."
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 #, fuzzy
 msgid "Cannot delete SCSI device."
 msgstr "Tidak dapat menghapus perangkat SCSI."
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 #, fuzzy
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Tidak dapat menghapus penyimpanan jarak jauh yang tidak dikelola."
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 #, fuzzy
 msgid "Path does not exist."
 msgstr "tidak ada"
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 #, fuzzy
 msgid "No write access to parent directory."
 msgstr "Tidak ada akses tulis ke direktori induk."
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 #, fuzzy
 msgid "Cannot delete unmanaged block device."
 msgstr "Tidak dapat menghapus perangkat blok yang tidak dikelola."
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 #, fuzzy
 msgid "Storage is read-only."
 msgstr "Penyimpanan bersifat hanya baca."
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 #, fuzzy
 msgid "No write access to path."
 msgstr "Tidak ada akses tulis ke jalur."
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 #, fuzzy
 msgid "Storage is marked as shareable."
 msgstr "Penyimpanan ditandai sebagai dapat dibagikan."
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 #, fuzzy
 msgid "Storage is a media device."
 msgstr "Penyimpanan adalah perangkat media."
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 #, fuzzy
 msgid "Storage is in use by the following virtual machines"
 msgstr "Penyimpanan sedang digunakan oleh mesin virtual berikut"
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 #, fuzzy
 msgid "Failed to check disk usage conflict."
 msgstr "Gagal memeriksa konflik penggunaan disk."
@@ -3902,42 +3896,32 @@ msgstr ""
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager tidak mendukung lebih dari satu konsol grafis"
 
-#: virtManager/details/console.py:492
-#, fuzzy, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "Jenis grafik '%s' tidak mendukung pengubahan ukuran otomatis."
-
-#: virtManager/details/console.py:495
-#, fuzzy
-msgid "Guest agent is not available."
-msgstr "Agen tamu tidak tersedia."
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 #, fuzzy
 msgid "Guest has crashed."
 msgstr "Tamu ngadat."
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 #, fuzzy
 msgid "Guest is not running."
 msgstr "Tamu tidak berjalan."
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 #, fuzzy
 msgid "Graphical console not configured for guest"
 msgstr "Konsol grafis tidak dikonfigurasi untuk tamu"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, fuzzy, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Tidak dapat menampilkan jenis konsol grafis '%s'"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 #, fuzzy
 msgid "Connecting to graphical console for guest"
 msgstr "Menghubungkan ke konsol grafis untuk tamu"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid ""
@@ -3945,32 +3929,32 @@ msgid ""
 "%s"
 msgstr "Terjadi kesalahan saat menyambungkan ke konsol grafis:&#10; %s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, fuzzy, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Galat otentikasi penampil: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 #, fuzzy
 msgid "USB redirection error"
 msgstr "Kesalahan pengalihan USB"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 #, fuzzy
 msgid "Viewer was disconnected."
 msgstr "Penampil telah terputus."
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, fuzzy, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Keluaran kesalahan terowongan SSH: %s"
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 #, fuzzy
 msgid "Viewer disconnected."
 msgstr "Penampil terputus."
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, fuzzy, python-format
 msgid "Press %s to release pointer."
 msgstr "Tekan %s untuk melepaskan penunjuk."
@@ -4561,7 +4545,7 @@ msgstr ""
 "dikonfigurasi untuk mendengarkan secara lokal. Untuk terhubung dari jarak "
 "jauh, Anda perlu mengubah alamat dengar tamu."
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, fuzzy, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -4570,10 +4554,19 @@ msgstr ""
 "Tidak dapat memberikan kredensial yang diminta ke server VNC.&#10; Jenis "
 "kredensial %s tidak didukung"
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, fuzzy, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Ditemukan SPICE% (nama-kesalahan) s"
+
+#: virtManager/details/viewers.py:750
+#, fuzzy
+msgid "Guest agent is not available."
+msgstr "Agen tamu tidak tersedia."
 
 #: virtManager/device/addstorage.py:93
 #, fuzzy, python-format
@@ -4694,8 +4687,7 @@ msgstr "Jaringan kode pengguna"
 msgid "Virtual network"
 msgstr "Jaringan virtual"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 #, fuzzy
 msgid "Inactive"
 msgstr "Tidak Aktif"
@@ -4819,37 +4811,37 @@ msgstr "Jaringan terisolasi, hanya perutean internal"
 msgid "Isolated network, routing disabled"
 msgstr "Jaringan terisolasi, perutean dinonaktifkan"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 #, fuzzy
 msgid "On Boot"
 msgstr "Boot pertama"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Anda yakin ingin menghapus jaringan secara permanen %s?"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, fuzzy, python-format
 msgid "Error deleting network '%s'"
 msgstr "Galat saat menghapus jaringan '%s'"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, fuzzy, python-format
 msgid "Error starting network '%s'"
 msgstr "Galat memulai jaringan '%s'"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, fuzzy, python-format
 msgid "Error stopping network '%s'"
 msgstr "Galat menghentikan jaringan '%s'"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, fuzzy, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Kesalahan meluncurkan wizard jaringan: %s"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, fuzzy, python-format
 msgid "Error changing network settings: %s"
 msgstr "Galat saat mengubah setelan jaringan: %s"
@@ -4894,72 +4886,72 @@ msgstr "Koneksi Libvirt tidak mendukung manajemen penyimpanan."
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "% (bytesfree) s Gratis / <i>% (bytesinuse) s Sedang Digunakan</i>"
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 #, fuzzy
 msgid "Create new volume"
 msgstr "Buat volume baru"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 #, fuzzy
 msgid "Pool does not support volume creation"
 msgstr "Pool tidak mendukung pembuatan volume"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 #, fuzzy
 msgid "No storage pool selected."
 msgstr "Tidak ada kolam penyimpanan yang dipilih."
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, fuzzy, python-format
 msgid "Error selecting pool: %s"
 msgstr "Kesalahan memilih pangkalan: %s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, fuzzy, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Galat saat menghentikan kumpulan '%s'"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, fuzzy, python-format
 msgid "Error starting pool '%s'"
 msgstr "Kesalahan memulai kumpulan '%s'"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, fuzzy, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Kesalahan meluncurkan wizard kumpulan: %s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Anda yakin ingin menghapus kolam secara permanen %s?"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, fuzzy, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Kesalahan menghapus kumpulan '%s'"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, fuzzy, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Galat saat menyegarkan pangkalan '%s'"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, fuzzy, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Kesalahan meluncurkan wizard volume: %s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, fuzzy, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Anda yakin ingin menghapus volume secara permanen %s?"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, fuzzy, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Kesalahan menghapus volume '%s'"
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, fuzzy, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Galat mengubah setelan pangkalan: %s"
@@ -5409,12 +5401,12 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "Galat membatalkan pekerjaan migrasi: %s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 #, fuzzy
 msgid "Libvirt connection does not support snapshots."
 msgstr "Koneksi Libvirt tidak mendukung snapshot."
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 #, fuzzy
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
@@ -5423,7 +5415,7 @@ msgstr ""
 "Snapshot hanya didukung jika semua image disk yang dapat ditulis yang "
 "dialokasikan untuk tamu dalam format qcow2."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 #, fuzzy
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
@@ -5432,19 +5424,19 @@ msgstr ""
 "Snapshot memerlukan setidaknya satu image disk qcow2 yang dapat ditulisi "
 "yang dialokasikan untuk tamu."
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, fuzzy, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Tidak dapat menemukan perangkat yang ditentukan dalam konfigurasi VM yang "
 "tidak aktif: %s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "Menyimpan domain ke disk"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 #, fuzzy
 msgid "Migrating domain"
 msgstr "Memigrasi domain"
@@ -5636,11 +5628,11 @@ msgstr "Pilih Volume Penyimpanan"
 msgid "_Show Virtual Machine Manager"
 msgstr "Pengelola Mesin Virtual"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "Kesalahan saat memulai Manajer Mesin Virtual"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error starting Virtual Machine Manager: %(error)s"
@@ -6497,22 +6489,22 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr "Jenis konsol otomatis '%s' tidak diketahui"
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, fuzzy, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Nilai yang tidak tepat untuk 'size': %s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, fuzzy, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "'% (Nama opsi) s' nilai '% (string) s' tidak diketahui"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 #, fuzzy
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Volume penyimpanan harus ditentukan sebagai vol = poolname / volname"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, fuzzy, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "String format PCI yang diharapkan untuk '%s'"
@@ -6610,19 +6602,19 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Atribut format tidak didukung untuk jenis volume ini"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, fuzzy, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Jenis perangkat '%s' membutuhkan jalur"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, fuzzy, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Harus menentukan parameter pembuatan penyimpanan untuk jalur yang tidak ada "
 "'%s'."
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, fuzzy, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -6638,7 +6630,12 @@ msgstr "Target sistem file '%s' harus merupakan jalur absolut"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s harus di atas 5900, atau -1 untuk alokasi otomatis"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "Tidak tahu cara menyiapkan UEFI untuk arch '%s'"
+
+#: virtinst/devices/hostdev.py:88
 #, fuzzy, python-format
 msgid "Unknown node device type %s"
 msgstr "Jenis perangkat node tidak diketahui %s"
@@ -6687,7 +6684,7 @@ msgstr "ukuran diperlukan untuk disk '%s' yang tidak ada"
 msgid "Cloning %(srcfile)s"
 msgstr "Menggandakan% (srcfile) s"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, fuzzy, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -6893,32 +6890,32 @@ msgstr ""
 "Lokasi harus direktori root dari pohon instalasi.&#10; Lihat halaman manual "
 "virt-install untuk berbagai contoh distro."
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, fuzzy, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Tidak dapat memperoleh file% (url) s:% (error) s"
 
-#: virtinst/install/urlfetcher.py:74
+#: virtinst/install/urlfetcher.py:106
 #, fuzzy, python-format
-msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "Mengambil file %s ..."
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, fuzzy, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Membuka URL% (url) s gagal:% (error) s"
 
-#: virtinst/install/volumeupload.py:109
+#: virtinst/install/volumeupload.py:108
 #, fuzzy, python-format
-msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "Transferring"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, fuzzy, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s sesuai dengan beberapa perangkat node"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, fuzzy, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Tidak menemukan perangkat simpul yang cocok untuk '%s'"
@@ -7011,9 +7008,9 @@ msgstr ""
 "Volume logis yang jarang tidak didukung, mengatur alokasi sama dengan "
 "kapasitas"
 
-#: virtinst/storage.py:688
+#: virtinst/storage.py:687
 #, fuzzy, python-format
-msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "Mengalokasikan '%s'"
 
 #: virtinst/storage.py:727
@@ -7934,6 +7931,14 @@ msgstr "Nama harus ditentukan untuk %s"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "% (objecttype) s name '% (name) s' tidak boleh berisi karakter '% (char) s'."
+
+#, fuzzy
+#~ msgid "Completed"
+#~ msgstr "Selesai"
+
+#, fuzzy
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "Jenis grafik '%s' tidak mendukung pengubahan ukuran otomatis."
 
 #~ msgid "Cannot mix both --bridge and --network arguments"
 #~ msgstr "Tidak bisa mencampur argumen --bridge dan --network"
