@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-05-29 07:26+0000\n"
+"POT-Creation-Date: 2021-06-11 06:14+0000\n"
 "PO-Revision-Date: 2020-11-26 01:35+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -255,7 +255,7 @@ msgstr "操作進行中"
 msgid "Please wait a few moments..."
 msgstr "請稍候…"
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
 msgid "Processing..."
 msgstr "處理中…"
 
@@ -749,7 +749,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "為虛擬機啟用儲存(_E)"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1002 virtManager/clone.py:277
+#: virtManager/addhardware.py:1017 virtManager/clone.py:277
 msgid "Storage"
 msgstr "儲存"
 
@@ -2054,31 +2054,31 @@ msgstr "硬體"
 msgid "Connection does not support storage management."
 msgstr "連接不支援儲存管理。"
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1004
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1019
 msgid "Controller"
 msgstr "控制器"
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1006
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1021
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr "網路"
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1023
 #: virtManager/details/details.py:194
 msgid "Input"
 msgstr "輸入"
 
 #: virtManager/addhardware.py:218 virtManager/addhardware.py:223
 #: virtManager/addhardware.py:226 virtManager/addhardware.py:230
-#: virtManager/addhardware.py:236 virtManager/addhardware.py:256
+#: virtManager/addhardware.py:236 virtManager/addhardware.py:260
 msgid "Not supported for this guest type."
 msgstr "不支援這個客戶機類型。"
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1010
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1025
 msgid "Graphics"
 msgstr "圖形"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1012
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1027
 msgid "Sound"
 msgstr "聲音"
 
@@ -2095,6 +2095,7 @@ msgid "USB Host Device"
 msgstr "USB 主機裝置"
 
 #: virtManager/addhardware.py:240 virtManager/addhardware.py:244
+#: virtManager/addhardware.py:254
 msgid "Connection does not support host device enumeration"
 msgstr "連接不支援列舉主機裝置"
 
@@ -2107,326 +2108,338 @@ msgid "PCI Host Device"
 msgstr "PCI 主機裝置"
 
 #: virtManager/addhardware.py:252
+#, fuzzy
+#| msgid "Host Device:"
+msgid "MDEV Host Device"
+msgstr "主機裝置："
+
+#: virtManager/addhardware.py:256
 msgid "Video"
 msgstr "影片"
 
-#: virtManager/addhardware.py:253
+#: virtManager/addhardware.py:257
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt 版本不支援影片裝置。"
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:254
+#: virtManager/addhardware.py:258 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "看門狗"
 
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:261
 msgid "Filesystem"
 msgstr "文件系統"
 
-#: virtManager/addhardware.py:258 virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1035
 #: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "智慧卡"
 
-#: virtManager/addhardware.py:260 virtManager/addhardware.py:1022
+#: virtManager/addhardware.py:264 virtManager/addhardware.py:1037
 msgid "USB Redirection"
 msgstr "USB 重新定向"
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1024
+#: virtManager/addhardware.py:266 virtManager/addhardware.py:1039
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:244
+#: virtManager/addhardware.py:268 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "隨機數生成器"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1028
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1043
 #: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "Panic 通知器"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:270
+#: virtManager/addhardware.py:271 virtManager/addhardware.py:274
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "不支援此虛擬機管理程式/libvirt/ 架構組合。"
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:253
+#: virtManager/addhardware.py:272 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:339
+#: virtManager/addhardware.py:343
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "更改 虛擬系統 配置出錯：%s"
 
-#: virtManager/addhardware.py:364
+#: virtManager/addhardware.py:368
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "這些更改將在下次關閉虛擬機後生效。"
 
-#: virtManager/addhardware.py:414
+#: virtManager/addhardware.py:418
 msgid "Pseudo TTY"
 msgstr "偽 TTY"
 
-#: virtManager/addhardware.py:415
+#: virtManager/addhardware.py:419
 msgid "Output to a file"
 msgstr "輸出到文件"
 
-#: virtManager/addhardware.py:416
+#: virtManager/addhardware.py:420
 msgid "TCP net console"
 msgstr "TCP 網路控制台"
 
-#: virtManager/addhardware.py:417
+#: virtManager/addhardware.py:421
 msgid "UDP net console"
 msgstr "UDP 網路控制台"
 
-#: virtManager/addhardware.py:418
+#: virtManager/addhardware.py:422
 msgid "UNIX socket"
 msgstr "UNIX 通訊端"
 
-#: virtManager/addhardware.py:419
+#: virtManager/addhardware.py:423
 msgid "Spice agent"
 msgstr "Spice 代理"
 
-#: virtManager/addhardware.py:420
+#: virtManager/addhardware.py:424
 msgid "Spice port"
 msgstr "Spice 埠"
 
-#: virtManager/addhardware.py:434 virtManager/addhardware.py:495
+#: virtManager/addhardware.py:438 virtManager/addhardware.py:499
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
+#: virtManager/addhardware.py:439 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr "磁片"
 
-#: virtManager/addhardware.py:436 virtManager/addhardware.py:497
+#: virtManager/addhardware.py:440 virtManager/addhardware.py:501
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:437 virtManager/addhardware.py:496
+#: virtManager/addhardware.py:441 virtManager/addhardware.py:500
 msgid "SATA"
 msgstr "SATA"
 
-#: virtManager/addhardware.py:438
+#: virtManager/addhardware.py:442
 msgid "VirtIO Serial"
 msgstr "VirtIO 串列埠"
 
-#: virtManager/addhardware.py:439 virtManager/addhardware.py:499
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:443 virtManager/addhardware.py:503
+#: virtManager/addhardware.py:581
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:440
+#: virtManager/addhardware.py:444
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:441
+#: virtManager/addhardware.py:445
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:442
+#: virtManager/addhardware.py:446
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:450 virtManager/addhardware.py:920
+#: virtManager/addhardware.py:454 virtManager/addhardware.py:933
 msgid "VirtIO SCSI"
 msgstr "VirtIO SCSI"
 
-#: virtManager/addhardware.py:453
+#: virtManager/addhardware.py:457
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:498
+#: virtManager/addhardware.py:502
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:500 virtManager/addhardware.py:578
+#: virtManager/addhardware.py:504 virtManager/addhardware.py:582
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
+#: virtManager/addhardware.py:505 virtManager/addhardware.py:583
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:508
+#: virtManager/addhardware.py:512
 msgid "Passthrough device"
 msgstr "直通裝置"
 
-#: virtManager/addhardware.py:509
+#: virtManager/addhardware.py:513
 msgid "Emulated device"
 msgstr "模擬裝置"
 
-#: virtManager/addhardware.py:516
+#: virtManager/addhardware.py:520
 msgid "TIS"
 msgstr "TIS"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:521
 msgid "CRB"
 msgstr "CRB"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:522
 msgid "SPAPR"
 msgstr "SPAPR"
 
-#: virtManager/addhardware.py:525
+#: virtManager/addhardware.py:529
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:530
 msgid "pSeries"
 msgstr "pSeries"
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:531
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: virtManager/addhardware.py:528
+#: virtManager/addhardware.py:532
 msgid "s390"
 msgstr "s390"
 
-#: virtManager/addhardware.py:535
+#: virtManager/addhardware.py:539
 msgid "Random"
 msgstr "隨機"
 
-#: virtManager/addhardware.py:536
+#: virtManager/addhardware.py:540
 msgid "Entropy Gathering Daemon"
 msgstr "熵收集守護行程"
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:541
 msgid "Builtin RNG"
 msgstr "內建 RNG"
 
-#: virtManager/addhardware.py:555
+#: virtManager/addhardware.py:559
 msgid "Forcefully reset the guest"
 msgstr "強制重設客戶機"
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:560
 msgid "Gracefully shutdown the guest"
 msgstr "正常關閉客戶機"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:561
 msgid "Forcefully power off the guest"
 msgstr "強制關閉客戶機電源"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:562
 msgid "Pause the guest"
 msgstr "暫停客戶機"
 
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:563
 msgid "No action"
 msgstr "無動作"
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:564
 msgid "Dump guest memory core"
 msgstr "轉儲客戶機記憶體核心"
 
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:571
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB 圖形數位板"
 
-#: virtManager/addhardware.py:570 virtManager/details/details.py:193
+#: virtManager/addhardware.py:574 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "鍵盤"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:191
+#: virtManager/addhardware.py:575 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "滑鼠"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:189
+#: virtManager/addhardware.py:576 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "繪圖板"
 
-#: virtManager/addhardware.py:576
+#: virtManager/addhardware.py:580
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:585
+#: virtManager/addhardware.py:589
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:687
 msgid "Disk device"
 msgstr "磁碟裝置"
 
-#: virtManager/addhardware.py:682
+#: virtManager/addhardware.py:689
 msgid "CDROM device"
 msgstr "CDROM 裝置"
 
-#: virtManager/addhardware.py:684
+#: virtManager/addhardware.py:691
 msgid "Floppy device"
 msgstr "磁片裝置"
 
-#: virtManager/addhardware.py:687
+#: virtManager/addhardware.py:694
 msgid "LUN Passthrough"
 msgstr "LUN 直連"
 
-#: virtManager/addhardware.py:710 virtManager/addhardware.py:791
-#: virtManager/addhardware.py:801 virtManager/addhardware.py:921
+#: virtManager/addhardware.py:717 virtManager/addhardware.py:804
+#: virtManager/addhardware.py:814 virtManager/addhardware.py:934
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
 #: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
 #: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "虛擬機管理程式預設"
 
-#: virtManager/addhardware.py:781
+#: virtManager/addhardware.py:794
 msgid "No Devices Available"
 msgstr "無裝置可用"
 
-#: virtManager/addhardware.py:838
+#: virtManager/addhardware.py:851
 msgid "Passthrough"
 msgstr "直通"
 
-#: virtManager/addhardware.py:839
+#: virtManager/addhardware.py:852
 msgid "Host"
 msgstr "主機"
 
-#: virtManager/addhardware.py:845
+#: virtManager/addhardware.py:858
 msgid "Spice channel"
 msgstr "Spice 通道"
 
-#: virtManager/addhardware.py:917
+#: virtManager/addhardware.py:930
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:918
+#: virtManager/addhardware.py:931
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:1014
+#: virtManager/addhardware.py:1029
 msgid "Video Device"
 msgstr "影片裝置"
 
-#: virtManager/addhardware.py:1016
+#: virtManager/addhardware.py:1031
 msgid "Watchdog Device"
 msgstr "監控裝置"
 
-#: virtManager/addhardware.py:1018
+#: virtManager/addhardware.py:1033
 msgid "Filesystem Passthrough"
 msgstr "文件系統轉移"
 
-#: virtManager/addhardware.py:1026
+#: virtManager/addhardware.py:1041
 msgid "Random Number Generator"
 msgstr "隨機數生成器"
 
-#: virtManager/addhardware.py:1030
+#: virtManager/addhardware.py:1045
 msgid "VM Sockets"
 msgstr "虛擬系統通訊端"
 
-#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
+#: virtManager/addhardware.py:1049 virtManager/details/details.py:2121
 #, python-format
 msgid "%s Device"
 msgstr "%s 裝置"
 
-#: virtManager/addhardware.py:1038
+#: virtManager/addhardware.py:1053
 msgid "PCI Device"
 msgstr "PCI 裝置"
 
-#: virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:1055
+#, fuzzy
+#| msgid "%s Device"
+msgid "MDEV Device"
+msgstr "%s 裝置"
+
+#: virtManager/addhardware.py:1056
 msgid "USB Device"
 msgstr "USB 裝置"
 
-#: virtManager/addhardware.py:1172
+#: virtManager/addhardware.py:1189
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2437,49 +2450,49 @@ msgstr ""
 "不支援添加更多 USB 控制器。\n"
 "可以在虛擬系統詳情頁面修改 USB 控制器類型。"
 
-#: virtManager/addhardware.py:1264
+#: virtManager/addhardware.py:1281
 msgid "Are you sure you want to add this device?"
 msgstr "確定要添加這個裝置嗎？"
 
-#: virtManager/addhardware.py:1267
+#: virtManager/addhardware.py:1284
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr "無法在執行的機器中附加這個裝置。要在下次虛擬機關機後添加這個裝置嗎？"
 
-#: virtManager/addhardware.py:1291
+#: virtManager/addhardware.py:1308
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "無法添加裝置：%s"
 
-#: virtManager/addhardware.py:1312
+#: virtManager/addhardware.py:1329
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "驗證裝置參數時出錯：%s"
 
-#: virtManager/addhardware.py:1318
+#: virtManager/addhardware.py:1335
 msgid "Creating device"
 msgstr "正在建立裝置"
 
-#: virtManager/addhardware.py:1319
+#: virtManager/addhardware.py:1336
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "根據裝置的不同，這可能需要一些時間才能完成。"
 
-#: virtManager/addhardware.py:1341
+#: virtManager/addhardware.py:1358
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "此裝置已被其他客戶機 %s 使用"
 
-#: virtManager/addhardware.py:1343
+#: virtManager/addhardware.py:1360
 msgid "Do you really want to use the device?"
 msgstr "確實要使用這個裝置嗎？"
 
-#: virtManager/addhardware.py:1388
+#: virtManager/addhardware.py:1405
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "構建裝置 XML 時出錯：%s"
 
-#: virtManager/asyncjob.py:235
+#: virtManager/asyncjob.py:220
 msgid "Cancelling job..."
 msgstr "正在取消任務……"
 
@@ -2851,7 +2864,7 @@ msgid "No active connection to install on."
 msgstr "沒有活動連接可用於安裝。"
 
 #: virtManager/createvm.py:947 virtManager/details/details.py:1771
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:236
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:237
 msgid "None"
 msgstr "無"
 
@@ -4496,32 +4509,32 @@ msgstr "正在遷移 虛擬系統 '%(name)s' 至 %(host)s。這可能需要一�
 msgid "Error cancelling migrate job: %s"
 msgstr "取消遷移任務時出錯：%s"
 
-#: virtManager/object/domain.py:457
+#: virtManager/object/domain.py:456
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt 連接不支援快照。"
 
-#: virtManager/object/domain.py:472
+#: virtManager/object/domain.py:471
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr "如果所有已分配至客戶機的可寫磁碟鏡像為 qcow2 格式，則僅支援快照。"
 
-#: virtManager/object/domain.py:475
+#: virtManager/object/domain.py:474
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr "快照需要客戶機已分配至少一個可寫的 qcow2 磁碟鏡像。"
 
-#: virtManager/object/domain.py:510
+#: virtManager/object/domain.py:509
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "在非活動的 虛擬系統 配置中找不到指定的裝置：%s"
 
-#: virtManager/object/domain.py:1372
+#: virtManager/object/domain.py:1371
 msgid "Saving domain to disk"
 msgstr "正在將域儲存到磁碟"
 
-#: virtManager/object/domain.py:1424
+#: virtManager/object/domain.py:1423
 msgid "Migrating domain"
 msgstr "正在遷移域"
 
@@ -5657,21 +5670,21 @@ msgstr "SEV 啟動安全性設定需要電腦支援 Q35 UEFI"
 msgid "SEV launch security is not supported on this platform"
 msgstr "此平台不支援 SEV 啟動安全性設定"
 
-#: virtinst/domcapabilities.py:235
+#: virtinst/domcapabilities.py:236
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:241
+#: virtinst/domcapabilities.py:242
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:244
+#: virtinst/domcapabilities.py:245
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "自訂： %(path)s"
 
-#: virtinst/domcapabilities.py:320
+#: virtinst/domcapabilities.py:321
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "獲取擴展的 CPU XML 失敗：%s"
@@ -5836,12 +5849,12 @@ msgstr "打開 URL %(url)s 失敗：%(error)s"
 msgid "Transferring '%(filename)s'"
 msgstr "傳輸 %s"
 
-#: virtinst/nodedev.py:234
+#: virtinst/nodedev.py:254
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s 會對應多個節點裝置"
 
-#: virtinst/nodedev.py:237
+#: virtinst/nodedev.py:257
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "不能為 '%s' 找到匹配的節點裝置"

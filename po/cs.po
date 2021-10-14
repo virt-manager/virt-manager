@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-05-29 07:26+0000\n"
+"POT-Creation-Date: 2021-06-11 06:14+0000\n"
 "PO-Revision-Date: 2020-09-22 16:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
@@ -244,7 +244,7 @@ msgstr "Provádí se požadovaná operace"
 msgid "Please wait a few moments..."
 msgstr "Vyčkejte…"
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
 msgid "Processing..."
 msgstr "Zpracování…"
 
@@ -754,7 +754,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "Zapnout úložiště pro tento virtuální stroj"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1002 virtManager/clone.py:277
+#: virtManager/addhardware.py:1017 virtManager/clone.py:277
 msgid "Storage"
 msgstr "Úložiště"
 
@@ -2094,31 +2094,31 @@ msgstr "Hardware"
 msgid "Connection does not support storage management."
 msgstr "Spojení neumožňuje správu úložiště."
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1004
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1019
 msgid "Controller"
 msgstr "Řadič"
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1006
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1021
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr "Síť"
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1023
 #: virtManager/details/details.py:194
 msgid "Input"
 msgstr "Vstup"
 
 #: virtManager/addhardware.py:218 virtManager/addhardware.py:223
 #: virtManager/addhardware.py:226 virtManager/addhardware.py:230
-#: virtManager/addhardware.py:236 virtManager/addhardware.py:256
+#: virtManager/addhardware.py:236 virtManager/addhardware.py:260
 msgid "Not supported for this guest type."
 msgstr "Není podporováno pro tento typ hosta."
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1010
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1025
 msgid "Graphics"
 msgstr "Grafika"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1012
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1027
 msgid "Sound"
 msgstr "Zvuk"
 
@@ -2135,6 +2135,7 @@ msgid "USB Host Device"
 msgstr "USB zařízení hostitele"
 
 #: virtManager/addhardware.py:240 virtManager/addhardware.py:244
+#: virtManager/addhardware.py:254
 msgid "Connection does not support host device enumeration"
 msgstr "Spojení nepodporuje vyčíslení zařízení hostitele"
 
@@ -2146,341 +2147,353 @@ msgstr "Nepodporováno pro kontejnery"
 msgid "PCI Host Device"
 msgstr "PCI zařízení hostitele"
 
+#: virtManager/addhardware.py:252
+#, fuzzy
+#| msgid "Host Device:"
+msgid "MDEV Host Device"
+msgstr "Zařízení hostitele:"
+
 # auto translated by TM merge from project: Pulseaudio, version: 6.0, DocId:
 # pulseaudio.pot
-#: virtManager/addhardware.py:252
+#: virtManager/addhardware.py:256
 msgid "Video"
 msgstr "Zobrazení"
 
-#: virtManager/addhardware.py:253
+#: virtManager/addhardware.py:257
 msgid "Libvirt version does not support video devices."
 msgstr "Tato verze libvirt nepodporuje video zařízení."
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:254
+#: virtManager/addhardware.py:258 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "Resetátor"
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:261
 msgid "Filesystem"
 msgstr "Souborový systém"
 
-#: virtManager/addhardware.py:258 virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1035
 #: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "Smartcard"
 
-#: virtManager/addhardware.py:260 virtManager/addhardware.py:1022
+#: virtManager/addhardware.py:264 virtManager/addhardware.py:1037
 msgid "USB Redirection"
 msgstr "Přesměrování USB"
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1024
+#: virtManager/addhardware.py:266 virtManager/addhardware.py:1039
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:244
+#: virtManager/addhardware.py:268 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1028
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1043
 #: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "Oznamování paniky"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:270
+#: virtManager/addhardware.py:271 virtManager/addhardware.py:274
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Nepodporováno pro tuto kombinaci hypervizor/libvirt/architektura."
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:253
+#: virtManager/addhardware.py:272 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:339
+#: virtManager/addhardware.py:343
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Chyba při změně nastavení virt. stroje: %s"
 
-#: virtManager/addhardware.py:364
+#: virtManager/addhardware.py:368
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Tyto změny se projeví až po příštím vypnutí hostitelů."
 
-#: virtManager/addhardware.py:414
+#: virtManager/addhardware.py:418
 msgid "Pseudo TTY"
 msgstr "Pseudo TTY"
 
-#: virtManager/addhardware.py:415
+#: virtManager/addhardware.py:419
 msgid "Output to a file"
 msgstr "Výstup do souboru"
 
-#: virtManager/addhardware.py:416
+#: virtManager/addhardware.py:420
 msgid "TCP net console"
 msgstr "TCP síťová konzole"
 
-#: virtManager/addhardware.py:417
+#: virtManager/addhardware.py:421
 msgid "UDP net console"
 msgstr "UDP síťová konzole"
 
-#: virtManager/addhardware.py:418
+#: virtManager/addhardware.py:422
 msgid "UNIX socket"
 msgstr "Unixový soket"
 
-#: virtManager/addhardware.py:419
+#: virtManager/addhardware.py:423
 msgid "Spice agent"
 msgstr "Spice agent"
 
-#: virtManager/addhardware.py:420
+#: virtManager/addhardware.py:424
 msgid "Spice port"
 msgstr "Spice port"
 
-#: virtManager/addhardware.py:434 virtManager/addhardware.py:495
+#: virtManager/addhardware.py:438 virtManager/addhardware.py:499
 msgid "IDE"
 msgstr "IDE"
 
 # auto translated by TM merge from project: Fedora Websites, version:
 # boot.fedoraproject.org, DocId: po/boot.fedoraproject.org
-#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
+#: virtManager/addhardware.py:439 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr "Disketa"
 
-#: virtManager/addhardware.py:436 virtManager/addhardware.py:497
+#: virtManager/addhardware.py:440 virtManager/addhardware.py:501
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:437 virtManager/addhardware.py:496
+#: virtManager/addhardware.py:441 virtManager/addhardware.py:500
 msgid "SATA"
 msgstr "SATA"
 
 # auto translated by TM merge from project: FreeIPA, version: ipa-4-5, DocId:
 # po/ipa
-#: virtManager/addhardware.py:438
+#: virtManager/addhardware.py:442
 msgid "VirtIO Serial"
 msgstr "VirtIO sériový"
 
-#: virtManager/addhardware.py:439 virtManager/addhardware.py:499
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:443 virtManager/addhardware.py:503
+#: virtManager/addhardware.py:581
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:440
+#: virtManager/addhardware.py:444
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:441
+#: virtManager/addhardware.py:445
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:442
+#: virtManager/addhardware.py:446
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:450 virtManager/addhardware.py:920
+#: virtManager/addhardware.py:454 virtManager/addhardware.py:933
 msgid "VirtIO SCSI"
 msgstr "VirtIO SCSI"
 
-#: virtManager/addhardware.py:453
+#: virtManager/addhardware.py:457
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:498
+#: virtManager/addhardware.py:502
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:500 virtManager/addhardware.py:578
+#: virtManager/addhardware.py:504 virtManager/addhardware.py:582
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
+#: virtManager/addhardware.py:505 virtManager/addhardware.py:583
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:508
+#: virtManager/addhardware.py:512
 msgid "Passthrough device"
 msgstr "Exportované zařízení"
 
-#: virtManager/addhardware.py:509
+#: virtManager/addhardware.py:513
 msgid "Emulated device"
 msgstr "Emulované zařízení"
 
-#: virtManager/addhardware.py:516
+#: virtManager/addhardware.py:520
 msgid "TIS"
 msgstr "TIS"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:521
 msgid "CRB"
 msgstr "CRB"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:522
 msgid "SPAPR"
 msgstr "SPAPR"
 
-#: virtManager/addhardware.py:525
+#: virtManager/addhardware.py:529
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:530
 msgid "pSeries"
 msgstr "pSeries"
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:531
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: virtManager/addhardware.py:528
+#: virtManager/addhardware.py:532
 msgid "s390"
 msgstr "s390"
 
-#: virtManager/addhardware.py:535
+#: virtManager/addhardware.py:539
 msgid "Random"
 msgstr "Náhodné"
 
-#: virtManager/addhardware.py:536
+#: virtManager/addhardware.py:540
 msgid "Entropy Gathering Daemon"
 msgstr "Proces služby získávání náhodnosti"
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:541
 msgid "Builtin RNG"
 msgstr "Vestavěný generátor náhodných čísel"
 
-#: virtManager/addhardware.py:555
+#: virtManager/addhardware.py:559
 msgid "Forcefully reset the guest"
 msgstr "Vynutit restart hosta"
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:560
 msgid "Gracefully shutdown the guest"
 msgstr "Korektně vypnout hosta"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:561
 msgid "Forcefully power off the guest"
 msgstr "Vynutit vypnutí hosta"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:562
 msgid "Pause the guest"
 msgstr "Pozastavit hosta"
 
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:563
 msgid "No action"
 msgstr "Žádná akce"
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:564
 msgid "Dump guest memory core"
 msgstr "Vypsat obsah paměti hosta"
 
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:571
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Grafický USB tablet EvTouch"
 
 # auto translated by TM merge from project: IBus-Chewing, version: master,
 # DocId: ibus-chewing
-#: virtManager/addhardware.py:570 virtManager/details/details.py:193
+#: virtManager/addhardware.py:574 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "Klávesnice"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:191
+#: virtManager/addhardware.py:575 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "Myš"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:189
+#: virtManager/addhardware.py:576 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "Tablet"
 
-#: virtManager/addhardware.py:576
+#: virtManager/addhardware.py:580
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:585
+#: virtManager/addhardware.py:589
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:687
 msgid "Disk device"
 msgstr "Diskové zařízení"
 
-#: virtManager/addhardware.py:682
+#: virtManager/addhardware.py:689
 msgid "CDROM device"
 msgstr "CDROM zařízení"
 
-#: virtManager/addhardware.py:684
+#: virtManager/addhardware.py:691
 msgid "Floppy device"
 msgstr "Disketové zařízení"
 
-#: virtManager/addhardware.py:687
+#: virtManager/addhardware.py:694
 msgid "LUN Passthrough"
 msgstr "LUN export do hosta"
 
-#: virtManager/addhardware.py:710 virtManager/addhardware.py:791
-#: virtManager/addhardware.py:801 virtManager/addhardware.py:921
+#: virtManager/addhardware.py:717 virtManager/addhardware.py:804
+#: virtManager/addhardware.py:814 virtManager/addhardware.py:934
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
 #: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
 #: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "Výchozí hypervizoru"
 
-#: virtManager/addhardware.py:781
+#: virtManager/addhardware.py:794
 msgid "No Devices Available"
 msgstr "Nejsou k dispozici žádná zařízení"
 
 # auto translated by TM merge from project: firewalld, version: master, DocId:
 # po/firewalld
-#: virtManager/addhardware.py:838
+#: virtManager/addhardware.py:851
 msgid "Passthrough"
 msgstr "Přímý průchod"
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/addhardware.py:839
+#: virtManager/addhardware.py:852
 msgid "Host"
 msgstr "Hostitel"
 
-#: virtManager/addhardware.py:845
+#: virtManager/addhardware.py:858
 msgid "Spice channel"
 msgstr "Spice kanál"
 
-#: virtManager/addhardware.py:917
+#: virtManager/addhardware.py:930
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:918
+#: virtManager/addhardware.py:931
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:1014
+#: virtManager/addhardware.py:1029
 msgid "Video Device"
 msgstr "Video zařízení"
 
-#: virtManager/addhardware.py:1016
+#: virtManager/addhardware.py:1031
 msgid "Watchdog Device"
 msgstr "Zařízení resetátoru"
 
-#: virtManager/addhardware.py:1018
+#: virtManager/addhardware.py:1033
 msgid "Filesystem Passthrough"
 msgstr "Export souborového systému do hosta"
 
-#: virtManager/addhardware.py:1026
+#: virtManager/addhardware.py:1041
 msgid "Random Number Generator"
 msgstr "Generátor náhodných čísel"
 
-#: virtManager/addhardware.py:1030
+#: virtManager/addhardware.py:1045
 msgid "VM Sockets"
 msgstr "Patic ve virt. stroji"
 
-#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
+#: virtManager/addhardware.py:1049 virtManager/details/details.py:2121
 #, python-format
 msgid "%s Device"
 msgstr "Zařízení %s"
 
-#: virtManager/addhardware.py:1038
+#: virtManager/addhardware.py:1053
 msgid "PCI Device"
 msgstr "Zařízení PCI"
 
-#: virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:1055
+#, fuzzy
+#| msgid "%s Device"
+msgid "MDEV Device"
+msgstr "Zařízení %s"
+
+#: virtManager/addhardware.py:1056
 msgid "USB Device"
 msgstr "Zařízení USB"
 
-#: virtManager/addhardware.py:1172
+#: virtManager/addhardware.py:1189
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2491,11 +2504,11 @@ msgstr ""
 "Přidání více než jednoho není podporováno.\n"
 "Můžete změnit typ USB řadiče na obrazovce s podrobnostmi o virt. stroji."
 
-#: virtManager/addhardware.py:1264
+#: virtManager/addhardware.py:1281
 msgid "Are you sure you want to add this device?"
 msgstr "Opravdu chcete přidat toto zařízení?"
 
-#: virtManager/addhardware.py:1267
+#: virtManager/addhardware.py:1284
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2503,39 +2516,39 @@ msgstr ""
 "Toto zařízení není možné připojit do spuštěného stroje. Přejete si ho "
 "zpřístupnit po příštím vypnutí hosta?"
 
-#: virtManager/addhardware.py:1291
+#: virtManager/addhardware.py:1308
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Nedaří se přidat zařízení: %s"
 
-#: virtManager/addhardware.py:1312
+#: virtManager/addhardware.py:1329
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "Chyba při ověřování správnosti parametrů zařízení: %s"
 
-#: virtManager/addhardware.py:1318
+#: virtManager/addhardware.py:1335
 msgid "Creating device"
 msgstr "Vytváření zařízení"
 
-#: virtManager/addhardware.py:1319
+#: virtManager/addhardware.py:1336
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "V závislosti na zařízení, dokončení tohoto může trvat několik minut."
 
-#: virtManager/addhardware.py:1341
+#: virtManager/addhardware.py:1358
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Zařízení už je používáno jiným hostem %s"
 
-#: virtManager/addhardware.py:1343
+#: virtManager/addhardware.py:1360
 msgid "Do you really want to use the device?"
 msgstr "Opravdu chcete použít toto zařízení?"
 
-#: virtManager/addhardware.py:1388
+#: virtManager/addhardware.py:1405
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "Chyba při sestavování XML pro zařízení: %s"
 
-#: virtManager/asyncjob.py:235
+#: virtManager/asyncjob.py:220
 msgid "Cancelling job..."
 msgstr "Rušení úkolu…"
 
@@ -2916,7 +2929,7 @@ msgid "No active connection to install on."
 msgstr "Žádné aktivní spojení na které nainstalovat."
 
 #: virtManager/createvm.py:947 virtManager/details/details.py:1771
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:236
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:237
 msgid "None"
 msgstr "Žádný"
 
@@ -4598,11 +4611,11 @@ msgstr "Přesouvá se virt. stroj „%(name)s“ na %(host)s. To může chvíli 
 msgid "Error cancelling migrate job: %s"
 msgstr "Chyba při rušení migrace: %s"
 
-#: virtManager/object/domain.py:457
+#: virtManager/object/domain.py:456
 msgid "Libvirt connection does not support snapshots."
 msgstr "Toto libvirt spojení nepodporuje zachycené stavy."
 
-#: virtManager/object/domain.py:472
+#: virtManager/object/domain.py:471
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4610,7 +4623,7 @@ msgstr ""
 "Zachycené stavy jsou k dispozici pouze pokud jsou všechny obrazy disků "
 "hosta, do kterých může zapisovat, ve formátu qcow2."
 
-#: virtManager/object/domain.py:475
+#: virtManager/object/domain.py:474
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4618,17 +4631,17 @@ msgstr ""
 "Zachycené stavy vyžadují alespoň jeden zapisovatelný qcow2 obraz disku "
 "přidělený hostovi."
 
-#: virtManager/object/domain.py:510
+#: virtManager/object/domain.py:509
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Dané zařízení se v nastavení neaktivního virt. stroje nedaří nalézt: %s"
 
-#: virtManager/object/domain.py:1372
+#: virtManager/object/domain.py:1371
 msgid "Saving domain to disk"
 msgstr "Ukládání domény na disk"
 
-#: virtManager/object/domain.py:1424
+#: virtManager/object/domain.py:1423
 msgid "Migrating domain"
 msgstr "Přesouvání domény"
 
@@ -5800,21 +5813,21 @@ msgstr "Zabezpečení SEV spouštění vyžaduje Q35 UEFI stroj"
 msgid "SEV launch security is not supported on this platform"
 msgstr "Zabezpečení SEV spouštění není na této platformě podporováno"
 
-#: virtinst/domcapabilities.py:235
+#: virtinst/domcapabilities.py:236
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:241
+#: virtinst/domcapabilities.py:242
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:244
+#: virtinst/domcapabilities.py:245
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Uživatelsky určené: %(path)s"
 
-#: virtinst/domcapabilities.py:320
+#: virtinst/domcapabilities.py:321
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Nepodařilo se získat expandované XML procesoru: %s"
@@ -5986,12 +5999,12 @@ msgstr "Otevírání URL adresy %(url)s se nezdařilo: %(error)s"
 msgid "Transferring '%(filename)s'"
 msgstr "Přenášení %s"
 
-#: virtinst/nodedev.py:234
+#: virtinst/nodedev.py:254
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s odpovídá vícero uzlům zařízení"
 
-#: virtinst/nodedev.py:237
+#: virtinst/nodedev.py:257
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Nenalezeno odpovídající zařízení uzlu pro „%s“"
