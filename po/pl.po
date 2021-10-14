@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2021-07-29 20:00+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
@@ -1432,7 +1432,7 @@ msgid "Apply pool changes"
 msgstr "Zastosuj zmiany w puli"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "Aktywacja"
 
@@ -3988,7 +3988,7 @@ msgstr "Sieć w trybie użytkownika"
 msgid "Virtual network"
 msgstr "Sieć wirtualna"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "Nieaktywne"
 
@@ -5558,7 +5558,7 @@ msgstr "Nieznane opcje %(optionflag)s: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Błąd: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5566,33 +5566,33 @@ msgstr ""
 "Nie można połączyć się z konsolą graficzną: nie zainstalowano pakietu virt-"
 "viewer. Proszę zainstalować pakiet „virt-viewer”."
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Zażądano grafiki, ale zmienna DISPLAY nie została ustawiona. Program virt-"
 "viewer nie zostanie uruchomiony."
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Nieznany typ automatycznej konsoli „%s”"
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Niewłaściwa wartość dla „size”: %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Nieznana „%(optionname)s” wartość „%(string)s”"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Wolumin pamięci masowej musi zostać podany jako vol=nazwa_puli/nazwa_woluminu"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Oczekiwano ciągu w formacie PCI dla „%s”"
@@ -5774,7 +5774,7 @@ msgstr ""
 "Błąd podczas klonowania obrazu dysku %(inputpath)s do %(outputpath)s: "
 "%(error)s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "Nie zgłoszono procesora gospodarza w możliwościach"
 
@@ -5945,18 +5945,18 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr "Używanie nienadzorowanego profilu „%s”"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "Nie można uzyskać dostępu do adresu URL, może został błędnie wpisany?"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 "Nie można odnaleźć dystrybucji możliwej do zainstalowania pod adresem URL "
 "„%s”"
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -5974,7 +5974,7 @@ msgstr "Nie można pobrać pliku %(url)s: %(error)s"
 msgid "Retrieving '%(filename)s'"
 msgstr "Pobieranie „%(filename)s”"
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Otwarcie adresu URL %(url)s się nie powiodło: %(error)s"

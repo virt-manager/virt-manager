@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2021-08-01 03:04+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
@@ -1433,7 +1433,7 @@ msgid "Apply pool changes"
 msgstr "Застосувати зміни у буфері"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "Активний"
 
@@ -4001,7 +4001,7 @@ msgstr "Робота у мережі у режимі користувача"
 msgid "Virtual network"
 msgstr "Віртуальна мережа"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "Неактивний"
 
@@ -5588,7 +5588,7 @@ msgstr "Невідомі параметри %(optionflag)s: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Помилка: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5596,33 +5596,33 @@ msgstr ""
 "Не вдалося встановити з'єднання з графічною консоллю: virt-viewer не "
 "встановлено. Будь ласка, встановіть пакунок «virt-viewer»."
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Графічний режим, запит щодо якого було надіслано за допомогою DISPLAY, не "
 "встановлено. virt-viewer не запущено."
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Невідомий тип автоматичної консолі — «%s»"
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Неналежне значення «size»: %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Невідоме значення «%(optionname)s» «%(string)s»"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Том сховища даних слід вказувати так vol=назва_резервного_сховища/назва_тому"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "«%s» мало бути рядком у форматі PCI"
@@ -5807,7 +5807,7 @@ msgstr ""
 "Помилка під час клонування образу диска %(inputpath)s до %(outputpath)s: "
 "%(error)s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr ""
 "У «capabilities» не повідомлено про кількість процесорів основної системи"
@@ -5975,17 +5975,17 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr "Використовуємо автоматизований профіль «%s»"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "Не вдалося отримати доступ до адреси. Друкарська помилка?"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 "Не вдалося виявити придатного до встановлення дистрибутива за адресою «%s»"
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -6005,7 +6005,7 @@ msgstr "Не вдалося надіслати запит щодо отрима�
 msgid "Retrieving '%(filename)s'"
 msgstr "Отримуємо «%(filename)s»"
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Не вдалося відкрити адресу %(url)s: %(error)s"
