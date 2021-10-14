@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-05-29 07:26+0000\n"
+"POT-Creation-Date: 2021-06-11 06:14+0000\n"
 "PO-Revision-Date: 2020-12-28 00:36+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
@@ -243,7 +243,7 @@ msgstr "Operasi sedang berlangsung"
 msgid "Please wait a few moments..."
 msgstr "Mohon tunggu beberapa saat ..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
 #, fuzzy
 msgid "Processing..."
 msgstr "Memproses..."
@@ -867,7 +867,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "_Enable penyimpanan untuk mesin virtual ini"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1002 virtManager/clone.py:277
+#: virtManager/addhardware.py:1017 virtManager/clone.py:277
 #, fuzzy
 msgid "Storage"
 msgstr "Penyimpanan"
@@ -2508,18 +2508,18 @@ msgstr "Perangkat keras"
 msgid "Connection does not support storage management."
 msgstr "Koneksi tidak mendukung manajemen penyimpanan."
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1004
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1019
 #, fuzzy
 msgid "Controller"
 msgstr "Pengendali"
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1006
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1021
 #: virtManager/createnet.py:330
 #, fuzzy
 msgid "Network"
 msgstr "Jaringan"
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1023
 #: virtManager/details/details.py:194
 #, fuzzy
 msgid "Input"
@@ -2527,17 +2527,17 @@ msgstr "Input"
 
 #: virtManager/addhardware.py:218 virtManager/addhardware.py:223
 #: virtManager/addhardware.py:226 virtManager/addhardware.py:230
-#: virtManager/addhardware.py:236 virtManager/addhardware.py:256
+#: virtManager/addhardware.py:236 virtManager/addhardware.py:260
 #, fuzzy
 msgid "Not supported for this guest type."
 msgstr "Tidak didukung untuk tipe tamu ini."
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1010
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1025
 #, fuzzy
 msgid "Graphics"
 msgstr "Grafis"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1012
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1027
 #, fuzzy
 msgid "Sound"
 msgstr "Suara"
@@ -2563,6 +2563,7 @@ msgid "USB Host Device"
 msgstr "Perangkat Host USB"
 
 #: virtManager/addhardware.py:240 virtManager/addhardware.py:244
+#: virtManager/addhardware.py:254
 #, fuzzy
 msgid "Connection does not support host device enumeration"
 msgstr "Koneksi tidak mendukung pencacahan perangkat host"
@@ -2579,299 +2580,304 @@ msgstr "Perangkat Host PCI"
 
 #: virtManager/addhardware.py:252
 #, fuzzy
+msgid "MDEV Host Device"
+msgstr "_Peranti Host:"
+
+#: virtManager/addhardware.py:256
+#, fuzzy
 msgid "Video"
 msgstr "Video"
 
-#: virtManager/addhardware.py:253
+#: virtManager/addhardware.py:257
 #, fuzzy
 msgid "Libvirt version does not support video devices."
 msgstr "Versi Libvirt tidak mendukung perangkat video."
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:254
+#: virtManager/addhardware.py:258 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 #, fuzzy
 msgid "Watchdog"
 msgstr "Penjaga"
 
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:261
 #, fuzzy
 msgid "Filesystem"
 msgstr "Memperbaiki sistem berkas yang rusak"
 
-#: virtManager/addhardware.py:258 virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1035
 #: virtManager/details/details.py:252
 #, fuzzy
 msgid "Smartcard"
 msgstr "Nama SmartCard"
 
-#: virtManager/addhardware.py:260 virtManager/addhardware.py:1022
+#: virtManager/addhardware.py:264 virtManager/addhardware.py:1037
 #, fuzzy
 msgid "USB Redirection"
 msgstr "Pengalihan USB"
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1024
+#: virtManager/addhardware.py:266 virtManager/addhardware.py:1039
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:244
+#: virtManager/addhardware.py:268 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1028
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1043
 #: virtManager/details/details.py:251
 #, fuzzy
 msgid "Panic Notifier"
 msgstr "Panic Notifier"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:270
+#: virtManager/addhardware.py:271 virtManager/addhardware.py:274
 #, fuzzy
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Tidak didukung untuk kombinasi hypervisor / libvirt / arch ini."
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:253
+#: virtManager/addhardware.py:272 virtManager/details/details.py:253
 #, fuzzy
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:339
+#: virtManager/addhardware.py:343
 #, fuzzy, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Galat mengubah konfigurasi VM: %s"
 
-#: virtManager/addhardware.py:364
+#: virtManager/addhardware.py:368
 #, fuzzy
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Perubahan ini akan berlaku setelah penghentian tamu berikutnya."
 
-#: virtManager/addhardware.py:414
+#: virtManager/addhardware.py:418
 #, fuzzy
 msgid "Pseudo TTY"
 msgstr "TTY semu"
 
-#: virtManager/addhardware.py:415
+#: virtManager/addhardware.py:419
 #, fuzzy
 msgid "Output to a file"
 msgstr "Keluaran ke file"
 
-#: virtManager/addhardware.py:416
+#: virtManager/addhardware.py:420
 #, fuzzy
 msgid "TCP net console"
 msgstr "Konsol jaringan TCP"
 
-#: virtManager/addhardware.py:417
+#: virtManager/addhardware.py:421
 #, fuzzy
 msgid "UDP net console"
 msgstr "Konsol bersih UDP"
 
-#: virtManager/addhardware.py:418
+#: virtManager/addhardware.py:422
 #, fuzzy
 msgid "UNIX socket"
 msgstr "Soket UNIX"
 
-#: virtManager/addhardware.py:419
+#: virtManager/addhardware.py:423
 #, fuzzy
 msgid "Spice agent"
 msgstr "Agen rempah-rempah"
 
-#: virtManager/addhardware.py:420
+#: virtManager/addhardware.py:424
 #, fuzzy
 msgid "Spice port"
 msgstr "Port rempah-rempah"
 
-#: virtManager/addhardware.py:434 virtManager/addhardware.py:495
+#: virtManager/addhardware.py:438 virtManager/addhardware.py:499
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
+#: virtManager/addhardware.py:439 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr "Floppy"
 
-#: virtManager/addhardware.py:436 virtManager/addhardware.py:497
+#: virtManager/addhardware.py:440 virtManager/addhardware.py:501
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:437 virtManager/addhardware.py:496
+#: virtManager/addhardware.py:441 virtManager/addhardware.py:500
 msgid "SATA"
 msgstr "SATA"
 
-#: virtManager/addhardware.py:438
+#: virtManager/addhardware.py:442
 #, fuzzy
 msgid "VirtIO Serial"
 msgstr "VirtIO Serial"
 
-#: virtManager/addhardware.py:439 virtManager/addhardware.py:499
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:443 virtManager/addhardware.py:503
+#: virtManager/addhardware.py:581
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:440
+#: virtManager/addhardware.py:444
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:441
+#: virtManager/addhardware.py:445
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:442
+#: virtManager/addhardware.py:446
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:450 virtManager/addhardware.py:920
+#: virtManager/addhardware.py:454 virtManager/addhardware.py:933
 #, fuzzy
 msgid "VirtIO SCSI"
 msgstr "virtio-scsi"
 
-#: virtManager/addhardware.py:453
+#: virtManager/addhardware.py:457
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:498
+#: virtManager/addhardware.py:502
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:500 virtManager/addhardware.py:578
+#: virtManager/addhardware.py:504 virtManager/addhardware.py:582
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
+#: virtManager/addhardware.py:505 virtManager/addhardware.py:583
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:508
+#: virtManager/addhardware.py:512
 #, fuzzy
 msgid "Passthrough device"
 msgstr "Perangkat passthrough"
 
-#: virtManager/addhardware.py:509
+#: virtManager/addhardware.py:513
 #, fuzzy
 msgid "Emulated device"
 msgstr "Perangkat yang diemulasi"
 
-#: virtManager/addhardware.py:516
+#: virtManager/addhardware.py:520
 msgid "TIS"
 msgstr "TIS"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:521
 msgid "CRB"
 msgstr "CRB"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:522
 msgid "SPAPR"
 msgstr "SPAPR"
 
-#: virtManager/addhardware.py:525
+#: virtManager/addhardware.py:529
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:530
 msgid "pSeries"
 msgstr "pSeries"
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:531
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: virtManager/addhardware.py:528
+#: virtManager/addhardware.py:532
 msgid "s390"
 msgstr "s390"
 
-#: virtManager/addhardware.py:535
+#: virtManager/addhardware.py:539
 #, fuzzy
 msgid "Random"
 msgstr "Acak"
 
-#: virtManager/addhardware.py:536
+#: virtManager/addhardware.py:540
 #, fuzzy
 msgid "Entropy Gathering Daemon"
 msgstr "Daemon Pengumpulan Entropi"
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:541
 #, fuzzy
 msgid "Builtin RNG"
 msgstr "Builtin RNG"
 
-#: virtManager/addhardware.py:555
+#: virtManager/addhardware.py:559
 #, fuzzy
 msgid "Forcefully reset the guest"
 msgstr "Setel ulang tamu secara paksa"
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:560
 #, fuzzy
 msgid "Gracefully shutdown the guest"
 msgstr "Matikan tamu dengan anggun"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:561
 #, fuzzy
 msgid "Forcefully power off the guest"
 msgstr "Matikan tamu secara paksa"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:562
 #, fuzzy
 msgid "Pause the guest"
 msgstr "Jeda tamu"
 
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:563
 #, fuzzy
 msgid "No action"
 msgstr "Tindakan"
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:564
 #, fuzzy
 msgid "Dump guest memory core"
 msgstr "Buang inti memori tamu"
 
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:571
 #, fuzzy
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Tablet Grafis EvTouch USB"
 
-#: virtManager/addhardware.py:570 virtManager/details/details.py:193
+#: virtManager/addhardware.py:574 virtManager/details/details.py:193
 #, fuzzy
 msgid "Keyboard"
 msgstr "Papan tik"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:191
+#: virtManager/addhardware.py:575 virtManager/details/details.py:191
 #, fuzzy
 msgid "Mouse"
 msgstr "Tukar tombol tetikus kanan dan kiri dalam pengaturan tetikus."
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:189
+#: virtManager/addhardware.py:576 virtManager/details/details.py:189
 #, fuzzy
 msgid "Tablet"
 msgstr "Tablet"
 
-#: virtManager/addhardware.py:576
+#: virtManager/addhardware.py:580
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:585
+#: virtManager/addhardware.py:589
 #, fuzzy, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "% (input_bus) s% (input_type) s"
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:687
 #, fuzzy
 msgid "Disk device"
 msgstr "Perangkat &Diska"
 
-#: virtManager/addhardware.py:682
+#: virtManager/addhardware.py:689
 #, fuzzy
 msgid "CDROM device"
 msgstr "Perangkat CDROM"
 
-#: virtManager/addhardware.py:684
+#: virtManager/addhardware.py:691
 #, fuzzy
 msgid "Floppy device"
 msgstr "Perangkat floppy"
 
-#: virtManager/addhardware.py:687
+#: virtManager/addhardware.py:694
 #, fuzzy
 msgid "LUN Passthrough"
 msgstr "LUN Passthrough"
 
-#: virtManager/addhardware.py:710 virtManager/addhardware.py:791
-#: virtManager/addhardware.py:801 virtManager/addhardware.py:921
+#: virtManager/addhardware.py:717 virtManager/addhardware.py:804
+#: virtManager/addhardware.py:814 virtManager/addhardware.py:934
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
 #: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
 #: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:169
@@ -2879,75 +2885,80 @@ msgstr "LUN Passthrough"
 msgid "Hypervisor default"
 msgstr "Hypervisor default"
 
-#: virtManager/addhardware.py:781
+#: virtManager/addhardware.py:794
 #, fuzzy
 msgid "No Devices Available"
 msgstr "Tidak Ada Perangkat yang Tersedia"
 
-#: virtManager/addhardware.py:838
+#: virtManager/addhardware.py:851
 #, fuzzy
 msgid "Passthrough"
 msgstr "Melewati"
 
-#: virtManager/addhardware.py:839
+#: virtManager/addhardware.py:852
 #, fuzzy
 msgid "Host"
 msgstr "Host"
 
-#: virtManager/addhardware.py:845
+#: virtManager/addhardware.py:858
 #, fuzzy
 msgid "Spice channel"
 msgstr "Saluran rempah-rempah"
 
-#: virtManager/addhardware.py:917
+#: virtManager/addhardware.py:930
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:918
+#: virtManager/addhardware.py:931
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:1014
+#: virtManager/addhardware.py:1029
 #, fuzzy
 msgid "Video Device"
 msgstr "Perangkat Video"
 
-#: virtManager/addhardware.py:1016
+#: virtManager/addhardware.py:1031
 #, fuzzy
 msgid "Watchdog Device"
 msgstr "Perangkat Pengawas"
 
-#: virtManager/addhardware.py:1018
+#: virtManager/addhardware.py:1033
 #, fuzzy
 msgid "Filesystem Passthrough"
 msgstr "Sistem File Passthrough"
 
-#: virtManager/addhardware.py:1026
+#: virtManager/addhardware.py:1041
 #, fuzzy
 msgid "Random Number Generator"
 msgstr "Penghasil Angka Acak"
 
-#: virtManager/addhardware.py:1030
+#: virtManager/addhardware.py:1045
 #, fuzzy
 msgid "VM Sockets"
 msgstr "Soket VM"
 
-#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
+#: virtManager/addhardware.py:1049 virtManager/details/details.py:2121
 #, fuzzy, python-format
 msgid "%s Device"
 msgstr "Perangkat"
 
-#: virtManager/addhardware.py:1038
+#: virtManager/addhardware.py:1053
 #, fuzzy
 msgid "PCI Device"
 msgstr "Perangkat"
 
-#: virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:1055
+#, fuzzy
+msgid "MDEV Device"
+msgstr "Perangkat"
+
+#: virtManager/addhardware.py:1056
 #, fuzzy
 msgid "USB Device"
 msgstr "Perangkat"
 
-#: virtManager/addhardware.py:1172
+#: virtManager/addhardware.py:1189
 #, fuzzy, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2958,12 +2969,12 @@ msgstr ""
 "pengontrol USB tidak didukung.&#10; Anda dapat mengubah jenis pengontrol USB "
 "di layar detail VM."
 
-#: virtManager/addhardware.py:1264
+#: virtManager/addhardware.py:1281
 #, fuzzy
 msgid "Are you sure you want to add this device?"
 msgstr "Apakah Anda yakin ingin menambahkan perangkat ini?"
 
-#: virtManager/addhardware.py:1267
+#: virtManager/addhardware.py:1284
 #, fuzzy
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
@@ -2972,44 +2983,44 @@ msgstr ""
 "Perangkat ini tidak dapat dipasang ke mesin yang sedang berjalan. Apakah "
 "Anda ingin membuat perangkat tersedia setelah tamu dimatikan berikutnya?"
 
-#: virtManager/addhardware.py:1291
+#: virtManager/addhardware.py:1308
 #, fuzzy, python-format
 msgid "Unable to add device: %s"
 msgstr "Tidak dapat menambahkan perangkat: %s"
 
-#: virtManager/addhardware.py:1312
+#: virtManager/addhardware.py:1329
 #, fuzzy, python-format
 msgid "Error validating device parameters: %s"
 msgstr "Kesalahan memvalidasi parameter perangkat: %s"
 
-#: virtManager/addhardware.py:1318
+#: virtManager/addhardware.py:1335
 #, fuzzy
 msgid "Creating device"
 msgstr "Membuat perangkat"
 
-#: virtManager/addhardware.py:1319
+#: virtManager/addhardware.py:1336
 #, fuzzy
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 "Bergantung pada perangkatnya, proses ini mungkin memerlukan waktu beberapa "
 "menit."
 
-#: virtManager/addhardware.py:1341
+#: virtManager/addhardware.py:1358
 #, fuzzy, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Perangkat sudah digunakan oleh tamu lain %s"
 
-#: virtManager/addhardware.py:1343
+#: virtManager/addhardware.py:1360
 #, fuzzy
 msgid "Do you really want to use the device?"
 msgstr "Anda yakin ingin menggunakan perangkat ini?"
 
-#: virtManager/addhardware.py:1388
+#: virtManager/addhardware.py:1405
 #, fuzzy, python-format
 msgid "Error building device XML: %s"
 msgstr "Galat membuat XML perangkat: %s"
 
-#: virtManager/asyncjob.py:235
+#: virtManager/asyncjob.py:220
 #, fuzzy
 msgid "Cancelling job..."
 msgstr "Membatalkan pekerjaan ..."
@@ -3438,7 +3449,7 @@ msgid "No active connection to install on."
 msgstr "Tidak ada koneksi aktif untuk menginstal."
 
 #: virtManager/createvm.py:947 virtManager/details/details.py:1771
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:236
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:237
 #, fuzzy
 msgid "None"
 msgstr "Nihil"
@@ -5401,12 +5412,12 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "Galat membatalkan pekerjaan migrasi: %s"
 
-#: virtManager/object/domain.py:457
+#: virtManager/object/domain.py:456
 #, fuzzy
 msgid "Libvirt connection does not support snapshots."
 msgstr "Koneksi Libvirt tidak mendukung snapshot."
 
-#: virtManager/object/domain.py:472
+#: virtManager/object/domain.py:471
 #, fuzzy
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
@@ -5415,7 +5426,7 @@ msgstr ""
 "Snapshot hanya didukung jika semua image disk yang dapat ditulis yang "
 "dialokasikan untuk tamu dalam format qcow2."
 
-#: virtManager/object/domain.py:475
+#: virtManager/object/domain.py:474
 #, fuzzy
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
@@ -5424,19 +5435,19 @@ msgstr ""
 "Snapshot memerlukan setidaknya satu image disk qcow2 yang dapat ditulisi "
 "yang dialokasikan untuk tamu."
 
-#: virtManager/object/domain.py:510
+#: virtManager/object/domain.py:509
 #, fuzzy, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Tidak dapat menemukan perangkat yang ditentukan dalam konfigurasi VM yang "
 "tidak aktif: %s"
 
-#: virtManager/object/domain.py:1372
+#: virtManager/object/domain.py:1371
 #, fuzzy
 msgid "Saving domain to disk"
 msgstr "Menyimpan domain ke disk"
 
-#: virtManager/object/domain.py:1424
+#: virtManager/object/domain.py:1423
 #, fuzzy
 msgid "Migrating domain"
 msgstr "Memigrasi domain"
@@ -6711,21 +6722,21 @@ msgstr "Keamanan peluncuran SEV membutuhkan mesin Q35 UEFI"
 msgid "SEV launch security is not supported on this platform"
 msgstr "Keamanan peluncuran SEV tidak didukung di platform ini"
 
-#: virtinst/domcapabilities.py:235
+#: virtinst/domcapabilities.py:236
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:241
+#: virtinst/domcapabilities.py:242
 #, fuzzy, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI% (arch) s:% (path) s"
 
-#: virtinst/domcapabilities.py:244
+#: virtinst/domcapabilities.py:245
 #, fuzzy, python-format
 msgid "Custom: %(path)s"
 msgstr "Ubahsuai:% (path) s"
 
-#: virtinst/domcapabilities.py:320
+#: virtinst/domcapabilities.py:321
 #, fuzzy, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Gagal mendapatkan XML CPU yang diperluas: %s"
@@ -6910,12 +6921,12 @@ msgstr "Membuka URL% (url) s gagal:% (error) s"
 msgid "Transferring '%(filename)s'"
 msgstr "Transferring"
 
-#: virtinst/nodedev.py:234
+#: virtinst/nodedev.py:254
 #, fuzzy, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s sesuai dengan beberapa perangkat node"
 
-#: virtinst/nodedev.py:237
+#: virtinst/nodedev.py:257
 #, fuzzy, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Tidak menemukan perangkat simpul yang cocok untuk '%s'"
