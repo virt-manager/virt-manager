@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-07-27 06:14+0000\n"
+"POT-Creation-Date: 2021-08-01 06:14+0000\n"
 "PO-Revision-Date: 2017-02-05 04:03+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Tamil (http://www.transifex.com/projects/p/virt-manager/"
@@ -1428,7 +1428,7 @@ msgid "Apply pool changes"
 msgstr ""
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:200
+#: virtManager/object/libvirtobject.py:209
 msgid "Active"
 msgstr "செயல்பாட்டிலுள்ள"
 
@@ -3287,28 +3287,28 @@ msgstr ""
 msgid "virt-manager does not support more than one graphical console"
 msgstr ""
 
-#: virtManager/details/console.py:570
+#: virtManager/details/console.py:565
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:572
+#: virtManager/details/console.py:567
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:695
+#: virtManager/details/console.py:690
 msgid "Graphical console not configured for guest"
 msgstr "விருந்தினருக்காக வரைகலை பணிமுனை கட்டமைக்கப்படவில்லை"
 
-#: virtManager/details/console.py:702
+#: virtManager/details/console.py:697
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "'%s' வரைபொருள் சாதன முனை வகையைக் காண்பிக்க முடியாது"
 
-#: virtManager/details/console.py:714
+#: virtManager/details/console.py:709
 msgid "Connecting to graphical console for guest"
 msgstr "விருந்தினருக்கான வரைகலைப் பணிமுனையை இணைக்கிறது"
 
-#: virtManager/details/console.py:733
+#: virtManager/details/console.py:728
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3316,29 +3316,29 @@ msgid ""
 "%s"
 msgstr "வரைபொருள் பணிமுனையுடன் இணைப்பதில் பிழை"
 
-#: virtManager/details/console.py:790
+#: virtManager/details/console.py:785
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: virtManager/details/console.py:812
+#: virtManager/details/console.py:807
 msgid "USB redirection error"
 msgstr "USB திருப்பிவிடல் பிழை"
 
-#: virtManager/details/console.py:821
+#: virtManager/details/console.py:816
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:827
+#: virtManager/details/console.py:822
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:832 virtManager/details/console.py:964
+#: virtManager/details/console.py:827 virtManager/details/console.py:959
 msgid "Viewer disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:968
+#: virtManager/details/console.py:963
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "சுட்டியை விடுவிக்க %s ஐ அழுத்தவும்."
@@ -3977,7 +3977,7 @@ msgstr "பயனர்முறைமை பிணையம்"
 msgid "Virtual network"
 msgstr "மெய்நிகர் பிணையம்"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
 msgid "Inactive"
 msgstr "செயலிழந்த"
 
@@ -4576,11 +4576,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "செயல்படா VM அமைவாக்கத்தில் குறிப்பிட்ட சாதனத்தைக் கண்டறிய முடியவில்லை: %s"
 
-#: virtManager/object/domain.py:1371
+#: virtManager/object/domain.py:1373
 msgid "Saving domain to disk"
 msgstr "களத்தை வட்டில் சேமிக்கிறது"
 
-#: virtManager/object/domain.py:1423
+#: virtManager/object/domain.py:1425
 msgid "Migrating domain"
 msgstr "களத்தை நகர்த்துகிறது"
 
@@ -5294,53 +5294,65 @@ msgstr ""
 "--panic default"
 
 #: virtinst/cli.py:801
+#, fuzzy
+#| msgid ""
+#| "Configure a guest smartcard device. Ex:\n"
+#| "--smartcard mode=passthrough"
+msgid ""
+"Configure a guest shared memory device. Ex:\n"
+"--shmem name=shmem0"
+msgstr ""
+"விருந்தினர் ஸ்மார்ட்கார்டு சாதனத்தை அமைவாக்கம் செய்யவும். எகா:\n"
+"--smartcard mode=passthrough"
+
+#: virtinst/cli.py:805
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:809
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:810
+#: virtinst/cli.py:814
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:817
+#: virtinst/cli.py:821
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:821
+#: virtinst/cli.py:825
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:829
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:830
+#: virtinst/cli.py:834
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:838
 msgid "Tune NUMA policy for the domain process."
 msgstr "டொமைன் செயலாக்கத்திற்கான NUMA கொள்கை."
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:842
 msgid "Tune memory policy for the domain process."
 msgstr "டொமைன் செயலாக்கத்திற்கான நினைவகக் கொள்கை."
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:846
 msgid "Tune blkio policy for the domain process."
 msgstr "டொமைன் செயலாக்கத்திற்கான blkio கொள்கையை மேம்படுத்தவும்."
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:850
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5348,14 +5360,14 @@ msgstr ""
 "டொமைன் செயலாக்கத்திற்கான நினைவக பின்னாதரவுக் கொள்கையை அமைக்கவும். எ.கா:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:851
+#: virtinst/cli.py:855
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:857
+#: virtinst/cli.py:861
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5363,33 +5375,33 @@ msgstr ""
 "டொமைனை அமைக்கவும் <clock> XML. எகா:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:862
+#: virtinst/cli.py:866
 msgid "Configure VM power management features"
 msgstr "VM மின்சக்தி நிர்வாக அம்சங்களை அமைவாக்கம் செய்யவும்"
 
-#: virtinst/cli.py:866
+#: virtinst/cli.py:870
 msgid "Configure VM lifecycle management policy"
 msgstr "VM வாழ்க்கைச்சுழற்சி நிர்வாகக் கொள்கையை அமைவாக்கம் செய்யவும்"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:874
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "VM வளப் பிரிவாக்கத்தை (cgroups) அமைவாக்கம் செய்யவும்"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:878
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:880
+#: virtinst/cli.py:884
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:886
+#: virtinst/cli.py:890
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5397,7 +5409,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:898
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5407,13 +5419,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (கன்டெய்னர்களுக்கு)"
 
-#: virtinst/cli.py:900
+#: virtinst/cli.py:904
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:910
+#: virtinst/cli.py:914
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5422,26 +5434,26 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:922
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:921
+#: virtinst/cli.py:925
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:923
+#: virtinst/cli.py:927
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:925
+#: virtinst/cli.py:929
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:935
+#: virtinst/cli.py:939
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5449,29 +5461,29 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:965
+#: virtinst/cli.py:969
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s 'ஆம்' அல்லது 'இல்லை' என்று மட்டுமே இருக்க வேண்டும்"
 
-#: virtinst/cli.py:1150
+#: virtinst/cli.py:1154
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: virtinst/cli.py:1462
+#: virtinst/cli.py:1466
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1518 virtinst/cli.py:1549
+#: virtinst/cli.py:1522 virtinst/cli.py:1553
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1898
+#: virtinst/cli.py:1902
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5479,31 +5491,31 @@ msgstr ""
 "வரைவியல் கன்சோலுக்கு இணைக்க முடியவில்லை: virt-viewer நிறுவப்படவில்லை. 'virt-viewer' "
 "தொகுப்பை நிறுவவும்."
 
-#: virtinst/cli.py:1905
+#: virtinst/cli.py:1909
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1916
+#: virtinst/cli.py:1920
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3288
+#: virtinst/cli.py:3336
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' க்கு தவறான மதிப்பு: %s"
 
-#: virtinst/cli.py:3301
+#: virtinst/cli.py:3349
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "தெரியாத '%s' மதிப்பு '%s'"
 
-#: virtinst/cli.py:3316
+#: virtinst/cli.py:3364
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "சேமிப்பக பிரிவகம் vol=poolname/volname ஆகவே குறிப்பிடப்பட வேண்டும்"
 
-#: virtinst/cli.py:3764
+#: virtinst/cli.py:3813
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5601,24 +5613,24 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "இந்த தொகுதி வகைக்கு வடிவமை பண்புக்கூறு ஆதரிக்கப்படாது"
 
-#: virtinst/devices/disk.py:801
+#: virtinst/devices/disk.py:802
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "சாதன வகை '%s' க்க்கு பாதை அவசியம்"
 
-#: virtinst/devices/disk.py:809
+#: virtinst/devices/disk.py:810
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "இல்லாத பாதை '%s' க்கான சேமிப்பக உருவாக்க அளவுருக்களைக் குறிப்பிட வேண்டும்."
 
-#: virtinst/devices/disk.py:922
+#: virtinst/devices/disk.py:923
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] ""
 msgstr[1] ""
 
-#: virtinst/devices/filesystem.py:121
+#: virtinst/devices/filesystem.py:123
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr "கோப்புமுறைமை இலக்கு '%s' ஆனது ஒரு சரியான பாதையாக இருக்க வேண்டும்"
@@ -5726,25 +5738,25 @@ msgstr ""
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
 
-#: virtinst/guest.py:77
+#: virtinst/guest.py:78
 msgid "Guest"
 msgstr "விருந்தினர்"
 
-#: virtinst/guest.py:85
+#: virtinst/guest.py:86
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "விருந்தினர் பெயர் '%s' ஏற்கனவே பயனில் உள்ளது."
 
-#: virtinst/guest.py:524
+#: virtinst/guest.py:527
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: virtinst/guest.py:528
+#: virtinst/guest.py:531
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:533
+#: virtinst/guest.py:536
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
