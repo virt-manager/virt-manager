@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2017-02-05 04:17+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Kannada (http://www.transifex.com/projects/p/virt-manager/"
@@ -236,11 +236,11 @@ msgstr "ಕಾರ್ಯವು ಪ್ರಗತಿಯಲ್ಲಿದೆ"
 msgid "Please wait a few moments..."
 msgstr "ದಯವಿಟ್ಟು ಕೆಲವು ಕ್ಷಣಗಳವರೆಗೆ ಕಾಯಿರಿ..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 msgid "Processing..."
 msgstr "ಸಂಸ್ಕರಿಸಲಾಗುತ್ತಿದೆ..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "ವಿವರಗಳು (_D)"
 
@@ -812,7 +812,7 @@ msgstr ""
 msgid "_Backing store"
 msgstr "ಶೇಖರಣೆಯ ಬ್ಯಾಕಿಂಗ್"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕವನ್ನು ಅಳಿಸು"
 
@@ -1432,7 +1432,6 @@ msgid "Apply pool changes"
 msgstr ""
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 msgid "Active"
 msgstr "ಸಕ್ರಿಯ"
@@ -2485,13 +2484,9 @@ msgstr ""
 msgid "Error building device XML: %s"
 msgstr ""
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 msgid "Cancelling job..."
 msgstr "ಕೆಲಸವನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುತ್ತಿದೆ..."
-
-#: virtManager/asyncjob.py:315
-msgid "Completed"
-msgstr "ಪೂರ್ಣಗೊಂಡಿದೆ"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
@@ -3113,135 +3108,135 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, fuzzy, python-format
 #| msgid "Error deleting virtual machine '%s': %s"
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "ವರ್ಚುವಲ್ ಗಣಕ '%s' ಅನ್ನು ಅಳಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "ಹೆಚ್ಚುವರಿಯಾಗಿ, ನಿಶ್ಚಿತ ಶೇಖರಣಾ ಸಾಧನಗಳನ್ನು ತೆಗೆದು ಹಾಕುವಾಗ ದೋಷಗಳು ಉಂಟಾಗಿವೆ: \n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
 msgstr "ನಿಶ್ಚಿತ ಶೇಖರಣಾ ಸಾಧನಗಳನ್ನು ತೆಗೆದು ಹಾಕುವಾಗ ದೋಷಗಳು ಉಂಟಾಗಿವೆ."
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "ಮಾರ್ಗ '%s' ಅನ್ನು ಅಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "ಆತಿಥೇಯ ಅಳಿಸುವ ಚೌಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr ""
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕ '%s' ಅನ್ನು ಅಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "ಸಾಧನವನ್ನು ತೆಗೆದು ಹಾಕುವಲ್ಲಿ ದೋಷ: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 "ಮುಂದಿನ ಬಾರಿ ಅತಿಥಿಯನ್ನು ಸ್ಥಗಿತಗೊಳಿಸಿದ ನಂತರ ಈ ಬದಲಾವಣೆಗಳು ಕಾರ್ಯರೂಪಕ್ಕೆ ಬರುತ್ತವೆ."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr ""
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "ಚಾಲನೆಯಲ್ಲಿರುವ ಗಣಕದಿಂದ ಸಾಧನವನ್ನು ತೆಗೆದು ಹಾಕಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr ""
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr ""
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr ""
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "ಗುರಿ"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "ಶೇಖರಣಾ ಮಾರ್ಗ"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 #, fuzzy
 #| msgid "Cannot delete iscsi share."
 msgid "Cannot delete iSCSI share."
 msgstr "iscsi ಹಂಚಿಕೆಯನ್ನು ಅಳಿಸಲಾಗಿಲ್ಲ."
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
 msgstr ""
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
 msgstr "ನಿರ್ವಹಿಸದೆ ಇರುವ ದೂರಸ್ಥ ಶೇಖರಣೆಯನ್ನು ಅಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 msgid "Path does not exist."
 msgstr "ಮಾರ್ಗವು ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ."
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 msgid "No write access to parent directory."
 msgstr "ಮೂಲ ಕೋಶಕ್ಕೆ ಬರೆಯಲು ಅನುಮತಿ ಇಲ್ಲ."
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
 msgstr "ನಿರ್ವಹಿಸದೆ ಇರುವ ಖಂಡ ಸಾಧನವನ್ನು ಅಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 msgid "Storage is read-only."
 msgstr "ಶೇಖರಣೆಯು ಕೇವಲ ಓದಲು ಮಾತ್ರ."
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 msgid "No write access to path."
 msgstr "ಮಾರ್ಗಕ್ಕೆ ಬರೆಯುವ ಅನುಮತಿ ಇಲ್ಲ."
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
 msgstr "ಶೇಖರಣೆಯನ್ನು ಹಂಚಬಹುದು ಎಂದು ಗುರುತು ಹಾಕಲಾಗಿದೆ."
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 msgid "Storage is a media device."
 msgstr ""
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 #, fuzzy
 #| msgid ""
 #| "Storage is in use by the following virtual machines:\n"
@@ -3251,7 +3246,7 @@ msgstr ""
 "ಶೇಖರಣೆಯನ್ನು ಈ ಕೆಳಗಿನ ವರ್ಚುವಲ್ ಗಣಕಗಳಿಂದ ಬಳಸಲಾಗುತ್ತಿದೆ:\n"
 "- %s "
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
 msgstr ""
 
@@ -3289,37 +3284,28 @@ msgstr ""
 msgid "virt-manager does not support more than one graphical console"
 msgstr ""
 
-#: virtManager/details/console.py:492
-#, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "'%s' ಬಗೆಯ ಗ್ರಾಫಿಕ್ಸ್‌ ಸ್ವಯಂ ಮರುಗಾತ್ರಿಸುವಿಕೆಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
-
-#: virtManager/details/console.py:495
-msgid "Guest agent is not available."
-msgstr "ಅತಿಥಿ ಮಧ್ಯವರ್ತಿಯು ಲಭ್ಯವಿಲ್ಲ."
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 msgid "Graphical console not configured for guest"
 msgstr "ಅತಿಥಿಗಾಗಿ ಚಿತ್ರಾತ್ಮಕ ಕನ್ಸೋಲ್ ಸಂರಚಿತಗೊಂಡಿಲ್ಲ"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "'%s' ಎಂಬ ಕನ್ಸೋಲ್ ಬಗೆಯನ್ನು ಪ್ರದರ್ಶಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 msgid "Connecting to graphical console for guest"
 msgstr "ಅತಿಥಿಗೋಸ್ಕರವಾಗಿ ಚಿತ್ರಾತ್ಮಕ ಕನ್ಸೋಲಿಗೆ ಸಂಪರ್ಕಿತಗೊಳ್ಳುತ್ತಿದೆ"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3327,29 +3313,29 @@ msgid ""
 "%s"
 msgstr "ಚಿತ್ರಾತ್ಮಕ ಕನ್ಸೋಲಿಗೆ ಸಂಪರ್ಕಿತಗೊಳ್ಳುವಲ್ಲಿ ದೋಷ"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "USB ಮರುನಿರ್ದೇಶನ ದೋಷ"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 msgid "Viewer disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "ಸೂಚಕವನ್ನು ಮುಕ್ತಗೊಳಿಸಲು %s ಅನ್ನು ಒತ್ತಿ."
@@ -3883,17 +3869,25 @@ msgid ""
 "listen address."
 msgstr ""
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
+
+#: virtManager/details/viewers.py:750
+msgid "Guest agent is not available."
+msgstr "ಅತಿಥಿ ಮಧ್ಯವರ್ತಿಯು ಲಭ್ಯವಿಲ್ಲ."
 
 #: virtManager/device/addstorage.py:93
 #, fuzzy, python-format
@@ -3979,8 +3973,7 @@ msgstr "ಬಳಕೆದಾರಕ್ರಮ ಜಾಲಬಂಧ"
 msgid "Virtual network"
 msgstr "ವರ್ಚುವಲ್‌ ಜಾಲಬಂಧ"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 msgid "Inactive"
 msgstr "ನಿಷ್ಕ್ರಿಯ"
 
@@ -4086,36 +4079,36 @@ msgstr "ಪ್ರತ್ಯೇಕಿಸಲಾದ ಜಾಲಬಂಧ, ಆಂತರ
 msgid "Isolated network, routing disabled"
 msgstr "ಪ್ರತ್ಯೇಕಿಸಲಾದ ಜಾಲಬಂಧ, ರೌಟಿಂಗ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 msgid "On Boot"
 msgstr "ಬೂಟ್ ಆದಾಗ ಮಾತ್ರ"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "ನೀವು ಜಾಲಬಂಧ %s ಅನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಖಚಿತವೆ?"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "ಜಾಲಬಂಧವನ್ನು ಅಳಿಸುವಲ್ಲಿ ದೋಷ '%s'"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "'%s' ಜಾಲಬಂಧವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "'%s' ಜಾಲಬಂಧವನ್ನು ನಿಲ್ಲಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "ಜಾಲಬಂಧ ಗಾರುಡಿ (ವಿಝಾರ್ಡ್) ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "ಜಾಲಬಂಧ ಸಿದ್ಧತೆಗಳನ್ನು ಬದಲಾಯಿಸುವಲ್ಲಿ ದೋಷ: %s"
@@ -4153,69 +4146,69 @@ msgstr "Libvirt ಸಂಪರ್ಕವು ಶೇಖರಣೆಯ ವ್ಯವಸ�
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr ""
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 msgid "Create new volume"
 msgstr "ಹೊಸ ಪರಿಮಾಣವನ್ನು ರಚಿಸಿ"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 msgid "Pool does not support volume creation"
 msgstr "ಪರಿಮಾಣದ ರಚನೆಯನ್ನು ಪೂಲ್ ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 msgid "No storage pool selected."
 msgstr "ಯಾವುದೆ ಶೇಖರಣಾ ಪೂಲ್ ಅನ್ನು ಆಯ್ಕೆ ಮಾಡಿಲ್ಲ."
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "ಪೂಲ್ ಅನ್ನು ಆರಿಸುಲ್ಲಿ ದೋಷ: %s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "'%s' ಪೂಲ್ ಅನ್ನು ನಿಲ್ಲಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "'%s' ಪೂಲ್ ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "ಪೂಲ್ ಗಾರುಡಿ(ವಿಜಾರ್ಡ್) ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "ನೀವು ಪೂಲ್‌ %s ಅನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಖಚಿತವೆ?"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "'%s' ಪೂಲ್ ಅನ್ನು ಅಳಿಸುವಲ್ಲಿ ವಿಫಲತೆ"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "'%s' ಪೂಲ್ ಅನ್ನು ತಾಜಾಗೊಳಿಸುವಲ್ಲಿ ವಿಫಲತೆ"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "ಪರಿಮಾಣ ಗಾರುಡಿ(ವಿಜಾರ್ಡ್) ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ವಿಫಲತೆ: %s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "ನೀವು ಪರಿಮಾಣ %s ಅನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಖಚಿತವೆ?"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr ""
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "ಪೂಲ್‌ ಸಿದ್ಧತೆಗಳನ್ನು ಬದಲಾಯಿಸುವಲ್ಲಿ ದೋಷ: %s"
@@ -4554,11 +4547,11 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "ವರ್ಗಾವಣೆ ಕೆಲಸವನ್ನು ರದ್ದುಗೊಳಿಸುವಲ್ಲಿ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt ಸಂಪರ್ಕವು ಸ್ನಾಪ್‌ಶಾಟ್‌ಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4566,7 +4559,7 @@ msgstr ""
 "ಅತಿಥಿಗಣಕಕ್ಕೆ ನಿಯೋಜಿಸಲಾದ ಎಲ್ಲಾ ಬರೆಯಬಹುದಾದ ಡಿಸ್ಕ್‌ ಚಿತ್ರಿಕೆಗಳು qcow2 ಶೈಲಿಯಲ್ಲಿ ಇದ್ದರೆ "
 "ಮಾತ್ರ ಸ್ನ್ಯಾಪ್‌ಶಾಟ್‌ಗಳನ್ನು ಬೆಂಬಲಿಸಲಾಗುತ್ತದೆ."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4574,16 +4567,16 @@ msgstr ""
 "ಸ್ನ್ಯಾಪ್‌ಶಾಟ್‌ಗಳಿಗೆ ಅತಿಥಿಗಣಕಕ್ಕೆ ನಿಯೋಜಿಸಲಾದ ಕನಿಷ್ಟ ಒಂದು ಬರೆಯಬಹುದಾದ qcow2 ಡಿಸ್ಕ್‌ "
 "ಚಿತ್ರಿಕೆಗಳ ಅಗತ್ಯವಿರುತ್ತದೆ."
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "ನಿಷ್ಕ್ರಿಯ VM ಸಂರಚನೆಯಲ್ಲಿ ಸೂಚಿತ ಸಾಧನವು ಕಂಡುಬಂದಿಲ್ಲ: %s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 msgid "Saving domain to disk"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಡಿಸ್ಕಿಗೆ ಉಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 msgid "Migrating domain"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ವರ್ಗಾಯಿಸಲಾಗುತ್ತಿದೆ"
 
@@ -4744,11 +4737,11 @@ msgstr "ಶೇಖರಣಾ ಪರಿಮಾಣವನ್ನು ಸೇರಿಸಿ"
 msgid "_Show Virtual Machine Manager"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕ ವ್ಯವಸ್ಥಾಪಕ ತೋರಿಸು (_S)"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "ವರ್ಚುವಲ್‌ ಗಣಕ ವ್ಯವಸ್ಥಾಪಕವನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error starting Virtual Machine Manager: %(error)s"
@@ -5490,22 +5483,22 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' ಗಾಗಿ ಸೂಕ್ತವಾಗಿರದ ಮೌಲ್ಯ: %s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "ಗೊತ್ತಿರದ '%s' ಮೌಲ್ಯ '%s'"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "ಶೇಖರಣಾ ಪರಿಮಾಣವನ್ನು vol=poolname/volname ರೀತಿಯಲ್ಲಿ ಸೂಚಿಸಬೇಕು"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5606,17 +5599,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "ಈ ಬಗೆಯ ಪರಿಮಾಣಕ್ಕಾಗಿನ ವಿನ್ಯಾಸ ಗುಣವಿಶೇಷಕ್ಕೆ ಬೆಂಬಲವಿರುವುದಿಲ್ಲ"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "ಮಾರ್ಗಕ್ಕಾಗಿ '%s' ಸಾಧನದ ಬಗೆಯ ಅಗತ್ಯವಿದೆ"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "ಅಸ್ತಿತ್ವದಲ್ಲಿರದ '%s' ಮಾರ್ಗಕ್ಕಾಗಿ ಶೇಖರಣೆ ರಚನೆಯ ನಿಯತಾಂಕಗಳನ್ನು ಸೂಚಿಸಬೇಕಾಗುತ್ತದೆ."
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5632,7 +5625,13 @@ msgstr "ಕಡತವ್ಯವಸ್ಥೆ ಗುರಿ '%s' ಒಂದು ಪರ�
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "ಸ್ವಯಂ ನಿಯೋಜನೆಗಾಗಿ %s ಎನ್ನುವುದು 5900 ಗಿಂತ ಹೆಚ್ಚಾಗಿರಬೇಕು ಅಥವ -1 ಆಗಿರಬೇಕು"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+#| msgid "Don't know how to --update for --%s"
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "--%s ಗಾಗಿ --update ಮಾಡುವುದು ಹೇಗೆಂದು ತಿಳಿದಿಲ್ಲ"
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr ""
@@ -5680,7 +5679,7 @@ msgstr "ಅಸ್ತಿತ್ವದಲ್ಲಿರದ ಡಿಸ್ಕ್  '%s' �
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s ಅನ್ನು ತದ್ರೂಪುಗೊಳಿಸಲಾಗುತ್ತಿದೆ"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, fuzzy, python-format
 #| msgid "Error cloning diskimage %s to %s: %s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
@@ -5853,34 +5852,36 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "%s ಕಡತವನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: virtinst/install/urlfetcher.py:74
-#, python-format
-msgid "Retrieving file %s..."
+#: virtinst/install/urlfetcher.py:106
+#, fuzzy, python-format
+#| msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "%s ಕಡತವನ್ನು ಮರಳಿ ಪಡೆಯಲಾಗುತ್ತಿದೆ..."
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "URL %s ತೆರೆಯುವಲ್ಲಿ ವಿಫಲತೆ:%s"
 
-#: virtinst/install/volumeupload.py:109
-#, python-format
-msgid "Transferring %s"
+#: virtinst/install/volumeupload.py:108
+#, fuzzy, python-format
+#| msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "%s ಅನ್ನು ವರ್ಗಾಯಿಸಲಾಗುತ್ತಿದೆ"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s ಎಂಬುದು ಅನೇಕ ನೋಡ್ ಸಾಧನಗಳಿಗೆ ಸಂಬಂಧಿಸಿರುತ್ತದೆ"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' ಗೆ ಹೊಂದಿಕೆಯಾಗುವ ನೋಡ್ ಸಾಧನವು ಕಂಡುಬಂದಿಲ್ಲ"
@@ -5968,9 +5969,10 @@ msgstr ""
 "ವಿರಳವಾದ ತಾರ್ಕಿಕ ಪರಿಮಾಣಗಳಿಗೆ ಬೆಂಬಲವಿಲ್ಲ, ನಿಯೋಜನೆಯನ್ನು ಸಾಮರ್ಥ್ಯಕ್ಕೆ ಸರಿಯಾಗಿರುವಂತೆ "
 "ಹೊಂದಿಸಲಾಗುತ್ತಿದೆ"
 
-#: virtinst/storage.py:688
-#, python-format
-msgid "Allocating '%s'"
+#: virtinst/storage.py:687
+#, fuzzy, python-format
+#| msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "'%s' ಅನ್ನು ನಿಯೋಜಿಸಲಾಗುತ್ತಿದೆ"
 
 #: virtinst/storage.py:727
@@ -6772,6 +6774,12 @@ msgstr ""
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s ಹೆಸರು '%s' ಎನ್ನುವುದು '%s' ಅಕ್ಷರವನ್ನು ಹೊಂದಿರುವಂತಿಲ್ಲ."
+
+#~ msgid "Completed"
+#~ msgstr "ಪೂರ್ಣಗೊಂಡಿದೆ"
+
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "'%s' ಬಗೆಯ ಗ್ರಾಫಿಕ್ಸ್‌ ಸ್ವಯಂ ಮರುಗಾತ್ರಿಸುವಿಕೆಯನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
 #~ msgid "Default"
 #~ msgstr "ಪೂರ್ವನಿಯೋಜಿತ"

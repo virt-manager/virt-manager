@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2020-08-06 08:29+0000\n"
 "Last-Translator: Pavel Hrdina <phrdina@redhat.com>\n"
 "Language-Team: English (United Kingdom) <https://translate.fedoraproject.org/"
@@ -240,11 +240,11 @@ msgstr "Operation in progress"
 msgid "Please wait a few moments..."
 msgstr "Please wait a few moments..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 msgid "Processing..."
 msgstr "Processing..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "_Details"
 
@@ -822,7 +822,7 @@ msgstr ""
 msgid "_Backing store"
 msgstr "Backing store"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
 msgstr "Delete Virtual Machine"
 
@@ -1438,7 +1438,6 @@ msgid "Apply pool changes"
 msgstr "Apply pool changes"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 msgid "Active"
 msgstr "Active"
@@ -2508,13 +2507,9 @@ msgstr "Do you really want to use the device?"
 msgid "Error building device XML: %s"
 msgstr ""
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 msgid "Cancelling job..."
 msgstr "Cancelling job..."
-
-#: virtManager/asyncjob.py:315
-msgid "Completed"
-msgstr "Completed"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
@@ -3137,133 +3132,133 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, fuzzy, python-format
 #| msgid "Error deleting virtual machine '%s': %s"
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Error deleting virtual machine '%s': %s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Additionally, there were errors removing certain storage devices: \n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Errors encountered while removing certain storage devices."
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "Deleting path '%s'"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Error launching delete dialogue: %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr ""
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Deleting virtual machine '%s'"
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Error Removing Device: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr "This change will take effect after the next guest shutdown."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr ""
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "Device could not be removed from the running machine"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr ""
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr ""
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr ""
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "Target"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "Storage Path"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 #, fuzzy
 #| msgid "Cannot delete iscsi share."
 msgid "Cannot delete iSCSI share."
 msgstr "Cannot delete iscsi share."
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
 msgstr "Cannot delete SCSI device."
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Cannot delete unmanaged remote storage."
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 msgid "Path does not exist."
 msgstr "Path does not exist."
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 msgid "No write access to parent directory."
 msgstr "No write access to parent directory."
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
 msgstr "Cannot delete unmanaged block device."
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 msgid "Storage is read-only."
 msgstr "Storage is read-only."
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 msgid "No write access to path."
 msgstr "No write access to path."
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
 msgstr "Storage is marked as shareable."
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 msgid "Storage is a media device."
 msgstr "Storage is a media device."
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 #, fuzzy
 #| msgid ""
 #| "Storage is in use by the following virtual machines:\n"
@@ -3273,7 +3268,7 @@ msgstr ""
 "Storage is in use by the following virtual machines:\n"
 "- %s "
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
 msgstr ""
 
@@ -3313,37 +3308,28 @@ msgstr "Graphical Console"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager does not support more that one graphical console"
 
-#: virtManager/details/console.py:492
-#, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "Graphics type '%s' does not support auto resize."
-
-#: virtManager/details/console.py:495
-msgid "Guest agent is not available."
-msgstr "Guest agent is not available."
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 msgid "Guest has crashed."
 msgstr "Guest has crashed."
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 msgid "Guest is not running."
 msgstr "Guest is not running."
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 msgid "Graphical console not configured for guest"
 msgstr "Graphical console not configured for guest"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Cannot display graphical console type '%s'"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 msgid "Connecting to graphical console for guest"
 msgstr "Connecting to graphical console for guest"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3351,29 +3337,29 @@ msgid ""
 "%s"
 msgstr "Error connecting to graphical console"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Viewer authentication error: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "USB redirection error"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr "Viewer was disconnected."
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH tunnel error output: %s"
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 msgid "Viewer disconnected."
 msgstr "Viewer disconnected."
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Press %s to release pointer."
@@ -3918,7 +3904,7 @@ msgstr ""
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, fuzzy, python-format
 #| msgid ""
 #| "Unable to provide requested credentials to the VNC server.\n"
@@ -3930,10 +3916,18 @@ msgstr ""
 "Unable to provide requested credentials to the VNC server.\n"
 " The credential type %s is not supported"
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Encountered SPICE %(error-name)s"
+
+#: virtManager/details/viewers.py:750
+msgid "Guest agent is not available."
+msgstr "Guest agent is not available."
 
 #: virtManager/device/addstorage.py:93
 #, python-format
@@ -4020,8 +4014,7 @@ msgstr "Usermode networking"
 msgid "Virtual network"
 msgstr "Virtual network"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 msgid "Inactive"
 msgstr "Inactive"
 
@@ -4128,36 +4121,36 @@ msgstr "Isolated network, internal routing only"
 msgid "Isolated network, routing disabled"
 msgstr "Isolated network, routing disabled"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 msgid "On Boot"
 msgstr "On Boot"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Are you sure you want to permanently delete the network %s?"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "Error deleting network '%s'"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "Error starting network '%s'"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "Error stopping network '%s'"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Error launching network wizard: %s"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "Error changing network settings: %s"
@@ -4196,69 +4189,69 @@ msgstr "Libvirt connection does not support storage management."
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "%s Free / <i>%s In Use</i>"
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 msgid "Create new volume"
 msgstr "Create new volume"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 msgid "Pool does not support volume creation"
 msgstr "Pool does not support volume creation"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 msgid "No storage pool selected."
 msgstr "No storage pool selected."
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Error selecting pool: %s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Error stopping pool '%s'"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Error starting pool '%s'"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Error launching pool wizard: %s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Are you sure you want to permanently delete the pool %s?"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Error deleting pool '%s'"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Error refreshing pool '%s'"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Error launching volume wizard: %s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Are you sure you want to permanently delete the volume %s?"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Error deleting volume '%s'"
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Error changing pool settings: %s"
@@ -4607,11 +4600,11 @@ msgstr "Migrating VM '%s' to %s. This may take a while."
 msgid "Error cancelling migrate job: %s"
 msgstr "Error cancelling migrate job: %s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt connection does not support snapshots."
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4619,7 +4612,7 @@ msgstr ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4627,16 +4620,16 @@ msgstr ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "Could not find specified device in the inactive VM configuration: %s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 msgid "Saving domain to disk"
 msgstr "Saving domain to disk"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 msgid "Migrating domain"
 msgstr "Migrating domain"
 
@@ -4797,11 +4790,11 @@ msgstr "Choose Storage Volume"
 msgid "_Show Virtual Machine Manager"
 msgstr "_Show Virtual Machine Manager"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "Error starting Virtual Machine Manager"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error starting Virtual Machine Manager: %(error)s"
@@ -5569,22 +5562,22 @@ msgstr "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Improper value for 'size': %s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Unknown '%s' value '%s'"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Storage volume must be specified as vol=poolname/volname"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5681,17 +5674,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Format attribute not supported for this volume type"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Device type '%s' requires a path"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "Must specify storage creation parameters for non-existent path '%s'."
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, fuzzy, python-format
 #| msgid "Only %s disks for bus '%s' are supported"
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
@@ -5709,7 +5702,13 @@ msgstr "Filesystem target '%s' must be an absolute path"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s must be above 5900, or -1 for auto allocation"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+#| msgid "Don't know how to setup UEFI for arch '%s'"
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "Don't know how to setup UEFI for arch '%s'"
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr "Unknown node device type %s"
@@ -5757,7 +5756,7 @@ msgstr "size is required for non-existent disk '%s'"
 msgid "Cloning %(srcfile)s"
 msgstr "Cloning %(srcfile)s"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, fuzzy, python-format
 #| msgid "Error cloning diskimage %s to %s: %s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
@@ -5941,34 +5940,36 @@ msgstr ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Couldn't acquire file %s: %s"
 
-#: virtinst/install/urlfetcher.py:74
-#, python-format
-msgid "Retrieving file %s..."
+#: virtinst/install/urlfetcher.py:106
+#, fuzzy, python-format
+#| msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "Retrieving file %s..."
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Opening URL %s failed: %s."
 
-#: virtinst/install/volumeupload.py:109
-#, python-format
-msgid "Transferring %s"
+#: virtinst/install/volumeupload.py:108
+#, fuzzy, python-format
+#| msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "Transferring %s"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s corresponds to multiple node devices"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Did not find a matching node device for '%s'"
@@ -6056,9 +6057,10 @@ msgstr ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 
-#: virtinst/storage.py:688
-#, python-format
-msgid "Allocating '%s'"
+#: virtinst/storage.py:687
+#, fuzzy, python-format
+#| msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "Allocating '%s'"
 
 #: virtinst/storage.py:727
@@ -6877,6 +6879,12 @@ msgstr "A name must be specified for the %s"
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s name '%s' can not contain '%s' character."
+
+#~ msgid "Completed"
+#~ msgstr "Completed"
+
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "Graphics type '%s' does not support auto resize."
 
 #~ msgid "Default"
 #~ msgstr "Default"

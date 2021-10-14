@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2020-11-23 08:35+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
@@ -243,11 +243,11 @@ msgstr "İşlem devam ediyor"
 msgid "Please wait a few moments..."
 msgstr "Lütfen bir kaç dakika bekleyiniz..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 msgid "Processing..."
 msgstr "İşleniyor..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "_Ayrıntılar"
 
@@ -819,7 +819,7 @@ msgstr "Yo_l:"
 msgid "_Backing store"
 msgstr "_Yedekleme deposu"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
 msgstr "Sanal Makineyi Sil"
 
@@ -1423,7 +1423,6 @@ msgid "Apply pool changes"
 msgstr "Havuz değişikliklerini uygula"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 msgid "Active"
 msgstr "Etkin"
@@ -2491,13 +2490,9 @@ msgstr "Aygıtı gerçekten kullanmak istiyor musunuz?"
 msgid "Error building device XML: %s"
 msgstr "Aygıt XML'i derlenirken hata oluştu: %s"
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 msgid "Cancelling job..."
 msgstr "İş iptal ediliyor..."
-
-#: virtManager/asyncjob.py:315
-msgid "Completed"
-msgstr "Tamamlandı"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
@@ -3096,35 +3091,35 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "'%(vm)s' sanal makinesi silinirken hata oluştu: %(error)s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Ek olarak, belirli depolama aygıtlarını kaldırırken hatalar oluştu: \n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Belirli depolama aygıtlarını kaldırırken hatalar oluştu."
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "'%s' yolu siliniyor"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Silme iletişim kutusu başlatılırken hata oluştu: %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr "'%(vmname)s' sil"
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
@@ -3132,103 +3127,103 @@ msgstr ""
 "'%s' sanal makinesi ve seçilen depolama alanı siliniyor (bu biraz zaman "
 "alabilir)"
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "'%s' sanal makinesi siliniyor"
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Aygıt Kaldırılırken Hata Oluştu: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 "Bu değişiklik konuğun bir sonraki kapanışından sonra geçerli olacaktır."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr "Depolama alanı silinmeyecek."
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "Çalışmakta olan makineden aygıt kaldırılamadı"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr "Disk Aygıtını Kaldır"
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr "'%(target)s' disk aygıtını kaldır"
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 "'%s' disk aygıtı ve seçilen depolama alanı kaldırılıyor (bu biraz zaman "
 "alabilir)"
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr "'%s' disk aygıtı kaldırılıyor"
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "Hedef"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "Depolama Yolu"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 msgid "Cannot delete iSCSI share."
 msgstr "iSCSI paylaşımı silinemiyor."
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
 msgstr "SCSI aygıtı silinemiyor."
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Yönetilmeyen uzak depolama alanı silinemiyor."
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 msgid "Path does not exist."
 msgstr "Yol bulunamamaktadır."
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 msgid "No write access to parent directory."
 msgstr "Üst dizine yazma izni yok."
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
 msgstr "Yönetilmeyen blok aygıtı silinemiyor."
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 msgid "Storage is read-only."
 msgstr "Depolama salt okunur."
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 msgid "No write access to path."
 msgstr "Belirtilen yola yazma erişimi yok."
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
 msgstr "Depolama paylaşılabilir olarak işaretlendi."
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 msgid "Storage is a media device."
 msgstr "Depolama bir ortam aygıtı."
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 msgid "Storage is in use by the following virtual machines"
 msgstr "Depolama aşağıdaki sanal makineler tarafından kullanılıyor"
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
 msgstr "Disk kullanım çakışması denetlenemedi."
 
@@ -3266,37 +3261,28 @@ msgstr "Grafiksel Konsol"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager birden fazla grafiksel konsolu desteklemiyor"
 
-#: virtManager/details/console.py:492
-#, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "'%s' grafik türü otomatik yeniden boyutlandırmayı desteklemiyor."
-
-#: virtManager/details/console.py:495
-msgid "Guest agent is not available."
-msgstr "Konuk aracısı kullanılabilir değil."
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 msgid "Guest has crashed."
 msgstr "Konuk çöktü."
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 msgid "Guest is not running."
 msgstr "Konuk çalışmıyor."
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 msgid "Graphical console not configured for guest"
 msgstr "Konuk için grafiksel konsol yapılandırılmadı"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "'%s' grafiksel konsol türü görüntülenemiyor"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 msgid "Connecting to graphical console for guest"
 msgstr "Konuk için grafiksel konsola bağlanılıyor"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3305,29 +3291,29 @@ msgstr ""
 "Grafiksel konsola bağlanırken hata oluştu:\n"
 "%s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Görüntüleyici kimlik doğrulama hatası: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "USB yönlendirme hatası"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr "Görüntüleyicinin bağlantısı kesildi."
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH tüneli hatası çıktısı: %s"
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 msgid "Viewer disconnected."
 msgstr "Görüntüleyicinin bağlantısı kesildi."
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "İşaretçiyi serbest bırakmak için %s'ye basın."
@@ -3870,7 +3856,7 @@ msgstr ""
 "yerel olarak dinlemek üzere yapılandırıldı. Uzaktan bağlanmak için konuğun "
 "dinleme adresini değiştirmeniz gerekecek."
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3879,10 +3865,18 @@ msgstr ""
 "VNC sunucusuna istenen kimlik bilgileri sağlanamıyor.\n"
 "%s kimlik bilgisi türü desteklenmiyor"
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "SPICE %(error-name)s ile karşılaşıldı"
+
+#: virtManager/details/viewers.py:750
+msgid "Guest agent is not available."
+msgstr "Konuk aracısı kullanılabilir değil."
 
 #: virtManager/device/addstorage.py:93
 #, python-format
@@ -3969,8 +3963,7 @@ msgstr "Kullanıcı modu ağı"
 msgid "Virtual network"
 msgstr "Sanal ağ"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 msgid "Inactive"
 msgstr "Etkin değil"
 
@@ -4074,36 +4067,36 @@ msgstr "Yalıtılmış ağ, yalnızca dahili yönlendirme"
 msgid "Isolated network, routing disabled"
 msgstr "Yalıtılmış ağ, yönlendirme devre dışı"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 msgid "On Boot"
 msgstr "Önyüklemede"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "%s ağını kalıcı olarak silmek istediğinizden emin misiniz?"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "'%s' ağı silinirken hata oluştu"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "'%s' ağı başlatılırken hata oluştu"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "'%s' ağı durdurulurken hata oluştu"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Ağ sihirbazı başlatılırken hata oluştu: %s"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "Ağ ayarları değiştirilirken hata oluştu: %s"
@@ -4141,69 +4134,69 @@ msgstr "Libvirt bağlantısı depolama yönetimini desteklememektedir."
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "%(bytesfree)s Boş / <i>%(bytesinuse)s Kullanımda</i>"
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 msgid "Create new volume"
 msgstr "Yeni birim oluştur"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 msgid "Pool does not support volume creation"
 msgstr "Havuz, birim oluşturmayı desteklemiyor"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 msgid "No storage pool selected."
 msgstr "Depolama havuzu seçilmedi."
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Havuz seçilirken hata oluştu: %s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "'%s' havuzu durdurulurken hata oluştu"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "'%s' havuzu başlatılırken hata oluştu"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Havuz sihirbazı başlatılırken hata oluşu: %s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "%s havuzunu kalıcı olarak silmek istediğinizden emin misiniz?"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "'%s' havuzu silinirken hata oluştu"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "'%s' havuzu yenilenirken hata oluştu"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Birim sihirbazı başlatılırken hata oluşu: %s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "%s birimini kalıcı olarak silmek istediğinizden emin misiniz?"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "'%s' birimi silinirken hata oluştu"
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Havuz ayarları değiştirilirken hata oluştu: %s"
@@ -4557,11 +4550,11 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "Taşıma işi iptal edilirken hata oluştu: %s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt bağlantısı anlık görüntüleri desteklemiyor."
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4569,7 +4562,7 @@ msgstr ""
 "Anlık görüntüler yalnızca konuğa ayrılan tüm yazılabilir disk görüntüleri "
 "qcow2 biçimindeyse desteklenir."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4577,17 +4570,17 @@ msgstr ""
 "Anlık görüntüler, konuğa ayrılan en az bir yazılabilir qcow2 disk kalıbı "
 "gerektirmektedir."
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Etkin olmayan sanal makine yapılandırmasında belirtilen aygıt bulunamadı: %s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 msgid "Saving domain to disk"
 msgstr "Alan diske kaydediliyor"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 msgid "Migrating domain"
 msgstr "Alan taşınıyor"
 
@@ -4748,11 +4741,11 @@ msgstr "Depolama Birimi Seç"
 msgid "_Show Virtual Machine Manager"
 msgstr "Virtual Machine Manager'i Gö_ster"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "Virtual Machine Manager başlatılırken hata oluştu"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Virtual Machine Manager başlatılırken hata oluştu: %(error)s"
@@ -5547,21 +5540,21 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr "Bilinmeyen otomatik konsol türü '%s'"
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' için uygun olmayan değer: %s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Bilinmeyen '%(optionname)s' değeri '%(string)s'"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Depolama birimi vol=havuzadı/birimadı olarak belirtilmelidir"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "'%s' için PCI biçim dizgesi bekleniyor"
@@ -5652,18 +5645,18 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Bu birim türü için biçim özniteliği desteklenmiyor"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "'%s' aygıt türü bir yol gerektiriyor"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Var olmayan '%s' yolu için depolama oluşturma parametreleri belirtilmelidir."
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5680,7 +5673,13 @@ msgstr "'%s' dosya sistemi hedefi mutlak bir yol olmalıdır"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 5900'ün üzerinde veya otomatik ayırma için -1 olmalıdır"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+#| msgid "Don't know how to setup UEFI for arch '%s'"
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "'%s' mimarisi için UEFI'nin nasıl ayarlanacağı bilinmiyor"
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr "Bilinmeyen düğüm aygıtı türü %s"
@@ -5727,7 +5726,7 @@ msgstr "var olmayan '%s' diski için boyut gerekli"
 msgid "Cloning %(srcfile)s"
 msgstr "%(srcfile)s klonlanıyor"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -5914,32 +5913,34 @@ msgstr ""
 "Konum, bir kurulum ağacının kök dizini olmalıdır.\n"
 "Çeşitli dağıtım örnekleri için virt-install kılavuz sayfasına bakın."
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "%(url)s dosyası alınamadı: %(error)s"
 
-#: virtinst/install/urlfetcher.py:74
-#, python-format
-msgid "Retrieving file %s..."
+#: virtinst/install/urlfetcher.py:106
+#, fuzzy, python-format
+#| msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "%s dosyası alınıyor..."
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "%(url)s URL'si açılamadı: %(error)s"
 
-#: virtinst/install/volumeupload.py:109
-#, python-format
-msgid "Transferring %s"
+#: virtinst/install/volumeupload.py:108
+#, fuzzy, python-format
+#| msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "%s aktarılıyor"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s birden fazla düğüm aygıtına karşılık geliyor"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' için eşleşen bir düğüm aygıtı bulunmadı"
@@ -6030,9 +6031,10 @@ msgstr ""
 "Seyrek mantıksal birimler desteklenmiyor, ayırma miktarı kapasiteye eşit "
 "olarak ayarlanıyor"
 
-#: virtinst/storage.py:688
-#, python-format
-msgid "Allocating '%s'"
+#: virtinst/storage.py:687
+#, fuzzy, python-format
+#| msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "'%s' ayrılıyor"
 
 #: virtinst/storage.py:727
@@ -6870,6 +6872,12 @@ msgstr "%s için bir ad belirtilmelidir"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s adı '%(name)s' '%(char)s' karakterini içeremez."
+
+#~ msgid "Completed"
+#~ msgstr "Tamamlandı"
+
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "'%s' grafik türü otomatik yeniden boyutlandırmayı desteklemiyor."
 
 #~ msgid "Default"
 #~ msgstr "Öntanımlı"
