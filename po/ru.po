@@ -17,15 +17,16 @@
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Olesya Gerasimenko <gammaray@basealt.ru>, 2020.
 # Dmitry Astankov <mornie@basealt.ru>, 2021.
+# Alexey Rubtsov <rushills@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-06-11 06:14+0000\n"
-"PO-Revision-Date: 2021-01-15 10:26+0000\n"
-"Last-Translator: Dmitry Astankov <mornie@basealt.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ru/>\n"
+"PO-Revision-Date: 2021-07-06 15:04+0000\n"
+"Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +34,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.7.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -894,7 +895,7 @@ msgstr "Эмулятор:"
 
 #: ui/details.ui:473
 msgid "Machine _Type: "
-msgstr "_Тип машины:"
+msgstr "_Тип машины: "
 
 #: ui/details.ui:486
 msgid "Chipse_t:"
@@ -1403,7 +1404,7 @@ msgstr "Остановить сеть"
 
 #: ui/hostnets.ui:646
 msgid "Delete Network"
-msgstr "Удалить  сеть"
+msgstr "Удалить сеть"
 
 #: ui/hoststorage.ui:29
 msgid "Add Pool"
@@ -2007,7 +2008,7 @@ msgstr "_Автоматическое подключение"
 
 #: ui/vmwindow.ui:282
 msgid "T_oolbar"
-msgstr "П_анель инструментов "
+msgstr "П_анель инструментов"
 
 #: ui/vmwindow.ui:296
 msgid "Send _Key"
@@ -2131,7 +2132,7 @@ msgstr "USB-устройство узла"
 #: virtManager/addhardware.py:240 virtManager/addhardware.py:244
 #: virtManager/addhardware.py:254
 msgid "Connection does not support host device enumeration"
-msgstr "Подключение не поддерживает подсчёт устройств хоста."
+msgstr "Подключение не поддерживает подсчёт устройств хоста"
 
 #: virtManager/addhardware.py:248
 msgid "Not supported for containers"
@@ -2868,7 +2869,7 @@ msgstr ""
 #: virtManager/createvm.py:526
 #, python-format
 msgid "Architecture '%s' is not installable"
-msgstr "Архитектура «%s» не подходит для установки."
+msgstr "Архитектура «%s» не подходит для установки"
 
 #: virtManager/createvm.py:541
 msgid "No install methods available for this connection."
@@ -2876,7 +2877,7 @@ msgstr "Для этого соединения методы установки �
 
 #: virtManager/createvm.py:572
 msgid "No hypervisor options were found for this connection."
-msgstr "Для этого соединения не обнаружено настроек гипервизора"
+msgstr "Для этого соединения не обнаружено настроек гипервизора."
 
 #: virtManager/createvm.py:577
 msgid ""
@@ -3194,7 +3195,7 @@ msgstr "Хранилище не будет удалено."
 
 #: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
-msgstr "Невозможно удалить устройство из работающей машины."
+msgstr "Невозможно удалить устройство из работающей машины"
 
 #: virtManager/delete.py:370
 msgid "Remove Disk Device"
@@ -3484,7 +3485,7 @@ msgstr ""
 
 #: virtManager/details/details.py:681
 msgid "UEFI not found"
-msgstr "UEFI не найден."
+msgstr "UEFI не найден"
 
 #: virtManager/details/details.py:730
 msgid "Version"
@@ -3546,8 +3547,7 @@ msgstr "Необходимо указать путь инициализации"
 #: virtManager/details/details.py:1527 virtManager/device/addstorage.py:287
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
-msgstr ""
-"Диск «%(path)s» уже используется другими гостевыми системами %(names)s."
+msgstr "Диск «%(path)s» уже используется другими гостевыми системами %(names)s"
 
 #: virtManager/details/details.py:1531 virtManager/device/addstorage.py:291
 msgid "Do you really want to use the disk?"
@@ -3909,11 +3909,11 @@ msgid ""
 "The credential type %s is not supported"
 msgstr ""
 "Не удалось предоставить учётные данные серверу VNC.\n"
-"Тип учётных данных %s не поддерживается."
+"Тип учётных данных %s не поддерживается"
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "Просмотрщик GTK-VNC слишком стар"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -3925,9 +3925,9 @@ msgid "Guest agent is not available."
 msgstr "Агент гостевой системы недоступен."
 
 #: virtManager/device/addstorage.py:93
-#, python-format
+#, fuzzy, python-format
 msgid "%s available in the default location"
-msgstr "Доступно %s "
+msgstr "В локации по умолчанию доступно %s"
 
 #: virtManager/device/addstorage.py:141
 #, python-format
@@ -3940,7 +3940,7 @@ msgstr "Исправить это сейчас?"
 
 #: virtManager/device/addstorage.py:144 virtManager/device/addstorage.py:168
 msgid "Don't ask about these directories again."
-msgstr "Больше не спрашивать об этих каталогах"
+msgstr "Больше не спрашивать об этих папках."
 
 #: virtManager/device/addstorage.py:157
 msgid ""
@@ -4058,7 +4058,7 @@ msgstr "Изменения не сохранены. Сохранить их?"
 
 #: virtManager/error.py:182
 msgid "Don't warn me again."
-msgstr "Больше не спрашивать"
+msgstr "Больше не предупреждать."
 
 #: virtManager/error.py:214
 msgid "Don't ask me again"
@@ -4583,7 +4583,7 @@ msgstr "Необработанная ошибка проверки ввода: %
 #: virtManager/migrate.py:399
 #, python-format
 msgid "Migrating VM '%s'"
-msgstr "Миграция виртуальной машины «%s»..."
+msgstr "Миграция ВМ «%s»"
 
 #: virtManager/migrate.py:400
 #, python-format
@@ -4850,7 +4850,7 @@ msgstr "Виртуальная машина сохраняется"
 
 #: virtManager/vmmenu.py:191
 msgid "Saving virtual machine memory to disk "
-msgstr "Сохранение памяти виртуальной машины на диск"
+msgstr "Сохранение памяти виртуальной машины на диск "
 
 #: virtManager/vmmenu.py:200
 #, python-format
@@ -5055,7 +5055,7 @@ msgstr ""
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 "Для просмотра дополнительных параметров используйте «--option=?» или «--"
-"option help»."
+"option help»"
 
 #: virtinst/cli.py:287
 #, python-format
@@ -5082,12 +5082,12 @@ msgstr ""
 #: virtinst/cli.py:318
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
-msgstr "(чтобы переопределить, добавьте --check %s=off или --check all=off)"
+msgstr " (чтобы переопределить, добавьте --check %s=off или --check all=off)"
 
 #: virtinst/cli.py:352
 #, python-format
 msgid "This will overwrite the existing path '%s'"
-msgstr "Это переопределит путь «%s» "
+msgstr "Это переопределит существующий путь «%s»"
 
 #: virtinst/cli.py:363
 #, python-format
@@ -5308,7 +5308,7 @@ msgstr "Настроить устройство слежения для гост
 
 #: virtinst/cli.py:774
 msgid "Configure guest video hardware."
-msgstr "Настроить видеоустройства гостевой системы"
+msgstr "Настроить видеоустройства гостевой системы."
 
 #: virtinst/cli.py:777
 msgid ""
@@ -5564,7 +5564,7 @@ msgid ""
 "'%(property_name)s'"
 msgstr ""
 "Неизвестно, как установить соответствие между типом устройства "
-"«%(device_type)s» и свойством «%(property_name)s»."
+"«%(device_type)s» и свойством «%(property_name)s»"
 
 #: virtinst/cli.py:1462
 #, python-format
@@ -5686,7 +5686,7 @@ msgstr "Недопустимое имя гостевой системы: %s"
 #: virtinst/devices/disk.py:354
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
-msgstr "Необходимо указать размер несуществующего тома «%s»."
+msgstr "Необходимо указать размер несуществующего тома «%s»"
 
 #: virtinst/devices/disk.py:359
 #, python-format
@@ -5704,7 +5704,7 @@ msgstr "Атрибут формата для этого типа тома не �
 #: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
-msgstr "Для устройств «%s»  необходимо указать путь."
+msgstr "Для устройств «%s» необходимо указать путь"
 
 #: virtinst/devices/disk.py:809
 #, python-format
@@ -5725,7 +5725,7 @@ msgstr[3] "Только %(number)s диск поддерживается для 
 #: virtinst/devices/filesystem.py:121
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
-msgstr "«%s» должен содержать абсолютный путь."
+msgstr "«%s» должен содержать абсолютный путь"
 
 #: virtinst/devices/graphics.py:20
 #, python-format
@@ -5733,10 +5733,9 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s должен быть выше 5900, или -1 для автоматического размещения"
 
 #: virtinst/devices/hostdev.py:82
-#, fuzzy, python-format
-#| msgid "Don't know how to setup UEFI for arch '%s'"
+#, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
-msgstr "Неизвестно, как настроить UEFI для архитектуры «%s»"
+msgstr "Неизвестно, как сгенерировать nodedev для mdev с id типа «%s»"
 
 #: virtinst/devices/hostdev.py:88
 #, python-format
@@ -5756,7 +5755,7 @@ msgstr "%(path)s не может использоваться для хране�
 #: virtinst/diskbackend.py:288
 #, python-format
 msgid "Permissions on '%s' did not stick"
-msgstr "Не удалось изменить разрешения для «%s» "
+msgstr "Не удалось изменить разрешения для «%s»"
 
 #: virtinst/diskbackend.py:538
 msgid ""
@@ -5773,17 +5772,17 @@ msgstr "Недостаточно места для создания диска."
 #: virtinst/diskbackend.py:548
 #, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
-msgstr "Запрошено %(mem1)s МБ  > доступно %(mem2)s МБ"
+msgstr "Запрошено %(mem1)s МБ > доступно %(mem2)s МБ"
 
 #: virtinst/diskbackend.py:555
 #, python-format
 msgid "size is required for non-existent disk '%s'"
-msgstr "Для несуществующего диска «%s» необходимо определить размер."
+msgstr "Для несуществующего диска «%s» необходимо определить размер"
 
 #: virtinst/diskbackend.py:565
 #, python-format
 msgid "Cloning %(srcfile)s"
-msgstr "Клонирование %(srcfile)s..."
+msgstr "Клонирование %(srcfile)s"
 
 #: virtinst/diskbackend.py:635
 #, python-format
@@ -5793,8 +5792,7 @@ msgstr ""
 
 #: virtinst/domain/cpu.py:222
 msgid "No host CPU reported in capabilities"
-msgstr ""
-"Секция &lt;capabilities&gt; не содержит информации о процессорах хоста."
+msgstr "Секция &lt;capabilities&gt; не содержит информации о процессорах хоста"
 
 #: virtinst/domain/launch_security.py:25
 msgid "Missing mandatory attribute 'type'"
@@ -5981,10 +5979,9 @@ msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Не удалось получить файл %(url)s: %(error)s"
 
 #: virtinst/install/urlfetcher.py:106
-#, fuzzy, python-format
-#| msgid "Retrieving file %s..."
+#, python-format
 msgid "Retrieving '%(filename)s'"
-msgstr "Получение файла %s..."
+msgstr "Получение «%(filename)s»"
 
 #: virtinst/install/urlfetcher.py:279
 #, python-format
@@ -5992,10 +5989,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Не удалось открыть URL-адрес %(url)s: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
-#, fuzzy, python-format
-#| msgid "Transferring %s"
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "Передача %s..."
+msgstr "Передача «%(filename)s»"
 
 #: virtinst/nodedev.py:254
 #, python-format
@@ -6094,10 +6090,9 @@ msgstr ""
 "пространство будет выделено полностью"
 
 #: virtinst/storage.py:687
-#, fuzzy, python-format
-#| msgid "Allocating '%s'"
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "Выделение ресурсов «%s»..."
+msgstr "Выделение «%(filename)s»"
 
 #: virtinst/storage.py:727
 #, python-format
@@ -6105,8 +6100,8 @@ msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
-"Недостаточно места в пуле для создания тома (требуется %(mem1)s  МБ > "
-"доступно %(mem2)s МБ)."
+"Недостаточно места в пуле для создания тома (требуется %(mem1)s МБ > "
+"доступно %(mem2)s МБ)"
 
 #: virtinst/storage.py:734
 #, python-format
@@ -6116,7 +6111,7 @@ msgid ""
 "available)"
 msgstr ""
 "Запрошенный размер тома превысит доступное пространство в случае его полного "
-"размещения (требуется %(mem1)s МБ > доступно %(mem2)s МБ)."
+"размещения (требуется %(mem1)s МБ > доступно %(mem2)s МБ)"
 
 #: virtinst/virtclone.py:22
 msgid ""
@@ -6157,7 +6152,7 @@ msgstr "Название исходной гостевой системы для
 
 #: virtinst/virtclone.py:83
 msgid "XML file to use as the original guest."
-msgstr "XML исходной гостевой системы"
+msgstr "XML исходной гостевой системы."
 
 #: virtinst/virtclone.py:85
 msgid ""
@@ -6229,8 +6224,7 @@ msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
-"Фиксированный MAC для новой машины. По умолчанию будет выбран случайный "
-"адрес."
+"Фиксированный MAC для новой машины. По умолчанию будет выбран случайный адрес"
 
 #: virtinst/virtclone.py:122 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:419
@@ -6273,7 +6267,7 @@ msgstr ""
 #: virtinst/virtinstall.py:127
 msgid "Cannot specify storage and use --nodisks"
 msgstr ""
-"При настройке пространства данных необходимо отключить параметр --nodisks."
+"При настройке пространства данных необходимо отключить параметр --nodisks"
 
 #: virtinst/virtinstall.py:131
 msgid ""
@@ -6484,7 +6478,7 @@ msgstr "Установка домена прервана."
 
 #: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
-msgstr "Пробный прогон завершен успешно."
+msgstr "Пробный прогон завершен успешно"
 
 #: virtinst/virtinstall.py:921
 #, python-format
@@ -6493,7 +6487,7 @@ msgstr "Неизвестный запрос шага XML «%s», должно б
 
 #: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
-msgstr "Отсутствует XML второго этапа установки."
+msgstr "Отсутствует XML второго этапа установки"
 
 #: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
@@ -6572,11 +6566,11 @@ msgstr "Параметры платформы виртуализации"
 
 #: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
-msgstr "Эта гостевая система должна быть полностью виртуализированной."
+msgstr "Эта гостевая система должна быть полностью виртуализированной"
 
 #: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
-msgstr "Эта гостевая система должна быть паравиртуализированной."
+msgstr "Эта гостевая система должна быть паравиртуализированной"
 
 #: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
@@ -6596,7 +6590,7 @@ msgstr "Имитируемый тип компьютера"
 
 #: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
-msgstr "Запускать домен автоматически при запуске хоста"
+msgstr "Запускать домен автоматически при запуске хоста."
 
 #: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
@@ -6609,7 +6603,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
-msgstr "Время ожидания завершения установки (в минутах)"
+msgstr "Время ожидания завершения установки (в минутах)."
 
 #: virtinst/virtxml.py:36
 msgid "Please enter 'yes' or 'no'."
@@ -6678,7 +6672,7 @@ msgid ""
 "'--edit'"
 msgstr ""
 "«--edit %(option)s» не имеет смысла вместе с --%(objecttype)s. Используйте "
-"«--edit» без дополнительных аргументов. "
+"«--edit» без дополнительных аргументов"
 
 #: virtinst/virtxml.py:158
 msgid "--os-variant is not supported with --edit"
@@ -6701,7 +6695,7 @@ msgstr "--os-variant нельзя использовать, если испол�
 #: virtinst/virtxml.py:199
 #, python-format
 msgid "--build-xml not supported for --%s"
-msgstr " --%s не поддерживает --build-xml"
+msgstr "--%s не поддерживает --build-xml"
 
 #: virtinst/virtxml.py:202
 msgid "--os-variant is not supported with --build-xml"
@@ -6851,8 +6845,6 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
-"Output built device XML. Domain is optional but recommended to ensure "
-"optimal defaults."
 
 #: virtinst/virtxml.py:383
 msgid "Output options"
@@ -6911,7 +6903,7 @@ msgstr "--update не может использоваться со станда�
 
 #: virtinst/virtxml.py:452
 msgid "A domain must be specified"
-msgstr "Необходимо указать домен."
+msgstr "Необходимо указать домен"
 
 #: virtinst/virtxml.py:480
 #, python-format
