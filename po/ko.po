@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-10-05 06:14+0000\n"
+"POT-Creation-Date: 2021-10-13 06:14+0000\n"
 "PO-Revision-Date: 2021-09-06 14:05+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
@@ -5654,7 +5654,7 @@ msgstr "mdev 유형 id '%s'에 노드 장치를 발생하는 방법을 알 수 �
 msgid "Unknown node device type %s"
 msgstr "알 수 없는 노드 장치 유형 %s"
 
-#: virtinst/devices/interface.py:171
+#: virtinst/devices/interface.py:189
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "MAC 주소 '%s'이(가) 다른 가상 머신에서 사용 중입니다."
@@ -6122,7 +6122,7 @@ msgstr ""
 "복제 게스트의 새로운 고정 MAC 주소입니다. 기본 값은 임의로 생성된 MAC입니다"
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1052
-#: virtinst/virtxml.py:417
+#: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "기타 옵션"
 
@@ -6480,21 +6480,21 @@ msgstr "콘솔이 닫혀 질 때에 도메인을 종료를 강제합니다."
 msgid "Minutes to wait for install to complete."
 msgstr "설치가 완료될 때까지 대기하는 시간입니다."
 
-#: virtinst/virtxml.py:34
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "'예' 또는 '아니요'를 입력하십시오."
 
-#: virtinst/virtxml.py:79
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "잘못된 --edit 옵션 '%s'"
 
-#: virtinst/virtxml.py:82
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr "XML에서 --%s 개체를 찾을 수 없음"
 
-#: virtinst/virtxml.py:85
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6505,31 +6505,31 @@ msgid_plural ""
 msgstr[0] ""
 "'--edit %(number)s'가 요청되었지만 XML에 %(max)s --%(type)s 개체만 있습니다"
 
-#: virtinst/virtxml.py:106
+#: virtinst/virtxml.py:107
 #, python-format
 msgid "No matching objects found for %s"
 msgstr "%s를 일치하는 개체가 없음"
 
-#: virtinst/virtxml.py:122
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s 중 하나를 지정해야 합니다."
 
-#: virtinst/virtxml.py:125
+#: virtinst/virtxml.py:126
 #, python-format
 msgid "Conflicting options %s"
 msgstr "충돌하는 옵션 %s"
 
-#: virtinst/virtxml.py:136
+#: virtinst/virtxml.py:137
 msgid "No change specified."
 msgstr "변경이 지정되지 않았습니다."
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:139
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "하나의 변경 조작만 지정 할 수 있습니다. (충돌하는 옵션 %s)"
 
-#: virtinst/virtxml.py:151
+#: virtinst/virtxml.py:152
 #, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
@@ -6538,59 +6538,59 @@ msgstr ""
 "'--edit%(option)s''는 --%(objecttype)s과 함께 사용 할 수 없습니다. 빈 '--"
 "edit'만 사용하십시오"
 
-#: virtinst/virtxml.py:156
+#: virtinst/virtxml.py:157
 msgid "--os-variant is not supported with --edit"
 msgstr "--os- variant는 --edit와 함께 지원하지 않습니다"
 
-#: virtinst/virtxml.py:163
+#: virtinst/virtxml.py:164
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device는 --%s과(와) 사용할 수 없음"
 
-#: virtinst/virtxml.py:174
+#: virtinst/virtxml.py:181
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device를 --%s과(와) 사용할 수 없음"
 
-#: virtinst/virtxml.py:177
+#: virtinst/virtxml.py:184
 msgid "--os-variant is not supported with --remove-device"
 msgstr "--os-variant는 --remove-device와 함께 지원하지 않습니다"
 
-#: virtinst/virtxml.py:197
+#: virtinst/virtxml.py:204
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml은 --%s에 지원되지 않음"
 
-#: virtinst/virtxml.py:200
+#: virtinst/virtxml.py:207
 msgid "--os-variant is not supported with --build-xml"
 msgstr "--os-variant는 --build-xml과 함께 지원하지 않습니다"
 
-#: virtinst/virtxml.py:226
+#: virtinst/virtxml.py:233
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "변경된 XML을 사용하여 '%s'을(를) 정의합니까?"
 
-#: virtinst/virtxml.py:234
+#: virtinst/virtxml.py:241
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "'%s' 도메인이 성공적으로 정의되었습니다."
 
-#: virtinst/virtxml.py:241
+#: virtinst/virtxml.py:248
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "변경된 XML과 함께 '%s'를 시작할까요?"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:535
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "도메인'%(domain)s': %(error)s 시작 중 오류가 발생하였습니다"
 
-#: virtinst/virtxml.py:256 virtinst/virtxml.py:539
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "도메인 '%s' 시작이 성공했습니다."
 
-#: virtinst/virtxml.py:262
+#: virtinst/virtxml.py:269
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6601,16 +6601,16 @@ msgstr ""
 "\n"
 "이 장치를 게스트 '%(domain)s'에 핫플러그 할까요?"
 
-#: virtinst/virtxml.py:264
+#: virtinst/virtxml.py:271
 msgid "Device hotplug successful."
 msgstr "장치 핫플러그 성공."
 
-#: virtinst/virtxml.py:265
+#: virtinst/virtxml.py:272
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "핫플러그 장치를 시도 중 오류 발생: %(error)s"
 
-#: virtinst/virtxml.py:267
+#: virtinst/virtxml.py:274
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6621,16 +6621,16 @@ msgstr ""
 "\n"
 "이 장치를 게스트 '%(domain)s'에서 핫언플러그 할까요?"
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:276
 msgid "Device hotunplug successful."
 msgstr "장치 핫언플러그 성공."
 
-#: virtinst/virtxml.py:270
+#: virtinst/virtxml.py:277
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "핫언플러그 장치 시도 중 오류 발생: %(error)s"
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:279
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6641,36 +6641,36 @@ msgstr ""
 "\n"
 "이 장치를 게스트'%(domain)s'를 위하여 최신화 할까요?"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:281
 msgid "Device update successful."
 msgstr "장치 최신화 성공."
 
-#: virtinst/virtxml.py:275
+#: virtinst/virtxml.py:282
 #, python-format
 msgid "Error attempting device update: %(error)s"
 msgstr "장치 최신화 시도 중 오류 발생: %(error)s"
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:327
 msgid "--xml can only be used with --edit"
 msgstr "--xml은 --edit와 함께만 사용 될 수 있습니다"
 
-#: virtinst/virtxml.py:335
+#: virtinst/virtxml.py:349
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr "XMLdiff가 발생 될 수 없습니다. 요청된 변경은 효력을 갖지 않습니다."
 
-#: virtinst/virtxml.py:354
+#: virtinst/virtxml.py:368
 msgid "Edit libvirt XML using command line options."
 msgstr "명령줄 옵션을 사용하여 libvirt XML을 편집하십시오."
 
-#: virtinst/virtxml.py:360
+#: virtinst/virtxml.py:374
 msgid "Domain name, id, or uuid"
 msgstr "도메인 이름, ID 또는 UUID"
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:376
 msgid "XML actions"
 msgstr "XML 조치"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:378
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6684,7 +6684,7 @@ msgstr ""
 "--edit all --disk ... (모든 디스크 장치 편집)\n"
 "--edit target=hda --disk ... ('hda' 디스크 편집)\n"
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:384
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6696,7 +6696,7 @@ msgstr ""
 "--remove-device --disk all (모든 디스크 제거)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:389
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6704,7 +6704,7 @@ msgstr ""
 "지정된 장치를 추가합니다. 예:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:378
+#: virtinst/virtxml.py:392
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -6712,11 +6712,11 @@ msgstr ""
 "구성(built)된 장치 XML 출력. 도메인은 선택적이지만 최적화 기본 설정을 보장하"
 "기 위하여 추천됩니다."
 
-#: virtinst/virtxml.py:381
+#: virtinst/virtxml.py:395
 msgid "Output options"
 msgstr "출력 옵션"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:397
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6728,61 +6728,61 @@ msgstr ""
 "--remove-device를 사용하면 hotunplug 조작입니다.\n"
 "--edit를 사용하면 장치 업데이트 조작입니다."
 
-#: virtinst/virtxml.py:389
+#: virtinst/virtxml.py:403
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr "도메인을 강제 정의합니다. --print 옵션이 지정된 경우에만 필요합니다."
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:406
 msgid "Force not defining the domain."
 msgstr "도메인 정의하지 않기를 강제합니다."
 
-#: virtinst/virtxml.py:395
+#: virtinst/virtxml.py:409
 msgid "Start the domain."
 msgstr "도메인 시작."
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:411
 msgid "Only print the requested change, in diff format"
 msgstr "요청된 변경만 diff 형식으로 인쇄합니다"
 
-#: virtinst/virtxml.py:399
+#: virtinst/virtxml.py:413
 msgid "Only print the requested change, in full XML format"
 msgstr "요청된 변경만 전체 XML 형식으로 인쇄합니다"
 
-#: virtinst/virtxml.py:401
+#: virtinst/virtxml.py:415
 msgid "Require confirmation before saving any results."
 msgstr "결과를 저장하기 전에 확인해야 합니다."
 
-#: virtinst/virtxml.py:405
+#: virtinst/virtxml.py:419
 msgid "XML options"
 msgstr "XML 옵션"
 
-#: virtinst/virtxml.py:445
+#: virtinst/virtxml.py:459
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin 입력과 함께 --confirm을 사용할 수 없습니다."
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:461
 msgid "Can't use --update with stdin input."
 msgstr "Stdin 입력과 함께 --update를 사용할 수 없습니다."
 
-#: virtinst/virtxml.py:450
+#: virtinst/virtxml.py:464
 msgid "A domain must be specified"
 msgstr "도메인을 지정해야 합니다"
 
-#: virtinst/virtxml.py:478
+#: virtinst/virtxml.py:492
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s의 --update 방법을 알 수 없습니다"
 
-#: virtinst/virtxml.py:511
+#: virtinst/virtxml.py:526
 msgid "The VM is not running, --update is inapplicable."
 msgstr "VM이 동작하지 않아서, --update는 적용 할 수 없습니다."
 
-#: virtinst/virtxml.py:544
+#: virtinst/virtxml.py:559
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "변경은 도메인이 완전히 종료된 이후에 영향을 줄 것입니다."
 
-#: virtinst/virtxml.py:546
+#: virtinst/virtxml.py:561
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6790,7 +6790,7 @@ msgstr ""
 "XML은 도메인 정의 후에 변경하지 않습니다. libvirt가 기본적으로 설정되어진 변"
 "경 값을 가질 것입니다."
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:574
 msgid "Aborted at user request"
 msgstr "사용자 요청에 따라 중단되었습니다"
 
