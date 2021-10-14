@@ -25,13 +25,14 @@
 # Jan Nerad <neradj@gmail.com>, 2020.
 # Chris Wehrli <christian.wehrli@gmx.ch>, 2021.
 # Ettore Atalan <atalanttore@googlemail.com>, 2021.
+# Christian Wehrli <christian@chw.onl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-08-01 06:14+0000\n"
-"PO-Revision-Date: 2021-08-21 16:32+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2021-08-26 18:04+0000\n"
+"Last-Translator: Christian Wehrli <christian@chw.onl>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/de/>\n"
 "Language: de\n"
@@ -261,7 +262,7 @@ msgstr "Bitte warten Sie einen Augenblick ..."
 
 #: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
 msgid "Processing..."
-msgstr "In Bearbeitung …"
+msgstr "In Bearbeitung..."
 
 #: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
@@ -289,7 +290,7 @@ msgstr "Speicher:"
 
 #: ui/clone.ui:285
 msgid "_Details..."
-msgstr "_Details …"
+msgstr "_Details..."
 
 #: ui/clone.ui:354
 msgid ""
@@ -298,8 +299,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>Klonen <u>not</u> ändert die Inhalte des Gast-"
-"Betriebssystems. Wenn Sie z.B.\n"
+"<span size='small'>Klonen ändert die Inhalte des Gast-Betriebssystems "
+"<u>nicht</u>. Wenn Sie z. B.\n"
 "Passwort oder statische IPs ändern müssen, gehen Sie zum virt-sysprep(1) "
 "tool.</span>"
 
@@ -325,7 +326,7 @@ msgstr "Pfad:"
 
 #: ui/clone.ui:640
 msgid "Existing disk"
-msgstr "Vorhandene Platte"
+msgstr "Vorhandener Datenträger"
 
 #: ui/clone.ui:671
 msgid "New _Path:"
@@ -333,11 +334,11 @@ msgstr "Neuer _Pfad:"
 
 #: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
-msgstr "Neue Platte erzeugen (k_lonen) für die virtuelle Maschine"
+msgstr "Neuen Datenträger erzeugen (k_lonen) für die virtuelle Maschine"
 
 #: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:63
 msgid "_Browse..."
-msgstr "_Durchsuchen ..."
+msgstr "_Durchsuchen..."
 
 #: ui/console.ui:21 ui/console.ui:267
 msgid "<b>The console is currently unavailable</b>"
@@ -365,7 +366,9 @@ msgstr "Dieses Passwort in Ihrem Schlüsselbund _speichern"
 
 #: ui/console.ui:196
 msgid "Check to save password, uncheck to forget password."
-msgstr "Auswählen um Passwort zu speichern, abwählen um Passwort zu vergessen."
+msgstr ""
+"Auswählen, um das Passwort zu speichern, abwählen, um das Passwort zu "
+"vergessen."
 
 #: ui/console.ui:292
 msgid "_Connect to console"
@@ -385,7 +388,7 @@ msgstr "_Hypervisor:"
 
 #: ui/createconn.ui:122
 msgid "Connect to _remote host over SSH"
-msgstr ""
+msgstr "Mit dem entfe_rnten Rechner über SSH verbinden"
 
 #: ui/createconn.ui:141
 msgid "_Autoconnect:"
@@ -409,7 +412,7 @@ msgstr ""
 
 #: ui/createconn.ui:267
 msgid "Cu_stom URI:"
-msgstr ""
+msgstr "Benutzerdefinierte URL:"
 
 #: ui/createconn.ui:316
 msgid "Generated URI:"
@@ -477,7 +480,7 @@ msgstr "Netz_werkname verwenden"
 
 #: ui/createnet.ui:765
 msgid "Cust_om"
-msgstr ""
+msgstr "Benutzerdefiniert"
 
 #: ui/createnet.ui:786
 msgid "<b>DNS domain name</b>"
@@ -610,7 +613,7 @@ msgstr "ISO"
 
 #: ui/createvm.ui:879
 msgid "Provide the operating system install U_RL:"
-msgstr ""
+msgstr "Geben Sie die U_RL für die Betriebssysteminstallation ein:"
 
 #: ui/createvm.ui:944
 msgid "Kerne_l options:"
@@ -641,6 +644,8 @@ msgid ""
 "<small>Kernel/initrd settings can be configured with 'Customize before "
 "install' on the final page.</small>"
 msgstr ""
+"<small>Kernel/initrd-Einstellungen können mit 'Customize before install' auf "
+"der finalen Seite konfiguriert werden.</small>"
 
 #: ui/createvm.ui:1199
 msgid "Provide the _application path:"
@@ -657,6 +662,10 @@ msgid ""
 "please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
 "\">virt-bootstrap</a></small>"
 msgstr ""
+"<small>Das Betriebssystembasisverzeichnis muss bereits vorhanden sein. Um "
+"die Erstellung des Betriebssytembasisverzeichnis zu aktivieren, installieren "
+"Sie <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
+"bootstrap</a></small>"
 
 #: ui/createvm.ui:1401
 msgid ""
@@ -664,6 +673,10 @@ msgid ""
 "tree for remote\n"
 "connections is not yet supported.</small>"
 msgstr ""
+"<small>Das Betriebssystembasisverzeichnis muss bereits vorhanden sein. Die "
+"Erstellung von entfernten \n"
+"Verbindungen für Betriebssystemverzeichnisse wird noch nicht "
+"unterstützt.</small>"
 
 #: ui/createvm.ui:1420
 msgid "Create OS directory tree from container image"
@@ -671,7 +684,7 @@ msgstr "BS-Verzeichnisbaum aus Container-Abbild erstellen"
 
 #: ui/createvm.ui:1450
 msgid "Source URI:"
-msgstr ""
+msgstr "Ausgangs-URI:"
 
 #: ui/createvm.ui:1466
 msgid ""
@@ -687,7 +700,7 @@ msgstr ""
 
 #: ui/createvm.ui:1493
 msgid "Do not verify TLS certificates of registry"
-msgstr ""
+msgstr "Die TLS-Zertifikate der Registry nicht verifizieren"
 
 #: ui/createvm.ui:1519
 msgid "Username:"
