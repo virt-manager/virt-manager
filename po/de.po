@@ -23,21 +23,24 @@
 # Michael Weiser <michael.weiser@gmx.de>, 2020. #zanata
 # Samuel Heinzmann <samuel.heinzmann@bluewin.ch>, 2020.
 # Jan Nerad <neradj@gmail.com>, 2020.
+# Chris Wehrli <christian.wehrli@gmx.ch>, 2021.
+# Ettore Atalan <atalanttore@googlemail.com>, 2021.
+# Christian Wehrli <christian@chw.onl>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-08-01 06:14+0000\n"
-"PO-Revision-Date: 2020-10-23 16:15+0000\n"
-"Last-Translator: Jan Nerad <neradj@gmail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"PO-Revision-Date: 2021-08-26 18:04+0000\n"
+"Last-Translator: Christian Wehrli <christian@chw.onl>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1\n"
+"X-Generator: Weblate 4.8\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -77,7 +80,7 @@ msgstr "Grafische Konsole der virtuellen Maschine"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
-msgstr "Virtuellen Maschinen verwalten"
+msgstr "Virtuelle Maschinen verwalten"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -162,7 +165,7 @@ msgstr "_Auto Socket:"
 
 #: ui/addhardware.ui:865
 msgid "_Channel:"
-msgstr "_Channel:"
+msgstr "_Kanal:"
 
 #: ui/addhardware.ui:1013 ui/details.ui:3810
 msgid "Ac_tion:"
@@ -199,7 +202,7 @@ msgstr "_Fertig"
 
 #: ui/addstorage.ui:33
 msgid "C_reate a disk image for the virtual machine"
-msgstr "_Datenträger Image für die virtuelle Maschine erstellen"
+msgstr "_Datenträger-Image für die virtuelle Maschine erstellen"
 
 #: ui/addstorage.ui:66
 msgid "0.0"
@@ -223,11 +226,11 @@ msgstr "_Puffermodus:"
 
 #: ui/addstorage.ui:290
 msgid "Discard mod_e:"
-msgstr ""
+msgstr "Mod_e verwerfen:"
 
 #: ui/addstorage.ui:321
 msgid "Detect _zeroes:"
-msgstr ""
+msgstr "_Nullen erkennen:"
 
 #: ui/addstorage.ui:352
 msgid "R_eadonly:"
@@ -242,10 +245,8 @@ msgid "Removab_le:"
 msgstr "_Entfernbar:"
 
 #: ui/addstorage.ui:435
-#, fuzzy
-#| msgid "Serial"
 msgid "Seria_l:"
-msgstr "Seriell"
+msgstr "Serie_ll:"
 
 #: ui/addstorage.ui:461
 msgid "Advanced _options"
@@ -261,7 +262,7 @@ msgstr "Bitte warten Sie einen Augenblick ..."
 
 #: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
 msgid "Processing..."
-msgstr "In Bearbeitung …"
+msgstr "In Bearbeitung..."
 
 #: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
@@ -280,18 +281,16 @@ msgid "Original VM:"
 msgstr "Originale VM:"
 
 #: ui/clone.ui:139
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
-msgstr "_Verbindung:"
+msgstr "Verbindung:"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
 msgid "Storage:"
-msgstr ""
+msgstr "Speicher:"
 
 #: ui/clone.ui:285
 msgid "_Details..."
-msgstr "_Details …"
+msgstr "_Details..."
 
 #: ui/clone.ui:354
 msgid ""
@@ -300,8 +299,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>Klonen <u>not</u> ändert die Inhalte des Gast-"
-"Betriebssystems. Wenn Sie z.B.\n"
+"<span size='small'>Klonen ändert die Inhalte des Gast-Betriebssystems "
+"<u>nicht</u>. Wenn Sie z. B.\n"
 "Passwort oder statische IPs ändern müssen, gehen Sie zum virt-sysprep(1) "
 "tool.</span>"
 
@@ -319,7 +318,7 @@ msgstr "Größe:"
 
 #: ui/clone.ui:601
 msgid "Target:"
-msgstr ""
+msgstr "Ziel:"
 
 #: ui/clone.ui:618 ui/details.ui:4386
 msgid "Path:"
@@ -327,19 +326,19 @@ msgstr "Pfad:"
 
 #: ui/clone.ui:640
 msgid "Existing disk"
-msgstr "Vorhandene Platte"
+msgstr "Vorhandener Datenträger"
 
 #: ui/clone.ui:671
 msgid "New _Path:"
-msgstr ""
+msgstr "Neuer _Pfad:"
 
 #: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
-msgstr "Neue Platte erzeugen (k_lonen) für die virtuelle Maschine"
+msgstr "Neuen Datenträger erzeugen (k_lonen) für die virtuelle Maschine"
 
 #: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:63
 msgid "_Browse..."
-msgstr "_Durchsuchen ..."
+msgstr "_Durchsuchen..."
 
 #: ui/console.ui:21 ui/console.ui:267
 msgid "<b>The console is currently unavailable</b>"
@@ -367,7 +366,9 @@ msgstr "Dieses Passwort in Ihrem Schlüsselbund _speichern"
 
 #: ui/console.ui:196
 msgid "Check to save password, uncheck to forget password."
-msgstr "Auswählen um Passwort zu speichern, abwählen um Passwort zu vergessen."
+msgstr ""
+"Auswählen, um das Passwort zu speichern, abwählen, um das Passwort zu "
+"vergessen."
 
 #: ui/console.ui:292
 msgid "_Connect to console"
@@ -387,7 +388,7 @@ msgstr "_Hypervisor:"
 
 #: ui/createconn.ui:122
 msgid "Connect to _remote host over SSH"
-msgstr ""
+msgstr "Mit dem entfe_rnten Rechner über SSH verbinden"
 
 #: ui/createconn.ui:141
 msgid "_Autoconnect:"
@@ -411,7 +412,7 @@ msgstr ""
 
 #: ui/createconn.ui:267
 msgid "Cu_stom URI:"
-msgstr ""
+msgstr "Benutzerdefinierte URL:"
 
 #: ui/createconn.ui:316
 msgid "Generated URI:"
@@ -427,19 +428,19 @@ msgstr "<span size='large'>Erstelle virtuelles Netzwerk</span>"
 
 #: ui/createnet.ui:156
 msgid "Fo_rward to:"
-msgstr ""
+msgstr "Weite_rleiten nach:"
 
 #: ui/createnet.ui:170
 msgid "Device _List:"
-msgstr ""
+msgstr "Geräte_liste:"
 
 #: ui/createnet.ui:248
 msgid "De_vice:"
-msgstr ""
+msgstr "Ge_rät:"
 
 #: ui/createnet.ui:291
 msgid "_Enable IPv4"
-msgstr ""
+msgstr "IPv4 _aktivieren"
 
 #: ui/createnet.ui:334 ui/createnet.ui:552
 msgid "_Network:"
@@ -463,7 +464,7 @@ msgstr "<b>IPv_4 Konfiguration</b>"
 
 #: ui/createnet.ui:509
 msgid "_Enable IPv6"
-msgstr ""
+msgstr "IPv6 _aktivieren"
 
 #: ui/createnet.ui:663
 msgid "Enable DHCPv6"
@@ -475,11 +476,11 @@ msgstr "<b>IPv_6 Konfiguration</b>"
 
 #: ui/createnet.ui:747
 msgid "Use net_work name"
-msgstr ""
+msgstr "Netz_werkname verwenden"
 
 #: ui/createnet.ui:765
 msgid "Cust_om"
-msgstr ""
+msgstr "Benutzerdefiniert"
 
 #: ui/createnet.ui:786
 msgid "<b>DNS domain name</b>"
@@ -495,7 +496,7 @@ msgstr "<span size='large'>Erstelle Speicherpool</span>"
 
 #: ui/createpool.ui:148
 msgid "Tar_get Path:"
-msgstr ""
+msgstr "_Zielpfad:"
 
 #: ui/createpool.ui:161 ui/createvol.ui:203
 msgid "F_ormat:"
@@ -523,7 +524,7 @@ msgstr "Neue VM"
 
 #: ui/createvm.ui:71
 msgid "<span size='large'>Create a new virtual machine</span>"
-msgstr ""
+msgstr "<span size='large'>Eine neue virtuelle Maschine erstellen</span>"
 
 #: ui/createvm.ui:173
 msgid "Choose virtualization type"
@@ -531,11 +532,11 @@ msgstr "Virtualisierungstyp auswählen"
 
 #: ui/createvm.ui:194
 msgid "_Virtual machine"
-msgstr ""
+msgstr "_Virtuelle Maschine"
 
 #: ui/createvm.ui:212
 msgid "_Container"
-msgstr ""
+msgstr "_Container"
 
 #: ui/createvm.ui:255
 msgid "Choose how you would like to install the operating system"
@@ -547,7 +548,7 @@ msgstr "_Lokales Installationsmedium (ISO-Abbild oder CDROM)"
 
 #: ui/createvm.ui:294
 msgid "Network _Install (HTTP, HTTPS, or FTP)"
-msgstr ""
+msgstr "Netzwerk_installation (HTTP, HTTPS oder FTP)"
 
 #: ui/createvm.ui:312
 msgid "Import _existing disk image"
@@ -555,7 +556,7 @@ msgstr "_Vorhandenes Festplatten-Abbild importieren"
 
 #: ui/createvm.ui:330
 msgid "Ma_nual install"
-msgstr ""
+msgstr "Ma_nuelle Installation"
 
 #: ui/createvm.ui:372
 msgid "Choose the container type"
@@ -600,7 +601,7 @@ msgstr "Name"
 
 #: ui/createvm.ui:801
 msgid "Choose _ISO or CDROM install media:"
-msgstr ""
+msgstr "_ISO oder CDROM-Installationsmedium auswählen:"
 
 #: ui/createvm.ui:831
 msgid "Bro_wse..."
@@ -612,7 +613,7 @@ msgstr "ISO"
 
 #: ui/createvm.ui:879
 msgid "Provide the operating system install U_RL:"
-msgstr ""
+msgstr "Geben Sie die U_RL für die Betriebssysteminstallation ein:"
 
 #: ui/createvm.ui:944
 msgid "Kerne_l options:"
@@ -643,6 +644,8 @@ msgid ""
 "<small>Kernel/initrd settings can be configured with 'Customize before "
 "install' on the final page.</small>"
 msgstr ""
+"<small>Kernel/initrd-Einstellungen können mit 'Customize before install' auf "
+"der finalen Seite konfiguriert werden.</small>"
 
 #: ui/createvm.ui:1199
 msgid "Provide the _application path:"
@@ -659,6 +662,10 @@ msgid ""
 "please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
 "\">virt-bootstrap</a></small>"
 msgstr ""
+"<small>Das Betriebssystembasisverzeichnis muss bereits vorhanden sein. Um "
+"die Erstellung des Betriebssytembasisverzeichnis zu aktivieren, installieren "
+"Sie <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
+"bootstrap</a></small>"
 
 #: ui/createvm.ui:1401
 msgid ""
@@ -666,14 +673,18 @@ msgid ""
 "tree for remote\n"
 "connections is not yet supported.</small>"
 msgstr ""
+"<small>Das Betriebssystembasisverzeichnis muss bereits vorhanden sein. Die "
+"Erstellung von entfernten \n"
+"Verbindungen für Betriebssystemverzeichnisse wird noch nicht "
+"unterstützt.</small>"
 
 #: ui/createvm.ui:1420
 msgid "Create OS directory tree from container image"
-msgstr ""
+msgstr "BS-Verzeichnisbaum aus Container-Abbild erstellen"
 
 #: ui/createvm.ui:1450
 msgid "Source URI:"
-msgstr ""
+msgstr "Ausgangs-URI:"
 
 #: ui/createvm.ui:1466
 msgid ""
@@ -682,22 +693,27 @@ msgid ""
 " * docker://registry:port/image:tag\n"
 " * virt-builder://template\n"
 msgstr ""
+"Mögliche URL-Formate:\n"
+" * file:///path/to/rootfs.tar\n"
+" * docker://registry:port/image:tag\n"
+" * virt-builder://template\n"
 
 #: ui/createvm.ui:1493
 msgid "Do not verify TLS certificates of registry"
-msgstr ""
+msgstr "Die TLS-Zertifikate der Registry nicht verifizieren"
 
 #: ui/createvm.ui:1519
 msgid "Username:"
-msgstr ""
+msgstr "Benutzername:"
 
 #: ui/createvm.ui:1530
 msgid "Password:"
-msgstr ""
+msgstr "Passwort:"
 
 #: ui/createvm.ui:1576
+#, fuzzy
 msgid "Credentials for accessing the source registry"
-msgstr ""
+msgstr "Zugangsdaten für den Zugriff auf die Quellregistrierung"
 
 #: ui/createvm.ui:1603
 msgid "Root password:"
@@ -705,11 +721,11 @@ msgstr ""
 
 #: ui/createvm.ui:1670
 msgid "Select _container template:"
-msgstr ""
+msgstr "_Containervorlage auswählen:"
 
 #: ui/createvm.ui:1713
 msgid "VZ templates"
-msgstr ""
+msgstr "VZ-Vorlagen"
 
 #: ui/createvm.ui:1738
 msgid "C_hoose the operating system you are installing:"
@@ -725,11 +741,11 @@ msgstr "Installation"
 
 #: ui/createvm.ui:1840
 msgid "Choose Memory and CPU settings:"
-msgstr ""
+msgstr "Speicher- und CPU-Einstellungen auswählen:"
 
 #: ui/createvm.ui:1861
 msgid "_Memory:"
-msgstr ""
+msgstr "_Speicher:"
 
 #: ui/createvm.ui:1876
 msgid "C_PUs:"
@@ -770,11 +786,11 @@ msgstr "Speicher:"
 
 #: ui/createvm.ui:2224
 msgid "CPUs:"
-msgstr ""
+msgstr "CPUs:"
 
 #: ui/createvm.ui:2258
 msgid "OS:"
-msgstr ""
+msgstr "BS:"
 
 #: ui/createvm.ui:2387
 msgid "N_etwork selection"
@@ -811,10 +827,8 @@ msgid "GiB"
 msgstr "GiB"
 
 #: ui/createvol.ui:322
-#, fuzzy
-#| msgid "Max Ca_pacity:"
 msgid "Ca_pacity:"
-msgstr "Max. Ka_pazität:"
+msgstr "Ka_pazität:"
 
 #: ui/createvol.ui:333
 #, fuzzy
@@ -824,7 +838,7 @@ msgstr "Verzeichnisdatenträger lokalisieren"
 
 #: ui/createvol.ui:388
 msgid "Pa_th:"
-msgstr ""
+msgstr "Pfa_d:"
 
 #: ui/createvol.ui:435
 #, fuzzy
@@ -898,7 +912,7 @@ msgstr "_Chipsatz:"
 
 #: ui/details.ui:501
 msgid "Firm_ware:"
-msgstr ""
+msgstr "Firm_ware:"
 
 #: ui/details.ui:656
 msgid "<b>Hypervisor Details</b>"
@@ -906,7 +920,7 @@ msgstr "<b>Hypervisor-Details</b>"
 
 #: ui/details.ui:730
 msgid "<b>Operating Sys_tem</b>"
-msgstr ""
+msgstr "<b>Betriebssys_tem</b>"
 
 #: ui/details.ui:780
 msgid "<b>Applications</b>"
@@ -941,14 +955,12 @@ msgid "Logical host CPUs:"
 msgstr "Logische Rechner-CPUs:"
 
 #: ui/details.ui:1246
-#, fuzzy
-#| msgid "_Allocation:"
 msgid "vCPU a_llocation:"
-msgstr "_Zuweisung:"
+msgstr "vCPU-_Zuweisung:"
 
 #: ui/details.ui:1263
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: ui/details.ui:1304
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
@@ -970,7 +982,7 @@ msgstr "Die _CPU-Konfiguration vom Wirt kopieren"
 
 #: ui/details.ui:1423
 msgid "Enable available CPU security flaw mitigations"
-msgstr ""
+msgstr "Verfügbare Abhilfemaßnahmen für CPU-Sicherheitslücken aktivieren"
 
 #: ui/details.ui:1444
 msgid "<b>Configu_ration</b>"
@@ -994,23 +1006,19 @@ msgstr "Socke_ts:"
 
 #: ui/details.ui:1545 ui/details.ui:1563 ui/details.ui:1581
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: ui/details.ui:1606
 msgid "<b>To_pology</b>"
 msgstr "<b>N_etzstruktur</b>"
 
 #: ui/details.ui:1669
-#, fuzzy
-#| msgid "_Allocation:"
 msgid "Current a_llocation:"
-msgstr "_Zuweisung:"
+msgstr "Aktuelle _Zuweisung:"
 
 #: ui/details.ui:1684
-#, fuzzy
-#| msgid "_Allocation:"
 msgid "Ma_ximum allocation:"
-msgstr "_Zuweisung:"
+msgstr "Ma_ximale Zuweisung:"
 
 #: ui/details.ui:1699
 msgid "Total host memory:"
@@ -1018,7 +1026,7 @@ msgstr "Gesamter Host-Speicher:"
 
 #: ui/details.ui:1732 ui/details.ui:1781
 msgid "50"
-msgstr ""
+msgstr "50"
 
 #: ui/details.ui:1756 ui/details.ui:1805 ui/fsdetails.ui:204
 msgid "MiB"
@@ -1070,7 +1078,7 @@ msgstr "Kernel Ar_gumente:"
 
 #: ui/details.ui:2197
 msgid "D_TB path:"
-msgstr ""
+msgstr "D_TB-Pfad:"
 
 #: ui/details.ui:2273
 msgid "<b>Dir_ect kernel boot</b>"
@@ -1094,7 +1102,7 @@ msgstr ""
 
 #: ui/details.ui:2594
 msgid "_Browse"
-msgstr ""
+msgstr "_Durchsuchen"
 
 #: ui/details.ui:2625 ui/details.ui:3344
 msgid "Device type:"
@@ -1118,7 +1126,7 @@ msgstr ""
 
 #: ui/details.ui:2932
 msgid "active"
-msgstr ""
+msgstr "aktiv"
 
 #: ui/details.ui:2954 ui/hoststorage.ui:446 ui/snapshots.ui:219
 msgid "label"
@@ -1126,7 +1134,7 @@ msgstr "Label"
 
 #: ui/details.ui:2996
 msgid "I_P address:"
-msgstr ""
+msgstr "I_P-Adresse:"
 
 #: ui/details.ui:3013
 msgid "<b>Virtual Network Interface</b>"
@@ -1153,19 +1161,19 @@ msgstr "<b>Klanggerät</b>"
 #, fuzzy
 #| msgid "label"
 msgid "label506"
-msgstr "Label"
+msgstr "label506"
 
 #: ui/details.ui:3369 ui/details.ui:3406
 #, fuzzy
 #| msgid "label"
 msgid "label508"
-msgstr "Label"
+msgstr "label508"
 
 #: ui/details.ui:3419
 #, fuzzy
 #| msgid "label"
 msgid "label507"
-msgstr "Label"
+msgstr "label507"
 
 #: ui/details.ui:3444
 msgid "Source host:"
@@ -1205,7 +1213,7 @@ msgstr "ROM _BAR:"
 
 #: ui/details.ui:3721
 msgid "_3D acceleration:"
-msgstr ""
+msgstr "_3D-Beschleunigung:"
 
 #: ui/details.ui:3749
 msgid "<b>Video</b>"
@@ -1213,7 +1221,7 @@ msgstr "<b>Video</b>"
 
 #: ui/details.ui:3994
 msgid "Devices:"
-msgstr ""
+msgstr "Geräte:"
 
 #: ui/details.ui:4045
 msgid "<b>Controller</b>"
@@ -1245,7 +1253,7 @@ msgstr "<b>Umgeleitetes Gerät</b>"
 
 #: ui/details.ui:4398
 msgid "Version:"
-msgstr ""
+msgstr "Version:"
 
 #: ui/details.ui:4463
 msgid "<b>TPM Device</b>"
@@ -1289,7 +1297,7 @@ msgstr "_Format:"
 
 #: ui/gfxdetails.ui:74
 msgid "Show passwor_d"
-msgstr ""
+msgstr "Passwor_t anzeigen"
 
 #: ui/gfxdetails.ui:120
 msgid "Addr_ess:"
@@ -1313,10 +1321,8 @@ msgid "5900"
 msgstr "5900"
 
 #: ui/gfxdetails.ui:260
-#, fuzzy
-#| msgid "_Open"
 msgid "Open_GL:"
-msgstr "_Öffnen"
+msgstr "Open_GL:"
 
 #: ui/gfxdetails.ui:274
 msgid "L_isten type:"
@@ -1674,7 +1680,7 @@ msgstr "_Migrieren"
 
 #: ui/netlist.ui:16
 msgid "De_vice name:"
-msgstr ""
+msgstr "Ge_rätename:"
 
 #: ui/netlist.ui:62
 msgid ""
@@ -1935,7 +1941,7 @@ msgstr "Schnappschuss erstellen"
 
 #: ui/snapshotsnew.ui:57
 msgid "<span size='large'>Create snapshot</span>"
-msgstr ""
+msgstr "<span size='large'>Schnappschuss erstellen</span>"
 
 #: ui/snapshotsnew.ui:138
 msgid "_Description:"
@@ -1998,16 +2004,12 @@ msgid "Auto _resize VM with window"
 msgstr "Größe automatisch mit Fenster _anpassen"
 
 #: ui/vmwindow.ui:259
-#, fuzzy
-#| msgid "Console"
 msgid "Co_nsoles"
-msgstr "Konsole"
+msgstr "Ko_nsolen"
 
 #: ui/vmwindow.ui:267
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "_Autoconnect"
-msgstr "_Automatische Verbindung:"
+msgstr "_Automatische Verbindung"
 
 #: ui/vmwindow.ui:282
 msgid "T_oolbar"
@@ -2073,7 +2075,7 @@ msgstr ""
 
 #: ui/xmleditor.ui:121
 msgid "_XML"
-msgstr ""
+msgstr "_XML"
 
 #: virtManager/about.py:21
 #, python-format
@@ -2222,10 +2224,8 @@ msgid "UDP net console"
 msgstr "UDP-Netzkonsole"
 
 #: virtManager/addhardware.py:422
-#, fuzzy
-#| msgid "Unix socket"
 msgid "UNIX socket"
-msgstr "Unix-Socket"
+msgstr "UNIX-Socket"
 
 #: virtManager/addhardware.py:423
 msgid "Spice agent"
@@ -2237,7 +2237,7 @@ msgstr "Spice-Port"
 
 #: virtManager/addhardware.py:438 virtManager/addhardware.py:499
 msgid "IDE"
-msgstr ""
+msgstr "IDE"
 
 #: virtManager/addhardware.py:439 virtManager/details/details.py:2337
 msgid "Floppy"
@@ -2245,26 +2245,24 @@ msgstr "Diskette"
 
 #: virtManager/addhardware.py:440 virtManager/addhardware.py:501
 msgid "SCSI"
-msgstr ""
+msgstr "SCSI"
 
 #: virtManager/addhardware.py:441 virtManager/addhardware.py:500
 msgid "SATA"
-msgstr ""
+msgstr "SATA"
 
 #: virtManager/addhardware.py:442
-#, fuzzy
-#| msgid "Serial"
 msgid "VirtIO Serial"
-msgstr "Seriell"
+msgstr "VirtIO Seriell"
 
 #: virtManager/addhardware.py:443 virtManager/addhardware.py:503
 #: virtManager/addhardware.py:581
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 #: virtManager/addhardware.py:444
 msgid "PCI"
-msgstr ""
+msgstr "PCI"
 
 #: virtManager/addhardware.py:445
 msgid "CCID"
@@ -2276,23 +2274,23 @@ msgstr ""
 
 #: virtManager/addhardware.py:454 virtManager/addhardware.py:933
 msgid "VirtIO SCSI"
-msgstr ""
+msgstr "VirtIO SCSI"
 
 #: virtManager/addhardware.py:457
 msgid "PCIe"
-msgstr ""
+msgstr "PCIe"
 
 #: virtManager/addhardware.py:502
 msgid "SD"
-msgstr ""
+msgstr "SD"
 
 #: virtManager/addhardware.py:504 virtManager/addhardware.py:582
 msgid "VirtIO"
-msgstr ""
+msgstr "VirtIO"
 
 #: virtManager/addhardware.py:505 virtManager/addhardware.py:583
 msgid "Xen"
-msgstr ""
+msgstr "Xen"
 
 #: virtManager/addhardware.py:512
 msgid "Passthrough device"
@@ -2300,11 +2298,11 @@ msgstr "Durchgangseinheit"
 
 #: virtManager/addhardware.py:513
 msgid "Emulated device"
-msgstr ""
+msgstr "Emuliertes Gerät"
 
 #: virtManager/addhardware.py:520
 msgid "TIS"
-msgstr ""
+msgstr "TIS"
 
 #: virtManager/addhardware.py:521
 msgid "CRB"
@@ -2324,11 +2322,11 @@ msgstr ""
 
 #: virtManager/addhardware.py:531
 msgid "Hyper-V"
-msgstr ""
+msgstr "Hyper-V"
 
 #: virtManager/addhardware.py:532
 msgid "s390"
-msgstr ""
+msgstr "s390"
 
 #: virtManager/addhardware.py:539
 msgid "Random"
@@ -2384,7 +2382,7 @@ msgstr "Tablett"
 
 #: virtManager/addhardware.py:580
 msgid "PS/2"
-msgstr ""
+msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
 #: virtManager/addhardware.py:589
@@ -2434,11 +2432,11 @@ msgstr "SPICE Kanal "
 
 #: virtManager/addhardware.py:930
 msgid "USB 3"
-msgstr ""
+msgstr "USB 3"
 
 #: virtManager/addhardware.py:931
 msgid "USB 2"
-msgstr ""
+msgstr "USB 2"
 
 #: virtManager/addhardware.py:1029
 msgid "Video Device"
@@ -2470,10 +2468,8 @@ msgid "PCI Device"
 msgstr "PCI-Gerät"
 
 #: virtManager/addhardware.py:1055
-#, fuzzy
-#| msgid "%s Device"
 msgid "MDEV Device"
-msgstr "%s Gerät"
+msgstr "MDEV-Gerät"
 
 #: virtManager/addhardware.py:1056
 msgid "USB Device"
@@ -2549,16 +2545,14 @@ msgid "Disk target: %s"
 msgstr ""
 
 #: virtManager/clone.py:112
-#, fuzzy, python-format
-#| msgid "Ke_rnel path:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Ke_rnel Pfad:"
+msgstr "Ursprünglicher Pfad: %s"
 
 #: virtManager/clone.py:114
-#, fuzzy, python-format
-#| msgid "Deleting path '%s'"
+#, python-format
 msgid "New path: %s"
-msgstr "Pfad «%s» löschen"
+msgstr "Neuer Pfad: %s"
 
 #: virtManager/clone.py:118
 #, fuzzy, python-format
@@ -2576,10 +2570,8 @@ msgid "Storage is not cloneable: %(reason)s"
 msgstr ""
 
 #: virtManager/clone.py:137
-#, fuzzy
-#| msgid "No storage to clone."
 msgid "No storage."
-msgstr "Kein zu klonender Speicher."
+msgstr "Kein Speicher."
 
 #: virtManager/clone.py:142
 #, python-format
@@ -2596,10 +2588,8 @@ msgid "Error launching clone dialog: %s"
 msgstr ""
 
 #: virtManager/clone.py:276
-#, fuzzy
-#| msgid "C_lone"
 msgid "Clone"
-msgstr "K_lonen"
+msgstr "Klonen"
 
 #: virtManager/clone.py:457
 msgid "Cloning will overwrite the existing file"
@@ -2646,10 +2636,9 @@ msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Fehler beim Erzeugen des Klons der virtuellen Maschine «%s»: %s"
 
 #: virtManager/clone.py:561
-#, fuzzy, python-format
-#| msgid "Error changing pool settings: %s"
+#, python-format
 msgid "Error with clone settings: %s"
-msgstr "Fehler beim Ändern der Pool-Einstellungen: %s"
+msgstr "Fehler mit Klon-Einstellungen: %s"
 
 #: virtManager/clone.py:566
 #, python-format
@@ -2765,7 +2754,7 @@ msgstr ""
 
 #: virtManager/createnet.py:114
 msgid "Isolated"
-msgstr ""
+msgstr "Isoliert"
 
 #: virtManager/createnet.py:115
 msgid "SR-IOV pool"
@@ -2773,7 +2762,7 @@ msgstr ""
 
 #: virtManager/createnet.py:175
 msgid "No available device"
-msgstr ""
+msgstr "Kein verfügbares Gerät"
 
 #: virtManager/createnet.py:336
 #, python-format
@@ -2866,15 +2855,14 @@ msgid "Error launching create dialog: %s"
 msgstr ""
 
 #: virtManager/createvm.py:308
-#, fuzzy, python-format
-#| msgid "Error"
+#, python-format
 msgid "Error: %s"
-msgstr "Fehler"
+msgstr "Fehler: %s"
 
 #: virtManager/createvm.py:314 virtManager/createvm.py:319
 #, python-format
 msgid "<span size='small'>Warning: %s</span>"
-msgstr ""
+msgstr "<span size='small'>Warnung: %s</span>"
 
 #: virtManager/createvm.py:490
 #, python-format
@@ -2960,7 +2948,7 @@ msgstr "Vorhandenes Betriebssystemabbild importieren"
 
 #: virtManager/createvm.py:967
 msgid "Manual install"
-msgstr ""
+msgstr "Manuelle Installation"
 
 #: virtManager/createvm.py:969
 msgid "Application container"
@@ -2972,7 +2960,7 @@ msgstr "Betriebssystemcontainer"
 
 #: virtManager/createvm.py:973
 msgid "Virtuozzo container"
-msgstr ""
+msgstr "Virtuozzo-Container"
 
 #: virtManager/createvm.py:1122
 msgid "Removing disk images"
@@ -3023,7 +3011,7 @@ msgstr ""
 
 #: virtManager/createvm.py:1478
 msgid "OS root directory is not empty"
-msgstr ""
+msgstr "BS-Wurzelverzeichnis ist nicht leer"
 
 #: virtManager/createvm.py:1479
 msgid ""
@@ -3060,11 +3048,11 @@ msgstr "Ein Betriebssystemverzeichnispfad ist erforderlich."
 
 #: virtManager/createvm.py:1545
 msgid "A template name is required."
-msgstr ""
+msgstr "Ein Vorlagenname ist erforderlich."
 
 #: virtManager/createvm.py:1548
 msgid "You must select an OS."
-msgstr ""
+msgstr "Sie müssen ein BS auswählen."
 
 #: virtManager/createvm.py:1578
 msgid "Error setting installer parameters."
@@ -3088,7 +3076,7 @@ msgstr ""
 
 #: virtManager/createvm.py:1844
 msgid "None detected"
-msgstr ""
+msgstr "Nichts erkannt"
 
 #: virtManager/createvm.py:1881
 #, fuzzy, python-format
@@ -3194,7 +3182,7 @@ msgstr "Fehler beim Starten des Löschdialogs: %s"
 #: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
-msgstr ""
+msgstr "'%(vmname)s' löschen"
 
 #: virtManager/delete.py:294
 #, python-format
@@ -3219,7 +3207,7 @@ msgstr ""
 
 #: virtManager/delete.py:357
 msgid "Storage will not be deleted."
-msgstr ""
+msgstr "Speicher wird nicht gelöscht."
 
 #: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
@@ -3253,10 +3241,8 @@ msgid "Storage Path"
 msgstr "Speicherpfad"
 
 #: virtManager/delete.py:567
-#, fuzzy
-#| msgid "Cannot delete iscsi share."
 msgid "Cannot delete iSCSI share."
-msgstr "iSCSI-Freigabe kann nicht entfernt werden."
+msgstr "iSCSI-Freigabe kann nicht gelöscht werden."
 
 #: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
@@ -3401,16 +3387,14 @@ msgid "Press %s to release pointer."
 msgstr "%s drücken, um den Mauszeiger freizugeben."
 
 #: virtManager/details/details.py:162
-#, fuzzy, python-format
-#| msgid "Floppy device"
+#, python-format
 msgid "Floppy %(index)d"
-msgstr "Diskettenlaufwerk"
+msgstr "Diskette %(index)d"
 
 #: virtManager/details/details.py:168
-#, fuzzy, python-format
-#| msgid "%s Redirector %s"
+#, python-format
 msgid "%(bus)s CDROM %(index)d"
-msgstr "%s Redirector %s"
+msgstr "%(bus)s CDROM %(index)d"
 
 #: virtManager/details/details.py:173
 #, fuzzy, python-format
@@ -3430,34 +3414,29 @@ msgid "NIC %(mac)s"
 msgstr ""
 
 #: virtManager/details/details.py:198
-#, fuzzy, python-format
-#| msgid "Serial %d"
+#, python-format
 msgid "Serial %(num)d"
-msgstr "Seriell %d"
+msgstr "Seriell %(num)d"
 
 #: virtManager/details/details.py:202
-#, fuzzy, python-format
-#| msgid "Parallel"
+#, python-format
 msgid "Parallel %(num)d"
-msgstr "Parallel"
+msgstr "Parallel %(num)d"
 
 #: virtManager/details/details.py:206
-#, fuzzy, python-format
-#| msgid "Text Console %d"
+#, python-format
 msgid "Console %(num)d"
-msgstr "Textkonsole %d"
+msgstr "Konsole %(num)d"
 
 #: virtManager/details/details.py:211
-#, fuzzy, python-format
-#| msgid "Channel"
+#, python-format
 msgid "Channel %(name)s"
-msgstr "Channel"
+msgstr "Kanal %(name)s"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel"
+#, python-format
 msgid "Channel %(type)s"
-msgstr "Channel"
+msgstr "Kanal %(type)s"
 
 #: virtManager/details/details.py:217
 #, python-format
@@ -3481,20 +3460,19 @@ msgid "Video %s"
 msgstr "Video %s"
 
 #: virtManager/details/details.py:230
-#, fuzzy, python-format
-#| msgid "Filesystem %s"
+#, python-format
 msgid "Filesystem %(path)s"
-msgstr "Dateisystem %s"
+msgstr "Dateisystem %(path)s"
 
 #: virtManager/details/details.py:234
 #, python-format
 msgid "Controller %(controller)s %(index)s"
-msgstr ""
+msgstr "Controller %(controller)s %(index)s"
 
 #: virtManager/details/details.py:238
 #, python-format
 msgid "Controller %(controller)s"
-msgstr ""
+msgstr "Controller %(controller)s"
 
 #: virtManager/details/details.py:243
 #, fuzzy, python-format
@@ -3503,15 +3481,14 @@ msgid "RNG %(device)s"
 msgstr "CDROM-Gerät"
 
 #: virtManager/details/details.py:247
-#, fuzzy, python-format
-#| msgid "CDROM device"
+#, python-format
 msgid "TPM %(device)s"
-msgstr "CDROM-Gerät"
+msgstr "TPM %(device)s"
 
 #: virtManager/details/details.py:248
 #, python-format
 msgid "TPM v%(version)s"
-msgstr ""
+msgstr "TPM v%(version)s"
 
 #: virtManager/details/details.py:540
 msgid "_Add Hardware"
@@ -3617,7 +3594,7 @@ msgstr "Fehler beim Neuladen der Geräteseite: %s"
 #: virtManager/details/details.py:1844
 #, python-format
 msgid "%(summary)s ..."
-msgstr ""
+msgstr "%(summary)s ..."
 
 #: virtManager/details/details.py:1856
 #, python-format
@@ -3698,10 +3675,9 @@ msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
 #: virtManager/details/details.py:2228
-#, fuzzy, python-format
-#| msgid "%(mode)s to %(device)s"
+#, python-format
 msgid "%(device)s on %(address)s"
-msgstr "%(mode)s zu %(device)s"
+msgstr "%(device)s unter %(address)s"
 
 #: virtManager/details/details.py:2234 virtManager/details/details.py:2244
 msgid "Cannot remove controller while devices are attached."
@@ -3764,7 +3740,7 @@ msgstr "Fehler beim Erzeugen des Schnappschusses: %s"
 
 #: virtManager/details/snapshots.py:216
 msgid "Snapshot"
-msgstr ""
+msgstr "Schnappschuss"
 
 #: virtManager/details/snapshots.py:219
 #, python-format
@@ -3809,7 +3785,7 @@ msgstr ""
 #: virtManager/details/snapshots.py:524
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
-msgstr ""
+msgstr "<b>Schnappschuss '%(name)s':</b>"
 
 #: virtManager/details/snapshots.py:544
 msgid "External disk and memory"
@@ -4026,7 +4002,7 @@ msgstr "VNC-Server"
 
 #: virtManager/device/gfxdetails.py:95
 msgid "Address"
-msgstr ""
+msgstr "Adresse"
 
 #: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
@@ -4043,11 +4019,11 @@ msgstr "Auto"
 #: virtManager/device/gfxdetails.py:218
 #, python-format
 msgid "A_uto (Port %(port)d)"
-msgstr ""
+msgstr "A_utomatisch (Port %(port)d)"
 
 #: virtManager/device/mediacombo.py:67
 msgid "No media selected"
-msgstr ""
+msgstr "Kein Medium ausgewählt"
 
 #: virtManager/device/mediacombo.py:100
 msgid "Media Unknown"
@@ -4135,10 +4111,9 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s von %(maxmem)s"
 
 #: virtManager/host.py:178
-#, fuzzy, python-format
-#| msgid "Connecting..."
+#, python-format
 msgid "%(connection)s - Connection Details"
-msgstr "Verbindungsaufbau …"
+msgstr "%(connection)s - Verbindungsdetails"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
@@ -4236,10 +4211,9 @@ msgid "Libvirt connection does not support storage management."
 msgstr "Libvirt-Verbindung unterstützt keine Speicherverwaltung."
 
 #: virtManager/hoststorage.py:315
-#, fuzzy, python-format
-#| msgid "%s Free / <i>%s In Use</i>"
+#, python-format
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
-msgstr "%s frei / <i>%s belegt</i>"
+msgstr "%(bytesfree)s Frei / <i>%(bytesinuse)s Belegt</i>"
 
 #: virtManager/hoststorage.py:335
 msgid "Create new volume"
@@ -4539,22 +4513,19 @@ msgstr ""
 "Sind Sie sicher?"
 
 #: virtManager/manager.py:575
-#, fuzzy, python-format
-#| msgid "Double click to connect"
+#, python-format
 msgid "%(uri)s (Double click to connect)"
-msgstr "Doppelklick zum Verbinden"
+msgstr "%(uri)s (Doppelklick zum Verbinden)"
 
 #: virtManager/manager.py:582
-#, fuzzy, python-format
-#| msgid "Connection not active."
+#, python-format
 msgid "%(connection)s - Not Connected"
-msgstr "Verbindung nicht aktiv."
+msgstr "%(connection)s - Nicht verbunden"
 
 #: virtManager/manager.py:584
-#, fuzzy, python-format
-#| msgid "Connecting..."
+#, python-format
 msgid "%(connection)s - Connecting..."
-msgstr "Verbindungsaufbau …"
+msgstr "%(connection)s - Verbindungsaufbau ..."
 
 #: virtManager/manager.py:760 virtManager/vmwindow.py:378
 msgid "_Restore"
@@ -4601,22 +4572,19 @@ msgstr ""
 "wird dies zurückweisen, außer Sie fügen einen Transport hinzu."
 
 #: virtManager/migrate.py:292
-#, fuzzy, python-format
-#| msgid "Hypervisors do not match"
+#, python-format
 msgid "%(uri)s (Hypervisors do not match)"
-msgstr "Hypervisoren stimmen nicht überein"
+msgstr "%(uri)s (Hypervisoren stimmen nicht überein)"
 
 #: virtManager/migrate.py:294
-#, fuzzy, python-format
-#| msgid "Disconnected"
+#, python-format
 msgid "%(uri)s (Disconnected)"
-msgstr "Getrennt"
+msgstr "%(uri)s (Getrennt)"
 
 #: virtManager/migrate.py:296
-#, fuzzy, python-format
-#| msgid "Same connection"
+#, python-format
 msgid "%(uri)s (Same connection)"
-msgstr "Gleiche Verbindung"
+msgstr "%(uri)s (Gleiche Verbindung)"
 
 #: virtManager/migrate.py:313
 msgid "No usable connections available."
@@ -4741,7 +4709,7 @@ msgstr "Multipath Device Enumerator"
 
 #: virtManager/object/storagepool.py:33
 msgid "Gluster Filesystem"
-msgstr "Gluster Dateisystem"
+msgstr "Gluster-Dateisystem"
 
 #: virtManager/object/storagepool.py:34
 msgid "RADOS Block Device/Ceph"
