@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-06-11 06:14+0000\n"
+"POT-Creation-Date: 2021-07-03 06:13+0000\n"
 "PO-Revision-Date: 2017-02-05 04:02+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Telugu (http://www.transifex.com/projects/p/virt-manager/"
@@ -1277,7 +1277,7 @@ msgid "_Port:"
 msgstr "పోర్టు (_P):"
 
 #: ui/gfxdetails.ui:167 ui/vsockdetails.ui:38
-#: virtManager/device/gfxdetails.py:209
+#: virtManager/device/gfxdetails.py:211
 msgid "A_uto"
 msgstr "స్వయంచాలక (_u)"
 
@@ -3940,7 +3940,7 @@ msgstr "ప్లగ్ఇన్ అనుసంధానాలు అమలు"
 msgid "Auto"
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:216
+#: virtManager/device/gfxdetails.py:218
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr ""
@@ -4726,11 +4726,11 @@ msgstr "నిల్వ వాల్యూమ్‌ను యెంచుకొ�
 msgid "_Show Virtual Machine Manager"
 msgstr "వర్చ్యువల్ మిషన్ వీక్షకము/నిర్వాహకము"
 
-#: virtManager/virtmanager.py:44
+#: virtManager/virtmanager.py:42
 msgid "Error starting Virtual Machine Manager"
 msgstr "వర్చ్యువల్ మిషన్ నిర్వాహికను ప్రారంభించుటలో దోషము"
 
-#: virtManager/virtmanager.py:45
+#: virtManager/virtmanager.py:43
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error starting Virtual Machine Manager: %(error)s"
@@ -5976,13 +5976,13 @@ msgstr ""
 "వాల్యూమ్ పూర్తిగా కేటాయించబడినప్పుడు అభ్యర్ధించిన వాల్యూమ్ సామర్ధ్యం అనునది అందుబాటులోని పూల్ జాగాను "
 "దాటును. (%d M అభ్యర్ధించిన సామర్ధ్యం > %d M అందుబాటులోవుంది)"
 
-#: virtinst/virtclone.py:22
+#: virtinst/virtclone.py:20
 msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
 
-#: virtinst/virtclone.py:69
+#: virtinst/virtclone.py:67
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -5999,41 +5999,41 @@ msgstr ""
 "అతిధేయ వైపు మార్పులు చేయును. సంకేతపదాలు మార్చడం, స్టాటిక్ ఐపి చిరునామా మార్చడం, మొదలైనవి. ఈ రకమైన "
 "మార్పుల కొరకు, virt-sysprep(1) చూడండి."
 
-#: virtinst/virtclone.py:79 virtinst/virtinstall.py:949
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:947
 msgid "General Options"
 msgstr "సర్వసామన్యమైన ఐచ్ఛికాలు"
 
-#: virtinst/virtclone.py:81
+#: virtinst/virtclone.py:79
 msgid "Name of the original guest to clone."
 msgstr ""
 
-#: virtinst/virtclone.py:83
+#: virtinst/virtclone.py:81
 msgid "XML file to use as the original guest."
 msgstr "వాస్తవ అతిథి వలె వుపయోగించుటకు XML ఫైలు."
 
-#: virtinst/virtclone.py:85
+#: virtinst/virtclone.py:83
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr "వాస్తవ అతిథి ఆకృతీకరణనుండి క్లోన్ పేరు మరియు నిల్వ పాత్‌లను స్వయంచాలకంగా జనియింపచేయి."
 
-#: virtinst/virtclone.py:88
+#: virtinst/virtclone.py:86
 msgid "Name for the new guest"
 msgstr "కొత్త అతిథి కొరకు పేరు"
 
-#: virtinst/virtclone.py:91
+#: virtinst/virtclone.py:89
 msgid "use btrfs COW lightweight copy"
 msgstr ""
 
-#: virtinst/virtclone.py:93
+#: virtinst/virtclone.py:91
 msgid "Storage Configuration"
 msgstr "నిల్వ ఆకృతీకరణ"
 
-#: virtinst/virtclone.py:95
+#: virtinst/virtclone.py:93
 msgid "New file to use as the disk image for the new guest"
 msgstr "కొత్త అతిథి కొరకు డిస్కు ప్రతిరూపంగా వుపయోగించుటకు కొత్త ఫైలు"
 
-#: virtinst/virtclone.py:98
+#: virtinst/virtclone.py:96
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6041,74 +6041,74 @@ msgstr ""
 "పరికరాలు నకలుతీయుటకు బలవంతంచేయి (ఉదా, 'hdc' చదువుటమాత్రమే cdrom పరికరం అయితే, --force-"
 "copy=hdc)"
 
-#: virtinst/virtclone.py:101
+#: virtinst/virtclone.py:99
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 
-#: virtinst/virtclone.py:106
+#: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "క్లోన్ యొక్క డిస్కు ప్రతిరూపం కొరకు స్పేర్స్ ఫైలు వుపయోగించదు"
 
-#: virtinst/virtclone.py:110
+#: virtinst/virtclone.py:108
 msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
 
-#: virtinst/virtclone.py:115
+#: virtinst/virtclone.py:113
 msgid "New file to use as storage for nvram VARS"
 msgstr ""
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:115
 msgid "Networking Configuration"
 msgstr "నెట్వర్కింగ్ ఆకృతీకరణ"
 
-#: virtinst/virtclone.py:119
+#: virtinst/virtclone.py:117
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr "క్లోన్ అతిథి కొరకు కొత్త స్థిర MAC చిరునామా. యాదృశ్చికంగా జనియింపచేసిన MAC అప్రమేయం"
 
-#: virtinst/virtclone.py:122 virtinst/virtinstall.py:1054
-#: virtinst/virtxml.py:419
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1052
+#: virtinst/virtxml.py:417
 msgid "Miscellaneous Options"
 msgstr "వివిధములైన ఐచ్ఛికాలు"
 
-#: virtinst/virtclone.py:149
+#: virtinst/virtclone.py:147
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
 
-#: virtinst/virtclone.py:181
+#: virtinst/virtclone.py:179
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
 msgstr ""
 
-#: virtinst/virtclone.py:198
+#: virtinst/virtclone.py:196
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "క్లోన్ '%s' విజయవంతంగా సృష్టించబడెను."
 
-#: virtinst/virtclone.py:209 virtinst/virtinstall.py:1163
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1161
 msgid "Installation aborted at user request"
 msgstr "వాడుకరి అభ్యర్ధనపై సంస్థాపన విరమించబడెను"
 
-#: virtinst/virtinstall.py:59
+#: virtinst/virtinstall.py:57
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
 
-#: virtinst/virtinstall.py:127
+#: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
 msgstr "నిల్వను తెలుపలేదు మరియు --nodisks వుపయోగించు"
 
-#: virtinst/virtinstall.py:131
+#: virtinst/virtinstall.py:129
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -6116,23 +6116,23 @@ msgstr ""
 "--file, --nonsparse, లేదా --file-size ను --disk ఐచ్చికాలతో కలుపలేదు. --disk PATH[,"
 "size=SIZE][,sparse=yes|no] వుపయోగించు"
 
-#: virtinst/virtinstall.py:225
+#: virtinst/virtinstall.py:223
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "--graphics మరియు పాత రకం గ్రాఫికల్ ఐచ్చికాలు మిళితం చేయలేము"
 
-#: virtinst/virtinstall.py:229
+#: virtinst/virtinstall.py:227
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr "VNC, SDL, --graphics లేదా --nographics లలో వొకటి కన్నా యెక్కువ తెలుపలేము"
 
-#: virtinst/virtinstall.py:312
+#: virtinst/virtinstall.py:310
 msgid "--memory amount in MiB is required"
 msgstr "--పునఃప్రారంభము అవసరం"
 
-#: virtinst/virtinstall.py:316
+#: virtinst/virtinstall.py:314
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: virtinst/virtinstall.py:320
+#: virtinst/virtinstall.py:318
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6141,7 +6141,7 @@ msgstr ""
 "ఒక సంస్థాపన పద్దతి తప్పక తెలుపాలి\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:332
+#: virtinst/virtinstall.py:330
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6149,78 +6149,78 @@ msgstr ""
 "CDROM మాద్యమం తరువాతి కన్సోల్‌కు అప్రమేయంగా ముద్రించదు, కనుక మీరు టెక్స్ట్ సంస్థాపన అవుట్పుట్ "
 "చూడరు. మీరు --location ఉపోయగించాలని అనుకోవచ్చు."
 
-#: virtinst/virtinstall.py:335
+#: virtinst/virtinstall.py:333
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "%S కి మీ ప్రాంతాన్ని తెలియజేయాలా"
 
-#: virtinst/virtinstall.py:348
+#: virtinst/virtinstall.py:346
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
 
-#: virtinst/virtinstall.py:353
+#: virtinst/virtinstall.py:351
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
 
-#: virtinst/virtinstall.py:360
+#: virtinst/virtinstall.py:358
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
 
-#: virtinst/virtinstall.py:367
+#: virtinst/virtinstall.py:365
 msgid ""
 "No operating system detected, VM performance may suffer. Specify an OS with "
 "--os-variant for optimal results."
 msgstr ""
 
-#: virtinst/virtinstall.py:380
+#: virtinst/virtinstall.py:378
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr ""
 
-#: virtinst/virtinstall.py:459
+#: virtinst/virtinstall.py:457
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr ""
 
-#: virtinst/virtinstall.py:469
+#: virtinst/virtinstall.py:467
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:488
+#: virtinst/virtinstall.py:486
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:503
+#: virtinst/virtinstall.py:501
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 
-#: virtinst/virtinstall.py:549
+#: virtinst/virtinstall.py:547
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "సంస్థాపన స్థానం నిర్థారించుటలో దోషం: %s"
 
-#: virtinst/virtinstall.py:552
+#: virtinst/virtinstall.py:550
 msgid "An --os-variant is required, but no value was set or detected."
 msgstr ""
 
-#: virtinst/virtinstall.py:625
+#: virtinst/virtinstall.py:623
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: virtinst/virtinstall.py:661
+#: virtinst/virtinstall.py:659
 #, fuzzy
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting for the installation to complete."
 msgstr "సంస్థాపన పూర్తగుటకు వేచివుండవలసిన నిమిషాలు."
 
-#: virtinst/virtinstall.py:662
+#: virtinst/virtinstall.py:660
 #, fuzzy, python-format
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting %(minutes)d minute for the installation to complete."
@@ -6228,59 +6228,59 @@ msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "సంస్థాపన పూర్తగుటకు వేచివుండవలసిన నిమిషాలు."
 msgstr[1] "సంస్థాపన పూర్తగుటకు వేచివుండవలసిన నిమిషాలు."
 
-#: virtinst/virtinstall.py:685
+#: virtinst/virtinstall.py:683
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:697
+#: virtinst/virtinstall.py:695
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:724
+#: virtinst/virtinstall.py:722
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/virtinstall.py:761
+#: virtinst/virtinstall.py:759
 msgid "Domain has crashed."
 msgstr "డొమైన్ క్రాషైంది."
 
-#: virtinst/virtinstall.py:791
+#: virtinst/virtinstall.py:789
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:801
+#: virtinst/virtinstall.py:799
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:810
 msgid "Domain has shutdown. Continuing."
 msgstr "డొమైన్ మూసివేయబడెను. కొనసాగిస్తోంది."
 
-#: virtinst/virtinstall.py:818
+#: virtinst/virtinstall.py:816
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "తెలిపిన సమయం పరిమితిని సంస్థాపన దాటినది. అనువర్తనం నిష్క్రమిస్తోంది."
 
-#: virtinst/virtinstall.py:841
+#: virtinst/virtinstall.py:839
 msgid "Domain creation completed."
 msgstr ""
 
-#: virtinst/virtinstall.py:850
+#: virtinst/virtinstall.py:848
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:855
+#: virtinst/virtinstall.py:853
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 
-#: virtinst/virtinstall.py:858
+#: virtinst/virtinstall.py:856
 msgid "Restarting guest."
 msgstr ""
 
-#: virtinst/virtinstall.py:875
+#: virtinst/virtinstall.py:873
 msgid ""
 "\n"
 "Starting install..."
@@ -6288,147 +6288,147 @@ msgstr ""
 "\n"
 "సంస్థాపన ప్రారంభిస్తోంది..."
 
-#: virtinst/virtinstall.py:898
+#: virtinst/virtinstall.py:896
 msgid "Domain install interrupted."
 msgstr "డొమైన్ సంస్థాపన ఆటంకపరచబడెను."
 
-#: virtinst/virtinstall.py:917
+#: virtinst/virtinstall.py:915
 msgid "Dry run completed successfully"
 msgstr "డ్రై రన్ విజయవంతంగా పూర్తైను"
 
-#: virtinst/virtinstall.py:921
+#: virtinst/virtinstall.py:919
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: virtinst/virtinstall.py:928
+#: virtinst/virtinstall.py:926
 msgid "Requested installation does not have XML step 2"
 msgstr "అభ్యర్ధించిన సంస్థాపన XML అంచె 2 కలిగిలేదు"
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:943
 msgid "Create a new virtual machine from specified install media."
 msgstr "తెలిపిన సంస్థాపనా మాద్యమంనుండి కొత్త వర్చ్యువల్ మిషన్ సృష్టించు."
 
-#: virtinst/virtinstall.py:951
+#: virtinst/virtinstall.py:949
 msgid "Name of the guest instance"
 msgstr "గెస్టు యిన్‌స్టాన్స్ యొక్క పేరు"
 
-#: virtinst/virtinstall.py:959
+#: virtinst/virtinstall.py:957
 msgid "Installation Method Options"
 msgstr "సంస్థాపనా పద్దతి ఐచ్చికాలు"
 
-#: virtinst/virtinstall.py:961
+#: virtinst/virtinstall.py:959
 msgid "CD-ROM installation media"
 msgstr "CD-ROM సంస్థాపనా మాధ్యమం"
 
-#: virtinst/virtinstall.py:963
+#: virtinst/virtinstall.py:961
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 
-#: virtinst/virtinstall.py:966
+#: virtinst/virtinstall.py:964
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE ప్రొటోకాల్ వుపయోగించి నెట్వర్కు నుండి బూట్ చేయి"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:966
 msgid "Build guest around an existing disk image"
 msgstr "ఇప్పటికే వున్న డిస్కు ప్రతిరూపం నందు అతిథి నిర్మించు"
 
-#: virtinst/virtinstall.py:971
+#: virtinst/virtinstall.py:969
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "--location నుండి బూటైన సంస్థాపనా కెర్నల్‌కు పాస్ చేయుటకు అదనపు ఆర్గుమెంట్లు"
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:972
 msgid "Add given file to root of initrd from --location"
 msgstr "--location నుండి initrd root కు యిచ్చిన ఫైలు జతచేయి"
 
-#: virtinst/virtinstall.py:976
+#: virtinst/virtinstall.py:974
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:978
+#: virtinst/virtinstall.py:976
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:980
+#: virtinst/virtinstall.py:978
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:983
+#: virtinst/virtinstall.py:981
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:997
+#: virtinst/virtinstall.py:995
 msgid "Device Options"
 msgstr "పరికర ఐచ్ఛికాలు"
 
-#: virtinst/virtinstall.py:1027
+#: virtinst/virtinstall.py:1025
 msgid "Guest Configuration Options"
 msgstr ""
 
-#: virtinst/virtinstall.py:1031
+#: virtinst/virtinstall.py:1029
 msgid "Virtualization Platform Options"
 msgstr "వర్చ్యులైజేషన్ ప్లాట్‌ఫాం ఐచ్చికాలు"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1033
 msgid "This guest should be a fully virtualized guest"
 msgstr "ఈ అతిథి పూర్తి వర్చ్యులైజ్డు అతిథి అయివుండాలి"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1036
 msgid "This guest should be a paravirtualized guest"
 msgstr "ఈ అతిథి పారావర్చ్యులైజ్డ్ అతిథి అయివుండాలి"
 
-#: virtinst/virtinstall.py:1041
+#: virtinst/virtinstall.py:1039
 msgid "This guest should be a container guest"
 msgstr "ఈ అతిథి కంటైనర్ అతిథి కావాలి"
 
-#: virtinst/virtinstall.py:1043
+#: virtinst/virtinstall.py:1041
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "ఉపయోగించుటకు హైపర్విజర్ పేరు (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1042
 msgid "The CPU architecture to simulate"
 msgstr "సిమ్యులేట్ చేయుటకు CPU ఆకృతి"
 
-#: virtinst/virtinstall.py:1045
+#: virtinst/virtinstall.py:1043
 msgid "The machine type to emulate"
 msgstr "ఎమ్యులేట్‌కు యంత్రం రకం"
 
-#: virtinst/virtinstall.py:1056
+#: virtinst/virtinstall.py:1054
 msgid "Have domain autostart on host boot up."
 msgstr "అతిధేయ బూటప్ పై డొమైన్ స్వయంచాలకప్రారంభం కలిగివుండు."
 
-#: virtinst/virtinstall.py:1058
+#: virtinst/virtinstall.py:1056
 msgid "Create a transient domain."
 msgstr ""
 
-#: virtinst/virtinstall.py:1060
+#: virtinst/virtinstall.py:1058
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:1063
+#: virtinst/virtinstall.py:1061
 msgid "Minutes to wait for install to complete."
 msgstr "సంస్థాపన పూర్తగుటకు వేచివుండవలసిన నిమిషాలు."
 
-#: virtinst/virtxml.py:36
+#: virtinst/virtxml.py:34
 msgid "Please enter 'yes' or 'no'."
 msgstr "'yes' లేదా 'no' ప్రవేశపెట్టండి"
 
-#: virtinst/virtxml.py:81
+#: virtinst/virtxml.py:79
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "చెల్లని --edit ఐచ్చికం '%s'"
 
-#: virtinst/virtxml.py:84
+#: virtinst/virtxml.py:82
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr ""
 
-#: virtinst/virtxml.py:87
+#: virtinst/virtxml.py:85
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6439,31 +6439,31 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: virtinst/virtxml.py:108
+#: virtinst/virtxml.py:106
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:124
+#: virtinst/virtxml.py:122
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s ఒకటి తెలుపాలి."
 
-#: virtinst/virtxml.py:127
+#: virtinst/virtxml.py:125
 #, python-format
 msgid "Conflicting options %s"
 msgstr "విభేదిస్తున్న ఐచ్చికాలు %s"
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:136
 msgid "No change specified."
 msgstr "ఏ మార్పు తెలుపలేదు."
 
-#: virtinst/virtxml.py:140
+#: virtinst/virtxml.py:138
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "ఒక మార్పు ఆపరేషన్ మాత్రమే తెలిపెను (విభేదిస్తున్న ఐచ్చికాలు %s)"
 
-#: virtinst/virtxml.py:153
+#: virtinst/virtxml.py:151
 #, fuzzy, python-format
 #| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgid ""
@@ -6471,60 +6471,60 @@ msgid ""
 "'--edit'"
 msgstr "'--edit %s' కు --%s తో అర్థంలేదు, ఖాళీ '--edit' ఉపయోగించు"
 
-#: virtinst/virtxml.py:158
+#: virtinst/virtxml.py:156
 msgid "--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:165
+#: virtinst/virtxml.py:163
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device ను --%s తో ఉపయోగించలేదు"
 
-#: virtinst/virtxml.py:176
+#: virtinst/virtxml.py:174
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--add-device ను --%s తో ఉపయోగించలేదు"
 
-#: virtinst/virtxml.py:179
+#: virtinst/virtxml.py:177
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 
-#: virtinst/virtxml.py:199
+#: virtinst/virtxml.py:197
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml అనునది --%s కు తోడ్పాటులేదు"
 
-#: virtinst/virtxml.py:202
+#: virtinst/virtxml.py:200
 msgid "--os-variant is not supported with --build-xml"
 msgstr ""
 
-#: virtinst/virtxml.py:228
+#: virtinst/virtxml.py:226
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "'%s' ను మార్చిన XML తో నిర్వచించాలా?"
 
-#: virtinst/virtxml.py:236
+#: virtinst/virtxml.py:234
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "డొమైన్ '%s' విజయవంతంగా నిర్వచించబడెను."
 
-#: virtinst/virtxml.py:243
+#: virtinst/virtxml.py:241
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:253 virtinst/virtxml.py:537
+#: virtinst/virtxml.py:251 virtinst/virtxml.py:535
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "డొమైన్ ప్రారంభించుటలో దోషం"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:541
+#: virtinst/virtxml.py:256 virtinst/virtxml.py:539
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:264
+#: virtinst/virtxml.py:262
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6532,19 +6532,19 @@ msgid ""
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:266
+#: virtinst/virtxml.py:264
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotplug successful."
 msgstr "పరికరం %s సఫలమైంది."
 
-#: virtinst/virtxml.py:267
+#: virtinst/virtxml.py:265
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "పరికరం దోషం %s: %s"
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:267
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6552,19 +6552,19 @@ msgid ""
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:271
+#: virtinst/virtxml.py:269
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotunplug successful."
 msgstr "పరికరం %s సఫలమైంది."
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:270
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "పరికరం దోషం %s: %s"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:272
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6572,39 +6572,39 @@ msgid ""
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:276
+#: virtinst/virtxml.py:274
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device update successful."
 msgstr "పరికరం %s సఫలమైంది."
 
-#: virtinst/virtxml.py:277
+#: virtinst/virtxml.py:275
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device update: %(error)s"
 msgstr "పరికరం దోషం %s: %s"
 
-#: virtinst/virtxml.py:315
+#: virtinst/virtxml.py:313
 msgid "--xml can only be used with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:337
+#: virtinst/virtxml.py:335
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:354
 msgid "Edit libvirt XML using command line options."
 msgstr "కమాండ్ లైన్ ఐచ్చికాలు ఉపయోగించి లిబ్‌వర్ట్ XML సరిచేయి"
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:360
 msgid "Domain name, id, or uuid"
 msgstr "డొమైన్ పేరు, ఐడి లేదా యుయుఐడి"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:362
 msgid "XML actions"
 msgstr "XML చర్యలు"
 
-#: virtinst/virtxml.py:366
+#: virtinst/virtxml.py:364
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6618,7 +6618,7 @@ msgstr ""
 "--edit all --disk ... (edit all disk devices)\n"
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 
-#: virtinst/virtxml.py:372
+#: virtinst/virtxml.py:370
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6630,7 +6630,7 @@ msgstr ""
 "--remove-device --disk all (remove all disks)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:377
+#: virtinst/virtxml.py:375
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6638,17 +6638,17 @@ msgstr ""
 "తెలిపిన పరికరం జతచేయి. ఉదాహరణ:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:380
+#: virtinst/virtxml.py:378
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:381
 msgid "Output options"
 msgstr "అవుట్పుట్ ఐచ్చికాలు"
 
-#: virtinst/virtxml.py:385
+#: virtinst/virtxml.py:383
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6660,67 +6660,67 @@ msgstr ""
 "With --remove-device, this is a hotunplug operation.\n"
 "With --edit, this is an update device operation."
 
-#: virtinst/virtxml.py:391
+#: virtinst/virtxml.py:389
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr "డొమైన్ నిర్వచనం బలవంతం. --print ఐచ్చికం తెలిపితే అవసరం."
 
-#: virtinst/virtxml.py:394
+#: virtinst/virtxml.py:392
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:395
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:399
+#: virtinst/virtxml.py:397
 msgid "Only print the requested change, in diff format"
 msgstr "అభ్యర్దించిన మార్పు మాత్రమే ముద్రించ, diff ఫార్మాట్‌లో"
 
-#: virtinst/virtxml.py:401
+#: virtinst/virtxml.py:399
 msgid "Only print the requested change, in full XML format"
 msgstr "అభ్యర్ధించిన మార్పు మాత్రమే ముద్రించు, XML ఫార్మాట్‌లో"
 
-#: virtinst/virtxml.py:403
+#: virtinst/virtxml.py:401
 msgid "Require confirmation before saving any results."
 msgstr "ఫలితాలను దాచుటకు ముందు నిర్థారణ కావాలి"
 
-#: virtinst/virtxml.py:407
+#: virtinst/virtxml.py:405
 msgid "XML options"
 msgstr "XML ఐచ్చికాలు"
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:445
 msgid "Can't use --confirm with stdin input."
 msgstr "--confirm ను stdin ఇన్పుట్‌తో ఉపయోగించలేదు."
 
-#: virtinst/virtxml.py:449
+#: virtinst/virtxml.py:447
 msgid "Can't use --update with stdin input."
 msgstr "--update ను stdin ఇన్పుట్‌తో ఉపయోగించలేదు."
 
-#: virtinst/virtxml.py:452
+#: virtinst/virtxml.py:450
 msgid "A domain must be specified"
 msgstr "డొమైన్ తప్పక తెలుపాలి"
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:478
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--update ను --%s కొరకు ఎలా చేయాలో తెలియదు"
 
-#: virtinst/virtxml.py:513
+#: virtinst/virtxml.py:511
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:546
+#: virtinst/virtxml.py:544
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:548
+#: virtinst/virtxml.py:546
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:559
 msgid "Aborted at user request"
 msgstr "వాడుకరి అభ్యర్ధన వద్ద విరమించబడెను"
 
