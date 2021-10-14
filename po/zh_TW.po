@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2020-11-26 01:35+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -255,11 +255,11 @@ msgstr "操作進行中"
 msgid "Please wait a few moments..."
 msgstr "請稍候…"
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 msgid "Processing..."
 msgstr "處理中…"
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "詳情(_D)"
 
@@ -825,7 +825,7 @@ msgstr "路徑(_T)："
 msgid "_Backing store"
 msgstr "後備儲存(_B)"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
 msgstr "刪除虛擬機"
 
@@ -1427,7 +1427,6 @@ msgid "Apply pool changes"
 msgstr "應用池更改"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 msgid "Active"
 msgstr "活動"
@@ -2480,13 +2479,9 @@ msgstr "確實要使用這個裝置嗎？"
 msgid "Error building device XML: %s"
 msgstr "構建裝置 XML 時出錯：%s"
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 msgid "Cancelling job..."
 msgstr "正在取消任務……"
-
-#: virtManager/asyncjob.py:315
-msgid "Completed"
-msgstr "已完成"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
@@ -3074,134 +3069,134 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "刪除 “%(vm)s” 虛擬機出錯 ：%(error)s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "另外，刪除某些儲存裝置時出錯：\n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
 msgstr "刪除默寫儲存裝置時出錯。"
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "刪除路徑 '%s'"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "啟動刪除對話框出錯： %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr "刪除 '%(vmname)s'"
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr "正在刪除虛擬系統 '%s' 和選定的儲存（這可能需要一段時間）"
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "刪除虛擬機 '%s'"
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "移除裝置時出錯：%s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr "這個更改將在下次虛擬機關機後生效。"
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr "儲存不會被刪除。"
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "不能從執行的機器中刪除裝置"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr "移除磁碟裝置"
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr "移除磁碟裝置 '%(target)s'"
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr "正在移除磁碟裝置 '%s' 和選定的儲存（這可能需要一段時間）"
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr "正在移除磁碟裝置 '%s'"
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "目標"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "儲存路徑"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 msgid "Cannot delete iSCSI share."
 msgstr "無法刪除 iSCSI 共享。"
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
 msgstr "無法刪除 SCSI 裝置。"
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
 msgstr "無法刪除自由遠端儲存。"
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 msgid "Path does not exist."
 msgstr "路徑不存在。"
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 msgid "No write access to parent directory."
 msgstr "沒有到父目錄的寫入訪問。"
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
 msgstr "無法刪除自由塊裝置。"
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 msgid "Storage is read-only."
 msgstr "儲存為唯讀。"
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 msgid "No write access to path."
 msgstr "沒有到路徑的寫入訪問。"
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
 msgstr "將儲存標記為可共享。"
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 msgid "Storage is a media device."
 msgstr "儲存是一種媒體裝置。"
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 msgid "Storage is in use by the following virtual machines"
 msgstr "以下虛擬系統在使用儲存"
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
 msgstr "無法檢查磁碟使用衝突。"
 
@@ -3239,37 +3234,28 @@ msgstr "圖形控制台"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager 不支援多個圖形控制台"
 
-#: virtManager/details/console.py:492
-#, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "'%s' 顯示卡類型不支援自動調整大小。"
-
-#: virtManager/details/console.py:495
-msgid "Guest agent is not available."
-msgstr "客戶機代理不可用。"
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 msgid "Guest has crashed."
 msgstr "客戶機已崩潰。"
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 msgid "Guest is not running."
 msgstr "客戶機未執行。"
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 msgid "Graphical console not configured for guest"
 msgstr "沒有為虛擬機系統配置圖形控制台"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "無法顯示圖形控制台類型 '%s'"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 msgid "Connecting to graphical console for guest"
 msgstr "為虛擬機系統連接到圖形控制台"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3278,29 +3264,29 @@ msgstr ""
 "連接到圖形控制台出錯：\n"
 "%s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "查看器身份驗證出錯： %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "USB 重定向錯誤"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr "查看器已斷開連接。"
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH 隧道輸出出錯：%s"
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 msgid "Viewer disconnected."
 msgstr "查看器斷開連接。"
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "按 %s 釋放游標。"
@@ -3827,7 +3813,7 @@ msgstr ""
 "客戶機位於具有 '%s' 傳輸的遠端主機上，但僅配置為在本機監聽。要遠端連接，需要"
 "更改客戶機的監聽地址。"
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3836,10 +3822,18 @@ msgstr ""
 "無法向 VNC 伺服器提供其要求的憑證。\n"
 "不支援的憑證類型 %s"
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "遭遇 SPICE %(error-name)s 錯誤"
+
+#: virtManager/details/viewers.py:750
+msgid "Guest agent is not available."
+msgstr "客戶機代理不可用。"
 
 #: virtManager/device/addstorage.py:93
 #, python-format
@@ -3925,8 +3919,7 @@ msgstr "使用者模式聯網"
 msgid "Virtual network"
 msgstr "虛擬網路"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 msgid "Inactive"
 msgstr "未啟動"
 
@@ -4030,36 +4023,36 @@ msgstr "隔離網路，僅使用內部路由"
 msgid "Isolated network, routing disabled"
 msgstr "隔離網路，禁用路由"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 msgid "On Boot"
 msgstr "引導時"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "確定要永久刪除網路 %s 嗎？"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "刪除網路 '%s' 時出錯"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "啟動網路 '%s' 時出錯"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "停止網路 '%s' 時出錯"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "啟動網路嚮導：%s"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "更改網路設定時出錯：%s"
@@ -4097,69 +4090,69 @@ msgstr "Libvirt 連接不支援儲存管理。"
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "%(bytesfree)s 空閒 / <i>%(bytesinuse)s 使用中</i>"
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 msgid "Create new volume"
 msgstr "建立新卷"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 msgid "Pool does not support volume creation"
 msgstr "池不支援建立卷"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 msgid "No storage pool selected."
 msgstr "尚未選擇儲存池。"
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "選擇池時出錯：%s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "停止池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "啟動池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "啟動池嚮匯出錯：%s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "確定要永久刪除池 %s 嗎？"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "刪除池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "重新整理池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "啟動卷嚮匯出錯：%s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "確定要永久刪除卷 %s 嗎？"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "刪除卷 '%s' 出錯"
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "修改池設定時出錯：%s"
@@ -4503,32 +4496,32 @@ msgstr "正在遷移 虛擬系統 '%(name)s' 至 %(host)s。這可能需要一�
 msgid "Error cancelling migrate job: %s"
 msgstr "取消遷移任務時出錯：%s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt 連接不支援快照。"
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr "如果所有已分配至客戶機的可寫磁碟鏡像為 qcow2 格式，則僅支援快照。"
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr "快照需要客戶機已分配至少一個可寫的 qcow2 磁碟鏡像。"
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "在非活動的 虛擬系統 配置中找不到指定的裝置：%s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 msgid "Saving domain to disk"
 msgstr "正在將域儲存到磁碟"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 msgid "Migrating domain"
 msgstr "正在遷移域"
 
@@ -4689,11 +4682,11 @@ msgstr "選擇儲存卷"
 msgid "_Show Virtual Machine Manager"
 msgstr "顯示虛擬系統管理器"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "啟動虛擬系統管理器出錯"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "啟動虛擬系統管理器出錯：%(error)s"
@@ -5463,21 +5456,21 @@ msgstr "需要圖形顯示，但未設定 DISPLAY。不能執行 virt-viewer。"
 msgid "Unknown autoconsole type '%s'"
 msgstr "未知的自動控制台類型 '%s'"
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' 數值不正確：%s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "未知 '%(optionname)s' 值 '%(string)s'"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "必須將儲存卷指定為 vol=poolname/volname"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "預期的 '%s' 的 PCI 格式字串"
@@ -5566,17 +5559,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "在這個卷類型中不支援的格式屬性"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "裝置類型 '%s' 需要一個路徑"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "必須為非現有路徑 '%s' 指定建立儲存的參數。"
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5592,7 +5585,13 @@ msgstr "目標文件系統 '%s' 必須為絕對路徑"
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 必須在 5900 以上，或設為 -1 自動分配"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+#| msgid "Don't know how to setup UEFI for arch '%s'"
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "不知如何為架構 '%s' 安裝 UEFI"
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr "未知節點裝置類型 %s"
@@ -5637,7 +5636,7 @@ msgstr "non-existent 磁碟 '%s' 需要大小"
 msgid "Cloning %(srcfile)s"
 msgstr "正在複製 %(srcfile)s"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr "將磁碟映像%(inputpath)s 複製至 %(outputpath)s 出錯：%(error)s"
@@ -5815,32 +5814,34 @@ msgstr ""
 "該位置必須為安裝樹的根目錄。\n"
 "請查看 virt-install man 手冊中獲取各發行版的範例。"
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "無法獲得文件 %(url)s：%(error)s"
 
-#: virtinst/install/urlfetcher.py:74
-#, python-format
-msgid "Retrieving file %s..."
+#: virtinst/install/urlfetcher.py:106
+#, fuzzy, python-format
+#| msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "搜尋文件 %s......"
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "打開 URL %(url)s 失敗：%(error)s"
 
-#: virtinst/install/volumeupload.py:109
-#, python-format
-msgid "Transferring %s"
+#: virtinst/install/volumeupload.py:108
+#, fuzzy, python-format
+#| msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "傳輸 %s"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s 會對應多個節點裝置"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "不能為 '%s' 找到匹配的節點裝置"
@@ -5925,9 +5926,10 @@ msgid ""
 "capacity"
 msgstr "不支援稀疏邏輯卷，將分配設置的容量"
 
-#: virtinst/storage.py:688
-#, python-format
-msgid "Allocating '%s'"
+#: virtinst/storage.py:687
+#, fuzzy, python-format
+#| msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "正在分配 '%s'"
 
 #: virtinst/storage.py:727
@@ -6719,6 +6721,12 @@ msgstr "必須為 %s 指定名稱"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名稱 '%(name)s' 不能包含 '%(char)s' 字元。"
+
+#~ msgid "Completed"
+#~ msgstr "已完成"
+
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "'%s' 顯示卡類型不支援自動調整大小。"
 
 #~ msgid "Default"
 #~ msgstr "預設"

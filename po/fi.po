@@ -14,11 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-04-07 06:05+0000\n"
+"POT-Creation-Date: 2021-05-29 07:26+0000\n"
 "PO-Revision-Date: 2021-05-29 14:02+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -239,11 +239,11 @@ msgstr "Toiminto käynnissä"
 msgid "Please wait a few moments..."
 msgstr "Odota hetki..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:296 virtManager/asyncjob.py:303
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
 msgid "Processing..."
 msgstr "Käsitellään..."
 
-#: ui/asyncjob.ui:187 ui/vmwindow.ui:152 ui/xmleditor.ui:26
+#: ui/asyncjob.ui:188 ui/vmwindow.ui:152 ui/xmleditor.ui:26
 msgid "_Details"
 msgstr "_Yksityiskohdat"
 
@@ -815,7 +815,7 @@ msgstr "_Polku:"
 msgid "_Backing store"
 msgstr "_Tausta myymälä"
 
-#: ui/delete.ui:9 virtManager/delete.py:286
+#: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
 msgstr "Poista virtuaalikone"
 
@@ -1423,7 +1423,6 @@ msgid "Apply pool changes"
 msgstr "Toteuta varantomuutokset"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/hostnets.py:249 virtManager/hoststorage.py:324
 #: virtManager/object/libvirtobject.py:200
 msgid "Active"
 msgstr "Aktiivinen"
@@ -2493,13 +2492,9 @@ msgstr "Haluatko varmasti käyttää tätä laitetta?"
 msgid "Error building device XML: %s"
 msgstr "Virhe laitteen XML:n luomisessa: %s"
 
-#: virtManager/asyncjob.py:213
+#: virtManager/asyncjob.py:235
 msgid "Cancelling job..."
 msgstr "Perutaan työtä..."
-
-#: virtManager/asyncjob.py:315
-msgid "Completed"
-msgstr "Valmis"
 
 #: virtManager/clone.py:28 virtinst/cloner.py:195
 msgid "No storage to clone."
@@ -3098,35 +3093,35 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:193
+#: virtManager/delete.py:194
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Virhe poistettaessa virtuaalikonetta '%(vm)s': %(error)s"
 
-#: virtManager/delete.py:210
+#: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Lisäksi joitain tallennustilalaitteita poistaessa ilmeni virheitä: \n"
 
-#: virtManager/delete.py:214
+#: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Tiettyjä tallennustilalaitteita poistaessa ilmeni virheitä."
 
-#: virtManager/delete.py:226
+#: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "Poistetaan polku '%s'"
 
-#: virtManager/delete.py:283
+#: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Virhe käynnistäessä poistamisikkunaa: %s"
 
-#: virtManager/delete.py:289
+#: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr "Poista '%(vmname)s'"
 
-#: virtManager/delete.py:293
+#: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
@@ -3134,104 +3129,104 @@ msgstr ""
 "Virtuaalikoneen %s ja valitun tallennustilan poistaminen (tämä voi viedä "
 "jonkin aikaa)"
 
-#: virtManager/delete.py:297
+#: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Poistetaan virtuaalikone '%s'"
 
-#: virtManager/delete.py:339
+#: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Virhe poistettaessa laitetta: %s"
 
-#: virtManager/delete.py:353
+#: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 "Tämä muutos tulee voimaan, kun vierasjärjestelmän sammutetaan seuraavan "
 "kerran."
 
-#: virtManager/delete.py:356
+#: virtManager/delete.py:357
 msgid "Storage will not be deleted."
 msgstr "Tallennustilaa ei poisteta."
 
-#: virtManager/delete.py:359
+#: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
 msgstr "Laitetta ei voitu poistaa käynnissä olevasta koneesta"
 
-#: virtManager/delete.py:369
+#: virtManager/delete.py:370
 msgid "Remove Disk Device"
 msgstr "Poista levylaite"
 
-#: virtManager/delete.py:372
+#: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr "Poista levylaite '%(target)s'"
 
-#: virtManager/delete.py:377
+#: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 "Levylaitteen '%s' ja valitun tallennustilan poistaminen (tämä voi viedä "
 "jonkin aikaa)"
 
-#: virtManager/delete.py:380
+#: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr "Poistetaan levylaite '%s'"
 
-#: virtManager/delete.py:505
+#: virtManager/delete.py:506
 msgid "Target"
 msgstr "Kohde"
 
-#: virtManager/delete.py:507
+#: virtManager/delete.py:508
 msgid "Storage Path"
 msgstr "Tallennustilan polku"
 
-#: virtManager/delete.py:566
+#: virtManager/delete.py:567
 msgid "Cannot delete iSCSI share."
 msgstr "ISCSI-jakoa ei voi poistaa."
 
-#: virtManager/delete.py:568
+#: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
 msgstr "SCSI:laitetta ei voi poistaa."
 
-#: virtManager/delete.py:571
+#: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Hallitsematonta etätallennustilaa ei voi poistaa."
 
-#: virtManager/delete.py:573
+#: virtManager/delete.py:574
 msgid "Path does not exist."
 msgstr "Polkua ei ole olemassa."
 
-#: virtManager/delete.py:575
+#: virtManager/delete.py:576
 msgid "No write access to parent directory."
 msgstr "Ei kirjoitusoikeutta vanhempaan hakemistoon."
 
-#: virtManager/delete.py:577
+#: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
 msgstr "Hallitsematonta lohkolaitetta ei voi poistaa."
 
-#: virtManager/delete.py:588
+#: virtManager/delete.py:589
 msgid "Storage is read-only."
 msgstr "Tallennustila on vain-luku:na."
 
-#: virtManager/delete.py:590
+#: virtManager/delete.py:591
 msgid "No write access to path."
 msgstr "Polkuun ei ole kirjoitusoikeutta."
 
-#: virtManager/delete.py:593
+#: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
 msgstr "Tallennustila on merkitty jaettavaksi."
 
-#: virtManager/delete.py:596
+#: virtManager/delete.py:597
 msgid "Storage is a media device."
 msgstr "Tallennustila on medialaite."
 
-#: virtManager/delete.py:605
+#: virtManager/delete.py:606
 msgid "Storage is in use by the following virtual machines"
 msgstr "Tallennustila on seuraavien virtuaalikoneiden käytössä"
 
-#: virtManager/delete.py:610
+#: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
 msgstr "Levyn käyttöristiriidan tarkistaminen epäonnistui."
 
@@ -3269,37 +3264,28 @@ msgstr "Graafinen konsoli"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager ei tue useampaa kuin yhtä graafista konsolia"
 
-#: virtManager/details/console.py:492
-#, python-format
-msgid "Graphics type '%s' does not support auto resize."
-msgstr "Grafiikkatyyppi '%s' ei tue automaattista koon asettamista."
-
-#: virtManager/details/console.py:495
-msgid "Guest agent is not available."
-msgstr "Vierasagentti ei ole käytettävissä."
-
-#: virtManager/details/console.py:575
+#: virtManager/details/console.py:570
 msgid "Guest has crashed."
 msgstr "Vierasjärjestelmä on kaatunut."
 
-#: virtManager/details/console.py:577
+#: virtManager/details/console.py:572
 msgid "Guest is not running."
 msgstr "Vierasjärjestelmä ei ole käynnissä."
 
-#: virtManager/details/console.py:700
+#: virtManager/details/console.py:695
 msgid "Graphical console not configured for guest"
 msgstr "Vierasjärjestelmän graafista konsolia ei ole asetettu"
 
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:702
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Graafisen konsolityypin '%s' näyttäminen ei onnistu"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:714
 msgid "Connecting to graphical console for guest"
 msgstr "Kytkeydytään vierasjärjestelmän graafiseen konsoliin"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:733
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3308,29 +3294,29 @@ msgstr ""
 "Virhe kytkeydyttäessä graafiseen konsoliin:\n"
 "%s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:790
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Katseluohjelman todennusvirhe: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:812
 msgid "USB redirection error"
 msgstr "USB-uudelleenohjauksen virhe"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:821
 msgid "Viewer was disconnected."
 msgstr "Katseluohjelma katkaistiin."
 
-#: virtManager/details/console.py:832
+#: virtManager/details/console.py:827
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH-tunnelin virhelähtö: %s"
 
-#: virtManager/details/console.py:837 virtManager/details/console.py:969
+#: virtManager/details/console.py:832 virtManager/details/console.py:964
 msgid "Viewer disconnected."
 msgstr "Katseluohjelma katkaistu."
 
-#: virtManager/details/console.py:973
+#: virtManager/details/console.py:968
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Paina %s osoittimen vapauttamiseksi."
@@ -3869,7 +3855,7 @@ msgstr ""
 "kuuntelemaan vain paikallisesti. Etäyhteyden muodostamiseksi sinun on "
 "vaihdettava vieraan kuunteluosoite."
 
-#: virtManager/details/viewers.py:347
+#: virtManager/details/viewers.py:351
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3878,10 +3864,18 @@ msgstr ""
 "Pyydettyjä tunnistetietoja ei voida antaa VNC-palvelimelle.\n"
 "Tunnistetyyppiä %s ei tueta"
 
-#: virtManager/details/viewers.py:569
+#: virtManager/details/viewers.py:423
+msgid "GTK-VNC viewer is too old"
+msgstr ""
+
+#: virtManager/details/viewers.py:577
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Kohdattu SPICE %(error-name)s"
+
+#: virtManager/details/viewers.py:750
+msgid "Guest agent is not available."
+msgstr "Vierasagentti ei ole käytettävissä."
 
 #: virtManager/device/addstorage.py:93
 #, python-format
@@ -3968,8 +3962,7 @@ msgstr "Käyttäjätilan verkotus"
 msgid "Virtual network"
 msgstr "Virtuaaliverkko"
 
-#: virtManager/device/netlist.py:116 virtManager/hostnets.py:249
-#: virtManager/hoststorage.py:324 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
 msgid "Inactive"
 msgstr "Passiivinen"
 
@@ -4075,36 +4068,36 @@ msgstr "Eristetty verkko, vain sisäinen reititys"
 msgid "Isolated network, routing disabled"
 msgstr "Eristetty verkko, reititys pois käytöstä"
 
-#: virtManager/hostnets.py:261 virtManager/hoststorage.py:325
+#: virtManager/hostnets.py:260 virtManager/hoststorage.py:324
 msgid "On Boot"
 msgstr "Käynnistyksessä"
 
-#: virtManager/hostnets.py:278
+#: virtManager/hostnets.py:277
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Haluatko varmasti poistaa verkon %s pysyvästi?"
 
-#: virtManager/hostnets.py:285
+#: virtManager/hostnets.py:284
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "Virhe poistaessa verkkoa '%s'"
 
-#: virtManager/hostnets.py:294
+#: virtManager/hostnets.py:293
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "Virhe käynnistäessä verkkoa '%s'"
 
-#: virtManager/hostnets.py:303
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "Virhe pysäyttäessä verkkoa '%s'"
 
-#: virtManager/hostnets.py:312
+#: virtManager/hostnets.py:311
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Virhe ohjatun verkkotoiminnon käynnistämisessä: %s"
 
-#: virtManager/hostnets.py:336
+#: virtManager/hostnets.py:335
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "Virhe verkon asetuksia muuttaessa: %s"
@@ -4142,69 +4135,69 @@ msgstr "Libvirt-yhteys ei tue tallennustilan hallintaa."
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "%(bytesfree)s vapaana / <i>%(bytesinuse)s käytössä</i>"
 
-#: virtManager/hoststorage.py:336
+#: virtManager/hoststorage.py:335
 msgid "Create new volume"
 msgstr "Luo uusi taltio"
 
-#: virtManager/hoststorage.py:343
+#: virtManager/hoststorage.py:342
 msgid "Pool does not support volume creation"
 msgstr "Varanto ei tue taltion luomista"
 
-#: virtManager/hoststorage.py:358
+#: virtManager/hoststorage.py:357
 msgid "No storage pool selected."
 msgstr "Ei tallennustilavarantoa valittu."
 
-#: virtManager/hoststorage.py:367
+#: virtManager/hoststorage.py:366
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Virhe valitessa varantoa: %s"
 
-#: virtManager/hoststorage.py:467
+#: virtManager/hoststorage.py:466
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Virhe pysäyttäessä varantoa '%s'"
 
-#: virtManager/hoststorage.py:476
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Virhe käynnistäessä varantoa '%s'"
 
-#: virtManager/hoststorage.py:486
+#: virtManager/hoststorage.py:485
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Virhe ohjatun varannontoiminnon käynnistämisessä: %s"
 
-#: virtManager/hoststorage.py:493
+#: virtManager/hoststorage.py:492
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Haluatko poistaa pysyvästi varannon %s?"
 
-#: virtManager/hoststorage.py:500
+#: virtManager/hoststorage.py:499
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Virhe poistaessa varantoa '%s'"
 
-#: virtManager/hoststorage.py:511
+#: virtManager/hoststorage.py:510
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Virhe päivittäessä varantoa '%s'"
 
-#: virtManager/hoststorage.py:545
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Virhe ohjatun taltiotoiminnon käynnistämisessä: %s"
 
-#: virtManager/hoststorage.py:553
+#: virtManager/hoststorage.py:552
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Haluatko poistaa pysyvästi taltion %s?"
 
-#: virtManager/hoststorage.py:566
+#: virtManager/hoststorage.py:565
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Virhe poistaessa taltiota '%s'"
 
-#: virtManager/hoststorage.py:591
+#: virtManager/hoststorage.py:590
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Virhe muuttaessa varannon asetuksia: %s"
@@ -4554,11 +4547,11 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "Virhe peruessa migraatiotyötä: %s"
 
-#: virtManager/object/domain.py:458
+#: virtManager/object/domain.py:457
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt-yhteys ei tue tilannevedoksia."
 
-#: virtManager/object/domain.py:473
+#: virtManager/object/domain.py:472
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4566,7 +4559,7 @@ msgstr ""
 "Tilannevedokset ovat tuettuja vain, jos kaikki vierasjärjestelmälle varatut "
 "kirjoitettavat levykuvat ovat qcow2-muodossa."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:475
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4574,17 +4567,17 @@ msgstr ""
 "Tilannevedokset edellyttävät vähintään yhtä kirjoitettavaa qcow2-levykuvaa, "
 "joka on varattu vieraalle."
 
-#: virtManager/object/domain.py:511
+#: virtManager/object/domain.py:510
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Määritettyä laitetta ei löydy passiivisesta virtuaalikoneen kokoonpanosta: %s"
 
-#: virtManager/object/domain.py:1373
+#: virtManager/object/domain.py:1372
 msgid "Saving domain to disk"
 msgstr "Tallennetaan toimialuetta levylle"
 
-#: virtManager/object/domain.py:1425
+#: virtManager/object/domain.py:1424
 msgid "Migrating domain"
 msgstr "Siirretään toimialuetta"
 
@@ -4745,11 +4738,11 @@ msgstr "Valitse tallennustilan taltio"
 msgid "_Show Virtual Machine Manager"
 msgstr "_Näytä virtuaalikoneiden hallitsin"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:44
 msgid "Error starting Virtual Machine Manager"
 msgstr "Virhe käynnistäessä Virtuaalikoneiden hallitsinta"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:45
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Virhe käynnistäessä Virtuaalikoneiden hallitsinta: %(error)s"
@@ -5541,23 +5534,23 @@ msgstr ""
 msgid "Unknown autoconsole type '%s'"
 msgstr "Tuntematon autokonsolityyppi '%s'"
 
-#: virtinst/cli.py:3285
+#: virtinst/cli.py:3287
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Virheellinen arvo 'koko':lle: %s"
 
-#: virtinst/cli.py:3298
+#: virtinst/cli.py:3300
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Tuntematon '%(optionname)s' arvo '%(string)s'"
 
-#: virtinst/cli.py:3313
+#: virtinst/cli.py:3315
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Tallennustilan taltio on määritettävä seuraavasti: vol=varannon nimi/taltion "
 "nimi"
 
-#: virtinst/cli.py:3758
+#: virtinst/cli.py:3763
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Odotettu PCI-muotoinen merkkijono '%s':lle"
@@ -5649,19 +5642,19 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Muotoattribuuttia ei tueta tälle levytyypille"
 
-#: virtinst/devices/disk.py:798
+#: virtinst/devices/disk.py:801
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Laitetyyppi '%s' vaatii polun"
 
-#: virtinst/devices/disk.py:806
+#: virtinst/devices/disk.py:809
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "On määritettävä tallennustilan luomisen parametrit olemattomalle polulle "
 "'%s'."
 
-#: virtinst/devices/disk.py:919
+#: virtinst/devices/disk.py:922
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5679,7 +5672,13 @@ msgstr ""
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s täytyy olla yli 5900, tai -1 automaattiseen varaukseen"
 
-#: virtinst/devices/hostdev.py:61
+#: virtinst/devices/hostdev.py:82
+#, fuzzy, python-format
+#| msgid "Don't know how to setup UEFI for arch '%s'"
+msgid "Don't know how to generate nodedev for mdev type id '%s'"
+msgstr "Ei tiedä miten UEFI määritetään arkkitehtuurille '%s'"
+
+#: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
 msgstr "Tuntematon solmun laitetyyppi %s"
@@ -5726,7 +5725,7 @@ msgstr "koko vaaditaan olemattomalle levylle '%s'"
 msgid "Cloning %(srcfile)s"
 msgstr "Kloonataan %(srcfile)s"
 
-#: virtinst/diskbackend.py:636
+#: virtinst/diskbackend.py:635
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
@@ -5910,32 +5909,34 @@ msgstr ""
 "Sijainnin on oltava asennuspuun juurihakemisto.\n"
 "Katso 'virt-install' man-sivulta erilaisia esimerkkejä."
 
-#: virtinst/install/urlfetcher.py:68
+#: virtinst/install/urlfetcher.py:101
 #, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Tiedostoa ei voitu hankkia %(url)s: %(error)s"
 
-#: virtinst/install/urlfetcher.py:74
-#, python-format
-msgid "Retrieving file %s..."
+#: virtinst/install/urlfetcher.py:106
+#, fuzzy, python-format
+#| msgid "Retrieving file %s..."
+msgid "Retrieving '%(filename)s'"
 msgstr "Noudetaan tiedostoa %s..."
 
-#: virtinst/install/urlfetcher.py:246
+#: virtinst/install/urlfetcher.py:279
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "URL:n %(url)s avaaminen epäonnistui: %(error)s"
 
-#: virtinst/install/volumeupload.py:109
-#, python-format
-msgid "Transferring %s"
+#: virtinst/install/volumeupload.py:108
+#, fuzzy, python-format
+#| msgid "Transferring %s"
+msgid "Transferring '%(filename)s'"
 msgstr "Siirretään %s"
 
-#: virtinst/nodedev.py:230
+#: virtinst/nodedev.py:234
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s vastaa useita solmulaitteita"
 
-#: virtinst/nodedev.py:233
+#: virtinst/nodedev.py:237
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Ei löytänyt vastaavaa solmulaitetta '%s':lle"
@@ -6025,9 +6026,10 @@ msgstr ""
 "Harvat loogiset taltiot eivät ole tuettuja, asetetaan kapasiteettia vastaava "
 "allokointi"
 
-#: virtinst/storage.py:688
-#, python-format
-msgid "Allocating '%s'"
+#: virtinst/storage.py:687
+#, fuzzy, python-format
+#| msgid "Allocating '%s'"
+msgid "Allocating '%(filename)s'"
 msgstr "Varataan '%s'"
 
 #: virtinst/storage.py:727
@@ -6867,6 +6869,12 @@ msgstr "Nimi täytyy antaa %s:lle"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s nimi '%(name)s' ei voi sisältää '%(char)s' merkkejä."
+
+#~ msgid "Completed"
+#~ msgstr "Valmis"
+
+#~ msgid "Graphics type '%s' does not support auto resize."
+#~ msgstr "Grafiikkatyyppi '%s' ei tue automaattista koon asettamista."
 
 #~ msgid "Default"
 #~ msgstr "Oletus"
