@@ -10,24 +10,25 @@
 # Zdenek Styblik <stybla@turnovfree.net>, 2010
 # Zdenek <chmelarz@gmail.com>, 2016. #zanata
 # Zdenek <chmelarz@gmail.com>, 2017. #zanata
-# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata
+# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021.
+# Zdenek Chmelar <chmelarz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-08-01 06:14+0000\n"
-"PO-Revision-Date: 2020-09-22 16:29+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"PO-Revision-Date: 2021-09-06 14:04+0000\n"
+"Last-Translator: Zdenek Chmelar <chmelarz@gmail.com>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.8\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -2148,10 +2149,8 @@ msgid "PCI Host Device"
 msgstr "PCI zařízení hostitele"
 
 #: virtManager/addhardware.py:252
-#, fuzzy
-#| msgid "Host Device:"
 msgid "MDEV Host Device"
-msgstr "Zařízení hostitele:"
+msgstr "MDEV zařízení hostitele"
 
 # auto translated by TM merge from project: Pulseaudio, version: 6.0, DocId:
 # pulseaudio.pot
@@ -2484,10 +2483,8 @@ msgid "PCI Device"
 msgstr "Zařízení PCI"
 
 #: virtManager/addhardware.py:1055
-#, fuzzy
-#| msgid "%s Device"
 msgid "MDEV Device"
-msgstr "Zařízení %s"
+msgstr "MDEV zařízení"
 
 #: virtManager/addhardware.py:1056
 msgid "USB Device"
@@ -3922,7 +3919,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "Příliš stará verze GTK-VNC prohlížeče"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -5365,16 +5362,12 @@ msgstr ""
 "--panic default"
 
 #: virtinst/cli.py:801
-#, fuzzy
-#| msgid ""
-#| "Configure a guest memory device. Ex:\n"
-#| "--memdev dimm,target.size=1024"
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
 "Nastavit paměťové zařízení hosta. Např.:\n"
-"--memdev dimm,target.size=1024"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:805
 msgid ""
@@ -5651,21 +5644,18 @@ msgid "Disk path '%s' does not exist."
 msgstr "Diskové umístění „%s“ neexistuje."
 
 #: virtinst/cloner.py:181
-#, fuzzy, python-format
-#| msgid "Architecture '%s' is not installable"
+#, python-format
 msgid "Disk network type '%s' is not cloneable."
-msgstr "Architektura „%s“ není instalovatelná"
+msgstr "Síťový disk typu „%s“ není možné klonovat."
 
 #: virtinst/cloner.py:184
 #, python-format
 msgid "Cloning disk network type '%s' requires managed storage."
-msgstr ""
+msgstr "Klonování síťového disku typu '%s' vyžaduje spravované úložiště."
 
 #: virtinst/cloner.py:190
-#, fuzzy
-#| msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgid "Cloning rbd volumes is not yet supported."
-msgstr "Klonování do existujícího svazku úložiště zatím není podporováno: „%s“"
+msgstr "Klonování rbd svazků zatím není podporováno."
 
 #: virtinst/cloner.py:197
 msgid "Read Only"
@@ -5751,10 +5741,9 @@ msgstr ""
 "Je třeba, aby %s bylo vyšší než 5900 (nebo -1 pro automatické přiřazení)"
 
 #: virtinst/devices/hostdev.py:82
-#, fuzzy, python-format
-#| msgid "Don't know how to setup UEFI for arch '%s'"
+#, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
-msgstr "Není známo jak nastavit UEFI pro architekturu „%s“"
+msgstr "Není známo jak vytvářet nodedev pro identifikátor typu mdev „%s“"
 
 #: virtinst/devices/hostdev.py:88
 #, python-format
@@ -5995,10 +5984,9 @@ msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Nedaří se získat soubor %(url)s: %(error)s"
 
 #: virtinst/install/urlfetcher.py:106
-#, fuzzy, python-format
-#| msgid "Retrieving file %s..."
+#, python-format
 msgid "Retrieving '%(filename)s'"
-msgstr "Získávání souboru %s…"
+msgstr "Získávání „%(filename)s“"
 
 #: virtinst/install/urlfetcher.py:279
 #, python-format
@@ -6006,10 +5994,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Otevírání URL adresy %(url)s se nezdařilo: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
-#, fuzzy, python-format
-#| msgid "Transferring %s"
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "Přenášení %s"
+msgstr "Přenášení „%(filename)s“"
 
 #: virtinst/nodedev.py:254
 #, python-format
@@ -6109,10 +6096,9 @@ msgstr ""
 "kapacita"
 
 #: virtinst/storage.py:687
-#, fuzzy, python-format
-#| msgid "Allocating '%s'"
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "Přiřazování „%s“"
+msgstr "Přiřazování „%(filename)s“"
 
 #: virtinst/storage.py:727
 #, python-format
