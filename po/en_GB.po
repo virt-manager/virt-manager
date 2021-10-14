@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-07-27 06:14+0000\n"
+"POT-Creation-Date: 2021-08-01 06:14+0000\n"
 "PO-Revision-Date: 2020-08-06 08:29+0000\n"
 "Last-Translator: Pavel Hrdina <phrdina@redhat.com>\n"
 "Language-Team: English (United Kingdom) <https://translate.fedoraproject.org/"
@@ -1438,7 +1438,7 @@ msgid "Apply pool changes"
 msgstr "Apply pool changes"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:200
+#: virtManager/object/libvirtobject.py:209
 msgid "Active"
 msgstr "Active"
 
@@ -3321,28 +3321,28 @@ msgstr "Graphical Console"
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager does not support more that one graphical console"
 
-#: virtManager/details/console.py:570
+#: virtManager/details/console.py:565
 msgid "Guest has crashed."
 msgstr "Guest has crashed."
 
-#: virtManager/details/console.py:572
+#: virtManager/details/console.py:567
 msgid "Guest is not running."
 msgstr "Guest is not running."
 
-#: virtManager/details/console.py:695
+#: virtManager/details/console.py:690
 msgid "Graphical console not configured for guest"
 msgstr "Graphical console not configured for guest"
 
-#: virtManager/details/console.py:702
+#: virtManager/details/console.py:697
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Cannot display graphical console type '%s'"
 
-#: virtManager/details/console.py:714
+#: virtManager/details/console.py:709
 msgid "Connecting to graphical console for guest"
 msgstr "Connecting to graphical console for guest"
 
-#: virtManager/details/console.py:733
+#: virtManager/details/console.py:728
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3350,29 +3350,29 @@ msgid ""
 "%s"
 msgstr "Error connecting to graphical console"
 
-#: virtManager/details/console.py:790
+#: virtManager/details/console.py:785
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Viewer authentication error: %s"
 
-#: virtManager/details/console.py:812
+#: virtManager/details/console.py:807
 msgid "USB redirection error"
 msgstr "USB redirection error"
 
-#: virtManager/details/console.py:821
+#: virtManager/details/console.py:816
 msgid "Viewer was disconnected."
 msgstr "Viewer was disconnected."
 
-#: virtManager/details/console.py:827
+#: virtManager/details/console.py:822
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH tunnel error output: %s"
 
-#: virtManager/details/console.py:832 virtManager/details/console.py:964
+#: virtManager/details/console.py:827 virtManager/details/console.py:959
 msgid "Viewer disconnected."
 msgstr "Viewer disconnected."
 
-#: virtManager/details/console.py:968
+#: virtManager/details/console.py:963
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Press %s to release pointer."
@@ -4027,7 +4027,7 @@ msgstr "Usermode networking"
 msgid "Virtual network"
 msgstr "Virtual network"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:201
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
 msgid "Inactive"
 msgstr "Inactive"
 
@@ -4638,11 +4638,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "Could not find specified device in the inactive VM configuration: %s"
 
-#: virtManager/object/domain.py:1371
+#: virtManager/object/domain.py:1373
 msgid "Saving domain to disk"
 msgstr "Saving domain to disk"
 
-#: virtManager/object/domain.py:1423
+#: virtManager/object/domain.py:1425
 msgid "Migrating domain"
 msgstr "Migrating domain"
 
@@ -5366,53 +5366,65 @@ msgstr ""
 "--panic default"
 
 #: virtinst/cli.py:801
+#, fuzzy
+#| msgid ""
+#| "Configure a guest smartcard device. Ex:\n"
+#| "--smartcard mode=passthrough"
+msgid ""
+"Configure a guest shared memory device. Ex:\n"
+"--shmem name=shmem0"
+msgstr ""
+"Configure a guest smartcard device. Ex:\n"
+"--smartcard mode=passthrough"
+
+#: virtinst/cli.py:805
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:809
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:810
+#: virtinst/cli.py:814
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:817
+#: virtinst/cli.py:821
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:821
+#: virtinst/cli.py:825
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:829
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:830
+#: virtinst/cli.py:834
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:838
 msgid "Tune NUMA policy for the domain process."
 msgstr "Tune NUMA policy for the domain process."
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:842
 msgid "Tune memory policy for the domain process."
 msgstr "Tune memory policy for the domain process."
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:846
 msgid "Tune blkio policy for the domain process."
 msgstr "Tune blkio policy for the domain process."
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:850
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5420,14 +5432,14 @@ msgstr ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:851
+#: virtinst/cli.py:855
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:857
+#: virtinst/cli.py:861
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5435,26 +5447,26 @@ msgstr ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:862
+#: virtinst/cli.py:866
 msgid "Configure VM power management features"
 msgstr "Configure VM power management features"
 
-#: virtinst/cli.py:866
+#: virtinst/cli.py:870
 msgid "Configure VM lifecycle management policy"
 msgstr "Configure VM lifecycle management policy"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:874
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Configure VM resource partitioning (cgroups)"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:878
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:880
+#: virtinst/cli.py:884
 #, fuzzy
 #| msgid ""
 #| "Pass arguments directly to the qemu emulator. Ex:\n"
@@ -5469,7 +5481,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:886
+#: virtinst/cli.py:890
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5477,7 +5489,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:898
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5487,13 +5499,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 
-#: virtinst/cli.py:900
+#: virtinst/cli.py:904
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:910
+#: virtinst/cli.py:914
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5507,26 +5519,26 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:922
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:921
+#: virtinst/cli.py:925
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:923
+#: virtinst/cli.py:927
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:925
+#: virtinst/cli.py:929
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "See 'osinfo-query os' for a full list."
 msgstr ""
 
-#: virtinst/cli.py:935
+#: virtinst/cli.py:939
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5534,12 +5546,12 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:965
+#: virtinst/cli.py:969
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s must be 'yes' or 'no'"
 
-#: virtinst/cli.py:1150
+#: virtinst/cli.py:1154
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5548,17 +5560,17 @@ msgstr ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 
-#: virtinst/cli.py:1462
+#: virtinst/cli.py:1466
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1518 virtinst/cli.py:1549
+#: virtinst/cli.py:1522 virtinst/cli.py:1553
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1898
+#: virtinst/cli.py:1902
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5566,31 +5578,31 @@ msgstr ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 
-#: virtinst/cli.py:1905
+#: virtinst/cli.py:1909
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 
-#: virtinst/cli.py:1916
+#: virtinst/cli.py:1920
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3288
+#: virtinst/cli.py:3336
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Improper value for 'size': %s"
 
-#: virtinst/cli.py:3301
+#: virtinst/cli.py:3349
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Unknown '%s' value '%s'"
 
-#: virtinst/cli.py:3316
+#: virtinst/cli.py:3364
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Storage volume must be specified as vol=poolname/volname"
 
-#: virtinst/cli.py:3764
+#: virtinst/cli.py:3813
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5687,17 +5699,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "Format attribute not supported for this volume type"
 
-#: virtinst/devices/disk.py:801
+#: virtinst/devices/disk.py:802
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Device type '%s' requires a path"
 
-#: virtinst/devices/disk.py:809
+#: virtinst/devices/disk.py:810
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "Must specify storage creation parameters for non-existent path '%s'."
 
-#: virtinst/devices/disk.py:922
+#: virtinst/devices/disk.py:923
 #, fuzzy, python-format
 #| msgid "Only %s disks for bus '%s' are supported"
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
@@ -5705,7 +5717,7 @@ msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] "Only %s disks for bus '%s' are supported"
 msgstr[1] "Only %s disks for bus '%s' are supported"
 
-#: virtinst/devices/filesystem.py:121
+#: virtinst/devices/filesystem.py:123
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr "Filesystem target '%s' must be an absolute path"
@@ -5810,25 +5822,25 @@ msgstr "Custom: %(path)s"
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
 
-#: virtinst/guest.py:77
+#: virtinst/guest.py:78
 msgid "Guest"
 msgstr "Guest"
 
-#: virtinst/guest.py:85
+#: virtinst/guest.py:86
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "Guest name '%s' is already in use."
 
-#: virtinst/guest.py:524
+#: virtinst/guest.py:527
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt version does not support UEFI."
 
-#: virtinst/guest.py:528
+#: virtinst/guest.py:531
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "Don't know how to setup UEFI for arch '%s'"
 
-#: virtinst/guest.py:533
+#: virtinst/guest.py:536
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "Did not find any UEFI binary path for arch '%s'"
