@@ -106,9 +106,15 @@ def testDomainCapabilitiesx86():
     assert "Custom:" in caps.label_for_firmware_path("/foobar")
     assert "UEFI" in caps.label_for_firmware_path("OVMF")
 
+    assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_memorybacking_memfd()
+
 
 def testDomainCapabilitiesAArch64():
     xml = open(DATADIR + "/kvm-aarch64-domcaps.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
     assert "None" in caps.label_for_firmware_path(None)
+
+    assert not caps.supports_filesystem_virtiofs()
+    assert not caps.supports_memorybacking_memfd()
