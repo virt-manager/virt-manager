@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-10-05 06:14+0000\n"
+"POT-Creation-Date: 2021-10-13 06:14+0000\n"
 "PO-Revision-Date: 2021-08-01 03:04+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
@@ -5757,7 +5757,7 @@ msgstr "Спосіб створення nodedev для ідентифікато�
 msgid "Unknown node device type %s"
 msgstr "Невідомий тип пристрою вузла, %s"
 
-#: virtinst/devices/interface.py:171
+#: virtinst/devices/interface.py:189
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr ""
@@ -6248,7 +6248,7 @@ msgstr ""
 "випадково створена MAC-адреса."
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1052
-#: virtinst/virtxml.py:417
+#: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "Інші параметри"
 
@@ -6630,21 +6630,21 @@ msgstr "Примусово вимкнути домен після закритт
 msgid "Minutes to wait for install to complete."
 msgstr "Час у хвилинах, протягом якого слід чекати на завершення встановлення."
 
-#: virtinst/virtxml.py:34
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "Введіть «yes» («так») або «no» («ні»)."
 
-#: virtinst/virtxml.py:79
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Некоректний параметр --edit «%s»"
 
-#: virtinst/virtxml.py:82
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr "У XML не знайдено об'єктів --%s"
 
-#: virtinst/virtxml.py:85
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6662,31 +6662,31 @@ msgstr[2] ""
 "Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
 "%(type)s"
 
-#: virtinst/virtxml.py:106
+#: virtinst/virtxml.py:107
 #, python-format
 msgid "No matching objects found for %s"
 msgstr "Не знайдено відповідних об'єктів для %s"
 
-#: virtinst/virtxml.py:122
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "One of %s must be specified."
 msgstr "Слід вказати один з %s."
 
-#: virtinst/virtxml.py:125
+#: virtinst/virtxml.py:126
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Конфлікт параметрів %s"
 
-#: virtinst/virtxml.py:136
+#: virtinst/virtxml.py:137
 msgid "No change specified."
 msgstr "Не вказано жодної зміни."
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:139
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "Можна вказувати лише одну дію зі зміни (конфлікт параметрів %s)"
 
-#: virtinst/virtxml.py:151
+#: virtinst/virtxml.py:152
 #, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
@@ -6695,60 +6695,60 @@ msgstr ""
 "«--edit %(option)s» не має сенсу, якщо вказано --%(objecttype)s. Не "
 "використовуйте аргумент: «--edit»"
 
-#: virtinst/virtxml.py:156
+#: virtinst/virtxml.py:157
 msgid "--os-variant is not supported with --edit"
 msgstr "якщо використано --edit, не можна використовувати --os-variant"
 
-#: virtinst/virtxml.py:163
+#: virtinst/virtxml.py:164
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "Не можна використовувати --add-device, якщо вказано --%s"
 
-#: virtinst/virtxml.py:174
+#: virtinst/virtxml.py:181
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Не можна використовувати --remove-device, якщо використано --%s"
 
-#: virtinst/virtxml.py:177
+#: virtinst/virtxml.py:184
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 "якщо використано --remove-device, не можна використовувати --os-variant"
 
-#: virtinst/virtxml.py:197
+#: virtinst/virtxml.py:204
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "Підтримки --build-xml для --%s не передбачено"
 
-#: virtinst/virtxml.py:200
+#: virtinst/virtxml.py:207
 msgid "--os-variant is not supported with --build-xml"
 msgstr "якщо використано --build-xml, не можна використовувати --os-variant"
 
-#: virtinst/virtxml.py:226
+#: virtinst/virtxml.py:233
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Визначити «%s» зі зміненим XML?"
 
-#: virtinst/virtxml.py:234
+#: virtinst/virtxml.py:241
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Домен «%s» успішно визначено."
 
-#: virtinst/virtxml.py:241
+#: virtinst/virtxml.py:248
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "Запустити «%s» зі зміненим XML?"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:535
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Не вдалося запустити домен «%(domain)s»: %(error)s"
 
-#: virtinst/virtxml.py:256 virtinst/virtxml.py:539
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Домен «%s» успішно запущено."
 
-#: virtinst/virtxml.py:262
+#: virtinst/virtxml.py:269
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6759,16 +6759,16 @@ msgstr ""
 "\n"
 "З'єднати «у гарячу» цей пристрій із гостьовою системою «%(domain)s»?"
 
-#: virtinst/virtxml.py:264
+#: virtinst/virtxml.py:271
 msgid "Device hotplug successful."
 msgstr "Пристрій успішно з'єднано «у гарячу»."
 
-#: virtinst/virtxml.py:265
+#: virtinst/virtxml.py:272
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "Помилка під час спроби з'єднати пристрій «у гарячу»: %(error)s"
 
-#: virtinst/virtxml.py:267
+#: virtinst/virtxml.py:274
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6779,16 +6779,16 @@ msgstr ""
 "\n"
 "Від'єднати цей пристрій «у гарячу» від гостьової системи «%(domain)s»?"
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:276
 msgid "Device hotunplug successful."
 msgstr "Пристрій успішно від'єднано «у гарячу»."
 
-#: virtinst/virtxml.py:270
+#: virtinst/virtxml.py:277
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Помилка під час спроби від'єднати пристрій «у гарячу»: %(error)s"
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:279
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6799,37 +6799,37 @@ msgstr ""
 "\n"
 "Оновити цей пристрій для гостьової системи «%(domain)s»?"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:281
 msgid "Device update successful."
 msgstr "Запис пристрою успішно оновлено."
 
-#: virtinst/virtxml.py:275
+#: virtinst/virtxml.py:282
 #, python-format
 msgid "Error attempting device update: %(error)s"
 msgstr "Помилка під час спроби оновлення запису пристрою: %(error)s"
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:327
 msgid "--xml can only be used with --edit"
 msgstr "--xml можна використовувати лише разом із --edit"
 
-#: virtinst/virtxml.py:335
+#: virtinst/virtxml.py:349
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "Немає різниці у XML. Зміни, на які надійшов запит, ні на що не вплинуть."
 
-#: virtinst/virtxml.py:354
+#: virtinst/virtxml.py:368
 msgid "Edit libvirt XML using command line options."
 msgstr "Редагувати XML libvirt за допомогою параметрів командного рядка."
 
-#: virtinst/virtxml.py:360
+#: virtinst/virtxml.py:374
 msgid "Domain name, id, or uuid"
 msgstr "Назва домену, id або uuid"
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:376
 msgid "XML actions"
 msgstr "Дії XML"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:378
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6843,7 +6843,7 @@ msgstr ""
 "--edit all --disk ... (редагувати усі дискові пристрої)\n"
 "--edit target=hda --disk ... (редагувати диск «hda»)\n"
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:384
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6855,7 +6855,7 @@ msgstr ""
 "--remove-device --disk all (вилучити усі диски)\n"
 "--remove-device --disk /якийсь/шлях"
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:389
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6863,7 +6863,7 @@ msgstr ""
 "Додати вказаний пристрій. Приклад:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:378
+#: virtinst/virtxml.py:392
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -6871,11 +6871,11 @@ msgstr ""
 "Вивести зібраний XML пристрою. Домен можна не вказувати, але рекомендуємо "
 "його вказати, щоб забезпечити оптимальні типові параметри."
 
-#: virtinst/virtxml.py:381
+#: virtinst/virtxml.py:395
 msgid "Output options"
 msgstr "Налаштування виведення"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:397
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6887,67 +6887,67 @@ msgstr ""
 "З --remove-device ця дія буде інтерактивним вилученням.\n"
 "З --edit ця дія буде дією з оновлення пристрою."
 
-#: virtinst/virtxml.py:389
+#: virtinst/virtxml.py:403
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Примусове визначення домену. Потрібне, лише якщо вказано параметр --print."
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:406
 msgid "Force not defining the domain."
 msgstr "Примусово не визначаємо домен."
 
-#: virtinst/virtxml.py:395
+#: virtinst/virtxml.py:409
 msgid "Start the domain."
 msgstr "Запустити домен."
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:411
 msgid "Only print the requested change, in diff format"
 msgstr "Лише вивести потрібну зміну у повному форматі diff"
 
-#: virtinst/virtxml.py:399
+#: virtinst/virtxml.py:413
 msgid "Only print the requested change, in full XML format"
 msgstr "Лише вивести потрібну зміну у повному форматі XML"
 
-#: virtinst/virtxml.py:401
+#: virtinst/virtxml.py:415
 msgid "Require confirmation before saving any results."
 msgstr "Для збереження будь-яких результатів потрібне підтвердження."
 
-#: virtinst/virtxml.py:405
+#: virtinst/virtxml.py:419
 msgid "XML options"
 msgstr "Параметри XML"
 
-#: virtinst/virtxml.py:445
+#: virtinst/virtxml.py:459
 msgid "Can't use --confirm with stdin input."
 msgstr ""
 "Не можна використовувати --confirm зі стандартним джерелом вхідних даних "
 "(stdin)."
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:461
 msgid "Can't use --update with stdin input."
 msgstr ""
 "Не можна використовувати --update зі стандартним джерелом вхідних даних "
 "(stdin)."
 
-#: virtinst/virtxml.py:450
+#: virtinst/virtxml.py:464
 msgid "A domain must be specified"
 msgstr "Слід вказати домен"
 
-#: virtinst/virtxml.py:478
+#: virtinst/virtxml.py:492
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "Спосіб використання --update для --%s невідомий"
 
-#: virtinst/virtxml.py:511
+#: virtinst/virtxml.py:526
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 "Віртуальну машину не запущено — застосовувати параметр --update не можна."
 
-#: virtinst/virtxml.py:544
+#: virtinst/virtxml.py:559
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Зміни буде застосовано після того, як домен буде повністю вимкнено."
 
-#: virtinst/virtxml.py:546
+#: virtinst/virtxml.py:561
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6955,7 +6955,7 @@ msgstr ""
 "XML не змінено після визначення домену. Ймовірно, ви змінили значення так, "
 "що воно збіглося із типовим значенням у libvirt."
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:574
 msgid "Aborted at user request"
 msgstr "Перервано на вимогу користувача"
 
