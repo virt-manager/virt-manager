@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-10-05 06:14+0000\n"
+"POT-Creation-Date: 2021-10-13 06:14+0000\n"
 "PO-Revision-Date: 2021-08-01 03:04+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
@@ -5700,7 +5700,7 @@ msgstr "'%s' mdev tür kimliği için nasıl nodedev oluşturulacağı bilinmiyo
 msgid "Unknown node device type %s"
 msgstr "Bilinmeyen düğüm aygıtı türü %s"
 
-#: virtinst/devices/interface.py:171
+#: virtinst/devices/interface.py:189
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "'%s' MAC adresi başka bir sanal makine tarafından kullanılıyor."
@@ -6179,7 +6179,7 @@ msgstr ""
 "MAC adresi oluşturulur"
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1052
-#: virtinst/virtxml.py:417
+#: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "Çeşitli Seçenekler"
 
@@ -6545,21 +6545,21 @@ msgstr "Konsol görüntüleyici kapatıldığında etki alanını kapatmaya zorl
 msgid "Minutes to wait for install to complete."
 msgstr "Kurulumun tamamlanması için dakika cinsinden beklenecek süre."
 
-#: virtinst/virtxml.py:34
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "Lütfen 'yes' veya 'no' girin."
 
-#: virtinst/virtxml.py:79
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Geçersiz --edit seçeneği '%s'"
 
-#: virtinst/virtxml.py:82
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr "XML'de --%s nesnesi bulunamadı"
 
-#: virtinst/virtxml.py:85
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6574,31 +6574,31 @@ msgstr[1] ""
 "'--edit %(number)s' istendi ancak XML'de yalnızca %(max)s --%(type)s nesnesi "
 "var"
 
-#: virtinst/virtxml.py:106
+#: virtinst/virtxml.py:107
 #, python-format
 msgid "No matching objects found for %s"
 msgstr "%s için eşleşen nesne bulunamadı"
 
-#: virtinst/virtxml.py:122
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s seçeneklerinden biri belirtilmelidir."
 
-#: virtinst/virtxml.py:125
+#: virtinst/virtxml.py:126
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Çakışan seçenekler %s"
 
-#: virtinst/virtxml.py:136
+#: virtinst/virtxml.py:137
 msgid "No change specified."
 msgstr "Değişiklik belirtilmedi."
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:139
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "Yalnızca bir değişiklik işlemi belirtilebilir (çakışan seçenekler %s)"
 
-#: virtinst/virtxml.py:151
+#: virtinst/virtxml.py:152
 #, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
@@ -6607,59 +6607,59 @@ msgstr ""
 "'--edit %(option)s' ile --%(objecttype)s birlikte bir anlam ifade etmiyor, "
 "yalnızca boş '--edit' kullanın"
 
-#: virtinst/virtxml.py:156
+#: virtinst/virtxml.py:157
 msgid "--os-variant is not supported with --edit"
 msgstr "--os-variant ile --edit birlikte desteklenmiyor"
 
-#: virtinst/virtxml.py:163
+#: virtinst/virtxml.py:164
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device ile --%s birlikte kullanılamaz"
 
-#: virtinst/virtxml.py:174
+#: virtinst/virtxml.py:181
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device ile --%s birlikte kullanılamaz"
 
-#: virtinst/virtxml.py:177
+#: virtinst/virtxml.py:184
 msgid "--os-variant is not supported with --remove-device"
 msgstr "--os-variant ile --remove-device birlikte desteklenmiyor"
 
-#: virtinst/virtxml.py:197
+#: virtinst/virtxml.py:204
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml --%s için desteklenmiyor"
 
-#: virtinst/virtxml.py:200
+#: virtinst/virtxml.py:207
 msgid "--os-variant is not supported with --build-xml"
 msgstr "--os-variant ile --build-xml birlikte desteklenmiyor"
 
-#: virtinst/virtxml.py:226
+#: virtinst/virtxml.py:233
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "'%s' değiştirilen XML ile tanımlansın mı?"
 
-#: virtinst/virtxml.py:234
+#: virtinst/virtxml.py:241
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "'%s' etki alanı başarıyla tanımlandı."
 
-#: virtinst/virtxml.py:241
+#: virtinst/virtxml.py:248
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "'%s' değiştirilen XML ile başlatılsın mı?"
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:535
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "'%(domain)s' etki alanı başlatılamadı: %(error)s"
 
-#: virtinst/virtxml.py:256 virtinst/virtxml.py:539
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "'%s' etki alanı başarıyla başlatıldı."
 
-#: virtinst/virtxml.py:262
+#: virtinst/virtxml.py:269
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6670,16 +6670,16 @@ msgstr ""
 "\n"
 "Bu aygıt çalışan '%(domain)s' konuğuna takılsın mı?"
 
-#: virtinst/virtxml.py:264
+#: virtinst/virtxml.py:271
 msgid "Device hotplug successful."
 msgstr "Aygıt başarıyla takıldı."
 
-#: virtinst/virtxml.py:265
+#: virtinst/virtxml.py:272
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "Aygıtı takmayı denerken hata oluştu: %(error)s"
 
-#: virtinst/virtxml.py:267
+#: virtinst/virtxml.py:274
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6690,16 +6690,16 @@ msgstr ""
 "\n"
 "Bu aygıt çalışan '%(domain)s' konuğundan çıkarılsın mı?"
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:276
 msgid "Device hotunplug successful."
 msgstr "Aygıt başarıyla çıkarıldı."
 
-#: virtinst/virtxml.py:270
+#: virtinst/virtxml.py:277
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Aygıtı çıkarmayı denerken hata oluştu: %(error)s"
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:279
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6710,37 +6710,37 @@ msgstr ""
 "\n"
 "Bu aygıt '%(domain)s' konuğu için güncellensin mi?"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:281
 msgid "Device update successful."
 msgstr "Aygıt başarıyla güncellendi."
 
-#: virtinst/virtxml.py:275
+#: virtinst/virtxml.py:282
 #, python-format
 msgid "Error attempting device update: %(error)s"
 msgstr "Aygıtı güncellemeyi denerken hata oluştu: %(error)s"
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:327
 msgid "--xml can only be used with --edit"
 msgstr "--xml yalnızca --edit ile kullanılabilir"
 
-#: virtinst/virtxml.py:335
+#: virtinst/virtxml.py:349
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "XML farkı oluşturulmadı. İstenen değişikliklerin hiçbir etkisi olmayacak."
 
-#: virtinst/virtxml.py:354
+#: virtinst/virtxml.py:368
 msgid "Edit libvirt XML using command line options."
 msgstr "Komut satırı seçeneklerini kullanarak libvirt XML'ini düzenle."
 
-#: virtinst/virtxml.py:360
+#: virtinst/virtxml.py:374
 msgid "Domain name, id, or uuid"
 msgstr "Etki alanı adı, kimlik veya uuid"
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:376
 msgid "XML actions"
 msgstr "XML eylemleri"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:378
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6754,7 +6754,7 @@ msgstr ""
 "--edit all --disk ... (tüm disk aygıtlarını düzenle)\n"
 "--edit target=hda --disk ... ('hda' diskini düzenle)\n"
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:384
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6766,7 +6766,7 @@ msgstr ""
 "--remove-device --disk all (tüm diskleri kaldır)\n"
 "--remove-device --disk /disk/yolu"
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:389
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6774,7 +6774,7 @@ msgstr ""
 "Belirtilen aygıtı ekle. Örnekler:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:378
+#: virtinst/virtxml.py:392
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -6782,11 +6782,11 @@ msgstr ""
 "Oluşturulan aygıt XML'ini yazdır. Etki alanı isteğe bağlıdır ancak en iyi "
 "öntanımlı değerleri sağlamak için tavsiye edilir."
 
-#: virtinst/virtxml.py:381
+#: virtinst/virtxml.py:395
 msgid "Output options"
 msgstr "Çıktı seçenekleri"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:397
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6798,63 +6798,63 @@ msgstr ""
 "--remove-device ile, bu bir çalışırken çıkarma işlemidir.\n"
 "--edit ile, bu bir aygıt güncelleme işlemidir."
 
-#: virtinst/virtxml.py:389
+#: virtinst/virtxml.py:403
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Etki alanını tanımlamaya zorla. Yalnızca bir --print seçeneği belirtilmişse "
 "gereklidir."
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:406
 msgid "Force not defining the domain."
 msgstr "Etki alanını tanımlamamaya zorla."
 
-#: virtinst/virtxml.py:395
+#: virtinst/virtxml.py:409
 msgid "Start the domain."
 msgstr "Etki alanını başlat."
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:411
 msgid "Only print the requested change, in diff format"
 msgstr "Yalnızca istenen değişikliği fark (diff) biçiminde yazdır"
 
-#: virtinst/virtxml.py:399
+#: virtinst/virtxml.py:413
 msgid "Only print the requested change, in full XML format"
 msgstr "Yalnızca istenen değişikliği tam XML biçiminde yazdır"
 
-#: virtinst/virtxml.py:401
+#: virtinst/virtxml.py:415
 msgid "Require confirmation before saving any results."
 msgstr "Herhangi bir sonucu kaydetmeden önce onay iste."
 
-#: virtinst/virtxml.py:405
+#: virtinst/virtxml.py:419
 msgid "XML options"
 msgstr "XML seçenekleri"
 
-#: virtinst/virtxml.py:445
+#: virtinst/virtxml.py:459
 msgid "Can't use --confirm with stdin input."
 msgstr "--confirm standart girdi (stdin) ile kullanılamaz."
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:461
 msgid "Can't use --update with stdin input."
 msgstr "--update standart girdi (stdin) ile kullanılamaz."
 
-#: virtinst/virtxml.py:450
+#: virtinst/virtxml.py:464
 msgid "A domain must be specified"
 msgstr "Bir etki alanı belirtilmelidir"
 
-#: virtinst/virtxml.py:478
+#: virtinst/virtxml.py:492
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s için nasıl --update yapılacağı bilinmiyor"
 
-#: virtinst/virtxml.py:511
+#: virtinst/virtxml.py:526
 msgid "The VM is not running, --update is inapplicable."
 msgstr "SM çalışmıyor, --update uygulanabilir değil."
 
-#: virtinst/virtxml.py:544
+#: virtinst/virtxml.py:559
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Etki alanı tamamen kapatıldıktan sonra değişiklikler geçerli olacak."
 
-#: virtinst/virtxml.py:546
+#: virtinst/virtxml.py:561
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6862,7 +6862,7 @@ msgstr ""
 "XML, etki alanı tanımlandıktan sonra değişmedi. Libvirt'in öntanımlı olarak "
 "ayarladığı bir değeri değiştirmiş olabilirsiniz."
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:574
 msgid "Aborted at user request"
 msgstr "Kullanıcı isteği üzerine sonlandırıldı"
 

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-10-05 06:14+0000\n"
+"POT-Creation-Date: 2021-10-13 06:14+0000\n"
 "PO-Revision-Date: 2017-02-05 04:17+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Kannada (http://www.transifex.com/projects/p/virt-manager/"
@@ -5661,7 +5661,7 @@ msgstr "--%s ಗಾಗಿ --update ಮಾಡುವುದು ಹೇಗೆಂದ�
 msgid "Unknown node device type %s"
 msgstr ""
 
-#: virtinst/devices/interface.py:171
+#: virtinst/devices/interface.py:189
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "'%s' MAC ವಿಳಾಸವು ಬೇರೊಂದು ವರ್ಚುವಲ್ ಗಣಕದಿಂದ ಬಳಸಲ್ಪಡುತ್ತಿದೆ."
@@ -6128,7 +6128,7 @@ msgstr ""
 "ಉತ್ಪಾದಿತಗೊಂಡ MAC ಆಗಿರುತ್ತದೆ"
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1052
-#: virtinst/virtxml.py:417
+#: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "ಇತರೆ ಆಯ್ಕೆಗಳು"
 
@@ -6469,21 +6469,21 @@ msgstr ""
 msgid "Minutes to wait for install to complete."
 msgstr "ಅನುಸ್ಥಾಪನೆಯು ಪೂರ್ಣಗೊಳ್ಳಲು ಕಾಯಬೇಕಿರುವ ನಿಮಿಷಗಳು."
 
-#: virtinst/virtxml.py:34
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "ದಯವಿಟ್ಟು 'yes' ಅಥವ 'no' ಎಂದು ನಮೂದಿಸಿ."
 
-#: virtinst/virtxml.py:79
+#: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "ತಪ್ಪಾದ --edit ಆಯ್ಕೆ '%s'"
 
-#: virtinst/virtxml.py:82
+#: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
 msgstr ""
 
-#: virtinst/virtxml.py:85
+#: virtinst/virtxml.py:86
 #, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
@@ -6493,31 +6493,31 @@ msgid_plural ""
 "in the XML"
 msgstr[0] ""
 
-#: virtinst/virtxml.py:106
+#: virtinst/virtxml.py:107
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:122
+#: virtinst/virtxml.py:123
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s ನಲ್ಲಿ ಒಂದನ್ನು ಸೂಚಿಸಬೇಕಾಗುತ್ತದೆ."
 
-#: virtinst/virtxml.py:125
+#: virtinst/virtxml.py:126
 #, python-format
 msgid "Conflicting options %s"
 msgstr "ಘರ್ಷಿಸುವ ಆಯ್ಕೆಗಳು %s"
 
-#: virtinst/virtxml.py:136
+#: virtinst/virtxml.py:137
 msgid "No change specified."
 msgstr "ಯಾವುದೆ ಬದಲಾವಣೆಯನ್ನು ಸೂಚಿಸಲಾಗಿಲ್ಲ."
 
-#: virtinst/virtxml.py:138
+#: virtinst/virtxml.py:139
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "ಕೇವಲ ಒಂದು ಬದಲಾವಣೆ ಕಾರ್ಯವನ್ನು ಸೂಚಿಸಬಹುದು (ಘರ್ಷಿಸುವ ಆಯ್ಕೆಗಳು %s)"
 
-#: virtinst/virtxml.py:151
+#: virtinst/virtxml.py:152
 #, fuzzy, python-format
 #| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
 msgid ""
@@ -6526,60 +6526,60 @@ msgid ""
 msgstr ""
 "'--edit %s' ಎನ್ನುವುದು  --%s ರೊಂದಿಗೆ ಹೊಂದಿಕೆಯಾಗುವುದಿಲ್ಲ, ಕೇವಲ '--edit' ಅನ್ನು ಬಳಸಿ"
 
-#: virtinst/virtxml.py:156
+#: virtinst/virtxml.py:157
 msgid "--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:163
+#: virtinst/virtxml.py:164
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "--add-device ಅನ್ನು --%s ನೊಂದಿಗೆ ಬಳಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ"
 
-#: virtinst/virtxml.py:174
+#: virtinst/virtxml.py:181
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device ಅನ್ನು --%s ನೊಂದಿಗೆ ಬಳಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ"
 
-#: virtinst/virtxml.py:177
+#: virtinst/virtxml.py:184
 msgid "--os-variant is not supported with --remove-device"
 msgstr ""
 
-#: virtinst/virtxml.py:197
+#: virtinst/virtxml.py:204
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--%s ಗಾಗಿ --build-xml ಎನ್ನುವುದಕ್ಕೆ ಬೆಂಬಲಿವಿರುವುದಿಲ್ಲ"
 
-#: virtinst/virtxml.py:200
+#: virtinst/virtxml.py:207
 msgid "--os-variant is not supported with --build-xml"
 msgstr ""
 
-#: virtinst/virtxml.py:226
+#: virtinst/virtxml.py:233
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "ಬದಲಾಯಿಸಲಾದ XML ನೊಂದಿಗೆ '%s' ಅನ್ನು ವಿವರಿಸಬೇಕೆ?"
 
-#: virtinst/virtxml.py:234
+#: virtinst/virtxml.py:241
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "ಡೊಮೇನ್ '%s' ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ವಿವರಿಸಲಾಗಿದೆ."
 
-#: virtinst/virtxml.py:241
+#: virtinst/virtxml.py:248
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:251 virtinst/virtxml.py:535
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "ಡೊಮೇನ್ ಅನ್ನು ಆರಂಭಿಸುವಲ್ಲಿ ದೋಷ"
 
-#: virtinst/virtxml.py:256 virtinst/virtxml.py:539
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:262
+#: virtinst/virtxml.py:269
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6587,19 +6587,19 @@ msgid ""
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:264
+#: virtinst/virtxml.py:271
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotplug successful."
 msgstr "ಸಾಧನ %s ಯಶಸ್ವಿಯಾಗಿದೆ."
 
-#: virtinst/virtxml.py:265
+#: virtinst/virtxml.py:272
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "%s ಸಾಧನವನ್ನು ಪ್ರಯತ್ನಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: virtinst/virtxml.py:267
+#: virtinst/virtxml.py:274
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6607,19 +6607,19 @@ msgid ""
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:276
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotunplug successful."
 msgstr "ಸಾಧನ %s ಯಶಸ್ವಿಯಾಗಿದೆ."
 
-#: virtinst/virtxml.py:270
+#: virtinst/virtxml.py:277
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "%s ಸಾಧನವನ್ನು ಪ್ರಯತ್ನಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:279
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6627,39 +6627,39 @@ msgid ""
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:281
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device update successful."
 msgstr "ಸಾಧನ %s ಯಶಸ್ವಿಯಾಗಿದೆ."
 
-#: virtinst/virtxml.py:275
+#: virtinst/virtxml.py:282
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device update: %(error)s"
 msgstr "%s ಸಾಧನವನ್ನು ಪ್ರಯತ್ನಿಸುವಲ್ಲಿ ದೋಷ: %s"
 
-#: virtinst/virtxml.py:313
+#: virtinst/virtxml.py:327
 msgid "--xml can only be used with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:335
+#: virtinst/virtxml.py:349
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:354
+#: virtinst/virtxml.py:368
 msgid "Edit libvirt XML using command line options."
 msgstr "ಆದೇಶ ಸಾಲಿನ ಆಯ್ಕೆಗಳನ್ನು ಬಳಸಿಕೊಂಡು libvirt XML ಅನ್ನು ಸಂಪಾದಿಸಿ."
 
-#: virtinst/virtxml.py:360
+#: virtinst/virtxml.py:374
 msgid "Domain name, id, or uuid"
 msgstr "ಡೊಮೇನ್ ಹೆಸರು, id, ಅಥವ uuid"
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:376
 msgid "XML actions"
 msgstr "XML ಕ್ರಿಯೆಗಳು"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:378
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6673,7 +6673,7 @@ msgstr ""
 "--edit all --disk ... (ಎಲ್ಲಾ ಡಿಸ್ಕ್ ಸಾಧನಗಳನ್ನು ಸಂಪಾದಿಸಿ)\n"
 "--edit target=hda --disk ... (ಡಿಸ್ಕ್ ಸಾಧನ 'hda' ಅನ್ನು ಸಂಪಾದಿಸಿ)\n"
 
-#: virtinst/virtxml.py:370
+#: virtinst/virtxml.py:384
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6685,7 +6685,7 @@ msgstr ""
 "--remove-device --disk all (ಎಲ್ಲಾ ಡಿಸ್ಕ್‌ಗಳನ್ನು ತೆಗೆದುಹಾಕಿ)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:375
+#: virtinst/virtxml.py:389
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6693,17 +6693,17 @@ msgstr ""
 "ಸೂಚಿಸಲಾದ ಸಾಧನವನ್ನು ಸೇರಿಸಿ. ಉದಾಹರಣೆಗೆ:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:378
+#: virtinst/virtxml.py:392
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:381
+#: virtinst/virtxml.py:395
 msgid "Output options"
 msgstr "ಔಟ್‌ಪುಟ್ ಆಯ್ಕೆಗಳು"
 
-#: virtinst/virtxml.py:383
+#: virtinst/virtxml.py:397
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6715,69 +6715,69 @@ msgstr ""
 "--remove-device ನೊಂದಿಗೆ, ಹಾಟ್‌ಅನ್‌ಪ್ಲಗ್‌ ಕಾರ್ಯಾಚರಣೆಯಾಗಿರುತ್ತದೆ.\n"
 "--edit ನೊಂದಿಗೆ, ಇದು ಅಪ್‌ಡೇಟ್ ಸಾಧನ ಕಾರ್ಯಾಚರಣೆಯಾಗಿರುತ್ತದೆ."
 
-#: virtinst/virtxml.py:389
+#: virtinst/virtxml.py:403
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "ಡೊಮೇನ್ ಅನ್ನು ವಿವರಿಸಲು ಒತ್ತಾಯಿಸು. ಒಂದು --print ಆಯ್ಕೆಯನ್ನು ಸೂಚಿಸಲಾಗಿದ್ದರೆ ಮಾತ್ರ ಇದರ "
 "ಅಗತ್ಯವಿರುತ್ತದೆ."
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:406
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:395
+#: virtinst/virtxml.py:409
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:411
 msgid "Only print the requested change, in diff format"
 msgstr "diff ವಿನ್ಯಾಸದಲ್ಲಿ, ಮನವಿ ಮಾಡಿದ ಪುಟವನ್ನು ಮಾತ್ರ ಮುದ್ರಿಸು"
 
-#: virtinst/virtxml.py:399
+#: virtinst/virtxml.py:413
 msgid "Only print the requested change, in full XML format"
 msgstr "ಸಂಪೂರ್ಣ XML ವಿನ್ಯಾಸದಲ್ಲಿ, ಮನವಿ ಮಾಡಿದ ಪುಟವನ್ನು ಮಾತ್ರ ಮುದ್ರಿಸು"
 
-#: virtinst/virtxml.py:401
+#: virtinst/virtxml.py:415
 msgid "Require confirmation before saving any results."
 msgstr "ಯಾವುದೆ ಫಲಿತಾಂಶಗಳನ್ನು ಉಳಿಸುವ ಮೊದಲು ಖಚಿತಪಡಿಸುವ ಅಗತ್ಯವಿದೆ."
 
-#: virtinst/virtxml.py:405
+#: virtinst/virtxml.py:419
 msgid "XML options"
 msgstr "XML ಆಯ್ಕೆಗಳು"
 
-#: virtinst/virtxml.py:445
+#: virtinst/virtxml.py:459
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin ಇನ್‌ಪುಟ್‌ನೊಂದಿಗೆ --confirm ಅನ್ನು ಬಳಸಲು ಸಾಧ್ಯವಿಲ್ಲ."
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:461
 msgid "Can't use --update with stdin input."
 msgstr "stdin ಇನ್‌ಪುಟ್‌ನೊಂದಿಗೆ --update ಅನ್ನು ಬಳಸಲು ಸಾಧ್ಯವಿಲ್ಲ."
 
-#: virtinst/virtxml.py:450
+#: virtinst/virtxml.py:464
 msgid "A domain must be specified"
 msgstr "ಒಂದು ಡೊಮೇನ್ ಅನ್ನು ಸೂಚಿಸಬೇಕಾಗುತ್ತದೆ"
 
-#: virtinst/virtxml.py:478
+#: virtinst/virtxml.py:492
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s ಗಾಗಿ --update ಮಾಡುವುದು ಹೇಗೆಂದು ತಿಳಿದಿಲ್ಲ"
 
-#: virtinst/virtxml.py:511
+#: virtinst/virtxml.py:526
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:544
+#: virtinst/virtxml.py:559
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:546
+#: virtinst/virtxml.py:561
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:574
 msgid "Aborted at user request"
 msgstr "ಬಳಕೆದಾರರ ಮನವಿಯ ಮೇರೆಗೆ ನಿಲ್ಲಿಸಲಾಗಿದೆ"
 
