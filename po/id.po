@@ -1,20 +1,20 @@
 # Andika Triwidada <andika@gmail.com>, 2017. #zanata, 2020.
-# Kukuh Syafaat <kukuh@syafaat.id>, 2020.
+# Kukuh Syafaat <kukuh@syafaat.id>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-08-01 06:14+0000\n"
-"PO-Revision-Date: 2020-12-28 00:36+0000\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/id/>\n"
+"PO-Revision-Date: 2021-09-06 14:05+0000\n"
+"Last-Translator: Kukuh Syafaat <kukuh@syafaat.id>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4\n"
+"X-Generator: Weblate 4.8\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -66,7 +66,9 @@ msgstr "Ditenagai oleh libvirt"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ui/about.ui:18
 msgid "translator-credits"
-msgstr "Andika Triwidada <andika@gmail.com>, 2020."
+msgstr ""
+"Andika Triwidada <andika@gmail.com>, 2020.\n"
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2021."
 
 #: ui/addhardware.ui:29
 msgid "Add New Virtual Hardware"
@@ -274,9 +276,8 @@ msgid "Connection:"
 msgstr "koneksi"
 
 #: ui/clone.ui:269 ui/createvm.ui:2241
-#, fuzzy
 msgid "Storage:"
-msgstr "Tidak bisa menyatakan penyimpanan dan memakai --nodisks"
+msgstr "Penyimpanan:"
 
 #: ui/clone.ui:285
 #, fuzzy
@@ -311,9 +312,8 @@ msgid "Size:"
 msgstr "Ukuran:"
 
 #: ui/clone.ui:601
-#, fuzzy
 msgid "Target:"
-msgstr "Target"
+msgstr "Target:"
 
 #: ui/clone.ui:618 ui/details.ui:4386
 #, fuzzy
@@ -355,9 +355,8 @@ msgid "_Password:"
 msgstr "_Sandi:"
 
 #: ui/console.ui:142 ui/createconn.ui:208
-#, fuzzy
 msgid "_Username:"
-msgstr "Nama pengg_una"
+msgstr "Nama Pengg_una:"
 
 #: ui/console.ui:177
 #, fuzzy
@@ -573,9 +572,8 @@ msgid "Choose virtualization type"
 msgstr "Pilih jenis virtualisasi"
 
 #: ui/createvm.ui:194
-#, fuzzy
 msgid "_Virtual machine"
-msgstr "Koneksi konsol grafis untuk mesin virtual"
+msgstr "Mesin _virtual"
 
 #: ui/createvm.ui:212
 #, fuzzy
@@ -627,17 +625,8 @@ msgid "C_onnection:"
 msgstr "Koneksi:"
 
 #: ui/createvm.ui:671
-#, fuzzy
 msgid "_Xen Type:"
-msgstr ""
-"Xen memerlukan modifikasi ke semua sistem operasi yang ingin berjalan di "
-"atasnya; tidak semua kernel memiliki tingkat kedewasaan yang sama dalam hal "
-"ini. Banyak yang fungsional-penuh, baik sebagai dom0 maupun domU: Linux 3.0 "
-"dan setelahnya, NetBSD 4.0 dan setelahnya, dan OpenSolaris. Yang lain hanya "
-"bekerja sebagai domU. Anda dapat memeriksa status dari setiap sistem operasi "
-"di wiki Xen: <ulink type=\"block\" url=\"https://wiki.xenproject.org/wiki/"
-"Dom0_Kernels_for_Xen\" /> <ulink type=\"block\" url=\"https://wiki."
-"xenproject.org/wiki/DomU_Support_for_Xen\" />"
+msgstr "Tipe _Xen:"
 
 #: ui/createvm.ui:685
 #, fuzzy
@@ -699,12 +688,10 @@ msgid "Kerne_l options:"
 msgstr "Opsi Kerne_l:"
 
 #: ui/createvm.ui:979
-#, fuzzy
 msgid "URL _Options"
-msgstr "_Opsi"
+msgstr "_Opsi URL"
 
 #: ui/createvm.ui:1010
-#, fuzzy
 msgid "URL"
 msgstr "URL"
 
@@ -751,8 +738,8 @@ msgid ""
 "\">virt-bootstrap</a></small>"
 msgstr ""
 "<small>Pohon direktori OS harus sudah ada. Untuk mengaktifkan pembuatan "
-"pohon direktori OS,&#10; silahkan instal <a href=\"https://github.com/virt-"
-"manager/virt-bootstrap\">virt-bootstrap</a></small>"
+"pohon direktori OS,&#10; silahkan instal <a href=\"https://github.com/"
+"virt-manager/virt-bootstrap\">virt-bootstrap</a></small>"
 
 #: ui/createvm.ui:1401
 #, fuzzy
@@ -792,7 +779,6 @@ msgid "Do not verify TLS certificates of registry"
 msgstr "Jangan verifikasi sertifikat TLS registri"
 
 #: ui/createvm.ui:1519
-#, fuzzy
 msgid "Username:"
 msgstr "Nama Pengguna:"
 
@@ -817,9 +803,8 @@ msgid "Select _container template:"
 msgstr "Pilih _container template:"
 
 #: ui/createvm.ui:1713
-#, fuzzy
 msgid "VZ templates"
-msgstr "Templat"
+msgstr "Templat VZ"
 
 #: ui/createvm.ui:1738
 #, fuzzy
@@ -868,7 +853,6 @@ msgstr "_Enable penyimpanan untuk mesin virtual ini"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
 #: virtManager/addhardware.py:1017 virtManager/clone.py:277
-#, fuzzy
 msgid "Storage"
 msgstr "Penyimpanan"
 
@@ -988,9 +972,8 @@ msgid "UUID:"
 msgstr "UUID:"
 
 #: ui/details.ui:262
-#, fuzzy
 msgid "T_itle:"
-msgstr "Judul:"
+msgstr "_Judul:"
 
 #: ui/details.ui:292
 #, fuzzy
@@ -1102,9 +1085,8 @@ msgid "Logical host CPUs:"
 msgstr "CPU host logis:"
 
 #: ui/details.ui:1246
-#, fuzzy
 msgid "vCPU a_llocation:"
-msgstr "vCPU a_llocation:"
+msgstr "A_lokasi vCPU :"
 
 #: ui/details.ui:1263
 #, fuzzy
@@ -1182,7 +1164,6 @@ msgid "Ma_ximum allocation:"
 msgstr "Alokasi maksimum:"
 
 #: ui/details.ui:1699
-#, fuzzy
 msgid "Total host memory:"
 msgstr "Total memori host:"
 
@@ -1269,9 +1250,8 @@ msgid "<b>Boot device order</b>"
 msgstr "<b>Urutan perangkat booting</b>"
 
 #: ui/details.ui:2502
-#, fuzzy
 msgid "Storage size:"
-msgstr "Penyimpanan:"
+msgstr "Ukuran penyimpanan:"
 
 #: ui/details.ui:2526
 #, fuzzy
@@ -1330,7 +1310,6 @@ msgstr "Tambah Antarmuka Jaringan Virtual"
 
 #: ui/details.ui:3075 ui/details.ui:3931 ui/details.ui:4244 ui/details.ui:4374
 #: ui/details.ui:4530
-#, fuzzy
 msgid "Type:"
 msgstr "Tipe:"
 
@@ -1375,14 +1354,12 @@ msgid "Bind host:"
 msgstr "Bind host:"
 
 #: ui/details.ui:3468
-#, fuzzy
 msgid "Target type:"
-msgstr "Target:"
+msgstr "Tipe target:"
 
 #: ui/details.ui:3480
-#, fuzzy
 msgid "Target name:"
-msgstr "Target:"
+msgstr "Nama target:"
 
 #: ui/details.ui:3492 ui/hostnets.ui:174 ui/hoststorage.ui:408
 #, fuzzy
@@ -1458,7 +1435,6 @@ msgid "<b>Redirected device</b>"
 msgstr "<b>Perangkat yang dialihkan</b>"
 
 #: ui/details.ui:4398
-#, fuzzy
 msgid "Version:"
 msgstr "Versi:"
 
@@ -1569,9 +1545,8 @@ msgid "_File"
 msgstr "_Berkas"
 
 #: ui/host.ui:43 ui/vmwindow.ui:48
-#, fuzzy
 msgid "_View Manager"
-msgstr "_View Manager"
+msgstr "_Pengelola Tampilan"
 
 #: ui/host.ui:128
 #, fuzzy
@@ -1594,21 +1569,12 @@ msgid "_Overview"
 msgstr "Pratijau"
 
 #: ui/host.ui:401
-#, fuzzy
 msgid "_Virtual Networks"
-msgstr ""
-"OpenVPN adalah perangkat lunak yang didedikasikan untuk menciptakan virtual "
-"private network. Penyiapannya melibatkan menciptakan antarmuka jaringan "
-"virtual VPN server dan klien; <literal>tun</literal> (untuk tunnel level IP) "
-"dan antarmuka <literal>tap</literal> (tunnel level terowongan) yang "
-"didukung. Dalam prakteknya, antarmuka <literal>tun</literal> akan paling "
-"sering digunakan kecuali ketika klien VPN yang dimaksudkan untuk "
-"diintegrasikan ke dalam jaringan lokal server melalui bridge Ethernet."
+msgstr "Jaringan _Virtual"
 
 #: ui/host.ui:425
-#, fuzzy
 msgid "_Storage"
-msgstr "Tidak bisa menyatakan penyimpanan dan memakai --nodisks"
+msgstr "_Penyimpanan"
 
 #: ui/hostnets.ui:186 ui/hoststorage.ui:420
 #, fuzzy
@@ -1782,14 +1748,12 @@ msgid "_Connection Details"
 msgstr "Aktifkan rincian koneksi"
 
 #: ui/manager.ui:127
-#, fuzzy
 msgid "_Virtual Machine Details"
-msgstr "_Detail Mesin Virtual"
+msgstr "Detail Mesin _Virtual"
 
 #: ui/manager.ui:172 ui/vmwindow.ui:132
-#, fuzzy
 msgid "_View"
-msgstr "Pandangan"
+msgstr "Tampilan"
 
 #: ui/manager.ui:181
 #, fuzzy
@@ -1931,6 +1895,7 @@ msgid "Let libvirt decide"
 msgstr "Biarkan libvirt memutuskan"
 
 #: ui/migrate.ui:387
+#, fuzzy
 msgid ""
 "Tunnel migration through the libvirtd connection channel, rather than having "
 "the hypervisor open a separate network connection to the destination. The "
@@ -1941,6 +1906,14 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
+"Migrasi terowongan melalui saluran koneksi libvirtd, daripada memiliki "
+"hypervisor membuka koneksi jaringan terpisah ke tujuan. Sumber instans "
+"libvirt terhubung langsung ke instans libvirt tujuan.\n"
+"\n"
+"Ini dapat menyederhanakan pengaturan karena tidak ada port firewall tambahan "
+"yang harus terbuka, dan akan mengenkripsi lalu lintas migrasi jika koneksi "
+"libvirt Anda dienkripsi. Tapi mungkin sulit untuk membuat pekerjaan ini "
+"dengan transportasi SSH."
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1971,6 +1944,7 @@ msgid "A_llow unsafe:"
 msgstr "A_llow tidak aman:"
 
 #: ui/migrate.ui:572
+#, fuzzy
 msgid ""
 "By default, the migrated VM config is removed from the source host, and "
 "saved persistently on the destination host. The destination host is "
@@ -1981,6 +1955,13 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
+"Secara default, konfigurasi VM yang dimigrasikan dihapus dari host sumber, "
+"dan disimpan terus-menerus di host tujuan. Tuan rumah tujuan dianggap "
+"sebagai rumah baru VM.\n"
+"\n"
+"Jika 'sementara' dipilih, migrasi dianggap hanya langkah sementara: host "
+"sumber mempertahankan salinan konfigurasi VM, dan salinan berjalan pindah ke "
+"tujuan hanya sementara, dan akan hilang ketika shutdown."
 
 #: ui/migrate.ui:576
 #, fuzzy
@@ -2117,7 +2098,6 @@ msgid "Default storage format for new disk images."
 msgstr "Format penyimpanan default untuk image disk baru."
 
 #: ui/preferences.ui:437
-#, fuzzy
 msgid "_Storage format:"
 msgstr "_Format penyimpanan:"
 
@@ -2264,9 +2244,8 @@ msgid "VM State:"
 msgstr "Negara:"
 
 #: ui/snapshots.ui:169
-#, fuzzy
 msgid "Timestamp:"
-msgstr "Timestamp"
+msgstr "Stempel waktu:"
 
 #: ui/snapshots.ui:207
 #, fuzzy
@@ -2329,19 +2308,16 @@ msgid "_Description:"
 msgstr "Deskripsi"
 
 #: ui/vmwindow.ui:18
-#, fuzzy
 msgid "Virtual Machine"
-msgstr "Koneksi konsol grafis untuk mesin virtual"
+msgstr "Mesin Virtual"
 
 #: ui/vmwindow.ui:93
-#, fuzzy
 msgid "Virtual _Machine"
-msgstr "Koneksi konsol grafis untuk mesin virtual"
+msgstr "_Mesin Virtual"
 
 #: ui/vmwindow.ui:109
-#, fuzzy
 msgid "_Take Screenshot"
-msgstr "Ambil Cuplikan Layar"
+msgstr "Ambil _Cuplikan Layar"
 
 #: ui/vmwindow.ui:118
 #, fuzzy
@@ -2409,9 +2385,8 @@ msgid "_Autoconnect"
 msgstr "sambung otomatis"
 
 #: ui/vmwindow.ui:282
-#, fuzzy
 msgid "T_oolbar"
-msgstr "T_oolbar"
+msgstr "Bil_ah Alat"
 
 #: ui/vmwindow.ui:296
 #, fuzzy
@@ -2454,7 +2429,6 @@ msgid "Snapshots"
 msgstr "Snapshot"
 
 #: ui/vmwindow.ui:427
-#, fuzzy
 msgid "Switch to fullscreen view"
 msgstr "Beralih ke tampilan layar penuh"
 
@@ -2488,9 +2462,8 @@ msgstr ""
 "Anda tahu apa yang Anda lakukan.</small>"
 
 #: ui/xmleditor.ui:121
-#, fuzzy
 msgid "_XML"
-msgstr "xml"
+msgstr "_XML"
 
 #: virtManager/about.py:21
 #, fuzzy, python-format
@@ -2558,7 +2531,6 @@ msgid "Channel"
 msgstr "Kanal"
 
 #: virtManager/addhardware.py:238
-#, fuzzy
 msgid "USB Host Device"
 msgstr "Perangkat Host USB"
 
@@ -2584,7 +2556,6 @@ msgid "MDEV Host Device"
 msgstr "_Peranti Host:"
 
 #: virtManager/addhardware.py:256
-#, fuzzy
 msgid "Video"
 msgstr "Video"
 
@@ -2670,7 +2641,6 @@ msgid "UDP net console"
 msgstr "Konsol bersih UDP"
 
 #: virtManager/addhardware.py:422
-#, fuzzy
 msgid "UNIX socket"
 msgstr "Soket UNIX"
 
@@ -2842,7 +2812,6 @@ msgid "Mouse"
 msgstr "Tukar tombol tetikus kanan dan kiri dalam pengaturan tetikus."
 
 #: virtManager/addhardware.py:576 virtManager/details/details.py:189
-#, fuzzy
 msgid "Tablet"
 msgstr "Tablet"
 
@@ -2914,7 +2883,6 @@ msgid "USB 2"
 msgstr "USB 2"
 
 #: virtManager/addhardware.py:1029
-#, fuzzy
 msgid "Video Device"
 msgstr "Perangkat Video"
 
@@ -2954,9 +2922,8 @@ msgid "MDEV Device"
 msgstr "Perangkat"
 
 #: virtManager/addhardware.py:1056
-#, fuzzy
 msgid "USB Device"
-msgstr "Perangkat"
+msgstr "Perangkat USB"
 
 #: virtManager/addhardware.py:1189
 #, fuzzy, python-format
@@ -3046,9 +3013,9 @@ msgid "New path: %s"
 msgstr "Jalur baru: %s"
 
 #: virtManager/clone.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr "Penyimpanan aman untuk dibagikan:% (reason) s"
+msgstr "Penyimpanan aman untuk dibagikan: %(reason)s"
 
 #: virtManager/clone.py:122
 #, fuzzy
@@ -3056,9 +3023,9 @@ msgid "Sharing this storage is potentially dangerous."
 msgstr "Berbagi penyimpanan ini berpotensi berbahaya."
 
 #: virtManager/clone.py:125
-#, fuzzy, python-format
+#, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr "Penyimpanan tidak dapat digandakan:% (reason) s"
+msgstr "Penyimpanan tidak dapat dikloning: %(reason)s"
 
 #: virtManager/clone.py:137
 #, fuzzy
@@ -3112,8 +3079,8 @@ msgid ""
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Perangkat disk berikut akan dibagikan dengan% (vmname) s:&#10;&#10; % "
-"(daftar jalur) s&#10; Menjalankan tamu baru dapat menimpa data dalam gambar "
+"Perangkat disk berikut akan dibagikan dengan% (vmname) s:&#10;&#10; % ("
+"daftar jalur) s&#10; Menjalankan tamu baru dapat menimpa data dalam gambar "
 "disk ini."
 
 #: virtManager/clone.py:503
@@ -3178,7 +3145,6 @@ msgid "Locate directory volume"
 msgstr "Temukan volume direktori"
 
 #: virtManager/connection.py:395
-#, fuzzy
 msgid "User session"
 msgstr "Sesi pengguna"
 
@@ -3211,7 +3177,6 @@ msgid "Error launching connect dialog: %s"
 msgstr "Galat meluncurkan dialog hubungkan: %s"
 
 #: virtManager/createconn.py:117
-#, fuzzy
 msgid "user session"
 msgstr "sesi pengguna"
 
@@ -3485,7 +3450,6 @@ msgid "Operating system container"
 msgstr "Wadah sistem operasi"
 
 #: virtManager/createvm.py:973
-#, fuzzy
 msgid "Virtuozzo container"
 msgstr "Kontainer Virtuozzo"
 
@@ -3605,7 +3569,6 @@ msgid "Error setting default name."
 msgstr "Terjadi kesalahan saat menyetel nama default."
 
 #: virtManager/createvm.py:1677
-#, fuzzy
 msgid "Storage parameter error."
 msgstr "Kesalahan parameter penyimpanan."
 
@@ -3763,7 +3726,6 @@ msgid "This change will take effect after the next guest shutdown."
 msgstr "Perubahan ini akan berlaku setelah penghentian tamu berikutnya."
 
 #: virtManager/delete.py:357
-#, fuzzy
 msgid "Storage will not be deleted."
 msgstr "Penyimpanan tidak akan dihapus."
 
@@ -3795,7 +3757,6 @@ msgid "Removing disk device '%s'"
 msgstr "Menghapus perangkat disk '%s'"
 
 #: virtManager/delete.py:506
-#, fuzzy
 msgid "Target"
 msgstr "Target"
 
@@ -3835,9 +3796,8 @@ msgid "Cannot delete unmanaged block device."
 msgstr "Tidak dapat menghapus perangkat blok yang tidak dikelola."
 
 #: virtManager/delete.py:589
-#, fuzzy
 msgid "Storage is read-only."
-msgstr "Penyimpanan bersifat hanya baca."
+msgstr "Penyimpanan hanya baca."
 
 #: virtManager/delete.py:591
 #, fuzzy
@@ -3845,17 +3805,14 @@ msgid "No write access to path."
 msgstr "Tidak ada akses tulis ke jalur."
 
 #: virtManager/delete.py:594
-#, fuzzy
 msgid "Storage is marked as shareable."
 msgstr "Penyimpanan ditandai sebagai dapat dibagikan."
 
 #: virtManager/delete.py:597
-#, fuzzy
 msgid "Storage is a media device."
 msgstr "Penyimpanan adalah perangkat media."
 
 #: virtManager/delete.py:606
-#, fuzzy
 msgid "Storage is in use by the following virtual machines"
 msgstr "Penyimpanan sedang digunakan oleh mesin virtual berikut"
 
@@ -3898,8 +3855,8 @@ msgstr "Tidak ada konsol grafis yang tersedia"
 #, fuzzy
 msgid "Graphical Console"
 msgstr ""
-"Kita sekarang bisa mendapatkan petunjuk koneksi untuk konsol grafis "
-"(tampilan VNC yang dikembalikan dapat diberikan sebagai parameter ke "
+"Kita sekarang bisa mendapatkan petunjuk koneksi untuk konsol grafis ("
+"tampilan VNC yang dikembalikan dapat diberikan sebagai parameter ke "
 "<command>vncviewer</command>):"
 
 #: virtManager/details/console.py:229
@@ -4036,7 +3993,7 @@ msgid "Sound %s"
 msgstr "Sound"
 
 #: virtManager/details/details.py:228
-#, fuzzy, python-format
+#, python-format
 msgid "Video %s"
 msgstr "Video %s"
 
@@ -4093,12 +4050,10 @@ msgstr ""
 "Libvirt tidak mendeteksi gambar firmware UEFI / OVMF yang diinstal pada host."
 
 #: virtManager/details/details.py:681
-#, fuzzy
 msgid "UEFI not found"
-msgstr "Tidak ditemukan"
+msgstr "UEFI tidak ditemukan"
 
 #: virtManager/details/details.py:730
-#, fuzzy
 msgid "Version"
 msgstr "Versi"
 
@@ -4135,9 +4090,8 @@ msgstr "Anda yakin ingin menghapus ini?"
 #: virtManager/details/details.py:1281 virtManager/details/details.py:1770
 #: virtManager/details/details.py:1789 virtManager/details/details.py:1983
 #: virtManager/lib/libvirtenummap.py:86
-#, fuzzy
 msgid "Unknown"
-msgstr "Tak dikenal"
+msgstr "Tidak Diketahui"
 
 #: virtManager/details/details.py:1363
 #, fuzzy, python-format
@@ -4567,7 +4521,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "Penampil GTK-VNC terlalu tua"
 
 #: virtManager/details/viewers.py:577
 #, fuzzy, python-format
@@ -4611,9 +4565,8 @@ msgid "A storage path must be specified."
 msgstr "Jalur penyimpanan harus ditentukan."
 
 #: virtManager/device/fsdetails.py:147
-#, fuzzy
 msgid "Te_mplate:"
-msgstr "Te_mplate:"
+msgstr "Te_mplat:"
 
 #: virtManager/device/fsdetails.py:149
 #, fuzzy
@@ -4626,18 +4579,8 @@ msgid "Spice server"
 msgstr "Server rempah-rempah"
 
 #: virtManager/device/gfxdetails.py:88
-#, fuzzy
 msgid "VNC server"
-msgstr ""
-"<literal>--graphics vnc</literal> menyatakan bahwa konsol grafis harus "
-"dibuat tersedia menggunakan VNC. Perilaku default untuk server VNC terkait "
-"adalah hanya mendengarkan pada antarmuka lokal; jika klien VNC akan "
-"dijalankan pada host yang berbeda, membuat koneksi akan memerlukan "
-"pengaturan tunnel SSH (lihat <xref linkend=\"sect.ssh-port-forwarding\" />). "
-"Sebagai alternatif, <literal>--graphics vnc,listen=0.0.0.0</literal> dapat "
-"digunakan sehingga server VNC dapat diakses dari semua antarmuka; perhatikan "
-"bahwa jika Anda melakukannya, Anda benar-benar harus merancang firewall Anda "
-"sesuai dengan itu."
+msgstr "Peladen VNC"
 
 #: virtManager/device/gfxdetails.py:95
 #, fuzzy
@@ -4694,7 +4637,6 @@ msgid "Usermode networking"
 msgstr "Jaringan kode pengguna"
 
 #: virtManager/device/netlist.py:43
-#, fuzzy
 msgid "Virtual network"
 msgstr "Jaringan virtual"
 
@@ -4714,7 +4656,6 @@ msgid "Macvtap device..."
 msgstr "Perangkat Macvtap ..."
 
 #: virtManager/device/netlist.py:194
-#, fuzzy
 msgid "Virtual Network is not active."
 msgstr "Jaringan Virtual tidak aktif."
 
@@ -4746,9 +4687,9 @@ msgid "Input Error"
 msgstr "Kesalahan Input"
 
 #: virtManager/error.py:140
-#, fuzzy, python-format
+#, python-format
 msgid "Validation Error: %s"
-msgstr "Kesalahan Validasi"
+msgstr "Kesalahan Validasi: %s"
 
 #: virtManager/error.py:180
 #, fuzzy
@@ -4863,7 +4804,6 @@ msgid "Copy Volume Path"
 msgstr "Salin Jalur Volume"
 
 #: virtManager/hoststorage.py:191
-#, fuzzy
 msgid "Volumes"
 msgstr "Volume"
 
@@ -4878,7 +4818,6 @@ msgid "Format"
 msgstr "Format"
 
 #: virtManager/hoststorage.py:216
-#, fuzzy
 msgid "Used By"
 msgstr "Digunakan oleh"
 
@@ -5024,7 +4963,6 @@ msgid "Unable to connect to libvirt %s."
 msgstr "Tidak dapat terhubung ke libvirt %s."
 
 #: virtManager/lib/connectauth.py:195
-#, fuzzy
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Kegagalan Koneksi Manajer Mesin Virtual"
 
@@ -5043,8 +4981,8 @@ msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
-"Tidak dapat mendeteksi hypervisor default. Pastikan paket virtualisasi "
-"QEMU / KVM yang sesuai diinstal untuk mengelola virtualisasi di host ini."
+"Tidak dapat mendeteksi hypervisor default. Pastikan paket virtualisasi QEMU /"
+" KVM yang sesuai diinstal untuk mengelola virtualisasi di host ini."
 
 #: virtManager/lib/connectauth.py:232
 #, fuzzy
@@ -5181,7 +5119,6 @@ msgid "Event wakeup"
 msgstr "Bangun acara"
 
 #: virtManager/lib/libvirtenummap.py:105 virtManager/lib/libvirtenummap.py:117
-#, fuzzy
 msgid "User"
 msgstr "Pengguna"
 
@@ -5533,9 +5470,8 @@ msgid "Sheepdog Filesystem"
 msgstr "Sistem File Anjing Gembala"
 
 #: virtManager/object/storagepool.py:36
-#, fuzzy
 msgid "ZFS Pool"
-msgstr "ZFS Pool"
+msgstr "Pool ZFS"
 
 #: virtManager/oslist.py:26
 #, fuzzy
@@ -5574,9 +5510,9 @@ msgstr "Hidup"
 
 #: virtManager/preferences.py:124 virtManager/preferences.py:146
 #: virtManager/preferences.py:156
-#, fuzzy, python-format
+#, python-format
 msgid "System default (%s)"
-msgstr "Baku sistem"
+msgstr "Bawaan sistem (%s)"
 
 #: virtManager/preferences.py:135
 #, fuzzy
@@ -6010,8 +5946,8 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
-"Konfigurasi sambungan otomatis konsol tamu. Contoh:&#10; --teks "
-"otomatis&#10; - grafis autoconsole&#10; - tidak ada konsol otomatis"
+"Konfigurasi sambungan otomatis konsol tamu. Contoh:&#10; --teks otomatis&#10;"
+" - grafis autoconsole&#10; - tidak ada konsol otomatis"
 
 #: virtinst/cli.py:607
 #, fuzzy
@@ -6068,9 +6004,9 @@ msgid ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
-"Konfigurasikan metadata tamu. Ex:&#10; --metadata name = foo, title = "
-"\"Judul cantik saya\", uuid = ...&#10; --metadata description = \"My nice "
-"long description\""
+"Konfigurasikan metadata tamu. Ex:&#10; --metadata name = foo, title = \"Judul"
+" cantik saya\", uuid = ...&#10; --metadata description = \"My nice long "
+"description\""
 
 #: virtinst/cli.py:666
 #, fuzzy
@@ -6281,8 +6217,8 @@ msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
-"Konfigurasikan perangkat IOMMU. Ex:&#10; - model iommu = intel, driver."
-"aw_bits = 48"
+"Konfigurasikan perangkat IOMMU. Ex:&#10; - model iommu = intel, "
+"driver.aw_bits = 48"
 
 #: virtinst/cli.py:821
 #, fuzzy
@@ -6422,8 +6358,8 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
-"Tentukan penyimpanan dengan berbagai opsi. Ex.&#10; - ukuran disk = 10 "
-"(gambar 10GiB baru di lokasi default)&#10; --disk / my / existing / disk, "
+"Tentukan penyimpanan dengan berbagai opsi. Ex.&#10; - ukuran disk = 10 ("
+"gambar 10GiB baru di lokasi default)&#10; --disk / my / existing / disk, "
 "cache = none&#10; - perangkat disk = cdrom, bus = scsi&#10; --disk =?"
 
 #: virtinst/cli.py:922
@@ -6460,9 +6396,9 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
-"Lakukan opsi XML XPath mentah pada XML akhir. Contoh:&#10; --xml ./cpu/"
-"@mode=host-passthrough&#10; --xml ./devices/disk[2]/serial=new-serial&#10; --"
-"xml xpath.delete =. / jam"
+"Lakukan opsi XML XPath mentah pada XML akhir. Contoh:&#10; --xml ./cpu/@mode"
+"=host-passthrough&#10; --xml ./devices/disk[2]/serial=new-serial&#10; --xml "
+"xpath.delete =. / jam"
 
 #: virtinst/cli.py:969
 #, fuzzy, python-format
@@ -6519,9 +6455,8 @@ msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "'% (Nama opsi) s' nilai '% (string) s' tidak diketahui"
 
 #: virtinst/cli.py:3364
-#, fuzzy
 msgid "Storage volume must be specified as vol=poolname/volname"
-msgstr "Volume penyimpanan harus ditentukan sebagai vol = poolname / volname"
+msgstr "Volume penyimpanan harus ditentukan sebagai vol=poolname/volname"
 
 #: virtinst/cli.py:3813
 #, fuzzy, python-format
@@ -6806,8 +6741,7 @@ msgstr "Gagal memvalidasi media instal '% (media) s':% (error) s"
 #: virtinst/install/installertreemedia.py:116
 #, fuzzy
 msgid "location kernel/initrd may only be specified with a location URL/path"
-msgstr ""
-"lokasi kernel / initrd hanya dapat ditentukan dengan URL / jalur lokasi"
+msgstr "lokasi kernel / initrd hanya dapat ditentukan dengan URL / jalur lokasi"
 
 #: virtinst/install/installertreemedia.py:119
 #, fuzzy
@@ -6984,7 +6918,6 @@ msgstr ""
 "Tidak dapat membuat kumpulan penyimpanan default '% (path) s':% (error) s"
 
 #: virtinst/storage.py:219 virtinst/storage.py:551
-#, fuzzy
 msgid "Storage object"
 msgstr "Objek penyimpanan"
 
@@ -7049,8 +6982,8 @@ msgid ""
 "available)"
 msgstr ""
 "Kapasitas volume yang diminta akan melebihi ruang kolam yang tersedia saat "
-"volume dialokasikan sepenuhnya. (% (mem1) s M kapasitas yang diminta>% "
-"(mem2) s M tersedia)"
+"volume dialokasikan sepenuhnya. (% (mem1) s M kapasitas yang diminta>% (mem2)"
+" s M tersedia)"
 
 #: virtinst/virtclone.py:20
 #, fuzzy
@@ -7061,6 +6994,7 @@ msgstr ""
 "Diperlukan nama mesin asli, gunakan '--original src_name' dan coba lagi."
 
 #: virtinst/virtclone.py:67
+#, fuzzy
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -7071,6 +7005,13 @@ msgid ""
 "outside the scope of this tool. For these types of changes, please see virt-"
 "sysprep(1)."
 msgstr ""
+"Duplikat mesin virtual, mengubah semua konfigurasi sisi host unik seperti "
+"alamat MAC, nama, dll. \n"
+"\n"
+"Isi VM TIDAK diubah: virt-clone tidak mengubah apa pun _inside_ OS tamu, "
+"hanya menduplikasi disk dan melakukan perubahan sisi host. Jadi hal-hal "
+"seperti mengubah kata sandi, mengubah alamat IP statis, dll berada di luar "
+"lingkup alat ini. Untuk jenis perubahan ini, silakan lihat virt-sysprep(1)."
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:947
 #, fuzzy
@@ -7106,7 +7047,6 @@ msgid "use btrfs COW lightweight copy"
 msgstr "gunakan btrfs COW copy ringan"
 
 #: virtinst/virtclone.py:91
-#, fuzzy
 msgid "Storage Configuration"
 msgstr "Konfigurasi Penyimpanan"
 
@@ -7131,8 +7071,8 @@ msgid ""
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 "Lewati salinan target perangkat. (misalnya, jika 'vda' adalah disk yang "
-"tidak ingin Anda salin dan gunakan jalur yang sama di VM baru, gunakan --"
-"skip-copy = vda)"
+"tidak ingin Anda salin dan gunakan jalur yang sama di VM baru, gunakan "
+"--skip-copy = vda)"
 
 #: virtinst/virtclone.py:104
 #, fuzzy
@@ -7231,8 +7171,8 @@ msgstr "Tidak bisa mencampur opsi --graphics dan grafis gaya lama"
 #: virtinst/virtinstall.py:227
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
-"Tak bisa menyatakan lebih dari satu dari VNC, SDL, --graphics, atau --"
-"nographics"
+"Tak bisa menyatakan lebih dari satu dari VNC, SDL, --graphics, atau "
+"--nographics"
 
 #: virtinst/virtinstall.py:310
 #, fuzzy
@@ -7488,8 +7428,8 @@ msgstr "Bangun tamu di sekitar image disk yang ada"
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
-"Argumen tambahan untuk diteruskan ke kernel instalasi yang di-boot dari --"
-"lokasi"
+"Argumen tambahan untuk diteruskan ke kernel instalasi yang di-boot dari "
+"--lokasi"
 
 #: virtinst/virtinstall.py:972
 #, fuzzy
@@ -7531,7 +7471,6 @@ msgid "Guest Configuration Options"
 msgstr "Opsi Konfigurasi Tamu"
 
 #: virtinst/virtinstall.py:1029
-#, fuzzy
 msgid "Virtualization Platform Options"
 msgstr "Opsi Platform Virtualisasi"
 
@@ -7799,8 +7738,8 @@ msgid ""
 msgstr ""
 "Edit XML VM. Contoh:&#10; --edit --disk ... (edit perangkat disk "
 "pertama)&#10; --edit 2 --disk ... (edit perangkat disk kedua)&#10; --edit "
-"semua --disk ... (edit semua perangkat disk)&#10; --edit target = hda --"
-"disk ... (edit disk 'hda')\n"
+"semua --disk ... (edit semua perangkat disk)&#10; --edit target = hda --disk "
+"... (edit disk 'hda')\n"
 
 #: virtinst/virtxml.py:370
 #, fuzzy
@@ -7882,9 +7821,8 @@ msgid "Require confirmation before saving any results."
 msgstr "Memerlukan konfirmasi sebelum menyimpan hasil apa pun."
 
 #: virtinst/virtxml.py:405
-#, fuzzy
 msgid "XML options"
-msgstr "opsi"
+msgstr "Opsi XML"
 
 #: virtinst/virtxml.py:445
 #, fuzzy
