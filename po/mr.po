@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-05-29 07:26+0000\n"
+"POT-Creation-Date: 2021-06-11 06:14+0000\n"
 "PO-Revision-Date: 2017-02-05 04:07+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Marathi (http://www.transifex.com/projects/p/virt-manager/"
@@ -235,7 +235,7 @@ msgstr "कार्यपद्धती प्रगतीत आहे"
 msgid "Please wait a few moments..."
 msgstr "कृपया काहिक क्षणा करीता थांबा..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:318 virtManager/asyncjob.py:325
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
 msgid "Processing..."
 msgstr "विश्लेषण करत आहे..."
 
@@ -727,7 +727,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "या वर्च्युअल मशीनकरीता स्टोरेज समर्थीत करा (_E)"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1002 virtManager/clone.py:277
+#: virtManager/addhardware.py:1017 virtManager/clone.py:277
 msgid "Storage"
 msgstr "साठा"
 
@@ -2044,31 +2044,31 @@ msgstr ""
 msgid "Connection does not support storage management."
 msgstr "साठा व्यवस्थापन करीता जुळवणी समर्थीत नाही."
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1004
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1019
 msgid "Controller"
 msgstr "कंट्रोलर"
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1006
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1021
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr "नेटवर्क"
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1023
 #: virtManager/details/details.py:194
 msgid "Input"
 msgstr "इन्पुट"
 
 #: virtManager/addhardware.py:218 virtManager/addhardware.py:223
 #: virtManager/addhardware.py:226 virtManager/addhardware.py:230
-#: virtManager/addhardware.py:236 virtManager/addhardware.py:256
+#: virtManager/addhardware.py:236 virtManager/addhardware.py:260
 msgid "Not supported for this guest type."
 msgstr "या अतिथी प्रकार करीता समर्थीत नाही."
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1010
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1025
 msgid "Graphics"
 msgstr "ग्राफिक्स्"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1012
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1027
 msgid "Sound"
 msgstr "आवाज"
 
@@ -2085,6 +2085,7 @@ msgid "USB Host Device"
 msgstr ""
 
 #: virtManager/addhardware.py:240 virtManager/addhardware.py:244
+#: virtManager/addhardware.py:254
 msgid "Connection does not support host device enumeration"
 msgstr "जुळवणी यजमान साधण एन्यूमरेशनसाठी समर्थन पुरवत नाही"
 
@@ -2097,330 +2098,342 @@ msgid "PCI Host Device"
 msgstr ""
 
 #: virtManager/addhardware.py:252
+#, fuzzy
+#| msgid "Host _Device:"
+msgid "MDEV Host Device"
+msgstr "यजमान साधन (_D):"
+
+#: virtManager/addhardware.py:256
 msgid "Video"
 msgstr ""
 
-#: virtManager/addhardware.py:253
+#: virtManager/addhardware.py:257
 msgid "Libvirt version does not support video devices."
 msgstr "Libvirt आवृत्ती ग्राफिकल उपकरणांकरीता समर्थन पुरवत नाही."
 
-#: virtManager/addhardware.py:254 virtManager/details/details.py:254
+#: virtManager/addhardware.py:258 virtManager/details/details.py:254
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
 msgstr "वॉचडॉग"
 
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:261
 msgid "Filesystem"
 msgstr ""
 
-#: virtManager/addhardware.py:258 virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1035
 #: virtManager/details/details.py:252
 msgid "Smartcard"
 msgstr "स्मार्टकार्ड"
 
-#: virtManager/addhardware.py:260 virtManager/addhardware.py:1022
+#: virtManager/addhardware.py:264 virtManager/addhardware.py:1037
 msgid "USB Redirection"
 msgstr "USB रिडाइरेक्शन"
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1024
+#: virtManager/addhardware.py:266 virtManager/addhardware.py:1039
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:264 virtManager/details/details.py:244
+#: virtManager/addhardware.py:268 virtManager/details/details.py:244
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1028
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1043
 #: virtManager/details/details.py:251
 msgid "Panic Notifier"
 msgstr "पॅनिक सूचक"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:270
+#: virtManager/addhardware.py:271 virtManager/addhardware.py:274
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr ""
 
-#: virtManager/addhardware.py:268 virtManager/details/details.py:253
+#: virtManager/addhardware.py:272 virtManager/details/details.py:253
 msgid "VirtIO VSOCK"
 msgstr ""
 
-#: virtManager/addhardware.py:339
+#: virtManager/addhardware.py:343
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "VM संरचना बदलतेवेळी त्रुटी: %s"
 
-#: virtManager/addhardware.py:364
+#: virtManager/addhardware.py:368
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "पुढील अतिथी शटडाऊन नंतरच ह्या बदलांचा परिणाम आढळेल."
 
-#: virtManager/addhardware.py:414
+#: virtManager/addhardware.py:418
 msgid "Pseudo TTY"
 msgstr "स्युडो TTY"
 
-#: virtManager/addhardware.py:415
+#: virtManager/addhardware.py:419
 msgid "Output to a file"
 msgstr "फाइलमध्ये साठवा"
 
-#: virtManager/addhardware.py:416
+#: virtManager/addhardware.py:420
 msgid "TCP net console"
 msgstr "TCP नेट कंसोल"
 
-#: virtManager/addhardware.py:417
+#: virtManager/addhardware.py:421
 msgid "UDP net console"
 msgstr "UDP नेट कंसोल"
 
-#: virtManager/addhardware.py:418
+#: virtManager/addhardware.py:422
 #, fuzzy
 #| msgid "Unix socket"
 msgid "UNIX socket"
 msgstr "Unix सॉकेट"
 
-#: virtManager/addhardware.py:419
+#: virtManager/addhardware.py:423
 msgid "Spice agent"
 msgstr "स्पाइस एजंट"
 
-#: virtManager/addhardware.py:420
+#: virtManager/addhardware.py:424
 msgid "Spice port"
 msgstr "स्पाइस पोर्ट"
 
-#: virtManager/addhardware.py:434 virtManager/addhardware.py:495
+#: virtManager/addhardware.py:438 virtManager/addhardware.py:499
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:435 virtManager/details/details.py:2337
+#: virtManager/addhardware.py:439 virtManager/details/details.py:2337
 msgid "Floppy"
 msgstr ""
 
-#: virtManager/addhardware.py:436 virtManager/addhardware.py:497
+#: virtManager/addhardware.py:440 virtManager/addhardware.py:501
 msgid "SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:437 virtManager/addhardware.py:496
+#: virtManager/addhardware.py:441 virtManager/addhardware.py:500
 msgid "SATA"
 msgstr ""
 
-#: virtManager/addhardware.py:438
+#: virtManager/addhardware.py:442
 msgid "VirtIO Serial"
 msgstr ""
 
-#: virtManager/addhardware.py:439 virtManager/addhardware.py:499
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:443 virtManager/addhardware.py:503
+#: virtManager/addhardware.py:581
 msgid "USB"
 msgstr ""
 
-#: virtManager/addhardware.py:440
+#: virtManager/addhardware.py:444
 msgid "PCI"
 msgstr ""
 
-#: virtManager/addhardware.py:441
+#: virtManager/addhardware.py:445
 msgid "CCID"
 msgstr ""
 
-#: virtManager/addhardware.py:442
+#: virtManager/addhardware.py:446
 msgid "xenbus"
 msgstr ""
 
-#: virtManager/addhardware.py:450 virtManager/addhardware.py:920
+#: virtManager/addhardware.py:454 virtManager/addhardware.py:933
 msgid "VirtIO SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:453
+#: virtManager/addhardware.py:457
 msgid "PCIe"
 msgstr ""
 
-#: virtManager/addhardware.py:498
+#: virtManager/addhardware.py:502
 msgid "SD"
 msgstr ""
 
-#: virtManager/addhardware.py:500 virtManager/addhardware.py:578
+#: virtManager/addhardware.py:504 virtManager/addhardware.py:582
 msgid "VirtIO"
 msgstr ""
 
-#: virtManager/addhardware.py:501 virtManager/addhardware.py:579
+#: virtManager/addhardware.py:505 virtManager/addhardware.py:583
 msgid "Xen"
 msgstr ""
 
-#: virtManager/addhardware.py:508
+#: virtManager/addhardware.py:512
 msgid "Passthrough device"
 msgstr "पासथ्रु साधन"
 
-#: virtManager/addhardware.py:509
+#: virtManager/addhardware.py:513
 msgid "Emulated device"
 msgstr ""
 
-#: virtManager/addhardware.py:516
+#: virtManager/addhardware.py:520
 msgid "TIS"
 msgstr ""
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:521
 msgid "CRB"
 msgstr ""
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:522
 msgid "SPAPR"
 msgstr ""
 
-#: virtManager/addhardware.py:525
+#: virtManager/addhardware.py:529
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:530
 msgid "pSeries"
 msgstr ""
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:531
 msgid "Hyper-V"
 msgstr ""
 
-#: virtManager/addhardware.py:528
+#: virtManager/addhardware.py:532
 msgid "s390"
 msgstr ""
 
-#: virtManager/addhardware.py:535
+#: virtManager/addhardware.py:539
 msgid "Random"
 msgstr "विनाक्रम"
 
-#: virtManager/addhardware.py:536
+#: virtManager/addhardware.py:540
 msgid "Entropy Gathering Daemon"
 msgstr "एंट्रोपि गोळा करणारे डिमन"
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:541
 msgid "Builtin RNG"
 msgstr ""
 
-#: virtManager/addhardware.py:555
+#: virtManager/addhardware.py:559
 msgid "Forcefully reset the guest"
 msgstr "अतिथीला सक्तीने मूळस्थितीत आणा"
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:560
 msgid "Gracefully shutdown the guest"
 msgstr "अतिथीला मोहकतेने बंद करा"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:561
 msgid "Forcefully power off the guest"
 msgstr "अतिथीला सक्तीने बंद करा"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:562
 msgid "Pause the guest"
 msgstr "अतिथीला थांबवा"
 
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:563
 msgid "No action"
 msgstr "कृती नाही"
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:564
 msgid "Dump guest memory core"
 msgstr ""
 
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:571
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB ग्राफिकल टॅबलेट"
 
-#: virtManager/addhardware.py:570 virtManager/details/details.py:193
+#: virtManager/addhardware.py:574 virtManager/details/details.py:193
 msgid "Keyboard"
 msgstr "कळफलक"
 
-#: virtManager/addhardware.py:571 virtManager/details/details.py:191
+#: virtManager/addhardware.py:575 virtManager/details/details.py:191
 msgid "Mouse"
 msgstr "माऊस"
 
-#: virtManager/addhardware.py:572 virtManager/details/details.py:189
+#: virtManager/addhardware.py:576 virtManager/details/details.py:189
 msgid "Tablet"
 msgstr "टॅबलेट"
 
-#: virtManager/addhardware.py:576
+#: virtManager/addhardware.py:580
 msgid "PS/2"
 msgstr ""
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:585
+#: virtManager/addhardware.py:589
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:687
 msgid "Disk device"
 msgstr "डिस्क साधन"
 
-#: virtManager/addhardware.py:682
+#: virtManager/addhardware.py:689
 msgid "CDROM device"
 msgstr "सीडीरॉम साधन"
 
-#: virtManager/addhardware.py:684
+#: virtManager/addhardware.py:691
 msgid "Floppy device"
 msgstr "फ्लॉपी साधन"
 
-#: virtManager/addhardware.py:687
+#: virtManager/addhardware.py:694
 msgid "LUN Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:710 virtManager/addhardware.py:791
-#: virtManager/addhardware.py:801 virtManager/addhardware.py:921
+#: virtManager/addhardware.py:717 virtManager/addhardware.py:804
+#: virtManager/addhardware.py:814 virtManager/addhardware.py:934
 #: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
 #: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
 #: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:169
 msgid "Hypervisor default"
 msgstr "पूर्वनिर्धारीत हायपरवायजर"
 
-#: virtManager/addhardware.py:781
+#: virtManager/addhardware.py:794
 msgid "No Devices Available"
 msgstr "साधण उपलब्ध नाही"
 
-#: virtManager/addhardware.py:838
+#: virtManager/addhardware.py:851
 msgid "Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:839
+#: virtManager/addhardware.py:852
 msgid "Host"
 msgstr ""
 
-#: virtManager/addhardware.py:845
+#: virtManager/addhardware.py:858
 msgid "Spice channel"
 msgstr ""
 
-#: virtManager/addhardware.py:917
+#: virtManager/addhardware.py:930
 msgid "USB 3"
 msgstr ""
 
-#: virtManager/addhardware.py:918
+#: virtManager/addhardware.py:931
 msgid "USB 2"
 msgstr ""
 
-#: virtManager/addhardware.py:1014
+#: virtManager/addhardware.py:1029
 msgid "Video Device"
 msgstr "व्हिडिओ साधन"
 
-#: virtManager/addhardware.py:1016
+#: virtManager/addhardware.py:1031
 msgid "Watchdog Device"
 msgstr "वॉचडॉग साधन"
 
-#: virtManager/addhardware.py:1018
+#: virtManager/addhardware.py:1033
 msgid "Filesystem Passthrough"
 msgstr "फाइलसिस्टम पासथ्रु"
 
-#: virtManager/addhardware.py:1026
+#: virtManager/addhardware.py:1041
 msgid "Random Number Generator"
 msgstr "विनाक्रम संख्या जनक"
 
-#: virtManager/addhardware.py:1030
+#: virtManager/addhardware.py:1045
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1034 virtManager/details/details.py:2121
+#: virtManager/addhardware.py:1049 virtManager/details/details.py:2121
 #, python-format
 msgid "%s Device"
 msgstr "%s साधन"
 
-#: virtManager/addhardware.py:1038
+#: virtManager/addhardware.py:1053
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s साधन"
 
-#: virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:1055
+#, fuzzy
+#| msgid "%s Device"
+msgid "MDEV Device"
+msgstr "%s साधन"
+
+#: virtManager/addhardware.py:1056
 #, fuzzy
 msgid "USB Device"
 msgstr "%s साधन"
 
-#: virtManager/addhardware.py:1172
+#: virtManager/addhardware.py:1189
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2431,11 +2444,11 @@ msgstr ""
 "एकापेक्षा जास्त USB कंट्रोलर समावेश करणे समर्थीत नाही.\n"
 "VM तपशीलवार पडद्यामध्ये तुम्ही USB कंट्रोलर प्रकार बदलवू शकता."
 
-#: virtManager/addhardware.py:1264
+#: virtManager/addhardware.py:1281
 msgid "Are you sure you want to add this device?"
 msgstr "तुम्हाला नक्की हे साधण जोडायचे?"
 
-#: virtManager/addhardware.py:1267
+#: virtManager/addhardware.py:1284
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2443,39 +2456,39 @@ msgstr ""
 "ह्या साधनाला सुरू असलेल्या मशीनसह जोडणी करणे अशक्य. पुढील अतिथी शटडाऊन केल्यानंतर साधन "
 "उपलब्ध करायचे?"
 
-#: virtManager/addhardware.py:1291
+#: virtManager/addhardware.py:1308
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "साधण समावेष करण्यास अशक्य: %s"
 
-#: virtManager/addhardware.py:1312
+#: virtManager/addhardware.py:1329
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1318
+#: virtManager/addhardware.py:1335
 msgid "Creating device"
 msgstr "साधन निर्माण करणे"
 
-#: virtManager/addhardware.py:1319
+#: virtManager/addhardware.py:1336
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "साधनावर आधारित, पूर्णत्वकरिता काही मिनीटे लागतील."
 
-#: virtManager/addhardware.py:1341
+#: virtManager/addhardware.py:1358
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1343
+#: virtManager/addhardware.py:1360
 msgid "Do you really want to use the device?"
 msgstr ""
 
-#: virtManager/addhardware.py:1388
+#: virtManager/addhardware.py:1405
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
 
-#: virtManager/asyncjob.py:235
+#: virtManager/asyncjob.py:220
 msgid "Cancelling job..."
 msgstr "जॉब रद्द करत आहे..."
 
@@ -2876,7 +2889,7 @@ msgid "No active connection to install on."
 msgstr "प्रतिष्ठापन करीता सक्रीय जुळवणी आढळली नाही."
 
 #: virtManager/createvm.py:947 virtManager/details/details.py:1771
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:236
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:237
 msgid "None"
 msgstr "काहिच नाही"
 
@@ -4533,11 +4546,11 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "माइग्रेट जॉब रद्द करतेवेळी त्रुटी: %s"
 
-#: virtManager/object/domain.py:457
+#: virtManager/object/domain.py:456
 msgid "Libvirt connection does not support snapshots."
 msgstr "लिबवर्ट जोडणी स्नॅपशॉट्सकरिता समर्थन पुरवत नाही."
 
-#: virtManager/object/domain.py:472
+#: virtManager/object/domain.py:471
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4545,23 +4558,23 @@ msgstr ""
 "सर्व लेखनजोगी qcow2 रूपणकरिता डिस्क प्रतिमांचे वाटप केले असल्यावरच स्नॅपशॉट्स समर्थीत "
 "असतात."
 
-#: virtManager/object/domain.py:475
+#: virtManager/object/domain.py:474
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
 "स्नॅपशॉट्सना अतिथीकरिता वाटप केलेली किमान एक लेखनजोगी qcow2 डिस्क प्रतिमा आवश्यक आहे."
 
-#: virtManager/object/domain.py:510
+#: virtManager/object/domain.py:509
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "निष्क्रिय VM संरचनामध्ये निर्देशीत साधन आढळले नाही: %s"
 
-#: virtManager/object/domain.py:1372
+#: virtManager/object/domain.py:1371
 msgid "Saving domain to disk"
 msgstr "डोमैनला डिस्कवर साठवत आहे"
 
-#: virtManager/object/domain.py:1424
+#: virtManager/object/domain.py:1423
 msgid "Migrating domain"
 msgstr "डोमैन स्थानांतरीत करत आहे"
 
@@ -5677,21 +5690,21 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: virtinst/domcapabilities.py:235
+#: virtinst/domcapabilities.py:236
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:241
+#: virtinst/domcapabilities.py:242
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:244
+#: virtinst/domcapabilities.py:245
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:320
+#: virtinst/domcapabilities.py:321
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
@@ -5852,12 +5865,12 @@ msgstr "URL %s ला उघडण्यास अपयशी: %s."
 msgid "Transferring '%(filename)s'"
 msgstr "%s स्थानांतरीत करत आहे"
 
-#: virtinst/nodedev.py:234
+#: virtinst/nodedev.py:254
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s एकापेक्षाजास्त नोड साधनांशी परस्पर आहे"
 
-#: virtinst/nodedev.py:237
+#: virtinst/nodedev.py:257
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' करीता जुळणारे नोड साधन आढळले नाही"
