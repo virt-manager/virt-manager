@@ -13,17 +13,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-05-29 07:26+0000\n"
-"PO-Revision-Date: 2021-04-14 18:56+0000\n"
+"POT-Creation-Date: 2021-06-11 06:14+0000\n"
+"PO-Revision-Date: 2021-06-22 11:04+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
-"Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ko/>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5.3\n"
+"X-Generator: Weblate 4.7\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -311,7 +311,7 @@ msgstr "새로운_경로:"
 
 #: ui/clone.ui:685
 msgid "Create a new disk (c_lone) for the virtual machine"
-msgstr "가상 머신에 새로운 디스크(복제) 생성(_L)"
+msgstr "가상 머신에 신규 디스크(복제) 생성(_l)"
 
 #: ui/clone.ui:719 ui/createvol.ui:415 ui/fsdetails.ui:63
 msgid "_Browse..."
@@ -1730,7 +1730,7 @@ msgstr "그래픽 유형(_P):"
 
 #: ui/preferences.ui:435 ui/preferences.ui:461
 msgid "Default storage format for new disk images."
-msgstr "새 디스크 이미지의 기본 저장소 형식입니다."
+msgstr "신규 디스크 이미지의 기본 저장소 형식입니다."
 
 #: ui/preferences.ui:437
 msgid "_Storage format:"
@@ -3022,8 +3022,8 @@ msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
-"가상 머신이 지금 생성 중 입니다. 디스크 저장소의 할당과 새로운 설치 이미지를 "
-"읽어들이는 작업을 완료하기 위해 몇 분이 필요할 것입니다."
+"가상 머신이 지금 생성 중 입니다. 디스크 저장소의 할당과 새로운 설치 이미지를 읽어 들이는 작업을 완료하기 위해 몇 분이 필요 할 "
+"것입니다."
 
 #: virtManager/createvm.py:2019
 #, python-format
@@ -3839,7 +3839,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "GTK-VNC 뷰어는 너무 오래되었습니다"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -5628,10 +5628,9 @@ msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s은(는) 5900 이상이거나 자동 할당의 경우 -1이어야 함"
 
 #: virtinst/devices/hostdev.py:82
-#, fuzzy, python-format
-#| msgid "Don't know how to setup UEFI for arch '%s'"
+#, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
-msgstr "Arch '%s'의 UEFI를 설정하는 방법을 알 수 없음"
+msgstr "mdev 유형 id '%s'에 노드 장치를 발생하는 방법을 알 수 없음"
 
 #: virtinst/devices/hostdev.py:88
 #, python-format
@@ -5869,10 +5868,9 @@ msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "파일 %(url)s: %(error)s을 얻을 수 없음"
 
 #: virtinst/install/urlfetcher.py:106
-#, fuzzy, python-format
-#| msgid "Retrieving file %s..."
+#, python-format
 msgid "Retrieving '%(filename)s'"
-msgstr "%s 파일 검색 중..."
+msgstr "'%(filename)s' 검색 중"
 
 #: virtinst/install/urlfetcher.py:279
 #, python-format
@@ -5880,10 +5878,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "URL %(url)s 열기 실패: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
-#, fuzzy, python-format
-#| msgid "Transferring %s"
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "%s 전송"
+msgstr "'%(filename)s' 전송"
 
 #: virtinst/nodedev.py:234
 #, python-format
@@ -5979,10 +5976,9 @@ msgid ""
 msgstr "희소 논리 볼륨이 지원되지 않으므로, 할당량을 용량과 동일하게 설정"
 
 #: virtinst/storage.py:687
-#, fuzzy, python-format
-#| msgid "Allocating '%s'"
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "'%s' 할당"
+msgstr "'%(filename)s' 할당"
 
 #: virtinst/storage.py:727
 #, python-format
@@ -6062,7 +6058,7 @@ msgstr "저장소 설정"
 
 #: virtinst/virtclone.py:95
 msgid "New file to use as the disk image for the new guest"
-msgstr "새 게스트의 디스크 이미지로 사용할 새 파일"
+msgstr "신규 게스트의 디스크 이미지로 사용할 새 파일"
 
 #: virtinst/virtclone.py:98
 msgid ""
