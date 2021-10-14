@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2021-08-01 03:04+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
@@ -1423,7 +1423,7 @@ msgid "Apply pool changes"
 msgstr "Havuz değişikliklerini uygula"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "Etkin"
 
@@ -3972,7 +3972,7 @@ msgstr "Kullanıcı modu ağı"
 msgid "Virtual network"
 msgstr "Sanal ağ"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "Etkin değil"
 
@@ -5539,7 +5539,7 @@ msgstr "Bilinmeyen %(optionflag)s seçenekleri: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Hata: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5547,31 +5547,31 @@ msgstr ""
 "Grafiksel konsola bağlanılamıyor: virt-viewer kurulu değil. Lütfen 'virt-"
 "viewer' paketini kurun."
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Grafikler istendi ancak DISPLAY ayarlanmadı. virt-viewer çalıştırılmıyor."
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Bilinmeyen otomatik konsol türü '%s'"
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' için uygun olmayan değer: %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Bilinmeyen '%(optionname)s' değeri '%(string)s'"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Depolama birimi vol=havuzadı/birimadı olarak belirtilmelidir"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "'%s' için PCI biçim dizgesi bekleniyor"
@@ -5749,7 +5749,7 @@ msgstr ""
 "%(inputpath)s disk kalıbı, %(outputpath)s adresine klonlanırken hata oluştu: "
 "%(error)s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "Yeteneklerde ana makine CPU'su bildirilmedi"
 
@@ -5912,16 +5912,16 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr "'%s' katılımsız profili kullanılıyor"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "URL'ye erişilemedi, yanlış yazmış olabilir misiniz?"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr "'%s' adresinde kurulabilir bir dağıtım bulunamadı"
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -5939,7 +5939,7 @@ msgstr "%(url)s dosyası alınamadı: %(error)s"
 msgid "Retrieving '%(filename)s'"
 msgstr "'%(filename)s' alınıyor"
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "%(url)s URL'si açılamadı: %(error)s"
