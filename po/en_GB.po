@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2020-08-06 08:29+0000\n"
 "Last-Translator: Pavel Hrdina <phrdina@redhat.com>\n"
 "Language-Team: English (United Kingdom) <https://translate.fedoraproject.org/"
@@ -1438,7 +1438,7 @@ msgid "Apply pool changes"
 msgstr "Apply pool changes"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "Active"
 
@@ -4027,7 +4027,7 @@ msgstr "Usermode networking"
 msgid "Virtual network"
 msgstr "Virtual network"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "Inactive"
 
@@ -5570,7 +5570,7 @@ msgstr ""
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5578,31 +5578,31 @@ msgstr ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Improper value for 'size': %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Unknown '%s' value '%s'"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Storage volume must be specified as vol=poolname/volname"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5787,7 +5787,7 @@ msgstr "Cloning %(srcfile)s"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr "Error cloning diskimage %s to %s: %s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "No host CPU reported in capabilities"
 
@@ -5940,16 +5940,16 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "The URL could not be accessed, maybe you mistyped?"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 #, fuzzy
 #| msgid ""
 #| "Could not find an installable distribution at '%s'%s\n"
@@ -5977,7 +5977,7 @@ msgstr "Couldn't acquire file %s: %s"
 msgid "Retrieving '%(filename)s'"
 msgstr "Retrieving file %s..."
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"

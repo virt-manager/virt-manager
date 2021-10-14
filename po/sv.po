@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2021-08-06 21:04+0000\n"
 "Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
 "Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
@@ -1427,7 +1427,7 @@ msgid "Apply pool changes"
 msgstr "Verkställ ändringar av poolen"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "Aktiv"
 
@@ -3971,7 +3971,7 @@ msgstr "Nätverk i användarläge"
 msgid "Virtual network"
 msgstr "Virtuellt nätverk"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "Inaktiv"
 
@@ -5534,7 +5534,7 @@ msgstr "Okända %(optionflag)s-flaggor: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Fel: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5542,30 +5542,30 @@ msgstr ""
 "Kan inte ansluta till den grafiska konsolen: virt-viewer är inte "
 "installerad. Installera paketet \"virt-viewer\"."
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr "Grafik begärd men DISPLAY inte satt. Kör inte virt-viewer."
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Okänd autoconsole-typ ”%s”"
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Felaktigt värde för ”size”: %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Okänt ”%(optionname)s”-värde ”%(string)s”"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Lagringsvolymer måste anges som vol=poolnamn/volnamn"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "PCI-formatsträng förväntades för ”%s”"
@@ -5742,7 +5742,7 @@ msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 "Fel när diskavbilden %(inputpath)s klonades till %(outputpath)s: %(error)s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "Ingen värd-CPU rapporterad i egenskaper"
 
@@ -5906,16 +5906,16 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr "Använder obevakad profil ”%s”"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "URL:en kunde inte nås, kanske du skrev fel?"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr "Kunde inte hitta en installerabar distribution på URL:en ”%s”"
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -5933,7 +5933,7 @@ msgstr "Kunde inte få tag i filen %(url)s: %(error)s"
 msgid "Retrieving '%(filename)s'"
 msgstr "Hämtar '%(filename)s'"
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Att öppna URL:en %(url)s misslyckades: %(error)s"

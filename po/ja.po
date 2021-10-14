@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2021-04-25 16:02+0000\n"
 "Last-Translator: rinsuki <428rinsuki+fedora@gmail.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/virt-"
@@ -1463,7 +1463,7 @@ msgid "Apply pool changes"
 msgstr "変更を適用する"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "動作中"
 
@@ -4075,7 +4075,7 @@ msgstr "ユーザーモードネットワーク"
 msgid "Virtual network"
 msgstr "仮想ネットワーク"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "停止"
 
@@ -5659,7 +5659,7 @@ msgstr ""
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5667,34 +5667,34 @@ msgstr ""
 "グラフィカルコンソールに接続できません: virt-viewer がインストールされていま"
 "せん。'virt-viewer' パッケージをインストールしてください。"
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "グラフィックスが要求されていますが DISPLAY 変数が設定されていません。virt-"
 "viewer を起動できません。"
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' に不適切な値があります: %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "'%s' の不明な値 '%s'"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "ストレージボリュームを vol=poolname/volname のように指定する必要があります"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5886,7 +5886,7 @@ msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 "ディスクイメージ %s のクローンを %s に作成中に、エラーが発生しました: %s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "ケイパビリティにおいて報告されたホスト CPU がありません"
 
@@ -6039,16 +6039,16 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr "無人インストールプロファイル '%s' を使用中"
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "URL にアクセスできません。URLは正しいですか？"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 #, fuzzy
 #| msgid ""
 #| "Could not find an installable distribution at '%s'%s\n"
@@ -6077,7 +6077,7 @@ msgstr "ファイル %s を取得できませんでした: %s"
 msgid "Retrieving '%(filename)s'"
 msgstr "ファイル %s を読出中..."
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, fuzzy, python-format
 #| msgid "Opening URL %s failed: %s."
 msgid "Opening URL %(url)s failed: %(error)s"

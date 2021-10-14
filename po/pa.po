@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2021-09-15 06:13+0000\n"
+"POT-Creation-Date: 2021-10-05 06:14+0000\n"
 "PO-Revision-Date: 2018-01-07 03:28+0000\n"
 "Last-Translator: A S Alam <aalam@fedoraproject.org>\n"
 "Language-Team: Panjabi (Punjabi) (http://www.transifex.com/projects/p/virt-"
@@ -1423,7 +1423,7 @@ msgid "Apply pool changes"
 msgstr ""
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "ਸਰਗਰਮ"
 
@@ -3947,7 +3947,7 @@ msgstr "ਯੂਜ਼ਰ-ਮੋਡ ਨੈੱਟਵਰਕਿੰਗ"
 msgid "Virtual network"
 msgstr "ਵਰਚੁਅਲ ਨੈੱਟਵਰਕ"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "ਨਾ-ਸਰਗਰਮ"
 
@@ -5428,7 +5428,7 @@ msgstr ""
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5436,31 +5436,31 @@ msgstr ""
 "ਗਰਾਫੀਕਲ ਕੰਸੋਲ ਨਾਲ ਜੁੜਨ ਤੋਂ ਅਯੋਗ: virt-viewer ਇੰਸਟਾਲ ਨਹੀਂ ਹੋਇਆ। ਕਿਰਪਾ ਕਰ ਕੇ 'virt-"
 "viewer' ਪੰਡ (package) ਇੰਸਟਾਲ ਕਰੋ।"
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "ਅਢੁਕਵਾਂ ਮੁੱਲ 'size' ਲਈ: %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "ਅਣਜਾਣ '%s' ਮੁੱਲ '%s'"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "ਭੰਡਾਰਣ ਆਇਤਨ vol=poolname/volname ਵਜੋਂ ਜਰੂਰੀ ਦਰਸਾਇਆ ਜਾਵੇ"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5639,7 +5639,7 @@ msgstr "%(srcfile)s ਕਲੋਨ ਕੀਤਾ ਜਾ ਰਿਹਾ"
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr "ਡਿਸਕ ਪ੍ਰਤੀਬਿੰਬ %s ਨੂੰ %s ਤੇ ਕਲੋਨ ਕਰਨ ਲੱਗਿਆਂ ਗਲਤੀ: %s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "ਯੋਗਤਾਵਾਂ ਵਿੱਚ ਕੋਈ ਮੇਜਬਾਨ CPU ਸੂਚਿਤ ਨਹੀਂ ਕੀਤਾ ਗਿਆ"
 
@@ -5791,16 +5791,16 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -5818,7 +5818,7 @@ msgstr "ਫਾਈਲ %s ਪ੍ਰਾਪਤ ਨਹੀਂ ਕਰ ਸਕਿਆ: %s"
 msgid "Retrieving '%(filename)s'"
 msgstr "ਫਾਈਲ %s ਮੁੜ-ਪ੍ਰਾਪਤ ਕਰ ਰਿਹਾ ਹੈ..."
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr ""

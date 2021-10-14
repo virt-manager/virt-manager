@@ -296,8 +296,8 @@ msgid ""
 msgstr ""
 "<span size='small'>A clonagem <u>não</u> altera os conteúdos do SO "
 "convidado. Se precisar fazer coisas\n"
-"como mudar senhas ou IPs estáticos, consulte a ferramenta virt-"
-"sysprep(1).</span>"
+"como mudar senhas ou IPs estáticos, consulte a ferramenta virt-sysprep(1).</"
+"span>"
 
 #: ui/clone.ui:409
 msgid "C_lone"
@@ -842,8 +842,8 @@ msgid ""
 "<small>This VM is currently running and will be forced off before being "
 "deleted</small>"
 msgstr ""
-"<small>Esta VM está em execução e será desligada antes de ser "
-"excluída</small>"
+"<small>Esta VM está em execução e será desligada antes de ser excluída</"
+"small>"
 
 #: ui/delete.ui:123
 msgid "Delete _associated storage files"
@@ -1311,7 +1311,8 @@ msgstr "Tipo de e_scuta:"
 
 #: ui/gfxdetails.ui:363
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
-msgstr "OpenGL só funciona com gráficos 'virtio' com 'aceleração 3D' habilitada"
+msgstr ""
+"OpenGL só funciona com gráficos 'virtio' com 'aceleração 3D' habilitada"
 
 #: ui/gfxdetails.ui:379
 msgid "OpenGL only works with 'Listen type' value 'none'"
@@ -1438,7 +1439,7 @@ msgid "Apply pool changes"
 msgstr "Aplicar alterações do pool"
 
 #: ui/hoststorage.ui:310 virtManager/connection.py:498
-#: virtManager/object/libvirtobject.py:209
+#: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "Ativo"
 
@@ -2192,7 +2193,8 @@ msgstr "Erro ao modificar a configuração da VM: %s"
 
 #: virtManager/addhardware.py:368
 msgid "These changes will take effect after the next guest shutdown."
-msgstr "Essas alterações terão efeito após o próximo desligamento do convidado."
+msgstr ""
+"Essas alterações terão efeito após o próximo desligamento do convidado."
 
 #: virtManager/addhardware.py:418
 msgid "Pseudo TTY"
@@ -3995,7 +3997,7 @@ msgstr "Rede em modo de usuário"
 msgid "Virtual network"
 msgstr "Rede virtual"
 
-#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:210
+#: virtManager/device/netlist.py:116 virtManager/object/libvirtobject.py:209
 msgid "Inactive"
 msgstr "Inativo"
 
@@ -5525,7 +5527,7 @@ msgstr "Opções %(optionflag)s desconhecidas: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Erro: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1902
+#: virtinst/cli.py:1903
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5533,34 +5535,34 @@ msgstr ""
 "Impossível conectar-se ao console gráfico: o virt-viewer não está instalado. "
 "Por favor, instale o pacote 'virt-viewer'."
 
-#: virtinst/cli.py:1909
+#: virtinst/cli.py:1910
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Gráfico solicitado, mas a (exibição) DISPLAY não está configurada. virt-"
 "viewer não está em execução."
 
-#: virtinst/cli.py:1920
+#: virtinst/cli.py:1921
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Tipo de autoconsole desconhecido '%s'"
 
-#: virtinst/cli.py:3337
+#: virtinst/cli.py:3463
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Valor impróprio para 'tamanho': %s"
 
-#: virtinst/cli.py:3350
+#: virtinst/cli.py:3476
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Valor '%s' Desconhecido '%s'"
 
-#: virtinst/cli.py:3365
+#: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "O volume de armazenamento deve ser especificado como vol=poolname/volname"
 
-#: virtinst/cli.py:3814
+#: virtinst/cli.py:3940
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
@@ -5741,7 +5743,7 @@ msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 "Erro ao clonar imagem de disco %(inputpath)s para %(outputpath)s: %(error)s"
 
-#: virtinst/domain/cpu.py:222
+#: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
 msgstr "Nenhuma CPU host notificada nos recursos"
 
@@ -5897,16 +5899,16 @@ msgstr ""
 msgid "Using unattended profile '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:311
+#: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "O URL não pôde ser acessado, talvez você tenha digitado errado?"
 
-#: virtinst/install/urldetect.py:313
+#: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr "Não foi possível encontrar uma distribuição instalável no URL '%s'"
 
-#: virtinst/install/urldetect.py:317
+#: virtinst/install/urldetect.py:318
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -5924,7 +5926,7 @@ msgstr "Não foi possível obter o arquivo %(url)s: %(error)s"
 msgid "Retrieving '%(filename)s'"
 msgstr "Recuperando '%(filename)s'"
 
-#: virtinst/install/urlfetcher.py:279
+#: virtinst/install/urlfetcher.py:278
 #, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Falha ao abrir URL %(url)s: %(error)s"
@@ -6356,7 +6358,8 @@ msgstr "O domínio travou."
 
 #: virtinst/virtinstall.py:789
 msgid "Domain is still running. Installation may be in progress."
-msgstr "O domínio ainda está em execução. A instalação pode estar em andamento."
+msgstr ""
+"O domínio ainda está em execução. A instalação pode estar em andamento."
 
 #: virtinst/virtinstall.py:799
 msgid "You can reconnect to the console to complete the installation process."
@@ -6716,7 +6719,8 @@ msgstr "--xml só pode ser usado com --edit"
 
 #: virtinst/virtxml.py:335
 msgid "No XML diff was generated. The requested changes will have no effect."
-msgstr "Nenhum diff XML foi gerado. As alterações solicitadas não terão efeito."
+msgstr ""
+"Nenhum diff XML foi gerado. As alterações solicitadas não terão efeito."
 
 #: virtinst/virtxml.py:354
 msgid "Edit libvirt XML using command line options."
