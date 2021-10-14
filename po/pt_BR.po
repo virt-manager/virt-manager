@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-09-15 06:13+0000\n"
-"PO-Revision-Date: 2021-04-11 07:02+0000\n"
-"Last-Translator: Renan Birck Pinheiro <renan.ee.ufsm@gmail.com>\n"
+"PO-Revision-Date: 2021-09-29 02:36+0000\n"
+"Last-Translator: Lucas Fernandes <lucas.af88@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5.3\n"
+"X-Generator: Weblate 4.8\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -133,7 +133,7 @@ msgstr "Endereço _MAC:"
 
 #: ui/addhardware.ui:437 ui/details.ui:2803 ui/details.ui:4422
 msgid "Device mode_l:"
-msgstr "Mode_lo de dispositivo: "
+msgstr "Mode_lo de dispositivo:"
 
 #: ui/addhardware.ui:671 ui/addhardware.ui:1324
 msgid "Host _Device:"
@@ -583,7 +583,7 @@ msgstr "Tipo de _Máquina:"
 
 #: ui/createvm.ui:724
 msgid "_Virt Type:"
-msgstr "Tipo de _Virtualização: "
+msgstr "Tipo de _Virtualização:"
 
 #: ui/createvm.ui:752
 msgid "Architecture options"
@@ -628,7 +628,7 @@ msgstr "PXE"
 
 #: ui/createvm.ui:1066
 msgid "Provide the existing stora_ge path:"
-msgstr "Fornecer o caminho de armazenamen_to existente: "
+msgstr "Fornecer o caminho de armazenamen_to existente:"
 
 #: ui/createvm.ui:1100 ui/createvm.ui:1228 ui/createvm.ui:1315
 msgid "B_rowse..."
@@ -741,7 +741,7 @@ msgstr "Memória"
 
 #: ui/createvm.ui:2010
 msgid "_Enable storage for this virtual machine"
-msgstr "_Habilitar armazenamento para esta máquina virtual "
+msgstr "_Habilitar armazenamento para esta máquina virtual"
 
 #: ui/createvm.ui:2048 virtManager/addhardware.py:213
 #: virtManager/addhardware.py:1017 virtManager/clone.py:277
@@ -754,7 +754,7 @@ msgstr "A instalação está pronta para iniciar."
 
 #: ui/createvm.ui:2126
 msgid "C_ustomize configuration before install"
-msgstr "P_ersonalisar a configuração antes da instalação "
+msgstr "P_ersonalisar a configuração antes da instalação"
 
 #: ui/createvm.ui:2190
 msgid "Install:"
@@ -1020,7 +1020,7 @@ msgstr "<b>Memória</b>"
 
 #: ui/details.ui:1878
 msgid "Start virt_ual machine on host boot up"
-msgstr "Iniciar máquina virt_ual durante a inicialização do host "
+msgstr "Iniciar máquina virt_ual durante a inicialização do host"
 
 #: ui/details.ui:1894
 msgid "<b>Autostart</b>"
@@ -1600,7 +1600,7 @@ msgstr ""
 "Isto pode simplificar a configuração já que nenhuma porta do firewall "
 "adicional precisa ser aberta e irá criptografar o tráfico de migração se a "
 "conexão do libvirt estiver criptografada. Mas, pode ser difícil de realizar "
-"isto com o transporte SSH. "
+"isto com o transporte SSH."
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1622,7 +1622,7 @@ msgstr ""
 "configurações que podem gerar o mau funcionamento de convidados, como se o "
 "modo cache de um disco nao fosse 'nenhum'.\n"
 "\n"
-"A habilitação desta opção informa o libvirt para ignorar essas verificações. "
+"A habilitação desta opção informa o libvirt para ignorar essas verificações."
 
 #: ui/migrate.ui:546
 msgid "A_llow unsafe:"
@@ -1646,7 +1646,7 @@ msgstr ""
 "Se 'temporário(a)' for selecionado, a migração é considerada somente um "
 "movimento temporário: o host de origem mantém uma cópia da configuração da "
 "MV e a cópia em execução movida ao destino é apenas transitória e "
-"desaparecerá quando desligada. "
+"desaparecerá quando desligada."
 
 #: ui/migrate.ui:576
 msgid "_Temporary move:"
@@ -1697,7 +1697,7 @@ msgstr "Preferências"
 
 #: ui/preferences.ui:48
 msgid "Enable _system tray icon"
-msgstr "Habilitar ícone na bandeja do _sistema "
+msgstr "Habilitar ícone na bandeja do _sistema"
 
 #: ui/preferences.ui:69
 msgid "Enable libgues_tfs VM introspection"
@@ -1721,7 +1721,7 @@ msgstr "Obter E/S de _Disco"
 
 #: ui/preferences.ui:224
 msgid "Poll _Network I/O"
-msgstr "Obter E/S de _Rede "
+msgstr "Obter E/S de _Rede"
 
 #: ui/preferences.ui:252
 msgid "Poll _Memory stats"
@@ -1769,8 +1769,7 @@ msgid ""
 msgstr ""
 "Configuração padrão da CPU para novas MVs. Esta é uma compensação típica "
 "entre a compatibilidade de migração e desempenho: Se estiver usando a opção "
-"'copiar host', seus servidores precisarão de CPUs idênticas para migrar a "
-"MV. "
+"'copiar host', seus servidores precisarão de CPUs idênticas para migrar a MV."
 
 #: ui/preferences.ui:477
 msgid "CPU _default:"
@@ -1885,11 +1884,11 @@ msgstr "Modo Snapshot:"
 
 #: ui/snapshots.ui:232 ui/snapshotsnew.ui:220
 msgid "Screenshot:"
-msgstr "Captura de tela: "
+msgstr "Captura de tela:"
 
 #: ui/snapshots.ui:259
 msgid "No screenshot available"
-msgstr "Nenhuma captura de tela disponível "
+msgstr "Nenhuma captura de tela disponível"
 
 #: ui/snapshots.ui:296
 msgid "<small><i>This was the most recently applied snapshot.</i></small>"
@@ -1983,7 +1982,7 @@ msgstr "_Nunca"
 
 #: ui/vmwindow.ui:246
 msgid "Auto _resize VM with window"
-msgstr "_Redimensionar automaticamente a MV com janela "
+msgstr "_Redimensionar automaticamente a MV com janela"
 
 #: ui/vmwindow.ui:259
 msgid "Co_nsoles"
@@ -2003,7 +2002,7 @@ msgstr "Enviar _Tecla"
 
 #: ui/vmwindow.ui:319
 msgid "Show the graphical console"
-msgstr "Mostrar o console gráfico "
+msgstr "Mostrar o console gráfico"
 
 #: ui/vmwindow.ui:320 virtManager/addhardware.py:232
 msgid "Console"
@@ -2031,7 +2030,7 @@ msgstr "Snapshots"
 
 #: ui/vmwindow.ui:427
 msgid "Switch to fullscreen view"
-msgstr "Trocar para a visualização de tela inteira "
+msgstr "Trocar para a visualização de tela inteira"
 
 #: ui/vmwindow.ui:452
 msgid "Begin Installation"
@@ -2120,7 +2119,7 @@ msgstr "A conexão não suporta a enumeração de dispositivos do hospedeiro"
 
 #: virtManager/addhardware.py:248
 msgid "Not supported for containers"
-msgstr "Não suportado para recipientes "
+msgstr "Não suportado para recipientes"
 
 #: virtManager/addhardware.py:249
 msgid "PCI Host Device"
@@ -2199,7 +2198,7 @@ msgstr "Saída a um arquivo"
 
 #: virtManager/addhardware.py:420
 msgid "TCP net console"
-msgstr "Console de rede TCP "
+msgstr "Console de rede TCP"
 
 #: virtManager/addhardware.py:421
 msgid "UDP net console"
@@ -2328,7 +2327,7 @@ msgstr "Reiniciar o convidado de modo forçado"
 
 #: virtManager/addhardware.py:560
 msgid "Gracefully shutdown the guest"
-msgstr "Desligar normalmente o convidado "
+msgstr "Desligar normalmente o convidado"
 
 #: virtManager/addhardware.py:561
 msgid "Forcefully power off the guest"
@@ -4388,7 +4387,7 @@ msgstr "Salvamento cancelado"
 
 #: virtManager/lib/libvirtenummap.py:101
 msgid "Event wakeup"
-msgstr " Ativação do evento "
+msgstr "Ativação do evento"
 
 #: virtManager/lib/libvirtenummap.py:105 virtManager/lib/libvirtenummap.py:117
 msgid "User"
@@ -5569,7 +5568,7 @@ msgstr "Valor impróprio para 'tamanho': %s"
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
-msgstr "Valor  '%s' Desconhecido '%s'"
+msgstr "Valor '%s' Desconhecido '%s'"
 
 #: virtinst/cli.py:3365
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -6032,7 +6031,7 @@ msgstr "Nome '%s' já está sendo usado por outro pool."
 #: virtinst/storage.py:388
 #, python-format
 msgid "Could not define storage pool: %s"
-msgstr "Não pôde definir pool de armazenamento:  %s"
+msgstr "Não pôde definir pool de armazenamento: %s"
 
 #: virtinst/storage.py:396
 #, python-format
