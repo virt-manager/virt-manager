@@ -597,7 +597,7 @@ class _OsVariant(object):
         if self.distro in ["caasp", "sle", "sled", "sles", "opensuse"]:
             return "install"
 
-        if self.distro not in ["centos", "rhel", "fedora"]:
+        if self.distro not in ["centos", "rhel", "fedora", "almalinux"]:
             return None
 
         # Red Hat distros
