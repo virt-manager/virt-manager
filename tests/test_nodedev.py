@@ -8,6 +8,7 @@
 import os.path
 
 import pytest
+import libvirt
 
 from virtinst import Guest
 from virtinst import NodeDevice
@@ -154,6 +155,19 @@ def testPCIMdev():
     assert dev.parent == "pci_0000_06_00_0"
     assert dev.device_type == "mdev"
     assert dev.type_id == "nvidia-11"
+    assert dev.get_mdev_uuid() == "4b20d080-1b54-4048-85b3-a6a62d165c01"
+
+# libvirt <7.3.0 doesn't support <uuid> in the mdev node device xml
+@pytest.mark.skipif(libvirt.getVersion() < 7003000, reason="libvirt version doesn't support new mdev format")
+def testPCIMdevNewFormat():
+    conn = utils.URIs.open_testdriver_cached()
+    devname = "mdev_35ceae7f_eea5_4f28_b7f3_7b12a3e62d3c_0000_06_00_0"
+    dev = _nodeDevFromName(conn, devname)
+    assert dev.name == devname
+    assert dev.parent == "pci_0000_06_00_0"
+    assert dev.device_type == "mdev"
+    assert dev.type_id == "nvidia-11"
+    assert dev.get_mdev_uuid() == "35ceae7f-eea5-4f28-b7f3-7b12a3e62d3c"
 
 
 # NodeDevice 2 Device XML tests
