@@ -94,6 +94,12 @@ class NodeDevice(XMLBuilder):
     device_type = XMLProperty("./capability/@type")
 
     def get_mdev_uuid(self):
+        # libvirt 7.3.0 added a <uuid> element to the nodedev xml for mdev
+        # types. For older versions, we unfortunately have to parse the nodedev
+        # name, which uses the format "mdev_$UUID_WITH_UNDERSCORES"
+        if self.uuid is not None:
+            return self.uuid
+
         return self.name[5:].replace('_', '-')
 
     def compare_to_hostdev(self, hostdev):
@@ -191,6 +197,7 @@ class NodeDevice(XMLBuilder):
 
     # type='mdev' options
     type_id = XMLProperty("./capability/type/@id")
+    uuid = XMLProperty("./capability/uuid")
 
 
 def _AddressStringToHostdev(conn, addrstr):
