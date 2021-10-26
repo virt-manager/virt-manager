@@ -3725,4 +3725,18 @@ ba</description>
   </capability>
 </device>
 
+<device>
+  <name>mdev_35ceae7f_eea5_4f28_b7f3_7b12a3e62d3c_0000_06_00_0</name>
+  <path>/sys/devices/pci0000:00/0000:00:02.0/35ceae7f-eea5-4f28-b7f3-7b12a3e62d3c</path>
+  <parent>pci_0000_06_00_0</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+ <capability type='mdev'>
+    <type id='nvidia-11'/>
+    <iommuGroup number='12'/>
+    <uuid>35ceae7f-eea5-4f28-b7f3-7b12a3e62d3c</uuid>
+  </capability>
+</device>
+
 </node>
