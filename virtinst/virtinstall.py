@@ -489,11 +489,7 @@ def set_cli_defaults(options, guest):
 
     if ncpus:
         # We need to do this upfront, so we don't incorrectly set guest.vcpus
-        guest.sync_vcpus_topology()
-        if not guest.vcpus:
-            # I don't think we need to print anything here as this was never
-            # a required value.
-            guest.vcpus = ncpus
+        guest.sync_vcpus_topology(ncpus)
 
     if storage and not storage_specified(options, guest):
         diskstr = 'size=%d' % (storage // (1024 ** 3))
