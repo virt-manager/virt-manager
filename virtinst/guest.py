@@ -692,16 +692,17 @@ class Guest(XMLBuilder):
             log.warning(  # pragma: no cover
                     "KVM acceleration not available, using '%s'", self.type)
 
-    def sync_vcpus_topology(self):
+    def sync_vcpus_topology(self, defCPUs):
         """
         <cpu> topology count and <vcpus> always need to match. Handle
         the syncing here since we are less constrained then doing it
         in CPU set_defaults
         """
-        if not self.cpu.has_topology():
-            return
         if not self.vcpus:
-            self.vcpus = self.cpu.vcpus_from_topology()
+            if self.cpu.has_topology():
+                self.vcpus = self.cpu.vcpus_from_topology()
+            else:
+                self.vcpus = defCPUs
         self.cpu.set_topology_defaults(self.vcpus)
 
     def set_defaults(self, _guest):
@@ -710,12 +711,7 @@ class Guest(XMLBuilder):
         if not self.uuid:
             self.uuid = Guest.generate_uuid(self.conn)
 
-        self.sync_vcpus_topology()
-        if not self.vcpus:
-            # Typically if omitted libvirt will fill this value in for us
-            # However if user specified cpuset= or placement=, libvirt
-            # will error if <vcpus>X is also unset. So keep this for safety
-            self.vcpus = 1
+        self.sync_vcpus_topology(1)
 
         self._set_default_machine()
         self._set_default_uefi()
