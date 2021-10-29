@@ -744,6 +744,20 @@
 </device>
 
 <device>
+  <name>usb_device_483_2016_noserial</name>
+  <parent>usb_device_1d6b_1_0000_00_1a_0</parent>
+  <driver>
+    <name>usb</name>
+  </driver>
+  <capability type='usb_device'>
+    <bus>3</bus>
+    <device>2</device>
+    <product id='0x2016'>Fingerprint Reader</product>
+    <vendor id='0x0483'>SGS Thomson Microelectronics</vendor>
+  </capability>
+</device>
+
+<device>
   <name>mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110</name>
   <path>/sys/devices/css0/0.0.0023/8e37ee90-2b51-45e3-9b25-bf8283c03110</path>
   <parent>css_0_0_0023</parent>
