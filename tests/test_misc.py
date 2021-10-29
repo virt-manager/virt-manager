@@ -22,14 +22,17 @@ def test_misc_cpu_topology():
     Various topology calculation corner cases
     """
     conn = utils.URIs.open_testdefault_cached()
+
+    def get_top(_c):
+        return [_c.topology.sockets, _c.topology.dies, _c.topology.cores, _c.topology.threads]
+
     cpu = virtinst.DomainCpu(conn)
     cpu.set_topology_defaults(6)
     assert cpu.topology.sockets is None
 
+    cpu = virtinst.DomainCpu(conn)
     cpu.topology.sockets = "2"
     cpu.set_topology_defaults(6)
-    def get_top(_c):
-        return [_c.topology.sockets, _c.topology.dies, _c.topology.cores, _c.topology.threads]
     assert get_top(cpu) == [2, 1, 3, 1]
 
     cpu = virtinst.DomainCpu(conn)
