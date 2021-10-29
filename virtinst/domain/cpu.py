@@ -30,22 +30,16 @@ class _CPUTopology(XMLBuilder):
     # `sockets`, `cores`, and `threads` are mandatory.
     def set_defaults_from_vcpus(self, vcpus):
         if not self.sockets:
-            if not self.cores:
-                self.sockets = vcpus // self.threads
-            else:
-                self.sockets = vcpus // self.cores
+            self.sockets = vcpus // self.total_vcpus()
 
         if not self.dies:
             self.dies = 1
 
         if not self.cores:
-            if not self.threads:
-                self.cores = vcpus // self.sockets
-            else:
-                self.cores = vcpus // (self.sockets * self.threads)
+            self.cores = vcpus // self.total_vcpus()
 
         if not self.threads:
-            self.threads = vcpus // (self.sockets * self.cores)
+            self.threads = vcpus // self.total_vcpus()
 
         return
 
