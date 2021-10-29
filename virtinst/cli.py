@@ -2657,6 +2657,7 @@ class ParserVCPU(VirtCLIParser):
 
         # Further CPU options should be added to --cpu
         cls.add_arg("sockets", "cpu.topology.sockets")
+        cls.add_arg("dies", "cpu.topology.dies")
         cls.add_arg("cores", "cpu.topology.cores")
         cls.add_arg("threads", "cpu.topology.threads")
 

@@ -467,7 +467,7 @@ c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole 
 c.add_compare("""
 --memory 1024
 --uuid 12345678-12F4-1234-1234-123456789AFA
---vcpus 4,cores=2,threads=2,sockets=2 --cpuset=1,3-5
+--vcpus 4,cores=2,threads=2,dies=1,sockets=2 --cpuset=1,3-5
 --cpu host-copy
 --description \"foobar & baz\"
 --boot uefi,smbios_mode=emulate,boot1.dev=hd,boot.dev=network,initarg1=bar=baz,initarg=foo

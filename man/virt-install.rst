@@ -289,7 +289,7 @@ Number of virtual cpus to configure for the guest. If 'maxvcpus' is specified,
 the guest will be able to hotplug up to MAX vcpus while the guest is running,
 but will startup with VCPUS.
 
-CPU topology can additionally be specified with sockets, cores, and threads.
+CPU topology can additionally be specified with sockets, dies, cores, and threads.
 If values are omitted, the rest will be autofilled preferring sockets over
 cores over threads.
 
