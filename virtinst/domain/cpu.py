@@ -365,6 +365,7 @@ class DomainCpu(XMLBuilder):
         no topology is set
         """
         return ((self.topology.sockets or 1) *
+                (self.topology.dies or 1) *
                 (self.topology.cores or 1) *
                 (self.topology.threads or 1))
 
