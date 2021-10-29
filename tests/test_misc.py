@@ -48,6 +48,12 @@ def test_misc_cpu_topology():
     assert cpu.vcpus_from_topology() == 10
 
     cpu = virtinst.DomainCpu(conn)
+    cpu.topology.sockets = 3
+    cpu.topology.dies = 2
+    cpu.topology.cores = 2
+    assert cpu.vcpus_from_topology() == 12
+
+    cpu = virtinst.DomainCpu(conn)
     assert cpu.vcpus_from_topology() == 1
 
 
