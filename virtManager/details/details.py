@@ -1170,8 +1170,8 @@ class vmmDetails(vmmGObjectUI):
             self.widget("cpu-vcpus").set_value(total)
         else:
             vcpus = uiutil.spin_get_helper(self.widget("cpu-vcpus"))
-            self.widget("cpu-sockets").set_value(vcpus or 1)
-            self.widget("cpu-cores").set_value(1)
+            self.widget("cpu-sockets").set_value(1)
+            self.widget("cpu-cores").set_value(vcpus or 1)
             self.widget("cpu-threads").set_value(1)
 
         self._enable_apply(EDIT_TOPOLOGY)
