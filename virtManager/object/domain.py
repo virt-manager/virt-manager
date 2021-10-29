@@ -625,7 +625,7 @@ class vmmDomain(vmmLibvirtObject):
     ##########################
 
     def define_cpu(self, vcpus=_SENTINEL,
-            model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
+            model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL, dies=_SENTINEL,
             cores=_SENTINEL, threads=_SENTINEL, clear_topology=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
@@ -637,6 +637,7 @@ class vmmDomain(vmmLibvirtObject):
             guest.cpu.topology.clear()
         elif sockets != _SENTINEL:
             guest.cpu.topology.sockets = sockets
+            guest.cpu.topology.dies = dies
             guest.cpu.topology.cores = cores
             guest.cpu.topology.threads = threads
 

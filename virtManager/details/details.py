@@ -425,8 +425,9 @@ class vmmDetails(vmmGObjectUI):
             "on_cpu_model_changed": _e(EDIT_CPU),
             "on_cpu_copy_host_clicked": self._cpu_copy_host_clicked_cb,
             "on_cpu_secure_toggled": _e(EDIT_CPU),
-            "on_cpu_cores_changed": self._cpu_topology_changed_cb,
             "on_cpu_sockets_changed": self._cpu_topology_changed_cb,
+            "on_cpu_dies_changed": self._cpu_topology_changed_cb,
+            "on_cpu_cores_changed": self._cpu_topology_changed_cb,
             "on_cpu_threads_changed": self._cpu_topology_changed_cb,
             "on_cpu_topology_enable_toggled": self._cpu_topology_enable_cb,
             "on_mem_maxmem_changed": _e(EDIT_MEM),
@@ -1161,16 +1162,18 @@ class vmmDetails(vmmGObjectUI):
         self.widget("cpu-vcpus").set_sensitive(not manual_top)
 
         if manual_top:
-            cores = uiutil.spin_get_helper(self.widget("cpu-cores")) or 1
             sockets = uiutil.spin_get_helper(self.widget("cpu-sockets")) or 1
+            dies = uiutil.spin_get_helper(self.widget("cpu-dies")) or 1
+            cores = uiutil.spin_get_helper(self.widget("cpu-cores")) or 1
             threads = uiutil.spin_get_helper(self.widget("cpu-threads")) or 1
-            total = cores * sockets * threads
+            total = sockets * dies * cores * threads
             if uiutil.spin_get_helper(self.widget("cpu-vcpus")) > total:
                 self.widget("cpu-vcpus").set_value(total)
             self.widget("cpu-vcpus").set_value(total)
         else:
             vcpus = uiutil.spin_get_helper(self.widget("cpu-vcpus"))
             self.widget("cpu-sockets").set_value(1)
+            self.widget("cpu-dies").set_value(1)
             self.widget("cpu-cores").set_value(vcpus or 1)
             self.widget("cpu-threads").set_value(1)
 
@@ -1443,6 +1446,7 @@ class vmmDetails(vmmGObjectUI):
             do_top = self.widget("cpu-topology-enable").get_active()
             kwargs["clear_topology"] = not do_top
             kwargs["sockets"] = self.widget("cpu-sockets").get_value()
+            kwargs["dies"] = self.widget("cpu-dies").get_value()
             kwargs["cores"] = self.widget("cpu-cores").get_value()
             kwargs["threads"] = self.widget("cpu-threads").get_value()
 
@@ -1904,11 +1908,21 @@ class vmmDetails(vmmGObjectUI):
         self.widget("cpu-topology-enable").set_active(show_top)
 
         sockets = cpu.topology.sockets or 1
+        dies = cpu.topology.dies or 1
         cores = cpu.topology.cores or 1
         threads = cpu.topology.threads or 1
 
+        xml = self.vm.get_xmlobj()
+        # dies is only expected for x86 right now, but if we see an
+        # existing VM with > 1 dies we enable it as future proofing
+        allow_dies = False
+        if xml.os.is_x86() or dies > 1:
+            allow_dies = True
+        self.widget("cpu-dies").set_sensitive(allow_dies)
+
         self.widget("cpu-sockets").set_value(sockets)
         self.widget("cpu-cores").set_value(cores)
+        self.widget("cpu-dies").set_value(dies)
         self.widget("cpu-threads").set_value(threads)
         if show_top:
             self.widget("cpu-topology-expander").set_expanded(True)
