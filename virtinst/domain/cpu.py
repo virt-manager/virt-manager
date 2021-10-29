@@ -35,6 +35,9 @@ class _CPUTopology(XMLBuilder):
             else:
                 self.sockets = vcpus // self.cores
 
+        if not self.dies:
+            self.dies = 1
+
         if not self.cores:
             if not self.threads:
                 self.cores = vcpus // self.sockets
