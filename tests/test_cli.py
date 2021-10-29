@@ -1350,7 +1350,7 @@ c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define
 c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
 c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
-c.add_compare("--add-device --host-device usb_device_4b3_4485_noserial", "add-host-device")
+c.add_compare("--add-device --host-device usb_device_483_2016_noserial", "add-host-device")
 c.add_compare("--add-device --sound pcspk", "add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
