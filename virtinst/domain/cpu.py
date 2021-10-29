@@ -49,6 +49,15 @@ class _CPUTopology(XMLBuilder):
 
         return
 
+    def total_vcpus(self):
+        """
+        Determine the CPU count represented by topology
+        """
+        return ((self.sockets or 1) *
+                (self.dies or 1) *
+                (self.cores or 1) *
+                (self.threads or 1))
+
 
 # Note: CPU cache is weird. The documentation implies that multiples instances
 # can be declared, one for each cache level one wishes to define. However,
@@ -367,10 +376,7 @@ class DomainCpu(XMLBuilder):
         Determine the CPU count represented by topology, or 1 if
         no topology is set
         """
-        return ((self.topology.sockets or 1) *
-                (self.topology.dies or 1) *
-                (self.topology.cores or 1) *
-                (self.topology.threads or 1))
+        return self.topology.total_vcpus()
 
     def has_topology(self):
         """
