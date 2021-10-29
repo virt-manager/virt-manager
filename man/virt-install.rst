@@ -290,8 +290,10 @@ the guest will be able to hotplug up to MAX vcpus while the guest is running,
 but will startup with VCPUS.
 
 CPU topology can additionally be specified with sockets, dies, cores, and threads.
-If values are omitted, the rest will be autofilled preferring sockets over
-cores over threads.
+If values are omitted, the rest will be autofilled preferring cores over sockets
+over threads. Cores are preferred because this matches the characteristics of
+modern real world silicon and thus a better fit for what guest OS will be
+expecting to deal with.
 
 'cpuset' sets which physical cpus the guest can use. ``CPUSET`` is a comma
 separated list of numbers, which can also be specified in ranges or cpus

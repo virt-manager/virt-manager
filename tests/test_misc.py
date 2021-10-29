@@ -38,7 +38,7 @@ def test_misc_cpu_topology():
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.dies = "3"
     cpu.set_topology_defaults(9)
-    assert get_top(cpu) == [3, 3, 1, 1]
+    assert get_top(cpu) == [1, 3, 3, 1]
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.cores = "4"
@@ -48,7 +48,7 @@ def test_misc_cpu_topology():
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.threads = "3"
     cpu.set_topology_defaults(12)
-    assert get_top(cpu) == [4, 1, 1, 3]
+    assert get_top(cpu) == [1, 1, 4, 3]
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.threads = "3"
