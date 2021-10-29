@@ -695,8 +695,8 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev 15:0.1
 --host-device 2:15:0.2
 --hostdev 0:15:0.3,address.type=pci,address.zpci.uid=0xffff,address.zpci.fid=0xffffffff
---host-device 0x0781:0x5151,driver_name=vfio
---host-device 04b3:4485
+--host-device 0x062a:0x0001,driver_name=vfio
+--host-device 0483:2016
 --host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on
 --hostdev usb_5_20 --hostdev usb_5_21
 --hostdev wlan0,type=net
