@@ -41,6 +41,18 @@ class _CPUTopology(XMLBuilder):
         if not self.threads:
             self.threads = vcpus // self.total_vcpus()
 
+        if self.total_vcpus() != vcpus:
+            raise ValueError(_("Total CPUs implied by topology "
+                               "(sockets=%(sockets)d * dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
+                               "does not match vCPU count %(vcpus)d") % {
+                                   "sockets": self.sockets,
+                                   "dies": self.dies,
+                                   "cores": self.cores,
+                                   "threads": self.threads,
+                                   "total": self.total_vcpus(),
+                                   "vcpus": vcpus,
+                               })
+
         return
 
     def total_vcpus(self):
