@@ -15,6 +15,9 @@
     <initrd>/f19-arm.initrd</initrd>
     <cmdline>console=ttyAMA0,1234 rw root=/dev/vda3</cmdline>
   </os>
+  <cpu>
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-arm</emulator>

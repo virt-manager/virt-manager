@@ -13,6 +13,7 @@
   </features>
   <cpu mode="custom" match="exact">
     <model fallback="allow" vendor_id="GenuineIntel">core2duo</model>
+    <topology sockets="1" dies="1" cores="1" threads="1"/>
   </cpu>
   <clock offset="utc"/>
   <on_reboot>destroy</on_reboot>
@@ -54,6 +55,7 @@
   </features>
   <cpu mode="custom" match="exact">
     <model fallback="allow" vendor_id="GenuineIntel">core2duo</model>
+    <topology sockets="1" dies="1" cores="1" threads="1"/>
   </cpu>
   <clock offset="utc"/>
   <pm>

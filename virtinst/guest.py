@@ -705,6 +705,16 @@ class Guest(XMLBuilder):
                 self.vcpus = defCPUs
         self.cpu.set_topology_defaults(self.vcpus)
 
+    def create_vcpus_topology(self):
+        """
+        If the user didn't specify any topology then populate a
+        default for fully virtualized machines
+        """
+        createTopology = False
+        if self.os.is_hvm():
+            createTopology = True
+        self.cpu.set_topology_defaults(self.vcpus, createTopology)
+
     def set_defaults(self, _guest):
         self.set_capabilities_defaults()
 
@@ -727,6 +737,7 @@ class Guest(XMLBuilder):
 
         self.clock.set_defaults(self)
         self.cpu.set_defaults(self)
+        self.create_vcpus_topology()
         self.features.set_defaults(self)
         for seclabel in self.seclabels:
             seclabel.set_defaults(self)

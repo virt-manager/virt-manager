@@ -14,7 +14,9 @@
     <loader readonly="yes" type="pflash">/usr/share/AAVMF/AAVMF_CODE.fd</loader>
     <boot dev="hd"/>
   </os>
-  <cpu mode="host-passthrough"/>
+  <cpu mode="host-passthrough">
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-aarch64</emulator>

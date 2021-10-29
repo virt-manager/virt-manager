@@ -13,6 +13,9 @@
     <type arch="s390x" machine="s390-ccw-virtio">hvm</type>
     <boot dev="hd"/>
   </os>
+  <cpu>
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-s390x</emulator>

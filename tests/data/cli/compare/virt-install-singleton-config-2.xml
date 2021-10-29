@@ -131,6 +131,7 @@
   <cpu mode="custom" match="strict" check="partial">
     <model>foobar</model>
     <vendor>meee</vendor>
+    <topology sockets="1" dies="1" cores="9" threads="1"/>
     <cache level="3" mode="emulate"/>
     <feature policy="force" name="x2apic"/>
     <feature policy="force" name="x2apicagain"/>
@@ -415,6 +416,7 @@
   <cpu mode="custom" match="strict" check="partial">
     <model>foobar</model>
     <vendor>meee</vendor>
+    <topology sockets="1" dies="1" cores="9" threads="1"/>
     <cache level="3" mode="emulate"/>
     <feature policy="force" name="x2apic"/>
     <feature policy="force" name="x2apicagain"/>

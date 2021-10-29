@@ -14,6 +14,9 @@
     <loader readonly="yes" type="pflash">/usr/local/share/uefi-firmware/BHYVE_UEFI.fd</loader>
     <boot dev="hd"/>
   </os>
+  <cpu>
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>bhyve</emulator>

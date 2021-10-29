@@ -14,6 +14,9 @@
     <kernel>/kernel.img</kernel>
     <initrd>/initrd.img</initrd>
   </os>
+  <cpu>
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-s390x</emulator>

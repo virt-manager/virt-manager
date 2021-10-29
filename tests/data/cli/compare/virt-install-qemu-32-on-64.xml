@@ -19,6 +19,9 @@
     <pae/>
     <vmport state="off"/>
   </features>
+  <cpu>
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>

@@ -8,6 +8,9 @@
     <type arch="ppc64" machine="pseries">hvm</type>
     <boot dev="network"/>
   </os>
+  <cpu>
+    <topology sockets="1" dies="1" cores="1" threads="1"/>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-ppc64</emulator>

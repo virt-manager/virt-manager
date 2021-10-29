@@ -24,7 +24,9 @@
     </hyperv>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="host-model">
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -96,7 +98,9 @@
     </hyperv>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="host-model">
+    <topology sockets="1" dies="1" cores="2" threads="1"/>
+  </cpu>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
