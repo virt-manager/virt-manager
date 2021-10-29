@@ -29,18 +29,18 @@ def test_misc_cpu_topology():
     cpu.topology.sockets = "2"
     cpu.set_topology_defaults(6)
     def get_top(_c):
-        return [_c.topology.sockets, _c.topology.cores, _c.topology.threads]
-    assert get_top(cpu) == [2, 3, 1]
+        return [_c.topology.sockets, _c.topology.dies, _c.topology.cores, _c.topology.threads]
+    assert get_top(cpu) == [2, 1, 3, 1]
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.cores = "4"
     cpu.set_topology_defaults(9)
-    assert get_top(cpu) == [2, 4, 1]
+    assert get_top(cpu) == [2, 1, 4, 1]
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.threads = "3"
     cpu.set_topology_defaults(14)
-    assert get_top(cpu) == [4, 1, 3]
+    assert get_top(cpu) == [4, 1, 1, 3]
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.sockets = 5
