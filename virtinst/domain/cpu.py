@@ -401,13 +401,14 @@ class DomainCpu(XMLBuilder):
         """
         return bool(self.topology.get_xml())
 
-    def set_topology_defaults(self, vcpus):
+    def set_topology_defaults(self, vcpus, create=False):
         """
         Fill in unset topology values, using the passed vcpus count.
-        Will not set topology from scratch, this just fills in missing
-        topology values.
+        If @create is False, this will not set topology from scratch,
+        just fill in missing topology values.
+        If @create is True, this will create topology from scratch.
         """
-        if not self.has_topology():
+        if not self.has_topology() and not create:
             return
         self.topology.set_defaults_from_vcpus(vcpus)
 

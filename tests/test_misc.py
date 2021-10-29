@@ -31,6 +31,10 @@ def test_misc_cpu_topology():
     assert cpu.topology.sockets is None
 
     cpu = virtinst.DomainCpu(conn)
+    cpu.set_topology_defaults(6, create=True)
+    assert get_top(cpu) == [1, 1, 6, 1]
+
+    cpu = virtinst.DomainCpu(conn)
     cpu.topology.sockets = "2"
     cpu.set_topology_defaults(6)
     assert get_top(cpu) == [2, 1, 3, 1]
