@@ -42,13 +42,21 @@ def test_misc_cpu_topology():
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.cores = "4"
-    cpu.set_topology_defaults(9)
+    cpu.set_topology_defaults(8)
     assert get_top(cpu) == [2, 1, 4, 1]
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.threads = "3"
-    cpu.set_topology_defaults(14)
+    cpu.set_topology_defaults(12)
     assert get_top(cpu) == [4, 1, 1, 3]
+
+    cpu = virtinst.DomainCpu(conn)
+    cpu.topology.threads = "3"
+    try:
+        cpu.set_topology_defaults(14)
+        assert False, "Topology unexpectedly validated"
+    except ValueError:
+        pass
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.sockets = 5

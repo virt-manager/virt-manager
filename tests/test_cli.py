@@ -467,7 +467,7 @@ c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole 
 c.add_compare("""
 --memory 1024
 --uuid 12345678-12F4-1234-1234-123456789AFA
---vcpus 4,cores=2,threads=2,dies=1,sockets=2 --cpuset=1,3-5
+--vcpus 4,cores=2,threads=1,dies=1,sockets=2 --cpuset=1,3-5
 --cpu host-copy
 --description \"foobar & baz\"
 --boot uefi,smbios_mode=emulate,boot1.dev=hd,boot.dev=network,initarg1=bar=baz,initarg=foo
@@ -573,7 +573,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 
 # Test the implied defaults for gl=yes setting virgl=on
 c.add_compare("""
---vcpus vcpu.current=3,maxvcpus=4,vcpu.placement=auto
+--vcpus vcpu.current=3,maxvcpus=6,vcpu.placement=auto
 --memory hotplugmemorymax=2048,hotplugmemoryslots=2
 --disk none
 --features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on,ioapic.driver=qemu
