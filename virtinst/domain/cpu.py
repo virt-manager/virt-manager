@@ -29,14 +29,25 @@ class _CPUTopology(XMLBuilder):
     # While `dies` is optional and defaults to 1 if omitted,
     # `sockets`, `cores`, and `threads` are mandatory.
     def set_defaults_from_vcpus(self, vcpus):
+        # The hierarchy is sockets > dies > cores > threads.
+        #
+        # In real world silicon though it is rare to have
+        # high socket/die counts, but common to have huge
+        # core counts.
+        #
+        # Some OS will even refuse to use sockets over a
+        # a certain count.
+        #
+        # Thus we prefer to expose cores to the guest rather
+        # than sockets as the default for missing fields
+        if not self.cores:
+            self.cores = vcpus // self.total_vcpus()
+
         if not self.sockets:
             self.sockets = vcpus // self.total_vcpus()
 
         if not self.dies:
             self.dies = 1
-
-        if not self.cores:
-            self.cores = vcpus // self.total_vcpus()
 
         if not self.threads:
             self.threads = vcpus // self.total_vcpus()
