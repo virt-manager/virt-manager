@@ -593,6 +593,12 @@ class _OsVariant(object):
         Kernel argument name the distro's installer uses to reference
         a network source, possibly bypassing some installer prompts
         """
+        # Let's ask the OS for its kernel argument for the source
+        if hasattr(self._os, "get_kernel_url_argument"):
+            osarg = self._os.get_kernel_url_argument()
+            if osarg is not None:
+                return osarg
+
         # SUSE distros
         if self.distro in ["caasp", "sle", "sled", "sles", "opensuse"]:
             return "install"
