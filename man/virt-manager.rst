@@ -88,6 +88,14 @@ URI.
 ``--show-host-summary``
     Display the host/connection details window.
 
+SYSTEM TRAY OPTION
+==================
+
+Connection autostart will not be disabled and thus don't require specifying a
+manual ``--connect`` URI. But it supports ``--connect`` URI as well:
+
+``--show-systray``
+    Launch virt-manager in system tray
 
 BUGS
 ====
