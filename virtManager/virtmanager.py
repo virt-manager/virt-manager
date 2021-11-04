@@ -155,6 +155,8 @@ def parse_commandline():
         help="Show domain delete window")
     parser.add_argument("--show-host-summary", action="store_true",
         help="Show connection details window")
+    parser.add_argument("--show-systray", action="store_true",
+        help="Launch virt-manager in system tray")
 
     return parser.parse_known_args()
 
@@ -240,12 +242,16 @@ def main():
     elif options.show_domain_delete:
         show_window = vmmEngine.CLI_SHOW_DOMAIN_DELETE
         domain = options.show_domain_delete
+    elif options.show_systray:
+        show_window = vmmEngine.CLI_SHOW_SYSTEM_TRAY
 
-    if show_window and options.uri is None:  # pragma: no cover
-        raise RuntimeError("can't use --show-* options without --connect")
+    if (show_window and show_window != vmmEngine.CLI_SHOW_SYSTEM_TRAY and
+        options.uri is None):  # pragma: no cover
+        raise RuntimeError("can't use --show-* options without --connect "
+                           "(except --show-systray)")
 
     skip_autostart = False
-    if show_window:
+    if show_window and show_window != vmmEngine.CLI_SHOW_SYSTEM_TRAY:
         skip_autostart = True
 
     # Hook libvirt events into glib main loop

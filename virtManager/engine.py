@@ -47,6 +47,7 @@ class vmmEngine(vmmGObject):
     CLI_SHOW_DOMAIN_CONSOLE = "console"
     CLI_SHOW_DOMAIN_DELETE = "delete"
     CLI_SHOW_HOST_SUMMARY = "summary"
+    CLI_SHOW_SYSTEM_TRAY = "systray"
 
     @classmethod
     def get_instance(cls):
@@ -62,6 +63,8 @@ class vmmEngine(vmmGObject):
         vmmGObject.__init__(self)
 
         self._exiting = False
+
+        self.systray_instance = None
 
         self._window_count = 0
         self._gtkapplication = None
@@ -95,7 +98,7 @@ class vmmEngine(vmmGObject):
         """
         Actual startup routines if we are running a new instance of the app
         """
-        vmmSystray.get_instance()
+        self.systray_instance = vmmSystray.get_instance()
         vmmInspection.get_instance()
 
         self.add_gsettings_handle(
@@ -441,6 +444,9 @@ class vmmEngine(vmmGObject):
                               self.CLI_SHOW_DOMAIN_CONSOLE,
                               self.CLI_SHOW_DOMAIN_DELETE]):
             self._cli_show_vm_helper(uri, clistr, show_window)
+        elif show_window == self.CLI_SHOW_SYSTEM_TRAY:
+            log.debug("Showing in the system tray")
+            self.systray_instance._show_systray()
         else:  # pragma: no cover
             raise RuntimeError("Unknown cli window command '%s'" %
                 show_window)
@@ -461,6 +467,11 @@ class vmmEngine(vmmGObject):
         log.debug("processing cli command uri=%s show_window=%s domain=%s",
             uri, show_window, domain)
         if not uri:
+            if show_window == self.CLI_SHOW_SYSTEM_TRAY:
+                log.debug("Launching in the system tray without --connect")
+                self.systray_instance._show_systray()
+                return
+
             log.debug("No cli action requested, launching default window")
             self._get_manager().show()
             return
