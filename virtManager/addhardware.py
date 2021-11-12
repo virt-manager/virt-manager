@@ -782,7 +782,9 @@ class vmmAddHardware(vmmGObjectUI):
                     if dev.xmlobj.name == subdev.xmlobj.parent:
                         prettyname += " (%s)" % subdev.pretty_name()
 
-            if devtype == "mdev":
+            # parent device names are appended with mdev names in
+            # libvirt 7.8.0
+            if devtype == "mdev" and len(prettyname) <= 41:
                 for parentdev in self.conn.list_nodedevs():
                     if dev.xmlobj.parent == parentdev.xmlobj.name:
                         prettyname = "%s %s" % (
