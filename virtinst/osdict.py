@@ -439,6 +439,28 @@ class _OsVariant(object):
         devids = ["http://qemu.org/chipset/x86/q35"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
+    def _get_firmware_list(self):
+        if hasattr(self._os, "get_complete_firmware_list"):
+            return self._os.get_complete_firmware_list().get_elements()
+        return []
+
+    def _supports_firmware_type(self, name, arch, default):
+        firmwares = self._get_firmware_list()
+
+        for firmware in firmwares:
+            if firmware.get_architecture() != arch:
+                continue
+            if firmware.get_firmware_type() == name:
+                return firmware.is_supported()
+
+        return default
+
+    def supports_firmware_efi(self, arch):
+        return self._supports_firmware_type("efi", arch, False)
+
+    def supports_firmware_bios(self, arch):
+        return self._supports_firmware_type("bios", arch, True)
+
     def get_recommended_resources(self):
         minimum = self._os.get_minimum_resources()
         recommended = self._os.get_recommended_resources()
