@@ -4086,6 +4086,10 @@ class ParserTPM(VirtCLIParser):
     }
 
     def _parse(self, inst):
+        if self.optstr == "none":
+            self.guest.skip_default_tpm = True
+            return
+
         if (self.optdict.get("type", "").startswith("/")):
             self.optdict["path"] = self.optdict.pop("type")
         return super()._parse(inst)

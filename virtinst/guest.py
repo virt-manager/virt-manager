@@ -199,6 +199,7 @@ class Guest(XMLBuilder):
         self.skip_default_usbredir = False
         self.skip_default_graphics = False
         self.skip_default_rng = False
+        self.skip_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
 
         self.skip_default_osinfo = False
@@ -724,6 +725,11 @@ class Guest(XMLBuilder):
         self._add_default_channels()
         self._add_default_rng()
         self._add_default_memballoon()
+        if self.is_uefi():
+            # If the guest is using UEFI, we take that as a
+            # flag that the VM is targeting a modern platform
+            # and thus we should also provide an emulated TPM.
+            self._add_default_tpm()
 
         self.clock.set_defaults(self)
         self.cpu.set_defaults(self)
@@ -946,6 +952,21 @@ class Guest(XMLBuilder):
             dev.type = "random"
             dev.device = "/dev/urandom"
             self.add_device(dev)
+
+    def _add_default_tpm(self):
+        if self.skip_default_tpm:
+            return
+        if self.devices.tpm:
+            return
+
+        if not self.lookup_domcaps().supports_tpm_emulator():
+            log.debug("Domain caps doesn't report TPM support")
+            return
+
+        log.debug("Adding default TPM")
+        dev = DeviceTpm(self.conn)
+        dev.type = DeviceTpm.TYPE_EMULATOR
+        self.add_device(dev)
 
     def _add_default_memballoon(self):
         if self.devices.memballoon:
