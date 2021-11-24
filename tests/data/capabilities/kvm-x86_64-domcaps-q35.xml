@@ -118,6 +118,16 @@
         <value>vfio</value>
       </enum>
     </hostdev>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-tis</value>
+        <value>tpm-crb</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>passthrough</value>
+        <value>emulator</value>
+      </enum>
+    </tpm>
   </devices>
   <features>
     <gic supported='no'/>
