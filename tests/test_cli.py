@@ -1076,6 +1076,7 @@ c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --co
 
 c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_q35)
 c.add_compare("--boot uefi --disk none", "boot-uefi")
+c.add_compare("--boot uefi --disk size=8 --tpm none", "boot-uefi-notpm")
 
 
 c = vinst.add_category("kvm-arm", "--connect %(URI-KVM)s --noautoconsole", precompare_check="3.3.0")  # required qemu-xhci from libvirt 3.3.0

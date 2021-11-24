@@ -101,6 +101,7 @@ class _Devices(_CapsBlock):
     disk = XMLChildProperty(_make_capsblock("disk"), is_single=True)
     video = XMLChildProperty(_make_capsblock("video"), is_single=True)
     graphics = XMLChildProperty(_make_capsblock("graphics"), is_single=True)
+    tpm = XMLChildProperty(_make_capsblock("tpm"), is_single=True)
 
 
 class _Features(_CapsBlock):
@@ -350,6 +351,15 @@ class DomainCapabilities(XMLBuilder):
         """
         models = self.devices.video.get_enum("modelType").get_values()
         return bool("bochs" in models)
+
+    def supports_tpm_emulator(self):
+        """
+        Returns False if either libvirt or qemu do not have support for
+        emulating a TPM.
+        """
+        models = self.devices.tpm.get_enum("model").get_values()
+        backends = self.devices.tpm.get_enum("backendModel").get_values()
+        return len(models) > 0 and bool("emulator" in backends)
 
     def supports_graphics_spice(self):
         if not self.devices.graphics.supported:
