@@ -18,15 +18,6 @@ from tests import utils
 ##################
 
 
-def test_osdict_aliases_ro():
-    aliases = getattr(OSDB, "_aliases")
-
-    if len(aliases) != 42:
-        raise AssertionError(_("OSDB._aliases changed size. It "
-            "should never be extended, since it is only for back "
-            "compat with pre-libosinfo osdict.py"))
-
-
 def test_list_os():
     OSDB.list_os()
 
