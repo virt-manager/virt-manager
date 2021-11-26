@@ -127,19 +127,22 @@ class _OSDB(object):
     """
     def __init__(self):
         self.__os_loader = None
+        self.__os_generic = None
         self.__all_variants = None
 
     #################
     # Internal APIs #
     #################
 
-    def _make_default_variants(self, allvariants):
-        # Add our custom generic variant
-        o = Libosinfo.Os()
-        o.set_param("short-id", "generic")
-        o.set_param("name", _("Generic OS"))
-        v = _OsVariant(o)
-        allvariants[v.name] = v
+    @property
+    def _os_generic(self):
+        if not self.__os_generic:
+            # Add our custom generic variant
+            o = Libosinfo.Os()
+            o.set_param("short-id", "generic")
+            o.set_param("name", _("Generic OS"))
+            self.__os_generic = _OsVariant(o)
+        return self.__os_generic
 
     @property
     def _os_loader(self):
@@ -164,7 +167,7 @@ class _OSDB(object):
                 for name in osi.get_short_ids():
                     allvariants[name] = osi
 
-            self._make_default_variants(allvariants)
+            allvariants["generic"] = self._os_generic
             self.__all_variants = allvariants
         return self.__all_variants
 
