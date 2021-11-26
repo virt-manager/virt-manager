@@ -151,12 +151,14 @@ class _OSDB(object):
         return self.__os_loader
 
     @property
+    def _os_db(self):
+        return self._os_loader.get_db()
+
+    @property
     def _all_variants(self):
         if not self.__all_variants:
-            loader = self._os_loader
             allvariants = {}
-            db = loader.get_db()
-            oslist = db.get_os_list()
+            oslist = self._os_db.get_os_list()
             for o in _OsinfoIter(oslist):
                 osi = _OsVariant(o)
                 for name in osi.get_short_ids():
@@ -192,8 +194,8 @@ class _OSDB(object):
             log.debug("Error creating libosinfo media object: %s", str(e))
             return None
 
-        if not self._os_loader.get_db().identify_media(media):
-            return None  # pragma: no cover
+        if not self._os_db.identify_media(media):
+            return []  # pragma: no cover
         return media.get_os().get_short_id(), _OsMedia(media)
 
     def guess_os_by_tree(self, location):
@@ -212,14 +214,13 @@ class _OSDB(object):
                 "location=%s : %s", location, str(e))
             return None
 
-        db = self._os_loader.get_db()
-        if hasattr(db, "identify_tree"):
+        if hasattr(self._os_db, "identify_tree"):
             # osinfo_db_identify_tree is part of libosinfo 1.6.0
-            if not db.identify_tree(tree):
+            if not self._os_db.identify_tree(tree):
                 return None  # pragma: no cover
             return tree.get_os().get_short_id(), _OsTree(tree)
         else:  # pragma: no cover
-            osobj, treeobj = self._os_loader.get_db().guess_os_from_tree(tree)
+            osobj, treeobj = self._os_db.guess_os_from_tree(tree)
             if not osobj:
                 return None  # pragma: no cover
             return osobj.get_short_id(), _OsTree(treeobj)
