@@ -129,56 +129,6 @@ class _OSDB(object):
         self.__os_loader = None
         self.__all_variants = None
 
-    # This is only for back compatibility with pre-libosinfo support.
-    # This should never change.
-    _aliases = {
-        "altlinux": "altlinux1.0",
-        "debianetch": "debian4",
-        "debianlenny": "debian5",
-        "debiansqueeze": "debian6",
-        "debianwheezy": "debian7",
-        "freebsd10": "freebsd10.0",
-        "freebsd6": "freebsd6.0",
-        "freebsd7": "freebsd7.0",
-        "freebsd8": "freebsd8.0",
-        "freebsd9": "freebsd9.0",
-        "mandriva2009": "mandriva2009.0",
-        "mandriva2010": "mandriva2010.0",
-        "mbs1": "mbs1.0",
-        "msdos": "msdos6.22",
-        "openbsd4": "openbsd4.2",
-        "opensolaris": "opensolaris2009.06",
-        "opensuse11": "opensuse11.4",
-        "opensuse12": "opensuse12.3",
-        "rhel4": "rhel4.0",
-        "rhel5": "rhel5.0",
-        "rhel6": "rhel6.0",
-        "rhel7": "rhel7.0",
-        "ubuntuhardy": "ubuntu8.04",
-        "ubuntuintrepid": "ubuntu8.10",
-        "ubuntujaunty": "ubuntu9.04",
-        "ubuntukarmic": "ubuntu9.10",
-        "ubuntulucid": "ubuntu10.04",
-        "ubuntumaverick": "ubuntu10.10",
-        "ubuntunatty": "ubuntu11.04",
-        "ubuntuoneiric": "ubuntu11.10",
-        "ubuntuprecise": "ubuntu12.04",
-        "ubuntuquantal": "ubuntu12.10",
-        "ubunturaring": "ubuntu13.04",
-        "ubuntusaucy": "ubuntu13.10",
-        "virtio26": "fedora10",
-        "vista": "winvista",
-        "winxp64": "winxp",
-
-        # Old --os-type values
-        "linux": "generic",
-        "windows": "winxp",
-        "solaris": "solaris10",
-        "unix": "freebsd9.0",
-        "other": "generic",
-    }
-
-
     #################
     # Internal APIs #
     #################
@@ -229,15 +179,6 @@ class _OSDB(object):
             raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
 
     def lookup_os(self, key, raise_error=False):
-        if key not in self._all_variants and key in self._aliases:
-            alias = self._aliases[key]
-            # Added 2018-10-02. Maybe remove aliases in a year
-            msg = (_("OS name '%(oldname)s' is deprecated, using '%(newname)s' "
-                    "instead. This alias will be removed in the future.") %
-                    {"oldname": key, "newname": alias})
-            log.warning(msg)
-            key = alias
-
         ret = self._all_variants.get(key)
         if ret is None and raise_error:
             raise ValueError(_("Unknown OS name '%s'. "
