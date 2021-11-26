@@ -128,7 +128,6 @@ class _OSDB(object):
     def __init__(self):
         self.__os_loader = None
         self.__os_generic = None
-        self.__all_variants = None
 
     #################
     # Internal APIs #
@@ -157,38 +156,32 @@ class _OSDB(object):
     def _os_db(self):
         return self._os_loader.get_db()
 
-    @property
-    def _all_variants(self):
-        if not self.__all_variants:
-            allvariants = {}
-            oslist = self._os_db.get_os_list()
-            for o in _OsinfoIter(oslist):
-                osi = _OsVariant(o)
-                for name in osi.get_short_ids():
-                    allvariants[name] = osi
-
-            allvariants["generic"] = self._os_generic
-            self.__all_variants = allvariants
-        return self.__all_variants
-
-
     ###############
     # Public APIs #
     ###############
 
     def lookup_os_by_full_id(self, full_id, raise_error=False):
-        for osobj in self._all_variants.values():
-            if osobj.full_id == full_id:
-                return osobj
-        if raise_error:
-            raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
+        osobj = self._os_db.get_os(full_id)
+        if osobj is None:
+            if raise_error:
+                raise ValueError(_("Unknown libosinfo ID '%s'") % full_id)
+            return None
+        return _OsVariant(osobj)
 
     def lookup_os(self, key, raise_error=False):
-        ret = self._all_variants.get(key)
-        if ret is None and raise_error:
-            raise ValueError(_("Unknown OS name '%s'. "
-                    "See `osinfo-query os` for valid values.") % key)
-        return ret
+        if key == self._os_generic.name:
+            return self._os_generic
+
+        flt = Libosinfo.Filter()
+        flt.add_constraint(Libosinfo.PRODUCT_PROP_SHORT_ID,
+                           key)
+        oslist = self._os_db.get_os_list().new_filtered(flt).get_elements()
+        if len(oslist) == 0:
+            if raise_error:
+                raise ValueError(_("Unknown OS name '%s'. "
+                                   "See `osinfo-query os` for valid values.") % key)
+            return None
+        return _OsVariant(oslist[0])
 
     def guess_os_by_iso(self, location):
         try:
@@ -234,8 +227,11 @@ class _OSDB(object):
         """
         sortmap = {}
 
-        for osobj in self._all_variants.values():
+        oslist = self._os_db.get_os_list().get_elements()
+        for osent in oslist:
+            osobj = _OsVariant(osent)
             sortmap[osobj.name] = osobj
+        sortmap[self._os_generic.name] = self._os_generic
 
         return _sort(sortmap)
 
