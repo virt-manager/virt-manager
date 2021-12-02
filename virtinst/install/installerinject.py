@@ -43,6 +43,11 @@ def _run_initrd_commands(initrd, tempdir):
     if gziperr:  # pragma: no cover
         log.debug("gzip stderr=%s", gziperr)
 
+    if (cpio_proc.returncode != 0 or
+        find_proc.returncode != 0 or
+        gzip_proc.returncode != 0):  # pragma: no cover
+        raise RuntimeError("Failed to inject files into initrd")
+
 
 def _run_iso_commands(iso, tempdir, cloudinit=False):
     # These three programs all behave similarly for our needs, and
