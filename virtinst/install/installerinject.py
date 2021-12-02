@@ -20,7 +20,7 @@ def _run_initrd_commands(initrd, tempdir):
                                  stderr=subprocess.PIPE,
                                  cwd=tempdir)
     cpio_proc = subprocess.Popen(['cpio', '--create', '--null', '--quiet',
-                                  '--format=newc', '--owner=+0:+0'],
+                                  '--format=newc', '--owner=root:root'],
                                  stdin=find_proc.stdout,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
