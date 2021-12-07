@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-11-11 06:14+0000\n"
-"PO-Revision-Date: 2021-10-09 02:05+0000\n"
-"Last-Translator: Gustavo Costa <xfgusta@gmail.com>\n"
+"PO-Revision-Date: 2021-11-30 16:46+0000\n"
+"Last-Translator: Lucas Fernandes <lucas.af88@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -5078,7 +5078,7 @@ msgstr "Isto substituirá o caminho '%s' existente"
 #: virtinst/cli.py:363
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
-msgstr "O disco %(path)s já está sendo usado por outros convidados %(names)s"
+msgstr "O disco %(path)s já está sendo usado por outros convidados %(names)s."
 
 #: virtinst/cli.py:407
 #, python-format
@@ -5130,14 +5130,14 @@ msgstr ""
 
 #: virtinst/cli.py:622
 msgid "Print the generated domain XML rather than create the guest."
-msgstr "Imprimir o domínio XML gerado ao invés de criar o convidado. "
+msgstr "Imprimir o domínio XML gerado ao invés de criar o convidado."
 
 #: virtinst/cli.py:641
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Executar através do processo de instalação, mas não criar dispositivos ou "
-"definer o convidado. "
+"definer o convidado."
 
 #: virtinst/cli.py:646
 msgid ""
@@ -5151,7 +5151,7 @@ msgstr ""
 
 #: virtinst/cli.py:650
 msgid "Suppress non-error output"
-msgstr "Suprimir saída não erro (non-error) "
+msgstr "Suprimir saída não erro (non-error)"
 
 #: virtinst/cli.py:652
 msgid "Print debugging information"
@@ -5376,7 +5376,7 @@ msgstr "Ajustar a política NUMA para o processo de domínio."
 
 #: virtinst/cli.py:842
 msgid "Tune memory policy for the domain process."
-msgstr "Ajustar a política de memória para o processo de domínio. "
+msgstr "Ajustar a política de memória para o processo de domínio."
 
 #: virtinst/cli.py:846
 msgid "Tune blkio policy for the domain process."
@@ -5631,7 +5631,7 @@ msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Definindo a porta do dispositivo de gráficos como autoport, para evitar "
-"conflito. "
+"conflito."
 
 #: virtinst/cloner.py:500
 #, python-format
@@ -5650,16 +5650,16 @@ msgid ""
 "the parent directory as a pool first."
 msgstr ""
 "Não há conhecimento de como criar armazenamento para o caminho '%s'. Use as "
-"APIs do libvirt para gerenciar primeiro o diretório primário como um pool. "
+"APIs do libvirt para gerenciar primeiro o diretório primário como um pool."
 
 #: virtinst/devices/disk.py:382
 msgid "Format attribute not supported for this volume type"
-msgstr "O atributo de formato não é compatível com este tipo de volume."
+msgstr "O atributo de formato não é compatível com este tipo de volume"
 
 #: virtinst/devices/disk.py:802
 #, python-format
 msgid "Device type '%s' requires a path"
-msgstr "O tipo do dispositivo '%s' exige um caminho."
+msgstr "O tipo do dispositivo '%s' exige um caminho"
 
 #: virtinst/devices/disk.py:810
 #, python-format
@@ -5694,7 +5694,7 @@ msgstr "Não há conhecimento de como configurar UEFI para a arquitetura '%s'"
 #: virtinst/devices/hostdev.py:88
 #, python-format
 msgid "Unknown node device type %s"
-msgstr "Tipo de dispositivo de nó %s desconhecido."
+msgstr "Tipo de dispositivo de nó %s desconhecido"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -6023,7 +6023,7 @@ msgstr ""
 #: virtinst/storage.py:557
 #, python-format
 msgid "Name '%s' already in use by another volume."
-msgstr "O nome '%s' já está sendo usado por outro volume"
+msgstr "O nome '%s' já está sendo usado por outro volume."
 
 #: virtinst/storage.py:642
 msgid ""
@@ -6068,7 +6068,7 @@ msgid ""
 "again."
 msgstr ""
 "É necessário um nome de máquina original, use '--original ORIGINAL_GUEST' e "
-"tente novamente. "
+"tente novamente."
 
 #: virtinst/virtclone.py:67
 #, fuzzy
@@ -6109,7 +6109,7 @@ msgid ""
 "configuration."
 msgstr ""
 "Gerar automaticamente caminhos de armazenamento e nome de clone a partir da "
-"configuração original do convidado. "
+"configuração original do convidado."
 
 #: virtinst/virtclone.py:86
 msgid "Name for the new guest"
@@ -6117,7 +6117,7 @@ msgstr "Nome para o novo convidado"
 
 #: virtinst/virtclone.py:89
 msgid "use btrfs COW lightweight copy"
-msgstr "usar cópia COW btrfs leve "
+msgstr "usar cópia COW btrfs leve"
 
 #: virtinst/virtclone.py:91
 msgid "Storage Configuration"
@@ -6143,7 +6143,7 @@ msgstr ""
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
-msgstr "Não use um arquivo separado para a imagem em disco do clone "
+msgstr "Não use um arquivo separado para a imagem em disco do clone"
 
 #: virtinst/virtclone.py:108
 msgid ""
@@ -6166,7 +6166,7 @@ msgid ""
 "MAC"
 msgstr ""
 "Endereço MAC fixado para o clone convidado. O padrão é um endereço MAC "
-"gerado aleatoriamente. "
+"gerado aleatoriamente"
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1052
 #: virtinst/virtxml.py:431
@@ -6218,7 +6218,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:223
 msgid "Cannot mix --graphics and old style graphical options"
-msgstr "Não é possível misturar --graphics e opções gráficas de estilo antigo "
+msgstr "Não é possível misturar --graphics e opções gráficas de estilo antigo"
 
 #: virtinst/virtinstall.py:227
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
@@ -6249,8 +6249,8 @@ msgid ""
 "will not see text install output. You might want to use --location."
 msgstr ""
 "A mídia do CDROM não imprime no terminal por padrão, portanto é provável que "
-"você não veja a instalação em modo texto. Você pode optar por usar --"
-"location. "
+"você não veja a instalação em modo texto. Você pode optar por usar "
+"--location."
 
 #: virtinst/virtinstall.py:333
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6411,7 +6411,7 @@ msgstr "Instalação de domínio interrompida."
 
 #: virtinst/virtinstall.py:915
 msgid "Dry run completed successfully"
-msgstr "Teste concluído com êxito."
+msgstr "Teste concluído com êxito"
 
 #: virtinst/virtinstall.py:919
 #, python-format
@@ -6426,7 +6426,7 @@ msgstr "A instalação solicitada não possui a etapa XML 2"
 msgid "Create a new virtual machine from specified install media."
 msgstr ""
 "Criar uma nova máquina virtual a partir de uma mídia de instalação "
-"especificada. "
+"especificada."
 
 #: virtinst/virtinstall.py:949
 msgid "Name of the guest instance"
@@ -6452,11 +6452,11 @@ msgstr ""
 msgid "Boot from the network using the PXE protocol"
 msgstr ""
 "Inicialize um instalador a partir da rede usando o protocolo de incialização "
-"PXE "
+"PXE"
 
 #: virtinst/virtinstall.py:966
 msgid "Build guest around an existing disk image"
-msgstr "Criar convidado em volta de uma imagem de disco existente "
+msgstr "Criar convidado em volta de uma imagem de disco existente"
 
 #: virtinst/virtinstall.py:969
 msgid ""
@@ -6499,7 +6499,7 @@ msgstr "Opções de Configuração do Convidado"
 
 #: virtinst/virtinstall.py:1029
 msgid "Virtualization Platform Options"
-msgstr "Opções da Plataforma de Virtualização "
+msgstr "Opções da Plataforma de Virtualização"
 
 #: virtinst/virtinstall.py:1033
 msgid "This guest should be a fully virtualized guest"
@@ -6529,7 +6529,7 @@ msgstr "O tipo de máquina a ser emulada"
 msgid "Have domain autostart on host boot up."
 msgstr ""
 "Configurar domínio para inicialização automática durante a inicialização do "
-"host. "
+"host."
 
 #: virtinst/virtinstall.py:1056
 msgid "Create a transient domain."
@@ -6541,33 +6541,36 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1061
 msgid "Minutes to wait for install to complete."
-msgstr "Minutos a aguardar para a instalação ser concluída. "
+msgstr "Minutos a aguardar para a instalação ser concluída."
 
 #: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
-msgstr "Por favor, insira 'sim' ou 'não':"
+msgstr "Por favor, insira 'sim' ou 'não'."
 
 #: virtinst/virtxml.py:80
 #, python-format
 msgid "Invalid --edit option '%s'"
-msgstr "Opção --edit inválida '%s' "
+msgstr "Opção --edit inválida '%s'"
 
 #: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
-msgstr "Nenhum objeto --%s localizado no XML "
+msgstr "Nenhum objeto --%s localizado no XML"
 
 #: virtinst/virtxml.py:86
-#, fuzzy, python-format
-#| msgid "--edit %s requested but there's only %s --%s object in the XML"
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
 msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
-msgstr[0] "--edit %s solicitado, mas existe somente objeto %s --%s no XML "
-msgstr[1] "--edit %s solicitado, mas existe somente objeto %s --%s no XML "
+msgstr[0] ""
+"'--edit %(number)s' solicitado, mas existe somente %(max)s --%(type)s objeto "
+"no XML"
+msgstr[1] ""
+"'--edit %(number)s' solicitado, mas existem somente %(max)s --%(type)s "
+"objetos no XML"
 
 #: virtinst/virtxml.py:107
 #, python-format
@@ -6725,7 +6728,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:368
 msgid "Edit libvirt XML using command line options."
-msgstr "Editar XML libvirt usando as opções da linha de comando. "
+msgstr "Editar XML libvirt usando as opções da linha de comando."
 
 #: virtinst/virtxml.py:374
 msgid "Domain name, id, or uuid"
@@ -6813,11 +6816,11 @@ msgstr "Imprimir somente a alteração solicitada, em um formato diferente"
 
 #: virtinst/virtxml.py:413
 msgid "Only print the requested change, in full XML format"
-msgstr "Imprimir somente a alteração solicitada, por completo em formato XML "
+msgstr "Imprimir somente a alteração solicitada, por completo em formato XML"
 
 #: virtinst/virtxml.py:415
 msgid "Require confirmation before saving any results."
-msgstr "Exigir confirmação antes de salvar quaisquer resultados. "
+msgstr "Exigir confirmação antes de salvar quaisquer resultados."
 
 #: virtinst/virtxml.py:419
 msgid "XML options"
