@@ -879,7 +879,7 @@ Sub options are:
     unprivileged account. Example: ssh-key=/home/user/.ssh/id_rsa.pub
 
 ``network-config=``
-    Specify a cloud-init netowrk-config file to add directly to the iso.
+    Specify a cloud-init network-config file to add directly to the iso.
 
 
 
