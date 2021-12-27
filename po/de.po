@@ -31,16 +31,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2021-12-11 06:14+0000\n"
-"PO-Revision-Date: 2021-11-08 00:49+0000\n"
+"PO-Revision-Date: 2021-12-28 23:16+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -729,11 +729,11 @@ msgstr "VZ-Vorlagen"
 
 #: ui/createvm.ui:1738
 msgid "C_hoose the operating system you are installing:"
-msgstr ""
+msgstr "Wä_hlen Sie das Betriebssystem aus, das Sie installieren:"
 
 #: ui/createvm.ui:1767
 msgid "A_utomatically detect from the installation media / source"
-msgstr ""
+msgstr "A_utomatische Erkennung aus dem Installationsmedium / der Quelle"
 
 #: ui/createvm.ui:1816
 msgid "Install"
@@ -1058,11 +1058,11 @@ msgstr "_Direkten Kernel-Boot aktivieren"
 
 #: ui/details.ui:2045
 msgid "Ke_rnel path:"
-msgstr "Ke_rnel Pfad:"
+msgstr "Ke_rnel-Pfad:"
 
 #: ui/details.ui:2061
 msgid "_Initrd path:"
-msgstr "_Initrd Pfad:"
+msgstr "_Initrd-Pfad:"
 
 #: ui/details.ui:2092 ui/details.ui:2137 ui/details.ui:2228
 msgid "Browse"
@@ -1070,7 +1070,7 @@ msgstr "Durchsuchen"
 
 #: ui/details.ui:2167
 msgid "Kernel ar_gs:"
-msgstr "Kernel Ar_gumente:"
+msgstr "Kernel-Ar_gumente:"
 
 #: ui/details.ui:2197
 msgid "D_TB path:"
@@ -2334,7 +2334,7 @@ msgstr "Entropy-Gathering-Dienst"
 
 #: virtManager/addhardware.py:541
 msgid "Builtin RNG"
-msgstr ""
+msgstr "Eingebauter ZZG"
 
 #: virtManager/addhardware.py:559
 msgid "Forcefully reset the guest"
@@ -2416,7 +2416,7 @@ msgstr "Kein Gerät verfügbar"
 
 #: virtManager/addhardware.py:851
 msgid "Passthrough"
-msgstr "Passthrough"
+msgstr "Durchleitung"
 
 #: virtManager/addhardware.py:852
 msgid "Host"
@@ -2988,7 +2988,7 @@ msgstr "Nicht erfasster Fehler beim Überprüfen von Installationsparametern: %s
 
 #: virtManager/createvm.py:1455
 msgid "Source URL is required"
-msgstr ""
+msgstr "Quell-URL ist erforderlich"
 
 #: virtManager/createvm.py:1460
 msgid "Please specify password for accessing source registry"
@@ -2997,12 +2997,12 @@ msgstr ""
 #: virtManager/createvm.py:1468
 #, python-format
 msgid "Destination path is not directory: %s"
-msgstr ""
+msgstr "Zielpfad ist kein Verzeichnis: %s"
 
 #: virtManager/createvm.py:1471
 #, python-format
 msgid "No write permissions for directory path: %s"
-msgstr ""
+msgstr "Keine Schreibberechtigung für Verzeichnispfad: %s"
 
 #: virtManager/createvm.py:1478
 msgid "OS root directory is not empty"
@@ -3067,17 +3067,16 @@ msgstr "Ungültiger Gast-Name"
 
 #: virtManager/createvm.py:1782
 msgid "Detecting..."
-msgstr ""
+msgstr "Wird erkannt ..."
 
 #: virtManager/createvm.py:1844
 msgid "None detected"
 msgstr "Nichts erkannt"
 
 #: virtManager/createvm.py:1881
-#, fuzzy, python-format
-#| msgid "Error starting installation: "
+#, python-format
 msgid "Error starting installation: %s"
-msgstr "Fehler beim Starten der Installation:"
+msgstr "Fehler beim Starten der Installation: %s"
 
 #: virtManager/createvm.py:1924
 #, python-format
@@ -3103,10 +3102,9 @@ msgid "VM '%s' didn't show up after expected time."
 msgstr "VM '%s' wurde nach erwartetem Zeitraum nicht angezeigt."
 
 #: virtManager/createvm.py:2069
-#, fuzzy, python-format
-#| msgid "Error continue install: %s"
+#, python-format
 msgid "Error continuing install: %s"
-msgstr "Fehler beim Fortführen der Installation: %s"
+msgstr "Fehler beim Fortsetzen der Installation: %s"
 
 #: virtManager/createvm.py:2082
 msgid "Bootstraping container"
@@ -3115,7 +3113,7 @@ msgstr ""
 #: virtManager/createvol.py:140
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
-msgstr ""
+msgstr "<b>%(volume)s's</b> verfügbarer Platz: %(size)s"
 
 #: virtManager/createvol.py:278
 #, python-format
@@ -3125,7 +3123,7 @@ msgstr "Fehler beim Anlegen des Datenträgers: %s"
 #: virtManager/createvol.py:294
 #, python-format
 msgid "Error validating volume: %s"
-msgstr ""
+msgstr "Fehler beim Validieren des Volumens: %s"
 
 #: virtManager/createvol.py:299
 msgid "Creating storage volume..."
@@ -3151,10 +3149,9 @@ msgstr ""
 "%s"
 
 #: virtManager/delete.py:194
-#, fuzzy, python-format
-#| msgid "Error deleting virtual machine '%s': %s"
+#, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
-msgstr "Fehler beim Löschen der virtuellen Maschine «%s»: %s"
+msgstr "Fehler beim Löschen der virtuellen Maschine «%(vm)s»: %(error)s"
 
 #: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
@@ -3210,7 +3207,7 @@ msgstr "Gerät konnte nicht von der laufenden Maschine entfernt werden"
 
 #: virtManager/delete.py:370
 msgid "Remove Disk Device"
-msgstr ""
+msgstr "Festplattengerät entfernen"
 
 #: virtManager/delete.py:373
 #, python-format
@@ -3392,16 +3389,14 @@ msgid "%(bus)s CDROM %(index)d"
 msgstr "%(bus)s CDROM %(index)d"
 
 #: virtManager/details/details.py:173
-#, fuzzy, python-format
-#| msgid "%s Redirector %s"
+#, python-format
 msgid "%(bus)s Disk %(index)d"
-msgstr "%s Redirector %s"
+msgstr "%(bus)s Festplatte %(index)d"
 
 #: virtManager/details/details.py:177
-#, fuzzy, python-format
-#| msgid "%s Redirector %s"
+#, python-format
 msgid "%(bus)s %(device)s %(index)d"
-msgstr "%s Redirector %s"
+msgstr "%(bus)s %(device)s %(index)d"
 
 #: virtManager/details/details.py:185
 #, python-format
@@ -3439,10 +3434,9 @@ msgid "Display %s"
 msgstr "Anzeige %s"
 
 #: virtManager/details/details.py:219
-#, fuzzy, python-format
-#| msgid "%s Redirector %s"
+#, python-format
 msgid "%(bus)s Redirector %(index)d"
-msgstr "%s Redirector %s"
+msgstr "%(bus)s Weiterleiter %(index)d"
 
 #: virtManager/details/details.py:226
 #, python-format
@@ -3470,10 +3464,9 @@ msgid "Controller %(controller)s"
 msgstr "Controller %(controller)s"
 
 #: virtManager/details/details.py:243
-#, fuzzy, python-format
-#| msgid "CDROM device"
+#, python-format
 msgid "RNG %(device)s"
-msgstr "CDROM-Gerät"
+msgstr "ZZG %(device)s"
 
 #: virtManager/details/details.py:247
 #, python-format
@@ -3546,7 +3539,7 @@ msgstr "Unbekannt"
 #: virtManager/details/details.py:1363
 #, python-format
 msgid "Error applying changes: %s"
-msgstr ""
+msgstr "Fehler beim Anwenden von Änderungen: %s"
 
 #: virtManager/details/details.py:1487
 #, python-format
@@ -3769,6 +3762,8 @@ msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s (External)</span>"
 msgstr ""
+"%(vm)s\n"
+"<span size='small'>VM-Status: %(state)s (Extern)</span>"
 
 #: virtManager/details/snapshots.py:462
 #, python-format
@@ -3776,6 +3771,8 @@ msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s</span>"
 msgstr ""
+"%(vm)s\n"
+"<span size='small'>VM-Status: %(state)s</span>"
 
 #: virtManager/details/snapshots.py:524
 #, python-format
@@ -3915,7 +3912,7 @@ msgstr ""
 
 #: virtManager/details/sshtunnels.py:67
 msgid "Guest is configured for TLS only which does not work over SSH."
-msgstr ""
+msgstr "Gast ist nur für TLS konfiguriert, das nicht über SSH funktioniert."
 
 #: virtManager/details/sshtunnels.py:73
 #, python-format
@@ -3939,7 +3936,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "GTK-VNC-Betrachter ist zu alt"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -4072,7 +4069,7 @@ msgstr ""
 
 #: virtManager/engine.py:123
 msgid "Checking for virtualization packages..."
-msgstr ""
+msgstr "Überprüfung auf Virtualisierungspakete ..."
 
 #: virtManager/error.py:139
 msgid "Input Error"
@@ -4342,6 +4339,8 @@ msgstr ""
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
+"Eine Virtualisierungsverbindung kann manuell über Datei->Verbindung "
+"hinzufügen hinzugefügt werden"
 
 #: virtManager/lib/inspection.py:77
 #, python-format
@@ -4808,10 +4807,9 @@ msgid "Error starting Virtual Machine Manager"
 msgstr "Fehler beim Starten der virtuellen Maschinenverwaltung"
 
 #: virtManager/virtmanager.py:43
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Fehler beim Starten der virtuellen Maschinenverwaltung"
+msgstr "Fehler beim Starten der Verwaltung virtueller Maschinen: %(error)s"
 
 #: virtManager/vmmenu.py:64
 msgid "_Reboot"
@@ -5003,7 +5001,7 @@ msgstr "PNG-Dateien"
 
 #: virtManager/xmleditor.py:118 virtManager/xmleditor.py:131
 msgid "There are unapplied changes."
-msgstr ""
+msgstr "Es gibt nicht angewandte Änderungen."
 
 #: virtManager/xmleditor.py:119
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
@@ -5044,10 +5042,8 @@ msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "Wirt unterstützt %(virttype)s %(arch)s nicht"
 
 #: virtinst/capabilities.py:308
-#, fuzzy
-#| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
-msgstr "jegliche Virtualisierungsoptionen"
+msgstr "Der Host unterstützt keine Virtualisierungsoptionen"
 
 #: virtinst/capabilities.py:314
 #, fuzzy, python-format
@@ -5515,15 +5511,15 @@ msgstr ""
 
 #: virtinst/cli.py:922
 msgid "OS options"
-msgstr ""
+msgstr "BS-Optionen"
 
 #: virtinst/cli.py:925
 msgid "The OS being installed in the guest."
-msgstr ""
+msgstr "Das auf dem Gastsystem zu installierende Betriebssystem."
 
 #: virtinst/cli.py:927
 msgid "The OS installed in the guest."
-msgstr ""
+msgstr "Das auf dem Gastsystem installierte BS."
 
 #: virtinst/cli.py:929
 msgid ""
@@ -5557,12 +5553,12 @@ msgstr ""
 #: virtinst/cli.py:1466
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
-msgstr ""
+msgstr "Unbekannte %(optionflag)s Optionen: %(string)s"
 
 #: virtinst/cli.py:1522 virtinst/cli.py:1553
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
-msgstr ""
+msgstr "Fehler: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:1903
 msgid ""
@@ -5589,10 +5585,9 @@ msgid "Improper value for 'size': %s"
 msgstr "Unzulässiger Wert für 'size': %s"
 
 #: virtinst/cli.py:3476
-#, fuzzy, python-format
-#| msgid "Unknown '%s' value '%s'"
+#, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
-msgstr "Unbekannter '%s' Wert '%s'"
+msgstr ""
 
 #: virtinst/cli.py:3491
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -5627,10 +5622,9 @@ msgid "Disk path '%s' does not exist."
 msgstr "Datenträgerpfad '%s' existiert nicht."
 
 #: virtinst/cloner.py:181
-#, fuzzy, python-format
-#| msgid "Architecture '%s' is not installable"
+#, python-format
 msgid "Disk network type '%s' is not cloneable."
-msgstr "Architektur '%s' ist nicht installierbar"
+msgstr ""
 
 #: virtinst/cloner.py:184
 #, python-format
@@ -5638,12 +5632,8 @@ msgid "Cloning disk network type '%s' requires managed storage."
 msgstr ""
 
 #: virtinst/cloner.py:190
-#, fuzzy
-#| msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgid "Cloning rbd volumes is not yet supported."
 msgstr ""
-"Klonen auf vorhandenen Speicherdatenträger wird derzeit nicht unterstützt: "
-"»%s«"
 
 #: virtinst/cloner.py:197
 msgid "Read Only"
@@ -5769,10 +5759,9 @@ msgstr ""
 "Es gibt nicht genügend freien Speicherplatz um die Festplatte zu erstellen."
 
 #: virtinst/diskbackend.py:548
-#, fuzzy, python-format
-#| msgid " %d M requested > %d M available"
+#, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
-msgstr " %d M angefordert > %d M verfügbar"
+msgstr "%(mem1)s M angefordert > %(mem2)s M verfügbar"
 
 #: virtinst/diskbackend.py:555
 #, python-format
@@ -5785,10 +5774,11 @@ msgid "Cloning %(srcfile)s"
 msgstr "Klonen von %(srcfile)s"
 
 #: virtinst/diskbackend.py:635
-#, fuzzy, python-format
-#| msgid "Error cloning diskimage %s to %s: %s"
+#, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
-msgstr "Fehler beim klonen des Disk-Image %s nach %s: %s"
+msgstr ""
+"Fehler beim Klonen des Festplattenabbilds %(inputpath)s nach %(outputpath)s: "
+"%(error)s"
 
 #: virtinst/domain/cpu.py:281
 msgid "No host CPU reported in capabilities"
@@ -5888,7 +5878,7 @@ msgstr ""
 
 #: virtinst/install/installertreemedia.py:209
 msgid "Couldn't find kernel for install tree."
-msgstr ""
+msgstr "Kernel für den Installationsbaum konnte nicht gefunden werden."
 
 #: virtinst/install/installertreemedia.py:267
 msgid ""
@@ -5904,12 +5894,12 @@ msgstr ""
 #: virtinst/install/unattended.py:74
 #, python-format
 msgid "%s requires the user-password to be set."
-msgstr ""
+msgstr "%s erfordert die Festlegung des Benutzerpassworts."
 
 #: virtinst/install/unattended.py:83
 #, python-format
 msgid "%s requires the admin-password to be set."
-msgstr ""
+msgstr "%s erfordert die Festlegung des Administratorpassworts."
 
 #: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
@@ -5955,26 +5945,18 @@ msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
 #: virtinst/install/urldetect.py:318
-#, fuzzy
-#| msgid ""
-#| "Could not find an installable distribution at '%s'%s\n"
-#| "\n"
-#| "The location must be the root directory of an install tree.\n"
-#| "See virt-install man page for various distro examples."
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
 msgstr ""
-"Keine installierbare Distribution gefunden bei '%s'%s\n"
-"\n"
-"Der Ort  muss das Root-Verzeichnis eines Installationsbaums sein.\n"
+"Der Ort muss das Wurzelverzeichnis eines Installationsbaums sein.\n"
 "In den virt-install Man-Pages finden Sie verschiedene Distributionsbeispiele."
 
 #: virtinst/install/urlfetcher.py:101
 #, fuzzy, python-format
 #| msgid "Couldn't acquire file %s: %s"
 msgid "Couldn't acquire file %(url)s: %(error)s"
-msgstr "Datei %s konnte nicht abgerufen werden: %s"
+msgstr "Datei %(url)s konnte nicht abgerufen werden: %(error)s"
 
 #: virtinst/install/urlfetcher.py:106
 #, fuzzy, python-format
@@ -5983,10 +5965,9 @@ msgid "Retrieving '%(filename)s'"
 msgstr "Datei %s wird abgerufen..."
 
 #: virtinst/install/urlfetcher.py:278
-#, fuzzy, python-format
-#| msgid "Opening URL %s failed: %s."
+#, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
-msgstr "Das Öffnen von Adresse %s ist fehlgeschlagen: %s."
+msgstr "Öffnen der URL %(url)s ist fehlgeschlagen: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
 #, fuzzy, python-format
@@ -6005,10 +5986,8 @@ msgid "Did not find a matching node device for '%s'"
 msgstr "Konnte passende Knoten-Einheit für '%s' nicht finden"
 
 #: virtinst/osdict.py:190
-#, fuzzy
-#| msgid "Generic"
 msgid "Generic OS"
-msgstr "Allgemein"
+msgstr "Generisches BS"
 
 #: virtinst/osdict.py:229
 #, python-format
@@ -6343,6 +6322,7 @@ msgstr ""
 #: virtinst/virtinstall.py:358
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
+"Die Netzwerkkonfiguration des Gastes unterstützt möglicherweise kein PXE"
 
 #: virtinst/virtinstall.py:365
 msgid ""
@@ -6391,10 +6371,8 @@ msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "Keine zu startende Konsole für den Gast, Standardwert --wait -1"
 
 #: virtinst/virtinstall.py:659
-#, fuzzy
-#| msgid "Minutes to wait for install to complete."
 msgid "Waiting for the installation to complete."
-msgstr "Minuten abwarten, bis Installation abgeschlossen ist."
+msgstr "Auf den Abschluss der Installation wird gewartet."
 
 #: virtinst/virtinstall.py:660
 #, fuzzy, python-format
@@ -6415,7 +6393,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:722
 msgid "Console command returned failure."
-msgstr ""
+msgstr "Konsolenbefehl hat einen Fehler zurückgegeben."
 
 #: virtinst/virtinstall.py:759
 msgid "Domain has crashed."
@@ -6530,7 +6508,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:974
 msgid "Perform an unattended installation"
-msgstr ""
+msgstr "Eine unbeaufsichtigte Installation durchführen"
 
 #: virtinst/virtinstall.py:976
 msgid "Specify fine grained install options"
@@ -6625,10 +6603,9 @@ msgstr[0] "--edit %s angefordert, aber es gibt nur %s --%s Objekt in XML"
 msgstr[1] "--edit %s angefordert, aber es gibt nur %s --%s Objekt in XML"
 
 #: virtinst/virtxml.py:107
-#, fuzzy, python-format
-#| msgid "No matching objects found for --%s %s"
+#, python-format
 msgid "No matching objects found for %s"
-msgstr "Keine passenden Objekte gefunden für --%s %s"
+msgstr "Keine passenden Objekte für %s gefunden"
 
 #: virtinst/virtxml.py:123
 #, python-format
@@ -6760,16 +6737,13 @@ msgid ""
 msgstr ""
 
 #: virtinst/virtxml.py:281
-#, fuzzy
-#| msgid "Device %s successful."
 msgid "Device update successful."
-msgstr "Gerät %s erfolgreich."
+msgstr "Geräteaktualisierung erfolgreich."
 
 #: virtinst/virtxml.py:282
-#, fuzzy, python-format
-#| msgid "Error attempting device %s: %s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "Fehler beim Versuch des Gerätes %s: %s"
+msgstr "Fehler beim Versuch der Geräteaktualisierung: %(error)s"
 
 #: virtinst/virtxml.py:327
 msgid "--xml can only be used with --edit"
