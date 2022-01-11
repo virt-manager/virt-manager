@@ -606,23 +606,8 @@ class _OsVariant(object):
         if self.distro not in ["centos", "rhel", "fedora"]:
             return None
 
-        # Red Hat distros
-        try:
-            if re.match(r"[0-9]+-unknown", self.version):
-                version = float(self.version.split("-")[0])
-            else:
-                version = float(self.version)
-        except Exception:
-            # Can hit this for -rawhide or -unknown
-            version = 999
-
-        if self.distro in ["centos", "rhel"] and version < 7:
-            return "method"
-
-        if self.distro in ["fedora"] and version < 19:
-            return "method"
-
-        return "inst.repo"
+        # Default for RH distros, incase libosinfo data isn't complete
+        return "inst.repo"  # pragma: no cover
 
     def _get_generic_location(self, treelist, arch, profile):
         if not hasattr(Libosinfo.Tree, "get_os_variants"):  # pragma: no cover
