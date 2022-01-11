@@ -2965,6 +2965,7 @@ class ParserFeatures(VirtCLIParser):
 
         cls.add_arg("smm.state", "smm", is_onoff=True)
         cls.add_arg("vmcoreinfo.state", "vmcoreinfo", is_onoff=True)
+        cls.add_arg("ioapic.driver", "ioapic_driver")
 
 
 ###################
