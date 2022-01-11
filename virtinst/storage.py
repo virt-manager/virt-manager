@@ -680,7 +680,7 @@ class StorageVolume(_StorageObject):
         t = threading.Thread(target=_progress_thread,
                              name="Checking storage allocation",
                              args=(self.name, self.pool, meter, event))
-        t.setDaemon(True)
+        t.daemon = True
 
         try:
             t.start()

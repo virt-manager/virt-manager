@@ -28,7 +28,7 @@ class _SENTINEL(object):
 
 
 def start_job_progress_thread(vm, meter, progtext):
-    current_thread = threading.currentThread()
+    current_thread = threading.current_thread()
 
     def jobinfo_cb():
         while True:

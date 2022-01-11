@@ -606,7 +606,7 @@ class _OsVariant(object):
         if self.distro not in ["centos", "rhel", "fedora"]:
             return None
 
-        # Default for RH distros, incase libosinfo data isn't complete
+        # Default for RH distros, in case libosinfo data isn't complete
         return "inst.repo"  # pragma: no cover
 
     def _get_generic_location(self, treelist, arch, profile):
