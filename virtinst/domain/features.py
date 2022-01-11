@@ -42,6 +42,7 @@ class DomainFeatures(XMLBuilder):
 
     smm = XMLProperty("./smm/@state", is_onoff=True)
     vmcoreinfo = XMLProperty("./vmcoreinfo/@state", is_onoff=True)
+    ioapic_driver = XMLProperty("./ioapic/@driver")
 
 
     ##################
