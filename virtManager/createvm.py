@@ -1776,7 +1776,7 @@ class vmmCreateVM(vmmGObjectUI):
         detectThread = threading.Thread(target=self._detect_thread_cb,
                                         name="Actual media detection",
                                         args=(cdrom, location, thread_results))
-        detectThread.setDaemon(True)
+        detectThread.daemon = True
         detectThread.start()
 
         self._os_list.search_entry.set_text(_("Detecting..."))
