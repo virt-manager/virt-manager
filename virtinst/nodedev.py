@@ -235,7 +235,8 @@ def _AddressStringToHostdev(conn, addrstr):
             hostdev.bus = bus
             hostdev.device = device
         else:
-            raise RuntimeError("Unknown address type")
+            raise RuntimeError(
+                    "Unknown hostdev address string format '%s'" % addrstr)
     except Exception:
         log.debug("Error parsing node device string.", exc_info=True)
         raise
