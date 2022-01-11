@@ -267,12 +267,6 @@ class Command(object):
     def _check_compare_file(self, conn, output):
         self.skip_checks.precompare_skip(conn)
 
-        # Generate test files that don't exist yet
-        filename = self.compare_file
-        if (utils.TESTCONFIG.regenerate_output or
-            not os.path.exists(filename)):
-            open(filename, "w").write(output)
-
         if "--print-diff" in self.argv and output.count("\n") > 3:
             # 1) Strip header
             # 2) Simplify context lines to reduce churn when
@@ -284,7 +278,11 @@ class Command(object):
                 newlines.append(line)
             output = "\n".join(newlines)
 
-        utils.diff_compare(output, filename)
+        # Make sure all test output has trailing newline, simplifies diffing
+        if not output.endswith("\n"):
+            output += "\n"
+
+        utils.diff_compare(output, self.compare_file)
 
         self.skip_checks.predefine_skip(conn)
 
