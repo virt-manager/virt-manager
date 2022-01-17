@@ -128,7 +128,6 @@ class vmmStatsManager(vmmGObject):
         self._disk_stats_lxc_supported = True
         self._mem_stats_supported = True
 
-
     def _cleanup(self):
         for statslist in self._vm_stats.values():
             statslist.cleanup()
@@ -390,7 +389,9 @@ class vmmStatsManager(vmmGObject):
     ####################
 
     def _get_all_stats(self, conn):
-        if not self._all_stats_supported:
+        # test conn supports allstats as of 2021, but for test coverage
+        # purposes lets still use the old stats code for the test driver
+        if not self._all_stats_supported or conn.is_test():
             return {}
 
         statflags = 0
