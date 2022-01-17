@@ -429,9 +429,6 @@ class _OsVariant(object):
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']
 
-    def get_short_ids(self):
-        return self._short_ids[:]
-
     def broken_uefi_with_hyperv(self):
         # Some windows versions are broken with hyperv enlightenments + UEFI
         # https://bugzilla.redhat.com/show_bug.cgi?id=1185253

@@ -945,6 +945,8 @@ c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no seco
 c.add_invalid("--paravirt --import --print-xml 7")  # Invalid --print-xml arg
 c.add_invalid("--location kernel=foo,initrd=bar")  # location kernel/initrd without any url
 c.add_invalid("--location http://example.com,kernel=foo")  # location without kernel+initrd specified as pair
+c.add_invalid("--os-type linux", grep="Unknown OS name 'linux'")
+c.add_invalid("--os-variant solaris10 --unattended", grep="not support unattended")
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
