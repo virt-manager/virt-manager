@@ -318,26 +318,18 @@ def _get_performance_icon_name():
 
 
 def _unindent_device_xml(xml):
-    """
-    The device parsed from a domain will have no indent
-    for the first line, but then <domain> expected indent
-    from the remaining lines. Try to unindent the remaining
-    lines so it looks nice in the XML editor.
-    """
     lines = xml.splitlines()
-    if not xml.startswith("<") or len(lines) < 2:
-        return xml
+    if not lines:
+        return xml  # pragma: no cover
 
     ret = ""
     unindent = 0
-    for c in lines[1]:
+    for c in lines[0]:
         if c != " ":
             break
         unindent += 1
 
-    unindent = max(0, unindent - 2)
-    ret = lines[0] + "\n"
-    for line in lines[1:]:
+    for line in lines:
         if re.match(r"^%s *<.*$" % (unindent * " "), line):
             line = line[unindent:]
         ret += line + "\n"

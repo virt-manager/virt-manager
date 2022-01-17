@@ -89,7 +89,8 @@ def _testRename(app, win, origname, newname):
     app.root.find_fuzzy(newname, "table cell")
 
     # Make sure the old entry is gone
-    lib.utils.check(lambda: origname not in oldcell.name)
+    if origname != newname:
+        lib.utils.check(lambda: origname not in oldcell.name)
 
 
 def testDetailsRenameSimple(app):
@@ -98,6 +99,7 @@ def testDetailsRenameSimple(app):
     """
     origname = "test-clone-simple"
     win = app.manager_open_details(origname)
+    _testRename(app, win, origname, origname)
     _testRename(app, win, origname, "test-new-name")
 
 

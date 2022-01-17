@@ -107,9 +107,19 @@ def fake_openauth(conn, cb, data):
 
 
 class fakeVirtBootstrap:
+    @staticmethod
     def bootstrap(**kwargs):
         import time
-        time.sleep(1)
+        import logging
+        log = logging.getLogger("virtBootstrap")
+        log.info("mock virtBootstrap msg1")
+        kwargs["progress_cb"]({"status": "msg1"})
+        time.sleep(.5)
+        log.info("mock virtBootstrap msg2")
+        kwargs["progress_cb"]({"status": "msg2"})
+        time.sleep(.5)
+        log.info("mock virtBootstrap msg3")
+        kwargs["progress_cb"]({"status": "msg3"})
         if "username" in kwargs:
             raise RuntimeError("fakeVirtBootstrap mock auth failure!")
 

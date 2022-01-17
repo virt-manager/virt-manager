@@ -53,14 +53,12 @@ class vmmNodeDevice(vmmLibvirtObject):
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
-    def _get_backend_status(self):
-        return self._STATUS_ACTIVE
     def _using_events(self):
         return self.conn.using_node_device_events
     def _get_backend_status(self):
         is_active = True
         if self.conn.support.nodedev_isactive(self._backend):
-            is_active = self._backend.isActive()
+            is_active = self._backend.isActive()  # pragma: no cover
         return (is_active and
                 self._STATUS_ACTIVE or
                 self._STATUS_INACTIVE)

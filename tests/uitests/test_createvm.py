@@ -3,8 +3,6 @@
 
 import unittest.mock
 
-import pytest
-
 import tests
 from . import lib
 
