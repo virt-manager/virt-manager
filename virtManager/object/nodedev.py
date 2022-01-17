@@ -57,6 +57,13 @@ class vmmNodeDevice(vmmLibvirtObject):
         return self._STATUS_ACTIVE
     def _using_events(self):
         return self.conn.using_node_device_events
+    def _get_backend_status(self):
+        is_active = True
+        if self.conn.support.nodedev_isactive(self._backend):
+            is_active = self._backend.isActive()
+        return (is_active and
+                self._STATUS_ACTIVE or
+                self._STATUS_INACTIVE)
 
     def pretty_name(self):
         return _pretty_name(self.xmlobj)
