@@ -304,6 +304,11 @@ class SupportCache:
         flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
         version="1.0.1")
 
+    # Nodedev checks
+    # Added in libvirt 7.8.0 mid 2021
+    nodedev_isactive = _make(
+        function="virNodeDevice.isActive", run_args=())
+
 
     def _check_version(self, version):
         """
