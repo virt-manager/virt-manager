@@ -1286,7 +1286,7 @@ c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "
 c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_target=3000,gid_count=40", "edit-simple-idmap")
 c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash,nvram=/test/nvram.img,os_type=hvm,domain_type=test,loader.readonly=on,loader.secure=no,machine=", "edit-simple-boot")
 c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
-c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features")
+c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features", precompare_check="8.0.0")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,kvmclock_tickpolicy=foo,rtc_tickpolicy=merge", "edit-simple-clock")
 c.add_compare("--pm suspend_to_mem.enabled=yes,suspend_to_disk.enabled=no", "edit-simple-pm")
 c.add_compare("--disk /dev/zero,perms=ro,source.startupPolicy=optional", "edit-simple-disk")
