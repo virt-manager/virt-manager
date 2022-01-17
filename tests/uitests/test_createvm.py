@@ -876,11 +876,8 @@ def testNewVMContainerVZ(app):
 
 
 def testNewVMContainerBootstrap(app):
-    app.uri = tests.utils.URIs.lxc
-    try:
-        import virtBootstrap  # pylint: disable=unused-import
-    except ImportError:
-        pytest.skip("virtBootstrap not installed")
+    app.open(uri=tests.utils.URIs.lxc,
+            extra_opts=["--test-options=fake-virtbootstrap"])
 
     newvm = _open_newvm(app)
     newvm.find_fuzzy("Operating system", "radio").click()

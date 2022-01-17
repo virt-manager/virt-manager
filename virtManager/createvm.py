@@ -78,8 +78,9 @@ def _pretty_memory(mem):
 # Helpers for tracking devices we create from this wizard #
 ###########################################################
 
-def is_virt_bootstrap_installed():
-    return pkgutil.find_loader('virtBootstrap') is not None
+def is_virt_bootstrap_installed(conn):
+    ret = pkgutil.find_loader('virtBootstrap') is not None
+    return ret or conn.config.CLITestOptions.fake_virtbootstrap
 
 
 class _GuestData:
@@ -623,7 +624,7 @@ class vmmCreateVM(vmmGObjectUI):
         # Allow container bootstrap only for local connection and
         # only if virt-bootstrap is installed. Otherwise, show message.
         is_local = not self.conn.is_remote()
-        vb_installed = is_virt_bootstrap_installed()
+        vb_installed = is_virt_bootstrap_installed(self.conn)
         vb_enabled = is_local and vb_installed
 
         oscontainer_widget_conf = {
@@ -2077,7 +2078,11 @@ class vmmCreateVM(vmmGObjectUI):
         as state/details.
         """
         import logging
-        import virtBootstrap
+
+        if self.conn.config.CLITestOptions.fake_virtbootstrap:
+            from .lib.testmock import fakeVirtBootstrap as virtBootstrap
+        else:  # pragma: no cover
+            import virtBootstrap  # pylint: disable=import-error
 
         meter.start(_("Bootstraping container"), None)
         def progress_update_cb(prog):
