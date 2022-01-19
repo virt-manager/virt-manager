@@ -191,7 +191,7 @@ class _OSDB(object):
             return None
 
         if not self._os_db.identify_media(media):
-            return None  # pragma: no cover
+            return None
         return media.get_os().get_short_id(), _OsMedia(media)
 
     def guess_os_by_tree(self, location):
