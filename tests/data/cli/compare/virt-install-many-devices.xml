@@ -206,7 +206,7 @@
       <target dev="sdae" bus="scsi" rotation_rate="6000"/>
     </disk>
     <disk type="network" device="disk">
-      <driver name="qemu"/>
+      <driver name="qemu" type="raw"/>
       <source protocol="iscsi" name="iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1">
         <host name="10.66.144.87"/>
       </source>
