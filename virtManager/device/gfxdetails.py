@@ -268,16 +268,25 @@ class vmmGraphicsDetails(vmmGObjectUI):
         if not self.widget("graphics-password-chk").get_active():
             passwd = None
 
+        portauto = self.widget("graphics-port-auto").get_active()
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
-        if self.widget("graphics-port-auto").get_active():
+
+        if (self.widget("graphics-port-auto").get_inconsistent() and
+            self.widget("graphics-port-auto").is_visible()):
+            # When switching from listen=None to listen=address with
+            # Hypervisor default, we need to force autoport otherwise
+            # the XML change doesn't stick
+            self._active_edits.append(_EDIT_GFX_PORT)
+            portauto = True
+        if portauto:
             port = -1
 
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
         addr = uiutil.get_list_selection(self.widget("graphics-address"))
-        if listen and listen != "none":
-            listen = addr
-        else:
+        if listen and listen == "none":
             port = None
+        elif listen:
+            listen = addr
 
         gtype = uiutil.get_list_selection(self.widget("graphics-type"))
 
