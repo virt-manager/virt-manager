@@ -814,14 +814,23 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         msg = _("Viewer was disconnected.")
+        errmsg = ""
         if errdetails:
-            msg += "\n" + errdetails
+            errmsg += "\n" + errdetails
         if ssherr:
             log.debug("SSH tunnel error output: %s", ssherr)
-            msg += "\n\n"
-            msg += _("SSH tunnel error output: %s") % ssherr
+            errmsg += "\n\n"
+            errmsg += _("SSH tunnel error output: %s") % ssherr
 
-        self._activate_gfx_unavailable_page(msg)
+        if errmsg:
+            self._activate_gfx_unavailable_page(msg + errmsg)
+            return
+
+        # If no error message was reported, this isn't a clear graphics
+        # error that should block reconnecting. So use the top level
+        # 'VM unavailable' page which makes it easier for the user to
+        # reconnect.
+        self._activate_vm_unavailable_page(msg)
 
     def _viewer_disconnected(self, ignore, errdetails, ssherr):
         self._activate_gfx_unavailable_page(_("Viewer disconnected."))
