@@ -747,18 +747,18 @@ class vmmConsolePages(vmmGObjectUI):
     # Viewer signal handling #
     ##########################
 
-    def _viewer_add_display(self, ignore, display):
+    def _viewer_add_display_cb(self, _src, display):
         self.widget("console-gfx-viewport").add(display)
 
         # Sync initial settings
         self._sync_scaling_with_display()
         self._sync_resizeguest_with_display()
 
-    def _pointer_grabbed(self, ignore):
+    def _pointer_grabbed_cb(self, _src):
         self._pointer_is_grabbed = True
         self.emit("change-title")
 
-    def _pointer_ungrabbed(self, ignore):
+    def _pointer_ungrabbed_cb(self, _src):
         self._pointer_is_grabbed = False
         self.emit("change-title")
 
@@ -781,7 +781,7 @@ class vmmConsolePages(vmmGObjectUI):
         else:
             self._enable_modifiers()
 
-    def _viewer_auth_error(self, ignore, errmsg, viewer_will_disconnect):
+    def _viewer_auth_error_cb(self, _src, errmsg, viewer_will_disconnect):
         errmsg = _("Viewer authentication error: %s") % errmsg
         self.err.val_err(errmsg)
 
@@ -793,16 +793,16 @@ class vmmConsolePages(vmmGObjectUI):
 
         self._refresh_vm_state()
 
-    def _viewer_need_auth(self, ignore, withPassword, withUsername):
+    def _viewer_need_auth_cb(self, _src, withPassword, withUsername):
         self._activate_auth_page(withPassword, withUsername)
 
-    def _viewer_agent_connected(self, ignore):
+    def _viewer_agent_connected_cb(self, _src):
         # Tell the vmwindow to trigger a state refresh, since
         # resizeguest setting depends on the agent value
         if self.widget("console-pages").is_visible():  # pragma: no cover
             self.emit("page-changed")
 
-    def _viewer_usb_redirect_error(self, ignore, errstr):
+    def _viewer_usb_redirect_error_cb(self, _src, errstr):
         self.err.show_err(
                 _("USB redirection error"),
                 text2=str(errstr), modal=True)  # pragma: no cover
@@ -832,7 +832,7 @@ class vmmConsolePages(vmmGObjectUI):
         # reconnect.
         self._activate_vm_unavailable_page(msg)
 
-    def _viewer_disconnected(self, ignore, errdetails, ssherr):
+    def _viewer_disconnected_cb(self, _src, errdetails, ssherr):
         self._activate_gfx_unavailable_page(_("Viewer disconnected."))
         log.debug("Viewer disconnected")
 
@@ -841,7 +841,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         self._viewer_disconnected_set_page(errdetails, ssherr)
 
-    def _viewer_connected(self, ignore):
+    def _viewer_connected_cb(self, _src):
         log.debug("Viewer connected")
         self._activate_gfx_viewer_page()
 
@@ -849,19 +849,20 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer_sync_modifiers()
 
     def _connect_viewer_signals(self):
-        self._viewer.connect("add-display-widget", self._viewer_add_display)
-        self._viewer.connect("pointer-grab", self._pointer_grabbed)
-        self._viewer.connect("pointer-ungrab", self._pointer_ungrabbed)
+        self._viewer.connect("add-display-widget", self._viewer_add_display_cb)
+        self._viewer.connect("pointer-grab", self._pointer_grabbed_cb)
+        self._viewer.connect("pointer-ungrab", self._pointer_ungrabbed_cb)
         self._viewer.connect("size-allocate", self._viewer_allocate_cb)
         self._viewer.connect("keyboard-grab", self._viewer_keyboard_grab_cb)
         self._viewer.connect("keyboard-ungrab", self._viewer_keyboard_grab_cb)
-        self._viewer.connect("connected", self._viewer_connected)
-        self._viewer.connect("disconnected", self._viewer_disconnected)
-        self._viewer.connect("auth-error", self._viewer_auth_error)
-        self._viewer.connect("need-auth", self._viewer_need_auth)
-        self._viewer.connect("agent-connected", self._viewer_agent_connected)
+        self._viewer.connect("connected", self._viewer_connected_cb)
+        self._viewer.connect("disconnected", self._viewer_disconnected_cb)
+        self._viewer.connect("auth-error", self._viewer_auth_error_cb)
+        self._viewer.connect("need-auth", self._viewer_need_auth_cb)
+        self._viewer.connect("agent-connected",
+            self._viewer_agent_connected_cb)
         self._viewer.connect("usb-redirect-error",
-            self._viewer_usb_redirect_error)
+            self._viewer_usb_redirect_error_cb)
 
 
     ##############################
