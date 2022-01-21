@@ -359,6 +359,8 @@ class VirtinstConnection(object):
     def is_remote(self):
         return bool(self._uriobj.hostname)
     def is_privileged(self):
+        if self.get_uri_path() == "/system" and os.getuid() != 0:
+            return False
         if self.get_uri_path() == "/session":
             return False
         if self.get_uri_path() == "/embed":
