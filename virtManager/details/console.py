@@ -579,7 +579,7 @@ class vmmConsolePages(vmmGObjectUI):
             self.widget("console-gfx-viewport"))
         self._viewer.cleanup()
         self._viewer = None
-        log.debug("Viewer disconnected")
+        log.debug("Viewer object cleaned up")
 
     def _refresh_vm_state(self):
         self._activate_default_console_page()
@@ -833,8 +833,8 @@ class vmmConsolePages(vmmGObjectUI):
         self._activate_vm_unavailable_page(msg)
 
     def _viewer_disconnected_cb(self, _src, errdetails, ssherr):
-        self._activate_gfx_unavailable_page(_("Viewer disconnected."))
-        log.debug("Viewer disconnected")
+        self._activate_gfx_unavailable_page(_("Viewer is disconnecting."))
+        log.debug("Viewer disconnected cb")
 
         # Make sure modifiers are set correctly
         self._viewer_sync_modifiers()
@@ -842,7 +842,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer_disconnected_set_page(errdetails, ssherr)
 
     def _viewer_connected_cb(self, _src):
-        log.debug("Viewer connected")
+        log.debug("Viewer connected cb")
         self._activate_gfx_viewer_page()
 
         # Make sure modifiers are set correctly
@@ -966,7 +966,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def vmwindow_close(self):
         return self._activate_vm_unavailable_page(
-                _("Viewer disconnected."))
+                _("Viewer window closed."))
     def vmwindow_get_title_message(self):
         if self._pointer_is_grabbed and self._viewer:
             keystr = self._viewer.console_get_grab_keys()
