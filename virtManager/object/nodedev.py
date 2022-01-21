@@ -35,9 +35,16 @@ def _pretty_name(xmlobj):
         return _usb_pretty_name(xmlobj)
 
     if xmlobj.device_type == "drm":
-        parent = NodeDevice.lookupNodedevFromString(
+        parent = NodeDevice.lookupNodedevByName(
                 xmlobj.conn, xmlobj.parent)
-        return "%s (%s)" % (_pretty_name(parent), xmlobj.drm_type)
+
+        # https://github.com/virt-manager/virt-manager/issues/328
+        # Apparently we can't depend on successful parent lookup
+        pretty_parent = xmlobj.parent
+        if parent:
+            pretty_parent = _pretty_name(parent)
+
+        return "%s (%s)" % (pretty_parent, xmlobj.drm_type)
 
     return xmlobj.name  # pragma: no cover
 
