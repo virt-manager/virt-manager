@@ -54,6 +54,21 @@ class NodeDevice(XMLBuilder):
     CAPABILITY_TYPE_MDEV = "mdev"
 
     @staticmethod
+    def lookupNodedevByName(conn, name):
+        """
+        Search the nodedev list cache for a matching name, and return the
+        result.
+
+        :param conn: libvirt.virConnect instance to perform the lookup on
+        :param conn: nodedev name
+        :returns: NodeDevice instance
+        """
+        for nodedev in conn.fetch_all_nodedevs():
+            if nodedev.name == name:
+                return nodedev
+
+
+    @staticmethod
     def lookupNodedevFromString(conn, idstring):
         """
         Convert the passed libvirt node device name to a NodeDevice
@@ -71,9 +86,9 @@ class NodeDevice(XMLBuilder):
         :returns: NodeDevice instance
         """
         # First try and see if this is a libvirt nodedev name
-        for nodedev in conn.fetch_all_nodedevs():
-            if nodedev.name == idstring:
-                return nodedev
+        nodedev = NodeDevice.lookupNodedevByName(conn, idstring)
+        if nodedev:
+            return nodedev
 
         try:
             return _AddressStringToNodedev(conn, idstring)
