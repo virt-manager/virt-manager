@@ -493,10 +493,20 @@ def testDetailsEditDevices1(app):
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 
+    # Listen 'none' to default 'address' type triggers
+    # a specific code path
+    tab.combo_select("Listen type:", "Address")
+    portauto = tab.find("graphics-port-auto", "check")
+    lib.utils.check(lambda: portauto.visible)
+    tab.find("OpenGL:", "check box")
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+    # Make sure it sticks
+    tab.combo_check_default("Listen type:", "Address")
+
     # Switch to VNC with options
     tab.combo_select("Type:", "VNC")
     tab.combo_select("Listen type:", "Address")
-    tab.find("graphics-port-auto", "check").click()
     tab.find("graphics-port-auto", "check").click()
     tab.find("graphics-port", "spin button").set_text("6001")
     tab.find("Password:", "check").click()
