@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-01-21 06:14+0000\n"
+"POT-Creation-Date: 2022-01-23 06:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2776,7 +2776,7 @@ msgid "No active connection to install on."
 msgstr ""
 
 #: virtManager/createvm.py:948 virtManager/details/details.py:1763
-#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:237
+#: virtManager/device/gfxdetails.py:96 virtinst/domcapabilities.py:238
 msgid "None"
 msgstr ""
 
@@ -3195,16 +3195,20 @@ msgstr ""
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:822
+#: virtManager/details/console.py:823
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:827 virtManager/details/console.py:959
-msgid "Viewer disconnected."
+#: virtManager/details/console.py:836
+msgid "Viewer is disconnecting."
 msgstr ""
 
-#: virtManager/details/console.py:963
+#: virtManager/details/console.py:969
+msgid "Viewer window closed."
+msgstr ""
+
+#: virtManager/details/console.py:973
 #, python-format
 msgid "Press %s to release pointer."
 msgstr ""
@@ -5257,6 +5261,16 @@ msgstr ""
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
+#: virtinst/cli.py:4631
+#, python-format
+msgid "%s corresponds to multiple node devices"
+msgstr ""
+
+#: virtinst/cli.py:4634
+#, python-format
+msgid "Did not find a matching node device for '%s'"
+msgstr ""
+
 #: virtinst/cloner.py:44
 #, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
@@ -5445,21 +5459,21 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: virtinst/domcapabilities.py:236
+#: virtinst/domcapabilities.py:237
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:242
+#: virtinst/domcapabilities.py:243
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:245
+#: virtinst/domcapabilities.py:246
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:321
+#: virtinst/domcapabilities.py:322
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
@@ -5473,16 +5487,16 @@ msgstr ""
 msgid "Guest name '%s' is already in use."
 msgstr ""
 
-#: virtinst/guest.py:527
+#: virtinst/guest.py:528
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: virtinst/guest.py:531
+#: virtinst/guest.py:532
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:536
+#: virtinst/guest.py:537
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
@@ -5614,16 +5628,6 @@ msgstr ""
 #: virtinst/install/volumeupload.py:108
 #, python-format
 msgid "Transferring '%(filename)s'"
-msgstr ""
-
-#: virtinst/nodedev.py:262
-#, python-format
-msgid "%s corresponds to multiple node devices"
-msgstr ""
-
-#: virtinst/nodedev.py:265
-#, python-format
-msgid "Did not find a matching node device for '%s'"
 msgstr ""
 
 #: virtinst/osdict.py:142
