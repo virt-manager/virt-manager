@@ -19,7 +19,7 @@ def testSystrayFake(app):
     manager = app.root.find("Virtual Machine Manager", check_active=False)
 
     # Add a connection to trigger systray update
-    uri = tests.utils.URIs.kvm
+    uri = tests.utils.URIs.kvm_x86
     manager.grab_focus()
     app.manager_createconn(uri=uri)
 

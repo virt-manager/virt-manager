@@ -116,7 +116,7 @@ def testDetailsStateMisc(app):
     """
     Test state changes and unapplied changes warnings
     """
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     win = app.manager_open_details("test", shutdown=True)
     fmenu = win.find("File", "menu")
     fmenu.click()
@@ -164,7 +164,7 @@ def testDetailsEditDomain1(app):
     """
     Test overview, memory, cpu pages
     """
-    app.uri = tests.utils.URIs.kvm_cpu_insecure
+    app.uri = tests.utils.URIs.kvm_x86_cpu_insecure
     win = app.manager_open_details("test")
     appl = win.find("config-apply", "push button")
 
