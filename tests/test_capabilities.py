@@ -87,10 +87,10 @@ def testDomainCapabilitiesx86():
     xml = open(DATADIR + "/kvm-x86_64-domcaps.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
-    assert caps.machine == "pc-i440fx-2.1"
+    assert caps.machine == "pc-i440fx-6.1"
     assert caps.arch == "x86_64"
     assert caps.domain == "kvm"
-    assert caps.path == "/bin/qemu-system-x86_64"
+    assert caps.path == "/usr/bin/qemu-system-x86_64"
 
     custom_mode = caps.cpu.get_mode("custom")
     assert bool(custom_mode)

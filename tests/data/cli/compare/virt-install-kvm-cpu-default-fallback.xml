@@ -10,7 +10,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
     <boot dev="network"/>
     <boot dev="hd"/>
   </os>
@@ -20,7 +20,7 @@
     <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
+    <model>Skylake-Client-noTSX-IBRS</model>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -33,7 +33,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>
@@ -80,7 +80,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
     <boot dev="hd"/>
   </os>
   <features>
@@ -89,7 +89,7 @@
     <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
+    <model>Skylake-Client-noTSX-IBRS</model>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -101,7 +101,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/dev/default-pool/testvol1.img"/>

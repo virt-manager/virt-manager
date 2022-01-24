@@ -10,7 +10,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="i686" machine="pc">hvm</type>
+    <type arch="i686" machine="pc-i440fx-6.1">hvm</type>
     <boot dev="network"/>
   </os>
   <features>
@@ -29,7 +29,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-i386</emulator>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>

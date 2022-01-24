@@ -31,7 +31,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>
@@ -79,7 +79,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>

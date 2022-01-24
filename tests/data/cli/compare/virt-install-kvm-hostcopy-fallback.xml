@@ -5,7 +5,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
     <boot dev="network"/>
   </os>
   <features>
@@ -14,27 +14,33 @@
     <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
-    <vendor>AMD</vendor>
-    <feature name="invtsc"/>
-    <feature name="perfctr_nb"/>
-    <feature name="perfctr_core"/>
-    <feature name="topoext"/>
-    <feature name="nodeid_msr"/>
-    <feature name="lwp"/>
-    <feature name="wdt"/>
-    <feature name="skinit"/>
-    <feature name="ibs"/>
-    <feature name="osvw"/>
-    <feature name="cr8legacy"/>
-    <feature name="extapic"/>
-    <feature name="cmp_legacy"/>
-    <feature name="fxsr_opt"/>
-    <feature name="mmxext"/>
-    <feature name="osxsave"/>
-    <feature name="monitor"/>
+    <model>Skylake-Client-noTSX-IBRS</model>
+    <vendor>Intel</vendor>
+    <feature name="ds"/>
+    <feature name="acpi"/>
+    <feature name="ss"/>
     <feature name="ht"/>
-    <feature name="vme"/>
+    <feature name="tm"/>
+    <feature name="pbe"/>
+    <feature name="dtes64"/>
+    <feature name="monitor"/>
+    <feature name="ds_cpl"/>
+    <feature name="vmx"/>
+    <feature name="smx"/>
+    <feature name="est"/>
+    <feature name="tm2"/>
+    <feature name="xtpr"/>
+    <feature name="pdcm"/>
+    <feature name="osxsave"/>
+    <feature name="tsc_adjust"/>
+    <feature name="clflushopt"/>
+    <feature name="intel-pt"/>
+    <feature name="md-clear"/>
+    <feature name="stibp"/>
+    <feature name="ssbd"/>
+    <feature name="xsaves"/>
+    <feature name="pdpe1gb"/>
+    <feature name="invtsc"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -47,7 +53,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
       <master startport="0"/>
@@ -86,7 +92,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="x86_64" machine="pc">hvm</type>
+    <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
     <boot dev="network"/>
   </os>
   <features>
@@ -95,27 +101,33 @@
     <vmport state="off"/>
   </features>
   <cpu mode="custom" match="exact">
-    <model>Opteron_G4</model>
-    <vendor>AMD</vendor>
-    <feature name="invtsc"/>
-    <feature name="perfctr_nb"/>
-    <feature name="perfctr_core"/>
-    <feature name="topoext"/>
-    <feature name="nodeid_msr"/>
-    <feature name="lwp"/>
-    <feature name="wdt"/>
-    <feature name="skinit"/>
-    <feature name="ibs"/>
-    <feature name="osvw"/>
-    <feature name="cr8legacy"/>
-    <feature name="extapic"/>
-    <feature name="cmp_legacy"/>
-    <feature name="fxsr_opt"/>
-    <feature name="mmxext"/>
-    <feature name="osxsave"/>
-    <feature name="monitor"/>
+    <model>Skylake-Client-noTSX-IBRS</model>
+    <vendor>Intel</vendor>
+    <feature name="ds"/>
+    <feature name="acpi"/>
+    <feature name="ss"/>
     <feature name="ht"/>
-    <feature name="vme"/>
+    <feature name="tm"/>
+    <feature name="pbe"/>
+    <feature name="dtes64"/>
+    <feature name="monitor"/>
+    <feature name="ds_cpl"/>
+    <feature name="vmx"/>
+    <feature name="smx"/>
+    <feature name="est"/>
+    <feature name="tm2"/>
+    <feature name="xtpr"/>
+    <feature name="pdcm"/>
+    <feature name="osxsave"/>
+    <feature name="tsc_adjust"/>
+    <feature name="clflushopt"/>
+    <feature name="intel-pt"/>
+    <feature name="md-clear"/>
+    <feature name="stibp"/>
+    <feature name="ssbd"/>
+    <feature name="xsaves"/>
+    <feature name="pdpe1gb"/>
+    <feature name="invtsc"/>
   </cpu>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -127,7 +139,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
       <master startport="0"/>

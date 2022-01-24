@@ -5,7 +5,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="i686" machine="pc">hvm</type>
+    <type arch="i686" machine="pc-i440fx-6.1">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
     <kernel>/VIRTINST-TESTSUITE/httpkernel</kernel>
     <initrd>/VIRTINST-TESTSUITE/ftpinitrd</initrd>
@@ -27,7 +27,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-i386</emulator>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
       <master startport="0"/>
@@ -66,7 +66,7 @@
   <currentMemory>65536</currentMemory>
   <vcpu>1</vcpu>
   <os>
-    <type arch="i686" machine="pc">hvm</type>
+    <type arch="i686" machine="pc-i440fx-6.1">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
     <boot dev="hd"/>
   </os>
@@ -86,7 +86,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-i386</emulator>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
       <master startport="0"/>
