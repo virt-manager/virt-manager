@@ -108,7 +108,6 @@ class _URIs(object):
         self.kvm_aarch64 = _uri_kvm_aarch64 + _caps("kvm-aarch64.xml") + _domcaps("kvm-aarch64-domcaps.xml")
         self.kvm_ppc64le = _uri_kvm + _caps("kvm-ppc64le.xml")
         self.kvm_s390x = _uri_kvm + _caps("kvm-s390x.xml")
-        self.kvm_s390x_KVMIBM = _uri_kvm + _caps("kvm-s390x-KVMIBM.xml")
         self.qemu_riscv64 = _uri_qemu_riscv64 + _caps("qemu-riscv64.xml")
 
 
