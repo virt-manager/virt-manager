@@ -16,7 +16,7 @@ def _open_migrate(app, vmname):
 
 def testMigrateQemu(app):
     # Use fake qemu connections
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     newuri = (tests.utils.URIs.test_default +
             ",fakeuri=qemu+tcp://fakehost/system")
     app.manager_createconn(newuri)

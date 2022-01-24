@@ -97,7 +97,7 @@ def test_misc_nonpredicatble_generate():
     """
     from virtinst import cli
     predconn = utils.URIs.open_testdefault_cached()
-    kvm_uri = utils.URIs.kvm.replace(",predictable", "")
+    kvm_uri = utils.URIs.kvm_x86.replace(",predictable", "")
     kvmconn = cli.getConnection(kvm_uri)
     testconn = cli.getConnection("test:///default")
 

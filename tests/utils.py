@@ -87,28 +87,24 @@ class _URIs(object):
         self.bhyve = _m("bhyve:///") + _caps("bhyve.xml") + _domcaps("bhyve-domcaps.xml")
 
         _uri_qemu = _m("qemu:///system")
+
+        # KVM x86 URIs
         _kvm_x86_caps = _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-domcaps.xml")
-        self.kvm = _uri_qemu + _kvm_x86_caps
-        self.kvm_cpu_insecure = _uri_qemu + _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-insecure-domcaps.xml")
-        self.kvm_remote = _m("qemu+tls://fakeuri.example.com/system") + _kvm_x86_caps
-        self.kvm_session = _m("qemu:///session") + _kvm_x86_caps
+        self.kvm_x86_session = _m("qemu:///session") + _kvm_x86_caps
+        self.kvm_x86 = _uri_qemu + _kvm_x86_caps
+        self.kvm_x86_remote = _m("qemu+tls://fakeuri.example.com/system") + _kvm_x86_caps
+        self.kvm_x86_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
+        self.kvm_x86_q35 = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-q35.xml")
+        self.kvm_x86_cpu_insecure = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-insecure-domcaps.xml")
+        self.kvm_amd_sev = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-amd-sev.xml")
 
-        _uri_kvm = _uri_qemu + _kvm_x86_caps
-        _uri_kvm_q35 = _uri_qemu + _domcaps("kvm-x86_64-domcaps-q35.xml")
-        _uri_kvm_amd_sev = _uri_qemu + _domcaps("kvm-x86_64-domcaps-amd-sev.xml")
-        _uri_kvm_aarch64 = _uri_qemu + _domcaps("kvm-aarch64-domcaps.xml")
-        _uri_qemu_riscv64 = _uri_qemu + _domcaps("qemu-riscv64-domcaps.xml")
-
-        self.kvm_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
-        self.kvm_q35 = _uri_kvm_q35 + _caps("kvm-x86_64.xml")
-        self.kvm_amd_sev = _uri_kvm_amd_sev + _caps("kvm-x86_64.xml")
-
+        # Non-x86 arch URIs
         self.kvm_armv7l_nodomcaps = _uri_qemu + _caps("kvm-armv7l.xml")
         self.kvm_armv7l = self.kvm_armv7l_nodomcaps + _domcaps("kvm-armv7l-domcaps.xml")
-        self.kvm_aarch64 = _uri_kvm_aarch64 + _caps("kvm-aarch64.xml") + _domcaps("kvm-aarch64-domcaps.xml")
-        self.kvm_ppc64le = _uri_kvm + _caps("kvm-ppc64le.xml")
-        self.kvm_s390x = _uri_kvm + _caps("kvm-s390x.xml")
-        self.qemu_riscv64 = _uri_qemu_riscv64 + _caps("qemu-riscv64.xml")
+        self.kvm_aarch64 = _uri_qemu + _caps("kvm-aarch64.xml") + _domcaps("kvm-aarch64-domcaps.xml")
+        self.kvm_ppc64le = _uri_qemu + _caps("kvm-ppc64le.xml") + _domcaps("kvm-x86_64-domcaps.xml")
+        self.kvm_s390x = _uri_qemu + _caps("kvm-s390x.xml") + _domcaps("kvm-x86_64-domcaps.xml")
+        self.qemu_riscv64 = _uri_qemu + _caps("qemu-riscv64.xml") + _domcaps("qemu-riscv64-domcaps.xml")
 
 
 
@@ -189,7 +185,7 @@ class _URIs(object):
         return self._testdriver_default
 
     def open_kvm(self):
-        return self.openconn(self.kvm)
+        return self.openconn(self.kvm_x86)
     def open_test_remote(self):
         return self.openconn(self.test_remote)
 

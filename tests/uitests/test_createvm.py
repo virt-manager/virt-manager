@@ -76,13 +76,13 @@ def testNewVMMultiConnection(app):
         return app.manager_createconn(uri)
 
     # Test empty qemu connection
-    _add_conn(tests.utils.URIs.kvm + _capsopt("test-empty.xml"))
+    _add_conn(tests.utils.URIs.kvm_x86 + _capsopt("test-empty.xml"))
     newvm = _open_newvm(app)
     newvm.find(".*No hypervisor options were found.*KVM kernel modules.*")
     newvm.window_close()
     app.manager_conn_disconnect("QEMU/KVM")
 
-    _add_conn(tests.utils.URIs.kvm_session +
+    _add_conn(tests.utils.URIs.kvm_x86_session +
             _capsopt("test-qemu-no-kvm.xml"))
     newvm = _open_newvm(app)
     newvm.find(".*KVM is not available.*")
@@ -375,7 +375,7 @@ def testNewVMURL(app):
     New VM with URL and distro detection, plus having fun with
     the storage browser and network selection.
     """
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Network Install", "radio").click()
@@ -448,7 +448,7 @@ def testNewKVMQ35Tweaks(app):
     """
     New VM that should default to Q35, but tweak things a bunch
     """
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Import", "radio").click()
@@ -513,7 +513,7 @@ def testNewKVMQ35UEFI(app):
     """
     New VM that should default to Q35, and set UEFI
     """
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Import", "radio").click()
@@ -549,7 +549,7 @@ def testNewPPC64(app):
     """
     New PPC64 VM to test architecture selection
     """
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Architecture options", "toggle").click()
@@ -1167,7 +1167,7 @@ def testNewVMSession(app):
     """
     Test with fake qemu session
     """
-    app.uri = tests.utils.URIs.kvm_session
+    app.uri = tests.utils.URIs.kvm_x86_session
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Import", "radio").click()

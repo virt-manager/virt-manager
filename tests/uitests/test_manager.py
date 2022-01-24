@@ -45,7 +45,7 @@ def _testVMLifecycle(app):
 
 def testVMLifecycle(app):
     # qemu hits some different domain code paths for setTime
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     _testVMLifecycle(app)
 
 
@@ -140,7 +140,7 @@ def testManagerQEMUSetTime(app):
     """
     Fake qemu setTime behavior for code coverage
     """
-    app.uri = tests.utils.URIs.kvm
+    app.uri = tests.utils.URIs.kvm_x86
     manager = app.topwin
     run = manager.find("Run", "push button")
     smenu = manager.find("Menu", "toggle button")

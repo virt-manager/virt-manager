@@ -184,7 +184,7 @@ def testDeleteRemoteManyDevices(app):
     """
     Test with a remote VM to hit a certain code path
     """
-    app.uri = tests.utils.URIs.kvm_remote
+    app.uri = tests.utils.URIs.kvm_x86_remote
     _testDeleteManyDevices(app)
 
 

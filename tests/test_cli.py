@@ -64,7 +64,7 @@ EXIST_FILES = [
 TEST_DATA = {
     'URI-TEST-FULL': utils.URIs.test_full,
     'URI-TEST-REMOTE': utils.URIs.test_remote,
-    'URI-KVM': utils.URIs.kvm,
+    'URI-KVM-X86': utils.URIs.kvm_x86,
     'URI-KVM-ARMV7L': utils.URIs.kvm_armv7l,
     'URI-KVM-AARCH64': utils.URIs.kvm_aarch64,
     'URI-KVM-PPC64LE': utils.URIs.kvm_ppc64le,
@@ -461,7 +461,7 @@ vinst = App("virt-install")
 # virt-install verbose XML comparison tests #
 #############################################
 
-c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM)s --noautoconsole --os-variant fedora-unknown", prerun_check=has_old_osinfo)
+c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM-X86)s --noautoconsole --os-variant fedora-unknown", prerun_check=has_old_osinfo)
 
 # Singleton element test #1, for simpler strings
 c.add_compare("""
@@ -798,7 +798,7 @@ c.add_invalid("--security foobar")  # Busted --security
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3", "memory-hotplug", precompare_check="5.3.0")
 c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
-c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
+c.add_compare("--connect " + utils.URIs.kvm_x86_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
 c.add_compare("--cpu host-passthrough,migratable=on", "cpu-host-passthrough-migratable")  # Passthrough with migratable attribute
 c.add_compare("--cpu host-model,model.fallback=forbid", "cpu-host-model-no-fallback")  # Host-Model with fallback disabled
 c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=GenuineIntel", "cpu-model")  # Specific CPU with fallback enabled
@@ -821,7 +821,7 @@ c.add_valid("--disk %(EXISTIMG1)s")  # Not specifying path=
 c.add_valid("--disk %(NEWIMG1)s,format=raw,size=.0000001")  # Not specifying path= but creating storage
 c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
-c.add_valid("--connect %(URI-KVM)s --disk /dev/default-pool/sharevol.img,perms=sh")  # Colliding shareable storage
+c.add_valid("--connect %(URI-KVM-X86)s --disk /dev/default-pool/sharevol.img,perms=sh")  # Colliding shareable storage
 c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom --disk path=%(EXISTIMG1)s,device=cdrom")  # Two IDE cds
 c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver name and type options
 c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
@@ -873,7 +873,7 @@ c.add_invalid("--vnc --sdl")  # Multi graphics collision
 c.add_invalid("--serial unix")  # Unix with no path
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
-c.add_invalid("--connect %(URI-KVM)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
+c.add_invalid("--connect %(URI-KVM-X86)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
 c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machine=pc
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
@@ -906,7 +906,7 @@ c.add_compare("--location ftp://example.com --os-variant auto", "fake-ftp")  # f
 c.add_compare("--location https://foobar.com --os-variant detect=no", "fake-http")  # fake https:// install using urlfetcher.py mocking, but also hit --os-variant detect=no
 c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7", "os-detect-success-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
-c.add_compare("--connect %(URI-KVM)s --install fedora26", "osinfo-url")  # getting URL from osinfo
+c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
 c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="An --os-variant is required")  # No os-variant detected, but require=yes
 c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
 c.add_invalid("--pxe --arch bogus")  # Bogus arch
@@ -934,8 +934,8 @@ c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
 c.add_valid("--hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
 c.add_compare("-c %(EXISTIMG2)s --osinfo win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
-c.add_compare("--connect %(URI-KVM)s --install fedora26 --os-variant fedora27 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified, and making sure we don't overwrite --os-variant
-c.add_compare("--connect %(URI-KVM)s --pxe --os-variant short-id=debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
+c.add_compare("--connect %(URI-KVM-X86)s --install fedora26 --os-variant fedora27 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified, and making sure we don't overwrite --os-variant
+c.add_compare("--connect %(URI-KVM-X86)s --pxe --os-variant short-id=debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
 c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
 c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
@@ -964,8 +964,8 @@ c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
 c.add_invalid("--nodisks --pxe --name test")  # Colliding name
 c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
 c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
-c.add_compare("--connect %(URI-KVM)s --reinstall test-clone-simple --pxe", "reinstall-pxe")  # compare --reinstall with --pxe
-c.add_compare("--connect %(URI-KVM)s --reinstall test-clone-simple --location http://example.com", "reinstall-location")  # compare --reinstall with --location
+c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --pxe", "reinstall-pxe")  # compare --reinstall with --pxe
+c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --location http://example.com", "reinstall-location")  # compare --reinstall with --location
 c.add_compare("--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended", "reinstall-cdrom")  # compare --reinstall with --cdrom handling
 c.add_invalid("--reinstall test --cdrom %(ISO-WIN7)s", grep="already active")  # trying to reinstall an active VM should fail
 c.add_invalid("--reinstall test", grep="install method must be specified")  # missing install method
@@ -975,7 +975,7 @@ c.add_invalid("--reinstall test", grep="install method must be specified")  # mi
 # Unattended tests #
 ####################
 
-c = vinst.add_category("unattended-install", "--connect %(URI-KVM)s --nographics --noautoconsole --disk none", prerun_check=no_osinfo_unattend_cb)
+c = vinst.add_category("unattended-install", "--connect %(URI-KVM-X86)s --nographics --noautoconsole --disk none", prerun_check=no_osinfo_unattend_cb)
 c.add_compare("--install fedora26 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s,user-password-file=%(USER-PASSWORD-FILE)s,product-key=1234,user-login=foobar,reg-login=regtest", "osinfo-url-unattended", prerun_check=lambda: not unattended.OSInstallScript.have_libosinfo_installation_url())  # unattended install for fedora, using initrd injection
 c.add_compare("--location %(TREEDIR)s --unattended", "osinfo-unattended-treeapis", prerun_check=lambda: not LIBOSINFO_SUPPORT_LOCAL_TREE)  # unattended install using treeobj libosinfo APIs
 c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s", "osinfo-win7-unattended", prerun_check=no_osinfo_unattended_win_drivers_cb)  # unattended install for win7
@@ -1014,7 +1014,7 @@ c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage wi
 # QEMU/KVM specific tests #
 ###########################
 
-c = vinst.add_category("kvm-generic", "--connect %(URI-KVM)s --autoconsole none")
+c = vinst.add_category("kvm-generic", "--connect %(URI-KVM-X86)s --autoconsole none")
 c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz'", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
 c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
@@ -1032,8 +1032,8 @@ c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --panic default", "s390x-cdrom", prerun_check=has_old_osinfo)
 
 # qemu:///session tests
-c.add_compare("--connect " + utils.URIs.kvm_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", prerun_check=has_old_osinfo)
-c.add_valid("--connect " + utils.URIs.kvm_session + " --install fedora21", prerun_check=has_old_osinfo)  # hits some get_search_paths and media_upload code paths
+c.add_compare("--connect " + utils.URIs.kvm_x86_session + " --disk size=8 --os-variant fedora21 --cdrom %(EXISTIMG1)s", "kvm-session-defaults", prerun_check=has_old_osinfo)
+c.add_valid("--connect " + utils.URIs.kvm_x86_session + " --install fedora21", prerun_check=has_old_osinfo)  # hits some get_search_paths and media_upload code paths
 
 # misc KVM config tests
 c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
@@ -1042,8 +1042,8 @@ c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")
 c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5.4 --cloud-init none", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --install kernel=%(ISO-WIN7)s,initrd=%(ISOLABEL)s,kernel_args='foo bar' --os-variant rhel6.4 --unattended none", "kvm-rhel6")  # RHEL6 defaults. ISO paths are just to point at existing files
 c.add_compare("--disk %(EXISTIMG1)s --location https://example.com --install kernel_args='test overwrite',kernel_args_overwrite=yes --os-variant rhel7.0", "kvm-rhel7", precompare_check=no_osinfo_unattend_cb)  # RHEL7 defaults
-c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
-c.add_compare("--connect " + utils.URIs.kvm_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
+c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
+c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", prerun_check=has_old_osinfo)  # win10 defaults
@@ -1051,10 +1051,10 @@ c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash
 c.add_compare("--arch i686 --boot uefi --install kernel=http://example.com/httpkernel,initrd=ftp://example.com/ftpinitrd --disk none", "kvm-i686-uefi")  # i686 uefi. piggy back it for --install testing too
 c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
-c.add_compare("--connect " + utils.URIs.kvm_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
-c.add_compare("--connect %(URI-KVM)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
+c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
+c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
 
-c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
+c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
 c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
@@ -1069,15 +1069,15 @@ c.add_valid("--boot firmware=efi --machine q35 --launchSecurity sev,reducedPhysB
 c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev)  # Missing launchSecurity 'type'
 c.add_invalid("--launchSecurity sev --connect " + utils.URIs.kvm_amd_sev)  # Fail if loader isn't UEFI
 c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev)  # Fail if machine type isn't Q35
-c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_q35)  # Fail with no SEV capabilities
+c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86_q35)  # Fail with no SEV capabilities
 
 
-c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_q35)
+c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_x86_q35)
 c.add_compare("--boot uefi --disk none", "boot-uefi")
 c.add_compare("--boot uefi --disk size=8 --tpm none", "boot-uefi-notpm")
 
 
-c = vinst.add_category("kvm-arm", "--connect %(URI-KVM)s --noautoconsole", precompare_check="3.3.0")  # required qemu-xhci from libvirt 3.3.0
+c = vinst.add_category("kvm-arm", "--connect %(URI-KVM-X86)s --noautoconsole", precompare_check="3.3.0")  # required qemu-xhci from libvirt 3.3.0
 # armv7l tests
 c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain")
 c.add_compare("--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --nographics --os-variant fedora20", "arm-virt-f20")
@@ -1099,7 +1099,7 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-headless"
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-headless")
 c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-headless", precompare_check="5.3.0")
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-headless")
-c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-headless")
+c.add_compare("--connect %(URI-KVM-X86)s --arch x86_64", "x86_64-headless")
 
 
 # Simple guests with graphics for various architectures
@@ -1108,7 +1108,7 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-graphics"
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-graphics")
 c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics", precompare_check="5.3.0", )
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-graphics")
-c.add_compare("--connect %(URI-KVM)s --arch x86_64", "x86_64-graphics")
+c.add_compare("--connect %(URI-KVM-X86)s --arch x86_64", "x86_64-graphics")
 
 
 
@@ -1205,7 +1205,7 @@ c.add_valid("--nographics --console none --location %(TREEDIR)s", grep="Director
 c.add_valid("--pxe --nographics --transient", grep="text console command: virsh")  # --transient handling
 c.add_valid("--pxe --nographics --autoconsole graphical", grep="graphical console command: virt-viewer")  # force --autoconsole graphical
 c.add_valid("--pxe --autoconsole text", grep="text console command: virsh")  # force --autoconsole text
-c.add_valid("--connect %(URI-KVM)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
+c.add_valid("--connect %(URI-KVM-X86)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_valid("--pxe", grep="User stopped the VM", env={"VIRTINST_TESTSUITE_HACK_DESTROY": "1"})  # fake the user destroying the VM, we should print a specific message and not reboot the VM
 c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
 c.add_invalid("--pxe --autoconsole text --wait -1", grep="exceeded specified time limit")  # hits a specific code path where we skip console waitpid
@@ -1258,16 +1258,16 @@ c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200,device0.read_bytes_sec=10000,device0.write_bytes_sec=10000,device0.read_iops_sec=20000,device0.write_iops_sec=20000", "build-blkiotune")
 c.add_compare("--build-xml --idmap clearxml=no,uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
-c.add_compare("--connect %(URI-KVM)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
-c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
+c.add_compare("--connect %(URI-KVM-X86)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
+c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
 c.add_compare("--build-xml --sound hda,audio.id=2", "build-sound")
 c.add_compare("4a64cc71-19c4-2fd0-2323-3050941ea3c3 --edit --boot network,cdrom", "edit-bootorder")  # basic bootorder test, also using UUID lookup
 c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response", input_text="yes")  # prompt response, also using domid lookup
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(_VIRTXMLDIR + "virtxml-qemu-commandline-clear.xml"))
 c.add_compare("--print-diff --remove-device --serial 1", "remove-console-dup", input_file=(_VIRTXMLDIR + "virtxml-console-dup.xml"))
-c.add_compare("--connect %(URI-KVM)s test-hyperv-uefi --edit --boot uefi", "hyperv-uefi-collision")
-c.add_compare("--connect %(URI-KVM)s test-many-devices --edit --cpu host-copy", "edit-cpu-host-copy")
-c.add_compare("--connect %(URI-KVM)s test-many-devices --build-xml --disk source.pool=pool-disk,source.volume=sdfg1", "build-disk-pool-disk")
+c.add_compare("--connect %(URI-KVM-X86)s test-hyperv-uefi --edit --boot uefi", "hyperv-uefi-collision")
+c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --edit --cpu host-copy", "edit-cpu-host-copy")
+c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk source.pool=pool-disk,source.volume=sdfg1", "build-disk-pool-disk")
 c.add_compare("test --add-device --network default --update --confirm", "update-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1", "VIRTINST_TEST_SUITE_INCREMENT_MACADDR": "1"}, input_text="yes\nyes\n")  # test hotplug success
 c.add_compare("test --add-device --network default --update --confirm --no-define", "update-nodefine-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1"}, input_text="yes\n")  # test hotplug success without define
 
@@ -1377,7 +1377,7 @@ c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-stora
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path-start")
 c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev-start")
 
-c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM)s test --print-diff --define")
+c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM-X86)s test --print-diff --define")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS (none) from XML
 c.add_compare("--add-device --disk %(EXISTIMG1)s --os-variant fedora28", "kvm-add-disk-os-from-cmdline")  # Guest OS (fedora) provided on command line
 c.add_compare("--add-device --network default", "kvm-add-network-os-from-xml")  # Guest OS information taken from the guest XML
@@ -1410,17 +1410,17 @@ c.add_invalid(_CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage,
 
 
 c = vclon.add_category("misc", "")
-c.add_compare("--connect %(URI-KVM)s -o test-clone --auto-clone", "clone-auto1")
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone --auto-clone", "clone-auto1")
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone", "clone-auto2")
-c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM + " --auto-clone", "clone-nvram")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM + " --auto-clone --nvram /nvram/my-custom-path", "clone-nvram-path")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_MISSING + " --auto-clone", "nvram-missing")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM)s " + _CLONE_NVRAM_MISSING + " --auto-clone --preserve", "nvram-missing-preserve")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
-c.add_compare("--connect %(URI-KVM)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
+c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM + " --auto-clone", "clone-nvram")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM + " --auto-clone --nvram /nvram/my-custom-path", "clone-nvram-path")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clone", "nvram-missing")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clone --preserve", "nvram-missing-preserve")  # hits a particular nvram code path
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
 c.add_compare(_CLONE_EMPTY + " --auto-clone --print-xml", "empty")  # Auto flag, no storage
-c.add_compare("--connect %(URI-KVM)s -o test-clone-simple --auto -f /foo.img --print-xml", "cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone-simple --auto -f /foo.img --print-xml", "cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
 c.add_compare(_CLONE_MANAGED + " --auto-clone", "auto-managed")  # Auto flag w/ managed storage
 c.add_compare(_CLONE_UNMANAGED + " --auto-clone", "auto-unmanaged")  # Auto flag w/ local storage
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --nonsparse")  # Auto flag, actual VM, skip state check
