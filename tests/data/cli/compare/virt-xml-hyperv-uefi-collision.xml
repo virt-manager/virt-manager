@@ -1,2 +1,20 @@
+   <os>
+     <type arch="i686">hvm</type>
+     <boot dev="hd"/>
++    <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
+   </os>
+   <features>
+     <acpi/>
+     <apic/>
+-    <hyperv mode="custom">
+-      <relaxed state="on"/>
+-      <vapic state="on"/>
+-      <spinlocks state="on" retries="8191"/>
+-    </hyperv>
++    <hyperv mode="custom"/>
+     <vmport state="off"/>
+   </features>
+   <clock offset="localtime">
+
 Domain 'test-hyperv-uefi' defined successfully.
 Changes will take effect after the domain is fully powered off.
