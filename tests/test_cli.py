@@ -799,7 +799,6 @@ c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actuall
 c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3", "memory-hotplug", precompare_check="5.3.0")
 c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
 c.add_compare("--connect " + utils.URIs.kvm_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
-c.add_compare("--connect " + utils.URIs.kvm_rhel, "cpu-rhel7-default", precompare_check="5.1.0")  # default CPU for old QEMU where we cannot use host-model
 c.add_compare("--cpu host-passthrough,migratable=on", "cpu-host-passthrough-migratable")  # Passthrough with migratable attribute
 c.add_compare("--cpu host-model,model.fallback=forbid", "cpu-host-model-no-fallback")  # Host-Model with fallback disabled
 c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=GenuineIntel", "cpu-model")  # Specific CPU with fallback enabled

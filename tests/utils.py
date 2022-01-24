@@ -94,14 +94,12 @@ class _URIs(object):
         self.kvm_session = _m("qemu:///session") + _kvm_x86_caps
 
         _uri_kvm = _uri_qemu + _kvm_x86_caps
-        _uri_kvm_rhel7 = _uri_qemu + _domcaps("kvm-x86_64-rhel7-domcaps.xml")
         _uri_kvm_q35 = _uri_qemu + _domcaps("kvm-x86_64-domcaps-q35.xml")
         _uri_kvm_amd_sev = _uri_qemu + _domcaps("kvm-x86_64-domcaps-amd-sev.xml")
         _uri_kvm_aarch64 = _uri_qemu + _domcaps("kvm-aarch64-domcaps.xml")
         _uri_qemu_riscv64 = _uri_qemu + _domcaps("qemu-riscv64-domcaps.xml")
 
         self.kvm_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
-        self.kvm_rhel = _uri_kvm_rhel7 + _caps("kvm-x86_64-rhel7.xml")
         self.kvm_q35 = _uri_kvm_q35 + _caps("kvm-x86_64.xml")
         self.kvm_amd_sev = _uri_kvm_amd_sev + _caps("kvm-x86_64.xml")
 
