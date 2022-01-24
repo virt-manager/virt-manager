@@ -37,7 +37,7 @@
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/qemu-kvm</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="writeback" io="threads" iothread="3" queues="8"/>
       <source dev="/dev/default-pool/UPPER"/>

@@ -148,7 +148,7 @@ def test_misc_cpu_cornercases():
     guest = virtinst.Guest(kvmconn)
     guest.x86_cpu_default = guest.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
     guest.set_defaults(guest)
-    assert guest.cpu.model == "Opteron_G4"
+    assert guest.cpu.model == "Skylake-Client-noTSX-IBRS"
 
     # pylint: disable=protected-access
     guest.cpu.model = "idontexist"

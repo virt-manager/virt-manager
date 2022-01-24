@@ -11,6 +11,9 @@
     <boot dev="cdrom"/>
     <boot dev="hd"/>
   </os>
+  <features>
+    <acpi/>
+  </features>
   <clock offset="utc"/>
   <on_poweroff>restart</on_poweroff>
   <on_reboot>destroy</on_reboot>
@@ -66,6 +69,9 @@
     <nvram template="VARS.fd"/>
     <boot dev="hd"/>
   </os>
+  <features>
+    <acpi/>
+  </features>
   <clock offset="utc"/>
   <on_poweroff>restart</on_poweroff>
   <on_reboot>destroy</on_reboot>
