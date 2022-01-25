@@ -45,6 +45,7 @@ from ..delete import vmmDeleteStorage
  EDIT_TOPOLOGY,
 
  EDIT_MEM,
+ EDIT_MEM_SHARED,
 
  EDIT_AUTOSTART,
  EDIT_BOOTORDER,
@@ -83,7 +84,7 @@ from ..delete import vmmDeleteStorage
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 38)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 39)
 
 
 # Columns in hw list model
@@ -431,7 +432,7 @@ class vmmDetails(vmmGObjectUI):
             "on_cpu_topology_enable_toggled": self._cpu_topology_enable_cb,
             "on_mem_maxmem_changed": _e(EDIT_MEM),
             "on_mem_memory_changed": self._curmem_changed_cb,
-            "on_mem_shared_access_toggled": _e(EDIT_MEM),
+            "on_mem_shared_access_toggled": _e(EDIT_MEM_SHARED),
 
             "on_boot_list_changed": self._boot_list_changed_cb,
             "on_boot_moveup_clicked": self._boot_moveup_clicked_cb,
@@ -1464,34 +1465,8 @@ class vmmDetails(vmmGObjectUI):
             hotplug_args["memory"] = kwargs["memory"]
             hotplug_args["maxmem"] = kwargs["maxmem"]
 
-            if self.widget("shared-memory").get_sensitive():
-                guest = self.vm.xmlobj
-                if self.widget("shared-memory").get_active():
-                    if guest.cpu.has_private_memAccess_cells():
-                        embeded_kwargs = {}
-                        embeded_kwargs["memAccess"] = "shared"
-                        self._change_config(
-                                self.vm.define_cpu, embeded_kwargs)
-                    domcaps = self.vm.get_domain_capabilities()
-                    embeded_kwargs = {}
-                    if domcaps.supports_memorybacking_memfd():
-                        embeded_kwargs["source_type"] = "memfd"
-                    else:
-                        embeded_kwargs["source_type"] = "file"
-                    embeded_kwargs["access_mode"] = "shared"
-                    self._change_config(
-                            self.vm.define_memorybacking, embeded_kwargs)
-                else:
-                    if guest.cpu.all_shared_memAccess_cells():
-                        embeded_kwargs = {}
-                        embeded_kwargs["memAccess"] = None
-                        self._change_config(
-                                self.vm.define_cpu, embeded_kwargs)
-                    embeded_kwargs = {}
-                    embeded_kwargs["source_type"] = None
-                    embeded_kwargs["access_mode"] = None
-                    self._change_config(
-                            self.vm.define_memorybacking, embeded_kwargs)
+        if self._edited(EDIT_MEM_SHARED):
+            kwargs["mem_shared"] = self.widget("shared-memory").get_active()
 
         return self._change_config(
                 self.vm.define_memory, kwargs,
@@ -1995,27 +1970,10 @@ class vmmDetails(vmmGObjectUI):
         curmem.set_value(int(round(vm_cur_mem)))
         maxmem.set_value(int(round(vm_max_mem)))
 
-        # If virtiofs support is reported via domcapabilities, It's seen as
-        # libvirt is new enough to allow setting shared memory access without
-        # hugepages or numa config.
-        domcaps = self.vm.get_domain_capabilities()
-        guest = self.vm.xmlobj
-        if not domcaps.supports_filesystem_virtiofs():
-            self.widget("shared-memory").set_active(
-                guest.cpu.all_shared_memAccess_cells())
-            self.widget("shared-memory").set_sensitive(False)
-            self.widget("shared-memory").set_tooltip_text(
-                _("Libvirt may not be new enough to support shared memory"))
-        else:
-            is_shared = (guest.memoryBacking.is_shared_access() or
-                         guest.cpu.all_shared_memAccess_cells())
-            # The access mode can be overridden per numa node by memAccess, So
-            # we need to check whether it has 'private' memAccess in numa node.
-            if guest.cpu.has_private_memAccess_cells():
-                is_shared = False
-                self.widget("shared-memory").set_tooltip_text(
-                    _("memory access mode 'private' is found in numa node"))
-            self.widget("shared-memory").set_active(is_shared)
+        shared_mem, shared_mem_err = self.vm.has_shared_mem()
+        self.widget("shared-memory").set_active(shared_mem)
+        self.widget("shared-memory").set_sensitive(not bool(shared_mem_err))
+        self.widget("shared-memory").set_tooltip_text(shared_mem_err)
 
     def _refresh_disk_page(self, disk):
         path = disk.get_source_path()
