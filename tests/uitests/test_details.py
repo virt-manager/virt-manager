@@ -162,9 +162,9 @@ def testDetailsStateMisc(app):
 
 def testDetailsEditDomain1(app):
     """
-    Test overview, memory, cpu pages
+    Test overview, memory
     """
-    app.uri = tests.utils.URIs.kvm_x86_cpu_insecure
+    app.uri = tests.utils.URIs.kvm_x86
     win = app.manager_open_details("test")
     appl = win.find("config-apply", "push button")
 
@@ -195,6 +195,26 @@ def testDetailsEditDomain1(app):
     _stop_vm(win)
     lib.utils.check(lambda: curmem.text == "1500")
     lib.utils.check(lambda: maxmem.text == "1500")
+
+    # Change the 'Shared mem' setting, verify the XML change,
+    # make sure unsetting it works too
+    starting_xml = lib.utils.get_xmleditor_xml(app, win)
+    tab.find("Enable shared", "check box").click()
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+    new_xml = lib.utils.get_xmleditor_xml(app, win)
+    assert "source type=\"memfd\"" in new_xml
+    tab.find("Enable shared", "check box").click()
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+    assert lib.utils.get_xmleditor_xml(app, win) == starting_xml
+
+
+def testDetailsEditCPU(app):
+    app.uri = tests.utils.URIs.kvm_x86_cpu_insecure
+    win = app.manager_open_details("test")
+    appl = win.find("config-apply", "push button")
+    _stop_vm(win)
 
     # Static CPU config
     # more cpu config: host-passthrough, copy, clear CPU, manual

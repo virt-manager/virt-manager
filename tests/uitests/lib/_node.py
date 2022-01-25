@@ -247,6 +247,12 @@ class _VMMDogtailNode(dogtail.tree.Node):
         assert hasattr(self, "text")
         self.text = text
 
+    def get_text(self):
+        self.check_onscreen()
+        self.check_sensitive()
+        assert hasattr(self, "text")
+        return self.text
+
     def bring_on_screen(self, key_name="Down", max_tries=100):
         """
         Attempts to bring the item to screen by repeatedly clicking the given
