@@ -429,12 +429,6 @@ class _OsVariant(object):
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']
 
-    def broken_uefi_with_hyperv(self):
-        # Some windows versions are broken with hyperv enlightenments + UEFI
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1185253
-        # https://bugs.launchpad.net/qemu/+bug/1593605
-        return self.name in ("win2k8r2", "win7")
-
     def get_clock(self):
         if self.is_windows() or self._family in ['solaris']:
             return "localtime"

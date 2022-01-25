@@ -19,6 +19,11 @@
   <features>
     <acpi/>
     <apic/>
+    <hyperv>
+      <relaxed state="on"/>
+      <vapic state="on"/>
+      <spinlocks state="on" retries="8191"/>
+    </hyperv>
     <vmport state="off"/>
   </features>
   <cpu mode="host-model"/>
@@ -26,6 +31,7 @@
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
+    <timer name="hypervclock" present="yes"/>
   </clock>
   <on_reboot>destroy</on_reboot>
   <pm>
@@ -96,6 +102,11 @@
   <features>
     <acpi/>
     <apic/>
+    <hyperv>
+      <relaxed state="on"/>
+      <vapic state="on"/>
+      <spinlocks state="on" retries="8191"/>
+    </hyperv>
     <vmport state="off"/>
   </features>
   <cpu mode="host-model"/>
@@ -103,6 +114,7 @@
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
+    <timer name="hypervclock" present="yes"/>
   </clock>
   <pm>
     <suspend-to-mem enabled="no"/>
