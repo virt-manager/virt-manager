@@ -1166,8 +1166,15 @@ class _VirtCLIArgument(object):
         if self._virtarg.lookup_cb:
             return self._virtarg.lookup_cb(parser,
                                            inst, self.val, self)
-        else:
-            return xmlutil.get_prop_path(inst, self.propname) == self.val
+
+        # To reliably compare between CLI style values and internal
+        # XML API values, we need to set the CLI value on a copy of the
+        # object we are checking, read back the result, and compare with that
+        xmlval = xmlutil.get_prop_path(inst, self.propname)
+        setter = inst.__class__(inst.conn, parsexml=inst.get_xml())
+        xmlutil.set_prop_path(setter, self.propname, self.val)
+        clival = xmlutil.get_prop_path(setter, self.propname)
+        return xmlval == clival
 
 
 def parse_optstr_tuples(optstr):
