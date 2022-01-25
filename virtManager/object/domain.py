@@ -441,6 +441,32 @@ class vmmDomain(vmmLibvirtObject):
     def is_persistent(self):
         return bool(self._backend.isPersistent())
 
+    def has_shared_mem(self):
+        """
+        Return a value for 'Enable shared memory' UI, and an error if
+        the value is not editable
+        """
+        err = None
+
+        # If virtiofs support is reported via domcapabilities, It's seen as
+        # libvirt is new enough to allow setting shared memory access without
+        # hugepages or numa config.
+        if not self.get_domain_capabilities().supports_filesystem_virtiofs():
+            is_shared = self.xmlobj.cpu.all_shared_memAccess_cells()
+            err = _("Libvirt may not be new enough to support shared memory")
+
+        else:
+            is_shared = (self.xmlobj.memoryBacking.is_shared_access() or
+                         self.xmlobj.cpu.all_shared_memAccess_cells())
+            # The access mode can be overridden per numa node by memAccess, So
+            # we need to check whether it has 'private' memAccess in numa node.
+            if self.xmlobj.cpu.has_private_memAccess_cells():
+                is_shared = False
+                err = _("memory access mode 'private' is found in numa node")
+
+        return is_shared, err
+
+
     ##################
     # Support checks #
     ##################
@@ -626,7 +652,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_cpu(self, vcpus=_SENTINEL,
             model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
-            cores=_SENTINEL, threads=_SENTINEL, memAccess=_SENTINEL,
+            cores=_SENTINEL, threads=_SENTINEL,
             clear_topology=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
@@ -648,28 +674,47 @@ class vmmDomain(vmmLibvirtObject):
             else:
                 guest.cpu.set_model(guest, model)
 
+        self._redefine_xmlobj(guest)
+
+
+    def _edit_shared_mem(self, guest, mem_shared):
+        source_type = _SENTINEL
+        access_mode = _SENTINEL
+        memAccess = _SENTINEL
+
+        if mem_shared:
+            if guest.cpu.has_private_memAccess_cells():
+                memAccess = "shared"
+            if self.get_domain_capabilities().supports_memorybacking_memfd():
+                source_type = "memfd"
+            else:
+                source_type = "file"
+            access_mode = "shared"
+        else:
+            if guest.cpu.all_shared_memAccess_cells():
+                memAccess = None
+            source_type = None
+            access_mode = None
+
+        if source_type != _SENTINEL:
+            guest.memoryBacking.source_type = source_type
+        if access_mode != _SENTINEL:
+            guest.memoryBacking.access_mode = access_mode
         if memAccess != _SENTINEL:
             for cell in guest.cpu.cells:
                 cell.memAccess = memAccess
 
-        self._redefine_xmlobj(guest)
-
-    def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL):
+    def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL,
+            mem_shared=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
         if memory != _SENTINEL:
             guest.currentMemory = int(memory)
         if maxmem != _SENTINEL:
             guest.memory = int(maxmem)
-        self._redefine_xmlobj(guest)
+        if mem_shared != _SENTINEL:
+            self._edit_shared_mem(guest, mem_shared)
 
-    def define_memorybacking(self, source_type=_SENTINEL, access_mode=_SENTINEL):
-        guest = self._make_xmlobj_to_define()
-
-        if source_type != _SENTINEL:
-            guest.memoryBacking.source_type = source_type
-        if access_mode != _SENTINEL:
-            guest.memoryBacking.access_mode = access_mode
         self._redefine_xmlobj(guest)
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
