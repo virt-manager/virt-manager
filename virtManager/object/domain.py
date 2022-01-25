@@ -446,23 +446,17 @@ class vmmDomain(vmmLibvirtObject):
         Return a value for 'Enable shared memory' UI, and an error if
         the value is not editable
         """
+        is_shared = False
         err = None
+        domcaps = self.get_domain_capabilities()
 
-        # If virtiofs support is reported via domcapabilities, It's seen as
-        # libvirt is new enough to allow setting shared memory access without
-        # hugepages or numa config.
-        if not self.get_domain_capabilities().supports_filesystem_virtiofs():
-            is_shared = self.xmlobj.cpu.all_shared_memAccess_cells()
-            err = _("Libvirt may not be new enough to support shared memory")
-
+        if self.xmlobj.cpu.cells:
+            err = _("Can not change shared memory setting when <numa> is configured.")
+        elif (not domcaps.supports_filesystem_virtiofs() or
+              not domcaps.supports_memorybacking_memfd()):
+            err = _("Libvirt may not be new enough to support memfd.")
         else:
-            is_shared = (self.xmlobj.memoryBacking.is_shared_access() or
-                         self.xmlobj.cpu.all_shared_memAccess_cells())
-            # The access mode can be overridden per numa node by memAccess, So
-            # we need to check whether it has 'private' memAccess in numa node.
-            if self.xmlobj.cpu.has_private_memAccess_cells():
-                is_shared = False
-                err = _("memory access mode 'private' is found in numa node")
+            is_shared = self.xmlobj.memoryBacking.source_type == "memfd"
 
         return is_shared, err
 
@@ -680,19 +674,11 @@ class vmmDomain(vmmLibvirtObject):
     def _edit_shared_mem(self, guest, mem_shared):
         source_type = _SENTINEL
         access_mode = _SENTINEL
-        memAccess = _SENTINEL
 
         if mem_shared:
-            if guest.cpu.has_private_memAccess_cells():
-                memAccess = "shared"
-            if self.get_domain_capabilities().supports_memorybacking_memfd():
-                source_type = "memfd"
-            else:
-                source_type = "file"
+            source_type = "memfd"
             access_mode = "shared"
         else:
-            if guest.cpu.all_shared_memAccess_cells():
-                memAccess = None
             source_type = None
             access_mode = None
 
@@ -700,9 +686,6 @@ class vmmDomain(vmmLibvirtObject):
             guest.memoryBacking.source_type = source_type
         if access_mode != _SENTINEL:
             guest.memoryBacking.access_mode = access_mode
-        if memAccess != _SENTINEL:
-            for cell in guest.cpu.cells:
-                cell.memAccess = memAccess
 
     def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL,
             mem_shared=_SENTINEL):

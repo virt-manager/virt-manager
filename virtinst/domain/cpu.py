@@ -412,20 +412,6 @@ class DomainCpu(XMLBuilder):
             return
         self.topology.set_defaults_from_vcpus(vcpus)
 
-    def has_private_memAccess_cells(self):
-        for cell in self.cells:
-            if cell.memAccess == "private":
-                return True
-        return False
-
-    def all_shared_memAccess_cells(self):
-        if not self.cells:
-            return False
-        for cell in self.cells:
-            if cell.memAccess != "shared":
-                return False
-        return True
-
 
     ##################
     # Default config #
