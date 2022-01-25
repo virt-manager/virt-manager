@@ -83,3 +83,12 @@ def test_xmleditor_interactions(app, win, finish):
     win.find("Details", "page tab").click()
     app.click_alert_button("changes will be lost", "Yes")
     check(lambda: not xmleditor.showing)
+
+
+def get_xmleditor_xml(_app, win):
+    win.find("XML", "page tab").click()
+    xmleditor = win.find("XML editor")
+    xml = xmleditor.get_text()
+    win.find("Details", "page tab").click()
+    check(lambda: not xmleditor.showing)
+    return xml
