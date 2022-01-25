@@ -1573,7 +1573,8 @@ class vmmDetails(vmmGObjectUI):
             kwargs["model"] = model
 
         if self._edited(EDIT_NET_SOURCE):
-            (kwargs["ntype"], kwargs["source"], kwargs["mode"]) = (
+            (kwargs["ntype"], kwargs["source"],
+             kwargs["mode"], kwargs["portgroup"]) = (
                 self.netlist.get_network_selection())
 
         if self._edited(EDIT_NET_MAC):

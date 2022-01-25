@@ -67,6 +67,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         self.builder.connect_signals({
             "on_net_source_changed": self._on_net_source_changed,
+            "on_net_portgroup_changed": self._emit_changed,
             "on_net_bridge_name_changed": self._emit_changed,
         })
 
@@ -100,6 +101,11 @@ class vmmNetworkList(vmmGObjectUI):
         combo.pack_start(text, True)
         combo.add_attribute(text, 'text', NET_ROW_LABEL)
         combo.add_attribute(text, 'sensitive', NET_ROW_SENSITIVE)
+
+        combo = self.widget("net-portgroup")
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 0)
 
         self.conn.connect("net-added", self._repopulate_network_list)
         self.conn.connect("net-removed", self._repopulate_network_list)
@@ -281,10 +287,14 @@ class vmmNetworkList(vmmGObjectUI):
             # This is generally the safest and most featureful default
             mode = "bridge"
 
-        return net_type, net_src, mode
+        portgroup = None
+        if self.widget("net-portgroup").is_visible():
+            portgroup = uiutil.get_list_selection(self.widget("net-portgroup"))
+
+        return net_type, net_src, mode, portgroup
 
     def build_device(self, macaddr, model=None):
-        nettype, devname, mode = self.get_network_selection()
+        nettype, devname, mode, portgroup = self.get_network_selection()
 
         net = virtinst.DeviceInterface(self.conn.get_backend())
         net.type = nettype
@@ -292,6 +302,7 @@ class vmmNetworkList(vmmGObjectUI):
         net.macaddr = macaddr
         net.model = model
         net.source_mode = mode
+        net.portgroup = portgroup
 
         return net
 
@@ -303,6 +314,7 @@ class vmmNetworkList(vmmGObjectUI):
     def reset_state(self):
         self.widget("net-default-warn-box").set_visible(False)
         self.widget("net-manual-source").set_text("")
+        self.widget("net-portgroup").get_child().set_text("")
         self._repopulate_network_list()
 
     def set_dev(self, net):
@@ -312,6 +324,10 @@ class vmmNetworkList(vmmGObjectUI):
         combo = self.widget("net-source")
         combo.set_active_iter(rowiter)
         combo.emit("changed")
+
+        if net.portgroup:
+            uiutil.set_list_selection(
+                    self.widget("net-portgroup"), net.portgroup)
 
 
     #############
@@ -350,6 +366,19 @@ class vmmNetworkList(vmmGObjectUI):
         netlist.set_active(default_idx)
 
 
+    def _populate_portgroups(self, portgroups):
+        combo = self.widget("net-portgroup")
+        model = combo.get_model()
+        model.clear()
+
+        default = None
+        for p in portgroups:
+            model.append([p.name])
+            if p.default:
+                default = p.name
+
+        uiutil.set_list_selection(combo, default)
+
     def _on_net_source_changed(self, src):
         ignore = src
         self._emit_changed()
@@ -359,9 +388,20 @@ class vmmNetworkList(vmmGObjectUI):
 
         nettype = rowdata.nettype
         is_direct = (nettype == virtinst.DeviceInterface.TYPE_DIRECT)
+        is_virtual = (nettype == virtinst.DeviceInterface.TYPE_VIRTUAL)
+
         uiutil.set_grid_row_visible(
             self.widget("net-macvtap-warn-box"), is_direct)
 
         show_bridge = rowdata.manual
         uiutil.set_grid_row_visible(
             self.widget("net-manual-source"), show_bridge)
+
+        portgroups = []
+        if is_virtual:
+            net = self.conn.get_net_by_name(rowdata.source)
+            portgroups = net.get_xmlobj().portgroups
+
+        uiutil.set_grid_row_visible(
+            self.widget("net-portgroup"), bool(portgroups))
+        self._populate_portgroups(portgroups)

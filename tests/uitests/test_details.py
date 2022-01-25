@@ -444,6 +444,16 @@ def testDetailsEditDiskNet(app):
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 
+    # Portgroup
+    src.click()
+    tab.find_fuzzy("plainbridge-portgroups",
+                   "menu item").bring_on_screen().click()
+    c = tab.find_fuzzy("Portgroup:", "combo box")
+    c.click_combo_entry()
+    c.find("sales").click()
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+
 
 def testDetailsNetIPAddress(app):
     """

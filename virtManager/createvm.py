@@ -979,9 +979,8 @@ class vmmCreateVM(vmmGObjectUI):
         self.widget("summary-cpu").set_text(cpu)
         self._populate_summary_storage()
 
-        ignore0, nsource, ignore1 = self._netlist.get_network_selection()
-        expand = not nsource
-        if expand:
+        nsource = self._netlist.get_network_selection()[1]
+        if not nsource:
             self.widget("advanced-expander").set_expanded(True)
 
 

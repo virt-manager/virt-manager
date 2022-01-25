@@ -353,6 +353,17 @@ def testAddNetworks(app):
     tab.combo_select("Device model:", "virtio")
     _finish(addhw, check=details)
 
+    # Portgroup
+    _open_addhw(app, details)
+    tab = _select_hw(addhw, "Network", "network-tab")
+    tab.find("MAC Address Field", "text").set_text("00:11:00:11:00:CC")
+    tab.combo_select("net-source", "Virtual network 'plainbridge-portgroups'")
+    c = tab.find_fuzzy("Portgroup:", "combo box")
+    c.click_combo_entry()
+    lib.utils.check(lambda: c.find("engineering", "menu item").selected)
+    c.find("engineering", "menu item").click()
+    _finish(addhw, check=details)
+
     # Manual macvtap
     _open_addhw(app, details)
     tab = _select_hw(addhw, "Network", "network-tab")
