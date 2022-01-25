@@ -914,46 +914,6 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
 </domain>
 
 
-<domain type='test'>
-  <name>test-hyperv-uefi</name>
-  <uuid>4a64cc71-19c4-2fd0-2323-f050941ea3c3</uuid>
-  <description>Used for testing specific win7 hyperv+uefi incompatibility via virt-xml</description>
-  <metadata>
-    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
-      <libosinfo:os id="http://microsoft.com/win/7"/>
-    </libosinfo:libosinfo>
-  </metadata>
-  <memory>8388608</memory>
-  <currentMemory>2097152</currentMemory>
-  <vcpu>2</vcpu>
-  <os>
-    <type arch='i686'>hvm</type>
-    <boot dev='hd'/>
-  </os>
-  <features>
-    <acpi/>
-    <apic/>
-    <hyperv>
-      <relaxed state="on"/>
-      <vapic state="on"/>
-      <spinlocks state="on" retries="8191"/>
-    </hyperv>
-    <vmport state="off"/>
-  </features>
-  <clock offset="localtime">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-    <timer name="hypervclock" present="yes"/>
-  </clock>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>destroy</on_crash>
-  <devices>
-  </devices>
-</domain>
-
-
 <domain type='test' xmlns:test='http://libvirt.org/schemas/domain/test/1.0'>
   <name>test-state-shutoff</name>
   <memory>1048576</memory>

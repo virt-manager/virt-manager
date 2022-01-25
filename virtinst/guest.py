@@ -570,20 +570,6 @@ class Guest(XMLBuilder):
                         self.os.machine)
                 self.os.machine = "q35"
 
-    def disable_hyperv_for_uefi(self):
-        # UEFI doesn't work with hyperv bits for some OS
-        if not self.is_uefi():
-            return  # pragma: no cover
-        if not self.osinfo.broken_uefi_with_hyperv():
-            return  # pragma: no cover
-        self.features.hyperv_relaxed = None
-        self.features.hyperv_vapic = None
-        self.features.hyperv_spinlocks = None
-        self.features.hyperv_spinlocks_retries = None
-        for i in self.clock.timers:
-            if i.name == "hypervclock":
-                self.clock.timers.remove(i)
-
     def has_spice(self):
         for gfx in self.devices.graphics:
             if gfx.type == gfx.TYPE_SPICE:
@@ -619,9 +605,6 @@ class Guest(XMLBuilder):
 
     def hyperv_supported(self):
         if not self.osinfo.is_windows():
-            return False
-        if (self.is_uefi() and
-            self.osinfo.broken_uefi_with_hyperv()):
             return False
         return True
 
