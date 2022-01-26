@@ -518,27 +518,6 @@ class Guest(XMLBuilder):
         """
         return self.os.is_arm_machvirt() or self.conn.is_bhyve()
 
-    def get_uefi_path(self):
-        """
-        If UEFI firmware path is found, return it, otherwise raise an error
-        """
-        domcaps = self.lookup_domcaps()
-
-        if not domcaps.supports_uefi_xml():
-            raise RuntimeError(_("Libvirt version does not support UEFI."))
-
-        if not domcaps.arch_can_uefi():
-            raise RuntimeError(
-                _("Don't know how to setup UEFI for arch '%s'") %
-                self.os.arch)
-
-        path = domcaps.find_uefi_path_for_arch()
-        if not path:  # pragma: no cover
-            raise RuntimeError(_("Did not find any UEFI binary path for "
-                "arch '%s'") % self.os.arch)
-
-        return path
-
     def is_uefi(self):
         if self.os.loader and self.os.loader_type == "pflash":
             return True
@@ -546,8 +525,8 @@ class Guest(XMLBuilder):
 
     def set_uefi_path(self, path):
         """
-        Configure UEFI for the VM, but only if libvirt is advertising
-        a known UEFI binary path.
+        Set old style UEFI XML via loader path.
+        Set up smm if needed for secureboot
         """
         self.os.loader_ro = True
         self.os.loader_type = "pflash"
@@ -569,6 +548,14 @@ class Guest(XMLBuilder):
                         "which is required for UEFI secure boot.",
                         self.os.machine)
                 self.os.machine = "q35"
+
+    def enable_uefi(self):
+        """
+        Enable UEFI using our default logic
+        """
+        path = self._lookup_default_uefi_path()
+        log.debug("Setting default UEFI path=%s", path)
+        self.set_uefi_path(path)
 
     def has_spice(self):
         for gfx in self.devices.graphics:
@@ -754,6 +741,27 @@ class Guest(XMLBuilder):
         default = capsinfo.machines and capsinfo.machines[0] or None
         self.os.machine = default
 
+    def _lookup_default_uefi_path(self):
+        """
+        If a default UEFI firmware path is found, return it,
+        otherwise raise an error
+        """
+        domcaps = self.lookup_domcaps()
+
+        if not domcaps.supports_uefi_xml():
+            raise RuntimeError(_("Libvirt version does not support UEFI."))
+
+        if not domcaps.arch_can_uefi():
+            raise RuntimeError(
+                _("Don't know how to setup UEFI for arch '%s'") %
+                self.os.arch)
+
+        path = domcaps.find_uefi_path_for_arch()
+        if not path:  # pragma: no cover
+            raise RuntimeError(_("Did not find any UEFI binary path for "
+                "arch '%s'") % self.os.arch)
+
+        return path
 
     def _set_default_uefi(self):
         use_default_uefi = (self.prefers_uefi() and
@@ -763,18 +771,17 @@ class Guest(XMLBuilder):
             self.os.nvram is None and
             self.os.firmware is None)
 
-        if use_default_uefi or self.uefi_requested:
-            try:
-                path = self.get_uefi_path()
-                log.debug("Setting UEFI path=%s", path)
-                self.set_uefi_path(path)
-            except RuntimeError as e:
-                if self.uefi_requested:
-                    raise
-                log.debug("Error setting UEFI default",
-                    exc_info=True)
-                log.warning("Couldn't configure UEFI: %s", e)
-                log.warning("Your VM may not boot successfully.")
+        if not use_default_uefi and not self.uefi_requested:
+            return
+
+        try:
+            self.enable_uefi()
+        except RuntimeError as e:
+            if self.uefi_requested:
+                raise
+            log.debug("Error setting UEFI default", exc_info=True)
+            log.warning("Couldn't configure UEFI: %s", e)
+            log.warning("Your VM may not boot successfully.")
 
     def _usb_disabled(self):
         controllers = [c for c in self.devices.controller if
