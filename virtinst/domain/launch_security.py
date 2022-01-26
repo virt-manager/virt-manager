@@ -16,6 +16,7 @@ class DomainLaunchSecurity(XMLBuilder):
     policy = XMLProperty("./policy")
     session = XMLProperty("./session")
     dhCert = XMLProperty("./dhCert")
+    kernelHashes = XMLProperty("./@kernelHashes", is_yesno=True)
 
     def is_sev(self):
         return self.type == "sev"
