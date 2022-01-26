@@ -702,7 +702,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
             title=_SENTINEL, loader=_SENTINEL,
-            nvram=_SENTINEL):
+            nvram=_SENTINEL, firmware=_SENTINEL):
         guest = self._make_xmlobj_to_define()
         if machine != _SENTINEL:
             guest.os.machine = machine
@@ -712,14 +712,20 @@ class vmmDomain(vmmLibvirtObject):
         if title != _SENTINEL:
             guest.title = title or None
 
-        if loader != _SENTINEL:
+        if loader != _SENTINEL and firmware != _SENTINEL:
+            guest.os.firmware = firmware
             if loader is None:
-                # Implies seabios, aka the default, so clear everything
                 guest.os.loader = None
-                guest.os.loader_ro = None
-                guest.os.loader_type = None
-                guest.os.nvram = None
-                guest.os.nvram_template = None
+
+                # But if switching to firmware=efi we may need to
+                # preserve NVRAM paths, so skip clearing all the properties
+                # and let libvirt do it for us.
+                if firmware is None:
+                    # Implies 'default', so clear everything
+                    guest.os.loader_ro = None
+                    guest.os.loader_type = None
+                    guest.os.nvram = None
+                    guest.os.nvram_template = None
             else:
                 # Implies UEFI
                 guest.set_uefi_path(loader)

@@ -240,7 +240,7 @@ class DomainCapabilities(XMLBuilder):
         if not path:
             if self.arch in ["i686", "x86_64"]:
                 return _("BIOS")
-            return _("None")
+            return _("Default")
 
         for arch, patterns in self._uefi_arch_patterns.items():
             for pattern in patterns:
