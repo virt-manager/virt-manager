@@ -104,7 +104,7 @@ class _GuestData:
 
         self.machine = None
         self.os_variant = None
-        self.uefi_path = None
+        self.uefi_requested = None
         self.name = None
 
         self.vcpus = None
@@ -140,8 +140,8 @@ class _GuestData:
             guest.os.machine = self.machine
         if self.os_variant:
             guest.set_os_name(self.os_variant)
-        if self.uefi_path:
-            guest.set_uefi_path(self.uefi_path)
+        if self.uefi_requested:
+            guest.uefi_requested = self.uefi_requested
 
         if self.filesystem:
             guest.add_device(self.filesystem)
@@ -480,9 +480,9 @@ class vmmCreateVM(vmmGObjectUI):
 
         if guest.prefers_uefi():
             try:
-                self._gdata.uefi_path = guest.get_uefi_path()
-                # Call for validation
-                guest.set_uefi_path(self._gdata.uefi_path)
+                # We call this for validation
+                guest.enable_uefi()
+                self._gdata.uefi_requested = True
                 installable_arch = True
                 log.debug("UEFI found, setting it as default.")
             except Exception as e:

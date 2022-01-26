@@ -260,6 +260,8 @@ class DomainCapabilities(XMLBuilder):
         """
         Return True if libvirt advertises support for proper UEFI setup
         """
+        if "efi" in self.os.get_enum("firmware").get_values():
+            return True
         return ("readonly" in self.os.loader.enum_names() and
                 "yes" in self.os.loader.get_enum("readonly").get_values())
 
