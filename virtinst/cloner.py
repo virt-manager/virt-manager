@@ -177,17 +177,14 @@ def _get_cloneable_msg(disk):
 
     if disk.type == "network":
         proto = disk.source.protocol
-        if proto not in ["rbd"]:
-            return _("Disk network type '%s' is not cloneable.") % proto
-        disk.set_backend_for_existing_path()
-        if not disk.get_vol_object():
-            return _("Cloning disk network type '%s' requires "
-                     "managed storage.") % proto
-        else:
+        if proto == "rbd":
             # This case, rbd with managed storage, is implementable. It
             # requires open coding a bunch of work in cloner, or reworking
             # other disk code to add unique URIs for rbd volumes and pools
-            return _("Cloning rbd volumes is not yet supported.")
+            return (
+                _("Cloning rbd volumes is not yet supported.") +
+                " https://github.com/virt-manager/virt-manager/issues/177")
+        return _("Disk network type '%s' is not cloneable.") % proto
 
 
 def _get_shareable_msg(disk):
