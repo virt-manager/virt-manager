@@ -1436,7 +1436,6 @@ c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file 
 c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-full --auto-clone", grep="not enough free space")  # catch failure of clone path setting
 c.add_invalid(_CLONE_NET_HTTP + " --auto-clone", grep="'http' is not cloneable")
-c.add_invalid(_CLONE_NET_RBD + " --auto-clone", grep="'rbd' requires managed storage")  # connection doesn't have the referenced rbd volume
 c.add_invalid(_CLONE_NET_RBD + " --connect %(URI-TEST-FULL)s --auto-clone", grep="Cloning rbd volumes is not yet supported")
 
 
