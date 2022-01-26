@@ -4235,6 +4235,9 @@ class ParserMemdev(VirtCLIParser):
         cls.add_arg("target.node", "target.node")
         cls.add_arg("target.label_size", "target.label_size",
                 cb=cls.set_target_size)
+        cls.add_arg("target.block", "target.block")
+        cls.add_arg("target.current", "target.current")
+        cls.add_arg("target.requested", "target.requested")
         cls.add_arg("target.readonly", "target.readonly", is_onoff=True)
         cls.add_arg("source.pagesize", "source.pagesize")
         cls.add_arg("source.path", "source.path")

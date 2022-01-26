@@ -16,6 +16,9 @@ class _DeviceMemoryTarget(XMLBuilder):
     node = XMLProperty("./node", is_int=True)
     label_size = XMLProperty("./label/size", is_int=True)
     readonly = XMLProperty("./readonly", is_bool=True)
+    block = XMLProperty("./block", is_int=True)
+    requested = XMLProperty("./requested", is_int=True)
+    current = XMLProperty("./current", is_int=True)
 
 
 class _DeviceMemorySource(XMLBuilder):
