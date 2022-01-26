@@ -46,6 +46,7 @@ class vmmPreferences(vmmGObjectUI):
         self.refresh_graphics_type()
         self.refresh_storage_format()
         self.refresh_cpu_default()
+        self.refresh_firmware_default()
         self.refresh_cpu_poll()
         self.refresh_disk_poll()
         self.refresh_net_poll()
@@ -73,6 +74,7 @@ class vmmPreferences(vmmGObjectUI):
             "on_prefs_graphics_type_changed": self.change_graphics_type,
             "on_prefs_storage_format_changed": self.change_storage_format,
             "on_prefs_cpu_default_changed": self.change_cpu_default,
+            "on_prefs_firmware_default_changed": self.change_firmware_default,
             "on_prefs_stats_enable_cpu_toggled": self.change_cpu_poll,
             "on_prefs_stats_enable_disk_toggled": self.change_disk_poll,
             "on_prefs_stats_enable_net_toggled": self.change_net_poll,
@@ -175,6 +177,17 @@ class vmmPreferences(vmmGObjectUI):
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
 
+        combo = self.widget("prefs-firmware-default")
+        # [gsettings value, string]
+        model = Gtk.ListStore(str, str)
+        for row in [["default", _("System default (%s)") %
+                    self.config.default_firmware_from_config],
+                    ["bios", "BIOS"],
+                    ["uefi", "UEFI"]]:
+            model.append(row)
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 1)
+
         if not vmmInspection.libguestfs_installed():  # pragma: no cover
             self.widget("prefs-libguestfs").set_sensitive(False)
             self.widget("prefs-libguestfs").set_tooltip_text(
@@ -233,6 +246,10 @@ class vmmPreferences(vmmGObjectUI):
     def refresh_cpu_default(self):
         combo = self.widget("prefs-cpu-default")
         val = self.config.get_default_cpu_setting()
+        uiutil.set_list_selection(combo, val)
+    def refresh_firmware_default(self):
+        combo = self.widget("prefs-firmware-default")
+        val = self.config.get_default_firmware_setting(raw=True)
         uiutil.set_list_selection(combo, val)
 
     def refresh_cpu_poll(self):
@@ -374,6 +391,9 @@ class vmmPreferences(vmmGObjectUI):
     def change_cpu_default(self, src):
         typ = uiutil.get_list_selection(src) or "default"
         self.config.set_default_cpu_setting(typ.lower())
+    def change_firmware_default(self, src):
+        typ = uiutil.get_list_selection(src) or "default"
+        self.config.set_firmware_setting(typ.lower())
 
     def change_cpu_poll(self, src):
         self.config.set_stats_enable_cpu_poll(src.get_active())

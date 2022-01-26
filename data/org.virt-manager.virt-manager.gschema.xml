@@ -265,6 +265,12 @@
       <description>CPU setting to use for new VMs. Limited to VMs matching the host architecture. Possible values: default (virt-manager default), hv-default (qemu's default), host-model-only (just the model, not the additional features), host-model (libvirt's host-model setting), host-passthrough (libvirt's host-passthrough setting).</description>
     </key>
 
+    <key name="firmware" type="s">
+      <default>'default'</default>
+      <summary>Use selected firmware for new VM booting</summary>
+      <description>Firmware used for new VMs. Possible values are BIOS (default) and UEFI. The firmware used is determined by libvirt unless a specific firmware is selected from the Customize dialog.</description>
+    </key>
+
   </schema>
 
   <schema id="org.virt-manager.virt-manager.paths"

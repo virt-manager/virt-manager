@@ -221,6 +221,7 @@ class vmmConfig(object):
 
         self.default_storage_format_from_config = "qcow2"
         self.default_console_resizeguest = 0
+        self.default_firmware_from_config = "bios"
 
         self._objects = []
         self.color_insensitive = None
@@ -531,6 +532,16 @@ class vmmConfig(object):
         return ret
     def set_default_cpu_setting(self, val):
         self.conf.set("/new-vm/cpu-default", val.lower())
+
+    def get_default_firmware_setting(self, raw=False):
+        ret = self.conf.get("/new-vm/firmware")
+        if ret not in ["default", "bios", "uefi"]:
+            ret = "default"  # pragma: no cover
+        if ret == "default" and not raw:
+            return self.default_firmware_from_config
+        return ret
+    def set_firmware_setting(self, val):
+        self.conf.set("/new-vm/firmware", val.lower())
 
 
     # URL/Media path history
