@@ -4715,6 +4715,7 @@ class ParserLaunchSecurity(VirtCLIParser):
         cls.add_arg("policy", "policy")
         cls.add_arg("session", "session")
         cls.add_arg("dhCert", "dhCert")
+        cls.add_arg("kernelHashes", "kernelHashes", is_onoff=True)
 
 
 ###########################
