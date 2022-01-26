@@ -705,7 +705,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
 
 
---filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on
+--filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on,driver.page_per_vq=off
 --filesystem template_name,/,type=template,mode=passthrough
 --filesystem type=file,source=/tmp/somefile.img,target=/mount/point,accessmode=squash,driver.format=qcow2,driver.type=path,driver.wrpolicy=immediate
 --filesystem type-mount,source.dir=/,target=/

@@ -279,7 +279,7 @@
       </target>
     </controller>
     <filesystem type="mount" accessmode="mapped">
-      <driver ats="on" iommu="off" packed="on"/>
+      <driver ats="on" iommu="off" packed="on" page_per_vq="off"/>
       <alias name="testfsalias"/>
       <source dir="/source"/>
       <target dir="/target"/>
