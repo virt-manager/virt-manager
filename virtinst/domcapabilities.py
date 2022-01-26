@@ -256,14 +256,15 @@ class DomainCapabilities(XMLBuilder):
         """
         return self.arch in list(self._uefi_arch_patterns.keys())
 
-    def supports_uefi_xml(self):
+    def supports_uefi_loader(self):
         """
-        Return True if libvirt advertises support for proper UEFI setup
+        Return True if libvirt advertises support for UEFI loader
         """
-        if "efi" in self.os.get_enum("firmware").get_values():
-            return True
         return ("readonly" in self.os.loader.enum_names() and
                 "yes" in self.os.loader.get_enum("readonly").get_values())
+
+    def supports_firmware_efi(self):
+        return "efi" in self.os.get_enum("firmware").get_values()
 
     def supports_safe_host_model(self):
         """

@@ -553,6 +553,11 @@ class Guest(XMLBuilder):
         """
         Enable UEFI using our default logic
         """
+        domcaps = self.lookup_domcaps()
+        if domcaps.supports_firmware_efi():
+            self.os.firmware = "efi"
+            return
+
         path = self._lookup_default_uefi_path()
         log.debug("Setting default UEFI path=%s", path)
         self.set_uefi_path(path)
@@ -748,11 +753,11 @@ class Guest(XMLBuilder):
         """
         domcaps = self.lookup_domcaps()
 
-        if not domcaps.supports_uefi_xml():
+        if not domcaps.supports_uefi_loader():
             raise RuntimeError(_("Libvirt version does not support UEFI."))
 
         if not domcaps.arch_can_uefi():
-            raise RuntimeError(
+            raise RuntimeError(  # pragma: no cover
                 _("Don't know how to setup UEFI for arch '%s'") %
                 self.os.arch)
 

@@ -873,7 +873,6 @@ c.add_invalid("--vnc --sdl")  # Multi graphics collision
 c.add_invalid("--serial unix")  # Unix with no path
 c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
 c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
-c.add_invalid("--connect %(URI-KVM-X86)s --boot uefi,arch=ppc64")  # unsupported arch for UEFI
 c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machine=pc
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
@@ -917,7 +916,7 @@ c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail 
 c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
 c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
 c.add_invalid("--install winxp", grep="does not have a URL location")  # no URL for winxp
-c.add_invalid("--arch i686 --install fedora26", grep="does not have a URL location for the architecture 'i686")  # there's no URL for i686
+c.add_invalid("--boot arch=i686 --install fedora26", grep="does not have a URL location for the architecture 'i686")  # there's no URL for i686
 c.add_invalid("-c foo --cdrom bar", grep="Cannot use -c")  # check for ambiguous -c and --cdrom collision
 c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for the ambiguous -c vs --connect
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
@@ -1023,7 +1022,7 @@ c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type 
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 
 # ppc64 tests
-c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
+c.add_compare("--machine pseries --boot arch=ppc64,network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
 c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
 c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default", "ppc64le-kvm-import")
 c.add_compare("--arch ppc64 --machine pseries --boot network --disk %(EXISTIMG1)s --graphics vnc --network none --tpm /dev/tpm0", "ppc64-pseries-tpm")  # default TPM for ppc64

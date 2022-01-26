@@ -21,9 +21,8 @@
     <partition>/virtualmachines/production</partition>
     <fibrechannel appid="myapplication"/>
   </resource>
-  <os>
+  <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf/OVMF_CODE.fd</loader>
     <initarg>foo</initarg>
     <initarg>bar=baz</initarg>
     <boot dev="network"/>
