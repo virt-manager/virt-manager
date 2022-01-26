@@ -1,11 +1,11 @@
+       <entry name="location">Upside down</entry>
+     </baseBoard>
    </sysinfo>
-   <os>
+-  <os>
++  <os firmware="efi">
      <type arch="i686">hvm</type>
--    <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf/OVMF_CODE.fd</loader>
-+    <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</loader>
+     <loader readonly="yes" type="pflash">/usr/share/edk2/ovmf/OVMF_CODE.fd</loader>
      <nvram>/nvram/test-many-devices_VARS.fd</nvram>
-     <smbios mode="sysinfo"/>
-   </os>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the domain is fully powered off.

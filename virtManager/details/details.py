@@ -661,7 +661,7 @@ class vmmDetails(vmmGObjectUI):
         uefipaths = [v.value for v in domcaps.os.loader.values]
 
         warn_icon = self.widget("overview-firmware-warn")
-        hv_supports_uefi = domcaps.supports_uefi_xml()
+        hv_supports_uefi = domcaps.supports_uefi_loader()
         if not hv_supports_uefi:
             warn_icon.set_tooltip_text(
                 _("Libvirt or hypervisor does not support UEFI."))
