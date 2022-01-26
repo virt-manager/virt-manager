@@ -647,10 +647,11 @@ class vmmDetails(vmmGObjectUI):
         self.widget("machine-type-label").set_visible(
             not self.is_customize_dialog)
 
+
         # Firmware
         combo = self.widget("overview-firmware")
-        # [label, path, is_sensitive]
-        model = Gtk.ListStore(str, str, bool)
+        # [label, loader path, is_sensitive, ./os/@firmware value]
+        model = Gtk.ListStore(str, str, bool, str)
         combo.set_model(model)
         text = Gtk.CellRendererText()
         combo.pack_start(text, True)
@@ -660,37 +661,41 @@ class vmmDetails(vmmGObjectUI):
         domcaps = self.vm.get_domain_capabilities()
         uefipaths = [v.value for v in domcaps.os.loader.values]
 
-        warn_icon = self.widget("overview-firmware-warn")
-        hv_supports_uefi = domcaps.supports_uefi_loader()
+        uefirows = []
+        if domcaps.supports_firmware_efi():
+            uefirows.append([_("UEFI"), None, True, "efi"])
+        for path in uefipaths:
+            uefirows.append(
+                [domcaps.label_for_firmware_path(path), path, True, None])
+
+        hv_supports_uefi = (domcaps.supports_uefi_loader() or
+                domcaps.supports_firmware_efi())
+
+        firmware_warn = None
         if not hv_supports_uefi:
-            warn_icon.set_tooltip_text(
-                _("Libvirt or hypervisor does not support UEFI."))
-        elif not uefipaths:
-            warn_icon.set_tooltip_text(  # pragma: no cover
+            firmware_warn = _("Libvirt or hypervisor does not support UEFI.")
+        elif not uefirows:
+            firmware_warn = (  # pragma: no cover
                 _("Libvirt did not detect any UEFI/OVMF firmware image "
                   "installed on the host."))
 
-        model.append([domcaps.label_for_firmware_path(None), None, True])
-        if not uefipaths:
-            model.append([_("UEFI not found"), None, False])
-        else:
-            for path in uefipaths:
-                model.append([domcaps.label_for_firmware_path(path),
-                    path, True])
-
+        # Put the default entry first in the list
+        model.append([domcaps.label_for_firmware_path(None), None, True, None])
+        for row in uefirows:
+            model.append(row)
         combo.set_active(0)
 
         self.widget("overview-firmware-warn").set_visible(
-            not (uefipaths and hv_supports_uefi) and self.is_customize_dialog)
+            self.is_customize_dialog and firmware_warn)
+        self.widget("overview-firmware-warn").set_tooltip_text(firmware_warn)
         self.widget("overview-firmware").set_visible(self.is_customize_dialog)
         self.widget("overview-firmware-label").set_visible(
             not self.is_customize_dialog)
-        show_firmware = ((self.conn.is_qemu() or
-                          self.conn.is_test() or
-                          self.conn.is_xen()) and
-                         domcaps.arch_can_uefi())
         uiutil.set_grid_row_visible(
-            self.widget("overview-firmware-title"), show_firmware)
+            self.widget("overview-firmware-title"),
+            self.vm.xmlobj.os.is_hvm() and
+            (domcaps.supports_firmware_efi() or
+             domcaps.arch_can_uefi()))
 
         # Chipset
         combo = self.widget("overview-chipset")
@@ -1394,6 +1399,8 @@ class vmmDetails(vmmGObjectUI):
         if self._edited(EDIT_FIRMWARE):
             kwargs["loader"] = uiutil.get_list_selection(
                 self.widget("overview-firmware"), column=1)
+            kwargs["firmware"] = uiutil.get_list_selection(
+                self.widget("overview-firmware"), column=3)
 
         if self._edited(EDIT_MACHTYPE):
             if self.widget("overview-chipset").is_visible():
@@ -1773,7 +1780,7 @@ class vmmDetails(vmmGObjectUI):
         # Firmware
         domcaps = self.vm.get_domain_capabilities()
         if self.vm.get_xmlobj().os.firmware == "efi":
-            firmware = 'UEFI'
+            firmware = _("UEFI")
         else:
             firmware = domcaps.label_for_firmware_path(
                 self.vm.get_xmlobj().os.loader)

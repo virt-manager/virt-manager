@@ -536,8 +536,10 @@ def testNewKVMQ35UEFI(app):
     # Change to UEFI
     details.combo_check_default("Chipset:", "Q35")
     details.combo_check_default("Firmware:", "BIOS")
-    details.combo_select("Firmware:", ".*x86_64.*")
+    details.combo_select("Firmware:", "UEFI")
     details.find("config-apply").click()
+    new_xml = lib.utils.get_xmleditor_xml(app, details)
+    assert "os firmware=\"efi\"" in new_xml
 
     # Finish
     details.find_fuzzy("Begin Installation", "button").click()
