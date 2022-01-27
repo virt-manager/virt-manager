@@ -95,6 +95,9 @@ Some examples:
   * Most VM tuning: `<cputune>`, `<blkiotune>`, `<numatune>`, fine grained `<vcpus>` listing
   * Editing existing machine type/arch/ostype, UEFI config. Only advanced users can make it work, and they can edit the XML.
 
+* Defaults
+  * [Defaulting to sky high maxmem and maxvcpus](https://github.com/virt-manager/virt-manager/issues/141)
+
 * Tight desktop integration stuff: registering as a default file handler, registering as a gnome search provider, etc. This is gnome-boxes territory
 * Serial console config options like [buffer scrollback size](https://bugzilla.redhat.com/show_bug.cgi?id=1610165). Use `virsh console` or cli tools if need flexibility.
 
