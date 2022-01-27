@@ -17,15 +17,20 @@ import shutil
 import sysconfig
 import subprocess
 
-# distutils will be deprecated in python 3.12 in favor of setuptools,
-# but as of this writing there's standard no setuptools way to extend the
-# 'build' or 'build_scripts' commands which are the only standard
-# commands we trigger.
-import distutils.command.build
-
 import setuptools
 import setuptools.command.install
 import setuptools.command.install_egg_info
+
+
+# distutils will be deprecated in python 3.12 in favor of setuptools,
+# but as of this writing there's standard no setuptools way to extend the
+# 'build' commands which are the only standard commands we trigger.
+# https://github.com/pypa/setuptools/issues/2591
+#
+# Newer setuptools will transparently support 'import distutils' though.
+# That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
+import distutils.command.build  # pylint: disable=wrong-import-order
+
 
 SYSPREFIX = sysconfig.get_config_var("prefix")
 
