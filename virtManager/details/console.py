@@ -332,6 +332,14 @@ class vmmConsolePages(vmmGObjectUI):
         self.widget("console-overlay").add_overlay(
                 self._overlay_toolbar_fullscreen.timed_revealer.get_overlay_widget())
 
+        # When the gtk-vnc and spice-gtk widgets are in non-scaling mode, we
+        # make them fill the whole window, and they paint the non-VM areas of
+        # the viewer black. But when scaling is enabled, the viewer widget is
+        # constrained. This change makes sure the non-VM portions in that case
+        # are also colored black, rather than the default theme window color.
+        self.widget("console-gfx-viewport").modify_bg(
+                Gtk.StateType.NORMAL, Gdk.Color(0, 0, 0))
+
         self.widget("console-pages").set_show_tabs(False)
         self.widget("serial-pages").set_show_tabs(False)
         self.widget("console-gfx-pages").set_show_tabs(False)
