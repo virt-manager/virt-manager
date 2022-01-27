@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkWindow" id="snapshot-top-window">
-    <property name="width_request">600</property>
-    <property name="height_request">400</property>
-    <property name="can_focus">False</property>
+    <property name="width-request">600</property>
+    <property name="height-request">400</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkBox" id="snapshot-top-box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="border_width">12</property>
+        <property name="border-width">12</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkPaned" id="spaned1">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
             <property name="position">200</property>
-            <property name="position_set">True</property>
+            <property name="position-set">True</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolledwindow7">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">in</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="snapshot-list">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="headers_visible">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="headers-visible">False</property>
                     <signal name="button-press-event" handler="on_snapshot_list_button_press_event" swapped="no"/>
                     <signal name="row-activated" handler="on_snapshot_list_row_activated" swapped="no"/>
                     <child internal-child="selection">
@@ -55,51 +55,52 @@
             <child>
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="left_padding">12</property>
+                <property name="can-focus">False</property>
+                <property name="left-padding">12</property>
                 <child>
                   <object class="GtkNotebook" id="snapshot-notebook">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="show_border">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="show-border">False</property>
                     <child>
                       <object class="GtkBox" id="sbox3">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
+                          <!-- n-columns=2 n-rows=7 -->
                           <object class="GtkGrid" id="sgrid1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">6</property>
+                            <property name="can-focus">False</property>
+                            <property name="row-spacing">6</property>
+                            <property name="column-spacing">6</property>
                             <child>
                               <object class="GtkLabel" id="slabel94">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="label" translatable="yes">Description:</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">5</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow8">
-                                <property name="height_request">80</property>
+                                <property name="height-request">80</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
+                                <property name="can-focus">True</property>
                                 <property name="hexpand">True</property>
-                                <property name="shadow_type">in</property>
+                                <property name="shadow-type">in</property>
                                 <child>
                                   <object class="GtkTextView" id="snapshot-description">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="left_margin">2</property>
-                                    <property name="right_margin">2</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="left-margin">2</property>
+                                    <property name="right-margin">2</property>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="snapshot-description-atkobject">
                                         <property name="AtkObject::accessible-name">snapshot-description</property>
@@ -109,31 +110,31 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">5</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">5</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label92">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">VM State:</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">3</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkBox" id="hbox3">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="spacing">3</property>
                                 <child>
                                   <object class="GtkImage" id="snapshot-status-icon">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can-focus">False</property>
                                     <property name="stock">gtk-cancel</property>
                                   </object>
                                   <packing>
@@ -145,7 +146,7 @@
                                 <child>
                                   <object class="GtkLabel" id="snapshot-status-text">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can-focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="label">Shut down</property>
                                   </object>
@@ -157,93 +158,93 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">3</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label93">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Timestamp:</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="snapshot-timestamp">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label">label</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="snapshot-title">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label">&lt;b&gt;snapshot 'foo'&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
+                                <property name="use-markup">True</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
                                 <property name="width">2</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Snapshot Mode:</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">4</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="snapshot-mode">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">label</property>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">4</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="label7">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
                                 <property name="label" translatable="yes">Screenshot:</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">6</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">6</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkBox" id="box5">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <child>
                                   <object class="GtkImage" id="snapshot-screenshot">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can-focus">False</property>
                                     <property name="stock">gtk-missing-image</property>
                                   </object>
                                   <packing>
@@ -255,7 +256,7 @@
                                 <child>
                                   <object class="GtkLabel" id="snapshot-screenshot-label">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can-focus">False</property>
                                     <property name="label" translatable="yes">No screenshot available</property>
                                   </object>
                                   <packing>
@@ -266,19 +267,19 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">6</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">6</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkBox" id="snapshot-is-current">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <property name="spacing">3</property>
                                 <child>
                                   <object class="GtkImage" id="image2">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can-focus">False</property>
                                     <property name="stock">gtk-info</property>
                                     <property name="icon_size">2</property>
                                   </object>
@@ -291,10 +292,10 @@
                                 <child>
                                   <object class="GtkLabel" id="label652">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
+                                    <property name="can-focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">&lt;small&gt;&lt;i&gt;This was the most recently applied snapshot.&lt;/i&gt;&lt;/small&gt;</property>
-                                    <property name="use_markup">True</property>
+                                    <property name="use-markup">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -304,8 +305,8 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">1</property>
                                 <property name="width">2</property>
                               </packing>
                             </child>
@@ -321,17 +322,17 @@
                     <child type="tab">
                       <object class="GtkLabel" id="label89">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label">details</property>
                       </object>
                       <packing>
-                        <property name="tab_fill">False</property>
+                        <property name="tab-fill">False</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="snapshot-error-label">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label">error label</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="snapshot-error-label-atkobject">
@@ -346,12 +347,12 @@
                     <child type="tab">
                       <object class="GtkLabel" id="label90">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label">empty</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
-                        <property name="tab_fill">False</property>
+                        <property name="tab-fill">False</property>
                       </packing>
                     </child>
                   </object>
@@ -372,25 +373,25 @@
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="hbox10">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child>
                   <object class="GtkButton" id="snapshot-add">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Create new snapshot</property>
-                    <property name="tooltip_text" translatable="yes">Create new snapshot</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup" translatable="yes">Create new snapshot</property>
+                    <property name="tooltip-text" translatable="yes">Create new snapshot</property>
                     <signal name="clicked" handler="on_snapshot_add_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="stock">gtk-add</property>
                       </object>
                     </child>
@@ -409,14 +410,14 @@
                 <child>
                   <object class="GtkButton" id="snapshot-start">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_markup" translatable="yes">Run selected snapshot</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-markup" translatable="yes">Run selected snapshot</property>
                     <signal name="clicked" handler="on_snapshot_start_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="someicon">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="stock">gtk-media-play</property>
                       </object>
                     </child>
@@ -435,14 +436,14 @@
                 <child>
                   <object class="GtkButton" id="snapshot-refresh">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_markup" translatable="yes">Refresh snapshot list</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-markup" translatable="yes">Refresh snapshot list</property>
                     <signal name="clicked" handler="on_snapshot_refresh_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image5">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="stock">gtk-refresh</property>
                       </object>
                     </child>
@@ -461,16 +462,16 @@
                 <child>
                   <object class="GtkButton" id="snapshot-delete">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Delete selected snapshot</property>
-                    <property name="tooltip_text" translatable="yes">Delete selected snapshot</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup" translatable="yes">Delete selected snapshot</property>
+                    <property name="tooltip-text" translatable="yes">Delete selected snapshot</property>
                     <signal name="clicked" handler="on_snapshot_delete_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image11">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="stock">gtk-delete</property>
                       </object>
                     </child>
@@ -496,19 +497,19 @@
             <child>
               <object class="GtkButtonBox" id="buttonbox1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="spacing">6</property>
-                <property name="layout_style">end</property>
+                <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="snapshot-apply">
                     <property name="label">gtk-apply</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Save updated snapshot metadata</property>
-                    <property name="tooltip_text" translatable="yes">Save updated snapshot metadata</property>
-                    <property name="use_stock">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup" translatable="yes">Save updated snapshot metadata</property>
+                    <property name="tooltip-text" translatable="yes">Save updated snapshot metadata</property>
+                    <property name="use-stock">True</property>
                     <signal name="clicked" handler="on_snapshot_apply_clicked" swapped="no"/>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="snapshot-apply-atkobject">
@@ -537,9 +538,6 @@
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>

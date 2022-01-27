@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkSearchEntry" id="os-name">
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="primary_icon_name">edit-find-symbolic</property>
-    <property name="primary_icon_activatable">False</property>
-    <property name="primary_icon_sensitive">False</property>
+    <property name="can-focus">True</property>
+    <property name="primary-icon-name">edit-find-symbolic</property>
+    <property name="primary-icon-activatable">False</property>
+    <property name="primary-icon-sensitive">False</property>
     <signal name="activate" handler="on_os_name_activate" swapped="no"/>
     <signal name="key-press-event" handler="on_os_name_key_press_event" swapped="no"/>
     <signal name="search-changed" handler="on_os_name_search_changed" swapped="no"/>
@@ -19,24 +19,24 @@
     </child>
   </object>
   <object class="GtkPopover" id="vmm-oslist">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="modal">False</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="valign">start</property>
                 <property name="stock">gtk-info</property>
                 <property name="icon_size">3</property>
@@ -50,7 +50,7 @@
             <child>
               <object class="GtkLabel" id="eol-warn">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Can't find the operating system you are looking for?
 Try selecting the next most recent version displayed,
@@ -72,18 +72,18 @@ or use the "Generic OS" entry.</property>
         <child>
           <object class="GtkScrolledWindow" id="os-scroll">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="vscrollbar_policy">always</property>
-            <property name="shadow_type">in</property>
+            <property name="can-focus">True</property>
+            <property name="vscrollbar-policy">always</property>
+            <property name="shadow-type">in</property>
             <child>
               <object class="GtkTreeView" id="os-list">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="headers_visible">False</property>
-                <property name="enable_search">False</property>
-                <property name="hover_selection">True</property>
-                <property name="enable_grid_lines">horizontal</property>
-                <property name="activate_on_single_click">True</property>
+                <property name="can-focus">True</property>
+                <property name="headers-visible">False</property>
+                <property name="enable-search">False</property>
+                <property name="hover-selection">True</property>
+                <property name="enable-grid-lines">horizontal</property>
+                <property name="activate-on-single-click">True</property>
                 <signal name="row-activated" handler="on_os_list_row_activated" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
@@ -106,10 +106,10 @@ or use the "Generic OS" entry.</property>
           <object class="GtkCheckButton" id="include-eol">
             <property name="label" translatable="yes">Include end of life operating systems</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
             <property name="halign">start</property>
-            <property name="draw_indicator">True</property>
+            <property name="draw-indicator">True</property>
             <signal name="toggled" handler="on_include_eol_toggled" swapped="no"/>
             <child internal-child="accessible">
               <object class="AtkObject" id="include-eol-atkobject">

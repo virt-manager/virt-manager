@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="stock">gtk-connect</property>
   </object>
   <object class="GtkDialog" id="vmm-open-connection">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes">Add Connection</property>
     <property name="resizable">False</property>
-    <property name="type_hint">dialog</property>
+    <property name="type-hint">dialog</property>
     <signal name="delete-event" handler="on_vmm_open_connection_delete_event" swapped="no"/>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_stock">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-stock">True</property>
                 <signal name="clicked" handler="on_cancel_clicked" swapped="no"/>
               </object>
               <packing>
@@ -48,12 +45,12 @@
               <object class="GtkButton" id="connect">
                 <property name="label" translatable="yes">Co_nnect</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="image">image1</property>
-                <property name="use_underline">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_connect_clicked" swapped="no"/>
               </object>
               <packing>
@@ -66,20 +63,21 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
+          <!-- n-columns=2 n-rows=9 -->
           <object class="GtkGrid" id="table1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkComboBox" id="hypervisor">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <signal name="changed" handler="on_hypervisor_changed" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="hypervisor-atkobject">
@@ -88,32 +86,32 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label87">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">_Hypervisor:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">hypervisor</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">hypervisor</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="hseparator1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -121,39 +119,39 @@
               <object class="GtkCheckButton" id="connect-remote">
                 <property name="label" translatable="yes">Connect to _remote host over SSH</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="on_connect_remote_toggled" swapped="no"/>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
                 <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label90">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">_Autoconnect:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">autoconnect</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">autoconnect</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="autoconnect">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="autoconnect-atkobject">
                     <property name="AtkObject::accessible-name">Autoconnect</property>
@@ -161,15 +159,15 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">6</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="username-entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">●</property>
+                <property name="can-focus">True</property>
+                <property name="invisible-char">●</property>
                 <signal name="changed" handler="on_username_entry_changed" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="username-entry-atkobject">
@@ -178,52 +176,52 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label91">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">24</property>
+                <property name="margin-left">24</property>
                 <property name="label" translatable="yes">H_ostname:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">hostname</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">hostname</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="margin_left">24</property>
-                <property name="margin_top">2</property>
-                <property name="margin_bottom">2</property>
+                <property name="margin-left">24</property>
+                <property name="margin-top">2</property>
+                <property name="margin-bottom">2</property>
                 <property name="label" translatable="yes">_Username:</property>
-                <property name="use_markup">True</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">username-entry</property>
+                <property name="use-markup">True</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">username-entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="session-warning-box">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkImage" id="image2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="stock">gtk-dialog-warning</property>
@@ -237,14 +235,14 @@
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">False</property>
                     <property name="label" translatable="yes">&lt;small&gt;QEMU usermode session is not the virt-manager
 default. It is likely that any pre-existing QEMU/KVM
 guests will not be available. Networking options
 are very limited. &lt;/small&gt;</property>
-                    <property name="use_markup">True</property>
-                    <property name="max_width_chars">20</property>
+                    <property name="use-markup">True</property>
+                    <property name="max-width-chars">20</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -254,29 +252,29 @@ are very limited. &lt;/small&gt;</property>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
                 <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label-uri-custom">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Cu_stom URI:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">uri-entry</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">uri-entry</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="uri-entry">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="uri-entry-atkobject">
@@ -285,18 +283,18 @@ are very limited. &lt;/small&gt;</property>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">8</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">8</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="uri-label">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label">uri</property>
                 <property name="ellipsize">end</property>
-                <property name="max_width_chars">22</property>
+                <property name="max-width-chars">22</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="uri-label-atkobject">
                     <property name="AtkObject::accessible-name">uri-label</property>
@@ -304,31 +302,31 @@ are very limited. &lt;/small&gt;</property>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label-uri-generated">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Generated URI:</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="hostname">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <signal name="changed" handler="on_hostname_changed" swapped="no"/>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
           </object>
