@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment4">
     <property name="lower">5900</property>
     <property name="upper">50000</property>
     <property name="value">5901</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
     <property name="lower">5900</property>
     <property name="upper">50000</property>
     <property name="value">5900</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
   </object>
+  <!-- n-columns=2 n-rows=7 -->
   <object class="GtkGrid" id="graphics-box">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="row_spacing">6</property>
-    <property name="column_spacing">6</property>
+    <property name="can-focus">False</property>
+    <property name="row-spacing">6</property>
+    <property name="column-spacing">6</property>
     <child>
       <object class="GtkBox" id="graphics-password-box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="graphics-password-chk">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
-            <property name="margin_top">6</property>
-            <property name="draw_indicator">True</property>
+            <property name="margin-top">6</property>
+            <property name="draw-indicator">True</property>
             <signal name="toggled" handler="on_graphics_use_password" swapped="no"/>
           </object>
           <packing>
@@ -46,16 +47,16 @@
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
             <property name="spacing">3</property>
             <child>
               <object class="GtkEntry" id="graphics-password">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="halign">start</property>
                 <property name="visibility">False</property>
-                <property name="invisible_char">●</property>
+                <property name="invisible-char">●</property>
                 <signal name="changed" handler="on_graphics_password_changed" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="graphics-password-atkobject">
@@ -73,10 +74,10 @@
               <object class="GtkCheckButton" id="graphics-visiblity-chk">
                 <property name="label" translatable="yes">Show passwor_d</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <signal name="toggled" handler="on_graphics_show_password" swapped="no"/>
               </object>
               <packing>
@@ -94,83 +95,83 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label429">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="label" translatable="yes">_Type:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-type</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">graphics-type</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label430">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="label" translatable="yes">Addr_ess:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-address</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">graphics-address</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label432">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="margin_top">6</property>
+        <property name="margin-top">6</property>
         <property name="label" translatable="yes">Pa_ssword:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-password-chk</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">graphics-password-chk</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">4</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label431">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="label" translatable="yes">_Port:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-port</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">graphics-port</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkBox" id="graphics-port-box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkCheckButton" id="graphics-port-auto">
             <property name="label" translatable="yes">A_uto</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">False</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="use-underline">True</property>
+            <property name="draw-indicator">True</property>
             <signal name="toggled" handler="on_graphics_port_auto_toggled" swapped="no"/>
             <child internal-child="accessible">
               <object class="AtkObject" id="graphics-port-auto-atkobject">
@@ -187,14 +188,14 @@
         <child>
           <object class="GtkSpinButton" id="graphics-port">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="invisible_char">●</property>
+            <property name="can-focus">True</property>
+            <property name="invisible-char">●</property>
             <property name="text" translatable="yes">5900</property>
             <property name="adjustment">adjustment5</property>
-            <property name="climb_rate">1</property>
-            <property name="snap_to_ticks">True</property>
+            <property name="climb-rate">1</property>
+            <property name="snap-to-ticks">True</property>
             <property name="numeric">True</property>
-            <property name="update_policy">if-valid</property>
+            <property name="update-policy">if-valid</property>
             <property name="value">5900</property>
             <signal name="changed" handler="on_graphics_port_changed" swapped="no"/>
             <child internal-child="accessible">
@@ -211,135 +212,136 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">3</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
       <object class="GtkComboBox" id="graphics-address">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="has_entry">True</property>
+        <property name="has-entry">True</property>
         <signal name="changed" handler="on_graphics_address_changed" swapped="no"/>
         <child internal-child="entry">
           <object class="GtkEntry" id="combobox-entry2">
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
           </object>
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
       </packing>
     </child>
     <child>
       <object class="GtkComboBox" id="graphics-type">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="has_entry">True</property>
+        <property name="has-entry">True</property>
         <signal name="changed" handler="on_graphics_type_changed" swapped="no"/>
         <child internal-child="entry">
           <object class="GtkEntry" id="combobox-entry3">
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
           </object>
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
         <property name="label" translatable="yes">Open_GL:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-opengl</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">graphics-opengl</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="label4">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">end</property>
         <property name="label" translatable="yes">L_isten type:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">graphics-listen-type</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">graphics-listen-type</property>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkComboBox" id="graphics-listen-type">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="has_entry">True</property>
+        <property name="has-entry">True</property>
         <signal name="changed" handler="on_graphics_listen_type_changed" swapped="no"/>
         <child internal-child="entry">
           <object class="GtkEntry">
-            <property name="can_focus">True</property>
+            <property name="can-focus">True</property>
           </object>
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
+      <!-- n-columns=2 n-rows=3 -->
       <object class="GtkGrid" id="graphics-opengl-subopts-box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="halign">start</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">6</property>
         <child>
           <object class="GtkImage">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="stock">gtk-dialog-warning</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkImage">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="valign">start</property>
             <property name="stock">gtk-dialog-warning</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="graphics-rendernode">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="hexpand">False</property>
-            <property name="has_entry">True</property>
+            <property name="has-entry">True</property>
             <signal name="changed" handler="on_graphics_rendernode_changed" swapped="no"/>
             <child internal-child="entry">
               <object class="GtkEntry">
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="halign">start</property>
               </object>
             </child>
@@ -350,15 +352,15 @@
             </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
             <property name="width">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="graphics-warn-virtio">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">OpenGL only works with 'virtio' graphics with '3D acceleration' enabled</property>
             <property name="wrap">True</property>
@@ -367,14 +369,14 @@
             </attributes>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="graphics-warn-listen">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">OpenGL only works with 'Listen type' value 'none'</property>
             <property name="wrap">True</property>
@@ -383,27 +385,27 @@
             </attributes>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">6</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
       <object class="GtkCheckButton" id="graphics-opengl">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="draw_indicator">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="draw-indicator">True</property>
         <signal name="toggled" handler="on_graphics_opengl_toggled" swapped="no"/>
       </object>
       <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">5</property>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>

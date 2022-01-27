@@ -1,49 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAboutDialog" id="vmm-about">
-    <property name="can_focus">False</property>
-    <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="program_name">Virtual Machine Manager</property>
+    <property name="can-focus">False</property>
+    <property name="destroy-with-parent">True</property>
+    <property name="type-hint">dialog</property>
+    <property name="program-name">Virtual Machine Manager</property>
     <property name="copyright" translatable="yes">Copyright (C) 2006-2020 Red Hat Inc.</property>
     <property name="comments" translatable="yes">Powered by libvirt</property>
     <property name="website">https://virt-manager.org/</property>
-    <property name="website_label">https://virt-manager.org/</property>
+    <property name="website-label">https://virt-manager.org/</property>
     <property name="authors">Daniel P. Berrange &lt;berrange@redhat.com&gt;
 Cole Robinson &lt;crobinso@redhat.com&gt;
 Hugh O. Brock &lt;hbrock@redhat.com&gt;
 </property>
-    <property name="translator_credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
+    <property name="translator-credits" translatable="yes" comments="TRANSLATORS: Replace this string with your names, one name per line.">translator-credits</property>
     <property name="artists">Máirín Duffy &lt;duffy@redhat.com&gt;
 Mike Langlie &lt;mlanglie@redhat.com&gt;
 Jeremy Perry &lt;jeperry@redhat.com&gt;
 Jakub Steiner &lt;jsteiner@redhat.com&gt;
 </property>
-    <property name="logo_icon_name">virt-manager</property>
-    <property name="license_type">gpl-2-0</property>
+    <property name="logo-icon-name">virt-manager</property>
+    <property name="license-type">gpl-2-0</property>
     <signal name="delete-event" handler="on_vmm_about_delete_event" swapped="no"/>
     <signal name="response" handler="on_vmm_about_response" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </object>
 </interface>
