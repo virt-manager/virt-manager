@@ -43,6 +43,7 @@ def testPrefsAll(app):
     tab.combo_select("CPU default:", "host-passthrough")
     tab.combo_select("Storage format:", "Raw")
     tab.combo_select("Graphics type", "VNC")
+    tab.combo_select("x86 Firmware", "UEFI")
 
     win.find("Console", "page tab").click()
     tab = consoletab
