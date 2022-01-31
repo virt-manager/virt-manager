@@ -375,7 +375,8 @@ def testNewVMURL(app):
     New VM with URL and distro detection, plus having fun with
     the storage browser and network selection.
     """
-    app.uri = tests.utils.URIs.kvm_x86
+    # Also test default UEFI from prefs
+    app.open(keyfile="uefi.ini", uri=tests.utils.URIs.kvm_x86)
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Network Install", "radio").click()

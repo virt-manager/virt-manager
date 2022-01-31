@@ -478,7 +478,10 @@ class vmmCreateVM(vmmGObjectUI):
                 guest.os.is_ppc64() or
                 guest.os.is_s390x())
 
-        default_efi = self.config.get_default_firmware_setting() == "uefi"
+        default_efi = (
+            self.config.get_default_firmware_setting() == "uefi" and
+            guest.os.is_x86() and
+            guest.os.is_hvm())
         if default_efi:
             log.debug("UEFI default requested via app preferences")
 

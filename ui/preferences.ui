@@ -412,7 +412,7 @@
                         <property name="can-focus">False</property>
                         <property name="left-padding">12</property>
                         <child>
-                          <!-- n-columns=2 n-rows=3 -->
+                          <!-- n-columns=2 n-rows=4 -->
                           <object class="GtkGrid" id="table4">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -501,27 +501,27 @@ identical CPUs in order to migrate the VM.</property>
                             <child>
                               <object class="GtkLabel" id="label127">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Default Firmware for new VMs. Boot using either BIOS or UEFI.</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes">Default Firmware for new VMs. Boot using either BIOS or UEFI.</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">_Firmware default:</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">prefs-firmware-default</property>
+                                <property name="label" translatable="yes">x86 _Firmware:</property>
+                                <property name="use-underline">True</property>
+                                <property name="mnemonic-widget">prefs-firmware-default</property>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">3</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkComboBox" id="prefs-firmware-default">
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can-focus">False</property>
                                 <signal name="changed" handler="on_prefs_firmware_default_changed" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">3</property>
                               </packing>
                             </child>
                           </object>

@@ -180,9 +180,7 @@ class vmmPreferences(vmmGObjectUI):
         combo = self.widget("prefs-firmware-default")
         # [gsettings value, string]
         model = Gtk.ListStore(str, str)
-        for row in [["default", _("System default (%s)") %
-                    self.config.default_firmware_from_config],
-                    ["bios", "BIOS"],
+        for row in [["default", _("System default")],
                     ["uefi", "UEFI"]]:
             model.append(row)
         combo.set_model(model)
@@ -249,7 +247,7 @@ class vmmPreferences(vmmGObjectUI):
         uiutil.set_list_selection(combo, val)
     def refresh_firmware_default(self):
         combo = self.widget("prefs-firmware-default")
-        val = self.config.get_default_firmware_setting(raw=True)
+        val = self.config.get_default_firmware_setting()
         uiutil.set_list_selection(combo, val)
 
     def refresh_cpu_poll(self):
