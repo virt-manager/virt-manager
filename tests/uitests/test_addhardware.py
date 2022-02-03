@@ -154,7 +154,6 @@ def testAddDisks(app):
     tab.find("Serial:", "text").set_text("ZZZZ")
     tab.combo_select("Cache mode:", "none")
     tab.combo_select("Discard mode:", "ignore")
-    tab.combo_select("Detect zeroes:", "unmap")
     # High number but we are non-sparse by default so it won't complain
     tab.find("GiB", "spin button").set_text("200000")
     _finish(addhw, check=details)

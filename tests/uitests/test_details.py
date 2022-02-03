@@ -414,7 +414,6 @@ def testDetailsEditDiskNet(app):
     tab.find("Serial:", "text").set_text("1234-ABCD")
     tab.combo_select("Cache mode:", "unsafe")
     tab.combo_select("Discard mode:", "unmap")
-    tab.combo_select("Detect zeroes:", "unmap")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 
