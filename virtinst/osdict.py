@@ -469,6 +469,11 @@ class _OsVariant(object):
                   "http://pcisig.com/pci/1af4/1044"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
+    def supports_virtiogpu(self, extra_devs=None):
+        # virtio1.0-gpu and virtio1.0
+        devids = ["http://pcisig.com/pci/1af4/1050"]
+        return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
+
     def supports_virtioballoon(self, extra_devs=None):
         # virtio-balloon and virtio1.0-balloon
         devids = ["http://pcisig.com/pci/1af4/1002",

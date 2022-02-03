@@ -44,6 +44,9 @@ class _CapsBlock(_HasValues):
     def enum_names(self):
         return [e.name for e in self.enums]
 
+    def has_enum(self, name):
+        return name in self.enum_names()
+
     def get_enum(self, name):
         for enum in self.enums:
             if enum.name == name:
@@ -359,6 +362,16 @@ class DomainCapabilities(XMLBuilder):
         models = self.devices.video.get_enum("modelType").get_values()
         return bool("bochs" in models)
 
+    def supports_video_qxl(self):
+        if not self.devices.video.has_enum("modelType"):
+            # qxl long predates modelType in domcaps, so if it is missing,
+            # use spice support as a rough value
+            return self.supports_graphics_spice()
+        return "qxl" in self.devices.video.get_enum("modelType").get_values()
+
+    def supports_video_virtio(self):
+        return "virtio" in self.devices.video.get_enum("modelType").get_values()
+
     def supports_tpm_emulator(self):
         """
         Returns False if either libvirt or qemu do not have support for
@@ -392,7 +405,6 @@ class DomainCapabilities(XMLBuilder):
         """
         sourceTypes = self.memorybacking.get_enum("sourceType").get_values()
         return bool("memfd" in sourceTypes)
-
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
