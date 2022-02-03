@@ -16,12 +16,11 @@ from ..baseclass import vmmGObjectUI
 (
     _EDIT_CACHE,
     _EDIT_DISCARD,
-    _EDIT_DETECT_ZEROES,
     _EDIT_RO,
     _EDIT_SHARE,
     _EDIT_REMOVABLE,
     _EDIT_SERIAL,
-) = range(1, 8)
+) = range(1, 7)
 
 
 class vmmAddStorage(vmmGObjectUI):
@@ -46,7 +45,6 @@ class vmmAddStorage(vmmGObjectUI):
             "on_storage_select_toggled": self._toggle_storage_select,
             "on_disk_cache_combo_changed": _e(_EDIT_CACHE),
             "on_disk_discard_combo_changed": _e(_EDIT_DISCARD),
-            "on_disk_detect_zeroes_combo_changed": _e(_EDIT_DETECT_ZEROES),
             "on_disk_readonly_changed": _e(_EDIT_RO),
             "on_disk_shareable_changed": _e(_EDIT_SHARE),
             "on_disk_removable_changed": _e(_EDIT_REMOVABLE),
@@ -110,13 +108,6 @@ class vmmAddStorage(vmmGObjectUI):
         uiutil.build_simple_combo(
                 self.widget("disk-discard"), values, sort=False)
 
-        # Detect zeroes combo
-        values = [[None, _("Hypervisor default")]]
-        for m in virtinst.DeviceDisk.DETECT_ZEROES_MODES:
-            values.append([m, m])
-        uiutil.build_simple_combo(
-                self.widget("disk-detect-zeroes"), values, sort=False)
-
 
     ##############
     # Public API #
@@ -179,7 +170,6 @@ class vmmAddStorage(vmmGObjectUI):
         self.widget("storage-create-box").set_sensitive(True)
         self.widget("disk-cache").set_active(0)
         self.widget("disk-discard").set_active(0)
-        self.widget("disk-detect-zeroes").set_active(0)
         self.widget("disk-serial").set_text("")
         self.widget("storage-advanced").set_expanded(False)
         self.widget("disk-readonly").set_active(False)
@@ -236,8 +226,6 @@ class vmmAddStorage(vmmGObjectUI):
             disk.driver_cache = vals.get("cache")
         if vals.get("discard") is not None:
             disk.driver_discard = vals.get("discard")
-        if vals.get("detect_zeroes") is not None:
-            disk.driver_detect_zeroes = vals.get("detect_zeroes")
         if vals.get("readonly") is not None:
             disk.read_only = vals.get("readonly")
         if vals.get("shareable") is not None:
@@ -307,7 +295,6 @@ class vmmAddStorage(vmmGObjectUI):
     def set_dev(self, disk):
         cache = disk.driver_cache
         discard = disk.driver_discard
-        detect_zeroes = disk.driver_detect_zeroes
         ro = disk.read_only
         share = disk.shareable
         removable = bool(disk.removable)
@@ -317,8 +304,6 @@ class vmmAddStorage(vmmGObjectUI):
 
         uiutil.set_list_selection(self.widget("disk-cache"), cache)
         uiutil.set_list_selection(self.widget("disk-discard"), discard)
-        uiutil.set_list_selection(
-                self.widget("disk-detect-zeroes"), detect_zeroes)
 
         self.widget("disk-serial").set_text(serial or "")
         self.widget("disk-readonly").set_active(ro)
@@ -339,9 +324,6 @@ class vmmAddStorage(vmmGObjectUI):
         if _EDIT_DISCARD in self._active_edits:
             ret["discard"] = uiutil.get_list_selection(
                     self.widget("disk-discard"))
-        if _EDIT_DETECT_ZEROES in self._active_edits:
-            ret["detect_zeroes"] = uiutil.get_list_selection(
-                    self.widget("disk-detect-zeroes"))
         if _EDIT_RO in self._active_edits:
             ret["readonly"] = self.widget("disk-readonly").get_active()
         if _EDIT_SHARE in self._active_edits:
