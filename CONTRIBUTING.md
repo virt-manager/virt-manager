@@ -110,7 +110,7 @@ Translations are handled through the Weblate instance hosted by the Fedora Proje
 
 * https://translate.fedoraproject.org/projects/virt-manager/virt-manager/
 * More info about translating as part of Fedora: https://fedoraproject.org/wiki/L10N/Translate_on_Weblate
-* The up to date translation `.pot` template is stored in the [`translations` branch](https://github.com/virt-manager/virt-manager/tree/translations) and synced with the `master` branch before release.
+* The up to date translation `.pot` template is stored in the [`translations` branch](https://github.com/virt-manager/virt-manager/tree/translations) and synced with the `main` branch before release.
 
 
 ## Advanced testing
