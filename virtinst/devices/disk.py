@@ -995,13 +995,26 @@ class DeviceDisk(Device):
         if self.is_cdrom():
             self.read_only = True
 
+        discard_unmap = False
+        if (self.conn.is_qemu() and
+            self.is_disk() and
+            self._storage_backend.will_create_storage() and
+            self._storage_backend.get_vol_install() and
+            self._storage_backend.get_vol_install().allocation == 0):
+            discard_unmap = True
+
         if (self.conn.is_qemu() and
             self.is_disk() and
             self.type == self.TYPE_BLOCK):
+            discard_unmap = True
             if not self.driver_cache:
                 self.driver_cache = self.CACHE_MODE_NONE
             if not self.driver_io:
                 self.driver_io = self.IO_MODE_NATIVE
+
+        if discard_unmap:
+            if not self.driver_discard:
+                self.driver_discard = "unmap"
 
         if not self.target:
             used_targets = [d.target for d in guest.devices.disk if d.target]

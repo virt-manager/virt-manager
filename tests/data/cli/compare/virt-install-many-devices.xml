@@ -39,7 +39,7 @@
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="writeback" io="threads" iothread="3" queues="8"/>
+      <driver name="qemu" type="raw" cache="writeback" discard="unmap" io="threads" iothread="3" queues="8"/>
       <source dev="/dev/default-pool/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>
@@ -48,15 +48,15 @@
       <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2" discard="unmap" detect_zeroes="unmap" error_policy="enospace"/>
+      <driver name="qemu" type="qcow2" detect_zeroes="unmap" error_policy="enospace"/>
       <source file="/dev/default-pool/new1.img"/>
       <target dev="vdb" bus="virtio"/>
       <address type="drive" controller="0" target="2" unit="0"/>
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
+      <driver discard="ignore" copy_on_read="on"/>
       <target dev="sdaa" bus="sata"/>
-      <driver copy_on_read="on"/>
       <iotune>
         <read_bytes_sec>1</read_bytes_sec>
         <write_bytes_sec>5</write_bytes_sec>
@@ -67,7 +67,7 @@
       <readonly/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="vdc" bus="virtio"/>
     </disk>
@@ -186,12 +186,12 @@
       <target dev="fda" bus="fdc"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/dev/default-pool/new2.img"/>
       <target dev="sdad" bus="usb" removable="on"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/tmp/brand-new.img"/>
       <target dev="vdn" bus="virtio"/>
       <boot order="10" loadparm="5"/>
@@ -213,13 +213,13 @@
       <target dev="vdo" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="raw"/>
+      <driver name="qemu" type="raw" discard="unmap"/>
       <source file="/var/lib/libvirt/images/disk.img"/>
       <target dev="vdp" bus="virtio"/>
       <transient shareBacking="yes"/>
     </disk>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="none" io="native"/>
+      <driver name="qemu" type="raw" cache="none" discard="unmap" io="native"/>
       <source dev="/dev/disk-pool/disk"/>
       <target dev="vdq" bus="virtio"/>
     </disk>
@@ -229,7 +229,7 @@
       <target dev="vdr" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/fooroot.img"/>
       <target dev="vds" bus="virtio"/>
       <transient/>
