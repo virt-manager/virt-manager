@@ -4116,6 +4116,15 @@ class ParserTPM(VirtCLIParser):
         cls.add_arg("backend.persistent_state",
                     "persistent_state", is_onoff=True)
 
+        cls.add_arg("active_pcr_banks.sha1",
+                    "active_pcr_banks.sha1", is_onoff=True)
+        cls.add_arg("active_pcr_banks.sha256",
+                    "active_pcr_banks.sha256", is_onoff=True)
+        cls.add_arg("active_pcr_banks.sha384",
+                    "active_pcr_banks.sha384", is_onoff=True)
+        cls.add_arg("active_pcr_banks.sha512",
+                    "active_pcr_banks.sha512", is_onoff=True)
+
 
 #################
 # --rng parsing #

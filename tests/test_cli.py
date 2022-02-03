@@ -563,7 +563,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --filesystem /foo/source,/bar/target,fmode=0123,dmode=0345
 --memballoon virtio,autodeflate=on,stats.period=10,freePageReporting=on
 --watchdog ib700,action=pause
---tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes
+--tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes,active_pcr_banks.sha1=on,active_pcr_banks.sha256=yes,active_pcr_banks.sha384=yes,active_pcr_banks.sha512=yes
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 --panic iobase=0x506
 --shmem shmem0,role=master,model.type=ivshmem-plain,size=8,size.unit=M

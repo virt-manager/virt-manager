@@ -6,7 +6,16 @@
 # See the COPYING file in the top-level directory.
 
 from .device import Device
-from ..xmlbuilder import XMLProperty
+from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+
+
+class _ActivePCRBanks(XMLBuilder):
+    XML_NAME = "active_pcr_banks"
+
+    sha1 = XMLProperty("./sha1", is_bool=True)
+    sha256 = XMLProperty("./sha256", is_bool=True)
+    sha384 = XMLProperty("./sha384", is_bool=True)
+    sha512 = XMLProperty("./sha512", is_bool=True)
 
 
 class DeviceTpm(Device):
@@ -32,6 +41,8 @@ class DeviceTpm(Device):
     encryption_secret = XMLProperty("./backend/encryption/@secret")
     persistent_state = XMLProperty(
             "./backend/@persistent_state", is_yesno=True)
+
+    active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True)
 
 
     ##################
