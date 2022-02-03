@@ -38,7 +38,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
@@ -96,7 +96,7 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
