@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-01 06:14+0000\n"
+"POT-Creation-Date: 2022-02-05 06:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -195,26 +195,22 @@ msgid "Discard mod_e:"
 msgstr ""
 
 #: ui/addstorage.ui:322
-msgid "Detect _zeroes:"
-msgstr ""
-
-#: ui/addstorage.ui:353
 msgid "R_eadonly:"
 msgstr ""
 
-#: ui/addstorage.ui:367
+#: ui/addstorage.ui:336
 msgid "Sharea_ble:"
 msgstr ""
 
-#: ui/addstorage.ui:408
+#: ui/addstorage.ui:377
 msgid "Removab_le:"
 msgstr ""
 
-#: ui/addstorage.ui:436
+#: ui/addstorage.ui:405
 msgid "Seria_l:"
 msgstr ""
 
-#: ui/addstorage.ui:462
+#: ui/addstorage.ui:431
 msgid "Advanced _options"
 msgstr ""
 
@@ -705,7 +701,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr ""
 
 #: ui/createvm.ui:2108 virtManager/addhardware.py:213
-#: virtManager/addhardware.py:1019 virtManager/clone.py:277
+#: virtManager/addhardware.py:1055 virtManager/clone.py:277
 msgid "Storage"
 msgstr ""
 
@@ -1997,20 +1993,20 @@ msgid "Hardware"
 msgstr ""
 
 #: virtManager/addhardware.py:202 virtManager/createvm.py:527
-#: virtManager/device/addstorage.py:199
+#: virtManager/device/addstorage.py:189
 msgid "Connection does not support storage management."
 msgstr ""
 
-#: virtManager/addhardware.py:215 virtManager/addhardware.py:1021
+#: virtManager/addhardware.py:215 virtManager/addhardware.py:1057
 msgid "Controller"
 msgstr ""
 
-#: virtManager/addhardware.py:216 virtManager/addhardware.py:1023
+#: virtManager/addhardware.py:216 virtManager/addhardware.py:1059
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr ""
 
-#: virtManager/addhardware.py:217 virtManager/addhardware.py:1025
+#: virtManager/addhardware.py:217 virtManager/addhardware.py:1061
 #: virtManager/details/details.py:195
 msgid "Input"
 msgstr ""
@@ -2021,11 +2017,11 @@ msgstr ""
 msgid "Not supported for this guest type."
 msgstr ""
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:1027
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:1063
 msgid "Graphics"
 msgstr ""
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:1029
+#: virtManager/addhardware.py:221 virtManager/addhardware.py:1065
 msgid "Sound"
 msgstr ""
 
@@ -2075,16 +2071,16 @@ msgstr ""
 msgid "Filesystem"
 msgstr ""
 
-#: virtManager/addhardware.py:262 virtManager/addhardware.py:1037
+#: virtManager/addhardware.py:262 virtManager/addhardware.py:1073
 #: virtManager/details/details.py:253
 msgid "Smartcard"
 msgstr ""
 
-#: virtManager/addhardware.py:264 virtManager/addhardware.py:1039
+#: virtManager/addhardware.py:264 virtManager/addhardware.py:1075
 msgid "USB Redirection"
 msgstr ""
 
-#: virtManager/addhardware.py:266 virtManager/addhardware.py:1041
+#: virtManager/addhardware.py:266 virtManager/addhardware.py:1077
 msgid "TPM"
 msgstr ""
 
@@ -2092,7 +2088,7 @@ msgstr ""
 msgid "RNG"
 msgstr ""
 
-#: virtManager/addhardware.py:269 virtManager/addhardware.py:1045
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1081
 #: virtManager/details/details.py:252
 msgid "Panic Notifier"
 msgstr ""
@@ -2179,7 +2175,7 @@ msgstr ""
 msgid "xenbus"
 msgstr ""
 
-#: virtManager/addhardware.py:454 virtManager/addhardware.py:935
+#: virtManager/addhardware.py:454 virtManager/addhardware.py:971
 msgid "VirtIO SCSI"
 msgstr ""
 
@@ -2313,76 +2309,83 @@ msgstr ""
 msgid "LUN Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:717 virtManager/addhardware.py:806
-#: virtManager/addhardware.py:816 virtManager/addhardware.py:936
-#: virtManager/device/addstorage.py:100 virtManager/device/addstorage.py:107
-#: virtManager/device/addstorage.py:114 virtManager/device/fsdetails.py:89
-#: virtManager/device/gfxdetails.py:103 virtManager/preferences.py:171
+#: virtManager/addhardware.py:717 virtManager/addhardware.py:842
+#: virtManager/addhardware.py:852 virtManager/addhardware.py:972
+#: virtManager/device/addstorage.py:98 virtManager/device/addstorage.py:105
+#: virtManager/device/fsdetails.py:89 virtManager/device/gfxdetails.py:103
+#: virtManager/preferences.py:171
 msgid "Hypervisor default"
 msgstr ""
 
-#: virtManager/addhardware.py:796
+#: virtManager/addhardware.py:781 virtManager/addhardware.py:827
+#, python-format
+msgid ""
+"%s is not active in the host system.\n"
+"Please start the mdev in the host system before adding it to the guest."
+msgstr ""
+
+#: virtManager/addhardware.py:818
 msgid "No Devices Available"
 msgstr ""
 
-#: virtManager/addhardware.py:853
+#: virtManager/addhardware.py:889
 msgid "Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:854
+#: virtManager/addhardware.py:890
 msgid "Host"
 msgstr ""
 
-#: virtManager/addhardware.py:860
+#: virtManager/addhardware.py:896
 msgid "Spice channel"
 msgstr ""
 
-#: virtManager/addhardware.py:932
+#: virtManager/addhardware.py:968
 msgid "USB 3"
 msgstr ""
 
-#: virtManager/addhardware.py:933
+#: virtManager/addhardware.py:969
 msgid "USB 2"
 msgstr ""
 
-#: virtManager/addhardware.py:1031
+#: virtManager/addhardware.py:1067
 msgid "Video Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1033
+#: virtManager/addhardware.py:1069
 msgid "Watchdog Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1035
+#: virtManager/addhardware.py:1071
 msgid "Filesystem Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:1043
+#: virtManager/addhardware.py:1079
 msgid "Random Number Generator"
 msgstr ""
 
-#: virtManager/addhardware.py:1047
+#: virtManager/addhardware.py:1083
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1051 virtManager/details/details.py:2131
+#: virtManager/addhardware.py:1087 virtManager/details/details.py:2131
 #, python-format
 msgid "%s Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1055
+#: virtManager/addhardware.py:1091
 msgid "PCI Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1057
+#: virtManager/addhardware.py:1093
 msgid "MDEV Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1058
+#: virtManager/addhardware.py:1094
 msgid "USB Device"
 msgstr ""
 
-#: virtManager/addhardware.py:1191
+#: virtManager/addhardware.py:1227
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2390,44 +2393,44 @@ msgid ""
 "You can change the USB controller type in the VM details screen."
 msgstr ""
 
-#: virtManager/addhardware.py:1283
+#: virtManager/addhardware.py:1319
 msgid "Are you sure you want to add this device?"
 msgstr ""
 
-#: virtManager/addhardware.py:1286
+#: virtManager/addhardware.py:1322
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr ""
 
-#: virtManager/addhardware.py:1310
+#: virtManager/addhardware.py:1346
 #, python-format
 msgid "Unable to add device: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1331
+#: virtManager/addhardware.py:1367
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1337
+#: virtManager/addhardware.py:1373
 msgid "Creating device"
 msgstr ""
 
-#: virtManager/addhardware.py:1338
+#: virtManager/addhardware.py:1374
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 
-#: virtManager/addhardware.py:1360
+#: virtManager/addhardware.py:1396
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1362
+#: virtManager/addhardware.py:1398
 msgid "Do you really want to use the device?"
 msgstr ""
 
-#: virtManager/addhardware.py:1407
+#: virtManager/addhardware.py:1443
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
@@ -3407,12 +3410,12 @@ msgstr ""
 msgid "An init path must be specified"
 msgstr ""
 
-#: virtManager/details/details.py:1531 virtManager/device/addstorage.py:287
+#: virtManager/details/details.py:1531 virtManager/device/addstorage.py:275
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr ""
 
-#: virtManager/details/details.py:1535 virtManager/device/addstorage.py:291
+#: virtManager/details/details.py:1535 virtManager/device/addstorage.py:279
 msgid "Do you really want to use the disk?"
 msgstr ""
 
@@ -3756,30 +3759,30 @@ msgstr ""
 msgid "Guest agent is not available."
 msgstr ""
 
-#: virtManager/device/addstorage.py:93
+#: virtManager/device/addstorage.py:91
 #, python-format
 msgid "%s available in the default location"
 msgstr ""
 
-#: virtManager/device/addstorage.py:141
+#: virtManager/device/addstorage.py:132
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 
-#: virtManager/device/addstorage.py:143
+#: virtManager/device/addstorage.py:134
 msgid "Do you want to correct this now?"
 msgstr ""
 
-#: virtManager/device/addstorage.py:144 virtManager/device/addstorage.py:168
+#: virtManager/device/addstorage.py:135 virtManager/device/addstorage.py:159
 msgid "Don't ask about these directories again."
 msgstr ""
 
-#: virtManager/device/addstorage.py:157
+#: virtManager/device/addstorage.py:148
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
 
-#: virtManager/device/addstorage.py:279
+#: virtManager/device/addstorage.py:267
 msgid "A storage path must be specified."
 msgstr ""
 
@@ -4429,11 +4432,11 @@ msgstr ""
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 
-#: virtManager/object/domain.py:1423
+#: virtManager/object/domain.py:1421
 msgid "Saving domain to disk"
 msgstr ""
 
-#: virtManager/object/domain.py:1475
+#: virtManager/object/domain.py:1473
 msgid "Migrating domain"
 msgstr ""
 
@@ -5289,12 +5292,12 @@ msgstr ""
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:4642
+#: virtinst/cli.py:4651
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr ""
 
-#: virtinst/cli.py:4645
+#: virtinst/cli.py:4654
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr ""
@@ -5360,33 +5363,33 @@ msgstr ""
 msgid "Invalid name for new guest: %s"
 msgstr ""
 
-#: virtinst/devices/disk.py:354
+#: virtinst/devices/disk.py:348
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr ""
 
-#: virtinst/devices/disk.py:359
+#: virtinst/devices/disk.py:353
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
 
-#: virtinst/devices/disk.py:382
+#: virtinst/devices/disk.py:376
 msgid "Format attribute not supported for this volume type"
 msgstr ""
 
-#: virtinst/devices/disk.py:802
+#: virtinst/devices/disk.py:796
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr ""
 
-#: virtinst/devices/disk.py:810
+#: virtinst/devices/disk.py:804
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 
-#: virtinst/devices/disk.py:923
+#: virtinst/devices/disk.py:917
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5482,25 +5485,25 @@ msgstr ""
 msgid "SEV launch security is not supported on this platform"
 msgstr ""
 
-#: virtinst/domcapabilities.py:242
+#: virtinst/domcapabilities.py:245
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:243
+#: virtinst/domcapabilities.py:246
 msgid "Default"
-msgstr ""
-
-#: virtinst/domcapabilities.py:248
-#, python-format
-msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
 #: virtinst/domcapabilities.py:251
 #, python-format
+msgid "UEFI %(arch)s: %(path)s"
+msgstr ""
+
+#: virtinst/domcapabilities.py:254
+#, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:330
+#: virtinst/domcapabilities.py:332
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
@@ -5671,12 +5674,12 @@ msgstr ""
 msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
 msgstr ""
 
-#: virtinst/osdict.py:578
+#: virtinst/osdict.py:583
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:590
+#: virtinst/osdict.py:595
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
