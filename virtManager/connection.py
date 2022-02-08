@@ -765,6 +765,7 @@ class vmmConnection(vmmGObject):
         _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_DEVICE_ADDED", 19)
         _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_AGENT_LIFECYCLE", 18,
                               self._domain_agent_lifecycle_event)
+        _add_domain_xml_event("VIR_DOMAIN_EVENT_ID_METADATA_CHANGE", 23)
 
         try:
             _check_events_disabled()
