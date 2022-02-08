@@ -1202,7 +1202,7 @@ Some example suboptions:
 
 ``accessmode`` or ``mode``
     The access mode for the source directory from the guest OS. Only used with
-    QEMU and type=mount. Valid modes are 'passthrough' (the default), 'mapped',
+    QEMU and type=mount. Valid modes are 'mapped' (the default), 'passthrough',
     or 'squash'. See libvirt domain XML documentation for more info.
 
 ``source``
