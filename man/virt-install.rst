@@ -633,7 +633,7 @@ Fedora/Red Hat Based
     https://download.fedoraproject.org/pub/fedora/linux/releases/29/Server/x86_64/os
 
 Debian
-    https://ftp.us.debian.org/debian/dists/stable/main/installer-amd64/
+    https://debian.osuosl.org/debian/dists/stable/main/installer-amd64/
 
 Ubuntu
     https://us.archive.ubuntu.com/ubuntu/dists/wily/main/installer-amd64/
