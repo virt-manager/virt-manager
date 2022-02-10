@@ -155,6 +155,13 @@ class DeviceGraphics(Device):
     def _default_type(self, guest):
         gtype = guest.default_graphics_type
         log.debug("Using default_graphics=%s", gtype)
+
+        if self.conn.is_xen():
+            # Xen domcaps can advertise spice support, but we have historically
+            # not defaulted to it for xen, so force vnc.
+            log.debug("Not defaulting to spice for xen driver. Using vnc.")
+            gtype = "vnc"
+
         if (gtype == "spice" and
             not guest.lookup_domcaps().supports_graphics_spice()):
             log.debug("spice requested but HV doesn't support it. "
