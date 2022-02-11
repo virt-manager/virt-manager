@@ -760,8 +760,8 @@ class _DebianDistro(_DistroTree):
 
         if self.cache.debian_media_type == "daily":
             log.debug("Appears to be debian 'daily' URL, using latest "
-                "debian OS")
-            return oses[0].name
+                "debiantesting")
+            return "debiantesting"
 
         for osobj in oses:
             if osobj.codename:

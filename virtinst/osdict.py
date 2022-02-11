@@ -27,78 +27,6 @@ def _media_create_from_location(location):
     return Libosinfo.Media.create_from_location_with_flags(location, None, 0)
 
 
-###################
-# Sorting helpers #
-###################
-
-def _sortby(osobj):
-    """
-    Combines distro+version to make a more sort friendly string. Examples
-
-    fedora25    -> fedora-0025000000000000
-    ubuntu17.04 -> ubuntu-0017000400000000
-    win2k8r2    -> win-0006000100000000
-    """
-    if osobj.is_generic():
-        # Sort generic at the end of the list
-        return "zzzzzz-000000000000"
-
-    version = osobj.version
-    try:
-        t = version.split(".")
-        t = t[:min(4, len(t))] + [0] * (4 - min(4, len(t)))
-        new_version = ""
-        for n in t:
-            new_version = new_version + ("%.4i" % int(n))
-        version = new_version
-    except Exception:
-        pass
-
-    return "%s-%s" % (osobj.distro, version)
-
-
-def _sort(tosort):
-    sortby_mappings = {}
-    distro_mappings = {}
-    retlist = []
-
-    for key, osinfo in tosort.items():
-        # Libosinfo has some duplicate version numbers here, so append .1
-        # if there's a collision
-        sortby = _sortby(osinfo)
-        while sortby_mappings.get(sortby):
-            sortby = sortby + ".1"
-        sortby_mappings[sortby] = key
-
-        # Group by distro first, so debian is clumped together, fedora, etc.
-        distro = osinfo.distro
-        if osinfo.is_generic():
-            distro = "zzzzzz"
-        if distro not in distro_mappings:
-            distro_mappings[distro] = []
-        distro_mappings[distro].append(sortby)
-
-    # We want returned lists to be sorted descending by 'distro', so we get
-    # debian5, debian4, fedora14, fedora13
-    #   rather than
-    # debian4, debian5, fedora13, fedora14
-    for distro_list in list(distro_mappings.values()):
-        distro_list.sort()
-        distro_list.reverse()
-
-    sorted_distro_list = list(distro_mappings.keys())
-    sorted_distro_list.sort()
-
-    # Build the final list of sorted os objects
-    for distro in sorted_distro_list:
-        distro_list = distro_mappings[distro]
-        for key in distro_list:
-            orig_key = sortby_mappings[key]
-            retlist.append(tosort[orig_key])
-
-    return retlist
-
-
 class _OsinfoIter:
     """
     Helper to turn osinfo style get_length/get_nth lists into python
@@ -221,19 +149,21 @@ class _OSDB(object):
                 return None  # pragma: no cover
             return osobj.get_short_id(), _OsTree(treeobj)
 
-    def list_os(self):
+    def list_os(self, sortkey="name"):
         """
-        List all OSes in the DB
+        List all OSes in the DB, sorting by the passes _OsVariant attribute
         """
-        sortmap = {}
+        oslist = [_OsVariant(osent) for osent in
+                  self._os_db.get_os_list().get_elements()]
+        oslist.append(self._os_generic)
 
-        oslist = self._os_db.get_os_list().get_elements()
-        for osent in oslist:
-            osobj = _OsVariant(osent)
-            sortmap[osobj.name] = osobj
-        sortmap[self._os_generic.name] = self._os_generic
-
-        return _sort(sortmap)
+        # human/natural sort, but with reverse sorted numbers
+        def to_int(text):
+            return (int(text) * -1) if text.isdigit() else text.lower()
+        def alphanum_key(obj):
+            val = getattr(obj, sortkey)
+            return [to_int(c) for c in re.split('([0-9]+)', val)]
+        return list(sorted(oslist, key=alphanum_key))
 
 
 OSDB = _OSDB()
