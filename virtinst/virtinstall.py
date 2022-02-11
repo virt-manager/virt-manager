@@ -1113,6 +1113,8 @@ def main(conn=None):
 
     if cli.check_option_introspection(options):
         return 0
+    if cli.check_osinfo_list(options):
+        return 0
 
     check_cdrom_option_error(options)
     cli.convert_old_force(options)

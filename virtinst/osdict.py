@@ -179,7 +179,7 @@ class _OSDB(object):
         if len(oslist) == 0:
             if raise_error:
                 raise ValueError(_("Unknown OS name '%s'. "
-                                   "See `osinfo-query os` for valid values.") % key)
+                                   "See `--os-variant list` for valid values.") % key)
             return None
         return _OsVariant(oslist[0])
 
@@ -312,6 +312,7 @@ class _OsVariant(object):
         if hasattr(self._os, "get_short_id_list"):
             self._short_ids = self._os.get_short_id_list()
         self.name = self._short_ids[0]
+        self.all_names = list(sorted(set(self._short_ids)))
 
         self._family = self._os.get_family()
         self.full_id = self._os.get_id()

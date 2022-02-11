@@ -1021,8 +1021,8 @@ value otherwise, and printing a warning.
 If any manual ``--os-variant`` value is specified, the default is
 all settings off or unset.
 
-Use the command "osinfo-query os" to get the list of the accepted OS
-variant names.
+Use the command ``virt-xml --os-variant list`` to get the list of the
+accepted OS variants. See ``osinfo-query os`` for even more output.
 
 
 

@@ -968,6 +968,7 @@ c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --locatio
 c.add_compare("--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended", "reinstall-cdrom")  # compare --reinstall with --cdrom handling
 c.add_invalid("--reinstall test --cdrom %(ISO-WIN7)s", grep="already active")  # trying to reinstall an active VM should fail
 c.add_invalid("--reinstall test", grep="install method must be specified")  # missing install method
+c.add_valid("--osinfo list", grep="osinfo-query os")  # --osinfo list
 
 
 ####################
@@ -1220,6 +1221,7 @@ vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
+c.add_valid("--os-variant list", grep="ubuntu10.10, ubuntumaverick")  # --os-variant list
 c.add_valid("test-state-shutoff --edit --update --boot menu=on", grep="The VM is not running")  # --update with inactive VM, should work but warn
 c.add_valid("test-state-shutoff --edit --boot menu=on", grep="XML did not change after domain define")  # menu=on is discarded because <bootloader> is specified
 c.add_valid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="no\nno\n")  # prompt exiting
