@@ -52,7 +52,7 @@ class vmmOSList(vmmGObjectUI):
         # (os object, label)
         os_list_model = Gtk.ListStore(object, str)
 
-        all_os = virtinst.OSDB.list_os()
+        all_os = virtinst.OSDB.list_os(sortkey="label")
 
         for os in all_os:
             os_list_model.append([os, "%s (%s)" % (os.label, os.name)])
