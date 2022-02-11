@@ -191,8 +191,8 @@ GUEST OS OPTIONS
     have been stored in the guest configuration during installation and virt-xml
     will retrieve it from there automatically.
 
-    Use the command "osinfo-query os" to get the list of the accepted OS
-    variants.
+    Use the command ``virt-xml --os-variant list`` to get the list of the
+    accepted OS variants. See ``osinfo-query os`` for even more output.
 
     See virt-install(1) documentation for more details about ``--os-variant``
 
