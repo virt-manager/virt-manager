@@ -771,7 +771,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 # Boot install options #
 ########################
 
-c = vinst.add_category("boot", "--nographics --noautoconsole --import --disk none --controller usb,model=none")
+c = vinst.add_category("boot", "--nographics --noautoconsole --import --disk none --controller usb,model=none --osinfo generic")
 c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-secure")
 c.add_compare("--boot firmware=bios,loader=/path/to/loader,loader.readonly=yes,loader.secure=no,loader.type=rom,bios.rebootTimeout=5000,bootmenu.enable=yes,bootmenu.timeout=5000", "boot-guest-loader-bios")
 c.add_compare("--boot firmware=efi,loader=/path/to/loader,loader.readonly=yes,loader.secure=yes,loader.type=pflash,bios.useserial=yes,nvram=/path/to/nvram", "boot-guest-loader-efi")
@@ -786,7 +786,7 @@ c.add_compare("--boot init=/bin/systemd,initargs='--unit emergency.service',init
 # CPU/RAM/numa and other singleton VM config tests #
 ####################################################
 
-c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe")
+c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe --osinfo generic")
 c.add_valid("--ram 4000000")  # Ram overcommit
 c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
 c.add_valid("--cpuset 1,2,3")  # cpuset backcompat with no --vcpus specified
@@ -810,7 +810,7 @@ c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=Genuine
 # Storage provisioning #
 ########################
 
-c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm")
+c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm --osinfo detect=yes,require=no")
 c.add_valid("--disk path=%(EXISTIMG1)s")  # Existing disk, no extra options
 c.add_valid("--disk pool=default-pool,size=.0001 --disk pool=default-pool,size=.0001")  # Create 2 volumes in a pool
 c.add_valid("--disk vol=default-pool/testvol1.img")  # Existing volume
@@ -858,7 +858,7 @@ c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk
 # Invalid devices that hit virtinst code paths #
 ################################################
 
-c = vinst.add_category("invalid-devices", "--noautoconsole --nodisks --pxe")
+c = vinst.add_category("invalid-devices", "--noautoconsole --nodisks --pxe --osinfo require=no")
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2", grep="corresponds to multiple node devices")
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host", grep="Unsupported node device type 'scsi_host'")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev", grep="Unknown hostdev address string format")  # Unknown hostdev
@@ -880,11 +880,8 @@ c.add_invalid("--memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.
 ########################
 
 c = vinst.add_category("nodisk-install", "--nographics --noautoconsole --nodisks")
-c.add_valid("--hvm --cdrom %(EXISTIMG1)s")  # Simple cdrom install
-c.add_valid("--pxe --ram 16", grep="Requested memory 16 MiB is abnormally low")  # catch low memory error
+c.add_valid("--os-variant generic --pxe --ram 16", grep="Requested memory 16 MiB is abnormally low")  # catch low memory error
 c.add_valid("--os-variant winxp --ram 32 --cdrom %(EXISTIMG1)s", grep="32 MiB is less than the recommended 64 MiB")  # Windows. Catch memory warning
-c.add_valid("--pxe --virt-type test")  # Explicit virt-type
-c.add_valid("--arch i686 --pxe")  # Explicitly fullvirt + arch
 c.add_valid("--location location=%(TREEDIR)s")  # Directory tree URL install
 c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
 c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
@@ -892,11 +889,11 @@ c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
 c.add_valid("--location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3")  # HVM windows install with disk
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --print-step 2")  # HVM windows install, print 3rd stage XML
-c.add_valid("--pxe --autostart")  # --autostart flag
-c.add_compare("--cdrom http://example.com/path/to/some.iso", "cdrom-url")
+c.add_valid("--osinfo generic --pxe --autostart")  # --autostart flag
+c.add_compare("--cdrom http://example.com/path/to/some.iso --os-variant detect=yes,require=no", "cdrom-url")
 c.add_compare("--pxe --print-step all --os-variant none", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com --os-variant auto", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
-c.add_compare("--location https://foobar.com --os-variant detect=no", "fake-http")  # fake https:// install using urlfetcher.py mocking, but also hit --os-variant detect=no
+c.add_compare("--location https://foobar.com --os-variant detect=no,require=no", "fake-http")  # fake https:// install using urlfetcher.py mocking, but also hit --os-variant detect=no
 c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7", "os-detect-success-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
@@ -913,32 +910,33 @@ c.add_invalid("-c qemu:///system", grep="looks like a libvirt URI")  # error for
 c.add_invalid("--location /", grep="Error validating install location")  # detect_distro failure
 c.add_invalid("--os-variant id=foo://bar", grep="Unknown libosinfo ID")  # bad full id
 c.add_invalid("--location http://testsuitefail.com", grep="installable distribution")  # will trigger a particular mock failure
-
+c.add_invalid("--cdrom %(EXISTIMG2)s", grep="expected virt-install to detect")  # hits the missing --osinfo error
+c.add_invalid("--pxe", grep="linux2018, linux2016", nogrep="expected virt-install to detect")  # hits missing --osinfo error but doesn't trigger the bit about detectable media
 
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
-c.add_valid("--hvm --import")  # FV Import install
-c.add_valid("--hvm --install no_install=yes")  # import install equivalent
-c.add_valid("--hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
+c.add_valid("--osinfo generic --hvm --install no_install=yes")  # import install equivalent
+c.add_valid("--osinfo generic --hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
 c.add_valid("--paravirt --import")  # PV Import install
 c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
-c.add_valid("--hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
+c.add_valid("--osinfo generic --hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
 c.add_compare("-c %(EXISTIMG2)s --osinfo win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26 --os-variant fedora27 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified, and making sure we don't overwrite --os-variant
 c.add_compare("--connect %(URI-KVM-X86)s --pxe --os-variant short-id=debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
-c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
-c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
-c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
-c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1
+c.add_invalid("--osinfo generic --hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
+c.add_invalid("--osinfo generic --hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
+c.add_invalid("--osinfo generic --hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
+c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --osinfo generic --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1
 c.add_invalid("--paravirt --import --print-xml 2", grep="does not have XML step 2")  # PV Import install, no second XML step
 c.add_invalid("--paravirt --import --print-xml 7", grep="Unknown XML step request '7'")  # Invalid --print-xml arg
 c.add_invalid("--location kernel=foo,initrd=bar", grep="location kernel/initrd may only be specified with a location URL/path")
 c.add_invalid("--location http://example.com,kernel=foo", grep="location kernel/initrd must be be specified as a pair")
-c.add_valid("--pxe --os-type linux", grep="--os-type is deprecated")
+c.add_valid("--pxe --os-variant generic --os-type linux", grep="--os-type is deprecated")
 c.add_invalid("--os-variant solaris10 --unattended", grep="not support unattended")
 
+
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
-c.add_compare("--connect %s" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
+c.add_compare("--connect %s --os-variant generic" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-init-default")  # default --cloud-init behavior is root-password-generate=yes,disable=yes
@@ -949,16 +947,17 @@ c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt,network-config=%(XMLDIR)s/cloudinit/network-config.txt", "cloud-init-options")  # --cloud-init user-data=,meta-data=,network-config=
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
-c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
+c.add_valid("--nodisks --pxe --osinfo generic", grep="VM performance may suffer")  # os variant warning
+c.add_valid("--nodisks --pxe", env={"VIRTINSTALL_OSINFO_DISABLE_REQUIRE": "1"}, grep="Skipping fatal error")
 c.add_invalid("--hvm --nodisks --pxe foobar", grep="unrecognized arguments: foobar")  # Positional arguments error
-c.add_invalid("--nodisks --pxe --name test", grep="Guest name 'test' is already")  # Colliding name
-c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
-c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
-c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --pxe", "reinstall-pxe")  # compare --reinstall with --pxe
+c.add_invalid("--nodisks --pxe --name test --osinfo require=no", grep="Guest name 'test' is already")  # Colliding name
+c.add_compare("--osinfo generic --cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
+c.add_valid("--connect %s --pxe --disk size=1 --osinfo generic" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
+c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --pxe --osinfo generic", "reinstall-pxe")  # compare --reinstall with --pxe
 c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --location http://example.com", "reinstall-location")  # compare --reinstall with --location
 c.add_compare("--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended", "reinstall-cdrom")  # compare --reinstall with --cdrom handling
 c.add_invalid("--reinstall test --cdrom %(ISO-WIN7)s", grep="already active")  # trying to reinstall an active VM should fail
-c.add_invalid("--reinstall test", grep="install method must be specified")  # missing install method
+c.add_invalid("--reinstall test --osinfo none", grep="install method must be specified")  # missing install method
 c.add_valid("--osinfo list", grep="osinfo-query os")  # --osinfo list
 
 
@@ -987,7 +986,7 @@ c.add_invalid("--install fedora29 --unattended user-login=root", grep="as user-l
 # Remote URI specific tests #
 #############################
 
-c = vinst.add_category("remote", "--connect %(URI-TEST-REMOTE)s --nographics --noautoconsole")
+c = vinst.add_category("remote", "--connect %(URI-TEST-REMOTE)s --nographics --noautoconsole --osinfo generic")
 c.add_valid("--nodisks --pxe")  # Simple pxe nodisks
 c.add_valid("--cdrom %(EXISTIMG1)s --disk none --livecd --dry")  # remote cdrom install
 c.add_compare("--pxe "
@@ -1025,20 +1024,20 @@ c.add_compare("--connect " + utils.URIs.kvm_x86_session + " --disk size=8 --os-v
 c.add_valid("--connect " + utils.URIs.kvm_x86_session + " --install fedora21", prerun_check=has_old_osinfo)  # hits some get_search_paths and media_upload code paths
 
 # misc KVM config tests
-c.add_compare("--disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
+c.add_compare("--osinfo generic --disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
 c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_xorriso)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
 c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5.4 --cloud-init none", "kvm-rhel5")  # RHEL5 defaults
 c.add_compare("--disk %(EXISTIMG1)s --install kernel=%(ISO-WIN7)s,initrd=%(ISOLABEL)s,kernel_args='foo bar' --os-variant rhel6.4 --unattended none", "kvm-rhel6")  # RHEL6 defaults. ISO paths are just to point at existing files
 c.add_compare("--disk %(EXISTIMG1)s --location https://example.com --install kernel_args='test overwrite',kernel_args_overwrite=yes --os-variant rhel7.0", "kvm-rhel7", precompare_check=no_osinfo_unattend_cb)  # RHEL7 defaults
 c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
-c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
+c.add_compare("--os-variant generic --connect " + utils.URIs.kvm_x86_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", prerun_check=has_old_osinfo)  # win10 defaults
 c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", prerun_check=has_old_osinfo)  # no HYPER-V with UEFI
-c.add_compare("--arch i686 --boot uefi --install kernel=http://example.com/httpkernel,initrd=ftp://example.com/ftpinitrd --disk none", "kvm-i686-uefi")  # i686 uefi. piggy back it for --install testing too
-c.add_compare("--machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
+c.add_compare("--osinfo generic --arch i686 --boot uefi --install kernel=http://example.com/httpkernel,initrd=ftp://example.com/ftpinitrd --disk none", "kvm-i686-uefi")  # i686 uefi. piggy back it for --install testing too
+c.add_compare("--osinfo generic --machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
 c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
 c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
@@ -1051,7 +1050,7 @@ c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm", grep="any 
 c.add_invalid("--nodisks --boot network --paravirt --arch mips", grep=" 'xen' for architecture 'mips'")
 
 
-c = vinst.add_category("kvm-x86_64-launch-security", "--disk none --noautoconsole")
+c = vinst.add_category("kvm-x86_64-launch-security", "--disk none --noautoconsole --osinfo generic")
 c.add_compare("--boot uefi --machine q35 --launchSecurity type=sev,reducedPhysBits=1,policy=0x0001,cbitpos=47,dhCert=BASE64CERT,session=BASE64SESSION,kernelHashes=yes --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev-full")  # Full cmdline
 c.add_compare("--boot uefi --machine q35 --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev")  # Fill in platform data from domcaps
 c.add_valid("--boot uefi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
@@ -1061,7 +1060,7 @@ c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd
 c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86_q35, grep="SEV launch security is not supported")  # Fail with no SEV capabilities
 
 
-c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_x86_q35)
+c = vinst.add_category("kvm-q35", "--noautoconsole --osinfo generic --connect " + utils.URIs.kvm_x86_q35)
 c.add_compare("--boot uefi --disk none", "boot-uefi")
 c.add_compare("--boot uefi --disk size=8 --tpm none", "boot-uefi-notpm")
 
@@ -1122,8 +1121,8 @@ c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64 --input default", "xen-pv", precompare_check="5.3.0")  # Xen PV
-c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
-c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
+c.add_compare("--osinfo generic --disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
+c.add_compare("--osinfo generic --disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
 
 
 
@@ -1133,8 +1132,8 @@ c.add_compare("--disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --install no_i
 
 c = vinst.add_category("vz", "--noautoconsole --connect " + utils.URIs.vz)
 c.add_valid("--container")  # validate the special define+start logic
-c.add_valid("--hvm --cdrom %(EXISTIMG1)s --disk none")  # hit more install vz logic
-c.add_valid("--hvm --import --disk %(EXISTIMG1)s --noreboot")  # hit more install vz logic
+c.add_valid("--osinfo generic --hvm --cdrom %(EXISTIMG1)s --disk none")  # hit more install vz logic
+c.add_valid("--osinfo generic --hvm --import --disk %(EXISTIMG1)s --noreboot")  # hit more install vz logic
 c.add_invalid("--container --transient", grep="Domain type 'vz' doesn't support transient installs.")
 c.add_compare("""
 --container
@@ -1149,7 +1148,7 @@ c.add_compare("""
 ########################
 
 c = vinst.add_category("bhyve", "--name foobhyve --noautoconsole --connect " + utils.URIs.bhyve)
-c.add_compare("--boot uefi --disk none --ram 256 --pxe", "bhyve-uefi")
+c.add_compare("--osinfo generic --boot uefi --disk none --ram 256 --pxe", "bhyve-uefi")
 c.add_compare("--os-variant fedora27", "bhyve-default-f27")
 
 
@@ -1159,7 +1158,7 @@ c.add_compare("--os-variant fedora27", "bhyve-default-f27")
 # Device option back compat testing #
 #####################################
 
-c = vinst.add_category("device-back-compat", "--nodisks --pxe --noautoconsole")
+c = vinst.add_category("device-back-compat", "--nodisks --pxe --noautoconsole --paravirt")
 c.add_valid("--sdl")  # SDL
 c.add_valid("--vnc --keymap ja --vncport 5950 --vnclisten 1.2.3.4")  # VNC w/ lots of options
 c.add_valid("--sound")  # --sound with no option back compat
@@ -1174,13 +1173,14 @@ c.add_invalid("--mac 22:11:11:11:11:11", grep="in use by another virtual machine
 c.add_invalid("--graphics vnc --vnclisten 1.2.3.4", grep="Cannot mix --graphics and old style graphical options")
 c.add_invalid("--network user --bridge foo0", grep="Cannot use --bridge and --network at the same time")
 
-c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole")
+c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole --osinfo generic")
 c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
 c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
 c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
-c = vinst.add_category("console-tests", "--nodisks")
+
+c = vinst.add_category("console-tests", "--nodisks --os-variant generic")
 c.add_valid("--pxe", grep="graphical console command: virt-viewer")  # mock default graphics+virt-viewer usage
 c.add_valid("--pxe --graphics spice,gl=on", grep="--attach")  # using virt-viewer --attach option for gl
 c.add_valid("--pxe --graphics listen=none", grep="--attach")  # using virt-viewer --attach option for listen 'none'
@@ -1192,8 +1192,8 @@ c.add_valid("--nographics --console none --location %(TREEDIR)s", grep="Director
 c.add_valid("--pxe --nographics --transient", grep="text console command: virsh")  # --transient handling
 c.add_valid("--pxe --nographics --autoconsole graphical", grep="graphical console command: virt-viewer")  # force --autoconsole graphical
 c.add_valid("--pxe --autoconsole text", grep="text console command: virsh")  # force --autoconsole text
-c.add_valid("--connect %(URI-KVM-X86)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_valid("--pxe", grep="User stopped the VM", env={"VIRTINST_TESTSUITE_HACK_DESTROY": "1"})  # fake the user destroying the VM, we should print a specific message and not reboot the VM
+c.add_valid("--connect %(URI-KVM-X86)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_invalid("--pxe --autoconsole badval", grep="Unknown autoconsole type 'badval'")
 c.add_invalid("--pxe --autoconsole text --wait -1", grep="exceeded specified time limit")  # hits a specific code path where we skip console waitpid
 
