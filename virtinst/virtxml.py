@@ -154,7 +154,7 @@ def action_edit(guest, options, parserclass):
                  {"option": options.edit,
                   "objecttype": parserclass.cli_arg_name})
     if options.os_variant is not None:
-        fail(_("--os-variant is not supported with --edit"))
+        fail(_("--os-variant/--osinfo is not supported with --edit"))
 
     return cli.parse_option_strings(options, guest, inst, editing=True)
 
@@ -181,7 +181,7 @@ def action_remove_device(guest, options, parserclass):
         fail(_("Cannot use --remove-device with --%s") %
              parserclass.cli_arg_name)
     if options.os_variant is not None:
-        fail(_("--os-variant is not supported with --remove-device"))
+        fail(_("--os-variant/--osinfo is not supported with --remove-device"))
 
     devs = _find_objects_to_edit(guest, "remove-device",
         getattr(options, parserclass.cli_arg_name)[-1], parserclass)
@@ -204,7 +204,7 @@ def action_build_xml(conn, options, parserclass, guest):
         fail(_("--build-xml not supported for --%s") %
              parserclass.cli_arg_name)
     if options.os_variant is not None:
-        fail(_("--os-variant is not supported with --build-xml"))
+        fail(_("--os-variant/--osinfo is not supported with --build-xml"))
 
     inst = parserclass.lookup_prop(guest)
     if parserclass.prop_is_list(guest):

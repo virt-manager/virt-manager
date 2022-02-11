@@ -900,9 +900,9 @@ c.add_compare("--location https://foobar.com --os-variant detect=no", "fake-http
 c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7", "os-detect-success-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
-c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="An --os-variant is required")  # No os-variant detected, but require=yes
+c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="--os-variant/--osinfo OS name is required")  # No os-variant detected, but require=yes
 c.add_invalid("--pxe --virt-type foobar", grep="Host does not support domain type")
-c.add_invalid("--pxe --os-variant farrrrrrrge", grep="Unknown OS name")  # Bogus --os-variant
+c.add_invalid("--pxe --os-variant farrrrrrrge", grep="Unknown OS name")
 c.add_invalid("--pxe --boot menu=foobar", grep="menu must be 'yes' or 'no'")
 c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0", grep="Kernel arguments are only supported with")  # cdrom fail w/ extra-args
 c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install", grep="Install method does not support initrd inject")
@@ -1207,7 +1207,7 @@ vixml = App("virt-xml")
 c = vixml.add_category("misc", "")
 c.add_valid("--help")  # basic --help test
 c.add_valid("--sound=? --tpm=?")  # basic introspection test
-c.add_valid("--os-variant list", grep="ubuntu10.10, ubuntumaverick")  # --os-variant list
+c.add_valid("--os-variant list", grep="ubuntu10.10, ubuntumaverick")
 c.add_valid("test-state-shutoff --edit --update --boot menu=on", grep="The VM is not running")  # --update with inactive VM, should work but warn
 c.add_valid("test-state-shutoff --edit --boot menu=on", grep="XML did not change after domain define")  # menu=on is discarded because <bootloader> is specified
 c.add_valid("test-for-virtxml --edit --graphics password=foo --update --confirm", input_text="no\nno\n")  # prompt exiting
@@ -1215,9 +1215,9 @@ c.add_valid("test-for-virtxml --edit --cpu host-passthrough --no-define --start 
 c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml", grep="requested changes will have no effect")
 c.add_valid("--print-diff test-for-virtxml --remove-device --disk boot.order=5", grep="boot order=\"5")
 c.add_invalid("test --edit 2 --events on_poweroff=destroy", grep="'--edit 2' doesn't make sense with --events")
-c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--os-variant is not supported")
-c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant is not supported")
-c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-variant is not supported")
+c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--os-variant/--osinfo is not supported")
+c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant/--osinfo is not supported")
+c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-variant/--osinfo is not supported")
 c.add_invalid("domain-idontexist --edit --cpu host-passthrough --start", grep="Could not find domain")
 c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Cannot use --update")
 c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't know how to --update for --events")
