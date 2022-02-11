@@ -108,7 +108,7 @@ class _OSDB(object):
         if len(oslist) == 0:
             if raise_error:
                 raise ValueError(_("Unknown OS name '%s'. "
-                                   "See `--os-variant list` for valid values.") % key)
+                                   "See `--osinfo list` for valid values.") % key)
             return None
         return _OsVariant(oslist[0])
 

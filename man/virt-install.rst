@@ -46,9 +46,9 @@ Many arguments have sub options, specified like opt1=foo,opt2=bar, etc. Try
 --option=? to see a complete list of sub options associated with that
 argument, example: virt-install --disk=?
 
-Most options are not required. If a suitable --os-variant value is specified
+Most options are not required. If a suitable --osinfo value is specified
 or detected, all defaults will be filled in and reported in the terminal
-output. If an --os-variant is not specified. minimum required options, --memory,
+output. If an --osinfo is not specified. minimum required options are --memory,
 guest storage (--disk or --filesystem), and an install method choice.
 
 
@@ -974,16 +974,15 @@ GUEST OS OPTIONS
 ``--os-variant``, ``--osinfo``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Syntax:** ``--os-variant`` [OS_VARIANT|OPT1=VAL1,...]
+**Syntax:** ``--osinfo`` [OS_VARIANT|OPT1=VAL1,...]
 
 Optimize the guest configuration for a specific operating system (ex.
 'fedora29', 'rhel7', 'win10'). While not required, specifying this
 options is HIGHLY RECOMMENDED, as it can greatly increase performance
 by specifying virtio among other guest tweaks.
 
-The simplest usage is ``--os-variant OS-NAME``, for example
-``--os-variant fedora32``. ``--os-variant`` supports explicit suboption
-syntax as well:
+The simplest usage is ``--os-variant OS-NAME`` or ``--osinfo OS-NAME``,
+for example ``--osinfo fedora32``. The supported suboptions are:
 
 ``name=``, ``short-id=``
     The OS name/short-id from libosinfo. Examples: ``fedora32``, ``win10``
@@ -1003,25 +1002,25 @@ syntax as well:
 
 Some interesting examples:
 
-``--os-variant detect=on,require=on``
+``--osinfo detect=on,require=on``
     This tells virt-install to attempt detection from install media,
     but explicitly fail if that does not succeed. This will ensure
     your virt-install invocations don't fallback to a poorly performing
     config
 
-``--os-variant detect=on,name=OSNAME``
+``--osinfo detect=on,name=OSNAME``
     Attempt OS detection from install media, but if that fails, use
     OSNAME as a fallback.
 
 
-By default, virt-install will do ``--os-variant detect=on,name=generic``,
+By default, virt-install will do ``--osinfo detect=on,name=generic``,
 using the detected OS if found, and falling back to the stub ``generic``
 value otherwise, and printing a warning.
 
-If any manual ``--os-variant`` value is specified, the default is
+If any manual ``--osinfo`` value is specified, the default is
 all settings off or unset.
 
-Use the command ``virt-xml --os-variant list`` to get the list of the
+Use the command ``virt-install --osinfo list`` to get the list of the
 accepted OS variants. See ``osinfo-query os`` for even more output.
 
 
@@ -2100,7 +2099,7 @@ instance:
        --name my-win10-vm \
        --memory 4096 \
        --disk size=40 \
-       --os-variant win10 \
+       --osinfo win10 \
        --cdrom /path/to/my/win10.iso
 
 
@@ -2116,7 +2115,7 @@ of the default SPICE, and request 8 virtual CPUs and 8192 MiB of memory:
         --memory 8192 \
         --vcpus 8 \
         --graphics vnc \
-        --os-variant centos7.0 \
+        --osinfo centos7.0 \
         --location http://mirror.centos.org/centos-7/7/os/x86_64/
 
 
@@ -2129,7 +2128,7 @@ Create a VM around an existing debian9 disk image:
         --import \
         --memory 512 \
         --disk /home/user/VMs/my-debian9.img \
-        --os-variant debian9
+        --osinfo debian9
 
 
 

@@ -191,10 +191,10 @@ GUEST OS OPTIONS
     have been stored in the guest configuration during installation and virt-xml
     will retrieve it from there automatically.
 
-    Use the command ``virt-xml --os-variant list`` to get the list of the
+    Use the command ``virt-xml --osinfo list`` to get the list of the
     accepted OS variants. See ``osinfo-query os`` for even more output.
 
-    See virt-install(1) documentation for more details about ``--os-variant``
+    See virt-install(1) documentation for more details about ``--os-variant/--osinfo``
 
 
 XML OPTIONS
@@ -378,7 +378,7 @@ for the guest OS by providing information about it on the command line:
 
 .. code-block::
 
-   # virt-xml fedora18 --os-variant fedora18 --add-device \
+   # virt-xml fedora18 --osinfo fedora18 --add-device \
      --disk /var/lib/libvirt/images/newimage.qcow2,format=qcow2,size=10
 
 

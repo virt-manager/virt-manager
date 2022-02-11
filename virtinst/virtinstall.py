@@ -365,7 +365,7 @@ def show_guest_warnings(options, guest, osdata):
         not osdata.is_generic_requested() and
         guest.os.is_x86() and guest.os.is_hvm()):
         log.warning(_("No operating system detected, VM performance may "
-            "suffer. Specify an OS with --os-variant for optimal results."))
+            "suffer. Specify an OS with --osinfo for optimal results."))
 
     _show_memory_warnings(guest)
 
@@ -529,7 +529,7 @@ def set_explicit_guest_options(options, guest):
 def installer_detect_distro(guest, installer, osdata):
     os_set = False
     try:
-        # OS name has to be set firstly whenever --os-variant is passed,
+        # OS name has to be set firstly whenever --osinfo is passed,
         # otherwise it won't be respected when the installer creates the
         # Distro Store.
         if osdata.get_name():
@@ -545,7 +545,7 @@ def installer_detect_distro(guest, installer, osdata):
         fail(_("Error validating install location: %s") % str(e))
 
     if not os_set and osdata.is_require():
-        fail(_("An --os-variant is required, but no value was set or detected."))
+        fail(_("--os-variant/--osinfo OS name is required, but no value was set or detected."))
 
 
 def _build_options_guest(conn, options):

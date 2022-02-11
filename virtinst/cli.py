@@ -928,7 +928,7 @@ def add_os_variant_option(parser, virtinstall):
     msg += "\n"
     msg += _("This is used for deciding optimal defaults like VirtIO.\n"
              "Example values: fedora29, rhel7.0, win10, ...\n"
-             "Use '--os-variant list' to see a full list.")
+             "Use '--osinfo list' to see a full list.")
 
     osg.add_argument("--os-variant", "--osinfo", help=msg)
     return osg
