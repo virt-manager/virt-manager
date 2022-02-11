@@ -754,7 +754,7 @@ class vmmAddHardware(vmmGObjectUI):
     def _build_hostdev_treeview(self):
         host_dev = self.widget("host-device")
         # [ xmlobj, label]
-        host_dev_model = Gtk.ListStore(object, str, bool)
+        host_dev_model = Gtk.ListStore(object, str)
         host_dev.set_model(host_dev_model)
         host_col = Gtk.TreeViewColumn()
         text = Gtk.CellRendererText()
@@ -762,28 +762,6 @@ class vmmAddHardware(vmmGObjectUI):
         host_col.add_attribute(text, 'text', 1)
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
-
-
-    def disable_finish_if_inactive(self, selection):
-        model, row = selection.get_selected()
-
-        if row is None:
-            return
-
-        hostdev = model[row]
-        if hostdev[1] is None:
-            self.widget("create-finish").set_sensitive(False)
-            self.widget("create-finish").set_tooltip_text()
-        elif hostdev[2]:
-            self.widget("create-finish").set_sensitive(True)
-            self.widget("create-finish").set_tooltip_text()
-        else:
-            tooltip = (_("%s is not active in the host system.\n"
-            "Please start the mdev in the host system before adding it to the guest.")
-            % hostdev[1])
-            self.widget("create-finish").set_sensitive(False)
-            self.widget("create-finish").set_tooltip_text(tooltip)
-
 
     def _populate_hostdev_model(self, devtype):
         devlist = self.widget("host-device")
@@ -812,25 +790,11 @@ class vmmAddHardware(vmmGObjectUI):
                         prettyname = "%s %s" % (
                                 parentdev.pretty_name(), prettyname)
 
-            model.append([dev.xmlobj, prettyname, dev.is_active()])
+            model.append([dev.xmlobj, prettyname])
 
         if len(model) == 0:
-            model.append([None, _("No Devices Available"), False])
-
+            model.append([None, _("No Devices Available")])
         uiutil.set_list_selection_by_number(devlist, 0)
-
-        # enable/disable finish button for default selection
-        if model[0][2]:
-            self.widget("create-finish").set_sensitive(True)
-            self.widget("create-finish").set_tooltip_text()
-        else:
-            tooltip = (_("%s is not active in the host system.\n"
-            "Please start the mdev in the host system before adding it to the guest.")
-            % model[0][1])
-            self.widget("create-finish").set_sensitive(False)
-            self.widget("create-finish").set_tooltip_text(tooltip)
-
-        devlist.get_selection().connect("changed", self.disable_finish_if_inactive)
 
 
     @staticmethod
