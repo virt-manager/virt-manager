@@ -6,8 +6,13 @@
 from gi.repository import Gdk, Gtk
 
 import virtinst
+from virtinst import xmlutil
 
 from .baseclass import vmmGObjectUI
+
+
+def _always_show(osobj):
+    return bool(osobj.is_generic() or osobj.is_linux_generic())
 
 
 class vmmOSList(vmmGObjectUI):
@@ -53,6 +58,8 @@ class vmmOSList(vmmGObjectUI):
         os_list_model = Gtk.ListStore(object, str)
 
         all_os = virtinst.OSDB.list_os(sortkey="label")
+        # Always put the generic entries at the end of the list
+        all_os = list(sorted(all_os, key=_always_show))
 
         for os in all_os:
             os_list_model.append([os, "%s (%s)" % (os.label, os.name)])
@@ -69,6 +76,10 @@ class vmmOSList(vmmGObjectUI):
         nameCol.pack_start(text, True)
         nameCol.add_attribute(text, 'text', 1)
         os_list.append_column(nameCol)
+
+        markup = "<small>%s</small>" % xmlutil.xml_escape(
+                self.widget("eol-warn").get_text())
+        self.widget("eol-warn").set_markup(markup)
 
 
     ###################
@@ -176,12 +187,12 @@ class vmmOSList(vmmGObjectUI):
 
     def _filter_os_cb(self, model, titer, ignore1):
         osobj = model.get(titer, 0)[0]
-        if osobj.is_generic():
-            return True
-
         if self._filter_eol:
             if osobj.eol:
                 return False
+
+        if _always_show(osobj):
+            return True
 
         if self._filter_name is not None and self._filter_name != "":
             label = osobj.label.lower()

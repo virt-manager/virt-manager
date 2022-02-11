@@ -67,7 +67,8 @@ class _OSDB(object):
             # Add our custom generic variant
             o = Libosinfo.Os()
             o.set_param("short-id", "generic")
-            o.set_param("name", _("Generic OS"))
+            o.set_param("name",
+                    _("Generic or unknown OS. Usage is not recommended."))
             self.__os_generic = _OsVariant(o)
         return self.__os_generic
 
@@ -356,6 +357,9 @@ class _OsVariant(object):
 
     def is_generic(self):
         return self.name == "generic"
+
+    def is_linux_generic(self):
+        return re.match(r"linux\d\d\d\d", self.name)
 
     def is_windows(self):
         return self._family in ['win9x', 'winnt', 'win16']
