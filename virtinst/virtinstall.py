@@ -143,8 +143,10 @@ def convert_old_disks(options):
 
 
 def convert_old_os_options(options):
-    if not options.os_variant and options.old_os_type:
-        options.os_variant = options.old_os_type
+    if not options.old_os_type:
+        return
+    log.warning(
+        _("--os-type is deprecated and does nothing. Please stop using it."))
     del(options.old_os_type)
 
 
