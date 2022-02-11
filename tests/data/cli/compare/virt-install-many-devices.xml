@@ -136,7 +136,7 @@
       </source>
       <target dev="vdi" bus="virtio"/>
     </disk>
-    <disk type="network" device="disk">
+    <disk type="network" device="disk" snapshot="no">
       <driver name="qemu"/>
       <source protocol="nbd">
         <host transport="unix" socket="/tmp/socket"/>

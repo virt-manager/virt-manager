@@ -85,7 +85,8 @@ class DeviceHostdev(Device):
             self.uuid = nodedev.get_mdev_uuid()
 
         else:
-            raise ValueError(_("Unknown node device type %s") % nodedev)
+            raise ValueError(_("Unsupported node device type '%s'") %
+                    nodedev.device_type)
 
 
     _XML_PROP_ORDER = ["mode", "type", "managed", "vendor", "product",

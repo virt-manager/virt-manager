@@ -434,6 +434,8 @@ class App(object):
     def add_valid(self, cat, args, **kwargs):
         self._add(cat, args, None, check_success=True, **kwargs)
     def add_invalid(self, cat, args, **kwargs):
+        if "grep" not in kwargs:
+            raise Exception("grep= must be passed for add_invalid")
         self._add(cat, args, None, check_success=False, **kwargs)
     def add_compare(self, cat, args, compbase, **kwargs):
         self._add(cat, args, compbase,
@@ -545,7 +547,7 @@ memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200,read_bytes_sec=10000,write_bytes_sec=10000,read_iops_sec=20000,write_iops_sec=20000
 --memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2
---features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,hyperv_vapic=on
+--features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,hyperv_vapic=on,smm=off
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no,timer4.name=rtc,timer5.name=tsc,timer6.name=tsc,timer4.track=wall,timer5.frequency=10,timer6.mode=emulate,timer7.name=rtc,timer7.tickpolicy=catchup,timer7.catchup.threshold=123,timer7.catchup.slew=120,timer7.catchup.limit=10000
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22
 --sysinfo type=smbios,system_manufacturer="Acme Inc.",system_product=Computer,system_version=3.2.1,system_serial=123456789,system_uuid=00000000-1111-2222-3333-444444444444,system_sku=abc-123,system_family=Server
@@ -615,7 +617,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk pool=rbd-ceph,size=.1,driver.name=qemu,driver.type=raw,driver.discard=unmap,driver.detect_zeroes=unmap,driver.io=native,driver.error_policy=stop
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file
 --disk source.protocol=http,source.host0.name=exampl2.com,source.host.port=8000,source.name=/path/to/my/file
---disk source.protocol=nbd,source.host.transport=unix,source.host.socket=/tmp/socket
+--disk source.protocol=nbd,source.host.transport=unix,source.host.socket=/tmp/socket,snapshot_policy=no
 --disk source.protocol=nbd,source_host_transport=unix,source_host_socket=/tmp/socket,bus=scsi,logical_block_size=512,physical_block_size=512,blockio.logical_block_size=512,blockio.physical_block_size=512,target.dev=sdz,rotation_rate=5000
 --disk gluster://192.168.1.100/test-volume/some/dir/test-gluster.qcow2
 --disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on,address.type=usb,address.bus=0,address.port=2
@@ -793,8 +795,7 @@ c.add_valid("--noapic --noacpi")  # feature backcompat
 c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
 c.add_valid("--security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # static with commas 1
 c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with commas 2
-c.add_invalid("--clock foo_tickpolicy=merge")  # Unknown timer
-c.add_invalid("--security foobar")  # Busted --security
+c.add_invalid("--clock foo_tickpolicy=merge", grep="Unknown --clock options: ['foo_tickpolicy']")  # Bad suboption
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3,target.block=2048,target.requested=1048576,target.current=524288", "memory-hotplug", precompare_check="5.3.0")
 c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
@@ -828,32 +829,28 @@ c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
 c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
 c.add_valid("--disk /some/new/pool/dir/new,size=.1")  # autocreate the pool
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
-c.add_valid("--disk %(EXISTIMG1)s,snapshot_policy=no")  # Disable snasphot for disk
-c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse")  # Nonexisting file, size too big
-c.add_invalid("--file %(NEWIMG1)s --file-size 100000")  # Huge file, sparse, but no prompting
-c.add_invalid("--file %(NEWIMG1)s")  # Nonexisting file, no size
-c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Too many IDE
+c.add_invalid("--disk /dev/zero --nodisks", grep="Cannot specify storage and use --nodisks")
+c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse", grep="There is not enough free space")  # Nonexisting file, size too big
+c.add_invalid("--file %(NEWIMG1)s --file-size 100000", grep="The requested volume capacity will exceed the")  # Huge file, sparse, but no prompting
+c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s", grep="Only 4 disks")  # Too many IDE
 c.add_invalid("--disk device=disk", grep="requires a path")  # --disk device=disk, but no path
 c.add_invalid("--disk pool=disk-pool,size=1,format=qcow2", grep="Format attribute not supported")  # format= invalid for disk pool
-c.add_invalid("--disk pool=foopool,size=.0001")  # Specify a nonexistent pool
-c.add_invalid("--disk vol=default-pool/foovol")  # Specify a nonexistent volume
-c.add_invalid("--disk vol=default-pool-no-slash")  # Wrong vol= format
-c.add_invalid("--disk perms=badformat")  # Wrong perms= format
-c.add_invalid("--disk size=badformat")  # Wrong size= format
-c.add_invalid("--disk pool=default-pool")  # Specify a pool with no size
-c.add_invalid("--disk path=%(EXISTIMG1)s,perms=ro,size=.0001,cache=FOOBAR")  # Unknown cache type
-c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001")  # Unmanaged file using non-raw format
-c.add_invalid("--disk path=/dev/disk-pool/newvol1.img,format=raw,size=.0000001")  # Managed disk using any format
-c.add_invalid("--disk %(NEWIMG1)s")  # Not specifying path= and non existent storage w/ no size
-c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000")  # Fail if fully allocated file would exceed disk space
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s")  # Colliding storage without --force
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt")  # Colliding storage with --prompt should still fail
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img")  # Colliding storage via backing store
-c.add_invalid("--disk %(EXISTIMG1)s,driver_name=foobar,driver_type=foobaz")  # Unknown driver name and type options (as of 1.0.0)
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1")  # Collision with existing VM, via source pool/volume
-c.add_invalid("--disk source.pool=default-pool,source.volume=idontexist")  # trying to lookup non-existent volume, hit specific error code
-c.add_invalid("--disk size=1 --security model=foo,type=bar")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
-c.add_invalid("--disk size=1 --file foobar")  # --disk and --file collision
+c.add_invalid("--disk pool=foopool,size=.0001", grep="no storage pool with matching name")  # Specify a nonexistent pool
+c.add_invalid("--disk vol=default-pool/foovol", grep="no storage vol with matching")  # Specify a nonexistent volume
+c.add_invalid("--disk vol=default-pool-no-slash", grep="Storage volume must be specified as vol=poolname/volname")  # Wrong vol= format
+c.add_invalid("--disk perms=badformat", grep="Unknown 'perms' value")  # Wrong perms= format
+c.add_invalid("--disk size=badformat", grep="could not convert string")  # Wrong size= format
+c.add_invalid("--disk pool=default-pool", grep="Size must be specified for non existent")  # Specify a pool with no size
+c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001", grep="Use libvirt APIs to manage the parent")  # Unmanaged file using non-raw format
+c.add_invalid("--disk path=/dev/disk-pool/newvol1.img,format=raw,size=.0000001", grep="Format attribute not supported for this volume type")  # Managed disk using any format
+c.add_invalid("--disk %(NEWIMG1)s", grep="Size must be specified")  # Not specifying path= and non existent storage w/ no size
+c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000", grep="The requested volume capacity will exceed")  # Fail if fully allocated file would exceed disk space
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt", grep="already in use by other guests")  # Colliding storage with --prompt should still fail
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img", grep="already in use by other guests")  # Colliding storage via backing store
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
+c.add_invalid("--disk source.pool=default-pool,source.volume=idontexist", grep="no storage vol with matching name 'idontexist'")  # trying to lookup non-existent volume, hit specific error code
+c.add_invalid("--disk size=1 --security model=foo,type=bar", grep="not appear to have been successful")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
+c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk and --file collision
 
 
 
@@ -862,18 +859,15 @@ c.add_invalid("--disk size=1 --file foobar")  # --disk and --file collision
 ################################################
 
 c = vinst.add_category("invalid-devices", "--noautoconsole --nodisks --pxe")
-c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2")  # multiple USB devices with identical vendorId and productId
-c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host")  # Unsupported hostdev type
-c.add_invalid("--host-device foobarhostdev")  # Unknown hostdev
-c.add_invalid("--host-device 300:400")  # Parseable hostdev, but unknown digits
-c.add_invalid("--controller address=foobar")  # Invalid address= value
-c.add_invalid("--graphics vnc,port=-50")  # Invalid port
-c.add_invalid("--graphics spice,tlsport=5")  # Invalid port
-c.add_invalid("--vnc --sdl")  # Multi graphics collision
-c.add_invalid("--serial unix")  # Unix with no path
-c.add_invalid("--channel pty,target_type=guestfwd")  # --channel guestfwd without target_address
-c.add_invalid("--boot uefi")  # URI doesn't support UEFI bits
-c.add_invalid("--features smm=on --machine pc")  # smm=on doesn't work for machine=pc
+c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2", grep="corresponds to multiple node devices")
+c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host", grep="Unsupported node device type 'scsi_host'")  # Unsupported hostdev type
+c.add_invalid("--host-device foobarhostdev", grep="Unknown hostdev address string format")  # Unknown hostdev
+c.add_invalid("--host-device 300:400", grep="Did not find a matching node device")  # Parseable hostdev, but unknown digits
+c.add_invalid("--controller address=foobar", grep="Expected PCI format string for 'foobar'")  # Invalid address= value
+c.add_invalid("--graphics vnc,port=-50", grep="above 5900")  # Invalid port
+c.add_invalid("--graphics spice,tlsport=5", grep="TLS Port must be")  # Invalid port
+c.add_invalid("--vnc --sdl", grep="Can't specify more than one of VNC, SDL")  # Multi graphics option collision
+c.add_invalid("--boot uefi", grep="Libvirt version does not support UEFI")  # URI doesn't support UEFI bits
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
 c.add_invalid("--xml /@foo=bar", grep="/@foo xmlXPathEval")  # failure processing xpath
@@ -907,14 +901,11 @@ c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7",
 c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
 c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="An --os-variant is required")  # No os-variant detected, but require=yes
-c.add_invalid("--pxe --virt-type bogus")  # Bogus virt-type
-c.add_invalid("--pxe --arch bogus")  # Bogus arch
-c.add_invalid("--livecd")  # LiveCD with no media
-c.add_invalid("--pxe --os-variant farrrrrrrge")  # Bogus --os-variant
-c.add_invalid("--pxe --boot menu=foobar")
-c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0")  # cdrom fail w/ extra-args
-c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install")  # initrd-inject with manual kernel/initrd
-c.add_invalid("--disk none --location kernel=/dev/null,initrd=/dev/null")  # --location with manual kernel/initrd, but not URL
+c.add_invalid("--pxe --virt-type foobar", grep="Host does not support domain type")
+c.add_invalid("--pxe --os-variant farrrrrrrge", grep="Unknown OS name")  # Bogus --os-variant
+c.add_invalid("--pxe --boot menu=foobar", grep="menu must be 'yes' or 'no'")
+c.add_invalid("--cdrom %(EXISTIMG1)s --extra-args console=ttyS0", grep="Kernel arguments are only supported with")  # cdrom fail w/ extra-args
+c.add_invalid("--hvm --boot kernel=%(TREEDIR)s/pxeboot/vmlinuz,initrd=%(TREEDIR)s/pxeboot/initrd.img,kernel_args='foo bar' --initrd-inject virt-install", grep="Install method does not support initrd inject")
 c.add_invalid("--install winxp", grep="does not have a URL location")  # no URL for winxp
 c.add_invalid("--boot arch=i686 --install fedora26", grep="does not have a URL location for the architecture 'i686")  # there's no URL for i686
 c.add_invalid("-c foo --cdrom bar", grep="Cannot use -c")  # check for ambiguous -c and --cdrom collision
@@ -939,10 +930,10 @@ c.add_invalid("--hvm --import --wait 2", grep="exceeded specified time limit")  
 c.add_invalid("--hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
 c.add_invalid("--hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
 c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1
-c.add_invalid("--paravirt --import --print-xml 2")  # PV Import install, no second XML step
-c.add_invalid("--paravirt --import --print-xml 7")  # Invalid --print-xml arg
-c.add_invalid("--location kernel=foo,initrd=bar")  # location kernel/initrd without any url
-c.add_invalid("--location http://example.com,kernel=foo")  # location without kernel+initrd specified as pair
+c.add_invalid("--paravirt --import --print-xml 2", grep="does not have XML step 2")  # PV Import install, no second XML step
+c.add_invalid("--paravirt --import --print-xml 7", grep="Unknown XML step request '7'")  # Invalid --print-xml arg
+c.add_invalid("--location kernel=foo,initrd=bar", grep="location kernel/initrd may only be specified with a location URL/path")
+c.add_invalid("--location http://example.com,kernel=foo", grep="location kernel/initrd must be be specified as a pair")
 c.add_valid("--pxe --os-type linux", grep="--os-type is deprecated")
 c.add_invalid("--os-variant solaris10 --unattended", grep="not support unattended")
 
@@ -959,8 +950,8 @@ c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe", grep="VM performance may suffer")  # os variant warning
-c.add_invalid("--hvm --nodisks --pxe foobar")  # Positional arguments error
-c.add_invalid("--nodisks --pxe --name test")  # Colliding name
+c.add_invalid("--hvm --nodisks --pxe foobar", grep="unrecognized arguments: foobar")  # Positional arguments error
+c.add_invalid("--nodisks --pxe --name test", grep="Guest name 'test' is already")  # Colliding name
 c.add_compare("--cdrom %(EXISTIMG1)s --disk size=1 --disk %(EXISTIMG2)s,device=cdrom", "cdrom-double")  # ensure --disk device=cdrom is ordered after --cdrom, this is important for virtio-win installs with a driver ISO
 c.add_valid("--connect %s --pxe --disk size=1" % utils.URIs.test_defaultpool_collision)  # testdriver already has a pool using the 'default' path, make sure we don't error
 c.add_compare("--connect %(URI-KVM-X86)s --reinstall test-clone-simple --pxe", "reinstall-pxe")  # compare --reinstall with --pxe
@@ -983,14 +974,12 @@ c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password-fi
 c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
 c.add_compare("--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended", "unattended-remote-cdrom")
 c.add_valid("--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
-c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
-c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
+
 c.add_invalid("--os-variant fedora26 --unattended profile=jeos --location http://example.foo", grep="admin-password")  # will trigger admin-password required error
 c.add_invalid("--os-variant debian9 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location http://example.foo", grep="user-password")  # will trigger user-password required error
 c.add_invalid("--os-variant debian9 --unattended profile=FRIBBER,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location http://example.foo", grep="Available profiles")  # will trigger unknown profile error
 c.add_invalid("--os-variant fedora29 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s --cdrom %(ISO-F29-LIVE)s", grep="media does not support")  # live media doesn't support installscript
-c.add_invalid("--os-variant msdos --unattended profile=desktop --location http://example.com")  # msdos doesn't support unattended install
-c.add_invalid("--os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s")  # winxp doesn't support expected injection method 'cdrom'
+c.add_invalid("--os-variant winxp --unattended profile=desktop --cdrom %(ISO-WIN7)s", grep=" OS 'winxp' does not support required injection method 'cdrom'")
 c.add_invalid("--install fedora29 --unattended user-login=root", grep="as user-login")  # will trigger an invalid user-login error
 
 
@@ -1004,9 +993,8 @@ c.add_valid("--cdrom %(EXISTIMG1)s --disk none --livecd --dry")  # remote cdrom 
 c.add_compare("--pxe "
 "--pxe --disk /foo/bar/baz,size=.01 "  # Creating any random path on the remote host
 "--disk /dev/zde ", "remote-storage")  # /dev file that we just pass through to the remote VM
-c.add_invalid("--pxe --disk /foo/bar/baz")  # File that doesn't exist after auto storage setup
-c.add_invalid("--nodisks --location /tmp")  # Use of --location
-c.add_invalid("--file /foo/bar/baz --pxe")  # Trying to use unmanaged storage without size argument
+c.add_invalid("--nodisks --location /tmp", grep="Cannot access install tree on remote connection: /tmp")
+c.add_invalid("--file /foo/bar/baz --pxe", grep="Size must be specified for non existent volume 'baz'")
 
 
 
@@ -1055,10 +1043,11 @@ c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXI
 c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
 
 c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
-c.add_invalid("--disk none --boot network --machine foobar")  # Unknown machine type
-c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm")  # Invalid domain type for arch
-c.add_invalid("--nodisks --boot network --paravirt --arch mips")  # Invalid arch/virt combo
-c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks")  # Using --location nfs, no longer supported
+
+c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks", grep="NFS URL installs are no longer supported")
+c.add_invalid("--disk none --boot network --machine foobar", grep="domain type None with machine 'foobar'")
+c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm", grep="any virtualization options for architecture 'mips'")
+c.add_invalid("--nodisks --boot network --paravirt --arch mips", grep=" 'xen' for architecture 'mips'")
 
 
 c = vinst.add_category("kvm-x86_64-launch-security", "--disk none --noautoconsole")
@@ -1066,10 +1055,9 @@ c.add_compare("--boot uefi --machine q35 --launchSecurity type=sev,reducedPhysBi
 c.add_compare("--boot uefi --machine q35 --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev")  # Fill in platform data from domcaps
 c.add_valid("--boot uefi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
 c.add_valid("--boot firmware=efi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
-c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev)  # Missing launchSecurity 'type'
-c.add_invalid("--launchSecurity sev --connect " + utils.URIs.kvm_amd_sev)  # Fail if loader isn't UEFI
-c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev)  # Fail if machine type isn't Q35
-c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86_q35)  # Fail with no SEV capabilities
+c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev, grep="Missing mandatory attribute 'type'")
+c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, grep="SEV launch security requires a Q35 UEFI machine")
+c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86_q35, grep="SEV launch security is not supported")  # Fail with no SEV capabilities
 
 
 c = vinst.add_category("kvm-q35", "--noautoconsole --connect " + utils.URIs.kvm_x86_q35)
@@ -1117,7 +1105,7 @@ c.add_compare("--connect %(URI-KVM-X86)s --arch x86_64", "x86_64-graphics")
 ######################
 
 c = vinst.add_category("lxc", "--name foolxc --noautoconsole --connect " + utils.URIs.lxc)
-c.add_invalid("--filesystem /,not/abs")  # filesystem target is not absolute
+c.add_invalid("--filesystem /,not/abs", grep="must be an absolute path")
 c.add_compare("", "default")
 c.add_compare("--os-variant fedora27", "default-f27")
 c.add_compare("--filesystem /source,/ --memory 128", "fs-default")
@@ -1146,7 +1134,7 @@ c = vinst.add_category("vz", "--noautoconsole --connect " + utils.URIs.vz)
 c.add_valid("--container")  # validate the special define+start logic
 c.add_valid("--hvm --cdrom %(EXISTIMG1)s --disk none")  # hit more install vz logic
 c.add_valid("--hvm --import --disk %(EXISTIMG1)s --noreboot")  # hit more install vz logic
-c.add_invalid("--container --transient")  # vz doesn't support --transient
+c.add_invalid("--container --transient", grep="Domain type 'vz' doesn't support transient installs.")
 c.add_compare("""
 --container
 --filesystem type=template,source=centos-7-x86_64,target="/"
@@ -1181,11 +1169,9 @@ c.add_valid("--network network:default --mac RANDOM")  # VirtualNetwork with a r
 c.add_valid("--vnc --keymap=local")  # --keymap local
 c.add_valid("--panic 0x505")  # ISA panic with iobase specified
 c.add_valid("--mac 22:11:11:11:11:11 --check mac_in_use=off")  # colliding mac, but check is skipped
-c.add_invalid("--mac 22:11:11:11:11:11")  # Colliding macaddr will error
-c.add_invalid("--graphics vnc --vnclisten 1.2.3.4")  # mixing old and new
-c.add_invalid("--network=FOO")  # Nonexistent network
-c.add_invalid("--mac 1234")  # Invalid mac
-c.add_invalid("--network user --bridge foo0")  # Mixing bridge and network
+c.add_invalid("--mac 22:11:11:11:11:11", grep="in use by another virtual machine")  # Colliding macaddr will error
+c.add_invalid("--graphics vnc --vnclisten 1.2.3.4", grep="Cannot mix --graphics and old style graphical options")
+c.add_invalid("--network user --bridge foo0", grep="Cannot use --bridge and --network at the same time")
 
 c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole")
 c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
@@ -1207,7 +1193,7 @@ c.add_valid("--pxe --nographics --autoconsole graphical", grep="graphical consol
 c.add_valid("--pxe --autoconsole text", grep="text console command: virsh")  # force --autoconsole text
 c.add_valid("--connect %(URI-KVM-X86)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_valid("--pxe", grep="User stopped the VM", env={"VIRTINST_TESTSUITE_HACK_DESTROY": "1"})  # fake the user destroying the VM, we should print a specific message and not reboot the VM
-c.add_invalid("--pxe --autoconsole badval")  # bad --autoconsole value
+c.add_invalid("--pxe --autoconsole badval", grep="Unknown autoconsole type 'badval'")
 c.add_invalid("--pxe --autoconsole text --wait -1", grep="exceeded specified time limit")  # hits a specific code path where we skip console waitpid
 
 
@@ -1242,17 +1228,16 @@ c.add_invalid("test-state-shutoff --cpu mode=idontexist --start --edit --no-defi
 c.add_invalid("test --cpu host-passthrough", grep="One of --edit, ")  # conflicting --edit options
 c.add_invalid("test --edit --add-device --disk path=foo", grep="Conflicting options --edit, --add-device")
 c.add_invalid("test --edit 0 --disk path=", grep="Invalid --edit option '0'")
-c.add_invalid("test --edit --hostdev driver_name=vfio")  # Guest has no hostdev to edit
-c.add_invalid("test --edit --cpu host-passthrough --boot hd,network")  # Specified more than 1 option
-c.add_invalid("test --edit")  # specified no edit option
-c.add_invalid("test --edit 2 --cpu host-passthrough")  # specifying --edit number where it doesn't make sense
-c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm")  # device edit out of range
-c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update --confirm", input_text="yes")  # test driver doesn't support attachdevice...
-c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update --confirm", input_text="foo\nyes\n")  # test driver doesn't support detachdevice...
-c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update --confirm", input_text="yes")  # test driver doesn't support updatdevice...
-c.add_invalid("--build-xml --memory 10,maxmemory=20")  # building XML for option that doesn't support it
+c.add_invalid("test --edit --hostdev driver_name=vfio", grep='No --hostdev objects found in the XML')
+c.add_invalid("test --edit --cpu host-passthrough --boot hd,network", grep="Only one change operation may be specified")
+c.add_invalid("test --edit", grep="No change specified.")
+c.add_invalid("test --edit 2 --cpu host-passthrough", grep="'--edit 2' requested but there's only 1 --cpu object in the XML")
+c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm", grep="'--edit 5' requested but there's only 1 --tpm object in the XML")
+c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update --confirm", input_text="yes", grep="not supported by the connection driver: virDomainAttachDevice")
+c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update --confirm", input_text="foo\nyes\n", grep="not supported by the connection driver: virDomainDetachDevice")
+c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update --confirm", input_text="yes", grep="not supported by the connection driver: virDomainUpdateDeviceFlags")
+c.add_invalid("--build-xml --memory 10,maxmemory=20", grep="--build-xml not supported for --memory")
 c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
-c.add_invalid("test --edit --boot network,cdrom --define --no-define")
 c.add_invalid("test --add-device --xml ./@foo=bar", grep="--xml can only be used with --edit")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # stdin test
@@ -1317,9 +1302,8 @@ c.add_compare("--sound pcspk", "edit-simple-soundhw")
 c.add_compare("--host-device 0x04b3:0x4485,driver_name=vfio,type=usb", "edit-simple-host-device")
 
 c = vixml.add_category("edit selection", "test-for-virtxml --print-diff --define")
-c.add_invalid("--edit target=vvv --disk /dev/null")  # no match found
-c.add_invalid("--edit seclabel2.model=dac --disk /dev/null")  # no match found
-c.add_valid("--edit seclabel.model=dac --disk /dev/null")  # match found
+c.add_invalid("--edit target=vvv --disk /dev/null", grep="No matching objects found for --edit target=vvv")
+c.add_invalid("--edit seclabel2.model=dac --disk /dev/null", grep="No matching objects found for --edit seclabel2.model=dac")
 c.add_compare("--edit 3 --sound pcspk", "edit-pos-num")
 c.add_compare("--edit -1 --video qxl", "edit-neg-num")
 c.add_compare("--edit all --host-device driver.name=vfio", "edit-all")
@@ -1334,7 +1318,7 @@ c.add_compare("--edit address.devno=0x0002 --hostdev address.devno=0x0008", "edi
 
 c = vixml.add_category("edit and start selection", "test-state-shutoff --print-diff --start")
 c.add_compare("--define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder")
-c.add_invalid("--define --no-define --edit target=vda --disk boot_order=1")
+c.add_invalid("--define --no-define --edit target=vda --disk boot_order=1", grep="argument --no-define: not allowed with argument --define")
 c.add_compare("--edit target=vda --disk boot_order=1", "start-select-disk-bootorder2")
 c.add_compare("--no-define --edit target=vda --disk boot_order=1", "start-select-disk-bootorder2")
 
@@ -1342,7 +1326,7 @@ c = vixml.add_category("edit selection 2", "test-collide --print-diff --define")
 c.add_compare("--edit target=hda --disk boot_order=1", "edit-select-disk-bootorder2")
 
 c = vixml.add_category("edit clear", "test-for-virtxml --print-diff --define")
-c.add_invalid("--edit --memory 200,clearxml=yes")  # clear isn't wired up for memory
+c.add_invalid("--edit --memory 200,clearxml=yes", grep="Don't know how to clearxml for --memory")
 c.add_compare("--edit --disk path=/foo/bar,size=2,target=fda,bus=fdc,device=floppy,clearxml=yes", "edit-clear-disk")
 c.add_compare("--edit --cpu host-passthrough,clearxml=yes", "edit-clear-cpu")
 c.add_compare("--edit --clock offset=utc,clearxml=yes", "edit-clear-clock")
@@ -1350,9 +1334,7 @@ c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-vide
 c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl")
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define")
-c.add_valid("--add-device --security model=dac")  # --add-device works for seclabel
-c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
-c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
+c.add_compare("--add-device --security model=dac", "add-seclabel")
 c.add_compare("--add-device --host-device usb_device_483_2016_noserial", "add-host-device")
 c.add_compare("--add-device --sound pcspk", "add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
@@ -1369,8 +1351,8 @@ c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110"
 c.add_compare("--remove-device --hostdev mdev_b1ae8bf6_38b0_4c81_9d44_78ce3f520496", "remove-hostdev-mdev")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
-c.add_invalid("--add-device --pm suspend_to_disk=yes")  # --add-device without a device
-c.add_invalid("--remove-device --clock utc")  # --remove-device without a dev
+c.add_invalid("--add-device --pm suspend_to_disk=yes", grep="Cannot use --add-device with --pm")  # --add-device without a device
+c.add_invalid("--remove-device --clock utc", grep="Cannot use --remove-device with --clock")  # --remove-device without a dev
 # one test in combination with --define
 c.add_compare("--define --add-device --host-device usb_device_4b3_4485_noserial", "add-host-device-start")
 # all other test cases without
@@ -1407,8 +1389,7 @@ vclon = App("virt-clone")
 c = vclon.add_category("remote", "--connect %(URI-TEST-REMOTE)s")
 c.add_valid(_CLONE_EMPTY + " --auto-clone")  # Auto flag, no storage
 c.add_valid(_CLONE_MANAGED + " --auto-clone")  # Auto flag w/ managed storage
-c.add_invalid(_CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
-c.add_invalid(_CLONE_UNMANAGED + " --auto-clone")  # Auto flag w/ local storage, which is invalid for remote connection
+c.add_invalid(_CLONE_UNMANAGED + " --auto-clone", grep="does not exist")  # Auto flag w/ local storage, which is invalid for remote connection
 
 
 c = vclon.add_category("misc", "")
@@ -1430,11 +1411,11 @@ c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserv
 c.add_valid("-n clonetest " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
 c.add_valid("-n clonetest " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11:11:11:11 --check all=off")  # Colliding mac but we skip the check
 c.add_invalid("-n clonetest " + _CLONE_UNMANAGED + " --auto-clone --mac 22:11:11:11:11:11", grep="--check mac_in_use=off")  # Colliding mac should fail
-c.add_invalid("--auto-clone")  # Just the auto flag
-c.add_invalid(_CLONE_EMPTY + " --file foo")  # Didn't specify new name
-c.add_invalid(_CLONE_EMPTY + " --auto-clone -n test")  # new name raises error
+c.add_invalid("--auto-clone", grep="An original machine name is required")  # No clone VM specified
+c.add_invalid(_CLONE_EMPTY + " --file foo", grep="use '--name NEW_VM_NAME'")  # Didn't specify new name
+c.add_invalid(_CLONE_EMPTY + " --auto-clone -n test", grep="Invalid name for new guest")  # new name raises error, already in use
 c.add_invalid("-o test --auto-clone", grep="shutoff")  # VM is running
-c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s")  # Should complain about overwriting existing file
+c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s", grep="Clone onto existing storage volume is not currently supported")  # Should complain about overwriting existing file
 c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-full --auto-clone", grep="not enough free space")  # catch failure of clone path setting
 c.add_invalid(_CLONE_NET_HTTP + " --auto-clone", grep="'http' is not cloneable")
@@ -1455,11 +1436,8 @@ c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s --reflink")  # XML w/ managed 
 c.add_valid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone -n test --auto-clone --replace", "replace")  # Overwriting existing running VM
 c.add_valid(_CLONE_MANAGED + " --auto-clone --force-copy fda")  # force copy empty floppy drive
-c.add_invalid(_CLONE_EMPTY + " foobar")  # Positional arguments error
-c.add_invalid("-o idontexist")  # Non-existent vm name
-c.add_invalid("-o idontexist --auto-clone")  # Non-existent vm name with auto flag,
-c.add_invalid(_CLONE_EMPTY + " -n test")  # Colliding new name
-c.add_invalid(_CLONE_UNMANAGED + "")  # XML file with several disks, but non specified
+c.add_invalid("-o idontexist --auto-clone", grep="Domain 'idontexist' was not found")  # Non-existent vm name
+c.add_invalid(_CLONE_UNMANAGED, grep="Either --auto-clone or --file")  # XML file with several disks, but non specified
 c.add_invalid(_CLONE_UNMANAGED + " --file virt-install", grep="overwrite the existing path 'virt-install'")  # XML w/ disks, overwriting existing files with no --preserve
 c.add_invalid(_CLONE_MANAGED + " --file /tmp/clonevol", grep="matching name 'default-vol'")  # will attempt to clone across pools, which test driver doesn't support
 c.add_invalid(_CLONE_NOEXIST + " --auto-clone", grep="'/i/really/dont/exist' does not exist.")  # XML w/ non-existent storage, WITHOUT --preserve
@@ -1580,8 +1558,8 @@ def _make_testcases():
     """
     cmdlist = []
     cmdlist += vinst.cmds
-    cmdlist += vclon.cmds
     cmdlist += vixml.cmds
+    cmdlist += vclon.cmds
     cmdlist += ARGCOMPLETE_CMDS
 
     newidx = 0
