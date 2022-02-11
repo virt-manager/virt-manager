@@ -984,7 +984,7 @@ class _SuboptCheckerClass:
         self._seen.add(name)
 
     def get_unseen(self):
-        return self._all - self._seen
+        return self._all - self._seen  # pragma: no cover
 
 
 _SuboptChecker = _SuboptCheckerClass()
