@@ -48,7 +48,7 @@ argument, example: virt-install --disk=?
 
 Most options are not required. If a suitable --osinfo value is specified
 or detected, all defaults will be filled in and reported in the terminal
-output. If an --osinfo is not specified. minimum required options are --memory,
+output. Otherwise, minimum required options are --memory,
 guest storage (--disk or --filesystem), and an install method choice.
 
 
@@ -974,14 +974,13 @@ GUEST OS OPTIONS
 ``--os-variant``, ``--osinfo``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**Syntax:** ``--osinfo`` [OS_VARIANT|OPT1=VAL1,...]
+**Syntax:** ``--osinfo`` [OSNAME|OPT1=VAL1,...]
 
-Optimize the guest configuration for a specific operating system (ex.
-'fedora29', 'rhel7', 'win10'). While not required, specifying this
-options is HIGHLY RECOMMENDED, as it can greatly increase performance
-by specifying virtio among other guest tweaks.
+Optimize the guest configuration for a specific operating system.
+For most cases, an OS must be specified or detected from the install
+media so performance critical features like virtio can be enabled.
 
-The simplest usage is ``--os-variant OS-NAME`` or ``--osinfo OS-NAME``,
+The simplest usage is ``--os-variant OSNAME`` or ``--osinfo OSNAME``,
 for example ``--osinfo fedora32``. The supported suboptions are:
 
 ``name=``, ``short-id=``
@@ -1012,16 +1011,22 @@ Some interesting examples:
     Attempt OS detection from install media, but if that fails, use
     OSNAME as a fallback.
 
-
-By default, virt-install will do ``--osinfo detect=on,name=generic``,
-using the detected OS if found, and falling back to the stub ``generic``
-value otherwise, and printing a warning.
-
 If any manual ``--osinfo`` value is specified, the default is
-all settings off or unset.
+all other settings off or unset.
+
+By default, virt-install will always attempt ``--osinfo detect=on``
+for appropriate install media. If no OS is detected, we will fail
+in certain common cases (x86 KVM for example). This fatal error was
+added in 2022. You can work around this by using the fallback example
+above, or disabling the ``require`` option. If you just need to get back
+to the old non-fatal behavior ASAP, set the environment variable
+VIRTINSTALL_OSINFO_DISABLE_REQUIRE=1.
 
 Use the command ``virt-install --osinfo list`` to get the list of the
 accepted OS variants. See ``osinfo-query os`` for even more output.
+
+Note: ``--os-variant`` and ``--osinfo`` are aliases for one another.
+``--osinfo`` is the preferred new style naming.
 
 
 

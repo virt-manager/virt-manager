@@ -1825,6 +1825,7 @@ class OSVariantData(object):
         if rawstr is None or rawstr == "auto":
             # The default behavior
             self._detect = True
+            self._require = "auto"
             return
 
         if rawstr == "none":
@@ -1845,8 +1846,10 @@ class OSVariantData(object):
 
     def is_detect(self):
         return self._detect
-    def is_require(self):
-        return self._require
+    def is_require_on(self):
+        return not self.is_require_default() and bool(self._require)
+    def is_require_default(self):
+        return self._require == "auto"
     def get_name(self):
         return self._name
 

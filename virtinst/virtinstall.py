@@ -548,8 +548,62 @@ def installer_detect_distro(guest, installer, osdata):
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
-    if not os_set and osdata.is_require():
-        fail(_("--os-variant/--osinfo OS name is required, but no value was set or detected."))
+    msg = _(
+        "--os-variant/--osinfo OS name is required, but no value was\n"
+        "set or detected.")
+    if os_set:
+        return
+    if osdata.is_require_on():
+        fail(msg)
+    if not osdata.is_require_default():
+        return
+
+    if not _needs_accurate_osinfo(guest):
+        return
+
+    fail_msg = msg + "\n\n"
+    fail_msg += _(
+        "This is now a fatal error. Specifying an OS name is required\n"
+        "for modern, performant, and secure virtual machine defaults.\n")
+
+    detect_msg = _(
+        "If you expected virt-install to detect an OS name from the\n"
+        "install media, you can set a fallback OS name with:\n"
+        "\n"
+        "  --osinfo detect=on,name=OSNAME\n")
+    possibly_detectable = bool(installer.location or installer.cdrom)
+    if possibly_detectable:
+        fail_msg += "\n" + detect_msg
+
+    fail_msg += "\n" + _(
+        "You can see a full list of possible OS name values with:\n"
+        "\n"
+        "   virt-install --osinfo list\n")
+
+    generic_linux_names = [o.name for o in virtinst.OSDB.list_os() if
+                           o.is_linux_generic()]
+    generic_linux_msg = _(
+        "If your Linux distro is not listed, try one of generic values\n"
+        "such as: {oslist}\n").format(oslist=", ".join(generic_linux_names))
+    if generic_linux_names:
+        fail_msg += "\n" + generic_linux_msg
+
+    envkey = "VIRTINSTALL_OSINFO_DISABLE_REQUIRE"
+    fail_msg += "\n" + _(
+        "If you just need to get the old behavior back, you can use:\n"
+        "\n"
+        "  --osinfo detect=on,require=off\n"
+        "\n"
+        "Or export {env_var}=1\n"
+        ).format(env_var=envkey)
+
+    fail_msg = "\n" + fail_msg
+    if envkey in os.environ:
+        log.warning(fail_msg)
+        m = _("{env_var} set. Skipping fatal error.").format(env_var=envkey)
+        log.warning(m)
+    else:
+        fail(fail_msg)
 
 
 def _build_options_guest(conn, options):
