@@ -372,14 +372,6 @@ class _OsVariant(object):
     def supported_netmodels(self):
         return self._device_filter(cls="net")
 
-    def supports_usbtablet(self, extra_devs=None):
-        # If no OS specified, still default to tablet
-        if self.is_generic():
-            return True
-
-        devids = ["http://usb.org/usb/80ee/0021"]
-        return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
-
     def supports_virtiodisk(self, extra_devs=None):
         # virtio-block and virtio1.0-block
         devids = ["http://pcisig.com/pci/1af4/1001",
