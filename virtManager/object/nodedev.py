@@ -66,6 +66,11 @@ class vmmNodeDevice(vmmLibvirtObject):
         is_active = True
         if self.conn.support.nodedev_isactive(self._backend):
             is_active = self._backend.isActive()  # pragma: no cover
+
+        if self.conn.is_test() and self.xmlobj.name.endswith("-fakeinactive"):
+            # Testsuite hack to mock inactive device
+            is_active = False
+
         return (is_active and
                 self._STATUS_ACTIVE or
                 self._STATUS_INACTIVE)

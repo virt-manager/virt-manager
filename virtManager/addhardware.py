@@ -753,32 +753,22 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_hostdev_treeview(self):
         host_dev = self.widget("host-device")
-        # [ xmlobj, label]
-        host_dev_model = Gtk.ListStore(object, str, bool)
+        # [ xmlobj, label, sensitive, tooltip]
+        host_dev_model = Gtk.ListStore(object, str, bool, str)
         host_dev.set_model(host_dev_model)
         host_col = Gtk.TreeViewColumn()
         text = Gtk.CellRendererText()
         host_col.pack_start(text, True)
         host_col.add_attribute(text, 'text', 1)
         host_col.add_attribute(text, 'sensitive', 2)
+        host_dev.set_tooltip_column(3)
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
 
 
     def _hostdev_row_selected_cb(self, selection):
         model, treeiter = selection.get_selected()
-
-        if treeiter is None:
-            return
-
-        row = model[treeiter]
-        tooltip = None
-        sensitive = row[2]
-        if row[0] and sensitive is False:
-            tooltip = (_("%s is not active in the host system.\n"
-            "Please start the mdev in the host system before adding it to the guest.")
-            % row[1])
-        self.widget("create-finish").set_tooltip_text(tooltip)
+        sensitive = treeiter and model[treeiter][2] or False
         self.widget("create-finish").set_sensitive(sensitive)
 
 
@@ -809,15 +799,21 @@ class vmmAddHardware(vmmGObjectUI):
                         prettyname = "%s %s" % (
                                 parentdev.pretty_name(), prettyname)
 
-            model.append([dev.xmlobj, prettyname, dev.is_active()])
+            tooltip = None
+            sensitive = dev.is_active()
+            if not sensitive:
+                tooltip = _("%s is not active in the host system.\n"
+                      "Please start the mdev in the host system before "
+                      "adding it to the guest.") % prettyname
+            model.append([dev.xmlobj, prettyname, sensitive, tooltip])
 
         if len(model) == 0:
-            model.append([None, _("No Devices Available"), False])
+            model.append([None, _("No Devices Available"), False, None])
 
         uiutil.set_list_selection_by_number(devlist, 0)
 
-        devlist.get_selection().connect("changed",
-                                        self._hostdev_row_selected_cb)
+        devlist.get_selection().connect(
+                "changed", self._hostdev_row_selected_cb)
         devlist.get_selection().emit("changed")
 
 

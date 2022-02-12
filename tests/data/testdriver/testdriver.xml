@@ -3679,6 +3679,19 @@ ba</description>
 </device>
 
 <device>
+  <name>mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110-fakeinactive</name>
+  <path>/sys/devices/css0/0.0.0023/8e37ee90-2b51-45e3-9b25-bf8283c03110-fakeinactive</path>
+  <parent>css_0_0_0023</parent>
+  <driver>
+    <name>vfio_mdev</name>
+  </driver>
+  <capability type='mdev'>
+    <type id='vfio_ccw-io'/>
+    <iommuGroup number='0'/>
+  </capability>
+</device>
+
+<device>
   <name>ap_matrix</name>
   <path>/sys/devices/vfio_ap/matrix</path>
   <parent>computer</parent>
