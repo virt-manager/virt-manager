@@ -1009,6 +1009,7 @@ c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
+c.add_compare("--osinfo linux2020 --pxe", "linux2020", prerun_check=lambda: not OSDB.lookup_os("linux2020"))
 
 # ppc64 tests
 c.add_compare("--machine pseries --boot arch=ppc64,network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
