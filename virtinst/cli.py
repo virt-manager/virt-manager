@@ -1843,8 +1843,6 @@ class OSVariantData(object):
         if osobj:
             self._name = osobj.name
 
-    def is_generic_requested(self):
-        return self._detect is False or self._name == "generic"
     def is_detect(self):
         return self._detect
     def is_require(self):

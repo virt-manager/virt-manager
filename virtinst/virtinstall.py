@@ -354,18 +354,22 @@ def _show_memory_warnings(guest):
             "Were you trying to specify GiB?"), rammb)
 
 
-def show_guest_warnings(options, guest, osdata):
+def _needs_accurate_osinfo(guest):
+    # Limit it to hvm x86 guests which presently our defaults
+    # only really matter for
+    return guest.os.is_x86() and guest.os.is_hvm()
+
+
+def show_guest_warnings(options, guest):
     if options.pxe and not supports_pxe(guest):
         log.warning(
             _("The guest's network configuration may not support PXE"))
 
-    # Limit it to hvm x86 guests which presently our defaults
-    # only really matter for
-    if (guest.osinfo.name == "generic" and
-        not osdata.is_generic_requested() and
-        guest.os.is_x86() and guest.os.is_hvm()):
-        log.warning(_("No operating system detected, VM performance may "
-            "suffer. Specify an OS with --osinfo for optimal results."))
+    if guest.osinfo.is_generic() and _needs_accurate_osinfo(guest):
+        log.warning(
+            _("Using --osinfo {osname}, VM performance may suffer. "
+              "Specify an accurate OS for optimal results.").format(
+            osname=guest.osinfo.name))
 
     _show_memory_warnings(guest)
 
@@ -596,7 +600,7 @@ def build_guest_instance(conn, options):
             cli.validate_mac(net.conn, net.macaddr)
 
     validate_required_options(options, guest, installer)
-    show_guest_warnings(options, guest, osdata)
+    show_guest_warnings(options, guest)
 
     return guest, installer
 
