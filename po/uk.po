@@ -3,32 +3,32 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2020, 2021.
-# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022.
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Yuri Chornoivan <yurchor@ukr.net>, 2015. #zanata, 2020, 2021.
-# Yuri Chornoivan <yurchor@ukr.net>, 2016. #zanata, 2020, 2021.
-# Yuri Chornoivan <yurchor@ukr.net>, 2017. #zanata, 2020, 2021.
-# Yuri Chornoivan <yurchor@ukr.net>, 2018. #zanata, 2020, 2021.
-# Yuri Chornoivan <yurchor@ukr.net>, 2019. #zanata, 2020, 2021.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020. #zanata, 2021.
+# Yuri Chornoivan <yurchor@ukr.net>, 2015. #zanata, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2016. #zanata, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2017. #zanata, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2018. #zanata, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2019. #zanata, 2020, 2021, 2022.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020. #zanata, 2021, 2022.
 # Taras Panchenko <top39@ukr.net>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-13 06:13+0000\n"
-"PO-Revision-Date: 2021-12-07 21:16+0000\n"
-"Last-Translator: Taras Panchenko <top39@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"PO-Revision-Date: 2022-02-15 17:16+0000\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -1010,10 +1010,8 @@ msgid "MiB"
 msgstr "МіБ"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Зовнішній диск і пам'ять"
+msgstr "Увімкнути с_пільну пам'ять"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1675,10 +1673,8 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>Не вдалося знайти відповідної типової мережі.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Порт:"
+msgstr "Група _портів:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1788,12 +1784,12 @@ msgstr "Ти_повий процесор:"
 #: ui/preferences.ui:505
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Типова мікропрограма для нових віртуальних машин. Завантаження за допомогою "
+"BIOS або UEFI."
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "_Мікропрограма:"
+msgstr "_Мікропрограма x86:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -2423,6 +2419,9 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s є неактивним у основній системі.\n"
+"Будь ласка, запустіть mdev в основній системі, перш ніж додавати її до "
+"гостьової."
 
 #: virtManager/addhardware.py:811
 msgid "No Devices Available"
@@ -3370,16 +3369,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "Помилкове виведення тунелю SSH: %s"
 
 #: virtManager/details/console.py:844
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Засіб перегляду від'єднано."
+msgstr "Засіб перегляду перебуває у стані від'єднання."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Засіб перегляду від'єднано."
+msgstr "Вікно засобу перегляду закрито."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3496,7 +3491,7 @@ msgstr "Ви_лучити обладнання"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4626,10 +4621,12 @@ msgstr "Помилка під час скасування завдання з п
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
+"Не можна змінювати параметр спільного використання пам'яті, якщо налаштовано "
+"<numa>."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt може бути недостатньо новою для підтримки memfd."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -4788,10 +4785,8 @@ msgid "Nearest host CPU model"
 msgstr "Найбільш схожа модель процесора основної системи"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Типова системна (%s)"
+msgstr "Типова системна"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5866,6 +5861,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"TЗагальна кількість процесорів, яка визначається топологією "
+"(сокетів=%(sockets)d * плашок=%(dies)d * ядер=%(cores)d * потоків=%(threads)"
+"d == %(total)d), не відповідає кількості віртуальних процесорів, %(vcpus)d"
 
 #: virtinst/domain/cpu.py:310
 msgid "No host CPU reported in capabilities"
