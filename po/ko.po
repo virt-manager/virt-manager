@@ -9,21 +9,22 @@
 # Eun-Ju Kim <eukim@redhat.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # simmon <simmon@nplob.com>, 2021.
+# Kim InSoo <simmon@nplob.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-13 06:13+0000\n"
-"PO-Revision-Date: 2021-09-06 14:05+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
-"Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ko/>\n"
+"PO-Revision-Date: 2022-02-15 17:16+0000\n"
+"Last-Translator: Kim InSoo <simmon@nplob.com>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -995,10 +996,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "외부 디스크 및 메모리"
+msgstr "공유_메모리 활성화"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1653,10 +1652,8 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>하위 지정 네트워크 찾기에 실패하였습니다.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "포트(_P):"
+msgstr "_포트그룹:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1762,13 +1759,11 @@ msgstr "CPU 기본값(_D):"
 
 #: ui/preferences.ui:505
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
-msgstr ""
+msgstr "바이오스 또는 UEFI 중에 하나를 사용하는 새로운 VMS. Boot용 기본 펌웨어."
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "펌웨어:"
+msgstr "x86_펌웨어:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -2395,6 +2390,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s는 호스트 시스템에서 동작하지 않습니다.\n"
+"게스트에 mdev를 추가하기 전에 호스트 시스템에서 mdev를 시작하세요."
 
 #: virtManager/addhardware.py:811
 msgid "No Devices Available"
@@ -3325,16 +3322,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "SSH 터널 오류 출력: %s"
 
 #: virtManager/details/console.py:844
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
 msgstr "표시기가 끊어졌습니다."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "표시기가 끊어졌습니다."
+msgstr "표시기용 창이 닫혔습니다."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3451,7 +3444,7 @@ msgstr "하드웨어 제거(_R)"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4559,11 +4552,11 @@ msgstr "이전 작업을 취소하는 도중 오류 발생: %s"
 
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "<numa>가 구성되어 있을 때에 공유된 메모리 설정을 변경 할 수 없습니다."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt는 memfd를 지원 할 만큼 새롭지 않을 수 있습니다."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -4722,10 +4715,8 @@ msgid "Nearest host CPU model"
 msgstr "가장 가까운 호스트 CPU 모델"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "시스템 기본값(%s)"
+msgstr "시스템 기본값"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5762,6 +5753,8 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"토폴로지 (소켓=%(sockets)d * 조각=%(dies)d * 코어=%(cores)d * 쓰레드=%(threads)d == "
+"%(total)d)에 의해 적용되는 총 CPU가 vCPU 수 %(vcpus)d와 일치하지 않습니다"
 
 #: virtinst/domain/cpu.py:310
 msgid "No host CPU reported in capabilities"
