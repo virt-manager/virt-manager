@@ -13,22 +13,22 @@
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017. #zanata
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018. #zanata
-# Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021.
+# Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-13 06:13+0000\n"
-"PO-Revision-Date: 2021-08-01 03:04+0000\n"
+"PO-Revision-Date: 2022-02-15 17:16+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/tr/>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -999,10 +999,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Harici disk ve bellek"
+msgstr "Paylaşılan _belleği etkinleştir"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1662,10 +1660,8 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>Uygun bir öntanımlı ağ bulunamadı.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Bağlantı noktası:"
+msgstr "_Bağlantı noktası grubu:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1774,12 +1770,12 @@ msgstr "CPU _öntanımlısı:"
 #: ui/preferences.ui:505
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Yeni SM'ler için öntanımlı ürün yazılımı. BIOS veya UEFI kullanarak "
+"önyükleme yapın."
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Ü_rün yazılımı:"
+msgstr "x86 Ürün _yazılımı:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -2407,6 +2403,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s ana makine sisteminde etkin değil.\n"
+"Konuğa eklemeden önce lütfen ana sistemde mdev'i başlatın."
 
 #: virtManager/addhardware.py:811
 msgid "No Devices Available"
@@ -3344,16 +3342,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "SSH tüneli hatası çıktısı: %s"
 
 #: virtManager/details/console.py:844
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Görüntüleyicinin bağlantısı kesildi."
+msgstr "Görüntüleyicinin bağlantısı kesiliyor."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Görüntüleyicinin bağlantısı kesildi."
+msgstr "Görüntüleyicinin penceresi kapatıldı."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3470,7 +3464,7 @@ msgstr "Donanım Ka_ldır"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4594,11 +4588,11 @@ msgstr "Taşıma işi iptal edilirken hata oluştu: %s"
 
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "<numa> yapılandırıldığında paylaşılan bellek ayarı değiştirilemez."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt, memfd destekleyecek kadar yeni olmayabilir."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -4758,10 +4752,8 @@ msgid "Nearest host CPU model"
 msgstr "En yakın ana makine CPU modeli"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Sistem öntanımlı değeri (%s)"
+msgstr "Sistem öntanımlı değeri"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5808,6 +5800,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"Topoloji tarafından dolaylı olarak belirtilen toplam CPU (soket=%(sockets)d *"
+" zar=%(dies)d * çekirdek=%(cores)d * iş parçacığı=%(threads)d == %(total)d,) "
+"vCPU sayısıyla (%(vcpus)d) eşleşmiyor"
 
 #: virtinst/domain/cpu.py:310
 msgid "No host CPU reported in capabilities"
