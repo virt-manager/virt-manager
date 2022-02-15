@@ -17,11 +17,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-13 06:13+0000\n"
+"POT-Creation-Date: 2022-02-15 06:14+0000\n"
 "PO-Revision-Date: 2022-02-15 17:16+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -576,7 +576,7 @@ msgid "Architecture options"
 msgstr "Параметри архітектури"
 
 #: ui/createvm.ui:792 virtManager/details/details.py:728
-#: virtManager/manager.py:329 virtManager/oslist.py:65
+#: virtManager/manager.py:329 virtManager/oslist.py:72
 msgid "Name"
 msgstr "Назва"
 
@@ -1681,10 +1681,14 @@ msgid "_Network source:"
 msgstr "_Мережеве джерело:"
 
 #: ui/oslist.ui:55
+#, fuzzy
+#| msgid ""
+#| "Can't find the operating system you are looking for?\n"
+#| "Try selecting the next most recent version displayed,\n"
+#| "or use the \"Generic OS\" entry."
 msgid ""
-"Can't find the operating system you are looking for?\n"
-"Try selecting the next most recent version displayed,\n"
-"or use the \"Generic OS\" entry."
+"Can't find the operating system you are looking for? Try selecting a similar "
+"distro or version, or use one of the 'Generic' options."
 msgstr ""
 "Не знайшли потрібної вам операційної системи?\n"
 "Спробуйте вибрати наступну із найсвіжіших показаних версій\n"
@@ -4733,7 +4737,7 @@ msgstr "Файлова система Sheepdog"
 msgid "ZFS Pool"
 msgstr "Буфер ZFS"
 
-#: virtManager/oslist.py:26
+#: virtManager/oslist.py:31
 msgid "Type to start searching..."
 msgstr "Введіть щось, щоб розпочати пошук…"
 
@@ -5584,10 +5588,15 @@ msgid "The OS installed in the guest."
 msgstr "Операційна система, встановлена на гостьовій системі."
 
 #: virtinst/cli.py:929
+#, fuzzy
+#| msgid ""
+#| "This is used for deciding optimal defaults like VirtIO.\n"
+#| "Example values: fedora29, rhel7.0, win10, ...\n"
+#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
-"See 'osinfo-query os' for a full list."
+"Use '--osinfo list' to see a full list."
 msgstr ""
 "Використовується для визначення оптимальних типових значень, зокрема "
 "VirtIO.\n"
@@ -5631,7 +5640,7 @@ msgstr "Невідомі параметри %(optionflag)s: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Помилка: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1910
+#: virtinst/cli.py:1908
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5639,46 +5648,53 @@ msgstr ""
 "Не вдалося встановити з'єднання з графічною консоллю: virt-viewer не "
 "встановлено. Будь ласка, встановіть пакунок «virt-viewer»."
 
-#: virtinst/cli.py:1917
+#: virtinst/cli.py:1915
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Графічний режим, запит щодо якого було надіслано за допомогою DISPLAY, не "
 "встановлено. virt-viewer не запущено."
 
-#: virtinst/cli.py:1928
+#: virtinst/cli.py:1926
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Невідомий тип автоматичної консолі — «%s»"
 
-#: virtinst/cli.py:3473
+#: virtinst/cli.py:3471
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Неналежне значення «size»: %s"
 
-#: virtinst/cli.py:3486
+#: virtinst/cli.py:3484
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Невідоме значення «%(optionname)s» «%(string)s»"
 
-#: virtinst/cli.py:3501
+#: virtinst/cli.py:3499
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Том сховища даних слід вказувати так vol=назва_резервного_сховища/назва_тому"
 
-#: virtinst/cli.py:3950
+#: virtinst/cli.py:3948
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "«%s» мало бути рядком у форматі PCI"
 
-#: virtinst/cli.py:4651
+#: virtinst/cli.py:4649
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s відповідає багатовузловим пристроям"
 
-#: virtinst/cli.py:4654
+#: virtinst/cli.py:4652
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Не знайдено відповідного вузлового пристрою для «%s»"
+
+#: virtinst/cli.py:4797
+msgid ""
+"You can see additional information with:\n"
+"\n"
+"  osinfo-query os\n"
+msgstr ""
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5800,8 +5816,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Спосіб створення nodedev для ідентифікатора типу mdev «%s» є невідомим"
 
 #: virtinst/devices/hostdev.py:88
-#, python-format
-msgid "Unknown node device type %s"
+#, fuzzy, python-format
+#| msgid "Unknown node device type %s"
+msgid "Unsupported node device type '%s'"
 msgstr "Невідомий тип пристрою вузла, %s"
 
 #: virtinst/devices/interface.py:189
@@ -5861,9 +5878,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
-"TЗагальна кількість процесорів, яка визначається топологією "
-"(сокетів=%(sockets)d * плашок=%(dies)d * ядер=%(cores)d * потоків=%(threads)"
-"d == %(total)d), не відповідає кількості віртуальних процесорів, %(vcpus)d"
+"TЗагальна кількість процесорів, яка визначається топологією (сокетів="
+"%(sockets)d * плашок=%(dies)d * ядер=%(cores)d * потоків=%(threads)d == "
+"%(total)d), не відповідає кількості віртуальних процесорів, %(vcpus)d"
 
 #: virtinst/domain/cpu.py:310
 msgid "No host CPU reported in capabilities"
@@ -6077,28 +6094,29 @@ msgstr "Не вдалося відкрити адресу %(url)s: %(error)s"
 msgid "Transferring '%(filename)s'"
 msgstr "Передавання «%(filename)s»"
 
-#: virtinst/osdict.py:142
-msgid "Generic OS"
-msgstr "Типова ОС"
+#: virtinst/osdict.py:71
+msgid "Generic or unknown OS. Usage is not recommended."
+msgstr ""
 
-#: virtinst/osdict.py:167
+#: virtinst/osdict.py:96
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "Невідомий ідентифікатор libosinfo «%s»"
 
-#: virtinst/osdict.py:181
-#, python-format
-msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#: virtinst/osdict.py:110
+#, fuzzy, python-format
+#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
 "Невідома назва операційної системи — «%s». Зі списком коректних значень "
 "можна ознайомитися за допомогою команди «osinfo-query os»."
 
-#: virtinst/osdict.py:583
+#: virtinst/osdict.py:510
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "У ОС «%s» немає місця URL"
 
-#: virtinst/osdict.py:595
+#: virtinst/osdict.py:522
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6205,7 +6223,7 @@ msgstr ""
 "статичної адреси IP тощо не можна виконати за допомогою цієї програми. Для "
 "внесення змін подібного роду слід скористатися virt-sysprep(1)."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:943
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "Загальні параметри"
 
@@ -6289,7 +6307,7 @@ msgstr ""
 "Нова фіксована MAC-адреса для клонованої гостьової системи. Типовою є "
 "випадково створена MAC-адреса"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1048
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "Інші параметри"
@@ -6315,7 +6333,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "Клон «%s» успішно створено."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1157
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1165
 msgid "Installation aborted at user request"
 msgstr "Встановлення перервано на вимогу користувача"
 
@@ -6340,29 +6358,33 @@ msgstr ""
 "параметрами --disk. Скористайтеся визначенням --disk АДРЕСА[,size=РОЗМІР][,"
 "sparse=yes|no]"
 
-#: virtinst/virtinstall.py:223
+#: virtinst/virtinstall.py:149
+msgid "--os-type is deprecated and does nothing. Please stop using it."
+msgstr ""
+
+#: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr ""
 "Не можна одночасно використовувати параметр --graphics і застарілі параметри "
 "графічної системи"
 
-#: virtinst/virtinstall.py:227
+#: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 "Можна використовувати лише один з параметрів VNC, SDL, --graphics або --"
 "nographics"
 
-#: virtinst/virtinstall.py:310
+#: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
 msgstr "--memory потрібен об'єм пам'яті у МіБ"
 
-#: virtinst/virtinstall.py:314
+#: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 "Слід вказати «--disk сховище» (скасувати цей параметр можна за допомогою --"
 "disk none)"
 
-#: virtinst/virtinstall.py:318
+#: virtinst/virtinstall.py:320
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6371,7 +6393,7 @@ msgstr ""
 "Слід вказати спосіб встановлення\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:330
+#: virtinst/virtinstall.py:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6380,13 +6402,13 @@ msgstr ""
 "ймовірно, ви не побачите у консолі текстового супроводу встановлення. Вам "
 "варто скористатися параметром --location."
 
-#: virtinst/virtinstall.py:333
+#: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 "Докладні приклади використання --location для носіїв даних типу CDROM можна "
 "знайти на сторінці довідника (man)"
 
-#: virtinst/virtinstall.py:346
+#: virtinst/virtinstall.py:348
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
@@ -6395,7 +6417,7 @@ msgstr ""
 "Запит на пам'ять у %(mem1)s МіБ є меншим за рекомендовані %(mem2)s МіБ для "
 "ОС %(osname)s"
 
-#: virtinst/virtinstall.py:351
+#: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
@@ -6403,67 +6425,74 @@ msgstr ""
 "Запит на пам'ять у %s МіБ є надзвичайно низьким. Можливо, ви хотіли вказати "
 "розмір у ГіБ?"
 
-#: virtinst/virtinstall.py:358
+#: virtinst/virtinstall.py:366
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
 "У налаштуваннях мережі гостьової системи може бути не передбачено підтримки "
 "PXE"
 
-#: virtinst/virtinstall.py:365
+#: virtinst/virtinstall.py:370
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "No operating system detected, VM performance may suffer. Specify an OS "
+#| "with --os-variant for optimal results."
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
+"for optimal results."
 msgstr ""
 "Не виявлено жодної операційної системи, швидкодію ВМ може бути значно "
 "знижено. Щоб отримати оптимальні результати, вкажіть операційну систему за "
 "допомогою параметра --os-variant."
 
-#: virtinst/virtinstall.py:378
+#: virtinst/virtinstall.py:384
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr "Використовуємо {osname} --location {url}"
 
-#: virtinst/virtinstall.py:457
+#: virtinst/virtinstall.py:463
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "Використовуємо типове значення --name {vm_name}"
 
-#: virtinst/virtinstall.py:467
+#: virtinst/virtinstall.py:473
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr "Використовуємо типове значення --memory {megabytes}"
 
-#: virtinst/virtinstall.py:486
+#: virtinst/virtinstall.py:492
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "Використовуємо типове для {os_name} значення --memory {megabytes}"
 
-#: virtinst/virtinstall.py:497
+#: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "Використовуємо типове для {os_name} значення --disk {disk_options}"
 
-#: virtinst/virtinstall.py:543
+#: virtinst/virtinstall.py:549
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Помилка під час перевірки місця встановлення: %s"
 
-#: virtinst/virtinstall.py:546
-msgid "An --os-variant is required, but no value was set or detected."
+#: virtinst/virtinstall.py:552
+#, fuzzy
+#| msgid "An --os-variant is required, but no value was set or detected."
+msgid ""
+"--os-variant/--osinfo OS name is required, but no value was set or detected."
 msgstr ""
 "Мало бути вказано --os-variant, але не встановлено або не виявлено жодного "
 "значення."
 
-#: virtinst/virtinstall.py:619
+#: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 "Немає консолі для запуску гостьової системи. Використовуємо типове --wait -1"
 
-#: virtinst/virtinstall.py:655
+#: virtinst/virtinstall.py:661
 msgid "Waiting for the installation to complete."
 msgstr "Очікуємо на завершення встановлення."
 
-#: virtinst/virtinstall.py:656
+#: virtinst/virtinstall.py:662
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
@@ -6471,50 +6500,50 @@ msgstr[0] "Очікуємо %(minutes)d хвилину на завершення
 msgstr[1] "Очікуємо %(minutes)d хвилини на завершення встановлення."
 msgstr[2] "Очікуємо %(minutes)d хвилин на завершення встановлення."
 
-#: virtinst/virtinstall.py:679
+#: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "Пароль для першого входу від імені root: %s"
 
-#: virtinst/virtinstall.py:691
+#: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 "Встановлення буде продовжено за 10 секунд (натисніть Enter, щоб "
 "пропустити)..."
 
-#: virtinst/virtinstall.py:718
+#: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
 msgstr "Виконання команди консолі завершилося повідомленням про помилку."
 
-#: virtinst/virtinstall.py:755
+#: virtinst/virtinstall.py:761
 msgid "Domain has crashed."
 msgstr "Домен завершив роботу у аварійному режимі."
 
-#: virtinst/virtinstall.py:785
+#: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
 msgstr "Домен продовжує працювати. Можливо, триває встановлення."
 
-#: virtinst/virtinstall.py:795
+#: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 "Ви можете повторно встановити з'єднання із консоллю для завершення процедури "
 "встановлення."
 
-#: virtinst/virtinstall.py:806
+#: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
 msgstr "Роботу домену завершено. Продовжуємо."
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "Час встановлення перевищив вказане обмеження за часом. Завершуємо роботу "
 "програми."
 
-#: virtinst/virtinstall.py:835
+#: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
 msgstr "Створення домену завершено."
 
-#: virtinst/virtinstall.py:844
+#: virtinst/virtinstall.py:850
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6523,15 +6552,15 @@ msgstr ""
 "Ви можете перезавантажити ваш домен такою командою:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr "Віртуальну машину зупинено користувачем. Не перезавантажуємо."
 
-#: virtinst/virtinstall.py:852
+#: virtinst/virtinstall.py:858
 msgid "Restarting guest."
 msgstr "Перезапускаємо гостьову систему."
 
-#: virtinst/virtinstall.py:869
+#: virtinst/virtinstall.py:875
 msgid ""
 "\n"
 "Starting install..."
@@ -6539,40 +6568,40 @@ msgstr ""
 "\n"
 "Починаємо встановлення…"
 
-#: virtinst/virtinstall.py:892
+#: virtinst/virtinstall.py:898
 msgid "Domain install interrupted."
 msgstr "Встановлення домену перервано."
 
-#: virtinst/virtinstall.py:911
+#: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
 msgstr "Під час тестового запуску помилок не виявлено"
 
-#: virtinst/virtinstall.py:915
+#: virtinst/virtinstall.py:921
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Невідомий запит кроку XML «%s», має бути 1, 2 або all"
 
-#: virtinst/virtinstall.py:922
+#: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
 msgstr "У вказаному встановленні немає кроку 2 XML"
 
-#: virtinst/virtinstall.py:939
+#: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
 msgstr "Створити віртуальну машину на основі вказаного носія для встановлення."
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:951
 msgid "Name of the guest instance"
 msgstr "Назва екземпляра гостьової системи"
 
-#: virtinst/virtinstall.py:953
+#: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
 msgstr "Параметри способу встановлення"
 
-#: virtinst/virtinstall.py:955
+#: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
 msgstr "Носій CD-ROM для встановлення"
 
-#: virtinst/virtinstall.py:957
+#: virtinst/virtinstall.py:963
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6580,34 +6609,34 @@ msgstr ""
 "Адреса встановлення дистрибутива, наприклад https://вузол/шлях. Приклади для "
 "окремих дистрибутивів можна знайти на сторінці підручника."
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
 msgstr "Завантажити з мережі за допомогою протоколу PXE"
 
-#: virtinst/virtinstall.py:962
+#: virtinst/virtinstall.py:968
 msgid "Build guest around an existing disk image"
 msgstr "Побудувати гостьову систему на основі вже створеного образу диска"
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:971
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Додаткові параметри, які слід передати ядру встановлення, що "
 "завантажуватиметься з --location"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
 msgstr "Додати вказаний файл до кореневого каталогу initrd з --location"
 
-#: virtinst/virtinstall.py:970
+#: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
 msgstr "Виконати автоматичне встановлення"
 
-#: virtinst/virtinstall.py:972
+#: virtinst/virtinstall.py:978
 msgid "Specify fine grained install options"
 msgstr "Вказати точні параметри встановлення"
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:980
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6615,60 +6644,60 @@ msgstr ""
 "Перевстановити наявну ВМ. Буде застосовано лише параметри встановлення, усі "
 "інші параметри налаштовування ВМ буде проігноровано."
 
-#: virtinst/virtinstall.py:977
+#: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "Виконати встановлення образу для «хмари» із налаштовуванням cloud-init"
 
-#: virtinst/virtinstall.py:991
+#: virtinst/virtinstall.py:997
 msgid "Device Options"
 msgstr "Параметри пристрою"
 
-#: virtinst/virtinstall.py:1021
+#: virtinst/virtinstall.py:1027
 msgid "Guest Configuration Options"
 msgstr "Параметри налаштування гостьової системи"
 
-#: virtinst/virtinstall.py:1025
+#: virtinst/virtinstall.py:1031
 msgid "Virtualization Platform Options"
 msgstr "Параметри платформи віртуалізації"
 
-#: virtinst/virtinstall.py:1029
+#: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
 msgstr ""
 "Ця гостьова система має бути повністю віртуалізованою гостьовою системою"
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
 msgstr "Ця гостьова система має бути паравіртуалізованою гостьовою системою"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
 msgstr "Ця гостьова система має бути гостьовою системою у контейнері"
 
-#: virtinst/virtinstall.py:1037
+#: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Назва гіпервізора, яку слід використовувати (kvm, qemu, xen…)"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1044
 msgid "The CPU architecture to simulate"
 msgstr "Архітектура процесора, яку слід імітувати"
 
-#: virtinst/virtinstall.py:1039
+#: virtinst/virtinstall.py:1045
 msgid "The machine type to emulate"
 msgstr "Тип архітектури, який слід імітувати"
 
-#: virtinst/virtinstall.py:1050
+#: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
 msgstr "Автоматично запускати домен після запуску основної системи."
 
-#: virtinst/virtinstall.py:1052
+#: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
 msgstr "Створити перехідний домен."
 
-#: virtinst/virtinstall.py:1054
+#: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "Примусово вимкнути домен після закриття консольного засобу перегляду."
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
 msgstr "Час у хвилинах, протягом якого слід чекати на завершення встановлення."
 
@@ -6738,7 +6767,9 @@ msgstr ""
 "використовуйте аргумент: «--edit»"
 
 #: virtinst/virtxml.py:157
-msgid "--os-variant is not supported with --edit"
+#, fuzzy
+#| msgid "--os-variant is not supported with --edit"
+msgid "--os-variant/--osinfo is not supported with --edit"
 msgstr "якщо використано --edit, не можна використовувати --os-variant"
 
 #: virtinst/virtxml.py:164
@@ -6752,7 +6783,9 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Не можна використовувати --remove-device, якщо використано --%s"
 
 #: virtinst/virtxml.py:184
-msgid "--os-variant is not supported with --remove-device"
+#, fuzzy
+#| msgid "--os-variant is not supported with --remove-device"
+msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr ""
 "якщо використано --remove-device, не можна використовувати --os-variant"
 
@@ -6762,7 +6795,9 @@ msgid "--build-xml not supported for --%s"
 msgstr "Підтримки --build-xml для --%s не передбачено"
 
 #: virtinst/virtxml.py:207
-msgid "--os-variant is not supported with --build-xml"
+#, fuzzy
+#| msgid "--os-variant is not supported with --build-xml"
+msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "якщо використано --build-xml, не можна використовувати --os-variant"
 
 #: virtinst/virtxml.py:233
@@ -6780,12 +6815,12 @@ msgstr "Домен «%s» успішно визначено."
 msgid "Start '%s' with the changed XML?"
 msgstr "Запустити «%s» зі зміненим XML?"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:552
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Не вдалося запустити домен «%(domain)s»: %(error)s"
 
-#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:556
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Домен «%s» успішно запущено."
@@ -6959,37 +6994,37 @@ msgstr "Для збереження будь-яких результатів п�
 msgid "XML options"
 msgstr "Параметри XML"
 
-#: virtinst/virtxml.py:459
+#: virtinst/virtxml.py:461
 msgid "Can't use --confirm with stdin input."
 msgstr ""
 "Не можна використовувати --confirm зі стандартним джерелом вхідних даних "
 "(stdin)."
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:463
 msgid "Can't use --update with stdin input."
 msgstr ""
 "Не можна використовувати --update зі стандартним джерелом вхідних даних "
 "(stdin)."
 
-#: virtinst/virtxml.py:464
+#: virtinst/virtxml.py:466
 msgid "A domain must be specified"
 msgstr "Слід вказати домен"
 
-#: virtinst/virtxml.py:492
+#: virtinst/virtxml.py:494
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "Спосіб використання --update для --%s невідомий"
 
-#: virtinst/virtxml.py:526
+#: virtinst/virtxml.py:528
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 "Віртуальну машину не запущено — застосовувати параметр --update не можна."
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:561
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Зміни буде застосовано після того, як домен буде повністю вимкнено."
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:563
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6997,7 +7032,7 @@ msgstr ""
 "XML не змінено після визначення домену. Ймовірно, ви змінили значення так, "
 "що воно збіглося із типовим значенням у libvirt."
 
-#: virtinst/virtxml.py:574
+#: virtinst/virtxml.py:576
 msgid "Aborted at user request"
 msgstr "Перервано на вимогу користувача"
 
@@ -7021,6 +7056,9 @@ msgstr "Для %s слід вказати назву"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "У %(objecttype)s назва «%(name)s» не повинна містити символу «%(char)s»."
+
+#~ msgid "Generic OS"
+#~ msgstr "Типова ОС"
 
 #~ msgid "Detect _zeroes:"
 #~ msgstr "Виявлення _нулів:"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-13 06:13+0000\n"
+"POT-Creation-Date: 2022-02-15 06:14+0000\n"
 "PO-Revision-Date: 2021-07-29 20:00+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
@@ -573,7 +573,7 @@ msgid "Architecture options"
 msgstr "Opcje architektury"
 
 #: ui/createvm.ui:792 virtManager/details/details.py:728
-#: virtManager/manager.py:329 virtManager/oslist.py:65
+#: virtManager/manager.py:329 virtManager/oslist.py:72
 msgid "Name"
 msgstr "Nazwa"
 
@@ -1684,10 +1684,14 @@ msgid "_Network source:"
 msgstr "Źródło _sieci:"
 
 #: ui/oslist.ui:55
+#, fuzzy
+#| msgid ""
+#| "Can't find the operating system you are looking for?\n"
+#| "Try selecting the next most recent version displayed,\n"
+#| "or use the \"Generic OS\" entry."
 msgid ""
-"Can't find the operating system you are looking for?\n"
-"Try selecting the next most recent version displayed,\n"
-"or use the \"Generic OS\" entry."
+"Can't find the operating system you are looking for? Try selecting a similar "
+"distro or version, or use one of the 'Generic' options."
 msgstr ""
 "Na liście nie ma szukanego systemu operacyjnego?\n"
 "Należy spróbować wybrać następną najnowszą\n"
@@ -4723,7 +4727,7 @@ msgstr "System plików Sheepdog"
 msgid "ZFS Pool"
 msgstr "Pula ZFS"
 
-#: virtManager/oslist.py:26
+#: virtManager/oslist.py:31
 msgid "Type to start searching..."
 msgstr "Wyszukiwanie…"
 
@@ -5559,10 +5563,15 @@ msgid "The OS installed in the guest."
 msgstr "System operacyjny zainstalowany na gościu."
 
 #: virtinst/cli.py:929
+#, fuzzy
+#| msgid ""
+#| "This is used for deciding optimal defaults like VirtIO.\n"
+#| "Example values: fedora29, rhel7.0, win10, ...\n"
+#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
-"See 'osinfo-query os' for a full list."
+"Use '--osinfo list' to see a full list."
 msgstr ""
 "Jest to używane do ustalania optymalnych wartości domyślnych, takich jak "
 "VirtIO.\n"
@@ -5605,7 +5614,7 @@ msgstr "Nieznane opcje %(optionflag)s: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Błąd: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1910
+#: virtinst/cli.py:1908
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5613,46 +5622,53 @@ msgstr ""
 "Nie można połączyć się z konsolą graficzną: nie zainstalowano pakietu virt-"
 "viewer. Proszę zainstalować pakiet „virt-viewer”."
 
-#: virtinst/cli.py:1917
+#: virtinst/cli.py:1915
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Zażądano grafiki, ale zmienna DISPLAY nie została ustawiona. Program virt-"
 "viewer nie zostanie uruchomiony."
 
-#: virtinst/cli.py:1928
+#: virtinst/cli.py:1926
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Nieznany typ automatycznej konsoli „%s”"
 
-#: virtinst/cli.py:3473
+#: virtinst/cli.py:3471
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Niewłaściwa wartość dla „size”: %s"
 
-#: virtinst/cli.py:3486
+#: virtinst/cli.py:3484
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Nieznana „%(optionname)s” wartość „%(string)s”"
 
-#: virtinst/cli.py:3501
+#: virtinst/cli.py:3499
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Wolumin pamięci masowej musi zostać podany jako vol=nazwa_puli/nazwa_woluminu"
 
-#: virtinst/cli.py:3950
+#: virtinst/cli.py:3948
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Oczekiwano ciągu w formacie PCI dla „%s”"
 
-#: virtinst/cli.py:4651
+#: virtinst/cli.py:4649
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s odpowiada wielu urządzeniom węzła"
 
-#: virtinst/cli.py:4654
+#: virtinst/cli.py:4652
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Nie odnaleziono pasującego urządzenia węzła dla „%s”"
+
+#: virtinst/cli.py:4797
+msgid ""
+"You can see additional information with:\n"
+"\n"
+"  osinfo-query os\n"
+msgstr ""
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5772,8 +5788,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Nie wiadomo, jak utworzyć nodedev dla identyfikatora typu mdev „%s”"
 
 #: virtinst/devices/hostdev.py:88
-#, python-format
-msgid "Unknown node device type %s"
+#, fuzzy, python-format
+#| msgid "Unknown node device type %s"
+msgid "Unsupported node device type '%s'"
 msgstr "Nieznany typ urządzenia węzła %s"
 
 #: virtinst/devices/interface.py:189
@@ -6047,28 +6064,29 @@ msgstr "Otwarcie adresu URL %(url)s się nie powiodło: %(error)s"
 msgid "Transferring '%(filename)s'"
 msgstr "Przesyłanie „%(filename)s”"
 
-#: virtinst/osdict.py:142
-msgid "Generic OS"
-msgstr "Ogólny system operacyjny"
+#: virtinst/osdict.py:71
+msgid "Generic or unknown OS. Usage is not recommended."
+msgstr ""
 
-#: virtinst/osdict.py:167
+#: virtinst/osdict.py:96
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "Nieznany identyfikator libosinfo „%s”"
 
-#: virtinst/osdict.py:181
-#, python-format
-msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#: virtinst/osdict.py:110
+#, fuzzy, python-format
+#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
 "Nieznana nazwa systemu operacyjnego „%s”. „osinfo-query os” wyświetli "
 "prawidłowe wartości."
 
-#: virtinst/osdict.py:583
+#: virtinst/osdict.py:510
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "System operacyjny „%s” nie ma położenia URL"
 
-#: virtinst/osdict.py:595
+#: virtinst/osdict.py:522
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6178,7 +6196,7 @@ msgstr ""
 "jest poza zakresem działań tego narzędzia. Do wprowadzania tego typu zmian "
 "należy użyć programu virt-sysprep(1)."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:943
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "Ogólne opcje"
 
@@ -6261,7 +6279,7 @@ msgstr ""
 "Nowy stały adres MAC dla sklonowanego gościa. Domyślnie jest to losowo "
 "utworzony adres MAC"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1048
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "Różne opcje"
@@ -6287,7 +6305,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "Klon „%s” został pomyślnie utworzony."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1157
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1165
 msgid "Installation aborted at user request"
 msgstr "Instalacja została przerwana na żądanie użytkownika"
 
@@ -6311,27 +6329,31 @@ msgstr ""
 "Nie można mieszać --file, --nonsparse lub --file-size z opcjami --disk. "
 "Proszę użyć --disk ŚCIEŻKA[,size=ROZMIAR][,sparse=yes|no]"
 
-#: virtinst/virtinstall.py:223
+#: virtinst/virtinstall.py:149
+msgid "--os-type is deprecated and does nothing. Please stop using it."
+msgstr ""
+
+#: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr ""
 "Nie można mieszać opcji --graphics z opcjami graficznymi w starym stylu"
 
-#: virtinst/virtinstall.py:227
+#: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 "Nie można podać więcej niż jedno z VNC, SDL, --graphics lub --nographics"
 
-#: virtinst/virtinstall.py:310
+#: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
 msgstr "Ilość pamięci --memory w MiB jest wymagana"
 
-#: virtinst/virtinstall.py:314
+#: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 "Pamięć masowa --disk musi zostać podana (należy użyć --disk none, aby "
 "zastąpić)"
 
-#: virtinst/virtinstall.py:318
+#: virtinst/virtinstall.py:320
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6340,7 +6362,7 @@ msgstr ""
 "Metoda instalacji musi zostać podana\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:330
+#: virtinst/virtinstall.py:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6349,13 +6371,13 @@ msgstr ""
 "prawdopodobnie wyjście tekstowe instalacji nie będzie widoczne. Warto "
 "rozważyć użycie opcji --location."
 
-#: virtinst/virtinstall.py:333
+#: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 "Na stronie podręcznika znajdują się przykłady używania opcji --location "
 "z nośnikiem CD-ROM"
 
-#: virtinst/virtinstall.py:346
+#: virtinst/virtinstall.py:348
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
@@ -6364,7 +6386,7 @@ msgstr ""
 "Żądana pamięć (%(mem1)s MiB) jest mniejsza niż zalecana (%(mem2)s MiB) dla "
 "systemu operacyjnego %(osname)s"
 
-#: virtinst/virtinstall.py:351
+#: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
@@ -6372,66 +6394,73 @@ msgstr ""
 "Żądana pamięć (%s MiB) jest nadzwyczajnie niska. Czy próbowano podać wartość "
 "w GiB?"
 
-#: virtinst/virtinstall.py:358
+#: virtinst/virtinstall.py:366
 msgid "The guest's network configuration may not support PXE"
 msgstr "Konfiguracja sieci gościa może nie obsługiwać PXE"
 
-#: virtinst/virtinstall.py:365
+#: virtinst/virtinstall.py:370
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "No operating system detected, VM performance may suffer. Specify an OS "
+#| "with --os-variant for optimal results."
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
+"for optimal results."
 msgstr ""
 "Nie wykryto systemu operacyjnego. Wydajność maszyny wirtualnej może być "
 "ograniczona. Proszę podać system operacyjny za pomocą opcji --os-variant, "
 "aby uzyskać optymalną wydajność."
 
-#: virtinst/virtinstall.py:378
+#: virtinst/virtinstall.py:384
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr "Używanie {osname} --location {url}"
 
-#: virtinst/virtinstall.py:457
+#: virtinst/virtinstall.py:463
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "Używanie domyślnego --name {vm_name}"
 
-#: virtinst/virtinstall.py:467
+#: virtinst/virtinstall.py:473
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr "Używanie domyślnego --memory {megabytes} kontenera"
 
-#: virtinst/virtinstall.py:486
+#: virtinst/virtinstall.py:492
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "Używanie domyślnego --memory {megabytes} systemu {os_name}"
 
-#: virtinst/virtinstall.py:497
+#: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "Używanie domyślnego --disk {disk_options} systemu {os_name}"
 
-#: virtinst/virtinstall.py:543
+#: virtinst/virtinstall.py:549
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Błąd podczas sprawdzania położenia instalacji: %s"
 
-#: virtinst/virtinstall.py:546
-msgid "An --os-variant is required, but no value was set or detected."
+#: virtinst/virtinstall.py:552
+#, fuzzy
+#| msgid "An --os-variant is required, but no value was set or detected."
+msgid ""
+"--os-variant/--osinfo OS name is required, but no value was set or detected."
 msgstr ""
 "Wymagana jest opcja --os-variant, ale nie ustawiono ani nie wykryto żadnej "
 "wartości."
 
-#: virtinst/virtinstall.py:619
+#: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 "Brak konsoli do uruchomienia dla gościa, zostanie użyta domyślna opcja --"
 "wait -1"
 
-#: virtinst/virtinstall.py:655
+#: virtinst/virtinstall.py:661
 msgid "Waiting for the installation to complete."
 msgstr "Oczekiwanie na ukończenie instalacji."
 
-#: virtinst/virtinstall.py:656
+#: virtinst/virtinstall.py:662
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
@@ -6439,48 +6468,48 @@ msgstr[0] "Oczekiwanie %(minutes)d minutę na ukończenie instalacji."
 msgstr[1] "Oczekiwanie %(minutes)d minuty na ukończenie instalacji."
 msgstr[2] "Oczekiwanie %(minutes)d minut na ukończenie instalacji."
 
-#: virtinst/virtinstall.py:679
+#: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "Hasło do pierwszego logowania jako root: %s"
 
-#: virtinst/virtinstall.py:691
+#: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 "Instalacja będzie kontynuowana za 10 sekund (naciśnięcie klawisza Enter "
 "pominie)…"
 
-#: virtinst/virtinstall.py:718
+#: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
 msgstr "Polecenie konsoli zwróciło niepowodzenie."
 
-#: virtinst/virtinstall.py:755
+#: virtinst/virtinstall.py:761
 msgid "Domain has crashed."
 msgstr "Domena uległa awarii."
 
-#: virtinst/virtinstall.py:785
+#: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
 msgstr "Domena jest nadal uruchomiona. Może być w trakcie instalacji."
 
-#: virtinst/virtinstall.py:795
+#: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr "Można ponownie połączyć się z konsolą, aby ukończyć proces instalacji."
 
-#: virtinst/virtinstall.py:806
+#: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
 msgstr "Domena została wyłączona. Kontynuowanie."
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "Instalacja przekroczyła podane ograniczenie czasu. Kończenie działania "
 "aplikacji."
 
-#: virtinst/virtinstall.py:835
+#: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
 msgstr "Utworzenie domeny zostało ukończone."
 
-#: virtinst/virtinstall.py:844
+#: virtinst/virtinstall.py:850
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6489,16 +6518,16 @@ msgstr ""
 "Można ponownie uruchomić domenę wykonując polecenie:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 "Użytkownik zatrzymał maszynę wirtualną. Nie zostanie ponownie uruchomiona."
 
-#: virtinst/virtinstall.py:852
+#: virtinst/virtinstall.py:858
 msgid "Restarting guest."
 msgstr "Ponowne uruchamianie gościa."
 
-#: virtinst/virtinstall.py:869
+#: virtinst/virtinstall.py:875
 msgid ""
 "\n"
 "Starting install..."
@@ -6506,40 +6535,40 @@ msgstr ""
 "\n"
 "Rozpoczynanie instalacji…"
 
-#: virtinst/virtinstall.py:892
+#: virtinst/virtinstall.py:898
 msgid "Domain install interrupted."
 msgstr "Przerwano instalację domeny."
 
-#: virtinst/virtinstall.py:911
+#: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
 msgstr "Uruchomienie na sucho zostało pomyślnie ukończone"
 
-#: virtinst/virtinstall.py:915
+#: virtinst/virtinstall.py:921
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Nieznane żądanie XML kroku „%s”, musi wynosić 1, 2 lub wszystko"
 
-#: virtinst/virtinstall.py:922
+#: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
 msgstr "Żądana instalacja nie ma XML kroku drugiego"
 
-#: virtinst/virtinstall.py:939
+#: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
 msgstr "Tworzy nową maszynę wirtualną z podanego nośnika instalacji."
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:951
 msgid "Name of the guest instance"
 msgstr "Nazwa gościa"
 
-#: virtinst/virtinstall.py:953
+#: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
 msgstr "Opcje metody instalacji"
 
-#: virtinst/virtinstall.py:955
+#: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
 msgstr "Nośnik instalacji CD-ROM"
 
-#: virtinst/virtinstall.py:957
+#: virtinst/virtinstall.py:963
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6547,34 +6576,34 @@ msgstr ""
 "Adres URL instalacji dystrybucji, np. https://serwer/ścieżka. Strona "
 "podręcznika zawiera konkretne przykłady dystrybucji."
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
 msgstr "Uruchamia z sieci za pomocą protokołu PXE"
 
-#: virtinst/virtinstall.py:962
+#: virtinst/virtinstall.py:968
 msgid "Build guest around an existing disk image"
 msgstr "Buduje gościa na podstawie istniejącego obrazu dysku"
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:971
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Dodatkowe parametry do przekazania do jądra instalacji uruchomionego z --"
 "location"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
 msgstr "Dodaje podany plik do roota obrazu initrd z --location"
 
-#: virtinst/virtinstall.py:970
+#: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
 msgstr "Wykonuje nienadzorowaną instalację"
 
-#: virtinst/virtinstall.py:972
+#: virtinst/virtinstall.py:978
 msgid "Specify fine grained install options"
 msgstr "Podaje szczegółowe opcje instalacji"
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:980
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6583,59 +6612,59 @@ msgstr ""
 "opcje instalacji, wszystkie pozostałe opcje konfiguracji maszyny wirtualnej "
 "są ignorowane."
 
-#: virtinst/virtinstall.py:977
+#: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "Wykonuje instalację obrazu chmury, konfigurowanie cloud-init"
 
-#: virtinst/virtinstall.py:991
+#: virtinst/virtinstall.py:997
 msgid "Device Options"
 msgstr "Opcje urządzenia"
 
-#: virtinst/virtinstall.py:1021
+#: virtinst/virtinstall.py:1027
 msgid "Guest Configuration Options"
 msgstr "Opcje konfiguracji gościa"
 
-#: virtinst/virtinstall.py:1025
+#: virtinst/virtinstall.py:1031
 msgid "Virtualization Platform Options"
 msgstr "Opcje platformy wirtualizacji"
 
-#: virtinst/virtinstall.py:1029
+#: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
 msgstr "Ten gość powinien być w pełni wirtualizowanym gościem"
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
 msgstr "Ten gość powinien być parawirtualizowany"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
 msgstr "Ten gość powinien być gościem kontenerem"
 
-#: virtinst/virtinstall.py:1037
+#: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Nazwa użytego nadzorcy (KVM, QEMU, Xen…)"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1044
 msgid "The CPU architecture to simulate"
 msgstr "Symulowana architektura procesora"
 
-#: virtinst/virtinstall.py:1039
+#: virtinst/virtinstall.py:1045
 msgid "The machine type to emulate"
 msgstr "Emulowany typ maszyny"
 
-#: virtinst/virtinstall.py:1050
+#: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
 msgstr "Automatyczne uruchamianie domeny podczas uruchamiania gospodarza."
 
-#: virtinst/virtinstall.py:1052
+#: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
 msgstr "Utwórz przejściową domenę."
 
-#: virtinst/virtinstall.py:1054
+#: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "Wymuszanie wyłączenia domeny po zamknięciu przeglądarki konsoli."
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
 msgstr "Minuty oczekiwania na ukończenie instalacji."
 
@@ -6705,7 +6734,9 @@ msgstr ""
 "pustego „--edit”"
 
 #: virtinst/virtxml.py:157
-msgid "--os-variant is not supported with --edit"
+#, fuzzy
+#| msgid "--os-variant is not supported with --edit"
+msgid "--os-variant/--osinfo is not supported with --edit"
 msgstr "--os-variant nie jest obsługiwane z --edit"
 
 #: virtinst/virtxml.py:164
@@ -6719,7 +6750,9 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Nie można używać --remove-device razem z --%s"
 
 #: virtinst/virtxml.py:184
-msgid "--os-variant is not supported with --remove-device"
+#, fuzzy
+#| msgid "--os-variant is not supported with --remove-device"
+msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr "--os-variant nie jest obsługiwane z --remove-device"
 
 #: virtinst/virtxml.py:204
@@ -6728,7 +6761,9 @@ msgid "--build-xml not supported for --%s"
 msgstr "--build-xml nie jest obsługiwane dla --%s"
 
 #: virtinst/virtxml.py:207
-msgid "--os-variant is not supported with --build-xml"
+#, fuzzy
+#| msgid "--os-variant is not supported with --build-xml"
+msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--os-variant nie jest obsługiwane z --build-xml"
 
 #: virtinst/virtxml.py:233
@@ -6746,12 +6781,12 @@ msgstr "Pomyślnie określono domenę „%s”."
 msgid "Start '%s' with the changed XML?"
 msgstr "Uruchomić „%s” za pomocą zmienionego pliku XML?"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:552
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Uruchomienie domeny „%(domain)s” się nie powiodło: %(error)s"
 
-#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:556
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Pomyślnie uruchomiono domenę „%s”."
@@ -6929,32 +6964,32 @@ msgstr "Wymaganie potwierdzenia przed zapisaniem wyników."
 msgid "XML options"
 msgstr "Opcje pliku XML"
 
-#: virtinst/virtxml.py:459
+#: virtinst/virtxml.py:461
 msgid "Can't use --confirm with stdin input."
 msgstr "Nie można używać --confirm razem ze standardowym wejściem."
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:463
 msgid "Can't use --update with stdin input."
 msgstr "Nie można używać --update razem ze standardowym wejściem."
 
-#: virtinst/virtxml.py:464
+#: virtinst/virtxml.py:466
 msgid "A domain must be specified"
 msgstr "Należy podać domenę"
 
-#: virtinst/virtxml.py:492
+#: virtinst/virtxml.py:494
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "Nie wiadomo, jak użyć --update dla --%s"
 
-#: virtinst/virtxml.py:526
+#: virtinst/virtxml.py:528
 msgid "The VM is not running, --update is inapplicable."
 msgstr "Maszyna wirtualna nie jest uruchomiona, --update nie ma zastosowania."
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:561
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Zmiany zostaną uwzględnione po pełnym wyłączeniu domeny."
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:563
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -6962,7 +6997,7 @@ msgstr ""
 "Kod XML nie uległ zmianie po określeniu domeny. Mogła zostać zmieniona "
 "wartość domyślnie ustawiana przez bibliotekę libvirt."
 
-#: virtinst/virtxml.py:574
+#: virtinst/virtxml.py:576
 msgid "Aborted at user request"
 msgstr "Przerwano na żądanie użytkownika"
 
@@ -6985,6 +7020,9 @@ msgstr "Należy podać nazwę dla %s"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s nazwa „%(name)s” nie może zawierać znaku „%(char)s”."
+
+#~ msgid "Generic OS"
+#~ msgstr "Ogólny system operacyjny"
 
 #~ msgid "Detect _zeroes:"
 #~ msgstr "Wykrywanie _zer:"
