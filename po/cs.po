@@ -10,25 +10,25 @@
 # Zdenek Styblik <stybla@turnovfree.net>, 2010
 # Zdenek <chmelarz@gmail.com>, 2016. #zanata
 # Zdenek <chmelarz@gmail.com>, 2017. #zanata
-# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021, 2022.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021, 2022.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021, 2022.
 # Zdenek Chmelar <chmelarz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-15 06:14+0000\n"
-"PO-Revision-Date: 2021-09-24 12:05+0000\n"
+"PO-Revision-Date: 2022-02-16 22:16+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -1024,10 +1024,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Externí disk a paměť"
+msgstr "Zapnout sdílenou pa_měť"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1693,28 +1691,20 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>Nepodařilo se najít vhodnou výchozí síť.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Port:"
+msgstr "Sku_pina portů:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
 msgstr "_Zdroj sítě:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for? Try selecting a similar "
 "distro or version, or use one of the 'Generic' options."
 msgstr ""
-"Nedaří se vám nalézt operační systém, který hledáte?\n"
-"Zkuste vybrat nejnovější ze zobrazených verzí,\n"
-"nebo použijte položku „Obecný operační systém“."
+"Nedaří se vám nalézt operační systém, který hledáte? Zkuste vybrat podobnou "
+"distribuci či verzi, nebo použijte položku „Obecný“."
 
 #: ui/oslist.ui:107
 msgid "Include end of life operating systems"
@@ -1810,12 +1800,11 @@ msgstr "Výchozí pro procesor:"
 #: ui/preferences.ui:505
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Výchozí firmware pro nové virt. stroje. Start s použitím buď BIOS nebo UEFI."
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Firm_ware:"
+msgstr "_Firmware pro platformu x86:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -2454,6 +2443,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s není v hostitelském systému aktivní.\n"
+"Než budete přidávat hosta virtualizace, spusťte v hostitelském systému mdev."
 
 #: virtManager/addhardware.py:811
 msgid "No Devices Available"
@@ -3393,16 +3384,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "Chybový výstup SSH tunelu: %s"
 
 #: virtManager/details/console.py:844
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Prohlížeč byl odpojen."
+msgstr "Prohlížeč se odpojuje."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Prohlížeč se odpojil."
+msgstr "Okno prohlížeče zavřeno."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3519,7 +3506,7 @@ msgstr "Odeb_rat hardware"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4648,11 +4635,11 @@ msgstr "Chyba při rušení migrace: %s"
 
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "Když je zapnuté <numa>, nastavení sdílené paměti není možné měnit."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt může být příliš staré verze na to, aby podporovalo memfd."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -4814,10 +4801,8 @@ msgid "Nearest host CPU model"
 msgstr "Nejbližší model procesoru hostitele"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Systémové výchozí (%s)"
+msgstr "Systémové výchozí"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5593,11 +5578,6 @@ msgid "The OS installed in the guest."
 msgstr "Operační systém nainstalovaný v hostovi."
 
 #: virtinst/cli.py:929
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5605,7 +5585,7 @@ msgid ""
 msgstr ""
 "Toto slouží pro rozhodování optimálních výchozích jako VirtIO.\n"
 "Hodnoty pro ukázku: fedora29, rhel7.0, win10, …\n"
-"Úplný seznam viz „osinfo-query os“."
+"Úplný seznam si lze vypsat příkazem „osinfo-query os“."
 
 #: virtinst/cli.py:939
 msgid ""
@@ -5696,6 +5676,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Další informace je možné si zobrazit pomocí:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5815,10 +5798,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Není známo jak vytvářet nodedev pro identifikátor typu mdev „%s“"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Neznámý typ zařízení uzlu %s"
+msgstr "Nepodporovaný typ zařízení uzlu „%s“"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -5875,6 +5857,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"Celkový počet procesorů, vyplývající z topologie (sockets=%(sockets)d * "
+"dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
+"neodpovídá počtu virt. procesorů %(vcpus)d"
 
 #: virtinst/domain/cpu.py:310
 msgid "No host CPU reported in capabilities"
@@ -6082,7 +6067,7 @@ msgstr "Přenášení „%(filename)s“"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "Obecný nebo neznámý operační systém. Použití není doporučeno."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6090,12 +6075,11 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "Neznámý libosinfo identifikátor pro „%s“"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
-"Neznámý název operačního systému „%s“. Platné hodnoty získáte spuštěním "
-"`osinfo-query os`"
+"Neznámý název operačního systému „%s“. Platné hodnoty získáte spuštěním s `--"
+"osinfo list`."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6347,7 +6331,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type je zastaralé a už nic nedělá. Prosíme přestaňte ho používat."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6415,17 +6399,13 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "Může být, že uspořádání sítě hosta nepodporuje PXE protokol"
 
 #: virtinst/virtinstall.py:370
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Nebyl rozpoznán operační systém hosta. Nebylo tedy možné optimalizovat a to "
-"může poznamenat výkon. Pro optimální výsledky určete operační systém pomocí "
-"--os-variant."
+"Při použití --osinfo {osname}, může být poznamenán výkon virt. stroje. Pro "
+"optimální výsledky zadejte operační systém přesně."
 
 #: virtinst/virtinstall.py:384
 #, python-brace-format
@@ -6458,12 +6438,11 @@ msgid "Error validating install location: %s"
 msgstr "Chyba při ověřování instalačního umístění: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was set or detected."
 msgstr ""
-"Je zapotřebí --os-variant, ale není nastavená nebo zjištěná žádná hodnota."
+"Je zapotřebí --os-variant/--osinfo název operačního systému, ale není "
+"nastavená nebo zjištěná žádná hodnota."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6742,10 +6721,8 @@ msgstr ""
 "použijte jen samotné „--edit“"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os-variant nelze použít společně s --edit"
+msgstr "--os-variant/--osinfo nelze použít dohromady s --edit"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6758,10 +6735,8 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Není možné použít --remove-device společně s --%s"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr "--os-variant nelze použít společně s --remove-device"
+msgstr "--os-variant/--osinfo nelze použít dohromady s --remove-device"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6769,10 +6744,8 @@ msgid "--build-xml not supported for --%s"
 msgstr "--build-xml není pro --%s podporováno"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "--os-variant nelze použít společně s --build-xml"
+msgstr "--os-variant/--osinfo nelze použít dohromady s --build-xml"
 
 #: virtinst/virtxml.py:233
 #, python-format
