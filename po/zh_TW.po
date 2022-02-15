@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-13 06:13+0000\n"
+"POT-Creation-Date: 2022-02-15 06:14+0000\n"
 "PO-Revision-Date: 2020-11-26 01:35+0000\n"
 "Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -582,7 +582,7 @@ msgid "Architecture options"
 msgstr "架構選項"
 
 #: ui/createvm.ui:792 virtManager/details/details.py:728
-#: virtManager/manager.py:329 virtManager/oslist.py:65
+#: virtManager/manager.py:329 virtManager/oslist.py:72
 msgid "Name"
 msgstr "名稱"
 
@@ -1669,10 +1669,14 @@ msgid "_Network source:"
 msgstr "網路源(_N)："
 
 #: ui/oslist.ui:55
+#, fuzzy
+#| msgid ""
+#| "Can't find the operating system you are looking for?\n"
+#| "Try selecting the next most recent version displayed,\n"
+#| "or use the \"Generic OS\" entry."
 msgid ""
-"Can't find the operating system you are looking for?\n"
-"Try selecting the next most recent version displayed,\n"
-"or use the \"Generic OS\" entry."
+"Can't find the operating system you are looking for? Try selecting a similar "
+"distro or version, or use one of the 'Generic' options."
 msgstr ""
 "找不到需要的作業系統？\n"
 "嘗試選擇最接近的最新版本，\n"
@@ -4651,7 +4655,7 @@ msgstr "Sheepdog 文件系統"
 msgid "ZFS Pool"
 msgstr "ZFS 池"
 
-#: virtManager/oslist.py:26
+#: virtManager/oslist.py:31
 msgid "Type to start searching..."
 msgstr "輸入以開始搜尋…"
 
@@ -5469,10 +5473,15 @@ msgid "The OS installed in the guest."
 msgstr "作業系統已安裝到客戶機中。"
 
 #: virtinst/cli.py:929
+#, fuzzy
+#| msgid ""
+#| "This is used for deciding optimal defaults like VirtIO.\n"
+#| "Example values: fedora29, rhel7.0, win10, ...\n"
+#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
-"See 'osinfo-query os' for a full list."
+"Use '--osinfo list' to see a full list."
 msgstr ""
 "這用於確定最佳預設值，例如 VirtIO。\n"
 "範例值：fedora29, rhel7.0, win10, ...\n"
@@ -5512,50 +5521,57 @@ msgstr "未知 %(optionflag)s 選項：%(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Error: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1910
+#: virtinst/cli.py:1908
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
 "無法連接到圖形控制台：沒有安裝 virt-viewer。請安裝 'virt-viewer' 套裝軟體。"
 
-#: virtinst/cli.py:1917
+#: virtinst/cli.py:1915
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr "需要圖形顯示，但未設定 DISPLAY。不能執行 virt-viewer。"
 
-#: virtinst/cli.py:1928
+#: virtinst/cli.py:1926
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "未知的自動控制台類型 '%s'"
 
-#: virtinst/cli.py:3473
+#: virtinst/cli.py:3471
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' 數值不正確：%s"
 
-#: virtinst/cli.py:3486
+#: virtinst/cli.py:3484
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "未知 '%(optionname)s' 值 '%(string)s'"
 
-#: virtinst/cli.py:3501
+#: virtinst/cli.py:3499
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "必須將儲存卷指定為 vol=poolname/volname"
 
-#: virtinst/cli.py:3950
+#: virtinst/cli.py:3948
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "預期的 '%s' 的 PCI 格式字串"
 
-#: virtinst/cli.py:4651
+#: virtinst/cli.py:4649
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s 會對應多個節點裝置"
 
-#: virtinst/cli.py:4654
+#: virtinst/cli.py:4652
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "不能為 '%s' 找到匹配的節點裝置"
+
+#: virtinst/cli.py:4797
+msgid ""
+"You can see additional information with:\n"
+"\n"
+"  osinfo-query os\n"
+msgstr ""
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5669,8 +5685,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "不知如何為架構 '%s' 安裝 UEFI"
 
 #: virtinst/devices/hostdev.py:88
-#, python-format
-msgid "Unknown node device type %s"
+#, fuzzy, python-format
+#| msgid "Unknown node device type %s"
+msgid "Unsupported node device type '%s'"
 msgstr "未知節點裝置類型 %s"
 
 #: virtinst/devices/interface.py:189
@@ -5925,26 +5942,27 @@ msgstr "打開 URL %(url)s 失敗：%(error)s"
 msgid "Transferring '%(filename)s'"
 msgstr "傳輸 %s"
 
-#: virtinst/osdict.py:142
-msgid "Generic OS"
-msgstr "通用作業系統"
+#: virtinst/osdict.py:71
+msgid "Generic or unknown OS. Usage is not recommended."
+msgstr ""
 
-#: virtinst/osdict.py:167
+#: virtinst/osdict.py:96
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "未知的 libosinfo ID '%s'"
 
-#: virtinst/osdict.py:181
-#, python-format
-msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#: virtinst/osdict.py:110
+#, fuzzy, python-format
+#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr "未知的作業系統名稱 '%s'。請參見 `osinfo-query os` 獲取有效的值。"
 
-#: virtinst/osdict.py:583
+#: virtinst/osdict.py:510
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "作業系統 '%s' 沒有 URL 位置"
 
-#: virtinst/osdict.py:595
+#: virtinst/osdict.py:522
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6043,7 +6061,7 @@ msgstr ""
 "碟和主機端的修改。所以像修改密碼，修改靜態 IP 地址等操作都在本工具複製範圍"
 "內。如何修改此類型的配置，請參考 virt-sysprep(1)。"
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:943
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "通用選項"
 
@@ -6119,7 +6137,7 @@ msgid ""
 "MAC"
 msgstr "為複製客戶機生成新的固定 MAC 地址。預設為隨機生成 MAC"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1048
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "其它選項"
@@ -6141,7 +6159,7 @@ msgstr "新虛擬機需要一個名稱，使用 '--name NEW_虛擬系統_NAME' �
 msgid "Clone '%s' created successfully."
 msgstr "成功複製 '%s'。"
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1157
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1165
 msgid "Installation aborted at user request"
 msgstr "根據使用者要求取消安裝"
 
@@ -6165,23 +6183,27 @@ msgstr ""
 "不能混用 --file, --nonsparse 或 --file-size 與 --disk 選項。使用 --disk "
 "PATH[,size=SIZE][,sparse=yes|no]"
 
-#: virtinst/virtinstall.py:223
+#: virtinst/virtinstall.py:149
+msgid "--os-type is deprecated and does nothing. Please stop using it."
+msgstr ""
+
+#: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "不能混用 --graphics 和舊式的圖形選項"
 
-#: virtinst/virtinstall.py:227
+#: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr "不能指定多個 VNC, SDL, --graphics 或 --nographics 選項"
 
-#: virtinst/virtinstall.py:310
+#: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
 msgstr "--memory 數值單位為 MiB"
 
-#: virtinst/virtinstall.py:314
+#: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr "--disk 儲存必須被指定 (--disk none 選項會覆蓋此參數)"
 
-#: virtinst/virtinstall.py:318
+#: virtinst/virtinstall.py:320
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6190,7 +6212,7 @@ msgstr ""
 "必須指定安裝方法。\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:330
+#: virtinst/virtinstall.py:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6198,11 +6220,11 @@ msgstr ""
 "CDROM 介質預設情況下不輸出訊息到文字控制台，所以可能看不到安裝的輸出。可能需"
 "要使用 --location 選項。"
 
-#: virtinst/virtinstall.py:333
+#: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "請參考 man 手冊以了解使用 --location 選項與 CDROM 介質的範例"
 
-#: virtinst/virtinstall.py:346
+#: virtinst/virtinstall.py:348
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
@@ -6210,110 +6232,117 @@ msgid ""
 msgstr ""
 "為作業系統 %(osname)s 請求的記憶體大小 %(mem1)s MiB 小於建議值 %(mem2)s MiB"
 
-#: virtinst/virtinstall.py:351
+#: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr "請求的記憶體 %s MiB 異常低。是否要指定為 GiB 單位？"
 
-#: virtinst/virtinstall.py:358
+#: virtinst/virtinstall.py:366
 msgid "The guest's network configuration may not support PXE"
 msgstr "客戶機的網路配置可能不支援 PXE"
 
-#: virtinst/virtinstall.py:365
+#: virtinst/virtinstall.py:370
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "No operating system detected, VM performance may suffer. Specify an OS "
+#| "with --os-variant for optimal results."
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
+"for optimal results."
 msgstr ""
 "未檢測到作業系統，虛擬機效能可能會受到影響。使用 --os-variant 選項指定作業系"
 "統以獲得最佳性能。"
 
-#: virtinst/virtinstall.py:378
+#: virtinst/virtinstall.py:384
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr "正在使用 {osname} --location {url}"
 
-#: virtinst/virtinstall.py:457
+#: virtinst/virtinstall.py:463
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "正在使用預設 --name {vm_name}"
 
-#: virtinst/virtinstall.py:467
+#: virtinst/virtinstall.py:473
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr "正在使用容器預設--memory {megabytes}"
 
-#: virtinst/virtinstall.py:486
+#: virtinst/virtinstall.py:492
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "正在使用 {os_name} 預設--memory {megabytes}"
 
-#: virtinst/virtinstall.py:497
+#: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "正在使用 {os_name} 預設 --disk {disk_options}"
 
-#: virtinst/virtinstall.py:543
+#: virtinst/virtinstall.py:549
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "驗證安裝位置出錯：%s"
 
-#: virtinst/virtinstall.py:546
-msgid "An --os-variant is required, but no value was set or detected."
+#: virtinst/virtinstall.py:552
+#, fuzzy
+#| msgid "An --os-variant is required, but no value was set or detected."
+msgid ""
+"--os-variant/--osinfo OS name is required, but no value was set or detected."
 msgstr "需要 --os-variant 指定值，但是沒有設定或檢測到任何值。"
 
-#: virtinst/virtinstall.py:619
+#: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "沒有控制台用於啟動客戶機，預設為 --wait -1"
 
-#: virtinst/virtinstall.py:655
+#: virtinst/virtinstall.py:661
 msgid "Waiting for the installation to complete."
 msgstr "請等待安裝完成。"
 
-#: virtinst/virtinstall.py:656
+#: virtinst/virtinstall.py:662
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "請等待 %(minutes)d 分鐘以便完成安裝。"
 
-#: virtinst/virtinstall.py:679
+#: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "首次 Root 登入的密碼是： %s"
 
-#: virtinst/virtinstall.py:691
+#: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr "安裝將在 10 秒內繼續（按確認鍵跳過）..."
 
-#: virtinst/virtinstall.py:718
+#: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
 msgstr "控制台指令執行失敗。"
 
-#: virtinst/virtinstall.py:755
+#: virtinst/virtinstall.py:761
 msgid "Domain has crashed."
 msgstr "域已經崩潰。"
 
-#: virtinst/virtinstall.py:785
+#: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
 msgstr "域仍在執行。安裝可能正在進行中。"
 
-#: virtinst/virtinstall.py:795
+#: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr "可以重新連接到控制台以完成安裝過程。"
 
-#: virtinst/virtinstall.py:806
+#: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
 msgstr "域已經關閉。將繼續。"
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "安裝已經超過指定的時間限制。退出程式。"
 
-#: virtinst/virtinstall.py:835
+#: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
 msgstr "域建立完成。"
 
-#: virtinst/virtinstall.py:844
+#: virtinst/virtinstall.py:850
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6322,15 +6351,15 @@ msgstr ""
 "可以執行以下指令重啟域：\n"
 "%s"
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr "使用者停止了虛擬系統。沒有重啟。"
 
-#: virtinst/virtinstall.py:852
+#: virtinst/virtinstall.py:858
 msgid "Restarting guest."
 msgstr "正在重啟客戶機。"
 
-#: virtinst/virtinstall.py:869
+#: virtinst/virtinstall.py:875
 msgid ""
 "\n"
 "Starting install..."
@@ -6338,130 +6367,130 @@ msgstr ""
 "\n"
 "開始安裝……"
 
-#: virtinst/virtinstall.py:892
+#: virtinst/virtinstall.py:898
 msgid "Domain install interrupted."
 msgstr "域安裝已被中斷。"
 
-#: virtinst/virtinstall.py:911
+#: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
 msgstr "試執行成功完成"
 
-#: virtinst/virtinstall.py:915
+#: virtinst/virtinstall.py:921
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "未知的 XML 步驟請求 '%s'，必須為 1、2 或 all"
 
-#: virtinst/virtinstall.py:922
+#: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
 msgstr "第 2 步沒有安裝需要的 XML"
 
-#: virtinst/virtinstall.py:939
+#: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
 msgstr "從指定安裝源建立新虛擬機。"
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:951
 msgid "Name of the guest instance"
 msgstr "客戶機實例名稱"
 
-#: virtinst/virtinstall.py:953
+#: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
 msgstr "安裝方法選項"
 
-#: virtinst/virtinstall.py:955
+#: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
 msgstr "光碟機安裝介質"
 
-#: virtinst/virtinstall.py:957
+#: virtinst/virtinstall.py:963
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 "發行版安裝 URL，例如：https://host/path。請參見手冊頁獲取有關特定發行的範例。"
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
 msgstr "使用 PXE 協議從網路引導"
 
-#: virtinst/virtinstall.py:962
+#: virtinst/virtinstall.py:968
 msgid "Build guest around an existing disk image"
 msgstr "在已有的磁碟鏡像中構建客戶機"
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:971
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "將附加參數添加到由 --location 引導的核心中"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
 msgstr "添加指定文件到由 --location 指定的 initrd 根中"
 
-#: virtinst/virtinstall.py:970
+#: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
 msgstr "執行無人值守安裝"
 
-#: virtinst/virtinstall.py:972
+#: virtinst/virtinstall.py:978
 msgid "Specify fine grained install options"
 msgstr "指定細粒度的安裝選項"
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:980
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr "重新安裝現有的虛擬系統。僅應用安裝選項，忽略所有其他虛擬系統配置選項。"
 
-#: virtinst/virtinstall.py:977
+#: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "執行雲映像安裝，配置 cloud-init"
 
-#: virtinst/virtinstall.py:991
+#: virtinst/virtinstall.py:997
 msgid "Device Options"
 msgstr "裝置選項"
 
-#: virtinst/virtinstall.py:1021
+#: virtinst/virtinstall.py:1027
 msgid "Guest Configuration Options"
 msgstr "客戶機配置選項"
 
-#: virtinst/virtinstall.py:1025
+#: virtinst/virtinstall.py:1031
 msgid "Virtualization Platform Options"
 msgstr "虛擬化平台選項"
 
-#: virtinst/virtinstall.py:1029
+#: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
 msgstr "這個客戶機應該是一個全虛擬化客戶機"
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
 msgstr "這個客戶機應該是一個半虛擬化客戶機"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
 msgstr "這個客戶機應該是一個容器客戶機"
 
-#: virtinst/virtinstall.py:1037
+#: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "要使用的管理程式名稱 (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1044
 msgid "The CPU architecture to simulate"
 msgstr "模擬 CPU 架構"
 
-#: virtinst/virtinstall.py:1039
+#: virtinst/virtinstall.py:1045
 msgid "The machine type to emulate"
 msgstr "機器類型為模擬類型"
 
-#: virtinst/virtinstall.py:1050
+#: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
 msgstr "主機啟動時自動啟動域。"
 
-#: virtinst/virtinstall.py:1052
+#: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
 msgstr "建立一個臨時域。"
 
-#: virtinst/virtinstall.py:1054
+#: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "關閉控制台查看器後，強制關閉域電源。"
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
 msgstr "請等待數分鐘以便完成安裝。"
 
@@ -6522,7 +6551,9 @@ msgid ""
 msgstr "'--edit %(option)s' 的 --%(objecttype)s 無任何意義，只需使用 '--edit'"
 
 #: virtinst/virtxml.py:157
-msgid "--os-variant is not supported with --edit"
+#, fuzzy
+#| msgid "--os-variant is not supported with --edit"
+msgid "--os-variant/--osinfo is not supported with --edit"
 msgstr "--edit 不支援和 --os-variant 一起使用"
 
 #: virtinst/virtxml.py:164
@@ -6536,7 +6567,9 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "不能同時使用 --remove-device 和 --%s 選項"
 
 #: virtinst/virtxml.py:184
-msgid "--os-variant is not supported with --remove-device"
+#, fuzzy
+#| msgid "--os-variant is not supported with --remove-device"
+msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr "--remove-device 不支援和 --os-variant 一起使用"
 
 #: virtinst/virtxml.py:204
@@ -6545,7 +6578,9 @@ msgid "--build-xml not supported for --%s"
 msgstr "--%s 選項不支援 --build-xml"
 
 #: virtinst/virtxml.py:207
-msgid "--os-variant is not supported with --build-xml"
+#, fuzzy
+#| msgid "--os-variant is not supported with --build-xml"
+msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--build-xml 不支援和 --os-variant 一起使用"
 
 #: virtinst/virtxml.py:233
@@ -6563,12 +6598,12 @@ msgstr "域 '%s' 成功定義。"
 msgid "Start '%s' with the changed XML?"
 msgstr "要以更改後的 XML 啟動 '%s' 嗎？"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:552
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "啟動域 '%(domain)s' 時出錯：%(error)s"
 
-#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:556
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "域 '%s' 已成功啟動。"
@@ -6738,38 +6773,38 @@ msgstr "儲存任何結果前需要確認。"
 msgid "XML options"
 msgstr "XML 選項"
 
-#: virtinst/virtxml.py:459
+#: virtinst/virtxml.py:461
 msgid "Can't use --confirm with stdin input."
 msgstr "不能在標準輸入使用 --confirm 選項。"
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:463
 msgid "Can't use --update with stdin input."
 msgstr "不能在標準輸入使用 --update 選項。"
 
-#: virtinst/virtxml.py:464
+#: virtinst/virtxml.py:466
 msgid "A domain must be specified"
 msgstr "必須指定域"
 
-#: virtinst/virtxml.py:492
+#: virtinst/virtxml.py:494
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "不知如何為 --%s 應用 --update 選項"
 
-#: virtinst/virtxml.py:526
+#: virtinst/virtxml.py:528
 msgid "The VM is not running, --update is inapplicable."
 msgstr "虛擬系統未執行，-update 參數不適用。"
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:561
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "域完全關閉電源後，更改才會生效。"
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:563
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr "域定義後 XML 沒有發生更改。可能已經更改了 libvirt 預設設置的值。"
 
-#: virtinst/virtxml.py:574
+#: virtinst/virtxml.py:576
 msgid "Aborted at user request"
 msgstr "根據使用者要求丟棄"
 
@@ -6791,6 +6826,9 @@ msgstr "必須為 %s 指定名稱"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名稱 '%(name)s' 不能包含 '%(char)s' 字元。"
+
+#~ msgid "Generic OS"
+#~ msgstr "通用作業系統"
 
 #~ msgid "Detect _zeroes:"
 #~ msgstr "檢測零(_Z)："

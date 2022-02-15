@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-13 06:13+0000\n"
+"POT-Creation-Date: 2022-02-15 06:14+0000\n"
 "PO-Revision-Date: 2017-02-05 04:07+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Marathi (http://www.transifex.com/projects/p/virt-manager/"
@@ -569,7 +569,7 @@ msgid "Architecture options"
 msgstr "आर्किटेक्चर पर्याय"
 
 #: ui/createvm.ui:792 virtManager/details/details.py:728
-#: virtManager/manager.py:329 virtManager/oslist.py:65
+#: virtManager/manager.py:329 virtManager/oslist.py:72
 msgid "Name"
 msgstr "नाव"
 
@@ -1656,9 +1656,8 @@ msgstr "नेटवर्क स्रोत (_N):"
 
 #: ui/oslist.ui:55
 msgid ""
-"Can't find the operating system you are looking for?\n"
-"Try selecting the next most recent version displayed,\n"
-"or use the \"Generic OS\" entry."
+"Can't find the operating system you are looking for? Try selecting a similar "
+"distro or version, or use one of the 'Generic' options."
 msgstr ""
 
 #: ui/oslist.ui:107
@@ -4685,7 +4684,7 @@ msgstr ""
 msgid "ZFS Pool"
 msgstr ""
 
-#: virtManager/oslist.py:26
+#: virtManager/oslist.py:31
 msgid "Type to start searching..."
 msgstr ""
 
@@ -5479,7 +5478,7 @@ msgstr ""
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
-"See 'osinfo-query os' for a full list."
+"Use '--osinfo list' to see a full list."
 msgstr ""
 
 #: virtinst/cli.py:939
@@ -5512,7 +5511,7 @@ msgstr ""
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1910
+#: virtinst/cli.py:1908
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5520,44 +5519,51 @@ msgstr ""
 "ग्राफिकल कंसोलसह जोडणी अशक्य: virt-viewer इंस्टॉल केले नाही. कृपया 'virt-viewer' संकुल "
 "इंस्टॉल करा."
 
-#: virtinst/cli.py:1917
+#: virtinst/cli.py:1915
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1928
+#: virtinst/cli.py:1926
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3473
+#: virtinst/cli.py:3471
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size': %s करीता अयोग्य मूल्य"
 
-#: virtinst/cli.py:3486
+#: virtinst/cli.py:3484
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "अपरिचीत '%s' मूल्य '%s'"
 
-#: virtinst/cli.py:3501
+#: virtinst/cli.py:3499
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "स्टोरेज खंडला vol=poolname/volname असे निर्देशीत करा"
 
-#: virtinst/cli.py:3950
+#: virtinst/cli.py:3948
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:4651
+#: virtinst/cli.py:4649
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s एकापेक्षाजास्त नोड साधनांशी परस्पर आहे"
 
-#: virtinst/cli.py:4654
+#: virtinst/cli.py:4652
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' करीता जुळणारे नोड साधन आढळले नाही"
+
+#: virtinst/cli.py:4797
+msgid ""
+"You can see additional information with:\n"
+"\n"
+"  osinfo-query os\n"
+msgstr ""
 
 #: virtinst/cloner.py:44
 #, fuzzy, python-format
@@ -5680,7 +5686,7 @@ msgstr "--%s करिता --update कसे करायचे, ते म�
 
 #: virtinst/devices/hostdev.py:88
 #, python-format
-msgid "Unknown node device type %s"
+msgid "Unsupported node device type '%s'"
 msgstr ""
 
 #: virtinst/devices/interface.py:189
@@ -5935,28 +5941,26 @@ msgstr "URL %s ला उघडण्यास अपयशी: %s."
 msgid "Transferring '%(filename)s'"
 msgstr "%s स्थानांतरीत करत आहे"
 
-#: virtinst/osdict.py:142
-#, fuzzy
-#| msgid "Generic"
-msgid "Generic OS"
-msgstr "मूळ"
+#: virtinst/osdict.py:71
+msgid "Generic or unknown OS. Usage is not recommended."
+msgstr ""
 
-#: virtinst/osdict.py:167
+#: virtinst/osdict.py:96
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr ""
 
-#: virtinst/osdict.py:181
+#: virtinst/osdict.py:110
 #, python-format
-msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
 
-#: virtinst/osdict.py:583
+#: virtinst/osdict.py:510
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:595
+#: virtinst/osdict.py:522
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6065,7 +6069,7 @@ msgstr ""
 "बाबी जसे कि पासवर्ड्ज बदलवणे, स्टॅटिक IP पत्ते बदलवमे, इत्यादि या साधनाच्या व्याप्ति बाहेर "
 "आहे. या प्रकारच्या बदलावांकरिता, कृपया virt-sysprep(1) पहा."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:943
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:949
 msgid "General Options"
 msgstr "साधारण पर्याय"
 
@@ -6138,7 +6142,7 @@ msgid ""
 "MAC"
 msgstr "क्लोन अतिथीकरीता नवीन ठरलेले MAC पत्ता. पूर्वनिर्धारित विनाक्रम निर्मीत MAC आहे"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1048
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1054
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "मिश्र पर्याय"
@@ -6160,7 +6164,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "क्लोन '%s' यशस्वीरित्या निर्माण केले."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1157
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1165
 msgid "Installation aborted at user request"
 msgstr "वापरकर्ता विनंतीवेळी इंस्टॉलेशन रद्द केले"
 
@@ -6182,23 +6186,27 @@ msgstr ""
 "--file, --nonsparse, किंवा --disk पर्यायसह --file-size एकत्र करणे अशक्य. --disk "
 "PATH[,size=SIZE][,sparse=yes|no] वापर करा"
 
-#: virtinst/virtinstall.py:223
+#: virtinst/virtinstall.py:149
+msgid "--os-type is deprecated and does nothing. Please stop using it."
+msgstr ""
+
+#: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "--graphics व जुण्या शैळीचे ग्राफिकल पर्याय एकत्र करणे अशक्य"
 
-#: virtinst/virtinstall.py:227
+#: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr "VNC, SDL, --graphics किंवा --nographics पैकी एक निर्देशीत करणे अशक्य"
 
-#: virtinst/virtinstall.py:310
+#: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
 msgstr "MiB मध्ये --memory प्रमाण आवश्यक आहे"
 
-#: virtinst/virtinstall.py:314
+#: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 
-#: virtinst/virtinstall.py:318
+#: virtinst/virtinstall.py:320
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6207,7 +6215,7 @@ msgstr ""
 "इंस्टॉल पद्धत निर्देशीत पाहिजे\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:330
+#: virtinst/virtinstall.py:332
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6216,78 +6224,80 @@ msgstr ""
 "बऱ्यापैकी मजकूर इंस्टॉल आउटपुट दिसणार नाही. तुम्हाला बहुदा --location याचा वापर करावे "
 "लागेल."
 
-#: virtinst/virtinstall.py:333
+#: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr "सीडीरॉम मिडीयासह --location च्या वापरसाठी, उदाहरणांकरिता मॅन पृष्ठ पहा"
 
-#: virtinst/virtinstall.py:346
+#: virtinst/virtinstall.py:348
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
 
-#: virtinst/virtinstall.py:351
+#: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
 
-#: virtinst/virtinstall.py:358
+#: virtinst/virtinstall.py:366
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
 
-#: virtinst/virtinstall.py:365
+#: virtinst/virtinstall.py:370
+#, python-brace-format
 msgid ""
-"No operating system detected, VM performance may suffer. Specify an OS with "
-"--os-variant for optimal results."
+"Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
+"for optimal results."
 msgstr ""
 
-#: virtinst/virtinstall.py:378
+#: virtinst/virtinstall.py:384
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr ""
 
-#: virtinst/virtinstall.py:457
+#: virtinst/virtinstall.py:463
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr ""
 
-#: virtinst/virtinstall.py:467
+#: virtinst/virtinstall.py:473
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:486
+#: virtinst/virtinstall.py:492
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:497
+#: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 
-#: virtinst/virtinstall.py:543
+#: virtinst/virtinstall.py:549
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "इंस्टॉल स्थळ वैध करतेवेळी त्रुटी: %s"
 
-#: virtinst/virtinstall.py:546
-msgid "An --os-variant is required, but no value was set or detected."
+#: virtinst/virtinstall.py:552
+msgid ""
+"--os-variant/--osinfo OS name is required, but no value was set or detected."
 msgstr ""
 
-#: virtinst/virtinstall.py:619
+#: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: virtinst/virtinstall.py:655
+#: virtinst/virtinstall.py:661
 #, fuzzy
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting for the installation to complete."
 msgstr "इंस्टॉल पूर्ण होईपर्यंत थांबण्याजोगी मिनीटे."
 
-#: virtinst/virtinstall.py:656
+#: virtinst/virtinstall.py:662
 #, fuzzy, python-format
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting %(minutes)d minute for the installation to complete."
@@ -6295,59 +6305,59 @@ msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "इंस्टॉल पूर्ण होईपर्यंत थांबण्याजोगी मिनीटे."
 msgstr[1] "इंस्टॉल पूर्ण होईपर्यंत थांबण्याजोगी मिनीटे."
 
-#: virtinst/virtinstall.py:679
+#: virtinst/virtinstall.py:685
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:691
+#: virtinst/virtinstall.py:697
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:718
+#: virtinst/virtinstall.py:724
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/virtinstall.py:755
+#: virtinst/virtinstall.py:761
 msgid "Domain has crashed."
 msgstr "डोमेन खंडीत झाले."
 
-#: virtinst/virtinstall.py:785
+#: virtinst/virtinstall.py:791
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:795
+#: virtinst/virtinstall.py:801
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:806
+#: virtinst/virtinstall.py:812
 msgid "Domain has shutdown. Continuing."
 msgstr "डोमेन पूर्णपणे बंद झाले. सुरू ठेवत आहे."
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:818
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "इंस्टॉलेशन निर्देशीत वेळ मर्यादापेक्षा जास्त वेळ घेत आहे. ॲप्लिकेशनपासून बाहेर पडत आहे."
 
-#: virtinst/virtinstall.py:835
+#: virtinst/virtinstall.py:841
 msgid "Domain creation completed."
 msgstr ""
 
-#: virtinst/virtinstall.py:844
+#: virtinst/virtinstall.py:850
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:855
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 
-#: virtinst/virtinstall.py:852
+#: virtinst/virtinstall.py:858
 msgid "Restarting guest."
 msgstr ""
 
-#: virtinst/virtinstall.py:869
+#: virtinst/virtinstall.py:875
 msgid ""
 "\n"
 "Starting install..."
@@ -6355,129 +6365,129 @@ msgstr ""
 "\n"
 "इंस्टॉल सुरू करत आहे..."
 
-#: virtinst/virtinstall.py:892
+#: virtinst/virtinstall.py:898
 msgid "Domain install interrupted."
 msgstr "डोमेन इंस्टॉलमध्ये व्यत्यय."
 
-#: virtinst/virtinstall.py:911
+#: virtinst/virtinstall.py:917
 msgid "Dry run completed successfully"
 msgstr "ड्राय रन यशस्वीरित्या पूर्ण झाले"
 
-#: virtinst/virtinstall.py:915
+#: virtinst/virtinstall.py:921
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: virtinst/virtinstall.py:922
+#: virtinst/virtinstall.py:928
 msgid "Requested installation does not have XML step 2"
 msgstr "विनंतीकृत इंस्टॉलेशनकडे XML स्टेप 2 नाही"
 
-#: virtinst/virtinstall.py:939
+#: virtinst/virtinstall.py:945
 msgid "Create a new virtual machine from specified install media."
 msgstr "निर्देशीत इंस्टॉल मिडीयापासून नविन वर्च्युअल मशीन निर्माण करा."
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:951
 msgid "Name of the guest instance"
 msgstr "अतिथी घटनाचे नाव"
 
-#: virtinst/virtinstall.py:953
+#: virtinst/virtinstall.py:959
 msgid "Installation Method Options"
 msgstr "इंस्टॉलेशन पद्धत पर्याय"
 
-#: virtinst/virtinstall.py:955
+#: virtinst/virtinstall.py:961
 msgid "CD-ROM installation media"
 msgstr "CD-ROM इंस्टॉलेशन मिडिया"
 
-#: virtinst/virtinstall.py:957
+#: virtinst/virtinstall.py:963
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:966
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE प्रोटोकॉलचा वापर करून नेटवर्कपासून बूट करा"
 
-#: virtinst/virtinstall.py:962
+#: virtinst/virtinstall.py:968
 msgid "Build guest around an existing disk image"
 msgstr "अस्तित्वातील डिस्क प्रतिमाच्या भोवती अतिथीची बांधणी करा"
 
-#: virtinst/virtinstall.py:965
+#: virtinst/virtinstall.py:971
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr "--location पासून बूट झालेल्या इंस्टॉल कर्नलकरीता पुरवण्याजोगी अगाऊ बाबी"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:974
 msgid "Add given file to root of initrd from --location"
 msgstr "--location पासून initrd च्या रूटमध्ये समाविष्ट करण्याजोगी फाइल"
 
-#: virtinst/virtinstall.py:970
+#: virtinst/virtinstall.py:976
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:972
+#: virtinst/virtinstall.py:978
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:980
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:977
+#: virtinst/virtinstall.py:983
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:991
+#: virtinst/virtinstall.py:997
 msgid "Device Options"
 msgstr "साधन पर्याय"
 
-#: virtinst/virtinstall.py:1021
+#: virtinst/virtinstall.py:1027
 msgid "Guest Configuration Options"
 msgstr ""
 
-#: virtinst/virtinstall.py:1025
+#: virtinst/virtinstall.py:1031
 msgid "Virtualization Platform Options"
 msgstr "वर्च्युअलाइजेशन प्लॅटफॉर्म पर्याय"
 
-#: virtinst/virtinstall.py:1029
+#: virtinst/virtinstall.py:1035
 msgid "This guest should be a fully virtualized guest"
 msgstr "अतिथी पूर्णतया वर्च्युअलाइज्ड अतिथी पाहिजे"
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1038
 msgid "This guest should be a paravirtualized guest"
 msgstr "अतिथी पॅरावर्च्युअलाइज्ड अतिथी पाहिजे"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1041
 msgid "This guest should be a container guest"
 msgstr "अतिथी कंटेनर अतिथी पाहिजे"
 
-#: virtinst/virtinstall.py:1037
+#: virtinst/virtinstall.py:1043
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "वापरण्याजोगी हाइपरवाइजर नाव (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1044
 msgid "The CPU architecture to simulate"
 msgstr "सिम्युलेट करण्जोगी CPU आर्किटेक्चर"
 
-#: virtinst/virtinstall.py:1039
+#: virtinst/virtinstall.py:1045
 msgid "The machine type to emulate"
 msgstr "इम्युलेटजोगी मशीन प्रकार"
 
-#: virtinst/virtinstall.py:1050
+#: virtinst/virtinstall.py:1056
 msgid "Have domain autostart on host boot up."
 msgstr "यजमान बूट अपवेळी डोमेनला स्वयंसुरू करा."
 
-#: virtinst/virtinstall.py:1052
+#: virtinst/virtinstall.py:1058
 msgid "Create a transient domain."
 msgstr ""
 
-#: virtinst/virtinstall.py:1054
+#: virtinst/virtinstall.py:1060
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1063
 msgid "Minutes to wait for install to complete."
 msgstr "इंस्टॉल पूर्ण होईपर्यंत थांबण्याजोगी मिनीटे."
 
@@ -6539,7 +6549,7 @@ msgid ""
 msgstr "--%s सह '--edit %s' वापरणे निरर्थक आहे, सरळ रिक्त '--edit' चा वापर करा"
 
 #: virtinst/virtxml.py:157
-msgid "--os-variant is not supported with --edit"
+msgid "--os-variant/--osinfo is not supported with --edit"
 msgstr ""
 
 #: virtinst/virtxml.py:164
@@ -6553,7 +6563,7 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "--%s सह --remove-device चा वापर शक्य नाही"
 
 #: virtinst/virtxml.py:184
-msgid "--os-variant is not supported with --remove-device"
+msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr ""
 
 #: virtinst/virtxml.py:204
@@ -6562,7 +6572,7 @@ msgid "--build-xml not supported for --%s"
 msgstr "--%s करिता --build-xml समर्थीत नाही"
 
 #: virtinst/virtxml.py:207
-msgid "--os-variant is not supported with --build-xml"
+msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr ""
 
 #: virtinst/virtxml.py:233
@@ -6580,13 +6590,13 @@ msgstr "डोमेन '%s' यशस्वीरित्या ठरवल�
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:550
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:552
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "डोमैन सुरू करतेवेळी त्रुटी"
 
-#: virtinst/virtxml.py:263 virtinst/virtxml.py:554
+#: virtinst/virtxml.py:263 virtinst/virtxml.py:556
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
@@ -6756,38 +6766,38 @@ msgstr "कोणतेही परिणाम साठवण्यापू�
 msgid "XML options"
 msgstr "XML पर्याय"
 
-#: virtinst/virtxml.py:459
+#: virtinst/virtxml.py:461
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin इंपुटसह --confirm चा वापर अशक्य."
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:463
 msgid "Can't use --update with stdin input."
 msgstr "stdin इंपुटसह --update चा वापर अशक्य."
 
-#: virtinst/virtxml.py:464
+#: virtinst/virtxml.py:466
 msgid "A domain must be specified"
 msgstr "डोमेन निर्देशीत पाहिजे"
 
-#: virtinst/virtxml.py:492
+#: virtinst/virtxml.py:494
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s करिता --update कसे करायचे, ते माहिती नाही"
 
-#: virtinst/virtxml.py:526
+#: virtinst/virtxml.py:528
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:559
+#: virtinst/virtxml.py:561
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:563
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:574
+#: virtinst/virtxml.py:576
 msgid "Aborted at user request"
 msgstr "वापरकर्ता विनंतीनुसार रद्द केले"
 
@@ -6809,6 +6819,11 @@ msgstr ""
 #| msgid "%s name '%s' can not contain '%s' character."
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%s नाव '%s' मध्ये '%s' अक्षर समाविष्टीत असू शकत नाही."
+
+#, fuzzy
+#~| msgid "Generic"
+#~ msgid "Generic OS"
+#~ msgstr "मूळ"
 
 #~ msgid "Completed"
 #~ msgstr "पूर्ण झाले"
