@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-15 06:14+0000\n"
-"PO-Revision-Date: 2022-02-15 17:16+0000\n"
+"PO-Revision-Date: 2022-02-16 22:16+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1681,18 +1681,12 @@ msgid "_Network source:"
 msgstr "_Мережеве джерело:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for? Try selecting a similar "
 "distro or version, or use one of the 'Generic' options."
 msgstr ""
-"Не знайшли потрібної вам операційної системи?\n"
-"Спробуйте вибрати наступну із найсвіжіших показаних версій\n"
-"або скористайтеся пунктом «Типова ОС»."
+"Не знайшли потрібної вам операційної системи? Спробуйте вибрати подібний "
+"дистрибутив або подібну версію чи скористайтеся пунктом «Типова»."
 
 #: ui/oslist.ui:107
 msgid "Include end of life operating systems"
@@ -5588,20 +5582,15 @@ msgid "The OS installed in the guest."
 msgstr "Операційна система, встановлена на гостьовій системі."
 
 #: virtinst/cli.py:929
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
-"Використовується для визначення оптимальних типових значень, зокрема "
-"VirtIO.\n"
+"Використовується для визначення оптимальних типових значень, зокрема VirtIO."
+"\n"
 "Приклади значень: fedora29, rhel7.0, win10, ...\n"
-"Щоб ознайомитися із повним списком, скористайтеся командою «osinfo-query os»."
+"Щоб ознайомитися із повним списком, скористайтеся параметром «--osinfo list»."
 
 #: virtinst/cli.py:939
 msgid ""
@@ -5695,6 +5684,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Додаткові відомості можна отримати за допомогою такої команди:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5816,10 +5808,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Спосіб створення nodedev для ідентифікатора типу mdev «%s» є невідомим"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Невідомий тип пристрою вузла, %s"
+msgstr "Непідтримуваний тип пристрою вузла, «%s»"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -6096,7 +6087,7 @@ msgstr "Передавання «%(filename)s»"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "Типова або невідома операційна система. Не рекомендуємо користуватися."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6104,12 +6095,11 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "Невідомий ідентифікатор libosinfo «%s»"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
 "Невідома назва операційної системи — «%s». Зі списком коректних значень "
-"можна ознайомитися за допомогою команди «osinfo-query os»."
+"можна ознайомитися за допомогою параметра «--osinfo list»."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6361,6 +6351,8 @@ msgstr ""
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
 msgstr ""
+"--os-type вважається застарілим і не призводить до будь-яких дій. Не "
+"користуйтеся ним."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6432,17 +6424,14 @@ msgstr ""
 "PXE"
 
 #: virtinst/virtinstall.py:370
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Не виявлено жодної операційної системи, швидкодію ВМ може бути значно "
-"знижено. Щоб отримати оптимальні результати, вкажіть операційну систему за "
-"допомогою параметра --os-variant."
+"Використання --osinfo {osname} може призвести до зниження швидкодії "
+"віртуальної машини. Щоб отримати оптимальні результати, вкажіть точну назву "
+"операційної системи."
 
 #: virtinst/virtinstall.py:384
 #, python-brace-format
@@ -6475,13 +6464,11 @@ msgid "Error validating install location: %s"
 msgstr "Помилка під час перевірки місця встановлення: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was set or detected."
 msgstr ""
-"Мало бути вказано --os-variant, але не встановлено або не виявлено жодного "
-"значення."
+"Мало бути вказано назву операційної системи для --os-variant/--osinfo, але "
+"не встановлено або не виявлено жодного значення."
 
 #: virtinst/virtinstall.py:625
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6767,10 +6754,8 @@ msgstr ""
 "використовуйте аргумент: «--edit»"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "якщо використано --edit, не можна використовувати --os-variant"
+msgstr "якщо використано --edit, не можна використовувати --os-variant/--osinfo"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6783,11 +6768,10 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Не можна використовувати --remove-device, якщо використано --%s"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr ""
-"якщо використано --remove-device, не можна використовувати --os-variant"
+"якщо використано --remove-device, не можна використовувати --os-variant/"
+"--osinfo"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6795,10 +6779,9 @@ msgid "--build-xml not supported for --%s"
 msgstr "Підтримки --build-xml для --%s не передбачено"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "якщо використано --build-xml, не можна використовувати --os-variant"
+msgstr ""
+"якщо використано --build-xml, не можна використовувати --os-variant/--osinfo"
 
 #: virtinst/virtxml.py:233
 #, python-format
