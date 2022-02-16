@@ -201,6 +201,7 @@ class Guest(XMLBuilder):
         self.skip_default_rng = False
         self.skip_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
+        self.q35_pcie_root_ports = 16
 
         self.skip_default_osinfo = False
         self.uefi_requested = False
@@ -715,6 +716,7 @@ class Guest(XMLBuilder):
             dev.set_defaults(self)
 
         self._add_virtioscsi_controller()
+        self._add_q35_pcie_controllers()
         self._add_spice_devices()
 
     def add_extra_drivers(self, extra_drivers):
@@ -997,6 +999,28 @@ class Guest(XMLBuilder):
         ctrl.model = "virtio-scsi"
         ctrl.set_defaults(self)
         self.add_device(ctrl)
+
+    def _add_q35_pcie_controllers(self):
+        if not self.os.is_q35():
+            return
+        if any([c for c in self.devices.controller if c.type == "pci"]):
+            return
+
+        added = False
+        for dummy in range(max(self.q35_pcie_root_ports, 0)):
+            if not added:
+                # Libvirt forces pcie-root to come first
+                ctrl = DeviceController(self.conn)
+                ctrl.type = "pci"
+                ctrl.model = "pcie-root"
+                ctrl.set_defaults(self)
+                self.add_device(ctrl)
+                added = True
+            ctrl = DeviceController(self.conn)
+            ctrl.type = "pci"
+            ctrl.model = "pcie-root-port"
+            ctrl.set_defaults(self)
+            self.add_device(ctrl)
 
     def _add_spice_channels(self):
         if self.skip_default_channel:
