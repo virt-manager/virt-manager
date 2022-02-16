@@ -260,14 +260,26 @@ class DomainCpu(XMLBuilder):
                      SPECIAL_MODE_HOST_COPY, SPECIAL_MODE_HOST_MODEL,
                      SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_CLEAR,
                      SPECIAL_MODE_APP_DEFAULT]
+
+    def _get_app_default_mode(self, guest):
+        # Depending on if libvirt+qemu is new enough, we prefer
+        # host-passthrough, then host-model, and finally host-model-only
+        domcaps = guest.lookup_domcaps()
+
+        if domcaps.supports_safe_host_passthrough():
+            return self.SPECIAL_MODE_HOST_PASSTHROUGH
+
+        log.debug("Safe host-passthrough is not available")
+        if domcaps.supports_safe_host_model():
+            return self.SPECIAL_MODE_HOST_MODEL
+
+        log.debug("Safe host-model is not available")
+        return self.SPECIAL_MODE_HOST_MODEL_ONLY
+
     def set_special_mode(self, guest, val):
         if val == self.SPECIAL_MODE_APP_DEFAULT:
-            # If libvirt is new enough to support reliable mode=host-model
-            # then use it, otherwise use previous default HOST_MODEL_ONLY
-            domcaps = guest.lookup_domcaps()
-            val = self.SPECIAL_MODE_HOST_MODEL_ONLY
-            if domcaps.supports_safe_host_model():
-                val = self.SPECIAL_MODE_HOST_MODEL
+            val = self._get_app_default_mode(guest)
+            log.debug("Using default cpu mode=%s", val)
 
         if (val == self.SPECIAL_MODE_HOST_MODEL or
             val == self.SPECIAL_MODE_HOST_PASSTHROUGH):
