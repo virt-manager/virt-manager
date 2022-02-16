@@ -1031,8 +1031,6 @@ c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5
 c.add_compare("--disk %(EXISTIMG1)s --install kernel=%(ISO-WIN7)s,initrd=%(ISOLABEL)s,kernel_args='foo bar' --os-variant rhel6.4 --unattended none", "kvm-rhel6")  # RHEL6 defaults. ISO paths are just to point at existing files
 c.add_compare("--disk %(EXISTIMG1)s --location https://example.com --install kernel_args='test overwrite',kernel_args_overwrite=yes --os-variant rhel7.0", "kvm-rhel7", precompare_check=no_osinfo_unattend_cb)  # RHEL7 defaults
 c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
-c.add_compare("--os-variant generic --connect " + utils.URIs.kvm_x86_nodomcaps + " --cpu host-copy --disk none --pxe", "kvm-hostcopy-fallback")  # No domcaps so need to use capabilities for CPU host-copy
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10", "kvm-win10", prerun_check=has_old_osinfo)  # win10 defaults
 c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", prerun_check=has_old_osinfo)  # no HYPER-V with UEFI

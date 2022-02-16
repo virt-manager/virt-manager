@@ -277,12 +277,14 @@ class DomainCpu(XMLBuilder):
             for f in self.features:
                 self.remove_child(f)
             self.mode = val
-        elif val == self.SPECIAL_MODE_HOST_COPY:
-            self.copy_host_cpu(guest)
         elif (val == self.SPECIAL_MODE_HV_DEFAULT or
               val == self.SPECIAL_MODE_CLEAR):
             self.clear()
-        elif val == self.SPECIAL_MODE_HOST_MODEL_ONLY:
+        elif (val == self.SPECIAL_MODE_HOST_MODEL_ONLY or
+              val == self.SPECIAL_MODE_HOST_COPY):
+            if val == self.SPECIAL_MODE_HOST_COPY:
+                log.warning("CPU mode=%s no longer supported, using mode=%s",
+                        val, self.SPECIAL_MODE_HOST_MODEL_ONLY)
             if self.conn.caps.host.cpu.model:
                 self.clear()
                 self.set_model(guest, self.conn.caps.host.cpu.model)
@@ -290,37 +292,6 @@ class DomainCpu(XMLBuilder):
             raise xmlutil.DevError("unknown special cpu mode '%s'" % val)
 
         self.special_mode_was_set = True
-
-    def copy_host_cpu(self, guest):
-        """
-        Try to manually mimic host-model, copying all the info
-        preferably out of domcapabilities, but capabilities as fallback.
-        """
-        domcaps = guest.lookup_domcaps()
-        if domcaps.supports_safe_host_model():
-            log.debug("Using domcaps for host-copy")
-            cpu = domcaps.cpu.get_mode("host-model")
-            model = cpu.models[0].model
-            fallback = cpu.models[0].fallback
-        else:
-            cpu = self.conn.caps.host.cpu
-            model = cpu.model
-            fallback = None
-            if not model:  # pragma: no cover
-                raise ValueError(_("No host CPU reported in capabilities"))
-
-        self.mode = "custom"
-        self.match = "exact"
-        self.set_model(guest, model)
-        if fallback:
-            self.model_fallback = fallback
-        self.vendor = cpu.vendor
-
-        for feature in self.features:
-            self.remove_child(feature)
-        for feature in cpu.features:
-            policy = getattr(feature, "policy", "require")
-            self.add_feature(feature.name, policy)
 
 
     ########################

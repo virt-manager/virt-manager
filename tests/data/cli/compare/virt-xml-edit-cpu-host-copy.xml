@@ -1,10 +1,11 @@
+@@
+     </hyperv>
      <ioapic driver="qemu"/>
    </features>
-   <cpu mode="custom" match="exact">
+-  <cpu mode="custom" match="exact">
 -    <model fallback="allow">core2duo</model>
-+    <model fallback="forbid">Skylake-Client-IBRS</model>
-     <vendor>Intel</vendor>
-     <topology sockets="9" dies="1" cores="1" threads="1"/>
+-    <vendor>Intel</vendor>
+-    <topology sockets="9" dies="1" cores="1" threads="1"/>
 -    <feature policy="require" name="pbe"/>
 -    <feature policy="require" name="tm2"/>
 -    <feature policy="require" name="est"/>
@@ -18,35 +19,26 @@
 -    <feature policy="require" name="ds_cpl"/>
 -    <feature policy="require" name="xtpr"/>
 -    <feature policy="require" name="acpi"/>
-     <numa>
-       <cell id="0" cpus="0-4" memory="219136" unit="KiB"/>
-       <cell id="1" cpus="5-8" memory="219136" unit="KiB"/>
-     </numa>
-+    <feature policy="require" name="ss"/>
-+    <feature policy="require" name="vmx"/>
-+    <feature policy="require" name="pdcm"/>
-+    <feature policy="require" name="hypervisor"/>
-+    <feature policy="require" name="tsc_adjust"/>
-+    <feature policy="require" name="clflushopt"/>
-+    <feature policy="require" name="umip"/>
-+    <feature policy="require" name="md-clear"/>
-+    <feature policy="require" name="stibp"/>
-+    <feature policy="require" name="arch-capabilities"/>
-+    <feature policy="require" name="ssbd"/>
-+    <feature policy="require" name="xsaves"/>
-+    <feature policy="require" name="pdpe1gb"/>
-+    <feature policy="require" name="invtsc"/>
-+    <feature policy="require" name="ibpb"/>
-+    <feature policy="require" name="ibrs"/>
-+    <feature policy="require" name="amd-stibp"/>
-+    <feature policy="require" name="amd-ssbd"/>
-+    <feature policy="require" name="skip-l1dfl-vmentry"/>
-+    <feature policy="require" name="pschange-mc-no"/>
-+    <feature policy="disable" name="hle"/>
-+    <feature policy="disable" name="rtm"/>
-   </cpu>
+-    <numa>
+-      <cell id="0" cpus="0-4" memory="219136" unit="KiB"/>
+-      <cell id="1" cpus="5-8" memory="219136" unit="KiB"/>
+-    </numa>
+-  </cpu>
    <clock offset="utc">
      <timer name="rtc" tickpolicy="catchup"/>
+     <timer name="pit" tickpolicy="delay"/>
+@@
+     <dhCert>AQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAAAQAAAAAOAAA</dhCert>
+     <session>IHAVENOIDEABUTJUSTPROVIDINGASTRING</session>
+   </launchSecurity>
++  <cpu mode="custom" match="exact">
++    <model>Skylake-Client-noTSX-IBRS</model>
++    <feature policy="require" name="ibpb"/>
++    <feature policy="require" name="md-clear"/>
++    <feature policy="require" name="spec-ctrl"/>
++    <feature policy="require" name="ssbd"/>
++  </cpu>
+ </domain>
 
 Domain 'test-many-devices' defined successfully.
 Changes will take effect after the domain is fully powered off.

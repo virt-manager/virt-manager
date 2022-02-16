@@ -953,7 +953,7 @@ def testCPUUnknownClear():
     outfile = DATADIR + "%s-out.xml" % basename
     guest = virtinst.Guest(kvmconn, parsexml=open(infile).read())
 
-    guest.cpu.copy_host_cpu(guest)
+    guest.cpu.set_special_mode(guest, "host-model-only")
     guest.cpu.clear()
     utils.diff_compare(guest.get_xml(), outfile)
 
