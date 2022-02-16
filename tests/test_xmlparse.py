@@ -230,7 +230,7 @@ def testAlterCpuMode():
     conn = utils.URIs.open_testdefault_cached()
     xml = open(DATADIR + "change-cpumode-in.xml").read()
     outfile = DATADIR + "change-cpumode-out.xml"
-    conn = utils.URIs.openconn(utils.URIs.kvm_x86_q35)
+    conn = utils.URIs.openconn(utils.URIs.kvm_x86)
     guest = virtinst.Guest(conn, xml)
     check = _make_checker(guest.cpu)
 

@@ -799,7 +799,7 @@ c.add_invalid("--clock foo_tickpolicy=merge", grep="Unknown --clock options: ['f
 c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
 c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3,target.block=2048,target.requested=1048576,target.current=524288", "memory-hotplug", precompare_check="5.3.0")
 c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
-c.add_compare("--connect " + utils.URIs.kvm_x86_q35 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
+c.add_compare("--connect " + utils.URIs.kvm_x86 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
 c.add_compare("--cpu host-passthrough,migratable=on", "cpu-host-passthrough-migratable")  # Passthrough with migratable attribute
 c.add_compare("--cpu host-model,model.fallback=forbid", "cpu-host-model-no-fallback")  # Host-Model with fallback disabled
 c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=GenuineIntel", "cpu-model")  # Specific CPU with fallback enabled
@@ -1039,6 +1039,8 @@ c.add_compare("--osinfo generic --machine q35 --cdrom %(EXISTIMG2)s --disk %(EXI
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
 c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
 c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
+c.add_compare("--osinfo generic --boot uefi --disk size=1", "boot-uefi")
+c.add_compare("--osinfo generic --boot uefi --disk size=1 --tpm none --connect " + utils.URIs.kvm_x86_oldfirmware, "boot-uefi-oldcaps")
 
 c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 
@@ -1055,12 +1057,9 @@ c.add_valid("--boot uefi --machine q35 --launchSecurity sev,reducedPhysBits=1,cb
 c.add_valid("--boot firmware=efi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
 c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev, grep="Missing mandatory attribute 'type'")
 c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, grep="SEV launch security requires a Q35 UEFI machine")
-c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86_q35, grep="SEV launch security is not supported")  # Fail with no SEV capabilities
+c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86, grep="SEV launch security is not supported")  # Fail with no SEV capabilities
 
 
-c = vinst.add_category("kvm-q35", "--noautoconsole --osinfo generic --connect " + utils.URIs.kvm_x86_q35)
-c.add_compare("--boot uefi --disk none", "boot-uefi")
-c.add_compare("--boot uefi --disk size=8 --tpm none", "boot-uefi-notpm")
 
 
 c = vinst.add_category("kvm-arm", "--connect %(URI-KVM-X86)s --noautoconsole", precompare_check="3.3.0")  # required qemu-xhci from libvirt 3.3.0

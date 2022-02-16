@@ -1,17 +1,13 @@
 <domainCapabilities>
   <path>/usr/bin/qemu-system-x86_64</path>
   <domain>kvm</domain>
-  <machine>pc-i440fx-6.1</machine>
+  <machine>pc-q35-6.1</machine>
   <arch>x86_64</arch>
-  <vcpu max='255'/>
+  <vcpu max='288'/>
   <iothreads supported='yes'/>
   <os supported='yes'>
-    <enum name='firmware'>
-      <value>efi</value>
-    </enum>
     <loader supported='yes'>
-      <value>/usr/share/edk2/ovmf/OVMF_CODE.fd</value>
-      <value>/usr/share/edk2/ovmf-ia32/OVMF_CODE.fd</value>
+      <value>/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd</value>
       <enum name='type'>
         <value>rom</value>
         <value>pflash</value>
@@ -21,6 +17,7 @@
         <value>no</value>
       </enum>
       <enum name='secure'>
+        <value>yes</value>
         <value>no</value>
       </enum>
     </loader>
@@ -39,30 +36,34 @@
       </enum>
     </mode>
     <mode name='host-model' supported='yes'>
-      <model fallback='forbid'>Skylake-Client-IBRS</model>
+      <model fallback='forbid'>Cooperlake</model>
       <vendor>Intel</vendor>
       <feature policy='require' name='ss'/>
       <feature policy='require' name='vmx'/>
       <feature policy='require' name='pdcm'/>
       <feature policy='require' name='hypervisor'/>
       <feature policy='require' name='tsc_adjust'/>
-      <feature policy='require' name='clflushopt'/>
+      <feature policy='require' name='mpx'/>
       <feature policy='require' name='umip'/>
       <feature policy='require' name='md-clear'/>
-      <feature policy='require' name='stibp'/>
-      <feature policy='require' name='arch-capabilities'/>
-      <feature policy='require' name='ssbd'/>
       <feature policy='require' name='xsaves'/>
-      <feature policy='require' name='pdpe1gb'/>
       <feature policy='require' name='invtsc'/>
       <feature policy='require' name='ibpb'/>
       <feature policy='require' name='ibrs'/>
       <feature policy='require' name='amd-stibp'/>
       <feature policy='require' name='amd-ssbd'/>
-      <feature policy='require' name='skip-l1dfl-vmentry'/>
-      <feature policy='require' name='pschange-mc-no'/>
       <feature policy='disable' name='hle'/>
       <feature policy='disable' name='rtm'/>
+      <feature policy='disable' name='avx512f'/>
+      <feature policy='disable' name='avx512dq'/>
+      <feature policy='disable' name='clwb'/>
+      <feature policy='disable' name='avx512cd'/>
+      <feature policy='disable' name='avx512bw'/>
+      <feature policy='disable' name='avx512vl'/>
+      <feature policy='disable' name='avx512vnni'/>
+      <feature policy='disable' name='avx-vnni'/>
+      <feature policy='disable' name='avx512-bf16'/>
+      <feature policy='disable' name='taa-no'/>
     </mode>
     <mode name='custom' supported='yes'>
       <model usable='yes'>qemu64</model>
@@ -138,7 +139,6 @@
         <value>lun</value>
       </enum>
       <enum name='bus'>
-        <value>ide</value>
         <value>fdc</value>
         <value>scsi</value>
         <value>virtio</value>
@@ -211,6 +211,16 @@
         <value>virtiofs</value>
       </enum>
     </filesystem>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-tis</value>
+        <value>tpm-crb</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>passthrough</value>
+        <value>emulator</value>
+      </enum>
+    </tpm>
   </devices>
   <features>
     <gic supported='no'/>
