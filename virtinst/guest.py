@@ -543,7 +543,7 @@ class Guest(XMLBuilder):
             "secboot" in self.os.loader):
             self.features.smm = True
             self.os.loader_secure = True
-            if self.os.machine and "q35" not in self.os.machine:
+            if not self.os.is_q35():
                 log.warning("Changing machine type from '%s' to 'q35' "
                         "which is required for UEFI secure boot.",
                         self.os.machine)
