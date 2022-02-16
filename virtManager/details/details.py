@@ -1078,7 +1078,7 @@ class vmmDetails(vmmGObjectUI):
         text = cpu_list.get_child().get_text()
 
         if self.widget("cpu-copy-host").get_active():
-            return virtinst.DomainCpu.SPECIAL_MODE_HOST_MODEL
+            return virtinst.DomainCpu.SPECIAL_MODE_HOST_PASSTHROUGH
 
         key = None
         for row in cpu_list.get_model():
@@ -1941,9 +1941,9 @@ class vmmDetails(vmmGObjectUI):
 
         # CPU model config
         model = cpu.model or None
-        if not model:
-            if cpu.mode == "host-model" or cpu.mode == "host-passthrough":
-                model = cpu.mode
+        is_host = (cpu.mode in ["host-model", "host-passthrough"])
+        if not model and is_host:
+            model = cpu.mode
 
         if model:
             self.widget("cpu-model").get_child().set_text(model)
@@ -1952,8 +1952,11 @@ class vmmDetails(vmmGObjectUI):
                 self.widget("cpu-model"),
                 virtinst.DomainCpu.SPECIAL_MODE_HV_DEFAULT, column=2)
 
-        is_host = (cpu.mode == "host-model")
         self.widget("cpu-copy-host").set_active(bool(is_host))
+        text = _("Copy host CP_U configuration")
+        if is_host:
+            text += " (%s)" % cpu.mode
+        self.widget("cpu-copy-host").set_label(text)
         self._cpu_copy_host_clicked_cb(self.widget("cpu-copy-host"))
 
         if not self._cpu_secure_is_available():
