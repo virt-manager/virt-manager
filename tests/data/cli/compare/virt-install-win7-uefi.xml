@@ -26,7 +26,7 @@
     </hyperv>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="host-passthrough"/>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -112,7 +112,7 @@
     </hyperv>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-model"/>
+  <cpu mode="host-passthrough"/>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>

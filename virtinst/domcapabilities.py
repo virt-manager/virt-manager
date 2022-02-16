@@ -129,10 +129,9 @@ class _CPUModel(XMLBuilder):
     fallback = XMLProperty("./@fallback")
 
 
-class _CPUMode(XMLBuilder):
+class _CPUMode(_CapsBlock):
     XML_NAME = "mode"
     name = XMLProperty("./@name")
-    supported = XMLProperty("./@supported", is_yesno=True)
 
     models = XMLChildProperty(_CPUModel)
     def get_model(self, name):
@@ -265,11 +264,20 @@ class DomainCapabilities(XMLBuilder):
         host-model in fact predates this support, however it wasn't
         general purpose safe prior to domcaps advertisement.
         """
-        for m in self.cpu.modes:
-            if (m.name == "host-model" and m.supported and
-                    m.models[0].fallback == "forbid"):
-                return True
-        return False
+        m = self.cpu.get_mode("host-model")
+        return (m and m.supported and
+                m.models[0].fallback == "forbid")
+
+    def supports_safe_host_passthrough(self):
+        """
+        Return True if host-passthrough is safe enough to use by default.
+        We limit this to domcaps new enough to report whether host-passthrough
+        is migratable or not, which also means libvirt is about new enough
+        to not taint the VM for using host-passthrough
+        """
+        m = self.cpu.get_mode("host-passthrough")
+        return (m and m.supported and
+                "on" in m.get_enum("hostPassthroughMigratable").get_values())
 
     def get_cpu_models(self):
         models = []
