@@ -309,8 +309,10 @@ def testNewVMCDROMRegular(app):
 
     # Change to 'copy host CPU'
     vmwindow.find_fuzzy("CPUs", "table cell").click()
-    vmwindow.find_fuzzy("Copy host", "check").click()
+    cpucheck = vmwindow.find_fuzzy("Copy host", "check")
+    cpucheck.click()
     vmwindow.find_fuzzy("config-apply").click()
+    lib.utils.check(lambda: "host-passthrough" in cpucheck.name)
 
     # Add a default disk
     vmwindow.find("add-hardware", "push button").click()
@@ -493,6 +495,13 @@ def testNewKVMQ35Tweaks(app):
     details.combo_select("Firmware:", ".*x86_64.*")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
+
+    # Verify host-passthrough selected
+    details.find_fuzzy("CPUs", "table cell").click()
+    cpucheck = details.find_fuzzy("Copy host", "check")
+    assert "host-passthrough" in cpucheck.name
+    new_xml = lib.utils.get_xmleditor_xml(app, details)
+    assert "host-passthrough" in new_xml
 
     # Add another network device
     details.find("add-hardware", "push button").click()
