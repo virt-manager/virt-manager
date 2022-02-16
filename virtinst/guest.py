@@ -714,7 +714,7 @@ class Guest(XMLBuilder):
         for dev in self.devices.get_all():
             dev.set_defaults(self)
 
-        self._add_implied_controllers()
+        self._add_virtioscsi_controller()
         self._add_spice_devices()
 
     def add_extra_drivers(self, extra_drivers):
@@ -986,17 +986,17 @@ class Guest(XMLBuilder):
             dev.model = "virtio"
             self.add_device(dev)
 
-    def _add_implied_controllers(self):
-        # Add virtio-scsi controller if needed
-        if self.can_default_virtioscsi():
-            for dev in self.devices.disk:
-                if dev.bus == "scsi":
-                    ctrl = DeviceController(self.conn)
-                    ctrl.type = "scsi"
-                    ctrl.model = "virtio-scsi"
-                    ctrl.set_defaults(self)
-                    self.add_device(ctrl)
-                    break
+    def _add_virtioscsi_controller(self):
+        if not self.can_default_virtioscsi():
+            return
+        if not any([d for d in self.devices.disk if d.bus == "scsi"]):
+            return
+
+        ctrl = DeviceController(self.conn)
+        ctrl.type = "scsi"
+        ctrl.model = "virtio-scsi"
+        ctrl.set_defaults(self)
+        self.add_device(ctrl)
 
     def _add_spice_channels(self):
         if self.skip_default_channel:
