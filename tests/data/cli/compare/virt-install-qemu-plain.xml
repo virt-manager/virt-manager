@@ -52,6 +52,9 @@
     </interface>
     <console type="pty"/>
     <input type="tablet" bus="usb"/>
+    <tpm model="tpm-tis">
+      <backend type="emulator"/>
+    </tpm>
     <graphics type="vnc" port="-1"/>
     <video>
       <model type="bochs"/>

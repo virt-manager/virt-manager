@@ -51,15 +51,18 @@ def testCapsUtilFuncs():
         caps_empty.guest_lookup()
 
 
-
 ##############################
 # domcapabilities.py testing #
 ##############################
 
-
 def testDomainCapabilities():
     xml = open(DATADIR + "/test-domcaps.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
+
+    assert caps.machine == "my-machine-type"
+    assert caps.arch == "x86_64"
+    assert caps.domain == "kvm"
+    assert caps.path == "/bin/emulatorbin"
 
     assert caps.os.loader.supported is True
     assert caps.os.loader.get_values() == ["/foo/bar", "/tmp/my_path"]
@@ -70,13 +73,8 @@ def testDomainCapabilities():
 
 
 def testDomainCapabilitiesx86():
-    xml = open(DATADIR + "/kvm-x86_64-domcaps.xml").read()
+    xml = open(DATADIR + "/kvm-x86_64-domcaps-latest.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
-
-    assert caps.machine == "pc-i440fx-6.1"
-    assert caps.arch == "x86_64"
-    assert caps.domain == "kvm"
-    assert caps.path == "/usr/bin/qemu-system-x86_64"
 
     custom_mode = caps.cpu.get_mode("custom")
     assert bool(custom_mode)

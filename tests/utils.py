@@ -89,21 +89,21 @@ class _URIs(object):
         _uri_qemu = _m("qemu:///system")
 
         # KVM x86 URIs
-        _kvm_x86_caps = _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-domcaps.xml")
+        _kvm_x86_caps = _caps("kvm-x86_64.xml") + _domcaps("kvm-x86_64-domcaps-latest.xml")
         self.kvm_x86_session = _m("qemu:///session") + _kvm_x86_caps
         self.kvm_x86 = _uri_qemu + _kvm_x86_caps
         self.kvm_x86_remote = _m("qemu+tls://fakeuri.example.com/system") + _kvm_x86_caps
         self.kvm_x86_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
-        self.kvm_x86_q35 = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-q35.xml")
-        self.kvm_x86_cpu_insecure = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-insecure-domcaps.xml")
+        self.kvm_x86_cpu_insecure = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-insecure.xml")
+        self.kvm_x86_oldfirmware = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-oldfirmware.xml")
         self.kvm_amd_sev = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-amd-sev.xml")
 
         # Non-x86 arch URIs
         self.kvm_armv7l_nodomcaps = _uri_qemu + _caps("kvm-armv7l.xml")
         self.kvm_armv7l = self.kvm_armv7l_nodomcaps + _domcaps("kvm-armv7l-domcaps.xml")
         self.kvm_aarch64 = _uri_qemu + _caps("kvm-aarch64.xml") + _domcaps("kvm-aarch64-domcaps.xml")
-        self.kvm_ppc64le = _uri_qemu + _caps("kvm-ppc64le.xml") + _domcaps("kvm-x86_64-domcaps.xml")
-        self.kvm_s390x = _uri_qemu + _caps("kvm-s390x.xml") + _domcaps("kvm-x86_64-domcaps.xml")
+        self.kvm_ppc64le = _uri_qemu + _caps("kvm-ppc64le.xml") + _domcaps("kvm-x86_64-domcaps-latest.xml")
+        self.kvm_s390x = _uri_qemu + _caps("kvm-s390x.xml") + _domcaps("kvm-x86_64-domcaps-latest.xml")
         self.qemu_riscv64 = _uri_qemu + _caps("qemu-riscv64.xml") + _domcaps("qemu-riscv64-domcaps.xml")
 
 
