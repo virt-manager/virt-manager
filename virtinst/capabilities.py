@@ -8,7 +8,6 @@
 
 import pwd
 
-from .domain import DomainCpu
 from .logger import log
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
@@ -17,27 +16,10 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 # capabilities host <cpu> parsing #
 ###################################
 
-class _CapsCPU(DomainCpu):
-    arch = XMLProperty("./arch")
-
-
-###########################
-# Caps <topology> parsers #
-###########################
-
-class _CapsTopologyCPU(XMLBuilder):
+class _CapsCPU(XMLBuilder):
     XML_NAME = "cpu"
-    id = XMLProperty("./@id")
-
-
-class _TopologyCell(XMLBuilder):
-    XML_NAME = "cell"
-    cpus = XMLChildProperty(_CapsTopologyCPU, relative_xpath="./cpus")
-
-
-class _CapsTopology(XMLBuilder):
-    XML_NAME = "topology"
-    cells = XMLChildProperty(_TopologyCell, relative_xpath="./cells")
+    arch = XMLProperty("./arch")
+    model = XMLProperty("./model")
 
 
 ######################################
@@ -60,7 +42,6 @@ class _CapsHost(XMLBuilder):
     XML_NAME = "host"
     secmodels = XMLChildProperty(_CapsSecmodel)
     cpu = XMLChildProperty(_CapsCPU, is_single=True)
-    topology = XMLChildProperty(_CapsTopology, is_single=True)
 
     def get_qemu_baselabel(self):
         for secmodel in self.secmodels:

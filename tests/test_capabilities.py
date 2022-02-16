@@ -24,18 +24,10 @@ def _buildCaps(filename):
 
 def testCapsCPUFeaturesNewSyntax():
     filename = "test-qemu-with-kvm.xml"
-    host_feature_list = ['lahf_lm', 'xtpr', 'cx16', 'tm2', 'est', 'vmx',
-        'ds_cpl', 'pbe', 'tm', 'ht', 'ss', 'acpi', 'ds']
-
     caps = _buildCaps(filename)
-    for f in host_feature_list:
-        assert f in [feat.name for feat in caps.host.cpu.features]
 
+    assert caps.host.cpu.arch == "x86_64"
     assert caps.host.cpu.model == "core2duo"
-    assert caps.host.cpu.vendor == "Intel"
-    assert caps.host.cpu.topology.threads == 3
-    assert caps.host.cpu.topology.cores == 5
-    assert caps.host.cpu.topology.sockets == 7
 
 
 def testCapsUtilFuncs():
@@ -58,12 +50,6 @@ def testCapsUtilFuncs():
     with pytest.raises(ValueError, match=r".*not support any.*"):
         caps_empty.guest_lookup()
 
-
-def testCapsNuma():
-    cells = _buildCaps("lxc.xml").host.topology.cells
-    assert len(cells) == 1
-    assert len(cells[0].cpus) == 8
-    assert cells[0].cpus[3].id == '3'
 
 
 ##############################
