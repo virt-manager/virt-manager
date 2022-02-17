@@ -31,6 +31,9 @@ class _HasValues(XMLBuilder):
     def get_values(self):
         return [v.value for v in self.values]
 
+    def has_value(self, val):
+        return val in self.get_values()
+
 
 class _Enum(_HasValues):
     XML_NAME = "enum"
@@ -253,10 +256,10 @@ class DomainCapabilities(XMLBuilder):
         """
         Return True if libvirt advertises support for UEFI loader
         """
-        return "yes" in self.os.loader.get_enum("readonly").get_values()
+        return self.os.loader.get_enum("readonly").has_value("yes")
 
     def supports_firmware_efi(self):
-        return "efi" in self.os.get_enum("firmware").get_values()
+        return self.os.get_enum("firmware").has_value("efi")
 
     def supports_safe_host_model(self):
         """
@@ -358,18 +361,17 @@ class DomainCapabilities(XMLBuilder):
         Returns False if either libvirt or qemu do not have support to bochs
         video type.
         """
-        models = self.devices.video.get_enum("modelType").get_values()
-        return bool("bochs" in models)
+        return self.devices.video.get_enum("modelType").has_value("bochs")
 
     def supports_video_qxl(self):
         if not self.devices.video.has_enum("modelType"):
             # qxl long predates modelType in domcaps, so if it is missing,
             # use spice support as a rough value
             return self.supports_graphics_spice()
-        return "qxl" in self.devices.video.get_enum("modelType").get_values()
+        return self.devices.video.get_enum("modelType").has_value("qxl")
 
     def supports_video_virtio(self):
-        return "virtio" in self.devices.video.get_enum("modelType").get_values()
+        return self.devices.video.get_enum("modelType").has_value("virtio")
 
     def supports_tpm_emulator(self):
         """
@@ -388,22 +390,20 @@ class DomainCapabilities(XMLBuilder):
                 return False
             return self.conn.caps.host.cpu.arch in ["i686", "x86_64"]
 
-        types = self.devices.graphics.get_enum("type").get_values()
-        return bool("spice" in types)
+        return self.devices.graphics.get_enum("type").has_value("spice")
 
     def supports_filesystem_virtiofs(self):
         """
         Return True if libvirt advertises support for virtiofs
         """
-        types = self.devices.filesystem.get_enum("driverType").get_values()
-        return bool("virtiofs" in types)
+        return self.devices.filesystem.get_enum(
+                "driverType").has_value("virtiofs")
 
     def supports_memorybacking_memfd(self):
         """
         Return True if libvirt advertises support for memfd memory backend
         """
-        sourceTypes = self.memorybacking.get_enum("sourceType").get_values()
-        return bool("memfd" in sourceTypes)
+        return self.memorybacking.get_enum("sourceType").has_value("memfd")
 
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
