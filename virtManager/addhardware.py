@@ -12,7 +12,7 @@ from virtinst import (DeviceChannel, DeviceConsole,
         DeviceController, DeviceDisk, DeviceHostdev,
         DeviceInput, DeviceInterface, DevicePanic, DeviceParallel,
         DeviceRedirdev, DeviceRng, DeviceSerial, DeviceSmartcard,
-        DeviceSound, DeviceTpm, DeviceVideo, DeviceVsock, DeviceWatchdog)
+        DeviceSound, DeviceVideo, DeviceVsock, DeviceWatchdog)
 from virtinst import log
 
 from .lib import uiutil
@@ -22,6 +22,7 @@ from .device.addstorage import vmmAddStorage
 from .device.fsdetails import vmmFSDetails
 from .device.gfxdetails import vmmGraphicsDetails
 from .device.netlist import vmmNetworkList
+from .device.tpmdetails import vmmTPMDetails
 from .device.vsockdetails import vmmVsockDetails
 from .storagebrowse import vmmStorageBrowser
 from .xmleditor import vmmXMLEditor
@@ -78,6 +79,9 @@ class vmmAddHardware(vmmGObjectUI):
         self._vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
         self.widget("vsock-align").add(self._vsockdetails.top_box)
 
+        self._tpmdetails = vmmTPMDetails(self.vm, self.builder, self.topwin)
+        self.widget("tpm-align").add(self._tpmdetails.top_box)
+
         self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
                 self.widget("create-pages-align"),
                 self.widget("create-pages"))
@@ -98,8 +102,6 @@ class vmmAddHardware(vmmGObjectUI):
             "on_char_device_type_changed": self._change_char_device_type,
             "on_char_target_name_changed": self._change_char_target_name,
             "on_char_auto_socket_toggled": self._change_char_auto_socket,
-
-            "on_tpm_device_type_changed": self._change_tpm_device_type,
 
             "on_usbredir_type_changed": self._change_usbredir_type,
 
@@ -145,6 +147,8 @@ class vmmAddHardware(vmmGObjectUI):
         self.addstorage = None
         self._vsockdetails.cleanup()
         self._vsockdetails = None
+        self._tpmdetails.cleanup()
+        self._tpmdetails = None
         self._xmleditor.cleanup()
         self._xmleditor = None
 
@@ -188,7 +192,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_watchdogaction_combo(self.vm, self.widget("watchdog-action"))
         self.build_smartcard_mode_combo(self.vm, self.widget("smartcard-mode"))
         self._build_redir_type_combo()
-        self._build_tpm_type_combo(self.vm)
         self._build_panic_model_combo()
         uiutil.build_simple_combo(self.widget("controller-model"), [])
         self._build_controller_type_combo()
@@ -316,9 +319,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         # Remaining devices
         self._fsdetails.reset_state()
-        self.widget("tpm-device-path").set_text("/dev/tpm0")
         self._gfxdetails.reset_state()
         self._vsockdetails.reset_state()
+        self._tpmdetails.reset_state()
 
     @staticmethod
     def change_config_helper(define_func, define_args, vm, err,
@@ -505,23 +508,6 @@ class vmmAddHardware(vmmGObjectUI):
             "xen": _("Xen"),
         }
         return bus_mappings.get(bus, bus)
-
-    @staticmethod
-    def tpm_pretty_type(val):
-        labels = {
-            DeviceTpm.TYPE_PASSTHROUGH: _("Passthrough device"),
-            DeviceTpm.TYPE_EMULATOR: _("Emulated device"),
-        }
-        return labels.get(val, val)
-
-    @staticmethod
-    def tpm_pretty_model(val):
-        labels = {
-            DeviceTpm.MODEL_TIS: _("TIS"),
-            DeviceTpm.MODEL_CRB: _("CRB"),
-            DeviceTpm.MODEL_SPAPR: _("SPAPR"),
-        }
-        return labels.get(val, val)
 
     @staticmethod
     def panic_pretty_model(val):
@@ -881,50 +867,6 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.build_simple_combo(self.widget("usbredir-list"), values)
 
 
-    def _build_tpm_type_combo(self, vm):
-        values = []
-        for t in DeviceTpm.TYPES:
-            values.append([t, vmmAddHardware.tpm_pretty_type(t)])
-        uiutil.build_simple_combo(self.widget("tpm-type"), values)
-        values = []
-        for t in vmmAddHardware._get_tpm_model_list(vm, None):
-            values.append([t, vmmAddHardware.tpm_pretty_model(t)])
-        uiutil.build_simple_combo(self.widget("tpm-model"), values)
-        values = []
-        for t in DeviceTpm.VERSIONS:
-            values.append([t, t])
-        uiutil.build_simple_combo(self.widget("tpm-version"), values,
-                default_value=DeviceTpm.VERSION_2_0)
-
-    @staticmethod
-    def _get_tpm_model_list(vm, tpmversion):
-        mod_list = []
-        if vm.is_hvm():
-            if vm.xmlobj.os.is_pseries():
-                mod_list.append("tpm-spapr")
-            else:
-                mod_list.append("tpm-tis")
-                if tpmversion != '1.2':
-                    mod_list.append("tpm-crb")
-            mod_list.sort()
-        return mod_list
-
-    @staticmethod
-    def populate_tpm_model_combo(vm, combo, tpmversion):
-        model = combo.get_model()
-        model.clear()
-
-        mod_list = vmmAddHardware._get_tpm_model_list(vm, tpmversion)
-        for m in mod_list:
-            model.append([m, vmmAddHardware.tpm_pretty_model(m)])
-        combo.set_active(0)
-
-    @staticmethod
-    def build_tpm_model_combo(vm, combo, tpmversion):
-        uiutil.build_simple_combo(combo, [])
-        vmmAddHardware.populate_tpm_model_combo(vm, combo, tpmversion)
-
-
     def _build_panic_model_combo(self):
         values = []
         for m in DevicePanic.get_models(self.vm.get_xmlobj()):
@@ -1130,19 +1072,6 @@ class vmmAddHardware(vmmGObjectUI):
             self.widget("create-mac-address").set_sensitive(True)
         else:
             self.widget("create-mac-address").set_sensitive(False)
-
-    def _change_tpm_device_type(self, src):
-        devtype = uiutil.get_list_selection(src)
-        if devtype is None:
-            return  # pragma: no cover
-
-        dev = DeviceTpm(self.conn.get_backend())
-        dev.type = devtype
-
-        uiutil.set_grid_row_visible(self.widget("tpm-device-path-label"),
-                devtype == dev.TYPE_PASSTHROUGH)
-        uiutil.set_grid_row_visible(self.widget("tpm-version-label"),
-                devtype == dev.TYPE_EMULATOR)
 
     def _change_char_auto_socket(self, src):
         if not src.get_visible():
@@ -1591,22 +1520,7 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _build_tpm(self):
-        typ = uiutil.get_list_selection(self.widget("tpm-type"))
-        model = uiutil.get_list_selection(self.widget("tpm-model"))
-        device_path = self.widget("tpm-device-path").get_text()
-        version = uiutil.get_list_selection(self.widget("tpm-version"))
-
-        if not self.widget("tpm-device-path").get_visible():
-            device_path = None
-        if not self.widget("tpm-version").get_visible():
-            version = None
-
-        dev = DeviceTpm(self.conn.get_backend())
-        dev.type = typ
-        dev.model = model
-        dev.device_path = device_path
-        dev.version = version
-        return dev
+        return self._tpmdetails.build_device()
 
     def _build_panic(self):
         model = uiutil.get_list_selection(self.widget("panic-model"))

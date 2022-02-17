@@ -4418,130 +4418,13 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment47">
+                          <object class="GtkAlignment" id="tpm-align">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="top-padding">3</property>
                             <property name="left-padding">12</property>
                             <child>
-                              <!-- n-columns=2 n-rows=4 -->
-                              <object class="GtkGrid" id="table200">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="border-width">3</property>
-                                <property name="row-spacing">4</property>
-                                <property name="column-spacing">8</property>
-                                <child>
-                                  <object class="GtkLabel" id="tpm-dev-type">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label">tpm-dev-type</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="tpm-device-path">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label">tpm-device-path</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label183">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">end</property>
-                                    <property name="label" translatable="yes">Type:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="tpm-device-path-label">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">end</property>
-                                    <property name="label" translatable="yes">Path:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="tpm-version-label">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">end</property>
-                                    <property name="label" translatable="yes">Version:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="tpm-version">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label">tpm-version</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="tpm-model-label">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">end</property>
-                                    <property name="label" translatable="yes">Device mode_l:</property>
-                                    <property name="use-underline">True</property>
-                                    <property name="mnemonic-widget">tpm-model-text</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="tpm-model">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">False</property>
-                                    <property name="has-entry">True</property>
-                                    <signal name="changed" handler="on_tpm_model_combo_changed" swapped="no"/>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry" id="tpm-model-text">
-                                        <property name="can-focus">True</property>
-                                      </object>
-                                    </child>
-                                    <child internal-child="accessible">
-                                      <object class="AtkObject" id="tpm-model-atkobject">
-                                        <property name="AtkObject::accessible-name">tpm-model</property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
-                                </child>
-                              </object>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>

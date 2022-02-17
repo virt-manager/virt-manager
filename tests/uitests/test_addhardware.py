@@ -610,7 +610,7 @@ def testAddHWMisc1(app):
     tab.combo_select("Mode:", "Passthrough")
     _finish(addhw, check=details)
 
-    # Add TPM emulated
+    # Add TPM default
     _open_addhw(app, details)
     tab = _select_hw(addhw, "TPM", "tpm-tab")
     _finish(addhw, check=details)
@@ -645,9 +645,10 @@ def testAddHWMisc2(app):
     # Add TPM passthrough
     _open_addhw(app, details)
     tab = _select_hw(addhw, "TPM", "tpm-tab")
-    tab.combo_select("Model:", "TIS")
-    tab.combo_select("Backend:", "Passthrough")
+    tab.combo_select("Type:", "Passthrough")
     tab.find("Device Path:", "text").set_text("/tmp/foo")
+    tab.find("Advanced options", "toggle button").click_expander()
+    tab.combo_select("Model:", "TIS")
     _finish(addhw, check=details)
 
     # Add RNG

@@ -632,7 +632,10 @@ def testDetailsEditDevices2(app):
 
     # TPM tweaks
     tab = _select_hw(app, win, "TPM", "tpm-tab")
-    tab.combo_select("tpm-model", "CRB")
+    tab.combo_select("Type:", "Emulated")
+    tab.find("Advanced options", "toggle button").click_expander()
+    tab.combo_select("Model:", "CRB")
+    tab.combo_select("Version:", "2.0")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 

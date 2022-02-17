@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.38.2 -->
+<interface>
+  <requires lib="gtk+" version="3.22"/>
+  <object class="GtkBox" id="top-box">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
+    <child>
+      <!-- n-columns=2 n-rows=2 -->
+      <object class="GtkGrid" id="table123">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">6</property>
+        <child>
+          <object class="GtkLabel" id="tpm-device-path-label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Device _Path:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">tpm-device-path</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="tpm-device-path">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="invisible-char">●</property>
+            <property name="width-chars">12</property>
+            <signal name="changed" handler="on_tpm_device_path_changed" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label35">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">_Type:</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">tpm-type</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="tpm-type">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="has-entry">True</property>
+            <signal name="changed" handler="on_tpm_type_changed" swapped="no"/>
+            <child internal-child="entry">
+              <object class="GtkEntry">
+                <property name="can-focus">False</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkExpander">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <child>
+          <!-- n-columns=2 n-rows=2 -->
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Model:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">tpm-model</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="tpm-model">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="has-entry">True</property>
+                <signal name="changed" handler="on_tpm_model_changed" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can-focus">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="tpm-version-label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Version:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">tpm-version</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="tpm-version">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="has-entry">True</property>
+                <signal name="changed" handler="on_tpm_version_changed" swapped="no"/>
+                <child internal-child="entry">
+                  <object class="GtkEntry">
+                    <property name="can-focus">False</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="tpm-advanced">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Adva_nced options</property>
+            <property name="use-underline">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="top-box-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">tpm-tab</property>
+      </object>
+    </child>
+  </object>
+</interface>
