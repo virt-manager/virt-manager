@@ -1,0 +1,148 @@
+<domainCapabilities>
+  <path>/usr/bin/qemu-system-ppc64</path>
+  <domain>kvm</domain>
+  <machine>pseries-7.0</machine>
+  <arch>ppc64</arch>
+  <vcpu max='2147483647'/>
+  <iothreads supported='yes'/>
+  <os supported='yes'>
+    <enum name='firmware'/>
+    <loader supported='yes'>
+      <value>/usr/share/AAVMF/AAVMF_CODE.fd</value>
+      <value>/usr/share/AAVMF/AAVMF32_CODE.fd</value>
+      <value>/usr/share/OVMF/OVMF_CODE.fd</value>
+      <enum name='type'>
+        <value>rom</value>
+        <value>pflash</value>
+      </enum>
+      <enum name='readonly'>
+        <value>yes</value>
+        <value>no</value>
+      </enum>
+      <enum name='secure'>
+        <value>no</value>
+      </enum>
+    </loader>
+  </os>
+  <cpu>
+    <mode name='host-passthrough' supported='yes'>
+      <enum name='hostPassthroughMigratable'>
+        <value>off</value>
+      </enum>
+    </mode>
+    <mode name='maximum' supported='yes'>
+      <enum name='maximumMigratable'>
+        <value>on</value>
+        <value>off</value>
+      </enum>
+    </mode>
+    <mode name='host-model' supported='yes'>
+      <model fallback='allow'>POWER8</model>
+    </mode>
+    <mode name='custom' supported='yes'>
+      <model usable='unknown'>POWER9</model>
+      <model usable='unknown'>POWER8</model>
+      <model usable='unknown'>POWER7</model>
+    </mode>
+  </cpu>
+  <memoryBacking supported='yes'>
+    <enum name='sourceType'>
+      <value>file</value>
+      <value>anonymous</value>
+      <value>memfd</value>
+    </enum>
+  </memoryBacking>
+  <devices>
+    <disk supported='yes'>
+      <enum name='diskDevice'>
+        <value>disk</value>
+        <value>cdrom</value>
+        <value>lun</value>
+      </enum>
+      <enum name='bus'>
+        <value>scsi</value>
+        <value>virtio</value>
+        <value>usb</value>
+        <value>sata</value>
+      </enum>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
+      </enum>
+    </disk>
+    <graphics supported='yes'>
+      <enum name='type'>
+        <value>vnc</value>
+      </enum>
+    </graphics>
+    <video supported='yes'>
+      <enum name='modelType'>
+        <value>vga</value>
+        <value>cirrus</value>
+        <value>vmvga</value>
+        <value>virtio</value>
+        <value>none</value>
+        <value>bochs</value>
+      </enum>
+    </video>
+    <hostdev supported='yes'>
+      <enum name='mode'>
+        <value>subsystem</value>
+      </enum>
+      <enum name='startupPolicy'>
+        <value>default</value>
+        <value>mandatory</value>
+        <value>requisite</value>
+        <value>optional</value>
+      </enum>
+      <enum name='subsysType'>
+        <value>usb</value>
+        <value>pci</value>
+        <value>scsi</value>
+      </enum>
+      <enum name='capsType'/>
+      <enum name='pciBackend'>
+        <value>default</value>
+        <value>vfio</value>
+      </enum>
+    </hostdev>
+    <rng supported='yes'>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>random</value>
+        <value>egd</value>
+        <value>builtin</value>
+      </enum>
+    </rng>
+    <filesystem supported='yes'>
+      <enum name='driverType'>
+        <value>path</value>
+        <value>handle</value>
+        <value>virtiofs</value>
+      </enum>
+    </filesystem>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-spapr</value>
+        <value>spapr-tpm-proxy</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>passthrough</value>
+        <value>emulator</value>
+      </enum>
+    </tpm>
+  </devices>
+  <features>
+    <gic supported='no'/>
+    <vmcoreinfo supported='no'/>
+    <genid supported='no'/>
+    <backingStoreInput supported='yes'/>
+    <backup supported='yes'/>
+    <sev supported='no'/>
+  </features>
+</domainCapabilities>
