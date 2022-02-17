@@ -13,22 +13,22 @@
 # Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020, 2021.
 # Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020, 2021.
 # Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2021.
-# Luna Jernberg <bittin@reimu.nl>, 2021.
+# Luna Jernberg <bittin@reimu.nl>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-15 06:14+0000\n"
-"PO-Revision-Date: 2021-08-06 21:04+0000\n"
-"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/sv/>\n"
+"PO-Revision-Date: 2022-02-18 13:16+0000\n"
+"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -1004,10 +1004,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Extern disk och minne"
+msgstr "Aktivera delat _minne"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1670,10 +1668,8 @@ msgstr ""
 "small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Port:"
+msgstr "_Portgrupp:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1786,12 +1782,12 @@ msgstr "CPU-_standard:"
 #: ui/preferences.ui:505
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Standardfirmware för nya virtuella datorer. Starta med antingen BIOS eller "
+"UEFI."
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Fast program_vara:"
+msgstr "x86_Fast programvara:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -3349,16 +3345,14 @@ msgid "SSH tunnel error output: %s"
 msgstr "SSH-tunnelns felutskrift: %s"
 
 #: virtManager/details/console.py:844
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Visaren kopplades ifrån."
+msgstr "Visaren kopplar från."
 
 #: virtManager/details/console.py:977
 #, fuzzy
 #| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Visaren är frånkopplad."
+msgstr "Visar fönstret stängt."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3475,7 +3469,7 @@ msgstr "_Ta bort maskinvara"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4594,6 +4588,7 @@ msgstr "Fel när migreringsjobbet avbröts: %s"
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
+"Kan inte ändra inställningen för delat minne när <numa> är konfigurerat."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
@@ -4756,10 +4751,8 @@ msgid "Nearest host CPU model"
 msgstr "Närmaste värd-CPU-modell"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Systemstandard (%s)"
+msgstr "Systemstandard"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -6026,7 +6019,7 @@ msgstr "Överför '%(filename)s'"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "Generiskt eller okänt OS. Användning rekommenderas inte."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6034,10 +6027,9 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "Okänt libosinfo-ID ”%s”"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
-msgstr "Okänt OS-namn ”%s”. Se ”osinfo-query os” för giltiga värden."
+msgstr "Okänt OS-namn '%s'. Se `--osinfo list` för giltiga värden."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6668,10 +6660,8 @@ msgstr ""
 "en tom ”--edit”"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os-variant stödljs inte med --edit"
+msgstr "--os-variant/--osinfo stödjs inte med --edit"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6684,10 +6674,8 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Kan inte använda --remove-device med --%s"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr "--os-variant stödjs inte med --remove-device"
+msgstr "--os-variant/--osinfo stödjs inte med --remove-device"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6695,10 +6683,8 @@ msgid "--build-xml not supported for --%s"
 msgstr "--build-xml stödjs inte för --%s"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "--os-variant stödjs inte med --build-xml"
+msgstr "--os-variant/--osinfo stödjs inte med --build-xml"
 
 #: virtinst/virtxml.py:233
 #, python-format
