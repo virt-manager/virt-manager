@@ -153,11 +153,84 @@ class _CPU(XMLBuilder):
                 return mode
 
 
+#############################
+# CPU flags/baseline helpers#
+#############################
+
+def _convert_mode_to_cpu(xml, arch):
+    root = ET.fromstring(xml)
+    root.tag = "cpu"
+    root.attrib = {}
+    aelement = ET.SubElement(root, "arch")
+    aelement.text = arch
+    return ET.tostring(root, encoding="unicode")
+
+
+def _get_expanded_cpu(domcaps, mode):
+    cpuXML = _convert_mode_to_cpu(mode.get_xml(), domcaps.arch)
+    log.debug("Generated CPU XML for security flag baseline:\n%s", cpuXML)
+
+    try:
+        expandedXML = domcaps.conn.baselineHypervisorCPU(
+                domcaps.path, domcaps.arch,
+                domcaps.machine, domcaps.domain, [cpuXML],
+                libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
+    except (libvirt.libvirtError, AttributeError):
+        expandedXML = domcaps.conn.baselineCPU([cpuXML],
+                libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
+
+    return DomainCpu(domcaps.conn, expandedXML)
+
+
+def _lookup_cpu_security_features(domcaps):
+    ret = []
+    sec_features = [
+            'spec-ctrl',
+            'ssbd',
+            'ibpb',
+            'virt-ssbd',
+            'md-clear']
+
+    for m in domcaps.cpu.modes:
+        if m.name != "host-model" or not m.supported:
+            continue  # pragma: no cover
+
+        try:
+            cpu = _get_expanded_cpu(domcaps, m)
+        except libvirt.libvirtError as e:  # pragma: no cover
+            log.warning(_("Failed to get expanded CPU XML: %s"), e)
+            break
+
+        for feature in cpu.features:
+            if feature.name in sec_features:
+                ret.append(feature.name)
+
+    log.debug("Found host-model security features: %s", ret)
+    return ret
+
+
 #################################
 # DomainCapabilities main class #
 #################################
 
 class DomainCapabilities(XMLBuilder):
+    XML_NAME = "domainCapabilities"
+    os = XMLChildProperty(_OS, is_single=True)
+    cpu = XMLChildProperty(_CPU, is_single=True)
+    devices = XMLChildProperty(_Devices, is_single=True)
+    features = XMLChildProperty(_Features, is_single=True)
+    memorybacking = XMLChildProperty(_MemoryBacking, is_single=True)
+
+    arch = XMLProperty("./arch")
+    domain = XMLProperty("./domain")
+    machine = XMLProperty("./machine")
+    path = XMLProperty("./path")
+
+
+    ################
+    # Init helpers #
+    ################
+
     @staticmethod
     def build_from_params(conn, emulator, arch, machine, hvtype):
         xml = None
@@ -178,6 +251,11 @@ class DomainCapabilities(XMLBuilder):
     def build_from_guest(guest):
         return DomainCapabilities.build_from_params(guest.conn,
             guest.emulator, guest.os.arch, guest.os.machine, guest.type)
+
+
+    #########################
+    # UEFI/firmware methods #
+    #########################
 
     # Mapping of UEFI binary names to their associated architectures. We
     # only use this info to do things automagically for the user, it shouldn't
@@ -261,6 +339,11 @@ class DomainCapabilities(XMLBuilder):
     def supports_firmware_efi(self):
         return self.os.get_enum("firmware").has_value("efi")
 
+
+    #######################
+    # CPU support methods #
+    #######################
+
     def supports_safe_host_model(self):
         """
         Return True if domcaps reports support for cpu mode=host-model.
@@ -293,60 +376,16 @@ class DomainCapabilities(XMLBuilder):
 
         return models
 
-    def _convert_mode_to_cpu(self, xml):
-        root = ET.fromstring(xml)
-        root.tag = "cpu"
-        root.attrib = {}
-        arch = ET.SubElement(root, "arch")
-        arch.text = self.arch
-        return ET.tostring(root, encoding="unicode")
-
-    def _get_expanded_cpu(self, mode):
-        cpuXML = self._convert_mode_to_cpu(mode.get_xml())
-        log.debug("Generated CPU XML for security flag baseline:\n%s", cpuXML)
-
-        try:
-            expandedXML = self.conn.baselineHypervisorCPU(
-                    self.path, self.arch, self.machine, self.domain, [cpuXML],
-                    libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
-        except (libvirt.libvirtError, AttributeError):
-            expandedXML = self.conn.baselineCPU([cpuXML],
-                    libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
-
-        return DomainCpu(self.conn, expandedXML)
-
-    def _lookup_cpu_security_features(self):
-        ret = []
-        sec_features = [
-                'spec-ctrl',
-                'ssbd',
-                'ibpb',
-                'virt-ssbd',
-                'md-clear']
-
-        for m in self.cpu.modes:
-            if m.name != "host-model" or not m.supported:
-                continue  # pragma: no cover
-
-            try:
-                cpu = self._get_expanded_cpu(m)
-            except libvirt.libvirtError as e:  # pragma: no cover
-                log.warning(_("Failed to get expanded CPU XML: %s"), e)
-                break
-
-            for feature in cpu.features:
-                if feature.name in sec_features:
-                    ret.append(feature.name)
-
-        log.debug("Found host-model security features: %s", ret)
-        return ret
-
     _features = None
     def get_cpu_security_features(self):
         if self._features is None:
-            self._features = self._lookup_cpu_security_features() or []
+            self._features = _lookup_cpu_security_features(self) or []
         return self._features
 
+
+    ########################
+    # Misc support methods #
+    ########################
 
     def supports_sev_launch_security(self):
         """
@@ -404,15 +443,3 @@ class DomainCapabilities(XMLBuilder):
         Return True if libvirt advertises support for memfd memory backend
         """
         return self.memorybacking.get_enum("sourceType").has_value("memfd")
-
-    XML_NAME = "domainCapabilities"
-    os = XMLChildProperty(_OS, is_single=True)
-    cpu = XMLChildProperty(_CPU, is_single=True)
-    devices = XMLChildProperty(_Devices, is_single=True)
-    features = XMLChildProperty(_Features, is_single=True)
-    memorybacking = XMLChildProperty(_MemoryBacking, is_single=True)
-
-    arch = XMLProperty("./arch")
-    domain = XMLProperty("./domain")
-    machine = XMLProperty("./machine")
-    path = XMLProperty("./path")
