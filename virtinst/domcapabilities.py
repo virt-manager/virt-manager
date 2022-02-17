@@ -42,7 +42,12 @@ class _Enum(_HasValues):
 
 class _CapsBlock(_HasValues):
     supported = XMLProperty("./@supported", is_yesno=True)
+    _supported_present = XMLProperty("./@supported")
     enums = XMLChildProperty(_Enum)
+
+    @property
+    def present(self):
+        return self._supported_present is not None
 
     def enum_names(self):
         return [e.name for e in self.enums]

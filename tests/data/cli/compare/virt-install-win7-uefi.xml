@@ -88,7 +88,7 @@
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
     <input type="tablet" bus="usb"/>
-    <tpm model="tpm-tis">
+    <tpm model="tpm-crb">
       <backend type="emulator"/>
     </tpm>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
@@ -190,7 +190,7 @@
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
     <input type="tablet" bus="usb"/>
-    <tpm model="tpm-tis">
+    <tpm model="tpm-crb">
       <backend type="emulator"/>
     </tpm>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">

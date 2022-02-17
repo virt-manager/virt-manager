@@ -81,7 +81,7 @@
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
     <input type="tablet" bus="usb"/>
-    <tpm model="tpm-tis">
+    <tpm>
       <backend type="passthrough">
         <device path="/dev/tpm0"/>
       </backend>

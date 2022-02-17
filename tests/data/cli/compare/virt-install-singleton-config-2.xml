@@ -228,7 +228,7 @@
     </channel>
     <input type="tablet" bus="usb"/>
     <tpm model="tpm-crb">
-      <backend type="passthrough" persistent_state="yes">
+      <backend type="passthrough" version="2.0" persistent_state="yes">
         <device path="/dev/tpm0"/>
         <encryption secret="11111111-2222-3333-4444-5555555555"/>
       </backend>
@@ -540,7 +540,7 @@
     </channel>
     <input type="tablet" bus="usb"/>
     <tpm model="tpm-crb">
-      <backend type="passthrough" persistent_state="yes">
+      <backend type="passthrough" version="2.0" persistent_state="yes">
         <device path="/dev/tpm0"/>
         <encryption secret="11111111-2222-3333-4444-5555555555"/>
       </backend>

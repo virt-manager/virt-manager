@@ -1851,6 +1851,9 @@ Configure a virtual TPM device. Examples:
 ``--tpm emulator``
     Request an emulated TPM device.
 
+``--tpm default``
+    Request virt-install to fill in a modern recommended default
+
 Use --tpm=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#elementsTpm
 
