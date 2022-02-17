@@ -999,14 +999,17 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-    def define_tpm(self, devobj, do_hotplug, model=_SENTINEL):
+    def define_tpm(self, devobj, do_hotplug, newdev=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
             return  # pragma: no cover
 
-        if model != _SENTINEL:
-            editdev.model = model
+        if newdev != _SENTINEL:
+            editdev.model = newdev.model
+            editdev.type = newdev.type
+            editdev.version = newdev.version
+            editdev.device_path = newdev.device_path
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 

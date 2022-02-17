@@ -21,6 +21,7 @@ from ..device.fsdetails import vmmFSDetails
 from ..device.gfxdetails import vmmGraphicsDetails
 from ..device.mediacombo import vmmMediaCombo
 from ..device.netlist import vmmNetworkList
+from ..device.tpmdetails import vmmTPMDetails
 from ..device.vsockdetails import vmmVsockDetails
 from ..lib.graphwidgets import Sparkline
 from ..oslist import vmmOSList
@@ -76,15 +77,14 @@ from ..delete import vmmDeleteStorage
 
  EDIT_CONTROLLER_MODEL,
 
- EDIT_TPM_TYPE,
- EDIT_TPM_MODEL,
+ EDIT_TPM,
 
  EDIT_VSOCK_AUTO,
  EDIT_VSOCK_CID,
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 39)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 38)
 
 
 # Columns in hw list model
@@ -377,6 +377,10 @@ class vmmDetails(vmmGObjectUI):
         self.widget("network-source-ui-align").add(self.netlist.top_box)
         self.netlist.connect("changed", _e(EDIT_NET_SOURCE))
 
+        self.tpmdetails = vmmTPMDetails(self.vm, self.builder, self.topwin)
+        self.widget("tpm-align").add(self.tpmdetails.top_box)
+        self.tpmdetails.connect("changed", _e(EDIT_TPM))
+
         self.vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
         self.widget("vsock-align").add(self.vsockdetails.top_box)
         self.vsockdetails.connect("changed-auto-cid", _e(EDIT_VSOCK_AUTO))
@@ -471,7 +475,6 @@ class vmmDetails(vmmGObjectUI):
 
             "on_hostdev_rombar_toggled": _e(EDIT_HOSTDEV_ROMBAR),
             "on_controller_model_combo_changed": _e(EDIT_CONTROLLER_MODEL),
-            "on_tpm_model_combo_changed": _e(EDIT_TPM_MODEL),
 
             "on_config_apply_clicked": self._config_apply_clicked_cb,
             "on_config_cancel_clicked": self._config_cancel_clicked_cb,
@@ -840,10 +843,6 @@ class vmmDetails(vmmGObjectUI):
         # Smartcard mode
         sc_mode = self.widget("smartcard-mode")
         vmmAddHardware.build_smartcard_mode_combo(self.vm, sc_mode)
-
-        # TPM model
-        tpm_model = self.widget("tpm-model")
-        vmmAddHardware.build_tpm_model_combo(self.vm, tpm_model, None)
 
         # Controller model
         combo = self.widget("controller-model")
@@ -1662,9 +1661,8 @@ class vmmDetails(vmmGObjectUI):
     def _apply_tpm(self, devobj):
         kwargs = {}
 
-        if self._edited(EDIT_TPM_MODEL):
-            model = uiutil.get_list_selection(self.widget("tpm-model"))
-            kwargs["model"] = model
+        if self._edited(EDIT_TPM):
+            kwargs["newdev"] = self.tpmdetails.update_device(devobj)
 
         return self._change_config(
                 self.vm.define_tpm, kwargs, devobj=devobj)
@@ -2082,22 +2080,7 @@ class vmmDetails(vmmGObjectUI):
             self.widget("redir-address"), bool(address))
 
     def _refresh_tpm_page(self, tpmdev):
-        def show_ui(widgetname, val):
-            doshow = bool(val)
-            uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
-            self.widget(widgetname).set_text(val or "-")
-
-        dev_type = tpmdev.type
-        self.widget("tpm-dev-type").set_text(
-                vmmAddHardware.tpm_pretty_type(dev_type))
-
-        vmmAddHardware.populate_tpm_model_combo(
-            self.vm, self.widget("tpm-model"), tpmdev.version)
-        uiutil.set_list_selection(self.widget("tpm-model"), tpmdev.model)
-
-        # Device type specific properties, only show if apply to the cur dev
-        show_ui("tpm-device-path", tpmdev.device_path)
-        show_ui("tpm-version", tpmdev.version)
+        self.tpmdetails.set_dev(tpmdev)
 
     def _refresh_panic_page(self, dev):
         model = dev.model or "isa"
