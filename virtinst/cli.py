@@ -4107,8 +4107,14 @@ class ParserTPM(VirtCLIParser):
             self.guest.skip_default_tpm = True
             return
 
+        # Handle --tpm /dev/tpm0
         if (self.optdict.get("type", "").startswith("/")):
             self.optdict["path"] = self.optdict.pop("type")
+
+        # Let --tpm default,... hit our DeviceTpm defaults code
+        if self.optdict.get("type") == "default":
+            self.optdict.pop("type")
+
         return super()._parse(inst)
 
     @classmethod

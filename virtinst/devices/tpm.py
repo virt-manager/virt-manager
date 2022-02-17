@@ -49,11 +49,32 @@ class DeviceTpm(Device):
     # Default config #
     ##################
 
-    def set_defaults(self, guest):
-        if not self.type:
-            self.type = self.TYPE_PASSTHROUGH
-        if not self.model:
-            self.model = self.MODEL_TIS
+    @staticmethod
+    def default_model(guest):
+        domcaps = guest.lookup_domcaps()
 
-            if guest.os.is_ppc64():
-                self.model = self.MODEL_SPAPR
+        if not domcaps.devices.tpm.present and not guest.os.is_pseries():
+            # Preserve the old default when domcaps is old
+            return DeviceTpm.MODEL_CRB
+        if domcaps.devices.tpm.get_enum("model").has_value(DeviceTpm.MODEL_CRB):
+            # CRB is the modern version, and it implies version 2.0
+            return DeviceTpm.MODEL_CRB
+
+        # Let libvirt decide so we don't need to duplicate its arch logic
+        return None
+
+    def set_defaults(self, guest):
+        if self.device_path and not self.type:
+            self.type = self.TYPE_PASSTHROUGH
+        if not self.type:
+            # Libvirt requires a backend type to be specified. 'emulator'
+            # may not be available if swtpm is not installed, but trying to
+            # fallback to 'passthrough' in that case isn't really workable.
+            # Instead we specify it unconditionally and let libvirt error.
+            self.type = self.TYPE_EMULATOR
+
+        # passthrough and model and version are all interconnected, so
+        # don't try to set a default model if other bits are set
+        if (self.type == self.TYPE_EMULATOR and
+            not self.model and not self.version):
+            self.model = self.default_model(guest)
