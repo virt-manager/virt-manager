@@ -1,0 +1,67 @@
+<domain type="test">
+  <name>fedora</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <pae/>
+    <vmport state="off"/>
+  </features>
+  <cpu mode="host-passthrough" migratable="on"/>
+  <clock offset="utc"/>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/test-hv</emulator>
+    <disk type="file" device="disk">
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
+      <target dev="hda" bus="ide"/>
+    </disk>
+    <controller type="usb" model="ich9-ehci1"/>
+    <controller type="usb" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
+    <interface type="user">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000"/>
+    </interface>
+    <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <tpm model="tpm-crb">
+      <backend type="emulator"/>
+    </tpm>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich6"/>
+    <video>
+      <model type="qxl"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+  </devices>
+  <seclabel type="dynamic" model="testSecurity" relabel="yes">
+    <label>foobar.label,a1,z2,b3</label>
+  </seclabel>
+</domain>

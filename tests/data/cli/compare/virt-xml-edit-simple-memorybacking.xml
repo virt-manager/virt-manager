@@ -1,0 +1,11 @@
+   </blkiotune>
+   <memoryBacking>
+     <hugepages/>
++    <access mode="shared"/>
++    <source type="file"/>
+   </memoryBacking>
+   <vcpu placement="static" cpuset="1-2,5-9,11,13-14">9</vcpu>
+   <iothreads>4</iothreads>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.

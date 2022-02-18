@@ -6,88 +6,33 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
-  <maxMemory slots="2">2097152</maxMemory>
-  <memoryBacking>
-    <hugepages/>
-    <access mode="shared"/>
-    <source type="anonymous"/>
-  </memoryBacking>
-  <vcpu current="3" placement="auto">6</vcpu>
-  <sysinfo type="smbios">
-    <bios>
-      <entry name="vendor">Acme LLC</entry>
-      <entry name="version">1.2.3</entry>
-      <entry name="date">01/01/1970</entry>
-      <entry name="release">10.22</entry>
-    </bios>
-    <system>
-      <entry name="manufacturer">Acme Inc.</entry>
-      <entry name="product">Computer</entry>
-      <entry name="version">3.2.1</entry>
-      <entry name="serial">123456789</entry>
-      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
-      <entry name="sku">abc-123</entry>
-      <entry name="family">Server</entry>
-    </system>
-    <baseBoard>
-      <entry name="manufacturer">Acme Corp.</entry>
-      <entry name="product">Motherboard</entry>
-      <entry name="version">A01</entry>
-      <entry name="serial">1234-5678</entry>
-      <entry name="asset">Tag</entry>
-      <entry name="location">Chassis</entry>
-    </baseBoard>
-  </sysinfo>
+  <maxMemory slots="1">409600</maxMemory>
+  <memory>307200</memory>
+  <currentMemory>102400</currentMemory>
+  <vcpu current="2" placement="auto">4</vcpu>
   <sysinfo type="fwcfg">
     <entry name="foo" file="bar">baz</entry>
   </sysinfo>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" type="rom">/tmp/foo</loader>
-    <cmdline>root=/foo</cmdline>
+    <initarg>foo</initarg>
+    <initarg>bar=baz</initarg>
+    <boot dev="network"/>
     <boot dev="hd"/>
-    <bootmenu enable="yes" timeout="5000"/>
-    <bios useserial="no" rebootTimeout="60"/>
-    <smbios mode="sysinfo"/>
+    <smbios mode="emulate"/>
   </os>
   <features>
     <acpi/>
-    <apic eoi="off"/>
-    <pae/>
-    <gic version="host"/>
-    <hap/>
-    <viridian/>
-    <pmu state="on"/>
-    <hyperv>
-      <reset state="off"/>
-      <vapic state="off"/>
-      <relaxed state="off"/>
-      <spinlocks state="on" retries="5678"/>
-      <synic state="on"/>
-    </hyperv>
+    <apic/>
     <vmport state="off"/>
-    <kvm>
-      <hidden state="on"/>
-      <hint-dedicated state="on"/>
-      <poll-control state="on"/>
-    </kvm>
-    <pvspinlock state="off"/>
-    <smm state="off"/>
-    <vmcoreinfo state="on"/>
-    <ioapic driver="qemu"/>
   </features>
-  <cpu>
-    <topology sockets="1" dies="1" cores="3" threads="2"/>
-    <numa>
-      <cell cpus="0" memory="1048576"/>
-    </numa>
+  <cpu mode="custom" match="exact">
+    <model>qemu64</model>
   </cpu>
   <clock offset="utc">
-    <timer name="pit" tickpolicy="catchup" present="yes"/>
-    <timer name="platform" present="no"/>
-    <timer name="rtc" present="no"/>
-    <timer name="tsc" present="no"/>
-    <timer name="hypervclock" present="no"/>
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
   </clock>
   <pm>
     <suspend-to-mem enabled="no"/>
@@ -95,6 +40,11 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" discard="unmap"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>
     <controller type="pci" model="pcie-root-port"/>
@@ -127,6 +77,11 @@
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
     <input type="tablet" bus="usb"/>
+    <tpm>
+      <backend type="passthrough">
+        <device path="/dev/tpm0"/>
+      </backend>
+    </tpm>
     <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
       <gl enable="yes" rendernode="/dev/dri/by-path/pci-0000:00:02.0-render"/>
       <image compression="off"/>
@@ -141,40 +96,8 @@
     <redirdev bus="usb" type="spicevmc"/>
     <memballoon model="virtio"/>
     <rng model="virtio">
-      <backend model="egd" type="nmdm">
-        <source master="/dev/foo1" slave="/dev/foo2"/>
-      </backend>
+      <backend model="random">/dev/urandom</backend>
     </rng>
-    <panic model="isa">
-      <address type="isa" iobase="0x500" irq="5"/>
-    </panic>
-    <memory model="dimm" access="private" discard="yes">
-      <source>
-        <pagesize>4</pagesize>
-        <nodemask>1-2</nodemask>
-      </source>
-      <target>
-        <size>524288</size>
-        <node>0</node>
-      </target>
-    </memory>
-    <memory model="nvdimm">
-      <alias name="mymemdev3"/>
-      <address type="dimm" slot="1" base="0x100000000"/>
-      <source>
-        <path>/path/to/nvdimm</path>
-        <pmem/>
-        <alignsize>2097152</alignsize>
-      </source>
-      <target>
-        <size>524288</size>
-        <node>0</node>
-        <label>
-          <size>131072</size>
-        </label>
-        <readonly/>
-      </target>
-    </memory>
     <vsock model="virtio">
       <cid auto="yes"/>
     </vsock>

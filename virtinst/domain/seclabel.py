@@ -53,8 +53,10 @@ class DomainSeclabel(XMLBuilder):
     ##################
 
     def set_defaults(self, _guest):
-        if self.type or self.model:
-            if self.type is None:
-                self.type = self.TYPE_DYNAMIC
-            if self.model is None:
-                self.model = self._guess_secmodel()
+        if not self.type and not self.model:
+            # Let libvirt fill it in
+            return
+        if self.type is None:
+            self.type = self.TYPE_DYNAMIC
+        if self.model is None:
+            self.model = self._guess_secmodel()
