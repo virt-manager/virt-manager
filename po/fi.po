@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-15 06:14+0000\n"
+"POT-Creation-Date: 2022-02-17 06:15+0000\n"
 "PO-Revision-Date: 2021-08-03 19:04+0000\n"
 "Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
 "Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
@@ -725,7 +725,7 @@ msgstr "Suo_rittimet:"
 msgid "(Insert host mem)"
 msgstr "(Syötä isäntämuisti)"
 
-#: ui/createvm.ui:2055 virtManager/details/details.py:2414
+#: ui/createvm.ui:2055 virtManager/details/details.py:2417
 msgid "Memory"
 msgstr "Muisti"
 
@@ -941,7 +941,7 @@ msgstr "<b>Suorittimet</b>"
 msgid "M_odel:"
 msgstr "_Malli:"
 
-#: ui/details.ui:1413
+#: ui/details.ui:1413 virtManager/details/details.py:1956
 msgid "Copy host CP_U configuration"
 msgstr "Kopioi isäntäkoneen suoritinmäärit_ykset"
 
@@ -1679,14 +1679,15 @@ msgstr "_Verkon lähde:"
 #| "Try selecting the next most recent version displayed,\n"
 #| "or use the \"Generic OS\" entry."
 msgid ""
-"Can't find the operating system you are looking for? Try selecting a similar "
-"distro or version, or use one of the 'Generic' options."
+"Can't find the operating system you are looking for?\n"
+"Try selecting a similar distro or version, or use one of the 'Generic' "
+"options."
 msgstr ""
 "Etkö löydä etsimääsi käyttöjärjestelmää?\n"
 "Yritä valita seuraava uusin näytetty versio,\n"
 "tai käytä merkintä \"Yleinen käyttöjärjestelmä\"."
 
-#: ui/oslist.ui:107
+#: ui/oslist.ui:108
 msgid "Include end of life operating systems"
 msgstr "Sisällytä käyttöjärjestelmien elinkaaren loppu"
 
@@ -2231,7 +2232,7 @@ msgstr "Spice-portti"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:439 virtManager/details/details.py:2347
+#: virtManager/addhardware.py:439 virtManager/details/details.py:2350
 msgid "Floppy"
 msgstr "Levyke"
 
@@ -2457,7 +2458,7 @@ msgstr "Satunnaislukugeneraattori"
 msgid "VM Sockets"
 msgstr "Virtuaalikoneen pistokkeet"
 
-#: virtManager/addhardware.py:1071 virtManager/details/details.py:2131
+#: virtManager/addhardware.py:1071 virtManager/details/details.py:2134
 #, python-format
 msgid "%s Device"
 msgstr "Laite %s"
@@ -3518,7 +3519,7 @@ msgid "Are you sure you want to remove this device?"
 msgstr "Haluatko poistaa tämän laitteen?"
 
 #: virtManager/details/details.py:1280 virtManager/details/details.py:1775
-#: virtManager/details/details.py:1794 virtManager/details/details.py:1993
+#: virtManager/details/details.py:1794 virtManager/details/details.py:1996
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Tuntematon"
@@ -3599,96 +3600,96 @@ msgstr "Poistettu käytöstä"
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s/%(total-memory)s"
 
-#: virtManager/details/details.py:2042
+#: virtManager/details/details.py:2045
 msgid "Absolute Movement"
 msgstr "Absoluuttinen liikkuminen"
 
-#: virtManager/details/details.py:2044
+#: virtManager/details/details.py:2047
 msgid "Relative Movement"
 msgstr "Suhteellinen liikkuminen"
 
-#: virtManager/details/details.py:2053 virtManager/details/details.py:2228
-#: virtManager/details/details.py:2231
+#: virtManager/details/details.py:2056 virtManager/details/details.py:2231
+#: virtManager/details/details.py:2234
 msgid "Hypervisor does not support removing this device"
 msgstr "Hypervisor ei tue tämän laitteen poistamista"
 
-#: virtManager/details/details.py:2057
+#: virtManager/details/details.py:2060
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s-palvelin"
 
-#: virtManager/details/details.py:2123
+#: virtManager/details/details.py:2126
 msgid "Serial Device"
 msgstr "Sarjalaite"
 
-#: virtManager/details/details.py:2125
+#: virtManager/details/details.py:2128
 msgid "Parallel Device"
 msgstr "Rinnakkaislaite"
 
-#: virtManager/details/details.py:2127
+#: virtManager/details/details.py:2130
 msgid "Console Device"
 msgstr "Konsolilaite"
 
-#: virtManager/details/details.py:2129
+#: virtManager/details/details.py:2132
 msgid "Channel Device"
 msgstr "Kanavalaite"
 
-#: virtManager/details/details.py:2139
+#: virtManager/details/details.py:2142
 msgid "Primary Console"
 msgstr "Ensisijainen konsoli"
 
-#: virtManager/details/details.py:2195
+#: virtManager/details/details.py:2198
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fyysinen %s laite"
 
-#: virtManager/details/details.py:2212
+#: virtManager/details/details.py:2215
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Viimeistä videolaitetta ei voida poistaa, kun grafiikka/näyttö on liitettynä."
 
-#: virtManager/details/details.py:2238
+#: virtManager/details/details.py:2241
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s %(address)s:lla"
 
-#: virtManager/details/details.py:2244 virtManager/details/details.py:2254
+#: virtManager/details/details.py:2247 virtManager/details/details.py:2257
 msgid "Cannot remove controller while devices are attached."
 msgstr "Ohjainta ei voida poistaa, kun laitteet ovat liitettyinä."
 
-#: virtManager/details/details.py:2344
+#: virtManager/details/details.py:2347
 msgid "Hard Disk"
 msgstr "Kiintolevy"
 
-#: virtManager/details/details.py:2345
+#: virtManager/details/details.py:2348
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2346
+#: virtManager/details/details.py:2349
 msgid "Network (PXE)"
 msgstr "Verkko (PXE)"
 
-#: virtManager/details/details.py:2361
+#: virtManager/details/details.py:2364
 msgid "No bootable devices"
 msgstr "Ei käynnistettäviä laitteita"
 
-#: virtManager/details/details.py:2408
+#: virtManager/details/details.py:2411
 msgid "Overview"
 msgstr "Yleistiedot"
 
-#: virtManager/details/details.py:2409
+#: virtManager/details/details.py:2412
 msgid "OS information"
 msgstr "Käyttöjärjestelmän tiedot"
 
-#: virtManager/details/details.py:2411
+#: virtManager/details/details.py:2414
 msgid "Performance"
 msgstr "Suorituskyky"
 
-#: virtManager/details/details.py:2413
+#: virtManager/details/details.py:2416
 msgid "CPUs"
 msgstr "Suorittimet"
 
-#: virtManager/details/details.py:2415
+#: virtManager/details/details.py:2418
 msgid "Boot Options"
 msgstr "Käynnistysvalinnat"
 
@@ -5011,7 +5012,7 @@ msgstr ""
 "XML-muutokset menetetään, jos poistut tältä välilehdeltä. Jätätkö todella "
 "tämän välilehden?"
 
-#: virtinst/capabilities.py:296
+#: virtinst/capabilities.py:277
 #, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
@@ -5020,23 +5021,23 @@ msgstr ""
 "Isäntä ei tue virtualisointityyppiä '%(virttype)s' arkkitehtuurille "
 "'%(arch)s'"
 
-#: virtinst/capabilities.py:300
+#: virtinst/capabilities.py:281
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
 "Isäntä ei tue mitään arkkitehtuurin virtualisointivaihtoehtoja '%(arch)s'"
 
-#: virtinst/capabilities.py:304
+#: virtinst/capabilities.py:285
 #, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "Isäntä ei tue virtualisointityyppiä '%(virttype)s'"
 
-#: virtinst/capabilities.py:308
+#: virtinst/capabilities.py:289
 msgid "Host does not support any virtualization options"
 msgstr "Isäntä ei tue mitään virtualisointivaihtoehtoja"
 
-#: virtinst/capabilities.py:314
+#: virtinst/capabilities.py:295
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
@@ -5045,7 +5046,7 @@ msgstr ""
 "Isäntä ei tue toimialueen tyyppiä %(domain)s koneella '%(machine)s' "
 "virtualisointityypille '%(virttype)s' arkkitehtuurilla '%(arch)s'"
 
-#: virtinst/capabilities.py:320
+#: virtinst/capabilities.py:301
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
@@ -5588,7 +5589,7 @@ msgstr "Tuntemattomat %(optionflag)s:n vaihtoehdot: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Virhe: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1908
+#: virtinst/cli.py:1911
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5596,49 +5597,49 @@ msgstr ""
 "Ei voida muodostaa yhteyttä graafiseen konsoliin: virt-viewer:ta ei ole "
 "asennettu. Asenna 'virt-viewer'-paketti."
 
-#: virtinst/cli.py:1915
+#: virtinst/cli.py:1918
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Grafiikkaa pyydetään, mutta DISPLAY:ta ei ole asetettu. virt-viewer.ei "
 "käynnissä."
 
-#: virtinst/cli.py:1926
+#: virtinst/cli.py:1929
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Tuntematon autokonsolityyppi '%s'"
 
-#: virtinst/cli.py:3471
+#: virtinst/cli.py:3474
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Virheellinen arvo 'koko':lle: %s"
 
-#: virtinst/cli.py:3484
+#: virtinst/cli.py:3487
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Tuntematon '%(optionname)s' arvo '%(string)s'"
 
-#: virtinst/cli.py:3499
+#: virtinst/cli.py:3502
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Tallennustilan taltio on määritettävä seuraavasti: vol=varannon nimi/taltion "
 "nimi"
 
-#: virtinst/cli.py:3948
+#: virtinst/cli.py:3957
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Odotettu PCI-muotoinen merkkijono '%s':lle"
 
-#: virtinst/cli.py:4649
+#: virtinst/cli.py:4659
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s vastaa useita solmulaitteita"
 
-#: virtinst/cli.py:4652
+#: virtinst/cli.py:4662
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Ei löytänyt vastaavaa solmulaitetta '%s':lle"
 
-#: virtinst/cli.py:4797
+#: virtinst/cli.py:4807
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5824,10 +5825,6 @@ msgid ""
 "%(vcpus)d"
 msgstr ""
 
-#: virtinst/domain/cpu.py:310
-msgid "No host CPU reported in capabilities"
-msgstr "Ei isäntäsuoritinta tiedotettu kyvyissä"
-
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
 msgstr "Pakollinen attribuutti 'type' puuttuu"
@@ -5840,25 +5837,25 @@ msgstr "SEV-käynnistysturva vaatii Q35 UEFI -koneen"
 msgid "SEV launch security is not supported on this platform"
 msgstr "SEV-käynnistysturvaa ei tueta tällä alustalla"
 
-#: virtinst/domcapabilities.py:245
+#: virtinst/domcapabilities.py:235
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:246
+#: virtinst/domcapabilities.py:236
 msgid "Default"
 msgstr "Oletus"
 
-#: virtinst/domcapabilities.py:251
+#: virtinst/domcapabilities.py:241
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:254
+#: virtinst/domcapabilities.py:244
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Mukautettu: %(path)s"
 
-#: virtinst/domcapabilities.py:332
+#: virtinst/domcapabilities.py:331
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Laajennetun suorittimen XML:n saaminen epäonnistui: %s"
@@ -5872,16 +5869,16 @@ msgstr "Vierasjärjestelmä"
 msgid "Guest name '%s' is already in use."
 msgstr "Vierasjärjestelmän nimi '%s' on jo käytössä."
 
-#: virtinst/guest.py:753
+#: virtinst/guest.py:755
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt-versio ei tue UEFI:tä."
 
-#: virtinst/guest.py:757
+#: virtinst/guest.py:759
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "Ei tiedä miten UEFI määritetään arkkitehtuurille '%s'"
 
-#: virtinst/guest.py:762
+#: virtinst/guest.py:764
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "Ei löytänyt yhtään UEFI-binääripolkua arkkitehtuurille '%s'"
@@ -6156,7 +6153,7 @@ msgstr ""
 "staattisen IP-osoitteen muuttaminen jne., Ovat tämän työkalun ulkopuolella. "
 "Katso tämäntyyppiset muutokset virt-sysprep (1):lta."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:949
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1003
 msgid "General Options"
 msgstr "Yleiset valinnat"
 
@@ -6237,7 +6234,7 @@ msgid ""
 msgstr ""
 "Uusi kiinteä MAC-osoite kloonivieraalle. Oletus on satunnaisesti luotu MAC"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1054
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1108
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "Muut valinnat"
@@ -6263,7 +6260,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "Klooni '%s' luotiin onnistuneesti."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1165
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1219
 msgid "Installation aborted at user request"
 msgstr "Asennus lopetettu käyttäjän pyynnöstä"
 
@@ -6400,63 +6397,107 @@ msgstr "Virhe vahvistaessa asennussijaintia: %s"
 #, fuzzy
 #| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
-"--os-variant/--osinfo OS name is required, but no value was set or detected."
+"--os-variant/--osinfo OS name is required, but no value was\n"
+"set or detected."
 msgstr "--Os-variant vaaditaan, mutta arvoa ei asetettu eikä havaittu."
 
-#: virtinst/virtinstall.py:625
+#: virtinst/virtinstall.py:566
+msgid ""
+"This is now a fatal error. Specifying an OS name is required\n"
+"for modern, performant, and secure virtual machine defaults.\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:570
+msgid ""
+"If you expected virt-install to detect an OS name from the\n"
+"install media, you can set a fallback OS name with:\n"
+"\n"
+"  --osinfo detect=on,name=OSNAME\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:579
+msgid ""
+"You can see a full list of possible OS name values with:\n"
+"\n"
+"   virt-install --osinfo list\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:586
+#, python-brace-format
+msgid ""
+"If your Linux distro is not listed, try one of generic values\n"
+"such as: {oslist}\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:593
+#, python-brace-format
+msgid ""
+"If you just need to get the old behavior back, you can use:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Or export {env_var}=1\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:603
+#, python-brace-format
+msgid "{env_var} set. Skipping fatal error."
+msgstr ""
+
+#: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "Ei vieraalle käynnistettävää konsolia, ajetaan oletuksena --wait -1"
 
-#: virtinst/virtinstall.py:661
+#: virtinst/virtinstall.py:715
 msgid "Waiting for the installation to complete."
 msgstr "Odottaa asennuksen valmistumista."
 
-#: virtinst/virtinstall.py:662
+#: virtinst/virtinstall.py:716
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "Odottaa %(minutes)d minuutti, kunnes asennus on valmis."
 msgstr[1] "Odottaa %(minutes)d minuuttia, kunnes asennus on valmis."
 
-#: virtinst/virtinstall.py:685
+#: virtinst/virtinstall.py:739
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "root:n ensimmäisen sisäänkirjautumisen salasana on: %s"
 
-#: virtinst/virtinstall.py:697
+#: virtinst/virtinstall.py:751
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr "Asennus jatkuu kymmenen sekunnin kuluttua (ohita painamalla Enter) ..."
 
-#: virtinst/virtinstall.py:724
+#: virtinst/virtinstall.py:778
 msgid "Console command returned failure."
 msgstr "Konsolikomento palautti epäonnistumisen."
 
-#: virtinst/virtinstall.py:761
+#: virtinst/virtinstall.py:815
 msgid "Domain has crashed."
 msgstr "Toimialue on kaatunut."
 
-#: virtinst/virtinstall.py:791
+#: virtinst/virtinstall.py:845
 msgid "Domain is still running. Installation may be in progress."
 msgstr "Toimialue on edelleen käynnissä. Asennus saattaa olla käynnissä."
 
-#: virtinst/virtinstall.py:801
+#: virtinst/virtinstall.py:855
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 "Voit muodostaa yhteyden konsoliin uudelleen asennuksen loppuun saattamiseksi."
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:866
 msgid "Domain has shutdown. Continuing."
 msgstr "Toimialue on sammunut. Jatketaan."
 
-#: virtinst/virtinstall.py:818
+#: virtinst/virtinstall.py:872
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "Asennus on ylittänyt määritetyn aikarajan. Poistutaan sovelluksesta."
 
-#: virtinst/virtinstall.py:841
+#: virtinst/virtinstall.py:895
 msgid "Domain creation completed."
 msgstr "Toimialueen luonti valmistui."
 
-#: virtinst/virtinstall.py:850
+#: virtinst/virtinstall.py:904
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6465,15 +6506,15 @@ msgstr ""
 "Voit käynnistää toimialueen uudelleen suorittamalla:\n"
 "'%s'"
 
-#: virtinst/virtinstall.py:855
+#: virtinst/virtinstall.py:909
 msgid "User stopped the VM. Not rebooting."
 msgstr "Käyttäjä pysäytti virtuaalikoneen. Ei uudelleenkäynnistystä."
 
-#: virtinst/virtinstall.py:858
+#: virtinst/virtinstall.py:912
 msgid "Restarting guest."
 msgstr "Käynnistetään vierasjärjestelmä uudelleen."
 
-#: virtinst/virtinstall.py:875
+#: virtinst/virtinstall.py:929
 msgid ""
 "\n"
 "Starting install..."
@@ -6481,40 +6522,40 @@ msgstr ""
 "\n"
 "Aloitetaan asennus..."
 
-#: virtinst/virtinstall.py:898
+#: virtinst/virtinstall.py:952
 msgid "Domain install interrupted."
 msgstr "Toimialueen asennus keskeytettiin."
 
-#: virtinst/virtinstall.py:917
+#: virtinst/virtinstall.py:971
 msgid "Dry run completed successfully"
 msgstr "Kuivakäynti suoritettu onnistuneesti"
 
-#: virtinst/virtinstall.py:921
+#: virtinst/virtinstall.py:975
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Tuntematon XML-vaihepyyntö '%s', on oltava 1, 2 tai kaikki"
 
-#: virtinst/virtinstall.py:928
+#: virtinst/virtinstall.py:982
 msgid "Requested installation does not have XML step 2"
 msgstr "Pyydetyllä asennuksella ei ole XML vaihtetta 2"
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:999
 msgid "Create a new virtual machine from specified install media."
 msgstr "Luo uusi virtuaalikone määritetystä asennusmediasta."
 
-#: virtinst/virtinstall.py:951
+#: virtinst/virtinstall.py:1005
 msgid "Name of the guest instance"
 msgstr "Vierasinstanssin nimi"
 
-#: virtinst/virtinstall.py:959
+#: virtinst/virtinstall.py:1013
 msgid "Installation Method Options"
 msgstr "Asennustavan valinnat"
 
-#: virtinst/virtinstall.py:961
+#: virtinst/virtinstall.py:1015
 msgid "CD-ROM installation media"
 msgstr "CD-ROM-asennusmedia"
 
-#: virtinst/virtinstall.py:963
+#: virtinst/virtinstall.py:1017
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6522,34 +6563,34 @@ msgstr ""
 "Jakelun URL-asennus, esim. https://isäntä/polku. Katso man-sivulta tarkat "
 "esimerkit jakeluista."
 
-#: virtinst/virtinstall.py:966
+#: virtinst/virtinstall.py:1020
 msgid "Boot from the network using the PXE protocol"
 msgstr "Käynnistä verkosta käyttäen PXE-protokollaa"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:1022
 msgid "Build guest around an existing disk image"
 msgstr "Rakenna vierasjärjestelmä olemassa olevan levykuvan ympärille"
 
-#: virtinst/virtinstall.py:971
+#: virtinst/virtinstall.py:1025
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Muita argumentteja välitettäväksi asennus ytimelle joka on käynnistetty --"
 "location"
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:1028
 msgid "Add given file to root of initrd from --location"
 msgstr "Lisää annettu tiedosto initrd:n roottiin --location:sta"
 
-#: virtinst/virtinstall.py:976
+#: virtinst/virtinstall.py:1030
 msgid "Perform an unattended installation"
 msgstr "Suorita asennus ilman valvontaa"
 
-#: virtinst/virtinstall.py:978
+#: virtinst/virtinstall.py:1032
 msgid "Specify fine grained install options"
 msgstr "Määritä hienorakeiset asennusvaihtoehdot"
 
-#: virtinst/virtinstall.py:980
+#: virtinst/virtinstall.py:1034
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6557,61 +6598,61 @@ msgstr ""
 "Asenna nykyinen virtuaalikone uudelleen. Vain asennusvaihtoehtoja käytetään, "
 "kaikki muut virtuaalikoneen kokoonpanovaihtoehdot ohitetaan."
 
-#: virtinst/virtinstall.py:983
+#: virtinst/virtinstall.py:1037
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "Suorita pilvikuvan asennus ja määritä cloud-init"
 
-#: virtinst/virtinstall.py:997
+#: virtinst/virtinstall.py:1051
 msgid "Device Options"
 msgstr "Laitevalinnat"
 
-#: virtinst/virtinstall.py:1027
+#: virtinst/virtinstall.py:1081
 msgid "Guest Configuration Options"
 msgstr "Vierasjärjestelmän määritysvalinnat"
 
-#: virtinst/virtinstall.py:1031
+#: virtinst/virtinstall.py:1085
 msgid "Virtualization Platform Options"
 msgstr "Virtualisointialustan valinnat"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1089
 msgid "This guest should be a fully virtualized guest"
 msgstr "Tämän vierasjärjestelmän tulisi olla täysin virtualisoitu vieras"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1092
 msgid "This guest should be a paravirtualized guest"
 msgstr "Tämän vierasjärjestelmän tulisi olla paravirtualisoitu vieras"
 
-#: virtinst/virtinstall.py:1041
+#: virtinst/virtinstall.py:1095
 msgid "This guest should be a container guest"
 msgstr "Tämän vierasjärjestelmän tulisi olla säiliövieras"
 
-#: virtinst/virtinstall.py:1043
+#: virtinst/virtinstall.py:1097
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Käytettäävän hypervisorin nimi (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1098
 msgid "The CPU architecture to simulate"
 msgstr "Simuloitava suoritinarkkitehtuuri"
 
-#: virtinst/virtinstall.py:1045
+#: virtinst/virtinstall.py:1099
 msgid "The machine type to emulate"
 msgstr "Emuloitavan koneen tyyppi"
 
-#: virtinst/virtinstall.py:1056
+#: virtinst/virtinstall.py:1110
 msgid "Have domain autostart on host boot up."
 msgstr ""
 "Aseta toimialue käynnistymään automaattisesti isäntäjärjestelmän "
 "käynnistyessä."
 
-#: virtinst/virtinstall.py:1058
+#: virtinst/virtinstall.py:1112
 msgid "Create a transient domain."
 msgstr "Luo ohimenevä toimialue."
 
-#: virtinst/virtinstall.py:1060
+#: virtinst/virtinstall.py:1114
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "Pakota toimialue pois päältä, kun konsolin katseluohjelma on suljettu."
 
-#: virtinst/virtinstall.py:1063
+#: virtinst/virtinstall.py:1117
 msgid "Minutes to wait for install to complete."
 msgstr "Odotettavat minuutit, jotta asennus voidaan suorittaa loppuun."
 
@@ -6962,6 +7003,9 @@ msgstr "Nimi täytyy antaa %s:lle"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s nimi '%(name)s' ei voi sisältää '%(char)s' merkkejä."
+
+#~ msgid "No host CPU reported in capabilities"
+#~ msgstr "Ei isäntäsuoritinta tiedotettu kyvyissä"
 
 #~ msgid "Generic OS"
 #~ msgstr "Yleinen käyttöjärjestelmä"

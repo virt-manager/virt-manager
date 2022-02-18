@@ -18,11 +18,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-15 06:14+0000\n"
+"POT-Creation-Date: 2022-02-17 06:15+0000\n"
 "PO-Revision-Date: 2022-02-16 22:16+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/tr/>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -730,7 +730,7 @@ msgstr "C_PU:"
 msgid "(Insert host mem)"
 msgstr "(Ana makine belleğini gir)"
 
-#: ui/createvm.ui:2055 virtManager/details/details.py:2414
+#: ui/createvm.ui:2055 virtManager/details/details.py:2417
 msgid "Memory"
 msgstr "Bellek"
 
@@ -942,7 +942,7 @@ msgstr "<b>CPU'lar</b>"
 msgid "M_odel:"
 msgstr "M_odel:"
 
-#: ui/details.ui:1413
+#: ui/details.ui:1413 virtManager/details/details.py:1956
 msgid "Copy host CP_U configuration"
 msgstr "Ana makine CP_U yapılandırmasını kopyala"
 
@@ -1668,14 +1668,19 @@ msgid "_Network source:"
 msgstr "_Ağ kaynağı:"
 
 #: ui/oslist.ui:55
+#, fuzzy
+#| msgid ""
+#| "Can't find the operating system you are looking for? Try selecting a "
+#| "similar distro or version, or use one of the 'Generic' options."
 msgid ""
-"Can't find the operating system you are looking for? Try selecting a similar "
-"distro or version, or use one of the 'Generic' options."
+"Can't find the operating system you are looking for?\n"
+"Try selecting a similar distro or version, or use one of the 'Generic' "
+"options."
 msgstr ""
 "Aradığınız işletim sistemini bulamıyor musunuz? Benzer bir dağıtım veya "
 "sürüm seçmeyi deneyin veya 'Genel' seçeneklerden birini kullanın."
 
-#: ui/oslist.ui:107
+#: ui/oslist.ui:108
 msgid "Include end of life operating systems"
 msgstr "Ömrü dolan işletim sistemlerini içer"
 
@@ -2220,7 +2225,7 @@ msgstr "Spice bağlantı noktası"
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:439 virtManager/details/details.py:2347
+#: virtManager/addhardware.py:439 virtManager/details/details.py:2350
 msgid "Floppy"
 msgstr "Disket"
 
@@ -2448,7 +2453,7 @@ msgstr "Rastgele Sayı Üreteci"
 msgid "VM Sockets"
 msgstr "SM Soketleri"
 
-#: virtManager/addhardware.py:1071 virtManager/details/details.py:2131
+#: virtManager/addhardware.py:1071 virtManager/details/details.py:2134
 #, python-format
 msgid "%s Device"
 msgstr "%s Aygıtı"
@@ -3505,7 +3510,7 @@ msgid "Are you sure you want to remove this device?"
 msgstr "Bu aygıtı kaldırmak istediğinizden emin misiniz?"
 
 #: virtManager/details/details.py:1280 virtManager/details/details.py:1775
-#: virtManager/details/details.py:1794 virtManager/details/details.py:1993
+#: virtManager/details/details.py:1794 virtManager/details/details.py:1996
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Bilinmeyen"
@@ -3587,95 +3592,95 @@ msgstr "Devre Dışı"
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s / %(total-memory)s"
 
-#: virtManager/details/details.py:2042
+#: virtManager/details/details.py:2045
 msgid "Absolute Movement"
 msgstr "Mutlak Hareket"
 
-#: virtManager/details/details.py:2044
+#: virtManager/details/details.py:2047
 msgid "Relative Movement"
 msgstr "Göreceli Hareket"
 
-#: virtManager/details/details.py:2053 virtManager/details/details.py:2228
-#: virtManager/details/details.py:2231
+#: virtManager/details/details.py:2056 virtManager/details/details.py:2231
+#: virtManager/details/details.py:2234
 msgid "Hypervisor does not support removing this device"
 msgstr "Hipervizör bu aygıtı kaldırmayı desteklemiyor"
 
-#: virtManager/details/details.py:2057
+#: virtManager/details/details.py:2060
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s Sunucu"
 
-#: virtManager/details/details.py:2123
+#: virtManager/details/details.py:2126
 msgid "Serial Device"
 msgstr "Seri Aygıt"
 
-#: virtManager/details/details.py:2125
+#: virtManager/details/details.py:2128
 msgid "Parallel Device"
 msgstr "Paralel Aygıt"
 
-#: virtManager/details/details.py:2127
+#: virtManager/details/details.py:2130
 msgid "Console Device"
 msgstr "Konsol Aygıtı"
 
-#: virtManager/details/details.py:2129
+#: virtManager/details/details.py:2132
 msgid "Channel Device"
 msgstr "Kanal Aygıtı"
 
-#: virtManager/details/details.py:2139
+#: virtManager/details/details.py:2142
 msgid "Primary Console"
 msgstr "Birincil Konsol"
 
-#: virtManager/details/details.py:2195
+#: virtManager/details/details.py:2198
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fiziksel %s Aygıtı"
 
-#: virtManager/details/details.py:2212
+#: virtManager/details/details.py:2215
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr "Grafik/Ekran bağlıyken son video aygıtı kaldırılamaz."
 
-#: virtManager/details/details.py:2238
+#: virtManager/details/details.py:2241
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(address)s üzerinde %(device)s"
 
-#: virtManager/details/details.py:2244 virtManager/details/details.py:2254
+#: virtManager/details/details.py:2247 virtManager/details/details.py:2257
 msgid "Cannot remove controller while devices are attached."
 msgstr "Aygıtlar takılıyken denetleyici kaldırılamaz."
 
-#: virtManager/details/details.py:2344
+#: virtManager/details/details.py:2347
 msgid "Hard Disk"
 msgstr "Sabit Disk"
 
-#: virtManager/details/details.py:2345
+#: virtManager/details/details.py:2348
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2346
+#: virtManager/details/details.py:2349
 msgid "Network (PXE)"
 msgstr "Ağ (PXE)"
 
-#: virtManager/details/details.py:2361
+#: virtManager/details/details.py:2364
 msgid "No bootable devices"
 msgstr "Önyüklenebilir aygıt yok"
 
-#: virtManager/details/details.py:2408
+#: virtManager/details/details.py:2411
 msgid "Overview"
 msgstr "Genel Bakış"
 
-#: virtManager/details/details.py:2409
+#: virtManager/details/details.py:2412
 msgid "OS information"
 msgstr "İS bilgileri"
 
-#: virtManager/details/details.py:2411
+#: virtManager/details/details.py:2414
 msgid "Performance"
 msgstr "Performans"
 
-#: virtManager/details/details.py:2413
+#: virtManager/details/details.py:2416
 msgid "CPUs"
 msgstr "CPU'lar"
 
-#: virtManager/details/details.py:2415
+#: virtManager/details/details.py:2418
 msgid "Boot Options"
 msgstr "Önyükleme Seçenekleri"
 
@@ -5000,7 +5005,7 @@ msgstr ""
 "Bu sekmeden ayrılırsanız XML değişiklikleriniz kaybolacak. Bu sekmeden "
 "gerçekten ayrılmak istiyor musunuz?"
 
-#: virtinst/capabilities.py:296
+#: virtinst/capabilities.py:277
 #, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
@@ -5009,7 +5014,7 @@ msgstr ""
 "Ana makine, '%(arch)s' mimarisi için '%(virttype)s' sanallaştırma türünü "
 "desteklemiyor"
 
-#: virtinst/capabilities.py:300
+#: virtinst/capabilities.py:281
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
@@ -5017,16 +5022,16 @@ msgstr ""
 "Ana makine, '%(arch)s' mimarisi için herhangi bir sanallaştırma seçeneğini "
 "desteklemiyor"
 
-#: virtinst/capabilities.py:304
+#: virtinst/capabilities.py:285
 #, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "Ana makine '%(virttype)s' sanallaştırma türünü desteklemiyor"
 
-#: virtinst/capabilities.py:308
+#: virtinst/capabilities.py:289
 msgid "Host does not support any virtualization options"
 msgstr "Ana makine herhangi bir sanallaştırma seçeneğini desteklemiyor"
 
-#: virtinst/capabilities.py:314
+#: virtinst/capabilities.py:295
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
@@ -5035,7 +5040,7 @@ msgstr ""
 "Ana makine, '%(arch)s' mimarisine sahip '%(virttype)s' sanallaştırma türü "
 "için '%(machine)s' makine ile %(domain)s etki alanı türünü desteklemiyor"
 
-#: virtinst/capabilities.py:320
+#: virtinst/capabilities.py:301
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
@@ -5576,7 +5581,7 @@ msgstr "Bilinmeyen %(optionflag)s seçenekleri: %(string)s"
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Hata: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1908
+#: virtinst/cli.py:1911
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5584,46 +5589,46 @@ msgstr ""
 "Grafiksel konsola bağlanılamıyor: virt-viewer kurulu değil. Lütfen 'virt-"
 "viewer' paketini kurun."
 
-#: virtinst/cli.py:1915
+#: virtinst/cli.py:1918
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Grafikler istendi ancak DISPLAY ayarlanmadı. virt-viewer çalıştırılmıyor."
 
-#: virtinst/cli.py:1926
+#: virtinst/cli.py:1929
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Bilinmeyen otomatik konsol türü '%s'"
 
-#: virtinst/cli.py:3471
+#: virtinst/cli.py:3474
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' için uygun olmayan değer: %s"
 
-#: virtinst/cli.py:3484
+#: virtinst/cli.py:3487
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Bilinmeyen '%(optionname)s' değeri '%(string)s'"
 
-#: virtinst/cli.py:3499
+#: virtinst/cli.py:3502
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Depolama birimi vol=havuzadı/birimadı olarak belirtilmelidir"
 
-#: virtinst/cli.py:3948
+#: virtinst/cli.py:3957
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "'%s' için PCI biçim dizgesi bekleniyor"
 
-#: virtinst/cli.py:4649
+#: virtinst/cli.py:4659
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s birden fazla düğüm aygıtına karşılık geliyor"
 
-#: virtinst/cli.py:4652
+#: virtinst/cli.py:4662
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' için eşleşen bir düğüm aygıtı bulunmadı"
 
-#: virtinst/cli.py:4797
+#: virtinst/cli.py:4807
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5812,10 +5817,6 @@ msgstr ""
 "* zar=%(dies)d * çekirdek=%(cores)d * iş parçacığı=%(threads)d == "
 "%(total)d,) vCPU sayısıyla (%(vcpus)d) eşleşmiyor"
 
-#: virtinst/domain/cpu.py:310
-msgid "No host CPU reported in capabilities"
-msgstr "Yeteneklerde ana makine CPU'su bildirilmedi"
-
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
 msgstr "'type' zorunlu özniteliği eksik"
@@ -5828,25 +5829,25 @@ msgstr "SEV başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
 msgid "SEV launch security is not supported on this platform"
 msgstr "SEV başlatma güvenliği bu platformda desteklenmiyor"
 
-#: virtinst/domcapabilities.py:245
+#: virtinst/domcapabilities.py:235
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:246
+#: virtinst/domcapabilities.py:236
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: virtinst/domcapabilities.py:251
+#: virtinst/domcapabilities.py:241
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:254
+#: virtinst/domcapabilities.py:244
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Özel: %(path)s"
 
-#: virtinst/domcapabilities.py:332
+#: virtinst/domcapabilities.py:331
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Genişletilmiş CPU XML'i alınamadı: %s"
@@ -5860,16 +5861,16 @@ msgstr "Konuk"
 msgid "Guest name '%s' is already in use."
 msgstr "'%s' konuk adı zaten kullanılıyor."
 
-#: virtinst/guest.py:753
+#: virtinst/guest.py:755
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt sürümü UEFI'yi desteklemiyor."
 
-#: virtinst/guest.py:757
+#: virtinst/guest.py:759
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "'%s' mimarisi için UEFI'nin nasıl ayarlanacağı bilinmiyor"
 
-#: virtinst/guest.py:762
+#: virtinst/guest.py:764
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "'%s' mimarisi için herhangi bir UEFI ikili dosya yolu bulunamadı"
@@ -6144,7 +6145,7 @@ msgstr ""
 "şeyler bu aracın kapsamı dışındadır. Bu tür değişiklikler için lütfen virt-"
 "sysprep(1) komutuna bakın."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:949
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1003
 msgid "General Options"
 msgstr "Genel Seçenekler"
 
@@ -6226,7 +6227,7 @@ msgstr ""
 "Klonlanan konuk için yeni sabit MAC adresi. Öntanımlı olarak, rastgele bir "
 "MAC adresi oluşturulur"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1054
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1108
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
 msgstr "Çeşitli Seçenekler"
@@ -6252,7 +6253,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "'%s' klonu başarıyla oluşturuldu."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1165
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1219
 msgid "Installation aborted at user request"
 msgstr "Kurulum kullanıcı isteği üzerine sonlandırıldı"
 
@@ -6385,67 +6386,115 @@ msgid "Error validating install location: %s"
 msgstr "Kurulum konumu doğrulanırken hata oluştu: %s"
 
 #: virtinst/virtinstall.py:552
+#, fuzzy
+#| msgid ""
+#| "--os-variant/--osinfo OS name is required, but no value was set or "
+#| "detected."
 msgid ""
-"--os-variant/--osinfo OS name is required, but no value was set or detected."
+"--os-variant/--osinfo OS name is required, but no value was\n"
+"set or detected."
 msgstr ""
 "--os-variant/--osinfo İS adı gerekli, ancak hiçbir değer ayarlanmadı veya "
 "tespit edilmedi."
 
-#: virtinst/virtinstall.py:625
+#: virtinst/virtinstall.py:566
+msgid ""
+"This is now a fatal error. Specifying an OS name is required\n"
+"for modern, performant, and secure virtual machine defaults.\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:570
+msgid ""
+"If you expected virt-install to detect an OS name from the\n"
+"install media, you can set a fallback OS name with:\n"
+"\n"
+"  --osinfo detect=on,name=OSNAME\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:579
+msgid ""
+"You can see a full list of possible OS name values with:\n"
+"\n"
+"   virt-install --osinfo list\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:586
+#, python-brace-format
+msgid ""
+"If your Linux distro is not listed, try one of generic values\n"
+"such as: {oslist}\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:593
+#, python-brace-format
+msgid ""
+"If you just need to get the old behavior back, you can use:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Or export {env_var}=1\n"
+msgstr ""
+
+#: virtinst/virtinstall.py:603
+#, python-brace-format
+msgid "{env_var} set. Skipping fatal error."
+msgstr ""
+
+#: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 "Konuk için başlatılacak konsol yok, öntanımlı olarak --wait -1 kullanılıyor"
 
-#: virtinst/virtinstall.py:661
+#: virtinst/virtinstall.py:715
 msgid "Waiting for the installation to complete."
 msgstr "Kurulumun tamamlanması bekleniyor."
 
-#: virtinst/virtinstall.py:662
+#: virtinst/virtinstall.py:716
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "Kurulumun tamamlanması için %(minutes)d dakika bekleniyor."
 msgstr[1] "Kurulumun tamamlanması için %(minutes)d dakika bekleniyor."
 
-#: virtinst/virtinstall.py:685
+#: virtinst/virtinstall.py:739
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "İlk root oturum açma parolası: %s"
 
-#: virtinst/virtinstall.py:697
+#: virtinst/virtinstall.py:751
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 "Kurulum 10 saniye içinde devam edecek (atlamak için Enter tuşuna basın)..."
 
-#: virtinst/virtinstall.py:724
+#: virtinst/virtinstall.py:778
 msgid "Console command returned failure."
 msgstr "Konsol komutu başarısız oldu."
 
-#: virtinst/virtinstall.py:761
+#: virtinst/virtinstall.py:815
 msgid "Domain has crashed."
 msgstr "Etki alanı çöktü."
 
-#: virtinst/virtinstall.py:791
+#: virtinst/virtinstall.py:845
 msgid "Domain is still running. Installation may be in progress."
 msgstr "Etki alanı hala çalışıyor. Kurulum devam ediyor olabilir."
 
-#: virtinst/virtinstall.py:801
+#: virtinst/virtinstall.py:855
 msgid "You can reconnect to the console to complete the installation process."
 msgstr "Kurulum işlemini tamamlamak için konsola yeniden bağlanabilirsiniz."
 
-#: virtinst/virtinstall.py:812
+#: virtinst/virtinstall.py:866
 msgid "Domain has shutdown. Continuing."
 msgstr "Etki alanı kapatıldı. Devam ediliyor."
 
-#: virtinst/virtinstall.py:818
+#: virtinst/virtinstall.py:872
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "Kurulum belirlenen zaman sınırını geçti. Uygulamadan çıkılıyor."
 
-#: virtinst/virtinstall.py:841
+#: virtinst/virtinstall.py:895
 msgid "Domain creation completed."
 msgstr "Etki alanı oluşturma tamamlandı."
 
-#: virtinst/virtinstall.py:850
+#: virtinst/virtinstall.py:904
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6454,15 +6503,15 @@ msgstr ""
 "Şu komutu çalıştırarak etki alanını yeniden başlatabilirsiniz:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:855
+#: virtinst/virtinstall.py:909
 msgid "User stopped the VM. Not rebooting."
 msgstr "Kullanıcı SM'yi durdurdu. Yeniden başlatılmıyor."
 
-#: virtinst/virtinstall.py:858
+#: virtinst/virtinstall.py:912
 msgid "Restarting guest."
 msgstr "Konuk yeniden başlatılıyor."
 
-#: virtinst/virtinstall.py:875
+#: virtinst/virtinstall.py:929
 msgid ""
 "\n"
 "Starting install..."
@@ -6470,40 +6519,40 @@ msgstr ""
 "\n"
 "Kurulum başlatılıyor..."
 
-#: virtinst/virtinstall.py:898
+#: virtinst/virtinstall.py:952
 msgid "Domain install interrupted."
 msgstr "Etki alanı kurulumu yarıda kesildi."
 
-#: virtinst/virtinstall.py:917
+#: virtinst/virtinstall.py:971
 msgid "Dry run completed successfully"
 msgstr "Kuru çalıştırma başarıyla tamamlandı"
 
-#: virtinst/virtinstall.py:921
+#: virtinst/virtinstall.py:975
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Bilinmeyen XML adım isteği '%s'. 1, 2 veya \"all\" olmalıdır"
 
-#: virtinst/virtinstall.py:928
+#: virtinst/virtinstall.py:982
 msgid "Requested installation does not have XML step 2"
 msgstr "İstenen kurulumda XML adım 2 yok"
 
-#: virtinst/virtinstall.py:945
+#: virtinst/virtinstall.py:999
 msgid "Create a new virtual machine from specified install media."
 msgstr "Belirtilen kurulum ortamından yeni bir sanal makine oluştur."
 
-#: virtinst/virtinstall.py:951
+#: virtinst/virtinstall.py:1005
 msgid "Name of the guest instance"
 msgstr "Konuk örneğinin adı"
 
-#: virtinst/virtinstall.py:959
+#: virtinst/virtinstall.py:1013
 msgid "Installation Method Options"
 msgstr "Kurulum Yöntemi Seçenekleri"
 
-#: virtinst/virtinstall.py:961
+#: virtinst/virtinstall.py:1015
 msgid "CD-ROM installation media"
 msgstr "CD-ROM kurulum ortamı"
 
-#: virtinst/virtinstall.py:963
+#: virtinst/virtinstall.py:1017
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6511,33 +6560,33 @@ msgstr ""
 "Dağıtım kurulum URL'si, örn. https://anamakine/yol. Belirli dağıtım "
 "örnekleri için kılavuz sayfasına bakın."
 
-#: virtinst/virtinstall.py:966
+#: virtinst/virtinstall.py:1020
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE iletişim kuralını kullanarak ağdan önyükle"
 
-#: virtinst/virtinstall.py:968
+#: virtinst/virtinstall.py:1022
 msgid "Build guest around an existing disk image"
 msgstr "Konuğu var olan bir disk kalıbı etrafında oluştur"
 
-#: virtinst/virtinstall.py:971
+#: virtinst/virtinstall.py:1025
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "--location konumundan önyüklenen kurulum çekirdeğine iletilecek ek argümanlar"
 
-#: virtinst/virtinstall.py:974
+#: virtinst/virtinstall.py:1028
 msgid "Add given file to root of initrd from --location"
 msgstr "Verilen dosyayı --location konumundan alınan initrd'nin köküne ekle"
 
-#: virtinst/virtinstall.py:976
+#: virtinst/virtinstall.py:1030
 msgid "Perform an unattended installation"
 msgstr "Katılımsız kurulum gerçekleştir"
 
-#: virtinst/virtinstall.py:978
+#: virtinst/virtinstall.py:1032
 msgid "Specify fine grained install options"
 msgstr "Ayrıntılı kurulum seçeneklerini belirt"
 
-#: virtinst/virtinstall.py:980
+#: virtinst/virtinstall.py:1034
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6545,59 +6594,59 @@ msgstr ""
 "Var olan SM'yi yeniden kur. Yalnızca kurulum seçenekleri uygulanır, diğer "
 "tüm SM yapılandırma seçenekleri yok sayılır."
 
-#: virtinst/virtinstall.py:983
+#: virtinst/virtinstall.py:1037
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "cloud-init yapılandırarak bir bulut kalıbı kurulumu gerçekleştir"
 
-#: virtinst/virtinstall.py:997
+#: virtinst/virtinstall.py:1051
 msgid "Device Options"
 msgstr "Aygıt Seçenekleri"
 
-#: virtinst/virtinstall.py:1027
+#: virtinst/virtinstall.py:1081
 msgid "Guest Configuration Options"
 msgstr "Konuk Yapılandırma Seçenekleri"
 
-#: virtinst/virtinstall.py:1031
+#: virtinst/virtinstall.py:1085
 msgid "Virtualization Platform Options"
 msgstr "Sanallaştırma Platformu Seçenekleri"
 
-#: virtinst/virtinstall.py:1035
+#: virtinst/virtinstall.py:1089
 msgid "This guest should be a fully virtualized guest"
 msgstr "Bu konuk tamamen sanallaştırılmış bir konuk olmalıdır"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1092
 msgid "This guest should be a paravirtualized guest"
 msgstr "Bu konuk yarı sanallaştırılmış bir konuk olmalıdır"
 
-#: virtinst/virtinstall.py:1041
+#: virtinst/virtinstall.py:1095
 msgid "This guest should be a container guest"
 msgstr "Bu konuk bir konteyner konuğu olmalıdır"
 
-#: virtinst/virtinstall.py:1043
+#: virtinst/virtinstall.py:1097
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Kullanılacak hipervizör adı (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1098
 msgid "The CPU architecture to simulate"
 msgstr "Simüle edilecek CPU mimarisi"
 
-#: virtinst/virtinstall.py:1045
+#: virtinst/virtinstall.py:1099
 msgid "The machine type to emulate"
 msgstr "Öykünülecek makine türü"
 
-#: virtinst/virtinstall.py:1056
+#: virtinst/virtinstall.py:1110
 msgid "Have domain autostart on host boot up."
 msgstr "Ana makine önyüklendiğinde etki alanını otomatik başlat."
 
-#: virtinst/virtinstall.py:1058
+#: virtinst/virtinstall.py:1112
 msgid "Create a transient domain."
 msgstr "Geçici bir etki alanı oluştur."
 
-#: virtinst/virtinstall.py:1060
+#: virtinst/virtinstall.py:1114
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "Konsol görüntüleyici kapatıldığında etki alanını kapatmaya zorla."
 
-#: virtinst/virtinstall.py:1063
+#: virtinst/virtinstall.py:1117
 msgid "Minutes to wait for install to complete."
 msgstr "Kurulumun tamamlanması için dakika cinsinden beklenecek süre."
 
@@ -6941,6 +6990,9 @@ msgstr "%s için bir ad belirtilmelidir"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s adı '%(name)s' '%(char)s' karakterini içeremez."
+
+#~ msgid "No host CPU reported in capabilities"
+#~ msgstr "Yeteneklerde ana makine CPU'su bildirilmedi"
 
 #~ msgid "Generic OS"
 #~ msgstr "Genel İS"
