@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-17 06:15+0000\n"
-"PO-Revision-Date: 2022-02-16 22:16+0000\n"
+"PO-Revision-Date: 2022-02-20 19:16+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1681,17 +1681,14 @@ msgid "_Network source:"
 msgstr "_Мережеве джерело:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for? Try selecting a "
-#| "similar distro or version, or use one of the 'Generic' options."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
-"Не знайшли потрібної вам операційної системи? Спробуйте вибрати подібний "
-"дистрибутив або подібну версію чи скористайтеся пунктом «Типова»."
+"Не знайшли потрібної вам операційної системи?\n"
+"Спробуйте вибрати подібний дистрибутив або подібну версію чи скористайтеся "
+"пунктом «Типова»."
 
 #: ui/oslist.ui:108
 msgid "Include end of life operating systems"
@@ -6464,22 +6461,21 @@ msgid "Error validating install location: %s"
 msgstr "Помилка під час перевірки місця встановлення: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was set or "
-#| "detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"Мало бути вказано назву операційної системи для --os-variant/--osinfo, але "
-"не встановлено або не виявлено жодного значення."
+"Мало бути вказано назву операційної системи для --os-variant/--osinfo,\n"
+"але не встановлено або не виявлено жодного значення."
 
 #: virtinst/virtinstall.py:566
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"Тепер це є критичною помилкою. Визначення назви ОС є обов'язковим\n"
+"для сучасних, швидкісних та безпечних типових параметрів віртуальної системи."
+"\n"
 
 #: virtinst/virtinstall.py:570
 msgid ""
@@ -6488,6 +6484,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"Якщо ви сподівалися, що virt-install визначить назву ОС за\n"
+"носієм даних для встановлення, ви можете вказати резервну назву ОС ось так:\n"
+"\n"
+"  --osinfo detect=on,name=НАЗВА_ОС\n"
 
 #: virtinst/virtinstall.py:579
 msgid ""
@@ -6495,6 +6495,10 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Переглянути повний список можливих назв ОС можна за допомогою такої команди:"
+"\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:586
 #, python-brace-format
@@ -6502,6 +6506,8 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Якщо вашого дистрибутива Linux немає у списку, спробуйте скористатися одним\n"
+"із типових значень, зокрема: {oslist}\n"
 
 #: virtinst/virtinstall.py:593
 #, python-brace-format
@@ -6512,11 +6518,17 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"Якщо вам просто потрібна стара поведінка програми, ви можете скористатися "
+"таким:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Або export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:603
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "Встановлено {env_var}. Пропускаємо критичну помилку."
 
 #: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
