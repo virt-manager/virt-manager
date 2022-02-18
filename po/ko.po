@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-17 06:15+0000\n"
-"PO-Revision-Date: 2022-02-15 17:16+0000\n"
+"PO-Revision-Date: 2022-02-20 19:16+0000\n"
 "Last-Translator: Kim InSoo <simmon@nplob.com>\n"
-"Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ko/>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1660,19 +1660,13 @@ msgid "_Network source:"
 msgstr "네트워크 소스(_N):"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
 "당신이 원하는 운영체제를 찾을 수 없습니까?\n"
-"표시된 다음 최신 버전을 선택해보세요,\n"
-"또는 \"일반 운영체제\" 항목을 사용합니다."
+"유사한 배포판 또는 버전을 시도해 보거나, \"일반\"Generic\" 옵션 중에 하나를 사용하세요."
 
 #: ui/oslist.ui:108
 msgid "Include end of life operating systems"
@@ -5495,11 +5489,6 @@ msgid "The OS installed in the guest."
 msgstr "게스트로 설치되는 OS 입니다."
 
 #: virtinst/cli.py:929
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5507,7 +5496,7 @@ msgid ""
 msgstr ""
 "이는 VirtIO와 같은 최적의 설정을 결정하기 위하여 사용합니다.\n"
 "예제 값: fedora29, rhel7.0, win10, ...\n"
-"모든 목록을 위하여 'osinfo-query os'을 참고하세요."
+"모든 목록을 보려면 '--osinfo list'를 사용하세요."
 
 #: virtinst/cli.py:939
 msgid ""
@@ -5599,6 +5588,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"당신은 다음과 같이 추가 정보를 볼 수 있습니다:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5711,10 +5703,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "mdev 유형 id '%s'에 노드 장치를 발생하는 방법을 알 수 없음"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "알 수 없는 노드 장치 유형 %s"
+msgstr "지원되지 않는 노드 장치 유형 '%s'"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -5974,7 +5965,7 @@ msgstr "'%(filename)s' 전송"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "Generic 또는 알지 못하는 OS. 사용 방식이 추천되지 않습니다."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -5982,12 +5973,9 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "알려지지 않은 libosinfo ID '%s'"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
-msgstr ""
-"알려지지 않은 OS 이름 '%s' 입니다. 유효 값을 위하여 `osinfo-query os`참고하세"
-"요."
+msgstr "알려지지 않은 OS 이름 '%s'. 유효 값을 위해 `--osinfo list`를 참고하세요."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6228,7 +6216,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type은 더 이상 사용되지 않고 아무런 동작을 하지 않습니다. 더 이상 사용하지 마세요."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6291,16 +6279,11 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "게스트 네트워크 설정은 PXE를 지원하지 않습니다"
 
 #: virtinst/virtinstall.py:370
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
-msgstr ""
-"운영 체제가 감지되지 않았으므로 VM 성능이 저하될 수 있습니다. 최적의 결과를 "
-"위해 --os-variant로 OS를 지정하십시오."
+msgstr "--osinfo {osname}를 사용하여, VM 성능이 저하될 수 있습니다. 최적의 결과를 위해 정확한 OS를 지정하세요."
 
 #: virtinst/virtinstall.py:384
 #, python-brace-format
@@ -6333,18 +6316,20 @@ msgid "Error validating install location: %s"
 msgstr "설치 위치 검증 오류: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
-msgstr "--os-variant는 필요하며, 값이 없는 구성 또는 검출이 되었습니다."
+msgstr ""
+"--os-variant/--osinfo OS 이름이 필요하나, 값이 없도록\n"
+"설정 또는 감지되었습니다."
 
 #: virtinst/virtinstall.py:566
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"이는 이제 치명적인 오류입니다. 지정한 OS 이름은\n"
+"최신화, 고성능과 보안 가상화 장비 기본설정을 위해 필요합니다.\n"
 
 #: virtinst/virtinstall.py:570
 msgid ""
@@ -6353,6 +6338,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"만약 당신이 virt-install를 설치 미디어에서 OS 이름을 검출 할 것으로\n"
+"예상되면, 다음과 같이 대체 OS 이름을 설정 할 수 있습니다:\n"
+"\n"
+"  --osinfo detect=on,name=OSNAME\n"
 
 #: virtinst/virtinstall.py:579
 msgid ""
@@ -6360,6 +6349,9 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"당신은 다음과 같이 사용 가능한 OS 이름의 전체 목록을 볼 수 있습니다:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:586
 #, python-brace-format
@@ -6367,6 +6359,8 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"만약 당신의 리눅스 배포판이 목록화 되어 있지 않으면, gnereric 값 중의 하나를 시도하세요\n"
+"다음과 같이:{oslist}\n"
 
 #: virtinst/virtinstall.py:593
 #, python-brace-format
@@ -6377,11 +6371,16 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"만약 당신이 이전 동작을 다시 가져오는 것이 필요하다면, 다음을 사용 할 수 있습니다:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"또는 export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:603
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "{env_var} 설정. 치명적 오류 건너뛰기."
 
 #: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6649,10 +6648,8 @@ msgstr ""
 "edit'만 사용하십시오"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os- variant는 --edit와 함께 지원하지 않습니다"
+msgstr "--os- variant/--osinfo는 --edit와 함께 지원하지 않습니다"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6665,10 +6662,8 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device를 --%s과(와) 사용할 수 없음"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr "--os-variant는 --remove-device와 함께 지원하지 않습니다"
+msgstr "--os-variant/--osinfo는 --remove-device와 함께 지원하지 않습니다"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6676,10 +6671,8 @@ msgid "--build-xml not supported for --%s"
 msgstr "--build-xml은 --%s에 지원되지 않음"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "--os-variant는 --build-xml과 함께 지원하지 않습니다"
+msgstr "--os-variant/--osinfo는 --build-xml과 함께 지원하지 않습니다"
 
 #: virtinst/virtxml.py:233
 #, python-format
