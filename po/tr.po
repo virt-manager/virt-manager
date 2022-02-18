@@ -19,10 +19,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-17 06:15+0000\n"
-"PO-Revision-Date: 2022-02-16 22:16+0000\n"
+"PO-Revision-Date: 2022-02-20 19:16+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/tr/>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1668,17 +1668,14 @@ msgid "_Network source:"
 msgstr "_Ağ kaynağı:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for? Try selecting a "
-#| "similar distro or version, or use one of the 'Generic' options."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
-"Aradığınız işletim sistemini bulamıyor musunuz? Benzer bir dağıtım veya "
-"sürüm seçmeyi deneyin veya 'Genel' seçeneklerden birini kullanın."
+"Aradığınız işletim sistemini bulamıyor musunuz?\n"
+"Benzer bir dağıtım veya sürüm seçmeyi deneyin veya 'Genel' seçeneklerden "
+"birini kullanın."
 
 #: ui/oslist.ui:108
 msgid "Include end of life operating systems"
@@ -6386,22 +6383,20 @@ msgid "Error validating install location: %s"
 msgstr "Kurulum konumu doğrulanırken hata oluştu: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was set or "
-#| "detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo İS adı gerekli, ancak hiçbir değer ayarlanmadı veya "
-"tespit edilmedi."
+"--os-variant/--osinfo İS adı gerekli, ancak hiçbir değer\n"
+"ayarlanmadı veya tespit edilmedi."
 
 #: virtinst/virtinstall.py:566
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"Bu artık ölümcül bir hatadır. Modern, performanslı ve güvenli\n"
+"sanal makine öntanımlı değerleri için bir İS adı belirtmek gereklidir.\n"
 
 #: virtinst/virtinstall.py:570
 msgid ""
@@ -6410,6 +6405,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"virt-install komutunun kurulum ortamından bir İS adı algılamasını\n"
+"bekliyorsanız, aşağıdaki komutla bir yedek İS adı ayarlayabilirsiniz:\n"
+"\n"
+"  --osinfo detect=on,name=İS-ADI\n"
 
 #: virtinst/virtinstall.py:579
 msgid ""
@@ -6417,6 +6416,9 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Şu komutla olası İS adı değerlerinin tam listesini görebilirsiniz:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:586
 #, python-brace-format
@@ -6424,6 +6426,8 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Linux dağıtımınız listede yoksa, şu gibi genel değerlerden\n"
+"birini deneyin: {oslist}\n"
 
 #: virtinst/virtinstall.py:593
 #, python-brace-format
@@ -6434,11 +6438,16 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"Eski davranışı geri getirmeniz gerekiyorsa, şunu kullanabilirsiniz:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Veya {env_var}=1 ortam değişkenini ayarlayabilirsiniz.\n"
 
 #: virtinst/virtinstall.py:603
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "{env_var} ayarlandı. Ölümcül hata atlanıyor."
 
 #: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
