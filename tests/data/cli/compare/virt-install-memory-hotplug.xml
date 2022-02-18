@@ -1,57 +1,117 @@
-<domain type="test">
-  <name>vm1</name>
+<domain type="kvm">
+  <name>fedora</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <maxMemory slots="2">2097152</maxMemory>
-  <vcpu>1</vcpu>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <maxMemory slots="3">2097152</maxMemory>
+  <vcpu>2</vcpu>
   <os>
-    <type arch="i686">hvm</type>
+    <type arch="x86_64" machine="q35">hvm</type>
     <boot dev="network"/>
+    <boot dev="hd"/>
   </os>
   <features>
-    <pae/>
+    <acpi/>
+    <apic/>
+    <vmport state="off"/>
   </features>
   <cpu>
     <numa>
       <cell cpus="0" memory="1048576"/>
     </numa>
   </cpu>
-  <clock offset="utc"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <on_reboot>destroy</on_reboot>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/test-hv</emulator>
-    <controller type="usb" model="ich9-ehci1"/>
-    <controller type="usb" model="ich9-uhci1">
-      <master startport="0"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci2">
-      <master startport="2"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci3">
-      <master startport="4"/>
-    </controller>
-    <interface type="user">
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" discard="unmap"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="pci" model="pcie-root"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
-      <model type="e1000"/>
+      <model type="virtio"/>
     </interface>
     <console type="pty"/>
-    <memory model="dimm" access="private">
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
+    <video>
+      <model type="virtio"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
+    <memory model="dimm" access="private" discard="yes">
       <source>
         <pagesize>4</pagesize>
         <nodemask>1-2</nodemask>
       </source>
       <target>
-        <size>524288</size>
+        <size>262144</size>
+        <node>0</node>
+      </target>
+    </memory>
+    <memory model="dimm" access="private" discard="yes">
+      <source>
+        <pagesize>4</pagesize>
+        <nodemask>1-2</nodemask>
+      </source>
+      <target>
+        <size>262144</size>
         <node>0</node>
       </target>
     </memory>
     <memory model="nvdimm">
       <alias name="mymemdev3"/>
+      <address type="dimm" slot="1" base="0x100000000"/>
       <source>
         <path>/path/to/nvdimm</path>
+        <pmem/>
+        <alignsize>2097152</alignsize>
       </source>
       <target>
         <size>524288</size>
@@ -62,63 +122,123 @@
         <block>2048</block>
         <current>524288</current>
         <requested>1048576</requested>
+        <readonly/>
       </target>
     </memory>
   </devices>
 </domain>
-<domain type="test">
-  <name>vm1</name>
+<domain type="kvm">
+  <name>fedora</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <maxMemory slots="2">2097152</maxMemory>
-  <vcpu>1</vcpu>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
+    </libosinfo:libosinfo>
+  </metadata>
+  <maxMemory slots="3">2097152</maxMemory>
+  <vcpu>2</vcpu>
   <os>
-    <type arch="i686">hvm</type>
-    <boot dev="network"/>
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="hd"/>
   </os>
   <features>
-    <pae/>
+    <acpi/>
+    <apic/>
+    <vmport state="off"/>
   </features>
   <cpu>
     <numa>
       <cell cpus="0" memory="1048576"/>
     </numa>
   </cpu>
-  <clock offset="utc"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/test-hv</emulator>
-    <controller type="usb" model="ich9-ehci1"/>
-    <controller type="usb" model="ich9-uhci1">
-      <master startport="0"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci2">
-      <master startport="2"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci3">
-      <master startport="4"/>
-    </controller>
-    <interface type="user">
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" discard="unmap"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="pci" model="pcie-root"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
-      <model type="e1000"/>
+      <model type="virtio"/>
     </interface>
     <console type="pty"/>
-    <memory model="dimm" access="private">
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
+    <video>
+      <model type="virtio"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
+    <memory model="dimm" access="private" discard="yes">
       <source>
         <pagesize>4</pagesize>
         <nodemask>1-2</nodemask>
       </source>
       <target>
-        <size>524288</size>
+        <size>262144</size>
+        <node>0</node>
+      </target>
+    </memory>
+    <memory model="dimm" access="private" discard="yes">
+      <source>
+        <pagesize>4</pagesize>
+        <nodemask>1-2</nodemask>
+      </source>
+      <target>
+        <size>262144</size>
         <node>0</node>
       </target>
     </memory>
     <memory model="nvdimm">
       <alias name="mymemdev3"/>
+      <address type="dimm" slot="1" base="0x100000000"/>
       <source>
         <path>/path/to/nvdimm</path>
+        <pmem/>
+        <alignsize>2097152</alignsize>
       </source>
       <target>
         <size>524288</size>
@@ -129,6 +249,7 @@
         <block>2048</block>
         <current>524288</current>
         <requested>1048576</requested>
+        <readonly/>
       </target>
     </memory>
   </devices>

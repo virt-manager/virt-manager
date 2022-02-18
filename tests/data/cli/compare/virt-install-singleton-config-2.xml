@@ -1,200 +1,50 @@
 <domain type="kvm">
   <name>fedora</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <genid>e9392370-2917-565e-692b-d057f46512d6</genid>
-  <title>my-title</title>
-  <description>my-description</description>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
-  <iothreads>2</iothreads>
-  <iothreadids>
-    <iothread id="1"/>
-    <iothread id="2"/>
-  </iothreadids>
-  <memory>1048576</memory>
-  <currentMemory>524288</currentMemory>
-  <blkiotune>
-    <weight>100</weight>
-    <device>
-      <path>/home/test/1.img</path>
-      <weight>200</weight>
-      <read_bytes_sec>10000</read_bytes_sec>
-      <write_bytes_sec>10000</write_bytes_sec>
-      <read_iops_sec>20000</read_iops_sec>
-      <write_iops_sec>20000</write_iops_sec>
-    </device>
-  </blkiotune>
-  <memtune>
-    <hard_limit>10</hard_limit>
-    <soft_limit>20</soft_limit>
-    <swap_hard_limit>30</swap_hard_limit>
-    <min_guarantee>40</min_guarantee>
-  </memtune>
-  <memoryBacking>
-    <nosharepages/>
-    <locked/>
-    <hugepages>
-      <page size="12" unit="G" nodeset="0,1"/>
-      <page size="1234" unit="MB" nodeset="2"/>
-    </hugepages>
-    <access mode="shared"/>
-    <source type="file"/>
-    <discard/>
-    <allocation mode="immediate"/>
-  </memoryBacking>
-  <vcpu>9</vcpu>
-  <numatune>
-    <memory mode="strict" nodeset="1-3,4"/>
-    <memnode cellid="1" mode="strict" nodeset="2"/>
-  </numatune>
-  <resource>
-    <partition>/virtualmachines/production</partition>
-  </resource>
-  <sysinfo type="smbios">
-    <bios>
-      <entry name="vendor">Acme LLC</entry>
-      <entry name="version">1.2.3</entry>
-      <entry name="date">01/01/1970</entry>
-      <entry name="release">10.22</entry>
-    </bios>
-    <system>
-      <entry name="manufacturer">Acme Inc.</entry>
-      <entry name="product">Computer</entry>
-      <entry name="version">3.2.1</entry>
-      <entry name="serial">123456789</entry>
-      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
-      <entry name="sku">abc-123</entry>
-      <entry name="family">Server</entry>
-    </system>
-    <baseBoard>
-      <entry name="manufacturer">Acme Corp.</entry>
-      <entry name="product">Motherboard</entry>
-      <entry name="version">A01</entry>
-      <entry name="serial">1234-5678</entry>
-      <entry name="asset">Tag</entry>
-      <entry name="location">Chassis</entry>
-    </baseBoard>
-    <chassis>
-      <entry name="manufacturer">Chassis Corp.</entry>
-      <entry name="version">4.0</entry>
-      <entry name="serial">1234chassis</entry>
-      <entry name="asset">chasset</entry>
-      <entry name="sku">chassku</entry>
-    </chassis>
-    <oemStrings>
-      <entry>test0</entry>
-      <entry>test1</entry>
-      <entry>complicated parsing, foo=bar</entry>
-    </oemStrings>
-  </sysinfo>
-  <bootloader>/new/bootld</bootloader>
-  <os firmware="efi">
+  <memory>4096000000</memory>
+  <currentMemory>4096000000</currentMemory>
+  <vcpu cpuset="1,3-5">2</vcpu>
+  <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <firmware>
-      <feature enabled="yes" name="secure-boot"/>
-      <feature enabled="no" name="enrolled-keys"/>
-    </firmware>
-    <loader>/foo/bar</loader>
-    <initarg>foo=bar</initarg>
-    <initarg>baz=woo</initarg>
-    <initdir>/my/custom/cwd</initdir>
-    <inituser>tester</inituser>
-    <initgroup>1000</initgroup>
     <boot dev="network"/>
-    <bootmenu enable="no"/>
-    <bios rebootTimeout="3"/>
-    <smbios mode="sysinfo"/>
+    <boot dev="hd"/>
+    <smbios mode="emulate"/>
   </os>
-  <idmap>
-    <uid start="0" target="1000" count="10"/>
-    <gid start="0" target="1000" count="10"/>
-  </idmap>
   <features>
-    <apic eoi="on"/>
-    <privnet/>
-    <pmu state="off"/>
-    <hyperv>
-      <reset state="on"/>
-      <vapic state="on"/>
-      <spinlocks state="on" retries="5678"/>
-      <synic state="on"/>
-    </hyperv>
+    <acpi/>
+    <apic/>
     <vmport state="off"/>
-    <kvm>
-      <hidden state="off"/>
-    </kvm>
-    <smm state="off"/>
-    <vmcoreinfo state="on"/>
   </features>
-  <cpu mode="custom" match="strict" check="partial">
-    <model>foobar</model>
-    <vendor>meee</vendor>
-    <cache level="3" mode="emulate"/>
+  <cpu mode="custom" match="exact">
+    <model>Skylake-Client-noTSX-IBRS</model>
     <feature policy="require" name="ibpb"/>
     <feature policy="require" name="md-clear"/>
     <feature policy="require" name="spec-ctrl"/>
     <feature policy="require" name="ssbd"/>
-    <feature policy="force" name="x2apic"/>
-    <feature policy="force" name="x2apicagain"/>
-    <feature policy="require" name="reqtest"/>
-    <feature policy="optional" name="opttest"/>
-    <feature policy="disable" name="distest2"/>
-    <feature policy="disable" name="distest"/>
-    <feature policy="forbid" name="foo"/>
-    <feature policy="forbid" name="bar"/>
-    <numa>
-      <cell id="0" cpus="1,2,3" memory="1024">
-        <distances>
-          <sibling id="0" value="10"/>
-          <sibling id="1" value="21"/>
-        </distances>
-      </cell>
-      <cell id="1" cpus="5-8" memory="256">
-        <distances>
-          <sibling id="0" value="21"/>
-          <sibling id="1" value="10"/>
-        </distances>
-      </cell>
-      <cell id="2" cpus="4" memory="256" unit="KiB" memAccess="shared" discard="no">
-        <cache level="1" associativity="direct" policy="writeback">
-          <size value="256" unit="KiB"/>
-          <line value="256" unit="KiB"/>
-        </cache>
-      </cell>
-      <interconnects>
-        <latency initiator="0" target="0" type="access" value="5"/>
-        <latency initiator="0" target="2" cache="1" type="access" value="10" unit="ns"/>
-        <bandwidth initiator="0" target="0" type="access" value="204800"/>
-        <bandwidth initiator="0" target="2" cache="1" type="access" value="409600" unit="KiB"/>
-      </interconnects>
-    </numa>
   </cpu>
   <clock offset="utc">
-    <timer name="rtc" tickpolicy="merge"/>
-    <timer name="hpet" present="yes"/>
-    <timer name="hypervclock" present="no"/>
+    <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
-    <timer name="rtc" track="wall"/>
-    <timer name="tsc" frequency="10"/>
-    <timer name="tsc" mode="emulate"/>
-    <timer name="rtc" tickpolicy="catchup">
-      <catchup threshold="123" slew="120" limit="10000"/>
-    </timer>
+    <timer name="hpet" present="no"/>
   </clock>
-  <on_poweroff>destroy</on_poweroff>
   <on_reboot>destroy</on_reboot>
-  <on_crash>preserve</on_crash>
   <pm>
-    <suspend-to-mem enabled="yes"/>
+    <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/new/emu</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" discard="unmap"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
-    <controller type="scsi" model="virtio-scsi"/>
     <controller type="pci" model="pcie-root"/>
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
@@ -212,10 +62,6 @@
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
-    <filesystem type="mount" accessmode="mapped" fmode="0123" dmode="0345">
-      <source dir="/foo/source"/>
-      <target dir="/bar/target"/>
-    </filesystem>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
@@ -226,287 +72,79 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <input type="tablet" bus="usb"/>
     <tpm model="tpm-crb">
-      <backend type="passthrough" version="2.0" persistent_state="yes">
-        <device path="/dev/tpm0"/>
-        <encryption secret="11111111-2222-3333-4444-5555555555"/>
-      </backend>
-      <active_pcr_banks>
-        <sha1/>
-        <sha256/>
-        <sha384/>
-        <sha512/>
-      </active_pcr_banks>
+      <backend type="emulator"/>
     </tpm>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
     <video>
       <model type="virtio"/>
     </video>
-    <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio" autodeflate="on" freePageReporting="on">
-      <stats period="10"/>
-    </memballoon>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <watchdog model="i6300esb" action="reset"/>
+    <memballoon model="virtio"/>
     <rng model="virtio">
-      <backend model="egd" type="udp">
-        <source mode="bind" host="127.0.0.1" service="8000"/>
-        <source mode="connect" host="foo" service="708"/>
-      </backend>
-      <rate bytes="1234" period="1000"/>
+      <backend model="random">/dev/urandom</backend>
     </rng>
-    <panic model="isa">
-      <address type="isa" iobase="0x506"/>
-    </panic>
-    <shmem name="shmem0" role="master">
-      <model type="ivshmem-plain"/>
-      <size unit="M">8</size>
-    </shmem>
-    <iommu model="intel">
-      <driver aw_bits="48" intremap="off" caching_mode="on" eim="off" iotlb="off"/>
-    </iommu>
+    <panic model="isa"/>
+    <vsock model="virtio">
+      <cid auto="yes"/>
+    </vsock>
   </devices>
-  <seclabel type="static" model="selinux" relabel="yes">
-    <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
-    <baselabel>baselabel</baselabel>
-  </seclabel>
-  <seclabel type="dynamic" model="dac">
-    <label>012:345</label>
-  </seclabel>
-  <keywrap>
-    <cipher name="aes" state="on"/>
-  </keywrap>
-  <on_lockfailure>ignore</on_lockfailure>
-  <cputune>
-    <shares>2048</shares>
-    <period>1000000</period>
-    <quota>-1</quota>
-    <global_period>1000000</global_period>
-    <global_quota>-1</global_quota>
-    <emulator_period>1000000</emulator_period>
-    <emulator_quota>-1</emulator_quota>
-    <iothread_period>1000000</iothread_period>
-    <iothread_quota>-1</iothread_quota>
-    <vcpupin vcpu="0" cpuset="0-3"/>
-    <emulatorpin cpuset="1,7"/>
-    <iothreadpin iothread="1" cpuset="1,7"/>
-    <emulatorsched scheduler="rr" priority="99"/>
-    <vcpusched vcpus="0-3,^2" scheduler="fifo" priority="95"/>
-    <iothreadsched iothreads="1,2" scheduler="fifo" priority="90"/>
-    <cachetune vcpus="0-3">
-      <cache id="0" level="3" type="both" size="3" unit="MiB"/>
-      <cache id="1" level="3" type="both" size="3" unit="MiB"/>
-      <monitor level="3" vcpus="2"/>
-      <monitor level="3" vcpus="0-3,^2"/>
-    </cachetune>
-    <cachetune vcpus="4-5">
-      <monitor level="3" vcpus="4"/>
-      <monitor level="3" vcpus="5"/>
-    </cachetune>
-    <memorytune vcpus="0-3">
-      <node id="0" bandwidth="60"/>
-    </memorytune>
-  </cputune>
+  <seclabel type="dynamic" model="selinux"/>
 </domain>
 <domain type="kvm">
   <name>fedora</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
-  <genid>e9392370-2917-565e-692b-d057f46512d6</genid>
-  <title>my-title</title>
-  <description>my-description</description>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
-  <iothreads>2</iothreads>
-  <iothreadids>
-    <iothread id="1"/>
-    <iothread id="2"/>
-  </iothreadids>
-  <memory>1048576</memory>
-  <currentMemory>524288</currentMemory>
-  <blkiotune>
-    <weight>100</weight>
-    <device>
-      <path>/home/test/1.img</path>
-      <weight>200</weight>
-      <read_bytes_sec>10000</read_bytes_sec>
-      <write_bytes_sec>10000</write_bytes_sec>
-      <read_iops_sec>20000</read_iops_sec>
-      <write_iops_sec>20000</write_iops_sec>
-    </device>
-  </blkiotune>
-  <memtune>
-    <hard_limit>10</hard_limit>
-    <soft_limit>20</soft_limit>
-    <swap_hard_limit>30</swap_hard_limit>
-    <min_guarantee>40</min_guarantee>
-  </memtune>
-  <memoryBacking>
-    <nosharepages/>
-    <locked/>
-    <hugepages>
-      <page size="12" unit="G" nodeset="0,1"/>
-      <page size="1234" unit="MB" nodeset="2"/>
-    </hugepages>
-    <access mode="shared"/>
-    <source type="file"/>
-    <discard/>
-    <allocation mode="immediate"/>
-  </memoryBacking>
-  <vcpu>9</vcpu>
-  <numatune>
-    <memory mode="strict" nodeset="1-3,4"/>
-    <memnode cellid="1" mode="strict" nodeset="2"/>
-  </numatune>
-  <resource>
-    <partition>/virtualmachines/production</partition>
-  </resource>
-  <sysinfo type="smbios">
-    <bios>
-      <entry name="vendor">Acme LLC</entry>
-      <entry name="version">1.2.3</entry>
-      <entry name="date">01/01/1970</entry>
-      <entry name="release">10.22</entry>
-    </bios>
-    <system>
-      <entry name="manufacturer">Acme Inc.</entry>
-      <entry name="product">Computer</entry>
-      <entry name="version">3.2.1</entry>
-      <entry name="serial">123456789</entry>
-      <entry name="uuid">00000000-1111-2222-3333-444444444444</entry>
-      <entry name="sku">abc-123</entry>
-      <entry name="family">Server</entry>
-    </system>
-    <baseBoard>
-      <entry name="manufacturer">Acme Corp.</entry>
-      <entry name="product">Motherboard</entry>
-      <entry name="version">A01</entry>
-      <entry name="serial">1234-5678</entry>
-      <entry name="asset">Tag</entry>
-      <entry name="location">Chassis</entry>
-    </baseBoard>
-    <chassis>
-      <entry name="manufacturer">Chassis Corp.</entry>
-      <entry name="version">4.0</entry>
-      <entry name="serial">1234chassis</entry>
-      <entry name="asset">chasset</entry>
-      <entry name="sku">chassku</entry>
-    </chassis>
-    <oemStrings>
-      <entry>test0</entry>
-      <entry>test1</entry>
-      <entry>complicated parsing, foo=bar</entry>
-    </oemStrings>
-  </sysinfo>
-  <bootloader>/new/bootld</bootloader>
-  <os firmware="efi">
+  <memory>4096000000</memory>
+  <currentMemory>4096000000</currentMemory>
+  <vcpu cpuset="1,3-5">2</vcpu>
+  <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <firmware>
-      <feature enabled="yes" name="secure-boot"/>
-      <feature enabled="no" name="enrolled-keys"/>
-    </firmware>
-    <loader>/foo/bar</loader>
-    <initarg>foo=bar</initarg>
-    <initarg>baz=woo</initarg>
-    <initdir>/my/custom/cwd</initdir>
-    <inituser>tester</inituser>
-    <initgroup>1000</initgroup>
-    <boot dev="cdrom"/>
-    <boot dev="fd"/>
     <boot dev="hd"/>
-    <boot dev="network"/>
-    <bootmenu enable="no"/>
-    <bios rebootTimeout="3"/>
-    <smbios mode="sysinfo"/>
+    <smbios mode="emulate"/>
   </os>
-  <idmap>
-    <uid start="0" target="1000" count="10"/>
-    <gid start="0" target="1000" count="10"/>
-  </idmap>
   <features>
-    <apic eoi="on"/>
-    <privnet/>
-    <pmu state="off"/>
-    <hyperv>
-      <reset state="on"/>
-      <vapic state="on"/>
-      <spinlocks state="on" retries="5678"/>
-      <synic state="on"/>
-    </hyperv>
+    <acpi/>
+    <apic/>
     <vmport state="off"/>
-    <kvm>
-      <hidden state="off"/>
-    </kvm>
-    <smm state="off"/>
-    <vmcoreinfo state="on"/>
   </features>
-  <cpu mode="custom" match="strict" check="partial">
-    <model>foobar</model>
-    <vendor>meee</vendor>
-    <cache level="3" mode="emulate"/>
+  <cpu mode="custom" match="exact">
+    <model>Skylake-Client-noTSX-IBRS</model>
     <feature policy="require" name="ibpb"/>
     <feature policy="require" name="md-clear"/>
     <feature policy="require" name="spec-ctrl"/>
     <feature policy="require" name="ssbd"/>
-    <feature policy="force" name="x2apic"/>
-    <feature policy="force" name="x2apicagain"/>
-    <feature policy="require" name="reqtest"/>
-    <feature policy="optional" name="opttest"/>
-    <feature policy="disable" name="distest2"/>
-    <feature policy="disable" name="distest"/>
-    <feature policy="forbid" name="foo"/>
-    <feature policy="forbid" name="bar"/>
-    <numa>
-      <cell id="0" cpus="1,2,3" memory="1024">
-        <distances>
-          <sibling id="0" value="10"/>
-          <sibling id="1" value="21"/>
-        </distances>
-      </cell>
-      <cell id="1" cpus="5-8" memory="256">
-        <distances>
-          <sibling id="0" value="21"/>
-          <sibling id="1" value="10"/>
-        </distances>
-      </cell>
-      <cell id="2" cpus="4" memory="256" unit="KiB" memAccess="shared" discard="no">
-        <cache level="1" associativity="direct" policy="writeback">
-          <size value="256" unit="KiB"/>
-          <line value="256" unit="KiB"/>
-        </cache>
-      </cell>
-      <interconnects>
-        <latency initiator="0" target="0" type="access" value="5"/>
-        <latency initiator="0" target="2" cache="1" type="access" value="10" unit="ns"/>
-        <bandwidth initiator="0" target="0" type="access" value="204800"/>
-        <bandwidth initiator="0" target="2" cache="1" type="access" value="409600" unit="KiB"/>
-      </interconnects>
-    </numa>
   </cpu>
   <clock offset="utc">
-    <timer name="rtc" tickpolicy="merge"/>
-    <timer name="hpet" present="yes"/>
-    <timer name="hypervclock" present="no"/>
+    <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
-    <timer name="rtc" track="wall"/>
-    <timer name="tsc" frequency="10"/>
-    <timer name="tsc" mode="emulate"/>
-    <timer name="rtc" tickpolicy="catchup">
-      <catchup threshold="123" slew="120" limit="10000"/>
-    </timer>
+    <timer name="hpet" present="no"/>
   </clock>
-  <on_poweroff>destroy</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>preserve</on_crash>
   <pm>
-    <suspend-to-mem enabled="yes"/>
+    <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/new/emu</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2" discard="unmap"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
+      <target dev="vda" bus="virtio"/>
+    </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
-    <controller type="scsi" model="virtio-scsi"/>
     <controller type="pci" model="pcie-root"/>
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
@@ -524,10 +162,6 @@
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
-    <filesystem type="mount" accessmode="mapped" fmode="0123" dmode="0345">
-      <source dir="/foo/source"/>
-      <target dir="/bar/target"/>
-    </filesystem>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
@@ -538,84 +172,31 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <input type="tablet" bus="usb"/>
     <tpm model="tpm-crb">
-      <backend type="passthrough" version="2.0" persistent_state="yes">
-        <device path="/dev/tpm0"/>
-        <encryption secret="11111111-2222-3333-4444-5555555555"/>
-      </backend>
-      <active_pcr_banks>
-        <sha1/>
-        <sha256/>
-        <sha384/>
-        <sha512/>
-      </active_pcr_banks>
+      <backend type="emulator"/>
     </tpm>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
     <video>
       <model type="virtio"/>
     </video>
-    <watchdog model="ib700" action="pause"/>
-    <memballoon model="virtio" autodeflate="on" freePageReporting="on">
-      <stats period="10"/>
-    </memballoon>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+    <watchdog model="i6300esb" action="reset"/>
+    <memballoon model="virtio"/>
     <rng model="virtio">
-      <backend model="egd" type="udp">
-        <source mode="bind" host="127.0.0.1" service="8000"/>
-        <source mode="connect" host="foo" service="708"/>
-      </backend>
-      <rate bytes="1234" period="1000"/>
+      <backend model="random">/dev/urandom</backend>
     </rng>
-    <panic model="isa">
-      <address type="isa" iobase="0x506"/>
-    </panic>
-    <shmem name="shmem0" role="master">
-      <model type="ivshmem-plain"/>
-      <size unit="M">8</size>
-    </shmem>
-    <iommu model="intel">
-      <driver aw_bits="48" intremap="off" caching_mode="on" eim="off" iotlb="off"/>
-    </iommu>
+    <panic model="isa"/>
+    <vsock model="virtio">
+      <cid auto="yes"/>
+    </vsock>
   </devices>
-  <seclabel type="static" model="selinux" relabel="yes">
-    <label>system_u:object_r:svirt_image_t:s0:c100,c200</label>
-    <baselabel>baselabel</baselabel>
-  </seclabel>
-  <seclabel type="dynamic" model="dac">
-    <label>012:345</label>
-  </seclabel>
-  <keywrap>
-    <cipher name="aes" state="on"/>
-  </keywrap>
-  <on_lockfailure>ignore</on_lockfailure>
-  <cputune>
-    <shares>2048</shares>
-    <period>1000000</period>
-    <quota>-1</quota>
-    <global_period>1000000</global_period>
-    <global_quota>-1</global_quota>
-    <emulator_period>1000000</emulator_period>
-    <emulator_quota>-1</emulator_quota>
-    <iothread_period>1000000</iothread_period>
-    <iothread_quota>-1</iothread_quota>
-    <vcpupin vcpu="0" cpuset="0-3"/>
-    <emulatorpin cpuset="1,7"/>
-    <iothreadpin iothread="1" cpuset="1,7"/>
-    <emulatorsched scheduler="rr" priority="99"/>
-    <vcpusched vcpus="0-3,^2" scheduler="fifo" priority="95"/>
-    <iothreadsched iothreads="1,2" scheduler="fifo" priority="90"/>
-    <cachetune vcpus="0-3">
-      <cache id="0" level="3" type="both" size="3" unit="MiB"/>
-      <cache id="1" level="3" type="both" size="3" unit="MiB"/>
-      <monitor level="3" vcpus="2"/>
-      <monitor level="3" vcpus="0-3,^2"/>
-    </cachetune>
-    <cachetune vcpus="4-5">
-      <monitor level="3" vcpus="4"/>
-      <monitor level="3" vcpus="5"/>
-    </cachetune>
-    <memorytune vcpus="0-3">
-      <node id="0" bandwidth="60"/>
-    </memorytune>
-  </cputune>
+  <seclabel type="dynamic" model="selinux"/>
 </domain>

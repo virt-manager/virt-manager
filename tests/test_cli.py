@@ -465,48 +465,32 @@ vinst = App("virt-install")
 
 c = vinst.add_category("xml-comparsion", "--connect %(URI-KVM-X86)s --noautoconsole --os-variant fedora-unknown", prerun_check=has_old_osinfo)
 
-# Singleton element test #1, for simpler strings
+
+# many-devices, the main XML coverage tester
 c.add_compare("""
---memory 1024
---uuid 12345678-12F4-1234-1234-123456789AFA
---vcpus 4,cores=2,threads=1,dies=1,sockets=2 --cpuset=1,3-5
---cpu host-copy
---description \"foobar & baz\"
---boot uefi,smbios_mode=emulate,boot1.dev=hd,boot.dev=network,initarg1=bar=baz,initarg=foo
---seclabel type=dynamic
---security type=none,model=dac
---numatune 1,2,3,5-7,^6
---memorybacking hugepages=on
---features apic=off
---clock offset=localtime
---resource /virtualmachines/production,fibrechannel.appid=myapplication
---events on_crash=restart
---metadata genid_enable=yes
---sysinfo host
+--boot firmware=efi,\
+firmware.feature0.enabled=true,firmware.feature0.name=secure-boot,\
+firmware.feature1.enabled=off,firmware.feature1.name=enrolled-keys,\
+emulator=/new/emu,bootloader=/new/bootld,bootloader_args='--append single',rebootTimeout=3,\
+initargs="foo=bar baz=woo",initdir=/my/custom/cwd,inituser=tester,initgroup=1000,\
+bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,\
+bootmenu.enable=yes,bootmenu.timeout=5000,\
+loader_ro=yes,loader.type=rom,loader=/tmp/foo,loader_secure=no,\
+acpi.table=/path/to/slic.dat,acpi.table.type=slic,\
+initenv0.name=MYENV,initenv0='some value',initenv1.name=FOO,initenv1=bar,\
+initdir=/my/custom/cwd,inituser=tester,initgroup=1000
 
---disk none
---console none
---channel none
---network none
---controller usb2
---graphics spice
---video vga
---sound none
---redirdev none
---memballoon none
---smartcard none
---watchdog default
---tpm /dev/tpm0
---rng /dev/random
---shmem shmem0
---vsock default
-""", "singleton-config-1")
 
-# Singleton element test #2, for complex strings
-c.add_compare("""--pxe
---memory 512,maxmemory=1024
---vcpus 9
+--vcpus vcpus=9,vcpu.placement=static,\
+vcpus.vcpu2.id=0,vcpus.vcpu2.enabled=no,\
+vcpus.vcpu3.id=1,vcpus.vcpu3.hotpluggable=no,vcpus.vcpu3.enabled=yes,\
+vcpus.vcpu.id=3,vcpus.vcpu0.enabled=yes,vcpus.vcpu0.order=3,\
+vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
+
+
 --cpu foobar,+x2apic,+x2apicagain,-distest,forbid=foo,forbid=bar,disable=distest2,optional=opttest,require=reqtest,match=strict,vendor=meee,mode=custom,check=partial,\
+topology.sockets=1,topology.dies=1,topology.cores=3,topology.threads=3,\
+model.fallback=allow,model.vendor_id=GenuineIntel,\
 cell.id=0,cell.cpus=1,2,3,cell.memory=1024,\
 cell1.id=1,cell1.memory=256,cell1.cpus=5-8,\
 numa.cell2.id=2,numa.cell2.memory=256,numa.cell2.unit=KiB,numa.cell2.cpus=4,numa.cell2.memAccess=shared,numa.cell2.discard=no,\
@@ -521,6 +505,12 @@ numa.interconnects.latency1.initiator=0,numa.interconnects.latency1.target=2,num
 numa.interconnects.bandwidth0.initiator=0,numa.interconnects.bandwidth0.target=0,numa.interconnects.bandwidth0.type=access,numa.interconnects.bandwidth0.value=204800,\
 numa.interconnects.bandwidth1.initiator=0,numa.interconnects.bandwidth1.target=2,numa.interconnects.bandwidth1.cache=1,numa.interconnects.bandwidth1.type=access,numa.interconnects.bandwidth1.value=409600,numa.interconnects.bandwidth1.unit=KiB,\
 cache.mode=emulate,cache.level=3
+
+
+--numatune 1,2,3,5-7,^6,mode=strict,\
+memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
+
+
 --cputune shares=2048,period=1000000,quota=-1,global_period=1000000,global_quota=-1,emulator_period=1000000,emulator_quota=-1,iothread_period=1000000,iothread_quota=-1,\
 vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,emulatorpin.cpuset=1,7,iothreadpin0.iothread=1,iothreadpin0.cpuset=1,7,\
 emulatorsched.scheduler=rr,emulatorsched.priority=99,vcpusched0.vcpus=0-3,^2,vcpusched0.scheduler=fifo,vcpusched0.priority=95,iothreadsched0.iothreads=1,2,iothreadsched0.scheduler=fifo,iothreadsched0.priority=90,\
@@ -533,78 +523,51 @@ cachetune1.vcpus=4-5,\
 cachetune1.monitor0.level=3,cachetune1.monitor0.vcpus=4,\
 cachetune1.monitor1.level=3,cachetune1.monitor1.vcpus=5,\
 memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
---iothreads iothreads=2,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
---metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6
---boot cdrom,fd,hd,network,menu=off,loader=/foo/bar,emulator=/new/emu,bootloader=/new/bootld,rebootTimeout=3,initargs="foo=bar baz=woo",initdir=/my/custom/cwd,inituser=tester,initgroup=1000,firmware=efi
---boot firmware.feature0.enabled=true,firmware.feature0.name=secure-boot
---boot firmware.feature1.enabled=off,firmware.feature1.name=enrolled-keys
---idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
---seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
---seclabel type=dynamic,label=012:345
---keywrap cipher0.name=aes,cipher0.state=on
---numatune 1-3,4,mode=strict,\
-memnode0.cellid=1,memnode0.mode=strict,memnode0.nodeset=2
+
+
 --memtune hard_limit=10,soft_limit=20,swap_hard_limit=30,min_guarantee=40
+
+
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200,read_bytes_sec=10000,write_bytes_sec=10000,read_iops_sec=20000,write_iops_sec=20000
+
+
 --memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2
---features acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,hyperv_vapic=on,smm=off
---clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no,timer4.name=rtc,timer5.name=tsc,timer6.name=tsc,timer4.track=wall,timer5.frequency=10,timer6.mode=emulate,timer7.name=rtc,timer7.tickpolicy=catchup,timer7.catchup.threshold=123,timer7.catchup.slew=120,timer7.catchup.limit=10000
+
+
+--iothreads iothreads=5,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
+
+
+--metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6,genid_enable=yes
+
+
+--features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on,ioapic.driver=qemu,acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,hyperv_vapic=on,smm=off
+
+
+--clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no,timer4.name=rtc,timer5.name=tsc,timer6.name=tsc,timer4.track=wall,timer5.frequency=10,timer6.mode=emulate,timer7.name=rtc,timer7.tickpolicy=catchup,timer7.catchup.threshold=123,timer7.catchup.slew=120,timer7.catchup.limit=10000,rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
+
+
+--keywrap cipher0.name=aes,cipher0.state=on
+
+
+--pm suspend_to_mem=yes,suspend_to_disk=no
+
+
+--resource /virtualmachines/production,fibrechannel.appid=myapplication
+
+
+--events on_poweroff=destroy,on_reboot=restart,on_crash=preserve,on_lockfailure=ignore
+
+
+--idmap uid_start=0,uid_target=1000,uid_count=10,gid_start=0,gid_target=1000,gid_count=10
+
+
 --sysinfo type=smbios,bios_vendor="Acme LLC",bios_version=1.2.3,bios_date=01/01/1970,bios_release=10.22
 --sysinfo type=smbios,system_manufacturer="Acme Inc.",system_product=Computer,system_version=3.2.1,system_serial=123456789,system_uuid=00000000-1111-2222-3333-444444444444,system_sku=abc-123,system_family=Server
 --sysinfo type=smbios,baseBoard_manufacturer="Acme Corp.",baseBoard_product=Motherboard,baseBoard_version=A01,baseBoard_serial=1234-5678,baseBoard_asset=Tag,baseBoard_location=Chassis
 --sysinfo type=smbios,chassis.manufacturer="Chassis Corp.",chassis.serial=1234chassis,chassis.asset=chasset,chassis.sku=chassku,chassis.version=4.0
 --sysinfo type=smbios,oemStrings.entry2="complicated parsing, foo=bar",oemStrings.entry1=test1,oemStrings.entry0=test0
-
---pm suspend_to_mem=yes,suspend_to_disk=no
---resource partition=/virtualmachines/production
---events on_poweroff=destroy,on_reboot=restart,on_crash=preserve,on_lockfailure=ignore
-
---controller usb3
---controller scsi,model=virtio-scsi
---graphics vnc
---filesystem /foo/source,/bar/target,fmode=0123,dmode=0345
---memballoon virtio,autodeflate=on,stats.period=10,freePageReporting=on
---watchdog ib700,action=pause
---tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes,active_pcr_banks.sha1=on,active_pcr_banks.sha256=yes,active_pcr_banks.sha384=yes,active_pcr_banks.sha512=yes,version=2.0
---rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
---panic iobase=0x506
---shmem shmem0,role=master,model.type=ivshmem-plain,size=8,size.unit=M
---iommu model=intel,driver.aw_bits=48,driver.caching_mode=on,driver.eim=off,driver.intremap=off,driver.iotlb=off
-""", "singleton-config-2", predefine_check="7.2.0")
-
-
-# Test the implied defaults for gl=yes setting virgl=on
-c.add_compare("""
---vcpus vcpu.current=3,maxvcpus=6,vcpu.placement=auto
---memory hotplugmemorymax=2048,hotplugmemoryslots=2
---disk none
---features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on,ioapic.driver=qemu
---clock rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
---boot bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,smbios.mode=host,bootmenu.enable=yes,bootmenu.timeout=5000,loader_ro=yes,loader.type=rom,loader=/tmp/foo
---memorybacking access.mode=shared,source.type=anonymous,hugepages=on
---graphics spice,gl=yes
---rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
---panic default,,address.type=isa,address.iobase=0x500,address.irq=5
---cpu topology.sockets=1,topology.dies=1,topology.cores=3,topology.threads=2,cell0.cpus=0,cell0.memory=1048576
---memdev dimm,access=private,target.size=512,target.node=0,source.pagesize=4,source.nodemask=1-2,discard=on
---memdev nvdimm,source.path=/path/to/nvdimm,target.size=512,target.node=0,target.label_size=128,alias.name=mymemdev3,address.type=dimm,address.base=0x100000000,address.slot=1,source.pmem=on,source.alignsize=2048,target.readonly=on
---vsock auto_cid=on
---memballoon default
-
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
---sysinfo type=fwcfg,entry0.name=foo,entry0.file=bar,entry0=baz
-""", "singleton-config-3", predefine_check="5.7.0")
 
-
-
-c.add_compare("""
---vcpus vcpus=4,cores=1,placement=static,\
-vcpus.vcpu2.id=0,vcpus.vcpu2.enabled=no,\
-vcpus.vcpu3.id=1,vcpus.vcpu3.hotpluggable=no,vcpus.vcpu3.enabled=yes,\
-vcpus.vcpu.id=3,vcpus.vcpu0.enabled=yes,vcpus.vcpu0.order=3,\
-vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
---cpu none
---iothreads 5
 
 --disk type=block,source.dev=/dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3,driver.queues=8
 --disk source.file=%(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
@@ -613,7 +576,7 @@ vcpus.vcpu1.id=2,vcpus.vcpu1.enabled=yes
 --disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered,rawio=yes
 --disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz,iotune.read_bytes_sec=1,iotune.read_iops_sec=2,iotune.write_bytes_sec=5,iotune.write_iops_sec=6
 --disk /dev/default-pool/iso-vol,format=qcow2,startup_policy=optional,iotune.total_bytes_sec=10,iotune.total_iops_sec=20,
---disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw
+--disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw,driver_name=qemu
 --disk pool=rbd-ceph,size=.1,driver.name=qemu,driver.type=raw,driver.discard=unmap,driver.detect_zeroes=unmap,driver.io=native,driver.error_policy=stop
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file
 --disk source.protocol=http,source.host0.name=exampl2.com,source.host.port=8000,source.name=/path/to/my/file
@@ -636,6 +599,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --disk source.dir=/
 --disk type=nvme,source.type=pci,source.managed=no,source.namespace=2,source.address.domain=0x0001,source.address.bus=0x02,source.address.slot=0x00,source.address.function=0x0
 
+
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo
 --network bridge=foobar,model=virtio,driver_name=qemu,driver_queues=3,filterref=foobar,rom.bar=off,rom.file=/some/rom,source.portgroup=foo
 --network bridge=ovsbr,virtualport.type=openvswitch,virtualport_profileid=demo,virtualport_interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,link.state=yes,driver.name=qemu,driver.queues=3,filterref.filter=filterbar,target.dev=mytargetname,virtualport.parameters.profileid=demo,virtualport.parameters.interfaceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b
@@ -644,6 +608,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock,address.type=pci,address.bus=0x00,address.slot=0x10,address.function=0x0,address.domain=0x0000
 --network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
 --network model=vmxnet3
+
 
 --graphics sdl
 --graphics spice,keymap=none
@@ -659,6 +624,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --graphics spice,listens0.type=network,listens0.network=default
 --graphics spice,listens0.type=socket,listens0.socket=/tmp/foobar
 
+
 --controller usb,model=ich9-ehci1,address=0:0:4.7,index=0
 --controller usb,model=ich9-uhci1,address=0:0:4.0,index=0,master=0,address.multifunction=on
 --controller usb,model=ich9-uhci2,address=0:0:4.1,index=0,master.startport=2
@@ -669,6 +635,10 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller pci,index=1,model=pci-root,target.index=1
 --controller pci,index=2,model=pci-bridge,target.chassisNr=1
 --controller pci,index=3,model=pci-expander-bus,target.busNr=252,target.node=1
+--controller usb3
+--controller scsi,model=virtio-scsi
+--controller usb2
+
 
 --input type=keyboard,bus=usb
 --input tablet
@@ -677,17 +647,25 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --input passthrough,source.evdev=/dev/input/event1,bus=virtio
 --input evdev,source.dev=/dev/input/event1234,source.repeat=on,source.grab=all,source.grabToggle=ctrl-ctrl
 
+
 --serial char_type=tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2,alias.name=testalias7
+
+
 --parallel type=udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234
 --parallel udp,source.connect_host=127.0.0.2,source.connect_service=8888,source.bind_host=127.0.0.1,source.bind_service=7777
 --parallel unix,path=/tmp/foo-socket,source.seclabel0.model=none,source.seclabel1.model=dac,source.seclabel1.relabel=yes,source.seclabel1.label=foobar,source.seclabel.relabel=no
+
+
 --channel pty,target_type=guestfwd,target_address=127.0.0.1:10000
 --channel pty,target_type=guestfwd,target.address=127.0.0.1,target.port=1234
 --channel pty,target_type=virtio,name=org.linux-kvm.port1
 --channel pty,target.type=virtio,target.name=org.linux-kvm.port2
---console pty,target_type=virtio
 --channel spicevmc
+
+
+--console pty,target_type=virtio
+
 
 --hostdev net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off
 --host-device usb_device_781_5151_2004453082054CA1BEEE
@@ -716,14 +694,18 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --filesystem type=volume,model=virtio,multidevs=remap,readonly=on,space_hard_limit=1234,space_soft_limit=500,source.pool=pool1,source.volume=vol,driver.name=virtiofs,driver.queue=3,binary.path=/foo/virtiofsd,binary.xattr=off,binary.cache.mode=always,binary.lock.posix=off,binary.lock.flock=on,target.dir=/foo,binary.sandbox.mode=chroot,source.socket=/tmp/foo.sock
 --filesystem type=block,source.dev=/dev/foo,target.dir=/
 --filesystem type=ram,source.usage=1024,source.units=MiB,target=/
+--filesystem /foo/source,/bar/target,fmode=0123,dmode=0345
+
 
 --soundhw default
 --sound ac97
 --sound codec0.type=micro,codec1.type=duplex,codec2.type=output
 
+
 --video cirrus
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65
 --video model=qxl,model.vgamem=1,model.ram=2,model.vram=3,model.heads=4,model.acceleration.accel3d=yes,model.vram64=65
+
 
 --smartcard passthrough,type=spicevmc
 --smartcard mode=host
@@ -731,28 +713,53 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --smartcard passthrough,type=tcp,source.mode=bind,source.host=1.2.3.4,source.service=5678,protocol.type=telnet
 --smartcard host-certificates,type=spicevmc,database=/fake/path/to/database,certificate0=/path/to/fake/cert0,certificate1=/path/to/fake/cert1,certificate2=/path/to/fake/cert2
 
+
 --redirdev usb,type=spicevmc
 --redirdev usb,type=tcp,server=localhost:4000
 --redirdev usb,type=tcp,server=127.0.0.1:4002,boot_order=3
 --redirdev default
 --redirdev type=unix,source.path=/tmp/foo.socket,log.file=/tmp/123.log
 
+
+--rng /dev/random
 --rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=
+--rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
+--rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 
---panic iobase=507
 
+--panic iobase=507,,address.type=isa,address.iobase=0x500,address.irq=5
+
+
+--shmem shmem0,role=master,model.type=ivshmem-plain,size=8,size.unit=M
 --shmem name=my_shmem0,role=peer,model.type=ivshmem-plain,size=4,size.unit=M
 --shmem name=shmem_server,model.type=ivshmem-doorbell,size=2,size.unit=M,server.path=/tmp/socket-shmemm,msi.vectors=32,msi.ioeventfd=on
 
+
 --vsock cid=17
 
---tpm default
+
+--tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes,active_pcr_banks.sha1=on,active_pcr_banks.sha256=yes,active_pcr_banks.sha384=yes,active_pcr_banks.sha512=yes,version=2.0
+
+
+--watchdog ib700,action=pause
+
+
+--memballoon virtio,autodeflate=on,stats.period=10,freePageReporting=on
+
+
+--iommu model=intel,driver.aw_bits=48,driver.caching_mode=on,driver.eim=off,driver.intremap=off,driver.iotlb=off
+
+
+--seclabel type=static,label='system_u:object_r:svirt_image_t:s0:c100,c200',relabel=yes,baselabel=baselabel
+--seclabel type=dynamic,label=012:345
+
 
 --qemu-commandline env=DISPLAY=:0.1
 --qemu-commandline="-display gtk,gl=on"
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"
 --qemu-commandline="-set device.video0.driver=virtio-vga"
 --qemu-commandline args="-foo bar"
+
 
 --xml /domain/@foo=bar
 --xml xpath.set=./baz,xpath.value=wib
@@ -762,47 +769,115 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --xml ./devices/graphics[2]/@ef=hg
 --xml xpath.create=./barenode
 --xml xpath.delete=./deleteme/deleteme2
+
+
 """, "many-devices", predefine_check="7.4.0")
 
 
+# Specific XML test cases #1
+c.add_compare(
+"--memory 512,maxmemory=1024 "  # special --memory XXX,maxmemory= handling
+"--description \"foobar & baz\" "  # compat --description handling
+"--uuid 12345678-12F4-1234-1234-123456789AFA "  # compat --uuid handling
+"--vcpus sockets=2,threads=2,dies=1,sockets=2 "  # --vcpus determine count from topology
+"--cpuset 1,3-5 "  # setting compat --cpuset when --vcpus is present
+"--seclabel relabel=yes "  # lets libvirt fill in type and model
+"--sysinfo host "  # special `--sysinfo host` handling
+"--noapic --noacpi "  # feature backcompat
+"--boot uefi,cdrom,fd,hd,network,menu=on "  # uefi for default devices, + old style bootorder
+
+# Disabling all the default device setup
+"""
+--cpu none
+--disk none
+--console none
+--channel none
+--network none
+--sound none
+--redirdev none
+--memballoon none
+--smartcard none
+--tpm none
+--rng none
+""", "singleton-config-1")
 
 
-########################
-# Boot install options #
-########################
+# Specific XML test cases #2
+c.add_compare("--pxe "
+"--ram 4000000 "  # Ram overcommit
+"--cpu host-copy "  # test host-copy back compat
+"--seclabel type=dynamic "  # test a fallback case when guessing model=
+"--sysinfo emulate "  # special `--sysinfo emulate` handling
+"--cpuset 1,3-5 "  # setting compat --cpuset when --vcpus is not present
 
-c = vinst.add_category("boot", "--nographics --noautoconsole --import --disk none --controller usb,model=none --osinfo generic")
-c.add_compare("--boot loader=/path/to/loader,loader_secure=yes", "boot-loader-secure")
-c.add_compare("--boot firmware=bios,loader=/path/to/loader,loader.readonly=yes,loader.secure=no,loader.type=rom,bios.rebootTimeout=5000,bootmenu.enable=yes,bootmenu.timeout=5000", "boot-guest-loader-bios")
-c.add_compare("--boot firmware=efi,loader=/path/to/loader,loader.readonly=yes,loader.secure=yes,loader.type=pflash,bios.useserial=yes,nvram=/path/to/nvram", "boot-guest-loader-efi")
-c.add_compare("--boot bootloader=/usr/bin/pygrub,bootloader_args='--append single'", "boot-host-loader")
-c.add_compare("--boot kernel=/path/to/kernel,initrd=/path/to/initrd,cmdline='console=ttyS0',dtb=/path/to/dtb,acpi.table=/path/to/slic.dat,acpi.table.type=slic", "boot-direct-kernel")
-c.add_compare("--boot init=/bin/systemd,initargs='--unit emergency.service',initenv0.name=MYENV,initenv0='some value',initenv1.name=FOO,initenv1=bar,initdir=/my/custom/cwd,inituser=tester,initgroup=1000", "boot-container")
+# 'default' handling for solo devices
+"""
+--tpm default
+--panic default
+--memballoon default
+--watchdog default
+--vsock default
+""", "singleton-config-2", predefine_check="7.2.0")
+
+
+# Specific XML test cases #3
+c.add_compare(""
+" --cpu qemu64,secure=off "  # disable security features that are added by default
+"--sysinfo type=fwcfg,entry0.name=foo,entry0.file=bar,entry0=baz "  # --sysinfo type=fwcfg options
+"--boot smbios.mode=emulate,boot1.dev=hd,boot.dev=network,initarg1=bar=baz,initarg=foo "  # --boot option conflicts
+"--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1 "  # --memory option backcompat handling
+"--graphics spice,gl=yes "  # gl=on enables --video virtio 3d accel
+"--cpuset auto "  # confirm `--cpuset auto` works
+"--vcpus vcpu.current=2,maxvcpus=4 "  # special current + max handling
+"--vsock auto_cid=on "  # --vsock auto cid must be specified on its own
+"--tpm /dev/tpm0 "  # --tpm PATH compat handling
+"", "singleton-config-3", predefine_check="5.7.0")
 
 
 
+# --memdev setup has a lot of interconnected validation, it's easier to keep this separate
+c.add_compare("--pxe "
+"--memory hotplugmemorymax=2048,hotplugmemoryslots=3 "
+"--cpu cell0.cpus=0,cell0.memory=1048576 "
 
-####################################################
-# CPU/RAM/numa and other singleton VM config tests #
-####################################################
+"--memdev dimm,access=private,target_size=256,target_node=0,"
+"source_pagesize=4,source_nodemask=1-2,discard=on "
+"--memdev dimm,access=private,target_size=256,target_node=0,"
+"source.pagesize=4,source.nodemask=1-2,discard=on "
 
-c = vinst.add_category("cpuram", "--hvm --nographics --noautoconsole --nodisks --pxe --osinfo generic")
-c.add_valid("--ram 4000000")  # Ram overcommit
-c.add_valid("--vcpus sockets=2,threads=2")  # Topology only
-c.add_valid("--cpuset 1,2,3")  # cpuset backcompat with no --vcpus specified
-c.add_valid("--cpu somemodel")  # Simple --cpu
-c.add_valid("--noapic --noacpi")  # feature backcompat
-c.add_valid("--security label=foobar.label,relabel=yes")  # --security implicit static
-c.add_valid("--security label=foobar.label,a1,z2,b3,type=static,relabel=no")  # static with commas 1
-c.add_valid("--security label=foobar.label,a1,z2,b3")  # --security static with commas 2
-c.add_invalid("--clock foo_tickpolicy=merge", grep="Unknown --clock options: ['foo_tickpolicy']")  # Bad suboption
-c.add_compare("--cpuset auto --vcpus 2", "cpuset-auto")  # --cpuset=auto actually works
-c.add_compare("--memory hotplugmemorymax=2048,hotplugmemoryslots=2 --cpu cell0.cpus=0,cell0.memory=1048576 --memdev dimm,access=private,target_size=512,target_node=0,source_pagesize=4,source_nodemask=1-2 --memdev nvdimm,source_path=/path/to/nvdimm,target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3,target.block=2048,target.requested=1048576,target.current=524288", "memory-hotplug", precompare_check="5.3.0")
-c.add_compare("--memory currentMemory=100,memory=200,maxmemory=300,maxMemory=400,maxMemory.slots=1", "memory-option-backcompat", precompare_check="5.3.0")
-c.add_compare("--connect " + utils.URIs.kvm_x86 + " --cpu qemu64,secure=off", "cpu-disable-sec")  # disable security features that are added by default
-c.add_compare("--cpu host-passthrough,migratable=on", "cpu-host-passthrough-migratable")  # Passthrough with migratable attribute
-c.add_compare("--cpu host-model,model.fallback=forbid", "cpu-host-model-no-fallback")  # Host-Model with fallback disabled
-c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=GenuineIntel", "cpu-model")  # Specific CPU with fallback enabled
+"--memdev nvdimm,source_path=/path/to/nvdimm,"
+"target_size=512,target_node=0,target_label_size=128,alias.name=mymemdev3,"
+"target.block=2048,target.requested=1048576,target.current=524288,"
+"address.type=dimm,address.base=0x100000000,address.slot=1,"
+"source.pmem=on,source.alignsize=2048,target.readonly=on "
+
+"", "memory-hotplug", precompare_check="5.3.0")
+
+
+
+# Hitting test driver specific output
+c.add_compare("--connect " + utils.URIs.test_suite + " "
+"--cpu host-passthrough,migratable=on "  # migratable=on is only accepted with host-passthrough
+"--seclabel label=foobar.label,a1,z2,b3,relabel=yes,type=dynamic "  # fills in default model=testModel
+"--tpm default "  # --tpm default when domcaps missing
+"",
+"testdriver-edgecases")
+
+
+# Test various storage corner cases
+c.add_compare(
+"--disk path=%(EXISTIMG1)s "  # Existing disk, no extra options
+"--disk pool=default-pool,size=.0001 --disk pool=default-pool,size=.0001 "  # Create 2 volumes in a pool
+"--disk path=%(EXISTIMG1)s,bus=ide --disk path=%(EXISTIMG1)s,bus=ide --disk path=%(EXISTIMG1)s,bus=ide --disk path=%(EXISTIMG1)s,device=cdrom,bus=ide "  # 3 IDE and CD
+"--disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi "  # > 16 scsi disks
+"--disk path=%(NEWIMG1)s,format=raw,size=.0000001 "  # Managed file using format raw
+"--disk %(NEWIMG2)s,format=qcow2,size=.0000001 "  # Managed file using format qcow2
+"--disk /dev/zero "  # Referencing a local unmanaged /dev node
+"--disk pool=default,size=.00001 "  # Building 'default' pool
+"--disk /some/new/pool/dir/new,size=.1 "  # autocreate the pool
+"--disk /dev/default-pool/sharevol.img,perms=sh "  # Colliding shareable storage
+"", "storage-creation")
+
 
 
 
@@ -811,23 +886,8 @@ c.add_compare("--cpu model=core2duo,model.fallback=allow,model.vendor_id=Genuine
 ########################
 
 c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm --osinfo detect=yes,require=no")
-c.add_valid("--disk path=%(EXISTIMG1)s")  # Existing disk, no extra options
-c.add_valid("--disk pool=default-pool,size=.0001 --disk pool=default-pool,size=.0001")  # Create 2 volumes in a pool
-c.add_valid("--disk vol=default-pool/testvol1.img")  # Existing volume
-c.add_valid("--disk path=%(EXISTIMG1)s --disk path=%(EXISTIMG1)s --disk path=%(EXISTIMG1)s --disk path=%(EXISTIMG1)s,device=cdrom")  # 3 IDE and CD
-c.add_valid("--disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi")  # > 16 scsi disks
-c.add_valid("--disk path=%(NEWIMG1)s,format=raw,size=.0000001")  # Managed file using format raw
-c.add_valid("--disk path=%(NEWIMG1)s,format=qcow2,size=.0000001")  # Managed file using format qcow2
-c.add_valid("--disk %(EXISTIMG1)s")  # Not specifying path=
-c.add_valid("--disk %(NEWIMG1)s,format=raw,size=.0000001")  # Not specifying path= but creating storage
 c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
-c.add_valid("--connect %(URI-KVM-X86)s --disk /dev/default-pool/sharevol.img,perms=sh")  # Colliding shareable storage
-c.add_valid("--disk path=%(EXISTIMG1)s,device=cdrom --disk path=%(EXISTIMG1)s,device=cdrom")  # Two IDE cds
-c.add_valid("--disk %(EXISTIMG1)s,driver_name=qemu,driver_type=qcow2")  # Driver name and type options
-c.add_valid("--disk /dev/zero")  # Referencing a local unmanaged /dev node
-c.add_valid("--disk pool=default,size=.00001")  # Building 'default' pool
-c.add_valid("--disk /some/new/pool/dir/new,size=.1")  # autocreate the pool
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
 c.add_invalid("--disk /dev/zero --nodisks", grep="Cannot specify storage and use --nodisks")
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse", grep="There is not enough free space")  # Nonexisting file, size too big
@@ -849,7 +909,7 @@ c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt", grep="a
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img", grep="already in use by other guests")  # Colliding storage via backing store
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source.pool=default-pool,source.volume=idontexist", grep="no storage vol with matching name 'idontexist'")  # trying to lookup non-existent volume, hit specific error code
-c.add_invalid("--disk size=1 --security model=foo,type=bar", grep="not appear to have been successful")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
+c.add_invalid("--disk size=1 --seclabel model=foo,type=bar", grep="not appear to have been successful")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk and --file collision
 
 
@@ -859,6 +919,7 @@ c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk
 ################################################
 
 c = vinst.add_category("invalid-devices", "--noautoconsole --nodisks --pxe --osinfo require=no")
+c.add_invalid("--clock foo_tickpolicy=merge", grep="Unknown --clock options: ['foo_tickpolicy']")  # Bad suboption
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2", grep="corresponds to multiple node devices")
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host", grep="Unsupported node device type 'scsi_host'")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev", grep="Unknown hostdev address string format")  # Unknown hostdev
@@ -882,14 +943,9 @@ c.add_invalid("--memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.
 c = vinst.add_category("nodisk-install", "--nographics --noautoconsole --nodisks")
 c.add_valid("--os-variant generic --pxe --ram 16", grep="Requested memory 16 MiB is abnormally low")  # catch low memory error
 c.add_valid("--os-variant winxp --ram 32 --cdrom %(EXISTIMG1)s", grep="32 MiB is less than the recommended 64 MiB")  # Windows. Catch memory warning
-c.add_valid("--location location=%(TREEDIR)s")  # Directory tree URL install
-c.add_valid("--location %(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install")  # initrd-inject
-c.add_valid("--hvm --location %(TREEDIR)s --extra-args console=ttyS0")  # Directory tree URL install with extra-args
-c.add_valid("--paravirt --location %(TREEDIR)s")  # Paravirt location
-c.add_valid("--location %(TREEDIR)s --os-variant fedora12")  # URL install with manual os-variant
-c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3")  # HVM windows install with disk
-c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --print-step 2")  # HVM windows install, print 3rd stage XML
 c.add_valid("--osinfo generic --pxe --autostart")  # --autostart flag
+c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --print-step 2")  # HVM windows install, print 3rd stage XML
+c.add_compare("--location location=%(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install", "initrd-inject")  # initrd-inject
 c.add_compare("--cdrom http://example.com/path/to/some.iso --os-variant detect=yes,require=no", "cdrom-url")
 c.add_compare("--pxe --print-step all --os-variant none", "simple-pxe")  # Diskless PXE install
 c.add_compare("--location ftp://example.com --os-variant auto", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
@@ -1290,13 +1346,14 @@ c.add_compare("""--metadata os_full_id=http://fedoraproject.org/fedora/23""", "e
 c.add_compare("--events on_poweroff=destroy,on_reboot=restart,on_crash=preserve", "edit-simple-events")
 c.add_compare("--qemu-commandline='-foo bar,baz=\"wib wob\"'", "edit-simple-qemu-commandline")
 c.add_compare("--memory 500,maxmemory=1000,hugepages=off", "edit-simple-memory")
-c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1", "edit-simple-vcpus")
+c.add_compare("--memorybacking hugepages=on,access.mode=shared,source.type=file", "edit-simple-memorybacking")
+c.add_compare("--vcpus 10,maxvcpus=20,cores=5,sockets=4,threads=1,placement=auto", "edit-simple-vcpus")
 c.add_compare("--cpu model=pentium2,+x2apic,forbid=pbe", "edit-simple-cpu")
 c.add_compare("--numatune memory.nodeset=1-5,7,memory.mode=strict,memory.placement=auto", "edit-simple-numatune")
 c.add_compare("--blkiotune weight=500,device_path=/dev/sdf,device_weight=600", "edit-simple-blkiotune")
 c.add_compare("--idmap uid_start=0,uid_target=2000,uid_count=30,gid_start=0,gid_target=3000,gid_count=40", "edit-simple-idmap")
-c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash,nvram=/test/nvram.img,os_type=hvm,domain_type=test,loader.readonly=on,loader.secure=no,machine=", "edit-simple-boot")
-c.add_compare("--security label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
+c.add_compare("--boot loader=foo.bar,useserial=on,init=/bin/bash,nvram=/test/nvram.img,os_type=hvm,domain_type=test,loader.readonly=on,loader.secure=no,machine=,smbios_mode=emulate", "edit-simple-boot")
+c.add_compare("--seclabel label=foo,bar,baz,UNKNOWN=val,relabel=on", "edit-simple-security")
 c.add_compare("--features eoi=on,hyperv_relaxed=off,acpi=", "edit-simple-features", precompare_check="8.0.0")
 c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,kvmclock_tickpolicy=foo,rtc_tickpolicy=merge", "edit-simple-clock")
 c.add_compare("--pm suspend_to_mem.enabled=yes,suspend_to_disk.enabled=no", "edit-simple-pm")
@@ -1356,7 +1413,7 @@ c.add_compare("--edit --video clearxml=yes,model=virtio,accel3d=yes", "edit-vide
 c.add_compare("--edit --graphics clearxml=yes,type=spice,gl=on,listen=none", "edit-graphics-spice-gl")
 
 c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define")
-c.add_compare("--add-device --security model=dac", "add-seclabel")
+c.add_compare("--add-device --seclabel model=dac", "add-seclabel")
 c.add_compare("--add-device --host-device usb_device_483_2016_noserial", "add-host-device")
 c.add_compare("--add-device --sound pcspk", "add-sound")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
