@@ -116,6 +116,7 @@ class vmmFSDetails(vmmGObjectUI):
     def _sync_ui(self):
         fstype = uiutil.get_list_selection(self.widget("fs-type-combo"))
         fsdriver = uiutil.get_list_selection(self.widget("fs-driver-combo"))
+        is_qemu = self.conn.is_qemu() or self.conn.is_test()
 
         show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
         uiutil.set_grid_row_visible(
@@ -137,6 +138,8 @@ class vmmFSDetails(vmmGObjectUI):
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)
+        uiutil.set_grid_row_visible(
+                self.widget("fs-type-combo"), not is_qemu)
         uiutil.set_grid_row_visible(
                 self.widget("fs-driver-combo"), show_driver_combo)
 
