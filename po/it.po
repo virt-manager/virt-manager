@@ -10,23 +10,23 @@
 # Terry Chuang <tchuang@redhat.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Gianluca Sforna <giallu@gmail.com>, 2017. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2020, 2021.
+# Pino Toscano <toscano.pino@tiscali.it>, 2020, 2021, 2022.
 # Fabio Tomat <f.t.public@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-17 06:15+0000\n"
-"PO-Revision-Date: 2021-11-16 06:16+0000\n"
-"Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"PO-Revision-Date: 2022-02-20 19:16+0000\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -1008,10 +1008,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Disco e memoria esterne"
+msgstr "Abilita _memoria condivisa"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1686,19 +1684,14 @@ msgid "_Network source:"
 msgstr "_Rete sorgente:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
 "Non riesci a trovare il sistema operativo che cerchi?\n"
-"Prova a selezionare la versione più recente mostrata,\n"
-"oppure usa \"SO generico\"."
+"Prova a selezionare una distribuzione o una versione simile,\n"
+"oppure usa una delle opzioni di SO \"generico\"."
 
 #: ui/oslist.ui:108
 msgid "Include end of life operating systems"
@@ -1795,10 +1788,8 @@ msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Firm_ware:"
+msgstr "_Firmware x86:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -3387,10 +3378,8 @@ msgid "Viewer is disconnecting."
 msgstr "Il visualizzatore è stato disconnesso."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Visualizzatore disconnesso."
+msgstr "Finestra del visualizzatore chiusa."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3507,7 +3496,7 @@ msgstr "_Rimuovi hardware"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4627,10 +4616,12 @@ msgstr "Errore durante l'annullamento del job di migrazione: %s"
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
+"Non è possibile cambiare l'impostazione della memoria condivisa quando "
+"<numa> è configurato."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt potrebbe non essere abbastanza recente per supportare memfd."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -4791,10 +4782,8 @@ msgid "Nearest host CPU model"
 msgstr "Modello CPU host più vicino"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Predefinito di sistema (%s)"
+msgstr "Predefinito di sistema"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5575,11 +5564,6 @@ msgid "The OS installed in the guest."
 msgstr "Il sistema operativo installato nel guest."
 
 #: virtinst/cli.py:929
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5587,7 +5571,7 @@ msgid ""
 msgstr ""
 "Usato per decidere i valori predefiniti ottimali tipo VirtIO.\n"
 "Valori di esempio: fedora29, rhel7.0, win10, ...\n"
-"Consultare `osinfo-query os` per una lista completa."
+"Consultare `--osinfo list` per una lista completa."
 
 #: virtinst/cli.py:939
 msgid ""
@@ -5680,6 +5664,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"È possibile avere ulteriori informazioni eseguendo:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5800,10 +5787,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Impossibile configurare UEFI per l'architettura '%s'"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Tipo di dispositivo nodo %s sconosciuto"
+msgstr "Tipo di dispositivo nodo '%s' non supportato"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -6070,7 +6056,7 @@ msgstr "Trasferimento di '%(filename)s'"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "OS generico o sconosciuto. Non ne è raccomandato l'uso."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6078,12 +6064,11 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "ID di libosinfo '%s' sconosciuto"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
-"Il nome di sistema operativo '%s' è sconosciuto. Consultare `osinfo-query "
-"os` per i valori validi."
+"Il nome di sistema operativo '%s' è sconosciuto. Consultare `--osinfo list` "
+"per i valori validi."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6331,7 +6316,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type è deprecato e non ha alcun effetto. Si prega di non usarlo."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6398,17 +6383,13 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "La configurazione di rete del guest potrebbe non supportare PXE"
 
 #: virtinst/virtinstall.py:370
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Non è stato rilevato alcun sistema operativo, le prestazioni della VM ne "
-"potrebbero risentire. Per risultati ottimali, specificare un sistema "
-"operativo con --os-variant."
+"È usato --osinfo {osname}, le prestazioni della VM ne potrebbero risentire. "
+"Per risultati ottimali, specificare un sistema operativo accurato."
 
 #: virtinst/virtinstall.py:384
 #, python-brace-format
@@ -6779,10 +6760,8 @@ msgstr ""
 "edit’ senza parametri"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os-variant non è supportato con --edit"
+msgstr "--os-variant/--osinfo non è supportato con --edit"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6795,10 +6774,8 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Impossibile utilizzare --remove-device con --%s"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr "--os-variant non è supportato con --remove-device"
+msgstr "--os-variant/--osinfo non è supportato con --remove-device"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6806,10 +6783,8 @@ msgid "--build-xml not supported for --%s"
 msgstr "--build-xml non supportato per --%s"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "--os-variant non è supportato con --build-xml"
+msgstr "--os-variant/--osinfo non è supportato con --build-xml"
 
 #: virtinst/virtxml.py:233
 #, python-format
