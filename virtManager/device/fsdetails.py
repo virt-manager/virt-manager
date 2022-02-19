@@ -97,10 +97,19 @@ class vmmFSDetails(vmmGObjectUI):
         else:
             simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
 
-        simple_store_set("fs-driver-combo",
-                [DeviceFilesystem.DRIVER_LOOP,
-                 DeviceFilesystem.DRIVER_NBD,
-                 None])
+        if self.conn.is_container_only():
+            simple_store_set("fs-driver-combo",
+                    [DeviceFilesystem.DRIVER_LOOP,
+                     DeviceFilesystem.DRIVER_NBD,
+                     None])
+        else:
+            domcaps = self.vm.get_domain_capabilities()
+            rows = []
+            if domcaps.supports_filesystem_virtiofs():
+                rows.append(["virtiofs", "virtiofs"])
+            rows.append([None, "virtio-9p"])
+            uiutil.build_simple_combo(
+                    self.widget("fs-driver-combo"), rows, sort=False)
 
         simple_store_set("fs-format-combo", ["raw", "qcow2"])
         self.widget("fs-readonly").set_visible(
@@ -129,7 +138,7 @@ class vmmFSDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(
                 self.widget("fs-format-combo"), show_format)
 
-        show_driver_combo = fstype == DeviceFilesystem.TYPE_FILE
+        show_driver_combo = is_qemu or fstype == DeviceFilesystem.TYPE_FILE
 
         if fstype == DeviceFilesystem.TYPE_TEMPLATE:
             source_text = _("Te_mplate:")
@@ -213,7 +222,11 @@ class vmmFSDetails(vmmGObjectUI):
         if _EDIT_FS_READONLY in self._active_edits:
             dev.readonly = readonly
         if _EDIT_FS_DRIVER in self._active_edits:
+            origdriver = dev.driver_type
             dev.driver_type = driver
+            if origdriver == "virtiofs" or driver == "virtiofs":
+                # Need to reset the accessmode for virtiofs
+                dev.accessmode = dev.default_accessmode()
         if _EDIT_FS_FORMAT in self._active_edits:
             dev.driver_format = fsformat
 
