@@ -108,7 +108,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkAlignment" id="create-pages-align">
+                      <object class="GtkBox" id="create-pages-align">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <child>
@@ -125,7 +125,7 @@
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">18</property>
                                 <child>
-                                  <object class="GtkAlignment" id="storage-align">
+                                  <object class="GtkBox" id="storage-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <child>
@@ -210,7 +210,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="storage-advanced-align">
+                                  <object class="GtkBox" id="storage-advanced-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <child>
@@ -443,7 +443,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkAlignment" id="network-source-label-align">
+                                      <object class="GtkBox" id="network-source-label-align">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <property name="hexpand">False</property>
@@ -458,7 +458,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkAlignment" id="network-source-ui-align">
+                                      <object class="GtkBox" id="network-source-ui-align">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <property name="hexpand">False</property>
@@ -570,7 +570,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkAlignment" id="graphics-align">
+                              <object class="GtkBox" id="graphics-align">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <child>
@@ -1192,7 +1192,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkAlignment" id="tpm-align">
+                              <object class="GtkBox" id="tpm-align">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <child>
@@ -1341,7 +1341,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkAlignment" id="vsock-align">
+                              <object class="GtkBox" id="vsock-align">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <child>
@@ -1369,6 +1369,11 @@
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>

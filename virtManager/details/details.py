@@ -556,6 +556,7 @@ class vmmDetails(vmmGObjectUI):
     def _init_graphs(self):
         def _make_graph():
             g = Sparkline()
+            g.set_hexpand(True)
             g.set_property("reversed", True)
             g.show()
             return g

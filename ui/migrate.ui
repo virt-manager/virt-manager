@@ -84,7 +84,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkAlignment" id="details-box-align">
+              <object class="GtkBox" id="details-box-align">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -212,166 +212,41 @@
                             <property name="label-xalign">0</property>
                             <property name="shadow-type">none</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment1">
+                              <!-- n-columns=1 n-rows=3 -->
+                              <object class="GtkGrid" id="grid2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">22</property>
+                                <property name="margin-start">12</property>
+                                <property name="row-spacing">12</property>
                                 <child>
-                                  <!-- n-columns=1 n-rows=3 -->
-                                  <object class="GtkGrid" id="grid2">
+                                  <!-- n-columns=3 n-rows=2 -->
+                                  <object class="GtkGrid" id="migrate-direct-box">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="row-spacing">12</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">6</property>
                                     <child>
-                                      <!-- n-columns=3 n-rows=2 -->
-                                      <object class="GtkGrid" id="migrate-direct-box">
+                                      <object class="GtkLabel" id="label2">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="row-spacing">6</property>
-                                        <property name="column-spacing">6</property>
-                                        <child>
-                                          <object class="GtkLabel" id="label2">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">_Address:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">migrate-set-address</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label5">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="label" translatable="yes">_Port:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">migrate-set-port</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="migrate-set-address">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="draw-indicator">True</property>
-                                            <signal name="toggled" handler="on_migrate_set_address_toggled" swapped="no"/>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="migrate-set-address-atkobject">
-                                                <property name="AtkObject::accessible-name">address-check</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="migrate-set-port">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="draw-indicator">True</property>
-                                            <signal name="toggled" handler="on_migrate_set_port_toggled" swapped="no"/>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="migrate-set-port-atkobject">
-                                                <property name="AtkObject::accessible-name">port-check</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkBox" id="hbox4">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <child>
-                                              <object class="GtkSpinButton" id="migrate-port">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">True</property>
-                                                <property name="invisible-char">●</property>
-                                                <property name="text" translatable="yes">0</property>
-                                                <property name="adjustment">adjustment1</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="migrate-port-label">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">Let libvirt decide</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">2</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkBox" id="box2">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <child>
-                                              <object class="GtkEntry" id="migrate-address">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">True</property>
-                                                <property name="invisible-char">●</property>
-                                                <child internal-child="accessible">
-                                                  <object class="AtkObject" id="migrate-address-atkobject">
-                                                    <property name="AtkObject::accessible-name">address-text</property>
-                                                  </object>
-                                                </child>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="migrate-address-label">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label" translatable="yes">Let libvirt decide</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">2</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">_Address:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">migrate-set-address</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label5">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">_Port:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">migrate-set-port</property>
                                       </object>
                                       <packing>
                                         <property name="left-attach">0</property>
@@ -379,21 +254,54 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkBox" id="box1">
+                                      <object class="GtkCheckButton" id="migrate-set-address">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="draw-indicator">True</property>
+                                        <signal name="toggled" handler="on_migrate_set_address_toggled" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="migrate-set-address-atkobject">
+                                            <property name="AtkObject::accessible-name">address-check</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="migrate-set-port">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="draw-indicator">True</property>
+                                        <signal name="toggled" handler="on_migrate_set_port_toggled" swapped="no"/>
+                                        <child internal-child="accessible">
+                                          <object class="AtkObject" id="migrate-set-port-atkobject">
+                                            <property name="AtkObject::accessible-name">port-check</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="hbox4">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="spacing">6</property>
                                         <child>
-                                          <object class="GtkLabel" id="migrate-mode-label">
+                                          <object class="GtkSpinButton" id="migrate-port">
                                             <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="tooltip-text" translatable="yes">Tunnel migration through the libvirtd connection channel, rather than having the hypervisor open a separate network connection to the destination. The source libvirt instance connects directly to the destination libvirt instance.
-
-This can simplify setup since no additional firewall ports need to be open, and will encrypt migration traffic if your libvirt connection is encrypted. But it can be difficult to make this work with SSH transport.</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">M_ode:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">migrate-mode</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="invisible-char">●</property>
+                                            <property name="text" translatable="yes">0</property>
+                                            <property name="adjustment">adjustment1</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -402,12 +310,51 @@ This can simplify setup since no additional firewall ports need to be open, and 
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="migrate-mode">
+                                          <object class="GtkLabel" id="migrate-port-label">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="hexpand">False</property>
-                                            <signal name="changed" handler="on_migrate_mode_changed" swapped="no"/>
+                                            <property name="label" translatable="yes">Let libvirt decide</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">True</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">2</property>
+                                        <property name="top-attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox" id="box2">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <child>
+                                          <object class="GtkEntry" id="migrate-address">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">True</property>
+                                            <property name="invisible-char">●</property>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="migrate-address-atkobject">
+                                                <property name="AtkObject::accessible-name">address-text</property>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="migrate-address-label">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label" translatable="yes">Let libvirt decide</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -417,94 +364,141 @@ This can simplify setup since no additional firewall ports need to be open, and 
                                         </child>
                                       </object>
                                       <packing>
+                                        <property name="left-attach">2</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="box1">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="migrate-mode-label">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="tooltip-text" translatable="yes">Tunnel migration through the libvirtd connection channel, rather than having the hypervisor open a separate network connection to the destination. The source libvirt instance connects directly to the destination libvirt instance.
+
+This can simplify setup since no additional firewall ports need to be open, and will encrypt migration traffic if your libvirt connection is encrypted. But it can be difficult to make this work with SSH transport.</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">M_ode:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">migrate-mode</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="migrate-mode">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">False</property>
+                                        <signal name="changed" handler="on_migrate_mode_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <!-- n-columns=2 n-rows=2 -->
+                                  <object class="GtkGrid" id="migrate-tunnel-box">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="column-spacing">6</property>
+                                    <child>
+                                      <object class="GtkBox" id="migrate-tunnel-warning-box">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkImage" id="image3">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="valign">start</property>
+                                            <property name="icon-name">dialog-warning</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="migrate-tunnel-warning-label">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <property name="halign">start</property>
+                                            <property name="label">&lt;span size="small"&gt;foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz&lt;/span&gt;</property>
+                                            <property name="use-markup">True</property>
+                                            <property name="wrap">True</property>
+                                            <property name="width-chars">0</property>
+                                            <property name="max-width-chars">40</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label1">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">False</property>
+                                        <property name="label" translatable="yes">_URI:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">migrate-tunnel-uri</property>
+                                      </object>
+                                      <packing>
                                         <property name="left-attach">0</property>
                                         <property name="top-attach">0</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <!-- n-columns=2 n-rows=2 -->
-                                      <object class="GtkGrid" id="migrate-tunnel-box">
+                                      <object class="GtkEntry" id="migrate-tunnel-uri">
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="column-spacing">6</property>
-                                        <child>
-                                          <object class="GtkBox" id="migrate-tunnel-warning-box">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="hexpand">True</property>
-                                            <property name="spacing">6</property>
-                                            <child>
-                                              <object class="GtkImage" id="image3">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="valign">start</property>
-                                                <property name="icon-name">dialog-warning</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="migrate-tunnel-warning-label">
-                                                <property name="visible">True</property>
-                                                <property name="can-focus">False</property>
-                                                <property name="halign">start</property>
-                                                <property name="label">&lt;span size="small"&gt;foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz foo bar baz&lt;/span&gt;</property>
-                                                <property name="use-markup">True</property>
-                                                <property name="wrap">True</property>
-                                                <property name="width-chars">0</property>
-                                                <property name="max-width-chars">40</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">True</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label1">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="hexpand">False</property>
-                                            <property name="label" translatable="yes">_URI:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">migrate-tunnel-uri</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkEntry" id="migrate-tunnel-uri">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="hexpand">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
+                                        <property name="can-focus">True</property>
+                                        <property name="hexpand">True</property>
                                       </object>
                                       <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">2</property>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">0</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
                                   </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">2</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -527,80 +521,74 @@ This can simplify setup since no additional firewall ports need to be open, and 
                           <object class="GtkExpander" id="migrate-advanced-expander">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment2">
+                              <!-- n-columns=2 n-rows=2 -->
+                              <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">22</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-top">6</property>
+                                <property name="row-spacing">6</property>
+                                <property name="column-spacing">6</property>
                                 <child>
-                                  <!-- n-columns=2 n-rows=2 -->
-                                  <object class="GtkGrid" id="grid1">
+                                  <object class="GtkLabel" id="migrate-unsafe-label">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="row-spacing">6</property>
-                                    <property name="column-spacing">6</property>
-                                    <child>
-                                      <object class="GtkLabel" id="migrate-unsafe-label">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="tooltip-text" translatable="yes">By default libvirt will refuse to migrate a VM for certain configurations that could lead to malfunctioning guests, like if a disk's cache mode is not 'none'.
+                                    <property name="tooltip-text" translatable="yes">By default libvirt will refuse to migrate a VM for certain configurations that could lead to malfunctioning guests, like if a disk's cache mode is not 'none'.
 
 Enabling this option tells libvirt to skip those checks.</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">A_llow unsafe:</property>
-                                        <property name="use-underline">True</property>
-                                        <property name="mnemonic-widget">migrate-unsafe</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="migrate-unsafe">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="receives-default">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="draw-indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left-attach">1</property>
-                                        <property name="top-attach">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="migrate-temporary-label">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="tooltip-text" translatable="yes">By default, the migrated VM config is removed from the source host, and saved persistently on the destination host. The destination host is considered the new home of the VM.
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">A_llow unsafe:</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="mnemonic-widget">migrate-unsafe</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="migrate-unsafe">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="migrate-temporary-label">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="tooltip-text" translatable="yes">By default, the migrated VM config is removed from the source host, and saved persistently on the destination host. The destination host is considered the new home of the VM.
 
 If 'temporary' is selected, the migration is considered only a temporary move: the source host maintains a copy of the VM config, and the running copy moved to the destination is only transient, and will disappear when it is shutdown.</property>
-                                        <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Temporary move:</property>
-                                        <property name="use-underline">True</property>
-                                        <property name="mnemonic-widget">migrate-temporary</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="migrate-temporary">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="receives-default">False</property>
-                                        <property name="halign">start</property>
-                                        <property name="draw-indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left-attach">1</property>
-                                        <property name="top-attach">1</property>
-                                      </packing>
-                                    </child>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">_Temporary move:</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="mnemonic-widget">migrate-temporary</property>
                                   </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="migrate-temporary">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">1</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -626,6 +614,11 @@ If 'temporary' is selected, the migration is considered only a temporary move: t
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>

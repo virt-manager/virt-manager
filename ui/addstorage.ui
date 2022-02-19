@@ -43,51 +43,26 @@
           </packing>
         </child>
         <child>
-          <object class="GtkAlignment" id="alignment1">
+          <object class="GtkBox" id="vbox1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="left-padding">22</property>
+            <property name="margin-start">22</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">4</property>
             <child>
-              <object class="GtkBox" id="vbox1">
+              <object class="GtkBox" id="hbox1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">4</property>
+                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkBox" id="hbox1">
+                  <object class="GtkSpinButton" id="storage-size">
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkSpinButton" id="storage-size">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="halign">end</property>
-                        <property name="text" translatable="yes">0.0</property>
-                        <property name="adjustment">adjustment1</property>
-                        <property name="climb-rate">1</property>
-                        <property name="digits">1</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label1">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">_GiB</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">storage-size</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    <property name="can-focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="text" translatable="yes">0.0</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="climb-rate">1</property>
+                    <property name="digits">1</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -96,28 +71,47 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="phys-hd-label">
+                  <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label">Free Space</property>
-                    <property name="use-markup">True</property>
-                    <style>
-                      <class name="vmm-lighter"/>
-                    </style>
+                    <property name="label" translatable="yes">_GiB</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">storage-size</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">False</property>
+                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="phys-hd-label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">start</property>
+                <property name="label">Free Space</property>
+                <property name="use-markup">True</property>
+                <style>
+                  <class name="vmm-lighter"/>
+                </style>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>

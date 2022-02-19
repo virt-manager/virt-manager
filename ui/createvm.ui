@@ -131,11 +131,9 @@
             <property name="orientation">vertical</property>
             <property name="spacing">15</property>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <object class="GtkBox" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="top-padding">3</property>
-                <property name="left-padding">3</property>
                 <child>
                   <object class="GtkNotebook" id="create-pages">
                     <property name="visible">True</property>
@@ -176,53 +174,47 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment3">
+                                  <object class="GtkBox" id="vbox5">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="left-padding">15</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkBox" id="vbox5">
+                                      <object class="GtkRadioButton" id="vz-virt-type-hvm">
+                                        <property name="label" translatable="yes">_Virtual machine</property>
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">3</property>
-                                        <child>
-                                          <object class="GtkRadioButton" id="vz-virt-type-hvm">
-                                            <property name="label" translatable="yes">_Virtual machine</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="active">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <signal name="toggled" handler="on_vz_virt_type_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkRadioButton" id="vz-virt-type-exe">
-                                            <property name="label" translatable="yes">_Container</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <property name="group">vz-virt-type-hvm</property>
-                                            <signal name="toggled" handler="on_vz_virt_type_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="active">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <signal name="toggled" handler="on_vz_virt_type_changed" swapped="no"/>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="vz-virt-type-exe">
+                                        <property name="label" translatable="yes">_Container</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <property name="group">vz-virt-type-hvm</property>
+                                        <signal name="toggled" handler="on_vz_virt_type_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -258,93 +250,87 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment20">
+                                  <object class="GtkBox" id="vbox19">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="left-padding">15</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkBox" id="vbox19">
+                                      <object class="GtkRadioButton" id="method-local">
+                                        <property name="label" translatable="yes">_Local install media (ISO image or CDROM)</property>
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">3</property>
-                                        <child>
-                                          <object class="GtkRadioButton" id="method-local">
-                                            <property name="label" translatable="yes">_Local install media (ISO image or CDROM)</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="active">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <signal name="toggled" handler="on_method_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkRadioButton" id="method-tree">
-                                            <property name="label" translatable="yes">Network _Install (HTTP, HTTPS, or FTP)</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <property name="group">method-local</property>
-                                            <signal name="toggled" handler="on_method_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkRadioButton" id="method-import">
-                                            <property name="label" translatable="yes">Import _existing disk image</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <property name="group">method-local</property>
-                                            <signal name="toggled" handler="on_method_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkRadioButton" id="method-manual">
-                                            <property name="label" translatable="yes">Ma_nual install</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <property name="group">method-local</property>
-                                            <signal name="toggled" handler="on_method_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">3</property>
-                                          </packing>
-                                        </child>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="active">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <signal name="toggled" handler="on_method_changed" swapped="no"/>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="method-tree">
+                                        <property name="label" translatable="yes">Network _Install (HTTP, HTTPS, or FTP)</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <property name="group">method-local</property>
+                                        <signal name="toggled" handler="on_method_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="method-import">
+                                        <property name="label" translatable="yes">Import _existing disk image</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <property name="group">method-local</property>
+                                        <signal name="toggled" handler="on_method_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="method-manual">
+                                        <property name="label" translatable="yes">Ma_nual install</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <property name="group">method-local</property>
+                                        <signal name="toggled" handler="on_method_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">3</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
+                                    <property name="expand">False</property>
                                     <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
@@ -375,53 +361,47 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment25">
+                                  <object class="GtkBox" id="vbox23">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="left-padding">15</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkBox" id="vbox23">
+                                      <object class="GtkRadioButton" id="method-container-app">
+                                        <property name="label" translatable="yes">_Application container</property>
                                         <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="spacing">3</property>
-                                        <child>
-                                          <object class="GtkRadioButton" id="method-container-app">
-                                            <property name="label" translatable="yes">_Application container</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="active">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <signal name="toggled" handler="on_method_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkRadioButton" id="method-container-os">
-                                            <property name="label" translatable="yes">O_perating system container</property>
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">True</property>
-                                            <property name="receives-default">False</property>
-                                            <property name="halign">start</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="draw-indicator">True</property>
-                                            <property name="group">method-container-app</property>
-                                            <signal name="toggled" handler="on_method_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="active">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <signal name="toggled" handler="on_method_changed" swapped="no"/>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkRadioButton" id="method-container-os">
+                                        <property name="label" translatable="yes">O_perating system container</property>
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">True</property>
+                                        <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="draw-indicator">True</property>
+                                        <property name="group">method-container-app</property>
+                                        <signal name="toggled" handler="on_method_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                   <packing>
@@ -631,131 +611,112 @@ bar</property>
                                 <property name="valign">start</property>
                                 <property name="vexpand">True</property>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment13">
+                                  <!-- n-columns=2 n-rows=4 -->
+                                  <object class="GtkGrid" id="table6">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="top-padding">8</property>
-                                    <property name="left-padding">15</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">6</property>
                                     <child>
-                                      <!-- n-columns=3 n-rows=4 -->
-                                      <object class="GtkGrid" id="table6">
+                                      <object class="GtkComboBox" id="arch">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="row-spacing">6</property>
-                                        <property name="column-spacing">6</property>
-                                        <child>
-                                          <object class="GtkComboBox" id="arch">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <signal name="changed" handler="on_arch_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBox" id="xen-type">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <signal name="changed" handler="on_xen_type_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label28">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">_Xen Type:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">xen-type</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label30">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">_Architecture:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">arch</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label10">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">_Machine Type:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">machine</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">3</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBox" id="machine">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <signal name="changed" handler="on_machine_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">3</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label31">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <property name="halign">end</property>
-                                            <property name="label" translatable="yes">_Virt Type:</property>
-                                            <property name="use-underline">True</property>
-                                            <property name="mnemonic-widget">virt-type</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBox" id="virt-type">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <signal name="changed" handler="on_virt_type_changed" swapped="no"/>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">1</property>
-                                            <property name="top-attach">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
+                                        <signal name="changed" handler="on_arch_changed" swapped="no"/>
                                       </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="xen-type">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <signal name="changed" handler="on_xen_type_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label28">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">_Xen Type:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">xen-type</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label30">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">_Architecture:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">arch</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label10">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">_Machine Type:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">machine</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="machine">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <signal name="changed" handler="on_machine_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label31">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">end</property>
+                                        <property name="label" translatable="yes">_Virt Type:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">virt-type</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="virt-type">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <signal name="changed" handler="on_virt_type_changed" swapped="no"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left-attach">1</property>
+                                        <property name="top-attach">1</property>
+                                      </packing>
                                     </child>
                                   </object>
                                 </child>
@@ -827,7 +788,7 @@ bar</property>
                                     <property name="can-focus">False</property>
                                     <property name="spacing">5</property>
                                     <child>
-                                      <object class="GtkAlignment" id="install-iso-align">
+                                      <object class="GtkBox" id="install-iso-align">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <child>
@@ -942,70 +903,44 @@ bar</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <child>
-                                          <object class="GtkAlignment" id="alignment18">
+                                          <!-- n-columns=2 n-rows=1 -->
+                                          <object class="GtkGrid" id="table7">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
+                                            <property name="margin-start">12</property>
+                                            <property name="row-spacing">4</property>
+                                            <property name="column-spacing">6</property>
                                             <child>
-                                              <!-- n-columns=3 n-rows=3 -->
-                                              <object class="GtkGrid" id="table7">
+                                              <object class="GtkLabel" id="label26">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
-                                                <property name="row-spacing">4</property>
-                                                <property name="column-spacing">6</property>
-                                                <child>
-                                                  <object class="GtkLabel" id="label26">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">False</property>
-                                                    <property name="halign">end</property>
-                                                    <property name="label" translatable="yes">Kerne_l options:</property>
-                                                    <property name="use-underline">True</property>
-                                                    <property name="mnemonic-widget">install-urlopts-entry</property>
+                                                <property name="halign">end</property>
+                                                <property name="label" translatable="yes">Kerne_l options:</property>
+                                                <property name="use-underline">True</property>
+                                                <property name="mnemonic-widget">install-urlopts-entry</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkEntry" id="install-urlopts-entry">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">True</property>
+                                                <property name="valign">center</property>
+                                                <property name="hexpand">True</property>
+                                                <property name="invisible-char">●</property>
+                                                <child internal-child="accessible">
+                                                  <object class="AtkObject" id="install-urlopts-entry-atkobject">
+                                                    <property name="AtkObject::accessible-name">install-urlopts-entry</property>
                                                   </object>
-                                                  <packing>
-                                                    <property name="left-attach">0</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkEntry" id="install-urlopts-entry">
-                                                    <property name="visible">True</property>
-                                                    <property name="can-focus">True</property>
-                                                    <property name="valign">center</property>
-                                                    <property name="hexpand">True</property>
-                                                    <property name="invisible-char">●</property>
-                                                    <child internal-child="accessible">
-                                                      <object class="AtkObject" id="install-urlopts-entry-atkobject">
-                                                        <property name="AtkObject::accessible-name">install-urlopts-entry</property>
-                                                      </object>
-                                                    </child>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left-attach">1</property>
-                                                    <property name="top-attach">0</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
                                                 </child>
                                               </object>
+                                              <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
                                             </child>
                                           </object>
                                         </child>
@@ -1458,6 +1393,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <property name="receives-default">False</property>
+                                        <property name="halign">start</property>
                                         <property name="draw-indicator">True</property>
                                         <signal name="toggled" handler="on_install_container_source_toggle" swapped="no"/>
                                       </object>
@@ -1532,6 +1468,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                                             <property name="visible">True</property>
                                             <property name="can-focus">True</property>
                                             <property name="receives-default">False</property>
+                                            <property name="halign">start</property>
                                             <property name="draw-indicator">True</property>
                                           </object>
                                           <packing>
@@ -1799,7 +1736,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkAlignment" id="install-os-align">
+                              <object class="GtkBox" id="install-os-align">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <child>
@@ -2078,7 +2015,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="storage-align">
+                          <object class="GtkBox" id="storage-align">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <child>
@@ -2138,7 +2075,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                               <object class="GtkGrid" id="table4">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="vexpand">False</property>
+                                <property name="halign">start</property>
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">6</property>
                                 <child>
@@ -2364,18 +2301,7 @@ connections is not yet supported.&lt;/small&gt;</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="alignment7">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="hexpand">False</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">6</property>
-                                  </packing>
+                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -2395,69 +2321,26 @@ connections is not yet supported.&lt;/small&gt;</property>
                           <object class="GtkExpander" id="advanced-expander">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment14">
+                              <!-- n-columns=1 n-rows=1 -->
+                              <object class="GtkGrid" id="grid17">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">20</property>
+                                <property name="margin-start">12</property>
+                                <property name="margin-top">6</property>
+                                <property name="row-spacing">6</property>
                                 <child>
-                                  <object class="GtkBox" id="vbox14">
+                                  <object class="GtkBox" id="netdev-ui-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="spacing">6</property>
                                     <child>
-                                      <!-- n-columns=3 n-rows=3 -->
-                                      <object class="GtkGrid" id="grid17">
-                                        <property name="visible">True</property>
-                                        <property name="can-focus">False</property>
-                                        <property name="row-spacing">6</property>
-                                        <child>
-                                          <object class="GtkAlignment" id="netdev-ui-align">
-                                            <property name="visible">True</property>
-                                            <property name="can-focus">False</property>
-                                            <child>
-                                              <placeholder/>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="left-attach">0</property>
-                                            <property name="top-attach">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                        <child>
-                                          <placeholder/>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="position">0</property>
-                                      </packing>
+                                      <placeholder/>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -2493,6 +2376,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>

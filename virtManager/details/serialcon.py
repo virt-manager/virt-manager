@@ -261,8 +261,8 @@ class vmmSerialConsole(vmmGObject):
         self._box.set_show_tabs(False)
         self._box.set_show_border(False)
 
-        align = Gtk.Alignment()
-        align.set_padding(2, 2, 2, 2)
+        align = Gtk.Box()
+        align.set_border_width(2)
         evbox = Gtk.EventBox()
         evbox.modify_bg(Gtk.StateType.NORMAL, Gdk.Color(0, 0, 0))
         terminalbox = Gtk.HBox()

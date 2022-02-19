@@ -5,6 +5,7 @@
   <object class="GtkNotebook" id="console-pages">
     <property name="visible">True</property>
     <property name="can-focus">True</property>
+    <property name="hexpand">True</property>
     <property name="show-border">False</property>
     <signal name="switch-page" handler="on_console_pages_switch_page" after="yes" swapped="no"/>
     <child>
@@ -199,43 +200,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">0</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
-              <object class="GtkAlignment">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">2</property>
-              </packing>
+              <placeholder/>
             </child>
             <child>
-              <object class="GtkAlignment">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>

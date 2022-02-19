@@ -326,7 +326,6 @@ class _errorDialog (Gtk.MessageDialog):
         self.get_accessible().set_name("vmm dialog")
 
         self.chk_vbox = None
-        self.chk_align = None
         self.init_chkbox()
 
         self.buffer = None
@@ -338,13 +337,9 @@ class _errorDialog (Gtk.MessageDialog):
         self.chk_vbox = Gtk.VBox(False, False)
         self.chk_vbox.set_spacing(0)
 
-        self.chk_align = Gtk.Alignment()
-        self.chk_align.set_padding(0, 0, 0, 0)
-        self.chk_align.add(self.chk_vbox)
-
-        self.chk_align.show_all()
+        self.chk_vbox.show_all()
         self.vbox.pack_start(  # pylint: disable=no-member
-            self.chk_align, False, False, 0)
+            self.chk_vbox, False, False, 0)
 
     def init_details(self):
         # Init details buffer

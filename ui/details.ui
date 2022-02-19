@@ -151,7 +151,7 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkAlignment" id="hw-panel-align">
+          <object class="GtkBox" id="hw-panel-align">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <child>
@@ -173,11 +173,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment9">
+                          <object class="GtkBox" id="alignment9">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=5 -->
                               <object class="GtkGrid" id="table5">
@@ -349,6 +349,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -374,11 +379,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment6">
+                          <object class="GtkBox" id="alignment6">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=6 -->
                               <object class="GtkGrid" id="table1">
@@ -643,6 +648,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -691,10 +701,10 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment43">
+                          <object class="GtkBox" id="alignment43">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
                             <child>
                               <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table17">
@@ -704,7 +714,7 @@
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">6</property>
                                 <child>
-                                  <object class="GtkAlignment" id="details-os-align">
+                                  <object class="GtkBox" id="details-os-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">True</property>
@@ -742,6 +752,11 @@
                                   <placeholder/>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -766,11 +781,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment44">
+                          <object class="GtkBox" id="alignment44">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">21</property>
+                            <property name="margin-start">21</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <object class="GtkScrolledWindow" id="scrolledwindow6">
                                 <property name="height-request">150</property>
@@ -792,6 +807,11 @@
                                   </object>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -922,10 +942,10 @@
                             <property name="label-xalign">0</property>
                             <property name="shadow-type">none</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment50">
+                              <object class="GtkBox" id="alignment50">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">12</property>
+                                <property name="margin-start">12</property>
                                 <child>
                                   <object class="GtkBox" id="box7">
                                     <property name="visible">True</property>
@@ -933,7 +953,7 @@
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkAlignment" id="overview-cpu-usage-align">
+                                      <object class="GtkBox" id="overview-cpu-usage-align">
                                         <property name="height-request">75</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
@@ -961,6 +981,11 @@
                                       </packing>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -986,10 +1011,10 @@
                             <property name="label-xalign">0</property>
                             <property name="shadow-type">none</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment4">
+                              <object class="GtkBox" id="alignment4">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">12</property>
+                                <property name="margin-start">12</property>
                                 <child>
                                   <object class="GtkBox" id="box6">
                                     <property name="visible">True</property>
@@ -997,7 +1022,7 @@
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkAlignment" id="overview-memory-usage-align">
+                                      <object class="GtkBox" id="overview-memory-usage-align">
                                         <property name="height-request">75</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
@@ -1025,6 +1050,11 @@
                                       </packing>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -1050,10 +1080,10 @@
                             <property name="label-xalign">0</property>
                             <property name="shadow-type">none</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment48">
+                              <object class="GtkBox" id="alignment48">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">12</property>
+                                <property name="margin-start">12</property>
                                 <child>
                                   <object class="GtkBox" id="box5">
                                     <property name="visible">True</property>
@@ -1061,7 +1091,7 @@
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkAlignment" id="overview-disk-usage-align">
+                                      <object class="GtkBox" id="overview-disk-usage-align">
                                         <property name="height-request">75</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
@@ -1090,6 +1120,11 @@
                                       </packing>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -1115,10 +1150,10 @@
                             <property name="label-xalign">0</property>
                             <property name="shadow-type">none</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment49">
+                              <object class="GtkBox" id="alignment49">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="left-padding">12</property>
+                                <property name="margin-start">12</property>
                                 <child>
                                   <object class="GtkBox" id="box8">
                                     <property name="visible">True</property>
@@ -1126,7 +1161,7 @@
                                     <property name="orientation">vertical</property>
                                     <property name="spacing">3</property>
                                     <child>
-                                      <object class="GtkAlignment" id="overview-network-traffic-align">
+                                      <object class="GtkBox" id="overview-network-traffic-align">
                                         <property name="height-request">75</property>
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
@@ -1155,6 +1190,11 @@
                                       </packing>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -1216,11 +1256,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment11">
+                          <object class="GtkBox" id="alignment11">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <object class="GtkBox" id="hbox5">
                                 <property name="visible">True</property>
@@ -1349,6 +1389,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1374,11 +1419,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment5">
+                          <object class="GtkBox" id="alignment5">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=3 -->
                               <object class="GtkGrid" id="table15">
@@ -1459,6 +1504,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1483,11 +1533,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment39">
+                          <object class="GtkBox" id="alignment39">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="left-padding">23</property>
-                            <property name="right-padding">12</property>
+                            <property name="margin-start">23</property>
+                            <property name="margin-end">12</property>
                             <child>
                               <object class="GtkBox" id="vbox15">
                                 <property name="visible">True</property>
@@ -1631,6 +1681,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1683,11 +1738,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment23">
+                          <object class="GtkBox" id="alignment23">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=4 -->
                               <object class="GtkGrid" id="table6">
@@ -1873,6 +1928,11 @@
                                   <placeholder/>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1925,11 +1985,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment2">
+                          <object class="GtkBox" id="alignment2">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <object class="GtkCheckButton" id="boot-autostart">
                                 <property name="label" translatable="yes">Start virt_ual machine on host boot up</property>
@@ -1941,6 +2001,11 @@
                                 <property name="draw-indicator">True</property>
                                 <signal name="toggled" handler="on_boot_autostart_changed" swapped="no"/>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -1965,11 +2030,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment36">
+                          <object class="GtkBox" id="alignment36">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=2 -->
                               <object class="GtkGrid" id="grid3">
@@ -2031,6 +2096,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -2055,11 +2125,11 @@
                         <property name="valign">start</property>
                         <property name="vexpand">False</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment20">
+                          <object class="GtkBox" id="alignment20">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <object class="GtkBox" id="box1">
                                 <property name="visible">True</property>
@@ -2334,6 +2404,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -2359,11 +2434,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="bootalign">
+                          <object class="GtkBox" id="bootalign">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <object class="GtkBox" id="bootvbox">
                                 <property name="visible">True</property>
@@ -2497,6 +2572,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -2548,11 +2628,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment149">
+                          <object class="GtkBox" id="alignment149">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <object class="GtkBox" id="vbox13">
                                 <property name="visible">True</property>
@@ -2649,7 +2729,7 @@
                                             <property name="can-focus">False</property>
                                             <property name="spacing">6</property>
                                             <child>
-                                              <object class="GtkAlignment" id="disk-source-align">
+                                              <object class="GtkBox" id="disk-source-align">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <child>
@@ -2767,7 +2847,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="storage-advanced-align">
+                                  <object class="GtkBox" id="storage-advanced-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <child>
@@ -2781,6 +2861,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -2856,11 +2941,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment137">
+                          <object class="GtkBox" id="alignment137">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=5 -->
                               <object class="GtkGrid" id="table31">
@@ -2917,7 +3002,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="network-source-label-align">
+                                  <object class="GtkBox" id="network-source-label-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">False</property>
@@ -2932,7 +3017,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment" id="network-source-ui-align">
+                                  <object class="GtkBox" id="network-source-ui-align">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="hexpand">False</property>
@@ -3077,6 +3162,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3129,11 +3219,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment150">
+                          <object class="GtkBox" id="alignment150">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=2 -->
                               <object class="GtkGrid" id="table33">
@@ -3194,6 +3284,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3245,11 +3340,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="graphics-align">
+                          <object class="GtkBox" id="graphics-align">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -3303,11 +3398,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment159">
+                          <object class="GtkBox" id="alignment159">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=1 -->
                               <object class="GtkGrid" id="table36">
@@ -3349,6 +3444,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3400,11 +3500,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment160">
+                          <object class="GtkBox" id="alignment160">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=7 -->
                               <object class="GtkGrid" id="table37">
@@ -3586,6 +3686,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3637,11 +3742,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment22">
+                          <object class="GtkBox" id="alignment22">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=2 -->
                               <object class="GtkGrid" id="table50">
@@ -3703,6 +3808,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3869,11 +3979,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment34">
+                          <object class="GtkBox" id="alignment34">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <!-- n-columns=2 n-rows=2 -->
                               <object class="GtkGrid" id="table8">
@@ -3946,6 +4056,11 @@
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3992,11 +4107,11 @@
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment35">
+                      <object class="GtkBox" id="alignment35">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="top-padding">3</property>
-                        <property name="left-padding">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">3</property>
                         <child>
                           <!-- n-columns=2 n-rows=3 -->
                           <object class="GtkGrid" id="table14">
@@ -4116,6 +4231,11 @@
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -4155,11 +4275,11 @@
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="fs-alignment">
+                      <object class="GtkBox" id="fs-alignment">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="top-padding">3</property>
-                        <property name="left-padding">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">3</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -4206,19 +4326,19 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment46">
+                          <object class="GtkBox" id="alignment46">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
-                              <object class="GtkTable" id="table18">
+                              <!-- n-columns=2 n-rows=1 -->
+                              <object class="GtkGrid" id="table18">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="border-width">3</property>
-                                <property name="n-columns">2</property>
-                                <property name="column-spacing">8</property>
                                 <property name="row-spacing">4</property>
+                                <property name="column-spacing">8</property>
                                 <child>
                                   <object class="GtkLabel" id="label74">
                                     <property name="visible">True</property>
@@ -4229,8 +4349,8 @@
                                     <property name="mnemonic-widget">smartcard-mode-text</property>
                                   </object>
                                   <packing>
-                                    <property name="x-options">GTK_FILL</property>
-                                    <property name="y-options"/>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -4253,12 +4373,15 @@
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
-                                    <property name="right-attach">2</property>
-                                    <property name="x-options">GTK_FILL</property>
-                                    <property name="y-options">GTK_FILL</property>
+                                    <property name="top-attach">0</property>
                                   </packing>
                                 </child>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -4305,11 +4428,11 @@
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment161">
+                      <object class="GtkBox" id="alignment161">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="top-padding">3</property>
-                        <property name="left-padding">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">3</property>
                         <child>
                           <!-- n-columns=2 n-rows=2 -->
                           <object class="GtkGrid" id="table51">
@@ -4367,6 +4490,11 @@
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -4412,11 +4540,11 @@
                         <property name="label-xalign">0</property>
                         <property name="shadow-type">none</property>
                         <child>
-                          <object class="GtkAlignment" id="tpm-align">
+                          <object class="GtkBox" id="tpm-align">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="top-padding">3</property>
-                            <property name="left-padding">12</property>
+                            <property name="margin-start">12</property>
+                            <property name="margin-top">3</property>
                             <child>
                               <placeholder/>
                             </child>
@@ -4465,10 +4593,10 @@
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment28">
+                      <object class="GtkBox" id="alignment28">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="left-padding">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <!-- n-columns=2 n-rows=2 -->
                           <object class="GtkGrid" id="table16">
@@ -4527,6 +4655,11 @@
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -4566,10 +4699,10 @@
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment10">
+                      <object class="GtkBox" id="alignment10">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="left-padding">12</property>
+                        <property name="margin-start">12</property>
                         <child>
                           <!-- n-columns=2 n-rows=1 -->
                           <object class="GtkGrid" id="table_panic">
@@ -4604,6 +4737,11 @@
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                       </object>
                     </child>
@@ -4643,11 +4781,11 @@
                     <property name="label-xalign">0</property>
                     <property name="shadow-type">none</property>
                     <child>
-                      <object class="GtkAlignment" id="vsock-align">
+                      <object class="GtkBox" id="vsock-align">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="top-padding">3</property>
-                        <property name="left-padding">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-top">3</property>
                         <child>
                           <placeholder/>
                         </child>
@@ -4683,6 +4821,11 @@
                   </packing>
                 </child>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
           <packing>
