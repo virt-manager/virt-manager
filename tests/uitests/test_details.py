@@ -588,6 +588,7 @@ def testDetailsEditDevices1(app):
 
 
 def testDetailsEditDevices2(app):
+    app.uri = tests.utils.URIs.kvm_x86
     win = app.manager_open_details("test-many-devices",
             shutdown=True)
     appl = win.find("config-apply", "push button")
@@ -617,6 +618,9 @@ def testDetailsEditDevices2(app):
 
     # Filesystem tweaks
     tab = _select_hw(app, win, "Filesystem /target/", "filesystem-tab")
+    tab.combo_select("Driver:", "virtiofs")
+    w = tab.find_fuzzy("Enable shared memory", "label")
+    lib.utils.check(lambda: w.visible)
     tab.find("Source path:", "text").set_text("/frib1")
     tab.find("Target path:", "text").set_text("newtarget")
     tab.find_fuzzy("Export filesystem", "check box").click()

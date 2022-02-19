@@ -8,6 +8,7 @@
 from gi.repository import Gtk
 
 from virtinst import DeviceFilesystem
+from virtinst import xmlutil
 
 from ..lib import uiutil
 from ..baseclass import vmmGObjectUI
@@ -152,6 +153,16 @@ class vmmFSDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(
                 self.widget("fs-driver-combo"), show_driver_combo)
 
+        need_shared_mem = fsdriver == "virtiofs"
+        have_shared_mem, _shared_mem_err = self.vm.has_shared_mem()
+        show_shared_mem_warn = need_shared_mem and not have_shared_mem
+        uiutil.set_grid_row_visible(
+                self.widget("fs-driver-warn-box"), show_shared_mem_warn)
+        if show_shared_mem_warn:
+            label = _(
+                    "You may need to 'Enable shared memory' on the 'Memory' screen.")
+            self.widget("fs-driver-warn").set_markup(
+                    "<small>%s</small>" % xmlutil.xml_escape(label))
 
 
     ##############
