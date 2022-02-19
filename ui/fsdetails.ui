@@ -7,7 +7,7 @@
     <property name="step-increment">100</property>
     <property name="page-increment">1000</property>
   </object>
-  <!-- n-columns=2 n-rows=8 -->
+  <!-- n-columns=2 n-rows=7 -->
   <object class="GtkGrid" id="vmm-fs-details">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -22,7 +22,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">6</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
@@ -37,7 +37,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">7</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
@@ -76,7 +76,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">4</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
@@ -91,20 +91,6 @@
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="fs-mode-title">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">start</property>
-        <property name="label" translatable="yes">M_ode:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">fs-mode-combo</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
@@ -132,7 +118,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">4</property>
+        <property name="top-attach">3</property>
       </packing>
     </child>
     <child>
@@ -146,7 +132,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">6</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
     <child>
@@ -159,7 +145,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">7</property>
+        <property name="top-attach">6</property>
       </packing>
     </child>
     <child>
@@ -173,7 +159,7 @@
       </object>
       <packing>
         <property name="left-attach">0</property>
-        <property name="top-attach">5</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
@@ -212,7 +198,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">5</property>
+        <property name="top-attach">4</property>
       </packing>
     </child>
     <child>
@@ -281,24 +267,6 @@
       <packing>
         <property name="left-attach">1</property>
         <property name="top-attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBox" id="fs-mode-combo">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">start</property>
-        <property name="has-entry">True</property>
-        <signal name="changed" handler="on_fs_mode_combo_changed" swapped="no"/>
-        <child internal-child="entry">
-          <object class="GtkEntry">
-            <property name="can-focus">False</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
       </packing>
     </child>
   </object>

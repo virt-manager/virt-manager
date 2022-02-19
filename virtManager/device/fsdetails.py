@@ -14,13 +14,12 @@ from ..baseclass import vmmGObjectUI
 from ..storagebrowse import vmmStorageBrowser
 
 
-_EDIT_FS_ENUM = range(1, 9)
+_EDIT_FS_ENUM = range(1, 8)
 (
     _EDIT_FS_TYPE,
     _EDIT_FS_DRIVER,
     _EDIT_FS_SOURCE,
     _EDIT_FS_RAM_SOURCE,
-    _EDIT_FS_MODE,
     _EDIT_FS_READONLY,
     _EDIT_FS_TARGET,
     _EDIT_FS_FORMAT,
@@ -51,7 +50,6 @@ class vmmFSDetails(vmmGObjectUI):
             "on_fs_source_browse_clicked": self._browse_fs_source_cb,
             "on_fs_type_combo_changed": _e(_EDIT_FS_TYPE),
             "on_fs_driver_combo_changed": _e(_EDIT_FS_DRIVER),
-            "on_fs_mode_combo_changed": _e(_EDIT_FS_MODE),
             "on_fs_readonly_toggled": _e(_EDIT_FS_READONLY),
             "on_fs_format_combo_changed": _e(_EDIT_FS_FORMAT),
             "on_fs_source_changed": _e(_EDIT_FS_SOURCE),
@@ -99,11 +97,6 @@ class vmmFSDetails(vmmGObjectUI):
         else:
             simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
 
-        simple_store_set("fs-mode-combo",
-                [DeviceFilesystem.MODE_MAPPED,
-                 DeviceFilesystem.MODE_SQUASH,
-                 None])
-
         simple_store_set("fs-driver-combo",
                 [DeviceFilesystem.DRIVER_LOOP,
                  DeviceFilesystem.DRIVER_NBD,
@@ -123,10 +116,6 @@ class vmmFSDetails(vmmGObjectUI):
     def _sync_ui(self):
         fstype = uiutil.get_list_selection(self.widget("fs-type-combo"))
         fsdriver = uiutil.get_list_selection(self.widget("fs-driver-combo"))
-        ismount = bool(fstype == DeviceFilesystem.TYPE_MOUNT)
-
-        show_mode = bool(ismount)
-        uiutil.set_grid_row_visible(self.widget("fs-mode-combo"), show_mode)
 
         show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
         uiutil.set_grid_row_visible(
@@ -140,8 +129,6 @@ class vmmFSDetails(vmmGObjectUI):
                 self.widget("fs-format-combo"), show_format)
 
         show_driver_combo = fstype == DeviceFilesystem.TYPE_FILE
-        show_mode_combo = (fstype == DeviceFilesystem.TYPE_MOUNT and
-                (self.conn.is_qemu() or self.conn.is_test()))
 
         if fstype == DeviceFilesystem.TYPE_TEMPLATE:
             source_text = _("Te_mplate:")
@@ -150,8 +137,6 @@ class vmmFSDetails(vmmGObjectUI):
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-mode-combo"), show_mode_combo)
         uiutil.set_grid_row_visible(
                 self.widget("fs-driver-combo"), show_driver_combo)
 
@@ -163,7 +148,6 @@ class vmmFSDetails(vmmGObjectUI):
 
     def reset_state(self):
         self.widget("fs-type-combo").set_active(0)
-        self.widget("fs-mode-combo").set_active(0)
         self.widget("fs-driver-combo").set_active(0)
         self.widget("fs-format-combo").set_active(0)
         self.widget("fs-source").set_text("")
@@ -177,8 +161,6 @@ class vmmFSDetails(vmmGObjectUI):
 
         uiutil.set_list_selection(
                 self.widget("fs-type-combo"), dev.type)
-        uiutil.set_list_selection(
-                self.widget("fs-mode-combo"), dev.accessmode)
         uiutil.set_list_selection(
                 self.widget("fs-driver-combo"), dev.driver_type)
         uiutil.set_list_selection(
@@ -210,10 +192,6 @@ class vmmFSDetails(vmmGObjectUI):
         if not self.widget("fs-format-combo").get_visible():
             fsformat = None
 
-        mode = uiutil.get_list_selection(self.widget("fs-mode-combo"))
-        if not self.widget("fs-mode-combo").get_visible():
-            mode = None
-
         driver = uiutil.get_list_selection(self.widget("fs-driver-combo"))
         if not self.widget("fs-driver-combo").get_visible():
             driver = None
@@ -229,8 +207,6 @@ class vmmFSDetails(vmmGObjectUI):
                 dev.source = source
         if _EDIT_FS_TARGET in self._active_edits:
             dev.target = target
-        if _EDIT_FS_MODE in self._active_edits:
-            dev.accessmode = mode
         if _EDIT_FS_READONLY in self._active_edits:
             dev.readonly = readonly
         if _EDIT_FS_DRIVER in self._active_edits:
