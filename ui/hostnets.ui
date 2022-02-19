@@ -62,7 +62,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
-                      <!-- n-columns=3 n-rows=5 -->
+                      <!-- n-columns=2 n-rows=5 -->
                       <object class="GtkGrid" id="table4">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -77,7 +77,7 @@
                               <object class="GtkImage" id="net-state-icon">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="stock">gtk-missing-image</property>
+                                <property name="icon-name">image-missing</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -234,21 +234,6 @@
                             <property name="top-attach">0</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -262,7 +247,7 @@
                         <property name="can-focus">True</property>
                         <property name="expanded">True</property>
                         <child>
-                          <!-- n-columns=3 n-rows=3 -->
+                          <!-- n-columns=2 n-rows=3 -->
                           <object class="GtkGrid" id="table3">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
@@ -292,42 +277,6 @@
                               <packing>
                                 <property name="left-attach">1</property>
                                 <property name="top-attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="hbox13">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="spacing">3</property>
-                                <child>
-                                  <object class="GtkImage" id="net-ipv4-forwarding-icon">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="stock">gtk-missing-image</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="net-ipv4-forwarding">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">NAT to any device</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -367,13 +316,28 @@
                               </packing>
                             </child>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
+                              <object class="GtkBox" id="hbox13">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="spacing">3</property>
+                                <child>
+                                  <object class="GtkLabel" id="net-ipv4-forwarding">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">NAT to any device</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">2</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
@@ -432,42 +396,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="hbox6">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="spacing">3</property>
-                                <child>
-                                  <object class="GtkImage" id="net-ipv6-forwarding-icon">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="stock">gtk-missing-image</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="net-ipv6-forwarding">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">Routed</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left-attach">1</property>
-                                <property name="top-attach">2</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="label39">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -500,6 +428,18 @@
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
+                                <property name="top-attach">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="net-ipv6-forwarding">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Routed</property>
+                              </object>
+                              <packing>
+                                <property name="left-attach">1</property>
                                 <property name="top-attach">2</property>
                               </packing>
                             </child>
@@ -595,7 +535,7 @@
                   <object class="GtkImage" id="image10">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-add</property>
+                    <property name="icon-name">list-add</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -622,7 +562,7 @@
                   <object class="GtkImage" id="image11">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-media-play</property>
+                    <property name="icon-name">media-playback-start</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -649,7 +589,7 @@
                   <object class="GtkImage" id="image12">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-stop</property>
+                    <property name="icon-name">process-stop</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -676,7 +616,7 @@
                   <object class="GtkImage" id="image13">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-delete</property>
+                    <property name="icon-name">edit-delete</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -704,11 +644,11 @@
             <property name="can-focus">False</property>
             <child>
               <object class="GtkButton" id="net-apply">
-                <property name="label">gtk-apply</property>
+                <property name="label" translatable="yes">_Apply</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="use-stock">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_net_apply_clicked" swapped="no"/>
               </object>
               <packing>

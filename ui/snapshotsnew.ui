@@ -2,11 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-new</property>
-  </object>
   <object class="GtkWindow" id="snapshot-new">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Create snapshot</property>
@@ -33,7 +28,7 @@
                   <object class="GtkImage" id="image4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-new</property>
+                    <property name="icon-name">document-new</property>
                     <property name="icon_size">6</property>
                   </object>
                   <packing>
@@ -182,7 +177,6 @@
                           <object class="GtkImage" id="snapshot-new-status-icon">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="stock">gtk-cancel</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -227,7 +221,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="halign">start</property>
-                        <property name="stock">gtk-missing-image</property>
+                        <property name="icon-name">image-missing</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -251,11 +245,11 @@
                 <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="snapshot-new-cancel">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_snapshot_new_cancel_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -270,7 +264,6 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="image">image3</property>
                     <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_snapshot_new_ok_clicked" swapped="no"/>
                   </object>

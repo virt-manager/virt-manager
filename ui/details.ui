@@ -68,11 +68,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">2</property>
   </object>
-  <object class="GtkImage" id="image80">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-add</property>
-  </object>
   <object class="GtkBox" id="details-top-box">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -128,7 +123,6 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="image">image80</property>
             <property name="use-underline">True</property>
             <signal name="clicked" handler="on_add_hardware_button_clicked" swapped="no"/>
             <child internal-child="accessible">
@@ -304,7 +298,7 @@
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="stock">gtk-missing-image</property>
+                                        <property name="icon-name">image-missing</property>
                                       </object>
                                       <packing>
                                         <property name="left-attach">0</property>
@@ -555,7 +549,7 @@
                                       <object class="GtkImage" id="overview-firmware-warn">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="stock">gtk-dialog-warning</property>
+                                        <property name="icon-name">dialog-warning</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -836,7 +830,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="valign">start</property>
-                                <property name="stock">gtk-dialog-warning</property>
+                                <property name="icon-name">dialog-warning</property>
                               </object>
                               <packing>
                                 <property name="left-attach">0</property>
@@ -1319,7 +1313,7 @@
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
                                             <property name="halign">start</property>
-                                            <property name="stock">gtk-dialog-warning</property>
+                                            <property name="icon-name">dialog-warning</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -2446,7 +2440,7 @@
                                               <object class="GtkImage" id="image7">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
-                                                <property name="stock">gtk-go-up</property>
+                                                <property name="icon-name">go-up</property>
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
@@ -2474,7 +2468,7 @@
                                               <object class="GtkImage" id="image8">
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
-                                                <property name="stock">gtk-go-down</property>
+                                                <property name="icon-name">go-down</property>
                                               </object>
                                             </child>
                                             <child internal-child="accessible">
@@ -3052,7 +3046,7 @@
                                           <object class="GtkImage">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="stock">gtk-refresh</property>
+                                            <property name="icon-name">view-refresh</property>
                                           </object>
                                         </child>
                                       </object>
@@ -4705,12 +4699,12 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="config-remove">
-                <property name="label">gtk-remove</property>
+                <property name="label" translatable="yes">_Remove</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="receives-default">False</property>
-                <property name="use-stock">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_config_remove_clicked" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="config-remove-atkobject">
@@ -4726,11 +4720,11 @@
             </child>
             <child>
               <object class="GtkButton" id="config-cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_config_cancel_clicked" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="config-cancel-atkobject">
@@ -4746,13 +4740,13 @@
             </child>
             <child>
               <object class="GtkButton" id="config-apply">
-                <property name="label">gtk-apply</property>
+                <property name="label" translatable="yes">_Apply</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="receives-default">False</property>
-                <property name="use-stock">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_config_apply_clicked" swapped="no"/>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="config-apply-atkobject">

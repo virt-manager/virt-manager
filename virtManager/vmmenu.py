@@ -24,20 +24,8 @@ class _VMMenu(Gtk.Menu):
 
         self._init_state()
 
-    def _add_action(self, label, widgetname, cb,
-                    iconname="system-shutdown"):
-        if label.startswith("gtk-"):
-            item = Gtk.ImageMenuItem.new_from_stock(label, None)
-        else:
-            item = Gtk.ImageMenuItem.new_with_mnemonic(label)
-
-        if iconname:
-            if iconname.startswith("gtk-"):
-                icon = Gtk.Image.new_from_stock(iconname, Gtk.IconSize.MENU)
-            else:
-                icon = Gtk.Image.new_from_icon_name(iconname,
-                                                    Gtk.IconSize.MENU)
-            item.set_image(icon)
+    def _add_action(self, label, widgetname, cb):
+        item = Gtk.MenuItem.new_with_mnemonic(label)
 
         item.vmm_widget_name = widgetname
         if cb:
@@ -66,8 +54,7 @@ class VMShutdownMenu(_VMMenu):
         self._add_action(_("F_orce Reset"), "reset", VMActionUI.reset)
         self._add_action(_("_Force Off"), "destroy", VMActionUI.destroy)
         self.add(Gtk.SeparatorMenuItem())
-        self._add_action(_("Sa_ve"), "save", VMActionUI.save,
-                iconname=Gtk.STOCK_SAVE)
+        self._add_action(_("Sa_ve"), "save", VMActionUI.save)
 
         self.get_accessible().set_name("vmm-shutdown-menu")
         self.show_all()
@@ -92,27 +79,20 @@ class VMActionMenu(_VMMenu):
     VM submenu for run, pause, shutdown, clone, etc
     """
     def _init_state(self):
-        self._add_action(_("_Run"), "run", VMActionUI.run,
-                iconname=Gtk.STOCK_MEDIA_PLAY)
-        self._add_action(_("_Pause"), "suspend", VMActionUI.suspend,
-                Gtk.STOCK_MEDIA_PAUSE)
-        self._add_action(_("R_esume"), "resume", VMActionUI.resume,
-                Gtk.STOCK_MEDIA_PAUSE)
+        self._add_action(_("_Run"), "run", VMActionUI.run)
+        self._add_action(_("_Pause"), "suspend", VMActionUI.suspend)
+        self._add_action(_("R_esume"), "resume", VMActionUI.resume)
         s = self._add_action(_("_Shut Down"), "shutdown", None)
         s.set_submenu(VMShutdownMenu(self._parent, self._current_vm_cb))
 
         self.add(Gtk.SeparatorMenuItem())
-        self._add_action(_("Clone..."), "clone",
-                VMActionUI.clone, iconname=None)
-        self._add_action(_("Migrate..."), "migrate",
-                VMActionUI.migrate, iconname=None)
-        self._add_action(_("_Delete"), "delete",
-                VMActionUI.delete, iconname=Gtk.STOCK_DELETE)
+        self._add_action(_("Clone..."), "clone", VMActionUI.clone)
+        self._add_action(_("Migrate..."), "migrate", VMActionUI.migrate)
+        self._add_action(_("_Delete"), "delete", VMActionUI.delete)
 
         if self._show_open:
             self.add(Gtk.SeparatorMenuItem())
-            self._add_action(Gtk.STOCK_OPEN, "show",
-                VMActionUI.show, iconname=None)
+            self._add_action(_("_Open"), "show", VMActionUI.show)
 
         self.get_accessible().set_name("vm-action-menu")
         self.show_all()

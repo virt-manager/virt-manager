@@ -248,13 +248,11 @@ class vmmSerialConsole(vmmGObject):
         self._serial_popup = Gtk.Menu()
         self._serial_popup.get_accessible().set_name("serial-popup-menu")
 
-        self._serial_copy = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_COPY,
-                                                            None)
+        self._serial_copy = Gtk.MenuItem.new_with_mnemonic(_("_Copy"))
         self._serial_copy.connect("activate", self._serial_copy_text)
         self._serial_popup.add(self._serial_copy)
 
-        self._serial_paste = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PASTE,
-                                                             None)
+        self._serial_paste = Gtk.MenuItem.new_with_mnemonic(_("_Paste"))
         self._serial_paste.connect("activate", self._serial_paste_text)
         self._serial_popup.add(self._serial_paste)
 

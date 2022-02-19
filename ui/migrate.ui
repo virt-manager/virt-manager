@@ -438,7 +438,7 @@ This can simplify setup since no additional firewall ports need to be open, and 
                                                 <property name="visible">True</property>
                                                 <property name="can-focus">False</property>
                                                 <property name="valign">start</property>
-                                                <property name="stock">gtk-dialog-warning</property>
+                                                <property name="icon-name">dialog-warning</property>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
@@ -642,11 +642,11 @@ If 'temporary' is selected, the migration is considered only a temporary move: t
                 <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="migrate-cancel">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_migrate_cancel_clicked" swapped="no"/>
                   </object>
                   <packing>

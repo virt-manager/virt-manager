@@ -2,31 +2,12 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-add</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-properties</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-properties</property>
-  </object>
   <object class="GtkWindow" id="vmm-manager">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Virtual Machine Manager</property>
     <property name="default-width">550</property>
     <property name="default-height">550</property>
     <property name="gravity">center</property>
-    <accel-groups>
-      <group name="accelgroup1"/>
-    </accel-groups>
     <signal name="configure-event" handler="on_vmm_manager_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_vm_manager_delete_event" swapped="no"/>
     <child>
@@ -48,13 +29,11 @@
                   <object class="GtkMenu" id="menuitem4_menu">
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="open_connection">
+                      <object class="GtkMenuItem" id="open_connection">
                         <property name="label" translatable="yes">_Add Connection...</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="image">image2</property>
-                        <property name="use-stock">False</property>
                         <signal name="activate" handler="on_menu_file_add_connection_activate" swapped="no"/>
                       </object>
                     </child>
@@ -74,25 +53,23 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_file_close">
-                        <property name="label">gtk-close</property>
+                      <object class="GtkMenuItem" id="menu_file_close">
+                        <property name="label" translatable="yes">_Close</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_file_close_activate" swapped="no"/>
+                        <accelerator key="w" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_file_quit">
-                        <property name="label">gtk-quit</property>
+                      <object class="GtkMenuItem" id="menu_file_quit">
+                        <property name="label" translatable="yes">_Quit</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_file_quit_activate" swapped="no"/>
+                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -109,35 +86,29 @@
                   <object class="GtkMenu" id="menuitem5_menu">
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_host_details">
+                      <object class="GtkMenuItem" id="menu_host_details">
                         <property name="label" translatable="yes">_Connection Details</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="image">image5</property>
-                        <property name="use-stock">False</property>
                         <signal name="activate" handler="on_menu_host_details_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_edit_details">
+                      <object class="GtkMenuItem" id="menu_edit_details">
                         <property name="label" translatable="yes">_Virtual Machine Details</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="image">image4</property>
-                        <property name="use-stock">False</property>
                         <signal name="activate" handler="on_menu_edit_details_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_edit_delete">
-                        <property name="label">gtk-delete</property>
+                      <object class="GtkMenuItem" id="menu_edit_delete">
+                        <property name="label" translatable="yes">_Delete</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_edit_delete_activate" swapped="no"/>
                       </object>
                     </child>
@@ -148,13 +119,11 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_edit_preferences">
-                        <property name="label">gtk-preferences</property>
+                      <object class="GtkMenuItem" id="menu_edit_preferences">
+                        <property name="label" translatable="yes">_Preferences</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_edit_preferences_activate" swapped="no"/>
                       </object>
                     </child>
@@ -247,13 +216,11 @@
                   <object class="GtkMenu" id="menuitem7_menu">
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu_help_about">
-                        <property name="label">gtk-about</property>
+                      <object class="GtkMenuItem" id="menu_help_about">
+                        <property name="label" translatable="yes">_About</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_help_about_activate" swapped="no"/>
                       </object>
                     </child>
@@ -329,7 +296,7 @@
                     <property name="tooltip-text" translatable="yes">Power on the virtual machine</property>
                     <property name="label" translatable="yes">_Run</property>
                     <property name="use-underline">True</property>
-                    <property name="stock-id">gtk-media-play</property>
+                    <property name="icon-name">media-playback-start</property>
                     <signal name="clicked" handler="on_vm_run_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -345,7 +312,7 @@
                     <property name="tooltip-text" translatable="yes">Pause the virtual machine</property>
                     <property name="label" translatable="yes">_Pause</property>
                     <property name="use-underline">True</property>
-                    <property name="stock-id">gtk-media-pause</property>
+                    <property name="icon-name">media-playback-pause</property>
                     <signal name="clicked" handler="on_vm_pause_clicked" swapped="no"/>
                   </object>
                   <packing>

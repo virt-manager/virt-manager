@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkWindow" id="vmm-host">
     <property name="width-request">800</property>
     <property name="height-request">600</property>
@@ -10,9 +9,6 @@
     <property name="title">Connection Details</property>
     <property name="default-width">750</property>
     <property name="default-height">500</property>
-    <accel-groups>
-      <group name="accelgroup1"/>
-    </accel-groups>
     <signal name="configure-event" handler="on_vmm_host_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_vmm_host_delete_event" swapped="no"/>
     <child>
@@ -49,25 +45,23 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu-file-close">
-                        <property name="label">gtk-close</property>
+                      <object class="GtkMenuItem" id="menu-file-close">
+                        <property name="label">_Close</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_file_close_activate" swapped="no"/>
+                        <accelerator key="w" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="menu-file-quit">
-                        <property name="label">gtk-quit</property>
+                      <object class="GtkMenuItem" id="menu-file-quit">
+                        <property name="label">_Quit</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="use-stock">True</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_menu_file_quit_activate" swapped="no"/>
+                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>

@@ -2,25 +2,11 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-close</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-quit</property>
-  </object>
   <object class="GtkWindow" id="vmm-vmwindow">
     <property name="can-focus">False</property>
     <property name="title" translatable="yes">Virtual Machine</property>
     <property name="default-width">800</property>
     <property name="default-height">600</property>
-    <accel-groups>
-      <group name="accelgroup1"/>
-    </accel-groups>
     <signal name="configure-event" handler="on_vmm_details_configure_event" swapped="no"/>
     <signal name="delete-event" handler="on_vmm_details_delete_event" swapped="no"/>
     <child>
@@ -57,27 +43,21 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="close4">
-                        <property name="label">_Close</property>
+                      <object class="GtkMenuItem" id="close4">
+                        <property name="label" translatable="yes">_Close</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="image">image1</property>
-                        <property name="use-stock">False</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_details_menu_close_activate" swapped="no"/>
                         <accelerator key="w" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="quit3">
-                        <property name="label">_Quit</property>
+                      <object class="GtkMenuItem" id="quit3">
+                        <property name="label" translatable="yes">_Quit</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="use-underline">True</property>
-                        <property name="image">image2</property>
-                        <property name="use-stock">False</property>
-                        <property name="accel-group">accelgroup1</property>
                         <signal name="activate" handler="on_details_menu_quit_activate" swapped="no"/>
                         <accelerator key="q" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                       </object>
@@ -333,7 +313,7 @@
                     <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes">Show virtual hardware details</property>
                     <property name="label" translatable="yes">Details</property>
-                    <property name="stock-id">gtk-info</property>
+                    <property name="icon-name">dialog-information</property>
                     <property name="group">control-vm-console</property>
                     <signal name="toggled" handler="on_control_vm_details_toggled" swapped="no"/>
                   </object>
@@ -359,7 +339,7 @@
                     <property name="tooltip-text" translatable="yes">Power on the virtual machine</property>
                     <property name="label" translatable="yes">Run</property>
                     <property name="use-underline">True</property>
-                    <property name="stock-id">gtk-media-play</property>
+                    <property name="icon-name">media-playback-start</property>
                     <signal name="clicked" handler="on_control_run_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -374,7 +354,7 @@
                     <property name="tooltip-text" translatable="yes">Pause the virtual machine</property>
                     <property name="label" translatable="yes">Pause</property>
                     <property name="use-underline">True</property>
-                    <property name="stock-id">gtk-media-pause</property>
+                    <property name="icon-name">media-playback-pause</property>
                     <signal name="toggled" handler="on_control_pause_toggled" swapped="no"/>
                   </object>
                   <packing>
@@ -426,7 +406,7 @@
                     <property name="can-focus">False</property>
                     <property name="tooltip-text" translatable="yes">Switch to fullscreen view</property>
                     <property name="halign">end</property>
-                    <property name="stock-id">gtk-fullscreen</property>
+                    <property name="icon-name">view-fullscreen</property>
                     <signal name="toggled" handler="on_control_fullscreen_toggled" swapped="no"/>
                   </object>
                   <packing>
@@ -453,7 +433,6 @@
                     <property name="is-important">True</property>
                     <property name="label" translatable="yes">_Begin Installation</property>
                     <property name="use-underline">True</property>
-                    <property name="stock-id">gtk-apply</property>
                     <signal name="clicked" handler="on_details_customize_finish_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -468,7 +447,6 @@
                     <property name="is-important">True</property>
                     <property name="label" translatable="yes">_Cancel Installation</property>
                     <property name="use-underline">True</property>
-                    <property name="stock-id">gtk-cancel</property>
                     <signal name="clicked" handler="on_details_cancel_customize_clicked" swapped="no"/>
                   </object>
                   <packing>

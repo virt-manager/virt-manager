@@ -358,7 +358,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.MENU)
-        img.set_property("icon-name", Gtk.STOCK_APPLY)
+        img.set_property("icon-name", "emblem-default")
         img.set_property("xalign", 0.0)
         col.pack_start(img, False)
         col.add_attribute(img, "visible", 5)
@@ -375,20 +375,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         # Snapshot popup menu
         menu = Gtk.Menu()
 
-        item = Gtk.ImageMenuItem.new_with_label(_("_Start snapshot"))
-        item.set_use_underline(True)
-        img = Gtk.Image()
-        img.set_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.MENU)
-        item.set_image(img)
+        item = Gtk.MenuItem.new_with_mnemonic(_("_Start snapshot"))
         item.show()
         item.connect("activate", self._on_start_clicked)
         menu.add(item)
 
-        item = Gtk.ImageMenuItem.new_with_label(_("_Delete snapshot"))
-        item.set_use_underline(True)
-        img = Gtk.Image()
-        img.set_from_stock(Gtk.STOCK_DELETE, Gtk.IconSize.MENU)
-        item.set_image(img)
+        item = Gtk.MenuItem.new_with_mnemonic(_("_Delete snapshot"))
         item.show()
         item.connect("activate", self._on_delete_clicked)
         menu.add(item)

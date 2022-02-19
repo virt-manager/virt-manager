@@ -304,10 +304,10 @@ class vmmCloneVM(vmmGObjectUI):
             _chkbox.set_property('active', active)
             _chkbox.set_property('visible', visible)
             _chkimg.set_property('visible', not visible)
-            icon = Gtk.STOCK_INFO
+            icon = "dialog-information"
             if sinfo.warn_about_sharing():
-                icon = Gtk.STOCK_DIALOG_WARNING
-            _chkimg.set_property('stock-id', icon)
+                icon = "dialog-warning"
+            _chkimg.set_property('icon-name', icon)
             tooltip = sinfo.get_tooltip()
             if tooltip != model[_iter][1]:
                 model[_iter][1] = tooltip
