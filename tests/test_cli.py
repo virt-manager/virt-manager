@@ -695,6 +695,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --filesystem type=block,source.dev=/dev/foo,target.dir=/
 --filesystem type=ram,source.usage=1024,source.units=MiB,target=/
 --filesystem /foo/source,/bar/target,fmode=0123,dmode=0345
+--filesystem /foo1,/bar1,driver.type=virtiofs
 
 
 --soundhw default

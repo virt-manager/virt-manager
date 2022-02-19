@@ -522,6 +522,11 @@
       <source dir="/foo/source"/>
       <target dir="/bar/target"/>
     </filesystem>
+    <filesystem type="mount">
+      <source dir="/foo1"/>
+      <target dir="/bar1"/>
+      <driver type="virtiofs"/>
+    </filesystem>
     <interface type="user">
       <source portgroup="foo"/>
       <mac address="12:34:56:78:11:22"/>
