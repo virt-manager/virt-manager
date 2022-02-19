@@ -185,7 +185,7 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def _cleanup(self):
         vmmLibvirtObject._cleanup(self)
-        for vol in self._volumes:
+        for vol in (self._volumes or []):
             vol.cleanup()
         self._volumes = None
 
