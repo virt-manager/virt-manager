@@ -9,22 +9,22 @@
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2018. #zanata
 # Ricky Tigg <ricky.tigg@gmail.com>, 2020, 2021.
-# Jan Kuparinen <copper_fin@hotmail.com>, 2021.
+# Jan Kuparinen <copper_fin@hotmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-17 06:15+0000\n"
-"PO-Revision-Date: 2021-08-03 19:04+0000\n"
+"PO-Revision-Date: 2022-02-20 19:16+0000\n"
 "Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:23 virtManager/systray.py:148
@@ -1000,10 +1000,8 @@ msgid "MiB"
 msgstr "Mit"
 
 #: ui/details.ui:1864
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Ulkoinen levy ja muisti"
+msgstr "Ota jaettu _muisti käyttöön"
 
 #: ui/details.ui:1889
 msgid "<b>Memory</b>"
@@ -1663,29 +1661,22 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>Sopivan oletusverkon löytäminen epäonnistui.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Portti:"
+msgstr "_Porttiryhmä:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
 msgstr "_Verkon lähde:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
 "Etkö löydä etsimääsi käyttöjärjestelmää?\n"
-"Yritä valita seuraava uusin näytetty versio,\n"
-"tai käytä merkintä \"Yleinen käyttöjärjestelmä\"."
+"Kokeile valita samankaltainen jakelu tai versio tai käytä jotakin \"Yleinen\""
+"-vaihtoehdoista."
 
 #: ui/oslist.ui:108
 msgid "Include end of life operating systems"
@@ -1780,12 +1771,12 @@ msgstr "Suori_ttimen oletus:"
 #: ui/preferences.ui:505
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Uusien virtuaalikoneiden oletuslaiteohjelmisto. Käynnistä käyttäen joko BIOS:"
+"ia tai UEFI:ia."
 
 #: ui/preferences.ui:507
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Laite_ohjelmistp:"
+msgstr "x86 _Laiteohjelmisto:"
 
 #: ui/preferences.ui:535
 msgid "<b>New VM Defaults</b>"
@@ -2413,6 +2404,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s ei ole aktiivinen isäntäjärjestelmässä.\n"
+"Käynnistä mdev isäntäjärjestelmässä ennen kuin lisäät sen vieraaseen."
 
 #: virtManager/addhardware.py:811
 msgid "No Devices Available"
@@ -3352,16 +3345,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "SSH-tunnelin virhelähtö: %s"
 
 #: virtManager/details/console.py:844
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Katseluohjelma katkaistiin."
+msgstr "Katseluohjelman yhteys katkeaa."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Katseluohjelma katkaistu."
+msgstr "Katseluohjelman ikkuna suljettu."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -3478,7 +3467,7 @@ msgstr "_Poista laitteisto"
 
 #: virtManager/details/details.py:666 virtManager/details/details.py:1783
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:676
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -4596,11 +4585,11 @@ msgstr "Virhe peruessa migraatiotyötä: %s"
 
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "Jaetun muistin asetusta ei voi muuttaa, kun <numa> on määritetty."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt ei ehkä ole tarpeeksi uusi tukemaan memfd:tä."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -4760,10 +4749,8 @@ msgid "Nearest host CPU model"
 msgstr "Lähin isäntäsuoritin-malli"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Järjestelmän oletus (%s)"
+msgstr "Järjestelmän oletus"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5539,11 +5526,6 @@ msgid "The OS installed in the guest."
 msgstr "Vieraaseen asennettu käyttöjärjestelmä."
 
 #: virtinst/cli.py:929
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5551,7 +5533,7 @@ msgid ""
 msgstr ""
 "Tätä käytetään optimaalisten oletusarvojen määrittämiseen, kuten VirtIO.\n"
 "Esimerkkiarvot: fedora34, rhel8.0, win10, ...\n"
-"Katso täydellinen luettelo 'osinfo-query os':lla."
+"Katso täydellinen luettelo '--osinfo list':lla."
 
 #: virtinst/cli.py:939
 msgid ""
@@ -5645,6 +5627,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Voit nähdä lisätietoja komennolla:\n"
+"\n"
+"   osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5764,10 +5749,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Ei tiedetä miten luoda nodedev mdev-tyypin tunnukselle '%s'"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Tuntematon solmun laitetyyppi %s"
+msgstr "Ei tuettu solmun laitetyyppi '%s'"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -5824,6 +5808,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"Topologian määräämät prosessorit yhteensä (sockets=%(sockets)d * dies=%(dies)"
+"d * cores=%(cores)d * threads=%(threads)d == %(total)d) ei vastaa vCPU-"
+"määrää %(vcpus)d"
 
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
@@ -6025,7 +6012,7 @@ msgstr "Siirretään '%(filename)s'"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "Yleinen tai tuntematon käyttöjärjestelmä. Käyttöä ei suositella."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6033,12 +6020,11 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "Tuntematon libosinfo:n tunniste '%s'"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
-"Tuntematon käyttöjärjestelmän nimi '%s'. Katso kelvolliset arvot 'osinfo-"
-"query os':lla."
+"Tuntematon käyttöjärjestelmän nimi '%s'. Katso kelvolliset arvot `--osinfo "
+"list`:lla."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6286,7 +6272,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type on vanhentunut eikä tee mitään. Lopeta sen käyttö."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6351,17 +6337,13 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "Vieraan verkon määritykset eivät välttämättä tue PXE:tä"
 
 #: virtinst/virtinstall.py:370
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Käyttöjärjestelmää ei havaittu, virtuaalikoneen suorituskyky voi kärsiä. "
-"Määritä käyttöjärjestelmä, jossa on '--os-variant' optimaalisia tuloksia "
-"varten."
+"Käytettäessä --osinfoa {osname} VM:n suorituskyky saattaa heiketä. Määritä "
+"tarkka käyttöjärjestelmä parhaan tuloksen saavuttamiseksi."
 
 #: virtinst/virtinstall.py:384
 #, python-brace-format
@@ -6394,18 +6376,20 @@ msgid "Error validating install location: %s"
 msgstr "Virhe vahvistaessa asennussijaintia: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
-msgstr "--Os-variant vaaditaan, mutta arvoa ei asetettu eikä havaittu."
+msgstr ""
+"--os-variant/--osinfo OS:n nimi vaaditaan, mutta arvoa ei ole \n"
+"asetettu taikka havaittu."
 
 #: virtinst/virtinstall.py:566
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"Tämä on nyt kohtalokas virhe. Käyttöjärjestelmän nimi on määritettävä\n"
+"nykyaikaisille, tehokkaille ja suojatuille virtuaalikoneen oletuksille.\n"
 
 #: virtinst/virtinstall.py:570
 msgid ""
@@ -6414,6 +6398,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"Jos odotit virt-installin tunnistavan käyttöjärjestelmän nimen\n"
+"asennusmediasta, voit asettaa varakäyttöjärjestelmän nimen seuraavasti:\n"
+"\n"
+"   --osinfo detect=on,name=OSNAME\n"
 
 #: virtinst/virtinstall.py:579
 msgid ""
@@ -6421,6 +6409,10 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Näet täydellisen luettelon mahdollisista käyttöjärjestelmän nimiarvoista "
+"komennolla:\n"
+"\n"
+"    virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:586
 #, python-brace-format
@@ -6428,6 +6420,8 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Jos Linux-distro ei ole luettelossa, kokeile jotakin yleisistä arvoista\n"
+"kuten: {oslist}\n"
 
 #: virtinst/virtinstall.py:593
 #, python-brace-format
@@ -6438,11 +6432,16 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"Jos haluat vain saada vanhan käyttäytymisen takaisin, voit käyttää:\n"
+"\n"
+"   --osinfo detect=on,require=off\n"
+"\n"
+"Tai export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:603
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "{env_var} asetettu. Ohitetaan kohtalokas virhe."
 
 #: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6720,10 +6719,8 @@ msgstr ""
 "sen sijaan tyhjää '--edit'"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os-variant ei tueta --edit parametrin kanssa"
+msgstr "--os-variant/--osinfo ei tueta --edit parametrin kanssa"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6736,10 +6733,8 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Ei pysty käyttämään --remove-device --%s:n kanssa"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr "--os-variant ei tueta --remove-device parametrin kanssa"
+msgstr "--os-variant/--osinfo ei tueta --remove-device parametrin kanssa"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6747,10 +6742,8 @@ msgid "--build-xml not supported for --%s"
 msgstr "--build-xml ei tueta --%s:lle"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "--os-variant ei tueta --build-xml kanssa"
+msgstr "--os-variant/--osinfo ei tueta --build-xml kanssa"
 
 #: virtinst/virtxml.py:233
 #, python-format
