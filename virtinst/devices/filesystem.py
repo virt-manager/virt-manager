@@ -135,14 +135,22 @@ class DeviceFilesystem(Device):
     def set_defaults(self, guest):
         ignore = guest
 
-        if self.conn.is_qemu() or self.conn.is_lxc() or self.conn.is_test():
-            # type=mount is the libvirt default. But hardcode it
-            # here since we need it for the accessmode check
-            if self.type is None:
-                self.type = self.TYPE_MOUNT
+        if not (self.conn.is_qemu() or
+                self.conn.is_lxc() or
+                self.conn.is_test()):
+            return
 
-            # libvirt qemu defaults to accessmode=passthrough, but that
-            # really only works well for qemu running as root, which is
-            # not the common case. so use mode=mapped
-            if self.accessmode is None:
+        # type=mount is the libvirt default. But hardcode it since other
+        # bits like validation depend on it
+        if self.type is None:
+            self.type = self.TYPE_MOUNT
+
+        if self.accessmode is None:
+            if self.driver_type == "virtiofs":
+                # let libvirt fill in default accessmode=passthrough
+                pass
+            else:
+                # libvirt qemu defaults to accessmode=passthrough, but that
+                # really only works well for qemu running as root, which is
+                # not the common case. so use mode=mapped
                 self.accessmode = self.MODE_MAPPED
