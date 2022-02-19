@@ -85,7 +85,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkAlignment" id="snapshot-new-box-align">
+              <object class="GtkBox" id="snapshot-new-box-align">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -229,6 +229,11 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>

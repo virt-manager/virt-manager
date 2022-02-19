@@ -102,12 +102,11 @@
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkAlignment" id="details-box-align">
+              <object class="GtkBox" id="details-box-align">
                 <property name="width-request">400</property>
                 <property name="height-request">400</property>
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="right-padding">1</property>
                 <child>
                   <object class="GtkBox" id="details-box">
                     <property name="visible">True</property>
@@ -282,6 +281,7 @@
                               <object class="GtkGrid" id="table2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
+                                <property name="halign">start</property>
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">6</property>
                                 <child>
@@ -342,17 +342,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkAlignment">
-                                    <property name="visible">True</property>
-                                    <property name="can-focus">False</property>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
+                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -448,6 +438,11 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>

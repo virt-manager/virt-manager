@@ -135,27 +135,13 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkButton" id="browse-local">
+                <property name="label" translatable="yes">_Browse Local</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="tooltip-text" translatable="yes">Browse local filesystem</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_browse_local_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkAlignment" id="alignment4">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="top-padding">2</property>
-                    <property name="bottom-padding">2</property>
-                    <child>
-                      <object class="GtkLabel" id="label2">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">_Browse Local</property>
-                        <property name="use-underline">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -185,8 +171,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-underline">True</property>
                 <property name="tooltip-text" translatable="yes">Choose the selected volume</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_choose_volume_clicked" swapped="no"/>
               </object>
               <packing>
@@ -201,8 +187,8 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
                 <property name="tooltip-text" translatable="yes">Apply pool changes</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_pool_apply_clicked" swapped="no"/>
               </object>
               <packing>
@@ -266,7 +252,7 @@
             <property name="can-focus">True</property>
             <property name="show-border">False</property>
             <child>
-              <object class="GtkAlignment" id="pool-details-align">
+              <object class="GtkBox" id="pool-details-align">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -276,7 +262,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <!-- n-columns=3 n-rows=5 -->
+                      <!-- n-columns=2 n-rows=5 -->
                       <object class="GtkGrid" id="table5">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -447,21 +433,6 @@
                             <property name="top-attach">1</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -631,6 +602,11 @@
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
             </child>

@@ -86,7 +86,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
-              <object class="GtkAlignment" id="pool-details-align">
+              <object class="GtkBox" id="pool-details-align">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -454,6 +454,11 @@
                       <placeholder/>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>

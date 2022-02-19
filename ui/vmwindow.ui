@@ -44,9 +44,9 @@
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="close4">
-                        <property name="label" translatable="yes">_Close</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">_Close</property>
                         <property name="use-underline">True</property>
                         <signal name="activate" handler="on_details_menu_close_activate" swapped="no"/>
                         <accelerator key="w" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
@@ -54,9 +54,9 @@
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="quit3">
-                        <property name="label" translatable="yes">_Quit</property>
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="label" translatable="yes">_Quit</property>
                         <property name="use-underline">True</property>
                         <signal name="activate" handler="on_details_menu_quit_activate" swapped="no"/>
                         <accelerator key="q" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
@@ -475,7 +475,7 @@
             <property name="show-border">False</property>
             <signal name="switch-page" handler="on_details_pages_switch_page" after="yes" swapped="no"/>
             <child>
-              <object class="GtkAlignment" id="details-placeholder">
+              <object class="GtkBox" id="details-placeholder">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
@@ -494,7 +494,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="console-placeholder">
+              <object class="GtkBox" id="console-placeholder">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>

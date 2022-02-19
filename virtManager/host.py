@@ -141,10 +141,12 @@ class vmmHost(vmmGObjectUI):
         self.widget("config-autoconnect").set_active(auto)
 
         self._cpu_usage_graph = Sparkline()
+        self._cpu_usage_graph.set_hexpand(True)
         self._cpu_usage_graph.show()
         self.widget("performance-cpu-align").add(self._cpu_usage_graph)
 
         self._memory_usage_graph = Sparkline()
+        self._memory_usage_graph.set_hexpand(True)
         self._memory_usage_graph.show()
         self.widget("performance-memory-align").add(self._memory_usage_graph)
 
