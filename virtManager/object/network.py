@@ -109,8 +109,6 @@ class vmmNetwork(vmmLibvirtObject):
         return self.get_xmlobj().domain_name
     def get_ipv6_enabled(self):
         return self.get_xmlobj().ipv6
-    def get_ipv4_forward_mode(self):
-        return self.get_xmlobj().forward.mode
 
     def _get_network(self, family):
         dhcpstart = None

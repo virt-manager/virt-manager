@@ -90,7 +90,7 @@
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="stock">gtk-dialog-warning</property>
+                                    <property name="icon-name">dialog-warning</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1008,11 +1008,11 @@ identical CPUs in order to migrate the VM.</property>
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="prefs-close">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="yes">_Close</property>
+                <property name="use-underline">True</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
                 <signal name="clicked" handler="on_prefs_close_clicked" swapped="no"/>
               </object>
               <packing>

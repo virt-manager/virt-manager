@@ -29,7 +29,7 @@
                   <object class="GtkImage" id="image2">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-new</property>
+                    <property name="icon-name">document-new</property>
                     <property name="icon_size">6</property>
                   </object>
                   <packing>
@@ -470,11 +470,11 @@
                 <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="pool-cancel">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_pool_cancel_clicked" swapped="no"/>
                   </object>
                   <packing>

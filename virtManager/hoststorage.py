@@ -175,10 +175,7 @@ class vmmHostStorage(vmmGObjectUI):
 
         # Volume list popup menu
         self._volmenu = Gtk.Menu()
-        volCopyPath = Gtk.ImageMenuItem.new_with_label(_("Copy Volume Path"))
-        volCopyImage = Gtk.Image()
-        volCopyImage.set_from_stock(Gtk.STOCK_COPY, Gtk.IconSize.MENU)
-        volCopyPath.set_image(volCopyImage)
+        volCopyPath = Gtk.MenuItem.new_with_mnemonic(_("Copy Volume Path"))
         volCopyPath.show()
         volCopyPath.connect("activate", self._vol_copy_path_cb)
         self._volmenu.add(volCopyPath)

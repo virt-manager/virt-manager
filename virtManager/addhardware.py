@@ -224,21 +224,21 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("Sound"), "audio-card", PAGE_SOUND,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."))
-        add_hw_option(_("Serial"), Gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option(_("Serial"), "device_serial", PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "serial")
-        add_hw_option(_("Parallel"), Gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option(_("Parallel"), "device_serial", PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "parallel")
-        add_hw_option(_("Console"), Gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option(_("Console"), "device_serial", PAGE_CHAR,
                       True, None, "console")
-        add_hw_option(_("Channel"), Gtk.STOCK_CONNECT, PAGE_CHAR,
+        add_hw_option(_("Channel"), "device_serial", PAGE_CHAR,
                       self.vm.is_hvm(),
                       _("Not supported for this guest type."),
                       "channel")
-        add_hw_option(_("USB Host Device"), "system-run", PAGE_HOSTDEV,
+        add_hw_option(_("USB Host Device"), "device_usb", PAGE_HOSTDEV,
                       self.conn.support.conn_nodedev(),
                       _("Connection does not support host device enumeration"),
                       "usb")
@@ -249,10 +249,10 @@ class vmmAddHardware(vmmGObjectUI):
         if self.vm.is_container():
             nodedev_enabled = False
             nodedev_errstr = _("Not supported for containers")
-        add_hw_option(_("PCI Host Device"), "system-run", PAGE_HOSTDEV,
+        add_hw_option(_("PCI Host Device"), "device_pci", PAGE_HOSTDEV,
                       nodedev_enabled, nodedev_errstr, "pci")
 
-        add_hw_option(_("MDEV Host Device"), "system-run", PAGE_HOSTDEV,
+        add_hw_option(_("MDEV Host Device"), "device_pci", PAGE_HOSTDEV,
                       self.conn.support.conn_nodedev(),
                       _("Connection does not support host device enumeration"),
                       "mdev")

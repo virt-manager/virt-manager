@@ -135,7 +135,7 @@
                                   <object class="GtkImage" id="snapshot-status-icon">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="stock">gtk-cancel</property>
+                                    <property name="icon-name">image-missing</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -245,7 +245,7 @@
                                   <object class="GtkImage" id="snapshot-screenshot">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="stock">gtk-missing-image</property>
+                                    <property name="icon-name">image-missing</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -280,7 +280,7 @@
                                   <object class="GtkImage" id="image2">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="stock">gtk-info</property>
+                                    <property name="icon-name">dialog-information</property>
                                     <property name="icon_size">2</property>
                                   </object>
                                   <packing>
@@ -392,7 +392,7 @@
                       <object class="GtkImage" id="image1">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="stock">gtk-add</property>
+                        <property name="icon-name">list-add</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
@@ -418,7 +418,7 @@
                       <object class="GtkImage" id="someicon">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="stock">gtk-media-play</property>
+                        <property name="icon-name">media-playback-start</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
@@ -444,7 +444,7 @@
                       <object class="GtkImage" id="image5">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="stock">gtk-refresh</property>
+                        <property name="icon-name">view-refresh</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
@@ -472,7 +472,7 @@
                       <object class="GtkImage" id="image11">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="stock">gtk-delete</property>
+                        <property name="icon-name">edit-delete</property>
                       </object>
                     </child>
                     <child internal-child="accessible">
@@ -502,14 +502,14 @@
                 <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="snapshot-apply">
-                    <property name="label">gtk-apply</property>
+                    <property name="label" translatable="yes">_Apply</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="has-tooltip">True</property>
+                    <property name="use-underline">True</property>
                     <property name="tooltip-markup" translatable="yes">Save updated snapshot metadata</property>
                     <property name="tooltip-text" translatable="yes">Save updated snapshot metadata</property>
-                    <property name="use-stock">True</property>
                     <signal name="clicked" handler="on_snapshot_apply_clicked" swapped="no"/>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="snapshot-apply-atkobject">

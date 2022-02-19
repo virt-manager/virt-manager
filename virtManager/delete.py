@@ -487,7 +487,7 @@ def _populate_storage_list(storage_list, vm, conn, diskdatas):
         elif not default:
             info = definfo
 
-        icon = Gtk.STOCK_DIALOG_WARNING
+        icon = "dialog-warning"
         icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
         row = [default, not can_del, diskdata.path, diskdata.label,
@@ -496,7 +496,7 @@ def _populate_storage_list(storage_list, vm, conn, diskdatas):
 
 
 def _prepare_storage_list(storage_list):
-    # Checkbox, deleteable?, storage path, target (hda), icon stock,
+    # Checkbox, deleteable?, storage path, target (hda), icon name,
     # icon size, tooltip
     model = Gtk.ListStore(bool, bool, str, str, bool, str, int, str)
     storage_list.set_model(model)
@@ -544,7 +544,7 @@ def _prepare_storage_list(storage_list):
     info_img = Gtk.CellRendererPixbuf()
     infoCol.pack_start(info_img, False)
     infoCol.add_attribute(info_img, 'visible', STORAGE_ROW_ICON_SHOW)
-    infoCol.add_attribute(info_img, 'stock-id', STORAGE_ROW_ICON)
+    infoCol.add_attribute(info_img, 'icon-name', STORAGE_ROW_ICON)
     infoCol.add_attribute(info_img, 'stock-size', STORAGE_ROW_ICON_SIZE)
     infoCol.set_sort_column_id(STORAGE_ROW_ICON)
 

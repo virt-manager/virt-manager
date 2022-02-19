@@ -17,11 +17,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-apply</property>
-  </object>
   <object class="GtkWindow" id="vmm-add-hardware">
     <property name="width-request">500</property>
     <property name="height-request">400</property>
@@ -290,7 +285,7 @@
                                   <object class="GtkImage" id="controller-tooltip">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
-                                    <property name="stock">gtk-info</property>
+                                    <property name="icon-name">dialog-information</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">2</property>
@@ -1439,11 +1434,11 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="create-cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="use-stock">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_create_cancel_clicked" swapped="no"/>
               </object>
               <packing>
@@ -1458,7 +1453,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
-                <property name="image">image1</property>
                 <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_create_finish_clicked" swapped="no"/>
               </object>

@@ -12,11 +12,6 @@
     <property name="step-increment">1</property>
     <property name="page-increment">10</property>
   </object>
-  <object class="GtkImage" id="image20">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-new</property>
-  </object>
   <object class="GtkWindow" id="vmm-create">
     <property name="width-request">500</property>
     <property name="height-request">500</property>
@@ -540,7 +535,7 @@
                                     <property name="halign">start</property>
                                     <property name="valign">start</property>
                                     <property name="hexpand">False</property>
-                                    <property name="stock">gtk-dialog-warning</property>
+                                    <property name="icon-name">dialog-warning</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
@@ -599,7 +594,7 @@ bar</property>
                                     <property name="halign">start</property>
                                     <property name="valign">start</property>
                                     <property name="hexpand">False</property>
-                                    <property name="stock">gtk-dialog-warning</property>
+                                    <property name="icon-name">dialog-warning</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
@@ -1180,7 +1175,7 @@ User shouldn't see this.</property>
                                       <object class="GtkImage">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="stock">gtk-info</property>
+                                        <property name="icon-name">dialog-information</property>
                                         <property name="icon_size">3</property>
                                       </object>
                                       <packing>
@@ -1388,7 +1383,7 @@ User shouldn't see this.</property>
                                           <object class="GtkImage" id="image3">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="stock">gtk-dialog-warning</property>
+                                            <property name="icon-name">dialog-warning</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -1427,7 +1422,7 @@ please install &lt;a href="https://github.com/virt-manager/virt-bootstrap"&gt;vi
                                           <object class="GtkImage" id="image8">
                                             <property name="visible">True</property>
                                             <property name="can-focus">False</property>
-                                            <property name="stock">gtk-dialog-warning</property>
+                                            <property name="icon-name">dialog-warning</property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -2514,11 +2509,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                 <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="create-cancel">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_create_cancel_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -2529,12 +2524,12 @@ connections is not yet supported.&lt;/small&gt;</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="create-back">
-                    <property name="label">gtk-go-back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_create_back_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -2545,11 +2540,11 @@ connections is not yet supported.&lt;/small&gt;</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="create-forward">
-                    <property name="label">gtk-go-forward</property>
+                    <property name="label" translatable="yes">_Forward</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_create_forward_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -2563,7 +2558,6 @@ connections is not yet supported.&lt;/small&gt;</property>
                     <property name="label" translatable="yes">_Finish</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="image">image20</property>
                     <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_create_finish_clicked" swapped="no"/>
                   </object>

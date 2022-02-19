@@ -149,7 +149,9 @@ class vmmOverlayToolbar:
         self._toolbar.get_accessible().set_name("Fullscreen Toolbar")
 
         # Exit button
-        button = Gtk.ToolButton.new_from_stock(Gtk.STOCK_LEAVE_FULLSCREEN)
+        button = Gtk.ToolButton()
+        button.set_label(_("Leave Fullscreen"))
+        button.set_icon_name("view-restore")
         button.set_tooltip_text(_("Leave fullscreen"))
         button.show()
         button.get_accessible().set_name("Fullscreen Exit")

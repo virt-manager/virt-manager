@@ -281,10 +281,7 @@ class vmmManager(vmmGObjectUI):
 
     def init_context_menus(self):
         def add_to_menu(idx, text, cb):
-            if text[0:3] == 'gtk':
-                item = Gtk.ImageMenuItem.new_from_stock(text, None)
-            else:
-                item = Gtk.ImageMenuItem.new_with_mnemonic(text)
+            item = Gtk.MenuItem.new_with_mnemonic(text)
             if cb:
                 item.connect("activate", cb)
             item.get_accessible().set_name("conn-%s" % idx)
@@ -292,14 +289,13 @@ class vmmManager(vmmGObjectUI):
             self.connmenu_items[idx] = item
 
         # Build connection context menu
-        add_to_menu("create", Gtk.STOCK_NEW, self.new_vm)
-        add_to_menu("connect", Gtk.STOCK_CONNECT, self.open_conn)
-        add_to_menu("disconnect", Gtk.STOCK_DISCONNECT,
-                      self.close_conn)
+        add_to_menu("create", _("_New"), self.new_vm)
+        add_to_menu("connect", _("_Connect"), self.open_conn)
+        add_to_menu("disconnect", _("Dis_connect"), self.close_conn)
         self.connmenu.add(Gtk.SeparatorMenuItem())
-        add_to_menu("delete", Gtk.STOCK_DELETE, self.do_delete)
+        add_to_menu("delete", _("De_lete"), self.do_delete)
         self.connmenu.add(Gtk.SeparatorMenuItem())
-        add_to_menu("details", _("D_etails"), self.show_host)
+        add_to_menu("details", _("_Details"), self.show_host)
         self.connmenu.show_all()
 
     def init_vmlist(self):

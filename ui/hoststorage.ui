@@ -2,11 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="stock">gtk-apply</property>
-  </object>
   <!-- n-columns=1 n-rows=2 -->
   <object class="GtkGrid" id="storage-grid">
     <property name="visible">True</property>
@@ -33,7 +28,7 @@
                   <object class="GtkImage" id="image4">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-add</property>
+                    <property name="icon-name">list-add</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -59,7 +54,7 @@
                   <object class="GtkImage" id="someicon">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-media-play</property>
+                    <property name="icon-name">media-playback-start</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -85,7 +80,7 @@
                   <object class="GtkImage" id="image6">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-stop</property>
+                    <property name="icon-name">process-stop</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -111,7 +106,7 @@
                   <object class="GtkImage" id="image7">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="stock">gtk-delete</property>
+                    <property name="icon-name">edit-delete</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -170,12 +165,12 @@
             </child>
             <child>
               <object class="GtkButton" id="browse-cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="tooltip-text" translatable="yes">Cancel and close dialog</property>
-                <property name="use-stock">True</property>
+                <property name="use-underline">True</property>
                 <signal name="clicked" handler="on_browse_cancel_clicked" swapped="no"/>
               </object>
               <packing>
@@ -186,12 +181,12 @@
             </child>
             <child>
               <object class="GtkButton" id="choose-volume">
-                <property name="label" translatable="yes">Choose Volume</property>
+                <property name="label" translatable="yes">Ch_oose Volume</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <property name="tooltip-text" translatable="yes">Choose the selected volume</property>
-                <property name="image">image3</property>
                 <signal name="clicked" handler="on_choose_volume_clicked" swapped="no"/>
               </object>
               <packing>
@@ -202,12 +197,12 @@
             </child>
             <child>
               <object class="GtkButton" id="pool-apply">
-                <property name="label">gtk-apply</property>
+                <property name="label" translatable="yes">_Apply</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <property name="tooltip-text" translatable="yes">Apply pool changes</property>
-                <property name="use-stock">True</property>
                 <signal name="clicked" handler="on_pool_apply_clicked" swapped="no"/>
               </object>
               <packing>
@@ -297,7 +292,7 @@
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="stock">gtk-missing-image</property>
+                                <property name="icon-name">image-missing</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -514,7 +509,7 @@
                                       <object class="GtkImage" id="image1">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="stock">gtk-add</property>
+                                        <property name="icon-name">list-add</property>
                                       </object>
                                     </child>
                                     <child internal-child="accessible">
@@ -541,7 +536,7 @@
                                       <object class="GtkImage" id="image8">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="stock">gtk-refresh</property>
+                                        <property name="icon-name">view-refresh</property>
                                       </object>
                                     </child>
                                     <child internal-child="accessible">
@@ -568,7 +563,7 @@
                                       <object class="GtkImage" id="image2">
                                         <property name="visible">True</property>
                                         <property name="can-focus">False</property>
-                                        <property name="stock">gtk-delete</property>
+                                        <property name="icon-name">edit-delete</property>
                                       </object>
                                     </child>
                                     <child internal-child="accessible">

@@ -92,7 +92,7 @@
                       <object class="GtkImage" id="delete-warn-running-vm-icon">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="stock">gtk-dialog-warning</property>
+                        <property name="icon-name">dialog-warning</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -178,11 +178,11 @@
                 <property name="layout-style">end</property>
                 <child>
                   <object class="GtkButton" id="delete-cancel">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_delete_cancel_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -193,11 +193,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="delete-ok">
-                    <property name="label">gtk-delete</property>
+                    <property name="label" translatable="yes">_Delete</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="use-stock">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="on_delete_ok_clicked" swapped="no"/>
                   </object>
                   <packing>
