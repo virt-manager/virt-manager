@@ -1,9 +1,14 @@
 <domain type="qemu">
-  <name>vm-aarch64</name>
+  <name>fedora26-aarch64</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/26"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
+  <vcpu>2</vcpu>
   <os>
     <type arch="aarch64" machine="virt">hvm</type>
     <loader>CODE.fd</loader>
@@ -26,8 +31,8 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
-      <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol2.img"/>
+      <driver name="qemu"/>
+      <source file="tests/data/fakemedia/fake-f26-netinst.iso"/>
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
@@ -55,14 +60,23 @@
     <video>
       <model type="virtio"/>
     </video>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>
 <domain type="qemu">
-  <name>vm-aarch64</name>
+  <name>fedora26-aarch64</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <metadata>
+    <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+      <libosinfo:os id="http://fedoraproject.org/fedora/26"/>
+    </libosinfo:libosinfo>
+  </metadata>
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
-  <vcpu>1</vcpu>
+  <vcpu>2</vcpu>
   <os>
     <type arch="aarch64" machine="virt">hvm</type>
     <loader>CODE.fd</loader>
@@ -111,5 +125,9 @@
     <video>
       <model type="virtio"/>
     </video>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
   </devices>
 </domain>
