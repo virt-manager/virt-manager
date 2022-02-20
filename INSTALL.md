@@ -36,7 +36,7 @@ Minimum version requirements of major components:
    - python >= 3.4
    - gtk3 >= 3.22
    - libvirt-python >= 0.6.0
-   - pygobject3 >= 3.22
+   - pygobject3 >= 3.31.3
    - libosinfo >= 0.2.10
    - gtksourceview >= 3
 
