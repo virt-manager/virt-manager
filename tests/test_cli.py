@@ -1084,8 +1084,6 @@ c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice 
 c.add_compare("--osinfo generic --boot uefi --disk size=1", "boot-uefi")
 c.add_compare("--osinfo generic --boot uefi --disk size=1 --tpm none --connect " + utils.URIs.kvm_x86_oldfirmware, "boot-uefi-oldcaps")
 
-c.add_valid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps)  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
-
 c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks", grep="NFS URL installs are no longer supported")
 c.add_invalid("--disk none --boot network --machine foobar", grep="domain type None with machine 'foobar'")
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm", grep="any virtualization options for architecture 'mips'")
@@ -1101,42 +1099,60 @@ c.add_compare("--connect " + utils.URIs.kvm_x86_session + " --disk size=8 --os-v
 c.add_valid("--connect " + utils.URIs.kvm_x86_session + " --install fedora21", prerun_check=has_old_osinfo)  # hits some get_search_paths and media_upload code paths
 
 
+
+
 ###############
 # ppc64 tests #
 ###############
 
 c.add_compare("--machine pseries --boot arch=ppc64,network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
-c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none", "ppc64-machdefault-f20")
-c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default --tpm default", "ppc64le-kvm-import")
+c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none --graphics vnc", "ppc64-machdefault-f20")
+c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default --tpm default --graphics none", "ppc64le-kvm-import")
+
+
 
 
 ###############
 # s390x tests #
 ###############
 
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora21 --panic default", "s390x-cdrom", prerun_check=has_old_osinfo)
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora30 --panic default --graphics vnc", "s390x-cdrom", prerun_check=has_old_osinfo)
+c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --disk %(EXISTIMG1)s --os-variant fedora30", "s390x-headless")
+
+
+
+###############
+# riscv tests #
+###############
+
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none", "riscv64-headless", precompare_check="5.3.0")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc", "riscv64-graphics", precompare_check="5.3.0", )
+
 
 
 ################
 # armv7l tests #
 ################
 
-c.add_compare("--arch armv7l --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain")
-c.add_compare("--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --nographics --os-variant fedora20", "arm-virt-f20")
+c.add_compare("--arch armv7l --osinfo generic --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain")
+c.add_compare("--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --graphics vnc --os-variant fedora20", "arm-virt-f20")
 c.add_compare("--arch armv7l --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --os-variant fedora20", "arm-defaultmach-f20")
 c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-variant fedora20", "arm-kvm-import")
+
 
 
 #################
 # aarch64 tests #
 #################
 
-c.add_compare("--arch aarch64 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
-c.add_compare("--arch aarch64 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machdefault")
-c.add_compare("--arch aarch64 --cdrom %(EXISTIMG2)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")
-c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default", "aarch64-kvm-import")  # the --panic is a no-op
+c.add_valid("--arch aarch64 --osinfo fedora19 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps, grep="Libvirt version does not support UEFI")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
+c.add_compare("--arch aarch64 --osinfo fedora19 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
+c.add_compare("--arch aarch64 --osinfo fedora19 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machdefault")
+c.add_compare("--arch aarch64 --cdrom %(ISO-F26-NETINST)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")  # cdrom test, but also --cpu none override, --events override, and headless
+c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default --graphics vnc", "aarch64-kvm-import")  # --import test, but also test --panic no-op, and --graphics
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
-c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64 --disk none --pxe --boot firmware=efi", "aarch64-firmware-no-override")
+c.add_compare("--connect %(URI-KVM-AARCH64)s --osinfo fedora30 --arch aarch64 --disk none --pxe --boot firmware=efi", "aarch64-firmware-no-override")
+
 
 
 #################
@@ -1152,29 +1168,6 @@ c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_s
 c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, grep="SEV launch security requires a Q35 UEFI machine")
 c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86, grep="SEV launch security is not supported")  # Fail with no SEV capabilities
 
-
-#############################
-# cross arch headless tests #
-#############################
-
-c = vinst.add_category("kvm-headless", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none")
-c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-headless")
-c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-headless")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-headless", precompare_check="5.3.0")
-c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-headless")
-c.add_compare("--connect %(URI-KVM-X86)s --arch x86_64", "x86_64-headless")
-
-
-#############################
-# cross arch graphics tests #
-#############################
-
-c = vinst.add_category("kvm-graphics", "--os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc")
-c.add_compare("--connect %(URI-KVM-AARCH64)s --arch aarch64", "aarch64-graphics")
-c.add_compare("--connect %(URI-KVM-PPC64LE)s --arch ppc64le", "ppc64-graphics")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64", "riscv64-graphics", precompare_check="5.3.0", )
-c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x", "s390x-graphics")
-c.add_compare("--connect %(URI-KVM-X86)s --arch x86_64", "x86_64-graphics")
 
 
 
