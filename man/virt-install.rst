@@ -1489,20 +1489,25 @@ See ``https://libvirt.org/formatdomain.html#elementsAddress`` for details.
 
 **Syntax:** ``--controller`` OPTIONS
 
-Attach a controller device to the guest. TYPE is one of:
-``ide``, ``fdc``, ``scsi``, ``sata``, ``virtio-serial``, or ``usb`` .
+Attach a controller device to the guest.
 
-Controller also supports the special values ``usb2`` and ``usb3`` to
-specify which version of the USB controller should be used (version 2
-or 3).
+Some example invocations:
 
-Some example suboptions:
+``--controller usb2``
+    Add a full USB2 controller setup
 
-``model``
-    Controller model.  These may vary according to the hypervisor and its
-    version.  Most commonly used models are e.g. ``auto`` , ``virtio-scsi``
-    for the ``scsi`` controller, ``ehci`` or ``none``for the ``usb``
-    controller.
+``--controller usb3``
+    Add a USB3 controller
+
+``--controller type=usb,model=none``
+    Disable USB entirely
+
+``--controller type=scsi,model=virtio-scsi``
+    Add a VirtIO SCSI controller
+
+``--controller q35_pcie_root_ports=NUM``
+    Control the number of default ``pcie-root-port`` controller devices
+    we add to the new VM by default, if the VM will use the q35 machine type.
 
 Use --controller=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#elementsControllers
