@@ -355,9 +355,13 @@ def _show_memory_warnings(guest):
 
 
 def _needs_accurate_osinfo(guest):
-    # Limit it to hvm x86 guests which presently our defaults
-    # only really matter for
-    return guest.os.is_x86() and guest.os.is_hvm()
+    # HVM is really the only case where OS impacts what we set for defaults,
+    # so far.
+    #
+    # Historically we would only warn about missing osinfo on x86, but
+    # with the change to make osinfo mandatory we relaxed the arch check,
+    # so virt-install behavior is more consistent.
+    return guest.os.is_hvm()
 
 
 def show_guest_warnings(options, guest):

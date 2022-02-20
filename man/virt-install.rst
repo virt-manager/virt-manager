@@ -1016,8 +1016,8 @@ all other settings off or unset.
 
 By default, virt-install will always attempt ``--osinfo detect=on``
 for appropriate install media. If no OS is detected, we will fail
-in certain common cases (x86 KVM for example). This fatal error was
-added in 2022. You can work around this by using the fallback example
+in most common cases. This fatal error was added in 2022. You can
+work around this by using the fallback example
 above, or disabling the ``require`` option. If you just need to get back
 to the old non-fatal behavior ASAP, set the environment variable
 VIRTINSTALL_OSINFO_DISABLE_REQUIRE=1.
