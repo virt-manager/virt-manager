@@ -720,7 +720,7 @@ def add_device_options(devg, sound_back_compat=False):
     devg.add_argument("--controller", action="append",
         help=_("Configure a guest controller device. Ex:\n"
                "--controller type=usb,model=qemu-xhci\n"
-               "--controller virtio-scsi\n"))
+               "--controller type=scsi,model=virtio-scsi\n"))
     ParserInput.register()
     devg.add_argument("--input", action="append",
         help=_("Configure a guest input device. Ex:\n"
