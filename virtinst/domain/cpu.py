@@ -286,6 +286,8 @@ class DomainCpu(XMLBuilder):
             self.model = None
             self.vendor = None
             self.model_fallback = None
+            self.migratable = None
+            self.check = None
             for f in self.features:
                 self.remove_child(f)
             self.mode = val
