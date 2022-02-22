@@ -4,14 +4,14 @@
 #
 # Translators:
 # Cole Robinson <crobinso@redhat.com>, 2011
-# Göran Uddeborg <goeran@uddeborg.se>, 2011, 2020, 2021.
+# Göran Uddeborg <goeran@uddeborg.se>, 2011, 2020, 2021, 2022.
 # Magnus Glantz <mg@hacka.net>, 2008
 # fedoratrans <fedoratrans@gmail.com>, 2006
-# Göran Uddeborg <goeran@uddeborg.se>, 2015. #zanata, 2020, 2021.
-# Göran Uddeborg <goeran@uddeborg.se>, 2016. #zanata, 2020, 2021.
-# Göran Uddeborg <goeran@uddeborg.se>, 2017. #zanata, 2020, 2021.
-# Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020, 2021.
-# Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020, 2021.
+# Göran Uddeborg <goeran@uddeborg.se>, 2015. #zanata, 2020, 2021, 2022.
+# Göran Uddeborg <goeran@uddeborg.se>, 2016. #zanata, 2020, 2021, 2022.
+# Göran Uddeborg <goeran@uddeborg.se>, 2017. #zanata, 2020, 2021, 2022.
+# Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020, 2021, 2022.
+# Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020, 2021, 2022.
 # Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2021.
 # Luna Jernberg <bittin@reimu.nl>, 2021, 2022.
 msgid ""
@@ -19,10 +19,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-17 06:15+0000\n"
-"PO-Revision-Date: 2022-02-18 13:16+0000\n"
-"Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/sv/>\n"
+"PO-Revision-Date: 2022-02-23 19:16+0000\n"
+"Last-Translator: Göran Uddeborg <goeran@uddeborg.se>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1676,19 +1676,14 @@ msgid "_Network source:"
 msgstr "_Nätverkskälla:"
 
 #: ui/oslist.ui:55
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
 "Kan du inte hitta opertivsystemet du letar efter?\n"
-"Prova att välja den näst senaste versionen som visas\n"
-"eller använd valet ”Generellt OS”."
+"Prova att välja en liknande distribution eller version, eller använd ett av "
+"valen ”Generellt”."
 
 #: ui/oslist.ui:108
 msgid "Include end of life operating systems"
@@ -2414,6 +2409,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s är inte aktive i värdsystemet.\n"
+"Starta mdev i värdsystemet före det läggs till till gästen."
 
 #: virtManager/addhardware.py:811
 msgid "No Devices Available"
@@ -3350,10 +3347,8 @@ msgid "Viewer is disconnecting."
 msgstr "Visaren kopplar från."
 
 #: virtManager/details/console.py:977
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Visar fönstret stängt."
+msgstr "Visarfönstret stängt."
 
 #: virtManager/details/console.py:981
 #, python-format
@@ -4593,7 +4588,7 @@ msgstr ""
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt kanske inte är ny nog för att stödja memfd."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -5534,19 +5529,14 @@ msgid "The OS installed in the guest."
 msgstr "OS:et är installerat på gästen."
 
 #: virtinst/cli.py:929
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
 "Detta används för att bestämma optimala standardvärden som VirtIO.\n"
-"Exempelvärden: fedora29, rhel7.0, win10, ...\n"
-"Se ”osinfo-query os” för en fullständig lista."
+"Exempelvärden: fedora29, rhel7.0, win10, …\n"
+"Använd ”--osinfo list” för en fullständig lista."
 
 #: virtinst/cli.py:939
 msgid ""
@@ -5636,6 +5626,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Man kan se ytterligare information med:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5752,10 +5745,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Vet inte hur man generar nodedev för mdev typ id ”%s”"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Okänd nodenhetstyp %s"
+msgstr "Nodenhetstypen ”%s” stödjs inte"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -5812,6 +5804,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"Totala CPU:er implicerad av topologin (socklar=%(sockets)d * skivor=%(dies)d "
+"* kärnor=%(cores)d * trådar=%(threads)d == %(total)d) stämmer inte med vCPU-"
+"antalet %(vcpus)d"
 
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
@@ -6272,7 +6267,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type är föråldrat och gör ingenting. Sluta använd det."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6332,16 +6327,13 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "Gästnätverkskonfigurationen stödjer möjligen inte PXE"
 
 #: virtinst/virtinstall.py:370
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Inget operativsystem hittat, VM-prestanda kan bli lidande. Ange ett OS med --"
-"os-variant för optimalt resultat."
+"Genom att använda --osinfo {osname} kan VM-prestanda bli lidande. Ange ett "
+"precist OS för optimalt resultat."
 
 #: virtinst/virtinstall.py:384
 #, python-brace-format
@@ -6374,18 +6366,20 @@ msgid "Error validating install location: %s"
 msgstr "Fel vid validering av installationsplats: %s"
 
 #: virtinst/virtinstall.py:552
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
-msgstr "En --os-variant krävs, men inget värde sattes eller upptäcktes."
+msgstr ""
+"--os-variant/--osinfo OS-namn krävs, men inget värde\n"
+"sattes eller upptäcktes."
 
 #: virtinst/virtinstall.py:566
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"Detta är nu ett ödesdigert fel. Att ange ett OS-namn krävs\n"
+"för moderna, presterande och säkra standardvärden för virtuella maskiner.\n"
 
 #: virtinst/virtinstall.py:570
 msgid ""
@@ -6394,6 +6388,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"Om du förväntade dig att virt-install skulle upptäcka ett OS-namn från\n"
+"installationsmediumet kan du sätta ett standardvärde med:\n"
+"\n"
+"  --osinfo detect=on,name=OSNAMN\n"
 
 #: virtinst/virtinstall.py:579
 msgid ""
@@ -6401,6 +6399,9 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Man kan se en fullständig lista av möjliga värden på OS-namn med:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:586
 #, python-brace-format
@@ -6408,6 +6409,9 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Om din Linux-distribution inte är uppräknad, försök med ett av de generella "
+"värdena\n"
+"såsom: {oslist}\n"
 
 #: virtinst/virtinstall.py:593
 #, python-brace-format
@@ -6418,11 +6422,16 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"Om du bara behöver få tillbaka det gamla beteendet kan du använda:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Eller export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:603
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "{env_var} satt. Hoppar över ödesdigra fel."
 
 #: virtinst/virtinstall.py:679
 msgid "No console to launch for the guest, defaulting to --wait -1"
