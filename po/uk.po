@@ -19,17 +19,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-02-27 13:16+0000\n"
+"PO-Revision-Date: 2022-03-09 18:02+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -1633,8 +1633,8 @@ msgid ""
 msgstr ""
 "Тунельоване перенесення за допомогою каналу з'єднання libvirtd замість "
 "відкриття гіпервізором окремого з'єднання мережі з призначенням. Екземпляр "
-"джерела libvirt з'єднується безпосередньо із екземпляром призначення "
-"libvirt.\n"
+"джерела libvirt з'єднується безпосередньо із екземпляром призначення libvirt."
+"\n"
 "\n"
 "Може спростити налаштування, оскільки не потрібно відкривати додаткові порти "
 "у брандмауері, і зашифрувати дані, що передаються під час перенесення, якщо "
@@ -3361,8 +3361,7 @@ msgstr "Графічна консоль"
 
 #: virtManager/details/console.py:231
 msgid "virt-manager does not support more than one graphical console"
-msgstr ""
-"У virt-manager передбачено підтримку не більше однієї графічної консолі"
+msgstr "У virt-manager передбачено підтримку не більше однієї графічної консолі"
 
 #: virtManager/details/console.py:575
 msgid "Guest has crashed."
@@ -5673,8 +5672,8 @@ msgid ""
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
-"Використовується для визначення оптимальних типових значень, зокрема "
-"VirtIO.\n"
+"Використовується для визначення оптимальних типових значень, зокрема VirtIO."
+"\n"
 "Приклади значень: fedora29, rhel7.0, win10, ...\n"
 "Щоб ознайомитися із повним списком, скористайтеся параметром «--osinfo list»."
 
@@ -5955,9 +5954,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
-"TЗагальна кількість процесорів, яка визначається топологією (сокетів="
-"%(sockets)d * плашок=%(dies)d * ядер=%(cores)d * потоків=%(threads)d == "
-"%(total)d), не відповідає кількості віртуальних процесорів, %(vcpus)d"
+"TЗагальна кількість процесорів, яка визначається топологією "
+"(сокетів=%(sockets)d * плашок=%(dies)d * ядер=%(cores)d * потоків=%(threads)"
+"d == %(total)d), не відповідає кількості віртуальних процесорів, %(vcpus)d"
 
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
@@ -6197,8 +6196,7 @@ msgstr "Для ОС «%(osname)s» не має місця URL для архіт�
 #: virtinst/storage.py:166
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr ""
-"Не вдалося створити типове резервне сховище даних «%(path)s»: %(error)s"
+msgstr "Не вдалося створити типове резервне сховище даних «%(path)s»: %(error)s"
 
 #: virtinst/storage.py:219 virtinst/storage.py:551
 msgid "Storage object"
@@ -6558,8 +6556,8 @@ msgid ""
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
 "Тепер це є критичною помилкою. Визначення назви ОС є обов'язковим\n"
-"для сучасних, швидкісних та безпечних типових параметрів віртуальної "
-"системи.\n"
+"для сучасних, швидкісних та безпечних типових параметрів віртуальної системи."
+"\n"
 
 #: virtinst/virtinstall.py:574
 msgid ""
@@ -6579,8 +6577,8 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
-"Переглянути повний список можливих назв ОС можна за допомогою такої "
-"команди:\n"
+"Переглянути повний список можливих назв ОС можна за допомогою такої команди:"
+"\n"
 "\n"
 "   virt-install --osinfo list\n"
 
@@ -6855,14 +6853,14 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
-"%(type)s"
+"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s "
+"--%(type)s"
 msgstr[1] ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
-"%(type)s"
+"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s "
+"--%(type)s"
 msgstr[2] ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
-"%(type)s"
+"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s "
+"--%(type)s"
 
 #: virtinst/virtxml.py:107
 #, python-format
@@ -6899,8 +6897,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:157
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr ""
-"якщо використано --edit, не можна використовувати --os-variant/--osinfo"
+msgstr "якщо використано --edit, не можна використовувати --os-variant/--osinfo"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6915,8 +6912,8 @@ msgstr "Не можна використовувати --remove-device, якщо
 #: virtinst/virtxml.py:184
 msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr ""
-"якщо використано --remove-device, не можна використовувати --os-variant/--"
-"osinfo"
+"якщо використано --remove-device, не можна використовувати --os-variant/"
+"--osinfo"
 
 #: virtinst/virtxml.py:204
 #, python-format
