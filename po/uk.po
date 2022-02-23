@@ -18,17 +18,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-21 06:16+0000\n"
-"PO-Revision-Date: 2022-02-20 19:16+0000\n"
+"PO-Revision-Date: 2022-02-25 20:16+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -175,7 +175,7 @@ msgstr "паніка"
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "_Скасувати"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -253,7 +253,7 @@ msgstr "Змінити шлях до сховища даних"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
-msgstr ""
+msgstr "_Гаразд"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -783,16 +783,12 @@ msgid "Finish"
 msgstr "Завершити"
 
 #: ui/createvm.ui:2415
-#, fuzzy
-#| msgid "_Backend:"
 msgid "_Back"
-msgstr "_Модуль обробки:"
+msgstr "_Назад"
 
 #: ui/createvm.ui:2431
-#, fuzzy
-#| msgid "Forwarding:"
 msgid "_Forward"
-msgstr "Переспрямування:"
+msgstr "_Далі"
 
 #: ui/createvol.ui:24
 msgid "Add a Storage Volume"
@@ -1268,15 +1264,13 @@ msgid "<b>Panic Notifier</b>"
 msgstr "<b>Сповіщувач про паніку</b>"
 
 #: ui/details.ui:4845
-#, fuzzy
-#| msgid "Removable"
 msgid "_Remove"
-msgstr "Портативний пристрій"
+msgstr "Ви_лучити"
 
 #: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
-msgstr ""
+msgstr "_Застосувати"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
@@ -1296,7 +1290,7 @@ msgstr "_Формат:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "щось там повідомлення-попередження"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1450,10 +1444,8 @@ msgid "Cancel and close dialog"
 msgstr "Скасувати і закрити діалогове вікно"
 
 #: ui/hoststorage.ui:170
-#, fuzzy
-#| msgid "Choose Volume"
 msgid "Ch_oose Volume"
-msgstr "Вибір тому"
+msgstr "Ви_брати том"
 
 #: ui/hoststorage.ui:174
 msgid "Choose the selected volume"
@@ -1494,11 +1486,11 @@ msgstr "С_творити віртуальну машину"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr ""
+msgstr "З_акрити"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr ""
+msgstr "Ви_йти"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1513,10 +1505,8 @@ msgid "_Virtual Machine Details"
 msgstr "Параметри ві_ртуальної машини"
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Параметри"
+msgstr "_Параметри"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -1552,7 +1542,7 @@ msgstr "_Довідка"
 
 #: ui/manager.ui:222
 msgid "_About"
-msgstr ""
+msgstr "П_ро програму"
 
 #: ui/manager.ui:253
 msgid "Create a new virtual machine"
@@ -2001,14 +1991,12 @@ msgid "_Version:"
 msgstr "_Версія:"
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
-msgstr "Додаткові параметри"
+msgstr "Д_одаткові параметри"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
-msgstr ""
+msgstr "tpm-tab"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
@@ -3333,8 +3321,6 @@ msgid "Failed to check disk usage conflict."
 msgstr "Не вдалося перевірити конфлікт у використанні диска."
 
 #: virtManager/details/console.py:153
-#, fuzzy
-#| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
 msgstr "Вийти з повноекранного режиму"
 
@@ -3775,11 +3761,11 @@ msgstr "Підтримки консолі для пристроїв типу «%
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "_Копіювати"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "Вс_тавити"
 
 #: virtManager/details/serialcon.py:348
 #, python-format
@@ -4044,7 +4030,7 @@ msgstr "_Шлях до джерела:"
 
 #: virtManager/device/fsdetails.py:163
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
-msgstr ""
+msgstr "Можливо, вам слід «Увімкнути спільну пам'ять» на сторінці «Пам'ять»."
 
 #: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
@@ -4135,10 +4121,8 @@ msgid "SPAPR"
 msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:71
-#, fuzzy
-#| msgid "Emulator:"
 msgid "Emulated"
-msgstr "Емулятор:"
+msgstr "Емульовано"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4560,23 +4544,17 @@ msgstr "Помилка під час спроби запуску засобу к
 
 #: virtManager/manager.py:292
 msgid "_New"
-msgstr ""
+msgstr "С_творити"
 
 #: virtManager/manager.py:293
-#, fuzzy
-#| msgid "Connect"
 msgid "_Connect"
-msgstr "З'єднати"
+msgstr "З'_єднати"
 
 #: virtManager/manager.py:294
-#, fuzzy
-#| msgid "Disconnected"
 msgid "Dis_connect"
-msgstr "Роз'єднано"
+msgstr "Р_оз'єднати"
 
 #: virtManager/manager.py:296
-#, fuzzy
-#| msgid "_Delete"
 msgid "De_lete"
 msgstr "В_илучити"
 
@@ -5387,11 +5365,6 @@ msgstr ""
 "--network help"
 
 #: virtinst/cli.py:721
-#, fuzzy
-#| msgid ""
-#| "Configure a guest controller device. Ex:\n"
-#| "--controller type=usb,model=qemu-xhci\n"
-#| "--controller virtio-scsi\n"
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5399,7 +5372,7 @@ msgid ""
 msgstr ""
 "Налаштовування пристрою контролера гостьової системи. Приклад:\n"
 "--controller type=usb,model=qemu-xhci\n"
-"--controller virtio-scsi\n"
+"--controller type=scsi,model=virtio-scsi\n"
 
 #: virtinst/cli.py:726
 msgid ""
