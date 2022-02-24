@@ -766,6 +766,10 @@ def add_device_options(devg, sound_back_compat=False):
         devg.add_argument("--soundhw", action="append", dest="sound",
             help=argparse.SUPPRESS)
 
+    ParserAudio.register()
+    devg.add_argument("--audio", action="append",
+                    help=_("Configure host audio backend for sound devices"))
+
     ParserWatchdog.register()
     devg.add_argument("--watchdog", action="append",
                     help=_("Configure a guest watchdog device"))
@@ -4591,6 +4595,18 @@ class ParserSound(VirtCLIParser):
         cls.add_arg("audio.id", "audio_id")
         cls.add_arg("codec[0-9]*.type", "type",
                     find_inst_cb=cls.codec_find_inst_cb)
+
+
+class ParserAudio(VirtCLIParser):
+    cli_arg_name = "audio"
+    guest_propname = "devices.audio"
+
+    @classmethod
+    def _init_class(cls, **kwargs):
+        VirtCLIParser._init_class(**kwargs)
+
+        cls.add_arg("type", "type")
+        cls.add_arg("id", "id")
 
 
 #####################

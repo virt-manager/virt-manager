@@ -703,6 +703,10 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --sound codec0.type=micro,codec1.type=duplex,codec2.type=output
 
 
+--audio id=1,type=spice
+--audio id=2,type=pulseaudio
+
+
 --video cirrus
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65
 --video model=qxl,model.vgamem=1,model.ram=2,model.vram=3,model.heads=4,model.acceleration.accel3d=yes,model.vram64=65
@@ -1411,6 +1415,7 @@ c = vixml.add_category("add/rm devices", "test-for-virtxml --print-diff --define
 c.add_compare("--add-device --seclabel model=dac", "add-seclabel")
 c.add_compare("--add-device --host-device usb_device_483_2016_noserial", "add-host-device")
 c.add_compare("--add-device --sound pcspk", "add-sound")
+c.add_compare("--add-device --audio type=none,id=1", "add-audio", predefine_check="7.4.0")
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "add-disk-notarget")  # filling in acceptable target
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage")
