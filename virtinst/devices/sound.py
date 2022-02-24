@@ -31,7 +31,7 @@ class DeviceSound(Device):
 
     @staticmethod
     def default_model(guest):
-        if guest.os.is_q35():
+        if guest.defaults_to_pcie():
             return "ich9"
         return "ich6"
 
