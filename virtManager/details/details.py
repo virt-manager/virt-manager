@@ -2097,6 +2097,7 @@ class vmmDetails(vmmGObjectUI):
         dev_type = chardev.type or "pty"
         primary = self.vm.serial_is_console_dup(chardev)
         show_target_type = not (char_type in ["serial", "parallel"])
+        is_qemuga = chardev.target_name == chardev.CHANNEL_NAME_QEMUGA
 
         if char_type == "serial":
             typelabel = _("Serial Device")
@@ -2121,8 +2122,9 @@ class vmmDetails(vmmGObjectUI):
         self.widget("char-type").set_markup(typelabel)
         self.widget("char-dev-type").set_text(dev_type)
 
-        def show_ui(widgetname, val):
-            doshow = bool(val)
+        def show_ui(widgetname, val, doshow=None):
+            if doshow is None:
+                doshow = bool(val)
             uiutil.set_grid_row_visible(self.widget(widgetname), doshow)
             self.widget(widgetname).set_text(val or "-")
 
@@ -2146,7 +2148,10 @@ class vmmDetails(vmmGObjectUI):
         show_ui("char-source-path", chardev.source.path)
         show_ui("char-target-type", target_type)
         show_ui("char-target-name", chardev.target_name)
-        show_ui("char-target-state", chardev.target_state)
+        # Only show for the qemu guest agent, which we get async
+        # notifiations about connection state. For spice this UI field
+        # can get out of date
+        show_ui("char-target-state", chardev.target_state, doshow=is_qemuga)
 
     def _refresh_hostdev_page(self, hostdev):
         rom_bar = hostdev.rom_bar
