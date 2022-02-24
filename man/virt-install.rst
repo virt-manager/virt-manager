@@ -1575,6 +1575,16 @@ Complete details at https://libvirt.org/formatdomain.html#elementsSound
 
 
 
+``--audio``
+^^^^^^^^^^^
+
+Configure host audio output for the guest's `--sound` hardware.
+
+Use --audio=? to see a list of all available sub options.
+Complete details at https://libvirt.org/formatdomain.html#audio-backends
+
+
+
 ``--watchdog``
 ^^^^^^^^^^^^^^
 

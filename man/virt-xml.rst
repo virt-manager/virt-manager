@@ -235,6 +235,7 @@ XML OPTIONS
 * ``--hostdev``
 * ``--filesystem``
 * ``--sound``
+* ``--audio``
 * ``--watchdog``
 * ``--video``
 * ``--smartcard``

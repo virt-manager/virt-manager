@@ -25,7 +25,7 @@ class _DomainDevices(XMLBuilder):
     XML_NAME = "devices"
     _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
             'smartcard', 'serial', 'parallel', 'console', 'channel',
-            'input', 'tpm', 'graphics', 'sound', 'video', 'hostdev',
+            'input', 'tpm', 'graphics', 'sound', 'audio', 'video', 'hostdev',
             'redirdev', 'watchdog', 'memballoon', 'rng', 'panic',
             'shmem', 'memory', 'vsock', 'iommu']
 
@@ -43,6 +43,7 @@ class _DomainDevices(XMLBuilder):
     tpm = XMLChildProperty(DeviceTpm)
     graphics = XMLChildProperty(DeviceGraphics)
     sound = XMLChildProperty(DeviceSound)
+    audio = XMLChildProperty(DeviceAudio)
     video = XMLChildProperty(DeviceVideo)
     hostdev = XMLChildProperty(DeviceHostdev)
     redirdev = XMLChildProperty(DeviceRedirdev)

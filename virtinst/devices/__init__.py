@@ -4,6 +4,7 @@
 # See the COPYING file in the top-level directory.
 
 
+from .audio import DeviceAudio
 from .char import DeviceChannel, DeviceConsole, DeviceParallel, DeviceSerial
 from .controller import DeviceController
 from .device import Device
