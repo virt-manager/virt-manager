@@ -1005,7 +1005,7 @@ class Guest(XMLBuilder):
         ctrl.set_defaults(self)
         self.add_device(ctrl)
 
-    def _defaults_to_pcie(self):
+    def defaults_to_pcie(self):
         if self.os.is_q35():
             return True
         if self.os.is_arm_machvirt():
@@ -1017,7 +1017,7 @@ class Guest(XMLBuilder):
     def _add_q35_pcie_controllers(self):
         if any([c for c in self.devices.controller if c.type == "pci"]):
             return
-        if not self._defaults_to_pcie():
+        if not self.defaults_to_pcie():
             return
 
         added = False
