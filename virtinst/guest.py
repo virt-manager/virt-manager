@@ -202,7 +202,11 @@ class Guest(XMLBuilder):
         self.skip_default_rng = False
         self.skip_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
-        self.num_pcie_root_ports = 16
+
+        # qemu 6.1, fairly new when we added this option, has an unfortunate
+        # bug with >= 15 root ports, so we choose 14 instead of our original 16
+        # https://gitlab.com/qemu-project/qemu/-/issues/641
+        self.num_pcie_root_ports = 14
 
         self.skip_default_osinfo = False
         self.uefi_requested = False
