@@ -3932,9 +3932,9 @@ class ParserController(VirtCLIParser):
         elif self.optstr == "usb3":
             return DeviceController.get_usb3_controller(inst.conn, self.guest)
 
-        if "q35_pcie_root_ports" in self.optdict:
-            self.guest.q35_pcie_root_ports = int(
-                    self.optdict.pop("q35_pcie_root_ports"))
+        if "num_pcie_root_ports" in self.optdict:
+            self.guest.num_pcie_root_ports = int(
+                    self.optdict.pop("num_pcie_root_ports"))
             return
 
         return super()._parse(inst)
@@ -3982,7 +3982,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("target.node", "target_node")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
-        cls.add_arg("q35_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg("num_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
 
 
 ###################

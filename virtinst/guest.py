@@ -202,7 +202,7 @@ class Guest(XMLBuilder):
         self.skip_default_rng = False
         self.skip_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
-        self.q35_pcie_root_ports = 16
+        self.num_pcie_root_ports = 16
 
         self.skip_default_osinfo = False
         self.uefi_requested = False
@@ -1001,14 +1001,24 @@ class Guest(XMLBuilder):
         ctrl.set_defaults(self)
         self.add_device(ctrl)
 
+    def _defaults_to_pcie(self):
+        if self.os.is_q35():
+            return True
+        if self.os.is_arm_machvirt():
+            return True
+        if self.os.is_riscv_virt():
+            return True
+        return False
+
     def _add_q35_pcie_controllers(self):
-        if not self.os.is_q35():
-            return
         if any([c for c in self.devices.controller if c.type == "pci"]):
+            return
+        if not self._defaults_to_pcie():
             return
 
         added = False
-        for dummy in range(max(self.q35_pcie_root_ports, 0)):
+        log.debug("Using num_pcie_root_ports=%s", self.num_pcie_root_ports)
+        for dummy in range(max(self.num_pcie_root_ports, 0)):
             if not added:
                 # Libvirt forces pcie-root to come first
                 ctrl = DeviceController(self.conn)

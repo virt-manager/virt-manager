@@ -1505,9 +1505,9 @@ Some example invocations:
 ``--controller type=scsi,model=virtio-scsi``
     Add a VirtIO SCSI controller
 
-``--controller q35_pcie_root_ports=NUM``
+``--controller num_pcie_root_ports=NUM``
     Control the number of default ``pcie-root-port`` controller devices
-    we add to the new VM by default, if the VM will use the q35 machine type.
+    we add to the new VM by default, if the VM will use PCIe by default.
 
 Use --controller=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#elementsControllers
