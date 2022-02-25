@@ -1,11 +1,11 @@
-<domain type='test' id='1'>
+<domain type='kvm'>
   <name>test</name>
   <uuid>6695eb01-f6a4-8304-79aa-97f2502e193f</uuid>
   <memory unit='KiB'>8388608</memory>
   <currentMemory unit='KiB'>2097152</currentMemory>
   <vcpu placement='static'>2</vcpu>
   <os>
-    <type arch='i686'>hvm</type>
+    <type arch='x86_64' machine="pc-q35-foobar">hvm</type>
     <boot dev='hd'/>
   </os>
   <clock offset='utc'/>

@@ -49,24 +49,36 @@
 
   <guest>
     <os_type>hvm</os_type>
-    <arch name="s390x">
+    <arch name='s390x'>
       <wordsize>64</wordsize>
       <emulator>/usr/bin/qemu-system-s390x</emulator>
-      <machine canonical="s390-virtio" maxCpus="255">s390</machine>
-      <machine canonical="s390-ccw-virtio" maxCpus="255">s390-ccw</machine>
-      <domain type="qemu">
-        <emulator>/usr/bin/qemu-system-s390x</emulator>
-      </domain>
-      <domain type="kvm">
-        <emulator>/usr/bin/qemu-system-s390x</emulator>
-        <machine canonical="s390-virtio" maxCpus="255">s390</machine>
-        <machine canonical="s390-ccw-virtio" maxCpus="255">s390-ccw</machine>
-      </domain>
+      <machine maxCpus='248'>s390-ccw-virtio-6.1</machine>
+      <machine canonical='s390-ccw-virtio-6.1' maxCpus='248'>s390-ccw-virtio</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-4.0</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-5.2</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-3.1</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.6</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.12</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.9</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-6.0</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-5.1</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-3.0</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-4.2</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.5</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.11</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.8</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-5.0</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-4.1</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.4</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.10</machine>
+      <machine maxCpus='248'>s390-ccw-virtio-2.7</machine>
+      <domain type='qemu'/>
+      <domain type='kvm'/>
     </arch>
     <features>
       <cpuselection/>
       <deviceboot/>
-      <disksnapshot default="on" toggle="no"/>
+      <disksnapshot default='on' toggle='no'/>
     </features>
   </guest>
 

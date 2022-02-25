@@ -257,6 +257,17 @@ For any option, use --option=? to see a list of all available sub options, examp
 
 --help output also lists a few general examples. See the EXAMPLES section below for some common examples.
 
+virt-xml specifically has some operations that don't really apply to virt-install
+Examples:
+
+``--boot refresh-machine-type=yes``
+    Refresh the XML ``<os><type machine=X></os>`` value to the latest one
+    that qemu provides. For example, if your VM has a machine type value
+    ``pc-q35-4.0``, this will reset the value to ``q35``, and works
+    similarly with other versioned machine types. Occasionally this is
+    necessary to get enable qemu bug fixes, or when qemu deprecates and
+    removes old machine type values.
+
 
 MISCELLANEOUS OPTIONS
 =====================

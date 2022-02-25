@@ -2738,6 +2738,10 @@ class ParserBoot(VirtCLIParser):
     # Option handling #
     ###################
 
+    def refresh_machine_type_cb(self, inst, val, virtarg):
+        if val is True:
+            self.guest.refresh_machine_type()
+
     def set_uefi_cb(self, inst, val, virtarg):
         if not self.editing:
             # From virt-install, we just set this flag, and set_defaults()
@@ -2796,6 +2800,10 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("cdrom", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("fd", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("network", None, lookup_cb=None, cb=cls.noset_cb)
+
+        cls.add_arg("refresh-machine-type", None,
+                cb=cls.refresh_machine_type_cb,
+                lookup_cb=None, is_onoff=True)
 
         # UEFI depends on these bits, so set them first
         cls.add_arg("os_type", "os_type")

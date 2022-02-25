@@ -1316,8 +1316,10 @@ c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update 
 c.add_invalid("--build-xml --memory 10,maxmemory=20", grep="--build-xml not supported for --memory")
 c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
 c.add_invalid("test --add-device --xml ./@foo=bar", grep="--xml can only be used with --edit")
+c.add_invalid("test-for-virtxml --edit --boot refresh-machine-type=yes", grep="Don't know how to refresh")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # stdin test
+c.add_compare("--connect %(URI-KVM-X86)s --edit --boot refresh-machine-type=yes", "refresh-machine-type", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # refresh-machine-type test. we need to use stdin XML since we can't get the libvirt testdriver to start with the machine XML we need
 c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200,device0.read_bytes_sec=10000,device0.write_bytes_sec=10000,device0.read_iops_sec=20000,device0.write_iops_sec=20000", "build-blkiotune")
