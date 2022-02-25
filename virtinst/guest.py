@@ -674,6 +674,43 @@ class Guest(XMLBuilder):
             log.warning(  # pragma: no cover
                     "KVM acceleration not available, using '%s'", self.type)
 
+    def refresh_machine_type(self):
+        """
+        Reset the guests's machine type to the latest 'canonical' machine
+        name that qemu reports. So if my VM is using ancient pc-0.11, we
+        try to turn that into just `pc`
+
+        The algorithm here is to fetch all machine types that are aliases
+        for a stable name (like pc -> pc-i440fx-6.2), and see if our current
+        machine type uses alias as a prefix. This is the format that qemu
+        uses for its stable machine type names.
+        """
+        # We need to unset the machine type first, so we can perform
+        # a successful capsinfo lookup, otherwise we will error when qemu
+        # has deprecated and removed the old machine type
+        original_machine_type = self.os.machine or ""
+        self.os.machine = None
+
+        capsinfo = self.lookup_capsinfo()
+        mobjs = (capsinfo.domain and
+                 capsinfo.domain.machines) or capsinfo.guest.machines
+        canonical_names = [m.name for m in mobjs if m.canonical]
+
+        for machine_alias in canonical_names:
+            if machine_alias == "pc":
+                prefix = "pc-i440fx-"
+            elif machine_alias == "q35":
+                prefix = "pc-q35-"
+            else:
+                # Example: pseries-X, virt-X, s390-ccw-virtio-X
+                prefix = machine_alias + "-"
+
+            if original_machine_type.startswith(prefix):
+                self.os.machine = machine_alias
+                return
+        raise Exception("Don't know how to refresh machine type '%s'" %
+                original_machine_type)
+
     def sync_vcpus_topology(self, defCPUs):
         """
         <cpu> topology count and <vcpus> always need to match. Handle

@@ -1137,3 +1137,20 @@ def testControllerAttachedDevices():
 
     # Little test for DeviceAddress.pretty_desc
     assert devs[-1].address.pretty_desc() == "0:0:0:3"
+
+
+def testRefreshMachineType():
+    guest = virtinst.Guest(utils.URIs.openconn(utils.URIs.kvm_x86))
+    guest.os.machine = "pc-i440fx-5.2"
+    guest.refresh_machine_type()
+    assert guest.os.machine == "pc"
+
+    guest = virtinst.Guest(utils.URIs.openconn(utils.URIs.kvm_x86))
+    guest.os.machine = "pc-q35-XYZ"
+    guest.refresh_machine_type()
+    assert guest.os.machine == "q35"
+
+    guest = virtinst.Guest(utils.URIs.openconn(utils.URIs.kvm_s390x))
+    guest.os.machine = "s390-ccw-virtio-12345"
+    guest.refresh_machine_type()
+    assert guest.os.machine == "s390-ccw-virtio"
