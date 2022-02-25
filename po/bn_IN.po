@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-21 06:16+0000\n"
+"POT-Creation-Date: 2022-02-25 06:16+0000\n"
 "PO-Revision-Date: 2017-02-05 04:04+0000\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Bengali (India) (http://www.transifex.com/projects/p/virt-"
@@ -56,6 +56,10 @@ msgstr ""
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
+msgstr ""
+
+#: data/virt-manager.desktop.in:9
+msgid "vmm;"
 msgstr ""
 
 #: ui/about.ui:10
@@ -712,7 +716,7 @@ msgstr "C_PUs:"
 msgid "(Insert host mem)"
 msgstr "(Insert host mem)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2393
+#: ui/createvm.ui:1987 virtManager/details/details.py:2398
 msgid "Memory"
 msgstr "মেমরি"
 
@@ -2273,7 +2277,7 @@ msgstr "Spice পোর্ট"
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:442 virtManager/details/details.py:2326
+#: virtManager/addhardware.py:442 virtManager/details/details.py:2331
 msgid "Floppy"
 msgstr ""
 
@@ -2480,7 +2484,7 @@ msgstr "অনির্দিষ্ট নম্বর প্রস্তুত�
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1013 virtManager/details/details.py:2110
+#: virtManager/addhardware.py:1013 virtManager/details/details.py:2111
 #, python-format
 msgid "%s Device"
 msgstr "%s ডিভাইস"
@@ -3671,8 +3675,8 @@ msgstr "সুনির্দিষ্ট চলাচল"
 msgid "Relative Movement"
 msgstr "আপেক্ষিক চলাচল"
 
-#: virtManager/details/details.py:2047 virtManager/details/details.py:2207
-#: virtManager/details/details.py:2210
+#: virtManager/details/details.py:2047 virtManager/details/details.py:2212
+#: virtManager/details/details.py:2215
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
@@ -3681,77 +3685,77 @@ msgstr ""
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s সার্ভার"
 
-#: virtManager/details/details.py:2102
+#: virtManager/details/details.py:2103
 msgid "Serial Device"
 msgstr "সিরিয়াল ডিভাইস"
 
-#: virtManager/details/details.py:2104
+#: virtManager/details/details.py:2105
 msgid "Parallel Device"
 msgstr "প্যারালেল ডিভাইস"
 
-#: virtManager/details/details.py:2106
+#: virtManager/details/details.py:2107
 msgid "Console Device"
 msgstr "কনসোল ডিভাইস"
 
-#: virtManager/details/details.py:2108
+#: virtManager/details/details.py:2109
 msgid "Channel Device"
 msgstr "চ্যানেল ডিভাইস"
 
-#: virtManager/details/details.py:2118
+#: virtManager/details/details.py:2119
 msgid "Primary Console"
 msgstr "প্রধান কনসোল"
 
-#: virtManager/details/details.py:2174
+#: virtManager/details/details.py:2179
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: virtManager/details/details.py:2191
+#: virtManager/details/details.py:2196
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2217
+#: virtManager/details/details.py:2222
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr ""
 
-#: virtManager/details/details.py:2223 virtManager/details/details.py:2233
+#: virtManager/details/details.py:2228 virtManager/details/details.py:2238
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2323
+#: virtManager/details/details.py:2328
 msgid "Hard Disk"
 msgstr ""
 
-#: virtManager/details/details.py:2324
+#: virtManager/details/details.py:2329
 msgid "CDROM"
 msgstr ""
 
-#: virtManager/details/details.py:2325
+#: virtManager/details/details.py:2330
 msgid "Network (PXE)"
 msgstr ""
 
-#: virtManager/details/details.py:2340
+#: virtManager/details/details.py:2345
 msgid "No bootable devices"
 msgstr "কোনো বুটযোগ্য ডিভাইস নেই"
 
-#: virtManager/details/details.py:2387
+#: virtManager/details/details.py:2392
 msgid "Overview"
 msgstr "সংক্ষিপ্ত তথ্য"
 
-#: virtManager/details/details.py:2388
+#: virtManager/details/details.py:2393
 msgid "OS information"
 msgstr "OS তথ্য"
 
-#: virtManager/details/details.py:2390
+#: virtManager/details/details.py:2395
 msgid "Performance"
 msgstr ""
 
-#: virtManager/details/details.py:2392
+#: virtManager/details/details.py:2397
 msgid "CPUs"
 msgstr ""
 
-#: virtManager/details/details.py:2394
+#: virtManager/details/details.py:2399
 msgid "Boot Options"
 msgstr ""
 
@@ -5381,14 +5385,20 @@ msgid "Configure guest sound device emulation"
 msgstr "গেস্ট সাউন্ড ডিভাইস ইমিউলেশন কনফিগার করুন"
 
 #: virtinst/cli.py:771
+#, fuzzy
+#| msgid "Configure a guest watchdog device"
+msgid "Configure host audio backend for sound devices"
+msgstr "একটি গেস্ট ওয়াচ-ডগ ডিভাইস কনফিগার করুন"
+
+#: virtinst/cli.py:775
 msgid "Configure a guest watchdog device"
 msgstr "একটি গেস্ট ওয়াচ-ডগ ডিভাইস কনফিগার করুন"
 
-#: virtinst/cli.py:774
+#: virtinst/cli.py:778
 msgid "Configure guest video hardware."
 msgstr "গেস্ট ভিডিও হার্ডওয়্যার কনফিগার করুন।"
 
-#: virtinst/cli.py:777
+#: virtinst/cli.py:781
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5396,7 +5406,7 @@ msgstr ""
 "একটি গেস্ট স্মার্টকার্ড ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:781
+#: virtinst/cli.py:785
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5404,7 +5414,7 @@ msgstr ""
 "একটি গেস্ট পুনঃনির্দেশ ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:789
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5412,7 +5422,7 @@ msgstr ""
 "একটি গেস্ট memballoon ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:793
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5420,13 +5430,13 @@ msgstr ""
 "একটি গেস্ট TPM ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:797
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: virtinst/cli.py:797
+#: virtinst/cli.py:801
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5434,7 +5444,7 @@ msgstr ""
 "একটি গেস্ট প্যানিক ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--panic default"
 
-#: virtinst/cli.py:801
+#: virtinst/cli.py:805
 #, fuzzy
 #| msgid ""
 #| "Configure a guest smartcard device. Ex:\n"
@@ -5446,54 +5456,54 @@ msgstr ""
 "একটি গেস্ট স্মার্টকার্ড ডিভাইস কনফিগার করুন। উদাঃ\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:809
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:813
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:814
+#: virtinst/cli.py:818
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:821
+#: virtinst/cli.py:825
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:829
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:829
+#: virtinst/cli.py:833
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:838
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:842
 msgid "Tune NUMA policy for the domain process."
 msgstr "ডোমেন প্রক্রিয়ার জন্য NUMA নীতি।"
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:846
 msgid "Tune memory policy for the domain process."
 msgstr "ডোমেন প্রক্রিয়ার জন্য মেমরি নীতি টিউন করুন।"
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:850
 msgid "Tune blkio policy for the domain process."
 msgstr "ডোমেন প্রক্রিয়ার জন্য blkio নীতি টিউন করুন।"
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:854
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5501,14 +5511,14 @@ msgstr ""
 "ডোমেন প্রক্রিয়ার জন্য মেমরি ব্যাকিং নীতি সেট করুন। উদাঃ\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:855
+#: virtinst/cli.py:859
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:861
+#: virtinst/cli.py:865
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5516,33 +5526,33 @@ msgstr ""
 "ডোমেন <clock> XML সেট করুন। উদাঃ\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:866
+#: virtinst/cli.py:870
 msgid "Configure VM power management features"
 msgstr "VM পাওয়ার ব্যবস্থাপনা বৈশিষ্ট্য কনফিগার করুন"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:874
 msgid "Configure VM lifecycle management policy"
 msgstr "VM লাইফ-সাইকেল ব্যবস্থাপনা নীতি কনফিগার করুন"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:878
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "VM রিসোর্স বিভাজন কনফিগার করুন (cgroups)"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:882
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:884
+#: virtinst/cli.py:888
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:890
+#: virtinst/cli.py:894
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
@@ -5550,7 +5560,7 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:898
+#: virtinst/cli.py:902
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5560,13 +5570,13 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 
-#: virtinst/cli.py:904
+#: virtinst/cli.py:908
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:914
+#: virtinst/cli.py:918
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5575,26 +5585,26 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:922
+#: virtinst/cli.py:926
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:925
+#: virtinst/cli.py:929
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:927
+#: virtinst/cli.py:931
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:933
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
 
-#: virtinst/cli.py:939
+#: virtinst/cli.py:943
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5602,12 +5612,12 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:969
+#: virtinst/cli.py:973
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s অবশ্যই 'yes' বা 'no'"
 
-#: virtinst/cli.py:1154
+#: virtinst/cli.py:1158
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5615,17 +5625,17 @@ msgid ""
 msgstr ""
 "ডিভাইস ধরন '%(device_type)s' বিশিষ্টতা '%(property_name)s' মেলানোর পদ্ধতি অজানা"
 
-#: virtinst/cli.py:1473
+#: virtinst/cli.py:1477
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1529 virtinst/cli.py:1560
+#: virtinst/cli.py:1533 virtinst/cli.py:1564
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1911
+#: virtinst/cli.py:1915
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5633,47 +5643,47 @@ msgstr ""
 "গ্র্যাফিক্যাল কনসোলে সংযোগ করতে ব্যর্থ: virt-viewer ইনস্টল করা নেই। অনুগ্রহ করে "
 "'virt-viewer' প্যাকেজ ইনস্টল করুন।"
 
-#: virtinst/cli.py:1918
+#: virtinst/cli.py:1922
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "গ্র্যাফিক্সের অনুরোধ জানানো হয়েছে কিন্তু প্রদর্শন সেট করা নেই। virt-viewer চলছে না।"
 
-#: virtinst/cli.py:1929
+#: virtinst/cli.py:1933
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:3474
+#: virtinst/cli.py:3478
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' এর অনুপযুক্ত মান: %s"
 
-#: virtinst/cli.py:3487
+#: virtinst/cli.py:3491
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "অজানা '%s' মান '%s'"
 
-#: virtinst/cli.py:3502
+#: virtinst/cli.py:3506
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "সংগ্রহস্থলের ভলিউম অবশ্যই vol=poolname/volname দিয়ে উল্লেখ করতে হবে"
 
-#: virtinst/cli.py:3957
+#: virtinst/cli.py:3961
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:4665
+#: virtinst/cli.py:4681
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s একাধিক নোড ডিভাইসের সংগে সংশিষ্ট"
 
-#: virtinst/cli.py:4668
+#: virtinst/cli.py:4684
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' এর জন্য মানানসই নোড ডিভাইস খুঁজে পাওয়া যায়নি"
 
-#: virtinst/cli.py:4813
+#: virtinst/cli.py:4829
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5897,25 +5907,25 @@ msgstr ""
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/guest.py:78
+#: virtinst/guest.py:79
 msgid "Guest"
 msgstr "গেস্ট"
 
-#: virtinst/guest.py:86
+#: virtinst/guest.py:87
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "'%s' গেস্ট নাম ইতিমধ্যেই ব্যবহৃত হচ্ছে।"
 
-#: virtinst/guest.py:755
+#: virtinst/guest.py:756
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: virtinst/guest.py:759
+#: virtinst/guest.py:760
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:764
+#: virtinst/guest.py:765
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
