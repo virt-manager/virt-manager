@@ -258,6 +258,24 @@ The --xml option has 4 sub options:
 
 
 
+**xpath subarguments**
+``````````````````````
+
+Similar to the ``--xml`` option, most top level options have ``xpath.*``
+suboptions. For example, ``--disk xpath1.set=./@foo=bar,xpath2.create=./newelement``
+would generate XML alterations like
+
+.. code-block::
+
+       <disk foo="bar">
+         <newelements/>
+       </disk>
+
+This is useful for setting XML options per device, when virt-install does not
+support those options yet.
+
+
+
 ``--qemu-commandline``
 ^^^^^^^^^^^^^^^^^^^^^^
 

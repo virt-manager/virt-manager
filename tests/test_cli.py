@@ -646,6 +646,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --input mouse,bus=virtio,model=virtio-non-transitional
 --input passthrough,source.evdev=/dev/input/event1,bus=virtio
 --input evdev,source.dev=/dev/input/event1234,source.repeat=on,source.grab=all,source.grabToggle=ctrl-ctrl
+--input mouse,model=FOOBAR,xpath0.set=./@bus=usb,xpath2.set=./address/@type=usb,xpath6.set=./willbeoverwritten=foo,xpath6.create=./randomelement,xpath7.create=./deleteme,xpath8.delete=./deleteme,xpath9.set=./@model=,xpath10.set=./@type,xpath10.value=keyboard
 
 
 --serial char_type=tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
@@ -1360,6 +1361,7 @@ c.add_compare("--clock offset=localtime,hpet_present=yes,kvmclock_present=no,kvm
 c.add_compare("--pm suspend_to_mem.enabled=yes,suspend_to_disk.enabled=no", "edit-simple-pm")
 c.add_compare("--disk /dev/zero,perms=ro,source.startupPolicy=optional", "edit-simple-disk")
 c.add_compare("--disk path=", "edit-simple-disk-remove-path")
+c.add_compare("--disk xpath1.delete=./source,xpath2.set=./boot/@order,xpath2.value=6,xpath3.create=./fakeelement", "edit-device-xpath")
 c.add_compare("--network source=br0,type=bridge,model=virtio,mac=", "edit-simple-network")
 c.add_compare("--graphics tlsport=5902,keymap=ja", "edit-simple-graphics")
 c.add_compare("--graphics listen=none", "edit-graphics-listen-none")

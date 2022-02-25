@@ -1366,6 +1366,8 @@ class VirtCLIParser(metaclass=_InitClass):
                 prefix = "0"
             if virtarg.cliname.startswith("address."):
                 prefix = "1"
+            if virtarg.cliname.startswith("xpath"):
+                prefix = "2"
             return prefix + virtarg.cliname
 
         print("%s options:" % cls.cli_flag_name())
@@ -1400,7 +1402,9 @@ class VirtCLIParser(metaclass=_InitClass):
 
     @staticmethod
     def _virtcli_class_init_common(subclass):
-        pass
+        if subclass and subclass.guest_propname:
+            _add_xpath_args(subclass)
+
 
     def __init__(self, optstr, guest=None, editing=None):
         self.optstr = optstr
@@ -1613,6 +1617,31 @@ def parse_xmlcli(guest, options):
         inst = guest.xml_actions.new()
         ParserXML(optstr).parse(inst)
         guest.xml_actions.append(inst)
+
+
+def _add_xpath_args(cls):
+    """
+    Add xpath.* subarguments to XML based CLI options
+    """
+    def find_xpath_cb(self, *args, **kwargs):
+        cliarg = "xpath"  # xpath[0-9]*
+        list_propname = "xml_actions"
+        # pylint: disable=protected-access
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
+    def _add_arg(*args, **kwargs):
+        kwargs["skip_testsuite_tracking"] = True
+        cls.add_arg(*args, **kwargs)
+
+    _add_arg("xpath[0-9]*.delete", "xpath_delete",
+            can_comma=True, lookup_cb=None, find_inst_cb=find_xpath_cb)
+    _add_arg("xpath[0-9]*.set", "xpath_set",
+            can_comma=True, lookup_cb=None, find_inst_cb=find_xpath_cb)
+    _add_arg("xpath[0-9]*.create", "xpath_create",
+            can_comma=True, lookup_cb=None, find_inst_cb=find_xpath_cb)
+    _add_arg("xpath[0-9]*.value", "xpath_value",
+            can_comma=True, lookup_cb=None, find_inst_cb=find_xpath_cb)
 
 
 ########################
@@ -4422,6 +4451,7 @@ class _ParserChar(VirtCLIParser):
 
         VirtCLIParser._virtcli_class_init_common(cls)
         _add_common_device_args(cls)
+        _add_xpath_args(cls)
 
         cls.add_arg("type", "type")
 

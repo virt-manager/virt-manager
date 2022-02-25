@@ -657,6 +657,10 @@
     <input type="evdev">
       <source dev="/dev/input/event1234" repeat="on" grab="all" grabToggle="ctrl-ctrl"/>
     </input>
+    <input type="keyboard" bus="usb">
+      <address type="usb"/>
+      <randomelement/>
+    </input>
     <tpm model="tpm-crb">
       <backend type="passthrough" version="2.0" persistent_state="yes">
         <device path="/dev/tpm0"/>
