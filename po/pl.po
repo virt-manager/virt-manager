@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-25 06:16+0000\n"
-"PO-Revision-Date: 2022-02-19 13:07+0000\n"
+"PO-Revision-Date: 2022-02-26 11:55+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -72,7 +72,7 @@ msgstr "Zarządzanie maszynami wirtualnymi"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr ""
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -85,7 +85,7 @@ msgstr "Używa biblioteki libvirt"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ui/about.ui:18
 msgid "translator-credits"
-msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2006-2020"
+msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2006-2022"
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
@@ -178,7 +178,7 @@ msgstr "awaria"
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "_Anuluj"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -256,7 +256,7 @@ msgstr "Zmiana ścieżki pamięci masowej"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -784,16 +784,12 @@ msgid "Finish"
 msgstr "Ukończ"
 
 #: ui/createvm.ui:2415
-#, fuzzy
-#| msgid "_Backend:"
 msgid "_Back"
-msgstr "_Mechanizm:"
+msgstr "_Wstecz"
 
 #: ui/createvm.ui:2431
-#, fuzzy
-#| msgid "Forwarding:"
 msgid "_Forward"
-msgstr "Przekazywanie:"
+msgstr "_Dalej"
 
 #: ui/createvol.ui:24
 msgid "Add a Storage Volume"
@@ -1270,15 +1266,13 @@ msgid "<b>Panic Notifier</b>"
 msgstr "<b>Powiadomienia o awariach</b>"
 
 #: ui/details.ui:4845
-#, fuzzy
-#| msgid "Removable"
 msgid "_Remove"
-msgstr "Wymienne"
+msgstr "_Usuń"
 
 #: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
-msgstr ""
+msgstr "_Zastosuj"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
@@ -1298,7 +1292,7 @@ msgstr "_Format:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "takie tam ostrzeżenie"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1452,10 +1446,8 @@ msgid "Cancel and close dialog"
 msgstr "Anuluj i zamknij okno dialogowe"
 
 #: ui/hoststorage.ui:170
-#, fuzzy
-#| msgid "Choose Volume"
 msgid "Ch_oose Volume"
-msgstr "Wybierz wolumin"
+msgstr "_Wybierz wolumin"
 
 #: ui/hoststorage.ui:174
 msgid "Choose the selected volume"
@@ -1496,11 +1488,11 @@ msgstr "_Nowa maszyna wirtualna"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr ""
+msgstr "Za_mknij"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr ""
+msgstr "Za_kończ"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1515,10 +1507,8 @@ msgid "_Virtual Machine Details"
 msgstr "Informacje o maszynie _wirtualnej"
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Preferencje"
+msgstr "_Preferencje"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -1554,7 +1544,7 @@ msgstr "Pomo_c"
 
 #: ui/manager.ui:222
 msgid "_About"
-msgstr ""
+msgstr "_O programie"
 
 #: ui/manager.ui:253
 msgid "Create a new virtual machine"
@@ -2003,14 +1993,12 @@ msgid "_Version:"
 msgstr "_Wersja:"
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
-msgstr "Zaawansowane opcje"
+msgstr "Zaawa_nsowane opcje"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
-msgstr ""
+msgstr "tpm-tab"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
@@ -3331,8 +3319,6 @@ msgid "Failed to check disk usage conflict."
 msgstr "Sprawdzenie konfliktu użycia dysku się nie powiodło."
 
 #: virtManager/details/console.py:153
-#, fuzzy
-#| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
 msgstr "Opuść pełny ekran"
 
@@ -3770,11 +3756,11 @@ msgstr "Konsola dla typu urządzenia „%s” nie jest obsługiwana"
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "S_kopiuj"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "Wkl_ej"
 
 #: virtManager/details/serialcon.py:348
 #, python-format
@@ -4034,6 +4020,7 @@ msgstr "Ś_cieżka źródłowa:"
 #: virtManager/device/fsdetails.py:163
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
+"Może być wymagane włączenie opcji „Pamięć współdzielona” na ekranie „Pamięć”."
 
 #: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
@@ -4124,10 +4111,8 @@ msgid "SPAPR"
 msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:71
-#, fuzzy
-#| msgid "Emulator:"
 msgid "Emulated"
-msgstr "Emulator:"
+msgstr "Emulowane"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4548,19 +4533,15 @@ msgstr "Błąd podczas uruchamiania menedżera: %s"
 
 #: virtManager/manager.py:292
 msgid "_New"
-msgstr ""
+msgstr "_Nowa"
 
 #: virtManager/manager.py:293
-#, fuzzy
-#| msgid "Connect"
 msgid "_Connect"
-msgstr "Połącz"
+msgstr "_Połącz"
 
 #: virtManager/manager.py:294
-#, fuzzy
-#| msgid "Disconnected"
 msgid "Dis_connect"
-msgstr "Rozłączono"
+msgstr "_Rozłącz"
 
 #: virtManager/manager.py:296
 #, fuzzy
@@ -5361,11 +5342,6 @@ msgstr ""
 "--network help"
 
 #: virtinst/cli.py:721
-#, fuzzy
-#| msgid ""
-#| "Configure a guest controller device. Ex:\n"
-#| "--controller type=usb,model=qemu-xhci\n"
-#| "--controller virtio-scsi\n"
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5373,7 +5349,7 @@ msgid ""
 msgstr ""
 "Konfiguruje urządzenie kontrolera gościa. Przykłady:\n"
 "--controller type=usb,model=qemu-xhci\n"
-"--controller virtio-scsi\n"
+"--controller type=scsi,model=virtio-scsi\n"
 
 #: virtinst/cli.py:726
 msgid ""
@@ -5422,10 +5398,8 @@ msgid "Configure guest sound device emulation"
 msgstr "Konfiguruje emulację urządzenia dźwiękowego gościa"
 
 #: virtinst/cli.py:771
-#, fuzzy
-#| msgid "Configure a guest watchdog device"
 msgid "Configure host audio backend for sound devices"
-msgstr "Konfiguruje urządzenie watchdog gościa"
+msgstr "Konfiguruje mechanizm dźwięku gospodarza dla urządzeń dźwiękowych"
 
 #: virtinst/cli.py:775
 msgid "Configure a guest watchdog device"
