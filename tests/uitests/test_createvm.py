@@ -105,7 +105,7 @@ def testNewVMMultiConnection(app):
     entry.click()
     # Launch this so we can verify storage browser is reset too
     newvm.find_fuzzy("install-iso-browse", "button").click()
-    app.select_storagebrowser_volume("default-pool", "iso-vol")
+    app.select_storagebrowser_volume("pool-dir", "iso-vol")
     newvm.find_fuzzy("Automatically detect", "check").click()
     newvm.find("oslist-entry").set_text("generic")
     newvm.find("oslist-popover").find_fuzzy("generic").click()
@@ -255,7 +255,7 @@ def testNewVMCDROMRegular(app):
 
     # Select a fake iso
     newvm.find_fuzzy("install-iso-browse", "button").click()
-    app.select_storagebrowser_volume("default-pool", "iso-vol")
+    app.select_storagebrowser_volume("pool-dir", "iso-vol")
 
     osentry = newvm.find("oslist-entry")
     lib.utils.check(lambda: osentry.text == "None detected")
@@ -456,7 +456,7 @@ def testNewKVMQ35Tweaks(app):
 
     newvm.find_fuzzy("Import", "radio").click()
     _forward(newvm)
-    newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+    newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
     newvm.find("oslist-entry").set_text("fribfrob")
     popover = newvm.find("oslist-popover")
     popover.find_fuzzy("linux2020").click()
@@ -527,7 +527,7 @@ def testNewKVMQ35UEFI(app):
 
     newvm.find_fuzzy("Import", "radio").click()
     _forward(newvm)
-    newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+    newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
     newvm.find("oslist-entry").set_text("fedora30")
     popover = newvm.find("oslist-popover")
     popover.find("include-eol").click()
@@ -630,7 +630,7 @@ def testNewVMAArch64UEFI(app):
     newvm.find_fuzzy("Automatically detect", "check").click()
     newvm.find("oslist-entry").set_text("generic")
     newvm.find("oslist-popover").find_fuzzy("generic").click()
-    newvm.find("media-entry").set_text("/dev/default-pool/testvol1.img")
+    newvm.find("media-entry").set_text("/pool-dir/testvol1.img")
     _forward(newvm)
     _forward(newvm)
     # Disable storage, this triggers a livecd code path in createvm.py
@@ -669,7 +669,7 @@ def testNewVMArmKernel(app):
     lib.utils.check(lambda: importradio.checked)
     _forward(newvm)
 
-    newvm.find("import-entry").set_text("/dev/default-pool/default-vol")
+    newvm.find("import-entry").set_text("/pool-dir/default-vol")
     # Make sure the info box shows up
     newvm.find("Kernel/initrd settings can be configured")
     newvm.find("oslist-entry").set_text("generic")
@@ -703,7 +703,7 @@ def testNewVMContainerApp(app):
     _forward(newvm, check=False)
     app.click_alert_button("path is required", "OK")
     newvm.find("install-app-browse").click()
-    app.select_storagebrowser_volume("default-pool", "aaa-unused.qcow2")
+    app.select_storagebrowser_volume("pool-dir", "aaa-unused.qcow2")
     lib.utils.check(lambda: "aaa-unused.qcow2" in apptext.text)
 
     _forward(newvm)
@@ -845,7 +845,7 @@ def testNewVMContainerTree(app):
     app.click_alert_button("path is required", "OK")
 
     newvm.find("install-oscontainer-browse").click()
-    app.select_storagebrowser_volume("default-pool", "dir-vol")
+    app.select_storagebrowser_volume("pool-dir", "dir-vol")
     lib.utils.check(lambda: "dir-vol" in dirtext.text)
 
     _forward(newvm)
@@ -955,7 +955,7 @@ def testNewVMXenPV(app):
 
     newvm.find_fuzzy("Import", "radio").click()
     _forward(newvm)
-    newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+    newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
     newvm.find("oslist-entry").set_text("generic")
     newvm.find("oslist-popover").find_fuzzy("generic").click()
     _forward(newvm)
@@ -1001,7 +1001,7 @@ def testNewVMInstallFail(app):
     _back(newvm)
     newvm.find_fuzzy("Select or create", "radio").click()
 
-    newvm.find("storage-entry").set_text("/dev/default-pool/somenewvol1")
+    newvm.find("storage-entry").set_text("/pool-dir/somenewvol1")
     _forward(newvm)
     newvm.find_fuzzy("Name", "text").set_text("test-foo")
     newvm.find_fuzzy("Finish", "button").click()
@@ -1023,7 +1023,7 @@ def testNewVMCustomizeXMLEdit(app):
     newvm.find_fuzzy("Local install media", "radio").click()
     newvm.find_fuzzy("Forward", "button").click()
     nonexistpath = "/dev/foovmm-idontexist"
-    existpath = "/dev/default-pool/testvol1.img"
+    existpath = "/pool-dir/testvol1.img"
     newvm.find("media-entry").set_text(nonexistpath)
     lib.utils.check(
             lambda: newvm.find("oslist-entry").text == "None detected")
@@ -1134,10 +1134,10 @@ def testNewVMRemote(app):
     app.click_alert_button("import is required", "OK")
 
     # Click forward, but Import path doesn't exist
-    importtext.set_text("/dev/default-pool/idontexist")
+    importtext.set_text("/pool-dir/idontexist")
     _forward(newvm, check=False)
     app.click_alert_button("import path must point", "OK")
-    importtext.set_text("/dev/default-pool/default-vol")
+    importtext.set_text("/pool-dir/default-vol")
 
     # Click forward, hitting missing OS error
     _forward(newvm, check=False)
@@ -1162,9 +1162,9 @@ def testNewVMRemote(app):
     lib.utils.check(lambda: not browsewin.active)
     # Reopen, select storage
     newvm.find("install-import-browse").click()
-    app.select_storagebrowser_volume("default-pool", "bochs-vol")
+    app.select_storagebrowser_volume("pool-dir", "bochs-vol")
     lib.utils.check(
-            lambda: importtext.text == "/dev/default-pool/bochs-vol")
+            lambda: importtext.text == "/pool-dir/bochs-vol")
 
     _forward(newvm)
     _forward(newvm)
@@ -1183,7 +1183,7 @@ def testNewVMSession(app):
 
     newvm.find_fuzzy("Import", "radio").click()
     _forward(newvm)
-    newvm.find("import-entry").set_text("/dev/default-pool/testvol1.img")
+    newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
     newvm.find("oslist-entry").set_text("generic")
     newvm.find("oslist-popover").find_fuzzy("generic").click()
     _forward(newvm)

@@ -218,7 +218,7 @@
     <emulator>/new/emu</emulator>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="writeback" discard="unmap" io="threads" iothread="3" queues="8"/>
-      <source dev="/dev/default-pool/UPPER"/>
+      <source dev="/pool-dir/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>
       <wwn>123456789abcdefa</wwn>
@@ -227,7 +227,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" detect_zeroes="unmap" error_policy="enospace"/>
-      <source file="/dev/default-pool/new1.img"/>
+      <source file="/pool-dir/new1.img"/>
       <target dev="vdb" bus="virtio"/>
       <address type="drive" controller="0" target="2" unit="0"/>
       <readonly/>
@@ -260,7 +260,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
-      <source file="/dev/default-pool/iso-vol">
+      <source file="/pool-dir/iso-vol">
         <seclabel model="dac">
           <label>foo,bar,baz</label>
         </seclabel>
@@ -276,7 +276,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
-      <source file="/dev/default-pool/iso-vol" startupPolicy="optional"/>
+      <source file="/pool-dir/iso-vol" startupPolicy="optional"/>
       <target dev="vde" bus="virtio"/>
       <iotune>
         <total_bytes_sec>10</total_bytes_sec>
@@ -365,7 +365,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/dev/default-pool/new2.img"/>
+      <source file="/pool-dir/new2.img"/>
       <target dev="sdad" bus="usb" removable="on"/>
     </disk>
     <disk type="file" device="disk">
@@ -403,7 +403,7 @@
     </disk>
     <disk type="dir" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source dir="/dev/default-pool/testvol1.img"/>
+      <source dir="/pool-dir/testvol1.img"/>
       <target dev="vdr" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">

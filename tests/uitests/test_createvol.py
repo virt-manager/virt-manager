@@ -20,7 +20,7 @@ def testCreateVolDefault(app):
     Create default volume, clean it up
     """
     hostwin = app.manager_open_host("Storage")
-    poolcell = hostwin.find("default-pool", "table cell")
+    poolcell = hostwin.find("pool-dir", "table cell")
     poolcell.click()
     vollist = hostwin.find("vol-list", "table")
     win = _open_createvol(app, hostwin)
@@ -56,7 +56,7 @@ def testCreateVolMisc(app):
     Cover all createvol options
     """
     hostwin = app.manager_open_host("Storage")
-    poolcell = hostwin.find("default-pool", "table cell")
+    poolcell = hostwin.find("pool-dir", "table cell")
     poolcell.click()
     win = _open_createvol(app, hostwin)
     name = win.find("Name:", "text")
@@ -81,7 +81,7 @@ def testCreateVolMisc(app):
             "Locate existing storage", "file chooser")
     chooser.window_close()
     app.select_storagebrowser_volume(
-            "default-pool", "bochs-vol", doubleclick=True)
+            "pool-dir", "bochs-vol", doubleclick=True)
     backingstore = win.find("backing-store")
     lib.utils.check(lambda: "bochs-vol" in backingstore.text)
     finish.click()
@@ -119,7 +119,7 @@ def testCreateVolMisc(app):
 def testCreateVolXMLEditor(app):
     app.open(xmleditor_enabled=True)
     hostwin = app.manager_open_host("Storage")
-    poolcell = hostwin.find("default-pool", "table cell")
+    poolcell = hostwin.find("pool-dir", "table cell")
     poolcell.click()
     win = _open_createvol(app, hostwin)
     finish = win.find("Finish", "push button")

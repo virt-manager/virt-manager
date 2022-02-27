@@ -47,9 +47,9 @@
   <cpu mode='host-passthrough'/>
   <os>
     <type arch="i686">hvm</type>
-    <kernel>/dev/default-pool/test-arm-kernel</kernel>
-    <initrd>/dev/default-pool/test-arm-initrd</initrd>
-    <dtb>/dev/default-pool/test-arm-dtb</dtb>
+    <kernel>/pool-dir/test-arm-kernel</kernel>
+    <initrd>/pool-dir/test-arm-initrd</initrd>
+    <dtb>/pool-dir/test-arm-dtb</dtb>
     <cmdline>console=ttyAMA0 rw root=/dev/vda3</cmdline>
   </os>
 </domain>
@@ -205,7 +205,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <target dev='fdb' bus='fdc'/>
     </disk>
     <disk type='dir' device='floppy'>
-      <source dir='/dev/default-pool/test-clone-simple.img'/>
+      <source dir='/pool-dir/test-clone-simple.img'/>
       <target dev='fdc' bus='fdc'/>
     </disk>
 
@@ -231,7 +231,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <!-- bus scsi -->
     <disk type='file' device='cdrom'>
       <target dev='sdb' bus='scsi'/>
-      <source file='/dev/default-pool/sharevol.img'/>
+      <source file='/pool-dir/sharevol.img'/>
       <address type='drive' controller='5'/>
       <shareable/>
     </disk>
@@ -253,7 +253,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <target dev='sdc' bus='scsi'/>
     </disk>
     <disk type='file' device='cdrom'>
-      <source file='/dev/default-pool/testvol2.img'/>
+      <source file='/pool-dir/testvol2.img'/>
       <target dev='sdf' bus='scsi'/>
       <readonly/>
     </disk>
@@ -318,14 +318,14 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
 
     <!-- bus usb -->
     <disk type='volume' device='disk'>
-      <source pool='default-pool' volume='overlay.img'/>
+      <source pool='pool-dir' volume='overlay.img'/>
       <target dev='sdd' bus='usb'/>
     </disk>
 
     <!-- bus xen -->
     <disk type='file' device='disk'>
       <driver name='tap' type='qcow' cache="writethrough"/>
-      <source file='/dev/default-pool/test-clone-simple.img'/>
+      <source file='/pool-dir/test-clone-simple.img'/>
       <target dev='xvdc' bus='xen'/>
     </disk>
 
@@ -793,7 +793,7 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='file' device='disk'>
-      <source file='/dev/default-pool/test-clone-simple.img'/>
+      <source file='/pool-dir/test-clone-simple.img'/>
       <target dev='hda' bus='ide'/>
       <driver type="qcow2"/>
     </disk>
@@ -843,17 +843,17 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
       <target dev='sdb' bus='scsi'/>
     </disk>
     <disk type='block' device='disk'>
-      <source dev='/dev/default-pool/collidevol1.img'/>
+      <source dev='/pool-dir/collidevol1.img'/>
       <target dev='sdc' bus='scsi'/>
       <driver type="qcow2"/>
       <shareable/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/dev/default-pool/default-vol'/>
+      <source file='/pool-dir/default-vol'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/dev/default-pool/testvol9.img'/>
+      <source file='/pool-dir/testvol9.img'/>
       <target dev='hdb' bus='ide'/>
     </disk>
     <interface type='network'>
@@ -975,7 +975,7 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
   <bootloader>/tmp/bootfoo</bootloader>
   <devices>
     <disk type='file' device='disk'>
-      <source file='/dev/default-pool/test-clone-simple.img'/>
+      <source file='/pool-dir/test-clone-simple.img'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <graphics type='vnc'/>
@@ -1008,7 +1008,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1046,7 +1046,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1081,7 +1081,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1119,7 +1119,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1157,7 +1157,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1192,7 +1192,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1227,7 +1227,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1264,7 +1264,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1297,7 +1297,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1334,7 +1334,7 @@ ba</description>
     <on_crash>destroy</on_crash>
     <devices>
       <disk type='file' device='disk'>
-        <source file='/dev/default-pool/test-clone-simple.img'/>
+        <source file='/pool-dir/test-clone-simple.img'/>
         <target dev='hda' bus='ide'/>
         <address type='drive' controller='0' bus='0' target='0' unit='0'/>
       </disk>
@@ -1596,7 +1596,7 @@ ba</description>
 
 
 <pool type='dir'>
-  <name>default-pool</name>
+  <name>pool-dir</name>
   <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e53fe</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -1604,7 +1604,7 @@ ba</description>
   <source>
   </source>
   <target>
-    <path>/dev/default-pool</path>
+    <path>/pool-dir</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -1768,7 +1768,7 @@ ba</description>
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backingl3.img</path>
+      <path>/pool-dir/backingl3.img</path>
     </backingStore>
   </volume>
   <volume type='file'>
@@ -1779,7 +1779,7 @@ ba</description>
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backingl2.img</path>
+      <path>/pool-dir/backingl2.img</path>
     </backingStore>
   </volume>
   <volume type='file'>
@@ -1790,7 +1790,7 @@ ba</description>
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backingl1.img</path>
+      <path>/pool-dir/backingl1.img</path>
     </backingStore>
   </volume>
 

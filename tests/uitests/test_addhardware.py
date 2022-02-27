@@ -176,7 +176,7 @@ def testAddDisks(app):
     browse = app.root.find("vmm-storage-browser")
 
     # Create a vol, refresh, then delete it
-    browse.find_fuzzy("default-pool", "table cell").click()
+    browse.find_fuzzy("pool-dir", "table cell").click()
     browse.find("vol-new", "push button").click()
     newvol = app.find_window("Add a Storage Volume")
     newname = "a-newvol"
@@ -229,7 +229,7 @@ def testAddDisks(app):
     tab.combo_select("Device type:", "Floppy device")
     diskradio = tab.find_fuzzy("Create a disk image", "radio")
     lib.utils.check(lambda: not diskradio.sensitive)
-    tab.find("storage-entry").set_text("/dev/default-pool/bochs-vol")
+    tab.find("storage-entry").set_text("/pool-dir/bochs-vol")
     _finish(addhw, check=details)
 
     # empty cdrom
@@ -532,7 +532,7 @@ def testAddLXCFilesystem(app):
     tab.find("Browse...", "push button").click()
     # Specific testing for dir vol handling for filesystem browse
     browsewin = app.root.find("vmm-storage-browser")
-    browsewin.find_fuzzy("default-pool", "table cell").click()
+    browsewin.find_fuzzy("pool-dir", "table cell").click()
     browsewin.find_fuzzy("bochs-vol", "table cell").click()
     choose = browsewin.find("Choose Volume")
     lib.utils.check(lambda: not choose.sensitive)
@@ -541,7 +541,7 @@ def testAddLXCFilesystem(app):
     choose.click()
     lib.utils.check(lambda: addhw.active)
     lib.utils.check(
-            lambda: source.text == "/dev/default-pool/dir-vol")
+            lambda: source.text == "/pool-dir/dir-vol")
 
     tab.find_fuzzy("Export filesystem", "check").click()
     # Use this to test some error.py logic for truncating large errors

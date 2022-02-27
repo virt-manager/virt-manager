@@ -85,14 +85,14 @@ def testHostStorageEdit(app):
     finish = win.find("Apply", "push button")
 
     # Shut off a pool, do an XML edit, verify it
-    win.find("default-pool", "table cell").click()
+    win.find("pool-dir", "table cell").click()
     delete = win.find("pool-delete", "push button")
     stop = win.find("pool-stop", "push button")
     stop.click()
     lib.utils.check(lambda: delete.sensitive)
     win.find("XML", "page tab").click()
     xmleditor = win.find("XML editor")
-    origpath = "/dev/default-pool"
+    origpath = "/pool-dir"
     newpath = "/dev/foo/bar/baz"
     xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
     finish.click()
@@ -120,7 +120,7 @@ def testHostStorageVolMisc(app):
     Misc actions involving volumes
     """
     win = app.manager_open_host("Storage").find("storage-grid")
-    win.find_fuzzy("default-pool", "table cell").click()
+    win.find_fuzzy("pool-dir", "table cell").click()
     vollist = win.find("vol-list", "table")
 
     vol1 = vollist.find("backingl1.img", "table cell")
@@ -136,7 +136,7 @@ def testHostStorageVolMisc(app):
     app.root.find("Copy Volume Path", "menu item").click()
     from gi.repository import Gdk, Gtk
     clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
-    lib.utils.check(lambda: clipboard.wait_for_text() == "/dev/default-pool/UPPER")
+    lib.utils.check(lambda: clipboard.wait_for_text() == "/pool-dir/UPPER")
 
 
 def testHostConn(app):

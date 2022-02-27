@@ -324,7 +324,7 @@ def testAlterDisk():
 
     disk = _get_disk("fda")
     check = _make_checker(disk)
-    disk.set_source_path("/dev/default-pool/default-vol")
+    disk.set_source_path("/pool-dir/default-vol")
     disk.sync_path_props()
     check("startup_policy", None, "optional")
     check("shareable", False, True)
@@ -618,12 +618,12 @@ def testChangeKVMMedia():
     guest, outfile = _get_test_content(kvmconn, "change-media")
 
     disk = guest.devices.disk[0]
-    disk.set_source_path("/dev/default-pool/default-vol")
+    disk.set_source_path("/pool-dir/default-vol")
     disk.sync_path_props()
 
     disk = guest.devices.disk[1]
-    disk.set_source_path("/dev/default-pool/default-vol")
-    assert disk.get_source_path() == "/dev/default-pool/default-vol"
+    disk.set_source_path("/pool-dir/default-vol")
+    assert disk.get_source_path() == "/pool-dir/default-vol"
     disk.set_source_path("/dev/pool-logical/diskvol1")
     disk.sync_path_props()
 
@@ -632,7 +632,7 @@ def testChangeKVMMedia():
     disk.sync_path_props()
 
     disk = guest.devices.disk[3]
-    disk.set_source_path("/dev/default-pool/default-vol")
+    disk.set_source_path("/pool-dir/default-vol")
     disk.sync_path_props()
 
     disk = guest.devices.disk[4]

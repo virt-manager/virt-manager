@@ -28,7 +28,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="floppy">
       <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol1.img"/>
+      <source file="/pool-dir/testvol1.img"/>
       <target dev="fda" bus="fdc"/>
       <boot order="1"/>
     </disk>

@@ -103,7 +103,7 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
 def testDirPool():
     conn = utils.URIs.open_testdefault_cached()
     poolobj = createPool(conn,
-                         StoragePool.TYPE_DIR, "pool-dir")
+                         StoragePool.TYPE_DIR, "pool-dir2")
     invol = createVol(conn, poolobj)
     createVol(conn, poolobj,
               volname=invol.name() + "input", input_vol=invol)

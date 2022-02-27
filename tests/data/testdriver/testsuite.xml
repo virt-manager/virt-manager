@@ -82,7 +82,7 @@
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='file' device='disk'>
-      <source file='/dev/default-pool/collidevol1.img'/>
+      <source file='/pool-dir/collidevol1.img'/>
       <target dev='hda' bus='ide'/>
       <driver type="qcow2"/>
     </disk>
@@ -473,7 +473,7 @@
 
 
 <pool type='dir'>
-  <name>default-pool</name>
+  <name>pool-dir</name>
   <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e53fe</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -481,7 +481,7 @@
   <source>
   </source>
   <target>
-    <path>/dev/default-pool</path>
+    <path>/pool-dir</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -619,7 +619,7 @@
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backingl3.img</path>
+      <path>/pool-dir/backingl3.img</path>
     </backingStore>
   </volume>
   <volume type='file'>
@@ -630,7 +630,7 @@
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backingl2.img</path>
+      <path>/pool-dir/backingl2.img</path>
     </backingStore>
   </volume>
   <volume type='file'>
@@ -641,7 +641,7 @@
       <format type='qcow2'/>
     </target>
     <backingStore>
-      <path>/dev/default-pool/backingl1.img</path>
+      <path>/pool-dir/backingl1.img</path>
     </backingStore>
   </volume>
 

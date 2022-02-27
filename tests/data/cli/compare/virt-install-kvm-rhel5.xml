@@ -34,7 +34,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol1.img"/>
+      <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
@@ -102,7 +102,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol1.img"/>
+      <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>

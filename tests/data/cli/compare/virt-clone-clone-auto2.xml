@@ -21,7 +21,7 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="file" device="disk">
       <driver type="qcow2"/>
-      <source file="/dev/default-pool/newvm.img"/>
+      <source file="/pool-dir/newvm.img"/>
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>

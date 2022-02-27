@@ -331,7 +331,7 @@ def testDetailsEditDomain2(app):
 
     initrd = tab.find("Initrd path:", "text")
     tab.find("initrd-browse", "push button").click()
-    app.select_storagebrowser_volume("default-pool", "backingl1.img")
+    app.select_storagebrowser_volume("pool-dir", "backingl1.img")
     lib.utils.check(lambda: win.active)
     lib.utils.check(lambda: "backing" in initrd.text)
     appl.click()
@@ -339,14 +339,14 @@ def testDetailsEditDomain2(app):
     lib.utils.check(lambda: win.active)
 
     tab.find("kernel-browse", "push button").click()
-    app.select_storagebrowser_volume("default-pool", "bochs-vol")
+    app.select_storagebrowser_volume("pool-dir", "bochs-vol")
     lib.utils.check(lambda: win.active)
     kernelpath = tab.find("Kernel path:", "text")
     lib.utils.check(lambda: "bochs" in kernelpath.text)
 
     dtb = tab.find("DTB path:", "text")
     tab.find("dtb-browse", "push button").click()
-    app.select_storagebrowser_volume("default-pool", "iso-vol")
+    app.select_storagebrowser_volume("pool-dir", "iso-vol")
     lib.utils.check(lambda: win.active)
     lib.utils.check(lambda: "iso-vol" in dtb.text)
 
@@ -779,7 +779,7 @@ def testDetailsXMLEdit(app):
     # Make some disk edits
     tab = _select_hw(app, win, "IDE Disk 1", "disk-tab")
     win.find("XML", "page tab").click()
-    origpath = "/dev/default-pool/test-clone-simple.img"
+    origpath = "/pool-dir/test-clone-simple.img"
     newpath = "/path/FOOBAR"
     xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
     finish.click()

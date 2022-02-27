@@ -72,13 +72,13 @@ TEST_DATA = {
     'URI-QEMU-RISCV64': utils.URIs.qemu_riscv64,
 
     'XMLDIR': XMLDIR,
-    'NEWIMG1': "/dev/default-pool/new1.img",
-    'NEWIMG2': "/dev/default-pool/new2.img",
+    'NEWIMG1': "/pool-dir/new1.img",
+    'NEWIMG2': "/pool-dir/new2.img",
     'NEWCLONEIMG1': NEW_FILES[0],
     'NEWCLONEIMG2': NEW_FILES[1],
     'NEWCLONEIMG3': NEW_FILES[2],
-    'EXISTIMG1': "/dev/default-pool/testvol1.img",
-    'EXISTIMG2': "/dev/default-pool/testvol2.img",
+    'EXISTIMG1': "/pool-dir/testvol1.img",
+    'EXISTIMG2': "/pool-dir/testvol2.img",
     'EXISTIMG3': EXIST_FILES[0],
     'EXISTIMG4': EXIST_FILES[1],
     'ISOTREE': "%s/fake-fedora17-tree.iso" % MEDIA_DIR,
@@ -88,7 +88,7 @@ TEST_DATA = {
     'ISO-F26-NETINST': "%s/fake-f26-netinst.iso" % MEDIA_DIR,
     'ISO-F29-LIVE': "%s/fake-f29-live.iso" % MEDIA_DIR,
     'TREEDIR': "%s/fakefedoratree" % MEDIA_DIR,
-    'COLLIDE': "/dev/default-pool/collidevol1.img",
+    'COLLIDE': "/pool-dir/collidevol1.img",
     'ADMIN-PASSWORD-FILE': "%s/admin-password.txt" % UNATTENDED_DIR,
     'USER-PASSWORD-FILE': "%s/user-password.txt" % UNATTENDED_DIR,
 }
@@ -569,13 +569,13 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
 
 
---disk type=block,source.dev=/dev/default-pool/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3,driver.queues=8
+--disk type=block,source.dev=/pool-dir/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3,driver.queues=8
 --disk source.file=%(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba,discard=ignore
 --disk size=1
 --disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered,rawio=yes
---disk /dev/default-pool/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz,iotune.read_bytes_sec=1,iotune.read_iops_sec=2,iotune.write_bytes_sec=5,iotune.write_iops_sec=6
---disk /dev/default-pool/iso-vol,format=qcow2,startup_policy=optional,iotune.total_bytes_sec=10,iotune.total_iops_sec=20,
+--disk /pool-dir/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz,iotune.read_bytes_sec=1,iotune.read_iops_sec=2,iotune.write_bytes_sec=5,iotune.write_iops_sec=6
+--disk /pool-dir/iso-vol,format=qcow2,startup_policy=optional,iotune.total_bytes_sec=10,iotune.total_iops_sec=20,
 --disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw,driver_name=qemu
 --disk pool=rbd-ceph,size=.1,driver.name=qemu,driver.type=raw,driver.discard=unmap,driver.detect_zeroes=unmap,driver.io=native,driver.error_policy=stop
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file
@@ -588,7 +588,7 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --disk vol=gluster-pool/test-gluster.raw
 --disk /var,device=floppy,snapshot=no,perms=rw
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk,bus=usb,target.removable=yes
---disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol,boot.order=10,boot.loadparm=5
+--disk /tmp/brand-new.img,size=1,backing_store=/pool-dir/iso-vol,boot.order=10,boot.loadparm=5
 --disk path=/dev/pool-logical/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
 source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client,target.rotation_rate=6000
 --disk vol=iscsi-direct/unit:0:0:1
@@ -873,7 +873,7 @@ c.add_compare("--connect " + utils.URIs.test_suite + " "
 # Test various storage corner cases
 c.add_compare(
 "--disk path=%(EXISTIMG1)s "  # Existing disk, no extra options
-"--disk pool=default-pool,size=.0001 --disk pool=default-pool,size=.0001 "  # Create 2 volumes in a pool
+"--disk pool=pool-dir,size=.0001 --disk pool=pool-dir,size=.0001 "  # Create 2 volumes in a pool
 "--disk path=%(EXISTIMG1)s,bus=ide --disk path=%(EXISTIMG1)s,bus=ide --disk path=%(EXISTIMG1)s,bus=ide --disk path=%(EXISTIMG1)s,device=cdrom,bus=ide "  # 3 IDE and CD
 "--disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi --disk path=%(EXISTIMG1)s,bus=scsi "  # > 16 scsi disks
 "--disk path=%(NEWIMG1)s,format=raw,size=.0000001 "  # Managed file using format raw
@@ -881,7 +881,7 @@ c.add_compare(
 "--disk /dev/zero "  # Referencing a local unmanaged /dev node
 "--disk pool=default,size=.00001 "  # Building 'default' pool
 "--disk /some/new/pool/dir/new,size=.1 "  # autocreate the pool
-"--disk /dev/default-pool/sharevol.img,perms=sh "  # Colliding shareable storage
+"--disk /pool-dir/sharevol.img,perms=sh "  # Colliding shareable storage
 "", "storage-creation")
 
 
@@ -902,19 +902,19 @@ c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --
 c.add_invalid("--disk device=disk", grep="requires a path")  # --disk device=disk, but no path
 c.add_invalid("--disk pool=pool-logical,size=1,format=qcow2", grep="Format attribute not supported")  # format= invalid for disk pool
 c.add_invalid("--disk pool=foopool,size=.0001", grep="no storage pool with matching name")  # Specify a nonexistent pool
-c.add_invalid("--disk vol=default-pool/foovol", grep="no storage vol with matching")  # Specify a nonexistent volume
-c.add_invalid("--disk vol=default-pool-no-slash", grep="Storage volume must be specified as vol=poolname/volname")  # Wrong vol= format
+c.add_invalid("--disk vol=pool-dir/foovol", grep="no storage vol with matching")  # Specify a nonexistent volume
+c.add_invalid("--disk vol=pool-dir-no-slash", grep="Storage volume must be specified as vol=poolname/volname")  # Wrong vol= format
 c.add_invalid("--disk perms=badformat", grep="Unknown 'perms' value")  # Wrong perms= format
 c.add_invalid("--disk size=badformat", grep="could not convert string")  # Wrong size= format
-c.add_invalid("--disk pool=default-pool", grep="Size must be specified for non existent")  # Specify a pool with no size
+c.add_invalid("--disk pool=pool-dir", grep="Size must be specified for non existent")  # Specify a pool with no size
 c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001", grep="Use libvirt APIs to manage the parent")  # Unmanaged file using non-raw format
 c.add_invalid("--disk path=/dev/pool-logical/newvol1.img,format=raw,size=.0000001", grep="Format attribute not supported for this volume type")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s", grep="Size must be specified")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000", grep="The requested volume capacity will exceed")  # Fail if fully allocated file would exceed disk space
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt", grep="already in use by other guests")  # Colliding storage with --prompt should still fail
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk /dev/default-pool/backingl3.img", grep="already in use by other guests")  # Colliding storage via backing store
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk /pool-dir/backingl3.img", grep="already in use by other guests")  # Colliding storage via backing store
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
-c.add_invalid("--disk source.pool=default-pool,source.volume=idontexist", grep="no storage vol with matching name 'idontexist'")  # trying to lookup non-existent volume, hit specific error code
+c.add_invalid("--disk source.pool=pool-dir,source.volume=idontexist", grep="no storage vol with matching name 'idontexist'")  # trying to lookup non-existent volume, hit specific error code
 c.add_invalid("--disk size=1 --seclabel model=foo,type=bar", grep="not appear to have been successful")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk and --file collision
 
@@ -1483,8 +1483,8 @@ c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM + " --auto-clone --nvr
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clone", "nvram-missing")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clone --preserve", "nvram-missing-preserve")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
-c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /pool-dir/newclone2.img --skip-copy=hdb --force-copy=sdb --file /pool-dir/newclone3.img", "clone-manual")
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /pool-dir/newclone2.img --skip-copy=hdb --force-copy=sdb --file /pool-dir/newclone3.img", "clone-manual")
 c.add_compare(_CLONE_EMPTY + " --auto-clone --print-xml", "empty")  # Auto flag, no storage
 c.add_compare("--connect %(URI-KVM-X86)s -o test-clone-simple --auto -f /foo.img --print-xml", "cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
 c.add_compare(_CLONE_MANAGED + " --auto-clone", "auto-managed")  # Auto flag w/ managed storage
@@ -1499,7 +1499,7 @@ c.add_invalid(_CLONE_EMPTY + " --file foo", grep="use '--name NEW_VM_NAME'")  # 
 c.add_invalid(_CLONE_EMPTY + " --auto-clone -n test", grep="Invalid name for new guest")  # new name raises error, already in use
 c.add_invalid("-o test --auto-clone", grep="shutoff")  # VM is running
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --file %(EXISTIMG1)s", grep="Clone onto existing storage volume is not currently supported")  # Should complain about overwriting existing file
-c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /dev/default-pool/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
+c.add_invalid("--connect %(URI-TEST-REMOTE)s -o test-clone-simple --auto-clone --file /pool-dir/testvol9.img --check all=off", grep="Clone onto existing storage volume")  # hit a specific error message
 c.add_invalid("--connect %(URI-TEST-FULL)s -o test-clone-full --auto-clone", grep="not enough free space")  # catch failure of clone path setting
 c.add_invalid(_CLONE_NET_HTTP + " --auto-clone", grep="'http' is not cloneable")
 c.add_invalid(_CLONE_NET_RBD + " --connect %(URI-TEST-FULL)s --auto-clone", grep="Cloning rbd volumes is not yet supported")

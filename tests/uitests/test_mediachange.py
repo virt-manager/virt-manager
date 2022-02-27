@@ -52,7 +52,7 @@ def testMediaChange(app):
     entry.click()
     # Use the storage browser to select new floppy storage
     tab.find("Browse", "push button").click()
-    app.select_storagebrowser_volume("default-pool", "iso-vol")
+    app.select_storagebrowser_volume("pool-dir", "iso-vol")
     appl.click()
 
     # Browse for image
@@ -61,7 +61,7 @@ def testMediaChange(app):
     combo.find(r"Fedora12_media \(/dev/sr0\)")
     entry.click()
     tab.find("Browse", "push button").click()
-    app.select_storagebrowser_volume("default-pool", "backingl1.img")
+    app.select_storagebrowser_volume("pool-dir", "backingl1.img")
     # Check 'already in use' dialog
     appl.click()
     app.click_alert_button("already in use by", "No")

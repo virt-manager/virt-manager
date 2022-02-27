@@ -109,7 +109,7 @@ def test_disk_path_in_use_kernel():
 
     # Comparing against kernel
     vms = virtinst.DeviceDisk.path_in_use_by(
-            conn, "/dev/default-pool/test-arm-kernel")
+            conn, "/pool-dir/test-arm-kernel")
     assert vms == ["test-arm-kernel"]
 
 
@@ -117,7 +117,7 @@ def test_disk_diskbackend_misc():
     # Test get_size() with vol_install
     conn = utils.URIs.open_testdefault_cached()
     disk = virtinst.DeviceDisk(conn)
-    pool = conn.storagePoolLookupByName("default-pool")
+    pool = conn.storagePoolLookupByName("pool-dir")
     vol_install = disk.build_vol_install(conn, "newvol1.img", pool, 1, False)
     disk.set_vol_install(vol_install)
     assert disk.get_size() == 1.0
@@ -156,7 +156,7 @@ def test_disk_diskbackend_misc():
     assert newdisk.get_size() == 0
 
     conn = utils.URIs.open_testdriver_cached()
-    volpath = "/dev/default-pool/test-clone-simple.img"
+    volpath = "/pool-dir/test-clone-simple.img"
     assert virtinst.DeviceDisk.path_definitely_exists(conn, volpath)
     disk = virtinst.DeviceDisk(conn)
     disk.set_source_path(volpath)
@@ -196,7 +196,7 @@ def test_disk_diskbackend_parse():
     # Ensure set_backend_for_existing_path resolves a path
     # to its existing storage volume
     xml = ("<disk type='file' device='disk'>"
-        "<source file='/dev/default-pool/default-vol'/>"
+        "<source file='/pool-dir/default-vol'/>"
         "</disk>")
     disk = virtinst.DeviceDisk(conn, parsexml=xml)
     disk.set_backend_for_existing_path()

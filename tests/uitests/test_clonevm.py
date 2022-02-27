@@ -148,7 +148,7 @@ def testCloneStorageChange(app):
     pathtxt = stgwin.find(None, "text", "New Path:")
     lib.utils.check(lambda: newname in pathtxt.text)
     stgwin.find("Browse", "push button").click()
-    app.select_storagebrowser_volume("default-pool", "iso-vol")
+    app.select_storagebrowser_volume("pool-dir", "iso-vol")
     lib.utils.check(lambda: "iso-vol" in pathtxt.text)
     stgwin.find("OK").click()
     app.click_alert_button("overwrite the existing", "No")
@@ -224,7 +224,7 @@ def testCloneNonmanaged(app):
     win.find("IDE Disk 1", "table cell").click()
     win.find("XML", "page tab").click()
     xmleditor = win.find("XML editor")
-    origpath = "/dev/default-pool/test-clone-simple.img"
+    origpath = "/pool-dir/test-clone-simple.img"
     newpath = tmpsrc.name
     xmleditor.set_text(xmleditor.text.replace(origpath, newpath))
     win.find("config-apply").click()

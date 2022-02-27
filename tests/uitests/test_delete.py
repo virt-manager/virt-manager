@@ -97,8 +97,8 @@ def _testDeleteManyDevices(app,
     undeletable_rows = [r.path for r in rows if r.undeletable]
     notdefault_rows = [r.path for r in rows if r.notdefault]
 
-    defpath = "/dev/default-pool/overlay.img"
-    nondefault_path2 = "/dev/default-pool/sharevol.img"
+    defpath = "/pool-dir/overlay.img"
+    nondefault_path2 = "/pool-dir/sharevol.img"
 
     assert selected_rows == [defpath]
     if nondefault_path:
@@ -130,7 +130,7 @@ def _testDeleteManyDevices(app,
 
     # Confirm
     browser = _open_storage_browser(app)
-    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find_fuzzy("pool-dir", "table cell").click()
     browser.find("vol-refresh", "push button").click()
     lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
     browser.find("sharevol.img", "table cell")
@@ -205,7 +205,7 @@ def testDeleteSkipStorage(app):
 
     # Confirm nothing was deleted compare to the default selections
     browser = _open_storage_browser(app)
-    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find_fuzzy("pool-dir", "table cell").click()
     browser.find("vol-refresh", "push button").click()
     browser.find("overlay.img", "table cell")
     browser.find("sharevol.img", "table cell")
@@ -235,7 +235,7 @@ def testDeleteDeviceNoStorage(app):
     details.window_close()
 
     browser = _open_storage_browser(app)
-    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find_fuzzy("pool-dir", "table cell").click()
     browser.find("vol-refresh", "push button").click()
     browser.find("overlay.img", "table cell")
 
@@ -261,13 +261,13 @@ def testDeleteDeviceWithStorage(app):
     lib.utils.check(lambda: not chk.checked)
     chk.click()
     lib.utils.check(lambda: chk.checked)
-    path = "/dev/default-pool/overlay.img"
+    path = "/pool-dir/overlay.img"
     delete.find_fuzzy(path)
     _finish(app, delete, [path])
     details.window_close()
 
     browser = _open_storage_browser(app)
-    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find_fuzzy("pool-dir", "table cell").click()
     browser.find("vol-refresh", "push button").click()
     lib.utils.check(lambda: "overlay.img" not in browser.fmt_nodes())
 
@@ -292,7 +292,7 @@ def testDeleteDeviceFail(app):
     lib.utils.check(lambda: not chk.checked)
     chk.click()
     lib.utils.check(lambda: chk.checked)
-    path = "/dev/default-pool/overlay.img"
+    path = "/pool-dir/overlay.img"
     delete.find_fuzzy(path)
     _finish(app, delete, [path], expect_fail=True)
     app.click_alert_button("Storage will not be.*deleted", "OK")
@@ -300,6 +300,6 @@ def testDeleteDeviceFail(app):
 
     # Verify file still exists
     browser = _open_storage_browser(app)
-    browser.find_fuzzy("default-pool", "table cell").click()
+    browser.find_fuzzy("pool-dir", "table cell").click()
     browser.find("vol-refresh", "push button").click()
     browser.find("overlay.img", "table cell")

@@ -18,7 +18,7 @@
   <devices>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol1.img"/>
+      <source file="/pool-dir/testvol1.img"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <controller type="xenbus" maxGrantFrames="64"/>
@@ -49,7 +49,7 @@
   <devices>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
-      <source file="/dev/default-pool/testvol1.img"/>
+      <source file="/pool-dir/testvol1.img"/>
       <target dev="xvda" bus="xen"/>
     </disk>
     <controller type="xenbus" maxGrantFrames="64"/>

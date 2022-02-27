@@ -25,12 +25,12 @@
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">
-      <source file="/dev/default-pool/testvol1.img"/>
+      <source file="/pool-dir/testvol1.img"/>
       <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
-      <source file="/dev/default-pool/testvol2.img"/>
+      <source file="/pool-dir/testvol2.img"/>
       <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
@@ -80,7 +80,7 @@
       <readonly/>
     </disk>
     <disk type="file" device="cdrom">
-      <source file="/dev/default-pool/testvol2.img"/>
+      <source file="/pool-dir/testvol2.img"/>
       <target dev="hdc" bus="ide"/>
       <readonly/>
     </disk>
