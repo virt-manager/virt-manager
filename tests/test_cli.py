@@ -282,6 +282,11 @@ class Command(object):
         if not output.endswith("\n"):
             output += "\n"
 
+        # Strip the test directory out of the saved output
+        search = '"%s/' % utils.TOPDIR
+        if search in output:
+            output = output.replace(search, "\"TESTSUITE_SCRUBBED/")
+
         utils.diff_compare(output, self.compare_file)
 
         self.skip_checks.predefine_skip(conn)
@@ -1521,7 +1526,7 @@ c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone -n test --auto-clone --
 c.add_valid(_CLONE_MANAGED + " --auto-clone --force-copy fda")  # force copy empty floppy drive
 c.add_invalid("-o idontexist --auto-clone", grep="Domain 'idontexist' was not found")  # Non-existent vm name
 c.add_invalid(_CLONE_UNMANAGED, grep="Either --auto-clone or --file")  # XML file with several disks, but non specified
-c.add_invalid(_CLONE_UNMANAGED + " --file virt-install", grep="overwrite the existing path 'virt-install'")  # XML w/ disks, overwriting existing files with no --preserve
+c.add_invalid(_CLONE_UNMANAGED + " --file virt-install", grep="overwrite the existing path")  # XML w/ disks, overwriting existing files with no --preserve
 c.add_invalid(_CLONE_MANAGED + " --file /tmp/clonevol", grep="matching name 'default-vol'")  # will attempt to clone across pools, which test driver doesn't support
 c.add_invalid(_CLONE_NOEXIST + " --auto-clone", grep="'/i/really/dont/exist' does not exist.")  # XML w/ non-existent storage, WITHOUT --preserve
 

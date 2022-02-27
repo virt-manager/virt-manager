@@ -34,7 +34,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="tests/data/fakemedia/fake-f26-netinst.iso"/>
+      <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-f26-netinst.iso"/>
       <target dev="sda" bus="sata"/>
       <readonly/>
     </disk>
@@ -102,6 +102,8 @@
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="cdrom">
+      <driver name="qemu"/>
+      <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-f26-netinst.iso"/>
       <target dev="sda" bus="sata"/>
       <readonly/>
     </disk>

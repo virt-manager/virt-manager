@@ -595,7 +595,8 @@ class StorageVolume(_StorageObject):
         log.debug("Attempting to detect format for backing_store=%s",
                 self.backing_store)
         from . import diskbackend
-        vol, pool = diskbackend.manage_path(self.conn, self.backing_store)
+        path, vol, pool = diskbackend.manage_path(self.conn, self.backing_store)
+        dummy = path
 
         if not vol:  # pragma: no cover
             log.debug("Didn't find any volume for backing_store")

@@ -39,7 +39,7 @@
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu"/>
-      <source file="tests/data/fakemedia/fake-fedora17-tree.iso"/>
+      <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-fedora17-tree.iso"/>
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
@@ -115,6 +115,8 @@
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
+      <driver name="qemu"/>
+      <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-fedora17-tree.iso"/>
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>

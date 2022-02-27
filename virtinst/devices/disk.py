@@ -610,7 +610,7 @@ class DeviceDisk(Device):
             path = self._get_xmlpath()
 
         if path and not vol_object and not parent_pool:
-            (vol_object, parent_pool) = diskbackend.manage_path(
+            (dummy, vol_object, parent_pool) = diskbackend.manage_path(
                     self.conn, path)
 
         self._change_backend(path, vol_object, parent_pool)
@@ -635,7 +635,8 @@ class DeviceDisk(Device):
 
         # User explicitly changed 'path', so try to lookup its storage
         # object since we may need it
-        (vol_object, parent_pool) = diskbackend.manage_path(self.conn, newpath)
+        (newpath, vol_object, parent_pool) = diskbackend.manage_path(
+                self.conn, newpath)
 
         self._change_backend(newpath, vol_object, parent_pool)
         self._set_xmlpath(self.get_source_path())

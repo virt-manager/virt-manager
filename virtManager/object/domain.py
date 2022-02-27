@@ -784,10 +784,12 @@ class vmmDomain(vmmLibvirtObject):
         if not editdev:
             return  # pragma: no cover
 
+        validate = False
         if path != _SENTINEL:
             editdev.set_source_path(path)
             if not do_hotplug:
                 editdev.sync_path_props()
+                validate = True
 
         if readonly != _SENTINEL:
             editdev.read_only = readonly
@@ -806,6 +808,8 @@ class vmmDomain(vmmLibvirtObject):
         if bus != _SENTINEL:
             editdev.change_bus(self.xmlobj, bus)
 
+        if validate:
+            editdev.validate()
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
     def define_network(self, devobj, do_hotplug,

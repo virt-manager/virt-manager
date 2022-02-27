@@ -1154,3 +1154,21 @@ def testRefreshMachineType():
     guest.os.machine = "s390-ccw-virtio-12345"
     guest.refresh_machine_type()
     assert guest.os.machine == "s390-ccw-virtio"
+
+
+def testDiskSourceAbspath():
+    # If an existing disk doesn't have an abspath in the XML, make sure
+    # we don't convert it just by parsing
+    conn = utils.URIs.open_testdefault_cached()
+    xml = "<disk type='file' device='disk'><source file='foobar'/></disk>"
+    disk = virtinst.DeviceDisk(conn, parsexml=xml)
+    assert disk.get_source_path() == "foobar"
+
+    # But setting a relative path should convert it
+    import os
+    disk.set_source_path("foobar2")
+    assert disk.get_source_path() == os.path.abspath("foobar2")
+
+    # ...unless it's a URL
+    disk.set_source_path("http://example.com/foobar3")
+    assert disk.get_source_path() == "http://example.com/foobar3"

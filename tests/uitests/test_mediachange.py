@@ -1,6 +1,9 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
+
+import tests
 from . import lib
 
 
@@ -10,6 +13,7 @@ from . import lib
 
 def testMediaChange(app):
     vmname = "test-many-devices"
+    app.uri = tests.utils.URIs.test_remote
     app.open(show_console=vmname)
     win = app.find_details_window(vmname,
             click_details=True, shutdown=True)
@@ -39,7 +43,7 @@ def testMediaChange(app):
         entry.text == "Floppy_install_label (/dev/fdb)")
 
     # Specify manual path
-    path = "/tmp/aaaaaaaaaaaaaaaaaaaaaaa.img"
+    path = "/pool-dir/UPPER"
     entry.set_text(path)
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
@@ -88,10 +92,16 @@ def testMediaHotplug(app):
     entry = win.find("media-entry")
     appl = win.find("config-apply")
 
-    # CDROM + physical
     hw.find("IDE CDROM 1", "table cell").click()
     lib.utils.check(lambda: not entry.text)
-    entry.set_text("/dev/sr0")
+    # Catch path does not exist error
+    entry.set_text("/dev/sr7")
+    appl.click()
+    app.click_alert_button("non-existent path '/dev/sr7", "Close")
+
+    # Check relative path while we are at it
+    path = "virt-install"
+    entry.set_text(path)
     appl.click()
     app.click_alert_button("changes will take effect", "OK")
     lib.utils.check(lambda: not appl.sensitive)
@@ -101,4 +111,4 @@ def testMediaHotplug(app):
     win.find("Shut Down", "push button").click()
     run = win.find("Run", "push button")
     lib.utils.check(lambda: run.sensitive)
-    lib.utils.check(lambda: entry.text == "Fedora12_media (/dev/sr0)")
+    lib.utils.check(lambda: entry.text == os.path.abspath(path))

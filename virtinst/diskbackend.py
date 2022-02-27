@@ -141,9 +141,9 @@ def manage_path(conn, path):
     If path is not managed, try to create a storage pool to probe the path
     """
     if not conn.support.conn_storage():
-        return None, None  # pragma: no cover
+        return None, None, None  # pragma: no cover
     if not path:
-        return None, None
+        return None, None, None
 
     if not path_is_url(path) and not path_is_network_vol(conn, path):
         path = os.path.abspath(path)
@@ -151,7 +151,7 @@ def manage_path(conn, path):
     searchpath = _get_storage_search_path(path)
     vol, pool = _check_if_path_managed(conn, searchpath)
     if vol or pool or not _can_auto_manage(path):
-        return vol, pool
+        return path, vol, pool
 
     dirname = os.path.dirname(path)
     poolname = os.path.basename(dirname).replace(" ", "_")
@@ -167,7 +167,7 @@ def manage_path(conn, path):
     pool = poolxml.install(build=False, create=True, autostart=True)
 
     vol = _lookup_vol_by_basename(pool, path)
-    return vol, pool
+    return path, vol, pool
 
 
 def path_is_url(path):
