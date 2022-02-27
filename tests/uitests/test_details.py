@@ -17,20 +17,28 @@ def _start_vm(win):
     lib.utils.check(lambda: not run.sensitive)
 
 
-def _select_hw(app, win, hwname, tabname):
-    c = win.find(hwname, "table cell")
+def table_cell_click(app, listw, text):
+    """
+    Find the table cell matching 'text'. If it's not on screen,
+    use ctrl+f searching to quickly select it.
+    """
+    c = listw.find(text, "table cell")
     if not c.onscreen:
-        hwlist = win.find("hw-list")
-        hwlist.point()
-        hwlist.click()
+        listw.point()
+        listw.click()
         app.rawinput.keyCombo("<ctrl>f")
         searchwin = app.find_window(None, roleName="window")
         searchentry = searchwin.find(None, "text")
-        searchentry.set_text(hwname)
+        searchentry.set_text(text)
         c.check_onscreen()
         lib.utils.check(lambda: c.state_selected)
         app.rawinput.pressKey("Enter")
     c.click()
+    return c
+
+
+def _select_hw(app, win, hwname, tabname):
+    table_cell_click(app, win.find("hw-list"), hwname)
     tab = win.find(tabname, None)
     lib.utils.check(lambda: tab.showing)
     return tab
