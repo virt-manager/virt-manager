@@ -5,6 +5,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
+
 from gi.repository import Gdk
 from gi.repository import GObject
 
@@ -12,12 +14,15 @@ import gi
 gi.require_version('GtkVnc', '2.0')
 from gi.repository import GtkVnc
 try:
+    SPICE_GTK_IMPORT_ERROR = None
+    if "VIRTINST_TEST_SUITE_FAKE_NO_SPICE" in os.environ:
+        raise ImportError("test suite faking no spice")
+
     gi.require_version('SpiceClientGtk', '3.0')
     from gi.repository import SpiceClientGtk
     from gi.repository import SpiceClientGLib
-    have_spice_gtk = True
-except (ValueError, ImportError):  # pragma: no cover
-    have_spice_gtk = False
+except (ValueError, ImportError) as e:
+    SPICE_GTK_IMPORT_ERROR = str(e)
 
 from virtinst import log
 

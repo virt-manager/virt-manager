@@ -1296,3 +1296,24 @@ def testNewVMDefaultBridge(app):
     newvm.find_fuzzy("Finish", "button").click()
     app.find_details_window("vm1")
     lib.utils.check(lambda: not newvm.showing)
+
+
+@unittest.mock.patch.dict('os.environ',
+        {"VIRTINST_TEST_SUITE_FAKE_NO_SPICE": "1"})
+def testCreateVMMissingSpice(app):
+    newvm = _open_newvm(app)
+
+    newvm.find_fuzzy("Import", "radio").click()
+    _forward(newvm)
+    newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
+    newvm.find("oslist-entry").set_text("generic")
+    newvm.find("oslist-popover").find_fuzzy("generic").click()
+    _forward(newvm)
+    _forward(newvm)
+
+    newvm.find_fuzzy("Finish", "button").click()
+    details = app.find_details_window("vm1")
+    lib.utils.check(lambda: not newvm.showing)
+
+    details.find_fuzzy("test suite faking no spice")
+    details.window_close()

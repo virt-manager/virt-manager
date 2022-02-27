@@ -12,7 +12,7 @@ from virtinst import log
 
 from .serialcon import vmmSerialConsole
 from .sshtunnels import ConnectionInfo
-from .viewers import SpiceViewer, VNCViewer, have_spice_gtk
+from .viewers import SpiceViewer, VNCViewer, SPICE_GTK_IMPORT_ERROR
 from ..baseclass import vmmGObject, vmmGObjectUI
 from ..lib.keyring import vmmKeyring
 
@@ -723,9 +723,10 @@ class vmmConsolePages(vmmGObjectUI):
             if ginfo.gtype == "vnc":
                 viewer_class = VNCViewer
             elif ginfo.gtype == "spice":
-                if not have_spice_gtk:  # pragma: no cover
-                    raise RuntimeError("Error opening Spice console, "
-                                       "SpiceClientGtk missing")
+                if SPICE_GTK_IMPORT_ERROR:
+                    raise RuntimeError(
+                            "Error opening SPICE console: %s" %
+                            SPICE_GTK_IMPORT_ERROR)
                 viewer_class = SpiceViewer
 
             self._viewer = viewer_class(self.vm, ginfo)
