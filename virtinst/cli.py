@@ -1580,38 +1580,11 @@ class VirtCLIParser(metaclass=_InitClass):
 # --xml parsing #
 #################
 
-class _XMLCLIInstance:
-    """
-    Helper class to parse --xml content into.
-    Generates XMLManualAction which actually performs the work
-    """
-    def __init__(self):
-        self.xpath_delete = None
-        self.xpath_set = None
-        self.xpath_create = None
-        self.xpath_value = None
-
-    def build_action(self):
-        from .xmlbuilder import XMLManualAction
-        if self.xpath_delete:
-            return XMLManualAction(self.xpath_delete,
-                    action=XMLManualAction.ACTION_DELETE)
-        if self.xpath_create:
-            return XMLManualAction(self.xpath_create,
-                    action=XMLManualAction.ACTION_CREATE)
-
-        xpath = self.xpath_set
-        if self.xpath_value:
-            val = self.xpath_value
-        else:
-            if "=" not in str(xpath):
-                fail("%s: Setting xpath must be in the form of XPATH=VALUE" %
-                        xpath)
-            xpath, val = xpath.rsplit("=", 1)
-        return XMLManualAction(xpath, val or None)
-
-
 class ParserXML(VirtCLIParser):
+    """
+    Parser to set values on XMLManualAction instances, which are tracked
+    in XMLBuilder.xml_actions
+    """
     cli_arg_name = "xml"
     supports_clearxml = False
 
@@ -1633,14 +1606,13 @@ class ParserXML(VirtCLIParser):
 
 def parse_xmlcli(guest, options):
     """
-    Parse --xml option strings and add the resulting XMLManualActions
-    to the Guest instance
+    Parse --xml option string into XMLManualAction instances and append
+    to guest.xml_actions.
     """
     for optstr in options.xml:
-        inst = _XMLCLIInstance()
+        inst = guest.xml_actions.new()
         ParserXML(optstr).parse(inst)
-        manualaction = inst.build_action()
-        guest.add_xml_manual_action(manualaction)
+        guest.xml_actions.append(inst)
 
 
 ########################

@@ -34,24 +34,49 @@ class XMLManualAction(object):
     ACTION_CREATE = 1
     ACTION_DELETE = 2
     ACTION_SET = 3
-    def __init__(self, xpath, value=None, action=-1):
-        self.xpath = xpath
-        self._value = value
 
-        self._action = self.ACTION_SET
-        if action != -1:
-            self._action = action
+    xpath_delete = None
+    xpath_create = None
+    xpath_value = None
+    xpath_set = None
+
+    def _process_args(self):
+        def _ret(x, a, v=None):
+            return (x, a, v)
+
+        if self.xpath_delete:
+            return _ret(self.xpath_delete, XMLManualAction.ACTION_DELETE)
+        if self.xpath_create:
+            return _ret(self.xpath_create, XMLManualAction.ACTION_CREATE)
+
+        xpath = self.xpath_set
+        if self.xpath_value:
+            val = self.xpath_value
+        else:
+            if "=" not in str(xpath):
+                raise Exception(
+                    "%s: Setting xpath must be in the form of XPATH=VALUE" %
+                    xpath)
+            xpath, val = xpath.rsplit("=", 1)
+        return _ret(xpath, XMLManualAction.ACTION_SET, val)
 
     def perform(self, xmlstate):
-        xpath = self.xpath
+        if (not self.xpath_delete and
+            not self.xpath_create and
+            not self.xpath_value and
+            not self.xpath_set):
+            return
+        xpath, action, value = self._process_args()
+
         if xpath.startswith("."):
-            xpath = xmlstate.make_abs_xpath(self.xpath)
-        if self._action == self.ACTION_DELETE:
+            xpath = xmlstate.make_abs_xpath(xpath)
+
+        if action == self.ACTION_DELETE:
             setval = False
-        elif self._action == self.ACTION_CREATE:
+        elif action == self.ACTION_CREATE:
             setval = True
         else:
-            setval = self._value
+            setval = value or None
         xmlstate.xmlapi.set_xpath_content(xpath, setval)
 
 
@@ -95,10 +120,11 @@ class _XMLChildList(list):
     This is just to insert a dynamically created add_new() function
     which instantiates and appends a new child object
     """
-    def __init__(self, childclass, copylist, xmlbuilder):
+    def __init__(self, childclass, copylist, xmlbuilder, is_xml=True):
         list.__init__(self)
         self._childclass = childclass
         self._xmlbuilder = xmlbuilder
+        self._is_xml = is_xml
         for i in copylist:
             self.append(i)
 
@@ -106,14 +132,20 @@ class _XMLChildList(list):
         """
         Instantiate a new child object and return it
         """
-        return self._childclass(self._xmlbuilder.conn)
+        args = ()
+        if self._is_xml:
+            args = (self._xmlbuilder.conn,)
+        return self._childclass(*args)
 
     def add_new(self):
         """
         Instantiate a new child object, append it, and return it
         """
         obj = self.new()
-        self._xmlbuilder.add_child(obj)
+        if self._is_xml:
+            self._xmlbuilder.add_child(obj)
+        else:
+            self.append(obj)
         return obj
 
 
@@ -518,7 +550,8 @@ class XMLBuilder(object):
 
         self._validate_xmlbuilder()
         self._initial_child_parse()
-        self._manual_actions = []
+        self.xml_actions = _XMLChildList(
+                XMLManualAction, [], self, is_xml=False)
 
     def _validate_xmlbuilder(self):
         # This is one time validation we run once per XMLBuilder class
@@ -651,13 +684,6 @@ class XMLBuilder(object):
         if "[" not in xpath:
             return 0
         return int(xpath.rsplit("[", 1)[1].strip("]")) - 1
-
-    def add_xml_manual_action(self, manualaction):
-        """
-        Register a manual XML action to perform at the end of the
-        XML building step. Triggered via --xml on the command line
-        """
-        self._manual_actions.append(manualaction)
 
 
     ################
@@ -841,5 +867,5 @@ class XMLBuilder(object):
                 for obj in xmlutil.listify(getattr(self, key)):
                     obj._add_parse_bits(self._xmlstate.xmlapi)
 
-        for manualaction in self._manual_actions:
+        for manualaction in self.xml_actions:
             manualaction.perform(self._xmlstate)
