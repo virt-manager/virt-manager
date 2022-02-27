@@ -21,12 +21,12 @@
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type="block" device="floppy">
       <driver type="vmdk"/>
-      <source dev="/dev/disk-pool/diskvol1-clone"/>
+      <source dev="/dev/pool-logical/diskvol1-clone"/>
       <target dev="fda" bus="fdc"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
     </disk>
     <disk type="block" device="disk">
-      <source dev="/dev/disk-pool/diskvol2"/>
+      <source dev="/dev/pool-logical/diskvol2"/>
       <target dev="sda" bus="scsi"/>
       <readonly/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>

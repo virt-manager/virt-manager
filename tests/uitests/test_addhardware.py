@@ -212,7 +212,7 @@ def testAddDisks(app):
     tab.find("storage-browse", "push button").click()
     browse = app.root.find("vmm-storage-browser")
 
-    browse.find_fuzzy("disk-pool", "table cell").click()
+    browse.find_fuzzy("pool-logical", "table cell").click()
     browse.find("diskvol1", "table cell").click()
     browse.find("Choose Volume", "push button").click()
     lib.utils.check(lambda: "/diskvol1" in storageent.text)

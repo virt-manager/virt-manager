@@ -120,7 +120,7 @@ def testNewVMMultiConnection(app):
     lib.utils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
     newvm.find_fuzzy("install-iso-browse", "button").click()
     browsewin = app.root.find("vmm-storage-browser")
-    lib.utils.check(lambda: "disk-pool" not in browsewin.fmt_nodes())
+    lib.utils.check(lambda: "pool-logical" not in browsewin.fmt_nodes())
 
 
 def testNewVMManualDefault(app):

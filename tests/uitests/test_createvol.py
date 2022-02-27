@@ -103,13 +103,13 @@ def testCreateVolMisc(app):
     vollist.find(newname)
 
     # Create LVM backing store
-    hostwin.find("disk-pool", "table cell").click()
+    hostwin.find("pool-logical", "table cell").click()
     win = _open_createvol(app, hostwin)
     newname = "aaa-lvm"
     name.set_text(newname)
     win.find("Backing store").click_expander()
     win.find("Browse...").click()
-    app.select_storagebrowser_volume("disk-pool", "diskvol7")
+    app.select_storagebrowser_volume("pool-logical", "diskvol7")
     sparse.check_not_onscreen()
     finish.click()
     vollist.find(newname)

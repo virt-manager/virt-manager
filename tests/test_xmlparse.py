@@ -624,11 +624,11 @@ def testChangeKVMMedia():
     disk = guest.devices.disk[1]
     disk.set_source_path("/dev/default-pool/default-vol")
     assert disk.get_source_path() == "/dev/default-pool/default-vol"
-    disk.set_source_path("/dev/disk-pool/diskvol1")
+    disk.set_source_path("/dev/pool-logical/diskvol1")
     disk.sync_path_props()
 
     disk = guest.devices.disk[2]
-    disk.set_source_path("/dev/disk-pool/diskvol1")
+    disk.set_source_path("/dev/pool-logical/diskvol1")
     disk.sync_path_props()
 
     disk = guest.devices.disk[3]
@@ -636,7 +636,7 @@ def testChangeKVMMedia():
     disk.sync_path_props()
 
     disk = guest.devices.disk[4]
-    disk.set_source_path("/dev/disk-pool/diskvol1")
+    disk.set_source_path("/dev/pool-logical/diskvol1")
     disk.sync_path_props()
 
     _alter_compare(kvmconn, guest.get_xml(), outfile)

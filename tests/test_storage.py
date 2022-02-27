@@ -218,7 +218,7 @@ def testMisc():
 
     fullconn = utils.URIs.open_testdriver_cached()
     glusterpool = fullconn.storagePoolLookupByName("gluster-pool")
-    diskpool = fullconn.storagePoolLookupByName("disk-pool")
+    diskpool = fullconn.storagePoolLookupByName("pool-logical")
 
     glustervol = StorageVolume(fullconn)
     glustervol.pool = glusterpool

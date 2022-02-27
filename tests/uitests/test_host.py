@@ -108,7 +108,7 @@ def testHostStorageEdit(app):
     # Change autostart. Trigger it by clicking on new cell
     win.find("newsort-default", "table cell").click()
     win.find("pool-autostart").click()
-    win.find("disk-pool", "table cell").click()
+    win.find("pool-logical", "table cell").click()
     app.click_alert_button("There are unapplied changes", "Yes")
 
     # Do standard xmleditor tests

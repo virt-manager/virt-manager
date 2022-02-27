@@ -376,7 +376,7 @@
     </disk>
     <disk type="block" device="lun">
       <driver name="qemu" type="raw"/>
-      <source dev="/dev/disk-pool/diskvol7">
+      <source dev="/dev/pool-logical/diskvol7">
         <reservations managed="no">
           <source type="unix" path="/var/run/test/pr-helper0.sock" mode="client"/>
         </reservations>
@@ -398,7 +398,7 @@
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="none" discard="unmap" io="native"/>
-      <source dev="/dev/disk-pool/disk"/>
+      <source dev="/dev/pool-logical/disk"/>
       <target dev="vdq" bus="virtio"/>
     </disk>
     <disk type="dir" device="disk">

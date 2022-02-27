@@ -589,11 +589,11 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --disk /var,device=floppy,snapshot=no,perms=rw
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk,bus=usb,target.removable=yes
 --disk /tmp/brand-new.img,size=1,backing_store=/dev/default-pool/iso-vol,boot.order=10,boot.loadparm=5
---disk path=/dev/disk-pool/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
+--disk path=/dev/pool-logical/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
 source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client,target.rotation_rate=6000
 --disk vol=iscsi-direct/unit:0:0:1
 --disk size=.0001,format=raw,transient=on,transient.shareBacking=yes
---disk size=.0001,pool=disk-pool
+--disk size=.0001,pool=pool-logical
 --disk path=%(EXISTIMG1)s,type=dir
 --disk path=/fooroot.img,size=.0001,transient=on
 --disk source.dir=/
@@ -900,7 +900,7 @@ c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse", grep="There i
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000", grep="The requested volume capacity will exceed the")  # Huge file, sparse, but no prompting
 c.add_invalid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s --file %(EXISTIMG1)s", grep="Only 4 disks")  # Too many IDE
 c.add_invalid("--disk device=disk", grep="requires a path")  # --disk device=disk, but no path
-c.add_invalid("--disk pool=disk-pool,size=1,format=qcow2", grep="Format attribute not supported")  # format= invalid for disk pool
+c.add_invalid("--disk pool=pool-logical,size=1,format=qcow2", grep="Format attribute not supported")  # format= invalid for disk pool
 c.add_invalid("--disk pool=foopool,size=.0001", grep="no storage pool with matching name")  # Specify a nonexistent pool
 c.add_invalid("--disk vol=default-pool/foovol", grep="no storage vol with matching")  # Specify a nonexistent volume
 c.add_invalid("--disk vol=default-pool-no-slash", grep="Storage volume must be specified as vol=poolname/volname")  # Wrong vol= format
@@ -908,7 +908,7 @@ c.add_invalid("--disk perms=badformat", grep="Unknown 'perms' value")  # Wrong p
 c.add_invalid("--disk size=badformat", grep="could not convert string")  # Wrong size= format
 c.add_invalid("--disk pool=default-pool", grep="Size must be specified for non existent")  # Specify a pool with no size
 c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001", grep="Use libvirt APIs to manage the parent")  # Unmanaged file using non-raw format
-c.add_invalid("--disk path=/dev/disk-pool/newvol1.img,format=raw,size=.0000001", grep="Format attribute not supported for this volume type")  # Managed disk using any format
+c.add_invalid("--disk path=/dev/pool-logical/newvol1.img,format=raw,size=.0000001", grep="Format attribute not supported for this volume type")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s", grep="Size must be specified")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000", grep="The requested volume capacity will exceed")  # Fail if fully allocated file would exceed disk space
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt", grep="already in use by other guests")  # Colliding storage with --prompt should still fail
@@ -1334,7 +1334,7 @@ c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clear
 c.add_compare("--print-diff --remove-device --serial 1", "remove-console-dup", input_file=(_VIRTXMLDIR + "virtxml-console-dup.xml"))
 c.add_compare("--print-diff --define --connect %(URI-KVM-X86)s test-many-devices --edit --boot uefi", "edit-boot-uefi")
 c.add_compare("--print-diff --define --connect %(URI-KVM-X86)s test-many-devices --edit --cpu host-copy", "edit-cpu-host-copy")
-c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk source.pool=pool-disk,source.volume=sdfg1", "build-disk-pool-disk")
+c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk source.pool=pool-disk,source.volume=sdfg1", "build-pool-logical-disk")
 c.add_compare("test --add-device --network default --update --confirm", "update-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1", "VIRTINST_TEST_SUITE_INCREMENT_MACADDR": "1"}, input_text="yes\nyes\n")  # test hotplug success
 c.add_compare("test --add-device --network default --update --confirm --no-define", "update-nodefine-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1"}, input_text="yes\n")  # test hotplug success without define
 
@@ -1483,8 +1483,8 @@ c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM + " --auto-clone --nvr
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clone", "nvram-missing")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clone --preserve", "nvram-missing-preserve")  # hits a particular nvram code path
-c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
-c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/disk-pool/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /dev/default-pool/newclone2.img --skip-copy=hdb --force-copy=sdb --file /dev/default-pool/newclone3.img", "clone-manual")
 c.add_compare(_CLONE_EMPTY + " --auto-clone --print-xml", "empty")  # Auto flag, no storage
 c.add_compare("--connect %(URI-KVM-X86)s -o test-clone-simple --auto -f /foo.img --print-xml", "cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
 c.add_compare(_CLONE_MANAGED + " --auto-clone", "auto-managed")  # Auto flag w/ managed storage

@@ -18,12 +18,12 @@
     <disk type="block" device="cdrom">
       <target dev="hdb" bus="ide"/>
       <driver name="qemu" type="raw"/>
-      <source dev="/dev/disk-pool/diskvol1"/>
+      <source dev="/dev/pool-logical/diskvol1"/>
     </disk>
     <disk type="block" device="cdrom">
       <target dev="hdc" bus="ide"/>
       <driver name="qemu" type="raw"/>
-      <source dev="/dev/disk-pool/diskvol1"/>
+      <source dev="/dev/pool-logical/diskvol1"/>
     </disk>
     <disk type="file" device="floppy">
       <target dev="fda" bus="fdc"/>
@@ -33,7 +33,7 @@
     <disk type="block" device="floppy">
       <target dev="fdb" bus="fdc"/>
       <driver name="qemu" type="raw"/>
-      <source dev="/dev/disk-pool/diskvol1"/>
+      <source dev="/dev/pool-logical/diskvol1"/>
     </disk>
   </devices>
 </domain>

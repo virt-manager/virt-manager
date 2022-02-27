@@ -830,12 +830,12 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='block' device='floppy'>
-      <source dev='/dev/disk-pool/diskvol1'/>
+      <source dev='/dev/pool-logical/diskvol1'/>
       <target dev='fda' bus='fdc'/>
       <driver type="vmdk"/>
     </disk>
     <disk type='block' device='disk'>
-      <source dev='/dev/disk-pool/diskvol2'/>
+      <source dev='/dev/pool-logical/diskvol2'/>
       <target dev='sda' bus='scsi'/>
       <readonly/>
     </disk>
@@ -2018,7 +2018,7 @@ ba</description>
 </pool>
 
 <pool type='logical'>
-  <name>disk-pool</name>
+  <name>pool-logical</name>
   <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5aaa</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -2026,7 +2026,7 @@ ba</description>
   <source>
   </source>
   <target>
-    <path>/dev/disk-pool</path>
+    <path>/dev/pool-logical</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
