@@ -573,11 +573,11 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --disk source.file=%(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba,discard=ignore
 --disk size=1
---disk /iscsi-pool/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered,rawio=yes
+--disk /pool-iscsi/diskvol1,total_bytes_sec=10,total_iops_sec=20,bus=scsi,device=lun,sgio=unfiltered,rawio=yes
 --disk /pool-dir/iso-vol,seclabel.model=dac,seclabel1.model=selinux,seclabel1.relabel=no,seclabel0.label=foo,bar,baz,iotune.read_bytes_sec=1,iotune.read_iops_sec=2,iotune.write_bytes_sec=5,iotune.write_iops_sec=6
 --disk /pool-dir/iso-vol,format=qcow2,startup_policy=optional,iotune.total_bytes_sec=10,iotune.total_iops_sec=20,
---disk source_pool=rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw,driver_name=qemu
---disk pool=rbd-ceph,size=.1,driver.name=qemu,driver.type=raw,driver.discard=unmap,driver.detect_zeroes=unmap,driver.io=native,driver.error_policy=stop
+--disk source_pool=pool-rbd-ceph,source_volume=some-rbd-vol,size=.1,driver_type=raw,driver_name=qemu
+--disk pool=pool-rbd-ceph,size=.1,driver.name=qemu,driver.type=raw,driver.discard=unmap,driver.detect_zeroes=unmap,driver.io=native,driver.error_policy=stop
 --disk source_protocol=http,source_host_name=example.com,source_host_port=8000,source_name=/path/to/my/file
 --disk source.protocol=http,source.host0.name=exampl2.com,source.host.port=8000,source.name=/path/to/my/file
 --disk source.protocol=nbd,source.host.transport=unix,source.host.socket=/tmp/socket,snapshot_policy=no
@@ -585,13 +585,13 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --disk gluster://192.168.1.100/test-volume/some/dir/test-gluster.qcow2
 --disk nbd+unix:///var/foo/bar/socket,bus=usb,removable=on,address.type=usb,address.bus=0,address.port=2
 --disk path=http://[1:2:3:4:1:2:3:4]:5522/my/path?query=foo
---disk vol=gluster-pool/test-gluster.raw
+--disk vol=pool-gluster/test-gluster.raw
 --disk /var,device=floppy,snapshot=no,perms=rw
 --disk %(NEWIMG2)s,size=1,backing_store=/tmp/foo.img,backing_format=vmdk,bus=usb,target.removable=yes
 --disk /tmp/brand-new.img,size=1,backing_store=/pool-dir/iso-vol,boot.order=10,boot.loadparm=5
 --disk path=/dev/pool-logical/diskvol7,device=lun,bus=scsi,reservations.managed=no,reservations.source.type=unix,reservations.source.path=/var/run/test/pr-helper0.sock,reservations.source.mode=client,\
 source.reservations.managed=no,source.reservations.source.type=unix,source.reservations.source.path=/var/run/test/pr-helper0.sock,source.reservations.source.mode=client,target.rotation_rate=6000
---disk vol=iscsi-direct/unit:0:0:1
+--disk vol=pool-iscsi-direct/unit:0:0:1
 --disk size=.0001,format=raw,transient=on,transient.shareBacking=yes
 --disk size=.0001,pool=pool-logical
 --disk path=%(EXISTIMG1)s,type=dir
@@ -913,7 +913,7 @@ c.add_invalid("--disk %(NEWIMG1)s", grep="Size must be specified")  # Not specif
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000", grep="The requested volume capacity will exceed")  # Fail if fully allocated file would exceed disk space
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt", grep="already in use by other guests")  # Colliding storage with --prompt should still fail
 c.add_invalid("--connect %(URI-TEST-FULL)s --disk /pool-dir/backingl3.img", grep="already in use by other guests")  # Colliding storage via backing store
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=rbd-ceph,source_volume=vol1", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=pool-rbd-ceph,source_volume=vol1", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source.pool=pool-dir,source.volume=idontexist", grep="no storage vol with matching name 'idontexist'")  # trying to lookup non-existent volume, hit specific error code
 c.add_invalid("--disk size=1 --seclabel model=foo,type=bar", grep="not appear to have been successful")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk and --file collision
@@ -1198,8 +1198,8 @@ c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
 c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
 c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
 c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64 --input default", "xen-pv", precompare_check="5.3.0")  # Xen PV
-c.add_compare("--osinfo generic --disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
-c.add_compare("--osinfo generic --disk  /iscsi-pool/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
+c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
+c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
 
 
 
@@ -1486,7 +1486,7 @@ c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_MISSING + " --auto-clo
 c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /pool-dir/newclone2.img --skip-copy=hdb --force-copy=sdb --file /pool-dir/newclone3.img", "clone-manual")
 c.add_compare("--connect %(URI-KVM-X86)s -o test-clone -n test-newclone --mac 12:34:56:1A:B2:C3 --mac 12:34:56:1A:B7:C3 --uuid 12345678-12F4-1234-1234-123456789AFA --file /dev/pool-logical/newclone1.img --file /pool-dir/newclone2.img --skip-copy=hdb --force-copy=sdb --file /pool-dir/newclone3.img", "clone-manual")
 c.add_compare(_CLONE_EMPTY + " --auto-clone --print-xml", "empty")  # Auto flag, no storage
-c.add_compare("--connect %(URI-KVM-X86)s -o test-clone-simple --auto -f /foo.img --print-xml", "cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
+c.add_compare("--connect %(URI-KVM-X86)s -o test-clone-simple --auto -f /foo.img --print-xml", "pool-test-cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
 c.add_compare(_CLONE_MANAGED + " --auto-clone", "auto-managed")  # Auto flag w/ managed storage
 c.add_compare(_CLONE_UNMANAGED + " --auto-clone", "auto-unmanaged")  # Auto flag w/ local storage
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --nonsparse")  # Auto flag, actual VM, skip state check

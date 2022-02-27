@@ -261,7 +261,7 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     <!-- bus virtio -->
     <disk type="volume" device="disk">
       <driver name="qemu"/>
-      <source pool="rbd-ceph" volume="vol1"/>
+      <source pool="pool-rbd-ceph" volume="vol1"/>
       <target dev="vdb" bus="virtio"/>
       <readonly/>
     </disk>
@@ -903,7 +903,7 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
   <devices>
     <emulator>/usr/lib/xen/bin/qemu-dm</emulator>
     <disk type='block' device='disk'>
-      <source dev='/full-pool/testvol1.img'/>
+      <source dev='/pool-test-full-pool/testvol1.img'/>
       <target dev='hda' bus='ide'/>
     </disk>
     <interface type='user'>
@@ -1824,7 +1824,7 @@ ba</description>
 
 
 <pool type='dir'>
-  <name>spurious-slash-pool</name>
+  <name>pool-test-spurious-slash</name>
   <uuid>35bb2ad9-1122-cdfe-461a-b8907f6e53fe</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -1832,7 +1832,7 @@ ba</description>
   <source>
   </source>
   <target>
-    <path>/spurious-slash-pool//</path>
+    <path>/pool-test-spurious-splash//</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -1868,7 +1868,7 @@ ba</description>
 
 
 <pool type='dir'>
-  <name>inactive-pool</name>
+  <name>pool-test-inactive</name>
   <uuid>35bb2aaa-388a-cdfe-461a-b8907f6e53fe</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -1876,7 +1876,7 @@ ba</description>
   <source>
   </source>
   <target>
-    <path>/inactive-pool</path>
+    <path>/pool-test-inactive</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -1901,7 +1901,7 @@ ba</description>
 
 
 <pool type='dir'>
-  <name>cross-pool</name>
+  <name>pool-test-cross-pool</name>
   <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5abc</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -1909,7 +1909,7 @@ ba</description>
   <source>
   </source>
   <target>
-    <path>/dev/cross-pool</path>
+    <path>/dev/pool-test-cross-pool</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -1946,7 +1946,7 @@ ba</description>
 
 
 <pool type='dir'>
-  <name>full-pool</name>
+  <name>pool-test-full-pool</name>
   <uuid>35bb2ad9-388a-cdfe-461a-b8907f6e5555</uuid>
   <capacity>1</capacity>
   <allocation>1</allocation>
@@ -1954,7 +1954,7 @@ ba</description>
   <source>
   </source>
   <target>
-    <path>/full-pool</path>
+    <path>/pool-test-full-pool</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -2062,7 +2062,7 @@ ba</description>
 
 
 <pool type='iscsi'>
-  <name>iscsi-pool</name>
+  <name>pool-iscsi</name>
   <uuid>abcdead9-388a-cdfe-461a-b8907f6e5aaa</uuid>
   <capacity>107374182400</capacity>
   <allocation>0</allocation>
@@ -2072,7 +2072,7 @@ ba</description>
     <device path="demo-target"/>
   </source>
   <target>
-    <path>/iscsi-pool</path>
+    <path>/pool-iscsi</path>
     <permissions>
       <mode>0700</mode>
       <owner>10736</owner>
@@ -2097,7 +2097,7 @@ ba</description>
 
 
 <pool type='iscsi-direct'>
-  <name>iscsi-direct</name>
+  <name>pool-iscsi-direct</name>
   <uuid>0799697a-94dd-4115-9601-8714b1931248</uuid>
   <capacity unit='bytes'>524287488</capacity>
   <allocation unit='bytes'>524287488</allocation>
@@ -2125,7 +2125,7 @@ ba</description>
 </pool>
 
 <pool type='rbd'>
-  <name>rbd-ceph</name>
+  <name>pool-rbd-ceph</name>
   <uuid>4bcd023e-990e-fcf6-d95c-52dd0cd938c8</uuid>
   <capacity unit='bytes'>47256127143936</capacity>
   <allocation unit='bytes'>5537792235090</allocation>
@@ -2165,7 +2165,7 @@ ba</description>
 
 
 <pool type='sheepdog'>
-  <name>myshpool</name>
+  <name>pool-sheepdog</name>
   <uuid>581381f8-a13f-4f7c-89b5-9c9b71c64834</uuid>
   <capacity unit='bytes'>107374182400</capacity>
   <allocation unit='bytes'>53687091200</allocation>
@@ -2194,7 +2194,7 @@ ba</description>
 
 
 <pool type='gluster'>
-  <name>gluster-pool</name>
+  <name>pool-gluster</name>
   <uuid>7b83ef6d-28da-44f1-841f-2011320f13b0</uuid>
   <capacity unit='bytes'>492258959360</capacity>
   <allocation unit='bytes'>16975638528</allocation>
@@ -2256,7 +2256,7 @@ ba</description>
 
 
 <pool type="zfs">
-  <name>zfs</name>
+  <name>pool-zfs</name>
   <source>
     <name>testzfspool</name>
     <device path="/dev/ada1"/>
@@ -2264,7 +2264,7 @@ ba</description>
 </pool>
 
 <pool type="dir">
-  <name>nvram</name>
+  <name>pool-test-nvram</name>
   <source>
   </source>
   <target>
@@ -2304,7 +2304,7 @@ ba</description>
 </pool>
 
 <pool type='mpath'>
-  <name>mpath</name>
+  <name>pool-mpath</name>
   <target>
     <path>/dev/mapper</path>
   </target>
@@ -2312,7 +2312,7 @@ ba</description>
 
 
 <pool type='scsi'>
-  <name>scsi</name>
+  <name>pool-scsi</name>
   <source>
     <adapter type='scsi_host' name='host0'/>
   </source>

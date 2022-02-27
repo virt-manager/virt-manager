@@ -217,7 +217,7 @@ def testMisc():
     assert vol.is_size_conflict()[0] is False
 
     fullconn = utils.URIs.open_testdriver_cached()
-    glusterpool = fullconn.storagePoolLookupByName("gluster-pool")
+    glusterpool = fullconn.storagePoolLookupByName("pool-gluster")
     diskpool = fullconn.storagePoolLookupByName("pool-logical")
 
     glustervol = StorageVolume(fullconn)
@@ -232,8 +232,8 @@ def testMisc():
     StoragePool.ensure_pool_is_running(glusterpool)
 
     # Check pool collision detection
-    name = StoragePool.find_free_name(fullconn, "gluster-pool")
-    assert name == "gluster-pool-1"
+    name = StoragePool.find_free_name(fullconn, "pool-gluster")
+    assert name == "pool-gluster-1"
 
 
 def testEnumerateLogical():

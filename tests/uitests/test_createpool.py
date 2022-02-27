@@ -75,8 +75,8 @@ def testCreatePools(app):
     # Test a iscsi pool
     win = _open_createpool(app, hostwin)
     win.combo_select("Type:", "iscsi:")
-    newname = "a-iscsi-pool"
-    name.set_text("a-iscsi-pool")
+    newname = "a-pool-iscsi"
+    name.set_text("a-pool-iscsi")
     win.find("target-browse").click()
     _browse_local_path("Choose target directory", "by-path")
     finish.click()

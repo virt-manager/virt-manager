@@ -251,7 +251,7 @@
     </disk>
     <disk type="block" device="lun" sgio="unfiltered" rawio="yes">
       <driver name="qemu" type="raw"/>
-      <source dev="/iscsi-pool/diskvol1"/>
+      <source dev="/pool-iscsi/diskvol1"/>
       <target dev="sdab" bus="scsi"/>
       <iotune>
         <total_bytes_sec>10</total_bytes_sec>
@@ -285,7 +285,7 @@
     </disk>
     <disk type="volume" device="disk">
       <driver name="qemu" type="raw"/>
-      <source volume="some-rbd-vol" pool="rbd-ceph"/>
+      <source volume="some-rbd-vol" pool="pool-rbd-ceph"/>
       <target dev="vdf" bus="virtio"/>
     </disk>
     <disk type="network" device="disk">

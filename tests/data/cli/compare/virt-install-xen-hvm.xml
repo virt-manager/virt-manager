@@ -20,7 +20,7 @@
     <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
     <disk type="block" device="disk">
       <driver name="phy"/>
-      <source dev="/iscsi-pool/diskvol1"/>
+      <source dev="/pool-iscsi/diskvol1"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">

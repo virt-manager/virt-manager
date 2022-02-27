@@ -118,6 +118,7 @@ def testNewVMMultiConnection(app):
     _forward(newvm)
     cdrom.click_combo_entry()
     lib.utils.check(lambda: "/dev/sr1" not in cdrom.fmt_nodes())
+    app.rawinput.pressKey("Escape")
     newvm.find_fuzzy("install-iso-browse", "button").click()
     browsewin = app.root.find("vmm-storage-browser")
     lib.utils.check(lambda: "pool-logical" not in browsewin.fmt_nodes())

@@ -120,7 +120,7 @@ def testAddCephDisk(app):
     tab.find_fuzzy("Select or create", "radio").click()
     tab.find("storage-browse", "push button").click()
     browse = app.root.find("vmm-storage-browser")
-    browse.find_fuzzy("rbd-ceph", "table cell").bring_on_screen().click()
+    browse.find_fuzzy("pool-rbd-ceph", "table cell").bring_on_screen().click()
     browse.find_fuzzy("some-rbd-vol", "table cell").click()
     browse.find("Choose Volume", "push button").click()
     _finish(addhw, check=details)

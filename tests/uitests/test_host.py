@@ -101,7 +101,7 @@ def testHostStorageEdit(app):
     lib.utils.check(lambda: poolloc.text == newpath)
 
     # Rename it
-    win.find("default", "table cell").click()
+    win.find("pool-dir", "table cell").click()
     win.find("pool-name").set_text("newsort-default")
     finish.click()
 
