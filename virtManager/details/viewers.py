@@ -21,8 +21,8 @@ try:
     gi.require_version('SpiceClientGtk', '3.0')
     from gi.repository import SpiceClientGtk
     from gi.repository import SpiceClientGLib
-except (ValueError, ImportError) as e:
-    SPICE_GTK_IMPORT_ERROR = str(e)
+except (ValueError, ImportError) as SPICE_GTK_IMPORT_ERROR:
+    SPICE_GTK_IMPORT_ERROR = str(SPICE_GTK_IMPORT_ERROR)
 
 from virtinst import log
 
