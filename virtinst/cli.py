@@ -892,7 +892,6 @@ def add_guest_xml_options(geng):
     ParserLaunchSecurity.register()
     geng.add_argument("--launchSecurity", "--launchsecurity", action="append",
         help=_("Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-               "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert=BASE64CERT\n"
                "--launchSecurity sev"))
 
 

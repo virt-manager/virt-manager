@@ -765,6 +765,9 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --seclabel type=dynamic,label=012:345
 
 
+--launchSecurity type=sev,reducedPhysBits=1,policy=0x0001,cbitpos=47,dhCert=BASE64CERT,session=BASE64SESSION,kernelHashes=yes
+
+
 --qemu-commandline env=DISPLAY=:0.1
 --qemu-commandline="-display gtk,gl=on"
 --qemu-commandline="-device vfio-pci,addr=05.0,sysfsdev=/sys/class/mdev_bus/0000:00:02.0/f321853c-c584-4a6b-b99a-3eee22a3919c"
@@ -796,6 +799,7 @@ c.add_compare(
 "--sysinfo host "  # special `--sysinfo host` handling
 "--noapic --noacpi "  # feature backcompat
 "--boot uefi,cdrom,fd,hd,network,menu=on "  # uefi for default devices, + old style bootorder
+"--launchSecurity sev "  # sev defaults
 
 # Disabling all the default device setup
 """
@@ -1098,6 +1102,7 @@ c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks", grep="
 c.add_invalid("--disk none --boot network --machine foobar", grep="domain type None with machine 'foobar'")
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm", grep="any virtualization options for architecture 'mips'")
 c.add_invalid("--nodisks --boot network --paravirt --arch mips", grep=" 'xen' for architecture 'mips'")
+c.add_invalid("--osinfo generic --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, grep="SEV launch security requires a Q35 UEFI machine")
 
 
 
@@ -1171,13 +1176,6 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --osinfo fedora30 --arch aarch64 --
 #################
 
 c = vinst.add_category("kvm-x86_64-launch-security", "--disk none --noautoconsole --osinfo generic")
-c.add_compare("--boot uefi --machine q35 --launchSecurity type=sev,reducedPhysBits=1,policy=0x0001,cbitpos=47,dhCert=BASE64CERT,session=BASE64SESSION,kernelHashes=yes --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev-full")  # Full cmdline
-c.add_compare("--boot uefi --machine q35 --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, "x86_64-launch-security-sev")  # Fill in platform data from domcaps
-c.add_valid("--boot uefi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
-c.add_valid("--boot firmware=efi --machine q35 --launchSecurity sev,reducedPhysBits=1,cbitpos=47 --connect " + utils.URIs.kvm_amd_sev)  # Default policy == 0x0003 will be used
-c.add_invalid("--launchSecurity policy=0x0001 --connect " + utils.URIs.kvm_amd_sev, grep="Missing mandatory attribute 'type'")
-c.add_invalid("--boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, grep="SEV launch security requires a Q35 UEFI machine")
-c.add_invalid("--boot uefi --machine q35 --launchSecurity sev,policy=0x0001 --connect " + utils.URIs.kvm_x86, grep="SEV launch security is not supported")  # Fail with no SEV capabilities
 
 
 

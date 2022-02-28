@@ -93,8 +93,6 @@ def _make_capsblock(xml_root_name):
 class _SEV(XMLBuilder):
     XML_NAME = "sev"
     supported = XMLProperty("./@supported", is_yesno=True)
-    cbitpos = XMLProperty("./cbitpos", is_int=True)
-    reducedPhysBits = XMLProperty("./reducedPhysBits", is_int=True)
 
 
 #############################
