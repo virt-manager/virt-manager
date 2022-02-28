@@ -810,6 +810,7 @@ class vmmAddHardware(vmmGObjectUI):
             values.append([m, vmmAddHardware.video_pretty_model(m)])
         if not values:
             values.append([None, _("Hypervisor default")])
+        values.append(["none", _("None")])
         default = DeviceVideo.default_model(vm.xmlobj)
         uiutil.build_simple_combo(combo, values, default_value=default)
 
