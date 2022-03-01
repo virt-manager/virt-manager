@@ -44,16 +44,22 @@ def _add(*args, **kwargs):
     _alldistros[_d.name] = _d
 
 
-_add("centos-5.11", "http://vault.centos.org/5.11/os/x86_64/",
+_add("centos5.11", "http://vault.centos.org/5.11/os/x86_64/",
      warntype=WARN_RHEL5, filename=KSOLD)
-_add("centos-6-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/6/os/x86_64/",
+_add("centos6.10", "http://vault.centos.org/6.10/os/x86_64",
      warntype=WARN_RHEL5, filename=KSOLD)
-_add("centos-7-latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
+_add("centos7latest", "http://ftp.linux.ncsu.edu/pub/CentOS/7/os/x86_64/",
      filename=KSNEW)
-_add("fedora-29", FEDORA_URL % ("29", "x86_64"), filename=KSNEW)
-_add("fedora-30", DEVFEDORA_URL % ("30", "x86_64"), filename=KSNEW)
-_add("debian-9",
+_add("centos8stream",
+     "http://ftp.linux.ncsu.edu/pub/CentOS/8-stream/BaseOS/x86_64/os/",
+     filename=KSNEW)
+_add("fedora35", FEDORA_URL % ("29", "x86_64"), filename=KSNEW)
+_add("fedora36", DEVFEDORA_URL % ("35", "x86_64"), filename=KSNEW)
+_add("debian9",
      "http://ftp.us.debian.org/debian/dists/stretch/main/installer-amd64/",
+     filename=PRESEED, warntype=WARN_DEBIAN)
+_add("debian11",
+     "http://ftp.us.debian.org/debian/dists/bullseye/main/installer-amd64/",
      filename=PRESEED, warntype=WARN_DEBIAN)
 
 
@@ -68,7 +74,7 @@ def _test_distro(distro):
         print("Debian: Won't ask any questions, will autoconfig network, "
               "then print a big red text box about a bad mirror config.")
     elif distro.warntype == WARN_FEDORA:
-        print("RHEL7, Fedora >= 17: Chokes on the bogus URI in the early ")
+        print("RHEL, Fedora >= 17: Chokes on the bogus URI in the early ")
         print("console screen when fetching the installer squashfs image.")
 
     os.environ.pop("VIRTINST_TEST_SUITE", None)
@@ -82,7 +88,7 @@ def _test_distro(distro):
         "--name __virtinst__test__initrd__ --ram 2048 "
         "--transient --destroy-on-exit --disk none "
         "--location %s --initrd-inject %s "
-        "--install kernel_args=%s,kernel_args_overwrite=yes" %
+        "--install kernel_args=%s,kernel_args_overwrite=yes --debug" %
         (distro.url, distro.filename, append))
     print("\n\n" + cmd)
     os.system(cmd)
@@ -114,7 +120,7 @@ def _make_tests():
     idx = 0
     for dname, dobj in _alldistros.items():
         idx += 1
-        name = "testInitrd%.3d_%s" % (idx, dname.replace("-", "_"))
+        name = "testInitrd%.3d_%s" % (idx, dname)
 
         do_setup = idx == 1
         testfunc = _build_testfunc(dobj, do_setup)
