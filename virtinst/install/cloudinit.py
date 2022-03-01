@@ -17,7 +17,7 @@ class CloudInitData():
     root_password_generate = None
     root_password_file = None
     generated_root_password = None
-    ssh_key = None
+    root_ssh_key = None
     user_data = None
     meta_data = None
     network_config = None
@@ -43,9 +43,9 @@ class CloudInitData():
             return self._get_password(self.root_password_file)
         return self.get_password_if_generated()
 
-    def get_ssh_key(self):
-        if self.ssh_key:
-            return self._get_password(self.ssh_key)
+    def get_root_ssh_key(self):
+        if self.root_ssh_key:
+            return self._get_password(self.root_ssh_key)
 
 
 def _create_metadata_content(cloudinit_data):
@@ -76,8 +76,8 @@ def _create_userdata_content(cloudinit_data):
     elif cloudinit_data.root_password_file:
         content += "  expire: False\n"
 
-    if cloudinit_data.ssh_key:
-        rootpass = cloudinit_data.get_ssh_key()
+    if cloudinit_data.root_ssh_key:
+        rootpass = cloudinit_data.get_root_ssh_key()
         content += "users:\n"
         content += "  - name: root\n"
         content += "    ssh-authorized-keys:\n"

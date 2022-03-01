@@ -1762,6 +1762,9 @@ def parse_install(optstr):
 class ParserCloudInit(VirtCLIParser):
     cli_arg_name = "cloud_init"
     supports_clearxml = False
+    aliases = {
+        "root-ssh-key": "ssh-key",
+    }
 
     @classmethod
     def _virtcli_class_init(cls):
@@ -1769,7 +1772,7 @@ class ParserCloudInit(VirtCLIParser):
         cls.add_arg("root-password-generate", "root_password_generate", is_onoff=True)
         cls.add_arg("root-password-file", "root_password_file")
         cls.add_arg("disable", "disable", is_onoff=True)
-        cls.add_arg("ssh-key", "ssh_key")
+        cls.add_arg("root-ssh-key", "root_ssh_key")
         cls.add_arg("user-data", "user_data")
         cls.add_arg("meta-data", "meta_data")
         cls.add_arg("network-config", "network_config")

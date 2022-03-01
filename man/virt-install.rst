@@ -894,9 +894,9 @@ Sub options are:
     Specify a cloud-init user-data file to add directly to the iso. All other
     user-data configuration options on the --cloud-init command line are ignored.
 
-``ssh-key=``
+``root-ssh-key=``
     Specify a public key to inject into the guest, providing ssh access to the
-    unprivileged account. Example: ssh-key=/home/user/.ssh/id_rsa.pub
+    root account. Example: root-ssh-key=/home/user/.ssh/id_rsa.pub
 
 ``network-config=``
     Specify a cloud-init network-config file to add directly to the iso.
