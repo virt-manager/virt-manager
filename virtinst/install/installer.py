@@ -498,22 +498,20 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
-        if self.has_cloudinit() or self.has_unattended():
-            # These cases require post-boot altering to remove the
-            # temporary media. It isn't really an install phase and more
-            # like a 'final_xml' phase but we don't have a real abstraction
-            # for that yet
-            return True
         if self._no_install:
             return False
         return bool(self._cdrom or
                     self._install_bootdev or
                     self._treemedia)
 
+    def _requires_postboot_xml_changes(self):
+        if self.has_cloudinit() or self.has_unattended():
+            return True
+        return self.has_install_phase()
+
     def options_specified(self):
         """
         Return True if some explicit install option was actually passed in
-        Validate that some install option was actually passed in.
         """
         if self._no_install:
             return True
@@ -592,7 +590,7 @@ class Installer(object):
 
     def _build_xml(self, guest, meter):
         install_xml = None
-        if self.has_install_phase():
+        if self._requires_postboot_xml_changes():
             install_xml = self._get_install_xml(guest, meter)
         final_xml = self._pre_reinstall_xml or guest.get_xml()
 
@@ -635,7 +633,7 @@ class Installer(object):
         meter_label = _("Creating domain...")
         meter = progress.ensure_meter(meter)
         meter.start(meter_label, None)
-        needs_boot = doboot or self.has_install_phase()
+        needs_boot = doboot or bool(install_xml)
 
         if guest.type == "vz" and not self._is_reinstall:
             if transient:

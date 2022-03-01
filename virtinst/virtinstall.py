@@ -431,7 +431,9 @@ def build_installer(options, guest, installdata):
         pass
     elif (options.import_install or
           options.xmlonly or
-          options.boot):
+          options.boot or
+          options.cloud_init or
+          options.unattended):
         no_install = True
 
     installer = virtinst.Installer(guest.conn,
