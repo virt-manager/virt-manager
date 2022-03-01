@@ -22,7 +22,6 @@
     </hyperv>
   </features>
   <clock offset="localtime"/>
-  <on_reboot>destroy</on_reboot>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
@@ -45,6 +44,7 @@
     </interface>
     <console type="pty"/>
   </devices>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="test">
   <name>win7</name>

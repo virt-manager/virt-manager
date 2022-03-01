@@ -22,7 +22,6 @@
     </hyperv>
   </features>
   <clock offset="localtime"/>
-  <on_reboot>destroy</on_reboot>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
@@ -32,11 +31,6 @@
     <disk type="file" device="cdrom">
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
-      <readonly/>
-    </disk>
-    <disk type="file" device="cdrom">
-      <source file="/VIRTINST-TESTSUITE/unattended.iso"/>
-      <target dev="hdb" bus="ide"/>
       <readonly/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
@@ -54,7 +48,13 @@
       <model type="e1000"/>
     </interface>
     <console type="pty"/>
+    <disk type="file" device="cdrom">
+      <source file="/VIRTINST-TESTSUITE/unattended.iso"/>
+      <target dev="hdb" bus="ide"/>
+      <readonly/>
+    </disk>
   </devices>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="test">
   <name>win7</name>
@@ -91,10 +91,6 @@
       <target dev="hda" bus="ide"/>
       <readonly/>
     </disk>
-    <disk type="file" device="cdrom">
-      <target dev="hdb" bus="ide"/>
-      <readonly/>
-    </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
       <master startport="0"/>
@@ -110,5 +106,9 @@
       <model type="e1000"/>
     </interface>
     <console type="pty"/>
+    <disk type="file" device="cdrom">
+      <target dev="hdb" bus="ide"/>
+      <readonly/>
+    </disk>
   </devices>
 </domain>

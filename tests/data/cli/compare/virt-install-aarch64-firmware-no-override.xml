@@ -15,7 +15,6 @@
   </os>
   <cpu mode="host-passthrough"/>
   <clock offset="utc"/>
-  <on_reboot>destroy</on_reboot>
   <devices>
     <emulator>/usr/bin/qemu-system-aarch64</emulator>
     <controller type="usb" model="qemu-xhci" ports="15"/>
@@ -49,6 +48,7 @@
       <backend model="random">/dev/urandom</backend>
     </rng>
   </devices>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="kvm">
   <name>fedora30</name>

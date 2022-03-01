@@ -10,7 +10,6 @@
     <boot dev="network"/>
   </os>
   <clock offset="utc"/>
-  <on_reboot>destroy</on_reboot>
   <devices>
     <emulator>bhyve</emulator>
     <interface type="bridge">
@@ -27,6 +26,7 @@
       <model type="vga"/>
     </video>
   </devices>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="bhyve">
   <name>foobhyve</name>

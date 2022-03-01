@@ -15,6 +15,7 @@ from .installertreemedia import InstallerTreeMedia
 from .installerinject import perform_cdrom_injections
 from ..domain import DomainOs
 from ..devices import DeviceDisk
+from ..guest import Guest
 from ..osdict import OSDB
 from ..logger import log
 from .. import progress
@@ -183,8 +184,8 @@ class Installer(object):
 
         dev = self._make_cdrom_device(location)
         dev.set_defaults(guest)
-        self._unattended_install_cdrom_device = dev
-        guest.add_device(self._unattended_install_cdrom_device)
+        self._unattended_install_cdrom_device = dev.target
+        guest.add_device(dev)
 
         if self.conn.in_testsuite():
             # Hack to set just the XML path differently for the test suite.
@@ -192,12 +193,13 @@ class Installer(object):
             dev.source.file = _make_testsuite_path(location)
 
     def _remove_unattended_install_cdrom_device(self, guest):
-        dummy = guest
         if not self._unattended_install_cdrom_device:
             return
 
-        self._unattended_install_cdrom_device.set_source_path(None)
-        self._unattended_install_cdrom_device.sync_path_props()
+        disk = [d for d in guest.devices.disk if
+                d.target == self._unattended_install_cdrom_device][0]
+        disk.set_source_path(None)
+        disk.sync_path_props()
 
     def _build_boot_order(self, guest, bootdev):
         bootorder = [bootdev]
@@ -562,37 +564,23 @@ class Installer(object):
     # guest install handling #
     ##########################
 
-    def _prepare_get_initial_xml(self, guest):
-        # We do a shallow copy of the OS block here, so that we can
-        # set the install time properties but not permanently overwrite
-        # any config the user explicitly requested.
-        data = (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
-                guest.os.kernel_args, guest.on_reboot, guest.currentMemory,
-                guest.memory)
-        return data
+    def _build_postboot_xml(self, final_xml, meter):
+        initial_guest = Guest(self.conn, parsexml=final_xml)
+        self._alter_bootconfig(initial_guest)
+        self._alter_install_resources(initial_guest, meter)
 
-    def _finish_get_initial_xml(self, guest, data):
-        (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
-                guest.os.kernel_args, guest.on_reboot, guest.currentMemory,
-                guest.memory) = data
+        final_guest = Guest(self.conn, parsexml=final_xml)
+        self._remove_install_cdrom_media(final_guest)
+        self._remove_unattended_install_cdrom_device(final_guest)
 
-    def _get_initial_xml(self, guest, meter):
-        data = self._prepare_get_initial_xml(guest)
-        try:
-            self._alter_bootconfig(guest)
-            self._alter_install_resources(guest, meter)
-            ret = guest.get_xml()
-            return ret
-        finally:
-            self._remove_install_cdrom_media(guest)
-            self._remove_unattended_install_cdrom_device(guest)
-            self._finish_get_initial_xml(guest, data)
+        return initial_guest.get_xml(), final_guest.get_xml()
 
     def _build_xml(self, guest, meter):
         initial_xml = None
+        final_xml = guest.get_xml()
         if self._requires_postboot_xml_changes():
-            initial_xml = self._get_initial_xml(guest, meter)
-        final_xml = self._pre_reinstall_xml or guest.get_xml()
+            initial_xml, final_xml = self._build_postboot_xml(final_xml, meter)
+        final_xml = self._pre_reinstall_xml or final_xml
 
         log.debug("Generated initial_xml: %s",
             (initial_xml and ("\n" + initial_xml) or "None required"))
@@ -673,7 +661,7 @@ class Installer(object):
     # Public install API #
     ######################
 
-    def start_install(self, guest, meter=None,
+    def start_install(self, user_guest, meter=None,
                       dry=False, return_xml=False,
                       doboot=True, transient=False):
         """
@@ -683,14 +671,19 @@ class Installer(object):
         :param return_xml: Don't create the guest, just return generated XML
         """
         if not self._is_reinstall and not return_xml:
-            guest.validate_name(guest.conn, guest.name)
-        self.set_install_defaults(guest)
+            Guest.validate_name(self.conn, user_guest.name)
+        self.set_install_defaults(user_guest)
+        disks = user_guest.devices.disk[:]
+
+        # All installer XML alterations are made on this guest instance,
+        # so the user_guest instance is left intact
+        guest = Guest(self.conn, parsexml=user_guest.get_xml())
 
         try:
             self._prepare(guest, meter)
 
             if not dry and not self._is_reinstall:
-                for dev in guest.devices.disk:
+                for dev in disks:
                     dev.build_storage(meter)
 
             initial_xml, final_xml = self._build_xml(guest, meter)

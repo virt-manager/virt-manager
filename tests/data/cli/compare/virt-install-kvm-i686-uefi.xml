@@ -20,7 +20,6 @@
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
   </clock>
-  <on_reboot>destroy</on_reboot>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
@@ -60,6 +59,7 @@
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>
   </devices>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="kvm">
   <name>vm-i686</name>

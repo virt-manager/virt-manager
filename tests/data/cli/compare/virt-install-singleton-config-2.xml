@@ -11,9 +11,9 @@
   <vcpu cpuset="1,3-5">2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
+    <smbios mode="emulate"/>
     <boot dev="network"/>
     <boot dev="hd"/>
-    <smbios mode="emulate"/>
   </os>
   <features>
     <acpi/>
@@ -32,7 +32,6 @@
     <timer name="pit" tickpolicy="delay"/>
     <timer name="hpet" present="no"/>
   </clock>
-  <on_reboot>destroy</on_reboot>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
@@ -97,6 +96,7 @@
     </vsock>
   </devices>
   <seclabel type="dynamic" model="selinux"/>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="kvm">
   <name>fedora</name>

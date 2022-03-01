@@ -14,7 +14,6 @@
     <kernel>/VIRTINST-TESTSUITE/vmlinuz</kernel>
     <initrd>/VIRTINST-TESTSUITE/initrd.img</initrd>
   </os>
-  <on_reboot>destroy</on_reboot>
   <devices>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
@@ -30,6 +29,7 @@
     <input type="mouse" bus="xen"/>
     <graphics type="vnc" port="-1"/>
   </devices>
+  <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="xen">
   <name>fedora17</name>
