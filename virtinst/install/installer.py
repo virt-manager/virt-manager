@@ -568,6 +568,8 @@ class Installer(object):
         initial_guest = Guest(self.conn, parsexml=final_xml)
         self._alter_bootconfig(initial_guest)
         self._alter_install_resources(initial_guest, meter)
+        if self.has_cloudinit():
+            initial_guest.set_smbios_serial_cloudinit()
 
         final_guest = Guest(self.conn, parsexml=final_xml)
         self._remove_install_cdrom_media(final_guest)

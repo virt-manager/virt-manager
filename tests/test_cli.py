@@ -1016,6 +1016,8 @@ c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-pass
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt", "cloud-init-options")  # --cloud-init ssh-key
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "cloud-init-options")  # --cloud-init user-data=,meta-data=
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt,network-config=%(XMLDIR)s/cloudinit/network-config.txt", "cloud-init-options")  # --cloud-init user-data=,meta-data=,network-config=
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --sysinfo system.serial=foobar", "cloud-init-smbios-skip")  # skip if a serial is already specified
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --boot smbios.mode=none", "cloud-init-smbios-none")  # skip if a serial is already specified
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe --osinfo generic", grep="VM performance may suffer")  # os variant warning

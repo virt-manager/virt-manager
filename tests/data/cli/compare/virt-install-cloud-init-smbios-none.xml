@@ -11,7 +11,7 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <smbios mode="sysinfo"/>
+    <smbios mode="none"/>
   </os>
   <features>
     <pae/>
@@ -48,11 +48,6 @@
       <readonly/>
     </disk>
   </devices>
-  <sysinfo type="smbios">
-    <system>
-      <entry name="serial">ds=nocloud</entry>
-    </system>
-  </sysinfo>
   <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="test">
@@ -69,6 +64,7 @@
   <os>
     <type arch="i686">hvm</type>
     <boot dev="hd"/>
+    <smbios mode="none"/>
   </os>
   <features>
     <pae/>

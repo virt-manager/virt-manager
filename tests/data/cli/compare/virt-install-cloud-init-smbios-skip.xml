@@ -9,6 +9,11 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
+  <sysinfo type="smbios">
+    <system>
+      <entry name="serial">foobar</entry>
+    </system>
+  </sysinfo>
   <os>
     <type arch="i686">hvm</type>
     <smbios mode="sysinfo"/>
@@ -48,11 +53,6 @@
       <readonly/>
     </disk>
   </devices>
-  <sysinfo type="smbios">
-    <system>
-      <entry name="serial">ds=nocloud</entry>
-    </system>
-  </sysinfo>
   <on_reboot>destroy</on_reboot>
 </domain>
 <domain type="test">
@@ -66,9 +66,15 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
+  <sysinfo type="smbios">
+    <system>
+      <entry name="serial">foobar</entry>
+    </system>
+  </sysinfo>
   <os>
     <type arch="i686">hvm</type>
     <boot dev="hd"/>
+    <smbios mode="sysinfo"/>
   </os>
   <features>
     <pae/>

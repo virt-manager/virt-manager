@@ -711,6 +711,27 @@ class Guest(XMLBuilder):
         raise Exception("Don't know how to refresh machine type '%s'" %
                 original_machine_type)
 
+    def set_smbios_serial_cloudinit(self):
+        if (not self.conn.is_qemu() and
+            not self.conn.is_test()):
+            return  # pragma: no cover
+        if (not self.os.is_x86() and
+            not self.os.is_arm_machvirt()):
+            return  # pragma: no cover
+        if self.os.smbios_mode not in [None, "sysinfo"]:
+            return
+
+        sysinfos = [s for s in self.sysinfo if s.type == "smbios"]
+        if not sysinfos:
+            sysinfos = [self.sysinfo.add_new()]
+        sysinfo = sysinfos[0]
+
+        if sysinfo.system_serial:
+            return
+        self.os.smbios_mode = "sysinfo"
+        sysinfo.type = "smbios"
+        sysinfo.system_serial = "ds=nocloud"
+
     def sync_vcpus_topology(self, defCPUs):
         """
         <cpu> topology count and <vcpus> always need to match. Handle
