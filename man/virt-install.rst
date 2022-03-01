@@ -898,6 +898,12 @@ Sub options are:
     Specify a public key to inject into the guest, providing ssh access to the
     root account. Example: root-ssh-key=/home/user/.ssh/id_rsa.pub
 
+``clouduser-ssh-key``
+    Specify a public key to inject into the guest, providing ssh access to
+    the default cloud-init user account. The account name is different per
+    distro cloud image. Some common ones are documented here:
+    https://docs.openstack.org/image-guide/obtain-images.html
+
 ``network-config=``
     Specify a cloud-init network-config file to add directly to the iso.
 

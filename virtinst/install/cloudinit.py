@@ -18,6 +18,7 @@ class CloudInitData():
     root_password_file = None
     generated_root_password = None
     root_ssh_key = None
+    clouduser_ssh_key = None
     user_data = None
     meta_data = None
     network_config = None
@@ -46,6 +47,10 @@ class CloudInitData():
     def get_root_ssh_key(self):
         if self.root_ssh_key:
             return self._get_password(self.root_ssh_key)
+
+    def get_clouduser_ssh_key(self):
+        if self.clouduser_ssh_key:
+            return self._get_password(self.clouduser_ssh_key)
 
 
 def _create_metadata_content(cloudinit_data):
@@ -76,12 +81,17 @@ def _create_userdata_content(cloudinit_data):
     elif cloudinit_data.root_password_file:
         content += "  expire: False\n"
 
-    if cloudinit_data.root_ssh_key:
-        rootpass = cloudinit_data.get_root_ssh_key()
+    if cloudinit_data.root_ssh_key or cloudinit_data.clouduser_ssh_key:
         content += "users:\n"
-        content += "  - name: root\n"
-        content += "    ssh-authorized-keys:\n"
-        content += "      - %s\n" % rootpass
+        rootkey = cloudinit_data.get_root_ssh_key()
+        userkey = cloudinit_data.get_clouduser_ssh_key()
+
+        if rootkey:
+            content += "  - name: root\n"
+            content += "    ssh-authorized-keys:\n"
+            content += "      - %s\n" % rootkey
+        if userkey:
+            content += "  - ssh-authorized-keys: %s\n" % userkey
 
     if cloudinit_data.disable:
         content += "runcmd:\n"
