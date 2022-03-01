@@ -562,7 +562,7 @@ class Installer(object):
     # guest install handling #
     ##########################
 
-    def _prepare_get_install_xml(self, guest):
+    def _prepare_get_initial_xml(self, guest):
         # We do a shallow copy of the OS block here, so that we can
         # set the install time properties but not permanently overwrite
         # any config the user explicitly requested.
@@ -571,13 +571,13 @@ class Installer(object):
                 guest.memory)
         return data
 
-    def _finish_get_install_xml(self, guest, data):
+    def _finish_get_initial_xml(self, guest, data):
         (guest.os.bootorder, guest.os.kernel, guest.os.initrd,
                 guest.os.kernel_args, guest.on_reboot, guest.currentMemory,
                 guest.memory) = data
 
-    def _get_install_xml(self, guest, meter):
-        data = self._prepare_get_install_xml(guest)
+    def _get_initial_xml(self, guest, meter):
+        data = self._prepare_get_initial_xml(guest)
         try:
             self._alter_bootconfig(guest)
             self._alter_install_resources(guest, meter)
@@ -586,26 +586,26 @@ class Installer(object):
         finally:
             self._remove_install_cdrom_media(guest)
             self._remove_unattended_install_cdrom_device(guest)
-            self._finish_get_install_xml(guest, data)
+            self._finish_get_initial_xml(guest, data)
 
     def _build_xml(self, guest, meter):
-        install_xml = None
+        initial_xml = None
         if self._requires_postboot_xml_changes():
-            install_xml = self._get_install_xml(guest, meter)
+            initial_xml = self._get_initial_xml(guest, meter)
         final_xml = self._pre_reinstall_xml or guest.get_xml()
 
-        log.debug("Generated install XML: %s",
-            (install_xml and ("\n" + install_xml) or "None required"))
-        log.debug("Generated boot XML: \n%s", final_xml)
+        log.debug("Generated initial_xml: %s",
+            (initial_xml and ("\n" + initial_xml) or "None required"))
+        log.debug("Generated final_xml: \n%s", final_xml)
 
-        return install_xml, final_xml
+        return initial_xml, final_xml
 
-    def _manual_transient_create(self, install_xml, final_xml, needs_boot):
+    def _manual_transient_create(self, initial_xml, final_xml, needs_boot):
         """
         For hypervisors (like vz) that don't implement createXML,
         we need to define+start, and undefine on start failure
         """
-        domain = self.conn.defineXML(install_xml or final_xml)
+        domain = self.conn.defineXML(initial_xml or final_xml)
         if not needs_boot:
             return domain
 
@@ -619,12 +619,12 @@ class Installer(object):
                 pass
             raise
 
-        if install_xml and install_xml != final_xml:
+        if initial_xml and initial_xml != final_xml:
             domain = self.conn.defineXML(final_xml)
         return domain
 
     def _create_guest(self, guest,
-                      meter, install_xml, final_xml, doboot, transient):
+                      meter, initial_xml, final_xml, doboot, transient):
         """
         Actually do the XML logging, guest defining/creating
 
@@ -633,18 +633,18 @@ class Installer(object):
         meter_label = _("Creating domain...")
         meter = progress.ensure_meter(meter)
         meter.start(meter_label, None)
-        needs_boot = doboot or bool(install_xml)
+        needs_boot = doboot or bool(initial_xml)
 
         if guest.type == "vz" and not self._is_reinstall:
             if transient:
                 raise RuntimeError(_("Domain type 'vz' doesn't support "
                     "transient installs."))
             domain = self._manual_transient_create(
-                    install_xml, final_xml, needs_boot)
+                    initial_xml, final_xml, needs_boot)
 
         else:
             if transient or needs_boot:
-                domain = self.conn.createXML(install_xml or final_xml, 0)
+                domain = self.conn.createXML(initial_xml or final_xml, 0)
             if not transient:
                 domain = self.conn.defineXML(final_xml)
 
@@ -693,12 +693,12 @@ class Installer(object):
                 for dev in guest.devices.disk:
                     dev.build_storage(meter)
 
-            install_xml, final_xml = self._build_xml(guest, meter)
+            initial_xml, final_xml = self._build_xml(guest, meter)
             if dry or return_xml:
-                return (install_xml, final_xml)
+                return (initial_xml, final_xml)
 
             domain = self._create_guest(
-                    guest, meter, install_xml, final_xml,
+                    guest, meter, initial_xml, final_xml,
                     doboot, transient)
 
             if self.autostart:
