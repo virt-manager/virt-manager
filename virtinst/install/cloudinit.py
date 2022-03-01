@@ -87,8 +87,11 @@ def _create_userdata_content(cloudinit_data):
         content += "runcmd:\n"
         content += "- [ sudo, touch, /etc/cloud/cloud-init.disabled ]\n"
 
-    log.debug("Generated cloud-init userdata: \n%s",
-            re.sub(r"root:(.*)", 'root:[SCRUBBLED]', content))
+    clean_content = re.sub(r"root:(.*)", 'root:[SCRUBBLED]', content)
+    if "VIRTINST_TEST_SUITE_PRINT_CLOUDINIT" in os.environ:
+        print(clean_content)
+
+    log.debug("Generated cloud-init userdata: \n%s", clean_content)
     return content
 
 

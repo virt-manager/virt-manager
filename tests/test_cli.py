@@ -297,6 +297,7 @@ class Command(object):
             for domxml in output.split("</domain>"):
                 if "<domain" not in domxml:
                     continue
+                domxml = "<domain" + domxml.split("<domain", 1)[1]
                 domxml = domxml + "</domain>"
                 try:
                     dom = conn.defineXML(domxml)
@@ -1010,14 +1011,12 @@ c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s --os-variant generic" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-init-default")  # default --cloud-init behavior is root-password-generate=yes,disable=yes
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no", "cloud-init-options")  # --cloud-init root-password-generate
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,disable=no", "cloud-init-options")  # --cloud-init root-password-file
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt", "cloud-init-options")  # --cloud-init ssh-key
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "cloud-init-options")  # --cloud-init user-data=,meta-data=
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt,network-config=%(XMLDIR)s/cloudinit/network-config.txt", "cloud-init-options")  # --cloud-init user-data=,meta-data=,network-config=
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --sysinfo system.serial=foobar", "cloud-init-smbios-skip")  # skip if a serial is already specified
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --boot smbios.mode=none", "cloud-init-smbios-none")  # skip if a serial is already specified
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-init-default", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init behavior is root-password-generate=yes,disable=yes
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,disable=no --boot smbios.mode=none", "cloud-init-options2", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-file with smbios.mode override
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt", "cloud-init-options3", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init ssh-key
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "cloud-init-options4", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt,network-config=%(XMLDIR)s/cloudinit/network-config.txt", "cloud-init-options5", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=,network-config=
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe --osinfo generic", grep="VM performance may suffer")  # os variant warning

@@ -1,3 +1,9 @@
+#cloud-config
+chpasswd:
+  list: |
+    root:[SCRUBBLED]
+  expire: True
+
 <domain type="test">
   <name>fedora28</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
@@ -9,9 +15,14 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
+  <sysinfo type="smbios">
+    <system>
+      <entry name="serial">foobar</entry>
+    </system>
+  </sysinfo>
   <os>
     <type arch="i686">hvm</type>
-    <smbios mode="none"/>
+    <smbios mode="sysinfo"/>
   </os>
   <features>
     <pae/>
@@ -61,10 +72,15 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
+  <sysinfo type="smbios">
+    <system>
+      <entry name="serial">foobar</entry>
+    </system>
+  </sysinfo>
   <os>
     <type arch="i686">hvm</type>
     <boot dev="hd"/>
-    <smbios mode="none"/>
+    <smbios mode="sysinfo"/>
   </os>
   <features>
     <pae/>
