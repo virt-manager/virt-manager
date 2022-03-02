@@ -522,16 +522,13 @@ class Guest(XMLBuilder):
         arm+machvirt prefers UEFI since it's required for traditional
         install methods
         """
-        if self.os.is_x86() and self.conn.is_qemu():
+        if (self.os.is_x86() and
+            (self.conn.is_qemu() or self.conn.is_test())):
             # If OS has dropped support for 'bios', we have no
             # choice but to use EFI.
             # For other OS still prefer BIOS since it is faster
             # and doesn't break QEMU internal snapshots
-            has_efi = self.osinfo.supports_firmware_efi(self.os.arch)
-            has_bios = self.osinfo.supports_firmware_bios(self.os.arch)
-            log.debug("Guest osinfo firmware has_efi=%d has_bios=%d",
-                      has_efi, has_bios)
-            prefer_efi = has_efi and not has_bios
+            prefer_efi = self.osinfo.requires_firmware_efi(self.os.arch)
         else:
             prefer_efi = self.os.is_arm_machvirt() or self.conn.is_bhyve()
 

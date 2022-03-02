@@ -440,14 +440,14 @@ class _OsVariant(object):
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def _get_firmware_list(self):
-        if hasattr(self._os, "get_complete_firmware_list"):
+        if hasattr(self._os, "get_complete_firmware_list"):  # pragma: no cover
             return self._os.get_complete_firmware_list().get_elements()
         return []
 
     def _supports_firmware_type(self, name, arch, default):
         firmwares = self._get_firmware_list()
 
-        for firmware in firmwares:
+        for firmware in firmwares:  # pragma: no cover
             if firmware.get_architecture() != arch:
                 continue
             if firmware.get_firmware_type() == name:
@@ -455,11 +455,16 @@ class _OsVariant(object):
 
         return default
 
-    def supports_firmware_efi(self, arch):
-        return self._supports_firmware_type("efi", arch, False)
+    def requires_firmware_efi(self, arch):
+        ret = False
+        try:
+            supports_efi = self._supports_firmware_type("efi", arch, False)
+            supports_bios = self._supports_firmware_type("bios", arch, True)
+            ret = supports_efi and not supports_bios
+        except Exception:  # pragma: no cover
+            log.debug("Error checking osinfo firmware support", exc_info=True)
 
-    def supports_firmware_bios(self, arch):
-        return self._supports_firmware_type("bios", arch, True)
+        return ret
 
     def get_recommended_resources(self):
         minimum = self._os.get_minimum_resources()
