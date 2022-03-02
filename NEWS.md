@@ -1,5 +1,24 @@
 # Virtual Machine Manager News
 
+## Release 4.0.0 (March 02, 2022)
+- virt-install --os-variant/--osinfo is now a hard requirement for most
+  cases
+- Add 'Enable shared memory' UI checkbox (Lin Ma)
+- add UI preference to default to UEFI for new VMs (Charles Arnold)
+- Add virtiofs filesystem driver UI option
+- Fill in all --cputune, --cpu, --shmem, --input, and --boot suboptions
+  (Hugues Fafard)
+- virt-* mdev improvements (Shalini Chellathurai Saroja)
+- bhyve improvments (Roman Bogorodskiy)
+- Revive network portgroup UI
+- enable a TPM by default when UEFI is used (Daniel P. Berrangé)
+- Use cpu host-passthrough by default on qemu x86
+- use virtio-gpu video for most modern distros
+- Default to extra pcie root ports for q35
+- set discard=unmap by default for sparse disks and block devices
+- We now require xorissofs for --location ISO
+- We now use setuptools rather than just plain distutils
+
 ## Release 3.2.0 (November 14, 2020)
 - Slim down filesystem device editor UI
 - Fix TOCTTOU virt-install bugs (Martin Pitt)
