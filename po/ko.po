@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
 "PO-Revision-Date: 2022-03-09 17:58+0000\n"
-"Last-Translator: Kim InSoo <simmon@nplob.com>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ko/>\n"
 "Language: ko\n"
@@ -832,8 +832,7 @@ msgstr "가상 머신 삭제"
 msgid ""
 "<small>This VM is currently running and will be forced off before being "
 "deleted</small>"
-msgstr ""
-"<small>이 VM은 현재 실행 중이므로 삭제하기 전에 강제 종료됩니다.</small>"
+msgstr "<small>이 VM은 현재 실행 중이므로 삭제하기 전에 강제 종료됩니다.</small>"
 
 #: ui/delete.ui:124
 msgid "Delete _associated storage files"
@@ -1613,13 +1612,13 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"하이퍼바이저에서 대상에 대한 개별 네트워크 연결을 열지 않고, libvirtd 연결 채"
-"널을 통한 터널 이식. 소스 libvirt 인스턴스에서 대상 libvirt 인스턴스에 직접 "
-"연결합니다.\n"
+"하이퍼바이저에서 대상에 대한 개별 네트워크 연결을 열지 않고, libvirtd 연결 "
+"채널을 통한 터널 이식. 소스 libvirt 인스턴스에서 대상 libvirt 인스턴스에 "
+"직접 연결합니다.\n"
 "\n"
-"따라서 추가 방화벽 포트를 열 필요가 없으므로 설정이 간소화되고, libvirt 연결"
-"이 암호화된 경우 이식 트래픽이 암호화됩니다. 그러나 SSH 전송에서는 이 기능을 "
-"작동하기 어려울 수 있습니다."
+"따라서 추가 방화벽 포트를 열 필요가 없으므로 설정이 간소화되고, libvirt "
+"연결이 암호화된 경우 이식 트래픽이 암호화됩니다. 그러나 SSH 전송에서는 이 "
+"기능을 작동하기 어려울 수 있습니다."
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1657,12 +1656,12 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"기본적으로 이식된 VM 구성은 소스 호스트에서 제거되고 대상 호스트에 영구 저장"
-"됩니다. 대상 호스트가 VM의 새로운 홈으로 간주됩니다.\n"
+"기본적으로 이식된 VM 구성은 소스 호스트에서 제거되고 대상 호스트에 영구 "
+"저장됩니다. 대상 호스트가 VM의 새로운 홈으로 간주됩니다.\n"
 "\n"
 "'임시'를 선택하면 이식은 임시 이동으로만 간주됩니다. 소스 호스트는 VM 구성의 "
-"사본을 유지 관리하며, 대상으로 이동된 실행 사본은 임시일 뿐이므로 대상이 종료"
-"되면 사라집니다."
+"사본을 유지 관리하며, 대상으로 이동된 실행 사본은 임시일 뿐이므로 대상이 "
+"종료되면 사라집니다."
 
 #: ui/migrate.ui:571
 msgid "_Temporary move:"
@@ -1684,9 +1683,8 @@ msgstr "장치 이름:"
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
-msgstr ""
-"<small>대부분의 설정에서 macvtap는 호스트와 게스트 간 네트워크 통신에서 작동"
-"하지 않습니다.</small>"
+msgstr "<small>대부분의 설정에서 macvtap는 호스트와 게스트 간 네트워크 통신에서 "
+"작동하지 않습니다.</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
@@ -1835,8 +1833,8 @@ msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
-"게스트 창 크기가 변경되면 게스트 해상도를 변경하십시오. Spice와 데스크탑 에이"
-"전트를 사용하여 적절하게 구성된 게스트에서만 작동합니다."
+"게스트 창 크기가 변경되면 게스트 해상도를 변경하십시오. Spice와 데스크탑 "
+"에이전트를 사용하여 적절하게 구성된 게스트에서만 작동합니다."
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
@@ -1987,8 +1985,7 @@ msgstr "스크린샷 찍기(_T)"
 
 #: ui/vmwindow.ui:98
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
-msgstr ""
-"SPICE 그래픽을 사용하는 가상 머신으로 호스트 USB 장치를 리디렉션하십시오."
+msgstr "SPICE 그래픽을 사용하는 가상 머신으로 호스트 USB 장치를 리디렉션하십시오."
 
 #: ui/vmwindow.ui:99
 msgid "_Redirect USB device"
@@ -2612,8 +2609,7 @@ msgstr "복제는 기존 파일을 덮어쓸 것임"
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
-msgstr ""
-"기존 이미지를 사용하면 복제 과정에서 해당 경로를 덮어쓰게 됩니다. 이 경로를 "
+msgstr "기존 이미지를 사용하면 복제 과정에서 해당 경로를 덮어쓰게 됩니다. 이 경로를 "
 "사용하겠습니까?"
 
 #: virtManager/clone.py:487
@@ -2893,9 +2889,8 @@ msgstr "이 연결에 대한 하이퍼바이저 옵션을 찾을 수 없습니�
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
-msgstr ""
-"이는 시스템에서 QEMU 또는 KVM이 설치되지 않거나 KVM 커널이 로드되지 않음을 의"
-"미합니다."
+msgstr "이는 시스템에서 QEMU 또는 KVM이 설치되지 않거나 KVM 커널이 로드되지 않음을 "
+"의미합니다."
 
 #: virtManager/createvm.py:606
 msgid ""
@@ -3492,8 +3487,7 @@ msgstr "Libvirt 또는 하이퍼바이저가 UEFI를 지원하지 않습니다."
 #: virtManager/details/details.py:675
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
-msgstr ""
-"Libvirt가 호스트에 설치된 UEFI/OVMF 펌웨어 이미지를 감지하지 못했습니다."
+msgstr "Libvirt가 호스트에 설치된 UEFI/OVMF 펌웨어 이미지를 감지하지 못했습니다."
 
 #: virtManager/details/details.py:725
 msgid "Version"
@@ -4038,8 +4032,7 @@ msgstr "가상 네트워크가 활성화되지 않았습니다."
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
-msgstr ""
-"'%s' 가상 네트워크가 활성화되지 않았습니다. 지금 네트워크를 시작하겠습니까?"
+msgstr "'%s' 가상 네트워크가 활성화되지 않았습니다. 지금 네트워크를 시작하겠습니까?"
 
 #: virtManager/device/netlist.py:212
 #, python-format
@@ -4578,8 +4571,8 @@ msgid ""
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
-"원격으로 액세스 가능한 libvirt URI가 터널링된 이식에 필요하지만, 선택한 연결"
-"은 로컬 URI입니다. 전송을 추가하지 않으면 Libvirt에서 연결을 거부합니다."
+"원격으로 액세스 가능한 libvirt URI가 터널링된 이식에 필요하지만, 선택한 "
+"연결은 로컬 URI입니다. 전송을 추가하지 않으면 Libvirt에서 연결을 거부합니다."
 
 #: virtManager/migrate.py:292
 #, python-format
@@ -4641,17 +4634,15 @@ msgstr "Libvirt 연결이 스냅샷을 지원하지 않습니다."
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
-msgstr ""
-"게스트에 할당된 모든 쓰기 가능 디스크 이미지가 qcow2 포맷인 경우에만 스냅샷"
-"이 지원됩니다."
+msgstr "게스트에 할당된 모든 쓰기 가능 디스크 이미지가 qcow2 포맷인 경우에만 "
+"스냅샷이 지원됩니다."
 
 #: virtManager/object/domain.py:494
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
-msgstr ""
-"스냅샷을 작성하려면 하나 이상의 쓰기 가능 qcow2 디스크 이미지가 게스트에 할당"
-"되어 있어야 합니다."
+msgstr "스냅샷을 작성하려면 하나 이상의 쓰기 가능 qcow2 디스크 이미지가 게스트에 "
+"할당되어 있어야 합니다."
 
 #: virtManager/object/domain.py:529
 #, python-format
@@ -4896,9 +4887,8 @@ msgstr "정말로 강제로 '%s'의 전원을 차단하시겠습니까?"
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
-msgstr ""
-"이는 OS를 종료하지 않고, VM의 전원을 즉시 끄게 됩니다. 이에 따라 데이터 유실"
-"이 발생할 수 있습니다."
+msgstr "이는 OS를 종료하지 않고, VM의 전원을 즉시 끄게 됩니다. 이에 따라 데이터 "
+"유실이 발생할 수 있습니다."
 
 #: virtManager/vmmenu.py:188 virtManager/vmmenu.py:257
 msgid "Error shutting down domain"
@@ -4972,9 +4962,8 @@ msgstr "정말로 '%s' 재설정을 강제 시행하시겠습니까?"
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
-msgstr ""
-"그러면 OS를 종료하지 않고 VM을 즉시 다시 설정하므로 데이터가 유실될 수 있습니"
-"다."
+msgstr "그러면 OS를 종료하지 않고 VM을 즉시 다시 설정하므로 데이터가 유실될 수 "
+"있습니다."
 
 #: virtManager/vmmenu.py:284
 msgid "Error resetting domain"
@@ -5167,8 +5156,7 @@ msgstr "설치를 완료한 후 게스트를 부팅하지 마십시오."
 
 #: virtinst/cli.py:615
 msgid "Don't check name collision, overwrite any guest with the same name."
-msgstr ""
-"이름 충돌을 확인하지 마십시오. 모든 게스트를 동일한 이름으로 덮어쓰십시오."
+msgstr "이름 충돌을 확인하지 마십시오. 모든 게스트를 동일한 이름으로 덮어쓰십시오."
 
 #: virtinst/cli.py:622
 msgid "Print the generated domain XML rather than create the guest."
@@ -5177,9 +5165,8 @@ msgstr "게스트를 생성하지 말고 생성된 도메인 XML을 인쇄하십
 #: virtinst/cli.py:641
 msgid ""
 "Run through install process, but do not create devices or define the guest."
-msgstr ""
-"설치 프로세스를 실행하십시오. 단, 장치를 작성하거나 게스트를 정의하지 마십시"
-"오."
+msgstr "설치 프로세스를 실행하십시오. 단, 장치를 작성하거나 게스트를 정의하지 "
+"마십시오."
 
 #: virtinst/cli.py:646
 msgid ""
@@ -5591,8 +5578,7 @@ msgstr "%(key)s은(는) '예' 또는 '아니요'여야 함"
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
-msgstr ""
-"장치 유형 '%(device_type)s' 속성 '%(property_name)s'과(와) 일치시키는 방법을 "
+msgstr "장치 유형 '%(device_type)s' 속성 '%(property_name)s'과(와) 일치시키는 방법을 "
 "알 수 없음"
 
 #: virtinst/cli.py:1477
@@ -5614,8 +5600,7 @@ msgstr "그래픽 콘솔에 연결할 수 없습니다. virt-viewer가 설치되
 
 #: virtinst/cli.py:1922
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
-msgstr ""
-"그래픽이 요청되었지만 DISPLAY가 설정되지 않았습니다. virt-viewer를 실행하지 "
+msgstr "그래픽이 요청되었지만 DISPLAY가 설정되지 않았습니다. virt-viewer를 실행하지 "
 "않습니다."
 
 #: virtinst/cli.py:1933
@@ -5733,9 +5718,8 @@ msgstr "존재하지 않는 볼륨 '%s'의 크기를 지정해야 함"
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
-msgstr ""
-"'%s' 경로의 저장소 작성 방법을 알 수 없습니다. libvirt API를 사용하여 먼저 상"
-"위 디렉터리를 풀로 관리하십시오."
+msgstr "'%s' 경로의 저장소 작성 방법을 알 수 없습니다. libvirt API를 사용하여 먼저 "
+"상위 디렉터리를 풀로 관리하십시오."
 
 #: virtinst/devices/disk.py:376
 msgid "Format attribute not supported for this volume type"
@@ -5796,9 +5780,8 @@ msgstr "'%s'의 권한은 고정되지 않음"
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
-msgstr ""
-"게스트를 실행할 때 희소 파일(sparse file)을 완전히 할당하는 데 충분한 여유 공"
-"간이 파일 시스템에 없습니다."
+msgstr "게스트를 실행할 때 희소 파일(sparse file)을 완전히 할당하는 데 충분한 여유 "
+"공간이 파일 시스템에 없습니다."
 
 #: virtinst/diskbackend.py:543
 msgid "There is not enough free space to create the disk."
@@ -6142,13 +6125,13 @@ msgid ""
 "outside the scope of this tool. For these types of changes, please see virt-"
 "sysprep(1)."
 msgstr ""
-"가상 머신을 복제하고, 고유한 호스트 측 설정(예: MAC 주소, 이름 등)을 모두 변"
-"경하십시오.\n"
+"가상 머신을 복제하고, 고유한 호스트 측 설정(예: MAC 주소, 이름 등)을 모두 "
+"변경하십시오.\n"
 "\n"
-"VM 콘텐츠는 변경되지 않습니다. virt-clone은 게스트 OS 내부를 변경하지 않으"
-"며, 디스크만 복제하고 호스트측만 변경합니다. 따라서 비밀번호 변경, 정적 IP 주"
-"소 변경과 같은 작업은 이 도구의 범위를 벗어납니다. 이러한 유형의 변경은 virt-"
-"sysprep(1)을 참조하십시오."
+"VM 콘텐츠는 변경되지 않습니다. virt-clone은 게스트 OS 내부를 변경하지 "
+"않으며, 디스크만 복제하고 호스트측만 변경합니다. 따라서 비밀번호 변경, 정적 "
+"IP 주소 변경과 같은 작업은 이 도구의 범위를 벗어납니다. 이러한 유형의 변경은 "
+"virt-sysprep(1)을 참조하십시오."
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
 msgid "General Options"
@@ -6188,8 +6171,7 @@ msgstr "신규 게스트의 디스크 이미지로 사용할 새 파일"
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
-msgstr ""
-"장치 강제 복사(예: 'hdc'가 읽기 전용 CDROM 장치인 경우, --force-copy=hdc)"
+msgstr "장치 강제 복사(예: 'hdc'가 읽기 전용 CDROM 장치인 경우, --force-copy=hdc)"
 
 #: virtinst/virtclone.py:99
 msgid ""
@@ -6244,9 +6226,8 @@ msgstr ""
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
-msgstr ""
-"새로운 가상 머신의 이름이 필요합니다. '--name NEW_VM_NAME'을 사용하여 지정하"
-"십시오."
+msgstr "새로운 가상 머신의 이름이 필요합니다. '--name NEW_VM_NAME'을 사용하여 "
+"지정하십시오."
 
 #: virtinst/virtclone.py:196
 #, python-format
@@ -6312,8 +6293,9 @@ msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
-"CDROM 미디어는 기본적으로 텍스트 콘솔에 인쇄되지 않으므로, 텍스트 설치 출력"
-"이 표시되지 않을 수 있습니다. --location을 사용하는 것이 좋을 수 있습니다."
+"CDROM 미디어는 기본적으로 텍스트 콘솔에 인쇄되지 않으므로, 텍스트 설치 "
+"출력이 표시되지 않을 수 있습니다. --location을 사용하는 것이 좋을 수 "
+"있습니다."
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
