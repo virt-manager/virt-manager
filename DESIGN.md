@@ -82,8 +82,8 @@ Some examples:
 
 * VM properties
   * [disk driver io=threads|native](https://github.com/virt-manager/virt-manager/commit/a162a3b845eee24f66baf63b3aeb82523b274b0d)
-  * [disk serial](https://github.com/virt-manager/virt-manager/commit/106686758346c7f7f0f25ce2a29e36fa6dff0547)
   * [disk scsi reservations](https://github.com/virt-manager/virt-manager/commit/b583ea7e66cd0b7117971cf55365355f78dd3670)
+  * [disk detect_zeroes](https://github.com/virt-manager/virt-manager/commit/8377b7f7b69ed0716fbe2c2818979a273bcb7567)
   * [graphics spice TLS port](https://github.com/virt-manager/virt-manager/commit/bd82ef65292cc47cffc27b8f67d7987679c61bf3)
   * [graphics keymap selection](https://github.com/virt-manager/virt-manager/commit/7251ea25c2936b69284366abc787f1b33c199b15)
   * [network virtualport](https://github.com/virt-manager/virt-manager/commit/b4b497e28f3f3e32a05f4cf78c21f07022ee824b)
