@@ -17,17 +17,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-02-26 12:57+0000\n"
-"Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/pl/>\n"
+"PO-Revision-Date: 2022-03-09 18:00+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -628,8 +628,8 @@ msgid ""
 "<small>Kernel/initrd settings can be configured with 'Customize before "
 "install' on the final page.</small>"
 msgstr ""
-"<small>Ustawienia jądra/initrd można skonfigurować za pomocą opcji "
-"„Dostosowanie konfiguracji przed instalacją” na ostatniej stronie.</small>"
+"<small>Ustawienia jądra/initrd można skonfigurować za pomocą opcji „"
+"Dostosowanie konfiguracji przed instalacją” na ostatniej stronie.</small>"
 
 #: ui/createvm.ui:1171
 msgid "Provide the _application path:"
@@ -659,8 +659,8 @@ msgid ""
 msgstr ""
 "<small>Drzewo katalogów systemu operacyjnego musi już istnieć. Tworzenie "
 "drzewa katalogów\n"
-"systemu operacyjnego dla zdalnych połączeń nie jest jeszcze obsługiwane.</"
-"small>"
+"systemu operacyjnego dla zdalnych połączeń nie jest jeszcze "
+"obsługiwane.</small>"
 
 #: ui/createvm.ui:1392
 msgid "Create OS directory tree from container image"
@@ -1675,14 +1675,14 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"Domyślnie konfiguracja migrowanej maszyny wirtualnej jest usuwana "
-"z gospodarza źródłowego i zapisywana na trwałe na gospodarzu docelowym. "
+"Domyślnie konfiguracja migrowanej maszyny wirtualnej jest usuwana z "
+"gospodarza źródłowego i zapisywana na trwałe na gospodarzu docelowym. "
 "Gospodarz docelowy jest uznawany za nowe miejsce maszyny.\n"
 "\n"
 "Jeśli wybrano „temporary”, to migracja jest uznawana tylko za ruch "
 "tymczasowy: gospodarz źródłowy zachowuje kopię konfiguracji maszyny "
-"wirtualnej, a działająca kopia przenoszona do celu jest tylko tymczasowa, "
-"i zniknie po jej wyłączeniu."
+"wirtualnej, a działająca kopia przenoszona do celu jest tylko tymczasowa, i "
+"zniknie po jej wyłączeniu."
 
 #: ui/migrate.ui:571
 msgid "_Temporary move:"
@@ -1813,8 +1813,8 @@ msgid ""
 msgstr ""
 "Domyślne ustawienia procesora dla nowej maszyny wirtualnej. Jest to zwykle "
 "równowaga\n"
-"między wydajnością i zgodnością migracji: jeśli używana jest opcja "
-"„skopiowania gospodarza”,\n"
+"między wydajnością i zgodnością migracji: jeśli używana jest opcja „"
+"skopiowania gospodarza”,\n"
 "to serwery będą wymagały identycznych procesorów, aby migrować maszynę."
 
 #: ui/preferences.ui:464
@@ -3126,8 +3126,8 @@ msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
-"Maszyna wirtualna jest teraz tworzona. Przydzielenie pamięci masowej dysku "
-"i pobranie obrazów instalacji może zająć kilka minut."
+"Maszyna wirtualna jest teraz tworzona. Przydzielenie pamięci masowej dysku i "
+"pobranie obrazów instalacji może zająć kilka minut."
 
 #: virtManager/createvm.py:2026
 #, python-format
@@ -3873,8 +3873,7 @@ msgstr ""
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
-msgstr ""
-"Zapisany stan zostanie usunięty, aby uniknąć uszkodzenia systemu plików"
+msgstr "Zapisany stan zostanie usunięty, aby uniknąć uszkodzenia systemu plików"
 
 #: virtManager/details/snapshots.py:669
 #, python-format
@@ -5378,8 +5377,8 @@ msgstr "Konfiguruje połączenie konsoli tekstowej między gościem a gospodarz
 #: virtinst/cli.py:744
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
-"Konfiguruje fizyczne urządzenia USB/PCI/itp. gospodarza współdzielone "
-"z gościem"
+"Konfiguruje fizyczne urządzenia USB/PCI/itp. gospodarza współdzielone z "
+"gościem"
 
 #: virtinst/cli.py:752
 msgid ""
@@ -5588,8 +5587,8 @@ msgid ""
 msgstr ""
 "Konfiguruje zabezpieczenia uruchamiania maszyny wirtualnej (np. szyfrowanie "
 "pamięci SEV). Przykłady:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
+"BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:902
@@ -5884,8 +5883,8 @@ msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
-"System plików nie będzie miał wystarczającej ilości wolnego miejsca, aby "
-"w pełni przydzielić plik zapasowy, kiedy gość jest uruchomiony."
+"System plików nie będzie miał wystarczającej ilości wolnego miejsca, aby w "
+"pełni przydzielić plik zapasowy, kiedy gość jest uruchomiony."
 
 #: virtinst/diskbackend.py:543
 msgid "There is not enough free space to create the disk."
@@ -6358,8 +6357,8 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
-"Wymagana jest opcja --auto-clone lub --file, należy użyć „--auto-clone lub --"
-"file” i spróbować ponownie."
+"Wymagana jest opcja --auto-clone lub --file, należy użyć „--auto-clone lub "
+"--file” i spróbować ponownie."
 
 #: virtinst/virtclone.py:179
 msgid ""
@@ -6405,8 +6404,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
-msgstr ""
-"Nie można mieszać opcji --graphics z opcjami graficznymi w starym stylu"
+msgstr "Nie można mieszać opcji --graphics z opcjami graficznymi w starym stylu"
 
 #: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
@@ -6444,8 +6442,8 @@ msgstr ""
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
-"Na stronie podręcznika znajdują się przykłady używania opcji --location "
-"z nośnikiem CD-ROM"
+"Na stronie podręcznika znajdują się przykłady używania opcji --location z "
+"nośnikiem CD-ROM"
 
 #: virtinst/virtinstall.py:348
 #, python-format
@@ -6714,8 +6712,8 @@ msgstr "Buduje gościa na podstawie istniejącego obrazu dysku"
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
-"Dodatkowe parametry do przekazania do jądra instalacji uruchomionego z --"
-"location"
+"Dodatkowe parametry do przekazania do jądra instalacji uruchomionego z "
+"--location"
 
 #: virtinst/virtinstall.py:1032
 msgid "Add given file to root of initrd from --location"
