@@ -66,6 +66,7 @@ class _DiskSource(XMLBuilder):
 
     name = XMLProperty("./@name")
     protocol = XMLProperty("./@protocol")
+    query = XMLProperty("./@query")
 
     type = XMLProperty("./@type")
     managed = XMLProperty("./@managed", is_yesno=True)
@@ -98,6 +99,8 @@ class _DiskSource(XMLBuilder):
                 self.name = uriobj.path
                 if self.name.startswith("/"):
                     self.name = self.name[1:]
+        if uriobj.query:
+            self.query = uriobj.query
 
     def build_url_from_network(self):
         """
