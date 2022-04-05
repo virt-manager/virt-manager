@@ -547,4 +547,5 @@ setuptools.setup(
     },
 
     distclass=VMMDistribution,
+    packages=[],
 )
