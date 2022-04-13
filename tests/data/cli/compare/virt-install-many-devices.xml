@@ -249,7 +249,7 @@
       <source file="/var/lib/libvirt/images/disk.qcow2"/>
       <target dev="vdc" bus="virtio"/>
     </disk>
-    <disk type="block" device="lun" sgio="unfiltered" rawio="yes">
+    <disk type="block" device="lun" sgio="filtered" rawio="yes">
       <driver name="qemu" type="raw"/>
       <source dev="/pool-iscsi/diskvol1"/>
       <target dev="sdab" bus="scsi"/>
