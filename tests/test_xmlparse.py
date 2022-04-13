@@ -314,8 +314,6 @@ def testAlterDisk():
     check = _make_checker(disk)
     check("type", "block")
     check("device", "lun")
-    check("sgio", None, "unfiltered")
-    check("rawio", None, "yes")
 
     disk = _get_disk("sda")
     check = _make_checker(disk)
