@@ -308,6 +308,7 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("char-path").set_text("")
         self.widget("char-channel").set_text("")
         self.widget("char-auto-socket").set_active(True)
+        self.widget("char-vdagent-clipboard").set_active(True)
 
 
         # RNG params
@@ -399,7 +400,8 @@ class vmmAddHardware(vmmGObjectUI):
                DeviceSerial.TYPE_UNIX]
         if char_class.XML_NAME == "channel":
             ret = [DeviceSerial.TYPE_SPICEVMC,
-                   DeviceSerial.TYPE_SPICEPORT] + ret
+                   DeviceSerial.TYPE_SPICEPORT,
+                   DeviceSerial.TYPE_QEMUVDAGENT] + ret
         return ret
 
     @staticmethod
@@ -425,6 +427,7 @@ class vmmAddHardware(vmmGObjectUI):
             DeviceSerial.TYPE_UNIX: _("UNIX socket"),
             DeviceSerial.TYPE_SPICEVMC: _("Spice agent"),
             DeviceSerial.TYPE_SPICEPORT: _("Spice port"),
+            DeviceSerial.TYPE_QEMUVDAGENT: _("QEMU vdagent"),
         }
         return labels.get(val, val)
 
@@ -1114,11 +1117,14 @@ class vmmAddHardware(vmmGObjectUI):
         supports_path = [dev.TYPE_FILE, dev.TYPE_UNIX,
                          dev.TYPE_DEV, dev.TYPE_PIPE]
         supports_channel = [dev.TYPE_SPICEPORT]
+        supports_clipboard = [dev.TYPE_QEMUVDAGENT]
 
         uiutil.set_grid_row_visible(self.widget("char-path-label"),
                 devtype in supports_path)
         uiutil.set_grid_row_visible(self.widget("char-channel-label"),
                 devtype in supports_channel)
+        uiutil.set_grid_row_visible(self.widget("char-vdagent-clipboard-label"),
+                devtype in supports_clipboard)
 
         uiutil.set_grid_row_visible(
             self.widget("char-target-name-label"), ischan)
@@ -1472,6 +1478,7 @@ class vmmAddHardware(vmmGObjectUI):
         source_channel = self.widget("char-channel").get_text()
         target_name = self.widget("char-target-name").get_child().get_text()
         target_type = uiutil.get_list_selection(typebox)
+        clipboard = self.widget("char-vdagent-clipboard").get_active()
 
         if not self.widget("char-path").get_visible():
             source_path = None
@@ -1486,6 +1493,7 @@ class vmmAddHardware(vmmGObjectUI):
         dev.type = devtype
         dev.source.path = source_path
         dev.source.channel = source_channel
+        dev.source.clipboard_copypaste = clipboard
         dev.target_name = target_name
         dev.target_type = target_type
         return dev

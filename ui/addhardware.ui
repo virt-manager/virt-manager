@@ -725,7 +725,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=6 -->
+                              <!-- n-columns=2 n-rows=7 -->
                               <object class="GtkGrid" id="char-table">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -899,6 +899,32 @@
                                   <packing>
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="char-vdagent-clipboard-label">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="label" translatable="yes">_Share Clipboard:</property>
+                                    <property name="use-underline">True</property>
+                                    <property name="mnemonic-widget">char-vdagent-clipboard</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="char-vdagent-clipboard">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">6</property>
                                   </packing>
                                 </child>
                                 <child internal-child="accessible">

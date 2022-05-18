@@ -207,10 +207,10 @@ def _label_for_device(dev, disk_bus_index):
         return _("Console %(num)d") % {"num": port + 1}
 
     if devtype == "channel":
+        pretty_type = vmmAddHardware.char_pretty_type(dev.type)
         name = vmmAddHardware.char_pretty_channel_name(dev.target_name)
         if name:
-            return _("Channel %(name)s") % {"name": name}
-        pretty_type = vmmAddHardware.char_pretty_type(dev.type)
+            return _("Channel %(type)s (%(name)s)") % {"type": pretty_type, "name": name}
         return _("Channel %(type)s") % {"type": pretty_type}
 
     if devtype == "graphics":
@@ -2098,6 +2098,7 @@ class vmmDetails(vmmGObjectUI):
         primary = self.vm.serial_is_console_dup(chardev)
         show_target_type = not (char_type in ["serial", "parallel"])
         is_qemuga = chardev.target_name == chardev.CHANNEL_NAME_QEMUGA
+        show_clipboard = chardev.type == chardev.TYPE_QEMUVDAGENT
 
         if char_type == "serial":
             typelabel = _("Serial Device")
@@ -2152,6 +2153,8 @@ class vmmDetails(vmmGObjectUI):
         # notifiations about connection state. For spice this UI field
         # can get out of date
         show_ui("char-target-state", chardev.target_state, doshow=is_qemuga)
+        clipboard = _("On") if chardev.source.clipboard_copypaste else _("Off")
+        show_ui("char-clipboard-sharing", clipboard, doshow=show_clipboard)
 
     def _refresh_hostdev_page(self, hostdev):
         rom_bar = hostdev.rom_bar

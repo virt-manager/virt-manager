@@ -3506,7 +3506,7 @@
                             <property name="margin-start">12</property>
                             <property name="margin-top">3</property>
                             <child>
-                              <!-- n-columns=2 n-rows=7 -->
+                              <!-- n-columns=2 n-rows=8 -->
                               <object class="GtkGrid" id="table37">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -3602,6 +3602,19 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkLabel" id="char-clipboard-sharing">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">start</property>
+                                    <property name="label" translatable="yes">label507</property>
+                                    <property name="selectable">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">1</property>
+                                    <property name="top-attach">7</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkLabel" id="char-source-host">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
@@ -3671,6 +3684,18 @@
                                   <packing>
                                     <property name="left-attach">0</property>
                                     <property name="top-attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="char-clipboard-sharing-label">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <property name="halign">end</property>
+                                    <property name="label" translatable="yes">Clipboard:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">7</property>
                                   </packing>
                                 </child>
                                 <child>
