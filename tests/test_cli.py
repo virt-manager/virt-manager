@@ -674,6 +674,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --channel pty,target_type=virtio,name=org.linux-kvm.port1
 --channel pty,target.type=virtio,target.name=org.linux-kvm.port2
 --channel spicevmc
+--channel qemu-vdagent,source.clipboard.copypaste=on,source.mouse.mode=client
 
 
 --console pty,target_type=virtio
@@ -739,7 +740,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 
 --rng /dev/random
---rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=
+--rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=,backend.source.clipboard.copypaste=,backend.source.mouse.mode=
 --rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 
@@ -791,7 +792,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --xml xpath.delete=./deleteme/deleteme2
 
 
-""", "many-devices", predefine_check="7.4.0")
+""", "many-devices", predefine_check="8.4.0")
 
 
 # Specific XML test cases #1

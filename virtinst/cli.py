@@ -3404,6 +3404,8 @@ def _add_char_source_args(cls, prefix=""):
     _add_arg("protocol.type", "source.protocol")
     _add_arg("log.file", "source.log_file")
     _add_arg("log.append", "source.log_append", is_onoff=True)
+    _add_arg("source.clipboard.copypaste", "source.clipboard_copypaste", is_onoff=True)
+    _add_arg("source.mouse.mode", "source.mouse_mode")
 
 
 ##################

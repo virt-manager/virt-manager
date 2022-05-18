@@ -647,6 +647,13 @@
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
     </channel>
+    <channel type="qemu-vdagent">
+      <source>
+        <clipboard copypaste="yes"/>
+        <mouse mode="client"/>
+      </source>
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <input type="keyboard" bus="usb"/>
     <input type="tablet" bus="usb"/>
     <input type="mouse" bus="ps2"/>

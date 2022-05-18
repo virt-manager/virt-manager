@@ -1761,6 +1761,15 @@ Some of the types of character device redirection are:
     and can be any string, such as the default com.redhat.spice.0 that
     specifies how the guest will see the channel.
 
+``--channel qemu-vdagent,target.type=virtio[,target.name=NAME]``
+    Communication channel for QEMU vd agent, using virtio serial (requires
+    2.6.34 or later host and guest). This allows copy/paste functionality with
+    VNC guests. Note that the guest clipboard integration is implemented via
+    spice-vdagent, which must be running even when the guest does not use spice
+    graphics. NAME is optional metadata that specifies how the guest will see
+    the channel, and should be left as the default com.redhat.spice.0 unless you
+    know what you are doing.
+
 
 Use --channel=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#elementsCharChannel
