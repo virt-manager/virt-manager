@@ -264,6 +264,8 @@ class my_install(setuptools.command.install.install):
         setuptools.command.install.install.finalize_options(self)
 
     def run(self):
+        setuptools.command.install.install.run(self)
+
         if not self.distribution.no_update_icon_cache:
             print("running gtk-update-icon-cache")
             icon_path = os.path.join(self.install_data, "share/icons/hicolor")
@@ -274,8 +276,6 @@ class my_install(setuptools.command.install.install):
             gschema_install = os.path.join(self.install_data,
                 "share/glib-2.0/schemas")
             self.spawn(["glib-compile-schemas", gschema_install])
-
-        setuptools.command.install.install.run(self)
 
 
 ###################
