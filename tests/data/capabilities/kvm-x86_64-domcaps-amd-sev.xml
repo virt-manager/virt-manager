@@ -1,13 +1,14 @@
 <domainCapabilities>
   <path>/usr/bin/qemu-system-x86_64</path>
   <domain>kvm</domain>
-  <machine>pc-q35-3.0</machine>
+  <machine>pc-q35-6.2</machine>
   <arch>x86_64</arch>
   <vcpu max='288'/>
   <iothreads supported='yes'/>
   <os supported='yes'>
+    <enum name='firmware'/>
     <loader supported='yes'>
-      <value>/usr/share/edk2/ovmf/OVMF_CODE.fd</value>
+      <value>/usr/share/OVMF/OVMF_CODE.fd</value>
       <enum name='type'>
         <value>rom</value>
         <value>pflash</value>
@@ -19,19 +20,41 @@
     </loader>
   </os>
   <cpu>
-    <mode name='host-passthrough' supported='yes'/>
+    <mode name='host-passthrough' supported='yes'>
+      <enum name='hostPassthroughMigratable'>
+        <value>on</value>
+        <value>off</value>
+      </enum>
+    </mode>
+    <mode name='maximum' supported='yes'>
+      <enum name='maximumMigratable'>
+        <value>on</value>
+        <value>off</value>
+      </enum>
+    </mode>
     <mode name='host-model' supported='yes'>
-      <model fallback='forbid'>EPYC-IBPB</model>
+      <model fallback='forbid'>EPYC-Milan</model>
       <vendor>AMD</vendor>
       <feature policy='require' name='x2apic'/>
       <feature policy='require' name='tsc-deadline'/>
       <feature policy='require' name='hypervisor'/>
       <feature policy='require' name='tsc_adjust'/>
+      <feature policy='require' name='vaes'/>
+      <feature policy='require' name='vpclmulqdq'/>
+      <feature policy='require' name='spec-ctrl'/>
+      <feature policy='require' name='stibp'/>
+      <feature policy='require' name='arch-capabilities'/>
+      <feature policy='require' name='ssbd'/>
       <feature policy='require' name='cmp_legacy'/>
-      <feature policy='require' name='perfctr_core'/>
       <feature policy='require' name='invtsc'/>
       <feature policy='require' name='virt-ssbd'/>
-      <feature policy='disable' name='monitor'/>
+      <feature policy='require' name='tsc-scale'/>
+      <feature policy='require' name='rdctl-no'/>
+      <feature policy='require' name='skip-l1dfl-vmentry'/>
+      <feature policy='require' name='mds-no'/>
+      <feature policy='require' name='pschange-mc-no'/>
+      <feature policy='disable' name='erms'/>
+      <feature policy='disable' name='fsrm'/>
     </mode>
     <mode name='custom' supported='yes'>
       <model usable='yes'>qemu64</model>
@@ -46,13 +69,16 @@
       <model usable='no'>coreduo</model>
       <model usable='no'>core2duo</model>
       <model usable='no'>athlon</model>
-      <model usable='no'>Westmere-IBRS</model>
+      <model usable='yes'>Westmere-IBRS</model>
       <model usable='yes'>Westmere</model>
+      <model usable='no'>Snowridge</model>
+      <model usable='no'>Skylake-Server-noTSX-IBRS</model>
       <model usable='no'>Skylake-Server-IBRS</model>
       <model usable='no'>Skylake-Server</model>
+      <model usable='no'>Skylake-Client-noTSX-IBRS</model>
       <model usable='no'>Skylake-Client-IBRS</model>
       <model usable='no'>Skylake-Client</model>
-      <model usable='no'>SandyBridge-IBRS</model>
+      <model usable='yes'>SandyBridge-IBRS</model>
       <model usable='yes'>SandyBridge</model>
       <model usable='yes'>Penryn</model>
       <model usable='no'>Opteron_G5</model>
@@ -60,17 +86,27 @@
       <model usable='yes'>Opteron_G3</model>
       <model usable='yes'>Opteron_G2</model>
       <model usable='yes'>Opteron_G1</model>
-      <model usable='no'>Nehalem-IBRS</model>
+      <model usable='yes'>Nehalem-IBRS</model>
       <model usable='yes'>Nehalem</model>
       <model usable='no'>IvyBridge-IBRS</model>
       <model usable='no'>IvyBridge</model>
+      <model usable='no'>Icelake-Server-noTSX</model>
+      <model usable='no'>Icelake-Server</model>
+      <model usable='no' deprecated='yes'>Icelake-Client-noTSX</model>
+      <model usable='no' deprecated='yes'>Icelake-Client</model>
       <model usable='no'>Haswell-noTSX-IBRS</model>
       <model usable='no'>Haswell-noTSX</model>
       <model usable='no'>Haswell-IBRS</model>
       <model usable='no'>Haswell</model>
+      <model usable='yes'>EPYC-Rome</model>
+      <model usable='no'>EPYC-Milan</model>
       <model usable='yes'>EPYC-IBPB</model>
       <model usable='yes'>EPYC</model>
+      <model usable='yes'>Dhyana</model>
+      <model usable='no'>Cooperlake</model>
       <model usable='yes'>Conroe</model>
+      <model usable='no'>Cascadelake-Server-noTSX</model>
+      <model usable='no'>Cascadelake-Server</model>
       <model usable='no'>Broadwell-noTSX-IBRS</model>
       <model usable='no'>Broadwell-noTSX</model>
       <model usable='no'>Broadwell-IBRS</model>
@@ -78,6 +114,13 @@
       <model usable='yes'>486</model>
     </mode>
   </cpu>
+  <memoryBacking supported='yes'>
+    <enum name='sourceType'>
+      <value>file</value>
+      <value>anonymous</value>
+      <value>memfd</value>
+    </enum>
+  </memoryBacking>
   <devices>
     <disk supported='yes'>
       <enum name='diskDevice'>
@@ -87,11 +130,17 @@
         <value>lun</value>
       </enum>
       <enum name='bus'>
+        <value>ide</value>
         <value>fdc</value>
         <value>scsi</value>
         <value>virtio</value>
         <value>usb</value>
         <value>sata</value>
+      </enum>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
       </enum>
     </disk>
     <graphics supported='yes'>
@@ -99,6 +148,7 @@
         <value>sdl</value>
         <value>vnc</value>
         <value>spice</value>
+        <value>egl-headless</value>
       </enum>
     </graphics>
     <video supported='yes'>
@@ -108,6 +158,9 @@
         <value>vmvga</value>
         <value>qxl</value>
         <value>virtio</value>
+        <value>none</value>
+        <value>bochs</value>
+        <value>ramfb</value>
       </enum>
     </video>
     <hostdev supported='yes'>
@@ -131,14 +184,47 @@
         <value>vfio</value>
       </enum>
     </hostdev>
+    <rng supported='yes'>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>random</value>
+        <value>egd</value>
+        <value>builtin</value>
+      </enum>
+    </rng>
+    <filesystem supported='yes'>
+      <enum name='driverType'>
+        <value>path</value>
+        <value>handle</value>
+        <value>virtiofs</value>
+      </enum>
+    </filesystem>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-tis</value>
+        <value>tpm-crb</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>passthrough</value>
+        <value>emulator</value>
+      </enum>
+    </tpm>
   </devices>
   <features>
     <gic supported='no'/>
     <vmcoreinfo supported='yes'/>
     <genid supported='yes'/>
+    <backingStoreInput supported='yes'/>
+    <backup supported='yes'/>
     <sev supported='yes'>
-      <cbitpos>47</cbitpos>
+      <cbitpos>51</cbitpos>
       <reducedPhysBits>1</reducedPhysBits>
+      <maxGuests>502</maxGuests>
+      <maxESGuests>7</maxESGuests>
     </sev>
   </features>
 </domainCapabilities>
