@@ -552,7 +552,15 @@ def autocomplete(parser):
     kwargs = {"validator": _completer_validator}
     if xmlutil.in_testsuite():
         import io
-        kwargs["output_stream"] = io.BytesIO()
+        class MyStream(io.StringIO):
+            # Custom class to handle both bytes() and str() on write.
+            # With argcomplete 2.0.0 and/or python3.10 something changed
+            # here, so this should hopefully cover back compat
+            def write(self, msg, *args, **kwargs):
+                if type(msg) is bytes:
+                    msg = msg.decode("utf-8")  # pragma: no cover
+                return super().write(msg, *args, **kwargs)
+        kwargs["output_stream"] = MyStream()
         kwargs["exit_method"] = sys.exit
 
     # This fdopen hackery is to avoid argcomplete debug_stream behavior
@@ -568,7 +576,7 @@ def autocomplete(parser):
             argcomplete.autocomplete(parser, **kwargs)
         except SystemExit:
             if xmlutil.in_testsuite():
-                output = kwargs["output_stream"].getvalue().decode("utf-8")
+                output = kwargs["output_stream"].getvalue()
                 print(output)
             raise
 
