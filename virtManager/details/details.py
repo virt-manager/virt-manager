@@ -209,8 +209,10 @@ def _label_for_device(dev, disk_bus_index):
     if devtype == "channel":
         pretty_type = vmmAddHardware.char_pretty_type(dev.type)
         name = vmmAddHardware.char_pretty_channel_name(dev.target_name)
-        if name:
-            return _("Channel %(type)s (%(name)s)") % {"type": pretty_type, "name": name}
+        # Don't print channel name with qemu-vdagent, to avoid ambiguity
+        # with the typical spice agent channel
+        if name and dev.type != "qemu-vdagent":
+            return _("Channel (%(name)s)") % {"type": pretty_type, "name": name}
         return _("Channel %(type)s") % {"type": pretty_type}
 
     if devtype == "graphics":
