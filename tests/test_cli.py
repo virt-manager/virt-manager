@@ -117,6 +117,11 @@ def no_osinfo_unattended_win_drivers_cb():
         return "osinfo is too old for this win7 unattended test"
 
 
+def no_osinfo_linux2020_virtio():
+    linux2020 = OSDB.lookup_os("linux2020")
+    return not linux2020 or not linux2020.supports_virtiogpu()
+
+
 ######################
 # Test class helpers #
 ######################
@@ -1080,7 +1085,7 @@ c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
-c.add_compare("--osinfo linux2020 --pxe", "linux2020", prerun_check=lambda: not OSDB.lookup_os("linux2020"))
+c.add_compare("--osinfo linux2020 --pxe", "linux2020", prerun_check=no_osinfo_linux2020_virtio)
 c.add_compare("--osinfo generic --disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
 c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_xorriso)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
