@@ -442,7 +442,7 @@ class _OsVariant(object):
     def _get_firmware_list(self):
         if hasattr(self._os, "get_complete_firmware_list"):  # pragma: no cover
             return self._os.get_complete_firmware_list().get_elements()
-        return []
+        return []  # pragma: no cover
 
     def _supports_firmware_type(self, name, arch, default):
         firmwares = self._get_firmware_list()
