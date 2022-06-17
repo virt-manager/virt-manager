@@ -1,12 +1,16 @@
 <domainCapabilities>
-  <path>/usr/libexec/qemu-kvm</path>
-  <domain>kvm</domain>
-  <machine>virt</machine>
+  <path>/usr/bin/qemu-system-arm</path>
+  <domain>qemu</domain>
+  <machine>virt-6.2</machine>
   <arch>armv7l</arch>
-  <vcpu max='255'/>
+  <vcpu max='512'/>
+  <iothreads supported='yes'/>
   <os supported='yes'>
+    <enum name='firmware'>
+      <value>efi</value>
+    </enum>
     <loader supported='yes'>
-      <value>/usr/share/edk2/arm/QEMU_EFI.fd</value>
+      <value>/usr/share/edk2/arm/QEMU_EFI-pflash.raw</value>
       <enum name='type'>
         <value>rom</value>
         <value>pflash</value>
@@ -15,8 +19,65 @@
         <value>yes</value>
         <value>no</value>
       </enum>
+      <enum name='secure'>
+        <value>no</value>
+      </enum>
     </loader>
   </os>
+  <cpu>
+    <mode name='host-passthrough' supported='no'/>
+    <mode name='maximum' supported='yes'>
+      <enum name='maximumMigratable'>
+        <value>on</value>
+        <value>off</value>
+      </enum>
+    </mode>
+    <mode name='host-model' supported='no'/>
+    <mode name='custom' supported='yes'>
+      <model usable='unknown'>pxa270-c0</model>
+      <model usable='unknown'>cortex-a15</model>
+      <model usable='unknown'>pxa270-b0</model>
+      <model usable='unknown'>cortex-m4</model>
+      <model usable='unknown'>pxa270-a0</model>
+      <model usable='unknown'>arm1176</model>
+      <model usable='unknown'>pxa270-b1</model>
+      <model usable='unknown'>cortex-a7</model>
+      <model usable='unknown'>pxa270-a1</model>
+      <model usable='unknown'>cortex-a8</model>
+      <model usable='unknown'>cortex-r5</model>
+      <model usable='unknown'>ti925t</model>
+      <model usable='unknown'>cortex-r5f</model>
+      <model usable='unknown'>arm1026</model>
+      <model usable='unknown'>cortex-a9</model>
+      <model usable='unknown'>cortex-m7</model>
+      <model usable='unknown'>pxa270</model>
+      <model usable='unknown'>pxa260</model>
+      <model usable='unknown'>pxa250</model>
+      <model usable='unknown'>pxa270-c5</model>
+      <model usable='unknown'>pxa261</model>
+      <model usable='unknown'>pxa262</model>
+      <model usable='unknown'>sa1110</model>
+      <model usable='unknown'>sa1100</model>
+      <model usable='unknown'>max</model>
+      <model usable='unknown'>cortex-m0</model>
+      <model usable='unknown'>cortex-m33</model>
+      <model usable='unknown'>arm946</model>
+      <model usable='unknown'>pxa255</model>
+      <model usable='unknown'>arm11mpcore</model>
+      <model usable='unknown'>cortex-m55</model>
+      <model usable='unknown'>arm926</model>
+      <model usable='unknown'>arm1136</model>
+      <model usable='unknown'>arm1136-r2</model>
+      <model usable='unknown'>cortex-m3</model>
+    </mode>
+  </cpu>
+  <memoryBacking supported='yes'>
+    <enum name='sourceType'>
+      <value>file</value>
+      <value>anonymous</value>
+      <value>memfd</value>
+    </enum>
+  </memoryBacking>
   <devices>
     <disk supported='yes'>
       <enum name='diskDevice'>
@@ -26,22 +87,36 @@
         <value>lun</value>
       </enum>
       <enum name='bus'>
-        <value>ide</value>
         <value>fdc</value>
         <value>scsi</value>
         <value>virtio</value>
+        <value>usb</value>
+        <value>sata</value>
+      </enum>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
       </enum>
     </disk>
     <graphics supported='yes'>
       <enum name='type'>
         <value>sdl</value>
         <value>vnc</value>
+        <value>spice</value>
+        <value>egl-headless</value>
       </enum>
     </graphics>
     <video supported='yes'>
       <enum name='modelType'>
+        <value>vga</value>
+        <value>cirrus</value>
+        <value>vmvga</value>
         <value>qxl</value>
         <value>virtio</value>
+        <value>none</value>
+        <value>bochs</value>
+        <value>ramfb</value>
       </enum>
     </video>
     <hostdev supported='yes'>
@@ -62,13 +137,47 @@
       <enum name='capsType'/>
       <enum name='pciBackend'/>
     </hostdev>
+    <rng supported='yes'>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>random</value>
+        <value>egd</value>
+        <value>builtin</value>
+      </enum>
+    </rng>
+    <filesystem supported='yes'>
+      <enum name='driverType'>
+        <value>path</value>
+        <value>handle</value>
+        <value>virtiofs</value>
+      </enum>
+    </filesystem>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-tis</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>passthrough</value>
+        <value>emulator</value>
+      </enum>
+    </tpm>
   </devices>
   <features>
     <gic supported='yes'>
       <enum name='version'>
         <value>2</value>
+        <value>3</value>
       </enum>
     </gic>
+    <vmcoreinfo supported='yes'/>
+    <genid supported='no'/>
+    <backingStoreInput supported='yes'/>
+    <backup supported='yes'/>
+    <sev supported='no'/>
   </features>
 </domainCapabilities>
 

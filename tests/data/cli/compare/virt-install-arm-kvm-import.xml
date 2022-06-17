@@ -9,9 +9,8 @@
   <memory>65536</memory>
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
-  <os>
+  <os firmware="efi">
     <type arch="armv7l" machine="virt">hvm</type>
-    <loader readonly="yes" type="pflash">/usr/share/edk2/arm/QEMU_EFI.fd</loader>
     <boot dev="hd"/>
   </os>
   <cpu mode="host-passthrough"/>

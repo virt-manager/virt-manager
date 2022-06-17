@@ -422,6 +422,14 @@ class DomainCapabilities(XMLBuilder):
         """
         models = self.devices.tpm.get_enum("model").get_values()
         backends = self.devices.tpm.get_enum("backendModel").get_values()
+
+        if self.arch == "armv7l" and models == ["tpm-tis"]:
+            # libvirt as of 8.4.0 can advertise armv7l tpm-tis support,
+            # but then explicitly rejects that config. If we see it,
+            # assume TPM is not supported
+            # https://gitlab.com/libvirt/libvirt/-/issues/329
+            return False
+
         return len(models) > 0 and bool("emulator" in backends)
 
     def supports_graphics_spice(self):
