@@ -48,10 +48,8 @@ class _StorageObject(XMLBuilder):
 
 
 def _preferred_default_pool_path(conn):
-    path = "/var/lib/libvirt/images"
-    if conn.is_unprivileged():
-        path = os.path.expanduser("~/.local/share/libvirt/images")
-    return path
+    root = conn.get_libvirt_data_root_dir()
+    return os.path.join(root, "images")
 
 
 def _lookup_poolxml_by_path(conn, path):

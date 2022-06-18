@@ -162,6 +162,12 @@ class VirtinstConnection(object):
             self._uri = self._libvirtconn.getURI()
             self._uriobj = URI(self._uri)
 
+    def get_libvirt_data_root_dir(self):
+        if self.is_privileged():
+            return "/var/lib/libvirt"
+        return os.environ.get("XDG_DATA_HOME",
+                              os.path.expanduser("~/.local/share/libvirt"))
+
 
     ####################
     # Polling routines #
