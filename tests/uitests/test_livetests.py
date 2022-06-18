@@ -38,7 +38,7 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 except Exception:
                     pass
                 try:
-                    dom.undefine()
+                    dom.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
                     dom.destroy()
                 except Exception:
                     pass
@@ -499,3 +499,45 @@ def testLiveHotplug(app, dom):
             pool.undefine()
         except Exception:
             log.debug("Error cleaning up pool", exc_info=True)
+
+
+@_vm_wrapper("uitests-firmware-efi")
+def testFirmwareRename(app, dom):
+    from virtinst import cli, DeviceDisk
+    win = app.topwin
+    dom.destroy()
+
+    # First we refresh the 'nvram' pool, so we can reliably
+    # check if nvram files are created/deleted as expected
+    conn = cli.getConnection(app.conn.getURI())
+    origname = dom.name()
+    nvramdir = conn.get_libvirt_data_root_dir() + "/qemu/nvram"
+
+    fakedisk = DeviceDisk(conn)
+    fakedisk.set_source_path(nvramdir + "/FAKE-UITEST-FILE")
+    nvram_pool = fakedisk.get_parent_pool()
+    nvram_pool.refresh()
+
+    origpath = "%s/%s_VARS.fd" % (nvramdir, origname)
+    newname = "uitests-firmware-efi-renamed"
+    newpath = "%s/%s_VARS.fd" % (nvramdir, newname)
+    assert DeviceDisk.path_definitely_exists(app.conn, origpath)
+    assert not DeviceDisk.path_definitely_exists(app.conn, newpath)
+
+    # Now do the actual UI clickage
+    win.find("Details", "radio button").click()
+    win.find("Hypervisor Details", "label")
+    win.find("Overview", "table cell").click()
+
+    newname = "uitests-firmware-efi-renamed"
+    win.find("Name:", "text").set_text(newname)
+    appl = win.find("config-apply")
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+
+    # Confirm window was updated
+    app.find_window("%s on" % newname)
+
+    # Confirm nvram paths were altered as expected
+    assert not DeviceDisk.path_definitely_exists(app.conn, origpath)
+    assert DeviceDisk.path_definitely_exists(app.conn, newpath)

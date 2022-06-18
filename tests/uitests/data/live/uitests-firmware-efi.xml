@@ -1,0 +1,14 @@
+<domain type="kvm">
+  <name>uitests-firmware-efi</name>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os firmware='efi'>
+    <type arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+</domain>
+

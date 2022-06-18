@@ -433,10 +433,8 @@ class vmmDomain(vmmLibvirtObject):
         return False
 
     def has_nvram(self):
-        return bool(self.get_xmlobj().os.firmware == 'efi' or
-                    (self.get_xmlobj().os.loader_ro is True and
-                     self.get_xmlobj().os.loader_type == "pflash" and
-                     self.get_xmlobj().os.nvram))
+        return bool(self.get_xmlobj().is_uefi() or
+                    self.get_xmlobj().os.nvram)
 
     def is_persistent(self):
         return bool(self._backend.isPersistent())
@@ -540,9 +538,32 @@ class vmmDomain(vmmLibvirtObject):
         We need to do this copy magic because there is no Libvirt storage API
         to rename storage volume.
         """
+        if not self.has_nvram():
+            return None, None
+
+        old_nvram_path = self.get_xmlobj().os.nvram
+        if not old_nvram_path:
+            # Probably using firmware=efi which doesn't put nvram
+            # path in the XML. Build the implied path
+            old_nvram_path = os.path.join(
+                self.conn.get_backend().get_libvirt_data_root_dir(),
+                self.conn.get_backend().get_uri_driver(),
+                "nvram", "%s_VARS.fd" % self.get_name())
+            log.debug("Guest is expected to use <nvram> but we didn't "
+                      "find one in the XML. Generated implied path=%s",
+                      old_nvram_path)
+
+        if not DeviceDisk.path_definitely_exists(
+                self.conn.get_backend(),
+                old_nvram_path):  # pragma: no cover
+            log.debug("old_nvram_path=%s but it doesn't appear to exist. "
+                      "skipping rename nvram duplication", old_nvram_path)
+            return None, None
+
+
         from virtinst import Cloner
         old_nvram = DeviceDisk(self.conn.get_backend())
-        old_nvram.set_source_path(self.get_xmlobj().os.nvram)
+        old_nvram.set_source_path(old_nvram_path)
 
         nvram_dir = os.path.dirname(old_nvram.get_source_path())
         new_nvram_path = os.path.join(nvram_dir,
@@ -564,10 +585,7 @@ class vmmDomain(vmmLibvirtObject):
             return
         Guest.validate_name(self.conn.get_backend(), str(new_name))
 
-        new_nvram = None
-        old_nvram = None
-        if self.has_nvram():
-            new_nvram, old_nvram = self._copy_nvram_file(new_name)
+        new_nvram, old_nvram = self._copy_nvram_file(new_name)
 
         try:
             self.define_name(new_name)
