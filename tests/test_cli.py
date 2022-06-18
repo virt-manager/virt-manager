@@ -119,7 +119,8 @@ def no_osinfo_unattended_win_drivers_cb():
 
 def no_osinfo_linux2020_virtio():
     linux2020 = OSDB.lookup_os("linux2020")
-    return not linux2020 or not linux2020.supports_virtiogpu()
+    if not linux2020 or not linux2020.supports_virtiogpu():
+        return "osinfo is too old: missing linux2020 with virtio-gpu"
 
 
 ######################
