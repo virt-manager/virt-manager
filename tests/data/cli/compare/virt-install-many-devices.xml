@@ -602,7 +602,7 @@
       <certificate>/path/to/fake/cert2</certificate>
     </smartcard>
     <serial type="tcp">
-      <source mode="bind" host="127.0.0.1" service="2222"/>
+      <source mode="bind" host="127.0.0.1" service="2222" tls="yes"/>
       <protocol type="telnet"/>
       <log file="/tmp/foo.log" append="on"/>
       <target>

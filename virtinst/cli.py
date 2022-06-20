@@ -3408,6 +3408,7 @@ def _add_char_source_args(cls, prefix=""):
     _add_arg("source.clipboard.copypaste", "source.clipboard_copypaste", is_onoff=True)
     _add_arg("source.mouse.mode", "source.mouse_mode")
     _add_arg("source.channel", "source.channel")
+    _add_arg("source.tls", "source.tls", is_onoff=True)
 
 
 ##################

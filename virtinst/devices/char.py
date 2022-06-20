@@ -44,6 +44,7 @@ class CharSource(XMLBuilder):
     master = XMLProperty("./@master")
     slave = XMLProperty("./@slave")
     mode = XMLProperty("./@mode")
+    tls = XMLProperty("./@tls", is_yesno=True)
 
     # for qemu-vdagent channel
     clipboard_copypaste = XMLProperty("./clipboard/@copypaste", is_yesno=True)
