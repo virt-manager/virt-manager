@@ -663,6 +663,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --serial char_type=tcp,host=:2222,mode=bind,protocol=telnet,log.file=/tmp/foo.log,log.append=yes,,target.model.name=pci-serial
 --serial nmdm,source.master=/dev/foo1,source.slave=/dev/foo2,alias.name=testalias7
+--serial spiceport,source.channel=org.qemu.console.serial.0
 
 
 --parallel type=udp,host=0.0.0.0:1234,bind_host=127.0.0.1:1234
@@ -741,7 +742,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 
 --rng /dev/random
---rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=,backend.source.clipboard.copypaste=,backend.source.mouse.mode=
+--rng device=/dev/urandom,backend.protocol.type=,backend.log.file=,backend.log.append=,backend.source.clipboard.copypaste=,backend.source.mouse.mode=,backend.source.channel=
 --rng type=egd,backend.type=nmdm,backend.source.master=/dev/foo1,backend.source.slave=/dev/foo2
 --rng egd,backend_host=127.0.0.1,backend_service=8000,backend_type=udp,backend_mode=bind,backend_connect_host=foo,backend_connect_service=708,rate.bytes=1234,rate.period=1000,model=virtio
 
