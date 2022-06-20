@@ -34,5 +34,6 @@ class DomainMemoryBacking(XMLBuilder):
     access_mode = XMLProperty("./access/@mode")
     source_type = XMLProperty("./source/@type")
     allocation_mode = XMLProperty("./allocation/@mode")
+    allocation_threads = XMLProperty("./allocation/@threads", is_int=True)
 
     pages = XMLChildProperty(_HugepagesPage, relative_xpath="./hugepages")

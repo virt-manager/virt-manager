@@ -543,7 +543,7 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --blkiotune weight=100,device_path=/home/test/1.img,device_weight=200,read_bytes_sec=10000,write_bytes_sec=10000,read_iops_sec=20000,write_iops_sec=20000
 
 
---memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2
+--memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2,allocation.threads=8
 
 
 --iothreads iothreads=5,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2

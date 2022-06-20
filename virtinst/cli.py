@@ -2230,6 +2230,7 @@ class ParserMemoryBacking(VirtCLIParser):
         cls.add_arg("source.type", "source_type")
         cls.add_arg("discard", "discard", is_onoff=True)
         cls.add_arg("allocation.mode", "allocation_mode")
+        cls.add_arg("allocation.threads", "allocation_threads")
 
 
 #################
