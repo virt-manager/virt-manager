@@ -104,8 +104,9 @@ class VirtinstConnection(object):
 
     def _get_caps(self):
         if not self._caps:
-            self._caps = Capabilities(self,
-                self._libvirtconn.getCapabilities())
+            capsxml = self._libvirtconn.getCapabilities()
+            self._caps = Capabilities(self, capsxml)
+            log.debug("Fetched capabilities for %s: %s", self._uri, capsxml)
         return self._caps
     caps = property(_get_caps)
 
