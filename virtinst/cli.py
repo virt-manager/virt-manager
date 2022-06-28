@@ -214,10 +214,21 @@ def getConnection(uri, conn=None):
         # preopened connection passed in via test suite
         return conn
 
+    def format_version(num):
+        log.debug(num)
+        maj = int(num / 1000000)
+        min = int(num / 1000) % 1000
+        mic = num % 1000
+        return "%s.%s.%s" % (maj, min, mic)
+
     log.debug("Requesting libvirt URI %s", (uri or "default"))
     conn = VirtinstConnection(uri)
     conn.open(_openauth_cb, None)
-    log.debug("Received libvirt URI %s", conn.uri)
+    log.debug("Received libvirt URI %s versions library=%s driver=%s hypervisor=%s",
+              conn.uri,
+              format_version(libvirt.getVersion()),
+              format_version(conn.getLibVersion()),
+              format_version(conn.getVersion()))
 
     return conn
 
