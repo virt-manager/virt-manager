@@ -241,6 +241,8 @@ class DomainCapabilities(XMLBuilder):
             try:
                 xml = conn.getDomainCapabilities(emulator, arch,
                     machine, hvtype)
+                log.debug("Fetched domain capabilities for (%s,%s,%s,%s): %s",
+                          emulator, arch, machine, hvtype, xml)
             except Exception:  # pragma: no cover
                 log.debug("Error fetching domcapabilities XML",
                     exc_info=True)
