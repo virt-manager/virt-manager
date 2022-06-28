@@ -201,7 +201,8 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
     sys.excepthook = exception_log
 
     # Log the app command string
-    log.debug("Launched with command line: %s", " ".join(sys.argv))
+    log.debug("Version %s launched with command line: %s",
+              BuildConfig.version, " ".join(sys.argv))
 
 
 ##############################
