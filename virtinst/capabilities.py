@@ -129,6 +129,19 @@ class _CapsGuest(XMLBuilder):
                 ret.append(m.canonical)
         return ret
 
+    def is_machine_alias(self, domain, src, tgt):
+        """
+        Determine if machine @src is an alias for machine @tgt
+        """
+        mobjs = (domain and domain.machines) or self.machines
+        for m in mobjs:
+            log.debug("Check %s == %s %s == %s", m.name, src, m.canonical, tgt)
+            if m.name == src and m.canonical == tgt:
+                log.debug("ok")
+                return True
+        log.debug("not ok")
+        return False
+
     def is_kvm_available(self):
         """
         Return True if kvm guests can be installed
@@ -178,6 +191,9 @@ class _CapsInfo(object):
 
         self.emulator = self.domain.emulator or self.guest.emulator
         self.machines = self.guest.all_machine_names(self.domain)
+
+    def is_machine_alias(self, src, tgt):
+        return self.guest.is_machine_alias(self.domain, src, tgt)
 
 
 class Capabilities(XMLBuilder):

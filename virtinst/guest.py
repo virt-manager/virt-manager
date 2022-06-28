@@ -618,13 +618,21 @@ class Guest(XMLBuilder):
         return True
 
     def lookup_domcaps(self):
+        def _compare_machine(domcaps):
+            capsinfo = self.lookup_capsinfo()
+            if self.os.machine == domcaps.machine:
+                return True
+            if capsinfo.is_machine_alias(self.os.machine, domcaps.machine):
+                return True
+            return False
+
         # We need to regenerate domcaps cache if any of these values change
         def _compare(domcaps):  # pragma: no cover
             if self.type == "test":
                 # Test driver doesn't support domcaps. We kinda fake it in
                 # some cases, but it screws up the checking here for parsed XML
                 return True
-            if self.os.machine and self.os.machine != domcaps.machine:
+            if self.os.machine and not _compare_machine(domcaps):
                 return False
             if self.type and self.type != domcaps.domain:
                 return False
