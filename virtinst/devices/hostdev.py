@@ -25,6 +25,7 @@ class DeviceHostdev(Device):
             self.bus = nodedev.bus
             self.slot = nodedev.slot
             self.function = nodedev.function
+            # self.rom_bar = False
 
         elif nodedev.device_type == NodeDevice.CAPABILITY_TYPE_USBDEV:
             self.type = "usb"
@@ -112,6 +113,7 @@ class DeviceHostdev(Device):
 
     driver_name = XMLProperty("./driver/@name")
     rom_bar = XMLProperty("./rom/@bar", is_onoff=True)
+    rom_bar_source = XMLProperty("./rom/@file")
 
     # type=scsi handling
     scsi_adapter = XMLProperty("./source/adapter/@name")

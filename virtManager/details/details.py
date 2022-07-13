@@ -84,7 +84,8 @@ from ..delete import vmmDeleteStorage
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 38)
+ EDIT_HOSTDEV_ROMBAR,
+ EDIT_HOSTDEV_ROMBAR_SOURCE) = range(1, 39)
 
 
 # Columns in hw list model
@@ -476,6 +477,8 @@ class vmmDetails(vmmGObjectUI):
             "on_smartcard_mode_combo_changed": _e(EDIT_SMARTCARD_MODE),
 
             "on_hostdev_rombar_toggled": _e(EDIT_HOSTDEV_ROMBAR),
+            "on_import_rombar_clicked": self._import_hostdev,
+            "on_romfile_clicked": self._enable_romfile,
             "on_controller_model_combo_changed": _e(EDIT_CONTROLLER_MODEL),
 
             "on_config_apply_clicked": self._config_apply_clicked_cb,
@@ -1649,9 +1652,35 @@ class vmmDetails(vmmGObjectUI):
 
         if self._edited(EDIT_HOSTDEV_ROMBAR):
             kwargs["rom_bar"] = self.widget("hostdev-rombar").get_active()
+            if not self.widget("hostdev-rombar").get_active():
+                kwargs["rom_bar_source"] = None
+
+        if self._edited(EDIT_HOSTDEV_ROMBAR_SOURCE):
+            kwargs["rom_bar_source"] = self.widget("rom-file").get_text()
+            if not self.widget("enable-romfile").get_active():
+                kwargs["rom_bar_source"] = None
 
         return self._change_config(
                 self.vm.define_hostdev, kwargs, devobj=devobj)
+
+    def _enable_romfile(self, src):
+
+        self.widget("rom-file").set_sensitive(src.get_active())
+        self.widget("import-rombar").set_sensitive(src.get_active())
+        self._enable_apply(EDIT_HOSTDEV_ROMBAR_SOURCE)
+
+    def _import_hostdev(self, src):
+
+        # This is used to open a filechooser dialog if "import rombar" button is clicked
+        # and add the selected rom path to the gtkentry
+
+        path = self.err.browse_local(self.conn, _type="bin rom",
+                              dialog_type=Gtk.FileChooserAction.OPEN, browse_reason=None,
+                              dialog_name="choose rombar", choose_button=Gtk.STOCK_OPEN)
+
+        self._enable_apply(EDIT_HOSTDEV_ROMBAR_SOURCE)
+
+        self.widget("rom-file").set_text(path or "")
 
     def _apply_tpm(self, devobj):
         kwargs = {}
@@ -1753,6 +1782,17 @@ class vmmDetails(vmmGObjectUI):
         self.widget("hw-panel").set_current_page(pagetype)
 
     def _refresh_overview_page(self):
+
+        '''this if statement is used when a vm is selected, checks if iommu is disabled
+        and if it is it automatically remove pci devices to the vm configuration '''
+
+        if all(i.xmlobj.iommugroup is None for i in self.conn.filter_nodedevs("pci")):
+            for i in self.vm.xmlobj.devices.hostdev:
+                if i.type == "pci":
+                    vmmDeleteStorage.remove_devobj_internal(
+                        self.vm, self.err, i
+                    )
+
         # Basic details
         self.widget("overview-name").set_text(self.vm.get_name())
         self.widget("overview-uuid").set_text(self.vm.get_uuid())
@@ -2163,6 +2203,20 @@ class vmmDetails(vmmGObjectUI):
         if rom_bar is None:
             rom_bar = True
 
+        rom_bar_source = hostdev.rom_bar_source
+        if rom_bar_source is None:
+            rom_bar_source = ""
+
+        if hostdev.rom_bar_source:
+            self.widget("enable-romfile").set_active(True)
+        else:
+            self.widget("import-rombar").set_sensitive(False)
+            self.widget("rom-file").set_sensitive(False)
+
+        if self.widget("enable-romfile").get_active():
+            self.widget("import-rombar").set_sensitive(True)
+            self.widget("rom-file").set_sensitive(True)
+
         devtype = hostdev.type
         if hostdev.type == 'usb':
             devtype = 'usb_device'
@@ -2181,10 +2235,14 @@ class vmmDetails(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("hostdev-rombar"), hostdev.type == "pci")
 
+        uiutil.set_grid_row_visible(
+            self.widget("rom-file"), rom_bar)
+
         devlabel = "<b>" + _("Physical %s Device") % hostdev.type.upper() + "</b>"
         self.widget("hostdev-title").set_markup(devlabel)
         self.widget("hostdev-source").set_text(pretty_name)
         self.widget("hostdev-rombar").set_active(rom_bar)
+        self.widget("rom-file").set_text(rom_bar_source)
 
     def _refresh_video_page(self, vid):
         model = vid.model

@@ -122,6 +122,8 @@ class NodeDevice(XMLBuilder):
         return self._capability_type == "virt_functions"
     def is_pci_bridge(self):
         return self._capability_type == "pci-bridge"
+    def is_cardbus_bridge(self):
+        return self._capability_type == "cardbus-bridge"
 
     def is_usb_linux_root_hub(self):
         return (self.vendor_id == "0x1d6b" and
@@ -146,6 +148,7 @@ class NodeDevice(XMLBuilder):
     product_name = XMLProperty("./capability/product")
     vendor_name = XMLProperty("./capability/vendor")
     _capability_type = XMLProperty("./capability/capability/@type")
+    iommugroup = XMLProperty("./capability/iommuGroup/@number")
 
     # type='usb' options
     device = XMLProperty("./capability/device")
