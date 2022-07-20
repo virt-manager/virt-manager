@@ -358,6 +358,7 @@ class DomainCpu(XMLBuilder):
 
     def set_model(self, guest, val):
         log.debug("setting cpu model %s", val)
+        self.migratable = None
         if val:
             self.mode = "custom"
             if not self.match:
