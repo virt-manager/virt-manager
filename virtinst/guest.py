@@ -627,7 +627,7 @@ class Guest(XMLBuilder):
             return False
 
         # We need to regenerate domcaps cache if any of these values change
-        def _compare(domcaps):  # pragma: no cover
+        def _compare(domcaps):
             if self.type == "test":
                 # Test driver doesn't support domcaps. We kinda fake it in
                 # some cases, but it screws up the checking here for parsed XML
@@ -637,7 +637,7 @@ class Guest(XMLBuilder):
             if self.type and self.type != domcaps.domain:
                 return False
             if self.os.arch and self.os.arch != domcaps.arch:
-                return False
+                return False  # pragma: no cover
             if self.emulator and self.emulator != domcaps.path:
                 return False
             return True
