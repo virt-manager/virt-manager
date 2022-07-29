@@ -545,7 +545,7 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2,allocation.threads=8
 
 
---iothreads iothreads=5,iothreadids.iothread1.id=1,iothreadids.iothread2.id=2
+--iothreads iothreads=5,iothreadids.iothread0.id=1,iothreadids.iothread1.id=2,iothreadids.iothread1.thread_pool_min=8,iothreadids.iothread1.thread_pool_max=16
 
 
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6,genid_enable=yes

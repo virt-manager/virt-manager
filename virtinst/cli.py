@@ -2614,7 +2614,11 @@ class ParserIOThreads(VirtCLIParser):
         # Options for IOThreads config
         cls.add_arg("iothreads", "iothreads")
         cls.add_arg("iothreadids.iothread[0-9]*.id", "id",
-                find_inst_cb=cls.iothreads_find_inst_cb)
+                    find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.thread_pool_min",
+                    "thread_pool_min", find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.thread_pool_max",
+                    "thread_pool_max", find_inst_cb=cls.iothreads_find_inst_cb)
 
 
 ###################

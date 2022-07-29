@@ -67,9 +67,11 @@ class _DomainDevices(XMLBuilder):
 
 class _IOThreadID(XMLBuilder):
     XML_NAME = "iothread"
-    _XML_PROP_ORDER = ["id"]
+    _XML_PROP_ORDER = ["id", "thread_pool_min", "thread_pool_max"]
 
     id = XMLProperty("./@id", is_int=True)
+    thread_pool_min = XMLProperty("./@thread_pool_min", is_int=True)
+    thread_pool_max = XMLProperty("./@thread_pool_max", is_int=True)
 
 
 class Guest(XMLBuilder):
