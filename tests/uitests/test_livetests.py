@@ -38,7 +38,10 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 except Exception:
                     pass
                 try:
-                    dom.undefineFlags(libvirt.VIR_DOMAIN_UNDEFINE_NVRAM)
+                    flags = 0
+                    if "qemu" in uri:
+                        flags = libvirt.VIR_DOMAIN_UNDEFINE_NVRAM
+                    dom.undefineFlags(flags)
                     dom.destroy()
                 except Exception:
                     pass
