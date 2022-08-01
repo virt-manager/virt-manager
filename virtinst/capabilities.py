@@ -135,11 +135,8 @@ class _CapsGuest(XMLBuilder):
         """
         mobjs = (domain and domain.machines) or self.machines
         for m in mobjs:
-            log.debug("Check %s == %s %s == %s", m.name, src, m.canonical, tgt)
             if m.name == src and m.canonical == tgt:
-                log.debug("ok")
                 return True
-        log.debug("not ok")
         return False
 
     def is_kvm_available(self):
