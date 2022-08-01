@@ -958,7 +958,6 @@ c.add_invalid("--boot uefi", grep="Libvirt version does not support UEFI")  # UR
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
 c.add_invalid("--xml /@foo=bar", grep="/@foo xmlXPathEval")  # failure processing xpath
-c.add_invalid("--memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.node=0,target.label_size=1,alias.name=mymemdev3,uuid=11111111-2222-aaaa-bbbb-ccccddddeeee", grep="UUID is not supported", prerun_check="7.5.0")  # hit a specific libvirt code path that proves --memdev uuid=XXX works
 
 
 
@@ -1340,6 +1339,7 @@ c.add_compare("--build-xml --cpu pentium3,+x2apic", "build-cpu")
 c.add_compare("--build-xml --tpm path=/dev/tpm", "build-tpm")
 c.add_compare("--build-xml --blkiotune weight=100,device0.path=/dev/sdf,device.weight=200,device0.read_bytes_sec=10000,device0.write_bytes_sec=10000,device0.read_iops_sec=20000,device0.write_iops_sec=20000", "build-blkiotune")
 c.add_compare("--build-xml --idmap clearxml=no,uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10", "build-idmap")
+c.add_compare("--build-xml --memdev nvdimm,source.path=/path/to/nvdimm,target.size=2,target.node=0,target.label_size=1,alias.name=mymemdev3,uuid=11111111-2222-aaaa-bbbb-ccccddddeeee", "build-memdev")  # --memdev uuid= is tough to test with libvirt's validation, so we test it here with XML building
 c.add_compare("--connect %(URI-KVM-X86)s --build-xml --disk %(EXISTIMG1)s", "build-disk-plain")
 c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk %(EXISTIMG1)s", "build-disk-domain")
 c.add_compare("--build-xml --sound hda,audio.id=2", "build-sound")
