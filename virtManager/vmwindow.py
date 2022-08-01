@@ -56,6 +56,7 @@ class vmmVMWindow(vmmGObjectUI):
             self.is_customize_dialog = True
             self.topwin.set_type_hint(Gdk.WindowTypeHint.DIALOG)
             self.topwin.set_transient_for(parent)
+            self.topwin.set_deletable(False)
 
             self.widget("toolbar-box").show()
             self.widget("customize-toolbar").show()
