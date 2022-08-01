@@ -114,6 +114,23 @@ class VirtinstConnection(object):
         return self._libvirtconn
 
 
+    ###################
+    # Private helpers #
+    ###################
+
+    def _log_versions(self):
+        def format_version(num):
+            major = int(num / 1000000)
+            minor = int(num / 1000) % 1000
+            micro = num % 1000
+            return "%s.%s.%s" % (major, minor, micro)
+
+        log.debug("libvirt URI versions library=%s driver=%s hypervisor=%s",
+                  format_version(self.local_libvirt_version()),
+                  format_version(self.daemon_version()),
+                  format_version(self.conn_version()))
+
+
     ##############
     # Public API #
     ##############
@@ -162,6 +179,9 @@ class VirtinstConnection(object):
         if not self._open_uri:
             self._uri = self._libvirtconn.getURI()
             self._uriobj = URI(self._uri)
+
+        self._log_versions()
+        self._get_caps()  # cache and log capabilities
 
     def get_libvirt_data_root_dir(self):
         if self.is_privileged():
