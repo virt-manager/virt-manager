@@ -2608,6 +2608,12 @@ class ParserIOThreads(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def defaultiothread_find_inst_cb(self, *args, **kwargs):
+        cliarg = "defaultiothread"
+        list_propname = "defaultiothread"
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
     @classmethod
     def _virtcli_class_init(cls):
         VirtCLIParser._virtcli_class_init_common(cls)
@@ -2619,6 +2625,10 @@ class ParserIOThreads(VirtCLIParser):
                     "thread_pool_min", find_inst_cb=cls.iothreads_find_inst_cb)
         cls.add_arg("iothreadids.iothread[0-9]*.thread_pool_max",
                     "thread_pool_max", find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("defaultiothread.thread_pool_min", "thread_pool_min",
+                    find_inst_cb=cls.defaultiothread_find_inst_cb)
+        cls.add_arg("defaultiothread.thread_pool_max", "thread_pool_max",
+                    find_inst_cb=cls.defaultiothread_find_inst_cb)
 
 
 ###################

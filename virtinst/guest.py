@@ -74,6 +74,13 @@ class _IOThreadID(XMLBuilder):
     thread_pool_max = XMLProperty("./@thread_pool_max", is_int=True)
 
 
+class _DefaultIOThread(XMLBuilder):
+    XML_NAME = "defaultiothread"
+
+    thread_pool_min = XMLProperty("./@thread_pool_min", is_int=True)
+    thread_pool_max = XMLProperty("./@thread_pool_max", is_int=True)
+
+
 class Guest(XMLBuilder):
     @staticmethod
     def validate_name(conn, name, check_collision=True, validate=True):
@@ -180,7 +187,8 @@ class Guest(XMLBuilder):
     XML_NAME = "domain"
     _XML_PROP_ORDER = [
         "type", "name", "uuid", "genid", "genid_enable",
-        "title", "description", "_metadata", "iothreads", "iothreadids",
+        "title", "description", "_metadata",
+        "iothreads", "iothreadids", "defaultiothread",
         "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
         "blkiotune", "memtune", "memoryBacking",
         "_vcpus", "vcpu_current", "vcpu_placement",
@@ -226,6 +234,7 @@ class Guest(XMLBuilder):
 
     iothreads = XMLProperty("./iothreads", is_int=True)
     iothreadids = XMLChildProperty(_IOThreadID, relative_xpath="./iothreadids")
+    defaultiothread = XMLChildProperty(_DefaultIOThread)
 
     def _set_currentMemory(self, val):
         if val is not None:
