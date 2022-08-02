@@ -530,6 +530,9 @@ setuptools.setup(
             glob.glob("virtinst/install/*.py")),
     ],
 
+    # stop setuptools 61+ thinking we want to include everything automatically
+    py_modules=[],
+
     cmdclass={
         'build': my_build,
         'build_i18n': my_build_i18n,
