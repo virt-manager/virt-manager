@@ -169,7 +169,6 @@ def action_add_device(guest, options, parserclass, devs):
             guest.add_device(dev)
     else:
         devs = cli.parse_option_strings(options, guest, None)
-        devs = xmlutil.listify(devs)
         for dev in devs:
             dev.set_defaults(guest)
 
@@ -213,7 +212,6 @@ def action_build_xml(conn, options, parserclass, guest):
         inst = inst.__class__(conn)
 
     devs = cli.parse_option_strings(options, guest, inst)
-    devs = xmlutil.listify(devs)
     for dev in devs:
         dev.set_defaults(guest)
     return devs
