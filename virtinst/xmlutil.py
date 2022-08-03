@@ -76,3 +76,23 @@ def diff(origstr, newstr, fromfile="Original", tofile="New"):
             origstr.splitlines(1), newstr.splitlines(1),
             fromfile=fromfile, tofile=tofile)
     return "".join(dlist)
+
+
+def unindent_device_xml(xml):
+    import re
+    lines = xml.splitlines()
+    if not lines:
+        return xml  # pragma: no cover
+
+    ret = ""
+    unindent = 0
+    for c in lines[0]:
+        if c != " ":
+            break
+        unindent += 1
+
+    for line in lines:
+        if re.match(r"^%s *<.*$" % (unindent * " "), line):
+            line = line[unindent:]
+        ret += line + "\n"
+    return ret

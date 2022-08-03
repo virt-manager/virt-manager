@@ -4,8 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import re
-
 from gi.repository import Gtk
 
 import libvirt
@@ -318,25 +316,6 @@ def _get_performance_icon_name():
     if not Gtk.IconTheme.get_default().has_icon(icon):
         icon = "system-run"  # pragma: no cover
     return icon
-
-
-def _unindent_device_xml(xml):
-    lines = xml.splitlines()
-    if not lines:
-        return xml  # pragma: no cover
-
-    ret = ""
-    unindent = 0
-    for c in lines[0]:
-        if c != " ":
-            break
-        unindent += 1
-
-    for line in lines:
-        if re.match(r"^%s *<.*$" % (unindent * " "), line):
-            line = line[unindent:]
-        ret += line + "\n"
-    return ret
 
 
 class vmmDetails(vmmGObjectUI):
@@ -1693,7 +1672,8 @@ class vmmDetails(vmmGObjectUI):
         try:
             dev = row[HW_LIST_COL_DEVICE]
             if dev:
-                self._xmleditor.set_xml(_unindent_device_xml(dev.get_xml()))
+                self._xmleditor.set_xml(
+                        virtinst.xmlutil.unindent_device_xml(dev.get_xml()))
             else:
                 self._xmleditor.set_xml_from_libvirtobject(self.vm)
 
