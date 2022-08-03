@@ -33,7 +33,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/tmp/.local/share/libvirt/images/disk.qcow2"/>
+      <source file="/tmp/.local/share/libvirt/images/fedora21.qcow2"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">
@@ -106,7 +106,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/tmp/.local/share/libvirt/images/disk.qcow2"/>
+      <source file="/tmp/.local/share/libvirt/images/fedora21.qcow2"/>
       <target dev="vda" bus="virtio"/>
     </disk>
     <disk type="file" device="cdrom">

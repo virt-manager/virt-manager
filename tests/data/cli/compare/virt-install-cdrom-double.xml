@@ -20,7 +20,7 @@
   <devices>
     <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="disk">
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">
@@ -72,7 +72,7 @@
   <devices>
     <emulator>/usr/bin/test-hv</emulator>
     <disk type="file" device="disk">
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="hda" bus="ide"/>
     </disk>
     <disk type="file" device="cdrom">

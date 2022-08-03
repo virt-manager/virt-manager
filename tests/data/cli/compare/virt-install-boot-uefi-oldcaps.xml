@@ -29,7 +29,7 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="sda" bus="sata"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>

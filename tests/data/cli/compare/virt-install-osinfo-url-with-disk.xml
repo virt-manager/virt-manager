@@ -38,7 +38,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/fedora27.qcow2"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
@@ -112,7 +112,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/fedora27.qcow2"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>

@@ -246,7 +246,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="vdc" bus="virtio"/>
     </disk>
     <disk type="block" device="lun" sgio="filtered" rawio="yes">
@@ -293,7 +293,7 @@
       <auth username="admin">
         <secret type="ceph" uuid="f65cc5a8-b77b-4254-9030-d50a528fb456"/>
       </auth>
-      <source protocol="rbd" name="rbd-sourcename/disk">
+      <source protocol="rbd" name="rbd-sourcename/fedora">
         <host name="ceph-mon-1.example.com" port="6789"/>
         <host name="ceph-mon-2.example.com" port="6789"/>
         <host name="ceph-mon-3.example.com" port="6789"/>
@@ -392,13 +392,13 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw" discard="unmap"/>
-      <source file="/var/lib/libvirt/images/disk.img"/>
+      <source file="/var/lib/libvirt/images/fedora.img"/>
       <target dev="vdp" bus="virtio"/>
       <transient shareBacking="yes"/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="none" discard="unmap" io="native"/>
-      <source dev="/dev/pool-logical/disk"/>
+      <source dev="/dev/pool-logical/fedora"/>
       <target dev="vdq" bus="virtio"/>
     </disk>
     <disk type="dir" device="disk">

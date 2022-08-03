@@ -463,13 +463,15 @@ def build_installer(options, guest, installdata):
     return installer
 
 
-def set_cli_defaults(options, guest):
+def set_cli_default_name(guest):
     if not guest.name:
         default_name = virtinst.Guest.generate_name(guest)
         cli.print_stdout(_("Using default --name {vm_name}").format(
             vm_name=default_name))
         guest.name = default_name
 
+
+def set_cli_defaults(options, guest):
     if guest.os.is_container():
         if not memory_specified(guest):
             mbram = 1024
@@ -618,8 +620,14 @@ def _build_options_guest(conn, options):
 
     # Fill in guest from the command line content
     set_explicit_guest_options(options, guest)
-    cli.run_all_parsers(options, guest)
-    cli.parse_xmlcli(guest, options)
+
+    # We do these two parser bit early, since Installer setup will
+    # depend on them, but delay the rest to later, since things like
+    # disk naming can depend on Installer operations
+    cli.run_parser(options, guest, cli.ParserBoot)
+    options.boot = None
+    cli.run_parser(options, guest, cli.ParserMetadata)
+    options.metadata = None
 
     # Call set_capabilities_defaults explicitly here rather than depend
     # on set_defaults calling it. Installer setup needs filled in values.
@@ -646,6 +654,11 @@ def build_guest_instance(conn, options):
     installer_detect_distro(guest, installer, osdata)
 
     if not options.reinstall:
+        # We want to fill in --name before we do disk parsing, since
+        # default disk paths are generated based on VM name
+        set_cli_default_name(guest)
+        cli.run_all_parsers(options, guest)
+        cli.parse_xmlcli(guest, options)
         set_cli_defaults(options, guest)
 
     installer.set_install_defaults(guest)

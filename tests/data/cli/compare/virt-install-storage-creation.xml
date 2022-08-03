@@ -37,12 +37,12 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/pool-dir/disk.qcow2"/>
+      <source file="/pool-dir/fedora.qcow2"/>
       <target dev="vdb" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/pool-dir/disk-1.qcow2"/>
+      <source file="/pool-dir/fedora-1.qcow2"/>
       <target dev="vdc" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
@@ -168,7 +168,7 @@
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
-      <source file="/var/lib/libvirt/images/disk.qcow2"/>
+      <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="vdg" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
