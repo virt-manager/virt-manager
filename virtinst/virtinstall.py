@@ -618,12 +618,12 @@ def _build_options_guest(conn, options):
 
     # Fill in guest from the command line content
     set_explicit_guest_options(options, guest)
-    cli.parse_option_strings(options, guest, None)
+    cli.run_all_parsers(options, guest)
     cli.parse_xmlcli(guest, options)
 
     # Call set_capabilities_defaults explicitly here rather than depend
     # on set_defaults calling it. Installer setup needs filled in values.
-    # However we want to do it after parse_option_strings to ensure
+    # However we want to do it after run_all_parsers to ensure
     # we are operating on any arch/os/type values passed in with --boot
     guest.set_capabilities_defaults()
 

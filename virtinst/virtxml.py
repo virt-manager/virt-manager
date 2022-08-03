@@ -156,7 +156,10 @@ def action_edit(guest, options, parserclass):
     if options.os_variant is not None:
         fail(_("--os-variant/--osinfo is not supported with --edit"))
 
-    return cli.parse_option_strings(options, guest, inst, editing=True)
+    devs = []
+    for editinst in xmlutil.listify(inst):
+        devs += cli.run_parser(options, guest, parserclass, editinst=editinst)
+    return devs
 
 
 def action_add_device(guest, options, parserclass, devs):
@@ -168,7 +171,7 @@ def action_add_device(guest, options, parserclass, devs):
         for dev in devs:
             guest.add_device(dev)
     else:
-        devs = cli.parse_option_strings(options, guest, None)
+        devs = cli.run_parser(options, guest, parserclass)
         for dev in devs:
             dev.set_defaults(guest)
 
@@ -205,7 +208,7 @@ def action_build_xml(options, parserclass, guest):
     if options.os_variant is not None:
         fail(_("--os-variant/--osinfo is not supported with --build-xml"))
 
-    devs = cli.parse_option_strings(options, guest, None)
+    devs = cli.run_parser(options, guest, parserclass)
     for dev in devs:
         dev.set_defaults(guest)
     return devs

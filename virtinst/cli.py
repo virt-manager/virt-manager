@@ -4812,35 +4812,27 @@ class ParserLaunchSecurity(VirtCLIParser):
 # Public virt parser APIs #
 ###########################
 
-def parse_option_strings(options, guest, instlist, editing=False):
+def run_parser(options, guest, parserclass, editinst=None):
     """
-    Iterate over VIRT_PARSERS, and launch the associated parser
-    function for every value that was filled in on 'options', which
-    came from argparse/the command line.
-
-    @editing: If we are updating an existing guest, like from virt-xml
+    Lookup the cli options.* string associated with the passed in Parser*
+    class, and parse its values into the passed guest instance, or editinst
+    for some virt-xml usage.
     """
-    instlist = xmlutil.listify(instlist)
-    if not instlist:
-        instlist = [None]
+    ret = []
+    optstr_list = xmlutil.listify(getattr(options, parserclass.cli_arg_name))
 
+    for optstr in optstr_list:
+        parserobj = parserclass(optstr, guest=guest, editing=bool(editinst))
+        parseret = parserobj.parse(editinst)
+        ret += xmlutil.listify(parseret)
+
+    return ret
+
+
+def run_all_parsers(options, guest):
     ret = []
     for parserclass in VIRT_PARSERS:
-        optlist = xmlutil.listify(getattr(options, parserclass.cli_arg_name))
-        if not optlist:
-            continue
-
-        for inst in instlist:
-            if inst and optlist:
-                # If an object is passed in, we are updating it in place, and
-                # only use the last command line occurrence, eg. from virt-xml
-                optlist = [optlist[-1]]
-
-            for optstr in optlist:
-                parserobj = parserclass(optstr, guest=guest, editing=editing)
-                parseret = parserobj.parse(inst)
-                ret += xmlutil.listify(parseret)
-
+        ret += run_parser(options, guest, parserclass)
     return ret
 
 
