@@ -27,21 +27,22 @@
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2018. #zanata
 # Osvaldo R. Salazar S. <orodolfo.salazars@gmail.com>, 2021.
 # Pedro Luis Valades Viera <perikiyoxd@gmail.com>, 2021.
+# Nicholas Di Nicola <nicodinicola7@outlook.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2021-12-31 09:16+0000\n"
-"Last-Translator: Pedro Luis Valades Viera <perikiyoxd@gmail.com>\n"
-"Language-Team: Spanish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/es/>\n"
+"PO-Revision-Date: 2022-04-26 19:17+0000\n"
+"Last-Translator: Nicholas Di Nicola <nicodinicola7@outlook.com>\n"
+"Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -193,7 +194,7 @@ msgstr "pánico"
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "_Cancelar"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -271,7 +272,7 @@ msgstr "Modificar ruta de almacenamiento"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
-msgstr ""
+msgstr "_Cancelar"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -800,8 +801,6 @@ msgid "Finish"
 msgstr "Finalizar"
 
 #: ui/createvm.ui:2415
-#, fuzzy
-#| msgid "_Backend:"
 msgid "_Back"
 msgstr "_Mecanismo (backend):"
 
@@ -1287,15 +1286,13 @@ msgid "<b>Panic Notifier</b>"
 msgstr "<b>Notificador de pánico</b>"
 
 #: ui/details.ui:4845
-#, fuzzy
-#| msgid "Removable"
 msgid "_Remove"
 msgstr "Removible"
 
 #: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
-msgstr ""
+msgstr "_Aplicar"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
@@ -1469,8 +1466,6 @@ msgid "Cancel and close dialog"
 msgstr "Cancelar y cerrar el cuadro de diálogo"
 
 #: ui/hoststorage.ui:170
-#, fuzzy
-#| msgid "Choose Volume"
 msgid "Ch_oose Volume"
 msgstr "Elegir volumen"
 
@@ -1513,7 +1508,7 @@ msgstr "_Nueva máquina virtual"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr ""
+msgstr "_Cerrar"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
@@ -1570,8 +1565,9 @@ msgid "_Help"
 msgstr "_Ayuda"
 
 #: ui/manager.ui:222
+#, fuzzy
 msgid "_About"
-msgstr ""
+msgstr "_Acerca de"
 
 #: ui/manager.ui:253
 msgid "Create a new virtual machine"
@@ -1860,10 +1856,8 @@ msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
 
 #: ui/preferences.ui:490
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Firmware:"
+msgstr "x86 _Firmware:"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
@@ -2028,8 +2022,6 @@ msgid "_Version:"
 msgstr "_Versión:"
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
 msgstr "Opciones avanzadas"
 
@@ -3449,10 +3441,8 @@ msgid "SSH tunnel error output: %s"
 msgstr "Error de salida del tunel SSH: %s"
 
 #: virtManager/details/console.py:846
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Visor fue desconectado"
+msgstr "Visor esta desconectando."
 
 #: virtManager/details/console.py:979
 #, fuzzy
@@ -3549,8 +3539,7 @@ msgid "Controller %(controller)s %(index)s"
 msgstr "Controlador %(controller)s %(index)s"
 
 #: virtManager/details/details.py:239
-#, fuzzy, python-format
-#| msgid "Controller %s %s"
+#, python-format
 msgid "Controller %(controller)s"
 msgstr "Controlador %(controller)s"
 
@@ -3580,7 +3569,7 @@ msgstr "_Eliminar Hardware"
 
 #: virtManager/details/details.py:662 virtManager/details/details.py:1774
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:672
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -3814,11 +3803,11 @@ msgstr "No se admite consola para el tipo de dispositivo '%s'"
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "_Copiar"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "_Pegar"
 
 #: virtManager/details/serialcon.py:348
 #, python-format
