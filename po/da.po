@@ -8,21 +8,22 @@
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # scootergrisen <scootergrisen@gmail.com>, 2020.
+# Morten Abildgaard <m@abildgaard.se>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2020-10-07 16:30+0000\n"
-"Last-Translator: scootergrisen <scootergrisen@gmail.com>\n"
-"Language-Team: Danish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/da/>\n"
+"PO-Revision-Date: 2022-07-13 13:19+0000\n"
+"Last-Translator: Morten Abildgaard <m@abildgaard.se>\n"
+"Language-Team: Danish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.2.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -31,7 +32,7 @@ msgstr "Administration for virtuel maskine"
 
 #: data/virt-manager.appdata.xml.in:7
 msgid "Graphically manage KVM, Xen, or LXC via libvirt"
-msgstr ""
+msgstr "Grafisk håndtering af KVM, Xen eller LXC via libvirt"
 
 #: data/virt-manager.appdata.xml.in:9
 msgid ""
@@ -41,6 +42,11 @@ msgid ""
 "for existing VMs on local or remote machines. Uses libvirt as the backend "
 "management API."
 msgstr ""
+"Virtual Machine Manager giver et grafisk værktøj til at administrere "
+"virtuelle maskiner til KVM, Xen og LXC. Start, stop, tilføj eller fjern "
+"virtuelle enheder, opret forbindelse til en grafisk eller seriel konsol, og "
+"se ressourceforbrugsstatistikker for eksisterende VM'er på lokale eller "
+"eksterne maskiner. Bruger libvirt som backend management API."
 
 #: data/virt-manager.appdata.xml.in:20
 msgid "Main manager window"
@@ -77,11 +83,11 @@ msgstr "Keld Simonsen <keld@dkuug.dk> 2006"
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
-msgstr ""
+msgstr "Tilføj ny virtuel hardware"
 
 #: ui/addhardware.ui:153
 msgid "_Device type:"
-msgstr ""
+msgstr "Enhedstype:"
 
 #: ui/addhardware.ui:184
 msgid "_Bus type:"
@@ -91,24 +97,24 @@ msgstr ""
 #: ui/createpool.ui:355 ui/fsdetails.ui:87 ui/gfxdetails.ui:107
 #: ui/tpmdetails.ui:49
 msgid "_Type:"
-msgstr ""
+msgstr "_Type:"
 
 #: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:937
 #: ui/addhardware.ui:1005 ui/addhardware.ui:1282 ui/tpmdetails.ui:99
 msgid "_Model:"
-msgstr ""
+msgstr "_Model:"
 
 #: ui/addhardware.ui:345
 msgid "ctrl"
-msgstr ""
+msgstr "ctrl"
 
 #: ui/addhardware.ui:397
 msgid "aa:bb:cc:dd:ee:ff"
-msgstr ""
+msgstr "aa:bb:cc:dd:ee:ff"
 
 #: ui/addhardware.ui:421 ui/details.ui:2976
 msgid "_MAC address:"
-msgstr ""
+msgstr "_MAC-adresse:"
 
 #: ui/addhardware.ui:436 ui/details.ui:2962
 msgid "Device mode_l:"
@@ -116,19 +122,19 @@ msgstr ""
 
 #: ui/addhardware.ui:673 ui/addhardware.ui:1229
 msgid "Host _Device:"
-msgstr ""
+msgstr "Værtsenhed:"
 
 #: ui/addhardware.ui:749
 msgid "_Path:"
-msgstr ""
+msgstr "Sti:"
 
 #: ui/addhardware.ui:763
 msgid "Device _Type:"
-msgstr ""
+msgstr "Enheds_type:"
 
 #: ui/addhardware.ui:789
 msgid "T_ype:"
-msgstr ""
+msgstr "T_ype:"
 
 #: ui/addhardware.ui:803 ui/clone.ui:480 ui/createnet.ui:213
 #: ui/createpool.ui:330 ui/createvm.ui:2152 ui/createvol.ui:185
@@ -166,7 +172,7 @@ msgstr ""
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "Afbryd"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -175,7 +181,7 @@ msgstr "_Afslut"
 
 #: ui/addstorage.ui:33
 msgid "C_reate a disk image for the virtual machine"
-msgstr ""
+msgstr "Op_ret et diskaftryk af den virtuelle maskine"
 
 #: ui/addstorage.ui:62
 msgid "0.0"
@@ -191,7 +197,7 @@ msgstr ""
 
 #: ui/addstorage.ui:185
 msgid "_Manage..."
-msgstr ""
+msgstr "Ad_ministrér..."
 
 #: ui/addstorage.ui:254
 msgid "Cac_he mode:"
@@ -276,7 +282,7 @@ msgstr ""
 
 #: ui/clone.ui:306
 msgid "Clone Virtual Machine"
-msgstr ""
+msgstr "Klon virtuel maskine"
 
 #: ui/clone.ui:347
 msgid "<span size='large'>Clone virtual machine</span>"
@@ -308,7 +314,7 @@ msgstr ""
 
 #: ui/clone.ui:706
 msgid "C_lone"
-msgstr ""
+msgstr "K_lon"
 
 #: ui/console.ui:17 ui/console.ui:233
 msgid "<b>The console is currently unavailable</b>"
@@ -316,27 +322,27 @@ msgstr "<b>Konsollen er i øjeblikket ikke tilgængelig</b>"
 
 #: ui/console.ui:57 virtManager/addhardware.py:227
 msgid "Serial"
-msgstr ""
+msgstr "Seriel"
 
 #: ui/console.ui:125
 msgid "_Password:"
-msgstr ""
+msgstr "Kodeord:"
 
 #: ui/console.ui:139 ui/createconn.ui:200
 msgid "_Username:"
-msgstr ""
+msgstr "Br_ugernavn:"
 
 #: ui/console.ui:174
 msgid "_Login"
-msgstr ""
+msgstr "Log ind"
 
 #: ui/console.ui:188
 msgid "_Save this password in your keyring"
-msgstr ""
+msgstr "Gem dette kodeord i din nøglering"
 
 #: ui/console.ui:192
 msgid "Check to save password, uncheck to forget password."
-msgstr ""
+msgstr "Marker for at huske kodeord, blank for at glemme kodeordet."
 
 #: ui/console.ui:258
 msgid "_Connect to console"
@@ -344,7 +350,7 @@ msgstr "_Opret forbindelse til konsol"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
-msgstr ""
+msgstr "Tilføj forbindelse"
 
 #: ui/createconn.ui:41
 msgid "Co_nnect"
@@ -352,19 +358,19 @@ msgstr "_Tilslut"
 
 #: ui/createconn.ui:92
 msgid "_Hypervisor:"
-msgstr ""
+msgstr "Hypervisor:"
 
 #: ui/createconn.ui:114
 msgid "Connect to _remote host over SSH"
-msgstr ""
+msgstr "Forbind til fjernvært via SSH"
 
 #: ui/createconn.ui:133
 msgid "_Autoconnect:"
-msgstr ""
+msgstr "Auto-forbind:"
 
 #: ui/createconn.ui:183
 msgid "H_ostname:"
-msgstr ""
+msgstr "Værtsnavn:"
 
 #: ui/createconn.ui:234
 msgid ""
@@ -408,43 +414,43 @@ msgstr ""
 
 #: ui/createnet.ui:326 ui/createnet.ui:537
 msgid "_Network:"
-msgstr ""
+msgstr "_Netværk:"
 
 #: ui/createnet.ui:417 ui/createnet.ui:628
 msgid "Start:"
-msgstr ""
+msgstr "Start:"
 
 #: ui/createnet.ui:429 ui/createnet.ui:640
 msgid "End:"
-msgstr ""
+msgstr "Slut:"
 
 #: ui/createnet.ui:438
 msgid "Enable DHCPv4"
-msgstr ""
+msgstr "Aktivér DHCPv4"
 
 #: ui/createnet.ui:473 ui/hostnets.ui:348
 msgid "<b>IPv_4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv_4-konfiguration</b>"
 
 #: ui/createnet.ui:498
 msgid "_Enable IPv6"
-msgstr ""
+msgstr "Aktivér IPv6"
 
 #: ui/createnet.ui:649
 msgid "Enable DHCPv6"
-msgstr ""
+msgstr "Aktivér DHCPv6"
 
 #: ui/createnet.ui:684 ui/hostnets.ui:452
 msgid "<b>IPv_6 configuration</b>"
-msgstr ""
+msgstr "<b>IPv_6-konfiguration</b>"
 
 #: ui/createnet.ui:728
 msgid "Use net_work name"
-msgstr ""
+msgstr "Anvend netværksnavn"
 
 #: ui/createnet.ui:746
 msgid "Cust_om"
-msgstr ""
+msgstr "Brugerdefineret"
 
 #: ui/createnet.ui:765
 msgid "<b>DNS domain name</b>"
@@ -1468,10 +1474,8 @@ msgid "_Virtual Machine Details"
 msgstr ""
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Præferencer"
+msgstr "Indstillinger"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -1916,10 +1920,8 @@ msgid "_Version:"
 msgstr ""
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
-msgstr "Avancerede indstillinger"
+msgstr "Ava_ncerede indstillinger"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
