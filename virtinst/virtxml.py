@@ -198,20 +198,14 @@ def action_remove_device(guest, options, parserclass):
     return devs
 
 
-def action_build_xml(conn, options, parserclass, guest):
+def action_build_xml(options, parserclass, guest):
     if not parserclass.guest_propname:
         fail(_("--build-xml not supported for --%s") %
              parserclass.cli_arg_name)
     if options.os_variant is not None:
         fail(_("--os-variant/--osinfo is not supported with --build-xml"))
 
-    inst = parserclass.lookup_prop(guest)
-    if parserclass.prop_is_list(guest):
-        inst = inst.new()
-    else:
-        inst = inst.__class__(conn)
-
-    devs = cli.parse_option_strings(options, guest, inst)
+    devs = cli.parse_option_strings(options, guest, None)
     for dev in devs:
         dev.set_defaults(guest)
     return devs
@@ -505,10 +499,10 @@ def main(conn=None):
     vm_is_running = bool(active_xmlobj)
 
     if options.build_xml:
-        devs = action_build_xml(conn, options, parserclass, inactive_xmlobj)
+        devs = action_build_xml(options, parserclass, inactive_xmlobj)
         for dev in devs:
             # pylint: disable=no-member
-            print_stdout(dev.get_xml())
+            print_stdout(xmlutil.unindent_device_xml(dev.get_xml()))
         return 0
 
     devs = None
