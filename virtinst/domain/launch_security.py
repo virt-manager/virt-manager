@@ -22,13 +22,15 @@ class DomainLaunchSecurity(XMLBuilder):
         if not guest.os.is_q35() or not guest.is_uefi():
             raise RuntimeError(_("SEV launch security requires a Q35 UEFI machine"))
 
-        # 'policy' is a mandatory 4-byte argument for the SEV firmware,
-        # if missing, let's use 0x03 which, according to the table at
-        # https://libvirt.org/formatdomain.html#launchSecurity:
-        # (bit 0) - disables the debugging mode
-        # (bit 1) - disables encryption key sharing across multiple guests
+        # The 'policy' is a mandatory 4-byte argument for the SEV firmware.
+        # If missing, we use 0x03 for the original SEV implementation and
+        # 0x07 for SEV-ES.
+        # Reference: https://libvirt.org/formatdomain.html#launchSecurity
         if self.policy is None:
+            domcaps = guest.lookup_domcaps()
             self.policy = "0x03"
+            if domcaps.supports_sev_launch_security(check_es=True):
+                self.policy = "0x07"
 
     def set_defaults(self, guest):
         if self.type == "sev":

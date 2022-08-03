@@ -93,6 +93,7 @@ def _make_capsblock(xml_root_name):
 class _SEV(XMLBuilder):
     XML_NAME = "sev"
     supported = XMLProperty("./@supported", is_yesno=True)
+    maxESGuests = XMLProperty("./maxESGuests")
 
 
 #############################
@@ -392,12 +393,15 @@ class DomainCapabilities(XMLBuilder):
     # Misc support methods #
     ########################
 
-    def supports_sev_launch_security(self):
+    def supports_sev_launch_security(self, check_es=False):
         """
         Returns False if either libvirt doesn't advertise support for SEV at
         all (< libvirt-4.5.0) or if it explicitly advertises it as unsupported
         on the platform
         """
+        if check_es:
+            return bool(self.features.sev.supported and
+                        self.features.sev.maxESGuests)
         return bool(self.features.sev.supported)
 
     def supports_video_bochs(self):
