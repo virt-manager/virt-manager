@@ -284,10 +284,6 @@ class Command(object):
                 newlines.append(line)
             output = "\n".join(newlines)
 
-        # Make sure all test output has trailing newline, simplifies diffing
-        if not output.endswith("\n"):
-            output += "\n"
-
         # Strip the test directory out of the saved output
         search = '"%s/' % utils.TOPDIR
         if search in output:
