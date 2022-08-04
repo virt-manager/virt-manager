@@ -88,7 +88,7 @@ def _test_distro(distro):
         "--name __virtinst__test__initrd__ --ram 2048 "
         "--transient --destroy-on-exit --disk none "
         "--location %s --initrd-inject %s "
-        "--install kernel_args=%s,kernel_args_overwrite=yes --debug" %
+        "--install kernel_args=%s,kernel_args_overwrite=yes" %
         (distro.url, distro.filename, append))
     print("\n\n" + cmd)
     os.system(cmd)
