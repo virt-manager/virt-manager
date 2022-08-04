@@ -1,5 +1,13 @@
 # Virtual Machine Manager News
 
+## Release 4.1.0 (August 04, 2022)
+- Fix build with setuptools-61 (Peter Alfredsen, Miro Hrončok)
+- add UI and cli support for qemu-vdagent channel (Jonathon Jongsma)
+- cli: More --iothreads suboptions (Lin Ma)
+- launch_security: Use SEV-ES policy=0x07 if host supports it (Charles
+  Arnold)
+- cli: Add support for URL query with disks (Martin Kletzander)
+
 ## Release 4.0.0 (March 02, 2022)
 - virt-install --os-variant/--osinfo is now a hard requirement for most
   cases
