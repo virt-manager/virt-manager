@@ -481,6 +481,11 @@ class DeviceDisk(Device):
     driver_iothread = XMLProperty("./driver/@iothread", is_int=True)
     driver_queues = XMLProperty("./driver/@queues", is_int=True)
 
+    driver_metadata_cache_max_size = XMLProperty(
+        "./driver/metadata_cache/max_size", is_int=True)
+    driver_metadata_cache_max_size_unit = XMLProperty(
+        "./driver/metadata_cache/max_size/@unit")
+
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
     wwn = XMLProperty("./wwn")

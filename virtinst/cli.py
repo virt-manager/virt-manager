@@ -3497,6 +3497,8 @@ class ParserDisk(VirtCLIParser):
         "driver.io": "io",
         "driver.name": "driver_name",
         "driver.type": "driver_type",
+        "driver.metadata_cache.max_size": "metadata_cache.max_size",
+        "driver.metadata_cache.max_size.unit": "metadata_cache.max_size.unit",
     }
 
     def _add_advertised_aliases(self):
@@ -3695,6 +3697,11 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("driver.iothread", "driver_iothread")
         cls.add_arg("driver.queues", "driver_queues")
         cls.add_arg("driver.error_policy", "error_policy")
+
+        cls.add_arg("driver.metadata_cache.max_size",
+                    "driver_metadata_cache_max_size")
+        cls.add_arg("driver.metadata_cache.max_size.unit",
+                    "driver_metadata_cache_max_size_unit")
 
         cls.add_arg("iotune.read_bytes_sec", "iotune_rbs")
         cls.add_arg("iotune.write_bytes_sec", "iotune_wbs")
