@@ -424,7 +424,7 @@
       <target dev="vdu" bus="virtio"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2">
+      <driver name="qemu" type="qcow2" discard="unmap">
         <metadata_cache>
           <max_size unit="KiB">2048</max_size>
         </metadata_cache>
