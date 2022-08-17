@@ -3497,8 +3497,6 @@ class ParserDisk(VirtCLIParser):
         "driver.io": "io",
         "driver.name": "driver_name",
         "driver.type": "driver_type",
-        "driver.metadata_cache.max_size": "metadata_cache.max_size",
-        "driver.metadata_cache.max_size.unit": "metadata_cache.max_size.unit",
     }
 
     def _add_advertised_aliases(self):
