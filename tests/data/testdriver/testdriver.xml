@@ -599,6 +599,13 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <source file='/root/container.vmdk'/>
       <target dir='/home'/>
     </filesystem>
+    <filesystem type='mount'>
+      <driver type='virtiofs' queue='1024'/>
+      <source socket='/tmp/sock'/>
+      <target dir='tag'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </filesystem>
+
 
     <!-- tpm devices -->
     <tpm model='tpm-tis'>
