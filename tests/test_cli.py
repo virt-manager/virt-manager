@@ -1108,7 +1108,7 @@ c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXI
 c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
 c.add_compare("--osinfo generic --boot uefi --disk size=1", "boot-uefi")
 c.add_compare("--osinfo generic --boot uefi --disk size=1 --tpm none --connect " + utils.URIs.kvm_x86_oldfirmware, "boot-uefi-oldcaps")
-c.add_compare("--osinfo linux2020 --boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, "amd-sev")
+c.add_compare("--osinfo linux2020 --boot uefi --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, "amd-sev", prerun_check=no_osinfo_linux2020_virtio)
 
 c.add_invalid("--disk none --location nfs:example.com/fake --nonetworks", grep="NFS URL installs are no longer supported")
 c.add_invalid("--disk none --boot network --machine foobar", grep="domain type None with machine 'foobar'")
