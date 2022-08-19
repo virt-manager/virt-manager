@@ -17,7 +17,9 @@
     <pae/>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-passthrough" migratable="on"/>
+  <cpu mode="host-passthrough" migratable="on">
+    <maxphysaddr mode="passthrough"/>
+  </cpu>
   <clock offset="utc"/>
   <pm>
     <suspend-to-mem enabled="no"/>

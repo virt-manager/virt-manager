@@ -2386,6 +2386,9 @@ class ParserCPU(VirtCLIParser):
         cls.add_arg("cache.level", "cache.level")
         cls.add_arg("cache.mode", "cache.mode")
 
+        cls.add_arg("maxphysaddr.mode", "maxphysaddr.mode")
+        cls.add_arg("maxphysaddr.bits", "maxphysaddr.bits")
+
         # CPU features
         # These are handled specially in _parse
         cls.add_arg("force", None, lookup_cb=None, cb=cls.set_feature_cb)

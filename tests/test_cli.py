@@ -511,7 +511,8 @@ numa.interconnects.latency0.initiator=0,numa.interconnects.latency0.target=0,num
 numa.interconnects.latency1.initiator=0,numa.interconnects.latency1.target=2,numa.interconnects.latency1.cache=1,numa.interconnects.latency1.type=access,numa.interconnects.latency1.value=10,numa.interconnects.latency1.unit=ns,\
 numa.interconnects.bandwidth0.initiator=0,numa.interconnects.bandwidth0.target=0,numa.interconnects.bandwidth0.type=access,numa.interconnects.bandwidth0.value=204800,\
 numa.interconnects.bandwidth1.initiator=0,numa.interconnects.bandwidth1.target=2,numa.interconnects.bandwidth1.cache=1,numa.interconnects.bandwidth1.type=access,numa.interconnects.bandwidth1.value=409600,numa.interconnects.bandwidth1.unit=KiB,\
-cache.mode=emulate,cache.level=3
+cache.mode=emulate,cache.level=3,\
+maxphysaddr.mode=emulate,maxphysaddr.bits=46
 
 
 --numatune 1,2,3,5-7,^6,mode=strict,\
@@ -880,7 +881,7 @@ c.add_compare("--pxe "
 
 # Hitting test driver specific output
 c.add_compare("--connect " + utils.URIs.test_suite + " "
-"--cpu host-passthrough,migratable=on "  # migratable=on is only accepted with host-passthrough
+"--cpu host-passthrough,migratable=on,maxphysaddr.mode=passthrough "  # migratable=on is only accepted with host-passthrough
 "--seclabel label=foobar.label,a1,z2,b3,relabel=yes,type=dynamic "  # fills in default model=testModel
 "--tpm default "  # --tpm default when domcaps missing
 "",
