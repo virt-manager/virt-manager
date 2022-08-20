@@ -429,11 +429,15 @@ def build_installer(options, guest, installdata):
         install_bootdev = "network"
     elif installdata.is_set:
         pass
-    elif (options.import_install or
-          options.xmlonly or
-          options.boot or
-          options.cloud_init or
-          options.unattended):
+    elif options.xmlonly:
+        no_install = True
+    elif options.import_install:
+        no_install = True
+    elif options.boot:
+        no_install = True
+    elif options.cloud_init:
+        no_install = True
+    elif options.unattended:
         no_install = True
 
     installer = virtinst.Installer(guest.conn,
