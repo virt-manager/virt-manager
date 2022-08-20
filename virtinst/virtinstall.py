@@ -433,7 +433,7 @@ def build_installer(options, guest, installdata):
         no_install = True
     elif options.import_install:
         no_install = True
-    elif options.boot:
+    elif options.boot_was_set:
         no_install = True
     elif options.cloud_init:
         no_install = True
@@ -645,6 +645,7 @@ def _build_options_guest(conn, options):
 def build_guest_instance(conn, options):
     installdata = cli.parse_install(options.install)
     osdata = cli.parse_os_variant(options.os_variant or installdata.os)
+    options.boot_was_set = bool(options.boot)
 
     if options.reinstall:
         dummy1, guest, dummy2 = cli.get_domain_and_guest(conn, options.reinstall)

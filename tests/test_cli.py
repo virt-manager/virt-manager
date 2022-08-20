@@ -967,6 +967,7 @@ c.add_valid("--os-variant generic --pxe --ram 16", grep="Requested memory 16 MiB
 c.add_valid("--os-variant winxp --ram 32 --cdrom %(EXISTIMG1)s", grep="32 MiB is less than the recommended 64 MiB")  # Windows. Catch memory warning
 c.add_valid("--osinfo generic --pxe --autostart")  # --autostart flag
 c.add_valid("--cdrom %(EXISTIMG2)s --os-variant win2k3 --print-step 2")  # HVM windows install, print 3rd stage XML
+c.add_valid("--memory 512 --osinfo generic --boot cdrom")  # --boot XXX should imply --install no_install
 c.add_compare("--location location=%(TREEDIR)s --initrd-inject virt-install --extra-args ks=file:/virt-install", "initrd-inject")  # initrd-inject
 c.add_compare("--cdrom http://example.com/path/to/some.iso --os-variant detect=yes,require=no", "cdrom-url")
 c.add_compare("--pxe --print-step all --os-variant none", "simple-pxe")  # Diskless PXE install
