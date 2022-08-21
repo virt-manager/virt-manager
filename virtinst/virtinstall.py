@@ -1019,7 +1019,7 @@ def xml_to_print(guest, installer, xmlonly, dry):
 
 def parse_args():
     parser = cli.setupParser(
-        "%(prog)s --name NAME --memory MB STORAGE INSTALL [options]",
+        "%(prog)s OPTIONS",
         _("Create a new virtual machine from specified install media."),
         introspection_epilog=True)
     cli.add_connect_option(parser)
