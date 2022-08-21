@@ -411,6 +411,9 @@ def build_installer(options, guest, installdata):
         else:
             extra_args = [installdata.kernel_args]
 
+    if options.unattended and options.cloud_init:
+        fail("--unattended and --cloud-init can not be specified together.")
+
     if options.unattended:
         unattended_data = cli.parse_unattended(options.unattended)
 
