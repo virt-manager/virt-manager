@@ -352,8 +352,7 @@ class Cloner(object):
         """
         self._new_guest.id = None
         self._new_guest.title = None
-        self._new_guest.uuid = None
-        self._new_guest.uuid = Guest.generate_uuid(self.conn)
+        self.set_clone_uuid(Guest.generate_uuid(self.conn))
 
         for dev in self._new_guest.devices.graphics:
             if dev.port and dev.port != -1:
@@ -408,6 +407,9 @@ class Cloner(object):
         Override the new VMs generated UUId
         """
         self._new_guest.uuid = uuid
+        for sysinfo in self._new_guest.sysinfo:
+            if sysinfo.system_uuid:
+                sysinfo.system_uuid = uuid
 
     def set_replace(self, val):
         """
