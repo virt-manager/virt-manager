@@ -1116,7 +1116,7 @@ c.add_invalid("--disk none --boot network --machine foobar", grep="domain type N
 c.add_invalid("--nodisks --boot network --arch mips --virt-type kvm", grep="any virtualization options for architecture 'mips'")
 c.add_invalid("--nodisks --boot network --paravirt --arch mips", grep=" 'xen' for architecture 'mips'")
 c.add_invalid("--osinfo generic --launchSecurity sev --connect " + utils.URIs.kvm_amd_sev, grep="SEV launch security requires a Q35 UEFI machine")
-c.add_invalid("--disk none --cloud-init --unattended --install fedora30", grep="--unattended and --cloud-init can not")
+c.add_invalid("--disk none --cloud-init --unattended --install fedora30", grep="Cannot use --unattended and --cloud-init at the same time")
 
 
 
