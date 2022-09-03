@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-09-03 10:17+0000\n"
+"PO-Revision-Date: 2022-09-05 17:19+0000\n"
 "Last-Translator: V I <xasertop@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ru/>\n"
@@ -99,7 +99,8 @@ msgstr ""
 "Dmitry Drozdov <dmi3652@gmail.com>\n"
 "Ilyas B Arinov <arinov.ilyas@gmail.com>\n"
 "Yulia Poyarkova <ypoyarko@fedoraproject.org>\n"
-"Olesya Gerasimenko <translation-team@basealt.ru>"
+"Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"ViktorOn https://github.com/viktoron"
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
@@ -1211,7 +1212,7 @@ msgstr "Устройство:"
 
 #: ui/details.ui:3787
 msgid "ROM _BAR:"
-msgstr "ROM _BAR:"
+msgstr "ПЗУ _BAR:"
 
 #: ui/details.ui:3910
 msgid "_3D acceleration:"
@@ -1725,7 +1726,7 @@ msgstr "<small>Не удалось найти подходящую сеть по
 
 #: ui/netlist.ui:146
 msgid "_Portgroup:"
-msgstr "_Порт:"
+msgstr "_Группа портов:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1837,10 +1838,8 @@ msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
 
 #: ui/preferences.ui:490
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Микро_программа:"
+msgstr "_Прошивка x86:"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
@@ -2524,10 +2523,8 @@ msgid "PCI Device"
 msgstr "Устройство PCI"
 
 #: virtManager/addhardware.py:1019
-#, fuzzy
-#| msgid "%s Device"
 msgid "MDEV Device"
-msgstr "Устройство %s"
+msgstr "Устройство MDEV"
 
 #: virtManager/addhardware.py:1020
 msgid "USB Device"
@@ -3334,10 +3331,8 @@ msgid "Failed to check disk usage conflict."
 msgstr "Не удалось проверить конфликт использования диска."
 
 #: virtManager/details/console.py:153
-#, fuzzy
-#| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
-msgstr "Выход из полноэкранного режима"
+msgstr "Выйти из полноэкранного режима"
 
 #: virtManager/details/console.py:155
 msgid "Leave fullscreen"
@@ -3422,16 +3417,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "Ошибка вывода туннеля SSH: %s"
 
 #: virtManager/details/console.py:846
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Клиент просмотра отключён."
+msgstr "Клиент просмотра отключается."
 
 #: virtManager/details/console.py:979
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Клиент просмотра отключён."
+msgstr "Окно клиента просмотра закрыто."
 
 #: virtManager/details/console.py:983
 #, python-format
@@ -3964,7 +3955,7 @@ msgid ""
 "descriptor connections."
 msgstr ""
 "Гостевая система работает на удалённом узле, но настроена так, что разрешает "
-"соединение только с локальными дескрипторамифайлов."
+"соединение только с дескрипторами локальными файлов."
 
 #: virtManager/details/sshtunnels.py:67
 msgid "Guest is configured for TLS only which does not work over SSH."
@@ -4555,25 +4546,19 @@ msgstr "Ошибка запуска менеджера: %s"
 
 #: virtManager/manager.py:292
 msgid "_New"
-msgstr ""
+msgstr "_Новое"
 
 #: virtManager/manager.py:293
-#, fuzzy
-#| msgid "Connect"
 msgid "_Connect"
-msgstr "Подключаться"
+msgstr "_Подключить"
 
 #: virtManager/manager.py:294
-#, fuzzy
-#| msgid "Disconnected"
 msgid "Dis_connect"
-msgstr "Отключено"
+msgstr "От_ключить"
 
 #: virtManager/manager.py:296
-#, fuzzy
-#| msgid "_Delete"
 msgid "De_lete"
-msgstr "_Удалить"
+msgstr "Уда_лить"
 
 #: virtManager/manager.py:375
 msgid "CPU usage"
@@ -4613,7 +4598,7 @@ msgstr ""
 #: virtManager/manager.py:571
 #, python-format
 msgid "%(uri)s (Double click to connect)"
-msgstr "%(uri)s (двойной щелчок для подключения)"
+msgstr "%(uri)s (двойное нажатие для подключения)"
 
 #: virtManager/manager.py:578
 #, python-format
@@ -4881,10 +4866,8 @@ msgid "Nearest host CPU model"
 msgstr "Подходящая модель процессора хоста"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Системный по умолчанию (%s)"
+msgstr "Системные по умолчанию"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5374,11 +5357,6 @@ msgstr ""
 "--network help"
 
 #: virtinst/cli.py:721
-#, fuzzy
-#| msgid ""
-#| "Configure a guest controller device. Ex:\n"
-#| "--controller type=usb,model=qemu-xhci\n"
-#| "--controller virtio-scsi\n"
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5386,7 +5364,7 @@ msgid ""
 msgstr ""
 "Конфигурация устройства контроллера гостевой системы. Пример:\n"
 "--controller type=usb,model=qemu-xhci\n"
-"--controller virtio-scsi\n"
+"--controller type=scsi,model=virtio-scsi\n"
 
 #: virtinst/cli.py:726
 msgid ""
@@ -5436,10 +5414,8 @@ msgid "Configure guest sound device emulation"
 msgstr "Настроить эмуляцию звукового устройства для гостевой системы"
 
 #: virtinst/cli.py:771
-#, fuzzy
-#| msgid "Configure a guest watchdog device"
 msgid "Configure host audio backend for sound devices"
-msgstr "Настроить устройство слежения для гостевой системы"
+msgstr "Настроить серверную часть узла для звуковых устройств"
 
 #: virtinst/cli.py:775
 msgid "Configure a guest watchdog device"
@@ -5498,16 +5474,12 @@ msgstr ""
 "--panic default"
 
 #: virtinst/cli.py:805
-#, fuzzy
-#| msgid ""
-#| "Configure a guest memory device. Ex:\n"
-#| "--memdev dimm,target.size=1024"
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
-"Конфигурация устройства памяти гостевой системы. Пример:\n"
-"--memdev dimm,target.size=1024"
+"Настройка разделяемой памяти гостевой системы. Пример:\n"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:809
 msgid ""
@@ -5681,11 +5653,6 @@ msgid "The OS installed in the guest."
 msgstr "ОС, которая установлена в гостевой системе."
 
 #: virtinst/cli.py:933
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5694,7 +5661,7 @@ msgstr ""
 "Используется для выбора оптимальных значений по умолчанию, в том числе "
 "VirtIO.\n"
 "Примеры значений: fedora29, rhel7.0, win10, ...\n"
-"Для просмотра полного списка введите команду «osinfo-query os»."
+"Для просмотра полного списка используйте «--osinfo list»."
 
 #: virtinst/cli.py:943
 msgid ""
@@ -5905,10 +5872,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Неизвестно, как сгенерировать nodedev для mdev с id типа «%s»"
 
 #: virtinst/devices/hostdev.py:88
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "Неизвестный тип устройства узла: %s"
+msgstr "Неподдерживаемый тип устройства узла: «%s»"
 
 #: virtinst/devices/interface.py:189
 #, python-format
@@ -6179,12 +6145,11 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "Неизвестный идентификатор libosinfo «%s»"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
-"Неизвестное название ОС — «%s». Со списком корректных значений можно "
-"ознакомиться с помощью команды «osinfo-query os»."
+"Неизвестное название ОС — «%s». Список корректных значений смотрите с "
+"помощью команды «--osinfo list»."
 
 #: virtinst/osdict.py:510
 #, python-format
@@ -6326,7 +6291,7 @@ msgstr "Имя гостевой системы"
 
 #: virtinst/virtclone.py:89
 msgid "use btrfs COW lightweight copy"
-msgstr "использовать облегчённую копию btrfs COW"
+msgstr "использовать облегчённую версию btrfs COW"
 
 #: virtinst/virtclone.py:91
 msgid "Storage Configuration"
@@ -6420,7 +6385,7 @@ msgid ""
 "connect? If not, use --cdrom instead"
 msgstr ""
 "Параметр «-c» указан c URI-адресом libvirt. Возможно, имелось в виду "
-"«--connect»? Если нет, используйте «--cdrom»."
+"«--connect»? Если нет, используйте «--cdrom»"
 
 #: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
@@ -6608,9 +6573,9 @@ msgstr "Ожидание завершения установки."
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] "Ожидание завершения установки: %(minutes)d мин."
-msgstr[1] "Ожидание завершения установки: %(minutes)d мин."
-msgstr[2] "Ожидание завершения установки: %(minutes)d мин."
+msgstr[0] "Ожидание завершения установки: %(minutes)d минута"
+msgstr[1] "Ожидание завершения установки: %(minutes)d минуты"
+msgstr[2] "Ожидание завершения установки: %(minutes)d минут"
 msgstr[3] "Ожидание завершения установки: %(minutes)d мин."
 
 #: virtinst/virtinstall.py:743
@@ -6875,14 +6840,12 @@ msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
 "'--edit'"
 msgstr ""
-"«--edit %(option)s» не имеет смысла вместе с --%(objecttype)s. Используйте "
-"«--edit» без дополнительных аргументов"
+"«--edit %(option)s» не имеет смысла вместе с --%(objecttype)s, используйте "
+"просто «--edit»"
 
 #: virtinst/virtxml.py:157
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os-variant нельзя использовать, если используется --edit"
+msgstr "--os-variant/--osinfo не поддерживается, если используется --edit"
 
 #: virtinst/virtxml.py:164
 #, python-format
@@ -6895,10 +6858,9 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device не может использоваться вместе с --%s"
 
 #: virtinst/virtxml.py:184
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr "--os-variant нельзя использовать, если используется --remove-device"
+msgstr ""
+"--os-variant/--osinfo не поддерживается, если используется --remove-device"
 
 #: virtinst/virtxml.py:204
 #, python-format
@@ -6906,10 +6868,8 @@ msgid "--build-xml not supported for --%s"
 msgstr "--%s не поддерживает --build-xml"
 
 #: virtinst/virtxml.py:207
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr "--os-variant нельзя использовать, если используется --build-xml"
+msgstr "--os-variant/--osinfo не поддерживается, если используется --build-xml"
 
 #: virtinst/virtxml.py:233
 #, python-format
