@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-03-03 06:15+0000\n"
-"PO-Revision-Date: 2022-07-31 07:18+0000\n"
+"PO-Revision-Date: 2022-08-08 16:30+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -2476,6 +2476,7 @@ msgstr "მოწყობილობის შექმნა"
 #: virtManager/addhardware.py:1287
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
+"დამოკიდებულია მოწყობილობაზე, დასრულებას შეიძლება რამდენიმე წუთი დასჭირდეს."
 
 #: virtManager/addhardware.py:1309
 #, python-format
@@ -2594,6 +2595,8 @@ msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
+"ვირტუალური მანქანის (%s) და მისი საცავის შექმნა (ამას საკმაო დრო შეიძლება "
+"დასჭირდეს)"
 
 #: virtManager/config.py:148
 msgid "Locate or create storage volume"
@@ -2644,6 +2647,11 @@ msgid ""
 "\n"
 "Recover error: %(recovererror)s"
 msgstr ""
+"%(object)s გადარქმევის შეცდომა. აღდგენაც ვერ მოხერხდა.\n"
+"\n"
+"საწყისი შეცდომა: %(origerror)s\n"
+"\n"
+"აღდგენის შეცდომა: %(recovererror)s"
 
 #: virtManager/createconn.py:56
 #, python-format
@@ -2830,6 +2838,8 @@ msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr ""
+"ეს ჩვეულებრივ ნიშნავს, რომ თქვენს მანქანაზე ან QEMU/KVM არ აყენია, ან "
+"ბირთვის KVM-ის მოდულები ჩატვირთული არაა."
 
 #: virtManager/createvm.py:606
 msgid ""
@@ -3535,7 +3545,7 @@ msgstr "გაცემულია %(transferred)d %(units)s"
 #: virtManager/details/details.py:1861 virtManager/details/details.py:1862
 #: virtManager/hostnets.py:206 virtManager/hostnets.py:225
 msgid "Disabled"
-msgstr "გამორთულია"
+msgstr "გათიშულია"
 
 #: virtManager/details/details.py:1870
 #, python-format
@@ -4297,7 +4307,7 @@ msgstr "შენახულია"
 
 #: virtManager/lib/libvirtenummap.py:78
 msgid "Shutoff"
-msgstr "გამორთვა"
+msgstr "გამორთულია"
 
 #: virtManager/lib/libvirtenummap.py:80 virtManager/lib/libvirtenummap.py:102
 #: virtManager/lib/libvirtenummap.py:114 virtManager/lib/libvirtenummap.py:122
@@ -4669,7 +4679,7 @@ msgstr "ყოველთვის"
 
 #: virtManager/preferences.py:123
 msgid "Off"
-msgstr "გამორთული"
+msgstr "გამორთულია"
 
 #: virtManager/preferences.py:124
 msgid "On"
