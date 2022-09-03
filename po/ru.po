@@ -25,7 +25,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
 "PO-Revision-Date: 2022-09-03 10:17+0000\n"
-"Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
+"Last-Translator: V I <xasertop@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
@@ -1039,7 +1039,7 @@ msgstr "МиБ"
 
 #: ui/details.ui:1913
 msgid "Enable shared _memory"
-msgstr "Разрешить разделяемую _память"
+msgstr "Включить разделяемую _память"
 
 #: ui/details.ui:1943
 msgid "<b>Memory</b>"
@@ -1521,10 +1521,8 @@ msgid "_Virtual Machine Details"
 msgstr "Свойства _виртуальной машины"
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Настройки"
+msgstr "_Настройки"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -2218,10 +2216,8 @@ msgid "PCI Host Device"
 msgstr "PCI-устройство узла"
 
 #: virtManager/addhardware.py:255
-#, fuzzy
-#| msgid "Host Device:"
 msgid "MDEV Host Device"
-msgstr "Устройство узла:"
+msgstr "Хост-устройство MDEV"
 
 #: virtManager/addhardware.py:259
 msgid "Video"
@@ -4010,9 +4006,9 @@ msgid "Guest agent is not available."
 msgstr "Агент гостевой системы недоступен."
 
 #: virtManager/device/addstorage.py:91
-#, fuzzy, python-format
+#, python-format
 msgid "%s available in the default location"
-msgstr "В локации по умолчанию доступно %s"
+msgstr "%s доступно в расположении по умолчанию"
 
 #: virtManager/device/addstorage.py:132
 #, python-format
@@ -4137,10 +4133,8 @@ msgid "SPAPR"
 msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:71
-#, fuzzy
-#| msgid "Emulator:"
 msgid "Emulated"
-msgstr "Эмулятор:"
+msgstr "Эмулировано"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -6511,17 +6505,13 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "Возможно, конфигурация сети гостевой системы не поддерживает PXE"
 
 #: virtinst/virtinstall.py:374
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"Операционная система не определена, производительность виртуальной машины "
-"может пострадать. Укажите ОС с помощью --os-variant для получения "
-"оптимальных результатов."
+"При использовании --osinfo {osname} производительность VM может пострадать. "
+"Укажите точную ОС для лучших результатов."
 
 #: virtinst/virtinstall.py:388
 #, python-brace-format
@@ -6554,14 +6544,12 @@ msgid "Error validating install location: %s"
 msgstr "Ошибка при проверке места установки: %s"
 
 #: virtinst/virtinstall.py:556
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"Необходим параметр «--os-variant», но его значение не указано или не "
-"обнаружено."
+"Параметр «-os-variant/--osinfo» требует имя ОС, но значение\n"
+"не указано или не обнаружено."
 
 #: virtinst/virtinstall.py:570
 msgid ""
@@ -7067,6 +7055,8 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
+"Вывод XML-кода встроенного устройства. Домен не необязателен к указанию, но "
+"рекомендуется для обеспечения оптимальных значений по умолчанию."
 
 #: virtinst/virtxml.py:395
 msgid "Output options"
