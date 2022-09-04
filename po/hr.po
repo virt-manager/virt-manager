@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-08-03 22:19+0000\n"
+"PO-Revision-Date: 2022-09-05 17:19+0000\n"
 "Last-Translator: Gogo Gogsi <linux.hr@protonmail.com>\n"
 "Language-Team: Croatian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/hr/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -77,7 +77,9 @@ msgstr "Pogonjeno s libvirt"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ui/about.ui:18
 msgid "translator-credits"
-msgstr "Renato Pavičić, renato@translator-shop.org"
+msgstr ""
+"Launchpad Contributions:\n"
+"  gogo https://launchpad.net/~trebelnik-stefina"
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
@@ -203,23 +205,23 @@ msgstr "Nač_in predmemorije:"
 
 #: ui/addstorage.ui:285
 msgid "Discard mod_e:"
-msgstr ""
+msgstr "Način odabacivanj_a:"
 
 #: ui/addstorage.ui:316
 msgid "R_eadonly:"
-msgstr ""
+msgstr "Samo _čitanje:"
 
 #: ui/addstorage.ui:330
 msgid "Sharea_ble:"
-msgstr ""
+msgstr "Dijelj_ivo:"
 
 #: ui/addstorage.ui:371
 msgid "Removab_le:"
-msgstr ""
+msgstr "Uklonji_vo:"
 
 #: ui/addstorage.ui:399
 msgid "Seria_l:"
-msgstr ""
+msgstr "Serijsk_i:"
 
 #: ui/addstorage.ui:425
 msgid "Advanced _options"
@@ -309,8 +311,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>Kloniranje <u>ne mijenja</u> sadržaj gostujećeg OS-a. Ako "
-"trebate obaviti promjenu\n"
+"<span size='small'>Kloniranje <u>ne mijenja</u> sadržaj OS-a virtualnog "
+"računala. Ako trebate obaviti promjenu\n"
 "lozinka ili nepromjenjivih IP adresa, pogledajte virt-sysprep(1) alat.</span>"
 
 #: ui/clone.ui:706
@@ -323,7 +325,7 @@ msgstr "<b>Konzola je trenutno nedostupna</b>"
 
 #: ui/console.ui:57 virtManager/addhardware.py:227
 msgid "Serial"
-msgstr ""
+msgstr "Serijski"
 
 #: ui/console.ui:125
 msgid "_Password:"
@@ -480,7 +482,7 @@ msgstr "Naziv po_služitelja:"
 
 #: ui/createpool.ui:204
 msgid "Initiator _IQN:"
-msgstr ""
+msgstr "IQN _pokretača::"
 
 #: ui/createpool.ui:215
 msgid "B_rowse"
@@ -816,7 +818,7 @@ msgstr "Pu_tanja:"
 
 #: ui/createvol.ui:423
 msgid "_Backing store"
-msgstr ""
+msgstr "_Pohrana sigurnosnog kopiranja"
 
 #: ui/delete.ui:9 virtManager/delete.py:287
 msgid "Delete Virtual Machine"
@@ -908,11 +910,11 @@ msgstr "Osvježi"
 
 #: ui/details.ui:996 ui/host.ui:263
 msgid "<b>CPU usage</b>"
-msgstr "<b>CPU upotreba</b>"
+msgstr "<b>CPU virtualnog računala</b>"
 
 #: ui/details.ui:1065 ui/host.ui:321
 msgid "<b>Memory usage</b>"
-msgstr "<b>Upotreba memorije</b>"
+msgstr "<b>Memorija</b>"
 
 #: ui/details.ui:1113
 msgid "0 KiBytes/s 0 KiBytes/s"
@@ -940,7 +942,7 @@ msgstr "2"
 
 #: ui/details.ui:1368
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr ""
+msgstr "<small>vCPU prekomjerno korištenje može naštetiti performansama</small>"
 
 #: ui/details.ui:1404
 msgid "<b>CPUs</b>"
@@ -997,7 +999,7 @@ msgstr "Na_jveća alokacija:"
 
 #: ui/details.ui:1791
 msgid "Total host memory:"
-msgstr "Ukupna memorija računala:"
+msgstr "Ukupna memorija fizičkog računala:"
 
 #: ui/details.ui:1824 ui/details.ui:1873
 msgid "50"
@@ -1093,7 +1095,7 @@ msgstr "Sabirnica d_iska:"
 
 #: ui/details.ui:2828
 msgid "disk-bus-label"
-msgstr ""
+msgstr "naziv-sabirnice-diska"
 
 #: ui/details.ui:2876
 msgid "<b>Virtual Disk</b>"
@@ -1189,7 +1191,7 @@ msgstr "_3D ubrzanje:"
 
 #: ui/details.ui:3938
 msgid "<b>Video</b>"
-msgstr ""
+msgstr "<b>Video</b>"
 
 #: ui/details.ui:4190
 msgid "Devices:"
@@ -1323,7 +1325,7 @@ msgstr "_Datoteka"
 
 #: ui/host.ui:36 ui/vmwindow.ui:34
 msgid "_View Manager"
-msgstr "_Upravitelj prikaza"
+msgstr "_Otvori UVR"
 
 #: ui/host.ui:116
 msgid "Libvirt URI:"
@@ -1500,15 +1502,15 @@ msgstr "_Grafikon"
 
 #: ui/manager.ui:157
 msgid "_Guest CPU Usage"
-msgstr "_Upotreba CPU gosta"
+msgstr "_CPU virtualnog računala"
 
 #: ui/manager.ui:167
 msgid "_Host CPU Usage"
-msgstr "_Upotreba CPU računala"
+msgstr "_CPU fizičkog računala"
 
 #: ui/manager.ui:176
 msgid "_Memory Usage"
-msgstr "_Upotreba memorije"
+msgstr "_Memorija"
 
 #: ui/manager.ui:185
 msgid "_Disk I/O"
@@ -1611,11 +1613,11 @@ msgstr ""
 
 #: ui/migrate.ui:474
 msgid "_URI:"
-msgstr ""
+msgstr "_URI:"
 
 #: ui/migrate.ui:509
 msgid "<b>Connectivity</b>"
-msgstr ""
+msgstr "<b>Povezivost</b>"
 
 #: ui/migrate.ui:537
 msgid ""
@@ -1644,37 +1646,39 @@ msgstr ""
 
 #: ui/migrate.ui:571
 msgid "_Temporary move:"
-msgstr ""
+msgstr "_Privremeno premještaje:"
 
 #: ui/migrate.ui:599
 msgid "Advanced options"
-msgstr ""
+msgstr "Napredne mogućnosti"
 
 #: ui/migrate.ui:653
 msgid "_Migrate"
-msgstr ""
+msgstr "_Preseli"
 
 #: ui/netlist.ui:17
 msgid "De_vice name:"
-msgstr ""
+msgstr "Na_ziv uređaja:"
 
 #: ui/netlist.ui:63
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
 msgstr ""
+"<small>Za većinu podešavanja, macvtap ne radi za mrežnu komunikaciju od "
+"fizičkog prema virtualnom računalu.</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
-msgstr ""
+msgstr "<small>Neuspjeli pronalazak prikladne zadane mreže.</small>"
 
 #: ui/netlist.ui:146
 msgid "_Portgroup:"
-msgstr ""
+msgstr "_Grupa ulaza:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
-msgstr ""
+msgstr "_Mrežni izvor:"
 
 #: ui/oslist.ui:56
 msgid ""
@@ -1682,10 +1686,13 @@ msgid ""
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
+"Ne možete pronaći traženi operativni sustav?\n"
+"Pokušajte odabrati sličnu distribuciju ili izdanje, ili koristite mogućnosti "
+"'Izvorno'."
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
-msgstr ""
+msgstr "Uključi kraj programske podrške za operativni sustav"
 
 #: ui/preferences.ui:14
 msgid "Preferences"
@@ -1693,23 +1700,23 @@ msgstr "Osobitosti"
 
 #: ui/preferences.ui:45
 msgid "Enable _system tray icon"
-msgstr ""
+msgstr "Omogući _ikonu trake sustava"
 
 #: ui/preferences.ui:67
 msgid "Enable libgues_tfs VM introspection"
-msgstr ""
+msgstr "Omogući libgues_tfs VR introspekciju"
 
 #: ui/preferences.ui:124
 msgid "Enable _XML editing"
-msgstr ""
+msgstr "Omogući _XML uređivanje"
 
 #: ui/preferences.ui:144
 msgid "<b>General</b>"
-msgstr ""
+msgstr "<b>Općenito</b>"
 
 #: ui/preferences.ui:159
 msgid "_General"
-msgstr ""
+msgstr "_Općenito"
 
 #: ui/preferences.ui:188
 msgid "Poll _Disk I/O"
@@ -1725,7 +1732,7 @@ msgstr ""
 
 #: ui/preferences.ui:272
 msgid "_Update status every"
-msgstr ""
+msgstr "_Nadopuni stanje svakih"
 
 #: ui/preferences.ui:309
 msgid "seconds"
@@ -1737,7 +1744,7 @@ msgstr ""
 
 #: ui/preferences.ui:357
 msgid "<b>Stats Options</b>"
-msgstr ""
+msgstr "<b>Mogućnosti statistike:</b>"
 
 #: ui/preferences.ui:375
 msgid "P_olling"
@@ -1745,15 +1752,15 @@ msgstr ""
 
 #: ui/preferences.ui:409
 msgid "Gra_phics type:"
-msgstr ""
+msgstr "Vrs_ta grafike:"
 
 #: ui/preferences.ui:422 ui/preferences.ui:448
 msgid "Default storage format for new disk images."
-msgstr ""
+msgstr "Zadani format pohrane za nove slike diska."
 
 #: ui/preferences.ui:424
 msgid "_Storage format:"
-msgstr ""
+msgstr "_Format pohrane:"
 
 #: ui/preferences.ui:460
 msgid ""
@@ -1766,175 +1773,179 @@ msgstr ""
 
 #: ui/preferences.ui:464
 msgid "CPU _default:"
-msgstr ""
+msgstr "CPU _zadani:"
 
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
-msgstr ""
+msgstr "Zadani firmver za nova VR. Pokrenite koristeći BIOS ili UEFI."
 
 #: ui/preferences.ui:490
 msgid "x86 _Firmware:"
-msgstr ""
+msgstr "x86 _firmver:"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
-msgstr ""
+msgstr "<b>Novo zadano VR</b>"
 
 #: ui/preferences.ui:541
 msgid "N_ew VM"
-msgstr ""
+msgstr "N_ovo VR"
 
 #: ui/preferences.ui:569
 msgid "Graphical console _scaling:"
-msgstr ""
+msgstr "Promjena veličine grafičke _konzole:"
 
 #: ui/preferences.ui:587
 msgid "Gr_ab keys:"
-msgstr ""
+msgstr "O_buhvati tipke:"
 
 #: ui/preferences.ui:602
 msgid "Not supported"
-msgstr ""
+msgstr "Nije podržano"
 
 #: ui/preferences.ui:630
 msgid "Change..."
-msgstr ""
+msgstr "Promijeni..."
 
 #: ui/preferences.ui:647
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
+"Promjena razlučivosti VR kada se promijeni veličina prozora VR. Radi samo s "
+"ispravno podešenim VR kada se koristi spice i agent radne površine."
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
-msgstr ""
+msgstr "_Promijeni veličinu VR na veličinu prozora:"
 
 #: ui/preferences.ui:675
 msgid "SPICE _USB Redirection:"
-msgstr ""
+msgstr "SPICE _USB preusmjeravanje:"
 
 #: ui/preferences.ui:699
 msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"Ako je onemogućeno, prozor VR se neće automatski povezati s pokrenutom "
+"grafičkom VR konzolm."
 
 #: ui/preferences.ui:701
 msgid "Console autoconnec_t:"
-msgstr ""
+msgstr "Automatsko povezivanje _konzole:"
 
 #: ui/preferences.ui:729
 msgid "<b>Graphical Consoles</b>"
-msgstr ""
+msgstr "<b>Grafičke konzole</b>"
 
 #: ui/preferences.ui:747
 msgid "Conso_le"
-msgstr ""
+msgstr "Konzo_la"
 
 #: ui/preferences.ui:775
 msgid "_Force Poweroff:"
-msgstr ""
+msgstr "_Prisilno isključi:"
 
 #: ui/preferences.ui:802
 msgid "Poweroff/_Reboot/Save:"
-msgstr ""
+msgstr "Isključi/_Ponovno pokreni/Spremi:"
 
 #: ui/preferences.ui:816
 msgid "_Pause:"
-msgstr ""
+msgstr "_Pauziraj:"
 
 #: ui/preferences.ui:869
 msgid "Device re_moval:"
-msgstr ""
+msgstr "Uklanjanje ure_đaja:"
 
 #: ui/preferences.ui:883
 msgid "_Unapplied changes:"
-msgstr ""
+msgstr "_Neprimijenjene promjene:"
 
 #: ui/preferences.ui:910
 msgid "_Deleting storage:"
-msgstr ""
+msgstr "_Brisanje pohrane:"
 
 #: ui/preferences.ui:939
 msgid "<b>Confirmations</b>"
-msgstr ""
+msgstr "<b>Potvrde</b>"
 
 #: ui/preferences.ui:957
 msgid "Feed_back"
-msgstr ""
+msgstr "Povratne _informacije"
 
 #: ui/snapshots.ui:80
 msgid "Description:"
-msgstr ""
+msgstr "Opis:"
 
 #: ui/snapshots.ui:118
 msgid "VM State:"
-msgstr ""
+msgstr "VR stanje:"
 
 #: ui/snapshots.ui:166
 msgid "Timestamp:"
-msgstr ""
+msgstr "Vrijeme:"
 
 #: ui/snapshots.ui:204
 msgid "Snapshot Mode:"
-msgstr ""
+msgstr "Način stvaranja snimka sustava:"
 
 #: ui/snapshots.ui:229 ui/snapshotsnew.ui:212
 msgid "Screenshot:"
-msgstr ""
+msgstr "Slika zaslona:"
 
 #: ui/snapshots.ui:256
 msgid "No screenshot available"
-msgstr ""
+msgstr "Slika zaslona nije dostupna"
 
 #: ui/snapshots.ui:293
 msgid "<small><i>This was the most recently applied snapshot.</i></small>"
-msgstr ""
+msgstr "<small><i>Ovo je najnovija primijenjena snimka sustava.</i></small>"
 
 #: ui/snapshots.ui:382 ui/snapshots.ui:383
 msgid "Create new snapshot"
-msgstr ""
+msgstr "Stvori novu snimku sustava"
 
 #: ui/snapshots.ui:409
 msgid "Run selected snapshot"
-msgstr ""
+msgstr "Pokreni odabranu snimku sustava"
 
 #: ui/snapshots.ui:435
 msgid "Refresh snapshot list"
-msgstr ""
+msgstr "Osvježi popis snimka sustava"
 
 #: ui/snapshots.ui:462 ui/snapshots.ui:463
 msgid "Delete selected snapshot"
-msgstr ""
+msgstr "Obriši odabrane snimke sustava"
 
 #: ui/snapshots.ui:504 ui/snapshots.ui:505
 msgid "Save updated snapshot metadata"
-msgstr ""
+msgstr "Spremi nadopunjene metapodatke snimke sustava"
 
 #: ui/snapshotsnew.ui:7
 msgid "Create snapshot"
-msgstr ""
+msgstr "Stvaranje snimke sustava"
 
 #: ui/snapshotsnew.ui:49
 msgid "<span size='large'>Create snapshot</span>"
-msgstr ""
+msgstr "<span size='large'>Stvaranje snimke sustava</span>"
 
 #: ui/snapshotsnew.ui:131
 msgid "_Description:"
-msgstr ""
+msgstr "_Opis:"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
-msgstr ""
+msgstr "Putanja _uređaja:"
 
 #: ui/tpmdetails.ui:130
 msgid "_Version:"
-msgstr ""
+msgstr "_Inačica:"
 
 #: ui/tpmdetails.ui:162
 msgid "Adva_nced options"
-msgstr ""
+msgstr "Napre_dne mogućnosti"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
@@ -1942,7 +1953,7 @@ msgstr ""
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
-msgstr ""
+msgstr "Virtualno računalo"
 
 #: ui/vmwindow.ui:73
 msgid "Virtual _Machine"
@@ -1955,50 +1966,52 @@ msgstr "_Uslikaj sliku zaslona"
 #: ui/vmwindow.ui:98
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr ""
+"Preusmjeri USB uređaj fizičkog računala u virtualno računalo sa SPICE "
+"grafikom."
 
 #: ui/vmwindow.ui:99
 msgid "_Redirect USB device"
-msgstr ""
+msgstr "_Preusmjeri USB uređaj"
 
 #: ui/vmwindow.ui:121
 msgid "_Console"
-msgstr ""
+msgstr "_Konzola"
 
 #: ui/vmwindow.ui:143
 msgid "Sna_pshots"
-msgstr ""
+msgstr "Sni_mke sustava"
 
 #: ui/vmwindow.ui:160
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Cjelozaslonski prikaz"
 
 #: ui/vmwindow.ui:169
 msgid "_Resize to VM"
-msgstr ""
+msgstr "_Promjena veličine na VR"
 
 #: ui/vmwindow.ui:178
 msgid "_Scale Display"
-msgstr ""
+msgstr "_Promjena veličine zaslona"
 
 #: ui/vmwindow.ui:188
 msgid "_Always"
-msgstr ""
+msgstr "_Uvijek"
 
 #: ui/vmwindow.ui:198
 msgid "_Only when Fullscreen"
-msgstr ""
+msgstr "_Samo pri cjelozaslonskom prikazu"
 
 #: ui/vmwindow.ui:209
 msgid "_Never"
-msgstr ""
+msgstr "_Nikada"
 
 #: ui/vmwindow.ui:226
 msgid "Auto _resize VM with window"
-msgstr ""
+msgstr "Automatska _promjena veličine s prozorom"
 
 #: ui/vmwindow.ui:239
 msgid "Co_nsoles"
-msgstr ""
+msgstr "Ko_nzole"
 
 #: ui/vmwindow.ui:247
 msgid "_Autoconnect"
@@ -2006,23 +2019,23 @@ msgstr "_Automatsko povezivanje"
 
 #: ui/vmwindow.ui:262
 msgid "T_oolbar"
-msgstr ""
+msgstr "A_latna traka"
 
 #: ui/vmwindow.ui:276
 msgid "Send _Key"
-msgstr ""
+msgstr "Pošalji _tipku"
 
 #: ui/vmwindow.ui:299
 msgid "Show the graphical console"
-msgstr ""
+msgstr "Prikaži grafičku konzolu"
 
 #: ui/vmwindow.ui:300 virtManager/addhardware.py:235
 msgid "Console"
-msgstr ""
+msgstr "Konzola"
 
 #: ui/vmwindow.ui:314
 msgid "Show virtual hardware details"
-msgstr ""
+msgstr "Prikaži pojedinosti virtualnog hardvera"
 
 #: ui/vmwindow.ui:315 virtManager/error.py:347
 msgid "Details"
@@ -2058,7 +2071,7 @@ msgstr "_Prekini instalaciju"
 
 #: ui/vsockdetails.ui:23
 msgid "Guest C_ID:"
-msgstr "Gostujući C_ID:"
+msgstr "C_ID virtualnog računala:"
 
 #: ui/xmleditor.ui:96
 msgid ""
@@ -2104,7 +2117,7 @@ msgstr "Unos"
 #: virtManager/addhardware.py:229 virtManager/addhardware.py:233
 #: virtManager/addhardware.py:239 virtManager/addhardware.py:263
 msgid "Not supported for this guest type."
-msgstr "Nije podržano na ovoj vrsti gosta."
+msgstr "Nije podržano na ovoj vrsti virtualnog računala."
 
 #: virtManager/addhardware.py:222 virtManager/addhardware.py:989
 msgid "Graphics"
@@ -2116,15 +2129,15 @@ msgstr "Zvuk"
 
 #: virtManager/addhardware.py:231
 msgid "Parallel"
-msgstr ""
+msgstr "Paralelni uređaj"
 
 #: virtManager/addhardware.py:237
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #: virtManager/addhardware.py:241
 msgid "USB Host Device"
-msgstr ""
+msgstr "USB uređaj fizičkog računala"
 
 #: virtManager/addhardware.py:243 virtManager/addhardware.py:247
 #: virtManager/addhardware.py:257
@@ -2133,49 +2146,49 @@ msgstr ""
 
 #: virtManager/addhardware.py:251
 msgid "Not supported for containers"
-msgstr ""
+msgstr "Nije podržano za spremnike"
 
 #: virtManager/addhardware.py:252
 msgid "PCI Host Device"
-msgstr ""
+msgstr "PCI uređaj fizičkog računala"
 
 #: virtManager/addhardware.py:255
 msgid "MDEV Host Device"
-msgstr ""
+msgstr "MDEV uređaj fizičkog računala"
 
 #: virtManager/addhardware.py:259
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: virtManager/addhardware.py:260
 msgid "Libvirt version does not support video devices."
-msgstr ""
+msgstr "Libvirt inačica ne podržava video uređaje."
 
 #: virtManager/addhardware.py:261 virtManager/details/details.py:255
 #: virtManager/lib/libvirtenummap.py:110
 msgid "Watchdog"
-msgstr ""
+msgstr "Watchdog"
 
 #: virtManager/addhardware.py:264
 msgid "Filesystem"
-msgstr ""
+msgstr "Datotečni sustav"
 
 #: virtManager/addhardware.py:265 virtManager/addhardware.py:999
 #: virtManager/details/details.py:253
 msgid "Smartcard"
-msgstr ""
+msgstr "Pametna kartica"
 
 #: virtManager/addhardware.py:267 virtManager/addhardware.py:1001
 msgid "USB Redirection"
-msgstr ""
+msgstr "USB preusmjeravanje"
 
 #: virtManager/addhardware.py:269 virtManager/addhardware.py:1003
 msgid "TPM"
-msgstr ""
+msgstr "TPM"
 
 #: virtManager/addhardware.py:271 virtManager/details/details.py:245
 msgid "RNG"
-msgstr ""
+msgstr "RNG"
 
 #: virtManager/addhardware.py:272 virtManager/addhardware.py:1007
 #: virtManager/details/details.py:252
@@ -2184,137 +2197,139 @@ msgstr ""
 
 #: virtManager/addhardware.py:274 virtManager/addhardware.py:277
 msgid "Not supported for this hypervisor/libvirt/arch combination."
-msgstr ""
+msgstr "Nije podaržano za ovu hipervizor/libvirt/arch kombinaciju."
 
 #: virtManager/addhardware.py:275 virtManager/details/details.py:254
 msgid "VirtIO VSOCK"
-msgstr ""
+msgstr "VirtIO VSOCK"
 
 #: virtManager/addhardware.py:346
 #, python-format
 msgid "Error changing VM configuration: %s"
-msgstr ""
+msgstr "Greška promjene VR podešavanja: %s"
 
 #: virtManager/addhardware.py:371
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
+"Ove promjene će se primijeniti nakon sljedećeg isključivanja virtualnog "
+"računala."
 
 #: virtManager/addhardware.py:421
 msgid "Pseudo TTY"
-msgstr ""
+msgstr "Pseudo TTY"
 
 #: virtManager/addhardware.py:422
 msgid "Output to a file"
-msgstr ""
+msgstr "Ispiši u datoteku"
 
 #: virtManager/addhardware.py:423
 msgid "TCP net console"
-msgstr ""
+msgstr "TCP mrežna konzola"
 
 #: virtManager/addhardware.py:424
 msgid "UDP net console"
-msgstr ""
+msgstr "UDP mrežna konzola"
 
 #: virtManager/addhardware.py:425
 msgid "UNIX socket"
-msgstr ""
+msgstr "UNIX priključnica"
 
 #: virtManager/addhardware.py:426
 msgid "Spice agent"
-msgstr ""
+msgstr "Spice agent"
 
 #: virtManager/addhardware.py:427
 msgid "Spice port"
-msgstr ""
+msgstr "Spice ulaz"
 
 #: virtManager/addhardware.py:441 virtManager/addhardware.py:502
 msgid "IDE"
-msgstr ""
+msgstr "IDE"
 
 #: virtManager/addhardware.py:442 virtManager/details/details.py:2331
 msgid "Floppy"
-msgstr ""
+msgstr "Disketni pogon"
 
 #: virtManager/addhardware.py:443 virtManager/addhardware.py:504
 msgid "SCSI"
-msgstr ""
+msgstr "SCSI"
 
 #: virtManager/addhardware.py:444 virtManager/addhardware.py:503
 msgid "SATA"
-msgstr ""
+msgstr "SATA"
 
 #: virtManager/addhardware.py:445
 msgid "VirtIO Serial"
-msgstr ""
+msgstr "VirtIO serijski"
 
 #: virtManager/addhardware.py:446 virtManager/addhardware.py:506
 #: virtManager/addhardware.py:567
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 #: virtManager/addhardware.py:447
 msgid "PCI"
-msgstr ""
+msgstr "PCI"
 
 #: virtManager/addhardware.py:448
 msgid "CCID"
-msgstr ""
+msgstr "CCID"
 
 #: virtManager/addhardware.py:449
 msgid "xenbus"
-msgstr ""
+msgstr "xenbus"
 
 #: virtManager/addhardware.py:457 virtManager/addhardware.py:897
 msgid "VirtIO SCSI"
-msgstr ""
+msgstr "VirtIO SCSI"
 
 #: virtManager/addhardware.py:460
 msgid "PCIe"
-msgstr ""
+msgstr "PCIe"
 
 #: virtManager/addhardware.py:505
 msgid "SD"
-msgstr ""
+msgstr "SD"
 
 #: virtManager/addhardware.py:507 virtManager/addhardware.py:568
 msgid "VirtIO"
-msgstr ""
+msgstr "VirtIO"
 
 #: virtManager/addhardware.py:508 virtManager/addhardware.py:569
 msgid "Xen"
-msgstr ""
+msgstr "Xen"
 
 #: virtManager/addhardware.py:515
 msgid "ISA"
-msgstr ""
+msgstr "ISA"
 
 #: virtManager/addhardware.py:516
 msgid "pSeries"
-msgstr ""
+msgstr "pSeries"
 
 #: virtManager/addhardware.py:517
 msgid "Hyper-V"
-msgstr ""
+msgstr "Hyper-V"
 
 #: virtManager/addhardware.py:518
 msgid "s390"
-msgstr ""
+msgstr "s390"
 
 #: virtManager/addhardware.py:525
 msgid "Random"
-msgstr ""
+msgstr "Naizmjenično"
 
 #: virtManager/addhardware.py:526
 msgid "Entropy Gathering Daemon"
-msgstr ""
+msgstr "Pozadinski program skupljanja entropije"
 
 #: virtManager/addhardware.py:527
 msgid "Builtin RNG"
-msgstr ""
+msgstr "Ugrađeni RNG"
 
 #: virtManager/addhardware.py:545
 msgid "Forcefully reset the guest"
-msgstr ""
+msgstr "Prisilno ponovno pokreni VR"
 
 #: virtManager/addhardware.py:546
 msgid "Gracefully shutdown the guest"
@@ -2322,61 +2337,61 @@ msgstr ""
 
 #: virtManager/addhardware.py:547
 msgid "Forcefully power off the guest"
-msgstr ""
+msgstr "Prisilno isključii VR"
 
 #: virtManager/addhardware.py:548
 msgid "Pause the guest"
-msgstr ""
+msgstr "Pauziraj VR"
 
 #: virtManager/addhardware.py:549
 msgid "No action"
-msgstr ""
+msgstr "Nema radnje"
 
 #: virtManager/addhardware.py:550
 msgid "Dump guest memory core"
-msgstr ""
+msgstr "Ispiši jezgru virtualne memorije"
 
 #: virtManager/addhardware.py:557
 msgid "EvTouch USB Graphics Tablet"
-msgstr ""
+msgstr "EvTouch USB grafički tablet"
 
 #: virtManager/addhardware.py:560 virtManager/details/details.py:194
 msgid "Keyboard"
-msgstr ""
+msgstr "Tipkovnica"
 
 #: virtManager/addhardware.py:561 virtManager/details/details.py:192
 msgid "Mouse"
-msgstr ""
+msgstr "Miš"
 
 #: virtManager/addhardware.py:562 virtManager/details/details.py:190
 msgid "Tablet"
-msgstr ""
+msgstr "Tablet"
 
 #: virtManager/addhardware.py:566
 msgid "PS/2"
-msgstr ""
+msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
 #: virtManager/addhardware.py:575
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
-msgstr ""
+msgstr "%(input_bus)s %(input_type)s"
 
 #: virtManager/addhardware.py:673
 msgid "Disk device"
-msgstr ""
+msgstr "Diskovni uređaj"
 
 #: virtManager/addhardware.py:675
 msgid "CDROM device"
-msgstr ""
+msgstr "CDROM uređaj"
 
 #: virtManager/addhardware.py:677
 msgid "Floppy device"
-msgstr ""
+msgstr "Disketni pogon"
 
 #: virtManager/addhardware.py:680
 msgid "LUN Passthrough"
-msgstr ""
+msgstr "LUN prolaz"
 
 #: virtManager/addhardware.py:703 virtManager/addhardware.py:812
 #: virtManager/addhardware.py:822 virtManager/addhardware.py:898
@@ -2385,7 +2400,7 @@ msgstr ""
 #: virtManager/device/tpmdetails.py:76 virtManager/device/tpmdetails.py:87
 #: virtManager/preferences.py:171
 msgid "Hypervisor default"
-msgstr ""
+msgstr "Zadano hipervizorom"
 
 #: virtManager/addhardware.py:791
 #, python-format
@@ -2393,55 +2408,57 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s nije aktivan na fizičkm računalu.\n"
+"Pokrenite mdev na fizičkom računalu prije dodavanja virtualnog računala."
 
 #: virtManager/addhardware.py:797
 msgid "No Devices Available"
-msgstr ""
+msgstr "Nema dostupnog uređaja"
 
 #: virtManager/addhardware.py:859 virtManager/device/tpmdetails.py:72
 msgid "Passthrough"
-msgstr ""
+msgstr "Prolaz"
 
 #: virtManager/addhardware.py:860
 msgid "Host"
-msgstr ""
+msgstr "Fizičko računalo"
 
 #: virtManager/addhardware.py:866
 msgid "Spice channel"
-msgstr ""
+msgstr "Spice kanal"
 
 #: virtManager/addhardware.py:894
 msgid "USB 3"
-msgstr ""
+msgstr "USB 3"
 
 #: virtManager/addhardware.py:895
 msgid "USB 2"
-msgstr ""
+msgstr "USB 2"
 
 #: virtManager/addhardware.py:993
 msgid "Video Device"
-msgstr ""
+msgstr "Video uređaj"
 
 #: virtManager/addhardware.py:995
 msgid "Watchdog Device"
-msgstr ""
+msgstr "Watchdog uređaj"
 
 #: virtManager/addhardware.py:997
 msgid "Filesystem Passthrough"
-msgstr ""
+msgstr "Prolaz datotečnog sustava"
 
 #: virtManager/addhardware.py:1005
 msgid "Random Number Generator"
-msgstr ""
+msgstr "Generator naizmjeničnog broja"
 
 #: virtManager/addhardware.py:1009
 msgid "VM Sockets"
-msgstr ""
+msgstr "VR priključnica"
 
 #: virtManager/addhardware.py:1013 virtManager/details/details.py:2111
 #, python-format
 msgid "%s Device"
-msgstr ""
+msgstr "%s uređaj"
 
 #: virtManager/addhardware.py:1017
 msgid "PCI Device"
@@ -2462,121 +2479,128 @@ msgid ""
 "Adding more than one USB controller is not supported.\n"
 "You can change the USB controller type in the VM details screen."
 msgstr ""
+"%s već ima priključen USB kontroler.\n"
+"Dodavanje više od jednog USB kontrolera nije podržano.\n"
+"Možete promijeniti vrstu USB kontrolera u VR zaslonu pojedinosti."
 
 #: virtManager/addhardware.py:1232
 msgid "Are you sure you want to add this device?"
-msgstr ""
+msgstr "Sigurno to želite dodati ovaj uređaj?"
 
 #: virtManager/addhardware.py:1235
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr ""
+"Ovaj uređaj se ne može priključiti na pokrenuto računalo. Želite li učiniti "
+"uređaj dostupnim nakon sljedećeg isključivanja virtualnog računala?"
 
 #: virtManager/addhardware.py:1259
 #, python-format
 msgid "Unable to add device: %s"
-msgstr ""
+msgstr "Nemoguće dodavanje uređaja: %s"
 
 #: virtManager/addhardware.py:1280
 #, python-format
 msgid "Error validating device parameters: %s"
-msgstr ""
+msgstr "Greška provjere parametara uređaja: %s"
 
 #: virtManager/addhardware.py:1286
 msgid "Creating device"
-msgstr ""
+msgstr "Stvaranje uređaja"
 
 #: virtManager/addhardware.py:1287
 msgid "Depending on the device, this may take a few minutes to complete."
-msgstr ""
+msgstr "Ovisno o uređaju, ovo bi moglo potrajati nekoliko minuta."
 
 #: virtManager/addhardware.py:1309
 #, python-format
 msgid "The device is already in use by other guests %s"
-msgstr ""
+msgstr "Uređaj već koristi drugo virtualno računalo %s"
 
 #: virtManager/addhardware.py:1311
 msgid "Do you really want to use the device?"
-msgstr ""
+msgstr "Sigurno želite koristiti uređaj?"
 
 #: virtManager/addhardware.py:1356
 #, python-format
 msgid "Error building device XML: %s"
-msgstr ""
+msgstr "Graška izgradnje XML-a uređaja : %s"
 
 #: virtManager/asyncjob.py:220
 msgid "Cancelling job..."
-msgstr ""
+msgstr "Prekidanja zadatka..."
 
 #: virtManager/clone.py:28 virtinst/cloner.py:192
 msgid "No storage to clone."
-msgstr ""
+msgstr "Nema pohrane za kloniranje."
 
 #: virtManager/clone.py:111
 #, python-format
 msgid "Disk target: %s"
-msgstr ""
+msgstr "Odredišni disk: %s"
 
 #: virtManager/clone.py:112
 #, python-format
 msgid "Original path: %s"
-msgstr ""
+msgstr "Izvorna putanja: %s"
 
 #: virtManager/clone.py:114
 #, python-format
 msgid "New path: %s"
-msgstr ""
+msgstr "Nova putanja: %s"
 
 #: virtManager/clone.py:118
 #, python-format
 msgid "Storage is safe to share: %(reason)s"
-msgstr ""
+msgstr "Pohrana se može sigurno dijeliti: %(reason)s"
 
 #: virtManager/clone.py:122
 msgid "Sharing this storage is potentially dangerous."
-msgstr ""
+msgstr "Dijeljenje ove pohrane potencijalno je opasno."
 
 #: virtManager/clone.py:125
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
-msgstr ""
+msgstr "Pohrana se ne može klonirati: %(reason)s"
 
 #: virtManager/clone.py:137
 msgid "No storage."
-msgstr ""
+msgstr "Nema pohrane."
 
 #: virtManager/clone.py:142
 #, python-format
 msgid "Share disk with %s"
-msgstr ""
+msgstr "Dijeli disk s %s"
 
 #: virtManager/clone.py:144
 msgid "Clone this disk"
-msgstr ""
+msgstr "Kloniraj ovaj disk"
 
 #: virtManager/clone.py:182
 #, python-format
 msgid "Error launching clone dialog: %s"
-msgstr ""
+msgstr "Greška pokretanja dijaloga kloniranja: %s"
 
 #: virtManager/clone.py:276
 msgid "Clone"
-msgstr ""
+msgstr "Kloniraj"
 
 #: virtManager/clone.py:457
 msgid "Cloning will overwrite the existing file"
-msgstr ""
+msgstr "Kloniranje će prebirati postojeću datoteku"
 
 #: virtManager/clone.py:458
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr ""
+"Korištenje postojeće slike će prebrisati putanju tijekom procesa kloniranja. "
+"Sigurno želite koristiti ovu putanju?"
 
 #: virtManager/clone.py:487
 msgid "Sharing storage may cause data to be overwritten."
-msgstr ""
+msgstr "Dijeljenje pohrane može uzrokovati prebrisivanje podataka."
 
 #: virtManager/clone.py:488
 #, python-format
@@ -2586,6 +2610,11 @@ msgid ""
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
+"Sljedeći diskovni uređaji biti će dijeljeni s %(vmname)s:\n"
+"\n"
+"%(pathlist)s\n"
+"Pokretanje novog virtualnog računala može prebrisati podatke u tim slikama "
+"diska."
 
 #: virtManager/clone.py:503
 #, python-format
@@ -2600,7 +2629,7 @@ msgstr "Greška s postavkama kloniranja: %s"
 #: virtManager/clone.py:566
 #, python-format
 msgid "Creating virtual machine clone '%s'"
-msgstr ""
+msgstr "Stvaranje klona virtualnog računala '%s'"
 
 #: virtManager/clone.py:571
 #, python-format
@@ -2608,46 +2637,48 @@ msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
+"Stvaranje klona virtualnog računala '%s' i odabrane pohrane (ovo može "
+"potrajati)"
 
 #: virtManager/config.py:148
 msgid "Locate or create storage volume"
-msgstr ""
+msgstr "Lociraj ili stvori uređaj pohrane"
 
 #: virtManager/config.py:149
 msgid "Locate existing storage"
-msgstr ""
+msgstr "Lociraj postojeću pohranu"
 
 #: virtManager/config.py:161
 msgid "Locate ISO media volume"
-msgstr ""
+msgstr "Lociraj uređaj ISO medija"
 
 #: virtManager/config.py:162
 msgid "Locate ISO media"
-msgstr ""
+msgstr "Lociraj ISO medij"
 
 #: virtManager/config.py:168
 msgid "Locate floppy media volume"
-msgstr ""
+msgstr "Lociraj uređaj medija disketnog pogona"
 
 #: virtManager/config.py:169
 msgid "Locate floppy media"
-msgstr ""
+msgstr "Lociraj medij disketnog pogona"
 
 #: virtManager/config.py:175 virtManager/config.py:176
 msgid "Locate directory volume"
-msgstr ""
+msgstr "Lociraj uređaj direktorija"
 
 #: virtManager/connection.py:395
 msgid "User session"
-msgstr ""
+msgstr "Korisnička sesija"
 
 #: virtManager/connection.py:495
 msgid "Disconnected"
-msgstr ""
+msgstr "Povezivanje prekinuto"
 
 #: virtManager/connection.py:497
 msgid "Connecting"
-msgstr ""
+msgstr "Povezivanje"
 
 #: virtManager/connection.py:586
 #, python-format
@@ -2658,47 +2689,52 @@ msgid ""
 "\n"
 "Recover error: %(recovererror)s"
 msgstr ""
+"%(object)s preimenovanje neuspjelo. Pokušaj obnove je isto neuspio.\n"
+"\n"
+"Izvorna greška: %(origerror)s\n"
+"\n"
+"Greška obnove: %(recovererror)s"
 
 #: virtManager/createconn.py:56
 #, python-format
 msgid "Error launching connect dialog: %s"
-msgstr ""
+msgstr "Greška pokretanja dijaloga povezivanja: %s"
 
 #: virtManager/createconn.py:117
 msgid "user session"
-msgstr ""
+msgstr "korisnička sesija"
 
 #: virtManager/createconn.py:123
 msgid "Custom URI..."
-msgstr ""
+msgstr "Prilagođen URI..."
 
 #: virtManager/createconn.py:241
 msgid "A hostname is required for remote connections."
-msgstr ""
+msgstr "Naziv računala je potreban za udaljena povezivanja."
 
 #: virtManager/createconn.py:254
 msgid "Would you still like to remember this connection?"
-msgstr ""
+msgstr "Želite li još uvijek zapamtiti ovo povezivanje?"
 
 #: virtManager/createnet.py:102
 msgid "Any physical device"
-msgstr ""
+msgstr "Svaki fizički uređaj"
 
 #: virtManager/createnet.py:103
 msgid "Physical device..."
-msgstr ""
+msgstr "Fizički uređaj..."
 
 #: virtManager/createnet.py:111 virtManager/object/network.py:161
 msgid "NAT"
-msgstr ""
+msgstr "NAT"
 
 #: virtManager/createnet.py:113
 msgid "Open"
-msgstr ""
+msgstr "Otvoreno"
 
 #: virtManager/createnet.py:114
 msgid "Isolated"
-msgstr ""
+msgstr "Izolirano"
 
 #: virtManager/createnet.py:115
 msgid "SR-IOV pool"
@@ -2706,56 +2742,56 @@ msgstr ""
 
 #: virtManager/createnet.py:175
 msgid "No available device"
-msgstr ""
+msgstr "Nema dostupnih uređaja"
 
 #: virtManager/createnet.py:336
 #, python-format
 msgid "Name '%s' already in use by another network."
-msgstr ""
+msgstr "Naziv '%s' već korsiti druga mreža."
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:318
 #: virtManager/createvol.py:263
 #, python-format
 msgid "Error building XML: %s"
-msgstr ""
+msgstr "Graška XML izgradnje: %s"
 
 #: virtManager/createnet.py:414
 #, python-format
 msgid "Error creating virtual network: %s"
-msgstr ""
+msgstr "Greška stvaranje virtualne mreže '%s'"
 
 #: virtManager/createnet.py:443
 #, python-format
 msgid "Error validating network: %s"
-msgstr ""
+msgstr "Greška provjere virtualne mreže: %s"
 
 #: virtManager/createnet.py:448
 msgid "Creating virtual network..."
-msgstr ""
+msgstr "Stvaranje virtualne mreže..."
 
 #: virtManager/createnet.py:449
 msgid "Creating the virtual network may take a while..."
-msgstr ""
+msgstr "Stvaranje virtualne mreže može potrajati..."
 
 #: virtManager/createpool.py:213
 msgid "Sou_rce Name:"
-msgstr ""
+msgstr "Naz_iv izvora:"
 
 #: virtManager/createpool.py:213
 msgid "Volg_roup Name:"
-msgstr ""
+msgstr "Naziv grupe _uređaja:"
 
 #: virtManager/createpool.py:215
 msgid "_Source Path:"
-msgstr ""
+msgstr "_Putanja izvora:"
 
 #: virtManager/createpool.py:217
 msgid "_Source IQN:"
-msgstr ""
+msgstr "_IQN izvor:"
 
 #: virtManager/createpool.py:219
 msgid "_Source Adapter:"
-msgstr ""
+msgstr "_Izvor adaptera:"
 
 #: virtManager/createpool.py:332
 #, python-format
@@ -2777,36 +2813,36 @@ msgstr ""
 
 #: virtManager/createpool.py:385
 msgid "Choose source path"
-msgstr ""
+msgstr "Odaberi putanju izvora"
 
 #: virtManager/createpool.py:398
 msgid "Choose target directory"
-msgstr ""
+msgstr "Odaberi odredišni direktorij"
 
 #: virtManager/createvm.py:70
 #, python-format
 msgid "%.1f GiB"
-msgstr ""
+msgstr "%.1f GiB"
 
 #: virtManager/createvm.py:74
 #, python-format
 msgid "%d MiB"
-msgstr ""
+msgstr "%d MiB"
 
 #: virtManager/createvm.py:182
 #, python-format
 msgid "Error launching create dialog: %s"
-msgstr ""
+msgstr "Greška pokretanja stvaranja dijaloga: %s"
 
 #: virtManager/createvm.py:309
 #, python-format
 msgid "Error: %s"
-msgstr ""
+msgstr "Greška: %s"
 
 #: virtManager/createvm.py:315 virtManager/createvm.py:320
 #, python-format
 msgid "<span size='small'>Warning: %s</span>"
-msgstr ""
+msgstr "<span size='small'>Upozorenje: %s</span>"
 
 #: virtManager/createvm.py:498
 #, python-format
@@ -2814,39 +2850,45 @@ msgid ""
 "Failed to setup UEFI: %s\n"
 "Install options are limited."
 msgstr ""
+"Neuspjelo UEFI postavljanje: %s\n"
+"Instalirane mogućnosti su ograničene."
 
 #: virtManager/createvm.py:524
 msgid "Libvirt version does not support remote URL installs."
-msgstr ""
+msgstr "Libvirt inačica ne podržava instalaciju udaljenih URL-ova."
 
 #: virtManager/createvm.py:531
 msgid "CDROM/ISO installs not available for paravirt guests."
-msgstr ""
+msgstr "CDROM/ISO instalacije nisu dostupne za paravirt virtualna računala."
 
 #: virtManager/createvm.py:534
 #, python-format
 msgid "Architecture '%s' is not installable"
-msgstr ""
+msgstr "Arhitektura '%s' se ne može instalirati"
 
 #: virtManager/createvm.py:549
 msgid "No install methods available for this connection."
-msgstr ""
+msgstr "Nema dostupnih načina instalacije za ovo povezivanje."
 
 #: virtManager/createvm.py:580
 msgid "No hypervisor options were found for this connection."
-msgstr ""
+msgstr "Nema pronađenih mogućnosti za ovo povezivanje."
 
 #: virtManager/createvm.py:585
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr ""
+"To uobičajeno znači da QEMU ili KVM nisu instalirani na vašem računalu, ili "
+"moduli KVM kernela nisu učitani."
 
 #: virtManager/createvm.py:606
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
+"KVM nije dostupan. Ovo možda znači da KVM paket nije instaliran, ili moduli "
+"KVM kernela nisu učitani. Vaša virtualna računala mogla bi lošeraditi ."
 
 #: virtManager/createvm.py:649
 #, python-format
@@ -2904,48 +2946,48 @@ msgstr "Uklanjanje slike diska"
 
 #: virtManager/createvm.py:1130
 msgid "Removing disk images we created for this virtual machine."
-msgstr ""
+msgstr "Uklanjanje slike diska stvorene za ovo virtualno računalo."
 
 #: virtManager/createvm.py:1324
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
-msgstr ""
+msgstr "Korak %(current_page)d od %(max_page)d"
 
 #: virtManager/createvm.py:1333
 msgid "Waiting for install media / source"
-msgstr ""
+msgstr "Čekanje instalacijskog medija / izvora"
 
 #: virtManager/createvm.py:1407
 #, python-format
 msgid "Error populating summary page: %s"
-msgstr ""
+msgstr "Greška ispunjavanja stranice sažetka: %s"
 
 #: virtManager/createvm.py:1451
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
-msgstr ""
+msgstr "Neuhvaćena greška provjere instalacijskih parametara:: %s"
 
 #: virtManager/createvm.py:1462
 msgid "Source URL is required"
-msgstr ""
+msgstr "Potreban je URL izvora"
 
 #: virtManager/createvm.py:1467
 msgid "Please specify password for accessing source registry"
-msgstr ""
+msgstr "Navedite lozinku za pristup izvoru registra"
 
 #: virtManager/createvm.py:1475
 #, python-format
 msgid "Destination path is not directory: %s"
-msgstr ""
+msgstr "Putanja odredišta nije direktorij: %s"
 
 #: virtManager/createvm.py:1478
 #, python-format
 msgid "No write permissions for directory path: %s"
-msgstr ""
+msgstr "Nema dozvola pisanja za putanju direktorija: %s"
 
 #: virtManager/createvm.py:1485
 msgid "OS root directory is not empty"
-msgstr ""
+msgstr "Korijenski OS direktorij nije prazan"
 
 #: virtManager/createvm.py:1486
 msgid ""
@@ -2953,62 +2995,65 @@ msgid ""
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
+"Stvaranje korijenskog datotečnog sustava u direktoriju koji nije prazan "
+"možda ne uspije uslijed sukoba datoteka.\n"
+"Želite li nastaviti?"
 
 #: virtManager/createvm.py:1505
 msgid "An install media selection is required."
-msgstr ""
+msgstr "Potreban je odabir instalacijskog medija."
 
 #: virtManager/createvm.py:1513
 msgid "An install tree is required."
-msgstr ""
+msgstr "Potrebno je stablo instalacije."
 
 #: virtManager/createvm.py:1521
 msgid "A storage path to import is required."
-msgstr ""
+msgstr "Potrebna je putanja pohrane za uvoz."
 
 #: virtManager/createvm.py:1527
 msgid "The import path must point to an existing storage."
-msgstr ""
+msgstr "Putanja uvoza mora usmjeravati na postojeću pohranu."
 
 #: virtManager/createvm.py:1533
 msgid "An application path is required."
-msgstr ""
+msgstr "Potrebna je putanja aplikacije."
 
 #: virtManager/createvm.py:1538
 msgid "An OS directory path is required."
-msgstr ""
+msgstr "Potrebna je putanja OS direktorija."
 
 #: virtManager/createvm.py:1552
 msgid "A template name is required."
-msgstr ""
+msgstr "Potreban je naziv predloška."
 
 #: virtManager/createvm.py:1555
 msgid "You must select an OS."
-msgstr ""
+msgstr "Morate odabrati OS."
 
 #: virtManager/createvm.py:1585
 msgid "Error setting installer parameters."
-msgstr ""
+msgstr "Greška postavljanja parametara instalacijskog programa."
 
 #: virtManager/createvm.py:1593
 msgid "Error setting default name."
-msgstr ""
+msgstr "Greška postavljanja zadanog naziva."
 
 #: virtManager/createvm.py:1684
 msgid "Storage parameter error."
-msgstr ""
+msgstr "Greška parametra pohrane."
 
 #: virtManager/createvm.py:1706
 msgid "Invalid guest name"
-msgstr ""
+msgstr "Nevaljani naziv virtualnog računala"
 
 #: virtManager/createvm.py:1789
 msgid "Detecting..."
-msgstr ""
+msgstr "Otkrivanje..."
 
 #: virtManager/createvm.py:1851
 msgid "None detected"
-msgstr ""
+msgstr "Ništa nije otkriveno"
 
 #: virtManager/createvm.py:1888
 #, python-format
@@ -3044,7 +3089,7 @@ msgstr "Greška nastavka instalacije: %s"
 
 #: virtManager/createvm.py:2093
 msgid "Bootstraping container"
-msgstr ""
+msgstr "Spremnik samopokretanja"
 
 #: virtManager/createvol.py:140
 #, python-format
@@ -3054,24 +3099,24 @@ msgstr "<b>%(volume)s's</b> dostupno prostora: %(size)s"
 #: virtManager/createvol.py:278
 #, python-format
 msgid "Error creating vol: %s"
-msgstr ""
+msgstr "Greška stvaranja uređaja %s"
 
 #: virtManager/createvol.py:294
 #, python-format
 msgid "Error validating volume: %s"
-msgstr ""
+msgstr "Greška provjere uređaja: %s"
 
 #: virtManager/createvol.py:299
 msgid "Creating storage volume..."
-msgstr ""
+msgstr "Stvaranje uređaja pohrane..."
 
 #: virtManager/createvol.py:300
 msgid "Creating the storage volume may take a while..."
-msgstr ""
+msgstr "Stvaranje uređaja pohrane može potrajati..."
 
 #: virtManager/delete.py:156
 msgid "Are you sure you want to delete the storage?"
-msgstr ""
+msgstr "Sigurno želite obrisati pohranu?"
 
 #: virtManager/delete.py:157
 #, python-format
@@ -3080,6 +3125,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Sljedeće putanje će biti obrisane:\n"
+"\n"
+"%s"
 
 #: virtManager/delete.py:194
 #, python-format
@@ -3089,128 +3137,133 @@ msgstr "Greška brisanja virtualnog računala '%(vm)s': %(error)s"
 #: virtManager/delete.py:211
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
+"Dodatno, došlo je do grešaka pri uklanjanju određenih uređaja pohrane: \n"
 
 #: virtManager/delete.py:215
 msgid "Errors encountered while removing certain storage devices."
-msgstr ""
+msgstr "Grešake su se dogodile pri uklanjanju određenih uređaja pohrane."
 
 #: virtManager/delete.py:227
 #, python-format
 msgid "Deleting path '%s'"
-msgstr ""
+msgstr "Putanja brisanja '%s'"
 
 #: virtManager/delete.py:284
 #, python-format
 msgid "Error launching delete dialog: %s"
-msgstr ""
+msgstr "Greška pokretanja dijaloga brisanja: %s"
 
 #: virtManager/delete.py:290
 #, python-format
 msgid "Delete '%(vmname)s'"
-msgstr ""
+msgstr "Obriši '%(vmname)s'"
 
 #: virtManager/delete.py:294
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
+"Brisanje virtualnog računala '%s' i odabrane pohrane (ovo bi moglo potrajati)"
 
 #: virtManager/delete.py:298
 #, python-format
 msgid "Deleting virtual machine '%s'"
-msgstr ""
+msgstr "Brisanje virtualnog računala '%s'"
 
 #: virtManager/delete.py:340
 #, python-format
 msgid "Error Removing Device: %s"
-msgstr ""
+msgstr "Greška uklanjanja uređaja: %s"
 
 #: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
+"Ova promjena će se primijeniti nakon sljedećeg isključivanja virtualnog "
+"računala."
 
 #: virtManager/delete.py:357
 msgid "Storage will not be deleted."
-msgstr ""
+msgstr "Pohrana neće biti obrisana."
 
 #: virtManager/delete.py:360
 msgid "Device could not be removed from the running machine"
-msgstr ""
+msgstr "Uređaj se ne može ukloniti iz pokrenutog računala"
 
 #: virtManager/delete.py:370
 msgid "Remove Disk Device"
-msgstr ""
+msgstr "Uklanjanje uređaja diska"
 
 #: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
-msgstr ""
+msgstr "Ukloni uređaj diska '%(target)s'"
 
 #: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
+"Uklanjanje uređaja diska '%s' i odabrane pohrane (ovo bi moglo potrajati)"
 
 #: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
-msgstr ""
+msgstr "Uklanjanje uređaja diska '%s'"
 
 #: virtManager/delete.py:506
 msgid "Target"
-msgstr ""
+msgstr "Odredište"
 
 #: virtManager/delete.py:508
 msgid "Storage Path"
-msgstr ""
+msgstr "Putanju pohrane"
 
 #: virtManager/delete.py:567
 msgid "Cannot delete iSCSI share."
-msgstr ""
+msgstr "Nemoguće brisanje iSCSI dijeljenja."
 
 #: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
-msgstr ""
+msgstr "Nemoguće brisanje SCSI uređaja."
 
 #: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
-msgstr ""
+msgstr "Nemoguće brisanje neupravljene udaljene pohrane."
 
 #: virtManager/delete.py:574
 msgid "Path does not exist."
-msgstr ""
+msgstr "Putanja ne postoji."
 
 #: virtManager/delete.py:576
 msgid "No write access to parent directory."
-msgstr ""
+msgstr "Nema dozvola pisanja za sadržani direktorij."
 
 #: virtManager/delete.py:578
 msgid "Cannot delete unmanaged block device."
-msgstr ""
+msgstr "Nemoguće brisanje neupravljenog blok uređaja."
 
 #: virtManager/delete.py:589
 msgid "Storage is read-only."
-msgstr ""
+msgstr "Pohrane ima samo dozvolu čitanja."
 
 #: virtManager/delete.py:591
 msgid "No write access to path."
-msgstr ""
+msgstr "Nema dozvole pisanja za putanju."
 
 #: virtManager/delete.py:594
 msgid "Storage is marked as shareable."
-msgstr ""
+msgstr "Pohrana je označena kao dijeljiva."
 
 #: virtManager/delete.py:597
 msgid "Storage is a media device."
-msgstr ""
+msgstr "Pohrana je medijski uređaj."
 
 #: virtManager/delete.py:606
 msgid "Storage is in use by the following virtual machines"
-msgstr ""
+msgstr "Pohranu koriste sljedeća virtualna računala"
 
 #: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
-msgstr ""
+msgstr "Neuspjela provjera sukoba korištenja diska."
 
 #: virtManager/details/console.py:153
 msgid "Leave Fullscreen"
@@ -3226,21 +3279,21 @@ msgstr "Pošalji kombinaciju tipki"
 
 #: virtManager/details/console.py:203
 msgid "No text console available"
-msgstr ""
+msgstr "Nema dostupne tekstne konzole"
 
 #: virtManager/details/console.py:208
 #, python-format
 msgid "Text Console %d"
-msgstr ""
+msgstr "Tekstna konzola %d"
 
 #: virtManager/details/console.py:210
 #, python-format
 msgid "Serial %d"
-msgstr ""
+msgstr "Serijski %d"
 
 #: virtManager/details/console.py:219
 msgid "No graphical console available"
-msgstr ""
+msgstr "Nema dostupne grafičke konzole"
 
 #: virtManager/details/console.py:225
 msgid "Graphical Console"
@@ -3252,24 +3305,24 @@ msgstr "virt-manager ne podržava više od jedne konzole"
 
 #: virtManager/details/console.py:575
 msgid "Guest has crashed."
-msgstr "Gost se srušio."
+msgstr "Virtualno računalo se srušilo."
 
 #: virtManager/details/console.py:577
 msgid "Guest is not running."
-msgstr "Gost nije pokrenut."
+msgstr "Virtualno računalo nije pokrenuto."
 
 #: virtManager/details/console.py:700
 msgid "Graphical console not configured for guest"
-msgstr ""
+msgstr "Grafička konzola nije podešena za virtualno računalo"
 
 #: virtManager/details/console.py:707
 #, python-format
 msgid "Cannot display graphical console type '%s'"
-msgstr ""
+msgstr "Nemoguć prikaz grafičke konzole vrste '%s'"
 
 #: virtManager/details/console.py:719
 msgid "Connecting to graphical console for guest"
-msgstr ""
+msgstr "Povezivanje s grafičkom konzolom za virtualno računalo"
 
 #: virtManager/details/console.py:738
 #, python-format
@@ -3283,321 +3336,326 @@ msgstr ""
 #: virtManager/details/console.py:795
 #, python-format
 msgid "Viewer authentication error: %s"
-msgstr ""
+msgstr "Greška ovjere gledatelja: %s"
 
 #: virtManager/details/console.py:817
 msgid "USB redirection error"
-msgstr ""
+msgstr "Greška USB preusmjeravanja"
 
 #: virtManager/details/console.py:826
 msgid "Viewer was disconnected."
-msgstr ""
+msgstr "Prekinuto je povezivanje s gledateljem."
 
 #: virtManager/details/console.py:833
 #, python-format
 msgid "SSH tunnel error output: %s"
-msgstr ""
+msgstr "Geška izlaza SSH tunela: %s"
 
 #: virtManager/details/console.py:846
 msgid "Viewer is disconnecting."
-msgstr ""
+msgstr "Prekida se povezivanje s gledateljem."
 
 #: virtManager/details/console.py:979
 msgid "Viewer window closed."
-msgstr ""
+msgstr "Prozor gledatelj je zatvoren."
 
 #: virtManager/details/console.py:983
 #, python-format
 msgid "Press %s to release pointer."
-msgstr ""
+msgstr "Prtisnite %s za oslobađanje pokazivača."
 
 #: virtManager/details/details.py:163
 #, python-format
 msgid "Floppy %(index)d"
-msgstr ""
+msgstr "Disketni pogon %(index)d"
 
 #: virtManager/details/details.py:169
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
-msgstr ""
+msgstr "%(bus)s CDROM %(index)d"
 
 #: virtManager/details/details.py:174
 #, python-format
 msgid "%(bus)s Disk %(index)d"
-msgstr ""
+msgstr "%(bus)s disk %(index)d"
 
 #: virtManager/details/details.py:178
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
-msgstr ""
+msgstr "%(bus)s %(device)s %(index)d"
 
 #: virtManager/details/details.py:186
 #, python-format
 msgid "NIC %(mac)s"
-msgstr ""
+msgstr "NIC %(mac)s"
 
 #: virtManager/details/details.py:199
 #, python-format
 msgid "Serial %(num)d"
-msgstr ""
+msgstr "Serijski priključak %(num)d"
 
 #: virtManager/details/details.py:203
 #, python-format
 msgid "Parallel %(num)d"
-msgstr ""
+msgstr "Paralelni priključak %(num)d"
 
 #: virtManager/details/details.py:207
 #, python-format
 msgid "Console %(num)d"
-msgstr ""
+msgstr "Konzola %(num)d"
 
 #: virtManager/details/details.py:212
 #, python-format
 msgid "Channel %(name)s"
-msgstr ""
+msgstr "Kanal %(name)s"
 
 #: virtManager/details/details.py:214
 #, python-format
 msgid "Channel %(type)s"
-msgstr ""
+msgstr "Kanal %(type)s"
 
 #: virtManager/details/details.py:218
 #, python-format
 msgid "Display %s"
-msgstr ""
+msgstr "Zaslon %s"
 
 #: virtManager/details/details.py:220
 #, python-format
 msgid "%(bus)s Redirector %(index)d"
-msgstr ""
+msgstr "%(bus)s preusmjeritelj %(index)d"
 
 #: virtManager/details/details.py:227
 #, python-format
 msgid "Sound %s"
-msgstr ""
+msgstr "Zvuk %s"
 
 #: virtManager/details/details.py:229
 #, python-format
 msgid "Video %s"
-msgstr ""
+msgstr "Video %s"
 
 #: virtManager/details/details.py:231
 #, python-format
 msgid "Filesystem %(path)s"
-msgstr ""
+msgstr "Datotečni sustav %(path)s"
 
 #: virtManager/details/details.py:235
 #, python-format
 msgid "Controller %(controller)s %(index)s"
-msgstr ""
+msgstr "Kontroler %(controller)s %(index)s"
 
 #: virtManager/details/details.py:239
 #, python-format
 msgid "Controller %(controller)s"
-msgstr ""
+msgstr "Kontroler %(controller)s"
 
 #: virtManager/details/details.py:244
 #, python-format
 msgid "RNG %(device)s"
-msgstr ""
+msgstr "RNG %(device)s"
 
 #: virtManager/details/details.py:248
 #, python-format
 msgid "TPM %(device)s"
-msgstr ""
+msgstr "TPM %(device)s"
 
 #: virtManager/details/details.py:249
 #, python-format
 msgid "TPM v%(version)s"
-msgstr ""
+msgstr "TPM v%(version)s"
 
 #: virtManager/details/details.py:537
 msgid "_Add Hardware"
-msgstr ""
+msgstr "_Dodaj hardver"
 
 #: virtManager/details/details.py:543
 msgid "_Remove Hardware"
-msgstr ""
+msgstr "_Ukloni hardver"
 
 #: virtManager/details/details.py:662 virtManager/details/details.py:1774
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:672
 msgid "Libvirt or hypervisor does not support UEFI."
-msgstr ""
+msgstr "Libvirt ili hipervizor ne podržava UEFI."
 
 #: virtManager/details/details.py:675
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
+"Libvirt nije otkrio nijednu UEFI/OVMF sliku firmverainstaliranu na fizičkom "
+"računalu."
 
 #: virtManager/details/details.py:725
 msgid "Version"
-msgstr ""
+msgstr "Inačica"
 
 #: virtManager/details/details.py:787
 msgid "Application Default"
-msgstr ""
+msgstr "Zadano aplikacijom"
 
 #: virtManager/details/details.py:789
 msgid "Hypervisor Default"
-msgstr ""
+msgstr "Zadano hipervizorom"
 
 #: virtManager/details/details.py:791
 msgid "Clear CPU configuration"
-msgstr ""
+msgstr "Ukloni CPU podešavanje"
 
 #: virtManager/details/details.py:809
 msgid "Disk bus:"
-msgstr ""
+msgstr "Sabirnica diska:"
 
 #: virtManager/details/details.py:1019
 #, python-format
 msgid "Error launching hardware dialog: %s"
-msgstr ""
+msgstr "Greška pokretanja dijaloga hardvera: %s"
 
 #: virtManager/details/details.py:1025
 msgid "Are you sure you want to remove this device?"
-msgstr ""
+msgstr "Sigurno želite ukloniti ovaj uređaj?"
 
 #: virtManager/details/details.py:1272 virtManager/details/details.py:1766
 #: virtManager/details/details.py:1785 virtManager/details/details.py:1987
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
-msgstr ""
+msgstr "Nepoznat"
 
 #: virtManager/details/details.py:1354
 #, python-format
 msgid "Error applying changes: %s"
-msgstr ""
+msgstr "Greška primjene promjena: %s"
 
 #: virtManager/details/details.py:1483
 #, python-format
 msgid "Error changing autostart value: %s"
-msgstr ""
+msgstr "Greška promjene vrijednosti automatskog pokretanja: %s"
 
 #: virtManager/details/details.py:1500
 msgid "Cannot set initrd without specifying a kernel path"
-msgstr ""
+msgstr "Nemoguće je postaviti initrd bez određivanja putanje kernela"
 
 #: virtManager/details/details.py:1503
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
+"Nemoguće je postavljanje argumenta kernela bez određivanja putanje kernela"
 
 #: virtManager/details/details.py:1510
 msgid "An init path must be specified"
-msgstr ""
+msgstr "init putanja mora biti navedena"
 
 #: virtManager/details/details.py:1523 virtManager/device/addstorage.py:275
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
-msgstr ""
+msgstr "Disk '%(path)s' već koristi drugo virtualno računalo %(names)s"
 
 #: virtManager/details/details.py:1527 virtManager/device/addstorage.py:279
 msgid "Do you really want to use the disk?"
-msgstr ""
+msgstr "Sigurno želite koristiti disk?"
 
 #: virtManager/details/details.py:1689
 msgid "Remove this device from the virtual machine"
-msgstr ""
+msgstr "Ukloni ovaj uređaj iz virtualnog računala"
 
 #: virtManager/details/details.py:1745
 #, python-format
 msgid "Error refreshing hardware page: %s"
-msgstr ""
+msgstr "Greška osvježavanja stranice hardvera: %s"
 
 #: virtManager/details/details.py:1840
 #, python-format
 msgid "%(summary)s ..."
-msgstr ""
+msgstr "%(summary)s ..."
 
 #: virtManager/details/details.py:1852
 #, python-format
 msgid "%(received)d %(units)s read"
-msgstr ""
+msgstr "%(received)d %(units)s očitano"
 
 #: virtManager/details/details.py:1853
 #, python-format
 msgid "%(transferred)d %(units)s write"
-msgstr ""
+msgstr "%(transferred)d %(units)s zapisano"
 
 #: virtManager/details/details.py:1856
 #, python-format
 msgid "%(received)d %(units)s in"
-msgstr ""
+msgstr "%(received)d %(units)s preuzeto"
 
 #: virtManager/details/details.py:1857
 #, python-format
 msgid "%(transferred)d %(units)s out"
-msgstr ""
+msgstr "%(transferred)d %(units)s poslano"
 
 #: virtManager/details/details.py:1859 virtManager/details/details.py:1860
 #: virtManager/details/details.py:1861 virtManager/details/details.py:1862
 #: virtManager/hostnets.py:206 virtManager/hostnets.py:225
 msgid "Disabled"
-msgstr ""
+msgstr "Onemogućeno"
 
 #: virtManager/details/details.py:1870
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
-msgstr ""
+msgstr "%(current-memory)s od %(total-memory)s"
 
 #: virtManager/details/details.py:2036
 msgid "Absolute Movement"
-msgstr ""
+msgstr "Apsolutni pomak"
 
 #: virtManager/details/details.py:2038
 msgid "Relative Movement"
-msgstr ""
+msgstr "Relativni pomak"
 
 #: virtManager/details/details.py:2047 virtManager/details/details.py:2212
 #: virtManager/details/details.py:2215
 msgid "Hypervisor does not support removing this device"
-msgstr ""
+msgstr "Hipervizor ne podržava uklanjanje ovog uređaja"
 
 #: virtManager/details/details.py:2051
 #, python-format
 msgid "%(graphicstype)s Server"
-msgstr ""
+msgstr "%(graphicstype)s poslužitelj"
 
 #: virtManager/details/details.py:2103
 msgid "Serial Device"
-msgstr ""
+msgstr "Serijski uređaj"
 
 #: virtManager/details/details.py:2105
 msgid "Parallel Device"
-msgstr ""
+msgstr "Paralelni uređaj"
 
 #: virtManager/details/details.py:2107
 msgid "Console Device"
-msgstr ""
+msgstr "Konzolni uređaj"
 
 #: virtManager/details/details.py:2109
 msgid "Channel Device"
-msgstr ""
+msgstr "Kanalni uređaj"
 
 #: virtManager/details/details.py:2119
 msgid "Primary Console"
-msgstr ""
+msgstr "Glavna konzola"
 
 #: virtManager/details/details.py:2179
 #, python-format
 msgid "Physical %s Device"
-msgstr ""
+msgstr "Fizički %s uređaj"
 
 #: virtManager/details/details.py:2196
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
+"Nemoguće uklanjanje posljednjeg video uređaja dok su Grafika/Zaslon "
+"priključeni."
 
 #: virtManager/details/details.py:2222
 #, python-format
 msgid "%(device)s on %(address)s"
-msgstr ""
+msgstr "%(device)s na %(address)s"
 
 #: virtManager/details/details.py:2228 virtManager/details/details.py:2238
 msgid "Cannot remove controller while devices are attached."
-msgstr ""
+msgstr "Nemoguće uklanjanje kontrolera dok su uređaji priključeni."
 
 #: virtManager/details/details.py:2328
 msgid "Hard Disk"
@@ -3637,7 +3695,7 @@ msgstr "Mogućnosti pokretanja"
 
 #: virtManager/details/serialcon.py:183
 msgid "Serial console not available for inactive guest"
-msgstr "Serijska konzola nije dostupna za neaktivne goste"
+msgstr "Serijska konzola nije dostupna za neaktivna virtualna računala"
 
 #: virtManager/details/serialcon.py:185
 #, python-format
@@ -3832,8 +3890,8 @@ msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
-"Gost je na udaljenom poslužitelju, samo je podešen da dopušta povezivanja s "
-"lokalne datoteke opisnika."
+"Virtualno računalo je na udaljenom poslužitelju, samo je podešeno da dopušta "
+"povezivanja s lokalne datoteke opisnika."
 
 #: virtManager/details/sshtunnels.py:67
 msgid "Guest is configured for TLS only which does not work over SSH."
@@ -3856,7 +3914,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:423
 msgid "GTK-VNC viewer is too old"
-msgstr ""
+msgstr "GTK-VNC je zastario"
 
 #: virtManager/details/viewers.py:577
 #, python-format
@@ -3865,7 +3923,7 @@ msgstr ""
 
 #: virtManager/details/viewers.py:750
 msgid "Guest agent is not available."
-msgstr ""
+msgstr "Agent virtualnog računala nije dostupan."
 
 #: virtManager/device/addstorage.py:91
 #, python-format
@@ -3875,77 +3933,78 @@ msgstr "%s je dostupno na zadanoj lokaciji"
 #: virtManager/device/addstorage.py:132
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
-msgstr ""
+msgstr "Emulator možda nema dozvolu pretrage za putanju '%s'."
 
 #: virtManager/device/addstorage.py:134
 msgid "Do you want to correct this now?"
-msgstr ""
+msgstr "Želite li ovo ispraviti odmah?"
 
 #: virtManager/device/addstorage.py:135 virtManager/device/addstorage.py:159
 msgid "Don't ask about these directories again."
-msgstr ""
+msgstr "Ne pitaj ponovno o ovim direktorijima."
 
 #: virtManager/device/addstorage.py:148
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
-msgstr ""
+msgstr "Greške su se dogodile pri promjeni dozvola za sljedeće direktorije:"
 
 #: virtManager/device/addstorage.py:267
 msgid "A storage path must be specified."
-msgstr ""
+msgstr "Putanja pohrane mora biti navedena."
 
 #: virtManager/device/fsdetails.py:145
 msgid "Te_mplate:"
-msgstr ""
+msgstr "Pr_edložak:"
 
 #: virtManager/device/fsdetails.py:147
 msgid "_Source path:"
-msgstr ""
+msgstr "_Putanja izvora:"
 
 #: virtManager/device/fsdetails.py:163
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
+"Možda trebate odabrati 'Omogući dijeljenu memorije' na 'Memorija' zaslonu."
 
 #: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
-msgstr ""
+msgstr "Spice poslužitelj"
 
 #: virtManager/device/gfxdetails.py:88
 msgid "VNC server"
-msgstr ""
+msgstr "VNC poslužitelj"
 
 #: virtManager/device/gfxdetails.py:95
 msgid "Address"
-msgstr ""
+msgstr "Adresa"
 
 #: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
-msgstr ""
+msgstr "Samo lokalno računalo"
 
 #: virtManager/device/gfxdetails.py:105
 msgid "All interfaces"
-msgstr ""
+msgstr "Sva sučelja"
 
 #: virtManager/device/gfxdetails.py:112
 msgid "Auto"
-msgstr ""
+msgstr "Automatski"
 
 #: virtManager/device/gfxdetails.py:218
 #, python-format
 msgid "A_uto (Port %(port)d)"
-msgstr ""
+msgstr "A_utomatski (Ulaz %(port)d)"
 
 #: virtManager/device/mediacombo.py:67
 msgid "No media selected"
-msgstr ""
+msgstr "Nema odabranog medija"
 
 #: virtManager/device/mediacombo.py:100
 msgid "Media Unknown"
-msgstr ""
+msgstr "Nepoznat medij"
 
 #: virtManager/device/mediacombo.py:102
 msgid "No media detected"
-msgstr ""
+msgstr "Nema otkrivenog medija"
 
 #: virtManager/device/netlist.py:40
 msgid "Usermode networking"
@@ -3984,150 +4043,150 @@ msgstr "Nemoguće pokretanje virtualne mreže '%(device)s': %(error)s"
 
 #: virtManager/device/tpmdetails.py:12
 msgid "TIS"
-msgstr ""
+msgstr "TIS"
 
 #: virtManager/device/tpmdetails.py:13
 msgid "CRB"
-msgstr ""
+msgstr "CRB"
 
 #: virtManager/device/tpmdetails.py:14
 msgid "SPAPR"
-msgstr ""
+msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:71
 msgid "Emulated"
-msgstr ""
+msgstr "Emulirano"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
-msgstr ""
+msgstr "CID"
 
 #: virtManager/engine.py:123
 msgid "Checking for virtualization packages..."
-msgstr ""
+msgstr "Provjera paketa virtualizacije..."
 
 #: virtManager/error.py:139
 msgid "Input Error"
-msgstr ""
+msgstr "Greška unosa"
 
 #: virtManager/error.py:140
 #, python-format
 msgid "Validation Error: %s"
-msgstr ""
+msgstr "Greška provjere: %s"
 
 #: virtManager/error.py:180
 msgid "There are unapplied changes. Would you like to apply them now?"
-msgstr ""
+msgstr "Postoje neprimijenjene promjene. Želite li ih sada primijeniti?"
 
 #: virtManager/error.py:182
 msgid "Don't warn me again."
-msgstr ""
+msgstr "Ne upozoravaj me ponovo."
 
 #: virtManager/error.py:214
 msgid "Don't ask me again"
-msgstr ""
+msgstr "Ne pitaj me ponovno"
 
 #: virtManager/host.py:32
 #, python-format
 msgid "Error launching host dialog: %s"
-msgstr ""
+msgstr "Greška pokretanja dijaloga virtualnog računala: %s"
 
 #: virtManager/host.py:170
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
-msgstr ""
+msgstr "%(currentmem)s od %(maxmem)s"
 
 #: virtManager/host.py:180
 #, python-format
 msgid "%(connection)s - Connection Details"
-msgstr ""
+msgstr "%(connection)s - Pojedinosti povezivanja"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
-msgstr ""
+msgstr "Mreže"
 
 #: virtManager/hostnets.py:140
 msgid "Libvirt connection does not support virtual network management."
-msgstr ""
+msgstr "Libvirt povezivanje ne podržava upravljanje virtualnom mrežom."
 
 #: virtManager/hostnets.py:148 virtManager/hoststorage.py:278
 msgid "Connection not active."
-msgstr ""
+msgstr "Povezivanje nije aktivno."
 
 #: virtManager/hostnets.py:164
 msgid "No virtual network selected."
-msgstr ""
+msgstr "Nema odabrane virtualne mreže."
 
 #: virtManager/hostnets.py:173
 #, python-format
 msgid "Error selecting network: %s"
-msgstr ""
+msgstr "Greška odabira mreže: %s"
 
 #: virtManager/hostnets.py:218 virtManager/object/network.py:166
 msgid "Routed network"
-msgstr ""
+msgstr "Rutirana mreža"
 
 #: virtManager/hostnets.py:220
 msgid "Isolated network, internal routing only"
-msgstr ""
+msgstr "Izolirana mreža, samo unutrašnje rutiranje"
 
 #: virtManager/hostnets.py:222
 msgid "Isolated network, routing disabled"
-msgstr ""
+msgstr "Izolirana mreža, rutiranje onemogućeno"
 
 #: virtManager/hostnets.py:253 virtManager/hoststorage.py:321
 msgid "On Boot"
-msgstr ""
+msgstr "Pri pokretanju"
 
 #: virtManager/hostnets.py:270
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
-msgstr ""
+msgstr "Sigurno želite trajno obrisati mrežu %s?"
 
 #: virtManager/hostnets.py:277
 #, python-format
 msgid "Error deleting network '%s'"
-msgstr ""
+msgstr "Greška brisanja mreže '%s'"
 
 #: virtManager/hostnets.py:286
 #, python-format
 msgid "Error starting network '%s'"
-msgstr ""
+msgstr "Greška pokretanja mreže '%s'"
 
 #: virtManager/hostnets.py:295
 #, python-format
 msgid "Error stopping network '%s'"
-msgstr ""
+msgstr "Greška zaustavljanja mreže '%s'"
 
 #: virtManager/hostnets.py:304
 #, python-format
 msgid "Error launching network wizard: %s"
-msgstr ""
+msgstr "Greška pokretanja čarobnjaka mreže: %s"
 
 #: virtManager/hostnets.py:328
 #, python-format
 msgid "Error changing network settings: %s"
-msgstr ""
+msgstr "Greška promjene mrežnih postavki: %s"
 
 #: virtManager/hoststorage.py:178
 msgid "Copy Volume Path"
-msgstr ""
+msgstr "Kopiranje putanje uređaja"
 
 #: virtManager/hoststorage.py:188
 msgid "Volumes"
-msgstr ""
+msgstr "Uređaji"
 
 #: virtManager/hoststorage.py:196
 msgid "Size"
-msgstr ""
+msgstr "Veličina"
 
 #: virtManager/hoststorage.py:205
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: virtManager/hoststorage.py:213
 msgid "Used By"
-msgstr ""
+msgstr "Koristi"
 
 #: virtManager/hoststorage.py:230
 msgid "Storage Pools"
@@ -4135,16 +4194,16 @@ msgstr ""
 
 #: virtManager/hoststorage.py:271
 msgid "Libvirt connection does not support storage management."
-msgstr ""
+msgstr "Libvirt povezivanje ne podržava upravljanje pohranom."
 
 #: virtManager/hoststorage.py:312
 #, python-format
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
-msgstr ""
+msgstr "%(bytesfree)s slobodno / <i>%(bytesinuse)s iskorišteno</i>"
 
 #: virtManager/hoststorage.py:332
 msgid "Create new volume"
-msgstr ""
+msgstr "Stvori novi uređaj"
 
 #: virtManager/hoststorage.py:339
 msgid "Pool does not support volume creation"
@@ -4192,17 +4251,17 @@ msgstr ""
 #: virtManager/hoststorage.py:541
 #, python-format
 msgid "Error launching volume wizard: %s"
-msgstr ""
+msgstr "Greška pokretanja čarobnjaka uređaja: %s"
 
 #: virtManager/hoststorage.py:549
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
-msgstr ""
+msgstr "Sigurno želite trajno obrisati uređaj %s?"
 
 #: virtManager/hoststorage.py:562
 #, python-format
 msgid "Error deleting volume '%s'"
-msgstr ""
+msgstr "Greška brisanja uređaja '%s'"
 
 #: virtManager/hoststorage.py:587
 #, python-format
@@ -4211,22 +4270,27 @@ msgstr ""
 
 #: virtManager/lib/connectauth.py:50
 msgid "Authentication required"
-msgstr ""
+msgstr "Potrebna je ovjera"
 
 #: virtManager/lib/connectauth.py:154
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
+"Udaljeno računalo zahtijeva netcat/nc inačicu koja podržava -U mogućnost."
 
 #: virtManager/lib/connectauth.py:160
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
+"Podesite pristup SSH ključem za udaljeno računalo, ili instalirajte SSH "
+"askpass paket lokalno."
 
 #: virtManager/lib/connectauth.py:164
 msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgstr ""
+"Provjerite je li 'libvirtd' pozadinski program pokrenut na udaljenom "
+"rečunalu."
 
 #: virtManager/lib/connectauth.py:168
 msgid ""
@@ -4234,6 +4298,9 @@ msgid ""
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
+"Provjerite da:\n"
+" - Xen fizički kernel je pokrenut\n"
+" - Xen usluga je pokrenuta"
 
 #: virtManager/lib/connectauth.py:174
 msgid ""
@@ -4241,15 +4308,18 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
+"Nemoguće otkrivanje lokalne sesije: ako ste pokrenuli virt-manager putem ssh "
+"-X ili VNC, možda se nećete moći povezati s libvirt kao uobičajeni korisnik. "
+"Pokušajte se pokrenuti kao korijenski korisnik."
 
 #: virtManager/lib/connectauth.py:180
 msgid "Verify that the 'libvirtd' daemon is running."
-msgstr ""
+msgstr "Provjerite je li 'libvirtd' pozadinski program pokrenut."
 
 #: virtManager/lib/connectauth.py:183
 #, python-format
 msgid "Unable to connect to libvirt %s."
-msgstr ""
+msgstr "Nemoguće povezivanje s libvirt %s."
 
 #: virtManager/lib/connectauth.py:195
 msgid "Virtual Machine Manager Connection Failure"
@@ -4260,35 +4330,42 @@ msgid ""
 "The libvirtd service does not appear to be installed. Install and run the "
 "libvirtd service to manage virtualization on this host."
 msgstr ""
+"Izgleda da libvirtd usluga nije instalirana. Instalirajte i pokrenite "
+"libvirtd uslugu kako bi upravljali virtualnim računalima na ovom računalu."
 
 #: virtManager/lib/connectauth.py:225
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization packages are installed to manage virtualization on this host."
 msgstr ""
+"Nemoguće otkrivanje zadanog hipervizora. Osigurajte da su instalirani "
+"prikladni paketi QEMU/KVM virtualizacije kako bi mogli upravljati "
+"virtualizacijom na ovom računalu."
 
 #: virtManager/lib/connectauth.py:232
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
+"Povezivanje virtualizacije se može ručno dodati putem Datoteka->Dodaj "
+"povezivanje"
 
 #: virtManager/lib/inspection.py:77
 #, python-format
 msgid "Error launching libguestfs appliance: %s"
-msgstr ""
+msgstr "Geška pokretanja libguestfs uređaja: %s"
 
 #: virtManager/lib/inspection.py:86
 msgid "Inspection found no operating systems."
-msgstr ""
+msgstr "Inspekcija nije pronašla operativne sustave."
 
 #: virtManager/lib/inspection.py:317
 #, python-format
 msgid "Error inspection VM: %s"
-msgstr ""
+msgstr "Greška VR inspekcije: %s"
 
 #: virtManager/lib/inspection.py:328
 msgid "Cannot inspect VM on remote connection"
-msgstr ""
+msgstr "Nemoguće VR inspekcija na udaljenom povezivanju"
 
 #: virtManager/lib/libvirtenummap.py:69
 msgid "Running"
@@ -4366,7 +4443,7 @@ msgstr "Spremanje"
 
 #: virtManager/lib/libvirtenummap.py:108
 msgid "Dumping"
-msgstr ""
+msgstr "Ispisivanje"
 
 #: virtManager/lib/libvirtenummap.py:109
 msgid "I/O error"
@@ -4415,15 +4492,15 @@ msgstr "Ob_riši"
 
 #: virtManager/manager.py:375
 msgid "CPU usage"
-msgstr "CPU upotreba"
+msgstr "CPU virtualnog računala"
 
 #: virtManager/manager.py:376
 msgid "Host CPU usage"
-msgstr "_Upotreba računalovog CPU-a"
+msgstr "CPU fizičkog računala"
 
 #: virtManager/manager.py:377
 msgid "Memory usage"
-msgstr "Upotreba memorije"
+msgstr "Memorija"
 
 #: virtManager/manager.py:378
 msgid "Disk I/O"
@@ -4587,7 +4664,7 @@ msgstr ""
 
 #: virtManager/object/network.py:155
 msgid "Isolated network"
-msgstr ""
+msgstr "Izolirana mreža"
 
 #: virtManager/object/network.py:159
 #, python-format
@@ -4607,11 +4684,11 @@ msgstr ""
 #: virtManager/object/nodedev.py:25
 #, python-format
 msgid "Interface %s"
-msgstr ""
+msgstr "Sučelje %s"
 
 #: virtManager/object/storagepool.py:25
 msgid "Filesystem Directory"
-msgstr ""
+msgstr "Direktorij datotečnog sustava"
 
 #: virtManager/object/storagepool.py:26
 msgid "Pre-Formatted Block Device"
@@ -4672,53 +4749,53 @@ msgstr "Nikad"
 
 #: virtManager/preferences.py:113
 msgid "Fullscreen only"
-msgstr ""
+msgstr "Samo cjelozaslonski prikaz"
 
 #: virtManager/preferences.py:114
 msgid "Always"
-msgstr ""
+msgstr "Uvijek"
 
 #: virtManager/preferences.py:123
 msgid "Off"
-msgstr ""
+msgstr "Isključi"
 
 #: virtManager/preferences.py:124
 msgid "On"
-msgstr ""
+msgstr "Uključi"
 
 #: virtManager/preferences.py:126 virtManager/preferences.py:148
 #: virtManager/preferences.py:158
 #, python-format
 msgid "System default (%s)"
-msgstr ""
+msgstr "Zadano sustavom (%s)"
 
 #: virtManager/preferences.py:137
 msgid "Manual redirect only"
-msgstr ""
+msgstr "Samo ručno preusmjeravanje"
 
 #: virtManager/preferences.py:138
 msgid "Auto redirect on USB attach"
-msgstr ""
+msgstr "Automatski preusmjeri pri USB priključivanju"
 
 #: virtManager/preferences.py:170
 msgid "Application default"
-msgstr ""
+msgstr "Zadana aplikacija"
 
 #: virtManager/preferences.py:173
 msgid "Nearest host CPU model"
-msgstr ""
+msgstr "Najbliži model CPU virtualnog uređaja"
 
 #: virtManager/preferences.py:183
 msgid "System default"
-msgstr ""
+msgstr "Zadano sustavom"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
-msgstr ""
+msgstr "python libguestfs podrška nije instalirana"
 
 #: virtManager/preferences.py:322
 msgid "Configure grab key combination"
-msgstr ""
+msgstr "Podesi kombinaciju tipki hvatanja"
 
 #: virtManager/preferences.py:331
 msgid ""
@@ -4726,18 +4803,21 @@ msgid ""
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
+"Sada možete odrediti tipke hvatanja pritiskom na njih.\n"
+"Za potvrdu vašeg odabira kliknite na tipku 'U redu'\n"
+"dok držite pritisnute željene tipke."
 
 #: virtManager/preferences.py:334
 msgid "Please press desired grab key combination"
-msgstr ""
+msgstr "Pritisnite željenu kombinaciju tipke hvatanja"
 
 #: virtManager/storagebrowse.py:77
 msgid "Cannot use local storage on remote connection."
-msgstr ""
+msgstr "Nemoguće korištenje lokalne pohrane na udaljenom povezivanju."
 
 #: virtManager/storagebrowse.py:108
 msgid "Choose Storage Volume"
-msgstr ""
+msgstr "Odabir uređaja pohrane"
 
 #: virtManager/systray.py:119
 msgid "_Show Virtual Machine Manager"
@@ -4920,11 +5000,11 @@ msgstr "Greška uslikavanja slike sustava: %s"
 
 #: virtManager/vmwindow.py:518
 msgid "Error initializing spice USB device widget"
-msgstr ""
+msgstr "Greška pokretanja grafičkog elementa spice USB uređaja"
 
 #: virtManager/vmwindow.py:522
 msgid "Select USB devices for redirection"
-msgstr ""
+msgstr "Odaberi USB uređaj za preusmjaravanje"
 
 #: virtManager/vmwindow.py:554
 msgid "Save Virtual Machine Screenshot"
@@ -4936,7 +5016,7 @@ msgstr "PNG datoteke"
 
 #: virtManager/xmleditor.py:118 virtManager/xmleditor.py:131
 msgid "There are unapplied changes."
-msgstr ""
+msgstr "Postoje neprimijenjene promjene."
 
 #: virtManager/xmleditor.py:119
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
@@ -5362,15 +5442,15 @@ msgstr ""
 
 #: virtinst/cli.py:926
 msgid "OS options"
-msgstr ""
+msgstr "OS mogućnosti"
 
 #: virtinst/cli.py:929
 msgid "The OS being installed in the guest."
-msgstr ""
+msgstr "OS se instalira na virtualno računalo."
 
 #: virtinst/cli.py:931
 msgid "The OS installed in the guest."
-msgstr ""
+msgstr "OS je instaliran na virtualno računalo."
 
 #: virtinst/cli.py:933
 msgid ""
@@ -5390,7 +5470,7 @@ msgstr ""
 #: virtinst/cli.py:973
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
-msgstr ""
+msgstr "%(key)s mora bit 'da' ili 'ne'"
 
 #: virtinst/cli.py:1158
 #, python-format
@@ -5647,59 +5727,62 @@ msgstr ""
 
 #: virtinst/domcapabilities.py:321
 msgid "BIOS"
-msgstr ""
+msgstr "BIOS"
 
 #: virtinst/domcapabilities.py:322
 msgid "Default"
-msgstr ""
+msgstr "Zadani"
 
 #: virtinst/domcapabilities.py:327
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
-msgstr ""
+msgstr "UEFI %(arch)s: %(path)s"
 
 #: virtinst/domcapabilities.py:330
 #, python-format
 msgid "Custom: %(path)s"
-msgstr ""
+msgstr "Prilagođeno: %(path)s"
 
 #: virtinst/guest.py:79
 msgid "Guest"
-msgstr ""
+msgstr "Virtualno računalo"
 
 #: virtinst/guest.py:87
 #, python-format
 msgid "Guest name '%s' is already in use."
-msgstr ""
+msgstr "Naziv virtualnog računala '%s' se već koristi."
 
 #: virtinst/guest.py:797
 msgid "Libvirt version does not support UEFI."
-msgstr ""
+msgstr "Libvirt inačica ne podržava UEFI."
 
 #: virtinst/guest.py:801
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
-msgstr ""
+msgstr "Ne znam kako podesiti UEFI za arhitekturu '%s'"
 
 #: virtinst/guest.py:806
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
+"Nije pronađena nijedna putanja UEFI binarne datoteke za arhitekturu '%s'"
 
 #: virtinst/install/installer.py:107
 #, python-format
 msgid "Removing disk '%s'"
-msgstr ""
+msgstr "Uklanjanje diska '%s'"
 
 #: virtinst/install/installer.py:266
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
+"Zaobilaženje memorije na %(number)s MiB potrebnih za%(osname)s mrežnu "
+"instalaciju."
 
 #: virtinst/install/installer.py:635
 msgid "Creating domain..."
-msgstr ""
+msgstr "Stvaranje domene..."
 
 #: virtinst/install/installer.py:642
 msgid "Domain type 'vz' doesn't support transient installs."
@@ -5926,7 +6009,7 @@ msgstr ""
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
 msgid "General Options"
-msgstr ""
+msgstr "Opće mogućnosti"
 
 #: virtinst/virtclone.py:79
 msgid "Name of the original guest to clone."
@@ -5952,7 +6035,7 @@ msgstr ""
 
 #: virtinst/virtclone.py:91
 msgid "Storage Configuration"
-msgstr ""
+msgstr "Podešavanje pohrane"
 
 #: virtinst/virtclone.py:93
 msgid "New file to use as the disk image for the new guest"
@@ -5998,7 +6081,7 @@ msgstr ""
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1112
 #: virtinst/virtxml.py:431
 msgid "Miscellaneous Options"
-msgstr ""
+msgstr "Ostale mogućnosti"
 
 #: virtinst/virtclone.py:147
 msgid ""
@@ -6327,15 +6410,15 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1055
 msgid "Device Options"
-msgstr ""
+msgstr "Mogućnosti uređaja"
 
 #: virtinst/virtinstall.py:1085
 msgid "Guest Configuration Options"
-msgstr ""
+msgstr "Mogućnosti podešavanja virtualnog računala"
 
 #: virtinst/virtinstall.py:1089
 msgid "Virtualization Platform Options"
-msgstr ""
+msgstr "Mogućnosti platforme virtualizacije"
 
 #: virtinst/virtinstall.py:1093
 msgid "This guest should be a fully virtualized guest"
