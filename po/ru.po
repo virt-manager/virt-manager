@@ -19,13 +19,14 @@
 # Dmitry Astankov <mornie@basealt.ru>, 2021, 2022.
 # Alexey Rubtsov <rushills@gmail.com>, 2021, 2022.
 # V I <xasertop@gmail.com>, 2022.
+# Olga Smirnova <mistresssilvara@hotmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-09-05 17:19+0000\n"
-"Last-Translator: Alexey Rubtsov <rushills@gmail.com>\n"
+"PO-Revision-Date: 2022-09-17 16:19+0000\n"
+"Last-Translator: Olga Smirnova <mistresssilvara@hotmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
@@ -1305,7 +1306,7 @@ msgstr "_Формат:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "предупреждение"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1835,7 +1836,7 @@ msgstr "ЦП по _умолчанию:"
 
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
-msgstr ""
+msgstr "Прошивка по умолчанию для новых ВМ. Загрузка через BIOS или UEFI."
 
 #: ui/preferences.ui:490
 msgid "x86 _Firmware:"
@@ -2008,7 +2009,7 @@ msgstr "_Дополнительные параметры"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
-msgstr ""
+msgstr "tpm-tab"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
@@ -2466,6 +2467,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s не активен в основной системе.\n"
+"Запустите mdev в основной системе перед его добавлением в гостевую."
 
 #: virtManager/addhardware.py:797
 msgid "No Devices Available"
@@ -3537,7 +3540,7 @@ msgstr "Удалить оборудование"
 
 #: virtManager/details/details.py:662 virtManager/details/details.py:1774
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:672
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -3765,11 +3768,11 @@ msgstr "Для устройства типа «%s» не поддерживае�
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "_Копировать"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "Вст_авить"
 
 #: virtManager/details/serialcon.py:348
 #, python-format
@@ -4031,7 +4034,7 @@ msgstr "_Путь на хосте:"
 
 #: virtManager/device/fsdetails.py:163
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
-msgstr ""
+msgstr "Может потребоваться включить разделяемую память на экране «Память»."
 
 #: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
@@ -4700,11 +4703,11 @@ msgstr "Не удалось отменить задание миграции: %s
 
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "Нельзя изменить разделяемую память, если используется <numa>."
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt может быть недостаточно новой для поддержки memfd."
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -5751,6 +5754,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Можно получить дополнительные сведения:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5929,6 +5935,9 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"Число ЦП данной топологии (сокеты=%(sockets)d * кристаллы=%(dies)d * "
+"ядра=%(cores)d * потоки=%(threads)d == %(total)d) не совпадает с числом "
+"виртуальных ЦП: %(vcpus)d"
 
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
@@ -6135,7 +6144,7 @@ msgstr "Передача «%(filename)s»"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "Обычная или неизвестная ОС. Не рекомендуется к использованию."
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6400,7 +6409,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type устарел и ничего не делает. Не используйте его."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6519,6 +6528,9 @@ msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"Это фатальная ошибка. Нужно указать название ОС\n"
+"для современных, производительных и безопасных \n"
+"настроек машины по умолчанию.\n"
 
 #: virtinst/virtinstall.py:574
 msgid ""
@@ -6527,6 +6539,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"Если вы хотели, чтобы virt-install определил название ОС\n"
+"на установочном носителе, задайте запасное название:\n"
+"\n"
+"  --osinfo detect=on,name=НАЗВАНИЕ\n"
 
 #: virtinst/virtinstall.py:583
 msgid ""
@@ -6534,6 +6550,9 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Чтобы увидеть все допустимые названия ОС:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:590
 #, python-brace-format
@@ -6541,6 +6560,8 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Если вашего дистрибутива Linux нет в списке, используйте\n"
+"общие названия из списка: {oslist}\n"
 
 #: virtinst/virtinstall.py:597
 #, python-brace-format
@@ -6551,11 +6572,16 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"Если вы хотите прежнего поведения, используйте:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Или экспортируйте {env_var}=1\n"
 
 #: virtinst/virtinstall.py:607
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "Задана {env_var}. Ошибка пропущена."
 
 #: virtinst/virtinstall.py:683
 msgid "No console to launch for the guest, defaulting to --wait -1"
