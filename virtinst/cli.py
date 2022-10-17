@@ -2861,6 +2861,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("loader.readonly", "loader_ro", is_onoff=True)
         cls.add_arg("loader.type", "loader_type")
         cls.add_arg("loader.secure", "loader_secure", is_onoff=True)
+        cls.add_arg("loader.stateless", "loader_stateless", is_onoff=True)
 
         # Guest-Based bootloader options
         cls.add_arg("firmware", "firmware")

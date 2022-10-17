@@ -86,6 +86,7 @@ class DomainOs(XMLBuilder):
     _XML_PROP_ORDER = [
             "firmware", "os_type", "arch", "machine", "firmware_features",
             "loader", "loader_ro", "loader_secure", "loader_type",
+            "loader_stateless",
             "nvram", "nvram_template",
             "init", "initargs", "initenvs", "initdir", "inituser", "initgroup",
             "kernel", "initrd", "kernel_args", "dtb", "acpi_tb", "acpi_tb_type",
@@ -100,6 +101,7 @@ class DomainOs(XMLBuilder):
     loader_ro = XMLProperty("./loader/@readonly", is_yesno=True)
     loader_type = XMLProperty("./loader/@type")
     loader_secure = XMLProperty("./loader/@secure", is_yesno=True)
+    loader_stateless = XMLProperty("./loader/@stateless", is_yesno=True)
 
     # BIOS bootloader options
     def _get_bootorder(self):

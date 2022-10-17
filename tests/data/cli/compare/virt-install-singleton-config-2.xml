@@ -11,7 +11,7 @@
   <vcpu cpuset="1,3-5">2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" secure="no" type="rom">/tmp/foo</loader>
+    <loader readonly="yes" secure="no" type="rom" stateless="yes">/tmp/foo</loader>
     <smbios mode="emulate"/>
     <boot dev="network"/>
     <boot dev="hd"/>
@@ -112,7 +112,7 @@
   <vcpu cpuset="1,3-5">2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
-    <loader readonly="yes" secure="no" type="rom">/tmp/foo</loader>
+    <loader readonly="yes" secure="no" type="rom" stateless="yes">/tmp/foo</loader>
     <boot dev="hd"/>
     <smbios mode="emulate"/>
   </os>

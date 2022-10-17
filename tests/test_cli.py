@@ -832,7 +832,7 @@ c.add_compare("--pxe "
 "--cpuset 1,3-5 "  # setting compat --cpuset when --vcpus is not present
 # --boot loader settings here, or they will conflict with firmware=efi
 # in other test cases
-"--boot loader_ro=yes,loader.type=rom,loader=/tmp/foo,loader_secure=no "
+"--boot loader_ro=yes,loader.type=rom,loader=/tmp/foo,loader_secure=no,loader.stateless=yes"
 
 # 'default' handling for solo devices
 """
