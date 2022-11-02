@@ -32,7 +32,6 @@ POOL_TYPE_DESCS = {
     StoragePool.TYPE_MPATH: _("Multipath Device Enumerator"),
     StoragePool.TYPE_GLUSTER: _("Gluster Filesystem"),
     StoragePool.TYPE_RBD: _("RADOS Block Device/Ceph"),
-    StoragePool.TYPE_SHEEPDOG: _("Sheepdog Filesystem"),
     StoragePool.TYPE_ZFS: _("ZFS Pool"),
 }
 
@@ -128,7 +127,6 @@ class vmmStoragePool(vmmLibvirtObject):
         ]
         if not clone:
             supported.extend([
-                StoragePool.TYPE_SHEEPDOG,
                 StoragePool.TYPE_ZFS,
             ])
         return pool_type in supported

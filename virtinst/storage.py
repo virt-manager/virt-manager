@@ -82,7 +82,6 @@ class StoragePool(_StorageObject):
     TYPE_MPATH   = "mpath"
     TYPE_GLUSTER = "gluster"
     TYPE_RBD     = "rbd"
-    TYPE_SHEEPDOG = "sheepdog"
     TYPE_ZFS     = "zfs"
 
     @staticmethod
@@ -311,7 +310,7 @@ class StoragePool(_StorageObject):
 
     def supports_source_name(self):
         return self.type in [self.TYPE_LOGICAL, self.TYPE_GLUSTER,
-            self.TYPE_RBD, self.TYPE_SHEEPDOG, self.TYPE_ZFS]
+            self.TYPE_RBD, self.TYPE_ZFS]
 
 
     def supports_source_path(self):
@@ -323,7 +322,7 @@ class StoragePool(_StorageObject):
     def supports_hosts(self):
         return self.type in [
                 self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER,
-                self.TYPE_RBD, self.TYPE_SHEEPDOG]
+                self.TYPE_RBD]
 
     def supports_format(self):
         return self.type in [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK]
@@ -340,8 +339,7 @@ class StoragePool(_StorageObject):
             return StorageVolume.TYPE_BLOCK
         if (self.type == StoragePool.TYPE_GLUSTER or
             self.type == StoragePool.TYPE_RBD or
-            self.type == StoragePool.TYPE_ISCSI or
-            self.type == StoragePool.TYPE_SHEEPDOG):
+            self.type == StoragePool.TYPE_ISCSI):
             return StorageVolume.TYPE_NETWORK
         return StorageVolume.TYPE_FILE
 

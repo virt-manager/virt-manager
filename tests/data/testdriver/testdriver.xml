@@ -296,24 +296,17 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
     </disk>
     <disk type='network' device='disk'>
       <driver name='qemu' type='raw'/>
-      <source protocol='sheepdog' name='image,with,commas'>
-        <host name='example.org' port='6000'/>
-      </source>
-      <target dev='vdad' bus='virtio'/>
-    </disk>
-    <disk type='network' device='disk'>
-      <driver name='qemu' type='raw'/>
       <source protocol='gluster' name='test-volume/test-gluster2.raw'>
         <host name='192.168.1.100'/>
       </source>
-      <target dev='vdae' bus='virtio'/>
+      <target dev='vdad' bus='virtio'/>
     </disk>
     <disk type='network' device='disk'>
       <driver name='qemu' type='raw'/>
       <source protocol='nbd'>
         <host transport='unix' socket='relative.sock'/>
       </source>
-      <target dev='vdaf' bus='virtio'/>
+      <target dev='vdae' bus='virtio'/>
     </disk>
 
     <!-- bus usb -->
@@ -2166,35 +2159,6 @@ ba</description>
     <target>
       <path>rbd-sourcename/some-rbd-vol</path>
       <format type='raw'/>
-    </target>
-  </volume>
-</pool>
-
-
-<pool type='sheepdog'>
-  <name>pool-sheepdog</name>
-  <uuid>581381f8-a13f-4f7c-89b5-9c9b71c64834</uuid>
-  <capacity unit='bytes'>107374182400</capacity>
-  <allocation unit='bytes'>53687091200</allocation>
-  <available unit='bytes'>53687091200</available>
-  <source>
-    <host name='localhost' port='7000'/>
-    <name>mysheeppool</name>
-  </source>
-
-  <volume type='network'>
-    <name>vol_sheepdog</name>
-    <key>sheep/vol_sheepdog</key>
-    <capacity unit='bytes'>1024</capacity>
-    <allocation unit='bytes'>0</allocation>
-    <target>
-      <path>sheepdog:vol_sheepdog</path>
-      <format type='unknown'/>
-      <permissions>
-        <mode>0600</mode>
-        <owner>-1</owner>
-        <group>-1</group>
-      </permissions>
     </target>
   </volume>
 </pool>
