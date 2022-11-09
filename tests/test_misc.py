@@ -224,6 +224,20 @@ def test_misc_meter():
     out = meter.output.getvalue().replace("\r", "\n")
     utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter6.txt"))
 
+    def _test_meter_zero(m, startval=0, text="Meter text test"):
+        with unittest.mock.patch("time.time", return_value=1.0):
+            m.start(text, startval)
+        with unittest.mock.patch("time.time", return_value=3.0):
+            m.update(0)
+        with unittest.mock.patch("time.time", return_value=3.1):
+            m.end()
+
+    # meter with size 0 and startval size 0
+    meter = _progresspriv.TextMeter(output=io.StringIO())
+    _test_meter_zero(meter, 0)
+    out = meter.output.getvalue().replace("\r", "\n")
+    utils.diff_compare(out, os.path.join(utils.DATADIR, "meter", "meter-zero.txt"))
+
     # BaseMeter coverage
     meter = _progresspriv.BaseMeter()
     _test_meter_values(meter)

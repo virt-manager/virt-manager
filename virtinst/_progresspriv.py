@@ -247,11 +247,15 @@ class TextMeter(BaseMeter):
         tl = TerminalLine(8)
         # For big screens, make it more readable.
         use_hours = bool(tl.llen > 80)
-        ui_size = tl.add(' | %5sB' % total_size)
         ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(),
                                               use_hours))
         ui_end, not_done = _term_add_end(tl, self.size, amount_read)
-        dummy = not_done
+        if not not_done and amount_read == 0:
+            # Doesn't need to print total_size
+            ui_size = tl.add(' | %5s ' % ' ')
+        else:
+            ui_size = tl.add(' | %5sB' % total_size)
+
         out = '\r%-*.*s%s%s%s\n' % (tl.rest(), tl.rest(), self.text,
                                     ui_size, ui_time, ui_end)
         self.output.write(out)
