@@ -1127,6 +1127,8 @@ class Guest(XMLBuilder):
             self.add_device(ctrl)
 
     def _add_spice_channels(self):
+        if not self.lookup_domcaps().supports_channel_spicevmc():
+            return
         if self.skip_default_channel:
             return
         for chn in self.devices.channel:
