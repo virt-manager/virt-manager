@@ -114,6 +114,7 @@ class _Devices(_CapsBlock):
     tpm = XMLChildProperty(_make_capsblock("tpm"), is_single=True)
     filesystem = XMLChildProperty(_make_capsblock("filesystem"), is_single=True)
     redirdev = XMLChildProperty(_make_capsblock("redirdev"), is_single=True)
+    channel = XMLChildProperty(_make_capsblock("channel"), is_single=True)
 
 
 class _Features(_CapsBlock):
@@ -448,6 +449,18 @@ class DomainCapabilities(XMLBuilder):
             return self.conn.caps.host.cpu.arch in ["i686", "x86_64"]
 
         return self.devices.graphics.get_enum("type").has_value("spice")
+
+    def supports_channel_spicevmc(self):
+        """
+        Return False if libvirt explicitly advertises no support for
+        spice channel
+        """
+        if self.devices.channel.supported is None:
+            # Follow the original behavior in case of talking to older
+            # libvirt.
+            return True
+
+        return self.devices.channel.get_enum("type").has_value("spicevmc")
 
     def supports_redirdev_usb(self):
         """
