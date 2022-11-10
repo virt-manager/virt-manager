@@ -1155,6 +1155,8 @@ class Guest(XMLBuilder):
         self.add_device(dev)
 
     def _add_spice_usbredir(self):
+        if not self.lookup_domcaps().supports_redirdev_usb():
+            return
         if self.skip_default_usbredir:
             return
         if self.devices.redirdev:

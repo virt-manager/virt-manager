@@ -113,6 +113,7 @@ class _Devices(_CapsBlock):
     graphics = XMLChildProperty(_make_capsblock("graphics"), is_single=True)
     tpm = XMLChildProperty(_make_capsblock("tpm"), is_single=True)
     filesystem = XMLChildProperty(_make_capsblock("filesystem"), is_single=True)
+    redirdev = XMLChildProperty(_make_capsblock("redirdev"), is_single=True)
 
 
 class _Features(_CapsBlock):
@@ -447,6 +448,18 @@ class DomainCapabilities(XMLBuilder):
             return self.conn.caps.host.cpu.arch in ["i686", "x86_64"]
 
         return self.devices.graphics.get_enum("type").has_value("spice")
+
+    def supports_redirdev_usb(self):
+        """
+        Return False if libvirt explicitly advertises no support for
+        USB redirect
+        """
+        if self.devices.redirdev.supported is None:
+            # Follow the original behavior in case of talking to older
+            # libvirt.
+            return True
+
+        return self.devices.redirdev.get_enum("bus").has_value("usb")
 
     def supports_filesystem_virtiofs(self):
         """
