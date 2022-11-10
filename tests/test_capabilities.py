@@ -92,6 +92,8 @@ def testDomainCapabilitiesx86():
 
     assert caps.supports_filesystem_virtiofs()
     assert caps.supports_memorybacking_memfd()
+    assert caps.supports_redirdev_usb()
+    assert caps.supports_channel_spicevmc()
 
     xml = open(DATADIR + "/kvm-x86_64-domcaps-amd-sev.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
