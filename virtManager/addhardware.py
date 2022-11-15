@@ -1562,6 +1562,8 @@ class vmmAddHardware(vmmGObjectUI):
         if len(controller_num) > 0:
             index_new = max([x.index for x in controller_num]) + 1
             dev.index = index_new
+        else:
+            dev.index = 0
 
         dev.type = controller_type
 
