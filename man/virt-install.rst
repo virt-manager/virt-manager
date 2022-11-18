@@ -965,6 +965,9 @@ Some examples:
     --boot uefi doesn't know about your UEFI binaries. If your UEFI firmware
     supports Secure boot feature you can enable it via loader_secure.
 
+``--boot firmware=efi,firmware.feature0.enabled=no,firmware.feature0.name=secure-boot``
+    Completely disable secure boot for the virtual machine.
+
 Use --boot=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#elementsOS
 
