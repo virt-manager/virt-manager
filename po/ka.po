@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-03-03 06:15+0000\n"
-"PO-Revision-Date: 2022-08-08 16:30+0000\n"
+"PO-Revision-Date: 2022-11-24 09:19+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -5543,7 +5543,7 @@ msgstr "გაზიარებადად მონიშვნა"
 #: virtinst/cloner.py:258
 #, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr ""
+msgstr "კლონირებისთვის ბილიკს '%(path)s' ვერ გამოვყენებ: %(error)s"
 
 #: virtinst/cloner.py:274
 #, python-format
@@ -5578,7 +5578,7 @@ msgstr ""
 
 #: virtinst/devices/disk.py:376
 msgid "Format attribute not supported for this volume type"
-msgstr ""
+msgstr "ფორმატის ატრიბუტები ამ ტომის ტიპისთვის მხარდაჭერილი არაა"
 
 #: virtinst/devices/disk.py:797
 #, python-format
@@ -6338,7 +6338,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1028
 msgid "Build guest around an existing disk image"
-msgstr ""
+msgstr "სტუმრის არსებული დისკის ასლის გარშემო აგება"
 
 #: virtinst/virtinstall.py:1031
 msgid ""
@@ -6365,7 +6365,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1043
 msgid "Perform a cloud image installation, configuring cloud-init"
-msgstr ""
+msgstr "ღრუბლოვანი ასლის დაყენება. მიმდინარეობს cloud-init-ის მორგება"
 
 #: virtinst/virtinstall.py:1057
 msgid "Device Options"
@@ -6385,11 +6385,11 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1098
 msgid "This guest should be a paravirtualized guest"
-msgstr ""
+msgstr "ეს სტუმარი პარავირტუალიზებული უნდა იყოს"
 
 #: virtinst/virtinstall.py:1101
 msgid "This guest should be a container guest"
-msgstr ""
+msgstr "ეს სტუმარი კონტეინერი უნდა იყოს"
 
 #: virtinst/virtinstall.py:1103
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
@@ -6405,7 +6405,7 @@ msgstr "მანქანის სიმულირებადი ტიპ�
 
 #: virtinst/virtinstall.py:1116
 msgid "Have domain autostart on host boot up."
-msgstr ""
+msgstr "ჰოსტის ჩატვირთვისას დომენის ავტომატური გაშვება."
 
 #: virtinst/virtinstall.py:1118
 msgid "Create a transient domain."
@@ -6417,7 +6417,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1123
 msgid "Minutes to wait for install to complete."
-msgstr ""
+msgstr "დაყენების მოლოდინის დრო, წუთებში."
 
 #: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
@@ -6431,7 +6431,7 @@ msgstr "--edit-ის არასწორი პარამეტრი '%s'"
 #: virtinst/virtxml.py:83
 #, python-format
 msgid "No --%s objects found in the XML"
-msgstr ""
+msgstr "XML-ში --%s ობიექტები ვერ ვიპოვე"
 
 #: virtinst/virtxml.py:86
 #, python-format
@@ -6580,7 +6580,7 @@ msgstr "მოწყობილობის განახლების შ�
 
 #: virtinst/virtxml.py:327
 msgid "--xml can only be used with --edit"
-msgstr ""
+msgstr "--xml -ის გამოყენება მხოლოდ --edit -თან ერთად შეგიძლიათ"
 
 #: virtinst/virtxml.py:349
 msgid "No XML diff was generated. The requested changes will have no effect."
@@ -6588,7 +6588,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:368
 msgid "Edit libvirt XML using command line options."
-msgstr ""
+msgstr "ჩაასწორეთ libvirt-ის XML ბრძანების სტრიქონის პარამეტრებით."
 
 #: virtinst/virtxml.py:374
 msgid "Domain name, id, or uuid"
@@ -6620,6 +6620,8 @@ msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
+"დაამატეთ მითითებული მოწყობლობა. მაგალითად:\n"
+"--add-device --disk ..."
 
 #: virtinst/virtxml.py:392
 msgid ""
@@ -6683,7 +6685,7 @@ msgstr "დომენის მითითება აუცილებე�
 #: virtinst/virtxml.py:494
 #, python-format
 msgid "Don't know how to --update for --%s"
-msgstr ""
+msgstr "არ ვიცი, როგორ --update --%s -სთვის"
 
 #: virtinst/virtxml.py:528
 msgid "The VM is not running, --update is inapplicable."
