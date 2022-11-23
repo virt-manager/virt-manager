@@ -26,13 +26,14 @@
 # Chris Wehrli <christian.wehrli@gmx.ch>, 2021.
 # Ettore Atalan <atalanttore@googlemail.com>, 2021, 2022.
 # Christian Wehrli <christian@chw.onl>, 2021.
+# Flo H <emailtoflorian@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-08-01 13:19+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2022-11-24 09:19+0000\n"
+"Last-Translator: Flo H <emailtoflorian@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/de/>\n"
 "Language: de\n"
@@ -40,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -144,7 +145,7 @@ msgstr "_Gerätemodell:"
 
 #: ui/addhardware.ui:673 ui/addhardware.ui:1229
 msgid "Host _Device:"
-msgstr "_Wirtsgerät:"
+msgstr "_Hostrechner:"
 
 #: ui/addhardware.ui:749
 msgid "_Path:"
@@ -501,8 +502,9 @@ msgid "Tar_get Path:"
 msgstr "_Zielpfad:"
 
 #: ui/createpool.ui:162 ui/createvol.ui:199
+#, fuzzy
 msgid "F_ormat:"
-msgstr "F_ormat:"
+msgstr "F_ormatieren:"
 
 #: ui/createpool.ui:176
 msgid "Host Na_me:"
@@ -913,7 +915,7 @@ msgstr "Emulator:"
 
 #: ui/details.ui:475
 msgid "Machine _Type: "
-msgstr "Maschinentyp:"
+msgstr "Maschinentyp: "
 
 #: ui/details.ui:488
 msgid "Chipse_t:"
@@ -987,7 +989,7 @@ msgstr "M_odell:"
 
 #: ui/details.ui:1452 virtManager/details/details.py:1947
 msgid "Copy host CP_U configuration"
-msgstr "Die _CPU-Konfiguration vom Wirt kopieren"
+msgstr "Die _CPU-Konfiguration vom Hostrechner kopieren"
 
 #: ui/details.ui:1493
 msgid "Enable available CPU security flaw mitigations"
@@ -1051,7 +1053,7 @@ msgstr "<b>Speicher</b>"
 
 #: ui/details.ui:1995
 msgid "Start virt_ual machine on host boot up"
-msgstr "Virt_uelle Maschine beim Start des Wirtes starten"
+msgstr "Virt_uelle Maschine beim Start des Hostrechners starten"
 
 #: ui/details.ui:2016
 msgid "<b>Autostart</b>"
@@ -1205,7 +1207,7 @@ msgstr "Zielname:"
 
 #: ui/details.ui:3669 ui/hostnets.ui:175 ui/hoststorage.ui:391
 msgid "State:"
-msgstr "Status: "
+msgstr "Status:"
 
 #: ui/details.ui:3681
 msgid "Source path:"
@@ -1237,7 +1239,7 @@ msgstr "Geräte:"
 
 #: ui/details.ui:4246
 msgid "<b>Controller</b>"
-msgstr "<b>Steuerung</b>"
+msgstr "<b>Controller</b>"
 
 #: ui/details.ui:4292
 msgid "<b>Filesystem</b>"
@@ -1285,18 +1287,16 @@ msgstr ""
 
 #: ui/details.ui:4752
 msgid "<b>Panic Notifier</b>"
-msgstr "<b>Panicmelder</b>"
+msgstr "<b>Panik-Melder</b>"
 
 #: ui/details.ui:4845
-#, fuzzy
-#| msgid "Removable"
 msgid "_Remove"
-msgstr "Entfernbar"
+msgstr "_Entfernen"
 
 #: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
-msgstr ""
+msgstr "Ü_bernehmen"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
@@ -1304,7 +1304,7 @@ msgstr "Dateisystem schreibgeschützt e_xportieren"
 
 #: ui/fsdetails.ui:101
 msgid "_Driver:"
-msgstr "_Treiber"
+msgstr "_Treiber:"
 
 #: ui/fsdetails.ui:129
 msgid "Ta_rget path:"
@@ -1337,7 +1337,7 @@ msgstr "Anschluss (_Port):"
 #: ui/gfxdetails.ui:168 ui/vsockdetails.ui:39
 #: virtManager/device/gfxdetails.py:211
 msgid "A_uto"
-msgstr "A_uto"
+msgstr "A_utomatisch"
 
 #: ui/gfxdetails.ui:193 ui/vsockdetails.ui:64
 msgid "5900"
@@ -1349,7 +1349,7 @@ msgstr "Open_GL:"
 
 #: ui/gfxdetails.ui:275
 msgid "L_isten type:"
-msgstr "L_isten Typ"
+msgstr "L_istentyp:"
 
 #: ui/gfxdetails.ui:365
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
@@ -1358,8 +1358,9 @@ msgstr ""
 "Beschleunigung«"
 
 #: ui/gfxdetails.ui:381
+#, fuzzy
 msgid "OpenGL only works with 'Listen type' value 'none'"
-msgstr ""
+msgstr "OpenGL funktioniert nur mit 'Listentyp'-Wert 'keine'"
 
 #: ui/host.ui:27 ui/manager.ui:26 ui/vmwindow.ui:25
 msgid "_File"
@@ -1395,7 +1396,7 @@ msgstr "_Speicher"
 
 #: ui/hostnets.ui:187 ui/hoststorage.ui:403
 msgid "A_utostart:"
-msgstr "A_utostart:"
+msgstr "A_utomatischer Start:"
 
 #: ui/hostnets.ui:201
 msgid "Domain:"
@@ -1473,7 +1474,7 @@ msgstr "Abbrechen und Dialogfeld schließen"
 #, fuzzy
 #| msgid "Choose Volume"
 msgid "Ch_oose Volume"
-msgstr "Datenträger auswählen"
+msgstr "_Datenträger auswählen"
 
 #: ui/hoststorage.ui:174
 msgid "Choose the selected volume"
@@ -1514,11 +1515,11 @@ msgstr "_Neue virtuelle Maschine"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr ""
+msgstr "_Schließen"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr ""
+msgstr "_Beenden"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1533,10 +1534,8 @@ msgid "_Virtual Machine Details"
 msgstr "_Details der virtuellen Maschine"
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Einstellungen"
+msgstr "_Einstellungen"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -1552,7 +1551,7 @@ msgstr "_Gast-CPU-Verwendung"
 
 #: ui/manager.ui:167
 msgid "_Host CPU Usage"
-msgstr "_Wirt-CPU-Verwendung"
+msgstr "_CPU-Auslastung Hostrechner"
 
 #: ui/manager.ui:176
 msgid "_Memory Usage"
@@ -1572,7 +1571,7 @@ msgstr "_Hilfe"
 
 #: ui/manager.ui:222
 msgid "_About"
-msgstr ""
+msgstr "Ü_ber"
 
 #: ui/manager.ui:253
 msgid "Create a new virtual machine"
@@ -1848,12 +1847,11 @@ msgstr "_CPU-Vorgabe:"
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Vorgabe Firmware-Einstellung für neue VMs. Wählen Sie entweder BIOS oder UEFI"
 
 #: ui/preferences.ui:490
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Firm_ware:"
+msgstr "x86 _Firmware:"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
@@ -1890,7 +1888,7 @@ msgstr ""
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
-msgstr "_Größe des Gastes mit Fenster ändern: "
+msgstr "_Größe des Gastes mit Fenster ändern:"
 
 #: ui/preferences.ui:675
 msgid "SPICE _USB Redirection:"
@@ -1958,7 +1956,7 @@ msgstr "VM-Status:"
 
 #: ui/snapshots.ui:166
 msgid "Timestamp:"
-msgstr "Zeitstempel"
+msgstr "Zeitstempel:"
 
 #: ui/snapshots.ui:204
 msgid "Snapshot Mode:"
@@ -2017,10 +2015,8 @@ msgid "_Version:"
 msgstr "_Version:"
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
-msgstr "Erweiterte Optionen"
+msgstr "_Erweiterte Optionen"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
@@ -2052,7 +2048,7 @@ msgstr "_Konsole"
 
 #: ui/vmwindow.ui:143
 msgid "Sna_pshots"
-msgstr "Sna_pshots"
+msgstr "Schna_pschuss"
 
 #: ui/vmwindow.ui:160
 msgid "_Fullscreen"
@@ -2212,8 +2208,9 @@ msgstr "USB Host-Gerät"
 
 #: virtManager/addhardware.py:243 virtManager/addhardware.py:247
 #: virtManager/addhardware.py:257
+#, fuzzy
 msgid "Connection does not support host device enumeration"
-msgstr "Verbindung unterstützt keine Wirtgeräteaufzählung"
+msgstr "Verbindung unterstützt keine Hostrechneraufzählung"
 
 #: virtManager/addhardware.py:251
 msgid "Not supported for containers"
@@ -2493,7 +2490,7 @@ msgstr "Host"
 
 #: virtManager/addhardware.py:866
 msgid "Spice channel"
-msgstr "SPICE Kanal "
+msgstr "SPICE Kanal"
 
 #: virtManager/addhardware.py:894
 msgid "USB 3"
@@ -2715,7 +2712,9 @@ msgstr "Erzeugen eines Klons der virtuellen Maschine «%s»"
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
-msgstr " und ausgewählten Speichers (dies kann eine Weile dauern)"
+msgstr ""
+"Erstelle Klon der virtuellen Maschine und des ausgewählten Speichermedium ("
+"dies kann eine Weile dauern)"
 
 #: virtManager/config.py:148
 msgid "Locate or create storage volume"
@@ -2790,11 +2789,11 @@ msgstr "Benutzer-Session"
 
 #: virtManager/createconn.py:123
 msgid "Custom URI..."
-msgstr ""
+msgstr "Benutzerdefinierte URI …"
 
 #: virtManager/createconn.py:241
 msgid "A hostname is required for remote connections."
-msgstr "Ein Rechnername wird für die entfernte Verbindung benötigt. "
+msgstr "Ein Rechnername wird für die entfernte Verbindungen benötigt."
 
 #: virtManager/createconn.py:254
 msgid "Would you still like to remember this connection?"
@@ -2979,11 +2978,10 @@ msgstr ""
 #: virtManager/createvm.py:649
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
-msgstr "Bis zu %(maxmem)s auf diesem Wirt verfügbar"
+msgstr "Bis zu %(maxmem)s auf diesem Hostrechner verfügbar"
 
 #: virtManager/createvm.py:657
-#, fuzzy, python-format
-#| msgid "Up to %(numcpus)d available"
+#, python-format
 msgid "Up to %(numcpus)d available"
 msgid_plural "Up to %(numcpus)d available"
 msgstr[0] "Bis zu %(numcpus)d verfügbar"
@@ -3307,7 +3305,7 @@ msgstr "iSCSI-Freigabe kann nicht gelöscht werden."
 
 #: virtManager/delete.py:569
 msgid "Cannot delete SCSI device."
-msgstr ""
+msgstr "SCSI Gerät kann nicht gelöscht werden."
 
 #: virtManager/delete.py:572
 msgid "Cannot delete unmanaged remote storage."
@@ -3342,14 +3340,8 @@ msgid "Storage is a media device."
 msgstr "Speicher ist ein Mediengerät."
 
 #: virtManager/delete.py:606
-#, fuzzy
-#| msgid ""
-#| "Storage is in use by the following virtual machines:\n"
-#| "- %s "
 msgid "Storage is in use by the following virtual machines"
-msgstr ""
-"Speicher wird von den folgenden virtuellen Maschinen verwendet:\n"
-"- %s "
+msgstr "Speicher wird von den folgenden virtuellen Maschinen verwendet"
 
 #: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
@@ -3602,7 +3594,7 @@ msgstr "CPU-Konfiguration löschen"
 
 #: virtManager/details/details.py:809
 msgid "Disk bus:"
-msgstr ""
+msgstr "Gerätebus:"
 
 #: virtManager/details/details.py:1019
 #, python-format
@@ -3753,6 +3745,7 @@ msgstr "%(device)s unter %(address)s"
 #: virtManager/details/details.py:2228 virtManager/details/details.py:2238
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
+"Controller kann nicht entfernt werden, solange Geräte damit verbunden sind."
 
 #: virtManager/details/details.py:2328
 msgid "Hard Disk"
@@ -3801,7 +3794,7 @@ msgstr ""
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "_Kopieren"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
@@ -4093,7 +4086,7 @@ msgstr "Adresse"
 
 #: virtManager/device/gfxdetails.py:104
 msgid "Localhost only"
-msgstr "Nur lokaler Wirt"
+msgstr "Nur lokaler Hostrechner"
 
 #: virtManager/device/gfxdetails.py:105
 msgid "All interfaces"
@@ -4171,10 +4164,8 @@ msgid "SPAPR"
 msgstr ""
 
 #: virtManager/device/tpmdetails.py:71
-#, fuzzy
-#| msgid "Emulator:"
 msgid "Emulated"
-msgstr "Emulator:"
+msgstr "Emuliert:"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4585,10 +4576,8 @@ msgid "_New"
 msgstr ""
 
 #: virtManager/manager.py:293
-#, fuzzy
-#| msgid "Connect"
 msgid "_Connect"
-msgstr "Verbinden"
+msgstr "_Verbinden"
 
 #: virtManager/manager.py:294
 #, fuzzy
@@ -5005,7 +4994,7 @@ msgstr "Virtuelle Maschine wird gespeichert"
 
 #: virtManager/vmmenu.py:171
 msgid "Saving virtual machine memory to disk "
-msgstr "Virtuelle Maschine wird auf Festplatte gespeichert"
+msgstr "Virtuelle Maschine wird auf Festplatte gespeichert "
 
 #: virtManager/vmmenu.py:180
 #, python-format
@@ -5371,6 +5360,9 @@ msgid ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
+"CPU Modell und Features. Ex:\n"
+"--cpu coreduo,+x2apic\n"
+"--cpu host-passthrough\n"
 
 #: virtinst/cli.py:701
 msgid ""
@@ -5787,7 +5779,7 @@ msgstr "Datenträgerpfad '%s' existiert nicht."
 
 #: virtinst/cloner.py:185
 msgid "Cloning rbd volumes is not yet supported."
-msgstr ""
+msgstr "Das Klonen von rbd Volumes wird noch nicht unterstützt"
 
 #: virtinst/cloner.py:187
 #, python-format
@@ -6579,12 +6571,11 @@ msgid "Waiting for the installation to complete."
 msgstr "Auf den Abschluss der Installation wird gewartet."
 
 #: virtinst/virtinstall.py:720
-#, fuzzy, python-format
-#| msgid "Minutes to wait for install to complete."
+#, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] "Minuten abwarten, bis Installation abgeschlossen ist."
-msgstr[1] "Minuten abwarten, bis Installation abgeschlossen ist."
+msgstr[0] "%(minutes)d Minute abwarten, bis Installation abgeschlossen ist."
+msgstr[1] "%(minutes)d Minuten abwarten, bis Installation abgeschlossen ist."
 
 #: virtinst/virtinstall.py:743
 #, python-format
@@ -6782,7 +6773,7 @@ msgstr "Minuten abwarten, bis Installation abgeschlossen ist."
 
 #: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
-msgstr "Bitte geben Sie »Ja« oder »Nein« ein: "
+msgstr "Bitte geben Sie »Ja« oder »Nein« ein:"
 
 #: virtinst/virtxml.py:80
 #, python-format
@@ -6804,7 +6795,7 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] "--edit %s angefordert, aber es gibt nur %s --%s Objekt in XML"
-msgstr[1] "--edit %s angefordert, aber es gibt nur %s --%s Objekt in XML"
+msgstr[1] "--edit %s angefordert, aber es gibt nur %s --%s Objekte in XML"
 
 #: virtinst/virtxml.py:107
 #, python-format
