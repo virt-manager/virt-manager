@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-03-09 17:57+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2022-11-25 15:19+0000\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/id/>\n"
 "Language: id\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -57,7 +57,7 @@ msgstr "Mengelola mesin virtual"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr ""
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -71,7 +71,7 @@ msgstr "Ditenagai oleh libvirt"
 #: ui/about.ui:18
 msgid "translator-credits"
 msgstr ""
-"Andika Triwidada <andika@gmail.com>, 2020, 2021.\n"
+"Andika Triwidada <andika@gmail.com>, 2020-2022.\n"
 "Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2020-2021."
 
 #: ui/addhardware.ui:24
@@ -166,7 +166,7 @@ msgstr "panic"
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "_Batal"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -246,7 +246,7 @@ msgstr "Ubah path penyimpanan"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -301,7 +301,6 @@ msgid "_Details..."
 msgstr "_Rincian..."
 
 #: ui/clone.ui:651
-#, fuzzy
 msgid ""
 "<span size='small'>Cloning does <u>not</u> alter the guest OS contents. If "
 "you need to do things\n"
@@ -309,8 +308,9 @@ msgid ""
 "span>"
 msgstr ""
 "<span size='small'>Kloning <u>tidak</u> mengubah konten OS tamu. Jika Anda "
-"perlu melakukan sesuatu&#10; seperti mengubah kata sandi atau IP statis, "
-"silakan lihat alat virt-sysprep (1).</span>"
+"perlu melakukan sesuatu\n"
+"seperti mengubah kata sandi atau IP statis, silakan lihat alat virt-sysprep "
+"(1).</span>"
 
 #: ui/clone.ui:706
 msgid "C_lone"
@@ -406,126 +406,102 @@ msgid "Fo_rward to:"
 msgstr "Dite_ruskan ke:"
 
 #: ui/createnet.ui:166
-#, fuzzy
 msgid "Device _List:"
-msgstr "Daftar perangkat:"
+msgstr "_Daftar Perangkat:"
 
 #: ui/createnet.ui:244
-#, fuzzy
 msgid "De_vice:"
-msgstr "Alat:"
+msgstr "_Perangkat:"
 
 #: ui/createnet.ui:287
-#, fuzzy
 msgid "_Enable IPv4"
 msgstr "_Aktifkan IPv4"
 
 #: ui/createnet.ui:326 ui/createnet.ui:537
-#, fuzzy
 msgid "_Network:"
-msgstr "Jaringan"
+msgstr "Jari_ngan:"
 
 #: ui/createnet.ui:417 ui/createnet.ui:628
-#, fuzzy
 msgid "Start:"
 msgstr "Mulai:"
 
 #: ui/createnet.ui:429 ui/createnet.ui:640
-#, fuzzy
 msgid "End:"
 msgstr "Akhir:"
 
 #: ui/createnet.ui:438
-#, fuzzy
 msgid "Enable DHCPv4"
 msgstr "Aktifkan DHCPv4"
 
 #: ui/createnet.ui:473 ui/hostnets.ui:348
-#, fuzzy
 msgid "<b>IPv_4 configuration</b>"
 msgstr "<b>Konfigurasi IPv_4</b>"
 
 #: ui/createnet.ui:498
-#, fuzzy
 msgid "_Enable IPv6"
 msgstr "_Aktifkan IPv6"
 
 #: ui/createnet.ui:649
-#, fuzzy
 msgid "Enable DHCPv6"
 msgstr "Aktifkan DHCPv6"
 
 #: ui/createnet.ui:684 ui/hostnets.ui:452
-#, fuzzy
 msgid "<b>IPv_6 configuration</b>"
 msgstr "<b>Konfigurasi IPv_6</b>"
 
 #: ui/createnet.ui:728
-#, fuzzy
 msgid "Use net_work name"
-msgstr "Gunakan nama net_work"
+msgstr "Gunakan nama jar_ingan"
 
 #: ui/createnet.ui:746
-#, fuzzy
 msgid "Cust_om"
-msgstr "Adat"
+msgstr "_Ubahan"
 
 #: ui/createnet.ui:765
-#, fuzzy
 msgid "<b>DNS domain name</b>"
 msgstr "<b>Nama domain DNS</b>"
 
 #: ui/createpool.ui:9
-#, fuzzy
 msgid "Add a New Storage Pool"
-msgstr "Tambahkan Kolam Penyimpanan Baru"
+msgstr "Tambahkan Pool Penyimpanan Baru"
 
 #: ui/createpool.ui:50
-#, fuzzy
 msgid "<span size='large'>Create storage pool</span>"
-msgstr "<span size='large'>Buat kolam penyimpanan</span>"
+msgstr "<span size='large'>Buat pool penyimpanan</span>"
 
 #: ui/createpool.ui:149
-#, fuzzy
 msgid "Tar_get Path:"
-msgstr "Jalur Tar_get:"
+msgstr "Path Tar_get:"
 
 #: ui/createpool.ui:162 ui/createvol.ui:199
-#, fuzzy
 msgid "F_ormat:"
-msgstr "Format:"
+msgstr "F_ormat:"
 
 #: ui/createpool.ui:176
-#, fuzzy
 msgid "Host Na_me:"
-msgstr "Host Na_me:"
+msgstr "Na_ma Host:"
 
 #: ui/createpool.ui:204
-#, fuzzy
 msgid "Initiator _IQN:"
 msgstr "Inisiator _IQN:"
 
 #: ui/createpool.ui:215
-#, fuzzy
 msgid "B_rowse"
-msgstr "J_rowse"
+msgstr "_Ramban"
 
 #: ui/createpool.ui:235
 msgid "Bro_wse"
 msgstr "Ra_mban"
 
 #: ui/createvm.ui:19
-#, fuzzy
 msgid "New VM"
 msgstr "VM baru"
 
 #: ui/createvm.ui:66
-#, fuzzy
 msgid "<span size='large'>Create a new virtual machine</span>"
 msgstr "<span size='large'>Buat mesin virtual baru</span>"
 
 #: ui/createvm.ui:168
-#, fuzzy
 msgid "Choose virtualization type"
 msgstr "Pilih jenis virtualisasi"
 
@@ -534,104 +510,79 @@ msgid "_Virtual machine"
 msgstr "Mesin _virtual"
 
 #: ui/createvm.ui:203
-#, fuzzy
 msgid "_Container"
-msgstr "Memulai Container"
+msgstr "_Container"
 
 #: ui/createvm.ui:244
-#, fuzzy
 msgid "Choose how you would like to install the operating system"
 msgstr "Pilih bagaimana Anda ingin menginstal sistem operasi"
 
 #: ui/createvm.ui:261
-#, fuzzy
 msgid "_Local install media (ISO image or CDROM)"
-msgstr "_Media instal lokal (image ISO atau CDROM)"
+msgstr "Media instalasi _lokal (image ISO atau CDROM)"
 
 #: ui/createvm.ui:279
-#, fuzzy
 msgid "Network _Install (HTTP, HTTPS, or FTP)"
-msgstr "Jaringan _Install (HTTP, HTTPS, atau FTP)"
+msgstr "_Instalasi jaringan (HTTP, HTTPS, atau FTP)"
 
 #: ui/createvm.ui:297
-#, fuzzy
 msgid "Import _existing disk image"
-msgstr "Impor _ image disk yang sudah ada"
+msgstr "Impor imag_e disk yang sudah ada"
 
 #: ui/createvm.ui:315
-#, fuzzy
 msgid "Ma_nual install"
-msgstr "Instal ma_nual"
+msgstr "Pasang ma_nual"
 
 #: ui/createvm.ui:355
-#, fuzzy
 msgid "Choose the container type"
-msgstr "Pilih jenis wadah"
+msgstr "Pilih jenis container"
 
 #: ui/createvm.ui:372
 msgid "_Application container"
 msgstr "Container _aplikasi"
 
 #: ui/createvm.ui:390
-#, fuzzy
 msgid "O_perating system container"
-msgstr "Penampung sistem operasi"
+msgstr "Container sistem o_perasi"
 
 #: ui/createvm.ui:438
-#, fuzzy
 msgid "C_onnection:"
-msgstr "Koneksi:"
+msgstr "K_oneksi:"
 
 #: ui/createvm.ui:648
 msgid "_Xen Type:"
 msgstr "Tipe _Xen:"
 
 #: ui/createvm.ui:662
-#, fuzzy
 msgid "_Architecture:"
-msgstr "Arsitektur"
+msgstr "_Arsitektur"
 
 #: ui/createvm.ui:676
-#, fuzzy
 msgid "_Machine Type:"
-msgstr ""
-"VMWare adalah sebuah mesin virtual yang proprietari; salah satu yang tertua "
-"di luar sana, itu juga satu dari yang paling dikenal. Itu bekerja dengan "
-"prinsip yang serupa dengan QEMU. VMWare menyediakan fitur-fitur tingkat "
-"lanjut seperti membuat snapshot dari sebuah mesin virtual yang sedang "
-"berjalan. <ulink type=\"block\" url=\"https://www.vmware.com/\" />"
+msgstr "Tipe _Mesin:"
 
 #: ui/createvm.ui:701
-#, fuzzy
 msgid "_Virt Type:"
-msgstr ""
-"Karena KVM dikelola dengan cara yang sama seperti QEMU, <literal>--virt-type "
-"kvm</literal> mengizinkan menyatakan penggunaan KVM meskipun URL terlihat "
-"seperti QEMU."
+msgstr "Tipe _Virt:"
 
 #: ui/createvm.ui:727
-#, fuzzy
 msgid "Architecture options"
 msgstr "Opsi arsitektur"
 
 #: ui/createvm.ui:748 virtManager/details/details.py:724
 #: virtManager/manager.py:325 virtManager/oslist.py:72
-#, fuzzy
 msgid "Name"
 msgstr "Nama"
 
 #: ui/createvm.ui:776
-#, fuzzy
 msgid "Choose _ISO or CDROM install media:"
-msgstr "Pilih _ISO atau CDROM install media:"
+msgstr "Pilih media instalasi _ISO atau CDROM:"
 
 #: ui/createvm.ui:806
-#, fuzzy
 msgid "Bro_wse..."
-msgstr "Bro_wse ..."
+msgstr "Ra_mban..."
 
 #: ui/createvm.ui:837
-#, fuzzy
 msgid "ISO"
 msgstr "ISO"
 
