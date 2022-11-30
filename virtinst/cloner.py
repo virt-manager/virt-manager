@@ -9,6 +9,7 @@
 
 import re
 import os
+from itertools import chain
 
 import libvirt
 
@@ -20,6 +21,7 @@ from .devices import DeviceInterface
 from .devices import DeviceDisk
 from .logger import log
 from .devices import DeviceChannel
+from .devices import DeviceSerial
 
 
 def _replace_vm(conn, name):
@@ -70,9 +72,9 @@ def _generate_clone_name(conn, basename):
             sep="", start_num=start_num, force_num=force_num)
 
 
-def _generate_clone_disk_path(conn, origname, newname, origpath):
+def _generate_clone_path(origname, newname, origpath, cb_exists):
     """
-    Generate desired cloned disk path name, derived from the
+    Generate desired cloned path for auxiliary files, derived from the
     original path, original VM name, and proposed new VM name
     """
     if origpath is None:
@@ -99,9 +101,7 @@ def _generate_clone_disk_path(conn, origname, newname, origpath):
         clonebase = newname
 
     clonebase = os.path.join(dirname, clonebase)
-    def cb(p):
-        return DeviceDisk.path_definitely_exists(conn, p)
-    return generatename.generate_name(clonebase, cb, suffix=suffix)
+    return generatename.generate_name(clonebase, cb_exists, suffix=suffix)
 
 
 def _lookup_vm(conn, name):
@@ -287,7 +287,9 @@ class Cloner(object):
 
     @staticmethod
     def generate_clone_disk_path(conn, origname, newname, origpath):
-        return _generate_clone_disk_path(conn, origname, newname, origpath)
+        def cb_exists(p):
+            return DeviceDisk.path_definitely_exists(conn, p)
+        return _generate_clone_path(origname, newname, origpath, cb_exists)
 
     @staticmethod
     def build_clone_disk(orig_disk, clonepath, allow_create, sparse):
@@ -455,6 +457,21 @@ class Cloner(object):
     # Functional methods #
     ######################
 
+    def _prepare_serial_files(self):
+        for serial in chain(self._new_guest.devices.console,
+                            self._new_guest.devices.serial):
+            if serial.type != DeviceSerial.TYPE_FILE:
+                continue
+
+            def cb_exists(path):
+                # Ignore the check for now
+                return False
+
+            serial.source.path = _generate_clone_path(self.src_name,
+                                                      self.new_guest.name,
+                                                      serial.source.path,
+                                                      cb_exists=cb_exists)
+
     def _prepare_nvram(self):
         if not self._nvram_diskinfo:
             return
@@ -534,6 +551,7 @@ class Cloner(object):
             xmldisk.set_source_path(new_disk.get_source_path())
 
         self._prepare_nvram()
+        self._prepare_serial_files()
 
         # Save altered clone xml
         diff = xmlutil.diff(self._src_guest.get_xml(),
