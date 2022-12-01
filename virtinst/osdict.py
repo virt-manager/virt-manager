@@ -18,17 +18,29 @@ from .logger import log
 
 def _process_medialist(medialist):
     nmedias = medialist.get_length()
-    if nmedias == 1:
+    osids = []
+
+    if nmedias == 0:
+        return None
+    elif nmedias == 1:
         return medialist.get_nth(0)
-
-    # can't determine a single definitive match. Print the possible matches and return None
-    if nmedias > 1:
-        ids = []
+    else:
+        # If we can't determine a single definitive match, print the
+        # possible matches and return None
         for n in range(nmedias):
-            ids.append(medialist.get_nth(n).get_os().get_short_id())
-        log.debug("media matches multiple operating systems: %s", ", ".join(ids))
+            # some isos can return multiple matches of the same OS with
+            # different architectures. Ignore duplicates.
+            id = medialist.get_nth(n).get_os().get_short_id()
+            if id not in osids:
+                osids.append(id)
 
-    return None
+        if len(osids) == 1:
+            # just return the first match
+            return medialist.get_nth(0)
+
+        log.debug("media matches multiple operating systems: %s", ", ".join(osids))
+        return None
+
 
 def _media_create_from_location(location):
     if not hasattr(Libosinfo.Media, "create_from_location_with_flags"):
