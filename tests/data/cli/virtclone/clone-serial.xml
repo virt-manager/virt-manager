@@ -1,0 +1,31 @@
+<domain type="test">
+  <name>__virtinst_cli_test-clone</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>8388608</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+  <devices>
+    <serial type="file">
+      <source path="/tmp/__virtinst_cli_test-clone.file">
+        <seclabel model="dac" relabel="no"/>
+      </source>
+    </serial>
+    <serial type="file">
+      <source path="/tmp/__virtinst_cli_other-serial.file"/>
+    </serial>
+    <serial type="unix">
+      <source mode="connect" path="/tmp/__virtinst_cli_socket.sock"/>
+    </serial>
+    <console type="file">
+      <source path="/tmp/__virtinst_cli_serial-exists.file"/>
+    </console>
+  </devices>
+</domain>
