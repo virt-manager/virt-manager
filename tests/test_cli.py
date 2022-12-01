@@ -52,12 +52,18 @@ NEW_FILES = [
     TMP_IMAGE_DIR + "new3.img",
     TMP_IMAGE_DIR + "exist1-clone.img",
     TMP_IMAGE_DIR + "exist2-clone.img",
+
+    TMP_IMAGE_DIR + "test-clone1.file",
+    TMP_IMAGE_DIR + "other-serial-clone.file",
+    TMP_IMAGE_DIR + "serial-exists-clone-1.file",
 ]
 
 # Images that are expected to exist before a command is run
 EXIST_FILES = [
     TMP_IMAGE_DIR + "exist1.img",
     TMP_IMAGE_DIR + "exist2.img",
+
+    TMP_IMAGE_DIR + "serial-exists-clone.file",
 ]
 
 
@@ -1491,6 +1497,7 @@ _CLONE_NVRAM_MISSING = "--original-xml %s/clone-nvram-missing.xml" % _CLONEXMLDI
 _CLONE_EMPTY = "--original-xml %s/clone-empty.xml" % _CLONEXMLDIR
 _CLONE_NET_RBD = "--original-xml %s/clone-net-rbd.xml" % _CLONEXMLDIR
 _CLONE_NET_HTTP = "--original-xml %s/clone-net-http.xml" % _CLONEXMLDIR
+_CLONE_SERIAL = "--original-xml %s/clone-serial.xml" % _CLONEXMLDIR
 
 
 vclon = App("virt-clone")
@@ -1514,6 +1521,7 @@ c.add_compare(_CLONE_EMPTY + " --auto-clone --print-xml", "empty")  # Auto flag,
 c.add_compare("--connect %(URI-KVM-X86)s -o test-clone-simple --auto -f /foo.img --print-xml", "pool-test-cross-pool")  # cross pool cloning which fails with test driver but let's confirm the XML
 c.add_compare(_CLONE_MANAGED + " --auto-clone", "auto-managed")  # Auto flag w/ managed storage
 c.add_compare(_CLONE_UNMANAGED + " --auto-clone", "auto-unmanaged")  # Auto flag w/ local storage
+c.add_compare(_CLONE_SERIAL + " --auto-clone", "serial")  # Auto flag w/ serial console
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone --auto-clone --nonsparse")  # Auto flag, actual VM, skip state check
 c.add_valid("--connect %(URI-TEST-FULL)s -o test-clone-simple -n newvm --preserve-data --file %(EXISTIMG1)s")  # Preserve data shouldn't complain about existing volume
 c.add_valid("-n clonetest " + _CLONE_UNMANAGED + " --file %(EXISTIMG3)s --file %(EXISTIMG4)s --check path_exists=off")  # Skip existing file check
