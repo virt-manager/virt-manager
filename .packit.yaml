@@ -1,0 +1,19 @@
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+upstream_package_name: virt-manager
+downstream_package_name: virt-manager
+
+specfile_path: virt-manager.spec
+
+jobs:
+  - job: copr_build
+    # Run on every PR
+    trigger: pull_request
+    # Defaults to x86_64 unless architecture is explicitly specified
+    targets:
+      - fedora-rawhide-aarch64
+      - fedora-rawhide-i386
+      - fedora-rawhide-ppc64le
+      - fedora-rawhide-s390x
+      - fedora-rawhide-x86_64
