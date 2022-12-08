@@ -27,8 +27,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-03-09 18:02+0000\n"
-"Last-Translator: Pavel Hrdina <phrdina@redhat.com>\n"
+"PO-Revision-Date: 2022-12-09 05:19+0000\n"
+"Last-Translator: Whired Planck <fungdaat31@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -77,7 +77,7 @@ msgstr "管理虚拟系统"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr ""
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -194,7 +194,7 @@ msgstr "恐慌（Panic）"
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "取消(_C)"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -272,7 +272,7 @@ msgstr "更改存储路径"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
-msgstr ""
+msgstr "确定(_O)"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -1283,7 +1283,7 @@ msgstr "可移除"
 #: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
-msgstr ""
+msgstr "应用(_A)"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
@@ -1303,7 +1303,7 @@ msgstr "格式(_F)："
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "胡乱的警告信息"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1499,11 +1499,11 @@ msgstr "新建虚拟机(_N)"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr ""
+msgstr "关闭(_C)"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr ""
+msgstr "退出(_Q)"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1557,7 +1557,7 @@ msgstr "帮助(_H)"
 
 #: ui/manager.ui:222
 msgid "_About"
-msgstr ""
+msgstr "关于(_A)"
 
 #: ui/manager.ui:253
 msgid "Create a new virtual machine"
@@ -1831,7 +1831,7 @@ msgstr "CPU 默认值(_D)："
 
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
-msgstr ""
+msgstr "新虚拟机的默认固件。使用 BIOS 或 UEFI 启动。"
 
 #: ui/preferences.ui:490
 #, fuzzy
@@ -2004,7 +2004,7 @@ msgstr "高级选项"
 
 #: ui/tpmdetails.ui:175
 msgid "tpm-tab"
-msgstr ""
+msgstr "tpm-tab"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
@@ -2460,6 +2460,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s 未在主机系统中激活。\n"
+"请先在主机系统中启动 mdev 然后再将其添加到客户机中。"
 
 #: virtManager/addhardware.py:797
 msgid "No Devices Available"
@@ -3512,7 +3514,7 @@ msgstr "删除硬件(_R)"
 
 #: virtManager/details/details.py:662 virtManager/details/details.py:1774
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:672
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -3737,11 +3739,11 @@ msgstr "不支持设备类型为 '%s' 的控制台"
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "复制(_C)"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "粘贴(_P)"
 
 #: virtManager/details/serialcon.py:348
 #, python-format
@@ -3988,7 +3990,7 @@ msgstr "源路径(_S)："
 
 #: virtManager/device/fsdetails.py:163
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
-msgstr ""
+msgstr "您可能需要在“内存”页面中“启用共享内存”。"
 
 #: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
@@ -4492,7 +4494,7 @@ msgstr "启动管理器出错：%s"
 
 #: virtManager/manager.py:292
 msgid "_New"
-msgstr ""
+msgstr "新增(_N)"
 
 #: virtManager/manager.py:293
 #, fuzzy
@@ -4650,11 +4652,11 @@ msgstr "取消迁移任务时出错：%s"
 
 #: virtManager/object/domain.py:454
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "已配置 <numa> 时无法更改共享内存设置。"
 
 #: virtManager/object/domain.py:457
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt 版本可能不够新而不支持 memfd。"
 
 #: virtManager/object/domain.py:476
 msgid "Libvirt connection does not support snapshots."
@@ -5678,6 +5680,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"您可以使用下列命令查看更多信息：\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5846,6 +5851,8 @@ msgid ""
 "%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
 "%(vcpus)d"
 msgstr ""
+"拓补所隐含的总 CPU 数（sockets=%(sockets)d * dies=%(dies)d * cores=%(cores)d "
+"* threads=%(threads)d == %(total)d）与 vCPU 计数 %(vcpus)d 不匹配"
 
 #: virtinst/domain/launch_security.py:26
 msgid "Missing mandatory attribute 'type'"
@@ -6041,7 +6048,7 @@ msgstr "正在传输 '%(filename)s'"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "通用或未知的操作系统。不建议使用。"
 
 #: virtinst/osdict.py:96
 #, python-format
@@ -6278,7 +6285,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type 已经弃用且功能不会生效。请停止使用。"
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
