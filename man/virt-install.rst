@@ -957,13 +957,26 @@ Some examples:
     via domcapabilities XML, so this will likely only work if using properly
     configured distro packages. This is the recommended UEFI setup.
 
+``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=yes,firmware.feature1.name=enrolled-keys,firmware.feature1.enabled=yes``
+    Configure the VM to boot from UEFI with Secure Boot support enabled.
+    Only signed operating systems will be able to boot with this configuration.
+
+``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=no``
+    Configure the VM to boot from UEFI with Secure Boot support disabled.
+    This configuration allows both signed and unsigned operating systems to
+    run.
+
+    Additional information about the ``secure-boot`` and
+    ``enrolled-keys`` firmware features and how they can be used to
+    influence firmware selection is available at
+    https://libvirt.org/kbase/secureboot.html
+
 ``--boot loader=/.../OVMF_CODE.fd,loader.readonly=yes,loader.type=pflash,nvram.template=/.../OVMF_VARS.fd,loader_secure=no``
     Specify that the virtual machine use the custom OVMF binary as boot firmware,
     mapped as a virtual flash chip. In addition, request that libvirt instantiate
     the VM-specific UEFI varstore from the custom "/.../OVMF_VARS.fd" varstore
     template. This setup is not recommended, and should only be used if
-    --boot uefi doesn't know about your UEFI binaries. If your UEFI firmware
-    supports Secure boot feature you can enable it via loader_secure.
+    --boot uefi doesn't know about your UEFI binaries.
 
 Use --boot=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#elementsOS
