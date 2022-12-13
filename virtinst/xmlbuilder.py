@@ -262,9 +262,9 @@ class XMLProperty(_XMLPropertyBase):
         self._is_onoff = is_onoff
         self._do_abspath = do_abspath
 
-        conflicts = sum([int(bool(i)) for i in
+        conflicts = sum(int(bool(i)) for i in
                 [self._is_bool, self._is_int,
-                 self._is_yesno, self._is_onoff]])
+                 self._is_yesno, self._is_onoff])
         if conflicts > 1:
             raise xmlutil.DevError("Conflict property converter options.")
 
@@ -343,7 +343,7 @@ class XMLProperty(_XMLPropertyBase):
         propstore = xmlbuilder._propstore
 
         if self.propname in propstore:
-            del(propstore[self.propname])
+            del propstore[self.propname]
         propstore[self.propname] = val
 
     def _nonxml_fget(self, xmlbuilder):

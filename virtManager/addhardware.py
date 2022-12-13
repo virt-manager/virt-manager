@@ -371,8 +371,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         msg = _("These changes will take effect after "
                 "the next guest shutdown.")
-        dtype = (hotplug_err and
-                 Gtk.MessageType.WARNING or Gtk.MessageType.INFO)
+        dtype = (Gtk.MessageType.WARNING if hotplug_err else
+                 Gtk.MessageType.INFO)
         hotplug_msg = ""
         if hotplug_err:
             hotplug_msg += (hotplug_err[0] + "\n\n" +
@@ -1560,7 +1560,7 @@ class vmmAddHardware(vmmGObjectUI):
         controller_num = [x for x in controllers if
                 (x.type == controller_type)]
         if len(controller_num) > 0:
-            index_new = max([x.index for x in controller_num]) + 1
+            index_new = max(x.index for x in controller_num) + 1
             dev.index = index_new
 
         dev.type = controller_type

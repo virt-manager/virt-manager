@@ -67,7 +67,7 @@ def check_cdrom_option_error(options):
 def convert_old_printxml(options):
     if options.xmlstep:
         options.xmlonly = options.xmlstep
-        del(options.xmlstep)
+        del options.xmlstep
 
 
 def convert_old_sound(options):
@@ -135,10 +135,10 @@ def convert_old_disks(options):
         else:
             _do_convert_old_disks(options)
 
-    del(options.file_paths)
-    del(options.disksize)
-    del(options.sparse)
-    del(options.nodisks)
+    del options.file_paths
+    del options.disksize
+    del options.sparse
+    del options.nodisks
     log.debug("Distilled --disk options: %s", options.disk)
 
 
@@ -147,7 +147,7 @@ def convert_old_os_options(options):
         return
     log.warning(
         _("--os-type is deprecated and does nothing. Please stop using it."))
-    del(options.old_os_type)
+    del options.old_os_type
 
 
 def convert_old_memory(options):
@@ -204,9 +204,9 @@ def convert_old_networks(options):
                 networks[idx] = networks[idx].replace(prefix + ":",
                                                       prefix + "=")
 
-    del(options.mac)
-    del(options.bridge)
-    del(options.nonetworks)
+    del options.mac
+    del options.bridge
+    del options.nonetworks
 
     options.network = networks
     log.debug("Distilled --network options: %s", options.network)
@@ -224,7 +224,7 @@ def convert_old_graphics(options):
     if graphics and (vnc or sdl or keymap or vncport or vnclisten):
         fail(_("Cannot mix --graphics and old style graphical options"))
 
-    optnum = sum([bool(g) for g in [vnc, nographics, sdl, graphics]])
+    optnum = sum(bool(g) for g in [vnc, nographics, sdl, graphics])
     if optnum > 1:
         raise ValueError(_("Can't specify more than one of VNC, SDL, "
                            "--graphics or --nographics"))

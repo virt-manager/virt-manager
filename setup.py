@@ -29,7 +29,7 @@ import setuptools.command.install_egg_info
 #
 # Newer setuptools will transparently support 'import distutils' though.
 # That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
-import distutils.command.build  # pylint: disable=wrong-import-order
+import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module
 
 
 SYSPREFIX = sysconfig.get_config_var("prefix")

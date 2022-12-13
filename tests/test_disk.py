@@ -82,6 +82,7 @@ def test_disk_dir_searchable(monkeypatch):
         searchdata = virtinst.DeviceDisk.check_path_search(conn,
                 tmpdir + "/footest")
         assert searchdata.uid == os.getuid()
+        # pylint: disable=use-implicit-booleaness-not-comparison
         assert searchdata.fixlist == []
 
         # Remove perms on the tmpdir, now it should report failures

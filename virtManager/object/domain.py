@@ -1306,10 +1306,10 @@ class vmmDomain(vmmLibvirtObject):
     def get_arch(self):
         return self.get_xmlobj().os.arch
     def get_init(self):
-        import pipes
+        import shlex
         init = self.get_xmlobj().os.init
         initargs = " ".join(
-            [pipes.quote(i.val) for i in self.get_xmlobj().os.initargs])
+            [shlex.quote(i.val) for i in self.get_xmlobj().os.initargs])
         return init, initargs
 
     def get_emulator(self):

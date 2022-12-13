@@ -32,7 +32,7 @@ def _new_poll_helper(origmap, typename, list_cb, build_cb, support_cb):
         else:
             # Previously known object
             current[name] = origmap[name]
-            del(origmap[name])
+            del origmap[name]
 
     return (list(origmap.values()), list(new.values()), list(current.values()))
 

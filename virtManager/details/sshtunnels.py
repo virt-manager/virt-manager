@@ -22,7 +22,7 @@ class ConnectionInfo(object):
     """
     def __init__(self, conn, gdev):
         self.gtype = gdev.type
-        self.gport = gdev.port and str(gdev.port) or None
+        self.gport = str(gdev.port) if gdev.port else None
         self.gsocket = (gdev.listens and gdev.listens[0].socket) or gdev.socket
         self.gaddr = gdev.listen or "127.0.0.1"
         self.gtlsport = gdev.tlsPort or None

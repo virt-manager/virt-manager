@@ -334,7 +334,7 @@ class DomainCapabilities(XMLBuilder):
         """
         Return True if we know how to setup UEFI for the passed arch
         """
-        return self.arch in list(self._uefi_arch_patterns.keys())
+        return self.arch in self._uefi_arch_patterns
 
     def supports_uefi_loader(self):
         """

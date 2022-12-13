@@ -85,7 +85,7 @@ class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
     '''
     oldwrap = None
 
-    # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ,protected-access
     def _split_lines(self, *args, **kwargs):
         def return_default():
             return argparse.RawDescriptionHelpFormatter._split_lines(
@@ -1690,7 +1690,7 @@ def convert_old_force(options):
     if options.force:
         if not options.check:
             options.check = "all=off"
-        del(options.force)
+        del options.force
 
 
 class ParserCheck(VirtCLIParser):
@@ -2281,7 +2281,7 @@ class ParserCPU(VirtCLIParser):
                 policy = "disable"
 
             if policy:
-                del(self.optdict[key])
+                del self.optdict[key]
                 converted[policy].append(key[1:])
 
         self.optdict.update(converted)
@@ -2753,7 +2753,7 @@ class ParserBoot(VirtCLIParser):
             if cliname not in inst.BOOT_DEVICES:
                 continue
 
-            del(self.optdict[cliname])
+            del self.optdict[cliname]
             if cliname not in boot_order:
                 boot_order.append(cliname)
 

@@ -66,7 +66,7 @@ class _VMStatsList(vmmGObject):
         expected = self.config.get_stats_history_length()
         current = len(self._stats)
         if current > expected:  # pragma: no cover
-            del(self._stats[expected:current])
+            del self._stats[expected:current]
 
         def _calculate_rate(record_name):
             ret = 0.0
