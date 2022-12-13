@@ -3,6 +3,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
 import sys
 import textwrap
 import traceback
@@ -231,49 +232,38 @@ class vmmErrorDialog(vmmGObject):
 
         return response
 
-    def browse_local(self, conn, dialog_name, start_folder=None,
+    def browse_local(self, dialog_name, start_folder=None,
                      _type=None, dialog_type=None,
-                     browse_reason=None,
-                     choose_button=None, default_name=None):
+                     choose_button=None, default_name=None,
+                     confirm_overwrite=False):
         """
         Helper function for launching a filechooser
 
         @dialog_name: String to use in the title bar of the filechooser.
-        @conn: vmmConnection used by calling class
         @start_folder: Folder the filechooser is viewing at startup
         @_type: File extension to filter by (e.g. "iso", "png")
         @dialog_type: Maps to FileChooserDialog 'action'
-        @browse_reason: The vmmConfig.CONFIG_DIR* reason we are browsing.
-            If set, this will override the 'folder' parameter with the gsettings
-            value, and store the user chosen path.
         """
-        import os
-
-        # Initial setup
-        overwrite_confirm = False
-        dialog_type = dialog_type or Gtk.FileChooserAction.OPEN
-
-        if dialog_type == Gtk.FileChooserAction.SAVE:
-            if choose_button is None:
-                choose_button = Gtk.STOCK_SAVE
-                overwrite_confirm = True
-
+        if dialog_type is None:
+            dialog_type = Gtk.FileChooserAction.OPEN
         if choose_button is None:
             choose_button = Gtk.STOCK_OPEN
+
+        buttons = (Gtk.STOCK_CANCEL,
+                   Gtk.ResponseType.CANCEL,
+                   choose_button,
+                   Gtk.ResponseType.ACCEPT)
 
         fcdialog = Gtk.FileChooserDialog(title=dialog_name,
                                     parent=self.get_parent(),
                                     action=dialog_type,
-                                    buttons=(Gtk.STOCK_CANCEL,
-                                             Gtk.ResponseType.CANCEL,
-                                             choose_button,
-                                             Gtk.ResponseType.ACCEPT))
+                                    buttons=buttons)
         fcdialog.set_default_response(Gtk.ResponseType.ACCEPT)
 
         if default_name:
             fcdialog.set_current_name(default_name)
 
-        fcdialog.set_do_overwrite_confirmation(overwrite_confirm)
+        fcdialog.set_do_overwrite_confirmation(confirm_overwrite)
 
         # Set file match pattern (ex. *.png)
         if _type is not None:
@@ -289,11 +279,6 @@ class vmmErrorDialog(vmmGObject):
                 f.set_name(name)
             fcdialog.set_filter(f)
 
-        # Set initial dialog folder
-        if browse_reason:
-            start_folder = self.config.get_default_directory(
-                conn, browse_reason)
-
         if start_folder is not None:
             if os.access(start_folder, os.R_OK):
                 fcdialog.set_current_folder(start_folder)
@@ -304,10 +289,6 @@ class vmmErrorDialog(vmmGObject):
             ret = fcdialog.get_filename()
         fcdialog.destroy()
 
-        # Store the chosen directory in gsettings if necessary
-        if ret and browse_reason and not ret.startswith("/dev"):
-            self.config.set_default_directory(
-                os.path.dirname(ret), browse_reason)
         return ret
 
 

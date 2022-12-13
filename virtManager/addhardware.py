@@ -1590,8 +1590,8 @@ class vmmAddHardware(vmmGObjectUI):
                 textent.set_text(path)
 
         reason = (isdir and
-                  self.config.CONFIG_DIR_FS or
-                  self.config.CONFIG_DIR_IMAGE)
+                  vmmStorageBrowser.REASON_FS or
+                  vmmStorageBrowser.REASON_IMAGE)
         if self._storagebrowser is None:
             self._storagebrowser = vmmStorageBrowser(self.conn)
 

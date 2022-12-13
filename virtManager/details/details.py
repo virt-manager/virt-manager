@@ -1089,7 +1089,7 @@ class vmmDetails(vmmGObjectUI):
 
     def _browse_file(self, callback, reason=None):
         if not reason:
-            reason = self.config.CONFIG_DIR_IMAGE
+            reason = vmmStorageBrowser.REASON_IMAGE
 
         if self.storage_browser is None:
             self.storage_browser = vmmStorageBrowser(self.conn)
@@ -1235,9 +1235,9 @@ class vmmDetails(vmmGObjectUI):
     def _disk_source_browse_clicked_cb(self, src):
         disk = self._get_hw_row()[HW_LIST_COL_DEVICE]
         if disk.is_floppy():
-            reason = self.config.CONFIG_DIR_FLOPPY_MEDIA
+            reason = vmmStorageBrowser.REASON_FLOPPY_MEDIA
         else:
-            reason = self.config.CONFIG_DIR_ISO_MEDIA
+            reason = vmmStorageBrowser.REASON_ISO_MEDIA
 
         def cb(ignore, path):
             self._mediacombo.set_path(path)

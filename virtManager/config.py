@@ -133,51 +133,6 @@ class _SettingsWrapper(object):
 
 
 class vmmConfig(object):
-    # key names for saving last used paths
-    CONFIG_DIR_IMAGE = "image"
-    CONFIG_DIR_ISO_MEDIA = "isomedia"
-    CONFIG_DIR_FLOPPY_MEDIA = "floppymedia"
-    CONFIG_DIR_SCREENSHOT = "screenshot"
-    CONFIG_DIR_FS = "fs"
-
-    # Metadata mapping for browse types. Prob shouldn't go here, but works
-    # for now.
-    browse_reason_data = {
-        CONFIG_DIR_IMAGE: {
-            "enable_create":  True,
-            "storage_title":  _("Locate or create storage volume"),
-            "local_title":    _("Locate existing storage"),
-            "dialog_type":    Gtk.FileChooserAction.SAVE,
-            "choose_button":  Gtk.STOCK_OPEN,
-            "gsettings_key": "image",
-        },
-
-        CONFIG_DIR_SCREENSHOT: {
-            "gsettings_key": "screenshot",
-        },
-
-        CONFIG_DIR_ISO_MEDIA: {
-            "enable_create":  False,
-            "storage_title":  _("Locate ISO media volume"),
-            "local_title":    _("Locate ISO media"),
-            "gsettings_key": "media",
-        },
-
-        CONFIG_DIR_FLOPPY_MEDIA: {
-            "enable_create":  False,
-            "storage_title":  _("Locate floppy media volume"),
-            "local_title":    _("Locate floppy media"),
-            "gsettings_key": "media",
-        },
-
-        CONFIG_DIR_FS: {
-            "enable_create":  False,
-            "storage_title":  _("Locate directory volume"),
-            "local_title":    _("Locate directory volume"),
-            "dialog_type":    Gtk.FileChooserAction.SELECT_FOLDER,
-        },
-    }
-
     CONSOLE_SCALE_NEVER = 0
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2
@@ -627,23 +582,15 @@ class vmmConfig(object):
 
 
     # Default directory location dealings
-    def get_default_directory(self, conn, _type):
-        ignore = conn
-        browsedata = self.browse_reason_data.get(_type, {})
-        key = browsedata.get("gsettings_key", None)
-        path = None
-
-        if key:
-            path = self.conf.get("/paths/%s-default" % key)
-
-        log.debug("directory for type=%s returning=%s", _type, path)
+    def get_default_directory(self, gsettings_key):
+        path = self.conf.get("/paths/%s-default" % gsettings_key)
+        log.debug("directory for gsettings_key=%s returning=%s",
+                  gsettings_key, path)
         return path
 
-    def set_default_directory(self, folder, _type):
-        browsedata = self.browse_reason_data.get(_type, {})
-        key = browsedata.get("gsettings_key", None)
-        if not key:
+    def set_default_directory(self, gsettings_key, folder):
+        if not folder or folder.startswith("/dev"):
             return  # pragma: no cover
-
-        log.debug("saving directory for type=%s to %s", key, folder)
-        self.conf.set("/paths/%s-default" % key, folder)
+        log.debug("saving directory for gsettings_key=%s to %s",
+                  gsettings_key, folder)
+        self.conf.set("/paths/%s-default" % gsettings_key, folder)

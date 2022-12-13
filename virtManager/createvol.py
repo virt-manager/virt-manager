@@ -208,7 +208,7 @@ class vmmCreateVolume(vmmGObjectUI):
             self._storage_browser.set_finish_cb(cb)
             self._storage_browser.topwin.set_modal(self.topwin.get_modal())
             self._storage_browser.set_browse_reason(
-                self.config.CONFIG_DIR_IMAGE)
+                vmmStorageBrowser.REASON_IMAGE)
 
         self._storage_browser.show(self.topwin)
 

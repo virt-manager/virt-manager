@@ -548,23 +548,30 @@ class vmmVMWindow(vmmGObjectUI):
             ret = ret.buffer  # pragma: no cover
 
         import datetime
+        import os
         now = str(datetime.datetime.now()).split(".")[0].replace(" ", "_")
         default = "Screenshot_%s_%s.png" % (self.vm.get_name(), now)
 
-        path = self.err.browse_local(
-            self.vm.conn, _("Save Virtual Machine Screenshot"),
+        start_folder = self.config.get_default_directory("screenshot")
+
+        filename = self.err.browse_local(
+            _("Save Virtual Machine Screenshot"),
             _type=("png", _("PNG files")),
             dialog_type=Gtk.FileChooserAction.SAVE,
-            browse_reason=self.config.CONFIG_DIR_SCREENSHOT,
-            default_name=default)
-        if not path:  # pragma: no cover
+            choose_button=Gtk.STOCK_SAVE,
+            start_folder=start_folder,
+            default_name=default,
+            confirm_overwrite=True)
+        if not filename:  # pragma: no cover
             log.debug("No screenshot path given, skipping save.")
             return
 
-        filename = path
         if not filename.endswith(".png"):
             filename += ".png"  # pragma: no cover
         open(filename, "wb").write(ret)
+
+        self.config.set_default_directory(
+                "screenshot", os.path.dirname(filename))
 
 
     ########################

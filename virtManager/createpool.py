@@ -381,9 +381,8 @@ class vmmCreatePool(vmmGObjectUI):
         self._show_options_by_pool()
 
     def _browse_source_cb(self, src):
-        source = self.err.browse_local(self.conn,
+        source = self.err.browse_local(
                 _("Choose source path"),
-                dialog_type=Gtk.FileChooserAction.OPEN,
                 start_folder="/dev")
         if source:
             self.widget("pool-source-path").get_child().set_text(source)
@@ -394,7 +393,7 @@ class vmmCreatePool(vmmGObjectUI):
         if current:
             startfolder = os.path.dirname(current)
 
-        target = self.err.browse_local(self.conn,
+        target = self.err.browse_local(
                 _("Choose target directory"),
                 dialog_type=Gtk.FileChooserAction.SELECT_FOLDER,
                 start_folder=startfolder)

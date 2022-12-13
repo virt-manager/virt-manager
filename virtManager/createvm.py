@@ -1280,11 +1280,11 @@ class vmmCreateVM(vmmGObjectUI):
 
     def _browse_file(self, cbwidget, cb=None, is_media=False, is_dir=False):
         if is_media:
-            reason = self.config.CONFIG_DIR_ISO_MEDIA
+            reason = vmmStorageBrowser.REASON_ISO_MEDIA
         elif is_dir:
-            reason = self.config.CONFIG_DIR_FS
+            reason = vmmStorageBrowser.REASON_FS
         else:
-            reason = self.config.CONFIG_DIR_IMAGE
+            reason = vmmStorageBrowser.REASON_IMAGE
 
         if cb:
             callback = cb

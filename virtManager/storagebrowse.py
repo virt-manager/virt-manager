@@ -4,6 +4,10 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import os
+
+from gi.repository import Gtk
+
 from virtinst import log
 
 from .lib import uiutil
@@ -11,15 +15,53 @@ from .baseclass import vmmGObjectUI
 from .hoststorage import vmmHostStorage
 
 
+class _BrowseReasonMetadata:
+    def __init__(self, browse_reason):
+        self.enable_create = False
+        self.storage_title = None
+        self.local_title = None
+        self.gsettings_key = None
+        self.dialog_type = None
+
+        if browse_reason == vmmStorageBrowser.REASON_IMAGE:
+            self.enable_create = True
+            self.local_title = _("Locate existing storage")
+            self.storage_title = _("Locate or create storage volume")
+            self.dialog_type = Gtk.FileChooserAction.SAVE
+            self.gsettings_key = "image"
+
+        if browse_reason == vmmStorageBrowser.REASON_ISO_MEDIA:
+            self.local_title = _("Locate ISO media")
+            self.storage_title = _("Locate ISO media volume")
+            self.gsettings_key = "media"
+
+        if browse_reason == vmmStorageBrowser.REASON_FLOPPY_MEDIA:
+            self.local_title = _("Locate floppy media")
+            self.storage_title = _("Locate floppy media volume")
+            self.gsettings_key = "media"
+
+        if browse_reason == vmmStorageBrowser.REASON_FS:
+            self.local_title = _("Locate directory volume")
+            self.storage_title = _("Locate directory volume")
+            self.dialog_type = Gtk.FileChooserAction.SELECT_FOLDER
+
+        if browse_reason is None:
+            self.enable_create = True
+            self.storage_title = _("Choose Storage Volume")
+
+
 class vmmStorageBrowser(vmmGObjectUI):
+    REASON_IMAGE = "image"
+    REASON_ISO_MEDIA = "isomedia"
+    REASON_FLOPPY_MEDIA = "floppymedia"
+    REASON_FS = "fs"
+
     def __init__(self, conn):
         vmmGObjectUI.__init__(self, "storagebrowse.ui", "vmm-storage-browse")
         self.conn = conn
 
         self._first_run = False
         self._finish_cb = None
-
-        # Passed to browse_local
         self._browse_reason = None
 
         self.storagelist = vmmHostStorage(self.conn, self.builder, self.topwin,
@@ -103,15 +145,10 @@ class vmmStorageBrowser(vmmGObjectUI):
 
     def set_browse_reason(self, reason):
         self._browse_reason = reason
-        data = self.config.browse_reason_data.get(self._browse_reason, {})
-        allow_create = True
-        title = _("Choose Storage Volume")
-        if data:
-            allow_create = data["enable_create"]
-            title = data["storage_title"]
+        data = _BrowseReasonMetadata(self._browse_reason)
 
-        self.topwin.set_title(title)
-        self.storagelist.widget("vol-add").set_sensitive(allow_create)
+        self.topwin.set_title(data.storage_title)
+        self.storagelist.widget("vol-add").set_sensitive(data.enable_create)
 
 
     #############
@@ -128,7 +165,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self._finish(volume.get_target_path())
 
     def _vol_sensitive_cb(self, fmt):
-        if ((self._browse_reason == self.config.CONFIG_DIR_FS) and
+        if ((self._browse_reason == vmmStorageBrowser.REASON_FS) and
             fmt != 'dir'):
             return False
         return True
@@ -139,22 +176,27 @@ class vmmStorageBrowser(vmmGObjectUI):
     ####################
 
     def _browse_local(self):
-        dialog_type = None
-        dialog_name = None
-        choose_button = None
+        data = _BrowseReasonMetadata(self._browse_reason)
+        gsettings_key = data.gsettings_key
 
-        data = self.config.browse_reason_data.get(self._browse_reason)
-        if data:
-            dialog_name = data["local_title"] or None
-            dialog_type = data.get("dialog_type")
-            choose_button = data.get("choose_button")
+        if gsettings_key:
+            start_folder = self.config.get_default_directory(gsettings_key)
 
-        filename = self.err.browse_local(self.conn,
-            dialog_type=dialog_type, browse_reason=self._browse_reason,
-            dialog_name=dialog_name, choose_button=choose_button)
-        if filename:
-            log.debug("Browse local chose path=%s", filename)
-            self._finish(filename)
+        filename = self.err.browse_local(
+            dialog_type=data.dialog_type,
+            dialog_name=data.local_title,
+            start_folder=start_folder)
+
+        if not filename:
+            return
+
+        log.debug("Browse local chose path=%s", filename)
+
+        if gsettings_key:
+            self.config.set_default_directory(
+                gsettings_key, os.path.dirname(filename))
+
+        self._finish(filename)
 
     def _finish(self, path):
         if self._finish_cb:

@@ -268,8 +268,8 @@ class vmmFSDetails(vmmGObjectUI):
                 textent.set_text(path)
 
         reason = (isdir and
-                  self.config.CONFIG_DIR_FS or
-                  self.config.CONFIG_DIR_IMAGE)
+                  vmmStorageBrowser.REASON_FS or
+                  vmmStorageBrowser.REASON_IMAGE)
 
         if self._storage_browser is None:
             self._storage_browser = vmmStorageBrowser(self.conn)
