@@ -178,7 +178,9 @@ def test_misc_meter():
             m.update(2000)
         with unittest.mock.patch("time.time", return_value=5.0):
             m.update(4000)
-        with unittest.mock.patch("time.time", return_value=6.0):
+        with unittest.mock.patch("time.time", return_value=5.1):
+            m.update(4500)
+        with unittest.mock.patch("time.time", return_value=5.5):
             m.end()
 
     # Basic output testing

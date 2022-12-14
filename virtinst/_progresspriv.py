@@ -112,10 +112,10 @@ class BaseMeter:
         assert type(amount_read) is int
 
         now = time.time()
+        self.last_amount_read = amount_read
+        self.re.update(amount_read, now)
         if (not self.last_update_time or
                 (now >= self.last_update_time + self.update_period)):
-            self.re.update(amount_read, now)
-            self.last_amount_read = amount_read
             self.last_update_time = now
             self._do_update(amount_read)
 
