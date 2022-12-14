@@ -1128,7 +1128,7 @@ class Guest(XMLBuilder):
 
     def _add_spice_channels(self):
         if not self.lookup_domcaps().supports_channel_spicevmc():
-            return
+            return  # pragma: no cover
         if self.skip_default_channel:
             return
         for chn in self.devices.channel:
@@ -1158,7 +1158,7 @@ class Guest(XMLBuilder):
 
     def _add_spice_usbredir(self):
         if not self.lookup_domcaps().supports_redirdev_usb():
-            return
+            return  # pragma: no cover
         if self.skip_default_usbredir:
             return
         if self.devices.redirdev:
