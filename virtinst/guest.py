@@ -809,7 +809,7 @@ class Guest(XMLBuilder):
             dev.set_defaults(self)
 
         self._add_virtioscsi_controller()
-        self._add_q35_pcie_controllers()
+        self.add_q35_pcie_controllers()
         self._add_spice_devices()
 
     def add_extra_drivers(self, extra_drivers):
@@ -1103,7 +1103,7 @@ class Guest(XMLBuilder):
             return True
         return False
 
-    def _add_q35_pcie_controllers(self):
+    def add_q35_pcie_controllers(self):
         if any([c for c in self.devices.controller if c.type == "pci"]):
             return
         if not self.defaults_to_pcie():
