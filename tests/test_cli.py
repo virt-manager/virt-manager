@@ -790,6 +790,8 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --xml xpath.create=./barenode
 --xml xpath.delete=./deleteme/deleteme2
 
+--check path_exists=off
+
 
 """, "many-devices", predefine_check="8.4.0")
 
@@ -900,6 +902,7 @@ c.add_compare(
 "--disk pool=default,size=.00001 "  # Building 'default' pool
 "--disk /some/new/pool/dir/new,size=.1 "  # autocreate the pool
 "--disk /pool-dir/sharevol.img,perms=sh "  # Colliding shareable storage
+"--check path_exists=off "
 "", "storage-creation")
 
 
@@ -910,7 +913,7 @@ c.add_compare(
 ########################
 
 c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm --osinfo detect=yes,require=no")
-c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
+c.add_valid("--disk %(COLLIDE)s --check path_in_use=off,path_exists=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
 c.add_invalid("--disk /dev/zero --nodisks", grep="Cannot specify storage and use --nodisks")
@@ -929,9 +932,9 @@ c.add_invalid("--disk path=/dev/foo/bar/baz,format=qcow2,size=.0000001", grep="U
 c.add_invalid("--disk path=/dev/pool-logical/newvol1.img,format=raw,size=.0000001", grep="Format attribute not supported for this volume type")  # Managed disk using any format
 c.add_invalid("--disk %(NEWIMG1)s", grep="Size must be specified")  # Not specifying path= and non existent storage w/ no size
 c.add_invalid("--disk %(NEWIMG1)s,sparse=true,size=100000000000", grep="The requested volume capacity will exceed")  # Fail if fully allocated file would exceed disk space
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt", grep="already in use by other guests")  # Colliding storage with --prompt should still fail
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk /pool-dir/backingl3.img", grep="already in use by other guests")  # Colliding storage via backing store
-c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=pool-rbd-ceph,source_volume=vol1", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk %(COLLIDE)s --prompt --check path_exists=off", grep="already in use by other guests")  # Colliding storage with --prompt should still fail
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk /pool-dir/backingl3.img --check path_exists=off", grep="already in use by other guests")  # Colliding storage via backing store
+c.add_invalid("--connect %(URI-TEST-FULL)s --disk source_pool=pool-rbd-ceph,source_volume=vol1 --check path_exists=off", grep="already in use by other guests")  # Collision with existing VM, via source pool/volume
 c.add_invalid("--disk source.pool=pool-dir,source.volume=idontexist", grep="no storage vol with matching name 'idontexist'")  # trying to lookup non-existent volume, hit specific error code
 c.add_invalid("--disk size=1 --seclabel model=foo,type=bar", grep="not appear to have been successful")  # Libvirt will error on the invalid security params, which should trigger the code path to clean up the disk images we created.
 c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk and --file collision
@@ -995,38 +998,38 @@ c.add_invalid("--pxe", grep="linux2018, linux2016", nogrep="expected virt-instal
 
 
 c = vinst.add_category("single-disk-install", "--nographics --noautoconsole --disk %(EXISTIMG1)s")
-c.add_valid("--osinfo generic --hvm --install no_install=yes")  # import install equivalent
+c.add_valid("--osinfo generic --hvm --install no_install=yes --check path_exists=off")  # import install equivalent
 c.add_valid("--osinfo generic --hvm --import --prompt --force")  # Working scenario w/ prompt shouldn't ask anything
-c.add_valid("--paravirt --import")  # PV Import install
-c.add_valid("--paravirt --print-xml 1")  # print single XML, implied import install
-c.add_valid("--osinfo generic --hvm --import --wait 0", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
-c.add_compare("-c %(EXISTIMG2)s --osinfo win2k3 --vcpus cores=4 --controller usb,model=none", "w2k3-cdrom")  # HVM windows install with disk
-c.add_compare("--connect %(URI-KVM-X86)s --install fedora26 --os-variant fedora27 --disk size=20", "osinfo-url-with-disk")  # filling in defaults, but with disk specified, and making sure we don't overwrite --os-variant
-c.add_compare("--connect %(URI-KVM-X86)s --pxe --os-variant short-id=debianbuster --disk none", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
-c.add_invalid("--osinfo generic --hvm --import --wait 2", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
-c.add_invalid("--osinfo generic --hvm --import --wait -1", grep="exceeded specified time limit")  # --wait -1, but test suite hack
-c.add_invalid("--osinfo generic --hvm --import --wait", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
+c.add_valid("--paravirt --import --check path_exists=off")  # PV Import install
+c.add_valid("--paravirt --print-xml 1 --check path_exists=off")  # print single XML, implied import install
+c.add_valid("--osinfo generic --hvm --import --wait 0 --check path_exists=off", grep="Treating --wait 0 as --noautoconsole")  # --wait 0 is the same as --noautoconsole
+c.add_compare("-c %(EXISTIMG2)s --osinfo win2k3 --vcpus cores=4 --controller usb,model=none --check path_exists=off", "w2k3-cdrom")  # HVM windows install with disk
+c.add_compare("--connect %(URI-KVM-X86)s --install fedora26 --os-variant fedora27 --disk size=20 --check path_exists=off", "osinfo-url-with-disk")  # filling in defaults, but with disk specified, and making sure we don't overwrite --os-variant
+c.add_compare("--connect %(URI-KVM-X86)s --pxe --os-variant short-id=debianbuster --disk none --check path_exists=off", "osinfo-multiple-short-id", prerun_check=lambda: not OSDB.lookup_os("debianbuster"))  # test plumbing for multiple short ids
+c.add_invalid("--osinfo generic --hvm --import --wait 2 --check path_exists=off", grep="exceeded specified time limit")  # --wait positive number, but test suite hack
+c.add_invalid("--osinfo generic --hvm --import --wait -1 --check path_exists=off", grep="exceeded specified time limit")  # --wait -1, but test suite hack
+c.add_invalid("--osinfo generic --hvm --import --wait --check path_exists=off", grep="exceeded specified time limit")  # --wait aka --wait -1, but test suite hack
 c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl --osinfo generic --hvm --import", use_default_args=False, grep="exceeded specified time limit")  # --sdl doesn't have a console callback, triggers implicit --wait -1
-c.add_invalid("--paravirt --import --print-xml 2", grep="does not have XML step 2")  # PV Import install, no second XML step
-c.add_invalid("--paravirt --import --print-xml 7", grep="Unknown XML step request '7'")  # Invalid --print-xml arg
+c.add_invalid("--paravirt --import --print-xml 2 --check path_exists=off", grep="does not have XML step 2")  # PV Import install, no second XML step
+c.add_invalid("--paravirt --import --print-xml 7 --check path_exists=off", grep="Unknown XML step request '7'")  # Invalid --print-xml arg
 c.add_invalid("--location kernel=foo,initrd=bar", grep="location kernel/initrd may only be specified with a location URL/path")
 c.add_invalid("--location http://example.com,kernel=foo", grep="location kernel/initrd must be be specified as a pair")
-c.add_valid("--pxe --os-variant generic --os-type linux", grep="--os-type is deprecated")
-c.add_invalid("--os-variant solaris10 --unattended", grep="not support unattended")
+c.add_valid("--pxe --os-variant generic --os-type linux --check path_exists=off", grep="--os-type is deprecated")
+c.add_invalid("--os-variant solaris10 --unattended --check path_exists=off", grep="not support unattended")
 
 
 c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s --os-variant generic" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-init-default", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init behavior is root-password-generate=yes,disable=yes
-c.add_valid("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init, but without implied --print-xml, to hit some specific code paths
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,root-ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt,clouduser-ssh-key=%(XMLDIR)s/cloudinit/ssh-key2.txt --boot smbios.mode=none", "cloud-init-options2", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-file with smbios.mode override
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt", "cloud-init-options3", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init ssh-key
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "cloud-init-options4", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt,network-config=%(XMLDIR)s/cloudinit/network-config.txt", "cloud-init-options5", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=,network-config=
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar --check path_exists=off", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --check path_exists=off", "cloud-init-default", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init behavior is root-password-generate=yes,disable=yes
+c.add_valid("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --check path_exists=off", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init, but without implied --print-xml, to hit some specific code paths
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar --check path_exists=off", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,root-ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt,clouduser-ssh-key=%(XMLDIR)s/cloudinit/ssh-key2.txt --boot smbios.mode=none --check path_exists=off", "cloud-init-options2", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-file with smbios.mode override
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt --check path_exists=off", "cloud-init-options3", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init ssh-key
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt --check path_exists=off", "cloud-init-options4", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=
+c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt,network-config=%(XMLDIR)s/cloudinit/network-config.txt --check path_exists=off", "cloud-init-options5", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=,network-config=
 c.add_valid("--panic help --disk=? --check=help", grep="path_in_use")  # Make sure introspection doesn't blow up
 c.add_valid("--connect test:///default --test-stub-command", use_default_args=False)  # --test-stub-command
 c.add_valid("--nodisks --pxe --osinfo generic", grep="VM performance may suffer")  # os variant warning
@@ -1084,28 +1087,28 @@ c.add_invalid("--file /foo/bar/baz --pxe", grep="Size must be specified for non 
 ###########################
 
 c = vinst.add_category("kvm-generic", "--connect %(URI-KVM-X86)s --autoconsole none")
-c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz'", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
+c.add_compare("--os-variant fedora-unknown --file %(EXISTIMG1)s --location %(TREEDIR)s --extra-args console=ttyS0 --cpu host --channel none --console none --sound none --redirdev none --boot cmdline='foo bar baz' --check path_exists=off", "kvm-fedoralatest-url", prerun_check=has_old_osinfo)  # Fedora Directory tree URL install with extra-args
 c.add_compare("--test-media-detection %(TREEDIR)s --arch x86_64 --hvm", "test-url-detection")  # --test-media-detection
-c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
-c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
+c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG1)s,device=floppy --disk %(NEWIMG1)s,size=.01,format=vmdk --location %(TREEDIR)s --extra-args console=ttyS0 --quiet --check path_exists=off", "quiet-url", prerun_check=has_old_osinfo)  # Quiet URL install should make no noise
+c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb --check path_exists=off", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 c.add_compare("--osinfo linux2020 --pxe", "linux2020", prerun_check=no_osinfo_linux2020_virtio)
 c.add_compare("--osinfo generic --disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
-c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_xorriso)  # Using --location iso mounting
-c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
-c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5.4 --cloud-init none", "kvm-rhel5")  # RHEL5 defaults
-c.add_compare("--disk %(EXISTIMG1)s --install kernel=%(ISO-WIN7)s,initrd=%(ISOLABEL)s,kernel_args='foo bar' --os-variant rhel6.4 --unattended none", "kvm-rhel6")  # RHEL6 defaults. ISO paths are just to point at existing files
-c.add_compare("--disk %(EXISTIMG1)s --location https://example.com --install kernel_args='test overwrite',kernel_args_overwrite=yes --os-variant rhel7.0", "kvm-rhel7", precompare_check=no_osinfo_unattend_cb)  # RHEL7 defaults
-c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
-c.add_compare("--connect " + utils.URIs.kvm_x86_cpu_insecure + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0", "kvm-cpu-hostmodel-fallback", prerun_check=has_old_osinfo)  # domcaps too old for default host-passthrough, falls back to host-model
-c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0 --controller num_pcie_root_ports=0", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
-c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10 --controller num_pcie_root_ports=2", "kvm-win10", prerun_check=has_old_osinfo)  # win10 defaults
-c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s", "win7-uefi", prerun_check=has_old_osinfo)  # no HYPER-V with UEFI
+c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks --check path_exists=off", "location-iso", prerun_check=missing_xorriso)  # Using --location iso mounting
+c.add_compare("--disk %(EXISTIMG1)s --cdrom %(ISOLABEL)s --check path_exists=off", "cdrom-centos-label")  # Using --cdrom with centos CD label, should use virtio etc.
+c.add_compare("--disk %(EXISTIMG1)s --install bootdev=network --os-variant rhel5.4 --cloud-init none --check path_exists=off", "kvm-rhel5")  # RHEL5 defaults
+c.add_compare("--disk %(EXISTIMG1)s --install kernel=%(ISO-WIN7)s,initrd=%(ISOLABEL)s,kernel_args='foo bar' --os-variant rhel6.4 --unattended none --check path_exists=off", "kvm-rhel6")  # RHEL6 defaults. ISO paths are just to point at existing files
+c.add_compare("--disk %(EXISTIMG1)s --location https://example.com --install kernel_args='test overwrite',kernel_args_overwrite=yes --os-variant rhel7.0 --check path_exists=off", "kvm-rhel7", precompare_check=no_osinfo_unattend_cb)  # RHEL7 defaults
+c.add_compare("--connect " + utils.URIs.kvm_x86_nodomcaps + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0 --check path_exists=off", "kvm-cpu-default-fallback", prerun_check=has_old_osinfo)  # No domcaps, so mode=host-model isn't safe, so we fallback to host-model-only
+c.add_compare("--connect " + utils.URIs.kvm_x86_cpu_insecure + " --disk %(EXISTIMG1)s --pxe --os-variant rhel7.0 --check path_exists=off", "kvm-cpu-hostmodel-fallback", prerun_check=has_old_osinfo)  # domcaps too old for default host-passthrough, falls back to host-model
+c.add_compare("--disk %(EXISTIMG1)s --pxe --os-variant centos7.0 --controller num_pcie_root_ports=0 --check path_exists=off", "kvm-centos7", prerun_check=has_old_osinfo)  # Centos 7 defaults
+c.add_compare("--disk %(EXISTIMG1)s --cdrom %(EXISTIMG2)s --os-variant win10 --controller num_pcie_root_ports=2 --check path_exists=off", "kvm-win10", prerun_check=has_old_osinfo)  # win10 defaults
+c.add_compare("--os-variant win7 --cdrom %(EXISTIMG2)s --boot loader_type=pflash,loader=CODE.fd,nvram_template=VARS.fd --disk %(EXISTIMG1)s --check path_exists=off", "win7-uefi", prerun_check=has_old_osinfo)  # no HYPER-V with UEFI
 c.add_compare("--osinfo generic --arch i686 --boot uefi --install kernel=http://example.com/httpkernel,initrd=ftp://example.com/ftpinitrd --disk none", "kvm-i686-uefi")  # i686 uefi. piggy back it for --install testing too
-c.add_compare("--osinfo generic --machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s", "q35-defaults")  # proper q35 disk defaults
+c.add_compare("--osinfo generic --machine q35 --cdrom %(EXISTIMG2)s --disk %(EXISTIMG1)s --check path_exists=off", "q35-defaults")  # proper q35 disk defaults
 c.add_compare("--disk size=1 --os-variant openbsd4.9", "openbsd-defaults")  # triggers net fallback scenario
-c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes", "f21-kvm-remote", prerun_check=has_old_osinfo)
+c.add_compare("--connect " + utils.URIs.kvm_x86_remote + " --import --disk %(EXISTIMG1)s --os-variant fedora21 --pm suspend_to_disk=yes --check path_exists=off", "f21-kvm-remote", prerun_check=has_old_osinfo)
 c.add_compare("--connect %(URI-KVM-X86)s --os-variant fedora26 --graphics spice --controller usb,model=none", "graphics-usb-disable")
 c.add_compare("--osinfo generic --boot uefi --disk size=1", "boot-uefi")
 c.add_compare("--osinfo generic --boot uefi --disk size=1 --tpm none --connect " + utils.URIs.kvm_x86_oldfirmware, "boot-uefi-oldcaps")
@@ -1134,9 +1137,9 @@ c.add_valid("--connect " + utils.URIs.kvm_x86_session + " --install fedora21", p
 # ppc64 tests #
 ###############
 
-c.add_compare("--machine pseries --boot arch=ppc64,network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none", "ppc64-pseries-f20")
-c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none --graphics vnc", "ppc64-machdefault-f20")
-c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default --tpm default --graphics none", "ppc64le-kvm-import")
+c.add_compare("--machine pseries --boot arch=ppc64,network --disk %(EXISTIMG1)s --disk device=cdrom --os-variant fedora20 --network none --check path_exists=off", "ppc64-pseries-f20")
+c.add_compare("--arch ppc64 --boot network --disk %(EXISTIMG1)s --os-variant fedora20 --network none --graphics vnc --check path_exists=off", "ppc64-machdefault-f20")
+c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-variant fedora20 --panic default --tpm default --graphics none --check path_exists=off", "ppc64le-kvm-import")
 
 
 
@@ -1145,8 +1148,8 @@ c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-
 # s390x tests #
 ###############
 
-c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora30 --panic default --graphics vnc", "s390x-cdrom", prerun_check=has_old_osinfo)
-c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --disk %(EXISTIMG1)s --os-variant fedora30", "s390x-headless")
+c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora30 --panic default --graphics vnc --check path_exists=off", "s390x-cdrom", prerun_check=has_old_osinfo)
+c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --disk %(EXISTIMG1)s --os-variant fedora30 --check path_exists=off", "s390x-headless")
 
 
 
@@ -1154,8 +1157,8 @@ c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --
 # riscv tests #
 ###############
 
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none", "riscv64-headless", precompare_check="5.3.0")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc", "riscv64-graphics", precompare_check="5.3.0", )
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none --check path_exists=off", "riscv64-headless", precompare_check="5.3.0")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc --check path_exists=off", "riscv64-graphics", precompare_check="5.3.0", )
 
 
 
@@ -1163,10 +1166,10 @@ c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora
 # armv7l tests #
 ################
 
-c.add_compare("--arch armv7l --osinfo generic --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics", "arm-vexpress-plain")
-c.add_compare("--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --graphics vnc --os-variant fedora20", "arm-virt-f20")
-c.add_compare("--arch armv7l --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --os-variant fedora20", "arm-defaultmach-f20")
-c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-variant fedora20", "arm-kvm-import")
+c.add_compare("--arch armv7l --osinfo generic --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics --check path_exists=off", "arm-vexpress-plain")
+c.add_compare("--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --graphics vnc --os-variant fedora20 --check path_exists=off", "arm-virt-f20")
+c.add_compare("--arch armv7l --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --os-variant fedora20 --check path_exists=off", "arm-defaultmach-f20")
+c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-variant fedora20 --check path_exists=off", "arm-kvm-import")
 
 
 
@@ -1176,10 +1179,10 @@ c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-v
 
 c.add_valid("--arch aarch64 --osinfo fedora19 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps, grep="Libvirt version does not support UEFI")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86, grep="OS name is required")  # catch missing osinfo for non-x86
-c.add_compare("--arch aarch64 --osinfo fedora19 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
-c.add_compare("--arch aarch64 --osinfo fedora19 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machdefault")
-c.add_compare("--arch aarch64 --cdrom %(ISO-F26-NETINST)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")  # cdrom test, but also --cpu none override, --events override, and headless
-c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default --graphics vnc", "aarch64-kvm-import")  # --import test, but also test --panic no-op, and --graphics
+c.add_compare("--arch aarch64 --osinfo fedora19 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --check path_exists=off", "aarch64-machvirt")
+c.add_compare("--arch aarch64 --osinfo fedora19 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --check path_exists=off", "aarch64-machdefault")
+c.add_compare("--arch aarch64 --cdrom %(ISO-F26-NETINST)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart --check path_exists=off", "aarch64-cdrom")  # cdrom test, but also --cpu none override, --events override, and headless
+c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default --graphics vnc --check path_exists=off", "aarch64-kvm-import")  # --import test, but also test --panic no-op, and --graphics
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --osinfo fedora30 --arch aarch64 --disk none --pxe --boot firmware=efi", "aarch64-firmware-no-override")
 
@@ -1212,11 +1215,11 @@ c.add_compare("--init /usr/bin/httpd", "manual-init")
 ######################
 
 c = vinst.add_category("xen", "--noautoconsole --connect " + utils.URIs.xen)
-c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none")  # Xen PV install headless
-c.add_compare("--disk %(EXISTIMG1)s --import", "xen-default")  # Xen default
-c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64 --input default", "xen-pv", precompare_check="5.3.0")  # Xen PV
-c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm", "xen-hvm")  # Xen HVM
-c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
+c.add_valid("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --graphics none --check path_exists=off")  # Xen PV install headless
+c.add_compare("--disk %(EXISTIMG1)s --import --check path_exists=off", "xen-default")  # Xen default
+c.add_compare("--disk %(EXISTIMG1)s --location %(TREEDIR)s --paravirt --controller xenbus,maxGrantFrames=64 --input default --check path_exists=off", "xen-pv", precompare_check="5.3.0")  # Xen PV
+c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1)s --livecd --hvm --check path_exists=off", "xen-hvm")  # Xen HVM
+c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1)s --install no_install=yes --hvm --check path_exists=off", "xen-hvm")  # Ensure --livecd and --install no_install are essentially identical
 
 
 
@@ -1227,7 +1230,7 @@ c.add_compare("--osinfo generic --disk  /pool-iscsi/diskvol1 --cdrom %(EXISTIMG1
 c = vinst.add_category("vz", "--noautoconsole --connect " + utils.URIs.vz)
 c.add_valid("--container")  # validate the special define+start logic
 c.add_valid("--osinfo generic --hvm --cdrom %(EXISTIMG1)s --disk none")  # hit more install vz logic
-c.add_valid("--osinfo generic --hvm --import --disk %(EXISTIMG1)s --noreboot")  # hit more install vz logic
+c.add_valid("--osinfo generic --hvm --import --disk %(EXISTIMG1)s --noreboot --check path_exists=off")  # hit more install vz logic
 c.add_invalid("--container --transient", grep="Domain type 'vz' doesn't support transient installs.")
 c.add_compare("""
 --container
@@ -1268,9 +1271,9 @@ c.add_invalid("--graphics vnc --vnclisten 1.2.3.4", grep="Cannot mix --graphics 
 c.add_invalid("--network user --bridge foo0", grep="Cannot use --bridge and --network at the same time")
 
 c = vinst.add_category("storage-back-compat", "--pxe --noautoconsole --osinfo generic")
-c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4")  # Existing file, other opts
-c.add_valid("--file %(EXISTIMG1)s")  # Existing file, no opts
-c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s")  # Multiple existing files
+c.add_valid("--file %(EXISTIMG1)s --nonsparse --file-size 4 --check path_exists=off")  # Existing file, other opts
+c.add_valid("--file %(EXISTIMG1)s --check path_exists=off")  # Existing file, no opts
+c.add_valid("--file %(EXISTIMG1)s --file %(EXISTIMG1)s --check path_exists=off")  # Multiple existing files
 c.add_valid("--file %(NEWIMG1)s --file-size .00001 --nonsparse")  # Nonexistent file
 
 
