@@ -345,7 +345,7 @@ def validate_disk(dev, warn_overwrite=False):
         """
         Prompt if disk file already exists and preserve mode is not used
         """
-        if not warn_overwrite:
+        if not warn_overwrite or dev.is_cdrom():
             return
         if not DeviceDisk.path_definitely_exists(dev.conn, path):
             return

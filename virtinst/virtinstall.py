@@ -675,8 +675,9 @@ def build_guest_instance(conn, options):
 
     if not options.reinstall:
         # cli specific disk validation
+        warn_overwrite = True
         for disk in guest.devices.disk:
-            cli.validate_disk(disk)
+            cli.validate_disk(disk, warn_overwrite)
         for net in guest.devices.interface:
             cli.validate_mac(net.conn, net.macaddr)
 
