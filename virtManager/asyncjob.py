@@ -7,7 +7,6 @@
 import threading
 import traceback
 
-from gi.repository import Gdk
 from gi.repository import GLib
 
 import libvirt
