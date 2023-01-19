@@ -464,13 +464,6 @@ class _OsVariant(object):
         except Exception:  # pragma: no cover
             log.debug("Error checking osinfo firmware support", exc_info=True)
 
-        if self.name == "win11":  # pragma: no cover
-            # 2022-03 the libosinfo APIs for firmware haven't landed, and
-            # there's no osinfo-db entry for win11. But we know win11 requires
-            # UEFI. Hardcode it for now, so the next virt-install release has
-            # a better chance of doing the right thing for win11 when
-            # it pops up in a osinfo-db release.
-            ret = True
         return ret
 
     def get_recommended_resources(self):
