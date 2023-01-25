@@ -393,7 +393,7 @@ class Installer(object):
         elif unattended_scripts:
             self._prepare_unattended_data(guest, meter, unattended_scripts)
 
-        elif self._cloudinit_data:
+        if self._cloudinit_data:
             self._prepare_cloudinit(guest, meter)
 
     def _cleanup(self, guest):
