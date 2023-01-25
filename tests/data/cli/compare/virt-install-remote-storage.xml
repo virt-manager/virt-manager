@@ -22,10 +22,12 @@
     <disk type="file" device="disk">
       <source file="/foo/bar/baz"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="block" device="disk">
       <source dev="/dev/zde"/>
       <target dev="hdb" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
@@ -68,10 +70,12 @@
     <disk type="file" device="disk">
       <source file="/foo/bar/baz"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="block" device="disk">
       <source dev="/dev/zde"/>
       <target dev="hdb" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">

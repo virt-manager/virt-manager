@@ -22,6 +22,7 @@
       <driver name="phy"/>
       <source dev="/pool-iscsi/diskvol1"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>

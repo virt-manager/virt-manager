@@ -34,31 +34,37 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/pool-dir/fedora.qcow2"/>
       <target dev="vdb" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/pool-dir/fedora-1.qcow2"/>
       <target dev="vdc" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hdb" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hdc" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
@@ -70,117 +76,140 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sda" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdb" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdc" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdd" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sde" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdf" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdg" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdh" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdi" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdj" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdk" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdl" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdm" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdn" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdo" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdp" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sdq" bus="scsi"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw" discard="unmap"/>
       <source file="/pool-dir/new1.img"/>
       <target dev="vdd" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/pool-dir/new2.img"/>
       <target dev="vde" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu"/>
       <source file="/dev/zero"/>
       <target dev="vdf" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="vdg" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/some/new/pool/dir/new"/>
       <target dev="vdh" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
       <source file="/pool-dir/sharevol.img"/>
       <target dev="vdi" bus="virtio"/>
       <shareable/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="scsi" model="virtio-scsi"/>

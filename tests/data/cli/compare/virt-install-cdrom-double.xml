@@ -22,6 +22,7 @@
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <source file="/pool-dir/testvol1.img"/>
@@ -74,6 +75,7 @@
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <target dev="hdb" bus="ide"/>

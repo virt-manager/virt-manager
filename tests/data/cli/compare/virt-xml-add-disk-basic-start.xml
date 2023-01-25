@@ -4,6 +4,7 @@
 +    <disk type="file" device="disk">
 +      <source file="/pool-dir/testvol1.img"/>
 +      <target dev="vdf" bus="virtio"/>
++      <blockio logical_block_size="512" physical_block_size="4096"/>
 +    </disk>
    </devices>
  </domain>
