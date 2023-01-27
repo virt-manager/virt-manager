@@ -9,6 +9,7 @@ import os
 import sys
 import time
 import select
+import threading
 
 import libvirt
 
@@ -914,6 +915,20 @@ def _process_domain(domain, guest, installer, waithandler, autoconsole,
     """
     instdomain = _InstalledDomain(domain, transient, destroy_on_exit)
 
+    domain_cb_id = None
+    if not transient:
+        try:
+            domain_cb_id = guest.conn.domainEventRegisterAny(
+                                domain, libvirt.VIR_DOMAIN_EVENT_ID_LIFECYCLE,
+                                domainEventCB, instdomain)
+        except Exception as e:
+            log.debug("Error registering domain event: %s", e)
+
+        try:
+            self._backend.setKeepAlive(20, 1)
+        except Exception as e:
+            log.debug("Failed to setKeepAlive: %s", str(e))
+
     _connect_console(guest, instdomain, autoconsole,
             waithandler.wait_for_console_to_exit)
 
@@ -921,7 +936,14 @@ def _process_domain(domain, guest, installer, waithandler, autoconsole,
     _wait_for_domain(installer, instdomain, autoconsole, waithandler)
     print_stdout(_("Domain creation completed."))
 
-    if transient:
+    try:
+        if domain_cb_id is not None:
+            guest.conn.domainEventDeregisterAny(domain_cb_id)
+    except Exception:  # pragma: no cover
+        logging.debug("Failed to deregister the domain event",
+                    exc_info=True)
+
+    if transient or instdomain._transient:
         return
     if domain.isActive():
         return
@@ -1188,6 +1210,34 @@ def set_test_stub_options(options):  # pragma: no cover
         options.os_variant = "fedora27"
 
 
+eventLoopThread = None
+
+
+def domainEventCB(conn, domain, event, detail, opaque):
+    # if undefine a running persistent domain, this converts it to a
+    # transient domain.
+    if event == libvirt.VIR_DOMAIN_EVENT_UNDEFINED:
+        instdomain = opaque
+        instdomain._transient = True
+        log.debug("domain lifecycle event: domain=%s Undefined Removed",
+                domain.name())
+
+
+def virEventLoopNativeRun():
+    while True:
+        libvirt.virEventRunDefaultImpl()
+
+
+def virEventLoopNativeStart():
+    global eventLoopThread
+    libvirt.virEventRegisterDefaultImpl()
+    eventLoopThread = threading.Thread(target=virEventLoopNativeRun,
+                                       name="EventLoop thread",
+                                       args=())
+    eventLoopThread.daemon = True
+    eventLoopThread.start()
+
+
 def main(conn=None):
     cli.earlyLogging()
     options = parse_args()
@@ -1218,6 +1268,9 @@ def main(conn=None):
     convert_wait_zero(options)
     set_test_stub_options(options)
     convert_old_os_options(options)
+
+    if not options.transient:
+        virEventLoopNativeStart()
 
     conn = cli.getConnection(options.connect, conn=conn)
 
