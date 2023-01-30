@@ -221,15 +221,23 @@ class _ConsoleMenu:
         from ..device.gfxdetails import vmmGraphicsDetails
 
         ret = []
+        preferred = None
         for idx, dev in enumerate(devs):
             label = (_("Graphical Console") + " " +
                      vmmGraphicsDetails.graphics_pretty_type_simple(dev.type))
 
-            tooltip = None
             if idx > 0:
                 label += " %s" % (idx + 1)
+
+            tooltip = None
+            if dev.type not in self.embeddable_graphics():
+                tooltip = _("virt-manager cannot display graphical "
+                            "console type '%s'") % (dev.type)
+            elif preferred is not None:
                 tooltip = _("virt-manager does not support more "
                             "than one graphical console")
+            else:
+                preferred = idx
 
             ret.append([label, dev, tooltip])
         return ret
@@ -689,9 +697,10 @@ class vmmConsolePages(vmmGObjectUI):
         ginfo = None
         try:
             gdevs = self.vm.xmlobj.devices.graphics
-            gdev = gdevs and gdevs[0] or None
-            if gdev:
-                ginfo = ConnectionInfo(self.vm.conn, gdev, 0)
+            for idx, dev in enumerate(gdevs):
+                if dev.type in self._consolemenu.embeddable_graphics():
+                    ginfo = ConnectionInfo(self.vm.conn, gdevs[idx], idx)
+                    break
         except Exception as e:  # pragma: no cover
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after
