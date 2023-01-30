@@ -691,7 +691,7 @@ class vmmConsolePages(vmmGObjectUI):
             gdevs = self.vm.xmlobj.devices.graphics
             gdev = gdevs and gdevs[0] or None
             if gdev:
-                ginfo = ConnectionInfo(self.vm.conn, gdev)
+                ginfo = ConnectionInfo(self.vm.conn, gdev, 0)
         except Exception as e:  # pragma: no cover
             # We can fail here if VM is destroyed: xen is a bit racy
             # and can't handle domain lookups that soon after

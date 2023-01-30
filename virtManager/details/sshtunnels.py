@@ -20,7 +20,8 @@ class ConnectionInfo(object):
     """
     Holds all the bits needed to make a connection to a graphical console
     """
-    def __init__(self, conn, gdev):
+    def __init__(self, conn, gdev, gidx):
+        self.gidx  = gidx
         self.gtype = gdev.type
         self.gport = str(gdev.port) if gdev.port else None
         self.gsocket = (gdev.listens and gdev.listens[0].socket) or gdev.socket
