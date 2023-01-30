@@ -293,6 +293,10 @@ class _ConsoleMenu:
                 return True
         return False
 
+    def embeddable_graphics(self):
+        ret = ["vnc", "spice"]
+        return ret
+
 
 class vmmConsolePages(vmmGObjectUI):
     """
@@ -700,7 +704,7 @@ class vmmConsolePages(vmmGObjectUI):
                 _("Graphical console not configured for guest"))
             return
 
-        if ginfo.gtype not in self.config.embeddable_graphics():
+        if ginfo.gtype not in self._consolemenu.embeddable_graphics():
             log.debug("Don't know how to show graphics type '%s' "
                           "disabling console page", ginfo.gtype)
 

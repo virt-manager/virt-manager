@@ -208,10 +208,6 @@ class vmmConfig(object):
     def get_ui_dir(self):
         return self.ui_dir
 
-    def embeddable_graphics(self):
-        ret = ["vnc", "spice"]
-        return ret
-
     def inspection_supported(self):
         if not vmmInspection.libguestfs_installed():
             return False  # pragma: no cover
