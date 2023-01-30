@@ -1164,9 +1164,9 @@ class vmmDomain(vmmLibvirtObject):
     def open_console(self, devname, stream, flags=0):
         return self._backend.openConsole(devname, stream, flags)
 
-    def open_graphics_fd(self):
+    def open_graphics_fd(self, idx):
         flags = 0
-        return self._backend.openGraphicsFD(0, flags)
+        return self._backend.openGraphicsFD(idx, flags)
 
     def list_snapshots(self):
         if self._snapshot_list is None:

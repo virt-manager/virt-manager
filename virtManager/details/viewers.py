@@ -134,7 +134,7 @@ class Viewer(vmmGObject):
         if not self._vm.conn.support.domain_open_graphics():
             return None
 
-        return self._vm.open_graphics_fd()
+        return self._vm.open_graphics_fd(self._ginfo.gidx)
 
     def _open(self):
         if self._ginfo.bad_config():
