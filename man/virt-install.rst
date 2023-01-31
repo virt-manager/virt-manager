@@ -929,6 +929,8 @@ Some examples:
 ``--boot cdrom,fd,hd,network``
     Set the boot device priority as first cdrom, first floppy, first harddisk,
     network PXE boot.
+    Note: s390x guests only support one boot device, so everything except
+    the first device type will be ignored.
 
 ``--boot kernel=KERNEL,initrd=INITRD,kernel_args="console=/dev/ttyS0"``
     Have guest permanently boot off a local kernel/initrd pair, with the
