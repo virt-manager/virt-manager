@@ -26,7 +26,7 @@
 # Silvia Sanchez <BHKohane@gmail.com>, 2017. #zanata
 # Máximo Castañeda Riloba <mcrcctm@gmail.com>, 2018. #zanata
 # Osvaldo R. Salazar S. <orodolfo.salazars@gmail.com>, 2021.
-# Pedro Luis Valades Viera <perikiyoxd@gmail.com>, 2021.
+# Pedro Luis Valades Viera <perikiyoxd@gmail.com>, 2021, 2023.
 # Nicholas Di Nicola <nicodinicola7@outlook.com>, 2022.
 # Miguel Ángel Sánchez <maletils@gmail.com>, 2022.
 msgid ""
@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-12-02 10:19+0000\n"
-"Last-Translator: Miguel Ángel Sánchez <maletils@gmail.com>\n"
+"PO-Revision-Date: 2023-02-05 05:20+0000\n"
+"Last-Translator: Pedro Luis Valades Viera <perikiyoxd@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/es/>\n"
 "Language: es\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -87,7 +87,7 @@ msgstr "Administrar maquinas virtuales"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr ""
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -1045,10 +1045,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1913
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Disco y memoria externos"
+msgstr "Habilitar _memoria compartida"
 
 #: ui/details.ui:1943
 msgid "<b>Memory</b>"
@@ -1313,7 +1311,7 @@ msgstr "_Formato:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "mensaje de advertencia blah foo"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1513,7 +1511,7 @@ msgstr "_Cerrar"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr ""
+msgstr "Salir"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1528,10 +1526,8 @@ msgid "_Virtual Machine Details"
 msgstr "_Detalles de la máquina virtual"
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Preferencias"
+msgstr "_Preferencias"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -1737,29 +1733,22 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>No se ha podido encontrar una red por defecto adecuada.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Puerto:"
+msgstr "_Grupo de puerto:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
 msgstr "Fuente de _red:"
 
 #: ui/oslist.ui:56
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
 "¿No encuentra el sistema operativo que busca?\n"
-"Intente seleccionar la siguiente versión más reciente que aparezca,\n"
-"o utilice la entrada \"Sistema operativo genérico\"."
+"Intente seleccionar una versión o distribución similar, o utilice la entrada "
+"\"Sistema operativo genérico\"."
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
@@ -1855,6 +1844,8 @@ msgstr "_CPU predeterminada:"
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Firmware por defecto para nuevas máquinas virtuales. Arranque mediante BIOS "
+"o UEFI."
 
 #: ui/preferences.ui:490
 msgid "x86 _Firmware:"
@@ -2488,6 +2479,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s no está activo en el sistema anfitrión.\n"
+"Por favor, inicie mdev en el sistema anfitrión antes de añadirlo al invitado."
 
 #: virtManager/addhardware.py:797
 msgid "No Devices Available"
@@ -3354,10 +3347,8 @@ msgid "Failed to check disk usage conflict."
 msgstr "Fallo al comprobar conflictos de uso de disco."
 
 #: virtManager/details/console.py:153
-#, fuzzy
-#| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
-msgstr "Salir de Pantalla completa"
+msgstr "Salir de pantalla completa"
 
 #: virtManager/details/console.py:155
 msgid "Leave fullscreen"
@@ -3446,10 +3437,8 @@ msgid "Viewer is disconnecting."
 msgstr "Visor esta desconectando."
 
 #: virtManager/details/console.py:979
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Visor desconectado"
+msgstr "Ventana del visor de cerrada."
 
 #: virtManager/details/console.py:983
 #, python-format
@@ -3462,10 +3451,9 @@ msgid "Floppy %(index)d"
 msgstr "Disquete %(index)d"
 
 #: virtManager/details/details.py:169
-#, fuzzy, python-format
-#| msgid "%s Redirector %s"
+#, python-format
 msgid "%(bus)s CDROM %(index)d"
-msgstr "%(bus)s CDROM %(index)d"
+msgstr "CDROM %(bus)s %(index)d"
 
 #: virtManager/details/details.py:174
 #, fuzzy, python-format
