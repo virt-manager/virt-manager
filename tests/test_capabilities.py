@@ -4,6 +4,7 @@
 # See the COPYING file in the top-level directory.
 
 import os
+import random
 
 import pytest
 
@@ -108,3 +109,50 @@ def testDomainCapabilitiesAArch64():
 
     assert not caps.supports_filesystem_virtiofs()
     assert not caps.supports_memorybacking_memfd()
+
+
+def testDomainCapabilitiesx86_64DefaultUEFIFirmware():
+    """Verify name based *automagic* UEFI firmware selection for x86_64.
+
+    virt-install has ability to select an UEFI firmware automagically when
+    user has not explicitly specified a firmware file path (i.e. --boot uefi),
+    This test verifies that the selection is deterministic and covers the naming
+    patterns found in various distributions (e.g. RHEL, Ubuntu, Debian, SUSE)
+    """
+    def domcaps(loaders):
+        values = "".join(["<value>" + sub + "</value>" for sub in loaders])
+        template = """
+        <domainCapabilities>
+            <arch>x86_64</arch>
+            <os supported='yes'>
+                <enum name='firmware'>
+                    <value>efi</value>
+                </enum>
+                <loader supported='yes'>
+                    {}
+                </loader>
+            </os>
+        </domainCapabilities>
+        """.format(values)
+        return template
+
+    fw_paths = [
+        "/tmp/x-edk2-x86_64-x.fd",
+        "/tmp/x-OVMF_CODE.fd",
+        "/tmp/x-OVMF_CODE_4M.fd",
+        "/tmp/ovmf-x64/OVMF.xxx.fd",
+        "/tmp/x-ovmf-x86_64-x",
+        "/tmp/my-ovmf-my",
+        "/tmp/my-OVMF-my/interesting"
+    ]
+
+    while len(fw_paths):
+        expected = fw_paths[0]
+        fw_paths_shuffled = list(fw_paths)
+        # The pattern order is important
+        # but order of loader names is not.
+        random.shuffle(fw_paths_shuffled)
+        caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), domcaps(fw_paths_shuffled))
+        assert caps.arch == "x86_64"
+        assert expected == caps.find_uefi_path_for_arch()
+        fw_paths.pop(0)

@@ -275,10 +275,11 @@ class DomainCapabilities(XMLBuilder):
         ],
         "x86_64": [
             r".*edk2-x86_64-.*\.fd",  # upstream qemu
-            r".*OVMF_CODE\.fd",  # RHEL
+            r".*OVMF_CODE\.fd",  # RHEL, Debian, Ubuntu
+            r".*OVMF_CODE_4M\.fd",  # Debian, Ubuntu
             r".*ovmf-x64/OVMF.*\.fd",  # gerd's firmware repo
             r".*ovmf-x86_64-.*",  # SUSE
-            r".*ovmf.*", ".*OVMF.*",  # generic attempt at a catchall
+            r".*ovmf.*", r".*OVMF.*",  # generic attempt at a catchall
         ],
         "aarch64": [
             r".*AAVMF_CODE\.fd",  # RHEL
