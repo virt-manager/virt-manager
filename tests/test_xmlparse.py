@@ -77,7 +77,7 @@ def testAlterGuest():
 
     check = _make_checker(guest)
 
-    # Check specific vcpu_current behaviro
+    # Check specific vcpu_current behavior
     check("vcpus", 5, 10)
     assert guest.vcpu_current is None
     check("vcpu_current", None, 15)

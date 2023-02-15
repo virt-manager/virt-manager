@@ -2095,7 +2095,7 @@ class vmmCreateVM(vmmGObjectUI):
             meter.start(_(prog['status']), None)
 
         asyncjob.details_enable()
-        # Use logging filter to show messages of the progreess on the GUI
+        # Use logging filter to show messages of the progress on the GUI
         class SetStateFilter(logging.Filter):
             def filter(self, record):
                 asyncjob.details_update("%s\n" % record.getMessage())
