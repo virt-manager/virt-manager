@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2023-03-02 08:32+0000\n"
+"PO-Revision-Date: 2023-03-03 09:20+0000\n"
 "Last-Translator: Hoppár Zoltán <hopparz@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/hu/>\n"
@@ -133,7 +133,7 @@ msgstr "Eszköz mode_ll:"
 
 #: ui/addhardware.ui:673 ui/addhardware.ui:1229
 msgid "Host _Device:"
-msgstr ""
+msgstr "Kiszolgáló eszköz:"
 
 #: ui/addhardware.ui:749
 msgid "_Path:"
@@ -154,8 +154,9 @@ msgid "_Name:"
 msgstr "_Név:"
 
 #: ui/addhardware.ui:840
+#, fuzzy
 msgid "_Auto socket:"
-msgstr ""
+msgstr "_Auto socket:"
 
 #: ui/addhardware.ui:868
 msgid "_Channel:"
@@ -170,8 +171,9 @@ msgid "_Mode:"
 msgstr "_Mód:"
 
 #: ui/addhardware.ui:1263 ui/details.ui:4688
+#, fuzzy
 msgid "rng"
-msgstr ""
+msgstr "rng"
 
 #: ui/addhardware.ui:1336 ui/details.ui:4770
 msgid "panic"
@@ -192,7 +194,7 @@ msgstr "_Befejezés"
 
 #: ui/addstorage.ui:33
 msgid "C_reate a disk image for the virtual machine"
-msgstr ""
+msgstr "Lemezkép készítése a virtuális géphez"
 
 #: ui/addstorage.ui:62
 msgid "0.0"
@@ -204,11 +206,11 @@ msgstr "_GiB"
 
 #: ui/addstorage.ui:156
 msgid "_Select or create custom storage"
-msgstr ""
+msgstr "Egyéni tárhely kialakítása vagy kiválasztása"
 
 #: ui/addstorage.ui:185
 msgid "_Manage..."
-msgstr ""
+msgstr "Kezelés..."
 
 #: ui/addstorage.ui:254
 msgid "Cac_he mode:"
@@ -216,7 +218,7 @@ msgstr "Gyorsítótár mód:"
 
 #: ui/addstorage.ui:285
 msgid "Discard mod_e:"
-msgstr ""
+msgstr "Elv_etési mód:"
 
 #: ui/addstorage.ui:316
 msgid "R_eadonly:"
@@ -231,10 +233,8 @@ msgid "Removab_le:"
 msgstr "Eltávo_lítható:"
 
 #: ui/addstorage.ui:399
-#, fuzzy
-#| msgid "Serial"
 msgid "Seria_l:"
-msgstr "Serial"
+msgstr "Soros:"
 
 #: ui/addstorage.ui:425
 msgid "Advanced _options"
@@ -262,8 +262,9 @@ msgid "Change storage path"
 msgstr "Tároló elérési útvonalának cseréje"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
+#, fuzzy
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -271,7 +272,7 @@ msgstr "Méret:"
 
 #: ui/clone.ui:144
 msgid "Target:"
-msgstr ""
+msgstr "Cél:"
 
 #: ui/clone.ui:161
 msgid "Path:"
@@ -291,7 +292,7 @@ msgstr "_Tallózás…"
 
 #: ui/clone.ui:273
 msgid "New _Path:"
-msgstr ""
+msgstr "Új elérési út:"
 
 #: ui/clone.ui:306
 msgid "Clone Virtual Machine"
@@ -299,25 +300,21 @@ msgstr "Virtuális gép klónozása"
 
 #: ui/clone.ui:347
 msgid "<span size='large'>Clone virtual machine</span>"
-msgstr ""
+msgstr "<span size='large'>Virtuális gép klónozása</span>"
 
 #: ui/clone.ui:422
 msgid "Original VM:"
-msgstr ""
+msgstr "Eredeti VM:"
 
 #: ui/clone.ui:434
-#, fuzzy
-#| msgid "C_onnection:"
 msgid "Connection:"
 msgstr "Kapcs_olat:"
 
 #: ui/clone.ui:566 ui/createvm.ui:2234
 msgid "Storage:"
-msgstr ""
+msgstr "Tároló:"
 
 #: ui/clone.ui:582
-#, fuzzy
-#| msgid "Details..."
 msgid "_Details..."
 msgstr "Részletek…"
 
@@ -363,13 +360,11 @@ msgstr "Ment_se el a jelszót a kulcstartóra"
 
 #: ui/console.ui:192
 msgid "Check to save password, uncheck to forget password."
-msgstr ""
+msgstr "Jelszó mentéséhez jelölje be, jelszó elfelejtéséhez törölje a jelölést."
 
 #: ui/console.ui:258
-#, fuzzy
-#| msgid "TCP net console"
 msgid "_Connect to console"
-msgstr "TCP hálózati konzol"
+msgstr "_Csatlakozzon a konzolhoz"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -385,7 +380,7 @@ msgstr "_Felügyelő:"
 
 #: ui/createconn.ui:114
 msgid "Connect to _remote host over SSH"
-msgstr ""
+msgstr "Csatlakozzon a _remote hosthoz SSH-n keresztül"
 
 #: ui/createconn.ui:133
 msgid "_Autoconnect:"
@@ -402,10 +397,14 @@ msgid ""
 "guests will not be available. Networking options\n"
 "are very limited. </small>"
 msgstr ""
+"<small>A QEMU usermode munkamenet nem a virt-manager\n"
+"alapértelmezett. Valószínű, hogy bármely már meglévő QEMU/KVM\n"
+"vendégek nem lesznek elérhetőek. Hálózati lehetőségek\n"
+"nagyon korlátozottak. </small>"
 
 #: ui/createconn.ui:259
 msgid "Cu_stom URI:"
-msgstr ""
+msgstr "Egyéni URI:"
 
 #: ui/createconn.ui:308
 msgid "Generated URI:"
@@ -417,23 +416,23 @@ msgstr "Új virtuális hálózat"
 
 #: ui/createnet.ui:55
 msgid "<span size='large'>Create virtual network</span>"
-msgstr ""
+msgstr "<span size='large'>Virtuális hálózat létrehozása</span>"
 
 #: ui/createnet.ui:152
 msgid "Fo_rward to:"
-msgstr ""
+msgstr "Továbbítás ide:"
 
 #: ui/createnet.ui:166
 msgid "Device _List:"
-msgstr ""
+msgstr "Eszköz _Lista:"
 
 #: ui/createnet.ui:244
 msgid "De_vice:"
-msgstr ""
+msgstr "Eszköz:"
 
 #: ui/createnet.ui:287
 msgid "_Enable IPv4"
-msgstr ""
+msgstr "IPv4 _engedélyezése"
 
 #: ui/createnet.ui:326 ui/createnet.ui:537
 msgid "_Network:"
@@ -453,11 +452,11 @@ msgstr "DHCPv4 engedélyezése"
 
 #: ui/createnet.ui:473 ui/hostnets.ui:348
 msgid "<b>IPv_4 configuration</b>"
-msgstr ""
+msgstr "<b>IPv_4 konfiguráció</b>"
 
 #: ui/createnet.ui:498
 msgid "_Enable IPv6"
-msgstr ""
+msgstr "IPv6 _engedélyezése"
 
 #: ui/createnet.ui:649
 msgid "Enable DHCPv6"
@@ -465,19 +464,19 @@ msgstr "DHCPv6 engedélyezése"
 
 #: ui/createnet.ui:684 ui/hostnets.ui:452
 msgid "<b>IPv_6 configuration</b>"
-msgstr ""
+msgstr "<b>IPv_6 konfiguráció</b>"
 
 #: ui/createnet.ui:728
 msgid "Use net_work name"
-msgstr ""
+msgstr "Alkalmazott hálózati név"
 
 #: ui/createnet.ui:746
 msgid "Cust_om"
-msgstr ""
+msgstr "Egyéni"
 
 #: ui/createnet.ui:765
 msgid "<b>DNS domain name</b>"
-msgstr ""
+msgstr "<b>DNS domainnév</b>"
 
 #: ui/createpool.ui:9
 msgid "Add a New Storage Pool"
@@ -485,11 +484,11 @@ msgstr "Új tároló készlet létrehozása"
 
 #: ui/createpool.ui:50
 msgid "<span size='large'>Create storage pool</span>"
-msgstr ""
+msgstr "<span size='large'>Tárolókészlet létrehozása</span>"
 
 #: ui/createpool.ui:149
 msgid "Tar_get Path:"
-msgstr ""
+msgstr "Cél elérési út:"
 
 #: ui/createpool.ui:162 ui/createvol.ui:199
 msgid "F_ormat:"
@@ -501,7 +500,7 @@ msgstr "G_azdanév:"
 
 #: ui/createpool.ui:204
 msgid "Initiator _IQN:"
-msgstr ""
+msgstr "Kezdő _IQN:"
 
 #: ui/createpool.ui:215
 msgid "B_rowse"
