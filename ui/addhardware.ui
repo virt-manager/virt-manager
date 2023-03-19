@@ -139,7 +139,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <!-- n-columns=2 n-rows=2 -->
+                                  <!-- n-columns=3 n-rows=3 -->
                                   <object class="GtkGrid" id="table7">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
@@ -202,6 +202,21 @@
                                         <property name="top-attach">1</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -244,7 +259,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=3 n-rows=2 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="grid5">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -328,6 +343,15 @@
                                 <child>
                                   <placeholder/>
                                 </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="grid5-atkobject">
                                     <property name="AtkObject::accessible-name">controller-tab</property>
@@ -356,7 +380,7 @@
                                 <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
                                 <child>
-                                  <!-- n-columns=2 n-rows=3 -->
+                                  <!-- n-columns=3 n-rows=3 -->
                                   <object class="GtkGrid" id="table31">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
@@ -489,6 +513,15 @@
                                         <property name="top-attach">2</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -518,7 +551,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=1 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table33">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -547,6 +580,27 @@
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">0</property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="table33-atkobject">
@@ -598,7 +652,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=1 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -634,6 +688,27 @@
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">0</property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="table2-atkobject">
@@ -672,7 +747,6 @@
                                     <property name="margin-end">1</property>
                                     <property name="label" translatable="yes">Host _Device:</property>
                                     <property name="use-underline">True</property>
-                                    <property name="mnemonic-widget">host-device</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
@@ -688,12 +762,59 @@
                                     <property name="vexpand">True</property>
                                     <property name="shadow-type">etched-in</property>
                                     <child>
-                                      <object class="GtkTreeView" id="host-device">
+                                      <object class="GtkViewport">
                                         <property name="visible">True</property>
-                                        <property name="can-focus">True</property>
-                                        <property name="headers-visible">False</property>
-                                        <child internal-child="selection">
-                                          <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                        <property name="can-focus">False</property>
+                                        <child>
+                                          <!-- n-columns=3 n-rows=3 -->
+                                          <object class="GtkGrid">
+                                            <property name="visible">True</property>
+                                            <property name="can-focus">False</property>
+                                            <child>
+                                              <object class="GtkComboBox" id="iommu-groups">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">False</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkTreeView" id="host-device">
+                                                <property name="visible">True</property>
+                                                <property name="can-focus">True</property>
+                                                <child internal-child="selection">
+                                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
                                         </child>
                                       </object>
                                     </child>
@@ -725,7 +846,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=7 -->
+                              <!-- n-columns=3 n-rows=7 -->
                               <object class="GtkGrid" id="char-table">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -927,6 +1048,27 @@
                                     <property name="top-attach">6</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="char-table-atkobject">
                                     <property name="AtkObject::accessible-name">char-tab</property>
@@ -949,7 +1091,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=1 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table5">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -985,6 +1127,27 @@
                                     <property name="top-attach">0</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="table5-atkobject">
                                     <property name="AtkObject::accessible-name">video-tab</property>
@@ -1007,7 +1170,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=2 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table6">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -1060,6 +1223,21 @@
                                     <property name="top-attach">1</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="table6-atkobject">
                                     <property name="AtkObject::accessible-name">watchdog-tab</property>
@@ -1111,7 +1289,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=1 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table10">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -1142,6 +1320,27 @@
                                     <property name="top-attach">0</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="table10-atkobject">
                                     <property name="AtkObject::accessible-name">smartcard-tab</property>
@@ -1164,7 +1363,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=1 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="table39">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -1195,6 +1394,27 @@
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">0</property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="table39-atkobject">
@@ -1241,7 +1461,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=2 n-rows=1 -->
+                              <!-- n-columns=3 n-rows=3 -->
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -1271,6 +1491,27 @@
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">0</property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="grid1-atkobject">

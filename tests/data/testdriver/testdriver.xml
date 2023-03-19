@@ -3540,6 +3540,23 @@ ba</description>
   </capability>
 </device>
 
+<device>
+  <name>pci_104c_ac56</name>
+  <parent>computer</parent>
+  <driver>
+    <name>pcmcia</name>
+  </driver>
+  <capability type="pci">
+    <domain>0</domain>
+    <bus>15</bus>
+    <slot>0</slot>
+    <function>0</function>
+    <product id="0xac56">PCI1510 PC card Cardbus Controller</product>
+    <vendor id="0x104c">Texas Instruments</vendor>
+    <capability type='cardbus-bridge'/>
+  </capability>
+</device>
+
 
 <device>
   <name>pci_10df_fe00_0_scsi_host</name>

@@ -10,7 +10,7 @@ import threading
 
 import libvirt
 
-from virtinst import DeviceConsole
+from virtinst import DeviceConsole, DeviceHostdev
 from virtinst import DeviceController
 from virtinst import DeviceDisk
 from virtinst import DomainSnapshot
@@ -617,6 +617,26 @@ class vmmDomain(vmmLibvirtObject):
         xmlobj.add_device(devobj)
         self._redefine_xmlobj(xmlobj)
 
+    def _get_iommu_group(self, devobj, xmlobj):
+
+        '''This function is only executed when the user wants to remove a pci device.
+        It is used to get all pci devices in the same iommugroup as the selected pci device'''
+
+        # this part is used to get the selected pci device iommugroup
+        
+        
+        for trydev in self.conn.filter_nodedevs("pci"):
+            if trydev.xmlobj.compare_to_hostdev(devobj):
+                iommugroup = trydev.xmlobj.iommugroup
+
+        # this part is used to get all other devices in the iommugroup and return them
+
+        for dev in self.conn.filter_nodedevs("pci"):
+            for i in xmlobj.devices.hostdev:
+                if dev.xmlobj.compare_to_hostdev(i):
+                    if dev.xmlobj.iommugroup == iommugroup:
+                        yield i
+
     def remove_device(self, devobj):
         """
         Remove passed device from the inactive guest XML
@@ -628,15 +648,23 @@ class vmmDomain(vmmLibvirtObject):
             con = self.xmlobj.devices.console[0]
 
         xmlobj = self._make_xmlobj_to_define()
-        editdev = self._lookup_device_to_define(xmlobj, devobj, False)
-        if not editdev:
-            return  # pragma: no cover
+
+        if (isinstance(devobj, DeviceHostdev) and devobj.type == "pci"):
+            for i in self._get_iommu_group(devobj, xmlobj):
+                editdev = self._lookup_device_to_define(xmlobj, i, False)
+                if not editdev:
+                    return  # pragma: no cover
+                xmlobj.remove_device(editdev)
+        else:
+            editdev = self._lookup_device_to_define(xmlobj, devobj, False)
+            if not editdev:
+                return  # pragma: no cover
+            xmlobj.remove_device(editdev)
 
         if con:
             rmcon = xmlobj.find_device(con)
             if rmcon:
                 xmlobj.remove_device(rmcon)
-        xmlobj.remove_device(editdev)
 
         self._redefine_xmlobj(xmlobj)
 
