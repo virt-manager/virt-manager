@@ -20,6 +20,7 @@ from ..device.gfxdetails import vmmGraphicsDetails
 from ..device.mediacombo import vmmMediaCombo
 from ..device.netlist import vmmNetworkList
 from ..device.tpmdetails import vmmTPMDetails
+from ..device.shmemdetails import vmmShmemDetails
 from ..device.vsockdetails import vmmVsockDetails
 from ..lib.graphwidgets import Sparkline
 from ..oslist import vmmOSList
@@ -76,13 +77,14 @@ from ..delete import vmmDeleteStorage
  EDIT_CONTROLLER_MODEL,
 
  EDIT_TPM,
+ EDIT_SHMEM,
 
  EDIT_VSOCK_AUTO,
  EDIT_VSOCK_CID,
 
  EDIT_FS,
 
- EDIT_HOSTDEV_ROMBAR) = range(1, 38)
+ EDIT_HOSTDEV_ROMBAR) = range(1, 39)
 
 
 # Columns in hw list model
@@ -115,7 +117,8 @@ from ..delete import vmmDeleteStorage
  HW_LIST_TYPE_TPM,
  HW_LIST_TYPE_RNG,
  HW_LIST_TYPE_PANIC,
- HW_LIST_TYPE_VSOCK) = range(23)
+ HW_LIST_TYPE_VSOCK,
+ HW_LIST_TYPE_SHMEM,) = range(24)
 
 remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_GRAPHICS, HW_LIST_TYPE_SOUND, HW_LIST_TYPE_CHAR,
@@ -123,7 +126,7 @@ remove_pages = [HW_LIST_TYPE_NIC, HW_LIST_TYPE_INPUT,
                 HW_LIST_TYPE_WATCHDOG, HW_LIST_TYPE_CONTROLLER,
                 HW_LIST_TYPE_FILESYSTEM, HW_LIST_TYPE_SMARTCARD,
                 HW_LIST_TYPE_REDIRDEV, HW_LIST_TYPE_TPM,
-                HW_LIST_TYPE_RNG, HW_LIST_TYPE_PANIC, HW_LIST_TYPE_VSOCK]
+                HW_LIST_TYPE_RNG, HW_LIST_TYPE_PANIC, HW_LIST_TYPE_VSOCK, HW_LIST_TYPE_SHMEM, ]
 
 # Boot device columns
 (BOOT_KEY,
@@ -252,6 +255,7 @@ def _label_for_device(dev, disk_bus_index):
         "panic": _("Panic Notifier"),
         "smartcard": _("Smartcard"),
         "vsock": _("VirtIO VSOCK"),
+        "shmem": _("SHMEM"),
         "watchdog": _("Watchdog"),
     }
     return devmap[devtype]
@@ -299,6 +303,7 @@ def _icon_for_device(dev):
         "controller": "device_pci",
         "panic": "system-run",
         "vsock": "network-idle",
+        "shmem": "device_mem",
     }
     return typemap[devtype]
 
@@ -361,6 +366,10 @@ class vmmDetails(vmmGObjectUI):
         self.tpmdetails = vmmTPMDetails(self.vm, self.builder, self.topwin)
         self.widget("tpm-align").add(self.tpmdetails.top_box)
         self.tpmdetails.connect("changed", _e(EDIT_TPM))
+
+        self.shmemdetails = vmmShmemDetails(self.vm, self.builder, self.topwin)
+        self.widget("shmem-align").add(self.shmemdetails.top_box)
+        self.shmemdetails.connect("changed", _e(EDIT_SHMEM))
 
         self.vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
         self.widget("vsock-align").add(self.vsockdetails.top_box)
@@ -1331,6 +1340,8 @@ class vmmDetails(vmmGObjectUI):
                 success = self._apply_tpm(dev)
             elif pagetype is HW_LIST_TYPE_VSOCK:
                 success = self._apply_vsock(dev)
+            elif pagetype is HW_LIST_TYPE_SHMEM:
+                success = self._apply_shmem(dev)
         except Exception as e:
             self.err.show_err(_("Error applying changes: %s") % e)
 
@@ -1654,6 +1665,14 @@ class vmmDetails(vmmGObjectUI):
         return self._change_config(
                 self.vm.define_vsock, kwargs, devobj=devobj)
 
+    def _apply_shmem(self, devobj):
+        kwargs = {}
+
+        if self._edited(EDIT_SHMEM):
+            kwargs["newdev"] = self.shmemdetails.update_device(devobj)
+
+        return self._change_config(self.vm.define_shmem, kwargs, devobj=devobj)
+
     ###########################
     # Details page refreshers #
     ###########################
@@ -1723,6 +1742,8 @@ class vmmDetails(vmmGObjectUI):
                 self._refresh_panic_page(dev)
             elif pagetype == HW_LIST_TYPE_VSOCK:
                 self._refresh_vsock_page(dev)
+            elif pagetype == HW_LIST_TYPE_SHMEM:
+                self._refresh_shmem_page(dev)
         except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error refreshing hardware page: %s") % str(e))
             # Don't return, we want the rest of the bits to run regardless
@@ -2072,6 +2093,9 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_vsock_page(self, dev):
         self.vsockdetails.set_dev(dev)
+
+    def _refresh_shmem_page(self, shmemdev):
+        self.shmemdetails.set_dev(shmemdev)
 
     def _refresh_char_page(self, chardev):
         char_type = chardev.DEVICE_TYPE
@@ -2484,6 +2508,8 @@ class vmmDetails(vmmGObjectUI):
             update_hwlist(HW_LIST_TYPE_SMARTCARD, dev)
         for dev in self.vm.xmlobj.devices.tpm:
             update_hwlist(HW_LIST_TYPE_TPM, dev)
+        for dev in self.vm.xmlobj.devices.shmem:
+            update_hwlist(HW_LIST_TYPE_SHMEM, dev)
         for dev in self.vm.xmlobj.devices.rng:
             update_hwlist(HW_LIST_TYPE_RNG, dev)
         for dev in self.vm.xmlobj.devices.panic:

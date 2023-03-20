@@ -1049,6 +1049,19 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
+    def define_shmem(self, devobj, do_hotplug, newdev=_SENTINEL):
+        xmlobj = self._make_xmlobj_to_define()
+        editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
+        if not editdev:
+            return
+
+        if newdev != _SENTINEL:
+            editdev.name = newdev.name
+            editdev.size = newdev.size
+
+        self._process_device_define(editdev, xmlobj, do_hotplug)
+
+
 
     ####################
     # Hotplug routines #

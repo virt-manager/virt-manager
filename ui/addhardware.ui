@@ -314,11 +314,6 @@
                                     <property name="can-focus">False</property>
                                     <property name="has-entry">True</property>
                                     <signal name="changed" handler="on_controller_type_changed" swapped="no"/>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">True</property>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -478,11 +473,6 @@
                                         <property name="can-focus">False</property>
                                         <property name="halign">start</property>
                                         <property name="has-entry">True</property>
-                                        <child internal-child="entry">
-                                          <object class="GtkEntry" id="combobox-entry3">
-                                            <property name="can-focus">True</property>
-                                          </object>
-                                        </child>
                                       </object>
                                       <packing>
                                         <property name="left-attach">1</property>
@@ -624,11 +614,6 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">True</property>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -692,9 +677,6 @@
                                         <property name="visible">True</property>
                                         <property name="can-focus">True</property>
                                         <property name="headers-visible">False</property>
-                                        <child internal-child="selection">
-                                          <object class="GtkTreeSelection" id="treeview-selection2"/>
-                                        </child>
                                       </object>
                                     </child>
                                   </object>
@@ -802,7 +784,6 @@
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">_Name:</property>
                                     <property name="use-underline">True</property>
-                                    <property name="mnemonic-widget">combobox-entry</property>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
@@ -816,12 +797,6 @@
                                     <property name="halign">start</property>
                                     <property name="has-entry">True</property>
                                     <signal name="changed" handler="on_char_target_name_changed" swapped="no"/>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry" id="combobox-entry">
-                                        <property name="can-focus">True</property>
-                                        <property name="width-chars">20</property>
-                                      </object>
-                                    </child>
                                     <child internal-child="accessible">
                                       <object class="AtkObject" id="char-target-name-atkobject">
                                         <property name="AtkObject::accessible-name">char-target-name</property>
@@ -890,11 +865,6 @@
                                     <property name="can-focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">True</property>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -974,11 +944,6 @@
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
                                     <property name="has-entry">True</property>
-                                    <child internal-child="entry">
-                                      <object class="GtkEntry">
-                                        <property name="can-focus">True</property>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
@@ -1241,6 +1206,30 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkBox" id="shmem-align">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">14</property>
+                              </packing>
+                            </child>
+                            <child type="tab">
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="label" translatable="yes">shmem</property>
+                              </object>
+                              <packing>
+                                <property name="position">14</property>
+                                <property name="tab-fill">False</property>
+                              </packing>
+                            </child>
+                            <child>
                               <!-- n-columns=2 n-rows=1 -->
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
@@ -1279,7 +1268,7 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="position">14</property>
+                                <property name="position">15</property>
                               </packing>
                             </child>
                             <child type="tab">
@@ -1289,7 +1278,7 @@
                                 <property name="label" translatable="yes">rng</property>
                               </object>
                               <packing>
-                                <property name="position">14</property>
+                                <property name="position">15</property>
                                 <property name="tab-fill">False</property>
                               </packing>
                             </child>
@@ -1352,7 +1341,7 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="position">15</property>
+                                <property name="position">16</property>
                               </packing>
                             </child>
                             <child type="tab">
@@ -1362,7 +1351,7 @@
                                 <property name="label" translatable="yes">panic</property>
                               </object>
                               <packing>
-                                <property name="position">15</property>
+                                <property name="position">16</property>
                                 <property name="tab-fill">False</property>
                               </packing>
                             </child>
@@ -1380,7 +1369,7 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="position">16</property>
+                                <property name="position">17</property>
                               </packing>
                             </child>
                             <child type="tab">
@@ -1390,7 +1379,7 @@
                                 <property name="label">vsock</property>
                               </object>
                               <packing>
-                                <property name="position">16</property>
+                                <property name="position">17</property>
                                 <property name="tab-fill">False</property>
                               </packing>
                             </child>
