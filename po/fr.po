@@ -25,21 +25,22 @@
 # Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2019. #zanata
 # Maxime GASTON <maxime@gaston.sh>, 2019. #zanata
 # Arnaud T. <listes.00@gmail.com>, 2021.
+# grimst <grimaitres@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2021-11-01 19:05+0000\n"
-"Last-Translator: Laurent Bigonville <bigon@debian.org>\n"
-"Language-Team: French <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fr/>\n"
+"PO-Revision-Date: 2023-03-24 15:20+0000\n"
+"Last-Translator: grimst <grimaitres@gmail.com>\n"
+"Language-Team: French <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -84,7 +85,7 @@ msgstr "Gérer des machines virtuelles"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr ""
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -198,7 +199,7 @@ msgstr "panique"
 #: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
-msgstr ""
+msgstr "_Annuler"
 
 #: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
@@ -276,7 +277,7 @@ msgstr "Modifier le chemin de stockage"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: ui/clone.ui:128 ui/hoststorage.ui:417
 msgid "Size:"
@@ -304,7 +305,7 @@ msgstr "_Parcourir…"
 
 #: ui/clone.ui:273
 msgid "New _Path:"
-msgstr ""
+msgstr "Nouveau _Chemin :"
 
 #: ui/clone.ui:306
 msgid "Clone Virtual Machine"
@@ -323,7 +324,6 @@ msgid "Connection:"
 msgstr "Connexion :"
 
 #: ui/clone.ui:566 ui/createvm.ui:2234
-#, fuzzy
 msgid "Storage:"
 msgstr "Stockage :"
 
@@ -442,7 +442,7 @@ msgstr "_Liste des périphériques :"
 
 #: ui/createnet.ui:244
 msgid "De_vice:"
-msgstr ""
+msgstr "Ap_pareil :"
 
 #: ui/createnet.ui:287
 msgid "_Enable IPv4"
@@ -651,6 +651,8 @@ msgid ""
 "<small>Kernel/initrd settings can be configured with 'Customize before "
 "install' on the final page.</small>"
 msgstr ""
+"<small>Les paramètres noyau/initrd peuvent être configurés avec 'Customize "
+"before install' sur la dernière page."
 
 #: ui/createvm.ui:1171
 msgid "Provide the _application path:"
@@ -806,16 +808,14 @@ msgid "Finish"
 msgstr "Terminer"
 
 #: ui/createvm.ui:2415
-#, fuzzy
-#| msgid "_Backend:"
 msgid "_Back"
-msgstr "_Backend :"
+msgstr "_Back"
 
 #: ui/createvm.ui:2431
 #, fuzzy
 #| msgid "Forwarding:"
 msgid "_Forward"
-msgstr "Transfert :"
+msgstr "_Transférer"
 
 #: ui/createvol.ui:24
 msgid "Add a Storage Volume"
@@ -853,7 +853,7 @@ msgstr "_Allouer tout le volume maintenant"
 
 #: ui/createvol.ui:377
 msgid "Pa_th:"
-msgstr ""
+msgstr "Che_min :"
 
 #: ui/createvol.ui:423
 #, fuzzy
@@ -1053,10 +1053,8 @@ msgid "MiB"
 msgstr "Mio"
 
 #: ui/details.ui:1913
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "Disque et mémoire externes"
+msgstr "Activer la _mémoire partagée"
 
 #: ui/details.ui:1943
 msgid "<b>Memory</b>"
@@ -1140,7 +1138,7 @@ msgstr "B_us du disque :"
 
 #: ui/details.ui:2828
 msgid "disk-bus-label"
-msgstr ""
+msgstr "disk-bus-label"
 
 #: ui/details.ui:2876
 msgid "<b>Virtual Disk</b>"
@@ -1295,15 +1293,13 @@ msgid "<b>Panic Notifier</b>"
 msgstr "<b>Notificateur de panique</b>"
 
 #: ui/details.ui:4845
-#, fuzzy
-#| msgid "Removable"
 msgid "_Remove"
-msgstr "Amovible"
+msgstr "_Enlever"
 
 #: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
-msgstr ""
+msgstr "_Appliquer"
 
 #: ui/fsdetails.ui:30
 msgid "E_xport filesystem as readonly mount"
@@ -1323,7 +1319,7 @@ msgstr "_Format :"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "Message d’avertissement blabla foo"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1361,10 +1357,12 @@ msgstr "Type d’écoute :"
 #: ui/gfxdetails.ui:365
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
+"OpenGL ne fonctionne qu’avec des graphiques 'virtio' avec 'accélération 3D' "
+"activée"
 
 #: ui/gfxdetails.ui:381
 msgid "OpenGL only works with 'Listen type' value 'none'"
-msgstr ""
+msgstr "OpenGL ne fonctionne qu’avec 'Listen type' valeur 'none'"
 
 #: ui/host.ui:27 ui/manager.ui:26 ui/vmwindow.ui:25
 msgid "_File"
@@ -1475,10 +1473,8 @@ msgid "Cancel and close dialog"
 msgstr "Annuler et fermer les boîtes de dialogue"
 
 #: ui/hoststorage.ui:170
-#, fuzzy
-#| msgid "Choose Volume"
 msgid "Ch_oose Volume"
-msgstr "Choisir le volume"
+msgstr "Ch_oisir le volume"
 
 #: ui/hoststorage.ui:174
 msgid "Choose the selected volume"
@@ -1519,11 +1515,11 @@ msgstr "_Nouvelle machine virtuelle"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr ""
+msgstr "_Fermer"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr ""
+msgstr "_Quitter"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1538,10 +1534,8 @@ msgid "_Virtual Machine Details"
 msgstr "Détails de la machine _virtuelle"
 
 #: ui/manager.ui:125
-#, fuzzy
-#| msgid "Preferences"
 msgid "_Preferences"
-msgstr "Préférences"
+msgstr "_Préférences"
 
 #: ui/manager.ui:138 ui/vmwindow.ui:112
 msgid "_View"
@@ -1577,7 +1571,7 @@ msgstr "A_ide"
 
 #: ui/manager.ui:222
 msgid "_About"
-msgstr ""
+msgstr "_À propos"
 
 #: ui/manager.ui:253
 msgid "Create a new virtual machine"
@@ -1628,11 +1622,11 @@ msgstr "Migrer la machine virtuelle"
 
 #: ui/migrate.ui:108
 msgid "Migrating VM:"
-msgstr ""
+msgstr "Migration de la VM :"
 
 #: ui/migrate.ui:124
 msgid "Original host:"
-msgstr ""
+msgstr "Hôte d'origine :"
 
 #: ui/migrate.ui:140
 msgid "New _host:"
@@ -1732,7 +1726,7 @@ msgstr "_Migrer"
 
 #: ui/netlist.ui:17
 msgid "De_vice name:"
-msgstr ""
+msgstr "Nom de l'ap_pareil :"
 
 #: ui/netlist.ui:63
 msgid ""
@@ -1744,13 +1738,13 @@ msgstr ""
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
-msgstr ""
+msgstr "<small>Impossible de trouver un réseau par défaut approprié. </small>"
 
 #: ui/netlist.ui:146
 #, fuzzy
 #| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Port :"
+msgstr "_Groupe port_ :"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1762,6 +1756,9 @@ msgid ""
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
+"Vous ne trouver pas le système d’exploitation que vous recherchez ?\n"
+"Essayez de sélectionner une distribution ou une version similaire, ou "
+"utilisez l’une des options 'Générique'."
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
@@ -1781,7 +1778,7 @@ msgstr "Activer l’introspection de la VM par libgues_tfs"
 
 #: ui/preferences.ui:124
 msgid "Enable _XML editing"
-msgstr ""
+msgstr "Activer l'édition _XML"
 
 #: ui/preferences.ui:144
 msgid "<b>General</b>"
@@ -1856,12 +1853,12 @@ msgstr "Valeur par _défaut du processeur :"
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"Micrologiciel par défaut pour les nouvelles machines virtuelles. Démarrez "
+"avec le BIOS ou l’UEFI."
 
 #: ui/preferences.ui:490
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "Firm_ware :"
+msgstr "x86 _Firmware:"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
@@ -1909,6 +1906,8 @@ msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"Si elle est désactivée, la fenêtre de la VM ne se connecte pas "
+"automatiquement à la console graphique de la VM en cours d’exécution."
 
 #: ui/preferences.ui:701
 msgid "Console autoconnec_t:"
@@ -4164,7 +4163,7 @@ msgstr "SPAPR"
 #, fuzzy
 #| msgid "Emulator:"
 msgid "Emulated"
-msgstr "Émulateur :"
+msgstr "Émulé"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
