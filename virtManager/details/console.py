@@ -514,7 +514,9 @@ class vmmConsolePages(vmmGObjectUI):
         viewer_alloc = self.widget("console-gfx-scroll").get_allocation()
         desktop_w, desktop_h = self._viewer.console_get_desktop_resolution()
 
-        self.topwin.unmaximize()
+        if self.topwin.is_maximized():
+            self.topwin.unmaximize()
+
         self.topwin.resize(
             desktop_w + (top_w - viewer_alloc.width),
             desktop_h + (top_h - viewer_alloc.height))
