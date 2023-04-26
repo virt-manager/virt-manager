@@ -12,7 +12,7 @@ Release: 1%{?dist}
 %global verrel %{version}-%{release}
 
 Summary: Desktop tool for managing virtual machines via libvirt
-License: GPLv2+
+License: GPL-2.0-or-later
 BuildArch: noarch
 URL: https://virt-manager.org/
 Source0: https://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar.gz
