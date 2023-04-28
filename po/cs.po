@@ -10,16 +10,16 @@
 # Zdenek Styblik <stybla@turnovfree.net>, 2010
 # Zdenek <chmelarz@gmail.com>, 2016. #zanata
 # Zdenek <chmelarz@gmail.com>, 2017. #zanata
-# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021, 2022.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021, 2022.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021, 2022.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021, 2022, 2023.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021, 2022, 2023.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021, 2022, 2023.
 # Zdenek Chmelar <chmelarz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2022-05-07 13:18+0000\n"
+"PO-Revision-Date: 2023-04-30 14:21+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/cs/>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -254,7 +254,7 @@ msgstr "Po_drobnosti"
 
 #: ui/clone.ui:8
 msgid "Change storage path"
-msgstr "Změnit umístění úložiště"
+msgstr "Změnit popis umístění úložiště"
 
 #: ui/clone.ui:41 ui/connectauth.ui:37
 msgid "_OK"
@@ -340,7 +340,7 @@ msgstr "<b>Konzole není momentálně k dispozici</b>"
 # po/ipa
 #: ui/console.ui:57 virtManager/addhardware.py:227
 msgid "Serial"
-msgstr "Sériový"
+msgstr "Sériové"
 
 #: ui/console.ui:125
 msgid "_Password:"
@@ -385,7 +385,7 @@ msgstr "Připojit se na vzdáleného hostitele p_rostřednictvím SSH"
 
 #: ui/createconn.ui:133
 msgid "_Autoconnect:"
-msgstr "_Automatické připojení:"
+msgstr "_Automatické připojování:"
 
 #: ui/createconn.ui:183
 msgid "H_ostname:"
@@ -398,17 +398,18 @@ msgid ""
 "guests will not be available. Networking options\n"
 "are very limited. </small>"
 msgstr ""
-"<small>Relace v uživatelském režimu QEMU není pro virt-manager\n"
-"výchozí. Je pravděpodobné, že nebude k dispozici žádný už existující\n"
-"QEMU/KVM host. Také možnosti sítě budou velmi omezené. </small>"
+"<small>Relace QEMU v uživatelském režimu není ve virt-manager jako výchozí.\n"
+"Je pravděpodobné, že žádní z případných už existujících QEMU/KVM hostů "
+"nebudou k dispozici.\n"
+"Také možnosti síťování budou jen velmi omezené. </small>"
 
 #: ui/createconn.ui:259
 msgid "Cu_stom URI:"
-msgstr "Uživatel_sky určená URI:"
+msgstr "Uživatel_sky určený URI:"
 
 #: ui/createconn.ui:308
 msgid "Generated URI:"
-msgstr "Vytvořená URI:"
+msgstr "Vytvořený URI:"
 
 #: ui/createnet.ui:9
 msgid "Create a new virtual network"
@@ -627,7 +628,7 @@ msgstr "PXE"
 
 #: ui/createvm.ui:1038
 msgid "Provide the existing stora_ge path:"
-msgstr "_Zadejte umístění existujícího úložiště:"
+msgstr "_Zadejte popis umístění existujícího úložiště:"
 
 #: ui/createvm.ui:1072 ui/createvm.ui:1200 ui/createvm.ui:1287
 msgid "B_rowse..."
@@ -836,7 +837,7 @@ msgstr "Ka_pacita:"
 
 #: ui/createvol.ui:331
 msgid "_Allocate entire volume now"
-msgstr "Přidělit rovnou celý sv_azek"
+msgstr "Přidělit rovnou celou velikost sv_azku"
 
 #: ui/createvol.ui:377
 msgid "Pa_th:"
@@ -1057,11 +1058,11 @@ msgstr "Zapnout virt. stroj při startu hostitele"
 
 #: ui/details.ui:2016
 msgid "<b>Autostart</b>"
-msgstr "<b>Automatické spuštění</b>"
+msgstr "<b>Automatické spouštění</b>"
 
 #: ui/details.ui:2063
 msgid "Init _path:"
-msgstr "_Umístění init:"
+msgstr "_Popis umístění init:"
 
 #: ui/details.ui:2077
 msgid "Init ar_gs:"
@@ -1422,7 +1423,7 @@ msgstr "NAT na libovolné zařízení"
 
 #: ui/hostnets.ui:439 virtManager/createnet.py:112
 msgid "Routed"
-msgstr "Směrované"
+msgstr "Směrovaná"
 
 #: ui/hostnets.ui:537
 msgid "Add Network"
@@ -1511,11 +1512,11 @@ msgstr "_Nový virtuální stroj"
 
 #: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
 msgid "_Close"
-msgstr "_Zavřít"
+msgstr "_Zavřít toto okno"
 
 #: ui/manager.ui:69 ui/vmwindow.ui:59
 msgid "_Quit"
-msgstr "_Ukončit"
+msgstr "_Ukončit celou aplikaci"
 
 #: ui/manager.ui:83
 msgid "_Edit"
@@ -1913,15 +1914,15 @@ msgstr "Konzo_le"
 
 #: ui/preferences.ui:775
 msgid "_Force Poweroff:"
-msgstr "_Vynutit vypnutí:"
+msgstr "_Vynucené vypínání:"
 
 #: ui/preferences.ui:802
 msgid "Poweroff/_Reboot/Save:"
-msgstr "Vypnout/_Restartovat/Uložit:"
+msgstr "Vypínání/_Restartování/Ukládání:"
 
 #: ui/preferences.ui:816
 msgid "_Pause:"
-msgstr "_Pozastavit:"
+msgstr "_Pozastavení:"
 
 #: ui/preferences.ui:869
 msgid "Device re_moval:"
@@ -1937,7 +1938,7 @@ msgstr "_Mazání úložiště:"
 
 #: ui/preferences.ui:939
 msgid "<b>Confirmations</b>"
-msgstr "<b>Potvrzení</b>"
+msgstr "<b>Potvrzování</b>"
 
 #: ui/preferences.ui:957
 msgid "Feed_back"
@@ -2038,7 +2039,7 @@ msgstr ""
 
 #: ui/vmwindow.ui:99
 msgid "_Redirect USB device"
-msgstr "Přesmě_rované USB zařízení"
+msgstr "Přesmě_rovat USB zařízení"
 
 #: ui/vmwindow.ui:121
 msgid "_Console"
@@ -2082,7 +2083,7 @@ msgstr "Ko_nzole"
 
 #: ui/vmwindow.ui:247
 msgid "_Autoconnect"
-msgstr "_Automatické připojení"
+msgstr "_Automatické připojování"
 
 #: ui/vmwindow.ui:262
 msgid "T_oolbar"
@@ -2782,11 +2783,11 @@ msgstr "Chyba při spouštění dialogu připojení: %s"
 
 #: virtManager/createconn.py:117
 msgid "user session"
-msgstr "uživatelská relace"
+msgstr "– uživatelská relace"
 
 #: virtManager/createconn.py:123
 msgid "Custom URI..."
-msgstr "Uživatelsky určená URI…"
+msgstr "Uživatelsky určený URI…"
 
 #: virtManager/createconn.py:241
 msgid "A hostname is required for remote connections."
@@ -2811,11 +2812,11 @@ msgstr "NAT"
 # auto translated by TM merge from project: abrt, version: rhel7, DocId: abrt
 #: virtManager/createnet.py:113
 msgid "Open"
-msgstr "Otevřené"
+msgstr "Otevřená"
 
 #: virtManager/createnet.py:114
 msgid "Isolated"
-msgstr "Izolované"
+msgstr "Izolovaná"
 
 #: virtManager/createnet.py:115
 msgid "SR-IOV pool"
@@ -2864,7 +2865,7 @@ msgstr "_Název skupiny svazků:"
 
 #: virtManager/createpool.py:215
 msgid "_Source Path:"
-msgstr "Umí_stění zdroje:"
+msgstr "Popi_s umístění zdroje:"
 
 #: virtManager/createpool.py:217
 msgid "_Source IQN:"
@@ -2980,9 +2981,9 @@ msgstr "Na hostiteli je k dispozici až %(maxmem)s"
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgid_plural "Up to %(numcpus)d available"
-msgstr[0] "Je k dispozici až %(numcpus)d"
-msgstr[1] "Jsou k dispozici až %(numcpus)d"
-msgstr[2] "Je k dispozici až %(numcpus)d"
+msgstr[0] "K dispozici až %(numcpus)d"
+msgstr[1] "K dispozici až %(numcpus)d"
+msgstr[2] "K dispozici až %(numcpus)d"
 
 #: virtManager/createvm.py:695
 msgid "No active connection to install on."
@@ -3610,11 +3611,11 @@ msgstr "Chyba při změně hodnoty automatického spouštění: %s"
 
 #: virtManager/details/details.py:1500
 msgid "Cannot set initrd without specifying a kernel path"
-msgstr "Nelze nastavit initrd a neuvést popis umístění jádra"
+msgstr "Není možné nastavit initrd a neuvést také popis umístění jádra"
 
 #: virtManager/details/details.py:1503
 msgid "Cannot set kernel arguments without specifying a kernel path"
-msgstr "Nelze nastavit argumenty jádra a neuvést popis umístění jádra"
+msgstr "Není možné nastavit argumenty jádra a neuvést popis umístění jádra"
 
 #: virtManager/details/details.py:1510
 msgid "An init path must be specified"
@@ -4223,7 +4224,7 @@ msgstr "Izolovaná síť, směrování vypnuto"
 
 #: virtManager/hostnets.py:253 virtManager/hoststorage.py:321
 msgid "On Boot"
-msgstr "Při startu"
+msgstr "Při startu operačního systému"
 
 #: virtManager/hostnets.py:270
 #, python-format
@@ -4290,7 +4291,7 @@ msgstr "%(bytesfree)s volné / <i>%(bytesinuse)s využito</i>"
 
 #: virtManager/hoststorage.py:332
 msgid "Create new volume"
-msgstr "Vytvořit nový oddíl"
+msgstr "Vytvořit nový svazek"
 
 #: virtManager/hoststorage.py:339
 msgid "Pool does not support volume creation"
@@ -4672,7 +4673,7 @@ msgid ""
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
-"Pro tunelované stěhování je třeba na dálku přístupná libvirt URI, ale "
+"Pro tunelované stěhování je třeba na dálku přístupný libvirt URI, ale "
 "vybrané spojení je místní URI. Pokud nepřidáte transport, libvirt toto "
 "odmítne."
 
@@ -4802,7 +4803,7 @@ msgstr "Složka exportovaná na síti"
 # DocId: anaconda
 #: virtManager/object/storagepool.py:28
 msgid "LVM Volume Group"
-msgstr "Skupina LVM svazku (VG)"
+msgstr "LVM skupina svazků (VG)"
 
 #: virtManager/object/storagepool.py:29
 msgid "Physical Disk Device"
@@ -4814,7 +4815,7 @@ msgstr "iSCSI cíl"
 
 #: virtManager/object/storagepool.py:31
 msgid "SCSI Host Adapter"
-msgstr "Hostitelský SCSI adaptér"
+msgstr "SCSI adaptér hostitele"
 
 #: virtManager/object/storagepool.py:32
 msgid "Multipath Device Enumerator"
@@ -4851,7 +4852,7 @@ msgstr "Nikdy"
 
 #: virtManager/preferences.py:113
 msgid "Fullscreen only"
-msgstr "Pouze celá obrazovka"
+msgstr "Pouze při přes celou obrazovku"
 
 #: virtManager/preferences.py:114
 msgid "Always"
@@ -4889,7 +4890,7 @@ msgstr "Nejbližší model procesoru hostitele"
 
 #: virtManager/preferences.py:183
 msgid "System default"
-msgstr "Systémové výchozí"
+msgstr "Systémový výchozí"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -4906,8 +4907,8 @@ msgid ""
 "while you have desired keys pressed."
 msgstr ""
 "Nyní můžete určit zachycovací klávesy jejich stisknutím.\n"
-"Pro potvrzení výběru klikněte na OK,\n"
-"zatímco máte stisknuté požadované klávesy."
+"Stiskněte a držte požadované klávesy a přitom jejich výběr\n"
+"potvrďte kliknutím na OK."
 
 #: virtManager/preferences.py:334
 msgid "Please press desired grab key combination"
@@ -4923,7 +4924,7 @@ msgstr "Vyberte svazek úložiště"
 
 #: virtManager/systray.py:119
 msgid "_Show Virtual Machine Manager"
-msgstr "Zobrazit Správu virtuálních strojů"
+msgstr "Zobrazit _Správu virtuálních strojů"
 
 #: virtManager/virtmanager.py:42
 msgid "Error starting Virtual Machine Manager"
@@ -5025,7 +5026,7 @@ msgid ""
 "start up?"
 msgstr ""
 "Nedaří se navázat v chodu domény. Přejete si\n"
-"odebrat zachycený stav a provést normální\n"
+"odebrat uložený stav a provést normální\n"
 "spuštění?"
 
 #: virtManager/vmmenu.py:233
@@ -5105,7 +5106,7 @@ msgstr "Chyba při inicializaci ovládacího prvku spice USB zařízení"
 
 #: virtManager/vmwindow.py:522
 msgid "Select USB devices for redirection"
-msgstr "Vyberte USB zařízení pro přesměrování"
+msgstr "Vyberte USB zařízení, která přesměrovat"
 
 #: virtManager/vmwindow.py:554
 msgid "Save Virtual Machine Screenshot"
@@ -5128,7 +5129,7 @@ msgstr ""
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
-"Pokud tuto kartu opustíte, vaše změny v XML budou ztraceny. Opravdu to "
+"Pokud tuto kartu opustíte, provedené změny v XML budou ztraceny. Opravdu to "
 "chcete?"
 
 #: virtinst/capabilities.py:277
@@ -5603,7 +5604,7 @@ msgid ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
-"Předá argumenty přímo emulátoru QEMU. Např.:\n"
+"Předat argumenty přímo emulátoru QEMU. Např.:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
@@ -6269,7 +6270,7 @@ msgid ""
 "outside the scope of this tool. For these types of changes, please see virt-"
 "sysprep(1)."
 msgstr ""
-"Duplikovat virtuální stroj a změnit všechna nastavení pro hosta, které se "
+"Zduplikovat virtuální stroj a změnit všechna nastavení pro hosta, které se "
 "nesmí opakovat, jako MAC adresa, název, atp.\n"
 "\n"
 "Obsah virt. stroje tím NENÍ ovlivněn: virt-clone nemění nic _uvnitř_ "
@@ -6397,7 +6398,7 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
-"-c zadáno s něčím, co vypadá jako URI libvirt. Měli jste na mysli --connect? "
+"-c zadáno s něčím, co vypadá jako libvirt URI. Měli jste na mysli --connect? "
 "Pokud ne, použijte namísto toho --cdrom"
 
 #: virtinst/virtinstall.py:125
@@ -6503,7 +6504,7 @@ msgstr "S použitím výchozího --name {vm_name}"
 #: virtinst/virtinstall.py:477
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
-msgstr "S využitím pro kontejner výchozích --memory {megabytes}"
+msgstr "S použitím pro kontejner výchozích --memory {megabytes}"
 
 #: virtinst/virtinstall.py:496
 #, python-brace-format
@@ -6600,9 +6601,9 @@ msgstr "Čeká se na dokončení instalace."
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] "Čeká se %(minutes)d na dokončení instalace."
-msgstr[1] "Čekají se %(minutes)d na dokončení instalace."
-msgstr[2] "Čeká se %(minutes)d na dokončení instalace."
+msgstr[0] "Čeká se %(minutes)d minutu na dokončení instalace."
+msgstr[1] "Čekají se %(minutes)d minuty na dokončení instalace."
+msgstr[2] "Čeká se %(minutes)d minut na dokončení instalace."
 
 #: virtinst/virtinstall.py:743
 #, python-format
@@ -7116,7 +7117,7 @@ msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
-"XML se po definování domény nezměnilo. Nejspíš jste změnit hodnotu, kterou "
+"XML se po definování domény nezměnilo. Nejspíš jste změnili hodnotu, kterou "
 "libvirt nastavuje už ve výchozím stavu."
 
 #: virtinst/virtxml.py:576
