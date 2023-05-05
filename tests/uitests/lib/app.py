@@ -222,7 +222,7 @@ class VMMDogtailApp(object):
         # Give time for the child window to appear and possibly grab focus
         self.sleep(1)
         self.get_manager(check_active=False)
-        dogtail.rawinput.drag(childwin.title_coordinates(), (1000, 1000))
+        dogtail.rawinput.dragWithTrajectory(childwin.title_coordinates(), (1000, 1000))
         self.manager_conn_disconnect(conn_label)
         utils.check(lambda: not childwin.showing)
 
