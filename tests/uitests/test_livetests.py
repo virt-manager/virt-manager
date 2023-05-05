@@ -471,9 +471,16 @@ def _testLiveHotplug(app, fname):
     lib.utils.check(lambda: tab.showing)
     entry.set_text(fname)
     appl.click()
+    # F38 CDROM change is broken:
+    # https://gitlab.com/qemu-project/qemu/-/issues/933
+    # pylint: disable=unreachable
+    app.click_alert_button("changes will take effect", "OK")
+    return
+
     lib.utils.check(lambda: not appl.sensitive)
     lib.utils.check(lambda: entry.text == fname)
     entry.click_secondary_icon()
+
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
     lib.utils.check(lambda: not entry.text)
