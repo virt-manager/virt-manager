@@ -228,15 +228,17 @@ def testManagerWindowReposition(app):
     fmenu.find("View Manager", "menu item").click()
     lib.utils.check(lambda: manager.active)
 
-    manager.window_maximize()
-    newx = manager.position[0]
-    newy = manager.position[1]
+    curxy = manager.title_coordinates()
+    newxy = curxy[0] + 200, curxy[1] + 200
+    import dogtail.rawinput
+    dogtail.rawinput.dragWithTrajectory(curxy, newxy)
+    checkxy = manager.position
     manager.window_close()
     host.click_title()
     host.find("File", "menu").click()
     host.find("View Manager", "menu item").click()
     lib.utils.check(lambda: manager.showing)
-    assert manager.position == (newx, newy)
+    assert manager.position == checkxy
 
 
 
