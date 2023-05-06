@@ -28,14 +28,14 @@
 # Osvaldo R. Salazar S. <orodolfo.salazars@gmail.com>, 2021.
 # Pedro Luis Valades Viera <perikiyoxd@gmail.com>, 2021, 2023.
 # Nicholas Di Nicola <nicodinicola7@outlook.com>, 2022.
-# Miguel Ángel Sánchez <maletils@gmail.com>, 2022.
+# Miguel Ángel Sánchez <maletils@gmail.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2023-02-05 05:20+0000\n"
-"Last-Translator: Pedro Luis Valades Viera <perikiyoxd@gmail.com>\n"
+"PO-Revision-Date: 2023-05-07 11:21+0000\n"
+"Last-Translator: Miguel Ángel Sánchez <maletils@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/es/>\n"
 "Language: es\n"
@@ -335,9 +335,9 @@ msgid ""
 "span>"
 msgstr ""
 "<span size='small'>La clonación <u>no</u> altera los contenidos del SO del "
-"invitado. Si necesita hacer cosas\n"
-"como cambiar contraseñas o IPs estáticas, vea la herramienta virt-sysprep(1)."
-"</span>"
+"huésped. Si necesita hacer cosas\n"
+"como cambiar contraseñas o IPs estáticas, consulte la herramienta virt-"
+"sysprep(1).</span>"
 
 #: ui/clone.ui:706
 msgid "C_lone"
@@ -408,9 +408,9 @@ msgid ""
 "guests will not be available. Networking options\n"
 "are very limited. </small>"
 msgstr ""
-"<small>Una sesión QEMU en modo usuario no es lo predeterminado\n"
-"de virt-manager. Es probable que cualesquiera invitados\n"
-"QEMU/KVM pre-existentes no estarán disponibles.\n"
+"<small>Las sesiones QEMU en modo de usuario no son las\n"
+"predeterminadas en virt-manager. Es probable que los\n"
+"huéspedes QEMU/KVM pre-existentes no estén disponibles.\n"
 "Las opciones de red son muy limitadas. </small>"
 
 #: ui/createconn.ui:259
@@ -1539,7 +1539,7 @@ msgstr "_Gráfico"
 
 #: ui/manager.ui:157
 msgid "_Guest CPU Usage"
-msgstr "Uso de CPU del equipo huésped"
+msgstr "Uso de CPU del huésped"
 
 #: ui/manager.ui:167
 msgid "_Host CPU Usage"
@@ -1674,11 +1674,11 @@ msgid ""
 "\n"
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
-"Por defecto libvirt rechaza migrar a una VM por ciertas configuraciones que "
-"podrían llevar a invitados con problemas de funcionamiento, por ejemplo, si "
-"el modo de caché de un disco no es 'ninguno'.\n"
+"Por defecto libvirt no migrará cualquier MV con ciertas configuraciones que "
+"podrían acabar en huéspedes inoperativos, como por ejemplo, si el modo de "
+"caché de un disco no es 'ninguno'.\n"
 "\n"
-"Habilitar esta opción le dice a libvirt que omita esas comprobaciones."
+"Habilitando esta opción le dice a libvirt que omita esas comprobaciones."
 
 #: ui/migrate.ui:541
 msgid "A_llow unsafe:"
@@ -1725,8 +1725,8 @@ msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
 msgstr ""
-"<small>En la mayoría de las configuraciones, macvtap no funciona para la "
-"comunicación en red de anfitrión a invitado.</small>"
+"<small>En la mayoría de las configuraciones, macvtap no permite la "
+"comunicación de red entre anfitrión y huésped.</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
@@ -1880,13 +1880,13 @@ msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
-"Cambiar la resolución del invitado cuando el tamaño de la ventana de este "
-"sea cambiado. Sólo funciona con invitados configurados apropiadamente, que "
-"usen Spice y el agente de escritorio."
+"Cambiar la resolución del huésped cuando el tamaño de la ventana de este se "
+"cambie. Sólo funciona con huéspedes configurados apropiadamente, que usen "
+"spice y el agente de escritorio."
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
-msgstr "_Redimensionar invitado con la ventana:"
+msgstr "_Redimensionar huésped con la ventana:"
 
 #: ui/preferences.ui:675
 msgid "SPICE _USB Redirection:"
@@ -2141,7 +2141,7 @@ msgstr "_Cancelar la instalación"
 
 #: ui/vsockdetails.ui:23
 msgid "Guest C_ID:"
-msgstr "C_ID invitado:"
+msgstr "C_ID huésped:"
 
 #: ui/xmleditor.ui:96
 msgid ""
@@ -2282,8 +2282,7 @@ msgstr "Error al modificar la configuración de MV: %s"
 
 #: virtManager/addhardware.py:371
 msgid "These changes will take effect after the next guest shutdown."
-msgstr ""
-"Estos cambios serán efectivos  tras el siguiente apagado del equipo huésped."
+msgstr "Estos cambios se harán efectivos tras el siguiente apagado del huésped."
 
 #: virtManager/addhardware.py:421
 msgid "Pseudo TTY"
@@ -2412,7 +2411,7 @@ msgstr "Forzar apagado del huésped"
 
 #: virtManager/addhardware.py:548
 msgid "Pause the guest"
-msgstr "Pausa el huésped"
+msgstr "Pausar el huésped"
 
 #: virtManager/addhardware.py:549
 msgid "No action"
@@ -2480,7 +2479,7 @@ msgid ""
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
 "%s no está activo en el sistema anfitrión.\n"
-"Por favor, inicie mdev en el sistema anfitrión antes de añadirlo al invitado."
+"Por favor, inicie mdev en el sistema anfitrión antes de añadirlo al huésped."
 
 #: virtManager/addhardware.py:797
 msgid "No Devices Available"
@@ -2563,8 +2562,8 @@ msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr ""
-"Este dispositivo no pudo añadirse a la máquina en ejecución.¿Le gustaría "
-"hacer que el dispositivo este disponible tras el siguiente apagado del "
+"Este dispositivo no pudo añadirse a la máquina en ejecución. ¿Le gustaría "
+"hacer que el dispositivo esté disponible tras el siguiente apagado del "
 "huésped?"
 
 #: virtManager/addhardware.py:1259
@@ -2589,7 +2588,7 @@ msgstr ""
 #: virtManager/addhardware.py:1309
 #, python-format
 msgid "The device is already in use by other guests %s"
-msgstr "El dispositivo ya está en uso por otros invitados (guests) %s"
+msgstr "El dispositivo ya está en uso por otros huéspedes %s"
 
 #: virtManager/addhardware.py:1311
 msgid "Do you really want to use the device?"
@@ -3121,7 +3120,7 @@ msgstr "Error de parámetro de almacenamiento."
 
 #: virtManager/createvm.py:1706
 msgid "Invalid guest name"
-msgstr "Nombre de invitado no válido"
+msgstr "Nombre de huésped no válido"
 
 #: virtManager/createvm.py:1789
 msgid "Detecting..."
@@ -3258,7 +3257,7 @@ msgstr "Error al retirar dispositivo: %s"
 
 #: virtManager/delete.py:354
 msgid "This change will take effect after the next guest shutdown."
-msgstr "Este cambio tendrá efecto tras el siguiente apagado del equipo huésped"
+msgstr "Este cambio se hará efectivo tras el siguiente apagado del huésped."
 
 #: virtManager/delete.py:357
 msgid "Storage will not be deleted."
@@ -3348,7 +3347,7 @@ msgstr "Fallo al comprobar conflictos de uso de disco."
 
 #: virtManager/details/console.py:153
 msgid "Leave Fullscreen"
-msgstr "Salir de pantalla completa"
+msgstr "Salir del modo de pantalla completa"
 
 #: virtManager/details/console.py:155
 msgid "Leave fullscreen"
@@ -3394,7 +3393,7 @@ msgstr "No se está ejecutando el huésped."
 
 #: virtManager/details/console.py:700
 msgid "Graphical console not configured for guest"
-msgstr "Consola gráfica no configurada para el huésped"
+msgstr "Consola gráfica para el huésped no configurada"
 
 #: virtManager/details/console.py:707
 #, python-format
@@ -3438,7 +3437,7 @@ msgstr "Visor esta desconectando."
 
 #: virtManager/details/console.py:979
 msgid "Viewer window closed."
-msgstr "Ventana del visor de cerrada."
+msgstr "Ventana del visor cerrada."
 
 #: virtManager/details/console.py:983
 #, python-format
@@ -3638,7 +3637,7 @@ msgstr ""
 
 #: virtManager/details/details.py:1527 virtManager/device/addstorage.py:279
 msgid "Do you really want to use the disk?"
-msgstr "¿En realidad desea usar el disco?"
+msgstr "¿Quiere realmente usar el disco?"
 
 #: virtManager/details/details.py:1689
 msgid "Remove this device from the virtual machine"
@@ -3974,11 +3973,12 @@ msgid "Error selecting snapshot: %s"
 msgstr "Error al seleccionar instantánea: %s"
 
 #: virtManager/details/sshtunnels.py:63
+#, fuzzy
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
-"El cliente está en un servidor remoto, pero está configurado para permitir "
+"El huésped está en un anfitrión remoto, pero está configurado para permitir "
 "sólo conexiones locales."
 
 #: virtManager/details/sshtunnels.py:67
@@ -3992,9 +3992,9 @@ msgid ""
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 msgstr ""
-"El invitado se encuentra en un host remoto con transporte '%s', pero está "
-"configurado sólo para escuchar localmente. Para conectarse remotamente "
-"necesitará cambiar la dirección de escucha del invitado."
+"El huésped se encuentra en un anfitrión remoto con transporte '%s', pero "
+"está configurado para sólo escuchar localmente. Para conectarse de forma "
+"remota, necesitará cambiar la dirección de escucha del huésped."
 
 #: virtManager/details/viewers.py:351
 #, fuzzy, python-format
@@ -4019,7 +4019,7 @@ msgstr "Se encontraron %(error-name)s de SPICE"
 
 #: virtManager/details/viewers.py:750
 msgid "Guest agent is not available."
-msgstr "El agente invitado no está disponible."
+msgstr "El agente del huésped no está disponible."
 
 #: virtManager/device/addstorage.py:91
 #, python-format
@@ -4460,7 +4460,7 @@ msgstr ""
 #: virtManager/lib/inspection.py:77
 #, python-format
 msgid "Error launching libguestfs appliance: %s"
-msgstr "Error al ejecutar el dispositivo libguestfs: %s"
+msgstr "Error al lanzar el appliance de libguestfs: %s"
 
 #: virtManager/lib/inspection.py:86
 msgid "Inspection found no operating systems."
@@ -4726,7 +4726,7 @@ msgstr "No hay conexiones usables disponibles."
 #: virtManager/migrate.py:353
 #, python-format
 msgid "Unable to migrate guest: %s"
-msgstr "Imposible migrar huésped: %s"
+msgstr "No se pudo migrar el huésped: %s"
 
 #: virtManager/migrate.py:381
 #, python-format
@@ -4766,16 +4766,16 @@ msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr ""
-"Las instantáneas sólo están soportadas si todas las imágenes de disco "
-"escribibles delimitadas para el invitado son del formato qcow2."
+"Sólo hay soporte para las instantáneas si todas las imágenes de disco con "
+"permisos de escritura asignadas al huésped son del formato qcow2."
 
 #: virtManager/object/domain.py:494
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
-"Las instantáneas requieren al menos una imagen de disco escribible qcow2 "
-"delimitada para el invitado."
+"Las instantáneas requieren la asignación de al menos una imagen de disco "
+"qcow2 con permisos de escritura al huésped."
 
 #: virtManager/object/domain.py:529
 #, python-format
@@ -4923,7 +4923,7 @@ msgstr "Sistema predeterminado (%s)"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
-msgstr "No está instalado el soporte python de libguestfs"
+msgstr "No está instalado el soporte para libguestfs de python"
 
 #: virtManager/preferences.py:322
 msgid "Configure grab key combination"
@@ -5310,21 +5310,21 @@ msgstr ""
 
 #: virtinst/cli.py:607
 msgid "Don't automatically try to connect to the guest console"
-msgstr "No intentar conectarse automáticamente con la consola huésped "
+msgstr "No intentar conectarse automáticamente con la consola huésped"
 
 #: virtinst/cli.py:611
 msgid "Don't boot guest after completing install."
-msgstr "No iniciar el huésped luego de completar la instalación."
+msgstr "No iniciar el huésped tras completar la instalación."
 
 #: virtinst/cli.py:615
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
-"No comprobar colisión de nombre, sobrescribir cualquier huésped con el mismo "
-"nombre."
+"No comprobar colisiones de nombre, sobrescribiendo cualquier huésped con el "
+"mismo nombre."
 
 #: virtinst/cli.py:622
 msgid "Print the generated domain XML rather than create the guest."
-msgstr "Visualiza el XML del dominio generado en lugar de crear el invitado."
+msgstr "Visualiza el XML del dominio generado en lugar de crear el huésped."
 
 #: virtinst/cli.py:641
 msgid ""
@@ -5357,7 +5357,7 @@ msgid ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
-"Configura los metadatos del invitado. Ejemplo:\n"
+"Configura los metadatos del huésped. Ejemplo:\n"
 "--metadata name=foo,title=\"Mi precioso título\",uuid=...\n"
 "--metadata description=\"Mi bonita y larga descripción\""
 
@@ -5411,19 +5411,14 @@ msgstr ""
 "--network help"
 
 #: virtinst/cli.py:721
-#, fuzzy
-#| msgid ""
-#| "Configure a guest controller device. Ex:\n"
-#| "--controller type=usb,model=qemu-xhci\n"
-#| "--controller virtio-scsi\n"
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 msgstr ""
-"Configura un controlador de dispositivos del huésped. Ej:\n"
+"Configura un dispositivo controlador para el huésped. Ej:\n"
 "--controller type=usb,model=qemu-xhci\n"
-"--controller virtio-scsi\n"
+"--controller type=scsi,model=virtio-scsi\n"
 
 #: virtinst/cli.py:726
 msgid ""
@@ -5431,21 +5426,21 @@ msgid ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
-"Configura un dispositivo de entrada del huésped. Ej:\n"
+"Configura un dispositivo de entrada para el huésped. Ej:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
 #: virtinst/cli.py:731
 msgid "Configure a guest serial device"
-msgstr "Configura un dispositivo serie en el huésped"
+msgstr "Configura un dispositivo serie para el huésped"
 
 #: virtinst/cli.py:734
 msgid "Configure a guest parallel device"
-msgstr "Configura un dispositivo paralelo en el huésped"
+msgstr "Configura un dispositivo paralelo para el huésped"
 
 #: virtinst/cli.py:737
 msgid "Configure a guest communication channel"
-msgstr "Configura un canal de comunicación en el huésped"
+msgstr "Configura un canal de comunicación para el huésped"
 
 #: virtinst/cli.py:740
 msgid "Configure a text console connection between the guest and host"
@@ -5455,8 +5450,8 @@ msgstr ""
 #: virtinst/cli.py:744
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
-"Configura los dispositivos físicos del anfitrión (host) USB/PCI/etc para ser "
-"compartidos con el invitado (guest)"
+"Configura dispositivos físicos del anfitrión USB/PCI/etc para ser "
+"compartidos con el huésped"
 
 #: virtinst/cli.py:752
 msgid ""
@@ -5470,7 +5465,7 @@ msgstr ""
 
 #: virtinst/cli.py:760
 msgid "Configure guest sound device emulation"
-msgstr "Configura emulación del dispositivo de sonido en el huésped"
+msgstr "Configura emulación de dispositivo de sonido para el huésped"
 
 #: virtinst/cli.py:771
 #, fuzzy
@@ -5480,18 +5475,18 @@ msgstr "Configura dispositivo watchdog en el huésped"
 
 #: virtinst/cli.py:775
 msgid "Configure a guest watchdog device"
-msgstr "Configura dispositivo watchdog en el huésped"
+msgstr "Configura un dispositivo watchdog para el huésped"
 
 #: virtinst/cli.py:778
 msgid "Configure guest video hardware."
-msgstr "Configura hardware de video en el huésped."
+msgstr "Configura hardware de video para el huésped."
 
 #: virtinst/cli.py:781
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
-"Configura un dispositivo smartcard en el huésped. Ej:\n"
+"Configura un dispositivo smartcard para el huésped. Ej:\n"
 "--smartcard mode=passthrough"
 
 #: virtinst/cli.py:785
@@ -5499,7 +5494,7 @@ msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
-"Configura un dispositivo de redirección de huésped. Ej:\n"
+"Configura un dispositivo de redirección para el huésped. Ej:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: virtinst/cli.py:789
@@ -5507,7 +5502,7 @@ msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
-"Configura un dispositivo memballoon huésped. Ej.:\n"
+"Configura un dispositivo memballoon para el huésped. Ej.:\n"
 "--memballoon model=virtio"
 
 #: virtinst/cli.py:793
@@ -5515,7 +5510,7 @@ msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
-"Configura un dispositivo TPM de huésped. Ej.:\n"
+"Configura un dispositivo TPM para el huésped. Ej.:\n"
 "--tpm /dev/tpm"
 
 #: virtinst/cli.py:797
@@ -5523,8 +5518,7 @@ msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
-"Configura un dispositivo generador de números aleatorios en el huésped. "
-"Ejemplo:\n"
+"Configura un dispositivo RNG para el huésped. Ej:\n"
 "--rng /dev/urandom"
 
 #: virtinst/cli.py:801
@@ -5532,26 +5526,24 @@ msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
-"Configura un dispositivo de pánico para el invitado. Ejemplo:\n"
+"Configura un dispositivo de pánico para el huésped. Ej:\n"
 "--panic default"
 
 #: virtinst/cli.py:805
-#, fuzzy
-#| msgid ""
-#| "Configure a guest smartcard device. Ex:\n"
-#| "--smartcard mode=passthrough"
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
-"Configura un dispositivo smartcard en el huésped. Ej:\n"
-"--smartcard mode=passthrough"
+"Configura un dispositivo de memoria compartida para el huésped. Ej:\n"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:809
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
+"Configura un dispositivo de memoria para el huésped. Ej:\n"
+"--memdev dimm,target.size=1024"
 
 #: virtinst/cli.py:813
 msgid ""
@@ -5955,8 +5947,8 @@ msgid ""
 "file when the guest is running."
 msgstr ""
 "El sistema de archivos no tendrá suficiente espacio libre para alojar "
-"completamente el archivo separado, una vez que el huésped se encuentre en "
-"ejecución. "
+"completamente el archivo disperso, una vez que el huésped se encuentre en "
+"ejecución."
 
 #: virtinst/diskbackend.py:543
 msgid "There is not enough free space to create the disk."
@@ -6323,13 +6315,13 @@ msgid ""
 "outside the scope of this tool. For these types of changes, please see virt-"
 "sysprep(1)."
 msgstr ""
-"Duplique una máquina vitual (VM) cambiando toda la configuración única del "
-"lado de anfitrión como la dirección MAC, nombre, etc.\n"
+"Duplica una máquina vitual (VM) cambiando toda la configuración del lado de "
+"anfitrión única como la dirección MAC, nombre, etc.\n"
 "\n"
-"Los contenidos de la máquina virtual NO están alterados: virt-clone no "
-"cambia nada _dentro_ del SO del invitado, sólo duplica los discos y aloja "
-"los cambios subsiguientes. Así que cosas como cambiar contraseñas, cambiar "
-"la dirección IP estática, etc. están fuera del alcance de esta herramienta. "
+"Los contenidos de la máquina virtual NO se alteran: virt-clone no cambia "
+"nada _dentro_ del SO del huésped, sólo duplica los discos y realiza cambios "
+"del lado de anfitrión. Así que cosas como cambiar contraseñas, cambiar la "
+"dirección IP estática, etc. están fuera del alcance de esta herramienta. "
 "Para estos tipos de cambios vea virt-sysprep(1)."
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
@@ -6617,8 +6609,8 @@ msgstr ""
 #: virtinst/virtinstall.py:683
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
-"No hay consola que lanzar para el invitado (guest), volviendo al valor "
-"predeterminado --wait -1"
+"No hay consola que lanzar para el huésped, se empleará la opción "
+"predeterminada --wait -1"
 
 #: virtinst/virtinstall.py:719
 #, fuzzy
@@ -6687,7 +6679,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:916
 msgid "Restarting guest."
-msgstr "Reiniciando invitado."
+msgstr "Reiniciando huésped."
 
 #: virtinst/virtinstall.py:933
 msgid ""
@@ -6745,7 +6737,7 @@ msgstr "Inicialice un instalador desde la red utilizando el protocolo PXE"
 
 #: virtinst/virtinstall.py:1026
 msgid "Build guest around an existing disk image"
-msgstr "Creación de huésped alrededor de una imagen de disco existente"
+msgstr "Crear huésped a partir de una imagen de disco existente"
 
 #: virtinst/virtinstall.py:1029
 msgid ""
@@ -6781,7 +6773,7 @@ msgstr "Opciones de dispositivo"
 
 #: virtinst/virtinstall.py:1085
 msgid "Guest Configuration Options"
-msgstr "Opciones de configuración de invitado (guest)"
+msgstr "Opciones de configuración de huésped"
 
 #: virtinst/virtinstall.py:1089
 msgid "Virtualization Platform Options"
@@ -6797,7 +6789,7 @@ msgstr "Este huésped debería ser un huésped paravirtualizado"
 
 #: virtinst/virtinstall.py:1099
 msgid "This guest should be a container guest"
-msgstr "Este huésped debería ser un contendedor de huésped"
+msgstr "Este huésped debería ser un huésped contenedor"
 
 #: virtinst/virtinstall.py:1101
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
