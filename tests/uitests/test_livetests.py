@@ -471,11 +471,15 @@ def _testLiveHotplug(app, fname):
     lib.utils.check(lambda: tab.showing)
     entry.set_text(fname)
     appl.click()
-    # F38 CDROM change is broken:
-    # https://gitlab.com/qemu-project/qemu/-/issues/933
     # pylint: disable=unreachable
-    app.click_alert_button("changes will take effect", "OK")
-    return
+    import dogtail.tree
+    try:
+        # F38 CDROM change is broken:
+        # https://gitlab.com/qemu-project/qemu/-/issues/933
+        app.click_alert_button("changes will take effect", "OK")
+        return
+    except dogtail.tree.SearchError:
+        pass
 
     lib.utils.check(lambda: not appl.sensitive)
     lib.utils.check(lambda: entry.text == fname)
