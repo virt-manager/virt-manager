@@ -40,6 +40,10 @@ def pytest_addoption(parser):
 def pytest_ignore_collect(path, config):
     uitests_requested = config.getoption("--uitests")
 
+    # Default --uitests to --verbosity=2
+    if uitests_requested:
+        config.option.verbose = max(2, config.option.verbose)
+
     # Unless explicitly requested, ignore these tests
     if "test_dist.py" in str(path):
         return True
