@@ -221,24 +221,29 @@ class _VMMDogtailNode(dogtail.tree.Node):
         clickX, clickY = self.title_coordinates()
         dogtail.rawinput.click(clickX, clickY, button)
 
+    def is_menuitem(self):
+        submenu = (self.roleName == "menu" and
+                   (not self.accessible_parent or
+                    self.accessible_parent.roleName == "menu"))
+        return submenu or self.roleName == "menu item"
+
     def click(self, *args, **kwargs):
         """
-        click wrapper, give up to a second for widget to appear on
-        screen, helps reduce some test flakiness
+        click wrapper, check some states first to reduce flakiness
         """
         # pylint: disable=arguments-differ,signature-differs
         self.check_onscreen()
         self.check_sensitive()
+        if self.is_menuitem():
+            self.point()
         super().click(*args, **kwargs)
 
     def point(self, *args, **kwargs):
         # pylint: disable=signature-differs
         super().point(*args, **kwargs)
 
-        if (self.roleName == "menu" and
-            self.accessible_parent.roleName == "menu"):
-            # Widget is a submenu, make sure the item is in selected
-            # state before we return
+        if self.is_menuitem():
+            # Make sure item is selected before we return to caller
             utils.check(lambda: self.state_selected)
 
     def set_text(self, text):
