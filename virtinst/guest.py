@@ -1017,7 +1017,10 @@ class Guest(XMLBuilder):
             return
         if (not self.os.is_x86() and
             not self.os.is_pseries()):
-            return
+            if (not self.os.is_arm_machvirt() or
+                not self.lookup_domcaps().supports_video_virtio()):
+                log.debug("Domain caps reports video virtio is not supported.")
+                return
         self.add_device(DeviceGraphics(self.conn))
 
     def _add_default_rng(self):
