@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-02-27 06:15+0000\n"
-"PO-Revision-Date: 2023-05-10 19:20+0000\n"
+"PO-Revision-Date: 2023-05-12 18:21+0000\n"
 "Last-Translator: Dankaházi (ifj.) István <dankahazi.istvan@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/hu/>\n"
@@ -77,7 +77,7 @@ msgstr "Virtuális gépek menedzselése"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr "vmm"
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -222,7 +222,7 @@ msgstr "Elv_etési mód:"
 
 #: ui/addstorage.ui:316
 msgid "R_eadonly:"
-msgstr "Csak olvas_ható"
+msgstr "Csak olvas_ható:"
 
 #: ui/addstorage.ui:330
 msgid "Sharea_ble:"
@@ -436,7 +436,7 @@ msgstr "IPv4 _engedélyezése"
 
 #: ui/createnet.ui:326 ui/createnet.ui:537
 msgid "_Network:"
-msgstr "_Hálózat"
+msgstr "_Hálózat:"
 
 #: ui/createnet.ui:417 ui/createnet.ui:628
 msgid "Start:"
@@ -572,7 +572,7 @@ msgstr ""
 
 #: ui/createvm.ui:662
 msgid "_Architecture:"
-msgstr "_Architektúra"
+msgstr "_Architektúra:"
 
 #: ui/createvm.ui:676
 msgid "_Machine Type:"
@@ -779,20 +779,16 @@ msgid "Finish"
 msgstr "Befejezés"
 
 #: ui/createvm.ui:2415
-#, fuzzy
-#| msgid "_Backend:"
 msgid "_Back"
-msgstr "Háttér:"
+msgstr "_Vissza"
 
 #: ui/createvm.ui:2431
-#, fuzzy
-#| msgid "Forwarding:"
 msgid "_Forward"
-msgstr "Továbbítás:"
+msgstr "_Tovább"
 
 #: ui/createvol.ui:24
 msgid "Add a Storage Volume"
-msgstr "Kötet hozzáadása:"
+msgstr "Tárolókötet hozzáadása"
 
 #: ui/createvol.ui:66
 msgid "<span size='large'>Create storage volume</span>"
@@ -898,7 +894,7 @@ msgstr "Emulátor:"
 
 #: ui/details.ui:475
 msgid "Machine _Type: "
-msgstr "Gép _típus:"
+msgstr "Gép _típusa: "
 
 #: ui/details.ui:488
 msgid "Chipse_t:"
@@ -2048,10 +2044,8 @@ msgid "Co_nsoles"
 msgstr "Konzol"
 
 #: ui/vmwindow.ui:247
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "_Autoconnect"
-msgstr "_Automatikus csatlakozás:"
+msgstr "_Automatikus csatlakozás"
 
 #: ui/vmwindow.ui:262
 msgid "T_oolbar"
@@ -2579,10 +2573,9 @@ msgid "Disk target: %s"
 msgstr ""
 
 #: virtManager/clone.py:112
-#, fuzzy, python-format
-#| msgid "Ke_rnel path:"
+#, python-format
 msgid "Original path: %s"
-msgstr "Ke_rnel elérési út:"
+msgstr "Elérési út: %s"
 
 #: virtManager/clone.py:114
 #, fuzzy, python-format
@@ -3103,10 +3096,9 @@ msgid "None detected"
 msgstr ""
 
 #: virtManager/createvm.py:1888
-#, fuzzy, python-format
-#| msgid "Error starting installation: "
+#, python-format
 msgid "Error starting installation: %s"
-msgstr "Hiba a telepítés indításakor:"
+msgstr "Hiba a telepítés indításakor: %s"
 
 #: virtManager/createvm.py:1931
 #, python-format
@@ -3608,7 +3600,7 @@ msgstr ""
 
 #: virtManager/details/details.py:1510
 msgid "An init path must be specified"
-msgstr "Meg kell adni egy init elérési útvonalat "
+msgstr "Meg kell adni egy init elérési útvonalat"
 
 #: virtManager/details/details.py:1523 virtManager/device/addstorage.py:275
 #, fuzzy, python-format
@@ -4097,10 +4089,8 @@ msgid "SPAPR"
 msgstr ""
 
 #: virtManager/device/tpmdetails.py:71
-#, fuzzy
-#| msgid "Emulator:"
 msgid "Emulated"
-msgstr "Emulátor:"
+msgstr "Emulátor"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4224,7 +4214,7 @@ msgstr ""
 
 #: virtManager/hoststorage.py:196
 msgid "Size"
-msgstr "Méret:"
+msgstr "Méret"
 
 #: virtManager/hoststorage.py:205
 msgid "Format"
@@ -4923,7 +4913,7 @@ msgstr "Virtuális gép mentése"
 
 #: virtManager/vmmenu.py:171
 msgid "Saving virtual machine memory to disk "
-msgstr "Virtuális gép memóriájának mentése lemezre"
+msgstr "Virtuális gép memóriájának mentése lemezre "
 
 #: virtManager/vmmenu.py:180
 #, python-format
@@ -5191,7 +5181,7 @@ msgstr ""
 
 #: virtinst/cli.py:607
 msgid "Don't automatically try to connect to the guest console"
-msgstr "Ne próbáljon automatikusan kapcsolódni a vendég rendszer konzoljához "
+msgstr "Ne próbáljon automatikusan kapcsolódni a vendég rendszer konzoljához"
 
 #: virtinst/cli.py:611
 msgid "Don't boot guest after completing install."
@@ -6618,7 +6608,7 @@ msgstr ""
 #: virtinst/virtxml.py:164
 #, python-format
 msgid "Cannot use --add-device with --%s"
-msgstr "Nem használható együtt az --add-device és a(z) --%s "
+msgstr "Nem használható együtt az --add-device és a(z) --%s"
 
 #: virtinst/virtxml.py:181
 #, python-format
