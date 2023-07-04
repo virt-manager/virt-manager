@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2022-03-03 06:15+0000\n"
-"PO-Revision-Date: 2023-04-10 18:20+0000\n"
+"PO-Revision-Date: 2023-07-05 17:20+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -5502,6 +5502,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"დამატებითი ინფორმაცია შეგიძლიათ იხილოთ ბრძანებით:\n"
+"\n"
+"   osinfo-query os\n"
 
 #: virtinst/cloner.py:44
 #, python-format
@@ -5594,8 +5597,8 @@ msgstr ""
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "მატარებლისთვის '%(bus)s' მხოლოდ %(number)s დისკია მხარდაჭერილი"
+msgstr[1] "მატარებლისთვის '%(bus)s' მხოლოდ %(number)s დისკია მხარდაჭერილი"
 
 #: virtinst/devices/filesystem.py:123
 #, python-format
@@ -5757,7 +5760,7 @@ msgstr ""
 #: virtinst/install/installertreemedia.py:142
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
-msgstr ""
+msgstr "დაშორებულ მიერთებაზე დაყენების ხე ხელმისაწვდომი არაა: %s"
 
 #: virtinst/install/installertreemedia.py:209
 msgid "Couldn't find kernel for install tree."
@@ -5798,7 +5801,7 @@ msgstr ""
 #: virtinst/install/unattended.py:335
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
-msgstr ""
+msgstr "ოს-ის '%s'მედიას ავტომატური დაყენების მხარდაჭერა არ გააჩნია"
 
 #: virtinst/install/unattended.py:346
 #, python-format
@@ -5971,7 +5974,7 @@ msgstr "დასაკლონი ვმ-ის სახელი."
 
 #: virtinst/virtclone.py:81
 msgid "XML file to use as the original guest."
-msgstr ""
+msgstr "ორიგინალური სტუმრის სახით გამოსაყენებელი XML ფაილი."
 
 #: virtinst/virtclone.py:83
 msgid ""
