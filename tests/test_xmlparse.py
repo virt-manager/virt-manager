@@ -163,6 +163,7 @@ def testAlterGuest():
     check("pvspinlock", None, True)
     check("gic_version", None, False)
     check("ioapic_driver", None, "qemu")
+    check("kvm_pv_ipi", None, False)
 
     check = _make_checker(guest.cpu)
     check("match", "exact", "strict")
