@@ -1087,7 +1087,7 @@ c = vinst.add_category("unattended-install", "--connect %(URI-KVM-X86)s --nograp
 c.add_compare("--install fedora26 --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s,user-password-file=%(USER-PASSWORD-FILE)s,product-key=1234,user-login=foobar,reg-login=regtest", "osinfo-url-unattended", prerun_check=lambda: not unattended.OSInstallScript.have_libosinfo_installation_url())  # unattended install for fedora, using initrd injection
 c.add_compare("--location %(TREEDIR)s --unattended", "osinfo-unattended-treeapis", prerun_check=lambda: not LIBOSINFO_SUPPORT_LOCAL_TREE)  # unattended install using treeobj libosinfo APIs
 c.add_compare("--cdrom %(ISO-WIN7)s --unattended profile=desktop,admin-password-file=%(ADMIN-PASSWORD-FILE)s", "osinfo-win7-unattended", prerun_check=no_osinfo_unattended_win_drivers_cb)  # unattended install for win7
-c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended")  # triggering the special netinst checking code
+c.add_compare("--os-variant fedora26 --unattended profile=jeos,admin-password-file=%(ADMIN-PASSWORD-FILE)s --location %(ISO-F26-NETINST)s", "osinfo-netinst-unattended", prerun_check=missing_xorriso)  # triggering the special netinst checking code
 c.add_compare("--os-variant silverblue29 --location http://example.com", "network-install-resources")  # triggering network-install resources override
 c.add_compare("--connect %(URI-TEST-REMOTE)s --os-variant win7 --cdrom %(EXISTIMG1)s --unattended", "unattended-remote-cdrom")
 c.add_valid("--pxe --os-variant fedora26 --unattended", grep="Using unattended profile 'desktop'")  # filling in default 'desktop' profile
