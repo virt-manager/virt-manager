@@ -752,6 +752,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --video cirrus
 --video model=qxl,vgamem=1,ram=2,vram=3,heads=4,accel3d=yes,vram64=65
 --video model=qxl,model.vgamem=1,model.ram=2,model.vram=3,model.heads=4,model.acceleration.accel3d=yes,model.vram64=65
+--video model=virtio,model.blob=on
 
 
 --smartcard passthrough,type=spicevmc

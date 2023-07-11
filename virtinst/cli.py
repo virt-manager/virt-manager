@@ -4664,6 +4664,7 @@ class ParserVideo(VirtCLIParser):
         cls.add_arg("model.vram", "vram")
         cls.add_arg("model.vram64", "vram64")
         cls.add_arg("model.vgamem", "vgamem")
+        cls.add_arg("model.blob", "blob")
 
 
 ###################

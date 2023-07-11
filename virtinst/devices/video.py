@@ -18,6 +18,7 @@ class DeviceVideo(Device):
     heads = XMLProperty("./model/@heads", is_int=True)
     vgamem = XMLProperty("./model/@vgamem", is_int=True)
     accel3d = XMLProperty("./model/acceleration/@accel3d", is_yesno=True)
+    blob = XMLProperty("./model/@blob", is_onoff=True)
 
     def _set_model(self, val):
         self._model = val
