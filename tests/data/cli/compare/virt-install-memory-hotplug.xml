@@ -6,7 +6,7 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
-  <maxMemory slots="3">2097152</maxMemory>
+  <maxMemory slots="3">4194304</maxMemory>
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
@@ -122,6 +122,24 @@
         <readonly/>
       </target>
     </memory>
+    <memory model="virtio-mem">
+      <target>
+        <size>524288</size>
+        <node>0</node>
+        <block>2048</block>
+        <requested>524288</requested>
+        <address base="0x180000000"/>
+      </target>
+    </memory>
+    <memory model="virtio-pmem">
+      <source>
+        <path>/tmp/virtio_pmem</path>
+      </source>
+      <target>
+        <size>524288</size>
+        <address base="0x1a0000000"/>
+      </target>
+    </memory>
   </devices>
   <on_reboot>destroy</on_reboot>
 </domain>
@@ -133,7 +151,7 @@
       <libosinfo:os id="http://fedoraproject.org/fedora/unknown"/>
     </libosinfo:libosinfo>
   </metadata>
-  <maxMemory slots="3">2097152</maxMemory>
+  <maxMemory slots="3">4194304</maxMemory>
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
@@ -246,6 +264,24 @@
         <current>524288</current>
         <requested>1048576</requested>
         <readonly/>
+      </target>
+    </memory>
+    <memory model="virtio-mem">
+      <target>
+        <size>524288</size>
+        <node>0</node>
+        <block>2048</block>
+        <requested>524288</requested>
+        <address base="0x180000000"/>
+      </target>
+    </memory>
+    <memory model="virtio-pmem">
+      <source>
+        <path>/tmp/virtio_pmem</path>
+      </source>
+      <target>
+        <size>524288</size>
+        <address base="0x1a0000000"/>
       </target>
     </memory>
   </devices>

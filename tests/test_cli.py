@@ -898,7 +898,7 @@ c.add_compare(""
 
 # --memdev setup has a lot of interconnected validation, it's easier to keep this separate
 c.add_compare("--pxe "
-"--memory hotplugmemorymax=2048,hotplugmemoryslots=3 "
+"--memory hotplugmemorymax=4096,hotplugmemoryslots=3 "
 "--cpu cell0.cpus=0,cell0.memory=1048576 "
 
 "--memdev dimm,access=private,target_size=256,target_node=0,"
@@ -911,6 +911,12 @@ c.add_compare("--pxe "
 "target.block=2048,target.requested=1048576,target.current=524288,"
 "address.type=dimm,address.base=0x100000000,address.slot=1,"
 "source.pmem=on,source.alignsize=2048,target.readonly=on "
+
+"--memdev virtio-mem,target_node=0,target.block=2048,"
+"target_size=512,target.requested=524288,target.address_base=0x180000000 "
+
+"--memdev virtio-pmem,source.path=/tmp/virtio_pmem,"
+"target_size=512,target.address_base=0x1a0000000 "
 
 "", "memory-hotplug", precompare_check="5.3.0")
 
