@@ -851,6 +851,41 @@ class _LibosinfoDistro(_DistroTree):
                  self.cache.libosinfo_mediaobj.get_initrd_path())
         ]
 
+class _OracleLinuxDistro(_DistroTree):
+    """
+    Special distro that has kernel, initrd under images/pxeboot
+    """
+    PRETTY_NAME = "Oracle Linux"
+    matching_distros = ["ol"]
+    _variant_prefix = "ol"
+
+    @classmethod
+    def is_valid(cls, cache):
+        if cache.treeinfo_family_regex(".*Oracle Linux.*"):
+            return True
+
+    def _set_manual_kernel_paths(self):
+        self._kernel_paths += [
+            ("images/pxeboot/vmlinuz",
+             "images/pxeboot/initrd.img")]
+
+    def _detect_version(self):
+        if not self.cache.treeinfo_version:  # pragma: no cover
+            log.debug("No treeinfo version? Not setting an os_variant")
+            return
+
+        version, update = self.cache.split_version()
+
+        # start with example base=ol7, then walk backwards
+        # through the OS list to find the latest os name that matches
+        # this way we handle ol7.6 from treeinfo when osdict only
+        # knows about ol7.5
+        base = self._variant_prefix + str(version)
+        while update >= 0:
+            tryvar = base + ".%s" % update
+            if OSDB.lookup_os(tryvar):
+                return tryvar
+            update -= 1
 
 def _build_distro_list(osobj):
     allstores = [
@@ -865,6 +900,7 @@ def _build_distro_list(osobj):
         _DebianDistro,
         _UbuntuDistro,
         _MageiaDistro,
+        _OracleLinuxDistro,
         # Always stick GenericDistro at the end, since it's a catchall
         _GenericTreeinfoDistro,
     ]
