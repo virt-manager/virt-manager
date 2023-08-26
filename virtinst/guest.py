@@ -630,9 +630,9 @@ class Guest(XMLBuilder):
 
     def lookup_domcaps(self):
         def _compare_machine(domcaps):
-            capsinfo = self.lookup_capsinfo()
             if self.os.machine == domcaps.machine:
                 return True
+            capsinfo = self.lookup_capsinfo()
             if capsinfo.is_machine_alias(self.os.machine, domcaps.machine):
                 return True
             return False
