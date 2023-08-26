@@ -632,7 +632,12 @@ class Guest(XMLBuilder):
         def _compare_machine(domcaps):
             if self.os.machine == domcaps.machine:
                 return True
-            capsinfo = self.lookup_capsinfo()
+            try:
+                capsinfo = self.lookup_capsinfo()
+            except Exception:
+                log.exception("Error fetching machine list for alias "
+                                  "resolution, assuming mismatch");
+                return False
             if capsinfo.is_machine_alias(self.os.machine, domcaps.machine):
                 return True
             return False
