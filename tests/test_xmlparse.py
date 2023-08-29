@@ -1170,3 +1170,34 @@ def testDiskSourceAbspath():
     # ...unless it's a URL
     disk.set_source_path("http://example.com/foobar3")
     assert disk.get_source_path() == "http://example.com/foobar3"
+
+
+def testUnknownEmulatorDomcapsLookup(monkeypatch):
+    """
+    Libvirt can handle defining a VM with a custom emulator, one not detected
+    by `virsh capabilities`. An appropriate `virsh domcapabilities` call will
+    inspect the emulator and return relevant info.
+
+    This test ensures that for parsing XML the `virsh capabilities` failure
+    isn't fatal, and we attempt to return valid `virsh domcapabilities` data
+    """
+
+    seen = False
+    def fake_build_from_params(conn, emulator, arch, machine, hvtype):
+        nonlocal seen
+        seen = True
+        assert arch == "mips"
+        assert machine == "some-unknown-machine"
+        assert emulator == "/my/manual/emulator"
+        return virtinst.DomainCapabilities(conn)
+
+    monkeypatch.setattr(
+        "virtinst.DomainCapabilities.build_from_params",
+        fake_build_from_params)
+
+    conn = utils.URIs.open_kvm()
+    xml = open(DATADIR + "emulator-custom.xml").read()
+    guest = virtinst.Guest(conn, xml)
+    assert guest.lookup_domcaps()
+    assert guest.lookup_domcaps()
+    assert seen
