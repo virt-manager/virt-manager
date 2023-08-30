@@ -115,9 +115,8 @@ def _perform_inspection(conn, vm):  # pragma: no cover
             g.mount_ro(dev, mp)
             filesystems_mounted = True
         except Exception:
-            log.exception("%s: exception mounting %s on %s "
-                              "(ignored)",
-                              prettyvm, dev, mp)
+            log.exception("%s: exception mounting %s on %s (ignored)",
+                          prettyvm, dev, mp)
 
     icon = None
     apps = None
@@ -154,7 +153,7 @@ def _perform_inspection(conn, vm):  # pragma: no cover
                 apps.append(app)
         except Exception:
             log.exception("%s: exception while listing apps (ignored)",
-                              prettyvm)
+                          prettyvm)
 
     # Force the libguestfs handle to close right now.
     del g

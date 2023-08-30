@@ -1429,7 +1429,7 @@ class vmmDomain(vmmLibvirtObject):
             self._backend.undefineFlags(flags)
         except libvirt.libvirtError:
             log.exception("libvirt undefineFlags failed, "
-                              "falling back to old style")
+                          "falling back to old style")
             self._backend.undefine()
 
     @vmmLibvirtObject.lifecycle_action

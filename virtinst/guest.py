@@ -636,7 +636,7 @@ class Guest(XMLBuilder):
                 capsinfo = self.lookup_capsinfo()
             except Exception:
                 log.exception("Error fetching machine list for alias "
-                                  "resolution, assuming mismatch");
+                              "resolution, assuming mismatch");
                 return False
             if capsinfo.is_machine_alias(self.os.machine, domcaps.machine):
                 return True
