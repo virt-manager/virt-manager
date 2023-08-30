@@ -427,8 +427,7 @@ class vmmHostStorage(vmmGObjectUI):
                     if not namestr:
                         namestr = None
             except Exception:  # pragma: no cover
-                log.exception("Failed to determine if storage volume in "
-                                  "use.")
+                log.exception("Failed to determine if storage volume in use.")
 
             sensitive = True
             if self._vol_sensitive_cb:
