@@ -528,6 +528,7 @@ class StorageVolume(_StorageObject):
         self.format = parsevol.format
         self.capacity = parsevol.capacity
         self.allocation = parsevol.allocation
+        self.permissions.mode = parsevol.permissions.mode
         if not self._pool:
             self.pool = self._input_vol.storagePoolLookupByVolume()
 
