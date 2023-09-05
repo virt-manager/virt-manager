@@ -8,6 +8,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import sys
 
 from ..logger import log
 
@@ -19,8 +20,13 @@ def _run_initrd_commands(initrd, tempdir):
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
                                  cwd=tempdir)
+
+    owner="root:root"
+    if sys.platform.startswith("darwin"):
+        owner="root:wheel"
+
     cpio_proc = subprocess.Popen(['cpio', '--create', '--null', '--quiet',
-                                  '--format=newc', '--owner=0:0'],
+                                  '--format=newc', f'--owner={owner}'],
                                  stdin=find_proc.stdout,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
