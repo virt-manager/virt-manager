@@ -211,6 +211,7 @@ class Guest(XMLBuilder):
         self.skip_default_graphics = False
         self.skip_default_rng = False
         self.skip_default_tpm = False
+        self.have_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
 
         # qemu 6.1, fairly new when we added this option, has an unfortunate
@@ -1065,6 +1066,7 @@ class Guest(XMLBuilder):
         dev = DeviceTpm(self.conn)
         dev.type = DeviceTpm.TYPE_EMULATOR
         self.add_device(dev)
+        self.have_default_tpm = True
 
     def _add_default_memballoon(self):
         if self.devices.memballoon:

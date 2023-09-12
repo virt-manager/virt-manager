@@ -564,12 +564,37 @@ class Installer(object):
     # guest install handling #
     ##########################
 
-    def _build_postboot_xml(self, final_xml, meter):
+    def _build_postboot_xml(self, guest_ro, final_xml, meter):
         initial_guest = Guest(self.conn, parsexml=final_xml)
         self._alter_bootconfig(initial_guest)
         self._alter_install_resources(initial_guest, meter)
         if self.has_cloudinit():
             initial_guest.set_smbios_serial_cloudinit()
+
+            # When shim in the guest sees unpopulated EFI NVRAM, like when
+            # we create a new UEFI VM, it invokes fallback.efi to populate
+            # initial NVRAM boot entries. When the guest also has a TPM device,
+            # shim will do a one time VM reset. This reset throws off the
+            # reboot detection that is central to virt-install's install
+            # process.
+            #
+            # The main install case that this will usually be relevant is
+            # the combo of UEFI and --cloud-init. The latter usually implies
+            # use of a distro cloud image, which will be using shim, and the
+            # --cloud-init process requires a multi stage install compared
+            # to just a plain import install.
+            #
+            # For that case, we disable the default TPM device for the first
+            # boot.
+            if (guest_ro.have_default_tpm and
+                guest_ro.is_uefi() and
+                len(initial_guest.devices.tpm)):
+                log.debug(
+                        "combo of default TPM, UEFI, and cloudinit is "
+                        "used. assuming this VM is using a linux distro "
+                        "cloud image with shim in the boot path. disabling "
+                        "TPM for the first boot")
+                initial_guest.remove_device(initial_guest.devices.tpm[0])
 
         final_guest = Guest(self.conn, parsexml=final_xml)
         self._remove_install_cdrom_media(final_guest)
@@ -581,7 +606,8 @@ class Installer(object):
         initial_xml = None
         final_xml = guest.get_xml()
         if self._requires_postboot_xml_changes():
-            initial_xml, final_xml = self._build_postboot_xml(final_xml, meter)
+            initial_xml, final_xml = self._build_postboot_xml(
+                    guest, final_xml, meter)
         final_xml = self._pre_reinstall_xml or final_xml
 
         log.debug("Generated initial_xml: %s",
@@ -680,6 +706,7 @@ class Installer(object):
         # All installer XML alterations are made on this guest instance,
         # so the user_guest instance is left intact
         guest = Guest(self.conn, parsexml=user_guest.get_xml())
+        guest.have_default_tpm = user_guest.have_default_tpm
 
         try:
             self._prepare(guest, meter)
