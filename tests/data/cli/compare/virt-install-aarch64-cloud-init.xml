@@ -10,25 +10,14 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="x86_64" machine="q35">hvm</type>
+    <type arch="aarch64" machine="virt">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/share/AAVMF/AAVMF_CODE.fd</loader>
     <smbios mode="sysinfo"/>
   </os>
-  <features>
-    <acpi/>
-    <apic/>
-  </features>
   <cpu mode="host-passthrough"/>
-  <clock offset="utc">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-  </clock>
-  <pm>
-    <suspend-to-mem enabled="no"/>
-    <suspend-to-disk enabled="no"/>
-  </pm>
+  <clock offset="utc"/>
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <emulator>/usr/bin/qemu-system-aarch64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
@@ -60,7 +49,7 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
-    <tpm model="tpm-crb">
+    <tpm>
       <backend type="emulator"/>
     </tpm>
     <memballoon model="virtio"/>
@@ -70,7 +59,7 @@
     <disk type="file" device="cdrom">
       <driver name="qemu" type="raw"/>
       <source file="/VIRTINST-TESTSUITE/cloudinit.iso"/>
-      <target dev="sda" bus="sata"/>
+      <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
   </devices>
@@ -93,25 +82,14 @@
   <currentMemory>65536</currentMemory>
   <vcpu>2</vcpu>
   <os>
-    <type arch="x86_64" machine="q35">hvm</type>
+    <type arch="aarch64" machine="virt">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/share/AAVMF/AAVMF_CODE.fd</loader>
     <boot dev="hd"/>
   </os>
-  <features>
-    <acpi/>
-    <apic/>
-  </features>
   <cpu mode="host-passthrough"/>
-  <clock offset="utc">
-    <timer name="rtc" tickpolicy="catchup"/>
-    <timer name="pit" tickpolicy="delay"/>
-    <timer name="hpet" present="no"/>
-  </clock>
-  <pm>
-    <suspend-to-mem enabled="no"/>
-    <suspend-to-disk enabled="no"/>
-  </pm>
+  <clock offset="utc"/>
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <emulator>/usr/bin/qemu-system-aarch64</emulator>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
@@ -143,7 +121,7 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
-    <tpm model="tpm-crb">
+    <tpm>
       <backend type="emulator"/>
     </tpm>
     <memballoon model="virtio"/>
@@ -151,7 +129,7 @@
       <backend model="random">/dev/urandom</backend>
     </rng>
     <disk type="file" device="cdrom">
-      <target dev="sda" bus="sata"/>
+      <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
   </devices>

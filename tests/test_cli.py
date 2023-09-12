@@ -1031,10 +1031,9 @@ c = vinst.add_category("misc-install", "--nographics --noautoconsole")
 c.add_compare("--connect %s --os-variant generic" % (utils.URIs.test_suite), "noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26" % (utils.URIs.test_suite), "osvariant-noargs-fail", use_default_args=False)  # No arguments
 c.add_compare("--connect %s --os-variant fedora26 --pxe --print-xml" % (utils.URIs.test_suite), "osvariant-defaults-pxe", use_default_args=False)  # No arguments
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "cloud-init-default", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init behavior is root-password-generate=yes,disable=yes
 c.add_valid("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init, but without implied --print-xml, to hit some specific code paths
-c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override
+c.add_compare("--connect %(URI-KVM-X86)s --disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init --tpm default", "cloud-init-default", env={"VIRTINST_TEST_SUITE_CLOUDINIT": "1"})  # default --cloud-init behavior is root-password-generate=yes,disable=yes, forcing tpm
+c.add_compare("--connect %(URI-KVM-X86)s --disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-generate=yes,disable=no --sysinfo system.serial=foobar --boot uefi", "cloud-init-options1", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-generate, with --sysinfo override, with uefi
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init root-password-file=%(ADMIN-PASSWORD-FILE)s,root-ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt,clouduser-ssh-key=%(XMLDIR)s/cloudinit/ssh-key2.txt --boot smbios.mode=none", "cloud-init-options2", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init root-password-file with smbios.mode override
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init ssh-key=%(XMLDIR)s/cloudinit/ssh-key.txt", "cloud-init-options3", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init ssh-key
 c.add_compare("--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "cloud-init-options4", env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"})  # --cloud-init user-data=,meta-data=
@@ -1195,6 +1194,7 @@ c.add_compare("--arch aarch64 --cdrom %(ISO-F26-NETINST)s --boot loader=CODE.fd,
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default --graphics vnc", "aarch64-kvm-import")  # --import test, but also test --panic no-op, and --graphics
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk size=1 --os-variant fedora22 --features gic_version=host --network network=default,address.type=pci --controller type=scsi,model=virtio-scsi,address.type=pci", "aarch64-kvm-gic")
 c.add_compare("--connect %(URI-KVM-AARCH64)s --osinfo fedora30 --arch aarch64 --disk none --pxe --boot firmware=efi", "aarch64-firmware-no-override")
+c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init", "aarch64-cloud-init")
 
 
 

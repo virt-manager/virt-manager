@@ -62,6 +62,20 @@
       <enum name='capsType'/>
       <enum name='pciBackend'/>
     </hostdev>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-tis</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>passthrough</value>
+        <value>emulator</value>
+        <value>external</value>
+      </enum>
+      <enum name='backendVersion'>
+        <value>1.2</value>
+        <value>2.0</value>
+      </enum>
+    </tpm>
   </devices>
   <features>
     <gic supported='yes'>

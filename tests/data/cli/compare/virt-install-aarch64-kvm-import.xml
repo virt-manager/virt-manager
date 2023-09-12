@@ -51,6 +51,9 @@
     </channel>
     <input type="tablet" bus="usb"/>
     <input type="keyboard" bus="usb"/>
+    <tpm>
+      <backend type="emulator"/>
+    </tpm>
     <graphics type="vnc" port="-1"/>
     <video>
       <model type="virtio"/>

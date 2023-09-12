@@ -4,7 +4,7 @@ chpasswd:
     root:[SCRUBBLED]
   expire: True
 
-<domain type="test">
+<domain type="kvm">
   <name>fedora28</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
@@ -20,48 +20,74 @@ chpasswd:
       <entry name="serial">foobar</entry>
     </system>
   </sysinfo>
-  <os>
-    <type arch="i686">hvm</type>
+  <os firmware="efi">
+    <type arch="x86_64" machine="q35">hvm</type>
     <smbios mode="sysinfo"/>
   </os>
   <features>
-    <pae/>
+    <acpi/>
+    <apic/>
   </features>
-  <clock offset="utc"/>
+  <cpu mode="host-passthrough"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/test-hv</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
-    <controller type="usb" model="ich9-ehci1"/>
-    <controller type="usb" model="ich9-uhci1">
-      <master startport="0"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci2">
-      <master startport="2"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci3">
-      <master startport="4"/>
-    </controller>
-    <interface type="user">
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="pci" model="pcie-root"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
-      <model type="e1000"/>
+      <model type="virtio"/>
     </interface>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <tpm model="tpm-crb">
+      <backend type="emulator"/>
+    </tpm>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
     <disk type="file" device="cdrom">
+      <driver name="qemu" type="raw"/>
       <source file="/VIRTINST-TESTSUITE/cloudinit.iso"/>
-      <target dev="hdb" bus="ide"/>
+      <target dev="sda" bus="sata"/>
       <readonly/>
     </disk>
   </devices>
   <on_reboot>destroy</on_reboot>
 </domain>
-<domain type="test">
+<domain type="kvm">
   <name>fedora28</name>
   <uuid>00000000-1111-2222-3333-444444444444</uuid>
   <metadata>
@@ -77,42 +103,67 @@ chpasswd:
       <entry name="serial">foobar</entry>
     </system>
   </sysinfo>
-  <os>
-    <type arch="i686">hvm</type>
+  <os firmware="efi">
+    <type arch="x86_64" machine="q35">hvm</type>
     <boot dev="hd"/>
     <smbios mode="sysinfo"/>
   </os>
   <features>
-    <pae/>
+    <acpi/>
+    <apic/>
   </features>
-  <clock offset="utc"/>
+  <cpu mode="host-passthrough"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
   <pm>
     <suspend-to-mem enabled="no"/>
     <suspend-to-disk enabled="no"/>
   </pm>
   <devices>
-    <emulator>/usr/bin/test-hv</emulator>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
+      <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
-      <target dev="hda" bus="ide"/>
+      <target dev="vda" bus="virtio"/>
     </disk>
-    <controller type="usb" model="ich9-ehci1"/>
-    <controller type="usb" model="ich9-uhci1">
-      <master startport="0"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci2">
-      <master startport="2"/>
-    </controller>
-    <controller type="usb" model="ich9-uhci3">
-      <master startport="4"/>
-    </controller>
-    <interface type="user">
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <controller type="pci" model="pcie-root"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
-      <model type="e1000"/>
+      <model type="virtio"/>
     </interface>
     <console type="pty"/>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+    <tpm model="tpm-crb">
+      <backend type="emulator"/>
+    </tpm>
+    <memballoon model="virtio"/>
+    <rng model="virtio">
+      <backend model="random">/dev/urandom</backend>
+    </rng>
     <disk type="file" device="cdrom">
-      <target dev="hdb" bus="ide"/>
+      <target dev="sda" bus="sata"/>
       <readonly/>
     </disk>
   </devices>
