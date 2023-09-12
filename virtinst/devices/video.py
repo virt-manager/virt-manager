@@ -32,8 +32,11 @@ class DeviceVideo(Device):
         if guest.os.is_pseries():
             return "vga"
         if guest.os.is_arm_machvirt():
-            # For all cases here the hv and guest are new enough for virtio
-            return "virtio"
+            if guest.lookup_domcaps().supports_video_virtio():
+                # For all cases here the hv and guest are new enough for virtio
+                return "virtio"
+            log.debug("Domain caps reports video virtio is not supported.")
+            return "none"
         if guest.os.is_riscv_virt():
             # For all cases here the hv and guest are new enough for virtio
             return "virtio"

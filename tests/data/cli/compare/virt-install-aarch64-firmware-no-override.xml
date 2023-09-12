@@ -43,6 +43,12 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <input type="tablet" bus="usb"/>
+    <input type="keyboard" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="virtio"/>
+    </video>
     <memballoon model="virtio"/>
     <rng model="virtio">
       <backend model="random">/dev/urandom</backend>
@@ -95,6 +101,12 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <input type="tablet" bus="usb"/>
+    <input type="keyboard" bus="usb"/>
+    <graphics type="vnc" port="-1"/>
+    <video>
+      <model type="virtio"/>
+    </video>
     <memballoon model="virtio"/>
     <rng model="virtio">
       <backend model="random">/dev/urandom</backend>
