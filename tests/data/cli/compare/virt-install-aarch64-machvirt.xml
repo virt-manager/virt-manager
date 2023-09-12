@@ -28,6 +28,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="vda" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <controller type="pci" model="pcie-root"/>

@@ -224,6 +224,7 @@
       <serial>WD-WMAP9A966149</serial>
       <wwn>123456789abcdefa</wwn>
       <shareable/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
       <boot order="2"/>
     </disk>
     <disk type="file" device="disk">
@@ -232,6 +233,7 @@
       <target dev="vdb" bus="virtio"/>
       <address type="drive" controller="0" target="2" unit="0"/>
       <readonly/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver discard="ignore" copy_on_read="on"/>
@@ -249,6 +251,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora.qcow2"/>
       <target dev="vdc" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="block" device="lun" sgio="filtered" rawio="yes">
       <driver name="qemu" type="raw"/>
@@ -274,6 +277,7 @@
         <read_iops_sec>2</read_iops_sec>
         <write_iops_sec>6</write_iops_sec>
       </iotune>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw"/>
@@ -283,11 +287,13 @@
         <total_bytes_sec>10</total_bytes_sec>
         <total_iops_sec>20</total_iops_sec>
       </iotune>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="volume" device="disk">
       <driver name="qemu" type="raw"/>
       <source volume="some-rbd-vol" pool="pool-rbd-ceph"/>
       <target dev="vdf" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw" discard="unmap" detect_zeroes="unmap" io="native" error_policy="stop"/>
@@ -300,6 +306,7 @@
         <host name="ceph-mon-3.example.com" port="6789"/>
       </source>
       <target dev="vdg" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -307,6 +314,7 @@
         <host name="example.com" port="8000"/>
       </source>
       <target dev="vdh" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -314,6 +322,7 @@
         <host name="exampl2.com" port="8000"/>
       </source>
       <target dev="vdi" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk" snapshot="no">
       <driver name="qemu"/>
@@ -321,6 +330,7 @@
         <host transport="unix" socket="/tmp/socket"/>
       </source>
       <target dev="vdj" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -336,6 +346,7 @@
         <host name="192.168.1.100"/>
       </source>
       <target dev="vdk" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -344,6 +355,7 @@
       </source>
       <target dev="sdac" bus="usb" removable="on"/>
       <address type="usb" bus="0" port="2"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu"/>
@@ -351,6 +363,7 @@
         <host name="1:2:3:4:1:2:3:4" port="5522"/>
       </source>
       <target dev="vdl" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="network" device="disk">
       <driver name="qemu" type="raw"/>
@@ -358,6 +371,7 @@
         <host name="192.168.1.100"/>
       </source>
       <target dev="vdm" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="dir" device="floppy" snapshot="no">
       <driver name="qemu"/>
@@ -368,11 +382,13 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/pool-dir/new2.img"/>
       <target dev="sdad" bus="usb" removable="on"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/tmp/brand-new.img"/>
       <target dev="vdn" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
       <boot order="10" loadparm="5"/>
     </disk>
     <disk type="block" device="lun">
@@ -390,39 +406,46 @@
         <host name="10.66.144.87"/>
       </source>
       <target dev="vdo" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="raw" discard="unmap"/>
       <source file="/var/lib/libvirt/images/fedora.img"/>
       <target dev="vdp" bus="virtio"/>
       <transient shareBacking="yes"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="block" device="disk">
       <driver name="qemu" type="raw" cache="none" discard="unmap" io="native"/>
       <source dev="/dev/pool-logical/fedora"/>
       <target dev="vdq" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="dir" device="disk">
       <driver name="qemu" type="qcow2"/>
       <source dir="/pool-dir/testvol1.img"/>
       <target dev="vdr" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/fooroot.img"/>
       <target dev="vds" bus="virtio"/>
       <transient/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="dir" device="disk">
       <driver name="qemu"/>
       <source dir="/"/>
       <target dev="vdt" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="nvme" device="disk">
       <source type="pci" managed="no" namespace="2">
         <address domain="1" bus="2" slot="0" function="0"/>
       </source>
       <target dev="vdu" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="disk">
       <driver name="qemu" type="qcow2" discard="unmap">
@@ -432,6 +455,7 @@
       </driver>
       <source file="/tmp/disk1.qcow2"/>
       <target dev="vdv" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" index="0" model="ich9-ehci1">
       <address type="pci" domain="0" bus="0" slot="4" function="7"/>

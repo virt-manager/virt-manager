@@ -41,6 +41,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sda" bus="sata"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
@@ -116,6 +117,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="sda" bus="sata"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>

@@ -35,6 +35,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/tmp/.local/share/libvirt/images/fedora21.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
@@ -108,6 +109,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/tmp/.local/share/libvirt/images/fedora21.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <disk type="file" device="cdrom">
       <target dev="hda" bus="ide"/>

@@ -20,6 +20,7 @@
     <disk type="file" device="disk">
       <source file="/var/lib/libvirt/images/foobhyve.img"/>
       <target dev="sda" bus="sata"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <interface type="bridge">
       <source bridge="testsuitebr0"/>

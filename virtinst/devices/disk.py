@@ -1015,6 +1015,12 @@ class DeviceDisk(Device):
             if not self.driver_io:
                 self.driver_io = self.IO_MODE_NATIVE
 
+        if self.is_disk():
+            if not self.logical_block_size:
+                self.logical_block_size = 512
+            if not self.physical_block_size:
+                self.physical_block_size = 4096
+
         if discard_unmap:
             if not self.driver_discard:
                 self.driver_discard = "unmap"

@@ -37,6 +37,7 @@ users:
     <disk type="file" device="disk">
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
@@ -90,6 +91,7 @@ users:
     <disk type="file" device="disk">
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <blockio logical_block_size="512" physical_block_size="4096"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
