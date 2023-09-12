@@ -54,7 +54,7 @@ class XMLManualAction(object):
             val = self.xpath_value
         else:
             if "=" not in str(xpath):
-                raise Exception(
+                raise ValueError(
                     "%s: Setting xpath must be in the form of XPATH=VALUE" %
                     xpath)
             xpath, val = xpath.rsplit("=", 1)

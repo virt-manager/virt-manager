@@ -1183,7 +1183,7 @@ def testUnknownEmulatorDomcapsLookup(monkeypatch):
     """
 
     seen = False
-    def fake_build_from_params(conn, emulator, arch, machine, hvtype):
+    def fake_build_from_params(conn, emulator, arch, machine, _hvtype):
         nonlocal seen
         seen = True
         assert arch == "mips"

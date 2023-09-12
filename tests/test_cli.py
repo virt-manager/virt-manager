@@ -455,7 +455,7 @@ class App(object):
         self._add(cat, args, None, check_success=True, **kwargs)
     def add_invalid(self, cat, args, **kwargs):
         if "grep" not in kwargs:
-            raise Exception("grep= must be passed for add_invalid")
+            raise RuntimeError("grep= must be passed for add_invalid")
         self._add(cat, args, None, check_success=False, **kwargs)
     def add_compare(self, cat, args, compbase, **kwargs):
         self._add(cat, args, compbase,

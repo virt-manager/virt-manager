@@ -636,7 +636,7 @@ class Guest(XMLBuilder):
                 capsinfo = self.lookup_capsinfo()
             except Exception:
                 log.exception("Error fetching machine list for alias "
-                              "resolution, assuming mismatch");
+                              "resolution, assuming mismatch")
                 return False
             if capsinfo.is_machine_alias(self.os.machine, domcaps.machine):
                 return True
@@ -743,7 +743,7 @@ class Guest(XMLBuilder):
             if original_machine_type.startswith(prefix):
                 self.os.machine = machine_alias
                 return
-        raise Exception("Don't know how to refresh machine type '%s'" %
+        raise RuntimeError("Don't know how to refresh machine type '%s'" %
                 original_machine_type)
 
     def set_smbios_serial_cloudinit(self):

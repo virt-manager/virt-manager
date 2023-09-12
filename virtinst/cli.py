@@ -1276,7 +1276,7 @@ class _InitClass(type):
     but without giving us an explicit dep on python 3.6
 
     """
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # pylint: disable=bad-mcs-classmethod-argument
         if len(args) != 3:
             return super().__new__(cls, *args)  # pragma: no cover
         dummy = kwargs
