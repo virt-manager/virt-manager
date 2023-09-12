@@ -7,7 +7,6 @@
 import collections
 import os
 import re
-import shutil
 import time
 
 from gi.repository import GLib
@@ -161,7 +160,7 @@ def connect_error(conn, errmsg, tb, warnconsole):
                       "or install an SSH askpass package locally.")
             show_errmsg = False
         else:
-            hint += _("Verify that the 'libvirtd' daemon is running "
+            hint += _("Verify that an appropriate libvirt daemon is running "
                       "on the remote host.")
 
     elif conn.is_xen():  # pragma: no cover
@@ -176,8 +175,8 @@ def connect_error(conn, errmsg, tb, warnconsole):
                       "may not be able to connect to libvirt as a "
                       "regular user. Try running as root.")
             show_errmsg = False
-        elif re.search(r"libvirt-sock", tb):  # pragma: no cover
-            hint += _("Verify that the 'libvirtd' daemon is running.")
+        elif re.search(r"virt[a-z]*-sock", tb):  # pragma: no cover
+            hint += _("Verify that an appropriate libvirt daemon is running.")
             show_errmsg = False
 
     msg = _("Unable to connect to libvirt %s." % conn.get_uri())
@@ -203,27 +202,11 @@ def connect_error(conn, errmsg, tb, warnconsole):
 # App first run connection setup #
 ##################################
 
-def setup_first_uri(config, tryuri):
-    # Add /usr/sbin to the path in case non-root user launches virt-manager
-    libvirtd_installed = bool(shutil.which("libvirtd", path=os.environ['PATH'] + os.pathsep + "/usr/sbin"))
-    if config.CLITestOptions.fake_no_libvirtd:
-        libvirtd_installed = False
-
-    if tryuri and libvirtd_installed:
-        return
-
-    # Manager fail message
+def setup_first_uri(_config, detected_uri):
     msg = ""
-    if not libvirtd_installed:  # pragma: no cover
-        msg += _("The libvirtd service does not appear to be installed. "
-                 "Install and run the libvirtd service to manage "
-                 "virtualization on this host.")
-
-    if not tryuri or "qemu" not in tryuri:
-        if msg:
-            msg += "\n\n"  # pragma: no cover
+    if not detected_uri:
         msg += _("Could not detect a default hypervisor. Make "
-                "sure the appropriate QEMU/KVM virtualization "
+                "sure the appropriate QEMU/KVM virtualization and libvirt "
                 "packages are installed to manage virtualization "
                 "on this host.")
 

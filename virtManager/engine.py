@@ -131,14 +131,14 @@ class vmmEngine(vmmGObject):
         """
         from .lib import connectauth
 
-        tryuri = vmmCreateConn.default_uri()
-        log.debug("Probed default URI=%s", tryuri)
+        detected_uri = vmmCreateConn.default_uri()
+        log.debug("Probed default URI=%s", detected_uri)
         if self.config.CLITestOptions.firstrun_uri is not None:
-            tryuri = self.config.CLITestOptions.firstrun_uri or None
-            log.debug("Using test-options firstrun_uri=%s", tryuri)
+            detected_uri = self.config.CLITestOptions.firstrun_uri or None
+            log.debug("Using test-options firstrun_uri=%s", detected_uri)
 
         manager = self._get_manager()
-        msg = connectauth.setup_first_uri(self.config, tryuri)
+        msg = connectauth.setup_first_uri(self.config, detected_uri)
         if msg:
             manager.set_startup_error(msg)
             return
@@ -149,7 +149,7 @@ class vmmEngine(vmmGObject):
                 if ConnectError:
                     self._handle_conn_error(c, ConnectError)
 
-            conn = vmmConnectionManager.get_instance().add_conn(tryuri)
+            conn = vmmConnectionManager.get_instance().add_conn(detected_uri)
             conn.set_autoconnect(True)
             conn.connect_once("open-completed", _open_completed)
             conn.open()

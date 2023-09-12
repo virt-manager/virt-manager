@@ -139,15 +139,12 @@ def testCLIFirstRunURIBad(app):
     app.click_alert_button("bad:///uri", "Close")
 
 
-def testCLIFirstRunNoLibvirtd(app):
+def testCLIFirstRunNoURI(app):
     # Emulate first run with no libvirtd detected
-    app.open(use_uri=False, firstrun_uri="bad:///uri",
-            extra_opts=["--test-options=fake-no-libvirtd"])
+    app.open(use_uri=False, firstrun_uri="")
     errlabel = app.topwin.find("error-label")
     lib.utils.check(
             lambda: "Checking for virtualization" in errlabel.text)
-    lib.utils.check(
-            lambda: "libvirtd service does not appear" in errlabel.text)
     lib.utils.check(
             lambda: "detect a default hypervisor" in errlabel.text)
 

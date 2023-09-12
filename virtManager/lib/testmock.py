@@ -168,8 +168,6 @@ class CLITestOptionsClass:
 
     * firstrun-uri: If set, use this as the initial connection URI
         if we are doing firstrun testing
-    * fake-no-libvirtd: If doing firstrun testing, fake that
-        libvirtd is not installed
     * fake-vnc-username: Fake VNC username auth request
     * fake-console-resolution: Fake viewer console resolution response.
         Spice doesn't return values here when we are just testing
@@ -223,7 +221,6 @@ class CLITestOptionsClass:
         self.test_vm_run_fail = _get("test-vm-run-fail")
         self.spice_agent = _get("spice-agent")
         self.firstrun_uri = _get_value("firstrun-uri")
-        self.fake_no_libvirtd = _get("fake-no-libvirtd")
         self.fake_vnc_username = _get("fake-vnc-username")
         self.fake_console_resolution = _get("fake-console-resolution")
         self.fake_systray = _get("fake-systray")
