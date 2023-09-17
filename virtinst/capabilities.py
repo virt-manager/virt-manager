@@ -236,7 +236,7 @@ class Capabilities(XMLBuilder):
         if not domains:
             return None
 
-        priority = ["kvm", "xen", "qemu"]
+        priority = ["kvm", "xen", "hvf", "qemu"]
 
         for t in priority:
             for d in domains:
