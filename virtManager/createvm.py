@@ -476,7 +476,8 @@ class vmmCreateVM(vmmGObjectUI):
 
         installable_arch = bool(guest.os.is_x86() or
                 guest.os.is_ppc64() or
-                guest.os.is_s390x())
+                guest.os.is_s390x() or
+                guest.os.is_sw_64())
 
         default_efi = (
             self.config.get_default_firmware_setting() == "uefi" and
@@ -792,7 +793,7 @@ class vmmCreateVM(vmmGObjectUI):
         archs.sort()
 
         prios = ["x86_64", "i686", "aarch64", "armv7l", "ppc64", "ppc64le",
-            "s390x"]
+            "s390x", "sw_64"]
         if self.conn.caps.host.cpu.arch not in prios:
             prios = []  # pragma: no cover
         for p in prios[:]:
@@ -858,6 +859,9 @@ class vmmCreateVM(vmmGObjectUI):
 
         defmachine = None
         prios = []
+        if self._capsinfo.arch in ["sw_64"]:
+            defmachine = "core3"
+
         recommended_machine = virtinst.Guest.get_recommended_machine(
                 self._capsinfo)
         if recommended_machine:

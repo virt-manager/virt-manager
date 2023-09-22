@@ -908,7 +908,8 @@ class Guest(XMLBuilder):
             usb_tablet = True
         if (self.os.is_arm_machvirt() or
             self.os.is_riscv_virt() or
-            self.os.is_pseries()):
+            self.os.is_pseries() or
+            self.os.is_sw_64()):
             usb_tablet = True
             usb_keyboard = True
 
@@ -1035,7 +1036,8 @@ class Guest(XMLBuilder):
                 self.os.is_arm_machvirt() or
                 self.os.is_riscv_virt() or
                 self.os.is_s390x() or
-                self.os.is_pseries()):
+                self.os.is_pseries() or
+                self.os.is_sw_64()):
             return
 
         if (self.conn.is_qemu() and
@@ -1081,7 +1083,8 @@ class Guest(XMLBuilder):
                 self.os.is_arm_machvirt() or
                 self.os.is_riscv_virt() or
                 self.os.is_s390x() or
-                self.os.is_pseries()):
+                self.os.is_pseries() or
+                self.os.is_sw_64()):
             return
 
         if self.osinfo.supports_virtioballoon(self._extra_drivers):
