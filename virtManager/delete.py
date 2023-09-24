@@ -179,8 +179,9 @@ class _vmmDeleteBase(vmmGObjectUI):
         self._set_vm(None)
 
     def _async_delete(self, asyncjob, vm, paths):
-        details = ""
+        errdata = None
         storage_errors = []
+
         try:
             self._destroy_vm(vm)
 
@@ -191,33 +192,32 @@ class _vmmDeleteBase(vmmGObjectUI):
             self._delete_vm(vm)
             vm.conn.schedule_priority_tick(pollvm=True)
         except Exception as e:  # pragma: no cover
-            error = _("Error deleting virtual machine '%(vm)s': %(error)s") % {
-                        "vm": vm.get_name(),
-                        "error": str(e),
-                    }
-            details = "".join(traceback.format_exc())
+            errdata = (
+                 (_("Error deleting virtual machine '%(vm)s': %(error)s") %
+                   {"vm": vm.get_name(), "error": str(e)}),
+                 "".join(traceback.format_exc()))
+
+        if not storage_errors and not errdata:
+            return
 
         storage_errstr = ""
         for errinfo in storage_errors:
             storage_errstr += "%s\n%s\n" % (errinfo[0], errinfo[1])
 
-        if not storage_errstr and not details:
-            return
-
         # We had extra storage errors. If there was another error message,
         # errors to it. Otherwise, build the main error around them.
-        if details:  # pragma: no cover
+        if errdata:  # pragma: no cover
+            error, details = errdata
             details += "\n\n"
             details += _("Additionally, there were errors removing"
-                                    " certain storage devices: \n")
+                         " certain storage devices: \n")
             details += storage_errstr
         else:
             error = _("Errors encountered while removing certain "
-                               "storage devices.")
+                      "storage devices.")
             details = storage_errstr
 
-        if error:
-            asyncjob.set_error(error, details)
+        asyncjob.set_error(error, details)
 
     def _async_delete_paths(self, paths, conn, meter):
         storage_errors = []
