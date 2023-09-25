@@ -21,23 +21,24 @@
 # V I <xasertop@gmail.com>, 2022.
 # Olga Smirnova <mistresssilvara@hotmail.com>, 2022.
 # Sergey A. <sw@atrus.ru>, 2023.
+# "Sergey A." <sw@atrus.ru>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-12 20:00+0200\n"
-"PO-Revision-Date: 2023-02-27 20:20+0000\n"
-"Last-Translator: Sergey A. <sw@atrus.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ru/>\n"
+"PO-Revision-Date: 2023-09-16 10:35+0000\n"
+"Last-Translator: \"Sergey A.\" <sw@atrus.ru>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Weblate 4.15.2\n"
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || ("
+"n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -78,24 +79,20 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "Подключение графической консоли для виртуальной машины"
 
 #: data/virt-manager.appdata.xml.in:37
-#, fuzzy
-#| msgid "virtualization type '%s'"
 msgid "virtualization"
-msgstr "тип виртуализации «%s»"
+msgstr "виртуализация"
 
 #: data/virt-manager.appdata.xml.in:38
-#, fuzzy
-#| msgid "Libvirt URI:"
 msgid "libvirt"
-msgstr "Адрес Libvirt:"
+msgstr "libvirt"
 
 #: data/virt-manager.appdata.xml.in:39
 msgid "qemu"
-msgstr ""
+msgstr "qemu"
 
 #: data/virt-manager.appdata.xml.in:40
 msgid "kvm"
-msgstr ""
+msgstr "kvm"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
@@ -196,7 +193,7 @@ msgstr "_Канал:"
 
 #: ui/addhardware.ui:908
 msgid "_Share Clipboard:"
-msgstr ""
+msgstr "_Общий буфер обмена:"
 
 #: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
@@ -1228,7 +1225,7 @@ msgstr "Состояние:"
 
 #: ui/details.ui:3695
 msgid "Clipboard:"
-msgstr ""
+msgstr "Буфер обмена:"
 
 #: ui/details.ui:3707
 msgid "Source path:"
@@ -2016,7 +2013,7 @@ msgstr "Сохранить обновлённые метаданные сним�
 
 #: ui/snapshotsnew.ui:7
 msgid "Create snapshot"
-msgstr "Создание снимка"
+msgstr "Создать снимок"
 
 #: ui/snapshotsnew.ui:49
 msgid "<span size='large'>Create snapshot</span>"
@@ -2330,7 +2327,7 @@ msgstr "Порт SPICE"
 
 #: virtManager/addhardware.py:430
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "QEMU vdagent"
 
 #: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
@@ -3474,10 +3471,9 @@ msgid "Console %(num)d"
 msgstr "Консоль %(num)d"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel %(name)s"
+#, python-format
 msgid "Channel (%(name)s)"
-msgstr "Канал %(name)s"
+msgstr "Канал (%(name)s)"
 
 #: virtManager/details/details.py:214
 #, python-format
@@ -5626,20 +5622,12 @@ msgstr ""
 "--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:903
-#, fuzzy
-#| msgid ""
-#| "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-#| "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-#| "dhCert=BASE64CERT\n"
-#| "--launchSecurity sev"
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
 "Конфигурация защиты при запуске ВМ (например, с помощью шифрования памяти "
 "SEV). Пример:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:910
