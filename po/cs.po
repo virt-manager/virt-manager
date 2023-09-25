@@ -18,11 +18,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-27 06:15+0000\n"
+"POT-Creation-Date: 2023-09-12 20:00+0200\n"
 "PO-Revision-Date: 2023-04-30 14:21+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,6 +66,26 @@ msgstr "Obrazovka nastavení virtuálního stroje"
 msgid "Graphical console connection for a virtual machine"
 msgstr "Připojení grafickou konzolí k virtuálnímu stroji"
 
+#: data/virt-manager.appdata.xml.in:37
+#, fuzzy
+#| msgid "virtualization type '%s'"
+msgid "virtualization"
+msgstr "typ virtualizace „%s“"
+
+#: data/virt-manager.appdata.xml.in:38
+#, fuzzy
+#| msgid "Libvirt URI:"
+msgid "libvirt"
+msgstr "Libvirt URI:"
+
+#: data/virt-manager.appdata.xml.in:39
+msgid "qemu"
+msgstr ""
+
+#: data/virt-manager.appdata.xml.in:40
+msgid "kvm"
+msgstr ""
+
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Spravovat virtuální stroje"
@@ -99,14 +119,14 @@ msgstr "Typ _zařízení:"
 msgid "_Bus type:"
 msgstr "Typ s_běrnice:"
 
-#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1152
+#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1178
 #: ui/createpool.ui:355 ui/fsdetails.ui:87 ui/gfxdetails.ui:107
 #: ui/tpmdetails.ui:49
 msgid "_Type:"
 msgstr "_Typ:"
 
-#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:937
-#: ui/addhardware.ui:1005 ui/addhardware.ui:1282 ui/tpmdetails.ui:99
+#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:963
+#: ui/addhardware.ui:1031 ui/addhardware.ui:1308 ui/tpmdetails.ui:99
 msgid "_Model:"
 msgstr "_Model:"
 
@@ -126,7 +146,7 @@ msgstr "_MAC adresa:"
 msgid "Device mode_l:"
 msgstr "Mode_l zařízení:"
 
-#: ui/addhardware.ui:673 ui/addhardware.ui:1229
+#: ui/addhardware.ui:673 ui/addhardware.ui:1255
 msgid "Host _Device:"
 msgstr "_Zařízení hostitele:"
 
@@ -156,31 +176,35 @@ msgstr "Soket _automaticky:"
 msgid "_Channel:"
 msgstr "_Kanál:"
 
-#: ui/addhardware.ui:1018 ui/details.ui:4000
+#: ui/addhardware.ui:908
+msgid "_Share Clipboard:"
+msgstr ""
+
+#: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
 msgstr "A_kce:"
 
-#: ui/addhardware.ui:1110 ui/createnet.ui:139
+#: ui/addhardware.ui:1136 ui/createnet.ui:139
 msgid "_Mode:"
 msgstr "Reži_m:"
 
-#: ui/addhardware.ui:1263 ui/details.ui:4688
+#: ui/addhardware.ui:1289 ui/details.ui:4715
 msgid "rng"
 msgstr "rng"
 
-#: ui/addhardware.ui:1336 ui/details.ui:4770
+#: ui/addhardware.ui:1362 ui/details.ui:4797
 msgid "panic"
 msgstr "panika"
 
-#: ui/addhardware.ui:1442 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
+#: ui/addhardware.ui:1468 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
 #: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
 #: ui/createpool.ui:478 ui/createvm.ui:2400 ui/createvol.ui:462
-#: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
+#: ui/delete.ui:181 ui/details.ui:4893 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
 msgstr "_Storno"
 
-#: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
+#: ui/addhardware.ui:1483 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
 msgid "_Finish"
 msgstr "_Dokončit"
@@ -243,7 +267,7 @@ msgstr "Provádí se požadovaná operace"
 msgid "Please wait a few moments..."
 msgstr "Vyčkejte…"
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:300 virtManager/asyncjob.py:307
 msgid "Processing..."
 msgstr "Zpracování…"
 
@@ -589,7 +613,7 @@ msgstr "Typ _virtualizace:"
 msgid "Architecture options"
 msgstr "Předvolby architektury"
 
-#: ui/createvm.ui:748 virtManager/details/details.py:724
+#: ui/createvm.ui:748 virtManager/details/details.py:705
 #: virtManager/manager.py:325 virtManager/oslist.py:72
 msgid "Name"
 msgstr "Název"
@@ -654,13 +678,13 @@ msgstr "Za_dejte kořenovou složku existujícího operačního systému:"
 msgid ""
 "<small>The OS directory tree must already exist. To enable OS directory tree "
 "creation,\n"
-"please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
-"\">virt-bootstrap</a></small>"
+"please install <a href=\"https://github.com/virt-manager/virt-"
+"bootstrap\">virt-bootstrap</a></small>"
 msgstr ""
 "<small>Je třeba, aby strom složek operačního systému už existoval. Pro "
 "zapnutí vytváření stromu složek operačního\n"
-"systému nainstalujte <a href=\"https://github.com/virt-manager/virt-bootstrap"
-"\">virt-bootstrap</a></small>"
+"systému nainstalujte <a href=\"https://github.com/virt-manager/virt-"
+"bootstrap\">virt-bootstrap</a></small>"
 
 #: ui/createvm.ui:1373
 msgid ""
@@ -752,7 +776,7 @@ msgstr "_Procesory:"
 msgid "(Insert host mem)"
 msgstr "(Vložit paměť hostitele)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2398
+#: ui/createvm.ui:1987 virtManager/details/details.py:2383
 msgid "Memory"
 msgstr "Operační paměť"
 
@@ -761,7 +785,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "Zapnout úložiště pro t_ento virtuální stroj"
 
 #: ui/createvm.ui:2040 virtManager/addhardware.py:216
-#: virtManager/addhardware.py:981 virtManager/clone.py:277
+#: virtManager/addhardware.py:984 virtManager/clone.py:277
 msgid "Storage"
 msgstr "Úložiště"
 
@@ -981,12 +1005,12 @@ msgstr ""
 msgid "<b>CPUs</b>"
 msgstr "<b>Procesory</b>"
 
-#: ui/details.ui:1441 ui/details.ui:3420 ui/details.ui:3879 ui/details.ui:4015
-#: ui/details.ui:4174
+#: ui/details.ui:1441 ui/details.ui:3420 ui/details.ui:3906 ui/details.ui:4042
+#: ui/details.ui:4201
 msgid "M_odel:"
 msgstr "M_odel:"
 
-#: ui/details.ui:1452 virtManager/details/details.py:1947
+#: ui/details.ui:1452 virtManager/details/details.py:1929
 msgid "Copy host CP_U configuration"
 msgstr "Zkopírovat uspořádání procesor_u hostitele"
 
@@ -1158,7 +1182,7 @@ msgstr "I_P adresa:"
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Rozhraní virtuální sítě</b>"
 
-#: ui/details.ui:3240 ui/details.ui:4127 ui/details.ui:4449 ui/details.ui:4625
+#: ui/details.ui:3240 ui/details.ui:4154 ui/details.ui:4476 ui/details.ui:4652
 msgid "Type:"
 msgstr "Typ:"
 
@@ -1178,119 +1202,123 @@ msgstr "<b>Zvukové zařízení</b>"
 msgid "label506"
 msgstr "štítek506"
 
-#: ui/details.ui:3546 ui/details.ui:3583
+#: ui/details.ui:3546 ui/details.ui:3584
 msgid "label508"
 msgstr "štítek508"
 
-#: ui/details.ui:3596
+#: ui/details.ui:3597 ui/details.ui:3610
 msgid "label507"
 msgstr "štítek507"
 
-#: ui/details.ui:3621
+#: ui/details.ui:3635
 msgid "Source host:"
 msgstr "Zdrojový hostitel:"
 
-#: ui/details.ui:3633
+#: ui/details.ui:3647
 msgid "Bind host:"
 msgstr "Spojovací hostitel:"
 
-#: ui/details.ui:3645
+#: ui/details.ui:3659
 msgid "Target type:"
 msgstr "Typ cíle:"
 
-#: ui/details.ui:3657
+#: ui/details.ui:3671
 msgid "Target name:"
 msgstr "Název cíle:"
 
-#: ui/details.ui:3669 ui/hostnets.ui:175 ui/hoststorage.ui:391
+#: ui/details.ui:3683 ui/hostnets.ui:175 ui/hoststorage.ui:391
 msgid "State:"
 msgstr "Stav:"
 
-#: ui/details.ui:3681
+#: ui/details.ui:3695
+msgid "Clipboard:"
+msgstr ""
+
+#: ui/details.ui:3707
 msgid "Source path:"
 msgstr "Popis umístění zdroje:"
 
-#: ui/details.ui:3701
+#: ui/details.ui:3727
 msgid "<b>insert type</b>"
 msgstr "<b>zadejte typ</b>"
 
-#: ui/details.ui:3762 ui/hostnets.ui:163
+#: ui/details.ui:3788 ui/hostnets.ui:163
 msgid "Device:"
 msgstr "Zařízení:"
 
-#: ui/details.ui:3787
+#: ui/details.ui:3814
 msgid "ROM _BAR:"
 msgstr "ROM _BAR:"
 
-#: ui/details.ui:3910
+#: ui/details.ui:3937
 msgid "_3D acceleration:"
 msgstr "_3D akcelerace:"
 
-#: ui/details.ui:3938
+#: ui/details.ui:3965
 msgid "<b>Video</b>"
 msgstr "<b>Video</b>"
 
-#: ui/details.ui:4190
+#: ui/details.ui:4217
 msgid "Devices:"
 msgstr "Zařízení:"
 
-#: ui/details.ui:4246
+#: ui/details.ui:4273
 msgid "<b>Controller</b>"
 msgstr "<b>Řadič</b>"
 
-#: ui/details.ui:4292
+#: ui/details.ui:4319
 msgid "<b>Filesystem</b>"
 msgstr "<b>Souborový systém</b>"
 
-#: ui/details.ui:4347 ui/migrate.ui:390
+#: ui/details.ui:4374 ui/migrate.ui:390
 msgid "M_ode:"
 msgstr "_Režim:"
 
-#: ui/details.ui:4392
+#: ui/details.ui:4419
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>Zařízení Smartcard</b>"
 
-#: ui/details.ui:4461
+#: ui/details.ui:4488
 msgid "Address:"
 msgstr "Adresa:"
 
-#: ui/details.ui:4473
+#: ui/details.ui:4500
 msgid "foo:12"
 msgstr "neco:12"
 
-#: ui/details.ui:4505
+#: ui/details.ui:4532
 msgid "<b>Redirected device</b>"
 msgstr "<b>Přesměrované zařízení</b>"
 
-#: ui/details.ui:4557
+#: ui/details.ui:4584
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM zařízení</b>"
 
-#: ui/details.ui:4650
+#: ui/details.ui:4677
 msgid "Host Device:"
 msgstr "Zařízení hostitele:"
 
-#: ui/details.ui:4670
+#: ui/details.ui:4697
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>Generátor náhodných čísel</b>"
 
-#: ui/details.ui:4720
+#: ui/details.ui:4747
 msgid "Model:"
 msgstr "Model:"
 
-#: ui/details.ui:4732
+#: ui/details.ui:4759
 msgid "panic-model"
 msgstr "model paniky"
 
-#: ui/details.ui:4752
+#: ui/details.ui:4779
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>Oznamování paniky</b>"
 
-#: ui/details.ui:4845
+#: ui/details.ui:4872
 msgid "_Remove"
 msgstr "Odeb_rat"
 
-#: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
+#: ui/details.ui:4913 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
 msgstr "_Použít"
@@ -1591,12 +1619,12 @@ msgid "Power on the virtual machine"
 msgstr "Zapnout virtuální stroj"
 
 #: ui/manager.ui:297 virtManager/manager.py:758 virtManager/vmmenu.py:82
-#: virtManager/vmwindow.py:380
+#: virtManager/vmwindow.py:381
 msgid "_Run"
 msgstr "_Spustit"
 
 #: ui/manager.ui:312 ui/vmwindow.ui:354 virtManager/manager.py:795
-#: virtManager/vmwindow.py:421
+#: virtManager/vmwindow.py:422
 msgid "Pause the virtual machine"
 msgstr "Pozastavit virtuální stroj"
 
@@ -2016,10 +2044,6 @@ msgstr "_Verze:"
 msgid "Adva_nced options"
 msgstr "Rozšíře_né volby"
 
-#: ui/tpmdetails.ui:175
-msgid "tpm-tab"
-msgstr "tpm-tab"
-
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
 msgstr "Virtuální stroj"
@@ -2105,7 +2129,7 @@ msgstr "Konzole"
 msgid "Show virtual hardware details"
 msgstr "Zobrazit podrobnosti o virtuálním hardware"
 
-#: ui/vmwindow.ui:315 virtManager/error.py:347
+#: ui/vmwindow.ui:315 virtManager/error.py:328
 msgid "Details"
 msgstr "Podrobnosti"
 
@@ -2160,7 +2184,7 @@ msgstr "Chyba při spouštění dialogu „O aplikaci“: %s"
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/addhardware.py:164 virtManager/details/details.py:592
+#: virtManager/addhardware.py:164 virtManager/details/details.py:573
 msgid "Hardware"
 msgstr "Hardware"
 
@@ -2169,17 +2193,17 @@ msgstr "Hardware"
 msgid "Connection does not support storage management."
 msgstr "Spojení neumožňuje správu úložiště."
 
-#: virtManager/addhardware.py:218 virtManager/addhardware.py:983
+#: virtManager/addhardware.py:218 virtManager/addhardware.py:986
 msgid "Controller"
 msgstr "Řadič"
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:985
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:988
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr "Síť"
 
-#: virtManager/addhardware.py:220 virtManager/addhardware.py:987
-#: virtManager/details/details.py:195
+#: virtManager/addhardware.py:220 virtManager/addhardware.py:990
+#: virtManager/details/details.py:193
 msgid "Input"
 msgstr "Vstup"
 
@@ -2189,11 +2213,11 @@ msgstr "Vstup"
 msgid "Not supported for this guest type."
 msgstr "Není podporováno pro tento typ hosta."
 
-#: virtManager/addhardware.py:222 virtManager/addhardware.py:989
+#: virtManager/addhardware.py:222 virtManager/addhardware.py:992
 msgid "Graphics"
 msgstr "Grafika"
 
-#: virtManager/addhardware.py:224 virtManager/addhardware.py:991
+#: virtManager/addhardware.py:224 virtManager/addhardware.py:994
 msgid "Sound"
 msgstr "Zvuk"
 
@@ -2247,16 +2271,16 @@ msgstr "Resetátor"
 msgid "Filesystem"
 msgstr "Souborový systém"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:999
+#: virtManager/addhardware.py:265 virtManager/addhardware.py:1002
 #: virtManager/details/details.py:253
 msgid "Smartcard"
 msgstr "Smartcard"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:1001
+#: virtManager/addhardware.py:267 virtManager/addhardware.py:1004
 msgid "USB Redirection"
 msgstr "Přesměrování USB"
 
-#: virtManager/addhardware.py:269 virtManager/addhardware.py:1003
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1006
 msgid "TPM"
 msgstr "TPM"
 
@@ -2264,7 +2288,7 @@ msgstr "TPM"
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:272 virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:272 virtManager/addhardware.py:1010
 #: virtManager/details/details.py:252
 msgid "Panic Notifier"
 msgstr "Oznamování paniky"
@@ -2277,202 +2301,206 @@ msgstr "Nepodporováno pro tuto kombinaci hypervizor/libvirt/architektura."
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:346
+#: virtManager/addhardware.py:347
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Chyba při změně nastavení virt. stroje: %s"
 
-#: virtManager/addhardware.py:371
+#: virtManager/addhardware.py:372
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Tyto změny se projeví až po příštím vypnutí hosta."
 
-#: virtManager/addhardware.py:421
+#: virtManager/addhardware.py:423
 msgid "Pseudo TTY"
 msgstr "Pseudo TTY"
 
-#: virtManager/addhardware.py:422
+#: virtManager/addhardware.py:424
 msgid "Output to a file"
 msgstr "Výstup do souboru"
 
-#: virtManager/addhardware.py:423
+#: virtManager/addhardware.py:425
 msgid "TCP net console"
 msgstr "TCP síťová konzole"
 
-#: virtManager/addhardware.py:424
+#: virtManager/addhardware.py:426
 msgid "UDP net console"
 msgstr "UDP síťová konzole"
 
-#: virtManager/addhardware.py:425
+#: virtManager/addhardware.py:427
 msgid "UNIX socket"
 msgstr "Unixový soket"
 
-#: virtManager/addhardware.py:426
+#: virtManager/addhardware.py:428
 msgid "Spice agent"
 msgstr "Spice agent"
 
-#: virtManager/addhardware.py:427
+#: virtManager/addhardware.py:429
 msgid "Spice port"
 msgstr "Spice port"
 
-#: virtManager/addhardware.py:441 virtManager/addhardware.py:502
+#: virtManager/addhardware.py:430
+msgid "QEMU vdagent"
+msgstr ""
+
+#: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
 msgstr "IDE"
 
 # auto translated by TM merge from project: Fedora Websites, version:
 # boot.fedoraproject.org, DocId: po/boot.fedoraproject.org
-#: virtManager/addhardware.py:442 virtManager/details/details.py:2331
+#: virtManager/addhardware.py:445 virtManager/details/details.py:2316
 msgid "Floppy"
 msgstr "Disketa"
 
-#: virtManager/addhardware.py:443 virtManager/addhardware.py:504
+#: virtManager/addhardware.py:446 virtManager/addhardware.py:507
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:444 virtManager/addhardware.py:503
+#: virtManager/addhardware.py:447 virtManager/addhardware.py:506
 msgid "SATA"
 msgstr "SATA"
 
 # auto translated by TM merge from project: FreeIPA, version: ipa-4-5, DocId:
 # po/ipa
-#: virtManager/addhardware.py:445
+#: virtManager/addhardware.py:448
 msgid "VirtIO Serial"
 msgstr "VirtIO sériový"
 
-#: virtManager/addhardware.py:446 virtManager/addhardware.py:506
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:449 virtManager/addhardware.py:509
+#: virtManager/addhardware.py:570
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:447
+#: virtManager/addhardware.py:450
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:448
+#: virtManager/addhardware.py:451
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:449
+#: virtManager/addhardware.py:452
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:457 virtManager/addhardware.py:897
+#: virtManager/addhardware.py:460 virtManager/addhardware.py:900
 msgid "VirtIO SCSI"
 msgstr "VirtIO SCSI"
 
-#: virtManager/addhardware.py:460
+#: virtManager/addhardware.py:463
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:505
+#: virtManager/addhardware.py:508
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:507 virtManager/addhardware.py:568
+#: virtManager/addhardware.py:510 virtManager/addhardware.py:571
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:508 virtManager/addhardware.py:569
+#: virtManager/addhardware.py:511 virtManager/addhardware.py:572
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:515
+#: virtManager/addhardware.py:518
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:516
+#: virtManager/addhardware.py:519
 msgid "pSeries"
 msgstr "pSeries"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:520
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:521
 msgid "s390"
 msgstr "s390"
 
-#: virtManager/addhardware.py:525
+#: virtManager/addhardware.py:528
 msgid "Random"
 msgstr "Náhodné"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:529
 msgid "Entropy Gathering Daemon"
 msgstr "Proces služby získávání náhodnosti"
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:530
 msgid "Builtin RNG"
 msgstr "Vestavěný generátor náhodných čísel"
 
-#: virtManager/addhardware.py:545
+#: virtManager/addhardware.py:548
 msgid "Forcefully reset the guest"
 msgstr "Vynutit restart hosta"
 
-#: virtManager/addhardware.py:546
+#: virtManager/addhardware.py:549
 msgid "Gracefully shutdown the guest"
 msgstr "Korektně vypnout hosta"
 
-#: virtManager/addhardware.py:547
+#: virtManager/addhardware.py:550
 msgid "Forcefully power off the guest"
 msgstr "Vynutit vypnutí hosta"
 
-#: virtManager/addhardware.py:548
+#: virtManager/addhardware.py:551
 msgid "Pause the guest"
 msgstr "Pozastavit hosta"
 
-#: virtManager/addhardware.py:549
+#: virtManager/addhardware.py:552
 msgid "No action"
 msgstr "Žádná akce"
 
-#: virtManager/addhardware.py:550
+#: virtManager/addhardware.py:553
 msgid "Dump guest memory core"
 msgstr "Vypsat obsah paměti hosta"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:560
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Grafický USB tablet EvTouch"
 
 # auto translated by TM merge from project: IBus-Chewing, version: master,
 # DocId: ibus-chewing
-#: virtManager/addhardware.py:560 virtManager/details/details.py:194
+#: virtManager/addhardware.py:563 virtManager/details/details.py:192
 msgid "Keyboard"
 msgstr "Klávesnice"
 
-#: virtManager/addhardware.py:561 virtManager/details/details.py:192
+#: virtManager/addhardware.py:564 virtManager/details/details.py:190
 msgid "Mouse"
 msgstr "Myš"
 
-#: virtManager/addhardware.py:562 virtManager/details/details.py:190
+#: virtManager/addhardware.py:565 virtManager/details/details.py:188
 msgid "Tablet"
 msgstr "Tablet"
 
-#: virtManager/addhardware.py:566
+#: virtManager/addhardware.py:569
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:575
+#: virtManager/addhardware.py:578
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:673
+#: virtManager/addhardware.py:676
 msgid "Disk device"
 msgstr "Diskové zařízení"
 
-#: virtManager/addhardware.py:675
+#: virtManager/addhardware.py:678
 msgid "CDROM device"
 msgstr "CDROM zařízení"
 
-#: virtManager/addhardware.py:677
+#: virtManager/addhardware.py:680
 msgid "Floppy device"
 msgstr "Disketové zařízení"
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:683
 msgid "LUN Passthrough"
 msgstr "Export LUN do hosta"
 
-#: virtManager/addhardware.py:703 virtManager/addhardware.py:812
-#: virtManager/addhardware.py:822 virtManager/addhardware.py:898
+#: virtManager/addhardware.py:706 virtManager/addhardware.py:815
+#: virtManager/addhardware.py:825 virtManager/addhardware.py:901
 #: virtManager/device/addstorage.py:98 virtManager/device/addstorage.py:105
 #: virtManager/device/fsdetails.py:88 virtManager/device/gfxdetails.py:103
 #: virtManager/device/tpmdetails.py:76 virtManager/device/tpmdetails.py:87
@@ -2480,7 +2508,7 @@ msgstr "Export LUN do hosta"
 msgid "Hypervisor default"
 msgstr "Výchozí hypervizoru"
 
-#: virtManager/addhardware.py:791
+#: virtManager/addhardware.py:794
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
@@ -2489,72 +2517,72 @@ msgstr ""
 "%s není v hostitelském systému aktivní.\n"
 "Než budete přidávat hosta virtualizace, spusťte v hostitelském systému mdev."
 
-#: virtManager/addhardware.py:797
+#: virtManager/addhardware.py:800
 msgid "No Devices Available"
 msgstr "Nejsou k dispozici žádná zařízení"
 
 # auto translated by TM merge from project: firewalld, version: master, DocId:
 # po/firewalld
-#: virtManager/addhardware.py:859 virtManager/device/tpmdetails.py:72
+#: virtManager/addhardware.py:862 virtManager/device/tpmdetails.py:72
 msgid "Passthrough"
 msgstr "Přímý průchod"
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/addhardware.py:860
+#: virtManager/addhardware.py:863
 msgid "Host"
 msgstr "Hostitel"
 
-#: virtManager/addhardware.py:866
+#: virtManager/addhardware.py:869
 msgid "Spice channel"
 msgstr "Spice kanál"
 
-#: virtManager/addhardware.py:894
+#: virtManager/addhardware.py:897
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:895
+#: virtManager/addhardware.py:898
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:993
+#: virtManager/addhardware.py:996
 msgid "Video Device"
 msgstr "Video zařízení"
 
-#: virtManager/addhardware.py:995
+#: virtManager/addhardware.py:998
 msgid "Watchdog Device"
 msgstr "Zařízení resetátoru"
 
-#: virtManager/addhardware.py:997
+#: virtManager/addhardware.py:1000
 msgid "Filesystem Passthrough"
 msgstr "Export souborového systému do hosta"
 
-#: virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:1008
 msgid "Random Number Generator"
 msgstr "Generátor náhodných čísel"
 
-#: virtManager/addhardware.py:1009
+#: virtManager/addhardware.py:1012
 msgid "VM Sockets"
 msgstr "Patic ve virt. stroji"
 
-#: virtManager/addhardware.py:1013 virtManager/details/details.py:2111
+#: virtManager/addhardware.py:1016 virtManager/details/details.py:2094
 #, python-format
 msgid "%s Device"
 msgstr "Zařízení %s"
 
-#: virtManager/addhardware.py:1017
+#: virtManager/addhardware.py:1020
 msgid "PCI Device"
 msgstr "PCI zařízení"
 
-#: virtManager/addhardware.py:1019
+#: virtManager/addhardware.py:1022
 msgid "MDEV Device"
 msgstr "MDEV zařízení"
 
-#: virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:1023
 msgid "USB Device"
 msgstr "USB zařízení"
 
-#: virtManager/addhardware.py:1140
+#: virtManager/addhardware.py:1146
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2565,11 +2593,11 @@ msgstr ""
 "Přidání více než jednoho není podporováno.\n"
 "Můžete změnit typ USB řadiče na obrazovce s podrobnostmi o virt. stroji."
 
-#: virtManager/addhardware.py:1232
+#: virtManager/addhardware.py:1238
 msgid "Are you sure you want to add this device?"
 msgstr "Opravdu chcete přidat toto zařízení?"
 
-#: virtManager/addhardware.py:1235
+#: virtManager/addhardware.py:1241
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2577,39 +2605,39 @@ msgstr ""
 "Toto zařízení není možné připojit do spuštěného stroje. Přejete si ho "
 "zpřístupnit po příštím vypnutí hosta?"
 
-#: virtManager/addhardware.py:1259
+#: virtManager/addhardware.py:1265
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Nedaří se přidat zařízení: %s"
 
-#: virtManager/addhardware.py:1280
+#: virtManager/addhardware.py:1286
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "Chyba při ověřování správnosti parametrů zařízení: %s"
 
-#: virtManager/addhardware.py:1286
+#: virtManager/addhardware.py:1292
 msgid "Creating device"
 msgstr "Vytváření zařízení"
 
-#: virtManager/addhardware.py:1287
+#: virtManager/addhardware.py:1293
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "V závislosti na zařízení, dokončení tohoto může trvat několik minut."
 
-#: virtManager/addhardware.py:1309
+#: virtManager/addhardware.py:1315
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Zařízení už je používáno jiným hostem %s"
 
-#: virtManager/addhardware.py:1311
+#: virtManager/addhardware.py:1317
 msgid "Do you really want to use the device?"
 msgstr "Opravdu chcete použít toto zařízení?"
 
-#: virtManager/addhardware.py:1356
+#: virtManager/addhardware.py:1362
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "Chyba při sestavování XML pro zařízení: %s"
 
-#: virtManager/asyncjob.py:220
+#: virtManager/asyncjob.py:219
 msgid "Cancelling job..."
 msgstr "Rušení úlohy…"
 
@@ -2720,34 +2748,6 @@ msgid ""
 msgstr ""
 "Vytváří se klon virtuálního stroje „%s“ a vybraného úložiště (to může chvíli "
 "trvat)"
-
-#: virtManager/config.py:148
-msgid "Locate or create storage volume"
-msgstr "Najděte nebo vytvořte nový svazek pro ukládání"
-
-#: virtManager/config.py:149
-msgid "Locate existing storage"
-msgstr "Vyhledat existující úložiště"
-
-#: virtManager/config.py:161
-msgid "Locate ISO media volume"
-msgstr "Vyhledat svazek ISO média"
-
-#: virtManager/config.py:162
-msgid "Locate ISO media"
-msgstr "Vyhledat ISO médium"
-
-#: virtManager/config.py:168
-msgid "Locate floppy media volume"
-msgstr "Vyhledat svazek disketového média"
-
-#: virtManager/config.py:169
-msgid "Locate floppy media"
-msgstr "Vyhledat disketové médium"
-
-#: virtManager/config.py:175 virtManager/config.py:176
-msgid "Locate directory volume"
-msgstr "Vyhledat adresářový svazek"
 
 #: virtManager/connection.py:395
 msgid "User session"
@@ -2897,7 +2897,7 @@ msgstr "Vytváření fondu úložiště může chvíli trvat…"
 msgid "Choose source path"
 msgstr "Zvolte popis umístění zdroje"
 
-#: virtManager/createpool.py:398
+#: virtManager/createpool.py:397
 msgid "Choose target directory"
 msgstr "Zvolte cílovou složku"
 
@@ -2989,7 +2989,7 @@ msgstr[2] "K dispozici až %(numcpus)d"
 msgid "No active connection to install on."
 msgstr "Žádné aktivní spojení na které nainstalovat."
 
-#: virtManager/createvm.py:955 virtManager/details/details.py:1767
+#: virtManager/createvm.py:955 virtManager/details/details.py:1749
 #: virtManager/device/gfxdetails.py:96
 msgid "None"
 msgstr "Žádný"
@@ -3403,7 +3403,7 @@ msgstr "Nelze zobrazit grafickou konzoli typu „%s“"
 msgid "Connecting to graphical console for guest"
 msgstr "Připojuje se ke grafické konzoli hosta"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:739
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3412,80 +3412,81 @@ msgstr ""
 "Chyba při připojování ke grafické konzoli:\n"
 "%s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:796
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Chyba ověření totožnosti prohlížeče: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:818
 msgid "USB redirection error"
 msgstr "Chyba přesměrování USB"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:827
 msgid "Viewer was disconnected."
 msgstr "Prohlížeč byl odpojen."
 
-#: virtManager/details/console.py:833
+#: virtManager/details/console.py:834
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Chybový výstup SSH tunelu: %s"
 
-#: virtManager/details/console.py:846
+#: virtManager/details/console.py:847
 msgid "Viewer is disconnecting."
 msgstr "Prohlížeč se odpojuje."
 
-#: virtManager/details/console.py:979
+#: virtManager/details/console.py:980
 msgid "Viewer window closed."
 msgstr "Okno prohlížeče zavřeno."
 
-#: virtManager/details/console.py:983
+#: virtManager/details/console.py:984
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Pro uvolnění ukazatele myši stiskněte %s."
 
-#: virtManager/details/details.py:163
+#: virtManager/details/details.py:161
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "Disketová mechanika %(index)d"
 
-#: virtManager/details/details.py:169
+#: virtManager/details/details.py:167
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%(bus)s CDROM %(index)d"
 
-#: virtManager/details/details.py:174
+#: virtManager/details/details.py:172
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "%(bus)s disk %(index)d"
 
-#: virtManager/details/details.py:178
+#: virtManager/details/details.py:176
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(bus)s %(device)s %(index)d"
 
-#: virtManager/details/details.py:186
+#: virtManager/details/details.py:184
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "Síť. rozhr. %(mac)s"
 
-#: virtManager/details/details.py:199
+#: virtManager/details/details.py:197
 #, python-format
 msgid "Serial %(num)d"
 msgstr "Sériový port %(num)d"
 
-#: virtManager/details/details.py:203
+#: virtManager/details/details.py:201
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "Paralelní port %(num)d"
 
-#: virtManager/details/details.py:207
+#: virtManager/details/details.py:205
 #, python-format
 msgid "Console %(num)d"
 msgstr "Textová konzole %(num)d"
 
-#: virtManager/details/details.py:212
-#, python-format
-msgid "Channel %(name)s"
+#: virtManager/details/details.py:213
+#, fuzzy, python-format
+#| msgid "Channel %(name)s"
+msgid "Channel (%(name)s)"
 msgstr "Kanál %(name)s"
 
 #: virtManager/details/details.py:214
@@ -3543,233 +3544,241 @@ msgstr "TPM %(device)s"
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:537
+#: virtManager/details/details.py:518
 msgid "_Add Hardware"
 msgstr "Přid_at hardware"
 
-#: virtManager/details/details.py:543
+#: virtManager/details/details.py:524
 msgid "_Remove Hardware"
 msgstr "Odeb_rat hardware"
 
-#: virtManager/details/details.py:662 virtManager/details/details.py:1774
+#: virtManager/details/details.py:643 virtManager/details/details.py:1756
 msgid "UEFI"
 msgstr "UEFI"
 
-#: virtManager/details/details.py:672
+#: virtManager/details/details.py:653
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Vámi používané libvirt nebo hypervizor nepodporuje UEFI."
 
-#: virtManager/details/details.py:675
+#: virtManager/details/details.py:656
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr "Libvirt na hostiteli nezjištěn žádný obraz s UEFI/OVMF firmware."
 
-#: virtManager/details/details.py:725
+#: virtManager/details/details.py:706
 msgid "Version"
 msgstr "Verze"
 
-#: virtManager/details/details.py:787
+#: virtManager/details/details.py:768
 msgid "Application Default"
 msgstr "Výchozí pro aplikaci"
 
-#: virtManager/details/details.py:789
+#: virtManager/details/details.py:770
 msgid "Hypervisor Default"
 msgstr "Výchozí pro hypervizor"
 
-#: virtManager/details/details.py:791
+#: virtManager/details/details.py:772
 msgid "Clear CPU configuration"
 msgstr "Vyčistit nastavení procesoru"
 
-#: virtManager/details/details.py:809
+#: virtManager/details/details.py:790
 msgid "Disk bus:"
 msgstr "Sběrnice disku:"
 
-#: virtManager/details/details.py:1019
+#: virtManager/details/details.py:1000
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Chyba při spouštění dialogu o hardware: %s"
 
-#: virtManager/details/details.py:1025
+#: virtManager/details/details.py:1006
 msgid "Are you sure you want to remove this device?"
 msgstr "Opravdu chcete odebrat toto zařízení?"
 
-#: virtManager/details/details.py:1272 virtManager/details/details.py:1766
-#: virtManager/details/details.py:1785 virtManager/details/details.py:1987
+#: virtManager/details/details.py:1253 virtManager/details/details.py:1748
+#: virtManager/details/details.py:1767 virtManager/details/details.py:1969
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: virtManager/details/details.py:1354
+#: virtManager/details/details.py:1335
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Chyba při uplatňování změn: %s"
 
-#: virtManager/details/details.py:1483
+#: virtManager/details/details.py:1464
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Chyba při změně hodnoty automatického spouštění: %s"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1481
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Není možné nastavit initrd a neuvést také popis umístění jádra"
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1484
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "Není možné nastavit argumenty jádra a neuvést popis umístění jádra"
 
-#: virtManager/details/details.py:1510
+#: virtManager/details/details.py:1491
 msgid "An init path must be specified"
 msgstr "Je třeba uvést popis umístění init"
 
-#: virtManager/details/details.py:1523 virtManager/device/addstorage.py:275
+#: virtManager/details/details.py:1504 virtManager/device/addstorage.py:275
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "Disk „%(path)s“ je už používán jiným hostem %(names)s"
 
-#: virtManager/details/details.py:1527 virtManager/device/addstorage.py:279
+#: virtManager/details/details.py:1508 virtManager/device/addstorage.py:279
 msgid "Do you really want to use the disk?"
 msgstr "Skutečně chcete použít tento disk?"
 
-#: virtManager/details/details.py:1689
+#: virtManager/details/details.py:1670
 msgid "Remove this device from the virtual machine"
 msgstr "Odebrat toto zařízení z virtuálního stroje"
 
-#: virtManager/details/details.py:1745
+#: virtManager/details/details.py:1727
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Chyba při znovunačítání seznamu hardware: %s"
 
-#: virtManager/details/details.py:1840
+#: virtManager/details/details.py:1822
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s …"
 
-#: virtManager/details/details.py:1852
+#: virtManager/details/details.py:1834
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s čtení"
 
-#: virtManager/details/details.py:1853
+#: virtManager/details/details.py:1835
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s zápis"
 
-#: virtManager/details/details.py:1856
+#: virtManager/details/details.py:1838
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s příchozí"
 
-#: virtManager/details/details.py:1857
+#: virtManager/details/details.py:1839
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s odchozí"
 
-#: virtManager/details/details.py:1859 virtManager/details/details.py:1860
-#: virtManager/details/details.py:1861 virtManager/details/details.py:1862
+#: virtManager/details/details.py:1841 virtManager/details/details.py:1842
+#: virtManager/details/details.py:1843 virtManager/details/details.py:1844
 #: virtManager/hostnets.py:206 virtManager/hostnets.py:225
 msgid "Disabled"
 msgstr "Vypnutý"
 
-#: virtManager/details/details.py:1870
+#: virtManager/details/details.py:1852
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s z %(total-memory)s"
 
-#: virtManager/details/details.py:2036
+#: virtManager/details/details.py:2018
 msgid "Absolute Movement"
 msgstr "Absolutně měřený pohyb"
 
-#: virtManager/details/details.py:2038
+#: virtManager/details/details.py:2020
 msgid "Relative Movement"
 msgstr "Relativně měřený pohyb"
 
-#: virtManager/details/details.py:2047 virtManager/details/details.py:2212
-#: virtManager/details/details.py:2215
+#: virtManager/details/details.py:2029 virtManager/details/details.py:2197
+#: virtManager/details/details.py:2200
 msgid "Hypervisor does not support removing this device"
 msgstr "Hypervizor nepodporuje odebrání tohoto zařízení"
 
-#: virtManager/details/details.py:2051
+#: virtManager/details/details.py:2033
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s server"
 
-#: virtManager/details/details.py:2103
+#: virtManager/details/details.py:2086
 msgid "Serial Device"
 msgstr "Sériové zařízení"
 
-#: virtManager/details/details.py:2105
+#: virtManager/details/details.py:2088
 msgid "Parallel Device"
 msgstr "Paralelní zařízení"
 
-#: virtManager/details/details.py:2107
+#: virtManager/details/details.py:2090
 msgid "Console Device"
 msgstr "Zařízení konzole"
 
-#: virtManager/details/details.py:2109
+#: virtManager/details/details.py:2092
 msgid "Channel Device"
 msgstr "Zařízení kanálu"
 
-#: virtManager/details/details.py:2119
+#: virtManager/details/details.py:2102
 msgid "Primary Console"
 msgstr "Hlavní konzole"
 
-#: virtManager/details/details.py:2179
+#: virtManager/details/details.py:2138 virtManager/preferences.py:123
+msgid "Off"
+msgstr "Vypnuto"
+
+#: virtManager/details/details.py:2138 virtManager/preferences.py:124
+msgid "On"
+msgstr "Zapnuto"
+
+#: virtManager/details/details.py:2164
 #, python-format
 msgid "Physical %s Device"
 msgstr "Fyzické %s zařízení"
 
-#: virtManager/details/details.py:2196
+#: virtManager/details/details.py:2181
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Pokud je je připojená grafika/zobrazení, není možné odebrat poslední "
 "zbývající video zařízení."
 
-#: virtManager/details/details.py:2222
+#: virtManager/details/details.py:2207
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s na %(address)s"
 
-#: virtManager/details/details.py:2228 virtManager/details/details.py:2238
+#: virtManager/details/details.py:2213 virtManager/details/details.py:2223
 msgid "Cannot remove controller while devices are attached."
 msgstr "Když jsou k němu připojená zařízení, nelze řadič odebrat."
 
 # auto translated by TM merge from project: Cockpit, version: master, DocId:
 # cockpit
-#: virtManager/details/details.py:2328
+#: virtManager/details/details.py:2313
 msgid "Hard Disk"
 msgstr "Pevný disk"
 
-#: virtManager/details/details.py:2329
+#: virtManager/details/details.py:2314
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2330
+#: virtManager/details/details.py:2315
 msgid "Network (PXE)"
 msgstr "Síť (PXE)"
 
-#: virtManager/details/details.py:2345
+#: virtManager/details/details.py:2330
 msgid "No bootable devices"
 msgstr "Žádná zařízení pro zavádění OS"
 
-#: virtManager/details/details.py:2392
+#: virtManager/details/details.py:2377
 msgid "Overview"
 msgstr "Přehled"
 
-#: virtManager/details/details.py:2393
+#: virtManager/details/details.py:2378
 msgid "OS information"
 msgstr "Informace o operačním systému"
 
 # auto translated by TM merge from project: anaconda, version: rhel6-branch,
 # DocId: anaconda
-#: virtManager/details/details.py:2395
+#: virtManager/details/details.py:2380
 msgid "Performance"
 msgstr "Výkon"
 
-#: virtManager/details/details.py:2397
+#: virtManager/details/details.py:2382
 msgid "CPUs"
 msgstr "Procesory"
 
-#: virtManager/details/details.py:2399
+#: virtManager/details/details.py:2384
 msgid "Boot Options"
 msgstr "Předvolby zavádění"
 
@@ -3988,7 +3997,7 @@ msgstr ""
 "pouze pro očekávání spojení místně. Pro připojení na dálku je třeba změnit "
 "adresu na které bude host očekávat spojení."
 
-#: virtManager/details/viewers.py:351
+#: virtManager/details/viewers.py:356
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3997,16 +4006,16 @@ msgstr ""
 "Nedaří se poskytnout požadované přihlašovací údaje VNC serveru.\n"
 "Typ přihlašovacích údajů %s není podporován"
 
-#: virtManager/details/viewers.py:423
+#: virtManager/details/viewers.py:428
 msgid "GTK-VNC viewer is too old"
 msgstr "Příliš stará verze GTK-VNC prohlížeče"
 
-#: virtManager/details/viewers.py:577
+#: virtManager/details/viewers.py:582
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Došlo ke SPICE %(error-name)s"
 
-#: virtManager/details/viewers.py:750
+#: virtManager/details/viewers.py:755
 msgid "Guest agent is not available."
 msgstr "Agent v hostovi není k dispozici."
 
@@ -4153,24 +4162,24 @@ msgstr "CID"
 msgid "Checking for virtualization packages..."
 msgstr "Kontrolují se balíčky virtualizace…"
 
-#: virtManager/error.py:139
+#: virtManager/error.py:140
 msgid "Input Error"
 msgstr "Chyba vstupu"
 
-#: virtManager/error.py:140
+#: virtManager/error.py:141
 #, python-format
 msgid "Validation Error: %s"
 msgstr "Chyba ověřování správnosti: %s"
 
-#: virtManager/error.py:180
+#: virtManager/error.py:181
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "Jsou zde neuplatněné změny. Chcete je použít nyní?"
 
-#: virtManager/error.py:182
+#: virtManager/error.py:183
 msgid "Don't warn me again."
 msgstr "Příště už nevarovat."
 
-#: virtManager/error.py:214
+#: virtManager/error.py:215
 msgid "Don't ask me again"
 msgstr "Příště se už neptat"
 
@@ -4306,52 +4315,52 @@ msgstr "Nevybráno žádné úložiště."
 msgid "Error selecting pool: %s"
 msgstr "Chyba při výběru úložiště: %s"
 
-#: virtManager/hoststorage.py:463
+#: virtManager/hoststorage.py:462
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Chyba při zastavování fondu „%s“"
 
-#: virtManager/hoststorage.py:472
+#: virtManager/hoststorage.py:471
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Chyba při spouštění fondu „%s“"
 
-#: virtManager/hoststorage.py:482
+#: virtManager/hoststorage.py:481
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Chyba při spouštění průvodce fondem: %s"
 
-#: virtManager/hoststorage.py:489
+#: virtManager/hoststorage.py:488
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Opravdu chcete nadobro smazat fond %s?"
 
-#: virtManager/hoststorage.py:496
+#: virtManager/hoststorage.py:495
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Chyba při mazání fondu „%s“"
 
-#: virtManager/hoststorage.py:507
+#: virtManager/hoststorage.py:506
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Chyba při znovunačítání fondu „%s“"
 
-#: virtManager/hoststorage.py:541
+#: virtManager/hoststorage.py:540
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Chyba při spouštění průvodce svazkem: %s"
 
-#: virtManager/hoststorage.py:549
+#: virtManager/hoststorage.py:548
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Opravdu chcete trvale smazat svazek %s?"
 
-#: virtManager/hoststorage.py:562
+#: virtManager/hoststorage.py:561
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Chyba při mazání svazku „%s“"
 
-#: virtManager/hoststorage.py:587
+#: virtManager/hoststorage.py:586
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Chyba při měnění nastavení fondu: %s"
@@ -4445,12 +4454,12 @@ msgstr "Chyba při spouštění libguestfs přístroje: %s"
 msgid "Inspection found no operating systems."
 msgstr "Inspekcí nenalezeny žádné operační systémy."
 
-#: virtManager/lib/inspection.py:317
+#: virtManager/lib/inspection.py:316
 #, python-format
 msgid "Error inspection VM: %s"
 msgstr "Chyba při inspekci virt. stroje: %s"
 
-#: virtManager/lib/inspection.py:328
+#: virtManager/lib/inspection.py:327
 msgid "Cannot inspect VM on remote connection"
 msgstr "Nedaří se provést inspekci virt. stroje na vzdáleném spojení"
 
@@ -4633,11 +4642,11 @@ msgstr "%(connection)s – není připojeno"
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s – připojování…"
 
-#: virtManager/manager.py:756 virtManager/vmwindow.py:378
+#: virtManager/manager.py:756 virtManager/vmwindow.py:379
 msgid "_Restore"
 msgstr "_Obnovit"
 
-#: virtManager/manager.py:793 virtManager/vmwindow.py:419
+#: virtManager/manager.py:793 virtManager/vmwindow.py:420
 msgid "Resume the virtual machine"
 msgstr "Navázat v chodu virtuálního stroje"
 
@@ -4721,19 +4730,19 @@ msgstr "Přesouvá se virt. stroj „%(name)s“ na %(host)s. To může chvíli 
 msgid "Error cancelling migrate job: %s"
 msgstr "Chyba při rušení migrace: %s"
 
-#: virtManager/object/domain.py:454
+#: virtManager/object/domain.py:452
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr "Když je zapnuté <numa>, nastavení sdílené paměti není možné měnit."
 
-#: virtManager/object/domain.py:457
+#: virtManager/object/domain.py:455
 msgid "Libvirt may not be new enough to support memfd."
 msgstr "Libvirt může být příliš staré verze na to, aby podporovalo memfd."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:474
 msgid "Libvirt connection does not support snapshots."
 msgstr "Toto libvirt spojení nepodporuje zachycené stavy."
 
-#: virtManager/object/domain.py:491
+#: virtManager/object/domain.py:489
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4741,7 +4750,7 @@ msgstr ""
 "Zachycené stavy jsou k dispozici pouze pokud jsou všechny obrazy disků "
 "hosta, do kterých může zapisovat, ve formátu qcow2."
 
-#: virtManager/object/domain.py:494
+#: virtManager/object/domain.py:492
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4749,17 +4758,17 @@ msgstr ""
 "Zachycené stavy vyžadují alespoň jeden zapisovatelný qcow2 obraz disku "
 "přidělený hostovi."
 
-#: virtManager/object/domain.py:529
+#: virtManager/object/domain.py:527
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Dané zařízení se v nastavení neaktivního virt. stroje nedaří nalézt: %s"
 
-#: virtManager/object/domain.py:1424
+#: virtManager/object/domain.py:1446
 msgid "Saving domain to disk"
 msgstr "Ukládání domény na disk"
 
-#: virtManager/object/domain.py:1476
+#: virtManager/object/domain.py:1498
 msgid "Migrating domain"
 msgstr "Stěhování domény"
 
@@ -4830,10 +4839,6 @@ msgid "RADOS Block Device/Ceph"
 msgstr "Rados blokové zařízení / Ceph"
 
 #: virtManager/object/storagepool.py:35
-msgid "Sheepdog Filesystem"
-msgstr "Souborový systém Sheepdog"
-
-#: virtManager/object/storagepool.py:36
 msgid "ZFS Pool"
 msgstr "ZFS fond"
 
@@ -4857,14 +4862,6 @@ msgstr "Pouze při přes celou obrazovku"
 #: virtManager/preferences.py:114
 msgid "Always"
 msgstr "Vždy"
-
-#: virtManager/preferences.py:123
-msgid "Off"
-msgstr "Vypnuto"
-
-#: virtManager/preferences.py:124
-msgid "On"
-msgstr "Zapnuto"
 
 #: virtManager/preferences.py:126 virtManager/preferences.py:148
 #: virtManager/preferences.py:158
@@ -4914,13 +4911,41 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "Stiskněte požadovanou kombinaci kláves"
 
-#: virtManager/storagebrowse.py:77
-msgid "Cannot use local storage on remote connection."
-msgstr "Nelze použít místní úložiště na vzdáleném připojení."
+#: virtManager/storagebrowse.py:28
+msgid "Locate existing storage"
+msgstr "Vyhledat existující úložiště"
 
-#: virtManager/storagebrowse.py:108
+#: virtManager/storagebrowse.py:29
+msgid "Locate or create storage volume"
+msgstr "Najděte nebo vytvořte nový svazek pro ukládání"
+
+#: virtManager/storagebrowse.py:34
+msgid "Locate ISO media"
+msgstr "Vyhledat ISO médium"
+
+#: virtManager/storagebrowse.py:35
+msgid "Locate ISO media volume"
+msgstr "Vyhledat svazek ISO média"
+
+#: virtManager/storagebrowse.py:39
+msgid "Locate floppy media"
+msgstr "Vyhledat disketové médium"
+
+#: virtManager/storagebrowse.py:40
+msgid "Locate floppy media volume"
+msgstr "Vyhledat svazek disketového média"
+
+#: virtManager/storagebrowse.py:44 virtManager/storagebrowse.py:45
+msgid "Locate directory volume"
+msgstr "Vyhledat adresářový svazek"
+
+#: virtManager/storagebrowse.py:50
 msgid "Choose Storage Volume"
 msgstr "Vyberte svazek úložiště"
+
+#: virtManager/storagebrowse.py:119
+msgid "Cannot use local storage on remote connection."
+msgstr "Nelze použít místní úložiště na vzdáleném připojení."
 
 #: virtManager/systray.py:119
 msgid "_Show Virtual Machine Manager"
@@ -5082,37 +5107,37 @@ msgstr "Chyba při restartování domény"
 msgid "Error launching details: %s"
 msgstr "Chyba při spouštění podrobností: %s"
 
-#: virtManager/vmwindow.py:225
+#: virtManager/vmwindow.py:226
 msgid "This will abort the installation. Are you sure?"
 msgstr "Toto přeruší instalaci. Opravdu to chcete?"
 
-#: virtManager/vmwindow.py:387
+#: virtManager/vmwindow.py:388
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s na %(connection-name)s"
 
-#: virtManager/vmwindow.py:431
+#: virtManager/vmwindow.py:432
 msgid "Manage VM snapshots"
 msgstr "Spravovat zachycené stavy virt. stroje"
 
-#: virtManager/vmwindow.py:510
+#: virtManager/vmwindow.py:511
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Chyba při pořizování zachyceného stavu: %s"
 
-#: virtManager/vmwindow.py:518
+#: virtManager/vmwindow.py:519
 msgid "Error initializing spice USB device widget"
 msgstr "Chyba při inicializaci ovládacího prvku spice USB zařízení"
 
-#: virtManager/vmwindow.py:522
+#: virtManager/vmwindow.py:523
 msgid "Select USB devices for redirection"
 msgstr "Vyberte USB zařízení, která přesměrovat"
 
-#: virtManager/vmwindow.py:554
+#: virtManager/vmwindow.py:558
 msgid "Save Virtual Machine Screenshot"
 msgstr "Uložit snímek obrazovky virtuálního stroje"
 
-#: virtManager/vmwindow.py:555
+#: virtManager/vmwindow.py:559
 msgid "PNG files"
 msgstr "PNG soubory"
 
@@ -5132,7 +5157,7 @@ msgstr ""
 "Pokud tuto kartu opustíte, provedené změny v XML budou ztraceny. Opravdu to "
 "chcete?"
 
-#: virtinst/capabilities.py:277
+#: virtinst/capabilities.py:290
 #, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
@@ -5141,23 +5166,23 @@ msgstr ""
 "Hostitel nepodporuje virtualizaci typu „%(virttype)s“ pro architekturu "
 "„%(arch)s“"
 
-#: virtinst/capabilities.py:281
+#: virtinst/capabilities.py:294
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
 "Hostitel nepodporuje žádnou možnost virtualizace pro architekturu „%(arch)s“"
 
-#: virtinst/capabilities.py:285
+#: virtinst/capabilities.py:298
 #, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "Hostitel nepodporuje typ virtualizace „%(virttype)s“"
 
-#: virtinst/capabilities.py:289
+#: virtinst/capabilities.py:302
 msgid "Host does not support any virtualization options"
 msgstr "Hostitel nepodporuje žádné možnosti virtualizace"
 
-#: virtinst/capabilities.py:295
+#: virtinst/capabilities.py:308
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
@@ -5166,7 +5191,7 @@ msgstr ""
 "Hostitel nepodporuje doménu typu %(domain)s se strojem „%(machine)s“ pro typ "
 "virtualizace „%(virttype)s“ s architekturou „%(arch)s“"
 
-#: virtinst/capabilities.py:301
+#: virtinst/capabilities.py:314
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
@@ -5185,7 +5210,7 @@ msgstr ""
 "Jaké dílčí volby jsou k dispozici zjistíte použitím „--volba=?“ nebo „--"
 "volba help“"
 
-#: virtinst/cli.py:287
+#: virtinst/cli.py:288
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5198,7 +5223,7 @@ msgstr ""
 "  %s\n"
 "v opačném případě restartujte instalaci."
 
-#: virtinst/cli.py:305
+#: virtinst/cli.py:306
 #, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
@@ -5207,48 +5232,48 @@ msgstr ""
 "%(path)s může být pro hypervizor nepřístupné. Bude třeba účtu „%(user)s“ "
 "udělit oprávnění ke spouštění a čtení následujících složek: %(dirs)s"
 
-#: virtinst/cli.py:318
+#: virtinst/cli.py:319
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (pro přebití použijte --check %s=off nebo --check all=off)"
 
-#: virtinst/cli.py:352
+#: virtinst/cli.py:353
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Toto přepíše stávající umístění „%s“"
 
-#: virtinst/cli.py:363
+#: virtinst/cli.py:364
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "Disk %(path)s je už používán jiným hostem %(names)s."
 
-#: virtinst/cli.py:407
+#: virtinst/cli.py:408
 #, python-format
 msgid "Running graphical console command: %(command)s"
 msgstr "Spouštění příkazu grafické konzole: %(command)s"
 
-#: virtinst/cli.py:421
+#: virtinst/cli.py:422
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr "Spuštění příkazu textové konzole: %(command)s"
 
-#: virtinst/cli.py:463
+#: virtinst/cli.py:464
 #, python-format
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "Nedaří se nalézt virt. doménu „%(domain)s“: %(error)s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
-#: virtinst/cli.py:482
+#: virtinst/cli.py:483
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
 msgstr "Volby %(option1)s a %(option2)s není možné použít naráz"
 
-#: virtinst/cli.py:583 virtinst/cli.py:586
+#: virtinst/cli.py:592 virtinst/cli.py:595
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Připojit k hypervizoru pomocí libvirt URI"
 
-#: virtinst/cli.py:601
+#: virtinst/cli.py:610
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5260,29 +5285,29 @@ msgstr ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 
-#: virtinst/cli.py:607
+#: virtinst/cli.py:616
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Nepokoušet se automaticky připojit ke konzoli hosta"
 
-#: virtinst/cli.py:611
+#: virtinst/cli.py:620
 msgid "Don't boot guest after completing install."
 msgstr "Po dokončení instalace hosta nespouštět."
 
-#: virtinst/cli.py:615
+#: virtinst/cli.py:624
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr "Nekontrolovat střet názvů, přepsat případného stejně nazvaného hosta."
 
-#: virtinst/cli.py:622
+#: virtinst/cli.py:631
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Namísto vytvoření hosta jen vypsat vytvořené XML domény."
 
-#: virtinst/cli.py:641
+#: virtinst/cli.py:650
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Projít instalačním procesem, ale nevytvářet zařízení nebo nedefinovat hosta."
 
-#: virtinst/cli.py:646
+#: virtinst/cli.py:655
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5292,15 +5317,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:650
+#: virtinst/cli.py:659
 msgid "Suppress non-error output"
 msgstr "Potlačit nechybový výstup"
 
-#: virtinst/cli.py:652
+#: virtinst/cli.py:661
 msgid "Print debugging information"
 msgstr "Vypsat ladící informace"
 
-#: virtinst/cli.py:658
+#: virtinst/cli.py:667
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5310,7 +5335,7 @@ msgstr ""
 "--metadata name=neco,title=\"hezky titulek\",uuid=…\n"
 "--metadata description=\"hezky podrobny popis\""
 
-#: virtinst/cli.py:666
+#: virtinst/cli.py:675
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -5320,7 +5345,7 @@ msgstr ""
 "--memory 1024 (v MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: virtinst/cli.py:679
+#: virtinst/cli.py:688
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5332,7 +5357,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 
-#: virtinst/cli.py:688
+#: virtinst/cli.py:697
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -5342,7 +5367,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: virtinst/cli.py:701
+#: virtinst/cli.py:710
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5354,7 +5379,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: virtinst/cli.py:710
+#: virtinst/cli.py:719
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5370,7 +5395,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:721
+#: virtinst/cli.py:730
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5380,7 +5405,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 
-#: virtinst/cli.py:726
+#: virtinst/cli.py:735
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5390,29 +5415,29 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:731
+#: virtinst/cli.py:740
 msgid "Configure a guest serial device"
 msgstr "Nastavit sériové zařízení hosta"
 
-#: virtinst/cli.py:734
+#: virtinst/cli.py:743
 msgid "Configure a guest parallel device"
 msgstr "Nastavit paralelní zařízení hosta"
 
-#: virtinst/cli.py:737
+#: virtinst/cli.py:746
 msgid "Configure a guest communication channel"
 msgstr "Nastavit komunikační kanál hosta"
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:749
 msgid "Configure a text console connection between the guest and host"
 msgstr "Nastavit spojení textovou konzolí mezi hostem a hostitelem"
 
-#: virtinst/cli.py:744
+#: virtinst/cli.py:753
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Nastavit fyzická USB/PCI/atd zařízení hostitele která mají být sdílena s "
 "hostem"
 
-#: virtinst/cli.py:752
+#: virtinst/cli.py:761
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5422,23 +5447,23 @@ msgstr ""
 "--filesystem /moje/zdrojova/slozka,/slozka/v/hostovi\n"
 "--filesystem nazev_sablony,/,type=template"
 
-#: virtinst/cli.py:760
+#: virtinst/cli.py:769
 msgid "Configure guest sound device emulation"
 msgstr "Nastavit emulaci zvukového zařízení pro hosta"
 
-#: virtinst/cli.py:771
+#: virtinst/cli.py:780
 msgid "Configure host audio backend for sound devices"
 msgstr "Nastavit podpůrnou vrstvu pro zvuk na hostiteli pro zvuková zařízení"
 
-#: virtinst/cli.py:775
+#: virtinst/cli.py:784
 msgid "Configure a guest watchdog device"
 msgstr "Nastavit zařízení resetátoru hosta"
 
-#: virtinst/cli.py:778
+#: virtinst/cli.py:787
 msgid "Configure guest video hardware."
 msgstr "Nastavit video hardware hosta."
 
-#: virtinst/cli.py:781
+#: virtinst/cli.py:790
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5446,7 +5471,7 @@ msgstr ""
 "Nastavit zařízení smartcard hosta. Např.:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:794
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5454,7 +5479,7 @@ msgstr ""
 "Nastavit zařízení přesměrování hosta. Např.:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:798
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5462,7 +5487,7 @@ msgstr ""
 "Nastavit výplňové (ballon) zařízení pro paměť hosta. Např.:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:802
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5470,7 +5495,7 @@ msgstr ""
 "Nastavit TPM zařízení hosta. Např.:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:797
+#: virtinst/cli.py:806
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -5478,7 +5503,7 @@ msgstr ""
 "Nastavit RNG zařízení hosta. Např.:\n"
 "--rng /dev/urandom"
 
-#: virtinst/cli.py:801
+#: virtinst/cli.py:810
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5486,7 +5511,7 @@ msgstr ""
 "Nastavit panické zařízení hosta. Např.:\n"
 "--panic default"
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:814
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
@@ -5494,7 +5519,7 @@ msgstr ""
 "Nastavit paměťové zařízení hosta. Např.:\n"
 "--shmem name=shmem0"
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:818
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -5502,7 +5527,7 @@ msgstr ""
 "Nastavit paměťové zařízení hosta. Např.:\n"
 "--memdev dimm,target.size=1024"
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:822
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -5512,7 +5537,7 @@ msgstr ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:827
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
@@ -5520,37 +5545,37 @@ msgstr ""
 "Nastavit IOMMU zařízení. Např.:\n"
 "--iommu model=intel,driver.aw_bits=48"
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:834
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "Nastavit <iothreads> a <iothreadids>."
 
-#: virtinst/cli.py:829
+#: virtinst/cli.py:838
 msgid "Set domain seclabel configuration."
 msgstr "Nastavit domain seclabel."
 
-#: virtinst/cli.py:833
+#: virtinst/cli.py:842
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 "Nastavit hosta tak, aby prováděl operace správy šifrovacího klíče platformy "
 "S390."
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:847
 msgid "Tune CPU parameters for the domain process."
 msgstr "Vyladit parametry procesoru pro proces domény."
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:851
 msgid "Tune NUMA policy for the domain process."
 msgstr "Vyladit NUMA zásadu pro proces domény."
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:855
 msgid "Tune memory policy for the domain process."
 msgstr "Vyladit zásadu paměti pro proces domény."
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:859
 msgid "Tune blkio policy for the domain process."
 msgstr "Vyladit zásadu blokového vstup/výstupu procesu domény."
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:863
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5558,7 +5583,7 @@ msgstr ""
 "Nastavit zásadu pro pozadí paměti pro proces domény. Např.:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:868
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -5568,7 +5593,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: virtinst/cli.py:865
+#: virtinst/cli.py:874
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5576,19 +5601,19 @@ msgstr ""
 "Nastavit <clock> XML domény. Např.:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:879
 msgid "Configure VM power management features"
 msgstr "Nastavit funkce správy napájení virt. stroje"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:883
 msgid "Configure VM lifecycle management policy"
 msgstr "Nastavit zásadu životního cyklu virt. stroje"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:887
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Nastavit rozdělování prostředků pro virt. stroje (cgroups)"
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:891
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -5598,7 +5623,7 @@ msgstr ""
 "--sysinfo stroj\n"
 "--sysinfo bios.vendor=MujVyrobce,bios.version=1.2.3,…\n"
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:897
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
@@ -5608,11 +5633,15 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:903
+#, fuzzy
+#| msgid ""
+#| "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
+#| "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+#| "dhCert=BASE64CERT\n"
+#| "--launchSecurity sev"
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 msgstr ""
 "Nastavit zabezpečení spouštění virt. stroje (např. SEV šifrování paměti). "
@@ -5621,7 +5650,7 @@ msgstr ""
 "dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
-#: virtinst/cli.py:902
+#: virtinst/cli.py:910
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5631,7 +5660,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (pro kontejnery)"
 
-#: virtinst/cli.py:908
+#: virtinst/cli.py:916
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
@@ -5639,7 +5668,7 @@ msgstr ""
 "Zapnout uživatelský jmenný prostor pro LXC kontejner. Např.:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:926
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5653,19 +5682,19 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:934
 msgid "OS options"
 msgstr "Volby operačního systému"
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:937
 msgid "The OS being installed in the guest."
 msgstr "Operační systém je instalován na hosta."
 
-#: virtinst/cli.py:931
+#: virtinst/cli.py:939
 msgid "The OS installed in the guest."
 msgstr "Operační systém nainstalovaný v hostovi."
 
-#: virtinst/cli.py:933
+#: virtinst/cli.py:941
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5675,7 +5704,7 @@ msgstr ""
 "Hodnoty pro ukázku: fedora29, rhel7.0, win10, …\n"
 "Úplný seznam si lze vypsat příkazem „osinfo-query os“."
 
-#: virtinst/cli.py:943
+#: virtinst/cli.py:951
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5687,12 +5716,12 @@ msgstr ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 
-#: virtinst/cli.py:973
+#: virtinst/cli.py:981
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "je třeba, aby %(key)s bylo „yes“ nebo „no“"
 
-#: virtinst/cli.py:1158
+#: virtinst/cli.py:1166
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5701,17 +5730,17 @@ msgstr ""
 "Není jasné jak hledat shodu v typu zařízení „%(device_type)s“ vlastnosti "
 "„%(property_name)s“"
 
-#: virtinst/cli.py:1477
+#: virtinst/cli.py:1494
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr "Neznámé volby %(optionflag)s: %(string)s"
 
-#: virtinst/cli.py:1533 virtinst/cli.py:1564
+#: virtinst/cli.py:1550 virtinst/cli.py:1581
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Chyba: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1915
+#: virtinst/cli.py:1933
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5719,46 +5748,46 @@ msgstr ""
 "Není možné se připojit ke grafické konzoli: není nainstalovaný virt-viewer. "
 "Nainstalujte balíček „virt-viewer“."
 
-#: virtinst/cli.py:1922
+#: virtinst/cli.py:1940
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Vyžádána grafika ale není nastaven DISPLAY. virt-viewer nebude spuštěn."
 
-#: virtinst/cli.py:1933
+#: virtinst/cli.py:1951
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Neznámý typ autoconsole „%s“"
 
-#: virtinst/cli.py:3486
+#: virtinst/cli.py:3527
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Nesprávná hodnota pro „velikost“: %s"
 
-#: virtinst/cli.py:3499
+#: virtinst/cli.py:3540
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Neznámá „%(optionname)s“ hodnota „%(string)s“"
 
-#: virtinst/cli.py:3514
+#: virtinst/cli.py:3555
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Svazek úložiště je třeba zadat jako vol=nazev_fondu/nazev_svazku"
 
-#: virtinst/cli.py:3969
+#: virtinst/cli.py:4015
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Očekáván řetězec v PCI formátu pro „%s“"
 
-#: virtinst/cli.py:4689
+#: virtinst/cli.py:4736
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s odpovídá vícero uzlům zařízení"
 
-#: virtinst/cli.py:4692
+#: virtinst/cli.py:4739
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Nenalezeno odpovídající zařízení uzlu pro „%s“"
 
-#: virtinst/cli.py:4837
+#: virtinst/cli.py:4876
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5768,7 +5797,7 @@ msgstr ""
 "\n"
 "  osinfo-query os\n"
 
-#: virtinst/cloner.py:44
+#: virtinst/cloner.py:46
 #, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "Nedaří se odebrat původní virt. stroj „%(vm)s“: %(error)s"
@@ -5815,28 +5844,28 @@ msgstr "Nedaří se použít umístění „%(path)s“ pro klonování: %(error
 msgid "Could not determine original disk information: %s"
 msgstr "Nedaří se zjistit informace o původním disku: %s"
 
-#: virtinst/cloner.py:325
+#: virtinst/cloner.py:327
 msgid "Domain to clone must be shutoff."
 msgstr "Doménu je třeba před klonováním vypnout."
 
-#: virtinst/cloner.py:360
+#: virtinst/cloner.py:361
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Port grafického zařízení se nastavuje na automatickou volbu, aby se zamezilo "
 "kolizi."
 
-#: virtinst/cloner.py:497
+#: virtinst/cloner.py:516
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "Neplatný název pro nového hosta: %s"
 
-#: virtinst/devices/disk.py:348
+#: virtinst/devices/disk.py:351
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr "Je třeba zadat velikost pro neexistující svazek „%s“"
 
-#: virtinst/devices/disk.py:353
+#: virtinst/devices/disk.py:356
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -5845,21 +5874,21 @@ msgstr ""
 "Není známo jak vytvořit úložiště pro umístění „%s“. Nejprve použijte "
 "aplikační programová rozhraní libvirt pro správu nadřazené složky coby fondu."
 
-#: virtinst/devices/disk.py:376
+#: virtinst/devices/disk.py:379
 msgid "Format attribute not supported for this volume type"
 msgstr "Pro tento typ svazku není atribut formátu podporován"
 
-#: virtinst/devices/disk.py:796
+#: virtinst/devices/disk.py:805
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Typ zařízení „%s“ vyžaduje popis umístění"
 
-#: virtinst/devices/disk.py:804
+#: virtinst/devices/disk.py:813
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "Pro neexistující umístění „%s“."
 
-#: virtinst/devices/disk.py:917
+#: virtinst/devices/disk.py:926
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5941,89 +5970,81 @@ msgstr ""
 #: virtinst/domain/cpu.py:56
 #, python-format
 msgid ""
-"Total CPUs implied by topology (sockets=%(sockets)d * dies=%(dies)d * cores="
-"%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
-"%(vcpus)d"
+"Total CPUs implied by topology (sockets=%(sockets)d * dies=%(dies)d * "
+"cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
+"count %(vcpus)d"
 msgstr ""
-"Celkový počet procesorů, vyplývající z topologie (sockets=%(sockets)d * dies="
-"%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) neodpovídá "
-"počtu virt. procesorů %(vcpus)d"
+"Celkový počet procesorů, vyplývající z topologie (sockets=%(sockets)d * "
+"dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
+"neodpovídá počtu virt. procesorů %(vcpus)d"
 
-#: virtinst/domain/launch_security.py:26
-msgid "Missing mandatory attribute 'type'"
-msgstr "Chybí povinný atribut „type“ (typ)"
-
-#: virtinst/domain/launch_security.py:35
+#: virtinst/domain/launch_security.py:23
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV zabezpečení spouštění vyžaduje Q35 UEFI stroj"
 
-#: virtinst/domain/launch_security.py:40
-msgid "SEV launch security is not supported on this platform"
-msgstr "SEV zabezpečení spouštění není na této platformě podporováno"
-
-#: virtinst/domcapabilities.py:206
+#: virtinst/domcapabilities.py:207
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Nepodařilo se získat expandované XML procesoru: %s"
 
-#: virtinst/domcapabilities.py:321
+#: virtinst/domcapabilities.py:324
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:322
+#: virtinst/domcapabilities.py:325
 msgid "Default"
 msgstr "Výchozí"
 
-#: virtinst/domcapabilities.py:327
+#: virtinst/domcapabilities.py:330
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:330
+#: virtinst/domcapabilities.py:333
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Uživatelsky určené: %(path)s"
 
-#: virtinst/guest.py:79
+#: virtinst/guest.py:88
 msgid "Guest"
 msgstr "Host"
 
-#: virtinst/guest.py:87
+#: virtinst/guest.py:96
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "Název hosta „%s“ už je používán."
 
-#: virtinst/guest.py:797
+#: virtinst/guest.py:854
 msgid "Libvirt version does not support UEFI."
 msgstr "Verze libvirt, kterou používáte, nepodporuje UEFI."
 
-#: virtinst/guest.py:801
+#: virtinst/guest.py:858
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "Není známo jak nastavit UEFI pro architekturu „%s“"
 
-#: virtinst/guest.py:806
+#: virtinst/guest.py:863
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "Nenalezeno žádné umístění UEFI binárky pro architekturu „%s“"
 
-#: virtinst/install/installer.py:107
+#: virtinst/install/installer.py:108
 #, python-format
 msgid "Removing disk '%s'"
 msgstr "Odebírání disku „%s“"
 
-#: virtinst/install/installer.py:266
+#: virtinst/install/installer.py:268
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
 "Pro síťovou instalaci %(osname)s je třeba předělat paměť na %(number)s MiB."
 
-#: virtinst/install/installer.py:635
+#: virtinst/install/installer.py:649
 msgid "Creating domain..."
 msgstr "Vytváření domény…"
 
-#: virtinst/install/installer.py:642
+#: virtinst/install/installer.py:656
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "Doména typu „vz“ nepodporuje přechodné instalace."
 
@@ -6165,12 +6186,12 @@ msgstr ""
 "Neznámý název operačního systému „%s“. Platné hodnoty získáte spuštěním s `--"
 "osinfo list`."
 
-#: virtinst/osdict.py:510
+#: virtinst/osdict.py:537
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "Operační systém „%s“ nemá URL umístění"
 
-#: virtinst/osdict.py:522
+#: virtinst/osdict.py:549
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6179,47 +6200,47 @@ msgstr ""
 "Operační systém „%(osname)s“ nemá URL umístění pro architekturu "
 "„%(archname)s“"
 
-#: virtinst/storage.py:166
+#: virtinst/storage.py:163
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "Nedaří se vytvořit výchozí fond úložiště „%(path)s“: %(error)s"
 
-#: virtinst/storage.py:219 virtinst/storage.py:551
+#: virtinst/storage.py:216 virtinst/storage.py:548
 msgid "Storage object"
 msgstr "Objekt úložiště"
 
-#: virtinst/storage.py:225
+#: virtinst/storage.py:222
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "Název „%s“ už je používán jiným fondem."
 
-#: virtinst/storage.py:388
+#: virtinst/storage.py:384
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "Nedaří se definovat fond úložiště: %s"
 
-#: virtinst/storage.py:396
+#: virtinst/storage.py:392
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "Nedaří se vytvořit fond úložiště: %s"
 
-#: virtinst/storage.py:402
+#: virtinst/storage.py:398
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "Nedaří se spustit fond úložiště: %s"
 
-#: virtinst/storage.py:408
+#: virtinst/storage.py:404
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr ""
 "Nedaří se nastavit příznak automatického spouštění pro fond úložiště: %s"
 
-#: virtinst/storage.py:557
+#: virtinst/storage.py:554
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Název „%s“ už je použit pro jiný svazek."
 
-#: virtinst/storage.py:642
+#: virtinst/storage.py:640
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -6227,21 +6248,21 @@ msgstr ""
 "Sparse logické svazky nejsou podporované, nastavuje se přidělení stejná jako "
 "kapacita"
 
-#: virtinst/storage.py:687
+#: virtinst/storage.py:685
 #, python-format
 msgid "Allocating '%(filename)s'"
 msgstr "Přidělování „%(filename)s“"
 
-#: virtinst/storage.py:727
+#: virtinst/storage.py:726
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
-"Ve fondu úložiště není dostatek volného místa pro vytvoření svazku. ("
-"požadováno přidělení %(mem1)s M > %(mem2)s M k dispozici)"
+"Ve fondu úložiště není dostatek volného místa pro vytvoření svazku. "
+"(požadováno přidělení %(mem1)s M > %(mem2)s M k dispozici)"
 
-#: virtinst/storage.py:734
+#: virtinst/storage.py:733
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6279,7 +6300,7 @@ msgstr ""
 "mimo záběr tohoto nástroje. Pro tyto typy změn se podívejte na virt-"
 "sysprep(1)."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1030
 msgid "General Options"
 msgstr "Obecné volby"
 
@@ -6363,8 +6384,8 @@ msgid ""
 msgstr ""
 "Nová pevná MAC adresa pro naklonovaného hosta. Výchozí je náhodně vytvořená"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1112
-#: virtinst/virtxml.py:431
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1135
+#: virtinst/virtxml.py:426
 msgid "Miscellaneous Options"
 msgstr "Různé volby"
 
@@ -6389,7 +6410,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "Klon „%s“ úspěšně vytvořen."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1223
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1246
 msgid "Installation aborted at user request"
 msgstr "Instalace přerušena na žádost uživatel"
 
@@ -6496,32 +6517,32 @@ msgstr ""
 msgid "Using {osname} --location {url}"
 msgstr "S použitím {osname} --location {url}"
 
-#: virtinst/virtinstall.py:467
+#: virtinst/virtinstall.py:476
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "S použitím výchozího --name {vm_name}"
 
-#: virtinst/virtinstall.py:477
+#: virtinst/virtinstall.py:488
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr "S použitím pro kontejner výchozích --memory {megabytes}"
 
-#: virtinst/virtinstall.py:496
+#: virtinst/virtinstall.py:507
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "S použitím pro {os_name} výchozích --memory {megabytes}"
 
-#: virtinst/virtinstall.py:507
+#: virtinst/virtinstall.py:518
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "S použitím pro {os_name} výchozích --disk {disk_options}"
 
-#: virtinst/virtinstall.py:553
+#: virtinst/virtinstall.py:564
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Chyba při ověřování instalačního umístění: %s"
 
-#: virtinst/virtinstall.py:556
+#: virtinst/virtinstall.py:567
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
@@ -6529,7 +6550,7 @@ msgstr ""
 "Je zapotřebí --os-variant/--osinfo název operačního systému\n"
 "ale není nastavená nebo zjištěná žádná hodnota."
 
-#: virtinst/virtinstall.py:570
+#: virtinst/virtinstall.py:581
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
@@ -6538,7 +6559,7 @@ msgstr ""
 "bylo možné nastavit moderní, výkonné a bezpečné výchozí hodnoty pro virt. "
 "stroj.\n"
 
-#: virtinst/virtinstall.py:574
+#: virtinst/virtinstall.py:585
 msgid ""
 "If you expected virt-install to detect an OS name from the\n"
 "install media, you can set a fallback OS name with:\n"
@@ -6550,7 +6571,7 @@ msgstr ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 
-#: virtinst/virtinstall.py:583
+#: virtinst/virtinstall.py:594
 msgid ""
 "You can see a full list of possible OS name values with:\n"
 "\n"
@@ -6560,7 +6581,7 @@ msgstr ""
 "\n"
 "   virt-install --osinfo list\n"
 
-#: virtinst/virtinstall.py:590
+#: virtinst/virtinstall.py:601
 #, python-brace-format
 msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
@@ -6569,7 +6590,7 @@ msgstr ""
 "Pokud vámi používaná distribuce Linuxu není uvedena,\n"
 "zkuste jednu z obecných hodnot, jako např.: {oslist}\n"
 
-#: virtinst/virtinstall.py:597
+#: virtinst/virtinstall.py:608
 #, python-brace-format
 msgid ""
 "If you just need to get the old behavior back, you can use:\n"
@@ -6584,20 +6605,21 @@ msgstr ""
 "\n"
 "Nebo exportujte proměnnou prostředí {env_var}=1\n"
 
-#: virtinst/virtinstall.py:607
+#: virtinst/virtinstall.py:618
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
 msgstr "Nastaveno {env_var}. Přeskakuje se zásadní chyba."
 
-#: virtinst/virtinstall.py:683
+#: virtinst/virtinstall.py:706
 msgid "No console to launch for the guest, defaulting to --wait -1"
-msgstr "Není konzole, kterou pro hosta spustit – bude použito výchozí --wait -1"
+msgstr ""
+"Není konzole, kterou pro hosta spustit – bude použito výchozí --wait -1"
 
-#: virtinst/virtinstall.py:719
+#: virtinst/virtinstall.py:742
 msgid "Waiting for the installation to complete."
 msgstr "Čeká se na dokončení instalace."
 
-#: virtinst/virtinstall.py:720
+#: virtinst/virtinstall.py:743
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
@@ -6605,44 +6627,44 @@ msgstr[0] "Čeká se %(minutes)d minutu na dokončení instalace."
 msgstr[1] "Čekají se %(minutes)d minuty na dokončení instalace."
 msgstr[2] "Čeká se %(minutes)d minut na dokončení instalace."
 
-#: virtinst/virtinstall.py:743
+#: virtinst/virtinstall.py:766
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "Heslo pro první přihlášení správce (root) je: %s"
 
-#: virtinst/virtinstall.py:755
+#: virtinst/virtinstall.py:778
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr "Instalace bude pokračovat za 10 sekund (přeskočíte stisknutím Enter)…"
 
-#: virtinst/virtinstall.py:782
+#: virtinst/virtinstall.py:805
 msgid "Console command returned failure."
 msgstr "Příkaz na konzoli vrátil nezdar."
 
-#: virtinst/virtinstall.py:819
+#: virtinst/virtinstall.py:842
 msgid "Domain has crashed."
 msgstr "Doména zhavarovala."
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:872
 msgid "Domain is still running. Installation may be in progress."
 msgstr "Doména je pořád ještě spuštěná. Může probíhat instalace."
 
-#: virtinst/virtinstall.py:859
+#: virtinst/virtinstall.py:882
 msgid "You can reconnect to the console to complete the installation process."
 msgstr "Můžete se znovu připojit ke konzoli a dokončit instalaci."
 
-#: virtinst/virtinstall.py:870
+#: virtinst/virtinstall.py:893
 msgid "Domain has shutdown. Continuing."
 msgstr "Doména se vypíná. Pokračuje se."
 
-#: virtinst/virtinstall.py:876
+#: virtinst/virtinstall.py:899
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "Instalace překročila určený časový limit. Aplikace se ukončuje."
 
-#: virtinst/virtinstall.py:899
+#: virtinst/virtinstall.py:922
 msgid "Domain creation completed."
 msgstr "Vytváření domény dokončeno."
 
-#: virtinst/virtinstall.py:908
+#: virtinst/virtinstall.py:931
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6651,15 +6673,15 @@ msgstr ""
 "Doménu můžete restartovat spuštěním:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:913
+#: virtinst/virtinstall.py:936
 msgid "User stopped the VM. Not rebooting."
 msgstr "Uživatel virt. stroj zastavil. Nebude restartován."
 
-#: virtinst/virtinstall.py:916
+#: virtinst/virtinstall.py:939
 msgid "Restarting guest."
 msgstr "Restartování hosta."
 
-#: virtinst/virtinstall.py:933
+#: virtinst/virtinstall.py:956
 msgid ""
 "\n"
 "Starting install..."
@@ -6667,40 +6689,40 @@ msgstr ""
 "\n"
 "Spouštění instalace…"
 
-#: virtinst/virtinstall.py:956
+#: virtinst/virtinstall.py:979
 msgid "Domain install interrupted."
 msgstr "Instalace domény přerušena."
 
-#: virtinst/virtinstall.py:975
+#: virtinst/virtinstall.py:998
 msgid "Dry run completed successfully"
 msgstr "Zkouška nanečisto úspěšně dokončena"
 
-#: virtinst/virtinstall.py:979
+#: virtinst/virtinstall.py:1002
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Požadavek na neznámý XML krok „%s“, je třeba, aby bylo 1, 2, nebo all"
 
-#: virtinst/virtinstall.py:986
+#: virtinst/virtinstall.py:1009
 msgid "Requested installation does not have XML step 2"
 msgstr "Požadovaná instalace nemá XML krok 2"
 
-#: virtinst/virtinstall.py:1003
+#: virtinst/virtinstall.py:1026
 msgid "Create a new virtual machine from specified install media."
 msgstr "Vytvořit nový virtuální stroj ze zadaného instalačního média."
 
-#: virtinst/virtinstall.py:1009
+#: virtinst/virtinstall.py:1032
 msgid "Name of the guest instance"
 msgstr "Název instance hosta"
 
-#: virtinst/virtinstall.py:1017
+#: virtinst/virtinstall.py:1040
 msgid "Installation Method Options"
 msgstr "Volby metody instalace"
 
-#: virtinst/virtinstall.py:1019
+#: virtinst/virtinstall.py:1042
 msgid "CD-ROM installation media"
 msgstr "CD-ROM instalační médium"
 
-#: virtinst/virtinstall.py:1021
+#: virtinst/virtinstall.py:1044
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6708,33 +6730,33 @@ msgstr ""
 "Instalační URL adresa distribuce, např. https://stroj/umisteni. Pro příklady "
 "pro konkrétní distribuce nahlédněte do manuálové stránky."
 
-#: virtinst/virtinstall.py:1024
+#: virtinst/virtinstall.py:1047
 msgid "Boot from the network using the PXE protocol"
 msgstr "Spustit ze sítě prostřednictvím PXE protokolu"
 
-#: virtinst/virtinstall.py:1026
+#: virtinst/virtinstall.py:1049
 msgid "Build guest around an existing disk image"
 msgstr "Sestavit hosta okolo existujícího obrazu disku"
 
-#: virtinst/virtinstall.py:1029
+#: virtinst/virtinstall.py:1052
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Další argumenty které předat instalačnímu jádru spouštěnému z --location"
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1055
 msgid "Add given file to root of initrd from --location"
 msgstr "Přidat daný soubor do kořene initrd z --location"
 
-#: virtinst/virtinstall.py:1034
+#: virtinst/virtinstall.py:1057
 msgid "Perform an unattended installation"
 msgstr "Provést bezobslužnou instalaci"
 
-#: virtinst/virtinstall.py:1036
+#: virtinst/virtinstall.py:1059
 msgid "Specify fine grained install options"
 msgstr "Zadejte jemné doladění předvoleb instalace"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1061
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6742,62 +6764,62 @@ msgstr ""
 "Přeinstalovat existující virt. stroj. Jsou použity pouze předvolby pro "
 "instalaci – všechny ostatní jsou ignorovány."
 
-#: virtinst/virtinstall.py:1041
+#: virtinst/virtinstall.py:1064
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 "Provést instalaci cloudového obrazu, prostřednictvím nastavení cloud-init"
 
 # auto translated by TM merge from project: anaconda, version: rhel6-branch,
 # DocId: anaconda
-#: virtinst/virtinstall.py:1055
+#: virtinst/virtinstall.py:1078
 msgid "Device Options"
 msgstr "Předvolby pro zařízení"
 
-#: virtinst/virtinstall.py:1085
+#: virtinst/virtinstall.py:1108
 msgid "Guest Configuration Options"
 msgstr "Předvolby pro nastavení hosta"
 
-#: virtinst/virtinstall.py:1089
+#: virtinst/virtinstall.py:1112
 msgid "Virtualization Platform Options"
 msgstr "Volby virtualizační platformy"
 
-#: virtinst/virtinstall.py:1093
+#: virtinst/virtinstall.py:1116
 msgid "This guest should be a fully virtualized guest"
 msgstr "Tento host by měl být plně virtualizovaný"
 
-#: virtinst/virtinstall.py:1096
+#: virtinst/virtinstall.py:1119
 msgid "This guest should be a paravirtualized guest"
 msgstr "Tento host by měl být paravirtualizovaný"
 
-#: virtinst/virtinstall.py:1099
+#: virtinst/virtinstall.py:1122
 msgid "This guest should be a container guest"
 msgstr "Tento host by měl být kontejner"
 
-#: virtinst/virtinstall.py:1101
+#: virtinst/virtinstall.py:1124
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Název hypervizoru který použít (kvm, qemu, xen, …)"
 
-#: virtinst/virtinstall.py:1102
+#: virtinst/virtinstall.py:1125
 msgid "The CPU architecture to simulate"
 msgstr "Architektura procesoru kterou emulovat"
 
-#: virtinst/virtinstall.py:1103
+#: virtinst/virtinstall.py:1126
 msgid "The machine type to emulate"
 msgstr "Typ stroje který emulovat"
 
-#: virtinst/virtinstall.py:1114
+#: virtinst/virtinstall.py:1137
 msgid "Have domain autostart on host boot up."
 msgstr "Spouštět doménu při start hostitele."
 
-#: virtinst/virtinstall.py:1116
+#: virtinst/virtinstall.py:1139
 msgid "Create a transient domain."
 msgstr "Vytvořit přechodnou doménu."
 
-#: virtinst/virtinstall.py:1118
+#: virtinst/virtinstall.py:1141
 msgid "Force power off the domain when the console viewer is closed."
 msgstr "Vynutit vypnutí domény při zavření prohlížeče konzole."
 
-#: virtinst/virtinstall.py:1121
+#: virtinst/virtinstall.py:1144
 msgid "Minutes to wait for install to complete."
 msgstr "Kolik minut čekat na dokončení instalace."
 
@@ -6824,14 +6846,14 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
-"je požadováno „--edit %(number)s“ ale v XML je pouze %(max)s objekt "
-"--%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML je pouze %(max)s objekt --"
+"%(type)s"
 msgstr[1] ""
-"je požadováno „--edit %(number)s“ ale v XML jsou pouze %(max)s objekty "
-"--%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML jsou pouze %(max)s objekty --"
+"%(type)s"
 msgstr[2] ""
-"je požadováno „--edit %(number)s“ ale v XML je pouze %(max)s objektů "
-"--%(type)s"
+"je požadováno „--edit %(number)s“ ale v XML je pouze %(max)s objektů --"
+"%(type)s"
 
 #: virtinst/virtxml.py:107
 #, python-format
@@ -6870,55 +6892,55 @@ msgstr ""
 msgid "--os-variant/--osinfo is not supported with --edit"
 msgstr "--os-variant/--osinfo nelze použít dohromady s --edit"
 
-#: virtinst/virtxml.py:164
+#: virtinst/virtxml.py:167
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "Není možné použít --add-device dohromady s --%s"
 
-#: virtinst/virtxml.py:181
+#: virtinst/virtxml.py:183
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Není možné použít --remove-device dohromady s --%s"
 
-#: virtinst/virtxml.py:184
+#: virtinst/virtxml.py:186
 msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr "--os-variant/--osinfo nelze použít dohromady s --remove-device"
 
-#: virtinst/virtxml.py:204
+#: virtinst/virtxml.py:206
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml není pro --%s podporováno"
 
-#: virtinst/virtxml.py:207
+#: virtinst/virtxml.py:209
 msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--os-variant/--osinfo nelze použít dohromady s --build-xml"
 
-#: virtinst/virtxml.py:233
+#: virtinst/virtxml.py:228
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Definovat „%s“ se změněným XML?"
 
-#: virtinst/virtxml.py:241
+#: virtinst/virtxml.py:236
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Doména „%s“ úspěšně definována."
 
-#: virtinst/virtxml.py:248
+#: virtinst/virtxml.py:243
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "Spustit „%s“ se změněným XML?"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:552
+#: virtinst/virtxml.py:253 virtinst/virtxml.py:547
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Doménu „%(domain)s“ se nepodařilo spustit: %(error)s"
 
-#: virtinst/virtxml.py:263 virtinst/virtxml.py:556
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:551
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Doména „%s“ úspěšně spuštěna."
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:264
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6929,16 +6951,16 @@ msgstr ""
 "\n"
 "Připojit toto zařízení za chodu k hostovi „%(domain)s“?"
 
-#: virtinst/virtxml.py:271
+#: virtinst/virtxml.py:266
 msgid "Device hotplug successful."
 msgstr "Připojení zařízení za chodu úspěšné."
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:267
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "Chyba při pokusu o připojení zařízení za chodu: %(error)s"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:269
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6949,16 +6971,16 @@ msgstr ""
 "\n"
 "Odpojit toto zařízení za chodu z hosta „%(domain)s“?"
 
-#: virtinst/virtxml.py:276
+#: virtinst/virtxml.py:271
 msgid "Device hotunplug successful."
 msgstr "Odpojení zařízení za chodu úspěšné."
 
-#: virtinst/virtxml.py:277
+#: virtinst/virtxml.py:272
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Chyba při pokusu o odpojení zařízení za chodu: %(error)s"
 
-#: virtinst/virtxml.py:279
+#: virtinst/virtxml.py:274
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6969,37 +6991,37 @@ msgstr ""
 "\n"
 "Aktualizovat toto zařízení pro hosta „%(domain)s“?"
 
-#: virtinst/virtxml.py:281
+#: virtinst/virtxml.py:276
 msgid "Device update successful."
 msgstr "Aktualizace zařízení úspěšná."
 
-#: virtinst/virtxml.py:282
+#: virtinst/virtxml.py:277
 #, python-format
 msgid "Error attempting device update: %(error)s"
 msgstr "Chyba při pokusu o aktualizaci zařízení: %(error)s"
 
-#: virtinst/virtxml.py:327
+#: virtinst/virtxml.py:322
 msgid "--xml can only be used with --edit"
 msgstr "volbu --xml je možné použít pouze ve spojení s --edit"
 
-#: virtinst/virtxml.py:349
+#: virtinst/virtxml.py:344
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "Nebyl vytvořen žádný rozdíl v XML. Požadované změny nebudou mít žádný efekt."
 
-#: virtinst/virtxml.py:368
+#: virtinst/virtxml.py:363
 msgid "Edit libvirt XML using command line options."
 msgstr "Upravit libvirt XML pomocí voleb příkazového řádku."
 
-#: virtinst/virtxml.py:374
+#: virtinst/virtxml.py:369
 msgid "Domain name, id, or uuid"
 msgstr "Název domény, identif., nebo nikde se neopakující identifikátor"
 
-#: virtinst/virtxml.py:376
+#: virtinst/virtxml.py:371
 msgid "XML actions"
 msgstr "Akce ohledně XML"
 
-#: virtinst/virtxml.py:378
+#: virtinst/virtxml.py:373
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -7013,7 +7035,7 @@ msgstr ""
 "--edit all --disk … (upravit všechna disková zařízení)\n"
 "--edit target=hda --disk … (upravit disk „hda“)\n"
 
-#: virtinst/virtxml.py:384
+#: virtinst/virtxml.py:379
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -7025,7 +7047,7 @@ msgstr ""
 "--remove-device --disk all (odebrat všechny disky)\n"
 "--remove-device --disk /nejake/umisteni"
 
-#: virtinst/virtxml.py:389
+#: virtinst/virtxml.py:384
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -7033,7 +7055,7 @@ msgstr ""
 "Přidat zadané zařízení. Příklad:\n"
 "--add-device --disk …"
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:387
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -7041,11 +7063,11 @@ msgstr ""
 "Vypsat sestavené XML pro zařízení. Doména je volitelná, ale doporučená pro "
 "zajištění optimálních výchozích hodnot."
 
-#: virtinst/virtxml.py:395
+#: virtinst/virtxml.py:390
 msgid "Output options"
 msgstr "Volby výstupu"
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:392
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -7057,62 +7079,62 @@ msgstr ""
 "S --remove-device, je toto operace odebrání za chodu.\n"
 "S --edit, je toto operace úpravy zařízení."
 
-#: virtinst/virtxml.py:403
+#: virtinst/virtxml.py:398
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Vynutit definování domény. Potřebné pouze pokud byla zadána volba --print."
 
-#: virtinst/virtxml.py:406
+#: virtinst/virtxml.py:401
 msgid "Force not defining the domain."
 msgstr "Vynutit nedefinování domény."
 
-#: virtinst/virtxml.py:409
+#: virtinst/virtxml.py:404
 msgid "Start the domain."
 msgstr "Spustit doménu."
 
-#: virtinst/virtxml.py:411
+#: virtinst/virtxml.py:406
 msgid "Only print the requested change, in diff format"
 msgstr "Pouze vypsat požadovanou změnu, ve formátu diff (rozdíl)"
 
-#: virtinst/virtxml.py:413
+#: virtinst/virtxml.py:408
 msgid "Only print the requested change, in full XML format"
 msgstr "Pouze vypsat požadovanou změnu, v plném XML formátu"
 
-#: virtinst/virtxml.py:415
+#: virtinst/virtxml.py:410
 msgid "Require confirmation before saving any results."
 msgstr "Vyžadovat potvrzení před uložením jakýchkoli výsledků."
 
-#: virtinst/virtxml.py:419
+#: virtinst/virtxml.py:414
 msgid "XML options"
 msgstr "Volby XML"
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:456
 msgid "Can't use --confirm with stdin input."
 msgstr "--confirm není možné použít se standardním vstupem (stdin)."
 
-#: virtinst/virtxml.py:463
+#: virtinst/virtxml.py:458
 msgid "Can't use --update with stdin input."
 msgstr "--update není možné použít se standardním vstupem (stdin)."
 
-#: virtinst/virtxml.py:466
+#: virtinst/virtxml.py:461
 msgid "A domain must be specified"
 msgstr "Je třeba zadat doménu"
 
-#: virtinst/virtxml.py:494
+#: virtinst/virtxml.py:489
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "Není známo jak provést --update pro --%s"
 
-#: virtinst/virtxml.py:528
+#: virtinst/virtxml.py:523
 msgid "The VM is not running, --update is inapplicable."
 msgstr "Virt. stroj není spuštěný, volbu --update proto nelze použít."
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:556
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Změny se projeví až poté, co bude doména zcela vypnuta."
 
-#: virtinst/virtxml.py:563
+#: virtinst/virtxml.py:558
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -7120,7 +7142,7 @@ msgstr ""
 "XML se po definování domény nezměnilo. Nejspíš jste změnili hodnotu, kterou "
 "libvirt nastavuje už ve výchozím stavu."
 
-#: virtinst/virtxml.py:576
+#: virtinst/virtxml.py:571
 msgid "Aborted at user request"
 msgstr "Zrušeno na žádost uživatele"
 
@@ -7134,15 +7156,27 @@ msgstr ""
 "„%(foundname)s“"
 
 #. translators: value is a generic object type name
-#: virtinst/xmlbuilder.py:487
+#: virtinst/xmlbuilder.py:519
 #, python-format
 msgid "A name must be specified for the %s"
 msgstr "Je třeba zadat název pro %s"
 
-#: virtinst/xmlbuilder.py:492
+#: virtinst/xmlbuilder.py:524
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "Název %(objecttype)s „%(name)s“ nemůže obsahovat znak „%(char)s“."
+
+#~ msgid "tpm-tab"
+#~ msgstr "tpm-tab"
+
+#~ msgid "Sheepdog Filesystem"
+#~ msgstr "Souborový systém Sheepdog"
+
+#~ msgid "Missing mandatory attribute 'type'"
+#~ msgstr "Chybí povinný atribut „type“ (typ)"
+
+#~ msgid "SEV launch security is not supported on this platform"
+#~ msgstr "SEV zabezpečení spouštění není na této platformě podporováno"
 
 #~ msgid "Version:"
 #~ msgstr "Verze:"
@@ -7234,9 +7268,6 @@ msgstr "Název %(objecttype)s „%(name)s“ nemůže obsahovat znak „%(char)s
 
 #~ msgid "for arch '%s'"
 #~ msgstr "pro architekturu „%s“"
-
-#~ msgid "virtualization type '%s'"
-#~ msgstr "typ virtualizace „%s“"
 
 #~ msgid "Cannot mix both --bridge and --network arguments"
 #~ msgstr ""

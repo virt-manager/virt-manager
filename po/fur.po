@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2022-02-27 06:15+0000\n"
+"POT-Creation-Date: 2023-09-12 20:00+0200\n"
 "PO-Revision-Date: 2023-04-30 14:21+0000\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
-"Language-Team: Friulian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/fur/>\n"
+"Language-Team: Friulian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/fur/>\n"
 "Language: fur\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,6 +51,26 @@ msgstr "Videade di configurazion de machine virtuâl"
 msgid "Graphical console connection for a virtual machine"
 msgstr "Conession de console grafiche par une machine virtuâl"
 
+#: data/virt-manager.appdata.xml.in:37
+#, fuzzy
+#| msgid "Choose virtualization type"
+msgid "virtualization"
+msgstr "Sielzi il gjenar di virtualizazion"
+
+#: data/virt-manager.appdata.xml.in:38
+#, fuzzy
+#| msgid "Libvirt URI:"
+msgid "libvirt"
+msgstr "URI di libvirt:"
+
+#: data/virt-manager.appdata.xml.in:39
+msgid "qemu"
+msgstr ""
+
+#: data/virt-manager.appdata.xml.in:40
+msgid "kvm"
+msgstr ""
+
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Gjestìs machinis virtuâls"
@@ -84,14 +104,14 @@ msgstr "Gjenar di _dispositîf:"
 msgid "_Bus type:"
 msgstr "Gjenar di _bus:"
 
-#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1152
+#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1178
 #: ui/createpool.ui:355 ui/fsdetails.ui:87 ui/gfxdetails.ui:107
 #: ui/tpmdetails.ui:49
 msgid "_Type:"
 msgstr "_Gjenar:"
 
-#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:937
-#: ui/addhardware.ui:1005 ui/addhardware.ui:1282 ui/tpmdetails.ui:99
+#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:963
+#: ui/addhardware.ui:1031 ui/addhardware.ui:1308 ui/tpmdetails.ui:99
 msgid "_Model:"
 msgstr "_Model:"
 
@@ -111,7 +131,7 @@ msgstr "Direzion _MAC:"
 msgid "Device mode_l:"
 msgstr "Mode_l dispositîf:"
 
-#: ui/addhardware.ui:673 ui/addhardware.ui:1229
+#: ui/addhardware.ui:673 ui/addhardware.ui:1255
 msgid "Host _Device:"
 msgstr "_Dispositîf host:"
 
@@ -141,31 +161,35 @@ msgstr "Socket _automatic:"
 msgid "_Channel:"
 msgstr "_Canâl:"
 
-#: ui/addhardware.ui:1018 ui/details.ui:4000
+#: ui/addhardware.ui:908
+msgid "_Share Clipboard:"
+msgstr ""
+
+#: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
 msgstr "A_zion:"
 
-#: ui/addhardware.ui:1110 ui/createnet.ui:139
+#: ui/addhardware.ui:1136 ui/createnet.ui:139
 msgid "_Mode:"
 msgstr "_Modalitât:"
 
-#: ui/addhardware.ui:1263 ui/details.ui:4688
+#: ui/addhardware.ui:1289 ui/details.ui:4715
 msgid "rng"
 msgstr "rng"
 
-#: ui/addhardware.ui:1336 ui/details.ui:4770
+#: ui/addhardware.ui:1362 ui/details.ui:4797
 msgid "panic"
 msgstr "panic"
 
-#: ui/addhardware.ui:1442 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
+#: ui/addhardware.ui:1468 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
 #: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
 #: ui/createpool.ui:478 ui/createvm.ui:2400 ui/createvol.ui:462
-#: ui/delete.ui:181 ui/details.ui:4866 ui/hoststorage.ui:154 ui/migrate.ui:638
+#: ui/delete.ui:181 ui/details.ui:4893 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:253
 msgid "_Cancel"
 msgstr "_Anule"
 
-#: ui/addhardware.ui:1457 ui/createnet.ui:813 ui/createpool.ui:493
+#: ui/addhardware.ui:1483 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
 msgid "_Finish"
 msgstr "_Finìs"
@@ -226,7 +250,7 @@ msgstr "Operazion in vore"
 msgid "Please wait a few moments..."
 msgstr "Par plasê spiete un lamp..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:303 virtManager/asyncjob.py:310
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:300 virtManager/asyncjob.py:307
 msgid "Processing..."
 msgstr "Elaborazion..."
 
@@ -304,8 +328,8 @@ msgid ""
 msgstr ""
 "<span size='small'>La clonazion <u>no</u> modifiche i contignûts dal SO "
 "ospit. Se ti covente fâ\n"
-"robis come cambiâ password o IP statics, viôt il strument virt-"
-"sysprep(1).</span>"
+"robis come cambiâ password o IP statics, viôt il strument virt-sysprep(1).</"
+"span>"
 
 #: ui/clone.ui:706
 msgid "C_lone"
@@ -563,7 +587,7 @@ msgstr "Gjenar di _virtualizazion:"
 msgid "Architecture options"
 msgstr "Opzions architeture"
 
-#: ui/createvm.ui:748 virtManager/details/details.py:724
+#: ui/createvm.ui:748 virtManager/details/details.py:705
 #: virtManager/manager.py:325 virtManager/oslist.py:72
 msgid "Name"
 msgstr "Non"
@@ -628,8 +652,8 @@ msgstr "Indicâ la cartele lidrîs _dal SO esistent:"
 msgid ""
 "<small>The OS directory tree must already exist. To enable OS directory tree "
 "creation,\n"
-"please install <a href=\"https://github.com/virt-manager/virt-bootstrap"
-"\">virt-bootstrap</a></small>"
+"please install <a href=\"https://github.com/virt-manager/virt-"
+"bootstrap\">virt-bootstrap</a></small>"
 msgstr ""
 "<small>L'arbul di cartelis dal SO al scugne esisti za. Par abilitâ la "
 "creazion di un arbul\n"
@@ -722,7 +746,7 @@ msgstr "C_PU:"
 msgid "(Insert host mem)"
 msgstr "(Inserî memorie host)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2398
+#: ui/createvm.ui:1987 virtManager/details/details.py:2383
 msgid "Memory"
 msgstr "Memorie"
 
@@ -731,7 +755,7 @@ msgid "_Enable storage for this virtual machine"
 msgstr "Abilitâ la memori_e di archiviazion par cheste machine virtuâl"
 
 #: ui/createvm.ui:2040 virtManager/addhardware.py:216
-#: virtManager/addhardware.py:981 virtManager/clone.py:277
+#: virtManager/addhardware.py:984 virtManager/clone.py:277
 msgid "Storage"
 msgstr "Memorie di archiviazion"
 
@@ -945,12 +969,12 @@ msgstr ""
 msgid "<b>CPUs</b>"
 msgstr "<b>CPUs</b>"
 
-#: ui/details.ui:1441 ui/details.ui:3420 ui/details.ui:3879 ui/details.ui:4015
-#: ui/details.ui:4174
+#: ui/details.ui:1441 ui/details.ui:3420 ui/details.ui:3906 ui/details.ui:4042
+#: ui/details.ui:4201
 msgid "M_odel:"
 msgstr "M_odel:"
 
-#: ui/details.ui:1452 virtManager/details/details.py:1947
+#: ui/details.ui:1452 virtManager/details/details.py:1929
 msgid "Copy host CP_U configuration"
 msgstr "Copiâ la configurazion CP_U dal host"
 
@@ -1118,7 +1142,7 @@ msgstr "Direzion I_P:"
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Interface di rêt virtuâl</b>"
 
-#: ui/details.ui:3240 ui/details.ui:4127 ui/details.ui:4449 ui/details.ui:4625
+#: ui/details.ui:3240 ui/details.ui:4154 ui/details.ui:4476 ui/details.ui:4652
 msgid "Type:"
 msgstr "Gjenar:"
 
@@ -1138,119 +1162,123 @@ msgstr "<b>Dispositîf audio</b>"
 msgid "label506"
 msgstr "label506"
 
-#: ui/details.ui:3546 ui/details.ui:3583
+#: ui/details.ui:3546 ui/details.ui:3584
 msgid "label508"
 msgstr "label508"
 
-#: ui/details.ui:3596
+#: ui/details.ui:3597 ui/details.ui:3610
 msgid "label507"
 msgstr "label507"
 
-#: ui/details.ui:3621
+#: ui/details.ui:3635
 msgid "Source host:"
 msgstr "Host sorzint:"
 
-#: ui/details.ui:3633
+#: ui/details.ui:3647
 msgid "Bind host:"
 msgstr "Host vincul:"
 
-#: ui/details.ui:3645
+#: ui/details.ui:3659
 msgid "Target type:"
 msgstr "Gjenar destinazion:"
 
-#: ui/details.ui:3657
+#: ui/details.ui:3671
 msgid "Target name:"
 msgstr "Non destinazion:"
 
-#: ui/details.ui:3669 ui/hostnets.ui:175 ui/hoststorage.ui:391
+#: ui/details.ui:3683 ui/hostnets.ui:175 ui/hoststorage.ui:391
 msgid "State:"
 msgstr "Stât:"
 
-#: ui/details.ui:3681
+#: ui/details.ui:3695
+msgid "Clipboard:"
+msgstr ""
+
+#: ui/details.ui:3707
 msgid "Source path:"
 msgstr "Percors sorzint:"
 
-#: ui/details.ui:3701
+#: ui/details.ui:3727
 msgid "<b>insert type</b>"
 msgstr "<b>inserî gjenar</b>"
 
-#: ui/details.ui:3762 ui/hostnets.ui:163
+#: ui/details.ui:3788 ui/hostnets.ui:163
 msgid "Device:"
 msgstr "Dispositîf:"
 
-#: ui/details.ui:3787
+#: ui/details.ui:3814
 msgid "ROM _BAR:"
 msgstr "ROM _BAR:"
 
-#: ui/details.ui:3910
+#: ui/details.ui:3937
 msgid "_3D acceleration:"
 msgstr "Acelerazion _3D:"
 
-#: ui/details.ui:3938
+#: ui/details.ui:3965
 msgid "<b>Video</b>"
 msgstr "<b>Video</b>"
 
-#: ui/details.ui:4190
+#: ui/details.ui:4217
 msgid "Devices:"
 msgstr "Dispositîfs:"
 
-#: ui/details.ui:4246
+#: ui/details.ui:4273
 msgid "<b>Controller</b>"
 msgstr "<b>Controller</b>"
 
-#: ui/details.ui:4292
+#: ui/details.ui:4319
 msgid "<b>Filesystem</b>"
 msgstr "<b>Filesystem</b>"
 
-#: ui/details.ui:4347 ui/migrate.ui:390
+#: ui/details.ui:4374 ui/migrate.ui:390
 msgid "M_ode:"
 msgstr "M_odalitât:"
 
-#: ui/details.ui:4392
+#: ui/details.ui:4419
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>Dispositîf smartcard</b>"
 
-#: ui/details.ui:4461
+#: ui/details.ui:4488
 msgid "Address:"
 msgstr "Direzion:"
 
-#: ui/details.ui:4473
+#: ui/details.ui:4500
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ui/details.ui:4505
+#: ui/details.ui:4532
 msgid "<b>Redirected device</b>"
 msgstr "<b>Dispositîf indreçât</b>"
 
-#: ui/details.ui:4557
+#: ui/details.ui:4584
 msgid "<b>TPM Device</b>"
 msgstr "<b>Dispositîf TPM</b>"
 
-#: ui/details.ui:4650
+#: ui/details.ui:4677
 msgid "Host Device:"
 msgstr "Dispositîf dal host:"
 
-#: ui/details.ui:4670
+#: ui/details.ui:4697
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>Gjeneradôr di numars casuâi</b>"
 
-#: ui/details.ui:4720
+#: ui/details.ui:4747
 msgid "Model:"
 msgstr "Model:"
 
-#: ui/details.ui:4732
+#: ui/details.ui:4759
 msgid "panic-model"
 msgstr "panic-model"
 
-#: ui/details.ui:4752
+#: ui/details.ui:4779
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>Strument di notifiche panic</b>"
 
-#: ui/details.ui:4845
+#: ui/details.ui:4872
 msgid "_Remove"
 msgstr "_Gjave"
 
-#: ui/details.ui:4886 ui/hostnets.ui:652 ui/hoststorage.ui:186
+#: ui/details.ui:4913 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
 msgstr "_Apliche"
@@ -1548,12 +1576,12 @@ msgid "Power on the virtual machine"
 msgstr "Impie la machine virtuâl"
 
 #: ui/manager.ui:297 virtManager/manager.py:758 virtManager/vmmenu.py:82
-#: virtManager/vmwindow.py:380
+#: virtManager/vmwindow.py:381
 msgid "_Run"
 msgstr "_Eseguìs"
 
 #: ui/manager.ui:312 ui/vmwindow.ui:354 virtManager/manager.py:795
-#: virtManager/vmwindow.py:421
+#: virtManager/vmwindow.py:422
 msgid "Pause the virtual machine"
 msgstr "Met in pause la machine virtuâl"
 
@@ -1977,10 +2005,6 @@ msgstr "_Version:"
 msgid "Adva_nced options"
 msgstr "Opzions ava_nzadis"
 
-#: ui/tpmdetails.ui:175
-msgid "tpm-tab"
-msgstr "tpm-tab"
-
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
 msgstr "Machine Virtuâl"
@@ -2067,7 +2091,7 @@ msgstr "Console"
 msgid "Show virtual hardware details"
 msgstr "Mostre i detais dal hardware virtuâl"
 
-#: ui/vmwindow.ui:315 virtManager/error.py:347
+#: ui/vmwindow.ui:315 virtManager/error.py:328
 msgid "Details"
 msgstr "Detais"
 
@@ -2120,7 +2144,7 @@ msgstr "_XML"
 msgid "Error launching 'About' dialog: %s"
 msgstr "Erôr tal inviâ il dialic 'Informazions su': %s"
 
-#: virtManager/addhardware.py:164 virtManager/details/details.py:592
+#: virtManager/addhardware.py:164 virtManager/details/details.py:573
 msgid "Hardware"
 msgstr "Hardware"
 
@@ -2129,17 +2153,17 @@ msgstr "Hardware"
 msgid "Connection does not support storage management."
 msgstr "La conession no supuarte la gjestion de memorie di archiviazion."
 
-#: virtManager/addhardware.py:218 virtManager/addhardware.py:983
+#: virtManager/addhardware.py:218 virtManager/addhardware.py:986
 msgid "Controller"
 msgstr "Controlôr"
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:985
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:988
 #: virtManager/createnet.py:330
 msgid "Network"
 msgstr "Rêt"
 
-#: virtManager/addhardware.py:220 virtManager/addhardware.py:987
-#: virtManager/details/details.py:195
+#: virtManager/addhardware.py:220 virtManager/addhardware.py:990
+#: virtManager/details/details.py:193
 msgid "Input"
 msgstr "Input"
 
@@ -2149,11 +2173,11 @@ msgstr "Input"
 msgid "Not supported for this guest type."
 msgstr "No supuartât par chest gjenar di ospit."
 
-#: virtManager/addhardware.py:222 virtManager/addhardware.py:989
+#: virtManager/addhardware.py:222 virtManager/addhardware.py:992
 msgid "Graphics"
 msgstr "Grafics"
 
-#: virtManager/addhardware.py:224 virtManager/addhardware.py:991
+#: virtManager/addhardware.py:224 virtManager/addhardware.py:994
 msgid "Sound"
 msgstr "Sun"
 
@@ -2203,16 +2227,16 @@ msgstr "Watchdog"
 msgid "Filesystem"
 msgstr "Filesystem"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:999
+#: virtManager/addhardware.py:265 virtManager/addhardware.py:1002
 #: virtManager/details/details.py:253
 msgid "Smartcard"
 msgstr "Smartcard"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:1001
+#: virtManager/addhardware.py:267 virtManager/addhardware.py:1004
 msgid "USB Redirection"
 msgstr "Indreçament USB"
 
-#: virtManager/addhardware.py:269 virtManager/addhardware.py:1003
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:1006
 msgid "TPM"
 msgstr "TPM"
 
@@ -2220,7 +2244,7 @@ msgstr "TPM"
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:272 virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:272 virtManager/addhardware.py:1010
 #: virtManager/details/details.py:252
 msgid "Panic Notifier"
 msgstr "Notificadôr panic"
@@ -2233,196 +2257,200 @@ msgstr "No supuartât par cheste cumbinazion di hypervisor/libvirt/architeture."
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:346
+#: virtManager/addhardware.py:347
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Erôr tal cambiâ la configurazion de MV: %s"
 
-#: virtManager/addhardware.py:371
+#: virtManager/addhardware.py:372
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Chestis modifichis a varan efiet dopo che l'ospit al sarà distudât."
 
-#: virtManager/addhardware.py:421
+#: virtManager/addhardware.py:423
 msgid "Pseudo TTY"
 msgstr "Pseudo TTY"
 
-#: virtManager/addhardware.py:422
+#: virtManager/addhardware.py:424
 msgid "Output to a file"
 msgstr "Output suntun file"
 
-#: virtManager/addhardware.py:423
+#: virtManager/addhardware.py:425
 msgid "TCP net console"
 msgstr "Console di rêt TCP"
 
-#: virtManager/addhardware.py:424
+#: virtManager/addhardware.py:426
 msgid "UDP net console"
 msgstr "Console di rêt UDP"
 
-#: virtManager/addhardware.py:425
+#: virtManager/addhardware.py:427
 msgid "UNIX socket"
 msgstr "Socket UNIX"
 
-#: virtManager/addhardware.py:426
+#: virtManager/addhardware.py:428
 msgid "Spice agent"
 msgstr "Agjent spice"
 
-#: virtManager/addhardware.py:427
+#: virtManager/addhardware.py:429
 msgid "Spice port"
 msgstr "Puarte spice"
 
-#: virtManager/addhardware.py:441 virtManager/addhardware.py:502
+#: virtManager/addhardware.py:430
+msgid "QEMU vdagent"
+msgstr ""
+
+#: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:442 virtManager/details/details.py:2331
+#: virtManager/addhardware.py:445 virtManager/details/details.py:2316
 msgid "Floppy"
 msgstr "Discut"
 
-#: virtManager/addhardware.py:443 virtManager/addhardware.py:504
+#: virtManager/addhardware.py:446 virtManager/addhardware.py:507
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:444 virtManager/addhardware.py:503
+#: virtManager/addhardware.py:447 virtManager/addhardware.py:506
 msgid "SATA"
 msgstr "SATA"
 
-#: virtManager/addhardware.py:445
+#: virtManager/addhardware.py:448
 msgid "VirtIO Serial"
 msgstr "Seriâl VirtIO"
 
-#: virtManager/addhardware.py:446 virtManager/addhardware.py:506
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:449 virtManager/addhardware.py:509
+#: virtManager/addhardware.py:570
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:447
+#: virtManager/addhardware.py:450
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:448
+#: virtManager/addhardware.py:451
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:449
+#: virtManager/addhardware.py:452
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:457 virtManager/addhardware.py:897
+#: virtManager/addhardware.py:460 virtManager/addhardware.py:900
 msgid "VirtIO SCSI"
 msgstr "VirtIO SCSI"
 
-#: virtManager/addhardware.py:460
+#: virtManager/addhardware.py:463
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:505
+#: virtManager/addhardware.py:508
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:507 virtManager/addhardware.py:568
+#: virtManager/addhardware.py:510 virtManager/addhardware.py:571
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:508 virtManager/addhardware.py:569
+#: virtManager/addhardware.py:511 virtManager/addhardware.py:572
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:515
+#: virtManager/addhardware.py:518
 msgid "ISA"
 msgstr "ISA"
 
-#: virtManager/addhardware.py:516
+#: virtManager/addhardware.py:519
 msgid "pSeries"
 msgstr "pSeries"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:520
 msgid "Hyper-V"
 msgstr "Hyper-V"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:521
 msgid "s390"
 msgstr "s390"
 
-#: virtManager/addhardware.py:525
+#: virtManager/addhardware.py:528
 msgid "Random"
 msgstr "Casuâl"
 
-#: virtManager/addhardware.py:526
+#: virtManager/addhardware.py:529
 msgid "Entropy Gathering Daemon"
 msgstr "Demoni di racuelte de entropie"
 
-#: virtManager/addhardware.py:527
+#: virtManager/addhardware.py:530
 msgid "Builtin RNG"
 msgstr "RNG incorporât"
 
-#: virtManager/addhardware.py:545
+#: virtManager/addhardware.py:548
 msgid "Forcefully reset the guest"
 msgstr "Torne fâ partî in mût sfuarçât l'ospit"
 
-#: virtManager/addhardware.py:546
+#: virtManager/addhardware.py:549
 msgid "Gracefully shutdown the guest"
 msgstr "Distude l'ospit"
 
-#: virtManager/addhardware.py:547
+#: virtManager/addhardware.py:550
 msgid "Forcefully power off the guest"
 msgstr "Distache in mût sfuarçât l'ospit"
 
-#: virtManager/addhardware.py:548
+#: virtManager/addhardware.py:551
 msgid "Pause the guest"
 msgstr "Met in pause l'ospit"
 
-#: virtManager/addhardware.py:549
+#: virtManager/addhardware.py:552
 msgid "No action"
 msgstr "Nissune azion"
 
-#: virtManager/addhardware.py:550
+#: virtManager/addhardware.py:553
 msgid "Dump guest memory core"
 msgstr "Tire jù il nuclei di memorie dal ospit"
 
-#: virtManager/addhardware.py:557
+#: virtManager/addhardware.py:560
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Taulute grafiche USB EvTouch"
 
-#: virtManager/addhardware.py:560 virtManager/details/details.py:194
+#: virtManager/addhardware.py:563 virtManager/details/details.py:192
 msgid "Keyboard"
 msgstr "Tastiere"
 
-#: virtManager/addhardware.py:561 virtManager/details/details.py:192
+#: virtManager/addhardware.py:564 virtManager/details/details.py:190
 msgid "Mouse"
 msgstr "Mouse"
 
-#: virtManager/addhardware.py:562 virtManager/details/details.py:190
+#: virtManager/addhardware.py:565 virtManager/details/details.py:188
 msgid "Tablet"
 msgstr "Taulute"
 
-#: virtManager/addhardware.py:566
+#: virtManager/addhardware.py:569
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:575
+#: virtManager/addhardware.py:578
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_type)s %(input_bus)s"
 
-#: virtManager/addhardware.py:673
+#: virtManager/addhardware.py:676
 msgid "Disk device"
 msgstr "Dispositîf disc"
 
-#: virtManager/addhardware.py:675
+#: virtManager/addhardware.py:678
 msgid "CDROM device"
 msgstr "Dispositîf CDROM"
 
-#: virtManager/addhardware.py:677
+#: virtManager/addhardware.py:680
 msgid "Floppy device"
 msgstr "Dispositîf discut"
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:683
 msgid "LUN Passthrough"
 msgstr "LUN Passthrough"
 
-#: virtManager/addhardware.py:703 virtManager/addhardware.py:812
-#: virtManager/addhardware.py:822 virtManager/addhardware.py:898
+#: virtManager/addhardware.py:706 virtManager/addhardware.py:815
+#: virtManager/addhardware.py:825 virtManager/addhardware.py:901
 #: virtManager/device/addstorage.py:98 virtManager/device/addstorage.py:105
 #: virtManager/device/fsdetails.py:88 virtManager/device/gfxdetails.py:103
 #: virtManager/device/tpmdetails.py:76 virtManager/device/tpmdetails.py:87
@@ -2430,7 +2458,7 @@ msgstr "LUN Passthrough"
 msgid "Hypervisor default"
 msgstr "Hypervisor predefinît"
 
-#: virtManager/addhardware.py:791
+#: virtManager/addhardware.py:794
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
@@ -2439,68 +2467,68 @@ msgstr ""
 "%s nol è atîf tal sisteme host.\n"
 "Invie mdev tal sisteme host prime di zontâlu al guest (ospit)."
 
-#: virtManager/addhardware.py:797
+#: virtManager/addhardware.py:800
 msgid "No Devices Available"
 msgstr "Nissun dispositîf disponibil"
 
-#: virtManager/addhardware.py:859 virtManager/device/tpmdetails.py:72
+#: virtManager/addhardware.py:862 virtManager/device/tpmdetails.py:72
 msgid "Passthrough"
 msgstr "Passaç"
 
-#: virtManager/addhardware.py:860
+#: virtManager/addhardware.py:863
 msgid "Host"
 msgstr "Host"
 
-#: virtManager/addhardware.py:866
+#: virtManager/addhardware.py:869
 msgid "Spice channel"
 msgstr "Canâl spice"
 
-#: virtManager/addhardware.py:894
+#: virtManager/addhardware.py:897
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:895
+#: virtManager/addhardware.py:898
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:993
+#: virtManager/addhardware.py:996
 msgid "Video Device"
 msgstr "Dispositîf video"
 
-#: virtManager/addhardware.py:995
+#: virtManager/addhardware.py:998
 msgid "Watchdog Device"
 msgstr "Dispositîf Watchdog"
 
-#: virtManager/addhardware.py:997
+#: virtManager/addhardware.py:1000
 msgid "Filesystem Passthrough"
 msgstr "Passaç dal filesystem"
 
-#: virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:1008
 msgid "Random Number Generator"
 msgstr "Gjeneradôr di numars casuâi"
 
-#: virtManager/addhardware.py:1009
+#: virtManager/addhardware.py:1012
 msgid "VM Sockets"
 msgstr "Socket MV"
 
-#: virtManager/addhardware.py:1013 virtManager/details/details.py:2111
+#: virtManager/addhardware.py:1016 virtManager/details/details.py:2094
 #, python-format
 msgid "%s Device"
 msgstr "Dispositîf %s"
 
-#: virtManager/addhardware.py:1017
+#: virtManager/addhardware.py:1020
 msgid "PCI Device"
 msgstr "Dispositîf PCI"
 
-#: virtManager/addhardware.py:1019
+#: virtManager/addhardware.py:1022
 msgid "MDEV Device"
 msgstr "Dispositîf MDEV"
 
-#: virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:1023
 msgid "USB Device"
 msgstr "Dispositîf USB"
 
-#: virtManager/addhardware.py:1140
+#: virtManager/addhardware.py:1146
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2511,11 +2539,11 @@ msgstr ""
 "Zontâ plui di un controlôr USB nol è supuartât.\n"
 "Tu puedis cambiâ il gjenar di controlôr USB te videade dai detais de MV."
 
-#: virtManager/addhardware.py:1232
+#: virtManager/addhardware.py:1238
 msgid "Are you sure you want to add this device?"
 msgstr "Zontâ pardabon chest dispositîf?"
 
-#: virtManager/addhardware.py:1235
+#: virtManager/addhardware.py:1241
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2523,39 +2551,39 @@ msgstr ""
 "Chest dispositîf nol pues jessi tacât ae machine in esecuzion. Vûstu rindi "
 "disponibil il dispositîf dopo dal prossim distudament dal ospit?"
 
-#: virtManager/addhardware.py:1259
+#: virtManager/addhardware.py:1265
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Impussibil zontâ il dispositîf: %s"
 
-#: virtManager/addhardware.py:1280
+#: virtManager/addhardware.py:1286
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "Erôr tal validâ i parametris dal dispositîf: %s"
 
-#: virtManager/addhardware.py:1286
+#: virtManager/addhardware.py:1292
 msgid "Creating device"
 msgstr "Daûr a creâ il dispositîf"
 
-#: virtManager/addhardware.py:1287
+#: virtManager/addhardware.py:1293
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "In base al dispositîf, al podarès stâ un pôcs di minûts par finî."
 
-#: virtManager/addhardware.py:1309
+#: virtManager/addhardware.py:1315
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Il dispositîf al è za doprât di altris ospits (guests) %s"
 
-#: virtManager/addhardware.py:1311
+#: virtManager/addhardware.py:1317
 msgid "Do you really want to use the device?"
 msgstr "Desideristu doprâ il dispositîf?"
 
-#: virtManager/addhardware.py:1356
+#: virtManager/addhardware.py:1362
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "Erôr tal costruî il XML dal dispositîf: %s"
 
-#: virtManager/asyncjob.py:220
+#: virtManager/asyncjob.py:219
 msgid "Cancelling job..."
 msgstr "Daûr a anulâ il lavôr..."
 
@@ -2673,34 +2701,6 @@ msgid ""
 msgstr ""
 "Daûr a creâ il clon de machine virtuâl '%s' e la memorie di archiviazion "
 "selezionade (al podarès tirâle a dilunc)"
-
-#: virtManager/config.py:148
-msgid "Locate or create storage volume"
-msgstr "Localize o cree il volum di archiviazion"
-
-#: virtManager/config.py:149
-msgid "Locate existing storage"
-msgstr "Localize la archiviazion esistente"
-
-#: virtManager/config.py:161
-msgid "Locate ISO media volume"
-msgstr "Localize il volum dal supuart ISO"
-
-#: virtManager/config.py:162
-msgid "Locate ISO media"
-msgstr "Localize il supuart ISO"
-
-#: virtManager/config.py:168
-msgid "Locate floppy media volume"
-msgstr "Localize il volum dal supuart dal discut"
-
-#: virtManager/config.py:169
-msgid "Locate floppy media"
-msgstr "Localize supuart discut"
-
-#: virtManager/config.py:175 virtManager/config.py:176
-msgid "Locate directory volume"
-msgstr "Localize volum de cartele"
 
 #: virtManager/connection.py:395
 msgid "User session"
@@ -2850,7 +2850,7 @@ msgstr "La creazion dal bacin di archiviazion e podarès tirâle a dilunc..."
 msgid "Choose source path"
 msgstr "Sielç percors sorzint"
 
-#: virtManager/createpool.py:398
+#: virtManager/createpool.py:397
 msgid "Choose target directory"
 msgstr "Sielç cartele di destinazion"
 
@@ -2942,7 +2942,7 @@ msgstr[1] "Fin a %(numcpus)d disponibilis"
 msgid "No active connection to install on."
 msgstr "Nissune conession ative dulà fâ la instalazion"
 
-#: virtManager/createvm.py:955 virtManager/details/details.py:1767
+#: virtManager/createvm.py:955 virtManager/details/details.py:1749
 #: virtManager/device/gfxdetails.py:96
 msgid "None"
 msgstr "Nissun"
@@ -2981,7 +2981,8 @@ msgstr "Rimozion imagjins dal disc"
 
 #: virtManager/createvm.py:1130
 msgid "Removing disk images we created for this virtual machine."
-msgstr "Daûr a rimovi lis imagjins dal disc creadis par cheste machine virtuâl."
+msgstr ""
+"Daûr a rimovi lis imagjins dal disc creadis par cheste machine virtuâl."
 
 #: virtManager/createvm.py:1324
 #, python-format
@@ -3364,7 +3365,7 @@ msgstr "Impussibil visualizâ il gjenar di console grafiche '%s'"
 msgid "Connecting to graphical console for guest"
 msgstr "Daûr a conetisi ae console grafiche pal ospit"
 
-#: virtManager/details/console.py:738
+#: virtManager/details/console.py:739
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3373,80 +3374,81 @@ msgstr ""
 "Erôr dilunc la conession ae console grafiche:\n"
 "%s"
 
-#: virtManager/details/console.py:795
+#: virtManager/details/console.py:796
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Erôr di autenticazion dal visualizadôr: %s"
 
-#: virtManager/details/console.py:817
+#: virtManager/details/console.py:818
 msgid "USB redirection error"
 msgstr "Erôr di indreçament dal USB"
 
-#: virtManager/details/console.py:826
+#: virtManager/details/console.py:827
 msgid "Viewer was disconnected."
 msgstr "Il visualizadôr al è stât disconetût."
 
-#: virtManager/details/console.py:833
+#: virtManager/details/console.py:834
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Jessude dal erôr dal tunel SSH: %s"
 
-#: virtManager/details/console.py:846
+#: virtManager/details/console.py:847
 msgid "Viewer is disconnecting."
 msgstr "Il visualizadôr al daûr a disconetisi."
 
-#: virtManager/details/console.py:979
+#: virtManager/details/console.py:980
 msgid "Viewer window closed."
 msgstr "Barcon dal visualizadôr sierât."
 
-#: virtManager/details/console.py:983
+#: virtManager/details/console.py:984
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Frache %s par molâ il pontadôr."
 
-#: virtManager/details/details.py:163
+#: virtManager/details/details.py:161
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "Discut floppy %(index)d"
 
-#: virtManager/details/details.py:169
+#: virtManager/details/details.py:167
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "CDROM %(bus)s %(index)d"
 
-#: virtManager/details/details.py:174
+#: virtManager/details/details.py:172
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "Disc %(bus)s %(index)d"
 
-#: virtManager/details/details.py:178
+#: virtManager/details/details.py:176
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(device)s %(bus)s %(index)d"
 
-#: virtManager/details/details.py:186
+#: virtManager/details/details.py:184
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "NIC %(mac)s"
 
-#: virtManager/details/details.py:199
+#: virtManager/details/details.py:197
 #, python-format
 msgid "Serial %(num)d"
 msgstr "Seriâl %(num)d"
 
-#: virtManager/details/details.py:203
+#: virtManager/details/details.py:201
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "Paralêl %(num)d"
 
-#: virtManager/details/details.py:207
+#: virtManager/details/details.py:205
 #, python-format
 msgid "Console %(num)d"
 msgstr "Console %(num)d"
 
-#: virtManager/details/details.py:212
-#, python-format
-msgid "Channel %(name)s"
+#: virtManager/details/details.py:213
+#, fuzzy, python-format
+#| msgid "Channel %(name)s"
+msgid "Channel (%(name)s)"
 msgstr "Canâl %(name)s"
 
 #: virtManager/details/details.py:214
@@ -3504,232 +3506,240 @@ msgstr "TPM %(device)s"
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:537
+#: virtManager/details/details.py:518
 msgid "_Add Hardware"
 msgstr "_Zonte hardware"
 
-#: virtManager/details/details.py:543
+#: virtManager/details/details.py:524
 msgid "_Remove Hardware"
 msgstr "_Gjave hardware"
 
-#: virtManager/details/details.py:662 virtManager/details/details.py:1774
+#: virtManager/details/details.py:643 virtManager/details/details.py:1756
 msgid "UEFI"
 msgstr "UEFI"
 
-#: virtManager/details/details.py:672
+#: virtManager/details/details.py:653
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt o hypervisor nol supuarte l'UEFI."
 
-#: virtManager/details/details.py:675
+#: virtManager/details/details.py:656
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirt nol à rilevât nissune imagjin firmware UEFI/OVMF instalade sul host."
 
-#: virtManager/details/details.py:725
+#: virtManager/details/details.py:706
 msgid "Version"
 msgstr "Version"
 
-#: virtManager/details/details.py:787
+#: virtManager/details/details.py:768
 msgid "Application Default"
 msgstr "Predefinît de aplicazion"
 
-#: virtManager/details/details.py:789
+#: virtManager/details/details.py:770
 msgid "Hypervisor Default"
 msgstr "Predefinît dal hypervisor"
 
-#: virtManager/details/details.py:791
+#: virtManager/details/details.py:772
 msgid "Clear CPU configuration"
 msgstr "Nete configurazion de CPU"
 
-#: virtManager/details/details.py:809
+#: virtManager/details/details.py:790
 msgid "Disk bus:"
 msgstr "Bus disc:"
 
-#: virtManager/details/details.py:1019
+#: virtManager/details/details.py:1000
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Erôr tal inviâ il dialic dal hardware: %s"
 
-#: virtManager/details/details.py:1025
+#: virtManager/details/details.py:1006
 msgid "Are you sure you want to remove this device?"
 msgstr "Gjavâ pardabon chest dispositîf?"
 
-#: virtManager/details/details.py:1272 virtManager/details/details.py:1766
-#: virtManager/details/details.py:1785 virtManager/details/details.py:1987
+#: virtManager/details/details.py:1253 virtManager/details/details.py:1748
+#: virtManager/details/details.py:1767 virtManager/details/details.py:1969
 #: virtManager/lib/libvirtenummap.py:86
 msgid "Unknown"
 msgstr "No cognossût"
 
-#: virtManager/details/details.py:1354
+#: virtManager/details/details.py:1335
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Erôr tal aplicâ lis modifichis: %s"
 
-#: virtManager/details/details.py:1483
+#: virtManager/details/details.py:1464
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Erôr tal cambiâ il valôr di autostart: %s"
 
-#: virtManager/details/details.py:1500
+#: virtManager/details/details.py:1481
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Impussibil stabilî initrd cence specificâ un percors dal kernel"
 
-#: virtManager/details/details.py:1503
+#: virtManager/details/details.py:1484
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 "Impussibil stabilî i argoments dal kernel cence specificâ un percors dal "
 "kernel"
 
-#: virtManager/details/details.py:1510
+#: virtManager/details/details.py:1491
 msgid "An init path must be specified"
 msgstr "Si scugne specificâ un percors di init"
 
-#: virtManager/details/details.py:1523 virtManager/device/addstorage.py:275
+#: virtManager/details/details.py:1504 virtManager/device/addstorage.py:275
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "Il disc '%(path)s' al è za doprât dai altris ospits %(names)s"
 
-#: virtManager/details/details.py:1527 virtManager/device/addstorage.py:279
+#: virtManager/details/details.py:1508 virtManager/device/addstorage.py:279
 msgid "Do you really want to use the disk?"
 msgstr "Doprâ pardabon il disc?"
 
-#: virtManager/details/details.py:1689
+#: virtManager/details/details.py:1670
 msgid "Remove this device from the virtual machine"
 msgstr "Gjave chest dispositîf de machine virtuâl"
 
-#: virtManager/details/details.py:1745
+#: virtManager/details/details.py:1727
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Erôr tal inzornâ la pagjine dal hardware: %s"
 
-#: virtManager/details/details.py:1840
+#: virtManager/details/details.py:1822
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1852
+#: virtManager/details/details.py:1834
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "Leture di %(received)d %(units)s"
 
-#: virtManager/details/details.py:1853
+#: virtManager/details/details.py:1835
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "Scriture di %(transferred)d %(units)s"
 
-#: virtManager/details/details.py:1856
+#: virtManager/details/details.py:1838
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s In jentrade"
 
-#: virtManager/details/details.py:1857
+#: virtManager/details/details.py:1839
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s In jessude"
 
-#: virtManager/details/details.py:1859 virtManager/details/details.py:1860
-#: virtManager/details/details.py:1861 virtManager/details/details.py:1862
+#: virtManager/details/details.py:1841 virtManager/details/details.py:1842
+#: virtManager/details/details.py:1843 virtManager/details/details.py:1844
 #: virtManager/hostnets.py:206 virtManager/hostnets.py:225
 msgid "Disabled"
 msgstr "Disabilitât"
 
-#: virtManager/details/details.py:1870
+#: virtManager/details/details.py:1852
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s di %(total-memory)s"
 
-#: virtManager/details/details.py:2036
+#: virtManager/details/details.py:2018
 msgid "Absolute Movement"
 msgstr "Moviment assolût"
 
-#: virtManager/details/details.py:2038
+#: virtManager/details/details.py:2020
 msgid "Relative Movement"
 msgstr "Moviment relatîf"
 
-#: virtManager/details/details.py:2047 virtManager/details/details.py:2212
-#: virtManager/details/details.py:2215
+#: virtManager/details/details.py:2029 virtManager/details/details.py:2197
+#: virtManager/details/details.py:2200
 msgid "Hypervisor does not support removing this device"
 msgstr "L'hypervisor nol supuarte la rimozion di chest dispositîf"
 
-#: virtManager/details/details.py:2051
+#: virtManager/details/details.py:2033
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "Servidôr %(graphicstype)s"
 
-#: virtManager/details/details.py:2103
+#: virtManager/details/details.py:2086
 msgid "Serial Device"
 msgstr "Dispositîf seriâl"
 
-#: virtManager/details/details.py:2105
+#: virtManager/details/details.py:2088
 msgid "Parallel Device"
 msgstr "Dispositîf paralêl"
 
-#: virtManager/details/details.py:2107
+#: virtManager/details/details.py:2090
 msgid "Console Device"
 msgstr "Dispositîf console"
 
-#: virtManager/details/details.py:2109
+#: virtManager/details/details.py:2092
 msgid "Channel Device"
 msgstr "Dispositîf canâl"
 
-#: virtManager/details/details.py:2119
+#: virtManager/details/details.py:2102
 msgid "Primary Console"
 msgstr "Console primarie"
 
-#: virtManager/details/details.py:2179
+#: virtManager/details/details.py:2138 virtManager/preferences.py:123
+msgid "Off"
+msgstr "Disativât"
+
+#: virtManager/details/details.py:2138 virtManager/preferences.py:124
+msgid "On"
+msgstr "Ativât"
+
+#: virtManager/details/details.py:2164
 #, python-format
 msgid "Physical %s Device"
 msgstr "Dispositîf %s fisic"
 
-#: virtManager/details/details.py:2196
+#: virtManager/details/details.py:2181
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Impussibil gjavâ l'ultin dispositîf video intant che e je colegade la "
 "grafiche o un display."
 
-#: virtManager/details/details.py:2222
+#: virtManager/details/details.py:2207
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s su %(address)s"
 
-#: virtManager/details/details.py:2228 virtManager/details/details.py:2238
+#: virtManager/details/details.py:2213 virtManager/details/details.py:2223
 msgid "Cannot remove controller while devices are attached."
 msgstr "Impussibil gjavâ il controlôr se al à dispositîfs tacâts."
 
-#: virtManager/details/details.py:2328
+#: virtManager/details/details.py:2313
 msgid "Hard Disk"
 msgstr "Disc fis"
 
-#: virtManager/details/details.py:2329
+#: virtManager/details/details.py:2314
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2330
+#: virtManager/details/details.py:2315
 msgid "Network (PXE)"
 msgstr "Rêt (PXE)"
 
-#: virtManager/details/details.py:2345
+#: virtManager/details/details.py:2330
 msgid "No bootable devices"
 msgstr "Nissun dispositîf inviabil"
 
-#: virtManager/details/details.py:2392
+#: virtManager/details/details.py:2377
 msgid "Overview"
 msgstr "Panoramiche"
 
-#: virtManager/details/details.py:2393
+#: virtManager/details/details.py:2378
 msgid "OS information"
 msgstr "Informazions sul sisteme operatîf"
 
-#: virtManager/details/details.py:2395
+#: virtManager/details/details.py:2380
 msgid "Performance"
 msgstr "Prestazions"
 
-#: virtManager/details/details.py:2397
+#: virtManager/details/details.py:2382
 msgid "CPUs"
 msgstr "CPUs"
 
-#: virtManager/details/details.py:2399
+#: virtManager/details/details.py:2384
 msgid "Boot Options"
 msgstr "Opzions di inviament"
 
@@ -3949,7 +3959,7 @@ msgstr ""
 "configurât par scoltâ dome in locâl. Par colegâsi di lontan ti coventarà "
 "modificâ la direzion di scolte dal ospit."
 
-#: virtManager/details/viewers.py:351
+#: virtManager/details/viewers.py:356
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3958,16 +3968,16 @@ msgstr ""
 "Impussibil furnî lis credenziâls domandadis al servidôr VNC.\n"
 "Il gjenar di credenziâls %s nol è supuartât"
 
-#: virtManager/details/viewers.py:423
+#: virtManager/details/viewers.py:428
 msgid "GTK-VNC viewer is too old"
 msgstr "Il visualizadôr GTK-VNC al è masse vecjo"
 
-#: virtManager/details/viewers.py:577
+#: virtManager/details/viewers.py:582
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "Riscontrât %(error-name)s di SPICE"
 
-#: virtManager/details/viewers.py:750
+#: virtManager/details/viewers.py:755
 msgid "Guest agent is not available."
 msgstr "L'agjent dal ospit nol è disponibil."
 
@@ -4113,24 +4123,24 @@ msgstr "CID"
 msgid "Checking for virtualization packages..."
 msgstr "Control dai pachets di virtualizazion..."
 
-#: virtManager/error.py:139
+#: virtManager/error.py:140
 msgid "Input Error"
 msgstr "Erôr di input"
 
-#: virtManager/error.py:140
+#: virtManager/error.py:141
 #, python-format
 msgid "Validation Error: %s"
 msgstr "Erôr di validazion: %s"
 
-#: virtManager/error.py:180
+#: virtManager/error.py:181
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "Si àn modifichis no aplicadis. Desideristu aplicâlis cumò?"
 
-#: virtManager/error.py:182
+#: virtManager/error.py:183
 msgid "Don't warn me again."
 msgstr "No sta visâmi plui."
 
-#: virtManager/error.py:214
+#: virtManager/error.py:215
 msgid "Don't ask me again"
 msgstr "No sta domandâmi plui"
 
@@ -4267,52 +4277,52 @@ msgstr "Nissun bacin di archiviazion selezionât."
 msgid "Error selecting pool: %s"
 msgstr "Erôr tal selezionâ il bacin: %s"
 
-#: virtManager/hoststorage.py:463
+#: virtManager/hoststorage.py:462
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Erôr tal fermâ il bacin '%s'"
 
-#: virtManager/hoststorage.py:472
+#: virtManager/hoststorage.py:471
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Erôr tal inviâ il bacin '%s'"
 
-#: virtManager/hoststorage.py:482
+#: virtManager/hoststorage.py:481
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Erôr tal fâ partî l'assistent pai bacins: %s"
 
-#: virtManager/hoststorage.py:489
+#: virtManager/hoststorage.py:488
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Eliminâ par simpri il bacin '%s'?"
 
-#: virtManager/hoststorage.py:496
+#: virtManager/hoststorage.py:495
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Erôr tal eliminâ il bacin '%s'"
 
-#: virtManager/hoststorage.py:507
+#: virtManager/hoststorage.py:506
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Erôr tal inzornâ il bacin '%s'"
 
-#: virtManager/hoststorage.py:541
+#: virtManager/hoststorage.py:540
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Erôr tal fâ partî la procedure vuidade dai volums: %s"
 
-#: virtManager/hoststorage.py:549
+#: virtManager/hoststorage.py:548
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Eliminâ pardabon par simpri il volum %s?"
 
-#: virtManager/hoststorage.py:562
+#: virtManager/hoststorage.py:561
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Erôr tal eliminâ il volum '%s'"
 
-#: virtManager/hoststorage.py:587
+#: virtManager/hoststorage.py:586
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Erôr tal cambiâ lis impostazions dal bacin: %s"
@@ -4325,8 +4335,8 @@ msgstr "Autenticazion necessarie"
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
-"L'host lontan al domande une version di netcat/nc che e supuarti la opzion "
-"-U."
+"L'host lontan al domande une version di netcat/nc che e supuarti la opzion -"
+"U."
 
 #: virtManager/lib/connectauth.py:160
 msgid ""
@@ -4407,12 +4417,12 @@ msgstr "Erôr tal inviâ l'aparât di libguestfs: %s"
 msgid "Inspection found no operating systems."
 msgstr "La ispezion no à cjatât nissun sisteme operatîf."
 
-#: virtManager/lib/inspection.py:317
+#: virtManager/lib/inspection.py:316
 #, python-format
 msgid "Error inspection VM: %s"
 msgstr "Erôr te ispezion de MV: %s"
 
-#: virtManager/lib/inspection.py:328
+#: virtManager/lib/inspection.py:327
 msgid "Cannot inspect VM on remote connection"
 msgstr "Impussibil ispezionâ une MV intune conession lontane"
 
@@ -4589,11 +4599,11 @@ msgstr "%(connection)s - no conetût"
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s - Daûr a coneti..."
 
-#: virtManager/manager.py:756 virtManager/vmwindow.py:378
+#: virtManager/manager.py:756 virtManager/vmwindow.py:379
 msgid "_Restore"
 msgstr "_Ripristine"
 
-#: virtManager/manager.py:793 virtManager/vmwindow.py:419
+#: virtManager/manager.py:793 virtManager/vmwindow.py:420
 msgid "Resume the virtual machine"
 msgstr "Ripie la machine virtuâl"
 
@@ -4679,21 +4689,21 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "Erôr tal anulâ il lavôr di migrazion: %s"
 
-#: virtManager/object/domain.py:454
+#: virtManager/object/domain.py:452
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
 "Nol è pussibil cambiâ la impostazion de memorie condividude cuant che <numa> "
 "al è configurât."
 
-#: virtManager/object/domain.py:457
+#: virtManager/object/domain.py:455
 msgid "Libvirt may not be new enough to support memfd."
 msgstr "Al è pussibil che libvirt nol sedi avonde resint par supuartâ memfd."
 
-#: virtManager/object/domain.py:476
+#: virtManager/object/domain.py:474
 msgid "Libvirt connection does not support snapshots."
 msgstr "La conession di libvirt no supuarte lis istantaniis."
 
-#: virtManager/object/domain.py:491
+#: virtManager/object/domain.py:489
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
@@ -4701,7 +4711,7 @@ msgstr ""
 "Lis istantaniis a son supuartadis dome se dutis lis imagjins dai discs (che "
 "si puedin scrivi) assegnadis al ospit, a son tal formât qcow2."
 
-#: virtManager/object/domain.py:494
+#: virtManager/object/domain.py:492
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
@@ -4709,17 +4719,17 @@ msgstr ""
 "Lis istantaniis a àn bisugne di almancul une imagjin di disc qcow2 che si "
 "pues scrivi assegnade al ospit."
 
-#: virtManager/object/domain.py:529
+#: virtManager/object/domain.py:527
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Impussibil cjatâ il dispositîf specificât te configurazion de MV inative: %s"
 
-#: virtManager/object/domain.py:1424
+#: virtManager/object/domain.py:1446
 msgid "Saving domain to disk"
 msgstr "Salvament dal domini su disc"
 
-#: virtManager/object/domain.py:1476
+#: virtManager/object/domain.py:1498
 msgid "Migrating domain"
 msgstr "Daûr a migrâ il domini"
 
@@ -4788,10 +4798,6 @@ msgid "RADOS Block Device/Ceph"
 msgstr "Dispositîf a blocs RADOS/Ceph"
 
 #: virtManager/object/storagepool.py:35
-msgid "Sheepdog Filesystem"
-msgstr "Filesystem Sheepdog"
-
-#: virtManager/object/storagepool.py:36
 msgid "ZFS Pool"
 msgstr "Bacin ZFS"
 
@@ -4815,14 +4821,6 @@ msgstr "Dome a plen visôr"
 #: virtManager/preferences.py:114
 msgid "Always"
 msgstr "Simpri"
-
-#: virtManager/preferences.py:123
-msgid "Off"
-msgstr "Disativât"
-
-#: virtManager/preferences.py:124
-msgid "On"
-msgstr "Ativât"
 
 #: virtManager/preferences.py:126 virtManager/preferences.py:148
 #: virtManager/preferences.py:158
@@ -4872,14 +4870,42 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "Frache la cumbinazion di tascj desiderade pe cature"
 
-#: virtManager/storagebrowse.py:77
+#: virtManager/storagebrowse.py:28
+msgid "Locate existing storage"
+msgstr "Localize la archiviazion esistente"
+
+#: virtManager/storagebrowse.py:29
+msgid "Locate or create storage volume"
+msgstr "Localize o cree il volum di archiviazion"
+
+#: virtManager/storagebrowse.py:34
+msgid "Locate ISO media"
+msgstr "Localize il supuart ISO"
+
+#: virtManager/storagebrowse.py:35
+msgid "Locate ISO media volume"
+msgstr "Localize il volum dal supuart ISO"
+
+#: virtManager/storagebrowse.py:39
+msgid "Locate floppy media"
+msgstr "Localize supuart discut"
+
+#: virtManager/storagebrowse.py:40
+msgid "Locate floppy media volume"
+msgstr "Localize il volum dal supuart dal discut"
+
+#: virtManager/storagebrowse.py:44 virtManager/storagebrowse.py:45
+msgid "Locate directory volume"
+msgstr "Localize volum de cartele"
+
+#: virtManager/storagebrowse.py:50
+msgid "Choose Storage Volume"
+msgstr "Selezionâ il volum di archiviazion"
+
+#: virtManager/storagebrowse.py:119
 msgid "Cannot use local storage on remote connection."
 msgstr ""
 "Impussibil doprâ une memorie di archiviazion locâl suntune conession lontane."
-
-#: virtManager/storagebrowse.py:108
-msgid "Choose Storage Volume"
-msgstr "Selezionâ il volum di archiviazion"
 
 #: virtManager/systray.py:119
 msgid "_Show Virtual Machine Manager"
@@ -5042,37 +5068,37 @@ msgstr "Erôr ta tornâ a inizializâ il domini"
 msgid "Error launching details: %s"
 msgstr "Erôr tal inviâ i detais: %s"
 
-#: virtManager/vmwindow.py:225
+#: virtManager/vmwindow.py:226
 msgid "This will abort the installation. Are you sure?"
 msgstr "Cheste operazion e interomparà la instalazion. Continuâ?"
 
-#: virtManager/vmwindow.py:387
+#: virtManager/vmwindow.py:388
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s su %(connection-name)s"
 
-#: virtManager/vmwindow.py:431
+#: virtManager/vmwindow.py:432
 msgid "Manage VM snapshots"
 msgstr "Gjestìs lis istantaniis de MV"
 
-#: virtManager/vmwindow.py:510
+#: virtManager/vmwindow.py:511
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Erôr tal cjapâ sù la videade: %s"
 
-#: virtManager/vmwindow.py:518
+#: virtManager/vmwindow.py:519
 msgid "Error initializing spice USB device widget"
 msgstr "Erôr tal inizializâ il widget dal dispositîf USB spice"
 
-#: virtManager/vmwindow.py:522
+#: virtManager/vmwindow.py:523
 msgid "Select USB devices for redirection"
 msgstr "Selezionâ i dispositîfs USB pal indreçament"
 
-#: virtManager/vmwindow.py:554
+#: virtManager/vmwindow.py:558
 msgid "Save Virtual Machine Screenshot"
 msgstr "Salve la videade de machine virtuâl"
 
-#: virtManager/vmwindow.py:555
+#: virtManager/vmwindow.py:559
 msgid "PNG files"
 msgstr "Files PNG"
 
@@ -5093,7 +5119,7 @@ msgstr ""
 "Lis tôs modifichis al XML a laran pierdudis se tu lassis cheste schede. "
 "Lassâ pardabon cheste schede?"
 
-#: virtinst/capabilities.py:277
+#: virtinst/capabilities.py:290
 #, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
@@ -5102,7 +5128,7 @@ msgstr ""
 "L'host nol supuarte il gjenar di virtualizazion '%(virttype)s' pe "
 "architeture '%(arch)s'"
 
-#: virtinst/capabilities.py:281
+#: virtinst/capabilities.py:294
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
@@ -5110,16 +5136,16 @@ msgstr ""
 "L'host nol supuarte nissune opzion di virtualizazion pe archieteture "
 "'%(arch)s'"
 
-#: virtinst/capabilities.py:285
+#: virtinst/capabilities.py:298
 #, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "L'host nol supuarte il gjenar di virtualizazion '%(virttype)s'"
 
-#: virtinst/capabilities.py:289
+#: virtinst/capabilities.py:302
 msgid "Host does not support any virtualization options"
 msgstr "L'host nol supuarte nissune opzion di virtualizazion"
 
-#: virtinst/capabilities.py:295
+#: virtinst/capabilities.py:308
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
@@ -5128,7 +5154,7 @@ msgstr ""
 "L'host nol supuarte il gjenar di domini %(domain)s cun machine '%(machine)s' "
 "pal gjenar di virtualizazion '%(virttype)s' cu la architeture '%(arch)s'"
 
-#: virtinst/capabilities.py:301
+#: virtinst/capabilities.py:314
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
@@ -5147,7 +5173,7 @@ msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 "Dopre '--option=?' o '--option help' par viodi lis sot-opzions disponibilis"
 
-#: virtinst/cli.py:287
+#: virtinst/cli.py:288
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5160,7 +5186,7 @@ msgstr ""
 "  %s\n"
 "in câs contrari, par plasê torne invie la instalazion."
 
-#: virtinst/cli.py:305
+#: virtinst/cli.py:306
 #, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
@@ -5170,48 +5196,48 @@ msgstr ""
 "concedi al utent '%(user)s' i permès di ricercje par chestis cartelis: "
 "%(dirs)s"
 
-#: virtinst/cli.py:318
+#: virtinst/cli.py:319
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (dopre --check %s=off o --check all=off par sorescrivi)"
 
-#: virtinst/cli.py:352
+#: virtinst/cli.py:353
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Chest al sorescrivarà il percors esistent '%s'"
 
-#: virtinst/cli.py:363
+#: virtinst/cli.py:364
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "Il disc %(path)s al è za doprât di altris ospits %(names)s."
 
-#: virtinst/cli.py:407
+#: virtinst/cli.py:408
 #, python-format
 msgid "Running graphical console command: %(command)s"
 msgstr "Esecuzion dal comant pe console grafiche: %(command)s"
 
-#: virtinst/cli.py:421
+#: virtinst/cli.py:422
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr "Esecuzion dal comant pe console testuâl: %(command)s"
 
-#: virtinst/cli.py:463
+#: virtinst/cli.py:464
 #, python-format
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "Nol è stât pussibil cjatâ il domini '%(domain)s': %(error)s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
-#: virtinst/cli.py:482
+#: virtinst/cli.py:483
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
 msgstr "impussibil doprâ %(option1)s e %(option2)s tal stes timp"
 
-#: virtinst/cli.py:583 virtinst/cli.py:586
+#: virtinst/cli.py:592 virtinst/cli.py:595
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Conession al hypervisor cul URI di libvirt"
 
-#: virtinst/cli.py:601
+#: virtinst/cli.py:610
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5223,31 +5249,31 @@ msgstr ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 
-#: virtinst/cli.py:607
+#: virtinst/cli.py:616
 msgid "Don't automatically try to connect to the guest console"
 msgstr "No sta provâ in automatic a coneti la console dal ospit"
 
-#: virtinst/cli.py:611
+#: virtinst/cli.py:620
 msgid "Don't boot guest after completing install."
 msgstr "No sta inviâ l'ospit dopo vê completât la instalazion."
 
-#: virtinst/cli.py:615
+#: virtinst/cli.py:624
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "No sta controlâ la colision dal non, sorescrîf cualsisei ospit cul stes non."
 
-#: virtinst/cli.py:622
+#: virtinst/cli.py:631
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Stampe l'XML dal domini gjenerât pitost che creâ l'ospit."
 
-#: virtinst/cli.py:641
+#: virtinst/cli.py:650
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Eseguìs il procès di instalazion, ma no sta creâ i dispositîfs o definî "
 "l'ospit."
 
-#: virtinst/cli.py:646
+#: virtinst/cli.py:655
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5257,15 +5283,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:650
+#: virtinst/cli.py:659
 msgid "Suppress non-error output"
 msgstr "Scarte de jessude ce che nol è erôr"
 
-#: virtinst/cli.py:652
+#: virtinst/cli.py:661
 msgid "Print debugging information"
 msgstr "Stampe lis informazions di debug"
 
-#: virtinst/cli.py:658
+#: virtinst/cli.py:667
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5275,7 +5301,7 @@ msgstr ""
 "--metadata name=foo,title=\"Gno biel titul\",uuid=...\n"
 "--metadata description=\"La mê ninine e lungje descrizion\""
 
-#: virtinst/cli.py:666
+#: virtinst/cli.py:675
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -5285,7 +5311,7 @@ msgstr ""
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: virtinst/cli.py:679
+#: virtinst/cli.py:688
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5297,7 +5323,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 
-#: virtinst/cli.py:688
+#: virtinst/cli.py:697
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -5307,7 +5333,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: virtinst/cli.py:701
+#: virtinst/cli.py:710
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5319,7 +5345,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: virtinst/cli.py:710
+#: virtinst/cli.py:719
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5335,7 +5361,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:721
+#: virtinst/cli.py:730
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5345,7 +5371,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 
-#: virtinst/cli.py:726
+#: virtinst/cli.py:735
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5355,28 +5381,28 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:731
+#: virtinst/cli.py:740
 msgid "Configure a guest serial device"
 msgstr "Configure un dispositîf seriâl pal ospit"
 
-#: virtinst/cli.py:734
+#: virtinst/cli.py:743
 msgid "Configure a guest parallel device"
 msgstr "Configure un dispositîf paralêl pal ospit"
 
-#: virtinst/cli.py:737
+#: virtinst/cli.py:746
 msgid "Configure a guest communication channel"
 msgstr "Configure un canâl di comunicazion pal ospit"
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:749
 msgid "Configure a text console connection between the guest and host"
 msgstr "Configure une conession de console di test tra l'ospit e l'host"
 
-#: virtinst/cli.py:744
+#: virtinst/cli.py:753
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Configure i dispositîfs host fisics USB/PCI/e v.i. par condividiju cul ospit"
 
-#: virtinst/cli.py:752
+#: virtinst/cli.py:761
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5386,23 +5412,23 @@ msgstr ""
 "--filesystem /mê/cartele/sorzint,/cartele/tal/ospit\n"
 "--filesystem non_model,/,type=template"
 
-#: virtinst/cli.py:760
+#: virtinst/cli.py:769
 msgid "Configure guest sound device emulation"
 msgstr "Configure la emulazion dal dispositîf sonôr dal ospit"
 
-#: virtinst/cli.py:771
+#: virtinst/cli.py:780
 msgid "Configure host audio backend for sound devices"
 msgstr "Configure un motôr audio dal host pai dispositîfs audio"
 
-#: virtinst/cli.py:775
+#: virtinst/cli.py:784
 msgid "Configure a guest watchdog device"
 msgstr "Configure un dispositîf di watchdog (vuardian) pal ospit"
 
-#: virtinst/cli.py:778
+#: virtinst/cli.py:787
 msgid "Configure guest video hardware."
 msgstr "Configure l'hardware video pal ospit."
 
-#: virtinst/cli.py:781
+#: virtinst/cli.py:790
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5410,7 +5436,7 @@ msgstr ""
 "Configure un dispositîf smartcard pal ospit. Es.:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:785
+#: virtinst/cli.py:794
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5418,7 +5444,7 @@ msgstr ""
 "Configure un dispositîf di indreçament pal ospit. Es.:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:789
+#: virtinst/cli.py:798
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5426,7 +5452,7 @@ msgstr ""
 "Configure un dispositîf memballoon (balon di memorie) pal ospit. Es.:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:793
+#: virtinst/cli.py:802
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5434,7 +5460,7 @@ msgstr ""
 "Configure un dispositîf TPM pal ospit. Es.:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:797
+#: virtinst/cli.py:806
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -5442,7 +5468,7 @@ msgstr ""
 "Configure un dispositîf RNG pal ospit. Es:\n"
 "--rng /dev/urandom"
 
-#: virtinst/cli.py:801
+#: virtinst/cli.py:810
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5450,7 +5476,7 @@ msgstr ""
 "Configure un dispositîf di panic pal ospit. Es.:\n"
 "--panic default"
 
-#: virtinst/cli.py:805
+#: virtinst/cli.py:814
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
@@ -5458,7 +5484,7 @@ msgstr ""
 "Configure un dispositîf di memorie condividude pal ospit. Es.:\n"
 "--shmem name=shmem0"
 
-#: virtinst/cli.py:809
+#: virtinst/cli.py:818
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -5466,7 +5492,7 @@ msgstr ""
 "Configure un dispositîf di memorie pal ospit. Es.:\n"
 "--memdev dimm,target.size=1024"
 
-#: virtinst/cli.py:813
+#: virtinst/cli.py:822
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -5476,7 +5502,7 @@ msgstr ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:827
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
@@ -5484,37 +5510,37 @@ msgstr ""
 "Configure un dispositîf IOMMU. Es.:\n"
 "--iommu model=intel,driver.aw_bits=48"
 
-#: virtinst/cli.py:825
+#: virtinst/cli.py:834
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "Stabilìs la configurazion <iothreads> e <iothreadids> dal domini."
 
-#: virtinst/cli.py:829
+#: virtinst/cli.py:838
 msgid "Set domain seclabel configuration."
 msgstr "Stabilìs la configurazion seclabel dal domini."
 
-#: virtinst/cli.py:833
+#: virtinst/cli.py:842
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 "Configure l'ospit par eseguî lis operazions di gjestion des clâfs di "
 "critografie dal S390."
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:847
 msgid "Tune CPU parameters for the domain process."
 msgstr "Juste i parametris de CPU pal procès dal domini."
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:851
 msgid "Tune NUMA policy for the domain process."
 msgstr "Juste la politiche NUMA pal procès dal domini."
 
-#: virtinst/cli.py:846
+#: virtinst/cli.py:855
 msgid "Tune memory policy for the domain process."
 msgstr "Juste la politiche de memorie pal procès dal domini."
 
-#: virtinst/cli.py:850
+#: virtinst/cli.py:859
 msgid "Tune blkio policy for the domain process."
 msgstr "Juste la politiche blkio pal procès dal domini."
 
-#: virtinst/cli.py:854
+#: virtinst/cli.py:863
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5522,7 +5548,7 @@ msgstr ""
 "Stabilìs la politiche de memorie di supuart pal procès dal domini. Es.:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:868
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -5532,7 +5558,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: virtinst/cli.py:865
+#: virtinst/cli.py:874
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5540,19 +5566,19 @@ msgstr ""
 "Stabilìs l'XML di <clock> dal domini. Es.:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:870
+#: virtinst/cli.py:879
 msgid "Configure VM power management features"
 msgstr "Configure lis funzionalitâts di gjestion energjetiche de MV"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:883
 msgid "Configure VM lifecycle management policy"
 msgstr "Configure la politiche di gjestion dal cicli di vite de MV"
 
-#: virtinst/cli.py:878
+#: virtinst/cli.py:887
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Configure il partizionament des risorsis de MV (cgroups)"
 
-#: virtinst/cli.py:882
+#: virtinst/cli.py:891
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -5562,7 +5588,7 @@ msgstr ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=GnoVendidôr,bios.version=1.2.3,...\n"
 
-#: virtinst/cli.py:888
+#: virtinst/cli.py:897
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
@@ -5572,20 +5598,24 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:894
+#: virtinst/cli.py:903
+#, fuzzy
+#| msgid ""
+#| "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
+#| "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+#| "dhCert=BASE64CERT\n"
+#| "--launchSecurity sev"
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 msgstr ""
 "Configure la sigurece di inviament de MV (p.e. cifradure de memorie SEV). "
 "Es.:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
-"BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
-#: virtinst/cli.py:902
+#: virtinst/cli.py:910
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5595,7 +5625,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (pai contignidôrs)"
 
-#: virtinst/cli.py:908
+#: virtinst/cli.py:916
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
@@ -5603,7 +5633,7 @@ msgstr ""
 "Abilite il spazi-non dal utent pal contignidôr LXC. Es.:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
-#: virtinst/cli.py:918
+#: virtinst/cli.py:926
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5617,19 +5647,19 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:934
 msgid "OS options"
 msgstr "Opzions dal SO"
 
-#: virtinst/cli.py:929
+#: virtinst/cli.py:937
 msgid "The OS being installed in the guest."
 msgstr "Il sisteme operatîf di instalâ tal ospit."
 
-#: virtinst/cli.py:931
+#: virtinst/cli.py:939
 msgid "The OS installed in the guest."
 msgstr "Il sisteme operatîf instalât tal ospit."
 
-#: virtinst/cli.py:933
+#: virtinst/cli.py:941
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5639,7 +5669,7 @@ msgstr ""
 "Valôrs di esempli: fedora29, rhel7.0, win10, ...\n"
 "Viôt '--osinfo list' par vê une liste complete."
 
-#: virtinst/cli.py:943
+#: virtinst/cli.py:951
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5651,12 +5681,12 @@ msgstr ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 
-#: virtinst/cli.py:973
+#: virtinst/cli.py:981
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s al scugne jessi 'yes' o 'no'"
 
-#: virtinst/cli.py:1158
+#: virtinst/cli.py:1166
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5665,17 +5695,17 @@ msgstr ""
 "No si sa cemût imbinâ la proprietât '%(property_name)s' dal gjenar di "
 "dispositîf '%(device_type)s'"
 
-#: virtinst/cli.py:1477
+#: virtinst/cli.py:1494
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr "Opzions di %(optionflag)s no cognossudis: %(string)s"
 
-#: virtinst/cli.py:1533 virtinst/cli.py:1564
+#: virtinst/cli.py:1550 virtinst/cli.py:1581
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Erôr: %(cli_flag_name)s%(options)s: %(err)s"
 
-#: virtinst/cli.py:1915
+#: virtinst/cli.py:1933
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5683,49 +5713,49 @@ msgstr ""
 "Impussibil conetisi ae console grafiche: virt-viewer nol è instalât. Si pree "
 "di instalâ il pachet 'virt-viewer'."
 
-#: virtinst/cli.py:1922
+#: virtinst/cli.py:1940
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 "Grafiche domandade, ma DISPLAY nol è stabilît. virt-viewer nol vignarà "
 "inviât."
 
-#: virtinst/cli.py:1933
+#: virtinst/cli.py:1951
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Gjenar di console automatiche '%s' no cognossût"
 
-#: virtinst/cli.py:3486
+#: virtinst/cli.py:3527
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Valôr impropri par 'size': %s"
 
-#: virtinst/cli.py:3499
+#: virtinst/cli.py:3540
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Valôr '%(string)s' di '%(optionname)s' no cognossût"
 
-#: virtinst/cli.py:3514
+#: virtinst/cli.py:3555
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Il volum di archiviazion al scugne jessi specificât come vol=nondalbacin/"
 "nondalvolum"
 
-#: virtinst/cli.py:3969
+#: virtinst/cli.py:4015
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Stringhe di formât PCI spietade par '%s'"
 
-#: virtinst/cli.py:4689
+#: virtinst/cli.py:4736
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s al corispuint a dispositîfs di grops multiplis"
 
-#: virtinst/cli.py:4692
+#: virtinst/cli.py:4739
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Impussibil cjatâ un dispositîf di grop corispondent par '%s'"
 
-#: virtinst/cli.py:4837
+#: virtinst/cli.py:4876
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5735,7 +5765,7 @@ msgstr ""
 "\n"
 "  osinfo-query os\n"
 
-#: virtinst/cloner.py:44
+#: virtinst/cloner.py:46
 #, python-format
 msgid "Could not remove old vm '%(vm)s': %(error)s"
 msgstr "Impussibil gjavâ la vecje MV '%(vm)s': %(error)s"
@@ -5777,35 +5807,36 @@ msgstr "Segnade tant che condivisibile"
 #: virtinst/cloner.py:258
 #, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
-msgstr "Nol è stât pussibil doprâ il percors '%(path)s' pe clonazion: %(error)s"
+msgstr ""
+"Nol è stât pussibil doprâ il percors '%(path)s' pe clonazion: %(error)s"
 
 #: virtinst/cloner.py:274
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "Nol è stât pussibil determinâ lis informazion dal disc origjinâl: %s"
 
-#: virtinst/cloner.py:325
+#: virtinst/cloner.py:327
 msgid "Domain to clone must be shutoff."
 msgstr "Il domini di clonâ al à di sei distudât."
 
-#: virtinst/cloner.py:360
+#: virtinst/cloner.py:361
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Daûr a stabilî la puarte dal dispositîf grafic a 'autoport', cussì di evitâ "
 "conflits."
 
-#: virtinst/cloner.py:497
+#: virtinst/cloner.py:516
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "Non no valit pal gnûf ospit: %s"
 
-#: virtinst/devices/disk.py:348
+#: virtinst/devices/disk.py:351
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr "Si scugne specificâ la dimension par un volum inesistent '%s'"
 
-#: virtinst/devices/disk.py:353
+#: virtinst/devices/disk.py:356
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -5814,23 +5845,23 @@ msgstr ""
 "No si sa cemût creâ l'archivi pal percors '%s'. Doprâ prime lis APIs di "
 "libvirt par gjestî la cartele principâl come un bacin."
 
-#: virtinst/devices/disk.py:376
+#: virtinst/devices/disk.py:379
 msgid "Format attribute not supported for this volume type"
 msgstr "Atribût format no supuartât par chest gjenar di volum"
 
-#: virtinst/devices/disk.py:796
+#: virtinst/devices/disk.py:805
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Il gjenar di dispositîf '%s' al pretint un percors"
 
-#: virtinst/devices/disk.py:804
+#: virtinst/devices/disk.py:813
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Al è necessari specificâ i parametris di creazion de memorie di archiviazion "
 "pal percors '%s' inesistent."
 
-#: virtinst/devices/disk.py:917
+#: virtinst/devices/disk.py:926
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5908,78 +5939,70 @@ msgstr ""
 #: virtinst/domain/cpu.py:56
 #, python-format
 msgid ""
-"Total CPUs implied by topology (sockets=%(sockets)d * dies=%(dies)d * cores="
-"%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU count "
-"%(vcpus)d"
+"Total CPUs implied by topology (sockets=%(sockets)d * dies=%(dies)d * "
+"cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
+"count %(vcpus)d"
 msgstr ""
 "CPUs totâls implicadis de topologjie (sockets=%(sockets)d * dies=%(dies)d * "
 "cores=%(cores)d * threads=%(threads)d == %(total)d) no corispuindin ae conte "
 "vCPU %(vcpus)d"
 
-#: virtinst/domain/launch_security.py:26
-msgid "Missing mandatory attribute 'type'"
-msgstr "Al mancje l'atribût obligatori 'type'"
-
-#: virtinst/domain/launch_security.py:35
+#: virtinst/domain/launch_security.py:23
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "La sigurece di inviament SEV e pretint di une machine UEFI Q35"
 
-#: virtinst/domain/launch_security.py:40
-msgid "SEV launch security is not supported on this platform"
-msgstr "La sigurece di inviament SEV no je supuartade su cheste plateforme"
-
-#: virtinst/domcapabilities.py:206
+#: virtinst/domcapabilities.py:207
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Nol è stât pussibil otignî l'XML complet de CPU: %s"
 
-#: virtinst/domcapabilities.py:321
+#: virtinst/domcapabilities.py:324
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:322
+#: virtinst/domcapabilities.py:325
 msgid "Default"
 msgstr "Predefinît"
 
-#: virtinst/domcapabilities.py:327
+#: virtinst/domcapabilities.py:330
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:330
+#: virtinst/domcapabilities.py:333
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Personalizât: %(path)s"
 
-#: virtinst/guest.py:79
+#: virtinst/guest.py:88
 msgid "Guest"
 msgstr "Ospit"
 
-#: virtinst/guest.py:87
+#: virtinst/guest.py:96
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "Il non dal ospit '%s' al è za doprât."
 
-#: virtinst/guest.py:797
+#: virtinst/guest.py:854
 msgid "Libvirt version does not support UEFI."
 msgstr "Cheste version di libvirt no supuarte UEFI."
 
-#: virtinst/guest.py:801
+#: virtinst/guest.py:858
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "No sai cemût configurâ l'UEFI pe architeture '%s'"
 
-#: virtinst/guest.py:806
+#: virtinst/guest.py:863
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "No ai cjatât nissun percors di binaris UEFI pe architeture '%s'"
 
-#: virtinst/install/installer.py:107
+#: virtinst/install/installer.py:108
 #, python-format
 msgid "Removing disk '%s'"
 msgstr "Daûr a gjavâ il disc '%s'"
 
-#: virtinst/install/installer.py:266
+#: virtinst/install/installer.py:268
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
@@ -5987,11 +6010,11 @@ msgstr ""
 "Sorescriture de memorie a %(number)s MiB necessaris pe instalazion di rêt di "
 "%(osname)s."
 
-#: virtinst/install/installer.py:635
+#: virtinst/install/installer.py:649
 msgid "Creating domain..."
 msgstr "Daûr a creâ il domini..."
 
-#: virtinst/install/installer.py:642
+#: virtinst/install/installer.py:656
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "Il gjenar di domini 'vz' nol supuarte lis instalazions transitoris."
 
@@ -6137,12 +6160,12 @@ msgstr ""
 "Il non dal SO '%s' nol è cognossût. Consulte `--osinfo liste` par vê valôrs "
 "valits."
 
-#: virtinst/osdict.py:510
+#: virtinst/osdict.py:537
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "Il SO '%s' nol à une localizazion URL"
 
-#: virtinst/osdict.py:522
+#: virtinst/osdict.py:549
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6150,47 +6173,47 @@ msgid ""
 msgstr ""
 "L'OS '%(osname)s' nol à une localizazion URL pe architeture '%(archname)s'"
 
-#: virtinst/storage.py:166
+#: virtinst/storage.py:163
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr ""
 "Impussibil creâ il bacin di archiviazion predefinît '%(path)s': %(error)s"
 
-#: virtinst/storage.py:219 virtinst/storage.py:551
+#: virtinst/storage.py:216 virtinst/storage.py:548
 msgid "Storage object"
 msgstr "Ogjet di archiviazion"
 
-#: virtinst/storage.py:225
+#: virtinst/storage.py:222
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "il non '%s' al è za doprât di un altri bacin."
 
-#: virtinst/storage.py:388
+#: virtinst/storage.py:384
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "Impussibil definî il bacin di archiviazion: %s"
 
-#: virtinst/storage.py:396
+#: virtinst/storage.py:392
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "Impussibil costruî il bacin di archiviazion: %s"
 
-#: virtinst/storage.py:402
+#: virtinst/storage.py:398
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "Impussibil inviâ il bacin di archiviazion: %s"
 
-#: virtinst/storage.py:408
+#: virtinst/storage.py:404
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "Impussibil configurâ la opzion pal inviament automatic dal bacin: %s"
 
-#: virtinst/storage.py:557
+#: virtinst/storage.py:554
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Il non '%s' al è za doprât di un altri volum."
 
-#: virtinst/storage.py:642
+#: virtinst/storage.py:640
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -6198,21 +6221,21 @@ msgstr ""
 "I volums logjics sparniçâts no son supuartâts, daûr a stabilî la assegnazion "
 "compagne ae capacitât"
 
-#: virtinst/storage.py:687
+#: virtinst/storage.py:685
 #, python-format
 msgid "Allocating '%(filename)s'"
 msgstr "Assegnazion di '%(filename)s'"
 
-#: virtinst/storage.py:727
+#: virtinst/storage.py:726
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
-"Nol è vonde spazi libar tal bacin di archiviazion par creâ il volum. (%(mem1)"
-"s M di assegnazion domandade > %(mem2)s M disponibii)"
+"Nol è vonde spazi libar tal bacin di archiviazion par creâ il volum. "
+"(%(mem1)s M di assegnazion domandade > %(mem2)s M disponibii)"
 
-#: virtinst/storage.py:734
+#: virtinst/storage.py:733
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6251,7 +6274,7 @@ msgstr ""
 "des passwords, de direzion IP statiche e v.i. a son fûr des competencis di "
 "chest strument. Par chescj gjenars di modifichis, viôt virt-sysprep(1)."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1007
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1030
 msgid "General Options"
 msgstr "Opzions gjenerâls"
 
@@ -6334,8 +6357,8 @@ msgstr ""
 "Gnove direzion MAC fisse pal ospit clon. In mût predefinît al è un MAC "
 "gjenerât a câs"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1112
-#: virtinst/virtxml.py:431
+#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1135
+#: virtinst/virtxml.py:426
 msgid "Miscellaneous Options"
 msgstr "Opzions variis"
 
@@ -6360,7 +6383,7 @@ msgstr ""
 msgid "Clone '%s' created successfully."
 msgstr "Clon '%s' creât cun sucès."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1223
+#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1246
 msgid "Installation aborted at user request"
 msgstr "Instalazion interote su richieste dal utent"
 
@@ -6394,7 +6417,8 @@ msgstr "Impussibil miscliçâ --graphics e lis opzions grafichis in vecjo stîl"
 
 #: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
-msgstr "Impussibil specificâ plui di un tra VNC, SDL, --graphics o --nographics"
+msgstr ""
+"Impussibil specificâ plui di un tra VNC, SDL, --graphics o --nographics"
 
 #: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
@@ -6465,32 +6489,32 @@ msgstr ""
 msgid "Using {osname} --location {url}"
 msgstr "Daûr a doprâ {osname} --location {url}"
 
-#: virtinst/virtinstall.py:467
+#: virtinst/virtinstall.py:476
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "Daûr a doprâ --name {vm_name} predefinît"
 
-#: virtinst/virtinstall.py:477
+#: virtinst/virtinstall.py:488
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr "Daûr a doprâ --memory {megabytes} predefinît dal contignidôr"
 
-#: virtinst/virtinstall.py:496
+#: virtinst/virtinstall.py:507
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "Daûr a doprâ --memory {megabytes} predefinît di {os_name}"
 
-#: virtinst/virtinstall.py:507
+#: virtinst/virtinstall.py:518
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "Daûr a doprâ --disk {disk_options} predefinît di {os_name}"
 
-#: virtinst/virtinstall.py:553
+#: virtinst/virtinstall.py:564
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Erôr tal validâ la posizion de instalazion: %s"
 
-#: virtinst/virtinstall.py:556
+#: virtinst/virtinstall.py:567
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
@@ -6498,7 +6522,7 @@ msgstr ""
 "--os-variant/--osinfo non OS al è domandât, ma nol è stât \n"
 "specificât o nol è stât rilevât nissun valôr."
 
-#: virtinst/virtinstall.py:570
+#: virtinst/virtinstall.py:581
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
@@ -6508,7 +6532,7 @@ msgstr ""
 "pes impostazions predefinidis di machinis virtuâls modernis, eficientis e "
 "siguris.\n"
 
-#: virtinst/virtinstall.py:574
+#: virtinst/virtinstall.py:585
 msgid ""
 "If you expected virt-install to detect an OS name from the\n"
 "install media, you can set a fallback OS name with:\n"
@@ -6521,7 +6545,7 @@ msgstr ""
 "\n"
 "  --osinfo detect=on,name=NONSO\n"
 
-#: virtinst/virtinstall.py:583
+#: virtinst/virtinstall.py:594
 msgid ""
 "You can see a full list of possible OS name values with:\n"
 "\n"
@@ -6532,7 +6556,7 @@ msgstr ""
 "\n"
 "   virt-install --osinfo list\n"
 
-#: virtinst/virtinstall.py:590
+#: virtinst/virtinstall.py:601
 #, python-brace-format
 msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
@@ -6541,7 +6565,7 @@ msgstr ""
 "Se la tô distribuzion Linux no je listade, prove un dai valôrs gjenerics\n"
 "come: {oslist}\n"
 
-#: virtinst/virtinstall.py:597
+#: virtinst/virtinstall.py:608
 #, python-brace-format
 msgid ""
 "If you just need to get the old behavior back, you can use:\n"
@@ -6556,73 +6580,73 @@ msgstr ""
 "\n"
 "Opûr espuarte {env_var}=1\n"
 
-#: virtinst/virtinstall.py:607
+#: virtinst/virtinstall.py:618
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
 msgstr "{env_var} configurâ. Daûr a saltâ l'erôr fatâl."
 
-#: virtinst/virtinstall.py:683
+#: virtinst/virtinstall.py:706
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 "Nissune console di inviâ pal ospit. Daûr a doprâ la impostazion predefinide "
 "--wait -1"
 
-#: virtinst/virtinstall.py:719
+#: virtinst/virtinstall.py:742
 msgid "Waiting for the installation to complete."
 msgstr "In spiete dal completament de instalazion."
 
-#: virtinst/virtinstall.py:720
+#: virtinst/virtinstall.py:743
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "Daûr a spietâ %(minutes)d minût pal completament de instalazion."
 msgstr[1] "Daûr a spietâ %(minutes)d minûts pal completament de instalazion."
 
-#: virtinst/virtinstall.py:743
+#: virtinst/virtinstall.py:766
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "La passwor pal prin acès come root e je: %s"
 
-#: virtinst/virtinstall.py:755
+#: virtinst/virtinstall.py:778
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 "La instalazion e continuarà chi di 10 seconts (frache Invie par continuâ "
 "daurman)..."
 
-#: virtinst/virtinstall.py:782
+#: virtinst/virtinstall.py:805
 msgid "Console command returned failure."
 msgstr "Il comant di console al à tornât un erôr."
 
-#: virtinst/virtinstall.py:819
+#: virtinst/virtinstall.py:842
 msgid "Domain has crashed."
 msgstr "Il domini al è colassât."
 
-#: virtinst/virtinstall.py:849
+#: virtinst/virtinstall.py:872
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 "Il domini al è ancjemò in esecuzion. Al è pussibil che la instalazion e sedi "
 "in vore."
 
-#: virtinst/virtinstall.py:859
+#: virtinst/virtinstall.py:882
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 "Al è pussibil tornâ a conetisi ae console par completâ il procès di "
 "instalazion."
 
-#: virtinst/virtinstall.py:870
+#: virtinst/virtinstall.py:893
 msgid "Domain has shutdown. Continuing."
 msgstr "Il domini al è stât distudât. Si continue."
 
-#: virtinst/virtinstall.py:876
+#: virtinst/virtinstall.py:899
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "La instalazion e à superât il timp limit specificât. Jessude de aplicazion."
 
-#: virtinst/virtinstall.py:899
+#: virtinst/virtinstall.py:922
 msgid "Domain creation completed."
 msgstr "Creazion dal domini completade."
 
-#: virtinst/virtinstall.py:908
+#: virtinst/virtinstall.py:931
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6631,15 +6655,15 @@ msgstr ""
 "Si pues tornâ a inviâ il domini eseguint:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:913
+#: virtinst/virtinstall.py:936
 msgid "User stopped the VM. Not rebooting."
 msgstr "L'utent al à fermade la MV; no ven tornade a inviâ."
 
-#: virtinst/virtinstall.py:916
+#: virtinst/virtinstall.py:939
 msgid "Restarting guest."
 msgstr "Si torne a fâ partî l'ospit."
 
-#: virtinst/virtinstall.py:933
+#: virtinst/virtinstall.py:956
 msgid ""
 "\n"
 "Starting install..."
@@ -6647,40 +6671,40 @@ msgstr ""
 "\n"
 "Inviament de instalazion..."
 
-#: virtinst/virtinstall.py:956
+#: virtinst/virtinstall.py:979
 msgid "Domain install interrupted."
 msgstr "Instalazion dal domini interote."
 
-#: virtinst/virtinstall.py:975
+#: virtinst/virtinstall.py:998
 msgid "Dry run completed successfully"
 msgstr "Esecuzion di prove completade cun sucès"
 
-#: virtinst/virtinstall.py:979
+#: virtinst/virtinstall.py:1002
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Richieste dal pas XML '%s' no cognossude, e scugne jessi 1, 2 opûr all"
 
-#: virtinst/virtinstall.py:986
+#: virtinst/virtinstall.py:1009
 msgid "Requested installation does not have XML step 2"
 msgstr "La instalazion domandade no à il pas XML 2"
 
-#: virtinst/virtinstall.py:1003
+#: virtinst/virtinstall.py:1026
 msgid "Create a new virtual machine from specified install media."
 msgstr "Cree une gnove machine virtuâl dal supuart di instalazion specificât."
 
-#: virtinst/virtinstall.py:1009
+#: virtinst/virtinstall.py:1032
 msgid "Name of the guest instance"
 msgstr "Non de istance dal ospit"
 
-#: virtinst/virtinstall.py:1017
+#: virtinst/virtinstall.py:1040
 msgid "Installation Method Options"
 msgstr "Opzions dal metodi di instalazion"
 
-#: virtinst/virtinstall.py:1019
+#: virtinst/virtinstall.py:1042
 msgid "CD-ROM installation media"
 msgstr "Supuart di instalazion CD-ROM"
 
-#: virtinst/virtinstall.py:1021
+#: virtinst/virtinstall.py:1044
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6688,33 +6712,33 @@ msgstr ""
 "URL instalazion distribuzion, p.e. https://host/percors. Viôt la pagjine man "
 "par esemplis di cualchi specifiche distribuzion."
 
-#: virtinst/virtinstall.py:1024
+#: virtinst/virtinstall.py:1047
 msgid "Boot from the network using the PXE protocol"
 msgstr "Invie de rêt doprant il protocol PXE"
 
-#: virtinst/virtinstall.py:1026
+#: virtinst/virtinstall.py:1049
 msgid "Build guest around an existing disk image"
 msgstr "Costruìs l'ospit tor ator di une imagjin disc esistente"
 
-#: virtinst/virtinstall.py:1029
+#: virtinst/virtinstall.py:1052
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Argoments adizionâi di passâ al kernel di instalazion inviât di --location"
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1055
 msgid "Add given file to root of initrd from --location"
 msgstr "Zonte il file indicât ae lidrîs di initrd di --location"
 
-#: virtinst/virtinstall.py:1034
+#: virtinst/virtinstall.py:1057
 msgid "Perform an unattended installation"
 msgstr "Eseguìs une instalazion automatizade"
 
-#: virtinst/virtinstall.py:1036
+#: virtinst/virtinstall.py:1059
 msgid "Specify fine grained install options"
 msgstr "Specifiche lis opzions detaiadis pe instalazion"
 
-#: virtinst/virtinstall.py:1038
+#: virtinst/virtinstall.py:1061
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6723,61 +6747,61 @@ msgstr ""
 "instalazion, dutis lis altris opzions di configurazion de MV a vegnin "
 "ignoradis."
 
-#: virtinst/virtinstall.py:1041
+#: virtinst/virtinstall.py:1064
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "Eseguìs une instalazion di imagjin pal cloud, configurant cloud-init"
 
-#: virtinst/virtinstall.py:1055
+#: virtinst/virtinstall.py:1078
 msgid "Device Options"
 msgstr "Opzions dispositîf"
 
-#: virtinst/virtinstall.py:1085
+#: virtinst/virtinstall.py:1108
 msgid "Guest Configuration Options"
 msgstr "Opzions di configurazion ospit"
 
-#: virtinst/virtinstall.py:1089
+#: virtinst/virtinstall.py:1112
 msgid "Virtualization Platform Options"
 msgstr "Opzions de plateforme di virtualizazion"
 
-#: virtinst/virtinstall.py:1093
+#: virtinst/virtinstall.py:1116
 msgid "This guest should be a fully virtualized guest"
 msgstr "Chest ospit al varès di jessi un ospit virtualizât dal dut"
 
-#: virtinst/virtinstall.py:1096
+#: virtinst/virtinstall.py:1119
 msgid "This guest should be a paravirtualized guest"
 msgstr "Chest ospit al varès di jessi un ospit para-virtualizât"
 
-#: virtinst/virtinstall.py:1099
+#: virtinst/virtinstall.py:1122
 msgid "This guest should be a container guest"
 msgstr "Chest ospit al varès di jessi un ospit contignidôr"
 
-#: virtinst/virtinstall.py:1101
+#: virtinst/virtinstall.py:1124
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Non dal Hypervisor di doprâ (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1102
+#: virtinst/virtinstall.py:1125
 msgid "The CPU architecture to simulate"
 msgstr "Architeture di CPU di simulâ"
 
-#: virtinst/virtinstall.py:1103
+#: virtinst/virtinstall.py:1126
 msgid "The machine type to emulate"
 msgstr "Il gjenar di machine di emulâ"
 
-#: virtinst/virtinstall.py:1114
+#: virtinst/virtinstall.py:1137
 msgid "Have domain autostart on host boot up."
 msgstr "Invie il domini in automatic, al inviament dal host."
 
-#: virtinst/virtinstall.py:1116
+#: virtinst/virtinstall.py:1139
 msgid "Create a transient domain."
 msgstr "Cree un domini temporani."
 
-#: virtinst/virtinstall.py:1118
+#: virtinst/virtinstall.py:1141
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 "Sfuarce il distudament dal domini cuant che al ven sierât il visualizadôr de "
 "console."
 
-#: virtinst/virtinstall.py:1121
+#: virtinst/virtinstall.py:1144
 msgid "Minutes to wait for install to complete."
 msgstr "Minûts di spiete pal completament de instalazion."
 
@@ -6847,55 +6871,55 @@ msgstr ""
 msgid "--os-variant/--osinfo is not supported with --edit"
 msgstr "--os-variant/--osinfo nol è supuartât cun --edit"
 
-#: virtinst/virtxml.py:164
+#: virtinst/virtxml.py:167
 #, python-format
 msgid "Cannot use --add-device with --%s"
 msgstr "Impussibil doprâ --add-device cun --%s"
 
-#: virtinst/virtxml.py:181
+#: virtinst/virtxml.py:183
 #, python-format
 msgid "Cannot use --remove-device with --%s"
 msgstr "Impussibil doprâ --remove-device cun --%s"
 
-#: virtinst/virtxml.py:184
+#: virtinst/virtxml.py:186
 msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgstr "--os-variant/--osinfo nol è supuartât cun --remove-device"
 
-#: virtinst/virtxml.py:204
+#: virtinst/virtxml.py:206
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--build-xml nol è supuartât par --%s"
 
-#: virtinst/virtxml.py:207
+#: virtinst/virtxml.py:209
 msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--os-variant/--osinfo nol è supuartât cun --build-xml"
 
-#: virtinst/virtxml.py:233
+#: virtinst/virtxml.py:228
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Definî '%s' cul XML modificât?"
 
-#: virtinst/virtxml.py:241
+#: virtinst/virtxml.py:236
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Domini '%s' definît cun sucès."
 
-#: virtinst/virtxml.py:248
+#: virtinst/virtxml.py:243
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "Inviâ '%s' cul XML modificât?"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:552
+#: virtinst/virtxml.py:253 virtinst/virtxml.py:547
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Nol è stât pussibil inviâ il domini '%(domain)s': %(error)s"
 
-#: virtinst/virtxml.py:263 virtinst/virtxml.py:556
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:551
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Domini '%s' inviât cun sucès."
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:264
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6906,16 +6930,16 @@ msgstr ""
 "\n"
 "Colegâ chest dispositîf al ospit '%(domain)s'?"
 
-#: virtinst/virtxml.py:271
+#: virtinst/virtxml.py:266
 msgid "Device hotplug successful."
 msgstr "Dispositîf colegât cun sucès."
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:267
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "Erôr tal tentatîf di colegâ il dispositîf: %(error)s"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:269
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6926,16 +6950,16 @@ msgstr ""
 "\n"
 "Discolegâ chest dispositîf dal ospit '%(domain)s'?"
 
-#: virtinst/virtxml.py:276
+#: virtinst/virtxml.py:271
 msgid "Device hotunplug successful."
 msgstr "Dispositîf discolegât cun sucès."
 
-#: virtinst/virtxml.py:277
+#: virtinst/virtxml.py:272
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Erôr tal tentatîf di discolegâ il dispositîf: %(error)s"
 
-#: virtinst/virtxml.py:279
+#: virtinst/virtxml.py:274
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6946,38 +6970,38 @@ msgstr ""
 "\n"
 "Inzornâ chest dispositîf pal ospit '%(domain)s'?"
 
-#: virtinst/virtxml.py:281
+#: virtinst/virtxml.py:276
 msgid "Device update successful."
 msgstr "Dispositîf inzornât cun sucès."
 
-#: virtinst/virtxml.py:282
+#: virtinst/virtxml.py:277
 #, python-format
 msgid "Error attempting device update: %(error)s"
 msgstr "Erôr tal tentatîf di inzornâ il dispositîf: %(error)s"
 
-#: virtinst/virtxml.py:327
+#: virtinst/virtxml.py:322
 msgid "--xml can only be used with --edit"
 msgstr "Al è pussibil doprâ --xml dome cun --edit"
 
-#: virtinst/virtxml.py:349
+#: virtinst/virtxml.py:344
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "No je stade gjenerade nissune diference (diff) dal XML. Lis modifichis "
 "domandadis no varan efiet."
 
-#: virtinst/virtxml.py:368
+#: virtinst/virtxml.py:363
 msgid "Edit libvirt XML using command line options."
 msgstr "Modifiche il XML di libvirt cun opzions a rie di comant."
 
-#: virtinst/virtxml.py:374
+#: virtinst/virtxml.py:369
 msgid "Domain name, id, or uuid"
 msgstr "Non dal domini, id o uuid"
 
-#: virtinst/virtxml.py:376
+#: virtinst/virtxml.py:371
 msgid "XML actions"
 msgstr "Azions pal XML"
 
-#: virtinst/virtxml.py:378
+#: virtinst/virtxml.py:373
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6991,7 +7015,7 @@ msgstr ""
 "--edit all --disk ... (modifiche ducj i dispositîfs disc)\n"
 "--edit target=hda --disk ... (modifiche il disc 'hda')\n"
 
-#: virtinst/virtxml.py:384
+#: virtinst/virtxml.py:379
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -7003,7 +7027,7 @@ msgstr ""
 "--remove-device --disk all (gjave ducj i discs)\n"
 "--remove-device --disk /un/percors"
 
-#: virtinst/virtxml.py:389
+#: virtinst/virtxml.py:384
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -7011,7 +7035,7 @@ msgstr ""
 "Zonte il dispositîf specificât. Esempli:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:387
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -7019,11 +7043,11 @@ msgstr ""
 "Scrîf l'XML dai dispositîfs creât. Il domini al è opzionâl ma racomandât par "
 "vê valôrs predefinîts otimâi."
 
-#: virtinst/virtxml.py:395
+#: virtinst/virtxml.py:390
 msgid "Output options"
 msgstr "Opzions di jessude"
 
-#: virtinst/virtxml.py:397
+#: virtinst/virtxml.py:392
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -7035,64 +7059,64 @@ msgstr ""
 "Cun --remove-device, cheste e je une operazion par discolegâ dispositîfs.\n"
 "Cun --edit, cheste e je une operazion par inzornâ dispositîfs."
 
-#: virtinst/virtxml.py:403
+#: virtinst/virtxml.py:398
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Sfuarce la definizion dal domini. Domandade dome se e je stade specificade "
 "une opzion --print."
 
-#: virtinst/virtxml.py:406
+#: virtinst/virtxml.py:401
 msgid "Force not defining the domain."
 msgstr "Sfuarce il no definî il domini."
 
-#: virtinst/virtxml.py:409
+#: virtinst/virtxml.py:404
 msgid "Start the domain."
 msgstr "Invie il domini."
 
-#: virtinst/virtxml.py:411
+#: virtinst/virtxml.py:406
 msgid "Only print the requested change, in diff format"
 msgstr "Stampe dome la modifiche domandade, in formât diff"
 
-#: virtinst/virtxml.py:413
+#: virtinst/virtxml.py:408
 msgid "Only print the requested change, in full XML format"
 msgstr "Stampe dome la modifiche domandade, in format XML complet"
 
-#: virtinst/virtxml.py:415
+#: virtinst/virtxml.py:410
 msgid "Require confirmation before saving any results."
 msgstr "Domande conferme prime di salvâ cualsisei risultât."
 
-#: virtinst/virtxml.py:419
+#: virtinst/virtxml.py:414
 msgid "XML options"
 msgstr "Opzions pal XML"
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:456
 msgid "Can't use --confirm with stdin input."
 msgstr "Impussibil doprâ --confirm cun input di stdin."
 
-#: virtinst/virtxml.py:463
+#: virtinst/virtxml.py:458
 msgid "Can't use --update with stdin input."
 msgstr "Impussibil doprâ --update cun input di stdin."
 
-#: virtinst/virtxml.py:466
+#: virtinst/virtxml.py:461
 msgid "A domain must be specified"
 msgstr "Tu scugnis specificâ un domini"
 
-#: virtinst/virtxml.py:494
+#: virtinst/virtxml.py:489
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "No si sa cemût fâ --update par --%s"
 
-#: virtinst/virtxml.py:528
+#: virtinst/virtxml.py:523
 msgid "The VM is not running, --update is inapplicable."
 msgstr "La machine virtuâl no je in esecuzion, nol è pussibil aplicâ --update."
 
-#: virtinst/virtxml.py:561
+#: virtinst/virtxml.py:556
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 "Lis modifichis a varan efiet une volte che il domini al è distudât dal dut."
 
-#: virtinst/virtxml.py:563
+#: virtinst/virtxml.py:558
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -7100,7 +7124,7 @@ msgstr ""
 "Il XML nol è cambiât dopo de definizion dal domini. Tu podaressis vê "
 "modificât un valôr predefinît di libvirt."
 
-#: virtinst/virtxml.py:576
+#: virtinst/virtxml.py:571
 msgid "Aborted at user request"
 msgstr "Operazion interote su richieste dal utent"
 
@@ -7114,16 +7138,28 @@ msgstr ""
 "'%(foundname)s'"
 
 #. translators: value is a generic object type name
-#: virtinst/xmlbuilder.py:487
+#: virtinst/xmlbuilder.py:519
 #, python-format
 msgid "A name must be specified for the %s"
 msgstr "Tu scugnis specificâ un non par %s"
 
-#: virtinst/xmlbuilder.py:492
+#: virtinst/xmlbuilder.py:524
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "Il non di %(objecttype)s '%(name)s' nol pues contignî il caratar '%(char)s'."
+
+#~ msgid "tpm-tab"
+#~ msgstr "tpm-tab"
+
+#~ msgid "Sheepdog Filesystem"
+#~ msgstr "Filesystem Sheepdog"
+
+#~ msgid "Missing mandatory attribute 'type'"
+#~ msgstr "Al mancje l'atribût obligatori 'type'"
+
+#~ msgid "SEV launch security is not supported on this platform"
+#~ msgstr "La sigurece di inviament SEV no je supuartade su cheste plateforme"
 
 #~ msgid "Version:"
 #~ msgstr "Version:"
