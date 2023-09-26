@@ -859,8 +859,6 @@ class vmmCreateVM(vmmGObjectUI):
 
         defmachine = None
         prios = []
-        if self._capsinfo.arch in ["sw_64"]:
-            defmachine = "core3"
 
         recommended_machine = virtinst.Guest.get_recommended_machine(
                 self._capsinfo)

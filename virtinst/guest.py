@@ -175,6 +175,10 @@ class Guest(XMLBuilder):
                 if "virt" in capsinfo.machines:
                     return "virt"
 
+            if capsinfo.arch in ["sw_64"]:
+                if "core3" in capsinfo.machines:
+                    return "core3"
+
         if capsinfo.conn.is_qemu() or capsinfo.conn.is_test():
             return _qemu_machine()
         return None
