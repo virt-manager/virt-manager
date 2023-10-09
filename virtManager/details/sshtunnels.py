@@ -69,7 +69,8 @@ class ConnectionInfo(object):
 
         if (not self.need_tunnel() and
             self.transport and
-            self._is_listen_localhost(self.get_conn_host()[0])):
+            self._is_listen_localhost() and
+            not self._is_listen_localhost(self._connhost)):
             return _("Guest is on a remote host with transport '%s' "
                 "but is only configured to listen locally. "
                 "To connect remotely you will need to change the guest's "
