@@ -509,9 +509,7 @@
       <readonly/>
       <space_hard_limit>1234</space_hard_limit>
       <space_soft_limit>500</space_soft_limit>
-      <source pool="pool1" volume="vol">
-        <socket>/tmp/foo.sock</socket>
-      </source>
+      <source pool="pool1" volume="vol" socket="/tmp/foo.sock"/>
       <target dir="/foo"/>
       <binary path="/foo/virtiofsd" xattr="off">
         <cache mode="always"/>
