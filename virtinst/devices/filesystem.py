@@ -53,7 +53,7 @@ class DeviceFilesystem(Device):
     source_units = XMLProperty("./source/@units")
     source_pool = XMLProperty("./source/@pool")
     source_volume = XMLProperty("./source/@volume")
-    source_socket = XMLProperty("./source/socket")
+    source_socket = XMLProperty("./source/@socket")
 
     binary_path = XMLProperty("./binary/@path")
     binary_xattr = XMLProperty("./binary/@xattr", is_onoff=True)
