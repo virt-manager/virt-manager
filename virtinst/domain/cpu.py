@@ -462,5 +462,10 @@ class DomainCpu(XMLBuilder):
             # -M virt defaults to a 32bit CPU, even if using aarch64
             self.set_model(guest, "cortex-a57")
 
+        elif guest.os.is_loongarch() and guest.type == "kvm":
+            if guest.os.arch != self.conn.caps.host.cpu.arch:
+                return
+            self.set_special_mode(guest, guest.loongarch_cpu_default)
+
         elif guest.os.is_x86() and guest.type == "kvm":
             self._set_cpu_x86_kvm_default(guest)

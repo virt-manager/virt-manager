@@ -27,6 +27,8 @@ class DeviceVideo(Device):
 
     @staticmethod
     def default_model(guest):
+        if guest.os.is_loongarch():
+            return "virtio"
         if not guest.os.is_hvm():
             return None
         if guest.os.is_pseries():

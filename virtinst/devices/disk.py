@@ -982,6 +982,8 @@ class DeviceDisk(Device):
         if self.conn.is_bhyve():
             # IDE bus is not supported by bhyve
             return "sata"
+        if self.is_cdrom() and guest.os.is_loongarch():
+            return "scsi"
         return "ide"
 
     def set_defaults(self, guest):

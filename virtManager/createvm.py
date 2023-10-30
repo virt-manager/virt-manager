@@ -476,7 +476,8 @@ class vmmCreateVM(vmmGObjectUI):
 
         installable_arch = bool(guest.os.is_x86() or
                 guest.os.is_ppc64() or
-                guest.os.is_s390x())
+                guest.os.is_s390x() or
+                guest.os.is_loongarch())
 
         default_efi = (
             self.config.get_default_firmware_setting() == "uefi" and
@@ -857,6 +858,8 @@ class vmmCreateVM(vmmGObjectUI):
         machines.sort()
 
         defmachine = None
+        if self._capsinfo.arch in ["loongarch64"]:
+            defmachine = "loongson7a"
         prios = []
         recommended_machine = virtinst.Guest.get_recommended_machine(
                 self._capsinfo)
