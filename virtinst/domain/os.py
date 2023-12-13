@@ -77,6 +77,8 @@ class DomainOs(XMLBuilder):
         return self.arch == "riscv64" or self.arch == "riscv32"
     def is_riscv_virt(self):
         return self.is_riscv() and str(self.machine).startswith("virt")
+    def is_loongarch64(self):
+        return self.arch == "loongarch64"
 
     ##################
     # XML properties #
