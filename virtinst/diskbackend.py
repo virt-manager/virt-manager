@@ -424,11 +424,7 @@ class _StorageCreator(_StorageBase):
     def __init__(self, conn):
         _StorageBase.__init__(self, conn)
 
-        self._pool = None
-        self._vol_install = None
-        self._path = None
-        self._size = None
-        self._dev_type = None
+        self._dev_type = self._size = self._path = self._vol_install = self._pool = None
 
 
     ##############
