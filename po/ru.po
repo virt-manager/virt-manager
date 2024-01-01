@@ -27,18 +27,18 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-09-16 10:35+0000\n"
+"PO-Revision-Date: 2023-11-01 02:48+0000\n"
 "Last-Translator: \"Sergey A.\" <sw@atrus.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ru/>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Weblate 5.0.2\n"
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || ("
+"n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -175,7 +175,7 @@ msgstr "_Тип устройства:"
 
 #: ui/addhardware.ui:789
 msgid "T_ype:"
-msgstr "Тип:"
+msgstr "Т_ип:"
 
 #: ui/addhardware.ui:803 ui/clone.ui:480 ui/createnet.ui:213
 #: ui/createpool.ui:330 ui/createvm.ui:2152 ui/createvol.ui:185
@@ -1213,7 +1213,7 @@ msgstr "Узел привязки:"
 
 #: ui/details.ui:3659
 msgid "Target type:"
-msgstr "Тип:"
+msgstr "Тип цели:"
 
 #: ui/details.ui:3671
 msgid "Target name:"
@@ -1841,7 +1841,7 @@ msgstr "Стандартный формат хранения данных для
 
 #: ui/preferences.ui:424
 msgid "_Storage format:"
-msgstr "_Формат:"
+msgstr "Формат _хранения данных:"
 
 #: ui/preferences.ui:460
 msgid ""
@@ -3691,7 +3691,7 @@ msgstr "Параллельное устройство"
 
 #: virtManager/details/details.py:2090
 msgid "Console Device"
-msgstr "Консоль"
+msgstr "Консольное устройство"
 
 #: virtManager/details/details.py:2092
 msgid "Channel Device"
@@ -4367,12 +4367,11 @@ msgstr ""
 "askpass SSH локально."
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr ""
-"Убедитесь, что на удалённом узле запущена внутренняя служба «libvirtd»."
+"Убедитесь, что на удалённом узле запущена соответствующая внутренняя служба "
+"«libvirtd»."
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4395,10 +4394,8 @@ msgstr ""
 "обычного пользователя. Попробуйте запуск от имени root."
 
 #: virtManager/lib/connectauth.py:179
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "Убедитесь, что внутренняя служба «libvirtd» запущена."
+msgstr "Убедитесь, что соответствующая внутренняя служба «libvirtd» запущена."
 
 #: virtManager/lib/connectauth.py:182
 #, python-format
@@ -4410,19 +4407,14 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "Ошибка подключения менеджера виртуальных машин"
 
 #: virtManager/lib/connectauth.py:208
-#, fuzzy
-#| msgid ""
-#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-#| "virtualization packages are installed to manage virtualization on this "
-#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
 "Не удалось определить гипервизор по умолчанию. Убедитесь, что установлены "
-"подходящие пакеты QEMU/KVM для управления виртуализацией на этой основной "
-"системе."
+"подходящие пакеты QEMU/KVM и libvirt для управления виртуализацией на этой "
+"основной системе."
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
