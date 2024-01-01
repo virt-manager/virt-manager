@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-12 20:00+0200\n"
+"POT-Creation-Date: 2023-09-25 07:46+0200\n"
 "PO-Revision-Date: 2023-09-25 05:35+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -350,8 +350,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>拓製 <u>不會</u> 修改客戶機作業系統內容。"
-"如果需要做一些設定\n"
+"<span size='small'>拓製 <u>不會</u> 修改客戶機作業系統內容。如果需要做一些設"
+"定\n"
 "比如修改密碼或設定靜態 IP 位址，請查看 virt-sysprep(1) 工具。</span>"
 
 #: ui/clone.ui:706
@@ -658,8 +658,9 @@ msgstr "瀏覽(_R)…"
 msgid ""
 "<small>Kernel/initrd settings can be configured with 'Customize before "
 "install' on the final page.</small>"
-msgstr "<small>可以在最後一頁上使用「安裝前自訂」來調配核心/initrd "
-"設定的組態。</small>"
+msgstr ""
+"<small>可以在最後一頁上使用「安裝前自訂」來調配核心/initrd 設定的組態。</"
+"small>"
 
 #: ui/createvm.ui:1171
 msgid "Provide the _application path:"
@@ -1650,9 +1651,8 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"隧道遷移直接透過 libvirtd "
-"連接通道，而不是由虛擬機管理程式打開一個單獨的網路連接到目標。 源 libvirt "
-"實例直接連接到目標 libvirt 實例。\n"
+"隧道遷移直接透過 libvirtd 連接通道，而不是由虛擬機管理程式打開一個單獨的網路"
+"連接到目標。 源 libvirt 實例直接連接到目標 libvirt 實例。\n"
 "\n"
 "由於不需要開放額外的防火牆埠，因此可以簡化組態。如果啟用 libvirt 連接加密， "
 "還可以加密遷移流量。但它很難由 SSH 來完成資料傳輸工作。"
@@ -1719,7 +1719,8 @@ msgstr "裝置名稱(_V)："
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
-msgstr "<small>在多數組態中，macvtap 不能為主機到客戶機的網路通信工作。</small>"
+msgstr ""
+"<small>在多數組態中，macvtap 不能為主機到客戶機的網路通信工作。</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
@@ -1866,8 +1867,9 @@ msgstr "變更…"
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
-msgstr "當改變客戶機視窗大小時，請修改其解析度。僅適用於使用 Spice "
-"和桌面代理正確設定組態的客戶機。"
+msgstr ""
+"當改變客戶機視窗大小時，請修改其解析度。僅適用於使用 Spice 和桌面代理正確設定"
+"組態的客戶機。"
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
@@ -3135,16 +3137,16 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:194
+#: virtManager/delete.py:196
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "刪除 “%(vm)s” 虛擬機出錯 ：%(error)s"
 
-#: virtManager/delete.py:211
+#: virtManager/delete.py:212
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "另外，刪除某些儲存裝置時出錯：\n"
 
-#: virtManager/delete.py:215
+#: virtManager/delete.py:216
 msgid "Errors encountered while removing certain storage devices."
 msgstr "刪除默寫儲存裝置時出錯。"
 
@@ -3817,8 +3819,9 @@ msgstr ""
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
-msgstr "確定要套用快照 '%(name)s' "
-"嗎？所有自最後一次快照建立以來對磁碟和組態的變更都會被丟棄。"
+msgstr ""
+"確定要套用快照 '%(name)s' 嗎？所有自最後一次快照建立以來對磁碟和組態的變更都"
+"會被丟棄。"
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -3898,7 +3901,8 @@ msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
-msgstr "客戶機位於具有 '%s' 傳輸的遠端主機上，但僅組態設定為在本機監聽。要遠端連接，"
+msgstr ""
+"客戶機位於具有 '%s' 傳輸的遠端主機上，但僅組態設定為在本機監聽。要遠端連接，"
 "需要更改客戶機的監聽地址。"
 
 #: virtManager/details/viewers.py:356
@@ -4265,26 +4269,30 @@ msgstr "刪除卷宗「%s」出錯"
 msgid "Error changing pool settings: %s"
 msgstr "修改儲池設定時出錯：%s"
 
-#: virtManager/lib/connectauth.py:50
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "需要認證"
 
-#: virtManager/lib/connectauth.py:154
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr "遠端主機要求一個支援 -U 選項版本的 netcat/nc。"
 
-#: virtManager/lib/connectauth.py:160
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
-msgstr "請為遠端主機組態設定 SSH 金鑰訪問，或在本機安裝一個 SSH askpass 套裝軟體。"
+msgstr ""
+"請為遠端主機組態設定 SSH 金鑰訪問，或在本機安裝一個 SSH askpass 套裝軟體。"
 
-#: virtManager/lib/connectauth.py:164
-msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+#: virtManager/lib/connectauth.py:163
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+msgid ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr "請驗證 'libvirtd' 守護程式是否在遠端主機上執行。"
 
-#: virtManager/lib/connectauth.py:168
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4294,7 +4302,7 @@ msgstr ""
 "已載入 -A Xen 主機核心\n"
 "已啟動 Xen 服務"
 
-#: virtManager/lib/connectauth.py:174
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4304,36 +4312,36 @@ msgstr ""
 "manager），可能無法以一般使用者身份連接 libvirt，。請嘗試以 root 使用者身份執"
 "行。"
 
-#: virtManager/lib/connectauth.py:180
-msgid "Verify that the 'libvirtd' daemon is running."
+#: virtManager/lib/connectauth.py:179
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running."
+msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "請驗證 'libvirtd' 守護行程是否正在執行。"
 
-#: virtManager/lib/connectauth.py:183
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "無法連接至 libvirt %s。"
 
-#: virtManager/lib/connectauth.py:195
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "虛擬機管理器連線失敗"
 
-#: virtManager/lib/connectauth.py:218
-msgid ""
-"The libvirtd service does not appear to be installed. Install and run the "
-"libvirtd service to manage virtualization on this host."
-msgstr ""
-"libvirtd 服務似乎沒有安裝。請安裝並執行 libvirtd 服務以管理此主機上的虛擬化服"
-"務。"
-
-#: virtManager/lib/connectauth.py:225
+#: virtManager/lib/connectauth.py:208
+#, fuzzy
+#| msgid ""
+#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
+#| "virtualization packages are installed to manage virtualization on this "
+#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualization packages are installed to manage virtualization on this host."
+"virtualization and libvirt packages are installed to manage virtualization "
+"on this host."
 msgstr ""
 "無法檢測到預設虛擬機管理程式。確保全裝了合適的 QEMU/KVM 虛擬化套裝軟體以管理"
 "此主機上的虛擬化服務。"
 
-#: virtManager/lib/connectauth.py:232
+#: virtManager/lib/connectauth.py:215
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr "通過 檔案->新增連接 可手動新增虛擬化服務連接"
@@ -5502,8 +5510,8 @@ msgid ""
 "--launchSecurity sev"
 msgstr ""
 "組態設定 VM 啟動安全性（例如：SEV 記憶體加密）。範例：\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,dhCert="
-"BASE64CERT\n"
+"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
+"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:910
@@ -5720,7 +5728,8 @@ msgstr "必須為非現有卷宗 '%s' 指定大小"
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
-msgstr "不知道如何為路徑 '%s' 建立儲存。首先使用 libvirt API 將父目錄作為儲池來管理。"
+msgstr ""
+"不知道如何為路徑 '%s' 建立儲存。首先使用 libvirt API 將父目錄作為儲池來管理。"
 
 #: virtinst/devices/disk.py:379
 msgid "Format attribute not supported for this volume type"
@@ -5957,8 +5966,8 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
-"作業系統 '%(osname)s' 不支援 '%(profilename)s' "
-"組態檔案的無人值守安裝。可用的組態檔案：%(profiles)s"
+"作業系統 '%(osname)s' 不支援 '%(profilename)s' 組態檔案的無人值守安裝。可用的"
+"組態檔案：%(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -6092,8 +6101,9 @@ msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
-msgstr "當卷宗已經被全部分配後，需要的卷宗容量將超過可用儲池空間。(%(mem1)s M "
-"需要的容量 > %(mem2)s M 可用容量)"
+msgstr ""
+"當卷宗已經被全部分配後，需要的卷宗容量將超過可用儲池空間。(%(mem1)s M 需要的"
+"容量 > %(mem2)s M 可用容量)"
 
 #: virtinst/virtclone.py:20
 msgid ""
@@ -6114,10 +6124,9 @@ msgid ""
 msgstr ""
 "複製一個虛擬機，需修改如 MAC 地址，名稱等所有主機端唯一的組態。\n"
 "\n"
-"虛擬機的內容並沒有改變：virt-clone "
-"不修改任何客戶機系統內部的組態，它只複製磁碟和主機端的修改。所以像修改密碼，"
-"修改靜態 IP 地址等操作都在本工具複製範圍內。如何修改此類型的組態，請參考 "
-"virt-sysprep(1)。"
+"虛擬機的內容並沒有改變：virt-clone 不修改任何客戶機系統內部的組態，它只複製磁"
+"碟和主機端的修改。所以像修改密碼，修改靜態 IP 地址等操作都在本工具複製範圍"
+"內。如何修改此類型的組態，請參考 virt-sysprep(1)。"
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1030
 msgid "General Options"
@@ -6177,7 +6186,8 @@ msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
-msgstr "不要將儲存內容拓製到指定的檔案路徑，它們的內容將保持不變。這要求為每個可拓製"
+msgstr ""
+"不要將儲存內容拓製到指定的檔案路徑，它們的內容將保持不變。這要求為每個可拓製"
 "磁碟映像指定現有路徑。"
 
 #: virtinst/virtclone.py:113
@@ -6550,7 +6560,8 @@ msgstr "指定細粒度的安裝選項"
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
-msgstr "重新安裝現有的虛擬系統。僅套用安裝選項，忽略所有其他虛擬系統的組態選項。"
+msgstr ""
+"重新安裝現有的虛擬系統。僅套用安裝選項，忽略所有其他虛擬系統的組態選項。"
 
 #: virtinst/virtinstall.py:1064
 msgid "Perform a cloud image installation, configuring cloud-init"
@@ -6934,6 +6945,13 @@ msgstr "必須為 %s 指定名稱"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名稱 '%(name)s' 不能包含 '%(char)s' 字元。"
+
+#~ msgid ""
+#~ "The libvirtd service does not appear to be installed. Install and run the "
+#~ "libvirtd service to manage virtualization on this host."
+#~ msgstr ""
+#~ "libvirtd 服務似乎沒有安裝。請安裝並執行 libvirtd 服務以管理此主機上的虛擬"
+#~ "化服務。"
 
 #, fuzzy
 #~ msgid "tpm-tab"

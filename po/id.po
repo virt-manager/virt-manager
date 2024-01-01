@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-12 20:00+0200\n"
+"POT-Creation-Date: 2023-09-25 07:46+0200\n"
 "PO-Revision-Date: 2022-11-25 15:19+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
@@ -3635,19 +3635,19 @@ msgid ""
 "%s"
 msgstr "Jalur berikut akan dihapus:&#10;&#10; %s"
 
-#: virtManager/delete.py:194
+#: virtManager/delete.py:196
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Kesalahan menghapus mesin virtual '% (vm) s':% (error) s"
 
-#: virtManager/delete.py:211
+#: virtManager/delete.py:212
 #, fuzzy
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "Selain itu, ada kesalahan saat menghapus perangkat penyimpanan tertentu: \n"
 
-#: virtManager/delete.py:215
+#: virtManager/delete.py:216
 #, fuzzy
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Terjadi kesalahan saat melepas perangkat penyimpanan tertentu."
@@ -4920,18 +4920,18 @@ msgstr "Kesalahan menghapus volume '%s'"
 msgid "Error changing pool settings: %s"
 msgstr "Galat mengubah setelan pangkalan: %s"
 
-#: virtManager/lib/connectauth.py:50
+#: virtManager/lib/connectauth.py:49
 #, fuzzy
 msgid "Authentication required"
 msgstr "Autentikasi diperlukan"
 
-#: virtManager/lib/connectauth.py:154
+#: virtManager/lib/connectauth.py:153
 #, fuzzy
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr "Host jarak jauh memerlukan versi netcat / nc yang mendukung opsi -U."
 
-#: virtManager/lib/connectauth.py:160
+#: virtManager/lib/connectauth.py:159
 #, fuzzy
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
@@ -4940,12 +4940,13 @@ msgstr ""
 "Konfigurasikan akses kunci SSH untuk host jarak jauh, atau instal paket "
 "askpass SSH secara lokal."
 
-#: virtManager/lib/connectauth.py:164
+#: virtManager/lib/connectauth.py:163
 #, fuzzy
-msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+msgid ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr "Pastikan bahwa daemon 'libvirtd' berjalan di host jarak jauh."
 
-#: virtManager/lib/connectauth.py:168
+#: virtManager/lib/connectauth.py:167
 #, fuzzy
 msgid ""
 "Verify that:\n"
@@ -4955,7 +4956,7 @@ msgstr ""
 "Verifikasi bahwa:&#10; - Kernel host Xen telah di-boot&#10; - Layanan Xen "
 "telah dimulai"
 
-#: virtManager/lib/connectauth.py:174
+#: virtManager/lib/connectauth.py:173
 #, fuzzy
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
@@ -4966,39 +4967,31 @@ msgstr ""
 "melalui ssh -X atau VNC, Anda mungkin tidak dapat terhubung ke libvirt "
 "sebagai pengguna biasa. Coba jalankan sebagai root."
 
-#: virtManager/lib/connectauth.py:180
+#: virtManager/lib/connectauth.py:179
 #, fuzzy
-msgid "Verify that the 'libvirtd' daemon is running."
+msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "Pastikan daemon 'libvirtd' sedang berjalan."
 
-#: virtManager/lib/connectauth.py:183
+#: virtManager/lib/connectauth.py:182
 #, fuzzy, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Tidak dapat terhubung ke libvirt %s."
 
-#: virtManager/lib/connectauth.py:195
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Kegagalan Koneksi Manajer Mesin Virtual"
 
-#: virtManager/lib/connectauth.py:218
-#, fuzzy
-msgid ""
-"The libvirtd service does not appear to be installed. Install and run the "
-"libvirtd service to manage virtualization on this host."
-msgstr ""
-"Layanan libvirtd tampaknya tidak diinstal. Instal dan jalankan layanan "
-"libvirtd untuk mengelola virtualisasi di host ini."
-
-#: virtManager/lib/connectauth.py:225
+#: virtManager/lib/connectauth.py:208
 #, fuzzy
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualization packages are installed to manage virtualization on this host."
+"virtualization and libvirt packages are installed to manage virtualization "
+"on this host."
 msgstr ""
 "Tidak dapat mendeteksi hypervisor default. Pastikan paket virtualisasi "
 "QEMU / KVM yang sesuai diinstal untuk mengelola virtualisasi di host ini."
 
-#: virtManager/lib/connectauth.py:232
+#: virtManager/lib/connectauth.py:215
 #, fuzzy
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
@@ -7988,6 +7981,14 @@ msgstr "Nama harus ditentukan untuk %s"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "% (objecttype) s name '% (name) s' tidak boleh berisi karakter '% (char) s'."
+
+#, fuzzy
+#~ msgid ""
+#~ "The libvirtd service does not appear to be installed. Install and run the "
+#~ "libvirtd service to manage virtualization on this host."
+#~ msgstr ""
+#~ "Layanan libvirtd tampaknya tidak diinstal. Instal dan jalankan layanan "
+#~ "libvirtd untuk mengelola virtualisasi di host ini."
 
 #, fuzzy
 #~ msgid "Sheepdog Filesystem"

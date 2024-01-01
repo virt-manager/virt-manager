@@ -15,11 +15,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-12 20:00+0200\n"
+"POT-Creation-Date: 2023-09-25 07:46+0200\n"
 "PO-Revision-Date: 2023-09-15 04:35+0000\n"
 "Last-Translator: Jan Kuparinen <copper_fin@hotmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3161,16 +3161,16 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:194
+#: virtManager/delete.py:196
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Virhe poistettaessa virtuaalikonetta '%(vm)s': %(error)s"
 
-#: virtManager/delete.py:211
+#: virtManager/delete.py:212
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Lisäksi joitain tallennustilalaitteita poistaessa ilmeni virheitä: \n"
 
-#: virtManager/delete.py:215
+#: virtManager/delete.py:216
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Tiettyjä tallennustilalaitteita poistaessa ilmeni virheitä."
 
@@ -4314,16 +4314,16 @@ msgstr "Virhe poistaessa taltiota '%s'"
 msgid "Error changing pool settings: %s"
 msgstr "Virhe muuttaessa varannon asetuksia: %s"
 
-#: virtManager/lib/connectauth.py:50
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "Tunnistautuminen vaaditaan"
 
-#: virtManager/lib/connectauth.py:154
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr "Etäisäntä vaatii version netcat/nc:ta, joka tukee vaihtoehtoa '-U'."
 
-#: virtManager/lib/connectauth.py:160
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4331,11 +4331,14 @@ msgstr ""
 "Määritä SSH-avaimen käyttö etäisännälle tai asenna SSH:n paketti askpass "
 "paikallisesti."
 
-#: virtManager/lib/connectauth.py:164
-msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+#: virtManager/lib/connectauth.py:163
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+msgid ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr "Varmista, että libvirtd-daemoni on käynnissä etäisännässä."
 
-#: virtManager/lib/connectauth.py:168
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4345,7 +4348,7 @@ msgstr ""
 " - Xen-isäntäkone käynnistettiin\n"
 " - Xen-palvelu on käynnistetty"
 
-#: virtManager/lib/connectauth.py:174
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4355,37 +4358,37 @@ msgstr ""
 "n tai VNC:n kautta, et ehkä voi muodostaa yhteyttä libvirtiin tavallisena "
 "käyttäjänä. Yritä suorittaa root:na."
 
-#: virtManager/lib/connectauth.py:180
-msgid "Verify that the 'libvirtd' daemon is running."
+#: virtManager/lib/connectauth.py:179
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running."
+msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "Vahvista, että 'libvirtd'-taustapalvelu on käynnissä."
 
-#: virtManager/lib/connectauth.py:183
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Yhteyden muodostaminen libvirtiin epäonnistui %s."
 
-#: virtManager/lib/connectauth.py:195
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtuaalikonehallitsimen yhteysvirhe"
 
-#: virtManager/lib/connectauth.py:218
-msgid ""
-"The libvirtd service does not appear to be installed. Install and run the "
-"libvirtd service to manage virtualization on this host."
-msgstr ""
-"Palvelu libvirtd ei näytä olevan asennettuna. Asenna ja suorita se, "
-"hallitaksesi tämän isännän virtualisointia."
-
-#: virtManager/lib/connectauth.py:225
+#: virtManager/lib/connectauth.py:208
+#, fuzzy
+#| msgid ""
+#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
+#| "virtualization packages are installed to manage virtualization on this "
+#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualization packages are installed to manage virtualization on this host."
+"virtualization and libvirt packages are installed to manage virtualization "
+"on this host."
 msgstr ""
 "Oletushypervisoria ei voitu havaita. Varmista, että asianmukaiset QEMU/KVM-"
 "virtualisointipaketit on asennettu tämän isännän virtualisoinnin "
 "hallitsemiseksi."
 
-#: virtManager/lib/connectauth.py:232
+#: virtManager/lib/connectauth.py:215
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -5577,8 +5580,8 @@ msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
-"Määritä virtuaalikoneen käynnistysturva (esim. SEV-muistin salaus. Esimerkki:"
-"\n"
+"Määritä virtuaalikoneen käynnistysturva (esim. SEV-muistin salaus. "
+"Esimerkki:\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:910
@@ -7088,6 +7091,13 @@ msgstr "Nimi täytyy antaa %s:lle"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s nimi '%(name)s' ei voi sisältää '%(char)s' merkkejä."
+
+#~ msgid ""
+#~ "The libvirtd service does not appear to be installed. Install and run the "
+#~ "libvirtd service to manage virtualization on this host."
+#~ msgstr ""
+#~ "Palvelu libvirtd ei näytä olevan asennettuna. Asenna ja suorita se, "
+#~ "hallitaksesi tämän isännän virtualisointia."
 
 #~ msgid "tpm-tab"
 #~ msgstr "tpm-välilehti"
