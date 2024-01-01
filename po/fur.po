@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-12 20:00+0200\n"
+"POT-Creation-Date: 2023-09-25 07:46+0200\n"
 "PO-Revision-Date: 2023-04-30 14:21+0000\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <https://translate.fedoraproject.org/projects/virt-"
@@ -3168,17 +3168,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:194
+#: virtManager/delete.py:196
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Erôr tal eliminâ la machine virtuâl '%(vm)s': %(error)s"
 
-#: virtManager/delete.py:211
+#: virtManager/delete.py:212
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "In diplui, a jerin erôrs tal gjavâ cierts dispositîfs di archiviazion:\n"
 
-#: virtManager/delete.py:215
+#: virtManager/delete.py:216
 msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 "Si son verificâts erôrs intant che si gjavave cierts dispositîfs di "
@@ -4327,18 +4327,18 @@ msgstr "Erôr tal eliminâ il volum '%s'"
 msgid "Error changing pool settings: %s"
 msgstr "Erôr tal cambiâ lis impostazions dal bacin: %s"
 
-#: virtManager/lib/connectauth.py:50
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "Autenticazion necessarie"
 
-#: virtManager/lib/connectauth.py:154
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "L'host lontan al domande une version di netcat/nc che e supuarti la opzion -"
 "U."
 
-#: virtManager/lib/connectauth.py:160
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4346,12 +4346,15 @@ msgstr ""
 "Configure l'acès cun clâf SSH al host lontan, opûr instale in locâl un "
 "pachet SSH askpass."
 
-#: virtManager/lib/connectauth.py:164
-msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+#: virtManager/lib/connectauth.py:163
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+msgid ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr ""
 "Verifiche che il demoni 'libvirtd' al sedi in esecuzion sul host lontan."
 
-#: virtManager/lib/connectauth.py:168
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4361,7 +4364,7 @@ msgstr ""
 " - un kernel host Xen al sedi stât inviât\n"
 " - il servizi Xen al sedi stât inviât"
 
-#: virtManager/lib/connectauth.py:174
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4371,37 +4374,37 @@ msgstr ""
 "di ssh -X o VNC, tu podaressis no rivâ a colegâti a libvirt tant che sempliç "
 "utent. Prove a eseguî come root."
 
-#: virtManager/lib/connectauth.py:180
-msgid "Verify that the 'libvirtd' daemon is running."
+#: virtManager/lib/connectauth.py:179
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running."
+msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "Verifiche che il demoni 'libvirtd' al sedi in esecuzion."
 
-#: virtManager/lib/connectauth.py:183
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Impussibil conetisi a libvirt %s."
 
-#: virtManager/lib/connectauth.py:195
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Faliment de conession al gjestôr des machinis virtuâls"
 
-#: virtManager/lib/connectauth.py:218
-msgid ""
-"The libvirtd service does not appear to be installed. Install and run the "
-"libvirtd service to manage virtualization on this host."
-msgstr ""
-"Il servizi libvirtd nol somee jessi instalât. Instale e eseguìs il servizi "
-"libvirtd par gjestî la virtualizazion su chest host."
-
-#: virtManager/lib/connectauth.py:225
+#: virtManager/lib/connectauth.py:208
+#, fuzzy
+#| msgid ""
+#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
+#| "virtualization packages are installed to manage virtualization on this "
+#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualization packages are installed to manage virtualization on this host."
+"virtualization and libvirt packages are installed to manage virtualization "
+"on this host."
 msgstr ""
 "Impussibil rilevâ un hypervisor predefinît. Controle che i pachets di "
 "virtualizazion QEMU/KVM juscj a sedin instalâts par gjestî la virtualizazion "
 "su chest host."
 
-#: virtManager/lib/connectauth.py:232
+#: virtManager/lib/connectauth.py:215
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -7148,6 +7151,13 @@ msgstr "Tu scugnis specificâ un non par %s"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "Il non di %(objecttype)s '%(name)s' nol pues contignî il caratar '%(char)s'."
+
+#~ msgid ""
+#~ "The libvirtd service does not appear to be installed. Install and run the "
+#~ "libvirtd service to manage virtualization on this host."
+#~ msgstr ""
+#~ "Il servizi libvirtd nol somee jessi instalât. Instale e eseguìs il "
+#~ "servizi libvirtd par gjestî la virtualizazion su chest host."
 
 #~ msgid "tpm-tab"
 #~ msgstr "tpm-tab"

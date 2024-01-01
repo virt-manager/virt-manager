@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-12 20:00+0200\n"
+"POT-Creation-Date: 2023-09-25 07:46+0200\n"
 "PO-Revision-Date: 2022-06-12 13:19+0000\n"
 "Last-Translator: R Toda <toda.ryunosuke@gmail.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/virt-"
@@ -3202,17 +3202,17 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:194
+#: virtManager/delete.py:196
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "仮想マシン '%(vm)s' の削除中にエラーが発生しました: %(error)s"
 
-#: virtManager/delete.py:211
+#: virtManager/delete.py:212
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "それに加えて、特定のストレージデバイスの削除中にエラーが発生しました: \n"
 
-#: virtManager/delete.py:215
+#: virtManager/delete.py:216
 msgid "Errors encountered while removing certain storage devices."
 msgstr "特定のストレージデバイスの削除中にエラーに遭遇しました。"
 
@@ -4360,18 +4360,18 @@ msgstr "ボリューム '%s' の削除中にエラーが発生しました"
 msgid "Error changing pool settings: %s"
 msgstr "プールの設定の変更中にエラーが発生しました: %s"
 
-#: virtManager/lib/connectauth.py:50
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "認証が必要です"
 
-#: virtManager/lib/connectauth.py:154
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "リモートホストに、-U オプションをサポートするバージョンの netcat/nc が必要で"
 "す。"
 
-#: virtManager/lib/connectauth.py:160
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4379,12 +4379,15 @@ msgstr ""
 "リモートホストに対する SSH 鍵アクセスを設定するか、もしくは SSH askpass パッ"
 "ケージをローカルにインストールしてください。"
 
-#: virtManager/lib/connectauth.py:164
-msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+#: virtManager/lib/connectauth.py:163
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+msgid ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr ""
 "リモートホストで、'libvirtd' デーモンが実行していることを確認してください。"
 
-#: virtManager/lib/connectauth.py:168
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4394,7 +4397,7 @@ msgstr ""
 " - Xen ホストカーネルが起動していること\n"
 " - Xen サービスが開始していること"
 
-#: virtManager/lib/connectauth.py:174
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4404,37 +4407,37 @@ msgstr ""
 "manager を実行している場合、一般ユーザーでは libvirt に接続できません。root "
 "ユーザーにて再度実行してください。"
 
-#: virtManager/lib/connectauth.py:180
-msgid "Verify that the 'libvirtd' daemon is running."
+#: virtManager/lib/connectauth.py:179
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running."
+msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "'libvirtd' デーモンが実行されていることを確認してください。"
 
-#: virtManager/lib/connectauth.py:183
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "libvirt に接続できません: %s 。"
 
-#: virtManager/lib/connectauth.py:195
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "仮想マシンマネージャーの接続障害"
 
-#: virtManager/lib/connectauth.py:218
-msgid ""
-"The libvirtd service does not appear to be installed. Install and run the "
-"libvirtd service to manage virtualization on this host."
-msgstr ""
-"libvirtd サービスがインストールされていないようです。このホストで仮想化環境を"
-"管理するため、 libvirtd サービスをインストールして動作させてください。"
-
-#: virtManager/lib/connectauth.py:225
+#: virtManager/lib/connectauth.py:208
+#, fuzzy
+#| msgid ""
+#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
+#| "virtualization packages are installed to manage virtualization on this "
+#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualization packages are installed to manage virtualization on this host."
+"virtualization and libvirt packages are installed to manage virtualization "
+"on this host."
 msgstr ""
 "デフォルトのハイパーバイザーが検出できません。このホストで仮想化環境を管理す"
 "るのに必要となる、 QEMU/KVM 仮想化パッケージをインストールしているかを確認し"
 "てください。"
 
-#: virtManager/lib/connectauth.py:232
+#: virtManager/lib/connectauth.py:215
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr "ファイル -> 接続を追加 で仮想化接続を追加することができます"
@@ -7159,6 +7162,13 @@ msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "%(objecttype)s の名前 '%(name)s' には '%(char)s' 文字を含めることができませ"
 "ん。"
+
+#~ msgid ""
+#~ "The libvirtd service does not appear to be installed. Install and run the "
+#~ "libvirtd service to manage virtualization on this host."
+#~ msgstr ""
+#~ "libvirtd サービスがインストールされていないようです。このホストで仮想化環"
+#~ "境を管理するため、 libvirtd サービスをインストールして動作させてください。"
 
 #~ msgid "Sheepdog Filesystem"
 #~ msgstr "Sheepdog ファイルシステム"

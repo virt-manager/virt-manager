@@ -26,18 +26,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-12 20:00+0200\n"
+"POT-Creation-Date: 2023-09-25 07:46+0200\n"
 "PO-Revision-Date: 2023-09-16 10:35+0000\n"
 "Last-Translator: \"Sergey A.\" <sw@atrus.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/ru/>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || ("
-"n%100>=11 && n%100<=14)? 2 : 3);\n"
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Generator: Weblate 5.0.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
@@ -3194,18 +3194,18 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:194
+#: virtManager/delete.py:196
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Ошибка удаления виртуальной машины «%(vm)s»: %(error)s"
 
-#: virtManager/delete.py:211
+#: virtManager/delete.py:212
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "Кроме того, имели место ошибки при удалении определённых устройств "
 "хранения:\n"
 
-#: virtManager/delete.py:215
+#: virtManager/delete.py:216
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Обнаружены ошибки при удалении определённых устройств хранения данных."
 
@@ -4347,18 +4347,18 @@ msgstr "Ошибка при удалении тома «%s»"
 msgid "Error changing pool settings: %s"
 msgstr "Ошибка изменения настроек пула: %s"
 
-#: virtManager/lib/connectauth.py:50
+#: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "Требуется проверка подлинности"
 
-#: virtManager/lib/connectauth.py:154
+#: virtManager/lib/connectauth.py:153
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "Для работы с удалённым узлом требуется версия netcat/nc с поддержкой "
 "параметра -U."
 
-#: virtManager/lib/connectauth.py:160
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4366,12 +4366,15 @@ msgstr ""
 "Настроить доступ по ключу SSH для удалённого узла или установить пакет "
 "askpass SSH локально."
 
-#: virtManager/lib/connectauth.py:164
-msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+#: virtManager/lib/connectauth.py:163
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
+msgid ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr ""
 "Убедитесь, что на удалённом узле запущена внутренняя служба «libvirtd»."
 
-#: virtManager/lib/connectauth.py:168
+#: virtManager/lib/connectauth.py:167
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4381,7 +4384,7 @@ msgstr ""
 "— ядро хост-системы Xen загружено;\n"
 "— служба Xen запущена"
 
-#: virtManager/lib/connectauth.py:174
+#: virtManager/lib/connectauth.py:173
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4391,37 +4394,37 @@ msgstr ""
 "ssh -X или VNC, может быть невозможно подключиться к libvirt от имени "
 "обычного пользователя. Попробуйте запуск от имени root."
 
-#: virtManager/lib/connectauth.py:180
-msgid "Verify that the 'libvirtd' daemon is running."
+#: virtManager/lib/connectauth.py:179
+#, fuzzy
+#| msgid "Verify that the 'libvirtd' daemon is running."
+msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "Убедитесь, что внутренняя служба «libvirtd» запущена."
 
-#: virtManager/lib/connectauth.py:183
+#: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Не удалось подключиться к libvirt %s."
 
-#: virtManager/lib/connectauth.py:195
+#: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Ошибка подключения менеджера виртуальных машин"
 
-#: virtManager/lib/connectauth.py:218
-msgid ""
-"The libvirtd service does not appear to be installed. Install and run the "
-"libvirtd service to manage virtualization on this host."
-msgstr ""
-"Возможно, служба libvirtd не установлена. Установите и запустите службу "
-"libvirtd для управления виртуализацией на этой основной системе."
-
-#: virtManager/lib/connectauth.py:225
+#: virtManager/lib/connectauth.py:208
+#, fuzzy
+#| msgid ""
+#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
+#| "virtualization packages are installed to manage virtualization on this "
+#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualization packages are installed to manage virtualization on this host."
+"virtualization and libvirt packages are installed to manage virtualization "
+"on this host."
 msgstr ""
 "Не удалось определить гипервизор по умолчанию. Убедитесь, что установлены "
 "подходящие пакеты QEMU/KVM для управления виртуализацией на этой основной "
 "системе."
 
-#: virtManager/lib/connectauth.py:232
+#: virtManager/lib/connectauth.py:215
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -7163,6 +7166,13 @@ msgstr "Необходимо указать имя для %s"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s имя «%(name)s» не может содержать символ «%(char)s»."
+
+#~ msgid ""
+#~ "The libvirtd service does not appear to be installed. Install and run the "
+#~ "libvirtd service to manage virtualization on this host."
+#~ msgstr ""
+#~ "Возможно, служба libvirtd не установлена. Установите и запустите службу "
+#~ "libvirtd для управления виртуализацией на этой основной системе."
 
 #~ msgid "tpm-tab"
 #~ msgstr "tpm-tab"
