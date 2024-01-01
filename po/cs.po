@@ -19,16 +19,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-09-12 21:04+0000\n"
+"PO-Revision-Date: 2023-09-26 07:35+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.1\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -4380,12 +4380,11 @@ msgstr ""
 "nainstalujte balíček SSH askpass."
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr ""
-"Ověřte, že na vzdáleném hostiteli je spuštěný proces služby „libvirtd“."
+"Ověřte, že na vzdáleném hostiteli je spuštěný příslušný proces služby "
+"libvirt."
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4408,10 +4407,8 @@ msgstr ""
 "uživatel. Zkuste spustit jako správce (root)."
 
 #: virtManager/lib/connectauth.py:179
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "Ověřte, že je spuštěný proces služby „libvirtd“."
+msgstr "Ověřte, že je spuštěný příšlušný proces služby libvirtd."
 
 #: virtManager/lib/connectauth.py:182
 #, python-format
@@ -4423,19 +4420,14 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "Nezdar spojení Správy virtuálních strojů"
 
 #: virtManager/lib/connectauth.py:208
-#, fuzzy
-#| msgid ""
-#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-#| "virtualization packages are installed to manage virtualization on this "
-#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
 "Není možné zjistit výchozí hypervizor. Ověřte že jsou nainstalované "
-"příslušné balíčky s virtualizací QEMU/KVM, aby na tomto hostiteli bylo možné "
-"spravovat virtualizaci."
+"příslušné balíčky s virtualizací QEMU/KVM a libvirt, aby na tomto hostiteli "
+"bylo možné spravovat virtualizaci."
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
