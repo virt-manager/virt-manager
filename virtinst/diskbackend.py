@@ -753,7 +753,7 @@ class StorageBackend(_StorageBase):
                 self._exists = True
             elif self._path is None:
                 self._exists = True
-            elif (not self.get_dev_type() == "network" and
+            elif (self.get_dev_type() != "network" and
                   not self._conn.is_remote() and
                   os.path.exists(self._path)):
                 self._exists = True

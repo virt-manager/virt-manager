@@ -618,8 +618,8 @@ class SpiceViewer(Viewer):
                 self._main_channel, "notify::agent-connected",
                 self._agent_connected_cb)
 
-        elif (type(channel) == SpiceClientGLib.DisplayChannel and
-                not self._display):
+        elif (isinstance(channel, SpiceClientGLib.DisplayChannel) and
+              not self._display):
             channel_id = channel.get_property("channel-id")
 
             if channel_id != 0:  # pragma: no cover
