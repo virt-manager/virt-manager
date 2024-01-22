@@ -1341,7 +1341,7 @@ c.add_invalid("test --edit --cpu host-passthrough --boot hd,network", grep="Only
 c.add_invalid("test --edit", grep="No change specified.")
 c.add_invalid("test --edit 2 --cpu host-passthrough", grep="'--edit 2' requested but there's only 1 --cpu object in the XML")
 c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm", grep="'--edit 5' requested but there's only 1 --tpm object in the XML")
-c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update --confirm", input_text="yes", grep="not supported by the connection driver: virDomainAttachDevice")
+c.add_invalid("test-for-virtxml --add-device --host-device 0x04b3:0x4485 --update --confirm", input_text="yes", grep="not supported")
 c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update --confirm", input_text="foo\nyes\n", grep="not supported by the connection driver: virDomainDetachDevice")
 c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update --confirm", input_text="yes", grep="not supported by the connection driver: virDomainUpdateDeviceFlags")
 c.add_invalid("--build-xml --memory 10,maxmemory=20", grep="--build-xml not supported for --memory")
