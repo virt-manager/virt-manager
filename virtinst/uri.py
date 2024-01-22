@@ -173,23 +173,39 @@ class MagicURI(object):
             capsxml = open(self.capsfile).read()
             conn.getCapabilities = lambda: capsxml
 
+        def _raise_nosupport_error(msg):
+            import libvirt
+            err = [libvirt.VIR_ERR_NO_SUPPORT, None, msg, None, None, None]
+            exc = libvirt.libvirtError(msg)
+            exc.err = err
+            raise exc
+
         # Fake domcapabilities. This is insufficient since output should
         # vary per type/arch/emulator combo, but it can be expanded later
         # if needed
+        domcapsxml = None
         if self.domcapsfile:
             domcapsxml = open(self.domcapsfile).read()
-            def fake_domcaps(emulator, arch, machine, virttype, flags=0):
-                ignore = emulator
-                ignore = flags
-                ignore = machine
-                ignore = virttype
 
+        def fake_domcaps(emulator, arch, machine, virttype, flags=0):
+            ignore = emulator
+            ignore = flags
+            ignore = machine
+            ignore = virttype
+
+            if domcapsxml:
                 ret = domcapsxml
                 if arch:
                     ret = re.sub("arch>.+</arch", "arch>%s</arch" % arch, ret)
                 return ret
 
-            conn.getDomainCapabilities = fake_domcaps
+            # In libvirt 9.8.0 the test suite added a stub domcaps
+            # impl. Fall back to raising NO_SUPPORT for our magic URIs, so
+            # we can keep getting code coverage of the old code paths
+            _raise_nosupport_error(
+                    "virtinst test driver fake domcaps nosupport")
+
+        conn.getDomainCapabilities = fake_domcaps
 
         if self.fakeuri:
             origcreate = conn.createXML
