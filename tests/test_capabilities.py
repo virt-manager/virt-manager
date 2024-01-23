@@ -51,6 +51,13 @@ def testCapsUtilFuncs():
         caps_empty.guest_lookup()
 
 
+def testGuestCapabilities():
+    filename = "kvm-x86_64.xml"
+    caps = _buildCaps(filename)
+
+    assert caps.guests[0].supports_externalSnapshot() is True
+
+
 ##############################
 # domcapabilities.py testing #
 ##############################
