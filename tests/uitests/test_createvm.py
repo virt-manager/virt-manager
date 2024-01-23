@@ -12,7 +12,11 @@ from . import lib
 ###################
 
 def _open_newvm(app):
-    app.root.find("New", "push button").click()
+    button = app.root.find("New", "push button")
+    # Launching the dialog can be very flakey without this explicit
+    # point() call, not sure why
+    button.point()
+    button.click()
     return app.find_window("New VM")
 
 
