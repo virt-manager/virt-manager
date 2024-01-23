@@ -97,6 +97,7 @@ class _CapsGuestFeatures(XMLBuilder):
     pae = XMLProperty("./pae", is_bool=True)
     acpi = XMLProperty("./acpi/@default", is_onoff=True)
     apic = XMLProperty("./apic/@default", is_onoff=True)
+    externalSnapshot = XMLProperty("./externalSnapshot", is_bool=True)
 
 
 class _CapsGuest(XMLBuilder):
@@ -165,6 +166,12 @@ class _CapsGuest(XMLBuilder):
         Return Tree if capabilities report support for APIC
         """
         return bool(self.features.apic)
+
+    def supports_externalSnapshot(self):
+        """
+        Return True if capabilities report support for external snapshots
+        """
+        return bool(self.features.externalSnapshot)
 
 
 ############################
