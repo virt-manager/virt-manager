@@ -215,7 +215,9 @@ class VMMDogtailApp(object):
         self.root.find_fuzzy("Edit", "menu").click()
         self.root.find_fuzzy("Connection Details", "menu item").click()
         win = self.find_window("%s - Connection Details" % conn_label)
-        win.find_fuzzy(tab, "page tab").click()
+        tab = win.find_fuzzy(tab, "page tab")
+        tab.point()
+        tab.click()
         return win
 
     def manager_test_conn_window_cleanup(self, conn_label, childwin):
