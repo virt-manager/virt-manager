@@ -699,7 +699,8 @@ def testChangeSnapshot():
     check("description", "offline desk", "foo\nnewline\n   indent")
     check("parent", "offline-root", "newparent")
     check("creationTime", 1375905916, 1234)
-    check("memory_type", "no", "internal")
+    check("memory_type", "no", "external")
+    check("memory_file", None, "/some/path/to/memory.img")
 
     check = _make_checker(snap.disks[0])
     check("name", "hda", "hdb")
