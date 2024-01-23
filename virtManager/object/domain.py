@@ -1189,11 +1189,13 @@ class vmmDomain(vmmLibvirtObject):
         if will_be_running:
             self._async_set_time()
 
-    def create_snapshot(self, xml, redefine=False):
+    def create_snapshot(self, xml, redefine=False, diskOnly=False):
         flags = 0
         if redefine:
             flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE)
         else:
+            if diskOnly:
+                flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_DISK_ONLY)
             log.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         self._backend.snapshotCreateXML(xml, flags)
 

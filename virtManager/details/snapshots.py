@@ -234,7 +234,7 @@ class vmmSnapshotNew(vmmGObjectUI):
     def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata):
         ignore = asyncjob
 
-        self.vm.create_snapshot(xml)
+        self.vm.create_snapshot(xml, diskOnly=False)
 
         try:
             cachedir = self.vm.get_cache_dir()
