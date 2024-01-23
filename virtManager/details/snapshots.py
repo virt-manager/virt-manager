@@ -81,6 +81,8 @@ class vmmSnapshotNew(vmmGObjectUI):
             "on_snapshot_new_name_changed": self._name_changed_cb,
             "on_snapshot_new_name_activate": self._ok_clicked_cb,
             "on_snapshot_new_ok_clicked": self._ok_clicked_cb,
+            "on_snapshot_new_mode_toggled": self._mode_toggled_cb,
+            "on_snapshot_new_memory_toggled": self._memory_toggled_cb,
         })
         self.bind_escape_key_close()
 
@@ -92,6 +94,7 @@ class vmmSnapshotNew(vmmGObjectUI):
     def show(self, parent):
         log.debug("Showing new snapshot wizard")
         self._reset_state()
+        self.topwin.resize(1, 1)
         self.topwin.set_transient_for(parent)
         self.topwin.present()
 
@@ -108,9 +111,43 @@ class vmmSnapshotNew(vmmGObjectUI):
     # UI init #
     ###########
 
+    def _init_snapshot_mode(self):
+        mode_external = self.widget("snapshot-new-mode-external")
+
+        capsinfo = self.vm.xmlobj.lookup_capsinfo()
+
+        if not capsinfo.guest.supports_externalSnapshot():
+            mode_external.set_sensitive(False)
+            mode_external.set_tooltip_text(
+                    _("external snapshots not supported with this libvirt connection"))
+
+    def _init_memory_path(self):
+        mempaths = self.widget("snapshot-new-memory-path")
+
+        model = Gtk.ListStore(str)
+        mempaths.set_model(model)
+        uiutil.init_combo_text_column(mempaths, 0)
+
     def _init_ui(self):
         buf = Gtk.TextBuffer()
         self.widget("snapshot-new-description").set_buffer(buf)
+        self._init_snapshot_mode()
+        self._init_memory_path()
+
+    def _reset_snapshot_mode(self):
+        mode_external = self.widget("snapshot-new-mode-external")
+        mode_internal = self.widget("snapshot-new-mode-internal")
+
+        if mode_external.is_sensitive():
+            mode_external.set_active(True)
+        else:
+            mode_internal.set_active(True)
+
+    def _reset_snapshot_memory_path(self):
+        mode_box = self.widget("snapshot-new-mode-external")
+        self._set_memory_path_visibility(mode_box)
+
+        self.widget("snapshot-new-memory-auto").set_active(True)
 
     def _reset_state(self):
         basename = "snapshot"
@@ -134,8 +171,49 @@ class vmmSnapshotNew(vmmGObjectUI):
         if sn:
             self.widget("snapshot-new-screenshot").set_from_pixbuf(sn)
 
+        self._reset_snapshot_mode()
+
+        self._reset_snapshot_memory_path()
+
         self.widget("snapshot-new-name").grab_focus()
 
+    ############
+    # UI utils #
+    ############
+
+    def _set_memory_path_visibility(self, mode_box):
+        uiutil.set_grid_row_visible(self.widget("snapshot-new-memory-label"),
+                                    mode_box.get_active() and self.vm.is_active())
+
+    def _populate_memory_path(self):
+        mempaths = self.widget("snapshot-new-memory-path")
+
+        if mempaths.is_sensitive():
+            return
+
+        model = mempaths.get_model()
+        paths = []
+
+        model.clear()
+
+        name = self.widget("snapshot-new-name").get_text()
+        memname = f"{self.vm.get_name()}-mem.{name}"
+
+        for disk in self.vm.get_xmlobj().devices.disk:
+            diskpath = disk.get_source_path()
+
+            if not diskpath:
+                continue
+
+            newpath = os.path.join(os.path.dirname(diskpath), memname)
+
+            if newpath not in paths:
+                paths.append(newpath)
+
+        for path in paths:
+            model.append([path])
+
+        mempaths.set_active(0)
 
     ###################
     # Create handling #
@@ -192,6 +270,13 @@ class vmmSnapshotNew(vmmGObjectUI):
         setattr(newpix, "vmm_sndata", sdata)
         return newpix
 
+    def _get_mode(self):
+        mode_external = self.widget("snapshot-new-mode-external")
+        if mode_external.get_active():
+            return "external"
+
+        return "internal"
+
     def _new_finish_cb(self, error, details, newname):
         self.reset_finish_cursor()
 
@@ -207,11 +292,16 @@ class vmmSnapshotNew(vmmGObjectUI):
         name = self.widget("snapshot-new-name").get_text()
         desc = self.widget("snapshot-new-description"
                            ).get_buffer().get_property("text")
+        mode = self._get_mode()
 
         try:
             newsnap = DomainSnapshot(self.vm.conn.get_backend())
             newsnap.name = name
             newsnap.description = desc or None
+            if mode == "external" and self.vm.is_active():
+                mempath = uiutil.get_list_selection(self.widget("snapshot-new-memory-path"))
+                newsnap.memory_type = mode
+                newsnap.memory_file = mempath
             newsnap.get_xml()
             newsnap.validate_generic_name(_("Snapshot"), newsnap.name)
             return newsnap
@@ -231,10 +321,10 @@ class vmmSnapshotNew(vmmGObjectUI):
         sndata = getattr(sn, "vmm_sndata", None)
         return mime, sndata
 
-    def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata):
+    def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata, diskOnly):
         ignore = asyncjob
 
-        self.vm.create_snapshot(xml, diskOnly=False)
+        self.vm.create_snapshot(xml, diskOnly=diskOnly)
 
         try:
             cachedir = self.vm.get_cache_dir()
@@ -263,10 +353,11 @@ class vmmSnapshotNew(vmmGObjectUI):
         xml = snap.get_xml()
         name = snap.name
         mime, sndata = self._get_screenshot_data_for_save()
+        diskOnly = not self.vm.is_active() and self._get_mode() == "external"
 
         self.set_finish_cursor()
         progWin = vmmAsyncJob(
-                    self._do_create_snapshot, [xml, name, mime, sndata],
+                    self._do_create_snapshot, [xml, name, mime, sndata, diskOnly],
                     self._new_finish_cb, [name],
                     _("Creating snapshot"),
                     _("Creating virtual machine snapshot"),
@@ -280,9 +371,23 @@ class vmmSnapshotNew(vmmGObjectUI):
 
     def _name_changed_cb(self, src):
         self.widget("snapshot-new-ok").set_sensitive(bool(src.get_text()))
+        self._populate_memory_path()
 
     def _ok_clicked_cb(self, src):
         return self._create_new_snapshot()
+
+    def _mode_toggled_cb(self, src):
+        self._set_memory_path_visibility(src)
+
+    def _memory_toggled_cb(self, src):
+        mempaths = self.widget("snapshot-new-memory-path")
+
+        if src.get_active():
+            mempaths.set_sensitive(False)
+        else:
+            mempaths.set_sensitive(True)
+
+        self._populate_memory_path()
 
 
 class vmmSnapshotPage(vmmGObjectUI):
