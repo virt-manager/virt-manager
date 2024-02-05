@@ -106,6 +106,8 @@ class _URIs(object):
         self.kvm_s390x = _uri_qemu + _caps("kvm-s390x.xml") + _domcaps("kvm-s390x-domcaps.xml")
         self.qemu_riscv64 = _uri_qemu + _caps("qemu-riscv64.xml") + _domcaps("qemu-riscv64-domcaps.xml")
 
+        # hvf
+        self.hvf_x86 = _uri_qemu + _caps("hvf-x86_64.xml") + _domcaps("hvf-x86_64-domcaps.xml")
 
 
     def openconn(self, uri):

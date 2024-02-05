@@ -1260,6 +1260,14 @@ c.add_compare("--os-variant fedora27", "bhyve-default-f27")
 
 
 
+###########################
+# qemu hvf specific tests #
+###########################
+
+c = vinst.add_category("bhyve", "--name foohvf --noautoconsole --connect " + utils.URIs.hvf_x86)
+c.add_compare("--os-variant fedora27", "hvf-default-f27")
+
+
 
 #####################################
 # Device option back compat testing #

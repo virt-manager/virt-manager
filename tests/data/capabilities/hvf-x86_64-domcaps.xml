@@ -1,0 +1,240 @@
+<domainCapabilities>
+  <path>/opt/local/bin/qemu-system-x86_64</path>
+  <domain>hvf</domain>
+  <machine>pc-i440fx-8.0</machine>
+  <arch>x86_64</arch>
+  <vcpu max='255'/>
+  <iothreads supported='yes'/>
+  <os supported='yes'>
+    <enum name='firmware'>
+      <value>efi</value>
+    </enum>
+    <loader supported='yes'>
+      <value>/opt/local/share/qemu/edk2-x86_64-code.fd</value>
+      <enum name='type'>
+        <value>rom</value>
+        <value>pflash</value>
+      </enum>
+      <enum name='readonly'>
+        <value>yes</value>
+        <value>no</value>
+      </enum>
+      <enum name='secure'>
+        <value>no</value>
+      </enum>
+    </loader>
+  </os>
+  <cpu>
+    <mode name='host-passthrough' supported='yes'>
+      <enum name='hostPassthroughMigratable'>
+        <value>on</value>
+        <value>off</value>
+      </enum>
+    </mode>
+    <mode name='maximum' supported='yes'>
+      <enum name='maximumMigratable'>
+        <value>on</value>
+        <value>off</value>
+      </enum>
+    </mode>
+    <mode name='host-model' supported='yes'>
+      <model fallback='forbid'>Skylake-Client</model>
+      <vendor>Intel</vendor>
+      <feature policy='require' name='ss'/>
+      <feature policy='require' name='hypervisor'/>
+      <feature policy='require' name='clflushopt'/>
+      <feature policy='require' name='pdpe1gb'/>
+      <feature policy='disable' name='x2apic'/>
+      <feature policy='disable' name='tsc-deadline'/>
+      <feature policy='disable' name='invpcid'/>
+      <feature policy='disable' name='mpx'/>
+      <feature policy='disable' name='xsavec'/>
+    </mode>
+    <mode name='custom' supported='yes'>
+      <model usable='no' vendor='unknown'>qemu64</model>
+      <model usable='yes' vendor='unknown'>qemu32</model>
+      <model usable='no' vendor='AMD'>phenom</model>
+      <model usable='yes' vendor='unknown'>pentium3</model>
+      <model usable='yes' vendor='unknown'>pentium2</model>
+      <model usable='yes' vendor='unknown'>pentium</model>
+      <model usable='no' vendor='Intel'>n270</model>
+      <model usable='yes' vendor='unknown'>kvm64</model>
+      <model usable='yes' vendor='unknown'>kvm32</model>
+      <model usable='no' vendor='Intel'>coreduo</model>
+      <model usable='no' vendor='Intel'>core2duo</model>
+      <model usable='no' vendor='AMD'>athlon</model>
+      <model usable='no' vendor='Intel'>Westmere-IBRS</model>
+      <model usable='yes' vendor='Intel'>Westmere</model>
+      <model usable='no' vendor='Intel'>Snowridge</model>
+      <model usable='no' vendor='Intel'>Skylake-Server-noTSX-IBRS</model>
+      <model usable='no' vendor='Intel'>Skylake-Server-IBRS</model>
+      <model usable='no' vendor='Intel'>Skylake-Server</model>
+      <model usable='no' vendor='Intel'>Skylake-Client-noTSX-IBRS</model>
+      <model usable='no' vendor='Intel'>Skylake-Client-IBRS</model>
+      <model usable='no' vendor='Intel'>Skylake-Client</model>
+      <model usable='no' vendor='Intel'>SapphireRapids</model>
+      <model usable='no' vendor='Intel'>SandyBridge-IBRS</model>
+      <model usable='no' vendor='Intel'>SandyBridge</model>
+      <model usable='yes' vendor='Intel'>Penryn</model>
+      <model usable='no' vendor='AMD'>Opteron_G5</model>
+      <model usable='no' vendor='AMD'>Opteron_G4</model>
+      <model usable='no' vendor='AMD'>Opteron_G3</model>
+      <model usable='no' vendor='AMD'>Opteron_G2</model>
+      <model usable='yes' vendor='AMD'>Opteron_G1</model>
+      <model usable='no' vendor='Intel'>Nehalem-IBRS</model>
+      <model usable='yes' vendor='Intel'>Nehalem</model>
+      <model usable='no' vendor='Intel'>IvyBridge-IBRS</model>
+      <model usable='no' vendor='Intel'>IvyBridge</model>
+      <model usable='no' vendor='Intel'>Icelake-Server-noTSX</model>
+      <model usable='no' vendor='Intel'>Icelake-Server</model>
+      <model usable='no' vendor='Intel'>Haswell-noTSX-IBRS</model>
+      <model usable='no' vendor='Intel'>Haswell-noTSX</model>
+      <model usable='no' vendor='Intel'>Haswell-IBRS</model>
+      <model usable='no' vendor='Intel'>Haswell</model>
+      <model usable='no' vendor='AMD'>EPYC-Rome</model>
+      <model usable='no' vendor='AMD'>EPYC-Milan</model>
+      <model usable='no' vendor='AMD'>EPYC-IBPB</model>
+      <model usable='no' vendor='AMD'>EPYC</model>
+      <model usable='no' vendor='Hygon'>Dhyana</model>
+      <model usable='no' vendor='Intel'>Cooperlake</model>
+      <model usable='yes' vendor='Intel'>Conroe</model>
+      <model usable='no' vendor='Intel'>Cascadelake-Server-noTSX</model>
+      <model usable='no' vendor='Intel'>Cascadelake-Server</model>
+      <model usable='no' vendor='Intel'>Broadwell-noTSX-IBRS</model>
+      <model usable='no' vendor='Intel'>Broadwell-noTSX</model>
+      <model usable='no' vendor='Intel'>Broadwell-IBRS</model>
+      <model usable='no' vendor='Intel'>Broadwell</model>
+      <model usable='yes' vendor='unknown'>486</model>
+    </mode>
+  </cpu>
+  <memoryBacking supported='yes'>
+    <enum name='sourceType'>
+      <value>file</value>
+      <value>anonymous</value>
+    </enum>
+  </memoryBacking>
+  <devices>
+    <disk supported='yes'>
+      <enum name='diskDevice'>
+        <value>disk</value>
+        <value>cdrom</value>
+        <value>floppy</value>
+        <value>lun</value>
+      </enum>
+      <enum name='bus'>
+        <value>ide</value>
+        <value>fdc</value>
+        <value>scsi</value>
+        <value>virtio</value>
+        <value>usb</value>
+        <value>sata</value>
+      </enum>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
+      </enum>
+    </disk>
+    <graphics supported='yes'>
+      <enum name='type'>
+        <value>vnc</value>
+        <value>spice</value>
+      </enum>
+    </graphics>
+    <video supported='yes'>
+      <enum name='modelType'>
+        <value>vga</value>
+        <value>cirrus</value>
+        <value>vmvga</value>
+        <value>qxl</value>
+        <value>virtio</value>
+        <value>none</value>
+        <value>bochs</value>
+        <value>ramfb</value>
+      </enum>
+    </video>
+    <hostdev supported='yes'>
+      <enum name='mode'>
+        <value>subsystem</value>
+      </enum>
+      <enum name='startupPolicy'>
+        <value>default</value>
+        <value>mandatory</value>
+        <value>requisite</value>
+        <value>optional</value>
+      </enum>
+      <enum name='subsysType'>
+        <value>usb</value>
+        <value>pci</value>
+        <value>scsi</value>
+      </enum>
+      <enum name='capsType'/>
+      <enum name='pciBackend'/>
+    </hostdev>
+    <rng supported='yes'>
+      <enum name='model'>
+        <value>virtio</value>
+        <value>virtio-transitional</value>
+        <value>virtio-non-transitional</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>random</value>
+        <value>egd</value>
+        <value>builtin</value>
+      </enum>
+    </rng>
+    <filesystem supported='yes'>
+      <enum name='driverType'>
+        <value>path</value>
+        <value>handle</value>
+      </enum>
+    </filesystem>
+    <tpm supported='yes'>
+      <enum name='model'>
+        <value>tpm-tis</value>
+        <value>tpm-crb</value>
+      </enum>
+      <enum name='backendModel'/>
+    </tpm>
+    <redirdev supported='yes'>
+      <enum name='bus'>
+        <value>usb</value>
+      </enum>
+    </redirdev>
+    <channel supported='yes'>
+      <enum name='type'>
+        <value>pty</value>
+        <value>unix</value>
+        <value>spicevmc</value>
+      </enum>
+    </channel>
+    <crypto supported='yes'>
+      <enum name='model'>
+        <value>virtio</value>
+      </enum>
+      <enum name='type'>
+        <value>qemu</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>builtin</value>
+      </enum>
+    </crypto>
+  </devices>
+  <features>
+    <gic supported='no'/>
+    <vmcoreinfo supported='yes'/>
+    <genid supported='yes'/>
+    <backingStoreInput supported='yes'/>
+    <backup supported='yes'/>
+    <async-teardown supported='no'/>
+    <sev supported='no'/>
+    <sgx supported='no'/>
+    <hyperv supported='yes'>
+      <enum name='features'>
+        <value>spinlocks</value>
+        <value>vendor_id</value>
+      </enum>
+    </hyperv>
+  </features>
+</domainCapabilities>
+

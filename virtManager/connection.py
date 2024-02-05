@@ -221,7 +221,7 @@ class vmmConnection(vmmGObject):
         elif domtype == "kvm":
             label = "KVM"
         elif domtype == "hvf":
-            label = "Hypervisor.framework"
+            label = "Hypervisor.framework"  # pragma: no cover
 
         return label
 
