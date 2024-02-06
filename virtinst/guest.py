@@ -213,6 +213,7 @@ class Guest(XMLBuilder):
         self.skip_default_tpm = False
         self.have_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
+        self.loongarch_cpu_default = self.cpu.SPECIAL_MODE_HOST_MODEL_ONLY
 
         # qemu 6.1, fairly new when we added this option, has an unfortunate
         # bug with >= 15 root ports, so we choose 14 instead of our original 16
@@ -353,7 +354,8 @@ class Guest(XMLBuilder):
         if (self.os.is_arm_machvirt() or
             self.os.is_riscv_virt() or
             self.os.is_s390x() or
-            self.os.is_pseries()):
+            self.os.is_pseries() or
+            self.os.is_loongarch()):
             return True
 
         if not os_support:
@@ -542,7 +544,7 @@ class Guest(XMLBuilder):
             # and doesn't break QEMU internal snapshots
             prefer_efi = self.osinfo.requires_firmware_efi(self.os.arch)
         else:
-            prefer_efi = self.os.is_arm_machvirt() or self.conn.is_bhyve()
+            prefer_efi = self.os.is_arm_machvirt() or self.conn.is_bhyve() or self.os.is_loongarch()
 
         log.debug("Prefer EFI => %s", prefer_efi)
         return prefer_efi
@@ -559,6 +561,8 @@ class Guest(XMLBuilder):
         """
         self.os.loader_ro = True
         self.os.loader_type = "pflash"
+        if (self.os.is_loongarch()):
+            self.os.loader_type = "rom"
         self.os.loader = path
 
         # If the firmware name contains "secboot" it is probably build
@@ -908,7 +912,8 @@ class Guest(XMLBuilder):
             usb_tablet = True
         if (self.os.is_arm_machvirt() or
             self.os.is_riscv_virt() or
-            self.os.is_pseries()):
+            self.os.is_pseries() or
+            self.os.is_loongarch()):
             usb_tablet = True
             usb_keyboard = True
 
@@ -1022,7 +1027,8 @@ class Guest(XMLBuilder):
         if self.os.is_container() and not self.conn.is_vz():
             return
         if (not self.os.is_x86() and
-            not self.os.is_pseries()):
+            not self.os.is_pseries() and
+            not self.os.is_loongarch()):
             return
         self.add_device(DeviceGraphics(self.conn))
 
@@ -1164,6 +1170,8 @@ class Guest(XMLBuilder):
         self.add_device(dev)
 
     def _add_spice_usbredir(self):
+        if self.os.is_loongarch():
+            return
         if not self.lookup_domcaps().supports_redirdev_usb():
             return  # pragma: no cover
         if self.skip_default_usbredir:

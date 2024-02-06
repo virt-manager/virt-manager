@@ -291,6 +291,10 @@ class DomainCapabilities(XMLBuilder):
             r".*arm/QEMU_EFI.*",  # fedora, gerd's firmware repo
             r".*edk2-arm-code\.fd"  # upstream qemu
         ],
+        "loongarch64": [
+            ".*loongarch_bios.bin",  # loongarch
+            ".*loongarch_bios.bin",  # gerd's firmware repo
+        ],
     }
 
     def find_uefi_path_for_arch(self):
@@ -446,7 +450,7 @@ class DomainCapabilities(XMLBuilder):
             # support. Use our pre-existing logic
             if not self.conn.is_qemu() and not self.conn.is_test():
                 return False
-            return self.conn.caps.host.cpu.arch in ["i686", "x86_64"]
+            return self.conn.caps.host.cpu.arch in ["i686", "x86_64", "loongarch64"]
 
         return self.devices.graphics.get_enum("type").has_value("spice")
 
