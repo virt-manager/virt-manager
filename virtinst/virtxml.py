@@ -10,7 +10,6 @@ import libvirt
 
 from . import cli
 from .cli import fail, fail_conflicting, print_stdout, print_stderr
-from .devices import DeviceConsole
 from .guest import Guest
 from .logger import log
 from . import xmlutil
@@ -188,13 +187,6 @@ def action_remove_device(guest, options, parserclass):
     devs = _find_objects_to_edit(guest, "remove-device",
         getattr(options, parserclass.cli_arg_name)[-1], parserclass)
     devs = xmlutil.listify(devs)
-
-    # Check for console duplicate devices
-    for dev in devs[:]:
-        condup = DeviceConsole.get_console_duplicate(guest, dev)
-        if condup:
-            log.debug("Found duplicate console device:\n%s", condup.get_xml())
-            devs.append(condup)
 
     for dev in devs:
         guest.remove_device(dev)
