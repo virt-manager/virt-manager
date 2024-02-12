@@ -500,8 +500,11 @@ class Guest(XMLBuilder):
 
     def add_device(self, dev):
         self.devices.add_child(dev)
+
     def remove_device(self, dev):
         self.devices.remove_child(dev)
+        self._remove_duplicate_console(dev)
+
     devices = XMLChildProperty(_DomainDevices, is_single=True)
 
     def find_device(self, origdev):
@@ -1197,3 +1200,9 @@ class Guest(XMLBuilder):
         self._add_spice_channels()
         self._add_spice_sound()
         self._add_spice_usbredir()
+
+    def _remove_duplicate_console(self, dev):
+        condup = DeviceConsole.get_console_duplicate(self, dev)
+        if condup:
+            log.debug("Found duplicate console device:\n%s", condup.get_xml())
+            self.devices.remove_child(condup)
