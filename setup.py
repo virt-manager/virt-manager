@@ -360,7 +360,7 @@ class CheckPylint(setuptools.Command):
         self.jobs = None
 
     def finalize_options(self):
-        if self.jobs:
+        if self.jobs is not None:
             self.jobs = int(self.jobs)
 
     def run(self):
@@ -414,7 +414,7 @@ class CheckPylint(setuptools.Command):
             "--rcfile", ".pylintrc",
             "--output-format=%s" % output_format,
         ]
-        if self.jobs:
+        if self.jobs is not None:
             pylint_opts += ["--jobs=%d" % self.jobs]
 
         pylint.lint.Run(lintfiles + pylint_opts)
