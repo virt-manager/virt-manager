@@ -1345,7 +1345,9 @@ c.add_invalid("test --cpu host-passthrough", grep="One of --edit, ")  # conflict
 c.add_invalid("test --edit --add-device --disk path=foo", grep="Conflicting options --edit, --add-device")
 c.add_invalid("test --edit 0 --disk path=", grep="Invalid --edit option '0'")
 c.add_invalid("test --edit --hostdev driver_name=vfio", grep='No --hostdev objects found in the XML')
-c.add_invalid("test --edit --cpu host-passthrough --boot hd,network", grep="Only one change operation may be specified")
+c.add_invalid("test --edit --cpu host-passthrough --boot hd,network", grep="Each XML-ACTION requires one --edit option.")
+c.add_invalid("test --edit --cpu host-passthrough --edit", grep="Each XML-ACTION requires one --edit option.")
+c.add_compare("test --print-diff --edit --cpu host-passthrough --edit --boot hd,network", "multiple-edit")
 c.add_invalid("test --edit", grep="No change specified.")
 c.add_invalid("test --edit 2 --cpu host-passthrough", grep="'--edit 2' requested but there's only 1 --cpu object in the XML")
 c.add_invalid("test-for-virtxml --edit 5 --tpm /dev/tpm", grep="'--edit 5' requested but there's only 1 --tpm object in the XML")
@@ -1355,6 +1357,7 @@ c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update 
 c.add_invalid("--build-xml --memory 10,maxmemory=20", grep="--build-xml not supported for --memory")
 c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
 c.add_invalid("test --add-device --xml ./@foo=bar", grep="--xml can only be used with --edit")
+c.add_invalid("test --edit --xml ./@foo=bar --edit --video model=virtio", grep="--xml cannot be used with any other XML-ACTION")
 c.add_invalid("test-for-virtxml --edit --boot refresh-machine-type=yes", grep="Don't know how to refresh")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # stdin test

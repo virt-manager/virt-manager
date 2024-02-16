@@ -115,8 +115,9 @@ def check_action_collision(options):
     collisions = []
     for cliname in actions:
         optname = cliname.replace("-", "_")
-        if getattr(options, optname) not in [False, -1]:
-            collisions.append(cliname)
+        if getattr(options, optname) not in [False, -1, None]:
+            if cliname not in collisions:
+                collisions.append(cliname)
 
     if len(collisions) == 0:
         fail(_("One of %s must be specified.") %
@@ -126,31 +127,51 @@ def check_action_collision(options):
              ", ".join(["--" + c for c in collisions]))
 
 
-def check_xmlopt_collision(options):
-    collisions = []
+def get_option_parsers(options):
+    parsers = []
+
     for parserclass in cli.VIRT_PARSERS + [cli.ParserXML]:
         if getattr(options, parserclass.cli_arg_name):
-            collisions.append(parserclass)
+            parsers.append(parserclass)
 
-    if len(collisions) == 0:
+    if len(parsers) == 0:
         fail(_("No change specified."))
-    if len(collisions) != 1:
-        fail(_("Only one change operation may be specified "
-               "(conflicting options %s)") %
-               [c.cli_flag_name() for c in collisions])
 
-    return collisions[0]
+    if cli.ParserXML in parsers and parsers.count(cli.ParserXML) != len(parsers):
+        fail(_("--xml cannot be used with any other XML-ACTION"))
+
+    return parsers
 
 
-def action_edit(guest, options, parserclass):
+def run_action(parsers, xmlobj, options, devs=None):
+    ret = []
+
+    edits = None
+    if options.edit:
+        edits = iter(options.edit)
+
+    for parserclass in parsers:
+        if options.edit:
+            ret.extend(action_edit(xmlobj, options, next(edits), parserclass))
+        elif options.add_device:
+            ret.extend(action_add_device(xmlobj, options, parserclass, devs))
+        elif options.remove_device:
+            ret.extend(action_remove_device(xmlobj, options, parserclass))
+        elif options.build_xml:
+            ret.extend(action_build_xml(options, parserclass, xmlobj))
+
+    return ret
+
+
+def action_edit(guest, options, edit, parserclass):
     if parserclass.guest_propname:
-        inst = _find_objects_to_edit(guest, "edit", options.edit, parserclass)
+        inst = _find_objects_to_edit(guest, "edit", edit, parserclass)
     else:
         inst = guest
-        if options.edit and options.edit != '1' and options.edit != 'all':
+        if edit and edit != '1' and edit != 'all':
             fail(_("'--edit %(option)s' doesn't make sense with "
                    "--%(objecttype)s, just use empty '--edit'") %
-                 {"option": options.edit,
+                 {"option": edit,
                   "objecttype": parserclass.cli_arg_name})
     if options.os_variant is not None:
         fail(_("--os-variant/--osinfo is not supported with --edit"))
@@ -298,7 +319,7 @@ def update_changes(domain, devs, action, confirm):
             print_stdout("")
 
 
-def prepare_changes(orig_xmlobj, options, parserclass, devs=None):
+def prepare_changes(orig_xmlobj, options, parsers, devs=None):
     """
     Parse the command line device/XML arguments, and apply the changes to
     a copy of the passed in xmlobj.
@@ -307,8 +328,8 @@ def prepare_changes(orig_xmlobj, options, parserclass, devs=None):
     """
     origxml = orig_xmlobj.get_xml()
     xmlobj = orig_xmlobj.__class__(conn=orig_xmlobj.conn, parsexml=origxml)
-    has_edit = options.edit != -1
-    is_xmlcli = parserclass is cli.ParserXML
+    has_edit = options.edit is not None
+    is_xmlcli = cli.ParserXML in parsers
 
     if is_xmlcli and not has_edit:
         fail(_("--xml can only be used with --edit"))
@@ -318,15 +339,15 @@ def prepare_changes(orig_xmlobj, options, parserclass, devs=None):
             devs = []
             cli.parse_xmlcli(xmlobj, options)
         else:
-            devs = action_edit(xmlobj, options, parserclass)
+            devs = run_action(parsers, xmlobj, options)
         action = "update"
 
     elif options.add_device:
-        devs = action_add_device(xmlobj, options, parserclass, devs)
+        devs = run_action(parsers, xmlobj, options, devs=devs)
         action = "hotplug"
 
     elif options.remove_device:
-        devs = action_remove_device(xmlobj, options, parserclass)
+        devs = run_action(parsers, xmlobj, options)
         action = "hotunplug"
 
     newxml = xmlobj.get_xml()
@@ -361,7 +382,8 @@ def parse_args():
         help=_("Domain name, id, or uuid"))
 
     actg = parser.add_argument_group(_("XML actions"))
-    actg.add_argument("--edit", nargs='?', default=-1,
+    actg.add_argument("--edit", nargs='?', default=None,
+                      action="append",
         help=_("Edit VM XML. Examples:\n"
         "--edit --disk ...     (edit first disk device)\n"
         "--edit 2 --disk ...   (edit second disk device)\n"
@@ -473,13 +495,16 @@ def main(conn=None):
     #   --build-xml
     check_action_collision(options)
 
-    # Ensure there wasn't more than one device/xml config option
-    # specified. So reject '--disk X --network X'
-    parserclass = check_xmlopt_collision(options)
+    parsers = get_option_parsers(options)
 
-    if options.update and not parserclass.guest_propname:
-        fail(_("Don't know how to --update for --%s") %
-             (parserclass.cli_arg_name))
+    if options.edit and len(options.edit) != len(parsers):
+        fail(_("Each XML-ACTION requires one --edit option."))
+
+    if options.update:
+        for parserclass in parsers:
+            if not parserclass.guest_propname:
+                fail(_("Don't know how to --update for --%s") %
+                    (parserclass.cli_arg_name))
 
     conn = cli.getConnection(options.connect, conn)
 
@@ -494,7 +519,7 @@ def main(conn=None):
     vm_is_running = bool(active_xmlobj)
 
     if options.build_xml:
-        devs = action_build_xml(options, parserclass, inactive_xmlobj)
+        devs = run_action(parsers, inactive_xmlobj, options)
         for dev in devs:
             # pylint: disable=no-member
             print_stdout(xmlutil.unindent_device_xml(dev.get_xml()))
@@ -507,7 +532,7 @@ def main(conn=None):
             fail_conflicting("--update", "--start")
         if vm_is_running:
             devs, action, dummy = prepare_changes(
-                    active_xmlobj, options, parserclass)
+                    active_xmlobj, options, parsers)
             update_changes(domain, devs, action, options.confirm)
             performed_update = True
         else:
@@ -519,7 +544,7 @@ def main(conn=None):
 
     original_xml = inactive_xmlobj.get_xml()
     devs, action, xmlobj_to_define = prepare_changes(
-            inactive_xmlobj, options, parserclass, devs=devs)
+            inactive_xmlobj, options, parsers, devs=devs)
     if not options.define:
         if options.start:
             start_domain_transient(conn, xmlobj_to_define, devs,
