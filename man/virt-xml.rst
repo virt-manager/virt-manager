@@ -71,6 +71,10 @@ XML ACTIONS
     before applying the requested changes. This allows completely rebuilding
     an XML block. See EXAMPLES for some usage.
 
+    It is possible to edit multiple XML blocks but every XML block needs to
+    be paired with it's own ``--edit``. So for example you can edit graphics
+    and video using ``--edit --graphics vnc --edit --video virtio``.
+
     EDIT-OPTIONS examples:
 
     * ``--edit``
