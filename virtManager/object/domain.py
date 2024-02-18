@@ -751,6 +751,18 @@ class vmmDomain(vmmLibvirtObject):
         if nvram != _SENTINEL:
             guest.os.nvram = nvram
 
+        if guest.os.machine == "q35":
+            pcie_controllers_already_created = False
+            for dev in guest.devices.controller:
+                if dev.model in ["pcie-root", "pcie-root-port"]:
+                    pcie_controllers_already_created = True
+                    break
+            if not pcie_controllers_already_created:
+                guest.add_q35_pcie_controllers()
+        elif guest.os.machine == "pc":
+            for dev in guest.devices.controller:
+                if dev.model in ["pcie-root", "pcie-root-port"]:
+                    guest.remove_device(dev)
         self._redefine_xmlobj(guest)
 
     def define_os(self, os_name=_SENTINEL):
