@@ -636,6 +636,11 @@ class DeviceDisk(Device):
         return self._storage_backend.get_path()
 
     def set_source_path(self, newpath):
+        # Some file managers use 'file://' when passing files to
+        # virt-manager, we need to strip it from the newpath.
+        if newpath is not None:
+            newpath = newpath.removeprefix("file://")
+
         if self._storage_backend.will_create_storage():
             raise xmlutil.DevError(
                     "Can't change disk path if storage creation info "

@@ -929,6 +929,7 @@ c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm --os
 c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
+c.add_valid("--disk file://%(NEWIMG1)s,size=1")  # Check that 'file://' prefix is removed correctly
 c.add_invalid("--disk /dev/zero --nodisks", grep="Cannot specify storage and use --nodisks")
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse", grep="There is not enough free space")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000", grep="The requested volume capacity will exceed the")  # Huge file, sparse, but no prompting
