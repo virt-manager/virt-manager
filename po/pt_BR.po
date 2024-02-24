@@ -22,13 +22,14 @@
 # Gustavo Costa <xfgusta@gmail.com>, 2021, 2022, 2023.
 # Rodrigo Tavares <rodrigost23@gmail.com>, 2021, 2022.
 # Renan Birck Pinheiro <renan.ee.ufsm@gmail.com>, 2021, 2022.
+# "Geraldo S. Simião Kutz" <geraldo.simiao.kutz@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-03-02 08:32+0000\n"
-"Last-Translator: Gustavo Costa <xfgusta@gmail.com>\n"
+"PO-Revision-Date: 2024-01-16 00:36+0000\n"
+"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -36,7 +37,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -87,11 +88,11 @@ msgstr "URI do libvirt:"
 
 #: data/virt-manager.appdata.xml.in:39
 msgid "qemu"
-msgstr ""
+msgstr "qemu"
 
 #: data/virt-manager.appdata.xml.in:40
 msgid "kvm"
-msgstr ""
+msgstr "kvm"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
@@ -189,7 +190,7 @@ msgstr "_Canal:"
 
 #: ui/addhardware.ui:908
 msgid "_Share Clipboard:"
-msgstr ""
+msgstr "_Compartilhar área de transferência:"
 
 #: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
@@ -1219,7 +1220,7 @@ msgstr "Estado:"
 
 #: ui/details.ui:3695
 msgid "Clipboard:"
-msgstr ""
+msgstr "Área de transferência:"
 
 #: ui/details.ui:3707
 msgid "Source path:"
@@ -1328,7 +1329,7 @@ msgstr "_Formato:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "Mensagem de aviso blah foo"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -3147,7 +3148,7 @@ msgstr "Erro ao continuar a instalação: %s"
 
 #: virtManager/createvm.py:2093
 msgid "Bootstraping container"
-msgstr ""
+msgstr "Inicializando container"
 
 #: virtManager/createvol.py:140
 #, python-format
@@ -5523,6 +5524,9 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
+"Configurar os sockets vsock do convidado. Ex:\n"
+"--vsock cid.auto=yes\n"
+"--vsock cid.address=7"
 
 #: virtinst/cli.py:827
 msgid ""
@@ -5534,19 +5538,21 @@ msgstr ""
 
 #: virtinst/cli.py:834
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr ""
+msgstr "Definir as configurações <iothreads> e <iothreadids> para o domínio."
 
 #: virtinst/cli.py:838
 msgid "Set domain seclabel configuration."
-msgstr ""
+msgstr "Definir a configuração seclabel para o domínio."
 
 #: virtinst/cli.py:842
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
+"Definir para o convidado executar as operações de gerenciamento de chaves "
+"criptográficas S390."
 
 #: virtinst/cli.py:847
 msgid "Tune CPU parameters for the domain process."
-msgstr ""
+msgstr "Ajustar os parâmetros de CPU para o processo de domínio."
 
 #: virtinst/cli.py:851
 msgid "Tune NUMA policy for the domain process."
@@ -5574,13 +5580,16 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
+"Definir <features> XML para o domínio. Ex:\n"
+"--features acpi=off\n"
+"--features apic=on,apic.eoi=on"
 
 #: virtinst/cli.py:874
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
-"Definir o domínio <clock> XML. Ex:\n"
+"Definir <clock> XML para o domínio. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: virtinst/cli.py:879
