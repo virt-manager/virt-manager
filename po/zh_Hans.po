@@ -1,42 +1,17 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-#
-# Translators:
-# 1dot75cm <sensor.wen@gmail.com>, 2014
-# Aron Xu <happyaron.xu@gmail.com>, 2010
-# Christopher Meng <cickumqt@gmail.com>, 2013
-# Hongwei Hou <neilhhw@hotmail.com>, 2014
-# Leah Liu <lliu@redhat.com>, 2008-2009
-# Hongwei Hou <neilhhw@hotmail.com>, 2014
-# 1dot75cm <sensor.wen@gmail.com>, 2014-2015
-# Wei Liu <lliu@redhat.com>, 2012
-# Wei Liu <LLIU@REDHAT.COM>, 2012
-# Xi Huang <xhuang@redhat.com>, 2006
-# Xi HUANG <xhuang@redhat.com>, 2007
-# Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Martin Liu <martin@aws-faq.com>, 2015. #zanata
-# Leah Liu <lliu@redhat.com>, 2016. #zanata
-# mosquito <sensor.wen@gmail.com>, 2016. #zanata
-# Cole Robinson <crobinso@redhat.com>, 2017. #zanata
-# Huacai Chen <chenhuacai@gmail.com>, 2020.
-# Pavel Hrdina <phrdina@redhat.com>, 2020, 2022.
-# Whired Planck <fungdaat31@outlook.com>, 2020, 2021, 2022.
-# Xi Lu <lx@shellcodes.org>, 2023.
-# Luke Na <narukeu@outlook.com>, 2023.
-# zk dc <zkdc2345@qq.com>, 2023.
-# 连 浩鑫 <lianhaoxin2012@outlook.com>, 2023.
+# This file is distributed under the same license as the virt-manager package.
 # eirik song <eirik.song@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2024-02-24 03:11+0000\n"
+"PO-Revision-Date: 2024-02-24 15:35+0000\n"
 "Last-Translator: eirik song <eirik.song@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
-"projects/virt-manager/virt-manager/zh_CN/>\n"
-"Language: zh_CN\n"
+"projects/virt-manager/virt-manager/zh_Hans/>\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -358,8 +333,8 @@ msgid ""
 "like change passwords or static IPs, please see the virt-sysprep(1) tool.</"
 "span>"
 msgstr ""
-"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。如果需要做一些配"
-"置\n"
+"<span size='small'>克隆 <u>不</u> 修改客户机操作系统内容。"
+"如果需要做一些配置\n"
 "比如修改密码或设置静态 IP 地址，请查看 virt-sysprep(1) 工具。</span>"
 
 #: ui/clone.ui:706
@@ -1658,11 +1633,12 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"隧道迁移使用 libvirtd 连接通道，而不是由虚拟机管理程序打开通向目标的单独网络"
-"连接。源 libvirt 实例直接连接到目标 libvirt 实例。\n"
+"隧道迁移使用 libvirtd "
+"连接通道，而不是由虚拟机管理程序打开通向目标的单独网络连接。源 libvirt "
+"实例直接连接到目标 libvirt 实例。\n"
 "\n"
-"由于不需要开放额外的防火墙端口，因此可以简化配置。如果启用 libvirt 连接加密，"
-"还可以加密迁移流量。但它很难由 SSH 来完成数据传输工作。"
+"由于不需要开放额外的防火墙端口，因此可以简化配置。如果启用 libvirt "
+"连接加密，还可以加密迁移流量。但它很难由 SSH 来完成数据传输工作。"
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1726,8 +1702,7 @@ msgstr "设备名称(_V)："
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
-msgstr ""
-"<small>在多数配置中，macvtap 不能为主机到客户机的网络通信工作。</small>"
+msgstr "<small>在多数配置中，macvtap 不能为主机到客户机的网络通信工作。</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
@@ -1874,9 +1849,8 @@ msgstr "更改..."
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
-msgstr ""
-"当改变客户机窗口大小时，请修改其分辨率。仅适用于使用 Spice 和桌面代理正确配置"
-"的客户机。"
+msgstr "当改变客户机窗口大小时，请修改其分辨率。仅适用于使用 Spice "
+"和桌面代理正确配置的客户机。"
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
@@ -2132,9 +2106,8 @@ msgstr "客户机 CID(_I)："
 msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
-msgstr ""
-"<small>XML 编辑已在“首选项” 中被禁用。仅当知道自己在做什么时再启用它。</"
-"small>"
+msgstr "<small>XML 编辑已在“首选项” "
+"中被禁用。仅当知道自己在做什么时再启用它。</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
@@ -2906,9 +2879,8 @@ msgstr "这通常是因为计算机没有安装 QEMU 或 KVM，或者没有载�
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
-msgstr ""
-"KVM 不可用。这可能是因为没有安装 KVM 软件包，或者没有载入 KVM 内核模块。虚拟"
-"系统可能性能会很差。"
+msgstr "KVM 不可用。这可能是因为没有安装 KVM 软件包，或者没有载入 KVM "
+"内核模块。虚拟系统可能性能会很差。"
 
 #: virtManager/createvm.py:649
 #, python-format
@@ -3151,7 +3123,7 @@ msgstr "删除 “%(vm)s” 虚拟机出错 ：%(error)s"
 
 #: virtManager/delete.py:212
 msgid "Additionally, there were errors removing certain storage devices: \n"
-msgstr "另外，删除某些存储设备时出错：\n"
+msgstr "另外，删除某些存储设备时出错： \n"
 
 #: virtManager/delete.py:216
 msgid "Errors encountered while removing certain storage devices."
@@ -3817,18 +3789,16 @@ msgstr ""
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
-msgstr ""
-"确定要应用快照 '%(name)s' 吗？所有自最后一次快照创建以来的对磁盘的更改都会被"
-"丢弃。"
+msgstr "确定要应用快照 '%(name)s' "
+"吗？所有自最后一次快照创建以来的对磁盘的更改都会被丢弃。"
 
 #: virtManager/details/snapshots.py:657
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
-msgstr ""
-"确定要应用快照 '%(name)s' 吗？所有自最后一次快照创建以来对磁盘和配置的更改都"
-"会被丢弃。"
+msgstr "确定要应用快照 '%(name)s' "
+"吗？所有自最后一次快照创建以来对磁盘和配置的更改都会被丢弃。"
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -3844,8 +3814,8 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 "快照 '%s' 仅包含磁盘状态，没有内存状态。还原快照将使现有的保存状态保持原状，"
-"从而有效地在正在运行的系统下切换磁盘。之后再运行域可能会导致大量文件系统损"
-"坏。因此，在还原快照之前，将移除保存的状态。"
+"从而有效地在正在运行的系统下切换磁盘。之后再运行域可能会导致大量文件系统损坏"
+"。因此，在还原快照之前，将移除保存的状态。"
 
 #: virtManager/details/snapshots.py:683
 msgid "Running snapshot"
@@ -3908,8 +3878,7 @@ msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
-msgstr ""
-"客户机位于具有 '%s' 传输的远程主机上，但仅配置为在本地监听。要远程连接，需要"
+msgstr "客户机位于具有 '%s' 传输的远程主机上，但仅配置为在本地监听。要远程连接，需要"
 "更改客户机的监听地址。"
 
 #: virtManager/details/viewers.py:356
@@ -4571,8 +4540,7 @@ msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
-msgstr ""
-"通过隧道迁移需要一个可远程访问的 libvirt URI，但已选的连接是一个本地 URI。"
+msgstr "通过隧道迁移需要一个可远程访问的 libvirt URI，但已选的连接是一个本地 URI。"
 "Libvirt 将会拒绝迁移，除非添加一个端口转发。"
 
 #: virtManager/migrate.py:292
@@ -5062,16 +5030,15 @@ msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"主机不支持机器 '%(machine)s' 的域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化"
-"类型 '%(virttype)s'"
+"主机不支持机器 '%(machine)s' 的域类型 %(domain)s 用于 '%(arch)s' "
+"架构的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/capabilities.py:314
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
-msgstr ""
-"主机不支持域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化类型 '%(virttype)s'"
+msgstr "主机不支持域类型 %(domain)s 用于 '%(arch)s' 架构的虚拟化类型 '%(virttype)s'"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
@@ -5099,9 +5066,8 @@ msgstr ""
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
-msgstr ""
-"%(path)s 可能不能被虚拟机管理程序访问。将需要授予 '%(user)s' 用户搜索以下目录"
-"的权限：%(dirs)s"
+msgstr "%(path)s 可能不能被虚拟机管理程序访问。将需要授予 '%(user)s' "
+"用户搜索以下目录的权限：%(dirs)s"
 
 #: virtinst/cli.py:319
 #, python-format
@@ -5599,8 +5565,7 @@ msgstr "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
-msgstr ""
-"无法连接到图形控制台：没有安装 virt-viewer。请安装 'virt-viewer' 软件包。"
+msgstr "无法连接到图形控制台：没有安装 virt-viewer。请安装 'virt-viewer' 软件包。"
 
 #: virtinst/cli.py:1940
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
@@ -5721,9 +5686,8 @@ msgstr "必须为非现有卷 '%s' 指定大小"
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
-msgstr ""
-"不知道如何为路径 '%s' 创建存储。首先使用 libvirt API 将父目录作为存储池来管"
-"理。"
+msgstr "不知道如何为路径 '%s' 创建存储。首先使用 libvirt API "
+"将父目录作为存储池来管理。"
 
 #: virtinst/devices/disk.py:379
 msgid "Format attribute not supported for this volume type"
@@ -5915,8 +5879,7 @@ msgstr "找不到安装树的内核。"
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
-msgstr ""
-"除非传递了额外的内核参数来将安装程序指向网络可访问的安装树，否则目录树的安装"
+msgstr "除非传递了额外的内核参数来将安装程序指向网络可访问的安装树，否则目录树的安装"
 "通常不起作用。"
 
 #: virtinst/install/unattended.py:63
@@ -5960,8 +5923,8 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
-"操作系统 '%(osname)s' 不支持 '%(profilename)s' 配置文件的无人值守安装。可用的"
-"配置文件：%(profiles)s"
+"操作系统 '%(osname)s' 不支持 '%(profilename)s' "
+"配置文件的无人值守安装。可用的配置文件：%(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -6086,8 +6049,7 @@ msgstr "正在分配 '%(filename)s'"
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
-msgstr ""
-"存储池中没有足够空间来创建卷。(%(mem1)s M 需要的空间 > %(mem2)s M 可用空间)"
+msgstr "存储池中没有足够空间来创建卷。(%(mem1)s M 需要的空间 > %(mem2)s M 可用空间)"
 
 #: virtinst/storage.py:733
 #, python-format
@@ -6095,8 +6057,7 @@ msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
-msgstr ""
-"当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%(mem1)s M 需要的容量 > "
+msgstr "当卷已经被全部分配后，需要的卷容量将超过可用池空间。(%(mem1)s M 需要的容量 > "
 "%(mem2)s M 可用容量)"
 
 #: virtinst/virtclone.py:20
@@ -6118,9 +6079,10 @@ msgid ""
 msgstr ""
 "复制一个虚拟机，需修改如 MAC 地址，名称等所有主机端唯一的配置。\n"
 "\n"
-"虚拟机的内容并没有改变：virt-clone 不修改任何客户机系统内部的配置，它只复制磁"
-"盘和主机端的修改。所以像修改密码，修改静态 IP 地址等操作都在本工具复制范围"
-"内。如何修改此类型的配置，请参考 virt-sysprep(1)。"
+"虚拟机的内容并没有改变：virt-clone "
+"不修改任何客户机系统内部的配置，它只复制磁盘和主机端的修改。所以像修改密码，"
+"修改静态 IP 地址等操作都在本工具复制范围内。如何修改此类型的配置，请参考 "
+"virt-sysprep(1)。"
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1030
 msgid "General Options"
@@ -6167,8 +6129,9 @@ msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
-"跳过设备目标的复制。 （例如，如果 'vda' 是不想复制的磁盘，并且不想在新虚拟系"
-"统中使用相同的路径，请使用 --skip-copy=vda 选项）"
+"跳过设备目标的复制。 （例如，如果 'vda' "
+"是不想复制的磁盘，并且不想在新虚拟系统中使用相同的路径，请使用 --skip-"
+"copy=vda 选项）"
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6179,8 +6142,7 @@ msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
-msgstr ""
-"不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆"
+msgstr "不要将存储内容克隆到指定的文件路径，它们的内容将保持不变。这要求为每个可克隆"
 "磁盘映像指定现有路径。"
 
 #: virtinst/virtclone.py:113
@@ -6227,9 +6189,8 @@ msgstr "根据用户要求取消安装"
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
-msgstr ""
-"-c 后指定的内容似乎是一个 libvirt URI。您是想使用 --connect 选项吗？如果不"
-"是，请改用 --cdrom"
+msgstr "-c 后指定的内容似乎是一个 libvirt URI。您是想使用 --connect "
+"选项吗？如果不是，请改用 --cdrom"
 
 #: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
@@ -6276,9 +6237,8 @@ msgstr ""
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
-msgstr ""
-"CDROM 介质默认情况下不输出信息到文本控制台，所以可能看不到安装的输出。可能需"
-"要使用 --location 选项。"
+msgstr "CDROM 介质默认情况下不输出信息到文本控制台，所以可能看不到安装的输出。"
+"可能需要使用 --location 选项。"
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6289,8 +6249,7 @@ msgstr "请参考 man 手册以了解使用 --location 选项与 CDROM 介质的
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
-msgstr ""
-"为操作系统 %(osname)s 请求的内存大小 %(mem1)s MiB 小于建议值 %(mem2)s MiB"
+msgstr "为操作系统 %(osname)s 请求的内存大小 %(mem1)s MiB 小于建议值 %(mem2)s MiB"
 
 #: virtinst/virtinstall.py:353
 #, python-format
@@ -6307,9 +6266,8 @@ msgstr "客户机的网络配置可能不支持 PXE"
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
-msgstr ""
-"使用 --osinfo {osname}，虚拟机性能可能会受到影响。准确指定操作系统以获得最佳"
-"性能。"
+msgstr "使用 --osinfo "
+"{osname}，虚拟机性能可能会受到影响。准确指定操作系统以获得最佳性能。"
 
 #: virtinst/virtinstall.py:388
 #, python-brace-format
@@ -6521,8 +6479,7 @@ msgstr "光驱安装介质"
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
-msgstr ""
-"发行版安装 URL，例如：https://host/path。请参见手册页获取有关特定发行的示例。"
+msgstr "发行版安装 URL，例如：https://host/path。请参见手册页获取有关特定发行的示例。"
 
 #: virtinst/virtinstall.py:1047
 msgid "Boot from the network using the PXE protocol"
@@ -6633,8 +6590,7 @@ msgid ""
 msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
-msgstr[0] ""
-"需要 '--edit %(number)s' 选项，但 XML 文件中仅存在 %(max)s --%(type)s 对象"
+msgstr[0] "需要 '--edit %(number)s' 选项，但 XML 文件中仅存在 %(max)s --%(type)s 对象"
 
 #: virtinst/virtxml.py:107
 #, python-format
@@ -6924,8 +6880,7 @@ msgstr "根据用户要求丢弃"
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
-msgstr ""
-"XML 文件中没有预期的根元素名称 '%(expectname)s'，而已找到 '%(foundname)s'"
+msgstr "XML 文件中没有预期的根元素名称 '%(expectname)s'，而已找到 '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:519
@@ -6937,438 +6892,3 @@ msgstr "必须为 %s 指定名称"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名称 '%(name)s' 不能包含 '%(char)s' 字符。"
-
-#~ msgid ""
-#~ "The libvirtd service does not appear to be installed. Install and run the "
-#~ "libvirtd service to manage virtualization on this host."
-#~ msgstr ""
-#~ "libvirtd 服务似乎没有安装。请安装并运行 libvirtd 服务以管理此主机上的虚拟"
-#~ "化服务。"
-
-#~ msgid "tpm-tab"
-#~ msgstr "tpm-tab"
-
-#~ msgid "Sheepdog Filesystem"
-#~ msgstr "Sheepdog 文件系统"
-
-#~ msgid "Missing mandatory attribute 'type'"
-#~ msgstr "缺少必填属性 '类型'"
-
-#~ msgid "SEV launch security is not supported on this platform"
-#~ msgstr "此平台不支持 SEV 启动安全性设置"
-
-#~ msgid "Version:"
-#~ msgstr "版本："
-
-#~ msgid "Passthrough device"
-#~ msgstr "直通设备"
-
-#~ msgid "Emulated device"
-#~ msgstr "模拟设备"
-
-#~ msgid "D_etails"
-#~ msgstr "详情(_e)"
-
-#~ msgid "No host CPU reported in capabilities"
-#~ msgstr "无主机性能报告"
-
-#~ msgid "Generic OS"
-#~ msgstr "通用操作系统"
-
-#~ msgid "Detect _zeroes:"
-#~ msgstr "检测零(_Z)："
-
-#~ msgid "UEFI not found"
-#~ msgstr "UEFI 未找到"
-
-#~ msgid "Cloning disk network type '%s' requires managed storage."
-#~ msgstr "克隆磁盘网络类型 '%s' 需要托管存储。"
-
-#~ msgid ""
-#~ "OS name '%(oldname)s' is deprecated, using '%(newname)s' instead. This "
-#~ "alias will be removed in the future."
-#~ msgstr ""
-#~ "操作系统名称不推荐使用 '%(oldname)s'，将改用为 '%(newname)s'。该别名将来会"
-#~ "被移除。"
-
-#~ msgid "Completed"
-#~ msgstr "已完成"
-
-#~ msgid "Graphics type '%s' does not support auto resize."
-#~ msgstr "'%s' 显卡类型不支持自动调整大小。"
-
-#~ msgid "_Write Policy:"
-#~ msgstr "写入策略(_W)："
-
-#~ msgid "_Allocation:"
-#~ msgstr "分配(_A)："
-
-#~ msgid "Browse..."
-#~ msgstr "浏览..."
-
-#~ msgid "_Add sound device:"
-#~ msgstr "添加音频设备(_A)："
-
-#~ msgid ""
-#~ "Add Spice _USB\n"
-#~ "Redirection:"
-#~ msgstr ""
-#~ "添加 Spice USB\n"
-#~ "重定向(_U)："
-
-#~ msgid "No"
-#~ msgstr "否"
-
-#~ msgid "Yes"
-#~ msgstr "是"
-
-#~ msgid "Copy host CPU definition"
-#~ msgstr "复制主机 CPU 定义"
-
-#~ msgid "available space:"
-#~ msgstr "可用空间："
-
-#~ msgid "Connection Details"
-#~ msgstr "连接详情"
-
-#~ msgid ""
-#~ "libvirtd is installed but not running. Start the libvirtd service to "
-#~ "manage virtualization on this host."
-#~ msgstr ""
-#~ "libvirtd 已经安装但没有在运行。请启动 libvirtd 服务以管理此主机上的虚拟化"
-#~ "服务。"
-
-#~ msgid "for arch '%s'"
-#~ msgstr "架构 '%s'"
-
-#~ msgid "Cannot mix both --bridge and --network arguments"
-#~ msgstr "不能混用 --bridge 和 --network 参数"
-
-#~ msgid "Cannot mix --update and --start"
-#~ msgstr "不能混合使用 --update 和 --start 参数"
-
-#~ msgid "char-target-name"
-#~ msgstr "char-target-name"
-
-#~ msgid "feedback-tab"
-#~ msgstr "feedback-tab"
-
-#~ msgid ""
-#~ "When the guest graphical console has keyboard focus, do not disable "
-#~ "shortcuts for console window menus (Alt+F -> File, etc.) Normally these "
-#~ "are disabled to ensure that typing in the guest does not accidentally "
-#~ "perform an operation in virt-manager's console window."
-#~ msgstr ""
-#~ "当在客户机的图形控制台使用键盘时，请不要禁用控制台窗口菜单的快捷键 (Alt+F "
-#~ "-> 文件 等等)。通常禁用这些快捷键，是为了保证不会在虚拟机中打字时，意外操"
-#~ "作 virt-manager 控制台窗口。"
-
-#~ msgid "_Force console shortcuts:"
-#~ msgstr "强制控制台快捷键(_F)："
-
-#~ msgid "_Text Consoles"
-#~ msgstr "文本控制台(_T)"
-
-#~ msgid "<b>Ad_vanced options</b>"
-#~ msgstr "<b>高级选项(_V)</b>"
-
-#~ msgid "Create clone based on:"
-#~ msgstr "基于此创建克隆："
-
-#~ msgid "Destination host:"
-#~ msgstr "目标主机："
-
-#~ msgid "No networking devices"
-#~ msgstr "没有联网设备"
-
-#~ msgid "Networking:"
-#~ msgstr "网络："
-
-#~ msgid "No storage to clone"
-#~ msgstr "没有要克隆的存储"
-
-#~ msgid ""
-#~ "<span size='small'>Cloning creates a new, independent copy of the "
-#~ "original disk. Sharing\n"
-#~ "uses the existing disk image for both the original and the new machine.</"
-#~ "span>"
-#~ msgstr ""
-#~ "<span size='small'>克隆生成了原始磁盘的新的独立副本。\n"
-#~ "在原始机器和新机器中共享使用现有磁盘镜像。</span>"
-
-#~ msgid "Change MAC address"
-#~ msgstr "修改 MAC 地址"
-
-#~ msgid "New _MAC:"
-#~ msgstr "新 _MAC："
-
-#~ msgid "MAC:"
-#~ msgstr "MAC："
-
-#~ msgid "Cannot clone unmanaged remote storage."
-#~ msgstr "无法克隆自由远程存储。"
-
-#~ msgid ""
-#~ "Block devices to clone must be libvirt\n"
-#~ "managed storage volumes."
-#~ msgstr ""
-#~ "要克隆的块设备必须\n"
-#~ "是由 libvirt 管理的存储卷。"
-
-#~ msgid "Cannot clone %s storage pool."
-#~ msgstr "无法克隆 %s 存储池。"
-
-#~ msgid "No write access"
-#~ msgstr "没有写入权限"
-
-#~ msgid "Shareable"
-#~ msgstr "可共享"
-
-#~ msgid "Usermode (%(mac)s)"
-#~ msgstr "用户模式（%(mac)s）"
-
-#~ msgid "%(netmode)s (%(mac)s)"
-#~ msgstr "%(netmode)s（%(mac)s）"
-
-#~ msgid "Virtual Network %(netdevice)s (%(mac)s)"
-#~ msgstr "虚拟网络 %(netdevice)s（%(mac)s）"
-
-#~ msgid "Virtual Network (%(mac)s)"
-#~ msgstr "虚拟网络（%(mac)s）"
-
-#~ msgid "%(nettype)s %(netdevice)s (%(mac)s)"
-#~ msgstr "%(nettype)s %(netdevice)s (%(mac)s)"
-
-#~ msgid "%(nettype)s (%(mac)s)"
-#~ msgstr "%(nettype)s (%(mac)s)"
-
-#~ msgid "Nothing to clone."
-#~ msgstr "没有可克隆的对象。"
-
-#~ msgid "Storage cannot be shared or cloned."
-#~ msgstr "无法共享或者克隆存储。"
-
-#~ msgid "One or more disks cannot be cloned or shared."
-#~ msgstr "无法克隆或者共享一个或者多个磁盘。"
-
-#~ msgid "Error changing MAC address: %s"
-#~ msgstr "更改 MAC 地址出错：%s"
-
-#~ msgid "Error changing storage path: %s"
-#~ msgstr "更改存储路径出错：%s"
-
-#~ msgid "Original guest name or XML is required."
-#~ msgstr "需要原始客户机名称或 XML。"
-
-#~ msgid ""
-#~ "More disks to clone than new paths specified. (%(passed)d specified, "
-#~ "%(need)d needed"
-#~ msgstr ""
-#~ "需要克隆的磁盘数多于已指定的路径。（已指定 %(passed)d 个，需要 %(need)d "
-#~ "个）"
-
-#~ msgid ""
-#~ "Do not clone storage, new disk images specified via --file are preserved "
-#~ "unchanged"
-#~ msgstr "不克隆存储，通过 --file 参数指定的新磁盘镜像将保留不变"
-
-#~ msgid "RAM:"
-#~ msgstr "RAM："
-
-#~ msgid "Heads:"
-#~ msgstr "标头："
-
-#~ msgid "Spice GL requires VirtIO graphics configured with accel3d."
-#~ msgstr "Spice GL 需要使用配置了 3D 加速的 VirtIO 显卡。"
-
-#~ msgid "Graphics listen type does not support spice GL."
-#~ msgstr "显卡监听类型不支持 Spice GL。"
-
-#~ msgid "No virtual machines"
-#~ msgstr "无虚拟机"
-
-#~ msgid "<small>Selected CPU model does not support Hyper-Threading</small>"
-#~ msgstr "<small>已选择的 CPU 模型不支持超线程</small>"
-
-#~ msgid "MAC address:"
-#~ msgstr "MAC 地址："
-
-#~ msgid "Embedded session"
-#~ msgstr "嵌入式会话"
-
-#~ msgid ""
-#~ "Host is not advertising support for full virtualization. Install options "
-#~ "may be limited."
-#~ msgstr "主机未通告其支持完全虚拟化。安装选项可能受限。"
-
-#~ msgid "NIC"
-#~ msgstr "NIC"
-
-#~ msgid "Error opening socket path '%(path)s': %(error)s"
-#~ msgstr "打开套接字路径 '%(path)s' 出错：%(error)s"
-
-#~ msgid "Error opening socket path '%s'"
-#~ msgstr "打开套接字路径 '%s' 时出错"
-
-#~ msgid "virt-manager requires libvirt 0.6.0 or later."
-#~ msgstr "虚拟系统管理器（virt-manager）需要 libvirt 0.6.0 或以上版本。"
-
-#~ msgid "B_uild Pool:"
-#~ msgstr "构建池(_U)："
-
-#~ msgid "Display:"
-#~ msgstr "显示："
-
-#~ msgid "XAuth:"
-#~ msgstr "X 验证："
-
-#~ msgid "Static Route:"
-#~ msgstr "静态路由："
-
-#~ msgid "Some changes may require a guest shutdown to take effect."
-#~ msgstr "有些更改可能需要关闭虚拟机方可生效。"
-
-#~ msgid "Bind"
-#~ msgstr "绑定"
-
-#~ msgid "Generic PS/2 Mouse"
-#~ msgstr "通用 PS/2 鼠标"
-
-#~ msgid "Generic USB Mouse"
-#~ msgstr "通用 USB 鼠标"
-
-#~ msgid "Generic VirtIO Tablet"
-#~ msgstr "通用 VirtIO 绘图板"
-
-#~ msgid "Generic PS/2 Keyboard"
-#~ msgstr "通用 PS/2 键盘"
-
-#~ msgid "Generic USB Keyboard"
-#~ msgstr "通用 USB 键盘"
-
-#~ msgid "Generic VirtIO Keyboard"
-#~ msgstr "通用 VirtIO 键盘"
-
-#~ msgid "Generic %(bus)s Mouse"
-#~ msgstr "通用 %(bus)s 鼠标"
-
-#~ msgid "Generic %(bus)s Tablet"
-#~ msgstr "通用 %(bus)s 绘图板"
-
-#~ msgid "Generic %(bus)s Keyboard"
-#~ msgstr "通用 %(bus)s 键盘"
-
-#~ msgid "Error adding device: %s"
-#~ msgstr "添加设备出错：%s"
-
-#~ msgid "invalid listen type"
-#~ msgstr "无效的监听类型"
-
-#~ msgid ""
-#~ "Building a pool of this type will format the source device. Are you sure "
-#~ "you want to 'build' this pool?"
-#~ msgstr "构建一个这种类型的池将格式化源设备。确定要 '构建' 这个池吗？"
-
-#~ msgid "No network selected"
-#~ msgstr "未选择网络"
-
-#~ msgid "Error setting install media location."
-#~ msgstr "设定安装介质位置出错。"
-
-#~ msgid "Network device required for URL install."
-#~ msgstr "URL 安装需要网络设备。"
-
-#~ msgid "CDROM %(index)d"
-#~ msgstr "CDROM %(index)d"
-
-#~ msgid "Disk %(index)d"
-#~ msgstr "磁盘 %(index)d"
-
-#~ msgid "%(device)s %(index)d"
-#~ msgstr "%(device)s %(index)d"
-
-#~ msgid "Not Enough Free Space"
-#~ msgstr "没有足够空间"
-
-#~ msgid "A filesystem source must be specified"
-#~ msgstr "必须指定文件系统源"
-
-#~ msgid "A RAM filesystem usage must be specified"
-#~ msgstr "必须指定 RAM 文件系统使用率"
-
-#~ msgid "A filesystem target must be specified"
-#~ msgstr "必须指定文件系统目标"
-
-#~ msgid "Filesystem parameter error"
-#~ msgstr "文件系统参数错误"
-
-#~ msgid "Hypervisor/libvirt does not support spice GL"
-#~ msgstr "虚拟系统管理程序/libvirt 不支持 Spice GL"
-
-#~ msgid "Hypervisor/libvirt does not support manual rendernode"
-#~ msgstr "虚拟系统管理程序/libvirt 不支持手动渲染节点"
-
-#~ msgid "Local SDL Window"
-#~ msgstr "本地 SDL 窗口"
-
-#~ msgid "Bridge"
-#~ msgstr "桥接"
-
-#~ msgid "No networking"
-#~ msgstr "无网络"
-
-#~ msgid ""
-#~ "The destination's hostname is 'localhost', which will be rejected by "
-#~ "libvirt. You must configure the destination to have a valid publicly "
-#~ "accessible hostname."
-#~ msgstr ""
-#~ "目标的主机名为 'localhost'，libvirt 将会拒绝迁移。你必须配置目标为一个有效"
-#~ "且能公开访问的主机名。"
-
-#~ msgid "%(mode)s to %(device)s"
-#~ msgstr "%(mode)s 至 %(device)s"
-
-#~ msgid "Hypervisor does not support domain reset."
-#~ msgstr "虚拟机管理程序不支持重置域。"
-
-#~ msgid "Host does not support spice GL"
-#~ msgstr "主机不支持 Spice GL"
-
-#~ msgid "External"
-#~ msgstr "外部"
-
-#~ msgid "VM State"
-#~ msgstr "VM 状态"
-
-#~ msgid "disk"
-#~ msgstr "磁盘"
-
-#~ msgid "disk and configuration"
-#~ msgstr "磁盘和配置"
-
-#~ msgid "Virtual Network"
-#~ msgstr "虚拟网络"
-
-#~ msgid "Warning"
-#~ msgstr "警告"
-
-#~ msgid "Disk"
-#~ msgstr "磁盘"
-
-#~ msgid "Not Connected"
-#~ msgstr "尚未连接"
-
-#~ msgid " %d minutes"
-#~ msgstr " %d 分钟"
-
-#~ msgid "Port"
-#~ msgstr "端口"
-
-#~ msgid "Migrate"
-#~ msgstr "迁移"
-
-#~ msgid "Disk \"%s\" is already in use by other guests %s"
-#~ msgstr "磁盘 \"%s\" 已被其他客户机 %s 使用"
-
-#~ msgid "%s:%s"
-#~ msgstr "%s:%s"
