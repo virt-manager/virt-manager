@@ -637,7 +637,8 @@ class DeviceDisk(Device):
 
     def set_source_path(self, newpath):
         # https://github.com/virt-manager/virt-manager/issues/542
-        newpath = newpath.replace("file://", "")
+        if newpath is not None:
+            newpath = newpath.replace("file://", "")
         if self._storage_backend.will_create_storage():
             raise xmlutil.DevError(
                     "Can't change disk path if storage creation info "
