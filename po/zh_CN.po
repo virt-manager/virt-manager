@@ -26,13 +26,14 @@
 # Luke Na <narukeu@outlook.com>, 2023.
 # zk dc <zkdc2345@qq.com>, 2023.
 # 连 浩鑫 <lianhaoxin2012@outlook.com>, 2023.
+# eirik song <eirik.song@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-08-24 21:21+0000\n"
-"Last-Translator: zk dc <zkdc2345@qq.com>\n"
+"PO-Revision-Date: 2024-02-24 03:11+0000\n"
+"Last-Translator: eirik song <eirik.song@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -40,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.4\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -76,24 +77,20 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "虚拟系统图形化控制台连接"
 
 #: data/virt-manager.appdata.xml.in:37
-#, fuzzy
-#| msgid "virtualization type '%s'"
 msgid "virtualization"
-msgstr "虚拟化类型 '%s'"
+msgstr "虚拟化类型"
 
 #: data/virt-manager.appdata.xml.in:38
-#, fuzzy
-#| msgid "Libvirt URI:"
 msgid "libvirt"
-msgstr "Libvirt URI："
+msgstr "libvirt"
 
 #: data/virt-manager.appdata.xml.in:39
 msgid "qemu"
-msgstr ""
+msgstr "qemu"
 
 #: data/virt-manager.appdata.xml.in:40
 msgid "kvm"
-msgstr ""
+msgstr "kvm"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
@@ -198,7 +195,7 @@ msgstr "通道(_C)："
 
 #: ui/addhardware.ui:908
 msgid "_Share Clipboard:"
-msgstr ""
+msgstr "共享剪贴板(_S)："
 
 #: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
@@ -1218,7 +1215,7 @@ msgstr "状态："
 
 #: ui/details.ui:3695
 msgid "Clipboard:"
-msgstr ""
+msgstr "剪贴板："
 
 #: ui/details.ui:3707
 msgid "Source path:"
@@ -2300,7 +2297,7 @@ msgstr "Spice 端口"
 
 #: virtManager/addhardware.py:430
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "QEMU vdagent"
 
 #: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
@@ -3418,10 +3415,9 @@ msgid "Console %(num)d"
 msgstr "控制台 %(num)d"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel %(name)s"
+#, python-format
 msgid "Channel (%(name)s)"
-msgstr "信道 %(name)s"
+msgstr "信道 (%(name)s)"
 
 #: virtManager/details/details.py:214
 #, python-format
@@ -4296,11 +4292,9 @@ msgid ""
 msgstr "请为远程主机配置 SSH 密钥访问，或在本地安装一个 SSH askpass 软件包。"
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "请验证 'libvirtd' 守护程序是否在远程主机上运行。"
+msgstr "验证远程主机上是否正在运行适当的 libvirt 守护进程。"
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4322,10 +4316,8 @@ msgstr ""
 "manager），可能无法以常规用户身份连接 libvirt，。请尝试以 root 用户身份运行。"
 
 #: virtManager/lib/connectauth.py:179
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "请验证 'libvirtd' 守护进程是否正在运行。"
+msgstr "验证适当的 libvirt 守护进程是否正在运行。"
 
 #: virtManager/lib/connectauth.py:182
 #, python-format
@@ -4337,18 +4329,12 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "虚拟机管理器连接失败"
 
 #: virtManager/lib/connectauth.py:208
-#, fuzzy
-#| msgid ""
-#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-#| "virtualization packages are installed to manage virtualization on this "
-#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
-msgstr ""
-"无法检测到默认虚拟机管理程序。确保安装了合适的 QEMU/KVM 虚拟化软件包以管理此"
-"主机上的虚拟化服务。"
+msgstr "无法检测到默认虚拟机管理程序。 确保安装了适当的 QEMU/KVM 虚拟化和 libvirt "
+"软件包来管理该主机上的虚拟化。"
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
@@ -4862,7 +4848,7 @@ msgstr "重启(_R)"
 
 #: virtManager/vmmenu.py:54
 msgid "F_orce Reset"
-msgstr "强制重置(_O)"
+msgstr "强制重启(_O)"
 
 #: virtManager/vmmenu.py:55
 msgid "_Force Off"
@@ -5514,19 +5500,11 @@ msgstr ""
 "--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:903
-#, fuzzy
-#| msgid ""
-#| "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-#| "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-#| "dhCert=BASE64CERT\n"
-#| "--launchSecurity sev"
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
 "配置虚拟系统启动安全性设置（例如：SEV 内存加密）。示例：\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:910
