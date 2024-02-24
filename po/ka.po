@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the virt-manager package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-09-27 08:35+0000\n"
+"PO-Revision-Date: 2024-02-11 02:36+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -676,6 +676,10 @@ msgid ""
 " * docker://registry:port/image:tag\n"
 " * virt-builder://template\n"
 msgstr ""
+"შესაძლო URL-ის ფორმატები:\n"
+" * file:///path/to/rootfs.tar\n"
+" * docker://registry:port/image:tag\n"
+" * virt-builder://template\n"
 
 #: ui/createvm.ui:1467
 msgid "Do not verify TLS certificates of registry"
@@ -1178,7 +1182,7 @@ msgstr "მდგომარეობა:"
 
 #: ui/details.ui:3695
 msgid "Clipboard:"
-msgstr ""
+msgstr "ბუფერი:"
 
 #: ui/details.ui:3707
 msgid "Source path:"
@@ -1835,6 +1839,8 @@ msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"თუ გამორთულია, ვმ-ის ფანჯარა გაშვებული ვმ-ის გრაფიკულ კონსოლს ავტომატურად არ "
+"მიუერთდება."
 
 #: ui/preferences.ui:701
 msgid "Console autoconnec_t:"
@@ -1967,6 +1973,8 @@ msgstr "_სწრაფი ასლის აღება"
 #: ui/vmwindow.ui:98
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
 msgstr ""
+"ჰოსტის USB მოწყობილობების გადამისამართება ვირტუალურ მანქანამდე SPICE "
+"გრაფიკით."
 
 #: ui/vmwindow.ui:99
 msgid "_Redirect USB device"
@@ -2207,7 +2215,7 @@ msgstr "ვმ-ის კონფიგურაციის შეცვლი
 
 #: virtManager/addhardware.py:372
 msgid "These changes will take effect after the next guest shutdown."
-msgstr ""
+msgstr "ეს ცვლილებები ძალაში შემდეგი სტუმრის გათიშვისას შევა."
 
 #: virtManager/addhardware.py:423
 msgid "Pseudo TTY"
@@ -2239,7 +2247,7 @@ msgstr "SPICE-ის პორტი"
 
 #: virtManager/addhardware.py:430
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "QEMU vdagent"
 
 #: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
@@ -4274,6 +4282,8 @@ msgstr ""
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
+"ვირტუალიზაციის მიერთება შეგიძლიათ ხელი დაამატოთ მენიუდან ფაილი->მიერთების "
+"დამატება"
 
 #: virtManager/lib/inspection.py:77
 #, python-format
@@ -4545,6 +4555,8 @@ msgstr "ვმ-ის მიგრაცია: '%s'"
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
+"მიმდინარეობს ვმ-ის '%(name)s' მიგრაცია ჰოსტზე '%(host)s'. ამას საკმაო დრო "
+"შეიძლება, დასჭირდეს."
 
 #: virtManager/migrate.py:411
 #, python-format
@@ -4554,10 +4566,12 @@ msgstr "მიგრაციის ამოცანის გაუქმე�
 #: virtManager/object/domain.py:452
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
+"როცა <NUMA> მორგებულია, გაზიარებული მეხსიერების პარამეტრებს ვერ შეცვლით."
 
 #: virtManager/object/domain.py:455
 msgid "Libvirt may not be new enough to support memfd."
 msgstr ""
+"შეიძლება, Libvirt საკმარისად ახალი არაა, რომ memfd-ის მხარდაჭერა ჰქონდეს."
 
 #: virtManager/object/domain.py:474
 msgid "Libvirt connection does not support snapshots."
@@ -4578,7 +4592,7 @@ msgstr ""
 #: virtManager/object/domain.py:527
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
-msgstr ""
+msgstr "ვერ ვიპოვე მითითებული მოწყობილობა არააქტიური ვმ-ის კონფიგურაციაში: %s"
 
 #: virtManager/object/domain.py:1446
 msgid "Saving domain to disk"
@@ -4954,6 +4968,7 @@ msgstr "გადაუტარებელი ცვლილებები."
 #: virtManager/xmleditor.py:119
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
+"თქვენი ცვლილებები დაიკარგება, თუ ამ ჩანართიდან გახვალთ. გნებავთ, გახვიდეთ?"
 
 #: virtManager/xmleditor.py:132
 msgid ""
@@ -4966,12 +4981,14 @@ msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
+"ჰოსტს არ აქვს მხარდაჭერა ვირტუალიზაციის ტიპისთვის '%(virttype)s' "
+"არქიტექტურაზე '%(arch)s'"
 
 #: virtinst/capabilities.py:294
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
-msgstr ""
+msgstr "ჰოსტს არ აქვს ვირტუალიზაციის მხარდაჭერა არქიტექტურისთვის '%(arch)s'"
 
 #: virtinst/capabilities.py:298
 #, python-format
@@ -4995,14 +5012,20 @@ msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
+"ჰოსტს არ აქვს დომენის ტიპის %(domain)s მხარდაჭერა ვირტუალიზაციის ტიპისთვის "
+"%(virttype)s არქიტექტურაზე '%(arch)s'"
 
 #: virtinst/cli.py:107
 msgid "See man page for examples and full option syntax."
 msgstr ""
+"მაგალითებისთვის და სრული პარამეტრის სინტაქსისთვის იხილეთ სახელმძღვანელოს "
+"გვერდი."
 
 #: virtinst/cli.py:109
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
+"შესაძლო ქვეპარამეტრების ჩამონათვალის მისაღებად გამოიყენეთ '--option=?' ან '--"
+"option help'"
 
 #: virtinst/cli.py:288
 #, python-format
@@ -5033,7 +5056,7 @@ msgstr "გადაეწერება არსებულ ბილიკ�
 #: virtinst/cli.py:364
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
-msgstr ""
+msgstr "დისკი %(path)s უკვე გამოიყენება სხვა სტუმრების (%(names)s) მიერ."
 
 #: virtinst/cli.py:408
 #, python-format
@@ -5055,7 +5078,7 @@ msgstr "დომენის '%(domain)s' პოვნა შეუძლებ
 #: virtinst/cli.py:483
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "პარამეტრებს %(option1)s და %(option2)s ერთდროულად ვერ გამოიყენებთ"
 
 #: virtinst/cli.py:592 virtinst/cli.py:595
 msgid "Connect to hypervisor with libvirt URI"
@@ -5071,7 +5094,7 @@ msgstr ""
 
 #: virtinst/cli.py:616
 msgid "Don't automatically try to connect to the guest console"
-msgstr ""
+msgstr "სტუმრის კონსოლს ავტომატურად არ დაუკავშირდე"
 
 #: virtinst/cli.py:620
 msgid "Don't boot guest after completing install."
@@ -5080,15 +5103,19 @@ msgstr "დაყენების დამთავრების შემ�
 #: virtinst/cli.py:624
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
+"სახელების კონფლიქტის შემოწმება არ მოხდება. სტუმარი იგივე სახელით თავზე "
+"გადაეწერება."
 
 #: virtinst/cli.py:631
 msgid "Print the generated domain XML rather than create the guest."
-msgstr ""
+msgstr "შექმნილი დომენის XML-ის გამოტანა სტუმრის შექმნის მაგიერ."
 
 #: virtinst/cli.py:650
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
+"დაყენების პროცესის გავლა, მაგრამ მოწყობილობები არ შეიქმნება და სტუმრის "
+"აღწერა არ მოხდება."
 
 #: virtinst/cli.py:655
 msgid ""
@@ -5096,6 +5123,9 @@ msgid ""
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
+"გადამოწმების ჩართვა/გამორთვა. მაგ:\n"
+"--check path_in_use=off\n"
+"--check all=off"
 
 #: virtinst/cli.py:659
 msgid "Suppress non-error output"
@@ -5209,7 +5239,7 @@ msgstr "სტუმართან კავშირის არხის მ
 
 #: virtinst/cli.py:749
 msgid "Configure a text console connection between the guest and host"
-msgstr ""
+msgstr "ტექსტური კონსოლის მიერთების მორგება სტუმარსა და ჰოსტს შორის"
 
 #: virtinst/cli.py:753
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
@@ -5331,6 +5361,8 @@ msgstr "დომენის seclabel-ის მორგება."
 #: virtinst/cli.py:842
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
+"სტუმრის დაყენება, რომ მან S390 კრიპტოგრაფიული გასაღების მართვის ოპერაციები "
+"განახორციელოს."
 
 #: virtinst/cli.py:847
 msgid "Tune CPU parameters for the domain process."
@@ -5360,6 +5392,9 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
+"დომენის <ფუნქციის> XML-ის დაყენება. მაგ:\n"
+"--features acpi=off\n"
+"--features apic=on, apic.eoi=on"
 
 #: virtinst/cli.py:874
 msgid ""
@@ -5387,6 +5422,9 @@ msgid ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
+"SMBIOS-ის სისტემური ინფორმაციის მორგება. მაგ:\n"
+"--sysinfo host\n"
+"--sysinfo bios.vendor=MyVebdor,bios.version=1.2.3,...\n"
 
 #: virtinst/cli.py:897
 msgid ""
@@ -5413,6 +5451,8 @@ msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
+"მომხმარებლის სახელების სივრცის ჩართვა LXC კონტეინერისთვის. მაგ:\n"
+"--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: virtinst/cli.py:926
 msgid ""
@@ -5461,6 +5501,8 @@ msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
+"არ ვიცი, როგორ დავამთხვიო მოწყობილობის ტიპის %(device_type)s' თვისება "
+"'%(property_name)s'"
 
 #: virtinst/cli.py:1494
 #, python-format
@@ -5477,10 +5519,14 @@ msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
 msgstr ""
+"გრაფიკულ კონსოლთან მიერთება შეუძლებელია: virt-viewer დაყენებული არაა. "
+"დააყენეთ პაკეტი 'virt-viewer'."
 
 #: virtinst/cli.py:1940
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
+"მოთხოვნილია გრაფიკა, მაგრამ გარემოს ცვლადი DISPLAY დაყენებული არა. virt-"
+"viewer გაშვებული არაა."
 
 #: virtinst/cli.py:1951
 #, python-format
@@ -5514,7 +5560,7 @@ msgstr "%s კვანძის მრავალ მოწყობილო�
 #: virtinst/cli.py:4739
 #, python-format
 msgid "Did not find a matching node device for '%s'"
-msgstr ""
+msgstr "ვერ ვიპოვე შესაბამისი კვანძის მოწყობილობა '%s'-სთვის"
 
 #: virtinst/cli.py:4876
 msgid ""
@@ -5539,7 +5585,7 @@ msgstr "დომენი '%s' ნაპოვნი არაა."
 #: virtinst/cloner.py:155
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
-msgstr ""
+msgstr "არსებული საცავის ტომში დაკლონვა ამჟამად მხარდაჭერილი არაა: '%s'"
 
 #: virtinst/cloner.py:176
 #, python-format
@@ -5590,7 +5636,7 @@ msgstr "ახალი სტუმრის არასწორი სახ
 #: virtinst/devices/disk.py:351
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
-msgstr ""
+msgstr "არარსებული ტომისთვის '%s' ზომის მითითება აუცილებელია"
 
 #: virtinst/devices/disk.py:356
 #, python-format
@@ -5612,6 +5658,8 @@ msgstr "მოწყობილობის ტიპს '%s' ესაჭი�
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
+"აუცილებელია საცავის შექმნის პარამეტრების მითითება არარსებული ბილიკისთვის "
+"'%s'."
 
 #: virtinst/devices/disk.py:926
 #, python-format
@@ -5628,7 +5676,7 @@ msgstr "ფაილური სისტემის სამიზნე '%s
 #: virtinst/devices/graphics.py:20
 #, python-format
 msgid "%s must be above 5900, or -1 for auto allocation"
-msgstr ""
+msgstr "%s 5900-ზე მეტი უნდა იყოს, ან -1, ავტომატური გამოყოფისთვის"
 
 #: virtinst/devices/hostdev.py:82
 #, python-format
@@ -5663,7 +5711,7 @@ msgstr ""
 
 #: virtinst/diskbackend.py:543
 msgid "There is not enough free space to create the disk."
-msgstr ""
+msgstr "დისკის შესაქმნელად ადგილი საკმარისი არაა."
 
 #: virtinst/diskbackend.py:548
 #, python-format
@@ -5738,12 +5786,12 @@ msgstr "Libvirt-ის ამ ვერსიას UEFI-ის მხარდ�
 #: virtinst/guest.py:858
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
-msgstr ""
+msgstr "არ ვიცი, როგორ ავაწყო UEFI არქიტექტურისთვის '%s'"
 
 #: virtinst/guest.py:863
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
-msgstr ""
+msgstr "ვერ ვიპოვე ვერც ერთი UEFI გამშვები ფაილის ბილიკი არქიტექტურისთვის '%s'"
 
 #: virtinst/install/installer.py:108
 #, python-format
@@ -5755,6 +5803,8 @@ msgstr "დისკის წაშლა ('%s')"
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
+"მეხსიერების გადაფარვა %(number)s მიბ-მდე, რაც %(osname)s-ის ქსელური "
+"დაყენებისთვისაა საჭირო."
 
 #: virtinst/install/installer.py:649
 msgid "Creating domain..."
@@ -5772,10 +5822,11 @@ msgstr "დასაყენებელი დისკის ('%(media)s') �
 #: virtinst/install/installertreemedia.py:116
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
+"ბირთვის/initrd-ის მდებარეობა, მხოლოდ, მდებარეობის URL-ით/ბილიკით შეგიძლიათ"
 
 #: virtinst/install/installertreemedia.py:119
 msgid "location kernel/initrd must be be specified as a pair"
-msgstr ""
+msgstr "ბირთვის/initrd-ის მდებარეობა წყვილად უნდა მიუთითოთ"
 
 #: virtinst/install/installertreemedia.py:142
 #, python-format
@@ -5810,13 +5861,14 @@ msgstr "%s-ს ადმინისტრატორის პაროლი�
 
 #: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
-msgstr ""
+msgstr "libosinfo ან osinfo-db მეტისმეტად ძველია ავტომატური დაყენებისთვის."
 
 #: virtinst/install/unattended.py:198
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr ""
+"ოს-ს '%(osname)s' ინექციის მეთოდის '%(methodname)s' მხარდაჭერა არ გააჩნია"
 
 #: virtinst/install/unattended.py:335
 #, python-format
@@ -5834,6 +5886,8 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
+"ოს-ს '%(osname)s' ავტომატური დაყენების მხარდაჭერა პროფილისთვის "
+"'%(profilename)s' არ გააჩნია. ხელმისაწვდომია პროფილები: %(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
@@ -5842,12 +5896,12 @@ msgstr "ავტომატური პროფილის ('%s') გამ
 
 #: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
-msgstr ""
+msgstr "ბმული ხელმიუწვდომელია. შეიძლება, არასწორად აკრიფეთ?"
 
 #: virtinst/install/urldetect.py:314
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
-msgstr ""
+msgstr "ვერ ვიპოვე დაყენებადი დისტრიბუტივი ბმულზე '%s'"
 
 #: virtinst/install/urldetect.py:318
 msgid ""
@@ -5888,6 +5942,7 @@ msgstr "\"libosinfo\"-ის უცნობი ID: '%s'"
 #, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
+"უცნობი ოს-ის სახელი '%s'. იხილეთ '--osinfo list' მისაღები მნიშვნელობებისთვის."
 
 #: virtinst/osdict.py:537
 #, python-format
@@ -6023,6 +6078,8 @@ msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
+"მოწყობილობების (მაგ: თუ 'hdc\" მხოლოდ-კითხვადი cdrom მოწყობილობაა, --force-"
+"copy=hdc) ნაძალადევი კოპირება"
 
 #: virtinst/virtclone.py:99
 msgid ""
@@ -6043,7 +6100,7 @@ msgstr ""
 
 #: virtinst/virtclone.py:113
 msgid "New file to use as storage for nvram VARS"
-msgstr ""
+msgstr "ახალი ფაილი, რომელიც nvram VARS-ის შესანახად იქნება გამოყენებული"
 
 #: virtinst/virtclone.py:115
 msgid "Networking Configuration"
@@ -6054,6 +6111,8 @@ msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
+"ახალი ფიქსირებული MAC მისამართი დაკლონილი სტუმრისთვის. ნაგულისხმევია "
+"შემთხვევით შექმნილი MAC"
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1135
 #: virtinst/virtxml.py:426
@@ -6065,6 +6124,8 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
+"აუცილებელია --auto-clone ან --file. გამოიყენეთ '--auto-clone' ან '--file' და "
+"თავიდან სცადეთ."
 
 #: virtinst/virtclone.py:179
 msgid ""
@@ -6099,7 +6160,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type მოძველებულია და აღარაფერს აკეთებს. შეწყვიტეთ მისი გამოყენება."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6115,7 +6176,7 @@ msgstr "--memory -ს ესაჭიროება რაონოდება
 
 #: virtinst/virtinstall.py:316
 msgid "--disk storage must be specified (override with --disk none)"
-msgstr ""
+msgstr "--disk საცავის მითითება აუცილებელია (გადაფარვა პარამეტრით --disk none)"
 
 #: virtinst/virtinstall.py:320
 #, python-format
@@ -6142,12 +6203,16 @@ msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
+"მოთხოვნილი %(mem1)s მეხსიერება ნაკლებია, ვიდრე რეკომენდებული %(mem2)s მიბ ოს-"
+"სთვის %(osname)s"
 
 #: virtinst/virtinstall.py:353
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
+"მოთხოვნილი მეხსიერება %s მიბ არანორმალურად ცოტაა. ცდილობდით, რაოდენობა "
+"გიგაბაიტებში მიგეთითებინათ?"
 
 #: virtinst/virtinstall.py:370
 msgid "The guest's network configuration may not support PXE"
@@ -6159,6 +6224,8 @@ msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
+"თუ გამოიყენებთ --osindo {osname}, შეიძლება, ვმ-ის წარმადობა დავარდეს. "
+"ოპტიმალური შედეგებისთვის მიუთითეთ ოს-ის ზუსტი სახელი."
 
 #: virtinst/virtinstall.py:388
 #, python-brace-format
@@ -6254,8 +6321,8 @@ msgstr "დაყენების პროცესის დასრულ�
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "დაყენების დასრულებას ველოდები კიდევ %(minutes)d წუთი."
+msgstr[1] "დაყენების დასრულებას ველოდები კიდევ %(minutes)d წუთი."
 
 #: virtinst/virtinstall.py:766
 #, python-format
@@ -6264,7 +6331,7 @@ msgstr "Root-ით პირველად შესვლის პარო�
 
 #: virtinst/virtinstall.py:778
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
-msgstr ""
+msgstr "დაყენება გაგრძელდება 10 წამში (გამოსატოვებლად დააწექით ღილაკს Enter)..."
 
 #: virtinst/virtinstall.py:805
 msgid "Console command returned failure."
@@ -6276,7 +6343,7 @@ msgstr "დომენი ავარიულად გაითიშა."
 
 #: virtinst/virtinstall.py:872
 msgid "Domain is still running. Installation may be in progress."
-msgstr ""
+msgstr "დომენი ჯერ კიდევ გაშვებულია. შეიძლება, დაყენება ჯერ კიდევ მიმდინარეობს."
 
 #: virtinst/virtinstall.py:882
 msgid "You can reconnect to the console to complete the installation process."
@@ -6288,7 +6355,7 @@ msgstr "დომენი გამოირთო. გაგრძელებ
 
 #: virtinst/virtinstall.py:899
 msgid "Installation has exceeded specified time limit. Exiting application."
-msgstr ""
+msgstr "დაყენების ვადა დაყენებულ დროის ლიმიტს გადასცდა. აპლიკაციიდან გასვლა."
 
 #: virtinst/virtinstall.py:922
 msgid "Domain creation completed."
@@ -6300,6 +6367,8 @@ msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
+"თქვენი დომენის გადასატვირთად გაუშვით:\n"
+"  %s"
 
 #: virtinst/virtinstall.py:936
 msgid "User stopped the VM. Not rebooting."
@@ -6332,11 +6401,11 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1009
 msgid "Requested installation does not have XML step 2"
-msgstr ""
+msgstr "მოთხოვნილ დაყენებას არ აქვს XML ნაბიჯი 2"
 
 #: virtinst/virtinstall.py:1026
 msgid "Create a new virtual machine from specified install media."
-msgstr ""
+msgstr "ახალი ვირტუალური მანქანის შექმნა მითითებული დაყენების მედიიდან."
 
 #: virtinst/virtinstall.py:1032
 msgid "Name of the guest instance"
@@ -6358,7 +6427,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:1047
 msgid "Boot from the network using the PXE protocol"
-msgstr ""
+msgstr "ქსელიდან, PXE პროტოკოლით ჩატვირთვა"
 
 #: virtinst/virtinstall.py:1049
 msgid "Build guest around an existing disk image"
@@ -6372,6 +6441,8 @@ msgstr ""
 #: virtinst/virtinstall.py:1055
 msgid "Add given file to root of initrd from --location"
 msgstr ""
+"მითითებული ფაილის დამატება --location-დან მითითებული initrd-ის საწყის "
+"საქაღალდეში"
 
 #: virtinst/virtinstall.py:1057
 msgid "Perform an unattended installation"
@@ -6405,7 +6476,7 @@ msgstr "ვირტუალიზაციის პლატფორმი�
 
 #: virtinst/virtinstall.py:1116
 msgid "This guest should be a fully virtualized guest"
-msgstr ""
+msgstr "ეს სტუმარი სრულად ვირტუალიზებული სტუმარი უნდა იყოს"
 
 #: virtinst/virtinstall.py:1119
 msgid "This guest should be a paravirtualized guest"
@@ -6417,7 +6488,7 @@ msgstr "ეს სტუმარი კონტეინერი უნდა
 
 #: virtinst/virtinstall.py:1124
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
-msgstr ""
+msgstr "ჰიპერვიზორის სახელი გამოსაყენებლად (kvm, qemu, xen, ...)"
 
 #: virtinst/virtinstall.py:1125
 msgid "The CPU architecture to simulate"
@@ -6491,6 +6562,8 @@ msgstr "ცვლილება მითითებული არაა."
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr ""
+"შესაძლებელია, მხოლოდ, ერთი შეცვლის ოპერაციის მითითება (ურთიერთგამომრიცხავი "
+"პარამეტრები %s)"
 
 #: virtinst/virtxml.py:152
 #, python-format
@@ -6558,6 +6631,9 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"მივაერთო ეს მოწყობილობა ჩართულ სტუმარზე '%(domain)s'?"
 
 #: virtinst/virtxml.py:266
 msgid "Device hotplug successful."
@@ -6575,6 +6651,9 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"გამოვაძრო ეს მოწყობილობა ჩართული სტუმრიდან '%(domain)s'?"
 
 #: virtinst/virtxml.py:271
 msgid "Device hotunplug successful."
@@ -6592,6 +6671,9 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"განვაახლო ეს მოწყობილობა სტუმრისთვის '%(domain)s'?"
 
 #: virtinst/virtxml.py:276
 msgid "Device update successful."
@@ -6652,6 +6734,8 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
+"აგებული მოწყობილობის XML-ის გამოტანა. დომენის მითითება არასავალდებულოა, "
+"მაგრამ რეკომენდებულია, რომ ოპტიმალური ნაგულისხმევი პარამეტრები მიიღოთ."
 
 #: virtinst/virtxml.py:390
 msgid "Output options"
@@ -6680,11 +6764,11 @@ msgstr "დომენის გაშვება."
 
 #: virtinst/virtxml.py:406
 msgid "Only print the requested change, in diff format"
-msgstr ""
+msgstr "მხოლოდ მოთხოვნილი ცვლილების გამოტანა, diff ფორმატში"
 
 #: virtinst/virtxml.py:408
 msgid "Only print the requested change, in full XML format"
-msgstr ""
+msgstr "მხოლოდ, მოთხოვნილი ცვლილების გამოტანა სრულ XML ფორმატში"
 
 #: virtinst/virtxml.py:410
 msgid "Require confirmation before saving any results."
@@ -6713,7 +6797,7 @@ msgstr "არ ვიცი, როგორ --update --%s -სთვის"
 
 #: virtinst/virtxml.py:523
 msgid "The VM is not running, --update is inapplicable."
-msgstr ""
+msgstr "ვმ გაშვებული არაა. პარამეტრს --update ვერ გამოიყენებთ."
 
 #: virtinst/virtxml.py:556
 msgid "Changes will take effect after the domain is fully powered off."
@@ -6740,12 +6824,14 @@ msgstr ""
 #: virtinst/xmlbuilder.py:519
 #, python-format
 msgid "A name must be specified for the %s"
-msgstr ""
+msgstr "%s-სთვის სახელის მითითება აუცილებელია"
 
 #: virtinst/xmlbuilder.py:524
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
+"%(objecttype)s-ის სახელი '%(name)s' არ შეიძლება, სიმბოლოს '%(char)s' "
+"შეიცავდეს."
 
 #~ msgid "Sheepdog Filesystem"
 #~ msgstr "Sheepdog ფაილური სისტემა"
