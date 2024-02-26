@@ -7,7 +7,7 @@
 from gi.repository import Gtk
 
 from virtinst import log
-from virtinst import StorageVolume
+from virtinst import StorageVolume, StoragePool
 
 from .lib import uiutil
 from .asyncjob import vmmAsyncJob
@@ -180,7 +180,9 @@ class vmmCreateVolume(vmmGObjectUI):
 
     def _can_sparse(self):
         dtype = self._parent_pool.xmlobj.get_disk_type()
-        return dtype == StorageVolume.TYPE_FILE
+        ptype = self._parent_pool.xmlobj.type
+        return (dtype == StorageVolume.TYPE_FILE or
+                ptype in [StoragePool.TYPE_ZFS])
 
     def _show_sparse(self):
         uiutil.set_grid_row_visible(
