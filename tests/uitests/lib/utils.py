@@ -29,6 +29,7 @@ def walkUIList(app, win, lst, error_cb, reverse=False):
     all_cells = lst.findChildren(lambda w: w.roleName == "table cell")
     if reverse:
         all_cells.reverse()
+    all_cells[0].point()
     all_cells[0].click()
     cells_per_selection = len([c for c in all_cells if c.focused])
 
