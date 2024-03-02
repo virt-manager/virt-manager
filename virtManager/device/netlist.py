@@ -397,9 +397,12 @@ class vmmNetworkList(vmmGObjectUI):
         uiutil.set_grid_row_visible(
             self.widget("net-manual-source"), show_bridge)
 
-        portgroups = []
+        net = None
         if is_virtual:
             net = self.conn.get_net_by_name(rowdata.source)
+
+        portgroups = []
+        if net:
             portgroups = net.get_xmlobj().portgroups
 
         uiutil.set_grid_row_visible(
