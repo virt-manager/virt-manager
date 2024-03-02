@@ -6,6 +6,7 @@ import os
 import libvirt
 import pytest
 
+import virtinst
 from virtinst import log
 
 import tests
@@ -515,17 +516,20 @@ def testFirmwareRename(app, dom):
     # First we refresh the 'nvram' pool, so we can reliably
     # check if nvram files are created/deleted as expected
     conn = cli.getConnection(app.conn.getURI())
+    guest = virtinst.Guest(conn, dom.XMLDesc(0))
     origname = dom.name()
-    nvramdir = conn.get_libvirt_data_root_dir() + "/qemu/nvram"
+    origpath = guest.os.nvram
+    if not origpath:
+        pytest.skip("libvirt is too old to put nvram path in inactive XML")
+    nvramdir = os.path.dirname(origpath)
 
     fakedisk = DeviceDisk(conn)
     fakedisk.set_source_path(nvramdir + "/FAKE-UITEST-FILE")
     nvram_pool = fakedisk.get_parent_pool()
     nvram_pool.refresh()
 
-    origpath = "%s/%s_VARS.fd" % (nvramdir, origname)
     newname = "uitests-firmware-efi-renamed"
-    newpath = "%s/%s_VARS.fd" % (nvramdir, newname)
+    newpath = origpath.replace(origname + "_VARS", newname + "_VARS")
     assert DeviceDisk.path_definitely_exists(app.conn, origpath)
     assert not DeviceDisk.path_definitely_exists(app.conn, newpath)
 

@@ -542,9 +542,9 @@ class vmmDomain(vmmLibvirtObject):
             return None, None
 
         old_nvram_path = self.get_xmlobj().os.nvram
-        if not old_nvram_path:
+        if not old_nvram_path:  # pragma: no cover
             # Probably using firmware=efi which doesn't put nvram
-            # path in the XML. Build the implied path
+            # path in the XML on older libvirt. Build the implied path
             old_nvram_path = os.path.join(
                 self.conn.get_backend().get_libvirt_data_root_dir(),
                 self.conn.get_backend().get_uri_driver(),
@@ -564,10 +564,11 @@ class vmmDomain(vmmLibvirtObject):
         from virtinst import Cloner
         old_nvram = DeviceDisk(self.conn.get_backend())
         old_nvram.set_source_path(old_nvram_path)
+        ext = os.path.splitext(old_nvram_path)[1]
 
         nvram_dir = os.path.dirname(old_nvram.get_source_path())
         new_nvram_path = os.path.join(nvram_dir,
-                "%s_VARS.fd" % os.path.basename(new_name))
+                "%s_VARS%s" % (os.path.basename(new_name), ext or ".fd"))
 
         new_nvram = Cloner.build_clone_disk(
                 old_nvram, new_nvram_path, True, False)
