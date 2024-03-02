@@ -355,7 +355,10 @@ Foo bar baz &amp; yeah boii &lt; &gt; yeahfoo
       <source network='dupmac'/>
       <mac address='22:22:33:54:32:11'/>
     </interface>
-    <interface type='user'/>
+    <interface type='network'>
+      <source network='plainbridge-portgroups' portgroup='sales'/>
+      <mac address='22:22:00:54:32:11'/>
+    </interface>
     <interface type='bridge'>
       <source bridge='brempty'/>
       <mac address='22:22:33:44:AA:BB'/>
