@@ -839,7 +839,7 @@ def testDetailsConsoleChecksSSH(app):
     # Check initial state
     _checkcon("Graphical console not configured")
     _stop()
-    _check_textconsole_menu("No graphical console available")
+    _check_textconsole_menu("Graphical console not configured")
 
     # Add a SDL graphics device which can't be displayed
     detailsbtn.click()

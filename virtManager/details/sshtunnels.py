@@ -20,9 +20,9 @@ class ConnectionInfo(object):
     """
     Holds all the bits needed to make a connection to a graphical console
     """
-    def __init__(self, conn, gdev, gidx):
-        self.gidx  = gidx
+    def __init__(self, conn, gdev):
         self.gtype = gdev.type
+        self.gidx = gdev.get_xml_idx()
         self.gport = str(gdev.port) if gdev.port else None
         self.gsocket = (gdev.listens and gdev.listens[0].socket) or gdev.socket
         self.gaddr = gdev.listen or "127.0.0.1"
