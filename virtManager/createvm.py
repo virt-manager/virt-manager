@@ -4,8 +4,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import importlib
 import io
-import pkgutil
 import os
 import threading
 import time
@@ -79,7 +79,7 @@ def _pretty_memory(mem):
 ###########################################################
 
 def is_virt_bootstrap_installed(conn):
-    ret = pkgutil.find_loader('virtBootstrap') is not None
+    ret = importlib.util.find_spec('virtBootstrap') is not None
     return ret or conn.config.CLITestOptions.fake_virtbootstrap
 
 
