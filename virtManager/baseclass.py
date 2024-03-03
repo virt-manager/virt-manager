@@ -164,8 +164,20 @@ class vmmGObject(GObject.GObject):
         GLib timeout_add wrapper to simplify callers, and track handles
         for easy cleanup
         """
-        ret = GLib.timeout_add(timeout, func, *args)
+        id_list = []
+        def wrap_func(*wrapargs):
+            # When the our timeout_add callback returns False, remove
+            # the source ID from our cache, to avoid glib warnings like
+            # this at app shutdown:
+            # Warning: Source ID 60 was not found when attempting to remove it
+            func_ret = func(*wrapargs)
+            if not func_ret:
+                self.remove_gobject_timeout(id_list[0])
+            return func_ret
+
+        ret = GLib.timeout_add(timeout, wrap_func, *args)
         self.add_gobject_timeout(ret)
+        id_list.append(ret)
         return ret
 
     def emit(self, signal_name, *args):
