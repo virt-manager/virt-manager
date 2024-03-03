@@ -156,7 +156,7 @@ def parse_commandline():
     parser.add_argument("--show-host-summary", action="store_true",
         help="Show connection details window")
     parser.add_argument("--show-systray", action="store_true",
-        help="Launch virt-manager in system tray")
+        help="Launch virt-manager only in system tray")
 
     return parser.parse_known_args()
 

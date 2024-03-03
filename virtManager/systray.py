@@ -434,6 +434,9 @@ class vmmSystray(vmmGObject):
     def is_embedded(self):
         return self._systray and self._systray.is_embedded()
 
+    def show_from_cli(self):
+        self._show_systray()
+
     def _cleanup(self):
         self._hide_systray()
         self._systray = None

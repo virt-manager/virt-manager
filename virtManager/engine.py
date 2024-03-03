@@ -64,8 +64,6 @@ class vmmEngine(vmmGObject):
 
         self._exiting = False
 
-        self.systray_instance = None
-
         self._window_count = 0
         self._gtkapplication = None
         self._init_gtk_application()
@@ -98,7 +96,7 @@ class vmmEngine(vmmGObject):
         """
         Actual startup routines if we are running a new instance of the app
         """
-        self.systray_instance = vmmSystray.get_instance()
+        vmmSystray.get_instance()
         vmmInspection.get_instance()
 
         self.add_gsettings_handle(
@@ -335,6 +333,30 @@ class vmmEngine(vmmGObject):
         """
         return vmmSystray.get_instance().is_embedded()
 
+    def _show_systray_from_cli(self):
+        """
+        Handler for --show-systray from CLI.
+        We force show the systray, and wait for a timeout to report if
+        its embedded. If not we raise an error and exit the app
+        """
+        vmmSystray.get_instance().show_from_cli()
+
+        @_show_startup_error
+        def check(self, count):
+            count -= 1
+            if self._systray_is_embedded():
+                log.debug("systray embedded")
+                return
+            if count <= 0:  # pragma: no cover
+                raise RuntimeError("systray did not show up")
+            self.timeout_add(1000, check, self, count)  # pragma: no cover
+
+        startcount = 5
+        timeout = 1000
+        if self.config.CLITestOptions.fake_systray:
+            timeout = 1
+        self.timeout_add(timeout, check, self, startcount)
+
     def _can_exit(self):
         return (self._window_count <= 0 and not
                 self._systray_is_embedded())
@@ -445,8 +467,8 @@ class vmmEngine(vmmGObject):
                               self.CLI_SHOW_DOMAIN_DELETE]):
             self._cli_show_vm_helper(uri, clistr, show_window)
         elif show_window == self.CLI_SHOW_SYSTEM_TRAY:
-            log.debug("Showing in the system tray")
-            self.systray_instance._show_systray()
+            # Handled elsewhere
+            pass
         else:  # pragma: no cover
             raise RuntimeError("Unknown cli window command '%s'" %
                 show_window)
@@ -466,12 +488,13 @@ class vmmEngine(vmmGObject):
 
         log.debug("processing cli command uri=%s show_window=%s domain=%s",
             uri, show_window, domain)
-        if not uri:
-            if show_window == self.CLI_SHOW_SYSTEM_TRAY:
-                log.debug("Launching in the system tray without --connect")
-                self.systray_instance._show_systray()
-                return
 
+        if show_window == self.CLI_SHOW_SYSTEM_TRAY:
+            log.debug("Launching only in the system tray")
+            self._show_systray_from_cli()
+            if not uri:
+                return
+        elif not uri:
             log.debug("No cli action requested, launching default window")
             self._get_manager().show()
             return

@@ -80,6 +80,19 @@ def testShowDelete(app):
     app.wait_for_exit()
 
 
+def testShowSystray(app):
+    opts = ["--test-options=fake-systray", "--show-systray"]
+    app.open(use_uri=False,
+             extra_opts=opts,
+             window_name="vmm-fake-systray")
+    app.sleep(1)
+    app.stop()
+
+    app.open(uri="test:///default",
+             extra_opts=opts,
+             window_name="vmm-fake-systray")
+
+
 def testShowRemoteDBusConnect(app):
     """
     Test the remote app dbus connection
