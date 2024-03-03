@@ -3,6 +3,8 @@
 
 import time
 
+import dogtail.config
+
 
 def check(func, timeout=2):
     """
@@ -17,6 +19,26 @@ def check(func, timeout=2):
         if (time.time() - start_time) > timeout:
             raise RuntimeError("Loop condition wasn't met")
         time.sleep(interval)
+
+
+class dogtail_timeout:
+    """
+    Context helper to run a specific check with custom timeout, in seconds
+    """
+    def __init__(self, timeout):
+        backoff = dogtail.config.config.searchBackoffDuration
+        self._tmpval = int(timeout / backoff)
+        self._origval = dogtail.config.config.searchCutoffCount
+
+    def _set(self, val):
+        dogtail.config.config.searchCutoffCount = val
+
+    def __enter__(self):
+        self._set(self._tmpval)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._set(self._origval)
 
 
 def walkUIList(app, win, lst, error_cb, reverse=False):
