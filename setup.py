@@ -29,7 +29,7 @@ import setuptools.command.install_egg_info
 #
 # Newer setuptools will transparently support 'import distutils' though.
 # That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
-import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module
+import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module,import-error
 
 
 SYSPREFIX = sysconfig.get_config_var("prefix")
@@ -95,8 +95,7 @@ class my_build_i18n(setuptools.Command):
             po_mtime = os.path.getmtime(po_file)
             mo_mtime = (os.path.exists(mo_file) and
                         os.path.getmtime(mo_file)) or 0
-            if po_mtime > max_po_mtime:
-                max_po_mtime = po_mtime
+            max_po_mtime = max(max_po_mtime, po_mtime)
             if po_mtime > mo_mtime:
                 self.spawn(cmd)
 
@@ -246,6 +245,7 @@ class my_install(setuptools.command.install.install):
     Error if we weren't 'configure'd with the correct install prefix
     """
     def finalize_options(self):
+        # pylint: disable=access-member-before-definition
         if self.prefix is None:
             if BuildConfig.prefix != SYSPREFIX:
                 print("Using configured prefix=%s instead of SYSPREFIX=%s" % (
