@@ -92,10 +92,11 @@ def testShowRemoteDBusConnect(app):
         newapp = lib.app.VMMDogtailApp("test:///default")
         newapp.open(check_already_running=False,
                 extra_opts=opts)
-        lib.utils.check(lambda: not newapp.is_running())
+        timeout = 10
+        lib.utils.check(lambda: not newapp.is_running(), timeout)
         vapps = [a for a in newapp.tree.root.applications() if
                  a.name == "virt-manager"]
-        lib.utils.check(lambda: len(vapps) == 1)
+        lib.utils.check(lambda: len(vapps) == 1, timeout=timeout)
         # Ensure connection showed up
         app.topwin.find("test default", "table cell")
 
