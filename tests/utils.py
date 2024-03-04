@@ -105,6 +105,7 @@ class _URIs(object):
         self.kvm_ppc64le = _uri_qemu + _caps("kvm-ppc64le.xml") + _domcaps("kvm-ppc64le-domcaps.xml")
         self.kvm_s390x = _uri_qemu + _caps("kvm-s390x.xml") + _domcaps("kvm-s390x-domcaps.xml")
         self.qemu_riscv64 = _uri_qemu + _caps("qemu-riscv64.xml") + _domcaps("qemu-riscv64-domcaps.xml")
+        self.kvm_loongarch64 = _uri_qemu + _caps("kvm-loongarch64.xml") + _domcaps("kvm-loongarch64-domcaps.xml")
 
         # hvf
         self.hvf_x86 = _uri_qemu + _caps("hvf-x86_64.xml") + _domcaps("hvf-x86_64-domcaps.xml")

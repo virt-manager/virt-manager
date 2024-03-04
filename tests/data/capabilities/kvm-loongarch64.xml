@@ -1,0 +1,71 @@
+<capabilities>
+
+  <host>
+    <uuid>21628021-9401-4aef-ad85-a26f109ec950</uuid>
+    <cpu>
+      <arch>loongarch64</arch>
+      <topology sockets='1' dies='1' clusters='1' cores='4' threads='1'/>
+      <pages unit='KiB' size='16'/>
+      <pages unit='KiB' size='32768'/>
+    </cpu>
+    <power_management>
+      <suspend_mem/>
+    </power_management>
+    <iommu support='no'/>
+    <migration_features>
+      <live/>
+      <uri_transports>
+        <uri_transport>tcp</uri_transport>
+        <uri_transport>rdma</uri_transport>
+      </uri_transports>
+    </migration_features>
+    <topology>
+      <cells num='1'>
+        <cell id='0'>
+          <memory unit='KiB'>16532032</memory>
+          <pages unit='KiB' size='16'>1033252</pages>
+          <pages unit='KiB' size='32768'>0</pages>
+          <distances>
+            <sibling id='0' value='10'/>
+          </distances>
+          <cpus num='4'>
+            <cpu id='0' socket_id='0' die_id='0' cluster_id='0' core_id='0' siblings='0'/>
+            <cpu id='1' socket_id='0' die_id='0' cluster_id='0' core_id='1' siblings='1'/>
+            <cpu id='2' socket_id='0' die_id='0' cluster_id='0' core_id='2' siblings='2'/>
+            <cpu id='3' socket_id='0' die_id='0' cluster_id='0' core_id='3' siblings='3'/>
+          </cpus>
+        </cell>
+      </cells>
+    </topology>
+    <secmodel>
+      <model>none</model>
+      <doi>0</doi>
+    </secmodel>
+    <secmodel>
+      <model>dac</model>
+      <doi>0</doi>
+      <baselabel type='kvm'>+964:+964</baselabel>
+      <baselabel type='qemu'>+964:+964</baselabel>
+    </secmodel>
+  </host>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='loongarch64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/bin/qemu-system-loongarch64</emulator>
+      <machine maxCpus='256'>virt</machine>
+      <machine maxCpus='1'>x-remote</machine>
+      <domain type='qemu'/>
+      <domain type='kvm'/>
+    </arch>
+    <features>
+      <acpi default='on' toggle='yes'/>
+      <cpuselection/>
+      <deviceboot/>
+      <disksnapshot default='on' toggle='no'/>
+      <externalSnapshot/>
+    </features>
+  </guest>
+
+</capabilities>
