@@ -23,6 +23,7 @@ from .device.fsdetails import vmmFSDetails
 from .device.gfxdetails import vmmGraphicsDetails
 from .device.netlist import vmmNetworkList
 from .device.tpmdetails import vmmTPMDetails
+from .device.shmemdetails import vmmShmemDetails
 from .device.vsockdetails import vmmVsockDetails
 from .storagebrowse import vmmStorageBrowser
 from .xmleditor import vmmXMLEditor
@@ -42,9 +43,10 @@ from .xmleditor import vmmXMLEditor
  PAGE_SMARTCARD,
  PAGE_USBREDIR,
  PAGE_TPM,
+ PAGE_IVSHMEM,
  PAGE_RNG,
  PAGE_PANIC,
- PAGE_VSOCK) = range(17)
+ PAGE_VSOCK) = range(18)
 
 
 class vmmAddHardware(vmmGObjectUI):
@@ -81,6 +83,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         self._tpmdetails = vmmTPMDetails(self.vm, self.builder, self.topwin)
         self.widget("tpm-align").add(self._tpmdetails.top_box)
+
+        self._shmemdetails = vmmShmemDetails(self.vm, self.builder, self.topwin)
+        self.widget("shmem-align").add(self._shmemdetails.top_box)
 
         self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
                 self.widget("create-pages-align"),
@@ -149,6 +154,8 @@ class vmmAddHardware(vmmGObjectUI):
         self._vsockdetails = None
         self._tpmdetails.cleanup()
         self._tpmdetails = None
+        self._shmemdetails.cleanup()
+        self._shmemdetails = None
         self._xmleditor.cleanup()
         self._xmleditor = None
 
@@ -275,6 +282,7 @@ class vmmAddHardware(vmmGObjectUI):
         add_hw_option(_("VirtIO VSOCK"), "network-idle", PAGE_VSOCK,
             self.vm.is_hvm(),
             _("Not supported for this hypervisor/libvirt/arch combination."))
+        add_hw_option(_("SHMEM"), "device_cpu", PAGE_IVSHMEM, True, None)
 
 
     def _reset_state(self):
@@ -323,6 +331,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._gfxdetails.reset_state()
         self._vsockdetails.reset_state()
         self._tpmdetails.reset_state()
+        self._shmemdetails.reset_state()
 
     @staticmethod
     def change_config_helper(define_func, define_args, vm, err,
@@ -1004,6 +1013,8 @@ class vmmAddHardware(vmmGObjectUI):
             return _("USB Redirection")
         if page == PAGE_TPM:
             return _("TPM")
+        if page == PAGE_IVSHMEM:
+            return _("SHMEM")
         if page == PAGE_RNG:
             return _("Random Number Generator")
         if page == PAGE_PANIC:
@@ -1392,6 +1403,8 @@ class vmmAddHardware(vmmGObjectUI):
             dev = self._build_usbredir()
         elif page_num == PAGE_TPM:
             dev = self._build_tpm()
+        elif page_num == PAGE_IVSHMEM:
+            dev = self._build_shmem()
         elif page_num == PAGE_RNG:
             dev = self._build_rng()
         elif page_num == PAGE_PANIC:
@@ -1529,6 +1542,9 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _build_tpm(self):
         return self._tpmdetails.build_device()
+
+    def _build_shmem(self):
+        return self._shmemdetails.build_device()
 
     def _build_panic(self):
         model = uiutil.get_list_selection(self.widget("panic-model"))
