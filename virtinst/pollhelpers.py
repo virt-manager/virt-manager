@@ -55,7 +55,12 @@ def fetch_volumes(backend, pool, origmap, build_cb):
     typename = "volume"
     list_cb = pool.listAllVolumes
     support_cb = backend.support.conn_storage
-    return _new_poll_helper(origmap, typename, list_cb, build_cb, support_cb)
+    try:
+        return _new_poll_helper(origmap, typename, list_cb, build_cb, support_cb)
+    except UnicodeDecodeError:
+        raise RuntimeError(_("Some files in the '%(pool_name)s' pool have unsupported "
+                           "characters in name. Please remove this file or "
+                           "undefine the pool.") % {"pool_name": pool.name()})
 
 
 def fetch_nodedevs(backend, origmap, build_cb):
