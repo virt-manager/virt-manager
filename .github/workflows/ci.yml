@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install RPM build deps
+    - name: Install base RPM packages
       run: |
         # glibc-langpacks-en needed to work around python locale issues
         # git-core needed for codecov/codecov-action
@@ -24,6 +24,8 @@ jobs:
           glibc-langpack-en \
           python3-pytest python3-pytest-cov
 
+    - name: Install RPM build deps
+      run: |
         dnf builddep -y ./virt-manager.spec
 
     - name: Build RPM and test install
