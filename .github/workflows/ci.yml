@@ -11,8 +11,6 @@ jobs:
       image: fedora:latest
 
     steps:
-    - uses: actions/checkout@v4
-
     - name: Install base RPM packages
       run: |
         # glibc-langpacks-en needed to work around python locale issues
@@ -23,6 +21,8 @@ jobs:
           dnf-plugins-core \
           glibc-langpack-en \
           python3-pytest python3-pytest-cov
+
+    - uses: actions/checkout@v4
 
     - name: Install RPM build deps
       run: |
