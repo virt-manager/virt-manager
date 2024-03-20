@@ -16,7 +16,9 @@ jobs:
     - name: Install RPM build deps
       run: |
         # glibc-langpacks-en needed to work around python locale issues
+        # git-core needed for codecov/codecov-action
         dnf install -y \
+          git-core \
           rpm-build \
           dnf-plugins-core \
           glibc-langpack-en \
