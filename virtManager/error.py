@@ -234,7 +234,7 @@ class vmmErrorDialog(vmmGObject):
 
     def browse_local(self, dialog_name, start_folder=None,
                      _type=None, dialog_type=None,
-                     choose_button=None, default_name=None,
+                     choose_label=None, default_name=None,
                      confirm_overwrite=False):
         """
         Helper function for launching a filechooser
@@ -246,19 +246,11 @@ class vmmErrorDialog(vmmGObject):
         """
         if dialog_type is None:
             dialog_type = Gtk.FileChooserAction.OPEN
-        if choose_button is None:
-            choose_button = Gtk.STOCK_OPEN
 
-        buttons = (Gtk.STOCK_CANCEL,
-                   Gtk.ResponseType.CANCEL,
-                   choose_button,
-                   Gtk.ResponseType.ACCEPT)
-
-        fcdialog = Gtk.FileChooserDialog(title=dialog_name,
-                                    parent=self.get_parent(),
-                                    action=dialog_type,
-                                    buttons=buttons)
-        fcdialog.set_default_response(Gtk.ResponseType.ACCEPT)
+        fcdialog = Gtk.FileChooserNative.new(title=dialog_name,
+                                             parent=self.get_parent(),
+                                             action=dialog_type,
+                                             accept_label=choose_label)
 
         if default_name:
             fcdialog.set_current_name(default_name)
