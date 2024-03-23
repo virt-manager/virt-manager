@@ -273,7 +273,7 @@ class vmmSerialConsole(vmmGObject):
 
         if self._vteterminal:
             scrollbar.set_adjustment(self._vteterminal.get_vadjustment())
-            align.add(self._vteterminal)
+            align.pack_start(self._vteterminal, True, True, 0)
 
         evbox.add(align)
         terminalbox.pack_start(evbox, True, True, 0)
