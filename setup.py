@@ -229,7 +229,7 @@ from %(pkgname)s import %(filename)s
         self._make_bash_completion_files()
 
         self.run_command("build_i18n")
-        distutils.command.build.build.run(self)
+        super().run()
 
 
 class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
@@ -261,10 +261,10 @@ class my_install(setuptools.command.install.install):
                   (self.prefix, BuildConfig.prefix))
             sys.exit(1)
 
-        setuptools.command.install.install.finalize_options(self)
+        super().finalize_options()
 
     def run(self):
-        setuptools.command.install.install.run(self)
+        super().run()
 
         if not self.distribution.no_update_icon_cache:
             print("running gtk-update-icon-cache")
@@ -429,7 +429,7 @@ class VMMDistribution(setuptools.dist.Distribution):
     def __init__(self, *args, **kwargs):
         self.no_update_icon_cache = False
         self.no_compile_schemas = False
-        setuptools.dist.Distribution.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class ExtractMessages(setuptools.Command):
