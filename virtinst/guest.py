@@ -785,6 +785,13 @@ class Guest(XMLBuilder):
                 self.vcpus = defCPUs
         self.cpu.set_topology_defaults(self.vcpus)
 
+    def change_graphics(self, val, inst):
+        inst.type = val
+        if val == "spice":
+            self._add_spice_devices()
+        else:
+            self._remove_spice_devices(inst)
+
     def set_defaults(self, _guest):
         self.set_capabilities_defaults()
 
