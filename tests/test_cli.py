@@ -1478,6 +1478,7 @@ c.add_compare("--remove-device --hostdev mdev_b1ae8bf6_38b0_4c81_9d44_78ce3f5204
 c = vixml.add_category("edit/remove spice graphics", "test-spice --print-diff --define")
 c.add_compare("--edit --graphics type=vnc", "change-spice-to-vnc")
 c.add_compare("--remove-device --graphics type=spice", "remove-spice-graphics")
+c.add_compare("--edit --graphics type=vnc --edit --video model=virtio", "change-graphics-and-video")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
 c.add_invalid("--add-device --pm suspend_to_disk=yes", grep="Cannot use --add-device with --pm")  # --add-device without a device
