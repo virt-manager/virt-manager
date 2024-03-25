@@ -1,0 +1,11 @@
+     <channel type="spicevmc">
+       <target type="virtio" name="com.redhat.spice.0"/>
+     </channel>
+-    <graphics type="spice" autoport="yes">
++    <graphics type="vnc" autoport="yes">
+       <listen type="address"/>
+       <image compression="off"/>
+       <gl enable="no"/>
+
+Domain 'test-spice' defined successfully.
+Changes will take effect after the domain is fully powered off.

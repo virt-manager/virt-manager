@@ -1472,6 +1472,10 @@ c.add_compare("--remove-device --memballoon all", "remove-memballoon")
 c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev")
 c.add_compare("--remove-device --hostdev mdev_b1ae8bf6_38b0_4c81_9d44_78ce3f520496", "remove-hostdev-mdev")
 
+c = vixml.add_category("edit/remove spice graphics", "test-spice --print-diff --define")
+c.add_compare("--edit --graphics type=vnc", "change-spice-to-vnc")
+c.add_compare("--remove-device --graphics type=spice", "remove-spice-graphics")
+
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
 c.add_invalid("--add-device --pm suspend_to_disk=yes", grep="Cannot use --add-device with --pm")  # --add-device without a device
 c.add_invalid("--remove-device --clock utc", grep="Cannot use --remove-device with --clock")  # --remove-device without a dev
