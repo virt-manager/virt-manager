@@ -3919,9 +3919,12 @@ class ParserGraphics(VirtCLIParser):
         inst.keymap = val
 
     def set_type_cb(self, inst, val, virtarg):
-        if val == "default":
-            return
-        inst.type = val
+        if self.editing:
+            self.guest.change_graphics(val, inst)
+        else:
+            if val == "default":
+                return
+            inst.type = val
 
     def listens_find_inst_cb(self, *args, **kwargs):
         cliarg = "listens"  # listens[0-9]*
