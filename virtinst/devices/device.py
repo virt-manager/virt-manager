@@ -132,6 +132,7 @@ class Device(XMLBuilder):
             "interface":     ["macaddr", "xmlindex"],
             "input":         ["bus", "type", "xmlindex"],
             "sound":         ["model", "xmlindex"],
+            "audio":         ["type", "id"],
             "video":         ["model", "xmlindex"],
             "watchdog":      ["model", "xmlindex"],
             "hostdev":       ["type", "managed", "xmlindex",

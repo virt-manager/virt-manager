@@ -39,11 +39,22 @@ class DeviceGraphics(Device):
     TYPE_RDP = "rdp"
     TYPE_SPICE = "spice"
 
-    _XML_PROP_ORDER = ["type", "gl", "_port", "_tlsPort", "autoport", "websocket",
+    _XML_PROP_ORDER = ["_type", "gl", "_port", "_tlsPort", "autoport", "websocket",
                        "keymap", "_listen",
                        "passwd", "display", "xauth"]
 
     keymap = XMLProperty("./@keymap")
+
+    def _set_type(self, val):
+        self._type = val
+        # connected is valid for Spice and VNC, but VNC accepts only 'keep' and
+        # libvirt errors out if there is any other value
+        if val == "vnc" and self.connected != "keep":
+            self.connected = None
+    def _get_type(self):
+        return self._type
+    _type = XMLProperty("./@type")
+    type = property(_get_type, _set_type)
 
     def _set_port(self, val):
         val = _validate_port("Port", val)
@@ -85,7 +96,6 @@ class DeviceGraphics(Device):
     _listen = XMLProperty("./@listen")
     listen = property(_get_listen, _set_listen)
 
-    type = XMLProperty("./@type")
     passwd = XMLProperty("./@passwd")
     passwdValidTo = XMLProperty("./@passwdValidTo")
     socket = XMLProperty("./@socket")

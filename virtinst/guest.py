@@ -500,8 +500,12 @@ class Guest(XMLBuilder):
 
     def add_device(self, dev):
         self.devices.add_child(dev)
+
     def remove_device(self, dev):
         self.devices.remove_child(dev)
+        self._remove_duplicate_console(dev)
+        self._remove_spice_devices()
+
     devices = XMLChildProperty(_DomainDevices, is_single=True)
 
     def find_device(self, origdev):
@@ -780,6 +784,13 @@ class Guest(XMLBuilder):
             else:
                 self.vcpus = defCPUs
         self.cpu.set_topology_defaults(self.vcpus)
+
+    def change_graphics(self, val, inst):
+        inst.type = val
+        if val == "spice":
+            self._add_spice_devices()
+        else:
+            self._remove_spice_devices()
 
     def set_defaults(self, _guest):
         self.set_capabilities_defaults()
@@ -1197,3 +1208,32 @@ class Guest(XMLBuilder):
         self._add_spice_channels()
         self._add_spice_sound()
         self._add_spice_usbredir()
+
+    def _remove_duplicate_console(self, dev):
+        condup = DeviceConsole.get_console_duplicate(self, dev)
+        if condup:
+            log.debug("Found duplicate console device:\n%s", condup.get_xml())
+            self.devices.remove_child(condup)
+
+    def _remove_spice_audio(self):
+        for audio in self.devices.audio:
+            if audio.type == "spice":
+                self.devices.remove_child(audio)
+
+    def _remove_spice_channels(self):
+        for channel in self.devices.channel:
+            if channel.type == DeviceChannel.TYPE_SPICEVMC:
+                self.devices.remove_child(channel)
+
+    def _remove_spice_usbredir(self):
+        for redirdev in self.devices.redirdev:
+            if redirdev.type == "spicevmc":
+                self.devices.remove_child(redirdev)
+
+    def _remove_spice_devices(self):
+        if self.has_spice():
+            return
+
+        self._remove_spice_audio()
+        self._remove_spice_channels()
+        self._remove_spice_usbredir()

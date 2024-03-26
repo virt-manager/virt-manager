@@ -1,0 +1,24 @@
+     <emulator>/usr/bin/qemu-system-x86_64</emulator>
+     <controller type="usb" index="0" model="qemu-xhci" ports="15"/>
+     <controller type="virtio-serial" index="0"/>
+-    <channel type="spicevmc">
+-      <target type="virtio" name="com.redhat.spice.0"/>
+-    </channel>
+-    <graphics type="spice" autoport="yes">
+-      <listen type="address"/>
+-      <image compression="off"/>
+-      <gl enable="no"/>
+-    </graphics>
+-    <audio id="1" type="spice"/>
+     <video>
+       <model type="qxl" ram="65536" vram="65536" vgamem="16384" heads="1" primary="yes"/>
+     </video>
+-    <redirdev bus="usb" type="spicevmc">
+-    </redirdev>
+-    <redirdev bus="usb" type="spicevmc">
+-    </redirdev>
+   </devices>
+ </domain>
+
+Domain 'test-spice' defined successfully.
+Changes will take effect after the domain is fully powered off.
