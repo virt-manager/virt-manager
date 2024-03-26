@@ -11,17 +11,21 @@ jobs:
       image: fedora:latest
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Install RPM build deps
+    - name: Install base RPM packages
       run: |
         # glibc-langpacks-en needed to work around python locale issues
+        # git-core needed for codecov/codecov-action
         dnf install -y \
+          git-core \
           rpm-build \
           dnf-plugins-core \
           glibc-langpack-en \
           python3-pytest python3-pytest-cov
 
+    - uses: actions/checkout@v4
+
+    - name: Install RPM build deps
+      run: |
         dnf builddep -y ./virt-manager.spec
 
     - name: Build RPM and test install
@@ -36,7 +40,6 @@ jobs:
         pytest --cov --cov-report=xml
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
-        file: ./coverage.xml
-        flags: unittests
+        token: ${{ secrets.CODECOV_TOKEN }}
