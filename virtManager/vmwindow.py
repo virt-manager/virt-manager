@@ -558,7 +558,7 @@ class vmmVMWindow(vmmGObjectUI):
             _("Save Virtual Machine Screenshot"),
             _type=("png", _("PNG files")),
             dialog_type=Gtk.FileChooserAction.SAVE,
-            choose_button=Gtk.STOCK_SAVE,
+            choose_label=_("_Save"),
             start_folder=start_folder,
             default_name=default,
             confirm_overwrite=True)
