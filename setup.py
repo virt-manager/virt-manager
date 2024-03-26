@@ -20,16 +20,17 @@ import subprocess
 import setuptools
 import setuptools.command.install
 import setuptools.command.install_egg_info
-
-
-# distutils will be deprecated in python 3.12 in favor of setuptools,
-# but as of this writing there's standard no setuptools way to extend the
-# 'build' commands which are the only standard commands we trigger.
-# https://github.com/pypa/setuptools/issues/2591
-#
-# Newer setuptools will transparently support 'import distutils' though.
-# That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
-import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module,import-error
+try:
+    # Use the setuptools build command with setuptools >= 62.4.0
+    import setuptools.command.build
+    BUILD_COMMAND_CLASS = setuptools.command.build.build
+except ImportError:
+    # Use distutils with an older setuptools version
+    #
+    # Newer setuptools will transparently support 'import distutils' though.
+    # That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
+    import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module,import-error
+    BUILD_COMMAND_CLASS = distutils.command.build.build
 
 
 SYSPREFIX = sysconfig.get_config_var("prefix")
@@ -131,7 +132,7 @@ class my_build_i18n(setuptools.Command):
                 self.distribution.data_files.append((target, files_merged))
 
 
-class my_build(distutils.command.build.build):
+class my_build(BUILD_COMMAND_CLASS):
     def _make_bin_wrappers(self):
         template = """#!/usr/bin/env python3
 
@@ -229,7 +230,7 @@ from %(pkgname)s import %(filename)s
         self._make_bash_completion_files()
 
         self.run_command("build_i18n")
-        distutils.command.build.build.run(self)
+        super().run()
 
 
 class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
@@ -261,10 +262,10 @@ class my_install(setuptools.command.install.install):
                   (self.prefix, BuildConfig.prefix))
             sys.exit(1)
 
-        setuptools.command.install.install.finalize_options(self)
+        super().finalize_options()
 
     def run(self):
-        setuptools.command.install.install.run(self)
+        super().run()
 
         if not self.distribution.no_update_icon_cache:
             print("running gtk-update-icon-cache")
@@ -429,7 +430,7 @@ class VMMDistribution(setuptools.dist.Distribution):
     def __init__(self, *args, **kwargs):
         self.no_update_icon_cache = False
         self.no_compile_schemas = False
-        setuptools.dist.Distribution.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class ExtractMessages(setuptools.Command):
