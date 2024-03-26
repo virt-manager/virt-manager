@@ -1198,6 +1198,14 @@ c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --os-variant f
 
 
 
+#####################
+# loongarch64 tests #
+#####################
+
+c.add_compare("--osinfo fedora19 --nodisks --pxe --connect " + utils.URIs.kvm_loongarch64, "kvm-loongarch64-basic")
+
+
+
 #################
 # AMD sev tests #
 #################
