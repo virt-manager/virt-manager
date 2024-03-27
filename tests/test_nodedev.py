@@ -72,6 +72,13 @@ def testPCIDevice():
     assert obj.is_pci_bridge() is True
 
 
+def testCardbusPCIDevice():
+    conn = utils.URIs.open_testdriver_cached()
+    nodename = "pci_104c_ac56"
+    obj = _nodeDevFromName(conn, nodename)
+    assert obj.is_cardbus_bridge() is True
+
+
 
 def testUSBDevDevice():
     conn = utils.URIs.open_testdriver_cached()

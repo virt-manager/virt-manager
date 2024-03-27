@@ -12,7 +12,7 @@ from virtinst import (DeviceChannel, DeviceConsole,
         DeviceController, DeviceDisk, DeviceHostdev,
         DeviceInput, DeviceInterface, DevicePanic, DeviceParallel,
         DeviceRedirdev, DeviceRng, DeviceSerial, DeviceSmartcard,
-        DeviceSound, DeviceVideo, DeviceVsock, DeviceWatchdog)
+        DeviceSound, DeviceVideo, DeviceVsock, DeviceWatchdog, NodeDevice)
 from virtinst import log
 
 from .lib import uiutil
@@ -184,6 +184,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._build_input_combo()
         self.build_sound_combo(self.vm, self.widget("sound-model"))
         self._build_hostdev_treeview()
+        self._build_iommu_group()
         self.build_video_combo(self.vm, self.widget("video-model"))
         uiutil.build_simple_combo(self.widget("char-device-type"), [])
         self._build_char_target_type_combo()
@@ -754,14 +755,12 @@ class vmmAddHardware(vmmGObjectUI):
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
 
-
-    def _hostdev_row_selected_cb(self, selection):
+    def _hostdev_row_selected_cb(self, selection, devtype):
         model, treeiter = selection.get_selected()
-        sensitive = treeiter and model[treeiter][2] or False
+        sensitive = treeiter and model[treeiter][2] or False or devtype == "pci"
         self.widget("create-finish").set_sensitive(sensitive)
 
-
-    def _populate_hostdev_model(self, devtype):
+    def _populate_hostdev_model(self, select, devtype):
         devlist = self.widget("host-device")
         model = devlist.get_model()
         model.clear()
@@ -776,6 +775,7 @@ class vmmAddHardware(vmmGObjectUI):
             prettyname = dev.pretty_name()
 
             if devtype == "pci":
+                self.widget("host-device").get_selection().set_mode(0)
                 for subdev in netdevs:
                     if dev.xmlobj.name == subdev.xmlobj.parent:
                         prettyname += " (%s)" % subdev.pretty_name()
@@ -794,7 +794,14 @@ class vmmAddHardware(vmmGObjectUI):
                 tooltip = _("%s is not active in the host system.\n"
                       "Please start the mdev in the host system before "
                       "adding it to the guest.") % prettyname
-            model.append([dev.xmlobj, prettyname, sensitive, tooltip])
+            if uiutil.get_list_selection(select) == dev.xmlobj.iommugroup:
+                model.append([dev.xmlobj, prettyname, sensitive, tooltip])
+            if not devtype == "pci":
+                self.widget("host-device").get_selection().set_mode(1)
+                model.append([dev.xmlobj, prettyname, sensitive, tooltip])
+
+        uiutil.set_grid_row_visible(self.widget("iommu-groups"),
+                                    devtype == "pci" and len(model) > 0)
 
         if len(model) == 0:
             model.append([None, _("No Devices Available"), False, None])
@@ -802,9 +809,24 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.set_list_selection_by_number(devlist, 0)
 
         devlist.get_selection().connect(
-                "changed", self._hostdev_row_selected_cb)
+            "changed", self._hostdev_row_selected_cb, devtype)
         devlist.get_selection().emit("changed")
 
+    def _build_iommu_group(self):
+        # This function is used to add iommu groups in the gtk combobox in pci page
+
+        rows = []
+
+        for dev in self.conn.filter_nodedevs("pci"):
+            if [dev.xmlobj.iommugroup, "Iommu_Group_{0}".format(dev.xmlobj.iommugroup)] in rows:
+                continue
+            if dev.xmlobj.is_pci_bridge() or dev.xmlobj.iommugroup is None or dev.xmlobj.is_cardbus_bridge():
+                continue
+            rows.append([dev.xmlobj.iommugroup, "Iommu_Group_{0}".format(dev.xmlobj.iommugroup)])
+
+        uiutil.build_simple_combo(self.widget("iommu-groups"), rows, sort=False)
+
+        self.widget("iommu-groups").connect("changed", self._populate_hostdev_model, "pci")
 
     @staticmethod
     def build_video_combo(vm, combo):
@@ -968,7 +990,7 @@ class vmmAddHardware(vmmGObjectUI):
                 devtype = "pci"
             if row and row[5] == "mdev":
                 devtype = "mdev"
-            self._populate_hostdev_model(devtype)
+            self._populate_hostdev_model(self.widget("iommu-groups"), devtype)
 
         if page == PAGE_CONTROLLER:
             # We need to trigger this as it can desensitive 'finish'
@@ -1030,6 +1052,10 @@ class vmmAddHardware(vmmGObjectUI):
 
     def _xmleditor_xml_requested_cb(self, src):
         dev = self._build_device(check_xmleditor=False)
+        if isinstance(dev, list):
+            for i in dev:
+                self._xmleditor.set_xml(i and i.get_xml() or "")
+            return
         self._xmleditor.set_xml(dev and dev.get_xml() or "")
 
 
@@ -1181,7 +1207,8 @@ class vmmAddHardware(vmmGObjectUI):
     ######################
 
     def _setup_device(self, asyncjob, dev):
-        if dev.DEVICE_TYPE != "disk":
+
+        if isinstance(dev, list) or dev.DEVICE_TYPE != "disk":
             return
 
         poolname = None
@@ -1259,7 +1286,11 @@ class vmmAddHardware(vmmGObjectUI):
         failure = True
         if not error:
             try:
-                failure = self._add_device(dev)
+                if isinstance(dev, list):
+                    for devs in dev:
+                        failure = self._add_device(devs)
+                else:
+                    failure = self._add_device(dev)
             except Exception as e:
                 failure = True
                 error = _("Unable to add device: %s") % str(e)
@@ -1279,7 +1310,11 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         try:
-            if self._validate_device(dev) is False:
+            if isinstance(dev, list):
+                for devs in dev:
+                    if self._validate_device(devs) is False:
+                        return
+            elif self._validate_device(dev) is False:
                 return
         except Exception as e:
             self.err.show_err(
@@ -1399,6 +1434,13 @@ class vmmAddHardware(vmmGObjectUI):
         elif page_num == PAGE_VSOCK:
             dev = self._build_vsock()
 
+        if isinstance(dev, list):
+            pci = []
+            for devs in dev:
+                devs.set_defaults(self.vm.get_xmlobj())
+                pci.append(devs)
+            return pci
+
         dev.set_defaults(self.vm.get_xmlobj())
         return dev
 
@@ -1465,9 +1507,20 @@ class vmmAddHardware(vmmGObjectUI):
     def _build_hostdev(self):
         nodedev = uiutil.get_list_selection(self.widget("host-device"))
         dev = DeviceHostdev(self.conn.get_backend())
-        dev.set_from_nodedev(nodedev)
-        setattr(dev, "vmm_nodedev", nodedev)
-        return dev
+        if nodedev:
+            dev.set_from_nodedev(nodedev)
+            setattr(dev, "vmm_nodedev", nodedev)
+            return dev
+        # This is used to add all pci devices in a iommugroup
+        pci = []
+        loop = (nodedevices for models in self.widget("host-device").get_model() 
+                for nodedevices in models if isinstance(nodedevices, NodeDevice))
+        for devices in loop:
+            dev = DeviceHostdev(self.conn.get_backend())
+            dev.set_from_nodedev(devices)
+            setattr(dev, "vmm_nodedev", devices)
+            pci.append(dev)
+        return pci
 
     def _build_char(self):
         char_class = self._get_char_class()

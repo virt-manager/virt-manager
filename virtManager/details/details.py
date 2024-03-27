@@ -1733,6 +1733,17 @@ class vmmDetails(vmmGObjectUI):
         self.widget("hw-panel").set_current_page(pagetype)
 
     def _refresh_overview_page(self):
+        
+        '''this if statement is used when a vm is selected, checks if iommu is disabled
+        and if it is it automatically remove pci devices to the vm configuration '''
+
+        if all(i.xmlobj.iommugroup is None for i in self.conn.filter_nodedevs("pci")):
+            for i in self.vm.xmlobj.devices.hostdev:
+                if i.type == "pci":
+                    vmmDeleteStorage.remove_devobj_internal(
+                        self.vm, self.err, i
+                    )
+
         # Basic details
         self.widget("overview-name").set_text(self.vm.get_name())
         self.widget("overview-uuid").set_text(self.vm.get_uuid())
