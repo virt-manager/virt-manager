@@ -1,0 +1,51 @@
+name: Test against libvirt.git
+
+on:
+  # Run every 3 days at midnight
+  schedule:
+    - cron: '0 0 */3 * *'
+
+jobs:
+  test-against-libvirt-git:
+    # Only run this if on the main 'virt-manager/virt-manager' repo, not forks
+    if: "contains(github.repository, 'virt-manager/virt-manager')"
+
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install RPM build and libvirt deps
+      run: |
+        # glibc-langpacks-en needed to work around python locale issues
+        dnf install -y \
+          rpm-build \
+          dnf-plugins-core \
+          glibc-langpack-en \
+          python3-pytest \
+          python3-pytest-error-for-skips
+
+        dnf builddep -y ./virt-manager.spec libvirt
+
+    - name: checkout and build libvirt
+      run: |
+        git clone --depth=1 https://gitlab.com/libvirt/libvirt
+        cd libvirt
+        meson build
+        ninja -C build
+        cd ..
+
+    - name: Build RPM and test install
+      run: |
+        ./setup.py rpm
+        dnf install -y \
+          noarch/virt-install*.rpm \
+          noarch/virt-manager-common*.rpm
+
+    - name: Run test suite
+      run: |
+        # Treat any `skips` as `errors`. We should only be
+        # skipping tests on old libvirt versions
+        ./libvirt/build/run pytest --error-for-skips
