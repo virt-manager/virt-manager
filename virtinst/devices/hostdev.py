@@ -70,8 +70,8 @@ class DeviceHostdev(Device):
                 self.model = "vfio-ap"
                 self.managed = "no"
 
-            elif (re.match("^nvidia-[0-9]{2}", nodedev.type_id) or
-                  re.match("^i915-GVTg_V[0-9]_[0-9]", nodedev.type_id)):
+            elif (re.match("^nvidia-[0-9]{2}", nodedev.type_id or "") or
+                  re.match("^i915-GVTg_V[0-9]_[0-9]", nodedev.type_id or "")):
                 self.model = "vfio-pci"
                 self.managed = "yes"
                 self.display = "off"
