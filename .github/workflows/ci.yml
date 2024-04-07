@@ -3,8 +3,7 @@ name: Test on fedora:latest
 on: [push, pull_request]
 
 jobs:
-  # Setup latest Fedora with latest libvirt from virt-preview, build
-  # the RPM, verify it installs, run test suite, upload coverage
+  # Test on fedora:latest with stock distro packages
   test:
     runs-on: ubuntu-latest
     container:
