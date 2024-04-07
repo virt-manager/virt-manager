@@ -473,25 +473,6 @@ class vmmDomain(vmmLibvirtObject):
         if not self.conn.support.domain_list_snapshots(self._backend):
             return _("Libvirt connection does not support snapshots.")
 
-        if self.list_snapshots():
-            return
-
-        # Check if our disks are all qcow2
-        seen_qcow2 = False
-        for disk in self.get_disk_devices_norefresh():
-            if disk.read_only:
-                continue
-            if disk.is_empty():
-                continue
-            if disk.driver_type == "qcow2":
-                seen_qcow2 = True
-                continue
-            return _("Snapshots are only supported if all writeable disks "
-                     "images allocated to the guest are qcow2 format.")
-        if not seen_qcow2:
-            return _("Snapshots require at least one writeable qcow2 disk "
-                     "image allocated to the guest.")
-
     def get_domain_capabilities(self):
         if not self._domain_caps:
             self._domain_caps = self.get_xmlobj().lookup_domcaps()
