@@ -1190,7 +1190,8 @@ class vmmDomain(vmmLibvirtObject):
             if diskOnly:
                 flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_DISK_ONLY)
             log.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
-        self._backend.snapshotCreateXML(xml, flags)
+        obj = self._backend.snapshotCreateXML(xml, flags)
+        log.debug("returned new snapshot XML:\n%s", obj.getXMLDesc(0))
 
     def _get_agent(self):
         """
