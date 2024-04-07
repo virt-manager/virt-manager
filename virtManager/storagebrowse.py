@@ -22,12 +22,14 @@ class _BrowseReasonMetadata:
         self.local_title = None
         self.gsettings_key = None
         self.dialog_type = None
+        self.choose_label = None
 
         if browse_reason == vmmStorageBrowser.REASON_IMAGE:
             self.enable_create = True
             self.local_title = _("Locate existing storage")
             self.storage_title = _("Locate or create storage volume")
             self.dialog_type = Gtk.FileChooserAction.SAVE
+            self.choose_label = _("_Open")
             self.gsettings_key = "image"
 
         if browse_reason == vmmStorageBrowser.REASON_ISO_MEDIA:
@@ -185,7 +187,8 @@ class vmmStorageBrowser(vmmGObjectUI):
         filename = self.err.browse_local(
             dialog_type=data.dialog_type,
             dialog_name=data.local_title,
-            start_folder=start_folder)
+            start_folder=start_folder,
+            choose_label=data.choose_label)
 
         if not filename:
             return
