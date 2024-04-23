@@ -19,7 +19,6 @@ import subprocess
 
 import setuptools
 import setuptools.command.install
-import setuptools.command.install_egg_info
 try:
     # Use the setuptools build command with setuptools >= 62.4.0
     import setuptools.command.build
@@ -233,14 +232,6 @@ from %(pkgname)s import %(filename)s
         super().run()
 
 
-class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
-    """
-    Disable egg_info installation, seems pointless for a non-library
-    """
-    def run(self):
-        pass
-
-
 class my_install(setuptools.command.install.install):
     """
     Error if we weren't 'configure'd with the correct install prefix
@@ -267,12 +258,12 @@ class my_install(setuptools.command.install.install):
     def run(self):
         super().run()
 
-        if not self.distribution.no_update_icon_cache:
+        if not self.distribution.no_update_icon_cache and shutil.which("gtk-update-icon-cache"):
             print("running gtk-update-icon-cache")
             icon_path = os.path.join(self.install_data, "share/icons/hicolor")
             self.spawn(["gtk-update-icon-cache", "-q", "-t", icon_path])
 
-        if not self.distribution.no_compile_schemas:
+        if not self.distribution.no_compile_schemas and shutil.which("glib-compile-schemas"):
             print("compiling gsettings schemas")
             gschema_install = os.path.join(self.install_data,
                 "share/glib-2.0/schemas")
@@ -539,7 +530,6 @@ setuptools.setup(
         'build_i18n': my_build_i18n,
 
         'install': my_install,
-        'install_egg_info': my_egg_info,
 
         'configure': configure,
 
