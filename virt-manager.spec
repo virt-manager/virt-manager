@@ -132,6 +132,7 @@ machine).
 
 %{_datadir}/%{name}/ui/*.ui
 %{_datadir}/%{name}/virtManager
+%{python3_sitelib}/virt_manager-*.egg-info/
 
 %{_datadir}/%{name}/icons
 %{_datadir}/icons/hicolor/*/apps/*
