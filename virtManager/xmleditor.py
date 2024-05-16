@@ -7,13 +7,24 @@ import gi
 from virtinst import log
 
 # We can use either gtksourceview3 or gtksourceview4
+have_gtksourceview = True
 try:
     gi.require_version("GtkSource", "4")
     log.debug("Using GtkSource 4")
 except ValueError:  # pragma: no cover
-    gi.require_version("GtkSource", "3.0")
-    log.debug("Using GtkSource 3.0")
-from gi.repository import GtkSource
+    try:
+        gi.require_version("GtkSource", "3.0")
+        log.debug("Using GtkSource 3.0")
+    except ValueError:
+        log.debug("Not using GtkSource")
+        have_gtksourceview = False
+
+if have_gtksourceview:
+    from gi.repository import GtkSource
+else:
+    # if GtkSourceView is not available, just use a plain TextView. This will
+    # only disable auto-indent and syntax highlighting.
+    from gi.repository import Gtk
 
 from .lib import uiutil
 from .baseclass import vmmGObjectUI
@@ -66,17 +77,20 @@ class vmmXMLEditor(vmmGObjectUI):
                 not enabled)
 
     def _init_ui(self):
-        self._srcview = GtkSource.View()
-        self._srcbuff = self._srcview.get_buffer()
-
-        lang = GtkSource.LanguageManager.get_default().get_language("xml")
-        self._srcbuff.set_language(lang)
+        if have_gtksourceview:
+            self._srcview = GtkSource.View()
+            self._srcbuff = self._srcview.get_buffer()
+            self._srcview.set_auto_indent(True)
+            lang = GtkSource.LanguageManager.get_default().get_language("xml")
+            self._srcbuff.set_language(lang)
+            self._srcbuff.set_highlight_syntax(True)
+        else:
+            self._srcview = Gtk.TextView()
+            self._srcbuff = self._srcview.get_buffer()
 
         self._srcview.set_monospace(True)
-        self._srcview.set_auto_indent(True)
         self._srcview.get_accessible().set_name("XML editor")
 
-        self._srcbuff.set_highlight_syntax(True)
         self._srcbuff.connect("changed", self._buffer_changed_cb)
 
         self.widget("xml-notebook").connect("switch-page",
