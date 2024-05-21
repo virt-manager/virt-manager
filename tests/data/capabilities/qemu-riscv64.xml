@@ -1,7 +1,5 @@
 <capabilities>
 
-  <!-- Generated on Fedora 29 with QEMU ~4.0.0 and libvirt ~5.3.0 -->
-
   <host>
     <uuid>2b763ba8-82a1-44dd-a197-9132a8d520a2</uuid>
     <cpu>
@@ -86,8 +84,8 @@
     <secmodel>
       <model>dac</model>
       <doi>0</doi>
-      <baselabel type='kvm'>+0:+0</baselabel>
-      <baselabel type='qemu'>+0:+0</baselabel>
+      <baselabel type='kvm'>+107:+107</baselabel>
+      <baselabel type='qemu'>+107:+107</baselabel>
     </secmodel>
   </host>
 
@@ -96,17 +94,19 @@
     <arch name='riscv64'>
       <wordsize>64</wordsize>
       <emulator>/usr/bin/qemu-system-riscv64</emulator>
-      <machine maxCpus='1'>spike_v1.10</machine>
-      <machine maxCpus='8'>virt</machine>
-      <machine maxCpus='1'>sifive_u</machine>
+      <machine maxCpus='512'>virt</machine>
+      <machine maxCpus='8'>spike</machine>
+      <machine maxCpus='5'>microchip-icicle-kit</machine>
+      <machine maxCpus='5'>sifive_u</machine>
+      <machine maxCpus='1'>shakti_c</machine>
       <machine maxCpus='1'>sifive_e</machine>
-      <machine maxCpus='1'>spike_v1.9.1</machine>
       <domain type='qemu'/>
     </arch>
     <features>
       <cpuselection/>
       <deviceboot/>
       <disksnapshot default='on' toggle='no'/>
+      <externalSnapshot/>
     </features>
   </guest>
 
