@@ -816,7 +816,7 @@ class Guest(XMLBuilder):
         for dev in self.devices.get_all():
             dev.set_defaults(self)
 
-        self._add_virtioscsi_controller()
+        self.add_virtioscsi_controller()
         self._add_q35_pcie_controllers()
         self._add_spice_devices()
 
@@ -1091,7 +1091,7 @@ class Guest(XMLBuilder):
             dev.model = "virtio"
             self.add_device(dev)
 
-    def _add_virtioscsi_controller(self):
+    def add_virtioscsi_controller(self):
         if not self.can_default_virtioscsi():
             return
         if not any([d for d in self.devices.disk if d.bus == "scsi"]):

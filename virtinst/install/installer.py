@@ -187,6 +187,13 @@ class Installer(object):
         self._unattended_install_cdrom_device = dev.target
         guest.add_device(dev)
 
+        # The CDROM we just added might be a SCSI one. If that's the case,
+        # libvirt will automatically add the necessary controller for us, but
+        # depending on the architecture its choice of model might not be
+        # usable by the guest OS. Try to add a virtio-scsi controller, if
+        # supported, for the best chance of the CDROM actually being picked up
+        guest.add_virtioscsi_controller()
+
         if self.conn.in_testsuite():
             # Hack to set just the XML path differently for the test suite.
             # Setting this via regular 'path' will error that it doesn't exist
