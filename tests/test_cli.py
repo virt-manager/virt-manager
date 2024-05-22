@@ -1166,8 +1166,8 @@ c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --
 # riscv tests #
 ###############
 
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none", "riscv64-headless", precompare_check="5.3.0")
-c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc", "riscv64-graphics", precompare_check="5.3.0", )
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none", "riscv64-headless")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --os-variant fedora29 --import --disk %(EXISTIMG1)s --network default --graphics vnc", "riscv64-graphics")
 
 
 
