@@ -1168,6 +1168,10 @@ c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --
 
 c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --osinfo fedora29 --import --disk %(EXISTIMG1)s --network default --graphics none", "riscv64-headless")
 c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --osinfo fedora29 --import --disk %(EXISTIMG1)s --network default --graphics spice", "riscv64-graphics")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --osinfo fedora29 --import --disk %(EXISTIMG1)s --boot kernel=/kernel.img,initrd=/initrd.img,cmdline='root=/dev/vda2'", "riscv64-kernel-boot")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --osinfo fedora29 --import --disk %(EXISTIMG1)s --cloud-init", "riscv64-cloud-init")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --osinfo fedora29 --cdrom %(ISO-F26-NETINST)s", "riscv64-cdrom")
+c.add_compare("--connect %(URI-QEMU-RISCV64)s --arch riscv64 --osinfo fedora29 --unattended", "riscv64-unattended")
 
 
 
