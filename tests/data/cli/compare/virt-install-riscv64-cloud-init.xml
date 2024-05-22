@@ -56,6 +56,7 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
+    <controller type="scsi" model="virtio-scsi"/>
   </devices>
   <on_reboot>destroy</on_reboot>
 </domain>
@@ -119,5 +120,6 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
+    <controller type="scsi" model="virtio-scsi"/>
   </devices>
 </domain>

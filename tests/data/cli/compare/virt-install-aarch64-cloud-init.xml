@@ -59,6 +59,7 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
+    <controller type="scsi" model="virtio-scsi"/>
   </devices>
   <sysinfo type="smbios">
     <system>
@@ -129,5 +130,6 @@
       <target dev="sda" bus="scsi"/>
       <readonly/>
     </disk>
+    <controller type="scsi" model="virtio-scsi"/>
   </devices>
 </domain>
