@@ -542,7 +542,9 @@ class Guest(XMLBuilder):
             # and doesn't break QEMU internal snapshots
             prefer_efi = self.osinfo.requires_firmware_efi(self.os.arch)
         else:
-            prefer_efi = self.os.is_arm_machvirt() or self.conn.is_bhyve()
+            prefer_efi = (self.os.is_arm_machvirt() or
+                          self.os.is_riscv_virt() or
+                          self.conn.is_bhyve())
 
         log.debug("Prefer EFI => %s", prefer_efi)
         return prefer_efi
