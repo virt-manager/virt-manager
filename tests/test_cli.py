@@ -704,9 +704,6 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev wlan0,type=net
 --hostdev /dev/vdz,type=storage
 --hostdev /dev/pty7,type=misc
---hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110,address.type=ccw,address.cssid=0xfe,address.ssid=0x1,address.devno=0x0008
---hostdev mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9
---hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
 
 
 --filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on,driver.page_per_vq=off
@@ -804,6 +801,13 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 
 """, "many-devices", predefine_check="8.4.0")
+
+# Need to extract from the many-devices test as it was fixed in libvirt 10.4.0
+c.add_compare("""
+--hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110,address.type=ccw,address.cssid=0xfe,address.ssid=0x1,address.devno=0x0008
+--hostdev mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9
+--hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
+""", "mdev-devices", prerun_check="10.4.0")
 
 
 # Specific XML test cases #1
@@ -1473,7 +1477,7 @@ c.add_compare("--remove-device --disk /dev/null", "remove-disk-path")
 c.add_compare("--remove-device --video all", "remove-video-all")
 c.add_compare("--remove-device --host-device 0x04b3:0x4485", "remove-hostdev-name")
 c.add_compare("--remove-device --memballoon all", "remove-memballoon")
-c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev")
+c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev", prerun_check="10.4.0")
 c.add_compare("--remove-device --hostdev mdev_b1ae8bf6_38b0_4c81_9d44_78ce3f520496", "remove-hostdev-mdev")
 
 c = vixml.add_category("add/rm devices and start", "test-state-shutoff --print-diff --start")
@@ -1485,7 +1489,7 @@ c.add_compare("--define --add-device --host-device usb_device_4b3_4485_noserial"
 c.add_compare("--add-device --disk %(EXISTIMG1)s,bus=virtio,target=vdf", "add-disk-basic-start")
 c.add_compare("--add-device --disk %(NEWIMG1)s,size=.01", "add-disk-create-storage-start")
 c.add_compare("--remove-device --disk /dev/null", "remove-disk-path-start")
-c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev-start")
+c.add_compare("--add-device --hostdev mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "add-hostdev-mdev-start", prerun_check="10.4.0")
 
 c = vixml.add_category("add/rm devices OS KVM", "--connect %(URI-KVM-X86)s test --print-diff --define")
 c.add_compare("--add-device --disk %(EXISTIMG1)s", "kvm-add-disk-os-from-xml")  # Guest OS (none) from XML

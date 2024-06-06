@@ -44,6 +44,14 @@ def _testNode2DeviceCompare(conn, nodename, devfile, nodedev=None):
     utils.diff_compare(dev.get_xml() + "\n", devfile)
 
 
+def check_version(conn, version):
+    if conn.support._check_version(version):
+        return
+
+    msg = f"Skipping check due to version < {version}"
+    raise pytest.skip(msg)
+
+
 def testFunkyChars():
     # Ensure parsing doesn't fail
     conn = utils.URIs.open_testdriver_cached()
@@ -129,6 +137,7 @@ def testDRMDevice():
 
 def testDASDMdev():
     conn = utils.URIs.open_testdriver_cached()
+    check_version(conn, "10.4.0")
     devname = "mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110"
     dev = _nodeDevFromName(conn, devname)
     assert dev.name == devname
@@ -139,6 +148,7 @@ def testDASDMdev():
 
 def testAPQNMdev():
     conn = utils.URIs.open_testdriver_cached()
+    check_version(conn, "10.4.0")
     devname = "mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9"
     dev = _nodeDevFromName(conn, devname)
     assert dev.name == devname
@@ -149,6 +159,7 @@ def testAPQNMdev():
 
 def testPCIMdev():
     conn = utils.URIs.open_testdriver_cached()
+    check_version(conn, "10.4.0")
     devname = "mdev_4b20d080_1b54_4048_85b3_a6a62d165c01"
     dev = _nodeDevFromName(conn, devname)
     assert dev.name == devname
@@ -158,10 +169,9 @@ def testPCIMdev():
     assert dev.get_mdev_uuid() == "4b20d080-1b54-4048-85b3-a6a62d165c01"
 
 
-# libvirt <7.3.0 doesn't support <uuid> in the mdev node device xml
-@pytest.mark.skipif(libvirt.getVersion() < 7003000, reason="libvirt version doesn't support new mdev format")
 def testPCIMdevNewFormat():
     conn = utils.URIs.open_testdriver_cached()
+    check_version(conn, "10.4.0")
     devname = "mdev_35ceae7f_eea5_4f28_b7f3_7b12a3e62d3c_0000_06_00_0"
     dev = _nodeDevFromName(conn, devname)
     assert dev.name == devname
