@@ -690,7 +690,7 @@ def vcpu_cli_options(grp, backcompat=True, editexample=False):
                "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
                "--vcpus sockets=2,cores=4,threads=2"))
 
-    extramsg = "--cpu host"
+    extramsg = "--cpu host-model"
     if editexample:
         extramsg = "--cpu host-model,clearxml=yes"
     grp.add_argument("--cpu", action="append",
