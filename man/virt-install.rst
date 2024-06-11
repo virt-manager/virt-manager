@@ -414,7 +414,7 @@ Some examples:
 ``--cpu core2duo,+x2apic,disable=vmx``
     Expose the core2duo CPU model, force enable x2apic, but do not expose vmx
 
-``--cpu host``
+``--cpu host-model``
     Expose the host CPUs configuration to the guest. This enables the guest to
     take advantage of many of the host CPUs features (better performance), but
     may cause issues if migrating the guest to a host without an identical CPU.
