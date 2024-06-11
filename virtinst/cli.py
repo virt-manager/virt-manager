@@ -2338,6 +2338,7 @@ class ParserCPU(VirtCLIParser):
 
     def set_model_cb(self, inst, val, virtarg):
         if val == "host":
+            log.warning(_("CPU model=host is deprecated, use model=host-model"))
             val = inst.SPECIAL_MODE_HOST_MODEL
         if val == "none":
             val = inst.SPECIAL_MODE_CLEAR
