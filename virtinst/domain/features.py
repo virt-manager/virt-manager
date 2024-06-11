@@ -63,17 +63,24 @@ class DomainFeatures(XMLBuilder):
         if not guest.hyperv_supported():
             return
 
-        if not self.conn.support.conn_hyperv_vapic():
-            return
+        features = guest.lookup_domcaps().supported_hyperv_features()
 
-        if self.hyperv_relaxed is None:
-            self.hyperv_relaxed = True
-        if self.hyperv_vapic is None:
-            self.hyperv_vapic = True
-        if self.hyperv_spinlocks is None:
-            self.hyperv_spinlocks = True
-        if self.hyperv_spinlocks_retries is None:
-            self.hyperv_spinlocks_retries = 8191
+        def _enable(name, requires=None, feature=None, value=True):
+            feature = feature or name
+            if feature not in features:
+                return
+            if getattr(self, f"hyperv_{name}") is not None:
+                return
+            if requires:
+                for val in requires:
+                    if getattr(self, f"hyperv_{val}") is not True:
+                        return
+            setattr(self, f"hyperv_{name}", value)
+
+        _enable("relaxed")
+        _enable("vapic")
+        _enable("spinlocks")
+        _enable("spinlocks_retries", feature="spinlocks", value=8191)
 
     def set_defaults(self, guest):
         if guest.os.is_container():
