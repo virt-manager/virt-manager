@@ -59,6 +59,22 @@ class DomainFeatures(XMLBuilder):
     # Default config #
     ##################
 
+    def _set_hyperv_defaults(self, guest):
+        if not guest.hyperv_supported():
+            return
+
+        if not self.conn.support.conn_hyperv_vapic():
+            return
+
+        if self.hyperv_relaxed is None:
+            self.hyperv_relaxed = True
+        if self.hyperv_vapic is None:
+            self.hyperv_vapic = True
+        if self.hyperv_spinlocks is None:
+            self.hyperv_spinlocks = True
+        if self.hyperv_spinlocks_retries is None:
+            self.hyperv_spinlocks_retries = 8191
+
     def set_defaults(self, guest):
         if guest.os.is_container():
             self.acpi = None
@@ -84,13 +100,4 @@ class DomainFeatures(XMLBuilder):
             else:
                 self.pae = capsinfo.guest.supports_pae()
 
-        if (guest.hyperv_supported() and
-            self.conn.support.conn_hyperv_vapic()):
-            if self.hyperv_relaxed is None:
-                self.hyperv_relaxed = True
-            if self.hyperv_vapic is None:
-                self.hyperv_vapic = True
-            if self.hyperv_spinlocks is None:
-                self.hyperv_spinlocks = True
-            if self.hyperv_spinlocks_retries is None:
-                self.hyperv_spinlocks_retries = 8191
+        self._set_hyperv_defaults(guest)
