@@ -2985,12 +2985,12 @@ class ParserFeatures(VirtCLIParser):
         "gic.version": "gic_version",
         "smm.state": "smm",
         "vmcoreinfo.state": "vmcoreinfo",
-        "hyperv.reset.state": "hyperv_reset",
-        "hyperv.vapic.state": "hyperv_vapic",
         "hyperv.relaxed.state": "hyperv_relaxed",
+        "hyperv.vapic.state": "hyperv_vapic",
         "hyperv.spinlocks.state": "hyperv_spinlocks",
         "hyperv.spinlocks.retries": "hyperv_spinlocks_retries",
         "hyperv.synic.state": "hyperv_synic",
+        "hyperv.reset.state": "hyperv_reset",
     }
 
     @classmethod
@@ -3006,12 +3006,12 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("apic.eoi", "eoi", is_onoff=True)
         cls.add_arg("pmu.state", "pmu", is_onoff=True)
 
-        cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
-        cls.add_arg("hyperv.vapic.state", "hyperv_vapic", is_onoff=True)
         cls.add_arg("hyperv.relaxed.state", "hyperv_relaxed", is_onoff=True)
+        cls.add_arg("hyperv.vapic.state", "hyperv_vapic", is_onoff=True)
         cls.add_arg("hyperv.spinlocks.state", "hyperv_spinlocks", is_onoff=True)
         cls.add_arg("hyperv.spinlocks.retries", "hyperv_spinlocks_retries")
         cls.add_arg("hyperv.synic.state", "hyperv_synic", is_onoff=True)
+        cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
 
         cls.add_arg("vmport.state", "vmport", is_onoff=True)
         cls.add_arg("kvm.hidden.state", "kvm_hidden", is_onoff=True)
