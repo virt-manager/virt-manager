@@ -3021,6 +3021,7 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("hyperv.tlbflush.state", "hyperv_tlbflush", is_onoff=True)
         cls.add_arg("hyperv.ipi.state", "hyperv_ipi", is_onoff=True)
         cls.add_arg("hyperv.evmcs.state", "hyperv_evmcs", is_onoff=True)
+        cls.add_arg("hyperv.avic.state", "hyperv_avic", is_onoff=True)
 
         cls.add_arg("vmport.state", "vmport", is_onoff=True)
         cls.add_arg("kvm.hidden.state", "kvm_hidden", is_onoff=True)
