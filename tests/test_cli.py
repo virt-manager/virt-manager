@@ -562,7 +562,13 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6,genid_enable=yes
 
 
---features apic.eoi=off,hap=on,hyperv.synic.state=on,hyperv.reset.state=off,hyperv.spinlocks.state=on,hyperv.spinlocks.retries=5678,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,hyperv.vapic.state=off,hyperv.relaxed.state=off,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on,ioapic.driver=qemu,acpi=off,eoi=on,privnet=on,hyperv_synic=on,hyperv_reset=on,hyperv_spinlocks=on,hyperv_spinlocks_retries=5678,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,hyperv_vapic=on,smm=off
+--features apic.eoi=off,hap=on,pae=on,pmu.state=on,pvspinlock.state=off,smm.state=off,viridian=on,vmcoreinfo.state=on,vmport.state=off,kvm.hidden.state=on,gic.version=host,kvm.hint-dedicated.state=on,kvm.poll-control.state=on,ioapic.driver=qemu,acpi=off,eoi=on,privnet=on,vmport=off,pmu=off,vmcoreinfo=on,kvm_hidden=off,smm=off,\
+hyperv.relaxed.state=off,\
+hyperv.vapic.state=off,hyperv_vapic=on,\
+hyperv.spinlocks.state=on,hyperv_spinlocks=on,\
+hyperv.spinlocks.retries=5678,hyperv_spinlocks_retries=5678,\
+hyperv.synic.state=on,hyperv_synic=on,\
+hyperv.reset.state=off,hyperv_reset=on
 
 
 --clock offset=utc,hpet_present=no,rtc_tickpolicy=merge,timer2.name=hypervclock,timer3.name=pit,timer1.present=yes,timer3.tickpolicy=delay,timer2.present=no,timer4.name=rtc,timer5.name=tsc,timer6.name=tsc,timer4.track=wall,timer5.frequency=10,timer6.mode=emulate,timer7.name=rtc,timer7.tickpolicy=catchup,timer7.catchup.threshold=123,timer7.catchup.slew=120,timer7.catchup.limit=10000,rtc_present=no,pit_present=yes,pit_tickpolicy=catchup,tsc_present=no,platform_present=no,hypervclock_present=no,platform_tickpolicy=foo,hpet_tickpolicy=bar,tsc_tickpolicy=wibble,kvmclock_tickpolicy=wobble,hypervclock_tickpolicy=woo
