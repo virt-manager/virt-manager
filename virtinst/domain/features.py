@@ -38,6 +38,7 @@ class DomainFeatures(XMLBuilder):
     hyperv_stimer_direct = XMLProperty("./hyperv/stimer/direct/@state", is_onoff=True)
     hyperv_reset = XMLProperty("./hyperv/reset/@state", is_onoff=True)
     hyperv_frequencies = XMLProperty("./hyperv/frequencies/@state", is_onoff=True)
+    hyperv_reenlightenment = XMLProperty("./hyperv/reenlightenment/@state", is_onoff=True)
 
     vmport = XMLProperty("./vmport/@state", is_onoff=True)
     kvm_hidden = XMLProperty("./kvm/hidden/@state", is_onoff=True)
