@@ -567,6 +567,7 @@ hyperv.relaxed.state=off,\
 hyperv.vapic.state=off,hyperv_vapic=on,\
 hyperv.spinlocks.state=on,hyperv_spinlocks=on,\
 hyperv.spinlocks.retries=5678,hyperv_spinlocks_retries=5678,\
+hyperv.vpindex.state=on,\
 hyperv.synic.state=on,hyperv_synic=on,\
 hyperv.reset.state=off,hyperv_reset=on
 
