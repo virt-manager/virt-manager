@@ -3011,6 +3011,7 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("hyperv.spinlocks.state", "hyperv_spinlocks", is_onoff=True)
         cls.add_arg("hyperv.spinlocks.retries", "hyperv_spinlocks_retries")
         cls.add_arg("hyperv.vpindex.state", "hyperv_vpindex", is_onoff=True)
+        cls.add_arg("hyperv.runtime.state", "hyperv_runtime", is_onoff=True)
         cls.add_arg("hyperv.synic.state", "hyperv_synic", is_onoff=True)
         cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
 
