@@ -32,6 +32,7 @@ class DomainFeatures(XMLBuilder):
     hyperv_spinlocks_retries = XMLProperty("./hyperv/spinlocks/@retries",
                                            is_int=True)
     hyperv_vpindex = XMLProperty("./hyperv/vpindex/@state", is_onoff=True)
+    hyperv_runtime = XMLProperty("./hyperv/runtime/@state", is_onoff=True)
     hyperv_synic = XMLProperty("./hyperv/synic/@state", is_onoff=True)
     hyperv_reset = XMLProperty("./hyperv/reset/@state", is_onoff=True)
 
