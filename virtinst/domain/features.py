@@ -34,6 +34,7 @@ class DomainFeatures(XMLBuilder):
     hyperv_vpindex = XMLProperty("./hyperv/vpindex/@state", is_onoff=True)
     hyperv_runtime = XMLProperty("./hyperv/runtime/@state", is_onoff=True)
     hyperv_synic = XMLProperty("./hyperv/synic/@state", is_onoff=True)
+    hyperv_stimer = XMLProperty("./hyperv/stimer/@state", is_onoff=True)
     hyperv_reset = XMLProperty("./hyperv/reset/@state", is_onoff=True)
 
     vmport = XMLProperty("./vmport/@state", is_onoff=True)

@@ -570,6 +570,7 @@ hyperv.spinlocks.retries=5678,hyperv_spinlocks_retries=5678,\
 hyperv.vpindex.state=on,\
 hyperv.runtime.state=on,\
 hyperv.synic.state=on,hyperv_synic=on,\
+hyperv.stimer.state=on,\
 hyperv.reset.state=off,hyperv_reset=on
 
 
