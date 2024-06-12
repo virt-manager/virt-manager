@@ -20,6 +20,7 @@ class _CapsCPU(XMLBuilder):
     XML_NAME = "cpu"
     arch = XMLProperty("./arch")
     model = XMLProperty("./model")
+    vendor = XMLProperty("./vendor")
 
 
 ######################################
