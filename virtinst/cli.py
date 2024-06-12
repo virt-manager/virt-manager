@@ -3014,6 +3014,7 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("hyperv.runtime.state", "hyperv_runtime", is_onoff=True)
         cls.add_arg("hyperv.synic.state", "hyperv_synic", is_onoff=True)
         cls.add_arg("hyperv.stimer.state", "hyperv_stimer", is_onoff=True)
+        cls.add_arg("hyperv.stimer.direct.state", "hyperv_stimer_direct", is_onoff=True)
         cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
 
         cls.add_arg("vmport.state", "vmport", is_onoff=True)
