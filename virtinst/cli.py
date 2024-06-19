@@ -2985,12 +2985,12 @@ class ParserFeatures(VirtCLIParser):
         "gic.version": "gic_version",
         "smm.state": "smm",
         "vmcoreinfo.state": "vmcoreinfo",
-        "hyperv.reset.state": "hyperv_reset",
-        "hyperv.vapic.state": "hyperv_vapic",
         "hyperv.relaxed.state": "hyperv_relaxed",
+        "hyperv.vapic.state": "hyperv_vapic",
         "hyperv.spinlocks.state": "hyperv_spinlocks",
         "hyperv.spinlocks.retries": "hyperv_spinlocks_retries",
         "hyperv.synic.state": "hyperv_synic",
+        "hyperv.reset.state": "hyperv_reset",
     }
 
     @classmethod
@@ -3006,12 +3006,22 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("apic.eoi", "eoi", is_onoff=True)
         cls.add_arg("pmu.state", "pmu", is_onoff=True)
 
-        cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
-        cls.add_arg("hyperv.vapic.state", "hyperv_vapic", is_onoff=True)
         cls.add_arg("hyperv.relaxed.state", "hyperv_relaxed", is_onoff=True)
+        cls.add_arg("hyperv.vapic.state", "hyperv_vapic", is_onoff=True)
         cls.add_arg("hyperv.spinlocks.state", "hyperv_spinlocks", is_onoff=True)
         cls.add_arg("hyperv.spinlocks.retries", "hyperv_spinlocks_retries")
+        cls.add_arg("hyperv.vpindex.state", "hyperv_vpindex", is_onoff=True)
+        cls.add_arg("hyperv.runtime.state", "hyperv_runtime", is_onoff=True)
         cls.add_arg("hyperv.synic.state", "hyperv_synic", is_onoff=True)
+        cls.add_arg("hyperv.stimer.state", "hyperv_stimer", is_onoff=True)
+        cls.add_arg("hyperv.stimer.direct.state", "hyperv_stimer_direct", is_onoff=True)
+        cls.add_arg("hyperv.reset.state", "hyperv_reset", is_onoff=True)
+        cls.add_arg("hyperv.frequencies.state", "hyperv_frequencies", is_onoff=True)
+        cls.add_arg("hyperv.reenlightenment.state", "hyperv_reenlightenment", is_onoff=True)
+        cls.add_arg("hyperv.tlbflush.state", "hyperv_tlbflush", is_onoff=True)
+        cls.add_arg("hyperv.ipi.state", "hyperv_ipi", is_onoff=True)
+        cls.add_arg("hyperv.evmcs.state", "hyperv_evmcs", is_onoff=True)
+        cls.add_arg("hyperv.avic.state", "hyperv_avic", is_onoff=True)
 
         cls.add_arg("vmport.state", "vmport", is_onoff=True)
         cls.add_arg("kvm.hidden.state", "kvm_hidden", is_onoff=True)

@@ -247,10 +247,40 @@ class SupportCache:
     conn_pm_disable = _make(hv_version={"qemu": "1.2.0", "test": 0})
     conn_qcow2_lazy_refcounts = _make(
         version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
+
+    # Hyper-V features based on libvirt and QEMU version. Prior QEMU 6.1.0
+    # not all features were reported by QEMU even when they were supported.
+    conn_hyperv_relaxed = _make(
+        version="1.0.0", hv_version={"qemu": "2.0.0", "test": 0})
     conn_hyperv_vapic = _make(
-        version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
+        version="1.1.0", hv_version={"qemu": "2.0.0", "test": 0})
+    conn_hyperv_spinlocks = _make(
+        version="1.1.0", hv_version={"qemu": "2.0.0", "test": 0})
     conn_hyperv_clock = _make(
-        version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
+        version="1.2.2", hv_version={"qemu": "2.0.0", "test": 0})
+    conn_hyperv_vpindex = _make(
+        version="1.3.3", hv_version={"qemu": "2.5.0", "test": 0})
+    conn_hyperv_runtime = _make(
+        version="1.3.3", hv_version={"qemu": "2.5.0", "test": 0})
+    conn_hyperv_synic = _make(
+        version="1.3.3", hv_version={"qemu": "2.6.0", "test": 0})
+    conn_hyperv_stimer = _make(
+        version="1.3.3", hv_version={"qemu": "2.6.0", "test": 0})
+    conn_hyperv_frequencies = _make(
+        version="4.7.0", hv_version={"qemu": "2.12.0", "test": 0})
+    conn_hyperv_reenlightenment = _make(
+        version="4.7.0", hv_version={"qemu": "3.0.0", "test": 0})
+    conn_hyperv_tlbflush = _make(
+        version="4.7.0", hv_version={"qemu": "3.0.0", "test": 0})
+    conn_hyperv_ipi = _make(
+        version="4.10.0", hv_version={"qemu": "3.1.0", "test": 0})
+    conn_hyperv_evmcs = _make(
+        version="4.10.0", hv_version={"qemu": "3.1.0", "test": 0})
+    # Not reported separately from hyperv_stimer so we need to have
+    # this check.
+    conn_hyperv_stimer_direct = _make(
+        version="5.7.0", hv_version={"qemu": "4.1.0", "test": 0})
+
     conn_domain_capabilities = _make(
         function="virConnect.getDomainCapabilities",
         run_args=(None, None, None, None))
