@@ -622,21 +622,11 @@ class vmmDomain(vmmLibvirtObject):
         """
         Remove passed device from the inactive guest XML
         """
-        # If serial and duplicate console are both present, they both need
-        # to be removed at the same time
-        con = None
-        if self.serial_is_console_dup(devobj):
-            con = self.xmlobj.devices.console[0]
-
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, False)
         if not editdev:
             return  # pragma: no cover
 
-        if con:
-            rmcon = xmlobj.find_device(con)
-            if rmcon:
-                xmlobj.remove_device(rmcon)
         xmlobj.remove_device(editdev)
 
         self._redefine_xmlobj(xmlobj)
