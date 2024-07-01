@@ -281,6 +281,11 @@ class DeviceDisk(Device):
         return errdict
 
     @staticmethod
+    def get_volmap(conn):
+        return dict((vol.backing_store, vol)
+                      for vol in conn.fetch_all_vols() if vol.backing_store)
+
+    @staticmethod
     def path_in_use_by(conn, path, shareable=False, read_only=False):
         """
         Return a list of VM names that are using the passed path.
@@ -292,13 +297,36 @@ class DeviceDisk(Device):
         :param read_only: Path we are checking is marked read_only, so
             don't warn if it conflicts with another read_only source.
         """
+        volmap = DeviceDisk.get_volmap(conn)
+        return DeviceDisk._path_in_use_by(conn, path, volmap, shareable, read_only)
+
+    @staticmethod
+    def paths_in_use_by(conn, paths, shareable=False, read_only=False):
+        """
+        Return a list of lists of VM names that are using the passed paths.
+        When handling a list of paths, this method is faster than calling
+        path_in_use_by() seperately as it takes time to call conn.fetch_all_vols().
+
+        :param conn: virConnect to check VMs
+        :param paths: Paths to check for
+        :param shareable: Path we are checking is marked shareable, so
+            don't warn if it conflicts with another shareable source.
+        :param read_only: Path we are checking is marked read_only, so
+            don't warn if it conflicts with another read_only source.
+        """
+        volmap = DeviceDisk.get_volmap(conn)
+        ret = []
+        for path in paths:
+            ret.append(DeviceDisk._path_in_use_by(conn, path, volmap, shareable, read_only))
+        return ret
+
+    @staticmethod
+    def _path_in_use_by(conn, path, volmap, shareable=False, read_only=False):
         if not path:
             return []
 
         # Find all volumes that have 'path' somewhere in their backing chain
         vols = []
-        volmap = dict((vol.backing_store, vol)
-                      for vol in conn.fetch_all_vols() if vol.backing_store)
         backpath = path
         while backpath in volmap:
             vol = volmap[backpath]
