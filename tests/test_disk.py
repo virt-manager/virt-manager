@@ -114,6 +114,14 @@ def test_disk_path_in_use_kernel():
     assert vms == ["test-arm-kernel"]
 
 
+def test_disk_paths_in_use():
+    conn = utils.URIs.open_kvm()
+
+    vms = virtinst.DeviceDisk.paths_in_use_by(
+            conn, ["/pool-dir/test-arm-kernel", "/pool-dir/test-arm-initrd"])
+    assert vms == [["test-arm-kernel"], ["test-arm-kernel"]]
+
+
 def test_disk_diskbackend_misc():
     # Test get_size() with vol_install
     conn = utils.URIs.open_testdefault_cached()
