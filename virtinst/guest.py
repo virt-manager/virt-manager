@@ -1031,7 +1031,8 @@ class Guest(XMLBuilder):
             return
         if (not self.os.is_x86() and
             not self.os.is_pseries() and
-            not self.os.is_loongarch64()):
+            not self.os.is_loongarch64() and
+            not self.os.is_arm_machvirt()):
             return
         self.add_device(DeviceGraphics(self.conn))
 
