@@ -1165,6 +1165,7 @@ c.add_compare("--connect %(URI-KVM-PPC64LE)s --import --disk %(EXISTIMG1)s --os-
 
 c.add_compare("--arch s390x --machine s390-ccw-virtio --connect %(URI-KVM-S390X)s --boot kernel=/kernel.img,initrd=/initrd.img --disk %(EXISTIMG1)s --disk %(EXISTIMG3)s,device=cdrom --os-variant fedora30 --panic default --graphics vnc", "s390x-cdrom", prerun_check=has_old_osinfo)
 c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --nographics --import --disk %(EXISTIMG1)s --os-variant fedora30", "s390x-headless")
+c.add_compare("--connect %(URI-KVM-S390X)s --arch s390x --import --disk none --osinfo fedora30", "s390x-default")
 
 
 
