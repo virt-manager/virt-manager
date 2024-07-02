@@ -18,13 +18,14 @@
 # Ting-Wei Lan <lantw44@gmail.com>, 2019. #zanata
 # Whired Planck <fungdaat31@outlook.com>, 2020, 2022.
 # Kisaragi Hiu <mail@kisaragi-hiu.com>, 2022.
+# zhanchun li <lzc777@126.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-09-25 05:35+0000\n"
-"Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
+"PO-Revision-Date: 2024-05-08 20:36+0000\n"
+"Last-Translator: zhanchun li <lzc777@126.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -32,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.5.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -4286,11 +4287,9 @@ msgstr ""
 "請為遠端主機組態設定 SSH 金鑰訪問，或在本機安裝一個 SSH askpass 套裝軟體。"
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "請驗證 'libvirtd' 守護程式是否在遠端主機上執行。"
+msgstr "請驗證遠程主機上是否有運轉適當的libvirt常駐程式。"
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4313,10 +4312,8 @@ msgstr ""
 "行。"
 
 #: virtManager/lib/connectauth.py:179
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "請驗證 'libvirtd' 守護行程是否正在執行。"
+msgstr "請驗證是否有適當的 'libvirtd' 守護程式正在運轉。"
 
 #: virtManager/lib/connectauth.py:182
 #, python-format
@@ -4328,18 +4325,12 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "虛擬機管理器連線失敗"
 
 #: virtManager/lib/connectauth.py:208
-#, fuzzy
-#| msgid ""
-#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-#| "virtualization packages are installed to manage virtualization on this "
-#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
-msgstr ""
-"無法檢測到預設虛擬機管理程式。確保全裝了合適的 QEMU/KVM 虛擬化套裝軟體以管理"
-"此主機上的虛擬化服務。"
+msgstr "無法檢測到預設虛擬機管理程式。確保安裝了適當的 QEMU/KVM "
+"虛擬化套裝和libvirt軟體以管理此主機上的虛擬化服務。"
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
