@@ -72,6 +72,7 @@ TEST_DATA = {
     'URI-TEST-FULL': utils.URIs.test_full,
     'URI-TEST-REMOTE': utils.URIs.test_remote,
     'URI-KVM-X86': utils.URIs.kvm_x86,
+    'URI-KVM-X86-NODOMCAPS': utils.URIs.kvm_x86_nodomcaps,
     'URI-KVM-ARMV7L': utils.URIs.kvm_armv7l,
     'URI-KVM-AARCH64': utils.URIs.kvm_aarch64,
     'URI-KVM-LOONGARCH64': utils.URIs.kvm_loongarch64,
@@ -1355,6 +1356,10 @@ c.add_valid("--pxe", grep="User stopped the VM", env={"VIRTINST_TESTSUITE_HACK_D
 c.add_valid("--connect %(URI-KVM-X86)s --install fedora28 --cloud-init", grep="Password for first root login")  # make sure we print the root login password
 c.add_invalid("--pxe --autoconsole badval", grep="Unknown autoconsole type 'badval'")
 c.add_invalid("--pxe --autoconsole text --wait -1", grep="exceeded specified time limit")  # hits a specific code path where we skip console waitpid
+
+c = vinst.add_category("hyperv", "--disk none --osinfo win11 --import")
+c.add_compare("--connect %(URI-KVM-X86)s --features hyperv.vpindex.state=off", "hyperv_disable_vpindex")  # disable feature that is required by others to test they are not enabled by default
+c.add_compare("--connect %(URI-KVM-X86-NODOMCAPS)s", "hyperv_no_domcaps")  # don't use domain capabilities to enable only some features by version check
 
 
 ##################
