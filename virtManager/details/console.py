@@ -286,6 +286,7 @@ class _ConsoleMenu(vmmGObject):
         items = graphics + [[None, None, None]] + serials
 
         last_item = None
+        none_selected = True
         for (label, dev, tooltip) in items:
             if label is None:
                 self._menu.add(Gtk.SeparatorMenuItem())
@@ -297,7 +298,7 @@ class _ConsoleMenu(vmmGObject):
 
             active = False
             if oldlabel is None and sensitive:
-                # Select the first selectable option
+                # Select the first selectable option, but oldlabel can become not sensitive
                 oldlabel = label
             if label == oldlabel:
                 active = True
@@ -310,12 +311,27 @@ class _ConsoleMenu(vmmGObject):
 
             item.set_label(label)
             item.set_active(active and sensitive)
+            none_selected = none_selected and not (active and sensitive)
             item.set_sensitive(sensitive)
             item.set_tooltip_text(tooltip or None)
             item.vmm_data = dev
             if sensitive:
                 item.connect("toggled", self._toggled_cb)
             self._menu.add(item)
+
+        if none_selected:
+            for i, child in enumerate(self._menu.get_children()):
+                if child.get_sensitive():
+                    item = Gtk.RadioMenuItem()
+                    item.set_label(child.get_label())
+                    item.set_active(True)
+                    item.set_sensitive(True)
+                    item.set_tooltip_text(child.get_tooltip_text() or None)
+                    item.vmm_data = child.vmm_data
+                    item.connect("toggled", self._toggled_cb)
+                    self._menu.insert(item, i)
+                    self._menu.remove(child)
+                    break
 
         self._menu.show_all()
 
