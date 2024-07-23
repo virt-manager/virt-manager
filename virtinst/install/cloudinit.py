@@ -81,17 +81,18 @@ def _create_userdata_content(cloudinit_data):
     elif cloudinit_data.root_password_file:
         content += "  expire: False\n"
 
-    if cloudinit_data.root_ssh_key or cloudinit_data.clouduser_ssh_key:
-        content += "users:\n"
+    if cloudinit_data.root_ssh_key:
         rootkey = cloudinit_data.get_root_ssh_key()
-        userkey = cloudinit_data.get_clouduser_ssh_key()
+        content += "users:\n"
+        content += "  - default\n"
+        content += "  - name: root\n"
+        content += "    ssh_authorized_keys:\n"
+        content += "      - %s\n" % rootkey
 
-        if rootkey:
-            content += "  - name: root\n"
-            content += "    ssh-authorized-keys:\n"
-            content += "      - %s\n" % rootkey
-        if userkey:
-            content += "  - ssh-authorized-keys: %s\n" % userkey
+    if cloudinit_data.clouduser_ssh_key:
+        userkey = cloudinit_data.get_clouduser_ssh_key()
+        content += "ssh_authorized_keys:\n"
+        content += "  - %s\n" % userkey
 
     if cloudinit_data.disable:
         content += "runcmd:\n"
