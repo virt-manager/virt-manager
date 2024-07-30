@@ -16,6 +16,32 @@ from . import xmlutil
 from .logger import log
 
 
+def _process_medialist(medialist):
+    nmedias = medialist.get_length()
+    osids = []
+
+    if nmedias == 0:
+        return None
+    elif nmedias == 1:
+        return medialist.get_nth(0)
+    else:
+        # If we can't determine a single definitive match, print the
+        # possible matches and return None
+        for n in range(nmedias):
+            # some isos can return multiple matches of the same OS with
+            # different architectures. Ignore duplicates.
+            id = medialist.get_nth(n).get_os().get_short_id()
+            if id not in osids:
+                osids.append(id)
+
+        if len(osids) == 1:
+            # just return the first match
+            return medialist.get_nth(0)
+
+        log.debug("media matches multiple operating systems: %s", ", ".join(osids))
+        return None
+
+
 def _media_create_from_location(location):
     if not hasattr(Libosinfo.Media, "create_from_location_with_flags"):
         return Libosinfo.Media.create_from_location(  # pragma: no cover
@@ -119,8 +145,16 @@ class _OSDB(object):
             log.debug("Error creating libosinfo media object: %s", str(e))
             return None
 
-        if not self._os_db.identify_media(media):
-            return None
+        if hasattr(self._os_db, "identify_medialist"):
+            # osinfo_db_identify_medialist is part of libosinfo 1.10.0
+            medialist = self._os_db.identify_medialist(media)
+            media = _process_medialist(medialist);
+            if media is None:
+                return None
+        else:
+            if not self._os_db.identify_media(media):
+                return None
+
         return media.get_os().get_short_id(), _OsMedia(media)
 
     def guess_os_by_tree(self, location):
@@ -139,6 +173,13 @@ class _OSDB(object):
                 "location=%s : %s", location, str(e))
             return None
 
+        if hasattr(self._os_db, "identify_treelist"):
+            # osinfo_db_identify_treelist is part of libosinfo 1.10.0
+            treelist = self._os_db.identify_treelist(tree)
+            tree = _process_medialist(treelist)
+            if tree is None:
+                return None
+            return tree.get_os().get_short_id(), _OsTree(tree)
         if hasattr(self._os_db, "identify_tree"):
             # osinfo_db_identify_tree is part of libosinfo 1.6.0
             if not self._os_db.identify_tree(tree):
