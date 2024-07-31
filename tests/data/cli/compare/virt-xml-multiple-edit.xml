@@ -1,0 +1,13 @@
+   <os>
+     <type arch="i686">hvm</type>
+     <boot dev="hd"/>
++    <boot dev="network"/>
+   </os>
+   <clock offset="utc"/>
+   <on_poweroff>destroy</on_poweroff>
+@@
+   <on_crash>destroy</on_crash>
+   <devices>
+   </devices>
++  <cpu mode="host-passthrough"/>
+ </domain>
