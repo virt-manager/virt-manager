@@ -3825,6 +3825,21 @@ class ParserNetwork(VirtCLIParser):
             val = "down"
         inst.link_state = val
 
+    def portForward_find_inst_cb(self, *args, **kwargs):
+        cliarg = "portForward"  # portForward[0-9]*
+        list_propname = "portForward"  # disk.hosts
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(*args, **kwargs)
+
+    def range_find_inst_cb(self, inst, *args, **kwargs):
+        cell = self.portForward_find_inst_cb(inst, *args, **kwargs)
+        inst = cell
+
+        cliarg = "range"  # portForward[0-9]*.range[0-9]*
+        list_propname = "range"  # portForward.range
+        cb = self._make_find_inst_cb(cliarg, list_propname)
+        return cb(inst, *args, **kwargs)
+
     @classmethod
     def _virtcli_class_init(cls):
         VirtCLIParser._virtcli_class_init_common(cls)
@@ -3839,6 +3854,8 @@ class ParserNetwork(VirtCLIParser):
 
         # Standard XML options
         cls.add_arg("type", "type", cb=cls.set_type_cb)
+        cls.add_arg("backend.type", "backend.type")
+        cls.add_arg("backend.logFile", "backend.logFile")
         cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters", is_onoff=True)
         cls.add_arg("source", "source")
         cls.add_arg("source.mode", "source_mode")
@@ -3873,6 +3890,20 @@ class ParserNetwork(VirtCLIParser):
                     "virtualport.profileid")
         cls.add_arg("virtualport.parameters.interfaceid",
                     "virtualport.interfaceid")
+        cls.add_arg("portForward[0-9]*.proto", "proto",
+                    find_inst_cb=cls.portForward_find_inst_cb)
+        cls.add_arg("portForward[0-9]*.address", "address",
+                    find_inst_cb=cls.portForward_find_inst_cb)
+        cls.add_arg("portForward[0-9]*.dev", "dev",
+                    find_inst_cb=cls.portForward_find_inst_cb)
+        cls.add_arg("portForward[0-9]*.range[0-9]*.start", "start",
+                    find_inst_cb=cls.range_find_inst_cb)
+        cls.add_arg("portForward[0-9]*.range[0-9]*.end", "end",
+                    find_inst_cb=cls.range_find_inst_cb)
+        cls.add_arg("portForward[0-9]*.range[0-9]*.to", "to",
+                    find_inst_cb=cls.range_find_inst_cb)
+        cls.add_arg("portForward[0-9]*.range[0-9]*.exclude", "exclude",
+                    is_onoff=True, find_inst_cb=cls.range_find_inst_cb)
 
 
 ######################
