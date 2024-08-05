@@ -3,18 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Andi Chandler <andi@gowling.com>, 2013-2014, 2022, 2023.
-# Andi Chandler <andi@gowling.com>, 2013-2015, 2022, 2023.
+# Andi Chandler <andi@gowling.com>, 2013-2014, 2022, 2023, 2024.
+# Andi Chandler <andi@gowling.com>, 2013-2015, 2022, 2023, 2024.
 # Luke Hollins <luke@farcry.ca>, 2015
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Andi Chandler <andi@gowling.com>, 2018. #zanata, 2022, 2023.
+# Andi Chandler <andi@gowling.com>, 2018. #zanata, 2022, 2023, 2024.
 # Pavel Hrdina <phrdina@redhat.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-02-22 02:20+0000\n"
+"PO-Revision-Date: 2024-03-18 00:36+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/en_GB/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.4\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -61,24 +61,20 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "Graphical console connection for a virtual machine"
 
 #: data/virt-manager.appdata.xml.in:37
-#, fuzzy
-#| msgid "virtualization type '%s'"
 msgid "virtualization"
-msgstr "virtualisation type '%s'"
+msgstr "virtualisation"
 
 #: data/virt-manager.appdata.xml.in:38
-#, fuzzy
-#| msgid "Libvirt URI:"
 msgid "libvirt"
-msgstr "Libvirt URI:"
+msgstr "libvirt"
 
 #: data/virt-manager.appdata.xml.in:39
 msgid "qemu"
-msgstr ""
+msgstr "qemu"
 
 #: data/virt-manager.appdata.xml.in:40
 msgid "kvm"
-msgstr ""
+msgstr "kvm"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
@@ -172,7 +168,7 @@ msgstr "_Channel:"
 
 #: ui/addhardware.ui:908
 msgid "_Share Clipboard:"
-msgstr ""
+msgstr "_Share Clipboard:"
 
 #: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
@@ -1199,7 +1195,7 @@ msgstr "State:"
 
 #: ui/details.ui:3695
 msgid "Clipboard:"
-msgstr ""
+msgstr "Clipboard:"
 
 #: ui/details.ui:3707
 msgid "Source path:"
@@ -2295,7 +2291,7 @@ msgstr "Spice port"
 
 #: virtManager/addhardware.py:430
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "QEMU vdagent"
 
 #: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
@@ -3426,10 +3422,9 @@ msgid "Console %(num)d"
 msgstr "Console %(num)d"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel %(name)s"
+#, python-format
 msgid "Channel (%(name)s)"
-msgstr "Channel %(name)s"
+msgstr "Channel (%(name)s)"
 
 #: virtManager/details/details.py:214
 #, python-format
@@ -4317,11 +4312,10 @@ msgstr ""
 "package locally."
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "Verify that the 'libvirtd' daemon is running on the remote host."
+msgstr ""
+"Verify that an appropriate libvirt daemon is running on the remote host."
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4344,10 +4338,8 @@ msgstr ""
 "running as root."
 
 #: virtManager/lib/connectauth.py:179
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "Verify that the 'libvirtd' daemon is running."
+msgstr "Verify that an appropriate libvirt daemon is running."
 
 #: virtManager/lib/connectauth.py:182
 #, python-format
@@ -4359,18 +4351,14 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtual Machine Manager Connection Failure"
 
 #: virtManager/lib/connectauth.py:208
-#, fuzzy
-#| msgid ""
-#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-#| "virtualization packages are installed to manage virtualization on this "
-#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-"virtualisation packages are installed to manage virtualisation on this host."
+"virtualisation and libvirt packages are installed to manage virtualisation "
+"on this host."
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
@@ -5554,19 +5542,11 @@ msgstr ""
 "--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:903
-#, fuzzy
-#| msgid ""
-#| "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-#| "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-#| "dhCert=BASE64CERT\n"
-#| "--launchSecurity sev"
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:910
