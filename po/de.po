@@ -28,21 +28,23 @@
 # Christian Wehrli <christian@chw.onl>, 2021.
 # Flo H <emailtoflorian@gmail.com>, 2022.
 # Anna Nym <geierb+fedoraproject@geierb.de>, 2023.
+# Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2023-09-25 07:46+0200\n"
-"PO-Revision-Date: 2023-08-02 14:20+0000\n"
-"Last-Translator: Anna Nym <geierb+fedoraproject@geierb.de>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"PO-Revision-Date: 2024-07-26 13:38+0000\n"
+"Last-Translator: Henning <boredsquirrel@users.noreply.translate.fedoraproject"
+".org>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -81,24 +83,22 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "Grafische Konsole der virtuellen Maschine"
 
 #: data/virt-manager.appdata.xml.in:37
-#, fuzzy
-#| msgid "virtualization type '%s'"
 msgid "virtualization"
-msgstr "Virtualisierungstyp '%s'"
+msgstr "Virtualisierung"
 
 #: data/virt-manager.appdata.xml.in:38
 #, fuzzy
 #| msgid "Libvirt URI:"
 msgid "libvirt"
-msgstr "Libvirt-Adresse:"
+msgstr "Libvirt"
 
 #: data/virt-manager.appdata.xml.in:39
 msgid "qemu"
-msgstr ""
+msgstr "qemu"
 
 #: data/virt-manager.appdata.xml.in:40
 msgid "kvm"
-msgstr ""
+msgstr "kvm"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
@@ -106,7 +106,7 @@ msgstr "Virtuelle Maschinen verwalten"
 
 #: data/virt-manager.desktop.in:9
 msgid "vmm;"
-msgstr ""
+msgstr "vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -196,7 +196,7 @@ msgstr "_Kanal:"
 
 #: ui/addhardware.ui:908
 msgid "_Share Clipboard:"
-msgstr ""
+msgstr "_Zwischenablage teilen:"
 
 #: ui/addhardware.ui:1044 ui/details.ui:4027
 msgid "Ac_tion:"
@@ -529,7 +529,7 @@ msgstr "_Zielpfad:"
 #: ui/createpool.ui:162 ui/createvol.ui:199
 #, fuzzy
 msgid "F_ormat:"
-msgstr "F_ormatieren:"
+msgstr "F_ormat:"
 
 #: ui/createpool.ui:176
 msgid "Host Na_me:"
@@ -1153,8 +1153,9 @@ msgid "Disk b_us:"
 msgstr "Festplattenb_us:"
 
 #: ui/details.ui:2828
+#, fuzzy
 msgid "disk-bus-label"
-msgstr ""
+msgstr "disk-bus-Beschriftung"
 
 #: ui/details.ui:2876
 msgid "<b>Virtual Disk</b>"
@@ -1162,7 +1163,7 @@ msgstr "<b>Virtuelle Platte:</b>"
 
 #: ui/details.ui:3080
 msgid "Link _state:"
-msgstr ""
+msgstr "Link _Status:"
 
 #: ui/details.ui:3091
 msgid "active"
@@ -1197,20 +1198,14 @@ msgid "<b>Sound Device</b>"
 msgstr "<b>Klanggerät</b>"
 
 #: ui/details.ui:3533
-#, fuzzy
-#| msgid "label"
 msgid "label506"
 msgstr "label506"
 
 #: ui/details.ui:3546 ui/details.ui:3584
-#, fuzzy
-#| msgid "label"
 msgid "label508"
 msgstr "label508"
 
 #: ui/details.ui:3597 ui/details.ui:3610
-#, fuzzy
-#| msgid "label"
 msgid "label507"
 msgstr "label507"
 
@@ -1236,7 +1231,7 @@ msgstr "Status:"
 
 #: ui/details.ui:3695
 msgid "Clipboard:"
-msgstr ""
+msgstr "Zwischenablage:"
 
 #: ui/details.ui:3707
 msgid "Source path:"
@@ -1312,7 +1307,7 @@ msgstr "Modell:"
 
 #: ui/details.ui:4759
 msgid "panic-model"
-msgstr ""
+msgstr "Panik-Modell"
 
 #: ui/details.ui:4779
 msgid "<b>Panic Notifier</b>"
@@ -1345,7 +1340,7 @@ msgstr "_Format:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "blah foo Warnungs-Nachricht"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1387,9 +1382,8 @@ msgstr ""
 "Beschleunigung«"
 
 #: ui/gfxdetails.ui:381
-#, fuzzy
 msgid "OpenGL only works with 'Listen type' value 'none'"
-msgstr "OpenGL funktioniert nur mit 'Listentyp'-Wert 'keine'"
+msgstr "OpenGL funktioniert nur mit 'Listen type'-Wert 'none'"
 
 #: ui/host.ui:27 ui/manager.ui:26 ui/vmwindow.ui:25
 msgid "_File"
@@ -1500,8 +1494,6 @@ msgid "Cancel and close dialog"
 msgstr "Abbrechen und Dialogfeld schließen"
 
 #: ui/hoststorage.ui:170
-#, fuzzy
-#| msgid "Choose Volume"
 msgid "Ch_oose Volume"
 msgstr "_Datenträger auswählen"
 
@@ -1655,7 +1647,7 @@ msgstr "VM migrieren:"
 
 #: ui/migrate.ui:124
 msgid "Original host:"
-msgstr ""
+msgstr "Ursprünglicher Host:"
 
 #: ui/migrate.ui:140
 msgid "New _host:"
@@ -1766,12 +1758,11 @@ msgstr ""
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
 msgstr ""
+"<small>Finden eines geeigneten Standard-Netzwerks fehlgeschlagen.</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "Anschluss (_Port):"
+msgstr "Anschlussgruppe (_Portgroup):"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1783,6 +1774,9 @@ msgid ""
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
+"Gesuchtes Betriebssystem nicht gefunden?\n"
+"Versuchen Sie, eine ähnliche Distribution oder Version zu wählen, oder "
+"wählen Sie die 'Generic' Option."
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
@@ -1798,7 +1792,7 @@ msgstr "_Symbol im Benachrichtigungsfeld aktivieren"
 
 #: ui/preferences.ui:67
 msgid "Enable libgues_tfs VM introspection"
-msgstr ""
+msgstr "libgues_tfs VM Einsicht aktivieren"
 
 #: ui/preferences.ui:124
 msgid "Enable _XML editing"
@@ -1928,12 +1922,12 @@ msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"Wenn deaktiviert, wird sich das VM Fenster nicht automatisch mit der "
+"laufenden grafischen VM Konsole verbinden."
 
 #: ui/preferences.ui:701
-#, fuzzy
-#| msgid "_Autoconnect:"
 msgid "Console autoconnec_t:"
-msgstr "_Automatische Verbindung:"
+msgstr "Konsole _automatisch verbinden:"
 
 #: ui/preferences.ui:729
 msgid "<b>Graphical Consoles</b>"
@@ -2165,13 +2159,15 @@ msgstr "Installation _abbrechen"
 
 #: ui/vsockdetails.ui:23
 msgid "Guest C_ID:"
-msgstr ""
+msgstr "Gast C_ID:"
 
 #: ui/xmleditor.ui:96
 msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
 msgstr ""
+"<small>XML Bearbeitung ist in den 'Preferences' deaktiviert. Nur aktivieren "
+"wenn Sie wissen was Sie tun.</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
@@ -2233,9 +2229,8 @@ msgstr "USB Host-Gerät"
 
 #: virtManager/addhardware.py:243 virtManager/addhardware.py:247
 #: virtManager/addhardware.py:257
-#, fuzzy
 msgid "Connection does not support host device enumeration"
-msgstr "Verbindung unterstützt keine Hostrechneraufzählung"
+msgstr "Verbindung unterstützt keine Hostrechner Aufzählung"
 
 #: virtManager/addhardware.py:251
 msgid "Not supported for containers"
@@ -2290,11 +2285,11 @@ msgstr "Panikmelder"
 
 #: virtManager/addhardware.py:274 virtManager/addhardware.py:277
 msgid "Not supported for this hypervisor/libvirt/arch combination."
-msgstr ""
+msgstr "Nicht unterstützt von dieser hypervisor/libvirt/arch Kombination."
 
 #: virtManager/addhardware.py:275 virtManager/details/details.py:254
 msgid "VirtIO VSOCK"
-msgstr ""
+msgstr "VirtIO VSOCK"
 
 #: virtManager/addhardware.py:347
 #, python-format
@@ -2336,7 +2331,7 @@ msgstr "Spice-Port"
 
 #: virtManager/addhardware.py:430
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "QEMU vdagent"
 
 #: virtManager/addhardware.py:444 virtManager/addhardware.py:505
 msgid "IDE"
@@ -2369,11 +2364,11 @@ msgstr "PCI"
 
 #: virtManager/addhardware.py:451
 msgid "CCID"
-msgstr ""
+msgstr "CCID"
 
 #: virtManager/addhardware.py:452
 msgid "xenbus"
-msgstr ""
+msgstr "xenbus"
 
 #: virtManager/addhardware.py:460 virtManager/addhardware.py:900
 msgid "VirtIO SCSI"
@@ -2401,7 +2396,7 @@ msgstr "ISA"
 
 #: virtManager/addhardware.py:519
 msgid "pSeries"
-msgstr ""
+msgstr "pSeries"
 
 #: virtManager/addhardware.py:520
 msgid "Hyper-V"
@@ -2445,7 +2440,7 @@ msgstr "Keine Aktion"
 
 #: virtManager/addhardware.py:553
 msgid "Dump guest memory core"
-msgstr ""
+msgstr "Gast-Speicher-Kern ausgeben"
 
 #: virtManager/addhardware.py:560
 msgid "EvTouch USB Graphics Tablet"
@@ -2471,7 +2466,7 @@ msgstr "PS/2"
 #: virtManager/addhardware.py:578
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
-msgstr ""
+msgstr "%(input_bus)s %(input_type)s"
 
 #: virtManager/addhardware.py:676
 msgid "Disk device"
@@ -2504,6 +2499,9 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s ist auf dem Host System nicht aktiv.\n"
+"Bitte starten Sie den mdev auf dem Host System, bevor Sie es zum Gast "
+"hinzufügen."
 
 #: virtManager/addhardware.py:800
 msgid "No Devices Available"
@@ -2547,7 +2545,7 @@ msgstr "Zufallszahlengenerator"
 
 #: virtManager/addhardware.py:1012
 msgid "VM Sockets"
-msgstr ""
+msgstr "VM Sockets"
 
 #: virtManager/addhardware.py:1016 virtManager/details/details.py:2094
 #, python-format
@@ -2620,7 +2618,7 @@ msgstr "Wollen Sie das Gerät wirklich verwenden?"
 #: virtManager/addhardware.py:1362
 #, python-format
 msgid "Error building device XML: %s"
-msgstr ""
+msgstr "Fehler beim erstellen der Geräte XML: %s"
 
 #: virtManager/asyncjob.py:219
 msgid "Cancelling job..."
@@ -2633,7 +2631,7 @@ msgstr "Kein zu klonender Speicher."
 #: virtManager/clone.py:111
 #, python-format
 msgid "Disk target: %s"
-msgstr ""
+msgstr "Festplatten-Ziel: %s"
 
 #: virtManager/clone.py:112
 #, python-format
@@ -2695,10 +2693,8 @@ msgstr ""
 "möchten?"
 
 #: virtManager/clone.py:487
-#, fuzzy
-#| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
-msgstr "Überspringen von Platten kann zum Überschreiben von Daten führen."
+msgstr "Teilen von Speicherplatz kann zum Überschreiben von Daten führen."
 
 #: virtManager/clone.py:488
 #, fuzzy, python-format
@@ -2715,15 +2711,15 @@ msgid ""
 msgstr ""
 "Die folgenden Festplattengeräte werden nicht geklont:\n"
 "\n"
-"%s\n"
+"%(pathlist)s\n"
 "Das Ausführen des neuen Gasts kann zum Überschreiben von Daten in diesen "
 "Plattenabbildern führen."
 
 #: virtManager/clone.py:503
-#, fuzzy, python-format
-#| msgid "Error creating virtual machine clone '%s': %s"
+#, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
-msgstr "Fehler beim Erzeugen des Klons der virtuellen Maschine «%s»: %s"
+msgstr ""
+"Fehler beim Erzeugen des Klons der virtuellen Maschine '%(vm)s': %(error)s"
 
 #: virtManager/clone.py:561
 #, python-format
@@ -2742,8 +2738,8 @@ msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
-"Erstelle Klon der virtuellen Maschine und des ausgewählten Speichermedium "
-"(dies kann eine Weile dauern)"
+"Erstelle Klon der virtuellen Maschine und des ausgewählten Speichers (dies "
+"kann eine Weile dauern)"
 
 #: virtManager/connection.py:395
 msgid "User session"
@@ -2758,13 +2754,7 @@ msgid "Connecting"
 msgstr "Verbinden"
 
 #: virtManager/connection.py:586
-#, fuzzy, python-format
-#| msgid ""
-#| "%s rename failed. Attempting to recover also failed.\n"
-#| "\n"
-#| "Original error: %s\n"
-#| "\n"
-#| "Recover error: %s"
+#, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
 "\n"
@@ -2772,12 +2762,12 @@ msgid ""
 "\n"
 "Recover error: %(recovererror)s"
 msgstr ""
-"%s Umbenennung fehlgeschlagen. Wiederherstellungsversuch ebenfalls "
+"%(object)s Umbenennung fehlgeschlagen. Wiederherstellungsversuch ebenfalls "
 "fehlgeschlagen.\n"
 "\n"
-"Originaler Fehler: %s\n"
+"Ursprünglicher Fehler: %(origerror)s\n"
 "\n"
-"Wiederherstellungs-Fehler: %s"
+"Wiederherstellungs-Fehler: %(recovererror)s"
 
 #: virtManager/createconn.py:56
 #, python-format
@@ -2806,7 +2796,7 @@ msgstr "Alle physischen Geräte"
 
 #: virtManager/createnet.py:103
 msgid "Physical device..."
-msgstr ""
+msgstr "Physisches Gerät..."
 
 #: virtManager/createnet.py:111 virtManager/object/network.py:161
 msgid "NAT"
@@ -2814,7 +2804,7 @@ msgstr "NAT"
 
 #: virtManager/createnet.py:113
 msgid "Open"
-msgstr ""
+msgstr "Öffnen"
 
 #: virtManager/createnet.py:114
 msgid "Isolated"
@@ -2822,7 +2812,7 @@ msgstr "Isoliert"
 
 #: virtManager/createnet.py:115
 msgid "SR-IOV pool"
-msgstr ""
+msgstr "SR-IOV pool"
 
 #: virtManager/createnet.py:175
 msgid "No available device"
@@ -2837,7 +2827,7 @@ msgstr "Name '%s' wird bereits  von einem anderen Netzwerk benutzt."
 #: virtManager/createvol.py:263
 #, python-format
 msgid "Error building XML: %s"
-msgstr ""
+msgstr "Fehler beim Erstellen der XML: %s"
 
 #: virtManager/createnet.py:414
 #, python-format
@@ -2847,7 +2837,7 @@ msgstr "Fehler beim Erzeugen des virtuellen Netzwerks: %s"
 #: virtManager/createnet.py:443
 #, python-format
 msgid "Error validating network: %s"
-msgstr ""
+msgstr "Fehler bei der Überprüfung des Netzwerks: %s"
 
 #: virtManager/createnet.py:448
 msgid "Creating virtual network..."
@@ -2859,11 +2849,11 @@ msgstr "Das Erstellen des virtuellen Netzwerkes kann eine Weile dauern …"
 
 #: virtManager/createpool.py:213
 msgid "Sou_rce Name:"
-msgstr ""
+msgstr "Que_llen Name:"
 
 #: virtManager/createpool.py:213
 msgid "Volg_roup Name:"
-msgstr ""
+msgstr "Volg_roup Name:"
 
 #: virtManager/createpool.py:215
 msgid "_Source Path:"
@@ -2875,7 +2865,7 @@ msgstr "_Source IQN:"
 
 #: virtManager/createpool.py:219
 msgid "_Source Adapter:"
-msgstr ""
+msgstr "_Quellen Adapter:"
 
 #: virtManager/createpool.py:332
 #, python-format
@@ -2885,7 +2875,7 @@ msgstr "Fehler beim Erzeugen des Pools: %s"
 #: virtManager/createpool.py:356
 #, python-format
 msgid "Error validating pool: %s"
-msgstr ""
+msgstr "Fehler bei Überprüfung des Pools: %s"
 
 #: virtManager/createpool.py:362
 msgid "Creating storage pool..."
@@ -2916,7 +2906,7 @@ msgstr "%d MiB"
 #: virtManager/createvm.py:182
 #, python-format
 msgid "Error launching create dialog: %s"
-msgstr ""
+msgstr "Fehler beim Starten des Erstell-Dialogs: %s"
 
 #: virtManager/createvm.py:309
 #, python-format
@@ -2934,6 +2924,8 @@ msgid ""
 "Failed to setup UEFI: %s\n"
 "Install options are limited."
 msgstr ""
+"UEFI-Einrichtung fehlgeschlagen: %s\n"
+"Installationsoptionen sind begrenzt."
 
 #: virtManager/createvm.py:524
 msgid "Libvirt version does not support remote URL installs."
@@ -2941,10 +2933,8 @@ msgstr ""
 "Libvirt-Version unterstützt die Installation von entfernten Adressen nicht."
 
 #: virtManager/createvm.py:531
-#, fuzzy
-#| msgid "%s installs not available for paravirt guests."
 msgid "CDROM/ISO installs not available for paravirt guests."
-msgstr "%s Installationen nicht verfügbar für paravirtualisierte Gäste."
+msgstr "CDROM/ISO Installationen nicht verfügbar für paravirtualisierte Gäste."
 
 #: virtManager/createvm.py:534
 #, python-format
@@ -3042,7 +3032,7 @@ msgstr "Schritt %(current_page)d von %(max_page)d"
 
 #: virtManager/createvm.py:1333
 msgid "Waiting for install media / source"
-msgstr ""
+msgstr "Warte auf Installationsmedium / Quelle"
 
 #: virtManager/createvm.py:1407
 #, python-format
@@ -3060,7 +3050,7 @@ msgstr "Quell-URL ist erforderlich"
 
 #: virtManager/createvm.py:1467
 msgid "Please specify password for accessing source registry"
-msgstr ""
+msgstr "Bitte Passwort für Zugriff auf Quellen-Register angeben"
 
 #: virtManager/createvm.py:1475
 #, python-format
@@ -3082,6 +3072,9 @@ msgid ""
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
+"Erstellen eines root Dateisystems in einem nicht leeren Verzeichnis kann "
+"durch Dateikonflikte fehlschlagen.\n"
+"Möchten Sie fortfahren?"
 
 #: virtManager/createvm.py:1505
 msgid "An install media selection is required."
@@ -3176,7 +3169,7 @@ msgstr "Fehler beim Fortsetzen der Installation: %s"
 
 #: virtManager/createvm.py:2093
 msgid "Bootstraping container"
-msgstr ""
+msgstr "Container wird gebootstrappt"
 
 #: virtManager/createvol.py:140
 #, python-format
@@ -3249,6 +3242,8 @@ msgstr "'%(vmname)s' löschen"
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
+"Lösche virtuelle Maschine '%s' und ausgewählten Speicher (dies kann eine "
+"Weile dauern)"
 
 #: virtManager/delete.py:298
 #, python-format
@@ -3280,17 +3275,19 @@ msgstr "Festplattengerät entfernen"
 #: virtManager/delete.py:373
 #, python-format
 msgid "Remove disk device '%(target)s'"
-msgstr ""
+msgstr "Entferne Speichergerät '%(target)s'"
 
 #: virtManager/delete.py:378
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
+"Entfernen von Speichergerät '%s' und ausgewähltem Speicher (dies kann eine "
+"Weile dauern)"
 
 #: virtManager/delete.py:381
 #, python-format
 msgid "Removing disk device '%s'"
-msgstr ""
+msgstr "Entferne Speichergerät '%s'"
 
 #: virtManager/delete.py:506
 msgid "Target"
@@ -3346,11 +3343,9 @@ msgstr "Speicher wird von den folgenden virtuellen Maschinen verwendet"
 
 #: virtManager/delete.py:611
 msgid "Failed to check disk usage conflict."
-msgstr ""
+msgstr "Überprüfung des Speicher-Nutzungskonflikts fehlgeschlagen."
 
 #: virtManager/details/console.py:153
-#, fuzzy
-#| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
 msgstr "Vollbildmodus verlassen"
 
@@ -3385,10 +3380,8 @@ msgid "Graphical Console"
 msgstr "Grafische Konsole"
 
 #: virtManager/details/console.py:231
-#, fuzzy
-#| msgid "virt-manager does not support more that one graphical console"
 msgid "virt-manager does not support more than one graphical console"
-msgstr "virt-manager unterstützt nicht mehr als eine grafische Konsole"
+msgstr "Virt-Manager unterstützt nicht mehr als eine grafische Konsole"
 
 #: virtManager/details/console.py:575
 msgid "Guest has crashed."
@@ -3412,12 +3405,13 @@ msgid "Connecting to graphical console for guest"
 msgstr "Mit grafischer Konsole für Gast wird verbunden"
 
 #: virtManager/details/console.py:739
-#, fuzzy, python-format
-#| msgid "Error connecting to graphical console"
+#, python-format
 msgid ""
 "Error connecting to graphical console:\n"
 "%s"
-msgstr "Fehler bei Verbindung mit grafischer Konsole"
+msgstr ""
+"Fehler bei Verbindung mit grafischer Konsole:\n"
+"%s"
 
 #: virtManager/details/console.py:796
 #, python-format
@@ -3438,16 +3432,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "SSH Tunnel Fehlerausgabe: %s"
 
 #: virtManager/details/console.py:847
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "Verbindung des Betrachters wurde getrennt."
+msgstr "Verbindung des Betrachters wird getrennt."
 
 #: virtManager/details/console.py:980
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "Verbindung des Betrachters getrennt."
+msgstr "Betrachterfenster geschlossen."
 
 #: virtManager/details/console.py:984
 #, python-format
@@ -3477,7 +3467,7 @@ msgstr "%(bus)s %(device)s %(index)d"
 #: virtManager/details/details.py:184
 #, python-format
 msgid "NIC %(mac)s"
-msgstr ""
+msgstr "NIC %(mac)s"
 
 #: virtManager/details/details.py:197
 #, python-format
@@ -3495,10 +3485,9 @@ msgid "Console %(num)d"
 msgstr "Konsole %(num)d"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel %(name)s"
+#, python-format
 msgid "Channel (%(name)s)"
-msgstr "Kanal %(name)s"
+msgstr "Kanal (%(name)s)"
 
 #: virtManager/details/details.py:214
 #, python-format
@@ -3518,7 +3507,7 @@ msgstr "%(bus)s Weiterleiter %(index)d"
 #: virtManager/details/details.py:227
 #, python-format
 msgid "Sound %s"
-msgstr ""
+msgstr "Ton %s"
 
 #: virtManager/details/details.py:229
 #, python-format
@@ -3565,7 +3554,7 @@ msgstr "Gerät _entfernen"
 
 #: virtManager/details/details.py:643 virtManager/details/details.py:1756
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:653
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -3638,10 +3627,9 @@ msgid "An init path must be specified"
 msgstr "Ein init-Pfad muss angegeben werden"
 
 #: virtManager/details/details.py:1504 virtManager/device/addstorage.py:275
-#, fuzzy, python-format
-#| msgid "Disk %s is already in use by other guests %s."
+#, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
-msgstr "Disk %s wird bereits von anderen Gästen %s verwendet."
+msgstr "Disk '%(path)s' wird bereits von anderen Gästen %(names)s verwendet"
 
 #: virtManager/details/details.py:1508 virtManager/device/addstorage.py:279
 msgid "Do you really want to use the disk?"
@@ -3669,7 +3657,7 @@ msgstr "%(received)d %(units)s read"
 #: virtManager/details/details.py:1835
 #, python-format
 msgid "%(transferred)d %(units)s write"
-msgstr ""
+msgstr "%(transferred)d %(units)s schreiben"
 
 #: virtManager/details/details.py:1838
 #, python-format
@@ -3679,7 +3667,7 @@ msgstr "%(received)d %(units)s in"
 #: virtManager/details/details.py:1839
 #, python-format
 msgid "%(transferred)d %(units)s out"
-msgstr ""
+msgstr "%(transferred)d %(units)s ausgeben"
 
 #: virtManager/details/details.py:1841 virtManager/details/details.py:1842
 #: virtManager/details/details.py:1843 virtManager/details/details.py:1844
@@ -3746,6 +3734,8 @@ msgstr "Physisches %s Gerät"
 #: virtManager/details/details.py:2181
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
+"Kann letztes Videogerät nicht entfernen, während Anzeige/Bildschirm "
+"verbunden ist."
 
 #: virtManager/details/details.py:2207
 #, python-format
@@ -3800,7 +3790,7 @@ msgstr "Serielle Konsole nicht verfügbar für inaktiven Gast"
 #: virtManager/details/serialcon.py:185
 #, python-format
 msgid "Console for device type '%s' is not supported"
-msgstr ""
+msgstr "Konsole für Gerätetyp '%s' nicht unterstützt"
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
@@ -3808,7 +3798,7 @@ msgstr "_Kopieren"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "_Einfügen"
 
 #: virtManager/details/serialcon.py:348
 #, python-format
@@ -3904,30 +3894,22 @@ msgstr ""
 "erstellen."
 
 #: virtManager/details/snapshots.py:653
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
-#| "snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"Sind Sie sicher, dass Sie Schnappschuss '%s' ausführen wollen? Alle %s "
-"Änderungen, die seit dem letzten Schnappschuss vorgenommen wurden, werden "
-"dadurch verworfen."
+"Sind Sie sicher, dass Sie Schnappschuss '%(name)s' ausführen wollen? Alle "
+"Änderungen seit dem letzten Schnappschuss werden dadurch verworfen."
 
 #: virtManager/details/snapshots.py:657
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
-#| "snapshot was created will be discarded."
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"Sind Sie sicher, dass Sie Schnappschuss '%s' ausführen wollen? Alle %s "
-"Änderungen, die seit dem letzten Schnappschuss vorgenommen wurden, werden "
-"dadurch verworfen."
+"Sind Sie sicher, dass Sie Schnappschuss '%(name)s' ausführen wollen? Alle "
+"Änderungen seit dem letzten Schnappschuss werden dadurch verworfen."
 
 #: virtManager/details/snapshots.py:668
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -4003,6 +3985,8 @@ msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
+"Gast ist auf einem entfernten Host, aber nur so konfiguriert, lokale 'file "
+"descriptor' Verbindungen zu erlauben."
 
 #: virtManager/details/sshtunnels.py:67
 msgid "Guest is configured for TLS only which does not work over SSH."
@@ -4015,12 +3999,12 @@ msgid ""
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 msgstr ""
+"Gast ist auf einem entfernten Host mit Transport '%s', aber nur für das "
+"lokale Empfangen konfiguriert. Um sich entfernt zu verbinden, müssen Sie die "
+"'listen address' des Gastes ändern."
 
 #: virtManager/details/viewers.py:356
-#, fuzzy, python-format
-#| msgid ""
-#| "Unable to provide requested credentials to the VNC server.\n"
-#| " The credential type %s is not supported"
+#, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
@@ -4035,7 +4019,7 @@ msgstr "GTK-VNC-Betrachter ist zu alt"
 #: virtManager/details/viewers.py:582
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
-msgstr ""
+msgstr "Begegnung mit SPICE %(error-name)s"
 
 #: virtManager/details/viewers.py:755
 msgid "Guest agent is not available."
@@ -4081,6 +4065,8 @@ msgstr "_Quellpfad:"
 #: virtManager/device/fsdetails.py:163
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
+"Sie müssen eventuell 'geteilten Speicher aktivieren' auf der Seite "
+"'Speicher' auswählen."
 
 #: virtManager/device/gfxdetails.py:87
 msgid "Spice server"
@@ -4137,11 +4123,11 @@ msgstr "Inaktiv"
 
 #: virtManager/device/netlist.py:136
 msgid "Bridge device..."
-msgstr ""
+msgstr "Überbrückungsgerät..."
 
 #: virtManager/device/netlist.py:141
 msgid "Macvtap device..."
-msgstr ""
+msgstr "Macvtap Gerät..."
 
 #: virtManager/device/netlist.py:199
 msgid "Virtual Network is not active."
