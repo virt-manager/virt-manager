@@ -410,7 +410,7 @@ class vmmHostStorage(vmmGObjectUI):
         for vol in vols:
             try:
                 paths.append(vol.get_target_path())
-            except Exception:
+            except Exception:  # pragma: no cover
                 log.debug("Error getting target path for '%s'", vol, exc_info=True)
                 paths.append(None)
         names_list = DeviceDisk.paths_in_use_by(pool.conn.get_backend(), paths)
