@@ -2,6 +2,8 @@
 # See the COPYING file in the top-level directory.
 
 # pylint: disable=wrong-import-order,ungrouped-imports
+import os
+
 import gi
 
 from virtinst import log
@@ -18,6 +20,10 @@ except ValueError:  # pragma: no cover
     except ValueError:
         log.debug("Not using GtkSource")
         have_gtksourceview = False
+
+if "VIRTINST_TEST_SUITE_FAKE_NO_SOURCEVIEW" in os.environ:
+    log.debug("Faking missing GtkSource for test suite")
+    have_gtksourceview = False
 
 if have_gtksourceview:
     from gi.repository import GtkSource

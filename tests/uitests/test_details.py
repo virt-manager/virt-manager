@@ -1,6 +1,8 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
+import unittest
+
 import tests.utils
 from . import lib
 
@@ -794,6 +796,21 @@ def testDetailsXMLEdit(app):
     win.find("Details", "page tab").click()
     disksrc = win.find("disk-source-path")
     lib.utils.check(lambda: disksrc.text == newpath)
+
+    # Do standard xmleditor tests
+    lib.utils.test_xmleditor_interactions(app, win, finish)
+
+
+@unittest.mock.patch.dict('os.environ',
+        {"VIRTINST_TEST_SUITE_FAKE_NO_SOURCEVIEW": "1"})
+def testDetailsXMLEditorSourceviewFallback(app):
+    """
+    Test XML editor standard bits, when falling back to gtk textview
+    """
+    app.open(xmleditor_enabled=True)
+    win = app.manager_open_details("test-clone-simple")
+    finish = win.find("config-apply")
+    xmleditor = win.find("XML editor")
 
     # Do standard xmleditor tests
     lib.utils.test_xmleditor_interactions(app, win, finish)
