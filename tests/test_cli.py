@@ -6,6 +6,7 @@
 import atexit
 import io
 import os
+import re
 import shlex
 import shutil
 import sys
@@ -348,10 +349,10 @@ class Command(object):
             _raise_error("Expected command to %s, but it didn't.\n" %
                  (self.check_success and "pass" or "fail"))
 
-        if self.grep and self.grep not in output:
-            _raise_error("Didn't find grep=%s" % self.grep)
-        if self.nogrep and self.nogrep in output:
-            _raise_error("Found grep=%s when we shouldn't see it" %
+        if self.grep and not re.search(self.grep, output):
+            _raise_error("Didn't find regex grep=%s" % self.grep)
+        if self.nogrep and re.search(self.nogrep, output):
+            _raise_error("Found regex grep=%s when we shouldn't see it" %
                     self.nogrep)
 
         if self.compare_file:
@@ -961,7 +962,7 @@ c.add_invalid("--disk size=1 --file foobar", grep="Cannot mix --file")  # --disk
 ################################################
 
 c = vinst.add_category("invalid-devices", "--noautoconsole --nodisks --pxe --osinfo require=no")
-c.add_invalid("--clock foo_tickpolicy=merge", grep="Unknown --clock options: ['foo_tickpolicy']")  # Bad suboption
+c.add_invalid("--clock foo_tickpolicy=merge", grep="Unknown --clock options:.*'foo_tickpolicy'")  # Bad suboption
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device 1d6b:2", grep="corresponds to multiple node devices")
 c.add_invalid("--connect %(URI-TEST-FULL)s --host-device pci_8086_2850_scsi_host_scsi_host", grep="Unsupported node device type 'scsi_host'")  # Unsupported hostdev type
 c.add_invalid("--host-device foobarhostdev", grep="Unknown hostdev address string format")  # Unknown hostdev
