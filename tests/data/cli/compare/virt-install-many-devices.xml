@@ -134,11 +134,22 @@
     <viridian/>
     <pmu state="off"/>
     <hyperv>
-      <reset state="on"/>
-      <vapic state="on"/>
       <relaxed state="off"/>
+      <vapic state="on"/>
       <spinlocks state="on" retries="5678"/>
+      <vpindex state="on"/>
+      <runtime state="on"/>
       <synic state="on"/>
+      <stimer state="on">
+        <direct state="on"/>
+      </stimer>
+      <reset state="on"/>
+      <frequencies state="on"/>
+      <reenlightenment state="on"/>
+      <tlbflush state="on"/>
+      <ipi state="on"/>
+      <evmcs state="on"/>
+      <avic state="on"/>
     </hyperv>
     <vmport state="off"/>
     <kvm>

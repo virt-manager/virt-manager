@@ -121,6 +121,7 @@ class _Features(_CapsBlock):
     XML_NAME = "features"
     gic = XMLChildProperty(_make_capsblock("gic"), is_single=True)
     sev = XMLChildProperty(_SEV, is_single=True)
+    hyperv = XMLChildProperty(_make_capsblock("hyperv"), is_single=True)
 
 
 class _MemoryBacking(_CapsBlock):
@@ -486,3 +487,12 @@ class DomainCapabilities(XMLBuilder):
         Return True if libvirt advertises support for memfd memory backend
         """
         return self.memorybacking.get_enum("sourceType").has_value("memfd")
+
+    def supported_hyperv_features(self):
+        """
+        Return list of supported Hyper-V features.
+        """
+        if not self.features.hyperv.supported:
+            return []
+
+        return self.features.hyperv.get_enum("features").get_values()

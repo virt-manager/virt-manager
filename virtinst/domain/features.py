@@ -26,13 +26,23 @@ class DomainFeatures(XMLBuilder):
     pmu = XMLProperty("./pmu/@state", is_onoff=True)
     eoi = XMLProperty("./apic/@eoi", is_onoff=True)
 
-    hyperv_reset = XMLProperty("./hyperv/reset/@state", is_onoff=True)
-    hyperv_vapic = XMLProperty("./hyperv/vapic/@state", is_onoff=True)
     hyperv_relaxed = XMLProperty("./hyperv/relaxed/@state", is_onoff=True)
+    hyperv_vapic = XMLProperty("./hyperv/vapic/@state", is_onoff=True)
     hyperv_spinlocks = XMLProperty("./hyperv/spinlocks/@state", is_onoff=True)
     hyperv_spinlocks_retries = XMLProperty("./hyperv/spinlocks/@retries",
                                            is_int=True)
+    hyperv_vpindex = XMLProperty("./hyperv/vpindex/@state", is_onoff=True)
+    hyperv_runtime = XMLProperty("./hyperv/runtime/@state", is_onoff=True)
     hyperv_synic = XMLProperty("./hyperv/synic/@state", is_onoff=True)
+    hyperv_stimer = XMLProperty("./hyperv/stimer/@state", is_onoff=True)
+    hyperv_stimer_direct = XMLProperty("./hyperv/stimer/direct/@state", is_onoff=True)
+    hyperv_reset = XMLProperty("./hyperv/reset/@state", is_onoff=True)
+    hyperv_frequencies = XMLProperty("./hyperv/frequencies/@state", is_onoff=True)
+    hyperv_reenlightenment = XMLProperty("./hyperv/reenlightenment/@state", is_onoff=True)
+    hyperv_tlbflush = XMLProperty("./hyperv/tlbflush/@state", is_onoff=True)
+    hyperv_ipi = XMLProperty("./hyperv/ipi/@state", is_onoff=True)
+    hyperv_evmcs = XMLProperty("./hyperv/evmcs/@state", is_onoff=True)
+    hyperv_avic = XMLProperty("./hyperv/avic/@state", is_onoff=True)
 
     vmport = XMLProperty("./vmport/@state", is_onoff=True)
     kvm_hidden = XMLProperty("./kvm/hidden/@state", is_onoff=True)
@@ -48,6 +58,53 @@ class DomainFeatures(XMLBuilder):
     ##################
     # Default config #
     ##################
+
+    def _set_hyperv_defaults(self, guest):
+        if not guest.hyperv_supported():
+            return
+
+        features = guest.lookup_domcaps().supported_hyperv_features()
+
+        def _enable(name, requires=[], feature=None, value=True):
+            feature = feature or name
+            conn_func = getattr(guest.conn.support,
+                                f"conn_hyperv_{feature}",
+                                lambda: False)
+            if feature not in features and conn_func() is not True:
+                return
+            if getattr(self, f"hyperv_{name}") is not None:
+                return
+            for val in requires:
+                if getattr(self, f"hyperv_{val}") is not True:
+                    return
+            setattr(self, f"hyperv_{name}", value)
+
+        _enable("relaxed")
+        _enable("vapic")
+        _enable("spinlocks")
+        _enable("spinlocks_retries", feature="spinlocks", value=8191)
+        _enable("vpindex")
+        _enable("runtime")
+        _enable("synic", requires=["vpindex"])
+
+        # Both hyperv_stimer and hyperv_stimer requires hv-timer to by enabled
+        # which libvirt hides under hypervclock timer.
+        if guest.clock.has_hyperv_timer():
+            _enable("stimer", requires=["vpindex", "synic"])
+            _enable("stimer_direct", requires=["vpindex", "synic", "stimer"])
+
+        _enable("frequencies")
+
+        _enable("tlbflush", requires=["vpindex"])
+        _enable("ipi", requires=["vpindex"])
+
+        capsinfo = guest.lookup_capsinfo()
+
+        if guest.conn.caps.host.cpu.vendor == "Intel":
+            _enable("evmcs", requires=["vapic"])
+
+        if self.apic is True:
+            _enable("avic")
 
     def set_defaults(self, guest):
         if guest.os.is_container():
@@ -74,13 +131,4 @@ class DomainFeatures(XMLBuilder):
             else:
                 self.pae = capsinfo.guest.supports_pae()
 
-        if (guest.hyperv_supported() and
-            self.conn.support.conn_hyperv_vapic()):
-            if self.hyperv_relaxed is None:
-                self.hyperv_relaxed = True
-            if self.hyperv_vapic is None:
-                self.hyperv_vapic = True
-            if self.hyperv_spinlocks is None:
-                self.hyperv_spinlocks = True
-            if self.hyperv_spinlocks_retries is None:
-                self.hyperv_spinlocks_retries = 8191
+        self._set_hyperv_defaults(guest)
