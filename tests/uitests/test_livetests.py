@@ -2,6 +2,7 @@
 # See the COPYING file in the top-level directory.
 
 import os
+import tempfile
 
 import libvirt
 import pytest
@@ -41,13 +42,34 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 try:
                     flags = 0
                     if "qemu" in uri:
-                        flags = libvirt.VIR_DOMAIN_UNDEFINE_NVRAM
+                        flags = (libvirt.VIR_DOMAIN_UNDEFINE_NVRAM |
+                                 libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA)
                     dom.undefineFlags(flags)
                     dom.destroy()
                 except Exception:
                     pass
         return wrapper
     return wrap1
+
+
+def _create_qcow2_file(fn):
+    def wrapper(app, *args, **kwargs):
+        tmpdir = tempfile.TemporaryDirectory(prefix="uitests-tmp")
+        dname = tmpdir.name
+        try:
+            fname = os.path.join(dname, "test.img")
+            os.system("qemu-img create -f qcow2 %s 1M > /dev/null" % fname)
+            os.system("chmod 700 %s" % dname)
+            fn(fname, app, *args, **kwargs)
+        finally:
+            poolname = os.path.basename(dname)
+            try:
+                pool = app.conn.storagePoolLookupByName(poolname)
+                pool.destroy()
+                pool.undefine()
+            except Exception:
+                log.debug("Error cleaning up pool", exc_info=True)
+    return wrapper
 
 
 def _destroy(app, win):
@@ -431,7 +453,14 @@ def testVNCSpecific(app, dom):
     win.click_title()
 
 
-def _testLiveHotplug(app, fname):
+@_vm_wrapper("uitests-hotplug")
+@_create_qcow2_file
+def testLiveHotplug(fname, app, dom):
+    """
+    Live test for basic hotplugging and media change, as well as
+    testing our auto-poolify magic
+    """
+    ignore = dom
     win = app.topwin
     win.find("Details", "radio button").click()
 
@@ -482,29 +511,68 @@ def _testLiveHotplug(app, fname):
     lib.utils.check(lambda: not entry.text)
 
 
+
 @_vm_wrapper("uitests-hotplug")
-def testLiveHotplug(app, dom):
-    """
-    Live test for basic hotplugging and media change, as well as
-    testing our auto-poolify magic
-    """
-    ignore = dom
-    import tempfile
-    tmpdir = tempfile.TemporaryDirectory(prefix="uitests-tmp")
-    dname = tmpdir.name
-    try:
-        fname = os.path.join(dname, "test.img")
-        os.system("qemu-img create -f qcow2 %s 1M > /dev/null" % fname)
-        os.system("chmod 700 %s" % dname)
-        _testLiveHotplug(app, fname)
-    finally:
-        poolname = os.path.basename(dname)
-        try:
-            pool = app.conn.storagePoolLookupByName(poolname)
-            pool.destroy()
-            pool.undefine()
-        except Exception:
-            log.debug("Error cleaning up pool", exc_info=True)
+@_create_qcow2_file
+def testLiveExternalSnapshots(fname, app, dom):
+    win = app.topwin
+    win.find("Details", "radio button").click()
+
+    # Add a scsi disk, importing the passed path
+    win.find("add-hardware", "push button").click()
+    addhw = app.find_window("Add New Virtual Hardware")
+    addhw.find("Storage", "table cell").click()
+    tab = addhw.find("storage-tab", None)
+    lib.utils.check(lambda: tab.showing)
+    tab.find("Select or create", "radio button").click()
+    tab.find("storage-entry").set_text(fname)
+    tab.combo_select("Bus type:", "SCSI")
+    addhw.find("Finish", "push button").click()
+
+    # Verify permission dialog pops up, ask to change
+    app.click_alert_button(
+            "The emulator may not have search permissions", "Yes")
+
+    # Verify no errors
+    lib.utils.check(lambda: not addhw.showing)
+    lib.utils.check(lambda: win.active)
+
+    def _make_snapshot(name, auto=True):
+        win.find("snapshot-add", "push button").click()
+        newwin = app.find_window("Create snapshot")
+        newwin.find("Name:", "text").set_text(name)
+        external = newwin.find("external", "radio button")
+        if not external.isChecked:
+            pytest.skip("libvirt is too old for external snapshots")
+        if not auto:
+            newwin.find("auto", "check box").click()
+        newwin.find("Finish", "push button").click()
+        lib.utils.check(lambda: not newwin.showing)
+        newc = win.find(name, "table cell")
+        lib.utils.check(lambda: newc.state_selected)
+
+    win.find("Snapshots", "radio button").click()
+    _make_snapshot("testnewsnap1")
+    _make_snapshot("testnewsnap2", auto=False)
+
+    # Poweroff VM and create an offline one
+    run = win.find("Run", "push button")
+    dom.destroy()
+    lib.utils.check(lambda: run.sensitive)
+
+    _make_snapshot("testnewsnap-offline")
+
+    # Delete first snapshot
+    newc = win.find("testnewsnap1", "table cell")
+    newc.click()
+    lib.utils.check(lambda: newc.state_selected)
+    win.find("snapshot-delete").click()
+    app.click_alert_button("permanently delete", "Yes")
+    lib.utils.check(lambda: newc.dead, timeout=10)
+    lib.utils.check(lambda: win.active)
+
+    # Ensure VM is still offline
+    lib.utils.check(lambda: run.sensitive)
 
 
 @_vm_wrapper("uitests-firmware-efi")
