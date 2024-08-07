@@ -129,6 +129,13 @@ def _testsuite_mac():
     return ret
 
 
+class _Backend(XMLBuilder):
+    XML_NAME = "backend"
+
+    type = XMLProperty("./@type")
+    logFile = XMLProperty("./@logFile", do_abspath=True)
+
+
 class _VirtualPort(XMLBuilder):
     XML_NAME = "virtualport"
 
@@ -139,6 +146,25 @@ class _VirtualPort(XMLBuilder):
     instanceid = XMLProperty("./parameters/@instanceid")
     profileid = XMLProperty("./parameters/@profileid")
     interfaceid = XMLProperty("./parameters/@interfaceid")
+
+
+class _PortForwardRange(XMLBuilder):
+    XML_NAME = "range"
+
+    start = XMLProperty("./@start", is_int=True)
+    end = XMLProperty("./@end", is_int=True)
+    to = XMLProperty("./@to", is_int=True)
+    exclude = XMLProperty("./@exclude", is_yesno=True)
+
+
+class _PortForward(XMLBuilder):
+    XML_NAME = "portForward"
+
+    proto = XMLProperty("./@proto")
+    address = XMLProperty("./@address")
+    dev = XMLProperty("./@dev")
+
+    range = XMLChildProperty(_PortForwardRange)
 
 
 class DeviceInterface(Device):
@@ -237,9 +263,13 @@ class DeviceInterface(Device):
     ##################
 
     _XML_PROP_ORDER = [
-        "bridge", "network", "source_dev", "source_type", "source_path",
-        "source_mode", "portgroup", "macaddr", "target_dev", "model",
-        "virtualport", "filterref", "rom_bar", "rom_file", "mtu_size"]
+        "backend", "bridge", "network", "source_dev", "source_type",
+        "source_path", "source_mode", "portgroup", "macaddr", "target_dev",
+        "model", "virtualport", "filterref", "rom_bar", "rom_file", "mtu_size",
+        "portForward",
+    ]
+
+    backend = XMLChildProperty(_Backend, is_single=True)
 
     bridge = XMLProperty("./source/@bridge")
     network = XMLProperty("./source/@network")
@@ -267,6 +297,8 @@ class DeviceInterface(Device):
     rom_file = XMLProperty("./rom/@file")
 
     mtu_size = XMLProperty("./mtu/@size", is_int=True)
+
+    portForward = XMLChildProperty(_PortForward)
 
 
     #############
@@ -310,9 +342,19 @@ class DeviceInterface(Device):
                 return pref
         return "e1000"
 
+    def _set_default_type(self):
+        if self.type:
+            return
+
+        if self.backend and self.backend.type == "passt":
+            self.type = self.TYPE_USER
+            return
+
+        self.type = self.TYPE_BRIDGE
+
     def set_defaults(self, guest):
-        if not self.type:
-            self.type = self.TYPE_BRIDGE
+        self._set_default_type()
+
         if not self.macaddr:
             self.macaddr = self.generate_mac(self.conn)
         if self.type == self.TYPE_BRIDGE and not self.bridge:

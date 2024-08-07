@@ -596,6 +596,18 @@
       <mac address="00:11:22:33:44:55"/>
       <model type="vmxnet3"/>
     </interface>
+    <interface type="user">
+      <backend type="passt" logFile="/tmp/foo.log"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <portForward proto="tcp" address="192.168.10.10" dev="eth0">
+        <range start="4000" end="5000" to="10000" exclude="no"/>
+        <range start="6000"/>
+      </portForward>
+      <portForward proto="tcp">
+        <range start="2022" to="22"/>
+      </portForward>
+    </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="host" type="tcp"/>
     <smartcard mode="passthrough" type="spicevmc"/>

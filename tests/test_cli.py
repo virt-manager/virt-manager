@@ -631,6 +631,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock,address.type=pci,address.bus=0x00,address.slot=0x10,address.function=0x0,address.domain=0x0000
 --network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
 --network model=vmxnet3
+--network backend.type=passt,backend.logFile=/tmp/foo.log,portForward0.proto=tcp,portForward0.address=192.168.10.10,portForward0.dev=eth0,portForward0.range0.start=4000,portForward0.range0.end=5000,portForward0.range0.to=10000,portForward0.range0.exclude=no,portForward0.range1.start=6000,portForward1.proto=tcp,portForward1.range0.start=2022,portForward1.range0.to=22
 
 
 --graphics sdl
