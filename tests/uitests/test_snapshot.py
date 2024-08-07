@@ -80,6 +80,7 @@ def testSnapshotLifecycle(app):
     newwin = app.find_window("Create snapshot")
     snapname = "testnewsnap"
     newwin.find("Name:", "text").set_text(snapname)
+    newwin.find("internal", "radio button").click()
     newwin.find("Description:", "text").set_text("testdesc")
     newwin.find("Finish", "push button").click()
     lib.utils.check(lambda: not newwin.showing)
@@ -99,6 +100,7 @@ def testSnapshotLifecycle(app):
     newwin = app.find_window("Create snapshot")
     snapname = "testnewsnap"
     newwin.find("Name:", "text").set_text(snapname)
+    newwin.find("internal", "radio button").click()
     newwin.find("Finish", "push button").click()
     lib.utils.check(lambda: not newwin.showing)
     newc = win.find(snapname, "table cell")
@@ -126,6 +128,7 @@ def testSnapshotMisc1(app):
     newwin = app.find_window("Create snapshot")
     snapname1 = "testnewsnap1"
     newwin.find("Name:", "text").set_text(snapname1)
+    newwin.find("internal", "radio button").click()
     newwin.find("Finish", "push button").click()
     lib.utils.check(lambda: not newwin.showing)
     newc = win.find(snapname1, "table cell")
@@ -136,6 +139,7 @@ def testSnapshotMisc1(app):
     lib.utils.check(lambda: not vmrun.sensitive)
     win.find("snapshot-add", "push button").click()
     newwin = app.find_window("Create snapshot")
+    newwin.find("internal", "radio button").click()
     # Force validation error
     newwin.find("Name:", "text").set_text("bad name")
     newwin.find("Finish", "push button").click()
