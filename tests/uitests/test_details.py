@@ -674,6 +674,7 @@ def testDetailsMiscEdits(app):
     Test misc editing behavior, like checking for unapplied
     changes
     """
+    app.open(extra_opts=["--test-options=test-update-device-fail"])
     win = app.manager_open_details("test-many-devices")
     hwlist = win.find("hw-list")
 

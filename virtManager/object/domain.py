@@ -1083,6 +1083,9 @@ class vmmDomain(vmmLibvirtObject):
 
         xml = devobj.get_xml()
         log.debug("update_device with xml=\n%s", xml)
+
+        if self.config.CLITestOptions.test_update_device_fail:
+            raise RuntimeError("fake update device failure")
         self._backend.updateDeviceFlags(xml, flags)
 
     def hotplug(self, memory=_SENTINEL, maxmem=_SENTINEL,

@@ -163,6 +163,7 @@ class CLITestOptionsClass:
         managed save issues
 
     * test-vm-run-fail: Make VM run fail, so we can test the error path
+    * test-update-device-fail: Make UpdateDevice API call fail
 
     * spice-agent: Make spice-agent detection return true in viewer.py
 
@@ -219,6 +220,7 @@ class CLITestOptionsClass:
         self.enable_libguestfs = _get("enable-libguestfs")
         self.test_managed_save = _get("test-managed-save")
         self.test_vm_run_fail = _get("test-vm-run-fail")
+        self.test_update_device_fail = _get("test-update-device-fail")
         self.spice_agent = _get("spice-agent")
         self.firstrun_uri = _get_value("firstrun-uri")
         self.fake_vnc_username = _get("fake-vnc-username")

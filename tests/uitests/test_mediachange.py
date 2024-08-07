@@ -86,7 +86,8 @@ def testMediaHotplug(app):
     Test in the case of a running VM
     """
     vmname = "test-many-devices"
-    app.open(show_console=vmname)
+    app.open(show_console=vmname,
+             extra_opts=["--test-options=test-update-device-fail"])
     win = app.find_details_window(vmname, click_details=True)
     hw = win.find("hw-list")
     entry = win.find("media-entry")
