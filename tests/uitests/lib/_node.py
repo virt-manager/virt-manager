@@ -252,7 +252,7 @@ class _VMMDogtailNode(dogtail.tree.Node):
         assert hasattr(self, "text")
         self.text = text
 
-    def get_text(self):
+    def get_text_override(self):
         self.check_onscreen()
         self.check_sensitive()
         assert hasattr(self, "text")

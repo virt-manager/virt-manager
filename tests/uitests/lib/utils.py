@@ -111,7 +111,7 @@ def test_xmleditor_interactions(app, win, finish):
 def get_xmleditor_xml(_app, win):
     win.find("XML", "page tab").click()
     xmleditor = win.find("XML editor")
-    xml = xmleditor.get_text()
+    xml = xmleditor.get_text_override()
     win.find("Details", "page tab").click()
     check(lambda: not xmleditor.showing)
     return xml
