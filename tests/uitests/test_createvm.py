@@ -658,7 +658,7 @@ def testNewVMArmKernel(app):
     newvm.find_fuzzy("Virt Type", "combo").click()
     KVM = newvm.find_fuzzy("KVM", "menu item")
     TCG = newvm.find_fuzzy("TCG", "menu item")
-    lib.utils.check(lambda: KVM.focused)
+    lib.utils.check(lambda: KVM.selected)
     lib.utils.check(lambda: TCG.showing)
     app.rawinput.pressKey("Esc")
 
