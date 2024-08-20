@@ -4849,8 +4849,13 @@ class ParserLaunchSecurity(VirtCLIParser):
         cls.add_arg("policy", "policy")
         cls.add_arg("session", "session")
         cls.add_arg("dhCert", "dhCert")
+        cls.add_arg("guestVisibleWorkarounds", "guestVisibleWorkarounds")
+        cls.add_arg("idBlock", "idBlock")
+        cls.add_arg("idAuth", "idAuth")
+        cls.add_arg("hostData", "hostData")
         cls.add_arg("kernelHashes", "kernelHashes", is_onoff=True)
-
+        cls.add_arg("authorKey", "authorKey", is_onoff=True)
+        cls.add_arg("vcek", "vcek", is_onoff=True)
 
 ###########################
 # Public virt parser APIs #
