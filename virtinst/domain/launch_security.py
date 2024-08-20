@@ -16,7 +16,13 @@ class DomainLaunchSecurity(XMLBuilder):
     policy = XMLProperty("./policy")
     session = XMLProperty("./session")
     dhCert = XMLProperty("./dhCert")
+    guestVisibleWorkarounds = XMLProperty("./guestVisibleWorkarounds")
+    idBlock = XMLProperty("./idBlock")
+    idAuth = XMLProperty("./idAuth")
+    hostData = XMLProperty("./hostData")
     kernelHashes = XMLProperty("./@kernelHashes", is_yesno=True)
+    authorKey = XMLProperty("./@authorKey", is_yesno=True)
+    vcek = XMLProperty("./@vcek", is_yesno=True)
 
     def _set_defaults_sev(self, guest):
         if not guest.os.is_q35() or not guest.is_uefi():
@@ -32,6 +38,12 @@ class DomainLaunchSecurity(XMLBuilder):
             if domcaps.supports_sev_launch_security(check_es=True):
                 self.policy = "0x07"
 
+    def _set_defaults_sev_snp(self, guest):
+        if not guest.os.is_q35() or not guest.is_uefi():
+            raise RuntimeError(_("SEV-SNP launch security requires a Q35 UEFI machine"))
+
     def set_defaults(self, guest):
         if self.type == "sev":
             return self._set_defaults_sev(guest)
+        elif self.type == "sev-snp":
+            return self._set_defaults_sev_snp(guest)
