@@ -1,0 +1,83 @@
+<domain type="kvm">
+  <name>vm1</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os firmware="efi">
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <vmport state="off"/>
+  </features>
+  <cpu mode="host-passthrough"/>
+  <clock offset="utc">
+    <timer name="rtc" tickpolicy="catchup"/>
+    <timer name="pit" tickpolicy="delay"/>
+    <timer name="hpet" present="no"/>
+  </clock>
+  <pm>
+    <suspend-to-mem enabled="no"/>
+    <suspend-to-disk enabled="no"/>
+  </pm>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <controller type="usb" model="ich9-ehci1"/>
+    <controller type="usb" model="ich9-uhci1">
+      <master startport="0"/>
+    </controller>
+    <controller type="usb" model="ich9-uhci2">
+      <master startport="2"/>
+    </controller>
+    <controller type="usb" model="ich9-uhci3">
+      <master startport="4"/>
+    </controller>
+    <controller type="pci" model="pcie-root"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <controller type="pci" model="pcie-root-port"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="e1000e"/>
+    </interface>
+    <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <tpm model="tpm-crb">
+      <backend type="emulator"/>
+    </tpm>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
+    <video>
+      <model type="qxl"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+  </devices>
+  <launchSecurity type="sev-snp" kernelHashes="yes" authorKey="yes" vcek="yes">
+    <policy>0x24</policy>
+    <guestVisibleWorkarounds>V2UgYXJlIHRoZSBLbmlnaA==</guestVisibleWorkarounds>
+    <idBlock>Tm93IHN0YW5kIGFzaWRlLCB3b3J0aHkgYWR2ZXJzYXJ5IU5vdyBzdGFuZCBhc2lkZSwgd29ydGh5IGFkdmVyc2FyeSFOb3cgc3RhbmQgYXNpZGUsIHdvcnRoeSBhZHZl</idBlock>
+    <idAuth>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</idAuth>
+    <hostData>V2UgYXJlIHRoZSBLbmlnaHRzIHdobyBzYXkgbmkhISE=</hostData>
+  </launchSecurity>
+</domain>
