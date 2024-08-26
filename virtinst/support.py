@@ -247,8 +247,6 @@ class SupportCache:
     conn_pm_disable = _make(hv_version={"qemu": "1.2.0", "test": 0})
     conn_qcow2_lazy_refcounts = _make(
         version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
-    conn_hyperv_vapic = _make(
-        version="1.1.0", hv_version={"qemu": "1.1.0", "test": 0})
     conn_hyperv_clock = _make(
         version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
     conn_domain_capabilities = _make(
