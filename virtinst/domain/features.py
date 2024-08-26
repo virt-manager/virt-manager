@@ -81,6 +81,26 @@ class DomainFeatures(XMLBuilder):
         _enable("vapic")
         _enable("spinlocks")
         _enable("spinlocks_retries", feature="spinlocks", value=8191)
+        _enable("vpindex")
+        _enable("runtime")
+        _enable("synic", requires=["vpindex"])
+
+        # Both hyperv_stimer and hyperv_stimer requires hv-timer to be enabled
+        # which libvirt hides under hypervclock timer.
+        if guest.clock.has_hyperv_timer():
+            _enable("stimer", requires=["vpindex", "synic"])
+            _enable("stimer_direct", requires=["vpindex", "synic", "stimer"])
+
+        _enable("frequencies")
+
+        _enable("tlbflush", requires=["vpindex"])
+        _enable("ipi", requires=["vpindex"])
+
+        if guest.conn.caps.host.cpu.vendor == "Intel":
+            _enable("evmcs", requires=["vapic"])
+
+        if self.apic is True:
+            _enable("avic")
 
     def set_defaults(self, guest):
         if guest.os.is_container():

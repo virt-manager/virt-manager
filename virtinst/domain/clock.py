@@ -27,6 +27,12 @@ class DomainClock(XMLBuilder):
     offset = XMLProperty("./@offset")
     timers = XMLChildProperty(_ClockTimer)
 
+    def has_hyperv_timer(self):
+        for timer in self.timers:
+            if timer.name == "hypervclock":
+                return True
+
+        return False
 
     ##################
     # Default config #
