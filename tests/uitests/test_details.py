@@ -811,7 +811,6 @@ def testDetailsXMLEditorSourceviewFallback(app):
     app.open(xmleditor_enabled=True)
     win = app.manager_open_details("test-clone-simple")
     finish = win.find("config-apply")
-    xmleditor = win.find("XML editor")
 
     # Do standard xmleditor tests
     lib.utils.test_xmleditor_interactions(app, win, finish)

@@ -8,7 +8,6 @@
 import os.path
 
 import pytest
-import libvirt
 
 from virtinst import Guest
 from virtinst import NodeDevice
@@ -45,6 +44,7 @@ def _testNode2DeviceCompare(conn, nodename, devfile, nodedev=None):
 
 
 def check_version(conn, version):
+    # pylint: disable=protected-access
     if conn.support._check_version(version):
         return
 

@@ -305,7 +305,7 @@ class DeviceDisk(Device):
         """
         Return a list of lists of VM names that are using the passed paths.
         When handling a list of paths, this method is faster than calling
-        path_in_use_by() seperately as it takes time to call conn.fetch_all_vols().
+        path_in_use_by() separately as it takes time to call conn.fetch_all_vols().
 
         :param conn: virConnect to check VMs
         :param paths: Paths to check for

@@ -30,7 +30,7 @@ except ImportError:
     # Newer setuptools will transparently support 'import distutils' though.
     # That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
     import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module,import-error
-    BUILD_COMMAND_CLASS = distutils.command.build.build
+    BUILD_COMMAND_CLASS = distutils.command.build.build  # pylint: disable=c-extension-no-member
 
 
 SYSPREFIX = sysconfig.get_config_var("prefix")
