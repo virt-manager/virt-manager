@@ -1,0 +1,15 @@
+       <target dev="testnet0"/>
+       <model type="e1000"/>
+     </interface>
+-    <interface type="bridge">
+-      <mac address="22:00:00:44:aa:bf"/>
+-      <source bridge="br0"/>
+-      <target dev="testnet1"/>
+-      <model type="e1000"/>
+-    </interface>
+     <interface type="ethernet">
+       <mac address="00:11:7f:33:44:55"/>
+       <script path="/etc/qemu-ifup"/>
+
+Domain 'test-for-virtxml' defined successfully.
+Changes will take effect after the domain is fully powered off.
