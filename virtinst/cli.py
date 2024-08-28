@@ -4857,6 +4857,7 @@ class ParserLaunchSecurity(VirtCLIParser):
         cls.add_arg("authorKey", "authorKey", is_onoff=True)
         cls.add_arg("vcek", "vcek", is_onoff=True)
 
+
 ###########################
 # Public virt parser APIs #
 ###########################
