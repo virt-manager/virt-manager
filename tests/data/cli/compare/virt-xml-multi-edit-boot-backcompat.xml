@@ -1,0 +1,16 @@
+   <os>
+     <type arch="i686">hvm</type>
+     <boot dev="hd"/>
++    <bootmenu enable="yes"/>
+   </os>
+   <clock offset="utc"/>
+   <on_poweroff>destroy</on_poweroff>
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
++    <emulator>/foo</emulator>
+   </devices>
+ </domain>
+
+Domain 'test' defined successfully.
+Changes will take effect after the domain is fully powered off.

@@ -1405,6 +1405,20 @@ c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk so
 c.add_compare("test --add-device --network default --update --confirm", "update-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1", "VIRTINST_TEST_SUITE_INCREMENT_MACADDR": "1"}, input_text="yes\nyes\n")  # test hotplug success
 c.add_compare("test --add-device --network default --update --confirm --no-define", "update-nodefine-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1"}, input_text="yes\n")  # test hotplug success without define
 
+# Regression testing for historical --add-device/--remove-device/--edit multi option handling
+# Single `--edit` with multiple options are processed in sequence
+c.add_compare("test --print-diff --define --edit --boot emulator=/foo --boot bootmenu.enable=yes", "multi-edit-boot-backcompat")
+c.add_compare("test-for-virtxml --print-diff --define --edit --network model=foo --network model=virtio --network boot.order=7", "multi-edit-device-backcompat")
+# Single `--add-device` with multiple options will add multiple devices
+c.add_compare("test --print-diff --define --add-device --sound model=ich9 --sound model=ac97", "multi-add-device-backcompat")
+# Single `--remove-device` with multiple options will only remove the last device
+c.add_compare("test-for-virtxml --print-diff --define --remove-device --network type=network --network type=bridge", "multi-remove-device-backcompat")
+
+c.add_invalid("test --print-diff --define --add-device --sound model=ac97 --video model=virtio", grep="Only one change operation may be specified")
+c.add_invalid("test-for-virtxml --print-diff --define --remove-device --sound model=ich6 --video model=vmvga", grep="Only one change operation may be specified")
+c.add_invalid("test-for-virtxml --print-diff --define --edit --sound model=ac97 --video model=virtio", grep="Only one change operation may be specified")
+
+
 
 c = vixml.add_category("simple edit diff", "test-for-virtxml --edit --print-diff --define")
 c.add_compare("""--xml ./@foo=bar --xml xpath.delete=./currentMemory --xml ./new/element/test=1""", "edit-xpaths")
