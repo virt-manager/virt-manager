@@ -31,8 +31,18 @@
       <wordsize>64</wordsize>
       <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
       <machine>xenpv</machine>
-      <domain type='xen'>
-      </domain>
+      <domain type='xen'/>
+    </arch>
+  </guest>
+
+  <!-- fake addition for testing xenpvh -->
+  <guest>
+    <os_type>xenpvh</os_type>
+    <arch name='x86_64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/lib64/xen/bin/qemu-dm</emulator>
+      <machine>xenpvh</machine>
+      <domain type='xen'/>
     </arch>
   </guest>
 
