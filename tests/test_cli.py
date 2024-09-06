@@ -634,7 +634,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --disk size=.0001,format=raw,transient=on,transient.shareBacking=yes
 --disk size=.0001,pool=pool-logical
 --disk path=%(EXISTIMG1)s,type=dir
---disk path=/fooroot.img,size=.0001,transient=on
+--disk path=file:///fooroot.img,size=.0001,transient=on
 --disk source.dir=/
 --disk type=nvme,source.type=pci,source.managed=no,source.namespace=2,source.address.domain=0x0001,source.address.bus=0x02,source.address.slot=0x00,source.address.function=0x0
 --disk /tmp/disk1.qcow2,size=16,driver.type=qcow2,driver.metadata_cache.max_size=2048,driver.metadata_cache.max_size.unit=KiB
@@ -949,7 +949,6 @@ c = vinst.add_category("storage", "--pxe --nographics --noautoconsole --hvm --os
 c.add_valid("--disk %(COLLIDE)s --check path_in_use=off")  # Colliding storage with --check
 c.add_valid("--disk %(COLLIDE)s --force")  # Colliding storage with --force
 c.add_valid("--disk %(NEWIMG1)s,sparse=true,size=100000000 --check disk_size=off")  # Don't warn about fully allocated file exceeding disk space
-c.add_valid("--disk file://%(NEWIMG1)s,size=1")  # Check that 'file://' prefix is removed correctly
 c.add_invalid("--disk /dev/zero --nodisks", grep="Cannot specify storage and use --nodisks")
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000 --nonsparse", grep="There is not enough free space")  # Nonexisting file, size too big
 c.add_invalid("--file %(NEWIMG1)s --file-size 100000", grep="The requested volume capacity will exceed the")  # Huge file, sparse, but no prompting
