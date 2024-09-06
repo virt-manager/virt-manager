@@ -79,12 +79,7 @@ UI. See the files in the ui/ directory.
 ## Submitting patches
 
 The [virt-manager git repo](https://github.com/virt-manager/virt-manager)
-is hosted on github. Small patches are acceptable via github pull-request,
-but anything non-trivial should be sent to the
-[virt-tools-list mailing list](https://www.redhat.com/mailman/listinfo/virt-tools-list).
-
-Sending patches using `git send-email` is preferred, but `git format-patch`
-output attached to an email is also fine.
+is hosted on github. All patches should be submitted there.
 
 
 ## UI design

@@ -488,9 +488,7 @@ class ExtractMessages(setuptools.Command):
 setuptools.setup(
     name="virt-manager",
     version=BuildConfig.version,
-    author="Cole Robinson",
-    author_email="virt-tools-list@redhat.com",
-    url="http://virt-manager.org",
+    url="https://virt-manager.org",
     license="GPLv2+",
 
     # These wrappers are generated in our custom build command
