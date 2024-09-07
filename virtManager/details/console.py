@@ -907,6 +907,10 @@ class vmmConsolePages(vmmGObjectUI):
         name, dev, errmsg = self._consolemenu.get_selected()
         is_graphics = hasattr(dev, "gtype")
 
+        if self.vm.is_runable():
+            self._show_vm_status_unavailable()
+            return
+
         if errmsg or not dev or is_graphics:
             self.widget("console-pages").set_current_page(
                     _CONSOLE_PAGE_GRAPHICS)
