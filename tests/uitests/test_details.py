@@ -969,3 +969,96 @@ def testDetailsConsoleChecksTCP(app):
     lib.utils.check(lambda: win.active)
     _run()
     _checkcon(".*configured to listen locally.*")
+
+
+def testDetailsConsoleSerialSwitch(app):
+    """
+    Test serial vs graphical console menu handling, across VM restarts,
+    which can hit some corner cases.
+    Hit a specific warning when the connection has
+    non-SSH transport but the guest config is only listening locally
+    """
+    app.open(xmleditor_enabled=True)
+    app.topwin.find("test\n", "table cell").doubleClick()
+    win = app.find_window("test on")
+    conpages = win.find("console-pages")
+    run = win.find("Run", "push button")
+    shutdown = win.find("Shut Down", "push button")
+    conbtn = win.find("Console", "radio button")
+    detailsbtn = win.find("Details", "radio button")
+
+    def _run():
+        win.click_title()
+        run.click()
+        lib.utils.check(lambda: not run.sensitive)
+    def _stop():
+        shutdown.click()
+        lib.utils.check(lambda: not shutdown.sensitive)
+    def _checkcon(msg):
+        conbtn.click()
+        lib.utils.check(lambda: conpages.showing)
+        conpages.find(msg)
+
+    def _open_textconsole_menu():
+        conbtn.click()
+        vmenu = win.find("^View$", "menu")
+        vmenu.click()
+        tmenu = win.find("Consoles", "menu")
+        tmenu.point()
+        app.sleep(.5)  # give console menu time to dynamically populate
+        return tmenu
+
+    def _find_textconsole_item(msg):
+        tmenu = _open_textconsole_menu()
+        return tmenu.find(msg, "radio menu item")
+
+    # Check initial state
+    _checkcon("Graphical console not configured")
+    _stop()
+
+    # Add graphics device
+    detailsbtn.click()
+    win.find("add-hardware", "push button").click()
+    addhw = app.find_window("Add New Virtual Hardware")
+    addhw.find("Graphics", "table cell").click()
+    addhw.find("XML", "page tab").click()
+    dev = '<graphics type="spice" autoport="yes"><listen type="none"/></graphics>'
+    addhw.find("XML editor").text = dev
+    addhw.find("Finish", "push button").click()
+    lib.utils.check(lambda: not addhw.active)
+    lib.utils.check(lambda: win.active)
+
+    # Add a serial
+    # Add graphics device
+    detailsbtn.click()
+    win.find("add-hardware", "push button").click()
+    addhw = app.find_window("Add New Virtual Hardware")
+    addhw.find("Serial", "table cell").click()
+    addhw.find("XML", "page tab").click()
+    dev = '<serial type="pty"/>'
+    addhw.find("XML editor").text = dev
+    addhw.find("Finish", "push button").click()
+    lib.utils.check(lambda: not addhw.active)
+    lib.utils.check(lambda: win.active)
+
+    _find_textconsole_item("Serial 1").click()
+    _run()
+    _checkcon(".*virDomainOpenConsole.*")
+    _stop()
+    _checkcon(".*Guest is not running.*")
+    _run()
+    _checkcon(".*virDomainOpenConsole.*")
+    _stop()
+    _checkcon(".*Guest is not running.*")
+    sitem = _find_textconsole_item("Serial 1")
+    lib.utils.check(lambda: sitem.sensitive)
+    lib.utils.check(lambda: sitem.checked)
+
+    # Remove serial
+    detailsbtn.click()
+    detailsbtn.click()
+    _select_hw(app, win, "Serial 1", "char-tab")
+    win.find("config-remove").click()
+    app.click_alert_button("Are you sure", "Yes")
+    _run()
+    _checkcon(".*SPICE error-connect.*")

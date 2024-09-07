@@ -353,18 +353,8 @@ def testConsoleLXCSerial(app, dom):
     win.find("Details", "radio button").click()
     win.find("Console", "radio button").click()
     _destroy(app, win)
-    view = app.root.find("^View$", "menu")
-    view.click()
-    # Triggers some tooltip cases
-    textmenu = view.find("Consoles", "menu")
-    textmenu.point()
-    lib.utils.check(lambda: textmenu.showing)
-    app.sleep(.5)  # give console menu time to dynamically populate
-    item = textmenu.find("Text Console 1")
-    lib.utils.check(lambda: not item.sensitive)
 
     # Restart the guest to trigger reconnect code
-    view.click()
     win.find("Run", "push button").click()
     term = win.find("Serial Terminal")
     lib.utils.check(lambda: term.showing)
