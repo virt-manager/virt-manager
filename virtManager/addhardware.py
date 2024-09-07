@@ -1486,6 +1486,9 @@ class vmmAddHardware(vmmGObjectUI):
             source_channel = None
         if not self.widget("char-target-name").get_visible():
             target_name = None
+        if not self.widget("char-vdagent-clipboard").get_visible():
+            clipboard = None
+
         if not typebox.get_visible():
             target_type = None
 
