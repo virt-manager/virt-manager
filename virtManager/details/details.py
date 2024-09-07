@@ -2550,4 +2550,6 @@ class vmmDetails(vmmGObjectUI):
         self._config_boot_move(False)
 
     def _vm_inspection_changed_cb(self, vm):
-        self._refresh_os_page()
+        row = self._get_hw_row()
+        if row and row[HW_LIST_COL_TYPE] == HW_LIST_TYPE_OS:
+            self._refresh_os_page()
