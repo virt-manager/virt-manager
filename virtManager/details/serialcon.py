@@ -170,7 +170,7 @@ class _DataStream(vmmGObject):
 
 class vmmSerialConsole(vmmGObject):
     @staticmethod
-    def can_connect(vm, dev):
+    def can_connect(_vm, dev):
         """
         Check if we think we can actually open passed console/serial dev
         """
@@ -179,9 +179,7 @@ class vmmSerialConsole(vmmGObject):
 
         err = ""
 
-        if not vm.is_active():
-            err = _("Serial console not available for inactive guest")
-        elif ctype not in usable_types:
+        if ctype not in usable_types:
             err = (_("Console for device type '%s' is not supported") % ctype)
 
         return err
