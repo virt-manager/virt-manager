@@ -1076,6 +1076,7 @@ c.add_compare("--reinstall test-cdrom --cdrom %(ISO-WIN7)s --unattended", "reins
 c.add_invalid("--reinstall test --cdrom %(ISO-WIN7)s", grep="already active")  # trying to reinstall an active VM should fail
 c.add_invalid("--reinstall test --osinfo none", grep="install method must be specified")  # missing install method
 c.add_valid("--osinfo list", grep="osinfo-query os")  # --osinfo list
+c.add_valid(f"--cdrom {MEDIA_DIR}/fake-win-multi.iso --disk none ")  # verify media that matches multi OS doesn't blow up.
 
 
 ####################
