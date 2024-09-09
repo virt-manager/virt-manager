@@ -113,5 +113,5 @@ def testDomainCapabilitiesAArch64():
 
     assert "Default" in caps.label_for_firmware_path(None)
 
-    assert not caps.supports_filesystem_virtiofs()
-    assert not caps.supports_memorybacking_memfd()
+    assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_memorybacking_memfd()

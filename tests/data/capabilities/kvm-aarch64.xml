@@ -1,16 +1,38 @@
 <capabilities>
-  <!-- From Fedora 21 on APM Mustang, libvirt 1.2.9.2 -->
 
   <host>
-    <uuid>25ef0280-ec82-42b0-8fb6-10adccc67c02</uuid>
+    <uuid>5103525c-cea0-03cb-2f27-aed3d1dea18a</uuid>
     <cpu>
       <arch>aarch64</arch>
-      <model>host</model>
-      <topology sockets='4' cores='2' threads='1'/>
+      <model>Neoverse-N1</model>
+      <vendor>ARM</vendor>
+      <topology sockets='1' dies='1' clusters='1' cores='80' threads='1'/>
+      <feature name='fp'/>
+      <feature name='asimd'/>
+      <feature name='evtstrm'/>
+      <feature name='aes'/>
+      <feature name='pmull'/>
+      <feature name='sha1'/>
+      <feature name='sha2'/>
+      <feature name='crc32'/>
+      <feature name='atomics'/>
+      <feature name='fphp'/>
+      <feature name='asimdhp'/>
+      <feature name='cpuid'/>
+      <feature name='asimdrdm'/>
+      <feature name='lrcpc'/>
+      <feature name='dcpop'/>
+      <feature name='asimddp'/>
+      <pages unit='KiB' size='4'/>
       <pages unit='KiB' size='64'/>
-      <pages unit='KiB' size='524288'/>
+      <pages unit='KiB' size='2048'/>
+      <pages unit='KiB' size='32768'/>
+      <pages unit='KiB' size='1048576'/>
     </cpu>
-    <power_management/>
+    <power_management>
+      <suspend_mem/>
+    </power_management>
+    <iommu support='yes'/>
     <migration_features>
       <live/>
       <uri_transports>
@@ -19,18 +41,193 @@
       </uri_transports>
     </migration_features>
     <topology>
-      <cells num='1'>
+      <cells num='2'>
         <cell id='0'>
-          <memory unit='KiB'>16647424</memory>
-          <cpus num='8'>
-            <cpu id='0' socket_id='0' core_id='0' siblings='0'/>
-            <cpu id='1' socket_id='0' core_id='1' siblings='1'/>
-            <cpu id='2' socket_id='1' core_id='0' siblings='2'/>
-            <cpu id='3' socket_id='1' core_id='1' siblings='3'/>
-            <cpu id='4' socket_id='2' core_id='0' siblings='4'/>
-            <cpu id='5' socket_id='2' core_id='1' siblings='5'/>
-            <cpu id='6' socket_id='3' core_id='0' siblings='6'/>
-            <cpu id='7' socket_id='3' core_id='1' siblings='7'/>
+          <memory unit='KiB'>263763320</memory>
+          <pages unit='KiB' size='4'>65940830</pages>
+          <pages unit='KiB' size='64'>0</pages>
+          <pages unit='KiB' size='2048'>0</pages>
+          <pages unit='KiB' size='32768'>0</pages>
+          <pages unit='KiB' size='1048576'>0</pages>
+          <distances>
+            <sibling id='0' value='10'/>
+            <sibling id='1' value='20'/>
+          </distances>
+          <cpus num='80'>
+            <cpu id='0' socket_id='56' die_id='0' cluster_id='456' core_id='4608' siblings='0'/>
+            <cpu id='1' socket_id='56' die_id='0' cluster_id='456' core_id='4609' siblings='1'/>
+            <cpu id='2' socket_id='56' die_id='0' cluster_id='496' core_id='5120' siblings='2'/>
+            <cpu id='3' socket_id='56' die_id='0' cluster_id='496' core_id='5121' siblings='3'/>
+            <cpu id='4' socket_id='56' die_id='0' cluster_id='616' core_id='6656' siblings='4'/>
+            <cpu id='5' socket_id='56' die_id='0' cluster_id='616' core_id='6657' siblings='5'/>
+            <cpu id='6' socket_id='56' die_id='0' cluster_id='656' core_id='7168' siblings='6'/>
+            <cpu id='7' socket_id='56' die_id='0' cluster_id='656' core_id='7169' siblings='7'/>
+            <cpu id='8' socket_id='56' die_id='0' cluster_id='416' core_id='4096' siblings='8'/>
+            <cpu id='9' socket_id='56' die_id='0' cluster_id='416' core_id='4097' siblings='9'/>
+            <cpu id='10' socket_id='56' die_id='0' cluster_id='536' core_id='5632' siblings='10'/>
+            <cpu id='11' socket_id='56' die_id='0' cluster_id='536' core_id='5633' siblings='11'/>
+            <cpu id='12' socket_id='56' die_id='0' cluster_id='576' core_id='6144' siblings='12'/>
+            <cpu id='13' socket_id='56' die_id='0' cluster_id='576' core_id='6145' siblings='13'/>
+            <cpu id='14' socket_id='56' die_id='0' cluster_id='696' core_id='7680' siblings='14'/>
+            <cpu id='15' socket_id='56' die_id='0' cluster_id='696' core_id='7681' siblings='15'/>
+            <cpu id='16' socket_id='56' die_id='0' cluster_id='296' core_id='2560' siblings='16'/>
+            <cpu id='17' socket_id='56' die_id='0' cluster_id='296' core_id='2561' siblings='17'/>
+            <cpu id='18' socket_id='56' die_id='0' cluster_id='336' core_id='3072' siblings='18'/>
+            <cpu id='19' socket_id='56' die_id='0' cluster_id='336' core_id='3073' siblings='19'/>
+            <cpu id='20' socket_id='56' die_id='0' cluster_id='776' core_id='8704' siblings='20'/>
+            <cpu id='21' socket_id='56' die_id='0' cluster_id='776' core_id='8705' siblings='21'/>
+            <cpu id='22' socket_id='56' die_id='0' cluster_id='816' core_id='9216' siblings='22'/>
+            <cpu id='23' socket_id='56' die_id='0' cluster_id='816' core_id='9217' siblings='23'/>
+            <cpu id='24' socket_id='56' die_id='0' cluster_id='256' core_id='2048' siblings='24'/>
+            <cpu id='25' socket_id='56' die_id='0' cluster_id='256' core_id='2049' siblings='25'/>
+            <cpu id='26' socket_id='56' die_id='0' cluster_id='376' core_id='3584' siblings='26'/>
+            <cpu id='27' socket_id='56' die_id='0' cluster_id='376' core_id='3585' siblings='27'/>
+            <cpu id='28' socket_id='56' die_id='0' cluster_id='736' core_id='8192' siblings='28'/>
+            <cpu id='29' socket_id='56' die_id='0' cluster_id='736' core_id='8193' siblings='29'/>
+            <cpu id='30' socket_id='56' die_id='0' cluster_id='856' core_id='9728' siblings='30'/>
+            <cpu id='31' socket_id='56' die_id='0' cluster_id='856' core_id='9729' siblings='31'/>
+            <cpu id='32' socket_id='56' die_id='0' cluster_id='136' core_id='512' siblings='32'/>
+            <cpu id='33' socket_id='56' die_id='0' cluster_id='136' core_id='513' siblings='33'/>
+            <cpu id='34' socket_id='56' die_id='0' cluster_id='176' core_id='1024' siblings='34'/>
+            <cpu id='35' socket_id='56' die_id='0' cluster_id='176' core_id='1025' siblings='35'/>
+            <cpu id='36' socket_id='56' die_id='0' cluster_id='96' core_id='0' siblings='36'/>
+            <cpu id='37' socket_id='56' die_id='0' cluster_id='96' core_id='1' siblings='37'/>
+            <cpu id='38' socket_id='56' die_id='0' cluster_id='216' core_id='1536' siblings='38'/>
+            <cpu id='39' socket_id='56' die_id='0' cluster_id='216' core_id='1537' siblings='39'/>
+            <cpu id='40' socket_id='56' die_id='0' cluster_id='476' core_id='4864' siblings='40'/>
+            <cpu id='41' socket_id='56' die_id='0' cluster_id='476' core_id='4865' siblings='41'/>
+            <cpu id='42' socket_id='56' die_id='0' cluster_id='516' core_id='5376' siblings='42'/>
+            <cpu id='43' socket_id='56' die_id='0' cluster_id='516' core_id='5377' siblings='43'/>
+            <cpu id='44' socket_id='56' die_id='0' cluster_id='636' core_id='6912' siblings='44'/>
+            <cpu id='45' socket_id='56' die_id='0' cluster_id='636' core_id='6913' siblings='45'/>
+            <cpu id='46' socket_id='56' die_id='0' cluster_id='676' core_id='7424' siblings='46'/>
+            <cpu id='47' socket_id='56' die_id='0' cluster_id='676' core_id='7425' siblings='47'/>
+            <cpu id='48' socket_id='56' die_id='0' cluster_id='436' core_id='4352' siblings='48'/>
+            <cpu id='49' socket_id='56' die_id='0' cluster_id='436' core_id='4353' siblings='49'/>
+            <cpu id='50' socket_id='56' die_id='0' cluster_id='556' core_id='5888' siblings='50'/>
+            <cpu id='51' socket_id='56' die_id='0' cluster_id='556' core_id='5889' siblings='51'/>
+            <cpu id='52' socket_id='56' die_id='0' cluster_id='596' core_id='6400' siblings='52'/>
+            <cpu id='53' socket_id='56' die_id='0' cluster_id='596' core_id='6401' siblings='53'/>
+            <cpu id='54' socket_id='56' die_id='0' cluster_id='716' core_id='7936' siblings='54'/>
+            <cpu id='55' socket_id='56' die_id='0' cluster_id='716' core_id='7937' siblings='55'/>
+            <cpu id='56' socket_id='56' die_id='0' cluster_id='316' core_id='2816' siblings='56'/>
+            <cpu id='57' socket_id='56' die_id='0' cluster_id='316' core_id='2817' siblings='57'/>
+            <cpu id='58' socket_id='56' die_id='0' cluster_id='356' core_id='3328' siblings='58'/>
+            <cpu id='59' socket_id='56' die_id='0' cluster_id='356' core_id='3329' siblings='59'/>
+            <cpu id='60' socket_id='56' die_id='0' cluster_id='796' core_id='8960' siblings='60'/>
+            <cpu id='61' socket_id='56' die_id='0' cluster_id='796' core_id='8961' siblings='61'/>
+            <cpu id='62' socket_id='56' die_id='0' cluster_id='836' core_id='9472' siblings='62'/>
+            <cpu id='63' socket_id='56' die_id='0' cluster_id='836' core_id='9473' siblings='63'/>
+            <cpu id='64' socket_id='56' die_id='0' cluster_id='276' core_id='2304' siblings='64'/>
+            <cpu id='65' socket_id='56' die_id='0' cluster_id='276' core_id='2305' siblings='65'/>
+            <cpu id='66' socket_id='56' die_id='0' cluster_id='396' core_id='3840' siblings='66'/>
+            <cpu id='67' socket_id='56' die_id='0' cluster_id='396' core_id='3841' siblings='67'/>
+            <cpu id='68' socket_id='56' die_id='0' cluster_id='756' core_id='8448' siblings='68'/>
+            <cpu id='69' socket_id='56' die_id='0' cluster_id='756' core_id='8449' siblings='69'/>
+            <cpu id='70' socket_id='56' die_id='0' cluster_id='876' core_id='9984' siblings='70'/>
+            <cpu id='71' socket_id='56' die_id='0' cluster_id='876' core_id='9985' siblings='71'/>
+            <cpu id='72' socket_id='56' die_id='0' cluster_id='156' core_id='768' siblings='72'/>
+            <cpu id='73' socket_id='56' die_id='0' cluster_id='156' core_id='769' siblings='73'/>
+            <cpu id='74' socket_id='56' die_id='0' cluster_id='196' core_id='1280' siblings='74'/>
+            <cpu id='75' socket_id='56' die_id='0' cluster_id='196' core_id='1281' siblings='75'/>
+            <cpu id='76' socket_id='56' die_id='0' cluster_id='116' core_id='256' siblings='76'/>
+            <cpu id='77' socket_id='56' die_id='0' cluster_id='116' core_id='257' siblings='77'/>
+            <cpu id='78' socket_id='56' die_id='0' cluster_id='236' core_id='1792' siblings='78'/>
+            <cpu id='79' socket_id='56' die_id='0' cluster_id='236' core_id='1793' siblings='79'/>
+          </cpus>
+        </cell>
+        <cell id='1'>
+          <memory unit='KiB'>262082520</memory>
+          <pages unit='KiB' size='4'>65520630</pages>
+          <pages unit='KiB' size='64'>0</pages>
+          <pages unit='KiB' size='2048'>0</pages>
+          <pages unit='KiB' size='32768'>0</pages>
+          <pages unit='KiB' size='1048576'>0</pages>
+          <distances>
+            <sibling id='0' value='20'/>
+            <sibling id='1' value='10'/>
+          </distances>
+          <cpus num='80'>
+            <cpu id='80' socket_id='76' die_id='0' cluster_id='1736' core_id='70144' siblings='80'/>
+            <cpu id='81' socket_id='76' die_id='0' cluster_id='1736' core_id='70145' siblings='81'/>
+            <cpu id='82' socket_id='76' die_id='0' cluster_id='1776' core_id='70656' siblings='82'/>
+            <cpu id='83' socket_id='76' die_id='0' cluster_id='1776' core_id='70657' siblings='83'/>
+            <cpu id='84' socket_id='76' die_id='0' cluster_id='1896' core_id='72192' siblings='84'/>
+            <cpu id='85' socket_id='76' die_id='0' cluster_id='1896' core_id='72193' siblings='85'/>
+            <cpu id='86' socket_id='76' die_id='0' cluster_id='1936' core_id='72704' siblings='86'/>
+            <cpu id='87' socket_id='76' die_id='0' cluster_id='1936' core_id='72705' siblings='87'/>
+            <cpu id='88' socket_id='76' die_id='0' cluster_id='1696' core_id='69632' siblings='88'/>
+            <cpu id='89' socket_id='76' die_id='0' cluster_id='1696' core_id='69633' siblings='89'/>
+            <cpu id='90' socket_id='76' die_id='0' cluster_id='1816' core_id='71168' siblings='90'/>
+            <cpu id='91' socket_id='76' die_id='0' cluster_id='1816' core_id='71169' siblings='91'/>
+            <cpu id='92' socket_id='76' die_id='0' cluster_id='1856' core_id='71680' siblings='92'/>
+            <cpu id='93' socket_id='76' die_id='0' cluster_id='1856' core_id='71681' siblings='93'/>
+            <cpu id='94' socket_id='76' die_id='0' cluster_id='1976' core_id='73216' siblings='94'/>
+            <cpu id='95' socket_id='76' die_id='0' cluster_id='1976' core_id='73217' siblings='95'/>
+            <cpu id='96' socket_id='76' die_id='0' cluster_id='1576' core_id='68096' siblings='96'/>
+            <cpu id='97' socket_id='76' die_id='0' cluster_id='1576' core_id='68097' siblings='97'/>
+            <cpu id='98' socket_id='76' die_id='0' cluster_id='1616' core_id='68608' siblings='98'/>
+            <cpu id='99' socket_id='76' die_id='0' cluster_id='1616' core_id='68609' siblings='99'/>
+            <cpu id='100' socket_id='76' die_id='0' cluster_id='2056' core_id='74240' siblings='100'/>
+            <cpu id='101' socket_id='76' die_id='0' cluster_id='2056' core_id='74241' siblings='101'/>
+            <cpu id='102' socket_id='76' die_id='0' cluster_id='2096' core_id='74752' siblings='102'/>
+            <cpu id='103' socket_id='76' die_id='0' cluster_id='2096' core_id='74753' siblings='103'/>
+            <cpu id='104' socket_id='76' die_id='0' cluster_id='1536' core_id='67584' siblings='104'/>
+            <cpu id='105' socket_id='76' die_id='0' cluster_id='1536' core_id='67585' siblings='105'/>
+            <cpu id='106' socket_id='76' die_id='0' cluster_id='1656' core_id='69120' siblings='106'/>
+            <cpu id='107' socket_id='76' die_id='0' cluster_id='1656' core_id='69121' siblings='107'/>
+            <cpu id='108' socket_id='76' die_id='0' cluster_id='2016' core_id='73728' siblings='108'/>
+            <cpu id='109' socket_id='76' die_id='0' cluster_id='2016' core_id='73729' siblings='109'/>
+            <cpu id='110' socket_id='76' die_id='0' cluster_id='2136' core_id='75264' siblings='110'/>
+            <cpu id='111' socket_id='76' die_id='0' cluster_id='2136' core_id='75265' siblings='111'/>
+            <cpu id='112' socket_id='76' die_id='0' cluster_id='1416' core_id='66048' siblings='112'/>
+            <cpu id='113' socket_id='76' die_id='0' cluster_id='1416' core_id='66049' siblings='113'/>
+            <cpu id='114' socket_id='76' die_id='0' cluster_id='1456' core_id='66560' siblings='114'/>
+            <cpu id='115' socket_id='76' die_id='0' cluster_id='1456' core_id='66561' siblings='115'/>
+            <cpu id='116' socket_id='76' die_id='0' cluster_id='1376' core_id='65536' siblings='116'/>
+            <cpu id='117' socket_id='76' die_id='0' cluster_id='1376' core_id='65537' siblings='117'/>
+            <cpu id='118' socket_id='76' die_id='0' cluster_id='1496' core_id='67072' siblings='118'/>
+            <cpu id='119' socket_id='76' die_id='0' cluster_id='1496' core_id='67073' siblings='119'/>
+            <cpu id='120' socket_id='76' die_id='0' cluster_id='1756' core_id='70400' siblings='120'/>
+            <cpu id='121' socket_id='76' die_id='0' cluster_id='1756' core_id='70401' siblings='121'/>
+            <cpu id='122' socket_id='76' die_id='0' cluster_id='1796' core_id='70912' siblings='122'/>
+            <cpu id='123' socket_id='76' die_id='0' cluster_id='1796' core_id='70913' siblings='123'/>
+            <cpu id='124' socket_id='76' die_id='0' cluster_id='1916' core_id='72448' siblings='124'/>
+            <cpu id='125' socket_id='76' die_id='0' cluster_id='1916' core_id='72449' siblings='125'/>
+            <cpu id='126' socket_id='76' die_id='0' cluster_id='1956' core_id='72960' siblings='126'/>
+            <cpu id='127' socket_id='76' die_id='0' cluster_id='1956' core_id='72961' siblings='127'/>
+            <cpu id='128' socket_id='76' die_id='0' cluster_id='1716' core_id='69888' siblings='128'/>
+            <cpu id='129' socket_id='76' die_id='0' cluster_id='1716' core_id='69889' siblings='129'/>
+            <cpu id='130' socket_id='76' die_id='0' cluster_id='1836' core_id='71424' siblings='130'/>
+            <cpu id='131' socket_id='76' die_id='0' cluster_id='1836' core_id='71425' siblings='131'/>
+            <cpu id='132' socket_id='76' die_id='0' cluster_id='1876' core_id='71936' siblings='132'/>
+            <cpu id='133' socket_id='76' die_id='0' cluster_id='1876' core_id='71937' siblings='133'/>
+            <cpu id='134' socket_id='76' die_id='0' cluster_id='1996' core_id='73472' siblings='134'/>
+            <cpu id='135' socket_id='76' die_id='0' cluster_id='1996' core_id='73473' siblings='135'/>
+            <cpu id='136' socket_id='76' die_id='0' cluster_id='1596' core_id='68352' siblings='136'/>
+            <cpu id='137' socket_id='76' die_id='0' cluster_id='1596' core_id='68353' siblings='137'/>
+            <cpu id='138' socket_id='76' die_id='0' cluster_id='1636' core_id='68864' siblings='138'/>
+            <cpu id='139' socket_id='76' die_id='0' cluster_id='1636' core_id='68865' siblings='139'/>
+            <cpu id='140' socket_id='76' die_id='0' cluster_id='2076' core_id='74496' siblings='140'/>
+            <cpu id='141' socket_id='76' die_id='0' cluster_id='2076' core_id='74497' siblings='141'/>
+            <cpu id='142' socket_id='76' die_id='0' cluster_id='2116' core_id='75008' siblings='142'/>
+            <cpu id='143' socket_id='76' die_id='0' cluster_id='2116' core_id='75009' siblings='143'/>
+            <cpu id='144' socket_id='76' die_id='0' cluster_id='1556' core_id='67840' siblings='144'/>
+            <cpu id='145' socket_id='76' die_id='0' cluster_id='1556' core_id='67841' siblings='145'/>
+            <cpu id='146' socket_id='76' die_id='0' cluster_id='1676' core_id='69376' siblings='146'/>
+            <cpu id='147' socket_id='76' die_id='0' cluster_id='1676' core_id='69377' siblings='147'/>
+            <cpu id='148' socket_id='76' die_id='0' cluster_id='2036' core_id='73984' siblings='148'/>
+            <cpu id='149' socket_id='76' die_id='0' cluster_id='2036' core_id='73985' siblings='149'/>
+            <cpu id='150' socket_id='76' die_id='0' cluster_id='2156' core_id='75520' siblings='150'/>
+            <cpu id='151' socket_id='76' die_id='0' cluster_id='2156' core_id='75521' siblings='151'/>
+            <cpu id='152' socket_id='76' die_id='0' cluster_id='1436' core_id='66304' siblings='152'/>
+            <cpu id='153' socket_id='76' die_id='0' cluster_id='1436' core_id='66305' siblings='153'/>
+            <cpu id='154' socket_id='76' die_id='0' cluster_id='1476' core_id='66816' siblings='154'/>
+            <cpu id='155' socket_id='76' die_id='0' cluster_id='1476' core_id='66817' siblings='155'/>
+            <cpu id='156' socket_id='76' die_id='0' cluster_id='1396' core_id='65792' siblings='156'/>
+            <cpu id='157' socket_id='76' die_id='0' cluster_id='1396' core_id='65793' siblings='157'/>
+            <cpu id='158' socket_id='76' die_id='0' cluster_id='1516' core_id='67328' siblings='158'/>
+            <cpu id='159' socket_id='76' die_id='0' cluster_id='1516' core_id='67329' siblings='159'/>
           </cpus>
         </cell>
       </cells>
@@ -51,56 +248,274 @@
 
   <guest>
     <os_type>hvm</os_type>
-    <arch name='aarch64'>
-      <wordsize>64</wordsize>
+    <arch name='armv7l'>
+      <wordsize>32</wordsize>
       <emulator>/usr/bin/qemu-system-aarch64</emulator>
-      <machine maxCpus='8'>virt</machine>
-      <machine maxCpus='1'>integratorcp</machine>
-      <machine maxCpus='2'>nuri</machine>
-      <machine maxCpus='1'>verdex</machine>
-      <machine maxCpus='2'>smdkc210</machine>
-      <machine maxCpus='1'>collie</machine>
-      <machine maxCpus='1'>spitz</machine>
-      <machine maxCpus='1'>realview-eb</machine>
-      <machine maxCpus='4'>realview-pbx-a9</machine>
-      <machine maxCpus='1'>versatilepb</machine>
-      <machine maxCpus='1'>realview-pb-a8</machine>
-      <machine maxCpus='1'>musicpal</machine>
-      <machine maxCpus='1'>z2</machine>
-      <machine maxCpus='1'>akita</machine>
-      <machine maxCpus='1'>kzm</machine>
-      <machine maxCpus='4'>realview-eb-mpcore</machine>
-      <machine maxCpus='1'>sx1</machine>
-      <machine maxCpus='1'>sx1-v1</machine>
-      <machine maxCpus='1'>cubieboard</machine>
-      <machine maxCpus='4'>highbank</machine>
-      <machine maxCpus='1'>netduino2</machine>
-      <machine maxCpus='1'>terrier</machine>
-      <machine maxCpus='1'>n810</machine>
-      <machine maxCpus='1'>mainstone</machine>
-      <machine maxCpus='4'>midway</machine>
-      <machine maxCpus='1'>cheetah</machine>
-      <machine maxCpus='1'>tosa</machine>
-      <machine maxCpus='4'>vexpress-a15</machine>
+      <machine maxCpus='512'>virt-8.2</machine>
+      <machine canonical='virt-8.2' maxCpus='512'>virt</machine>
+      <machine maxCpus='2'>qcom-dc-scm-v1-bmc</machine>
+      <machine maxCpus='2'>mori-bmc</machine>
+      <machine maxCpus='2'>ast2600-evb</machine>
       <machine maxCpus='1'>borzoi</machine>
+      <machine maxCpus='1'>tiogapass-bmc</machine>
+      <machine maxCpus='1'>spitz</machine>
+      <machine maxCpus='255'>virt-2.7</machine>
+      <machine maxCpus='2'>nuri</machine>
+      <machine maxCpus='2'>mcimx7d-sabre</machine>
+      <machine maxCpus='1'>romulus-bmc</machine>
+      <machine maxCpus='512'>virt-3.0</machine>
+      <machine maxCpus='512'>virt-5.0</machine>
+      <machine maxCpus='2'>npcm750-evb</machine>
+      <machine maxCpus='255'>virt-2.10</machine>
+      <machine maxCpus='2'>rainier-bmc</machine>
+      <machine maxCpus='1'>mps3-an547</machine>
+      <machine maxCpus='255'>virt-2.8</machine>
+      <machine maxCpus='2'>musca-b1</machine>
+      <machine maxCpus='4'>realview-pbx-a9</machine>
       <machine maxCpus='1'>versatileab</machine>
-      <machine maxCpus='1'>lm3s6965evb</machine>
-      <machine maxCpus='1'>n800</machine>
-      <machine maxCpus='1'>connex</machine>
-      <machine maxCpus='4'>vexpress-a9</machine>
+      <machine maxCpus='1'>kzm</machine>
+      <machine maxCpus='2'>fby35-bmc</machine>
+      <machine maxCpus='2'>musca-a</machine>
+      <machine maxCpus='512'>virt-3.1</machine>
+      <machine maxCpus='1'>mcimx6ul-evk</machine>
+      <machine maxCpus='512'>virt-5.1</machine>
+      <machine maxCpus='2'>smdkc210</machine>
+      <machine maxCpus='1'>sx1</machine>
+      <machine maxCpus='255'>virt-2.11</machine>
+      <machine maxCpus='1'>imx25-pdk</machine>
+      <machine maxCpus='1'>stm32vldiscovery</machine>
+      <machine maxCpus='255'>virt-2.9</machine>
+      <machine maxCpus='4'>orangepi-pc</machine>
+      <machine maxCpus='1'>quanta-q71l-bmc</machine>
+      <machine maxCpus='1'>z2</machine>
+      <machine maxCpus='512'>virt-5.2</machine>
       <machine maxCpus='1'>xilinx-zynq-a9</machine>
+      <machine maxCpus='6'>xlnx-zcu102</machine>
+      <machine maxCpus='1'>tosa</machine>
+      <machine maxCpus='1'>mps2-an500</machine>
+      <machine maxCpus='255'>virt-2.12</machine>
+      <machine maxCpus='2'>mps2-an521</machine>
+      <machine maxCpus='4'>sabrelite</machine>
+      <machine maxCpus='1'>mps2-an511</machine>
       <machine maxCpus='1'>canon-a1100</machine>
+      <machine maxCpus='1'>realview-eb</machine>
+      <machine maxCpus='2'>quanta-gbs-bmc</machine>
+      <machine maxCpus='1'>emcraft-sf2</machine>
+      <machine maxCpus='1'>realview-pb-a8</machine>
+      <machine maxCpus='512'>sbsa-ref</machine>
+      <machine maxCpus='1'>yosemitev2-bmc</machine>
+      <machine maxCpus='1'>xenpvh</machine>
+      <machine maxCpus='512'>virt-7.0</machine>
+      <machine maxCpus='512'>virt-4.0</machine>
+      <machine maxCpus='1'>raspi1ap</machine>
+      <machine maxCpus='1'>palmetto-bmc</machine>
+      <machine maxCpus='1'>sx1-v1</machine>
+      <machine maxCpus='1'>n810</machine>
+      <machine maxCpus='1'>g220a-bmc</machine>
+      <machine maxCpus='1'>n800</machine>
+      <machine maxCpus='512'>virt-7.1</machine>
+      <machine maxCpus='2'>tacoma-bmc</machine>
+      <machine maxCpus='2'>bletchley-bmc</machine>
+      <machine maxCpus='512'>virt-4.1</machine>
+      <machine maxCpus='2'>quanta-gsj</machine>
+      <machine maxCpus='1'>versatilepb</machine>
+      <machine maxCpus='1'>terrier</machine>
+      <machine maxCpus='1'>mainstone</machine>
+      <machine maxCpus='4'>realview-eb-mpcore</machine>
+      <machine maxCpus='1'>integratorcp</machine>
+      <machine maxCpus='512'>virt-7.2</machine>
+      <machine maxCpus='1'>supermicrox11-bmc</machine>
+      <machine maxCpus='512'>virt-4.2</machine>
+      <machine maxCpus='1'>witherspoon-bmc</machine>
+      <machine maxCpus='2'>qcom-firework-bmc</machine>
+      <machine maxCpus='2'>mps3-an524</machine>
+      <machine maxCpus='2'>kudo-bmc</machine>
+      <machine maxCpus='4'>vexpress-a9</machine>
+      <machine maxCpus='4'>midway</machine>
+      <machine maxCpus='1'>musicpal</machine>
       <machine maxCpus='1'>lm3s811evb</machine>
+      <machine maxCpus='1'>lm3s6965evb</machine>
+      <machine maxCpus='1'>supermicro-x11spi-bmc</machine>
+      <machine maxCpus='1'>microbit</machine>
+      <machine maxCpus='3'>fby35</machine>
+      <machine maxCpus='1'>mps2-an505</machine>
+      <machine maxCpus='1'>mps2-an385</machine>
+      <machine maxCpus='512'>virt-6.0</machine>
+      <machine maxCpus='512'>virt-8.0</machine>
+      <machine maxCpus='4'>raspi3ap</machine>
+      <machine maxCpus='1'>cubieboard</machine>
+      <machine maxCpus='1'>ast1030-evb</machine>
+      <machine maxCpus='1'>verdex</machine>
+      <machine maxCpus='1'>netduino2</machine>
+      <machine maxCpus='4'>bpim2u</machine>
+      <machine maxCpus='4'>xlnx-versal-virt</machine>
+      <machine maxCpus='1'>mps2-an386</machine>
+      <machine maxCpus='1'>olimex-stm32-h405</machine>
+      <machine maxCpus='512'>virt-6.1</machine>
+      <machine maxCpus='512'>virt-8.1</machine>
+      <machine maxCpus='4'>raspi3b</machine>
+      <machine maxCpus='4'>raspi2b</machine>
+      <machine maxCpus='4'>vexpress-a15</machine>
+      <machine maxCpus='2'>fuji-bmc</machine>
+      <machine maxCpus='512'>virt-6.2</machine>
+      <machine maxCpus='1'>x-remote</machine>
+      <machine maxCpus='1'>cheetah</machine>
+      <machine maxCpus='1'>sonorapass-bmc</machine>
+      <machine maxCpus='255'>virt-2.6</machine>
+      <machine maxCpus='1'>ast2500-evb</machine>
+      <machine maxCpus='4'>highbank</machine>
+      <machine maxCpus='1'>akita</machine>
+      <machine maxCpus='1'>connex</machine>
+      <machine maxCpus='1'>netduinoplus2</machine>
+      <machine maxCpus='1'>collie</machine>
+      <machine maxCpus='1'>raspi0</machine>
+      <machine maxCpus='1'>fp5280g2-bmc</machine>
       <domain type='qemu'/>
-      <domain type='kvm'>
-        <emulator>/usr/bin/qemu-system-aarch64</emulator>
-      </domain>
+      <domain type='kvm'/>
     </arch>
     <features>
       <cpuselection/>
       <deviceboot/>
       <disksnapshot default='on' toggle='no'/>
+      <externalSnapshot/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='aarch64'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/bin/qemu-system-aarch64</emulator>
+      <machine maxCpus='512'>virt-8.2</machine>
+      <machine canonical='virt-8.2' maxCpus='512'>virt</machine>
+      <machine maxCpus='2'>qcom-dc-scm-v1-bmc</machine>
+      <machine maxCpus='2'>mori-bmc</machine>
+      <machine maxCpus='2'>ast2600-evb</machine>
+      <machine maxCpus='1'>borzoi</machine>
+      <machine maxCpus='1'>tiogapass-bmc</machine>
+      <machine maxCpus='1'>spitz</machine>
+      <machine maxCpus='255'>virt-2.7</machine>
+      <machine maxCpus='2'>nuri</machine>
+      <machine maxCpus='2'>mcimx7d-sabre</machine>
+      <machine maxCpus='1'>romulus-bmc</machine>
+      <machine maxCpus='512'>virt-3.0</machine>
+      <machine maxCpus='512'>virt-5.0</machine>
+      <machine maxCpus='2'>npcm750-evb</machine>
+      <machine maxCpus='255'>virt-2.10</machine>
+      <machine maxCpus='2'>rainier-bmc</machine>
+      <machine maxCpus='1'>mps3-an547</machine>
+      <machine maxCpus='255'>virt-2.8</machine>
+      <machine maxCpus='2'>musca-b1</machine>
+      <machine maxCpus='4'>realview-pbx-a9</machine>
+      <machine maxCpus='1'>versatileab</machine>
+      <machine maxCpus='1'>kzm</machine>
+      <machine maxCpus='2'>fby35-bmc</machine>
+      <machine maxCpus='2'>musca-a</machine>
+      <machine maxCpus='512'>virt-3.1</machine>
+      <machine maxCpus='1'>mcimx6ul-evk</machine>
+      <machine maxCpus='512'>virt-5.1</machine>
+      <machine maxCpus='2'>smdkc210</machine>
+      <machine maxCpus='1'>sx1</machine>
+      <machine maxCpus='255'>virt-2.11</machine>
+      <machine maxCpus='1'>imx25-pdk</machine>
+      <machine maxCpus='1'>stm32vldiscovery</machine>
+      <machine maxCpus='255'>virt-2.9</machine>
+      <machine maxCpus='4'>orangepi-pc</machine>
+      <machine maxCpus='1'>quanta-q71l-bmc</machine>
+      <machine maxCpus='1'>z2</machine>
+      <machine maxCpus='512'>virt-5.2</machine>
+      <machine maxCpus='1'>xilinx-zynq-a9</machine>
+      <machine maxCpus='6'>xlnx-zcu102</machine>
+      <machine maxCpus='1'>tosa</machine>
+      <machine maxCpus='1'>mps2-an500</machine>
+      <machine maxCpus='255'>virt-2.12</machine>
+      <machine maxCpus='2'>mps2-an521</machine>
+      <machine maxCpus='4'>sabrelite</machine>
+      <machine maxCpus='1'>mps2-an511</machine>
+      <machine maxCpus='1'>canon-a1100</machine>
+      <machine maxCpus='1'>realview-eb</machine>
+      <machine maxCpus='2'>quanta-gbs-bmc</machine>
+      <machine maxCpus='1'>emcraft-sf2</machine>
+      <machine maxCpus='1'>realview-pb-a8</machine>
+      <machine maxCpus='512'>sbsa-ref</machine>
+      <machine maxCpus='1'>yosemitev2-bmc</machine>
+      <machine maxCpus='1'>xenpvh</machine>
+      <machine maxCpus='512'>virt-7.0</machine>
+      <machine maxCpus='512'>virt-4.0</machine>
+      <machine maxCpus='1'>raspi1ap</machine>
+      <machine maxCpus='1'>palmetto-bmc</machine>
+      <machine maxCpus='1'>sx1-v1</machine>
+      <machine maxCpus='1'>n810</machine>
+      <machine maxCpus='1'>g220a-bmc</machine>
+      <machine maxCpus='1'>n800</machine>
+      <machine maxCpus='512'>virt-7.1</machine>
+      <machine maxCpus='2'>tacoma-bmc</machine>
+      <machine maxCpus='2'>bletchley-bmc</machine>
+      <machine maxCpus='512'>virt-4.1</machine>
+      <machine maxCpus='2'>quanta-gsj</machine>
+      <machine maxCpus='1'>versatilepb</machine>
+      <machine maxCpus='1'>terrier</machine>
+      <machine maxCpus='1'>mainstone</machine>
+      <machine maxCpus='4'>realview-eb-mpcore</machine>
+      <machine maxCpus='1'>integratorcp</machine>
+      <machine maxCpus='512'>virt-7.2</machine>
+      <machine maxCpus='1'>supermicrox11-bmc</machine>
+      <machine maxCpus='512'>virt-4.2</machine>
+      <machine maxCpus='1'>witherspoon-bmc</machine>
+      <machine maxCpus='2'>qcom-firework-bmc</machine>
+      <machine maxCpus='2'>mps3-an524</machine>
+      <machine maxCpus='2'>kudo-bmc</machine>
+      <machine maxCpus='4'>vexpress-a9</machine>
+      <machine maxCpus='4'>midway</machine>
+      <machine maxCpus='1'>musicpal</machine>
+      <machine maxCpus='1'>lm3s811evb</machine>
+      <machine maxCpus='1'>lm3s6965evb</machine>
+      <machine maxCpus='1'>supermicro-x11spi-bmc</machine>
+      <machine maxCpus='1'>microbit</machine>
+      <machine maxCpus='3'>fby35</machine>
+      <machine maxCpus='1'>mps2-an505</machine>
+      <machine maxCpus='1'>mps2-an385</machine>
+      <machine maxCpus='512'>virt-6.0</machine>
+      <machine maxCpus='512'>virt-8.0</machine>
+      <machine maxCpus='4'>raspi3ap</machine>
+      <machine maxCpus='1'>cubieboard</machine>
+      <machine maxCpus='1'>ast1030-evb</machine>
+      <machine maxCpus='1'>verdex</machine>
+      <machine maxCpus='1'>netduino2</machine>
+      <machine maxCpus='4'>bpim2u</machine>
+      <machine maxCpus='4'>xlnx-versal-virt</machine>
+      <machine maxCpus='1'>mps2-an386</machine>
+      <machine maxCpus='1'>olimex-stm32-h405</machine>
+      <machine maxCpus='512'>virt-6.1</machine>
+      <machine maxCpus='512'>virt-8.1</machine>
+      <machine maxCpus='4'>raspi3b</machine>
+      <machine maxCpus='4'>raspi2b</machine>
+      <machine maxCpus='4'>vexpress-a15</machine>
+      <machine maxCpus='2'>fuji-bmc</machine>
+      <machine maxCpus='512'>virt-6.2</machine>
+      <machine maxCpus='1'>x-remote</machine>
+      <machine maxCpus='1'>cheetah</machine>
+      <machine maxCpus='1'>sonorapass-bmc</machine>
+      <machine maxCpus='255'>virt-2.6</machine>
+      <machine maxCpus='1'>ast2500-evb</machine>
+      <machine maxCpus='4'>highbank</machine>
+      <machine maxCpus='1'>akita</machine>
+      <machine maxCpus='1'>connex</machine>
+      <machine maxCpus='1'>netduinoplus2</machine>
+      <machine maxCpus='1'>collie</machine>
+      <machine maxCpus='1'>raspi0</machine>
+      <machine maxCpus='1'>fp5280g2-bmc</machine>
+      <domain type='qemu'/>
+      <domain type='kvm'/>
+    </arch>
+    <features>
+      <acpi default='on' toggle='yes'/>
+      <cpuselection/>
+      <deviceboot/>
+      <disksnapshot default='on' toggle='no'/>
+      <externalSnapshot/>
     </features>
   </guest>
 
 </capabilities>
+
