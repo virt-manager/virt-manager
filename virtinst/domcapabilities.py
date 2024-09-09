@@ -296,6 +296,10 @@ class DomainCapabilities(XMLBuilder):
             r".*RISCV_VIRT_CODE\..*",  # Fedora, Debian
             r".*riscv64.*",  # generic attempt at a catchall
         ],
+        "loongarch64": [
+            r".*loongarch64/QEMU_CODE\..*",  # Fedora
+            r".*loongarch64.*",  # generic attempt at a catchall
+        ],
     }
 
     def find_uefi_path_for_arch(self):
