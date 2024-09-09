@@ -283,7 +283,7 @@ class DomainCapabilities(XMLBuilder):
         ],
         "aarch64": [
             r".*AAVMF_CODE\.fd",  # RHEL
-            r".*aarch64/QEMU_EFI.*",  # gerd's firmware repo
+            r".*aarch64/QEMU_EFI.*",  # fedora, gerd's firmware repo
             r".*aarch64.*",  # generic attempt at a catchall
             r".*edk2-aarch64-code\.fd",  # upstream qemu
         ],
