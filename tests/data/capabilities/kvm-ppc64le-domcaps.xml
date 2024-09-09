@@ -1,16 +1,13 @@
 <domainCapabilities>
   <path>/usr/bin/qemu-system-ppc64</path>
   <domain>kvm</domain>
-  <machine>pseries-7.0</machine>
-  <arch>ppc64</arch>
-  <vcpu max='2147483647'/>
+  <machine>pseries-8.2</machine>
+  <arch>ppc64le</arch>
+  <vcpu max='2048'/>
   <iothreads supported='yes'/>
   <os supported='yes'>
     <enum name='firmware'/>
     <loader supported='yes'>
-      <value>/usr/share/AAVMF/AAVMF_CODE.fd</value>
-      <value>/usr/share/AAVMF/AAVMF32_CODE.fd</value>
-      <value>/usr/share/OVMF/OVMF_CODE.fd</value>
       <enum name='type'>
         <value>rom</value>
         <value>pflash</value>
@@ -30,19 +27,16 @@
         <value>off</value>
       </enum>
     </mode>
-    <mode name='maximum' supported='yes'>
-      <enum name='maximumMigratable'>
-        <value>on</value>
-        <value>off</value>
-      </enum>
-    </mode>
+    <mode name='maximum' supported='no'/>
     <mode name='host-model' supported='yes'>
       <model fallback='allow'>POWER8</model>
+      <vendor>IBM</vendor>
     </mode>
     <mode name='custom' supported='yes'>
-      <model usable='unknown'>POWER9</model>
-      <model usable='unknown'>POWER8</model>
-      <model usable='unknown'>POWER7</model>
+      <model usable='unknown' vendor='IBM'>POWER10</model>
+      <model usable='unknown' vendor='IBM'>POWER9</model>
+      <model usable='unknown' vendor='IBM'>POWER8</model>
+      <model usable='unknown' vendor='IBM'>POWER7</model>
     </mode>
   </cpu>
   <memoryBacking supported='yes'>
@@ -73,14 +67,16 @@
     </disk>
     <graphics supported='yes'>
       <enum name='type'>
+        <value>sdl</value>
         <value>vnc</value>
+        <value>egl-headless</value>
+        <value>dbus</value>
       </enum>
     </graphics>
     <video supported='yes'>
       <enum name='modelType'>
         <value>vga</value>
         <value>cirrus</value>
-        <value>vmvga</value>
         <value>virtio</value>
         <value>none</value>
         <value>bochs</value>
@@ -134,8 +130,36 @@
       <enum name='backendModel'>
         <value>passthrough</value>
         <value>emulator</value>
+        <value>external</value>
+      </enum>
+      <enum name='backendVersion'>
+        <value>1.2</value>
+        <value>2.0</value>
       </enum>
     </tpm>
+    <redirdev supported='yes'>
+      <enum name='bus'>
+        <value>usb</value>
+      </enum>
+    </redirdev>
+    <channel supported='yes'>
+      <enum name='type'>
+        <value>pty</value>
+        <value>unix</value>
+      </enum>
+    </channel>
+    <crypto supported='yes'>
+      <enum name='model'>
+        <value>virtio</value>
+      </enum>
+      <enum name='type'>
+        <value>qemu</value>
+      </enum>
+      <enum name='backendModel'>
+        <value>builtin</value>
+        <value>lkcf</value>
+      </enum>
+    </crypto>
   </devices>
   <features>
     <gic supported='no'/>
@@ -143,6 +167,9 @@
     <genid supported='no'/>
     <backingStoreInput supported='yes'/>
     <backup supported='yes'/>
+    <async-teardown supported='yes'/>
     <sev supported='no'/>
+    <sgx supported='no'/>
   </features>
 </domainCapabilities>
+

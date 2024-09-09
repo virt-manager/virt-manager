@@ -1,22 +1,20 @@
 <capabilities>
-  <!-- From RHEL7.2 development, libvirt-daemon-1.2.14-1.ael7b.ppc64le -->
 
   <host>
-    <uuid>a8726024-45c0-4b62-b631-14fbb6d75b9e</uuid>
+    <uuid>440da247-ed35-44f6-a82f-839c42ba191f</uuid>
     <cpu>
       <arch>ppc64le</arch>
-      <model>power8e</model>
+      <model>POWER8</model>
       <vendor>IBM</vendor>
-      <topology sockets='1' cores='160' threads='1'/>
+      <topology sockets='1' dies='1' clusters='1' cores='6' threads='8'/>
       <pages unit='KiB' size='64'/>
       <pages unit='KiB' size='16384'/>
       <pages unit='KiB' size='16777216'/>
     </cpu>
     <power_management>
       <suspend_mem/>
-      <suspend_disk/>
-      <suspend_hybrid/>
     </power_management>
+    <iommu support='yes'/>
     <migration_features>
       <live/>
       <uri_transports>
@@ -25,212 +23,134 @@
       </uri_transports>
     </migration_features>
     <topology>
-      <cells num='4'>
+      <cells num='2'>
         <cell id='0'>
-          <memory unit='KiB'>67108864</memory>
-          <pages unit='KiB' size='64'>1048576</pages>
+          <memory unit='KiB'>33364032</memory>
+          <pages unit='KiB' size='64'>521313</pages>
           <pages unit='KiB' size='16384'>0</pages>
           <pages unit='KiB' size='16777216'>0</pages>
           <distances>
             <sibling id='0' value='10'/>
             <sibling id='1' value='20'/>
-            <sibling id='16' value='40'/>
-            <sibling id='17' value='40'/>
           </distances>
-          <cpus num='24'>
-            <cpu id='0' socket_id='0' core_id='32' siblings='0'/>
-            <cpu id='8' socket_id='0' core_id='40' siblings='8'/>
-            <cpu id='16' socket_id='0' core_id='96' siblings='16'/>
-            <cpu id='19'/>
-            <cpu id='20'/>
-            <cpu id='21'/>
-            <cpu id='22'/>
-            <cpu id='23'/>
-            <cpu id='24' socket_id='0' core_id='104' siblings='24'/>
-            <cpu id='25'/>
-            <cpu id='26'/>
-            <cpu id='27'/>
-            <cpu id='28'/>
-            <cpu id='29'/>
-            <cpu id='30'/>
-            <cpu id='31'/>
-            <cpu id='32' socket_id='0' core_id='112' siblings='32'/>
-            <cpu id='33'/>
-            <cpu id='34'/>
-            <cpu id='35'/>
-            <cpu id='36'/>
-            <cpu id='37'/>
-            <cpu id='38'/>
-            <cpu id='39'/>
+          <cpus num='48'>
+            <cpu id='0' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='1' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='2' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='3' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='4' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='5' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='6' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='7' socket_id='0' die_id='0' cluster_id='0' core_id='32' siblings='0-7'/>
+            <cpu id='8' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='9' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='10' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='11' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='12' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='13' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='14' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='15' socket_id='0' die_id='0' cluster_id='0' core_id='40' siblings='8-15'/>
+            <cpu id='16' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='17' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='18' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='19' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='20' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='21' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='22' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='23' socket_id='0' die_id='0' cluster_id='0' core_id='48' siblings='16-23'/>
+            <cpu id='24' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='25' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='26' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='27' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='28' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='29' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='30' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='31' socket_id='0' die_id='0' cluster_id='0' core_id='96' siblings='24-31'/>
+            <cpu id='32' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='33' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='34' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='35' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='36' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='37' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='38' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='39' socket_id='0' die_id='0' cluster_id='0' core_id='104' siblings='32-39'/>
+            <cpu id='40' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='41' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='42' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='43' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='44' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='45' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='46' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
+            <cpu id='47' socket_id='0' die_id='0' cluster_id='0' core_id='112' siblings='40-47'/>
           </cpus>
         </cell>
         <cell id='1'>
-          <memory unit='KiB'>67108864</memory>
-          <pages unit='KiB' size='64'>1048576</pages>
+          <memory unit='KiB'>33354368</memory>
+          <pages unit='KiB' size='64'>521162</pages>
           <pages unit='KiB' size='16384'>0</pages>
           <pages unit='KiB' size='16777216'>0</pages>
           <distances>
             <sibling id='0' value='20'/>
             <sibling id='1' value='10'/>
-            <sibling id='16' value='40'/>
-            <sibling id='17' value='40'/>
           </distances>
-          <cpus num='40'>
-            <cpu id='40' socket_id='1' core_id='160' siblings='40'/>
-            <cpu id='41'/>
-            <cpu id='42'/>
-            <cpu id='43'/>
-            <cpu id='44'/>
-            <cpu id='45'/>
-            <cpu id='46'/>
-            <cpu id='47'/>
-            <cpu id='48' socket_id='1' core_id='176' siblings='48'/>
-            <cpu id='49'/>
-            <cpu id='50'/>
-            <cpu id='51'/>
-            <cpu id='52'/>
-            <cpu id='53'/>
-            <cpu id='54'/>
-            <cpu id='55'/>
-            <cpu id='56' socket_id='1' core_id='224' siblings='56'/>
-            <cpu id='57'/>
-            <cpu id='58'/>
-            <cpu id='59'/>
-            <cpu id='60'/>
-            <cpu id='61'/>
-            <cpu id='62'/>
-            <cpu id='63'/>
-            <cpu id='64' socket_id='1' core_id='232' siblings='64'/>
-            <cpu id='65'/>
-            <cpu id='66'/>
-            <cpu id='67'/>
-            <cpu id='68'/>
-            <cpu id='69'/>
-            <cpu id='70'/>
-            <cpu id='71'/>
-            <cpu id='72' socket_id='1' core_id='240' siblings='72'/>
-            <cpu id='73'/>
-            <cpu id='74'/>
-            <cpu id='75'/>
-            <cpu id='76'/>
-            <cpu id='77'/>
-            <cpu id='78'/>
-            <cpu id='79'/>
-          </cpus>
-        </cell>
-        <cell id='16'>
-          <memory unit='KiB'>67108864</memory>
-          <pages unit='KiB' size='64'>1048576</pages>
-          <pages unit='KiB' size='16384'>0</pages>
-          <pages unit='KiB' size='16777216'>0</pages>
-          <distances>
-            <sibling id='0' value='40'/>
-            <sibling id='1' value='40'/>
-            <sibling id='16' value='10'/>
-            <sibling id='17' value='20'/>
-          </distances>
-          <cpus num='40'>
-            <cpu id='80' socket_id='16' core_id='2088' siblings='80'/>
-            <cpu id='81'/>
-            <cpu id='82'/>
-            <cpu id='83'/>
-            <cpu id='84'/>
-            <cpu id='85'/>
-            <cpu id='86'/>
-            <cpu id='87'/>
-            <cpu id='88' socket_id='16' core_id='2096' siblings='88'/>
-            <cpu id='89'/>
-            <cpu id='90'/>
-            <cpu id='91'/>
-            <cpu id='92'/>
-            <cpu id='93'/>
-            <cpu id='94'/>
-            <cpu id='95'/>
-            <cpu id='96' socket_id='16' core_id='2144' siblings='96'/>
-            <cpu id='97'/>
-            <cpu id='98'/>
-            <cpu id='99'/>
-            <cpu id='100'/>
-            <cpu id='101'/>
-            <cpu id='102'/>
-            <cpu id='103'/>
-            <cpu id='104' socket_id='16' core_id='2152' siblings='104'/>
-            <cpu id='105'/>
-            <cpu id='106'/>
-            <cpu id='107'/>
-            <cpu id='108'/>
-            <cpu id='109'/>
-            <cpu id='110'/>
-            <cpu id='111'/>
-            <cpu id='112' socket_id='16' core_id='2160' siblings='112'/>
-            <cpu id='113'/>
-            <cpu id='114'/>
-            <cpu id='115'/>
-            <cpu id='116'/>
-            <cpu id='117'/>
-            <cpu id='118'/>
-            <cpu id='119'/>
-          </cpus>
-        </cell>
-        <cell id='17'>
-          <memory unit='KiB'>67108864</memory>
-          <pages unit='KiB' size='64'>1048576</pages>
-          <pages unit='KiB' size='16384'>0</pages>
-          <pages unit='KiB' size='16777216'>0</pages>
-          <distances>
-            <sibling id='0' value='40'/>
-            <sibling id='1' value='40'/>
-            <sibling id='16' value='20'/>
-            <sibling id='17' value='10'/>
-          </distances>
-          <cpus num='40'>
-            <cpu id='120' socket_id='17' core_id='2208' siblings='120'/>
-            <cpu id='121'/>
-            <cpu id='122'/>
-            <cpu id='123'/>
-            <cpu id='124'/>
-            <cpu id='125'/>
-            <cpu id='126'/>
-            <cpu id='127'/>
-            <cpu id='128' socket_id='17' core_id='2224' siblings='128'/>
-            <cpu id='129'/>
-            <cpu id='130'/>
-            <cpu id='131'/>
-            <cpu id='132'/>
-            <cpu id='133'/>
-            <cpu id='134'/>
-            <cpu id='135'/>
-            <cpu id='136' socket_id='17' core_id='2272' siblings='136'/>
-            <cpu id='137'/>
-            <cpu id='138'/>
-            <cpu id='139'/>
-            <cpu id='140'/>
-            <cpu id='141'/>
-            <cpu id='142'/>
-            <cpu id='143'/>
-            <cpu id='144' socket_id='17' core_id='2280' siblings='144'/>
-            <cpu id='145'/>
-            <cpu id='146'/>
-            <cpu id='147'/>
-            <cpu id='148'/>
-            <cpu id='149'/>
-            <cpu id='150'/>
-            <cpu id='151'/>
-            <cpu id='152' socket_id='17' core_id='2288' siblings='152'/>
-            <cpu id='153'/>
-            <cpu id='154'/>
-            <cpu id='155'/>
-            <cpu id='156'/>
-            <cpu id='157'/>
-            <cpu id='158'/>
-            <cpu id='159'/>
+          <cpus num='48'>
+            <cpu id='48' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='49' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='50' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='51' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='52' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='53' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='54' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='55' socket_id='1' die_id='0' cluster_id='0' core_id='160' siblings='48-55'/>
+            <cpu id='56' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='57' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='58' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='59' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='60' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='61' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='62' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='63' socket_id='1' die_id='0' cluster_id='0' core_id='168' siblings='56-63'/>
+            <cpu id='64' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='65' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='66' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='67' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='68' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='69' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='70' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='71' socket_id='1' die_id='0' cluster_id='0' core_id='176' siblings='64-71'/>
+            <cpu id='72' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='73' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='74' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='75' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='76' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='77' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='78' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='79' socket_id='1' die_id='0' cluster_id='0' core_id='224' siblings='72-79'/>
+            <cpu id='80' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='81' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='82' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='83' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='84' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='85' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='86' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='87' socket_id='1' die_id='0' cluster_id='0' core_id='232' siblings='80-87'/>
+            <cpu id='88' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='89' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='90' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='91' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='92' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='93' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='94' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
+            <cpu id='95' socket_id='1' die_id='0' cluster_id='0' core_id='240' siblings='88-95'/>
           </cpus>
         </cell>
       </cells>
     </topology>
     <secmodel>
-      <model>none</model>
+      <model>selinux</model>
       <doi>0</doi>
+      <baselabel type='kvm'>system_u:system_r:svirt_t:s0</baselabel>
+      <baselabel type='qemu'>system_u:system_r:svirt_tcg_t:s0</baselabel>
     </secmodel>
     <secmodel>
       <model>dac</model>
@@ -242,20 +162,129 @@
 
   <guest>
     <os_type>hvm</os_type>
-    <arch name='ppc64le'>
+    <arch name='ppc64'>
       <wordsize>64</wordsize>
-      <emulator>/usr/libexec/qemu-kvm</emulator>
-      <machine canonical='pseries-rhel7.1.0' maxCpus='255'>pseries</machine>
+      <emulator>/usr/bin/qemu-system-ppc64</emulator>
+      <machine maxCpus='4096'>pseries-8.2</machine>
+      <machine canonical='pseries-8.2' maxCpus='4096'>pseries</machine>
+      <machine maxCpus='1'>amigaone</machine>
+      <machine maxCpus='2048'>powernv9</machine>
+      <machine canonical='powernv9' maxCpus='2048'>powernv</machine>
+      <machine maxCpus='4096'>pseries-4.1</machine>
+      <machine maxCpus='15'>mpc8544ds</machine>
+      <machine maxCpus='4096'>pseries-6.1</machine>
+      <machine maxCpus='4096'>pseries-2.5</machine>
+      <machine maxCpus='2048'>powernv10</machine>
+      <machine maxCpus='4096'>pseries-4.2</machine>
+      <machine maxCpus='4096'>pseries-6.2</machine>
+      <machine maxCpus='4096'>pseries-2.6</machine>
+      <machine maxCpus='32'>ppce500</machine>
+      <machine maxCpus='4096'>pseries-2.7</machine>
+      <machine maxCpus='4096'>pseries-3.0</machine>
+      <machine maxCpus='4096'>pseries-8.0</machine>
+      <machine maxCpus='4096'>pseries-5.0</machine>
+      <machine maxCpus='1'>40p</machine>
+      <machine maxCpus='4096'>pseries-2.8</machine>
+      <machine maxCpus='1'>pegasos2</machine>
+      <machine maxCpus='4096'>pseries-3.1</machine>
+      <machine maxCpus='4096'>pseries-8.1</machine>
+      <machine maxCpus='4096'>pseries-5.1</machine>
+      <machine maxCpus='4096'>pseries-2.9</machine>
+      <machine maxCpus='1'>bamboo</machine>
+      <machine maxCpus='1'>g3beige</machine>
+      <machine maxCpus='4096'>pseries-5.2</machine>
+      <machine maxCpus='4096'>pseries-2.12-sxxm</machine>
+      <machine maxCpus='4096'>pseries-2.10</machine>
+      <machine maxCpus='4096'>pseries-7.0</machine>
+      <machine maxCpus='1'>virtex-ml507</machine>
+      <machine maxCpus='4096'>pseries-2.11</machine>
+      <machine maxCpus='4096'>pseries-2.1</machine>
+      <machine maxCpus='4096'>pseries-7.1</machine>
+      <machine maxCpus='4096'>pseries-2.12</machine>
+      <machine maxCpus='4096'>pseries-2.2</machine>
+      <machine maxCpus='4096'>pseries-7.2</machine>
+      <machine maxCpus='1'>mac99</machine>
+      <machine maxCpus='1'>sam460ex</machine>
+      <machine maxCpus='1'>ref405ep</machine>
+      <machine maxCpus='4096'>pseries-2.3</machine>
+      <machine maxCpus='2048'>powernv8</machine>
+      <machine maxCpus='1'>x-remote</machine>
+      <machine maxCpus='4096'>pseries-4.0</machine>
+      <machine maxCpus='4096'>pseries-6.0</machine>
+      <machine maxCpus='4096'>pseries-2.4</machine>
       <domain type='qemu'/>
-      <domain type='kvm'>
-        <emulator>/usr/libexec/qemu-kvm</emulator>
-      </domain>
+      <domain type='kvm'/>
     </arch>
     <features>
       <cpuselection/>
       <deviceboot/>
       <disksnapshot default='on' toggle='no'/>
+      <externalSnapshot/>
+    </features>
+  </guest>
+
+  <guest>
+    <os_type>hvm</os_type>
+    <arch name='ppc64le'>
+      <wordsize>64</wordsize>
+      <emulator>/usr/bin/qemu-system-ppc64</emulator>
+      <machine maxCpus='4096'>pseries-8.2</machine>
+      <machine canonical='pseries-8.2' maxCpus='4096'>pseries</machine>
+      <machine maxCpus='1'>amigaone</machine>
+      <machine maxCpus='2048'>powernv9</machine>
+      <machine canonical='powernv9' maxCpus='2048'>powernv</machine>
+      <machine maxCpus='4096'>pseries-4.1</machine>
+      <machine maxCpus='15'>mpc8544ds</machine>
+      <machine maxCpus='4096'>pseries-6.1</machine>
+      <machine maxCpus='4096'>pseries-2.5</machine>
+      <machine maxCpus='2048'>powernv10</machine>
+      <machine maxCpus='4096'>pseries-4.2</machine>
+      <machine maxCpus='4096'>pseries-6.2</machine>
+      <machine maxCpus='4096'>pseries-2.6</machine>
+      <machine maxCpus='32'>ppce500</machine>
+      <machine maxCpus='4096'>pseries-2.7</machine>
+      <machine maxCpus='4096'>pseries-3.0</machine>
+      <machine maxCpus='4096'>pseries-8.0</machine>
+      <machine maxCpus='4096'>pseries-5.0</machine>
+      <machine maxCpus='1'>40p</machine>
+      <machine maxCpus='4096'>pseries-2.8</machine>
+      <machine maxCpus='1'>pegasos2</machine>
+      <machine maxCpus='4096'>pseries-3.1</machine>
+      <machine maxCpus='4096'>pseries-8.1</machine>
+      <machine maxCpus='4096'>pseries-5.1</machine>
+      <machine maxCpus='4096'>pseries-2.9</machine>
+      <machine maxCpus='1'>bamboo</machine>
+      <machine maxCpus='1'>g3beige</machine>
+      <machine maxCpus='4096'>pseries-5.2</machine>
+      <machine maxCpus='4096'>pseries-2.12-sxxm</machine>
+      <machine maxCpus='4096'>pseries-2.10</machine>
+      <machine maxCpus='4096'>pseries-7.0</machine>
+      <machine maxCpus='1'>virtex-ml507</machine>
+      <machine maxCpus='4096'>pseries-2.11</machine>
+      <machine maxCpus='4096'>pseries-2.1</machine>
+      <machine maxCpus='4096'>pseries-7.1</machine>
+      <machine maxCpus='4096'>pseries-2.12</machine>
+      <machine maxCpus='4096'>pseries-2.2</machine>
+      <machine maxCpus='4096'>pseries-7.2</machine>
+      <machine maxCpus='1'>mac99</machine>
+      <machine maxCpus='1'>sam460ex</machine>
+      <machine maxCpus='1'>ref405ep</machine>
+      <machine maxCpus='4096'>pseries-2.3</machine>
+      <machine maxCpus='2048'>powernv8</machine>
+      <machine maxCpus='1'>x-remote</machine>
+      <machine maxCpus='4096'>pseries-4.0</machine>
+      <machine maxCpus='4096'>pseries-6.0</machine>
+      <machine maxCpus='4096'>pseries-2.4</machine>
+      <domain type='qemu'/>
+      <domain type='kvm'/>
+    </arch>
+    <features>
+      <cpuselection/>
+      <deviceboot/>
+      <disksnapshot default='on' toggle='no'/>
+      <externalSnapshot/>
     </features>
   </guest>
 
 </capabilities>
+
