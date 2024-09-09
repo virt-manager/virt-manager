@@ -112,6 +112,10 @@ def testDomainCapabilitiesAArch64():
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
 
     assert "Default" in caps.label_for_firmware_path(None)
+    assert "Custom:" in caps.label_for_firmware_path("/foobar")
+    assert "UEFI" in caps.label_for_firmware_path("aarch64/QEMU_EFI")
 
     assert caps.supports_filesystem_virtiofs()
     assert caps.supports_memorybacking_memfd()
+    assert caps.supports_redirdev_usb()
+    assert caps.supports_channel_spicevmc()
