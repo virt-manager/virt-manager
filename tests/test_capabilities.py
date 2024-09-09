@@ -145,3 +145,33 @@ def testDomainCapabilitiesRISCV64():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
+
+
+def testDomainCapabilitiesLoongArch64():
+    xml = open(DATADIR + "/kvm-loongarch64-domcaps.xml").read()
+    caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
+
+    host_mode = caps.cpu.get_mode("host-passthrough")
+    assert bool(host_mode)
+    assert host_mode.supported
+    max_mode = caps.cpu.get_mode("maximum")
+    assert bool(max_mode)
+    assert max_mode.supported
+    custom_mode = caps.cpu.get_mode("custom")
+    assert bool(custom_mode)
+    cpu_model = custom_mode.get_model("la132")
+    assert bool(cpu_model)
+    assert cpu_model.usable
+
+    models = caps.get_cpu_models()
+    assert len(models) > 2
+    assert "la464" in models
+
+    assert "Default" in caps.label_for_firmware_path(None)
+    assert "Custom:" in caps.label_for_firmware_path("/foobar")
+    assert "UEFI" in caps.label_for_firmware_path("loongarch64/QEMU_CODE.fd")
+
+    assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_memorybacking_memfd()
+    assert caps.supports_redirdev_usb()
+    assert caps.supports_channel_spicevmc()
