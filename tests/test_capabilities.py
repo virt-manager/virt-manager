@@ -115,3 +115,33 @@ def testDomainCapabilitiesAArch64():
 
     assert not caps.supports_filesystem_virtiofs()
     assert not caps.supports_memorybacking_memfd()
+
+
+def testDomainCapabilitiesRISCV64():
+    xml = open(DATADIR + "/qemu-riscv64-domcaps.xml").read()
+    caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
+
+    host_mode = caps.cpu.get_mode("host-passthrough")
+    assert bool(host_mode)
+    assert not host_mode.supported
+    max_mode = caps.cpu.get_mode("maximum")
+    assert bool(max_mode)
+    assert max_mode.supported
+    custom_mode = caps.cpu.get_mode("custom")
+    assert bool(custom_mode)
+    cpu_model = custom_mode.get_model("rv64")
+    assert bool(cpu_model)
+    assert cpu_model.usable
+
+    models = caps.get_cpu_models()
+    assert len(models) > 5
+    assert "veyron-v1" in models
+
+    assert "Default" in caps.label_for_firmware_path(None)
+    assert "Custom:" in caps.label_for_firmware_path("/foobar")
+    assert "UEFI" in caps.label_for_firmware_path("RISCV_VIRT_CODE.fd")
+
+    assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_memorybacking_memfd()
+    assert caps.supports_redirdev_usb()
+    assert caps.supports_channel_spicevmc()
