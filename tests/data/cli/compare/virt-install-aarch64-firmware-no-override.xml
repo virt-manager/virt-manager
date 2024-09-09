@@ -13,6 +13,9 @@
     <type arch="aarch64" machine="virt">hvm</type>
     <boot dev="network"/>
   </os>
+  <features>
+    <acpi/>
+  </features>
   <cpu mode="host-passthrough"/>
   <clock offset="utc"/>
   <devices>
@@ -43,12 +46,18 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <input type="tablet" bus="usb"/>
     <input type="keyboard" bus="usb"/>
     <tpm>
       <backend type="emulator"/>
     </tpm>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
     <video>
       <model type="virtio"/>
     </video>
@@ -74,6 +83,9 @@
     <type arch="aarch64" machine="virt">hvm</type>
     <boot dev="network"/>
   </os>
+  <features>
+    <acpi/>
+  </features>
   <cpu mode="host-passthrough"/>
   <clock offset="utc"/>
   <devices>
@@ -104,12 +116,18 @@
       <source mode="bind"/>
       <target type="virtio" name="org.qemu.guest_agent.0"/>
     </channel>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <input type="tablet" bus="usb"/>
     <input type="keyboard" bus="usb"/>
     <tpm>
       <backend type="emulator"/>
     </tpm>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
     <video>
       <model type="virtio"/>
     </video>
