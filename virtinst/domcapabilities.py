@@ -292,6 +292,10 @@ class DomainCapabilities(XMLBuilder):
             r".*arm/QEMU_EFI.*",  # fedora, gerd's firmware repo
             r".*edk2-arm-code\.fd"  # upstream qemu
         ],
+        "riscv64": [
+            r".*RISCV_VIRT_CODE\..*",  # Fedora, Debian
+            r".*riscv64.*",  # generic attempt at a catchall
+        ],
     }
 
     def find_uefi_path_for_arch(self):
