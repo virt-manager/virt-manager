@@ -119,3 +119,21 @@ def testDomainCapabilitiesAArch64():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
+
+
+def testDomainCapabilitiesPPC64le():
+    xml = open(DATADIR + "/kvm-ppc64le-domcaps.xml").read()
+    caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
+
+    custom_mode = caps.cpu.get_mode("custom")
+    assert bool(custom_mode)
+
+    models = caps.get_cpu_models()
+    assert "POWER9" in models
+
+    assert "Default" in caps.label_for_firmware_path(None)
+
+    assert caps.supports_filesystem_virtiofs()
+    assert caps.supports_memorybacking_memfd()
+    assert caps.supports_redirdev_usb()
+    assert not caps.supports_channel_spicevmc()
