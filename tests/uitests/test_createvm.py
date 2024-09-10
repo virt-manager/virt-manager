@@ -480,10 +480,16 @@ def testNewKVMQ35Tweaks(app):
     details.combo_check_default("Chipset:", "Q35")
     details.combo_check_default("Firmware:", "BIOS")
 
-    # Switch i440FX and back
+    # Unchanged machine
+    details.combo_select("Chipset:", "i440FX")
+    details.combo_select("Chipset:", "Q35")
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+    # Switch i440FX
     details.combo_select("Chipset:", "i440FX")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
+    # Switch back to Q35
     details.combo_select("Chipset:", "Q35")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
