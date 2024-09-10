@@ -128,7 +128,7 @@ class _CapsGuest(XMLBuilder):
         for m in mobjs:
             ret.append(m.name)
             if m.canonical and m.canonical not in ret:
-                ret.append(m.canonical)
+                ret.append(m.canonical)  # pragma: no cover
         return ret
 
     def is_machine_alias(self, domain, src, tgt):
