@@ -922,12 +922,7 @@ def testDetailsConsoleChecksSSH(app):
     _checkcon(".*SSH tunnel error output.*")
 
 
-def testDetailsConsoleChecksTCP(app):
-    """
-    Hit a specific warning when the connection has
-    non-SSH transport but the guest config is only listening locally
-    """
-    fakeuri = "qemu+tcp://foouser@256.256.256.256:1234/system"
+def _testDetailsConsoleChecksTCP(app, fakeuri, msg):
     uri = tests.utils.URIs.test_full + ",fakeuri=%s" % fakeuri
     app.uri = uri
     app.open(xmleditor_enabled=True)
@@ -956,7 +951,6 @@ def testDetailsConsoleChecksTCP(app):
     _checkcon("Graphical console not configured")
     _stop()
 
-    # Add a SDL graphics device which can't be displayed
     detailsbtn.click()
     win.find("add-hardware", "push button").click()
     addhw = app.find_window("Add New Virtual Hardware")
@@ -968,7 +962,27 @@ def testDetailsConsoleChecksTCP(app):
     lib.utils.check(lambda: not addhw.active)
     lib.utils.check(lambda: win.active)
     _run()
-    _checkcon(".*configured to listen locally.*")
+    _checkcon(msg)
+
+
+def testDetailsConsoleTCPNonlocal(app):
+    """
+    Hit a specific warning when the connection has
+    non-SSH transport but the guest config is only listening locally
+    """
+    fakeuri = "qemu+tcp://foouser@256.256.256.256:1234/system"
+    msg = ".*configured to listen locally.*"
+    _testDetailsConsoleChecksTCP(app, fakeuri, msg)
+
+
+def testDetailsConsoleTCPLocal(app):
+    """
+    Ensure we don't hit the nonlocal check, when both graphics
+    and connection URI are localhost
+    """
+    fakeuri = "qemu+tcp://foouser@localhost:1234/system"
+    msg = "Viewer was disconnected\\."
+    _testDetailsConsoleChecksTCP(app, fakeuri, msg)
 
 
 def testDetailsConsoleSerialSwitch(app):
