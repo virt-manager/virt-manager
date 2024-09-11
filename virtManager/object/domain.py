@@ -436,6 +436,10 @@ class vmmDomain(vmmLibvirtObject):
         return bool(self.get_xmlobj().is_uefi() or
                     self.get_xmlobj().os.nvram)
 
+    def has_tpm_state(self):
+        return any(tpm.type == "emulator"
+                   for tpm in self.get_xmlobj().devices.tpm)
+
     def is_persistent(self):
         return bool(self._backend.isPersistent())
 
@@ -1414,6 +1418,9 @@ class vmmDomain(vmmLibvirtObject):
         else:
             if self.has_nvram():
                 flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_KEEP_NVRAM", 0)
+            if (self.has_tpm_state() and
+                self.conn.support.domain_undefine_keep_tpm()):
+                flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_KEEP_TPM", 0)
         try:
             self._backend.undefineFlags(flags)
         except libvirt.libvirtError:
