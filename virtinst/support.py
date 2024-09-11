@@ -296,6 +296,8 @@ class SupportCache:
     domain_state = _make(function="virDomain.state", run_args=())
     domain_open_graphics = _make(function="virDomain.openGraphicsFD",
         version="1.2.8", hv_version={"qemu": 0})
+    domain_undefine_keep_tpm = _make(
+            hv_libvirt_version={"qemu": "8.9.0"})
 
     # Pool checks
     pool_metadata_prealloc = _make(
