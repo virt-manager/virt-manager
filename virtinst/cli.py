@@ -1616,12 +1616,12 @@ class ParserXML(VirtCLIParser):
         super()._parse(inst)
 
 
-def parse_xmlcli(guest, options):
+def parse_xmlcli(guest, parservalue):
     """
     Parse --xml option string into XMLManualAction instances and append
     to guest.xml_actions.
     """
-    for optstr in options.xml:
+    for optstr in parservalue:
         inst = guest.xml_actions.new()
         ParserXML(optstr).parse(inst)
         guest.xml_actions.append(inst)
@@ -4876,16 +4876,15 @@ class ParserLaunchSecurity(VirtCLIParser):
 # Public virt parser APIs #
 ###########################
 
-def run_parser(options, guest, parserclass, editinst=None):
+def run_parser(guest, parserclass, parservalue, editinst=None):
     """
     Lookup the cli options.* string associated with the passed in Parser*
     class, and parse its values into the passed guest instance, or editinst
     for some virt-xml usage.
     """
     ret = []
-    optstr_list = xmlutil.listify(getattr(options, parserclass.cli_arg_name))
 
-    for optstr in optstr_list:
+    for optstr in xmlutil.listify(parservalue):
         parserobj = parserclass(optstr, guest=guest, editing=bool(editinst))
         parseret = parserobj.parse(editinst)
         ret += xmlutil.listify(parseret)
@@ -4896,7 +4895,8 @@ def run_parser(options, guest, parserclass, editinst=None):
 def run_all_parsers(options, guest):
     ret = []
     for parserclass in VIRT_PARSERS:
-        ret += run_parser(options, guest, parserclass)
+        parservalue = getattr(options, parserclass.cli_arg_name)
+        ret += run_parser(guest, parserclass, parservalue)
     return ret
 
 
