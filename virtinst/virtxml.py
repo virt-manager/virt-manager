@@ -59,6 +59,43 @@ def defined_xml_is_unchanged(conn, domain, original_xml):
     return new_xml == original_xml
 
 
+##################
+# Action parsing #
+##################
+
+def check_action_collision(options):
+    actions = ["edit", "add-device", "remove-device", "build-xml"]
+
+    collisions = []
+    for cliname in actions:
+        optname = cliname.replace("-", "_")
+        if getattr(options, optname) not in [False, -1]:
+            collisions.append(cliname)
+
+    if len(collisions) == 0:
+        fail(_("One of %s must be specified.") %
+             ", ".join(["--" + c for c in actions]))
+    if len(collisions) > 1:
+        fail(_("Conflicting options %s") %
+             ", ".join(["--" + c for c in collisions]))
+
+
+def check_xmlopt_collision(options):
+    collisions = []
+    for parserclass in cli.VIRT_PARSERS + [cli.ParserXML]:
+        if getattr(options, parserclass.cli_arg_name):
+            collisions.append(parserclass)
+
+    if len(collisions) == 0:
+        fail(_("No change specified."))
+    if len(collisions) != 1:
+        fail(_("Only one change operation may be specified "
+               "(conflicting options %s)") %
+               [c.cli_flag_name() for c in collisions])
+
+    return collisions[0]
+
+
 ################
 # Change logic #
 ################
@@ -107,39 +144,6 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
                  ("--%s %s" % (action_name, editval)))
 
     return inst
-
-
-def check_action_collision(options):
-    actions = ["edit", "add-device", "remove-device", "build-xml"]
-
-    collisions = []
-    for cliname in actions:
-        optname = cliname.replace("-", "_")
-        if getattr(options, optname) not in [False, -1]:
-            collisions.append(cliname)
-
-    if len(collisions) == 0:
-        fail(_("One of %s must be specified.") %
-             ", ".join(["--" + c for c in actions]))
-    if len(collisions) > 1:
-        fail(_("Conflicting options %s") %
-             ", ".join(["--" + c for c in collisions]))
-
-
-def check_xmlopt_collision(options):
-    collisions = []
-    for parserclass in cli.VIRT_PARSERS + [cli.ParserXML]:
-        if getattr(options, parserclass.cli_arg_name):
-            collisions.append(parserclass)
-
-    if len(collisions) == 0:
-        fail(_("No change specified."))
-    if len(collisions) != 1:
-        fail(_("Only one change operation may be specified "
-               "(conflicting options %s)") %
-               [c.cli_flag_name() for c in collisions])
-
-    return collisions[0]
 
 
 def action_edit(guest, options, parserclass):
