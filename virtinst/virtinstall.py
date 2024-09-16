@@ -631,10 +631,8 @@ def _build_options_guest(conn, options):
     # We do these two parser bit early, since Installer setup will
     # depend on them, but delay the rest to later, since things like
     # disk naming can depend on Installer operations
-    cli.run_parser(options, guest, cli.ParserBoot)
-    options.boot = None
-    cli.run_parser(options, guest, cli.ParserMetadata)
-    options.metadata = None
+    cli.run_parser(guest, cli.ParserBoot, options.boot)
+    cli.run_parser(guest, cli.ParserMetadata, options.metadata)
 
     # Call set_capabilities_defaults explicitly here rather than depend
     # on set_defaults calling it. Installer setup needs filled in values.
@@ -666,7 +664,7 @@ def build_guest_instance(conn, options):
         # default disk paths are generated based on VM name
         set_cli_default_name(guest)
         cli.run_all_parsers(options, guest)
-        cli.parse_xmlcli(guest, options)
+        cli.parse_xmlcli(guest, options.xml)
         set_cli_defaults(options, guest)
 
     installer.set_install_defaults(guest)

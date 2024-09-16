@@ -44,11 +44,11 @@ def get_diff(origxml, newxml):
     return diff
 
 
-def set_os_variant(options, guest):
-    if options.os_variant is None:
+def set_os_variant(guest, os_variant):
+    if os_variant is None:
         return
 
-    osdata = cli.parse_os_variant(options.os_variant)
+    osdata = cli.parse_os_variant(os_variant)
     if osdata.get_name():
         guest.set_os_name(osdata.get_name())
 
@@ -231,12 +231,13 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
     return inst
 
 
-def action_edit(action, guest, options):
+def action_edit(action, guest):
     parserclass = action.parserclass
+    parservalue = action.parservalue
     selector = action.selector
 
     if parserclass is cli.ParserXML:
-        cli.parse_xmlcli(guest, options)
+        cli.parse_xmlcli(guest, parservalue)
         return []
 
     if parserclass.guest_propname:
@@ -252,22 +253,23 @@ def action_edit(action, guest, options):
 
     devs = []
     for editinst in xmlutil.listify(inst):
-        devs += cli.run_parser(options, guest, parserclass,
+        devs += cli.run_parser(guest, parserclass, parservalue,
                                editinst=editinst)
     return devs
 
 
-def action_add_device(action, guest, options, input_devs):
+def action_add_device(action, guest, os_variant, input_devs):
     parserclass = action.parserclass
+    parservalue = action.parservalue
 
-    set_os_variant(options, guest)
+    set_os_variant(guest, os_variant)
 
     if input_devs:
         for dev in input_devs:
             guest.add_device(dev)
         devs = input_devs
     else:
-        devs = cli.run_parser(options, guest, parserclass)
+        devs = cli.run_parser(guest, parserclass, parservalue)
         for dev in devs:
             dev.set_defaults(guest)
 
@@ -287,10 +289,11 @@ def action_remove_device(action, guest):
     return devs
 
 
-def action_build_xml(action, guest, options):
+def action_build_xml(action, guest):
     parserclass = action.parserclass
+    parservalue = action.parservalue
 
-    devs = cli.run_parser(options, guest, parserclass)
+    devs = cli.run_parser(guest, parserclass, parservalue)
     for dev in devs:
         dev.set_defaults(guest)
     return devs
@@ -298,11 +301,11 @@ def action_build_xml(action, guest, options):
 
 def perform_action(action, guest, options, input_devs):
     if action.is_add_device:
-        return action_add_device(action, guest, options, input_devs)
+        return action_add_device(action, guest, options.os_variant, input_devs)
     if action.is_remove_device:
         return action_remove_device(action, guest)
     if action.is_edit:
-        return action_edit(action, guest, options)
+        return action_edit(action, guest)
     raise xmlutil.DevError(
         "perform_action() incorrectly called with action_name=%s" %
         action.action_name)
@@ -566,7 +569,7 @@ def main(conn=None):
     vm_is_running = bool(active_xmlobj)
 
     if action.is_build_xml:
-        built_devs = action_build_xml(action, inactive_xmlobj, options)
+        built_devs = action_build_xml(action, inactive_xmlobj)
         for dev in built_devs:
             # pylint: disable=no-member
             print_stdout(xmlutil.unindent_device_xml(dev.get_xml()))
