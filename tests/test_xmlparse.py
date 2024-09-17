@@ -1215,3 +1215,17 @@ def testConvertToQ35():
 
     _test("convert-to-q35-win10")
     _test("convert-to-q35-f39", num_pcie_root_ports=5)
+
+
+def testConvertToVNC():
+    conn = utils.URIs.openconn(utils.URIs.kvm_x86)
+
+    def _test(filename_base):
+        guest, outfile = _get_test_content(conn, filename_base)
+        guest.convert_to_vnc()
+        _alter_compare(conn, guest.get_xml(), outfile)
+
+    _test("convert-to-vnc-empty")
+    _test("convert-to-vnc-spice-devices")
+    _test("convert-to-vnc-spice-manyopts")
+    _test("convert-to-vnc-has-vnc")

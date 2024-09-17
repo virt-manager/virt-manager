@@ -828,6 +828,84 @@ class Guest(XMLBuilder):
 
         self.add_q35_pcie_controllers()
 
+    def _convert_spice_gl_to_egl_headless(self):
+        if not self.has_spice():
+            return
+
+        spicedev = [g for g in self.devices.graphics if g.type == "spice"][0]
+        if not spicedev.gl:
+            return
+
+        dev = DeviceGraphics(self.conn)
+        dev.type = "egl-headless"
+        dev.set_defaults(self.conn)
+        if spicedev.rendernode:
+            dev.rendernode = spicedev.rendernode
+        self.add_device(dev)
+
+    def _convert_to_vnc_graphics(self):
+        """
+        If there's already VNC graphics configured, we leave it intact,
+        but rip out all evidence of other graphics devices.
+
+        If there's other non-VNC, non-egl-headless configured, we try to
+        inplace convert the first device we encounter.
+
+        If there's no graphics configured, set up a default VNC config.`
+        """
+        vnc_devs = [g for g in self.devices.graphics if g.type == "vnc"]
+        # We ignore egl-headless, it's not a true graphical frontend
+        other_devs = [g for g in self.devices.graphics if
+                      g.type != "vnc" and g.type != "egl-headless"]
+
+        # Guest already had a vnc device.
+        # Remove all other devs and we are done
+        if vnc_devs:
+            for g in other_devs:
+                self.remove_device(g)
+            return
+
+        # We didn't find any non-vnc device to convert.
+        # Add a vnc device with default config
+        if not other_devs:
+            dev = DeviceGraphics(self.conn)
+            dev.type = dev.TYPE_VNC
+            dev.set_defaults(self.conn)
+            self.add_device(dev)
+            return
+
+        # Convert the pre-existing graphics device to vnc
+        # Remove the rest
+        dev = other_devs.pop(0)
+        srcdev = DeviceGraphics(self.conn, dev.get_xml())
+        for g in other_devs:
+            self.remove_device(g)
+
+        dev.clear()
+        dev.type = dev.TYPE_VNC
+        dev.keymap = srcdev.keymap
+        dev.port = srcdev.port
+        dev.autoport = srcdev.autoport
+        dev.passwd = srcdev.passwd
+        dev.passwdValidTo = srcdev.passwdValidTo
+        dev.listen = srcdev.listen
+        for listen in srcdev.listens:
+            srcdev.remove_child(listen)
+            dev.add_child(listen)
+        dev.set_defaults(self)
+
+    def convert_to_vnc(self):
+        """
+        Convert existing XML to have one VNC graphics connection.
+        """
+        self._convert_spice_gl_to_egl_headless()
+
+        # Rip out spice graphics devices unconditionally.
+        # Could be necessary if XML is in broken state.
+        self._force_remove_spice_devices()
+
+        self._convert_to_vnc_graphics()
+
     def set_defaults(self, _guest):
         self.set_capabilities_defaults()
 
@@ -1277,10 +1355,12 @@ class Guest(XMLBuilder):
             if redirdev.type == "spicevmc":
                 self.devices.remove_child(redirdev)
 
-    def _remove_spice_devices(self, rmdev):
-        if rmdev.DEVICE_TYPE != "graphics" or self.has_spice():
-            return
-
+    def _force_remove_spice_devices(self):
         self._remove_spice_audio()
         self._remove_spice_channels()
         self._remove_spice_usbredir()
+
+    def _remove_spice_devices(self, rmdev):
+        if rmdev.DEVICE_TYPE != "graphics" or self.has_spice():
+            return
+        self._force_remove_spice_devices()

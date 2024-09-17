@@ -1,0 +1,20 @@
+<domain type="qemu">
+  <name>convert-me</name>
+  <memory unit="KiB">8388608</memory>
+  <currentMemory unit="KiB">2097152</currentMemory>
+  <vcpu placement="static">2</vcpu>
+  <os>
+    <type arch="i686">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <clock offset="utc"/>
+  <devices>
+    <graphics type="vnc" port="5907" keymap="de" listen="127.0.0.1" passwd="sercet" passwdValidTo="2011-05-31T16:11:22">
+      <listen type="socket" socket="/tmp/spice.sock"/>
+      <listen type="address" address="127.0.0.1"/>
+    </graphics>
+    <graphics type="egl-headless">
+      <gl rendernode="/dev/my/rendernode"/>
+    </graphics>
+  </devices>
+</domain>

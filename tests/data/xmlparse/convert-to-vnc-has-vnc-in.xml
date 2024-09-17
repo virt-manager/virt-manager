@@ -1,0 +1,31 @@
+<domain type="kvm">
+  <name>convert-me</name>
+  <memory>2097152</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="network"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <vmport state="off"/>
+  </features>
+  <devices>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <graphics type="vnc" port="5907"/>
+    <sound model="ich9"/>
+    <audio type='spice'/>
+    <video>
+      <model type="virtio"/>
+    </video>
+    <redirdev bus="usb" type="spicevmc"/>
+    <redirdev bus="usb" type="spicevmc"/>
+  </devices>
+</domain>
