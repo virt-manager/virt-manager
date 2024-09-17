@@ -1,0 +1,22 @@
+<domain type="kvm">
+  <name>convert-me</name>
+  <memory>2097152</memory>
+  <currentMemory>2097152</currentMemory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch="x86_64" machine="q35">hvm</type>
+    <boot dev="network"/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <vmport state="off"/>
+  </features>
+  <devices>
+    <graphics type="vnc" port="-1"/>
+    <sound model="ich9"/>
+    <video>
+      <model type="virtio"/>
+    </video>
+  </devices>
+</domain>
