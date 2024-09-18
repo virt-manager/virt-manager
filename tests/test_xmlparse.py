@@ -1220,12 +1220,12 @@ def testConvertToQ35():
 def testConvertToVNC():
     conn = utils.URIs.openconn(utils.URIs.kvm_x86)
 
-    def _test(filename_base):
+    def _test(filename_base, **kwargs):
         guest, outfile = _get_test_content(conn, filename_base)
-        guest.convert_to_vnc()
+        guest.convert_to_vnc(**kwargs)
         _alter_compare(conn, guest.get_xml(), outfile)
 
-    _test("convert-to-vnc-empty")
+    _test("convert-to-vnc-empty", qemu_vdagent=True)
     _test("convert-to-vnc-spice-devices")
-    _test("convert-to-vnc-spice-manyopts")
-    _test("convert-to-vnc-has-vnc")
+    _test("convert-to-vnc-spice-manyopts", qemu_vdagent=True)
+    _test("convert-to-vnc-has-vnc", qemu_vdagent=True)

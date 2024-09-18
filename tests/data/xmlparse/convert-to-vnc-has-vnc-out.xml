@@ -13,6 +13,9 @@
     <vmport state="off"/>
   </features>
   <devices>
+    <channel type="qemu-vdagent">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <graphics type="vnc" port="5907"/>
     <sound model="ich9"/>
     <video>

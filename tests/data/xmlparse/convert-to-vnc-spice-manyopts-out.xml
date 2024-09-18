@@ -18,6 +18,13 @@
         <acceleration accel3d="yes"/>
       </model>
     </video>
+    <channel type="qemu-vdagent">
+      <source>
+        <clipboard copypaste="no"/>
+        <mouse mode="client"/>
+      </source>
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
     <graphics type="egl-headless">
       <gl rendernode="/dev/my/rendernode"/>
     </graphics>
