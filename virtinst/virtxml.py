@@ -491,6 +491,12 @@ def parse_args():
         const=cli.VirtCLIParser.OPTSTR_EMPTY,
         help=_("Convert an existing VM from PC/i440FX to Q35."))
 
+    cli.ParserConvertToVNC.register()
+    conv.add_argument("--convert-to-vnc", nargs="?",
+        const=cli.VirtCLIParser.OPTSTR_EMPTY,
+        help=_("Convert an existing VM to use VNC graphics. "
+               "This removes any remnants of Spice graphics."))
+
     g = parser.add_argument_group(_("XML options"))
     cli.add_disk_option(g, editexample=True)
     cli.add_net_option(g)
