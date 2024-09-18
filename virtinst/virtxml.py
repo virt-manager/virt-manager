@@ -109,9 +109,6 @@ def validate_action(action, conn, options):
         fail(_("--build-xml not supported for --%s") %
              action.parserclass.cli_arg_name)
 
-    if action.parserclass is cli.ParserXML and not action.is_edit:
-        fail(_("--xml can only be used with --edit"))
-
     stub_guest = Guest(conn)
     if not action.parserclass.prop_is_list(stub_guest):
         if action.is_remove_device:
@@ -148,7 +145,7 @@ def check_action_collision(options):
 
 def check_xmlopt_collision(options):
     collisions = []
-    for parserclass in cli.VIRT_PARSERS + [cli.ParserXML]:
+    for parserclass in cli.VIRT_PARSERS:
         value = getattr(options, parserclass.cli_arg_name)
         if value:
             collisions.append((parserclass, value))
@@ -235,10 +232,6 @@ def action_edit(action, guest):
     parserclass = action.parserclass
     parservalue = action.parservalue
     selector = action.selector
-
-    if parserclass is cli.ParserXML:
-        cli.parse_xmlcli(guest, parservalue)
-        return []
 
     if parserclass.guest_propname:
         inst = _find_objects_to_edit(guest, "edit",

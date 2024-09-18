@@ -1413,7 +1413,7 @@ c.add_invalid("test-for-virtxml --remove-device --host-device 1 --update --confi
 c.add_invalid("test-for-virtxml --edit --graphics password=foo,keymap= --update --confirm", input_text="yes", grep="(not supported by the connection driver: virDomainUpdateDeviceFlags|persistent update of device 'graphics' is not supported)")
 c.add_invalid("--build-xml --memory 10,maxmemory=20", grep="--build-xml not supported for --memory")
 c.add_invalid("test-state-shutoff --edit sparse=no --disk path=blah", grep="Don't know how to match device type 'disk' property 'sparse'")
-c.add_invalid("test --add-device --xml ./@foo=bar", grep="--xml can only be used with --edit")
+c.add_invalid("test --add-device --xml ./@foo=bar", grep="Cannot use --add-device with --xml")
 c.add_invalid("test-for-virtxml --edit --boot refresh-machine-type=yes", grep="Don't know how to refresh")
 c.add_compare("test --print-xml --edit --vcpus 7", "print-xml")  # test --print-xml
 c.add_compare("--edit --cpu host-passthrough", "stdin-edit", input_file=(_VIRTXMLDIR + "virtxml-stdin-edit.xml"))  # stdin test
