@@ -106,21 +106,21 @@ def validate_action(action, conn, options):
             fail(_("--os-variant/--osinfo is not supported with --build-xml"))
 
     if not action.parserclass.guest_propname and action.is_build_xml:
-        fail(_("--build-xml not supported for --%s") %
-             action.parserclass.cli_arg_name)
+        fail(_("--build-xml not supported for {cli_flag}").format(
+             cli_flag=action.parserclass.cli_flag_name()))
 
     stub_guest = Guest(conn)
     if not action.parserclass.prop_is_list(stub_guest):
         if action.is_remove_device:
-            fail(_("Cannot use --remove-device with --%s") %
-                 action.parserclass.cli_arg_name)
+            fail(_("Cannot use --remove-device with {cli_flag}").format(
+                 cli_flag=action.parserclass.cli_flag_name()))
         if action.is_add_device:
-            fail(_("Cannot use --add-device with --%s") %
-                 action.parserclass.cli_arg_name)
+            fail(_("Cannot use --add-device with {cli_flag}").format(
+                 cli_flag=action.parserclass.cli_flag_name()))
 
     if options.update and not action.parserclass.guest_propname:
-        fail(_("Don't know how to --update for --%s") %
-             (action.parserclass.cli_arg_name))
+        fail(_("Don't know how to --update for {cli_flag}").format(
+             cli_flag=action.parserclass.cli_flag_name()))
 
 
 def check_action_collision(options):
@@ -198,16 +198,16 @@ def _find_objects_to_edit(guest, action_name, editval, parserclass):
             fail(_("Invalid --edit option '%s'") % editval)
 
         if not objlist:
-            fail(_("No --%s objects found in the XML") %
-                parserclass.cli_arg_name)
+            fail(_("No {cli_flag} objects found in the XML").format(
+                cli_flag=parserclass.cli_flag_name()))
         if len(objlist) < abs(idx):
-            fail(ngettext("'--edit %(number)s' requested but there's only "
-                          "%(max)s --%(type)s object in the XML",
-                          "'--edit %(number)s' requested but there are only "
-                          "%(max)s --%(type)s objects in the XML",
-                          len(objlist)) %
-                {"number": idx, "max": len(objlist),
-                 "type": parserclass.cli_arg_name})
+            fail(ngettext("'--edit {number}' requested but there's only "
+                          "{maxnum} {cli_flag} object in the XML",
+                          "'--edit {number}' requested but there are only "
+                          "{maxnum} {cli_flag} objects in the XML",
+                          len(objlist)).format(
+                number=idx, maxnum=len(objlist),
+                cli_flag=parserclass.cli_flag_name()))
 
         if idx > 0:
             idx -= 1
@@ -239,10 +239,10 @@ def action_edit(action, guest):
     else:
         inst = guest
         if (selector and selector != '1' and selector != 'all'):
-            fail(_("'--edit %(option)s' doesn't make sense with "
-                   "--%(objecttype)s, just use empty '--edit'") %
-                 {"option": selector,
-                  "objecttype": parserclass.cli_arg_name})
+            fail(_("'--edit {option}' doesn't make sense with "
+                   "{cli_flag}, just use empty '--edit'").format(
+                   option=selector,
+                   cli_flag=parserclass.cli_flag_name()))
 
     devs = []
     for editinst in xmlutil.listify(inst):
