@@ -843,7 +843,7 @@ class Guest(XMLBuilder):
             dev.rendernode = spicedev.rendernode
         self.add_device(dev)
 
-    def _convert_to_vnc_graphics(self):
+    def _convert_to_vnc_graphics(self, agent):
         """
         If there's already VNC graphics configured, we leave it intact,
         but rip out all evidence of other graphics devices.
@@ -894,6 +894,10 @@ class Guest(XMLBuilder):
             dev.add_child(listen)
         dev.set_defaults(self)
 
+        if agent:
+            agent.source.clipboard_copypaste = srcdev.clipboard_copypaste
+            agent.source.mouse_mode = srcdev.mouse_mode
+
     def _convert_to_vnc_video(self):
         """
         If there's no video device, add a default one.
@@ -920,7 +924,18 @@ class Guest(XMLBuilder):
                           "removing it instead.", dev.model)
                 self.remove_device(dev)
 
-    def convert_to_vnc(self):
+    def _add_qemu_vdagent(self):
+        if any(c for c in self.devices.channel if
+               c.type == c.TYPE_QEMUVDAGENT):
+            return
+
+        dev = DeviceChannel(self.conn)
+        dev.type = dev.TYPE_QEMUVDAGENT
+        dev.set_defaults(self)
+        self.add_device(dev)
+        return dev
+
+    def convert_to_vnc(self, qemu_vdagent=False):
         """
         Convert existing XML to have one VNC graphics connection.
         """
@@ -930,7 +945,11 @@ class Guest(XMLBuilder):
         # Could be necessary if XML is in broken state.
         self._force_remove_spice_devices()
 
-        self._convert_to_vnc_graphics()
+        agent = None
+        if qemu_vdagent:
+            agent = self._add_qemu_vdagent()
+
+        self._convert_to_vnc_graphics(agent)
         self._convert_to_vnc_video()
 
     def set_defaults(self, _guest):

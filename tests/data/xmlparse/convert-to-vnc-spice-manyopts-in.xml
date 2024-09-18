@@ -12,6 +12,8 @@
     <graphics type='spice' port='5907' tlsPort='5901' autoport='no' passwd='sercet' passwdValidTo='2011-05-31T16:11:22' connected='disconnect' keymap='de' listen='127.0.0.1'>
       <listen type='socket' socket='/tmp/spice.sock'/>
       <listen type='address' address='127.0.0.1'/>
+      <clipboard copypaste='no'/>
+      <mouse mode='client'/>
       <gl enable='yes' rendernode='/dev/my/rendernode'/>
     </graphics>
     <graphics type='sdl'/>
