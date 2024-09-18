@@ -796,6 +796,38 @@ class Guest(XMLBuilder):
         else:
             self._remove_spice_devices(inst)
 
+    def convert_to_q35(self, num_pcie_root_ports=None):
+        self.os.machine = "q35"
+
+        if num_pcie_root_ports is not None:
+            self.num_pcie_root_ports = int(num_pcie_root_ports)
+
+        for dev in self.devices.get_all():
+            if (dev.DEVICE_TYPE == "controller" and
+                dev.type in ["pci", "ide"]):
+                self.remove_device(dev)
+                continue
+
+            if (dev.DEVICE_TYPE == "sound" and
+                dev.model == "ich6"):
+                dev.model = "ich9"
+
+            if (dev.DEVICE_TYPE == "interface" and
+                dev.model == "e1000"):
+                dev.model = "e1000e"
+
+            if (dev.DEVICE_TYPE == "disk" and
+                dev.bus == "ide"):
+                dev.bus = "sata"
+                used_targets = [d.target for d in self.devices.disk if d.target]
+                dev.generate_target(used_targets)
+                dev.address.clear()
+
+            if dev.address.type == "pci":
+                dev.address.clear()
+
+        self.add_q35_pcie_controllers()
+
     def set_defaults(self, _guest):
         self.set_capabilities_defaults()
 

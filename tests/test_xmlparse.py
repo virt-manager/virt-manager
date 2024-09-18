@@ -1203,3 +1203,15 @@ def testUnknownEmulatorDomcapsLookup(monkeypatch):
     assert guest.lookup_domcaps()
     assert guest.lookup_domcaps()
     assert seen
+
+
+def testConvertToQ35():
+    conn = utils.URIs.openconn(utils.URIs.kvm_x86)
+
+    def _test(filename_base, **kwargs):
+        guest, outfile = _get_test_content(conn, filename_base)
+        guest.convert_to_q35(**kwargs)
+        _alter_compare(conn, guest.get_xml(), outfile)
+
+    _test("convert-to-q35-win10")
+    _test("convert-to-q35-f39", num_pcie_root_ports=5)
