@@ -664,7 +664,6 @@ def build_guest_instance(conn, options):
         # default disk paths are generated based on VM name
         set_cli_default_name(guest)
         cli.run_all_parsers(options, guest)
-        cli.parse_xmlcli(guest, options.xml)
         set_cli_defaults(options, guest)
 
     installer.set_install_defaults(guest)

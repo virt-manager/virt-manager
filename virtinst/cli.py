@@ -493,7 +493,7 @@ def fail_conflicting(option1, option2):
 
 def _get_completer_parsers():
     return VIRT_PARSERS + [ParserCheck, ParserLocation,
-            ParserUnattended, ParserInstall, ParserCloudInit, ParserXML,
+            ParserUnattended, ParserInstall, ParserCloudInit,
             ParserOSVariant]
 
 
@@ -947,6 +947,7 @@ def add_os_variant_option(parser, virtinstall):
 
 
 def add_xml_option(grp):
+    ParserXML.register()
     grp.add_argument("--xml", action="append", default=[],
             help=_("Perform raw XML XPath options on the final XML. Example:\n"
                    "--xml ./cpu/@mode=host-passthrough\n"
@@ -1608,23 +1609,21 @@ class ParserXML(VirtCLIParser):
         cls.add_arg("xpath.create", "xpath_create", can_comma=True)
         cls.add_arg("xpath.value", "xpath_value", can_comma=True)
 
-    def _parse(self, inst):
+    def parse(self, inst):
+        """
+        Parse --xml option string into XMLManualAction instances and append
+        to guest.xml_actions.
+        """
+        inst = self.guest.xml_actions.new()
+
+        # Default `--xml FOO` to `--xml xpath.set=FOO`
         if not self.optstr.startswith("xpath."):
             self.optdict.clear()
             self.optdict["xpath.set"] = self.optstr
 
-        super()._parse(inst)
+        super().parse(inst)
 
-
-def parse_xmlcli(guest, parservalue):
-    """
-    Parse --xml option string into XMLManualAction instances and append
-    to guest.xml_actions.
-    """
-    for optstr in parservalue:
-        inst = guest.xml_actions.new()
-        ParserXML(optstr).parse(inst)
-        guest.xml_actions.append(inst)
+        self.guest.xml_actions.append(inst)
 
 
 def _add_xpath_args(cls):
