@@ -13,6 +13,11 @@
       <listen type="socket" socket="/tmp/spice.sock"/>
       <listen type="address" address="127.0.0.1"/>
     </graphics>
+    <video>
+      <model type="virtio" primary="yes">
+        <acceleration accel3d="yes"/>
+      </model>
+    </video>
     <graphics type="egl-headless">
       <gl rendernode="/dev/my/rendernode"/>
     </graphics>
