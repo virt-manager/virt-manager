@@ -26,5 +26,15 @@
     </video>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>
+    <serial type='spiceport'>
+      <source channel='org.qemu.console.serial.0'/>
+      <target type='isa-serial' port='0'>
+        <model name='isa-serial'/>
+      </target>
+    </serial>
+    <console type='spiceport'>
+      <source channel='org.qemu.console.serial.0'/>
+      <target type='serial' port='0'/>
+    </console>
   </devices>
 </domain>

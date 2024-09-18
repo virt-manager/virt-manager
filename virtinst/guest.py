@@ -1355,10 +1355,16 @@ class Guest(XMLBuilder):
             if redirdev.type == "spicevmc":
                 self.devices.remove_child(redirdev)
 
+    def _remove_spiceport(self):
+        for dev in self.devices.serial + self.devices.console:
+            if dev.type == dev.TYPE_SPICEPORT:
+                self.devices.remove_child(dev)
+
     def _force_remove_spice_devices(self):
         self._remove_spice_audio()
         self._remove_spice_channels()
         self._remove_spice_usbredir()
+        self._remove_spiceport()
 
     def _remove_spice_devices(self, rmdev):
         if rmdev.DEVICE_TYPE != "graphics" or self.has_spice():
