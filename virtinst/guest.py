@@ -894,6 +894,32 @@ class Guest(XMLBuilder):
             dev.add_child(listen)
         dev.set_defaults(self)
 
+    def _convert_to_vnc_video(self):
+        """
+        If there's no video device, add a default one.
+        If there's any qxl device, reset its config to app defaults.
+        """
+        if not self.devices.video:
+            videodev = DeviceVideo(self.conn)
+            videodev.set_defaults(self)
+            self.add_device(videodev)
+            return
+
+        qxl_devs = [v for v in self.devices.video if v.model == "qxl"]
+        if qxl_devs and not any(dev.primary for dev in self.devices.video):
+            # Make sure `primary` flag is set, we need it up ahead
+            self.devices.video[0].primary = True
+
+        for dev in qxl_devs:
+            is_primary = dev.primary
+            dev.clear()
+            dev.set_defaults(self)
+            if not is_primary and dev.model != "virtio":
+                # Device can't be non-primary, so just remove it
+                log.debug("Can't use model=%s for non-primary video device, "
+                          "removing it instead.", dev.model)
+                self.remove_device(dev)
+
     def convert_to_vnc(self):
         """
         Convert existing XML to have one VNC graphics connection.
@@ -905,6 +931,7 @@ class Guest(XMLBuilder):
         self._force_remove_spice_devices()
 
         self._convert_to_vnc_graphics()
+        self._convert_to_vnc_video()
 
     def set_defaults(self, _guest):
         self.set_capabilities_defaults()

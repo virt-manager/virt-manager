@@ -23,7 +23,7 @@
     <sound model="ich9"/>
     <audio type='spice'/>
     <video>
-      <model type="virtio"/>
+      <model type="qxl" heads='4' vgamem='1'/>
     </video>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="spicevmc"/>

@@ -15,6 +15,14 @@
       <gl enable='yes' rendernode='/dev/my/rendernode'/>
     </graphics>
     <graphics type='sdl'/>
+    <video>
+      <model type='virtio'>
+        <acceleration accel3d='yes'/>
+      </model>
+    </video>
+    <video>
+      <model type='qxl'/>
+    </video>
   </devices>
 </domain>
 
