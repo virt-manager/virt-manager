@@ -222,6 +222,28 @@ Sub options are:
     we add to the VM by default.
 
 
+``--convert-to-vnc``
+^^^^^^^^^^^^^^^^^^^^
+
+**Syntax:** ``--convert-to-vnc`` [OPTIONS]
+
+Convert an existing VM to exclusively use a single VNC graphics device.
+
+It will attempt to remove all references to any non-VNC graphics config, like
+Spice. For example:
+
+* ``qxl`` devices will be replaced
+* all ``spicevmc`` and ``spiceport`` devices will be removed
+* spice GL will be converted to ``egl-headless``
+
+Sub options are:
+
+``qemu-vdagent=on|off``
+    Add a ``qemu-vdagent`` device if one is not already configured.
+    This replaces some functionality of the spice vdagent.
+    This defaults to ``off`` but that could change in the future.
+
+
 XML OPTIONS
 ===========
 

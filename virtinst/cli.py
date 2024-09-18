@@ -1678,6 +1678,28 @@ class ParserConvertToQ35(VirtCLIParser):
         self.guest.convert_to_q35(**inst.__dict__)
 
 
+############################
+# --convert-to-vnc parsing #
+############################
+
+class ParserConvertToVNC(VirtCLIParser):
+    cli_arg_name = "convert_to_vnc"
+    supports_clearxml = False
+
+    @classmethod
+    def _virtcli_class_init(cls):
+        VirtCLIParser._virtcli_class_init_common(cls)
+        cls.add_arg("qemu-vdagent", "qemu_vdagent")
+
+    def parse(self, inst):
+        class ConvertToVNCData:
+            qemu_vdagent = None
+
+        inst = ConvertToVNCData()
+        super().parse(inst)
+        self.guest.convert_to_vnc(**inst.__dict__)
+
+
 ########################
 # --unattended parsing #
 ########################

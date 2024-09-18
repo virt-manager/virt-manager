@@ -1,0 +1,15 @@
+   <on_reboot>restart</on_reboot>
+   <on_crash>destroy</on_crash>
+   <devices>
++    <channel type="qemu-vdagent">
++      <target type="virtio" name="com.redhat.spice.0"/>
++    </channel>
++    <graphics type="vnc" port="-1"/>
++    <video>
++      <model type="vga"/>
++    </video>
+   </devices>
+ </domain>
+
+Domain 'test' defined successfully.
+Changes will take effect after the domain is fully powered off.

@@ -1439,6 +1439,8 @@ c.add_compare("test --add-device --network default --update --confirm --no-defin
 # --convert-* tests
 c.add_compare("--connect %(URI-KVM-X86)s --print-diff --define --edit --convert-to-q35", "convert-to-q35", input_file=(_VIRTXMLDIR + "convert-to-q35-win10-in.xml"))
 c.add_compare("--connect %(URI-KVM-X86)s --print-diff --define --edit --convert-to-q35 num_pcie_root_ports=7", "convert-to-q35-numports", input_file=(_VIRTXMLDIR + "convert-to-q35-win10-in.xml"))
+c.add_compare("--connect %(URI-KVM-X86)s test --print-diff --define --edit --convert-to-vnc", "convert-to-vnc")
+c.add_compare("--connect %(URI-KVM-X86)s test --print-diff --define --edit --convert-to-vnc qemu-vdagent=on", "convert-to-vnc-vdagent")
 
 # Regression testing for historical --add-device/--remove-device/--edit multi option handling
 # Single `--edit` with multiple options are processed in sequence
