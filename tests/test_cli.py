@@ -1436,6 +1436,10 @@ c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk so
 c.add_compare("test --add-device --network default --update --confirm", "update-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1", "VIRTINST_TEST_SUITE_INCREMENT_MACADDR": "1"}, input_text="yes\nyes\n")  # test hotplug success
 c.add_compare("test --add-device --network default --update --confirm --no-define", "update-nodefine-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1"}, input_text="yes\n")  # test hotplug success without define
 
+# --convert-* tests
+c.add_compare("--connect %(URI-KVM-X86)s --print-diff --define --edit --convert-to-q35", "convert-to-q35", input_file=(_VIRTXMLDIR + "convert-to-q35-win10-in.xml"))
+c.add_compare("--connect %(URI-KVM-X86)s --print-diff --define --edit --convert-to-q35 num_pcie_root_ports=7", "convert-to-q35-numports", input_file=(_VIRTXMLDIR + "convert-to-q35-win10-in.xml"))
+
 # Regression testing for historical --add-device/--remove-device/--edit multi option handling
 # Single `--edit` with multiple options are processed in sequence
 c.add_compare("test --print-diff --define --edit --boot emulator=/foo --boot bootmenu.enable=yes", "multi-edit-boot-backcompat")

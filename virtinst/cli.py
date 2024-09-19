@@ -1324,6 +1324,8 @@ class VirtCLIParser(metaclass=_InitClass):
     @cli_arg_name: The command line argument this maps to, so
         "hostdev" for --hostdev
     """
+    OPTSTR_EMPTY = 1
+
     guest_propname = None
     remove_first = None
     stub_none = True
@@ -1419,6 +1421,8 @@ class VirtCLIParser(metaclass=_InitClass):
         self.optstr = optstr
         self.guest = guest
         self.editing = editing
+        if self.optstr == self.OPTSTR_EMPTY:
+            self.optstr = ""
         self.optdict = _parse_optstr_to_dict(self.optstr,
                 self._virtargs, xmlutil.listify(self.remove_first)[:])
 
@@ -1649,6 +1653,29 @@ def _add_xpath_args(cls):
             can_comma=True, lookup_cb=None, find_inst_cb=find_xpath_cb)
     _add_arg("xpath[0-9]*.value", "xpath_value",
             can_comma=True, lookup_cb=None, find_inst_cb=find_xpath_cb)
+
+
+############################
+# --convert-to-q35 parsing #
+############################
+
+class ParserConvertToQ35(VirtCLIParser):
+    cli_arg_name = "convert_to_q35"
+    supports_clearxml = False
+
+    @classmethod
+    def _virtcli_class_init(cls):
+        VirtCLIParser._virtcli_class_init_common(cls)
+        cls.add_arg("num_pcie_root_ports", "num_pcie_root_ports")
+
+
+    def parse(self, inst):
+        class ConvertToQ35Data:
+            num_pcie_root_ports = None
+
+        inst = ConvertToQ35Data()
+        super().parse(inst)
+        self.guest.convert_to_q35(**inst.__dict__)
 
 
 ########################
