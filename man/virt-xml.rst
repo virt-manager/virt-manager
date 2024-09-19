@@ -197,6 +197,31 @@ GUEST OS OPTIONS
     See virt-install(1) documentation for more details about ``--os-variant/--osinfo``
 
 
+CONVERSION OPTIONS
+==================
+
+``--convert-to-q35``
+^^^^^^^^^^^^^^^^^^^^
+
+**Syntax:** ``--convert-to-q35`` [OPTIONS]
+
+Convert an existing VM config from PC/i440FX to Q35 machine type.
+This largely consists of:
+
+* Convert device topology from PCI to PCIe
+* Convert any IDE storage to SATA
+
+You may need to make config changes inside the VM to handle this as well.
+For example, Windows 10 may not find the boot device after IDE to SATA conversion.
+But booting into safe mode once may fix it.
+
+Sub options are:
+
+``num_pcie_root_ports=NUM``
+    Control the number of default ``pcie-root-port`` controller devices
+    we add to the VM by default.
+
+
 XML OPTIONS
 ===========
 
