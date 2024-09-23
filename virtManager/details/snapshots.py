@@ -165,12 +165,6 @@ class vmmSnapshotNew(vmmGObjectUI):
         self.widget("snapshot-new-status-icon").set_from_icon_name(
             self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
 
-        sn = self._get_screenshot()
-        uiutil.set_grid_row_visible(
-            self.widget("snapshot-new-screenshot"), bool(sn))
-        if sn:
-            self.widget("snapshot-new-screenshot").set_from_pixbuf(sn)
-
         self._reset_snapshot_mode()
 
         self._reset_snapshot_memory_path()
@@ -265,10 +259,7 @@ class vmmSnapshotNew(vmmGObjectUI):
         if not ext:
             return  # pragma: no cover
 
-        newpix = _make_screenshot_pixbuf(mime, sdata)
-        setattr(newpix, "vmm_mimetype", mime)
-        setattr(newpix, "vmm_sndata", sdata)
-        return newpix
+        return mime, sdata
 
     def _get_mode(self):
         mode_external = self.widget("snapshot-new-mode-external")
@@ -308,19 +299,6 @@ class vmmSnapshotNew(vmmGObjectUI):
         except Exception as e:
             return self.err.val_err(_("Error validating snapshot: %s") % e)
 
-    def _get_screenshot_data_for_save(self):
-        snwidget = self.widget("snapshot-new-screenshot")
-        if not snwidget.is_visible():
-            return None, None
-
-        sn = snwidget.get_pixbuf()
-        if not sn:  # pragma: no cover
-            return None, None
-
-        mime = getattr(sn, "vmm_mimetype", None)
-        sndata = getattr(sn, "vmm_sndata", None)
-        return mime, sndata
-
     def _do_create_snapshot(self, asyncjob, xml, name, mime, sndata, diskOnly):
         ignore = asyncjob
 
@@ -352,7 +330,7 @@ class vmmSnapshotNew(vmmGObjectUI):
 
         xml = snap.get_xml()
         name = snap.name
-        mime, sndata = self._get_screenshot_data_for_save()
+        mime, sndata = (self._get_screenshot() or (None, None))
         diskOnly = not self.vm.is_active() and self._get_mode() == "external"
 
         self.set_finish_cursor()
