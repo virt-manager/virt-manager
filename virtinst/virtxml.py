@@ -546,7 +546,7 @@ def main(conn=None):
     elif vm_is_running and not performed_update:
         print_stdout(
             _("Changes will take effect after the domain is fully powered off."))
-    elif defined_xml_is_unchanged(conn, domain, original_xml):
+    elif defined_xml_is_unchanged(conn, dom, original_xml):
         log.warning(_("XML did not change after domain define. You may "
             "have changed a value that libvirt is setting by default."))
 
