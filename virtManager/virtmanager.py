@@ -191,9 +191,6 @@ def main():
         drop_tty()
         do_drop_stdio = True
 
-        # Ignore SIGHUP, otherwise a serial console closing drops the whole app
-        signal.signal(signal.SIGHUP, signal.SIG_IGN)
-
     leftovers = _import_gtk(leftovers)
     Gtk = globals()["Gtk"]
 
