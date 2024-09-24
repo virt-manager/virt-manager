@@ -185,6 +185,12 @@ def main():
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir
 
+    # Force SSH to use askpass if a password is required,
+    # rather than possibly prompting on a terminal the user isn't looking at.
+    os.environ.setdefault("SSH_ASKPASS_REQUIRE", "force")
+    log.debug("Using SSH_ASKPASS_REQUIRE=%s",
+              os.environ["SSH_ASKPASS_REQUIRE"])
+
     # Now we've got basic environment up & running we can fork
     do_drop_stdio = False
     if not options.no_fork and not options.debug:
