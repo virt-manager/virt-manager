@@ -492,22 +492,21 @@ class vmmConsolePages(vmmGObjectUI):
             scroll.set_policy(Gtk.PolicyType.AUTOMATIC,
                               Gtk.PolicyType.AUTOMATIC)
 
-        if is_resizeguest:
-            # With resize guest, we don't want to maintain aspect ratio,
-            # since the guest can resize to arbitrary resolutions.
-            viewer_alloc = Gdk.Rectangle()
-            viewer_alloc.width = req.width
-            viewer_alloc.height = req.height
-            self._viewer.console_size_allocate(viewer_alloc)
-            return
-
-        if not is_scale:
-            # Scaling disabled is easy, just force the VNC widget size. Since
-            # we are inside a scrollwindow, it shouldn't cause issues.
+        # If scaling is enabled, we set the viewer widget to the same
+        # size as the scrollwindow, and the viewer scales the VM to fit.
+        #
+        # If resizeguest is enabled, regardless of scaling, we need to
+        # do the same as the scaling case, so the viewer knows the size
+        # of the window. The viewer then sends that size to the guest,
+        # and it (hopefully) changes VM resolution to match.
+        #
+        # When neither are enabled, we force the viewer widget to the size
+        # of VM resolution, so scroll bars show up when the window is shrunk.
+        if not is_scale and not is_resizeguest:
             self._viewer.console_set_size_request(desktop_w, desktop_h)
             return
 
-        # Make sure there is no hard size requirement so we can scale down
+        # Reset any previous size_request
         self._viewer.console_set_size_request(-1, -1)
 
         viewer_alloc = Gdk.Rectangle()
