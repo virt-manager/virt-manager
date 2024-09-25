@@ -680,9 +680,7 @@ class vmmVMWindow(vmmGObjectUI):
         val = self.vm.get_console_resizeguest()
         widget = self.widget("details-menu-view-resizeguest")
         widget.set_tooltip_text(tooltip)
-        widget.set_sensitive(not bool(tooltip))
-        if not tooltip:
-            self.widget("details-menu-view-resizeguest").set_active(bool(val))
+        self.widget("details-menu-view-resizeguest").set_active(bool(val))
 
         self._console.vmwindow_sync_resizeguest_with_display()
 
