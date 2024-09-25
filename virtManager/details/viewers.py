@@ -301,6 +301,9 @@ class VNCViewer(Viewer):
         self._display.set_force_size(False)
         self._display.set_pointer_grab(True)
 
+        if _gtkvnc_check_display_support("set_keep_aspect_ratio"):
+            self._display.set_keep_aspect_ratio(True)
+
         self.emit("add-display-widget", self._display)
         self._display.realize()
 
