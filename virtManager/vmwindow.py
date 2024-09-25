@@ -628,6 +628,8 @@ class vmmVMWindow(vmmGObjectUI):
         self.widget("control-fullscreen").set_sensitive(allow_fullscreen)
         self.widget("details-menu-view-fullscreen").set_sensitive(
             allow_fullscreen)
+        self.widget("detains-menu-view-size-to-vm").set_sensitive(
+            allow_fullscreen)
 
     def _console_refresh_scaling_from_settings(self):
         scale_type = self.vm.get_console_scaling()
