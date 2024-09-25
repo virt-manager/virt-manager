@@ -75,6 +75,7 @@ class Viewer(vmmGObject):
         self._ginfo = ginfo
         self._tunnels = SSHTunnels(self._ginfo)
         self._keyboard_grab = False
+        self._desktop_resolution = None
 
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
@@ -164,6 +165,23 @@ class Viewer(vmmGObject):
         ssherr = self._tunnels.get_err_output()
         self.emit("disconnected", errdetails, ssherr)
 
+    def _set_desktop_resolution(self, w, h):
+        if w == 0 or h == 0:
+            return  # pragma: no cover
+
+        origres = self._desktop_resolution
+        newres = (w, h)
+        if origres != newres:
+            log.debug("vm=%s resolution changed: orig=%s new=%s",
+                      self._vm.get_name(), origres, newres)
+        self._desktop_resolution = newres
+
+    def _get_desktop_resolution(self):
+        ret = self._desktop_resolution or (0, 0)
+        if (ret[0] == 0) or (ret[1] == 0):
+            return None
+        return ret
+
 
     #######################################################
     # Internal API that will be overwritten by subclasses #
@@ -189,9 +207,6 @@ class Viewer(vmmGObject):
     def _open_host(self):
         raise NotImplementedError()
     def _open_fd(self, fd):
-        raise NotImplementedError()
-
-    def _get_desktop_resolution(self):
         raise NotImplementedError()
 
     def _get_scaling(self):
@@ -246,14 +261,7 @@ class Viewer(vmmGObject):
         return self._get_grab_keys()
 
     def console_get_desktop_resolution(self):
-        ret = self._get_desktop_resolution()
-        if not ret:
-            return ret  # pragma: no cover
-
-        # Don't pass on bogus resolutions
-        if (ret[0] == 0) or (ret[1] == 0):
-            return None
-        return ret
+        return self._get_desktop_resolution()
 
     def console_get_scaling(self):
         return self._get_scaling()
@@ -287,7 +295,6 @@ class VNCViewer(Viewer):
     def __init__(self, *args, **kwargs):
         Viewer.__init__(self, *args, **kwargs)
         self._display = None
-        self._desktop_resolution = None
 
 
     ###################
@@ -339,8 +346,7 @@ class VNCViewer(Viewer):
         self._emit_disconnected()
 
     def _desktop_resize(self, src_ignore, w, h):
-        self._desktop_resolution = (w, h)
-        # Queue a resize
+        self._set_desktop_resolution(w, h)
         self.emit("size-allocate", None)
 
     def _auth_failure_cb(self, ignore, msg):
@@ -421,9 +427,6 @@ class VNCViewer(Viewer):
 
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys])
-
-    def _get_desktop_resolution(self):
-        return self._desktop_resolution
 
     def _set_username(self, cred):
         self._display.set_credential(GtkVnc.DisplayCredential.USERNAME, cred)
@@ -644,6 +647,9 @@ class SpiceViewer(Viewer):
             self._display = SpiceClientGtk.Display.new(self._spice_session,
                                                       channel_id)
             self._init_widget()
+            _SIGS.connect_after(
+                self._display_channel, "display-primary-create",
+                self._display_primary_create_cb)
             self.emit("connected")
 
         elif (type(channel) in [SpiceClientGLib.PlaybackChannel,
@@ -656,6 +662,9 @@ class SpiceViewer(Viewer):
 
     def _agent_connected_cb(self, src, val):
         self.emit("agent-connected")  # pragma: no cover
+
+    def _display_primary_create_cb(self, *args):
+        self._set_desktop_resolution(args[2], args[3])
 
 
     ################################
@@ -710,11 +719,6 @@ class SpiceViewer(Viewer):
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys],
                                       SpiceClientGtk.DisplayKeyEvent.CLICK)
-
-    def _get_desktop_resolution(self):
-        if not self._display_channel:
-            return None  # pragma: no cover
-        return self._display_channel.get_properties("width", "height")
 
     def _has_agent(self):
         if not self._main_channel:
