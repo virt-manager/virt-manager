@@ -34,8 +34,19 @@ from ..baseclass import vmmGObject
 # VNC/Spice abstraction handling #
 ##################################
 
+_GTKVNC_SUPPORT_CACHE = {}
+
+
+def _gtkvnc_check_display_support(funcname):
+    if funcname not in _GTKVNC_SUPPORT_CACHE:
+        val = hasattr(GtkVnc.Display, funcname)
+        log.debug("GtkVnc.Display %s support=%s", funcname, val)
+        _GTKVNC_SUPPORT_CACHE[funcname] = val
+    return _GTKVNC_SUPPORT_CACHE[funcname]
+
+
 def _gtkvnc_supports_resizeguest():
-    return hasattr(GtkVnc.Display, "set_allow_resize")
+    return _gtkvnc_check_display_support("set_allow_resize")
 
 
 class Viewer(vmmGObject):
