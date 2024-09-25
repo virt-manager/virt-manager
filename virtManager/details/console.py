@@ -482,13 +482,8 @@ class vmmConsolePages(vmmGObjectUI):
         is_scale = self._viewer.console_get_scaling()
         is_resizeguest = self._viewer.console_get_resizeguest()
 
-        dx = 0
-        dy = 0
-        align_ratio = float(req.width) / float(req.height)
-
         # pylint: disable=unpacking-non-sequence
         desktop_w, desktop_h = res
-        desktop_ratio = float(desktop_w) / float(desktop_h)
 
         if is_scale:
             # Make sure we never show scrollbars when scaling
@@ -515,22 +510,9 @@ class vmmConsolePages(vmmGObjectUI):
         # Make sure there is no hard size requirement so we can scale down
         self._viewer.console_set_size_request(-1, -1)
 
-        # Make sure desktop aspect ratio is maintained
-        if align_ratio > desktop_ratio:
-            desktop_w = int(req.height * desktop_ratio)
-            desktop_h = req.height
-            dx = (req.width - desktop_w) // 2
-
-        else:
-            desktop_w = req.width
-            desktop_h = int(req.width // desktop_ratio)
-            dy = (req.height - desktop_h) // 2
-
         viewer_alloc = Gdk.Rectangle()
-        viewer_alloc.x = dx
-        viewer_alloc.y = dy
-        viewer_alloc.width = desktop_w
-        viewer_alloc.height = desktop_h
+        viewer_alloc.width = req.width
+        viewer_alloc.height = req.height
         self._viewer.console_size_allocate(viewer_alloc)
 
     def _viewer_get_resizeguest_tooltip(self):
