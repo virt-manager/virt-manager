@@ -723,8 +723,7 @@ class SpiceViewer(Viewer):
     def _has_agent(self):
         if not self._main_channel:
             return False  # pragma: no cover
-        return (self._main_channel.get_property("agent-connected") or
-                self.config.CLITestOptions.spice_agent)
+        return self._main_channel.get_property("agent-connected")
 
     def _open_host(self):
         host, port, tlsport = self._ginfo.get_conn_host()

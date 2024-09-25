@@ -474,9 +474,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         res = self._viewer.console_get_desktop_resolution()
         if res is None:
-            if not self.config.CLITestOptions.fake_console_resolution:
-                return
-            res = (800, 600)
+            return
 
         scroll = self.widget("console-gfx-scroll")
         is_scale = self._viewer.console_get_scaling()

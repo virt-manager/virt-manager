@@ -372,9 +372,7 @@ def testConsoleLXCSerial(app, dom):
     lib.utils.check(lambda: not win.showing)
 
 
-@_vm_wrapper("uitests-spice-specific",
-        opts=["--test-options=spice-agent",
-              "--test-options=fake-console-resolution"])
+@_vm_wrapper("uitests-spice-specific")
 def testConsoleSpiceSpecific(app, dom):
     """
     Spice specific behavior. Has lots of devices that will open
