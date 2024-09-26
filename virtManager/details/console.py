@@ -553,19 +553,14 @@ class vmmConsolePages(vmmGObjectUI):
         if not self._viewer:
             return
 
-        fs = self._in_fullscreen
-        curscale = self._viewer.console_get_scaling()
         scale_type = self.vm.get_console_scaling()
 
-        if (scale_type == self.config.CONSOLE_SCALE_NEVER and
-            curscale is True):
+        if scale_type == self.config.CONSOLE_SCALE_NEVER:
             self._viewer.console_set_scaling(False)
-        elif (scale_type == self.config.CONSOLE_SCALE_ALWAYS and
-              curscale is False):
+        elif scale_type == self.config.CONSOLE_SCALE_ALWAYS:
             self._viewer.console_set_scaling(True)
-        elif (scale_type == self.config.CONSOLE_SCALE_FULLSCREEN and
-              curscale != fs):
-            self._viewer.console_set_scaling(fs)
+        elif scale_type == self.config.CONSOLE_SCALE_FULLSCREEN:
+            self._viewer.console_set_scaling(self._in_fullscreen)
 
         # Refresh viewer size
         self.widget("console-gfx-scroll").queue_resize()
