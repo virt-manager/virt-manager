@@ -479,6 +479,7 @@ class vmmConsolePages(vmmGObjectUI):
         scroll = self.widget("console-gfx-scroll")
         is_scale = self._viewer.console_get_scaling()
         is_resizeguest = self._viewer.console_get_resizeguest()
+        scale_factor = scroll.get_scale_factor()
 
         # pylint: disable=unpacking-non-sequence
         desktop_w, desktop_h = res
@@ -500,7 +501,12 @@ class vmmConsolePages(vmmGObjectUI):
         #
         # When neither are enabled, we force the viewer widget to the size
         # of VM resolution, so scroll bars show up when the window is shrunk.
-        if not is_scale and not is_resizeguest:
+        #
+        # ...except when scale_factor != 1. Any other scale_factor, and
+        # gtk3 doesn't give us a reliable way to map VM resolution to
+        # host widget pixel dimensions. This means our scroll window
+        # effectively won't work when desktop scaling is enabled.
+        if not is_scale and not is_resizeguest and scale_factor == 1:
             self._viewer.console_set_size_request(desktop_w, desktop_h)
             return
 
