@@ -469,20 +469,13 @@ class vmmConsolePages(vmmGObjectUI):
     ###########################
 
     def _scroll_size_allocate(self, src_ignore, req):
-        if not self._viewer:
-            return
-
-        res = self._viewer.console_get_desktop_resolution()
-        if res is None:
+        if not self._viewer_is_visible():
             return
 
         scroll = self.widget("console-gfx-scroll")
         is_scale = self._viewer.console_get_scaling()
         is_resizeguest = self._viewer.console_get_resizeguest()
         scale_factor = scroll.get_scale_factor()
-
-        # pylint: disable=unpacking-non-sequence
-        desktop_w, desktop_h = res
 
         if is_scale:
             # Make sure we never show scrollbars when scaling
@@ -507,7 +500,8 @@ class vmmConsolePages(vmmGObjectUI):
         # host widget pixel dimensions. This means our scroll window
         # effectively won't work when desktop scaling is enabled.
         if not is_scale and not is_resizeguest and scale_factor == 1:
-            self._viewer.console_set_size_request(desktop_w, desktop_h)
+            res = self._viewer.console_get_desktop_resolution() or (-1, -1)
+            self._viewer.console_set_size_request(*res)
             return
 
         # Reset any previous size_request
