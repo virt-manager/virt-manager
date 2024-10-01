@@ -535,6 +535,10 @@ class vmmConsolePages(vmmGObjectUI):
             log.debug("_set_size_to_vm but no VM desktop resolution set")
             return
 
+        # Note: gtk3 has no APIs for telling us about fractional scaling.
+        # without that, we can't reliably figure out how VM dimensions
+        # should map to host widget dimensions.
+
         top_w, top_h = self.topwin.get_size()
         viewer_alloc = self.widget("console-gfx-scroll").get_allocation()
         desktop_w, desktop_h = vm_resolution
