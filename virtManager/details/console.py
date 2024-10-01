@@ -528,19 +528,24 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _set_size_to_vm(self):
         # Resize the console to best fit the VM resolution
+        vm_resolution = self._viewer.console_get_desktop_resolution()
         if not self._viewer:
             return  # pragma: no cover
-        if not self._viewer.console_get_desktop_resolution():
-            return  # pragma: no cover
+        if not vm_resolution:  # pragma: no cover
+            log.debug("_set_size_to_vm but no VM desktop resolution set")
+            return
 
         top_w, top_h = self.topwin.get_size()
         viewer_alloc = self.widget("console-gfx-scroll").get_allocation()
-        desktop_w, desktop_h = self._viewer.console_get_desktop_resolution()
+        desktop_w, desktop_h = vm_resolution
 
+        valw = desktop_w + (top_w - viewer_alloc.width)
+        valh = desktop_h + (top_h - viewer_alloc.height)
+
+        log.debug("_set_size_to_vm vm=(%s, %s) window=(%s, %s)",
+                  desktop_w, desktop_h, valw, valh)
         self.topwin.unmaximize()
-        self.topwin.resize(
-            desktop_w + (top_w - viewer_alloc.width),
-            desktop_h + (top_h - viewer_alloc.height))
+        self.topwin.resize(valw, valh)
 
 
     ################
