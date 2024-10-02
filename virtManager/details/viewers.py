@@ -124,8 +124,6 @@ class Viewer(vmmGObject):
             self._display.grab_focus()
     def _set_size_request(self, *args, **kwargs):
         return self._display.set_size_request(*args, **kwargs)
-    def _size_allocate(self, *args, **kwargs):
-        return self._display.size_allocate(*args, **kwargs)
 
     def _get_pixbuf(self):
         return self._display.get_pixbuf()
@@ -240,8 +238,6 @@ class Viewer(vmmGObject):
         return bool(self._display and self._keyboard_grab)
     def console_set_size_request(self, *args, **kwargs):
         return self._set_size_request(*args, **kwargs)
-    def console_size_allocate(self, *args, **kwargs):
-        return self._size_allocate(*args, **kwargs)
 
     def console_get_pixbuf(self):
         return self._get_pixbuf()

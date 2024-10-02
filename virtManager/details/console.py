@@ -401,7 +401,7 @@ class vmmConsolePages(vmmGObjectUI):
         })
 
         self.widget("console-gfx-scroll").connect("size-allocate",
-            self._scroll_size_allocate)
+            self._scroll_size_allocate_cb)
         self.widget("console-gfx-pages").connect("switch-page",
                 self._page_changed_cb)
 
@@ -468,7 +468,7 @@ class vmmConsolePages(vmmGObjectUI):
     # Resize and scaling APIs #
     ###########################
 
-    def _scroll_size_allocate(self, src_ignore, req):
+    def _scroll_size_allocate_cb(self, src, req):
         if not self._viewer_is_visible():
             return
 
@@ -499,11 +499,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         # Reset any previous size_request
         self._viewer.console_set_size_request(-1, -1)
-
-        viewer_alloc = Gdk.Rectangle()
-        viewer_alloc.width = req.width
-        viewer_alloc.height = req.height
-        self._viewer.console_size_allocate(viewer_alloc)
 
     def _viewer_get_resizeguest_tooltip(self):
         tooltip = ""
