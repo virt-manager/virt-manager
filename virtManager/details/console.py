@@ -763,7 +763,10 @@ class vmmConsolePages(vmmGObjectUI):
         self._pointer_is_grabbed = False
         self.emit("change-title")
 
-    def _viewer_allocate_cb(self, src, req):
+    def _viewer_size_allocate_cb(self, src, req):
+        self._adjust_viewer_size()
+
+    def _viewer_desktop_resolution_changed_cb(self, src):
         self._adjust_viewer_size()
 
     def _viewer_keyboard_grab_cb(self, src):
@@ -853,7 +856,9 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.connect("add-display-widget", self._viewer_add_display_cb)
         self._viewer.connect("pointer-grab", self._pointer_grabbed_cb)
         self._viewer.connect("pointer-ungrab", self._pointer_ungrabbed_cb)
-        self._viewer.connect("size-allocate", self._viewer_allocate_cb)
+        self._viewer.connect("size-allocate", self._viewer_size_allocate_cb)
+        self._viewer.connect("desktop-resolution-changed",
+                             self._viewer_desktop_resolution_changed_cb)
         self._viewer.connect("keyboard-grab", self._viewer_keyboard_grab_cb)
         self._viewer.connect("keyboard-ungrab", self._viewer_keyboard_grab_cb)
         self._viewer.connect("connected", self._viewer_connected_cb)

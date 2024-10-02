@@ -56,6 +56,7 @@ class Viewer(vmmGObject):
     __gsignals__ = {
         "add-display-widget": (vmmGObject.RUN_FIRST, None, [object]),
         "size-allocate": (vmmGObject.RUN_FIRST, None, [object]),
+        "desktop-resolution-changed": (vmmGObject.RUN_FIRST, None, []),
         "pointer-grab": (vmmGObject.RUN_FIRST, None, []),
         "pointer-ungrab": (vmmGObject.RUN_FIRST, None, []),
         "keyboard-grab": (vmmGObject.RUN_FIRST, None, []),
@@ -169,10 +170,13 @@ class Viewer(vmmGObject):
 
         origres = self._desktop_resolution
         newres = (w, h)
-        if origres != newres:
-            log.debug("vm=%s resolution changed: orig=%s new=%s",
-                      self._vm.get_name(), origres, newres)
+        if origres == newres:
+            return  # pragma: no cover
+
+        log.debug("vm=%s resolution changed: orig=%s new=%s",
+                  self._vm.get_name(), origres, newres)
         self._desktop_resolution = newres
+        self.emit("desktop-resolution-changed")
 
     def _get_desktop_resolution(self):
         ret = self._desktop_resolution or (0, 0)
@@ -321,7 +325,7 @@ class VNCViewer(Viewer):
         self._display.connect("vnc-auth-failure", self._auth_failure_cb)
         self._display.connect("vnc-initialized", self._connected_cb)
         self._display.connect("vnc-disconnected", self._disconnected_cb)
-        self._display.connect("vnc-desktop-resize", self._desktop_resize)
+        self._display.connect("vnc-desktop-resize", self._desktop_resize_cb)
 
         self._display.show()
 
@@ -341,9 +345,8 @@ class VNCViewer(Viewer):
         self._tunnels.unlock()
         self._emit_disconnected()
 
-    def _desktop_resize(self, src_ignore, w, h):
+    def _desktop_resize_cb(self, src, w, h):
         self._set_desktop_resolution(w, h)
-        self.emit("size-allocate", None)
 
     def _auth_failure_cb(self, ignore, msg):
         log.debug("VNC auth failure. msg=%s", msg)
