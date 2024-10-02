@@ -653,7 +653,7 @@ class vmmConnection(vmmGObject):
         # This event is triggered when deleting external snapshots and it changes
         # shutoff VM into paused and makes that VM unusable until virt-manager is
         # restarted so we need to ignore it in case VM is shutoff.
-        if obj.is_shutoff():  # pragma: no cover
+        if obj and obj.is_shutoff():  # pragma: no cover
             log.debug("received agent lifecycle event but domain is shutoff, ignoring it")
             return
 
