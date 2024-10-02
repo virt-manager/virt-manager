@@ -425,13 +425,6 @@ class vmmDomain(vmmLibvirtObject):
     def get_install_abort(self):
         return bool(self._install_abort)
 
-    def has_spicevmc_type_redirdev(self):
-        devs = self.xmlobj.devices.redirdev
-        for dev in devs:
-            if dev.type == "spicevmc":
-                return True
-        return False
-
     def has_nvram(self):
         return bool(self.get_xmlobj().is_uefi() or
                     self.get_xmlobj().os.nvram)

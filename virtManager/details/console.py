@@ -702,8 +702,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _viewer_can_usb_redirect(self):
         return (self._viewer_is_visible() and
-                self._viewer.console_has_usb_redirection() and
-                self.vm.has_spicevmc_type_redirdev())
+                self._viewer.console_has_usb_redirection())
 
 
     #########################
@@ -989,9 +988,8 @@ class vmmConsolePages(vmmGObjectUI):
     # API used by vmmVMWindow #
     ###########################
 
-    def vmwindow_viewer_has_usb_redirection(self):
-        return bool(self._viewer and
-            self._viewer.console_has_usb_redirection())
+    def vmwindow_viewer_can_usb_redirect(self):
+        return self._viewer_can_usb_redirect()
     def vmwindow_viewer_get_usb_widget(self):
         return self._viewer.console_get_usb_widget()
     def vmwindow_viewer_get_pixbuf(self):
@@ -1021,8 +1019,6 @@ class vmmConsolePages(vmmGObjectUI):
         return self._consolemenu.get_menu()
     def vmwindow_get_viewer_is_visible(self):
         return self._viewer_is_visible()
-    def vmwindow_get_can_usb_redirect(self):
-        return self._viewer_can_usb_redirect()
     def vmwindow_get_resizeguest_tooltip(self):
         return self._viewer_get_resizeguest_tooltip()
 

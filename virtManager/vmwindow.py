@@ -114,7 +114,7 @@ class vmmVMWindow(vmmGObjectUI):
             "on_details_customize_finish_clicked": self.customize_finish,
             "on_details_cancel_customize_clicked": self._customize_cancel_clicked,
 
-            "on_details_menu_virtual_manager_activate": self.control_vm_menu,
+            "on_details_menu_virtual_manager_activate": self._on_menu_virtual_machine_activate_cb,
             "on_details_menu_screenshot_activate": self.control_vm_screenshot,
             "on_details_menu_usb_redirection": self.control_vm_usb_redirection,
             "on_details_menu_view_toolbar_activate": self.toggle_toolbar,
@@ -490,10 +490,8 @@ class vmmVMWindow(vmmGObjectUI):
         else:
             vmmenu.VMActionUI.resume(self, self.vm)
 
-    def control_vm_menu(self, src_ignore):
-        can_usb = bool(self.vm.has_spicevmc_type_redirdev() and
-                       self._console.vmwindow_viewer_has_usb_redirection())
-        self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
+    def _on_menu_virtual_machine_activate_cb(self, src):
+        self._console_refresh_can_usbredir()
 
     def control_vm_run(self, src_ignore):
         if self._details.vmwindow_has_unapplied_changes():
@@ -609,18 +607,22 @@ class vmmVMWindow(vmmGObjectUI):
 
         paused = self.vm.is_paused()
         is_viewer = self._console.vmwindow_get_viewer_is_visible()
-        can_usb = self._console.vmwindow_get_can_usb_redirect()
 
         self.widget("details-menu-vm-screenshot").set_sensitive(is_viewer)
-        self.widget("details-menu-usb-redirection").set_sensitive(can_usb)
         keycombo_menu = self._console.vmwindow_get_keycombo_menu()
 
         can_sendkey = (is_viewer and not paused)
         for c in keycombo_menu.get_children():
             c.set_sensitive(can_sendkey)
 
+        self._console_refresh_can_usbredir()
         self._console_refresh_can_fullscreen()
         self._console_refresh_resizeguest_from_settings()
+
+    def _console_refresh_can_usbredir(self):
+        can_usb = self._console.vmwindow_viewer_can_usb_redirect()
+        self.widget("details-menu-usb-redirection").set_sensitive(
+                bool(can_usb))
 
     def _console_refresh_can_fullscreen(self):
         allow_fullscreen = self._console.vmwindow_get_viewer_is_visible()

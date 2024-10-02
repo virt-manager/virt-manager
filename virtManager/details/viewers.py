@@ -789,8 +789,4 @@ class SpiceViewer(Viewer):
     def _has_usb_redirection(self):
         if not self._spice_session or not self._usbdev_manager:
             return False  # pragma: no cover
-
-        for c in self._spice_session.get_channels():
-            if c.__class__ is SpiceClientGLib.UsbredirChannel:
-                return True
-        return False
+        return True
