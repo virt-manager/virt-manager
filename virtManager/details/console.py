@@ -477,13 +477,6 @@ class vmmConsolePages(vmmGObjectUI):
         is_resizeguest = self._viewer.console_get_resizeguest()
         scale_factor = scroll.get_scale_factor()
 
-        if is_scale:
-            # Make sure we never show scrollbars when scaling
-            scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
-        else:
-            scroll.set_policy(Gtk.PolicyType.AUTOMATIC,
-                              Gtk.PolicyType.AUTOMATIC)
-
         # If scaling is enabled, we set the viewer widget to the same
         # size as the scrollwindow, and the viewer scales the VM to fit.
         #
