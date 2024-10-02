@@ -400,8 +400,6 @@ class vmmConsolePages(vmmGObjectUI):
             "on_console_connect_button_clicked": self._connect_button_clicked_cb,
         })
 
-        self.widget("console-gfx-scroll").connect("size-allocate",
-            self._scroll_size_allocate_cb)
         self.widget("console-gfx-pages").connect("switch-page",
                 self._page_changed_cb)
 
@@ -468,7 +466,7 @@ class vmmConsolePages(vmmGObjectUI):
     # Resize and scaling APIs #
     ###########################
 
-    def _scroll_size_allocate_cb(self, src, req):
+    def _adjust_viewer_size(self):
         if not self._viewer_is_visible():
             return
 
@@ -512,7 +510,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         val = bool(self.vm.get_console_resizeguest())
         self._viewer.console_set_resizeguest(val)
-        self.widget("console-gfx-scroll").queue_resize()
+        self._adjust_viewer_size()
 
     def _set_size_to_vm(self):
         # Resize the console to best fit the VM resolution
@@ -557,8 +555,7 @@ class vmmConsolePages(vmmGObjectUI):
         elif scale_type == self.config.CONSOLE_SCALE_FULLSCREEN:
             self._viewer.console_set_scaling(self._in_fullscreen)
 
-        # Refresh viewer size
-        self.widget("console-gfx-scroll").queue_resize()
+        self._adjust_viewer_size()
 
 
     ###################
@@ -766,8 +763,8 @@ class vmmConsolePages(vmmGObjectUI):
         self._pointer_is_grabbed = False
         self.emit("change-title")
 
-    def _viewer_allocate_cb(self, src, ignore):
-        self.widget("console-gfx-scroll").queue_resize()
+    def _viewer_allocate_cb(self, src, req):
+        self._adjust_viewer_size()
 
     def _viewer_keyboard_grab_cb(self, src):
         self._viewer_sync_modifiers()
