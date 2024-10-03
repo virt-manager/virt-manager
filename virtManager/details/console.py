@@ -466,38 +466,6 @@ class vmmConsolePages(vmmGObjectUI):
     # Resize and scaling APIs #
     ###########################
 
-    def _adjust_viewer_size(self):
-        if not self._viewer_is_visible():
-            return
-
-        scroll = self.widget("console-gfx-scroll")
-        is_scale = self._viewer.console_get_scaling()
-        is_resizeguest = self._viewer.console_get_resizeguest()
-        scale_factor = scroll.get_scale_factor()
-
-        # If scaling is enabled, we set the viewer widget to the same
-        # size as the scrollwindow, and the viewer scales the VM to fit.
-        #
-        # If resizeguest is enabled, regardless of scaling, we need to
-        # do the same as the scaling case, so the viewer knows the size
-        # of the window. The viewer then sends that size to the guest,
-        # and it (hopefully) changes VM resolution to match.
-        #
-        # When neither are enabled, we force the viewer widget to the size
-        # of VM resolution, so scroll bars show up when the window is shrunk.
-        #
-        # ...except when scale_factor != 1. Any other scale_factor, and
-        # gtk3 doesn't give us a reliable way to map VM resolution to
-        # host widget pixel dimensions. This means our scroll window
-        # effectively won't work when desktop scaling is enabled.
-        if not is_scale and not is_resizeguest and scale_factor == 1:
-            res = self._viewer.console_get_desktop_resolution() or (-1, -1)
-            self._viewer.console_set_size_request(*res)
-            return
-
-        # Reset any previous size_request
-        self._viewer.console_set_size_request(-1, -1)
-
     def _viewer_get_resizeguest_tooltip(self):
         tooltip = ""
         if self._viewer:
@@ -510,7 +478,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         val = bool(self.vm.get_console_resizeguest())
         self._viewer.console_set_resizeguest(val)
-        self._adjust_viewer_size()
 
     def _set_size_to_vm(self):
         # Resize the console to best fit the VM resolution
@@ -554,8 +521,6 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer.console_set_scaling(True)
         elif scale_type == self.config.CONSOLE_SCALE_FULLSCREEN:
             self._viewer.console_set_scaling(self._in_fullscreen)
-
-        self._adjust_viewer_size()
 
 
     ###################
@@ -763,12 +728,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._pointer_is_grabbed = False
         self.emit("change-title")
 
-    def _viewer_size_allocate_cb(self, src, req):
-        self._adjust_viewer_size()
-
-    def _viewer_desktop_resolution_changed_cb(self, src):
-        self._adjust_viewer_size()
-
     def _viewer_keyboard_grab_cb(self, src):
         self._viewer_sync_modifiers()
 
@@ -856,9 +815,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.connect("add-display-widget", self._viewer_add_display_cb)
         self._viewer.connect("pointer-grab", self._pointer_grabbed_cb)
         self._viewer.connect("pointer-ungrab", self._pointer_ungrabbed_cb)
-        self._viewer.connect("size-allocate", self._viewer_size_allocate_cb)
-        self._viewer.connect("desktop-resolution-changed",
-                             self._viewer_desktop_resolution_changed_cb)
         self._viewer.connect("keyboard-grab", self._viewer_keyboard_grab_cb)
         self._viewer.connect("keyboard-ungrab", self._viewer_keyboard_grab_cb)
         self._viewer.connect("connected", self._viewer_connected_cb)

@@ -128,8 +128,6 @@ class Viewer(vmmGObject):
     def _grab_focus(self):
         if self._display:
             self._display.grab_focus()
-    def _set_size_request(self, *args, **kwargs):
-        return self._display.set_size_request(*args, **kwargs)
 
     def _get_pixbuf(self):
         return self._display.get_pixbuf()
@@ -268,8 +266,6 @@ class Viewer(vmmGObject):
         return self._grab_focus()
     def console_has_keyboard_grab(self):
         return bool(self._display and self._keyboard_grab)
-    def console_set_size_request(self, *args, **kwargs):
-        return self._set_size_request(*args, **kwargs)
 
     def console_get_pixbuf(self):
         return self._get_pixbuf()
@@ -291,13 +287,9 @@ class Viewer(vmmGObject):
     def console_get_desktop_resolution(self):
         return self._get_desktop_resolution()
 
-    def console_get_scaling(self):
-        return self._get_scaling()
     def console_set_scaling(self, val):
         return self._set_scaling(val)
 
-    def console_get_resizeguest(self):
-        return self._get_resizeguest()
     def console_set_resizeguest(self, val):
         return self._set_resizeguest(val)
     def console_get_resizeguest_warning(self):
@@ -342,7 +334,6 @@ class VNCViewer(Viewer):
     def _init_display(self):
         display = GtkVnc.Display()
 
-        display.set_force_size(False)
         display.set_pointer_grab(True)
 
         if _gtkvnc_check_display_support("set_keep_aspect_ratio"):
@@ -402,6 +393,10 @@ class VNCViewer(Viewer):
         if withUsername or withPassword:
             self.emit("need-auth", withPassword, withUsername)
 
+    def _sync_force_size(self):
+        force_size = not self._get_scaling() and not self._get_resizeguest()
+        self._display.set_force_size(force_size)
+
 
     ###############################
     # Private API implementations #
@@ -418,7 +413,8 @@ class VNCViewer(Viewer):
             return self._display.get_scaling()
     def _set_scaling(self, scaling):
         if self._display:
-            return self._display.set_scaling(scaling)
+            self._display.set_scaling(scaling)
+            self._sync_force_size()
 
     def _set_grab_keys(self, keys):
         seq = GtkVnc.GrabSequence.new(keys)
@@ -435,6 +431,7 @@ class VNCViewer(Viewer):
     def _set_resizeguest(self, val):
         if _gtkvnc_supports_resizeguest():
             self._display.set_allow_resize(val)  # pylint: disable=no-member
+            self._sync_force_size()
     def _get_resizeguest(self):
         if _gtkvnc_supports_resizeguest():
             return self._display.get_allow_resize()  # pylint: disable=no-member
