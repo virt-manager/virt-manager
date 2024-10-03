@@ -160,6 +160,27 @@ class Viewer(vmmGObject):
     def _get_grab_keys(self):
         return self._display.get_grab_keys().as_string()
 
+    def _refresh_grab_keys(self):
+        if not self._display:
+            return  # pragma: no cover
+
+        try:
+            keys = self.config.get_keys_combination()
+            if not keys:
+                return  # pragma: no cover
+
+            try:
+                keys = [int(k) for k in keys.split(',')]
+            except Exception:  # pragma: no cover
+                log.debug("Error in grab_keys configuration in Gsettings",
+                              exc_info=True)
+                return
+
+            self._set_grab_keys(keys)
+        except Exception as e:  # pragma: no cover
+            log.debug("Error when getting the grab keys combination: %s",
+                          str(e))
+
     def _emit_disconnected(self, errdetails=None):
         ssherr = self._tunnels.get_err_output()
         self.emit("disconnected", errdetails, ssherr)
@@ -203,7 +224,7 @@ class Viewer(vmmGObject):
     def _send_keys(self, keys):
         raise NotImplementedError()
 
-    def _refresh_grab_keys(self):
+    def _set_grab_keys(self, keys):
         raise NotImplementedError()
 
     def _open_host(self):
@@ -399,30 +420,9 @@ class VNCViewer(Viewer):
         if self._display:
             return self._display.set_scaling(scaling)
 
-    def _get_grab_keys(self):
-        return self._display.get_grab_keys().as_string()
-
-    def _refresh_grab_keys(self):
-        if not self._display:
-            return  # pragma: no cover
-
-        try:
-            keys = self.config.get_keys_combination()
-            if not keys:
-                return  # pragma: no cover
-
-            try:
-                keys = [int(k) for k in keys.split(',')]
-            except Exception:  # pragma: no cover
-                log.debug("Error in grab_keys configuration in Gsettings",
-                              exc_info=True)
-                return
-
-            seq = GtkVnc.GrabSequence.new(keys)
-            self._display.set_grab_keys(seq)
-        except Exception as e:  # pragma: no cover
-            log.debug("Error when getting the grab keys combination: %s",
-                          str(e))
+    def _set_grab_keys(self, keys):
+        seq = GtkVnc.GrabSequence.new(keys)
+        self._display.set_grab_keys(seq)
 
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys])
@@ -693,27 +693,9 @@ class SpiceViewer(Viewer):
     def _is_open(self):
         return self._spice_session is not None
 
-    def _refresh_grab_keys(self):
-        if not self._display:
-            return  # pragma: no cover
-
-        try:
-            keys = self.config.get_keys_combination()
-            if not keys:
-                return  # pragma: no cover
-
-            try:
-                keys = [int(k) for k in keys.split(',')]
-            except Exception:  # pragma: no cover
-                log.debug("Error in grab_keys configuration in Gsettings",
-                              exc_info=True)
-                return
-
-            seq = SpiceClientGtk.GrabSequence.new(keys)
-            self._display.set_grab_keys(seq)
-        except Exception as e:  # pragma: no cover
-            log.debug("Error when getting the grab keys combination: %s",
-                          str(e))
+    def _set_grab_keys(self, keys):
+        seq = SpiceClientGtk.GrabSequence.new(keys)
+        self._display.set_grab_keys(seq)
 
     def _send_keys(self, keys):
         return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys],
