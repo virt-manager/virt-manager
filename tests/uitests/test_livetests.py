@@ -152,15 +152,22 @@ def _checkConsoleStandard(app, dom):
     win.find("^View$", "menu").click()
     scalemenu = win.find("Scale Display", "menu")
     scalemenu.point()
-    scalemenu.find("Always", "radio menu item").click()
-    win.find("^View$", "menu").click()
-    scalemenu = win.find("Scale Display", "menu")
-    scalemenu.point()
     scalemenu.find("Never", "radio menu item").click()
     win.find("^View$", "menu").click()
     scalemenu = win.find("Scale Display", "menu")
     scalemenu.point()
     scalemenu.find("Only", "radio menu item").click()
+    win.find("^View$", "menu").click()
+    scalemenu = win.find("Scale Display", "menu")
+    scalemenu.point()
+    scalemenu.find("Always", "radio menu item").click()
+
+    # 'Resize to VM' again, to hit the scaling->always case
+    oldsize = win.size
+    win.find("^View$", "menu").click()
+    win.find("Resize to VM", "menu item").click()
+    newsize = win.size
+    lib.utils.check(lambda: oldsize != newsize)
 
     win.window_close()
 

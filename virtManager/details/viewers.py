@@ -76,7 +76,7 @@ class Viewer(vmmGObject):
         self._ginfo = ginfo
         self._tunnels = SSHTunnels(self._ginfo)
         self._keyboard_grab = False
-        self._desktop_resolution = None
+        self._desktop_resolution = (0, 0)
 
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
@@ -202,12 +202,6 @@ class Viewer(vmmGObject):
         self._desktop_resolution = newres
         self.emit("desktop-resolution-changed")
 
-    def _get_desktop_resolution(self):
-        ret = self._desktop_resolution or (0, 0)
-        if (ret[0] == 0) or (ret[1] == 0):
-            return None
-        return ret
-
 
     #######################################################
     # Internal API that will be overwritten by subclasses #
@@ -254,6 +248,9 @@ class Viewer(vmmGObject):
     def _has_usb_redirection(self):
         raise NotImplementedError()
 
+    def _get_preferred_size(self):
+        raise NotImplementedError()
+
 
     ####################################
     # APIs accessed by vmmConsolePages #
@@ -284,8 +281,8 @@ class Viewer(vmmGObject):
     def console_get_grab_keys(self):
         return self._get_grab_keys()
 
-    def console_get_desktop_resolution(self):
-        return self._get_desktop_resolution()
+    def console_get_preferred_size(self):
+        return self._get_preferred_size()
 
     def console_set_scaling(self, val):
         return self._set_scaling(val)
@@ -444,6 +441,9 @@ class VNCViewer(Viewer):
         return None  # pragma: no cover
     def _has_usb_redirection(self):
         return False
+
+    def _get_preferred_size(self):
+        return self._desktop_resolution
 
 
     #######################
@@ -758,3 +758,16 @@ class SpiceViewer(Viewer):
         if not self._spice_session or not self._usbdev_manager:
             return False  # pragma: no cover
         return True
+
+    def _get_preferred_size(self):
+        if (not self._display or
+            self._get_scaling() or
+            self._get_resizeguest()):
+            return self._desktop_resolution
+
+        # When scaling and resizeguest disabled, this usually matches the
+        # VM resolution. But when host desktop scaling is used, spice will
+        # intentionally have different values here.
+        w = self._display.get_preferred_width()[1]
+        h = self._display.get_preferred_height()[1]
+        return (w, h)

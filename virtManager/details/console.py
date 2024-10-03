@@ -480,27 +480,22 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.console_set_resizeguest(val)
 
     def _set_size_to_vm(self):
-        # Resize the console to best fit the VM resolution
-        vm_resolution = self._viewer.console_get_desktop_resolution()
-        if not self._viewer:
+        if not self._viewer_is_visible():
             return  # pragma: no cover
-        if not vm_resolution:  # pragma: no cover
-            log.debug("_set_size_to_vm but no VM desktop resolution set")
-            return
 
-        # Note: gtk3 has no APIs for telling us about fractional scaling.
-        # without that, we can't reliably figure out how VM dimensions
-        # should map to host widget dimensions.
+        w, h = self._viewer.console_get_preferred_size()
+        if w <= 0 or h <= 0:  # pragma: no cover
+            log.debug("_set_size_to_vm but no valid sizing found")
+            return
 
         top_w, top_h = self.topwin.get_size()
         viewer_alloc = self.widget("console-gfx-scroll").get_allocation()
-        desktop_w, desktop_h = vm_resolution
 
-        valw = desktop_w + (top_w - viewer_alloc.width)
-        valh = desktop_h + (top_h - viewer_alloc.height)
+        valw = w + (top_w - viewer_alloc.width)
+        valh = h + (top_h - viewer_alloc.height)
 
         log.debug("_set_size_to_vm vm=(%s, %s) window=(%s, %s)",
-                  desktop_w, desktop_h, valw, valh)
+                  w, h, valw, valh)
         self.topwin.unmaximize()
         self.topwin.resize(valw, valh)
 
