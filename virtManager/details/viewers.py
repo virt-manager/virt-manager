@@ -81,10 +81,8 @@ class Viewer(vmmGObject):
         self.add_gsettings_handle(
             self.config.on_keys_combination_changed(self._refresh_grab_keys))
 
-        self.connect("add-display-widget", self._common_init)
-
     def _cleanup(self):
-        self.close()
+        self._close()
 
         if self._display:
             self._display.destroy()
@@ -108,12 +106,19 @@ class Viewer(vmmGObject):
             self.emit(new_signal, *args, **kwargs)
         return _proxy_signal
 
-    def _common_init(self, ignore1, ignore2):
+    def _set_display(self, display):
+        self._display = display
         self._refresh_grab_keys()
 
         self._display.connect("size-allocate",
             self._make_signal_proxy("size-allocate"))
 
+        self.emit("add-display-widget", self._display)
+        self._display.realize()
+
+        self._connect_display_signals()
+
+        self._display.show()
 
 
     #########################
@@ -210,10 +215,12 @@ class Viewer(vmmGObject):
     # Internal API that will be overwritten by subclasses #
     #######################################################
 
-    def close(self):
+    def _close(self):
         raise NotImplementedError()
 
     def _is_open(self):
+        raise NotImplementedError()
+    def _connect_display_signals(self):
         raise NotImplementedError()
 
     def _set_username(self, cred):
@@ -313,28 +320,12 @@ class Viewer(vmmGObject):
 class VNCViewer(Viewer):
     viewer_type = "vnc"
 
-    def __init__(self, *args, **kwargs):
-        Viewer.__init__(self, *args, **kwargs)
-        self._display = None
-
 
     ###################
     # Private helpers #
     ###################
 
-    def _init_widget(self):
-        self._display = GtkVnc.Display()
-
-        # Make sure viewer doesn't force resize itself
-        self._display.set_force_size(False)
-        self._display.set_pointer_grab(True)
-
-        if _gtkvnc_check_display_support("set_keep_aspect_ratio"):
-            self._display.set_keep_aspect_ratio(True)
-
-        self.emit("add-display-widget", self._display)
-        self._display.realize()
-
+    def _connect_display_signals(self):
         self._display.connect("vnc-pointer-grab",
             self._make_signal_proxy("pointer-grab"))
         self._display.connect("vnc-pointer-ungrab",
@@ -348,7 +339,16 @@ class VNCViewer(Viewer):
         self._display.connect("vnc-disconnected", self._disconnected_cb)
         self._display.connect("vnc-desktop-resize", self._desktop_resize_cb)
 
-        self._display.show()
+    def _init_display(self):
+        display = GtkVnc.Display()
+
+        display.set_force_size(False)
+        display.set_pointer_grab(True)
+
+        if _gtkvnc_check_display_support("set_keep_aspect_ratio"):
+            display.set_keep_aspect_ratio(True)
+
+        self._set_display(display)
 
     def _keyboard_grab_cb(self, src):
         self._keyboard_grab = True
@@ -407,7 +407,7 @@ class VNCViewer(Viewer):
     # Private API implementations #
     ###############################
 
-    def close(self):
+    def _close(self):
         self._display.close()
 
     def _is_open(self):
@@ -454,7 +454,7 @@ class VNCViewer(Viewer):
     #######################
 
     def _open(self):
-        self._init_widget()
+        self._init_display()
         return Viewer._open(self)
 
     def _open_host(self):
@@ -507,7 +507,6 @@ class SpiceViewer(Viewer):
         self._display = None
         self._audio = None
         self._main_channel = None
-        self._display_channel = None
         self._usbdev_manager = None
         self._channels = set()
 
@@ -529,14 +528,9 @@ class SpiceViewer(Viewer):
         else:
             self.emit("keyboard-ungrab")
 
-    def _init_widget(self):
-        self.emit("add-display-widget", self._display)
-        self._display.realize()
-
+    def _connect_display_signals(self):
         self._display.connect("mouse-grab", self._mouse_grab_cb)
         self._display.connect("keyboard-grab", self._keyboard_grab_cb)
-
-        self._display.show()
 
     def _create_spice_session(self):
         self._spice_session = SpiceClientGLib.Session()
@@ -642,12 +636,12 @@ class SpiceViewer(Viewer):
                 log.debug("Spice multi-head unsupported")
                 return
 
-            self._display_channel = channel
-            self._display = SpiceClientGtk.Display.new(self._spice_session,
-                                                      channel_id)
-            self._init_widget()
+            display = SpiceClientGtk.Display.new(
+                    self._spice_session, channel_id)
+            self._set_display(display)
+
             _SIGS.connect_after(
-                self._display_channel, "display-primary-create",
+                channel, "display-primary-create",
                 self._display_primary_create_cb)
             self.emit("connected")
 
@@ -670,16 +664,12 @@ class SpiceViewer(Viewer):
     # Internal API implementations #
     ################################
 
-    def close(self):
+    def _close(self):
         if self._spice_session is not None:
             _SIGS.disconnect_obj_signals(self._spice_session)
             self._spice_session.disconnect()
         self._spice_session = None
         self._audio = None
-        if self._display:
-            self._display.destroy()
-        self._display = None
-        self._display_channel = None
 
         for channel in self._channels:
             _SIGS.disconnect_obj_signals(channel)
