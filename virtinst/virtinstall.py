@@ -840,11 +840,13 @@ class _InstalledDomain:
 
             return not self._domain.isActive()
         except libvirt.libvirtError as e:
-            if (self._transient and
-                e.get_error_code() == libvirt.VIR_ERR_NO_DOMAIN):
+            if e.get_error_code() != libvirt.VIR_ERR_NO_DOMAIN:
+                raise  # pragma: no cover
+
+            if self._transient:
                 log.debug("transient VM shutdown and disappeared.")
                 return True
-            raise  # pragma: no cover
+            fail(_("VM disappeared unexpectedly: %s") % e)  # pragma: no cover
 
 
 def _wait_for_domain(installer, instdomain, autoconsole, waithandler):
