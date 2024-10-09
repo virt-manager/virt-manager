@@ -1919,9 +1919,6 @@ class OSVariantData(object):
         if osobj:
             self._name = osobj.name
 
-        if self._require_from_cli is None and not self._require:
-            self._require_from_cli = False
-
         if self._require_from_cli is False:
             self._require = self._REQUIRE_OFF
         elif self._require_from_cli is True:
