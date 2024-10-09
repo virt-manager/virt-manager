@@ -507,6 +507,8 @@ class Installer(object):
         into the guest. Things like LiveCDs, Import, or a manually specified
         bootorder do not have an install phase.
         """
+        if self.has_cloudinit() or self.has_unattended():
+            return True
         if self._no_install:
             return False
         return bool(self._cdrom or

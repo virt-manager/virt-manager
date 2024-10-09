@@ -438,10 +438,6 @@ def build_installer(options, guest, installdata):
         no_install = True
     elif options.boot_was_set:
         no_install = True
-    elif options.cloud_init:
-        no_install = True
-    elif options.unattended:
-        no_install = True
 
     installer = virtinst.Installer(guest.conn,
             cdrom=cdrom,
