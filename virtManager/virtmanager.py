@@ -129,10 +129,10 @@ def do_we_fork(options):
     if val == "yes":
         log.debug("%s=%s, defaulting to --fork", key, val)
         return True
-    if val == "no":
+    if val == "no":  # pragma: no cover
         log.debug("%s=%s, defaulting to --no-fork", key, val)
         return False
-    if val:
+    if val:  # pragma: no cover
         log.warning("Unknown %s=%s, expected 'yes' or 'no'", key, val)
 
     # Default is `--no-fork`
