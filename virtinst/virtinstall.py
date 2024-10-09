@@ -547,15 +547,25 @@ def installer_detect_distro(guest, installer, osdata):
         # OS name has to be set firstly whenever --osinfo is passed,
         # otherwise it won't be respected when the installer creates the
         # Distro Store.
+        fallback_name = None
         if osdata.get_name():
+            fallback_name = osdata.get_name()
             os_set = True
-            guest.set_os_name(osdata.get_name())
+            guest.set_os_name(fallback_name)
 
         # This also validates the install location
         autodistro = installer.detect_distro(guest)
-        if osdata.is_detect() and autodistro:
-            os_set = True
-            guest.set_os_name(autodistro)
+        if osdata.is_detect():
+            if autodistro:
+                os_set = True
+                guest.set_os_name(autodistro)
+            elif fallback_name:
+                msg = _(
+                    "Failed to detect osinfo OS name from install media."
+                    "Using fallback name=%s.") % fallback_name
+                msg += _("\nPlease file a bug against virt-install if "
+                         "you expected detection to succeed.")
+                log.warning(msg)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
 
