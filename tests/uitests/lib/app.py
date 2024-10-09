@@ -296,13 +296,13 @@ class VMMDogtailApp(object):
     def open(self, uri=None,
             extra_opts=None, check_already_running=True, use_uri=True,
             window_name=None, xmleditor_enabled=False, keyfile=None,
-            break_setfacl=False, first_run=True, no_fork=True,
+            break_setfacl=False, first_run=True,
             will_fail=False, enable_libguestfs=False,
-            firstrun_uri=None, show_console=None):
+            firstrun_uri=None, show_console=None, allow_debug=True):
         extra_opts = extra_opts or []
         uri = uri or self.uri
 
-        if tests.utils.TESTCONFIG.debug and no_fork:
+        if allow_debug and tests.utils.TESTCONFIG.debug:
             stdout = sys.stdout
             stderr = sys.stderr
             extra_opts.append("--debug")
@@ -312,8 +312,6 @@ class VMMDogtailApp(object):
 
         cmd = [sys.executable]
         cmd += [os.path.join(tests.utils.TOPDIR, "virt-manager")]
-        if no_fork:
-            cmd += ["--no-fork"]
         if use_uri:
             cmd += ["--connect", uri]
         if show_console:
