@@ -1885,17 +1885,22 @@ def parse_location(optstr):
 ########################
 
 class OSVariantData(object):
+    _REQUIRE_ON = 1
+    _REQUIRE_OFF = 2
+    _REQUIRE_AUTO = 3
+
     def __init__(self):
         self._name = None
         self._id = None
         self._detect = False
-        self._require = False
+        self._require_from_cli = None
+        self._require = None
 
     def set_compat_str(self, rawstr):
         if rawstr is None or rawstr == "auto":
             # The default behavior
             self._detect = True
-            self._require = "auto"
+            self._require = self._REQUIRE_AUTO
             return
 
         if rawstr == "none":
@@ -1914,12 +1919,22 @@ class OSVariantData(object):
         if osobj:
             self._name = osobj.name
 
+        if self._require_from_cli is None and not self._require:
+            self._require_from_cli = False
+
+        if self._require_from_cli is False:
+            self._require = self._REQUIRE_OFF
+        elif self._require_from_cli is True:
+            self._require = self._REQUIRE_ON
+        else:
+            self._require = self._REQUIRE_AUTO
+
     def is_detect(self):
         return self._detect
     def is_require_on(self):
-        return not self.is_require_default() and bool(self._require)
-    def is_require_default(self):
-        return self._require == "auto"
+        return self._require == self._REQUIRE_ON
+    def is_require_off(self):
+        return self._require == self._REQUIRE_OFF
     def get_name(self):
         return self._name
 
@@ -1935,7 +1950,7 @@ class ParserOSVariant(VirtCLIParser):
         cls.add_arg("short-id", "_name")
         cls.add_arg("id", "_id")
         cls.add_arg("detect", "_detect", is_onoff=True)
-        cls.add_arg("require", "_require", is_onoff=True)
+        cls.add_arg("require", "_require_from_cli", is_onoff=True)
 
     def parse(self, inst):
         if "=" not in str(self.optstr):
