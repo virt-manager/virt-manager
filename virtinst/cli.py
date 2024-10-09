@@ -1886,7 +1886,6 @@ def parse_location(optstr):
 
 class OSVariantData(object):
     _REQUIRE_ON = 1
-    _REQUIRE_OFF = 2
     _REQUIRE_AUTO = 3
 
     def __init__(self):
@@ -1920,7 +1919,10 @@ class OSVariantData(object):
             self._name = osobj.name
 
         if self._require_from_cli is False:
-            self._require = self._REQUIRE_OFF
+            if not self._name:
+                log.debug(
+                    "Converting `require=off` to fallback `name=generic`")
+                self._name = "generic"
         elif self._require_from_cli is True:
             self._require = self._REQUIRE_ON
         else:
@@ -1930,8 +1932,6 @@ class OSVariantData(object):
         return self._detect
     def is_require_on(self):
         return self._require == self._REQUIRE_ON
-    def is_require_off(self):
-        return self._require == self._REQUIRE_OFF
     def get_name(self):
         return self._name
 
