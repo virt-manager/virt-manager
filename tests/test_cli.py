@@ -1023,6 +1023,7 @@ c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7",
 c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
 c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="--os-variant/--osinfo OS name is required")  # No os-variant detected, but require=yes
+c.add_valid("--pxe --osinfo detect=yes")  # --osinfo detect=on failed, but with implied require=no
 c.add_invalid("--pxe --virt-type foobar", grep="Host does not support domain type")
 c.add_invalid("--pxe --os-variant farrrrrrrge", grep="Unknown OS name")
 c.add_invalid("--pxe --boot menu=foobar", grep="menu must be 'yes' or 'no'")
