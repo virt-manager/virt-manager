@@ -1020,8 +1020,10 @@ c.add_compare("--pxe --print-step all --os-variant none", "simple-pxe")  # Diskl
 c.add_compare("--location ftp://example.com --os-variant auto", "fake-ftp")  # fake ftp:// install using urlfetcher.py mocking
 c.add_compare("--location https://foobar.com --os-variant detect=no,require=no", "fake-http")  # fake https:// install using urlfetcher.py mocking, but also hit --os-variant detect=no
 c.add_compare("--location https://foobar.com --os-variant detect=yes,name=win7", "os-detect-success-fallback")  # os detection succeeds, so fallback should be ignored
-c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection succeeds, so fallback should be ignored
+c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallback")  # os detection fails, so we use fallback name=
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
+c.add_valid("--location https://foobar.com --os-variant detect=yes,name=win7", nogrep="Please file a bug against virt-install")  # os detection succeeds, the fallback warning shouldn't be printed
+c.add_valid("--pxe --os-variant detect=yes,name=win7", grep="Please file a bug against virt-install")  # os detection fails, so fallback warning should be printed
 c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="--os-variant/--osinfo OS name is required")  # No os-variant detected, but require=yes
 c.add_invalid("--pxe --osinfo detect=yes", grep="--os-variant/--osinfo OS name is required")  # --osinfo detect=on failed, but with implied require=yes
 c.add_invalid("--pxe --virt-type foobar", grep="Host does not support domain type")
