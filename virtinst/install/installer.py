@@ -501,11 +501,11 @@ class Installer(object):
             search_paths.append(self._cdrom_path())
         return search_paths
 
-    def has_install_phase(self):
+    def requires_postboot_xml_changes(self):
         """
-        Return True if the requested setup is actually installing an OS
-        into the guest. Things like LiveCDs, Import, or a manually specified
-        bootorder do not have an install phase.
+        Return True if the install operation has 2 XML phases, and
+        requires a hard VM poweroff to ensure the second stage is
+        used for subsequent boots.
         """
         if self.has_cloudinit() or self.has_unattended():
             return True
@@ -515,18 +515,13 @@ class Installer(object):
                     self._install_bootdev or
                     self._treemedia)
 
-    def _requires_postboot_xml_changes(self):
-        if self.has_cloudinit() or self.has_unattended():
-            return True
-        return self.has_install_phase()
-
     def options_specified(self):
         """
         Return True if some explicit install option was actually passed in
         """
         if self._no_install:
             return True
-        return self.has_install_phase()
+        return self.requires_postboot_xml_changes()
 
     def detect_distro(self, guest):
         """
@@ -614,7 +609,7 @@ class Installer(object):
     def _build_xml(self, guest, meter):
         initial_xml = None
         final_xml = guest.get_xml()
-        if self._requires_postboot_xml_changes():
+        if self.requires_postboot_xml_changes():
             initial_xml, final_xml = self._build_postboot_xml(
                     guest, final_xml, meter)
         final_xml = self._pre_reinstall_xml or final_xml
