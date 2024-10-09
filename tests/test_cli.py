@@ -1024,6 +1024,7 @@ c.add_compare("--pxe --os-variant detect=yes,name=win7", "os-detect-fail-fallbac
 c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # getting URL from osinfo
 c.add_valid("--location https://foobar.com --os-variant detect=yes,name=win7", nogrep="Please file a bug against virt-install")  # os detection succeeds, the fallback warning shouldn't be printed
 c.add_valid("--pxe --os-variant detect=yes,name=win7", grep="Please file a bug against virt-install")  # os detection fails, so fallback warning should be printed
+c.add_valid("--cdrom http://example.com/path/to/some.iso --os-variant detect=yes,require=no", grep="Please file a bug against virt-install")  # detection fails with require=no, we should print the error about using fallback name=
 c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="--os-variant/--osinfo OS name is required")  # No os-variant detected, but require=yes
 c.add_invalid("--pxe --osinfo detect=yes", grep="--os-variant/--osinfo OS name is required")  # --osinfo detect=on failed, but with implied require=yes
 c.add_invalid("--pxe --virt-type foobar", grep="Host does not support domain type")
