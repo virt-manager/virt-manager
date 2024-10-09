@@ -566,7 +566,7 @@ def installer_detect_distro(guest, installer, osdata):
         return
     if osdata.is_require_on():
         fail(msg)
-    if not osdata.is_require_default():
+    if osdata.is_require_off():
         return
 
     if not _needs_accurate_osinfo(guest):
