@@ -118,6 +118,16 @@ def drop_stdio():
     os.dup2(0, 2)
 
 
+def do_we_fork(options):
+    if options.debug or options.no_fork:
+        return False
+    if options.fork:
+        return True
+
+    # Default is `--fork`
+    return True
+
+
 def parse_commandline():
     epilog = ("Also accepts standard GTK arguments like --g-fatal-warnings")
     parser = argparse.ArgumentParser(usage="virt-manager [options]",
@@ -142,6 +152,8 @@ def parse_commandline():
         default=False)
     parser.add_argument("--no-fork", action="store_true",
         help="Don't fork into background on startup")
+    parser.add_argument("--fork", action="store_true",
+        help="Force fork into background on startup (this is the default)")
 
     parser.add_argument("--show-domain-creator", action="store_true",
         help="Show 'New VM' wizard")
@@ -192,16 +204,15 @@ def main():
               os.environ["SSH_ASKPASS_REQUIRE"])
 
     # Now we've got basic environment up & running we can fork
-    do_drop_stdio = False
-    if not options.no_fork and not options.debug:
+    do_fork = do_we_fork(options)
+    if do_fork:
         drop_tty()
-        do_drop_stdio = True
 
     leftovers = _import_gtk(leftovers)
     Gtk = globals()["Gtk"]
 
     # Do this after the Gtk import so the user has a chance of seeing any error
-    if do_drop_stdio:
+    if do_fork:
         drop_stdio()
 
     if leftovers:
