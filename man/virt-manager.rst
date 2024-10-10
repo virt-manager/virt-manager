@@ -54,8 +54,14 @@ The following options are accepted when running ``virt-manager``
 
 
 ``--no-fork``
-    Don't fork ``virt-manager`` off into the background: run it blocking the
-    current terminal. Useful for seeing possible errors dumped to stdout/stderr.
+    Don't fork ``virt-manager`` off into the background.
+    See ``VIRT-MANAGER, SSH, AND FORKING`` section for more info.
+
+
+``--fork``
+    Force forking ``virt-manager`` off into the background.
+    This is the default behavior.
+    See ``VIRT-MANAGER, SSH, AND FORKING`` section for more info.
 
 
 DIALOG WINDOW OPTIONS
@@ -97,6 +103,32 @@ manual ``--connect`` URI. But it supports ``--connect`` URI as well:
 
 ``--show-systray``
     Launch virt-manager only in system tray
+
+
+VIRT-MANAGER, SSH, AND FORKING
+==============================
+
+Historically, on startup virt-manager would detach from the running
+terminal and fork into the background. This was to force any usage of
+ssh to call ssh-askpass when it needed a password, rather than silently
+asking on a terminal the user probably isn't watching.
+
+openssh 8.4p1 released in Sep 2020 added the SSH_ASKPASS_REQUIRE
+environment variable that saves us from having to do the fork dance.
+https://man.openbsd.org/ssh.1#SSH_ASKPASS_REQUIRE
+
+virt-manager now sets SSH_ASKPASS_REQUIRE=force.
+However to get this to work with libvirt ssh connections, you'll need
+libvirt 10.9.0 released in October 2024.
+
+virt-manager no longer forks by defaults.
+
+You can get the old forking behavior with the ``--fork`` option,
+or by setting the ``VIRT_MANAGER_DEFAULT_FORK=yes`` environment variable.
+
+However if you find you need forking for a usecase other than temporarily
+working around libvirt version issues, please let the virt-manager developers
+know by filing a bug report.
 
 
 BUGS

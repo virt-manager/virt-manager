@@ -188,18 +188,31 @@ def testCLINoFirstRun(app):
     lib.utils.check(lambda: app.topwin.showing)
 
 
-def testCLINoFork(app):
-    # Test app without forking
+def _testCLIFork(app, opts):
     app.open(first_run=False, enable_libguestfs=None,
-            use_uri=False, no_fork=False)
+            use_uri=False, allow_debug=False,
+            extra_opts=opts)
     app.wait_for_exit()
+    lib.utils.check(lambda: app.has_dbus())
     app.topwin.window_close()
     lib.utils.check(lambda: not app.has_dbus())
 
 
+def testCLIFork(app):
+    # Test app with --fork
+    _testCLIFork(app, ["--fork"])
+
+
+@unittest.mock.patch.dict('os.environ', {"VIRT_MANAGER_DEFAULT_FORK": "yes"})
+def testCLIForkEnv(app):
+    # Test with fork via env
+    _testCLIFork(app, [])
+
+
 def testCLIGTKArgs(app):
     # Ensure gtk arg passthrough works
-    app.open(extra_opts=["--gtk-debug=misc"])
+    # Also test --no-fork is a no-op
+    app.open(extra_opts=["--gtk-debug=misc", "--no-fork"])
     lib.utils.check(lambda: app.topwin.showing)
 
 
