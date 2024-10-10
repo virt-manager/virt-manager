@@ -124,6 +124,17 @@ def do_we_fork(options):
     if options.fork:
         return True
 
+    key = "VIRT_MANAGER_DEFAULT_FORK"
+    val = os.environ.get(key, None)
+    if val == "yes":
+        log.debug("%s=%s, defaulting to --fork", key, val)
+        return True
+    if val == "no":
+        log.debug("%s=%s, defaulting to --no-fork", key, val)
+        return False
+    if val:
+        log.warning("Unknown %s=%s, expected 'yes' or 'no'", key, val)
+
     # Default is `--fork`
     return True
 
