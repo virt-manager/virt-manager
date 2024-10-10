@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2023-09-25 07:46+0200\n"
+"POT-Creation-Date: 2024-08-16 22:43+0200\n"
 "PO-Revision-Date: 2024-05-08 20:36+0000\n"
 "Last-Translator: zhanchun li <lzc777@126.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -148,11 +148,11 @@ msgstr "ctrl"
 msgid "aa:bb:cc:dd:ee:ff"
 msgstr "aa:bb:cc:dd:ee:ff"
 
-#: ui/addhardware.ui:421 ui/details.ui:2976
+#: ui/addhardware.ui:421 ui/details.ui:2978
 msgid "_MAC address:"
 msgstr "_MAC 地址："
 
-#: ui/addhardware.ui:436 ui/details.ui:2962
+#: ui/addhardware.ui:436 ui/details.ui:2964
 msgid "Device mode_l:"
 msgstr "裝置型號(_L)："
 
@@ -190,7 +190,7 @@ msgstr "通道(_C)："
 msgid "_Share Clipboard:"
 msgstr "共享剪貼簿(_S)："
 
-#: ui/addhardware.ui:1044 ui/details.ui:4027
+#: ui/addhardware.ui:1044 ui/details.ui:4029
 msgid "Ac_tion:"
 msgstr "動作(_T)："
 
@@ -198,24 +198,24 @@ msgstr "動作(_T)："
 msgid "_Mode:"
 msgstr "模式(_M)："
 
-#: ui/addhardware.ui:1289 ui/details.ui:4715
+#: ui/addhardware.ui:1289 ui/details.ui:4717
 msgid "rng"
 msgstr "rng"
 
-#: ui/addhardware.ui:1362 ui/details.ui:4797
+#: ui/addhardware.ui:1362 ui/details.ui:4799
 msgid "panic"
 msgstr "panic"
 
 #: ui/addhardware.ui:1468 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
 #: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
 #: ui/createpool.ui:478 ui/createvm.ui:2400 ui/createvol.ui:462
-#: ui/delete.ui:181 ui/details.ui:4893 ui/hoststorage.ui:154 ui/migrate.ui:638
-#: ui/snapshotsnew.ui:253
+#: ui/delete.ui:181 ui/details.ui:4895 ui/hoststorage.ui:154 ui/migrate.ui:638
+#: ui/snapshotsnew.ui:368
 msgid "_Cancel"
 msgstr "取消(_C)"
 
 #: ui/addhardware.ui:1483 ui/createnet.ui:813 ui/createpool.ui:493
-#: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:268
+#: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:383
 msgid "_Finish"
 msgstr "完成(_F)"
 
@@ -938,364 +938,364 @@ msgstr "<b>虛擬機管理程式詳情</b>"
 msgid "<b>Operating Sys_tem</b>"
 msgstr "<b>作業系統(_T)</b>"
 
-#: ui/details.ui:822
+#: ui/details.ui:824
 msgid "<b>Applications</b>"
 msgstr "<b>應用程式</b>"
 
-#: ui/details.ui:885
+#: ui/details.ui:887
 msgid "Refresh"
 msgstr "重新整理"
 
-#: ui/details.ui:996 ui/host.ui:263
+#: ui/details.ui:998 ui/host.ui:263
 msgid "<b>CPU usage</b>"
 msgstr "<b>CPU 使用率</b>"
 
-#: ui/details.ui:1065 ui/host.ui:321
+#: ui/details.ui:1067 ui/host.ui:321
 msgid "<b>Memory usage</b>"
 msgstr "<b>記憶體用量</b>"
 
-#: ui/details.ui:1113
+#: ui/details.ui:1115
 msgid "0 KiBytes/s 0 KiBytes/s"
 msgstr "0 KiBytes/s 0 KiBytes/s"
 
-#: ui/details.ui:1135
+#: ui/details.ui:1137
 msgid "<b>Disk I/O</b>"
 msgstr "<b>磁碟 I/O</b>"
 
-#: ui/details.ui:1205
+#: ui/details.ui:1207
 msgid "<b>Network I/O</b>"
 msgstr "<b>網路 I/O</b>"
 
-#: ui/details.ui:1297
+#: ui/details.ui:1299
 msgid "Logical host CPUs:"
 msgstr "邏輯主機 CPU 數："
 
-#: ui/details.ui:1310
+#: ui/details.ui:1312
 msgid "vCPU a_llocation:"
 msgstr "vCPU 分配(_A)："
 
-#: ui/details.ui:1327
+#: ui/details.ui:1329
 msgid "2"
 msgstr "2"
 
-#: ui/details.ui:1368
+#: ui/details.ui:1370
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
 msgstr "<small>過度使用 vCPUs 會影響性能</small>"
 
-#: ui/details.ui:1404
+#: ui/details.ui:1406
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU 數</b>"
 
-#: ui/details.ui:1441 ui/details.ui:3420 ui/details.ui:3906 ui/details.ui:4042
-#: ui/details.ui:4201
+#: ui/details.ui:1443 ui/details.ui:3422 ui/details.ui:3908 ui/details.ui:4044
+#: ui/details.ui:4203
 msgid "M_odel:"
 msgstr "型號(_O)："
 
-#: ui/details.ui:1452 virtManager/details/details.py:1929
+#: ui/details.ui:1454 virtManager/details/details.py:1929
 msgid "Copy host CP_U configuration"
 msgstr "複製主機 CPU 組態(_U)"
 
-#: ui/details.ui:1493
+#: ui/details.ui:1495
 msgid "Enable available CPU security flaw mitigations"
 msgstr "啟用可用的 CPU 安全漏洞紓解措施"
 
-#: ui/details.ui:1519
+#: ui/details.ui:1521
 msgid "<b>Configu_ration</b>"
 msgstr "<b>組態(_R)</b>"
 
-#: ui/details.ui:1549
+#: ui/details.ui:1551
 msgid "Manuall_y set CPU topology"
 msgstr "手動設定 CPU 拓撲(_Y)"
 
-#: ui/details.ui:1577
+#: ui/details.ui:1579
 msgid "Thread_s:"
 msgstr "執行緒(_S)："
 
-#: ui/details.ui:1591
+#: ui/details.ui:1593
 msgid "Cor_es:"
 msgstr "核心(_E)："
 
-#: ui/details.ui:1605
+#: ui/details.ui:1607
 msgid "Socke_ts:"
 msgstr "通訊端(_T)："
 
-#: ui/details.ui:1621 ui/details.ui:1639 ui/details.ui:1657
+#: ui/details.ui:1623 ui/details.ui:1641 ui/details.ui:1659
 msgid "1"
 msgstr "1"
 
-#: ui/details.ui:1696
+#: ui/details.ui:1698
 msgid "<b>To_pology</b>"
 msgstr "<b>拓撲(_P)</b>"
 
-#: ui/details.ui:1761
+#: ui/details.ui:1763
 msgid "Current a_llocation:"
 msgstr "目前分配(_L)："
 
-#: ui/details.ui:1776
+#: ui/details.ui:1778
 msgid "Ma_ximum allocation:"
 msgstr "最大分配(_X)："
 
-#: ui/details.ui:1791
+#: ui/details.ui:1793
 msgid "Total host memory:"
 msgstr "總主機記憶體："
 
-#: ui/details.ui:1824 ui/details.ui:1873
+#: ui/details.ui:1826 ui/details.ui:1875
 msgid "50"
 msgstr "50"
 
-#: ui/details.ui:1848 ui/details.ui:1897 ui/fsdetails.ui:177
+#: ui/details.ui:1850 ui/details.ui:1899 ui/fsdetails.ui:177
 msgid "MiB"
 msgstr "MiB"
 
-#: ui/details.ui:1913
+#: ui/details.ui:1915
 msgid "Enable shared _memory"
 msgstr "啟用共用記憶體(_M)"
 
-#: ui/details.ui:1943
+#: ui/details.ui:1945
 msgid "<b>Memory</b>"
 msgstr "<b>記憶體</b>"
 
-#: ui/details.ui:1995
+#: ui/details.ui:1997
 msgid "Start virt_ual machine on host boot up"
 msgstr "主機開機時啟動虛擬機(_U)"
 
-#: ui/details.ui:2016
+#: ui/details.ui:2018
 msgid "<b>Autostart</b>"
 msgstr "<b>自動啟動</b>"
 
-#: ui/details.ui:2063
+#: ui/details.ui:2065
 msgid "Init _path:"
 msgstr "Init 路徑(_P)："
 
-#: ui/details.ui:2077
+#: ui/details.ui:2079
 msgid "Init ar_gs:"
 msgstr "Init 參數(_G)："
 
-#: ui/details.ui:2111
+#: ui/details.ui:2113
 msgid "<b>Container init</b>"
 msgstr "<b>容器 init</b>"
 
-#: ui/details.ui:2141
+#: ui/details.ui:2143
 msgid "Ena_ble direct kernel boot"
 msgstr "啟用直接核心開機(_B)"
 
-#: ui/details.ui:2174
+#: ui/details.ui:2176
 msgid "Ke_rnel path:"
 msgstr "核心路徑(_R)："
 
-#: ui/details.ui:2190
+#: ui/details.ui:2192
 msgid "_Initrd path:"
 msgstr "Initrd 路徑(_I)："
 
-#: ui/details.ui:2221 ui/details.ui:2266 ui/details.ui:2357
+#: ui/details.ui:2223 ui/details.ui:2268 ui/details.ui:2359
 msgid "Browse"
 msgstr "瀏覽"
 
-#: ui/details.ui:2296
+#: ui/details.ui:2298
 msgid "Kernel ar_gs:"
 msgstr "核心參數(_G)："
 
-#: ui/details.ui:2326
+#: ui/details.ui:2328
 msgid "D_TB path:"
 msgstr "DTB 路徑(_T)："
 
-#: ui/details.ui:2419
+#: ui/details.ui:2421
 msgid "<b>Dir_ect kernel boot</b>"
 msgstr "<b>直接核心開機(_E)</b>"
 
-#: ui/details.ui:2450
+#: ui/details.ui:2452
 msgid "Enable boot me_nu"
 msgstr "啟用開機選單(_N)"
 
-#: ui/details.ui:2587
+#: ui/details.ui:2589
 msgid "<b>Boot device order</b>"
 msgstr "<b>開機裝置順序</b>"
 
-#: ui/details.ui:2655
+#: ui/details.ui:2657
 msgid "Storage size:"
 msgstr "儲存大小："
 
-#: ui/details.ui:2679
+#: ui/details.ui:2681
 msgid "Source _path:"
 msgstr "源路徑(_P)："
 
-#: ui/details.ui:2747
+#: ui/details.ui:2749
 msgid "_Browse"
 msgstr "瀏覽(_B)"
 
-#: ui/details.ui:2778 ui/details.ui:3521
+#: ui/details.ui:2780 ui/details.ui:3523
 msgid "Device type:"
 msgstr "裝置類型："
 
-#: ui/details.ui:2791
+#: ui/details.ui:2793
 msgid "Disk b_us:"
 msgstr "磁碟匯流排(_U)："
 
-#: ui/details.ui:2828
+#: ui/details.ui:2830
 msgid "disk-bus-label"
 msgstr "disk-bus-label"
 
-#: ui/details.ui:2876
+#: ui/details.ui:2878
 msgid "<b>Virtual Disk</b>"
 msgstr "<b>虛擬磁碟</b>"
 
-#: ui/details.ui:3080
+#: ui/details.ui:3082
 msgid "Link _state:"
 msgstr "連結狀態(_S)："
 
-#: ui/details.ui:3091
+#: ui/details.ui:3093
 msgid "active"
 msgstr "活動"
 
-#: ui/details.ui:3113 ui/hoststorage.ui:429 ui/snapshots.ui:216
+#: ui/details.ui:3115 ui/hoststorage.ui:429 ui/snapshots.ui:216
 msgid "label"
 msgstr "標籤"
 
-#: ui/details.ui:3155
+#: ui/details.ui:3157
 msgid "I_P address:"
 msgstr "IP 位址(_P)："
 
-#: ui/details.ui:3177
+#: ui/details.ui:3179
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>虛擬網路介面</b>"
 
-#: ui/details.ui:3240 ui/details.ui:4154 ui/details.ui:4476 ui/details.ui:4652
+#: ui/details.ui:3242 ui/details.ui:4156 ui/details.ui:4478 ui/details.ui:4654
 msgid "Type:"
 msgstr "類型："
 
-#: ui/details.ui:3253
+#: ui/details.ui:3255
 msgid "Mode:"
 msgstr "模式："
 
-#: ui/details.ui:3299
+#: ui/details.ui:3301
 msgid "<b>Virtual Input Device</b>"
 msgstr "<b>虛擬輸入裝置</b>"
 
-#: ui/details.ui:3459
+#: ui/details.ui:3461
 msgid "<b>Sound Device</b>"
 msgstr "<b>聲音裝置</b>"
 
-#: ui/details.ui:3533
+#: ui/details.ui:3535
 msgid "label506"
 msgstr "label506"
 
-#: ui/details.ui:3546 ui/details.ui:3584
+#: ui/details.ui:3548 ui/details.ui:3586
 msgid "label508"
 msgstr "label508"
 
-#: ui/details.ui:3597 ui/details.ui:3610
+#: ui/details.ui:3599 ui/details.ui:3612
 msgid "label507"
 msgstr "label507"
 
-#: ui/details.ui:3635
+#: ui/details.ui:3637
 msgid "Source host:"
 msgstr "源主機："
 
-#: ui/details.ui:3647
+#: ui/details.ui:3649
 msgid "Bind host:"
 msgstr "綁定主機："
 
-#: ui/details.ui:3659
+#: ui/details.ui:3661
 msgid "Target type:"
 msgstr "目標類型："
 
-#: ui/details.ui:3671
+#: ui/details.ui:3673
 msgid "Target name:"
 msgstr "目標名稱："
 
-#: ui/details.ui:3683 ui/hostnets.ui:175 ui/hoststorage.ui:391
+#: ui/details.ui:3685 ui/hostnets.ui:175 ui/hoststorage.ui:391
 msgid "State:"
 msgstr "狀態："
 
-#: ui/details.ui:3695
+#: ui/details.ui:3697
 msgid "Clipboard:"
 msgstr "剪貼簿："
 
-#: ui/details.ui:3707
+#: ui/details.ui:3709
 msgid "Source path:"
 msgstr "源路徑："
 
-#: ui/details.ui:3727
+#: ui/details.ui:3729
 msgid "<b>insert type</b>"
 msgstr "<b>插入類型</b>"
 
-#: ui/details.ui:3788 ui/hostnets.ui:163
+#: ui/details.ui:3790 ui/hostnets.ui:163
 msgid "Device:"
 msgstr "裝置："
 
-#: ui/details.ui:3814
+#: ui/details.ui:3816
 msgid "ROM _BAR:"
 msgstr "ROM 欄(_B)："
 
-#: ui/details.ui:3937
+#: ui/details.ui:3939
 msgid "_3D acceleration:"
 msgstr "3D 加速(_3)："
 
-#: ui/details.ui:3965
+#: ui/details.ui:3967
 msgid "<b>Video</b>"
 msgstr "<b>影片</b>"
 
-#: ui/details.ui:4217
+#: ui/details.ui:4219
 msgid "Devices:"
 msgstr "裝置："
 
-#: ui/details.ui:4273
+#: ui/details.ui:4275
 msgid "<b>Controller</b>"
 msgstr "<b>控制器</b>"
 
-#: ui/details.ui:4319
+#: ui/details.ui:4321
 msgid "<b>Filesystem</b>"
 msgstr "<b>檔案系統</b>"
 
-#: ui/details.ui:4374 ui/migrate.ui:390
+#: ui/details.ui:4376 ui/migrate.ui:390
 msgid "M_ode:"
 msgstr "模式(_O)："
 
-#: ui/details.ui:4419
+#: ui/details.ui:4421
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>智慧卡裝置</b>"
 
-#: ui/details.ui:4488
+#: ui/details.ui:4490
 msgid "Address:"
 msgstr "地址："
 
-#: ui/details.ui:4500
+#: ui/details.ui:4502
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ui/details.ui:4532
+#: ui/details.ui:4534
 msgid "<b>Redirected device</b>"
 msgstr "<b>重定向裝置</b>"
 
-#: ui/details.ui:4584
+#: ui/details.ui:4586
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM 裝置</b>"
 
-#: ui/details.ui:4677
+#: ui/details.ui:4679
 msgid "Host Device:"
 msgstr "主機裝置："
 
-#: ui/details.ui:4697
+#: ui/details.ui:4699
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>隨機數生成器</b>"
 
-#: ui/details.ui:4747
+#: ui/details.ui:4749
 msgid "Model:"
 msgstr "型號："
 
-#: ui/details.ui:4759
+#: ui/details.ui:4761
 msgid "panic-model"
 msgstr "panic-model"
 
-#: ui/details.ui:4779
+#: ui/details.ui:4781
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>Panic 通知器</b>"
 
-#: ui/details.ui:4872
+#: ui/details.ui:4874
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: ui/details.ui:4913 ui/hostnets.ui:652 ui/hoststorage.ui:186
+#: ui/details.ui:4915 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
 msgstr "套用(_A)"
@@ -1481,7 +1481,7 @@ msgstr "選擇已選定卷宗"
 msgid "Apply pool changes"
 msgstr "套用儲池變更"
 
-#: ui/hoststorage.ui:293 virtManager/connection.py:498
+#: ui/hoststorage.ui:293 virtManager/connection.py:500
 #: virtManager/object/libvirtobject.py:208
 msgid "Active"
 msgstr "活動"
@@ -1582,7 +1582,7 @@ msgstr "建立"
 msgid "Show the virtual machine console and details"
 msgstr "顯示虛擬機控制台及詳情"
 
-#: ui/manager.ui:281 virtManager/vmmenu.py:95
+#: ui/manager.ui:281 virtManager/storagebrowse.py:32 virtManager/vmmenu.py:95
 msgid "_Open"
 msgstr "打開(_O)"
 
@@ -1990,6 +1990,34 @@ msgstr "<span size='large'>建立快照</span>"
 msgid "_Description:"
 msgstr "描述(_D)："
 
+#: ui/snapshotsnew.ui:236
+#, fuzzy
+#| msgid "Snapshot Mode:"
+msgid "Snapshot _Mode:"
+msgstr "截圖模式："
+
+#: ui/snapshotsnew.ui:251
+#, fuzzy
+#| msgid "External"
+msgid "_external"
+msgstr "外部"
+
+#: ui/snapshotsnew.ui:268
+#, fuzzy
+#| msgid "External"
+msgid "_internal"
+msgstr "外部"
+
+#: ui/snapshotsnew.ui:294
+#, fuzzy
+#| msgid "VM State:"
+msgid "Memory _State:"
+msgstr "虛擬系統狀態："
+
+#: ui/snapshotsnew.ui:308
+msgid "_auto"
+msgstr ""
+
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
 msgstr "裝置路徑："
@@ -2086,7 +2114,7 @@ msgstr "控制台"
 msgid "Show virtual hardware details"
 msgstr "顯示虛擬硬體詳情"
 
-#: ui/vmwindow.ui:315 virtManager/error.py:328
+#: ui/vmwindow.ui:315 virtManager/error.py:320
 msgid "Details"
 msgstr "詳情"
 
@@ -2684,19 +2712,19 @@ msgid ""
 "while)"
 msgstr "建立虛擬系統拓製「%s」以及選擇的儲存（可能需要一些時間）"
 
-#: virtManager/connection.py:395
+#: virtManager/connection.py:397
 msgid "User session"
 msgstr "使用者工作階段"
 
-#: virtManager/connection.py:495
+#: virtManager/connection.py:497
 msgid "Disconnected"
 msgstr "取消連接"
 
-#: virtManager/connection.py:497
+#: virtManager/connection.py:499
 msgid "Connecting"
 msgstr "連線中"
 
-#: virtManager/connection.py:586
+#: virtManager/connection.py:588
 #, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
@@ -2766,7 +2794,7 @@ msgid "Name '%s' already in use by another network."
 msgstr "名稱 '%s' 已被其他網路使用。"
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:318
-#: virtManager/createvol.py:263
+#: virtManager/createvol.py:265
 #, python-format
 msgid "Error building XML: %s"
 msgstr "構建 XML 時出錯：%s"
@@ -3105,21 +3133,21 @@ msgstr "Bootstraping 容器"
 msgid "<b>%(volume)s's</b> available space: %(size)s"
 msgstr "<b>%(volume)s 的</b> 可用空間： %(size)s"
 
-#: virtManager/createvol.py:278
+#: virtManager/createvol.py:280
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "建立卷出錯：%s"
 
-#: virtManager/createvol.py:294
+#: virtManager/createvol.py:296
 #, python-format
 msgid "Error validating volume: %s"
 msgstr "驗證卷宗時出錯：%s"
 
-#: virtManager/createvol.py:299
+#: virtManager/createvol.py:301
 msgid "Creating storage volume..."
 msgstr "建立儲存卷宗…"
 
-#: virtManager/createvol.py:300
+#: virtManager/createvol.py:302
 msgid "Creating the storage volume may take a while..."
 msgstr "建立儲存卷宗可能需要一些時間…"
 
@@ -3281,54 +3309,50 @@ msgstr "退出全螢幕"
 msgid "Send key combination"
 msgstr "發送組合鍵"
 
-#: virtManager/details/console.py:203
-msgid "No text console available"
-msgstr "沒有可用的文字控制台"
-
-#: virtManager/details/console.py:208
-#, python-format
-msgid "Text Console %d"
-msgstr "文字控制台 %d"
-
-#: virtManager/details/console.py:210
-#, python-format
-msgid "Serial %d"
-msgstr "序列 %d"
-
-#: virtManager/details/console.py:219
-msgid "No graphical console available"
-msgstr "沒有可用的圖形控制台"
-
-#: virtManager/details/console.py:225
-msgid "Graphical Console"
-msgstr "圖形控制台"
-
-#: virtManager/details/console.py:231
-msgid "virt-manager does not support more than one graphical console"
-msgstr "virt-manager 不支援多個圖形控制台"
-
-#: virtManager/details/console.py:575
-msgid "Guest has crashed."
-msgstr "客戶機已崩潰。"
-
-#: virtManager/details/console.py:577
-msgid "Guest is not running."
-msgstr "客戶機未執行。"
-
-#: virtManager/details/console.py:700
-msgid "Graphical console not configured for guest"
-msgstr "沒有為客戶機組態設定圖形控制台"
-
-#: virtManager/details/console.py:707
+#: virtManager/details/console.py:195
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "無法顯示圖形控制台類型 '%s'"
 
-#: virtManager/details/console.py:719
+#: virtManager/details/console.py:223
+#, python-format
+msgid "Text Console %d"
+msgstr "文字控制台 %d"
+
+#: virtManager/details/console.py:225
+#, python-format
+msgid "Serial %d"
+msgstr "序列 %d"
+
+#: virtManager/details/console.py:231
+msgid "No text console available"
+msgstr "沒有可用的文字控制台"
+
+#: virtManager/details/console.py:244
+msgid "Graphical Console"
+msgstr "圖形控制台"
+
+#: virtManager/details/console.py:254
+msgid "virt-manager does not support more than one graphical console"
+msgstr "virt-manager 不支援多個圖形控制台"
+
+#: virtManager/details/console.py:260
+msgid "Graphical console not configured for guest"
+msgstr "沒有為客戶機組態設定圖形控制台"
+
+#: virtManager/details/console.py:619
+msgid "Guest has crashed."
+msgstr "客戶機已崩潰。"
+
+#: virtManager/details/console.py:621
+msgid "Guest is not running."
+msgstr "客戶機未執行。"
+
+#: virtManager/details/console.py:739
 msgid "Connecting to graphical console for guest"
 msgstr "為虛擬機系統連接到圖形控制台"
 
-#: virtManager/details/console.py:739
+#: virtManager/details/console.py:762
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3337,33 +3361,33 @@ msgstr ""
 "連接到圖形控制台出錯：\n"
 "%s"
 
-#: virtManager/details/console.py:796
+#: virtManager/details/console.py:819
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "檢視器認證錯誤：%s"
 
-#: virtManager/details/console.py:818
+#: virtManager/details/console.py:841
 msgid "USB redirection error"
 msgstr "USB 重定向錯誤"
 
-#: virtManager/details/console.py:827
+#: virtManager/details/console.py:850
 msgid "Viewer was disconnected."
 msgstr "檢視器已斷開連接。"
 
-#: virtManager/details/console.py:834
+#: virtManager/details/console.py:857
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "SSH 隧道輸出出錯：%s"
 
-#: virtManager/details/console.py:847
+#: virtManager/details/console.py:870
 msgid "Viewer is disconnecting."
 msgstr "檢視器正在斷開連接。"
 
-#: virtManager/details/console.py:980
+#: virtManager/details/console.py:1009
 msgid "Viewer window closed."
 msgstr "檢視視窗已關閉。"
 
-#: virtManager/details/console.py:984
+#: virtManager/details/console.py:1013
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "按 %s 釋放游標。"
@@ -3722,42 +3746,46 @@ msgstr "貼上(_P)"
 msgid "Error connecting to text console: %s"
 msgstr "連接到文字控制台時出錯：%s"
 
-#: virtManager/details/snapshots.py:199
+#: virtManager/details/snapshots.py:122
+msgid "external snapshots not supported with this libvirt connection"
+msgstr ""
+
+#: virtManager/details/snapshots.py:284
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr "建立快照出錯：%s"
 
-#: virtManager/details/snapshots.py:216
+#: virtManager/details/snapshots.py:306
 msgid "Snapshot"
 msgstr "快照"
 
-#: virtManager/details/snapshots.py:219
+#: virtManager/details/snapshots.py:309
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr "驗證快照出錯：%s"
 
-#: virtManager/details/snapshots.py:271 virtManager/lib/libvirtenummap.py:113
+#: virtManager/details/snapshots.py:362 virtManager/lib/libvirtenummap.py:113
 msgid "Creating snapshot"
 msgstr "正在建立快照"
 
-#: virtManager/details/snapshots.py:272
+#: virtManager/details/snapshots.py:363
 msgid "Creating virtual machine snapshot"
 msgstr "正在建立虛擬機快照"
 
-#: virtManager/details/snapshots.py:378
+#: virtManager/details/snapshots.py:483
 msgid "_Start snapshot"
 msgstr "開始快照"
 
-#: virtManager/details/snapshots.py:383
+#: virtManager/details/snapshots.py:488
 msgid "_Delete snapshot"
 msgstr "刪除快照"
 
-#: virtManager/details/snapshots.py:436
+#: virtManager/details/snapshots.py:541
 #, python-format
 msgid "Error refreshing snapshot list: %s"
 msgstr "重新整理快照列表出錯：%s"
 
-#: virtManager/details/snapshots.py:449
+#: virtManager/details/snapshots.py:554
 #, python-format
 msgid ""
 "%(vm)s\n"
@@ -3766,7 +3794,7 @@ msgstr ""
 "%(vm)s\n"
 "<span size='small'>虛擬系統狀態：%(state)s (外部)</span>"
 
-#: virtManager/details/snapshots.py:454
+#: virtManager/details/snapshots.py:559
 #, python-format
 msgid ""
 "%(vm)s\n"
@@ -3775,28 +3803,28 @@ msgstr ""
 "%(vm)s\n"
 "<span size='small'>虛擬系統狀態：%(state)s</span>"
 
-#: virtManager/details/snapshots.py:516
+#: virtManager/details/snapshots.py:621
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
 msgstr "<b>快照 '%(name)s':</b>"
 
-#: virtManager/details/snapshots.py:536
+#: virtManager/details/snapshots.py:641
 msgid "External disk and memory"
 msgstr "外部磁碟和記憶體"
 
-#: virtManager/details/snapshots.py:538
+#: virtManager/details/snapshots.py:643
 msgid "External memory only"
 msgstr "僅外部記憶體"
 
-#: virtManager/details/snapshots.py:540
+#: virtManager/details/snapshots.py:645
 msgid "External disk only"
 msgstr "僅外部磁碟"
 
-#: virtManager/details/snapshots.py:631
+#: virtManager/details/snapshots.py:736
 msgid "Saved memory state will not be part of the snapshot"
 msgstr "儲存的記憶體狀態不會成為快照的一部分"
 
-#: virtManager/details/snapshots.py:632
+#: virtManager/details/snapshots.py:737
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -3806,7 +3834,7 @@ msgstr ""
 "該域目前已儲存。由於技術限制，儲存的記憶體狀態將不會成為快照的一部分。以後執"
 "行快照的狀態就相當於中途強制關閉了系統。建議對正在執行或關閉的系統生成快照。"
 
-#: virtManager/details/snapshots.py:653
+#: virtManager/details/snapshots.py:758
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
@@ -3815,7 +3843,7 @@ msgstr ""
 "確定要套用快照 '%(name)s' 嗎？所有自最後一次快照建立以來的對磁碟的變更都會被"
 "丟棄。"
 
-#: virtManager/details/snapshots.py:657
+#: virtManager/details/snapshots.py:762
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
@@ -3824,11 +3852,11 @@ msgstr ""
 "確定要套用快照 '%(name)s' 嗎？所有自最後一次快照建立以來對磁碟和組態的變更都"
 "會被丟棄。"
 
-#: virtManager/details/snapshots.py:668
+#: virtManager/details/snapshots.py:773
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr "儲存的狀態將被移除以避免檔案系統損壞"
 
-#: virtManager/details/snapshots.py:669
+#: virtManager/details/snapshots.py:774
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -3841,62 +3869,62 @@ msgstr ""
 "狀，從而有效地在正在執行的系統下切換磁碟。之後再執行域可能會導致大量檔案系統"
 "損壞。因此，在還原快照之前，將移除儲存的狀態。"
 
-#: virtManager/details/snapshots.py:683
+#: virtManager/details/snapshots.py:788
 msgid "Running snapshot"
 msgstr "執行快照"
 
-#: virtManager/details/snapshots.py:684
+#: virtManager/details/snapshots.py:789
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "執行快照 '%s'"
 
-#: virtManager/details/snapshots.py:685
+#: virtManager/details/snapshots.py:790
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "執行快照 '%s' 時出錯"
 
-#: virtManager/details/snapshots.py:694
+#: virtManager/details/snapshots.py:799
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "確定要永久刪除所選快照嗎？"
 
-#: virtManager/details/snapshots.py:702
+#: virtManager/details/snapshots.py:807
 msgid "Deleting snapshot"
 msgstr "正在刪除快照"
 
-#: virtManager/details/snapshots.py:703
+#: virtManager/details/snapshots.py:808
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "正在刪除快照 '%s'"
 
-#: virtManager/details/snapshots.py:704
+#: virtManager/details/snapshots.py:809
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "刪除快照 '%s' 時出錯"
 
-#: virtManager/details/snapshots.py:712
+#: virtManager/details/snapshots.py:817
 msgid "No snapshot selected."
 msgstr "未選擇快照。"
 
-#: virtManager/details/snapshots.py:715
+#: virtManager/details/snapshots.py:820
 msgid "Multiple snapshots selected."
 msgstr "已選擇多個快照。"
 
-#: virtManager/details/snapshots.py:725
+#: virtManager/details/snapshots.py:830
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "選擇快照時出錯：%s"
 
-#: virtManager/details/sshtunnels.py:63
+#: virtManager/details/sshtunnels.py:64
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr "客戶機位於遠端主機上，但被僅組態設定為允許本機檔案描述符連接。"
 
-#: virtManager/details/sshtunnels.py:67
+#: virtManager/details/sshtunnels.py:68
 msgid "Guest is configured for TLS only which does not work over SSH."
 msgstr "客戶機被組態設定為無法透過 SSH 的僅 TLS 連接。"
 
-#: virtManager/details/sshtunnels.py:73
+#: virtManager/details/sshtunnels.py:74
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
@@ -4063,7 +4091,7 @@ msgstr "虛擬"
 msgid "CID"
 msgstr "CID"
 
-#: virtManager/engine.py:123
+#: virtManager/engine.py:124
 msgid "Checking for virtualization packages..."
 msgstr "正在檢查虛擬化套裝軟體…"
 
@@ -4220,52 +4248,52 @@ msgstr "尚未選擇儲存池。"
 msgid "Error selecting pool: %s"
 msgstr "選擇儲池時出錯：%s"
 
-#: virtManager/hoststorage.py:462
+#: virtManager/hoststorage.py:468
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "停止儲池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:471
+#: virtManager/hoststorage.py:477
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "啟動儲池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:481
+#: virtManager/hoststorage.py:487
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "啟動儲池精靈出錯：%s"
 
-#: virtManager/hoststorage.py:488
+#: virtManager/hoststorage.py:494
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "確定要永久刪除 %s 儲池嗎？"
 
-#: virtManager/hoststorage.py:495
+#: virtManager/hoststorage.py:501
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "刪除儲池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:506
+#: virtManager/hoststorage.py:512
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "重新整理儲池時 '%s' 時出錯"
 
-#: virtManager/hoststorage.py:540
+#: virtManager/hoststorage.py:546
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "啟動卷宗精靈出錯：%s"
 
-#: virtManager/hoststorage.py:548
+#: virtManager/hoststorage.py:554
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "確定要永久刪除卷宗 %s 嗎？"
 
-#: virtManager/hoststorage.py:561
+#: virtManager/hoststorage.py:567
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "刪除卷宗「%s」出錯"
 
-#: virtManager/hoststorage.py:586
+#: virtManager/hoststorage.py:592
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "修改儲池設定時出錯：%s"
@@ -4329,8 +4357,9 @@ msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
-msgstr "無法檢測到預設虛擬機管理程式。確保安裝了適當的 QEMU/KVM "
-"虛擬化套裝和libvirt軟體以管理此主機上的虛擬化服務。"
+msgstr ""
+"無法檢測到預設虛擬機管理程式。確保安裝了適當的 QEMU/KVM 虛擬化套裝和libvirt軟"
+"體以管理此主機上的虛擬化服務。"
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
@@ -4644,11 +4673,11 @@ msgstr "快照需要客戶機已分配至少一個可寫的 qcow2 磁碟鏡像�
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "在非活動的 虛擬系統 組態中找不到指定的裝置：%s"
 
-#: virtManager/object/domain.py:1446
+#: virtManager/object/domain.py:1452
 msgid "Saving domain to disk"
 msgstr "正在將域儲存到磁碟"
 
-#: virtManager/object/domain.py:1498
+#: virtManager/object/domain.py:1504
 msgid "Migrating domain"
 msgstr "正在遷移域"
 
@@ -4789,39 +4818,39 @@ msgstr ""
 msgid "Please press desired grab key combination"
 msgstr "請按下所需的捕獲組合鍵"
 
-#: virtManager/storagebrowse.py:28
+#: virtManager/storagebrowse.py:29
 msgid "Locate existing storage"
 msgstr "定位現有儲存"
 
-#: virtManager/storagebrowse.py:29
+#: virtManager/storagebrowse.py:30
 msgid "Locate or create storage volume"
 msgstr "定位或建立儲存卷宗"
 
-#: virtManager/storagebrowse.py:34
+#: virtManager/storagebrowse.py:36
 msgid "Locate ISO media"
 msgstr "定位 ISO 介質"
 
-#: virtManager/storagebrowse.py:35
+#: virtManager/storagebrowse.py:37
 msgid "Locate ISO media volume"
 msgstr "定位 ISO 媒體卷宗"
 
-#: virtManager/storagebrowse.py:39
+#: virtManager/storagebrowse.py:41
 msgid "Locate floppy media"
 msgstr "定位磁片卷"
 
-#: virtManager/storagebrowse.py:40
+#: virtManager/storagebrowse.py:42
 msgid "Locate floppy media volume"
 msgstr "定位磁片媒體卷宗"
 
-#: virtManager/storagebrowse.py:44 virtManager/storagebrowse.py:45
+#: virtManager/storagebrowse.py:46 virtManager/storagebrowse.py:47
 msgid "Locate directory volume"
 msgstr "定位目錄卷宗"
 
-#: virtManager/storagebrowse.py:50
+#: virtManager/storagebrowse.py:52
 msgid "Choose Storage Volume"
 msgstr "選擇儲存卷宗"
 
-#: virtManager/storagebrowse.py:119
+#: virtManager/storagebrowse.py:121
 msgid "Cannot use local storage on remote connection."
 msgstr "無法在遠端連線中使用本機儲存。"
 
@@ -5017,42 +5046,48 @@ msgstr "儲存虛擬機截圖"
 msgid "PNG files"
 msgstr "PNG 檔案"
 
-#: virtManager/xmleditor.py:118 virtManager/xmleditor.py:131
+#: virtManager/vmwindow.py:561
+#, fuzzy
+#| msgid "Saved"
+msgid "_Save"
+msgstr "已儲存"
+
+#: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
 msgid "There are unapplied changes."
 msgstr "還有未套用的變更。"
 
-#: virtManager/xmleditor.py:119
+#: virtManager/xmleditor.py:139
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr "如果離開這個分頁，變更將會遺失。確定要離開嗎？"
 
-#: virtManager/xmleditor.py:132
+#: virtManager/xmleditor.py:152
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr "如果離開這個分頁，對 XML 的變更將會遺失。確定要離開嗎？"
 
-#: virtinst/capabilities.py:290
+#: virtinst/capabilities.py:297
 #, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr "主機不支援架構 '%(arch)s' 的虛擬化類型 '%(virttype)s'"
 
-#: virtinst/capabilities.py:294
+#: virtinst/capabilities.py:301
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr "主機不支援架構 '%(arch)s' 的任何虛擬化選項"
 
-#: virtinst/capabilities.py:298
+#: virtinst/capabilities.py:305
 #, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "主機不支援虛擬化類型 %(virttype)s"
 
-#: virtinst/capabilities.py:302
+#: virtinst/capabilities.py:309
 msgid "Host does not support any virtualization options"
 msgstr "主機不支援任何虛擬化選項"
 
-#: virtinst/capabilities.py:308
+#: virtinst/capabilities.py:315
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
@@ -5061,7 +5096,7 @@ msgstr ""
 "主機不支援機器 '%(machine)s' 的域類型 %(domain)s 用於 '%(arch)s' 架構的虛擬化"
 "類型 '%(virttype)s'"
 
-#: virtinst/capabilities.py:314
+#: virtinst/capabilities.py:321
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
@@ -5609,36 +5644,40 @@ msgstr "請求了圖形顯示，但未設定 DISPLAY。不能執行 virt-viewer�
 msgid "Unknown autoconsole type '%s'"
 msgstr "未知的自動控制台類型 '%s'"
 
-#: virtinst/cli.py:3527
+#: virtinst/cli.py:2341
+msgid "CPU model=host is deprecated, use model=host-model"
+msgstr ""
+
+#: virtinst/cli.py:3528
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' 數值不正確：%s"
 
-#: virtinst/cli.py:3540
+#: virtinst/cli.py:3541
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "未知 '%(optionname)s' 值 '%(string)s'"
 
-#: virtinst/cli.py:3555
+#: virtinst/cli.py:3556
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "必須將儲存卷宗指定為 vol=poolname/volname"
 
-#: virtinst/cli.py:4015
+#: virtinst/cli.py:4016
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "預期的 '%s' 的 PCI 格式字串"
 
-#: virtinst/cli.py:4736
+#: virtinst/cli.py:4737
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s 會對應多個節點裝置"
 
-#: virtinst/cli.py:4739
+#: virtinst/cli.py:4740
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "不能為 '%s' 找到匹配的節點裝置"
 
-#: virtinst/cli.py:4876
+#: virtinst/cli.py:4877
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5709,12 +5748,12 @@ msgstr "設定圖形裝置埠為自動埠，以避免相互衝突。"
 msgid "Invalid name for new guest: %s"
 msgstr "新用戶端的無效名稱：%s"
 
-#: virtinst/devices/disk.py:351
+#: virtinst/devices/disk.py:379
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr "必須為非現有卷宗 '%s' 指定大小"
 
-#: virtinst/devices/disk.py:356
+#: virtinst/devices/disk.py:384
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -5722,21 +5761,21 @@ msgid ""
 msgstr ""
 "不知道如何為路徑 '%s' 建立儲存。首先使用 libvirt API 將父目錄作為儲池來管理。"
 
-#: virtinst/devices/disk.py:379
+#: virtinst/devices/disk.py:407
 msgid "Format attribute not supported for this volume type"
 msgstr "在這個卷宗類型中不支援的格式屬性"
 
-#: virtinst/devices/disk.py:805
+#: virtinst/devices/disk.py:838
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "裝置類型 '%s' 需要一個路徑"
 
-#: virtinst/devices/disk.py:813
+#: virtinst/devices/disk.py:846
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "必須為非現有路徑 '%s' 指定建立儲存的參數。"
 
-#: virtinst/devices/disk.py:926
+#: virtinst/devices/disk.py:959
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5853,16 +5892,16 @@ msgstr "客戶機"
 msgid "Guest name '%s' is already in use."
 msgstr "客戶機名稱 '%s' 已經在使用。"
 
-#: virtinst/guest.py:854
+#: virtinst/guest.py:858
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt 版本不支援 UEFI。"
 
-#: virtinst/guest.py:858
+#: virtinst/guest.py:862
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "不知如何為架構 '%s' 安裝 UEFI"
 
-#: virtinst/guest.py:863
+#: virtinst/guest.py:867
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "不能為架構 '%s' 找到任何 UEFI 二進位制路徑"
@@ -5872,17 +5911,17 @@ msgstr "不能為架構 '%s' 找到任何 UEFI 二進位制路徑"
 msgid "Removing disk '%s'"
 msgstr "正在刪除磁碟 '%s'"
 
-#: virtinst/install/installer.py:268
+#: virtinst/install/installer.py:275
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr "%(osname)s 網路安裝需要將記憶體覆蓋到 %(number)s MiB。"
 
-#: virtinst/install/installer.py:649
+#: virtinst/install/installer.py:656
 msgid "Creating domain..."
 msgstr "建立域…"
 
-#: virtinst/install/installer.py:656
+#: virtinst/install/installer.py:663
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "域類型 'vz' 不支援臨時安裝。"
 
@@ -6937,6 +6976,9 @@ msgstr "必須為 %s 指定名稱"
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr "%(objecttype)s 名稱 '%(name)s' 不能包含 '%(char)s' 字元。"
 
+#~ msgid "No graphical console available"
+#~ msgstr "沒有可用的圖形控制台"
+
 #~ msgid ""
 #~ "The libvirtd service does not appear to be installed. Install and run the "
 #~ "libvirtd service to manage virtualization on this host."
@@ -7278,9 +7320,6 @@ msgstr "%(objecttype)s 名稱 '%(name)s' 不能包含 '%(char)s' 字元。"
 
 #~ msgid "Host does not support spice GL"
 #~ msgstr "主機不支援 spice GL"
-
-#~ msgid "External"
-#~ msgstr "外部"
 
 #~ msgid "VM State"
 #~ msgstr "虛擬機狀態"
