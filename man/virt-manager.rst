@@ -58,6 +58,11 @@ The following options are accepted when running ``virt-manager``
     current terminal. Useful for seeing possible errors dumped to stdout/stderr.
 
 
+``--fork``
+    Force forking ``virt-manager`` off into the background.
+    This is the default behavior.
+
+
 DIALOG WINDOW OPTIONS
 =====================
 
