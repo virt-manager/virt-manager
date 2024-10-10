@@ -135,8 +135,8 @@ def do_we_fork(options):
     if val:
         log.warning("Unknown %s=%s, expected 'yes' or 'no'", key, val)
 
-    # Default is `--fork`
-    return True
+    # Default is `--no-fork`
+    return False
 
 
 def parse_commandline():
