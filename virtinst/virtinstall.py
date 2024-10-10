@@ -438,10 +438,6 @@ def build_installer(options, guest, installdata):
         no_install = True
     elif options.boot_was_set:
         no_install = True
-    elif options.cloud_init:
-        no_install = True
-    elif options.unattended:
-        no_install = True
 
     installer = virtinst.Installer(guest.conn,
             cdrom=cdrom,
@@ -874,7 +870,7 @@ def _wait_for_domain(installer, instdomain, autoconsole, waithandler):
         # User either:
         #   used --noautoconsole
         #   killed console and guest is still running
-        if not installer.has_install_phase():
+        if not installer.requires_postboot_xml_changes():
             return
 
         msg += "\n"
@@ -925,7 +921,7 @@ def _process_domain(domain, guest, installer, waithandler, autoconsole,
     if domain.isActive():
         return
 
-    if noreboot or not installer.has_install_phase():
+    if noreboot or not installer.requires_postboot_xml_changes():
         print_stdout(  # pragma: no cover
             _("You can restart your domain by running:\n  %s") %
             cli.virsh_start_cmd(guest))
