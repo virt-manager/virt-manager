@@ -108,13 +108,10 @@ manual ``--connect`` URI. But it supports ``--connect`` URI as well:
 VIRT-MANAGER, SSH, AND FORKING
 ==============================
 
-On startup virt-manager will detach from the running
-terminal and fork into the background. This is to force any usage of
-ssh to call ssh-askpass when it needs a password, rather than silently
+Historically, on startup virt-manager would detach from the running
+terminal and fork into the background. This was to force any usage of
+ssh to call ssh-askpass when it needed a password, rather than silently
 asking on a terminal the user probably isn't watching.
-
-Users can opt out of this forking behavior with ``--no-fork``, or
-by setting the ``VIRT_MANAGER_DEFAULT_FORK=no`` environment variable.
 
 openssh 8.4p1 released in Sep 2020 added the SSH_ASKPASS_REQUIRE
 environment variable that saves us from having to do the fork dance.
@@ -124,9 +121,10 @@ virt-manager now sets SSH_ASKPASS_REQUIRE=force.
 However to get this to work with libvirt ssh connections, you'll need
 libvirt 10.8.0 released in October 1st 2024.
 
-In the future, virt-manager will likely stop forking by default.
-You can future proof request forking with ``--fork`` or by
-settings the ``VIRT_MANAGER_DEFAULT_FORK=yes`` environment variable.
+virt-manager no longer forks by defaults.
+
+You can get the old forking behavior with the ``--fork`` option,
+or by setting the ``VIRT_MANAGER_DEFAULT_FORK=yes`` environment variable.
 
 However if you find you need forking for a usecase other than temporarily
 working around libvirt version issues, please let the virt-manager developers
