@@ -199,15 +199,15 @@ class vmmVMWindow(vmmGObjectUI):
 
     def _set_initial_window_size(self):
         """
-        We want the window size for new windows to be 1024x768 viewer
+        We want the window size for new windows to be 1280x800 viewer
         size, plus whatever it takes to fit the toolbar+menubar, etc.
         To achieve this, we force the display box to the desired size
         with set_size_request, wait for the window to report it has
         been resized, and then unset the hardcoded size request so
         the user can manually resize the window however they want.
         """
-        w = 1024
-        h = 768
+        w = 1280
+        h = 800
         hid = []
         def win_cb(src, event):
             self.widget("details-pages").set_size_request(-1, -1)
