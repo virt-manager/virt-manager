@@ -4,30 +4,30 @@
 #
 # Translators:
 # Cole Robinson <crobinso@redhat.com>, 2011
-# Piotr Drąg <piotrdrag@gmail.com>, 2006,2011-2015, 2020, 2021, 2022, 2023.
+# Piotr Drąg <piotrdrag@gmail.com>, 2006,2011-2015, 2020, 2021, 2022, 2023, 2024.
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020, 2021, 2022, 2023.
-# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020, 2021, 2022, 2023.
-# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020, 2021, 2022, 2023.
-# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020, 2021, 2022, 2023.
-# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020, 2021, 2022, 2023.
-# Piotr Drąg <piotrdrag@gmail.com>, 2020. #zanata, 2021, 2022, 2023.
+# Piotr Drąg <piotrdrag@gmail.com>, 2015. #zanata, 2020, 2021, 2022, 2023, 2024.
+# Piotr Drąg <piotrdrag@gmail.com>, 2016. #zanata, 2020, 2021, 2022, 2023, 2024.
+# Piotr Drąg <piotrdrag@gmail.com>, 2017. #zanata, 2020, 2021, 2022, 2023, 2024.
+# Piotr Drąg <piotrdrag@gmail.com>, 2018. #zanata, 2020, 2021, 2022, 2023, 2024.
+# Piotr Drąg <piotrdrag@gmail.com>, 2019. #zanata, 2020, 2021, 2022, 2023, 2024.
+# Piotr Drąg <piotrdrag@gmail.com>, 2020. #zanata, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-08-16 22:43+0200\n"
-"PO-Revision-Date: 2023-09-25 16:05+0000\n"
+"PO-Revision-Date: 2024-08-24 12:24+0000\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
-"Language-Team: Polish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/pl/>\n"
+"Language-Team: Polish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.7\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -101,7 +101,7 @@ msgstr "Używa biblioteki libvirt"
 #. TRANSLATORS: Replace this string with your names, one name per line.
 #: ui/about.ui:18
 msgid "translator-credits"
-msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2006-2023"
+msgstr "Piotr Drąg <piotrdrag@gmail.com>, 2006-2024"
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
@@ -2009,32 +2009,24 @@ msgid "_Description:"
 msgstr "_Opis:"
 
 #: ui/snapshotsnew.ui:236
-#, fuzzy
-#| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
-msgstr "Tryb migawki:"
+msgstr "_Tryb migawki:"
 
 #: ui/snapshotsnew.ui:251
-#, fuzzy
-#| msgid "External"
 msgid "_external"
-msgstr "Zewnętrzne"
+msgstr "_zewnętrzny"
 
 #: ui/snapshotsnew.ui:268
-#, fuzzy
-#| msgid "External"
 msgid "_internal"
-msgstr "Zewnętrzne"
+msgstr "_wewnętrzny"
 
 #: ui/snapshotsnew.ui:294
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "Stan maszyny wirtualnej:"
+msgstr "_Stan pamięci:"
 
 #: ui/snapshotsnew.ui:308
 msgid "_auto"
-msgstr ""
+msgstr "_automatyczny"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -3797,7 +3789,7 @@ msgstr "Błąd podczas łączenia się z konsolą tekstową: %s"
 
 #: virtManager/details/snapshots.py:122
 msgid "external snapshots not supported with this libvirt connection"
-msgstr ""
+msgstr "zewnętrzne migawki nie są obsługiwane za pomocą tego połączenia libvirt"
 
 #: virtManager/details/snapshots.py:284
 #, python-format
@@ -5128,10 +5120,8 @@ msgid "PNG files"
 msgstr "Pliki PNG"
 
 #: virtManager/vmwindow.py:561
-#, fuzzy
-#| msgid "Saved"
 msgid "_Save"
-msgstr "Zapisana"
+msgstr "_Zapisz"
 
 #: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
 msgid "There are unapplied changes."
@@ -5749,6 +5739,8 @@ msgstr "Nieznany typ automatycznej konsoli „%s”"
 #: virtinst/cli.py:2341
 msgid "CPU model=host is deprecated, use model=host-model"
 msgstr ""
+"Procesor model=gospodarz jest przestarzały, należy użyć model=model-"
+"gospodarza"
 
 #: virtinst/cli.py:3528
 #, python-format
