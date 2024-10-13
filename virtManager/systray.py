@@ -19,22 +19,12 @@ from .connmanager import vmmConnectionManager
 
 
 # pylint: disable=ungrouped-imports
-# Prefer AyatantaAppIndicator3 which is the modern maintained
-# appindicator library.
 try:  # pragma: no cover
     # pylint: disable=no-name-in-module
     gi.require_version('AyatanaAppIndicator3', '0.1')
     from gi.repository import AyatanaAppIndicator3 as AppIndicator3
 except Exception:  # pragma: no cover
     AppIndicator3 = None
-
-if not AppIndicator3:
-    try:  # pragma: no cover
-        # pylint: disable=no-name-in-module
-        gi.require_version('AppIndicator3', '0.1')
-        from gi.repository import AppIndicator3
-    except Exception:  # pragma: no cover
-        AppIndicator3 = None
 
 
 def _toggle_manager(*args, **kwargs):
