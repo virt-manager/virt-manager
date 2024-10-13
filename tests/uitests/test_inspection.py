@@ -6,7 +6,7 @@ import pytest
 from . import lib
 
 try:
-    import guestfs
+    import guestfs  # pylint: disable=import-error
     ignore = guestfs
     HAS_LIBGUESTFS = True
 except Exception:

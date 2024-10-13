@@ -219,6 +219,7 @@ class vmmEngine(vmmGObject):
         self._application.connect("activate",
             self._on_gtk_application_activated)
 
+        # pylint: disable=no-member
         action = Gio.SimpleAction.new("cli_command",
             GLib.VariantType.new("(sss)"))
         action.connect("activate", self._handle_cli_command)
