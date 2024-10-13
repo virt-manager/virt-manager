@@ -140,7 +140,7 @@ def set_grid_row_visible(child, visible):
     For the passed widget, find its parent GtkGrid, and hide/show all
     elements that are in the same row as it. Simplifies having to name
     every element in a row when we want to dynamically hide things
-    based on UI interraction
+    based on UI interaction
     """
     parent = child.get_parent()
     if not isinstance(parent, Gtk.Grid):

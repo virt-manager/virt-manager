@@ -2090,12 +2090,12 @@ class vmmCreateVM(vmmGObjectUI):
         else:  # pragma: no cover
             import virtBootstrap  # pylint: disable=import-error
 
-        meter.start(_("Bootstraping container"), None)
+        meter.start(_("Bootstrapping container"), None)
         def progress_update_cb(prog):
             meter.start(_(prog['status']), None)
 
         asyncjob.details_enable()
-        # Use logging filter to show messages of the progreess on the GUI
+        # Use logging filter to show messages of the progress on the GUI
         class SetStateFilter(logging.Filter):
             def filter(self, record):
                 asyncjob.details_update("%s\n" % record.getMessage())

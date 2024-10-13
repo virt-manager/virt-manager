@@ -496,7 +496,7 @@ def _populate_storage_list(storage_list, vm, conn, diskdatas):
 
 
 def _prepare_storage_list(storage_list):
-    # Checkbox, deleteable?, storage path, target (hda), icon name,
+    # Checkbox, deletable?, storage path, target (hda), icon name,
     # icon size, tooltip
     model = Gtk.ListStore(bool, bool, str, str, bool, str, int, str)
     storage_list.set_model(model)
@@ -557,7 +557,7 @@ def _storage_item_toggled(src, index, storage_list):
 
 
 def _can_delete(conn, vol, path):
-    """Is the passed path even deleteable"""
+    """Is the passed path even deletable"""
     msg = None
 
     if vol:

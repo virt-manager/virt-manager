@@ -2132,7 +2132,7 @@ class vmmDetails(vmmGObjectUI):
         show_ui("char-target-type", target_type)
         show_ui("char-target-name", chardev.target_name)
         # Only show for the qemu guest agent, which we get async
-        # notifiations about connection state. For spice this UI field
+        # notifications about connection state. For spice this UI field
         # can get out of date
         show_ui("char-target-state", chardev.target_state, doshow=is_qemuga)
         clipboard = _("On") if chardev.source.clipboard_copypaste else _("Off")

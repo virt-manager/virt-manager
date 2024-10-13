@@ -3244,7 +3244,7 @@ class ParserSysinfo(VirtCLIParser):
         # Previously libvirt treated sysinfo as a singleton object, but
         # that changed with fwcfg support. Our cli would merge all options
         # together but now needs to support multiple. Maintain sorta
-        # backcompat behavior by mergin options if 'type' matches
+        # backcompat behavior by merging options if 'type' matches
         if not inst:
             typ = self.optdict["type"]
             for sysinfo in self.guest.sysinfo:
