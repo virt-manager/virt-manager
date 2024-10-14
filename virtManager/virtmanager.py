@@ -118,6 +118,27 @@ def drop_stdio():
     os.dup2(0, 2)
 
 
+def do_we_fork(options):
+    if options.fork:
+        return True
+    if options.debug or options.no_fork:
+        return False
+
+    key = "VIRT_MANAGER_DEFAULT_FORK"
+    val = os.environ.get(key, None)
+    if val == "yes":
+        log.debug("%s=%s, defaulting to --fork", key, val)
+        return True
+    if val == "no":  # pragma: no cover
+        log.debug("%s=%s, defaulting to --no-fork", key, val)
+        return False
+    if val:  # pragma: no cover
+        log.warning("Unknown %s=%s, expected 'yes' or 'no'", key, val)
+
+    # Default is `--no-fork`
+    return False
+
+
 def parse_commandline():
     epilog = ("Also accepts standard GTK arguments like --g-fatal-warnings")
     parser = argparse.ArgumentParser(usage="virt-manager [options]",
@@ -142,6 +163,8 @@ def parse_commandline():
         default=False)
     parser.add_argument("--no-fork", action="store_true",
         help="Don't fork into background on startup")
+    parser.add_argument("--fork", action="store_true",
+        help="Force fork into background on startup (this is the default)")
 
     parser.add_argument("--show-domain-creator", action="store_true",
         help="Show 'New VM' wizard")
@@ -185,17 +208,22 @@ def main():
     # With F27 gnome+wayland we need to set these before GTK import
     os.environ["GSETTINGS_SCHEMA_DIR"] = BuildConfig.gsettings_dir
 
+    # Force SSH to use askpass if a password is required,
+    # rather than possibly prompting on a terminal the user isn't looking at.
+    os.environ.setdefault("SSH_ASKPASS_REQUIRE", "force")
+    log.debug("Using SSH_ASKPASS_REQUIRE=%s",
+              os.environ["SSH_ASKPASS_REQUIRE"])
+
     # Now we've got basic environment up & running we can fork
-    do_drop_stdio = False
-    if not options.no_fork and not options.debug:
+    do_fork = do_we_fork(options)
+    if do_fork:
         drop_tty()
-        do_drop_stdio = True
 
     leftovers = _import_gtk(leftovers)
     Gtk = globals()["Gtk"]
 
     # Do this after the Gtk import so the user has a chance of seeing any error
-    if do_drop_stdio:
+    if do_fork:
         drop_stdio()
 
     if leftovers:
