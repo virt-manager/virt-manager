@@ -40,6 +40,12 @@ foreach bin : bin_data
   )
 endforeach
 
+gnome = import('gnome')
+gnome.post_install(
+  glib_compile_schemas: get_option('compile-schemas'),
+  gtk_update_icon_cache: get_option('update-icon-cache'),
+)
+
 if git
   spec_conf = configuration_data({
     'VERSION': meson.project_version(),
