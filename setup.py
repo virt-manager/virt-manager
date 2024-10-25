@@ -29,56 +29,12 @@ except ImportError:
     BUILD_COMMAND_CLASS = distutils.command.build.build  # pylint: disable=c-extension-no-member
 
 
-SYSPREFIX = sysconfig.get_config_var("prefix")
-
-
-def _import_buildconfig():
-    # A bit of crazyness to import the buildconfig file without importing
-    # the rest of virtinst, so the build process doesn't require all the
-    # runtime deps to be installed
-    spec = importlib.util.spec_from_file_location(
-            'buildconfig', 'virtinst/buildconfig.py')
-    buildconfig = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(buildconfig)
-    if "libvirt" in sys.modules:
-        raise RuntimeError("Found libvirt in sys.modules. setup.py should "
-                "not import virtinst.")
-    return buildconfig.BuildConfig
-
-
-BuildConfig = _import_buildconfig()
-
-
 class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
     """
     Disable egg_info installation, seems pointless for a non-library
     """
     def run(self):
         pass
-
-
-class my_install(setuptools.command.install.install):
-    """
-    Error if we weren't 'configure'd with the correct install prefix
-    """
-    def finalize_options(self):
-        # pylint: disable=access-member-before-definition
-        if self.prefix is None:
-            if BuildConfig.prefix != SYSPREFIX:
-                print("Using configured prefix=%s instead of SYSPREFIX=%s" % (
-                    BuildConfig.prefix, SYSPREFIX))
-                self.prefix = BuildConfig.prefix
-            else:
-                print("Using SYSPREFIX=%s" % SYSPREFIX)
-                self.prefix = SYSPREFIX
-
-        elif self.prefix != BuildConfig.prefix:
-            print("Install prefix=%s doesn't match configure prefix=%s\n"
-                  "Pass matching --prefix to 'setup.py configure'" %
-                  (self.prefix, BuildConfig.prefix))
-            sys.exit(1)
-
-        super().finalize_options()
 
 
 ###################
@@ -105,40 +61,6 @@ class my_rpm(setuptools.Command):
             "dist/virt-manager-%s.tar.gz" % BuildConfig.version,
         ]
         subprocess.check_call(cmd)
-
-
-class configure(setuptools.Command):
-    user_options = [
-        ("prefix=", None, "installation prefix"),
-        ("default-graphics=", None,
-         "Default graphics type (spice or vnc) (default=spice)"),
-        ("default-hvs=", None,
-         "Comma separated list of hypervisors shown in 'Open Connection' "
-         "wizard. (default=all hvs)"),
-
-    ]
-    description = "Configure the build, similar to ./configure"
-
-    def finalize_options(self):
-        pass
-
-    def initialize_options(self):
-        self.prefix = SYSPREFIX
-        self.default_graphics = None
-        self.default_hvs = None
-
-
-    def run(self):
-        template = ""
-        template += "[config]\n"
-        template += "prefix = %s\n" % self.prefix
-        if self.default_graphics is not None:
-            template += "default_graphics = %s\n" % self.default_graphics
-        if self.default_hvs is not None:
-            template += "default_hvs = %s\n" % self.default_hvs
-
-        open(BuildConfig.cfgpath, "w").write(template)
-        print("Generated %s" % BuildConfig.cfgpath)
 
 
 class TestCommand(setuptools.Command):
@@ -229,19 +151,11 @@ setuptools.setup(
     url="https://virt-manager.org",
     license="GPLv2+",
 
-    data_files=[
-        ("share/virt-manager/virtinst",
-            glob.glob("virtinst/build.cfg")),
-    ],
-
     # stop setuptools 61+ thinking we want to include everything automatically
     py_modules=[],
 
     cmdclass={
-        'install': my_install,
         'install_egg_info': my_egg_info,
-
-        'configure': configure,
 
         'pylint': CheckPylint,
         'rpm': my_rpm,

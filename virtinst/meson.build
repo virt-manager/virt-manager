@@ -36,3 +36,17 @@ install_data(
 subdir('devices')
 subdir('domain')
 subdir('install')
+
+conf = configuration_data()
+conf.set('version', meson.project_version())
+conf.set('prefix', prefix)
+conf.set('default_graphics', get_option('default-graphics'))
+conf.set('default_hvs', ','.join(get_option('default-hvs')))
+
+configure_file(
+  input: 'build.cfg.in',
+  output: 'build.cfg',
+  configuration: conf,
+  install: true,
+  install_dir: pkgdir / 'virtinst',
+)
