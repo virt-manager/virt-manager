@@ -114,8 +114,8 @@ machine).
 
 %install
 ./setup.py \
-    --no-update-icon-cache --no-compile-schemas \
-    install -O1 --root=%{buildroot}
+    install -O1 --root=%{buildroot} \
+    --no-update-icon-cache --no-compile-schemas
 %find_lang %{name}
 
 %if 0%{?py_byte_compile:1}

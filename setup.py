@@ -260,15 +260,25 @@ class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
 
 
 class my_install(setuptools.command.install.install):
+    user_options = setuptools.command.install.install.user_options + [
+        ("no-update-icon-cache", None, "Don't run gtk-update-icon-cache"),
+        ("no-compile-schemas", None, "Don't compile gsettings schemas"),
+    ]
+
+    def initialize_options(self):
+        super().initialize_options()
+        self.no_update_icon_cache = False
+        self.no_compile_schemas = False
+
     def run(self):
         super().run()
 
-        if not self.distribution.no_update_icon_cache:
+        if not self.no_update_icon_cache:
             print("running gtk-update-icon-cache")
             icon_path = os.path.join(self.install_data, "share/icons/hicolor")
             self.spawn(["gtk-update-icon-cache", "-q", "-t", icon_path])
 
-        if not self.distribution.no_compile_schemas:
+        if not self.no_compile_schemas:
             print("compiling gsettings schemas")
             gschema_install = os.path.join(self.install_data,
                 "share/glib-2.0/schemas")
@@ -381,18 +391,6 @@ class CheckPylint(setuptools.Command):
             pylint_opts += ["--jobs=%d" % self.jobs]
 
         pylint.lint.Run(lintfiles + pylint_opts)
-
-
-class VMMDistribution(setuptools.dist.Distribution):
-    global_options = setuptools.dist.Distribution.global_options + [
-        ("no-update-icon-cache", None, "Don't run gtk-update-icon-cache"),
-        ("no-compile-schemas", None, "Don't compile gsettings schemas"),
-    ]
-
-    def __init__(self, *args, **kwargs):
-        self.no_update_icon_cache = False
-        self.no_compile_schemas = False
-        super().__init__(*args, **kwargs)
 
 
 class ExtractMessages(setuptools.Command):
@@ -508,6 +506,5 @@ setuptools.setup(
         'extract_messages': ExtractMessages,
     },
 
-    distclass=VMMDistribution,
     packages=[],
 )
