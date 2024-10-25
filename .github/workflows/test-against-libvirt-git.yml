@@ -27,7 +27,13 @@ jobs:
           python3-pytest \
           python3-pytest-error-for-skips
 
-        dnf builddep -y ./virt-manager.spec libvirt
+        dnf install -y \
+          gettext \
+          python3-devel \
+          python3-docutils \
+          meson
+
+        dnf builddep -y libvirt
 
     - name: checkout and build libvirt
       run: |
@@ -39,10 +45,16 @@ jobs:
 
     - name: Build RPM and test install
       run: |
-        ./setup.py rpm
+        git config --global --add safe.directory $PWD
+        meson setup build \
+          -Dupdate-icon-cache=false \
+          -Dcompile-schemas=false \
+          -Dtests=disabled
+        meson dist -C build
+        rpmbuild -tb build/meson-dist/virt-manager*.tar.xz
         dnf install -y \
-          noarch/virt-install*.rpm \
-          noarch/virt-manager-common*.rpm
+          ~/rpmbuild/RPMS/noarch/virt-install*.rpm \
+          ~/rpmbuild/RPMS/noarch/virt-manager-common*.rpm
 
     - name: Run test suite
       run: |

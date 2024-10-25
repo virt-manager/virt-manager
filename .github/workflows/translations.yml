@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  # This job will run ./setup.py extract_messages on top of git main
+  # This job will run meson compile -C build virt-manager-pot on top of git main
   # and force push that to the 'translations' branch. That branch will
   # always have an up to date .pot file for use in weblate
   update-translation-pot:
@@ -22,7 +22,13 @@ jobs:
     steps:
     - name: Install deps
       run: |
-        dnf install -y python3-setuptools gettext git diffutils
+        dnf install -y \
+        git \
+        diffutils \
+        gettext \
+        python3-devel \
+        python3-docutils \
+        meson
 
     - uses: actions/checkout@v4
       with:
@@ -39,7 +45,11 @@ jobs:
         git rebase remotes/origin/translations
 
         cp po/virt-manager.pot old.pot
-        ./setup.py extract_messages
+        meson setup build \
+          -Dupdate-icon-cache=false \
+          -Dcompile-schemas=false \
+          -Dtests=disabled
+        meson compile -C build virt-manager-pot
         ec=0
         diff -q -I 'POT-Creation-Date' old.pot po/virt-manager.pot || ec=$?
         case "${ec}" in
