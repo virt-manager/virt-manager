@@ -7,7 +7,7 @@
 # End local config
 
 Name: virt-manager
-Version: 4.1.0
+Version: @VERSION@
 Release: 1%{?dist}
 %global verrel %{version}-%{release}
 
@@ -15,7 +15,7 @@ Summary: Desktop tool for managing virtual machines via libvirt
 License: GPL-2.0-or-later
 BuildArch: noarch
 URL: https://virt-manager.org/
-Source0: https://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar.gz
+Source0: https://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar.xz
 
 
 Requires: virt-manager-common = %{verrel}
@@ -53,7 +53,7 @@ Suggests: python3-libguestfs
 BuildRequires: gettext
 BuildRequires: python3-devel
 BuildRequires: python3-docutils
-BuildRequires: python3-setuptools
+BuildRequires: meson
 
 
 %description
@@ -104,18 +104,15 @@ machine).
 
 
 %build
-%if %{default_hvs}
-%global _default_hvs --default-hvs %{default_hvs}
-%endif
-
-./setup.py configure \
-    %{?_default_hvs}
-
+%meson \
+    -Ddefault-hvs=%{default_hvs} \
+    -Dupdate-icon-cache=false \
+    -Dcompile-schemas=false
+%meson_build
 
 %install
-./setup.py \
-    --no-update-icon-cache --no-compile-schemas \
-    install -O1 --root=%{buildroot}
+%meson_install
+
 %find_lang %{name}
 
 %if 0%{?py_byte_compile:1}
