@@ -178,11 +178,14 @@ from %(pkgname)s import %(filename)s
         if not rstbin:
             sys.exit("Didn't find rst2man or rst2man.py")
 
+        mandir = os.path.join(self.build_base, "man")
+        if not os.path.exists(mandir):
+            os.mkdir(mandir)
+
         for path in glob.glob("man/*.rst"):
             base = os.path.basename(path)
             appname = os.path.splitext(base)[0]
-            newpath = os.path.join(os.path.dirname(path),
-                                   appname + ".1")
+            newpath = os.path.join(mandir, appname + ".1")
 
             print("Generating %s" % newpath)
             out = subprocess.check_output([rstbin, "--strict", path])
@@ -456,10 +459,10 @@ setuptools.setup(
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),
 
         ("share/man/man1", [
-            "man/virt-manager.1",
-            "man/virt-install.1",
-            "man/virt-clone.1",
-            "man/virt-xml.1"
+            "build/man/virt-manager.1",
+            "build/man/virt-install.1",
+            "build/man/virt-clone.1",
+            "build/man/virt-xml.1"
         ]),
 
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
