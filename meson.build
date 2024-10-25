@@ -18,6 +18,7 @@ subdir('man')
 subdir('data')
 subdir('ui')
 subdir('virtinst')
+subdir('virtManager')
 
 if git
   spec_conf = configuration_data({

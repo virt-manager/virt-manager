@@ -433,15 +433,6 @@ setuptools.setup(
         "build/virt-xml"]),
 
     data_files=[
-        ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
-        ("share/virt-manager/virtManager/details",
-            glob.glob("virtManager/details/*.py")),
-        ("share/virt-manager/virtManager/device",
-            glob.glob("virtManager/device/*.py")),
-        ("share/virt-manager/virtManager/lib",
-            glob.glob("virtManager/lib/*.py")),
-        ("share/virt-manager/virtManager/object",
-            glob.glob("virtManager/object/*.py")),
         ("share/virt-manager/virtinst",
             glob.glob("virtinst/build.cfg")),
     ],
