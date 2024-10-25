@@ -49,44 +49,6 @@ def _import_buildconfig():
 BuildConfig = _import_buildconfig()
 
 
-class my_build(BUILD_COMMAND_CLASS):
-    def _make_bin_wrappers(self):
-        template = """#!/usr/bin/env python3
-
-import os
-import sys
-sys.path.insert(0, "%(sharepath)s")
-from %(pkgname)s import %(filename)s
-
-%(filename)s.runcli()
-"""
-        if not os.path.exists("build"):
-            os.mkdir("build")
-        sharepath = os.path.join(BuildConfig.prefix, "share", "virt-manager")
-
-        def make_script(pkgname, filename, toolname):
-            assert os.path.exists(pkgname + "/" + filename + ".py")
-            content = template % {
-                "sharepath": sharepath,
-                "pkgname": pkgname,
-                "filename": filename}
-
-            newpath = os.path.abspath(os.path.join("build", toolname))
-            print("Generating %s" % newpath)
-            open(newpath, "w").write(content)
-
-        make_script("virtinst", "virtinstall", "virt-install")
-        make_script("virtinst", "virtclone", "virt-clone")
-        make_script("virtinst", "virtxml", "virt-xml")
-        make_script("virtManager", "virtmanager", "virt-manager")
-
-
-    def run(self):
-        self._make_bin_wrappers()
-
-        super().run()
-
-
 class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
     """
     Disable egg_info installation, seems pointless for a non-library
@@ -293,13 +255,6 @@ setuptools.setup(
     url="https://virt-manager.org",
     license="GPLv2+",
 
-    # These wrappers are generated in our custom build command
-    scripts=([
-        "build/virt-manager",
-        "build/virt-clone",
-        "build/virt-install",
-        "build/virt-xml"]),
-
     data_files=[
         ("share/virt-manager/virtinst",
             glob.glob("virtinst/build.cfg")),
@@ -309,8 +264,6 @@ setuptools.setup(
     py_modules=[],
 
     cmdclass={
-        'build': my_build,
-
         'install': my_install,
         'install_egg_info': my_egg_info,
 
