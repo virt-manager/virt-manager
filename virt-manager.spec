@@ -108,7 +108,7 @@ machine).
 %global _default_hvs --default-hvs %{default_hvs}
 %endif
 
-./setup.py configure \
+./setup.py build \
     %{?_default_hvs}
 
 

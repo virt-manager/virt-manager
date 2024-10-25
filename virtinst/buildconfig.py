@@ -31,6 +31,10 @@ _istest = "VIRTINST_TEST_SUITE" in os.environ
 _running_from_srcdir = os.path.exists(
     os.path.join(_srcdir, "tests", "test_cli.py"))
 
+# we know that this file is installed into $prefix/share/virt-manager/virtinst
+# so we can figure use do $prefix/share/virt-manager/../..
+_prefix = os.path.abspath(os.path.join(_srcdir, "..", ".."))
+
 
 def _split_list(commastr):
     return [d for d in commastr.split(",") if d]
@@ -56,28 +60,27 @@ class _BuildConfig(object):
         self.default_graphics = _get_param("default_graphics", "spice")
         self.default_hvs = _split_list(_get_param("default_hvs", ""))
 
-        self.prefix = None
+        self.prefix = _prefix
         self.gettext_dir = None
         self.ui_dir = None
         self.icon_dir = None
         self.gsettings_dir = None
         self.running_from_srcdir = _running_from_srcdir
-        self._set_paths_by_prefix(_get_param("prefix", "/usr"))
+        self._set_paths_by_prefix()
 
 
-    def _set_paths_by_prefix(self, prefix):
-        self.prefix = prefix
-        self.gettext_dir = os.path.join(prefix, "share", "locale")
+    def _set_paths_by_prefix(self):
+        self.gettext_dir = os.path.join(self.prefix, "share", "locale")
 
         if self.running_from_srcdir:
             self.ui_dir = os.path.join(_srcdir, "ui")
             self.icon_dir = os.path.join(_srcdir, "data")
             self.gsettings_dir = self.icon_dir
         else:  # pragma: no cover
-            self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
-            self.icon_dir = os.path.join(prefix, "share", "virt-manager",
+            self.ui_dir = os.path.join(self.prefix, "share", "virt-manager", "ui")
+            self.icon_dir = os.path.join(self.prefix, "share", "virt-manager",
                 "icons")
-            self.gsettings_dir = os.path.join(prefix, "share",
+            self.gsettings_dir = os.path.join(self.prefix, "share",
                 "glib-2.0", "schemas")
 
 

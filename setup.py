@@ -14,7 +14,6 @@ import importlib.util
 import os
 from pathlib import Path
 import shutil
-import sysconfig
 import subprocess
 
 import setuptools
@@ -31,9 +30,6 @@ except ImportError:
     # That can be overridden with SETUPTOOLS_USE_DISTUTILS env variable
     import distutils.command.build  # pylint: disable=wrong-import-order,deprecated-module,import-error
     BUILD_COMMAND_CLASS = distutils.command.build.build  # pylint: disable=c-extension-no-member
-
-
-SYSPREFIX = sysconfig.get_config_var("prefix")
 
 
 def _import_buildconfig():
@@ -133,6 +129,19 @@ class my_build_i18n(setuptools.Command):
 
 
 class my_build(BUILD_COMMAND_CLASS):
+    user_options = BUILD_COMMAND_CLASS.user_options + [
+        ("default-graphics=", None,
+         "Default graphics type (spice or vnc) (default=spice)"),
+        ("default-hvs=", None,
+         "Comma separated list of hypervisors shown in 'Open Connection' "
+         "wizard. (default=all hvs)"),
+    ]
+
+    def initialize_options(self):
+        super().initialize_options()
+        self.default_graphics = None
+        self.default_hvs = None
+
     def _make_bin_wrappers(self):
         template = """#!/usr/bin/env python3
 
@@ -220,12 +229,23 @@ from %(pkgname)s import %(filename)s
         bashdir = "share/bash-completion/completions/"
         self.distribution.data_files.append((bashdir, instpaths))
 
+    def _create_build_config(self):
+        template = ""
+        template += "[config]\n"
+        if self.default_graphics is not None:
+            template += "default_graphics = %s\n" % self.default_graphics
+        if self.default_hvs is not None:
+            template += "default_hvs = %s\n" % self.default_hvs
+
+        open(BuildConfig.cfgpath, "w").write(template)
+        print("Generated %s" % BuildConfig.cfgpath)
 
     def run(self):
         self._make_bin_wrappers()
         self._make_man_pages()
         self._build_icons()
         self._make_bash_completion_files()
+        self._create_build_config()
 
         self.run_command("build_i18n")
         super().run()
@@ -240,28 +260,6 @@ class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
 
 
 class my_install(setuptools.command.install.install):
-    """
-    Error if we weren't 'configure'd with the correct install prefix
-    """
-    def finalize_options(self):
-        # pylint: disable=access-member-before-definition
-        if self.prefix is None:
-            if BuildConfig.prefix != SYSPREFIX:
-                print("Using configured prefix=%s instead of SYSPREFIX=%s" % (
-                    BuildConfig.prefix, SYSPREFIX))
-                self.prefix = BuildConfig.prefix
-            else:
-                print("Using SYSPREFIX=%s" % SYSPREFIX)
-                self.prefix = SYSPREFIX
-
-        elif self.prefix != BuildConfig.prefix:
-            print("Install prefix=%s doesn't match configure prefix=%s\n"
-                  "Pass matching --prefix to 'setup.py configure'" %
-                  (self.prefix, BuildConfig.prefix))
-            sys.exit(1)
-
-        super().finalize_options()
-
     def run(self):
         super().run()
 
@@ -301,40 +299,6 @@ class my_rpm(setuptools.Command):
             "dist/virt-manager-%s.tar.gz" % BuildConfig.version,
         ]
         subprocess.check_call(cmd)
-
-
-class configure(setuptools.Command):
-    user_options = [
-        ("prefix=", None, "installation prefix"),
-        ("default-graphics=", None,
-         "Default graphics type (spice or vnc) (default=spice)"),
-        ("default-hvs=", None,
-         "Comma separated list of hypervisors shown in 'Open Connection' "
-         "wizard. (default=all hvs)"),
-
-    ]
-    description = "Configure the build, similar to ./configure"
-
-    def finalize_options(self):
-        pass
-
-    def initialize_options(self):
-        self.prefix = SYSPREFIX
-        self.default_graphics = None
-        self.default_hvs = None
-
-
-    def run(self):
-        template = ""
-        template += "[config]\n"
-        template += "prefix = %s\n" % self.prefix
-        if self.default_graphics is not None:
-            template += "default_graphics = %s\n" % self.default_graphics
-        if self.default_hvs is not None:
-            template += "default_hvs = %s\n" % self.default_hvs
-
-        open(BuildConfig.cfgpath, "w").write(template)
-        print("Generated %s" % BuildConfig.cfgpath)
 
 
 class TestCommand(setuptools.Command):
@@ -518,7 +482,7 @@ setuptools.setup(
         ("share/virt-manager/virtManager/object",
             glob.glob("virtManager/object/*.py")),
         ("share/virt-manager/virtinst",
-            glob.glob("virtinst/*.py") + glob.glob("virtinst/build.cfg")),
+            glob.glob("virtinst/*.py") + ["virtinst/build.cfg"]),
         ("share/virt-manager/virtinst/devices",
             glob.glob("virtinst/devices/*.py")),
         ("share/virt-manager/virtinst/domain",
@@ -536,8 +500,6 @@ setuptools.setup(
 
         'install': my_install,
         'install_egg_info': my_egg_info,
-
-        'configure': configure,
 
         'pylint': CheckPylint,
         'rpm': my_rpm,
