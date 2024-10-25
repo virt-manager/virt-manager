@@ -17,3 +17,5 @@ foreach script: ['virt-install', 'virt-clone', 'virt-xml']
     install_dir: datadir / 'bash-completion' / 'completions',
   )
 endforeach
+
+subdir('icons')

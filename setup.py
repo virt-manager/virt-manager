@@ -160,27 +160,8 @@ from %(pkgname)s import %(filename)s
         make_script("virtManager", "virtmanager", "virt-manager")
 
 
-    def _build_icons(self):
-        for size in glob.glob(os.path.join("data/icons", "*")):
-            for category in glob.glob(os.path.join(size, "*")):
-                icons = []
-                for icon in glob.glob(os.path.join(category, "*")):
-                    icons.append(icon)
-                if not icons:
-                    continue
-
-                category = os.path.basename(category)
-                dest = ("share/icons/hicolor/%s/%s" %
-                        (os.path.basename(size), category))
-                if category != "apps":
-                    dest = dest.replace("share/", "share/virt-manager/")
-
-                self.distribution.data_files.append((dest, icons))
-
-
     def run(self):
         self._make_bin_wrappers()
-        self._build_icons()
 
         self.run_command("build_i18n")
         super().run()
