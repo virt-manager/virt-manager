@@ -443,13 +443,7 @@ setuptools.setup(
         ("share/virt-manager/virtManager/object",
             glob.glob("virtManager/object/*.py")),
         ("share/virt-manager/virtinst",
-            glob.glob("virtinst/*.py") + glob.glob("virtinst/build.cfg")),
-        ("share/virt-manager/virtinst/devices",
-            glob.glob("virtinst/devices/*.py")),
-        ("share/virt-manager/virtinst/domain",
-            glob.glob("virtinst/domain/*.py")),
-        ("share/virt-manager/virtinst/install",
-            glob.glob("virtinst/install/*.py")),
+            glob.glob("virtinst/build.cfg")),
     ],
 
     # stop setuptools 61+ thinking we want to include everything automatically
