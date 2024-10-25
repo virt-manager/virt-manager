@@ -34,8 +34,7 @@ it by running the latest code using the steps above.
 The following commands will be useful for anyone writing patches:
 
 ```sh
-pytest               # Run local unit test suite
-./setup.py pylint    # Run pylint/pycodestyle checking
+meson test -C build
 ```
 
 Any patches shouldn't change the output of 'pytest' or 'pylint'. Depending
@@ -43,8 +42,9 @@ on what version of libvirt or pylint is installed, you may see some
 pre-existing errors from these commands. The important thing is that
 any changes you make do not add additional errors.
 
-The 'pylint' command requires [`pylint`](https://github.com/PyCQA/pylint)
-and [`pycodestyle`](https://github.com/pycqa/pycodestyle) to be installed.
+The 'test' command requires [`pylint`](https://github.com/PyCQA/pylint),
+[`pycodestyle`](https://github.com/pycqa/pycodestyle) and
+['pytest'](https://github.com/pytest-dev/pytest/) to be installed.
 If [`codespell`](https://github.com/codespell-project/codespell) is installed,
 it will be invoked as well.
 

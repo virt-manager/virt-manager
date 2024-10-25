@@ -11,19 +11,9 @@ For more details on that, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 To install the software into `/usr/local` (usually), you can do:
 ```sh
-./setup.py install
+meson setup build
+meson install -C build
 ```
-
-To build an RPM, you can run:
-```sh
-./setup.py rpm
-```
-
-`setup.py` generally has all the build and install commands, for more info see:
-
-   - `./setup.py --help-commands`
-   - `./setup.py install --help`
-   - [Python Standard Build and Install](https://docs.python.org/3/install/#standard-build-and-install)
 
 
 ## Pre-requisite software
