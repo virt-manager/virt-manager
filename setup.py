@@ -5,10 +5,6 @@
 
 
 import sys
-if sys.version_info.major < 3:
-    print("virt-manager is python3 only. Run this as ./setup.py")
-    sys.exit(1)
-
 import glob
 import importlib.util
 import os
