@@ -178,31 +178,9 @@ from %(pkgname)s import %(filename)s
                 self.distribution.data_files.append((dest, icons))
 
 
-    def _make_bash_completion_files(self):
-        scripts = ["virt-install", "virt-clone", "virt-xml"]
-        srcfile = "data/bash-completion.sh.in"
-        builddir = "build/bash-completion/"
-        if not os.path.exists(builddir):
-            os.makedirs(builddir)
-
-        instpaths = []
-        for script in scripts:
-            genfile = os.path.join(builddir, script)
-            print("Generating %s" % genfile)
-            src = open(srcfile, "r")
-            dst = open(genfile, "w")
-            dst.write(src.read().replace("::SCRIPTNAME::", script))
-            dst.close()
-            instpaths.append(genfile)
-
-        bashdir = "share/bash-completion/completions/"
-        self.distribution.data_files.append((bashdir, instpaths))
-
-
     def run(self):
         self._make_bin_wrappers()
         self._build_icons()
-        self._make_bash_completion_files()
 
         self.run_command("build_i18n")
         super().run()
@@ -474,8 +452,6 @@ setuptools.setup(
         "build/virt-xml"]),
 
     data_files=[
-        ("share/glib-2.0/schemas",
-         ["data/org.virt-manager.virt-manager.gschema.xml"]),
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),
 
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
