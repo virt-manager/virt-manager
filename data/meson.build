@@ -1,5 +1,9 @@
 fs = import('fs')
 
+desktop_file = files('virt-manager.desktop.in')
+
+appdata_file = files('virt-manager.appdata.xml.in')
+
 install_data(
   'org.virt-manager.virt-manager.gschema.xml',
   install_dir: datadir / 'glib-2.0' / 'schemas',

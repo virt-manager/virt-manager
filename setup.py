@@ -49,85 +49,6 @@ def _import_buildconfig():
 BuildConfig = _import_buildconfig()
 
 
-# pylint: disable=attribute-defined-outside-init
-
-_desktop_files = [
-    ("share/applications", ["data/virt-manager.desktop.in"]),
-]
-_appdata_files = [
-    ("share/metainfo", ["data/virt-manager.appdata.xml.in"]),
-]
-
-
-class my_build_i18n(setuptools.Command):
-    """
-    Add our desktop files to the list, saves us having to track setup.cfg
-    """
-    user_options = [
-        ('merge-po', 'm', 'merge po files against template'),
-    ]
-
-    def initialize_options(self):
-        self.merge_po = False
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        po_dir = "po"
-        if self.merge_po:
-            pot_file = os.path.join("po", "virt-manager.pot")
-            for po_file in glob.glob("%s/*.po" % po_dir):
-                cmd = ["msgmerge", "--previous", "-o", po_file, po_file, pot_file]
-                self.spawn(cmd)
-
-        max_po_mtime = 0
-        for po_file in glob.glob("%s/*.po" % po_dir):
-            lang = os.path.basename(po_file[:-3])
-            mo_dir = os.path.join("build", "mo", lang, "LC_MESSAGES")
-            mo_file = os.path.join(mo_dir, "virt-manager.mo")
-            if not os.path.exists(mo_dir):
-                os.makedirs(mo_dir)
-
-            cmd = ["msgfmt", po_file, "-o", mo_file]
-            po_mtime = os.path.getmtime(po_file)
-            mo_mtime = (os.path.exists(mo_file) and
-                        os.path.getmtime(mo_file)) or 0
-            max_po_mtime = max(max_po_mtime, po_mtime)
-            if po_mtime > mo_mtime:
-                self.spawn(cmd)
-
-            targetpath = os.path.join("share/locale", lang, "LC_MESSAGES")
-            self.distribution.data_files.append((targetpath, (mo_file,)))
-
-        # Merge .in with translations using gettext
-        for (file_set, switch) in [(_appdata_files, "--xml"),
-                                   (_desktop_files, "--desktop")]:
-            for (target, files) in file_set:
-                build_target = os.path.join("build", target)
-                if not os.path.exists(build_target):
-                    os.makedirs(build_target)
-
-                files_merged = []
-                for f in files:
-                    if f.endswith(".in"):
-                        file_merged = os.path.basename(f[:-3])
-                    else:
-                        file_merged = os.path.basename(f)
-
-                    file_merged = os.path.join(build_target, file_merged)
-                    cmd = ["msgfmt", switch, "--template", f, "-d", po_dir,
-                           "-o", file_merged]
-                    mtime_merged = (os.path.exists(file_merged) and
-                                    os.path.getmtime(file_merged)) or 0
-                    mtime_file = os.path.getmtime(f)
-                    if (mtime_merged < max_po_mtime or
-                        mtime_merged < mtime_file):
-                        # Only build if output is older than input (.po,.in)
-                        self.spawn(cmd)
-                    files_merged.append(file_merged)
-                self.distribution.data_files.append((target, files_merged))
-
-
 class my_build(BUILD_COMMAND_CLASS):
     def _make_bin_wrappers(self):
         template = """#!/usr/bin/env python3
@@ -163,7 +84,6 @@ from %(pkgname)s import %(filename)s
     def run(self):
         self._make_bin_wrappers()
 
-        self.run_command("build_i18n")
         super().run()
 
 
@@ -367,58 +287,6 @@ class VMMDistribution(setuptools.dist.Distribution):
         super().__init__(*args, **kwargs)
 
 
-class ExtractMessages(setuptools.Command):
-    user_options = [
-    ]
-    description = "Extract the translation messages"
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        bug_address = "https://github.com/virt-manager/virt-manager/issues"
-        potfile = "po/virt-manager.pot"
-        xgettext_args = [
-            "xgettext",
-            "--add-comments=translators",
-            "--msgid-bugs-address=" + bug_address,
-            "--package-name=virt-manager",
-            "--output=" + potfile,
-            "--sort-by-file",
-            "--join-existing",
-        ]
-
-        # Truncate .pot file to ensure it exists
-        open(potfile, "w").write("")
-
-        # First extract the messages from the AppStream sources,
-        # creating the template
-        appdata_files = [f for sublist in _appdata_files for f in sublist[1]]
-        cmd = xgettext_args + appdata_files
-        self.spawn(cmd)
-
-        # Extract the messages from the desktop files
-        desktop_files = [f for sublist in _desktop_files for f in sublist[1]]
-        cmd = xgettext_args + ["--language=Desktop"] + desktop_files
-        self.spawn(cmd)
-
-        # Extract the messages from the Python sources
-        py_sources = list(Path("virtManager").rglob("*.py"))
-        py_sources += list(Path("virtinst").rglob("*.py"))
-        py_sources = [str(src) for src in py_sources]
-        cmd = xgettext_args + ["--language=Python"] + py_sources
-        self.spawn(cmd)
-
-        # Extract the messages from the Glade UI files
-        ui_files = list(Path(".").rglob("*.ui"))
-        ui_files = [str(src) for src in ui_files]
-        cmd = xgettext_args + ["--language=Glade"] + ui_files
-        self.spawn(cmd)
-
-
 setuptools.setup(
     name="virt-manager",
     version=BuildConfig.version,
@@ -442,7 +310,6 @@ setuptools.setup(
 
     cmdclass={
         'build': my_build,
-        'build_i18n': my_build_i18n,
 
         'install': my_install,
         'install_egg_info': my_egg_info,
@@ -452,8 +319,6 @@ setuptools.setup(
         'pylint': CheckPylint,
         'rpm': my_rpm,
         'test': TestCommand,
-
-        'extract_messages': ExtractMessages,
     },
 
     distclass=VMMDistribution,
