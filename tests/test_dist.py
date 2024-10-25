@@ -34,14 +34,14 @@ def test_validate_po_files():
 
 def test_validate_pot_strings():
     """
-    Validate that xgettext via `setup.py extract_messages` don't print
-    any warnings
+    Validate that xgettext via don't print any warnings.
     """
     potfile = "po/virt-manager.pot"
     origpot = open(potfile).read()
     try:
+        subprocess.run(["meson", "setup", "build"], check=True)
         out = subprocess.check_output(
-                ["./setup.py", "extract_messages"],
+                ["meson", "compile", "-C", "build", "virt-manager-pot"],
                 stderr=subprocess.STDOUT)
         warnings = [l for l in out.decode("utf-8").splitlines()
                     if "warning:" in l]
