@@ -433,8 +433,6 @@ setuptools.setup(
         "build/virt-xml"]),
 
     data_files=[
-        ("share/virt-manager/ui", glob.glob("ui/*.ui")),
-
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
         ("share/virt-manager/virtManager/details",
             glob.glob("virtManager/details/*.py")),

@@ -16,6 +16,7 @@ git = run_command('test', '-e', '.git', check: false).returncode() == 0
 subdir('scripts')
 subdir('man')
 subdir('data')
+subdir('ui')
 
 if git
   spec_conf = configuration_data({
