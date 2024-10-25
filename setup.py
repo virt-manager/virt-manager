@@ -138,19 +138,17 @@ class my_build(BUILD_COMMAND_CLASS):
 
 import os
 import sys
-sys.path.insert(0, "%(sharepath)s")
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "share", "virt-manager")))
 from %(pkgname)s import %(filename)s
 
 %(filename)s.runcli()
 """
         if not os.path.exists("build"):
             os.mkdir("build")
-        sharepath = os.path.join(BuildConfig.prefix, "share", "virt-manager")
 
         def make_script(pkgname, filename, toolname):
             assert os.path.exists(pkgname + "/" + filename + ".py")
             content = template % {
-                "sharepath": sharepath,
                 "pkgname": pkgname,
                 "filename": filename}
 
