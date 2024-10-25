@@ -45,13 +45,10 @@ def _get_param(name, default):  # pragma: no cover
         return default
 
 
-__version__ = "4.1.0"
-
-
 class _BuildConfig(object):
     def __init__(self):
         self.cfgpath = _cfgpath
-        self.version = __version__
+        self.version = _get_param("version", "")
 
         self.default_graphics = _get_param("default_graphics", "spice")
         self.default_hvs = _split_list(_get_param("default_hvs", ""))
