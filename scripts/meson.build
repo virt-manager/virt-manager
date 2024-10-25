@@ -1,4 +1,5 @@
 scripts = [
+  'make_bin_wrapper.py',
   'meson_dist.py',
 ]
 

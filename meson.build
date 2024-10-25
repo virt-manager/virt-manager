@@ -8,6 +8,7 @@ python3 = python.find_installation('python3')
 
 prefix = get_option('prefix')
 datadir = prefix / get_option('datadir')
+bindir = prefix / get_option('bindir')
 pkgdir = datadir / 'virt-manager'
 
 # figure out if we are building from git
@@ -20,6 +21,24 @@ subdir('ui')
 subdir('virtinst')
 subdir('virtManager')
 subdir('po')
+
+bin_data = [
+  {'pkgname': 'virtinst', 'filename': 'virtinstall', 'toolname': 'virt-install'},
+  {'pkgname': 'virtinst', 'filename': 'virtclone', 'toolname': 'virt-clone'},
+  {'pkgname': 'virtinst', 'filename': 'virtxml', 'toolname': 'virt-xml'},
+  {'pkgname': 'virtManager', 'filename': 'virtmanager', 'toolname': 'virt-manager'},
+]
+
+foreach bin : bin_data
+  custom_target(
+    command: [make_bin_wrapper_prog, pkgdir, bin['pkgname'], bin['filename']],
+    capture: true,
+    output: bin['toolname'],
+    install: true,
+    install_dir: bindir,
+    install_mode: 'rwxr-xr-x',
+  )
+endforeach
 
 if git
   spec_conf = configuration_data({
