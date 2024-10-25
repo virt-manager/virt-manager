@@ -59,3 +59,15 @@ if git
 
   meson.add_dist_script(meson_dist_prog.full_path(), spec_file)
 endif
+
+if get_option('tests').auto()
+  use_tests = git
+elif get_option('tests').enabled()
+  use_tests = true
+else
+  use_tests = false
+endif
+
+if use_tests
+  subdir('tests')
+endif
