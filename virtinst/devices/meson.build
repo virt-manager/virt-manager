@@ -1,0 +1,31 @@
+virtinst_devices_sources = files(
+  '__init__.py',
+  'audio.py',
+  'char.py',
+  'controller.py',
+  'device.py',
+  'disk.py',
+  'filesystem.py',
+  'graphics.py',
+  'hostdev.py',
+  'input.py',
+  'interface.py',
+  'iommu.py',
+  'memballoon.py',
+  'memory.py',
+  'panic.py',
+  'redirdev.py',
+  'rng.py',
+  'shmem.py',
+  'smartcard.py',
+  'sound.py',
+  'tpm.py',
+  'video.py',
+  'vsock.py',
+  'watchdog.py',
+)
+
+install_data(
+  virtinst_devices_sources,
+  install_dir: pkgdir / 'virtinst' / 'devices',
+)

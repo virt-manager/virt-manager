@@ -17,6 +17,7 @@ subdir('scripts')
 subdir('man')
 subdir('data')
 subdir('ui')
+subdir('virtinst')
 
 if git
   spec_conf = configuration_data({
