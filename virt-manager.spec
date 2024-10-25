@@ -147,6 +147,7 @@ machine).
 
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/virtinst
+%{python3_sitelib}/*
 
 
 %files -n virt-install

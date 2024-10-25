@@ -251,14 +251,6 @@ from %(pkgname)s import %(filename)s
         super().run()
 
 
-class my_egg_info(setuptools.command.install_egg_info.install_egg_info):
-    """
-    Disable egg_info installation, seems pointless for a non-library
-    """
-    def run(self):
-        pass
-
-
 class my_install(setuptools.command.install.install):
     user_options = setuptools.command.install.install.user_options + [
         ("no-update-icon-cache", None, "Don't run gtk-update-icon-cache"),
@@ -497,7 +489,6 @@ setuptools.setup(
         'build_i18n': my_build_i18n,
 
         'install': my_install,
-        'install_egg_info': my_egg_info,
 
         'pylint': CheckPylint,
         'rpm': my_rpm,
