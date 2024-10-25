@@ -107,7 +107,8 @@ machine).
 %meson \
     -Ddefault-hvs=%{default_hvs} \
     -Dupdate-icon-cache=false \
-    -Dcompile-schemas=false
+    -Dcompile-schemas=false \
+    -Dtests=disabled
 %meson_build
 
 %install

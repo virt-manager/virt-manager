@@ -3,3 +3,5 @@ option('compile-schemas', type: 'boolean', value: true, description: 'whether to
 
 option('default-graphics', type: 'combo', choices: ['spice', 'vnc'], value: 'spice', description: 'default graphics type')
 option('default-hvs', type: 'array', choices: ['qemu', 'xen', 'lxc', 'bhyve', 'vz'], description: 'list of hypervisors shown in "Open Connection" wizard')
+
+option('tests', type: 'feature', value: 'auto', description: 'whether to run tests')

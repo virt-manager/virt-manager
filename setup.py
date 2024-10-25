@@ -75,76 +75,6 @@ class TestCommand(setuptools.Command):
                  "See CONTRIBUTING.md for more info.")
 
 
-class CheckPylint(setuptools.Command):
-    user_options = [
-        ("jobs=", "j", "use multiple processes to speed up Pylint"),
-    ]
-    description = "Check code using pylint and pycodestyle"
-
-    def initialize_options(self):
-        self.jobs = None
-
-    def finalize_options(self):
-        if self.jobs is not None:
-            self.jobs = int(self.jobs)
-
-    def run(self):
-        import pylint.lint
-        import pycodestyle
-
-        lintfiles = [
-            # Put this first so pylint learns what Gtk version we
-            # want to lint against
-            "virtManager/virtmanager.py",
-            "setup.py",
-            "tests",
-            "virtinst",
-            "virtManager"]
-
-        spellfiles = lintfiles[:]
-        spellfiles += list(glob.glob("*.md"))
-        spellfiles += list(glob.glob("man/*.rst"))
-        spellfiles += ["data/virt-manager.appdata.xml.in",
-                       "data/virt-manager.desktop.in",
-                       "data/org.virt-manager.virt-manager.gschema.xml",
-                       "virt-manager.spec"]
-        spellfiles.remove("NEWS.md")
-
-        try:
-            import codespell_lib
-            # pylint: disable=protected-access
-            print("running codespell")
-            codespell_lib._codespell.main(
-                '-I', 'tests/data/codespell_dict.txt',
-                '--skip', '*.pyc,*.iso,*.xml', *spellfiles)
-        except ImportError:
-            print("codespell is not installed. skipping...")
-        except Exception as e:
-            print("Error running codespell: %s" % e)
-
-        output_format = sys.stdout.isatty() and "colorized" or "text"
-
-        print("running pycodestyle")
-        style_guide = pycodestyle.StyleGuide(
-            config_file='setup.cfg',
-            format="pylint",
-            paths=lintfiles,
-        )
-        report = style_guide.check_files()
-        if style_guide.options.count:
-            sys.stderr.write(str(report.total_errors) + '\n')
-
-        print("running pylint")
-        pylint_opts = [
-            "--rcfile", ".pylintrc",
-            "--output-format=%s" % output_format,
-        ]
-        if self.jobs is not None:
-            pylint_opts += ["--jobs=%d" % self.jobs]
-
-        pylint.lint.Run(lintfiles + pylint_opts)
-
-
 setuptools.setup(
     name="virt-manager",
     version=BuildConfig.version,
@@ -157,7 +87,6 @@ setuptools.setup(
     cmdclass={
         'install_egg_info': my_egg_info,
 
-        'pylint': CheckPylint,
         'rpm': my_rpm,
         'test': TestCommand,
     },
