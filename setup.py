@@ -80,20 +80,6 @@ class my_install(setuptools.command.install.install):
 
         super().finalize_options()
 
-    def run(self):
-        super().run()
-
-        if not self.distribution.no_update_icon_cache:
-            print("running gtk-update-icon-cache")
-            icon_path = os.path.join(self.install_data, "share/icons/hicolor")
-            self.spawn(["gtk-update-icon-cache", "-q", "-t", icon_path])
-
-        if not self.distribution.no_compile_schemas:
-            print("compiling gsettings schemas")
-            gschema_install = os.path.join(self.install_data,
-                "share/glib-2.0/schemas")
-            self.spawn(["glib-compile-schemas", gschema_install])
-
 
 ###################
 # Custom commands #
@@ -237,18 +223,6 @@ class CheckPylint(setuptools.Command):
         pylint.lint.Run(lintfiles + pylint_opts)
 
 
-class VMMDistribution(setuptools.dist.Distribution):
-    global_options = setuptools.dist.Distribution.global_options + [
-        ("no-update-icon-cache", None, "Don't run gtk-update-icon-cache"),
-        ("no-compile-schemas", None, "Don't compile gsettings schemas"),
-    ]
-
-    def __init__(self, *args, **kwargs):
-        self.no_update_icon_cache = False
-        self.no_compile_schemas = False
-        super().__init__(*args, **kwargs)
-
-
 setuptools.setup(
     name="virt-manager",
     version=BuildConfig.version,
@@ -274,6 +248,5 @@ setuptools.setup(
         'test': TestCommand,
     },
 
-    distclass=VMMDistribution,
     packages=[],
 )
