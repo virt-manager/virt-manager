@@ -4,7 +4,17 @@
 upstream_package_name: virt-manager
 downstream_package_name: virt-manager
 
-specfile_path: virt-manager.spec
+specfile_path: build/virt-manager.spec
+
+srpm_build_deps:
+  - gettext
+  - python3-devel
+  - python3-docutils
+  - meson
+
+actions:
+  post-upstream-clone:
+    - meson setup build -Dupdate-icon-cache=false -Dcompile-schemas=false -Dtests=disabled
 
 jobs:
   - job: copr_build
