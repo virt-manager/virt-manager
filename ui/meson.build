@@ -1,0 +1,38 @@
+ui_files = files(
+  'about.ui',
+  'addhardware.ui',
+  'addstorage.ui',
+  'asyncjob.ui',
+  'clone.ui',
+  'connectauth.ui',
+  'console.ui',
+  'createconn.ui',
+  'createnet.ui',
+  'createpool.ui',
+  'createvm.ui',
+  'createvol.ui',
+  'delete.ui',
+  'details.ui',
+  'fsdetails.ui',
+  'gfxdetails.ui',
+  'hostnets.ui',
+  'hoststorage.ui',
+  'host.ui',
+  'manager.ui',
+  'migrate.ui',
+  'netlist.ui',
+  'oslist.ui',
+  'preferences.ui',
+  'snapshotsnew.ui',
+  'snapshots.ui',
+  'storagebrowse.ui',
+  'tpmdetails.ui',
+  'vmwindow.ui',
+  'vsockdetails.ui',
+  'xmleditor.ui',
+)
+
+install_data(
+  ui_files,
+  install_dir: pkgdir / 'ui'
+)
