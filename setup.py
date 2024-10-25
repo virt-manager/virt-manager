@@ -160,26 +160,6 @@ from %(pkgname)s import %(filename)s
         make_script("virtManager", "virtmanager", "virt-manager")
 
 
-    def _make_man_pages(self):
-        rstbin = shutil.which("rst2man")
-        if not rstbin:
-            rstbin = shutil.which("rst2man.py")
-        if not rstbin:
-            sys.exit("Didn't find rst2man or rst2man.py")
-
-        for path in glob.glob("man/*.rst"):
-            base = os.path.basename(path)
-            appname = os.path.splitext(base)[0]
-            newpath = os.path.join(os.path.dirname(path),
-                                   appname + ".1")
-
-            print("Generating %s" % newpath)
-            out = subprocess.check_output([rstbin, "--strict", path])
-            open(newpath, "wb").write(out)
-
-            self.distribution.data_files.append(
-                ('share/man/man1', (newpath,)))
-
     def _build_icons(self):
         for size in glob.glob(os.path.join("data/icons", "*")):
             for category in glob.glob(os.path.join(size, "*")):
@@ -221,7 +201,6 @@ from %(pkgname)s import %(filename)s
 
     def run(self):
         self._make_bin_wrappers()
-        self._make_man_pages()
         self._build_icons()
         self._make_bash_completion_files()
 
@@ -498,13 +477,6 @@ setuptools.setup(
         ("share/glib-2.0/schemas",
          ["data/org.virt-manager.virt-manager.gschema.xml"]),
         ("share/virt-manager/ui", glob.glob("ui/*.ui")),
-
-        ("share/man/man1", [
-            "man/virt-manager.1",
-            "man/virt-install.1",
-            "man/virt-clone.1",
-            "man/virt-xml.1"
-        ]),
 
         ("share/virt-manager/virtManager", glob.glob("virtManager/*.py")),
         ("share/virt-manager/virtManager/details",
