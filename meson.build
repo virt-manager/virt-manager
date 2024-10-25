@@ -6,10 +6,14 @@ project('virt-manager',
 python = import('python')
 python3 = python.find_installation('python3')
 
+prefix = get_option('prefix')
+datadir = prefix / get_option('datadir')
+
 # figure out if we are building from git
 git = run_command('test', '-e', '.git', check: false).returncode() == 0
 
 subdir('scripts')
+subdir('man')
 
 if git
   spec_conf = configuration_data({
