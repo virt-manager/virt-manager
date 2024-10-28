@@ -31,7 +31,7 @@ class DomainLaunchSecurity(XMLBuilder):
         # The 'policy' is a mandatory 4-byte argument for the SEV firmware.
         # If missing, we use 0x03 for the original SEV implementation and
         # 0x07 for SEV-ES.
-        # Reference: https://libvirt.org/formatdomain.html#launchSecurity
+        # Reference: https://libvirt.org/formatdomain.html#launch-security
         if self.policy is None:
             domcaps = guest.lookup_domcaps()
             self.policy = "0x03"
