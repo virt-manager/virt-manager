@@ -117,7 +117,7 @@ maps to the <memory> element.
 To configure memory modules which can be hotunplugged see ``--memdev`` description.
 
 Use --memory=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsMemoryAllocation
+Complete details at https://libvirt.org/formatdomain.html#memory-allocation
 
 
 
@@ -129,7 +129,7 @@ Complete details at https://libvirt.org/formatdomain.html#elementsMemoryAllocati
 This option will influence how virtual memory pages are backed by host pages.
 
 Use --memorybacking=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsMemoryBacking
+Complete details at https://libvirt.org/formatdomain.html#memory-backing
 
 
 
@@ -163,7 +163,7 @@ Specify metadata values for the guest. Possible options include name, uuid,
 title, and description. This option deprecates -u/--uuid and --description.
 
 Use --metadata=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsMetadata
+Complete details at https://libvirt.org/formatdomain.html#general-metadata
 
 
 
@@ -176,7 +176,7 @@ Specify events values for the guest. Possible options include
 on_poweroff, on_reboot, and on_crash.
 
 Use --events=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsEvents
+Complete details at https://libvirt.org/formatdomain.html#events-configuration
 
 
 
@@ -188,7 +188,7 @@ Complete details at https://libvirt.org/formatdomain.html#elementsEvents
 Specify resource partitioning for the guest.
 
 Use --resource=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#resPartition
+Complete details at https://libvirt.org/formatdomain.html#resource-partitioning
 
 
 
@@ -210,8 +210,10 @@ Configure sysinfo/SMBIOS values exposed to the VM OS. Examples:
 
 Use --sysinfo=? to see a list of all available sub options.
 
-Complete details at https://libvirt.org/formatdomain.html#elementsSysinfo
-and https://libvirt.org/formatdomain.html#elementsOSBIOS for ``smbios`` XML element.
+Complete details at
+https://libvirt.org/formatdomain.html#operating-system-booting and
+https://libvirt.org/formatdomain.html#smbios-system-information for ``smbios``
+XML element.
 
 
 
@@ -294,7 +296,8 @@ Environment variables are specified with 'env', for example:
 
     --qemu-commandline=env=DISPLAY=:0.1
 
-Complete details about the libvirt feature: https://libvirt.org/drvqemu.html#qemucommand
+Complete details about the libvirt feature:
+https://libvirt.org/drvqemu.html#pass-through-of-arbitrary-qemu-commands
 
 
 
@@ -326,7 +329,7 @@ If the value 'auto' is passed, virt-install attempts to automatically determine
 an optimal cpu pinning using NUMA data, if available.
 
 Use --vcpus=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCPUAllocation
+Complete details at https://libvirt.org/formatdomain.html#cpu-allocation
 
 
 
@@ -349,7 +352,7 @@ as ``--vcpus cpuset=`` option. mode can be one of 'interleave', 'preferred', or
 mode.
 
 Use --numatune=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsNUMATuning
+Complete details at https://libvirt.org/formatdomain.html#numa-node-tuning
 
 
 
@@ -366,7 +369,7 @@ Tune memory policy for the domain process. Example invocations
     --memtune hard_limit=100,soft_limit=60,swap_hard_limit=150,min_guarantee=80
 
 Use --memtune=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsMemoryTuning
+Complete details at https://libvirt.org/formatdomain.html#memory-tuning
 
 
 
@@ -383,7 +386,7 @@ Tune blkio policy for the domain process. Example invocations
     --blkiotune weight=100,device.path=/dev/sdc,device.weight=200
 
 Use --blkiotune=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsBlockTuning
+Complete details at https://libvirt.org/formatdomain.html#block-i-o-tuning
 
 
 
@@ -436,7 +439,7 @@ Some examples:
     Example of passing through the host cpu's cache information.
 
 Use --cpu=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCPU
+Complete details at https://libvirt.org/formatdomain.html#cpu-model-and-topology
 
 
 
@@ -455,7 +458,7 @@ Example invocation
     --cputune vcpupin0.vcpu=0,vcpupin0.cpuset=0-3,vcpupin1.vcpu=1,vcpupin1.cpuset=4-7
 
 Use --cputune=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCPUTuning
+Complete details at https://libvirt.org/formatdomain.html#cpu-tuning
 
 
 
@@ -469,7 +472,7 @@ Configure domain seclabel domain settings. Type can be either 'static' or
 LABEL without TYPE implies static configuration.
 
 Use --security=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#seclabel
+Complete details at https://libvirt.org/formatdomain.html#security-label
 
 
 
@@ -481,7 +484,7 @@ Complete details at https://libvirt.org/formatdomain.html#seclabel
 Specify domain <keywrap> XML, used for S390 cryptographic key management operations.
 
 Use --keywrap=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#keywrap
+Complete details at https://libvirt.org/formatdomain.html#key-wrap
 
 
 
@@ -494,7 +497,7 @@ Specify domain <iothreads> and/or <iothreadids> XML.
 For example, to configure ``<iothreads>4</iothreads>``, use ``--iothreads 4``
 
 Use --iothreads=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsIOThreadsAllocation
+Complete details at https://libvirt.org/formatdomain.html#iothreads-allocation
 
 
 
@@ -529,7 +532,7 @@ apic, eoi, privnet, and hyperv features. Some examples:
     type.)
 
 Use --features=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsFeatures
+Complete details at https://libvirt.org/formatdomain.html#hypervisor-features
 
 
 
@@ -551,7 +554,7 @@ Configure the guest's <clock> XML. Some supported options:
     might be catchup, delay, etc. Refer to the libvirt docs for all values.
 
 Use --clock=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsTime
+Complete details at https://libvirt.org/formatdomain.html#time-keeping
 
 
 
@@ -567,7 +570,7 @@ Configure guest power management features. Example:
       --pm suspend_to_memi.enabled=on,suspend_to_disk.enabled=off
 
 Use --pm=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsPowerManagement
+Complete details at https://libvirt.org/formatdomain.html#power-management
 
 
 
@@ -596,7 +599,7 @@ SEV has further implications on usage of virtio devices, so refer to EXAMPLES
 section to see a full invocation of virt-install with --launchSecurity.
 
 Use --launchSecurity=? to see a list of all available sub options. Complete
-details at https://libvirt.org/formatdomain.html#launchSecurity
+details at https://libvirt.org/formatdomain.html#launch-security
 
 
 
@@ -981,7 +984,8 @@ Some examples:
     --boot uefi doesn't know about your UEFI binaries.
 
 Use --boot=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsOS
+Complete details at
+https://libvirt.org/formatdomain.html#operating-system-booting
 
 
 
@@ -1002,7 +1006,7 @@ make containers secure, in the absence of sVirt confinement.
       --idmap uid.start=0,uid.target=1000,uid.count=10,gid.start=0,gid.target=1000,gid.count=10
 
 Use --idmap=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsOSContainer
+Complete details at https://libvirt.org/formatdomain.html#container-boot
 
 
 
@@ -1219,7 +1223,8 @@ See the examples section for some uses. This option deprecates -f/--file,
 -s/--file-size, --nonsparse, and --nodisks.
 
 Use --disk=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsDisks
+Complete details at
+https://libvirt.org/formatdomain.html#hard-drives-floppy-disks-cdroms
 
 
 
@@ -1255,7 +1260,7 @@ Some example suboptions:
     The mount location to use in the guest.
 
 Use --filesystem=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsFilesystems
+Complete details at https://libvirt.org/formatdomain.html#filesystems
 
 
 
@@ -1323,7 +1328,7 @@ Some example suboptions:
     midonet, and openvswitch config.
 
     Use --network=? to see a list of all available sub options.
-    Complete details at https://libvirt.org/formatdomain.html#elementsNICS
+    Complete details at https://libvirt.org/formatdomain.html#network-interfaces
 
     This option deprecates -m/--mac, -b/--bridge, and --nonetworks
 
@@ -1432,7 +1437,7 @@ Some supported suboptions:
     DRM render node path to use. This is used when 'gl' is enabled.
 
 Use --graphics=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsGraphics
+Complete details at https://libvirt.org/formatdomain.html#graphical-framebuffers
 
 This deprecates the following options:
 --vnc, --vncport, --vnclisten, -k/--keymap, --sdl, --nographics
@@ -1519,7 +1524,7 @@ DEVICE OPTIONS
 
 All devices have a set of ``address.*`` options for configuring the
 particulars of the device's address on its parent controller or bus.
-See ``https://libvirt.org/formatdomain.html#elementsAddress`` for details.
+See ``https://libvirt.org/formatdomain.html#device-addresses`` for details.
 
 
 
@@ -1549,7 +1554,7 @@ Some example invocations:
     we add to the new VM by default, if the VM will use PCIe by default.
 
 Use --controller=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsControllers
+Complete details at https://libvirt.org/formatdomain.html#controllers
 
 
 
@@ -1561,7 +1566,7 @@ Complete details at https://libvirt.org/formatdomain.html#elementsControllers
 Attach an input device to the guest. Example input device types are mouse, tablet, or keyboard.
 
 Use --input=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsInput
+Complete details at https://libvirt.org/formatdomain.html#input-devices
 
 
 
@@ -1594,7 +1599,7 @@ Attach a physical host device to the guest. Some example values for HOSTDEV:
     Block device (in LXC container).
 
 Use --hostdev=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsHostDev
+Complete details at https://libvirt.org/formatdomain.html#host-device-assignment
 
 
 
@@ -1610,7 +1615,7 @@ OS supports.
 
 This deprecates the old --soundhw option.
 Use --sound=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsSound
+Complete details at https://libvirt.org/formatdomain.html#sound-devices
 
 
 
@@ -1660,7 +1665,7 @@ Some examples:
     Use the i6300esb with the 'poweroff' action
 
 Use --watchdog=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsWatchdog
+Complete details at https://libvirt.org/formatdomain.html#watchdog-devices
 
 
 
@@ -1731,7 +1736,8 @@ noted. Some of the types of character device redirection are:
     --serial tcp,mode=MODE
 
 Use --serial=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCharSerial
+Complete details at
+https://libvirt.org/formatdomain.html#consoles-serial-parallel-channel-devices
 
 
 
@@ -1744,7 +1750,7 @@ Specify a parallel device. The format and options are largely identical
 to ``serial``
 
 Use --parallel=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCharParallel
+Complete details at https://libvirt.org/formatdomain.html#parallel-port
 
 
 
@@ -1787,7 +1793,7 @@ Some of the types of character device redirection are:
 
 
 Use --channel=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCharChannel
+Complete details at https://libvirt.org/formatdomain.html#channel
 
 
 
@@ -1809,7 +1815,7 @@ Example:
 
 
 Use --console=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsCharConsole
+Complete details at https://libvirt.org/formatdomain.html#console
 
 
 
@@ -1822,7 +1828,7 @@ Specify what video device model will be attached to the guest. Valid values
 for VIDEO are hypervisor specific, but some options for recent kvm are
 cirrus, vga, qxl, virtio, or vmvga (vmware).
 Use --video=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsVideo
+Complete details at https://libvirt.org/formatdomain.html#video-devices
 
 
 
@@ -1847,7 +1853,7 @@ An example invocation:
     to the guest
 
 Use --smartcard=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsSmartcard
+Complete details at https://libvirt.org/formatdomain.html#smartcard-devices
 
 
 
@@ -1875,7 +1881,7 @@ Examples invocations:
 
 
 Use --redirdev=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsRedir
+Complete details at https://libvirt.org/formatdomain.html#redirected-devices
 
 
 
@@ -1897,7 +1903,7 @@ MODEL is the type of memballoon device provided. The value can be 'virtio',
     Disable the memballoon device
 
 Use --memballoon=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsMemBalloon
+Complete details at https://libvirt.org/formatdomain.html#memory-balloon-device
 
 
 
@@ -1918,7 +1924,7 @@ Configure a virtual TPM device. Examples:
     Request virt-install to fill in a modern recommended default
 
 Use --tpm=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsTpm
+Complete details at https://libvirt.org/formatdomain.html#tpm-device
 
 
 
@@ -1944,7 +1950,8 @@ Example invocations:
     Connect to localhost to the TCP port 8000 to get entropy data.
 
 Use --rng=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsRng
+Complete details at
+https://libvirt.org/formatdomain.html#random-number-generator-device
 
 
 
@@ -1957,7 +1964,7 @@ Attach a panic notifier device to the guest.
 For the recommended settings, use: ``--panic default``
 
 Use --panic=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsPanic
+Complete details at https://libvirt.org/formatdomain.html#panic-device
 
 
 
@@ -1983,7 +1990,7 @@ Add a memory module to a guest which can be hotunplugged. To add a memdev you ne
 to configure hotplugmemory and NUMA for a guest.
 
 Use --memdev=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#elementsMemory.
+Complete details at https://libvirt.org/formatdomain.html#memory-devices
 
 
 
@@ -1999,7 +2006,7 @@ Configure a vsock host/guest interface. A typical configuration would be
     --vsock cid.auto=yes
 
 Use --vsock=? to see a list of all available sub options.
-Complete details at https://libvirt.org/formatdomain.html#vsock.
+Complete details at https://libvirt.org/formatdomain.html#vsock
 
 
 
@@ -2011,7 +2018,7 @@ Complete details at https://libvirt.org/formatdomain.html#vsock.
 Add an IOMMU device to the guest.
 
 Use --iommu=? to see a list of all available options.
-Complete details at https://libvirt.org/formatdomain.html#elementsIommu.
+Complete details at https://libvirt.org/formatdomain.html#iommu-devices
 
 
 
