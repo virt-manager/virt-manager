@@ -113,6 +113,10 @@ def _checkConsoleStandard(app, dom):
     # 'Resize to VM' testing
     oldsize = win.size
     win.find("^View$", "menu").click()
+    scalemenu = win.find("Scale Display", "menu")
+    scalemenu.point()
+    scalemenu.find("Never", "radio menu item").click()
+    win.find("^View$", "menu").click()
     win.find("Resize to VM", "menu item").click()
     newsize = win.size
     lib.utils.check(lambda: oldsize != newsize)
@@ -149,10 +153,6 @@ def _checkConsoleStandard(app, dom):
 
     # Tweak scaling
     win.window_maximize()
-    win.find("^View$", "menu").click()
-    scalemenu = win.find("Scale Display", "menu")
-    scalemenu.point()
-    scalemenu.find("Never", "radio menu item").click()
     win.find("^View$", "menu").click()
     scalemenu = win.find("Scale Display", "menu")
     scalemenu.point()
