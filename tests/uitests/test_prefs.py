@@ -50,7 +50,7 @@ def testPrefsAll(app):
     tab.check_onscreen()
     tab.combo_select("SPICE USB", "Manual redirect")
     tab.combo_select("Resize guest", "On")
-    tab.combo_select("Graphical console scaling", "Always")
+    tab.combo_select("Graphical console scaling", "Never")
     tab.find("Console autoconnect", "check box").click()
 
     tab.find("Change...", "push button").click()
