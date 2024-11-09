@@ -27,13 +27,14 @@
 # zk dc <zkdc2345@qq.com>, 2023.
 # 连 浩鑫 <lianhaoxin2012@outlook.com>, 2023.
 # eirik song <eirik.song@gmail.com>, 2024.
+# jianqing yan <yanjianqing@kylinos.cn>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-08-16 22:43+0200\n"
-"PO-Revision-Date: 2024-02-24 03:11+0000\n"
-"Last-Translator: eirik song <eirik.song@gmail.com>\n"
+"PO-Revision-Date: 2024-08-21 01:38+0000\n"
+"Last-Translator: jianqing yan <yanjianqing@kylinos.cn>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -41,7 +42,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.7\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -2000,7 +2001,7 @@ msgstr "描述(_D)："
 #, fuzzy
 #| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
-msgstr "截图模式："
+msgstr "快照模式："
 
 #: ui/snapshotsnew.ui:251
 #, fuzzy
@@ -2012,17 +2013,18 @@ msgstr "外部"
 #, fuzzy
 #| msgid "External"
 msgid "_internal"
-msgstr "外部"
+msgstr "内部"
 
 #: ui/snapshotsnew.ui:294
 #, fuzzy
 #| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "虚拟系统状态："
+msgstr "内存状态："
 
 #: ui/snapshotsnew.ui:308
+#, fuzzy
 msgid "_auto"
-msgstr ""
+msgstr "自动"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -3753,8 +3755,9 @@ msgid "Error connecting to text console: %s"
 msgstr "连接到文本控制台时出错：%s"
 
 #: virtManager/details/snapshots.py:122
+#, fuzzy
 msgid "external snapshots not supported with this libvirt connection"
-msgstr ""
+msgstr "这个 libvirt 连接不支持外部快照"
 
 #: virtManager/details/snapshots.py:284
 #, python-format
@@ -5054,7 +5057,7 @@ msgstr "PNG 文件"
 #, fuzzy
 #| msgid "Saved"
 msgid "_Save"
-msgstr "已保存"
+msgstr "保存"
 
 #: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
 msgid "There are unapplied changes."
@@ -5647,8 +5650,9 @@ msgid "Unknown autoconsole type '%s'"
 msgstr "未知的自动控制台类型 '%s'"
 
 #: virtinst/cli.py:2341
+#, fuzzy
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr ""
+msgstr "CPU model=host 已弃用，请使用 model=host-model"
 
 #: virtinst/cli.py:3528
 #, python-format
