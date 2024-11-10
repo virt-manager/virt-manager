@@ -116,7 +116,7 @@ class InstallerTreeMedia(object):
                 raise ValueError(_("location kernel/initrd may only "
                     "be specified with a location URL/path"))
             if not (location_kernel and location_initrd):
-                raise ValueError(_("location kernel/initrd must be "
+                raise ValueError(_("location kernel/initrd must "
                     "be specified as a pair"))
 
         self._cached_fetcher = None

@@ -1059,7 +1059,7 @@ c.add_invalid("--connect test:///default --name foo --ram 64 --disk none --sdl -
 c.add_invalid("--paravirt --import --print-xml 2", grep="does not have XML step 2")  # PV Import install, no second XML step
 c.add_invalid("--paravirt --import --print-xml 7", grep="Unknown XML step request '7'")  # Invalid --print-xml arg
 c.add_invalid("--location kernel=foo,initrd=bar", grep="location kernel/initrd may only be specified with a location URL/path")
-c.add_invalid("--location http://example.com,kernel=foo", grep="location kernel/initrd must be be specified as a pair")
+c.add_invalid("--location http://example.com,kernel=foo", grep="location kernel/initrd must be specified as a pair")
 c.add_valid("--pxe --os-variant generic --os-type linux", grep="--os-type is deprecated")
 c.add_invalid("--os-variant solaris10 --unattended", grep="not support unattended")
 
