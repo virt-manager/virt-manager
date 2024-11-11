@@ -20,13 +20,13 @@ from ..lib.keyring import vmmKeyring
 # console-pages IDs
 (_CONSOLE_PAGE_UNAVAILABLE,
  _CONSOLE_PAGE_SERIAL,
- _CONSOLE_PAGE_GRAPHICS) = range(3)
+ _CONSOLE_PAGE_GRAPHICS,
+ _CONSOLE_PAGE_CONNECT) = range(4)
 
 # console-gfx-pages IDs
 (_GFX_PAGE_VIEWER,
  _GFX_PAGE_AUTH,
- _GFX_PAGE_UNAVAILABLE,
- _GFX_PAGE_CONNECT) = range(4)
+ _GFX_PAGE_UNAVAILABLE) = range(3)
 
 
 class _TimedRevealer(vmmGObject):
@@ -625,8 +625,8 @@ class vmmConsolePages(vmmGObjectUI):
         if self._viewer:
             self._viewer.console_grab_focus()
 
-    def _activate_gfx_connect_page(self):
-        self.widget("console-gfx-pages").set_current_page(_GFX_PAGE_CONNECT)
+    def _activate_console_connect_page(self):
+        self.widget("console-pages").set_current_page(_CONSOLE_PAGE_CONNECT)
 
     def _viewer_is_visible(self):
         is_visible = self.widget("console-pages").is_visible()
@@ -659,7 +659,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         if (not self.vm.get_console_autoconnect() and
             not self._viewer_connect_clicked):
-            self._activate_gfx_connect_page()
+            self._activate_console_connect_page()
             return
 
         self._activate_gfx_unavailable_page(
@@ -855,6 +855,11 @@ class vmmConsolePages(vmmGObjectUI):
             title = Gtk.Label(label=name)
             self.widget("serial-pages").append_page(serial.get_box(), title)
             self._serial_consoles.append(serial)
+
+        if (not self.vm.get_console_autoconnect() and
+            not self._viewer_connect_clicked):
+            self._activate_console_connect_page()
+            return
 
         serial.open_console()
         page_idx = self._serial_consoles.index(serial)
