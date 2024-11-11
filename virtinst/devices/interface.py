@@ -7,7 +7,7 @@
 import os
 import random
 
-from .device import Device
+from .device import Device, DeviceAddress
 from ..logger import log
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
@@ -167,6 +167,10 @@ class _PortForward(XMLBuilder):
     range = XMLChildProperty(_PortForwardRange)
 
 
+class _DeviceInterfaceSourceAddress(DeviceAddress):
+    pass
+
+
 class DeviceInterface(Device):
     XML_NAME = "interface"
 
@@ -284,6 +288,10 @@ class DeviceInterface(Device):
     source_type = XMLProperty("./source/@type")
     source_path = XMLProperty("./source/@path")
     source_mode = XMLProperty("./source/@mode")
+    source_address = XMLChildProperty(_DeviceInterfaceSourceAddress,
+                                      is_single=True,
+                                      relative_xpath="./source")
+
     portgroup = XMLProperty("./source/@portgroup")
     model = XMLProperty("./model/@type")
     target_dev = XMLProperty("./target/@dev")

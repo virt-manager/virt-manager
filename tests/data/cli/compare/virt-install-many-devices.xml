@@ -626,6 +626,13 @@
         <range start="2022" to="22"/>
       </portForward>
     </interface>
+    <interface type="hostdev">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <source>
+        <address type="pci" domain="0" bus="0" slot="7" function="0"/>
+      </source>
+    </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="host" type="tcp"/>
     <smartcard mode="passthrough" type="spicevmc"/>

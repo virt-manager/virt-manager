@@ -3930,11 +3930,18 @@ class ParserNetwork(VirtCLIParser):
         cls.add_arg("backend.type", "backend.type")
         cls.add_arg("backend.logFile", "backend.logFile")
         cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters", is_onoff=True)
+
         cls.add_arg("source", "source")
         cls.add_arg("source.mode", "source_mode")
         cls.add_arg("source.type", "source_type")
         cls.add_arg("source.path", "source_path")
         cls.add_arg("source.portgroup", "portgroup")
+        cls.add_arg("source.address.type", "source_address.type")
+        cls.add_arg("source.address.domain", "source_address.domain")
+        cls.add_arg("source.address.bus", "source_address.bus")
+        cls.add_arg("source.address.slot", "source_address.slot")
+        cls.add_arg("source.address.function", "source_address.function")
+
         cls.add_arg("target.dev", "target_dev")
         cls.add_arg("model.type", "model")
         cls.add_arg("mac.address", "macaddr", cb=cls.set_mac_cb)
