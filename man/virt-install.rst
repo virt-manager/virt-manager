@@ -1332,6 +1332,11 @@ Some example suboptions:
 
     This option deprecates -m/--mac, -b/--bridge, and --nonetworks
 
+``hostdev=HOSTDEV``
+    Use the referenced nodedev device as the source for ``type=hostdev``
+    as described here: https://libvirt.org/formatdomain.html#pci-passthrough
+
+    For ``HOSTDEV`` format, see ``--hostdev`` documentation
 
 
 GRAPHICS OPTIONS

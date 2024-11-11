@@ -3913,6 +3913,10 @@ class ParserNetwork(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(inst, *args, **kwargs)
 
+    def set_hostdev_cb(self, inst, val, virtarg):
+        val = _lookupNodedevFromString(inst.conn, val)
+        inst.set_from_nodedev(val)
+
     @classmethod
     def _virtcli_class_init(cls):
         VirtCLIParser._virtcli_class_init_common(cls)
@@ -3941,6 +3945,8 @@ class ParserNetwork(VirtCLIParser):
         cls.add_arg("source.address.bus", "source_address.bus")
         cls.add_arg("source.address.slot", "source_address.slot")
         cls.add_arg("source.address.function", "source_address.function")
+
+        cls.add_arg("hostdev", None, cb=cls.set_hostdev_cb, lookup_cb=None)
 
         cls.add_arg("target.dev", "target_dev")
         cls.add_arg("model.type", "model")

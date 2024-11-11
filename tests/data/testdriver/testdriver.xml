@@ -3590,6 +3590,23 @@ ba</description>
 <!-- End duplicate USB devices -->
 
 <device>
+  <name>pci_0000_00_09_0</name>
+  <path>/sys/devices/pci0000:00/0000:00:09.0</path>
+  <parent>computer</parent>
+  <driver>
+    <name>i915</name>
+  </driver>
+  <capability type='pci'>
+    <domain>0</domain>
+    <bus>0</bus>
+    <slot>9</slot>
+    <function>0</function>
+    <product id='0x191b'>HD Graphics 530</product>
+    <vendor id='0x8086'>Intel Corporation</vendor>
+  </capability>
+</device>
+
+<device>
   <name>pci_0000_00_02_0</name>
   <path>/sys/devices/pci0000:00/0000:00:02.0</path>
   <parent>computer</parent>

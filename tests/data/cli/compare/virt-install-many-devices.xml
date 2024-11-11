@@ -633,6 +633,20 @@
         <address type="pci" domain="0" bus="0" slot="7" function="0"/>
       </source>
     </interface>
+    <interface type="hostdev" managed="yes">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <source>
+        <address type="pci" domain="0" bus="0" slot="9" function="0"/>
+      </source>
+    </interface>
+    <interface type="hostdev" managed="yes">
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <source>
+        <address type="pci" domain="0" bus="0" slot="4" function="0"/>
+      </source>
+    </interface>
     <smartcard mode="passthrough" type="spicevmc"/>
     <smartcard mode="host" type="tcp"/>
     <smartcard mode="passthrough" type="spicevmc"/>

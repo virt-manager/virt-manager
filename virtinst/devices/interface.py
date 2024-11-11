@@ -8,6 +8,7 @@ import os
 import random
 
 from .device import Device, DeviceAddress
+from ..nodedev import NodeDevice
 from ..logger import log
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
@@ -291,6 +292,7 @@ class DeviceInterface(Device):
     source_address = XMLChildProperty(_DeviceInterfaceSourceAddress,
                                       is_single=True,
                                       relative_xpath="./source")
+    managed = XMLProperty("./@managed", is_yesno=True)
 
     portgroup = XMLProperty("./source/@portgroup")
     model = XMLProperty("./model/@type")
@@ -326,6 +328,24 @@ class DeviceInterface(Device):
 
         self.type = nettype
         self.source = source
+
+    def set_from_nodedev(self, nodedev):
+        log.debug("set_from_nodedev xml=\n%s", nodedev.get_xml())
+
+        self.type = "hostdev"
+        if self.managed is None:
+            self.managed = True
+
+        if nodedev.device_type == NodeDevice.CAPABILITY_TYPE_PCI:
+            self.source_address.type = "pci"
+            self.source_address.domain = nodedev.domain
+            self.source_address.bus = nodedev.bus
+            self.source_address.slot = nodedev.slot
+            self.source_address.function = nodedev.function
+
+        else:  # pragma: no cover
+            raise ValueError(_("Unsupported node device type '%s'") %
+                    nodedev.device_type)
 
 
     ##################

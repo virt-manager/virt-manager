@@ -653,6 +653,8 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network model=vmxnet3
 --network backend.type=passt,backend.logFile=/tmp/foo.log,portForward0.proto=tcp,portForward0.address=192.168.10.10,portForward0.dev=eth0,portForward0.range0.start=4000,portForward0.range0.end=5000,portForward0.range0.to=10000,portForward0.range0.exclude=no,portForward0.range1.start=6000,portForward1.proto=tcp,portForward1.range0.start=2022,portForward1.range0.to=22
 --network type=hostdev,source.address.type=pci,source.address.domain=0x0,source.address.bus=0x00,source.address.slot=0x07,source.address.function=0x0
+--network hostdev=pci_0000_00_09_0
+--network hostdev=0:0:4.0
 
 
 --graphics sdl
