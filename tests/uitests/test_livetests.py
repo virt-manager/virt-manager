@@ -313,11 +313,10 @@ def testConsoleVNCSocket(app, dom):
     lib.utils.check(lambda: con.showing)
 
 
-@_vm_wrapper("uitests-spice-standard")
-def testConsoleAutoconnect(app, dom):
+def _testConsoleAutoconnect(app, dom, wname):
     ignore = dom
     win = app.topwin
-    con = win.find("console-gfx-viewport")
+    con = win.find(wname)
     lib.utils.check(lambda: con.showing)
 
     # Disable autoconnect
@@ -334,6 +333,16 @@ def testConsoleAutoconnect(app, dom):
     lib.utils.check(lambda: not con.showing)
     button.click()
     lib.utils.check(lambda: con.showing)
+
+
+@_vm_wrapper("uitests-spice-standard")
+def testConsoleAutoconnectGraphics(app, dom):
+    _testConsoleAutoconnect(app, dom, "console-gfx-viewport")
+
+
+@_vm_wrapper("uitests-lxc-serial", uri="lxc:///")
+def testConsoleAutoconnectSerial(app, dom):
+    _testConsoleAutoconnect(app, dom, "Serial Terminal")
 
 
 @_vm_wrapper("uitests-lxc-serial", uri="lxc:///")
