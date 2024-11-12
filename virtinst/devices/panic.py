@@ -18,6 +18,7 @@ class DevicePanic(Device):
     MODEL_S390 = "s390"
 
     model = XMLProperty("./@model")
+    set_stub = XMLProperty(".", is_bool=True)
 
 
     ##################
@@ -46,4 +47,5 @@ class DevicePanic(Device):
         if not self.address.type and self.address.iobase:
             self.address.type = "isa"
         if not self.model:
-            self.model = DevicePanic.get_default_model(guest)
+            # This asks libvirt to fill in a default
+            self.set_stub = True
