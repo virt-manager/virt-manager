@@ -22,7 +22,7 @@ from . import xmlutil
 from .buildconfig import BuildConfig
 from .connection import VirtinstConnection
 from .devices import (Device, DeviceController, DeviceDisk, DeviceGraphics,
-        DeviceHostdev, DeviceInterface, DevicePanic)
+        DeviceHostdev, DeviceInterface)
 from .guest import Guest
 from .logger import log, reset_logging
 from .nodedev import NodeDevice
@@ -4488,7 +4488,7 @@ class ParserPanic(VirtCLIParser):
         if (len(self.optdict) == 1 and
             self.optdict.get("model", "").startswith("0x")):
             self.optdict["address.iobase"] = self.optdict["model"]
-            self.optdict["model"] = DevicePanic.MODEL_ISA
+            self.optdict["model"] = "isa"
 
         return super()._parse(inst)
 
