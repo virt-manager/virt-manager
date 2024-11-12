@@ -561,10 +561,11 @@ def installer_detect_distro(guest, installer, osdata):
                 guest.set_os_name(autodistro)
             elif fallback_name:
                 msg = _(
-                    "Failed to detect osinfo OS name from install media."
-                    "Using fallback name=%s.") % fallback_name
-                msg += _("\nPlease file a bug against virt-install if "
-                         "you expected detection to succeed.")
+                    "Failed to detect osinfo OS name from install media, "
+                    "using fallback name '{name}'.\n"
+                    "Please file a bug against virt-install if "
+                    "you expected the detection to succeed.").format(
+                        name=fallback_name)
                 log.warning(msg)
     except ValueError as e:
         fail(_("Error validating install location: %s") % str(e))
