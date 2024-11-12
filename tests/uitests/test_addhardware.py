@@ -660,7 +660,6 @@ def testAddHWMisc2(app):
     # Add Panic
     _open_addhw(app, details)
     tab = _select_hw(addhw, "Panic", "panic-tab")
-    tab.combo_select("Model:", "Hyper-V")
     _finish(addhw, check=details)
 
     # Add vsock
