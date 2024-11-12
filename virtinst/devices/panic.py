@@ -12,11 +12,6 @@ from ..xmlbuilder import XMLProperty
 class DevicePanic(Device):
     XML_NAME = "panic"
 
-    MODEL_ISA = "isa"
-    MODEL_PSERIES = "pseries"
-    MODEL_HYPERV = "hyperv"
-    MODEL_S390 = "s390"
-
     model = XMLProperty("./@model")
     set_stub = XMLProperty(".", is_bool=True)
 
@@ -24,24 +19,6 @@ class DevicePanic(Device):
     ##################
     # Default config #
     ##################
-
-    @staticmethod
-    def get_models(guest):
-        if guest.os.is_x86():
-            return [DevicePanic.MODEL_ISA,
-                    DevicePanic.MODEL_HYPERV]
-        elif guest.os.is_pseries():
-            return [DevicePanic.MODEL_PSERIES]
-        elif guest.os.is_s390x():
-            return [DevicePanic.MODEL_S390]
-        return []
-
-    @staticmethod
-    def get_default_model(guest):
-        models = DevicePanic.get_models(guest)
-        if models:
-            return models[0]
-        return None
 
     def set_defaults(self, guest):
         if not self.address.type and self.address.iobase:

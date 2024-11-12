@@ -270,8 +270,7 @@ class vmmAddHardware(vmmGObjectUI):
                       True, None)
         add_hw_option(_("RNG"), "system-run", PAGE_RNG, True, None)
         add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
-            bool(DevicePanic.get_models(self.vm.get_xmlobj())),
-            _("Not supported for this hypervisor/libvirt/arch combination."))
+                      True, None)
         add_hw_option(_("VirtIO VSOCK"), "network-idle", PAGE_VSOCK,
             self.vm.is_hvm(),
             _("Not supported for this hypervisor/libvirt/arch combination."))
@@ -511,16 +510,6 @@ class vmmAddHardware(vmmGObjectUI):
             "xen": _("Xen"),
         }
         return bus_mappings.get(bus, bus)
-
-    @staticmethod
-    def panic_pretty_model(val):
-        labels = {
-            DevicePanic.MODEL_ISA: _("ISA"),
-            DevicePanic.MODEL_PSERIES: _("pSeries"),
-            DevicePanic.MODEL_HYPERV: _("Hyper-V"),
-            DevicePanic.MODEL_S390: _("s390"),
-        }
-        return labels.get(val, val)
 
     @staticmethod
     def rng_pretty_type(val):
@@ -871,12 +860,8 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     def _build_panic_model_combo(self):
-        values = []
-        for m in DevicePanic.get_models(self.vm.get_xmlobj()):
-            values.append([m, vmmAddHardware.panic_pretty_model(m)])
-
-        default = DevicePanic.get_default_model(self.vm.get_xmlobj())
-        uiutil.build_simple_combo(self.widget("panic-model"), values, default_value=default)
+        values = [[None, _("Hypervisor default")]]
+        uiutil.build_simple_combo(self.widget("panic-model"), values)
 
 
     def _build_controller_type_combo(self):

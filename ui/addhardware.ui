@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -1294,7 +1294,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=3 n-rows=3 -->
+                              <!-- n-columns=2 n-rows=1 -->
                               <object class="GtkGrid" id="grid2">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -1318,32 +1318,17 @@
                                   <object class="GtkComboBox" id="panic-model">
                                     <property name="visible">True</property>
                                     <property name="can-focus">False</property>
+                                    <property name="has-entry">True</property>
+                                    <child internal-child="entry">
+                                      <object class="GtkEntry">
+                                        <property name="can-focus">True</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="left-attach">1</property>
                                     <property name="top-attach">0</property>
                                   </packing>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
                                 </child>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="grid2-atkobject">

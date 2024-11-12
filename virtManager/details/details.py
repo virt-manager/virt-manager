@@ -2058,9 +2058,7 @@ class vmmDetails(vmmGObjectUI):
         self.tpmdetails.set_dev(tpmdev)
 
     def _refresh_panic_page(self, dev):
-        model = dev.model or "isa"
-        pmodel = vmmAddHardware.panic_pretty_model(model)
-        self.widget("panic-model").set_text(pmodel)
+        self.widget("panic-model").set_text(dev.model or "")
 
     def _refresh_rng_page(self, dev):
         is_random = dev.backend_model == "random"
