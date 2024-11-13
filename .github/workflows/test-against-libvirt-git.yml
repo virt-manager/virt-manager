@@ -15,8 +15,6 @@ jobs:
       image: fedora:latest
 
     steps:
-    - uses: actions/checkout@v4
-
     - name: Install RPM build and libvirt deps
       run: |
         # glibc-langpacks-en needed to work around python locale issues
@@ -35,13 +33,7 @@ jobs:
 
         dnf builddep -y libvirt
 
-    - name: checkout and build libvirt
-      run: |
-        git clone --depth=1 https://gitlab.com/libvirt/libvirt
-        cd libvirt
-        meson build
-        ninja -C build
-        cd ..
+    - uses: actions/checkout@v4
 
     - name: Build RPM and test install
       run: |
@@ -55,6 +47,14 @@ jobs:
         dnf install -y \
           ~/rpmbuild/RPMS/noarch/virt-install*.rpm \
           ~/rpmbuild/RPMS/noarch/virt-manager-common*.rpm
+
+    - name: checkout and build libvirt
+      run: |
+        git clone --depth=1 https://gitlab.com/libvirt/libvirt
+        cd libvirt
+        meson build
+        ninja -C build
+        cd ..
 
     - name: Run test suite
       run: |
