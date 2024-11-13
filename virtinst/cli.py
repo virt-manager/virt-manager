@@ -2841,15 +2841,15 @@ class ParserBoot(VirtCLIParser):
 
     def set_uefi_cb(self, inst, val, virtarg):
         val = _on_off_convert("uefi", val)
-        if not val:
-            raise NotImplementedError()
 
         if not self.editing:
             # From virt-install, we just set this flag, and set_defaults()
             # will fill in everything for us, otherwise we have a circular
             # dep on determining arch/machine info
-            self.guest.uefi_requested = True
+            self.guest.uefi_requested = val
         else:
+            if not val:
+                raise NotImplementedError()
             self.guest.enable_uefi()
 
     def set_initargs_cb(self, inst, val, virtarg):
