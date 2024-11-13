@@ -749,6 +749,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --soundhw default
 --sound ac97
 --sound codec0.type=micro,codec1.type=duplex,codec2.type=output
+--sound model=usb,multichannel=yes
 
 
 --audio id=1,type=spice

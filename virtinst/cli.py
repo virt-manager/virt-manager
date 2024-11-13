@@ -4774,6 +4774,7 @@ class ParserSound(VirtCLIParser):
         cls.add_arg("audio.id", "audio_id")
         cls.add_arg("codec[0-9]*.type", "type",
                     find_inst_cb=cls.codec_find_inst_cb)
+        cls.add_arg("multichannel", "multichannel")
 
 
 class ParserAudio(VirtCLIParser):

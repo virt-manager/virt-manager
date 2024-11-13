@@ -23,6 +23,7 @@ class DeviceSound(Device):
     model = XMLProperty("./@model")
     codecs = XMLChildProperty(_Codec)
     audio_id = XMLProperty("./audio/@id")
+    multichannel = XMLProperty("./@multichannel", is_yesno=True)
 
 
     ##################
