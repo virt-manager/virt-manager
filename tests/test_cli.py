@@ -1151,7 +1151,7 @@ c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type 
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
 c.add_compare("--osinfo linux2020 --pxe", "linux2020", prerun_check=no_osinfo_linux2020_virtio)
 c.add_compare("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s", "win11", prerun_check=no_osinfo_win11)
-c.add_invalid("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s --boot uefi=off", grep="NotImplementedError")
+c.add_compare("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s --boot uefi=off", "win11-no-uefi")
 c.add_compare("--osinfo generic --disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
 c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks", "location-iso", prerun_check=missing_xorriso)  # Using --location iso mounting
 c.add_compare("--disk %(EXISTIMG1)s --location %(ISOTREE)s --nonetworks --cloud-init user-data=%(XMLDIR)s/cloudinit/user-data.txt,meta-data=%(XMLDIR)s/cloudinit/meta-data.txt", "location-iso-and-cloud-init", prerun_check=missing_xorriso)  # Using --location iso mounting and --cloud-init at the same time

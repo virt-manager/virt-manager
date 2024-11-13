@@ -221,7 +221,7 @@ class Guest(XMLBuilder):
         self.num_pcie_root_ports = 14
 
         self.skip_default_osinfo = False
-        self.uefi_requested = False
+        self.uefi_requested = None
         self.__osinfo = None
         self._capsinfo = None
         self._domcaps = None
@@ -1038,6 +1038,9 @@ class Guest(XMLBuilder):
         return path
 
     def _set_default_uefi(self):
+        if self.uefi_requested is False:
+            return
+
         use_default_uefi = (self.prefers_uefi() and
             not self.os.kernel and
             not self.os.loader and
