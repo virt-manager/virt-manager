@@ -4310,6 +4310,8 @@ class ParserTPM(VirtCLIParser):
         cls.add_arg("backend.persistent_state",
                     "persistent_state", is_onoff=True)
         cls.add_arg("backend.debug", "debug")
+        cls.add_arg("backend.source.type", "source_type")
+        cls.add_arg("backend.source.path", "source_path")
 
         cls.add_arg("active_pcr_banks.sha1",
                     "active_pcr_banks.sha1", is_onoff=True)

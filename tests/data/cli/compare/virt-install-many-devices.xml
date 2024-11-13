@@ -749,7 +749,9 @@
       </active_pcr_banks>
     </tpm>
     <tpm model="tpm-tis">
-      <backend type="emulator" version="2.0" debug="3"/>
+      <backend type="emulator" version="2.0" debug="3">
+        <source type="dir" path="/some/dir"/>
+      </backend>
     </tpm>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority">
       <ab>cd</ab>
