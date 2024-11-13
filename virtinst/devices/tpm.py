@@ -41,6 +41,7 @@ class DeviceTpm(Device):
     encryption_secret = XMLProperty("./backend/encryption/@secret")
     persistent_state = XMLProperty(
             "./backend/@persistent_state", is_yesno=True)
+    debug = XMLProperty("./backend/@debug")
 
     active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True)
 
