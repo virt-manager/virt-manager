@@ -2825,8 +2825,8 @@ class ParserBoot(VirtCLIParser):
         self._convert_boot_order(inst)
 
         # Back compat to allow uefi to have no cli value specified
-        if "uefi" in self.optdict:
-            self.optdict["uefi"] = True
+        if self.optdict.get("uefi", -1) is None:
+            self.optdict["uefi"] = "on"
 
         return super()._parse(inst)
 
@@ -2840,6 +2840,10 @@ class ParserBoot(VirtCLIParser):
             self.guest.refresh_machine_type()
 
     def set_uefi_cb(self, inst, val, virtarg):
+        val = _on_off_convert("uefi", val)
+        if not val:
+            raise NotImplementedError()
+
         if not self.editing:
             # From virt-install, we just set this flag, and set_defaults()
             # will fill in everything for us, otherwise we have a circular
