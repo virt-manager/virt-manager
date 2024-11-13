@@ -748,7 +748,7 @@ class WaitHandler:
 
     def wait(self):
         """
-        sleep 1 second, then teturn True if wait time has expired
+        sleep 1 second, then return True if wait time has expired
         """
         _sleep(1)
         if self._wait_forever:
