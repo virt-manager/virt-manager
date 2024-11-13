@@ -641,6 +641,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --disk type=nvme,source.type=pci,source.managed=no,source.namespace=2,source.address.domain=0x0001,source.address.bus=0x02,source.address.slot=0x00,source.address.function=0x0
 --disk /tmp/disk1.qcow2,size=16,driver.type=qcow2,driver.metadata_cache.max_size=2048,driver.metadata_cache.max_size.unit=KiB
 --disk /tmp/disk2.qcow2,size=16,driver.type=qcow2,driver.discard=unmap,driver.discard_no_unref=on
+--disk /tmp/disk3.qcow2,size=16,driver.type=qcow2,blockio.discard_granularity=4096
 
 
 --network user,mac=12:34:56:78:11:22,portgroup=foo,link_state=down,rom_bar=on,rom_file=/tmp/foo

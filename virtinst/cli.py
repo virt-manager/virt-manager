@@ -3788,6 +3788,7 @@ class ParserDisk(VirtCLIParser):
 
         cls.add_arg("blockio.logical_block_size", "logical_block_size")
         cls.add_arg("blockio.physical_block_size", "physical_block_size")
+        cls.add_arg("blockio.discard_granularity", "discard_granularity")
 
         cls.add_arg("geometry.cyls", "geometry_cyls")
         cls.add_arg("geometry.heads", "geometry_heads")
