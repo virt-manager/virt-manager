@@ -521,6 +521,7 @@ class DeviceDisk(Device):
     startup_policy = XMLProperty("./source/@startupPolicy")
     logical_block_size = XMLProperty("./blockio/@logical_block_size")
     physical_block_size = XMLProperty("./blockio/@physical_block_size")
+    discard_granularity = XMLProperty("./blockio/@discard_granularity")
 
     iotune_rbs = XMLProperty("./iotune/read_bytes_sec", is_int=True)
     iotune_ris = XMLProperty("./iotune/read_iops_sec", is_int=True)
