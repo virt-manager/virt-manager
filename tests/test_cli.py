@@ -794,7 +794,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --vsock cid=17
 
 
---tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes,active_pcr_banks.sha1=on,active_pcr_banks.sha256=yes,active_pcr_banks.sha384=yes,active_pcr_banks.sha512=yes,version=2.0
+--tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes,backend.active_pcr_banks.sha1=on,backend.active_pcr_banks.sha256=yes,backend.active_pcr_banks.sha384=yes,backend.active_pcr_banks.sha512=yes,version=2.0
 
 --tpm model=tpm-tis,backend.type=emulator,backend.version=2.0,backend.debug=3,backend.source.type=dir,backend.source.path=/some/dir
 

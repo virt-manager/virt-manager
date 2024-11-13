@@ -45,7 +45,8 @@ class DeviceTpm(Device):
     source_type = XMLProperty("./backend/source/@type")
     source_path = XMLProperty("./backend/source/@path")
 
-    active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True)
+    active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True,
+                                        relative_xpath="./backend")
 
 
     ##################
