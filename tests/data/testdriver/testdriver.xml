@@ -718,7 +718,15 @@ test-many-devices, like an alternate RNG, EOL OS ID, title field
   <vcpu>2</vcpu>
   <cpu mode='host-model'/>
   <os firmware='efi'>
+    <firmware>
+      <feature enabled='yes' name='enrolled-keys'/>
+      <feature enabled='yes' name='secure-boot'/>
+    </firmware>
     <type arch='i686'>hvm</type>
+    <loader format="qcow2" readonly='yes' secure='yes' type='pflash'>/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd.qcow2</loader>
+    <nvram type='file' format='qcow2' template='/usr/share/OVMF/OVMF_VARS.fd.qcow2'>
+      <source file='/var/lib/libvirt/nvram/guest_VARS.fd'/>
+    </nvram>
     <boot dev='hd'/>
   </os>
   <clock offset='utc'/>

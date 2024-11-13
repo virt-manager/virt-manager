@@ -1446,7 +1446,7 @@ c.add_compare("--confirm 1 --edit --cpu host-passthrough", "prompt-response", in
 c.add_compare("--edit --print-diff --qemu-commandline clearxml=yes", "edit-clearxml-qemu-commandline", input_file=(_VIRTXMLDIR + "virtxml-qemu-commandline-clear.xml"))
 c.add_compare("--print-diff --remove-device --serial 1", "remove-console-dup", input_file=(_VIRTXMLDIR + "virtxml-console-dup.xml"))
 c.add_compare("--print-diff --define --connect %(URI-KVM-X86)s test --edit --boot uefi", "edit-boot-uefi")
-c.add_invalid("--print-diff --define --connect %(URI-KVM-X86)s test-alternate-devs --edit --boot uefi=off", grep="NotImplementedError")
+c.add_compare("--print-diff --define --connect %(URI-KVM-X86)s test-alternate-devs --edit --boot uefi=off", "edit-boot-uefi-off")
 c.add_compare("--print-diff --define --connect %(URI-KVM-X86)s test-many-devices --edit --cpu host-copy", "edit-cpu-host-copy", precompare_check="10.1.0")
 c.add_compare("--connect %(URI-KVM-X86)s test-many-devices --build-xml --disk source.pool=pool-disk,source.volume=sdfg1", "build-pool-logical-disk")
 c.add_compare("test --add-device --network default --update --confirm", "update-succeed", env={"VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL": "1", "VIRTINST_TEST_SUITE_INCREMENT_MACADDR": "1"}, input_text="yes\nyes\n")  # test hotplug success

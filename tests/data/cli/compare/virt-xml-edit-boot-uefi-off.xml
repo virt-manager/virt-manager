@@ -1,0 +1,20 @@
+   <memory unit="KiB">134217728</memory>
+   <currentMemory unit="KiB">67108864</currentMemory>
+   <vcpu placement="static">2</vcpu>
+-  <os firmware="efi">
++  <os>
+     <type arch="i686">hvm</type>
+-    <firmware>
+-      <feature enabled="yes" name="enrolled-keys"/>
+-      <feature enabled="yes" name="secure-boot"/>
+-    </firmware>
+-    <loader readonly="yes" secure="yes" type="pflash" format="qcow2">/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd.qcow2</loader>
+-    <nvram template="/usr/share/OVMF/OVMF_VARS.fd.qcow2" type="file" format="qcow2">
+-      <source file="/var/lib/libvirt/nvram/guest_VARS.fd"/>
+-    </nvram>
+     <boot dev="hd"/>
+   </os>
+   <cpu mode="host-model"/>
+
+Domain 'test-alternate-devs' defined successfully.
+Changes will take effect after the domain is fully powered off.
