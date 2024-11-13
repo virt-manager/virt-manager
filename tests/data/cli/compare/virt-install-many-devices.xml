@@ -740,13 +740,13 @@
       <backend type="passthrough" version="2.0" persistent_state="yes">
         <device path="/dev/tpm0"/>
         <encryption secret="11111111-2222-3333-4444-5555555555"/>
+        <active_pcr_banks>
+          <sha1/>
+          <sha256/>
+          <sha384/>
+          <sha512/>
+        </active_pcr_banks>
       </backend>
-      <active_pcr_banks>
-        <sha1/>
-        <sha256/>
-        <sha384/>
-        <sha512/>
-      </active_pcr_banks>
     </tpm>
     <tpm model="tpm-tis">
       <backend type="emulator" version="2.0" debug="3">

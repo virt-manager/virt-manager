@@ -4313,13 +4313,13 @@ class ParserTPM(VirtCLIParser):
         cls.add_arg("backend.source.type", "source_type")
         cls.add_arg("backend.source.path", "source_path")
 
-        cls.add_arg("active_pcr_banks.sha1",
+        cls.add_arg("backend.active_pcr_banks.sha1",
                     "active_pcr_banks.sha1", is_onoff=True)
-        cls.add_arg("active_pcr_banks.sha256",
+        cls.add_arg("backend.active_pcr_banks.sha256",
                     "active_pcr_banks.sha256", is_onoff=True)
-        cls.add_arg("active_pcr_banks.sha384",
+        cls.add_arg("backend.active_pcr_banks.sha384",
                     "active_pcr_banks.sha384", is_onoff=True)
-        cls.add_arg("active_pcr_banks.sha512",
+        cls.add_arg("backend.active_pcr_banks.sha512",
                     "active_pcr_banks.sha512", is_onoff=True)
 
 
