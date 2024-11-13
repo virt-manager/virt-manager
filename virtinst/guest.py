@@ -600,6 +600,22 @@ class Guest(XMLBuilder):
         log.debug("Setting default UEFI path=%s", path)
         self.set_uefi_path(path)
 
+    def disable_uefi(self):
+        self.os.firmware = None
+        self.os.loader = None
+        self.os.loader_ro = None
+        self.os.loader_type = None
+        self.os.loader_secure = None
+        self.os.nvram = None
+        self.os.nvram_template = None
+        for feature in self.os.firmware_features:
+            self.os.remove_child(feature)
+
+        # Force remove any properties we don't know about
+        self._xmlstate.xmlapi.node_force_remove("./os/firmware")
+        self._xmlstate.xmlapi.node_force_remove("./os/nvram")
+        self._xmlstate.xmlapi.node_force_remove("./os/loader")
+
     def has_spice(self):
         for gfx in self.devices.graphics:
             if gfx.type == gfx.TYPE_SPICE:

@@ -2849,8 +2849,9 @@ class ParserBoot(VirtCLIParser):
             self.guest.uefi_requested = val
         else:
             if not val:
-                raise NotImplementedError()
-            self.guest.enable_uefi()
+                self.guest.disable_uefi()
+            else:
+                self.guest.enable_uefi()
 
     def set_initargs_cb(self, inst, val, virtarg):
         inst.set_initargs_string(val)

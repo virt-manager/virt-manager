@@ -711,11 +711,7 @@ class vmmDomain(vmmLibvirtObject):
                 # preserve NVRAM paths, so skip clearing all the properties
                 # and let libvirt do it for us.
                 if firmware is None:
-                    # Implies 'default', so clear everything
-                    guest.os.loader_ro = None
-                    guest.os.loader_type = None
-                    guest.os.nvram = None
-                    guest.os.nvram_template = None
+                    guest.disable_uefi()
             else:
                 # Implies UEFI
                 guest.set_uefi_path(loader)
