@@ -750,6 +750,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --sound ac97
 --sound codec0.type=micro,codec1.type=duplex,codec2.type=output
 --sound model=usb,multichannel=yes
+--sound model=virtio,streams=4
 
 
 --audio id=1,type=spice
