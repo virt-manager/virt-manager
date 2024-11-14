@@ -37,20 +37,6 @@ class DeviceInput(Device):
     # Default config #
     ##################
 
-    def _default_bus(self, _guest):
-        if self.type == self.TYPE_TABLET:
-            return self.BUS_USB
-        # This is not explicitly stated in the docs, but the example provided
-        # for evdev inputs does not have a bus type set and libvirt won't
-        # accept such XML either.
-        if self.type == self.TYPE_EVDEV:
-            return None
-        if self.conn.is_xen():
-            return self.BUS_XEN
-        return self.BUS_PS2
-
     def set_defaults(self, guest):
         if not self.type:
             self.type = self.TYPE_MOUSE
-        if not self.bus:
-            self.bus = self._default_bus(guest)
