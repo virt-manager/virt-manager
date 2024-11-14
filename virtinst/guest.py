@@ -211,6 +211,7 @@ class Guest(XMLBuilder):
         self.skip_default_graphics = False
         self.skip_default_rng = False
         self.skip_default_tpm = False
+        self.skip_default_input = False
         self.have_default_tpm = False
         self.x86_cpu_default = self.cpu.SPECIAL_MODE_APP_DEFAULT
 
@@ -1064,6 +1065,8 @@ class Guest(XMLBuilder):
         return all([c.model == "none" for c in controllers])
 
     def _add_default_input_device(self):
+        if self.skip_default_input:
+            return
         if self.os.is_container():
             return
         if self.devices.input:

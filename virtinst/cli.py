@@ -4169,6 +4169,13 @@ class ParserInput(VirtCLIParser):
     cli_arg_name = "input"
     guest_propname = "devices.input"
     remove_first = "type"
+    stub_none = False
+
+    def _parse(self, inst):
+        if self.optstr == "none":
+            self.guest.skip_default_input = True
+            return
+        return super()._parse(inst)
 
     @classmethod
     def _virtcli_class_init(cls):
