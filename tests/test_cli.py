@@ -868,6 +868,7 @@ c.add_compare(
 --smartcard none
 --tpm none
 --rng none
+--input none
 """, "singleton-config-1")
 
 
