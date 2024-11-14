@@ -18,7 +18,7 @@ meson install -C build
 
 ## Pre-requisite software
 
-A detailed dependency list can be found in [virt-manager.spec](virt-manager.spec) file.
+A detailed dependency list can be found in [virt-manager.spec.in](virt-manager.spec.in) file.
 
 Minimum version requirements of major components:
 
