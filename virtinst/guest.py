@@ -1069,45 +1069,42 @@ class Guest(XMLBuilder):
             return
         if self.os.is_container():
             return
+        if self.os.is_xenpv():
+            return
         if self.devices.input:
             return
         if not self.devices.graphics:
             return
-        if self._usb_disabled():
+
+        tablet = True
+        keyboard = True
+        if self.os.is_x86():
+            # We don't historically add USB keyboard for x86,
+            # default libvirt/qemu PS2 seems to be fine
+            keyboard = False
+
+        bus = None
+        if self.os.is_s390x():
+            # s390x guests need VirtIO input devices
+            if self.osinfo.supports_virtioinput(self._extra_drivers):
+                bus = "virtio"
+        elif not self._usb_disabled():
+            bus = "usb"
+
+        if not bus:
             return
 
-        usb_tablet = False
-        usb_keyboard = False
-        if self.os.is_x86() and not self.os.is_xenpv():
-            usb_tablet = True
-        if (self.os.is_arm_machvirt() or
-            self.os.is_riscv_virt() or
-            self.os.is_pseries() or
-            self.os.is_loongarch64()):
-            usb_tablet = True
-            usb_keyboard = True
-
-        if usb_tablet:
+        def _add_input(itype):
             dev = DeviceInput(self.conn)
-            dev.type = "tablet"
-            dev.bus = "usb"
-            self.add_device(dev)
-        if usb_keyboard:
-            dev = DeviceInput(self.conn)
-            dev.type = "keyboard"
-            dev.bus = "usb"
+            dev.type = itype
+            dev.bus = bus
+            dev.set_defaults(self)
             self.add_device(dev)
 
-        # s390x guests need VirtIO input devices
-        if self.os.is_s390x() and self.osinfo.supports_virtioinput(self._extra_drivers):
-            dev = DeviceInput(self.conn)
-            dev.type = "tablet"
-            dev.bus = "virtio"
-            self.add_device(dev)
-            dev = DeviceInput(self.conn)
-            dev.type = "keyboard"
-            dev.bus = "virtio"
-            self.add_device(dev)
+        if tablet:
+            _add_input("tablet")
+        if keyboard:
+            _add_input("keyboard")
 
     def _add_default_console_device(self):
         if self.skip_default_console:
