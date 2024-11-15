@@ -121,7 +121,7 @@ storage options via -file.
 
 
 ``--preserve-data``
-    No storage is cloned: disk images specific by --file are preserved as is,
+    No storage is cloned: disk images specified by --file are preserved as is,
     and referenced in the new clone XML. This is useful if you want to clone
     a VM XML template, but not the storage contents.
 
