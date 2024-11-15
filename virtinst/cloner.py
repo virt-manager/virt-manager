@@ -476,17 +476,21 @@ class Cloner(object):
         if not self._nvram_diskinfo:
             return
 
+        diskinfo = self._nvram_diskinfo
+        old_nvram = DeviceDisk(self.conn)
+        old_nvram_path = diskinfo.disk.get_source_path()
+        old_nvram.set_source_path(old_nvram_path)
+
         new_nvram_path = self._new_nvram_path
         if new_nvram_path is None:
-            nvram_dir = os.path.dirname(self._new_guest.os.nvram)
+            ext = os.path.splitext(old_nvram_path)[1]
+            nvram_dir = os.path.dirname(old_nvram_path)
             new_nvram_path = os.path.join(
-                    nvram_dir, "%s_VARS.fd" % self._new_guest.name)
+                    nvram_dir, "%s_VARS%s" %
+                    (os.path.basename(self._new_guest.name), ext or ".fd"))
 
-        diskinfo = self._nvram_diskinfo
         new_nvram = DeviceDisk(self.conn)
         new_nvram.set_source_path(new_nvram_path)
-        old_nvram = DeviceDisk(self.conn)
-        old_nvram.set_source_path(diskinfo.disk.get_source_path())
 
         if (diskinfo.is_clone_requested() and
             new_nvram.wants_storage_creation() and
