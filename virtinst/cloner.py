@@ -214,11 +214,18 @@ class _CloneDiskInfo:
 
     def __init__(self, srcdisk):
         self.disk = DeviceDisk(srcdisk.conn, parsexml=srcdisk.get_xml())
-        self.disk.set_backend_for_existing_path()
         self.new_disk = None
 
-        self._share_msg = _get_shareable_msg(self.disk)
         self._cloneable_msg = -1
+        try:
+            # Failure here means source path may not exist. Sometimes
+            # that's fatal, sometimes it's not (like with `--preserve`),
+            # but we don't know for sure until later.
+            self.disk.set_backend_for_existing_path()
+        except Exception as e:
+            self._cloneable_msg = str(e)
+
+        self._share_msg = _get_shareable_msg(self.disk)
         self._newpath_msg = None
 
         self._action = None
