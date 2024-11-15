@@ -144,8 +144,10 @@ storage options via -file.
 
 
 ``--replace``
-    Shutdown and remove any existing guest with the passed ``--name`` before
-    cloning the original guest.
+    Before cloning, try a simple ``virsh destroy`` and ``virsh undefine`` on
+    any existing VM with the passed ``--name``. If those operations fail (like
+    when ``virsh undefine`` requires ``--nvram`` flag), the clone will fail
+    and you will need to manually remove the existing VM.
 
 
 ``-h``, ``--help``
