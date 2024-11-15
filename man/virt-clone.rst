@@ -127,9 +127,9 @@ storage options via -file.
 
 
 ``--reflink``
-    When --reflink is specified, perform a lightweight copy. This is much faster
-    if source images and destination images are all on the same btrfs filesystem.
-    If COW copy is not possible, then virt-clone fails.
+    Perform a lightweight copy. This is much faster if source images and destination
+    images are all on the same btrfs filesystem. This only works for raw format disk
+    images, any non-raw images will not attempt to use refink
 
 
 ``-m``, ``--mac`` MAC

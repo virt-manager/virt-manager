@@ -670,8 +670,11 @@ class StorageVolume(_StorageObject):
                 cloneflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
 
         if self.reflink:
-            cloneflags |= getattr(libvirt,
-                "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
+            if self.format != "raw":
+                log.warning("skipping reflink for non-raw vol=%s", self.name)
+            else:
+                cloneflags |= getattr(libvirt,
+                    "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
 
         event = threading.Event()
         meter = progress.ensure_meter(meter)

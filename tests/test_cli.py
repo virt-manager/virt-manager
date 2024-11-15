@@ -1614,7 +1614,7 @@ c.add_invalid(_CLONE_UNMANAGED + " --auto-clone", grep="does not exist")  # Auto
 
 c = vclon.add_category("misc", "")
 c.add_compare("--connect %(URI-KVM-X86)s -o test-clone --auto-clone", "clone-auto1")
-c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone", "clone-auto2")
+c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone-simple --name newvm --auto-clone --reflink", "clone-auto2")
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM + " --auto-clone", "clone-nvram")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM + " --auto-clone --nvram /nvram/my-custom-path", "clone-nvram-path")  # hits a particular nvram code path
 c.add_compare("--connect %(URI-KVM-X86)s " + _CLONE_NVRAM_NEWPOOL + " --auto-clone", "nvram-newpool")  # hits a particular nvram code path
