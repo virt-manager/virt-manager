@@ -13,6 +13,7 @@ from . import generatename
 from . import progress
 from .logger import log
 from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
+from . import xmlutil
 
 
 _DEFAULT_DEV_TARGET = "/dev"
@@ -375,6 +376,10 @@ class StoragePool(_StorageObject):
         xml = self.get_xml()
         log.debug("Creating storage pool '%s' with xml:\n%s",
                       self.name, xml)
+
+        if (xmlutil.in_testsuite() and
+            "virtinst-testsuite-fail-pool-install" in xml):
+            raise RuntimeError("StoragePool.install testsuite mocked failure")
 
         meter = progress.ensure_meter(meter)
 
