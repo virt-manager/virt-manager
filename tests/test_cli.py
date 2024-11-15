@@ -1654,14 +1654,14 @@ c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s
 c.add_valid(_CLONE_UNMANAGED + " --file %(NEWCLONEIMG1)s --file %(NEWCLONEIMG2)s --force-copy=fda")  # XML w/ disks, force copy a target with no media
 c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s")  # XML w/ managed storage, specify managed path
 c.add_valid(_CLONE_MANAGED + " --file %(NEWIMG1)s --reflink")  # XML w/ managed storage, specify managed path, use --reflink option
-c.add_valid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ managed storage, specify managed path across pools
 c.add_compare("--connect %(URI-TEST-FULL)s -o test-clone -n test --auto-clone --replace", "replace")  # Overwriting existing running VM
 c.add_valid(_CLONE_MANAGED + " --auto-clone --force-copy fda")  # force copy empty floppy drive
 c.add_invalid("-o idontexist --auto-clone", grep="Domain 'idontexist' was not found")  # Non-existent vm name
 c.add_invalid(_CLONE_UNMANAGED, grep="Either --auto-clone or --file")  # XML file with several disks, but non specified
 c.add_invalid(_CLONE_UNMANAGED + " --file virt-install", grep="overwrite the existing path")  # XML w/ disks, overwriting existing files with no --preserve
 c.add_invalid(_CLONE_MANAGED + " --file /tmp/clonevol", grep="matching name 'default-vol'")  # will attempt to clone across pools, which test driver doesn't support
-c.add_invalid(_CLONE_NOEXIST + " --auto-clone", grep="'/i/really/dont/exist' does not exist.")  # XML w/ non-existent storage, WITHOUT --preserve
+c.add_valid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s --preserve")  # XML w/ non-existent storage, but using --preserve flag shouldn't raise an error
+c.add_invalid(_CLONE_NOEXIST + " --file %(EXISTIMG1)s", grep="StoragePool.install testsuite mocked failure")  # XML w/ non-existent storage, WITHOUT --preserve, so it _should_ error
 
 
 
