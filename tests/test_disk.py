@@ -171,6 +171,14 @@ def test_disk_diskbackend_misc():
     disk.set_source_path(volpath)
     assert disk.get_size()
 
+    disk = virtinst.DeviceDisk(conn)
+    try:
+        disk.set_source_path(
+                "/virtinst-testsuite-fail-pool-install/test.qcow2")
+        raise AssertionError("expected failure")
+    except RuntimeError as e:
+        assert "StoragePool.install testsuite mocked failure" in str(e)
+
 
 def test_disk_diskbackend_parse():
     # Test that calling validate() on parsed disk XML doesn't attempt
