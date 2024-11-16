@@ -632,6 +632,44 @@
         <range start="2022" to="22"/>
       </portForward>
     </interface>
+    <interface type="user">
+      <backend type="passt"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <portForward proto="tcp">
+        <range start="8080" to="80"/>
+      </portForward>
+    </interface>
+    <interface type="user">
+      <backend type="passt"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <portForward proto="tcp">
+        <range start="8080"/>
+      </portForward>
+    </interface>
+    <interface type="user">
+      <backend type="passt"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <portForward proto="udp">
+        <range start="7000" end="8000"/>
+      </portForward>
+      <portForward proto="tcp" address="127.0.0.1">
+        <range start="2222" to="22"/>
+      </portForward>
+    </interface>
+    <interface type="user">
+      <backend type="passt"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+      <portForward proto="tcp" address="2001:db8:ac10:fd01::1:10">
+        <range start="3000" end="4000" to="30"/>
+      </portForward>
+      <portForward proto="tcp" address="127.0.0.1">
+        <range start="5000" end="6000" to="5"/>
+      </portForward>
+    </interface>
     <interface type="hostdev">
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
