@@ -450,9 +450,9 @@ class DomainCpu(XMLBuilder):
     def set_defaults(self, guest):
         if not self.conn.is_test() and not self.conn.is_qemu():
             return
-        if (self.get_xml().strip() or
-            self.special_mode_was_set):
-            # User already configured CPU
+        if self.special_mode_was_set:
+            return
+        if self.model or self.mode:
             return
 
         if guest.os.is_arm_machvirt() and guest.type == "kvm":
