@@ -18,7 +18,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu>
+  <cpu mode="host-passthrough">
     <numa>
       <cell cpus="0" memory="1048576"/>
     </numa>
@@ -162,7 +162,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu>
+  <cpu mode="host-passthrough">
     <numa>
       <cell cpus="0" memory="1048576"/>
     </numa>
