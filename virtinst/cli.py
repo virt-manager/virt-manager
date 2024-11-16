@@ -3883,6 +3883,9 @@ class ParserNetwork(VirtCLIParser):
     def set_type_cb(self, inst, val, virtarg):
         if val == "default":
             inst.set_default_source()
+        elif val == "passt":
+            inst.type = "user"
+            inst.backend.type = "passt"
         else:
             inst.type = val
 
@@ -3913,6 +3916,38 @@ class ParserNetwork(VirtCLIParser):
         list_propname = "range"  # portForward.range
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(inst, *args, **kwargs)
+
+    def set_port_forward_pretty(self, inst, val, _virtarg):
+        if "/" in val:
+            val, proto = val.rsplit("/", 1)
+        else:
+            proto = "tcp"
+
+        if ":" in val:
+            val, port_to = val.rsplit(":", 1)
+        else:
+            port_to = None
+
+        if ":" in val:
+            host, val = val.rsplit(":", 1)
+        else:
+            host = None
+
+        if "-" in val:
+            port_start, port_end = val.rsplit("-", 1)
+        else:
+            port_start = val
+            port_end = None
+
+        if not inst.range:
+            inst.range.add_new()
+        rangeobj = inst.range[0]
+
+        inst.proto = proto
+        inst.address = host
+        rangeobj.start = port_start
+        rangeobj.end = port_end
+        rangeobj.to = port_to
 
     def set_hostdev_cb(self, inst, val, virtarg):
         val = _lookupNodedevFromString(inst.conn, val)
@@ -3991,6 +4026,9 @@ class ParserNetwork(VirtCLIParser):
                     find_inst_cb=cls.range_find_inst_cb)
         cls.add_arg("portForward[0-9]*.range[0-9]*.exclude", "exclude",
                     is_onoff=True, find_inst_cb=cls.range_find_inst_cb)
+        cls.add_arg("portForward[0-9]*", None, lookup_cb=None,
+                    cb=cls.set_port_forward_pretty,
+                    find_inst_cb=cls.portForward_find_inst_cb)
 
 
 ######################

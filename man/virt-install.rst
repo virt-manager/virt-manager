@@ -1338,6 +1338,20 @@ Some example suboptions:
 
     For ``HOSTDEV`` format, see ``--hostdev`` documentation
 
+``portForward=[ADDRESS:]HOSTPORT[:GUESTPORT][/PROTO]``
+    Simpler option for specifying port forwarding with
+    ``--network passt`` networks. Roughly matches ``podman run -p``
+    syntax. HOSTPORT can be a represented as a range like ``7000-8000``, but
+    GUESTPORT can only be a single port. If GUESTPORT is not provided, host
+    and guest ports are assumed to match.
+
+    Examples:
+
+    .. code-block::
+
+           --network passt,portForward=8080:80 \
+           --network passt,portForward0=7000-8000/udp,portForward1=127.0.0.1:2222:22 \
+
 
 GRAPHICS OPTIONS
 ================
