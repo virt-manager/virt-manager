@@ -1926,7 +1926,10 @@ Configure a virtual TPM device. Examples:
     Request an emulated TPM device.
 
 ``--tpm default``
-    Request virt-install to fill in a modern recommended default
+    Request virt-install to fill in a modern recommended default.
+
+``--tpm none``
+    Request virt-install to disable TPM device.
 
 Use --tpm=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#tpm-device
