@@ -20,16 +20,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-13 08:09+0100\n"
-"PO-Revision-Date: 2024-09-08 15:50+0000\n"
+"PO-Revision-Date: 2024-11-13 10:28+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138 virtManager/systray.py:148
@@ -387,10 +387,8 @@ msgid "_Connect to console"
 msgstr "_Connetti alla console"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "_Connetti"
+msgstr "Connetti"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -3206,8 +3204,6 @@ msgid "Bootstraping container"
 msgstr "Creazione del container"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Creazione del container"
 
@@ -6047,10 +6043,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "La sicurezza di avvio SEV richiede una macchina UEFI Q35"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "La sicurezza di avvio SEV richiede una macchina UEFI Q35"
+msgstr "La sicurezza di avvio SEV-SNP richiede una macchina UEFI Q35"
 
 #: virtinst/domcapabilities.py:207 virtinst/domcapabilities.py:208
 #, python-format
@@ -6137,8 +6131,6 @@ msgid "location kernel/initrd must be be specified as a pair"
 msgstr "la posizione del kernel/initrd deve essere specificata come una coppia"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "la posizione del kernel/initrd deve essere specificata come una coppia"
 
@@ -6982,28 +6974,24 @@ msgid "No matching objects found for %s"
 msgstr "Nessun oggetto corrispondente trovato per %s"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml non supportato per --%s"
+msgstr "--build-xml non supportato per {cli_flag}"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "Impossibile utilizzare --remove-device con --%s"
+msgstr "Impossibile utilizzare --remove-device con {cli_flag}"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "Impossibile utilizzare --add-device con --%s"
+msgstr "Impossibile utilizzare --add-device con {cli_flag}"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "Impossibile eseguire --update per --%s"
+msgstr "Impossibile eseguire --update per {cli_flag}"
 
 #: virtinst/virtxml.py:123 virtinst/virtxml.py:136
 #, python-format
@@ -7046,19 +7034,12 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Impossibile utilizzare --remove-device con --%s"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "Nessun oggetto --%s trovato nello XML"
+msgstr "Nessun oggetto {cli_flag} trovato nello XML"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -7066,10 +7047,10 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"'--edit %(number)s' richiesto, ma c'è solo %(max)s oggetto --%(type)s nello "
+"'--edit {number}' richiesto, ma c'è solo {maxnum} oggetto {cli_flag} nello "
 "XML"
 msgstr[1] ""
-"'--edit %(number)s' richiesto, ma ci sono solo %(max)s oggetti --%(type)s "
+"'--edit {number}' richiesto, ma ci sono solo {maxnum} oggetti {cli_flag} "
 "nello XML"
 
 #: virtinst/virtxml.py:206
@@ -7088,15 +7069,12 @@ msgid "Domain '%s' defined successfully."
 msgstr "Dominio '%s' definito correttamente."
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
-"'--edit %(option)s' non può essere usato con --%(objecttype)s. Utilizzare '--"
-"edit' senza parametri"
+"'--edit {option}' non può essere usato con {cli_flag}. Utilizzare '--edit' "
+"senza parametri"
 
 #: virtinst/virtxml.py:243 virtinst/virtxml.py:333
 #, python-format
@@ -7300,10 +7278,8 @@ msgid "A domain must be specified"
 msgstr "Deve essere specificato un dominio"
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "Opzioni in conflitto %s"
+msgstr "Opzioni di conversione"
 
 #: virtinst/virtxml.py:489
 #, python-format
