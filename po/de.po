@@ -34,10 +34,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-13 08:09+0100\n"
-"PO-Revision-Date: 2024-11-09 15:47+0000\n"
+"PO-Revision-Date: 2024-11-23 12:38+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -402,10 +402,8 @@ msgid "_Connect to console"
 msgstr "_Verbinde mit Konsole"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "_Verbinden"
+msgstr "Verbinden"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -2036,32 +2034,24 @@ msgid "_Description:"
 msgstr "_Beschreibung:"
 
 #: ui/snapshotsnew.ui:211 ui/snapshotsnew.ui:236
-#, fuzzy
-#| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
-msgstr "Schnappschussmodus:"
+msgstr "Schnappschuss_modus:"
 
 #: ui/snapshotsnew.ui:226 ui/snapshotsnew.ui:251
-#, fuzzy
-#| msgid "External"
 msgid "_external"
-msgstr "Extern"
+msgstr "_extern"
 
 #: ui/snapshotsnew.ui:243 ui/snapshotsnew.ui:268
-#, fuzzy
-#| msgid "External"
 msgid "_internal"
-msgstr "Extern"
+msgstr "_intern"
 
 #: ui/snapshotsnew.ui:269 ui/snapshotsnew.ui:294
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "VM-Status:"
+msgstr "Speicher_status:"
 
 #: ui/snapshotsnew.ui:283 ui/snapshotsnew.ui:308
 msgid "_auto"
-msgstr ""
+msgstr "_automatisch"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -3870,6 +3860,7 @@ msgstr "Fehler bei Verbindung mit Textkonsole: %s"
 #: virtManager/details/snapshots.py:122
 msgid "external snapshots not supported with this libvirt connection"
 msgstr ""
+"externe Schnappschüsse werden bei dieser libvirt-Verbindung nicht unterstützt"
 
 #: virtManager/details/snapshots.py:275 virtManager/details/snapshots.py:284
 #, python-format
@@ -4209,10 +4200,10 @@ msgstr ""
 "starten?"
 
 #: virtManager/device/netlist.py:212
-#, fuzzy, python-format
-#| msgid "Could not start virtual network '%s': %s"
+#, python-format
 msgid "Could not start virtual network '%(device)s': %(error)s"
-msgstr "Virtuelles Netzwerk «%s» konnte nicht gestartet werden: %s"
+msgstr ""
+"Virtuelles Netzwerk '%(device)s' konnte nicht gestartet werden: %(error)s"
 
 #: virtManager/device/tpmdetails.py:12
 msgid "TIS"
