@@ -20,16 +20,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-13 08:09+0100\n"
-"PO-Revision-Date: 2024-08-17 12:38+0000\n"
+"PO-Revision-Date: 2024-11-14 16:16+0000\n"
 "Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/tr/>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138 virtManager/systray.py:148
@@ -381,10 +381,8 @@ msgid "_Connect to console"
 msgstr "Konsola _bağlan"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "_Bağlan"
+msgstr "Bağlan"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -3174,8 +3172,6 @@ msgid "Bootstraping container"
 msgstr "Konteyner önyükleniyor"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Konteyner önyükleniyor"
 
@@ -5989,10 +5985,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "SEV başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
+msgstr "SEV-SNP başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
 
 #: virtinst/domcapabilities.py:207 virtinst/domcapabilities.py:208
 #, python-format
@@ -6076,8 +6070,6 @@ msgid "location kernel/initrd must be be specified as a pair"
 msgstr "Çekirdek/initrd konumu bir çift olarak belirtilmelidir"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "Çekirdek/initrd konumu bir çift olarak belirtilmelidir"
 
@@ -6566,6 +6558,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"Kurulum ortamından osinfo işletim sistemi adı tespit edilemedi, '{name}' adı "
+"kullanılacak.\n"
+"Tespit işleminin başarılı olmasını bekliyorsanız lütfen virt-install için "
+"bir hata bildirimi oluşturun."
 
 #: virtinst/virtinstall.py:567 virtinst/virtinstall.py:574
 msgid ""
@@ -6671,7 +6667,7 @@ msgstr "Etki alanı çöktü."
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "SM beklenmedik şekilde kayboldu: %s"
 
 #: virtinst/virtinstall.py:872 virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
@@ -6896,28 +6892,24 @@ msgid "No matching objects found for %s"
 msgstr "%s için eşleşen nesne bulunamadı"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml --%s için desteklenmiyor"
+msgstr "--build-xml {cli_flag} için desteklenmiyor"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "--remove-device ile --%s birlikte kullanılamaz"
+msgstr "--remove-device ile {cli_flag} birlikte kullanılamaz"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "--add-device ile --%s birlikte kullanılamaz"
+msgstr "--add-device ile {cli_flag} birlikte kullanılamaz"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "--%s için nasıl --update yapılacağı bilinmiyor"
+msgstr "{cli_flag} için nasıl --update yapılacağı bilinmiyor"
 
 #: virtinst/virtxml.py:123 virtinst/virtxml.py:136
 #, python-format
@@ -6958,19 +6950,12 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device ile --%s birlikte kullanılamaz"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "XML'de --%s nesnesi bulunamadı"
+msgstr "XML'de {cli_flag} nesnesi bulunamadı"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -6978,10 +6963,10 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"'--edit %(number)s' istendi ancak XML'de yalnızca %(max)s --%(type)s nesnesi "
+"'--edit {number}' istendi ancak XML'de yalnızca {maxnum} {cli_flag} nesnesi "
 "var"
 msgstr[1] ""
-"'--edit %(number)s' istendi ancak XML'de yalnızca %(max)s --%(type)s nesnesi "
+"'--edit {number}' istendi ancak XML'de yalnızca {maxnum} {cli_flag} nesnesi "
 "var"
 
 #: virtinst/virtxml.py:206
@@ -7000,15 +6985,12 @@ msgid "Domain '%s' defined successfully."
 msgstr "'%s' etki alanı başarıyla tanımlandı."
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
-"'--edit %(option)s' ile --%(objecttype)s birlikte bir anlam ifade etmiyor, "
-"yalnızca boş '--edit' kullanın"
+"'--edit {option}' ile {cli_flag} birlikte bir anlam ifade etmiyor, yalnızca "
+"boş '--edit' kullanın"
 
 #: virtinst/virtxml.py:243 virtinst/virtxml.py:333
 #, python-format
@@ -7210,10 +7192,8 @@ msgid "A domain must be specified"
 msgstr "Bir etki alanı belirtilmelidir"
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "Çakışan seçenekler %s"
+msgstr "Dönüşüm seçenekleri"
 
 #: virtinst/virtxml.py:489
 #, python-format
@@ -7222,13 +7202,15 @@ msgstr "--%s için nasıl --update yapılacağı bilinmiyor"
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Var olan bir sanal makineyi PC/i440FX'ten Q35'e dönüştürün."
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Var olan bir sanal makineyi VNC grafiklerini kullanacak şekilde dönüştürün. "
+"Bu, Spice grafikleriyle ilgili her şeyi kaldırır."
 
 #: virtinst/virtxml.py:523 virtinst/virtxml.py:595
 msgid "The VM is not running, --update is inapplicable."
