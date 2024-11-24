@@ -19,17 +19,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-13 08:09+0100\n"
-"PO-Revision-Date: 2024-08-17 12:38+0000\n"
+"PO-Revision-Date: 2024-11-14 16:16+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138 virtManager/systray.py:148
@@ -385,10 +385,8 @@ msgid "_Connect to console"
 msgstr "З'єднатися із _консоллю"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "З'_єднати"
+msgstr "З'єднати"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -3198,8 +3196,6 @@ msgid "Bootstraping container"
 msgstr "Перебудовуємо контейнер"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Перебудовуємо контейнер"
 
@@ -6051,10 +6047,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "Для захисту під час запуску SEV потрібна машина UEFI Q35"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "Для захисту під час запуску SEV потрібна машина UEFI Q35"
+msgstr "Для захисту під час запуску SEV-SNP потрібна машина UEFI Q35"
 
 #: virtinst/domcapabilities.py:207 virtinst/domcapabilities.py:208
 #, python-format
@@ -6139,8 +6133,6 @@ msgid "location kernel/initrd must be be specified as a pair"
 msgstr "розташування ядра/initrd має бути визначено як пару значень"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "розташування ядра/initrd має бути визначено як пару значень"
 
@@ -6645,6 +6637,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"Не вдалося виявити назву операційної системи osinfo з носія для "
+"встановлення. Використовуємо резервну назву «{name}».\n"
+"Будь ласка, повідомте про ваду у virt-install, якщо вважаєте, що виявлення "
+"мало бути успішним."
 
 #: virtinst/virtinstall.py:567 virtinst/virtinstall.py:574
 msgid ""
@@ -6755,7 +6751,7 @@ msgstr "Домен завершив роботу у аварійному реж�
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "ВМ несподівана зникла: %s"
 
 #: virtinst/virtinstall.py:872 virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
@@ -6993,28 +6989,24 @@ msgid "No matching objects found for %s"
 msgstr "Не знайдено відповідних об'єктів для %s"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "Підтримки --build-xml для --%s не передбачено"
+msgstr "Підтримки --build-xml для {cli_flag} не передбачено"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "Не можна використовувати --remove-device, якщо використано --%s"
+msgstr "Не можна використовувати --remove-device, якщо використано {cli_flag}"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "Не можна використовувати --add-device, якщо вказано --%s"
+msgstr "Не можна використовувати --add-device, якщо вказано {cli_flag}"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "Спосіб використання --update для --%s невідомий"
+msgstr "Спосіб використання --update для {cli_flag} невідомий"
 
 #: virtinst/virtxml.py:123 virtinst/virtxml.py:136
 #, python-format
@@ -7055,19 +7047,12 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Не можна використовувати --remove-device, якщо використано --%s"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "У XML не знайдено об'єктів --%s"
+msgstr "У XML не знайдено об'єктів {cli_flag}"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -7075,14 +7060,14 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
-"%(type)s"
+"Отримано запит щодо --edit {number}, але у XML є лише {maxnum} об'єкт "
+"{cli_flag}"
 msgstr[1] ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
-"%(type)s"
+"Отримано запит щодо --edit {number}, але у XML є лише {maxnum} об'єкти "
+"{cli_flag}"
 msgstr[2] ""
-"Отримано запит щодо --edit %(number)s, але у XML є лише об'єкт %(max)s --"
-"%(type)s"
+"Отримано запит щодо --edit {number}, але у XML є лише {maxnum} об'єктів "
+"{cli_flag}"
 
 #: virtinst/virtxml.py:206
 #, python-format
@@ -7100,15 +7085,12 @@ msgid "Domain '%s' defined successfully."
 msgstr "Домен «%s» успішно визначено."
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
-"«--edit %(option)s» не має сенсу, якщо вказано --%(objecttype)s. Не "
-"використовуйте аргумент: «--edit»"
+"«--edit {option}» не має сенсу, якщо вказано {cli_flag}. Не використовуйте "
+"аргумент: «--edit»"
 
 #: virtinst/virtxml.py:243 virtinst/virtxml.py:333
 #, python-format
@@ -7313,10 +7295,8 @@ msgid "A domain must be specified"
 msgstr "Слід вказати домен"
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "Конфлікт параметрів %s"
+msgstr "Параметри перетворення"
 
 #: virtinst/virtxml.py:489
 #, python-format
@@ -7325,13 +7305,15 @@ msgstr "Спосіб використання --update для --%s невідо�
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Перетворити наявну ВМ з PC/i440FX на Q35."
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Перетворити наявну ВМ на використання графіки VNC. У результаті буде "
+"вилучено усі залишки графіки Spice."
 
 #: virtinst/virtxml.py:523 virtinst/virtxml.py:595
 msgid "The VM is not running, --update is inapplicable."
