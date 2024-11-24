@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-13 08:09+0100\n"
-"PO-Revision-Date: 2024-11-09 04:13+0000\n"
+"PO-Revision-Date: 2024-11-24 16:38+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/id/>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -371,10 +371,8 @@ msgid "_Connect to console"
 msgstr "Sambungkan _ke konsol"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "Co_nnect"
 msgid "Connect"
-msgstr "Sambu_ng"
+msgstr "Sambung"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -1258,7 +1256,6 @@ msgid "foo:12"
 msgstr "foo:12"
 
 #: ui/details.ui:4534
-#, fuzzy
 msgid "<b>Redirected device</b>"
 msgstr "<b>Perangkat yang dialihkan</b>"
 
@@ -1297,14 +1294,12 @@ msgid "_Apply"
 msgstr "Terapk_an"
 
 #: ui/fsdetails.ui:30
-#, fuzzy
 msgid "E_xport filesystem as readonly mount"
-msgstr "Sistem file E_xport sebagai mount hanya-baca"
+msgstr "E_kspor sistem berkas sebagai kait hanya-baca"
 
 #: ui/fsdetails.ui:101
-#, fuzzy
 msgid "_Driver:"
-msgstr "_Sopir:"
+msgstr "_Driver:"
 
 #: ui/fsdetails.ui:129
 msgid "Ta_rget path:"
@@ -1319,9 +1314,8 @@ msgid "blah foo warning message"
 msgstr "pesan peringatan blah foo"
 
 #: ui/gfxdetails.ui:75
-#, fuzzy
 msgid "Show passwor_d"
-msgstr "Tampilkan passwor_d"
+msgstr "Tampilkan kata san_di"
 
 #: ui/gfxdetails.ui:121
 msgid "Addr_ess:"
@@ -1337,9 +1331,8 @@ msgstr "_Port:"
 
 #: ui/gfxdetails.ui:168 ui/vsockdetails.ui:39
 #: virtManager/device/gfxdetails.py:211
-#, fuzzy
 msgid "A_uto"
-msgstr "Mobil"
+msgstr "_Otomatis"
 
 #: ui/gfxdetails.ui:193 ui/vsockdetails.ui:64
 msgid "5900"
@@ -1355,7 +1348,6 @@ msgid "L_isten type:"
 msgstr "Tipe L_isten:"
 
 #: ui/gfxdetails.ui:365
-#, fuzzy
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
 msgstr ""
 "OpenGL hanya bekerja dengan grafik 'virtio' dengan 'akselerasi 3D' diaktifkan"
@@ -1378,19 +1370,16 @@ msgid "Libvirt URI:"
 msgstr "URI Libvirt:"
 
 #: ui/host.ui:184
-#, fuzzy
 msgid "A_utoconnect:"
-msgstr "A_utoconnect:"
+msgstr "Koneksi _otomatis:"
 
 #: ui/host.ui:199
-#, fuzzy
 msgid "<b>Basic details</b>"
-msgstr "<b>Detail dasar</b>"
+msgstr "<b>Rincian dasar</b>"
 
 #: ui/host.ui:352
-#, fuzzy
 msgid "_Overview"
-msgstr "Pratijau"
+msgstr "_Ringkasan"
 
 #: ui/host.ui:375
 msgid "_Virtual Networks"
@@ -1401,9 +1390,8 @@ msgid "_Storage"
 msgstr "_Penyimpanan"
 
 #: ui/hostnets.ui:187 ui/hoststorage.ui:403
-#, fuzzy
 msgid "A_utostart:"
-msgstr "A_utostart:"
+msgstr "M_ulai otomatis:"
 
 #: ui/hostnets.ui:201
 msgid "Domain:"
@@ -1466,17 +1454,14 @@ msgid "Delete Pool"
 msgstr "Hapus Pool"
 
 #: ui/hoststorage.ui:138
-#, fuzzy
 msgid "_Browse Local"
-msgstr "_Browse Lokal"
+msgstr "Ram_ban Lokal"
 
 #: ui/hoststorage.ui:142
-#, fuzzy
 msgid "Browse local filesystem"
-msgstr "Jelajahi sistem file lokal"
+msgstr "Jelajahi sistem berkas lokal"
 
 #: ui/hoststorage.ui:158
-#, fuzzy
 msgid "Cancel and close dialog"
 msgstr "Batalkan dan tutup dialog"
 
@@ -1734,23 +1719,20 @@ msgid "_Migrate"
 msgstr "_Migrasi"
 
 #: ui/netlist.ui:17
-#, fuzzy
 msgid "De_vice name:"
-msgstr "Nama perangkat:"
+msgstr "Nama _perangkat:"
 
 #: ui/netlist.ui:63
-#, fuzzy
 msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
 msgstr ""
 "<small>Di sebagian besar konfigurasi, macvtap tidak berfungsi untuk "
-"komunikasi jaringan host ke tamu.</small>"
+"komunikasi jaringan host ke guest.</small>"
 
 #: ui/netlist.ui:122
-#, fuzzy
 msgid "<small>Failed to find a suitable default network.</small>"
-msgstr "<small>Gagal menemukan jaringan default yang sesuai.</small>"
+msgstr "<small>Gagal menemukan jaringan baku yang sesuai.</small>"
 
 #: ui/netlist.ui:146
 msgid "_Portgroup:"
@@ -1761,17 +1743,15 @@ msgid "_Network source:"
 msgstr "Sumber jari_ngan:"
 
 #: ui/oslist.ui:56
-#, fuzzy
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
-"Tidak dapat menemukan sistem operasi yang Anda cari?&#10; Coba pilih versi "
-"terbaru berikutnya yang ditampilkan,&#10; atau gunakan entri \"OS Generik\"."
+"Tidak bisa menemukan sistem operasi yang Anda cari?\n"
+"Coba pilih distro atau versi serupa, atau gunakan satu dari opsi \"Generik\"."
 
 #: ui/oslist.ui:109
-#, fuzzy
 msgid "Include end of life operating systems"
 msgstr "Sertakan sistem operasi akhir masa pakai"
 
@@ -1844,7 +1824,6 @@ msgid "_Storage format:"
 msgstr "_Format penyimpanan:"
 
 #: ui/preferences.ui:460
-#, fuzzy
 msgid ""
 "Default CPU setting for new VMs. This is typically a tradeoff between "
 "performance\n"
@@ -1852,9 +1831,11 @@ msgid ""
 "will need\n"
 "identical CPUs in order to migrate the VM."
 msgstr ""
-"Pengaturan CPU default untuk VM baru. Ini biasanya merupakan pertukaran "
-"antara kinerja&#10; dan kompatibilitas migrasi: jika menggunakan opsi 'salin "
-"host', server Anda akan membutuhkannya&#10; CPU identik untuk memigrasi VM."
+"Pengaturan CPU baku untuk VM baru. Ini biasanya suatu kompromi antara "
+"kinerja\n"
+"dan kompatibilitas migrasi: jika menggunakan opsi 'copy host', server Anda "
+"akan\n"
+"membutuhkan CPU identik untuk memigrasi VM."
 
 #: ui/preferences.ui:464
 msgid "CPU _default:"
@@ -1895,23 +1876,20 @@ msgid "Change..."
 msgstr "Ubah..."
 
 #: ui/preferences.ui:647
-#, fuzzy
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
-"Ubah resolusi tamu saat ukuran jendela tamu diubah. Hanya berfungsi dengan "
-"tamu yang dikonfigurasi dengan benar menggunakan rempah-rempah dan agen "
-"desktop."
+"Ubah resolusi guest saat ukuran jendela guest diubah. Hanya berfungsi dengan "
+"guest yang dikonfigurasi dengan benar menggunakan spice dan agen desktop."
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
 msgstr "Ubah uku_ran guest dengan jendela:"
 
 #: ui/preferences.ui:675
-#, fuzzy
 msgid "SPICE _USB Redirection:"
-msgstr "SPICE _USB Redirection:"
+msgstr "Pengalihan _USB SPICE:"
 
 #: ui/preferences.ui:699
 #, fuzzy
@@ -1936,14 +1914,12 @@ msgid "Conso_le"
 msgstr "Konso_l"
 
 #: ui/preferences.ui:775
-#, fuzzy
 msgid "_Force Poweroff:"
-msgstr "_Force Poweroff:"
+msgstr "_Paksa Mati:"
 
 #: ui/preferences.ui:802
-#, fuzzy
 msgid "Poweroff/_Reboot/Save:"
-msgstr "Poweroff / _Reboot / Simpan:"
+msgstr "Matikan/Boot Ulang/Simpan:"
 
 #: ui/preferences.ui:816
 msgid "_Pause:"
@@ -1954,12 +1930,10 @@ msgid "Device re_moval:"
 msgstr "Pe_ncopotan perangkat:"
 
 #: ui/preferences.ui:883
-#, fuzzy
 msgid "_Unapplied changes:"
-msgstr "_Perubahan yang belum diterapkan:"
+msgstr "Per_ubahan yang belum diterapkan:"
 
 #: ui/preferences.ui:910
-#, fuzzy
 msgid "_Deleting storage:"
 msgstr "_Menghapus penyimpanan:"
 
@@ -3770,11 +3744,9 @@ msgid "Physical %s Device"
 msgstr "Perangkat %s Fisik"
 
 #: virtManager/details/details.py:2179 virtManager/details/details.py:2181
-#, fuzzy
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
-"Tidak dapat melepas perangkat video terakhir saat Grafik / Tampilan "
-"terpasang."
+"Tidak bisa menghapus perangkat video terakhir saat Grafik/Tampilan tercantol."
 
 #: virtManager/details/details.py:2205 virtManager/details/details.py:2207
 #, python-format
@@ -3783,9 +3755,8 @@ msgstr "%(device)s pada %(address)s"
 
 #: virtManager/details/details.py:2211 virtManager/details/details.py:2213
 #: virtManager/details/details.py:2221 virtManager/details/details.py:2223
-#, fuzzy
 msgid "Cannot remove controller while devices are attached."
-msgstr "Tidak dapat melepas pengontrol saat perangkat terpasang."
+msgstr "Tidak bisa menghapus pengendali saat perangkat tercantol."
 
 #: virtManager/details/details.py:2311 virtManager/details/details.py:2313
 msgid "Hard Disk"
@@ -3921,49 +3892,46 @@ msgid "External disk only"
 msgstr "Disk eksternal saja"
 
 #: virtManager/details/snapshots.py:714 virtManager/details/snapshots.py:736
-#, fuzzy
 msgid "Saved memory state will not be part of the snapshot"
-msgstr "Status memori yang disimpan tidak akan menjadi bagian dari snapshot"
+msgstr "Keadaan memori yang disimpan tidak akan menjadi bagian dari snapshot"
 
 #: virtManager/details/snapshots.py:715 virtManager/details/snapshots.py:737
-#, fuzzy
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
 "the same as having forced the system off mid-flight. It is recommended to "
 "snapshot either the running or shut down system instead."
 msgstr ""
-"Domain saat ini disimpan. Karena keterbatasan teknis, status memori yang "
+"Domain saat ini disimpan. Karena keterbatasan teknis, keadaan memori yang "
 "disimpan tidak akan menjadi bagian dari snapshot. Menjalankannya nanti akan "
-"sama dengan memaksa sistem mati di tengah penerbangan. Sebagai gantinya, "
-"disarankan untuk mengambil gambar sistem yang sedang berjalan atau mati."
+"sama dengan memaksa sistem mati di tengah perjalanan. Sebagai gantinya, "
+"disarankan untuk men-snapshot sistem yang sedang berjalan atau mati."
 
 #: virtManager/details/snapshots.py:736 virtManager/details/snapshots.py:758
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"Anda yakin ingin menjalankan snapshot '% (name) s'? Semua perubahan disk "
-"sejak snapshot terakhir dibuat akan dibuang."
+"Anda yakin ingin menjalankan snapshot '%(name)s'? Semua perubahan disk sejak "
+"snapshot terakhir dibuat akan dibuang."
 
 #: virtManager/details/snapshots.py:740 virtManager/details/snapshots.py:762
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"Anda yakin ingin menjalankan snapshot '% (name) s'? Semua perubahan disk dan "
+"Anda yakin ingin menjalankan snapshot '%(name)s'? Semua perubahan disk dan "
 "konfigurasi sejak snapshot terakhir dibuat akan dibuang."
 
 #: virtManager/details/snapshots.py:751 virtManager/details/snapshots.py:773
-#, fuzzy
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
-"Status yang disimpan akan dihapus untuk menghindari kerusakan sistem file"
+"Keadaan yang disimpan akan dihapus untuk menghindari kerusakan sistem berkas"
 
 #: virtManager/details/snapshots.py:752 virtManager/details/snapshots.py:774
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
 "would leave the existing saved state in place, effectively switching a disk "
@@ -3971,11 +3939,11 @@ msgid ""
 "result in extensive filesystem corruption. Therefore the saved state will be "
 "removed before restoring the snapshot."
 msgstr ""
-"Jepretan '%s' hanya berisi disk dan tidak ada status memori. Memulihkan "
-"snapshot akan meninggalkan status tersimpan yang ada, secara efektif "
+"Snapshot '%s' hanya berisi disk dan tidak ada keadaan memori. Memulihkan "
+"snapshot akan meninggalkan keadaan tersimpan yang ada, secara efektif "
 "mengalihkan disk di bawah sistem yang sedang berjalan. Menjalankan domain "
-"setelahnya kemungkinan besar akan mengakibatkan kerusakan sistem file yang "
-"ekstensif. Oleh karena itu, status yang disimpan akan dihapus sebelum "
+"setelahnya kemungkinan besar akan mengakibatkan kerusakan sistem berkas yang "
+"ekstensif. Oleh karena itu, keadaan yang disimpan akan dihapus sebelum "
 "memulihkan snapshot."
 
 #: virtManager/details/snapshots.py:766 virtManager/details/snapshots.py:788
@@ -3993,7 +3961,6 @@ msgid "Error running snapshot '%s'"
 msgstr "Galat saat menjalankan snapshot '%s'"
 
 #: virtManager/details/snapshots.py:777 virtManager/details/snapshots.py:799
-#, fuzzy
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "Anda yakin ingin menghapus secara permanen snapshot yang dipilih?"
 
@@ -4025,47 +3992,45 @@ msgid "Error selecting snapshot: %s"
 msgstr "Kesalahan saat memilih snapshot: %s"
 
 #: virtManager/details/sshtunnels.py:64
-#, fuzzy
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
-"Tamu berada di host jarak jauh, tetapi hanya dikonfigurasi untuk mengizinkan "
-"koneksi deskriptor file lokal."
+"Guest berada di host jarak jauh, tetapi hanya dikonfigurasi untuk "
+"mengizinkan koneksi deskriptor berkas lokal."
 
 #: virtManager/details/sshtunnels.py:68
-#, fuzzy
 msgid "Guest is configured for TLS only which does not work over SSH."
-msgstr "Tamu dikonfigurasikan hanya untuk TLS yang tidak bekerja melalui SSH."
+msgstr "Guest dikonfigurasikan hanya untuk TLS yang tidak bekerja melalui SSH."
 
 #: virtManager/details/sshtunnels.py:74 virtManager/details/sshtunnels.py:75
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 msgstr ""
-"Tamu berada di host jarak jauh dengan transport '%s' tetapi hanya "
+"Guest berada di host jarak jauh dengan transport '%s' tetapi hanya "
 "dikonfigurasi untuk mendengarkan secara lokal. Untuk terhubung dari jarak "
-"jauh, Anda perlu mengubah alamat dengar tamu."
+"jauh, Anda perlu mengubah alamat dengar guest."
 
 #: virtManager/details/viewers.py:356 virtManager/details/viewers.py:384
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
-"Tidak dapat memberikan kredensial yang diminta ke server VNC.&#10; Jenis "
-"kredensial %s tidak didukung"
+"Tidak bisa memberikan kredensial yang diminta ke server VNC.\n"
+"Jenis kredensial %s tidak didukung"
 
 #: virtManager/details/viewers.py:428 virtManager/details/viewers.py:438
 msgid "GTK-VNC viewer is too old"
 msgstr "Penampil GTK-VNC terlalu tua"
 
 #: virtManager/details/viewers.py:582 virtManager/details/viewers.py:589
-#, fuzzy, python-format
+#, python-format
 msgid "Encountered SPICE %(error-name)s"
-msgstr "Ditemukan SPICE% (nama-kesalahan) s"
+msgstr "Ditemui %(error-name)s SPICE"
 
 #: virtManager/details/viewers.py:740 virtManager/details/viewers.py:755
 msgid "Guest agent is not available."
@@ -4077,9 +4042,9 @@ msgid "%s available in the default location"
 msgstr "%s tersedia di lokasi baku"
 
 #: virtManager/device/addstorage.py:132
-#, fuzzy, python-format
+#, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
-msgstr "Emulator mungkin tidak memiliki izin penelusuran untuk jalur '%s'."
+msgstr "Emulator mungkin tidak memiliki izin pencarian untuk path '%s'."
 
 #: virtManager/device/addstorage.py:134
 msgid "Do you want to correct this now?"
@@ -4176,7 +4141,7 @@ msgid "Virtual Network is not active."
 msgstr "Jaringan Virtual tidak aktif."
 
 #: virtManager/device/netlist.py:200
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr ""
@@ -4184,9 +4149,9 @@ msgstr ""
 "sekarang?"
 
 #: virtManager/device/netlist.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start virtual network '%(device)s': %(error)s"
-msgstr "Tidak dapat memulai jaringan virtual '% (device) s':% (error) s"
+msgstr "Tidak bisa memulai jaringan virtual '%(device)s': %(error)s"
 
 #: virtManager/device/tpmdetails.py:12
 msgid "TIS"
@@ -4209,9 +4174,8 @@ msgid "CID"
 msgstr "CID"
 
 #: virtManager/engine.py:124
-#, fuzzy
 msgid "Checking for virtualization packages..."
-msgstr "Memeriksa paket virtualisasi ..."
+msgstr "Memeriksa paket virtualisasi..."
 
 #: virtManager/error.py:140
 msgid "Input Error"
@@ -4223,7 +4187,6 @@ msgid "Validation Error: %s"
 msgstr "Kesalahan Validasi: %s"
 
 #: virtManager/error.py:181
-#, fuzzy
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr ""
 "Ada perubahan yang belum diterapkan. Apakah Anda ingin menerapkannya "
@@ -4238,9 +4201,9 @@ msgid "Don't ask me again"
 msgstr "Jangan tanya lagi"
 
 #: virtManager/host.py:32
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching host dialog: %s"
-msgstr "Galat saat meluncurkan dialog inang: %s"
+msgstr "Galat saat meluncurkan dialog host: %s"
 
 #: virtManager/host.py:170
 #, python-format
@@ -4248,16 +4211,15 @@ msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s dari %(maxmem)s"
 
 #: virtManager/host.py:180
-#, fuzzy, python-format
+#, python-format
 msgid "%(connection)s - Connection Details"
-msgstr "% (koneksi) s - Detail Koneksi"
+msgstr "%(connection)s - Rincian Koneksi"
 
 #: virtManager/hostnets.py:106
 msgid "Networks"
 msgstr "Jaringan"
 
 #: virtManager/hostnets.py:140
-#, fuzzy
 msgid "Libvirt connection does not support virtual network management."
 msgstr "Koneksi Libvirt tidak mendukung manajemen jaringan virtual."
 
@@ -4292,9 +4254,9 @@ msgid "On Boot"
 msgstr "Saat Boot"
 
 #: virtManager/hostnets.py:270
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
-msgstr "Anda yakin ingin menghapus jaringan secara permanen %s?"
+msgstr "Anda yakin ingin menghapus jaringan %s secara permanen?"
 
 #: virtManager/hostnets.py:277
 #, python-format
@@ -4312,12 +4274,12 @@ msgid "Error stopping network '%s'"
 msgstr "Galat menghentikan jaringan '%s'"
 
 #: virtManager/hostnets.py:304
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching network wizard: %s"
-msgstr "Kesalahan meluncurkan wizard jaringan: %s"
+msgstr "Galat saat meluncurkan wahana pandu jaringan: %s"
 
 #: virtManager/hostnets.py:328
-#, fuzzy, python-format
+#, python-format
 msgid "Error changing network settings: %s"
 msgstr "Galat saat mengubah setelan jaringan: %s"
 
@@ -4346,28 +4308,25 @@ msgid "Storage Pools"
 msgstr "Pool Penyimpanan"
 
 #: virtManager/hoststorage.py:271
-#, fuzzy
 msgid "Libvirt connection does not support storage management."
 msgstr "Koneksi Libvirt tidak mendukung manajemen penyimpanan."
 
 #: virtManager/hoststorage.py:312
-#, fuzzy, python-format
+#, python-format
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
-msgstr "% (bytesfree) s Gratis / <i>% (bytesinuse) s Sedang Digunakan</i>"
+msgstr "%(bytesfree)s Bebas / <i>%(bytesinuse)s Dipakai</i>"
 
 #: virtManager/hoststorage.py:332
 msgid "Create new volume"
 msgstr "Buat volume baru"
 
 #: virtManager/hoststorage.py:339
-#, fuzzy
 msgid "Pool does not support volume creation"
 msgstr "Pool tidak mendukung pembuatan volume"
 
 #: virtManager/hoststorage.py:354
-#, fuzzy
 msgid "No storage pool selected."
-msgstr "Tidak ada kolam penyimpanan yang dipilih."
+msgstr "Tidak ada pool penyimpanan yang dipilih."
 
 #: virtManager/hoststorage.py:363
 #, python-format
@@ -4410,117 +4369,108 @@ msgid "Error launching volume wizard: %s"
 msgstr "Galat saat meluncurkan wahana pandu volume: %s"
 
 #: virtManager/hoststorage.py:554
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
-msgstr "Anda yakin ingin menghapus volume secara permanen %s?"
+msgstr "Anda yakin ingin menghapus volume %s secara permanen?"
 
 #: virtManager/hoststorage.py:567
-#, fuzzy, python-format
+#, python-format
 msgid "Error deleting volume '%s'"
-msgstr "Kesalahan menghapus volume '%s'"
+msgstr "Galat saat menghapus volume '%s'"
 
 #: virtManager/hoststorage.py:592
-#, fuzzy, python-format
+#, python-format
 msgid "Error changing pool settings: %s"
-msgstr "Galat mengubah setelan pangkalan: %s"
+msgstr "Galat saat mengubah setelan pool: %s"
 
 #: virtManager/lib/connectauth.py:49
 msgid "Authentication required"
 msgstr "Autentikasi diperlukan"
 
 #: virtManager/lib/connectauth.py:153
-#, fuzzy
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
-msgstr "Host jarak jauh memerlukan versi netcat / nc yang mendukung opsi -U."
+msgstr "Host jarak jauh memerlukan versi netcat/nc yang mendukung opsi -U."
 
 #: virtManager/lib/connectauth.py:159
-#, fuzzy
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
-"Konfigurasikan akses kunci SSH untuk host jarak jauh, atau instal paket "
+"Konfigurasikan akses kunci SSH untuk host jarak jauh, atau pasang paket "
 "askpass SSH secara lokal."
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "Pastikan bahwa daemon 'libvirtd' berjalan di host jarak jauh."
+msgstr "Pastikan bahwa daemon libvirt berjalan di host jarak jauh."
 
 #: virtManager/lib/connectauth.py:167
-#, fuzzy
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
-"Verifikasi bahwa:&#10; - Kernel host Xen telah di-boot&#10; - Layanan Xen "
-"telah dimulai"
+"Verifikasi bahwa:\n"
+" - Kernel host Xen telah di-boot\n"
+" - Layanan Xen telah dimulai"
 
 #: virtManager/lib/connectauth.py:173
-#, fuzzy
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
-"Tidak dapat mendeteksi sesi lokal: jika Anda menjalankan virt-manager "
-"melalui ssh -X atau VNC, Anda mungkin tidak dapat terhubung ke libvirt "
-"sebagai pengguna biasa. Coba jalankan sebagai root."
+"Tidak bisa mendeteksi sesi lokal: jika Anda menjalankan virt-manager melalui "
+"ssh -X atau VNC, Anda mungkin tidak dapat terhubung ke libvirt sebagai "
+"pengguna biasa. Coba jalankan sebagai root."
 
 #: virtManager/lib/connectauth.py:179
-#, fuzzy
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "Pastikan daemon 'libvirtd' sedang berjalan."
+msgstr "Pastikan daemon libvirt yang sesuai sedang berjalan."
 
 #: virtManager/lib/connectauth.py:182
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to connect to libvirt %s."
-msgstr "Tidak dapat terhubung ke libvirt %s."
+msgstr "Tidak bisa terhubung ke libvirt %s."
 
 #: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Kegagalan Koneksi Manajer Mesin Virtual"
 
 #: virtManager/lib/connectauth.py:208
-#, fuzzy
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
-"Tidak dapat mendeteksi hypervisor default. Pastikan paket virtualisasi "
-"QEMU / KVM yang sesuai diinstal untuk mengelola virtualisasi di host ini."
+"Tidak bisa mendeteksi hypervisor baku. Pastikan paket virtualisasi QEMU/KVM "
+"yang sesuai terpasang untuk mengelola virtualisasi di host ini."
 
 #: virtManager/lib/connectauth.py:215
-#, fuzzy
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
-"Koneksi virtualisasi dapat ditambahkan secara manual melalui File-> Add "
-"Connection"
+"Koneksi virtualisasi dapat ditambahkan secara manual melalui Berkas->Tambah "
+"Koneksi"
 
 #: virtManager/lib/inspection.py:77
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching libguestfs appliance: %s"
-msgstr "Galat meluncurkan alat libguestfs: %s"
+msgstr "Galat saat meluncurkan appliance libguestfs: %s"
 
 #: virtManager/lib/inspection.py:86
-#, fuzzy
 msgid "Inspection found no operating systems."
 msgstr "Pemeriksaan tidak menemukan sistem operasi."
 
 #: virtManager/lib/inspection.py:316
-#, fuzzy, python-format
+#, python-format
 msgid "Error inspection VM: %s"
-msgstr "VM inspeksi kesalahan: %s"
+msgstr "Galat inspeksi VM: %s"
 
 #: virtManager/lib/inspection.py:327
-#, fuzzy
 msgid "Cannot inspect VM on remote connection"
-msgstr "Tidak dapat memeriksa VM pada koneksi jarak jauh"
+msgstr "Tidak bisa memeriksa VM pada koneksi jarak jauh"
 
 #: virtManager/lib/libvirtenummap.py:69
 msgid "Running"
@@ -4626,27 +4576,23 @@ msgid "Panicked"
 msgstr "Panik"
 
 #: virtManager/manager.py:87
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching manager: %s"
-msgstr "Galat meluncurkan manajer: %s"
+msgstr "Galat saat meluncurkan manajer: %s"
 
 #: virtManager/manager.py:292
 msgid "_New"
 msgstr "_Baru"
 
 #: virtManager/manager.py:293
-#, fuzzy
-#| msgid "Co_nnect"
 msgid "_Connect"
 msgstr "Sambu_ng"
 
 #: virtManager/manager.py:294
-#, fuzzy
 msgid "Dis_connect"
-msgstr "Terputus"
+msgstr "_Putus"
 
 #: virtManager/manager.py:296
-#, fuzzy
 msgid "De_lete"
 msgstr "_Hapus"
 
@@ -4686,32 +4632,29 @@ msgstr ""
 "Anda yakin?"
 
 #: virtManager/manager.py:571
-#, fuzzy, python-format
+#, python-format
 msgid "%(uri)s (Double click to connect)"
-msgstr "% (uri) s (Klik dua kali untuk menghubungkan)"
+msgstr "%(uri)s (Klik ganda untuk menyambung)"
 
 #: virtManager/manager.py:578
-#, fuzzy, python-format
+#, python-format
 msgid "%(connection)s - Not Connected"
-msgstr "% (koneksi) s - Tidak Terhubung"
+msgstr "%(connection)s - Tidak Terhubung"
 
 #: virtManager/manager.py:580
-#, fuzzy, python-format
+#, python-format
 msgid "%(connection)s - Connecting..."
-msgstr "% (koneksi) s - Menghubungkan ..."
+msgstr "%(connection)s - Menyambung..."
 
 #: virtManager/manager.py:756 virtManager/vmwindow.py:379
-#, fuzzy
 msgid "_Restore"
 msgstr "P_ulihkan"
 
 #: virtManager/manager.py:793 virtManager/vmwindow.py:420
-#, fuzzy
 msgid "Resume the virtual machine"
 msgstr "Lanjutkan mesin virtual"
 
 #: virtManager/manager.py:909
-#, fuzzy
 msgid "Disabled in preferences dialog."
 msgstr "Dinonaktifkan di dialog preferensi."
 
@@ -4730,12 +4673,11 @@ msgid "Tunnelled"
 msgstr "Terowongan"
 
 #: virtManager/migrate.py:161
-#, fuzzy, python-format
+#, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
-msgstr "<span size='large'>Migrasikan '% (vm) s'</span>"
+msgstr "<span size='large'>Migrasikan '%(vm)s'</span>"
 
 #: virtManager/migrate.py:222
-#, fuzzy
 msgid "A valid destination connection must be selected."
 msgstr "Koneksi tujuan yang valid harus dipilih."
 
@@ -4751,50 +4693,48 @@ msgstr ""
 "menolak ini kecuali Anda menambahkan transport."
 
 #: virtManager/migrate.py:292
-#, fuzzy, python-format
+#, python-format
 msgid "%(uri)s (Hypervisors do not match)"
-msgstr "% (uri) s (Hypervisor tidak cocok)"
+msgstr "%(uri)s (Hypervisor tidak cocok)"
 
 #: virtManager/migrate.py:294
-#, fuzzy, python-format
+#, python-format
 msgid "%(uri)s (Disconnected)"
-msgstr "% (uri) s (Terputus)"
+msgstr "%(uri)s (Terputus)"
 
 #: virtManager/migrate.py:296
-#, fuzzy, python-format
+#, python-format
 msgid "%(uri)s (Same connection)"
-msgstr "% (uri) s (Koneksi sama)"
+msgstr "%(uri)s (Koneksi yang sama)"
 
 #: virtManager/migrate.py:313
-#, fuzzy
 msgid "No usable connections available."
-msgstr "Tidak ada koneksi yang dapat digunakan tersedia."
+msgstr "Tidak tersedia koneksi yang dapat digunakan."
 
 #: virtManager/migrate.py:353
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to migrate guest: %s"
-msgstr "Tidak dapat memindahkan tamu: %s"
+msgstr "Tidak bisa memigrasi guest: %s"
 
 #: virtManager/migrate.py:381
-#, fuzzy, python-format
+#, python-format
 msgid "Uncaught error validating input: %s"
-msgstr "Kesalahan yang tidak tertangkap memvalidasi masukan: %s"
+msgstr "Galat tak tertangkap saat memvalidasi masukan: %s"
 
 #: virtManager/migrate.py:399
-#, fuzzy, python-format
+#, python-format
 msgid "Migrating VM '%s'"
 msgstr "Memigrasi VM '%s'"
 
 #: virtManager/migrate.py:400
-#, fuzzy, python-format
+#, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
-msgstr ""
-"Memigrasi VM '% (name) s' ke% (host) s. Ini mungkin memakan waktu cukup lama."
+msgstr "Memigrasi VM '%(name)s' ke %(host)s. Ini mungkin makan waktu."
 
 #: virtManager/migrate.py:411
-#, fuzzy, python-format
+#, python-format
 msgid "Error cancelling migrate job: %s"
-msgstr "Galat membatalkan pekerjaan migrasi: %s"
+msgstr "Galat saat membatalkan pekerjaan migrasi: %s"
 
 #: virtManager/object/domain.py:449 virtManager/object/domain.py:452
 msgid "Can not change shared memory setting when <numa> is configured."
@@ -4806,34 +4746,31 @@ msgid "Libvirt may not be new enough to support memfd."
 msgstr "Libvirt mungkin tidak cukup baru untuk mendukung memfd."
 
 #: virtManager/object/domain.py:471 virtManager/object/domain.py:474
-#, fuzzy
 msgid "Libvirt connection does not support snapshots."
 msgstr "Koneksi Libvirt tidak mendukung snapshot."
 
 #: virtManager/object/domain.py:489
-#, fuzzy
 msgid ""
 "Snapshots are only supported if all writeable disks images allocated to the "
 "guest are qcow2 format."
 msgstr ""
 "Snapshot hanya didukung jika semua image disk yang dapat ditulis yang "
-"dialokasikan untuk tamu dalam format qcow2."
+"dialokasikan untuk guest dalam format qcow2."
 
 #: virtManager/object/domain.py:492
-#, fuzzy
 msgid ""
 "Snapshots require at least one writeable qcow2 disk image allocated to the "
 "guest."
 msgstr ""
 "Snapshot memerlukan setidaknya satu image disk qcow2 yang dapat ditulisi "
-"yang dialokasikan untuk tamu."
+"yang dialokasikan untuk guest."
 
 #: virtManager/object/domain.py:505 virtManager/object/domain.py:527
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
-"Tidak dapat menemukan perangkat yang ditentukan dalam konfigurasi VM yang "
-"tidak aktif: %s"
+"Tidak bisa temukan perangkat yang ditentukan dalam konfigurasi VM yang tidak "
+"aktif: %s"
 
 #: virtManager/object/domain.py:1435 virtManager/object/domain.py:1452
 msgid "Saving domain to disk"
@@ -4868,17 +4805,14 @@ msgid "Interface %s"
 msgstr "Antar muka %s"
 
 #: virtManager/object/storagepool.py:25
-#, fuzzy
 msgid "Filesystem Directory"
-msgstr "Direktori Sistem File"
+msgstr "Direktori Sistem Berkas"
 
 #: virtManager/object/storagepool.py:26
-#, fuzzy
 msgid "Pre-Formatted Block Device"
-msgstr "Perangkat Blokir Pra-format"
+msgstr "Perangkat Blok Terpraformat"
 
 #: virtManager/object/storagepool.py:27
-#, fuzzy
 msgid "Network Exported Directory"
 msgstr "Direktori Jaringan Yang Diekspor"
 
@@ -4967,25 +4901,22 @@ msgid "python libguestfs support is not installed"
 msgstr "dukungan python libguestfs tidak diinstal"
 
 #: virtManager/preferences.py:322
-#, fuzzy
 msgid "Configure grab key combination"
-msgstr "Konfigurasi kombinasi tombol ambil"
+msgstr "Konfigurasikan kombinasi tombol genggam"
 
 #: virtManager/preferences.py:331
-#, fuzzy
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
-"Sekarang Anda dapat menentukan tombol ambil dengan menekannya.&#10; Untuk "
-"mengkonfirmasi pilihan Anda, silakan klik tombol OK&#10; selama Anda menekan "
-"tombol yang diinginkan."
+"Sekarang Anda dapat menentukan tombol genggam dengan menekan mereka.\n"
+"Untuk mengonfirmasi pilihan Anda, silakan klik tombol OK\n"
+"sambil Anda menekan tombol-tombol yang diinginkan."
 
 #: virtManager/preferences.py:334
-#, fuzzy
 msgid "Please press desired grab key combination"
-msgstr "Silakan tekan kombinasi tombol ambil yang diinginkan"
+msgstr "Silakan tekan kombinasi tombol genggam yang diinginkan"
 
 #: virtManager/storagebrowse.py:29
 msgid "Locate existing storage"
@@ -5024,43 +4955,37 @@ msgid "Cannot use local storage on remote connection."
 msgstr "Tidak bisa menggunakan penyimpanan lokal pada koneksi jarak jauh."
 
 #: virtManager/systray.py:109 virtManager/systray.py:119
-#, fuzzy
 msgid "_Show Virtual Machine Manager"
-msgstr "Pengelola Mesin Virtual"
+msgstr "Tampilkan Manajer Me_sin Virtual"
 
 #: virtManager/virtmanager.py:42
 msgid "Error starting Virtual Machine Manager"
 msgstr "Kesalahan saat memulai Manajer Mesin Virtual"
 
 #: virtManager/virtmanager.py:43
-#, fuzzy, python-format
-#| msgid "Error starting Virtual Machine Manager"
+#, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
-msgstr "Kesalahan saat memulai Virtual Machine Manager:% (error) s"
+msgstr "Galat saat memulai Manajer Mesin Virtual: %(error)s"
 
 #: virtManager/vmmenu.py:52
-#, fuzzy
 msgid "_Reboot"
 msgstr "_Reboot"
 
 #: virtManager/vmmenu.py:54
-#, fuzzy
 msgid "F_orce Reset"
-msgstr "F_orce Atur Ulang"
+msgstr "P_aksa Reset"
 
 #: virtManager/vmmenu.py:55
-#, fuzzy
 msgid "_Force Off"
-msgstr "_Force Off"
+msgstr "_Paksa Mati"
 
 #: virtManager/vmmenu.py:57
 msgid "Sa_ve"
 msgstr "Sim_pan"
 
 #: virtManager/vmmenu.py:84
-#, fuzzy
 msgid "R_esume"
-msgstr "Lanjut"
+msgstr "La_njut"
 
 #: virtManager/vmmenu.py:89
 msgid "Clone..."
@@ -5071,9 +4996,9 @@ msgid "Migrate..."
 msgstr "Migrasikan..."
 
 #: virtManager/vmmenu.py:145
-#, fuzzy, python-format
+#, python-format
 msgid "Error cancelling save job: %s"
-msgstr "Galat membatalkan simpan pekerjaan: %s"
+msgstr "Galat saat membatalkan pekerjaan simpan: %s"
 
 #: virtManager/vmmenu.py:154
 #, python-format
@@ -5094,26 +5019,24 @@ msgid "Saving virtual machine memory to disk "
 msgstr "Menyimpan memori mesin virtual ke disk "
 
 #: virtManager/vmmenu.py:180
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Anda yakin ingin mematikan paksa '%s'?"
 
 #: virtManager/vmmenu.py:182
-#, fuzzy
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
-"Ini akan segera mematikan VM tanpa mematikan OS dan dapat menyebabkan "
+"Ini akan seketika mematikan daya VM tanpa mematikan OS dan dapat menyebabkan "
 "kehilangan data."
 
 #: virtManager/vmmenu.py:188 virtManager/vmmenu.py:257
-#, fuzzy
 msgid "Error shutting down domain"
-msgstr "Terjadi kesalahan saat mematikan domain"
+msgstr "Galat saat mematikan domain"
 
 #: virtManager/vmmenu.py:194
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Anda yakin ingin menjeda '%s'?"
 
@@ -5122,37 +5045,33 @@ msgid "Error pausing domain"
 msgstr "Galat saat mengistirahatkan domain"
 
 #: virtManager/vmmenu.py:206
-#, fuzzy
 msgid "Error unpausing domain"
-msgstr "Terjadi kesalahan saat membatalkan jeda domain"
+msgstr "Galat saat membatalkan jeda domain"
 
 #: virtManager/vmmenu.py:216
-#, fuzzy, python-format
-#| msgid "Error validating install location: %s"
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Galat memulihkan domain: %s"
+msgstr "Galat saat memulihkan domain: %s"
 
 #: virtManager/vmmenu.py:219
-#, fuzzy
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
-"Domain tidak dapat dipulihkan. Anda mau&#10; untuk menghapus status "
-"tersimpan dan melakukan rutinitas&#10; memulai?"
+"Domain tidak dapat dipulihkan. Anda mau menghapus\n"
+"keadaan tersimpan dan melakukan awal mula reguler?"
 
 #: virtManager/vmmenu.py:233
-#, fuzzy, python-format
+#, python-format
 msgid "Error removing domain state: %s"
-msgstr "Galat menghapus status domain: %s"
+msgstr "Galat saat menghapus keadaan domain: %s"
 
 #: virtManager/vmmenu.py:237
 msgid "Restoring Virtual Machine"
 msgstr "Memulihkan Mesin Virtual"
 
 #: virtManager/vmmenu.py:238
-#, fuzzy
 msgid "Restoring virtual machine memory from disk"
 msgstr "Memulihkan memori mesin virtual dari disk"
 
@@ -5161,42 +5080,40 @@ msgid "Error starting domain"
 msgstr "Galat saat memulai domain"
 
 #: virtManager/vmmenu.py:251
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Anda yakin ingin mematikan '%s'?"
 
 #: virtManager/vmmenu.py:263
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to reboot '%s'?"
-msgstr "Anda yakin ingin mereboot '%s'?"
+msgstr "Anda yakin ingin me-reboot '%s'?"
 
 #: virtManager/vmmenu.py:269
 msgid "Error rebooting domain"
 msgstr "Galat saat boot ulang domain"
 
 #: virtManager/vmmenu.py:276
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to force reset '%s'?"
-msgstr "Anda yakin ingin menyetel ulang '%s' secara paksa?"
+msgstr "Anda yakin ingin me-reset paksa '%s'?"
 
 #: virtManager/vmmenu.py:278
-#, fuzzy
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
-"Ini akan segera mengatur ulang VM tanpa mematikan OS dan dapat menyebabkan "
+"Ini akan seketika me-reset VM tanpa mematikan OS dan dapat menyebabkan "
 "kehilangan data."
 
 #: virtManager/vmmenu.py:284
-#, fuzzy
 msgid "Error resetting domain"
-msgstr "Terjadi kesalahan saat menyetel ulang domain"
+msgstr "Galat saat menyetel ulang domain"
 
 #: virtManager/vmwindow.py:46
-#, fuzzy, python-format
+#, python-format
 msgid "Error launching details: %s"
-msgstr "Galat meluncurkan detail: %s"
+msgstr "Galat saat meluncurkan detail: %s"
 
 #: virtManager/vmwindow.py:226
 msgid "This will abort the installation. Are you sure?"
@@ -5217,19 +5134,16 @@ msgid "Error taking screenshot: %s"
 msgstr "Galat saat mengambil tangkapan layar: %s"
 
 #: virtManager/vmwindow.py:517 virtManager/vmwindow.py:519
-#, fuzzy
 msgid "Error initializing spice USB device widget"
-msgstr "Terjadi kesalahan saat memulai widget perangkat USB rempah-rempah"
+msgstr "Galat saat menginisialisasi widget perangkat USB spice"
 
 #: virtManager/vmwindow.py:521 virtManager/vmwindow.py:523
-#, fuzzy
 msgid "Select USB devices for redirection"
 msgstr "Pilih perangkat USB yang akan dialihkan"
 
 #: virtManager/vmwindow.py:556 virtManager/vmwindow.py:558
-#, fuzzy
 msgid "Save Virtual Machine Screenshot"
-msgstr "Simpan Screenshot Mesin Virtual"
+msgstr "Simpan Tangkapan Layar Mesin Virtual"
 
 #: virtManager/vmwindow.py:557 virtManager/vmwindow.py:559
 msgid "PNG files"
@@ -5244,101 +5158,97 @@ msgid "There are unapplied changes."
 msgstr "Ada perubahan yang belum diterapkan."
 
 #: virtManager/xmleditor.py:139
-#, fuzzy
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
-"Perubahan Anda akan hilang jika Anda meninggalkan tab ini. Benar-benar "
-"keluar dari tab ini?"
+"Perubahan Anda akan hilang jika Anda meninggalkan tab ini. Yakin keluar dari "
+"tab ini?"
 
 #: virtManager/xmleditor.py:152
-#, fuzzy
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
-"Perubahan XML Anda akan hilang jika Anda meninggalkan tab ini. Benar-benar "
-"keluar dari tab ini?"
+"Perubahan XML Anda akan hilang jika Anda meninggalkan tab ini. Yakin keluar "
+"dari tab ini?"
 
 #: virtinst/capabilities.py:297 virtinst/capabilities.py:298
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
 "'%(arch)s'"
 msgstr ""
-"Host tidak mendukung jenis virtualisasi '% (virttype) s' untuk arsitektur '% "
-"(arch) s'"
+"Host tidak mendukung jenis virtualisasi '%(virttype)s' untuk arsitektur "
+"'%(arch)s'"
 
 #: virtinst/capabilities.py:301 virtinst/capabilities.py:302
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
-"Host tidak mendukung opsi virtualisasi apa pun untuk arsitektur '% (arch) s'"
+"Host tidak mendukung opsi virtualisasi apa pun untuk arsitektur '%(arch)s'"
 
 #: virtinst/capabilities.py:305 virtinst/capabilities.py:306
-#, fuzzy, python-format
+#, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
-msgstr "Host tidak mendukung jenis virtualisasi '% (virttype) s'"
+msgstr "Host tidak mendukung jenis virtualisasi '%(virttype)s'"
 
 #: virtinst/capabilities.py:309 virtinst/capabilities.py:310
-#, fuzzy
 msgid "Host does not support any virtualization options"
 msgstr "Host tidak mendukung opsi virtualisasi apa pun"
 
 #: virtinst/capabilities.py:315 virtinst/capabilities.py:316
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Host tidak mendukung tipe domain% (domain) s dengan mesin '% (machine) s' "
-"untuk jenis virtualisasi '% (virttype) s' dengan arsitektur '% (arch) s'"
+"Host tidak mendukung tipe domain %(domain)s dengan mesin '%(machine)s' untuk "
+"jenis virtualisasi '%(virttype)s' dengan arsitektur '%(arch)s'"
 
 #: virtinst/capabilities.py:321 virtinst/capabilities.py:322
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Host tidak mendukung jenis domain% (domain) s untuk jenis virtualisasi '% "
-"(virttype) s' dengan arsitektur '% (arch) s'"
+"Host tidak mendukung jenis domain %(domain)s untuk jenis virtualisasi "
+"'%(virttype)s' dengan arsitektur '%(arch)s'"
 
 #: virtinst/cli.py:107
-#, fuzzy
 msgid "See man page for examples and full option syntax."
 msgstr "Lihat halaman manual untuk contoh dan sintaks opsi lengkap."
 
 #: virtinst/cli.py:109
-#, fuzzy
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
-"Gunakan '--option =?' atau '--option help' untuk melihat suboption yang "
+"Gunakan '--option=?' atau '--option help' untuk melihat sub opsi yang "
 "tersedia"
 
 #: virtinst/cli.py:288
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
 "If it was, you can restart your domain by running:\n"
 "  %s\n"
 "otherwise, please restart your installation."
 msgstr ""
-"Penginstalan domain tampaknya tidak berhasil.&#10; Jika ya, Anda dapat "
-"memulai ulang domain Anda dengan menjalankan:&#10; %s&#10; jika tidak, "
-"silakan restart instalasi Anda."
+"Instalasi domain tampaknya tidak berhasil.\n"
+"Jika ya, Anda dapat memulai ulang domain Anda dengan menjalankan:\n"
+"  %s\n"
+"jika tidak, silakan mulai ulang instalasi Anda."
 
 #: virtinst/cli.py:306
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
-"% (path) s mungkin tidak bisa diakses oleh hypervisor. Anda harus memberikan "
-"izin pencarian pengguna '% (user) s' untuk direktori berikut:% (dirs) s"
+"%(path)s mungkin tidak bisa diakses oleh hypervisor. Anda harus memberikan "
+"izin pencarian pengguna '%(user)s' bagi direktori berikut: %(dirs)s"
 
 #: virtinst/cli.py:319
-#, fuzzy, python-format
+#, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
-msgstr " (Gunakan --check %s = off atau --check all = off untuk menimpa)"
+msgstr " (Gunakan --check %s=off atau --check all=off untuk menimpa)"
 
 #: virtinst/cli.py:353
 #, python-format
@@ -5346,47 +5256,47 @@ msgid "This will overwrite the existing path '%s'"
 msgstr "Ini akan menimpa path yang ada '%s'"
 
 #: virtinst/cli.py:364
-#, fuzzy, python-format
+#, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
-msgstr "Disk% (path) s sudah digunakan oleh tamu lain% (names) s."
+msgstr "Disk %(path)s sudah digunakan oleh guest lain %(names)s."
 
 #: virtinst/cli.py:408
-#, fuzzy, python-format
+#, python-format
 msgid "Running graphical console command: %(command)s"
-msgstr "Menjalankan perintah konsol grafis:% (command) s"
+msgstr "Menjalankan perintah konsol grafis: %(command)s"
 
 #: virtinst/cli.py:422
-#, fuzzy, python-format
+#, python-format
 msgid "Running text console command: %(command)s"
-msgstr "Menjalankan perintah konsol teks:% (command) s"
+msgstr "Menjalankan perintah konsol teks: %(command)s"
 
 #: virtinst/cli.py:464
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find domain '%(domain)s': %(error)s"
-msgstr "Tidak dapat menemukan domain '% (domain) s':% (error) s"
+msgstr "Tidak bisa temukan domain '%(domain)s': %(error)s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
 #: virtinst/cli.py:483
-#, fuzzy, python-format
+#, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr "Tidak dapat menggunakan% (option1) s dan% (option2) s secara bersamaan"
+msgstr "Tidak bisa menggunakan %(option1)s dan %(option2)s secara bersamaan"
 
 #: virtinst/cli.py:592 virtinst/cli.py:595
-#, fuzzy
 msgid "Connect to hypervisor with libvirt URI"
-msgstr "Hubungkan ke hypervisor dengan libvirt URI"
+msgstr "Hubungkan ke hypervisor dengan URI libvirt"
 
 #: virtinst/cli.py:610
-#, fuzzy
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
-"Konfigurasi sambungan otomatis konsol tamu. Contoh:&#10; --teks "
-"otomatis&#10; - grafis autoconsole&#10; - tidak ada konsol otomatis"
+"Konfigurasikan sambungan otomatis konsol guest. Contoh:\n"
+"--autoconsole text\n"
+"--autoconsole graphical\n"
+"--autoconsole none"
 
 #: virtinst/cli.py:616
 #, fuzzy
@@ -5432,66 +5342,64 @@ msgid "Suppress non-error output"
 msgstr "Menekan keluaran non-error"
 
 #: virtinst/cli.py:661
-#, fuzzy
 msgid "Print debugging information"
 msgstr "Cetak informasi debugging"
 
 #: virtinst/cli.py:667
-#, fuzzy
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
-"Konfigurasikan metadata tamu. Ex:&#10; --metadata name = foo, title = "
-"\"Judul cantik saya\", uuid = ...&#10; --metadata description = \"My nice "
-"long description\""
+"Konfigurasikan metadata guest. Mis:\n"
+"--metadata name=foo,title=\"Judul-judulan\",uuid=...\n"
+"--metadata description=\"Keterangan panjang lebar\""
 
 #: virtinst/cli.py:675
-#, fuzzy
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
-"Konfigurasi alokasi memori tamu. Ex:&#10; --memori 1024 (dalam MiB)&#10; --"
-"memori memori = 1024, memoriMemori = 512\n"
+"Konfigurasi alokasi memori guest. Mis:\n"
+"--memory 1024 (dalam MiB)\n"
+"--memory memory=1024,currentMemory=512\n"
 
 #: virtinst/cli.py:688
-#, fuzzy
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
-"Jumlah vCPU yang akan dikonfigurasi untuk tamu Anda. Ex:&#10; --vcpus 5&#10; "
-"--vcpus 5, maxvcpus = 10, cpuset = 1-4,6,8&#10; --vcpus soket = 2, inti = 4, "
-"utas = 2"
+"Cacah vCPU yang akan dikonfigurasi untuk guest Anda. Mis:\n"
+"--vcpus 5\n"
+"--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
+"--vcpus sockets=2,cores=4,threads=2"
 
 #: virtinst/cli.py:697
-#, fuzzy
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
-"Model dan fitur CPU. Ex:&#10; --cpu coreduo, + x2apic&#10; --cpu host-"
-"passthrough\n"
+"Model dan fitur CPU. Mis:\n"
+"--cpu coreduo,+x2apic\n"
+"--cpu host-passthrough\n"
 
 #: virtinst/cli.py:710
-#, fuzzy
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 msgstr ""
-"Konfigurasi pengaturan tampilan tamu. Ex:&#10; - bumbu grafis&#10; --"
-"graphics vnc, port = 5901, dengarkan = 0.0.0.0&#10; --graphics tidak ada\n"
+"Mengonfigurasi pengaturan tampilan tamu. Mis:\n"
+"--graphics spice\n"
+"--graphics vnc,port=5901,listen=0.0.0.0\n"
+"--graphics none\n"
 
 #: virtinst/cli.py:719
-#, fuzzy
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5500,57 +5408,54 @@ msgid ""
 "--network none\n"
 "--network help"
 msgstr ""
-"Konfigurasikan antarmuka jaringan tamu. Ex:&#10; --jembatan jaringan = "
-"mybr0&#10; --jaringan jaringan = my_libvirt_virtual_net&#10; --jaringan "
-"jaringan = mynet, model = virtio, mac = 00: 11 ...&#10; - tidak ada "
-"jaringan&#10; --bantuan jaringan"
+"Mengonfigurasi antarmuka jaringan guest. Mis:\n"
+"--network bridge=mybr0\n"
+"--network network=my_libvirt_virtual_net\n"
+"--network network=mynet,model=virtio,mac=00:11...\n"
+"--network none\n"
+"--network help"
 
 #: virtinst/cli.py:730
-#, fuzzy
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 msgstr ""
-"Konfigurasikan perangkat pengontrol tamu. Ex:&#10; --controller type = usb, "
-"model = qemu-xhci&#10; --controller virtio-scsi\n"
+"Mengonfigurasi perangkat pengontrol guest. Mis:\n"
+"--controller type=usb,model=qemu-xhci\n"
+"--controller type=scsi,model=virtio-scsi\n"
 
 #: virtinst/cli.py:735
-#, fuzzy
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
-"Konfigurasikan perangkat masukan tamu. Ex:&#10; --tablet masukan&#10; --"
-"masukkan keyboard, bus = usb"
+"Mengonfigurasi perangkat masukan guest. Mis:\n"
+"--input tablet\n"
+"--input keyboard,bus=usb"
 
 #: virtinst/cli.py:740
-#, fuzzy
 msgid "Configure a guest serial device"
-msgstr "Konfigurasikan perangkat serial tamu"
+msgstr "Mengonfigurasi perangkat serial guest"
 
 #: virtinst/cli.py:743
-#, fuzzy
 msgid "Configure a guest parallel device"
-msgstr "Konfigurasi perangkat paralel tamu"
+msgstr "Mengonfigurasi perangkat paralel guest"
 
 #: virtinst/cli.py:746
-#, fuzzy
 msgid "Configure a guest communication channel"
-msgstr "Konfigurasikan saluran komunikasi tamu"
+msgstr "Mengonfigurasikan kanal komunikasi guest"
 
 #: virtinst/cli.py:749
-#, fuzzy
 msgid "Configure a text console connection between the guest and host"
-msgstr "Konfigurasikan koneksi konsol teks antara tamu dan host"
+msgstr "Mengonfigurasi koneksi konsol teks antara guest dan host"
 
 #: virtinst/cli.py:753
-#, fuzzy
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
-"Konfigurasikan perangkat host USB / PCI / dll fisik untuk dibagikan dengan "
-"tamu"
+"Mengonfigurasi perangkat fisik host USB/PCI/dll untuk dipakai bersama dengan "
+"guest"
 
 #: virtinst/cli.py:761
 #, fuzzy
@@ -5567,59 +5472,56 @@ msgid "Configure guest sound device emulation"
 msgstr "Konfigurasikan emulasi perangkat suara guest"
 
 #: virtinst/cli.py:780
-#, fuzzy
 msgid "Configure host audio backend for sound devices"
-msgstr "Konfigurasikan perangkat pengawas tamu"
+msgstr "Mengonfigurasi backend audio host bagi perangkat suara"
 
 #: virtinst/cli.py:784
-#, fuzzy
 msgid "Configure a guest watchdog device"
-msgstr "Konfigurasikan perangkat pengawas tamu"
+msgstr "Mengonfigurasi perangkat watchdog guest"
 
 #: virtinst/cli.py:787
-#, fuzzy
 msgid "Configure guest video hardware."
-msgstr "Konfigurasi perangkat keras video tamu."
+msgstr "Mengonfigurasi perangkat keras video guest."
 
 #: virtinst/cli.py:790
-#, fuzzy
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
-"Konfigurasi perangkat smartcard tamu. Ex:&#10; --smartcard mode = passthrough"
+"Mengonfigurasi perangkat smartcard guest. Mis:\n"
+"--smartcard mode=passthrough"
 
 #: virtinst/cli.py:794
-#, fuzzy
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
-"Konfigurasikan perangkat pengalihan tamu. Ex:&#10; --redirdev usb, ketik = "
-"tcp, server = 192.168.1.1: 4000"
+"Mengonfigurasi perangkat pengalihan guest. Mis:\n"
+"--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: virtinst/cli.py:798
-#, fuzzy
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
-"Konfigurasikan perangkat memballoon tamu. Ex:&#10; --memballoon model = "
-"virtio"
+"Mengonfigurasi perangkat memballoon guest. Mis:\n"
+"--memballoon model=virtio"
 
 #: virtinst/cli.py:802
-#, fuzzy
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
-msgstr "Konfigurasikan perangkat TPM tamu. Ex:&#10; --tpm / dev / tpm"
+msgstr ""
+"Mengonfigurasi perangkat TPM guest. Mis:\n"
+"--tpm /dev/tpm"
 
 #: virtinst/cli.py:806
-#, fuzzy
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
-msgstr "Konfigurasi perangkat RNG tamu. Ex:&#10; --rng / dev / urandom"
+msgstr ""
+"Mengonfigurasi perangkat RNG guest. Mis:\n"
+"--rng /dev/urandom"
 
 #: virtinst/cli.py:810
 #, fuzzy
@@ -5629,49 +5531,46 @@ msgid ""
 msgstr "Konfigurasikan perangkat panik tamu. Ex:&#10; - default panic"
 
 #: virtinst/cli.py:814
-#, fuzzy
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
-"Konfigurasi perangkat memori tamu. Ex:&#10; --memdev dimm, target.size = 1024"
+"Mengonfigurasi perangkat memori bersama guest. Mis:\n"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:818
-#, fuzzy
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
-"Konfigurasi perangkat memori tamu. Ex:&#10; --memdev dimm, target.size = 1024"
+"Mengkonfigurasi perangkat memori guest. Mis:\n"
+"--memdev dimm,target.size=1024"
 
 #: virtinst/cli.py:822
-#, fuzzy
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
-"Konfigurasikan soket tamu vsock. Ex:&#10; --vsock cid.auto = ya&#10; --vsock "
-"cid.address = 7"
+"Mengonfigurasikan soket vsock guest. Mis:\n"
+"--vsock cid.auto=yes\n"
+"--vsock cid.address=7"
 
 #: virtinst/cli.py:827
-#, fuzzy
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
-"Konfigurasikan perangkat IOMMU. Ex:&#10; - model iommu = intel, driver."
-"aw_bits = 48"
+"Mengonfigurasikan perangkat IOMMU. Mis:\n"
+"--iommu model=intel,driver.aw_bits=48"
 
 #: virtinst/cli.py:834
-#, fuzzy
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr "Tetapkan domain<iothreads> dan<iothreadids> konfigurasi."
+msgstr "Menetapkan domain <iothreads> dan konfigurasi <iothreadids>."
 
 #: virtinst/cli.py:838
-#, fuzzy
 msgid "Set domain seclabel configuration."
-msgstr "Setel konfigurasi label rahasia domain."
+msgstr "Menata konfigurasi seclabel domain."
 
 #: virtinst/cli.py:842
 #, fuzzy
@@ -5679,119 +5578,106 @@ msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr "Atur tamu untuk melakukan operasi manajemen kunci kriptografi S390."
 
 #: virtinst/cli.py:847
-#, fuzzy
 msgid "Tune CPU parameters for the domain process."
-msgstr "Sesuaikan parameter CPU untuk proses domain."
+msgstr "Tala parameter CPU untuk proses domain."
 
 #: virtinst/cli.py:851
-#, fuzzy
 msgid "Tune NUMA policy for the domain process."
-msgstr "Sesuaikan kebijakan NUMA untuk proses domain."
+msgstr "Tala kebijakan NUMA untuk proses domain."
 
 #: virtinst/cli.py:855
-#, fuzzy
 msgid "Tune memory policy for the domain process."
-msgstr "Sesuaikan kebijakan memori untuk proses domain."
+msgstr "Tala kebijakan memori untuk proses domain."
 
 #: virtinst/cli.py:859
-#, fuzzy
 msgid "Tune blkio policy for the domain process."
-msgstr "Sesuaikan kebijakan blkio untuk proses domain."
+msgstr "Tala kebijakan blkio untuk proses domain."
 
 #: virtinst/cli.py:863
-#, fuzzy
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Tetapkan kebijakan dukungan memori untuk proses domain. Ex:&#10; --"
-"memorybacking hugepages = on"
+"Tetapkan kebijakan dukungan memori untuk proses domain. Mis:\n"
+"--memorybacking hugepages=on"
 
 #: virtinst/cli.py:868
-#, fuzzy
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
-"Tetapkan domain<features> XML. Ex:&#10; --features acpi = off&#10; --fitur "
-"apic = on, apic.eoi = on"
+"Tetapkan XML <fitur> domain. Mis:\n"
+"--features acpi=off\n"
+"--features apic=on,apic.eoi=on"
 
 #: virtinst/cli.py:874
-#, fuzzy
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
-"Tetapkan domain<clock> XML. Ex:&#10; --clock offset = waktu lokal, "
-"rtc_tickpolicy = catchup"
+"Tetapkan XML <jam> domain. Mis:\n"
+"--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: virtinst/cli.py:879
-#, fuzzy
 msgid "Configure VM power management features"
-msgstr "Konfigurasi fitur manajemen daya VM"
+msgstr "Konfigurasikan fitur manajemen daya VM"
 
 #: virtinst/cli.py:883
-#, fuzzy
 msgid "Configure VM lifecycle management policy"
 msgstr "Konfigurasikan kebijakan manajemen siklus hidup VM"
 
 #: virtinst/cli.py:887
-#, fuzzy
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Konfigurasikan partisi sumber daya VM (cgroups)"
 
 #: virtinst/cli.py:891
-#, fuzzy
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
-"Konfigurasikan Informasi Sistem SMBIOS. Ex:&#10; --sysinfo host&#10; --"
-"sysinfo bios.vendor = MyVendor, bios.version = 1.2.3, ...\n"
+"Konfigurasikan Informasi Sistem SMBIOS. Mis.:\n"
+"--sysinfo host\n"
+"--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 
 #: virtinst/cli.py:897
-#, fuzzy
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
-"Teruskan argumen langsung ke emulator QEMU. Ex:&#10; --qemu-commandline = '- "
-"tampilkan gtk, gl = on'&#10; --qemu-commandline env = DISPLAY =: 0.1"
+"Teruskan argumen langsung ke emulator QEMU. Mis.:\n"
+"--qemu-commandline='-display gtk,gl=on'\n"
+"--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:903
-#, fuzzy
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
-"Konfigurasikan keamanan peluncuran VM (mis. Enkripsi memori SEV). Ex:&#10; --"
-"launchSecurity type = sev, cbitpos = 47, reductionPhysBits = 1, policy = "
-"0x0001, dhCert = BASE64CERT&#10; --launchSecurity sev"
+"Konfigurasikan keamanan peluncuran VM (mis. Enkripsi memori SEV). Mis.:\n"
+"--launchSecurity sev"
 
 #: virtinst/cli.py:910
-#, fuzzy
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
-"Konfigurasikan pengaturan boot tamu. Ex:&#10; --boot hd, cdrom, menu = "
-"on&#10; --boot init = / sbin / init (untuk kontainer)"
+"Konfigurasikan pengaturan boot guest. Mis.:\n"
+"--boot hd,cdrom,menu=on\n"
+"--boot init=/sbin/init (untuk kontainer)"
 
 #: virtinst/cli.py:916
-#, fuzzy
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
-"Aktifkan namespace pengguna untuk penampung LXC. Ex:&#10; --idmap uid.start "
-"= 0, uid.target = 1000, uid.count = 10"
+"Aktifkan namespace pengguna untuk kontainer LXC. Mis.:\n"
+"--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: virtinst/cli.py:926
-#, fuzzy
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5799,23 +5685,23 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
-"Tentukan penyimpanan dengan berbagai opsi. Ex.&#10; - ukuran disk = 10 "
-"(gambar 10GiB baru di lokasi default)&#10; --disk / my / existing / disk, "
-"cache = none&#10; - perangkat disk = cdrom, bus = scsi&#10; --disk =?"
+"Tentukan penyimpanan dengan berbagai opsi. Mis.\n"
+"--disk size=10 (new 10GiB image in default location)\n"
+"--disk /my/existing/disk,cache=none\n"
+"--disk device=cdrom,bus=scsi\n"
+"--disk=?"
 
 #: virtinst/cli.py:934
 msgid "OS options"
 msgstr "Opsi OS"
 
 #: virtinst/cli.py:937
-#, fuzzy
 msgid "The OS being installed in the guest."
-msgstr "OS sedang diinstal di tamu."
+msgstr "OS sedang yang sedang dipasang di guest."
 
 #: virtinst/cli.py:939
-#, fuzzy
 msgid "The OS installed in the guest."
-msgstr "OS diinstal di tamu."
+msgstr "OS yang dipasang dalam guest."
 
 #: virtinst/cli.py:941
 #, fuzzy
@@ -5841,9 +5727,9 @@ msgstr ""
 "xml xpath.delete =. / jam"
 
 #: virtinst/cli.py:981 virtinst/cli.py:982
-#, fuzzy, python-format
+#, python-format
 msgid "%(key)s must be 'yes' or 'no'"
-msgstr "% (key) s harus 'yes' atau 'no'"
+msgstr "%(key)s harus berupa 'yes' atau 'no'"
 
 #: virtinst/cli.py:1166 virtinst/cli.py:1167
 #, python-format
@@ -6082,16 +5968,15 @@ msgid "size is required for non-existent disk '%s'"
 msgstr "ukuran diperlukan untuk disk '%s' yang tidak ada"
 
 #: virtinst/diskbackend.py:565
-#, fuzzy, python-format
+#, python-format
 msgid "Cloning %(srcfile)s"
-msgstr "Menggandakan% (srcfile) s"
+msgstr "Menggandakan %(srcfile)s"
 
 #: virtinst/diskbackend.py:635
-#, fuzzy, python-format
+#, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
-"Kesalahan mengkloning diskimage% (jalur input) s ke% (jalur keluaran) s:% "
-"(error) s"
+"Galat saat menggandakan diskimage %(inputpath)s ke %(outputpath)s: %(error)s"
 
 #: virtinst/domain/cpu.py:56
 #, python-format
@@ -6142,27 +6027,26 @@ msgid "Guest"
 msgstr "Guest"
 
 #: virtinst/guest.py:96
-#, fuzzy, python-format
+#, python-format
 msgid "Guest name '%s' is already in use."
-msgstr "Nama tamu '%s' sudah digunakan."
+msgstr "Nama guest '%s' sudah digunakan."
 
 #: virtinst/guest.py:858 virtinst/guest.py:1025
-#, fuzzy
 msgid "Libvirt version does not support UEFI."
 msgstr "Versi Libvirt tidak mendukung UEFI."
 
 #: virtinst/guest.py:862 virtinst/guest.py:1029
-#, fuzzy, python-format
+#, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
-msgstr "Tidak tahu cara menyiapkan UEFI untuk arch '%s'"
+msgstr "Tidak tahu cara menyiapkan UEFI untuk arsitektur '%s'"
 
 #: virtinst/guest.py:867 virtinst/guest.py:1034
-#, fuzzy, python-format
+#, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
-msgstr "Tidak menemukan jalur biner UEFI untuk arch '%s'"
+msgstr "Tidak menemukan path biner UEFI untuk arsitektur '%s'"
 
 #: virtinst/install/installer.py:108
-#, fuzzy, python-format
+#, python-format
 msgid "Removing disk '%s'"
 msgstr "Menghapus disk '%s'"
 
@@ -6175,14 +6059,12 @@ msgstr ""
 "jaringan."
 
 #: virtinst/install/installer.py:653 virtinst/install/installer.py:656
-#, fuzzy
 msgid "Creating domain..."
 msgstr "Membuat domain ..."
 
 #: virtinst/install/installer.py:660 virtinst/install/installer.py:663
-#, fuzzy
 msgid "Domain type 'vz' doesn't support transient installs."
-msgstr "Jenis domain 'vz' tidak mendukung penginstalan sementara."
+msgstr "Jenis domain 'vz' tidak mendukung instalasi transien."
 
 #: virtinst/install/installertreemedia.py:69
 #, fuzzy, python-format
@@ -6234,77 +6116,74 @@ msgstr ""
 "pengguna."
 
 #: virtinst/install/unattended.py:74
-#, fuzzy, python-format
+#, python-format
 msgid "%s requires the user-password to be set."
 msgstr "%s membutuhkan sandi pengguna untuk disetel."
 
 #: virtinst/install/unattended.py:83
-#, fuzzy, python-format
+#, python-format
 msgid "%s requires the admin-password to be set."
-msgstr "%s membutuhkan sandi-admin untuk disetel."
+msgstr "%s membutuhkan sandi admin untuk disetel."
 
 #: virtinst/install/unattended.py:180
-#, fuzzy
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
-"libosinfo atau osinfo-db terlalu tua untuk mendukung penginstalan tanpa "
-"pengawasan."
+"libosinfo atau osinfo-db terlalu tua untuk mendukung instalasi tanpa "
+"pendampingan."
 
 #: virtinst/install/unattended.py:198
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr ""
-"OS '% (osname) s' tidak mendukung metode injeksi yang dibutuhkan '% "
-"(methodname) s'"
+"OS '%(osname)s' tidak mendukung metode injeksi '%(methodname)s' yang "
+"dibutuhkan"
 
 #: virtinst/install/unattended.py:335
-#, fuzzy, python-format
+#, python-format
 msgid "OS '%s' media does not support unattended installation"
-msgstr "Media OS '%s' tidak mendukung penginstalan tanpa pengawasan"
+msgstr "Media OS '%s' tidak mendukung instalasi tanpa pendampingan"
 
 #: virtinst/install/unattended.py:346
-#, fuzzy, python-format
+#, python-format
 msgid "OS '%s' does not support unattended installation."
-msgstr "OS '%s' tidak mendukung penginstalan tanpa pengawasan."
+msgstr "OS '%s' tidak mendukung instalasi tanpa pendampingan."
 
 #: virtinst/install/unattended.py:355
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
-"OS '% (osname) s' tidak mendukung instalasi tanpa pengawasan untuk profil '% "
-"(profilename) s'. Profil yang tersedia:% (profiles) s"
+"OS '%(osname)s' tidak mendukung instalasi tanpa pendampingan untuk profil "
+"'%(profilename)s'. Profil yang tersedia: %(profiles)s"
 
 #: virtinst/install/unattended.py:362
-#, fuzzy, python-format
+#, python-format
 msgid "Using unattended profile '%s'"
-msgstr "Menggunakan profil tanpa pengawasan '%s'"
+msgstr "Menggunakan profil tanpa pendampingan '%s'"
 
 #: virtinst/install/urldetect.py:312
-#, fuzzy
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "URL tidak dapat diakses, mungkin Anda salah ketik?"
 
 #: virtinst/install/urldetect.py:314
-#, fuzzy, python-format
+#, python-format
 msgid "Could not find an installable distribution at URL '%s'"
-msgstr "Tidak dapat menemukan distribusi yang dapat dipasang di URL '%s'"
+msgstr "Tidak bisa menemukan distribusi yang dapat dipasang di URL '%s'"
 
 #: virtinst/install/urldetect.py:318
-#, fuzzy
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
 msgstr ""
-"Lokasi harus direktori root dari pohon instalasi.&#10; Lihat halaman manual "
-"virt-install untuk berbagai contoh distro."
+"Lokasi harus berupa direktori root dari pohon instalasi.\n"
+"Lihat halaman manual virt-install untuk berbagai contoh distro."
 
 #: virtinst/install/urlfetcher.py:101
-#, fuzzy, python-format
+#, python-format
 msgid "Couldn't acquire file %(url)s: %(error)s"
-msgstr "Tidak dapat memperoleh file% (url) s:% (error) s"
+msgstr "Tidak bisa memperoleh berkas %(url)s: %(error)s"
 
 #: virtinst/install/urlfetcher.py:106
 #, python-format
@@ -6312,9 +6191,9 @@ msgid "Retrieving '%(filename)s'"
 msgstr "Mengambil '%(filename)s'"
 
 #: virtinst/install/urlfetcher.py:278
-#, fuzzy, python-format
+#, python-format
 msgid "Opening URL %(url)s failed: %(error)s"
-msgstr "Membuka URL% (url) s gagal:% (error) s"
+msgstr "Membuka URL %(url)s gagal: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
 #, fuzzy, python-format
@@ -6326,102 +6205,99 @@ msgid "Generic or unknown OS. Usage is not recommended."
 msgstr "OS tak dikenal atau generik. Penggunaan tidak direkomendasikan."
 
 #: virtinst/osdict.py:96
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown libosinfo ID '%s'"
-msgstr "ID libosinfo '%s' tidak diketahui"
+msgstr "ID libosinfo '%s' tidak dikenal"
 
 #: virtinst/osdict.py:110
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
-"Nama OS tidak dikenal '%s'. Lihat `osinfo-query os` untuk nilai yang valid."
+"Nama OS tidak dikenal '%s'. Lihat '--osinfo list' untuk nilai yang valid."
 
 #: virtinst/osdict.py:537
-#, fuzzy, python-format
+#, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "OS '%s' tidak memiliki lokasi URL"
 
 #: virtinst/osdict.py:549
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
 msgstr ""
-"OS '% (osname) s' tidak memiliki lokasi URL untuk arsitektur '% (archname) s'"
+"OS '%(osname)s' tidak memiliki lokasi URL untuk arsitektur '%(archname)s'"
 
 #: virtinst/storage.py:163
-#, fuzzy, python-format
+#, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
-msgstr ""
-"Tidak dapat membuat kumpulan penyimpanan default '% (path) s':% (error) s"
+msgstr "Tidak bisa membuat pool penyimpanan baku '%(path)s': %(error)s"
 
 #: virtinst/storage.py:216 virtinst/storage.py:548
 msgid "Storage object"
 msgstr "Objek penyimpanan"
 
 #: virtinst/storage.py:222
-#, fuzzy, python-format
+#, python-format
 msgid "Name '%s' already in use by another pool."
-msgstr "Nama '%s' sudah digunakan oleh pangkalan lain."
+msgstr "Nama '%s' sudah digunakan oleh pool lain."
 
 #: virtinst/storage.py:384
-#, fuzzy, python-format
+#, python-format
 msgid "Could not define storage pool: %s"
-msgstr "Tidak dapat menentukan kumpulan penyimpanan: %s"
+msgstr "Tidak bisa mendefinisikan pool penyimpanan: %s"
 
 #: virtinst/storage.py:392
-#, fuzzy, python-format
+#, python-format
 msgid "Could not build storage pool: %s"
-msgstr "Tidak dapat membangun kumpulan penyimpanan: %s"
+msgstr "Tidak bisa membangun pool penyimpanan: %s"
 
 #: virtinst/storage.py:398
-#, fuzzy, python-format
+#, python-format
 msgid "Could not start storage pool: %s"
-msgstr "Tidak dapat memulai kumpulan penyimpanan: %s"
+msgstr "Tidak bisa memulai pool penyimpanan: %s"
 
 #: virtinst/storage.py:404
-#, fuzzy, python-format
+#, python-format
 msgid "Could not set pool autostart flag: %s"
-msgstr "Tidak dapat menyetel panji mulai otomatis kumpulan: %s"
+msgstr "Tidak bisa menyetel flag mulai otomatis pool: %s"
 
 #: virtinst/storage.py:554
-#, fuzzy, python-format
+#, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Nama '%s' sudah digunakan oleh volume lain."
 
 #: virtinst/storage.py:640
-#, fuzzy
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr ""
-"Volume logis yang jarang tidak didukung, mengatur alokasi sama dengan "
-"kapasitas"
+"Volume logis sparse tidak didukung, mengatur alokasi sama dengan kapasitas"
 
 #: virtinst/storage.py:685
-#, fuzzy, python-format
+#, python-format
 msgid "Allocating '%(filename)s'"
-msgstr "Mengalokasikan '%s'"
+msgstr "Mengalokasikan '%(filename)s'"
 
 #: virtinst/storage.py:726
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
-"Tidak ada cukup ruang kosong di kolam penyimpanan untuk membuat volume. (% "
-"(mem1) s M meminta alokasi>% (mem2) s M tersedia)"
+"Tidak ada cukup ruang kosong di pool penyimpanan untuk membuat volume. "
+"(%(mem1)s M alokasi diminta > %(mem2)s M tersedia)"
 
 #: virtinst/storage.py:733
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
 msgstr ""
-"Kapasitas volume yang diminta akan melebihi ruang kolam yang tersedia saat "
-"volume dialokasikan sepenuhnya. (% (mem1) s M kapasitas yang diminta>% "
-"(mem2) s M tersedia)"
+"Kapasitas volume yang diminta akan melebihi ruang pool yang tersedia saat "
+"volume dialokasikan sepenuhnya. (%(mem1)s M kapasitas diminta > %(mem2)s M "
+"tersedia)"
 
 #: virtinst/virtclone.py:20
 #, fuzzy
@@ -6475,9 +6351,8 @@ msgstr ""
 "Buat otomatis nama klon dan jalur penyimpanan dari konfigurasi tamu asli."
 
 #: virtinst/virtclone.py:86
-#, fuzzy
 msgid "Name for the new guest"
-msgstr "Nama untuk tamu baru"
+msgstr "Nama untuk guest baru"
 
 #: virtinst/virtclone.py:89
 #, fuzzy
@@ -6489,18 +6364,16 @@ msgid "Storage Configuration"
 msgstr "Konfigurasi Penyimpanan"
 
 #: virtinst/virtclone.py:93
-#, fuzzy
 msgid "New file to use as the disk image for the new guest"
-msgstr "File baru untuk digunakan sebagai image disk untuk tamu baru"
+msgstr "Berkas baru untuk digunakan sebagai image disk bagi guest baru"
 
 #: virtinst/virtclone.py:96
-#, fuzzy
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
-"Paksa untuk menyalin perangkat (misalnya, jika 'hdc' adalah perangkat cdrom "
-"readonly, --force-copy = hdc)"
+"Paksa untuk menyalin perangkat (mis., jika 'hdc' adalah perangkat cdrom "
+"hanya-baca, --force-copy=hdc)"
 
 #: virtinst/virtclone.py:99
 #, fuzzy
@@ -6681,27 +6554,27 @@ msgstr ""
 "akurat untuk hasil yang optimal."
 
 #: virtinst/virtinstall.py:388
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr "Menggunakan {osname} --location {url}"
 
 #: virtinst/virtinstall.py:472 virtinst/virtinstall.py:476
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "Menggunakan default --name {vm_name}"
 
 #: virtinst/virtinstall.py:484 virtinst/virtinstall.py:488
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using container default --memory {megabytes}"
-msgstr "Menggunakan penampung default --memory {megabytes}"
+msgstr "Menggunakan container default --memory {megabytes}"
 
 #: virtinst/virtinstall.py:503 virtinst/virtinstall.py:507
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr "Menggunakan {os_name} default --memory {megabytes}"
 
 #: virtinst/virtinstall.py:514 virtinst/virtinstall.py:518
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr "Menggunakan {os_name} default --disk {disk_options}"
 
@@ -6718,15 +6591,18 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"Gagal mendeteksi nama OS osinfo dari media instalasi, menggunakan nama "
+"fallback '{name}'.\n"
+"Silakan laporkan bug terhadap virt-install jika Anda mengharapkan "
+"pendeteksian berhasil."
 
 #: virtinst/virtinstall.py:567 virtinst/virtinstall.py:574
-#, fuzzy
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--Os-variant diperlukan, tetapi tidak ada nilai yang ditetapkan atau "
-"terdeteksi."
+"--os-variant/--osinfo nama OS diperlukan, tetapi tidak ada\n"
+"nilai yang ditetapkan atau terdeteksi."
 
 #: virtinst/virtinstall.py:581 virtinst/virtinstall.py:586
 msgid ""
@@ -6791,37 +6667,33 @@ msgid "{env_var} set. Skipping fatal error."
 msgstr "{env_var} ditata. Melewati galat fatal."
 
 #: virtinst/virtinstall.py:706 virtinst/virtinstall.py:708
-#, fuzzy
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
-"Tidak ada konsol yang akan diluncurkan untuk tamu, secara default --wait -1"
+"Tidak ada konsol yang akan diluncurkan untuk guest, memakai default --wait -1"
 
 #: virtinst/virtinstall.py:742 virtinst/virtinstall.py:744
-#, fuzzy
 msgid "Waiting for the installation to complete."
-msgstr "Menunggu penginstalan selesai."
+msgstr "Menunggu instalasi selesai."
 
 #: virtinst/virtinstall.py:743 virtinst/virtinstall.py:745
-#, fuzzy, python-format
+#, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
-msgstr[0] "Menunggu% (menit) d menit hingga penginstalan selesai."
+msgstr[0] "Menunggu %(minutes)d menit hingga instalasi selesai."
 
 #: virtinst/virtinstall.py:766 virtinst/virtinstall.py:768
-#, fuzzy, python-format
+#, python-format
 msgid "Password for first root login is: %s"
 msgstr "Sandi untuk login root pertama adalah: %s"
 
 #: virtinst/virtinstall.py:778 virtinst/virtinstall.py:780
-#, fuzzy
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
-"Instalasi akan dilanjutkan dalam 10 detik (tekan Enter untuk melewati) ..."
+"Instalasi akan dilanjutkan dalam 10 detik (tekan Enter untuk melewati)..."
 
 #: virtinst/virtinstall.py:805 virtinst/virtinstall.py:807
-#, fuzzy
 msgid "Console command returned failure."
-msgstr "Perintah konsol kembali gagal."
+msgstr "Perintah konsol mengembalikan kegagalan."
 
 #: virtinst/virtinstall.py:842 virtinst/virtinstall.py:844
 #, fuzzy
@@ -6831,51 +6703,46 @@ msgstr "Domain macet."
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "VM menghilang tanpa disangka: %s"
 
 #: virtinst/virtinstall.py:872 virtinst/virtinstall.py:876
-#, fuzzy
 msgid "Domain is still running. Installation may be in progress."
-msgstr "Domain masih berjalan. Penginstalan mungkin sedang berlangsung."
+msgstr "Domain masih berjalan. Instalasi mungkin sedang berlangsung."
 
 #: virtinst/virtinstall.py:882 virtinst/virtinstall.py:886
-#, fuzzy
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 "Anda dapat menyambungkan kembali ke konsol untuk menyelesaikan proses "
 "instalasi."
 
 #: virtinst/virtinstall.py:893 virtinst/virtinstall.py:897
-#, fuzzy
 msgid "Domain has shutdown. Continuing."
-msgstr "Domain telah ditutup. Melanjutkan."
+msgstr "Domain telah mati. Melanjutkan."
 
 #: virtinst/virtinstall.py:899 virtinst/virtinstall.py:903
-#, fuzzy
 msgid "Installation has exceeded specified time limit. Exiting application."
-msgstr "Pemasangan melebihi batas waktu yang ditentukan. Keluar dari aplikasi."
+msgstr "Instalasi melebihi batas waktu yang ditentukan. Keluar dari aplikasi."
 
 #: virtinst/virtinstall.py:922 virtinst/virtinstall.py:926
-#, fuzzy
 msgid "Domain creation completed."
 msgstr "Pembuatan domain selesai."
 
 #: virtinst/virtinstall.py:931 virtinst/virtinstall.py:935
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can restart your domain by running:\n"
 "  %s"
-msgstr "Anda dapat memulai ulang domain Anda dengan menjalankan:&#10; %s"
+msgstr ""
+"Anda dapat memulai ulang domain Anda dengan menjalankan:\n"
+"  %s"
 
 #: virtinst/virtinstall.py:936 virtinst/virtinstall.py:940
-#, fuzzy
 msgid "User stopped the VM. Not rebooting."
 msgstr "Pengguna menghentikan VM. Tidak me-reboot."
 
 #: virtinst/virtinstall.py:939 virtinst/virtinstall.py:943
-#, fuzzy
 msgid "Restarting guest."
-msgstr "Tamu memulai ulang."
+msgstr "Memulai ulang guest."
 
 #: virtinst/virtinstall.py:956 virtinst/virtinstall.py:960
 msgid ""
@@ -6886,9 +6753,8 @@ msgstr ""
 "Memulai instalasi..."
 
 #: virtinst/virtinstall.py:979 virtinst/virtinstall.py:983
-#, fuzzy
 msgid "Domain install interrupted."
-msgstr "Pemasangan domain terputus."
+msgstr "Instalasi domain terinterupsi."
 
 #: virtinst/virtinstall.py:998 virtinst/virtinstall.py:1002
 #, fuzzy
@@ -6896,32 +6762,27 @@ msgid "Dry run completed successfully"
 msgstr "Uji coba berhasil diselesaikan"
 
 #: virtinst/virtinstall.py:1002 virtinst/virtinstall.py:1006
-#, fuzzy, python-format
+#, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
-msgstr "Permintaan langkah XML tidak dikenal '%s', harus 1, 2, atau semua"
+msgstr "Permintaan langkah XML tidak dikenal '%s', harus 1, 2, atau all"
 
 #: virtinst/virtinstall.py:1009 virtinst/virtinstall.py:1013
-#, fuzzy
 msgid "Requested installation does not have XML step 2"
-msgstr "Pemasangan yang diminta tidak memiliki XML langkah 2"
+msgstr "Instalasi yang diminta tidak memiliki XML langkah 2"
 
 #: virtinst/virtinstall.py:1026 virtinst/virtinstall.py:1030
-#, fuzzy
 msgid "Create a new virtual machine from specified install media."
 msgstr "Buat mesin virtual baru dari media instal yang ditentukan."
 
 #: virtinst/virtinstall.py:1032 virtinst/virtinstall.py:1036
-#, fuzzy
 msgid "Name of the guest instance"
-msgstr "Nama instance tamu"
+msgstr "Nama instansi guest"
 
 #: virtinst/virtinstall.py:1040 virtinst/virtinstall.py:1044
-#, fuzzy
 msgid "Installation Method Options"
 msgstr "Opsi Metode Instalasi"
 
 #: virtinst/virtinstall.py:1042 virtinst/virtinstall.py:1046
-#, fuzzy
 msgid "CD-ROM installation media"
 msgstr "Media instalasi CD-ROM"
 
@@ -6935,14 +6796,12 @@ msgstr ""
 "contoh distro tertentu."
 
 #: virtinst/virtinstall.py:1047 virtinst/virtinstall.py:1051
-#, fuzzy
 msgid "Boot from the network using the PXE protocol"
 msgstr "Boot dari jaringan menggunakan protokol PXE"
 
 #: virtinst/virtinstall.py:1049 virtinst/virtinstall.py:1053
-#, fuzzy
 msgid "Build guest around an existing disk image"
-msgstr "Bangun tamu di sekitar image disk yang ada"
+msgstr "Bangun guest di atas image disk yang ada"
 
 #: virtinst/virtinstall.py:1052 virtinst/virtinstall.py:1056
 #, fuzzy
@@ -6986,43 +6845,36 @@ msgid "Device Options"
 msgstr "Opsi Perangkat"
 
 #: virtinst/virtinstall.py:1108 virtinst/virtinstall.py:1112
-#, fuzzy
 msgid "Guest Configuration Options"
-msgstr "Opsi Konfigurasi Tamu"
+msgstr "Opsi Konfigurasi Guest"
 
 #: virtinst/virtinstall.py:1112 virtinst/virtinstall.py:1116
 msgid "Virtualization Platform Options"
 msgstr "Opsi Platform Virtualisasi"
 
 #: virtinst/virtinstall.py:1116 virtinst/virtinstall.py:1120
-#, fuzzy
 msgid "This guest should be a fully virtualized guest"
-msgstr "Tamu ini haruslah tamu yang tervirtualisasi sepenuhnya"
+msgstr "Guest ini harus berupa guest yang tervirtualisasi sepenuhnya"
 
 #: virtinst/virtinstall.py:1119 virtinst/virtinstall.py:1123
-#, fuzzy
 msgid "This guest should be a paravirtualized guest"
-msgstr "Tamu ini haruslah tamu paravirtualized"
+msgstr "Guest ini harus berupa guest terparavirtualisasi"
 
 #: virtinst/virtinstall.py:1122 virtinst/virtinstall.py:1126
-#, fuzzy
 msgid "This guest should be a container guest"
-msgstr "Tamu ini harus menjadi tamu kontainer"
+msgstr "Guest ini harus berupa guest kontainer"
 
 #: virtinst/virtinstall.py:1124 virtinst/virtinstall.py:1128
-#, fuzzy
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Nama hypervisor yang akan digunakan (kvm, qemu, xen, ...)"
 
 #: virtinst/virtinstall.py:1125 virtinst/virtinstall.py:1129
-#, fuzzy
 msgid "The CPU architecture to simulate"
 msgstr "Arsitektur CPU yang akan disimulasikan"
 
 #: virtinst/virtinstall.py:1126 virtinst/virtinstall.py:1130
-#, fuzzy
 msgid "The machine type to emulate"
-msgstr "Jenis mesin yang akan ditiru"
+msgstr "Jenis mesin yang akan diemulasi"
 
 #: virtinst/virtinstall.py:1137 virtinst/virtinstall.py:1141
 #, fuzzy
@@ -7035,32 +6887,29 @@ msgid "Create a transient domain."
 msgstr "Buat domain sementara."
 
 #: virtinst/virtinstall.py:1141 virtinst/virtinstall.py:1145
-#, fuzzy
 msgid "Force power off the domain when the console viewer is closed."
-msgstr "Matikan paksa domain saat penampil konsol ditutup."
+msgstr "Matikan paksa daya domain saat penampil konsol ditutup."
 
 #: virtinst/virtinstall.py:1144 virtinst/virtinstall.py:1148
-#, fuzzy
 msgid "Minutes to wait for install to complete."
-msgstr "Menit untuk menunggu pemasangan selesai."
+msgstr "Berapa menit menunggu instalasi selesai."
 
 #: virtinst/virtxml.py:34 virtinst/virtxml.py:35
-#, fuzzy
 msgid "Please enter 'yes' or 'no'."
 msgstr "Harap masukkan 'ya' atau 'tidak'."
 
 #: virtinst/virtxml.py:80 virtinst/virtxml.py:198
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Opsi --edit '%s' tidak valid"
 
 #: virtinst/virtxml.py:83
-#, fuzzy, python-format
+#, python-format
 msgid "No --%s objects found in the XML"
-msgstr "Tidak ada - %s objek ditemukan dalam XML"
+msgstr "Tidak ada objek --%s yang ditemukan dalam XML"
 
 #: virtinst/virtxml.py:86
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "'--edit %(number)s' requested but there's only %(max)s --%(type)s object in "
 "the XML"
@@ -7068,13 +6917,11 @@ msgid_plural ""
 "'--edit %(number)s' requested but there are only %(max)s --%(type)s objects "
 "in the XML"
 msgstr[0] ""
-"'--edit% (number) s' diminta tetapi hanya ada% (max) s -% (type) s objek di "
-"XML"
+"'--edit %(number)s' diminta tetapi hanya ada %(max)s objek --%(type)s di XML"
 
 #: virtinst/virtxml.py:102 virtinst/virtxml.py:157
-#, fuzzy
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr "--os-variant tidak didukung dengan --edit"
+msgstr "--os-variant/--osinfo tidak didukung dengan --edit"
 
 #: virtinst/virtxml.py:104 virtinst/virtxml.py:186
 msgid "--os-variant/--osinfo is not supported with --remove-device"
@@ -7085,64 +6932,59 @@ msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--os-variant/--osinfo tidak didukung dengan --build-xml"
 
 #: virtinst/virtxml.py:107 virtinst/virtxml.py:225
-#, fuzzy, python-format
+#, python-format
 msgid "No matching objects found for %s"
 msgstr "Tidak ditemukan objek yang cocok untuk %s"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml tidak didukung untuk --%s"
+msgstr "--build-xml tidak didukung untuk {cli_flag}"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "Tidak bisa memakai --remove-device dengan - %s"
+msgstr "Tidak bisa memakai --remove-device dengan {cli_flag}"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "Tidak bisa memakao --add-device dengan - %s"
+msgstr "Tidak bisa memakao --add-device dengan {cli_flag}"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "Tidak tahu bagaimana --update untuk --%s"
+msgstr "Tidak tahu bagaimana --update untuk {cli_flag}"
 
 #: virtinst/virtxml.py:123 virtinst/virtxml.py:136
-#, fuzzy, python-format
+#, python-format
 msgid "One of %s must be specified."
 msgstr "Salah satu dari %s harus ditentukan."
 
 #: virtinst/virtxml.py:126 virtinst/virtxml.py:139
-#, fuzzy, python-format
+#, python-format
 msgid "Conflicting options %s"
 msgstr "Opsi yang bertentangan %s"
 
 #: virtinst/virtxml.py:137 virtinst/virtxml.py:154
-#, fuzzy
 msgid "No change specified."
 msgstr "Tidak ada perubahan yang ditentukan."
 
 #: virtinst/virtxml.py:139 virtinst/virtxml.py:156
-#, fuzzy, python-format
+#, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr ""
 "Hanya satu operasi perubahan yang dapat ditentukan (opsi yang bertentangan "
 "%s)"
 
 #: virtinst/virtxml.py:152
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use empty "
 "'--edit'"
 msgstr ""
-"'--edit% (option) s' tidak masuk akal dengan -% (objecttype) s, gunakan saja "
-"'--edit' kosong"
+"'--edit %(option)s' tidak masuk akal dengan --%(objecttype)s, gunakan saja '"
+"--edit' kosong"
 
 #: virtinst/virtxml.py:167
 #, python-format
@@ -7155,12 +6997,12 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "Tidak bisa memakai --remove-device dengan - %s"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "Tidak ada - %s objek ditemukan dalam XML"
+msgstr "Tidak ada objek {cli_flag} yang ditemukan dalam XML"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -7168,7 +7010,7 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"'--edit% (number) s' diminta tetapi hanya ada% (max) s -% (type) s objek di "
+"'--edit {number}' diminta tetapi hanya ada {maxnum} obyek {cli_flag} dalam "
 "XML"
 
 #: virtinst/virtxml.py:206
@@ -7187,12 +7029,12 @@ msgid "Domain '%s' defined successfully."
 msgstr "Domain '%s' berhasil didefinisikan."
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
-"'--edit% (option) s' tidak masuk akal dengan -% (objecttype) s, gunakan saja "
-"'--edit' kosong"
+"'--edit {option}' tidak masuk akal dengan {cli_flag}, gunakan saja '--edit' "
+"kosong"
 
 #: virtinst/virtxml.py:243 virtinst/virtxml.py:333
 #, python-format
@@ -7201,9 +7043,9 @@ msgstr "Mulai '%s' dengan XML yang diubah?"
 
 #: virtinst/virtxml.py:253 virtinst/virtxml.py:343 virtinst/virtxml.py:547
 #: virtinst/virtxml.py:619
-#, fuzzy, python-format
+#, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
-msgstr "Gagal memulai domain '% (domain) s':% (error) s"
+msgstr "Gagal memulai domain '%(domain)s': %(error)s"
 
 #: virtinst/virtxml.py:258 virtinst/virtxml.py:348 virtinst/virtxml.py:551
 #: virtinst/virtxml.py:623
@@ -7212,22 +7054,24 @@ msgid "Domain '%s' started successfully."
 msgstr "Domain '%s' berhasil dimulai."
 
 #: virtinst/virtxml.py:264 virtinst/virtxml.py:354
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(xml)s\n"
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
-msgstr "% (xml) s&#10;&#10; Hotplug perangkat ini ke tamu '% (domain) s'?"
+msgstr ""
+"%(xml)s\n"
+"\n"
+"Hotplug perangkat ini ke guest '%(domain)s'?"
 
 #: virtinst/virtxml.py:266 virtinst/virtxml.py:356
 msgid "Device hotplug successful."
 msgstr "Hotplug perangkat berhasil."
 
 #: virtinst/virtxml.py:267 virtinst/virtxml.py:357
-#, fuzzy, python-format
-#| msgid "Error validating install location: %s"
+#, python-format
 msgid "Error attempting device hotplug: %(error)s"
-msgstr "Kesalahan mencoba hotplug perangkat:% (error) s"
+msgstr "Galat saat mencoba hotplug perangkat: %(error)s"
 
 #: virtinst/virtxml.py:269 virtinst/virtxml.py:359
 #, fuzzy, python-format
@@ -7250,39 +7094,38 @@ msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Terjadi kesalahan saat mencoba cabut perangkat lunak:% (error) s"
 
 #: virtinst/virtxml.py:274 virtinst/virtxml.py:364
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(xml)s\n"
 "\n"
 "Update this device for the guest '%(domain)s'?"
-msgstr "% (xml) s&#10;&#10; Perbarui perangkat ini untuk tamu '% (domain) s'?"
+msgstr ""
+"%(xml)s\n"
+"\n"
+"Perbarui perangkat ini untuk guest '%(domain)s'?"
 
 #: virtinst/virtxml.py:276 virtinst/virtxml.py:366
 msgid "Device update successful."
 msgstr "Pembaruan perangkat berhasil."
 
 #: virtinst/virtxml.py:277 virtinst/virtxml.py:367
-#, fuzzy, python-format
-#| msgid "Error validating install location: %s"
+#, python-format
 msgid "Error attempting device update: %(error)s"
-msgstr "Kesalahan saat mencoba pembaruan perangkat:% (error) s"
+msgstr "Galat saat mencoba pembaruan perangkat: %(error)s"
 
 #: virtinst/virtxml.py:322
-#, fuzzy
 msgid "--xml can only be used with --edit"
 msgstr "--xml hanya dapat digunakan dengan --edit"
 
 #: virtinst/virtxml.py:344 virtinst/virtxml.py:418
-#, fuzzy
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "Tidak ada perbedaan XML yang dibuat. Perubahan yang diminta tidak akan "
 "berpengaruh."
 
 #: virtinst/virtxml.py:363 virtinst/virtxml.py:437
-#, fuzzy
 msgid "Edit libvirt XML using command line options."
-msgstr "Edit XML libvirt menggunakan opsi baris perintah."
+msgstr "Sunting XML libvirt menggunakan opsi baris perintah."
 
 #: virtinst/virtxml.py:369 virtinst/virtxml.py:443
 msgid "Domain name, id, or uuid"
@@ -7293,7 +7136,6 @@ msgid "XML actions"
 msgstr "Tindakan XML"
 
 #: virtinst/virtxml.py:373 virtinst/virtxml.py:447
-#, fuzzy
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -7301,58 +7143,57 @@ msgid ""
 "--edit all --disk ... (edit all disk devices)\n"
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
-"Edit XML VM. Contoh:&#10; --edit --disk ... (edit perangkat disk "
-"pertama)&#10; --edit 2 --disk ... (edit perangkat disk kedua)&#10; --edit "
-"semua --disk ... (edit semua perangkat disk)&#10; --edit target = hda --"
-"disk ... (edit disk 'hda')\n"
+"Edit XML VM. Contoh:\n"
+"--edit --disk ...     (sunting perangkat disk pertama)\n"
+"--edit 2 --disk ...   (sunting perangkat disk kedua)\n"
+"--edit all --disk ... (sunting semua perangkat disk)\n"
+"--edit target=hda --disk ... (sunting disk 'hda')\n"
 
 #: virtinst/virtxml.py:379 virtinst/virtxml.py:453
-#, fuzzy
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
 "--remove-device --disk all (remove all disks)\n"
 "--remove-device --disk /some/path"
 msgstr ""
-"Hapus perangkat tertentu. Contoh:&#10; --remove-device --disk 1 (hapus disk "
-"pertama)&#10; --remove-device --disk all (hapus semua disk)&#10; --remove-"
-"device --disk / some / path"
+"Hapus perangkat tertentu. Contoh:\n"
+"--remove-device --disk 1 (hapus disk pertama)\n"
+"--remove-device --disk all (hapus semua disk)\n"
+"--remove-device --disk /path/anu"
 
 #: virtinst/virtxml.py:384 virtinst/virtxml.py:458
-#, fuzzy
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
-"Tambahkan perangkat tertentu. Contoh:&#10; --tambah-perangkat --disk ..."
+"Tambahkan perangkat yang dinyatakan. Contoh:\n"
+"--add-device --disk ..."
 
 #: virtinst/virtxml.py:387 virtinst/virtxml.py:461
-#, fuzzy
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
-"Keluarkan XML perangkat yang dibangun. Domain bersifat opsional tetapi "
-"disarankan untuk memastikan default yang optimal."
+"Cetak XML perangkat yang dibangun. Domain bersifat opsional tetapi "
+"disarankan untuk memastikan baku yang optimal."
 
 #: virtinst/virtxml.py:390 virtinst/virtxml.py:464
 msgid "Output options"
 msgstr "Opsi luaran"
 
 #: virtinst/virtxml.py:392 virtinst/virtxml.py:466
-#, fuzzy
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
 "With --remove-device, this is a hotunplug operation.\n"
 "With --edit, this is an update device operation."
 msgstr ""
-"Terapkan perubahan ke VM yang sedang berjalan.&#10; Dengan --add-device, ini "
-"adalah operasi hotplug.&#10; Dengan --remove-device, ini adalah operasi "
-"hotunplug.&#10; Dengan --edit, ini adalah operasi perangkat pembaruan."
+"Terapkan perubahan ke VM yang sedang berjalan.\n"
+"Dengan --add-device, ini adalah operasi hotplug.\n"
+"Dengan --remove-device, ini adalah operasi hotunplug.\n"
+"Dengan --edit, ini adalah operasi pembaruan perangkat."
 
 #: virtinst/virtxml.py:398 virtinst/virtxml.py:472
-#, fuzzy
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
@@ -7360,7 +7201,6 @@ msgstr ""
 "ditentukan."
 
 #: virtinst/virtxml.py:401 virtinst/virtxml.py:475
-#, fuzzy
 msgid "Force not defining the domain."
 msgstr "Paksa tidak menentukan domain."
 
@@ -7397,9 +7237,8 @@ msgid "A domain must be specified"
 msgstr "Sebuah domain harus ditentukan"
 
 #: virtinst/virtxml.py:488
-#, fuzzy
 msgid "Conversion options"
-msgstr "Opsi yang bertentangan %s"
+msgstr "Opsi konversi"
 
 #: virtinst/virtxml.py:489
 #, python-format
@@ -7408,57 +7247,55 @@ msgstr "Tidak tahu bagaimana --update untuk --%s"
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Konversikan VM yang ada dari PC/i440FX ke Q35."
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Mengonversi VM yang sudah ada untuk menggunakan grafis VNC. Ini akan "
+"menghapus sisa-sisa grafis Spice."
 
 #: virtinst/virtxml.py:523 virtinst/virtxml.py:595
 msgid "The VM is not running, --update is inapplicable."
 msgstr "VM tidak sedang berjalan, --update tidak dapat diterapkan."
 
 #: virtinst/virtxml.py:556 virtinst/virtxml.py:628
-#, fuzzy
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Perubahan akan berlaku setelah domain dimatikan sepenuhnya."
 
 #: virtinst/virtxml.py:558 virtinst/virtxml.py:630
-#, fuzzy
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 "XML tidak berubah setelah domain ditentukan. Anda mungkin telah mengubah "
-"nilai yang disetel libvirt secara default."
+"nilai yang disetel libvirt secara baku."
 
 #: virtinst/virtxml.py:571 virtinst/virtxml.py:643
-#, fuzzy
 msgid "Aborted at user request"
-msgstr "Dibatalkan atas permintaan pengguna"
+msgstr "Digugurkan atas permintaan pengguna"
 
 #: virtinst/xmlapi.py:191
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
-"XML tidak memiliki nama elemen root yang diharapkan '% (expectname) s', "
-"ditemukan '% (foundname) s'"
+"XML tidak memiliki nama elemen root yang diharapkan '%(expectname)s', "
+"ditemukan '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:519
-#, fuzzy, python-format
+#, python-format
 msgid "A name must be specified for the %s"
 msgstr "Nama harus ditentukan untuk %s"
 
 #: virtinst/xmlbuilder.py:524
-#, fuzzy, python-format
+#, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
-msgstr ""
-"% (objecttype) s name '% (name) s' tidak boleh berisi karakter '% (char) s'."
+msgstr "Nama %(objecttype)s '%(name)s' tidak boleh berisi karakter '%(char)s'."
 
 #, fuzzy
 #~ msgid "No graphical console available"
