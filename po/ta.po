@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2024-08-16 22:43+0200\n"
+"POT-Creation-Date: 2024-11-13 08:09+0100\n"
 "PO-Revision-Date: 2022-03-09 18:01+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Tamil <https://translate.fedoraproject.org/projects/virt-"
@@ -28,7 +28,7 @@ msgstr ""
 "X-Generator: Weblate 4.11.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
-#: ui/manager.ui:7 virtManager/systray.py:148
+#: ui/manager.ui:7 virtManager/systray.py:138 virtManager/systray.py:148
 msgid "Virtual Machine Manager"
 msgstr "மெய்நிகர் கணினி மேலாளர்"
 
@@ -57,21 +57,21 @@ msgstr ""
 msgid "Graphical console connection for a virtual machine"
 msgstr ""
 
-#: data/virt-manager.appdata.xml.in:37
+#: data/virt-manager.appdata.xml.in:36 data/virt-manager.appdata.xml.in:37
 #, fuzzy
 #| msgid "virtualization type '%s'"
 msgid "virtualization"
 msgstr "மெய்நிகராக்க வகை '%s'"
 
-#: data/virt-manager.appdata.xml.in:38
+#: data/virt-manager.appdata.xml.in:37 data/virt-manager.appdata.xml.in:38
 msgid "libvirt"
 msgstr ""
 
-#: data/virt-manager.appdata.xml.in:39
+#: data/virt-manager.appdata.xml.in:38 data/virt-manager.appdata.xml.in:39
 msgid "qemu"
 msgstr ""
 
-#: data/virt-manager.appdata.xml.in:40
+#: data/virt-manager.appdata.xml.in:39 data/virt-manager.appdata.xml.in:40
 msgid "kvm"
 msgstr ""
 
@@ -181,20 +181,22 @@ msgstr "முறைமை (_M):"
 msgid "rng"
 msgstr "rng"
 
-#: ui/addhardware.ui:1362 ui/details.ui:4799
+#: ui/addhardware.ui:1347 ui/addhardware.ui:1362 ui/details.ui:4799
 msgid "panic"
 msgstr "பேனிக்"
 
-#: ui/addhardware.ui:1468 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
-#: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
-#: ui/createpool.ui:478 ui/createvm.ui:2400 ui/createvol.ui:462
-#: ui/delete.ui:181 ui/details.ui:4895 ui/hoststorage.ui:154 ui/migrate.ui:638
+#: ui/addhardware.ui:1453 ui/addhardware.ui:1468 ui/asyncjob.ui:146
+#: ui/clone.ui:26 ui/clone.ui:690 ui/connectauth.ui:22 ui/createconn.ui:25
+#: ui/createnet.ui:798 ui/createpool.ui:478 ui/createvm.ui:2400
+#: ui/createvol.ui:462 ui/delete.ui:181 ui/details.ui:4895
+#: ui/hoststorage.ui:154 ui/migrate.ui:638 ui/snapshotsnew.ui:343
 #: ui/snapshotsnew.ui:368
 msgid "_Cancel"
 msgstr ""
 
-#: ui/addhardware.ui:1483 ui/createnet.ui:813 ui/createpool.ui:493
-#: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:383
+#: ui/addhardware.ui:1468 ui/addhardware.ui:1483 ui/createnet.ui:813
+#: ui/createpool.ui:493 ui/createvm.ui:2446 ui/createvol.ui:477
+#: ui/snapshotsnew.ui:358 ui/snapshotsnew.ui:383
 msgid "_Finish"
 msgstr "முடிவு (_F)"
 
@@ -370,11 +372,17 @@ msgstr "உங்கள் keyringஇல் இந்த கடவுச்ச�
 msgid "Check to save password, uncheck to forget password."
 msgstr ""
 
-#: ui/console.ui:258
+#: ui/console.ui:258 ui/console.ui:274
 #, fuzzy
 #| msgid "TCP net console"
 msgid "_Connect to console"
 msgstr "TCP net பணியகம்"
+
+#: ui/console.ui:291
+#, fuzzy
+#| msgid "Co_nnect"
+msgid "Connect"
+msgstr "இணைப்பு (_n)"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -742,7 +750,8 @@ msgstr "CPUs (_P):"
 msgid "(Insert host mem)"
 msgstr "(புரவல நினைவை உள்நுழைக்கவும்)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2383
+#: ui/createvm.ui:1987 virtManager/details/details.py:2381
+#: virtManager/details/details.py:2383
 msgid "Memory"
 msgstr "நினைவகம்"
 
@@ -751,7 +760,8 @@ msgid "_Enable storage for this virtual machine"
 msgstr "இந்த மெய்நிகர் கணினியின் சேமிப்பகத்தை செயல்படுத்து (_E)"
 
 #: ui/createvm.ui:2040 virtManager/addhardware.py:216
-#: virtManager/addhardware.py:984 virtManager/clone.py:277
+#: virtManager/addhardware.py:969 virtManager/addhardware.py:984
+#: virtManager/clone.py:277
 msgid "Storage"
 msgstr "சேமிப்பகம்"
 
@@ -1993,31 +2003,31 @@ msgstr ""
 msgid "_Description:"
 msgstr "விளக்கம் (_D):"
 
-#: ui/snapshotsnew.ui:236
+#: ui/snapshotsnew.ui:211 ui/snapshotsnew.ui:236
 #, fuzzy
 #| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
 msgstr "ஸ்னாப்ஷாட் பயன்முறை:"
 
-#: ui/snapshotsnew.ui:251
+#: ui/snapshotsnew.ui:226 ui/snapshotsnew.ui:251
 #, fuzzy
 #| msgid "External"
 msgid "_external"
 msgstr "வெளி"
 
-#: ui/snapshotsnew.ui:268
+#: ui/snapshotsnew.ui:243 ui/snapshotsnew.ui:268
 #, fuzzy
 #| msgid "External"
 msgid "_internal"
 msgstr "வெளி"
 
-#: ui/snapshotsnew.ui:294
+#: ui/snapshotsnew.ui:269 ui/snapshotsnew.ui:294
 #, fuzzy
 #| msgid "VM State:"
 msgid "Memory _State:"
 msgstr "VM நிலை:"
 
-#: ui/snapshotsnew.ui:308
+#: ui/snapshotsnew.ui:283 ui/snapshotsnew.ui:308
 msgid "_auto"
 msgstr ""
 
@@ -2184,17 +2194,18 @@ msgstr ""
 msgid "Connection does not support storage management."
 msgstr "சேமிப்பக மேலாண்மைக்கு இணைப்புகள் துணைபுரியவில்லை.ில்லை"
 
-#: virtManager/addhardware.py:218 virtManager/addhardware.py:986
+#: virtManager/addhardware.py:218 virtManager/addhardware.py:971
+#: virtManager/addhardware.py:986
 msgid "Controller"
 msgstr "கன்ட்ரோலர்"
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:988
-#: virtManager/createnet.py:330
+#: virtManager/addhardware.py:219 virtManager/addhardware.py:973
+#: virtManager/addhardware.py:988 virtManager/createnet.py:330
 msgid "Network"
 msgstr "பிணையம்"
 
-#: virtManager/addhardware.py:220 virtManager/addhardware.py:990
-#: virtManager/details/details.py:193
+#: virtManager/addhardware.py:220 virtManager/addhardware.py:975
+#: virtManager/addhardware.py:990 virtManager/details/details.py:193
 msgid "Input"
 msgstr "இறக்கு"
 
@@ -2204,11 +2215,13 @@ msgstr "இறக்கு"
 msgid "Not supported for this guest type."
 msgstr "இந்த விருந்தினர் வகைக்கு துணை புரியவில்லை"
 
-#: virtManager/addhardware.py:222 virtManager/addhardware.py:992
+#: virtManager/addhardware.py:222 virtManager/addhardware.py:977
+#: virtManager/addhardware.py:992
 msgid "Graphics"
 msgstr "வரைகலை"
 
-#: virtManager/addhardware.py:224 virtManager/addhardware.py:994
+#: virtManager/addhardware.py:224 virtManager/addhardware.py:979
+#: virtManager/addhardware.py:994
 msgid "Sound"
 msgstr "ஒலி"
 
@@ -2260,16 +2273,18 @@ msgstr "Watchdog"
 msgid "Filesystem"
 msgstr ""
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:1002
-#: virtManager/details/details.py:253
+#: virtManager/addhardware.py:265 virtManager/addhardware.py:987
+#: virtManager/addhardware.py:1002 virtManager/details/details.py:253
 msgid "Smartcard"
 msgstr "ஸ்மார்ட்"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:1004
+#: virtManager/addhardware.py:267 virtManager/addhardware.py:989
+#: virtManager/addhardware.py:1004
 msgid "USB Redirection"
 msgstr "USB திருப்பிவிடுதல்"
 
-#: virtManager/addhardware.py:269 virtManager/addhardware.py:1006
+#: virtManager/addhardware.py:269 virtManager/addhardware.py:991
+#: virtManager/addhardware.py:1006
 msgid "TPM"
 msgstr "TPM"
 
@@ -2277,122 +2292,144 @@ msgstr "TPM"
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:272 virtManager/addhardware.py:1010
-#: virtManager/details/details.py:252
+#: virtManager/addhardware.py:272 virtManager/addhardware.py:995
+#: virtManager/addhardware.py:1010 virtManager/details/details.py:252
 msgid "Panic Notifier"
 msgstr "பானிக் அறிவிப்பான்"
 
-#: virtManager/addhardware.py:274 virtManager/addhardware.py:277
+#: virtManager/addhardware.py:274 virtManager/addhardware.py:276
+#: virtManager/addhardware.py:277
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr ""
 
-#: virtManager/addhardware.py:275 virtManager/details/details.py:254
+#: virtManager/addhardware.py:274 virtManager/addhardware.py:275
+#: virtManager/details/details.py:254
 msgid "VirtIO VSOCK"
 msgstr ""
 
-#: virtManager/addhardware.py:347
+#: virtManager/addhardware.py:346 virtManager/addhardware.py:347
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "பிழை மாற்றும் VM கட்டமைப்பு: %s"
 
-#: virtManager/addhardware.py:372
+#: virtManager/addhardware.py:371 virtManager/addhardware.py:372
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "இந்த மாற்றங்கள் அடுத்த விருந்தினர் அணைப்புக்குப் பிறகு விளைவை ஏற்படுத்தும்."
 
-#: virtManager/addhardware.py:423
+#: virtManager/addhardware.py:422 virtManager/addhardware.py:423
 msgid "Pseudo TTY"
 msgstr "Pseudo TTY"
 
-#: virtManager/addhardware.py:424
+#: virtManager/addhardware.py:423 virtManager/addhardware.py:424
 msgid "Output to a file"
 msgstr "ஒரு கோப்பிற்கு வெளியீடு செய்"
 
-#: virtManager/addhardware.py:425
+#: virtManager/addhardware.py:424 virtManager/addhardware.py:425
 msgid "TCP net console"
 msgstr "TCP net பணியகம்"
 
-#: virtManager/addhardware.py:426
+#: virtManager/addhardware.py:425 virtManager/addhardware.py:426
 msgid "UDP net console"
 msgstr "UDP net பணியகம்"
 
-#: virtManager/addhardware.py:427
+#: virtManager/addhardware.py:426 virtManager/addhardware.py:427
 #, fuzzy
 #| msgid "Unix socket"
 msgid "UNIX socket"
 msgstr "Unix சாக்கெட்"
 
-#: virtManager/addhardware.py:428
+#: virtManager/addhardware.py:427 virtManager/addhardware.py:428
 msgid "Spice agent"
 msgstr "Spice ஏஜன்ட்"
 
-#: virtManager/addhardware.py:429
+#: virtManager/addhardware.py:428 virtManager/addhardware.py:429
 msgid "Spice port"
 msgstr "ஸ்பைஸ் துறை"
 
-#: virtManager/addhardware.py:430
+#: virtManager/addhardware.py:429 virtManager/addhardware.py:430
 msgid "QEMU vdagent"
 msgstr ""
 
-#: virtManager/addhardware.py:444 virtManager/addhardware.py:505
+#: virtManager/addhardware.py:443 virtManager/addhardware.py:444
+#: virtManager/addhardware.py:504 virtManager/addhardware.py:505
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:445 virtManager/details/details.py:2316
+#: virtManager/addhardware.py:444 virtManager/addhardware.py:445
+#: virtManager/details/details.py:2314 virtManager/details/details.py:2316
 msgid "Floppy"
 msgstr ""
 
-#: virtManager/addhardware.py:446 virtManager/addhardware.py:507
+#: virtManager/addhardware.py:445 virtManager/addhardware.py:446
+#: virtManager/addhardware.py:506 virtManager/addhardware.py:507
 msgid "SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:447 virtManager/addhardware.py:506
+#: virtManager/addhardware.py:446 virtManager/addhardware.py:447
+#: virtManager/addhardware.py:505 virtManager/addhardware.py:506
 msgid "SATA"
 msgstr ""
 
-#: virtManager/addhardware.py:448
+#: virtManager/addhardware.py:447 virtManager/addhardware.py:448
 msgid "VirtIO Serial"
 msgstr ""
 
-#: virtManager/addhardware.py:449 virtManager/addhardware.py:509
-#: virtManager/addhardware.py:570
+#: virtManager/addhardware.py:448 virtManager/addhardware.py:449
+#: virtManager/addhardware.py:508 virtManager/addhardware.py:509
+#: virtManager/addhardware.py:559 virtManager/addhardware.py:570
 msgid "USB"
 msgstr ""
 
-#: virtManager/addhardware.py:450
+#: virtManager/addhardware.py:449 virtManager/addhardware.py:450
 msgid "PCI"
 msgstr ""
 
-#: virtManager/addhardware.py:451
+#: virtManager/addhardware.py:450 virtManager/addhardware.py:451
 msgid "CCID"
 msgstr ""
 
-#: virtManager/addhardware.py:452
+#: virtManager/addhardware.py:451 virtManager/addhardware.py:452
 msgid "xenbus"
 msgstr ""
 
-#: virtManager/addhardware.py:460 virtManager/addhardware.py:900
+#: virtManager/addhardware.py:459 virtManager/addhardware.py:460
+#: virtManager/addhardware.py:885 virtManager/addhardware.py:900
 msgid "VirtIO SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:463
+#: virtManager/addhardware.py:462 virtManager/addhardware.py:463
 msgid "PCIe"
 msgstr ""
 
-#: virtManager/addhardware.py:508
+#: virtManager/addhardware.py:507 virtManager/addhardware.py:508
 msgid "SD"
 msgstr ""
 
-#: virtManager/addhardware.py:510 virtManager/addhardware.py:571
+#: virtManager/addhardware.py:509 virtManager/addhardware.py:510
+#: virtManager/addhardware.py:560 virtManager/addhardware.py:571
 msgid "VirtIO"
 msgstr ""
 
-#: virtManager/addhardware.py:511 virtManager/addhardware.py:572
+#: virtManager/addhardware.py:510 virtManager/addhardware.py:511
+#: virtManager/addhardware.py:561 virtManager/addhardware.py:572
 msgid "Xen"
 msgstr ""
+
+#: virtManager/addhardware.py:517 virtManager/addhardware.py:528
+msgid "Random"
+msgstr "எழுந்தமானமான"
+
+#: virtManager/addhardware.py:518 virtManager/addhardware.py:529
+msgid "Entropy Gathering Daemon"
+msgstr "என்ட்ராபி சேகரிக்கும் டெமான்"
 
 #: virtManager/addhardware.py:518
 msgid "ISA"
 msgstr "ISA"
+
+#: virtManager/addhardware.py:519 virtManager/addhardware.py:530
+msgid "Builtin RNG"
+msgstr ""
 
 #: virtManager/addhardware.py:519
 msgid "pSeries"
@@ -2406,166 +2443,161 @@ msgstr ""
 msgid "s390"
 msgstr ""
 
-#: virtManager/addhardware.py:528
-msgid "Random"
-msgstr "எழுந்தமானமான"
-
-#: virtManager/addhardware.py:529
-msgid "Entropy Gathering Daemon"
-msgstr "என்ட்ராபி சேகரிக்கும் டெமான்"
-
-#: virtManager/addhardware.py:530
-msgid "Builtin RNG"
-msgstr ""
-
-#: virtManager/addhardware.py:548
+#: virtManager/addhardware.py:537 virtManager/addhardware.py:548
 msgid "Forcefully reset the guest"
 msgstr "விருந்தினரை பலவந்தமாக மீட்டமை"
 
-#: virtManager/addhardware.py:549
+#: virtManager/addhardware.py:538 virtManager/addhardware.py:549
 msgid "Gracefully shutdown the guest"
 msgstr "விருந்தினரை நல்ல முறையில் இயக்க நிறுத்து"
 
-#: virtManager/addhardware.py:550
+#: virtManager/addhardware.py:539 virtManager/addhardware.py:550
 msgid "Forcefully power off the guest"
 msgstr "விருந்தினரை பலவந்தமாக மின்சக்தி நிறுத்து"
 
-#: virtManager/addhardware.py:551
+#: virtManager/addhardware.py:540 virtManager/addhardware.py:551
 msgid "Pause the guest"
 msgstr "விருந்தினரை இடைநிறுத்து"
 
-#: virtManager/addhardware.py:552
+#: virtManager/addhardware.py:541 virtManager/addhardware.py:552
 msgid "No action"
 msgstr "செயல் இல்லை"
 
-#: virtManager/addhardware.py:553
+#: virtManager/addhardware.py:542 virtManager/addhardware.py:553
 msgid "Dump guest memory core"
 msgstr ""
 
-#: virtManager/addhardware.py:560
+#: virtManager/addhardware.py:549 virtManager/addhardware.py:560
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB வரைகலை டாப்லெட்"
 
-#: virtManager/addhardware.py:563 virtManager/details/details.py:192
+#: virtManager/addhardware.py:552 virtManager/addhardware.py:563
+#: virtManager/details/details.py:192
 msgid "Keyboard"
 msgstr "விசைப்பலகை"
 
-#: virtManager/addhardware.py:564 virtManager/details/details.py:190
+#: virtManager/addhardware.py:553 virtManager/addhardware.py:564
+#: virtManager/details/details.py:190
 msgid "Mouse"
 msgstr "சுண்டி"
 
-#: virtManager/addhardware.py:565 virtManager/details/details.py:188
+#: virtManager/addhardware.py:554 virtManager/addhardware.py:565
+#: virtManager/details/details.py:188
 msgid "Tablet"
 msgstr "டெப்லெட்"
 
-#: virtManager/addhardware.py:569
+#: virtManager/addhardware.py:558 virtManager/addhardware.py:569
 msgid "PS/2"
 msgstr ""
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:578
+#: virtManager/addhardware.py:567 virtManager/addhardware.py:578
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:676
+#: virtManager/addhardware.py:665 virtManager/addhardware.py:676
 msgid "Disk device"
 msgstr "வட்டு சாதனம்"
 
-#: virtManager/addhardware.py:678
+#: virtManager/addhardware.py:667 virtManager/addhardware.py:678
 msgid "CDROM device"
 msgstr "CDROM சாதனம்"
 
-#: virtManager/addhardware.py:680
+#: virtManager/addhardware.py:669 virtManager/addhardware.py:680
 msgid "Floppy device"
 msgstr "நெகிழ்வட்டு சாதனம்"
 
-#: virtManager/addhardware.py:683
+#: virtManager/addhardware.py:672 virtManager/addhardware.py:683
 msgid "LUN Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:706 virtManager/addhardware.py:815
-#: virtManager/addhardware.py:825 virtManager/addhardware.py:901
-#: virtManager/device/addstorage.py:98 virtManager/device/addstorage.py:105
-#: virtManager/device/fsdetails.py:88 virtManager/device/gfxdetails.py:103
-#: virtManager/device/tpmdetails.py:76 virtManager/device/tpmdetails.py:87
-#: virtManager/preferences.py:171
+#: virtManager/addhardware.py:695 virtManager/addhardware.py:706
+#: virtManager/addhardware.py:804 virtManager/addhardware.py:814
+#: virtManager/addhardware.py:815 virtManager/addhardware.py:825
+#: virtManager/addhardware.py:863 virtManager/addhardware.py:886
+#: virtManager/addhardware.py:901 virtManager/device/addstorage.py:98
+#: virtManager/device/addstorage.py:105 virtManager/device/fsdetails.py:88
+#: virtManager/device/gfxdetails.py:103 virtManager/device/tpmdetails.py:76
+#: virtManager/device/tpmdetails.py:87 virtManager/preferences.py:171
 msgid "Hypervisor default"
 msgstr "Hypervisor முன்னிருப்பு"
 
-#: virtManager/addhardware.py:794
+#: virtManager/addhardware.py:783 virtManager/addhardware.py:794
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
 
-#: virtManager/addhardware.py:800
+#: virtManager/addhardware.py:789 virtManager/addhardware.py:800
 msgid "No Devices Available"
 msgstr "சாதனங்கள்  எதுவும் கிடைக்கப் பெறவல்்லை."
 
-#: virtManager/addhardware.py:862 virtManager/device/tpmdetails.py:72
+#: virtManager/addhardware.py:851 virtManager/addhardware.py:862
+#: virtManager/device/tpmdetails.py:72
 msgid "Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:863
+#: virtManager/addhardware.py:852 virtManager/addhardware.py:863
 msgid "Host"
 msgstr ""
 
-#: virtManager/addhardware.py:869
+#: virtManager/addhardware.py:858 virtManager/addhardware.py:869
 msgid "Spice channel"
 msgstr ""
 
-#: virtManager/addhardware.py:897
+#: virtManager/addhardware.py:882 virtManager/addhardware.py:897
 msgid "USB 3"
 msgstr ""
 
-#: virtManager/addhardware.py:898
+#: virtManager/addhardware.py:883 virtManager/addhardware.py:898
 msgid "USB 2"
 msgstr ""
 
-#: virtManager/addhardware.py:996
+#: virtManager/addhardware.py:981 virtManager/addhardware.py:996
 msgid "Video Device"
 msgstr "வீடியோ சாதனம்"
 
-#: virtManager/addhardware.py:998
+#: virtManager/addhardware.py:983 virtManager/addhardware.py:998
 msgid "Watchdog Device"
 msgstr "watchdog சாதனம்"
 
-#: virtManager/addhardware.py:1000
+#: virtManager/addhardware.py:985 virtManager/addhardware.py:1000
 msgid "Filesystem Passthrough"
 msgstr "கோப்பு முறைமை பாஸ்த்ரூ"
 
-#: virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:993 virtManager/addhardware.py:1008
 msgid "Random Number Generator"
 msgstr "எழுந்தமானமான எண் உருவாக்கி"
 
-#: virtManager/addhardware.py:1012
+#: virtManager/addhardware.py:997 virtManager/addhardware.py:1012
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1016 virtManager/details/details.py:2094
+#: virtManager/addhardware.py:1001 virtManager/addhardware.py:1016
+#: virtManager/details/details.py:2092 virtManager/details/details.py:2094
 #, python-format
 msgid "%s Device"
 msgstr "%s சாதனம்"
 
-#: virtManager/addhardware.py:1020
+#: virtManager/addhardware.py:1005 virtManager/addhardware.py:1020
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s சாதனம்"
 
-#: virtManager/addhardware.py:1022
+#: virtManager/addhardware.py:1007 virtManager/addhardware.py:1022
 #, fuzzy
 #| msgid "%s Device"
 msgid "MDEV Device"
 msgstr "%s சாதனம்"
 
-#: virtManager/addhardware.py:1023
+#: virtManager/addhardware.py:1008 virtManager/addhardware.py:1023
 #, fuzzy
 msgid "USB Device"
 msgstr "%s சாதனம்"
 
-#: virtManager/addhardware.py:1146
+#: virtManager/addhardware.py:1131 virtManager/addhardware.py:1146
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2576,11 +2608,11 @@ msgstr ""
 "ஒன்றுக்கு மேற்பட்ட USB கன்ட்ரோலர்களைச் சேர்க்க ஆதரவில்லை.\n"
 "VM விவரங்கள் திரையில் USB கன்ட்ரோலர் வகையை மாற்றலாம்."
 
-#: virtManager/addhardware.py:1238
+#: virtManager/addhardware.py:1223 virtManager/addhardware.py:1238
 msgid "Are you sure you want to add this device?"
 msgstr "இந்த சாதனத்தை சேர்க்க நீங்கள் விரும்புகிறீர்களா?"
 
-#: virtManager/addhardware.py:1241
+#: virtManager/addhardware.py:1226 virtManager/addhardware.py:1241
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2588,34 +2620,34 @@ msgstr ""
 "இந்த சாதனத்தை இயங்கும் கணினியில் இணைக்க முடியாது. விருந்திநர் அடுத்த முறை அணைக்கும் "
 "போது சாதனம் கிடைக்கும் படி செய்ய விரும்புகிறீர்களா?"
 
-#: virtManager/addhardware.py:1265
+#: virtManager/addhardware.py:1250 virtManager/addhardware.py:1265
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "சாதனத்தை சேர்க்க முடியவில்லை: %s"
 
-#: virtManager/addhardware.py:1286
+#: virtManager/addhardware.py:1271 virtManager/addhardware.py:1286
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1292
+#: virtManager/addhardware.py:1277 virtManager/addhardware.py:1292
 msgid "Creating device"
 msgstr "சாதனத்தை "
 
-#: virtManager/addhardware.py:1293
+#: virtManager/addhardware.py:1278 virtManager/addhardware.py:1293
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "சாதனத்தைப் பொறுத்து, இது நிறைவடைய சில நிமிடங்கள் ஆகலாம்."
 
-#: virtManager/addhardware.py:1315
+#: virtManager/addhardware.py:1300 virtManager/addhardware.py:1315
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1317
+#: virtManager/addhardware.py:1302 virtManager/addhardware.py:1317
 msgid "Do you really want to use the device?"
 msgstr ""
 
-#: virtManager/addhardware.py:1362
+#: virtManager/addhardware.py:1347 virtManager/addhardware.py:1362
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
@@ -3175,6 +3207,12 @@ msgstr "நிறுவலைத் தொடர்வதில் பிழை:
 msgid "Bootstraping container"
 msgstr ""
 
+#: virtManager/createvm.py:2093
+#, fuzzy
+#| msgid "Application container"
+msgid "Bootstrapping container"
+msgstr "பயன்பாடு கன்டெய்னர்"
+
 #: virtManager/createvol.py:140
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
@@ -3398,19 +3436,19 @@ msgstr ""
 msgid "Graphical console not configured for guest"
 msgstr "விருந்தினருக்காக வரைகலை பணிமுனை கட்டமைக்கப்படவில்லை"
 
-#: virtManager/details/console.py:619
+#: virtManager/details/console.py:547 virtManager/details/console.py:619
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:621
+#: virtManager/details/console.py:549 virtManager/details/console.py:621
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:739
+#: virtManager/details/console.py:666 virtManager/details/console.py:739
 msgid "Connecting to graphical console for guest"
 msgstr "விருந்தினருக்கான வரைகலைப் பணிமுனையை இணைக்கிறது"
 
-#: virtManager/details/console.py:762
+#: virtManager/details/console.py:689 virtManager/details/console.py:762
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3418,33 +3456,33 @@ msgid ""
 "%s"
 msgstr "வரைபொருள் பணிமுனையுடன் இணைப்பதில் பிழை"
 
-#: virtManager/details/console.py:819
+#: virtManager/details/console.py:743 virtManager/details/console.py:819
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: virtManager/details/console.py:841
+#: virtManager/details/console.py:765 virtManager/details/console.py:841
 msgid "USB redirection error"
 msgstr "USB திருப்பிவிடல் பிழை"
 
-#: virtManager/details/console.py:850
+#: virtManager/details/console.py:774 virtManager/details/console.py:850
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:857
+#: virtManager/details/console.py:781 virtManager/details/console.py:857
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:870
+#: virtManager/details/console.py:794 virtManager/details/console.py:870
 msgid "Viewer is disconnecting."
 msgstr ""
 
-#: virtManager/details/console.py:1009
+#: virtManager/details/console.py:940 virtManager/details/console.py:1009
 msgid "Viewer window closed."
 msgstr ""
 
-#: virtManager/details/console.py:1013
+#: virtManager/details/console.py:944 virtManager/details/console.py:1013
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "சுட்டியை விடுவிக்க %s ஐ அழுத்தவும்."
@@ -3701,7 +3739,8 @@ msgstr "சரியான இயக்கம்"
 msgid "Relative Movement"
 msgstr "தொடர்பான இயக்கம்"
 
-#: virtManager/details/details.py:2029 virtManager/details/details.py:2197
+#: virtManager/details/details.py:2029 virtManager/details/details.py:2195
+#: virtManager/details/details.py:2197 virtManager/details/details.py:2198
 #: virtManager/details/details.py:2200
 msgid "Hypervisor does not support removing this device"
 msgstr ""
@@ -3711,106 +3750,109 @@ msgstr ""
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s சேவையகம்"
 
-#: virtManager/details/details.py:2086
+#: virtManager/details/details.py:2084 virtManager/details/details.py:2086
 msgid "Serial Device"
 msgstr "தொடர் சாதனம்"
 
-#: virtManager/details/details.py:2088
+#: virtManager/details/details.py:2086 virtManager/details/details.py:2088
 msgid "Parallel Device"
 msgstr "இணை சாதனம்"
 
-#: virtManager/details/details.py:2090
+#: virtManager/details/details.py:2088 virtManager/details/details.py:2090
 msgid "Console Device"
 msgstr "பணிமுனை சாதனம்"
 
-#: virtManager/details/details.py:2092
+#: virtManager/details/details.py:2090 virtManager/details/details.py:2092
 msgid "Channel Device"
 msgstr "சேனல் சாதனம்"
 
-#: virtManager/details/details.py:2102
+#: virtManager/details/details.py:2100 virtManager/details/details.py:2102
 msgid "Primary Console"
 msgstr "முதன்மை பணிமுனை"
 
-#: virtManager/details/details.py:2138 virtManager/preferences.py:123
+#: virtManager/details/details.py:2136 virtManager/details/details.py:2138
+#: virtManager/preferences.py:123
 msgid "Off"
 msgstr "ஆஃப்"
 
-#: virtManager/details/details.py:2138 virtManager/preferences.py:124
+#: virtManager/details/details.py:2136 virtManager/details/details.py:2138
+#: virtManager/preferences.py:124
 msgid "On"
 msgstr "ஆன்"
 
-#: virtManager/details/details.py:2164
+#: virtManager/details/details.py:2162 virtManager/details/details.py:2164
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: virtManager/details/details.py:2181
+#: virtManager/details/details.py:2179 virtManager/details/details.py:2181
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2207
+#: virtManager/details/details.py:2205 virtManager/details/details.py:2207
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr ""
 
-#: virtManager/details/details.py:2213 virtManager/details/details.py:2223
+#: virtManager/details/details.py:2211 virtManager/details/details.py:2213
+#: virtManager/details/details.py:2221 virtManager/details/details.py:2223
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2313
+#: virtManager/details/details.py:2311 virtManager/details/details.py:2313
 msgid "Hard Disk"
 msgstr ""
 
-#: virtManager/details/details.py:2314
+#: virtManager/details/details.py:2312 virtManager/details/details.py:2314
 msgid "CDROM"
 msgstr ""
 
-#: virtManager/details/details.py:2315
+#: virtManager/details/details.py:2313 virtManager/details/details.py:2315
 msgid "Network (PXE)"
 msgstr ""
 
-#: virtManager/details/details.py:2330
+#: virtManager/details/details.py:2328 virtManager/details/details.py:2330
 msgid "No bootable devices"
 msgstr "பூட் செய்யத்தக்க சாதனங்கள் இல்லை"
 
-#: virtManager/details/details.py:2377
+#: virtManager/details/details.py:2375 virtManager/details/details.py:2377
 msgid "Overview"
 msgstr "கண்ணோட்டம்"
 
-#: virtManager/details/details.py:2378
+#: virtManager/details/details.py:2376 virtManager/details/details.py:2378
 msgid "OS information"
 msgstr "OS தகவல்"
 
-#: virtManager/details/details.py:2380
+#: virtManager/details/details.py:2378 virtManager/details/details.py:2380
 msgid "Performance"
 msgstr ""
 
-#: virtManager/details/details.py:2382
+#: virtManager/details/details.py:2380 virtManager/details/details.py:2382
 msgid "CPUs"
 msgstr ""
 
-#: virtManager/details/details.py:2384
+#: virtManager/details/details.py:2382 virtManager/details/details.py:2384
 msgid "Boot Options"
+msgstr ""
+
+#: virtManager/details/serialcon.py:183 virtManager/details/serialcon.py:185
+#, python-format
+msgid "Console for device type '%s' is not supported"
 msgstr ""
 
 #: virtManager/details/serialcon.py:183
 msgid "Serial console not available for inactive guest"
 msgstr "செயலிலா விருந்தினருக்கு இப்போது தொடர் பணிமுனை வசதி இல்லை"
 
-#: virtManager/details/serialcon.py:185
-#, python-format
-msgid "Console for device type '%s' is not supported"
-msgstr ""
-
-#: virtManager/details/serialcon.py:251
+#: virtManager/details/serialcon.py:249 virtManager/details/serialcon.py:251
 msgid "_Copy"
 msgstr ""
 
-#: virtManager/details/serialcon.py:255
+#: virtManager/details/serialcon.py:253 virtManager/details/serialcon.py:255
 msgid "_Paste"
 msgstr ""
 
-#: virtManager/details/serialcon.py:348
+#: virtManager/details/serialcon.py:346 virtManager/details/serialcon.py:348
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "உரை பணிமுனையை இணைப்பதில் பிழை: %s"
@@ -3819,77 +3861,78 @@ msgstr "உரை பணிமுனையை இணைப்பதில் ப
 msgid "external snapshots not supported with this libvirt connection"
 msgstr ""
 
-#: virtManager/details/snapshots.py:284
+#: virtManager/details/snapshots.py:275 virtManager/details/snapshots.py:284
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr "ஸ்னாப்ஷாட்டை உருவாக்கும் போது ஒரு பிழை ஏற்பட்டது: %s"
 
-#: virtManager/details/snapshots.py:306
+#: virtManager/details/snapshots.py:297 virtManager/details/snapshots.py:306
 msgid "Snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:309
+#: virtManager/details/snapshots.py:300 virtManager/details/snapshots.py:309
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr "ஸ்னாப்ஷாட்டை மதிப்பிடும்போது பிழை ஏற்பட்டது: %s"
 
-#: virtManager/details/snapshots.py:362 virtManager/lib/libvirtenummap.py:113
+#: virtManager/details/snapshots.py:340 virtManager/details/snapshots.py:362
+#: virtManager/lib/libvirtenummap.py:113
 msgid "Creating snapshot"
 msgstr "ஸ்னாப்ஷாட்டை உருவாக்குகிறது"
 
-#: virtManager/details/snapshots.py:363
+#: virtManager/details/snapshots.py:341 virtManager/details/snapshots.py:363
 msgid "Creating virtual machine snapshot"
 msgstr "மெய்நிகர் கணினி ஸ்னாப்ஷாட்டை உருவாக்குகிறது"
 
-#: virtManager/details/snapshots.py:483
+#: virtManager/details/snapshots.py:461 virtManager/details/snapshots.py:483
 msgid "_Start snapshot"
 msgstr "ஸ்னாப்ஷாட்டைத் தொடங்கு (_S)"
 
-#: virtManager/details/snapshots.py:488
+#: virtManager/details/snapshots.py:466 virtManager/details/snapshots.py:488
 msgid "_Delete snapshot"
 msgstr "ஸ்னாப்ஷாட்டை அழி (_D)"
 
-#: virtManager/details/snapshots.py:541
+#: virtManager/details/snapshots.py:519 virtManager/details/snapshots.py:541
 #, python-format
 msgid "Error refreshing snapshot list: %s"
 msgstr "ஸ்னாப்ஷாட் பட்டியலைப் புதுப்பிப்பதில் பிழை: %s"
 
-#: virtManager/details/snapshots.py:554
+#: virtManager/details/snapshots.py:532 virtManager/details/snapshots.py:554
 #, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s (External)</span>"
 msgstr ""
 
-#: virtManager/details/snapshots.py:559
+#: virtManager/details/snapshots.py:537 virtManager/details/snapshots.py:559
 #, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s</span>"
 msgstr ""
 
-#: virtManager/details/snapshots.py:621
+#: virtManager/details/snapshots.py:599 virtManager/details/snapshots.py:621
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
 msgstr ""
 
-#: virtManager/details/snapshots.py:641
+#: virtManager/details/snapshots.py:619 virtManager/details/snapshots.py:641
 msgid "External disk and memory"
 msgstr "வெளி வட்டு மற்றும் நினைவகம்"
 
-#: virtManager/details/snapshots.py:643
+#: virtManager/details/snapshots.py:621 virtManager/details/snapshots.py:643
 msgid "External memory only"
 msgstr "வெளி நினைவகம் மட்டும்"
 
-#: virtManager/details/snapshots.py:645
+#: virtManager/details/snapshots.py:623 virtManager/details/snapshots.py:645
 msgid "External disk only"
 msgstr "வெளி வட்டு மட்டும்"
 
-#: virtManager/details/snapshots.py:736
+#: virtManager/details/snapshots.py:714 virtManager/details/snapshots.py:736
 msgid "Saved memory state will not be part of the snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:737
+#: virtManager/details/snapshots.py:715 virtManager/details/snapshots.py:737
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -3897,7 +3940,7 @@ msgid ""
 "snapshot either the running or shut down system instead."
 msgstr ""
 
-#: virtManager/details/snapshots.py:758
+#: virtManager/details/snapshots.py:736 virtManager/details/snapshots.py:758
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
@@ -3909,7 +3952,7 @@ msgstr ""
 "ஸ்னாப்ஷாட் '%s' ஐ இயக்க வேண்டுமா? கடந்த ஸ்னாப்ஷாட்டிலிருந்து உருவாக்கப்பட்ட %s மாற்றங்கள் "
 "அனைத்தும் இழக்கப்படும்."
 
-#: virtManager/details/snapshots.py:762
+#: virtManager/details/snapshots.py:740 virtManager/details/snapshots.py:762
 #, fuzzy, python-format
 #| msgid ""
 #| "Are you sure you want to run snapshot '%s'? All %s changes since the last "
@@ -3921,11 +3964,11 @@ msgstr ""
 "ஸ்னாப்ஷாட் '%s' ஐ இயக்க வேண்டுமா? கடந்த ஸ்னாப்ஷாட்டிலிருந்து உருவாக்கப்பட்ட %s மாற்றங்கள் "
 "அனைத்தும் இழக்கப்படும்."
 
-#: virtManager/details/snapshots.py:773
+#: virtManager/details/snapshots.py:751 virtManager/details/snapshots.py:773
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 
-#: virtManager/details/snapshots.py:774
+#: virtManager/details/snapshots.py:752 virtManager/details/snapshots.py:774
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -3935,47 +3978,47 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 
-#: virtManager/details/snapshots.py:788
+#: virtManager/details/snapshots.py:766 virtManager/details/snapshots.py:788
 msgid "Running snapshot"
 msgstr "ஸ்னாப்ஷாட்டை இயக்குகிறது"
 
-#: virtManager/details/snapshots.py:789
+#: virtManager/details/snapshots.py:767 virtManager/details/snapshots.py:789
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "ஸ்னாப்ஷாட் '%s' ஐ இயக்குகிறது"
 
-#: virtManager/details/snapshots.py:790
+#: virtManager/details/snapshots.py:768 virtManager/details/snapshots.py:790
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "ஸ்னாப்ஷாட்டை இயக்குவதில் பிழை: '%s'"
 
-#: virtManager/details/snapshots.py:799
+#: virtManager/details/snapshots.py:777 virtManager/details/snapshots.py:799
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "தேர்ந்தெடுத்த ஸ்னாப்ஷாட்டுகளை நிரந்தரமாக அழிக்க வேண்டுமா?"
 
-#: virtManager/details/snapshots.py:807
+#: virtManager/details/snapshots.py:785 virtManager/details/snapshots.py:807
 msgid "Deleting snapshot"
 msgstr "ஸ்னாப்ஷாட்டை அழிக்கிறது"
 
-#: virtManager/details/snapshots.py:808
+#: virtManager/details/snapshots.py:786 virtManager/details/snapshots.py:808
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "ஸ்னாப்ஷாட் '%s' ஐ அழிக்கிறது"
 
-#: virtManager/details/snapshots.py:809
+#: virtManager/details/snapshots.py:787 virtManager/details/snapshots.py:809
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "ஸ்னாப்ஷாட் '%s' ஐ அழிக்கும் போது ஒரு பிழை ஏற்பட்டது"
 
-#: virtManager/details/snapshots.py:817
+#: virtManager/details/snapshots.py:795 virtManager/details/snapshots.py:817
 msgid "No snapshot selected."
 msgstr "ஸ்னாப்ஷாட் எதுவும் தேர்ந்தெடுக்கப்படவில்லை."
 
-#: virtManager/details/snapshots.py:820
+#: virtManager/details/snapshots.py:798 virtManager/details/snapshots.py:820
 msgid "Multiple snapshots selected."
 msgstr "ஒன்றுக்கும் மேற்பட்ட ஸ்னாப்ஷாட்டுகள் தேர்ந்தெடுக்கப்பட்டுள்ளன."
 
-#: virtManager/details/snapshots.py:830
+#: virtManager/details/snapshots.py:808 virtManager/details/snapshots.py:830
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "ஸ்னாப்ஷாட்டைத் தேர்ந்தெடுப்பதில் பிழை: %s"
@@ -3990,7 +4033,7 @@ msgstr ""
 msgid "Guest is configured for TLS only which does not work over SSH."
 msgstr ""
 
-#: virtManager/details/sshtunnels.py:74
+#: virtManager/details/sshtunnels.py:74 virtManager/details/sshtunnels.py:75
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
@@ -3998,23 +4041,23 @@ msgid ""
 "listen address."
 msgstr ""
 
-#: virtManager/details/viewers.py:356
+#: virtManager/details/viewers.py:356 virtManager/details/viewers.py:384
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
 
-#: virtManager/details/viewers.py:428
+#: virtManager/details/viewers.py:428 virtManager/details/viewers.py:438
 msgid "GTK-VNC viewer is too old"
 msgstr ""
 
-#: virtManager/details/viewers.py:582
+#: virtManager/details/viewers.py:582 virtManager/details/viewers.py:589
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
 
-#: virtManager/details/viewers.py:755
+#: virtManager/details/viewers.py:740 virtManager/details/viewers.py:755
 msgid "Guest agent is not available."
 msgstr "விருந்தினர் ஏஜன்ட் கிடைக்கவில்லை."
 
@@ -4717,15 +4760,15 @@ msgstr ""
 msgid "Error cancelling migrate job: %s"
 msgstr "நகர்த்தல் பணியை ரத்துசெய்வதில் பிழை: %s"
 
-#: virtManager/object/domain.py:452
+#: virtManager/object/domain.py:449 virtManager/object/domain.py:452
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
 
-#: virtManager/object/domain.py:455
+#: virtManager/object/domain.py:452 virtManager/object/domain.py:455
 msgid "Libvirt may not be new enough to support memfd."
 msgstr ""
 
-#: virtManager/object/domain.py:474
+#: virtManager/object/domain.py:471 virtManager/object/domain.py:474
 msgid "Libvirt connection does not support snapshots."
 msgstr "Libvirt இணைப்பு ஸ்னாப்ஷாட்டுகளை ஆதரிக்காது."
 
@@ -4745,16 +4788,16 @@ msgstr ""
 "ஸ்னாப்ஷாட்டுகளுக்கு, குறைந்தது ஒரு எழுதக்கூடிய qcow2 வட்டு படமேனும் விருந்தினருக்கு "
 "ஒதுக்கப்பட்டிருக்க வேண்டியது அவசியம்."
 
-#: virtManager/object/domain.py:527
+#: virtManager/object/domain.py:505 virtManager/object/domain.py:527
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "செயல்படா VM அமைவாக்கத்தில் குறிப்பிட்ட சாதனத்தைக் கண்டறிய முடியவில்லை: %s"
 
-#: virtManager/object/domain.py:1452
+#: virtManager/object/domain.py:1435 virtManager/object/domain.py:1452
 msgid "Saving domain to disk"
 msgstr "களத்தை வட்டில் சேமிக்கிறது"
 
-#: virtManager/object/domain.py:1504
+#: virtManager/object/domain.py:1487 virtManager/object/domain.py:1504
 msgid "Migrating domain"
 msgstr "களத்தை நகர்த்துகிறது"
 
@@ -4933,7 +4976,7 @@ msgstr "சேமிப்பக தொகுதியை தேர்ந்த�
 msgid "Cannot use local storage on remote connection."
 msgstr "தொலைவு இணைப்பில் உள்ளமை சேமிப்பகத்தை பயன்படுத்த முடியாது."
 
-#: virtManager/systray.py:119
+#: virtManager/systray.py:109 virtManager/systray.py:119
 msgid "_Show Virtual Machine Manager"
 msgstr "மெய்நிகர் கணினி நிர்வாகியைக் காண்பி (_S)"
 
@@ -5115,28 +5158,28 @@ msgstr ""
 msgid "Manage VM snapshots"
 msgstr "VM ஸ்னாப்ஷாட்டுகளை நிர்வகிக்கவும்"
 
-#: virtManager/vmwindow.py:511
+#: virtManager/vmwindow.py:509 virtManager/vmwindow.py:511
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "ஸ்னாப்ஷாட்டை எடுக்கையில் பிழை: %s"
 
-#: virtManager/vmwindow.py:519
+#: virtManager/vmwindow.py:517 virtManager/vmwindow.py:519
 msgid "Error initializing spice USB device widget"
 msgstr "ஸ்பைஸ் USB சாதன விட்ஜெட்டைத் துவக்குவதில் பிழை"
 
-#: virtManager/vmwindow.py:523
+#: virtManager/vmwindow.py:521 virtManager/vmwindow.py:523
 msgid "Select USB devices for redirection"
 msgstr "திருப்பிவிடலுக்கான USB சாதனங்களைத் தேர்ந்தெடுக்கவும்"
 
-#: virtManager/vmwindow.py:558
+#: virtManager/vmwindow.py:556 virtManager/vmwindow.py:558
 msgid "Save Virtual Machine Screenshot"
 msgstr "மெய்நிகர் கணினி திரைப்பிடிப்பை சேமிக்கவும்"
 
-#: virtManager/vmwindow.py:559
+#: virtManager/vmwindow.py:557 virtManager/vmwindow.py:559
 msgid "PNG files"
 msgstr ""
 
-#: virtManager/vmwindow.py:561
+#: virtManager/vmwindow.py:559 virtManager/vmwindow.py:561
 #, fuzzy
 #| msgid "Saved"
 msgid "_Save"
@@ -5155,7 +5198,7 @@ msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 
-#: virtinst/capabilities.py:297
+#: virtinst/capabilities.py:297 virtinst/capabilities.py:298
 #, fuzzy, python-format
 #| msgid ""
 #| "Host does not support domain type %(domain)s%(machine)s for "
@@ -5167,7 +5210,7 @@ msgstr ""
 "வழங்கியானது, மெய்நிகராக்க வகை '%(virttype)s' arch '%(arch)s' க்கு "
 "%(domain)s%(machine)s வகை டொமைனை ஆதரிக்காது"
 
-#: virtinst/capabilities.py:301
+#: virtinst/capabilities.py:301 virtinst/capabilities.py:302
 #, fuzzy, python-format
 #| msgid ""
 #| "Host does not support domain type %(domain)s%(machine)s for "
@@ -5178,19 +5221,19 @@ msgstr ""
 "வழங்கியானது, மெய்நிகராக்க வகை '%(virttype)s' arch '%(arch)s' க்கு "
 "%(domain)s%(machine)s வகை டொமைனை ஆதரிக்காது"
 
-#: virtinst/capabilities.py:305
+#: virtinst/capabilities.py:305 virtinst/capabilities.py:306
 #, fuzzy, python-format
 #| msgid "Host does not support %(virttype)s %(arch)s"
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "வழங்கி %(virttype)s %(arch)s ஐ ஆதரிக்கவில்லை"
 
-#: virtinst/capabilities.py:309
+#: virtinst/capabilities.py:309 virtinst/capabilities.py:310
 #, fuzzy
 #| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
 msgstr "ஏதேனும் மெய்நிகராக்க விருப்பங்கள்"
 
-#: virtinst/capabilities.py:315
+#: virtinst/capabilities.py:315 virtinst/capabilities.py:316
 #, fuzzy, python-format
 #| msgid ""
 #| "Host does not support domain type %(domain)s%(machine)s for "
@@ -5202,7 +5245,7 @@ msgstr ""
 "வழங்கியானது, மெய்நிகராக்க வகை '%(virttype)s' arch '%(arch)s' க்கு "
 "%(domain)s%(machine)s வகை டொமைனை ஆதரிக்காது"
 
-#: virtinst/capabilities.py:321
+#: virtinst/capabilities.py:321 virtinst/capabilities.py:322
 #, fuzzy, python-format
 #| msgid ""
 #| "Host does not support domain type %(domain)s%(machine)s for "
@@ -5655,7 +5698,7 @@ msgid ""
 "Use '--osinfo list' to see a full list."
 msgstr ""
 
-#: virtinst/cli.py:951
+#: virtinst/cli.py:951 virtinst/cli.py:952
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5663,29 +5706,30 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:981
+#: virtinst/cli.py:981 virtinst/cli.py:982
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s 'ஆம்' அல்லது 'இல்லை' என்று மட்டுமே இருக்க வேண்டும்"
 
-#: virtinst/cli.py:1166
+#: virtinst/cli.py:1166 virtinst/cli.py:1167
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: virtinst/cli.py:1494
+#: virtinst/cli.py:1494 virtinst/cli.py:1499
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1550 virtinst/cli.py:1581
+#: virtinst/cli.py:1550 virtinst/cli.py:1555 virtinst/cli.py:1581
+#: virtinst/cli.py:1586
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1933
+#: virtinst/cli.py:1933 virtinst/cli.py:1993
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5693,50 +5737,50 @@ msgstr ""
 "வரைவியல் கன்சோலுக்கு இணைக்க முடியவில்லை: virt-viewer நிறுவப்படவில்லை. 'virt-viewer' "
 "தொகுப்பை நிறுவவும்."
 
-#: virtinst/cli.py:1940
+#: virtinst/cli.py:1940 virtinst/cli.py:2000
 msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgstr ""
 
-#: virtinst/cli.py:1951
+#: virtinst/cli.py:1951 virtinst/cli.py:2011
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:2341
+#: virtinst/cli.py:2341 virtinst/cli.py:2401
 msgid "CPU model=host is deprecated, use model=host-model"
 msgstr ""
 
-#: virtinst/cli.py:3528
+#: virtinst/cli.py:3528 virtinst/cli.py:3600
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "'size' க்கு தவறான மதிப்பு: %s"
 
-#: virtinst/cli.py:3541
+#: virtinst/cli.py:3541 virtinst/cli.py:3613
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "தெரியாத '%s' மதிப்பு '%s'"
 
-#: virtinst/cli.py:3556
+#: virtinst/cli.py:3556 virtinst/cli.py:3628
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "சேமிப்பக பிரிவகம் vol=poolname/volname ஆகவே குறிப்பிடப்பட வேண்டும்"
 
-#: virtinst/cli.py:4016
+#: virtinst/cli.py:4016 virtinst/cli.py:4136
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:4737
+#: virtinst/cli.py:4737 virtinst/cli.py:4859
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s ஆனது பல கனு சாதனங்களுக்கு உரியதாக உள்ளது"
 
-#: virtinst/cli.py:4740
+#: virtinst/cli.py:4740 virtinst/cli.py:4862
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' க்கான ஒரு பொருத்தமான கனு சாதனத்தைக் கண்டறிய முடியவில்லை"
 
-#: virtinst/cli.py:4877
+#: virtinst/cli.py:4877 virtinst/cli.py:5005
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5831,17 +5875,17 @@ msgstr ""
 msgid "Format attribute not supported for this volume type"
 msgstr "இந்த தொகுதி வகைக்கு வடிவமை பண்புக்கூறு ஆதரிக்கப்படாது"
 
-#: virtinst/devices/disk.py:838
+#: virtinst/devices/disk.py:838 virtinst/devices/disk.py:839
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "சாதன வகை '%s' க்க்கு பாதை அவசியம்"
 
-#: virtinst/devices/disk.py:846
+#: virtinst/devices/disk.py:846 virtinst/devices/disk.py:847
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr "இல்லாத பாதை '%s' க்கான சேமிப்பக உருவாக்க அளவுருக்களைக் குறிப்பிட வேண்டும்."
 
-#: virtinst/devices/disk.py:959
+#: virtinst/devices/disk.py:959 virtinst/devices/disk.py:960
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5866,12 +5910,12 @@ msgstr ""
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "--%s க்கு --update எப்படி செய்வதென்று தெரியவில்லை"
 
-#: virtinst/devices/hostdev.py:88
+#: virtinst/devices/hostdev.py:88 virtinst/devices/interface.py:347
 #, python-format
 msgid "Unsupported node device type '%s'"
 msgstr ""
 
-#: virtinst/devices/interface.py:189
+#: virtinst/devices/interface.py:189 virtinst/devices/interface.py:220
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr ""
@@ -5929,29 +5973,33 @@ msgid ""
 "count %(vcpus)d"
 msgstr ""
 
-#: virtinst/domain/launch_security.py:23
+#: virtinst/domain/launch_security.py:23 virtinst/domain/launch_security.py:29
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr ""
 
-#: virtinst/domcapabilities.py:207
+#: virtinst/domain/launch_security.py:43
+msgid "SEV-SNP launch security requires a Q35 UEFI machine"
+msgstr ""
+
+#: virtinst/domcapabilities.py:207 virtinst/domcapabilities.py:208
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:324
+#: virtinst/domcapabilities.py:324 virtinst/domcapabilities.py:333
 msgid "BIOS"
 msgstr ""
 
-#: virtinst/domcapabilities.py:325
+#: virtinst/domcapabilities.py:325 virtinst/domcapabilities.py:334
 msgid "Default"
 msgstr "முன்னிருப்பு"
 
-#: virtinst/domcapabilities.py:330
+#: virtinst/domcapabilities.py:330 virtinst/domcapabilities.py:339
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:333
+#: virtinst/domcapabilities.py:333 virtinst/domcapabilities.py:342
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
@@ -5965,16 +6013,16 @@ msgstr "விருந்தினர்"
 msgid "Guest name '%s' is already in use."
 msgstr "விருந்தினர் பெயர் '%s' ஏற்கனவே பயனில் உள்ளது."
 
-#: virtinst/guest.py:858
+#: virtinst/guest.py:858 virtinst/guest.py:1025
 msgid "Libvirt version does not support UEFI."
 msgstr ""
 
-#: virtinst/guest.py:862
+#: virtinst/guest.py:862 virtinst/guest.py:1029
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:867
+#: virtinst/guest.py:867 virtinst/guest.py:1034
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
@@ -5990,11 +6038,11 @@ msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
 
-#: virtinst/install/installer.py:656
+#: virtinst/install/installer.py:653 virtinst/install/installer.py:656
 msgid "Creating domain..."
 msgstr "டொமைனை உருவாக்குகிறது..."
 
-#: virtinst/install/installer.py:663
+#: virtinst/install/installer.py:660 virtinst/install/installer.py:663
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr ""
 
@@ -6010,6 +6058,12 @@ msgstr ""
 #: virtinst/install/installertreemedia.py:119
 msgid "location kernel/initrd must be be specified as a pair"
 msgstr ""
+
+#: virtinst/install/installertreemedia.py:119
+#, fuzzy
+#| msgid "An init path must be specified"
+msgid "location kernel/initrd must be specified as a pair"
+msgstr "init பாதை குறிப்பிடப்பட வேண்டும்"
 
 #: virtinst/install/installertreemedia.py:142
 #, python-format
@@ -6243,6 +6297,7 @@ msgstr ""
 "வெளியேயானதாகும். இவ்வகை மாற்றங்களுக்கு virt-sysprep(1) ஐப் பார்க்கவும்."
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1030
+#: virtinst/virtinstall.py:1034
 msgid "General Options"
 msgstr "பொது விருப்பங்கள்"
 
@@ -6320,7 +6375,7 @@ msgstr ""
 "உருவாக்கப்பட்ட MAC முகவரியே முன்னிருப்பாக இருக்கும்"
 
 #: virtinst/virtclone.py:120 virtinst/virtinstall.py:1135
-#: virtinst/virtxml.py:426
+#: virtinst/virtinstall.py:1139 virtinst/virtxml.py:426 virtinst/virtxml.py:512
 msgid "Miscellaneous Options"
 msgstr "இதர விருப்பங்கள்"
 
@@ -6342,6 +6397,7 @@ msgid "Clone '%s' created successfully."
 msgstr "குளோன் '%s' வெற்றிகரமாக உருவாக்கப்பட்டது."
 
 #: virtinst/virtclone.py:207 virtinst/virtinstall.py:1246
+#: virtinst/virtinstall.py:1250
 msgid "Installation aborted at user request"
 msgstr "பயனரின் கோரிக்கையின் பேரில் நிறுவல் கைவிடப்பட்டது"
 
@@ -6439,44 +6495,53 @@ msgstr ""
 msgid "Using {osname} --location {url}"
 msgstr ""
 
-#: virtinst/virtinstall.py:476
+#: virtinst/virtinstall.py:472 virtinst/virtinstall.py:476
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr ""
 
-#: virtinst/virtinstall.py:488
+#: virtinst/virtinstall.py:484 virtinst/virtinstall.py:488
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:507
+#: virtinst/virtinstall.py:503 virtinst/virtinstall.py:507
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:518
+#: virtinst/virtinstall.py:514 virtinst/virtinstall.py:518
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 
-#: virtinst/virtinstall.py:564
+#: virtinst/virtinstall.py:564 virtinst/virtinstall.py:571
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "நிறுவல் இடத்தை மதிப்பீடு செய்வதில் பிழை: %s"
 
-#: virtinst/virtinstall.py:567
+#: virtinst/virtinstall.py:564
+#, python-brace-format
+msgid ""
+"Failed to detect osinfo OS name from install media, using fallback name "
+"'{name}'.\n"
+"Please file a bug against virt-install if you expected the detection to "
+"succeed."
+msgstr ""
+
+#: virtinst/virtinstall.py:567 virtinst/virtinstall.py:574
 msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
 
-#: virtinst/virtinstall.py:581
+#: virtinst/virtinstall.py:581 virtinst/virtinstall.py:586
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:585
+#: virtinst/virtinstall.py:585 virtinst/virtinstall.py:590
 msgid ""
 "If you expected virt-install to detect an OS name from the\n"
 "install media, you can set a fallback OS name with:\n"
@@ -6484,21 +6549,21 @@ msgid ""
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:594
+#: virtinst/virtinstall.py:594 virtinst/virtinstall.py:599
 msgid ""
 "You can see a full list of possible OS name values with:\n"
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:601
+#: virtinst/virtinstall.py:601 virtinst/virtinstall.py:606
 #, python-brace-format
 msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:608
+#: virtinst/virtinstall.py:608 virtinst/virtinstall.py:613
 #, python-brace-format
 msgid ""
 "If you just need to get the old behavior back, you can use:\n"
@@ -6508,22 +6573,22 @@ msgid ""
 "Or export {env_var}=1\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:618
+#: virtinst/virtinstall.py:618 virtinst/virtinstall.py:623
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
 msgstr ""
 
-#: virtinst/virtinstall.py:706
+#: virtinst/virtinstall.py:706 virtinst/virtinstall.py:708
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
 
-#: virtinst/virtinstall.py:742
+#: virtinst/virtinstall.py:742 virtinst/virtinstall.py:744
 #, fuzzy
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting for the installation to complete."
 msgstr "நிறுவல் முடியக் காத்திருக்க வேண்டிய நிமிடங்கள்."
 
-#: virtinst/virtinstall.py:743
+#: virtinst/virtinstall.py:743 virtinst/virtinstall.py:745
 #, fuzzy, python-format
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting %(minutes)d minute for the installation to complete."
@@ -6531,60 +6596,65 @@ msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "நிறுவல் முடியக் காத்திருக்க வேண்டிய நிமிடங்கள்."
 msgstr[1] "நிறுவல் முடியக் காத்திருக்க வேண்டிய நிமிடங்கள்."
 
-#: virtinst/virtinstall.py:766
+#: virtinst/virtinstall.py:766 virtinst/virtinstall.py:768
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:778
+#: virtinst/virtinstall.py:778 virtinst/virtinstall.py:780
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:805
+#: virtinst/virtinstall.py:805 virtinst/virtinstall.py:807
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/virtinstall.py:842
+#: virtinst/virtinstall.py:842 virtinst/virtinstall.py:844
 msgid "Domain has crashed."
 msgstr "டொமைன் செயலிழந்தது."
 
-#: virtinst/virtinstall.py:872
+#: virtinst/virtinstall.py:854
+#, python-format
+msgid "VM disappeared unexpectedly: %s"
+msgstr ""
+
+#: virtinst/virtinstall.py:872 virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:882
+#: virtinst/virtinstall.py:882 virtinst/virtinstall.py:886
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:893
+#: virtinst/virtinstall.py:893 virtinst/virtinstall.py:897
 msgid "Domain has shutdown. Continuing."
 msgstr "டொமைன் செயல் நிறுத்தப்பட்டது. தொடர்கிறது."
 
-#: virtinst/virtinstall.py:899
+#: virtinst/virtinstall.py:899 virtinst/virtinstall.py:903
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "நிறுவலானது குறிப்பிட்ட கால வரம்பை மீறிவிட்டது. பயன்பாட்டிலிருந்து வெளியேறுகிறது."
 
-#: virtinst/virtinstall.py:922
+#: virtinst/virtinstall.py:922 virtinst/virtinstall.py:926
 msgid "Domain creation completed."
 msgstr ""
 
-#: virtinst/virtinstall.py:931
+#: virtinst/virtinstall.py:931 virtinst/virtinstall.py:935
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
 "  %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:936
+#: virtinst/virtinstall.py:936 virtinst/virtinstall.py:940
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 
-#: virtinst/virtinstall.py:939
+#: virtinst/virtinstall.py:939 virtinst/virtinstall.py:943
 msgid "Restarting guest."
 msgstr ""
 
-#: virtinst/virtinstall.py:956
+#: virtinst/virtinstall.py:956 virtinst/virtinstall.py:960
 msgid ""
 "\n"
 "Starting install..."
@@ -6592,138 +6662,138 @@ msgstr ""
 "\n"
 "நிறுவலைத் தொடங்குகிறது..."
 
-#: virtinst/virtinstall.py:979
+#: virtinst/virtinstall.py:979 virtinst/virtinstall.py:983
 msgid "Domain install interrupted."
 msgstr "டொமைன் நிறுவல் தடைபட்டது."
 
-#: virtinst/virtinstall.py:998
+#: virtinst/virtinstall.py:998 virtinst/virtinstall.py:1002
 msgid "Dry run completed successfully"
 msgstr "ட்ரை இயக்கம் வெற்றிகரமாக முடிந்தது"
 
-#: virtinst/virtinstall.py:1002
+#: virtinst/virtinstall.py:1002 virtinst/virtinstall.py:1006
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 
-#: virtinst/virtinstall.py:1009
+#: virtinst/virtinstall.py:1009 virtinst/virtinstall.py:1013
 msgid "Requested installation does not have XML step 2"
 msgstr "கோரப்பட்ட நிறுவலில் XML step 2 இல்லை"
 
-#: virtinst/virtinstall.py:1026
+#: virtinst/virtinstall.py:1026 virtinst/virtinstall.py:1030
 msgid "Create a new virtual machine from specified install media."
 msgstr "குறிப்பிட்ட நிறுவல் ஊடகத்திலிருந்து ஒரு புதிய மெய்நிகர் கணினியை உருவாக்கவும்."
 
-#: virtinst/virtinstall.py:1032
+#: virtinst/virtinstall.py:1032 virtinst/virtinstall.py:1036
 msgid "Name of the guest instance"
 msgstr "விருந்தினர் நேர்வின் பெயர்"
 
-#: virtinst/virtinstall.py:1040
+#: virtinst/virtinstall.py:1040 virtinst/virtinstall.py:1044
 msgid "Installation Method Options"
 msgstr "நிறுவல் முறை விருப்பங்கள்"
 
-#: virtinst/virtinstall.py:1042
+#: virtinst/virtinstall.py:1042 virtinst/virtinstall.py:1046
 msgid "CD-ROM installation media"
 msgstr "CD-ROM நிறுவல் ஊடகம்"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1044 virtinst/virtinstall.py:1048
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
 
-#: virtinst/virtinstall.py:1047
+#: virtinst/virtinstall.py:1047 virtinst/virtinstall.py:1051
 msgid "Boot from the network using the PXE protocol"
 msgstr "PXE நெறிமுறையைப் பயன்படுத்தி பிணையத்திலிருந்து தொடங்கு"
 
-#: virtinst/virtinstall.py:1049
+#: virtinst/virtinstall.py:1049 virtinst/virtinstall.py:1053
 msgid "Build guest around an existing disk image"
 msgstr "முன்பே உள்ள ஒரு வட்டு பிம்பத்தைக் கொண்டு விருந்தினரை உருவாக்கு"
 
-#: virtinst/virtinstall.py:1052
+#: virtinst/virtinstall.py:1052 virtinst/virtinstall.py:1056
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "--location இலிருந்து தொடங்கப்பட்ட நிறுவல் கெர்னலுக்கு வழங்கக்கூடிய கூடுதல் மதிப்புருக்கள்"
 
-#: virtinst/virtinstall.py:1055
+#: virtinst/virtinstall.py:1055 virtinst/virtinstall.py:1059
 msgid "Add given file to root of initrd from --location"
 msgstr "கொடுக்கப்பட்ட கோப்பை --location இலிருந்து initrd இன் ரூட்டில் சேர்க்கவும்"
 
-#: virtinst/virtinstall.py:1057
+#: virtinst/virtinstall.py:1057 virtinst/virtinstall.py:1061
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:1059
+#: virtinst/virtinstall.py:1059 virtinst/virtinstall.py:1063
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:1061
+#: virtinst/virtinstall.py:1061 virtinst/virtinstall.py:1065
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:1064
+#: virtinst/virtinstall.py:1064 virtinst/virtinstall.py:1068
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:1078
+#: virtinst/virtinstall.py:1078 virtinst/virtinstall.py:1082
 msgid "Device Options"
 msgstr "சாதன விருப்பங்கள்"
 
-#: virtinst/virtinstall.py:1108
+#: virtinst/virtinstall.py:1108 virtinst/virtinstall.py:1112
 msgid "Guest Configuration Options"
 msgstr ""
 
-#: virtinst/virtinstall.py:1112
+#: virtinst/virtinstall.py:1112 virtinst/virtinstall.py:1116
 msgid "Virtualization Platform Options"
 msgstr "மெய்நிகராக்க இயங்குதள விருப்பங்கள்"
 
-#: virtinst/virtinstall.py:1116
+#: virtinst/virtinstall.py:1116 virtinst/virtinstall.py:1120
 msgid "This guest should be a fully virtualized guest"
 msgstr "இந்த விருந்தினர் முழுவதும் மெய்நிகராக்கப்பட்ட விருந்தினராக இருக்க வேண்டும்"
 
-#: virtinst/virtinstall.py:1119
+#: virtinst/virtinstall.py:1119 virtinst/virtinstall.py:1123
 msgid "This guest should be a paravirtualized guest"
 msgstr "விருந்தினர் இணைமெய்நிகராக்கப்பட்ட விருந்தினராக இருக்க வேண்டும்"
 
-#: virtinst/virtinstall.py:1122
+#: virtinst/virtinstall.py:1122 virtinst/virtinstall.py:1126
 msgid "This guest should be a container guest"
 msgstr "இந்த விருந்தினர் கன்டெய்னர் விருந்தினராக இருக்க வேண்டும்"
 
-#: virtinst/virtinstall.py:1124
+#: virtinst/virtinstall.py:1124 virtinst/virtinstall.py:1128
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "பயன்படுத்த வேண்டிய ஹைப்பர்வைசர் பெயர் (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1125
+#: virtinst/virtinstall.py:1125 virtinst/virtinstall.py:1129
 msgid "The CPU architecture to simulate"
 msgstr "நிகருருவாக்கப்பட வேண்டிய CPU கட்டமைப்பு"
 
-#: virtinst/virtinstall.py:1126
+#: virtinst/virtinstall.py:1126 virtinst/virtinstall.py:1130
 msgid "The machine type to emulate"
 msgstr "நிகராக்கம் செய்யப்பட வேண்டிய கணினி வகை"
 
-#: virtinst/virtinstall.py:1137
+#: virtinst/virtinstall.py:1137 virtinst/virtinstall.py:1141
 msgid "Have domain autostart on host boot up."
 msgstr "வழங்கி தொடக்கத்தின் போது டொமைன் தானாக தொடங்கச் செய்."
 
-#: virtinst/virtinstall.py:1139
+#: virtinst/virtinstall.py:1139 virtinst/virtinstall.py:1143
 msgid "Create a transient domain."
 msgstr ""
 
-#: virtinst/virtinstall.py:1141
+#: virtinst/virtinstall.py:1141 virtinst/virtinstall.py:1145
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:1144
+#: virtinst/virtinstall.py:1144 virtinst/virtinstall.py:1148
 msgid "Minutes to wait for install to complete."
 msgstr "நிறுவல் முடியக் காத்திருக்க வேண்டிய நிமிடங்கள்."
 
-#: virtinst/virtxml.py:35
+#: virtinst/virtxml.py:34 virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "'yes' அல்லது 'no' என உள்ளிடவும்."
 
-#: virtinst/virtxml.py:80
+#: virtinst/virtxml.py:80 virtinst/virtxml.py:198
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "செல்லுபடியாகாத --edit விருப்பம் '%s'"
@@ -6744,26 +6814,62 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: virtinst/virtxml.py:107
+#: virtinst/virtxml.py:102 virtinst/virtxml.py:157
+msgid "--os-variant/--osinfo is not supported with --edit"
+msgstr ""
+
+#: virtinst/virtxml.py:104 virtinst/virtxml.py:186
+msgid "--os-variant/--osinfo is not supported with --remove-device"
+msgstr ""
+
+#: virtinst/virtxml.py:106 virtinst/virtxml.py:209
+msgid "--os-variant/--osinfo is not supported with --build-xml"
+msgstr ""
+
+#: virtinst/virtxml.py:107 virtinst/virtxml.py:225
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:123
+#: virtinst/virtxml.py:109
+#, fuzzy, python-brace-format
+#| msgid "--build-xml not supported for --%s"
+msgid "--build-xml not supported for {cli_flag}"
+msgstr "--%s க்கு --build-xml ஆதரிக்கப்படாது"
+
+#: virtinst/virtxml.py:115
+#, fuzzy, python-brace-format
+#| msgid "Cannot use --remove-device with --%s"
+msgid "Cannot use --remove-device with {cli_flag}"
+msgstr "--%s உடன் --remove-device ஐப் பயன்படுத்த முடியாது"
+
+#: virtinst/virtxml.py:118
+#, fuzzy, python-brace-format
+#| msgid "Cannot use --add-device with --%s"
+msgid "Cannot use --add-device with {cli_flag}"
+msgstr "--%s உடன் --add-device ஐப் பயன்படுத்த முடியாது"
+
+#: virtinst/virtxml.py:122
+#, fuzzy, python-brace-format
+#| msgid "Don't know how to --update for --%s"
+msgid "Don't know how to --update for {cli_flag}"
+msgstr "--%s க்கு --update எப்படி செய்வதென்று தெரியவில்லை"
+
+#: virtinst/virtxml.py:123 virtinst/virtxml.py:136
 #, python-format
 msgid "One of %s must be specified."
 msgstr "%s இல் ஒன்றைக் குறிப்பிட வேண்டும்."
 
-#: virtinst/virtxml.py:126
+#: virtinst/virtxml.py:126 virtinst/virtxml.py:139
 #, python-format
 msgid "Conflicting options %s"
 msgstr "முரண்படும் விருப்பங்கள் %s"
 
-#: virtinst/virtxml.py:137
+#: virtinst/virtxml.py:137 virtinst/virtxml.py:154
 msgid "No change specified."
 msgstr "மாற்றம் எதுவும் குறிப்பிடப்படவில்லை."
 
-#: virtinst/virtxml.py:139
+#: virtinst/virtxml.py:139 virtinst/virtxml.py:156
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr "ஒரு மாற்ற செயல்பாட்டை மட்டுமே குறிப்பிட முடியும் (முரண்படும் விருப்பங்கள் %s)"
@@ -6777,10 +6883,6 @@ msgid ""
 msgstr ""
 "'--edit %s' கட்டளை --%s உடன் எந்த பலனையும் தராது, '--edit' ஐ மட்டும் பயன்படுத்தவும்"
 
-#: virtinst/virtxml.py:157
-msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr ""
-
 #: virtinst/virtxml.py:167
 #, python-format
 msgid "Cannot use --add-device with --%s"
@@ -6791,46 +6893,64 @@ msgstr "--%s உடன் --add-device ஐப் பயன்படுத்த 
 msgid "Cannot use --remove-device with --%s"
 msgstr "--%s உடன் --remove-device ஐப் பயன்படுத்த முடியாது"
 
-#: virtinst/virtxml.py:186
-msgid "--os-variant/--osinfo is not supported with --remove-device"
+#: virtinst/virtxml.py:201
+#, python-brace-format
+msgid "No {cli_flag} objects found in the XML"
 msgstr ""
+
+#: virtinst/virtxml.py:204
+#, python-brace-format
+msgid ""
+"'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
+"the XML"
+msgid_plural ""
+"'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
+"in the XML"
+msgstr[0] ""
+msgstr[1] ""
 
 #: virtinst/virtxml.py:206
 #, python-format
 msgid "--build-xml not supported for --%s"
 msgstr "--%s க்கு --build-xml ஆதரிக்கப்படாது"
 
-#: virtinst/virtxml.py:209
-msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr ""
-
-#: virtinst/virtxml.py:228
+#: virtinst/virtxml.py:228 virtinst/virtxml.py:318
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "மாற்றப்பட்ட XML கொண்டு '%s' ஐ வரையறுக்கவா?"
 
-#: virtinst/virtxml.py:236
+#: virtinst/virtxml.py:236 virtinst/virtxml.py:326
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "டொமைன் '%s' வெற்றிகரமாக வரையறுக்கப்பட்டது."
 
-#: virtinst/virtxml.py:243
+#: virtinst/virtxml.py:242
+#, fuzzy, python-brace-format
+#| msgid "'--edit %s' doesn't make sense with --%s, just use empty '--edit'"
+msgid ""
+"'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
+msgstr ""
+"'--edit %s' கட்டளை --%s உடன் எந்த பலனையும் தராது, '--edit' ஐ மட்டும் பயன்படுத்தவும்"
+
+#: virtinst/virtxml.py:243 virtinst/virtxml.py:333
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:253 virtinst/virtxml.py:547
+#: virtinst/virtxml.py:253 virtinst/virtxml.py:343 virtinst/virtxml.py:547
+#: virtinst/virtxml.py:619
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "களத்தைத் துவக்குவதில் பிழை"
 
-#: virtinst/virtxml.py:258 virtinst/virtxml.py:551
+#: virtinst/virtxml.py:258 virtinst/virtxml.py:348 virtinst/virtxml.py:551
+#: virtinst/virtxml.py:623
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:264
+#: virtinst/virtxml.py:264 virtinst/virtxml.py:354
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6838,19 +6958,19 @@ msgid ""
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:266
+#: virtinst/virtxml.py:266 virtinst/virtxml.py:356
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotplug successful."
 msgstr "சாதனம் %s வெற்றி."
 
-#: virtinst/virtxml.py:267
+#: virtinst/virtxml.py:267 virtinst/virtxml.py:357
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "சாதனம் %s ஐ முயற்சிப்பதில் பிழை: %s"
 
-#: virtinst/virtxml.py:269
+#: virtinst/virtxml.py:269 virtinst/virtxml.py:359
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6858,19 +6978,19 @@ msgid ""
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:271
+#: virtinst/virtxml.py:271 virtinst/virtxml.py:361
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotunplug successful."
 msgstr "சாதனம் %s வெற்றி."
 
-#: virtinst/virtxml.py:272
+#: virtinst/virtxml.py:272 virtinst/virtxml.py:362
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "சாதனம் %s ஐ முயற்சிப்பதில் பிழை: %s"
 
-#: virtinst/virtxml.py:274
+#: virtinst/virtxml.py:274 virtinst/virtxml.py:364
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6878,13 +6998,13 @@ msgid ""
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:276
+#: virtinst/virtxml.py:276 virtinst/virtxml.py:366
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device update successful."
 msgstr "சாதனம் %s வெற்றி."
 
-#: virtinst/virtxml.py:277
+#: virtinst/virtxml.py:277 virtinst/virtxml.py:367
 #, fuzzy, python-format
 #| msgid "Error attempting device %s: %s"
 msgid "Error attempting device update: %(error)s"
@@ -6894,23 +7014,23 @@ msgstr "சாதனம் %s ஐ முயற்சிப்பதில் ப
 msgid "--xml can only be used with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:344
+#: virtinst/virtxml.py:344 virtinst/virtxml.py:418
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:363
+#: virtinst/virtxml.py:363 virtinst/virtxml.py:437
 msgid "Edit libvirt XML using command line options."
 msgstr "கட்டளைவரி விருப்பங்களைக் கொண்டு libvirt XML ஐத் திருத்தவும்."
 
-#: virtinst/virtxml.py:369
+#: virtinst/virtxml.py:369 virtinst/virtxml.py:443
 msgid "Domain name, id, or uuid"
 msgstr "டொமைன் பெயர், id அல்லது uuid"
 
-#: virtinst/virtxml.py:371
+#: virtinst/virtxml.py:371 virtinst/virtxml.py:445
 msgid "XML actions"
 msgstr "XML செயல்கள்"
 
-#: virtinst/virtxml.py:373
+#: virtinst/virtxml.py:373 virtinst/virtxml.py:447
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6924,7 +7044,7 @@ msgstr ""
 "--edit all --disk ... (அனைத்து வட்டு சாதனங்களையும் திருத்தவும்)\n"
 "--edit target=hda --disk ... (வட்டு 'hda' ஐத் திருத்தவும்)\n"
 
-#: virtinst/virtxml.py:379
+#: virtinst/virtxml.py:379 virtinst/virtxml.py:453
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6936,7 +7056,7 @@ msgstr ""
 "--remove-device --disk all (அனைத்து வட்டுகளையும் அகற்றவும்)\n"
 "--remove-device --disk /some/path"
 
-#: virtinst/virtxml.py:384
+#: virtinst/virtxml.py:384 virtinst/virtxml.py:458
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -6944,17 +7064,17 @@ msgstr ""
 "குறிப்பிட்ட சாதனத்தைச் சேர்க்கவும். எடுத்துக்காட்டு:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:387
+#: virtinst/virtxml.py:387 virtinst/virtxml.py:461
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:390
+#: virtinst/virtxml.py:390 virtinst/virtxml.py:464
 msgid "Output options"
 msgstr "வெளியீடு விருப்பங்கள்"
 
-#: virtinst/virtxml.py:392
+#: virtinst/virtxml.py:392 virtinst/virtxml.py:466
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6966,69 +7086,85 @@ msgstr ""
 "With --remove-device, இது ஒரு ஹாட்-அன்-ப்ளக் செயல்பாடு.\n"
 "With --edit, இது ஒரு சாதனப் புதுப்பிப்பு செயல்பாடு."
 
-#: virtinst/virtxml.py:398
+#: virtinst/virtxml.py:398 virtinst/virtxml.py:472
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "டொமைனை வரையறுத்தல் நிர்ப்பந்திக்கவும். --print விருப்பம் குறிப்பிடப்பட்டிருந்தால் மட்டுமே "
 "தேவைப்படும்."
 
-#: virtinst/virtxml.py:401
+#: virtinst/virtxml.py:401 virtinst/virtxml.py:475
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:404
+#: virtinst/virtxml.py:404 virtinst/virtxml.py:478
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:406
+#: virtinst/virtxml.py:406 virtinst/virtxml.py:480
 msgid "Only print the requested change, in diff format"
 msgstr "கோரிய மாற்றத்தை மட்டும் diff வடிவமைப்பில் அச்சிடவும்"
 
-#: virtinst/virtxml.py:408
+#: virtinst/virtxml.py:408 virtinst/virtxml.py:482
 msgid "Only print the requested change, in full XML format"
 msgstr "கோரிய மாற்றத்தை மட்டும் XML வடிவமைப்பில் அச்சிடவும்"
 
-#: virtinst/virtxml.py:410
+#: virtinst/virtxml.py:410 virtinst/virtxml.py:484
 msgid "Require confirmation before saving any results."
 msgstr "முடிவுகளை சேமிக்கும் முன்பு உறுதிப்படுத்தல் செய்தி வேண்டும்"
 
-#: virtinst/virtxml.py:414
+#: virtinst/virtxml.py:414 virtinst/virtxml.py:500
 msgid "XML options"
 msgstr "XML விருப்பங்கள்"
 
-#: virtinst/virtxml.py:456
+#: virtinst/virtxml.py:456 virtinst/virtxml.py:542
 msgid "Can't use --confirm with stdin input."
 msgstr "stdin உள்ளீட்டுடன் --confirm ஐப் பயன்படுத்த முடியாது."
 
-#: virtinst/virtxml.py:458
+#: virtinst/virtxml.py:458 virtinst/virtxml.py:544
 msgid "Can't use --update with stdin input."
 msgstr "stdin உள்ளீட்டுடன் --update ஐப் பயன்படுத்த முடியாது."
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:461 virtinst/virtxml.py:547
 msgid "A domain must be specified"
 msgstr "ஒரு டொமைன் குறிப்பிடப்பட வேண்டும்"
+
+#: virtinst/virtxml.py:488
+#, fuzzy
+#| msgid "Conflicting options %s"
+msgid "Conversion options"
+msgstr "முரண்படும் விருப்பங்கள் %s"
 
 #: virtinst/virtxml.py:489
 #, python-format
 msgid "Don't know how to --update for --%s"
 msgstr "--%s க்கு --update எப்படி செய்வதென்று தெரியவில்லை"
 
-#: virtinst/virtxml.py:523
+#: virtinst/virtxml.py:492
+msgid "Convert an existing VM from PC/i440FX to Q35."
+msgstr ""
+
+#: virtinst/virtxml.py:497
+msgid ""
+"Convert an existing VM to use VNC graphics. This removes any remnants of "
+"Spice graphics."
+msgstr ""
+
+#: virtinst/virtxml.py:523 virtinst/virtxml.py:595
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:556
+#: virtinst/virtxml.py:556 virtinst/virtxml.py:628
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:558
+#: virtinst/virtxml.py:558 virtinst/virtxml.py:630
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:571
+#: virtinst/virtxml.py:571 virtinst/virtxml.py:643
 msgid "Aborted at user request"
 msgstr "பயனரின் கோரிக்கையின் பேரில் கைவிடப்பட்டது"
 
