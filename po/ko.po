@@ -17,16 +17,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-13 08:09+0100\n"
-"PO-Revision-Date: 2024-08-17 12:38+0000\n"
+"PO-Revision-Date: 2024-11-15 14:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
-"Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ko/>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138 virtManager/systray.py:148
@@ -378,8 +378,6 @@ msgid "_Connect to console"
 msgstr "콘솔 연결"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
 msgstr "_연결"
 
@@ -3160,8 +3158,6 @@ msgid "Bootstraping container"
 msgstr "부트스트래핑 컨테이너"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "부트스트래핑 컨테이너"
 
@@ -5940,10 +5936,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV 실행 보안은 Q35 UEFI 장비에 필요합니다"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "SEV 실행 보안은 Q35 UEFI 장비에 필요합니다"
+msgstr "SEV-SNP 실행 보안은 Q35 UEFI 장비에 필요합니다"
 
 #: virtinst/domcapabilities.py:207 virtinst/domcapabilities.py:208
 #, python-format
@@ -6025,10 +6019,8 @@ msgid "location kernel/initrd must be be specified as a pair"
 msgstr "kernel/initrd 경로는 쌍으로 지정되어야만 합니다"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
-msgstr "kernel/initrd 경로는 쌍으로 지정되어야만 합니다"
+msgstr "위치 kernel/initrd 는 쌍으로 지정되어야만 합니다"
 
 #: virtinst/install/installertreemedia.py:142
 #, python-format
@@ -6502,6 +6494,9 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"대체 이름 '{name}' 을 사용한 설치 미디어에서 osinfo OS 이름을 탐지하는 데 "
+"실패했습니다.\n"
+"만약 탐지가 성공적으로 예상되면 virt-install에 결점을 제출해주세요."
 
 #: virtinst/virtinstall.py:567 virtinst/virtinstall.py:574
 msgid ""
@@ -6607,7 +6602,7 @@ msgstr "도메인이 충돌합니다."
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "VM이 예상치 못하게 사라졌습니다: %s"
 
 #: virtinst/virtinstall.py:872 virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
@@ -6827,28 +6822,24 @@ msgid "No matching objects found for %s"
 msgstr "%s를 일치하는 개체가 없음"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml은 --%s에 지원되지 않음"
+msgstr "--build-xml은 {cli_flag}에 지원되지 않음"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "--remove-device를 --%s과(와) 사용할 수 없음"
+msgstr "--remove-device를 {cli_flag} 와 함께 사용 할 수 없음"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "--add-device는 --%s과(와) 사용할 수 없음"
+msgstr "--add-device를 {cli_flag}와 함께 사용 할 수 없음"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "--%s의 --update 방법을 알 수 없습니다"
+msgstr "{cli_flag}용 --update 방법을 알 수 없습니다"
 
 #: virtinst/virtxml.py:123 virtinst/virtxml.py:136
 #, python-format
@@ -6889,27 +6880,19 @@ msgid "Cannot use --remove-device with --%s"
 msgstr "--remove-device를 --%s과(와) 사용할 수 없음"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "XML에서 --%s 개체를 찾을 수 없음"
+msgstr "XML에서 {cli_flag} 대상을 찾을 수 없음"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
 msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
-msgstr[0] ""
-"'--edit %(number)s'가 요청되었지만 XML에 %(max)s --%(type)s 개체만 있습니다"
+msgstr[0] "'--edit {number}'가 요청되었지만 XML에 {maxnum} {cli_flag} 대상만 있습니다"
 
 #: virtinst/virtxml.py:206
 #, python-format
@@ -6927,15 +6910,11 @@ msgid "Domain '%s' defined successfully."
 msgstr "'%s' 도메인이 성공적으로 정의되었습니다."
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
-msgstr ""
-"'--edit%(option)s''는 --%(objecttype)s과 함께 사용 할 수 없습니다. 빈 '--"
-"edit'만 사용하십시오"
+msgstr "'--edit{option}'는 {cli_flag}와 함께 사용하지 않으며, 빈 '--edit' 만 "
+"사용하세요"
 
 #: virtinst/virtxml.py:243 virtinst/virtxml.py:333
 #, python-format
@@ -7134,10 +7113,8 @@ msgid "A domain must be specified"
 msgstr "도메인을 지정해야 합니다"
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "충돌하는 옵션 %s"
+msgstr "변환 옵션"
 
 #: virtinst/virtxml.py:489
 #, python-format
@@ -7146,13 +7123,14 @@ msgstr "--%s의 --update 방법을 알 수 없습니다"
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "기존 VM을 PC/i440FX에서 Q35까지 변환합니다."
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
-msgstr ""
+msgstr "VNC 그래픽을 사용하도록 기존 VM을 전환합니다. 이는 Spice 그래픽의 잔여물을 "
+"제거합니다."
 
 #: virtinst/virtxml.py:523 virtinst/virtxml.py:595
 msgid "The VM is not running, --update is inapplicable."
