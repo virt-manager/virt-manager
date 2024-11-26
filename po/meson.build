@@ -29,6 +29,5 @@ i18n.gettext(
     '--msgid-bugs-address=https://github.com/virt-manager/virt-manager/issues',
     '--package-version=@0@'.format(meson.project_version()),
     '--sort-by-file',
-    '--join-existing',
   ],
 )
