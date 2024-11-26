@@ -1,5 +1,33 @@
 # Virtual Machine Manager News
 
+## Release 5.0.0 (November 26, 2024)
+- virt-clone: colne serial files (Oleg Vasilev)
+- virt-clone: Copy disk permissions as well (Martin Kletzander)
+- virt-install: Add properties for AMD SEV-SNP (Daniel P. Berrangé)
+- virt-install: Add passt backend for user network interface
+- virt-install: Add support for --sound multichannel,stream (Lin Ma)
+- virt-install: Add support for --tpm backend.debug,backend.source (Lin Ma)
+- virt-xml: add --edit --convert-to-q35
+- virt-xml: add --edit --convert-to-vnc
+- virt-xml: Add --edit --boot uefi
+- virt-manager: Fix opening graphical console with egl-headless (Feng Jiang)
+- virt-manager: Add support to create external snapshots
+- virt-manager: Default to scaling=Always for consoles
+- virt-manager: switch to not forking by default
+- cli: Add more --disk options (Lin Ma)
+- cli: Add --memdev target.address_base for virtio-mem and virtio-pmem (Lin Ma)
+- cli: Add --features kvm.pv-ipi.state=on|off (Lin Ma)
+- cli: Add --video model.blob=on|off (Lin Ma)
+- Add missing Hyper-V features and enable most of them by default
+- Add loongarch support (Xianglai Li)
+- Add support for hvf domain type (Mohamed Akram)
+- Support creating sparse volumes on ZFS pools (Iain Buclaw)
+- UEFI improvements for riscv64 and loongarch64 VMs (Andrea Bolognani)
+- Add graphcis to riscv64 and aarch64
+- build: swtich from setuptools to meson
+- diskbackend: Drop support for sheepdog (Lin Ma)
+- cli: Deprecate --cpu host in favor of --cpu host-model (Andrea Bolognani)
+
 ## Release 4.1.0 (August 04, 2022)
 - Fix build with setuptools-61 (Peter Alfredsen, Miro Hrončok)
 - add UI and cli support for qemu-vdagent channel (Jonathon Jongsma)
