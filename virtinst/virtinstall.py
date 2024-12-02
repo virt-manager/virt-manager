@@ -571,7 +571,7 @@ def installer_detect_distro(guest, installer, osdata):
         fail(_("Error validating install location: %s") % str(e))
 
     msg = _(
-        "--os-variant/--osinfo OS name is required, but no value was\n"
+        "--osinfo/--os-variant OS name is required, but no value was\n"
         "set or detected.")
     if os_set:
         return
@@ -650,7 +650,7 @@ def _build_options_guest(conn, options):
 
 def build_guest_instance(conn, options):
     installdata = cli.parse_install(options.install)
-    osdata = cli.parse_os_variant(options.os_variant or installdata.os)
+    osdata = cli.parse_osinfo(options.osinfo or installdata.os)
     options.boot_was_set = bool(options.boot)
 
     if options.reinstall:
@@ -1076,7 +1076,7 @@ def parse_args():
     cli.add_boot_options(insg)
     insg.add_argument("--init", help=argparse.SUPPRESS)
 
-    osg = cli.add_os_variant_option(parser, virtinstall=True)
+    osg = cli.add_osinfo_option(parser, virtinstall=True)
     osg.add_argument("--os-type", dest="old_os_type", help=argparse.SUPPRESS)
 
     devg = parser.add_argument_group(_("Device Options"))
@@ -1188,8 +1188,8 @@ def set_test_stub_options(options):  # pragma: no cover
         options.disk = "none"
     if not options.graphics:
         options.graphics = "none"
-    if not options.os_variant:
-        options.os_variant = "fedora27"
+    if not options.osinfo:
+        options.osinfo = "fedora27"
 
 
 def main(conn=None):

@@ -180,7 +180,7 @@ These options decide what action to take after altering the XML. In the common c
 GUEST OS OPTIONS
 ================
 
-``--os-variant``, ``--osinfo`` OS_VARIANT
+``--osinfo``, ``--os-variant`` OS_VARIANT
     Optimize the guest configuration for a specific operating system (ex.
     'fedora29', 'rhel7', 'win10'). While not required, specifying this
     options is HIGHLY RECOMMENDED, as it can greatly increase performance
@@ -194,7 +194,7 @@ GUEST OS OPTIONS
     Use the command ``virt-xml --osinfo list`` to get the list of the
     accepted OS variants. See ``osinfo-query os`` for even more output.
 
-    See virt-install(1) documentation for more details about ``--os-variant/--osinfo``
+    See virt-install(1) documentation for more details about ``--osinfo/--os-variant``
 
 
 CONVERSION OPTIONS

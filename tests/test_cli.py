@@ -1039,8 +1039,8 @@ c.add_compare("--connect %(URI-KVM-X86)s --install fedora26", "osinfo-url")  # g
 c.add_valid("--location https://foobar.com --os-variant detect=yes,name=win7", nogrep="Please file a bug against virt-install")  # os detection succeeds, the fallback warning shouldn't be printed
 c.add_valid("--pxe --os-variant detect=yes,name=win7", grep="Please file a bug against virt-install")  # os detection fails, so fallback warning should be printed
 c.add_valid("--cdrom http://example.com/path/to/some.iso --os-variant detect=yes,require=no", grep="Please file a bug against virt-install")  # detection fails with require=no, we should print the error about using fallback name=
-c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="--os-variant/--osinfo OS name is required")  # No os-variant detected, but require=yes
-c.add_invalid("--pxe --osinfo detect=yes", grep="--os-variant/--osinfo OS name is required")  # --osinfo detect=on failed, but with implied require=yes
+c.add_invalid("--pxe --os-variant detect=yes,require=yes", grep="--osinfo/--os-variant OS name is required")  # No os-variant detected, but require=yes
+c.add_invalid("--pxe --osinfo detect=yes", grep="--osinfo/--os-variant OS name is required")  # --osinfo detect=on failed, but with implied require=yes
 c.add_invalid("--pxe --virt-type foobar", grep="Host does not support domain type")
 c.add_invalid("--pxe --os-variant farrrrrrrge", grep="Unknown OS name")
 c.add_invalid("--pxe --boot menu=foobar", grep="menu must be 'yes' or 'no'")
@@ -1409,9 +1409,9 @@ c.add_valid("test-for-virtxml --edit --cpu host-passthrough --no-define --start 
 c.add_valid("test-for-virtxml --edit --metadata name=test-for-virtxml", grep="requested changes will have no effect")
 c.add_valid("--print-diff test-for-virtxml --remove-device --disk boot.order=5", grep="boot order=\"5")
 c.add_invalid("test --edit 2 --events on_poweroff=destroy", grep="'--edit 2' doesn't make sense with --events")
-c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--os-variant/--osinfo is not supported")
-c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--os-variant/--osinfo is not supported")
-c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--os-variant/--osinfo is not supported")
+c.add_invalid("test --os-variant fedora26 --edit --cpu host-passthrough", grep="--osinfo/--os-variant is not supported")
+c.add_invalid("test-for-virtxml --os-variant fedora26 --remove-device --disk 1", grep="--osinfo/--os-variant is not supported")
+c.add_invalid("--build-xml --os-variant fedora26 --disk path=foo", grep="--osinfo/--os-variant is not supported")
 c.add_invalid("domain-idontexist --edit --cpu host-passthrough --start", grep="Could not find domain")
 c.add_invalid("test-state-shutoff --edit --update --boot menu=on --start", grep="Cannot use --update")
 c.add_invalid("test --edit --update --events on_poweroff=destroy", grep="Don't know how to --update for --events")
