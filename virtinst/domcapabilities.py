@@ -115,6 +115,7 @@ class _Devices(_CapsBlock):
     filesystem = XMLChildProperty(_make_capsblock("filesystem"), is_single=True)
     redirdev = XMLChildProperty(_make_capsblock("redirdev"), is_single=True)
     channel = XMLChildProperty(_make_capsblock("channel"), is_single=True)
+    panic = XMLChildProperty(_make_capsblock("panic"), is_single=True)
 
 
 class _Features(_CapsBlock):
@@ -504,3 +505,9 @@ class DomainCapabilities(XMLBuilder):
             return []
 
         return self.features.hyperv.get_enum("features").get_values()
+
+    def supported_panic_models(self):
+        """
+        Return list of supported panic device models.
+        """
+        return self.devices.panic.get_enum("model").get_values()
