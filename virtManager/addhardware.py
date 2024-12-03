@@ -860,8 +860,13 @@ class vmmAddHardware(vmmGObjectUI):
 
 
     def _build_panic_model_combo(self):
+        guest = self.vm.get_xmlobj()
         values = [[None, _("Hypervisor default")]]
+        for m in guest.lookup_domcaps().supported_panic_models():
+            values.append([m, m])
+
         uiutil.build_simple_combo(self.widget("panic-model"), values)
+        uiutil.set_list_selection(self.widget("panic-model"), None)
 
 
     def _build_controller_type_combo(self):
