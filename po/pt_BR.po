@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-09-29 16:34+0000\n"
-"Last-Translator: Lucas Fernandes <lucas.af88@gmail.com>\n"
+"PO-Revision-Date: 2024-12-03 12:38+0000\n"
+"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.8.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -392,10 +392,8 @@ msgid "_Connect to console"
 msgstr "_Conectar-se ao console"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "_Conectar"
+msgstr "Conectar"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -2020,32 +2018,24 @@ msgid "_Description:"
 msgstr "_Descrição:"
 
 #: ui/snapshotsnew.ui:211
-#, fuzzy
-#| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
 msgstr "Snapshot _Mode:"
 
 #: ui/snapshotsnew.ui:226
-#, fuzzy
-#| msgid "External"
 msgid "_external"
-msgstr "Externo"
+msgstr "_externo"
 
 #: ui/snapshotsnew.ui:243
-#, fuzzy
-#| msgid "External"
 msgid "_internal"
-msgstr "Externo"
+msgstr "_interno"
 
 #: ui/snapshotsnew.ui:269
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "Estado da VM:"
+msgstr "Estado da _memória:"
 
 #: ui/snapshotsnew.ui:283
 msgid "_auto"
-msgstr ""
+msgstr "_automaticamente"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -3160,8 +3150,6 @@ msgid "Error continuing install: %s"
 msgstr "Erro ao continuar a instalação: %s"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Inicializando container"
 
@@ -3476,10 +3464,9 @@ msgid "Console %(num)d"
 msgstr "Console %(num)d"
 
 #: virtManager/details/details.py:213
-#, fuzzy, python-format
-#| msgid "Channel %(name)s"
+#, python-format
 msgid "Channel (%(name)s)"
-msgstr "Canal %(name)s"
+msgstr "Canal (%(name)s)"
 
 #: virtManager/details/details.py:214
 #, python-format
@@ -3796,7 +3783,7 @@ msgstr "Erro ao conectar ao console de texto: %s"
 
 #: virtManager/details/snapshots.py:122
 msgid "external snapshots not supported with this libvirt connection"
-msgstr ""
+msgstr "snapshots externos não suportados com esta conexão libvirt"
 
 #: virtManager/details/snapshots.py:275
 #, python-format
@@ -5113,10 +5100,8 @@ msgid "PNG files"
 msgstr "Arquivos PNG"
 
 #: virtManager/vmwindow.py:559
-#, fuzzy
-#| msgid "Saved"
 msgid "_Save"
-msgstr "Salvo"
+msgstr "_Salvar"
 
 #: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
 msgid "There are unapplied changes."
@@ -5737,7 +5722,7 @@ msgstr "Tipo de autoconsole desconhecido '%s'"
 
 #: virtinst/cli.py:2401
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr ""
+msgstr "O modelo de CPU=host está obsoleto, use o modelo=host-model"
 
 #: virtinst/cli.py:3605
 #, python-format
@@ -5965,10 +5950,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "Segurança SEV na inicialização precisa de uma máquina UEFI Q35"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "Segurança SEV na inicialização precisa de uma máquina UEFI Q35"
+msgstr "Segurança SEV-SNP na inicialização precisa de uma máquina UEFI Q35"
 
 #: virtinst/domcapabilities.py:208
 #, python-format
@@ -6050,8 +6033,6 @@ msgstr ""
 "de localização"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "localização do kernel/initrd precisa ser especificada como um par"
 
@@ -6536,6 +6517,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"Falha ao detectar o nome do sistema operacional da mídia de instalação, "
+"usando o nome alternativo '{name}'.\n"
+"Registre um bug para virt-install se você esperava que a detecção fosse bem-"
+"sucedida."
 
 #: virtinst/virtinstall.py:571
 #, python-format
@@ -6648,7 +6633,7 @@ msgstr "O domínio travou."
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "VM desapareceu inesperadamente: %s"
 
 #: virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
@@ -6854,28 +6839,24 @@ msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--os-variant/--osinfo não são compatíveis com --build-xml"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml não fornece suporte para --%s"
+msgstr "--build-xml não suportado para {cli_flag}"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "Não é possível usar --remove-device com --%s"
+msgstr "Não é possível usar --remove-device com {cli_flag}"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "Não é possível usar --add-device com --%s"
+msgstr "Não é possível usar --add-device com {cli_flag}"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "Não há conhecimento de como (atualizar) --update para --%s"
+msgstr "Não sei como --update para {cli_flag}"
 
 #: virtinst/virtxml.py:136
 #, python-format
@@ -6904,19 +6885,12 @@ msgid "Invalid --edit option '%s'"
 msgstr "Opção --edit inválida '%s'"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "Nenhum objeto --%s localizado no XML"
+msgstr "Nenhum objeto {cli_flag} encontrado no XML"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -6924,11 +6898,10 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"'--edit %(number)s' solicitado, mas existe somente %(max)s --%(type)s objeto "
-"no XML"
+"'--edit {number}' solicitado, mas há apenas {maxnum} objeto {cli_flag} no XML"
 msgstr[1] ""
-"'--edit %(number)s' solicitado, mas existem somente %(max)s --%(type)s "
-"objetos no XML"
+"'--edit {number}' solicitado, mas há apenas {maxnum} objetos {cli_flag} no "
+"XML"
 
 #: virtinst/virtxml.py:225
 #, python-format
@@ -6936,15 +6909,11 @@ msgid "No matching objects found for %s"
 msgstr "Nenhum objeto correspondente localizado para %s"
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
-"'--edit %(option)s' não faz sentido com --%(objecttype)s, apenas use '--"
-"edit' sem nada"
+"'--edit {option}' não faz sentido com {cli_flag}, basta usar '--edit' vazio"
 
 #: virtinst/virtxml.py:318
 #, python-format
@@ -7134,20 +7103,20 @@ msgid "Require confirmation before saving any results."
 msgstr "Exigir confirmação antes de salvar quaisquer resultados."
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "Opções %s em conflito"
+msgstr "Opções de conversão"
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Converter uma VM existente de PC/i440FX para Q35."
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Converter uma VM existente para usar gráficos VNC. Isso remove quaisquer "
+"resquícios de gráficos Spice."
 
 #: virtinst/virtxml.py:500
 msgid "XML options"
