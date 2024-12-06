@@ -1,6 +1,8 @@
 # -*- rpm-spec -*-
 
-%global default_hvs                "qemu,xen,lxc"
+%global default_hvs         "qemu,xen,lxc"
+%global have_spice          %{defined fedora}
+
 
 
 # End local config
@@ -22,7 +24,9 @@ Requires: python3-gobject >= 3.31.3
 Requires: gtk3 >= 3.22.0
 Requires: libvirt-glib >= 0.0.9
 Requires: gtk-vnc2
+%if %{have_spice}
 Requires: spice-gtk3
+%endif
 
 # virt-manager is one of those apps that people will often install onto
 # a headless machine for use over SSH. This means the virt-manager dep
@@ -108,8 +112,13 @@ machine).
 
 
 %build
+%if ! %{have_spice}
+%global _default_graphics -Ddefault-graphics=vnc
+%endif
+
 %meson \
     -Ddefault-hvs=%{default_hvs} \
+    %{?_default_graphics} \
     -Dupdate-icon-cache=false \
     -Dcompile-schemas=false \
     -Dtests=disabled
