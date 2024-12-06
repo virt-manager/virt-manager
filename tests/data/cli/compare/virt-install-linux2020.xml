@@ -19,7 +19,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-passthrough"/>
+  <cpu mode="maximum"/>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
@@ -102,7 +102,7 @@
     <apic/>
     <vmport state="off"/>
   </features>
-  <cpu mode="host-passthrough"/>
+  <cpu mode="maximum"/>
   <clock offset="utc">
     <timer name="rtc" tickpolicy="catchup"/>
     <timer name="pit" tickpolicy="delay"/>
