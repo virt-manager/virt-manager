@@ -267,12 +267,13 @@ class DomainCpu(XMLBuilder):
     SPECIAL_MODE_HOST_COPY = "host-copy"
     SPECIAL_MODE_HOST_MODEL = "host-model"
     SPECIAL_MODE_HOST_PASSTHROUGH = "host-passthrough"
+    SPECIAL_MODE_MAXIMUM = "maximum"
     SPECIAL_MODE_CLEAR = "clear"
     SPECIAL_MODE_APP_DEFAULT = "default"
     SPECIAL_MODES = [SPECIAL_MODE_HOST_MODEL_ONLY, SPECIAL_MODE_HV_DEFAULT,
                      SPECIAL_MODE_HOST_COPY, SPECIAL_MODE_HOST_MODEL,
-                     SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_CLEAR,
-                     SPECIAL_MODE_APP_DEFAULT]
+                     SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_MAXIMUM,
+                     SPECIAL_MODE_CLEAR, SPECIAL_MODE_APP_DEFAULT]
 
     def _get_app_default_mode(self, guest):
         # Depending on if libvirt+qemu is new enough, we prefer
@@ -295,7 +296,8 @@ class DomainCpu(XMLBuilder):
             log.debug("Using default cpu mode=%s", val)
 
         if (val == self.SPECIAL_MODE_HOST_MODEL or
-            val == self.SPECIAL_MODE_HOST_PASSTHROUGH):
+            val == self.SPECIAL_MODE_HOST_PASSTHROUGH or
+            val == self.SPECIAL_MODE_MAXIMUM):
             self.model = None
             self.vendor = None
             self.model_fallback = None
