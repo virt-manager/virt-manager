@@ -31,7 +31,12 @@ Requires: spice-gtk3
 # Unfortunately nothing in our chain has an explicit dep on some kind
 # of usable gsettings backend, so we explicitly depend on dconf so that
 # user settings actually persist across app runs.
+#
+# That said, we skip this dep for flatpak, where dconf isn't used in
+# the runtime. gsettings defaults to ini file in that case
+%if ! 0%{?flatpak}
 Requires: dconf
+%endif
 
 # The vte291 package is actually the latest vte with API version 2.91, while
 # the vte3 package is effectively a compat package with API version 2.90.
