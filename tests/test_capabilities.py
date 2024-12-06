@@ -101,6 +101,7 @@ def testDomainCapabilitiesx86():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
+    assert caps.supported_panic_models() == ["isa", "hyperv", "pvpanic"]
 
     xml = open(DATADIR + "/kvm-x86_64-domcaps-amd-sev.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
@@ -119,6 +120,7 @@ def testDomainCapabilitiesAArch64():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
+    assert caps.supported_panic_models() == ["pvpanic"]
 
 
 def testDomainCapabilitiesPPC64le():
@@ -137,6 +139,7 @@ def testDomainCapabilitiesPPC64le():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert not caps.supports_channel_spicevmc()
+    assert caps.supported_panic_models() == ["pseries", "pvpanic"]
 
 
 def testDomainCapabilitiesRISCV64():
@@ -167,6 +170,7 @@ def testDomainCapabilitiesRISCV64():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
+    assert caps.supported_panic_models() == ["pvpanic"]
 
 
 def testDomainCapabilitiesLoongArch64():
@@ -197,3 +201,4 @@ def testDomainCapabilitiesLoongArch64():
     assert caps.supports_memorybacking_memfd()
     assert caps.supports_redirdev_usb()
     assert caps.supports_channel_spicevmc()
+    assert caps.supported_panic_models() == ["pvpanic"]
