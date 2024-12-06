@@ -382,6 +382,10 @@ class DomainCapabilities(XMLBuilder):
         return (m and m.supported and
                 "on" in m.get_enum("hostPassthroughMigratable").get_values())
 
+    def supports_maximum_cpu_mode(self):
+        m = self.cpu.get_mode("maximum")
+        return (m and m.supported)
+
     def get_cpu_models(self):
         models = []
 
