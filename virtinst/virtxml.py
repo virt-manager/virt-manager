@@ -44,11 +44,11 @@ def get_diff(origxml, newxml):
     return diff
 
 
-def set_os_variant(guest, os_variant):
-    if os_variant is None:
+def set_osinfo(guest, osinfo):
+    if osinfo is None:
         return
 
-    osdata = cli.parse_os_variant(os_variant)
+    osdata = cli.parse_osinfo(osinfo)
     if osdata.get_name():
         guest.set_os_name(osdata.get_name())
 
@@ -97,13 +97,13 @@ class Action:
 
 
 def validate_action(action, conn, options):
-    if options.os_variant is not None:
+    if options.osinfo is not None:
         if action.is_edit:
-            fail(_("--os-variant/--osinfo is not supported with --edit"))
+            fail(_("--osinfo/--os-variant is not supported with --edit"))
         if action.is_remove_device:
-            fail(_("--os-variant/--osinfo is not supported with --remove-device"))
+            fail(_("--osinfo/--os-variant is not supported with --remove-device"))
         if action.is_build_xml:
-            fail(_("--os-variant/--osinfo is not supported with --build-xml"))
+            fail(_("--osinfo/--os-variant is not supported with --build-xml"))
 
     if not action.parserclass.guest_propname and action.is_build_xml:
         fail(_("--build-xml not supported for {cli_flag}").format(
@@ -251,11 +251,11 @@ def action_edit(action, guest):
     return devs
 
 
-def action_add_device(action, guest, os_variant, input_devs):
+def action_add_device(action, guest, osinfo, input_devs):
     parserclass = action.parserclass
     parservalue = action.parservalue
 
-    set_os_variant(guest, os_variant)
+    set_osinfo(guest, osinfo)
 
     if input_devs:
         for dev in input_devs:
@@ -294,7 +294,7 @@ def action_build_xml(action, guest):
 
 def perform_action(action, guest, options, input_devs):
     if action.is_add_device:
-        return action_add_device(action, guest, options.os_variant, input_devs)
+        return action_add_device(action, guest, options.osinfo, input_devs)
     if action.is_remove_device:
         return action_remove_device(action, guest)
     if action.is_edit:
@@ -483,7 +483,7 @@ def parse_args():
     outg.add_argument("--confirm", action="store_true",
         help=_("Require confirmation before saving any results."))
 
-    cli.add_os_variant_option(parser, virtinstall=False)
+    cli.add_osinfo_option(parser, virtinstall=False)
 
     conv = parser.add_argument_group(_("Conversion options"))
     cli.ParserConvertToQ35.register()

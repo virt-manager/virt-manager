@@ -1017,7 +1017,7 @@ GUEST OS OPTIONS
 ================
 
 
-``--os-variant``, ``--osinfo``
+``--osinfo``, ``--os-variant``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Syntax:** ``--osinfo`` [OSNAME|OPT1=VAL1,...]
@@ -1026,7 +1026,7 @@ Optimize the guest configuration for a specific operating system.
 For most cases, an OS must be specified or detected from the install
 media so performance critical features like virtio can be enabled.
 
-The simplest usage is ``--os-variant OSNAME`` or ``--osinfo OSNAME``,
+The simplest usage is ``--osinfo OSNAME`` or ``--os-variant OSNAME``,
 for example ``--osinfo fedora32``. The supported suboptions are:
 
 ``name=``, ``short-id=``
@@ -1071,7 +1071,7 @@ VIRTINSTALL_OSINFO_DISABLE_REQUIRE=1.
 Use the command ``virt-install --osinfo list`` to get the list of the
 accepted OS variants. See ``osinfo-query os`` for even more output.
 
-Note: ``--os-variant`` and ``--osinfo`` are aliases for one another.
+Note: ``--osinfo`` and ``--os-variant`` are aliases for one another.
 ``--osinfo`` is the preferred new style naming.
 
 

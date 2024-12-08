@@ -29,15 +29,15 @@ def _is_url(url):
 
 
 class _LocationData(object):
-    def __init__(self, os_variant, kernel_pairs, os_media, os_tree):
-        self.os_variant = os_variant
+    def __init__(self, osinfo, kernel_pairs, os_media, os_tree):
+        self.osinfo = osinfo
         self.kernel_pairs = kernel_pairs
         self.os_media = os_media
         self.os_tree = os_tree
 
         self.kernel_url_arg = None
-        if self.os_variant:
-            osobj = OSDB.lookup_os(self.os_variant)
+        if self.osinfo:
+            osobj = OSDB.lookup_os(self.osinfo)
             self.kernel_url_arg = osobj.get_kernel_url_arg()
 
 
@@ -171,7 +171,7 @@ class InstallerTreeMedia(object):
             return self._cached_data
 
         store = None
-        os_variant = None
+        osinfo = None
         os_media = None
         os_tree = None
         kernel_paths = []
@@ -187,14 +187,14 @@ class InstallerTreeMedia(object):
 
         if store:
             kernel_paths = store.get_kernel_paths()
-            os_variant = store.get_osdict_info()
+            osinfo = store.get_osdict_info()
             os_media = store.get_os_media()
             os_tree = store.get_os_tree()
         if has_location_kernel:
             kernel_paths = [
                     (self._location_kernel, self._location_initrd)]
 
-        self._cached_data = _LocationData(os_variant, kernel_paths,
+        self._cached_data = _LocationData(osinfo, kernel_paths,
                 os_media, os_tree)
         return self._cached_data
 
@@ -236,8 +236,8 @@ class InstallerTreeMedia(object):
             self._initrd_injections.append((scriptpath, expected_filename))
 
     def _prepare_kernel_url_arg(self, guest, cache):
-        os_variant = cache.os_variant or guest.osinfo.name
-        osobj = OSDB.lookup_os(os_variant)
+        osinfo = cache.osinfo or guest.osinfo.name
+        osobj = OSDB.lookup_os(osinfo)
         return osobj.get_kernel_url_arg()
 
     def _prepare_kernel_args(self, guest, cache, unattended_scripts):
@@ -304,7 +304,7 @@ class InstallerTreeMedia(object):
     def detect_distro(self, guest):
         fetcher = self._get_fetcher(guest, None)
         cache = self._get_cached_data(guest, fetcher)
-        return cache.os_variant
+        return cache.osinfo
 
     def get_os_media(self, guest, meter):
         fetcher = self._get_fetcher(guest, meter)
