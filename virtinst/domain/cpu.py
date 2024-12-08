@@ -267,17 +267,27 @@ class DomainCpu(XMLBuilder):
     SPECIAL_MODE_HOST_COPY = "host-copy"
     SPECIAL_MODE_HOST_MODEL = "host-model"
     SPECIAL_MODE_HOST_PASSTHROUGH = "host-passthrough"
+    SPECIAL_MODE_MAXIMUM = "maximum"
     SPECIAL_MODE_CLEAR = "clear"
     SPECIAL_MODE_APP_DEFAULT = "default"
     SPECIAL_MODES = [SPECIAL_MODE_HOST_MODEL_ONLY, SPECIAL_MODE_HV_DEFAULT,
                      SPECIAL_MODE_HOST_COPY, SPECIAL_MODE_HOST_MODEL,
-                     SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_CLEAR,
-                     SPECIAL_MODE_APP_DEFAULT]
+                     SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_MAXIMUM,
+                     SPECIAL_MODE_CLEAR, SPECIAL_MODE_APP_DEFAULT]
 
     def _get_app_default_mode(self, guest):
         # Depending on if libvirt+qemu is new enough, we prefer
         # host-passthrough, then host-model, and finally host-model-only
+        # Emulated guests use maximum mode if available
         domcaps = guest.lookup_domcaps()
+
+        if (domcaps.supports_maximum_cpu_mode() and
+            guest.type == "qemu" and
+            (guest.os.is_x86() or
+             guest.os.is_arm_machvirt() or
+             guest.os.is_riscv_virt() or
+             guest.os.is_loongarch64())):
+            return self.SPECIAL_MODE_MAXIMUM
 
         if domcaps.supports_safe_host_passthrough():
             return self.SPECIAL_MODE_HOST_PASSTHROUGH
@@ -295,7 +305,8 @@ class DomainCpu(XMLBuilder):
             log.debug("Using default cpu mode=%s", val)
 
         if (val == self.SPECIAL_MODE_HOST_MODEL or
-            val == self.SPECIAL_MODE_HOST_PASSTHROUGH):
+            val == self.SPECIAL_MODE_HOST_PASSTHROUGH or
+            val == self.SPECIAL_MODE_MAXIMUM):
             self.model = None
             self.vendor = None
             self.model_fallback = None
@@ -458,9 +469,17 @@ class DomainCpu(XMLBuilder):
         if guest.os.is_arm_machvirt() and guest.type == "kvm":
             self.mode = self.SPECIAL_MODE_HOST_PASSTHROUGH
 
-        elif guest.os.is_arm64() and guest.os.is_arm_machvirt():
-            # -M virt defaults to a 32bit CPU, even if using aarch64
-            self.set_model(guest, "cortex-a57")
-
         elif guest.os.is_x86() and guest.type == "kvm":
             self._set_cpu_x86_kvm_default(guest)
+
+        else:
+            domcaps = guest.lookup_domcaps()
+
+            # Prefer to emulate a feature-rich CPU instead of a basic one
+            if (domcaps.supports_maximum_cpu_mode() and
+                guest.type == "qemu" and
+                (guest.os.is_x86() or
+                 guest.os.is_arm_machvirt() or
+                 guest.os.is_riscv_virt() or
+                 guest.os.is_loongarch64())):
+                self.set_special_mode(guest, self.SPECIAL_MODE_MAXIMUM)

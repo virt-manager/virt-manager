@@ -438,6 +438,11 @@ Some examples:
 ``--cpu host-passthrough,cache.mode=passthrough``
     Example of passing through the host cpu's cache information.
 
+``--cpu maximum``
+    Expose the most feature-rich CPU possible. Useful when running a foreign
+    architecture guest, for example a riscv64 guest on an x86_64 host. Not
+    recommended when using KVM to run a same-architecture guest.
+
 Use --cpu=? to see a list of all available sub options.
 Complete details at https://libvirt.org/formatdomain.html#cpu-model-and-topology
 
