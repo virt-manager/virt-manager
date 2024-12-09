@@ -775,6 +775,8 @@ class vmmDetails(vmmGObjectUI):
             virtinst.DomainCpu.SPECIAL_MODE_HOST_MODEL, False])
         model.append(["host-passthrough", "05",
             virtinst.DomainCpu.SPECIAL_MODE_HOST_PASSTHROUGH, False])
+        model.append(["maximum", "06",
+            virtinst.DomainCpu.SPECIAL_MODE_MAXIMUM, False])
         model.append([None, None, None, True])
         for name in domcaps.get_cpu_models():
             model.append([name, name, name, False])
@@ -1915,7 +1917,8 @@ class vmmDetails(vmmGObjectUI):
         # CPU model config
         model = cpu.model or None
         is_host = (cpu.mode in ["host-model", "host-passthrough"])
-        if not model and is_host:
+        is_special_mode = (cpu.mode in virtinst.DomainCpu.SPECIAL_MODES)
+        if not model and is_special_mode:
             model = cpu.mode
 
         if model:

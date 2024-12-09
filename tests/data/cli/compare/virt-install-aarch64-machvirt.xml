@@ -18,9 +18,7 @@
   <features>
     <acpi/>
   </features>
-  <cpu mode="custom" match="exact">
-    <model>cortex-a57</model>
-  </cpu>
+  <cpu mode="maximum"/>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-aarch64</emulator>

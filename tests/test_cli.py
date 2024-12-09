@@ -1153,7 +1153,7 @@ c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
-c.add_compare("--osinfo linux2020 --pxe", "linux2020", prerun_check=no_osinfo_linux2020_virtio)
+c.add_compare("--osinfo linux2020 --pxe --cpu maximum", "linux2020", prerun_check=no_osinfo_linux2020_virtio) # also --cpu maximum
 c.add_compare("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s", "win11", prerun_check=no_osinfo_win11)
 c.add_compare("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s --boot uefi=off", "win11-no-uefi")
 c.add_compare("--osinfo generic --disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths
@@ -1247,7 +1247,7 @@ c.add_compare("--connect %(URI-KVM-ARMV7L)s --disk %(EXISTIMG1)s --import --os-v
 
 c.add_valid("--arch aarch64 --osinfo fedora19 --nodisks --pxe --connect " + utils.URIs.kvm_x86_nodomcaps, grep="Libvirt version does not support UEFI")  # attempt to default to aarch64 UEFI, but it fails, but should only print warnings
 c.add_invalid("--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86, grep="OS name is required")  # catch missing osinfo for non-x86
-c.add_compare("--arch aarch64 --osinfo fedora19 --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
+c.add_compare("--arch aarch64 --osinfo fedora19 --machine virt --cpu default --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machvirt")
 c.add_compare("--arch aarch64 --osinfo fedora19 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s", "aarch64-machdefault")
 c.add_compare("--arch aarch64 --cdrom %(ISO-F26-NETINST)s --boot loader=CODE.fd,nvram.template=VARS.fd --disk %(EXISTIMG1)s --cpu none --events on_crash=preserve,on_reboot=destroy,on_poweroff=restart", "aarch64-cdrom")  # cdrom test, but also --cpu none override, --events override, and headless
 c.add_compare("--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --import --os-variant fedora21 --panic default --graphics vnc", "aarch64-kvm-import")  # --import test, but also test --panic no-op, and --graphics
