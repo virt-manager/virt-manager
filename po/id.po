@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-11-24 16:38+0000\n"
+"PO-Revision-Date: 2024-11-28 15:38+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/id/>\n"
+"Language-Team: Indonesian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4046,7 +4046,7 @@ msgstr "Otomatis"
 #: virtManager/device/gfxdetails.py:218
 #, fuzzy, python-format
 msgid "A_uto (Port %(port)d)"
-msgstr "A_uto (Port% (port) d)"
+msgstr "A_uto (Port %(port)d)"
 
 #: virtManager/device/mediacombo.py:67
 msgid "No media selected"
@@ -5978,12 +5978,12 @@ msgid "Removing disk '%s'"
 msgstr "Menghapus disk '%s'"
 
 #: virtinst/install/installer.py:275
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
-"Mengganti memori ke% (number) s MiB diperlukan untuk% (osname) s instalasi "
-"jaringan."
+"Menimpa memori ke %(number)s MiB yang diperlukan untuk instalasi jaringan "
+"%(osname)s."
 
 #: virtinst/install/installer.py:653
 msgid "Creating domain..."
@@ -5994,10 +5994,9 @@ msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "Jenis domain 'vz' tidak mendukung instalasi transien."
 
 #: virtinst/install/installertreemedia.py:69
-#, fuzzy, python-format
-#| msgid "Error validating install location: %s"
+#, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
-msgstr "Gagal memvalidasi media instal '% (media) s':% (error) s"
+msgstr "Gagal memvalidasi media instal '%(media)s': %(error)s"
 
 #: virtinst/install/installertreemedia.py:116
 #, fuzzy
@@ -6031,11 +6030,10 @@ msgstr ""
 "dapat diakses jaringan."
 
 #: virtinst/install/unattended.py:63
-#, fuzzy, python-format
+#, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
 msgstr ""
-"% (osname) s tidak dapat menggunakan '% (loginname) s' sebagai login "
-"pengguna."
+"%(osname)s tidak bisa menggunakan '%(loginname)s' sebagai login pengguna."
 
 #: virtinst/install/unattended.py:74
 #, python-format
@@ -6118,9 +6116,9 @@ msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Membuka URL %(url)s gagal: %(error)s"
 
 #: virtinst/install/volumeupload.py:108
-#, fuzzy, python-format
+#, python-format
 msgid "Transferring '%(filename)s'"
-msgstr "Transferring"
+msgstr "Mentransfer '%(filename)s'"
 
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
@@ -6421,11 +6419,13 @@ msgid "--disk storage must be specified (override with --disk none)"
 msgstr "- penyimpanan disk harus ditentukan (timpa dengan --disk tidak ada)"
 
 #: virtinst/virtinstall.py:320
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "An install method must be specified\n"
 "(%(methods)s)"
-msgstr "Metode pemasangan harus ditentukan&#10; (% (metode) s)"
+msgstr ""
+"Metode pemasangan harus ditentukan\n"
+"(%(methods)s)"
 
 #: virtinst/virtinstall.py:332
 #, fuzzy
@@ -6444,13 +6444,13 @@ msgstr ""
 "Lihat halaman manual untuk contoh penggunaan --lokasi dengan media CDROM"
 
 #: virtinst/virtinstall.py:348
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
-"Memori yang diminta% (mem1) s MiB kurang dari yang disarankan% (mem2) s MiB "
-"untuk OS% (osname) s"
+"Memori yang diminta %(mem1)s MiB kurang dari yang disarankan %(mem2)s MiB "
+"untuk OS %(osname)s"
 
 #: virtinst/virtinstall.py:353
 #, fuzzy, python-format
@@ -6958,7 +6958,9 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
-"% (xml) s&#10;&#10; Hot cabut perangkat ini dari '% (domain) s' milik tamu?"
+"%(xml)s&\n"
+"\n"
+"Hotunplug perangkat ini dari '%(domain)s' milik guest?"
 
 #: virtinst/virtxml.py:361
 #, fuzzy
@@ -6969,7 +6971,7 @@ msgstr "Hotunplug perangkat berhasil."
 #, fuzzy, python-format
 #| msgid "Error validating install location: %s"
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Terjadi kesalahan saat mencoba cabut perangkat lunak:% (error) s"
+msgstr "Galat saat mencoba hotunplug perangkat: %(error)s"
 
 #: virtinst/virtxml.py:364
 #, python-format
