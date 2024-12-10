@@ -494,7 +494,7 @@ def fail_conflicting(option1, option2):
 def _get_completer_parsers():
     return VIRT_PARSERS + [ParserCheck, ParserLocation,
             ParserUnattended, ParserInstall, ParserCloudInit,
-            ParserOSVariant]
+            ParserOSInfo]
 
 
 def _virtparser_completer(prefix, **kwargs):
@@ -930,7 +930,7 @@ def add_disk_option(stog, editexample=False):
                "--disk=?") + editmsg)
 
 
-def add_os_variant_option(parser, virtinstall):
+def add_osinfo_option(parser, virtinstall):
     osg = parser.add_argument_group(_("OS options"))
 
     if virtinstall:
@@ -942,7 +942,7 @@ def add_os_variant_option(parser, virtinstall):
              "Example values: fedora29, rhel7.0, win10, ...\n"
              "Use '--osinfo list' to see a full list.")
 
-    osg.add_argument("--os-variant", "--osinfo", help=msg)
+    osg.add_argument("--osinfo", "--os-variant", help=msg)
     return osg
 
 
@@ -1880,11 +1880,11 @@ def parse_location(optstr):
     return parsedata.location, parsedata.kernel, parsedata.initrd
 
 
-########################
-# --os-variant parsing #
-########################
+####################
+# --osinfo parsing #
+####################
 
-class OSVariantData(object):
+class OSInfoData(object):
     _REQUIRE_ON = 1
     _REQUIRE_AUTO = 3
 
@@ -1936,8 +1936,8 @@ class OSVariantData(object):
         return self._name
 
 
-class ParserOSVariant(VirtCLIParser):
-    cli_arg_name = "os_variant"
+class ParserOSInfo(VirtCLIParser):
+    cli_arg_name = "osinfo"
     supports_clearxml = False
 
     @classmethod
@@ -1956,9 +1956,9 @@ class ParserOSVariant(VirtCLIParser):
         return super().parse(inst)
 
 
-def parse_os_variant(optstr):
-    data = OSVariantData()
-    parser = ParserOSVariant(optstr)
+def parse_osinfo(optstr):
+    data = OSInfoData()
+    parser = ParserOSInfo(optstr)
     parser.parse(data)
     data.validate()
     return data
@@ -5051,7 +5051,7 @@ def check_option_introspection(options):
 
 
 def check_osinfo_list(options):
-    if options.os_variant != "list":
+    if options.osinfo != "list":
         return False
 
     for osobj in OSDB.list_os():

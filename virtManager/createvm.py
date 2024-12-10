@@ -103,7 +103,7 @@ class _GuestData:
         self.init = None
 
         self.machine = None
-        self.os_variant = None
+        self.osinfo = None
         self.uefi_requested = None
         self.name = None
 
@@ -138,8 +138,8 @@ class _GuestData:
             # If no machine was explicitly selected, we don't overwrite
             # it, because we want to
             guest.os.machine = self.machine
-        if self.os_variant:
-            guest.set_os_name(self.os_variant)
+        if self.osinfo:
+            guest.set_os_name(self.osinfo)
         if self.uefi_requested:
             guest.uefi_requested = self.uefi_requested
 
@@ -1578,7 +1578,7 @@ class vmmCreateVM(vmmGObjectUI):
             self._gdata.cdrom = cdrom
             self._gdata.extra_args = extra
             self._gdata.livecd = False
-            self._gdata.os_variant = osobj and osobj.name or None
+            self._gdata.osinfo = osobj and osobj.name or None
             guest = self._gdata.build_guest()
             installer = self._gdata.build_installer()
         except Exception as e:
