@@ -171,6 +171,13 @@ class vmmManager(vmmGObjectUI):
         for conn in connmanager.conns.values():
             self._conn_added(connmanager, conn)
 
+        # Select the first item in the list if it exists
+        vmlist = self.widget("vm-list")
+        model = vmlist.get_model()
+        if len(model) > 0:
+            selection = vmlist.get_selection()
+            selection.select_path(Gtk.TreePath.new_first())
+
 
     ##################
     # Common methods #
