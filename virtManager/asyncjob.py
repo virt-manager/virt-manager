@@ -76,6 +76,16 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
             asyncjob.job_canceled):
             return  # pragma: no cover
 
+        # If network is inactive, show a different error message
+        if (isinstance(e, libvirt.libvirtError) and
+                e.get_error_code() == libvirt.VIR_ERR_OPERATION_INVALID and
+                e.get_error_domain() == libvirt.VIR_FROM_NETWORK):
+            asyncjob.set_error(
+                str(e) + "\n\n" +
+                _("Go to: Edit -> Connection Details -> Network Interfaces to activate the network."),
+                "".join(traceback.format_exc()))
+            return # pragma: no cover
+
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
 
