@@ -41,6 +41,7 @@ class DomainFeatures(XMLBuilder):
     hyperv_reenlightenment = XMLProperty("./hyperv/reenlightenment/@state", is_onoff=True)
     hyperv_tlbflush = XMLProperty("./hyperv/tlbflush/@state", is_onoff=True)
     hyperv_tlbflush_direct = XMLProperty("./hyperv/tlbflush/direct/@state", is_onoff=True)
+    hyperv_tlbflush_extended = XMLProperty("./hyperv/tlbflush/extended/@state", is_onoff=True)
     hyperv_ipi = XMLProperty("./hyperv/ipi/@state", is_onoff=True)
     hyperv_evmcs = XMLProperty("./hyperv/evmcs/@state", is_onoff=True)
     hyperv_avic = XMLProperty("./hyperv/avic/@state", is_onoff=True)
