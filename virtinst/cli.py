@@ -4370,6 +4370,8 @@ class ParserTPM(VirtCLIParser):
         cls.add_arg("backend.debug", "debug")
         cls.add_arg("backend.source.type", "source_type")
         cls.add_arg("backend.source.path", "source_path")
+        cls.add_arg("backend.profile.source", "profile_source")
+        cls.add_arg("backend.profile.removeDisabled", "profile_removeDisabled")
 
         cls.add_arg("backend.active_pcr_banks.sha1",
                     "active_pcr_banks.sha1", is_onoff=True)
