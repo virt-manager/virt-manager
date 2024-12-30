@@ -2950,6 +2950,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("bios.useserial", "bios_useserial", is_onoff=True)
         cls.add_arg("bios.rebootTimeout", "bios_rebootTimeout")
         cls.add_arg("smbios.mode", "smbios_mode")
+        cls.add_arg("nvram.templateFormat", "nvram_templateFormat")
 
         # Direct kernel boot options
         cls.add_arg("kernel", "kernel")

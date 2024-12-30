@@ -126,6 +126,7 @@ class DomainOs(XMLBuilder):
     bios_useserial = XMLProperty("./bios/@useserial", is_yesno=True)
     bios_rebootTimeout = XMLProperty("./bios/@rebootTimeout", is_int=True)
     smbios_mode = XMLProperty("./smbios/@mode")
+    nvram_templateFormat = XMLProperty("./nvram/@templateFormat")
 
     # Host bootloader options
     # Since the elements for a host bootloader are actually directly under

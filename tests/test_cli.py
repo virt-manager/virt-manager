@@ -500,7 +500,8 @@ bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,\
 bootmenu.enable=yes,bootmenu.timeout=5000,\
 acpi.table=/path/to/slic.dat,acpi.table.type=slic,\
 initenv0.name=MYENV,initenv0='some value',initenv1.name=FOO,initenv1=bar,\
-initdir=/my/custom/cwd,inituser=tester,initgroup=1000
+initdir=/my/custom/cwd,inituser=tester,initgroup=1000,\
+loader_type=pflash,loader=CODE.fd,nvram.template=VARS.fd,nvram.templateFormat=raw
 
 
 --vcpus vcpus=9,vcpu.placement=static,\
