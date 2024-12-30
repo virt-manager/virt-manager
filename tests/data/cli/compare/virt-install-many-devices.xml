@@ -108,6 +108,8 @@
       <feature enabled="yes" name="secure-boot"/>
       <feature enabled="no" name="enrolled-keys"/>
     </firmware>
+    <loader type="pflash">CODE.fd</loader>
+    <nvram template="VARS.fd" templateFormat="raw"/>
     <initarg>foo=bar</initarg>
     <initarg>baz=woo</initarg>
     <initenv name="MYENV">some value</initenv>
