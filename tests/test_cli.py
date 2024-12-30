@@ -582,6 +582,7 @@ hyperv.ipi.state=on,\
 hyperv.evmcs.state=on,\
 hyperv.avic.state=on,\
 hyperv.xmm_input.state=on,\
+hyperv.emsr_bitmap.state=on,\
 kvm.pv-ipi.state=on,\
 msrs.unknown=ignore
 
