@@ -44,6 +44,8 @@ class DeviceTpm(Device):
     debug = XMLProperty("./backend/@debug")
     source_type = XMLProperty("./backend/source/@type")
     source_path = XMLProperty("./backend/source/@path")
+    profile_source = XMLProperty("./backend/profile/@source")
+    profile_removeDisabled = XMLProperty("./backend/profile/@removeDisabled")
 
     active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True,
                                         relative_xpath="./backend")
