@@ -578,6 +578,7 @@ hyperv.reset.state=off,hyperv_reset=on,\
 hyperv.frequencies.state=on,\
 hyperv.reenlightenment.state=on,\
 hyperv.tlbflush.state=on,\
+hyperv.tlbflush.direct.state=on,\
 hyperv.ipi.state=on,\
 hyperv.evmcs.state=on,\
 hyperv.avic.state=on,\
