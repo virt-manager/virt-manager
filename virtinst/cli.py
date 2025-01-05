@@ -3778,6 +3778,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("driver.queues", "driver_queues")
         cls.add_arg("driver.error_policy", "error_policy")
         cls.add_arg("driver.discard_no_unref", "driver_discard_no_unref", is_onoff=True)
+        cls.add_arg("driver.queue_size", "driver_queue_size")
 
         cls.add_arg("driver.metadata_cache.max_size",
                     "driver_metadata_cache_max_size")
