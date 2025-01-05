@@ -12,7 +12,9 @@
   <iothreads>5</iothreads>
   <iothreadids>
     <iothread id="1"/>
-    <iothread id="2" thread_pool_min="8" thread_pool_max="16"/>
+    <iothread id="2" thread_pool_min="8" thread_pool_max="16">
+      <poll max="123" grow="456" shrink="789"/>
+    </iothread>
   </iothreadids>
   <defaultiothread thread_pool_min="4" thread_pool_max="32"/>
   <memory>65536</memory>

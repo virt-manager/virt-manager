@@ -2693,6 +2693,12 @@ class ParserIOThreads(VirtCLIParser):
                     find_inst_cb=cls.defaultiothread_find_inst_cb)
         cls.add_arg("defaultiothread.thread_pool_max", "thread_pool_max",
                     find_inst_cb=cls.defaultiothread_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.poll.max",
+                    "max", find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.poll.grow",
+                    "grow", find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.poll.shrink",
+                    "shrink", find_inst_cb=cls.iothreads_find_inst_cb)
 
 
 ###################
