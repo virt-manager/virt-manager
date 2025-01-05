@@ -231,7 +231,7 @@
   <devices>
     <emulator>/new/emu</emulator>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="writeback" discard="unmap" io="threads" iothread="3" queues="8"/>
+      <driver name="qemu" type="raw" cache="writeback" discard="unmap" io="threads" iothread="3" queues="8" queue_size="256"/>
       <source dev="/pool-dir/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>
