@@ -4502,6 +4502,7 @@ class ParserMemdev(VirtCLIParser):
         cls.add_arg("source.pmem", "source.pmem", is_onoff=True)
         cls.add_arg("source.alignsize", "source.alignsize",
                 cb=cls.set_target_size)
+        cls.add_arg("target.dynamicMemslots", "target.dynamicMemslots")
 
 
 ########################
