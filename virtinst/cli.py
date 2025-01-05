@@ -4199,6 +4199,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("target.busNr", "target_busNr")
         cls.add_arg("target.index", "target_index")
         cls.add_arg("target.node", "target_node")
+        cls.add_arg("target.memReserve", "target_memReserve")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
         cls.add_arg("num_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
