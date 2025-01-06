@@ -30,13 +30,14 @@
 # Anna Nym <geierb+fedoraproject@geierb.de>, 2023.
 # Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
 # Jarne Förster <fedora@mymailclient.de>, 2024.
+# christian hartmann <hartmann.christian@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-12-03 20:59+0000\n"
-"Last-Translator: Jarne Förster <fedora@mymailclient.de>\n"
+"PO-Revision-Date: 2024-12-23 22:38+0000\n"
+"Last-Translator: christian hartmann <hartmann.christian@gmail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/de/>\n"
 "Language: de\n"
@@ -44,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -1154,9 +1155,8 @@ msgid "Disk b_us:"
 msgstr "Festplattenb_us:"
 
 #: ui/details.ui:2830
-#, fuzzy
 msgid "disk-bus-label"
-msgstr "disk-bus-Beschriftung"
+msgstr "Fesplatten Bus Beschriftung"
 
 #: ui/details.ui:2878
 msgid "<b>Virtual Disk</b>"
@@ -2714,7 +2714,7 @@ msgid ""
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Die folgenden Festplattengeräte werden nicht geklont:\n"
+"Die folgenden Festplattengeräte werden geteilt mit:\n"
 "\n"
 "%(pathlist)s\n"
 "Das Ausführen des neuen Gasts kann zum Überschreiben von Daten in diesen "
@@ -4156,7 +4156,7 @@ msgstr "TIS"
 
 #: virtManager/device/tpmdetails.py:13
 msgid "CRB"
-msgstr ""
+msgstr "CRB"
 
 #: virtManager/device/tpmdetails.py:14
 msgid "SPAPR"
@@ -4432,7 +4432,7 @@ msgstr "Stellen Sie sicher, dass der »libvirtd«-Dienst läuft."
 #: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
-msgstr ""
+msgstr "Verbindung zu libvirt %s kann nicht hergestellt werden."
 
 #: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
@@ -4444,6 +4444,9 @@ msgid ""
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
+"Es konnte kein Standard-Hypervisor erkannt werden. Stellen Sie sicher, dass "
+"die entsprechenden QEMU/KVM-Virtualisierungs- und libvirt-Pakete installiert "
+"sind, um die Virtualisierung auf diesem Host zu verwalten."
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
@@ -4455,7 +4458,7 @@ msgstr ""
 #: virtManager/lib/inspection.py:77
 #, python-format
 msgid "Error launching libguestfs appliance: %s"
-msgstr ""
+msgstr "Fehler beim Starten der libguestfs-Anwendung: %s"
 
 #: virtManager/lib/inspection.py:86
 msgid "Inspection found no operating systems."
