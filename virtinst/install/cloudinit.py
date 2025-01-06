@@ -8,9 +8,6 @@ import random
 import re
 import string
 import tempfile
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
-from urllib.request import urlopen
 
 from ..logger import log
 
@@ -25,30 +22,6 @@ class CloudInitData():
     user_data = None
     meta_data = None
     network_config = None
-
-    @staticmethod
-    def _fetch_url_content(url, fallback_encoding="utf-8"):
-        """
-        Fetch content from a URL with proper error handling and encoding detection.
-
-        Args:
-            url: The URL to fetch content from
-            fallback_encoding: Encoding to use if not specified by the server
-
-        Returns:
-            str: The decoded content from the URL
-
-        Raises:
-            RuntimeError: If there are any HTTP or URL errors
-        """
-        try:
-            with urlopen(url) as response:
-                encoding = response.info().get_content_charset() or fallback_encoding
-                return response.read().decode(encoding)
-        except HTTPError as e:
-            raise RuntimeError(f"cloud-init HTTP Error - {e.code} {e.reason} - ({url})")
-        except URLError as e:
-            raise RuntimeError(f"cloud-init URL Error - {e.reason} - ({url})")
 
     def _generate_password(self):
         if not self.generated_root_password:
@@ -79,22 +52,6 @@ class CloudInitData():
         if self.clouduser_ssh_key:
             return self._get_password(self.clouduser_ssh_key)
 
-    @staticmethod
-    def _validate_url_scheme(url):
-        """
-        Validate that the URL uses a supported scheme.
-
-        Args:
-            url: The URL to validate
-
-        Raises:
-            RuntimeError: If the scheme is not supported
-        """
-        scheme = urlparse(url).scheme
-        if scheme and scheme not in ["http", "https"]:
-            raise RuntimeError(
-                f"cloud-init Protocol Error - {scheme} is unsupported (use http/https) - ({url})"
-            )
 
 def _create_metadata_content(cloudinit_data):
     content = ""
@@ -106,17 +63,10 @@ def _create_metadata_content(cloudinit_data):
 
 
 def _create_userdata_content(cloudinit_data):
-    """Create the user-data content either from a file or URL"""
     if cloudinit_data.user_data:
-        url_scheme = urlparse(cloudinit_data.user_data).scheme
-
-        if not url_scheme:
-            log.debug("Using user-data content from path=%s", cloudinit_data.user_data)
-            return open(cloudinit_data.user_data).read()
-
-        cloudinit_data._validate_url_scheme(cloudinit_data.user_data)
-        log.debug("Fetching user-data content from URL=%s", cloudinit_data.user_data)
-        return cloudinit_data._fetch_url_content(cloudinit_data.user_data)
+        log.debug("Using user-data content from path=%s",
+                cloudinit_data.user_data)
+        return open(cloudinit_data.user_data).read()
 
     content = "#cloud-config\n"
 
