@@ -29,15 +29,16 @@
 # Flo H <emailtoflorian@gmail.com>, 2022.
 # Anna Nym <geierb+fedoraproject@geierb.de>, 2023.
 # Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
+# Jarne Förster <fedora@mymailclient.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-11-23 12:38+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"PO-Revision-Date: 2024-12-03 20:59+0000\n"
+"Last-Translator: Jarne Förster <fedora@mymailclient.de>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2736,14 +2737,13 @@ msgid "Creating virtual machine clone '%s'"
 msgstr "Erzeugen eines Klons der virtuellen Maschine «%s»"
 
 #: virtManager/clone.py:571
-#, fuzzy, python-format
-#| msgid " and selected storage (this may take a while)"
+#, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
-"Erstelle Klon der virtuellen Maschine und des ausgewählten Speichers (dies "
-"kann eine Weile dauern)"
+"Erstelle Klon der Virtuellen Maschine \"%s\" sowie dem ausgewähltem Speicher "
+"(dies kann eine Weile dauern)"
 
 #: virtManager/connection.py:397
 msgid "User session"
@@ -4385,19 +4385,23 @@ msgstr "Authentifizierung benötigt"
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
+"Der Remote-Host benötigt eine netcat/nc Version, welche den -U Parameter "
+"unterstützt."
 
 #: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
+"Konfigurieren Sie den SSH Schlüsselzugriff für den Remote-Host, oder "
+"installieren Sie lokal ein SSH askpask Paket."
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "Stellen Sie sicher, dass der »libvirtd«-Dienst läuft."
+msgstr ""
+"Stellen Sie sicher, dass auf dem Remote-Host ein geeigneter »libvirt«-Dienst "
+"läuft."
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4415,6 +4419,9 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
+"Konnte keine lokale Sitzung erkennen: Wenn Sie Virt-Manager über ssh -X oder "
+"VNC laufen lassen, können Sie sich evtl. nicht als normaler Benutzer mit "
+"libvirt verbinden. Versuchen Sie es als root."
 
 #: virtManager/lib/connectauth.py:179
 #, fuzzy
