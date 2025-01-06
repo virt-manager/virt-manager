@@ -578,13 +578,9 @@ hyperv.reset.state=off,hyperv_reset=on,\
 hyperv.frequencies.state=on,\
 hyperv.reenlightenment.state=on,\
 hyperv.tlbflush.state=on,\
-hyperv.tlbflush.direct.state=on,\
-hyperv.tlbflush.extended.state=on,\
 hyperv.ipi.state=on,\
 hyperv.evmcs.state=on,\
 hyperv.avic.state=on,\
-hyperv.xmm_input.state=on,\
-hyperv.emsr_bitmap.state=on,\
 kvm.pv-ipi.state=on,\
 msrs.unknown=ignore
 
@@ -849,6 +845,19 @@ c.add_compare("""
 --hostdev mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9
 --hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
 """, "mdev-devices", prerun_check="10.4.0")
+
+c.add_compare("""
+--features \
+hyperv.xmm_input.state=on,\
+hyperv.emsr_bitmap.state=on
+""", "hyperv_enable_xmm_and_emsr", prerun_check="10.7.0")
+
+c.add_compare("""
+--features \
+hyperv.tlbflush.state=on,\
+hyperv.tlbflush.direct.state=on,\
+hyperv.tlbflush.extended.state=on
+""", "hyperv_enable_tlbflush_direct_and_extended", prerun_check="11.0.0")
 
 
 # Specific XML test cases #1
