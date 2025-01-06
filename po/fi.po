@@ -8,7 +8,7 @@
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2017. #zanata, 2024.
 # Jiri Grönroos <jiri.gronroos@iki.fi>, 2018. #zanata, 2024.
-# Ricky Tigg <ricky.tigg@gmail.com>, 2020, 2021.
+# Ricky Tigg <ricky.tigg@gmail.com>, 2020, 2021, 2024.
 # Jan Kuparinen <copper_fin@hotmail.com>, 2021, 2022, 2023.
 # Ville-Pekka Vainio <vpvainio@iki.fi>, 2022.
 msgid ""
@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-11-19 20:18+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fi/>\n"
+"PO-Revision-Date: 2024-12-19 17:06+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -2014,14 +2014,12 @@ msgid "_internal"
 msgstr "_sisäinen"
 
 #: ui/snapshotsnew.ui:269
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "Virtuaalikoneen tila:"
+msgstr "Muistin _tila:"
 
 #: ui/snapshotsnew.ui:283
 msgid "_auto"
-msgstr ""
+msgstr "_automaattinen"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -3130,10 +3128,8 @@ msgid "Error continuing install: %s"
 msgstr "Virhe asennuksen jatkamisessa: %s"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
-msgstr "Käynnistyshihnakontti"
+msgstr "Käynnistyskontti"
 
 #: virtManager/createvol.py:140
 #, python-format
@@ -3758,7 +3754,7 @@ msgstr "Virhe yhdistäessä tekstikonsoliin: %s"
 
 #: virtManager/details/snapshots.py:122
 msgid "external snapshots not supported with this libvirt connection"
-msgstr ""
+msgstr "ulkoisia tilannekuvia ei tueta tällä libvirt-yhteydellä"
 
 #: virtManager/details/snapshots.py:275
 #, python-format
@@ -5682,7 +5678,7 @@ msgstr "Tuntematon autokonsolityyppi '%s'"
 
 #: virtinst/cli.py:2401
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr ""
+msgstr "CPU model=host on vanhentunut, käytä model=host-model"
 
 #: virtinst/cli.py:3605
 #, python-format
@@ -5911,10 +5907,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV-käynnistysturva vaatii Q35 UEFI -koneen"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "SEV-käynnistysturva vaatii Q35 UEFI -koneen"
+msgstr "SEV-SNP-käynnistysturva vaatii Q35 UEFI -koneen"
 
 #: virtinst/domcapabilities.py:208
 #, python-format
@@ -5993,8 +5987,6 @@ msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr "paikka kernel/initrd voidaan määrittää vain paikka URL/path:n kanssa"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "paikka kernel/initrd täytyy antaa parina"
 
@@ -6472,6 +6464,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"Osinfo OS -nimen havaitseminen asennusmedialta epäonnistui käyttämällä "
+"varanimeä '{name}'.\n"
+"Ilmoita virheestä virt-installia vastaan, jos odotit havaitsemisen "
+"onnistuvan."
 
 #: virtinst/virtinstall.py:571
 #, python-format
@@ -6581,7 +6577,7 @@ msgstr "Toimialue on kaatunut."
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "Virtuaalikone katosi odottamatta: %s"
 
 #: virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
@@ -6780,28 +6776,24 @@ msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--os-variant/--osinfo ei tueta --build-xml kanssa"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml ei tueta --%s:lle"
+msgstr "--build-xml ei tueta {cli_flag}:lle"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "Ei pysty käyttämään --remove-device --%s:n kanssa"
+msgstr "Ei pysty käyttämään --remove-device {cli_flag}:n kanssa"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "Ei pysty käyttämään --add-device --%s:n kanssa"
+msgstr "Ei pysty käyttämään --add-device {cli_flag}:n kanssa"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "Ei tiedä miten '--update' --%s:lle"
+msgstr "Ei tiedä miten '--update' {cli_flag}:lle"
 
 #: virtinst/virtxml.py:136
 #, python-format
@@ -6829,19 +6821,12 @@ msgid "Invalid --edit option '%s'"
 msgstr "Virheellinen --edit-valinta '%s'"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "Yhtään --%s objektia ei löydetty XML:stä"
+msgstr "Yhtään {cli_flag}-objektia ei löydetty XML:sta"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -6849,10 +6834,9 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"'--edit %(number)s' pyydetty, mutta XML:ssä on vain %(max)s --%(type)s "
-"objekti"
+"'--edit {number}' pyydetty, mutta XML:ssä on vain {maxnum} {cli_flag} objekti"
 msgstr[1] ""
-"'--edit %(number)s' pyydetty, mutta XML:ssä on vain %(max)s --%(type)s "
+"'--edit {number}' pyydetty, mutta XML:ssä on vain {maxnum} {cli_flag} "
 "objektia"
 
 #: virtinst/virtxml.py:225
@@ -6861,15 +6845,12 @@ msgid "No matching objects found for %s"
 msgstr "%s:lle ei löytynyt yhtään vastaavaa esinettä"
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
-"'--edit %(option)s' on merkityksetön käytettäessä --%(objecttype)s, käytä "
-"sen sijaan tyhjää '--edit'"
+"'--edit {option}' on merkityksetön käytettäessä {cli_flag}, käytä sen sijaan "
+"tyhjää '--edit'"
 
 #: virtinst/virtxml.py:318
 #, python-format
@@ -7058,20 +7039,20 @@ msgid "Require confirmation before saving any results."
 msgstr "Vaadi vahvistus ennen minkään tuloksen tallennusta."
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "Ristiriitaiset vaihtoehdot %s"
+msgstr "Muunnosvaihtoehdot"
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Muunna olemassa oleva virtuaalikone PC/i440FX:sta Q35:een."
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Muunna olemassa oleva virtuaalikone käyttämään VNC-grafiikkaa. Tämä poistaa "
+"kaikki Spice-grafiikan jäännökset."
 
 #: virtinst/virtxml.py:500
 msgid "XML options"
