@@ -8,8 +8,11 @@ import random
 import re
 import string
 import tempfile
+from urllib.parse import urlparse
 
 from ..logger import log
+from ..progress import make_meter
+from .urlfetcher import fetcherForURI
 
 
 class CloudInitData():
@@ -64,9 +67,19 @@ def _create_metadata_content(cloudinit_data):
 
 def _create_userdata_content(cloudinit_data):
     if cloudinit_data.user_data:
-        log.debug("Using user-data content from path=%s",
-                cloudinit_data.user_data)
-        return open(cloudinit_data.user_data).read()
+        parsed_url = urlparse(cloudinit_data.user_data)
+
+        if parsed_url.scheme:
+            base_url = f"{parsed_url.scheme}://{parsed_url.netloc}{os.path.dirname(parsed_url.path)}"
+            filename = os.path.basename(parsed_url.path)
+
+            meter = make_meter(quiet=True)
+
+            fetcher = fetcherForURI(base_url, tempfile.gettempdir(), meter)
+            return fetcher.acquireFileContent(filename)
+        else:
+            log.debug("Using user-data content from path=%s", cloudinit_data.user_data)
+            return open(cloudinit_data.user_data).read()
 
     content = "#cloud-config\n"
 
