@@ -172,7 +172,7 @@ class _XMLPropertyBase(property):
 class XMLChildProperty(_XMLPropertyBase):
     """
     Property that points to a class used for parsing a subsection of
-    of the parent XML. For example when we deligate parsing
+    of the parent XML. For example when we delegate parsing
     /domain/cpu/feature of the /domain/cpu class.
 
     @child_class: XMLBuilder class this property is tracking. So for
