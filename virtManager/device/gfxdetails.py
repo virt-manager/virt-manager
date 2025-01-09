@@ -145,7 +145,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password").set_sensitive(passwd_enabled)
         if not passwd_enabled:
             self.widget("graphics-password").set_text("")
-        passwd_visible = self.widget("graphics-visiblity-chk").get_active()
+        passwd_visible = self.widget("graphics-visibility-chk").get_active()
         self.widget("graphics-password").set_visibility(passwd_visible)
 
         glval = self.widget("graphics-opengl").get_active()
