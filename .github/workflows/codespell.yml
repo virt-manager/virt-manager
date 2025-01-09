@@ -1,0 +1,14 @@
+name: Scan with codespell
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  codespell:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: codespell-project/actions-codespell@v2
