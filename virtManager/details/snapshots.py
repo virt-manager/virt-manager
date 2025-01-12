@@ -138,7 +138,19 @@ class vmmSnapshotNew(vmmGObjectUI):
         mode_external = self.widget("snapshot-new-mode-external")
         mode_internal = self.widget("snapshot-new-mode-internal")
 
-        if mode_external.is_sensitive():
+        has_internal_snapshots = False
+        for snap in self.vm.list_snapshots():
+            if not snap.is_external():
+                has_internal_snapshots = True
+
+        # Default to external snapshots if supported, unless the
+        # guest already has some internal snapshots
+        #
+        # External snapshots that have an internal snapshot as parent
+        # cannot (currently) be deleted, so if the guest is already
+        # using internal snapshots we should stick to those to avoid
+        # running into this limitation
+        if mode_external.is_sensitive() and not has_internal_snapshots:
             mode_external.set_active(True)
         else:
             mode_internal.set_active(True)
