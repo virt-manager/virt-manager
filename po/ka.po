@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-07 05:20+0000\n"
+"PO-Revision-Date: 2025-01-17 09:10+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -5704,7 +5704,7 @@ msgstr "კვანძის მოწყობილობის მხარ�
 #: virtinst/devices/interface.py:220
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
-msgstr ""
+msgstr "MAC მისამართი '%s' უკვე გამოიყენება სხვა ვირტუალური მანქანის მიერ."
 
 #: virtinst/diskbackend.py:109
 #, python-format
@@ -6187,6 +6187,8 @@ msgstr "--graphics-ის და ძველი სტილის გრაფ
 #: virtinst/virtinstall.py:229
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
+"შესაძლებელია, მხოლოდ, ერთ-ერთის მითითება პარამეტრებიდან VNC, SDL, --graphics "
+"ან --nographics"
 
 #: virtinst/virtinstall.py:312
 msgid "--memory amount in MiB is required"
@@ -6339,6 +6341,8 @@ msgstr "{env_var} დაყენებულია. ფატალური �
 #: virtinst/virtinstall.py:708
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr ""
+"სტუმრის გასაშვებად კონსოლი აღმოჩენილი არაა. გამოიყენება ნაგულისხმევი --wait "
+"-1"
 
 #: virtinst/virtinstall.py:744
 msgid "Waiting for the installation to complete."
@@ -6381,7 +6385,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:886
 msgid "You can reconnect to the console to complete the installation process."
-msgstr ""
+msgstr "დაყენების დასასრულებლად კონსოლთან თავიდან მიერთება შეგიძლიათ."
 
 #: virtinst/virtinstall.py:897
 msgid "Domain has shutdown. Continuing."
@@ -6431,7 +6435,7 @@ msgstr "სატესტო გაშვება წარმატებუ�
 #: virtinst/virtinstall.py:1006
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
-msgstr ""
+msgstr "უცნობი XML ბიჯის მოთხოვნა '%s'. უნდა იყოს 1,2, ან all"
 
 #: virtinst/virtinstall.py:1013
 msgid "Requested installation does not have XML step 2"
@@ -6470,7 +6474,7 @@ msgstr "სტუმრის არსებული დისკის ას
 #: virtinst/virtinstall.py:1056
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
-msgstr ""
+msgstr "დამატებითი პარამეტრები --location -დან ჩატვირთული ბირთვის დასაყენებლად"
 
 #: virtinst/virtinstall.py:1059
 msgid "Add given file to root of initrd from --location"
@@ -6542,7 +6546,7 @@ msgstr "შუალედური დომენის შექმნა."
 
 #: virtinst/virtinstall.py:1145
 msgid "Force power off the domain when the console viewer is closed."
-msgstr ""
+msgstr "დომენის ნაძალადევი გამორთვა, როცა კონსოლის ფანჯარა დაიხურება."
 
 #: virtinst/virtinstall.py:1148
 msgid "Minutes to wait for install to complete."
@@ -6636,6 +6640,8 @@ msgstr "%s-ის შესაბამისი ობიექტები ნ
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
+"პარამეტრს '--edit {option}' აზრი არ აქვს {cli_flag}-სთან ერთად. გამოიყენეთ "
+"უბრალოდ '--edit'"
 
 #: virtinst/virtxml.py:318
 #, python-format
@@ -6844,7 +6850,7 @@ msgstr "ვმ გაშვებული არაა. პარამეტ�
 
 #: virtinst/virtxml.py:628
 msgid "Changes will take effect after the domain is fully powered off."
-msgstr ""
+msgstr "ცვლილებები, მხოლოდ, მაშინ შევა ძალაში, როცა დომენი სრულად გაითიშება."
 
 #: virtinst/virtxml.py:630
 msgid ""
@@ -6862,6 +6868,8 @@ msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
+"XML-ს არ ჰქონდა მოსალოდნელი ძირითადი ელემენტი სახელით '%(expectname)s'. "
+"აღმოჩენილია '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:519
