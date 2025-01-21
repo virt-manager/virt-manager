@@ -370,6 +370,16 @@ class vmmSnapshotNew(vmmGObjectUI):
         self._populate_memory_path()
 
     def _ok_clicked_cb(self, src):
+        current_mode = self._get_current_mode()
+
+        if current_mode and current_mode != self._get_mode():
+            result = self.err.yes_no(_("Mixing external and internal snapshots for "
+                                       "the same VM is not recommended. Are you "
+                                       "sure you want to continue?"))
+
+            if not result:
+                return
+
         return self._create_new_snapshot()
 
     def _mode_toggled_cb(self, src):
