@@ -792,7 +792,7 @@ class vmmCreateVM(vmmGObjectUI):
         archs.sort()
 
         prios = ["x86_64", "i686", "aarch64", "armv7l", "ppc64", "ppc64le",
-            "s390x"]
+            "riscv64", "s390x"]
         if self.conn.caps.host.cpu.arch not in prios:
             prios = []  # pragma: no cover
         for p in prios[:]:
