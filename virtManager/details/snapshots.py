@@ -287,7 +287,7 @@ class vmmSnapshotNew(vmmGObjectUI):
 
         try:
             newsnap = DomainSnapshot(self.vm.conn.get_backend())
-            newsnap.name = name
+            newsnap.name = name.replace(' ','_')
             newsnap.description = desc or None
             if mode == "external" and self.vm.is_active():
                 mempath = uiutil.get_list_selection(self.widget("snapshot-new-memory-path"))
