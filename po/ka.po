@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-21 16:38+0000\n"
+"PO-Revision-Date: 2025-01-22 09:58+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -1640,6 +1640,14 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
+"გვირაბით მიგრაცია libvirtd-ის კავშირის არხით იმის მაგიერ, რომ გამოიყენოთ "
+"ჰაიპერვიზორის ღია ცალკე ქსელური მიერთება სამიზნემდე. წყარო libvirt-ის "
+"გაშვებული ასლი პირდაპირ უკავშირდება სამიზნე libvirt-ის გაშვებულ ასლს.\n"
+"\n"
+"ამას, შეუძლია, გაამარტივოს გარემო, რადგან არაა საჭირო მეტი ბრანდმაუერის "
+"პორტების გახსნა და ის დაშიფრავს მიგრაციის ტრაფიკს. თუ თქვენი libvirt-ის "
+"კავშირი დაშიფრულია. მაგრამ, ამის SSH ტრანსპორტის ზემოდან აწყობა, ცოტა ძნელი "
+"შეიძლება, იყოს."
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1657,6 +1665,11 @@ msgid ""
 "\n"
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
+"ნაგულისხმევად libvirt უარს იტყვის, დაამიგრიგოს კონკრეტული კონფიგურაციის "
+"მქონე ვმ-ები, რომლებსაც შეუძლიათ, სტუმარი სისტემების არასწორი მუშაობა "
+"გამოიწვიოს, მაგალითად, თუ დისკის კეშის რეჟიმი დაყენებულია 'არაფერზე'.\n"
+"\n"
+"ამ პარამეტრის ჩართვით libvirt გამოტოვებს ამ შემოწმებებს."
 
 #: ui/migrate.ui:541
 msgid "A_llow unsafe:"
@@ -1695,6 +1708,8 @@ msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
 msgstr ""
+"<small>ძირითადად macvtap არ იმუშავებს ჰოსტიდან სტუმრის ქსელამდე "
+"ურთიერთობისას.</small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
@@ -1714,6 +1729,9 @@ msgid ""
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
+"ვერ იპოვეთ ოპერაციული სისტემა, რომელსაც ეძებდით?\n"
+"სცადეთ, აირჩიოთ მსგავსი დისტრიბუტივი ან ვერსია, ან გამოიენეთ არჩევანი "
+"'ზოგადი'."
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
@@ -1839,6 +1857,9 @@ msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
+"სტუმრის გაფართოების შეცვლა, როცა სტუმრის ფანჯრის ზომა იცვლება. მუშაობს, "
+"მხოლოდ, სწორად მორგებულ სტუმრებზე, spice-ის და სამუშაო მაგიდის აგენტის "
+"გამოყენებით."
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
@@ -2119,6 +2140,8 @@ msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
 msgstr ""
+"<small>XML-ის ჩასწორება გათიშულია მორგების ფანჯარაში. ჩართეთ ის, მხოლოდ, "
+"მაშინ, თუ იცით, რას აკეთებთ.</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
@@ -2433,6 +2456,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s ჰოსტის სისტემაში აქტიური არაა.\n"
+"სცადეთ, გაუშვათ mdev ჰოსტის სისტემაში, სანამ მას სტუმარში ჩაამატებთ."
 
 #: virtManager/addhardware.py:789
 msgid "No Devices Available"
@@ -2502,6 +2527,9 @@ msgid ""
 "Adding more than one USB controller is not supported.\n"
 "You can change the USB controller type in the VM details screen."
 msgstr ""
+"%s-ს უკვე აქვს USB კონტროლერი მიმაგრებული.\n"
+"ერთზე მეტი USB კონტროლერის დამატება მხარდაჭერილი არაა.\n"
+"USB კონტროლერის ტიპს შეცვმა ვმ-ის დეტალების ეკრანზე შეგიძლიათ."
 
 #: virtManager/addhardware.py:1223
 msgid "Are you sure you want to add this device?"
@@ -2512,6 +2540,8 @@ msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
 msgstr ""
+"ამ მოწყობილობის მიერთება შეუძლებელია გაშვებული მანქანისთვის. გნებავთ, ეს "
+"მოწყობილობა ხელმისაწვდომი შემდეგი სტუმრის ჩართვის შემდეგ გახდეს?"
 
 #: virtManager/addhardware.py:1250
 #, python-format
@@ -2614,6 +2644,8 @@ msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
 msgstr ""
+"გამოყენებული დისკის ასლის ფაილის გამოყენება თავზე გადააწერს ბილიკს დაკლონვის "
+"მიმდინარეობისას. მართლა გნებავთ, გამოიყენოთ ეს ბილიკი?"
 
 #: virtManager/clone.py:487
 msgid "Sharing storage may cause data to be overwritten."
@@ -2627,6 +2659,10 @@ msgid ""
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
+"შემდეგი დისკური მოწყობილობები იქნება გაზიარებული მანქანასთან %(vmname)s:\n"
+"\n"
+"%(pathlist)s\n"
+"ახალი სტუმრის გაშვება ამ დისკის ასლის ფაილებში მონაცემებს ზედ გადააწერს."
 
 #: virtManager/clone.py:503
 #, python-format
@@ -3059,6 +3095,9 @@ msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
 msgstr ""
+"ახლა მიმდინარეობს ვირტუალური მანქანების შექმნა. დისკური საცავის გამოყოფას და "
+"დაყენების ფაილების მიღებას, შეიძლება, დასასრულებლად, რამდენიმე წუთი "
+"დასჭირდეს."
 
 #: virtManager/createvm.py:2026
 #, python-format
@@ -3464,6 +3503,8 @@ msgstr "Libvirt-ს ან ჰაიპერვაიზორს UEFI-ის �
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
+"Libvirt-მა ვერ იპოვა ამ ჰოსტზე დაყენებული UEFI/OVMF მიკროკოდის დისკის ასლის "
+"ფაილი."
 
 #: virtManager/details/details.py:706
 msgid "Version"
@@ -3789,6 +3830,8 @@ msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
+"მართლა გნებავთ, გაუშვათ სწრაფი ასლი '%(name)s'? ყველა ცვლილება დისკებზე, "
+"რომელიც ბოლო სწრაფი ასლის შექმნის შემდეგ შევიდა, მოცილებული იქნება."
 
 #: virtManager/details/snapshots.py:740
 #, python-format
@@ -4249,6 +4292,8 @@ msgstr "საჭიროა ავთენტიკაცია"
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
+"დაშორებული ჰოსტი ითხოვს netcat/nc-ის ვერსიას, რომელსაც -U პარამეტრის "
+"მხარდაჭერა გააჩნია."
 
 #: virtManager/lib/connectauth.py:159
 msgid ""
@@ -5101,6 +5146,10 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
+"მოირგეთ სტუმრის კონსოლის ავტოდაკავშირება. მაგალითად\n"
+"--autoconsole text\n"
+"--autoconsole graphical\n"
+"--autoconnect none"
 
 #: virtinst/cli.py:616
 msgid "Don't automatically try to connect to the guest console"
@@ -5449,6 +5498,9 @@ msgid ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
+"არგუმენტების გადაცემა პირდაპირ QEMU ემულატორისთვის. მაგ:\n"
+"--qemu-commandline='-display gtk,gl=on'\n"
+"--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:903
 msgid ""
@@ -5653,6 +5705,7 @@ msgstr "დაკლონისთვის დომენი გამორ�
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
+"გრაფიკული მოწყობილობის პორტი autoport იქნება, რომ კონფლიქტი თავიდან ავიცილო."
 
 #: virtinst/cloner.py:527
 #, python-format
@@ -5985,6 +6038,7 @@ msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
 msgstr ""
+"ოს-ს '%(osname)s' არ აქვს URL მდებარეობა არქიტექტურისთვის '%(archname)s'"
 
 #: virtinst/storage.py:164
 #, python-format
@@ -6030,6 +6084,8 @@ msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr ""
+"დამატებითი ლოგიკური ტომები მხარდაჭერილი არაა. გამოყოფილი ზომა სრული "
+"მოცულობის ტოლი იქნება"
 
 #: virtinst/storage.py:693
 #, python-format
@@ -6056,6 +6112,8 @@ msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
+"საჭიროა ორიგინალი მანქანის სახელი. გამოიყენეთ '--original src_name ' და "
+"თაიდან სცადეთ."
 
 #: virtinst/virtclone.py:67
 msgid ""
@@ -6086,6 +6144,8 @@ msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
+"კლონის სახელისა და საცავის ბილიკების ავტოგენერაცია ორიგინალი სტუმრის "
+"კონფიგურაციიდან."
 
 #: virtinst/virtclone.py:86
 msgid "Name for the new guest"
@@ -6102,6 +6162,7 @@ msgstr "საცავის მორგება"
 #: virtinst/virtclone.py:93
 msgid "New file to use as the disk image for the new guest"
 msgstr ""
+"ახალი ფაილი, რომელიც ახალი სტუმრის დისკის ასლის ფაილად იქნება გამოყენებული"
 
 #: virtinst/virtclone.py:96
 msgid ""
@@ -6119,7 +6180,7 @@ msgstr ""
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
-msgstr ""
+msgstr "არ გამოიყენო დამატებითი ფაილი კლონის დისკის ასლის ფაილისთვის"
 
 #: virtinst/virtclone.py:108
 msgid ""
@@ -6187,6 +6248,8 @@ msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
 msgstr ""
+"--file, --nonsparse და --file-size პარამეტრების შერევა შეუძლებელია "
+"პარამეტრთან --disk. გამოიყენეთ --disk ბილიკი[,size=ზომა][,sparse=yes|no]"
 
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
@@ -6229,6 +6292,8 @@ msgstr ""
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
+"მაგალითისთვის იხილეთ man-ის გვერდი, მაგალითად, CDROM-თან --location-ის "
+"გამოყენებისთვის"
 
 #: virtinst/virtinstall.py:348
 #, python-format
@@ -6307,6 +6372,8 @@ msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
+"--os-variant/--osinfo ოს-ის სახელი აუცილებელია, მაგრამ მნიშვნელობა\n"
+"მითითებული ან გადაცემული არაა."
 
 #: virtinst/virtinstall.py:586
 msgid ""
@@ -6475,6 +6542,8 @@ msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
+"დისტრიბუტივის დაყენების ბმული. მაგ: https://host/path. დისტრიბუტივების "
+"მაგალითისთვის იხილეთ სახელმძღვანელო."
 
 #: virtinst/virtinstall.py:1051
 msgid "Boot from the network using the PXE protocol"
@@ -6744,6 +6813,7 @@ msgstr "მოწყობილობის განახლების შ�
 #: virtinst/virtxml.py:418
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
+"სხვაობის XML ფაილი არ შექმნილა. მოთხოვნილ ცვლილებებს გავლენა არ ექნებათ."
 
 #: virtinst/virtxml.py:437
 msgid "Edit libvirt XML using command line options."
@@ -6806,6 +6876,8 @@ msgstr ""
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
+"დომენის ნაძალადევი აღწერა. მხოლოდ, მაშინაა საჭირო, თუ მითითებულია პარამეტრი "
+"--print."
 
 #: virtinst/virtxml.py:475
 msgid "Force not defining the domain."
