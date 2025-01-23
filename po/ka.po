@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-22 09:58+0000\n"
+"PO-Revision-Date: 2025-01-23 10:29+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -1686,6 +1686,13 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
+"ნაგულისხმევად მიგრირებული ვმ-ის კონფიგურაცია იშლება წყარო ჰოსტიდან და "
+"ინახება მუდმივი სახით სამიზნე ჰოსტზე. სამიზნე ჰოსტი ვმ-ის ახალ სახლად "
+"განიხილება.\n"
+"\n"
+"თუ არჩეულია \"დროებითი\", მიგრაცია, მხოლოდ, დროებითად ითვლება: წყარო ჰოსტი "
+"ინახავს ვმ-ის კონფიგურაციის ასლს და გაშვებული ასლის გადატანა სამიზნე ჰოსტზე, "
+"მხოლოდ, დროებითია და გაქრება, როცა მას გათიშავთ."
 
 #: ui/migrate.ui:571
 msgid "_Temporary move:"
@@ -3907,6 +3914,8 @@ msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
+"სტუმარი დაშორებულ ჰოსტზეა, მაგრამ მორგებულია, რომ დაუშვას ლოკალური ფაილის "
+"დესკრიტპორით მიერთება."
 
 #: virtManager/details/sshtunnels.py:68
 msgid "Guest is configured for TLS only which does not work over SSH."
@@ -3926,6 +3935,8 @@ msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
+"მოთხოვნილი ავტორიზაციის დეტალების VNC სერვერზე გადაცემა შეუძლებელია.\n"
+"ავტორიზაციის დეტალების ტიპი %s მხარდაჭერილი არაა"
 
 #: virtManager/details/viewers.py:438
 msgid "GTK-VNC viewer is too old"
@@ -4300,6 +4311,8 @@ msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
+"მოირგეთ SSH გასაღებით წვდომა დაშორებული ჰოსტისთვის, ან დააყენეთ SSH-ის "
+"პაკეტი askpass ლოკალურად."
 
 #: virtManager/lib/connectauth.py:163
 msgid ""
@@ -5029,6 +5042,8 @@ msgstr ""
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
+"თქვენი XML-ის ცვლილებები დაიკარგება, თუ გახვალთ ამ ჩანართიდან. მართლა "
+"გნებავთ ამ ჩანართიდან გასვლა?"
 
 #: virtinst/capabilities.py:298
 #, python-format
@@ -6223,6 +6238,8 @@ msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
 msgstr ""
+"ახალი ვირტუალური მანქანისთვის სახელი აუცილებელია. მისათითებლად გამოიყენეთ '--"
+"name ახალი_ვმ-ის_სახელი'."
 
 #: virtinst/virtclone.py:196
 #, python-format
@@ -6395,6 +6412,9 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"შესაძლო ოს-ის სახელების სრული სიის სანახავად გამოიყენეთ:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:606
 #, python-brace-format
@@ -6402,6 +6422,9 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"თუ თქვენი ლინუქსის დისტრიბუტივი სიაში არაა, გამოიყენეთ ზოგადი მნიშვნელობები,"
+"\n"
+"როგორიცაა {oslist}\n"
 
 #: virtinst/virtinstall.py:613
 #, python-brace-format
@@ -6577,6 +6600,8 @@ msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
+"არსებული ვმ-ის თავიდან დაყენება. მხოლოდ, გამოიყენება, დაყენების პარამეტრები. "
+"ყველა დანარჩენი ვმ-ის პარამეტრი გათვალისწინებული არ იქნება."
 
 #: virtinst/virtinstall.py:1068
 msgid "Perform a cloud image installation, configuring cloud-init"
@@ -6912,6 +6937,8 @@ msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"არსებული ვმ-ის გადაყვანა, რომ მან VNC გრაფიკა გამოიყენოს. ეს Spice-ის "
+"გრაფიკის ყველა მონარჩენს წაშლის."
 
 #: virtinst/virtxml.py:500
 msgid "XML options"
