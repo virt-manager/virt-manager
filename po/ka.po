@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-24 16:31+0000\n"
+"PO-Revision-Date: 2025-01-24 18:19+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -4944,6 +4944,8 @@ msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
+"ეს ავტომატურად გამორთავს ვირტუალურ მანქანას ოს-ის გათიშვის გარეშე და "
+"შეიძლება, მონაცემების კარგვა გამოიწვიოს."
 
 #: virtManager/vmmenu.py:188 virtManager/vmmenu.py:257
 msgid "Error shutting down domain"
@@ -4973,6 +4975,9 @@ msgid ""
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
+"დომენის აღდგენა შეუძლებელია. გნებავთ,\n"
+"წაშალოთ შენახული მდგომარეობა და შეასრულოთ\n"
+"ჩვეულებრივი გაშვვება?"
 
 #: virtManager/vmmenu.py:233
 #, python-format
@@ -5015,6 +5020,8 @@ msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
+"ეს ავთომატურად გამორთავს და ჩართავს ვმ-ს ოს-ის სწორად გათიშვის გარეშე და "
+"შეიძლება, მონაცემების დაკარგვა გამოიწვიოს."
 
 #: virtManager/vmmenu.py:284
 msgid "Error resetting domain"
@@ -5109,6 +5116,8 @@ msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
+"ჰოსტს არ აქვს მხარდაჭერა დომების ტიპისთვის %(domain)s მანქანაზე '%(machine)"
+"s' ვირტუალიზაციის ტიპისთვის '%(virttype)s' არქიტექტურაზე '%(arch)s'"
 
 #: virtinst/capabilities.py:322
 #, python-format
@@ -5132,20 +5141,27 @@ msgstr ""
 "option help'"
 
 #: virtinst/cli.py:288
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
 "If it was, you can restart your domain by running:\n"
 "  %s\n"
 "otherwise, please restart your installation."
 msgstr ""
+"როგორც ჩანს, დომენის დაყენება წარმატებით არ დასრულდა.\n"
+"თუ ის დასრულდა წარმატებით, გადატვირთეთ თქვენი დომენი ბრძანებით:\n"
+"   %d\n"
+"ან თავიდან დაიწყეთ დაყენება."
 
 #: virtinst/cli.py:306
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
+"%(path)s შეიძლება, ჰაიპერვიზორის მიერ წვდომადი არაა. შეიძლება, საჭიროა "
+"მომხმარებლისთვის '%(%(user)s)s' კითხვის უფლების მიცემა შემდეგ საქაღალდეებზე: "
+"%(dirs)s"
 
 #: virtinst/cli.py:319
 #, python-format
@@ -5585,6 +5601,12 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
+"მიუთითეთ საცავი შემდეგი პარამეტრებით:\n"
+"--disk size=10 (ახალი 10 გიგაბიტი დისკის ასლის ფაილი ნაგულისხმევ "
+"მდებარეობაზე\n"
+"--disk /საქაღალდის/ბილიკი/დისკი,cache=none\n"
+"--disk device=cdrom,bus=scsi\n"
+"--disk=?"
 
 #: virtinst/cli.py:934
 msgid "OS options"
@@ -5604,6 +5626,9 @@ msgid ""
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
+"ეს VirtIO-ის მსგავსი პარამეტრების ასარჩევად გამოიყენება.\n"
+"მნიშვნელობის მაგალითები: fedora29, rhel7.0, win10,....\n"
+"სრული სიის სანახავად გამოიყენეთ '--osinfo list'."
 
 #: virtinst/cli.py:952
 msgid ""
@@ -5612,6 +5637,10 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
+"დაუმუშავებელი XML XPath პარამეტრების გამოყენება საბოლოო XML-ზე. მაგალითად:\n"
+"--xml ./cpu/@mode=host-passthrough\n"
+"--xml ./devices/disk[2]/serial=new-serial\n"
+"--xml xpath.delete=./clock"
 
 #: virtinst/cli.py:982
 #, python-format
@@ -5772,6 +5801,8 @@ msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
+"არ ვიცი, როგორ შევქმნა საცავი ბილიკისთვის '%s'. გამოიყენეთ libvirt-ის API-"
+"ები რომ მართოთ მშობელი საქაღალდე, როგორც შესაბამისი პული."
 
 #: virtinst/devices/disk.py:407
 msgid "Format attribute not supported for this volume type"
