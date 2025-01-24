@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-24 16:26+0000\n"
+"PO-Revision-Date: 2025-01-24 16:31+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -3945,6 +3945,9 @@ msgid ""
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 msgstr ""
+"სტუმარი დაშორებულ ჰოსტზეა ტრანსპორტით '%s'. მაგრამ ის, მხოლოდ, ლოკალურად "
+"უსმენს. იმისათვის რომ გარედან დაუკავშირდეთ, სტუმრის მოსმენის მისამართი უნდა "
+"შეცვალოთ."
 
 #: virtManager/details/viewers.py:384
 #, python-format
@@ -4343,6 +4346,9 @@ msgid ""
 " - A Xen host kernel was booted\n"
 " - The Xen service has been started"
 msgstr ""
+"შეამოწმეთ, არის თუ არა:\n"
+" - Xen-ის ჰოსტი ჩატვირთული\n"
+" - გაშვებულია, თუ არა Xen-ის სერვისი"
 
 #: virtManager/lib/connectauth.py:173
 msgid ""
@@ -4350,6 +4356,9 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
+"ლოკალური სესიის აღმოჩენა შეუძლებელია: თუ virt-manager გაშვებული გაქვთ ssh -X-"
+"ით ან VNC-ით, შეიძლება, libvirt-თან დაკავშირება ჩვეულებრივი მომხმარებლით ვერ "
+"შეძლოთ. სცადეთ, root-ით გაუშვათ."
 
 #: virtManager/lib/connectauth.py:179
 msgid "Verify that an appropriate libvirt daemon is running."
@@ -4370,6 +4379,8 @@ msgid ""
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
+"ნაგულისხმევი ჰაიპერვიზორის აღმოჩენა შეუძლებელია. დარწმუნდით, რომ QEMU/KVM-ის "
+"ვირტუალიზაციის და libvirt-ის პაკეტები დაყენებულია."
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
@@ -4609,6 +4620,9 @@ msgid ""
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
+"გვირაბით მიგრაციისთვის აუცილებელია დაშორებულად წვდომადი libvirt-ის URI, "
+"მაგრამ, არსებული კავშირი ლოკალური URI-ია. Libvirt ამას არ მიიღებთ, თუ "
+"ტრანსპორტს არ დაამატებთ."
 
 #: virtManager/migrate.py:292
 #, python-format
@@ -4812,6 +4826,9 @@ msgid ""
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
+"ახლა შეგიძლიათ დაამატოთ ღილაკების ჩაჭერა მათი დაჭერით.\n"
+"იმისათვის, რომ თქვენი არჩევანი დაადასტუროთ, დააწკაპუნეთ ღილაკს 'დიახ'\n"
+"სანამ სასურველ ღილაკებზე ჯერ კიდევ გიჭირავთ."
 
 #: virtManager/preferences.py:334
 msgid "Please press desired grab key combination"
