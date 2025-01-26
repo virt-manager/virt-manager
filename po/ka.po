@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-24 18:19+0000\n"
+"PO-Revision-Date: 2025-01-25 04:23+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ka/>\n"
@@ -5141,7 +5141,7 @@ msgstr ""
 "option help'"
 
 #: virtinst/cli.py:288
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
 "If it was, you can restart your domain by running:\n"
@@ -5150,17 +5150,17 @@ msgid ""
 msgstr ""
 "როგორც ჩანს, დომენის დაყენება წარმატებით არ დასრულდა.\n"
 "თუ ის დასრულდა წარმატებით, გადატვირთეთ თქვენი დომენი ბრძანებით:\n"
-"   %d\n"
+"   %s\n"
 "ან თავიდან დაიწყეთ დაყენება."
 
 #: virtinst/cli.py:306
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
 "%(path)s შეიძლება, ჰაიპერვიზორის მიერ წვდომადი არაა. შეიძლება, საჭიროა "
-"მომხმარებლისთვის '%(%(user)s)s' კითხვის უფლების მიცემა შემდეგ საქაღალდეებზე: "
+"მომხმარებლისთვის '%(user)s' კითხვის უფლების მიცემა შემდეგ საქაღალდეებზე: "
 "%(dirs)s"
 
 #: virtinst/cli.py:319
@@ -5867,6 +5867,8 @@ msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
+"ფაილურ სისტემას არ ექნება საკმარისი ადგილი, რომ დამატებითი ფაილი სრულად "
+"გამოყოს, როცა სტუმარი გაშვებულია."
 
 #: virtinst/diskbackend.py:543
 msgid "There is not enough free space to create the disk."
@@ -5901,6 +5903,9 @@ msgid ""
 "cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
 "count %(vcpus)d"
 msgstr ""
+"სულ CPU-ები ტოპოლოგიაში (სოკეტები=%(sockets)d * კრისტალი=%(dies)d * "
+"ბირთვები=%(cores)d * ნაკადები=%(threads)d == %(total)d არ ემთხვევა vCPU-ების "
+"რაოდენობას %(vcpus)d"
 
 #: virtinst/domain/launch_security.py:29
 msgid "SEV launch security requires a Q35 UEFI machine"
@@ -6005,6 +6010,9 @@ msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
 msgstr ""
+"საქაღალდიდან დაყენება, ჩვეულებრივ, არ მუშაობს, სანამ ბირთვს არ გადასცემთ "
+"დამატებით პარმეტრებს, რომლებიც დაყენების პროგრამას ქსელში ამ საქაღალდის "
+"მდებარეობას მიუთითებს."
 
 #: virtinst/install/unattended.py:63
 #, python-format
@@ -6071,6 +6079,8 @@ msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
 msgstr ""
+"მდებარეობა დაყენების ხის ძირითადი საქაღალდე უნდა იყოს.\n"
+"მეტი ინფორმაციისთვის იხილეთ virt-install-ის დოკუმენტაცია."
 
 #: virtinst/install/urlfetcher.py:101
 #, python-format
@@ -6178,6 +6188,8 @@ msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
+"ტომის შესაქმნელად საცავის პულში საკმარისი თავისუფალი ადგილი არაა ("
+"მოთხოვნილია %(mem1)s მბ > %(mem2)s მბ ხელმისაწვდომი)"
 
 #: virtinst/storage.py:741
 #, python-format
@@ -6186,6 +6198,9 @@ msgid ""
 "volume is fully allocated. (%(mem1)s M requested capacity > %(mem2)s M "
 "available)"
 msgstr ""
+"მოთხოვნილიტომის მოცულობა უფრო მეტია, ვიდრე პულის ხელმისაწვდომი სივრცე, როცა "
+"ტომი მთლიანად გამოიყენება (%(mem1)s მოთხოვნილი მბ > %(mem2)s მბ "
+"ხელმისაწვდომი)"
 
 #: virtinst/virtclone.py:20
 msgid ""
@@ -6206,6 +6221,14 @@ msgid ""
 "outside the scope of this tool. For these types of changes, please see virt-"
 "sysprep(1)."
 msgstr ""
+"დაადუბლირეთ ვირტუალური მანქანა. ამით შეიცვლება ჰოსტის ყველა ისეთი უნიკალური "
+"პარამეტრი, როგორიცაა MAC მისამართი, სახელი და ა.შ.\n"
+"\n"
+"ვმ-ის შემცველობა არ შეიცვლება: virt-cone სტუმარი ოს-ის _შიგნით_ არაფერს "
+"ცვლის. ის, მხოლოდ, დაადუბლირებს დისკებს და მოახდენს ჰოსტის მხარეს "
+"ცვლილებებს. ასე რომ, პაროლების შეცვლა, სტატიკური IP მისამართის შეცვლა და "
+"ა.შ. ამ ხელსაწყოს მოქმედების არეალის გარეთაა. ამ ტიპის ცვლილებებისთვის "
+"იხილეთ ბრძანება virt-sysprep (1)."
 
 #: virtinst/virtclone.py:77 virtinst/virtinstall.py:1034
 msgid "General Options"
@@ -6257,6 +6280,9 @@ msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
+"მოწყობილობის სამიზნის კოპირების გამოტოვება (მაგ: თუ 'vda' დისკია, რომლის "
+"კოპირებაც არ გნებავთ და გნებავთ, იგივე ბილიკზე გამოიყენოთ ახალ ვმ-ში, "
+"გამოიყენეთ --skip-copy=vda)"
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6268,6 +6294,9 @@ msgid ""
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
+"საცავის შემცველობა არ დაკოპირდება მითითებული ფაილის ბილიკებზე. მათი "
+"შემცველობა არ შეიცვლება. ამას თითოეული დაკლონვადი დისკის ასლის ფაილის "
+"ბილიკის მითითება სჭირდება."
 
 #: virtinst/virtclone.py:113
 msgid "New file to use as storage for nvram VARS"
@@ -6320,6 +6349,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"მითითებულია -c არგუმენტით, რომელიც libvirt-ის URI-ის წააგავს. გულისხმობდით, "
+"რომ გნებავთ --connect? თუ არა, გამოიყენეთ --cdrom"
 
 #: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
@@ -6370,6 +6401,8 @@ msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
+"CDROM მედია, ნაგულისხმევად, ტექსტურ კონსოლზე არ ბეჭდავს, ასე რომ გამოტანილ "
+"ტექსტს ვერ დაინახავთ. შეიძლება, დაგჭირდეთ პარამეტრი --location."
 
 #: virtinst/virtinstall.py:335
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6443,6 +6476,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"დაყენების მედიიდან ოპერაციული სისტემის სახელის დადგენა ჩავარდა. გამოყენებული "
+"იქნება ზოგადი სახელი '{name}'.\n"
+"მოგვწერეთ virt-install-ის შეცდომის შესახებ, თუ ელოდით, რომ აღმოჩენა სწორად "
+"უნდა მომხდარიყო."
 
 #: virtinst/virtinstall.py:571
 #, python-format
@@ -6462,6 +6499,9 @@ msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"ეს შეცდომა ფატალურია. ოს-ის სახელის მითითება აუცილებელია\n"
+"თანამედროვე, წარმადობის მქონე, დაცული ვირტუალური მანქანის ნაგულისხმევი "
+"პარამეტრებისთვის.\n"
 
 #: virtinst/virtinstall.py:590
 msgid ""
@@ -6470,6 +6510,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"თუ ელოდით, რომ  virt-install დაადგენდა ოს-ის სახელს\n"
+"დასაყენებელი მედიიდან, ამისი გაკეთება შეგიძლიათ პარამეტრით:\n"
+"\n"
+"  --osinfo detect=on,name=OSNAME\n"
 
 #: virtinst/virtinstall.py:599
 msgid ""
@@ -6500,6 +6544,11 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"თუ გნებავთ ძველი ქცევის დაბრუნება, გამოიყენეთ:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"ან export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:623
 #, python-brace-format
@@ -6800,7 +6849,11 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
+"'--edit {number}' მოთხოვნილია, მაგრამ XML-ში, მხოლოდ, {maxnum} {cli_flag} "
+"ობიექტია"
 msgstr[1] ""
+"'--edit {number}' მოთხოვნილია, მაგრამ XML-ში, მხოლოდ, {maxnum} {cli_flag} "
+"ობიექტია"
 
 #: virtinst/virtxml.py:225
 #, python-format
@@ -6925,6 +6978,11 @@ msgid ""
 "--edit all --disk ... (edit all disk devices)\n"
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
+"ვმ-ის XML ფაილის ჩასწორება. მაგალითები:\n"
+"--edit --disk ...     (პირველი დისკის მოწყობილობის ჩასწორება)\n"
+"--edit 2 --disk ...   (მეორე დისკის მოწყობილობის ჩასწორება)\n"
+"--edit all --disk ... (ყველა დისკის მოწყობილობის ჩასწორება)\n"
+"--edit target=hda --disk ... (ჩასწორდება დისკი 'hda')\n"
 
 #: virtinst/virtxml.py:453
 msgid ""
@@ -6933,6 +6991,10 @@ msgid ""
 "--remove-device --disk all (remove all disks)\n"
 "--remove-device --disk /some/path"
 msgstr ""
+"მითითებული მოწყობილობის წაშლა. მაგ:\n"
+"--remove-device --disk 1 (პირველი დისკის წაშლა)\n"
+"--remove-device --disk all (ყველა დისკის წაშლა)\n"
+"--remove-device --disk /some/path"
 
 #: virtinst/virtxml.py:458
 msgid ""
@@ -6961,6 +7023,10 @@ msgid ""
 "With --remove-device, this is a hotunplug operation.\n"
 "With --edit, this is an update device operation."
 msgstr ""
+"ცვლილებების გადატარება გაშვებულ ვმ-ზე.\n"
+"პარამეტრი --add-device 'ცხლად' დამატების ოპერაციაა.\n"
+"პარამეტრი --remove-device 'ცხლად' გამოერთების ოპერაციაა.\n"
+"პარამეტრი --edit მოწყობილობის განახლების ოპერაციაა."
 
 #: virtinst/virtxml.py:472
 msgid ""
@@ -7034,6 +7100,8 @@ msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
+"XML არ შეცვლილა დომენის აღწერის შემდეგ. შეიძლება, შეცვალეთ მნიშვნელობაზე, "
+"რომელსაც libvirt ნაგულისხმევად იყენებს."
 
 #: virtinst/virtxml.py:643
 msgid "Aborted at user request"
