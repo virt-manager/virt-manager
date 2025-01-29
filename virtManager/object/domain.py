@@ -1157,14 +1157,13 @@ class vmmDomain(vmmLibvirtObject):
         return self._snapshot_list[:]
 
     def get_current_snapshot(self):
+        if self._backend.hasCurrentSnapshot(0):
+            rawsnap = self._backend.snapshotCurrent(0)
+            obj = vmmDomainSnapshot(self.conn, rawsnap)
+            obj.init_libvirt_state()
+            return obj
 
-       if self._backend.hasCurrentSnapshot(0):
-           rawsnap = self._backend.snapshotCurrent(0)
-           obj = vmmDomainSnapshot(self.conn, rawsnap)
-           obj.init_libvirt_state()
-           return obj
-
-       return None
+        return None
 
     @vmmLibvirtObject.lifecycle_action
     def revert_to_snapshot(self, snap):
