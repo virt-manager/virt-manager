@@ -17,10 +17,12 @@ from virtinst import xmlutil
 
 # pylint: disable=protected-access
 
+
 class _TestConfig(object):
     """
     Class containing any bits passed in from setup.py
     """
+
     def __init__(self):
         self.regenerate_output = False
         self.debug = False
@@ -57,8 +59,10 @@ class _URIs(object):
         self._testdriver_default = None
 
         _capspath = DATADIR + "/capabilities/"
+
         def _domcaps(path):
             return ",domcaps=" + _capspath + path
+
         def _caps(path):
             return ",caps=" + _capspath + path
 
@@ -69,16 +73,18 @@ class _URIs(object):
         # trickling effects for the testsuite. We use our own
         # test XML which roughly matches test:///default, and then
         # fake the URI
-        self.test_default = _testtmpl % (_testdriverdir + "testdefault.xml") + ",fakeuri=test:///default"
+        self.test_default = (
+            _testtmpl % (_testdriverdir + "testdefault.xml") + ",fakeuri=test:///default"
+        )
 
         self.test_full = _testtmpl % (_testdriverdir + "testdriver.xml")
         self.test_suite = _testtmpl % (_testdriverdir + "testsuite.xml")
-        self.test_defaultpool_collision = _testtmpl % (
-            _testdriverdir + "defaultpool-collision.xml")
+        self.test_defaultpool_collision = _testtmpl % (_testdriverdir + "defaultpool-collision.xml")
         self.test_empty = _testtmpl % (_testdriverdir + "empty.xml")
 
         def _m(fakeuri):
             return self.test_full + ",fakeuri=%s" % fakeuri
+
         self.test_remote = _m("test+tls://fakeuri.example.com/")
 
         self.xen = _m("xen:///") + _caps("xen-rhel5.4.xml")
@@ -94,22 +100,33 @@ class _URIs(object):
         self.kvm_x86 = _uri_qemu + _kvm_x86_caps
         self.kvm_x86_remote = _m("qemu+tls://fakeuri.example.com/system") + _kvm_x86_caps
         self.kvm_x86_nodomcaps = _uri_qemu + _caps("kvm-x86_64.xml")
-        self.kvm_x86_cpu_insecure = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-insecure.xml")
-        self.kvm_x86_oldfirmware = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-oldfirmware.xml")
+        self.kvm_x86_cpu_insecure = self.kvm_x86_nodomcaps + _domcaps(
+            "kvm-x86_64-domcaps-insecure.xml"
+        )
+        self.kvm_x86_oldfirmware = self.kvm_x86_nodomcaps + _domcaps(
+            "kvm-x86_64-domcaps-oldfirmware.xml"
+        )
         self.kvm_amd_sev = self.kvm_x86_nodomcaps + _domcaps("kvm-x86_64-domcaps-amd-sev.xml")
 
         # Non-x86 arch URIs
         self.kvm_armv7l_nodomcaps = _uri_qemu + _caps("kvm-armv7l.xml")
         self.kvm_armv7l = self.kvm_armv7l_nodomcaps + _domcaps("kvm-armv7l-domcaps.xml")
-        self.kvm_aarch64 = _uri_qemu + _caps("kvm-aarch64.xml") + _domcaps("kvm-aarch64-domcaps.xml")
-        self.kvm_ppc64le = _uri_qemu + _caps("kvm-ppc64le.xml") + _domcaps("kvm-ppc64le-domcaps.xml")
+        self.kvm_aarch64 = (
+            _uri_qemu + _caps("kvm-aarch64.xml") + _domcaps("kvm-aarch64-domcaps.xml")
+        )
+        self.kvm_ppc64le = (
+            _uri_qemu + _caps("kvm-ppc64le.xml") + _domcaps("kvm-ppc64le-domcaps.xml")
+        )
         self.kvm_s390x = _uri_qemu + _caps("kvm-s390x.xml") + _domcaps("kvm-s390x-domcaps.xml")
-        self.qemu_riscv64 = _uri_qemu + _caps("qemu-riscv64.xml") + _domcaps("qemu-riscv64-domcaps.xml")
-        self.kvm_loongarch64 = _uri_qemu + _caps("kvm-loongarch64.xml") + _domcaps("kvm-loongarch64-domcaps.xml")
+        self.qemu_riscv64 = (
+            _uri_qemu + _caps("qemu-riscv64.xml") + _domcaps("qemu-riscv64-domcaps.xml")
+        )
+        self.kvm_loongarch64 = (
+            _uri_qemu + _caps("kvm-loongarch64.xml") + _domcaps("kvm-loongarch64-domcaps.xml")
+        )
 
         # hvf
         self.hvf_x86 = _uri_qemu + _caps("hvf-x86_64.xml") + _domcaps("hvf-x86_64-domcaps.xml")
-
 
     def openconn(self, uri):
         """
@@ -129,8 +146,8 @@ class _URIs(object):
                 if not is_testdriver_xml:
                     raise
                 self._testdriver_error = (
-                        "error opening testdriver.xml: %s\n"
-                        "libvirt is probably too old" % str(e))
+                    "error opening testdriver.xml: %s\n" "libvirt is probably too old" % str(e)
+                )
                 print(self._testdriver_error, file=sys.stderr)
 
         if is_testdriver_xml and self._testdriver_error:
@@ -161,6 +178,7 @@ class _URIs(object):
             # Used by clonetest.py nvram-newpool test
             if poolobj.name() == "nvram-newpool":
                 from virtinst import StorageVolume
+
                 vol = StorageVolume(conn)
                 vol.pool = poolobj
                 vol.name = "clone-orig-vars.fd"
@@ -189,11 +207,12 @@ class _URIs(object):
 
     def open_kvm(self):
         return self.openconn(self.kvm_x86)
+
     def open_test_remote(self):
         return self.openconn(self.test_remote)
 
-URIs = _URIs()
 
+URIs = _URIs()
 
 
 def test_create(testconn, xml, define_func="defineXML"):
@@ -247,8 +266,7 @@ def diff_compare(actual_out, filename=None, expect_out=None):
     if not expect_out.endswith("\n"):
         expect_out += "\n"
 
-    diff = xmlutil.diff(expect_out, actual_out,
-            filename or '', "Generated output")
+    diff = xmlutil.diff(expect_out, actual_out, filename or "", "Generated output")
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)
 
@@ -257,6 +275,7 @@ def run_without_testsuite_hacks(cb):
     """
     Decorator for unsetting the test suite env variable
     """
+
     def wrapper_cb(*args, **kwargs):
         origval = os.environ.pop("VIRTINST_TEST_SUITE", None)
         try:
@@ -264,4 +283,5 @@ def run_without_testsuite_hacks(cb):
         finally:
             if origval:
                 os.environ["VIRTINST_TEST_SUITE"] = origval
+
     return wrapper_cb

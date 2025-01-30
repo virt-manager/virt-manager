@@ -26,7 +26,6 @@ class DeviceSmartcard(Device):
     database = XMLProperty("./database")
     certificates = XMLChildProperty(_Certificate)
 
-
     ##################
     # Default config #
     ##################

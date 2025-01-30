@@ -11,18 +11,19 @@ warnings.simplefilter("ignore")
 
 # Ignores pylint error since dogtail doesn't specify this
 import gi
-gi.require_version('Atspi', '2.0')
+
+gi.require_version("Atspi", "2.0")
 
 import dogtail.config
 import dogtail.utils
 
 # find() backoff handling
-dogtail.config.config.searchBackoffDuration = .1
+dogtail.config.config.searchBackoffDuration = 0.1
 dogtail.config.config.searchCutoffCount = 20
 
 # Use .1 second delay between each action (default 1)
-dogtail.config.config.actionDelay = .1
-dogtail.config.config.defaultDelay = .1
+dogtail.config.config.actionDelay = 0.1
+dogtail.config.config.defaultDelay = 0.1
 
 # Turn off needlessly noisy debugging
 DOGTAIL_DEBUG = False

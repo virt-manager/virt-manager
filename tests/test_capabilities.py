@@ -62,6 +62,7 @@ def testGuestCapabilities():
 # domcapabilities.py testing #
 ##############################
 
+
 def testDomainCapabilities():
     xml = open(DATADIR + "/test-domcaps.xml").read()
     caps = DomainCapabilities(utils.URIs.open_testdriver_cached(), xml)
@@ -74,8 +75,7 @@ def testDomainCapabilities():
     assert caps.os.loader.supported is True
     assert caps.os.loader.get_values() == ["/foo/bar", "/tmp/my_path"]
     assert caps.os.loader.enum_names() == ["type", "readonly"]
-    assert caps.os.loader.get_enum("type").get_values() == [
-            "rom", "pflash"]
+    assert caps.os.loader.get_enum("type").get_values() == ["rom", "pflash"]
     assert caps.os.loader.get_enum("idontexist").get_values() == []
 
 

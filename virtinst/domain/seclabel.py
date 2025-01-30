@@ -34,19 +34,19 @@ class DomainSeclabel(XMLBuilder):
 
         lab_len = None
         if self.label:
-            lab_len = min(3, len(self.label.split(':')))
+            lab_len = min(3, len(self.label.split(":")))
 
         if lab_len == 3:
             return self.MODEL_SELINUX
         elif lab_len == 2:
             return self.MODEL_DAC
+
     model = XMLProperty("./@model")
     type = XMLProperty("./@type")
 
     label = XMLProperty("./label")
     baselabel = XMLProperty("./baselabel")
     relabel = XMLProperty("./@relabel", is_yesno=True)
-
 
     ##################
     # Default config #

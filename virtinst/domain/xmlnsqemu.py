@@ -6,8 +6,7 @@
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-XMLBuilder.register_namespace(
-        "qemu", "http://libvirt.org/schemas/domain/qemu/1.0")
+XMLBuilder.register_namespace("qemu", "http://libvirt.org/schemas/domain/qemu/1.0")
 
 
 class _XMLNSQemuArg(XMLBuilder):
@@ -27,6 +26,7 @@ class DomainXMLNSQemu(XMLBuilder):
     """
     Class for generating <qemu:commandline> XML
     """
+
     XML_NAME = "qemu:commandline"
     _XML_PROP_ORDER = ["args", "envs"]
 

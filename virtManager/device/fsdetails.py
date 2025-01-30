@@ -28,13 +28,10 @@ _EDIT_FS_ENUM = range(1, 8)
 
 
 class vmmFSDetails(vmmGObjectUI):
-    __gsignals__ = {
-        "changed": (vmmGObjectUI.RUN_FIRST, None, [])
-    }
+    __gsignals__ = {"changed": (vmmGObjectUI.RUN_FIRST, None, [])}
 
     def __init__(self, vm, builder, topwin):
-        vmmGObjectUI.__init__(self, "fsdetails.ui",
-                              None, builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "fsdetails.ui", None, builder=builder, topwin=topwin)
 
         self.vm = vm
         self.conn = vm.conn
@@ -45,18 +42,21 @@ class vmmFSDetails(vmmGObjectUI):
         def _e(edittype):
             def signal_cb(*args):
                 self._change_cb(edittype)
+
             return signal_cb
 
-        self.builder.connect_signals({
-            "on_fs_source_browse_clicked": self._browse_fs_source_cb,
-            "on_fs_type_combo_changed": _e(_EDIT_FS_TYPE),
-            "on_fs_driver_combo_changed": _e(_EDIT_FS_DRIVER),
-            "on_fs_readonly_toggled": _e(_EDIT_FS_READONLY),
-            "on_fs_format_combo_changed": _e(_EDIT_FS_FORMAT),
-            "on_fs_source_changed": _e(_EDIT_FS_SOURCE),
-            "on_fs_ram_source_changed": _e(_EDIT_FS_RAM_SOURCE),
-            "on_fs_target_changed": _e(_EDIT_FS_TARGET),
-        })
+        self.builder.connect_signals(
+            {
+                "on_fs_source_browse_clicked": self._browse_fs_source_cb,
+                "on_fs_type_combo_changed": _e(_EDIT_FS_TYPE),
+                "on_fs_driver_combo_changed": _e(_EDIT_FS_DRIVER),
+                "on_fs_readonly_toggled": _e(_EDIT_FS_READONLY),
+                "on_fs_format_combo_changed": _e(_EDIT_FS_FORMAT),
+                "on_fs_source_changed": _e(_EDIT_FS_SOURCE),
+                "on_fs_ram_source_changed": _e(_EDIT_FS_RAM_SOURCE),
+                "on_fs_target_changed": _e(_EDIT_FS_TARGET),
+            }
+        )
 
         self._init_ui()
         self.top_box = self.widget("vmm-fs-details")
@@ -68,7 +68,6 @@ class vmmFSDetails(vmmGObjectUI):
         if self._storage_browser:
             self._storage_browser.cleanup()
             self._storage_browser = None
-
 
     ##########################
     # Initialization methods #
@@ -90,34 +89,34 @@ class vmmFSDetails(vmmGObjectUI):
 
         # Filesystem widgets
         if self.conn.is_container_only():
-            simple_store_set("fs-type-combo",
-                [DeviceFilesystem.TYPE_MOUNT,
-                 DeviceFilesystem.TYPE_FILE,
-                 DeviceFilesystem.TYPE_BLOCK,
-                 DeviceFilesystem.TYPE_RAM])
+            simple_store_set(
+                "fs-type-combo",
+                [
+                    DeviceFilesystem.TYPE_MOUNT,
+                    DeviceFilesystem.TYPE_FILE,
+                    DeviceFilesystem.TYPE_BLOCK,
+                    DeviceFilesystem.TYPE_RAM,
+                ],
+            )
         else:
             simple_store_set("fs-type-combo", [DeviceFilesystem.TYPE_MOUNT])
 
         if self.conn.is_container_only():
-            simple_store_set("fs-driver-combo",
-                    [DeviceFilesystem.DRIVER_LOOP,
-                     DeviceFilesystem.DRIVER_NBD,
-                     None])
+            simple_store_set(
+                "fs-driver-combo", [DeviceFilesystem.DRIVER_LOOP, DeviceFilesystem.DRIVER_NBD, None]
+            )
         else:
             domcaps = self.vm.get_domain_capabilities()
             rows = []
             if domcaps.supports_filesystem_virtiofs():
                 rows.append(["virtiofs", "virtiofs"])
             rows.append([None, "virtio-9p"])
-            uiutil.build_simple_combo(
-                    self.widget("fs-driver-combo"), rows, sort=False)
+            uiutil.build_simple_combo(self.widget("fs-driver-combo"), rows, sort=False)
 
         simple_store_set("fs-format-combo", ["raw", "qcow2"])
         self.widget("fs-readonly").set_visible(
-                self.conn.is_qemu() or
-                self.conn.is_test() or
-                self.conn.is_lxc())
-
+            self.conn.is_qemu() or self.conn.is_test() or self.conn.is_lxc()
+        )
 
     ##############
     # UI syncing #
@@ -129,15 +128,11 @@ class vmmFSDetails(vmmGObjectUI):
         is_qemu = self.conn.is_qemu() or self.conn.is_test()
 
         show_ram_source = fstype == DeviceFilesystem.TYPE_RAM
-        uiutil.set_grid_row_visible(
-            self.widget("fs-ram-source-box"), show_ram_source)
-        uiutil.set_grid_row_visible(
-            self.widget("fs-source-box"), not show_ram_source)
+        uiutil.set_grid_row_visible(self.widget("fs-ram-source-box"), show_ram_source)
+        uiutil.set_grid_row_visible(self.widget("fs-source-box"), not show_ram_source)
 
-        show_format = bool(
-            fsdriver == DeviceFilesystem.DRIVER_NBD)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-format-combo"), show_format)
+        show_format = bool(fsdriver == DeviceFilesystem.DRIVER_NBD)
+        uiutil.set_grid_row_visible(self.widget("fs-format-combo"), show_format)
 
         show_driver_combo = is_qemu or fstype == DeviceFilesystem.TYPE_FILE
 
@@ -148,22 +143,18 @@ class vmmFSDetails(vmmGObjectUI):
 
         self.widget("fs-source-title").set_text(source_text)
         self.widget("fs-source-title").set_use_underline(True)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-type-combo"), not is_qemu)
-        uiutil.set_grid_row_visible(
-                self.widget("fs-driver-combo"), show_driver_combo)
+        uiutil.set_grid_row_visible(self.widget("fs-type-combo"), not is_qemu)
+        uiutil.set_grid_row_visible(self.widget("fs-driver-combo"), show_driver_combo)
 
         need_shared_mem = fsdriver == "virtiofs"
         have_shared_mem, _shared_mem_err = self.vm.has_shared_mem()
         show_shared_mem_warn = need_shared_mem and not have_shared_mem
-        uiutil.set_grid_row_visible(
-                self.widget("fs-driver-warn-box"), show_shared_mem_warn)
+        uiutil.set_grid_row_visible(self.widget("fs-driver-warn-box"), show_shared_mem_warn)
         if show_shared_mem_warn:
-            label = _(
-                    "You may need to 'Enable shared memory' on the 'Memory' screen.")
+            label = _("You may need to 'Enable shared memory' on the 'Memory' screen.")
             self.widget("fs-driver-warn").set_markup(
-                    "<small>%s</small>" % xmlutil.xml_escape(label))
-
+                "<small>%s</small>" % xmlutil.xml_escape(label)
+            )
 
     ##############
     # Public API #
@@ -182,12 +173,9 @@ class vmmFSDetails(vmmGObjectUI):
     def set_dev(self, dev):
         self.reset_state()
 
-        uiutil.set_list_selection(
-                self.widget("fs-type-combo"), dev.type)
-        uiutil.set_list_selection(
-                self.widget("fs-driver-combo"), dev.driver_type)
-        uiutil.set_list_selection(
-                self.widget("fs-format-combo"), dev.driver_format)
+        uiutil.set_list_selection(self.widget("fs-type-combo"), dev.type)
+        uiutil.set_list_selection(self.widget("fs-driver-combo"), dev.driver_type)
+        uiutil.set_list_selection(self.widget("fs-format-combo"), dev.driver_format)
 
         if dev.type != DeviceFilesystem.TYPE_RAM:
             self.widget("fs-source").set_text(dev.source or "")
@@ -197,7 +185,6 @@ class vmmFSDetails(vmmGObjectUI):
         self.widget("fs-readonly").set_active(dev.readonly)
 
         self._active_edits = []
-
 
     ###################
     # Device building #
@@ -221,11 +208,10 @@ class vmmFSDetails(vmmGObjectUI):
 
         if _EDIT_FS_TYPE in self._active_edits:
             dev.type = fstype
-        if (_EDIT_FS_RAM_SOURCE in self._active_edits or
-            _EDIT_FS_SOURCE in self._active_edits):
+        if _EDIT_FS_RAM_SOURCE in self._active_edits or _EDIT_FS_SOURCE in self._active_edits:
             if fstype == DeviceFilesystem.TYPE_RAM:
                 dev.source = usage
-                dev.source_units = 'MiB'
+                dev.source_units = "MiB"
             else:
                 dev.source = source
         if _EDIT_FS_TARGET in self._active_edits:
@@ -257,7 +243,6 @@ class vmmFSDetails(vmmGObjectUI):
         self._set_values(newdev)
         return newdev
 
-
     ####################
     # Internal helpers #
     ####################
@@ -267,9 +252,7 @@ class vmmFSDetails(vmmGObjectUI):
             if path:
                 textent.set_text(path)
 
-        reason = (isdir and
-                  vmmStorageBrowser.REASON_FS or
-                  vmmStorageBrowser.REASON_IMAGE)
+        reason = isdir and vmmStorageBrowser.REASON_FS or vmmStorageBrowser.REASON_IMAGE
 
         if self._storage_browser is None:
             self._storage_browser = vmmStorageBrowser(self.conn)
@@ -277,7 +260,6 @@ class vmmFSDetails(vmmGObjectUI):
         self._storage_browser.set_finish_cb(set_storage_cb)
         self._storage_browser.set_browse_reason(reason)
         self._storage_browser.show(self.topwin.get_ancestor(Gtk.Window))
-
 
     #############
     # Listeners #

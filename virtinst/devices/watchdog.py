@@ -17,19 +17,23 @@ class DeviceWatchdog(Device):
     MODELS = [MODEL_I6300, MODEL_IB700, MODEL_DIAG288]
 
     ACTION_SHUTDOWN = "shutdown"
-    ACTION_RESET    = "reset"
+    ACTION_RESET = "reset"
     ACTION_POWEROFF = "poweroff"
-    ACTION_PAUSE    = "pause"
-    ACTION_NONE     = "none"
-    ACTION_DUMP     = "dump"
-    ACTIONS = [ACTION_RESET, ACTION_SHUTDOWN,
-               ACTION_POWEROFF, ACTION_PAUSE,
-               ACTION_DUMP, ACTION_NONE]
+    ACTION_PAUSE = "pause"
+    ACTION_NONE = "none"
+    ACTION_DUMP = "dump"
+    ACTIONS = [
+        ACTION_RESET,
+        ACTION_SHUTDOWN,
+        ACTION_POWEROFF,
+        ACTION_PAUSE,
+        ACTION_DUMP,
+        ACTION_NONE,
+    ]
 
     _XML_PROP_ORDER = ["model", "action"]
     model = XMLProperty("./@model")
     action = XMLProperty("./@action")
-
 
     ##################
     # Default config #

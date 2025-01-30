@@ -11,14 +11,16 @@ from gi.repository import Gdk
 from gi.repository import GObject
 
 import gi
-gi.require_version('GtkVnc', '2.0')
+
+gi.require_version("GtkVnc", "2.0")
 from gi.repository import GtkVnc
+
 try:
     SPICE_GTK_IMPORT_ERROR = None
     if "VIRTINST_TEST_SUITE_FAKE_NO_SPICE" in os.environ:
         raise ImportError("test suite faking no spice")
 
-    gi.require_version('SpiceClientGtk', '3.0')
+    gi.require_version("SpiceClientGtk", "3.0")
     from gi.repository import SpiceClientGtk
     from gi.repository import SpiceClientGLib
 except (ValueError, ImportError) as _SPICE_GTK_IMPORT_ERROR:
@@ -53,6 +55,7 @@ class Viewer(vmmGObject):
     """
     Base class for viewer abstraction
     """
+
     __gsignals__ = {
         "add-display-widget": (vmmGObject.RUN_FIRST, None, [object]),
         "size-allocate": (vmmGObject.RUN_FIRST, None, [object]),
@@ -78,8 +81,7 @@ class Viewer(vmmGObject):
         self._keyboard_grab = False
         self._desktop_resolution = (0, 0)
 
-        self.add_gsettings_handle(
-            self.config.on_keys_combination_changed(self._refresh_grab_keys))
+        self.add_gsettings_handle(self.config.on_keys_combination_changed(self._refresh_grab_keys))
 
     def _cleanup(self):
         self._close()
@@ -91,7 +93,6 @@ class Viewer(vmmGObject):
 
         self._tunnels.close_all()
 
-
     ########################
     # Internal helper APIs #
     ########################
@@ -101,17 +102,18 @@ class Viewer(vmmGObject):
         Helper for redirecting a signal from self._display out
         through the viewer
         """
+
         def _proxy_signal(src, *args, **kwargs):
             ignore = src
             self.emit(new_signal, *args, **kwargs)
+
         return _proxy_signal
 
     def _set_display(self, display):
         self._display = display
         self._refresh_grab_keys()
 
-        self._display.connect("size-allocate",
-            self._make_signal_proxy("size-allocate"))
+        self._display.connect("size-allocate", self._make_signal_proxy("size-allocate"))
 
         self.emit("add-display-widget", self._display)
         self._display.realize()
@@ -119,7 +121,6 @@ class Viewer(vmmGObject):
         self._connect_display_signals()
 
         self._display.show()
-
 
     #########################
     # Generic internal APIs #
@@ -173,16 +174,14 @@ class Viewer(vmmGObject):
                 return  # pragma: no cover
 
             try:
-                keys = [int(k) for k in keys.split(',')]
+                keys = [int(k) for k in keys.split(",")]
             except Exception:  # pragma: no cover
-                log.debug("Error in grab_keys configuration in Gsettings",
-                              exc_info=True)
+                log.debug("Error in grab_keys configuration in Gsettings", exc_info=True)
                 return
 
             self._set_grab_keys(keys)
         except Exception as e:  # pragma: no cover
-            log.debug("Error when getting the grab keys combination: %s",
-                          str(e))
+            log.debug("Error when getting the grab keys combination: %s", str(e))
 
     def _emit_disconnected(self, errdetails=None):
         ssherr = self._tunnels.get_err_output()
@@ -197,11 +196,9 @@ class Viewer(vmmGObject):
         if origres == newres:
             return  # pragma: no cover
 
-        log.debug("vm=%s resolution changed: orig=%s new=%s",
-                  self._vm.get_name(), origres, newres)
+        log.debug("vm=%s resolution changed: orig=%s new=%s", self._vm.get_name(), origres, newres)
         self._desktop_resolution = newres
         self.emit("desktop-resolution-changed")
-
 
     #######################################################
     # Internal API that will be overwritten by subclasses #
@@ -212,11 +209,13 @@ class Viewer(vmmGObject):
 
     def _is_open(self):
         raise NotImplementedError()
+
     def _connect_display_signals(self):
         raise NotImplementedError()
 
     def _set_username(self, cred):
         raise NotImplementedError()
+
     def _set_password(self, cred):
         raise NotImplementedError()
 
@@ -228,29 +227,33 @@ class Viewer(vmmGObject):
 
     def _open_host(self):
         raise NotImplementedError()
+
     def _open_fd(self, fd):
         raise NotImplementedError()
 
     def _get_scaling(self):
         raise NotImplementedError()
+
     def _set_scaling(self, scaling):
         raise NotImplementedError()
 
     def _set_resizeguest(self, val):
         raise NotImplementedError()
+
     def _get_resizeguest(self):
         raise NotImplementedError()
+
     def _get_resizeguest_warning(self):
         raise NotImplementedError()
 
     def _get_usb_widget(self):
         raise NotImplementedError()
+
     def _has_usb_redirection(self):
         raise NotImplementedError()
 
     def _get_preferred_size(self):
         raise NotImplementedError()
-
 
     ####################################
     # APIs accessed by vmmConsolePages #
@@ -261,6 +264,7 @@ class Viewer(vmmGObject):
 
     def console_grab_focus(self):
         return self._grab_focus()
+
     def console_has_keyboard_grab(self):
         return bool(self._display and self._keyboard_grab)
 
@@ -272,6 +276,7 @@ class Viewer(vmmGObject):
 
     def console_set_password(self, val):
         return self._set_password(val)
+
     def console_set_username(self, val):
         return self._set_username(val)
 
@@ -289,11 +294,13 @@ class Viewer(vmmGObject):
 
     def console_set_resizeguest(self, val):
         return self._set_resizeguest(val)
+
     def console_get_resizeguest_warning(self):
         return self._get_resizeguest_warning()
 
     def console_get_usb_widget(self):
         return self._get_usb_widget()
+
     def console_has_usb_redirection(self):
         return self._has_usb_redirection()
 
@@ -306,19 +313,17 @@ class Viewer(vmmGObject):
 # VNC viewer class #
 ####################
 
+
 class VNCViewer(Viewer):
     viewer_type = "vnc"
-
 
     ###################
     # Private helpers #
     ###################
 
     def _connect_display_signals(self):
-        self._display.connect("vnc-pointer-grab",
-            self._make_signal_proxy("pointer-grab"))
-        self._display.connect("vnc-pointer-ungrab",
-            self._make_signal_proxy("pointer-ungrab"))
+        self._display.connect("vnc-pointer-grab", self._make_signal_proxy("pointer-grab"))
+        self._display.connect("vnc-pointer-ungrab", self._make_signal_proxy("pointer-ungrab"))
         self._display.connect("vnc-keyboard-grab", self._keyboard_grab_cb)
         self._display.connect("vnc-keyboard-ungrab", self._keyboard_ungrab_cb)
 
@@ -380,10 +385,10 @@ class VNCViewer(Viewer):
             elif cred == GtkVnc.DisplayCredential.CLIENTNAME:  # pragma: no cover
                 self._display.set_credential(cred, "libvirt-vnc")
             else:  # pragma: no cover
-                errmsg = (
-                        _("Unable to provide requested credentials to the VNC server.\n"
-                        "The credential type %s is not supported") %
-                        str(cred.value_name))
+                errmsg = _(
+                    "Unable to provide requested credentials to the VNC server.\n"
+                    "The credential type %s is not supported"
+                ) % str(cred.value_name)
                 self.emit("auth-error", errmsg, True)
                 return
 
@@ -393,7 +398,6 @@ class VNCViewer(Viewer):
     def _sync_force_size(self):
         force_size = not self._get_scaling() and not self._get_resizeguest()
         self._display.set_force_size(force_size)
-
 
     ###############################
     # Private API implementations #
@@ -408,6 +412,7 @@ class VNCViewer(Viewer):
     def _get_scaling(self):
         if self._display:
             return self._display.get_scaling()
+
     def _set_scaling(self, scaling):
         if self._display:
             self._display.set_scaling(scaling)
@@ -422,6 +427,7 @@ class VNCViewer(Viewer):
 
     def _set_username(self, cred):
         self._display.set_credential(GtkVnc.DisplayCredential.USERNAME, cred)
+
     def _set_password(self, cred):
         self._display.set_credential(GtkVnc.DisplayCredential.PASSWORD, cred)
 
@@ -429,22 +435,24 @@ class VNCViewer(Viewer):
         if _gtkvnc_supports_resizeguest():
             self._display.set_allow_resize(val)  # pylint: disable=no-member
             self._sync_force_size()
+
     def _get_resizeguest(self):
         if _gtkvnc_supports_resizeguest():
             return self._display.get_allow_resize()  # pylint: disable=no-member
         return False  # pragma: no cover
+
     def _get_resizeguest_warning(self):
         if not _gtkvnc_supports_resizeguest():
             return _("GTK-VNC viewer is too old")  # pragma: no cover
 
     def _get_usb_widget(self):
         return None  # pragma: no cover
+
     def _has_usb_redirection(self):
         return False
 
     def _get_preferred_size(self):
         return self._desktop_resolution
-
 
     #######################
     # Connection routines #
@@ -466,6 +474,7 @@ class VNCViewer(Viewer):
 ######################
 # Spice viewer class #
 ######################
+
 
 class _SignalTracker:
     # Helper class to more conveniently connect and disconnect signals
@@ -507,7 +516,6 @@ class SpiceViewer(Viewer):
         self._usbdev_manager = None
         self._channels = set()
 
-
     ###################
     # Private helpers #
     ###################
@@ -540,23 +548,16 @@ class SpiceViewer(Viewer):
         # Distros might have usb redirection compiled out, like OpenBSD
         # https://bugzilla.redhat.com/show_bug.cgi?id=1348479
         try:
-            self._usbdev_manager = SpiceClientGLib.UsbDeviceManager.get(
-                                        self._spice_session)
-            _SIGS.connect(
-                    self._usbdev_manager, "auto-connect-failed",
-                    self._usbdev_redirect_error)
-            _SIGS.connect(
-                    self._usbdev_manager, "device-error",
-                    self._usbdev_redirect_error)
+            self._usbdev_manager = SpiceClientGLib.UsbDeviceManager.get(self._spice_session)
+            _SIGS.connect(self._usbdev_manager, "auto-connect-failed", self._usbdev_redirect_error)
+            _SIGS.connect(self._usbdev_manager, "device-error", self._usbdev_redirect_error)
 
             autoredir = self.config.get_auto_usbredir()
             if autoredir:
                 gtk_session.set_property("auto-usbredir", True)
         except Exception:  # pragma: no cover
             self._usbdev_manager = None
-            log.debug("Error initializing spice usb device manager",
-                exc_info=True)
-
+            log.debug("Error initializing spice usb device manager", exc_info=True)
 
     #####################
     # Channel listeners #
@@ -569,12 +570,16 @@ class SpiceViewer(Viewer):
             self._emit_disconnected()
         elif event == SpiceClientGLib.ChannelEvent.ERROR_AUTH:
             if not self._spice_session.get_property("password"):
-                log.debug("Spice channel received ERROR_AUTH, but no "
-                    "password set, assuming it wants credentials.")
+                log.debug(
+                    "Spice channel received ERROR_AUTH, but no "
+                    "password set, assuming it wants credentials."
+                )
                 self.emit("need-auth", True, False)
             else:
-                log.debug("Spice channel received ERROR_AUTH, but a "
-                    "password is already set. Assuming authentication failed.")
+                log.debug(
+                    "Spice channel received ERROR_AUTH, but a "
+                    "password is already set. Assuming authentication failed."
+                )
                 self.emit("auth-error", channel.get_error().message, False)
         elif "ERROR" in str(event):
             # SpiceClientGLib.ChannelEvent.ERROR_CONNECT
@@ -586,8 +591,7 @@ class SpiceViewer(Viewer):
                 error = channel.get_error().message
             log.debug("Spice channel event=%s message=%s", event, error)
 
-            msg = _("Encountered SPICE %(error-name)s") % {
-                "error-name": event.value_nick}
+            msg = _("Encountered SPICE %(error-name)s") % {"error-name": event.value_nick}
             if error:
                 msg += ": %s" % error
             self._emit_disconnected(msg)
@@ -615,36 +619,30 @@ class SpiceViewer(Viewer):
         self._channels.add(channel)
         _SIGS.connect(channel, "open-fd", self._channel_open_fd_request)
 
-        if (isinstance(channel, SpiceClientGLib.MainChannel) and
-            not self._main_channel):
+        if isinstance(channel, SpiceClientGLib.MainChannel) and not self._main_channel:
             self._main_channel = channel
+            _SIGS.connect_after(self._main_channel, "channel-event", self._main_channel_event_cb)
             _SIGS.connect_after(
-                self._main_channel, "channel-event",
-                self._main_channel_event_cb)
-            _SIGS.connect_after(
-                self._main_channel, "notify::agent-connected",
-                self._agent_connected_cb)
+                self._main_channel, "notify::agent-connected", self._agent_connected_cb
+            )
 
-        elif (isinstance(channel, SpiceClientGLib.DisplayChannel) and
-              not self._display):
+        elif isinstance(channel, SpiceClientGLib.DisplayChannel) and not self._display:
             channel_id = channel.get_property("channel-id")
 
             if channel_id != 0:  # pragma: no cover
                 log.debug("Spice multi-head unsupported")
                 return
 
-            display = SpiceClientGtk.Display.new(
-                    self._spice_session, channel_id)
+            display = SpiceClientGtk.Display.new(self._spice_session, channel_id)
             self._set_display(display)
 
-            _SIGS.connect_after(
-                channel, "display-primary-create",
-                self._display_primary_create_cb)
+            _SIGS.connect_after(channel, "display-primary-create", self._display_primary_create_cb)
             self.emit("connected")
 
-        elif (type(channel) in [SpiceClientGLib.PlaybackChannel,
-                                SpiceClientGLib.RecordChannel] and
-                                not self._audio):
+        elif (
+            type(channel) in [SpiceClientGLib.PlaybackChannel, SpiceClientGLib.RecordChannel]
+            and not self._audio
+        ):
             # It's unclear why we need this audio handle, but it
             # does matter:
             # https://bugzilla.redhat.com/show_bug.cgi?id=1881080
@@ -655,7 +653,6 @@ class SpiceViewer(Viewer):
 
     def _display_primary_create_cb(self, *args):
         self._set_desktop_resolution(args[2], args[3])
-
 
     ################################
     # Internal API implementations #
@@ -685,8 +682,9 @@ class SpiceViewer(Viewer):
         self._display.set_grab_keys(seq)
 
     def _send_keys(self, keys):
-        return self._display.send_keys([Gdk.keyval_from_name(k) for k in keys],
-                                      SpiceClientGtk.DisplayKeyEvent.CLICK)
+        return self._display.send_keys(
+            [Gdk.keyval_from_name(k) for k in keys], SpiceClientGtk.DisplayKeyEvent.CLICK
+        )
 
     def _has_agent(self):
         if not self._main_channel:
@@ -697,8 +695,7 @@ class SpiceViewer(Viewer):
         host, port, tlsport = self._ginfo.get_conn_host()
         self._create_spice_session()
 
-        log.debug("Spice connecting to host=%s port=%s tlsport=%s",
-            host, port, tlsport)
+        log.debug("Spice connecting to host=%s port=%s tlsport=%s", host, port, tlsport)
         self._spice_session.set_property("host", str(host))
         if port:
             self._spice_session.set_property("port", str(port))
@@ -713,6 +710,7 @@ class SpiceViewer(Viewer):
 
     def _set_username(self, cred):
         ignore = cred  # pragma: no cover
+
     def _set_password(self, cred):
         self._spice_session.set_property("password", cred)
         fd = self._get_fd_for_open()
@@ -724,6 +722,7 @@ class SpiceViewer(Viewer):
     def _get_scaling(self):
         if self._display:
             return self._display.get_property("scaling")
+
     def _set_scaling(self, scaling):
         if self._display:
             self._display.set_property("scaling", scaling)
@@ -731,16 +730,19 @@ class SpiceViewer(Viewer):
     def _set_resizeguest(self, val):
         if self._display:
             self._display.set_property("resize-guest", val)
+
     def _get_resizeguest(self):
         if self._display:
             return self._display.get_property("resize-guest")
         return False  # pragma: no cover
+
     def _get_resizeguest_warning(self):
         if not self._has_agent():
             return _("Guest agent is not available.")
 
-    def _usbdev_redirect_error(self, spice_usbdev_widget, spice_usb_device,
-            errstr):  # pragma: no cover
+    def _usbdev_redirect_error(
+        self, spice_usbdev_widget, spice_usb_device, errstr
+    ):  # pragma: no cover
         ignore = spice_usbdev_widget
         ignore = spice_usb_device
         self.emit("usb-redirect-error", errstr)
@@ -749,8 +751,7 @@ class SpiceViewer(Viewer):
         if not self._spice_session:
             return  # pragma: no cover
 
-        usbwidget = SpiceClientGtk.UsbDeviceWidget.new(self._spice_session,
-            None)
+        usbwidget = SpiceClientGtk.UsbDeviceWidget.new(self._spice_session, None)
         usbwidget.connect("connect-failed", self._usbdev_redirect_error)
         return usbwidget
 
@@ -760,9 +761,7 @@ class SpiceViewer(Viewer):
         return True
 
     def _get_preferred_size(self):
-        if (not self._display or
-            self._get_scaling() or
-            self._get_resizeguest()):
+        if not self._display or self._get_scaling() or self._get_resizeguest():
             return self._desktop_resolution
 
         # When scaling and resizeguest disabled, this usually matches the

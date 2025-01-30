@@ -12,6 +12,7 @@ class _HugepagesPage(XMLBuilder):
     """
     Class representing <memoryBacking><hugepages><page> elements
     """
+
     XML_NAME = "page"
 
     size = XMLProperty("./@size")

@@ -11,6 +11,7 @@ from . import lib
 # Private helpers #
 ###################
 
+
 def _open_newvm(app):
     button = app.root.find("New", "push button")
     # Launching the dialog can be very flakey without this explicit
@@ -56,6 +57,7 @@ def _back(newvm, check=True):
 # UI tests for virt-manager's NewVM wizard #
 ############################################
 
+
 def testNewVMMultiConnection(app):
     """
     Test the wizard's multiple connection handling
@@ -86,8 +88,7 @@ def testNewVMMultiConnection(app):
     newvm.window_close()
     app.manager_conn_disconnect("QEMU/KVM")
 
-    _add_conn(tests.utils.URIs.kvm_x86_session +
-            _capsopt("test-qemu-no-kvm.xml"))
+    _add_conn(tests.utils.URIs.kvm_x86_session + _capsopt("test-qemu-no-kvm.xml"))
     newvm = _open_newvm(app)
     newvm.find(".*KVM is not available.*")
     newvm.window_close()
@@ -161,7 +162,6 @@ def testNewVMManualDefault(app):
     _forward(newvm)
     _forward(newvm)
 
-
     # Empty triggers a specific codepath
     newvm.find_fuzzy("Name", "text").set_text("")
     # Name collision failure
@@ -209,8 +209,7 @@ def testNewVMStorage(app):
     newvm.find("storage-browse").click()
     browse = app.root.find("vmm-storage-browser")
     browse.find("Browse Local", "push button").click()
-    chooser = app.root.find(
-            "Locate existing storage", "file chooser")
+    chooser = app.root.find("Locate existing storage", "file chooser")
     fname = "COPYING"
     chooser.find(fname, "table cell").click()
     chooser.find("Open", "push button").click()
@@ -222,7 +221,6 @@ def testNewVMStorage(app):
     newvm.find("Finish", "push button").click()
     app.find_details_window("vm1")
     lib.utils.check(lambda: not newvm.showing)
-
 
 
 def testNewVMCDROMRegular(app):
@@ -376,7 +374,6 @@ def testNewVMCDROMDetect(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-
 def testNewVMURL(app):
     """
     New VM with URL and distro detection, plus having fun with
@@ -395,7 +392,9 @@ def testNewVMURL(app):
     _forward(newvm, check=False)
     app.click_alert_button("tree is required", "OK")
 
-    url = "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
+    url = (
+        "https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/10/Fedora/x86_64/os/"
+    )
     oslabel = "Fedora 10"
     newvm.find("install-url-entry").set_text(url)
     newvm.find("install-url-entry").click()
@@ -559,7 +558,7 @@ def testNewKVMQ35UEFI(app):
     details.combo_select("Firmware:", "UEFI")
     details.find("config-apply").click()
     new_xml = lib.utils.get_xmleditor_xml(app, details)
-    assert "os firmware=\"efi\"" in new_xml
+    assert 'os firmware="efi"' in new_xml
 
     # Finish
     details.find_fuzzy("Begin Installation", "button").click()
@@ -695,7 +694,6 @@ def testNewVMArmKernel(app):
 
     lib.utils.check(lambda: not newvm.showing)
     app.find_details_window("vm1")
-
 
 
 def testNewVMContainerApp(app):
@@ -838,7 +836,6 @@ def testNewVMCustomizeMisc(app):
     app.find_details_window("foonewname")
 
 
-
 def testNewVMContainerTree(app):
     """
     Simple LXC tree install
@@ -867,7 +864,6 @@ def testNewVMContainerTree(app):
     app.find_details_window("container1")
 
 
-
 def testNewVMContainerVZ(app):
     """
     Virtuozzo container install
@@ -894,10 +890,8 @@ def testNewVMContainerVZ(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-
 def testNewVMContainerBootstrap(app):
-    app.open(uri=tests.utils.URIs.lxc,
-            extra_opts=["--test-options=fake-virtbootstrap"])
+    app.open(uri=tests.utils.URIs.lxc, extra_opts=["--test-options=fake-virtbootstrap"])
 
     newvm = _open_newvm(app)
     newvm.find_fuzzy("Operating system", "radio").click()
@@ -905,6 +899,7 @@ def testNewVMContainerBootstrap(app):
 
     # Set directory path
     import tempfile
+
     tmpdir = tempfile.TemporaryDirectory()
     newvm.find_fuzzy("Create OS directory", "check box").click()
 
@@ -953,7 +948,6 @@ def testNewVMContainerBootstrap(app):
     app.find_details_window("container1")
 
 
-
 def testNewVMXenPV(app):
     """
     Test the create wizard with a fake xen PV install
@@ -975,7 +969,6 @@ def testNewVMXenPV(app):
 
     app.find_details_window("vm1")
     lib.utils.check(lambda: not newvm.showing)
-
 
 
 def testNewVMInstallFail(app):
@@ -1021,7 +1014,6 @@ def testNewVMInstallFail(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-
 def testNewVMCustomizeXMLEdit(app):
     """
     Test new VM with raw XML editing via customize wizard
@@ -1036,8 +1028,7 @@ def testNewVMCustomizeXMLEdit(app):
     nonexistpath = "/dev/foovmm-idontexist"
     existpath = "/pool-dir/testvol1.img"
     newvm.find("media-entry").set_text(nonexistpath)
-    lib.utils.check(
-            lambda: newvm.find("oslist-entry").text == "None detected")
+    lib.utils.check(lambda: newvm.find("oslist-entry").text == "None detected")
     newvm.find_fuzzy("Automatically detect", "check").click()
     newvm.find("oslist-entry").set_text("generic")
     newvm.find("oslist-popover").find_fuzzy("generic").click()
@@ -1077,8 +1068,7 @@ def testNewVMCustomizeXMLEdit(app):
     bootmenu = tab.find("Enable boot menu", "check box")
     lib.utils.check(lambda: not bootmenu.checked)
     win.find("XML", "page tab").click()
-    newtext = xmleditor.text.replace(
-            "<os>", "<os><bootmenu enable='yes'/>")
+    newtext = xmleditor.text.replace("<os>", "<os><bootmenu enable='yes'/>")
     xmleditor.set_text(newtext)
     finish.click()
     win.find("Details", "page tab").click()
@@ -1174,8 +1164,7 @@ def testNewVMRemote(app):
     # Reopen, select storage
     newvm.find("install-import-browse").click()
     app.select_storagebrowser_volume("pool-dir", "bochs-vol")
-    lib.utils.check(
-            lambda: importtext.text == "/pool-dir/bochs-vol")
+    lib.utils.check(lambda: importtext.text == "/pool-dir/bochs-vol")
 
     _forward(newvm)
     _forward(newvm)
@@ -1260,8 +1249,7 @@ def testNewVMInactiveNetwork(app):
     Test with an inactive 'default' network
     """
     app.uri = tests.utils.URIs.test_default
-    hostwin = app.manager_open_host("Virtual Networks",
-            conn_label="test default")
+    hostwin = app.manager_open_host("Virtual Networks", conn_label="test default")
     cell = hostwin.find("default", "table cell")
     cell.click()
     hostwin.find("net-stop").click()
@@ -1282,7 +1270,7 @@ def testNewVMInactiveNetwork(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-@unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE": "1"})
+@unittest.mock.patch.dict("os.environ", {"VIRTINST_TEST_SUITE": "1"})
 def testNewVMDefaultBridge(app):
     """
     We actually set the unittest env variable here, which
@@ -1308,8 +1296,7 @@ def testNewVMDefaultBridge(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-@unittest.mock.patch.dict('os.environ',
-        {"VIRTINST_TEST_SUITE_FAKE_NO_SPICE": "1"})
+@unittest.mock.patch.dict("os.environ", {"VIRTINST_TEST_SUITE_FAKE_NO_SPICE": "1"})
 def testCreateVMMissingSpice(app):
     newvm = _open_newvm(app)
 

@@ -14,10 +14,12 @@ from .. import xmlutil
 # Misc child nodes for CPU domain #
 ###################################
 
+
 class _CPUTopology(XMLBuilder):
     """
     Class for generating XML for <cpu> child node <topology>.
     """
+
     XML_NAME = "topology"
     _XML_PROP_ORDER = ["sockets", "dies", "cores", "threads"]
 
@@ -53,16 +55,21 @@ class _CPUTopology(XMLBuilder):
             self.threads = vcpus // self.total_vcpus()
 
         if self.total_vcpus() != vcpus:
-            raise ValueError(_("Total CPUs implied by topology "
-                               "(sockets=%(sockets)d * dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
-                               "does not match vCPU count %(vcpus)d") % {
-                                   "sockets": self.sockets,
-                                   "dies": self.dies,
-                                   "cores": self.cores,
-                                   "threads": self.threads,
-                                   "total": self.total_vcpus(),
-                                   "vcpus": vcpus,
-                               })
+            raise ValueError(
+                _(
+                    "Total CPUs implied by topology "
+                    "(sockets=%(sockets)d * dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
+                    "does not match vCPU count %(vcpus)d"
+                )
+                % {
+                    "sockets": self.sockets,
+                    "dies": self.dies,
+                    "cores": self.cores,
+                    "threads": self.threads,
+                    "total": self.total_vcpus(),
+                    "vcpus": vcpus,
+                }
+            )
 
         return
 
@@ -70,10 +77,7 @@ class _CPUTopology(XMLBuilder):
         """
         Determine the CPU count represented by topology
         """
-        return ((self.sockets or 1) *
-                (self.dies or 1) *
-                (self.cores or 1) *
-                (self.threads or 1))
+        return (self.sockets or 1) * (self.dies or 1) * (self.cores or 1) * (self.threads or 1)
 
 
 # Note: CPU cache is weird. The documentation implies that multiples instances
@@ -84,6 +88,7 @@ class _CPUCache(XMLBuilder):
     """
     Class for generating XML for <cpu> child node <cache>.
     """
+
     XML_NAME = "cache"
     _XML_PROP_ORDER = ["level", "mode"]
 
@@ -95,6 +100,7 @@ class _CPUFeature(XMLBuilder):
     """
     Class for generating XML for <cpu> child nodes <feature>.
     """
+
     XML_NAME = "feature"
     _XML_PROP_ORDER = ["policy", "name"]
 
@@ -106,6 +112,7 @@ class _CPUMaxphysaddr(XMLBuilder):
     """
     Class for generating XML for <cpu> child node <maxphysaddr>.
     """
+
     XML_NAME = "maxphysaddr"
     _XML_PROP_ORDER = ["mode", "bits"]
 
@@ -117,11 +124,13 @@ class _CPUMaxphysaddr(XMLBuilder):
 # NUMA cells #
 ##############
 
+
 class _NUMACellSibling(XMLBuilder):
     """
     Class for generating XML for <cpu><numa><cell><distances> child nodes
     <sibling>, describing the distances to other NUMA cells.
     """
+
     XML_NAME = "sibling"
     _XML_PROP_ORDER = ["id", "value"]
 
@@ -134,9 +143,17 @@ class _NUMACellCache(XMLBuilder):
     Class for generating XML for <cpu><numa><cell> child nodes <cache>,
     describing caches for NUMA cells.
     """
+
     XML_NAME = "cache"
-    _XML_PROP_ORDER = ["level", "associativity", "policy",
-            "size_value", "size_unit", "line_value", "line_unit"]
+    _XML_PROP_ORDER = [
+        "level",
+        "associativity",
+        "policy",
+        "size_value",
+        "size_unit",
+        "line_value",
+        "line_unit",
+    ]
 
     level = XMLProperty("./@level", is_int=True)
     associativity = XMLProperty("./@associativity")
@@ -153,9 +170,9 @@ class _NUMACell(XMLBuilder):
     Class for generating XML for <cpu><numa> child nodes <cell> XML, describing
     NUMA cells.
     """
+
     XML_NAME = "cell"
-    _XML_PROP_ORDER = ["id", "cpus", "memory", "unit", "memAccess", "discard",
-            "siblings", "caches"]
+    _XML_PROP_ORDER = ["id", "cpus", "memory", "unit", "memAccess", "discard", "siblings", "caches"]
 
     id = XMLProperty("./@id", is_int=True)
     cpus = XMLProperty("./@cpus")
@@ -172,11 +189,13 @@ class _NUMACell(XMLBuilder):
 # Interconnections between NUMA cells #
 #######################################
 
+
 class _NUMALatency(XMLBuilder):
     """
     Class for generating XML for <cpu><numa><cell><interconnects> child nodes
     <latency>, describing latency between two NUMA memory nodes.
     """
+
     XML_NAME = "latency"
     _XML_PROP_ORDER = ["initiator", "target", "cache", "type", "value", "unit"]
 
@@ -195,6 +214,7 @@ class _NUMABandwidth(XMLBuilder):
     Class for generating XML for <cpu><numa><cell><interconnects> child nodes
     <bandwidth>, describing bandwidth between two NUMA memory nodes.
     """
+
     XML_NAME = "bandwidth"
     _XML_PROP_ORDER = ["initiator", "target", "cache", "type", "value", "unit"]
 
@@ -214,16 +234,30 @@ class _NUMABandwidth(XMLBuilder):
 # Actual CPU domain #
 #####################
 
+
 class DomainCpu(XMLBuilder):
     """
     Class for generating <cpu> XML
     """
-    XML_NAME = "cpu"
-    _XML_PROP_ORDER = ["mode", "match", "check", "migratable",
-            "model", "model_fallback", "model_vendor_id", "vendor",
-            "topology", "cache", "features",
-            "cells", "latencies", "bandwidths", "maxphysaddr"]
 
+    XML_NAME = "cpu"
+    _XML_PROP_ORDER = [
+        "mode",
+        "match",
+        "check",
+        "migratable",
+        "model",
+        "model_fallback",
+        "model_vendor_id",
+        "vendor",
+        "topology",
+        "cache",
+        "features",
+        "cells",
+        "latencies",
+        "bandwidths",
+        "maxphysaddr",
+    ]
 
     ##################
     # XML properties #
@@ -255,7 +289,6 @@ class DomainCpu(XMLBuilder):
 
     maxphysaddr = XMLChildProperty(_CPUMaxphysaddr, is_single=True)
 
-
     #############################
     # Special CPU mode handling #
     #############################
@@ -270,18 +303,28 @@ class DomainCpu(XMLBuilder):
     SPECIAL_MODE_MAXIMUM = "maximum"
     SPECIAL_MODE_CLEAR = "clear"
     SPECIAL_MODE_APP_DEFAULT = "default"
-    SPECIAL_MODES = [SPECIAL_MODE_HOST_MODEL_ONLY, SPECIAL_MODE_HV_DEFAULT,
-                     SPECIAL_MODE_HOST_COPY, SPECIAL_MODE_HOST_MODEL,
-                     SPECIAL_MODE_HOST_PASSTHROUGH, SPECIAL_MODE_MAXIMUM,
-                     SPECIAL_MODE_CLEAR, SPECIAL_MODE_APP_DEFAULT]
+    SPECIAL_MODES = [
+        SPECIAL_MODE_HOST_MODEL_ONLY,
+        SPECIAL_MODE_HV_DEFAULT,
+        SPECIAL_MODE_HOST_COPY,
+        SPECIAL_MODE_HOST_MODEL,
+        SPECIAL_MODE_HOST_PASSTHROUGH,
+        SPECIAL_MODE_MAXIMUM,
+        SPECIAL_MODE_CLEAR,
+        SPECIAL_MODE_APP_DEFAULT,
+    ]
 
     def _should_use_maximum_cpu_mode(self, guest, domcaps):
-        if (domcaps.supports_maximum_cpu_mode() and
-            guest.type == "qemu" and
-            (guest.os.is_x86() or
-             guest.os.is_arm_machvirt() or
-             guest.os.is_riscv_virt() or
-             guest.os.is_loongarch64())):
+        if (
+            domcaps.supports_maximum_cpu_mode()
+            and guest.type == "qemu"
+            and (
+                guest.os.is_x86()
+                or guest.os.is_arm_machvirt()
+                or guest.os.is_riscv_virt()
+                or guest.os.is_loongarch64()
+            )
+        ):
             return True
 
         return False
@@ -292,7 +335,7 @@ class DomainCpu(XMLBuilder):
         # Emulated guests use maximum mode if available
         domcaps = guest.lookup_domcaps()
 
-        if (self._should_use_maximum_cpu_mode(guest, domcaps)):
+        if self._should_use_maximum_cpu_mode(guest, domcaps):
             return self.SPECIAL_MODE_MAXIMUM
 
         if domcaps.supports_safe_host_passthrough():
@@ -310,9 +353,11 @@ class DomainCpu(XMLBuilder):
             val = self._get_app_default_mode(guest)
             log.debug("Using default cpu mode=%s", val)
 
-        if (val == self.SPECIAL_MODE_HOST_MODEL or
-            val == self.SPECIAL_MODE_HOST_PASSTHROUGH or
-            val == self.SPECIAL_MODE_MAXIMUM):
+        if (
+            val == self.SPECIAL_MODE_HOST_MODEL
+            or val == self.SPECIAL_MODE_HOST_PASSTHROUGH
+            or val == self.SPECIAL_MODE_MAXIMUM
+        ):
             self.model = None
             self.vendor = None
             self.model_fallback = None
@@ -321,14 +366,15 @@ class DomainCpu(XMLBuilder):
             for f in self.features:
                 self.remove_child(f)
             self.mode = val
-        elif (val == self.SPECIAL_MODE_HV_DEFAULT or
-              val == self.SPECIAL_MODE_CLEAR):
+        elif val == self.SPECIAL_MODE_HV_DEFAULT or val == self.SPECIAL_MODE_CLEAR:
             self.clear()
-        elif (val == self.SPECIAL_MODE_HOST_MODEL_ONLY or
-              val == self.SPECIAL_MODE_HOST_COPY):
+        elif val == self.SPECIAL_MODE_HOST_MODEL_ONLY or val == self.SPECIAL_MODE_HOST_COPY:
             if val == self.SPECIAL_MODE_HOST_COPY:
-                log.warning("CPU mode=%s no longer supported, using mode=%s",
-                        val, self.SPECIAL_MODE_HOST_MODEL_ONLY)
+                log.warning(
+                    "CPU mode=%s no longer supported, using mode=%s",
+                    val,
+                    self.SPECIAL_MODE_HOST_MODEL_ONLY,
+                )
             if self.conn.caps.host.cpu.model:
                 self.clear()
                 self.set_model(guest, self.conn.caps.host.cpu.model)
@@ -336,7 +382,6 @@ class DomainCpu(XMLBuilder):
             raise xmlutil.DevError("unknown special cpu mode '%s'" % val)
 
         self.special_mode_was_set = True
-
 
     ########################
     # Security mitigations #
@@ -380,7 +425,6 @@ class DomainCpu(XMLBuilder):
                 if f.name == feature and f.policy == "require":
                     self.remove_child(f)
                     break
-
 
     ###########
     # Helpers #
@@ -428,7 +472,6 @@ class DomainCpu(XMLBuilder):
             return
         self.topology.set_defaults_from_vcpus(vcpus)
 
-
     ##################
     # Default config #
     ##################
@@ -449,9 +492,11 @@ class DomainCpu(XMLBuilder):
         if cpu_model and cpu_model.usable != "no":
             return
 
-        log.debug("Host capabilities CPU '%s' is not supported "
+        log.debug(
+            "Host capabilities CPU '%s' is not supported "
             "according to domain capabilities. Unsetting CPU model",
-            self.model)
+            self.model,
+        )
         self.model = None
 
     def _set_cpu_x86_kvm_default(self, guest):
@@ -482,5 +527,5 @@ class DomainCpu(XMLBuilder):
             domcaps = guest.lookup_domcaps()
 
             # Prefer to emulate a feature-rich CPU instead of a basic one
-            if (self._should_use_maximum_cpu_mode(guest, domcaps)):
+            if self._should_use_maximum_cpu_mode(guest, domcaps):
                 self.set_special_mode(guest, self.SPECIAL_MODE_MAXIMUM)

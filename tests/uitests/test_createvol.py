@@ -8,6 +8,7 @@ from . import lib
 # UI tests for the createvol wizard #
 #####################################
 
+
 def _open_createvol(app, hostwin):
     hostwin.find("vol-new", "push button").click()
     win = app.find_window("Add a Storage Volume")
@@ -47,8 +48,7 @@ def testCreateVolDefault(app):
 
     # Ensure host window closes fine
     hostwin.keyCombo("<ctrl>w")
-    lib.utils.check(lambda: not hostwin.showing and
-            not hostwin.active)
+    lib.utils.check(lambda: not hostwin.showing and not hostwin.active)
 
 
 def testCreateVolMisc(app):
@@ -77,11 +77,9 @@ def testCreateVolMisc(app):
     browsewin = app.root.find("vmm-storage-browser")
     # Test browse local opening
     browsewin.find("Browse Local", "push button").click()
-    chooser = app.root.find(
-            "Locate existing storage", "file chooser")
+    chooser = app.root.find("Locate existing storage", "file chooser")
     chooser.window_close()
-    app.select_storagebrowser_volume(
-            "pool-dir", "bochs-vol", doubleclick=True)
+    app.select_storagebrowser_volume("pool-dir", "bochs-vol", doubleclick=True)
     backingstore = win.find("backing-store")
     lib.utils.check(lambda: "bochs-vol" in backingstore.text)
     finish.click()
@@ -115,7 +113,6 @@ def testCreateVolMisc(app):
     vollist.find(newname)
 
 
-
 def testCreateVolXMLEditor(app):
     app.open(xmleditor_enabled=True)
     hostwin = app.manager_open_host("Storage")
@@ -132,8 +129,7 @@ def testCreateVolXMLEditor(app):
     name.set_text(tmpname)
     win.find("XML", "page tab").click()
     xmleditor = win.find("XML editor")
-    newtext = xmleditor.text.replace(
-                    ">%s.qcow2<" % tmpname, ">%s<" % newname)
+    newtext = xmleditor.text.replace(">%s.qcow2<" % tmpname, ">%s<" % newname)
     xmleditor.set_text(newtext)
     finish.click()
     lib.utils.check(lambda: hostwin.active)

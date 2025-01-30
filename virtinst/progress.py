@@ -15,6 +15,7 @@ class Meter:
     Meter class that hides the internals of the backend implementation
     from virtinst and friends
     """
+
     # Used by virt-manager subclass
     format_number = _progresspriv.format_number
     format_time = _progresspriv.format_time

@@ -8,9 +8,9 @@ from . import lib
 # UI tests for various connection.py related bits #
 ###################################################
 
+
 def testConnectionBlacklist(app):
-    app.open(
-        extra_opts=["--test-options=object-denylist=test-many-devices"])
+    app.open(extra_opts=["--test-options=object-denylist=test-many-devices"])
     manager = app.topwin
 
     def _delete_vm(vmname):
@@ -20,20 +20,16 @@ def testConnectionBlacklist(app):
         delete.find("Delete", "push button").click()
         lib.utils.check(lambda: manager.active)
 
-    lib.utils.check(
-            lambda: "test-many-devices" not in app.topwin.fmt_nodes())
+    lib.utils.check(lambda: "test-many-devices" not in app.topwin.fmt_nodes())
     _delete_vm("test-arm-kernel")
     _delete_vm("test-clone-full")
     _delete_vm("test-clone-simple")
-    app.sleep(.5)  # Give events time to register to hit full denylist path
-    lib.utils.check(
-            lambda: "test-many-devices" not in app.topwin.fmt_nodes())
+    app.sleep(0.5)  # Give events time to register to hit full denylist path
+    lib.utils.check(lambda: "test-many-devices" not in app.topwin.fmt_nodes())
 
 
 def testConnectionConnCrash(app):
-    app.open(
-        extra_opts=["--test-options=conn-crash",
-                    "--test-options=short-poll"])
+    app.open(extra_opts=["--test-options=conn-crash", "--test-options=short-poll"])
     manager = app.topwin
 
     manager.find(r"^test testdriver.xml - Not Connected", "table cell")
@@ -42,20 +38,22 @@ def testConnectionConnCrash(app):
 
 def testConnectionFakeEvents(app):
     app.open(
-        extra_opts=["--test-options=fake-nodedev-event=computer",
-                    "--test-options=fake-agent-event=test-many-devices",
-                    "--test-options=short-poll"])
+        extra_opts=[
+            "--test-options=fake-nodedev-event=computer",
+            "--test-options=fake-agent-event=test-many-devices",
+            "--test-options=short-poll",
+        ]
+    )
     manager = app.topwin
     app.sleep(1.2)  # needs a second to hit both nodedev/agent event paths
     lib.utils.check(lambda: manager.active)
 
 
 def testConnectionOpenauth(app):
-    app.open(
-        extra_opts=["--test-options=fake-openauth"],
-        window_name="Authentication required")
+    app.open(extra_opts=["--test-options=fake-openauth"], window_name="Authentication required")
 
     dialog = app.root.find("Authentication required")
+
     def _run():
         username = dialog.find("Username:.*entry")
         password = dialog.find("Password:.*entry")
@@ -64,7 +62,6 @@ def testConnectionOpenauth(app):
         app.rawinput.pressKey("Enter")
         lib.utils.check(lambda: password.focused)
         password.typeText("bar")
-
 
     _run()
     dialog.find("OK", "push button").click()
@@ -96,6 +93,5 @@ def testConnectionOpenauth(app):
 
 
 def testConnectionSessionError(app):
-    app.open(
-        extra_opts=["--test-options=fake-session-error"])
+    app.open(extra_opts=["--test-options=fake-session-error"])
     app.click_alert_button("Could not detect a local session", "Close")

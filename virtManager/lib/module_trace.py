@@ -27,23 +27,25 @@ def generate_wrapper(origfunc, name):
 
     def newfunc(*args, **kwargs):
         threadname = threading.current_thread().name
-        is_main_thread = (threading.current_thread().name == "MainThread")
+        is_main_thread = threading.current_thread().name == "MainThread"
 
         # These APIs don't hit the network, so we might not want to see them.
-        is_non_network_libvirt_call = (name.endswith(".name") or
-            name.endswith(".UUIDString") or
-            name.endswith(".__init__") or
-            name.endswith(".__del__") or
-            name.endswith(".connect") or
-            name.startswith("libvirtError"))
+        is_non_network_libvirt_call = (
+            name.endswith(".name")
+            or name.endswith(".UUIDString")
+            or name.endswith(".__init__")
+            or name.endswith(".__del__")
+            or name.endswith(".connect")
+            or name.startswith("libvirtError")
+        )
 
-        if (not is_non_network_libvirt_call and
-            (is_main_thread or not CHECK_MAINLOOP)):
+        if not is_non_network_libvirt_call and (is_main_thread or not CHECK_MAINLOOP):
             tb = ""
             if is_main_thread:
                 tb = "\n%s" % "".join(traceback.format_stack())
-            log.debug("TRACE %s: thread=%s: %s %s %s%s",
-                          time.time(), threadname, name, args, kwargs, tb)
+            log.debug(
+                "TRACE %s: thread=%s: %s %s %s%s", time.time(), threadname, name, args, kwargs, tb
+            )
         return origfunc(*args, **kwargs)
 
     return newfunc

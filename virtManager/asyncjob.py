@@ -24,7 +24,6 @@ class _vmmMeter(virtinst.progress.Meter):
         self._pbar_fraction = pbar_fraction
         self._pbar_done = pbar_done
 
-
     #################
     # Internal APIs #
     #################
@@ -34,12 +33,10 @@ class _vmmMeter(virtinst.progress.Meter):
             self._pbar_pulse("", self._text)
         else:
             fread = virtinst.progress.Meter.format_number(self._total_read)
-            rtime = virtinst.progress.Meter.format_time(
-                    self._meter.re.remaining_time(), True)
+            rtime = virtinst.progress.Meter.format_time(self._meter.re.remaining_time(), True)
             frac = self._meter.re.fraction_read()
             out = "%3i%% %5sB %s ETA" % (frac * 100, fread, rtime)
             self._pbar_fraction(frac, out, self._text)
-
 
     #############################################
     # Public APIs specific to virt-manager code #
@@ -47,7 +44,6 @@ class _vmmMeter(virtinst.progress.Meter):
 
     def is_started(self):
         return bool(self._meter.start_time)
-
 
     ###################
     # Meter overrides #
@@ -71,30 +67,27 @@ def cb_wrapper(callback, asyncjob, *args, **kwargs):
         callback(asyncjob, *args, **kwargs)
     except Exception as e:
         # If job is cancelled, don't report error to user.
-        if (isinstance(e, libvirt.libvirtError) and
-            asyncjob.can_cancel() and
-            asyncjob.job_canceled):
+        if isinstance(e, libvirt.libvirtError) and asyncjob.can_cancel() and asyncjob.job_canceled:
             return  # pragma: no cover
 
         asyncjob.set_error(str(e), "".join(traceback.format_exc()))
 
 
-def _simple_async_done_cb(error, details,
-                          parent, errorintro, errorcb, finish_cb):
+def _simple_async_done_cb(error, details, parent, errorintro, errorcb, finish_cb):
     if error:
         if errorcb:
             errorcb(error, details)
         else:
             error = errorintro + ": " + error
-            parent.err.show_err(error,
-                                details=details)
+            parent.err.show_err(error, details=details)
 
     if finish_cb:
         finish_cb()
 
 
-def _simple_async(callback, args, parent, title, text, errorintro,
-                  show_progress, simplecb, errorcb, finish_cb):
+def _simple_async(
+    callback, args, parent, title, text, errorintro, show_progress, simplecb, errorcb, finish_cb
+):
     """
     @show_progress: Whether to actually show a progress dialog
     @simplecb: If true, build a callback wrapper that ignores the asyncjob
@@ -102,22 +95,30 @@ def _simple_async(callback, args, parent, title, text, errorintro,
     """
     docb = callback
     if simplecb:
+
         def tmpcb(job, *args, **kwargs):
             ignore = job
             callback(*args, **kwargs)
+
         docb = tmpcb
 
-    asyncjob = vmmAsyncJob(docb, args,
-                           _simple_async_done_cb,
-                           (parent, errorintro, errorcb, finish_cb),
-                           title, text, parent.topwin,
-                           show_progress=show_progress)
+    asyncjob = vmmAsyncJob(
+        docb,
+        args,
+        _simple_async_done_cb,
+        (parent, errorintro, errorcb, finish_cb),
+        title,
+        text,
+        parent.topwin,
+        show_progress=show_progress,
+    )
     asyncjob.run()
 
 
 def idle_wrapper(fn):
     def wrapped(self, *args, **kwargs):
         return self.idle_add(fn, self, *args, **kwargs)
+
     return wrapped
 
 
@@ -125,25 +126,35 @@ class vmmAsyncJob(vmmGObjectUI):
     """
     Displays a progress bar while executing the "callback" method.
     """
-    @staticmethod
-    def simple_async(callback, args, parent, title, text, errorintro,
-                     simplecb=True, errorcb=None, finish_cb=None):
-        _simple_async(callback, args, parent,
-                      title, text, errorintro, True,
-                      simplecb, errorcb, finish_cb)
 
     @staticmethod
-    def simple_async_noshow(callback, args, parent, errorintro,
-                            simplecb=True, errorcb=None, finish_cb=None):
-        _simple_async(callback, args, parent,
-                      "", "", errorintro, False,
-                      simplecb, errorcb, finish_cb)
+    def simple_async(
+        callback, args, parent, title, text, errorintro, simplecb=True, errorcb=None, finish_cb=None
+    ):
+        _simple_async(
+            callback, args, parent, title, text, errorintro, True, simplecb, errorcb, finish_cb
+        )
 
+    @staticmethod
+    def simple_async_noshow(
+        callback, args, parent, errorintro, simplecb=True, errorcb=None, finish_cb=None
+    ):
+        _simple_async(
+            callback, args, parent, "", "", errorintro, False, simplecb, errorcb, finish_cb
+        )
 
-    def __init__(self,
-                 callback, args, finish_cb, finish_args,
-                 title, text, parent,
-                 show_progress=True, cancel_cb=None):
+    def __init__(
+        self,
+        callback,
+        args,
+        finish_cb,
+        finish_args,
+        title,
+        text,
+        parent,
+        show_progress=True,
+        cancel_cb=None,
+    ):
         """
         @show_progress: If False, don't actually show a progress dialog
         @cancel_cb: Cancel callback if operation supports it.
@@ -171,19 +182,19 @@ class vmmAsyncJob(vmmGObjectUI):
         self._is_pulsing = True
         self._meter = None
 
-        self._bg_thread = threading.Thread(target=cb_wrapper,
-                                           args=[callback, self] + args)
+        self._bg_thread = threading.Thread(target=cb_wrapper, args=[callback, self] + args)
         self._bg_thread.daemon = True
 
-        self.builder.connect_signals({
-            "on_async_job_cancel_clicked": self._on_cancel,
-        })
+        self.builder.connect_signals(
+            {
+                "on_async_job_cancel_clicked": self._on_cancel,
+            }
+        )
 
         # UI state
         self.topwin.set_title(title)
         self.widget("pbar-text").set_text(text)
         self.widget("cancel-async-job").set_visible(bool(self.cancel_cb))
-
 
     ####################
     # Internal helpers #
@@ -203,8 +214,6 @@ class vmmAsyncJob(vmmGObjectUI):
             return  # pragma: no cover
         self.widget("pbar-stage").set_text(text)
 
-
-
     ################
     # UI listeners #
     ################
@@ -218,16 +227,13 @@ class vmmAsyncJob(vmmGObjectUI):
             self.widget("warning-box").hide()
             self._set_stage_text(_("Cancelling job..."), canceling=True)
 
-
     ##############
     # Public API #
     ##############
 
     def get_meter(self):
         if not self._meter:
-            self._meter = _vmmMeter(self._pbar_pulse,
-                                    self._pbar_fraction,
-                                    self._pbar_done)
+            self._meter = _vmmMeter(self._pbar_pulse, self._pbar_fraction, self._pbar_done)
         return self._meter
 
     def set_error(self, error, details):
@@ -266,7 +272,6 @@ class vmmAsyncJob(vmmGObjectUI):
         if not self.cancel_cb and self.show_progress:
             self._set_cursor("progress")
         self._bg_thread.start()
-
 
     ####################################################################
     # All functions after this point are called from the timer loop or #
@@ -318,6 +323,7 @@ class vmmAsyncJob(vmmGObjectUI):
     @idle_wrapper
     def details_enable(self):
         from gi.repository import Vte
+
         self._details_widget = Vte.Terminal()
         self.widget("details-box").add(self._details_widget)
         self._details_widget.set_visible(True)

@@ -9,9 +9,14 @@ from ..xmlbuilder import XMLProperty
 class DeviceShMem(Device):
     XML_NAME = "shmem"
     _XML_PROP_ORDER = [
-        "name", "role",
-        "type", "size", "size_unit",
-        "server_path", "msi_vectors", "msi_ioeventfd",
+        "name",
+        "role",
+        "type",
+        "size",
+        "size_unit",
+        "server_path",
+        "msi_vectors",
+        "msi_ioeventfd",
     ]
 
     MODEL_IVSHMEM = "ivshmem"

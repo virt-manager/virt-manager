@@ -33,9 +33,11 @@ class DeviceHostdev(Device):
 
             count = 0
             for dev in self.conn.fetch_all_nodedevs():
-                if (dev.device_type == NodeDevice.CAPABILITY_TYPE_USBDEV and
-                    dev.vendor_id == self.vendor and
-                    dev.product_id == self.product):
+                if (
+                    dev.device_type == NodeDevice.CAPABILITY_TYPE_USBDEV
+                    and dev.vendor_id == self.vendor
+                    and dev.product_id == self.product
+                ):
                     count += 1
 
             if count > 1:
@@ -70,8 +72,9 @@ class DeviceHostdev(Device):
                 self.model = "vfio-ap"
                 self.managed = "no"
 
-            elif (re.match("^nvidia-[0-9]{2}", nodedev.type_id or "") or
-                  re.match("^i915-GVTg_V[0-9]_[0-9]", nodedev.type_id or "")):
+            elif re.match("^nvidia-[0-9]{2}", nodedev.type_id or "") or re.match(
+                "^i915-GVTg_V[0-9]_[0-9]", nodedev.type_id or ""
+            ):
                 self.model = "vfio-pci"
                 self.managed = "yes"
                 self.display = "off"
@@ -79,19 +82,28 @@ class DeviceHostdev(Device):
 
             else:
                 raise ValueError(  # pragma: no cover
-                        _("Don't know how to generate nodedev for mdev type id '%s'") %
-                        nodedev.type_id)
+                    _("Don't know how to generate nodedev for mdev type id '%s'") % nodedev.type_id
+                )
 
             self.uuid = nodedev.get_mdev_uuid()
 
         else:
-            raise ValueError(_("Unsupported node device type '%s'") %
-                    nodedev.device_type)
+            raise ValueError(_("Unsupported node device type '%s'") % nodedev.device_type)
 
-
-    _XML_PROP_ORDER = ["mode", "type", "managed", "vendor", "product",
-                       "domain", "bus", "slot", "function", "model",
-                       "display", "ramfb"]
+    _XML_PROP_ORDER = [
+        "mode",
+        "type",
+        "managed",
+        "vendor",
+        "product",
+        "domain",
+        "bus",
+        "slot",
+        "function",
+        "model",
+        "display",
+        "ramfb",
+    ]
 
     mode = XMLProperty("./@mode")
     type = XMLProperty("./@type")
@@ -130,7 +142,6 @@ class DeviceHostdev(Device):
 
     # type=mdev
     uuid = XMLProperty("./source/address/@uuid")
-
 
     ##################
     # Default config #

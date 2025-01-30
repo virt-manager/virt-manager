@@ -10,31 +10,46 @@ from tests.utils import TESTCONFIG
 
 
 def pytest_addoption(parser):
-    parser.addoption("--uitests", action="store_true", default=False,
-            help="Run dogtail UI tests")
+    parser.addoption("--uitests", action="store_true", default=False, help="Run dogtail UI tests")
 
-    parser.addoption("--regenerate-output",
-            action="store_true", default=False,
-            help="Regenerate test output")
+    parser.addoption(
+        "--regenerate-output", action="store_true", default=False, help="Regenerate test output"
+    )
 
     # test_urls options
-    parser.addoption('--urls-skip-libosinfo',
-            action="store_true", default=False,
-            help=("For test_urls.py, "
-                  "Don't use libosinfo for media/tree detection, "
-                  "Use our internal detection logic."))
-    parser.addoption("--urls-force-libosinfo",
-            action="store_true", default=False,
-            help=("For test_urls.py, Only use libosinfo for "
-                  "media/tree detection. This will skip "
-                  "some cases that are known not to work, "
-                  "like debian/ubuntu tree detection."))
-    parser.addoption("--urls-iso-only",
-            action="store_true", default=False,
-            help=("For test_urls.py, Only run iso tests."))
-    parser.addoption("--urls-url-only",
-            action="store_true", default=False,
-            help=("For test_urls.py, Only run url tests"))
+    parser.addoption(
+        "--urls-skip-libosinfo",
+        action="store_true",
+        default=False,
+        help=(
+            "For test_urls.py, "
+            "Don't use libosinfo for media/tree detection, "
+            "Use our internal detection logic."
+        ),
+    )
+    parser.addoption(
+        "--urls-force-libosinfo",
+        action="store_true",
+        default=False,
+        help=(
+            "For test_urls.py, Only use libosinfo for "
+            "media/tree detection. This will skip "
+            "some cases that are known not to work, "
+            "like debian/ubuntu tree detection."
+        ),
+    )
+    parser.addoption(
+        "--urls-iso-only",
+        action="store_true",
+        default=False,
+        help=("For test_urls.py, Only run iso tests."),
+    )
+    parser.addoption(
+        "--urls-url-only",
+        action="store_true",
+        default=False,
+        help=("For test_urls.py, Only run url tests"),
+    )
 
 
 def pytest_ignore_collect(path, config):
@@ -61,8 +76,7 @@ def pytest_ignore_collect(path, config):
 
 def pytest_collection_modifyitems(config, items):
     def find_items(basename):
-        return [i for i in items
-                if os.path.basename(i.fspath) == basename]
+        return [i for i in items if os.path.basename(i.fspath) == basename]
 
     # Move test_cli cases to the end, because they are slow
     # Move test_checkprops to the very end, because it needs to run
@@ -78,6 +92,7 @@ def pytest_collection_modifyitems(config, items):
         # Don't setup urlfetcher mocking for test_urls.py
         # All other tests need it
         from tests import urlfetcher_mock
+
         urlfetcher_mock.setup_mock()
 
     if find_items("test_inject.py"):

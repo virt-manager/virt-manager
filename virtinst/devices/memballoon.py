@@ -17,7 +17,6 @@ class DeviceMemballoon(Device):
     stats_period = XMLProperty("./stats/@period", is_int=True)
     freePageReporting = XMLProperty("./@freePageReporting", is_onoff=True)
 
-
     ##################
     # Default config #
     ##################

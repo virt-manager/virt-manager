@@ -14,8 +14,7 @@ BASECOLOR = Gtk.StyleContext().lookup_color("theme_base_color")[1]
 
 def rect_print(name, rect):  # pragma: no cover
     # For debugging
-    print("%s: height=%d, width=%d, x=%d, y=%d" %
-          (name, rect.height, rect.width, rect.x, rect.y))
+    print("%s: height=%d, width=%d, x=%d, y=%d" % (name, rect.height, rect.width, rect.x, rect.y))
 
 
 def _line_helper(cairo_ct, bottom_baseline, points, for_fill=False):
@@ -90,12 +89,19 @@ class CellRendererSparkline(Gtk.CellRenderer):
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array': (GObject.TYPE_PYOBJECT, "Data Array",
-                        "Array of data points for the graph",
-                        GObject.PARAM_READWRITE),
-        'reversed': (GObject.TYPE_BOOLEAN, "Reverse data",
-                     "Process data from back to front.",
-                     0, GObject.PARAM_READWRITE),
+        "data_array": (
+            GObject.TYPE_PYOBJECT,
+            "Data Array",
+            "Array of data points for the graph",
+            GObject.PARAM_READWRITE,
+        ),
+        "reversed": (
+            GObject.TYPE_BOOLEAN,
+            "Reverse data",
+            "Process data from back to front.",
+            0,
+            GObject.PARAM_READWRITE,
+        ),
     }
 
     def __init__(self):
@@ -107,8 +113,7 @@ class CellRendererSparkline(Gtk.CellRenderer):
         self.reversed = False
         self.rgb = None
 
-    def do_render(self, cr, widget, background_area, cell_area,
-                  flags):
+    def do_render(self, cr, widget, background_area, cell_area, flags):
         # cr                : Cairo context
         # widget            : GtkWidget instance
         # background_area   : GdkRectangle: entire cell area
@@ -124,23 +129,23 @@ class CellRendererSparkline(Gtk.CellRenderer):
         BORDER_PADDING = 2
         # Indent of graph from border
         GRAPH_INDENT = 2
-        GRAPH_PAD = (BORDER_PADDING + GRAPH_INDENT)
+        GRAPH_PAD = BORDER_PADDING + GRAPH_INDENT
 
         # We don't use yalign, since we expand to the entire height
         ignore = self.get_property("yalign")
         xalign = self.get_property("xalign")
 
         # Set up graphing bounds
-        graph_x      = (cell_area.x + GRAPH_PAD)
-        graph_y      = (cell_area.y + GRAPH_PAD)
-        graph_width  = (cell_area.width - (GRAPH_PAD * 2))
-        graph_height = (cell_area.height - (GRAPH_PAD * 2))
+        graph_x = cell_area.x + GRAPH_PAD
+        graph_y = cell_area.y + GRAPH_PAD
+        graph_width = cell_area.width - (GRAPH_PAD * 2)
+        graph_height = cell_area.height - (GRAPH_PAD * 2)
 
-        pixels_per_point = (graph_width // max(1, len(self.data_array) - 1))
+        pixels_per_point = graph_width // max(1, len(self.data_array) - 1)
 
         # Graph width needs to be some multiple of the amount of data points
         # we have
-        graph_width = (pixels_per_point * max(1, len(self.data_array) - 1))
+        graph_width = pixels_per_point * max(1, len(self.data_array) - 1)
 
         # Recalculate border width based on the amount we are graphing
         border_width = graph_width + (GRAPH_INDENT * 2)
@@ -158,18 +163,22 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
         # Draw gray graph border
         cr.set_source_rgb(0.8828125, 0.8671875, 0.8671875)
-        cr.rectangle(cell_area.x + BORDER_PADDING,
-                     cell_area.y + BORDER_PADDING,
-                     border_width,
-                     cell_area.height - (BORDER_PADDING * 2))
+        cr.rectangle(
+            cell_area.x + BORDER_PADDING,
+            cell_area.y + BORDER_PADDING,
+            border_width,
+            cell_area.height - (BORDER_PADDING * 2),
+        )
         cr.stroke()
 
         # Fill in basecolor box inside graph outline
         cr.set_source_rgb(BASECOLOR.red, BASECOLOR.green, BASECOLOR.blue)
-        cr.rectangle(cell_area.x + BORDER_PADDING,
-                     cell_area.y + BORDER_PADDING,
-                     border_width,
-                     cell_area.height - (BORDER_PADDING * 2))
+        cr.rectangle(
+            cell_area.x + BORDER_PADDING,
+            cell_area.y + BORDER_PADDING,
+            border_width,
+            cell_area.height - (BORDER_PADDING * 2),
+        )
         cr.fill()
 
         def get_y(index):
@@ -177,7 +186,7 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
             n = index
             if self.reversed:
-                n = (len(self.data_array) - index - 1)
+                n = len(self.data_array) - index - 1
 
             val = self.data_array[n]
             y = baseline_y - (graph_height * val)
@@ -193,7 +202,6 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
             points.append((x, y))
 
-
         cell_area.x = graph_x
         cell_area.y = graph_y
         cell_area.width = graph_width
@@ -205,12 +213,9 @@ class CellRendererSparkline(Gtk.CellRenderer):
         draw_line(cr, cell_area.y, cell_area.height, points)
 
         # Set color to light blue for the fill
-        cr.set_source_rgba(0.71484375, 0.84765625, 0.89453125, .5)
+        cr.set_source_rgba(0.71484375, 0.84765625, 0.89453125, 0.5)
 
-        draw_fill(cr,
-                  cell_area.x, cell_area.y,
-                  cell_area.width, cell_area.height,
-                  points)
+        draw_fill(cr, cell_area.x, cell_area.y, cell_area.width, cell_area.height, points)
         return
 
     def do_get_size(self, widget, cell_area=None):
@@ -224,8 +229,8 @@ class CellRendererSparkline(Gtk.CellRenderer):
         xoffset = 0
         yoffset = 0
 
-        width = ((xpad * 2) + FIXED_WIDTH)
-        height = ((ypad * 2) + FIXED_HEIGHT)
+        width = (xpad * 2) + FIXED_WIDTH
+        height = (ypad * 2) + FIXED_HEIGHT
 
         return (xoffset, yoffset, width, height)
 
@@ -233,9 +238,11 @@ class CellRendererSparkline(Gtk.CellRenderer):
     # variables can't be named like that
     def _sanitize_param_spec_name(self, name):
         return name.replace("-", "_")
+
     def do_get_property(self, param_spec):  # pragma: no cover
         name = self._sanitize_param_spec_name(param_spec.name)
         return getattr(self, name)
+
     def do_set_property(self, param_spec, value):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
@@ -251,20 +258,36 @@ class Sparkline(Gtk.DrawingArea):
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array': (GObject.TYPE_PYOBJECT, "Data Array",
-                        "Array of data points for the graph",
-                        GObject.PARAM_READWRITE),
-        'filled': (GObject.TYPE_BOOLEAN, 'Filled', 'the foo of the object',
-                   1,
-                   GObject.PARAM_READWRITE),
-        'num_sets': (GObject.TYPE_INT, "Number of sets",
-                     "Number of data sets to graph",
-                     1, 2, 1, GObject.PARAM_READWRITE),
-        'reversed': (GObject.TYPE_BOOLEAN, "Reverse data",
-                     "Process data from back to front.",
-                     0, GObject.PARAM_READWRITE),
-        'rgb': (GObject.TYPE_PYOBJECT, "rgb array", "List of rgb values",
-                GObject.PARAM_READWRITE),
+        "data_array": (
+            GObject.TYPE_PYOBJECT,
+            "Data Array",
+            "Array of data points for the graph",
+            GObject.PARAM_READWRITE,
+        ),
+        "filled": (
+            GObject.TYPE_BOOLEAN,
+            "Filled",
+            "the foo of the object",
+            1,
+            GObject.PARAM_READWRITE,
+        ),
+        "num_sets": (
+            GObject.TYPE_INT,
+            "Number of sets",
+            "Number of data sets to graph",
+            1,
+            2,
+            1,
+            GObject.PARAM_READWRITE,
+        ),
+        "reversed": (
+            GObject.TYPE_BOOLEAN,
+            "Reverse data",
+            "Process data from back to front.",
+            0,
+            GObject.PARAM_READWRITE,
+        ),
+        "rgb": (GObject.TYPE_PYOBJECT, "rgb array", "List of rgb values", GObject.PARAM_READWRITE),
     }
 
     def __init__(self):
@@ -282,10 +305,11 @@ class Sparkline(Gtk.DrawingArea):
     def set_data_array(self, val):
         self._data_array = val
         self.queue_draw()
+
     def get_data_array(self):
         return self._data_array
-    data_array = property(get_data_array, set_data_array)
 
+    data_array = property(get_data_array, set_data_array)
 
     def do_draw(self, cr):
         cr.save()
@@ -294,9 +318,8 @@ class Sparkline(Gtk.DrawingArea):
         w = window.get_width()
         h = window.get_height()
 
-        points_per_set = (len(self.data_array) // self.num_sets)
-        pixels_per_point = (float(w) /
-                            (float((points_per_set - 1) or 1)))
+        points_per_set = len(self.data_array) // self.num_sets
+        pixels_per_point = float(w) / (float((points_per_set - 1) or 1))
 
         widget = self
         ctx = widget.get_style_context()
@@ -307,10 +330,7 @@ class Sparkline(Gtk.DrawingArea):
         # This draws the marker ticks
         max_ticks = 4
         for index in range(1, max_ticks):
-            Gtk.render_line(ctx, cr, 1,
-                            (h // max_ticks) * index,
-                            w - 2,
-                            (h // max_ticks) * index)
+            Gtk.render_line(ctx, cr, 1, (h // max_ticks) * index, w - 2, (h // max_ticks) * index)
 
         # Foreground-color graphics context
         # This draws the black border
@@ -322,7 +342,7 @@ class Sparkline(Gtk.DrawingArea):
 
             n = dataset * points_per_set
             if self.reversed:
-                n += (points_per_set - index - 1)
+                n += points_per_set - index - 1
             else:
                 n += index
 
@@ -333,16 +353,17 @@ class Sparkline(Gtk.DrawingArea):
 
         for dataset in range(0, self.num_sets):
             if len(self.rgb) == (self.num_sets * 3):
-                cr.set_source_rgb(self.rgb[(dataset * 3)],
-                                        self.rgb[(dataset * 3) + 1],
-                                        self.rgb[(dataset * 1) + 2])
+                cr.set_source_rgb(
+                    self.rgb[(dataset * 3)],
+                    self.rgb[(dataset * 3) + 1],
+                    self.rgb[(dataset * 1) + 2],
+                )
             points = []
             for index in range(0, points_per_set):
                 x = index * pixels_per_point
                 y = get_y(dataset, index)
 
                 points.append((int(x), int(y)))
-
 
             if self.num_sets == 1:
                 pass
@@ -370,9 +391,11 @@ class Sparkline(Gtk.DrawingArea):
     # variables can't be named like that
     def _sanitize_param_spec_name(self, name):
         return name.replace("-", "_")
+
     def do_get_property(self, param_spec):  # pragma: no cover
         name = self._sanitize_param_spec_name(param_spec.name)
         return getattr(self, name)
+
     def do_set_property(self, param_spec, value):
         name = self._sanitize_param_spec_name(param_spec.name)
         setattr(self, name, value)
@@ -380,7 +403,9 @@ class Sparkline(Gtk.DrawingArea):
     # These make pylint happy
     def set_property(self, *args, **kwargs):
         return Gtk.DrawingArea.set_property(self, *args, **kwargs)
+
     def show(self, *args, **kwargs):
         return Gtk.DrawingArea.show(self, *args, **kwargs)
+
     def destroy(self, *args, **kwargs):
         return Gtk.DrawingArea.destroy(self, *args, **kwargs)

@@ -25,14 +25,32 @@ class DomainSysinfo(XMLBuilder):
     """
 
     XML_NAME = "sysinfo"
-    _XML_PROP_ORDER = ["type",
-        "bios_vendor", "bios_version", "bios_date", "bios_release",
-        "system_manufacturer", "system_product", "system_version",
-        "system_serial", "system_uuid", "system_sku", "system_family",
-        "baseBoard_manufacturer", "baseBoard_product", "baseBoard_version",
-        "baseBoard_serial", "baseBoard_asset", "baseBoard_location",
-        "chassis_manufacturer", "chassis_version",
-        "chassis_serial", "chassis_asset", "chassis_sku", "oemStrings"]
+    _XML_PROP_ORDER = [
+        "type",
+        "bios_vendor",
+        "bios_version",
+        "bios_date",
+        "bios_release",
+        "system_manufacturer",
+        "system_product",
+        "system_version",
+        "system_serial",
+        "system_uuid",
+        "system_sku",
+        "system_family",
+        "baseBoard_manufacturer",
+        "baseBoard_product",
+        "baseBoard_version",
+        "baseBoard_serial",
+        "baseBoard_asset",
+        "baseBoard_location",
+        "chassis_manufacturer",
+        "chassis_version",
+        "chassis_serial",
+        "chassis_asset",
+        "chassis_sku",
+        "oemStrings",
+    ]
 
     type = XMLProperty("./@type")
 
@@ -49,8 +67,7 @@ class DomainSysinfo(XMLBuilder):
     system_sku = XMLProperty("./system/entry[@name='sku']")
     system_family = XMLProperty("./system/entry[@name='family']")
 
-    baseBoard_manufacturer = XMLProperty(
-        "./baseBoard/entry[@name='manufacturer']")
+    baseBoard_manufacturer = XMLProperty("./baseBoard/entry[@name='manufacturer']")
     baseBoard_product = XMLProperty("./baseBoard/entry[@name='product']")
     baseBoard_version = XMLProperty("./baseBoard/entry[@name='version']")
     baseBoard_serial = XMLProperty("./baseBoard/entry[@name='serial']")
@@ -63,6 +80,5 @@ class DomainSysinfo(XMLBuilder):
     chassis_asset = XMLProperty("./chassis/entry[@name='asset']")
     chassis_sku = XMLProperty("./chassis/entry[@name='sku']")
 
-    oemStrings = XMLChildProperty(
-            _SysinfoOemString, relative_xpath="./oemStrings")
+    oemStrings = XMLChildProperty(_SysinfoOemString, relative_xpath="./oemStrings")
     entries = XMLChildProperty(_SysinfoEntry)

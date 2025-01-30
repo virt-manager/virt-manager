@@ -11,13 +11,13 @@ class _CloneRow:
     """
     Helper class for interacting with the clone row
     """
+
     def __init__(self, *args):
         self.chkcell = args[2]
         self.txtcell = args[5]
 
         self.is_cloneable = self.chkcell.showing
-        self.is_share_requested = (
-                not self.is_cloneable or not self.chkcell.checked)
+        self.is_share_requested = not self.is_cloneable or not self.chkcell.checked
         self.is_clone_requested = not self.is_share_requested
 
     def check_in_text(self, substr):
@@ -29,15 +29,17 @@ class _CloneRow:
 
 def _get_all_rows(win):
     slist = win.find("storage-list")
+
     def pred(node):
         return node.roleName == "table cell"
+
     cells = slist.findChildren(pred, isLambda=True)
 
     idx = 0
     rows = []
     cellcount = 6
     while idx < len(cells):
-        rows.append(_CloneRow(*cells[idx:idx + cellcount]))
+        rows.append(_CloneRow(*cells[idx : idx + cellcount]))
         idx += cellcount
         # Skip the next row which is always a separator
         idx += cellcount
@@ -47,6 +49,7 @@ def _get_all_rows(win):
 ##############################################
 # UI tests for virt-manager's CloneVM wizard #
 ##############################################
+
 
 def testCloneSimple(app):
     # Disable predictable so UUID generation doesn't collide
@@ -187,7 +190,6 @@ def testCloneStorageChange(app):
     row = _get_all_rows(win)[0].check_in_text(oldnewname)
 
 
-
 def testCloneError(app):
     # Trigger some error handling scenarios
     win = app.manager_open_clone("test-clone-full")
@@ -208,10 +210,10 @@ def testCloneError(app):
     lib.utils.check(lambda: win.active)
 
 
-
 def testCloneNonmanaged(app):
     # Verify unmanaged clone actual works
     import tempfile
+
     tmpsrc = tempfile.NamedTemporaryFile()
     tmpdst = tempfile.NamedTemporaryFile()
 

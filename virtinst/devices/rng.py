@@ -21,14 +21,12 @@ class DeviceRng(Device):
     backend_model = XMLProperty("./backend/@model")
     backend_type = XMLProperty("./backend/@type")
 
-    source = XMLChildProperty(CharSource, is_single=True,
-            relative_xpath="./backend")
+    source = XMLChildProperty(CharSource, is_single=True, relative_xpath="./backend")
 
     rate_bytes = XMLProperty("./rate/@bytes")
     rate_period = XMLProperty("./rate/@period")
 
     device = XMLProperty("./backend[@model='random']")
-
 
     ##################
     # Default config #

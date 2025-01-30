@@ -96,6 +96,7 @@ def test_misc_nonpredicatble_generate():
     Bypass our testsuite 'predicatable' handling to test actual random output
     """
     from virtinst import cli
+
     predconn = utils.URIs.open_testdefault_cached()
     kvm_uri = utils.URIs.kvm_x86.replace(",predictable", "")
     kvmconn = cli.getConnection(kvm_uri)

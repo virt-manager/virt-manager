@@ -9,6 +9,7 @@ from . import lib
 # UI tests for manager window, and basic VM lifecycle stuff #
 #############################################################
 
+
 def _testVMLifecycle(app):
     """
     Basic VM lifecycle test, shared between standard and no-events
@@ -50,8 +51,7 @@ def testVMLifecycle(app):
 
 
 def testVMNoEventsLifecycle(app):
-    app.open(extra_opts=["--test-options=no-events",
-                         "--test-options=short-poll"])
+    app.open(extra_opts=["--test-options=no-events", "--test-options=short-poll"])
     _testVMLifecycle(app)
 
 
@@ -175,7 +175,6 @@ def testManagerVMRunFail(app):
     app.click_alert_button("fake error", "Close")
 
 
-
 def testManagerColumns(app):
     # Enable all stat options
     # Need to expand the window size so all columns are onscreen
@@ -190,6 +189,7 @@ def testManagerColumns(app):
     win.find("Close", "push button").click()
 
     manager = app.topwin
+
     def _test_sort(name):
         col = manager.find(name, "table column header")
         col.check_onscreen()
@@ -245,7 +245,6 @@ def testManagerWindowReposition(app):
     assert abs(manager.position[1] - checkxy[1]) in range(3)
 
 
-
 def testManagerWindowCleanup(app):
     """
     Open migrate, clone, delete, newvm, details, host windows, close the
@@ -297,12 +296,9 @@ def testManagerDefaultStartup(app):
     app.open(use_uri=False)
     manager = app.topwin
     errlabel = manager.find("error-label")
-    lib.utils.check(
-            lambda: "Checking for virtualization" in errlabel.text)
-    lib.utils.check(
-            lambda: "File->Add Connection" in errlabel.text)
-    lib.utils.check(
-            lambda: "appropriate QEMU/KVM" in errlabel.text)
+    lib.utils.check(lambda: "Checking for virtualization" in errlabel.text)
+    lib.utils.check(lambda: "File->Add Connection" in errlabel.text)
+    lib.utils.check(lambda: "appropriate QEMU/KVM" in errlabel.text)
 
     manager.find("File", "menu").click()
     manager.find("Quit", "menu item").click()

@@ -66,23 +66,24 @@ class vmmStorageBrowser(vmmGObjectUI):
         self._finish_cb = None
         self._browse_reason = None
 
-        self.storagelist = vmmHostStorage(self.conn, self.builder, self.topwin,
-            self._vol_sensitive_cb)
+        self.storagelist = vmmHostStorage(
+            self.conn, self.builder, self.topwin, self._vol_sensitive_cb
+        )
         self._init_ui()
 
-        self.builder.connect_signals({
-            "on_vmm_storage_browse_delete_event": self.close,
-        })
+        self.builder.connect_signals(
+            {
+                "on_vmm_storage_browse_delete_event": self.close,
+            }
+        )
         self.bind_escape_key_close()
-
 
     def show(self, parent):
         log.debug("Showing storage browser")
         if not self._first_run:
             self._first_run = True
             pool = self.conn.get_default_pool()
-            uiutil.set_list_selection(
-                    self.storagelist.widget("pool-list"), pool)
+            uiutil.set_list_selection(self.storagelist.widget("pool-list"), pool)
 
         self.topwin.set_transient_for(parent)
         self.topwin.present()
@@ -121,12 +122,9 @@ class vmmStorageBrowser(vmmGObjectUI):
             tooltip = _("Cannot use local storage on remote connection.")
         self.storagelist.widget("browse-local").set_tooltip_text(tooltip)
 
-        uiutil.set_grid_row_visible(
-            self.storagelist.widget("pool-autostart"), False)
-        uiutil.set_grid_row_visible(
-            self.storagelist.widget("pool-name-entry"), False)
-        uiutil.set_grid_row_visible(
-            self.storagelist.widget("pool-state-box"), False)
+        uiutil.set_grid_row_visible(self.storagelist.widget("pool-autostart"), False)
+        uiutil.set_grid_row_visible(self.storagelist.widget("pool-name-entry"), False)
+        uiutil.set_grid_row_visible(self.storagelist.widget("pool-state-box"), False)
         self.storagelist.widget("browse-local").set_visible(True)
         self.storagelist.widget("browse-cancel").set_visible(True)
         self.storagelist.widget("choose-volume").set_visible(True)
@@ -135,13 +133,13 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         self.set_browse_reason(self._browse_reason)
 
-
     ##############
     # Public API #
     ##############
 
     def set_finish_cb(self, callback):
         self._finish_cb = callback
+
     def set_vm_name(self, name):
         self.storagelist.set_name_hint(name)
 
@@ -151,7 +149,6 @@ class vmmStorageBrowser(vmmGObjectUI):
 
         self.topwin.set_title(data.storage_title)
         self.storagelist.widget("vol-add").set_sensitive(data.enable_create)
-
 
     #############
     # Listeners #
@@ -167,11 +164,9 @@ class vmmStorageBrowser(vmmGObjectUI):
         self._finish(volume.get_target_path())
 
     def _vol_sensitive_cb(self, fmt):
-        if ((self._browse_reason == vmmStorageBrowser.REASON_FS) and
-            fmt != 'dir'):
+        if (self._browse_reason == vmmStorageBrowser.REASON_FS) and fmt != "dir":
             return False
         return True
-
 
     ####################
     # Internal helpers #
@@ -188,7 +183,8 @@ class vmmStorageBrowser(vmmGObjectUI):
             dialog_type=data.dialog_type,
             dialog_name=data.local_title,
             start_folder=start_folder,
-            choose_label=data.choose_label)
+            choose_label=data.choose_label,
+        )
 
         if not filename:
             return
@@ -196,8 +192,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         log.debug("Browse local chose path=%s", filename)
 
         if gsettings_key:
-            self.config.set_default_directory(
-                gsettings_key, os.path.dirname(filename))
+            self.config.set_default_directory(gsettings_key, os.path.dirname(filename))
 
         self._finish(filename)
 

@@ -6,8 +6,7 @@
 from ..xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 
 
-XMLBuilder.register_namespace(
-        "libosinfo", "http://libosinfo.org/xmlns/libvirt/domain/1.0")
+XMLBuilder.register_namespace("libosinfo", "http://libosinfo.org/xmlns/libvirt/domain/1.0")
 
 
 class _XMLNSLibosinfo(XMLBuilder):
@@ -20,6 +19,7 @@ class DomainMetadata(XMLBuilder):
     """
     Class for generating <metadata> XML
     """
+
     XML_NAME = "metadata"
 
     libosinfo = XMLChildProperty(_XMLNSLibosinfo, is_single=True)

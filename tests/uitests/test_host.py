@@ -8,6 +8,7 @@ from . import lib
 # UI tests for virt-manager's VM details window #
 #################################################
 
+
 def testHostNetworkSmokeTest(app):
     """
     Verify that each virtual network displays, without error.
@@ -59,7 +60,6 @@ def testHostNetworkEdit(app):
 
     # Do standard xmleditor tests
     lib.utils.test_xmleditor_interactions(app, win, finish)
-
 
 
 def testHostStorageSmokeTest(app):
@@ -135,6 +135,7 @@ def testHostStorageVolMisc(app):
     vol2.click(button=3)
     app.root.find("Copy Volume Path", "menu item").click()
     from gi.repository import Gdk, Gtk
+
     clipboard = Gtk.Clipboard.get_default(Gdk.Display.get_default())
     lib.utils.check(lambda: clipboard.wait_for_text() == "/pool-dir/UPPER")
 

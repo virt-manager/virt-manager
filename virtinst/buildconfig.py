@@ -12,10 +12,8 @@ Configuration variables that can be set at build time
 import os
 import sys
 
-if (sys.version_info.major != 3 or
-    sys.version_info.minor < 4):  # pragma: no cover
-    print("python 3.4 or later is required, your's is %s" %
-            sys.version_info)
+if sys.version_info.major != 3 or sys.version_info.minor < 4:  # pragma: no cover
+    print("python 3.4 or later is required, your's is %s" % sys.version_info)
     sys.exit(1)
 
 import configparser
@@ -28,8 +26,7 @@ if os.path.exists(_cfgpath):
     _cfg.read(_cfgpath)  # pragma: no cover
 
 _istest = "VIRTINST_TEST_SUITE" in os.environ
-_running_from_srcdir = os.path.exists(
-    os.path.join(_srcdir, "tests", "test_cli.py"))
+_running_from_srcdir = os.path.exists(os.path.join(_srcdir, "tests", "test_cli.py"))
 
 
 def _split_list(commastr):
@@ -61,7 +58,6 @@ class _BuildConfig(object):
         self.running_from_srcdir = _running_from_srcdir
         self._set_paths_by_prefix(_get_param("prefix", "/usr"))
 
-
     def _set_paths_by_prefix(self, prefix):
         self.prefix = prefix
         self.gettext_dir = os.path.join(prefix, "share", "locale")
@@ -72,10 +68,8 @@ class _BuildConfig(object):
             self.gsettings_dir = self.icon_dir
         else:  # pragma: no cover
             self.ui_dir = os.path.join(prefix, "share", "virt-manager", "ui")
-            self.icon_dir = os.path.join(prefix, "share", "virt-manager",
-                "icons")
-            self.gsettings_dir = os.path.join(prefix, "share",
-                "glib-2.0", "schemas")
+            self.icon_dir = os.path.join(prefix, "share", "virt-manager", "icons")
+            self.gsettings_dir = os.path.join(prefix, "share", "glib-2.0", "schemas")
 
 
 BuildConfig = _BuildConfig()

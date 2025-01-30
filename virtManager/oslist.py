@@ -16,9 +16,7 @@ def _always_show(osobj):
 
 
 class vmmOSList(vmmGObjectUI):
-    __gsignals__ = {
-        "os-selected": (vmmGObjectUI.RUN_FIRST, None, [object])
-    }
+    __gsignals__ = {"os-selected": (vmmGObjectUI.RUN_FIRST, None, [object])}
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "oslist.ui", "vmm-oslist")
@@ -31,21 +29,21 @@ class vmmOSList(vmmGObjectUI):
         self.search_entry.set_placeholder_text(_("Type to start searching..."))
         self.eol_text = self.widget("eol-warn").get_text()
 
-        self.builder.connect_signals({
-            "on_include_eol_toggled": self._eol_toggled_cb,
-
-            "on_os_name_activate": self._entry_activate_cb,
-            "on_os_name_key_press_event": self._key_press_cb,
-            "on_os_name_search_changed": self._search_changed_cb,
-            "on_os_name_stop_search": self._stop_search_cb,
-            "on_os_list_row_activated": self._os_selected_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_include_eol_toggled": self._eol_toggled_cb,
+                "on_os_name_activate": self._entry_activate_cb,
+                "on_os_name_key_press_event": self._key_press_cb,
+                "on_os_name_search_changed": self._search_changed_cb,
+                "on_os_name_stop_search": self._stop_search_cb,
+                "on_os_list_row_activated": self._os_selected_cb,
+            }
+        )
 
         self._init_state()
 
     def _cleanup(self):
         pass
-
 
     ###########
     # UI init #
@@ -74,13 +72,11 @@ class vmmOSList(vmmGObjectUI):
 
         text = Gtk.CellRendererText()
         nameCol.pack_start(text, True)
-        nameCol.add_attribute(text, 'text', 1)
+        nameCol.add_attribute(text, "text", 1)
         os_list.append_column(nameCol)
 
-        markup = "<small>%s</small>" % xmlutil.xml_escape(
-                self.widget("eol-warn").get_text())
+        markup = "<small>%s</small>" % xmlutil.xml_escape(self.widget("eol-warn").get_text())
         self.widget("eol-warn").set_markup(markup)
-
 
     ###################
     # Private helpers #
@@ -92,7 +88,7 @@ class vmmOSList(vmmGObjectUI):
         if not self.is_visible():
             return
         if not len(os_list.get_model()):
-            return   # pragma: no cover
+            return  # pragma: no cover
         sel.select_iter(os_list.get_model()[0].iter)
 
     def _refilter(self):
@@ -129,7 +125,6 @@ class vmmOSList(vmmGObjectUI):
         self.topwin.popup()
         self._set_default_selection()
 
-
     ################
     # UI Callbacks #
     ################
@@ -163,9 +158,7 @@ class vmmOSList(vmmGObjectUI):
         if self._selected_os:
             selected_label = self._selected_os.label
 
-        if (not src.get_sensitive() or
-            not searchname or
-            selected_label == searchname):
+        if not src.get_sensitive() or not searchname or selected_label == searchname:
             self.topwin.popdown()
             self._clear_filter()
             return
@@ -182,7 +175,7 @@ class vmmOSList(vmmGObjectUI):
         else:
             self.search_entry.set_text("")
 
-    def _os_selected_cb(self, src,  path, column):
+    def _os_selected_cb(self, src, path, column):
         self._sync_os_selection()
 
     def _filter_os_cb(self, model, titer, ignore1):
@@ -197,12 +190,10 @@ class vmmOSList(vmmGObjectUI):
         if self._filter_name is not None and self._filter_name != "":
             label = osobj.label.lower()
             name = osobj.name.lower()
-            if (label.find(self._filter_name) == -1 and
-                name.find(self._filter_name) == -1):
+            if label.find(self._filter_name) == -1 and name.find(self._filter_name) == -1:
                 return False
 
         return True
-
 
     ###############
     # Public APIs #

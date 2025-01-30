@@ -35,38 +35,48 @@ class DomainOs(XMLBuilder):
     """
     Class for generating boot device related XML
     """
+
     BOOT_DEVICE_HARDDISK = "hd"
     BOOT_DEVICE_CDROM = "cdrom"
     BOOT_DEVICE_FLOPPY = "fd"
     BOOT_DEVICE_NETWORK = "network"
-    BOOT_DEVICES = [BOOT_DEVICE_HARDDISK, BOOT_DEVICE_CDROM,
-                    BOOT_DEVICE_FLOPPY, BOOT_DEVICE_NETWORK]
+    BOOT_DEVICES = [
+        BOOT_DEVICE_HARDDISK,
+        BOOT_DEVICE_CDROM,
+        BOOT_DEVICE_FLOPPY,
+        BOOT_DEVICE_NETWORK,
+    ]
 
     def is_hvm(self):
         return self.os_type == "hvm"
+
     def is_xenpv(self):
         return self.os_type in ["xen", "linux", "xenpvh"]
+
     def is_container(self):
         return self.os_type == "exe"
 
     def is_x86(self):
         return self.arch == "x86_64" or self.arch == "i686"
+
     def is_q35(self):
-        return (self.is_x86() and
-                self.machine and
-                "q35" in self.machine)
+        return self.is_x86() and self.machine and "q35" in self.machine
 
     def is_arm32(self):
         return self.arch == "armv7l"
+
     def is_arm64(self):
         return self.arch == "aarch64"
+
     def is_arm(self):
         return self.is_arm32() or self.is_arm64()
+
     def is_arm_machvirt(self):
         return self.is_arm() and str(self.machine).startswith("virt")
 
     def is_ppc64(self):
         return self.arch == "ppc64" or self.arch == "ppc64le"
+
     def is_pseries(self):
         return self.is_ppc64() and str(self.machine).startswith("pseries")
 
@@ -75,8 +85,10 @@ class DomainOs(XMLBuilder):
 
     def is_riscv(self):
         return self.arch == "riscv64" or self.arch == "riscv32"
+
     def is_riscv_virt(self):
         return self.is_riscv() and str(self.machine).startswith("virt")
+
     def is_loongarch64(self):
         return self.arch == "loongarch64"
 
@@ -86,14 +98,37 @@ class DomainOs(XMLBuilder):
 
     XML_NAME = "os"
     _XML_PROP_ORDER = [
-            "firmware", "os_type", "arch", "machine", "firmware_features",
-            "loader", "loader_ro", "loader_secure", "loader_type",
-            "loader_stateless",
-            "nvram", "nvram_template",
-            "init", "initargs", "initenvs", "initdir", "inituser", "initgroup",
-            "kernel", "initrd", "kernel_args", "dtb", "acpi_tb", "acpi_tb_type",
-            "bootdevs", "bootmenu_enable", "bootmenu_timeout",
-            "bios_useserial", "bios_rebootTimeout", "smbios_mode"]
+        "firmware",
+        "os_type",
+        "arch",
+        "machine",
+        "firmware_features",
+        "loader",
+        "loader_ro",
+        "loader_secure",
+        "loader_type",
+        "loader_stateless",
+        "nvram",
+        "nvram_template",
+        "init",
+        "initargs",
+        "initenvs",
+        "initdir",
+        "inituser",
+        "initgroup",
+        "kernel",
+        "initrd",
+        "kernel_args",
+        "dtb",
+        "acpi_tb",
+        "acpi_tb_type",
+        "bootdevs",
+        "bootmenu_enable",
+        "bootmenu_timeout",
+        "bios_useserial",
+        "bios_rebootTimeout",
+        "smbios_mode",
+    ]
 
     # Shared/Generic boot options
     os_type = XMLProperty("./type")
@@ -108,6 +143,7 @@ class DomainOs(XMLBuilder):
     # BIOS bootloader options
     def _get_bootorder(self):
         return [dev.dev for dev in self.bootdevs]
+
     def _set_bootorder(self, newdevs):
         for dev in self.bootdevs:
             self.remove_child(dev)
@@ -115,6 +151,7 @@ class DomainOs(XMLBuilder):
         for d in newdevs:
             dev = self.bootdevs.add_new()
             dev.dev = d
+
     bootorder = property(_get_bootorder, _set_bootorder)
     bootdevs = XMLChildProperty(_BootDevice)
     firmware = XMLProperty("./@firmware")
@@ -148,14 +185,15 @@ class DomainOs(XMLBuilder):
     initdir = XMLProperty("./initdir")
     inituser = XMLProperty("./inituser")
     initgroup = XMLProperty("./initgroup")
+
     def set_initargs_string(self, argstring):
         import shlex
+
         for obj in self.initargs:
             self.remove_child(obj)
         for val in shlex.split(argstring):
             obj = self.initargs.add_new()
             obj.val = val
-
 
     ##################
     # Default config #

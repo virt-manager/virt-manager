@@ -6,7 +6,8 @@
 # pylint: disable=wrong-import-position
 
 import gi
-gi.require_version('Libosinfo', '1.0')
+
+gi.require_version("Libosinfo", "1.0")
 
 from virtinst.buildconfig import BuildConfig
 
@@ -16,13 +17,12 @@ def _setup_i18n():
     import locale
 
     try:
-        locale.setlocale(locale.LC_ALL, '')
+        locale.setlocale(locale.LC_ALL, "")
     except Exception:  # pragma: no cover
         # Can happen if user passed a bogus LANG
         pass
 
-    gettext.install("virt-manager", BuildConfig.gettext_dir,
-                    names=["ngettext"])
+    gettext.install("virt-manager", BuildConfig.gettext_dir, names=["ngettext"])
     gettext.bindtextdomain("virt-manager", BuildConfig.gettext_dir)
 
 
@@ -35,6 +35,7 @@ def _set_libvirt_error_handler():
     def libvirt_callback(userdata, err):
         ignore = userdata
         ignore = err
+
     ctx = None
     libvirt.registerErrorHandler(libvirt_callback, ctx)
 

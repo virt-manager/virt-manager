@@ -12,6 +12,7 @@ class _DeleteRow:
     """
     Helper class for interacting with the delete dialog rows
     """
+
     def __init__(self, cell1, cell2, cell3, cell4):
         ignore = cell4
         self.chkcell = cell1
@@ -37,6 +38,7 @@ def _create_testdriver_path(fn):
             if os.path.exists(tmpdir):
                 os.chmod(tmpdir, 0o777)
                 shutil.rmtree(tmpdir)
+
     return wrapper
 
 
@@ -71,14 +73,16 @@ def _finish(app, delete, paths, expect_fail=False, click_no=False):
 
 def _get_all_rows(delete):
     slist = delete.find("storage-list")
+
     def pred(node):
         return node.roleName == "table cell"
+
     cells = slist.findChildren(pred, isLambda=True)
 
     idx = 0
     rows = []
     while idx < len(cells):
-        rows.append(_DeleteRow(*cells[idx:idx + 4]))
+        rows.append(_DeleteRow(*cells[idx : idx + 4]))
         idx += 4
     return rows
 
@@ -87,9 +91,8 @@ def _get_all_rows(delete):
 # UI tests for virt-manager's VM delete window #
 ################################################
 
-def _testDeleteManyDevices(app,
-        nondefault_path=None, delete_nondefault=False,
-        skip_finish=False):
+
+def _testDeleteManyDevices(app, nondefault_path=None, delete_nondefault=False, skip_finish=False):
     delete = _open_delete(app, "test-many-devices")
 
     rows = _get_all_rows(delete)
@@ -151,9 +154,7 @@ def testDeleteNondefaultOverride(app, tmppath):
     Path not selected by default, but we select it,
     which will cause it to be manually unlinked
     """
-    _testDeleteManyDevices(app,
-            nondefault_path=tmppath,
-            delete_nondefault=True)
+    _testDeleteManyDevices(app, nondefault_path=tmppath, delete_nondefault=True)
     assert not os.path.exists(tmppath)
 
 
@@ -163,10 +164,9 @@ def testDeleteFailure(app, tmppath):
     After launching the wizard we change permissions to make
     file deletion fail
     """
-    paths = _testDeleteManyDevices(app,
-            nondefault_path=tmppath,
-            delete_nondefault=True,
-            skip_finish=True)
+    paths = _testDeleteManyDevices(
+        app, nondefault_path=tmppath, delete_nondefault=True, skip_finish=True
+    )
     os.chmod(os.path.dirname(tmppath), 0o555)
     delete = app.find_window("Delete")
     _finish(app, delete, paths, expect_fail=True, click_no=True)
@@ -216,8 +216,7 @@ def testDeleteDeviceNoStorage(app):
     Verify successful device remove with storage doesn't
     touch host storage
     """
-    details = app.manager_open_details("test-many-devices",
-            shutdown=True)
+    details = app.manager_open_details("test-many-devices", shutdown=True)
 
     hwlist = details.find("hw-list")
     hwlist.click()
@@ -244,8 +243,7 @@ def testDeleteDeviceWithStorage(app):
     """
     Verify successful device remove deletes storage
     """
-    details = app.manager_open_details("test-many-devices",
-            shutdown=True)
+    details = app.manager_open_details("test-many-devices", shutdown=True)
 
     hwlist = details.find("hw-list")
     hwlist.click()

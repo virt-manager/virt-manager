@@ -25,6 +25,7 @@ class dogtail_timeout:
     """
     Context helper to run a specific check with custom timeout, in seconds
     """
+
     def __init__(self, timeout):
         backoff = dogtail.config.config.searchBackoffDuration
         self._tmpval = int(timeout / backoff)
@@ -60,8 +61,7 @@ def walkUIList(app, win, lst, error_cb, reverse=False):
         cell = all_cells[idx]
         if not cell.state_selected:
             # Could be a separator table cell. Try to figure it out
-            if not any([c.name for c in
-                        all_cells[idx:(idx + cells_per_selection)]]):
+            if not any([c.name for c in all_cells[idx : (idx + cells_per_selection)]]):
                 idx += cells_per_selection
                 continue
 

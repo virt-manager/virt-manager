@@ -20,6 +20,7 @@ class _vmmSecret(object):
 
     def get_secret(self):
         return self.secret
+
     def get_name(self):
         return self.name
 
@@ -28,6 +29,7 @@ class vmmKeyring(vmmGObject):
     """
     freedesktop Secret API abstraction
     """
+
     @classmethod
     def get_instance(cls):
         if not cls._instance:
@@ -41,18 +43,27 @@ class vmmKeyring(vmmGObject):
 
         try:
             self._dbus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
-            self._service = Gio.DBusProxy.new_sync(self._dbus, 0, None,
-                                    "org.freedesktop.secrets",
-                                    "/org/freedesktop/secrets",
-                                    "org.freedesktop.Secret.Service", None)
+            self._service = Gio.DBusProxy.new_sync(
+                self._dbus,
+                0,
+                None,
+                "org.freedesktop.secrets",
+                "/org/freedesktop/secrets",
+                "org.freedesktop.Secret.Service",
+                None,
+            )
 
-            self._session = self._service.OpenSession("(sv)", "plain",
-                                                      GLib.Variant("s", ""))[1]
+            self._session = self._service.OpenSession("(sv)", "plain", GLib.Variant("s", ""))[1]
 
-            self._collection = Gio.DBusProxy.new_sync(self._dbus, 0, None,
-                                "org.freedesktop.secrets",
-                                "/org/freedesktop/secrets/aliases/default",
-                                "org.freedesktop.Secret.Collection", None)
+            self._collection = Gio.DBusProxy.new_sync(
+                self._dbus,
+                0,
+                None,
+                "org.freedesktop.secrets",
+                "/org/freedesktop/secrets/aliases/default",
+                "org.freedesktop.Secret.Collection",
+                None,
+            )
 
             log.debug("Using keyring session %s", self._session)
         except Exception:  # pragma: no cover
@@ -69,8 +80,7 @@ class vmmKeyring(vmmGObject):
         unlocked, locked = self._service.SearchItems("(a{ss})", attributes)
         if not unlocked:
             if locked:
-                log.warning(  # pragma: no cover
-                        "Item found, but it's locked")
+                log.warning("Item found, but it's locked")  # pragma: no cover
             return None
         return unlocked[0]
 
@@ -78,9 +88,14 @@ class vmmKeyring(vmmGObject):
         if path == "/":
             return
         iface = Gio.DBusProxy.new_sync(  # pragma: no cover
-                self._dbus, 0, None,
-                "org.freedesktop.secrets", path,
-                "org.freedesktop.Secret.Prompt", None)
+            self._dbus,
+            0,
+            None,
+            "org.freedesktop.secrets",
+            path,
+            "org.freedesktop.Secret.Prompt",
+            None,
+        )
         iface.Prompt("(s)", "")  # pragma: no cover
 
     def _add_secret(self, secret):
@@ -89,13 +104,15 @@ class vmmKeyring(vmmGObject):
                 "org.freedesktop.Secret.Item.Label": GLib.Variant("s", secret.get_name()),
                 "org.freedesktop.Secret.Item.Attributes": GLib.Variant("a{ss}", secret.attributes),
             }
-            params = (self._session, [],
-                      [ord(v) for v in secret.get_secret()],
-                      "text/plain; charset=utf8")
+            params = (
+                self._session,
+                [],
+                [ord(v) for v in secret.get_secret()],
+                "text/plain; charset=utf8",
+            )
             replace = True
 
-            dummy, prompt = self._collection.CreateItem("(a{sv}(oayays)b)",
-                                              props, params, replace)
+            dummy, prompt = self._collection.CreateItem("(a{sv}(oayays)b)", props, params, replace)
             self._do_prompt_if_needed(prompt)
         except Exception:  # pragma: no cover
             log.exception("Failed to add keyring secret")
@@ -106,9 +123,15 @@ class vmmKeyring(vmmGObject):
             if path is None:
                 return None
 
-            iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
-                                           "org.freedesktop.secrets", path,
-                                           "org.freedesktop.Secret.Item", None)
+            iface = Gio.DBusProxy.new_sync(
+                self._dbus,
+                0,
+                None,
+                "org.freedesktop.secrets",
+                path,
+                "org.freedesktop.Secret.Item",
+                None,
+            )
             prompt = iface.Delete()
             self._do_prompt_if_needed(prompt)
         except Exception:  # pragma: no cover
@@ -121,9 +144,15 @@ class vmmKeyring(vmmGObject):
             if path is None:
                 return None
 
-            iface = Gio.DBusProxy.new_sync(self._dbus, 0, None,
-                                    "org.freedesktop.secrets", path,
-                                    "org.freedesktop.Secret.Item", None)
+            iface = Gio.DBusProxy.new_sync(
+                self._dbus,
+                0,
+                None,
+                "org.freedesktop.secrets",
+                path,
+                "org.freedesktop.Secret.Item",
+                None,
+            )
 
             secretbytes = iface.GetSecret("(o)", self._session)[2]
             label = iface.get_cached_property("Label").unpack().strip("'")
@@ -142,7 +171,6 @@ class vmmKeyring(vmmGObject):
             log.exception("Failed to get keyring secret uuid=%r hvuri=%r", uuid, hvuri)
 
         return ret
-
 
     ##############
     # Public API #
@@ -168,10 +196,9 @@ class vmmKeyring(vmmGObject):
         if not self.is_available():
             return  # pragma: no cover
 
-
-        secret = _vmmSecret(self._get_secret_name(vm), password,
-                           {"uuid": vm.get_uuid(),
-                            "hvuri": vm.conn.get_uri()})
+        secret = _vmmSecret(
+            self._get_secret_name(vm), password, {"uuid": vm.get_uuid(), "hvuri": vm.conn.get_uri()}
+        )
         vm.set_console_username(username)
         self._add_secret(secret)
 

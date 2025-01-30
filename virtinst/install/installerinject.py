@@ -15,19 +15,18 @@ from ..logger import log
 def _run_initrd_commands(initrd, tempdir):
     log.debug("Appending to the initrd.")
 
-    find_proc = subprocess.Popen(['find', '.', '-print0'],
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 cwd=tempdir)
-    cpio_proc = subprocess.Popen(['cpio', '--create', '--null', '--quiet',
-                                  '--format=newc', '--owner=0:0'],
-                                 stdin=find_proc.stdout,
-                                 stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE,
-                                 cwd=tempdir)
-    f = open(initrd, 'ab')
-    gzip_proc = subprocess.Popen(['gzip'], stdin=cpio_proc.stdout,
-                                 stdout=f, stderr=subprocess.PIPE)
+    find_proc = subprocess.Popen(
+        ["find", ".", "-print0"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=tempdir
+    )
+    cpio_proc = subprocess.Popen(
+        ["cpio", "--create", "--null", "--quiet", "--format=newc", "--owner=0:0"],
+        stdin=find_proc.stdout,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=tempdir,
+    )
+    f = open(initrd, "ab")
+    gzip_proc = subprocess.Popen(["gzip"], stdin=cpio_proc.stdout, stdout=f, stderr=subprocess.PIPE)
     cpio_proc.wait()
     find_proc.wait()
     gzip_proc.wait()
@@ -43,9 +42,9 @@ def _run_initrd_commands(initrd, tempdir):
     if gziperr:  # pragma: no cover
         log.debug("gzip stderr=%s", gziperr)
 
-    if (cpio_proc.returncode != 0 or
-        find_proc.returncode != 0 or
-        gzip_proc.returncode != 0):  # pragma: no cover
+    if (
+        cpio_proc.returncode != 0 or find_proc.returncode != 0 or gzip_proc.returncode != 0
+    ):  # pragma: no cover
         raise RuntimeError("Failed to inject files into initrd")
 
 
@@ -60,11 +59,7 @@ def _run_iso_commands(iso, tempdir, cloudinit=False):
         if shutil.which(program):
             break
 
-    cmd = [program,
-           "-o", iso,
-           "-J",
-           "-input-charset", "utf8",
-           "-rational-rock"]
+    cmd = [program, "-o", iso, "-J", "-input-charset", "utf8", "-rational-rock"]
     if cloudinit:
         cmd.extend(["-V", "cidata"])
     cmd.append(tempdir)
@@ -87,8 +82,7 @@ def _perform_generic_injections(injections, scratchdir, media, cb, **kwargs):
             else:
                 dst = os.path.basename(filename)
 
-            log.debug("Injecting src=%s dst=%s into media=%s",
-                    filename, dst, media)
+            log.debug("Injecting src=%s dst=%s into media=%s", filename, dst, media)
             shutil.copy(filename, os.path.join(tempdir, dst))
 
         return cb(media, tempdir, **kwargs)
@@ -100,8 +94,7 @@ def perform_initrd_injections(initrd, injections, scratchdir):
     """
     Insert files into the root directory of the initial ram disk
     """
-    _perform_generic_injections(injections, scratchdir, initrd,
-            _run_initrd_commands)
+    _perform_generic_injections(injections, scratchdir, initrd, _run_initrd_commands)
 
 
 def perform_cdrom_injections(injections, scratchdir, cloudinit=False):
@@ -113,13 +106,14 @@ def perform_cdrom_injections(injections, scratchdir, cloudinit=False):
     else:
         iso_suffix = "-unattended.iso"
     fileobj = tempfile.NamedTemporaryFile(
-        prefix="virtinst-", suffix=iso_suffix,
-        dir=scratchdir, delete=False)
+        prefix="virtinst-", suffix=iso_suffix, dir=scratchdir, delete=False
+    )
     iso = fileobj.name
 
     try:
-        _perform_generic_injections(injections, scratchdir, iso,
-            _run_iso_commands, cloudinit=cloudinit)
+        _perform_generic_injections(
+            injections, scratchdir, iso, _run_iso_commands, cloudinit=cloudinit
+        )
     except Exception:  # pragma: no cover
         os.unlink(iso)
         raise

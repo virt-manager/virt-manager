@@ -20,6 +20,7 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 # Genering <enum> and <value> handling #
 ########################################
 
+
 class _Value(XMLBuilder):
     XML_NAME = "value"
     value = XMLProperty(".")
@@ -80,8 +81,10 @@ def _make_capsblock(xml_root_name):
     To build a class that tracks that whole <graphics> block, call this
     like _make_capsblock("graphics")
     """
+
     class TmpClass(_CapsBlock):
         pass
+
     setattr(TmpClass, "XML_NAME", xml_root_name)
     return TmpClass
 
@@ -89,6 +92,7 @@ def _make_capsblock(xml_root_name):
 ################################
 # SEV launch security handling #
 ################################
+
 
 class _SEV(XMLBuilder):
     XML_NAME = "sev"
@@ -99,6 +103,7 @@ class _SEV(XMLBuilder):
 #############################
 # Misc toplevel XML classes #
 #############################
+
 
 class _OS(_CapsBlock):
     XML_NAME = "os"
@@ -133,6 +138,7 @@ class _MemoryBacking(_CapsBlock):
 # CPU classes #
 ###############
 
+
 class _CPUModel(XMLBuilder):
     XML_NAME = "model"
     model = XMLProperty(".")
@@ -145,6 +151,7 @@ class _CPUMode(_CapsBlock):
     name = XMLProperty("./@name")
 
     models = XMLChildProperty(_CPUModel)
+
     def get_model(self, name):
         for model in self.models:
             if model.model == name:
@@ -165,6 +172,7 @@ class _CPU(XMLBuilder):
 # CPU flags/baseline helpers#
 #############################
 
+
 def _convert_mode_to_cpu(xml, arch):
     root = ET.fromstring(xml)
     root.tag = "cpu"
@@ -180,24 +188,24 @@ def _get_expanded_cpu(domcaps, mode):
 
     try:
         expandedXML = domcaps.conn.baselineHypervisorCPU(
-                domcaps.path, domcaps.arch,
-                domcaps.machine, domcaps.domain, [cpuXML],
-                libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
+            domcaps.path,
+            domcaps.arch,
+            domcaps.machine,
+            domcaps.domain,
+            [cpuXML],
+            libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES,
+        )
     except (libvirt.libvirtError, AttributeError):
-        expandedXML = domcaps.conn.baselineCPU([cpuXML],
-                libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES)
+        expandedXML = domcaps.conn.baselineCPU(
+            [cpuXML], libvirt.VIR_CONNECT_BASELINE_CPU_EXPAND_FEATURES
+        )
 
     return DomainCpu(domcaps.conn, expandedXML)
 
 
 def _lookup_cpu_security_features(domcaps):
     ret = []
-    sec_features = [
-            'spec-ctrl',
-            'ssbd',
-            'ibpb',
-            'virt-ssbd',
-            'md-clear']
+    sec_features = ["spec-ctrl", "ssbd", "ibpb", "virt-ssbd", "md-clear"]
 
     for m in domcaps.cpu.modes:
         if m.name != "host-model" or not m.supported:
@@ -221,6 +229,7 @@ def _lookup_cpu_security_features(domcaps):
 # DomainCapabilities main class #
 #################################
 
+
 class DomainCapabilities(XMLBuilder):
     XML_NAME = "domainCapabilities"
     os = XMLChildProperty(_OS, is_single=True)
@@ -234,7 +243,6 @@ class DomainCapabilities(XMLBuilder):
     machine = XMLProperty("./machine")
     path = XMLProperty("./path")
 
-
     ################
     # Init helpers #
     ################
@@ -244,13 +252,17 @@ class DomainCapabilities(XMLBuilder):
         xml = None
         if conn.support.conn_domain_capabilities():
             try:
-                xml = conn.getDomainCapabilities(emulator, arch,
-                    machine, hvtype)
-                log.debug("Fetched domain capabilities for (%s,%s,%s,%s): %s",
-                          emulator, arch, machine, hvtype, xml)
+                xml = conn.getDomainCapabilities(emulator, arch, machine, hvtype)
+                log.debug(
+                    "Fetched domain capabilities for (%s,%s,%s,%s): %s",
+                    emulator,
+                    arch,
+                    machine,
+                    hvtype,
+                    xml,
+                )
             except Exception:  # pragma: no cover
-                log.debug("Error fetching domcapabilities XML",
-                    exc_info=True)
+                log.debug("Error fetching domcapabilities XML", exc_info=True)
 
         if not xml:
             # If not supported, just use a stub object
@@ -259,9 +271,9 @@ class DomainCapabilities(XMLBuilder):
 
     @staticmethod
     def build_from_guest(guest):
-        return DomainCapabilities.build_from_params(guest.conn,
-            guest.emulator, guest.os.arch, guest.os.machine, guest.type)
-
+        return DomainCapabilities.build_from_params(
+            guest.conn, guest.emulator, guest.os.arch, guest.os.machine, guest.type
+        )
 
     #########################
     # UEFI/firmware methods #
@@ -280,7 +292,8 @@ class DomainCapabilities(XMLBuilder):
             r".*OVMF_CODE\.fd",  # RHEL
             r".*ovmf-x64/OVMF.*\.fd",  # gerd's firmware repo
             r".*ovmf-x86_64-.*",  # SUSE
-            r".*ovmf.*", ".*OVMF.*",  # generic attempt at a catchall
+            r".*ovmf.*",
+            ".*OVMF.*",  # generic attempt at a catchall
         ],
         "aarch64": [
             r".*AAVMF_CODE\.fd",  # RHEL
@@ -291,7 +304,7 @@ class DomainCapabilities(XMLBuilder):
         "armv7l": [
             r".*AAVMF32_CODE\.fd",  # Debian qemu-efi-arm package
             r".*arm/QEMU_EFI.*",  # fedora, gerd's firmware repo
-            r".*edk2-arm-code\.fd"  # upstream qemu
+            r".*edk2-arm-code\.fd",  # upstream qemu
         ],
         "riscv64": [
             r".*RISCV_VIRT_CODE\..*",  # Fedora, Debian
@@ -313,10 +326,9 @@ class DomainCapabilities(XMLBuilder):
         firmware_files = [f.value for f in self.os.loader.values]
         if self.conn.is_bhyve():
             for firmware_file in firmware_files:
-                if 'BHYVE_UEFI.fd' in firmware_file:
+                if "BHYVE_UEFI.fd" in firmware_file:
                     return firmware_file
-            return (firmware_files and
-                    firmware_files[0] or None)  # pragma: no cover
+            return firmware_files and firmware_files[0] or None  # pragma: no cover
 
         patterns = self._uefi_arch_patterns.get(self.arch)
         for pattern in patterns:
@@ -337,8 +349,7 @@ class DomainCapabilities(XMLBuilder):
         for arch, patterns in self._uefi_arch_patterns.items():
             for pattern in patterns:
                 if re.match(pattern, path):
-                    return (_("UEFI %(arch)s: %(path)s") %
-                        {"arch": arch, "path": path})
+                    return _("UEFI %(arch)s: %(path)s") % {"arch": arch, "path": path}
 
         return _("Custom: %(path)s" % {"path": path})
 
@@ -357,7 +368,6 @@ class DomainCapabilities(XMLBuilder):
     def supports_firmware_efi(self):
         return self.os.get_enum("firmware").has_value("efi")
 
-
     #######################
     # CPU support methods #
     #######################
@@ -369,8 +379,7 @@ class DomainCapabilities(XMLBuilder):
         general purpose safe prior to domcaps advertisement.
         """
         m = self.cpu.get_mode("host-model")
-        return (m and m.supported and
-                m.models[0].fallback == "forbid")
+        return m and m.supported and m.models[0].fallback == "forbid"
 
     def supports_safe_host_passthrough(self):
         """
@@ -380,12 +389,11 @@ class DomainCapabilities(XMLBuilder):
         to not taint the VM for using host-passthrough
         """
         m = self.cpu.get_mode("host-passthrough")
-        return (m and m.supported and
-                "on" in m.get_enum("hostPassthroughMigratable").get_values())
+        return m and m.supported and "on" in m.get_enum("hostPassthroughMigratable").get_values()
 
     def supports_maximum_cpu_mode(self):
         m = self.cpu.get_mode("maximum")
-        return (m and m.supported)
+        return m and m.supported
 
     def get_cpu_models(self):
         models = []
@@ -399,11 +407,11 @@ class DomainCapabilities(XMLBuilder):
         return models
 
     _features = None
+
     def get_cpu_security_features(self):
         if self._features is None:
             self._features = _lookup_cpu_security_features(self) or []
         return self._features
-
 
     ########################
     # Misc support methods #
@@ -416,8 +424,7 @@ class DomainCapabilities(XMLBuilder):
         on the platform
         """
         if check_es:
-            return bool(self.features.sev.supported and
-                        self.features.sev.maxESGuests)
+            return bool(self.features.sev.supported and self.features.sev.maxESGuests)
         return bool(self.features.sev.supported)
 
     def supports_video_bochs(self):
@@ -492,8 +499,7 @@ class DomainCapabilities(XMLBuilder):
         """
         Return True if libvirt advertises support for virtiofs
         """
-        return self.devices.filesystem.get_enum(
-                "driverType").has_value("virtiofs")
+        return self.devices.filesystem.get_enum("driverType").has_value("virtiofs")
 
     def supports_memorybacking_memfd(self):
         """

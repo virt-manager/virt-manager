@@ -18,7 +18,6 @@ class DeviceRedirdev(Device):
     type = XMLProperty("./@type")
     source = XMLChildProperty(CharSource, is_single=True)
 
-
     ##################
     # Default config #
     ##################

@@ -11,59 +11,76 @@ import os
 
 def fake_job_info():
     import random
+
     total = 1024 * 1024 * 1024
     fakepcent = random.choice(range(1, 100))
-    remaining = ((total / 100) * fakepcent)
+    remaining = (total / 100) * fakepcent
     return [None, None, None, total, None, remaining]
 
 
 def fake_interface_addresses(iface, source):
     import libvirt
+
     mac = iface.macaddr
     if source == libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT:
         ret = {
-            'enp1s0': {'hwaddr': mac, 'addrs': [
-                {'addr': '10.0.0.1', 'prefix': 24, 'type': 0},
-                {'addr': 'fd00:beef::1', 'prefix': 128, 'type': 1},
-                {'addr': 'fe80::1', 'prefix': 64, 'type': 1}],
+            "enp1s0": {
+                "hwaddr": mac,
+                "addrs": [
+                    {"addr": "10.0.0.1", "prefix": 24, "type": 0},
+                    {"addr": "fd00:beef::1", "prefix": 128, "type": 1},
+                    {"addr": "fe80::1", "prefix": 64, "type": 1},
+                ],
             },
-            'lo': {'hwaddr': '00:00:00:00:00:00', 'addrs': [
-                {'addr': '127.0.0.1', 'prefix': 8, 'type': 0},
-                {'addr': '::1', 'prefix': 128, 'type': 1}],
+            "lo": {
+                "hwaddr": "00:00:00:00:00:00",
+                "addrs": [
+                    {"addr": "127.0.0.1", "prefix": 8, "type": 0},
+                    {"addr": "::1", "prefix": 128, "type": 1},
+                ],
             },
         }
     else:
-        ret = {'vnet0': {'hwaddr': mac, 'addrs': [
-            {'addr': '10.0.0.3', 'prefix': 0, 'type': 0}],
-        }}
+        ret = {
+            "vnet0": {
+                "hwaddr": mac,
+                "addrs": [{"addr": "10.0.0.3", "prefix": 0, "type": 0}],
+            }
+        }
     return ret
 
 
 def fake_dhcp_leases():
-    ret = [{
-        'clientid': 'XXX',
-        'expirytime': 1598570993,
-        'hostname': None,
-        'iaid': '1448103320',
-        'iface': 'virbr1',
-        'ipaddr': 'fd00:beef::2',
-        'mac': 'BAD',
-        'prefix': 64,
-        'type': 1}, {
-        'clientid': 'YYY',
-        'expirytime': 1598570993,
-        'hostname': None,
-        'iaid': None,
-        'iface': 'virbr1',
-        'ipaddr': '10.0.0.2',
-        'mac': 'NOPE',
-        'prefix': 24,
-        'type': 0}]
+    ret = [
+        {
+            "clientid": "XXX",
+            "expirytime": 1598570993,
+            "hostname": None,
+            "iaid": "1448103320",
+            "iface": "virbr1",
+            "ipaddr": "fd00:beef::2",
+            "mac": "BAD",
+            "prefix": 64,
+            "type": 1,
+        },
+        {
+            "clientid": "YYY",
+            "expirytime": 1598570993,
+            "hostname": None,
+            "iaid": None,
+            "iface": "virbr1",
+            "ipaddr": "10.0.0.2",
+            "mac": "NOPE",
+            "prefix": 24,
+            "type": 0,
+        },
+    ]
     return ret
 
 
 def schedule_fake_agent_event(conn, cb):
     import libvirt
+
     vmname = conn.config.CLITestOptions.fake_agent_event
     backend = conn.get_backend()
     state = libvirt.VIR_CONNECT_DOMAIN_EVENT_AGENT_LIFECYCLE_STATE_CONNECTED
@@ -78,6 +95,7 @@ def schedule_fake_agent_event(conn, cb):
 
 def schedule_fake_nodedev_event(conn, lifecycle_cb, update_cb):
     import libvirt
+
     nodename = conn.config.CLITestOptions.fake_nodedev_event
     backend = conn.get_backend()
 
@@ -98,6 +116,7 @@ def schedule_fake_nodedev_event(conn, lifecycle_cb, update_cb):
 def fake_openauth(conn, cb, data):
     ignore = conn
     import libvirt
+
     creds = [
         [libvirt.VIR_CRED_USERNAME, "Username", None, None, None],
         [libvirt.VIR_CRED_PASSPHRASE, "Password", None, None, None],
@@ -111,13 +130,14 @@ class fakeVirtBootstrap:
     def bootstrap(**kwargs):
         import time
         import logging
+
         log = logging.getLogger("virtBootstrap")
         log.info("mock virtBootstrap msg1")
         kwargs["progress_cb"]({"status": "msg1"})
-        time.sleep(.5)
+        time.sleep(0.5)
         log.info("mock virtBootstrap msg2")
         kwargs["progress_cb"]({"status": "msg2"})
-        time.sleep(.5)
+        time.sleep(0.5)
         log.info("mock virtBootstrap msg3")
         kwargs["progress_cb"]({"status": "msg3"})
         if "username" in kwargs:
@@ -184,6 +204,7 @@ class CLITestOptionsClass:
     * short-poll: Use a polling interval of only .1 seconds to speed
         up the uitests a bit
     """
+
     def __init__(self, test_options_str):
         optset = set()
         for optstr in test_options_str:
@@ -241,14 +262,17 @@ class CLITestOptionsClass:
         if first_run and not self.gsettings_keyfile:
             import atexit
             import tempfile
+
             filename = tempfile.mktemp(prefix="virtmanager-firstrun-keyfile")
             self.gsettings_keyfile = filename
             atexit.register(lambda: os.unlink(filename))
 
         if self.break_setfacl:
             import virtinst.diskbackend
+
             def fake_search(*args, **kwargs):
                 raise RuntimeError("Fake search fix fail from test suite")
+
             virtinst.diskbackend.SETFACL = "getfacl"
             # pylint: disable=protected-access
             virtinst.diskbackend._fix_perms_chmod = fake_search

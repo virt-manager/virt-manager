@@ -22,7 +22,8 @@ from ..logger import log
 # isoreader abstraction #
 #########################
 
-class _XorrisoReader():
+
+class _XorrisoReader:
     def __init__(self, location):
         self._location = location
         self._cache_file_list = self._make_file_list()
@@ -32,17 +33,15 @@ class _XorrisoReader():
         cmd = ["xorriso", "-indev", self._location, "-print", delim, "-find"]
 
         log.debug("Generating iso filelist: %s", cmd)
-        output = subprocess.check_output(cmd,
-                stderr=subprocess.DEVNULL, universal_newlines=True)
+        output = subprocess.check_output(cmd, stderr=subprocess.DEVNULL, universal_newlines=True)
         return output.split(delim, 1)[1].strip().splitlines()
 
     def grabFile(self, url, scratchdir):
         tmp = tempfile.NamedTemporaryFile(
-                prefix="virtinst-iso", suffix="-" + os.path.basename(url),
-                dir=scratchdir)
+            prefix="virtinst-iso", suffix="-" + os.path.basename(url), dir=scratchdir
+        )
 
-        cmd = ["xorriso", "-osirrox", "on", "-indev", self._location,
-               "-extract", url, tmp.name]
+        cmd = ["xorriso", "-osirrox", "on", "-indev", self._location, "-extract", url, tmp.name]
         log.debug("Extracting iso file: %s", cmd)
         subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
         return open(tmp.name, "rb").read()
@@ -55,11 +54,13 @@ class _XorrisoReader():
 # Fetcher implementations #
 ###########################
 
+
 class _URLFetcher(object):
     """
     This is a generic base class for fetching/extracting files from
     a media source, such as CD ISO, or HTTP/HTTPS/FTP server
     """
+
     _block_size = 16384
     _is_iso = False
 
@@ -70,7 +71,6 @@ class _URLFetcher(object):
 
         log.debug("Using scratchdir=%s", scratchdir)
         self._prepare()
-
 
     ####################
     # Internal helpers #
@@ -98,13 +98,11 @@ class _URLFetcher(object):
         try:
             urlobj, size = self._grabber(url)
         except Exception as e:
-            msg = (_("Couldn't acquire file %(url)s: %(error)s") % {
-                    "url": url, "error": str(e)})
+            msg = _("Couldn't acquire file %(url)s: %(error)s") % {"url": url, "error": str(e)}
             raise ValueError(msg) from None
 
         log.debug("Fetching URI: %s", url)
-        msg = _("Retrieving '%(filename)s'") % {
-                "filename": os.path.basename(filename)}
+        msg = _("Retrieving '%(filename)s'") % {"filename": os.path.basename(filename)}
         self.meter.start(msg, size)
 
         self._write(urlobj, fileobj)
@@ -131,7 +129,6 @@ class _URLFetcher(object):
         data needs to be passed to self._write
         """
         raise NotImplementedError("must be implemented in subclass")
-
 
     ##############
     # Public API #
@@ -182,8 +179,11 @@ class _URLFetcher(object):
         fn = None
         try:
             fileobj = tempfile.NamedTemporaryFile(
-                prefix="virtinst-", suffix="-" + os.path.basename(filename),
-                dir=self.scratchdir, delete=False)
+                prefix="virtinst-",
+                suffix="-" + os.path.basename(filename),
+                dir=self.scratchdir,
+                delete=False,
+            )
             fn = fileobj.name
 
             self._grabURL(filename, fileobj, fullurl=fullurl)
@@ -239,7 +239,7 @@ class _HTTPURLFetcher(_URLFetcher):
         response = self._session.get(url, stream=True)
         response.raise_for_status()
         try:
-            size = int(response.headers.get('content-length'))
+            size = int(response.headers.get("content-length"))
         except Exception:  # pragma: no cover
             size = None
         return response, size
@@ -268,15 +268,17 @@ class _FTPURLFetcher(_URLFetcher):
         try:
             parsed = urllib.parse.urlparse(self.location)
             self._ftp = ftplib.FTP()
-            username = urllib.parse.unquote(parsed.username or '')
-            password = urllib.parse.unquote(parsed.password or '')
+            username = urllib.parse.unquote(parsed.username or "")
+            password = urllib.parse.unquote(parsed.password or "")
             self._ftp.connect(parsed.hostname, parsed.port or 0)
             self._ftp.login(username, password)
             # Force binary mode
             self._ftp.voidcmd("TYPE I")
         except Exception as e:  # pragma: no cover
-            msg = (_("Opening URL %(url)s failed: %(error)s") % {
-                    "url": self.location, "error": str(e)})
+            msg = _("Opening URL %(url)s failed: %(error)s") % {
+                "url": self.location,
+                "error": str(e),
+            }
             raise ValueError(msg) from None
 
     def _grabber(self, url):
@@ -287,7 +289,6 @@ class _FTPURLFetcher(_URLFetcher):
         urlobj = urllib.request.urlopen(request)
         size = self._ftp.size(urllib.parse.urlparse(url)[2])
         return urlobj, size
-
 
     def _cleanup(self):
         if not self._ftp:
@@ -311,8 +312,7 @@ class _FTPURLFetcher(_URLFetcher):
                 # If it's a dir
                 self._ftp.cwd(path)
         except ftplib.all_errors as e:  # pragma: no cover
-            log.debug("FTP hasFile: couldn't access %s: %s",
-                          url, str(e))
+            log.debug("FTP hasFile: couldn't access %s: %s", url, str(e))
             return False
 
         return True
@@ -322,6 +322,7 @@ class _LocalURLFetcher(_URLFetcher):
     """
     For grabbing files from a local directory
     """
+
     def _hasFile(self, url):
         parsed = urllib.parse.urlparse(url)
         return os.path.exists(parsed.path)
@@ -371,8 +372,7 @@ class DirectFetcher(_URLFetcher):
         return True
 
     def _grabber(self, url):
-        raise RuntimeError(  # pragma: no cover
-                "DirectFetcher shouldn't be used for file access.")
+        raise RuntimeError("DirectFetcher shouldn't be used for file access.")  # pragma: no cover
 
 
 def fetcherForURI(uri, scratchdir, meter, direct=False):

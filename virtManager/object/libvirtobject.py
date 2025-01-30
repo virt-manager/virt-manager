@@ -40,8 +40,7 @@ class vmmLibvirtObject(vmmGObject):
     @staticmethod
     def log_redefine_xml_diff(obj, origxml, newxml):
         if origxml == newxml:
-            log.debug("Redefine requested for %s, but XML didn't change!",
-                          obj)
+            log.debug("Redefine requested for %s, but XML didn't change!", obj)
             return
 
         diff = xmlutil.diff(origxml, newxml, "Original XML", "New XML")
@@ -53,6 +52,7 @@ class vmmLibvirtObject(vmmGObject):
         Decorator for object lifecycle actions like start, stop, delete.
         Will make sure any necessary state is updated accordingly.
         """
+
         def newfn(self, *args, **kwargs):
             ret = fn(self, *args, **kwargs)
 
@@ -66,6 +66,7 @@ class vmmLibvirtObject(vmmGObject):
             self.conn.schedule_priority_tick(**tick_kwargs)
 
             return ret
+
         return newfn
 
     def __repr__(self):
@@ -74,14 +75,14 @@ class vmmLibvirtObject(vmmGObject):
             name = self.get_name()
         except Exception:
             name = ""
-        return "<%s name=%s id=%s>" % (
-                self.__class__.__name__, name, hex(id(self)))
+        return "<%s name=%s id=%s>" % (self.__class__.__name__, name, hex(id(self)))
 
     def _cleanup(self):
         self._backend = None
 
     def _get_conn(self):
         return self._conn
+
     conn = property(_get_conn)
 
     def get_backend(self):
@@ -89,15 +90,19 @@ class vmmLibvirtObject(vmmGObject):
 
     def is_domain(self):
         return self.class_name() == "domain"
+
     def is_network(self):
         return self.class_name() == "network"
+
     def is_pool(self):
         return self.class_name() == "pool"
+
     def is_nodedev(self):
         return self.class_name() == "nodedev"
 
     def get_autostart(self):  # pragma: no cover
         return False
+
     def set_autostart(self, val):  # pragma: no cover
         ignore = val
 
@@ -114,8 +119,7 @@ class vmmLibvirtObject(vmmGObject):
         if xmlobj.name == newname:
             return  # pragma: no cover
 
-        log.debug("Changing %s name from %s to %s",
-                      self, oldname, newname)
+        log.debug("Changing %s name from %s to %s", self, oldname, newname)
         origxml = xmlobj.get_xml()
         xmlobj.name = newname
         newxml = xmlobj.get_xml()
@@ -131,15 +135,16 @@ class vmmLibvirtObject(vmmGObject):
 
         self.set_autostart(oldautostart)
 
-
     #############################################################
     # Functions that should probably be overridden in sub class #
     #############################################################
 
     def _XMLDesc(self, flags):
         raise NotImplementedError()
+
     def class_name(self):
         raise NotImplementedError()
+
     def _conn_tick_poll_param(self):
         # The parameter name for conn.tick() object polling. So
         # for vmmDomain == "pollvm"
@@ -147,8 +152,10 @@ class vmmLibvirtObject(vmmGObject):
 
     def reports_stats(self):
         return False
+
     def _using_events(self):
         return False
+
     def _get_backend_status(self):
         raise NotImplementedError()
 
@@ -184,13 +191,11 @@ class vmmLibvirtObject(vmmGObject):
 
             self._init_libvirt_state()
         except Exception:  # pragma: no cover
-            log.debug("Error initializing libvirt state for %s", self,
-                exc_info=True)
+            log.debug("Error initializing libvirt state for %s", self, exc_info=True)
             initialize_failed = True
 
         self.__initialized = True
         self.idle_emit("initialized", initialize_failed)
-
 
     ###################
     # Status handling #
@@ -220,8 +225,7 @@ class vmmLibvirtObject(vmmGObject):
             if required.
         :returns: True if status changed, false otherwise
         """
-        if (self._using_events() and
-            self.__status is not None):
+        if self._using_events() and self.__status is not None:
             return False
 
         if newstatus is None:
@@ -235,7 +239,6 @@ class vmmLibvirtObject(vmmGObject):
         if cansignal:
             self.idle_emit("state-changed")
         return True
-
 
     ##################
     # Public XML API #
@@ -270,9 +273,7 @@ class vmmLibvirtObject(vmmGObject):
         Refresh XML if it isn't up to date, basically if we aren't using
         events.
         """
-        if (self._using_events() and
-            self._xmlobj and
-            self._is_xml_valid):
+        if self._using_events() and self._xmlobj and self._is_xml_valid:
             return
         self.__force_refresh_xml(nosignal=nosignal)
 
@@ -290,8 +291,7 @@ class vmmLibvirtObject(vmmGObject):
 
         self._invalidate_xml()
         active_xml = self._XMLDesc(self._active_xml_flags)
-        self._xmlobj = self._parseclass(self.conn.get_backend(),
-            parsexml=active_xml)
+        self._xmlobj = self._parseclass(self.conn.get_backend(), parsexml=active_xml)
         self._is_xml_valid = True
 
         if not nosignal and origxml != active_xml:
@@ -316,11 +316,9 @@ class vmmLibvirtObject(vmmGObject):
             # stopped). Callers that request inactive are basically expecting
             # a new copy.
             inactive_xml = self._XMLDesc(self._inactive_xml_flags)
-            return self._parseclass(self.conn.get_backend(),
-                parsexml=inactive_xml)
+            return self._parseclass(self.conn.get_backend(), parsexml=inactive_xml)
 
-        if (self._xmlobj is None or
-            (refresh_if_nec and not self._is_xml_valid)):
+        if self._xmlobj is None or (refresh_if_nec and not self._is_xml_valid):
             self.ensure_latest_xml()
 
         return self._xmlobj
@@ -345,7 +343,6 @@ class vmmLibvirtObject(vmmGObject):
         origxml = self.get_xml_to_define()
         newxml = xml
         self._redefine_xml_internal(origxml, newxml)
-
 
     #########################
     # Internal XML routines #

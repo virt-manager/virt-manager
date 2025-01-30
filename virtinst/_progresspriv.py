@@ -19,11 +19,11 @@ import time
 
 # Code from https://mail.python.org/pipermail/python-list/2000-May/033365.html
 def terminal_width(fd=1):
-    """ Get the real terminal width """
+    """Get the real terminal width"""
     try:
-        buf = 'abcdefgh'
+        buf = "abcdefgh"
         buf = fcntl.ioctl(fd, termios.TIOCGWINSZ, buf)
-        ret = struct.unpack('hhhh', buf)[1]  # pragma: no cover
+        ret = struct.unpack("hhhh", buf)[1]  # pragma: no cover
         return ret or 80  # pragma: no cover
     except IOError:
         return 80
@@ -34,7 +34,7 @@ _term_width_last = None
 
 
 def terminal_width_cached(fd=1, cache_timeout=1.000):
-    """ Get the real terminal width, but cache it for a bit. """
+    """Get the real terminal width, but cache it for a bit."""
     global _term_width_val
     global _term_width_last
 
@@ -46,7 +46,7 @@ def terminal_width_cached(fd=1, cache_timeout=1.000):
 
 
 class TerminalLine:
-    """ Help create dynamic progress bars, uses terminal_width_cached(). """
+    """Help create dynamic progress bars, uses terminal_width_cached()."""
 
     def __init__(self, min_rest=0, beg_len=None, fd=1, cache_timeout=1.000):
         if beg_len is None:
@@ -56,30 +56,30 @@ class TerminalLine:
         self._fin = False
 
     def __len__(self):
-        """ Usable length for elements. """
+        """Usable length for elements."""
         return self.llen - self._min_len
 
     def rest_split(self, fixed, elements=2):
-        """ After a fixed length, split the rest of the line length among
-            a number of different elements (default=2). """
+        """After a fixed length, split the rest of the line length among
+        a number of different elements (default=2)."""
         return max(self.llen - fixed, 0) // elements
 
     def add(self, element, full_len=None):
-        """ If there is room left in the line, above min_len, add element.
-            Note that as soon as one add fails all the rest will fail too. """
+        """If there is room left in the line, above min_len, add element.
+        Note that as soon as one add fails all the rest will fail too."""
 
         if full_len is None:
             full_len = len(element)
         if len(self) < full_len:
             self._fin = True
         if self._fin:
-            return ''
+            return ""
 
         self.llen -= len(element)
         return element
 
     def rest(self):
-        """ Current rest of line, same as .rest_split(fixed=0, elements=1). """
+        """Current rest of line, same as .rest_split(fixed=0, elements=1)."""
         return self.llen
 
 
@@ -114,8 +114,7 @@ class BaseMeter:
         now = time.time()
         self.last_amount_read = amount_read
         self.re.update(amount_read, now)
-        if (not self.last_update_time or
-                (now >= self.last_update_time + self.update_period)):
+        if not self.last_update_time or (now >= self.last_update_time + self.update_period):
             self.last_update_time = now
             self._do_update(amount_read)
 
@@ -180,20 +179,19 @@ class BaseMeter:
 def _term_add_bar(tl, bar_max_length, pc):
     bar_len = bar_max_length * pc
     ibar_len = int(bar_len)
-    progressbar = '=' * ibar_len
+    progressbar = "=" * ibar_len
     if (bar_len - ibar_len) >= 0.5:
-        progressbar += '-'
-    return tl.add(' [%-*.*s]' % (bar_max_length, bar_max_length,
-                                 progressbar))
+        progressbar += "-"
+    return tl.add(" [%-*.*s]" % (bar_max_length, bar_max_length, progressbar))
 
 
 def _term_add_end(tl, osize, size):
     if osize:  # osize should be None or >0, but that's been broken.
         if size > osize:  # Is ??? better? Really need something to say < vs >.
-            return tl.add(' !!! '), True
+            return tl.add(" !!! "), True
         elif size != osize:
-            return tl.add(' ... '), True
-    return tl.add(' ' * 5), False
+            return tl.add(" ... "), True
+    return tl.add(" " * 5), False
 
 
 class TextMeter(BaseMeter):
@@ -211,30 +209,43 @@ class TextMeter(BaseMeter):
         tl = TerminalLine(8, 8 + 1 + 8)
         # For big screens, make it more readable.
         use_hours = bool(tl.llen > 80)
-        ui_size = tl.add(' | %5sB' % fread)
+        ui_size = tl.add(" | %5sB" % fread)
         if self.size is None:
-            ui_time = tl.add('  %s' % format_time(etime, use_hours))
-            ui_end = tl.add(' ' * 5)
-            ui_rate = tl.add(' %5sB/s' % ave_dl)
-            out = '%-*.*s%s%s%s%s\r' % (tl.rest(), tl.rest(), self.text,
-                                        ui_rate, ui_size, ui_time, ui_end)
+            ui_time = tl.add("  %s" % format_time(etime, use_hours))
+            ui_end = tl.add(" " * 5)
+            ui_rate = tl.add(" %5sB/s" % ave_dl)
+            out = "%-*.*s%s%s%s%s\r" % (
+                tl.rest(),
+                tl.rest(),
+                self.text,
+                ui_rate,
+                ui_size,
+                ui_time,
+                ui_end,
+            )
         else:
             rtime = self.re.remaining_time()
             frtime = format_time(rtime, use_hours)
             frac = self.re.fraction_read()
 
-            ui_time = tl.add('  %s' % frtime)
-            ui_end = tl.add(' ETA ')
+            ui_time = tl.add("  %s" % frtime)
+            ui_end = tl.add(" ETA ")
 
-            ui_pc = tl.add(' %2i%%' % (frac * 100))
-            ui_rate = tl.add(' %5sB/s' % ave_dl)
+            ui_pc = tl.add(" %2i%%" % (frac * 100))
+            ui_rate = tl.add(" %5sB/s" % ave_dl)
             # Make text grow a bit before we start growing the bar too
             blen = 4 + tl.rest_split(8 + 8 + 4)
             ui_bar = _term_add_bar(tl, blen, frac)
-            out = '\r%-*.*s%s%s%s%s%s%s\r' % (
-                tl.rest(), tl.rest(), self.text,
-                ui_pc, ui_bar,
-                ui_rate, ui_size, ui_time, ui_end
+            out = "\r%-*.*s%s%s%s%s%s%s\r" % (
+                tl.rest(),
+                tl.rest(),
+                self.text,
+                ui_pc,
+                ui_bar,
+                ui_rate,
+                ui_size,
+                ui_time,
+                ui_end,
             )
 
         self.output.write(out)
@@ -247,23 +258,22 @@ class TextMeter(BaseMeter):
         tl = TerminalLine(8)
         # For big screens, make it more readable.
         use_hours = bool(tl.llen > 80)
-        ui_time = tl.add('  %s' % format_time(self.re.elapsed_time(),
-                                              use_hours))
+        ui_time = tl.add("  %s" % format_time(self.re.elapsed_time(), use_hours))
         ui_end, not_done = _term_add_end(tl, self.size, amount_read)
         if not not_done and amount_read == 0:
             # Doesn't need to print total_size
-            ui_size = tl.add(' | %5s ' % ' ')
+            ui_size = tl.add(" | %5s " % " ")
         else:
-            ui_size = tl.add(' | %5sB' % total_size)
+            ui_size = tl.add(" | %5sB" % total_size)
 
-        out = '\r%-*.*s%s%s%s\n' % (tl.rest(), tl.rest(), self.text,
-                                    ui_size, ui_time, ui_end)
+        out = "\r%-*.*s%s%s%s\n" % (tl.rest(), tl.rest(), self.text, ui_size, ui_time, ui_end)
         self.output.write(out)
         self.output.flush()
 
 
 ######################################################################
 # support classes and functions
+
 
 class RateEstimator:
     def __init__(self, timescale=5.0):
@@ -295,7 +305,8 @@ class RateEstimator:
         if self.last_amount_read:
             self.last_update_time = now
             self.ave_rate = self._temporal_rolling_ave(
-                time_diff, read_diff, self.ave_rate, self.timescale)
+                time_diff, read_diff, self.ave_rate, self.timescale
+            )
         self.last_amount_read = amount_read
 
     #####################################################################
@@ -359,11 +370,11 @@ class RateEstimator:
 def format_time(seconds, use_hours=0):
     if seconds is None or seconds < 0:
         if use_hours:
-            return '--:--:--'
+            return "--:--:--"
         else:
-            return '--:--'
-    elif seconds == float('inf'):
-        return 'Infinite'  # pragma: no cover
+            return "--:--"
+    elif seconds == float("inf"):
+        return "Infinite"  # pragma: no cover
     else:
         seconds = int(seconds)
         minutes = seconds // 60
@@ -371,22 +382,24 @@ def format_time(seconds, use_hours=0):
         if use_hours:
             hours = minutes // 60
             minutes = minutes % 60
-            return '%02i:%02i:%02i' % (hours, minutes, seconds)
+            return "%02i:%02i:%02i" % (hours, minutes, seconds)
         else:
-            return '%02i:%02i' % (minutes, seconds)
+            return "%02i:%02i" % (minutes, seconds)
 
 
 def format_number(number):
     """Turn numbers into human-readable metric-like numbers"""
-    symbols = ['',  # (none)
-               'k',  # kilo
-               'M',  # mega
-               'G',  # giga
-               'T',  # tera
-               'P',  # peta
-               'E',  # exa
-               'Z',  # zetta
-               'Y']  # yotta
+    symbols = [
+        "",  # (none)
+        "k",  # kilo
+        "M",  # mega
+        "G",  # giga
+        "T",  # tera
+        "P",  # peta
+        "E",  # exa
+        "Z",  # zetta
+        "Y",
+    ]  # yotta
 
     step = 1024.0
     thresh = 999
@@ -404,12 +417,12 @@ def format_number(number):
     if isinstance(number, int):
         # it's an int or a long, which means it didn't get divided,
         # which means it's already short enough
-        fmt = '%i%s%s'
+        fmt = "%i%s%s"
     elif number < 9.95:
         # must use 9.95 for proper sizing.  For example, 9.99 will be
         # rounded to 10.0 with the .1f format string (which is too long)
-        fmt = '%.1f%s%s'
+        fmt = "%.1f%s%s"
     else:
-        fmt = '%.0f%s%s'
+        fmt = "%.0f%s%s"
 
     return fmt % (float(number or 0), " ", symbols[depth])

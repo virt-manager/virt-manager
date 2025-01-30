@@ -29,6 +29,7 @@ class _DataStream(vmmGObject):
     """
     Wrapper class for interacting with libvirt console stream
     """
+
     def __init__(self, vm):
         vmmGObject.__init__(self)
 
@@ -46,7 +47,6 @@ class _DataStream(vmmGObject):
         self.vm = None
         self.conn = None
 
-
     #################
     # Internal APIs #
     #################
@@ -62,8 +62,9 @@ class _DataStream(vmmGObject):
         ignore = stream
         terminal = opaque
 
-        if (events & libvirt.VIR_EVENT_HANDLE_ERROR or
-            events & libvirt.VIR_EVENT_HANDLE_HANGUP):  # pragma: no cover
+        if (
+            events & libvirt.VIR_EVENT_HANDLE_ERROR or events & libvirt.VIR_EVENT_HANDLE_HANGUP
+        ):  # pragma: no cover
             log.debug("Received stream ERROR/HANGUP, closing console")
             self.close()
             return
@@ -89,8 +90,7 @@ class _DataStream(vmmGObject):
             if not queued_text:
                 self.idle_add(self._display_data, terminal)
 
-        if (events & libvirt.VIR_EVENT_HANDLE_WRITABLE and
-            self._terminalToStream):
+        if events & libvirt.VIR_EVENT_HANDLE_WRITABLE and self._terminalToStream:
 
             try:
                 done = self._stream.send(self._terminalToStream.encode())
@@ -106,10 +106,11 @@ class _DataStream(vmmGObject):
             self._terminalToStream = self._terminalToStream[done:]
 
         if not self._terminalToStream:
-            self._stream.eventUpdateCallback(libvirt.VIR_STREAM_EVENT_READABLE |
-                                            libvirt.VIR_STREAM_EVENT_ERROR |
-                                            libvirt.VIR_STREAM_EVENT_HANGUP)
-
+            self._stream.eventUpdateCallback(
+                libvirt.VIR_STREAM_EVENT_READABLE
+                | libvirt.VIR_STREAM_EVENT_ERROR
+                | libvirt.VIR_STREAM_EVENT_HANGUP
+            )
 
     ##############
     # Public API #
@@ -120,8 +121,7 @@ class _DataStream(vmmGObject):
             return
 
         name = dev and dev.alias.name or None
-        log.debug("Opening console stream for dev=%s alias=%s",
-                      dev, name)
+        log.debug("Opening console stream for dev=%s alias=%s", dev, name)
         # libxl doesn't set aliases, their open_console just defaults to
         # opening the first console device, so don't force presence of
         # an alias
@@ -130,11 +130,15 @@ class _DataStream(vmmGObject):
         self.vm.open_console(name, stream)
         self._stream = stream
 
-        self._stream.eventAddCallback((libvirt.VIR_STREAM_EVENT_READABLE |
-                                      libvirt.VIR_STREAM_EVENT_ERROR |
-                                      libvirt.VIR_STREAM_EVENT_HANGUP),
-                                     self._event_on_stream,
-                                     terminal)
+        self._stream.eventAddCallback(
+            (
+                libvirt.VIR_STREAM_EVENT_READABLE
+                | libvirt.VIR_STREAM_EVENT_ERROR
+                | libvirt.VIR_STREAM_EVENT_HANGUP
+            ),
+            self._event_on_stream,
+            terminal,
+        )
 
     def close(self):
         if self._stream:
@@ -162,10 +166,12 @@ class _DataStream(vmmGObject):
 
         self._terminalToStream += text
         if self._terminalToStream:
-            self._stream.eventUpdateCallback(libvirt.VIR_STREAM_EVENT_READABLE |
-                                            libvirt.VIR_STREAM_EVENT_WRITABLE |
-                                            libvirt.VIR_STREAM_EVENT_ERROR |
-                                            libvirt.VIR_STREAM_EVENT_HANGUP)
+            self._stream.eventUpdateCallback(
+                libvirt.VIR_STREAM_EVENT_READABLE
+                | libvirt.VIR_STREAM_EVENT_WRITABLE
+                | libvirt.VIR_STREAM_EVENT_ERROR
+                | libvirt.VIR_STREAM_EVENT_HANGUP
+            )
 
 
 class vmmSerialConsole(vmmGObject):
@@ -180,7 +186,7 @@ class vmmSerialConsole(vmmGObject):
         err = ""
 
         if ctype not in usable_types:
-            err = (_("Console for device type '%s' is not supported") % ctype)
+            err = _("Console for device type '%s' is not supported") % ctype
 
         return err
 
@@ -191,7 +197,6 @@ class vmmSerialConsole(vmmGObject):
         if serials and vm.serial_is_console_dup(serials[0]):
             consoles.pop(0)
         return serials + consoles
-
 
     def __init__(self, vm, target_port, name):
         vmmGObject.__init__(self)
@@ -225,7 +230,6 @@ class vmmSerialConsole(vmmGObject):
         self._vteterminal = None
         self._box = None
 
-
     ###########
     # UI init #
     ###########
@@ -236,10 +240,8 @@ class vmmSerialConsole(vmmGObject):
         self._vteterminal.set_audible_bell(False)
         self._vteterminal.get_accessible().set_name("Serial Terminal")
 
-        self._vteterminal.connect("button-press-event",
-                self._show_serial_rcpopup)
-        self._vteterminal.connect("commit",
-                self._datastream.send_data, self._vteterminal)
+        self._vteterminal.connect("button-press-event", self._show_serial_rcpopup)
+        self._vteterminal.connect("commit", self._datastream.send_data, self._vteterminal)
         self._vteterminal.show()
 
     def _init_popup(self):
@@ -282,9 +284,7 @@ class vmmSerialConsole(vmmGObject):
         self._box.show_all()
 
         scrollbar.hide()
-        scrollbar.get_adjustment().connect(
-            "changed", self._scrollbar_adjustment_changed, scrollbar)
-
+        scrollbar.get_adjustment().connect("changed", self._scrollbar_adjustment_changed, scrollbar)
 
     ###################
     # Private methods #
@@ -303,18 +303,15 @@ class vmmSerialConsole(vmmGObject):
 
             if port == self.target_port:
                 if path != self.lastpath:
-                    log.debug("Serial console '%s' path changed to %s",
-                                  self.target_port, path)
+                    log.debug("Serial console '%s' path changed to %s", self.target_port, path)
                 self.lastpath = path
                 found = dev
                 break
 
         if not found:  # pragma: no cover
-            log.debug("No devices found for serial target port '%s'",
-                      self.target_port)
+            log.debug("No devices found for serial target port '%s'", self.target_port)
             self.lastpath = None
         return found
-
 
     ##############
     # Public API #
@@ -328,8 +325,7 @@ class vmmSerialConsole(vmmGObject):
         return self._box
 
     def has_focus(self):
-        return bool(self._vteterminal and
-                    self._vteterminal.get_property("has-focus"))
+        return bool(self._vteterminal and self._vteterminal.get_property("has-focus"))
 
     def set_focus_callbacks(self, in_cb, out_cb):
         self._vteterminal.connect("focus-in-event", in_cb)
@@ -350,7 +346,6 @@ class vmmSerialConsole(vmmGObject):
                 pass
         return False
 
-
     ################
     # UI listeners #
     ################
@@ -362,8 +357,7 @@ class vmmSerialConsole(vmmGObject):
             self._datastream.close()
 
     def _scrollbar_adjustment_changed(self, adjustment, scrollbar):
-        scrollbar.set_visible(
-            adjustment.get_upper() > adjustment.get_page_size())
+        scrollbar.set_visible(adjustment.get_upper() > adjustment.get_page_size())
 
     def _show_serial_rcpopup(self, src, event):
         if event.button != 3:

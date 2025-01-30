@@ -11,15 +11,15 @@ from ..xmlbuilder import XMLProperty
 class DeviceController(Device):
     XML_NAME = "controller"
 
-    TYPE_IDE             = "ide"
-    TYPE_FDC             = "fdc"
-    TYPE_SCSI            = "scsi"
-    TYPE_SATA            = "sata"
-    TYPE_VIRTIOSERIAL    = "virtio-serial"
-    TYPE_USB             = "usb"
-    TYPE_PCI             = "pci"
-    TYPE_CCID            = "ccid"
-    TYPE_XENBUS          = "xenbus"
+    TYPE_IDE = "ide"
+    TYPE_FDC = "fdc"
+    TYPE_SCSI = "scsi"
+    TYPE_SATA = "sata"
+    TYPE_VIRTIOSERIAL = "virtio-serial"
+    TYPE_USB = "usb"
+    TYPE_PCI = "pci"
+    TYPE_CCID = "ccid"
+    TYPE_XENBUS = "xenbus"
 
     @staticmethod
     def get_usb2_controllers(conn):
@@ -62,9 +62,14 @@ class DeviceController(Device):
             ctrl.ports = 15
         return ctrl
 
-
-    _XML_PROP_ORDER = ["type", "index", "model", "master_startport",
-            "driver_queues", "maxGrantFrames"]
+    _XML_PROP_ORDER = [
+        "type",
+        "index",
+        "model",
+        "master_startport",
+        "driver_queues",
+        "maxGrantFrames",
+    ]
 
     type = XMLProperty("./@type")
     model = XMLProperty("./@model")
@@ -90,16 +95,14 @@ class DeviceController(Device):
     def _get_attached_disk_devices(self, guest):
         ret = []
         for disk in guest.devices.disk:
-            if (self.type == disk.bus and
-                self.index == disk.address.controller):
+            if self.type == disk.bus and self.index == disk.address.controller:
                 ret.append(disk)
         return ret
 
     def _get_attached_virtioserial_devices(self, guest):
         ret = []
         for dev in guest.devices.channel:
-            if (self.type == dev.address.type and
-                self.index == dev.address.controller):
+            if self.type == dev.address.type and self.index == dev.address.controller:
                 ret.append(dev)
         for dev in guest.devices.console:
             # virtio console is implied to be on virtio-serial index=0

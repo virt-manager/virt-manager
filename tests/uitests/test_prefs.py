@@ -8,6 +8,7 @@ from . import lib
 # UI tests for the preferences dialog #
 #######################################
 
+
 def testPrefsAll(app):
     app.root.find("Edit", "menu").click()
     app.root.find("Preferences", "menu item").click()
@@ -90,7 +91,6 @@ def testPrefsAll(app):
     lib.utils.check(lambda: win.visible is False)
 
 
-
 def testPrefsXMLEditor(app):
     managerwin = app.topwin
     detailswin = app.manager_open_details("test-clone-simple")
@@ -118,8 +118,7 @@ def testPrefsXMLEditor(app):
     xmleditor.set_text(newtext)
     finish.click()
     detailswin.find("Details", "page tab").click()
-    lib.utils.check(lambda:
-            detailswin.find("Title:", "text").text == "FOOTITLE")
+    lib.utils.check(lambda: detailswin.find("Title:", "text").text == "FOOTITLE")
 
 
 def testPrefsKeyfile(app):

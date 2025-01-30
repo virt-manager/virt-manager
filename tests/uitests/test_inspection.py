@@ -7,6 +7,7 @@ from . import lib
 
 try:
     import guestfs  # pylint: disable=import-error
+
     ignore = guestfs
     HAS_LIBGUESTFS = True
 except Exception:
@@ -16,6 +17,7 @@ except Exception:
 #########################################################
 # UI tests for the libguestfs inspection infrastructure #
 #########################################################
+
 
 def testInspectionMock(app):
     if not HAS_LIBGUESTFS:

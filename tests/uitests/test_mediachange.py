@@ -11,12 +11,12 @@ from . import lib
 # UI tests for details storage media change #
 #############################################
 
+
 def testMediaChange(app):
     vmname = "test-many-devices"
     app.uri = tests.utils.URIs.test_remote
     app.open(show_console=vmname)
-    win = app.find_details_window(vmname,
-            click_details=True, shutdown=True)
+    win = app.find_details_window(vmname, click_details=True, shutdown=True)
     hw = win.find("hw-list")
     tab = win.find("disk-tab")
     combo = win.find("media-combo")
@@ -39,8 +39,7 @@ def testMediaChange(app):
     entry.set_text("/dev/fdb")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
-    lib.utils.check(lambda:
-        entry.text == "Floppy_install_label (/dev/fdb)")
+    lib.utils.check(lambda: entry.text == "Floppy_install_label (/dev/fdb)")
 
     # Specify manual path
     path = "/pool-dir/UPPER"
@@ -80,14 +79,12 @@ def testMediaChange(app):
     lib.utils.check(lambda: not entry.text)
 
 
-
 def testMediaHotplug(app):
     """
     Test in the case of a running VM
     """
     vmname = "test-many-devices"
-    app.open(show_console=vmname,
-             extra_opts=["--test-options=test-update-device-fail"])
+    app.open(show_console=vmname, extra_opts=["--test-options=test-update-device-fail"])
     win = app.find_details_window(vmname, click_details=True)
     hw = win.find("hw-list")
     entry = win.find("media-entry")

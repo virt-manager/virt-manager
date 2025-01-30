@@ -36,6 +36,7 @@ def _make_fake_data(vm):
     data.product_variant = "test_product_variant"
 
     from gi.repository import Gtk
+
     icontheme = Gtk.IconTheme.get_default()
     icon = icontheme.lookup_icon("vm_new", Gtk.IconSize.LARGE_TOOLBAR, 0)
     data.icon = open(icon.get_filename(), "rb").read()
@@ -43,6 +44,7 @@ def _make_fake_data(vm):
     data.applications = []
     for prefix in ["test_app1_", "test_app2_"]:
         import time
+
         app = vmmInspectionApplication()
         if "app1" in prefix:
             app.display_name = prefix + "display_name"
@@ -71,10 +73,8 @@ def _perform_inspection(conn, vm):  # pragma: no cover
         g.add_libvirt_dom(vm.get_backend(), readonly=1)
         g.launch()
     except Exception as e:
-        log.debug("%s: Error launching libguestfs appliance: %s",
-                prettyvm, str(e))
-        return _inspection_error(
-                _("Error launching libguestfs appliance: %s") % str(e))
+        log.debug("%s: Error launching libguestfs appliance: %s", prettyvm, str(e))
+        return _inspection_error(_("Error launching libguestfs appliance: %s") % str(e))
 
     log.debug("%s: inspection appliance connected", prettyvm)
 
@@ -82,8 +82,7 @@ def _perform_inspection(conn, vm):  # pragma: no cover
     roots = g.inspect_os()
     if len(roots) == 0:
         log.debug("%s: no operating systems found", prettyvm)
-        return _inspection_error(
-                _("Inspection found no operating systems."))
+        return _inspection_error(_("Inspection found no operating systems."))
 
     # Arbitrarily pick the first root device.
     root = roots[0]
@@ -115,8 +114,7 @@ def _perform_inspection(conn, vm):  # pragma: no cover
             g.mount_ro(dev, mp)
             filesystems_mounted = True
         except Exception:
-            log.exception("%s: exception mounting %s on %s (ignored)",
-                          prettyvm, dev, mp)
+            log.exception("%s: exception mounting %s on %s (ignored)", prettyvm, dev, mp)
 
     icon = None
     apps = None
@@ -152,16 +150,22 @@ def _perform_inspection(conn, vm):  # pragma: no cover
                     app.description = gapp["app2_description"]
                 apps.append(app)
         except Exception:
-            log.exception("%s: exception while listing apps (ignored)",
-                          prettyvm)
+            log.exception("%s: exception while listing apps (ignored)", prettyvm)
 
     # Force the libguestfs handle to close right now.
     del g
 
     # Log what we found.
-    log.debug("%s: detected operating system: %s %s %d.%d (%s) (%s)",
-                  prettyvm, os_type, distro, major_version, minor_version,
-                  product_name, package_format)
+    log.debug(
+        "%s: detected operating system: %s %s %d.%d (%s) (%s)",
+        prettyvm,
+        os_type,
+        distro,
+        major_version,
+        minor_version,
+        product_name,
+        package_format,
+    )
     log.debug("hostname: %s", hostname)
     if icon:
         log.debug("icon: %d bytes", len(icon))
@@ -199,14 +203,14 @@ class vmmInspection(vmmGObject):
         if cls._libguestfs_installed is None:
             try:
                 import guestfs as ignore  # pylint: disable=import-error
+
                 log.debug("python guestfs is installed")
                 cls._libguestfs_installed = True
             except ImportError:  # pragma: no cover
                 log.debug("python guestfs is not installed")
                 cls._libguestfs_installed = False
             except Exception:  # pragma: no cover
-                log.debug("error importing guestfs",
-                        exc_info=True)
+                log.debug("error importing guestfs", exc_info=True)
                 cls._libguestfs_installed = False
         return cls._libguestfs_installed
 
@@ -261,8 +265,7 @@ class vmmInspection(vmmGObject):
         self._q.put((conn.get_uri(), vm.get_name()))
 
     def _start(self):
-        self._thread = threading.Thread(
-                name="inspection thread", target=self._run)
+        self._thread = threading.Thread(name="inspection thread", target=self._run)
         self._thread.daemon = True
         self._thread.start()
 
@@ -323,13 +326,11 @@ class vmmInspection(vmmGObject):
             return  # pragma: no cover
 
         if conn.is_remote():  # pragma: no cover
-            return _inspection_error(
-                    _("Cannot inspect VM on remote connection"))
+            return _inspection_error(_("Cannot inspect VM on remote connection"))
         if conn.is_test():
             return _make_fake_data(vm)
 
         return _perform_inspection(conn, vm)  # pragma: no cover
-
 
     ##############
     # Public API #

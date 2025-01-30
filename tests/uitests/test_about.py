@@ -10,6 +10,7 @@ from . import lib
 # UI tests for the 'About' dialog #
 ###################################
 
+
 def testAbout(app):
     app.root.find("Help", "menu").click()
     app.root.find("About", "menu item").click()
