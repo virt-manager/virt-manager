@@ -12,7 +12,7 @@ import tempfile
 from ..logger import log
 
 
-class CloudInitData():
+class CloudInitData:
     disable = None
     root_password_generate = None
     root_password_file = None
@@ -27,8 +27,7 @@ class CloudInitData():
         if not self.generated_root_password:
             self.generated_root_password = ""
             for dummy in range(16):
-                self.generated_root_password += random.choice(
-                        string.ascii_letters + string.digits)
+                self.generated_root_password += random.choice(string.ascii_letters + string.digits)
         return self.generated_root_password
 
     def _get_password(self, pwdfile):
@@ -56,16 +55,14 @@ class CloudInitData():
 def _create_metadata_content(cloudinit_data):
     content = ""
     if cloudinit_data.meta_data:
-        log.debug("Using meta-data content from path=%s",
-                cloudinit_data.meta_data)
+        log.debug("Using meta-data content from path=%s", cloudinit_data.meta_data)
         content = open(cloudinit_data.meta_data).read()
     return content
 
 
 def _create_userdata_content(cloudinit_data):
     if cloudinit_data.user_data:
-        log.debug("Using user-data content from path=%s",
-                cloudinit_data.user_data)
+        log.debug("Using user-data content from path=%s", cloudinit_data.user_data)
         return open(cloudinit_data.user_data).read()
 
     content = "#cloud-config\n"
@@ -96,8 +93,7 @@ def _create_userdata_content(cloudinit_data):
 
     if cloudinit_data.disable:
         content += "runcmd:\n"
-        content += ('- echo "Disabled by virt-install" > '
-                    "/etc/cloud/cloud-init.disabled\n")
+        content += '- echo "Disabled by virt-install" > ' "/etc/cloud/cloud-init.disabled\n"
 
     clean_content = re.sub(r"root:(.*)", 'root:[SCRUBBLED]', content)
     if "VIRTINST_TEST_SUITE_PRINT_CLOUDINIT" in os.environ:
@@ -110,8 +106,7 @@ def _create_userdata_content(cloudinit_data):
 def _create_network_config_content(cloudinit_data):
     content = ""
     if cloudinit_data.network_config:
-        log.debug("Using network-config content from path=%s",
-                  cloudinit_data.network_config)
+        log.debug("Using network-config content from path=%s", cloudinit_data.network_config)
         content = open(cloudinit_data.network_config).read()
     return content
 
@@ -129,8 +124,8 @@ def create_files(scratchdir, cloudinit_data):
     try:
         for content, destfile in data:
             fileobj = tempfile.NamedTemporaryFile(
-                    prefix="virtinst-", suffix=("-%s" % destfile),
-                    dir=scratchdir, delete=False)
+                prefix="virtinst-", suffix=("-%s" % destfile), dir=scratchdir, delete=False
+            )
             filename = fileobj.name
             filepairs.append((filename, destfile))
 

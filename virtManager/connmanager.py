@@ -13,6 +13,7 @@ class vmmConnectionManager(vmmGObject):
     """
     Tracks the list of connections, emits conn-added and conn-removed
     """
+
     __gsignals__ = {
         "conn-added": (vmmGObject.RUN_FIRST, None, [object]),
         "conn-removed": (vmmGObject.RUN_FIRST, None, [str]),

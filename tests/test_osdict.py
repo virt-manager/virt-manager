@@ -41,8 +41,8 @@ def test_urldetct_matching_distros():
         for distro in store.matching_distros:
             if distro in seen_distro:
                 raise xmlutil.DevError(
-                        "store=%s has conflicting matching_distro=%s " %
-                        (store.PRETTY_NAME, distro))
+                    "store=%s has conflicting matching_distro=%s " % (store.PRETTY_NAME, distro)
+                )
             seen_distro.append(distro)
 
 

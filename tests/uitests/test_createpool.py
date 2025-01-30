@@ -8,6 +8,7 @@ from . import lib
 # UI tests for the createpool wizard #
 ######################################
 
+
 def _open_createpool(app, hostwin):
     hostwin.find("pool-add", "push button").click()
     win = app.find_window("Add a New Storage Pool")
@@ -125,7 +126,6 @@ def testCreatePools(app):
     hostwin.click()
     hostwin.keyCombo("<ctrl>w")
     lib.utils.check(lambda: not hostwin.showing)
-
 
 
 def testCreatePoolXMLEditor(app):

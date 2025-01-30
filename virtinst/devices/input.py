@@ -21,7 +21,6 @@ class DeviceInput(Device):
     BUS_VIRTIO = "virtio"
     BUS_XEN = "xen"
 
-
     type = XMLProperty("./@type")
     bus = XMLProperty("./@bus")
     model = XMLProperty("./@model")
@@ -31,7 +30,6 @@ class DeviceInput(Device):
     source_repeat = XMLProperty("./source/@repeat", is_onoff=True)
     source_grab = XMLProperty("./source/@grab")
     source_grabToggle = XMLProperty("./source/@grabToggle")
-
 
     ##################
     # Default config #

@@ -14,8 +14,7 @@ class DomainMemtune(XMLBuilder):
     """
 
     XML_NAME = "memtune"
-    _XML_PROP_ORDER = ["hard_limit", "soft_limit", "swap_hard_limit",
-            "min_guarantee"]
+    _XML_PROP_ORDER = ["hard_limit", "soft_limit", "swap_hard_limit", "min_guarantee"]
 
     hard_limit = XMLProperty("./hard_limit", is_int=True)
     soft_limit = XMLProperty("./soft_limit", is_int=True)

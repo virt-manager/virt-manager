@@ -25,9 +25,18 @@ class _URLTestData(object):
     Class that tracks all data needed for a single URL test case.
     Data is stored in data/test_urls.ini
     """
-    def __init__(self, name, url, detectdistro,
-            testxen, testshortcircuit, kernelarg, kernelregex,
-            skip_libosinfo):
+
+    def __init__(
+        self,
+        name,
+        url,
+        detectdistro,
+        testxen,
+        testshortcircuit,
+        kernelarg,
+        kernelregex,
+        skip_libosinfo,
+    ):
         self.name = name
         self.url = url
         self.detectdistro = detectdistro
@@ -44,22 +53,18 @@ class _URLTestData(object):
         self.testshortcircuit = testshortcircuit
 
     def _find_arch(self):
-        if ("i686" in self.url or
-            "i386" in self.url or
-            "i586" in self.url):
+        if "i686" in self.url or "i386" in self.url or "i586" in self.url:
             return "i686"
-        if ("arm64" in self.url or
-            "aarch64" in self.url):
+        if "arm64" in self.url or "aarch64" in self.url:
             return "aarch64"
-        if ("ppc64el" in self.url or
-            "ppc64le" in self.url):
+        if "ppc64el" in self.url or "ppc64le" in self.url:
             return "ppc64le"
         if "s390" in self.url:
             return "s390x"
-        if ("x86_64" in self.url or
-            "amd64" in self.url):
+        if "x86_64" in self.url or "amd64" in self.url:
             return "x86_64"
         return "x86_64"
+
 
 testconn = utils.URIs.open_testdefault_cached()
 hvmguest = Guest(testconn)
@@ -99,16 +104,18 @@ def _skipmsg(testdata):
 
     # If --force-libosinfo used, don't run tests that we know libosinfo
     # can't detect, non-treeinfo URLs basically
-    if ("ubuntu" in distname or
-        "debian" in distname or
-        "mageia" in distname or
-        "opensuse10" in distname or
-        "opensuse11" in distname or
-        "opensuse12" in distname or
-        "opensuse13" in distname or
-        "opensuseleap-42" in distname or
-        "generic" in distname or
-        testdata.url.startswith("ftp:/")):
+    if (
+        "ubuntu" in distname
+        or "debian" in distname
+        or "mageia" in distname
+        or "opensuse10" in distname
+        or "opensuse11" in distname
+        or "opensuse12" in distname
+        or "opensuse13" in distname
+        or "opensuseleap-42" in distname
+        or "generic" in distname
+        or testdata.url.startswith("ftp:/")
+    ):
         return "skipping known busted libosinfo URL tests"
 
 
@@ -131,9 +138,11 @@ def _testGuest(testdata, guest):
     try:
         detected_distro = installer.detect_distro(guest)
     except Exception as e:
-        msg = ("\nFailed in installer detect_distro():\n"
+        msg = (
+            "\nFailed in installer detect_distro():\n"
             "name   = %s\n"
-            "url    = %s\n\n%s" % (distname, url, str(e)))
+            "url    = %s\n\n%s" % (distname, url, str(e))
+        )
         raise type(e)(msg).with_traceback(sys.exc_info()[2]) from None
 
     # Make sure the stores are reporting correct distro name/variant
@@ -143,37 +152,41 @@ def _testGuest(testdata, guest):
             "found   = %s\n"
             "expect  = %s\n\n"
             "testname = %s\n"
-            "url      = %s\n" %
-            (detected_distro, checkdistro, distname, url))
+            "url      = %s\n" % (detected_distro, checkdistro, distname, url)
+        )
 
     if guest is xenguest:
         return
-
 
     # Do this only after the distro detection, since we actually need
     # to fetch files for that part
     treemedia = installer._treemedia  # pylint: disable=protected-access
     fetcher = treemedia._cached_fetcher  # pylint: disable=protected-access
+
     def fakeAcquireFile(filename, fullurl=None):
         log.debug("Fake acquiring filename=%s fullurl=%s", filename, fullurl)
         return filename
+
     fetcher.acquireFile = fakeAcquireFile
 
     # Fetch regular kernel
     kernel, initrd, kernelargs = treemedia.prepare(guest, meter, None)
     dummy = initrd
     if testdata.kernelregex and not re.match(testdata.kernelregex, kernel):
-        raise AssertionError("kernel=%s but testdata.kernelregex='%s'" %
-                (kernel, testdata.kernelregex))
+        raise AssertionError(
+            "kernel=%s but testdata.kernelregex='%s'" % (kernel, testdata.kernelregex)
+        )
 
     if testdata.kernelarg == "None":
         if bool(kernelargs):
-            raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
-                    % (kernelargs, testdata.kernelarg))
+            raise AssertionError(
+                "kernelargs='%s' but testdata.kernelarg='%s'" % (kernelargs, testdata.kernelarg)
+            )
     elif testdata.kernelarg:
         if testdata.kernelarg != str(kernelargs).split("=")[0]:
-            raise AssertionError("kernelargs='%s' but testdata.kernelarg='%s'"
-                    % (kernelargs, testdata.kernelarg))
+            raise AssertionError(
+                "kernelargs='%s' but testdata.kernelarg='%s'" % (kernelargs, testdata.kernelarg)
+            )
 
 
 def _testURL(testdata):
@@ -208,6 +221,7 @@ def test001BadURL():
 
 def _make_tests():
     import configparser
+
     cfg = configparser.ConfigParser()
     cfg.read("tests/data/test_urls.ini")
 
@@ -224,18 +238,25 @@ def _make_tests():
         if "distro" not in vals:
             print("url needs an explicit distro= value: %s" % url)
             sys.exit(1)
-        d = _URLTestData(name, url, vals["distro"],
-                vals.get("testxen", "0") == "1",
-                vals.get("testshortcircuit", "0") == "1",
-                vals.get("kernelarg", None),
-                vals.get("kernelregex", None),
-                vals.get("skiplibosinfo", "0") == "1")
+        d = _URLTestData(
+            name,
+            url,
+            vals["distro"],
+            vals.get("testxen", "0") == "1",
+            vals.get("testshortcircuit", "0") == "1",
+            vals.get("kernelarg", None),
+            vals.get("kernelregex", None),
+            vals.get("skiplibosinfo", "0") == "1",
+        )
         urls[d.name] = d
 
     for key, testdata in sorted(urls.items()):
+
         def _make_wrapper(d):
             return lambda: _testURL(d)
+
         methodname = "test_URL%s" % key.replace("-", "_")
         globals()[methodname] = _make_wrapper(testdata)
+
 
 _make_tests()

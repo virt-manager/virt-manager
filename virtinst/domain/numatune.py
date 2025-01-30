@@ -21,6 +21,7 @@ class DomainNumatune(XMLBuilder):
     """
     Class for generating <numatune> XML
     """
+
     XML_NAME = "numatune"
     _XML_PROP_ORDER = ["memory_mode", "memory_nodeset", "memory_placement", "memnode"]
 

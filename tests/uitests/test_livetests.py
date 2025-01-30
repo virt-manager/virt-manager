@@ -18,6 +18,7 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
     """
     Decorator to define+start a VM and clean it up on exit
     """
+
     def wrap1(fn):
         def wrapper(app, *args, **kwargs):
             app.error_if_already_running()
@@ -28,7 +29,7 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 dom.create()
                 app.uri = uri
                 app.conn = conn
-                extra_opts = (opts or [])
+                extra_opts = opts or []
                 extra_opts += ["--show-domain-console", vmname]
                 # Enable stats for more code coverage
                 keyfile = "statsonly.ini"
@@ -42,13 +43,17 @@ def _vm_wrapper(vmname, uri="qemu:///system", opts=None):
                 try:
                     flags = 0
                     if "qemu" in uri:
-                        flags = (libvirt.VIR_DOMAIN_UNDEFINE_NVRAM |
-                                 libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA)
+                        flags = (
+                            libvirt.VIR_DOMAIN_UNDEFINE_NVRAM
+                            | libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA
+                        )
                     dom.undefineFlags(flags)
                     dom.destroy()
                 except Exception:
                     pass
+
         return wrapper
+
     return wrap1
 
 
@@ -69,6 +74,7 @@ def _create_qcow2_file(fn):
                 pool.undefine()
             except Exception:
                 log.debug("Error cleaning up pool", exc_info=True)
+
     return wrapper
 
 
@@ -84,6 +90,7 @@ def _destroy(app, win):
 ###############################################
 # Test live console connections with stub VMs #
 ###############################################
+
 
 def _checkConsoleStandard(app, dom):
     """
@@ -192,13 +199,13 @@ def _checkConsoleFocus(app, dom):
 
     # Check that modifiers don't work when console grabs pointer
     win.click()
-    app.sleep(.5)  # make sure window code has time to adjust modifiers
+    app.sleep(0.5)  # make sure window code has time to adjust modifiers
     win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: win.showing)
     dom.destroy()
     win.find("Guest is not running.")
     win.grab_focus()
-    app.sleep(.5)  # make sure window code has time to adjust modifiers
+    app.sleep(0.5)  # make sure window code has time to adjust modifiers
     win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: not win.showing)
 
@@ -271,8 +278,7 @@ def testConsoleSpicePassword(app, dom):
     return _checkPassword(app)
 
 
-@_vm_wrapper("uitests-vnc-password",
-             opts=["--test-options=fake-vnc-username"])
+@_vm_wrapper("uitests-vnc-password", opts=["--test-options=fake-vnc-username"])
 def testConsoleVNCPasswordUsername(app, dom):
     ignore = dom
     win = app.topwin
@@ -303,7 +309,7 @@ def testConsoleVNCSocket(app, dom):
         vmenu.click()
         tmenu = win.find("Consoles", "menu")
         tmenu.point()
-        app.sleep(.5)  # give console menu time to dynamically populate
+        app.sleep(0.5)  # give console menu time to dynamically populate
         tmenu.find(msg, "radio menu item").click()
 
     # A bit of an extra test, make sure selecting Graphical Console works
@@ -383,7 +389,7 @@ def testConsoleLXCSerial(app, dom):
     _destroy(app, win)
     lib.utils.check(lambda: not dom.isActive())
     win.click_title()
-    app.sleep(.3)  # make sure window code has time to adjust modifiers
+    app.sleep(0.3)  # make sure window code has time to adjust modifiers
     win.keyCombo("<ctrl><shift>w")
     lib.utils.check(lambda: not win.showing)
 
@@ -423,6 +429,7 @@ def testConsoleSpiceSpecific(app, dom):
         smenu = vmenu.find("Scale Display", "menu")
         smenu.point()
         smenu.find("Auto resize VM", "check menu item").click()
+
     _click_auto()
     win.click_title()
     win.window_maximize()
@@ -434,6 +441,7 @@ def testConsoleSpiceSpecific(app, dom):
 @_vm_wrapper("uitests-vnc-standard")
 def testVNCSpecific(app, dom):
     from gi.repository import GtkVnc
+
     if not hasattr(GtkVnc.Display, "set_allow_resize"):
         pytest.skip("GtkVnc is too old")
 
@@ -449,6 +457,7 @@ def testVNCSpecific(app, dom):
         smenu = vmenu.find("Scale Display", "menu")
         smenu.point()
         smenu.find("Auto resize VM", "check menu item").click()
+
     _click_auto()
     win.click_title()
     win.window_maximize()
@@ -480,8 +489,7 @@ def testLiveHotplug(fname, app, dom):
     addhw.find("Finish", "push button").click()
 
     # Verify permission dialog pops up, ask to change
-    app.click_alert_button(
-            "The emulator may not have search permissions", "Yes")
+    app.click_alert_button("The emulator may not have search permissions", "Yes")
 
     # Verify no errors
     lib.utils.check(lambda: not addhw.showing)
@@ -515,7 +523,6 @@ def testLiveHotplug(fname, app, dom):
     lib.utils.check(lambda: not entry.text)
 
 
-
 @_vm_wrapper("uitests-hotplug")
 @_create_qcow2_file
 def testLiveExternalSnapshots(fname, app, dom):
@@ -534,8 +541,7 @@ def testLiveExternalSnapshots(fname, app, dom):
     addhw.find("Finish", "push button").click()
 
     # Verify permission dialog pops up, ask to change
-    app.click_alert_button(
-            "The emulator may not have search permissions", "Yes")
+    app.click_alert_button("The emulator may not have search permissions", "Yes")
 
     # Verify no errors
     lib.utils.check(lambda: not addhw.showing)
@@ -582,6 +588,7 @@ def testLiveExternalSnapshots(fname, app, dom):
 @_vm_wrapper("uitests-firmware-efi")
 def testFirmwareRename(app, dom):
     from virtinst import cli, DeviceDisk
+
     win = app.topwin
     dom.destroy()
 

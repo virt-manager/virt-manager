@@ -24,14 +24,22 @@ def _set_host_helper(obj, hostparam, portparam, val):
 
 class CharSource(XMLBuilder):
     XML_NAME = "source"
-    _XML_PROP_ORDER = ["bind_host", "bind_service",
-                       "mode", "connect_host", "connect_service",
-                       "path", "channel"]
+    _XML_PROP_ORDER = [
+        "bind_host",
+        "bind_service",
+        "mode",
+        "connect_host",
+        "connect_service",
+        "path",
+        "channel",
+    ]
 
     def set_friendly_connect(self, val):
         _set_host_helper(self, "connect_host", "connect_service", val)
+
     def set_friendly_bind(self, val):
         _set_host_helper(self, "bind_host", "bind_service", val)
+
     def set_friendly_host(self, val):
         _set_host_helper(self, "host", "service", val)
 
@@ -57,11 +65,9 @@ class CharSource(XMLBuilder):
     log_file = XMLProperty("./../log/@file")
     log_append = XMLProperty("./../log/@append", is_onoff=True)
 
-
     # Convenience source helpers for setting connect/bind host and service
     connect_host = XMLProperty("./../source[@mode='connect']/@host")
-    connect_service = XMLProperty(
-            "./../source[@mode='connect']/@service", is_int=True)
+    connect_service = XMLProperty("./../source[@mode='connect']/@service", is_int=True)
     bind_host = XMLProperty("./../source[@mode='bind']/@host")
     bind_service = XMLProperty("./../source[@mode='bind']/@service", is_int=True)
 
@@ -72,16 +78,16 @@ class _DeviceChar(Device):
     directly.
     """
 
-    TYPE_PTY      = "pty"
-    TYPE_DEV      = "dev"
-    TYPE_STDIO    = "stdio"
-    TYPE_PIPE     = "pipe"
-    TYPE_FILE     = "file"
-    TYPE_VC       = "vc"
-    TYPE_NULL     = "null"
-    TYPE_TCP      = "tcp"
-    TYPE_UDP      = "udp"
-    TYPE_UNIX     = "unix"
+    TYPE_PTY = "pty"
+    TYPE_DEV = "dev"
+    TYPE_STDIO = "stdio"
+    TYPE_PIPE = "pipe"
+    TYPE_FILE = "file"
+    TYPE_VC = "vc"
+    TYPE_NULL = "null"
+    TYPE_TCP = "tcp"
+    TYPE_UDP = "udp"
+    TYPE_UNIX = "unix"
     TYPE_SPICEVMC = "spicevmc"
     TYPE_SPICEPORT = "spiceport"
     TYPE_NMDM = "nmdm"
@@ -91,16 +97,17 @@ class _DeviceChar(Device):
     CHANNEL_NAME_QEMUGA = "org.qemu.guest_agent.0"
     CHANNEL_NAME_LIBGUESTFS = "org.libguestfs.channel.0"
     CHANNEL_NAME_SPICE_WEBDAV = "org.spice-space.webdav.0"
-    CHANNEL_NAMES = [CHANNEL_NAME_SPICE,
-                     CHANNEL_NAME_QEMUGA,
-                     CHANNEL_NAME_LIBGUESTFS,
-                     CHANNEL_NAME_SPICE_WEBDAV]
+    CHANNEL_NAMES = [
+        CHANNEL_NAME_SPICE,
+        CHANNEL_NAME_QEMUGA,
+        CHANNEL_NAME_LIBGUESTFS,
+        CHANNEL_NAME_SPICE_WEBDAV,
+    ]
 
     def set_friendly_target(self, val):
         _set_host_helper(self, "target_address", "target_port", val)
 
-    _XML_PROP_ORDER = ["type", "source",
-                       "target_type", "target_name", "target_state"]
+    _XML_PROP_ORDER = ["type", "source", "target_type", "target_name", "target_state"]
 
     type = XMLProperty("./@type")
     source = XMLChildProperty(CharSource, is_single=True)
@@ -112,21 +119,19 @@ class _DeviceChar(Device):
     target_state = XMLProperty("./target/@state")
     target_model_name = XMLProperty("./target/model/@name")
 
-
     ##################
     # Default config #
     ##################
 
     def set_defaults(self, _guest):
-        if (not self.source.mode and
-            self.type in [self.TYPE_UNIX, self.TYPE_TCP]):
+        if not self.source.mode and self.type in [self.TYPE_UNIX, self.TYPE_TCP]:
             self.source.mode = "bind"
         if not self.target_type and self.DEVICE_TYPE == "channel":
             self.target_type = "virtio"
-        if not self.target_name and (self.type == self.TYPE_SPICEVMC or
-                self.type == self.TYPE_QEMUVDAGENT):
+        if not self.target_name and (
+            self.type == self.TYPE_SPICEVMC or self.type == self.TYPE_QEMUVDAGENT
+        ):
             self.target_name = self.CHANNEL_NAME_SPICE
-
 
 
 class DeviceConsole(_DeviceChar):
@@ -144,8 +149,9 @@ class DeviceConsole(_DeviceChar):
             return  # pragma: no cover
 
         console = consoles[0]
-        if (console.type == serial.type and
-            (console.target_type is None or console.target_type == "serial")):
+        if console.type == serial.type and (
+            console.target_type is None or console.target_type == "serial"
+        ):
             return console
 
     XML_NAME = "console"

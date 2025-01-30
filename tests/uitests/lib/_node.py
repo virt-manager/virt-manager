@@ -16,8 +16,10 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
     """
     Object dogtail/pyatspi want for node searching.
     """
-    def __init__(self, name=None, roleName=None, labeller_text=None,
-            focusable=False, onscreen=False):
+
+    def __init__(
+        self, name=None, roleName=None, labeller_text=None, focusable=False, onscreen=False
+    ):
         """
         :param name: Match node.name or node.labeller.text if
             labeller_text not specified
@@ -44,8 +46,10 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
     def makeScriptMethodCall(self, isRecursive):
         ignore = isRecursive
         return
+
     def makeScriptVariableName(self):
         return
+
     def describeSearchResult(self, node=None):
         if not node:
             return ""
@@ -63,24 +67,30 @@ class _FuzzyPredicate(dogtail.predicate.Predicate):
             if node.labeller:
                 labeller = node.labeller.text
 
-            if (self._name and
-                    not self._name_pattern.match(node.name) and
-                    not self._name_pattern.match(labeller)):
+            if (
+                self._name
+                and not self._name_pattern.match(node.name)
+                and not self._name_pattern.match(labeller)
+            ):
                 return
-            if (self._labeller_text and
-                    not self._labeller_pattern.match(labeller)):
+            if self._labeller_text and not self._labeller_pattern.match(labeller):
                 return
-            if (self._focusable and not
-                    (node.focusable and
-                     node.onscreen and
-                     node.sensitive and
-                     node.roleName not in ["page tab list", "radio button"])):
+            if self._focusable and not (
+                node.focusable
+                and node.onscreen
+                and node.sensitive
+                and node.roleName not in ["page tab list", "radio button"]
+            ):
                 return False
             return True
         except Exception as e:
             log.debug(
-                    "got predicate exception name=%s role=%s labeller=%s: %s",
-                    self._name, self._roleName, self._labeller_text, e)
+                "got predicate exception name=%s role=%s labeller=%s: %s",
+                self._name,
+                self._roleName,
+                self._labeller_text,
+                e,
+            )
 
 
 def _debug_decorator(fn):
@@ -90,6 +100,7 @@ def _debug_decorator(fn):
         except Exception:
             print("node=%s\nstates=%s" % (self, self.print_states()))
             raise
+
     return _cb
 
 
@@ -97,6 +108,7 @@ class _VMMDogtailNode(dogtail.tree.Node):
     """
     Our extensions to the dogtail node wrapper class.
     """
+
     # The class hackery means pylint can't figure this class out
     # pylint: disable=no-member
 
@@ -120,10 +132,12 @@ class _VMMDogtailNode(dogtail.tree.Node):
         if self.roleName in ["frame"]:
             return True
         screen = Gdk.Screen.get_default()
-        return (self.position[0] >= 0 and
-                self.position[0] + self.size[0] < screen.get_width() and
-                self.position[1] >= 0 and
-                self.position[1] + self.size[1] < screen.get_height())
+        return (
+            self.position[0] >= 0
+            and self.position[0] + self.size[0] < screen.get_width()
+            and self.position[1] >= 0
+            and self.position[1] + self.size[1] < screen.get_height()
+        )
 
     @_debug_decorator
     def check_onscreen(self):
@@ -215,16 +229,15 @@ class _VMMDogtailNode(dogtail.tree.Node):
         center of the bar
         """
         if self.roleName not in ["frame", "alert"]:
-            raise RuntimeError("Can't use click_title() on type=%s" %
-                    self.roleName)
+            raise RuntimeError("Can't use click_title() on type=%s" % self.roleName)
         button = 1
         clickX, clickY = self.title_coordinates()
         dogtail.rawinput.click(clickX, clickY, button)
 
     def is_menuitem(self):
-        submenu = (self.roleName == "menu" and
-                   (not self.accessible_parent or
-                    self.accessible_parent.roleName == "menu"))
+        submenu = self.roleName == "menu" and (
+            not self.accessible_parent or self.accessible_parent.roleName == "menu"
+        )
         return submenu or self.roleName == "menu item"
 
     def click(self, *args, **kwargs):
@@ -300,13 +313,19 @@ class _VMMDogtailNode(dogtail.tree.Node):
         self.grabFocus()
         self.check_focused()
 
-
     #########################
     # Widget search helpers #
     #########################
 
-    def find(self, name, roleName=None, labeller_text=None,
-            check_active=True, recursive=True, focusable=False):
+    def find(
+        self,
+        name,
+        roleName=None,
+        labeller_text=None,
+        check_active=True,
+        recursive=True,
+        focusable=False,
+    ):
         """
         Search root for any widget that contains the passed name/role regex
         strings.
@@ -316,9 +335,10 @@ class _VMMDogtailNode(dogtail.tree.Node):
         try:
             ret = self.findChild(pred, recursive=recursive)
         except dogtail.tree.SearchError:
-            raise dogtail.tree.SearchError("Didn't find widget with name='%s' "
-                "roleName='%s' labeller_text='%s'" %
-                (name, roleName, labeller_text)) from None
+            raise dogtail.tree.SearchError(
+                "Didn't find widget with name='%s' "
+                "roleName='%s' labeller_text='%s'" % (name, roleName, labeller_text)
+            ) from None
 
         # Wait for independent windows to become active in the window manager
         # before we return them. This ensures the window is actually onscreen
@@ -343,7 +363,6 @@ class _VMMDogtailNode(dogtail.tree.Node):
 
         return self.find(name_pattern, role_pattern, labeller_pattern)
 
-
     ##########################
     # Higher level behaviors #
     ##########################
@@ -366,7 +385,6 @@ class _VMMDogtailNode(dogtail.tree.Node):
         utils.check(lambda: item.selected)
         dogtail.rawinput.pressKey("Escape")
 
-
     #####################
     # Debugging helpers #
     #####################
@@ -379,6 +397,7 @@ class _VMMDogtailNode(dogtail.tree.Node):
 
     def fmt_nodes(self):
         strs = []
+
         def _walk(node):
             try:
                 strs.append(node.node_string())

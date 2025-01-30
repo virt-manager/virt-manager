@@ -19,10 +19,9 @@ class vmmMediaCombo(vmmGObjectUI):
     MEDIA_TYPE_CDROM = "cdrom"
 
     MEDIA_FIELDS_NUM = 4
-    (MEDIA_FIELD_PATH,
-    MEDIA_FIELD_LABEL,
-    MEDIA_FIELD_HAS_MEDIA,
-    MEDIA_FIELD_KEY) = range(MEDIA_FIELDS_NUM)
+    (MEDIA_FIELD_PATH, MEDIA_FIELD_LABEL, MEDIA_FIELD_HAS_MEDIA, MEDIA_FIELD_KEY) = range(
+        MEDIA_FIELDS_NUM
+    )
 
     def __init__(self, conn, builder, topwin):
         vmmGObjectUI.__init__(self, None, None, builder=builder, topwin=topwin)
@@ -38,15 +37,12 @@ class vmmMediaCombo(vmmGObjectUI):
         self._floppy_rows = []
         self._rows_inited = False
 
-        self.add_gsettings_handle(
-                self.config.on_iso_paths_changed(self._iso_paths_changed_cb))
-
+        self.add_gsettings_handle(self.config.on_iso_paths_changed(self._iso_paths_changed_cb))
 
     def _cleanup(self):
         self.conn = None
         self.top_box.destroy()
         self.top_box = None
-
 
     ##########################
     # Initialization methods #
@@ -59,8 +55,10 @@ class vmmMediaCombo(vmmGObjectUI):
         self._combo = Gtk.ComboBox(has_entry=True)
         self._combo.set_entry_text_column(self.MEDIA_FIELD_LABEL)
         self._combo.get_accessible().set_name("media-combo")
+
         def separator_cb(_model, _iter):
             return _model[_iter][self.MEDIA_FIELD_PATH] is None
+
         self._combo.set_row_separator_func(separator_cb)
 
         self._entry = self._combo.get_child()
@@ -91,8 +89,10 @@ class vmmMediaCombo(vmmGObjectUI):
     def _make_nodedev_rows(self, media_type):
         rows = []
         for nodedev in self.conn.filter_nodedevs("storage"):
-            if not (nodedev.xmlobj.device_type == "storage" and
-                    nodedev.xmlobj.drive_type in ["cdrom", "floppy"]):
+            if not (
+                nodedev.xmlobj.device_type == "storage"
+                and nodedev.xmlobj.drive_type in ["cdrom", "floppy"]
+            ):
                 continue
             if nodedev.xmlobj.drive_type != media_type:
                 continue
@@ -102,9 +102,9 @@ class vmmMediaCombo(vmmGObjectUI):
                 media_label = _("No media detected")
             label = "%s (%s)" % (media_label, nodedev.xmlobj.block)
 
-            row = self._make_row(nodedev.xmlobj.block, label,
-                    nodedev.xmlobj.media_available,
-                    nodedev.xmlobj.name)
+            row = self._make_row(
+                nodedev.xmlobj.block, label, nodedev.xmlobj.media_available, nodedev.xmlobj.name
+            )
             rows.append(row)
         return rows
 
@@ -121,7 +121,6 @@ class vmmMediaCombo(vmmGObjectUI):
         self._iso_rows = self._make_iso_rows()
         self._rows_inited = True
 
-
     ################
     # UI callbacks #
     ################
@@ -137,7 +136,6 @@ class vmmMediaCombo(vmmGObjectUI):
 
     def _iso_paths_changed_cb(self):
         self._iso_rows = self._make_iso_rows()
-
 
     ##############
     # Public API #
@@ -172,15 +170,13 @@ class vmmMediaCombo(vmmGObjectUI):
         self._combo.set_active(-1)
 
     def get_path(self, store_media=True):
-        ret = uiutil.get_list_selection(
-            self._combo, column=self.MEDIA_FIELD_PATH)
+        ret = uiutil.get_list_selection(self._combo, column=self.MEDIA_FIELD_PATH)
         if store_media and not ret.startswith("/dev"):
             self.config.add_iso_path(ret)
         return ret
 
     def set_path(self, path):
-        uiutil.set_list_selection(
-            self._combo, path, column=self.MEDIA_FIELD_PATH)
+        uiutil.set_list_selection(self._combo, path, column=self.MEDIA_FIELD_PATH)
         self._entry.set_position(-1)
 
     def set_mnemonic_label(self, label):

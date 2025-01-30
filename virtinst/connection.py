@@ -38,6 +38,7 @@ class VirtinstConnection(object):
     - lookup for API feature support
     - simplified API wrappers that handle new and old ways of doing things
     """
+
     @staticmethod
     def get_app_cache_dir():
         ret = os.environ.get("XDG_CACHE_HOME")
@@ -88,7 +89,6 @@ class VirtinstConnection(object):
 
         self.support = support.SupportCache(weakref.proxy(self))
 
-
     ##############
     # Properties #
     ##############
@@ -100,6 +100,7 @@ class VirtinstConnection(object):
 
     def _get_uri(self):
         return self._uri or self._open_uri
+
     uri = property(_get_uri)
 
     def _get_caps(self):
@@ -108,11 +109,11 @@ class VirtinstConnection(object):
             self._caps = Capabilities(self, capsxml)
             log.debug("Fetched capabilities for %s: %s", self._uri, capsxml)
         return self._caps
+
     caps = property(_get_caps)
 
     def get_conn_for_api_arg(self):
         return self._libvirtconn
-
 
     ###################
     # Private helpers #
@@ -125,11 +126,12 @@ class VirtinstConnection(object):
             micro = num % 1000
             return "%s.%s.%s" % (major, minor, micro)
 
-        log.debug("libvirt URI versions library=%s driver=%s hypervisor=%s",
-                  format_version(self.local_libvirt_version()),
-                  format_version(self.daemon_version()),
-                  format_version(self.conn_version()))
-
+        log.debug(
+            "libvirt URI versions library=%s driver=%s hypervisor=%s",
+            format_version(self.local_libvirt_version()),
+            format_version(self.daemon_version()),
+            format_version(self.conn_version()),
+        )
 
     ##############
     # Public API #
@@ -168,9 +170,7 @@ class VirtinstConnection(object):
         ]
         open_flags = 0
 
-        conn = libvirt.openAuth(self._open_uri,
-                [valid_auth_options, authcb, cbdata],
-                open_flags)
+        conn = libvirt.openAuth(self._open_uri, [valid_auth_options, authcb, cbdata], open_flags)
 
         if self._magic_uri:
             self._magic_uri.overwrite_conn_functions(conn)
@@ -186,9 +186,7 @@ class VirtinstConnection(object):
     def get_libvirt_data_root_dir(self):
         if self.is_privileged():
             return "/var/lib/libvirt"
-        return os.environ.get("XDG_DATA_HOME",
-                              os.path.expanduser("~/.local/share/libvirt"))
-
+        return os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share/libvirt"))
 
     ####################
     # Polling routines #
@@ -207,8 +205,7 @@ class VirtinstConnection(object):
         return self._fetch_cache[key][:]
 
     def _fetch_all_domains_raw(self):
-        dummy1, dummy2, ret = pollhelpers.fetch_vms(
-            self, {}, lambda obj, ignore: obj)
+        dummy1, dummy2, ret = pollhelpers.fetch_vms(self, {}, lambda obj, ignore: obj)
         domains = []
         for obj in ret:
             # TOCTOU race: a domain may go away in between enumeration and inspection
@@ -221,12 +218,10 @@ class VirtinstConnection(object):
         return domains
 
     def _build_pool_raw(self, poolobj):
-        return StoragePool(weakref.proxy(self),
-                           parsexml=poolobj.XMLDesc(0))
+        return StoragePool(weakref.proxy(self), parsexml=poolobj.XMLDesc(0))
 
     def _fetch_all_pools_raw(self):
-        dummy1, dummy2, ret = pollhelpers.fetch_pools(
-            self, {}, lambda obj, ignore: obj)
+        dummy1, dummy2, ret = pollhelpers.fetch_pools(self, {}, lambda obj, ignore: obj)
         pools = []
         for poolobj in ret:
             # TOCTOU race: a pool may go away in between enumeration and inspection
@@ -239,10 +234,8 @@ class VirtinstConnection(object):
         return pools
 
     def _fetch_all_nodedevs_raw(self):
-        dummy1, dummy2, ret = pollhelpers.fetch_nodedevs(
-            self, {}, lambda obj, ignore: obj)
-        return [NodeDevice(weakref.proxy(self), obj.XMLDesc(0))
-                for obj in ret]
+        dummy1, dummy2, ret = pollhelpers.fetch_nodedevs(self, {}, lambda obj, ignore: obj)
+        return [NodeDevice(weakref.proxy(self), obj.XMLDesc(0)) for obj in ret]
 
     def _fetch_vols_raw(self, poolxmlobj):
         ret = []
@@ -255,8 +248,7 @@ class VirtinstConnection(object):
         if pool.info()[0] != libvirt.VIR_STORAGE_POOL_RUNNING:
             return ret
 
-        dummy1, dummy2, vols = pollhelpers.fetch_volumes(
-            self, pool, {}, lambda obj, ignore: obj)
+        dummy1, dummy2, vols = pollhelpers.fetch_volumes(self, pool, {}, lambda obj, ignore: obj)
 
         for vol in vols:
             try:
@@ -302,37 +294,32 @@ class VirtinstConnection(object):
         Returns a list of Guest() objects
         """
         return self._fetch_helper(
-                self._FETCH_KEY_DOMAINS,
-                self._fetch_all_domains_raw,
-                self.cb_fetch_all_domains)
+            self._FETCH_KEY_DOMAINS, self._fetch_all_domains_raw, self.cb_fetch_all_domains
+        )
 
     def fetch_all_pools(self):
         """
         Returns a list of StoragePool objects
         """
         return self._fetch_helper(
-                self._FETCH_KEY_POOLS,
-                self._fetch_all_pools_raw,
-                self.cb_fetch_all_pools)
+            self._FETCH_KEY_POOLS, self._fetch_all_pools_raw, self.cb_fetch_all_pools
+        )
 
     def fetch_all_vols(self):
         """
         Returns a list of StorageVolume objects
         """
         return self._fetch_helper(
-                self._FETCH_KEY_VOLS,
-                self._fetch_all_vols_raw,
-                self.cb_fetch_all_vols)
+            self._FETCH_KEY_VOLS, self._fetch_all_vols_raw, self.cb_fetch_all_vols
+        )
 
     def fetch_all_nodedevs(self):
         """
         Returns a list of NodeDevice() objects
         """
         return self._fetch_helper(
-                self._FETCH_KEY_NODEDEVS,
-                self._fetch_all_nodedevs_raw,
-                self.cb_fetch_all_nodedevs)
-
+            self._FETCH_KEY_NODEDEVS, self._fetch_all_nodedevs_raw, self.cb_fetch_all_nodedevs
+        )
 
     #########################
     # Libvirt API overrides #
@@ -340,7 +327,6 @@ class VirtinstConnection(object):
 
     def getURI(self):
         return self._uri
-
 
     #########################
     # Public version checks #
@@ -378,34 +364,39 @@ class VirtinstConnection(object):
                 log.debug("Error calling getVersion", exc_info=True)
         return self._conn_version
 
-
     ###################
     # Public URI bits #
     ###################
 
     def is_remote(self):
         return bool(self._uriobj.hostname)
+
     def is_privileged(self):
         if self.get_uri_path() == "/session":
             return False
         if self.get_uri_path() == "/embed":
             return os.getuid() == 0
         return True
+
     def is_unprivileged(self):
         return not self.is_privileged()
 
     def get_uri_hostname(self):
         return self._uriobj.hostname
+
     def get_uri_port(self):
         return self._uriobj.port
+
     def get_uri_username(self):
         return self._uriobj.username
+
     def get_uri_transport(self):
         if self.get_uri_hostname() and not self._uriobj.transport:
             # Libvirt defaults to transport=tls if hostname specified but
             # no transport is specified
             return "tls"
         return self._uriobj.transport
+
     def get_uri_path(self):
         return self._uriobj.path
 
@@ -414,30 +405,36 @@ class VirtinstConnection(object):
 
     def is_qemu(self):
         return self._uriobj.scheme.startswith("qemu")
+
     def is_qemu_privileged(self):
-        return (self.is_qemu() and self.is_privileged())
+        return self.is_qemu() and self.is_privileged()
+
     def is_qemu_unprivileged(self):
-        return (self.is_qemu() and self.is_unprivileged())
+        return self.is_qemu() and self.is_unprivileged()
 
     def is_really_test(self):
         return URI(self._open_uri).scheme.startswith("test")
+
     def is_test(self):
         return self._uriobj.scheme.startswith("test")
+
     def is_xen(self):
-        return (self._uriobj.scheme.startswith("xen") or
-                self._uriobj.scheme.startswith("libxl"))
+        return self._uriobj.scheme.startswith("xen") or self._uriobj.scheme.startswith("libxl")
+
     def is_lxc(self):
         return self._uriobj.scheme.startswith("lxc")
+
     def is_openvz(self):
         return self._uriobj.scheme.startswith("openvz")
+
     def is_container_only(self):
         return self.is_lxc() or self.is_openvz()
+
     def is_vz(self):
-        return (self._uriobj.scheme.startswith("vz") or
-                self._uriobj.scheme.startswith("parallels"))
+        return self._uriobj.scheme.startswith("vz") or self._uriobj.scheme.startswith("parallels")
+
     def is_bhyve(self):
         return self._uriobj.scheme.startswith("bhyve")
-
 
     #########################
     # Support check helpers #

@@ -32,8 +32,7 @@ def _build_pool(conn, meter, path):
 
     # Explicitly don't build? since if we are creating this directory
     # we probably don't have correct perms
-    ret = poolbuild.install(meter=meter, create=True, build=False,
-                            autostart=True)
+    ret = poolbuild.install(meter=meter, create=True, build=False, autostart=True)
     return ret
 
 
@@ -79,8 +78,9 @@ def _upload_file(conn, meter, destpool, src):
     name = StorageVolume.find_free_name(conn, destpool, basename)
     log.debug("Generated volume name %s", name)
 
-    vol_install = DeviceDisk.build_vol_install(conn, name, destpool,
-                    (float(size) / 1024.0 / 1024.0 / 1024.0), True)
+    vol_install = DeviceDisk.build_vol_install(
+        conn, name, destpool, (float(size) / 1024.0 / 1024.0 / 1024.0), True
+    )
 
     disk = DeviceDisk(conn)
     disk.set_vol_install(vol_install)
@@ -89,8 +89,7 @@ def _upload_file(conn, meter, destpool, src):
     disk.build_storage(meter)
     vol = disk.get_vol_object()
     if not vol:
-        raise RuntimeError(  # pragma: no cover
-                "Failed to lookup scratch media volume")
+        raise RuntimeError("Failed to lookup scratch media volume")  # pragma: no cover
 
     try:
         # Register upload
@@ -105,8 +104,7 @@ def _upload_file(conn, meter, destpool, src):
 
         # Start transfer
         total = 0
-        msg = _("Transferring '%(filename)s'") % {
-                "filename": os.path.basename(src)}
+        msg = _("Transferring '%(filename)s'") % {"filename": os.path.basename(src)}
         meter.start(msg, size)
         while True:
             blocksize = 1024 * 1024  # 1 MiB

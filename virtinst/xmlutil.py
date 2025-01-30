@@ -72,14 +72,16 @@ def in_testsuite():
 
 def diff(origstr, newstr, fromfile="Original", tofile="New"):
     import difflib
+
     dlist = difflib.unified_diff(
-            origstr.splitlines(1), newstr.splitlines(1),
-            fromfile=fromfile, tofile=tofile)
+        origstr.splitlines(1), newstr.splitlines(1), fromfile=fromfile, tofile=tofile
+    )
     return "".join(dlist)
 
 
 def unindent_device_xml(xml):
     import re
+
     lines = xml.splitlines()
     if not lines:
         return xml  # pragma: no cover

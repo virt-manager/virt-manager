@@ -8,6 +8,7 @@ from . import lib
 # UI tests for the createnet wizard #
 #####################################
 
+
 def _open_netadd(app, hostwin):
     hostwin.find("net-add", "push button").click()
     win = app.find_window("Create a new virtual network")
@@ -55,7 +56,6 @@ def testCreateNet(app):
     lib.utils.check(lambda: cell.dead)
 
 
-
 def testCreateNetXMLEditor(app):
     """
     Test the XML editor
@@ -88,8 +88,7 @@ def testCreateNetXMLEditor(app):
     # Ensure host window closes fine
     hostwin.click()
     hostwin.keyCombo("<ctrl>w")
-    lib.utils.check(lambda: not hostwin.showing and
-            not hostwin.active)
+    lib.utils.check(lambda: not hostwin.showing and not hostwin.active)
 
 
 def testCreateNetMulti(app):
@@ -97,8 +96,7 @@ def testCreateNetMulti(app):
     Test remaining create options
     """
     app.uri = "test:///default"
-    hostwin = app.manager_open_host(
-            "Virtual Networks", conn_label="test default")
+    hostwin = app.manager_open_host("Virtual Networks", conn_label="test default")
     win = _open_netadd(app, hostwin)
     finish = win.find("Finish", "push button")
 

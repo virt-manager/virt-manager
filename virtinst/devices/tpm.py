@@ -39,17 +39,14 @@ class DeviceTpm(Device):
     model = XMLProperty("./@model")
     device_path = XMLProperty("./backend/device/@path")
     encryption_secret = XMLProperty("./backend/encryption/@secret")
-    persistent_state = XMLProperty(
-            "./backend/@persistent_state", is_yesno=True)
+    persistent_state = XMLProperty("./backend/@persistent_state", is_yesno=True)
     debug = XMLProperty("./backend/@debug")
     source_type = XMLProperty("./backend/source/@type")
     source_path = XMLProperty("./backend/source/@path")
     profile_source = XMLProperty("./backend/profile/@source")
     profile_removeDisabled = XMLProperty("./backend/profile/@removeDisabled")
 
-    active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True,
-                                        relative_xpath="./backend")
-
+    active_pcr_banks = XMLChildProperty(_ActivePCRBanks, is_single=True, relative_xpath="./backend")
 
     ##################
     # Default config #
@@ -81,6 +78,5 @@ class DeviceTpm(Device):
 
         # passthrough and model and version are all interconnected, so
         # don't try to set a default model if other bits are set
-        if (self.type == self.TYPE_EMULATOR and
-            not self.model and not self.version):
+        if self.type == self.TYPE_EMULATOR and not self.model and not self.version:
             self.model = self.default_model(guest)

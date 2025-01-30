@@ -30,13 +30,15 @@ class URI(object):
     """
     Parse an arbitrary URI into its individual parts
     """
+
     def __init__(self, uri):
         self.uri = uri
 
         split_uri = self._split(uri)
         self.scheme = split_uri[0]
-        (self.username, self.hostname, self.path, self.query,
-         self.fragment) = map(urllib.parse.unquote, split_uri[1:])
+        (self.username, self.hostname, self.path, self.query, self.fragment) = map(
+            urllib.parse.unquote, split_uri[1:]
+        )
 
         self.transport = ''
         if "+" in self.scheme:
@@ -53,7 +55,6 @@ class URI(object):
             self.hostname, self.port = self.hostname.split(":", 1)
 
         self.host_is_ipv4_string = bool(re.match("^[0-9.]+$", self.hostname))
-
 
     ###################
     # Private helpers #
@@ -72,13 +73,13 @@ class URI(object):
         scheme = username = netloc = query = fragment = ''
         i = uri.find(":")
         if i > 0:
-            scheme, uri = uri[:i].lower(), uri[i + 1:]
+            scheme, uri = uri[:i].lower(), uri[i + 1 :]
             if uri[:2] == '//':
                 netloc, uri = splitnetloc(uri, 2)
                 offset = netloc.find("@")
                 if offset > 0:
                     username = netloc[0:offset]
-                    netloc = netloc[offset + 1:]
+                    netloc = netloc[offset + 1 :]
             if '#' in uri:
                 uri, fragment = uri.split('#', 1)
             if '?' in uri:
@@ -114,6 +115,7 @@ class MagicURI(object):
 
     See tests/utils.py for example URLs
     """
+
     VIRTINST_URI_MAGIC_PREFIX = "__virtinst_test__"
 
     @staticmethod
@@ -154,7 +156,6 @@ class MagicURI(object):
         if opts:
             self._err = "MagicURI has unhandled opts=%s" % opts
 
-
     ##############
     # Public API #
     ##############
@@ -175,6 +176,7 @@ class MagicURI(object):
 
         def _raise_nosupport_error(msg):
             import libvirt
+
             err = [libvirt.VIR_ERR_NO_SUPPORT, None, msg, None, None, None]
             exc = libvirt.libvirtError(msg)
             exc.err = err
@@ -202,19 +204,21 @@ class MagicURI(object):
             # In libvirt 9.8.0 the test suite added a stub domcaps
             # impl. Fall back to raising NO_SUPPORT for our magic URIs, so
             # we can keep getting code coverage of the old code paths
-            _raise_nosupport_error(
-                    "virtinst test driver fake domcaps nosupport")
+            _raise_nosupport_error("virtinst test driver fake domcaps nosupport")
 
         conn.getDomainCapabilities = fake_domcaps
 
         if self.fakeuri:
             origcreate = conn.createXML
             origdefine = conn.defineXML
+
             def newcreate(xml, flags):
                 xml = sanitize_xml_for_test_define(xml)
                 return origcreate(xml, flags)
+
             def newdefine(xml):
                 xml = sanitize_xml_for_test_define(xml)
                 return origdefine(xml)
+
             conn.createXML = newcreate
             conn.defineXML = newdefine

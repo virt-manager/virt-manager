@@ -28,6 +28,7 @@ class _XPathSegment(object):
                 fullsegment=baz[@somepro='somval']
         #5: nodename=finalprop, is_prop=True, fullsegment=@finalprop
     """
+
     def __init__(self, fullsegment):
         self.fullsegment = fullsegment
         self.nodename = fullsegment
@@ -58,6 +59,7 @@ class _XPath(object):
     Helper class for performing manipulations of XPath strings. Splits
     the xpath into segments.
     """
+
     def __init__(self, fullxpath):
         self.fullxpath = fullxpath
         self.segments = []
@@ -69,7 +71,7 @@ class _XPath(object):
             self.segments.append(_XPathSegment(s))
 
         self.is_prop = self.segments[-1].is_prop
-        self.propname = (self.is_prop and self.segments[-1].nodename or None)
+        self.propname = self.is_prop and self.segments[-1].nodename or None
         if self.is_prop:
             self.segments = self.segments[:-1]
         self.xpath = self.join(self.segments)
@@ -84,42 +86,59 @@ class _XPath(object):
 
 class _XMLBase(object):
     NAMESPACES = {}
+
     @classmethod
     def register_namespace(cls, nsname, uri):
         cls.NAMESPACES[nsname] = uri
 
     def copy_api(self):
         raise NotImplementedError()
+
     def count(self, xpath):
         raise NotImplementedError()
+
     def _find(self, fullxpath):
         raise NotImplementedError()
+
     def _node_tostring(self, node):
         raise NotImplementedError()
+
     def _node_get_text(self, node):
         raise NotImplementedError()
+
     def _node_set_text(self, node, setval):
         raise NotImplementedError()
+
     def _node_get_property(self, node, propname):
         raise NotImplementedError()
+
     def _node_set_property(self, node, propname, setval):
         raise NotImplementedError()
+
     def _node_new(self, xpathseg, parentnode):
         raise NotImplementedError()
+
     def _node_add_child(self, parentxpath, parentnode, newnode):
         raise NotImplementedError()
+
     def _node_remove_child(self, parentnode, childnode):
         raise NotImplementedError()
+
     def _node_replace_child(self, xpath, newnode):
         raise NotImplementedError()
+
     def _node_from_xml(self, xml):
         raise NotImplementedError()
+
     def _node_has_content(self, node):
         raise NotImplementedError()
+
     def _node_get_name(self, node):
         raise NotImplementedError()
+
     def node_clear(self, xpath):
         raise NotImplementedError()
+
     def _sanitize_xml(self, xml):
         raise NotImplementedError()
 
@@ -188,9 +207,12 @@ class _XMLBase(object):
         if rootname == expected_root_name:
             return
         raise RuntimeError(
-            _("XML did not have expected root element name "
-              "'%(expectname)s', found '%(foundname)s'") %
-            {"expectname": expected_root_name, "foundname": rootname})
+            _(
+                "XML did not have expected root element name "
+                "'%(expectname)s', found '%(foundname)s'"
+            )
+            % {"expectname": expected_root_name, "foundname": rootname}
+        )
 
     def _node_set_content(self, xpath, node, setval):
         xpathobj = _XPath(xpath)
@@ -227,8 +249,7 @@ class _XMLBase(object):
         parentxpath = "."
         parentnode = self._find(parentxpath)
         if not parentnode:
-            raise xmlutil.DevError(
-                    "Did not find XML root node for xpath=%s" % fullxpath)
+            raise xmlutil.DevError("Did not find XML root node for xpath=%s" % fullxpath)
 
         for xpathseg in xpathobj.segments[1:]:
             oldxpath = parentxpath
@@ -246,8 +267,7 @@ class _XMLBase(object):
             # For a conditional xpath like ./foo[@bar='baz'],
             # we also want to implicitly set <foo bar='baz'/>
             if xpathseg.condition_prop:
-                self._node_set_property(parentnode, xpathseg.condition_prop,
-                        xpathseg.condition_val)
+                self._node_set_property(parentnode, xpathseg.condition_prop, xpathseg.condition_val)
 
         return parentnode
 
@@ -317,21 +337,22 @@ class _Libxml2API(_XMLBase):
         try:
             node = self._ctx.xpathEval(xpath)
         except Exception as e:
-            log.debug("fullxpath=%s xpath=%s eval failed",
-                    fullxpath, xpath, exc_info=True)
+            log.debug("fullxpath=%s xpath=%s eval failed", fullxpath, xpath, exc_info=True)
             raise RuntimeError("%s %s" % (fullxpath, str(e))) from None
-        return (node and node[0] or None)
+        return node and node[0] or None
 
     def count(self, xpath):
         return len(self._ctx.xpathEval(xpath))
 
     def _node_tostring(self, node):
         return node.serialize()
+
     def _node_from_xml(self, xml):
         return libxml2.parseDoc(xml).children
 
     def _node_get_text(self, node):
         return node.content
+
     def _node_set_text(self, node, setval):
         if setval is not None:
             setval = xmlutil.xml_escape(setval)
@@ -341,6 +362,7 @@ class _Libxml2API(_XMLBase):
         prop = node.hasProp(propname)
         if prop:
             return prop.content
+
     def _node_set_property(self, node, propname, setval):
         if setval is None:
             prop = node.hasProp(propname)
@@ -365,8 +387,7 @@ class _Libxml2API(_XMLBase):
 
         ns = _find_parent_ns()
         if not ns:
-            ns = newnode.newNs(
-                    self.NAMESPACES[xpathseg.nsname], xpathseg.nsname)
+            ns = newnode.newNs(self.NAMESPACES[xpathseg.nsname], xpathseg.nsname)
         newnode.setNs(ns)
         return newnode
 

@@ -9,20 +9,18 @@ from virtinst import URI
 
 
 def parse_options():
-    description = ("Generate a fake URI for use with virt-manager/virtinst "
+    description = (
+        "Generate a fake URI for use with virt-manager/virtinst "
         "that wraps a standard test:/// URI but pretends to be a different "
         "hypervisor. See virtinst/uri.py MagicURI for format details. "
-        "Example: magicuri.py qemu+tcp://fakeuri.example.com/system")
+        "Example: magicuri.py qemu+tcp://fakeuri.example.com/system"
+    )
     parser = argparse.ArgumentParser(description=description)
 
-    parser.add_argument("fakeuri",
-            help="The libvirt URI we should fake")
-    parser.add_argument("--capsfile",
-            help="Path to file to use for capabilities XML")
-    parser.add_argument("--domcapsfile",
-            help="Path to file to use for domain capabilities XML")
-    parser.add_argument("--driverxml",
-            help="Path to driver xml (defaults to testdriver.xml)")
+    parser.add_argument("fakeuri", help="The libvirt URI we should fake")
+    parser.add_argument("--capsfile", help="Path to file to use for capabilities XML")
+    parser.add_argument("--domcapsfile", help="Path to file to use for domain capabilities XML")
+    parser.add_argument("--driverxml", help="Path to driver xml (defaults to testdriver.xml)")
 
     options = parser.parse_args()
 
@@ -78,6 +76,7 @@ def main():
 
     print(uri)
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

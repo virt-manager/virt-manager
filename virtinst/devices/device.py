@@ -13,6 +13,7 @@ class DeviceVirtioDriver(XMLBuilder):
     """
     Represents shared virtio <driver> options
     """
+
     XML_NAME = "driver"
     ats = XMLProperty("./@ats", is_onoff=True)
     iommu = XMLProperty("./@iommu", is_onoff=True)
@@ -24,6 +25,7 @@ class DeviceSeclabel(XMLBuilder):
     """
     Minimal seclabel that's used for device sources.
     """
+
     XML_NAME = "seclabel"
     model = XMLProperty("./@model")
     relabel = XMLProperty("./@relabel", is_yesno=True)
@@ -50,23 +52,30 @@ class DeviceAddress(XMLBuilder):
     <address type='virtio-serial' controller='1' bus='0' port='4'/>
     """
 
-    ADDRESS_TYPE_PCI           = "pci"
-    ADDRESS_TYPE_DRIVE         = "drive"
+    ADDRESS_TYPE_PCI = "pci"
+    ADDRESS_TYPE_DRIVE = "drive"
     ADDRESS_TYPE_VIRTIO_SERIAL = "virtio-serial"
-    ADDRESS_TYPE_CCID          = "ccid"
-    ADDRESS_TYPE_SPAPR_VIO     = "spapr-vio"
+    ADDRESS_TYPE_CCID = "ccid"
+    ADDRESS_TYPE_SPAPR_VIO = "spapr-vio"
 
     XML_NAME = "address"
-    _XML_PROP_ORDER = ["type", "domain", "controller", "bus", "slot",
-                       "function", "target", "unit", "multifunction"]
+    _XML_PROP_ORDER = [
+        "type",
+        "domain",
+        "controller",
+        "bus",
+        "slot",
+        "function",
+        "target",
+        "unit",
+        "multifunction",
+    ]
 
     def pretty_desc(self):
         pretty_desc = None
         if self.type == self.ADDRESS_TYPE_DRIVE:
-            pretty_desc = ("%s:%s:%s:%s" %
-                            (self.controller, self.bus, self.target, self.unit))
+            pretty_desc = "%s:%s:%s:%s" % (self.controller, self.bus, self.target, self.unit)
         return pretty_desc
-
 
     type = XMLProperty("./@type")
     # type=pci
@@ -99,6 +108,7 @@ class Device(XMLBuilder):
     """
     Base class for all domain xml device objects.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize device state
@@ -106,8 +116,7 @@ class Device(XMLBuilder):
         :param conn: libvirt connection to validate device against
         """
         XMLBuilder.__init__(self, *args, **kwargs)
-        self._XML_PROP_ORDER = self._XML_PROP_ORDER + [
-                "virtio_driver", "alias", "address"]
+        self._XML_PROP_ORDER = self._XML_PROP_ORDER + ["virtio_driver", "alias", "address"]
 
     alias = XMLChildProperty(DeviceAlias, is_single=True)
     address = XMLChildProperty(DeviceAddress, is_single=True)
@@ -128,32 +137,39 @@ class Device(XMLBuilder):
         are a 'match'
         """
         devprops = {
-            "disk":          ["target", "bus"],
-            "interface":     ["macaddr", "xmlindex"],
-            "input":         ["bus", "type", "xmlindex"],
-            "sound":         ["model", "xmlindex"],
-            "audio":         ["type", "id"],
-            "video":         ["model", "xmlindex"],
-            "watchdog":      ["model", "xmlindex"],
-            "hostdev":       ["type", "managed", "xmlindex",
-                              "product", "vendor",
-                              "function", "domain", "slot"],
-            "serial":        ["type", "target_port"],
-            "parallel":      ["type", "target_port"],
-            "console":       ["type", "target_type", "target_port"],
-            "graphics":      ["type", "xmlindex"],
-            "controller":    ["type", "index"],
-            "channel":       ["type", "target_name"],
-            "filesystem":    ["target", "xmlindex"],
-            "smartcard":     ["mode", "xmlindex"],
-            "redirdev":      ["bus", "type", "xmlindex"],
-            "tpm":           ["type", "xmlindex"],
-            "rng":           ["backend_model", "xmlindex"],
-            "panic":         ["model", "xmlindex"],
-            "shmem":         ["name", "xmlindex"],
-            "vsock":         ["model", "xmlindex"],
-            "memballoon":    ["model", "xmlindex"],
-            "iommu":         ["model", "xmlindex"],
+            "disk": ["target", "bus"],
+            "interface": ["macaddr", "xmlindex"],
+            "input": ["bus", "type", "xmlindex"],
+            "sound": ["model", "xmlindex"],
+            "audio": ["type", "id"],
+            "video": ["model", "xmlindex"],
+            "watchdog": ["model", "xmlindex"],
+            "hostdev": [
+                "type",
+                "managed",
+                "xmlindex",
+                "product",
+                "vendor",
+                "function",
+                "domain",
+                "slot",
+            ],
+            "serial": ["type", "target_port"],
+            "parallel": ["type", "target_port"],
+            "console": ["type", "target_type", "target_port"],
+            "graphics": ["type", "xmlindex"],
+            "controller": ["type", "index"],
+            "channel": ["type", "target_name"],
+            "filesystem": ["target", "xmlindex"],
+            "smartcard": ["mode", "xmlindex"],
+            "redirdev": ["bus", "type", "xmlindex"],
+            "tpm": ["type", "xmlindex"],
+            "rng": ["backend_model", "xmlindex"],
+            "panic": ["model", "xmlindex"],
+            "shmem": ["name", "xmlindex"],
+            "vsock": ["model", "xmlindex"],
+            "memballoon": ["model", "xmlindex"],
+            "iommu": ["model", "xmlindex"],
         }
 
         if id(self) == id(newdev):
@@ -168,8 +184,7 @@ class Device(XMLBuilder):
         # Only compare against XML ID values, if both devices were
         # taken from inside a complete guest hierarchy, otherwise
         # things won't line up.
-        can_check_xml = ("devices" in newdev.get_xml_id() and
-                "devices" in self.get_xml_id())
+        can_check_xml = "devices" in newdev.get_xml_id() and "devices" in self.get_xml_id()
 
         for devprop in devprops[self.DEVICE_TYPE]:
             if devprop == "xmlindex":

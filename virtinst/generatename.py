@@ -24,8 +24,7 @@ def check_libvirt_collision(collision_cb, val):
     return check
 
 
-def generate_name(base, collision_cb, suffix="",
-                  start_num=1, sep="-", force_num=False):
+def generate_name(base, collision_cb, suffix="", start_num=1, sep="-", force_num=False):
     """
     Generate a new name from the passed base string, verifying it doesn't
     collide with the collision callback.
@@ -57,7 +56,7 @@ def generate_name(base, collision_cb, suffix="",
     for i in numrange:
         tryname = base
         if i is not None:
-            tryname += ("%s%d" % (sep, i))
+            tryname += "%s%d" % (sep, i)
         tryname += suffix
 
         if not collision_cb(tryname):

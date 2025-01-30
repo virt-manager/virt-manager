@@ -46,6 +46,7 @@ def test_clone_unmanaged():
 
 def test_generate_name():
     conn = utils.URIs.open_testdriver_cached()
+
     def _g(n):
         return Cloner.generate_clone_name(conn, n)
 

@@ -21,6 +21,7 @@ class DomainVCPUs(XMLBuilder):
     """
     Class for generating <vcpus> XML
     """
+
     XML_NAME = "vcpus"
 
     vcpu = XMLChildProperty(_DomainVCPU)

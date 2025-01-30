@@ -15,6 +15,7 @@ from .asyncjob import vmmAsyncJob
 # Build toolbar shutdown button menu (manager and details toolbar) #
 ####################################################################
 
+
 class _VMMenu(Gtk.Menu):
     def __init__(self, src, current_vm_cb, show_open=True):
         Gtk.Menu.__init__(self)
@@ -29,10 +30,12 @@ class _VMMenu(Gtk.Menu):
 
         item.vmm_widget_name = widgetname
         if cb:
+
             def _cb(_menuitem):
                 _vm = self._current_vm_cb()
                 if _vm:
                     return cb(self._parent, _vm)
+
             item.connect("activate", _cb)
 
         self.add(item)
@@ -40,6 +43,7 @@ class _VMMenu(Gtk.Menu):
 
     def _init_state(self):
         raise NotImplementedError()
+
     def update_widget_states(self, vm):
         raise NotImplementedError()
 
@@ -48,6 +52,7 @@ class VMShutdownMenu(_VMMenu):
     """
     Shutdown submenu for reboot, forceoff, reset, etc.
     """
+
     def _init_state(self):
         self._add_action(_("_Reboot"), "reboot", VMActionUI.reboot)
         self._add_action(_("_Shut Down"), "shutdown", VMActionUI.shutdown)
@@ -78,6 +83,7 @@ class VMActionMenu(_VMMenu):
     """
     VM submenu for run, pause, shutdown, clone, etc
     """
+
     def _init_state(self):
         self._add_action(_("_Run"), "run", VMActionUI.run)
         self._add_action(_("_Pause"), "suspend", VMActionUI.suspend)
@@ -149,9 +155,11 @@ class VMActionUI(object):
 
     @staticmethod
     def save(src, vm):
-        if not src.err.chkbox_helper(src.config.get_confirm_poweroff,
-                src.config.set_confirm_poweroff,
-                text1=_("Are you sure you want to save '%s'?") % vm.get_name()):
+        if not src.err.chkbox_helper(
+            src.config.get_confirm_poweroff,
+            src.config.set_confirm_poweroff,
+            text1=_("Are you sure you want to save '%s'?") % vm.get_name(),
+        ):
             return
 
         _cancel_cb = None
@@ -160,16 +168,22 @@ class VMActionUI(object):
 
         def cb(asyncjob):
             vm.save(meter=asyncjob.get_meter())
+
         def finish_cb(error, details):
             if error is not None:  # pragma: no cover
                 error = _("Error saving domain: %s") % error
                 src.err.show_err(error, details=details)
 
-        progWin = vmmAsyncJob(cb, [],
-                    finish_cb, [],
-                    _("Saving Virtual Machine"),
-                    _("Saving virtual machine memory to disk "),
-                    src.topwin, cancel_cb=_cancel_cb)
+        progWin = vmmAsyncJob(
+            cb,
+            [],
+            finish_cb,
+            [],
+            _("Saving Virtual Machine"),
+            _("Saving virtual machine memory to disk "),
+            src.topwin,
+            cancel_cb=_cancel_cb,
+        )
         progWin.run()
 
     @staticmethod
@@ -177,39 +191,40 @@ class VMActionUI(object):
         if not src.err.chkbox_helper(
             src.config.get_confirm_forcepoweroff,
             src.config.set_confirm_forcepoweroff,
-            text1=_("Are you sure you want to force poweroff '%s'?" %
-                    vm.get_name()),
-            text2=_("This will immediately poweroff the VM without "
-                    "shutting down the OS and may cause data loss.")):
+            text1=_("Are you sure you want to force poweroff '%s'?" % vm.get_name()),
+            text2=_(
+                "This will immediately poweroff the VM without "
+                "shutting down the OS and may cause data loss."
+            ),
+        ):
             return
 
         log.debug("Destroying vm '%s'", vm.get_name())
-        vmmAsyncJob.simple_async_noshow(vm.destroy, [], src,
-                                        _("Error shutting down domain"))
+        vmmAsyncJob.simple_async_noshow(vm.destroy, [], src, _("Error shutting down domain"))
 
     @staticmethod
     def suspend(src, vm):
-        if not src.err.chkbox_helper(src.config.get_confirm_pause,
+        if not src.err.chkbox_helper(
+            src.config.get_confirm_pause,
             src.config.set_confirm_pause,
-            text1=_("Are you sure you want to pause '%s'?" %
-                    vm.get_name())):
+            text1=_("Are you sure you want to pause '%s'?" % vm.get_name()),
+        ):
             return
 
         log.debug("Pausing vm '%s'", vm.get_name())
-        vmmAsyncJob.simple_async_noshow(vm.suspend, [], src,
-                                        _("Error pausing domain"))
+        vmmAsyncJob.simple_async_noshow(vm.suspend, [], src, _("Error pausing domain"))
 
     @staticmethod
     def resume(src, vm):
         log.debug("Unpausing vm '%s'", vm.get_name())
-        vmmAsyncJob.simple_async_noshow(vm.resume, [], src,
-                                        _("Error unpausing domain"))
+        vmmAsyncJob.simple_async_noshow(vm.resume, [], src, _("Error unpausing domain"))
 
     @staticmethod
     def run(src, vm):
         log.debug("Starting vm '%s'", vm.get_name())
 
         if vm.has_managed_save():
+
             def errorcb(error, details):
                 # This is run from the main thread
                 res = src.err.show_err(
@@ -218,10 +233,12 @@ class VMActionUI(object):
                     text2=_(
                         "The domain could not be restored. Would you like\n"
                         "to remove the saved state and perform a regular\n"
-                        "start up?"),
+                        "start up?"
+                    ),
                     dialog_type=Gtk.MessageType.WARNING,
                     buttons=Gtk.ButtonsType.YES_NO,
-                    modal=True)
+                    modal=True,
+                )
 
                 if not res:
                     return
@@ -230,75 +247,78 @@ class VMActionUI(object):
                     vm.remove_saved_image()
                     VMActionUI.run(src, vm)
                 except Exception as e:  # pragma: no cover
-                    src.err.show_err(_("Error removing domain state: %s")
-                                     % str(e))
+                    src.err.show_err(_("Error removing domain state: %s") % str(e))
 
             # VM will be restored, which can take some time, so show progress
             title = _("Restoring Virtual Machine")
             text = _("Restoring virtual machine memory from disk")
-            vmmAsyncJob.simple_async(vm.startup, [], src,
-                                     title, text, "", errorcb=errorcb)
+            vmmAsyncJob.simple_async(vm.startup, [], src, title, text, "", errorcb=errorcb)
 
         else:
             # Regular startup
-            errorintro  = _("Error starting domain")
+            errorintro = _("Error starting domain")
             vmmAsyncJob.simple_async_noshow(vm.startup, [], src, errorintro)
 
     @staticmethod
     def shutdown(src, vm):
-        if not src.err.chkbox_helper(src.config.get_confirm_poweroff,
+        if not src.err.chkbox_helper(
+            src.config.get_confirm_poweroff,
             src.config.set_confirm_poweroff,
-            text1=_("Are you sure you want to poweroff '%s'?" %
-                    vm.get_name())):
+            text1=_("Are you sure you want to poweroff '%s'?" % vm.get_name()),
+        ):
             return
 
         log.debug("Shutting down vm '%s'", vm.get_name())
-        vmmAsyncJob.simple_async_noshow(vm.shutdown, [], src,
-                                        _("Error shutting down domain"))
+        vmmAsyncJob.simple_async_noshow(vm.shutdown, [], src, _("Error shutting down domain"))
 
     @staticmethod
     def reboot(src, vm):
-        if not src.err.chkbox_helper(src.config.get_confirm_poweroff,
+        if not src.err.chkbox_helper(
+            src.config.get_confirm_poweroff,
             src.config.set_confirm_poweroff,
-            text1=_("Are you sure you want to reboot '%s'?" %
-                    vm.get_name())):
+            text1=_("Are you sure you want to reboot '%s'?" % vm.get_name()),
+        ):
             return
 
         log.debug("Rebooting vm '%s'", vm.get_name())
-        vmmAsyncJob.simple_async_noshow(vm.reboot, [], src,
-            _("Error rebooting domain"))
+        vmmAsyncJob.simple_async_noshow(vm.reboot, [], src, _("Error rebooting domain"))
 
     @staticmethod
     def reset(src, vm):
         if not src.err.chkbox_helper(
             src.config.get_confirm_forcepoweroff,
             src.config.set_confirm_forcepoweroff,
-            text1=_("Are you sure you want to force reset '%s'?" %
-                    vm.get_name()),
-            text2=_("This will immediately reset the VM without "
-                    "shutting down the OS and may cause data loss.")):
+            text1=_("Are you sure you want to force reset '%s'?" % vm.get_name()),
+            text2=_(
+                "This will immediately reset the VM without "
+                "shutting down the OS and may cause data loss."
+            ),
+        ):
             return
 
         log.debug("Resetting vm '%s'", vm.get_name())
-        vmmAsyncJob.simple_async_noshow(vm.reset, [], src,
-                                        _("Error resetting domain"))
+        vmmAsyncJob.simple_async_noshow(vm.reset, [], src, _("Error resetting domain"))
 
     @staticmethod
     def delete(src, vm):
         from .delete import vmmDeleteDialog
+
         vmmDeleteDialog.show_instance(src, vm)
 
     @staticmethod
     def migrate(src, vm):
         from .migrate import vmmMigrateDialog
+
         vmmMigrateDialog.show_instance(src, vm)
 
     @staticmethod
     def clone(src, vm):
         from .clone import vmmCloneVM
+
         vmmCloneVM.show_instance(src, vm)
 
     @staticmethod
     def show(src, vm):
         from .vmwindow import vmmVMWindow
+
         vmmVMWindow.get_instance(src, vm).show()
