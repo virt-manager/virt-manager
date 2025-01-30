@@ -15,6 +15,7 @@ from virtinst import URI
 # VirtinstConnection tests #
 ############################
 
+
 def test_misc():
     # Misc API checks
     conn = cli.getConnection("test:///default")
@@ -61,6 +62,7 @@ def test_poll():
     # Add coverage for conn fetch_* handling, and pollhelpers
     conn = cli.getConnection("test:///default")
     objmap = {}
+
     def build_cb(obj, name):
         return obj
 

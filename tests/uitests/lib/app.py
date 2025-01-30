@@ -20,13 +20,13 @@ class VMMDogtailApp(object):
     """
     Wrapper class to simplify dogtail app handling
     """
+
     def __init__(self, uri=tests.utils.URIs.test_full):
         self._proc = None
         self._root = None
         self._topwin = None
         self._manager = None
         self.uri = uri
-
 
     ####################################
     # Helpers to save testcase imports #
@@ -41,12 +41,12 @@ class VMMDogtailApp(object):
     def find_window(self, name, roleName=None, check_active=True):
         if roleName is None:
             roleName = "(frame|dialog|alert|window)"
-        return self.root.find(name=name, roleName=roleName,
-                recursive=False, check_active=check_active)
+        return self.root.find(
+            name=name, roleName=roleName, recursive=False, check_active=check_active
+        )
 
     rawinput = dogtail.rawinput
     tree = dogtail.tree
-
 
     #################################
     # virt-manager specific helpers #
@@ -54,12 +54,10 @@ class VMMDogtailApp(object):
 
     def get_manager(self, check_active=True):
         if not self._manager:
-            self._manager = self.find_window("Virtual Machine Manager",
-                    check_active=check_active)
+            self._manager = self.find_window("Virtual Machine Manager", check_active=check_active)
         return self._manager
 
-    def find_details_window(self, vmname,
-            click_details=False, shutdown=False):
+    def find_details_window(self, vmname, click_details=False, shutdown=False):
         win = self.find_window("%s on" % vmname, "frame")
         if click_details:
             win.find("Details", "radio button").click()
@@ -85,7 +83,6 @@ class VMMDogtailApp(object):
             volcell.click()
             browsewin.find_fuzzy("Choose Volume").click()
         utils.check(lambda: not browsewin.active)
-
 
     ##########################
     # manager window helpers #
@@ -133,11 +130,24 @@ class VMMDogtailApp(object):
         self.click_alert_button("will remove the connection", "Yes")
         utils.check(lambda: c.dead)
 
-    def manager_vm_action(self, vmname, confirm_click_no=False,
-            run=False, shutdown=False, destroy=False, reset=False,
-            reboot=False, pause=False, resume=False, save=False,
-            restore=False, clone=False, migrate=False, delete=False,
-            details=False):
+    def manager_vm_action(
+        self,
+        vmname,
+        confirm_click_no=False,
+        run=False,
+        shutdown=False,
+        destroy=False,
+        reset=False,
+        reboot=False,
+        pause=False,
+        resume=False,
+        save=False,
+        restore=False,
+        clone=False,
+        migrate=False,
+        delete=False,
+        details=False,
+    ):
         manager = self.get_manager()
         vmcell = manager.find(vmname + "\n", "table cell")
 
@@ -203,8 +213,7 @@ class VMMDogtailApp(object):
 
     def manager_open_details(self, vmname, shutdown=False):
         self.manager_vm_action(vmname, details=True)
-        win = self.find_details_window(vmname,
-                shutdown=shutdown, click_details=True)
+        win = self.find_details_window(vmname, shutdown=shutdown, click_details=True)
         return win
 
     def manager_open_host(self, tab, conn_label="test testdriver.xml"):
@@ -228,7 +237,6 @@ class VMMDogtailApp(object):
         self.manager_conn_disconnect(conn_label)
         utils.check(lambda: not childwin.showing)
 
-
     ###########################
     # Process management APIs #
     ###########################
@@ -247,16 +255,22 @@ class VMMDogtailApp(object):
 
     def has_dbus(self):
         dbus = Gio.DBusProxy.new_sync(
-                Gio.bus_get_sync(Gio.BusType.SESSION, None), 0, None,
-                "org.freedesktop.DBus", "/org/freedesktop/DBus",
-                "org.freedesktop.DBus", None)
+            Gio.bus_get_sync(Gio.BusType.SESSION, None),
+            0,
+            None,
+            "org.freedesktop.DBus",
+            "/org/freedesktop/DBus",
+            "org.freedesktop.DBus",
+            None,
+        )
         return "org.virt-manager.virt-manager" in dbus.ListNames()
 
     def error_if_already_running(self):
         # Ensure virt-manager isn't already running
         if self.has_dbus():
-            raise RuntimeError("virt-manager is already running. "
-                    "Close it before running this test suite.")
+            raise RuntimeError(
+                "virt-manager is already running. Close it before running this test suite."
+            )
 
     def is_running(self):
         return bool(self._proc and self._proc.poll() is None)
@@ -288,17 +302,27 @@ class VMMDogtailApp(object):
             self.wait_for_exit()
             raise
 
-
     #####################################
     # virt-manager launching entrypoint #
     #####################################
 
-    def open(self, uri=None,
-            extra_opts=None, check_already_running=True, use_uri=True,
-            window_name=None, xmleditor_enabled=False, keyfile=None,
-            break_setfacl=False, first_run=True,
-            will_fail=False, enable_libguestfs=False,
-            firstrun_uri=None, show_console=None, allow_debug=True):
+    def open(
+        self,
+        uri=None,
+        extra_opts=None,
+        check_already_running=True,
+        use_uri=True,
+        window_name=None,
+        xmleditor_enabled=False,
+        keyfile=None,
+        break_setfacl=False,
+        first_run=True,
+        will_fail=False,
+        enable_libguestfs=False,
+        firstrun_uri=None,
+        show_console=None,
+        allow_debug=True,
+    ):
         extra_opts = extra_opts or []
         uri = uri or self.uri
 
@@ -334,6 +358,7 @@ class VMMDogtailApp(object):
         if keyfile:
             import atexit
             import tempfile
+
             keyfile = tests.utils.UITESTDATADIR + "/keyfile/" + keyfile
             tempname = tempfile.mktemp(prefix="virtmanager-uitests-keyfile")
             open(tempname, "w").write(open(keyfile).read())

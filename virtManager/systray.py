@@ -21,7 +21,7 @@ from .connmanager import vmmConnectionManager
 # pylint: disable=ungrouped-imports
 try:  # pragma: no cover
     # pylint: disable=no-name-in-module
-    gi.require_version('AyatanaAppIndicator3', '0.1')
+    gi.require_version("AyatanaAppIndicator3", "0.1")
     from gi.repository import AyatanaAppIndicator3 as AppIndicator3
 except Exception:  # pragma: no cover
     AppIndicator3 = None
@@ -31,6 +31,7 @@ def _toggle_manager(*args, **kwargs):
     ignore = args
     ignore = kwargs
     from .manager import vmmManager
+
     manager = vmmManager.get_instance(None)
     if manager.is_visible():
         manager.close()
@@ -55,10 +56,15 @@ def _conn_disconnect_cb(src, uri):
 def _has_appindicator_dbus():  # pragma: no cover
     try:
         bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
-        dbus = Gio.DBusProxy.new_sync(bus, 0, None,
-                "org.freedesktop.DBus",
-                "/org/freedesktop/DBus",
-                "org.freedesktop.DBus", None)
+        dbus = Gio.DBusProxy.new_sync(
+            bus,
+            0,
+            None,
+            "org.freedesktop.DBus",
+            "/org/freedesktop/DBus",
+            "org.freedesktop.DBus",
+            None,
+        )
         if dbus.NameHasOwner("(s)", "org.kde.StatusNotifierWatcher"):
             return True
         if dbus.NameHasOwner("(s)", "org.freedesktop.StatusNotifierWatcher"):
@@ -73,8 +79,7 @@ _USING_APPINDICATOR = False
 if AppIndicator3:  # pragma: no cover
     log.debug("Imported AppIndicator3=%s", AppIndicator3)
     if not _has_appindicator_dbus():
-        log.debug("AppIndicator3 is available, but didn't "
-                              "find any dbus watcher.")
+        log.debug("AppIndicator3 is available, but didn't find any dbus watcher.")
     else:
         _USING_APPINDICATOR = True
         log.debug("Using AppIndicator3 for systray")
@@ -84,13 +89,17 @@ if AppIndicator3:  # pragma: no cover
 # systray backend classes #
 ###########################
 
+
 class _Systray(object):
     def is_embedded(self):
         raise NotImplementedError()
+
     def show(self):
         raise NotImplementedError()
+
     def hide(self):
         raise NotImplementedError()
+
     def set_menu(self, menu):
         raise NotImplementedError()
 
@@ -99,14 +108,14 @@ class _SystrayIndicator(_Systray):  # pragma: no cover
     """
     UI backend for appindicator
     """
+
     def __init__(self):
         self._icon = AppIndicator3.Indicator.new(
-                "virt-manager", "virt-manager",
-                AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
+            "virt-manager", "virt-manager", AppIndicator3.IndicatorCategory.APPLICATION_STATUS
+        )
 
     def set_menu(self, menu):
-        hide_item = Gtk.MenuItem.new_with_mnemonic(
-                _("_Show Virtual Machine Manager"))
+        hide_item = Gtk.MenuItem.new_with_mnemonic(_("_Show Virtual Machine Manager"))
         hide_item.connect("activate", _toggle_manager)
         hide_item.show()
         menu.insert(hide_item, len(menu.get_children()) - 1)
@@ -117,11 +126,11 @@ class _SystrayIndicator(_Systray):  # pragma: no cover
     def is_embedded(self):
         if not self._icon.get_property("connected"):
             return False
-        return (self._icon.get_status() !=
-                AppIndicator3.IndicatorStatus.PASSIVE)
+        return self._icon.get_status() != AppIndicator3.IndicatorStatus.PASSIVE
 
     def show(self):
         self._icon.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+
     def hide(self):
         self._icon.set_status(AppIndicator3.IndicatorStatus.PASSIVE)
 
@@ -130,6 +139,7 @@ class _SystrayStatusIcon(_Systray):  # pragma: no cover
     """
     UI backend for Gtk StatusIcon
     """
+
     def __init__(self):
         self._icon = Gtk.StatusIcon()
         self._icon.set_property("icon-name", "virt-manager")
@@ -148,12 +158,11 @@ class _SystrayStatusIcon(_Systray):  # pragma: no cover
         if button != 3:
             return
 
-        self._menu.popup(None, None,
-                Gtk.StatusIcon.position_menu,
-                self._icon, 0, event_time)
+        self._menu.popup(None, None, Gtk.StatusIcon.position_menu, self._icon, 0, event_time)
 
     def show(self):
         self._icon.set_visible(True)
+
     def hide(self):
         self._icon.set_visible(False)
 
@@ -163,6 +172,7 @@ class _SystrayWindow(_Systray):
     A mock systray implementation that shows its own top level window,
     so we can test more of the infrastructure in our ui tests
     """
+
     def __init__(self):
         self._window = None
         self._menu = None
@@ -191,6 +201,7 @@ class _SystrayWindow(_Systray):
 
     def show(self):
         self._window.show_all()
+
     def hide(self):
         self._window.hide()
 
@@ -200,6 +211,7 @@ class _TrayMainMenu(vmmGObject):
     Helper class for maintaining the conn + VM menu list and updating
     it in place
     """
+
     def __init__(self):
         vmmGObject.__init__(self)
         self.topwin = None  # Need this for error callbacks from VMActionMenu
@@ -209,7 +221,6 @@ class _TrayMainMenu(vmmGObject):
     def _cleanup(self):
         self._menu.destroy()
         self._menu = None
-
 
     ###########
     # UI init #
@@ -229,7 +240,6 @@ class _TrayMainMenu(vmmGObject):
         menu.show_all()
         return menu
 
-
     ######################
     # UI update routines #
     ######################
@@ -237,11 +247,13 @@ class _TrayMainMenu(vmmGObject):
     # Helpers for stashing identifying data in the menu item objects
     def _get_lookupkey(self, child):
         return getattr(child, "_vmlookupkey", None)
+
     def _set_lookupkey(self, child, val):
         return setattr(child, "_vmlookupkey", val)
 
     def _get_sortkey(self, child):
         return getattr(child, "_vmsortkey", None)
+
     def _set_sortkey(self, child, val):
         return setattr(child, "_vmsortkey", val)
 
@@ -278,7 +290,6 @@ class _TrayMainMenu(vmmGObject):
         disconnect_item = self._find_lookupkey(menu_item.get_submenu(), 2)
         connect_item.set_visible(conn.is_active())
         disconnect_item.set_visible(not conn.is_active())
-
 
     def _build_conn_menuitem(self, conn):
         """
@@ -323,15 +334,14 @@ class _TrayMainMenu(vmmGObject):
         connmenu = self._find_conn_menuitem(uri)
         return self._find_lookupkey(connmenu.get_submenu(), vm)
 
-
     ################
     # UI listeners #
     ################
 
     def _exit_app_cb(self, src):
         from .engine import vmmEngine
-        vmmEngine.get_instance().exit_app()
 
+        vmmEngine.get_instance().exit_app()
 
     ##############
     # Public API #
@@ -393,6 +403,7 @@ class vmmSystray(vmmGObject):
     API class representing a systray icon. May use StatusIcon or appindicator
     backends
     """
+
     @classmethod
     def get_instance(cls):
         if not cls._instance:
@@ -405,8 +416,7 @@ class vmmSystray(vmmGObject):
             return
         if _USING_APPINDICATOR:
             return
-        return ("No appindicator listener found, which is required "
-            "on wayland.")
+        return "No appindicator listener found, which is required on wayland."
 
     def __init__(self):
         vmmGObject.__init__(self)
@@ -416,10 +426,9 @@ class vmmSystray(vmmGObject):
         self._mainmenu = None
 
         self.add_gsettings_handle(
-            self.config.on_view_system_tray_changed(
-                self._show_systray_changed_cb))
+            self.config.on_view_system_tray_changed(self._show_systray_changed_cb)
+        )
         self._startup()
-
 
     def is_embedded(self):
         return self._systray and self._systray.is_embedded()
@@ -433,7 +442,6 @@ class vmmSystray(vmmGObject):
         if self._mainmenu:
             self._mainmenu.cleanup()
             self._mainmenu = None
-
 
     ###########################
     # Initialization routines #
@@ -476,7 +484,6 @@ class vmmSystray(vmmGObject):
     def _startup(self):
         # This will trigger the actual UI showing
         self._show_systray_changed_cb()
-
 
     ################
     # UI listeners #

@@ -43,8 +43,7 @@ def _replace_vm(conn, name):
         log.debug("Undefining guest '%s'", name)
         vm.undefine()
     except libvirt.libvirtError as e:  # pragma: no cover
-        msg = (_("Could not remove old vm '%(vm)s': %(error)s") % {
-                "vm": name, "error": str(e)})
+        msg = _("Could not remove old vm '%(vm)s': %(error)s") % {"vm": name, "error": str(e)}
         raise RuntimeError(msg) from None
 
 
@@ -62,14 +61,15 @@ def _generate_clone_name(conn, basename):
         force_num = True
         if num_match:
             start_num = int(str(num_match.group())) + 1
-        basename = basename[:match.start()]
+        basename = basename[: match.start()]
 
     def cb(n):
-        return generatename.check_libvirt_collision(
-            conn.lookupByName, n)
+        return generatename.check_libvirt_collision(conn.lookupByName, n)
+
     basename = basename + "-clone"
-    return generatename.generate_name(basename, cb,
-            sep="", start_num=start_num, force_num=force_num)
+    return generatename.generate_name(
+        basename, cb, sep="", start_num=start_num, force_num=force_num
+    )
 
 
 def _generate_clone_path(origname, newname, origpath, cb_exists):
@@ -115,11 +115,15 @@ def _lookup_vm(conn, name):
 def _build_clone_vol_install(orig_disk, new_disk):
     # We set a stub size for initial creation
     # set_input_vol will overwrite it
-    size = .000001
+    size = 0.000001
     sparse = False
     vol_install = DeviceDisk.build_vol_install(
-        orig_disk.conn, os.path.basename(new_disk.get_source_path()),
-        new_disk.get_parent_pool(), size, sparse)
+        orig_disk.conn,
+        os.path.basename(new_disk.get_source_path()),
+        new_disk.get_parent_pool(),
+        size,
+        sparse,
+    )
     vol_install.set_input_vol(orig_disk.get_vol_object())
 
     return vol_install
@@ -145,18 +149,20 @@ def _build_clone_disk(orig_disk, clonepath, allow_create, sparse):
         # we have permissions to do so. This validation check
         # caused a few bug reports in a short period of time,
         # so must be a common case.
-        if (conn.is_remote() or
-            new_disk.type != new_disk.TYPE_BLOCK or
-            not orig_disk.get_source_path() or
-            not os.access(orig_disk.get_source_path(), os.R_OK) or
-            not new_disk.get_source_path() or
-            not os.access(new_disk.get_source_path(), os.W_OK)):
+        if (
+            conn.is_remote()
+            or new_disk.type != new_disk.TYPE_BLOCK
+            or not orig_disk.get_source_path()
+            or not os.access(orig_disk.get_source_path(), os.R_OK)
+            or not new_disk.get_source_path()
+            or not os.access(new_disk.get_source_path(), os.W_OK)
+        ):
             raise RuntimeError(
-                _("Clone onto existing storage volume is not "
-                  "currently supported: '%s'") % new_disk.get_source_path())
+                _("Clone onto existing storage volume is not currently supported: '%s'")
+                % new_disk.get_source_path()
+            )
 
-    if (orig_disk.get_vol_object() and
-        new_disk.wants_storage_creation()):
+    if orig_disk.get_vol_object() and new_disk.wants_storage_creation():
         vol_install = _build_clone_vol_install(orig_disk, new_disk)
         if not sparse:
             vol_install.allocation = vol_install.capacity
@@ -182,8 +188,9 @@ def _get_cloneable_msg(disk):
             # requires open coding a bunch of work in cloner, or reworking
             # other disk code to add unique URIs for rbd volumes and pools
             return (
-                _("Cloning rbd volumes is not yet supported.") +
-                " https://github.com/virt-manager/virt-manager/issues/177")
+                _("Cloning rbd volumes is not yet supported.")
+                + " https://github.com/virt-manager/virt-manager/issues/177"
+            )
         return _("Disk network type '%s' is not cloneable.") % proto
 
 
@@ -208,6 +215,7 @@ class _CloneDiskInfo:
     * preserve: Destination path is an existing, and no copying is performed.
     * share: Original disk XML is used unchanged for the new disk
     """
+
     _ACTION_SHARE = 1
     _ACTION_CLONE = 2
     _ACTION_PRESERVE = 3
@@ -235,18 +243,23 @@ class _CloneDiskInfo:
 
     def is_clone_requested(self):
         return self._action in [self._ACTION_CLONE]
+
     def is_share_requested(self):
         return self._action in [self._ACTION_SHARE]
+
     def is_preserve_requested(self):
         return self._action in [self._ACTION_PRESERVE]
 
     def _set_action(self, action):
         if action != self._action:
             self._action = action
+
     def set_clone_requested(self):
         self._set_action(self._ACTION_CLONE)
+
     def set_share_requested(self):
         self._set_action(self._ACTION_SHARE)
+
     def set_preserve_requested(self):
         self._set_action(self._ACTION_PRESERVE)
 
@@ -258,20 +271,23 @@ class _CloneDiskInfo:
                 return
 
         try:
-            self.new_disk = Cloner.build_clone_disk(
-                    self.disk, path, allow_create, sparse)
+            self.new_disk = Cloner.build_clone_disk(self.disk, path, allow_create, sparse)
         except Exception as e:
             log.debug("Error setting clone path.", exc_info=True)
-            err = (_("Could not use path '%(path)s' for cloning: %(error)s") %
-                    {"path": path, "error": str(e)})
+            err = _("Could not use path '%(path)s' for cloning: %(error)s") % {
+                "path": path,
+                "error": str(e),
+            }
             self._newpath_msg = err
 
     def get_share_msg(self):
         return self._share_msg
+
     def get_cloneable_msg(self):
         if self._cloneable_msg == -1:
             self._cloneable_msg = _get_cloneable_msg(self.disk)
         return self._cloneable_msg
+
     def get_newpath_msg(self):
         return self._newpath_msg
 
@@ -296,6 +312,7 @@ class Cloner(object):
     def generate_clone_disk_path(conn, origname, newname, origpath):
         def cb_exists(p):
             return DeviceDisk.path_definitely_exists(conn, p)
+
         return _generate_clone_path(origname, newname, origpath, cb_exists)
 
     @staticmethod
@@ -316,7 +333,6 @@ class Cloner(object):
         self._sparse = True
         self._replace = False
         self._reflink = False
-
 
     #################
     # Init routines #
@@ -347,8 +363,7 @@ class Cloner(object):
             self._diskinfos.append(_CloneDiskInfo(disk))
         for diskinfo in [d for d in self._diskinfos if d.is_clone_requested()]:
             disk = diskinfo.disk
-            log.debug("Wants cloning: size=%s path=%s",
-                    disk.get_size(), disk.get_source_path())
+            log.debug("Wants cloning: size=%s path=%s", disk.get_size(), disk.get_source_path())
 
         if self._src_guest.os.nvram:
             old_nvram = DeviceDisk(self.conn)
@@ -365,8 +380,12 @@ class Cloner(object):
 
         for dev in self._new_guest.devices.graphics:
             if dev.port and dev.port != -1:
-                log.warning(_("Setting the graphics device port to autoport, "
-                               "in order to avoid conflicting."))
+                log.warning(
+                    _(
+                        "Setting the graphics device port to autoport, "
+                        "in order to avoid conflicting."
+                    )
+                )
                 dev.port = -1
 
         for iface in self._new_guest.devices.interface:
@@ -376,15 +395,17 @@ class Cloner(object):
         # For guest agent channel, remove a path to generate a new one with
         # new guest name
         for channel in self._new_guest.devices.channel:
-            if (channel.type == DeviceChannel.TYPE_UNIX and
-                channel.target_name and channel.source.path and
-                channel.target_name in channel.source.path):
+            if (
+                channel.type == DeviceChannel.TYPE_UNIX
+                and channel.target_name
+                and channel.source.path
+                and channel.target_name in channel.source.path
+            ):
                 channel.source.path = None
 
         new_name = Cloner.generate_clone_name(self.conn, self.src_name)
         log.debug("Auto-generated clone name '%s'", new_name)
         self.set_clone_name(new_name)
-
 
     ##############
     # Properties #
@@ -449,8 +470,7 @@ class Cloner(object):
         """
         Return a list of _CloneDiskInfo that are tagged for cloning
         """
-        return [di for di in self.get_diskinfos() if
-                not di.is_share_requested()]
+        return [di for di in self.get_diskinfos() if not di.is_share_requested()]
 
     def set_nvram_path(self, val):
         """
@@ -459,14 +479,12 @@ class Cloner(object):
         """
         self._new_nvram_path = val
 
-
     ######################
     # Functional methods #
     ######################
 
     def _prepare_serial_files(self):
-        for serial in chain(self._new_guest.devices.console,
-                            self._new_guest.devices.serial):
+        for serial in chain(self._new_guest.devices.console, self._new_guest.devices.serial):
             if serial.type != DeviceSerial.TYPE_FILE:
                 continue
 
@@ -474,10 +492,9 @@ class Cloner(object):
                 # Ignore the check for now
                 return False
 
-            serial.source.path = _generate_clone_path(self.src_name,
-                                                      self.new_guest.name,
-                                                      serial.source.path,
-                                                      cb_exists=cb_exists)
+            serial.source.path = _generate_clone_path(
+                self.src_name, self.new_guest.name, serial.source.path, cb_exists=cb_exists
+            )
 
     def _prepare_nvram(self):
         if not self._nvram_diskinfo:
@@ -493,15 +510,17 @@ class Cloner(object):
             ext = os.path.splitext(old_nvram_path)[1]
             nvram_dir = os.path.dirname(old_nvram_path)
             new_nvram_path = os.path.join(
-                    nvram_dir, "%s_VARS%s" %
-                    (os.path.basename(self._new_guest.name), ext or ".fd"))
+                nvram_dir, "%s_VARS%s" % (os.path.basename(self._new_guest.name), ext or ".fd")
+            )
 
         new_nvram = DeviceDisk(self.conn)
         new_nvram.set_source_path(new_nvram_path)
 
-        if (diskinfo.is_clone_requested() and
-            new_nvram.wants_storage_creation() and
-            diskinfo.disk.get_vol_object()):
+        if (
+            diskinfo.is_clone_requested()
+            and new_nvram.wants_storage_creation()
+            and diskinfo.disk.get_vol_object()
+        ):
             # We only run validation if there's some existing nvram we
             # can copy. It's valid for nvram to not exist at VM define
             # time, libvirt will create it for us
@@ -514,15 +533,14 @@ class Cloner(object):
 
         self._new_guest.os.nvram = new_nvram.get_source_path()
 
-
     def prepare(self):
         """
         Validate and set up all parameters needed for the new (clone) VM
         """
         try:
-            Guest.validate_name(self.conn, self._new_guest.name,
-                                check_collision=not self._replace,
-                                validate=False)
+            Guest.validate_name(
+                self.conn, self._new_guest.name, check_collision=not self._replace, validate=False
+            )
         except ValueError as e:
             msg = _("Invalid name for new guest: %s") % e
             raise ValueError(msg) from None
@@ -533,9 +551,8 @@ class Cloner(object):
             if not diskinfo.new_disk:
                 # User didn't set a path, generate one
                 newpath = Cloner.generate_clone_disk_path(
-                         self.conn, self.src_name,
-                         self.new_guest.name,
-                         orig_disk.get_source_path())
+                    self.conn, self.src_name, self.new_guest.name, orig_disk.get_source_path()
+                )
                 diskinfo.set_new_path(newpath, self._sparse)
                 if not diskinfo.new_disk:
                     # We hit an error, clients will raise it later
@@ -543,8 +560,11 @@ class Cloner(object):
 
             new_disk = diskinfo.new_disk
             assert new_disk
-            log.debug("Cloning srcpath=%s dstpath=%s",
-                    orig_disk.get_source_path(), new_disk.get_source_path())
+            log.debug(
+                "Cloning srcpath=%s dstpath=%s",
+                orig_disk.get_source_path(),
+                new_disk.get_source_path(),
+            )
 
             if self._reflink:
                 vol_install = new_disk.get_vol_install()
@@ -565,8 +585,7 @@ class Cloner(object):
         self._prepare_serial_files()
 
         # Save altered clone xml
-        diff = xmlutil.diff(self._src_guest.get_xml(),
-                self._new_guest.get_xml())
+        diff = xmlutil.diff(self._src_guest.get_xml(), self._new_guest.get_xml())
         log.debug("Clone guest xml diff:\n%s", diff)
 
     def start_duplicate(self, meter=None):

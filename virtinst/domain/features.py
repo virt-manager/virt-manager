@@ -11,6 +11,7 @@ class DomainFeatures(XMLBuilder):
     """
     Class for generating <features> XML
     """
+
     XML_NAME = "features"
     _XML_PROP_ORDER = ["acpi", "apic", "pae", "gic_version"]
 
@@ -29,8 +30,7 @@ class DomainFeatures(XMLBuilder):
     hyperv_relaxed = XMLProperty("./hyperv/relaxed/@state", is_onoff=True)
     hyperv_vapic = XMLProperty("./hyperv/vapic/@state", is_onoff=True)
     hyperv_spinlocks = XMLProperty("./hyperv/spinlocks/@state", is_onoff=True)
-    hyperv_spinlocks_retries = XMLProperty("./hyperv/spinlocks/@retries",
-                                           is_int=True)
+    hyperv_spinlocks_retries = XMLProperty("./hyperv/spinlocks/@retries", is_int=True)
     hyperv_vpindex = XMLProperty("./hyperv/vpindex/@state", is_onoff=True)
     hyperv_runtime = XMLProperty("./hyperv/runtime/@state", is_onoff=True)
     hyperv_synic = XMLProperty("./hyperv/synic/@state", is_onoff=True)
@@ -59,7 +59,6 @@ class DomainFeatures(XMLBuilder):
     vmcoreinfo = XMLProperty("./vmcoreinfo/@state", is_onoff=True)
     ioapic_driver = XMLProperty("./ioapic/@driver")
     msrs_unknown = XMLProperty("./msrs/@unknown")
-
 
     ##################
     # Default config #
@@ -126,9 +125,7 @@ class DomainFeatures(XMLBuilder):
         if self._prop_is_unset("apic"):
             self.apic = capsinfo.guest.supports_apic()
         if self._prop_is_unset("pae"):
-            if (guest.os.is_hvm() and
-                guest.type == "xen" and
-                guest.os.arch == "x86_64"):
+            if guest.os.is_hvm() and guest.type == "xen" and guest.os.arch == "x86_64":
                 self.pae = True
             else:
                 self.pae = capsinfo.guest.supports_pae()

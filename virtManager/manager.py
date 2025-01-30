@@ -23,25 +23,22 @@ from .lib.graphwidgets import CellRendererSparkline
 GRAPH_LEN = 40
 
 # fields in the tree model data set
-(ROW_HANDLE,
-ROW_SORT_KEY,
-ROW_MARKUP,
-ROW_STATUS_ICON,
-ROW_HINT,
-ROW_IS_CONN,
-ROW_IS_CONN_CONNECTED,
-ROW_IS_VM,
-ROW_IS_VM_RUNNING,
-ROW_COLOR,
-ROW_INSPECTION_OS_ICON) = range(11)
+(
+    ROW_HANDLE,
+    ROW_SORT_KEY,
+    ROW_MARKUP,
+    ROW_STATUS_ICON,
+    ROW_HINT,
+    ROW_IS_CONN,
+    ROW_IS_CONN_CONNECTED,
+    ROW_IS_VM,
+    ROW_IS_VM_RUNNING,
+    ROW_COLOR,
+    ROW_INSPECTION_OS_ICON,
+) = range(11)
 
 # Columns in the tree view
-(COL_NAME,
-COL_GUEST_CPU,
-COL_HOST_CPU,
-COL_MEM,
-COL_DISK,
-COL_NETWORK) = range(6)
+(COL_NAME, COL_GUEST_CPU, COL_HOST_CPU, COL_MEM, COL_DISK, COL_NETWORK) = range(6)
 
 
 def _style_get_prop(widget, propname):
@@ -52,7 +49,7 @@ def _style_get_prop(widget, propname):
 
 
 def _cmp(a, b):
-    return ((a > b) - (a < b))
+    return (a > b) - (a < b)
 
 
 def _get_inspection_icon_pixbuf(vm, w, h):
@@ -83,8 +80,7 @@ class vmmManager(vmmGObjectUI):
         except Exception as e:  # pragma: no cover
             if not parentobj:
                 raise
-            parentobj.err.show_err(
-                    _("Error launching manager: %s") % str(e))
+            parentobj.err.show_err(_("Error launching manager: %s") % str(e))
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "manager.ui", "vmm-manager")
@@ -101,41 +97,35 @@ class vmmManager(vmmGObjectUI):
         self.connmenu.get_accessible().set_name("conn-menu")
         self.connmenu_items = {}
 
-        self.builder.connect_signals({
-            "on_menu_view_guest_cpu_usage_activate":
-            self.toggle_stats_visible_guest_cpu,
-            "on_menu_view_host_cpu_usage_activate":
-            self.toggle_stats_visible_host_cpu,
-            "on_menu_view_memory_usage_activate":
-            self.toggle_stats_visible_memory_usage,
-            "on_menu_view_disk_io_activate":
-            self.toggle_stats_visible_disk,
-            "on_menu_view_network_traffic_activate":
-            self.toggle_stats_visible_network,
-
-            "on_vm_manager_delete_event": self.close,
-            "on_vmm_manager_configure_event": self.window_resized,
-            "on_menu_file_add_connection_activate": self.open_newconn,
-            "on_menu_new_vm_activate": self.new_vm,
-            "on_menu_file_quit_activate": self.exit_app,
-            "on_menu_file_close_activate": self.close,
-            "on_vmm_close_clicked": self.close,
-            "on_vm_open_clicked": self.show_vm,
-            "on_vm_run_clicked": self.start_vm,
-            "on_vm_new_clicked": self.new_vm,
-            "on_vm_shutdown_clicked": self.poweroff_vm,
-            "on_vm_pause_clicked": self.pause_vm_button,
-            "on_menu_edit_details_activate": self.show_vm,
-            "on_menu_edit_delete_activate": self.do_delete,
-            "on_menu_host_details_activate": self.show_host,
-
-            "on_vm_list_row_activated": self.row_activated,
-            "on_vm_list_button_press_event": self.popup_vm_menu_button,
-            "on_vm_list_key_press_event": self.popup_vm_menu_key,
-
-            "on_menu_edit_preferences_activate": self.show_preferences,
-            "on_menu_help_about_activate": self.show_about,
-        })
+        self.builder.connect_signals(
+            {
+                "on_menu_view_guest_cpu_usage_activate": self.toggle_stats_visible_guest_cpu,
+                "on_menu_view_host_cpu_usage_activate": self.toggle_stats_visible_host_cpu,
+                "on_menu_view_memory_usage_activate": self.toggle_stats_visible_memory_usage,
+                "on_menu_view_disk_io_activate": self.toggle_stats_visible_disk,
+                "on_menu_view_network_traffic_activate": self.toggle_stats_visible_network,
+                "on_vm_manager_delete_event": self.close,
+                "on_vmm_manager_configure_event": self.window_resized,
+                "on_menu_file_add_connection_activate": self.open_newconn,
+                "on_menu_new_vm_activate": self.new_vm,
+                "on_menu_file_quit_activate": self.exit_app,
+                "on_menu_file_close_activate": self.close,
+                "on_vmm_close_clicked": self.close,
+                "on_vm_open_clicked": self.show_vm,
+                "on_vm_run_clicked": self.start_vm,
+                "on_vm_new_clicked": self.new_vm,
+                "on_vm_shutdown_clicked": self.poweroff_vm,
+                "on_vm_pause_clicked": self.pause_vm_button,
+                "on_menu_edit_details_activate": self.show_vm,
+                "on_menu_edit_delete_activate": self.do_delete,
+                "on_menu_host_details_activate": self.show_host,
+                "on_vm_list_row_activated": self.row_activated,
+                "on_vm_list_button_press_event": self.popup_vm_menu_button,
+                "on_vm_list_key_press_event": self.popup_vm_menu_key,
+                "on_menu_edit_preferences_activate": self.show_preferences,
+                "on_menu_help_about_activate": self.show_about,
+            }
+        )
 
         # There seem to be ref counting issues with calling
         # list.get_column, so avoid it
@@ -152,8 +142,7 @@ class vmmManager(vmmGObjectUI):
         self.init_context_menus()
 
         self.update_current_selection()
-        self.widget("vm-list").get_selection().connect(
-            "changed", self.update_current_selection)
+        self.widget("vm-list").get_selection().connect("changed", self.update_current_selection)
 
         self.max_disk_rate = 10.0
         self.max_net_rate = 10.0
@@ -170,7 +159,6 @@ class vmmManager(vmmGObjectUI):
         connmanager.connect("conn-removed", self._conn_removed)
         for conn in connmanager.conns.values():
             self._conn_added(connmanager, conn)
-
 
     ##################
     # Common methods #
@@ -200,7 +188,6 @@ class vmmManager(vmmGObjectUI):
 
         return 1
 
-
     def _cleanup(self):
         self.diskcol = None
         self.guestcpucol = None
@@ -223,7 +210,6 @@ class vmmManager(vmmGObjectUI):
         self.widget("vm-notebook").set_current_page(1)
         self.widget("startup-error-label").set_text(msg)
 
-
     ################
     # Init methods #
     ################
@@ -231,41 +217,52 @@ class vmmManager(vmmGObjectUI):
     def init_stats(self):
         self.add_gsettings_handle(
             self.config.on_vmlist_guest_cpu_usage_visible_changed(
-                                self.toggle_guest_cpu_usage_visible_widget))
+                self.toggle_guest_cpu_usage_visible_widget
+            )
+        )
         self.add_gsettings_handle(
             self.config.on_vmlist_host_cpu_usage_visible_changed(
-                                self.toggle_host_cpu_usage_visible_widget))
+                self.toggle_host_cpu_usage_visible_widget
+            )
+        )
         self.add_gsettings_handle(
             self.config.on_vmlist_memory_usage_visible_changed(
-                                self.toggle_memory_usage_visible_widget))
+                self.toggle_memory_usage_visible_widget
+            )
+        )
         self.add_gsettings_handle(
-            self.config.on_vmlist_disk_io_visible_changed(
-                                self.toggle_disk_io_visible_widget))
+            self.config.on_vmlist_disk_io_visible_changed(self.toggle_disk_io_visible_widget)
+        )
         self.add_gsettings_handle(
             self.config.on_vmlist_network_traffic_visible_changed(
-                                self.toggle_network_traffic_visible_widget))
+                self.toggle_network_traffic_visible_widget
+            )
+        )
 
         # Register callbacks with the global stats enable/disable values
         # that disable the associated vmlist widgets if reporting is disabled
         self.add_gsettings_handle(
             self.config.on_stats_enable_cpu_poll_changed(
-                self._config_polling_change_cb, COL_GUEST_CPU))
+                self._config_polling_change_cb, COL_GUEST_CPU
+            )
+        )
         self.add_gsettings_handle(
-            self.config.on_stats_enable_disk_poll_changed(
-                self._config_polling_change_cb, COL_DISK))
+            self.config.on_stats_enable_disk_poll_changed(self._config_polling_change_cb, COL_DISK)
+        )
         self.add_gsettings_handle(
             self.config.on_stats_enable_net_poll_changed(
-                self._config_polling_change_cb, COL_NETWORK))
+                self._config_polling_change_cb, COL_NETWORK
+            )
+        )
         self.add_gsettings_handle(
-            self.config.on_stats_enable_memory_poll_changed(
-                self._config_polling_change_cb, COL_MEM))
+            self.config.on_stats_enable_memory_poll_changed(self._config_polling_change_cb, COL_MEM)
+        )
 
         self.toggle_guest_cpu_usage_visible_widget()
         self.toggle_host_cpu_usage_visible_widget()
         self.toggle_memory_usage_visible_widget()
         self.toggle_disk_io_visible_widget()
         self.toggle_network_traffic_visible_widget()
-
 
     def init_toolbar(self):
         self.widget("vm-new").set_icon_name("vm_new")
@@ -319,8 +316,7 @@ class vmmManager(vmmGObjectUI):
         vmlist.set_model(model)
         vmlist.set_tooltip_column(ROW_HINT)
         vmlist.set_headers_visible(True)
-        vmlist.set_level_indentation(
-                -(_style_get_prop(vmlist, "expander-size") + 3))
+        vmlist.set_level_indentation(-(_style_get_prop(vmlist, "expander-size") + 3))
 
         nameCol = Gtk.TreeViewColumn(_("Name"))
         nameCol.set_expand(True)
@@ -333,19 +329,18 @@ class vmmManager(vmmGObjectUI):
         status_icon = Gtk.CellRendererPixbuf()
         status_icon.set_property("stock-size", Gtk.IconSize.DND)
         nameCol.pack_start(status_icon, False)
-        nameCol.add_attribute(status_icon, 'icon-name', ROW_STATUS_ICON)
-        nameCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
+        nameCol.add_attribute(status_icon, "icon-name", ROW_STATUS_ICON)
+        nameCol.add_attribute(status_icon, "visible", ROW_IS_VM)
 
         inspection_os_icon = Gtk.CellRendererPixbuf()
         nameCol.pack_start(inspection_os_icon, False)
-        nameCol.add_attribute(inspection_os_icon, 'pixbuf',
-                                ROW_INSPECTION_OS_ICON)
-        nameCol.add_attribute(inspection_os_icon, 'visible', ROW_IS_VM)
+        nameCol.add_attribute(inspection_os_icon, "pixbuf", ROW_INSPECTION_OS_ICON)
+        nameCol.add_attribute(inspection_os_icon, "visible", ROW_IS_VM)
 
         name_txt = Gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
-        nameCol.add_attribute(name_txt, 'foreground', ROW_COLOR)
+        nameCol.add_attribute(name_txt, "markup", ROW_MARKUP)
+        nameCol.add_attribute(name_txt, "foreground", ROW_COLOR)
 
         self.spacer_txt = Gtk.CellRendererText()
         self.spacer_txt.set_property("ypad", 4)
@@ -359,14 +354,14 @@ class vmmManager(vmmGObjectUI):
             txt = Gtk.CellRendererText()
             txt.set_property("ypad", 4)
             col.pack_start(txt, True)
-            col.add_attribute(txt, 'visible', ROW_IS_CONN)
+            col.add_attribute(txt, "visible", ROW_IS_CONN)
 
             img = CellRendererSparkline()
             img.set_property("xpad", 6)
             img.set_property("ypad", 12)
             img.set_property("reversed", True)
             col.pack_start(img, True)
-            col.add_attribute(img, 'visible', ROW_IS_VM)
+            col.add_attribute(img, "visible", ROW_IS_VM)
 
             col.set_sort_column_id(colnum)
             vmlist.append_column(col)
@@ -385,7 +380,6 @@ class vmmManager(vmmGObjectUI):
         model.set_sort_func(COL_DISK, self.vmlist_disk_io_sorter)
         model.set_sort_func(COL_NETWORK, self.vmlist_network_usage_sorter)
         model.set_sort_column_id(COL_NAME, Gtk.SortType.ASCENDING)
-
 
     ##################
     # Helper methods #
@@ -430,7 +424,6 @@ class vmmManager(vmmGObjectUI):
             return None
         return _walk(self.model, self.model.get_iter_first(), conn_or_vm)
 
-
     ####################
     # Action listeners #
     ####################
@@ -445,23 +438,28 @@ class vmmManager(vmmGObjectUI):
 
     def open_newconn(self, _src):
         from .createconn import vmmCreateConn
+
         vmmCreateConn.get_instance(self).show(self.topwin)
 
     def new_vm(self, _src):
         from .createvm import vmmCreateVM
+
         conn = self.current_conn()
         vmmCreateVM.show_instance(self, conn and conn.get_uri() or None)
 
     def show_about(self, _src):
         from .about import vmmAbout
+
         vmmAbout.show_instance(self)
 
     def show_preferences(self, src_ignore):
         from .preferences import vmmPreferences
+
         vmmPreferences.show_instance(self)
 
     def show_host(self, _src):
         from .host import vmmHost
+
         conn = self.current_conn()
         vmmHost.show_instance(self, conn)
 
@@ -491,8 +489,9 @@ class vmmManager(vmmGObjectUI):
             vmmenu.VMActionUI.delete(self, vm)
 
     def _do_delete_conn(self, conn):
-        result = self.err.yes_no(_("This will remove the connection:\n\n%s\n\n"
-                                   "Are you sure?") % conn.get_uri())
+        result = self.err.yes_no(
+            _("This will remove the connection:\n\n%s\n\nAre you sure?") % conn.get_uri()
+        )
         if not result:
             return
 
@@ -520,6 +519,7 @@ class vmmManager(vmmGObjectUI):
 
     def start_vm(self, ignore):
         vmmenu.VMActionUI.run(self, self.current_vm())
+
     def poweroff_vm(self, _src):
         vmmenu.VMActionUI.shutdown(self, self.current_vm())
 
@@ -539,7 +539,6 @@ class vmmManager(vmmGObjectUI):
         if ConnectError:
             msg, details, title = ConnectError
             self.err.show_err(msg, details, title)
-
 
     ####################################
     # VM add/remove management methods #
@@ -589,17 +588,15 @@ class vmmManager(vmmGObjectUI):
         return color
 
     def _build_vm_markup(self, name, status):
-        domtext     = ("<span size='smaller' weight='bold'>%s</span>" %
-                       xmlutil.xml_escape(name))
-        statetext   = "<span size='smaller'>%s</span>" % status
+        domtext = "<span size='smaller' weight='bold'>%s</span>" % xmlutil.xml_escape(name)
+        statetext = "<span size='smaller'>%s</span>" % status
         return domtext + "\n" + statetext
 
     def _build_row(self, conn, vm):
         if conn:
             name = conn.get_pretty_desc()
             markup = self._build_conn_markup(conn, name)
-            status = ("<span size='smaller'>%s</span>" %
-                      conn.get_state_text())
+            status = "<span size='smaller'>%s</span>" % conn.get_state_text()
             status_icon = None
             hint = self._build_conn_hint(conn)
             color = self._build_conn_color(conn)
@@ -620,8 +617,7 @@ class vmmManager(vmmGObjectUI):
         row.insert(ROW_STATUS_ICON, status_icon)
         row.insert(ROW_HINT, xmlutil.xml_escape(hint))
         row.insert(ROW_IS_CONN, bool(conn))
-        row.insert(ROW_IS_CONN_CONNECTED,
-                   bool(conn) and not conn.is_disconnected())
+        row.insert(ROW_IS_CONN_CONNECTED, bool(conn) and not conn.is_disconnected())
         row.insert(ROW_IS_VM, bool(vm))
         row.insert(ROW_IS_VM_RUNNING, bool(vm) and vm.is_active())
         row.insert(ROW_COLOR, color)
@@ -665,7 +661,6 @@ class vmmManager(vmmGObjectUI):
 
         self._remove_child_rows(conn_row)
         self.model.remove(conn_row.iter)
-
 
     #############################
     # State/UI updating methods #
@@ -746,8 +741,7 @@ class vmmManager(vmmGObjectUI):
         row = self.get_row(conn)
 
         self.max_disk_rate = max(self.max_disk_rate, conn.disk_io_max_rate())
-        self.max_net_rate = max(self.max_net_rate,
-                                conn.network_traffic_max_rate())
+        self.max_net_rate = max(self.max_net_rate, conn.network_traffic_max_rate())
 
         self.model.row_changed(row.path, row.iter)
 
@@ -832,13 +826,11 @@ class vmmManager(vmmGObjectUI):
             conning = conn.is_connecting()
 
             self.connmenu_items["create"].set_sensitive(not disconn)
-            self.connmenu_items["disconnect"].set_sensitive(not (disconn or
-                                                                 conning))
+            self.connmenu_items["disconnect"].set_sensitive(not (disconn or conning))
             self.connmenu_items["connect"].set_sensitive(disconn)
             self.connmenu_items["delete"].set_sensitive(disconn)
 
             self.connmenu.popup_at_pointer(event)
-
 
     #################
     # Stats methods #
@@ -853,22 +845,19 @@ class vmmManager(vmmGObjectUI):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return _cmp(obj1.guest_cpu_time_percentage(),
-                   obj2.guest_cpu_time_percentage())
+        return _cmp(obj1.guest_cpu_time_percentage(), obj2.guest_cpu_time_percentage())
 
     def vmlist_host_cpu_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return _cmp(obj1.host_cpu_time_percentage(),
-                   obj2.host_cpu_time_percentage())
+        return _cmp(obj1.host_cpu_time_percentage(), obj2.host_cpu_time_percentage())
 
     def vmlist_memory_usage_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
         obj2 = model[iter2][ROW_HANDLE]
 
-        return _cmp(obj1.stats_memory(),
-                   obj2.stats_memory())
+        return _cmp(obj1.stats_memory(), obj2.stats_memory())
 
     def vmlist_disk_io_sorter(self, model, iter1, iter2, ignore):
         obj1 = model[iter1][ROW_HANDLE]
@@ -920,31 +909,53 @@ class vmmManager(vmmGObjectUI):
         col.set_visible(do_show)
         self.widget(menu).set_active(do_show)
 
-        any_visible = any([c.get_visible() for c in
-            [self.netcol, self.diskcol, self.memcol,
-             self.guestcpucol, self.hostcpucol]])
+        any_visible = any(
+            [
+                c.get_visible()
+                for c in [self.netcol, self.diskcol, self.memcol, self.guestcpucol, self.hostcpucol]
+            ]
+        )
         self.spacer_txt.set_property("visible", not any_visible)
 
     def toggle_network_traffic_visible_widget(self):
         self._toggle_graph_helper(
-            self.config.is_vmlist_network_traffic_visible(), self.netcol,
-            self.network_traffic_img, "menu_view_stats_network")
+            self.config.is_vmlist_network_traffic_visible(),
+            self.netcol,
+            self.network_traffic_img,
+            "menu_view_stats_network",
+        )
+
     def toggle_disk_io_visible_widget(self):
         self._toggle_graph_helper(
-            self.config.is_vmlist_disk_io_visible(), self.diskcol,
-            self.disk_io_img, "menu_view_stats_disk")
+            self.config.is_vmlist_disk_io_visible(),
+            self.diskcol,
+            self.disk_io_img,
+            "menu_view_stats_disk",
+        )
+
     def toggle_memory_usage_visible_widget(self):
         self._toggle_graph_helper(
-            self.config.is_vmlist_memory_usage_visible(), self.memcol,
-            self.memory_usage_img, "menu_view_stats_memory")
+            self.config.is_vmlist_memory_usage_visible(),
+            self.memcol,
+            self.memory_usage_img,
+            "menu_view_stats_memory",
+        )
+
     def toggle_guest_cpu_usage_visible_widget(self):
         self._toggle_graph_helper(
-            self.config.is_vmlist_guest_cpu_usage_visible(), self.guestcpucol,
-            self.guest_cpu_usage_img, "menu_view_stats_guest_cpu")
+            self.config.is_vmlist_guest_cpu_usage_visible(),
+            self.guestcpucol,
+            self.guest_cpu_usage_img,
+            "menu_view_stats_guest_cpu",
+        )
+
     def toggle_host_cpu_usage_visible_widget(self):
         self._toggle_graph_helper(
-            self.config.is_vmlist_host_cpu_usage_visible(), self.hostcpucol,
-            self.host_cpu_usage_img, "menu_view_stats_host_cpu")
+            self.config.is_vmlist_host_cpu_usage_visible(),
+            self.hostcpucol,
+            self.host_cpu_usage_img,
+            "menu_view_stats_host_cpu",
+        )
 
     def toggle_stats_visible(self, src, stats_id):
         visible = src.get_active()
@@ -959,12 +970,16 @@ class vmmManager(vmmGObjectUI):
 
     def toggle_stats_visible_guest_cpu(self, src):
         self.toggle_stats_visible(src, COL_GUEST_CPU)
+
     def toggle_stats_visible_host_cpu(self, src):
         self.toggle_stats_visible(src, COL_HOST_CPU)
+
     def toggle_stats_visible_memory_usage(self, src):
         self.toggle_stats_visible(src, COL_MEM)
+
     def toggle_stats_visible_disk(self, src):
         self.toggle_stats_visible(src, COL_DISK)
+
     def toggle_stats_visible_network(self, src):
         self.toggle_stats_visible(src, COL_NETWORK)
 
@@ -974,7 +989,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.guest_cpu_time_vector(GRAPH_LEN)
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def host_cpu_usage_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -982,7 +997,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.host_cpu_time_vector(GRAPH_LEN)
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def memory_usage_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -990,7 +1005,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.stats_memory_vector(GRAPH_LEN)
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def disk_io_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -999,7 +1014,7 @@ class vmmManager(vmmGObjectUI):
 
         d1, d2 = obj.disk_io_vectors(GRAPH_LEN, self.max_disk_rate)
         data = [(x + y) / 2 for x, y in zip(d1, d2)]
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -1008,4 +1023,4 @@ class vmmManager(vmmGObjectUI):
 
         d1, d2 = obj.network_traffic_vectors(GRAPH_LEN, self.max_net_rate)
         data = [(x + y) / 2 for x, y in zip(d1, d2)]
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)

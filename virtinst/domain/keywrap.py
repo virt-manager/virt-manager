@@ -14,6 +14,7 @@ class DomainKeyWrap(XMLBuilder):
     """
     Class for generating <keywrap> XML
     """
+
     XML_NAME = "keywrap"
 
     cipher = XMLChildProperty(_KeyWrap)

@@ -80,7 +80,6 @@ def testPCIDevice():
     assert obj.is_pci_bridge() is True
 
 
-
 def testUSBDevDevice():
     conn = utils.URIs.open_testdriver_cached()
     devname = "usb_device_781_5151_2004453082054CA1BEEE"
@@ -182,6 +181,7 @@ def testPCIMdevNewFormat():
 
 
 # NodeDevice 2 Device XML tests
+
 
 def testNodeDev2USB1():
     conn = utils.URIs.open_testdriver_cached()

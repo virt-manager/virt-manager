@@ -16,6 +16,7 @@ from .xmlbuilder import XMLBuilder, XMLChildProperty, XMLProperty
 # capabilities host <cpu> parsing #
 ###################################
 
+
 class _CapsCPU(XMLBuilder):
     XML_NAME = "cpu"
     arch = XMLProperty("./arch")
@@ -26,6 +27,7 @@ class _CapsCPU(XMLBuilder):
 ######################################
 # Caps <host> and <secmodel> parsers #
 ######################################
+
 
 class _CapsSecmodelBaselabel(XMLBuilder):
     XML_NAME = "baselabel"
@@ -70,14 +72,14 @@ class _CapsHost(XMLBuilder):
                 user = pwd.getpwuid(uid)[0]
                 return user, uid
             except Exception:
-                log.debug("Exception parsing qemu dac baselabel=%s",
-                    label, exc_info=True)
+                log.debug("Exception parsing qemu dac baselabel=%s", label, exc_info=True)
         return None, None
 
 
 ################################
 # <guest> and <domain> parsers #
 ################################
+
 
 class _CapsMachine(XMLBuilder):
     XML_NAME = "machine"
@@ -112,7 +114,6 @@ class _CapsGuest(XMLBuilder):
     domains = XMLChildProperty(_CapsDomain, relative_xpath="./arch")
     features = XMLChildProperty(_CapsGuestFeatures, is_single=True)
     machines = XMLChildProperty(_CapsMachine, relative_xpath="./arch")
-
 
     ###############
     # Public APIs #
@@ -179,11 +180,13 @@ class _CapsGuest(XMLBuilder):
 # Main capabilities object #
 ############################
 
+
 class _CapsInfo(object):
     """
     Container object to hold the results of guest_lookup, so users don't
     need to juggle two objects
     """
+
     def __init__(self, conn, guest, domain):
         self.conn = conn
         self.guest = guest
@@ -211,7 +214,6 @@ class Capabilities(XMLBuilder):
     host = XMLChildProperty(_CapsHost, is_single=True)
     guests = XMLChildProperty(_CapsGuest)
 
-
     ############################
     # Public XML building APIs #
     ############################
@@ -223,8 +225,7 @@ class Capabilities(XMLBuilder):
 
         for a in archs:
             for g in self.guests:
-                if ((os_type is None or g.os_type == os_type) and
-                    (a is None or g.arch == a)):
+                if (os_type is None or g.os_type == os_type) and (a is None or g.arch == a):
                     return g
 
     def _bestDomainType(self, guest, dtype, machine):
@@ -295,17 +296,19 @@ class Capabilities(XMLBuilder):
         guest = self._guestForOSType(os_type, arch)
         if not guest:
             if arch and os_type:
-                msg = (_("Host does not support virtualization type "
-                         "'%(virttype)s' for architecture '%(arch)s'") %
-                         {'virttype': os_type, 'arch': arch})
+                msg = _(
+                    "Host does not support virtualization type "
+                    "'%(virttype)s' for architecture '%(arch)s'"
+                ) % {"virttype": os_type, "arch": arch}
             elif arch:
-                msg = (_("Host does not support any virtualization options "
-                         "for architecture '%(arch)s'") %
-                         {'arch': arch})
+                msg = _(
+                    "Host does not support any virtualization options "
+                    "for architecture '%(arch)s'"
+                ) % {"arch": arch}
             elif os_type:
-                msg = (_("Host does not support virtualization type "
-                         "'%(virttype)s'") %
-                         {'virttype': os_type})
+                msg = _("Host does not support virtualization type '%(virttype)s'") % {
+                    "virttype": os_type
+                }
             else:
                 msg = _("Host does not support any virtualization options")
             raise ValueError(msg)
@@ -313,17 +316,22 @@ class Capabilities(XMLBuilder):
         domain = self._bestDomainType(guest, typ, machine)
         if domain is None:
             if machine:
-                msg = (_("Host does not support domain type %(domain)s with "
-                         "machine '%(machine)s' for virtualization type "
-                         "'%(virttype)s' with architecture '%(arch)s'") %
-                         {'domain': typ, 'virttype': guest.os_type,
-                         'arch': guest.arch, 'machine': machine})
+                msg = _(
+                    "Host does not support domain type %(domain)s with "
+                    "machine '%(machine)s' for virtualization type "
+                    "'%(virttype)s' with architecture '%(arch)s'"
+                ) % {
+                    "domain": typ,
+                    "virttype": guest.os_type,
+                    "arch": guest.arch,
+                    "machine": machine,
+                }
             else:
-                msg = (_("Host does not support domain type %(domain)s for "
-                         "virtualization type '%(virttype)s' with "
-                         "architecture '%(arch)s'") %
-                         {'domain': typ, 'virttype': guest.os_type,
-                         'arch': guest.arch})
+                msg = _(
+                    "Host does not support domain type %(domain)s for "
+                    "virtualization type '%(virttype)s' with "
+                    "architecture '%(arch)s'"
+                ) % {"domain": typ, "virttype": guest.os_type, "arch": guest.arch}
             raise ValueError(msg)
 
         capsinfo = _CapsInfo(self.conn, guest, domain)

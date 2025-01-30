@@ -27,11 +27,12 @@ class DeviceVideo(Device):
             self.ram = None
             self.vgamem = None
             self.vram64 = None
+
     def _get_model(self):
         return self._model
+
     _model = XMLProperty("./model/@type")
     model = property(_get_model, _set_model)
-
 
     ##################
     # Default config #
@@ -58,23 +59,19 @@ class DeviceVideo(Device):
             # virtio is implied in this case
             return "virtio"
 
-        if (guest.lookup_domcaps().supports_video_virtio() and
-            guest.osinfo.supports_virtiogpu()):
+        if guest.lookup_domcaps().supports_video_virtio() and guest.osinfo.supports_virtiogpu():
             # When the guest supports it, this is the top preference
             return "virtio"
-        if (guest.os.is_x86() and
-            guest.has_spice() and
-            guest.lookup_domcaps().supports_video_qxl()):
+        if guest.os.is_x86() and guest.has_spice() and guest.lookup_domcaps().supports_video_qxl():
             # qxl is only beneficial over regular vga when paired with spice.
             # The device still may not be available though
             return "qxl"
-        if (guest.is_uefi() and
-            guest.lookup_domcaps().supports_video_bochs()):
+        if guest.is_uefi() and guest.lookup_domcaps().supports_video_bochs():
             return "bochs"
         return "vga"
 
     def set_defaults(self, guest):
         if not self.model:
             self.model = self.default_model(guest)
-        if self.model == 'virtio' and guest.has_gl():
+        if self.model == "virtio" and guest.has_gl():
             self.accel3d = True

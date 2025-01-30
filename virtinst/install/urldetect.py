@@ -16,6 +16,7 @@ from ..osdict import OSDB
 # Helpers for detecting distro from given URL #
 ###############################################
 
+
 class _DistroCache(object):
     def __init__(self, fetcher):
         self._fetcher = fetcher
@@ -59,8 +60,9 @@ class _DistroCache(object):
         #
         # Anaconda is the canonical treeinfo consumer and they check for both
         # locations, so we need to do the same
-        treeinfostr = (self.acquire_file_content(".treeinfo") or
-            self.acquire_file_content("treeinfo"))
+        treeinfostr = self.acquire_file_content(".treeinfo") or self.acquire_file_content(
+            "treeinfo"
+        )
         if treeinfostr is None:
             return None
 
@@ -105,8 +107,7 @@ class _DistroCache(object):
             if re.match(regex, line):
                 return True
 
-        log.debug("found filename=%s but regex=%s didn't match",
-                filename, regex)
+        log.debug("found filename=%s but regex=%s didn't match", filename, regex)
         return False
 
     def get_treeinfo_media(self, typ):
@@ -114,6 +115,7 @@ class _DistroCache(object):
         Pull kernel/initrd/boot.iso paths out of the treeinfo for
         the passed data
         """
+
         def _get_treeinfo_path(media_name):
             image_type = self.treeinfo.get("general", "arch")
             if typ == "xen":
@@ -121,15 +123,14 @@ class _DistroCache(object):
             return self.treeinfo.get("images-%s" % image_type, media_name)
 
         try:
-            return [(_get_treeinfo_path("kernel"),
-                     _get_treeinfo_path("initrd"))]
+            return [(_get_treeinfo_path("kernel"), _get_treeinfo_path("initrd"))]
         except Exception:  # pragma: no cover
-            log.debug("Failed to parse treeinfo kernel/initrd",
-                    exc_info=True)
+            log.debug("Failed to parse treeinfo kernel/initrd", exc_info=True)
             return []
 
     def split_version(self):
         verstr = self.treeinfo_version
+
         def _safeint(c):
             try:
                 return int(c)
@@ -145,8 +146,7 @@ class _DistroCache(object):
             version = _safeint(verstr.split(".")[0])
             update = _safeint(verstr.split(".")[1])
 
-        log.debug("converted verstr=%s to version=%s update=%s",
-                verstr, version, update)
+        log.debug("converted verstr=%s to version=%s update=%s", verstr, version, update)
         return version, update
 
     def fetcher_is_iso(self):
@@ -158,13 +158,17 @@ class _DistroCache(object):
             return False
 
         self.libosinfo_os_variant, self.libosinfo_mediaobj = ret
-        if (not self.libosinfo_mediaobj.get_kernel_path() or
-            not self.libosinfo_mediaobj.get_initrd_path()):  # pragma: no cover
+        if (
+            not self.libosinfo_mediaobj.get_kernel_path()
+            or not self.libosinfo_mediaobj.get_initrd_path()
+        ):  # pragma: no cover
             # This can happen if the media is live media, or just
             # with incomplete libosinfo data
-            log.debug("libosinfo didn't report any media kernel/initrd "
-                          "path for detected os_variant=%s",
-                          self.libosinfo_mediaobj)
+            log.debug(
+                "libosinfo didn't report any media kernel/initrd "
+                "path for detected os_variant=%s",
+                self.libosinfo_mediaobj,
+            )
             return False
         return True
 
@@ -182,13 +186,13 @@ class _SUSEContent(object):
     """
     Helper class tracking the SUSE 'content' files
     """
+
     def __init__(self, content_str):
         self.content_str = content_str
         self.content_dict = {}
 
         for line in self.content_str.splitlines():
-            for prefix in ["LABEL", "DISTRO", "VERSION",
-                           "BASEARCHS", "DEFAULTBASE", "REPOID"]:
+            for prefix in ["LABEL", "DISTRO", "VERSION", "BASEARCHS", "DEFAULTBASE", "REPOID"]:
                 if line.startswith(prefix + " "):
                     self.content_dict[prefix] = line.split(" ", 1)[1]
 
@@ -196,19 +200,21 @@ class _SUSEContent(object):
         self.tree_arch = self._get_tree_arch()
         self.product_name = self._get_product_name()
         self.product_version = self._get_product_version()
-        log.debug("SUSE content product_name=%s product_version=%s "
-            "tree_arch=%s", self.product_name, self.product_version,
-            self.tree_arch)
+        log.debug(
+            "SUSE content product_name=%s product_version=%s tree_arch=%s",
+            self.product_name,
+            self.product_version,
+            self.tree_arch,
+        )
 
     def _get_tree_arch(self):
         # Examples:
         # opensuse 11.4: BASEARCHS i586 x86_64
         # opensuse 12.3: BASEARCHS i586 x86_64
         # opensuse 10.3: DEFAULTBASE i586
-        distro_arch = (self.content_dict.get("BASEARCHS") or
-                       self.content_dict.get("DEFAULTBASE"))
+        distro_arch = self.content_dict.get("BASEARCHS") or self.content_dict.get("DEFAULTBASE")
         if not distro_arch and "REPOID" in self.content_dict:
-            distro_arch = self.content_dict["REPOID"].rsplit('/', 1)[1]
+            distro_arch = self.content_dict["REPOID"].rsplit("/", 1)[1]
         if not distro_arch:
             return None  # pragma: no cover
 
@@ -261,21 +267,18 @@ class _SUSEContent(object):
 
         distro_version = self.content_dict.get("VERSION", "")
         if "-" in distro_version:
-            distro_version = distro_version.split('-', 1)[0]
+            distro_version = distro_version.split("-", 1)[0]
 
         # Special case, parse version out of a line like this
         # cpe:/o:opensuse:opensuse:13.2,openSUSE
-        if (not distro_version and
-            re.match("^.*:.*,openSUSE*", self.content_dict["DISTRO"])):
-            distro_version = self.content_dict["DISTRO"].rsplit(
-                    ",", 1)[0].strip().rsplit(":")[4]
+        if not distro_version and re.match("^.*:.*,openSUSE*", self.content_dict["DISTRO"]):
+            distro_version = self.content_dict["DISTRO"].rsplit(",", 1)[0].strip().rsplit(":")[4]
         distro_version = distro_version.strip()
 
         if "Enterprise" in self.product_name or "SLES" in self.product_name:
-            sle_version = self.product_name.strip().rsplit(' ')[4]
-            if len(self.product_name.strip().rsplit(' ')) > 5:
-                sle_version = (sle_version + '.' +
-                        self.product_name.strip().rsplit(' ')[5][2])
+            sle_version = self.product_name.strip().rsplit(" ")[4]
+            if len(self.product_name.strip().rsplit(" ")) > 5:
+                sle_version = sle_version + "." + self.product_name.strip().rsplit(" ")[5][2]
             distro_version = sle_version
 
         return distro_version
@@ -295,8 +298,9 @@ def getDistroStore(guest, fetcher, skip_error):
             continue
 
         store = sclass(fetcher.location, arch, _type, cache)
-        log.debug("Detected class=%s osvariant=%s",
-                      store.__class__.__name__, store.get_osdict_info())
+        log.debug(
+            "Detected class=%s osvariant=%s", store.__class__.__name__, store.get_osdict_info()
+        )
         return store
 
     if skip_error:
@@ -308,15 +312,15 @@ def getDistroStore(guest, fetcher, skip_error):
     # https://www.redhat.com/archives/virt-tools-list/2014-December/msg00048.html
     extramsg = ""
     if not fetcher.can_access():
-        extramsg = (": " +
-            _("The URL could not be accessed, maybe you mistyped?"))
+        extramsg = ": " + _("The URL could not be accessed, maybe you mistyped?")
 
-    msg = (_("Could not find an installable distribution at URL '%s'") %
-            fetcher.location)
+    msg = _("Could not find an installable distribution at URL '%s'") % fetcher.location
     msg += extramsg
     msg += "\n\n"
-    msg += _("The location must be the root directory of an install tree.\n"
-          "See virt-install man page for various distro examples.")
+    msg += _(
+        "The location must be the root directory of an install tree.\n"
+        "See virt-install man page for various distro examples."
+    )
     raise ValueError(msg)
 
 
@@ -324,11 +328,13 @@ def getDistroStore(guest, fetcher, skip_error):
 # Distro classes #
 ##################
 
+
 class _DistroTree(object):
     """
     Class for determining the kernel/initrd path for an install
     tree (URL, ISO, or local directory)
     """
+
     PRETTY_NAME = None
     matching_distros = []
 
@@ -343,10 +349,8 @@ class _DistroTree(object):
         else:
             self._os_variant = self._detect_version()
 
-        if (self._os_variant and
-            not OSDB.lookup_os(self._os_variant)):
-            log.debug("Detected os_variant as %s, which is not in osdict.",
-                    self._os_variant)
+        if self._os_variant and not OSDB.lookup_os(self._os_variant):
+            log.debug("Detected os_variant as %s, which is not in osdict.", self._os_variant)
             self._os_variant = None
 
         self._kernel_paths = []
@@ -354,7 +358,6 @@ class _DistroTree(object):
             self._kernel_paths = self.cache.get_treeinfo_media(self.type)
         else:
             self._set_manual_kernel_paths()
-
 
     def _set_manual_kernel_paths(self):
         """
@@ -369,7 +372,6 @@ class _DistroTree(object):
         """
         log.debug("%s does not implement any osdict detection", self)
         return None
-
 
     ##############
     # Public API #
@@ -415,14 +417,12 @@ class _FedoraDistro(_DistroTree):
 
         verstr = self.cache.treeinfo_version
         if not verstr:  # pragma: no cover
-            log.debug("No treeinfo version? Assume latest_variant=%s",
-                    latest_variant)
+            log.debug("No treeinfo version? Assume latest_variant=%s", latest_variant)
             return latest_variant
 
         # rawhide trees changed to use version=Rawhide in Apr 2016
         if verstr in ["development", "rawhide", "Rawhide"]:
-            log.debug("treeinfo version=%s, using latest_variant=%s",
-                    verstr, latest_variant)
+            log.debug("treeinfo version=%s, using latest_variant=%s", verstr, latest_variant)
             return latest_variant
 
         # treeinfo version is just an integer
@@ -431,8 +431,11 @@ class _FedoraDistro(_DistroTree):
             return variant
 
         log.debug(
-                "variant=%s from treeinfo version=%s not found, "
-                "using latest_variant=%s", variant, verstr, latest_variant)
+            "variant=%s from treeinfo version=%s not found, using latest_variant=%s",
+            variant,
+            verstr,
+            latest_variant,
+        )
         return latest_variant
 
 
@@ -482,7 +485,6 @@ class _CentOSDistro(_RHELDistro):
             return True
 
 
-
 class _SuseDistro(_RHELDistro):
     PRETTY_NAME = None
     _suse_regex = []
@@ -518,8 +520,8 @@ class _SuseDistro(_RHELDistro):
         # We only reach here if no treeinfo was matched
         tree_arch = self.cache.suse_content.tree_arch
 
-        if re.match(r'i[4-9]86', tree_arch):
-            tree_arch = 'i386'
+        if re.match(r"i[4-9]86", tree_arch):
+            tree_arch = "i386"
 
         oldkern = "linux"
         oldinit = "initrd"
@@ -530,29 +532,23 @@ class _SuseDistro(_RHELDistro):
         if self.type == "xen":
             # Matches Opensuse > 10.2 and sles 10
             self._kernel_paths.append(
-                ("boot/%s/vmlinuz-xen" % tree_arch,
-                 "boot/%s/initrd-xen" % tree_arch))
+                ("boot/%s/vmlinuz-xen" % tree_arch, "boot/%s/initrd-xen" % tree_arch)
+            )
 
         if str(self._os_variant).startswith(("sles11", "sled11")):
             if tree_arch == "s390x":
-                self._kernel_paths.append(
-                    ("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
+                self._kernel_paths.append(("boot/s390x/vmrdr.ikr", "boot/s390x/initrd"))
             if tree_arch == "ppc64":
-                self._kernel_paths.append(
-                    ("suseboot/linux64", "suseboot/initrd64"))
+                self._kernel_paths.append(("suseboot/linux64", "suseboot/initrd64"))
 
         # Tested with SLES 12 for ppc64le, all s390x
-        self._kernel_paths.append(
-            ("boot/%s/linux" % tree_arch,
-             "boot/%s/initrd" % tree_arch))
+        self._kernel_paths.append(("boot/%s/linux" % tree_arch, "boot/%s/initrd" % tree_arch))
         # Tested with Opensuse 10.0
-        self._kernel_paths.append(
-            ("boot/loader/%s" % oldkern,
-             "boot/loader/%s" % oldinit))
+        self._kernel_paths.append(("boot/loader/%s" % oldkern, "boot/loader/%s" % oldinit))
         # Tested with Opensuse >= 10.2, 11, and sles 10
         self._kernel_paths.append(
-            ("boot/%s/loader/linux" % tree_arch,
-             "boot/%s/loader/initrd" % tree_arch))
+            ("boot/%s/loader/linux" % tree_arch, "boot/%s/loader/initrd" % tree_arch)
+        )
 
     def _detect_osdict_from_suse_content(self):
         if not self.cache.suse_content:
@@ -562,12 +558,12 @@ class _SuseDistro(_RHELDistro):
         if not distro_version:
             return  # pragma: no cover
 
-        version = distro_version.split('.', 1)[0].strip()
+        version = distro_version.split(".", 1)[0].strip()
 
         if str(self._variant_prefix).startswith(("sles", "sled")):
             sp_version = ""
-            if len(distro_version.split('.', 1)) == 2:
-                sp_version = 'sp' + distro_version.split('.', 1)[1].strip()
+            if len(distro_version.split(".", 1)) == 2:
+                sp_version = "sp" + distro_version.split(".", 1)[1].strip()
 
             return self._variant_prefix + version + sp_version
 
@@ -578,7 +574,7 @@ class _SuseDistro(_RHELDistro):
         oses = [n for n in OSDB.list_os() if n.name.startswith(root)]
 
         for osobj in oses:
-            codename = osobj.name[len(root):]
+            codename = osobj.name[len(root) :]
             if re.search("/%s/" % codename, self.uri):
                 return osobj.name
 
@@ -594,7 +590,7 @@ class _SuseDistro(_RHELDistro):
             tryvar = base
             # SLE doesn't use '.0' for initial releases in
             # osinfo-db (sles11, sles12, etc)
-            if update > 0 or not base.startswith('sle'):
+            if update > 0 or not base.startswith("sle"):
                 tryvar += ".%s" % update
             if OSDB.lookup_os(tryvar):
                 return tryvar
@@ -655,8 +651,7 @@ class _DebianDistro(_DistroTree):
             media_type = "legacy_url"
         elif check_manifest("daily/MANIFEST"):
             media_type = "daily"
-        elif cache.content_regex(".disk/info",
-                "%s.*" % cls._debname.capitalize()):
+        elif cache.content_regex(".disk/info", "%s.*" % cls._debname.capitalize()):
             # There's two cases here:
             # 1) Direct access ISO, attached as CDROM afterwards. We
             #    use one set of kernels in that case which seem to
@@ -672,22 +667,18 @@ class _DebianDistro(_DistroTree):
             cache.debian_media_type = media_type
         return bool(media_type)
 
-
     def _set_manual_kernel_paths(self):
         if self.cache.debian_media_type == "disk":
             self._set_installcd_paths()
         else:
             self._set_url_paths()
 
-
     def _find_treearch(self):
-        for pattern in [r"^.*/installer-(\w+)/?$",
-                        r"^.*/daily-images/(\w+)/?$"]:
+        for pattern in [r"^.*/installer-(\w+)/?$", r"^.*/daily-images/(\w+)/?$"]:
             arch = re.findall(pattern, self.uri)
             if not arch:
                 continue
-            log.debug("Found pattern=%s treearch=%s in uri",
-                pattern, arch[0])
+            log.debug("Found pattern=%s treearch=%s in uri", pattern, arch[0])
             return arch[0]
 
         # Check for standard arch strings which will be
@@ -714,8 +705,7 @@ class _DebianDistro(_DistroTree):
             url_prefix = "current/legacy-images"
 
         tree_arch = self._find_treearch()
-        hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix,
-                self._debname, tree_arch)
+        hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix, self._debname, tree_arch)
         initrd_basename = "initrd.gz"
         kernel_basename = "linux"
         if tree_arch in ["ppc64el"]:
@@ -726,13 +716,10 @@ class _DebianDistro(_DistroTree):
             kernel_basename = "kernel.%s" % self._debname
             initrd_basename = "initrd.%s" % self._debname
 
-
         if self.type == "xen":
             xenroot = "%s/netboot/xen/" % url_prefix
-            self._kernel_paths.append(
-                    (xenroot + "vmlinuz", xenroot + "initrd.gz"))
-        self._kernel_paths.append(
-                (hvmroot + kernel_basename, hvmroot + initrd_basename))
+            self._kernel_paths.append((xenroot + "vmlinuz", xenroot + "initrd.gz"))
+        self._kernel_paths.append((hvmroot + kernel_basename, hvmroot + initrd_basename))
 
     def _set_installcd_paths(self):
         if self._debname == "ubuntu":
@@ -759,8 +746,7 @@ class _DebianDistro(_DistroTree):
         oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
 
         if self.cache.debian_media_type == "daily":
-            log.debug("Appears to be debian 'daily' URL, using latest "
-                "debiantesting")
+            log.debug("Appears to be debian 'daily' URL, using latest debiantesting")
             return "debiantesting"
 
         for osobj in oses:
@@ -807,8 +793,8 @@ class _MageiaDistro(_DistroTree):
 
     def _set_manual_kernel_paths(self):
         self._kernel_paths += [
-            ("isolinux/%s/vmlinuz" % self.arch,
-             "isolinux/%s/all.rdz" % self.arch)]
+            ("isolinux/%s/vmlinuz" % self.arch, "isolinux/%s/all.rdz" % self.arch)
+        ]
 
     def _detect_version(self):
         # version is just an integer
@@ -821,6 +807,7 @@ class _GenericTreeinfoDistro(_DistroTree):
     """
     Generic catchall class for .treeinfo using distros
     """
+
     PRETTY_NAME = "Generic Treeinfo"
     matching_distros = []
 
@@ -836,6 +823,7 @@ class _LibosinfoDistro(_DistroTree):
     """
     For ISO media detection that was fully handled by libosinfo
     """
+
     PRETTY_NAME = "Libosinfo detected"
     matching_distros = []
 
@@ -847,8 +835,10 @@ class _LibosinfoDistro(_DistroTree):
 
     def _set_manual_kernel_paths(self):
         self._kernel_paths += [
-                (self.cache.libosinfo_mediaobj.get_kernel_path(),
-                 self.cache.libosinfo_mediaobj.get_initrd_path())
+            (
+                self.cache.libosinfo_mediaobj.get_kernel_path(),
+                self.cache.libosinfo_mediaobj.get_initrd_path(),
+            )
         ]
 
 
@@ -872,9 +862,11 @@ def _build_distro_list(osobj):
     # If user manually specified an os_distro, bump its URL class
     # to the top of the list
     if osobj.distro:
-        log.debug("variant=%s has distro=%s, looking for matching "
-                      "distro store to prioritize",
-                      osobj.name, osobj.distro)
+        log.debug(
+            "variant=%s has distro=%s, looking for matching distro store to prioritize",
+            osobj.name,
+            osobj.distro,
+        )
         found_store = None
         for store in allstores:
             if osobj.distro in store.matching_distros:

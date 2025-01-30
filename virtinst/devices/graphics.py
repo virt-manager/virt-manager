@@ -17,8 +17,7 @@ def _validate_port(name, val):
     val = int(val)
 
     if val < 5900 and val != -1:
-        raise ValueError(_("%s must be above 5900, or "
-                           "-1 for auto allocation") % name)
+        raise ValueError(_("%s must be above 5900, or -1 for auto allocation") % name)
     return val
 
 
@@ -39,9 +38,19 @@ class DeviceGraphics(Device):
     TYPE_RDP = "rdp"
     TYPE_SPICE = "spice"
 
-    _XML_PROP_ORDER = ["_type", "gl", "_port", "_tlsPort", "autoport", "websocket",
-                       "keymap", "_listen",
-                       "passwd", "display", "xauth"]
+    _XML_PROP_ORDER = [
+        "_type",
+        "gl",
+        "_port",
+        "_tlsPort",
+        "autoport",
+        "websocket",
+        "keymap",
+        "_listen",
+        "passwd",
+        "display",
+        "xauth",
+    ]
 
     keymap = XMLProperty("./@keymap")
 
@@ -51,8 +60,10 @@ class DeviceGraphics(Device):
         # libvirt errors out if there is any other value
         if val == "vnc" and self.connected != "keep":
             self.connected = None
+
     def _get_type(self):
         return self._type
+
     _type = XMLProperty("./@type")
     type = property(_get_type, _set_type)
 
@@ -60,8 +71,10 @@ class DeviceGraphics(Device):
         val = _validate_port("Port", val)
         self.autoport = self._get_default_autoport()
         self._port = val
+
     def _get_port(self):
         return self._port
+
     _port = XMLProperty("./@port", is_int=True)
     port = property(_get_port, _set_port)
 
@@ -69,8 +82,10 @@ class DeviceGraphics(Device):
         val = _validate_port("TLS Port", val)
         self.autoport = self._get_default_autoport()
         self._tlsPort = val
+
     def _get_tlsport(self):
         return self._tlsPort
+
     _tlsPort = XMLProperty("./@tlsPort", is_int=True)
     tlsPort = property(_get_tlsport, _set_tlsport)
 
@@ -79,7 +94,6 @@ class DeviceGraphics(Device):
 
     xauth = XMLProperty("./@xauth")
     display = XMLProperty("./@display")
-
 
     def _set_listen(self, val):
         if val == "none":
@@ -91,8 +105,10 @@ class DeviceGraphics(Device):
         else:
             self._remove_all_listens()
             self._listen = val
+
     def _get_listen(self):
         return self._listen
+
     _listen = XMLProperty("./@listen")
     listen = property(_get_listen, _set_listen)
 
@@ -103,6 +119,7 @@ class DeviceGraphics(Device):
     defaultMode = XMLProperty("./@defaultMode")
 
     listens = XMLChildProperty(_GraphicsListen)
+
     def _remove_all_listens(self):
         for listen in self.listens:
             self.remove_child(listen)
@@ -134,7 +151,6 @@ class DeviceGraphics(Device):
     rendernode = XMLProperty("./gl/@rendernode")
     zlib_compression = XMLProperty("./zlib/@compression")
 
-
     ##################
     # Default config #
     ##################
@@ -158,7 +174,7 @@ class DeviceGraphics(Device):
         # old libvirt that didn't support 'autoport'
         if self.type != "spice":
             return None
-        if (self.port == -1 and self.tlsPort == -1):
+        if self.port == -1 and self.tlsPort == -1:
             return True
         return None
 
@@ -172,8 +188,7 @@ class DeviceGraphics(Device):
             log.debug("Not defaulting to spice for xen driver. Using vnc.")
             gtype = "vnc"
 
-        if (gtype == "spice" and
-            not guest.lookup_domcaps().supports_graphics_spice()):
+        if gtype == "spice" and not guest.lookup_domcaps().supports_graphics_spice():
             log.debug("spice requested but HV doesn't support it. Using vnc.")
             gtype = "vnc"
         return gtype
@@ -182,8 +197,7 @@ class DeviceGraphics(Device):
         if self.type != "spice":
             return None
         if not self.conn.is_remote():
-            log.debug("Local connection, disabling spice image "
-                "compression.")
+            log.debug("Local connection, disabling spice image compression.")
             return "off"
         return None
 

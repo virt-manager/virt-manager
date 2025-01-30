@@ -9,6 +9,7 @@ from . import lib
 # UI tests for the migrate dialog #
 ###################################
 
+
 def _open_migrate(app, vmname):
     app.manager_vm_action(vmname, migrate=True)
     return app.find_window("Migrate the virtual machine")
@@ -17,15 +18,13 @@ def _open_migrate(app, vmname):
 def testMigrateQemu(app):
     # Use fake qemu connections
     app.uri = tests.utils.URIs.kvm_x86
-    newuri = (tests.utils.URIs.test_default +
-            ",fakeuri=qemu+tcp://fakehost/system")
+    newuri = tests.utils.URIs.test_default + ",fakeuri=qemu+tcp://fakehost/system"
     app.manager_createconn(newuri)
 
     # Run default migrate
     mig = _open_migrate(app, "test-many-devices")
     mig.find("Migrate", "push button").click()
-    app.click_alert_button(
-            "the.connection.driver:.virDomainMigrate", "Close")
+    app.click_alert_button("the.connection.driver:.virDomainMigrate", "Close")
     mig.find("Cancel", "push button").click()
     lib.utils.check(lambda: not mig.showing)
 
@@ -35,8 +34,7 @@ def testMigrateQemu(app):
     label = mig.find("Let libvirt decide")
     label.check_onscreen()
     mig.find("Migrate", "push button").click()
-    app.click_alert_button(
-            "the.connection.driver:.virDomainMigrate", "Close")
+    app.click_alert_button("the.connection.driver:.virDomainMigrate", "Close")
     mig.find("Cancel", "push button").click()
     lib.utils.check(lambda: not mig.showing)
 
@@ -57,15 +55,13 @@ def testMigrateXen(app):
     # Use fake xen connections
     app.uri = tests.utils.URIs.test_full + ",fakeuri=xen:///"
 
-    fakeremotexen = (tests.utils.URIs.test_default +
-            ",fakeuri=xen+tcp://fakehost/")
+    fakeremotexen = tests.utils.URIs.test_default + ",fakeuri=xen+tcp://fakehost/"
     app.manager_createconn(fakeremotexen)
 
     # Run default migrate
     mig = _open_migrate(app, "test-many-devices")
     mig.find("Migrate", "push button").click()
-    app.click_alert_button(
-            "the.connection.driver:.virDomainMigrate", "Close")
+    app.click_alert_button("the.connection.driver:.virDomainMigrate", "Close")
     mig.find("Cancel", "push button").click()
     lib.utils.check(lambda: not mig.showing)
 
@@ -133,8 +129,7 @@ def testMigrateXMLEditor(app):
     newname = "aafroofroo"
     win.find("XML", "page tab").click()
     xmleditor = win.find("XML editor")
-    newtext = xmleditor.text.replace(
-            ">%s<" % vmname, ">%s<" % newname)
+    newtext = xmleditor.text.replace(">%s<" % vmname, ">%s<" % newname)
     xmleditor.set_text(newtext)
     win.find("Migrate", "push button").click()
     lib.utils.check(lambda: not win.showing, timeout=10)

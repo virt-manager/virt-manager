@@ -14,12 +14,9 @@ class _LibvirtEnumMap(object):
     """
     Helper for mapping libvirt event int values to their API names
     """
+
     # Some values we define to distinguish between API objects
-    (DOMAIN_EVENT,
-     DOMAIN_AGENT_EVENT,
-     NETWORK_EVENT,
-     STORAGE_EVENT,
-     NODEDEV_EVENT) = range(1, 6)
+    (DOMAIN_EVENT, DOMAIN_AGENT_EVENT, NETWORK_EVENT, STORAGE_EVENT, NODEDEV_EVENT) = range(1, 6)
 
     # Regex map for naming all event types depending on the API object
     _EVENT_PREFIX = {
@@ -81,53 +78,53 @@ class _LibvirtEnumMap(object):
         elif status == libvirt.VIR_DOMAIN_PMSUSPENDED:
             return _("Suspended")
 
-        log.debug(  # pragma: no cover
-                "Unknown status %s, returning 'Unknown'", status)
+        log.debug("Unknown status %s, returning 'Unknown'", status)  # pragma: no cover
         return _("Unknown")  # pragma: no cover
 
     @staticmethod
     def pretty_status_reason(status, reason):
         def key(x, y):
             return getattr(libvirt, "VIR_DOMAIN_" + x, y)
+
         reasons = {
             libvirt.VIR_DOMAIN_RUNNING: {
-                key("RUNNING_BOOTED", 1):             _("Booted"),
-                key("RUNNING_MIGRATED", 2):           _("Migrated"),
-                key("RUNNING_RESTORED", 3):           _("Restored"),
-                key("RUNNING_FROM_SNAPSHOT", 4):      _("From snapshot"),
-                key("RUNNING_UNPAUSED", 5):           _("Unpaused"),
+                key("RUNNING_BOOTED", 1): _("Booted"),
+                key("RUNNING_MIGRATED", 2): _("Migrated"),
+                key("RUNNING_RESTORED", 3): _("Restored"),
+                key("RUNNING_FROM_SNAPSHOT", 4): _("From snapshot"),
+                key("RUNNING_UNPAUSED", 5): _("Unpaused"),
                 key("RUNNING_MIGRATION_CANCELED", 6): _("Migration canceled"),
-                key("RUNNING_SAVE_CANCELED", 7):      _("Save canceled"),
-                key("RUNNING_WAKEUP", 8):             _("Event wakeup"),
-                key("RUNNING_CRASHED", 9):            _("Crashed"),
+                key("RUNNING_SAVE_CANCELED", 7): _("Save canceled"),
+                key("RUNNING_WAKEUP", 8): _("Event wakeup"),
+                key("RUNNING_CRASHED", 9): _("Crashed"),
             },
             libvirt.VIR_DOMAIN_PAUSED: {
-                key("PAUSED_USER", 1):                _("User"),
-                key("PAUSED_MIGRATION", 2):           _("Migrating"),
-                key("PAUSED_SAVE", 3):                _("Saving"),
-                key("PAUSED_DUMP", 4):                _("Dumping"),
-                key("PAUSED_IOERROR", 5):             _("I/O error"),
-                key("PAUSED_WATCHDOG", 6):            _("Watchdog"),
-                key("PAUSED_FROM_SNAPSHOT", 7):       _("From snapshot"),
-                key("PAUSED_SHUTTING_DOWN", 8):       _("Shutting down"),
-                key("PAUSED_SNAPSHOT", 9):            _("Creating snapshot"),
-                key("PAUSED_CRASHED", 10):            _("Crashed"),
+                key("PAUSED_USER", 1): _("User"),
+                key("PAUSED_MIGRATION", 2): _("Migrating"),
+                key("PAUSED_SAVE", 3): _("Saving"),
+                key("PAUSED_DUMP", 4): _("Dumping"),
+                key("PAUSED_IOERROR", 5): _("I/O error"),
+                key("PAUSED_WATCHDOG", 6): _("Watchdog"),
+                key("PAUSED_FROM_SNAPSHOT", 7): _("From snapshot"),
+                key("PAUSED_SHUTTING_DOWN", 8): _("Shutting down"),
+                key("PAUSED_SNAPSHOT", 9): _("Creating snapshot"),
+                key("PAUSED_CRASHED", 10): _("Crashed"),
             },
             libvirt.VIR_DOMAIN_SHUTDOWN: {
-                key("SHUTDOWN_USER", 1):              _("User"),
+                key("SHUTDOWN_USER", 1): _("User"),
             },
             libvirt.VIR_DOMAIN_SHUTOFF: {
-                key("SHUTOFF_SHUTDOWN", 1):           _("Shut Down"),
-                key("SHUTOFF_DESTROYED", 2):          _("Destroyed"),
-                key("SHUTOFF_CRASHED", 3):            _("Crashed"),
-                key("SHUTOFF_MIGRATED", 4):           _("Migrated"),
-                key("SHUTOFF_SAVED", 5):              _("Saved"),
-                key("SHUTOFF_FAILED", 6):             _("Failed"),
-                key("SHUTOFF_FROM_SNAPSHOT", 7):      _("From snapshot"),
+                key("SHUTOFF_SHUTDOWN", 1): _("Shut Down"),
+                key("SHUTOFF_DESTROYED", 2): _("Destroyed"),
+                key("SHUTOFF_CRASHED", 3): _("Crashed"),
+                key("SHUTOFF_MIGRATED", 4): _("Migrated"),
+                key("SHUTOFF_SAVED", 5): _("Saved"),
+                key("SHUTOFF_FAILED", 6): _("Failed"),
+                key("SHUTOFF_FROM_SNAPSHOT", 7): _("From snapshot"),
             },
             libvirt.VIR_DOMAIN_CRASHED: {
-                key("CRASHED_PANICKED", 1):           _("Panicked"),
-            }
+                key("CRASHED_PANICKED", 1): _("Panicked"),
+            },
         }
         return reasons.get(status) and reasons[status].get(reason)
 
@@ -140,12 +137,16 @@ class _LibvirtEnumMap(object):
         for key in [a for a in dir(libvirt) if re.match(regex, a)]:
             val = getattr(libvirt, key)
             if type(val) is not int:  # pragma: no cover
-                log.debug("libvirt regex=%s key=%s val=%s "
-                    "isn't an integer", regex, key, val)
+                log.debug("libvirt regex=%s key=%s val=%s isn't an integer", regex, key, val)
                 continue
             if val in ret:  # pragma: no cover
-                log.debug("libvirt regex=%s key=%s val=%s is already "
-                    "in dict as key=%s", regex, key, val, regex[val])
+                log.debug(
+                    "libvirt regex=%s key=%s val=%s is already in dict as key=%s",
+                    regex,
+                    key,
+                    val,
+                    regex[val],
+                )
                 continue
             ret[val] = key
         return ret
@@ -167,30 +168,31 @@ class _LibvirtEnumMap(object):
             if event not in eventmap:
                 event = next(iter(eventmap))  # pragma: no cover
             eventstr = eventmap[event]
-            detail1map = self._get_map(eventstr,
-                    self._DETAIL1_PREFIX.get(eventstr))
+            detail1map = self._get_map(eventstr, self._DETAIL1_PREFIX.get(eventstr))
             if detail1 in detail1map:
                 detail1str = detail1map[detail1]
-                detail2map = self._get_map(detail1str,
-                        self._DETAIL2_PREFIX.get(detail1str))
+                detail2map = self._get_map(detail1str, self._DETAIL2_PREFIX.get(detail1str))
                 if detail2 in detail2map:
                     detail2str = detail2map[detail2]
 
         return eventstr, detail1str, detail2str
 
     def _state_str(self, api, detail1, detail2):
-        ignore, d1str, d2str = self._make_strs(api, 0,
-                detail1, detail2)
+        ignore, d1str, d2str = self._make_strs(api, 0, detail1, detail2)
         return "state=%s reason=%s" % (d1str, d2str)
 
     def domain_lifecycle_str(self, detail1, detail2):
         return self._state_str(self.DOMAIN_EVENT, detail1, detail2)
+
     def network_lifecycle_str(self, detail1, detail2):
         return self._state_str(self.NETWORK_EVENT, detail1, detail2)
+
     def storage_lifecycle_str(self, detail1, detail2):
         return self._state_str(self.STORAGE_EVENT, detail1, detail2)
+
     def nodedev_lifecycle_str(self, detail1, detail2):
         return self._state_str(self.NODEDEV_EVENT, detail1, detail2)
+
     def domain_agent_lifecycle_str(self, detail1, detail2):
         return self._state_str(self.DOMAIN_AGENT_EVENT, detail1, detail2)
 

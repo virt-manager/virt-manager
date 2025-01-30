@@ -31,25 +31,27 @@ class vmmAddStorage(vmmGObjectUI):
     }
 
     def __init__(self, conn, builder, topwin):
-        vmmGObjectUI.__init__(self, "addstorage.ui", None,
-                              builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "addstorage.ui", None, builder=builder, topwin=topwin)
         self.conn = conn
 
         def _e(edittype):
             def signal_cb(*args):
                 self._change_cb(edittype)
+
             return signal_cb
 
-        self.builder.connect_signals({
-            "on_storage_browse_clicked": self._browse_storage,
-            "on_storage_select_toggled": self._toggle_storage_select,
-            "on_disk_cache_combo_changed": _e(_EDIT_CACHE),
-            "on_disk_discard_combo_changed": _e(_EDIT_DISCARD),
-            "on_disk_readonly_changed": _e(_EDIT_RO),
-            "on_disk_shareable_changed": _e(_EDIT_SHARE),
-            "on_disk_removable_changed": _e(_EDIT_REMOVABLE),
-            "on_disk_serial_changed": _e(_EDIT_SERIAL),
-        })
+        self.builder.connect_signals(
+            {
+                "on_storage_browse_clicked": self._browse_storage,
+                "on_storage_select_toggled": self._toggle_storage_select,
+                "on_disk_cache_combo_changed": _e(_EDIT_CACHE),
+                "on_disk_discard_combo_changed": _e(_EDIT_DISCARD),
+                "on_disk_readonly_changed": _e(_EDIT_RO),
+                "on_disk_shareable_changed": _e(_EDIT_SHARE),
+                "on_disk_removable_changed": _e(_EDIT_REMOVABLE),
+                "on_disk_serial_changed": _e(_EDIT_SERIAL),
+            }
+        )
 
         self._active_edits = []
         self.top_box = self.widget("storage-box")
@@ -60,7 +62,6 @@ class vmmAddStorage(vmmGObjectUI):
         self.conn = None
         self.top_box.destroy()
         self.advanced_top_box.destroy()
-
 
     ##########################
     # Initialization methods #
@@ -88,9 +89,8 @@ class vmmAddStorage(vmmGObjectUI):
                 return "Unknown GiB"
             return "%.1f GiB" % float(size)
 
-        hd_label = (_("%s available in the default location") %
-                    pretty_storage(max_storage))
-        hd_label = ("<span>%s</span>" % hd_label)
+        hd_label = _("%s available in the default location") % pretty_storage(max_storage)
+        hd_label = "<span>%s</span>" % hd_label
         widget.set_markup(hd_label)
 
     def _init_ui(self):
@@ -98,16 +98,13 @@ class vmmAddStorage(vmmGObjectUI):
         values = [[None, _("Hypervisor default")]]
         for m in virtinst.DeviceDisk.CACHE_MODES:
             values.append([m, m])
-        uiutil.build_simple_combo(
-                self.widget("disk-cache"), values, sort=False)
+        uiutil.build_simple_combo(self.widget("disk-cache"), values, sort=False)
 
         # Discard combo
         values = [[None, _("Hypervisor default")]]
         for m in virtinst.DeviceDisk.DISCARD_MODES:
             values.append([m, m])
-        uiutil.build_simple_combo(
-                self.widget("disk-discard"), values, sort=False)
-
+        uiutil.build_simple_combo(self.widget("disk-discard"), values, sort=False)
 
     ##############
     # Public API #
@@ -116,8 +113,7 @@ class vmmAddStorage(vmmGObjectUI):
     @staticmethod
     def check_path_search(src, conn, path):
         skip_paths = src.config.get_perms_fix_ignore()
-        searchdata = virtinst.DeviceDisk.check_path_search(
-            conn.get_backend(), path)
+        searchdata = virtinst.DeviceDisk.check_path_search(conn.get_backend(), path)
 
         broken_paths = searchdata.fixlist[:]
         for p in broken_paths[:]:
@@ -129,11 +125,11 @@ class vmmAddStorage(vmmGObjectUI):
 
         log.debug("No search access for dirs: %s", broken_paths)
         resp, chkres = src.err.warn_chkbox(
-                        _("The emulator may not have search permissions "
-                          "for the path '%s'.") % path,
-                        _("Do you want to correct this now?"),
-                        _("Don't ask about these directories again."),
-                        buttons=Gtk.ButtonsType.YES_NO)
+            _("The emulator may not have search permissions for the path '%s'.") % path,
+            _("Do you want to correct this now?"),
+            _("Don't ask about these directories again."),
+            buttons=Gtk.ButtonsType.YES_NO,
+        )
 
         if chkres:
             src.config.add_perms_fix_ignore(broken_paths)
@@ -145,8 +141,7 @@ class vmmAddStorage(vmmGObjectUI):
         if not errors:
             return
 
-        errmsg = _("Errors were encountered changing permissions for the "
-                   "following directories:")
+        errmsg = _("Errors were encountered changing permissions for the following directories:")
         details = ""
         for p, error in errors.items():
             if p in broken_paths:
@@ -155,8 +150,9 @@ class vmmAddStorage(vmmGObjectUI):
 
         log.debug("Permission errors:\n%s", details)
 
-        ignore, chkres = src.err.err_chkbox(errmsg, details,
-                             _("Don't ask about these directories again."))
+        ignore, chkres = src.err.err_chkbox(
+            errmsg, details, _("Don't ask about these directories again.")
+        )
 
         if chkres:
             src.config.add_perms_fix_ignore(list(errors.keys()))
@@ -179,15 +175,13 @@ class vmmAddStorage(vmmGObjectUI):
 
         storage_tooltip = None
 
-        can_storage = (not self.conn.is_remote() or
-                       self.conn.support.conn_storage())
+        can_storage = not self.conn.is_remote() or self.conn.support.conn_storage()
         use_storage = self.widget("storage-select")
         storage_area = self.widget("storage-box")
 
         storage_area.set_sensitive(can_storage)
         if not can_storage:  # pragma: no cover
-            storage_tooltip = _("Connection does not support storage"
-                                " management.")
+            storage_tooltip = _("Connection does not support storage management.")
             use_storage.set_sensitive(True)
         storage_area.set_tooltip_text(storage_tooltip or "")
 
@@ -201,16 +195,19 @@ class vmmAddStorage(vmmGObjectUI):
         suffix = suffix or ".img"
 
         path = virtinst.StorageVolume.find_free_name(
-            self.conn.get_backend(), pool.get_backend(), name,
-            suffix=suffix, collideguest=collideguest)
+            self.conn.get_backend(),
+            pool.get_backend(),
+            name,
+            suffix=suffix,
+            collideguest=collideguest,
+        )
 
         return os.path.join(pool.xmlobj.target_path, path)
 
     def is_default_storage(self):
         return self.widget("storage-create").get_active()
 
-    def build_device(self, vmname,
-            path=None, device="disk", collideguest=None):
+    def build_device(self, vmname, path=None, device="disk", collideguest=None):
         if path is None:
             if self.is_default_storage():
                 path = self.get_default_path(vmname, collideguest=collideguest)
@@ -232,8 +229,7 @@ class vmmAddStorage(vmmGObjectUI):
             disk.shareable = vals.get("shareable")
         if vals.get("serial") is not None:
             disk.serial = vals.get("serial")
-        if (vals.get("removable") is not None and
-            self.widget("disk-removable").get_visible()):
+        if vals.get("removable") is not None and self.widget("disk-removable").get_visible():
             disk.removable = vals.get("removable")
 
         if disk.wants_storage_creation():
@@ -245,20 +241,20 @@ class vmmAddStorage(vmmGObjectUI):
             # If the user changed the default disk format to raw, assume
             # they want to maximize performance, so fully allocate the
             # disk image. Otherwise use sparse
-            sparse = fmt != 'raw'
+            sparse = fmt != "raw"
 
             vol_install = virtinst.DeviceDisk.build_vol_install(
-                disk.conn, os.path.basename(path), pool,
-                size, sparse)
+                disk.conn, os.path.basename(path), pool, size, sparse
+            )
             disk.set_vol_install(vol_install)
 
             if disk.get_vol_install().supports_format():
-                log.debug("Using default prefs format=%s for path=%s",
-                    fmt, path)
+                log.debug("Using default prefs format=%s for path=%s", fmt, path)
                 disk.get_vol_install().format = fmt
             else:
-                log.debug("path=%s can not use default prefs format=%s, "
-                        "not setting it", path, fmt)  # pragma: no cover
+                log.debug(
+                    "path=%s can not use default prefs format=%s, not setting it", path, fmt
+                )  # pragma: no cover
 
         return disk
 
@@ -272,25 +268,23 @@ class vmmAddStorage(vmmGObjectUI):
         # Disk collision
         names = disk.is_conflict_disk()
         if names:
-            msg = (_("Disk '%(path)s' is already in use by other "
-                   "guests %(names)s") %
-                   {"path": path, "names": names})
-            res = self.err.yes_no(msg,
-                    _("Do you really want to use the disk?"))
+            msg = _("Disk '%(path)s' is already in use by other guests %(names)s") % {
+                "path": path,
+                "names": names,
+            }
+            res = self.err.yes_no(msg, _("Do you really want to use the disk?"))
             if not res:
                 return False
 
         self.check_path_search(self, self.conn, path)
-
 
     ##################
     # Device editing #
     ##################
 
     def set_disk_bus(self, bus):
-        show_removable = (bus == "usb")
-        uiutil.set_grid_row_visible(
-                self.widget("disk-removable"), show_removable)
+        show_removable = bus == "usb"
+        uiutil.set_grid_row_visible(self.widget("disk-removable"), show_removable)
 
     def set_dev(self, disk):
         cache = disk.driver_cache
@@ -314,28 +308,23 @@ class vmmAddStorage(vmmGObjectUI):
         # This comes last
         self._active_edits = []
 
-
     def get_values(self):
         ret = {}
 
         if _EDIT_CACHE in self._active_edits:
-            ret["cache"] = uiutil.get_list_selection(
-                    self.widget("disk-cache"))
+            ret["cache"] = uiutil.get_list_selection(self.widget("disk-cache"))
         if _EDIT_DISCARD in self._active_edits:
-            ret["discard"] = uiutil.get_list_selection(
-                    self.widget("disk-discard"))
+            ret["discard"] = uiutil.get_list_selection(self.widget("disk-discard"))
         if _EDIT_RO in self._active_edits:
             ret["readonly"] = self.widget("disk-readonly").get_active()
         if _EDIT_SHARE in self._active_edits:
             ret["shareable"] = self.widget("disk-shareable").get_active()
         if _EDIT_REMOVABLE in self._active_edits:
-            ret["removable"] = bool(
-                self.widget("disk-removable").get_active())
+            ret["removable"] = bool(self.widget("disk-removable").get_active())
         if _EDIT_SERIAL in self._active_edits:
             ret["serial"] = self.widget("disk-serial").get_text()
 
         return ret
-
 
     #############
     # Listeners #

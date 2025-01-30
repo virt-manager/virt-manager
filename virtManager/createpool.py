@@ -23,27 +23,28 @@ class vmmCreatePool(vmmGObjectUI):
         vmmGObjectUI.__init__(self, "createpool.ui", "vmm-create-pool")
         self.conn = conn
 
-        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
-                self.widget("pool-details-align"),
-                self.widget("pool-details"))
-        self._xmleditor.connect("xml-requested",
-                self._xmleditor_xml_requested_cb)
+        self._xmleditor = vmmXMLEditor(
+            self.builder,
+            self.topwin,
+            self.widget("pool-details-align"),
+            self.widget("pool-details"),
+        )
+        self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
 
-        self.builder.connect_signals({
-            "on_pool_cancel_clicked": self.close,
-            "on_vmm_create_pool_delete_event": self.close,
-            "on_pool_finish_clicked": self._finish_clicked_cb,
-            "on_pool_type_changed": self._pool_type_changed_cb,
-
-            "on_pool_source_button_clicked": self._browse_source_cb,
-            "on_pool_target_button_clicked": self._browse_target_cb,
-
-            "on_pool_iqn_chk_toggled": self._iqn_toggled_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_pool_cancel_clicked": self.close,
+                "on_vmm_create_pool_delete_event": self.close,
+                "on_pool_finish_clicked": self._finish_clicked_cb,
+                "on_pool_type_changed": self._pool_type_changed_cb,
+                "on_pool_source_button_clicked": self._browse_source_cb,
+                "on_pool_target_button_clicked": self._browse_target_cb,
+                "on_pool_iqn_chk_toggled": self._iqn_toggled_cb,
+            }
+        )
         self.bind_escape_key_close()
 
         self._init_ui()
-
 
     #######################
     # Standard UI methods #
@@ -64,7 +65,6 @@ class vmmCreatePool(vmmGObjectUI):
         self.conn = None
         self._xmleditor.cleanup()
         self._xmleditor = None
-
 
     ###########
     # UI init #
@@ -108,8 +108,7 @@ class vmmCreatePool(vmmGObjectUI):
     def _reset_state(self):
         self._xmleditor.reset_state()
 
-        defaultname = StoragePool.find_free_name(
-                self.conn.get_backend(), "pool")
+        defaultname = StoragePool.find_free_name(self.conn.get_backend(), "pool")
         self.widget("pool-name").set_text(defaultname)
         self.widget("pool-name").grab_focus()
         self.widget("pool-target-path").set_text("")
@@ -122,7 +121,6 @@ class vmmCreatePool(vmmGObjectUI):
 
         uiutil.set_list_selection(self.widget("pool-type"), 0)
         self._show_options_by_pool()
-
 
     #################
     # UI populating #
@@ -162,17 +160,14 @@ class vmmCreatePool(vmmGObjectUI):
     def _list_pool_sources(self, pool_type):
         plist = []
         try:
-            plist = StoragePool.pool_list_from_sources(
-                    self.conn.get_backend(), pool_type)
+            plist = StoragePool.pool_list_from_sources(self.conn.get_backend(), pool_type)
         except Exception:  # pragma: no cover
             log.exception("Pool enumeration failed")
 
         return plist
 
     def _get_build_default(self, pooltype):
-        if pooltype in [StoragePool.TYPE_DIR,
-                        StoragePool.TYPE_FS,
-                        StoragePool.TYPE_NETFS]:
+        if pooltype in [StoragePool.TYPE_DIR, StoragePool.TYPE_FS, StoragePool.TYPE_NETFS]:
             # Building for these simply entails creating a directory
             return True
         return False
@@ -196,10 +191,12 @@ class vmmCreatePool(vmmGObjectUI):
         is_scsi = pool.type == StoragePool.TYPE_SCSI
 
         # Source path browsing is meaningless for net pools
-        if pool.type in [StoragePool.TYPE_NETFS,
-                               StoragePool.TYPE_ISCSI,
-                               StoragePool.TYPE_SCSI,
-                               StoragePool.TYPE_GLUSTER]:
+        if pool.type in [
+            StoragePool.TYPE_NETFS,
+            StoragePool.TYPE_ISCSI,
+            StoragePool.TYPE_SCSI,
+            StoragePool.TYPE_GLUSTER,
+        ]:
             src_b = False
 
         show_row("pool-target", tgt)
@@ -210,7 +207,8 @@ class vmmCreatePool(vmmGObjectUI):
         show_row("pool-source-name", src_name)
 
         self.widget("pool-source-name-label").set_label(
-                is_lvm and _("Volg_roup Name:") or _("Sou_rce Name:"))
+            is_lvm and _("Volg_roup Name:") or _("Sou_rce Name:")
+        )
 
         src_label = _("_Source Path:")
         if iqn:
@@ -221,18 +219,15 @@ class vmmCreatePool(vmmGObjectUI):
         self.widget("pool-source-label").set_use_underline(True)
 
         if tgt:
-            self.widget("pool-target-path").set_text(
-                pool.default_target_path() or "")
+            self.widget("pool-target-path").set_text(pool.default_target_path() or "")
 
         self.widget("pool-target-button").set_sensitive(tgt_b)
         self.widget("pool-source-button").set_sensitive(src_b)
 
         if src_name:
-            self.widget("pool-source-name").get_child().set_text(
-                    pool.default_source_name() or "")
+            self.widget("pool-source-name").get_child().set_text(pool.default_source_name() or "")
 
         self._populate_pool_sources()
-
 
     ################
     # UI accessors #
@@ -267,7 +262,6 @@ class vmmCreatePool(vmmGObjectUI):
 
     def _get_config_iqn(self):
         return self._get_visible_text("pool-iqn")
-
 
     ###################
     # Object building #
@@ -320,7 +314,6 @@ class vmmCreatePool(vmmGObjectUI):
     def _validate(self, pool):
         pool.validate()
 
-
     ##################
     # Object install #
     ##################
@@ -330,8 +323,7 @@ class vmmCreatePool(vmmGObjectUI):
 
         if error:
             error = _("Error creating pool: %s") % error
-            self.err.show_err(error,
-                              details=details)
+            self.err.show_err(error, details=details)
         else:
             self.conn.schedule_priority_tick(pollpool=True)
             self.close()
@@ -357,14 +349,16 @@ class vmmCreatePool(vmmGObjectUI):
 
         self.reset_finish_cursor()
 
-        progWin = vmmAsyncJob(self._async_pool_create, [pool, build],
-                              self._finish_cb, [pool],
-                              _("Creating storage pool..."),
-                              _("Creating the storage pool may take a "
-                                "while..."),
-                              self.topwin)
+        progWin = vmmAsyncJob(
+            self._async_pool_create,
+            [pool, build],
+            self._finish_cb,
+            [pool],
+            _("Creating storage pool..."),
+            _("Creating the storage pool may take a while..."),
+            self.topwin,
+        )
         progWin.run()
-
 
     ################
     # UI listeners #
@@ -381,9 +375,7 @@ class vmmCreatePool(vmmGObjectUI):
         self._show_options_by_pool()
 
     def _browse_source_cb(self, src):
-        source = self.err.browse_local(
-                _("Choose source path"),
-                start_folder="/dev")
+        source = self.err.browse_local(_("Choose source path"), start_folder="/dev")
         if source:
             self.widget("pool-source-path").get_child().set_text(source)
 
@@ -394,9 +386,10 @@ class vmmCreatePool(vmmGObjectUI):
             startfolder = os.path.dirname(current)
 
         target = self.err.browse_local(
-                _("Choose target directory"),
-                dialog_type=Gtk.FileChooserAction.SELECT_FOLDER,
-                start_folder=startfolder)
+            _("Choose target directory"),
+            dialog_type=Gtk.FileChooserAction.SELECT_FOLDER,
+            start_folder=startfolder,
+        )
         if target:
             self.widget("pool-target-path").set_text(target)
 

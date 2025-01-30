@@ -32,15 +32,15 @@ def start_job_progress_thread(vm, meter, progtext):
 
     def jobinfo_cb():
         while True:
-            time.sleep(.5)
+            time.sleep(0.5)
 
             if not current_thread.is_alive():
                 return
 
             try:
                 jobinfo = vm.job_info()
-                data_total      = int(jobinfo[3])
-                data_remaining  = int(jobinfo[5])
+                data_total = int(jobinfo[3])
+                data_remaining = int(jobinfo[5])
 
                 # data_total is 0 if the job hasn't started yet
                 if not data_total:
@@ -56,9 +56,7 @@ def start_job_progress_thread(vm, meter, progtext):
                 return
 
     if vm.supports_domain_job_info():
-        t = threading.Thread(target=jobinfo_cb,
-                             name="job progress reporting",
-                             args=())
+        t = threading.Thread(target=jobinfo_cb, name="job progress reporting", args=())
         t.daemon = True
         t.start()
 
@@ -67,6 +65,7 @@ class _IPFetcher:
     """
     Helper class to contain all IP fetching and processing logic
     """
+
     def __init__(self):
         self._cache = None
 
@@ -83,11 +82,10 @@ class _IPFetcher:
 
         if vm.agent_ready():
             self._cache["qemuga"] = vm.get_interface_addresses(
-                iface,
-                libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT)
+                iface, libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT
+            )
 
-        arp_flag = getattr(libvirt,
-            "VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_ARP", 3)
+        arp_flag = getattr(libvirt, "VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_ARP", 3)
         self._cache["arp"] = vm.get_interface_addresses(iface, arp_flag)
 
     def get(self, vm, iface):
@@ -106,11 +104,10 @@ class _IPFetcher:
             ipv4 = None
             ipv6 = None
             if addrs["hwaddr"] == iface.macaddr:
-                for addr in (addrs["addrs"] or []):
+                for addr in addrs["addrs"] or []:
                     if addr["type"] == 0:
                         ipv4 = addr["addr"]
-                    elif (addr["type"] == 1 and
-                          not str(addr["addr"]).startswith("fe80")):
+                    elif addr["type"] == 1 and not str(addr["addr"]).startswith("fe80"):
                         ipv6 = addr["addr"] + "/" + str(addr["prefix"])
             return ipv4, ipv6
 
@@ -127,7 +124,6 @@ class _IPFetcher:
                 elif lease["type"] == 1:
                     ipv6 = lease["ipaddr"]
             return ipv4, ipv6
-
 
         for datalist in [list(qemuga.values()), leases, list(arp.values())]:
             ipv4 = None
@@ -174,10 +170,9 @@ class vmmDomainSnapshot(vmmLibvirtObject):
     """
     Class wrapping a virDomainSnapshot object
     """
-    def __init__(self, conn, backend):
-        vmmLibvirtObject.__init__(self, conn, backend, backend.getName(),
-                                  DomainSnapshot)
 
+    def __init__(self, conn, backend):
+        vmmLibvirtObject.__init__(self, conn, backend, backend.getName(), DomainSnapshot)
 
     ##########################
     # Required class methods #
@@ -185,14 +180,15 @@ class vmmDomainSnapshot(vmmLibvirtObject):
 
     def _conn_tick_poll_param(self):
         return None  # pragma: no cover
+
     def class_name(self):
         return "snapshot"  # pragma: no cover
 
     def _XMLDesc(self, flags):
         return self._backend.getXMLDesc(flags=flags)
+
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
-
 
     ###########
     # Actions #
@@ -212,33 +208,36 @@ class vmmDomainSnapshot(vmmLibvirtObject):
             "shutdown": libvirt.VIR_DOMAIN_SHUTDOWN,
             "shutoff": libvirt.VIR_DOMAIN_SHUTOFF,
             "crashed": libvirt.VIR_DOMAIN_CRASHED,
-            "pmsuspended": getattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7)
+            "pmsuspended": getattr(libvirt, "VIR_DOMAIN_PMSUSPENDED", 7),
         }
         return statemap.get(state, libvirt.VIR_DOMAIN_SHUTOFF)
 
     def run_status(self):
         status = self._state_str_to_int()
         return LibvirtEnumMap.pretty_run_status(status, False)
+
     def run_status_icon_name(self):
         status = self._state_str_to_int()
         if status not in LibvirtEnumMap.VM_STATUS_ICONS:  # pragma: no cover
             log.debug("Unknown status %d, using NOSTATE", status)
             status = libvirt.VIR_DOMAIN_NOSTATE
         return LibvirtEnumMap.VM_STATUS_ICONS[status]
+
     def is_running(self):
         """
         Captured state is a running domain.
         """
         return self._state_str_to_int() in [libvirt.VIR_DOMAIN_RUNNING]
+
     def has_run_state(self):
         """
         Captured state contains run state in addition to disk state.
         """
-        return self._state_str_to_int() in [libvirt.VIR_DOMAIN_RUNNING,
-                                            libvirt.VIR_DOMAIN_PAUSED]
+        return self._state_str_to_int() in [libvirt.VIR_DOMAIN_RUNNING, libvirt.VIR_DOMAIN_PAUSED]
 
     def is_current(self):
         return self._backend.isCurrent()
+
     def is_external(self):
         if self.get_xmlobj().memory_type == "external":
             return True
@@ -253,6 +252,7 @@ class _vmmDomainSetTimeThread(vmmGObject):
     A separate thread handling time setting operations as not to block the main
     UI.
     """
+
     def __init__(self, domain):
         vmmGObject.__init__(self)
         self._domain = domain
@@ -272,8 +272,7 @@ class _vmmDomainSetTimeThread(vmmGObject):
 
         # Only run the API for qemu and test drivers, they are the only ones
         # that support it. This will save spamming logs with error output.
-        if (not self._domain.conn.is_qemu() and
-            not self._domain.conn.is_test()):
+        if not self._domain.conn.is_qemu() and not self._domain.conn.is_test():
             return  # pragma: no cover
 
         # For qemu, only run the API if the VM has the qemu guest agent in
@@ -282,8 +281,7 @@ class _vmmDomainSetTimeThread(vmmGObject):
             return
 
         log.debug("Starting time setting thread")
-        self._thread = threading.Thread(name='settime thread',
-                                        target=self._do_loop)
+        self._thread = threading.Thread(name="settime thread", target=self._do_loop)
         self._thread.start()
 
     def stop(self):
@@ -338,6 +336,7 @@ class vmmDomain(vmmLibvirtObject):
     Class wrapping virDomain libvirt objects. Is also extended to be
     backed by a virtinst.Guest object for new VM 'customize before install'
     """
+
     __gsignals__ = {
         "resources-sampled": (vmmLibvirtObject.RUN_FIRST, None, []),
         "inspection-changed": (vmmLibvirtObject.RUN_FIRST, None, []),
@@ -378,8 +377,7 @@ class vmmDomain(vmmLibvirtObject):
 
         # Determine available XML flags (older libvirt versions will error
         # out if passed SECURE_XML, INACTIVE_XML, etc)
-        (self._inactive_xml_flags,
-         self._active_xml_flags) = self.conn.get_dom_flags(self._backend)
+        (self._inactive_xml_flags, self._active_xml_flags) = self.conn.get_dom_flags(self._backend)
 
         # Prime caches
         info = self._backend.info()
@@ -387,14 +385,14 @@ class vmmDomain(vmmLibvirtObject):
         self.has_managed_save()
         self.snapshots_supported()
 
-        if (self.get_name() == "Domain-0" and
-            self.get_uuid() == "00000000-0000-0000-0000-000000000000"):
+        if (
+            self.get_name() == "Domain-0"
+            and self.get_uuid() == "00000000-0000-0000-0000-000000000000"
+        ):
             # We don't want virt-manager to track Domain-0 since it
             # doesn't work with our UI. Raising an error will ensures it
             # is denylisted.
-            raise RuntimeError(  # pragma: no cover
-                    "Can't track Domain-0 as a vmmDomain")
-
+            raise RuntimeError("Can't track Domain-0 as a vmmDomain")  # pragma: no cover
 
     ###########################
     # Misc API getter methods #
@@ -402,6 +400,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def reports_stats(self):
         return True
+
     def _using_events(self):
         return self.conn.using_domain_events
 
@@ -426,12 +425,10 @@ class vmmDomain(vmmLibvirtObject):
         return bool(self._install_abort)
 
     def has_nvram(self):
-        return bool(self.get_xmlobj().is_uefi() or
-                    self.get_xmlobj().os.nvram)
+        return bool(self.get_xmlobj().is_uefi() or self.get_xmlobj().os.nvram)
 
     def has_tpm_state(self):
-        return any(tpm.type == "emulator"
-                   for tpm in self.get_xmlobj().devices.tpm)
+        return any(tpm.type == "emulator" for tpm in self.get_xmlobj().devices.tpm)
 
     def is_persistent(self):
         return bool(self._backend.isPersistent())
@@ -447,14 +444,14 @@ class vmmDomain(vmmLibvirtObject):
 
         if self.xmlobj.cpu.cells:
             err = _("Can not change shared memory setting when <numa> is configured.")
-        elif (not domcaps.supports_filesystem_virtiofs() or
-              not domcaps.supports_memorybacking_memfd()):
+        elif (
+            not domcaps.supports_filesystem_virtiofs() or not domcaps.supports_memorybacking_memfd()
+        ):
             err = _("Libvirt may not be new enough to support memfd.")
         else:
             is_shared = self.xmlobj.memoryBacking.source_type == "memfd"
 
         return is_shared, err
-
 
     ##################
     # Support checks #
@@ -474,7 +471,6 @@ class vmmDomain(vmmLibvirtObject):
         if not self._domain_caps:
             self._domain_caps = self.get_xmlobj().lookup_domcaps()
         return self._domain_caps
-
 
     #############################
     # Internal XML handling API #
@@ -502,8 +498,9 @@ class vmmDomain(vmmLibvirtObject):
             return
 
         raise RuntimeError(  # pragma: no cover
-                _("Could not find specified device in the "
-                  "inactive VM configuration: %s") % repr(origdev))
+            _("Could not find specified device in the inactive VM configuration: %s")
+            % repr(origdev)
+        )
 
     def _process_device_define(self, editdev, xmlobj, do_hotplug):
         if do_hotplug:
@@ -526,34 +523,40 @@ class vmmDomain(vmmLibvirtObject):
             old_nvram_path = os.path.join(
                 self.conn.get_backend().get_libvirt_data_root_dir(),
                 self.conn.get_backend().get_uri_driver(),
-                "nvram", "%s_VARS.fd" % self.get_name())
-            log.debug("Guest is expected to use <nvram> but we didn't "
-                      "find one in the XML. Generated implied path=%s",
-                      old_nvram_path)
+                "nvram",
+                "%s_VARS.fd" % self.get_name(),
+            )
+            log.debug(
+                "Guest is expected to use <nvram> but we didn't "
+                "find one in the XML. Generated implied path=%s",
+                old_nvram_path,
+            )
 
         if not DeviceDisk.path_definitely_exists(
-                self.conn.get_backend(),
-                old_nvram_path):  # pragma: no cover
-            log.debug("old_nvram_path=%s but it doesn't appear to exist. "
-                      "skipping rename nvram duplication", old_nvram_path)
+            self.conn.get_backend(), old_nvram_path
+        ):  # pragma: no cover
+            log.debug(
+                "old_nvram_path=%s but it doesn't appear to exist. "
+                "skipping rename nvram duplication",
+                old_nvram_path,
+            )
             return None, None
 
-
         from virtinst import Cloner
+
         old_nvram = DeviceDisk(self.conn.get_backend())
         old_nvram.set_source_path(old_nvram_path)
         ext = os.path.splitext(old_nvram_path)[1]
 
         nvram_dir = os.path.dirname(old_nvram.get_source_path())
-        new_nvram_path = os.path.join(nvram_dir,
-                "%s_VARS%s" % (os.path.basename(new_name), ext or ".fd"))
+        new_nvram_path = os.path.join(
+            nvram_dir, "%s_VARS%s" % (os.path.basename(new_name), ext or ".fd")
+        )
 
-        new_nvram = Cloner.build_clone_disk(
-                old_nvram, new_nvram_path, True, False)
+        new_nvram = Cloner.build_clone_disk(old_nvram, new_nvram_path, True, False)
 
         new_nvram.build_storage(None)
         return new_nvram, old_nvram
-
 
     ##############################
     # Persistent XML change APIs #
@@ -573,8 +576,7 @@ class vmmDomain(vmmLibvirtObject):
                 try:
                     new_nvram.get_vol_object().delete(0)
                 except Exception as warn:  # pragma: no cover
-                    log.debug("rename failed and new nvram was not "
-                                  "removed: '%s'", warn)
+                    log.debug("rename failed and new nvram was not removed: '%s'", warn)
             raise error
 
         if not new_nvram:
@@ -626,15 +628,20 @@ class vmmDomain(vmmLibvirtObject):
         self._redefine_xmlobj(xmlobj)
         return editdev, newdev
 
-
     ##########################
     # non-device XML editing #
     ##########################
 
-    def define_cpu(self, vcpus=_SENTINEL,
-            model=_SENTINEL, secure=_SENTINEL, sockets=_SENTINEL,
-            cores=_SENTINEL, threads=_SENTINEL,
-            clear_topology=_SENTINEL):
+    def define_cpu(
+        self,
+        vcpus=_SENTINEL,
+        model=_SENTINEL,
+        secure=_SENTINEL,
+        sockets=_SENTINEL,
+        cores=_SENTINEL,
+        threads=_SENTINEL,
+        clear_topology=_SENTINEL,
+    ):
         guest = self._make_xmlobj_to_define()
 
         if vcpus != _SENTINEL:
@@ -657,7 +664,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
-
     def _edit_shared_mem(self, guest, mem_shared):
         source_type = _SENTINEL
         access_mode = _SENTINEL
@@ -674,8 +680,7 @@ class vmmDomain(vmmLibvirtObject):
         if access_mode != _SENTINEL:
             guest.memoryBacking.access_mode = access_mode
 
-    def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL,
-            mem_shared=_SENTINEL):
+    def define_memory(self, memory=_SENTINEL, maxmem=_SENTINEL, mem_shared=_SENTINEL):
         guest = self._make_xmlobj_to_define()
 
         if memory != _SENTINEL:
@@ -687,9 +692,15 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
-    def define_overview(self, machine=_SENTINEL, description=_SENTINEL,
-            title=_SENTINEL, loader=_SENTINEL,
-            nvram=_SENTINEL, firmware=_SENTINEL):
+    def define_overview(
+        self,
+        machine=_SENTINEL,
+        description=_SENTINEL,
+        title=_SENTINEL,
+        loader=_SENTINEL,
+        nvram=_SENTINEL,
+        firmware=_SENTINEL,
+    ):
         guest = self._make_xmlobj_to_define()
 
         old_machine = None
@@ -737,9 +748,17 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
-    def define_boot(self, boot_order=_SENTINEL, boot_menu=_SENTINEL,
-                    kernel=_SENTINEL, initrd=_SENTINEL, dtb=_SENTINEL,
-                    kernel_args=_SENTINEL, init=_SENTINEL, initargs=_SENTINEL):
+    def define_boot(
+        self,
+        boot_order=_SENTINEL,
+        boot_menu=_SENTINEL,
+        kernel=_SENTINEL,
+        initrd=_SENTINEL,
+        dtb=_SENTINEL,
+        kernel_args=_SENTINEL,
+        init=_SENTINEL,
+        initargs=_SENTINEL,
+    ):
 
         guest = self._make_xmlobj_to_define()
         if boot_order != _SENTINEL:
@@ -763,16 +782,23 @@ class vmmDomain(vmmLibvirtObject):
 
         self._redefine_xmlobj(guest)
 
-
     ######################
     # Device XML editing #
     ######################
 
-    def define_disk(self, devobj, do_hotplug,
-            path=_SENTINEL, readonly=_SENTINEL,
-            shareable=_SENTINEL, removable=_SENTINEL, cache=_SENTINEL,
-            discard=_SENTINEL, bus=_SENTINEL,
-            serial=_SENTINEL):
+    def define_disk(
+        self,
+        devobj,
+        do_hotplug,
+        path=_SENTINEL,
+        readonly=_SENTINEL,
+        shareable=_SENTINEL,
+        removable=_SENTINEL,
+        cache=_SENTINEL,
+        discard=_SENTINEL,
+        bus=_SENTINEL,
+        serial=_SENTINEL,
+    ):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -806,11 +832,18 @@ class vmmDomain(vmmLibvirtObject):
             editdev.validate()
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-    def define_network(self, devobj, do_hotplug,
-            ntype=_SENTINEL, source=_SENTINEL,
-            mode=_SENTINEL, model=_SENTINEL,
-            macaddr=_SENTINEL, linkstate=_SENTINEL,
-            portgroup=_SENTINEL):
+    def define_network(
+        self,
+        devobj,
+        do_hotplug,
+        ntype=_SENTINEL,
+        source=_SENTINEL,
+        mode=_SENTINEL,
+        model=_SENTINEL,
+        macaddr=_SENTINEL,
+        linkstate=_SENTINEL,
+        portgroup=_SENTINEL,
+    ):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -837,10 +870,17 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-    def define_graphics(self, devobj, do_hotplug,
-            listen=_SENTINEL, port=_SENTINEL,
-            passwd=_SENTINEL, gtype=_SENTINEL,
-            gl=_SENTINEL, rendernode=_SENTINEL):
+    def define_graphics(
+        self,
+        devobj,
+        do_hotplug,
+        listen=_SENTINEL,
+        port=_SENTINEL,
+        passwd=_SENTINEL,
+        gtype=_SENTINEL,
+        gl=_SENTINEL,
+        rendernode=_SENTINEL,
+    ):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -898,8 +938,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-    def define_watchdog(self, devobj, do_hotplug,
-            model=_SENTINEL, action=_SENTINEL):
+    def define_watchdog(self, devobj, do_hotplug, model=_SENTINEL, action=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -937,18 +976,15 @@ class vmmDomain(vmmLibvirtObject):
         def _change_model():
             if editdev.type == "usb":
                 ctrls = xmlobj.devices.controller
-                ctrls = [x for x in ctrls if (x.type ==
-                         DeviceController.TYPE_USB)]
+                ctrls = [x for x in ctrls if (x.type == DeviceController.TYPE_USB)]
                 for dev in ctrls:
                     xmlobj.remove_device(dev)
 
                 if model == "ich9-ehci1":
-                    for dev in DeviceController.get_usb2_controllers(
-                            xmlobj.conn):
+                    for dev in DeviceController.get_usb2_controllers(xmlobj.conn):
                         xmlobj.add_device(dev)
                 elif model == "usb3":
-                    dev = DeviceController.get_usb3_controller(
-                        xmlobj.conn, xmlobj)
+                    dev = DeviceController.get_usb3_controller(xmlobj.conn, xmlobj)
                     xmlobj.add_device(dev)
                 else:
                     dev = DeviceController(xmlobj.conn)
@@ -985,7 +1021,6 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-
     def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
@@ -1011,8 +1046,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-    def define_vsock(self, devobj, do_hotplug,
-            auto_cid=_SENTINEL, cid=_SENTINEL):
+    def define_vsock(self, devobj, do_hotplug, auto_cid=_SENTINEL, cid=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -1024,7 +1058,6 @@ class vmmDomain(vmmLibvirtObject):
             editdev.cid = cid
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
-
 
     ####################
     # Hotplug routines #
@@ -1063,26 +1096,33 @@ class vmmDomain(vmmLibvirtObject):
             raise RuntimeError("fake update device failure")
         self._backend.updateDeviceFlags(xml, flags)
 
-    def hotplug(self, memory=_SENTINEL, maxmem=_SENTINEL,
-            description=_SENTINEL, title=_SENTINEL, device=_SENTINEL):
+    def hotplug(
+        self,
+        memory=_SENTINEL,
+        maxmem=_SENTINEL,
+        description=_SENTINEL,
+        title=_SENTINEL,
+        device=_SENTINEL,
+    ):
         if not self.is_active():
             return
 
         def _hotplug_memory(val):
             if val != self.xmlobj.currentMemory:
                 self._backend.setMemory(val)
+
         def _hotplug_maxmem(val):
             if val != self.xmlobj.memory:
                 self._backend.setMaxMemory(val)
 
         def _hotplug_metadata(val, mtype):
-            flags = (libvirt.VIR_DOMAIN_AFFECT_LIVE |
-                     libvirt.VIR_DOMAIN_AFFECT_CONFIG)
+            flags = libvirt.VIR_DOMAIN_AFFECT_LIVE | libvirt.VIR_DOMAIN_AFFECT_CONFIG
             self._backend.setMetadata(mtype, val, None, None, flags)
 
         if memory != _SENTINEL:
-            log.debug("Hotplugging curmem=%s maxmem=%s for VM '%s'",
-                         memory, maxmem, self.get_name())
+            log.debug(
+                "Hotplugging curmem=%s maxmem=%s for VM '%s'", memory, maxmem, self.get_name()
+            )
 
             actual_cur = self.xmlobj.currentMemory
             if maxmem < actual_cur:
@@ -1094,14 +1134,12 @@ class vmmDomain(vmmLibvirtObject):
                 _hotplug_memory(memory)
 
         if description != _SENTINEL:
-            _hotplug_metadata(description,
-                libvirt.VIR_DOMAIN_METADATA_DESCRIPTION)
+            _hotplug_metadata(description, libvirt.VIR_DOMAIN_METADATA_DESCRIPTION)
         if title != _SENTINEL:
             _hotplug_metadata(title, libvirt.VIR_DOMAIN_METADATA_TITLE)
 
         if device != _SENTINEL:
             self._update_device(device)
-
 
     ########################
     # Libvirt API wrappers #
@@ -1109,13 +1147,16 @@ class vmmDomain(vmmLibvirtObject):
 
     def _conn_tick_poll_param(self):
         return "pollvm"
+
     def class_name(self):
         return "domain"
 
     def _define(self, xml):
         self.conn.define_domain(xml)
+
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
+
     def _get_backend_status(self):
         return self._backend.info()[0]
 
@@ -1123,6 +1164,7 @@ class vmmDomain(vmmLibvirtObject):
         if self._autostart is None:
             self._autostart = self._backend.autostart()
         return self._autostart
+
     def set_autostart(self, val):
         self._backend.setAutostart(val)
 
@@ -1136,6 +1178,7 @@ class vmmDomain(vmmLibvirtObject):
         # It's tough to hit this via uitests because it depends
         # on the job lasting more than a second
         return self._backend.jobInfo()  # pragma: no cover
+
     def abort_job(self):
         self._backend.abortJob()
 
@@ -1179,10 +1222,10 @@ class vmmDomain(vmmLibvirtObject):
     def create_snapshot(self, xml, redefine=False, diskOnly=False):
         flags = 0
         if redefine:
-            flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE)
+            flags = flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_REDEFINE
         else:
             if diskOnly:
-                flags = (flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_DISK_ONLY)
+                flags = flags | libvirt.VIR_DOMAIN_SNAPSHOT_CREATE_DISK_ONLY
             log.debug("Creating snapshot flags=%s xml=\n%s", flags, xml)
         obj = self._backend.snapshotCreateXML(xml, flags)
         log.debug("returned new snapshot XML:\n%s", obj.getXMLDesc(0))
@@ -1192,8 +1235,7 @@ class vmmDomain(vmmLibvirtObject):
         Return agent channel object if it is defined.
         """
         for dev in self.xmlobj.devices.channel:
-            if (dev.type == "unix" and
-                dev.target_name == dev.CHANNEL_NAME_QEMUGA):
+            if dev.type == "unix" and dev.target_name == dev.CHANNEL_NAME_QEMUGA:
                 return dev
         return None
 
@@ -1251,10 +1293,9 @@ class vmmDomain(vmmLibvirtObject):
         """
         t = time.time()
         seconds = int(t)
-        nseconds = int((t - seconds) * 10 ** 9)
+        nseconds = int((t - seconds) * 10**9)
         try:
-            self._backend.setTime(time={"seconds": seconds,
-                                        "nseconds": nseconds})
+            self._backend.setTime(time={"seconds": seconds, "nseconds": nseconds})
             log.debug("Successfully set guest time")
         except Exception as e:  # pragma: no cover
             log.debug("Failed to set time: %s", e)
@@ -1272,15 +1313,16 @@ class vmmDomain(vmmLibvirtObject):
         """
         self._set_time_thread.stop()
 
-
     ########################
     # XML Parsing routines #
     ########################
 
     def is_container(self):
         return self.get_xmlobj().os.is_container()
+
     def is_xenpv(self):
         return self.get_xmlobj().os.is_xenpv()
+
     def is_hvm(self):
         return self.get_xmlobj().os.is_hvm()
 
@@ -1288,23 +1330,29 @@ class vmmDomain(vmmLibvirtObject):
         if self._uuid is None:
             self._uuid = self._backend.UUIDString()
         return self._uuid
+
     def get_abi_type(self):
         return self.get_xmlobj().os.os_type
+
     def get_hv_type(self):
         return self.get_xmlobj().type
+
     def get_pretty_hv_type(self):
         return self.conn.pretty_hv(self.get_abi_type(), self.get_hv_type())
+
     def get_arch(self):
         return self.get_xmlobj().os.arch
+
     def get_init(self):
         import shlex
+
         init = self.get_xmlobj().os.init
-        initargs = " ".join(
-            [shlex.quote(i.val) for i in self.get_xmlobj().os.initargs])
+        initargs = " ".join([shlex.quote(i.val) for i in self.get_xmlobj().os.initargs])
         return init, initargs
 
     def get_emulator(self):
         return self.get_xmlobj().emulator
+
     def get_machtype(self):
         return self.get_xmlobj().os.machine
 
@@ -1316,6 +1364,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def get_title(self):
         return self.get_xmlobj().title
+
     def get_description(self):
         return self.get_xmlobj().description
 
@@ -1326,14 +1375,15 @@ class vmmDomain(vmmLibvirtObject):
     def get_boot_menu(self):
         guest = self.get_xmlobj()
         return bool(guest.os.bootmenu_enable)
+
     def get_boot_kernel_info(self):
         guest = self.get_xmlobj()
-        return (guest.os.kernel, guest.os.initrd,
-                guest.os.dtb, guest.os.kernel_args)
+        return (guest.os.kernel, guest.os.initrd, guest.os.dtb, guest.os.kernel_args)
 
     def get_interface_devices_norefresh(self):
         xmlobj = self.get_xmlobj(refresh_if_nec=False)
         return xmlobj.devices.interface
+
     def get_disk_devices_norefresh(self):
         xmlobj = self.get_xmlobj(refresh_if_nec=False)
         return xmlobj.devices.disk
@@ -1349,7 +1399,6 @@ class vmmDomain(vmmLibvirtObject):
         # redirdev can also be marked bootable, but it should be rarely
         # used and clutters the UI
         return self.xmlobj.get_bootable_devices(exclude_redirdev=True)
-
 
     ############################
     # Domain lifecycle methods #
@@ -1386,8 +1435,9 @@ class vmmDomain(vmmLibvirtObject):
     @vmmLibvirtObject.lifecycle_action
     def startup(self):
         has_managed = self.has_managed_save()
-        if (self.config.CLITestOptions.test_vm_run_fail or
-           (has_managed and self.config.CLITestOptions.test_managed_save)):
+        if self.config.CLITestOptions.test_vm_run_fail or (
+            has_managed and self.config.CLITestOptions.test_managed_save
+        ):
             raise RuntimeError("fake error for managed save")
 
         self._backend.create()
@@ -1408,22 +1458,19 @@ class vmmDomain(vmmLibvirtObject):
         """
         flags = 0
         if force:
-            flags |= getattr(libvirt,
-                             "VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA", 0)
+            flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA", 0)
             flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_MANAGED_SAVE", 0)
             if self.has_nvram():
                 flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_NVRAM", 0)
         else:
             if self.has_nvram():
                 flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_KEEP_NVRAM", 0)
-            if (self.has_tpm_state() and
-                self.conn.support.domain_undefine_keep_tpm()):
+            if self.has_tpm_state() and self.conn.support.domain_undefine_keep_tpm():
                 flags |= getattr(libvirt, "VIR_DOMAIN_UNDEFINE_KEEP_TPM", 0)
         try:
             self._backend.undefineFlags(flags)
         except libvirt.libvirtError:
-            log.exception("libvirt undefineFlags failed, "
-                          "falling back to old style")
+            log.exception("libvirt undefineFlags failed, falling back to old style")
             self._backend.undefine()
 
     @vmmLibvirtObject.lifecycle_action
@@ -1450,7 +1497,7 @@ class vmmDomain(vmmLibvirtObject):
         if self._has_managed_save is None:
             try:
                 self._has_managed_save = self._backend.hasManagedSaveImage(0)
-            except Exception as e:    # pragma: no cover
+            except Exception as e:  # pragma: no cover
                 if self.conn.support.is_libvirt_error_no_domain(e):
                     return False
                 raise
@@ -1459,13 +1506,20 @@ class vmmDomain(vmmLibvirtObject):
 
     def remove_saved_image(self):
         if not self.has_managed_save():
-            return   # pragma: no cover
+            return  # pragma: no cover
         self._backend.managedSaveRemove(0)
         self._has_managed_save = None
 
-
-    def migrate(self, destconn, dest_uri=None,
-            tunnel=False, unsafe=False, temporary=False, xml=None, meter=None):
+    def migrate(
+        self,
+        destconn,
+        dest_uri=None,
+        tunnel=False,
+        unsafe=False,
+        temporary=False,
+        xml=None,
+        meter=None,
+    ):
         self._cancel_set_time()
         self._install_abort = True
 
@@ -1484,9 +1538,15 @@ class vmmDomain(vmmLibvirtObject):
             flags |= libvirt.VIR_MIGRATE_UNSAFE
 
         libvirt_destconn = destconn.get_backend().get_conn_for_api_arg()
-        log.debug("Migrating: conn=%s flags=%s uri=%s tunnel=%s "
-            "unsafe=%s temporary=%s",
-            destconn, flags, dest_uri, tunnel, unsafe, temporary)
+        log.debug(
+            "Migrating: conn=%s flags=%s uri=%s tunnel=%s unsafe=%s temporary=%s",
+            destconn,
+            flags,
+            dest_uri,
+            tunnel,
+            unsafe,
+            temporary,
+        )
 
         if meter:
             start_job_progress_thread(self, meter, _("Migrating domain"))
@@ -1512,58 +1572,69 @@ class vmmDomain(vmmLibvirtObject):
 
         # Don't schedule any conn update, migrate dialog handles it for us
 
-
     ###################
     # Stats accessors #
     ###################
 
     def _get_stats(self):
         return self.conn.statsmanager.get_vm_statslist(self)
+
     def stats_memory(self):
         return self._get_stats().get_record("curmem")
+
     def cpu_time(self):
         return self._get_stats().get_record("cpuTime")
+
     def host_cpu_time_percentage(self):
         return self._get_stats().get_record("cpuHostPercent")
+
     def guest_cpu_time_percentage(self):
         return self._get_stats().get_record("cpuGuestPercent")
+
     def network_rx_rate(self):
         return self._get_stats().get_record("netRxRate")
+
     def network_tx_rate(self):
         return self._get_stats().get_record("netTxRate")
+
     def disk_read_rate(self):
         return self._get_stats().get_record("diskRdRate")
+
     def disk_write_rate(self):
         return self._get_stats().get_record("diskWrRate")
 
     def network_traffic_rate(self):
         return self.network_tx_rate() + self.network_rx_rate()
+
     def network_traffic_max_rate(self):
         stats = self._get_stats()
         return max(stats.netRxMaxRate, stats.netTxMaxRate, 10.0)
+
     def disk_io_rate(self):
         return self.disk_read_rate() + self.disk_write_rate()
+
     def disk_io_max_rate(self):
         stats = self._get_stats()
         return max(stats.diskRdMaxRate, stats.diskWrMaxRate, 10.0)
 
     def host_cpu_time_vector(self, limit=None):
         return self._get_stats().get_vector("cpuHostPercent", limit)
+
     def guest_cpu_time_vector(self, limit=None):
         return self._get_stats().get_vector("cpuGuestPercent", limit)
+
     def stats_memory_vector(self, limit=None):
         return self._get_stats().get_vector("currMemPercent", limit)
+
     def network_traffic_vectors(self, limit=None, ceil=None):
         if ceil is None:
             ceil = self.network_traffic_max_rate()
-        return self._get_stats().get_in_out_vector(
-                "netRxRate", "netTxRate", limit, ceil)
+        return self._get_stats().get_in_out_vector("netRxRate", "netTxRate", limit, ceil)
+
     def disk_io_vectors(self, limit=None, ceil=None):
         if ceil is None:
             ceil = self.disk_io_max_rate()
-        return self._get_stats().get_in_out_vector(
-                "diskRdRate", "diskWrRate", limit, ceil)
-
+        return self._get_stats().get_in_out_vector("diskRdRate", "diskWrRate", limit, ceil)
 
     ###################
     # Status helpers ##
@@ -1578,36 +1649,44 @@ class vmmDomain(vmmLibvirtObject):
 
     def is_active(self):
         return not self.is_shutoff()
+
     def is_shutoff(self):
         return self.status() == libvirt.VIR_DOMAIN_SHUTOFF
+
     def is_crashed(self):
         return self.status() == libvirt.VIR_DOMAIN_CRASHED
+
     def is_stoppable(self):
-        return self.status() in [libvirt.VIR_DOMAIN_RUNNING,
-                                 libvirt.VIR_DOMAIN_PAUSED,
-                                 libvirt.VIR_DOMAIN_CRASHED,
-                                 libvirt.VIR_DOMAIN_PMSUSPENDED]
+        return self.status() in [
+            libvirt.VIR_DOMAIN_RUNNING,
+            libvirt.VIR_DOMAIN_PAUSED,
+            libvirt.VIR_DOMAIN_CRASHED,
+            libvirt.VIR_DOMAIN_PMSUSPENDED,
+        ]
+
     def is_destroyable(self):
-        return (self.is_stoppable() or
-                self.status() in [libvirt.VIR_DOMAIN_CRASHED])
+        return self.is_stoppable() or self.status() in [libvirt.VIR_DOMAIN_CRASHED]
+
     def is_runable(self):
         return self.is_shutoff()
+
     def is_pauseable(self):
         return self.status() in [libvirt.VIR_DOMAIN_RUNNING]
+
     def is_unpauseable(self):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
+
     def is_paused(self):
         return self.status() in [libvirt.VIR_DOMAIN_PAUSED]
+
     def is_cloneable(self):
         return self.status() in [libvirt.VIR_DOMAIN_SHUTOFF]
 
     def run_status(self):
-        return LibvirtEnumMap.pretty_run_status(
-                self.status(), self.has_managed_save())
+        return LibvirtEnumMap.pretty_run_status(self.status(), self.has_managed_save())
 
     def run_status_reason(self):
-        return LibvirtEnumMap.pretty_status_reason(
-                self.status(), self.status_reason())
+        return LibvirtEnumMap.pretty_status_reason(self.status(), self.status_reason())
 
     def run_status_icon_name(self):
         status = self.status()
@@ -1620,16 +1699,16 @@ class vmmDomain(vmmLibvirtObject):
         self.inspection = data
         self.idle_emit("inspection-changed")
 
-
     ##################
     # config helpers #
     ##################
 
     def on_console_scaling_changed(self, *args, **kwargs):
-        return self.config.listen_pervm(self.get_uuid(), "/scaling",
-                                        *args, **kwargs)
+        return self.config.listen_pervm(self.get_uuid(), "/scaling", *args, **kwargs)
+
     def set_console_scaling(self, value):
         self.config.set_pervm(self.get_uuid(), "/scaling", value)
+
     def get_console_scaling(self):
         ret = self.config.get_pervm(self.get_uuid(), "/scaling")
         if ret == -1:
@@ -1637,10 +1716,11 @@ class vmmDomain(vmmLibvirtObject):
         return ret
 
     def on_console_resizeguest_changed(self, *args, **kwargs):
-        return self.config.listen_pervm(self.get_uuid(), "/resize-guest",
-                                        *args, **kwargs)
+        return self.config.listen_pervm(self.get_uuid(), "/resize-guest", *args, **kwargs)
+
     def set_console_resizeguest(self, value):
         self.config.set_pervm(self.get_uuid(), "/resize-guest", value)
+
     def get_console_resizeguest(self):
         ret = self.config.get_pervm(self.get_uuid(), "/resize-guest")
         if ret == -1:
@@ -1648,10 +1728,11 @@ class vmmDomain(vmmLibvirtObject):
         return ret
 
     def on_console_autoconnect_changed(self, *args, **kwargs):
-        return self.config.listen_pervm(self.get_uuid(), "/resize-guest",
-                                        *args, **kwargs)
+        return self.config.listen_pervm(self.get_uuid(), "/resize-guest", *args, **kwargs)
+
     def set_console_autoconnect(self, value):
         self.config.set_pervm(self.get_uuid(), "/autoconnect", value)
+
     def get_console_autoconnect(self):
         ret = self.config.get_pervm(self.get_uuid(), "/autoconnect")
         if ret == -1:
@@ -1660,32 +1741,31 @@ class vmmDomain(vmmLibvirtObject):
 
     def set_details_window_size(self, w, h):
         self.config.set_pervm(self.get_uuid(), "/vm-window-size", (w, h))
+
     def get_details_window_size(self):
         ret = self.config.get_pervm(self.get_uuid(), "/vm-window-size")
         return ret
 
     def get_console_username(self):
         return self.config.get_pervm(self.get_uuid(), "/console-username")
+
     def set_console_username(self, username):
-        return self.config.set_pervm(self.get_uuid(), "/console-username",
-                                     username)
+        return self.config.set_pervm(self.get_uuid(), "/console-username", username)
+
     def del_console_username(self):
-        return self.config.set_pervm(self.get_uuid(), "/console-username",
-                                     "")
+        return self.config.set_pervm(self.get_uuid(), "/console-username", "")
 
     def get_cache_dir(self):
         ret = os.path.join(self.conn.get_cache_dir(), self.get_uuid())
         os.makedirs(ret, 0o755, exist_ok=True)
         return ret
 
-
     ###################
     # Polling helpers #
     ###################
 
     def tick(self, stats_update=True):
-        if (not self._using_events() and
-            not stats_update):
+        if not self._using_events() and not stats_update:
             return
 
         dosignal = False
@@ -1709,12 +1789,14 @@ class vmmDomain(vmmLibvirtObject):
 # Libvirt domain class #
 ########################
 
+
 class vmmDomainVirtinst(vmmDomain):
     """
     Domain object backed by a virtinst Guest object.
 
     Used for launching a details window for customizing a VM before install.
     """
+
     def __init__(self, conn, backend, key, installer):
         vmmDomain.__init__(self, conn, backend, key)
         self._orig_xml = None
@@ -1726,10 +1808,13 @@ class vmmDomainVirtinst(vmmDomain):
 
     def get_name(self):
         return self._backend.name
+
     def get_uuid(self):
         return self._backend.uuid
+
     def get_id(self):
         return -1  # pragma: no cover
+
     def has_managed_save(self):
         return False
 
@@ -1738,12 +1823,14 @@ class vmmDomainVirtinst(vmmDomain):
 
     def get_autostart(self):
         return self._installer.autostart
+
     def set_autostart(self, val):
         self._installer.autostart = bool(val)
         self.emit("state-changed")
 
     def _using_events(self):
         return False
+
     def _get_backend_status(self):
         return libvirt.VIR_DOMAIN_SHUTOFF
 
@@ -1751,7 +1838,6 @@ class vmmDomainVirtinst(vmmDomain):
         self._orig_backend = None
         self._installer = None
         super()._cleanup()
-
 
     ################
     # XML handling #
@@ -1769,14 +1855,19 @@ class vmmDomainVirtinst(vmmDomain):
 
         if origdisk.get_vol_object():
             log.debug(
-                    "Syncing vol_object=%s from origdisk=%s to newdisk=%s",
-                    origdisk.get_vol_object(), origdisk, newdisk)
-            newdisk.set_vol_object(origdisk.get_vol_object(),
-                                   origdisk.get_parent_pool())
+                "Syncing vol_object=%s from origdisk=%s to newdisk=%s",
+                origdisk.get_vol_object(),
+                origdisk,
+                newdisk,
+            )
+            newdisk.set_vol_object(origdisk.get_vol_object(), origdisk.get_parent_pool())
         elif origdisk.get_vol_install():
             log.debug(
-                    "Syncing vol_install=%s from origdisk=%s to newdisk=%s",
-                    origdisk.get_vol_install(), origdisk, newdisk)
+                "Syncing vol_install=%s from origdisk=%s to newdisk=%s",
+                origdisk.get_vol_install(),
+                origdisk,
+                newdisk,
+            )
             newdisk.set_vol_install(origdisk.get_vol_install())
 
     def _replace_domain_xml(self, newxml):

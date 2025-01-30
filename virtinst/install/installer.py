@@ -23,8 +23,7 @@ from .. import xmlutil
 
 
 def _make_testsuite_path(path):
-    return os.path.join("/VIRTINST-TESTSUITE",
-            os.path.basename(path).split("-", 2)[-1])
+    return os.path.join("/VIRTINST-TESTSUITE", os.path.basename(path).split("-", 2)[-1])
 
 
 class Installer(object):
@@ -50,10 +49,21 @@ class Installer(object):
     :param no_install: If True, this installer specifically does not have
         an install phase. We are just using it to create the initial XML.
     """
-    def __init__(self, conn, cdrom=None, location=None, install_bootdev=None,
-            location_kernel=None, location_initrd=None,
-            install_kernel=None, install_initrd=None, install_kernel_args=None,
-            no_install=None, is_reinstall=False):
+
+    def __init__(
+        self,
+        conn,
+        cdrom=None,
+        location=None,
+        install_bootdev=None,
+        location_kernel=None,
+        location_initrd=None,
+        install_kernel=None,
+        install_initrd=None,
+        install_kernel_args=None,
+        no_install=None,
+        is_reinstall=False,
+    ):
         self.conn = conn
 
         # Entry point for virt-manager 'Customize' wizard to change autostart
@@ -79,12 +89,16 @@ class Installer(object):
             cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
             self._cdrom = cdrom
             self._install_bootdev = "cdrom"
-        elif (location or location_kernel or location_initrd or
-              install_kernel or install_initrd):
-            self._treemedia = InstallerTreeMedia(self.conn, location,
-                    location_kernel, location_initrd,
-                    install_kernel, install_initrd, install_kernel_args)
-
+        elif location or location_kernel or location_initrd or install_kernel or install_initrd:
+            self._treemedia = InstallerTreeMedia(
+                self.conn,
+                location,
+                location_kernel,
+                location_initrd,
+                install_kernel,
+                install_initrd,
+                install_kernel_args,
+            )
 
     ##################
     # Static helpers #
@@ -100,8 +114,7 @@ class Installer(object):
 
         for disk in clean_disks:
             path = disk.get_source_path()
-            log.debug("Removing created disk path=%s vol_object=%s",
-                path, disk.get_vol_object())
+            log.debug("Removing created disk path=%s vol_object=%s", path, disk.get_vol_object())
             name = os.path.basename(path)
 
             try:
@@ -116,10 +129,8 @@ class Installer(object):
 
                 meter.end()
             except Exception as e:  # pragma: no cover
-                log.debug("Failed to remove disk '%s'",
-                    name, exc_info=True)
+                log.debug("Failed to remove disk '%s'", name, exc_info=True)
                 log.error("Failed to remove disk '%s': %s", name, e)
-
 
     ###################
     # Private helpers #
@@ -172,8 +183,7 @@ class Installer(object):
             # Keep media attached for windows which has a multi stage install
             return
         for disk in guest.devices.disk:
-            if (disk.is_cdrom() and
-                disk.get_source_path() == self._cdrom_path()):
+            if disk.is_cdrom() and disk.get_source_path() == self._cdrom_path():
                 disk.set_source_path(None)
                 disk.sync_path_props()
                 break
@@ -203,8 +213,9 @@ class Installer(object):
         if not self._unattended_install_cdrom_device:
             return
 
-        disk = [d for d in guest.devices.disk if
-                d.target == self._unattended_install_cdrom_device][0]
+        disk = [d for d in guest.devices.disk if d.target == self._unattended_install_cdrom_device][
+            0
+        ]
         disk.set_source_path(None)
         disk.sync_path_props()
 
@@ -223,9 +234,11 @@ class Installer(object):
         return bootorder
 
     def _can_set_guest_bootorder(self, guest):
-        return (not guest.os.is_container() and
-            not guest.os.kernel and
-            not any([d.boot.order for d in guest.devices.get_all()]))
+        return (
+            not guest.os.is_container()
+            and not guest.os.kernel
+            and not any([d.boot.order for d in guest.devices.get_all()])
+        )
 
     def _alter_treemedia_bootconfig(self, guest):
         if not self._treemedia:
@@ -233,11 +246,9 @@ class Installer(object):
 
         kernel, initrd, kernel_args = self._treemedia_bootconfig
         if kernel:
-            guest.os.kernel = (self.conn.in_testsuite() and
-                    _make_testsuite_path(kernel) or kernel)
+            guest.os.kernel = self.conn.in_testsuite() and _make_testsuite_path(kernel) or kernel
         if initrd:
-            guest.os.initrd = (self.conn.in_testsuite() and
-                    _make_testsuite_path(initrd) or initrd)
+            guest.os.initrd = self.conn.in_testsuite() and _make_testsuite_path(initrd) or initrd
         if kernel_args:
             guest.os.kernel_args = kernel_args
 
@@ -272,12 +283,11 @@ class Installer(object):
         ram = guest.osinfo.get_network_install_required_ram(guest)
         ram = (ram or 0) // 1024
         if ram > guest.currentMemory:
-            msg = (_("Overriding memory to %(number)s MiB needed for "
-                "%(osname)s network install.") %
-                {"number": ram // 1024, "osname": guest.osinfo.name})
+            msg = _(
+                "Overriding memory to %(number)s MiB needed for %(osname)s network install."
+            ) % {"number": ram // 1024, "osname": guest.osinfo.name}
             log.warning(msg)
             guest.currentMemory = ram
-
 
     ################
     # Internal API #
@@ -303,11 +313,11 @@ class Installer(object):
     def _upload_media(self, guest, meter, paths):
         system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
 
-        if (not self._should_upload_media(guest) and
-            not xmlutil.in_testsuite()):
+        if not self._should_upload_media(guest) and not xmlutil.in_testsuite():
             # We have access to system scratchdir, don't jump through hoops
-            log.debug("Have access to preferred scratchdir so"
-                        " nothing to upload")  # pragma: no cover
+            log.debug(
+                "Have access to preferred scratchdir so nothing to upload"
+            )  # pragma: no cover
             return paths  # pragma: no cover
 
         if not guest.conn.support_remote_url_install():
@@ -315,8 +325,7 @@ class Installer(object):
             log.debug("Media upload not supported")  # pragma: no cover
             return paths  # pragma: no cover
 
-        newpaths, tmpvols = volumeupload.upload_paths(
-                guest.conn, system_scratchdir, meter, paths)
+        newpaths, tmpvols = volumeupload.upload_paths(guest.conn, system_scratchdir, meter, paths)
         self._tmpvols += tmpvols
         return newpaths
 
@@ -333,10 +342,8 @@ class Installer(object):
             self._tmpfiles.append(scriptpath)
             injections.append((scriptpath, expected_filename))
 
-        drivers_location = guest.osinfo.get_pre_installable_drivers_location(
-                guest.os.arch)
-        drivers = unattended.download_drivers(
-                drivers_location, scratchdir, meter)
+        drivers_location = guest.osinfo.get_pre_installable_drivers_location(guest.os.arch)
+        drivers = unattended.download_drivers(drivers_location, scratchdir, meter)
         injections.extend(drivers)
         self._tmpfiles.extend([driverpair[0] for driverpair in drivers])
 
@@ -356,20 +363,21 @@ class Installer(object):
             injection_method = "initrd"
         else:
             if not guest.osinfo.is_windows():
-                log.warning("Attempting unattended method=cdrom injection "
-                        "for a non-windows OS. If this doesn't work, try "
-                        "passing install media to --location")
+                log.warning(
+                    "Attempting unattended method=cdrom injection "
+                    "for a non-windows OS. If this doesn't work, try "
+                    "passing install media to --location"
+                )
             osguess = OSDB.guess_os_by_iso(self.cdrom)
             os_media = osguess[1] if osguess else None
             injection_method = "cdrom"
 
         return unattended.prepare_install_scripts(
-                guest, self._unattended_data, url,
-                os_media, os_tree, injection_method)
+            guest, self._unattended_data, url, os_media, os_tree, injection_method
+        )
 
     def _prepare_treemedia(self, guest, meter, unattended_scripts):
-        kernel, initrd, kernel_args = self._treemedia.prepare(guest, meter,
-                unattended_scripts)
+        kernel, initrd, kernel_args = self._treemedia.prepare(guest, meter, unattended_scripts)
 
         paths = [kernel, initrd]
         kernel, initrd = self._upload_media(guest, meter, paths)
@@ -422,8 +430,7 @@ class Installer(object):
             return DomainOs.BOOT_DEVICE_CDROM
 
         if self._install_bootdev:
-            if any([d for d in guest.devices.disk
-                    if d.device == d.DEVICE_DISK]):
+            if any([d for d in guest.devices.disk if d.device == d.DEVICE_DISK]):
                 return DomainOs.BOOT_DEVICE_HARDDISK
             return self._install_bootdev
 
@@ -435,7 +442,6 @@ class Installer(object):
         elif device == DeviceDisk.DEVICE_FLOPPY:
             return DomainOs.BOOT_DEVICE_FLOPPY
         return DomainOs.BOOT_DEVICE_HARDDISK
-
 
     ##############
     # Public API #
@@ -452,14 +458,14 @@ class Installer(object):
 
     def set_initrd_injections(self, initrd_injections):
         if not self._treemedia:
-            raise RuntimeError("Install method does not support "
-                    "initrd injections.")
+            raise RuntimeError("Install method does not support initrd injections.")
         self._treemedia.set_initrd_injections(initrd_injections)
 
     def set_extra_args(self, extra_args):
         if not self._treemedia:
-            raise RuntimeError("Kernel arguments are only supported with "
-                    "location or kernel installs.")
+            raise RuntimeError(
+                "Kernel arguments are only supported with location or kernel installs."
+            )
         self._treemedia.set_extra_args(extra_args)
 
     def set_install_defaults(self, guest):
@@ -492,10 +498,9 @@ class Installer(object):
         for to perform this install.
         """
         search_paths = []
-        if ((self._treemedia or
-             self._cloudinit_data or
-             self._unattended_data) and
-             not self._should_upload_media(guest)):
+        if (
+            self._treemedia or self._cloudinit_data or self._unattended_data
+        ) and not self._should_upload_media(guest):
             search_paths.append(InstallerTreeMedia.make_scratchdir(guest))
         if self._cdrom_path():
             search_paths.append(self._cdrom_path())
@@ -511,9 +516,7 @@ class Installer(object):
             return True
         if self._no_install:
             return False
-        return bool(self._cdrom or
-                    self._install_bootdev or
-                    self._treemedia)
+        return bool(self._cdrom or self._install_bootdev or self._treemedia)
 
     def options_specified(self):
         """
@@ -536,8 +539,7 @@ class Installer(object):
             ret = self._treemedia.detect_distro(guest)
         elif self.cdrom:
             if guest.conn.is_remote():
-                log.debug("Can't detect distro for cdrom "
-                    "remote connection.")
+                log.debug("Can't detect distro for cdrom remote connection.")
             else:
                 osguess = OSDB.guess_os_by_iso(self.cdrom)
                 if osguess:
@@ -556,13 +558,13 @@ class Installer(object):
 
     def has_cloudinit(self):
         return bool(self._cloudinit_data)
+
     def has_unattended(self):
         return bool(self._unattended_data)
 
     def get_generated_password(self):
         if self._cloudinit_data:
             return self._cloudinit_data.get_password_if_generated()
-
 
     ##########################
     # guest install handling #
@@ -590,14 +592,13 @@ class Installer(object):
             #
             # For that case, we disable the default TPM device for the first
             # boot.
-            if (guest_ro.have_default_tpm and
-                guest_ro.is_uefi() and
-                len(initial_guest.devices.tpm)):
+            if guest_ro.have_default_tpm and guest_ro.is_uefi() and len(initial_guest.devices.tpm):
                 log.debug(
-                        "combo of default TPM, UEFI, and cloudinit is "
-                        "used. assuming this VM is using a linux distro "
-                        "cloud image with shim in the boot path. disabling "
-                        "TPM for the first boot")
+                    "combo of default TPM, UEFI, and cloudinit is "
+                    "used. assuming this VM is using a linux distro "
+                    "cloud image with shim in the boot path. disabling "
+                    "TPM for the first boot"
+                )
                 initial_guest.remove_device(initial_guest.devices.tpm[0])
 
         final_guest = Guest(self.conn, parsexml=final_xml)
@@ -610,12 +611,12 @@ class Installer(object):
         initial_xml = None
         final_xml = guest.get_xml()
         if self.requires_postboot_xml_changes():
-            initial_xml, final_xml = self._build_postboot_xml(
-                    guest, final_xml, meter)
+            initial_xml, final_xml = self._build_postboot_xml(guest, final_xml, meter)
         final_xml = self._pre_reinstall_xml or final_xml
 
-        log.debug("Generated initial_xml: %s",
-            (initial_xml and ("\n" + initial_xml) or "None required"))
+        log.debug(
+            "Generated initial_xml: %s", (initial_xml and ("\n" + initial_xml) or "None required")
+        )
         log.debug("Generated final_xml: \n%s", final_xml)
 
         return initial_xml, final_xml
@@ -643,8 +644,7 @@ class Installer(object):
             domain = self.conn.defineXML(final_xml)
         return domain
 
-    def _create_guest(self, guest,
-                      meter, initial_xml, final_xml, doboot, transient):
+    def _create_guest(self, guest, meter, initial_xml, final_xml, doboot, transient):
         """
         Actually do the XML logging, guest defining/creating
 
@@ -657,10 +657,8 @@ class Installer(object):
 
         if guest.type == "vz" and not self._is_reinstall:
             if transient:
-                raise RuntimeError(_("Domain type 'vz' doesn't support "
-                    "transient installs."))
-            domain = self._manual_transient_create(
-                    initial_xml, final_xml, needs_boot)
+                raise RuntimeError(_("Domain type 'vz' doesn't support transient installs."))
+            domain = self._manual_transient_create(initial_xml, final_xml, needs_boot)
 
         else:
             if transient or needs_boot:
@@ -669,8 +667,7 @@ class Installer(object):
                 domain = self.conn.defineXML(final_xml)
 
         try:
-            log.debug("XML fetched from libvirt object:\n%s",
-                          domain.XMLDesc(0))
+            log.debug("XML fetched from libvirt object:\n%s", domain.XMLDesc(0))
         except Exception as e:  # pragma: no cover
             log.debug("Error fetching XML from libvirt object: %s", e)
         meter.end()
@@ -685,17 +682,17 @@ class Installer(object):
         except Exception as e:  # pragma: no cover
             if not self.conn.support.is_error_nosupport(e):
                 raise
-            log.warning("Could not set autostart flag: libvirt "
-                            "connection does not support autostart.")
-
+            log.warning(
+                "Could not set autostart flag: libvirt connection does not support autostart."
+            )
 
     ######################
     # Public install API #
     ######################
 
-    def start_install(self, user_guest, meter=None,
-                      dry=False, return_xml=False,
-                      doboot=True, transient=False):
+    def start_install(
+        self, user_guest, meter=None, dry=False, return_xml=False, doboot=True, transient=False
+    ):
         """
         Begin the guest install. Will add install media to the guest config,
         launch it, then redefine the XML with the postinstall config.
@@ -723,9 +720,7 @@ class Installer(object):
             if dry or return_xml:
                 return (initial_xml, final_xml)
 
-            domain = self._create_guest(
-                    guest, meter, initial_xml, final_xml,
-                    doboot, transient)
+            domain = self._create_guest(guest, meter, initial_xml, final_xml, doboot, transient)
 
             if self.autostart:
                 self._flag_autostart(domain)

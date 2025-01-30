@@ -27,10 +27,15 @@ def do_we_have_session():
     ret = False
     try:  # pragma: no cover
         bus = Gio.bus_get_sync(Gio.BusType.SYSTEM, None)
-        manager = Gio.DBusProxy.new_sync(bus, 0, None,
-                        "org.freedesktop.login1",
-                        "/org/freedesktop/login1",
-                        "org.freedesktop.login1.Manager", None)
+        manager = Gio.DBusProxy.new_sync(
+            bus,
+            0,
+            None,
+            "org.freedesktop.login1",
+            "/org/freedesktop/login1",
+            "org.freedesktop.login1.Manager",
+            None,
+        )
 
         # This raises an error exception
         out = manager.GetSessionByPID("(u)", pid)
@@ -48,12 +53,14 @@ class _vmmConnectAuth(vmmGObjectUI):
         self.creds = creds
         self.topwin.set_title(_("Authentication required"))
 
-        self.builder.connect_signals({
-            "on_connectauth_cancel_clicked": self._cancel_cb,
-            "on_connectauth_ok_clicked": self._ok_cb,
-            "on_entry1_activate": self._entry_cb,
-            "on_entry2_activate": self._entry_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_connectauth_cancel_clicked": self._cancel_cb,
+                "on_connectauth_ok_clicked": self._ok_cb,
+                "on_entry1_activate": self._entry_cb,
+                "on_entry2_activate": self._entry_cb,
+            }
+        )
 
         self.entry1 = self.widget("entry1")
         self.entry2 = self.widget("entry2")
@@ -69,9 +76,7 @@ class _vmmConnectAuth(vmmGObjectUI):
         for idx, cred in enumerate(self.creds):
             # Libvirt virConnectCredential
             credtype, prompt, _challenge, _defresult, _result = cred
-            noecho = credtype in [
-                    libvirt.VIR_CRED_PASSPHRASE,
-                    libvirt.VIR_CRED_NOECHOPROMPT]
+            noecho = credtype in [libvirt.VIR_CRED_PASSPHRASE, libvirt.VIR_CRED_NOECHOPROMPT]
             if not prompt:  # pragma: no cover
                 raise RuntimeError("No prompt for auth credtype=%s" % credtype)
 
@@ -98,6 +103,7 @@ class _vmmConnectAuth(vmmGObjectUI):
 
     def _ok_cb(self, src):
         self.topwin.response(Gtk.ResponseType.OK)
+
     def _cancel_cb(self, src):
         self.topwin.response(Gtk.ResponseType.CANCEL)
 
@@ -132,7 +138,7 @@ def creds_dialog(creds, cbdata):
     GLib.idle_add(wrapper, creds, cbdata)
 
     while not retipc:
-        time.sleep(.1)
+        time.sleep(0.1)
 
     return retipc[0]
 
@@ -147,33 +153,37 @@ def connect_error(conn, errmsg, tb, warnconsole):
     show_errmsg = True
 
     if conn.is_remote():
-        log.debug("connect_error: conn transport=%s",
-            conn.get_uri_transport())
+        log.debug("connect_error: conn transport=%s", conn.get_uri_transport())
         if re.search(r"nc: .* -- 'U'", tb):  # pragma: no cover
-            hint += _("The remote host requires a version of netcat/nc "
-                      "which supports the -U option.")
+            hint += _(
+                "The remote host requires a version of netcat/nc which supports the -U option."
+            )
             show_errmsg = False
-        elif (conn.get_uri_transport() == "ssh" and
-                re.search(r"askpass", tb)):  # pragma: no cover
+        elif conn.get_uri_transport() == "ssh" and re.search(r"askpass", tb):  # pragma: no cover
 
-            hint += _("Configure SSH key access for the remote host, "
-                      "or install an SSH askpass package locally.")
+            hint += _(
+                "Configure SSH key access for the remote host, "
+                "or install an SSH askpass package locally."
+            )
             show_errmsg = False
         else:
-            hint += _("Verify that an appropriate libvirt daemon is running "
-                      "on the remote host.")
+            hint += _("Verify that an appropriate libvirt daemon is running on the remote host.")
 
     elif conn.is_xen():  # pragma: no cover
-        hint += _("Verify that:\n"
-                  " - A Xen host kernel was booted\n"
-                  " - The Xen service has been started")
+        hint += _(
+            "Verify that:\n"
+            " - A Xen host kernel was booted\n"
+            " - The Xen service has been started"
+        )
 
     else:
         if warnconsole:
-            hint += _("Could not detect a local session: if you are "
-                      "running virt-manager over ssh -X or VNC, you "
-                      "may not be able to connect to libvirt as a "
-                      "regular user. Try running as root.")
+            hint += _(
+                "Could not detect a local session: if you are "
+                "running virt-manager over ssh -X or VNC, you "
+                "may not be able to connect to libvirt as a "
+                "regular user. Try running as root."
+            )
             show_errmsg = False
         elif re.search(r"virt[a-z]*-sock", tb):  # pragma: no cover
             hint += _("Verify that an appropriate libvirt daemon is running.")
@@ -193,8 +203,7 @@ def connect_error(conn, errmsg, tb, warnconsole):
 
     title = _("Virtual Machine Manager Connection Failure")
 
-    ConnectError = collections.namedtuple("ConnectError",
-            ["msg", "details", "title"])
+    ConnectError = collections.namedtuple("ConnectError", ["msg", "details", "title"])
     return ConnectError(msg, details, title)
 
 
@@ -202,17 +211,19 @@ def connect_error(conn, errmsg, tb, warnconsole):
 # App first run connection setup #
 ##################################
 
+
 def setup_first_uri(_config, detected_uri):
     msg = ""
     if not detected_uri:
-        msg += _("Could not detect a default hypervisor. Make "
-                "sure the appropriate QEMU/KVM virtualization and libvirt "
-                "packages are installed to manage virtualization "
-                "on this host.")
+        msg += _(
+            "Could not detect a default hypervisor. Make "
+            "sure the appropriate QEMU/KVM virtualization and libvirt "
+            "packages are installed to manage virtualization "
+            "on this host."
+        )
 
     if msg:
         msg += "\n\n"
-        msg += _("A virtualization connection can be manually "
-                 "added via File->Add Connection")
+        msg += _("A virtualization connection can be manually added via File->Add Connection")
 
     return msg or None

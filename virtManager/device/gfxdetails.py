@@ -28,8 +28,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
     }
 
     def __init__(self, vm, builder, topwin):
-        vmmGObjectUI.__init__(self, "gfxdetails.ui",
-                              None, builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "gfxdetails.ui", None, builder=builder, topwin=topwin)
         self.vm = vm
         self.conn = vm.conn
 
@@ -38,20 +37,23 @@ class vmmGraphicsDetails(vmmGObjectUI):
         def _e(edittype):
             def signal_cb(*args):
                 self._change_cb(edittype)
+
             return signal_cb
 
-        self.builder.connect_signals({
-            "on_graphics_show_password": self._show_password_cb,
-            "on_graphics_port_auto_toggled": self._change_port_auto,
-            "on_graphics_opengl_toggled": _e(_EDIT_GFX_OPENGL),
-            "on_graphics_type_changed": _e(_EDIT_GFX_TYPE),
-            "on_graphics_use_password": _e(_EDIT_GFX_PASSWD),
-            "on_graphics_listen_type_changed": _e(_EDIT_GFX_LISTEN),
-            "on_graphics_password_changed": _e(_EDIT_GFX_PASSWD),
-            "on_graphics_address_changed": _e(_EDIT_GFX_LISTEN),
-            "on_graphics_port_changed": _e(_EDIT_GFX_PORT),
-            "on_graphics_rendernode_changed": _e(_EDIT_GFX_OPENGL),
-        })
+        self.builder.connect_signals(
+            {
+                "on_graphics_show_password": self._show_password_cb,
+                "on_graphics_port_auto_toggled": self._change_port_auto,
+                "on_graphics_opengl_toggled": _e(_EDIT_GFX_OPENGL),
+                "on_graphics_type_changed": _e(_EDIT_GFX_TYPE),
+                "on_graphics_use_password": _e(_EDIT_GFX_PASSWD),
+                "on_graphics_listen_type_changed": _e(_EDIT_GFX_LISTEN),
+                "on_graphics_password_changed": _e(_EDIT_GFX_PASSWD),
+                "on_graphics_address_changed": _e(_EDIT_GFX_LISTEN),
+                "on_graphics_port_changed": _e(_EDIT_GFX_PORT),
+                "on_graphics_rendernode_changed": _e(_EDIT_GFX_OPENGL),
+            }
+        )
 
         self._init_ui()
         self.top_box = self.widget("graphics-box")
@@ -60,19 +62,19 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.vm = None
         self.conn = None
 
-
     #####################
     # Pretty UI helpers #
     #####################
 
     @staticmethod
     def graphics_pretty_type_simple(gtype):
-        if (gtype in [virtinst.DeviceGraphics.TYPE_VNC,
-                      virtinst.DeviceGraphics.TYPE_SDL,
-                      virtinst.DeviceGraphics.TYPE_RDP]):
+        if gtype in [
+            virtinst.DeviceGraphics.TYPE_VNC,
+            virtinst.DeviceGraphics.TYPE_SDL,
+            virtinst.DeviceGraphics.TYPE_RDP,
+        ]:
             return str(gtype).upper()
         return str(gtype).capitalize()
-
 
     ##########################
     # Initialization methods #
@@ -117,7 +119,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
                 rendernode = drm.get_devnode().path
                 model.append([rendernode, i.pretty_name()])
 
-
     ##############
     # UI syncing #
     ##############
@@ -128,18 +129,14 @@ class vmmGraphicsDetails(vmmGObjectUI):
         is_spice = gtype == "spice"
 
         listen = uiutil.get_list_selection(self.widget("graphics-listen-type"))
-        has_listen_none = (listen in ["none", "socket"])
+        has_listen_none = listen in ["none", "socket"]
 
-        has_virtio_3d = bool([
-            v for v in self.vm.xmlobj.devices.video if
-            (v.model == "virtio" and v.accel3d)])
+        has_virtio_3d = bool(
+            [v for v in self.vm.xmlobj.devices.video if (v.model == "virtio" and v.accel3d)]
+        )
 
-        uiutil.set_grid_row_visible(
-                self.widget("graphics-warn-virtio"),
-                not has_virtio_3d)
-        uiutil.set_grid_row_visible(
-                self.widget("graphics-warn-listen"),
-                not has_listen_none)
+        uiutil.set_grid_row_visible(self.widget("graphics-warn-virtio"), not has_virtio_3d)
+        uiutil.set_grid_row_visible(self.widget("graphics-warn-listen"), not has_listen_none)
 
         passwd_enabled = self.widget("graphics-password-chk").get_active()
         self.widget("graphics-password").set_sensitive(passwd_enabled)
@@ -149,9 +146,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password").set_visibility(passwd_visible)
 
         glval = self.widget("graphics-opengl").get_active()
-        uiutil.set_grid_row_visible(
-                self.widget("graphics-opengl-subopts-box"),
-                glval and is_spice)
+        uiutil.set_grid_row_visible(self.widget("graphics-opengl-subopts-box"), glval and is_spice)
 
         all_rows = [
             "graphics-listen-type",
@@ -162,12 +157,14 @@ class vmmGraphicsDetails(vmmGObjectUI):
             "graphics-opengl-subopts-box",
         ]
 
-        is_auto = (self.widget("graphics-port-auto").get_active() or
-            self.widget("graphics-port-auto").get_inconsistent())
+        is_auto = (
+            self.widget("graphics-port-auto").get_active()
+            or self.widget("graphics-port-auto").get_inconsistent()
+        )
         self.widget("graphics-port").set_visible(not is_auto)
 
         rows = ["graphics-password-box", "graphics-listen-type"]
-        if listen == 'address':
+        if listen == "address":
             rows.extend(["graphics-port-box", "graphics-address"])
         if is_spice:
             rows.append("graphics-opengl")
@@ -180,16 +177,12 @@ class vmmGraphicsDetails(vmmGObjectUI):
         for row in all_rows:
             uiutil.set_grid_row_visible(self.widget(row), row in rows)
 
-
-
     ##############
     # Public API #
     ##############
 
     def reset_state(self):
-        uiutil.set_list_selection(
-                self.widget("graphics-type"),
-                self.config.get_graphics_type())
+        uiutil.set_list_selection(self.widget("graphics-type"), self.config.get_graphics_type())
         self.widget("graphics-listen-type").set_active(0)
         self.widget("graphics-address").set_active(0)
 
@@ -234,10 +227,8 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-password").set_text(gfx.passwd or "")
 
         listentype = gfx.get_first_listen_type()
-        uiutil.set_list_selection(
-                self.widget("graphics-listen-type"), listentype)
-        uiutil.set_list_selection(
-                self.widget("graphics-address"), gfx.listen)
+        uiutil.set_list_selection(self.widget("graphics-listen-type"), listentype)
+        uiutil.set_list_selection(self.widget("graphics-address"), gfx.listen)
 
         glval = bool(gfx.gl)
         renderval = gfx.rendernode or None
@@ -247,8 +238,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
             # Only sync rendernode UI with XML, if gl=on, otherwise
             # we want to preserve the suggested rendernode already
             # selected in the UI
-            uiutil.set_list_selection(
-                   self.widget("graphics-rendernode"), renderval)
+            uiutil.set_list_selection(self.widget("graphics-rendernode"), renderval)
 
         # This comes last
         self._active_edits = []
@@ -271,8 +261,10 @@ class vmmGraphicsDetails(vmmGObjectUI):
         portauto = self.widget("graphics-port-auto").get_active()
         port = uiutil.spin_get_helper(self.widget("graphics-port"))
 
-        if (self.widget("graphics-port-auto").get_inconsistent() and
-            self.widget("graphics-port-auto").is_visible()):
+        if (
+            self.widget("graphics-port-auto").get_inconsistent()
+            and self.widget("graphics-port-auto").is_visible()
+        ):
             # When switching from listen=None to listen=address with
             # Hypervisor default, we need to force autoport otherwise
             # the XML change doesn't stick
@@ -317,7 +309,6 @@ class vmmGraphicsDetails(vmmGObjectUI):
         dev.port = values["port"]
 
         return dev
-
 
     #############
     # Listeners #

@@ -33,11 +33,8 @@ def _random_mac(conn):
         # Xen
         oui = [0x00, 0x16, 0x3E]
 
-    mac = oui + [
-            random.randint(0x00, 0xff),
-            random.randint(0x00, 0xff),
-            random.randint(0x00, 0xff)]
-    return ':'.join(["%02x" % x for x in mac])
+    mac = oui + [random.randint(0x00, 0xFF), random.randint(0x00, 0xFF), random.randint(0x00, 0xFF)]
+    return ":".join(["%02x" % x for x in mac])
 
 
 def _default_route():
@@ -49,8 +46,7 @@ def _default_route():
     for line in open(route_file):
         info = line.split()
         if len(info) != 11:  # pragma: no cover
-            log.debug("Unexpected field count=%s when parsing %s",
-                          len(info), route_file)
+            log.debug("Unexpected field count=%s when parsing %s", len(info), route_file)
             break
 
         try:
@@ -79,9 +75,11 @@ def _host_default_bridge():
     except Exception:  # pragma: no cover
         defn = -1
 
-    if (defn >= 0 and
-        os.path.exists("/sys/class/net/peth%d/brport" % defn) and
-        os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)):
+    if (
+        defn >= 0
+        and os.path.exists("/sys/class/net/peth%d/brport" % defn)
+        and os.path.exists("/sys/class/net/xenbr%d/bridge" % defn)
+    ):
         return "xenbr%d"  # pragma: no cover
     return None
 
@@ -175,12 +173,12 @@ class _DeviceInterfaceSourceAddress(DeviceAddress):
 class DeviceInterface(Device):
     XML_NAME = "interface"
 
-    TYPE_BRIDGE     = "bridge"
-    TYPE_VIRTUAL    = "network"
-    TYPE_USER       = "user"
-    TYPE_VHOSTUSER  = "vhostuser"
-    TYPE_ETHERNET   = "ethernet"
-    TYPE_DIRECT   = "direct"
+    TYPE_BRIDGE = "bridge"
+    TYPE_VIRTUAL = "network"
+    TYPE_USER = "user"
+    TYPE_VHOSTUSER = "vhostuser"
+    TYPE_ETHERNET = "ethernet"
+    TYPE_DIRECT = "direct"
 
     @staticmethod
     def generate_mac(conn):
@@ -199,8 +197,7 @@ class DeviceInterface(Device):
             except RuntimeError:  # pragma: no cover
                 continue
 
-        log.debug(  # pragma: no cover
-                "Failed to generate non-conflicting MAC")
+        log.debug("Failed to generate non-conflicting MAC")  # pragma: no cover
         return None  # pragma: no cover
 
     @staticmethod
@@ -217,8 +214,8 @@ class DeviceInterface(Device):
                 nicmac = nic.macaddr or ""
                 if nicmac.lower() == searchmac.lower():
                     raise RuntimeError(
-                            _("The MAC address '%s' is in use "
-                              "by another virtual machine.") % searchmac)
+                        _("The MAC address '%s' is in use by another virtual machine.") % searchmac
+                    )
 
     @staticmethod
     def default_bridge(conn):
@@ -227,7 +224,6 @@ class DeviceInterface(Device):
         if one is setup on the host
         """
         return _default_bridge(conn)
-
 
     ###############
     # XML helpers #
@@ -245,6 +241,7 @@ class DeviceInterface(Device):
         if self.type == self.TYPE_DIRECT:
             return self.source_dev
         return None
+
     def _set_source(self, newsource):
         """
         Convenience function, try to set the relevant <source> value
@@ -260,17 +257,30 @@ class DeviceInterface(Device):
             self.bridge = newsource
         elif self.type == self.TYPE_DIRECT:
             self.source_dev = newsource
-    source = property(_get_source, _set_source)
 
+    source = property(_get_source, _set_source)
 
     ##################
     # XML properties #
     ##################
 
     _XML_PROP_ORDER = [
-        "backend", "bridge", "network", "source_dev", "source_type",
-        "source_path", "source_mode", "portgroup", "macaddr", "target_dev",
-        "model", "virtualport", "filterref", "rom_bar", "rom_file", "mtu_size",
+        "backend",
+        "bridge",
+        "network",
+        "source_dev",
+        "source_type",
+        "source_path",
+        "source_mode",
+        "portgroup",
+        "macaddr",
+        "target_dev",
+        "model",
+        "virtualport",
+        "filterref",
+        "rom_bar",
+        "rom_file",
+        "mtu_size",
         "portForward",
     ]
 
@@ -289,9 +299,9 @@ class DeviceInterface(Device):
     source_type = XMLProperty("./source/@type")
     source_path = XMLProperty("./source/@path")
     source_mode = XMLProperty("./source/@mode")
-    source_address = XMLChildProperty(_DeviceInterfaceSourceAddress,
-                                      is_single=True,
-                                      relative_xpath="./source")
+    source_address = XMLChildProperty(
+        _DeviceInterfaceSourceAddress, is_single=True, relative_xpath="./source"
+    )
     managed = XMLProperty("./@managed", is_yesno=True)
 
     portgroup = XMLProperty("./source/@portgroup")
@@ -309,7 +319,6 @@ class DeviceInterface(Device):
     mtu_size = XMLProperty("./mtu/@size", is_int=True)
 
     portForward = XMLChildProperty(_PortForward)
-
 
     #############
     # Build API #
@@ -344,9 +353,7 @@ class DeviceInterface(Device):
             self.source_address.function = nodedev.function
 
         else:  # pragma: no cover
-            raise ValueError(_("Unsupported node device type '%s'") %
-                    nodedev.device_type)
-
+            raise ValueError(_("Unsupported node device type '%s'") % nodedev.device_type)
 
     ##################
     # Default config #

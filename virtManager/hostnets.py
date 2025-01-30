@@ -17,9 +17,9 @@ from .xmleditor import vmmXMLEditor
 
 
 EDIT_NET_IDS = (
-EDIT_NET_NAME,
-EDIT_NET_AUTOSTART,
-EDIT_NET_XML,
+    EDIT_NET_NAME,
+    EDIT_NET_AUTOSTART,
+    EDIT_NET_XML,
 ) = list(range(3))
 
 
@@ -29,8 +29,7 @@ ICON_SHUTOFF = "state_shutoff"
 
 class vmmHostNets(vmmGObjectUI):
     def __init__(self, conn, builder, topwin):
-        vmmGObjectUI.__init__(self, "hostnets.ui",
-                              None, builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "hostnets.ui", None, builder=builder, topwin=topwin)
         self.conn = conn
 
         self._addnet = None
@@ -39,18 +38,18 @@ class vmmHostNets(vmmGObjectUI):
         self._active_edits = set()
         self.top_box = self.widget("top-box")
 
-        self.builder.connect_signals({
-            "on_net_add_clicked": self._add_network_cb,
-            "on_net_delete_clicked": self._delete_network_cb,
-            "on_net_stop_clicked": self._stop_network_cb,
-            "on_net_start_clicked": self._start_network_cb,
-            "on_net_apply_clicked": (lambda *x: self._net_apply()),
-            "on_net_list_changed": self._net_selected_cb,
-            "on_net_autostart_toggled": (lambda *x:
-                self._enable_net_apply(EDIT_NET_AUTOSTART)),
-            "on_net_name_changed": (lambda *x:
-                self._enable_net_apply(EDIT_NET_NAME)),
-        })
+        self.builder.connect_signals(
+            {
+                "on_net_add_clicked": self._add_network_cb,
+                "on_net_delete_clicked": self._delete_network_cb,
+                "on_net_stop_clicked": self._stop_network_cb,
+                "on_net_start_clicked": self._start_network_cb,
+                "on_net_apply_clicked": (lambda *x: self._net_apply()),
+                "on_net_list_changed": self._net_selected_cb,
+                "on_net_autostart_toggled": (lambda *x: self._enable_net_apply(EDIT_NET_AUTOSTART)),
+                "on_net_name_changed": (lambda *x: self._enable_net_apply(EDIT_NET_NAME)),
+            }
+        )
 
         self._init_ui()
         self._populate_networks()
@@ -58,7 +57,6 @@ class vmmHostNets(vmmGObjectUI):
         self.conn.connect("net-added", self._conn_nets_changed_cb)
         self.conn.connect("net-removed", self._conn_nets_changed_cb)
         self.conn.connect("state-changed", self._conn_state_changed_cb)
-
 
     #######################
     # Standard UI methods #
@@ -78,7 +76,6 @@ class vmmHostNets(vmmGObjectUI):
         if self._addnet:
             self._addnet.close()
 
-
     ###########
     # UI init #
     ###########
@@ -86,15 +83,12 @@ class vmmHostNets(vmmGObjectUI):
     def _init_ui(self):
         self.widget("network-pages").set_show_tabs(False)
 
-        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
-                self.widget("net-details-align"),
-                self.widget("net-details"))
-        self._xmleditor.connect("changed",
-                lambda s: self._enable_net_apply(EDIT_NET_XML))
-        self._xmleditor.connect("xml-requested",
-                self._xmleditor_xml_requested_cb)
-        self._xmleditor.connect("xml-reset",
-                self._xmleditor_xml_reset_cb)
+        self._xmleditor = vmmXMLEditor(
+            self.builder, self.topwin, self.widget("net-details-align"), self.widget("net-details")
+        )
+        self._xmleditor.connect("changed", lambda s: self._enable_net_apply(EDIT_NET_XML))
+        self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
+        self._xmleditor.connect("xml-reset", self._xmleditor_xml_reset_cb)
 
         # [ netobj, label, icon name, icon size, is_active ]
         netListModel = Gtk.ListStore(object, str, str, int, bool)
@@ -110,13 +104,12 @@ class vmmHostNets(vmmGObjectUI):
         net_img = Gtk.CellRendererPixbuf()
         netCol.pack_start(net_img, False)
         netCol.pack_start(net_txt, True)
-        netCol.add_attribute(net_txt, 'text', 1)
-        netCol.add_attribute(net_txt, 'sensitive', 4)
-        netCol.add_attribute(net_img, 'icon-name', 2)
-        netCol.add_attribute(net_img, 'stock-size', 3)
+        netCol.add_attribute(net_txt, "text", 1)
+        netCol.add_attribute(net_txt, "sensitive", 4)
+        netCol.add_attribute(net_img, "icon-name", 2)
+        netCol.add_attribute(net_img, "stock-size", 3)
         self.widget("net-list").append_column(netCol)
         netListModel.set_sort_column_id(1, Gtk.SortType.ASCENDING)
-
 
     ##############
     # Public API #
@@ -125,20 +118,18 @@ class vmmHostNets(vmmGObjectUI):
     def refresh_page(self):
         self.conn.schedule_priority_tick(pollnet=True)
 
-
     #################
     # UI populating #
     #################
 
     def _refresh_conn_state(self):
         conn_active = self.conn.is_active()
-        self.widget("net-add").set_sensitive(conn_active and
-            self.conn.support.conn_network())
+        self.widget("net-add").set_sensitive(conn_active and self.conn.support.conn_network())
 
         if conn_active and not self.conn.support.conn_network():
             self._set_error_page(  # pragma: no cover
-                _("Libvirt connection does not support virtual network "
-                  "management."))
+                _("Libvirt connection does not support virtual network management.")
+            )
 
         if conn_active:
             uiutil.set_list_selection_by_number(self.widget("net-list"), 0)
@@ -186,9 +177,15 @@ class vmmHostNets(vmmGObjectUI):
             for net in self.conn.list_nets():
                 net.disconnect_by_obj(self)
                 net.connect("state-changed", self._net_state_changed_cb)
-                model.append([net, net.get_name(), "network-idle",
-                              Gtk.IconSize.LARGE_TOOLBAR,
-                              bool(net.is_active())])
+                model.append(
+                    [
+                        net,
+                        net.get_name(),
+                        "network-idle",
+                        Gtk.IconSize.LARGE_TOOLBAR,
+                        bool(net.is_active()),
+                    ]
+                )
         finally:
             net_list.set_model(model)
 
@@ -236,13 +233,11 @@ class vmmHostNets(vmmGObjectUI):
         self.widget("net-name").set_editable(not active)
         self.widget("net-device").set_text(net.get_bridge_device() or "")
         self.widget("net-name-domain").set_text(net.get_name_domain() or "")
-        uiutil.set_grid_row_visible(self.widget("net-name-domain"),
-                                       bool(net.get_name_domain()))
+        uiutil.set_grid_row_visible(self.widget("net-name-domain"), bool(net.get_name_domain()))
 
-        icon = (active and ICON_RUNNING or ICON_SHUTOFF)
+        icon = active and ICON_RUNNING or ICON_SHUTOFF
         self.widget("net-state").set_text(net.run_status())
-        self.widget("net-state-icon").set_from_icon_name(icon,
-                                                         Gtk.IconSize.BUTTON)
+        self.widget("net-state-icon").set_from_icon_name(icon, Gtk.IconSize.BUTTON)
 
         self.widget("net-start").set_sensitive(not active)
         self.widget("net-stop").set_sensitive(active)
@@ -257,7 +252,6 @@ class vmmHostNets(vmmGObjectUI):
 
         self._xmleditor.set_xml_from_libvirtobject(net)
 
-
     #############################
     # Network lifecycle actions #
     #############################
@@ -267,14 +261,16 @@ class vmmHostNets(vmmGObjectUI):
         if net is None:
             return  # pragma: no cover
 
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the network %s?") % net.get_name())
+        result = self.err.yes_no(
+            _("Are you sure you want to permanently delete the network %s?") % net.get_name()
+        )
         if not result:
             return
 
         log.debug("Deleting network '%s'", net.get_name())
-        vmmAsyncJob.simple_async_noshow(net.delete, [], self,
-                            _("Error deleting network '%s'") % net.get_name())
+        vmmAsyncJob.simple_async_noshow(
+            net.delete, [], self, _("Error deleting network '%s'") % net.get_name()
+        )
 
     def _start_network_cb(self, src):
         net = self._current_network()
@@ -282,8 +278,9 @@ class vmmHostNets(vmmGObjectUI):
             return  # pragma: no cover
 
         log.debug("Starting network '%s'", net.get_name())
-        vmmAsyncJob.simple_async_noshow(net.start, [], self,
-                            _("Error starting network '%s'") % net.get_name())
+        vmmAsyncJob.simple_async_noshow(
+            net.start, [], self, _("Error starting network '%s'") % net.get_name()
+        )
 
     def _stop_network_cb(self, src):
         net = self._current_network()
@@ -291,8 +288,9 @@ class vmmHostNets(vmmGObjectUI):
             return  # pragma: no cover
 
         log.debug("Stopping network '%s'", net.get_name())
-        vmmAsyncJob.simple_async_noshow(net.stop, [], self,
-                            _("Error stopping network '%s'") % net.get_name())
+        vmmAsyncJob.simple_async_noshow(
+            net.stop, [], self, _("Error stopping network '%s'") % net.get_name()
+        )
 
     def _add_network_cb(self, src):
         log.debug("Launching 'Add Network'")
@@ -302,7 +300,6 @@ class vmmHostNets(vmmGObjectUI):
             self._addnet.show(self.topwin)
         except Exception as e:  # pragma: no cover
             self.err.show_err(_("Error launching network wizard: %s") % str(e))
-
 
     ############################
     # Net apply/config actions #
@@ -341,14 +338,11 @@ class vmmHostNets(vmmGObjectUI):
         self._xmleditor.details_changed = True
 
     def _confirm_changes(self):
-        if (self.is_visible() and
-            self._active_edits and
-            self.err.confirm_unapplied_changes()):
+        if self.is_visible() and self._active_edits and self.err.confirm_unapplied_changes():
             self._net_apply()
 
         self._disable_net_apply()
         return True
-
 
     ################
     # UI listeners #

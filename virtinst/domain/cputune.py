@@ -10,10 +10,12 @@ from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 # CPU Pinning #
 ###############
 
+
 class _VCPUPin(XMLBuilder):
     """
     Class for generating <cputune> child <vcpupin> XML
     """
+
     XML_NAME = "vcpupin"
     _XML_PROP_ORDER = ["vcpu", "cpuset"]
 
@@ -25,6 +27,7 @@ class _IOThreadPin(XMLBuilder):
     """
     Class for generating <cputune> child <iothreadpin> XML
     """
+
     XML_NAME = "iothreadpin"
     _XML_PROP_ORDER = ["iothread", "cpuset"]
 
@@ -36,10 +39,12 @@ class _IOThreadPin(XMLBuilder):
 # Scheduling #
 ##############
 
+
 class _VCPUSched(XMLBuilder):
     """
     Class for generating <cputune> child <vcpusched> XML
     """
+
     XML_NAME = "vcpusched"
     _XML_PROP_ORDER = ["vcpus", "scheduler", "priority"]
 
@@ -52,6 +57,7 @@ class _IOThreadSched(XMLBuilder):
     """
     Class for generating <cputune> child <iothreadsched> XML
     """
+
     XML_NAME = "iothreadsched"
     _XML_PROP_ORDER = ["iothreads", "scheduler", "priority"]
 
@@ -64,10 +70,12 @@ class _IOThreadSched(XMLBuilder):
 # Cache & Memory Tunables #
 ###########################
 
+
 class _CacheTuneCache(XMLBuilder):
     """
     Class for generating <cachetune> child <cache> XML
     """
+
     XML_NAME = "cache"
     _XML_PROP_ORDER = ["id", "level", "type", "size", "unit"]
 
@@ -82,6 +90,7 @@ class _CacheTuneMonitor(XMLBuilder):
     """
     Class for generating <cachetune> child <monitor> XML
     """
+
     XML_NAME = "monitor"
     _XML_PROP_ORDER = ["level", "vcpus"]
 
@@ -93,6 +102,7 @@ class _CacheTune(XMLBuilder):
     """
     Class for generating <cputune> child <cachetune> XML
     """
+
     XML_NAME = "cachetune"
     _XML_PROP_ORDER = ["vcpus", "caches"]
 
@@ -105,6 +115,7 @@ class _MemoryTuneNode(XMLBuilder):
     """
     Class for generating <memorytune> child <node> XML
     """
+
     XML_NAME = "node"
     _XML_PROP_ORDER = ["id", "bandwidth"]
 
@@ -116,6 +127,7 @@ class _MemoryTune(XMLBuilder):
     """
     Class for generating <cputune> child <memorytune> XML
     """
+
     XML_NAME = "memorytune"
     _XML_PROP_ORDER = ["vcpus", "nodes"]
 
@@ -127,16 +139,33 @@ class _MemoryTune(XMLBuilder):
 # Actual CPUTune domain #
 #########################
 
+
 class DomainCputune(XMLBuilder):
     """
     Class for generating <cputune> XML
     """
+
     XML_NAME = "cputune"
-    _XML_PROP_ORDER = ["shares", "period", "quota", "global_period", "global_quota",
-            "emulator_period", "emulator_quota", "iothread_period", "iothread_quota",
-            "vcpupins", "emulatorpin_cpuset", "iothreadpins",
-            "emulatorsched_scheduler", "emulatorsched_priority", "vcpuscheds", "iothreadscheds",
-            "cachetunes", "memorytunes"]
+    _XML_PROP_ORDER = [
+        "shares",
+        "period",
+        "quota",
+        "global_period",
+        "global_quota",
+        "emulator_period",
+        "emulator_quota",
+        "iothread_period",
+        "iothread_quota",
+        "vcpupins",
+        "emulatorpin_cpuset",
+        "iothreadpins",
+        "emulatorsched_scheduler",
+        "emulatorsched_priority",
+        "vcpuscheds",
+        "iothreadscheds",
+        "cachetunes",
+        "memorytunes",
+    ]
 
     # Resource quotas
     shares = XMLProperty("./shares", is_int=True)

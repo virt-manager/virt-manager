@@ -14,7 +14,6 @@ class DeviceVsock(Device):
     auto_cid = XMLProperty("./cid/@auto", is_yesno=True)
     cid = XMLProperty("./cid/@address", is_int=True)
 
-
     ##################
     # Default config #
     ##################

@@ -12,6 +12,7 @@ class _Codec(XMLBuilder):
     """
     Class for generating <sound> child <codec> XML
     """
+
     XML_NAME = "codec"
 
     type = XMLProperty("./@type")
@@ -25,7 +26,6 @@ class DeviceSound(Device):
     audio_id = XMLProperty("./audio/@id")
     multichannel = XMLProperty("./@multichannel", is_yesno=True)
     streams = XMLProperty("./@streams")
-
 
     ##################
     # Default config #

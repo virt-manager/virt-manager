@@ -43,9 +43,7 @@ class _StorageObject(XMLBuilder):
     ##############
 
     name = XMLProperty("./name")
-    permissions = XMLChildProperty(_StoragePermissions,
-                                   relative_xpath="./target",
-                                   is_single=True)
+    permissions = XMLChildProperty(_StoragePermissions, relative_xpath="./target", is_single=True)
 
 
 def _preferred_default_pool_path(conn):
@@ -73,17 +71,18 @@ class StoragePool(_StorageObject):
     """
     Base class for building and installing libvirt storage pool xml
     """
-    TYPE_DIR     = "dir"
-    TYPE_FS      = "fs"
-    TYPE_NETFS   = "netfs"
+
+    TYPE_DIR = "dir"
+    TYPE_FS = "fs"
+    TYPE_NETFS = "netfs"
     TYPE_LOGICAL = "logical"
-    TYPE_DISK    = "disk"
-    TYPE_ISCSI   = "iscsi"
-    TYPE_SCSI    = "scsi"
-    TYPE_MPATH   = "mpath"
+    TYPE_DISK = "disk"
+    TYPE_ISCSI = "iscsi"
+    TYPE_SCSI = "scsi"
+    TYPE_MPATH = "mpath"
     TYPE_GLUSTER = "gluster"
-    TYPE_RBD     = "rbd"
-    TYPE_ZFS     = "zfs"
+    TYPE_RBD = "rbd"
+    TYPE_ZFS = "zfs"
 
     @staticmethod
     def pool_list_from_sources(conn, pool_type):
@@ -106,6 +105,7 @@ class StoragePool(_StorageObject):
         log.debug("Libvirt returned pool sources XML:\n%s", xml)
 
         import xml.etree.ElementTree as ET
+
         root = ET.fromstring(xml)
 
         # We implicitly only support this for pool TYPE_LOGICAL
@@ -134,8 +134,7 @@ class StoragePool(_StorageObject):
             poolxml = _lookup_poolxml_by_path(conn, path)
 
         if poolxml:
-            log.debug("Found default pool name=%s target=%s",
-                    poolxml.name, poolxml.target_path)
+            log.debug("Found default pool name=%s target=%s", poolxml.name, poolxml.target_path)
         return poolxml
 
     @staticmethod
@@ -151,8 +150,7 @@ class StoragePool(_StorageObject):
         try:
             name = "default"
             path = _preferred_default_pool_path(conn)
-            log.debug("Attempting to build default pool with target '%s'",
-                          path)
+            log.debug("Attempting to build default pool with target '%s'", path)
             defpool = StoragePool(conn)
             defpool.type = defpool.TYPE_DIR
             defpool.name = name
@@ -161,8 +159,10 @@ class StoragePool(_StorageObject):
             return defpool
         except Exception as e:  # pragma: no cover
             log.debug("Error building default pool", exc_info=True)
-            msg = (_("Couldn't create default storage pool '%(path)s': %(error)s") %
-                    {"path": path, "error": str(e)})
+            msg = _("Couldn't create default storage pool '%(path)s': %(error)s") % {
+                "path": path,
+                "error": str(e),
+            }
             raise RuntimeError(msg) from None
 
     @staticmethod
@@ -185,11 +185,13 @@ class StoragePool(_StorageObject):
         Finds a name similar (or equal) to passed 'basename' that is not
         in use by another pool. Extra params are passed to generate_name
         """
+
         def cb(name):
             for pool in conn.fetch_all_pools():
                 if pool.name == name:
                     return True
             return False
+
         return generatename.generate_name(basename, cb, **kwargs)
 
     @staticmethod
@@ -207,7 +209,6 @@ class StoragePool(_StorageObject):
             log.debug("refreshing pool=%s", pool_object.name())
             pool_object.refresh(0)
 
-
     ######################
     # Validation helpers #
     ######################
@@ -220,25 +221,20 @@ class StoragePool(_StorageObject):
             conn.storagePoolLookupByName(name)
         except libvirt.libvirtError:
             return
-        raise ValueError(_("Name '%s' already in use by another pool." %
-                         name))  # pragma: no cover
+        raise ValueError(_("Name '%s' already in use by another pool." % name))  # pragma: no cover
 
     def default_target_path(self):
         if not self.supports_target_path():
             return None
-        if (self.type == self.TYPE_DIR or
-            self.type == self.TYPE_NETFS or
-            self.type == self.TYPE_FS):
-            return os.path.join(
-                    _preferred_default_pool_path(self.conn), self.name)
+        if self.type == self.TYPE_DIR or self.type == self.TYPE_NETFS or self.type == self.TYPE_FS:
+            return os.path.join(_preferred_default_pool_path(self.conn), self.name)
         if self.type == self.TYPE_ISCSI or self.type == self.TYPE_SCSI:
             return _DEFAULT_SCSI_TARGET
         if self.type == self.TYPE_MPATH:
             return _DEFAULT_MPATH_TARGET
 
     def _type_to_source_prop(self):
-        if (self.type == self.TYPE_NETFS or
-            self.type == self.TYPE_GLUSTER):
+        if self.type == self.TYPE_NETFS or self.type == self.TYPE_GLUSTER:
             return "_source_dir"
         elif self.type == self.TYPE_SCSI:
             return "_source_adapter"
@@ -247,8 +243,10 @@ class StoragePool(_StorageObject):
 
     def _get_source(self):
         return getattr(self, self._type_to_source_prop())
+
     def _set_source(self, val):
         return setattr(self, self._type_to_source_prop(), val)
+
     source_path = property(_get_source, _set_source)
 
     def default_source_name(self):
@@ -260,20 +258,30 @@ class StoragePool(_StorageObject):
         if self.type == StoragePool.TYPE_GLUSTER:
             return "gv0"
 
-
     ##############
     # Properties #
     ##############
 
     XML_NAME = "pool"
-    _XML_PROP_ORDER = ["name", "type", "uuid",
-                       "capacity", "allocation", "available",
-                       "format", "hosts",
-                       "_source_dir", "_source_adapter", "_source_device",
-                       "source_name", "target_path",
-                       "permissions",
-                       "auth_type", "auth_username", "auth_secret_uuid"]
-
+    _XML_PROP_ORDER = [
+        "name",
+        "type",
+        "uuid",
+        "capacity",
+        "allocation",
+        "available",
+        "format",
+        "hosts",
+        "_source_dir",
+        "_source_adapter",
+        "_source_device",
+        "source_name",
+        "target_path",
+        "permissions",
+        "auth_type",
+        "auth_username",
+        "auth_secret_uuid",
+    ]
 
     _source_dir = XMLProperty("./source/dir/@path")
     _source_adapter = XMLProperty("./source/adapter/@name")
@@ -298,32 +306,35 @@ class StoragePool(_StorageObject):
 
     hosts = XMLChildProperty(_Host, relative_xpath="./source")
 
-
     ######################
     # Public API helpers #
     ######################
 
     def supports_target_path(self):
         return self.type in [
-                self.TYPE_DIR, self.TYPE_FS, self.TYPE_NETFS,
-                self.TYPE_ISCSI,
-                self.TYPE_SCSI, self.TYPE_MPATH]
+            self.TYPE_DIR,
+            self.TYPE_FS,
+            self.TYPE_NETFS,
+            self.TYPE_ISCSI,
+            self.TYPE_SCSI,
+            self.TYPE_MPATH,
+        ]
 
     def supports_source_name(self):
-        return self.type in [self.TYPE_LOGICAL, self.TYPE_GLUSTER,
-            self.TYPE_RBD, self.TYPE_ZFS]
-
+        return self.type in [self.TYPE_LOGICAL, self.TYPE_GLUSTER, self.TYPE_RBD, self.TYPE_ZFS]
 
     def supports_source_path(self):
         return self.type in [
-                self.TYPE_FS, self.TYPE_NETFS,
-                self.TYPE_DISK, self.TYPE_ISCSI, self.TYPE_SCSI,
-                self.TYPE_GLUSTER]
+            self.TYPE_FS,
+            self.TYPE_NETFS,
+            self.TYPE_DISK,
+            self.TYPE_ISCSI,
+            self.TYPE_SCSI,
+            self.TYPE_GLUSTER,
+        ]
 
     def supports_hosts(self):
-        return self.type in [
-                self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER,
-                self.TYPE_RBD]
+        return self.type in [self.TYPE_NETFS, self.TYPE_ISCSI, self.TYPE_GLUSTER, self.TYPE_RBD]
 
     def supports_format(self):
         return self.type in [self.TYPE_FS, self.TYPE_NETFS, self.TYPE_DISK]
@@ -332,18 +343,21 @@ class StoragePool(_StorageObject):
         return self.type in [self.TYPE_ISCSI]
 
     def get_disk_type(self):
-        if (self.type == StoragePool.TYPE_DISK or
-            self.type == StoragePool.TYPE_LOGICAL or
-            self.type == StoragePool.TYPE_SCSI or
-            self.type == StoragePool.TYPE_MPATH or
-            self.type == StoragePool.TYPE_ZFS):
+        if (
+            self.type == StoragePool.TYPE_DISK
+            or self.type == StoragePool.TYPE_LOGICAL
+            or self.type == StoragePool.TYPE_SCSI
+            or self.type == StoragePool.TYPE_MPATH
+            or self.type == StoragePool.TYPE_ZFS
+        ):
             return StorageVolume.TYPE_BLOCK
-        if (self.type == StoragePool.TYPE_GLUSTER or
-            self.type == StoragePool.TYPE_RBD or
-            self.type == StoragePool.TYPE_ISCSI):
+        if (
+            self.type == StoragePool.TYPE_GLUSTER
+            or self.type == StoragePool.TYPE_RBD
+            or self.type == StoragePool.TYPE_ISCSI
+        ):
             return StorageVolume.TYPE_NETWORK
         return StorageVolume.TYPE_FILE
-
 
     ##################
     # Build routines #
@@ -364,7 +378,7 @@ class StoragePool(_StorageObject):
         if not self.format and self.supports_format():
             self.format = "auto"
 
-        if (self.type == self.TYPE_DISK and self.format == "auto"):
+        if self.type == self.TYPE_DISK and self.format == "auto":
             # There is no explicit "auto" type for disk pools, but leaving out
             # the format type seems to do the job for existing formatted disks
             self.format = None
@@ -374,11 +388,9 @@ class StoragePool(_StorageObject):
         Install storage pool xml.
         """
         xml = self.get_xml()
-        log.debug("Creating storage pool '%s' with xml:\n%s",
-                      self.name, xml)
+        log.debug("Creating storage pool '%s' with xml:\n%s", self.name, xml)
 
-        if (xmlutil.in_testsuite() and
-            "virtinst-testsuite-fail-pool-install" in xml):
+        if xmlutil.in_testsuite() and "virtinst-testsuite-fail-pool-install" in xml:
             raise RuntimeError("StoragePool.install testsuite mocked failure")
 
         meter = progress.ensure_meter(meter)
@@ -413,8 +425,7 @@ class StoragePool(_StorageObject):
             try:
                 pool.undefine()
             except Exception as e:
-                log.debug("Error cleaning up pool after failure: %s",
-                              str(e))
+                log.debug("Error cleaning up pool after failure: %s", str(e))
             raise RuntimeError(errmsg)
 
         self.conn.cache_new_pool(pool)
@@ -434,7 +445,7 @@ def _progress_thread(volname, pool, meter, event):
             vol.info()  # pragma: no cover
             break  # pragma: no cover
         except Exception:
-            if event.wait(.2):
+            if event.wait(0.2):
                 break
 
     if vol is None:
@@ -452,6 +463,7 @@ class StorageVolume(_StorageObject):
     """
     Base class for building and installing libvirt storage volume xml
     """
+
     @staticmethod
     def get_file_extension_for_format(fmt):
         if not fmt:
@@ -480,15 +492,13 @@ class StorageVolume(_StorageObject):
 
             for disk in collideguest.devices.disk:
                 checkpath = disk.get_source_path()
-                if (pooltarget and checkpath and
-                    os.path.dirname(checkpath) == pooltarget):
+                if pooltarget and checkpath and os.path.dirname(checkpath) == pooltarget:
                     collidelist.append(os.path.basename(checkpath))
 
         def cb(tryname):
             if tryname in collidelist:
                 return True
-            return generatename.check_libvirt_collision(
-                pool_object.storageVolLookupByName, tryname)
+            return generatename.check_libvirt_collision(pool_object.storageVolLookupByName, tryname)
 
         StoragePool.ensure_pool_is_running(pool_object, refresh=True)
         return generatename.generate_name(basename, cb, **kwargs)
@@ -499,7 +509,6 @@ class StorageVolume(_StorageObject):
     TYPE_NETWORK = getattr(libvirt, "VIR_STORAGE_VOL_NETWORK", 3)
     TYPE_NETDIR = getattr(libvirt, "VIR_STORAGE_VOL_NETDIR", 4)
 
-
     def __init__(self, *args, **kwargs):
         _StorageObject.__init__(self, *args, **kwargs)
 
@@ -508,27 +517,27 @@ class StorageVolume(_StorageObject):
         self._pool_xml = None
         self._reflink = False
 
-
     ######################
     # Non XML properties #
     ######################
 
     def _get_pool(self):
         return self._pool
+
     def _set_pool(self, newpool):
         StoragePool.ensure_pool_is_running(newpool)
         self._pool = newpool
-        self._pool_xml = StoragePool(self.conn,
-            parsexml=self._pool.XMLDesc(0))
+        self._pool_xml = StoragePool(self.conn, parsexml=self._pool.XMLDesc(0))
+
     pool = property(_get_pool, _set_pool)
 
     @property
     def input_vol(self):
         return self._input_vol
+
     def set_input_vol(self, vol):
         self._input_vol = vol
-        parsevol = StorageVolume(self.conn,
-                                 parsexml=self._input_vol.XMLDesc(0))
+        parsevol = StorageVolume(self.conn, parsexml=self._input_vol.XMLDesc(0))
 
         self.format = parsevol.format
         self.capacity = parsevol.capacity
@@ -539,10 +548,11 @@ class StorageVolume(_StorageObject):
 
     def _get_reflink(self):
         return self._reflink
+
     def _set_reflink(self, reflink):
         self._reflink = reflink
-    reflink = property(_get_reflink, _set_reflink)
 
+    reflink = property(_get_reflink, _set_reflink)
 
     ##########################
     # XML validation helpers #
@@ -556,8 +566,9 @@ class StorageVolume(_StorageObject):
             pool.storageVolLookupByName(name)
         except libvirt.libvirtError:
             return
-        raise ValueError(_("Name '%s' already in use by another volume." %
-                         name))  # pragma: no cover
+        raise ValueError(
+            _("Name '%s' already in use by another volume." % name)
+        )  # pragma: no cover
 
     def _get_vol_type(self):
         if self.type:  # pragma: no cover
@@ -570,16 +581,23 @@ class StorageVolume(_StorageObject):
             elif self.type == "network":
                 return self.TYPE_NETWORK
         return self._pool_xml.get_disk_type()
-    file_type = property(_get_vol_type)
 
+    file_type = property(_get_vol_type)
 
     ##################
     # XML properties #
     ##################
 
     XML_NAME = "volume"
-    _XML_PROP_ORDER = ["name", "key", "capacity", "allocation", "format",
-                       "target_path", "permissions"]
+    _XML_PROP_ORDER = [
+        "name",
+        "key",
+        "capacity",
+        "allocation",
+        "format",
+        "target_path",
+        "permissions",
+    ]
 
     type = XMLProperty("./@type")
     key = XMLProperty("./key")
@@ -589,14 +607,12 @@ class StorageVolume(_StorageObject):
     target_path = XMLProperty("./target/path")
     backing_store = XMLProperty("./backingStore/path")
     backing_format = XMLProperty("./backingStore/format/@type")
-    lazy_refcounts = XMLProperty(
-            "./target/features/lazy_refcounts", is_bool=True)
-
+    lazy_refcounts = XMLProperty("./target/features/lazy_refcounts", is_bool=True)
 
     def _detect_backing_store_format(self):
-        log.debug("Attempting to detect format for backing_store=%s",
-                self.backing_store)
+        log.debug("Attempting to detect format for backing_store=%s", self.backing_store)
         from . import diskbackend
+
         path, vol, pool = diskbackend.manage_path(self.conn, self.backing_store)
         dummy = path
 
@@ -608,17 +624,17 @@ class StorageVolume(_StorageObject):
         # the 'format' parameter as we know it, like qcow2 etc.
         volxml = StorageVolume(self.conn, vol.XMLDesc(0))
         volxml.pool = pool
-        log.debug("Found backing store volume XML:\n%s",
-                volxml.get_xml())
+        log.debug("Found backing store volume XML:\n%s", volxml.get_xml())
 
         if not volxml.supports_format():  # pragma: no cover
-            log.debug("backing_store volume doesn't appear to have "
-                "a file format we can specify, returning None")
+            log.debug(
+                "backing_store volume doesn't appear to have "
+                "a file format we can specify, returning None"
+            )
             return None
 
         log.debug("Returning format=%s", volxml.format)
         return volxml.format
-
 
     ######################
     # Public API helpers #
@@ -626,7 +642,6 @@ class StorageVolume(_StorageObject):
 
     def supports_format(self):
         return self.file_type == self.TYPE_FILE
-
 
     ##################
     # Build routines #
@@ -642,8 +657,12 @@ class StorageVolume(_StorageObject):
 
         if self._pool_xml.type == StoragePool.TYPE_LOGICAL:
             if self.allocation != self.capacity:
-                log.warning(_("Sparse logical volumes are not supported, "
-                               "setting allocation equal to capacity"))
+                log.warning(
+                    _(
+                        "Sparse logical volumes are not supported, "
+                        "setting allocation equal to capacity"
+                    )
+                )
                 self.allocation = self.capacity
 
         isfatal, errmsg = self.is_size_conflict()
@@ -660,14 +679,15 @@ class StorageVolume(_StorageObject):
             self.backing_format = self._detect_backing_store_format()
 
         xml = self.get_xml()
-        log.debug("Creating storage volume '%s' with xml:\n%s",
-                      self.name, xml)
+        log.debug("Creating storage volume '%s' with xml:\n%s", self.name, xml)
 
         cloneflags = 0
         createflags = 0
-        if (self.format == "qcow2" and
-            not self.backing_store and
-            self.conn.support.pool_metadata_prealloc(self.pool)):
+        if (
+            self.format == "qcow2"
+            and not self.backing_store
+            and self.conn.support.pool_metadata_prealloc(self.pool)
+        ):
             createflags |= libvirt.VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA
             if self.capacity == self.allocation:
                 # For cloning, this flag will make libvirt+qemu-img preallocate
@@ -678,14 +698,15 @@ class StorageVolume(_StorageObject):
             if self.format != "raw":
                 log.warning("skipping reflink for non-raw vol=%s", self.name)
             else:
-                cloneflags |= getattr(libvirt,
-                    "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
+                cloneflags |= getattr(libvirt, "VIR_STORAGE_VOL_CREATE_REFLINK", 1)
 
         event = threading.Event()
         meter = progress.ensure_meter(meter)
-        t = threading.Thread(target=_progress_thread,
-                             name="Checking storage allocation",
-                             args=(self.name, self.pool, meter, event))
+        t = threading.Thread(
+            target=_progress_thread,
+            name="Checking storage allocation",
+            args=(self.name, self.pool, meter, event),
+        )
         t.daemon = True
 
         try:
@@ -710,8 +731,7 @@ class StorageVolume(_StorageObject):
             return vol
         except Exception as e:
             log.debug("Error creating storage volume", exc_info=True)
-            msg = ("Couldn't create storage volume '%s': '%s'" % (
-                self.name, str(e)))
+            msg = "Couldn't create storage volume '%s': '%s'" % (self.name, str(e))
             raise RuntimeError(msg) from None
         finally:
             event.set()
@@ -731,18 +751,18 @@ class StorageVolume(_StorageObject):
         # pool info is [pool state, capacity, allocation, available]
         avail = self.pool.info()[3]
         if self.allocation > avail:
-            msg = (_("There is not enough free space on the storage "
-                    "pool to create the volume. (%(mem1)s M requested "
-                    "allocation > %(mem2)s M available)") %
-                    {"mem1": (self.allocation // (1024 * 1024)),
-                     "mem2": (avail // (1024 * 1024))})
+            msg = _(
+                "There is not enough free space on the storage "
+                "pool to create the volume. (%(mem1)s M requested "
+                "allocation > %(mem2)s M available)"
+            ) % {"mem1": (self.allocation // (1024 * 1024)), "mem2": (avail // (1024 * 1024))}
             return (True, msg)
         elif self.capacity > avail:
-            msg = (_("The requested volume capacity will exceed the "
-                     "available pool space when the volume is fully "
-                     "allocated. (%(mem1)s M requested "
-                     "capacity > %(mem2)s M available)") %
-                     {"mem1": (self.capacity // (1024 * 1024)),
-                      "mem2": (avail // (1024 * 1024))})
+            msg = _(
+                "The requested volume capacity will exceed the "
+                "available pool space when the volume is fully "
+                "allocated. (%(mem1)s M requested "
+                "capacity > %(mem2)s M available)"
+            ) % {"mem1": (self.capacity // (1024 * 1024)), "mem2": (avail // (1024 * 1024))}
             return (False, msg)
         return (False, "")

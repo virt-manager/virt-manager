@@ -49,10 +49,21 @@ class _DiskSource(XMLBuilder):
     Class representing disk <source> block, and various helpers
     that only operate on <source> contents
     """
+
     _XML_PROP_ORDER = [
-        "file", "dev", "dir",
-        "volume", "pool", "protocol", "name", "hosts",
-        "type", "managed", "namespace", "address"]
+        "file",
+        "dev",
+        "dir",
+        "volume",
+        "pool",
+        "protocol",
+        "name",
+        "hosts",
+        "type",
+        "managed",
+        "namespace",
+        "address",
+    ]
     XML_NAME = "source"
 
     file = XMLProperty("./@file")
@@ -79,12 +90,12 @@ class _DiskSource(XMLBuilder):
         up and set the <disk> properties directly
         """
         from ..uri import URI
+
         uriobj = URI(uri)
 
         if uriobj.scheme:
             self.protocol = uriobj.scheme
-        if ((uriobj.hostname or uriobj.port or uriobj.transport) and
-            not self.hosts):
+        if (uriobj.hostname or uriobj.port or uriobj.transport) and not self.hosts:
             self.hosts.add_new()
         if uriobj.transport:
             self.hosts[0].transport = uriobj.transport
@@ -171,7 +182,7 @@ class _DiskSource(XMLBuilder):
                 path += poolxml.source_name
                 if poolxml.source_path:
                     path += poolxml.source_path
-                if not path.endswith('/'):
+                if not path.endswith("/"):
                     path += "/"
             path += volxml.name
         self.name = path or None
@@ -189,8 +200,13 @@ class DeviceDisk(Device):
     CACHE_MODE_WRITEBACK = "writeback"
     CACHE_MODE_DIRECTSYNC = "directsync"
     CACHE_MODE_UNSAFE = "unsafe"
-    CACHE_MODES = [CACHE_MODE_NONE, CACHE_MODE_WRITETHROUGH,
-        CACHE_MODE_WRITEBACK, CACHE_MODE_DIRECTSYNC, CACHE_MODE_UNSAFE]
+    CACHE_MODES = [
+        CACHE_MODE_NONE,
+        CACHE_MODE_WRITETHROUGH,
+        CACHE_MODE_WRITEBACK,
+        CACHE_MODE_DIRECTSYNC,
+        CACHE_MODE_UNSAFE,
+    ]
 
     DISCARD_MODE_IGNORE = "ignore"
     DISCARD_MODE_UNMAP = "unmap"
@@ -208,7 +224,6 @@ class DeviceDisk(Device):
     TYPE_NETWORK = "network"
 
     IO_MODE_NATIVE = "native"
-
 
     @staticmethod
     def path_definitely_exists(conn, path):
@@ -237,6 +252,7 @@ class DeviceDisk(Device):
             - uid we checked for or None if not application
         """
         log.debug("DeviceDisk.check_path_search path=%s", path)
+
         class SearchData(object):
             def __init__(self):
                 self.user = None
@@ -276,14 +292,12 @@ class DeviceDisk(Device):
 
         :returns: Return a dictionary of entries {broken path : error msg}
         """
-        errdict = diskbackend.set_dirs_searchable(
-                searchdata.fixlist, searchdata.user)
+        errdict = diskbackend.set_dirs_searchable(searchdata.fixlist, searchdata.user)
         return errdict
 
     @staticmethod
     def get_volmap(conn):
-        return dict((vol.backing_store, vol)
-                      for vol in conn.fetch_all_vols() if vol.backing_store)
+        return dict((vol.backing_store, vol) for vol in conn.fetch_all_vols() if vol.backing_store)
 
     @staticmethod
     def path_in_use_by(conn, path, shareable=False, read_only=False):
@@ -364,8 +378,9 @@ class DeviceDisk(Device):
         return ret
 
     @staticmethod
-    def build_vol_install(conn, volname, poolobj, size, sparse,
-                          fmt=None, backing_store=None, backing_format=None):
+    def build_vol_install(
+        conn, volname, poolobj, size, sparse, fmt=None, backing_store=None, backing_format=None
+    ):
         """
         Helper for building a StorageVolume instance to pass to DeviceDisk
         for eventual storage creation.
@@ -376,19 +391,22 @@ class DeviceDisk(Device):
         from ..storage import StorageVolume
 
         if size is None:
-            raise ValueError(_("Size must be specified for non "
-                               "existent volume '%s'" % volname))
+            raise ValueError(_("Size must be specified for non existent volume '%s'" % volname))
 
         # This catches --disk /dev/idontexist,size=1 if /dev is unmanaged
         if not poolobj:
-            raise RuntimeError(_("Don't know how to create storage for "
-                "path '%s'. Use libvirt APIs to manage the parent directory "
-                "as a pool first.") % volname)
+            raise RuntimeError(
+                _(
+                    "Don't know how to create storage for "
+                    "path '%s'. Use libvirt APIs to manage the parent directory "
+                    "as a pool first."
+                )
+                % volname
+            )
 
-        log.debug("Creating volume '%s' on pool '%s'",
-                      volname, poolobj.name())
+        log.debug("Creating volume '%s' on pool '%s'", volname, poolobj.name())
 
-        cap = (size * 1024 * 1024 * 1024)
+        cap = size * 1024 * 1024 * 1024
         if sparse:
             alloc = 0
         else:
@@ -404,8 +422,7 @@ class DeviceDisk(Device):
 
         if fmt:
             if not volinst.supports_format():
-                raise ValueError(_("Format attribute not supported for this "
-                                   "volume type"))
+                raise ValueError(_("Format attribute not supported for this volume type"))
             volinst.format = fmt
 
         return volinst
@@ -418,7 +435,7 @@ class DeviceDisk(Device):
         """
         digits = []
         for factor in range(0, 3):
-            amt = (num % (26 ** (factor + 1))) // (26 ** factor)
+            amt = (num % (26 ** (factor + 1))) // (26**factor)
             if amt == 0 and num >= (26 ** (factor + 1)):
                 amt = 26
             num -= amt
@@ -428,10 +445,9 @@ class DeviceDisk(Device):
         for digit in digits:
             if digit == 0:
                 continue
-            gen_t += "%c" % (ord('a') + digit - 1)
+            gen_t += "%c" % (ord("a") + digit - 1)
 
         return gen_t
-
 
     @staticmethod
     def target_to_num(tgt):
@@ -440,24 +456,34 @@ class DeviceDisk(Device):
         """
         num = 0
         k = 0
-        if tgt[0] == 'x':
+        if tgt[0] == "x":
             # This case is here for 'xvda'
             tgt = tgt[1:]
         for i, c in enumerate(reversed(tgt[2:])):
             if i != 0:
                 k = 1
-            num += (ord(c) - ord('a') + k) * (26 ** i)
+            num += (ord(c) - ord("a") + k) * (26**i)
         return num
 
-
     _XML_PROP_ORDER = [
-        "_xmltype", "_device", "snapshot_policy",
-        "driver_name", "driver_type",
-        "driver_cache", "driver_discard", "driver_detect_zeroes",
-        "driver_io", "driver_iothread", "driver_queues", "error_policy",
-        "auth_username", "auth_secret_type", "auth_secret_uuid",
+        "_xmltype",
+        "_device",
+        "snapshot_policy",
+        "driver_name",
+        "driver_type",
+        "driver_cache",
+        "driver_discard",
+        "driver_detect_zeroes",
+        "driver_io",
+        "driver_iothread",
+        "driver_queues",
+        "error_policy",
+        "auth_username",
+        "auth_secret_type",
+        "auth_secret_uuid",
         "source",
-        "target", "bus",
+        "target",
+        "bus",
     ]
 
     def __init__(self, *args, **kwargs):
@@ -467,8 +493,8 @@ class DeviceDisk(Device):
         self.storage_was_created = False
 
         self._storage_backend = diskbackend.StorageBackendStub(
-            self.conn, self._get_xmlpath(), self._xmltype, self.driver_type)
-
+            self.conn, self._get_xmlpath(), self._xmltype, self.driver_type
+        )
 
     ##################
     # XML properties #
@@ -511,10 +537,8 @@ class DeviceDisk(Device):
     driver_discard_no_unref = XMLProperty("./driver/@discard_no_unref", is_onoff=True)
     driver_queue_size = XMLProperty("./driver/@queue_size", is_int=True)
 
-    driver_metadata_cache_max_size = XMLProperty(
-        "./driver/metadata_cache/max_size", is_int=True)
-    driver_metadata_cache_max_size_unit = XMLProperty(
-        "./driver/metadata_cache/max_size/@unit")
+    driver_metadata_cache_max_size = XMLProperty("./driver/metadata_cache/max_size", is_int=True)
+    driver_metadata_cache_max_size_unit = XMLProperty("./driver/metadata_cache/max_size/@unit")
 
     error_policy = XMLProperty("./driver/@error_policy")
     serial = XMLProperty("./serial")
@@ -542,7 +566,6 @@ class DeviceDisk(Device):
     reservations_source_type = XMLProperty("./source/reservations/source/@type")
     reservations_source_path = XMLProperty("./source/reservations/source/@path")
     reservations_source_mode = XMLProperty("./source/reservations/source/@mode")
-
 
     #############################
     # Internal defaults helpers #
@@ -590,26 +613,28 @@ class DeviceDisk(Device):
         if self._xmltype:
             return self._xmltype
         return self._get_default_type()
+
     def _set_type(self, val):
         self._xmltype = val
+
     type = property(_get_type, _set_type)
 
     def _get_device(self):
         if self._device:
             return self._device
         return self.DEVICE_DISK
+
     def _set_device(self, val):
         self._device = val
-    device = property(_get_device, _set_device)
 
+    device = property(_get_device, _set_device)
 
     ############################
     # Storage backend handling #
     ############################
 
     def _change_backend(self, path, vol_object, parent_pool):
-        backend = diskbackend.StorageBackend(self.conn, path,
-                                             vol_object, parent_pool)
+        backend = diskbackend.StorageBackend(self.conn, path, vol_object, parent_pool)
         self._storage_backend = backend
 
     def set_backend_for_existing_path(self):
@@ -636,21 +661,22 @@ class DeviceDisk(Device):
 
         if typ == DeviceDisk.TYPE_VOLUME:
             try:
-                parent_pool = self.conn.storagePoolLookupByName(
-                    self.source.pool)
-                vol_object = parent_pool.storageVolLookupByName(
-                    self.source.volume)
+                parent_pool = self.conn.storagePoolLookupByName(self.source.pool)
+                vol_object = parent_pool.storageVolLookupByName(self.source.volume)
             except Exception as e:
                 self._source_volume_err = str(e)
-                log.debug("Error fetching source pool=%s vol=%s",
-                    self.source.pool, self.source.volume, exc_info=True)
+                log.debug(
+                    "Error fetching source pool=%s vol=%s",
+                    self.source.pool,
+                    self.source.volume,
+                    exc_info=True,
+                )
 
         if vol_object is None and path is None:
             path = self._get_xmlpath()
 
         if path and not vol_object and not parent_pool:
-            (dummy, vol_object, parent_pool) = diskbackend.manage_path(
-                    self.conn, path)
+            (dummy, vol_object, parent_pool) = diskbackend.manage_path(self.conn, path)
 
         self._change_backend(path, vol_object, parent_pool)
 
@@ -661,8 +687,7 @@ class DeviceDisk(Device):
         this is a reconstructed URL. In some cases like rbd:// this may
         be an entirely synthetic URL format
         """
-        if (self._storage_backend.is_stub() and not
-            self._storage_backend.get_path()):
+        if self._storage_backend.is_stub() and not self._storage_backend.get_path():
             self._resolve_storage_backend()
         return self._storage_backend.get_path()
 
@@ -673,42 +698,41 @@ class DeviceDisk(Device):
             newpath = newpath.removeprefix("file://")
 
         if self._storage_backend.will_create_storage():
-            raise xmlutil.DevError(
-                    "Can't change disk path if storage creation info "
-                    "has been set.")
+            raise xmlutil.DevError("Can't change disk path if storage creation info has been set.")
 
         # User explicitly changed 'path', so try to lookup its storage
         # object since we may need it
-        (newpath, vol_object, parent_pool) = diskbackend.manage_path(
-                self.conn, newpath)
+        (newpath, vol_object, parent_pool) = diskbackend.manage_path(self.conn, newpath)
 
         self._change_backend(newpath, vol_object, parent_pool)
         self._set_xmlpath(self.get_source_path())
 
     def set_vol_object(self, vol_object, parent_pool):
-        log.debug("disk.set_vol_object: volxml=\n%s",
-            vol_object.XMLDesc(0))
-        log.debug("disk.set_vol_object: poolxml=\n%s",
-            parent_pool.XMLDesc(0))
+        log.debug("disk.set_vol_object: volxml=\n%s", vol_object.XMLDesc(0))
+        log.debug("disk.set_vol_object: poolxml=\n%s", parent_pool.XMLDesc(0))
         self._change_backend(None, vol_object, parent_pool)
         self._set_xmlpath(self.get_source_path())
 
     def set_vol_install(self, vol_install):
-        log.debug("disk.set_vol_install: name=%s poolxml=\n%s",
-            vol_install.name, vol_install.pool.XMLDesc(0))
-        self._storage_backend = diskbackend.ManagedStorageCreator(
-            self.conn, vol_install)
+        log.debug(
+            "disk.set_vol_install: name=%s poolxml=\n%s",
+            vol_install.name,
+            vol_install.pool.XMLDesc(0),
+        )
+        self._storage_backend = diskbackend.ManagedStorageCreator(self.conn, vol_install)
         self._set_xmlpath(self.get_source_path())
 
     def get_vol_object(self):
         return self._storage_backend.get_vol_object()
+
     def get_vol_install(self):
         return self._storage_backend.get_vol_install()
+
     def get_parent_pool(self):
         return self._storage_backend.get_parent_pool()
+
     def get_size(self):
         return self._storage_backend.get_size()
-
 
     def _set_source_network_from_storage(self, volxml, poolxml):
         self.type = "network"
@@ -720,8 +744,7 @@ class DeviceDisk(Device):
         self.source.set_network_from_storage(volxml, poolxml)
 
     def _set_network_source_from_backend(self):
-        if (self._storage_backend.get_vol_object() or
-            self._storage_backend.get_vol_install()):
+        if self._storage_backend.get_vol_object() or self._storage_backend.get_vol_install():
             volxml = self._storage_backend.get_vol_xml()
             poolxml = self._storage_backend.get_parent_pool_xml()
             self._set_source_network_from_storage(volxml, poolxml)
@@ -737,7 +760,6 @@ class DeviceDisk(Device):
         elif disk_type == DeviceDisk.TYPE_FILE:
             return "file"
         return None
-
 
     # _xmlpath is an abstraction for source file/block/dir paths, since
     # they don't have any special properties aside from needing to match
@@ -767,11 +789,9 @@ class DeviceDisk(Device):
         """
         Set a path to manually clone (as in, not through libvirt)
         """
-        self._storage_backend = diskbackend.CloneStorageCreator(self.conn,
-            self.get_source_path(),
-            disk.get_source_path(),
-            disk.get_size(), sparse)
-
+        self._storage_backend = diskbackend.CloneStorageCreator(
+            self.conn, self.get_source_path(), disk.get_source_path(), disk.get_size(), sparse
+        )
 
     #####################
     # Utility functions #
@@ -782,8 +802,10 @@ class DeviceDisk(Device):
 
     def is_cdrom(self):
         return self.device == self.DEVICE_CDROM
+
     def is_floppy(self):
         return self.device == self.DEVICE_FLOPPY
+
     def is_disk(self):
         return self.device == self.DEVICE_DISK
 
@@ -801,7 +823,6 @@ class DeviceDisk(Device):
         will error.
         """
         return not self._storage_backend.exists()
-
 
     ####################
     # Storage building #
@@ -827,7 +848,6 @@ class DeviceDisk(Device):
         parent_pool = self.get_vol_install().pool
         self._change_backend(None, vol_object, parent_pool)
 
-
     ######################
     # validation helpers #
     ######################
@@ -838,16 +858,15 @@ class DeviceDisk(Device):
                 raise RuntimeError(self._source_volume_err)
 
             if not self.can_be_empty():
-                raise ValueError(_("Device type '%s' requires a path") %
-                                 self.device)
+                raise ValueError(_("Device type '%s' requires a path") % self.device)
 
             return
 
-        if (not self._storage_backend.exists() and
-            not self._storage_backend.will_create_storage()):
+        if not self._storage_backend.exists() and not self._storage_backend.will_create_storage():
             raise ValueError(
-                _("Must specify storage creation parameters for "
-                  "non-existent path '%s'.") % self.get_source_path())
+                _("Must specify storage creation parameters for non-existent path '%s'.")
+                % self.get_source_path()
+            )
 
         self._storage_backend.validate()
 
@@ -870,11 +889,10 @@ class DeviceDisk(Device):
 
         :returns: list of colliding VM names
         """
-        ret = self.path_in_use_by(self.conn, self.get_source_path(),
-                                  shareable=self.shareable,
-                                  read_only=self.read_only)
+        ret = self.path_in_use_by(
+            self.conn, self.get_source_path(), shareable=self.shareable, read_only=self.read_only
+        )
         return ret
-
 
     ###########################
     # Misc functional helpers #
@@ -902,6 +920,7 @@ class DeviceDisk(Device):
         disk.
         :returns: str prefix, or None if no reasonable guess can be made
         """
+
         # The upper limits here aren't necessarily 1024, but let the HV
         # error as appropriate.
         def _return(prefix):
@@ -959,10 +978,13 @@ class DeviceDisk(Device):
             return ret
 
         raise ValueError(
-            ngettext("Only %(number)s disk for bus '%(bus)s' are supported",
-                     "Only %(number)s disks for bus '%(bus)s' are supported",
-                     maxnode) %
-            {"number": maxnode, "bus": self.bus})
+            ngettext(
+                "Only %(number)s disk for bus '%(bus)s' are supported",
+                "Only %(number)s disks for bus '%(bus)s' are supported",
+                maxnode,
+            )
+            % {"number": maxnode, "bus": self.bus}
+        )
 
     def change_bus(self, guest, newbus):
         """
@@ -988,7 +1010,6 @@ class DeviceDisk(Device):
         self.target = None
         self.generate_target(used)
 
-
     #########################
     # set_defaults handling #
     #########################
@@ -1004,9 +1025,7 @@ class DeviceDisk(Device):
             return "ide"
         if self.is_disk() and guest.supports_virtiodisk():
             return "virtio"
-        if (self.is_cdrom() and
-            guest.supports_virtioscsi() and
-            not guest.os.is_x86()):
+        if self.is_cdrom() and guest.supports_virtioscsi() and not guest.os.is_x86():
             # x86 long time default has been IDE CDROM, stick with that to
             # avoid churn, but every newer virt arch that supports virtio-scsi
             # should use it
@@ -1035,16 +1054,16 @@ class DeviceDisk(Device):
             self.read_only = True
 
         discard_unmap = False
-        if (self.conn.is_qemu() and
-            self.is_disk() and
-            self._storage_backend.will_create_storage() and
-            self._storage_backend.get_vol_install() and
-            self._storage_backend.get_vol_install().allocation == 0):
+        if (
+            self.conn.is_qemu()
+            and self.is_disk()
+            and self._storage_backend.will_create_storage()
+            and self._storage_backend.get_vol_install()
+            and self._storage_backend.get_vol_install().allocation == 0
+        ):
             discard_unmap = True
 
-        if (self.conn.is_qemu() and
-            self.is_disk() and
-            self.type == self.TYPE_BLOCK):
+        if self.conn.is_qemu() and self.is_disk() and self.type == self.TYPE_BLOCK:
             discard_unmap = True
             if not self.driver_cache:
                 self.driver_cache = self.CACHE_MODE_NONE

@@ -15,19 +15,11 @@ from ..lib import testmock
 
 def _make_addr_str(addrStr, prefix, netmaskStr):
     if prefix:
-        return str(
-            ipaddress.ip_network(
-                str("{}/{}").format(addrStr, prefix), strict=False
-            )
-        )
+        return str(ipaddress.ip_network(str("{}/{}").format(addrStr, prefix), strict=False))
     elif netmaskStr:
         netmask = ipaddress.ip_address(str((netmaskStr)))
         network = ipaddress.ip_address(str((addrStr)))
-        return str(
-            ipaddress.ip_network(
-                str("{}/{}").format(network, netmask), strict=False
-            )
-        )
+        return str(ipaddress.ip_network(str("{}/{}").format(network, netmask), strict=False))
     else:
         return str(ipaddress.ip_network(str(addrStr), strict=False))
 
@@ -38,27 +30,27 @@ class vmmNetwork(vmmLibvirtObject):
 
         self._leases = None
 
-
     ##########################
     # Required class methods #
     ##########################
 
     def _conn_tick_poll_param(self):
         return "pollnet"
+
     def class_name(self):
         return "network"
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
+
     def _define(self, xml):
         return self.conn.define_network(xml)
+
     def _using_events(self):
         return self.conn.using_network_events
-    def _get_backend_status(self):
-        return (bool(self._backend.isActive()) and
-                self._STATUS_ACTIVE or
-                self._STATUS_INACTIVE)
 
+    def _get_backend_status(self):
+        return bool(self._backend.isActive()) and self._STATUS_ACTIVE or self._STATUS_INACTIVE
 
     ###########
     # Actions #
@@ -78,13 +70,13 @@ class vmmNetwork(vmmLibvirtObject):
         self._backend.undefine()
         self._backend = None
 
-
     ###############################
     # XML/config handling parsing #
     ###############################
 
     def get_autostart(self):
         return self._backend.autostart()
+
     def set_autostart(self, val):
         self._backend.setAutostart(val)
 
@@ -105,8 +97,10 @@ class vmmNetwork(vmmLibvirtObject):
 
     def get_bridge_device(self):
         return self.get_xmlobj().bridge
+
     def get_name_domain(self):
         return self.get_xmlobj().domain_name
+
     def get_ipv6_enabled(self):
         return self.get_xmlobj().ipv6
 
@@ -117,8 +111,7 @@ class vmmNetwork(vmmLibvirtObject):
         xmlobj = self.get_xmlobj()
         ip = None
         for i in xmlobj.ips:
-            if (i.family == family or
-                (family == "ipv4" and not i.family)):
+            if i.family == family or (family == "ipv4" and not i.family):
                 if i.ranges:
                     ip = i
                     dhcpstart = i.ranges[0].start
@@ -127,8 +120,7 @@ class vmmNetwork(vmmLibvirtObject):
 
         if not ip:
             for i in xmlobj.ips:
-                if (i.family == family or
-                    (family == "ipv4" and not i.family)):
+                if i.family == family or (family == "ipv4" and not i.family):
                     ip = i
                     break
 
@@ -138,12 +130,15 @@ class vmmNetwork(vmmLibvirtObject):
 
         dhcp = [None, None]
         if dhcpstart and dhcpend:
-            dhcp = [str(ipaddress.ip_address(str(dhcpstart))),
-                    str(ipaddress.ip_address(str(dhcpend)))]
+            dhcp = [
+                str(ipaddress.ip_address(str(dhcpstart))),
+                str(ipaddress.ip_address(str(dhcpend))),
+            ]
         return [ret, dhcp]
 
     def get_ipv4_network(self):
         return self._get_network("ipv4")
+
     def get_ipv6_network(self):
         return self._get_network("ipv6")
 

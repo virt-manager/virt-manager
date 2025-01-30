@@ -23,12 +23,33 @@ _ignore = Device
 
 class _DomainDevices(XMLBuilder):
     XML_NAME = "devices"
-    _XML_PROP_ORDER = ['disk', 'controller', 'filesystem', 'interface',
-            'smartcard', 'serial', 'parallel', 'console', 'channel',
-            'input', 'tpm', 'graphics', 'sound', 'audio', 'video', 'hostdev',
-            'redirdev', 'watchdog', 'memballoon', 'rng', 'panic',
-            'shmem', 'memory', 'vsock', 'iommu']
-
+    _XML_PROP_ORDER = [
+        "disk",
+        "controller",
+        "filesystem",
+        "interface",
+        "smartcard",
+        "serial",
+        "parallel",
+        "console",
+        "channel",
+        "input",
+        "tpm",
+        "graphics",
+        "sound",
+        "audio",
+        "video",
+        "hostdev",
+        "redirdev",
+        "watchdog",
+        "memballoon",
+        "rng",
+        "panic",
+        "shmem",
+        "memory",
+        "vsock",
+        "iommu",
+    ]
 
     disk = XMLChildProperty(DeviceDisk)
     controller = XMLChildProperty(DeviceController)
@@ -109,17 +130,14 @@ class Guest(XMLBuilder):
             u[6] = (u[6] & 0x0F) | (4 << 4)
             u[8] = (u[8] & 0x3F) | (2 << 6)
 
-            return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2,
-                             "%02x" * 6]) % tuple(u)
+            return "-".join(["%02x" * 4, "%02x" * 2, "%02x" * 2, "%02x" * 2, "%02x" * 6]) % tuple(u)
 
         for ignore in range(256):
             uuid = _randomUUID()
-            if not generatename.check_libvirt_collision(
-                    conn.lookupByUUID, uuid):
+            if not generatename.check_libvirt_collision(conn.lookupByUUID, uuid):
                 return uuid
 
-        log.error(  # pragma: no cover
-                "Failed to generate non-conflicting UUID")
+        log.error("Failed to generate non-conflicting UUID")  # pragma: no cover
 
     @staticmethod
     def generate_name(guest):
@@ -145,12 +163,15 @@ class Guest(XMLBuilder):
             force_num = False
 
         def cb(n):
-            return generatename.check_libvirt_collision(
-                guest.conn.lookupByName, n)
-        return generatename.generate_name(basename, cb,
-            start_num=force_num and 1 or 2, force_num=force_num,
-            sep=not force_num and "-" or "")
+            return generatename.check_libvirt_collision(guest.conn.lookupByName, n)
 
+        return generatename.generate_name(
+            basename,
+            cb,
+            start_num=force_num and 1 or 2,
+            force_num=force_num,
+            sep=not force_num and "-" or "",
+        )
 
     @staticmethod
     def get_recommended_machine(capsinfo):
@@ -159,9 +180,9 @@ class Guest(XMLBuilder):
         We only return this for arch cases where there's a very clear
         preference that's different from the default machine type
         """
+
         def _qemu_machine():
-            if (capsinfo.arch in ["ppc64", "ppc64le"] and
-                "pseries" in capsinfo.machines):
+            if capsinfo.arch in ["ppc64", "ppc64le"] and "pseries" in capsinfo.machines:
                 return "pseries"
 
             if capsinfo.arch in ["armv7l", "aarch64"]:
@@ -182,24 +203,55 @@ class Guest(XMLBuilder):
             return _qemu_machine()
         return None
 
-
     #################
     # init handling #
     #################
 
     XML_NAME = "domain"
     _XML_PROP_ORDER = [
-        "type", "name", "uuid", "genid", "genid_enable",
-        "title", "description", "_metadata",
-        "iothreads", "iothreadids", "defaultiothread",
-        "maxMemory", "maxMemorySlots", "memory", "_currentMemory",
-        "blkiotune", "memtune", "memoryBacking",
-        "_vcpus", "vcpu_current", "vcpu_placement",
-        "vcpu_cpuset", "vcpulist", "numatune", "resource", "sysinfo",
-        "bootloader", "bootloader_args", "os", "idmap",
-        "features", "cpu", "clock",
-        "on_poweroff", "on_reboot", "on_crash",
-        "pm", "emulator", "devices", "launchSecurity", "seclabels", "keywrap"]
+        "type",
+        "name",
+        "uuid",
+        "genid",
+        "genid_enable",
+        "title",
+        "description",
+        "_metadata",
+        "iothreads",
+        "iothreadids",
+        "defaultiothread",
+        "maxMemory",
+        "maxMemorySlots",
+        "memory",
+        "_currentMemory",
+        "blkiotune",
+        "memtune",
+        "memoryBacking",
+        "_vcpus",
+        "vcpu_current",
+        "vcpu_placement",
+        "vcpu_cpuset",
+        "vcpulist",
+        "numatune",
+        "resource",
+        "sysinfo",
+        "bootloader",
+        "bootloader_args",
+        "os",
+        "idmap",
+        "features",
+        "cpu",
+        "clock",
+        "on_poweroff",
+        "on_reboot",
+        "on_crash",
+        "pm",
+        "emulator",
+        "devices",
+        "launchSecurity",
+        "seclabels",
+        "keywrap",
+    ]
 
     def __init__(self, *args, **kwargs):
         XMLBuilder.__init__(self, *args, **kwargs)
@@ -230,7 +282,6 @@ class Guest(XMLBuilder):
         self._domcaps = None
         self._extra_drivers = None
 
-
     ######################
     # Property accessors #
     ######################
@@ -247,8 +298,10 @@ class Guest(XMLBuilder):
             if self.memory is None or self.memory < val:
                 self.memory = val
         self._currentMemory = val
+
     def _get_currentMemory(self):
         return self._currentMemory
+
     currentMemory = property(_get_currentMemory, _set_currentMemory)
 
     _currentMemory = XMLProperty("./currentMemory", is_int=True)
@@ -263,8 +316,10 @@ class Guest(XMLBuilder):
             if self.vcpu_current is not None and self.vcpu_current > val:
                 self.vcpu_current = val
         self._vcpus = val
+
     def _get_vcpus(self):
         return self._vcpus
+
     _vcpus = XMLProperty("./vcpu", is_int=True)
     vcpus = property(_get_vcpus, _set_vcpus)
 
@@ -309,7 +364,6 @@ class Guest(XMLBuilder):
 
     xmlns_qemu = XMLChildProperty(DomainXMLNSQemu, is_single=True)
 
-
     ##############################
     # osinfo related definitions #
     ##############################
@@ -322,8 +376,11 @@ class Guest(XMLBuilder):
         if os_id:
             self.__osinfo = OSDB.lookup_os_by_full_id(os_id)
             if not self.__osinfo:
-                log.debug("XML had libosinfo os id=%s but we didn't "
-                        "find any libosinfo object matching that", os_id)
+                log.debug(
+                    "XML had libosinfo os id=%s but we didn't "
+                    "find any libosinfo object matching that",
+                    os_id,
+                )
 
         if not self.__osinfo:
             # If you hit this error, it means some part of the cli
@@ -331,10 +388,10 @@ class Guest(XMLBuilder):
             # available. Try moving whatever bits need osinfo to be
             # triggered via set_defaults
             if self.skip_default_osinfo:
-                raise xmlutil.DevError(
-                        "osinfo is accessed before it has been set.")
+                raise xmlutil.DevError("osinfo is accessed before it has been set.")
             self.set_default_os_name()
         return self.__osinfo
+
     osinfo = property(_get_osinfo)
 
     def _set_os_obj(self, obj):
@@ -354,11 +411,13 @@ class Guest(XMLBuilder):
             return False
 
         # These _only_ support virtio so don't check the OS
-        if (self.os.is_arm_machvirt() or
-            self.os.is_riscv_virt() or
-            self.os.is_s390x() or
-            self.os.is_pseries() or
-            self.os.is_loongarch64()):
+        if (
+            self.os.is_arm_machvirt()
+            or self.os.is_riscv_virt()
+            or self.os.is_s390x()
+            or self.os.is_pseries()
+            or self.os.is_loongarch64()
+        ):
             return True
 
         if not os_support:
@@ -371,13 +430,15 @@ class Guest(XMLBuilder):
 
     def supports_virtionet(self):
         return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
+
     def supports_virtiodisk(self):
         return self._supports_virtio(self.osinfo.supports_virtiodisk(self._extra_drivers))
+
     def supports_virtioscsi(self):
         return self._supports_virtio(self.osinfo.supports_virtioscsi(self._extra_drivers))
+
     def _supports_virtioserial(self):
         return self._supports_virtio(self.osinfo.supports_virtioserial(self._extra_drivers))
-
 
     #####################
     # Bootorder helpers #
@@ -452,8 +513,7 @@ class Guest(XMLBuilder):
         for dev in self.devices.get_all():
             dev.boot.order = None
 
-        dev_map = dict((dev.get_xml_id(), dev) for dev in
-                       self.get_bootable_devices())
+        dev_map = dict((dev.get_xml_id(), dev) for dev in self.get_bootable_devices())
         for boot_idx, dev_xml_id in enumerate(boot_order, 1):
             dev_map[dev_xml_id].boot.order = boot_idx
 
@@ -477,9 +537,10 @@ class Guest(XMLBuilder):
         self.os.bootorder = []
 
         # Sort the bootable devices by boot order
-        devs_sorted = sorted([device for device in self.get_bootable_devices()
-                              if device.boot.order is not None],
-                             key=lambda device: device.boot.order)
+        devs_sorted = sorted(
+            [device for device in self.get_bootable_devices() if device.boot.order is not None],
+            key=lambda device: device.boot.order,
+        )
 
         # set new boot order
         dev.boot.order = boot_index
@@ -497,7 +558,6 @@ class Guest(XMLBuilder):
             if next_boot_index is not None:
                 # we found a hole so we can stop here
                 break
-
 
     ###############################
     # Public XML APIs and helpers #
@@ -543,18 +603,19 @@ class Guest(XMLBuilder):
         arm+machvirt prefers UEFI since it's required for traditional
         install methods
         """
-        if (self.os.is_x86() and
-            (self.conn.is_qemu() or self.conn.is_test())):
+        if self.os.is_x86() and (self.conn.is_qemu() or self.conn.is_test()):
             # If OS has dropped support for 'bios', we have no
             # choice but to use EFI.
             # For other OS still prefer BIOS since it is faster
             # and doesn't break QEMU internal snapshots
             prefer_efi = self.osinfo.requires_firmware_efi(self.os.arch)
         else:
-            prefer_efi = (self.os.is_arm_machvirt() or
-                          self.os.is_riscv_virt() or
-                          self.os.is_loongarch64() or
-                          self.conn.is_bhyve())
+            prefer_efi = (
+                self.os.is_arm_machvirt()
+                or self.os.is_riscv_virt()
+                or self.os.is_loongarch64()
+                or self.conn.is_bhyve()
+            )
 
         log.debug("Prefer EFI => %s", prefer_efi)
         return prefer_efi
@@ -580,14 +641,15 @@ class Guest(XMLBuilder):
         # SMM feature enabled so change the machine to q35 as well.
         # To actually enforce the secure boot for the guest if Secure Boot
         # Mode is configured we need to enable loader secure feature.
-        if (self.os.is_x86() and
-            "secboot" in self.os.loader):
+        if self.os.is_x86() and "secboot" in self.os.loader:
             self.features.smm = True
             self.os.loader_secure = True
             if not self.os.is_q35():
-                log.warning("Changing machine type from '%s' to 'q35' "
-                        "which is required for UEFI secure boot.",
-                        self.os.machine)
+                log.warning(
+                    "Changing machine type from '%s' to 'q35' "
+                    "which is required for UEFI secure boot.",
+                    self.os.machine,
+                )
                 self.os.machine = "q35"
 
     def enable_uefi(self):
@@ -664,8 +726,7 @@ class Guest(XMLBuilder):
             try:
                 capsinfo = self.lookup_capsinfo()
             except Exception:
-                log.exception("Error fetching machine list for alias "
-                              "resolution, assuming mismatch")
+                log.exception("Error fetching machine list for alias resolution, assuming mismatch")
                 return False
             if capsinfo.is_machine_alias(self.os.machine, domcaps.machine):
                 return True
@@ -706,10 +767,8 @@ class Guest(XMLBuilder):
 
         if not self._capsinfo or not _compare(self._capsinfo):
             self._capsinfo = self.conn.caps.guest_lookup(
-                os_type=self.os.os_type,
-                arch=self.os.arch,
-                typ=self.type,
-                machine=self.os.machine)
+                os_type=self.os.os_type, arch=self.os.arch, typ=self.type, machine=self.os.machine
+            )
         return self._capsinfo
 
     def set_capabilities_defaults(self, capsinfo=None):
@@ -724,19 +783,13 @@ class Guest(XMLBuilder):
         self.os.arch = capsinfo.arch
         if not self.os.loader:
             self.os.loader = capsinfo.loader
-        if (not self.emulator and
-            not self.os.is_xenpv() and
-            self.type != "vz"):
+        if not self.emulator and not self.os.is_xenpv() and self.type != "vz":
             self.emulator = capsinfo.emulator
         if not self.os.machine:
             self.os.machine = Guest.get_recommended_machine(capsinfo)
 
-        if (wants_default_type and
-            self.conn.is_qemu() and
-            self.os.is_x86() and
-            self.type != "kvm"):
-            log.warning(  # pragma: no cover
-                    "KVM acceleration not available, using '%s'", self.type)
+        if wants_default_type and self.conn.is_qemu() and self.os.is_x86() and self.type != "kvm":
+            log.warning("KVM acceleration not available, using '%s'", self.type)  # pragma: no cover
 
     def refresh_machine_type(self):
         """
@@ -756,8 +809,7 @@ class Guest(XMLBuilder):
         self.os.machine = None
 
         capsinfo = self.lookup_capsinfo()
-        mobjs = (capsinfo.domain and
-                 capsinfo.domain.machines) or capsinfo.guest.machines
+        mobjs = (capsinfo.domain and capsinfo.domain.machines) or capsinfo.guest.machines
         canonical_names = [m.name for m in mobjs if m.canonical]
 
         for machine_alias in canonical_names:
@@ -772,15 +824,12 @@ class Guest(XMLBuilder):
             if original_machine_type.startswith(prefix):
                 self.os.machine = machine_alias
                 return
-        raise RuntimeError("Don't know how to refresh machine type '%s'" %
-                original_machine_type)
+        raise RuntimeError("Don't know how to refresh machine type '%s'" % original_machine_type)
 
     def set_smbios_serial_cloudinit(self):
-        if (not self.conn.is_qemu() and
-            not self.conn.is_test()):
+        if not self.conn.is_qemu() and not self.conn.is_test():
             return  # pragma: no cover
-        if (not self.os.is_x86() and
-            not self.os.is_arm_machvirt()):
+        if not self.os.is_x86() and not self.os.is_arm_machvirt():
             return  # pragma: no cover
         if self.os.smbios_mode not in [None, "sysinfo"]:
             return
@@ -823,21 +872,17 @@ class Guest(XMLBuilder):
             self.num_pcie_root_ports = int(num_pcie_root_ports)
 
         for dev in self.devices.get_all():
-            if (dev.DEVICE_TYPE == "controller" and
-                dev.type in ["pci", "ide"]):
+            if dev.DEVICE_TYPE == "controller" and dev.type in ["pci", "ide"]:
                 self.remove_device(dev)
                 continue
 
-            if (dev.DEVICE_TYPE == "sound" and
-                dev.model == "ich6"):
+            if dev.DEVICE_TYPE == "sound" and dev.model == "ich6":
                 dev.model = "ich9"
 
-            if (dev.DEVICE_TYPE == "interface" and
-                dev.model == "e1000"):
+            if dev.DEVICE_TYPE == "interface" and dev.model == "e1000":
                 dev.model = "e1000e"
 
-            if (dev.DEVICE_TYPE == "disk" and
-                dev.bus == "ide"):
+            if dev.DEVICE_TYPE == "disk" and dev.bus == "ide":
                 dev.bus = "sata"
                 used_targets = [d.target for d in self.devices.disk if d.target]
                 dev.generate_target(used_targets)
@@ -875,8 +920,9 @@ class Guest(XMLBuilder):
         """
         vnc_devs = [g for g in self.devices.graphics if g.type == "vnc"]
         # We ignore egl-headless, it's not a true graphical frontend
-        other_devs = [g for g in self.devices.graphics if
-                      g.type != "vnc" and g.type != "egl-headless"]
+        other_devs = [
+            g for g in self.devices.graphics if g.type != "vnc" and g.type != "egl-headless"
+        ]
 
         # Guest already had a vnc device.
         # Remove all other devs and we are done
@@ -940,13 +986,14 @@ class Guest(XMLBuilder):
             dev.set_defaults(self)
             if not is_primary and dev.model != "virtio":
                 # Device can't be non-primary, so just remove it
-                log.debug("Can't use model=%s for non-primary video device, "
-                          "removing it instead.", dev.model)
+                log.debug(
+                    "Can't use model=%s for non-primary video device, removing it instead.",
+                    dev.model,
+                )
                 self.remove_device(dev)
 
     def _add_qemu_vdagent(self):
-        if any(c for c in self.devices.channel if
-               c.type == c.TYPE_QEMUVDAGENT):
+        if any(c for c in self.devices.channel if c.type == c.TYPE_QEMUVDAGENT):
             return
 
         dev = DeviceChannel(self.conn)
@@ -1012,7 +1059,6 @@ class Guest(XMLBuilder):
     def add_extra_drivers(self, extra_drivers):
         self._extra_drivers = extra_drivers
 
-
     ########################
     # Private xml routines #
     ########################
@@ -1023,11 +1069,13 @@ class Guest(XMLBuilder):
 
         capsinfo = self.lookup_capsinfo()
 
-        if (self.os.is_x86() and
-            self.conn.is_qemu() and
-            "q35" in capsinfo.machines and
-            self.conn.support.qemu_q35_default() and
-            self.osinfo.supports_chipset_q35()):
+        if (
+            self.os.is_x86()
+            and self.conn.is_qemu()
+            and "q35" in capsinfo.machines
+            and self.conn.support.qemu_q35_default()
+            and self.osinfo.supports_chipset_q35()
+        ):
             self.os.machine = "q35"
             return
 
@@ -1046,13 +1094,12 @@ class Guest(XMLBuilder):
 
         if not domcaps.arch_can_uefi():
             raise RuntimeError(  # pragma: no cover
-                _("Don't know how to setup UEFI for arch '%s'") %
-                self.os.arch)
+                _("Don't know how to setup UEFI for arch '%s'") % self.os.arch
+            )
 
         path = domcaps.find_uefi_path_for_arch()
         if not path:  # pragma: no cover
-            raise RuntimeError(_("Did not find any UEFI binary path for "
-                "arch '%s'") % self.os.arch)
+            raise RuntimeError(_("Did not find any UEFI binary path for arch '%s'") % self.os.arch)
 
         return path
 
@@ -1060,12 +1107,14 @@ class Guest(XMLBuilder):
         if self.uefi_requested is False:
             return
 
-        use_default_uefi = (self.prefers_uefi() and
-            not self.os.kernel and
-            not self.os.loader and
-            self.os.loader_ro is None and
-            self.os.nvram is None and
-            self.os.firmware is None)
+        use_default_uefi = (
+            self.prefers_uefi()
+            and not self.os.kernel
+            and not self.os.loader
+            and self.os.loader_ro is None
+            and self.os.nvram is None
+            and self.os.firmware is None
+        )
 
         if not use_default_uefi and not self.uefi_requested:
             return
@@ -1080,8 +1129,7 @@ class Guest(XMLBuilder):
             log.warning("Your VM may not boot successfully.")
 
     def _usb_disabled(self):
-        controllers = [c for c in self.devices.controller if
-            c.type == "usb"]
+        controllers = [c for c in self.devices.controller if c.type == "usb"]
         if not controllers:
             return False
         return all([c.model == "none" for c in controllers])
@@ -1136,10 +1184,10 @@ class Guest(XMLBuilder):
 
         dev = DeviceConsole(self.conn)
         if self.conn.is_bhyve():
-            nmdm_dev_prefix = '/dev/nmdm{}'.format(self.generate_uuid(self.conn))
+            nmdm_dev_prefix = "/dev/nmdm{}".format(self.generate_uuid(self.conn))
             dev.type = dev.TYPE_NMDM
-            dev.source.master = nmdm_dev_prefix + 'A'
-            dev.source.slave = nmdm_dev_prefix + 'B'
+            dev.source.master = nmdm_dev_prefix + "A"
+            dev.source.slave = nmdm_dev_prefix + "B"
         else:
             dev.type = dev.TYPE_PTY
 
@@ -1170,15 +1218,13 @@ class Guest(XMLBuilder):
             usb2 = not usb3
         elif self.os.is_arm_machvirt():
             # For machvirt, we always assume OS supports usb3
-            if (qemu_usb3 and
-                self.conn.support.conn_machvirt_pci_default()):
+            if qemu_usb3 and self.conn.support.conn_machvirt_pci_default():
                 usb3 = True
         elif self.os.is_riscv_virt():
             # For RISC-V we can assume the guest OS supports USB3, but we
             # have to make sure libvirt and QEMU are new enough to be using
             # PCI by default
-            if (qemu_usb3 and
-                self.conn.support.conn_riscv_virt_pci_default()):
+            if qemu_usb3 and self.conn.support.conn_riscv_virt_pci_default():
                 usb3 = True
         elif self.os.is_pseries():
             # For pseries, we always assume OS supports usb3
@@ -1193,8 +1239,7 @@ class Guest(XMLBuilder):
             for dev in DeviceController.get_usb2_controllers(self.conn):
                 self.add_device(dev)
         elif usb3:
-            self.add_device(
-                DeviceController.get_usb3_controller(self.conn, self))
+            self.add_device(DeviceController.get_usb3_controller(self.conn, self))
 
     def _add_default_channels(self):
         if self.skip_default_channel:
@@ -1202,9 +1247,11 @@ class Guest(XMLBuilder):
         if self.devices.channel:
             return
 
-        if (self.conn.is_qemu() and
-            self._supports_virtioserial() and
-            self.conn.support.conn_autosocket()):
+        if (
+            self.conn.is_qemu()
+            and self._supports_virtioserial()
+            and self.conn.support.conn_autosocket()
+        ):
             dev = DeviceChannel(self.conn)
             dev.type = "unix"
             dev.target_type = "virtio"
@@ -1218,11 +1265,13 @@ class Guest(XMLBuilder):
             return
         if self.os.is_container() and not self.conn.is_vz():
             return
-        if (not self.os.is_x86() and
-            not self.os.is_pseries() and
-            not self.os.is_loongarch64() and
-            not self.os.is_arm_machvirt() and
-            not self.os.is_riscv_virt()):
+        if (
+            not self.os.is_x86()
+            and not self.os.is_pseries()
+            and not self.os.is_loongarch64()
+            and not self.os.is_arm_machvirt()
+            and not self.os.is_riscv_virt()
+        ):
             return
         self.add_device(DeviceGraphics(self.conn))
 
@@ -1231,17 +1280,21 @@ class Guest(XMLBuilder):
             return
         if self.devices.rng:
             return
-        if not (self.os.is_x86() or
-                self.os.is_arm_machvirt() or
-                self.os.is_riscv_virt() or
-                self.os.is_s390x() or
-                self.os.is_pseries() or
-                self.os.is_loongarch64()):
+        if not (
+            self.os.is_x86()
+            or self.os.is_arm_machvirt()
+            or self.os.is_riscv_virt()
+            or self.os.is_s390x()
+            or self.os.is_pseries()
+            or self.os.is_loongarch64()
+        ):
             return
 
-        if (self.conn.is_qemu() and
-            self.osinfo.supports_virtiorng(self._extra_drivers) and
-            self.conn.support.conn_rng_urandom()):
+        if (
+            self.conn.is_qemu()
+            and self.osinfo.supports_virtiorng(self._extra_drivers)
+            and self.conn.support.conn_rng_urandom()
+        ):
             dev = DeviceRng(self.conn)
             dev.type = "random"
             dev.device = "/dev/urandom"
@@ -1278,12 +1331,14 @@ class Guest(XMLBuilder):
         # We know for certain that a memballoon is good to have with these
         # machine types; for other machine types, we leave the decision up
         # to libvirt
-        if not (self.os.is_x86() or
-                self.os.is_arm_machvirt() or
-                self.os.is_riscv_virt() or
-                self.os.is_s390x() or
-                self.os.is_pseries() or
-                self.os.is_loongarch64()):
+        if not (
+            self.os.is_x86()
+            or self.os.is_arm_machvirt()
+            or self.os.is_riscv_virt()
+            or self.os.is_s390x()
+            or self.os.is_pseries()
+            or self.os.is_loongarch64()
+        ):
             return
 
         if self.osinfo.supports_virtioballoon(self._extra_drivers):
@@ -1393,9 +1448,7 @@ class Guest(XMLBuilder):
         if not self.has_spice():
             return
 
-        if (self.features.vmport is None and
-            self.os.is_x86() and
-            self.conn.support.conn_vmport()):
+        if self.features.vmport is None and self.os.is_x86() and self.conn.support.conn_vmport():
             self.features.vmport = False
 
         self._add_spice_channels()

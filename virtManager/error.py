@@ -15,8 +15,7 @@ from virtinst import log
 from .baseclass import vmmGObject
 
 
-def _launch_dialog(dialog, primary_text, secondary_text, title,
-                   widget=None, modal=True):
+def _launch_dialog(dialog, primary_text, secondary_text, title, widget=None, modal=True):
     def fix_text(t):
         if not t:
             return t
@@ -46,8 +45,10 @@ def _launch_dialog(dialog, primary_text, secondary_text, title,
         res = bool(res in [Gtk.ResponseType.YES, Gtk.ResponseType.OK])
         dialog.destroy()
     else:
+
         def response_destroy(src, ignore):
             src.destroy()
+
         dialog.connect("response", response_destroy)
         dialog.show()
 
@@ -74,14 +75,21 @@ class vmmErrorDialog(vmmGObject):
 
     def set_modal_default(self, val):
         self._modal_default = val
+
     def get_parent(self):
         return self._parent
 
-    def show_err(self, summary, details=None, title="",
-                 modal=None, debug=True,
-                 dialog_type=Gtk.MessageType.ERROR,
-                 buttons=Gtk.ButtonsType.CLOSE,
-                 text2=None):
+    def show_err(
+        self,
+        summary,
+        details=None,
+        title="",
+        modal=None,
+        debug=True,
+        dialog_type=Gtk.MessageType.ERROR,
+        buttons=Gtk.ButtonsType.CLOSE,
+        text2=None,
+    ):
         if modal is None:
             modal = self._modal_default
 
@@ -97,45 +105,42 @@ class vmmErrorDialog(vmmGObject):
             if details and details != summary:
                 det = details
                 if details.startswith(summary):
-                    det = details[len(summary):].strip()
+                    det = details[len(summary) :].strip()
                 debugmsg += "\ndetails=%s" % det
             log.debug(debugmsg)
 
         # Make sure we have consistent details for error dialogs
-        if (dialog_type == Gtk.MessageType.ERROR and summary not in details):
+        if dialog_type == Gtk.MessageType.ERROR and summary not in details:
             details = summary + "\n\n" + details
 
-        dialog = _errorDialog(parent=self.get_parent(),
-                              flags=0,
-                              message_type=dialog_type,
-                              buttons=buttons)
+        dialog = _errorDialog(
+            parent=self.get_parent(), flags=0, message_type=dialog_type, buttons=buttons
+        )
 
-        return dialog.show_dialog(primary_text=summary,
-                                  secondary_text=text2,
-                                  details=details, title=title,
-                                  modal=modal)
-
+        return dialog.show_dialog(
+            primary_text=summary, secondary_text=text2, details=details, title=title, modal=modal
+        )
 
     ###################################
     # Simple one shot message dialogs #
     ###################################
 
-    def _simple_dialog(self, dialog_type, buttons, text1,
-                       text2, title, widget=None, modal=True):
+    def _simple_dialog(self, dialog_type, buttons, text1, text2, title, widget=None, modal=True):
 
-        dialog = Gtk.MessageDialog(self.get_parent(),
-                                   flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                                   message_type=dialog_type,
-                                   buttons=buttons)
+        dialog = Gtk.MessageDialog(
+            self.get_parent(),
+            flags=Gtk.DialogFlags.DESTROY_WITH_PARENT,
+            message_type=dialog_type,
+            buttons=buttons,
+        )
         if self._simple:
             self._simple.destroy()
         self._simple = dialog
         self._simple.get_accessible().set_name("vmm dialog")
 
-        return _launch_dialog(self._simple,
-                              text1, text2 or "", title or "",
-                              widget=widget,
-                              modal=modal)
+        return _launch_dialog(
+            self._simple, text1, text2 or "", title or "", widget=widget, modal=modal
+        )
 
     def val_err(self, text1, text2=None, title=_("Input Error"), modal=True):
         logtext = _("Validation Error: %s") % text1
@@ -149,14 +154,14 @@ class vmmErrorDialog(vmmGObject):
 
         dtype = Gtk.MessageType.ERROR
         buttons = Gtk.ButtonsType.OK
-        self._simple_dialog(dtype, buttons,
-                            str(text1),
-                            text2 and str(text2) or "",
-                            str(title), None, modal)
+        self._simple_dialog(
+            dtype, buttons, str(text1), text2 and str(text2) or "", str(title), None, modal
+        )
         return False
 
-    def show_info(self, text1, text2=None, title="", widget=None, modal=True,
-                  buttons=Gtk.ButtonsType.OK):
+    def show_info(
+        self, text1, text2=None, title="", widget=None, modal=True, buttons=Gtk.ButtonsType.OK
+    ):
         dtype = Gtk.MessageType.INFO
         self._simple_dialog(dtype, buttons, text1, text2, title, widget, modal)
         return False
@@ -176,13 +181,12 @@ class vmmErrorDialog(vmmGObject):
         Helper function for confirming whether to apply unapplied changes
         """
         return self.chkbox_helper(
-                self.config.get_confirm_unapplied,
-                self.config.set_confirm_unapplied,
-                text1=(_("There are unapplied changes. "
-                         "Would you like to apply them now?")),
-                chktext=_("Don't warn me again."),
-                default=False)
-
+            self.config.get_confirm_unapplied,
+            self.config.set_confirm_unapplied,
+            text1=(_("There are unapplied changes. Would you like to apply them now?")),
+            chktext=_("Don't warn me again."),
+            default=False,
+        )
 
     ##########################################
     # One shot dialog with a checkbox prompt #
@@ -191,28 +195,22 @@ class vmmErrorDialog(vmmGObject):
     def warn_chkbox(self, text1, text2=None, chktext=None, buttons=None):
         dtype = Gtk.MessageType.WARNING
         buttons = buttons or Gtk.ButtonsType.OK_CANCEL
-        chkbox = _errorDialog(parent=self.get_parent(),
-                              flags=0,
-                              message_type=dtype,
-                              buttons=buttons)
-        return chkbox.show_dialog(primary_text=text1,
-                                  secondary_text=text2,
-                                  chktext=chktext)
+        chkbox = _errorDialog(
+            parent=self.get_parent(), flags=0, message_type=dtype, buttons=buttons
+        )
+        return chkbox.show_dialog(primary_text=text1, secondary_text=text2, chktext=chktext)
 
     def err_chkbox(self, text1, text2=None, chktext=None, buttons=None):
         dtype = Gtk.MessageType.ERROR
         buttons = buttons or Gtk.ButtonsType.OK
-        chkbox = _errorDialog(parent=self.get_parent(),
-                              flags=0,
-                              message_type=dtype,
-                              buttons=buttons)
-        return chkbox.show_dialog(primary_text=text1,
-                                  secondary_text=text2,
-                                  chktext=chktext)
+        chkbox = _errorDialog(
+            parent=self.get_parent(), flags=0, message_type=dtype, buttons=buttons
+        )
+        return chkbox.show_dialog(primary_text=text1, secondary_text=text2, chktext=chktext)
 
-    def chkbox_helper(self, getcb, setcb, text1, text2=None,
-                      default=True,
-                      chktext=_("Don't ask me again")):
+    def chkbox_helper(
+        self, getcb, setcb, text1, text2=None, default=True, chktext=_("Don't ask me again")
+    ):
         """
         Helper to prompt user about proceeding with an operation
         Returns True if the 'yes' or 'ok' button was selected, False otherwise
@@ -224,18 +222,24 @@ class vmmErrorDialog(vmmGObject):
             return default
 
         # pylint: disable=unpacking-non-sequence
-        res = self.warn_chkbox(text1=text1, text2=text2,
-                               chktext=chktext,
-                               buttons=Gtk.ButtonsType.YES_NO)
+        res = self.warn_chkbox(
+            text1=text1, text2=text2, chktext=chktext, buttons=Gtk.ButtonsType.YES_NO
+        )
         response, skip_prompt = res
         setcb(not skip_prompt)
 
         return response
 
-    def browse_local(self, dialog_name, start_folder=None,
-                     _type=None, dialog_type=None,
-                     choose_label=None, default_name=None,
-                     confirm_overwrite=False):
+    def browse_local(
+        self,
+        dialog_name,
+        start_folder=None,
+        _type=None,
+        dialog_type=None,
+        choose_label=None,
+        default_name=None,
+        confirm_overwrite=False,
+    ):
         """
         Helper function for launching a filechooser
 
@@ -247,10 +251,12 @@ class vmmErrorDialog(vmmGObject):
         if dialog_type is None:
             dialog_type = Gtk.FileChooserAction.OPEN
 
-        fcdialog = Gtk.FileChooserNative.new(title=dialog_name,
-                                             parent=self.get_parent(),
-                                             action=dialog_type,
-                                             accept_label=choose_label)
+        fcdialog = Gtk.FileChooserNative.new(
+            title=dialog_name,
+            parent=self.get_parent(),
+            action=dialog_type,
+            accept_label=choose_label,
+        )
 
         if default_name:
             fcdialog.set_current_name(default_name)
@@ -284,10 +290,11 @@ class vmmErrorDialog(vmmGObject):
         return ret
 
 
-class _errorDialog (Gtk.MessageDialog):
+class _errorDialog(Gtk.MessageDialog):
     """
     Custom error dialog with optional check boxes or details drop down
     """
+
     def __init__(self, *args, **kwargs):
         Gtk.MessageDialog.__init__(self, *args, **kwargs)
 
@@ -311,8 +318,7 @@ class _errorDialog (Gtk.MessageDialog):
         self.chk_vbox.set_spacing(0)
 
         self.chk_vbox.show_all()
-        self.vbox.pack_start(  # pylint: disable=no-member
-            self.chk_vbox, False, False, 0)
+        self.vbox.pack_start(self.chk_vbox, False, False, 0)  # pylint: disable=no-member
 
     def init_details(self):
         # Init details buffer
@@ -330,13 +336,12 @@ class _errorDialog (Gtk.MessageDialog):
         details.set_border_width(6)
         sw.add(details)
         self.buf_expander.add(sw)
-        self.vbox.pack_start(  # pylint: disable=no-member
-            self.buf_expander, False, False, 0)
+        self.vbox.pack_start(self.buf_expander, False, False, 0)  # pylint: disable=no-member
         self.buf_expander.show_all()
 
-    def show_dialog(self, primary_text, secondary_text="",
-                    title="", details="", chktext="",
-                    modal=True):
+    def show_dialog(
+        self, primary_text, secondary_text="", title="", details="", chktext="", modal=True
+    ):
         chkbox = None
         res = None
 
@@ -356,10 +361,7 @@ class _errorDialog (Gtk.MessageDialog):
             self.chk_vbox.add(chkbox)
             chkbox.show()
 
-        res = _launch_dialog(self,
-                             primary_text, secondary_text or "",
-                             title,
-                             modal=modal)
+        res = _launch_dialog(self, primary_text, secondary_text or "", title, modal=modal)
 
         if chktext:
             res = [res, chkbox.get_active()]

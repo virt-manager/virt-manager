@@ -76,25 +76,30 @@ class DeviceFilesystem(Device):
 
     def _get_source(self):
         return getattr(self, self._type_to_source_prop())
+
     def _set_source(self, val):
         return setattr(self, self._type_to_source_prop(), val)
+
     source = property(_get_source, _set_source)
 
     def _get_target(self):
         return self.target_dir
+
     def _set_target(self, val):
         self.target_dir = val
+
     target = property(_get_target, _set_target)
 
     def _get_type(self):
-        return getattr(self, '_type_prop')
+        return getattr(self, "_type_prop")
+
     def _set_type(self, val):
         # Get type/value of the attribute of "source" property
         old_source_type = self._type_to_source_prop()
         old_source_value = self.source
 
         # Update "type" property
-        new_type = setattr(self, '_type_prop', val)
+        new_type = setattr(self, "_type_prop", val)
 
         # If the attribute type of 'source' property has changed
         # restore the value
@@ -105,7 +110,6 @@ class DeviceFilesystem(Device):
 
     type = property(_get_type, _set_type)
 
-
     ##############
     # Validation #
     ##############
@@ -114,14 +118,13 @@ class DeviceFilesystem(Device):
         # In case of qemu for default fs type (mount) target is not
         # actually a directory, it is merely a arbitrary string tag
         # that is exported to the guest as a hint for where to mount
-        if ((self.conn.is_qemu() or self.conn.is_test()) and
-            (self.type is None or
-             self.type == self.TYPE_MOUNT)):
+        if (self.conn.is_qemu() or self.conn.is_test()) and (
+            self.type is None or self.type == self.TYPE_MOUNT
+        ):
             return
 
         if not os.path.isabs(target):
-            raise ValueError(_("Filesystem target '%s' must be an absolute "
-                               "path") % target)
+            raise ValueError(_("Filesystem target '%s' must be an absolute path") % target)
 
     def validate(self):
         if self.target:
@@ -136,7 +139,6 @@ class DeviceFilesystem(Device):
         # not the common case. so use mode=mapped
         return self.MODE_MAPPED
 
-
     ##################
     # Default config #
     ##################
@@ -144,9 +146,7 @@ class DeviceFilesystem(Device):
     def set_defaults(self, guest):
         ignore = guest
 
-        if not (self.conn.is_qemu() or
-                self.conn.is_lxc() or
-                self.conn.is_test()):
+        if not (self.conn.is_qemu() or self.conn.is_lxc() or self.conn.is_test()):
             return
 
         # type=mount is the libvirt default. But hardcode it since other

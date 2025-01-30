@@ -26,19 +26,20 @@ def testCheckXMLBuilderProps():
     _skipIfTestsFailed()
 
     # pylint: disable=protected-access
-    fail = [p for p in virtinst.xmlbuilder._allprops
-            if p not in virtinst.xmlbuilder._seenprops]
+    fail = [p for p in virtinst.xmlbuilder._allprops if p not in virtinst.xmlbuilder._seenprops]
     msg = None
     try:
         if fail:
             raise RuntimeError(str(fail))
     except Exception:
         msg = "".join(traceback.format_exc()) + "\n\n"
-        msg += ("This means that there are XML properties that are\n"
-                "untested in the test suite. This could be caused\n"
-                "by a previous test suite failure, or if you added\n"
-                "a new property and didn't extend the test suite.\n"
-                "Look into extending test_cli.py and/or test_xmlparse.py.")
+        msg += (
+            "This means that there are XML properties that are\n"
+            "untested in the test suite. This could be caused\n"
+            "by a previous test suite failure, or if you added\n"
+            "a new property and didn't extend the test suite.\n"
+            "Look into extending test_cli.py and/or test_xmlparse.py."
+        )
 
     if msg:
         pytest.fail(msg)
@@ -53,11 +54,14 @@ def testCheckCLISuboptions():
 
     # pylint: disable=protected-access
     from virtinst import cli
+
     unchecked = cli._SuboptChecker.get_unseen()
     if unchecked:
         msg = "\n\n"
         msg += "\n".join(sorted(a for a in unchecked)) + "\n\n"
-        msg += ("These command line arguments or aliases are not checked\n"
-               "in the test suite. Please test them.\n"
-               "Total unchecked arguments: %s" % len(unchecked))
+        msg += (
+            "These command line arguments or aliases are not checked\n"
+            "in the test suite. Please test them.\n"
+            "Total unchecked arguments: %s" % len(unchecked)
+        )
         pytest.fail(msg)

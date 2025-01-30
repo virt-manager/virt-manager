@@ -20,25 +20,26 @@ from .xmleditor import vmmXMLEditor
 
 
 EDIT_POOL_IDS = (
-EDIT_POOL_NAME,
-EDIT_POOL_AUTOSTART,
-EDIT_POOL_XML,
+    EDIT_POOL_NAME,
+    EDIT_POOL_AUTOSTART,
+    EDIT_POOL_XML,
 ) = list(range(3))
 
 VOL_NUM_COLUMNS = 7
-(VOL_COLUMN_HANDLE,
- VOL_COLUMN_NAME,
- VOL_COLUMN_CAPACITY,
- VOL_COLUMN_SIZESTR,
- VOL_COLUMN_FORMAT,
- VOL_COLUMN_INUSEBY,
- VOL_COLUMN_SENSITIVE) = range(VOL_NUM_COLUMNS)
+(
+    VOL_COLUMN_HANDLE,
+    VOL_COLUMN_NAME,
+    VOL_COLUMN_CAPACITY,
+    VOL_COLUMN_SIZESTR,
+    VOL_COLUMN_FORMAT,
+    VOL_COLUMN_INUSEBY,
+    VOL_COLUMN_SENSITIVE,
+) = range(VOL_NUM_COLUMNS)
 
 POOL_NUM_COLUMNS = 4
-(POOL_COLUMN_HANDLE,
- POOL_COLUMN_LABEL,
- POOL_COLUMN_ISACTIVE,
- POOL_COLUMN_PERCENT) = range(POOL_NUM_COLUMNS)
+(POOL_COLUMN_HANDLE, POOL_COLUMN_LABEL, POOL_COLUMN_ISACTIVE, POOL_COLUMN_PERCENT) = range(
+    POOL_NUM_COLUMNS
+)
 
 ICON_RUNNING = "state_running"
 ICON_SHUTOFF = "state_shutoff"
@@ -61,8 +62,7 @@ class vmmHostStorage(vmmGObjectUI):
     }
 
     def __init__(self, conn, builder, topwin, vol_sensitive_cb=None):
-        vmmGObjectUI.__init__(self, "hoststorage.ui",
-                              None, builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "hoststorage.ui", None, builder=builder, topwin=topwin)
         self.conn = conn
 
         # Callback function for setting volume row sensitivity. Used
@@ -79,28 +79,26 @@ class vmmHostStorage(vmmGObjectUI):
         self._xmleditor = None
         self.top_box = self.widget("storage-grid")
 
-        self.builder.connect_signals({
-            "on_pool_add_clicked": self._pool_add_cb,
-            "on_pool_stop_clicked": self._pool_stop_cb,
-            "on_pool_start_clicked": self._pool_start_cb,
-            "on_pool_delete_clicked": self._pool_delete_cb,
-            "on_pool_refresh_clicked": self._pool_refresh_cb,
-            "on_pool_apply_clicked": (lambda *x: self._pool_apply()),
-
-            "on_vol_delete_clicked": self._vol_delete_cb,
-            "on_vol_list_button_press_event": self._vol_popup_menu_cb,
-            "on_vol_list_changed": self._vol_selected_cb,
-            "on_vol_add_clicked": self._vol_add_cb,
-
-            "on_browse_cancel_clicked": self._cancel_clicked_cb,
-            "on_browse_local_clicked": self._browse_local_clicked_cb,
-            "on_choose_volume_clicked": self._choose_volume_clicked_cb,
-            "on_vol_list_row_activated": self._vol_list_row_activated_cb,
-
-            "on_pool_name_changed": (lambda *x:
-                self._enable_pool_apply(EDIT_POOL_NAME)),
-            "on_pool_autostart_toggled": self._pool_autostart_changed_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_pool_add_clicked": self._pool_add_cb,
+                "on_pool_stop_clicked": self._pool_stop_cb,
+                "on_pool_start_clicked": self._pool_start_cb,
+                "on_pool_delete_clicked": self._pool_delete_cb,
+                "on_pool_refresh_clicked": self._pool_refresh_cb,
+                "on_pool_apply_clicked": (lambda *x: self._pool_apply()),
+                "on_vol_delete_clicked": self._vol_delete_cb,
+                "on_vol_list_button_press_event": self._vol_popup_menu_cb,
+                "on_vol_list_changed": self._vol_selected_cb,
+                "on_vol_add_clicked": self._vol_add_cb,
+                "on_browse_cancel_clicked": self._cancel_clicked_cb,
+                "on_browse_local_clicked": self._browse_local_clicked_cb,
+                "on_choose_volume_clicked": self._choose_volume_clicked_cb,
+                "on_vol_list_row_activated": self._vol_list_row_activated_cb,
+                "on_pool_name_changed": (lambda *x: self._enable_pool_apply(EDIT_POOL_NAME)),
+                "on_pool_autostart_toggled": self._pool_autostart_changed_cb,
+            }
+        )
 
         self._init_ui()
         self._populate_pools()
@@ -108,7 +106,6 @@ class vmmHostStorage(vmmGObjectUI):
         self.conn.connect("pool-added", self._conn_pools_changed_cb)
         self.conn.connect("pool-removed", self._conn_pools_changed_cb)
         self.conn.connect("state-changed", self._conn_state_changed_cb)
-
 
     #######################
     # Standard UI methods #
@@ -143,30 +140,28 @@ class vmmHostStorage(vmmGObjectUI):
         if self._volmenu:
             self._volmenu.hide()
 
-
     ###########
     # UI init #
     ###########
 
     def _cap_sort_func_cb(self, model, iter1, iter2, userdata):
         def _cmp(a, b):
-            return ((a > b) - (a < b))
+            return (a > b) - (a < b)
 
-        return _cmp(int(model[iter1][VOL_COLUMN_CAPACITY]),
-                    int(model[iter2][VOL_COLUMN_CAPACITY]))
+        return _cmp(int(model[iter1][VOL_COLUMN_CAPACITY]), int(model[iter2][VOL_COLUMN_CAPACITY]))
 
     def _init_ui(self):
         self.widget("storage-pages").set_show_tabs(False)
 
-        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
-                self.widget("pool-details-align"),
-                self.widget("pool-details"))
-        self._xmleditor.connect("changed",
-                lambda s: self._enable_pool_apply(EDIT_POOL_XML))
-        self._xmleditor.connect("xml-requested",
-                self._xmleditor_xml_requested_cb)
-        self._xmleditor.connect("xml-reset",
-                self._xmleditor_xml_reset_cb)
+        self._xmleditor = vmmXMLEditor(
+            self.builder,
+            self.topwin,
+            self.widget("pool-details-align"),
+            self.widget("pool-details"),
+        )
+        self._xmleditor.connect("changed", lambda s: self._enable_pool_apply(EDIT_POOL_XML))
+        self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
+        self._xmleditor.connect("xml-reset", self._xmleditor_xml_reset_cb)
 
         # These are enabled in storagebrowser.py
         self.widget("browse-local").set_visible(False)
@@ -188,16 +183,16 @@ class vmmHostStorage(vmmGObjectUI):
         volCol = Gtk.TreeViewColumn(_("Volumes"))
         vol_txt1 = Gtk.CellRendererText()
         volCol.pack_start(vol_txt1, True)
-        volCol.add_attribute(vol_txt1, 'text', VOL_COLUMN_NAME)
-        volCol.add_attribute(vol_txt1, 'sensitive', VOL_COLUMN_SENSITIVE)
+        volCol.add_attribute(vol_txt1, "text", VOL_COLUMN_NAME)
+        volCol.add_attribute(vol_txt1, "sensitive", VOL_COLUMN_SENSITIVE)
         volCol.set_sort_column_id(VOL_COLUMN_NAME)
         self.widget("vol-list").append_column(volCol)
 
         volSizeCol = Gtk.TreeViewColumn(_("Size"))
         vol_txt2 = Gtk.CellRendererText()
         volSizeCol.pack_start(vol_txt2, False)
-        volSizeCol.add_attribute(vol_txt2, 'text', VOL_COLUMN_SIZESTR)
-        volSizeCol.add_attribute(vol_txt2, 'sensitive', VOL_COLUMN_SENSITIVE)
+        volSizeCol.add_attribute(vol_txt2, "text", VOL_COLUMN_SIZESTR)
+        volSizeCol.add_attribute(vol_txt2, "sensitive", VOL_COLUMN_SENSITIVE)
         volSizeCol.set_sort_column_id(VOL_COLUMN_CAPACITY)
         self.widget("vol-list").append_column(volSizeCol)
         volListModel.set_sort_func(VOL_COLUMN_CAPACITY, self._cap_sort_func_cb)
@@ -205,21 +200,20 @@ class vmmHostStorage(vmmGObjectUI):
         volFormatCol = Gtk.TreeViewColumn(_("Format"))
         vol_txt3 = Gtk.CellRendererText()
         volFormatCol.pack_start(vol_txt3, False)
-        volFormatCol.add_attribute(vol_txt3, 'text', VOL_COLUMN_FORMAT)
-        volFormatCol.add_attribute(vol_txt3, 'sensitive', VOL_COLUMN_SENSITIVE)
+        volFormatCol.add_attribute(vol_txt3, "text", VOL_COLUMN_FORMAT)
+        volFormatCol.add_attribute(vol_txt3, "sensitive", VOL_COLUMN_SENSITIVE)
         volFormatCol.set_sort_column_id(VOL_COLUMN_FORMAT)
         self.widget("vol-list").append_column(volFormatCol)
 
         volUseCol = Gtk.TreeViewColumn(_("Used By"))
         vol_txt4 = Gtk.CellRendererText()
         volUseCol.pack_start(vol_txt4, False)
-        volUseCol.add_attribute(vol_txt4, 'text', VOL_COLUMN_INUSEBY)
-        volUseCol.add_attribute(vol_txt4, 'sensitive', VOL_COLUMN_SENSITIVE)
+        volUseCol.add_attribute(vol_txt4, "text", VOL_COLUMN_INUSEBY)
+        volUseCol.add_attribute(vol_txt4, "sensitive", VOL_COLUMN_SENSITIVE)
         volUseCol.set_sort_column_id(VOL_COLUMN_INUSEBY)
         self.widget("vol-list").append_column(volUseCol)
 
-        volListModel.set_sort_column_id(VOL_COLUMN_NAME,
-            Gtk.SortType.ASCENDING)
+        volListModel.set_sort_column_id(VOL_COLUMN_NAME, Gtk.SortType.ASCENDING)
 
         # Init pool list
         # [pool object, label, pool.is_active(), percent string]
@@ -233,17 +227,14 @@ class vmmHostStorage(vmmGObjectUI):
         pool_per = Gtk.CellRendererText()
         poolCol.pack_start(pool_per, False)
         poolCol.pack_start(pool_txt, True)
-        poolCol.add_attribute(pool_txt, 'markup', POOL_COLUMN_LABEL)
-        poolCol.add_attribute(pool_txt, 'sensitive', POOL_COLUMN_ISACTIVE)
-        poolCol.add_attribute(pool_per, 'markup', POOL_COLUMN_PERCENT)
+        poolCol.add_attribute(pool_txt, "markup", POOL_COLUMN_LABEL)
+        poolCol.add_attribute(pool_txt, "sensitive", POOL_COLUMN_ISACTIVE)
+        poolCol.add_attribute(pool_per, "markup", POOL_COLUMN_PERCENT)
         pool_list.append_column(poolCol)
-        poolListModel.set_sort_column_id(POOL_COLUMN_LABEL,
-            Gtk.SortType.ASCENDING)
+        poolListModel.set_sort_column_id(POOL_COLUMN_LABEL, Gtk.SortType.ASCENDING)
 
         pool_list.get_selection().connect("changed", self._pool_selected_cb)
-        pool_list.get_selection().set_select_function(
-            (lambda *x: self._confirm_changes()), None)
-
+        pool_list.get_selection().set_select_function((lambda *x: self._confirm_changes()), None)
 
     ###############
     # Public APIs #
@@ -256,19 +247,18 @@ class vmmHostStorage(vmmGObjectUI):
     def set_name_hint(self, val):
         self._name_hint = val
 
-
     #################
     # UI populating #
     #################
 
     def _refresh_conn_state(self):
         conn_active = self.conn.is_active()
-        self.widget("pool-add").set_sensitive(conn_active and
-            self.conn.support.conn_storage())
+        self.widget("pool-add").set_sensitive(conn_active and self.conn.support.conn_storage())
 
         if conn_active and not self.conn.support.conn_storage():
             self._set_error_page(  # pragma: no cover
-                _("Libvirt connection does not support storage management."))
+                _("Libvirt connection does not support storage management.")
+            )
 
         if conn_active:
             uiutil.set_list_selection_by_number(self.widget("pool-list"), 0)
@@ -309,14 +299,13 @@ class vmmHostStorage(vmmGObjectUI):
         self.widget("pool-name-entry").set_text(pool.get_name())
         self.widget("pool-name-entry").set_editable(not active)
         self.widget("pool-sizes").set_markup(
-                _("%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>") %
-                {"bytesfree": pool.get_pretty_available(),
-                 "bytesinuse": pool.get_pretty_allocation()})
-        self.widget("pool-location").set_text(
-                pool.get_target_path())
+            _("%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>")
+            % {"bytesfree": pool.get_pretty_available(), "bytesinuse": pool.get_pretty_allocation()}
+        )
+        self.widget("pool-location").set_text(pool.get_target_path())
         self.widget("pool-state-icon").set_from_icon_name(
-                ((active and ICON_RUNNING) or ICON_SHUTOFF),
-                Gtk.IconSize.BUTTON)
+            ((active and ICON_RUNNING) or ICON_SHUTOFF), Gtk.IconSize.BUTTON
+        )
         self.widget("pool-state").set_text(pool.run_status())
         self.widget("pool-autostart").set_label(_("On Boot"))
         self.widget("pool-autostart").set_active(auto)
@@ -332,11 +321,9 @@ class vmmHostStorage(vmmGObjectUI):
         self.widget("vol-add").set_tooltip_text(_("Create new volume"))
         self.widget("vol-delete").set_sensitive(False)
 
-        if (active and
-            not vmmStoragePool.supports_volume_creation(pool.get_type())):
+        if active and not vmmStoragePool.supports_volume_creation(pool.get_type()):
             self.widget("vol-add").set_sensitive(False)
-            self.widget("vol-add").set_tooltip_text(
-                _("Pool does not support volume creation"))
+            self.widget("vol-add").set_tooltip_text(_("Pool does not support volume creation"))
 
         self._xmleditor.set_xml_from_libvirtobject(pool)
 
@@ -422,8 +409,7 @@ class vmmHostStorage(vmmGObjectUI):
                 sizestr = vol.get_pretty_capacity()
                 fmt = vol.get_format() or ""
             except Exception:  # pragma: no cover
-                log.debug("Error getting volume info for '%s', "
-                              "hiding it", vol, exc_info=True)
+                log.debug("Error getting volume info for '%s', hiding it", vol, exc_info=True)
                 continue
 
             namestr = None
@@ -451,8 +437,8 @@ class vmmHostStorage(vmmGObjectUI):
 
         def _reset_vscroll_position():
             vadj.set_value(vadj.get_upper() * vscroll_percent)
-        self.idle_add(_reset_vscroll_position)
 
+        self.idle_add(_reset_vscroll_position)
 
     ##########################
     # Pool lifecycle actions #
@@ -464,8 +450,9 @@ class vmmHostStorage(vmmGObjectUI):
             return  # pragma: no cover
 
         log.debug("Stopping pool '%s'", pool.get_name())
-        vmmAsyncJob.simple_async_noshow(pool.stop, [], self,
-                            _("Error stopping pool '%s'") % pool.get_name())
+        vmmAsyncJob.simple_async_noshow(
+            pool.stop, [], self, _("Error stopping pool '%s'") % pool.get_name()
+        )
 
     def _pool_start_cb(self, src):
         pool = self._current_pool()
@@ -473,8 +460,9 @@ class vmmHostStorage(vmmGObjectUI):
             return  # pragma: no cover
 
         log.debug("Starting pool '%s'", pool.get_name())
-        vmmAsyncJob.simple_async_noshow(pool.start, [], self,
-                            _("Error starting pool '%s'") % pool.get_name())
+        vmmAsyncJob.simple_async_noshow(
+            pool.start, [], self, _("Error starting pool '%s'") % pool.get_name()
+        )
 
     def _pool_add_cb(self, src):
         log.debug("Launching 'Add Pool' wizard")
@@ -491,14 +479,16 @@ class vmmHostStorage(vmmGObjectUI):
         if pool is None:
             return  # pragma: no cover
 
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the pool %s?") % pool.get_name())
+        result = self.err.yes_no(
+            _("Are you sure you want to permanently delete the pool %s?") % pool.get_name()
+        )
         if not result:
             return
 
         log.debug("Deleting pool '%s'", pool.get_name())
-        vmmAsyncJob.simple_async_noshow(pool.delete, [], self,
-                            _("Error deleting pool '%s'") % pool.get_name())
+        vmmAsyncJob.simple_async_noshow(
+            pool.delete, [], self, _("Error deleting pool '%s'") % pool.get_name()
+        )
 
     def _pool_refresh_cb(self, src):
         pool = self._current_pool()
@@ -508,9 +498,9 @@ class vmmHostStorage(vmmGObjectUI):
         self._confirm_changes()
 
         log.debug("Refresh pool '%s'", pool.get_name())
-        vmmAsyncJob.simple_async_noshow(pool.refresh, [], self,
-                            _("Error refreshing pool '%s'") % pool.get_name())
-
+        vmmAsyncJob.simple_async_noshow(
+            pool.refresh, [], self, _("Error refreshing pool '%s'") % pool.get_name()
+        )
 
     ###########################
     # Volume action listeners #
@@ -531,8 +521,7 @@ class vmmHostStorage(vmmGObjectUI):
         if pool is None:
             return  # pragma: no cover
 
-        log.debug("Launching 'Add Volume' wizard for pool '%s'",
-                      pool.get_name())
+        log.debug("Launching 'Add Volume' wizard for pool '%s'", pool.get_name())
         try:
             if self._addvol is None:
                 self._addvol = vmmCreateVolume(self.conn, pool)
@@ -551,21 +540,24 @@ class vmmHostStorage(vmmGObjectUI):
             return  # pragma: no cover
 
         pool = self._current_pool()
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the volume %s?") % vol.get_name())
+        result = self.err.yes_no(
+            _("Are you sure you want to permanently delete the volume %s?") % vol.get_name()
+        )
         if not result:
             return
 
         def cb():
             vol.delete()
+
             def idlecb():
                 pool.refresh()
+
             self.idle_add(idlecb)
 
         log.debug("Deleting volume '%s'", vol.get_name())
-        vmmAsyncJob.simple_async_noshow(cb, [], self,
-                        _("Error deleting volume '%s'") % vol.get_name())
-
+        vmmAsyncJob.simple_async_noshow(
+            cb, [], self, _("Error deleting volume '%s'") % vol.get_name()
+        )
 
     #############################
     # pool apply/config actions #
@@ -605,14 +597,11 @@ class vmmHostStorage(vmmGObjectUI):
         self._xmleditor.details_changed = False
 
     def _confirm_changes(self):
-        if (self.is_visible() and
-            self._active_edits and
-            self.err.confirm_unapplied_changes()):
+        if self.is_visible() and self._active_edits and self.err.confirm_unapplied_changes():
             self._pool_apply()
 
         self._disable_pool_apply()
         return True
-
 
     #############
     # Listeners #

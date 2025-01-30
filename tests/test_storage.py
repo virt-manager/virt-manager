@@ -15,8 +15,16 @@ from tests import utils
 BASEPATH = os.path.join(utils.DATADIR, "storage")
 
 
-def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
-               source_path=None, source_name=None, iqn=None):
+def createPool(
+    conn,
+    ptype,
+    poolname=None,
+    fmt=None,
+    target_path=None,
+    source_path=None,
+    source_name=None,
+    iqn=None,
+):
 
     if poolname is None:
         poolname = StoragePool.find_free_name(conn, "%s-pool" % ptype)
@@ -31,13 +39,11 @@ def createPool(conn, ptype, poolname=None, fmt=None, target_path=None,
     if pool_inst.supports_source_path():
         pool_inst.source_path = source_path or "/some/source/path"
     if pool_inst.supports_target_path():
-        pool_inst.target_path = (target_path or
-                pool_inst.default_target_path())
+        pool_inst.target_path = target_path or pool_inst.default_target_path()
     if fmt and pool_inst.supports_format():
         pool_inst.format = fmt
     if pool_inst.supports_source_name():
-        pool_inst.source_name = (source_name or
-                pool_inst.default_source_name())
+        pool_inst.source_name = source_name or pool_inst.default_source_name()
     if iqn and pool_inst.supports_iqn():
         pool_inst.iqn = iqn
 
@@ -100,87 +106,69 @@ def createVol(conn, poolobj, volname=None, input_vol=None, clone_vol=None):
 # Test cases #
 ##############
 
+
 def testDirPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-                         StoragePool.TYPE_DIR, "pool-dir2")
+    poolobj = createPool(conn, StoragePool.TYPE_DIR, "pool-dir2")
     invol = createVol(conn, poolobj)
-    createVol(conn, poolobj,
-              volname=invol.name() + "input", input_vol=invol)
-    createVol(conn, poolobj,
-              volname=invol.name() + "clone", clone_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "clone", clone_vol=invol)
     removePool(poolobj)
 
 
 def testFSPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-                         StoragePool.TYPE_FS, "pool-fs")
+    poolobj = createPool(conn, StoragePool.TYPE_FS, "pool-fs")
     invol = createVol(conn, poolobj)
-    createVol(conn, poolobj,
-              volname=invol.name() + "input", input_vol=invol)
-    createVol(conn, poolobj,
-              volname=invol.name() + "clone", clone_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "clone", clone_vol=invol)
     removePool(poolobj)
 
 
 def testNetFSPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-                         StoragePool.TYPE_NETFS, "pool-netfs")
+    poolobj = createPool(conn, StoragePool.TYPE_NETFS, "pool-netfs")
     invol = createVol(conn, poolobj)
-    createVol(conn, poolobj,
-              volname=invol.name() + "input", input_vol=invol)
-    createVol(conn, poolobj,
-              volname=invol.name() + "clone", clone_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "clone", clone_vol=invol)
     removePool(poolobj)
 
 
 def testLVPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-                         StoragePool.TYPE_LOGICAL,
-                         "pool-logical",
-                         source_name="pool-logical")
+    poolobj = createPool(conn, StoragePool.TYPE_LOGICAL, "pool-logical", source_name="pool-logical")
     invol = createVol(conn, poolobj)
-    createVol(conn, poolobj,
-              volname=invol.name() + "input", input_vol=invol)
-    createVol(conn,
-              poolobj, volname=invol.name() + "clone", clone_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "clone", clone_vol=invol)
     removePool(poolobj)
 
     # Test parsing source name for target path
-    poolobj = createPool(conn, StoragePool.TYPE_LOGICAL,
-               "pool-logical-target-srcname",
-               target_path="/dev/vgfoobar")
+    poolobj = createPool(
+        conn, StoragePool.TYPE_LOGICAL, "pool-logical-target-srcname", target_path="/dev/vgfoobar"
+    )
     removePool(poolobj)
 
     # Test with source name
-    poolobj = createPool(conn,
-               StoragePool.TYPE_LOGICAL, "pool-logical-srcname",
-               source_name="vgname")
+    poolobj = createPool(
+        conn, StoragePool.TYPE_LOGICAL, "pool-logical-srcname", source_name="vgname"
+    )
     removePool(poolobj)
 
 
 def testDiskPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-                         StoragePool.TYPE_DISK,
-                         "pool-disk", fmt="auto",
-                         target_path="/some/target/path")
+    poolobj = createPool(
+        conn, StoragePool.TYPE_DISK, "pool-disk", fmt="auto", target_path="/some/target/path"
+    )
     invol = createVol(conn, poolobj)
-    createVol(conn, poolobj,
-              volname=invol.name() + "input", input_vol=invol)
-    createVol(conn, poolobj,
-              volname=invol.name() + "clone", clone_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "input", input_vol=invol)
+    createVol(conn, poolobj, volname=invol.name() + "clone", clone_vol=invol)
     removePool(poolobj)
 
 
 def testISCSIPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-               StoragePool.TYPE_ISCSI, "pool-iscsi",
-               iqn="foo.bar.baz.iqn")
+    poolobj = createPool(conn, StoragePool.TYPE_ISCSI, "pool-iscsi", iqn="foo.bar.baz.iqn")
     removePool(poolobj)
 
 
@@ -198,15 +186,13 @@ def testMpathPool():
 
 def testGlusterPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-            StoragePool.TYPE_GLUSTER, "pool-gluster")
+    poolobj = createPool(conn, StoragePool.TYPE_GLUSTER, "pool-gluster")
     removePool(poolobj)
 
 
 def testRBDPool():
     conn = utils.URIs.open_testdefault_cached()
-    poolobj = createPool(conn,
-            StoragePool.TYPE_RBD, "pool-rbd")
+    poolobj = createPool(conn, StoragePool.TYPE_RBD, "pool-rbd")
     removePool(poolobj)
 
 
@@ -238,6 +224,5 @@ def testMisc():
 
 def testEnumerateLogical():
     conn = utils.URIs.open_testdefault_cached()
-    lst = StoragePool.pool_list_from_sources(conn,
-                                             StoragePool.TYPE_LOGICAL)
+    lst = StoragePool.pool_list_from_sources(conn, StoragePool.TYPE_LOGICAL)
     assert lst == ["testvg1", "testvg2"]

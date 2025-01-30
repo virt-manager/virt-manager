@@ -33,22 +33,24 @@ class _vmmDeleteBase(vmmGObjectUI):
     """
     Base class for both types of VM/device storage deleting wizards
     """
+
     def __init__(self):
         vmmGObjectUI.__init__(self, "delete.ui", "vmm-delete")
         self.vm = None
 
-        self.builder.connect_signals({
-            "on_vmm_delete_delete_event": self.close,
-            "on_delete_cancel_clicked": self.close,
-            "on_delete_ok_clicked": self._finish_clicked_cb,
-            "on_delete_remove_storage_toggled": self._toggle_remove_storage,
-        })
+        self.builder.connect_signals(
+            {
+                "on_vmm_delete_delete_event": self.close,
+                "on_delete_cancel_clicked": self.close,
+                "on_delete_ok_clicked": self._finish_clicked_cb,
+                "on_delete_remove_storage_toggled": self._toggle_remove_storage,
+            }
+        )
         self.bind_escape_key_close()
         self._cleanup_on_app_close()
 
         self.topwin.set_title(self._get_dialog_title())
         self._init_state()
-
 
     def _init_state(self):
         _prepare_storage_list(self.widget("delete-storage-list"))
@@ -66,10 +68,8 @@ class _vmmDeleteBase(vmmGObjectUI):
         self._set_vm(None)
         return 1
 
-
     def _cleanup(self):
         pass
-
 
     ##########################
     # Initialization methods #
@@ -87,8 +87,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         # Set VM name or disk.target in title'
         text = self._get_dialog_text()
 
-        title_str = ("<span size='large'>%s</span>" %
-                     xmlutil.xml_escape(text))
+        title_str = "<span size='large'>%s</span>" % xmlutil.xml_escape(text)
         self.widget("header-label").set_markup(title_str)
 
         self.topwin.resize(1, 1)
@@ -96,17 +95,14 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         # Show warning message if VM is running
         vm_active = self._vm_active_status()
-        uiutil.set_grid_row_visible(
-            self.widget("delete-warn-running-vm-box"), vm_active)
+        uiutil.set_grid_row_visible(self.widget("delete-warn-running-vm-box"), vm_active)
 
         # Enable storage removal by default
         remove_storage_default = self._get_remove_storage_default()
         self.widget("delete-remove-storage").set_active(remove_storage_default)
         self.widget("delete-remove-storage").toggled()
         diskdatas = self._get_disk_datas()
-        _populate_storage_list(self.widget("delete-storage-list"),
-                               self.vm, self.vm.conn, diskdatas)
-
+        _populate_storage_list(self.widget("delete-storage-list"), self.vm, self.vm.conn, diskdatas)
 
     ################
     # UI listeners #
@@ -121,9 +117,7 @@ class _vmmDeleteBase(vmmGObjectUI):
 
     def _toggle_remove_storage(self, src):
         dodel = src.get_active()
-        uiutil.set_grid_row_visible(
-            self.widget("delete-storage-scroll"), dodel)
-
+        uiutil.set_grid_row_visible(self.widget("delete-storage-scroll"), dodel)
 
     #########################
     # finish/delete methods #
@@ -136,8 +130,7 @@ class _vmmDeleteBase(vmmGObjectUI):
         paths = []
         if self.widget("delete-remove-storage").get_active():
             for row in model:
-                if (not row[STORAGE_ROW_CANT_DELETE] and
-                    row[STORAGE_ROW_CONFIRM]):
+                if not row[STORAGE_ROW_CANT_DELETE] and row[STORAGE_ROW_CONFIRM]:
                     paths.append(row[STORAGE_ROW_PATH])
         return paths
 
@@ -154,12 +147,13 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         if paths:
             title = _("Are you sure you want to delete the storage?")
-            message = (_("The following paths will be deleted:\n\n%s") %
-                       "\n".join(paths))
+            message = _("The following paths will be deleted:\n\n%s") % "\n".join(paths)
             ret = self.err.chkbox_helper(
                 self.config.get_confirm_delstorage,
                 self.config.set_confirm_delstorage,
-                text1=title, text2=message)
+                text1=title,
+                text2=message,
+            )
             if not ret:
                 return
 
@@ -172,9 +166,15 @@ class _vmmDeleteBase(vmmGObjectUI):
 
         title, text = self._get_progress_text(paths)
 
-        progWin = vmmAsyncJob(self._async_delete, [self.vm, paths],
-                              self._delete_finished_cb, [],
-                              title, text, self.topwin)
+        progWin = vmmAsyncJob(
+            self._async_delete,
+            [self.vm, paths],
+            self._delete_finished_cb,
+            [],
+            title,
+            text,
+            self.topwin,
+        )
         progWin.run()
         self._set_vm(None)
 
@@ -193,9 +193,12 @@ class _vmmDeleteBase(vmmGObjectUI):
             vm.conn.schedule_priority_tick(pollvm=True)
         except Exception as e:  # pragma: no cover
             errdata = (
-                 (_("Error deleting virtual machine '%(vm)s': %(error)s") %
-                   {"vm": vm.get_name(), "error": str(e)}),
-                 "".join(traceback.format_exc()))
+                (
+                    _("Error deleting virtual machine '%(vm)s': %(error)s")
+                    % {"vm": vm.get_name(), "error": str(e)}
+                ),
+                "".join(traceback.format_exc()),
+            )
 
         if not storage_errors and not errdata:
             return
@@ -209,12 +212,10 @@ class _vmmDeleteBase(vmmGObjectUI):
         if errdata:  # pragma: no cover
             error, details = errdata
             details += "\n\n"
-            details += _("Additionally, there were errors removing"
-                         " certain storage devices: \n")
+            details += _("Additionally, there were errors removing certain storage devices: \n")
             details += storage_errstr
         else:
-            error = _("Errors encountered while removing certain "
-                      "storage devices.")
+            error = _("Errors encountered while removing certain storage devices.")
             details = storage_errstr
 
         asyncjob.set_error(error, details)
@@ -227,8 +228,7 @@ class _vmmDeleteBase(vmmGObjectUI):
                 meter.start(_("Deleting path '%s'") % path, None)
                 self._async_delete_path(conn, path, meter)
             except Exception as e:
-                storage_errors.append((str(e),
-                                          "".join(traceback.format_exc())))
+                storage_errors.append((str(e), "".join(traceback.format_exc())))
             meter.end()
         return storage_errors
 
@@ -244,27 +244,34 @@ class _vmmDeleteBase(vmmGObjectUI):
         else:
             os.unlink(path)
 
-
     ################
     # Subclass API #
     ################
 
     def _get_dialog_title(self):
         raise NotImplementedError
+
     def _get_dialog_text(self):
         raise NotImplementedError
+
     def _get_progress_text(self, paths):
         raise NotImplementedError
+
     def _get_disk_datas(self):
         raise NotImplementedError
+
     def _vm_active_status(self):
         raise NotImplementedError
+
     def _delete_vm(self, vm):
         raise NotImplementedError
+
     def _remove_device(self, paths):
         raise NotImplementedError
+
     def _destroy_vm(self, vm):
         raise NotImplementedError
+
     def _get_remove_storage_default(self):
         raise NotImplementedError
 
@@ -273,6 +280,7 @@ class vmmDeleteDialog(_vmmDeleteBase):
     """
     Dialog for deleting a VM and optionally its storage
     """
+
     @classmethod
     def show_instance(cls, parentobj, vm):
         try:
@@ -280,8 +288,7 @@ class vmmDeleteDialog(_vmmDeleteBase):
                 cls._instance = vmmDeleteDialog()
             cls._instance.show(parentobj.topwin, vm)
         except Exception as e:  # pragma: no cover
-            parentobj.err.show_err(
-                    _("Error launching delete dialog: %s") % str(e))
+            parentobj.err.show_err(_("Error launching delete dialog: %s") % str(e))
 
     def _get_dialog_title(self):
         return _("Delete Virtual Machine")
@@ -291,8 +298,10 @@ class vmmDeleteDialog(_vmmDeleteBase):
 
     def _get_progress_text(self, paths):
         if paths:
-            title = _("Deleting virtual machine '%s' and selected storage "
-                      "(this may take a while)") % self.vm.get_name()
+            title = (
+                _("Deleting virtual machine '%s' and selected storage (this may take a while)")
+                % self.vm.get_name()
+            )
             text = title
         else:
             title = _("Deleting virtual machine '%s'") % self.vm.get_name()
@@ -329,6 +338,7 @@ class vmmDeleteStorage(_vmmDeleteBase):
     Dialog for removing a disk device from a VM and optionally deleting
     its storage
     """
+
     @staticmethod
     def remove_devobj_internal(vm, err, devobj, deleting_storage=False):
         log.debug("Removing device: %s", devobj)
@@ -358,9 +368,11 @@ class vmmDeleteStorage(_vmmDeleteBase):
 
         err.show_err(
             _("Device could not be removed from the running machine"),
-            details=(detach_err[0] + "\n\n" + detach_err[1]), text2=msg,
+            details=(detach_err[0] + "\n\n" + detach_err[1]),
+            text2=msg,
             buttons=Gtk.ButtonsType.OK,
-            dialog_type=Gtk.MessageType.INFO)
+            dialog_type=Gtk.MessageType.INFO,
+        )
 
     def __init__(self, disk):
         _vmmDeleteBase.__init__(self)
@@ -370,13 +382,14 @@ class vmmDeleteStorage(_vmmDeleteBase):
         return _("Remove Disk Device")
 
     def _get_dialog_text(self):
-        return _("Remove disk device '%(target)s'") % {
-                "target": self.disk.target}
+        return _("Remove disk device '%(target)s'") % {"target": self.disk.target}
 
     def _get_progress_text(self, paths):
         if paths:
-            title = _("Removing disk device '%s' and selected storage "
-                      "(this may take a while)") % self.disk.target
+            title = (
+                _("Removing disk device '%s' and selected storage (this may take a while)")
+                % self.disk.target
+            )
         else:
             title = _("Removing disk device '%s'") % self.disk.target
         text = title
@@ -394,8 +407,8 @@ class vmmDeleteStorage(_vmmDeleteBase):
     def _remove_device(self, paths):
         deleting_storage = bool(paths)
         return vmmDeleteStorage.remove_devobj_internal(
-                self.vm, self.err, self.disk,
-                deleting_storage=deleting_storage)
+            self.vm, self.err, self.disk, deleting_storage=deleting_storage
+        )
 
     def _delete_vm(self, vm):
         pass
@@ -408,22 +421,25 @@ class vmmDeleteStorage(_vmmDeleteBase):
 # UI init helpers #
 ###################
 
+
 class _DiskData:
     """
     Helper class to contain all info we need to decide whether we
     should default to deleting a path
     """
+
     @staticmethod
     def from_disk(disk):
         """
         Build _DiskData from a DeviceDisk object
         """
         return _DiskData(
-                disk.target,
-                disk.get_source_path(),
-                disk.read_only,
-                disk.shareable,
-                disk.device in ["cdrom", "floppy"])
+            disk.target,
+            disk.get_source_path(),
+            disk.read_only,
+            disk.shareable,
+            disk.device in ["cdrom", "floppy"],
+        )
 
     def __init__(self, label, path, ro, shared, is_media):
         self.label = label
@@ -441,12 +457,9 @@ def _build_diskdata_for_vm(vm):
     for disk in vm.xmlobj.devices.disk:
         diskdatas.append(_DiskData.from_disk(disk))
 
-    diskdatas.append(
-            _DiskData("kernel", vm.get_xmlobj().os.kernel, True, False, True))
-    diskdatas.append(
-            _DiskData("initrd", vm.get_xmlobj().os.initrd, True, False, True))
-    diskdatas.append(
-            _DiskData("dtb", vm.get_xmlobj().os.dtb, True, False, True))
+    diskdatas.append(_DiskData("kernel", vm.get_xmlobj().os.kernel, True, False, True))
+    diskdatas.append(_DiskData("initrd", vm.get_xmlobj().os.initrd, True, False, True))
+    diskdatas.append(_DiskData("dtb", vm.get_xmlobj().os.dtb, True, False, True))
 
     return diskdatas
 
@@ -478,8 +491,7 @@ def _populate_storage_list(storage_list, vm, conn, diskdatas):
         can_del, delinfo = _can_delete(conn, vol, diskdata.path)
 
         if can_del:
-            default, definfo = _do_we_default(conn, vm.get_name(), vol,
-                                              diskdata)
+            default, definfo = _do_we_default(conn, vm.get_name(), vol, diskdata)
 
         info = None
         if not can_del:
@@ -490,8 +502,16 @@ def _populate_storage_list(storage_list, vm, conn, diskdatas):
         icon = "dialog-warning"
         icon_size = Gtk.IconSize.LARGE_TOOLBAR
 
-        row = [default, not can_del, diskdata.path, diskdata.label,
-               bool(info), icon, icon_size, info]
+        row = [
+            default,
+            not can_del,
+            diskdata.path,
+            diskdata.label,
+            bool(info),
+            icon,
+            icon_size,
+            info,
+        ]
         model.append(row)
 
 
@@ -515,37 +535,39 @@ def _prepare_storage_list(storage_list):
     storage_list.append_column(infoCol)
 
     chkbox = Gtk.CellRendererToggle()
-    chkbox.connect('toggled', _storage_item_toggled, storage_list)
+    chkbox.connect("toggled", _storage_item_toggled, storage_list)
     confirmCol.pack_start(chkbox, False)
+
     def sensitive_cb(column, cell, model, _iter, data):
         row = model[_iter]
         inconsistent = row[STORAGE_ROW_CANT_DELETE]
         sensitive = not inconsistent
         active = row[STORAGE_ROW_CONFIRM]
         chk = column.get_cells()[0]
-        chk.set_property('inconsistent', inconsistent)
-        chk.set_property('active', active)
-        chk.set_property('sensitive', sensitive)
+        chk.set_property("inconsistent", inconsistent)
+        chk.set_property("active", active)
+        chk.set_property("sensitive", sensitive)
+
     confirmCol.set_cell_data_func(chkbox, sensitive_cb)
     confirmCol.set_sort_column_id(STORAGE_ROW_CANT_DELETE)
 
     path_txt = Gtk.CellRendererText()
     pathCol.pack_start(path_txt, True)
-    pathCol.add_attribute(path_txt, 'text', STORAGE_ROW_PATH)
+    pathCol.add_attribute(path_txt, "text", STORAGE_ROW_PATH)
     pathCol.set_sort_column_id(STORAGE_ROW_PATH)
     path_txt.set_property("width-chars", 50)
     path_txt.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
     target_txt = Gtk.CellRendererText()
     targetCol.pack_start(target_txt, False)
-    targetCol.add_attribute(target_txt, 'text', STORAGE_ROW_TARGET)
+    targetCol.add_attribute(target_txt, "text", STORAGE_ROW_TARGET)
     targetCol.set_sort_column_id(STORAGE_ROW_TARGET)
 
     info_img = Gtk.CellRendererPixbuf()
     infoCol.pack_start(info_img, False)
-    infoCol.add_attribute(info_img, 'visible', STORAGE_ROW_ICON_SHOW)
-    infoCol.add_attribute(info_img, 'icon-name', STORAGE_ROW_ICON)
-    infoCol.add_attribute(info_img, 'stock-size', STORAGE_ROW_ICON_SIZE)
+    infoCol.add_attribute(info_img, "visible", STORAGE_ROW_ICON_SHOW)
+    infoCol.add_attribute(info_img, "icon-name", STORAGE_ROW_ICON)
+    infoCol.add_attribute(info_img, "stock-size", STORAGE_ROW_ICON_SIZE)
     infoCol.set_sort_column_id(STORAGE_ROW_ICON)
 
 
@@ -582,7 +604,7 @@ def _can_delete(conn, vol, path):
 
 
 def _do_we_default(conn, vm_name, vol, diskdata):
-    """ Returns (do we delete by default?, info string if not)"""
+    """Returns (do we delete by default?, info string if not)"""
     info = []
 
     if diskdata.ro:
@@ -597,8 +619,7 @@ def _do_we_default(conn, vm_name, vol, diskdata):
         info.append(_("Storage is a media device."))
 
     try:
-        names = virtinst.DeviceDisk.path_in_use_by(conn.get_backend(),
-                diskdata.path)
+        names = virtinst.DeviceDisk.path_in_use_by(conn.get_backend(), diskdata.path)
 
         if len(names) > 1:
             names.remove(vm_name)

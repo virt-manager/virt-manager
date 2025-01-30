@@ -14,6 +14,7 @@ from virtinst import xmlutil
 # UI getter helpers #
 #####################
 
+
 def spin_get_helper(widget):
     """
     Safely get spin button contents, converting to int if possible
@@ -51,8 +52,7 @@ def get_list_selected_row(widget, check_visible=False):
     return row
 
 
-def get_list_selection(widget, column=0,
-                       check_visible=False, check_entry=True):
+def get_list_selection(widget, column=0, check_visible=False, check_entry=True):
     """
     Helper to simplify getting the selected row and value in a list/tree/combo.
     If nothing is selected, and the widget is a combo box with a text entry,
@@ -75,6 +75,7 @@ def get_list_selection(widget, column=0,
 #####################
 # UI setter helpers #
 #####################
+
 
 def set_list_selection_by_number(widget, rownum):
     """
@@ -124,6 +125,7 @@ def set_list_selection(widget, value, column=0):
 # Misc functions #
 ##################
 
+
 def child_get_property(parent, child, propname):
     """
     Wrapper for child_get_property, which pygobject doesn't properly
@@ -165,7 +167,7 @@ def init_combo_text_column(combo, col):
     else:
         text = Gtk.CellRendererText()
         combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', col)
+        combo.add_attribute(text, "text", col)
         return text
     return None
 

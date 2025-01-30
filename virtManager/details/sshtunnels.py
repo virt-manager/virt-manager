@@ -20,6 +20,7 @@ class ConnectionInfo(object):
     """
     Holds all the bits needed to make a connection to a graphical console
     """
+
     def __init__(self, conn, gdev):
         self.gtype = gdev.type
         self.gidx = gdev.get_xml_idx()
@@ -61,21 +62,26 @@ class ConnectionInfo(object):
 
     def bad_config(self):
         if self.transport and self._is_listen_none():
-            return _("Guest is on a remote host, but is only configured "
-                "to allow local file descriptor connections.")
+            return _(
+                "Guest is on a remote host, but is only configured "
+                "to allow local file descriptor connections."
+            )
 
         if self.need_tunnel() and (self.gtlsport and not self.gport):
-            return _("Guest is configured for TLS only which does not "
-                "work over SSH.")
+            return _("Guest is configured for TLS only which does not work over SSH.")
 
-        if (not self.need_tunnel() and
-            self.transport and
-            self._is_listen_localhost() and
-            not self._is_listen_localhost(self._connhost)):
-            return _("Guest is on a remote host with transport '%s' "
+        if (
+            not self.need_tunnel()
+            and self.transport
+            and self._is_listen_localhost()
+            and not self._is_listen_localhost(self._connhost)
+        ):
+            return _(
+                "Guest is on a remote host with transport '%s' "
                 "but is only configured to listen locally. "
                 "To connect remotely you will need to change the guest's "
-                "listen address." % self.transport)
+                "listen address." % self.transport
+            )
 
     def get_conn_host(self):
         """
@@ -96,11 +102,21 @@ class ConnectionInfo(object):
         return self._connhost, self._connport
 
     def logstring(self):
-        return ("proto=%s trans=%s connhost=%s connuser=%s "
-                "connport=%s gaddr=%s gport=%s gtlsport=%s gsocket=%s" %
-                (self.gtype, self.transport, self._connhost, self.connuser,
-                 self._connport, self.gaddr, self.gport, self.gtlsport,
-                 self.gsocket))
+        return (
+            "proto=%s trans=%s connhost=%s connuser=%s "
+            "connport=%s gaddr=%s gport=%s gtlsport=%s gsocket=%s"
+            % (
+                self.gtype,
+                self.transport,
+                self._connhost,
+                self.connuser,
+                self._connport,
+                self.gaddr,
+                self.gport,
+                self.gtlsport,
+                self.gsocket,
+            )
+        )
 
 
 class _TunnelScheduler(object):
@@ -112,6 +128,7 @@ class _TunnelScheduler(object):
     It's only instantiated once for the whole app, because we serialize
     independent of connection, vm, etc.
     """
+
     def __init__(self):
         self._thread = None
         self._queue = queue.Queue()
@@ -119,15 +136,19 @@ class _TunnelScheduler(object):
 
     def _handle_queue(self):
         while True:
-            lock_cb, cb, args, = self._queue.get()
+            (
+                lock_cb,
+                cb,
+                args,
+            ) = self._queue.get()
             lock_cb()
             vmmGObject.idle_add(cb, *args)
 
     def schedule(self, lock_cb, cb, *args):
         if not self._thread:
-            self._thread = threading.Thread(name="Tunnel thread",
-                                            target=self._handle_queue,
-                                            args=())
+            self._thread = threading.Thread(
+                name="Tunnel thread", target=self._handle_queue, args=()
+            )
             self._thread.daemon = True
         if not self._thread.is_alive():
             self._thread.start()
@@ -135,6 +156,7 @@ class _TunnelScheduler(object):
 
     def lock(self):
         self._lock.acquire()
+
     def unlock(self):
         self._lock.release()
 
@@ -153,8 +175,9 @@ class _Tunnel(object):
             return  # pragma: no cover
         self._closed = True
 
-        log.debug("Close tunnel PID=%s ERRFD=%s",
-                      self._pid, self._errfd and self._errfd.fileno() or None)
+        log.debug(
+            "Close tunnel PID=%s ERRFD=%s", self._pid, self._errfd and self._errfd.fileno() or None
+        )
 
         # Since this is a socket object, the file descriptor is closed
         # when it's garbage collected.
@@ -200,8 +223,7 @@ class _Tunnel(object):
 
         self._errfd = errfds[0]
         self._errfd.setblocking(0)
-        log.debug("Opened tunnel PID=%d ERRFD=%d",
-                      pid, self._errfd.fileno())
+        log.debug("Opened tunnel PID=%d ERRFD=%d", pid, self._errfd.fileno())
 
         self._pid = pid
 
@@ -218,7 +240,7 @@ def _make_ssh_command(ginfo):
         argv += ["-p", str(port)]
 
     if ginfo.connuser:
-        argv += ['-l', ginfo.connuser]
+        argv += ["-l", ginfo.connuser]
 
     argv += [host]
 
@@ -245,8 +267,8 @@ def _make_ssh_command(ginfo):
         """else"""
         """   CMD="nc %(nc_params)s";"""
         """fi;"""
-        """eval "$CMD";""" %
-        {'nc_params': nc_params})
+        """eval "$CMD";""" % {"nc_params": nc_params}
+    )
 
     argv.append("sh -c")
     argv.append("'%s'" % nc_cmd)

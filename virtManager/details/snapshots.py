@@ -36,6 +36,7 @@ def _make_screenshot_pixbuf(mime, sdata):
     loader.close()
 
     maxsize = 450
+
     def _scale(big, small, maxsize):
         if big <= maxsize:
             return big, small  # pragma: no cover
@@ -49,8 +50,7 @@ def _make_screenshot_pixbuf(mime, sdata):
     else:
         height, width = _scale(height, width, maxsize)  # pragma: no cover
 
-    return pixbuf.scale_simple(width, height,
-                               GdkPixbuf.InterpType.BILINEAR)
+    return pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
 
 
 def _mime_to_ext(val, reverse=False):
@@ -59,9 +59,12 @@ def _mime_to_ext(val, reverse=False):
             return e
         if val == e and reverse:
             return m
-    log.debug("Don't know how to convert %s=%s to %s",  # pragma: no cover
-                  reverse and "extension" or "mime", val,
-                  reverse and "mime" or "extension")
+    log.debug(
+        "Don't know how to convert %s=%s to %s",  # pragma: no cover
+        reverse and "extension" or "mime",
+        val,
+        reverse and "mime" or "extension",
+    )
 
 
 class vmmSnapshotNew(vmmGObjectUI):
@@ -75,17 +78,18 @@ class vmmSnapshotNew(vmmGObjectUI):
 
         self._init_ui()
 
-        self.builder.connect_signals({
-            "on_snapshot_new_delete_event": self.close,
-            "on_snapshot_new_cancel_clicked": self.close,
-            "on_snapshot_new_name_changed": self._name_changed_cb,
-            "on_snapshot_new_name_activate": self._ok_clicked_cb,
-            "on_snapshot_new_ok_clicked": self._ok_clicked_cb,
-            "on_snapshot_new_mode_toggled": self._mode_toggled_cb,
-            "on_snapshot_new_memory_toggled": self._memory_toggled_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_snapshot_new_delete_event": self.close,
+                "on_snapshot_new_cancel_clicked": self.close,
+                "on_snapshot_new_name_changed": self._name_changed_cb,
+                "on_snapshot_new_name_activate": self._ok_clicked_cb,
+                "on_snapshot_new_ok_clicked": self._ok_clicked_cb,
+                "on_snapshot_new_mode_toggled": self._mode_toggled_cb,
+                "on_snapshot_new_memory_toggled": self._memory_toggled_cb,
+            }
+        )
         self.bind_escape_key_close()
-
 
     #######################
     # Standard UI methods #
@@ -106,7 +110,6 @@ class vmmSnapshotNew(vmmGObjectUI):
     def _cleanup(self):
         self.vm = None
 
-
     ###########
     # UI init #
     ###########
@@ -119,7 +122,8 @@ class vmmSnapshotNew(vmmGObjectUI):
         if not capsinfo.guest.supports_externalSnapshot():
             mode_external.set_sensitive(False)
             mode_external.set_tooltip_text(
-                    _("external snapshots not supported with this libvirt connection"))
+                _("external snapshots not supported with this libvirt connection")
+            )
 
     def _init_memory_path(self):
         mempaths = self.widget("snapshot-new-memory-path")
@@ -158,11 +162,13 @@ class vmmSnapshotNew(vmmGObjectUI):
 
     def _reset_state(self):
         basename = "snapshot"
+
         def cb(n):
             return generatename.check_libvirt_collision(
-                self.vm.get_backend().snapshotLookupByName, n)
-        default_name = generatename.generate_name(
-                basename, cb, sep="", start_num=1, force_num=True)
+                self.vm.get_backend().snapshotLookupByName, n
+            )
+
+        default_name = generatename.generate_name(basename, cb, sep="", start_num=1, force_num=True)
 
         self.widget("snapshot-new-name").set_text(default_name)
         self.widget("snapshot-new-name").emit("changed")
@@ -170,7 +176,8 @@ class vmmSnapshotNew(vmmGObjectUI):
         self.widget("snapshot-new-ok").grab_focus()
         self.widget("snapshot-new-status-text").set_text(self.vm.run_status())
         self.widget("snapshot-new-status-icon").set_from_icon_name(
-            self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON)
+            self.vm.run_status_icon_name(), Gtk.IconSize.BUTTON
+        )
 
         self._reset_snapshot_mode()
 
@@ -183,8 +190,9 @@ class vmmSnapshotNew(vmmGObjectUI):
     ############
 
     def _set_memory_path_visibility(self, mode_box):
-        uiutil.set_grid_row_visible(self.widget("snapshot-new-memory-label"),
-                                    mode_box.get_active() and self.vm.is_active())
+        uiutil.set_grid_row_visible(
+            self.widget("snapshot-new-memory-label"), mode_box.get_active() and self.vm.is_active()
+        )
 
     def _populate_memory_path(self):
         mempaths = self.widget("snapshot-new-memory-path")
@@ -229,6 +237,7 @@ class vmmSnapshotNew(vmmGObjectUI):
             mime = self.vm.get_backend().screenshot(stream, screen, flags)
 
             ret = io.BytesIO()
+
             def _write_cb(_stream, data, userdata):
                 ignore = stream
                 ignore = userdata
@@ -288,8 +297,7 @@ class vmmSnapshotNew(vmmGObjectUI):
 
     def _validate_new_snapshot(self):
         name = self.widget("snapshot-new-name").get_text()
-        desc = self.widget("snapshot-new-description"
-                           ).get_buffer().get_property("text")
+        desc = self.widget("snapshot-new-description").get_buffer().get_property("text")
         mode = self._get_mode()
 
         try:
@@ -337,16 +345,19 @@ class vmmSnapshotNew(vmmGObjectUI):
 
         xml = snap.get_xml()
         name = snap.name
-        mime, sndata = (self._get_screenshot() or (None, None))
+        mime, sndata = self._get_screenshot() or (None, None)
         diskOnly = not self.vm.is_active() and self._get_mode() == "external"
 
         self.set_finish_cursor()
         progWin = vmmAsyncJob(
-                    self._do_create_snapshot, [xml, name, mime, sndata, diskOnly],
-                    self._new_finish_cb, [name],
-                    _("Creating snapshot"),
-                    _("Creating virtual machine snapshot"),
-                    self.topwin)
+            self._do_create_snapshot,
+            [xml, name, mime, sndata, diskOnly],
+            self._new_finish_cb,
+            [name],
+            _("Creating snapshot"),
+            _("Creating virtual machine snapshot"),
+            self.topwin,
+        )
         progWin.run()
 
     def _get_current_mode(self):
@@ -360,7 +371,6 @@ class vmmSnapshotNew(vmmGObjectUI):
 
         return "internal"
 
-
     ################
     # UI listeners #
     ################
@@ -373,9 +383,13 @@ class vmmSnapshotNew(vmmGObjectUI):
         current_mode = self._get_current_mode()
 
         if current_mode and current_mode != self._get_mode():
-            result = self.err.yes_no(_("Mixing external and internal snapshots for "
-                                       "the same VM is not recommended. Are you "
-                                       "sure you want to continue?"))
+            result = self.err.yes_no(
+                _(
+                    "Mixing external and internal snapshots for "
+                    "the same VM is not recommended. Are you "
+                    "sure you want to continue?"
+                )
+            )
 
             if not result:
                 return
@@ -398,8 +412,7 @@ class vmmSnapshotNew(vmmGObjectUI):
 
 class vmmSnapshotPage(vmmGObjectUI):
     def __init__(self, vm, builder, topwin):
-        vmmGObjectUI.__init__(self, "snapshots.ui",
-                              None, builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "snapshots.ui", None, builder=builder, topwin=topwin)
 
         self.vm = vm
 
@@ -410,16 +423,18 @@ class vmmSnapshotPage(vmmGObjectUI):
         self._snapmenu = None
         self._init_ui()
 
-        self.builder.connect_signals({
-            "on_snapshot_add_clicked": self._on_add_clicked,
-            "on_snapshot_delete_clicked": self._on_delete_clicked,
-            "on_snapshot_start_clicked": self._on_start_clicked,
-            "on_snapshot_apply_clicked": self._on_apply_clicked,
-            "on_snapshot_list_changed": self._snapshot_selected,
-            "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
-            "on_snapshot_refresh_clicked": self._on_refresh_clicked,
-            "on_snapshot_list_row_activated": self._on_start_clicked,
-        })
+        self.builder.connect_signals(
+            {
+                "on_snapshot_add_clicked": self._on_add_clicked,
+                "on_snapshot_delete_clicked": self._on_delete_clicked,
+                "on_snapshot_start_clicked": self._on_start_clicked,
+                "on_snapshot_apply_clicked": self._on_apply_clicked,
+                "on_snapshot_list_changed": self._snapshot_selected,
+                "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
+                "on_snapshot_refresh_clicked": self._on_refresh_clicked,
+                "on_snapshot_list_row_activated": self._on_start_clicked,
+            }
+        )
 
         self.top_box = self.widget("snapshot-top-box")
         self.widget("snapshot-top-window").remove(self.top_box)
@@ -427,7 +442,6 @@ class vmmSnapshotPage(vmmGObjectUI):
         selection.emit("changed")
         selection.set_mode(Gtk.SelectionMode.MULTIPLE)
         selection.set_select_function(self._confirm_changes, None)
-
 
     ##############
     # Init stuff #
@@ -460,12 +474,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.LARGE_TOOLBAR)
         col.pack_start(img, False)
-        col.add_attribute(img, 'icon-name', 3)
+        col.add_attribute(img, "icon-name", 3)
 
         txt = Gtk.CellRendererText()
         txt.set_property("ellipsize", Pango.EllipsizeMode.END)
         col.pack_start(txt, False)
-        col.add_attribute(txt, 'markup', 1)
+        col.add_attribute(txt, "markup", 1)
 
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.MENU)
@@ -498,13 +512,13 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         self._snapmenu = menu
 
-
     ###################
     # Functional bits #
     ###################
 
     def _get_selected_snapshots(self):
         selection = self.widget("snapshot-list").get_selection()
+
         def add_snap(treemodel, path, it, snaps):
             ignore = path
             try:
@@ -544,8 +558,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             snapshots = self.vm.list_snapshots()
         except Exception as e:  # pragma: no cover
             log.exception(e)
-            self._set_error_page(_("Error refreshing snapshot list: %s") %
-                                str(e))
+            self._set_error_page(_("Error refreshing snapshot list: %s") % str(e))
             return
 
         has_external = False
@@ -557,24 +570,19 @@ class vmmSnapshotPage(vmmGObjectUI):
             if snap.is_external():
                 has_external = True
                 sortname = "3%s" % name
-                label = _("%(vm)s\n<span size='small'>VM State: "
-                          "%(state)s (External)</span>")
+                label = _("%(vm)s\n<span size='small'>VM State: %(state)s (External)</span>")
             else:
                 has_internal = True
                 sortname = "1%s" % name
-                label = _("%(vm)s\n<span size='small'>VM State: "
-                          "%(state)s</span>")
+                label = _("%(vm)s\n<span size='small'>VM State: %(state)s</span>")
 
-            label = label % {
-                "vm": xmlutil.xml_escape(name),
-                "state": xmlutil.xml_escape(state)
-            }
-            model.append([name, label, desc, snap.run_status_icon_name(),
-                          sortname, snap.is_current()])
+            label = label % {"vm": xmlutil.xml_escape(name), "state": xmlutil.xml_escape(state)}
+            model.append(
+                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()]
+            )
 
         if has_internal and has_external:
             model.append([None, None, None, None, "2", False])
-
 
         def check_selection(treemodel, path, it, snaps):
             if select_name:
@@ -619,27 +627,22 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         timestamp = ""
         if snap:
-            timestamp = str(datetime.datetime.fromtimestamp(
-                xmlobj.creationTime))
+            timestamp = str(datetime.datetime.fromtimestamp(xmlobj.creationTime))
 
         title = ""
         if name:
-            title = (_("<b>Snapshot '%(name)s':</b>") %
-                     {"name": xmlutil.xml_escape(name)})
+            title = _("<b>Snapshot '%(name)s':</b>") % {"name": xmlutil.xml_escape(name)}
 
-        uiutil.set_grid_row_visible(
-            self.widget("snapshot-is-current"), is_current)
+        uiutil.set_grid_row_visible(self.widget("snapshot-is-current"), is_current)
         self.widget("snapshot-title").set_markup(title)
         self.widget("snapshot-timestamp").set_text(timestamp)
         self.widget("snapshot-description").get_buffer().set_text(desc)
 
         self.widget("snapshot-status-text").set_text(state)
         if icon:
-            self.widget("snapshot-status-icon").set_from_icon_name(
-                icon, Gtk.IconSize.BUTTON)
+            self.widget("snapshot-status-icon").set_from_icon_name(icon, Gtk.IconSize.BUTTON)
 
-        uiutil.set_grid_row_visible(self.widget("snapshot-mode"),
-                                       is_external)
+        uiutil.set_grid_row_visible(self.widget("snapshot-mode"), is_external)
         if is_external:
             is_mem = xmlobj.memory_type == "external"
             is_disk = [d.snapshot == "external" for d in xmlobj.disks]
@@ -699,7 +702,6 @@ class vmmSnapshotPage(vmmGObjectUI):
         snap.ensure_latest_xml()
         return True
 
-
     #############
     # Listeners #
     #############
@@ -735,17 +737,19 @@ class vmmSnapshotPage(vmmGObjectUI):
     def _on_add_clicked(self, ignore):
         if not self._snapshot_new:
             self._snapshot_new = vmmSnapshotNew(self.vm)
-            self._snapshot_new.connect("snapshot-created",
-                    self._snapshot_created_cb)
+            self._snapshot_new.connect("snapshot-created", self._snapshot_created_cb)
         if self.vm.has_managed_save():
             result = self.err.ok_cancel(
                 _("Saved memory state will not be part of the snapshot"),
-                _("The domain is currently saved. Due to technical "
-                  "limitations that saved memory state will not become part "
-                  "of the snapshot. Running it later will be the same as "
-                  "having forced the system off mid-flight. It is "
-                  "recommended to snapshot either the running or shut down "
-                  "system instead."))
+                _(
+                    "The domain is currently saved. Due to technical "
+                    "limitations that saved memory state will not become part "
+                    "of the snapshot. Running it later will be the same as "
+                    "having forced the system off mid-flight. It is "
+                    "recommended to snapshot either the running or shut down "
+                    "system instead."
+                ),
+            )
             if not result:
                 return
         self._snapshot_new.show(self.topwin)
@@ -761,13 +765,17 @@ class vmmSnapshotPage(vmmGObjectUI):
         snap = snaps[0]
 
         if self.vm.is_active():
-            msg = _("Are you sure you want to run the snapshot '%(name)s'? "
-                    "All the disk changes since the last snapshot was created "
-                    "will be discarded.")
+            msg = _(
+                "Are you sure you want to run the snapshot '%(name)s'? "
+                "All the disk changes since the last snapshot was created "
+                "will be discarded."
+            )
         else:
-            msg = _("Are you sure you want to run the snapshot '%(name)s'? "
-                    "All the disk and configuration changes since the last "
-                    "snapshot was created will be discarded.")
+            msg = _(
+                "Are you sure you want to run the snapshot '%(name)s'? "
+                "All the disk and configuration changes since the last "
+                "snapshot was created will be discarded."
+            )
         msg = msg % {"name": snap.get_name()}
 
         result = self.err.yes_no(msg)
@@ -777,44 +785,53 @@ class vmmSnapshotPage(vmmGObjectUI):
         if self.vm.has_managed_save() and not snap.has_run_state():
             result = self.err.ok_cancel(
                 _("Saved state will be removed to avoid filesystem corruption"),
-                _("Snapshot '%s' contains only disk and no memory state. "
-                  "Restoring the snapshot would leave the existing saved state "
-                  "in place, effectively switching a disk underneath a running "
-                  "system. Running the domain afterwards would likely result in "
-                  "extensive filesystem corruption. Therefore the saved state "
-                  "will be removed before restoring the snapshot."
-                  ) % snap.get_name())
+                _(
+                    "Snapshot '%s' contains only disk and no memory state. "
+                    "Restoring the snapshot would leave the existing saved state "
+                    "in place, effectively switching a disk underneath a running "
+                    "system. Running the domain afterwards would likely result in "
+                    "extensive filesystem corruption. Therefore the saved state "
+                    "will be removed before restoring the snapshot."
+                )
+                % snap.get_name(),
+            )
             if not result:
                 return
             self.vm.remove_saved_image()
 
         log.debug("Running snapshot '%s'", snap.get_name())
-        vmmAsyncJob.simple_async(self.vm.revert_to_snapshot,
-                            [snap], self,
-                            _("Running snapshot"),
-                            _("Running snapshot '%s'") % snap.get_name(),
-                            _("Error running snapshot '%s'") %
-                            snap.get_name(),
-                            finish_cb=self._refresh_snapshots)
+        vmmAsyncJob.simple_async(
+            self.vm.revert_to_snapshot,
+            [snap],
+            self,
+            _("Running snapshot"),
+            _("Running snapshot '%s'") % snap.get_name(),
+            _("Error running snapshot '%s'") % snap.get_name(),
+            finish_cb=self._refresh_snapshots,
+        )
 
     def _on_delete_clicked(self, ignore):
         snaps = self._get_selected_snapshots()
         if not snaps:
             return  # pragma: no cover
 
-        result = self.err.yes_no(_("Are you sure you want to permanently "
-                                   "delete the selected snapshots?"))
+        result = self.err.yes_no(
+            _("Are you sure you want to permanently delete the selected snapshots?")
+        )
         if not result:
             return
 
         for snap in snaps:
             log.debug("Deleting snapshot '%s'", snap.get_name())
-            vmmAsyncJob.simple_async(snap.delete, [], self,
-                            _("Deleting snapshot"),
-                            _("Deleting snapshot '%s'") % snap.get_name(),
-                            _("Error deleting snapshot '%s'") % snap.get_name(),
-                            finish_cb=self._refresh_snapshots)
-
+            vmmAsyncJob.simple_async(
+                snap.delete,
+                [],
+                self,
+                _("Deleting snapshot"),
+                _("Deleting snapshot '%s'") % snap.get_name(),
+                _("Error deleting snapshot '%s'") % snap.get_name(),
+                finish_cb=self._refresh_snapshots,
+            )
 
     def _snapshot_selected(self, selection):
         ignore = selection

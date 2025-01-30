@@ -14,7 +14,7 @@ def _compare_int(nodedev_val, hostdev_val):
     def _intify(val):
         try:
             if "0x" in str(val):
-                return int(val or '0x00', 16)
+                return int(val or "0x00", 16)
             else:
                 return int(val)
         except Exception:
@@ -22,7 +22,7 @@ def _compare_int(nodedev_val, hostdev_val):
 
     nodedev_val = _intify(nodedev_val)
     hostdev_val = _intify(hostdev_val)
-    return (nodedev_val == hostdev_val or hostdev_val == -1)
+    return nodedev_val == hostdev_val or hostdev_val == -1
 
 
 def _compare_uuid(nodedev_val, hostdev_val):
@@ -32,7 +32,7 @@ def _compare_uuid(nodedev_val, hostdev_val):
     except Exception:  # pragma: no cover
         return -1
 
-    return (nodedev_val == hostdev_val)
+    return nodedev_val == hostdev_val
 
 
 class DevNode(XMLBuilder):
@@ -66,7 +66,6 @@ class NodeDevice(XMLBuilder):
             if nodedev.name == name:
                 return nodedev
 
-
     XML_NAME = "device"
 
     # Libvirt can generate bogus 'system' XML:
@@ -84,26 +83,30 @@ class NodeDevice(XMLBuilder):
         if self.uuid is not None:
             return self.uuid
 
-        return self.name[5:].replace('_', '-')
+        return self.name[5:].replace("_", "-")
 
     def compare_to_hostdev(self, hostdev):
         if self.device_type == "pci":
             if hostdev.type != "pci":
                 return False
 
-            return (_compare_int(self.domain, hostdev.domain) and
-                _compare_int(self.bus, hostdev.bus) and
-                _compare_int(self.slot, hostdev.slot) and
-                _compare_int(self.function, hostdev.function))
+            return (
+                _compare_int(self.domain, hostdev.domain)
+                and _compare_int(self.bus, hostdev.bus)
+                and _compare_int(self.slot, hostdev.slot)
+                and _compare_int(self.function, hostdev.function)
+            )
 
         if self.device_type == "usb_device":
             if hostdev.type != "usb":
                 return False
 
-            return (_compare_int(self.product_id, hostdev.product) and
-                _compare_int(self.vendor_id, hostdev.vendor) and
-                _compare_int(self.bus, hostdev.bus) and
-                _compare_int(self.device, hostdev.device))
+            return (
+                _compare_int(self.product_id, hostdev.product)
+                and _compare_int(self.vendor_id, hostdev.vendor)
+                and _compare_int(self.bus, hostdev.bus)
+                and _compare_int(self.device, hostdev.device)
+            )
 
         if self.device_type == "mdev":
             if hostdev.type != "mdev":
@@ -113,23 +116,21 @@ class NodeDevice(XMLBuilder):
 
         return False
 
-
     ########################
     # XML helper functions #
     ########################
 
     def is_pci_sriov(self):
         return self._capability_type == "virt_functions"
+
     def is_pci_bridge(self):
         return self._capability_type == "pci-bridge"
 
     def is_usb_linux_root_hub(self):
-        return (self.vendor_id == "0x1d6b" and
-                self.product_id in ["0x0001", "0x0002", "0x0003"])
+        return self.vendor_id == "0x1d6b" and self.product_id in ["0x0001", "0x0002", "0x0003"]
 
     def is_drm_render(self):
         return self.device_type == "drm" and self.drm_type == "render"
-
 
     ##################
     # XML properties #
@@ -161,11 +162,10 @@ class NodeDevice(XMLBuilder):
     block = XMLProperty("./capability/block")
     drive_type = XMLProperty("./capability/drive_type")
 
-    media_label = XMLProperty(
-        "./capability/capability[@type='removable']/media_label")
+    media_label = XMLProperty("./capability/capability[@type='removable']/media_label")
     media_available = XMLProperty(
-            "./capability/capability[@type='removable']/media_available",
-            is_int=True)
+        "./capability/capability[@type='removable']/media_available", is_int=True
+    )
 
     # type='drm' options
     drm_type = XMLProperty("./capability/type")

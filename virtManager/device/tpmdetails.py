@@ -31,8 +31,7 @@ class vmmTPMDetails(vmmGObjectUI):
     }
 
     def __init__(self, vm, builder, topwin):
-        super().__init__("tpmdetails.ui", None,
-                         builder=builder, topwin=topwin)
+        super().__init__("tpmdetails.ui", None, builder=builder, topwin=topwin)
         self.vm = vm
         self.conn = vm.conn
 
@@ -41,14 +40,17 @@ class vmmTPMDetails(vmmGObjectUI):
         def _e(edittype):
             def signal_cb(*args):
                 self._change_cb(edittype)
+
             return signal_cb
 
-        self.builder.connect_signals({
-            "on_tpm_type_changed": _e(_EDIT_TPM_TYPE),
-            "on_tpm_device_path_changed": _e(_EDIT_TPM_DEVICE_PATH),
-            "on_tpm_model_changed": _e(_EDIT_TPM_MODEL),
-            "on_tpm_version_changed": _e(_EDIT_TPM_VERSION),
-        })
+        self.builder.connect_signals(
+            {
+                "on_tpm_type_changed": _e(_EDIT_TPM_TYPE),
+                "on_tpm_device_path_changed": _e(_EDIT_TPM_DEVICE_PATH),
+                "on_tpm_model_changed": _e(_EDIT_TPM_MODEL),
+                "on_tpm_version_changed": _e(_EDIT_TPM_VERSION),
+            }
+        )
 
         self._init_ui()
         self.top_box = self.widget("top-box")
@@ -56,7 +58,6 @@ class vmmTPMDetails(vmmGObjectUI):
     def _cleanup(self):
         self.vm = None
         self.conn = None
-
 
     ##############
     # UI helpers #
@@ -90,15 +91,13 @@ class vmmTPMDetails(vmmGObjectUI):
         ]
         uiutil.build_simple_combo(self.widget("tpm-version"), rows, sort=False)
 
-
     def _sync_ui(self):
         devtype = uiutil.get_list_selection(self.widget("tpm-type"))
 
-        uiutil.set_grid_row_visible(self.widget("tpm-device-path"),
-                devtype == DeviceTpm.TYPE_PASSTHROUGH)
-        uiutil.set_grid_row_visible(self.widget("tpm-version"),
-                devtype == DeviceTpm.TYPE_EMULATOR)
-
+        uiutil.set_grid_row_visible(
+            self.widget("tpm-device-path"), devtype == DeviceTpm.TYPE_PASSTHROUGH
+        )
+        uiutil.set_grid_row_visible(self.widget("tpm-version"), devtype == DeviceTpm.TYPE_EMULATOR)
 
     ##################
     # Public UI APIs #
@@ -106,29 +105,21 @@ class vmmTPMDetails(vmmGObjectUI):
 
     def reset_state(self):
         self.widget("tpm-device-path").set_text("/dev/tpm0")
-        uiutil.set_list_selection(
-                self.widget("tpm-type"), DeviceTpm.TYPE_EMULATOR)
+        uiutil.set_list_selection(self.widget("tpm-type"), DeviceTpm.TYPE_EMULATOR)
 
         default_model = DeviceTpm.default_model(self.vm.xmlobj)
-        uiutil.set_list_selection(
-                self.widget("tpm-model"), default_model)
-        uiutil.set_list_selection(
-                self.widget("tpm-version"), None)
-
+        uiutil.set_list_selection(self.widget("tpm-model"), default_model)
+        uiutil.set_list_selection(self.widget("tpm-version"), None)
 
     def set_dev(self, dev):
         self.reset_state()
 
-        uiutil.set_list_selection(
-                self.widget("tpm-type"), dev.type)
-        uiutil.set_list_selection(
-                self.widget("tpm-model"), dev.model)
-        uiutil.set_list_selection(
-                self.widget("tpm-version"), dev.version)
+        uiutil.set_list_selection(self.widget("tpm-type"), dev.type)
+        uiutil.set_list_selection(self.widget("tpm-model"), dev.model)
+        uiutil.set_list_selection(self.widget("tpm-version"), dev.version)
         self.widget("tpm-device-path").set_text(dev.device_path or "")
 
         self._active_edits = []
-
 
     ########################
     # Device building APIs #
@@ -170,7 +161,6 @@ class vmmTPMDetails(vmmGObjectUI):
         newdev = DeviceTpm(dev.conn, parsexml=dev.get_xml())
         self._set_values(newdev)
         return newdev
-
 
     #############
     # Listeners #

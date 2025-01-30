@@ -18,15 +18,15 @@ from ..lib.keyring import vmmKeyring
 
 
 # console-pages IDs
-(_CONSOLE_PAGE_UNAVAILABLE,
- _CONSOLE_PAGE_SERIAL,
- _CONSOLE_PAGE_GRAPHICS,
- _CONSOLE_PAGE_CONNECT) = range(4)
+(
+    _CONSOLE_PAGE_UNAVAILABLE,
+    _CONSOLE_PAGE_SERIAL,
+    _CONSOLE_PAGE_GRAPHICS,
+    _CONSOLE_PAGE_CONNECT,
+) = range(4)
 
 # console-gfx-pages IDs
-(_GFX_PAGE_VIEWER,
- _GFX_PAGE_AUTH,
- _GFX_PAGE_UNAVAILABLE) = range(3)
+(_GFX_PAGE_VIEWER, _GFX_PAGE_AUTH, _GFX_PAGE_UNAVAILABLE) = range(3)
 
 
 class _TimedRevealer(vmmGObject):
@@ -34,6 +34,7 @@ class _TimedRevealer(vmmGObject):
     Revealer for the fullscreen toolbar, with a bit of extra logic to
     hide/show based on mouse over
     """
+
     def __init__(self, toolbar):
         vmmGObject.__init__(self)
 
@@ -67,8 +68,7 @@ class _TimedRevealer(vmmGObject):
     def _enter_notify(self, ignore1, ignore2):
         x, y = self._ebox.get_pointer()
         alloc = self._ebox.get_allocation()
-        entered = bool(x >= 0 and y >= 0 and
-                       x < alloc.width and y < alloc.height)
+        entered = bool(x >= 0 and y >= 0 and x < alloc.width and y < alloc.height)
 
         if not self._in_fullscreen:
             return
@@ -90,6 +90,7 @@ class _TimedRevealer(vmmGObject):
         def cb():
             self._revealer.set_reveal_child(False)
             self._timeout_id = None
+
         self._timeout_id = self.timeout_add(timeout, cb)
 
     def _unregister_timeout(self):
@@ -159,12 +160,10 @@ class vmmOverlayToolbar:
         button.connect("clicked", on_leave_fn)
 
         self._send_key_button = Gtk.ToolButton()
-        self._send_key_button.set_icon_name(
-                                "preferences-desktop-keyboard-shortcuts")
+        self._send_key_button.set_icon_name("preferences-desktop-keyboard-shortcuts")
         self._send_key_button.set_tooltip_text(_("Send key combination"))
         self._send_key_button.show_all()
-        self._send_key_button.connect("clicked",
-                self._on_send_key_button_clicked_cb)
+        self._send_key_button.connect("clicked", self._on_send_key_button_clicked_cb)
         self._send_key_button.get_accessible().set_name("Fullscreen Send Key")
         self._toolbar.add(self._send_key_button)
 
@@ -176,8 +175,9 @@ class vmmOverlayToolbar:
         rect = Gdk.Rectangle()
 
         rect.y = win.get_height()
-        self._keycombo_menu.popup_at_rect(win, rect,
-                Gdk.Gravity.NORTH_WEST, Gdk.Gravity.NORTH_WEST, event)
+        self._keycombo_menu.popup_at_rect(
+            win, rect, Gdk.Gravity.NORTH_WEST, Gdk.Gravity.NORTH_WEST, event
+        )
 
     def cleanup(self):
         self._keycombo_menu.destroy()
@@ -200,6 +200,7 @@ class _ConsoleMenu(vmmGObject):
     """
     Helper class for building the text/graphical console menu list
     """
+
     def __init__(self, show_cb, toggled_cb):
         vmmGObject.__init__(self)
         self._menu = Gtk.Menu()
@@ -210,7 +211,6 @@ class _ConsoleMenu(vmmGObject):
         self._menu.destroy()
         self._menu = None
         self._toggled_cb = None
-
 
     ################
     # Internal API #
@@ -241,8 +241,11 @@ class _ConsoleMenu(vmmGObject):
             idx = gdev.get_xml_idx()
             ginfo = ConnectionInfo(vm.conn, gdev)
 
-            label = (_("Graphical Console") + " " +
-                     vmmGraphicsDetails.graphics_pretty_type_simple(gdev.type))
+            label = (
+                _("Graphical Console")
+                + " "
+                + vmmGraphicsDetails.graphics_pretty_type_simple(gdev.type)
+            )
             if idx > 0:
                 label += " %s" % (idx + 1)
 
@@ -251,21 +254,18 @@ class _ConsoleMenu(vmmGObject):
                 if not found_default:
                     found_default = True
                 else:
-                    tooltip = _("virt-manager does not support more "
-                                "than one graphical console")
+                    tooltip = _("virt-manager does not support more than one graphical console")
 
             ret.append([label, ginfo, tooltip])
 
         if not ret:
-            ret = [[_("Graphical console not configured for guest"),
-                    None, None]]
+            ret = [[_("Graphical console not configured for guest"), None, None]]
         return ret
 
     def _get_selected_menu_item(self):
         for child in self._menu.get_children():
-            if hasattr(child, 'get_active') and child.get_active():
+            if hasattr(child, "get_active") and child.get_active():
                 return child
-
 
     ##############
     # Public API #
@@ -286,7 +286,7 @@ class _ConsoleMenu(vmmGObject):
         items = graphics + [[None, None, None]] + serials
 
         last_item = None
-        for (label, dev, tooltip) in items:
+        for label, dev, tooltip in items:
             if label is None:
                 self._menu.add(Gtk.SeparatorMenuItem())
                 continue
@@ -340,6 +340,7 @@ class vmmConsolePages(vmmGObjectUI):
     """
     Handles all the complex UI handling dictated by the spice/vnc widgets
     """
+
     __gsignals__ = {
         "page-changed": (vmmGObjectUI.RUN_FIRST, None, []),
         "leave-fullscreen": (vmmGObjectUI.RUN_FIRST, None, []),
@@ -347,8 +348,7 @@ class vmmConsolePages(vmmGObjectUI):
     }
 
     def __init__(self, vm, builder, topwin):
-        vmmGObjectUI.__init__(self, "console.ui",
-                              None, builder=builder, topwin=topwin)
+        vmmGObjectUI.__init__(self, "console.ui", None, builder=builder, topwin=topwin)
 
         self.vm = vm
         self.top_box = self.widget("console-pages")
@@ -368,41 +368,41 @@ class vmmConsolePages(vmmGObjectUI):
         self._keycombo_menu = build_keycombo_menu(self._do_send_key)
 
         self._overlay_toolbar_fullscreen = vmmOverlayToolbar(
-            on_leave_fn=self._leave_fullscreen,
-            on_send_key_fn=self._do_send_key)
+            on_leave_fn=self._leave_fullscreen, on_send_key_fn=self._do_send_key
+        )
         self.widget("console-overlay").add_overlay(
-                self._overlay_toolbar_fullscreen.timed_revealer.get_overlay_widget())
+            self._overlay_toolbar_fullscreen.timed_revealer.get_overlay_widget()
+        )
 
         # When the gtk-vnc and spice-gtk widgets are in non-scaling mode, we
         # make them fill the whole window, and they paint the non-VM areas of
         # the viewer black. But when scaling is enabled, the viewer widget is
         # constrained. This change makes sure the non-VM portions in that case
         # are also colored black, rather than the default theme window color.
-        self.widget("console-gfx-viewport").modify_bg(
-                Gtk.StateType.NORMAL, Gdk.Color(0, 0, 0))
+        self.widget("console-gfx-viewport").modify_bg(Gtk.StateType.NORMAL, Gdk.Color(0, 0, 0))
 
         self.widget("console-pages").set_show_tabs(False)
         self.widget("serial-pages").set_show_tabs(False)
         self.widget("console-gfx-pages").set_show_tabs(False)
 
         self._consolemenu = _ConsoleMenu(
-                self._on_console_menu_show_cb,
-                self._on_console_menu_toggled_cb)
+            self._on_console_menu_show_cb, self._on_console_menu_toggled_cb
+        )
         self._serial_consoles = []
 
         # Signals are added by vmmVMWindow. Don't use connect_signals here
         # or it changes will be overwritten
 
-        self.builder.connect_signals({
-            "on_console_pages_switch_page": self._page_changed_cb,
-            "on_console_auth_password_activate": self._auth_login_cb,
-            "on_console_auth_login_clicked": self._auth_login_cb,
-            "on_console_connect_button_clicked": self._connect_button_clicked_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_console_pages_switch_page": self._page_changed_cb,
+                "on_console_auth_password_activate": self._auth_login_cb,
+                "on_console_auth_login_clicked": self._auth_login_cb,
+                "on_console_connect_button_clicked": self._connect_button_clicked_cb,
+            }
+        )
 
-        self.widget("console-gfx-pages").connect("switch-page",
-                self._page_changed_cb)
-
+        self.widget("console-gfx-pages").connect("switch-page", self._page_changed_cb)
 
     def _cleanup(self):
         self.vm = None
@@ -420,7 +420,6 @@ class vmmConsolePages(vmmGObjectUI):
         self._consolemenu.cleanup()
         self._consolemenu = None
 
-
     #################
     # Internal APIs #
     #################
@@ -433,11 +432,10 @@ class vmmConsolePages(vmmGObjectUI):
             self.topwin.remove_accel_group(g)
 
         settings = Gtk.Settings.get_default()
-        self._gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
-        settings.set_property('gtk-menu-bar-accel', None)
+        self._gtk_settings_accel = settings.get_property("gtk-menu-bar-accel")
+        settings.set_property("gtk-menu-bar-accel", None)
 
-        self._gtk_settings_mnemonic = settings.get_property(
-            "gtk-enable-mnemonics")
+        self._gtk_settings_mnemonic = settings.get_property("gtk-enable-mnemonics")
         settings.set_property("gtk-enable-mnemonics", False)
 
     def _enable_modifiers(self):
@@ -445,12 +443,11 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         settings = Gtk.Settings.get_default()
-        settings.set_property('gtk-menu-bar-accel', self._gtk_settings_accel)
+        settings.set_property("gtk-menu-bar-accel", self._gtk_settings_accel)
         self._gtk_settings_accel = None
 
         if self._gtk_settings_mnemonic is not None:
-            settings.set_property("gtk-enable-mnemonics",
-                                  self._gtk_settings_mnemonic)
+            settings.set_property("gtk-enable-mnemonics", self._gtk_settings_mnemonic)
 
         for g in self._accel_groups:
             self.topwin.add_accel_group(g)
@@ -460,7 +457,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         if keys is not None:
             self._viewer.console_send_keys(keys)
-
 
     ###########################
     # Resize and scaling APIs #
@@ -494,11 +490,9 @@ class vmmConsolePages(vmmGObjectUI):
         valw = w + (top_w - viewer_alloc.width)
         valh = h + (top_h - viewer_alloc.height)
 
-        log.debug("_set_size_to_vm vm=(%s, %s) window=(%s, %s)",
-                  w, h, valw, valh)
+        log.debug("_set_size_to_vm vm=(%s, %s) window=(%s, %s)", w, h, valw, valh)
         self.topwin.unmaximize()
         self.topwin.resize(valw, valh)
-
 
     ################
     # Scaling APIs #
@@ -516,7 +510,6 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer.console_set_scaling(True)
         elif scale_type == self.config.CONSOLE_SCALE_FULLSCREEN:
             self._viewer.console_set_scaling(self._in_fullscreen)
-
 
     ###################
     # Fullscreen APIs #
@@ -537,7 +530,6 @@ class vmmConsolePages(vmmGObjectUI):
 
         self._sync_scaling_with_display()
 
-
     ##########################
     # State tracking methods #
     ##########################
@@ -557,8 +549,7 @@ class vmmConsolePages(vmmGObjectUI):
 
         if self._viewer is None:
             return
-        self._viewer.console_remove_display_from_widget(
-            self.widget("console-gfx-viewport"))
+        self._viewer.console_remove_display_from_widget(self.widget("console-gfx-viewport"))
         self._viewer.cleanup()
         self._viewer = None
         log.debug("Viewer object cleaned up")
@@ -566,18 +557,15 @@ class vmmConsolePages(vmmGObjectUI):
     def _refresh_vm_state(self):
         self._activate_default_console_page()
 
-
     ###########################
     # console page navigation #
     ###########################
 
     def _activate_gfx_unavailable_page(self, msg):
         self._close_viewer()
-        self.widget("console-gfx-pages").set_current_page(
-                _GFX_PAGE_UNAVAILABLE)
+        self.widget("console-gfx-pages").set_current_page(_GFX_PAGE_UNAVAILABLE)
         if msg:
-            self.widget("console-gfx-unavailable").set_label(
-                    "<b>" + msg + "</b>")
+            self.widget("console-gfx-unavailable").set_label("<b>" + msg + "</b>")
 
     def _activate_vm_unavailable_page(self, msg):
         """
@@ -587,11 +575,9 @@ class vmmConsolePages(vmmGObjectUI):
         console.
         """
         self._close_viewer()
-        self.widget("console-pages").set_current_page(
-                _CONSOLE_PAGE_UNAVAILABLE)
+        self.widget("console-pages").set_current_page(_CONSOLE_PAGE_UNAVAILABLE)
         if msg:
-            self.widget("console-unavailable").set_label(
-                    "<b>" + msg + "</b>")
+            self.widget("console-unavailable").set_label("<b>" + msg + "</b>")
         self._activate_gfx_unavailable_page(msg)
 
     def _activate_auth_page(self, withPassword, withUsername):
@@ -634,15 +620,15 @@ class vmmConsolePages(vmmGObjectUI):
         gpage = self.widget("console-gfx-pages").get_current_page()
 
         return bool(
-            is_visible and
-            cpage == _CONSOLE_PAGE_GRAPHICS and
-            gpage == _GFX_PAGE_VIEWER and
-            self._viewer and self._viewer.console_is_open())
+            is_visible
+            and cpage == _CONSOLE_PAGE_GRAPHICS
+            and gpage == _GFX_PAGE_VIEWER
+            and self._viewer
+            and self._viewer.console_is_open()
+        )
 
     def _viewer_can_usb_redirect(self):
-        return (self._viewer_is_visible() and
-                self._viewer.console_has_usb_redirection())
-
+        return self._viewer_is_visible() and self._viewer.console_has_usb_redirection()
 
     #########################
     # Viewer login attempts #
@@ -657,13 +643,11 @@ class vmmConsolePages(vmmGObjectUI):
             self._activate_gfx_unavailable_page(errmsg)
             return
 
-        if (not self.vm.get_console_autoconnect() and
-            not self._viewer_connect_clicked):
+        if not self.vm.get_console_autoconnect() and not self._viewer_connect_clicked:
             self._activate_console_connect_page()
             return
 
-        self._activate_gfx_unavailable_page(
-            _("Connecting to graphical console for guest"))
+        self._activate_gfx_unavailable_page(_("Connecting to graphical console for guest"))
 
         log.debug("Starting connect process for %s", ginfo.logstring())
         try:
@@ -674,9 +658,7 @@ class vmmConsolePages(vmmGObjectUI):
                 # is probably expecting their spice console to work, so we
                 # should show an explicit failure
                 if SPICE_GTK_IMPORT_ERROR:
-                    raise RuntimeError(
-                            "Error opening SPICE console: %s" %
-                            SPICE_GTK_IMPORT_ERROR)
+                    raise RuntimeError("Error opening SPICE console: %s" % SPICE_GTK_IMPORT_ERROR)
                 viewer_class = SpiceViewer
 
             self._viewer = viewer_class(self.vm, ginfo)
@@ -685,8 +667,7 @@ class vmmConsolePages(vmmGObjectUI):
             self._viewer.console_open()
         except Exception as e:
             log.exception("Error connecting to graphical console")
-            self._activate_gfx_unavailable_page(
-                    _("Error connecting to graphical console:\n%s") % e)
+            self._activate_gfx_unavailable_page(_("Error connecting to graphical console:\n%s") % e)
 
     def _set_credentials(self, src_ignore=None):
         passwd = self.widget("console-auth-password")
@@ -699,10 +680,10 @@ class vmmConsolePages(vmmGObjectUI):
 
         if self.widget("console-auth-remember").get_active():
             vmmKeyring.get_instance().set_console_password(
-                    self.vm, passwd.get_text(), username.get_text())
+                self.vm, passwd.get_text(), username.get_text()
+            )
         else:
             vmmKeyring.get_instance().del_console_password(self.vm)
-
 
     ##########################
     # Viewer signal handling #
@@ -731,8 +712,7 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _viewer_sync_modifiers(self):
         serial_has_focus = any([s.has_focus() for s in self._serial_consoles])
-        viewer_keyboard_grab = (self._viewer and
-                self._viewer.console_has_keyboard_grab())
+        viewer_keyboard_grab = self._viewer and self._viewer.console_has_keyboard_grab()
 
         if serial_has_focus or viewer_keyboard_grab:
             self._disable_modifiers()
@@ -762,8 +742,8 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _viewer_usb_redirect_error_cb(self, _src, errstr):
         self.err.show_err(
-                _("USB redirection error"),
-                text2=str(errstr), modal=True)  # pragma: no cover
+            _("USB redirection error"), text2=str(errstr), modal=True
+        )  # pragma: no cover
 
     def _viewer_disconnected_set_page(self, errdetails, ssherr):
         if self.vm.is_runable():  # pragma: no cover
@@ -816,11 +796,8 @@ class vmmConsolePages(vmmGObjectUI):
         self._viewer.connect("disconnected", self._viewer_disconnected_cb)
         self._viewer.connect("auth-error", self._viewer_auth_error_cb)
         self._viewer.connect("need-auth", self._viewer_need_auth_cb)
-        self._viewer.connect("agent-connected",
-            self._viewer_agent_connected_cb)
-        self._viewer.connect("usb-redirect-error",
-            self._viewer_usb_redirect_error_cb)
-
+        self._viewer.connect("agent-connected", self._viewer_agent_connected_cb)
+        self._viewer.connect("usb-redirect-error", self._viewer_usb_redirect_error_cb)
 
     ##############################
     # Console list menu handling #
@@ -835,8 +812,7 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         if errmsg or not dev or is_graphics:
-            self.widget("console-pages").set_current_page(
-                    _CONSOLE_PAGE_GRAPHICS)
+            self.widget("console-pages").set_current_page(_CONSOLE_PAGE_GRAPHICS)
             self.idle_add(self._init_viewer, dev, errmsg)
             return
 
@@ -849,15 +825,13 @@ class vmmConsolePages(vmmGObjectUI):
 
         if not serial:
             serial = vmmSerialConsole(self.vm, target_port, name)
-            serial.set_focus_callbacks(self._serial_focus_changed_cb,
-                                       self._serial_focus_changed_cb)
+            serial.set_focus_callbacks(self._serial_focus_changed_cb, self._serial_focus_changed_cb)
 
             title = Gtk.Label(label=name)
             self.widget("serial-pages").append_page(serial.get_box(), title)
             self._serial_consoles.append(serial)
 
-        if (not self.vm.get_console_autoconnect() and
-            not self._viewer_connect_clicked):
+        if not self.vm.get_console_autoconnect() and not self._viewer_connect_clicked:
             self._activate_console_connect_page()
             return
 
@@ -884,7 +858,7 @@ class vmmConsolePages(vmmGObjectUI):
             self._show_vm_status_unavailable()
             return
 
-        viewer_initialized = (self._viewer and self._viewer.console_is_open())
+        viewer_initialized = self._viewer and self._viewer.console_is_open()
         if viewer_initialized:
             return
 
@@ -901,7 +875,6 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _on_console_menu_show_cb(self, src):
         self._populate_console_menu()
-
 
     ################
     # UI listeners #
@@ -923,21 +896,22 @@ class vmmConsolePages(vmmGObjectUI):
         # Dispatch the next bit in idle_add, so the UI size can change
         self.idle_emit("page-changed")
 
-
     ###########################
     # API used by vmmVMWindow #
     ###########################
 
     def vmwindow_viewer_can_usb_redirect(self):
         return self._viewer_can_usb_redirect()
+
     def vmwindow_viewer_get_usb_widget(self):
         return self._viewer.console_get_usb_widget()
+
     def vmwindow_viewer_get_pixbuf(self):
         return self._viewer.console_get_pixbuf()
 
     def vmwindow_close(self):
-        return self._activate_vm_unavailable_page(
-                _("Viewer window closed."))
+        return self._activate_vm_unavailable_page(_("Viewer window closed."))
+
     def vmwindow_get_title_message(self):
         if self._pointer_is_grabbed and self._viewer:
             keystr = self._viewer.console_get_grab_keys()
@@ -945,24 +919,30 @@ class vmmConsolePages(vmmGObjectUI):
 
     def vmwindow_activate_default_console_page(self):
         return self._activate_default_console_page()
+
     def vmwindow_refresh_vm_state(self):
         return self._refresh_vm_state()
 
     def vmwindow_set_size_to_vm(self):
         return self._set_size_to_vm()
+
     def vmwindow_set_fullscreen(self, do_fullscreen):
         self._change_fullscreen(do_fullscreen)
 
     def vmwindow_get_keycombo_menu(self):
         return self._keycombo_menu
+
     def vmwindow_get_console_list_menu(self):
         return self._consolemenu.get_menu()
+
     def vmwindow_get_viewer_is_visible(self):
         return self._viewer_is_visible()
+
     def vmwindow_get_resizeguest_tooltip(self):
         return self._viewer_get_resizeguest_tooltip()
 
     def vmwindow_sync_scaling_with_display(self):
         return self._sync_scaling_with_display()
+
     def vmwindow_sync_resizeguest_with_display(self):
         return self._sync_resizeguest_with_display()

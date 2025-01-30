@@ -7,8 +7,7 @@ class DomainLaunchSecurity(XMLBuilder):
     """
 
     XML_NAME = "launchSecurity"
-    _XML_PROP_ORDER = ["type", "cbitpos", "reducedPhysBits", "policy",
-            "session", "dhCert"]
+    _XML_PROP_ORDER = ["type", "cbitpos", "reducedPhysBits", "policy", "session", "dhCert"]
 
     type = XMLProperty("./@type")
     cbitpos = XMLProperty("./cbitpos", is_int=True)

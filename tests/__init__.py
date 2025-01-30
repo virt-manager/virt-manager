@@ -32,6 +32,7 @@ from virtinst import virtxml
 
 def setup_logging():
     import logging
+
     reset_logging()
 
     fmt = "%(levelname)-8s %(message)s"

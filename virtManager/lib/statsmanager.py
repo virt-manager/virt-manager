@@ -17,12 +17,21 @@ class _VMStatsRecord(object):
     """
     Tracks a set of VM stats for a single timestamp
     """
-    def __init__(self, timestamp,
-                 cpuTime, cpuTimeAbs,
-                 cpuHostPercent, cpuGuestPercent,
-                 curmem, currMemPercent,
-                 diskRdBytes, diskWrBytes,
-                 netRxBytes, netTxBytes):
+
+    def __init__(
+        self,
+        timestamp,
+        cpuTime,
+        cpuTimeAbs,
+        cpuHostPercent,
+        cpuGuestPercent,
+        curmem,
+        currMemPercent,
+        diskRdBytes,
+        diskWrBytes,
+        netRxBytes,
+        netTxBytes,
+    ):
         self.timestamp = timestamp
         self.cpuTime = cpuTime
         self.cpuTimeAbs = cpuTimeAbs
@@ -46,6 +55,7 @@ class _VMStatsList(vmmGObject):
     """
     Tracks a list of VMStatsRecords for a single VM
     """
+
     def __init__(self):
         vmmGObject.__init__(self)
         self._stats = []
@@ -72,8 +82,7 @@ class _VMStatsList(vmmGObject):
             ret = 0.0
             if self._stats:
                 oldstats = self._stats[0]
-                ratediff = (getattr(newstats, record_name) -
-                            getattr(oldstats, record_name))
+                ratediff = getattr(newstats, record_name) - getattr(oldstats, record_name)
                 timediff = newstats.timestamp - oldstats.timestamp
                 ret = float(ratediff) / float(timediff)
             return max(ret, 0.0)
@@ -109,14 +118,14 @@ class _VMStatsList(vmmGObject):
         return vector
 
     def get_in_out_vector(self, name1, name2, limit, ceil):
-        return (self.get_vector(name1, limit, ceil=ceil),
-                self.get_vector(name2, limit, ceil=ceil))
+        return (self.get_vector(name1, limit, ceil=ceil), self.get_vector(name2, limit, ceil=ceil))
 
 
 class vmmStatsManager(vmmGObject):
     """
     Class for polling statistics
     """
+
     def __init__(self):
         vmmGObject.__init__(self)
         self._vm_stats = {}
@@ -133,7 +142,6 @@ class vmmStatsManager(vmmGObject):
             statslist.cleanup()
         self._latest_all_stats = None
 
-
     ######################
     # CPU stats handling #
     ######################
@@ -147,8 +155,7 @@ class vmmStatsManager(vmmGObject):
 
     def _sample_cpu_stats(self, vm, allstats):
         timestamp = time.time()
-        if (not vm.is_active() or
-            not self.config.get_stats_enable_cpu_poll()):
+        if not vm.is_active() or not self.config.get_stats_enable_cpu_poll():
             return 0, 0, 0, 0, timestamp
 
         cpuTime = 0
@@ -165,8 +172,7 @@ class vmmStatsManager(vmmGObject):
         else:
             state, guestcpus, cpuTimeAbs = self._old_cpu_stats_helper(vm)
 
-        is_offline = (state in [libvirt.VIR_DOMAIN_SHUTOFF,
-                                libvirt.VIR_DOMAIN_CRASHED])
+        is_offline = state in [libvirt.VIR_DOMAIN_SHUTOFF, libvirt.VIR_DOMAIN_CRASHED]
         if is_offline:
             guestcpus = 0
             cpuTimeAbs = 0
@@ -175,9 +181,9 @@ class vmmStatsManager(vmmGObject):
         if not is_offline:
             hostcpus = vm.conn.host_active_processor_count()
 
-            pcentbase = (
-                    ((cpuTime) * 100.0) /
-                    ((timestamp - prevTimestamp) * 1000.0 * 1000.0 * 1000.0))
+            pcentbase = ((cpuTime) * 100.0) / (
+                (timestamp - prevTimestamp) * 1000.0 * 1000.0 * 1000.0
+            )
             cpuHostPercent = pcentbase / hostcpus
             # Under RHEL-5.9 using a XEN HV guestcpus can be 0 during shutdown
             # so play safe and check it.
@@ -187,7 +193,6 @@ class vmmStatsManager(vmmGObject):
         cpuGuestPercent = max(0.0, min(100.0, cpuGuestPercent))
 
         return cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent, timestamp
-
 
     ######################
     # net stats handling #
@@ -207,8 +212,7 @@ class vmmStatsManager(vmmGObject):
                 self._net_stats_supported = False
                 return 0, 0
 
-            log.debug("Error in interfaceStats for '%s' dev '%s': %s",
-                          vm.get_name(), dev, err)
+            log.debug("Error in interfaceStats for '%s' dev '%s': %s", vm.get_name(), dev, err)
             if vm.is_active():
                 log.debug("Adding %s to skip list", dev)
                 statslist.stats_net_skip.append(dev)
@@ -221,9 +225,11 @@ class vmmStatsManager(vmmGObject):
         rx = 0
         tx = 0
         statslist = self.get_vm_statslist(vm)
-        if (not self._net_stats_supported or
-            not vm.is_active() or
-            not self.config.get_stats_enable_net_poll()):
+        if (
+            not self._net_stats_supported
+            or not vm.is_active()
+            or not self.config.get_stats_enable_net_poll()
+        ):
             statslist.stats_net_skip = []
             return rx, tx
 
@@ -248,7 +254,6 @@ class vmmStatsManager(vmmGObject):
 
         return rx, tx
 
-
     #######################
     # disk stats handling #
     #######################
@@ -267,8 +272,7 @@ class vmmStatsManager(vmmGObject):
                 self._disk_stats_supported = False
                 return 0, 0
 
-            log.debug("Error in blockStats for '%s' dev '%s': %s",
-                          vm.get_name(), dev, err)
+            log.debug("Error in blockStats for '%s' dev '%s': %s", vm.get_name(), dev, err)
             if vm.is_active():
                 log.debug("Adding %s to skip list", dev)
                 statslist.stats_disk_skip.append(dev)
@@ -281,9 +285,11 @@ class vmmStatsManager(vmmGObject):
         rd = 0
         wr = 0
         statslist = self.get_vm_statslist(vm)
-        if (not self._disk_stats_supported or
-            not vm.is_active() or
-            not self.config.get_stats_enable_disk_poll()):
+        if (
+            not self._disk_stats_supported
+            or not vm.is_active()
+            or not self.config.get_stats_enable_disk_poll()
+        ):
             statslist.stats_disk_skip = []
             return rd, wr
 
@@ -298,7 +304,7 @@ class vmmStatsManager(vmmGObject):
         # LXC has a special blockStats method
         if vm.conn.is_lxc() and self._disk_stats_lxc_supported:
             try:
-                io = vm.get_backend().blockStats('')
+                io = vm.get_backend().blockStats("")
                 if io:
                     rd = io[1]
                     wr = io[3]
@@ -320,7 +326,6 @@ class vmmStatsManager(vmmGObject):
 
         return rd, wr
 
-
     #########################
     # memory stats handling #
     #########################
@@ -332,14 +337,12 @@ class vmmStatsManager(vmmGObject):
             return
 
         # Only works for virtio balloon
-        if not any([b for b in vm.get_xmlobj().devices.memballoon if
-                    b.model == "virtio"]):
+        if not any([b for b in vm.get_xmlobj().devices.memballoon if b.model == "virtio"]):
             return  # pragma: no cover
 
         try:
             secs = 5
-            vm.get_backend().setMemoryStatsPeriod(secs,
-                libvirt.VIR_DOMAIN_AFFECT_LIVE)
+            vm.get_backend().setMemoryStatsPeriod(secs, libvirt.VIR_DOMAIN_AFFECT_LIVE)
         except Exception as e:  # pragma: no cover
             log.debug("Error setting memstats period: %s", e)
 
@@ -361,9 +364,11 @@ class vmmStatsManager(vmmGObject):
 
     def _sample_mem_stats(self, vm, allstats):
         statslist = self.get_vm_statslist(vm)
-        if (not self._mem_stats_supported or
-            not vm.is_active() or
-            not self.config.get_stats_enable_memory_poll()):
+        if (
+            not self._mem_stats_supported
+            or not vm.is_active()
+            or not self.config.get_stats_enable_memory_poll()
+        ):
             statslist.mem_stats_period_is_set = False
             return 0, 0
 
@@ -373,8 +378,7 @@ class vmmStatsManager(vmmGObject):
 
         if allstats:
             totalmem = allstats.get("balloon.current", 1)
-            curmem = max(0,
-                    totalmem - allstats.get("balloon.unused", totalmem))
+            curmem = max(0, totalmem - allstats.get("balloon.unused", totalmem))
         else:
             totalmem, curmem = self._old_mem_stats_helper(vm)
 
@@ -382,7 +386,6 @@ class vmmStatsManager(vmmGObject):
         currMemPercent = max(0.0, min(currMemPercent, 100.0))
 
         return currMemPercent, curmem
-
 
     ####################
     # alltats handling #
@@ -425,7 +428,6 @@ class vmmStatsManager(vmmGObject):
                 log.debug("Error call getAllDomainStats(): %s", err)
         return ret
 
-
     ##############
     # Public API #
     ##############
@@ -433,18 +435,26 @@ class vmmStatsManager(vmmGObject):
     def refresh_vm_stats(self, vm):
         domallstats = self._latest_all_stats.get(vm.get_uuid(), None)
 
-        (cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent, timestamp) = \
-                self._sample_cpu_stats(vm, domallstats)
+        (cpuTime, cpuTimeAbs, cpuHostPercent, cpuGuestPercent, timestamp) = self._sample_cpu_stats(
+            vm, domallstats
+        )
         currMemPercent, curmem = self._sample_mem_stats(vm, domallstats)
         diskRdBytes, diskWrBytes = self._sample_disk_stats(vm, domallstats)
         netRxBytes, netTxBytes = self._sample_net_stats(vm, domallstats)
 
         newstats = _VMStatsRecord(
-                timestamp, cpuTime, cpuTimeAbs,
-                cpuHostPercent, cpuGuestPercent,
-                curmem, currMemPercent,
-                diskRdBytes, diskWrBytes,
-                netRxBytes, netTxBytes)
+            timestamp,
+            cpuTime,
+            cpuTimeAbs,
+            cpuHostPercent,
+            cpuGuestPercent,
+            curmem,
+            currMemPercent,
+            diskRdBytes,
+            diskWrBytes,
+            netRxBytes,
+            netTxBytes,
+        )
         self.get_vm_statslist(vm).append_stats(newstats)
 
     def cache_all_stats(self, conn):

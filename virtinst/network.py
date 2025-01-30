@@ -74,10 +74,22 @@ class Network(XMLBuilder):
     """
     Top level class for <network> object XML
     """
+
     XML_NAME = "network"
-    _XML_PROP_ORDER = ["ipv6", "name", "uuid", "forward", "virtualport_type",
-                       "bridge", "stp", "delay", "domain_name",
-                       "macaddr", "ips", "routes"]
+    _XML_PROP_ORDER = [
+        "ipv6",
+        "name",
+        "uuid",
+        "forward",
+        "virtualport_type",
+        "bridge",
+        "stp",
+        "delay",
+        "domain_name",
+        "macaddr",
+        "ips",
+        "routes",
+    ]
 
     ipv6 = XMLProperty("./@ipv6", is_yesno=True)
     name = XMLProperty("./name")
@@ -98,7 +110,6 @@ class Network(XMLBuilder):
     portgroups = XMLChildProperty(_NetworkPortgroup)
     ips = XMLChildProperty(_NetworkIP)
     routes = XMLChildProperty(_NetworkRoute)
-
 
     ###################
     # Helper routines #

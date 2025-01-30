@@ -35,6 +35,7 @@ class _StorageInfo:
     serialize them into the actual cloner diskinfo once the
     user clicks 'Clone' to complete the process.
     """
+
     def __init__(self, vm, cloner, diskinfo):
         self._diskinfo = diskinfo
         self._orig_disk = diskinfo.disk
@@ -45,8 +46,7 @@ class _StorageInfo:
         self.cloneable_msg = _get_cloneable_msg(diskinfo)
 
         self._manual_path = None
-        self._generated_path = (diskinfo.new_disk and
-                diskinfo.new_disk.get_source_path())
+        self._generated_path = diskinfo.new_disk and diskinfo.new_disk.get_source_path()
         if not self._generated_path:
             self._reset_generated_path()
 
@@ -57,17 +57,22 @@ class _StorageInfo:
 
     def is_cloneable(self):
         return not bool(self.cloneable_msg)
+
     def is_clone_requested(self):
         return self._is_clone_requested
+
     def is_share_requested(self):
         return not self._is_clone_requested
+
     def warn_about_sharing(self):
         return not self.share_msg
 
     def get_target(self):
         return self._orig_disk.target
+
     def get_orig_disk_path(self):
         return self._orig_disk.get_source_path()
+
     def get_new_disk_path(self):
         if self._manual_path:
             return self._manual_path
@@ -75,8 +80,10 @@ class _StorageInfo:
 
     def set_clone_requested(self, val):
         self._is_clone_requested = bool(val)
+
     def set_manual_path(self, val):
         self._manual_path = val
+
     def set_new_vm_name(self, val):
         if not val or val == self._new_vm_name:
             return
@@ -88,7 +95,8 @@ class _StorageInfo:
             self._orig_disk.conn,
             self._orig_vm_name,
             self._new_vm_name,
-            self._orig_disk.get_source_path())
+            self._orig_disk.get_source_path(),
+        )
 
     def set_values_on_diskinfo(self, diskinfo):
         if not self._is_clone_requested:
@@ -100,7 +108,6 @@ class _StorageInfo:
         sparse = True
         newpath = self.get_new_disk_path()
         diskinfo.set_new_path(newpath, sparse)
-
 
     ###################
     # UI info helpers #
@@ -115,15 +122,12 @@ class _StorageInfo:
         lines.append("\n")
 
         if self.share_msg:
-            lines.append(_("Storage is safe to share: %(reason)s") % {
-                "reason": self.share_msg})
+            lines.append(_("Storage is safe to share: %(reason)s") % {"reason": self.share_msg})
         else:
-            lines.append(
-                _("Sharing this storage is potentially dangerous."))
+            lines.append(_("Sharing this storage is potentially dangerous."))
 
         if self.cloneable_msg:
-            lines.append(_("Storage is not cloneable: %(reason)s") % {
-                "reason": self.cloneable_msg})
+            lines.append(_("Storage is not cloneable: %(reason)s") % {"reason": self.cloneable_msg})
         return "\n".join(lines)
 
     def get_markup(self, vm):
@@ -178,8 +182,7 @@ class vmmCloneVM(vmmGObjectUI):
                 cls._instances[uri] = vmmCloneVM()
             cls._instances[uri].show(parentobj.topwin, vm)
         except Exception as e:  # pragma: no cover
-            parentobj.err.show_err(
-                    _("Error launching clone dialog: %s") % str(e))
+            parentobj.err.show_err(_("Error launching clone dialog: %s") % str(e))
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "clone.ui", "vmm-clone")
@@ -191,25 +194,25 @@ class vmmCloneVM(vmmGObjectUI):
         self._storage_dialog = self.widget("vmm-change-storage")
         self._storage_dialog.set_transient_for(self.topwin)
 
-        self.builder.connect_signals({
-            "on_clone_delete_event": self._close_cb,
-            "on_clone_cancel_clicked": self._close_cb,
-            "on_clone_ok_clicked": self._finish_clicked_cb,
-            "on_storage_selection_changed": self._storage_selection_changed_cb,
-            "on_storage_details_clicked": self._storage_details_clicked_cb,
-
-            # Storage subdialog signals
-            "on_vmm_change_storage_delete_event": self._storage_dialog_close_cb,
-            "on_change_storage_cancel_clicked": self._storage_dialog_close_cb,
-            "on_change_storage_ok_clicked": self._storage_dialog_finish_cb,
-            "on_change_storage_doclone_toggled": self._storage_dialog_doclone_toggled_cb,
-            "on_change_storage_browse_clicked": self._storage_dialog_browse_cb,
-        })
+        self.builder.connect_signals(
+            {
+                "on_clone_delete_event": self._close_cb,
+                "on_clone_cancel_clicked": self._close_cb,
+                "on_clone_ok_clicked": self._finish_clicked_cb,
+                "on_storage_selection_changed": self._storage_selection_changed_cb,
+                "on_storage_details_clicked": self._storage_details_clicked_cb,
+                # Storage subdialog signals
+                "on_vmm_change_storage_delete_event": self._storage_dialog_close_cb,
+                "on_change_storage_cancel_clicked": self._storage_dialog_close_cb,
+                "on_change_storage_ok_clicked": self._storage_dialog_finish_cb,
+                "on_change_storage_doclone_toggled": self._storage_dialog_doclone_toggled_cb,
+                "on_change_storage_browse_clicked": self._storage_dialog_browse_cb,
+            }
+        )
         self.bind_escape_key_close()
         self._cleanup_on_app_close()
 
         self._init_ui()
-
 
     #######################
     # Standard UI methods #
@@ -260,7 +263,6 @@ class vmmCloneVM(vmmGObjectUI):
             self._storage_browser.cleanup()
             self._storage_browser = None
 
-
     ###########
     # UI init #
     ###########
@@ -283,12 +285,13 @@ class vmmCloneVM(vmmGObjectUI):
 
         def separator_cb(_model, _iter):
             return _model[_iter][0] == "separator"
+
         storage_list.set_row_separator_func(separator_cb)
 
         chkbox = Gtk.CellRendererToggle()
-        chkbox.connect('toggled', self._storage_clone_toggled_cb)
+        chkbox.connect("toggled", self._storage_clone_toggled_cb)
         chkimg = Gtk.CellRendererPixbuf()
-        chkimg.set_property('stock-size', Gtk.IconSize.MENU)
+        chkimg.set_property("stock-size", Gtk.IconSize.MENU)
         cloneCol.pack_start(chkimg, False)
         cloneCol.pack_start(chkbox, False)
 
@@ -301,13 +304,13 @@ class vmmCloneVM(vmmGObjectUI):
             active = sinfo.is_clone_requested()
             _chkimg = column.get_cells()[0]
             _chkbox = column.get_cells()[1]
-            _chkbox.set_property('active', active)
-            _chkbox.set_property('visible', visible)
-            _chkimg.set_property('visible', not visible)
+            _chkbox.set_property("active", active)
+            _chkbox.set_property("visible", visible)
+            _chkimg.set_property("visible", not visible)
             icon = "dialog-information"
             if sinfo.warn_about_sharing():
                 icon = "dialog-warning"
-            _chkimg.set_property('icon-name', icon)
+            _chkimg.set_property("icon-name", icon)
             tooltip = sinfo.get_tooltip()
             if tooltip != model[_iter][1]:
                 model[_iter][1] = tooltip
@@ -320,7 +323,7 @@ class vmmCloneVM(vmmGObjectUI):
         pathtxt.set_property("width-chars", 30)
         pathtxt.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
         pathimg = Gtk.CellRendererPixbuf()
-        pathimg.set_property('stock-size', Gtk.IconSize.MENU)
+        pathimg.set_property("stock-size", Gtk.IconSize.MENU)
         pathimg.set_padding(3, 0)
         pathCol.pack_start(pathimg, False)
         pathCol.pack_start(pathtxt, True)
@@ -333,12 +336,11 @@ class vmmCloneVM(vmmGObjectUI):
             _pathimg = column.get_cells()[0]
             _pathtxt = column.get_cells()[1]
             markup = sinfo.get_markup(self.vm)
-            _pathtxt.set_property('markup', markup)
-            _pathimg.set_property('icon-name', sinfo.get_icon_name())
+            _pathtxt.set_property("markup", markup)
+            _pathimg.set_property("icon-name", sinfo.get_icon_name())
 
         pathCol.set_cell_data_func(pathtxt, path_cb)
         pathCol.set_cell_data_func(pathimg, path_cb)
-
 
     def _reset_state(self):
         self.widget("clone-cancel").grab_focus()
@@ -350,8 +352,7 @@ class vmmCloneVM(vmmGObjectUI):
         self.widget("clone-orig-name").set_text(cloner.src_name)
         self.widget("clone-new-name").set_text(cloner.new_guest.name)
 
-        uiutil.set_grid_row_visible(
-            self.widget("clone-dest-host"), self.conn.is_remote())
+        uiutil.set_grid_row_visible(self.widget("clone-dest-host"), self.conn.is_remote())
         self.widget("clone-dest-host").set_text(self.conn.get_pretty_desc())
 
         # Collect info about all the VMs disks
@@ -362,7 +363,6 @@ class vmmCloneVM(vmmGObjectUI):
             self._storage_list[sinfo.get_target()] = sinfo
 
         self._populate_storage_ui()
-
 
     #######################
     # Functional routines #
@@ -376,7 +376,6 @@ class vmmCloneVM(vmmGObjectUI):
         if new_name:
             cloner.set_clone_name(new_name)
         return cloner
-
 
     #######################
     # Storage UI building #
@@ -405,7 +404,6 @@ class vmmCloneVM(vmmGObjectUI):
         active = not src.get_property("active")
         sinfo.set_clone_requested(active)
         model.emit("row-changed", row.path, row.iter)
-
 
     ###########################
     # Storage window handling #
@@ -437,7 +435,6 @@ class vmmCloneVM(vmmGObjectUI):
 
         self.widget("vmm-change-storage").show_all()
 
-
     def _storage_dialog_finish(self):
         target = self.widget("change-storage-target").get_text()
         sinfo = self._storage_list[target]
@@ -452,19 +449,19 @@ class vmmCloneVM(vmmGObjectUI):
 
         new_path = self.widget("change-storage-new").get_text()
 
-        if virtinst.DeviceDisk.path_definitely_exists(
-                self.vm.conn.get_backend(), new_path):
+        if virtinst.DeviceDisk.path_definitely_exists(self.vm.conn.get_backend(), new_path):
             text1 = _("Cloning will overwrite the existing file")
-            text2 = _("Using an existing image will overwrite "
-                      "the path during the clone process. Are "
-                      "you sure you want to use this path?")
+            text2 = _(
+                "Using an existing image will overwrite "
+                "the path during the clone process. Are "
+                "you sure you want to use this path?"
+            )
             res = self.err.yes_no(text1, text2)
             if not res:
                 return
 
         sinfo.set_manual_path(new_path)
         self._storage_dialog_close()
-
 
     ###################
     # Finish routines #
@@ -479,17 +476,19 @@ class vmmCloneVM(vmmGObjectUI):
                 continue
             if not sinfo.warn_about_sharing():
                 continue
-            warn_str += "%s: %s\n" % (
-                    sinfo.get_target(), sinfo.get_orig_disk_path())
+            warn_str += "%s: %s\n" % (sinfo.get_target(), sinfo.get_orig_disk_path())
 
         if warn_str:
             res = self.err.ok_cancel(
                 _("Sharing storage may cause data to be overwritten."),
-                _("The following disk devices will be shared with %(vmname)s:"
-                  "\n\n%(pathlist)s\n"
-                  "Running the new guest could overwrite data in these "
-                  "disk images.") % {
-                      "vmname": self.vm.get_name(), "pathlist": warn_str})
+                _(
+                    "The following disk devices will be shared with %(vmname)s:"
+                    "\n\n%(pathlist)s\n"
+                    "Running the new guest could overwrite data in these "
+                    "disk images."
+                )
+                % {"vmname": self.vm.get_name(), "pathlist": warn_str},
+            )
             if not res:
                 return False
 
@@ -500,11 +499,10 @@ class vmmCloneVM(vmmGObjectUI):
         self.reset_finish_cursor()
 
         if error is not None:
-            error = (_("Error creating virtual machine clone '%(vm)s': "
-                       "%(error)s") % {
-                     "vm": cloner.new_guest.name,
-                     "error": error,
-                     })
+            error = _("Error creating virtual machine clone '%(vm)s': %(error)s") % {
+                "vm": cloner.new_guest.name,
+                "error": error,
+            }
             self.err.show_err(error, details=details)
             return
 
@@ -532,8 +530,11 @@ class vmmCloneVM(vmmGObjectUI):
                 pool = self.conn.get_pool_by_name(poolname)
                 self.idle_add(pool.refresh)
             except Exception:  # pragma: no cover
-                log.debug("Error looking up pool=%s for refresh after "
-                        "VM clone.", poolname, exc_info=True)
+                log.debug(
+                    "Error looking up pool=%s for refresh after VM clone.",
+                    poolname,
+                    exc_info=True,
+                )
 
     def _build_final_cloner(self):
         self._set_paths_from_clone_name()
@@ -563,20 +564,28 @@ class vmmCloneVM(vmmGObjectUI):
 
         self.set_finish_cursor()
 
-        title = (_("Creating virtual machine clone '%s'") %
-                 cloner.new_guest.name)
+        title = _("Creating virtual machine clone '%s'") % cloner.new_guest.name
 
         text = title
         if cloner.get_nonshare_diskinfos():
-            text = (_("Creating virtual machine clone '%s' and selected "
-                      "storage (this may take a while)") %
-                    cloner.new_guest.name)
+            text = (
+                _(
+                    "Creating virtual machine clone '%s' and selected "
+                    "storage (this may take a while)"
+                )
+                % cloner.new_guest.name
+            )
 
-        progWin = vmmAsyncJob(self._async_clone, [cloner],
-                              self._finish_cb, [self.conn, cloner],
-                              title, text, self.topwin)
+        progWin = vmmAsyncJob(
+            self._async_clone,
+            [cloner],
+            self._finish_cb,
+            [self.conn, cloner],
+            title,
+            text,
+            self.topwin,
+        )
         progWin.run()
-
 
     ################
     # UI listeners #
@@ -584,6 +593,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def _close_cb(self, src, event=None):
         return self.close()
+
     def _finish_clicked_cb(self, src):
         return self._finish()
 
@@ -601,6 +611,7 @@ class vmmCloneVM(vmmGObjectUI):
 
     def _storage_dialog_close_cb(self, src, event=None):
         return self._storage_dialog_close()
+
     def _storage_dialog_finish_cb(self, src):
         self._storage_dialog_finish()
 

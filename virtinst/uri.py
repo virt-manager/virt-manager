@@ -14,9 +14,9 @@ from . import xmlutil
 
 def sanitize_xml_for_test_define(xml):
     orig = xml
-    xml = re.sub("arch=\".*\"", "arch=\"i686\"", xml)
-    xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
-    xml = re.sub("machine type=\".*\"", "", xml)
+    xml = re.sub('arch=".*"', 'arch="i686"', xml)
+    xml = re.sub('domain type=".*"', 'domain type="test"', xml)
+    xml = re.sub('machine type=".*"', "", xml)
     xml = re.sub(">exe<", ">hvm<", xml)
     xml = re.sub(">linux<", ">xen<", xml)
 
@@ -30,19 +30,21 @@ class URI(object):
     """
     Parse an arbitrary URI into its individual parts
     """
+
     def __init__(self, uri):
         self.uri = uri
 
         split_uri = self._split(uri)
         self.scheme = split_uri[0]
-        (self.username, self.hostname, self.path, self.query,
-         self.fragment) = map(urllib.parse.unquote, split_uri[1:])
+        (self.username, self.hostname, self.path, self.query, self.fragment) = map(
+            urllib.parse.unquote, split_uri[1:]
+        )
 
-        self.transport = ''
+        self.transport = ""
         if "+" in self.scheme:
             self.scheme, self.transport = self.scheme.rsplit("+", 1)
 
-        self.port = ''
+        self.port = ""
         self.is_ipv6 = False
         if self.hostname.startswith("[") and "]" in self.hostname:
             if "]:" in self.hostname:
@@ -54,14 +56,13 @@ class URI(object):
 
         self.host_is_ipv4_string = bool(re.match("^[0-9.]+$", self.hostname))
 
-
     ###################
     # Private helpers #
     ###################
 
     def _split(self, uri):
         def splitnetloc(url, start=0):
-            for c in '/?#':  # the order is important!
+            for c in "/?#":  # the order is important!
                 delim = url.find(c, start)
                 if delim >= 0:
                     break
@@ -69,20 +70,20 @@ class URI(object):
                 delim = len(url)
             return url[start:delim], url[delim:]
 
-        scheme = username = netloc = query = fragment = ''
+        scheme = username = netloc = query = fragment = ""
         i = uri.find(":")
         if i > 0:
-            scheme, uri = uri[:i].lower(), uri[i + 1:]
-            if uri[:2] == '//':
+            scheme, uri = uri[:i].lower(), uri[i + 1 :]
+            if uri[:2] == "//":
                 netloc, uri = splitnetloc(uri, 2)
                 offset = netloc.find("@")
                 if offset > 0:
                     username = netloc[0:offset]
-                    netloc = netloc[offset + 1:]
-            if '#' in uri:
-                uri, fragment = uri.split('#', 1)
-            if '?' in uri:
-                uri, query = uri.split('?', 1)
+                    netloc = netloc[offset + 1 :]
+            if "#" in uri:
+                uri, fragment = uri.split("#", 1)
+            if "?" in uri:
+                uri, query = uri.split("?", 1)
         return scheme, username, netloc, uri, query, fragment
 
 
@@ -114,6 +115,7 @@ class MagicURI(object):
 
     See tests/utils.py for example URLs
     """
+
     VIRTINST_URI_MAGIC_PREFIX = "__virtinst_test__"
 
     @staticmethod
@@ -154,7 +156,6 @@ class MagicURI(object):
         if opts:
             self._err = "MagicURI has unhandled opts=%s" % opts
 
-
     ##############
     # Public API #
     ##############
@@ -175,6 +176,7 @@ class MagicURI(object):
 
         def _raise_nosupport_error(msg):
             import libvirt
+
             err = [libvirt.VIR_ERR_NO_SUPPORT, None, msg, None, None, None]
             exc = libvirt.libvirtError(msg)
             exc.err = err
@@ -202,19 +204,21 @@ class MagicURI(object):
             # In libvirt 9.8.0 the test suite added a stub domcaps
             # impl. Fall back to raising NO_SUPPORT for our magic URIs, so
             # we can keep getting code coverage of the old code paths
-            _raise_nosupport_error(
-                    "virtinst test driver fake domcaps nosupport")
+            _raise_nosupport_error("virtinst test driver fake domcaps nosupport")
 
         conn.getDomainCapabilities = fake_domcaps
 
         if self.fakeuri:
             origcreate = conn.createXML
             origdefine = conn.defineXML
+
             def newcreate(xml, flags):
                 xml = sanitize_xml_for_test_define(xml)
                 return origcreate(xml, flags)
+
             def newdefine(xml):
                 xml = sanitize_xml_for_test_define(xml)
                 return origdefine(xml)
+
             conn.createXML = newcreate
             conn.defineXML = newdefine

@@ -38,8 +38,8 @@ def _check_function(function, flag, run_args, data):
     # is of the correct type
     if not isinstance(data, classobj):
         raise ValueError(
-            "Passed obj %s with args must be of type %s, was %s" %
-            (data, str(classobj), type(data)))
+            "Passed obj %s with args must be of type %s, was %s" % (data, str(classobj), type(data))
+        )
 
     use_args = run_args
     if flag_tuple:
@@ -65,11 +65,13 @@ def _version_str_to_int(verstr):
         return 0
 
     if verstr.count(".") != 2:
-        raise xmlutil.DevError(
-                "version string '%s' needs two '.' in it." % verstr)
+        raise xmlutil.DevError("version string '%s' needs two '.' in it." % verstr)
 
-    return ((int(verstr.split(".")[0]) * 1000000) +
-            (int(verstr.split(".")[1]) * 1000) + (int(verstr.split(".")[2])))
+    return (
+        (int(verstr.split(".")[0]) * 1000000)
+        + (int(verstr.split(".")[1]) * 1000)
+        + (int(verstr.split(".")[2]))
+    )
 
 
 class _SupportCheck(object):
@@ -97,9 +99,16 @@ class _SupportCheck(object):
         'this feature is supported with qemu and libvirt version 1.0.0,
          and xen with libvirt version 1.1.0'
     """
-    def __init__(self,
-                 function=None, run_args=None, flag=None,
-                 version=None, hv_version=None, hv_libvirt_version=None):
+
+    def __init__(
+        self,
+        function=None,
+        run_args=None,
+        flag=None,
+        version=None,
+        hv_version=None,
+        hv_libvirt_version=None,
+    ):
         self.function = function
         self.run_args = run_args
         self.flag = flag
@@ -110,14 +119,15 @@ class _SupportCheck(object):
         if self.function:
             assert len(function.split(".")) == 2
 
-        versions = ([self.version] + list(self.hv_libvirt_version.values()))
+        versions = [self.version] + list(self.hv_libvirt_version.values())
         for vstr in versions:
             v = _version_str_to_int(vstr)
             if vstr is not None and v != 0 and v < 7003:
                 raise xmlutil.DevError(
                     "Cannot enforce "
                     "support checks for libvirt versions less than 0.7.3, "
-                    "since required APIs were not available. ver=%s" % vstr)
+                    "since required APIs were not available. ver=%s" % vstr
+                )
 
     def __call__(self, virtconn, data=None):
         """
@@ -136,8 +146,7 @@ class _SupportCheck(object):
             data = data.get_conn_for_api_arg()
 
         if self.function:
-            ret = _check_function(
-                    self.function, self.flag, self.run_args, data)
+            ret = _check_function(self.function, self.flag, self.run_args, data)
             if ret is not None:
                 return ret
 
@@ -156,16 +165,14 @@ class _SupportCheck(object):
             if hv_type not in self.hv_version:
                 if "all" not in self.hv_version:
                     return False
-            elif (actual_hv_version <
-                  _version_str_to_int(self.hv_version[hv_type])):
+            elif actual_hv_version < _version_str_to_int(self.hv_version[hv_type]):
                 return False
 
         if self.hv_libvirt_version:
             if hv_type not in self.hv_libvirt_version:
                 if "all" not in self.hv_libvirt_version:
                     return False
-            elif (actual_libvirt_version <
-                  _version_str_to_int(self.hv_libvirt_version[hv_type])):
+            elif actual_libvirt_version < _version_str_to_int(self.hv_libvirt_version[hv_type]):
                 return False
 
         return True
@@ -217,25 +224,22 @@ class SupportCache:
         if not isinstance(err, libvirt.libvirtError):
             return False  # pragma: no cover
 
-        if (err.get_error_code() == libvirt.VIR_ERR_RPC or
-            err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT):
+        if (
+            err.get_error_code() == libvirt.VIR_ERR_RPC
+            or err.get_error_code() == libvirt.VIR_ERR_NO_SUPPORT
+        ):
             return True
 
         return False  # pragma: no cover
-
 
     def __init__(self, virtconn):
         self._cache = {}
         self._virtconn = virtconn
 
-    conn_domain = _make(
-        function="virConnect.listAllDomains", run_args=())
-    conn_storage = _make(
-        function="virConnect.listAllStoragePools", run_args=())
-    conn_nodedev = _make(
-        function="virConnect.listDevices", run_args=(None, 0))
-    conn_network = _make(
-        function="virConnect.listNetworks", run_args=())
+    conn_domain = _make(function="virConnect.listAllDomains", run_args=())
+    conn_storage = _make(function="virConnect.listAllStoragePools", run_args=())
+    conn_nodedev = _make(function="virConnect.listDevices", run_args=(None, 0))
+    conn_network = _make(function="virConnect.listNetworks", run_args=())
 
     conn_stream = _make(function="virConnect.newStream", run_args=(0,))
     conn_working_xen_events = _make(hv_version={"xen": "4.0.0", "all": 0})
@@ -245,18 +249,17 @@ class SupportCache:
     conn_default_qcow2 = _make(hv_version={"qemu": "1.2.0", "test": 0})
     conn_autosocket = _make(hv_libvirt_version={"qemu": "1.0.6"})
     conn_pm_disable = _make(hv_version={"qemu": "1.2.0", "test": 0})
-    conn_qcow2_lazy_refcounts = _make(
-        version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
-    conn_hyperv_clock = _make(
-        version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
+    conn_qcow2_lazy_refcounts = _make(version="1.1.0", hv_version={"qemu": "1.2.0", "test": 0})
+    conn_hyperv_clock = _make(version="1.2.2", hv_version={"qemu": "1.5.3", "test": 0})
     conn_domain_capabilities = _make(
-        function="virConnect.getDomainCapabilities",
-        run_args=(None, None, None, None))
-    conn_vmport = _make(
-        version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
+        function="virConnect.getDomainCapabilities", run_args=(None, None, None, None)
+    )
+    conn_vmport = _make(version="1.2.16", hv_version={"qemu": "2.2.0", "test": 0})
     conn_mem_stats_period = _make(
         function="virDomain.setMemoryStatsPeriod",
-        version="1.1.1", hv_version={"qemu": 0, "test": "5.6.0"})
+        version="1.1.1",
+        hv_version={"qemu": 0, "test": "5.6.0"},
+    )
     # spice GL is actually enabled with libvirt 1.3.3, but 3.1.0 is the
     # first version that sorts out the qemu:///system + cgroup issues
     conn_graphics_listen_none = _make(version="2.0.0")
@@ -277,38 +280,32 @@ class SupportCache:
     # limited to arbitrary new enough xen, since I know libxl can handle it
     # but I don't think the old xend driver does.
     conn_disk_driver_name_qemu = _make(
-        hv_version={"qemu": 0, "xen": "4.2.0"},
-        hv_libvirt_version={"qemu": 0, "xen": "1.1.0"})
+        hv_version={"qemu": 0, "xen": "4.2.0"}, hv_libvirt_version={"qemu": 0, "xen": "1.1.0"}
+    )
 
     # Domain checks
-    domain_xml_inactive = _make(function="virDomain.XMLDesc", run_args=(),
-        flag="VIR_DOMAIN_XML_INACTIVE")
-    domain_xml_secure = _make(function="virDomain.XMLDesc", run_args=(),
-        flag="VIR_DOMAIN_XML_SECURE")
-    domain_managed_save = _make(
-        function="virDomain.hasManagedSaveImage",
-        run_args=(0,))
+    domain_xml_inactive = _make(
+        function="virDomain.XMLDesc", run_args=(), flag="VIR_DOMAIN_XML_INACTIVE"
+    )
+    domain_xml_secure = _make(
+        function="virDomain.XMLDesc", run_args=(), flag="VIR_DOMAIN_XML_SECURE"
+    )
+    domain_managed_save = _make(function="virDomain.hasManagedSaveImage", run_args=(0,))
     domain_job_info = _make(function="virDomain.jobInfo", run_args=())
-    domain_list_snapshots = _make(
-        function="virDomain.listAllSnapshots", run_args=())
-    domain_memory_stats = _make(
-        function="virDomain.memoryStats", run_args=())
+    domain_list_snapshots = _make(function="virDomain.listAllSnapshots", run_args=())
+    domain_memory_stats = _make(function="virDomain.memoryStats", run_args=())
     domain_state = _make(function="virDomain.state", run_args=())
-    domain_open_graphics = _make(function="virDomain.openGraphicsFD",
-        version="1.2.8", hv_version={"qemu": 0})
-    domain_undefine_keep_tpm = _make(
-            hv_libvirt_version={"qemu": "8.9.0"})
+    domain_open_graphics = _make(
+        function="virDomain.openGraphicsFD", version="1.2.8", hv_version={"qemu": 0}
+    )
+    domain_undefine_keep_tpm = _make(hv_libvirt_version={"qemu": "8.9.0"})
 
     # Pool checks
-    pool_metadata_prealloc = _make(
-        flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA",
-        version="1.0.1")
+    pool_metadata_prealloc = _make(flag="VIR_STORAGE_VOL_CREATE_PREALLOC_METADATA", version="1.0.1")
 
     # Nodedev checks
     # Added in libvirt 7.8.0 mid 2021
-    nodedev_isactive = _make(
-        function="virNodeDevice.isActive", run_args=())
-
+    nodedev_isactive = _make(function="virNodeDevice.isActive", run_args=())
 
     def _check_version(self, version):
         """

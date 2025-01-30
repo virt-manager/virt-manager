@@ -18,8 +18,7 @@ from .logger import log
 
 def _media_create_from_location(location):
     if not hasattr(Libosinfo.Media, "create_from_location_with_flags"):
-        return Libosinfo.Media.create_from_location(  # pragma: no cover
-                location, None)
+        return Libosinfo.Media.create_from_location(location, None)  # pragma: no cover
 
     # We prefer this API, because by default it will not
     # reject non-bootable media, like debian s390x
@@ -32,6 +31,7 @@ class _OsinfoIter:
     Helper to turn osinfo style get_length/get_nth lists into python
     iterables
     """
+
     def __init__(self, listobj):
         self.current = 0
         self.listobj = listobj
@@ -41,6 +41,7 @@ class _OsinfoIter:
 
     def __iter__(self):
         return self
+
     def __next__(self):
         if self.current > self.high:
             raise StopIteration
@@ -53,6 +54,7 @@ class _OSDB(object):
     """
     Entry point for the public API
     """
+
     def __init__(self):
         self.__os_loader = None
         self.__os_generic = None
@@ -67,8 +69,7 @@ class _OSDB(object):
             # Add our custom generic variant
             o = Libosinfo.Os()
             o.set_param("short-id", "generic")
-            o.set_param("name",
-                    _("Generic or unknown OS. Usage is not recommended."))
+            o.set_param("name", _("Generic or unknown OS. Usage is not recommended."))
             self.__os_generic = _OsVariant(o)
         return self.__os_generic
 
@@ -102,13 +103,13 @@ class _OSDB(object):
             return self._os_generic
 
         flt = Libosinfo.Filter()
-        flt.add_constraint(Libosinfo.PRODUCT_PROP_SHORT_ID,
-                           key)
+        flt.add_constraint(Libosinfo.PRODUCT_PROP_SHORT_ID, key)
         oslist = self._os_db.get_os_list().new_filtered(flt).get_elements()
         if len(oslist) == 0:
             if raise_error:
-                raise ValueError(_("Unknown OS name '%s'. "
-                                   "See `--osinfo list` for valid values.") % key)
+                raise ValueError(
+                    _("Unknown OS name '%s'. See `--osinfo list` for valid values.") % key
+                )
             return None
         return _OsVariant(oslist[0])
 
@@ -135,8 +136,7 @@ class _OSDB(object):
         try:
             tree = Libosinfo.Tree.create_from_location(location, None)
         except Exception as e:
-            log.debug("Error creating libosinfo tree object for "
-                "location=%s : %s", location, str(e))
+            log.debug("Error creating libosinfo tree object for location=%s : %s", location, str(e))
             return None
 
         if hasattr(self._os_db, "identify_tree"):
@@ -154,16 +154,17 @@ class _OSDB(object):
         """
         List all OSes in the DB, sorting by the passes _OsVariant attribute
         """
-        oslist = [_OsVariant(osent) for osent in
-                  self._os_db.get_os_list().get_elements()]
+        oslist = [_OsVariant(osent) for osent in self._os_db.get_os_list().get_elements()]
         oslist.append(self._os_generic)
 
         # human/natural sort, but with reverse sorted numbers
         def to_int(text):
             return (int(text) * -1) if text.isdigit() else text.lower()
+
         def alphanum_key(obj):
             val = getattr(obj, sortkey)
-            return [to_int(c) for c in re.split('([0-9]+)', val)]
+            return [to_int(c) for c in re.split("([0-9]+)", val)]
+
         return list(sorted(oslist, key=alphanum_key))
 
 
@@ -173,6 +174,7 @@ OSDB = _OSDB()
 #####################
 # OsResources class #
 #####################
+
 
 class _OsResources:
     def __init__(self, minimum, recommended):
@@ -213,8 +215,7 @@ class _OsResources:
         # value as an approximation at a 'recommended' value
         val = self._get_minimum_key(key, arch)
         if val:
-            log.debug("No recommended value found for key='%s', "
-                    "using minimum=%s * 2", key, val)
+            log.debug("No recommended value found for key='%s', using minimum=%s * 2", key, val)
             return val * 2
         return None
 
@@ -234,6 +235,7 @@ class _OsResources:
 #####################
 # OsVariant classes #
 #####################
+
 
 class _OsVariant(object):
     def __init__(self, o):
@@ -257,39 +259,44 @@ class _OsVariant(object):
     def __repr__(self):
         return "<%s name=%s>" % (self.__class__.__name__, self.name)
 
-
     ########################
     # Internal helper APIs #
     ########################
 
-    def _is_related_to(self, related_os_list, osobj=None,
-            check_derives=True, check_upgrades=True, check_clones=True):
+    def _is_related_to(
+        self,
+        related_os_list,
+        osobj=None,
+        check_derives=True,
+        check_upgrades=True,
+        check_clones=True,
+    ):
         osobj = osobj or self._os
         if osobj.get_short_id() in related_os_list:
             return True
 
         check_list = []
+
         def _extend(newl):
             for obj in newl:
                 if obj not in check_list:
                     check_list.append(obj)
 
         if check_derives:
-            _extend(osobj.get_related(
-                Libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
+            _extend(osobj.get_related(Libosinfo.ProductRelationship.DERIVES_FROM).get_elements())
         if check_clones:
-            _extend(osobj.get_related(
-                Libosinfo.ProductRelationship.CLONES).get_elements())
+            _extend(osobj.get_related(Libosinfo.ProductRelationship.CLONES).get_elements())
         if check_upgrades:
-            _extend(osobj.get_related(
-                Libosinfo.ProductRelationship.UPGRADES).get_elements())
+            _extend(osobj.get_related(Libosinfo.ProductRelationship.UPGRADES).get_elements())
 
         for checkobj in check_list:
-            if (checkobj.get_short_id() in related_os_list or
-                self._is_related_to(related_os_list, osobj=checkobj,
-                    check_upgrades=check_upgrades,
-                    check_derives=check_derives,
-                    check_clones=check_clones)):
+            if checkobj.get_short_id() in related_os_list or self._is_related_to(
+                related_os_list,
+                osobj=checkobj,
+                check_upgrades=check_upgrades,
+                check_derives=check_derives,
+                check_clones=check_clones,
+            ):
                 return True
 
         return False
@@ -315,7 +322,6 @@ class _OsVariant(object):
 
         return ret
 
-
     ###############
     # Cached APIs #
     ###############
@@ -326,8 +332,7 @@ class _OsVariant(object):
 
         # We can use os.get_release_status() & osinfo.ReleaseStatus.ROLLING
         # if we require libosinfo >= 1.4.0.
-        release_status = self._os.get_param_value(
-                Libosinfo.OS_PROP_RELEASE_STATUS) or None
+        release_status = self._os.get_param_value(Libosinfo.OS_PROP_RELEASE_STATUS) or None
 
         def _glib_to_datetime(glibdate):
             date = "%s-%s" % (glibdate.get_year(), glibdate.get_day_of_year())
@@ -347,7 +352,6 @@ class _OsVariant(object):
             return now > rel5
         return False
 
-
     ###############
     # Public APIs #
     ###############
@@ -362,10 +366,10 @@ class _OsVariant(object):
         return re.match(r"linux\d\d\d\d", self.name)
 
     def is_windows(self):
-        return self._family in ['win9x', 'winnt', 'win16']
+        return self._family in ["win9x", "winnt", "win16"]
 
     def get_clock(self):
-        if self.is_windows() or self._family in ['solaris']:
+        if self.is_windows() or self._family in ["solaris"]:
             return "localtime"
         return "utc"
 
@@ -374,26 +378,22 @@ class _OsVariant(object):
 
     def supports_virtiodisk(self, extra_devs=None):
         # virtio-block and virtio1.0-block
-        devids = ["http://pcisig.com/pci/1af4/1001",
-                  "http://pcisig.com/pci/1af4/1042"]
+        devids = ["http://pcisig.com/pci/1af4/1001", "http://pcisig.com/pci/1af4/1042"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def supports_virtioscsi(self, extra_devs=None):
         # virtio-scsi and virtio1.0-scsi
-        devids = ["http://pcisig.com/pci/1af4/1004",
-                  "http://pcisig.com/pci/1af4/1048"]
+        devids = ["http://pcisig.com/pci/1af4/1004", "http://pcisig.com/pci/1af4/1048"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def supports_virtionet(self, extra_devs=None):
         # virtio-net and virtio1.0-net
-        devids = ["http://pcisig.com/pci/1af4/1000",
-                  "http://pcisig.com/pci/1af4/1041"]
+        devids = ["http://pcisig.com/pci/1af4/1000", "http://pcisig.com/pci/1af4/1041"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def supports_virtiorng(self, extra_devs=None):
         # virtio-rng and virtio1.0-rng
-        devids = ["http://pcisig.com/pci/1af4/1005",
-                  "http://pcisig.com/pci/1af4/1044"]
+        devids = ["http://pcisig.com/pci/1af4/1005", "http://pcisig.com/pci/1af4/1044"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def supports_virtiogpu(self, extra_devs=None):
@@ -403,13 +403,11 @@ class _OsVariant(object):
 
     def supports_virtioballoon(self, extra_devs=None):
         # virtio-balloon and virtio1.0-balloon
-        devids = ["http://pcisig.com/pci/1af4/1002",
-                  "http://pcisig.com/pci/1af4/1045"]
+        devids = ["http://pcisig.com/pci/1af4/1002", "http://pcisig.com/pci/1af4/1045"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
     def supports_virtioserial(self, extra_devs=None):
-        devids = ["http://pcisig.com/pci/1af4/1003",
-                  "http://pcisig.com/pci/1af4/1043"]
+        devids = ["http://pcisig.com/pci/1af4/1003", "http://pcisig.com/pci/1af4/1043"]
         if self._device_filter(devids=devids, extra_devs=extra_devs):
             return True
         # osinfo data was wrong for RHEL/centos here until Oct 2018
@@ -433,8 +431,9 @@ class _OsVariant(object):
 
     def supports_chipset_q35(self, extra_devs=None):
         # For our purposes, check for the union of q35 + virtio1.0 support
-        if (self.supports_virtionet(extra_devs=extra_devs) and
-            not self.supports_virtio1(extra_devs=extra_devs)):
+        if self.supports_virtionet(extra_devs=extra_devs) and not self.supports_virtio1(
+            extra_devs=extra_devs
+        ):
             return False
         devids = ["http://qemu.org/chipset/x86/q35"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
@@ -533,8 +532,7 @@ class _OsVariant(object):
         treelist = list(_OsinfoIter(self._os.get_tree_list()))
 
         if not treelist:
-            raise RuntimeError(
-                _("OS '%s' does not have a URL location") % self.name)
+            raise RuntimeError(_("OS '%s' does not have a URL location") % self.name)
 
         # Some distros have more than one URL for a specific architecture,
         # which is the case for Fedora and different variants (Server,
@@ -546,9 +544,9 @@ class _OsVariant(object):
             return location
 
         raise RuntimeError(
-            _("OS '%(osname)s' does not have a URL location "
-              "for the architecture '%(archname)s'") %
-            {"osname": self.name, "archname": arch})
+            _("OS '%(osname)s' does not have a URL location for the architecture '%(archname)s'")
+            % {"osname": self.name, "archname": arch}
+        )
 
     def get_install_script_list(self):
         return list(_OsinfoIter(self._os.get_install_script_list()))
@@ -604,8 +602,10 @@ class _OsMedia(object):
 
     def get_kernel_path(self):
         return self._media.get_kernel_path()
+
     def get_initrd_path(self):
         return self._media.get_initrd_path()
+
     def supports_installer_script(self):
         return self._media.supports_installer_script()
 

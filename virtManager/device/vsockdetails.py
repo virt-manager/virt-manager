@@ -16,22 +16,22 @@ class vmmVsockDetails(vmmGObjectUI):
     MIN_GUEST_CID = 3
 
     def __init__(self, vm, builder, topwin):
-        super().__init__("vsockdetails.ui", None,
-                         builder=builder, topwin=topwin)
+        super().__init__("vsockdetails.ui", None, builder=builder, topwin=topwin)
         self.vm = vm
         self.conn = vm.conn
 
-        self.builder.connect_signals({
-            "on_vsock_auto_toggled": self._vsock_auto_toggled,
-            "on_vsock_cid_changed": lambda ignore: self.emit("changed-cid"),
-        })
+        self.builder.connect_signals(
+            {
+                "on_vsock_auto_toggled": self._vsock_auto_toggled,
+                "on_vsock_cid_changed": lambda ignore: self.emit("changed-cid"),
+            }
+        )
 
         self.top_box = self.widget("vsock-box")
 
     def _cleanup(self):
         self.vm = None
         self.conn = None
-
 
     ##############
     # Public API #
@@ -61,7 +61,6 @@ class vmmVsockDetails(vmmGObjectUI):
         self.widget("vsock-auto").set_active(is_auto)
         self.widget("vsock-cid").set_value(cid)
         self.widget("vsock-cid").set_visible(not is_auto)
-
 
     #############
     # Listeners #

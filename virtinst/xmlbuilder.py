@@ -31,6 +31,7 @@ class XMLManualAction(object):
     Helper class for tracking and performing the user requested manual
     XML action
     """
+
     ACTION_CREATE = 1
     ACTION_DELETE = 2
     ACTION_SET = 3
@@ -54,17 +55,17 @@ class XMLManualAction(object):
             val = self.xpath_value
         else:
             if "=" not in str(xpath):
-                raise ValueError(
-                    "%s: Setting xpath must be in the form of XPATH=VALUE" %
-                    xpath)
+                raise ValueError("%s: Setting xpath must be in the form of XPATH=VALUE" % xpath)
             xpath, val = xpath.rsplit("=", 1)
         return _ret(xpath, XMLManualAction.ACTION_SET, val)
 
     def perform(self, xmlstate):
-        if (not self.xpath_delete and
-            not self.xpath_create and
-            not self.xpath_value and
-            not self.xpath_set):
+        if (
+            not self.xpath_delete
+            and not self.xpath_create
+            and not self.xpath_value
+            and not self.xpath_set
+        ):
             return
         xpath, action, value = self._process_args()
 
@@ -85,6 +86,7 @@ class _XMLPropertyCache(object):
     Cache lookup tables mapping classes to their associated
     XMLProperty and XMLChildProperty classes
     """
+
     def __init__(self):
         self._name_to_prop = {}
         self._prop_to_name = {}
@@ -120,6 +122,7 @@ class _XMLChildList(list):
     This is just to insert a dynamically created add_new() function
     which instantiates and appends a new child object
     """
+
     def __init__(self, childclass, copylist, xmlbuilder, is_xml=True):
         list.__init__(self)
         self._childclass = childclass
@@ -183,6 +186,7 @@ class XMLChildProperty(_XMLPropertyBase):
     @is_single: If True, this represents an XML node that is only expected
         to appear once, like <domain><cpu>
     """
+
     def __init__(self, child_class, relative_xpath=".", is_single=False):
         self.child_class = child_class
         self.is_single = is_single
@@ -193,7 +197,6 @@ class XMLChildProperty(_XMLPropertyBase):
     def __repr__(self):
         return "<XMLChildProperty %s %s>" % (str(self.child_class), id(self))
 
-
     def _get(self, xmlbuilder):
         if self.propname not in xmlbuilder._propstore and not self.is_single:
             xmlbuilder._propstore[self.propname] = []
@@ -202,9 +205,7 @@ class XMLChildProperty(_XMLPropertyBase):
     def _fget(self, xmlbuilder):
         if self.is_single:
             return self._get(xmlbuilder)
-        return _XMLChildList(self.child_class,
-                             self._get(xmlbuilder),
-                             xmlbuilder)
+        return _XMLChildList(self.child_class, self._get(xmlbuilder), xmlbuilder)
 
     def clear(self, xmlbuilder):
         if self.is_single:
@@ -215,10 +216,13 @@ class XMLChildProperty(_XMLPropertyBase):
 
     def insert(self, xmlbuilder, newobj, idx):
         self._get(xmlbuilder).insert(idx, newobj)
+
     def append(self, xmlbuilder, newobj):
         self._get(xmlbuilder).append(newobj)
+
     def remove(self, xmlbuilder, obj):
         self._get(xmlbuilder).remove(obj)
+
     def set(self, xmlbuilder, obj):
         xmlbuilder._propstore[self.propname] = obj
 
@@ -227,9 +231,9 @@ class XMLChildProperty(_XMLPropertyBase):
 
 
 class XMLProperty(_XMLPropertyBase):
-    def __init__(self, xpath,
-                 is_bool=False, is_int=False, is_yesno=False, is_onoff=False,
-                 do_abspath=False):
+    def __init__(
+        self, xpath, is_bool=False, is_int=False, is_yesno=False, is_onoff=False, do_abspath=False
+    ):
         """
         Set a XMLBuilder class property that maps to a value in an XML
         document, indicated by the passed xpath. For example, for a
@@ -262,9 +266,9 @@ class XMLProperty(_XMLPropertyBase):
         self._is_onoff = is_onoff
         self._do_abspath = do_abspath
 
-        conflicts = sum(int(bool(i)) for i in
-                [self._is_bool, self._is_int,
-                 self._is_yesno, self._is_onoff])
+        conflicts = sum(
+            int(bool(i)) for i in [self._is_bool, self._is_int, self._is_yesno, self._is_onoff]
+        )
         if conflicts > 1:
             raise xmlutil.DevError("Conflict property converter options.")
 
@@ -274,10 +278,8 @@ class XMLProperty(_XMLPropertyBase):
 
         _XMLPropertyBase.__init__(self, self.getter, self.setter)
 
-
     def __repr__(self):
         return "<XMLProperty %s %s>" % (str(self._xpath), id(self))
-
 
     ####################
     # Internal helpers #
@@ -359,7 +361,6 @@ class XMLProperty(_XMLPropertyBase):
         if self.propname in propstore:
             self.setter(xmlbuilder, None)
 
-
     ##################################
     # The actual getter/setter impls #
     ##################################
@@ -389,8 +390,7 @@ class XMLProperty(_XMLPropertyBase):
         Actually fetch the associated value from the backing XML
         """
         xpath = xmlbuilder._xmlstate.make_abs_xpath(self._xpath)
-        return xmlbuilder._xmlstate.xmlapi.get_xpath_content(
-                xpath, self._is_bool)
+        return xmlbuilder._xmlstate.xmlapi.get_xpath_content(xpath, self._is_bool)
 
     def setter(self, xmlbuilder, val):
         """
@@ -414,8 +414,7 @@ class XMLProperty(_XMLPropertyBase):
 
 
 class _XMLState(object):
-    def __init__(self, root_name, parsexml, parentxmlstate,
-                 relative_object_xpath):
+    def __init__(self, root_name, parsexml, parentxmlstate, relative_object_xpath):
         self._root_name = root_name
         self._namespace = ""
         if ":" in self._root_name:
@@ -430,8 +429,7 @@ class _XMLState(object):
         # xpath of the parent. For a disk in a standalone <domain>, this
         # is empty, but if the <domain> is part of a <domainsnapshot>,
         # it will be "./domain"
-        self._parent_xpath = (
-            parentxmlstate and parentxmlstate.abs_xpath()) or ""
+        self._parent_xpath = (parentxmlstate and parentxmlstate.abs_xpath()) or ""
 
         self.xmlapi = None
         self.is_build = not parsexml and not parentxmlstate
@@ -447,8 +445,9 @@ class _XMLState(object):
         if not parsexml:
             parsexml = "<%s%s/>" % (self._root_name, self._namespace)
         elif self._namespace and "xmlns" not in parsexml:
-            parsexml = parsexml.replace("<" + self._root_name,
-                    "<" + self._root_name + self._namespace)
+            parsexml = parsexml.replace(
+                "<" + self._root_name, "<" + self._root_name + self._namespace
+            )
 
         try:
             self.xmlapi = XMLAPI(parsexml)
@@ -472,8 +471,7 @@ class _XMLState(object):
         return x1 + x2
 
     def abs_xpath(self):
-        return self._join_xpath(self._parent_xpath or ".",
-                self._relative_object_xpath or ".")
+        return self._join_xpath(self._parent_xpath or ".", self._relative_object_xpath or ".")
 
     def make_abs_xpath(self, xpath):
         """
@@ -490,6 +488,7 @@ class XMLBuilder(object):
     """
     Base for all classes which build or parse domain XML
     """
+
     # Order that we should apply values to the XML. Keeps XML generation
     # consistent with what the test suite expects.
     _XML_PROP_ORDER = []
@@ -516,19 +515,18 @@ class XMLBuilder(object):
         forbid = [" "]
         if not val:
             # translators: value is a generic object type name
-            raise ValueError(_("A name must be specified for the %s") %
-                    name_label)
+            raise ValueError(_("A name must be specified for the %s") % name_label)
         for c in forbid:
             if c not in val:
                 continue
-            msg = (_("%(objecttype)s name '%(name)s' can not contain "
-                    "'%(char)s' character.") %
-                    {"objecttype": name_label, "name": val, "char": c})
+            msg = _("%(objecttype)s name '%(name)s' can not contain '%(char)s' character.") % {
+                "objecttype": name_label,
+                "name": val,
+                "char": c,
+            }
             raise ValueError(msg)
 
-
-    def __init__(self, conn, parsexml=None,
-                 parentxmlstate=None, relative_object_xpath=None):
+    def __init__(self, conn, parsexml=None, parentxmlstate=None, relative_object_xpath=None):
         """
         Initialize state
 
@@ -544,14 +542,11 @@ class XMLBuilder(object):
             parsexml = "".join([c for c in parsexml if c in string.printable])
 
         self._propstore = collections.OrderedDict()
-        self._xmlstate = _XMLState(self.XML_NAME,
-                                   parsexml, parentxmlstate,
-                                   relative_object_xpath)
+        self._xmlstate = _XMLState(self.XML_NAME, parsexml, parentxmlstate, relative_object_xpath)
 
         self._validate_xmlbuilder()
         self._initial_child_parse()
-        self.xml_actions = _XMLChildList(
-                XMLManualAction, [], self, is_xml=False)
+        self.xml_actions = _XMLChildList(XMLManualAction, [], self, is_xml=False)
 
     def _validate_xmlbuilder(self):
         # This is one time validation we run once per XMLBuilder class
@@ -563,15 +558,14 @@ class XMLBuilder(object):
         childprops = self._all_child_props()
         for key in self._XML_PROP_ORDER:
             if key not in xmlprops and key not in childprops:
-                raise xmlutil.DevError(
-                        "key '%s' must be xml prop or child prop" % key)
+                raise xmlutil.DevError("key '%s' must be xml prop or child prop" % key)
 
         childclasses = []
         for childprop in childprops.values():
             if childprop.child_class in childclasses:
                 raise xmlutil.DevError(
-                        "can't register duplicate child_class=%s" %
-                        childprop.child_class)
+                    "can't register duplicate child_class=%s" % childprop.child_class
+                )
             childclasses.append(childprop.child_class)
 
         setattr(self.__class__, cachekey, True)
@@ -584,25 +578,24 @@ class XMLBuilder(object):
             prop_path = xmlprop.get_prop_xpath(self, child_class)
 
             if xmlprop.is_single:
-                obj = child_class(self.conn,
-                    parentxmlstate=self._xmlstate,
-                    relative_object_xpath=prop_path)
+                obj = child_class(
+                    self.conn, parentxmlstate=self._xmlstate, relative_object_xpath=prop_path
+                )
                 xmlprop.set(self, obj)
                 continue
 
-            nodecount = self._xmlstate.xmlapi.count(
-                self._xmlstate.make_abs_xpath(prop_path))
+            nodecount = self._xmlstate.xmlapi.count(self._xmlstate.make_abs_xpath(prop_path))
             for idx in range(nodecount):
                 idxstr = "[%d]" % (idx + 1)
-                obj = child_class(self.conn,
+                obj = child_class(
+                    self.conn,
                     parentxmlstate=self._xmlstate,
-                    relative_object_xpath=(prop_path + idxstr))
+                    relative_object_xpath=(prop_path + idxstr),
+                )
                 xmlprop.append(self, obj)
 
     def __repr__(self):
-        return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1],
-                               self.XML_NAME, id(self))
-
+        return "<%s %s %s>" % (self.__class__.__name__.split(".")[-1], self.XML_NAME, id(self))
 
     ############################
     # Public XML managing APIs #
@@ -685,7 +678,6 @@ class XMLBuilder(object):
             return 0
         return int(xpath.rsplit("[", 1)[1].strip("]")) - 1
 
-
     ################
     # Internal API #
     ################
@@ -712,8 +704,7 @@ class XMLBuilder(object):
                 ret = xmlprop
                 break
         if not ret:
-            raise xmlutil.DevError(
-                "Didn't find child property for child_class=%s" % child_class)
+            raise xmlutil.DevError("Didn't find child property for child_class=%s" % child_class)
         return ret
 
     def _set_xpaths(self, parent_xpath, relative_object_xpath=-1):
@@ -745,8 +736,7 @@ class XMLBuilder(object):
                     idxstr = "[%d]" % typecount[class_type]
 
                 prop_path = xmlprop.get_prop_xpath(self, obj)
-                obj._set_xpaths(self._xmlstate.abs_xpath(),
-                        prop_path + idxstr)
+                obj._set_xpaths(self._xmlstate.abs_xpath(), prop_path + idxstr)
 
     def _parse_with_children(self, *args, **kwargs):
         """
@@ -777,8 +767,7 @@ class XMLBuilder(object):
         if not obj._xmlstate.is_build:
             use_xpath = obj._xmlstate.abs_xpath().rsplit("/", 1)[0]
             indent = 2 * obj._xmlstate.abs_xpath().count("/")
-            self._xmlstate.xmlapi.node_add_xml(
-                    textwrap.indent(xml, indent * " "), use_xpath)
+            self._xmlstate.xmlapi.node_add_xml(textwrap.indent(xml, indent * " "), use_xpath)
         obj._parse_with_children(None, self._xmlstate)
 
     def remove_child(self, obj):
@@ -821,7 +810,6 @@ class XMLBuilder(object):
         if getattr(self, propname):
             return False
         return propname not in self._propstore
-
 
     #################################
     # Private XML building routines #

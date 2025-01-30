@@ -17,9 +17,11 @@ def test_validate_po_files():
     """
     failures = []
     for pofile in glob.glob("po/*.po"):
-        proc = subprocess.Popen(["msgfmt", "--output-file=/dev/null",
-            "--check", pofile],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc = subprocess.Popen(
+            ["msgfmt", "--output-file=/dev/null", "--check", pofile],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
         ignore, stderr = proc.communicate()
         if proc.wait():
             failures.append("%s: %s" % (pofile, stderr))
@@ -41,15 +43,12 @@ def test_validate_pot_strings():
     try:
         subprocess.run(["meson", "setup", "build"], check=True)
         out = subprocess.check_output(
-                ["meson", "compile", "-C", "build", "virt-manager-pot"],
-                stderr=subprocess.STDOUT)
-        warnings = [l for l in out.decode("utf-8").splitlines()
-                    if "warning:" in l]
-        warnings = [w for w in warnings
-                    if "a fallback ITS rule file" not in w]
+            ["meson", "compile", "-C", "build", "virt-manager-pot"], stderr=subprocess.STDOUT
+        )
+        warnings = [l for l in out.decode("utf-8").splitlines() if "warning:" in l]
+        warnings = [w for w in warnings if "a fallback ITS rule file" not in w]
         if warnings:
-            raise AssertionError("xgettext has warnings:\n\n%s" %
-                    "\n".join(warnings))
+            raise AssertionError("xgettext has warnings:\n\n%s" % "\n".join(warnings))
     finally:
         open(potfile, "w").write(origpot)
 
@@ -64,36 +63,34 @@ def test_ui_minimum_version():
     # to enforce
     minimum_version_major = 3
     minimum_version_minor = 22
-    minimum_version_str = "%s.%s" % (minimum_version_major,
-                                     minimum_version_minor)
+    minimum_version_str = "%s.%s" % (minimum_version_major, minimum_version_minor)
 
     failures = []
     for filename in glob.glob("ui/*.ui"):
         required_version = None
         for line in open(filename).readlines():
             # This is much faster than XML parsing the whole file
-            if not line.strip().startswith('<requires '):
+            if not line.strip().startswith("<requires "):
                 continue
 
             req = ET.fromstring(line)
-            if (req.tag != "requires" or
-                req.attrib.get("lib") != "gtk+"):
+            if req.tag != "requires" or req.attrib.get("lib") != "gtk+":
                 continue
             required_version = req.attrib["version"]
 
         if required_version is None:
-            raise AssertionError("ui file=%s doesn't have a <requires> "
-                "tag for gtk+")
+            raise AssertionError("ui file=%s doesn't have a <requires> tag for gtk+")
 
-        if (int(required_version.split(".")[0]) != minimum_version_major or
-            int(required_version.split(".")[1]) != minimum_version_minor):
+        if (
+            int(required_version.split(".")[0]) != minimum_version_major
+            or int(required_version.split(".")[1]) != minimum_version_minor
+        ):
             failures.append((filename, required_version))
 
     if not failures:
         return
 
-    err = ("The following files should require version of gtk-%s:\n" %
-        minimum_version_str)
+    err = "The following files should require version of gtk-%s:\n" % minimum_version_str
     err += "\n".join([("%s version=%s" % tup) for tup in failures])
     raise AssertionError(err)
 
@@ -117,12 +114,10 @@ def test_ui_translatable_atknames():
         return
     err = "Some files incorrectly have translatable ATK names.\n"
     err += "Run this command to fix:\n\n"
-    err += ("""sed -i -e 's/%s" translatable="yes"/%s"/g' """ %
-            (atkstr, atkstr))
+    err += """sed -i -e 's/%s" translatable="yes"/%s"/g' """ % (atkstr, atkstr)
     err += " ".join(failures)
     raise AssertionError(err)
 
 
 def test_appstream_validate():
-    subprocess.check_call(["appstream-util", "validate",
-        "data/virt-manager.appdata.xml.in"])
+    subprocess.check_call(["appstream-util", "validate", "data/virt-manager.appdata.xml.in"])

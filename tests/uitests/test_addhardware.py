@@ -12,31 +12,28 @@ def _search_permissions_decorator(fn):
     """
     Decorator to set up necessary bits to test disk permission search
     """
+
     def wrapper(app, *args, **kwargs):
         # Generate capabilities XML from a template, with out
         # UID/GID inserted as the intended emulator permissions
-        capsfile = (tests.utils.UITESTDATADIR +
-                "/capabilities/dac-caps-template.xml")
-        capsdata = open(capsfile).read() % {
-                "UID": os.getuid(), "GID": os.getgid()}
-        tmpcaps = tempfile.NamedTemporaryFile(
-                prefix="virt-manager-uitests-caps")
+        capsfile = tests.utils.UITESTDATADIR + "/capabilities/dac-caps-template.xml"
+        capsdata = open(capsfile).read() % {"UID": os.getuid(), "GID": os.getgid()}
+        tmpcaps = tempfile.NamedTemporaryFile(prefix="virt-manager-uitests-caps")
         tmpcapspath = tmpcaps.name
         open(tmpcapspath, "w").write(capsdata)
 
         # We mock a qemu URI to trigger the permissions check
-        uri = (tests.utils.URIs.test_full +
-                ",fakeuri=qemu:///system,caps=%s" % tmpcapspath)
+        uri = tests.utils.URIs.test_full + ",fakeuri=qemu:///system,caps=%s" % tmpcapspath
 
         # Create a temporary directory that we can manipulate perms
-        tmpobj = tempfile.TemporaryDirectory(
-                prefix="virtinst-test-search")
+        tmpobj = tempfile.TemporaryDirectory(prefix="virtinst-test-search")
         tmpdir = tmpobj.name
         try:
             os.chmod(tmpdir, 0o000)
             fn(app, uri, tmpdir, *args, **kwargs)
         finally:
             os.chmod(tmpdir, 0o777)
+
     return wrapper
 
 
@@ -62,8 +59,7 @@ def _open_addhw(app, details):
 
 def _open_app(app, vmname, title=None, shutdown=False, **kwargs):
     app.open(show_console=vmname, **kwargs)
-    details = app.find_details_window(title or vmname,
-            click_details=True, shutdown=shutdown)
+    details = app.find_details_window(title or vmname, click_details=True, shutdown=shutdown)
     return details
 
 
@@ -194,8 +190,7 @@ def testAddDisks(app):
 
     # Test browse local
     browse.find("Browse Local", "push button").click()
-    chooser = app.root.find(
-            "Locate existing storage", "file chooser")
+    chooser = app.root.find("Locate existing storage", "file chooser")
 
     # use filename that is near the beginning of the file list when sorted,
     # as the row in the file dialog may become scrolled out of the view and
@@ -221,7 +216,6 @@ def testAddDisks(app):
     _finish(addhw, check=None)
     app.click_alert_button("already in use by", "Yes")
     lib.utils.check(lambda: details.active)
-
 
     # choose file for floppy
     addhw = _open_addhw(app, details)
@@ -312,8 +306,7 @@ def testAddDiskSearchPermsFail(app, uri, tmpdir):
     Force perms fixing to fail
     """
     app.uri = uri
-    details = _open_app(app, "test-clone-simple",
-            break_setfacl=True)
+    details = _open_app(app, "test-clone-simple", break_setfacl=True)
 
     # Say 'Yes' and it should fail, then denylist the paths
     addhw = _open_addhw(app, details)
@@ -384,7 +377,6 @@ def testAddNetworks(app):
     tab.find("mac-address-enable", "check box").click()
     tab.find("MAC Address Field", "text").set_text("00:11:0A:11:00:11")
     _finish(addhw, check=details)
-
 
 
 def testAddGraphics(app):
@@ -472,8 +464,7 @@ def testAddHosts(app):
     # Add MDEV device
     _open_addhw(app, details)
     tab = _select_hw(addhw, "MDEV Host Device", "host-tab")
-    tab.find_fuzzy("mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110",
-                   "table cell").click()
+    tab.find_fuzzy("mdev_8e37ee90_2b51_45e3_9b25_bf8283c03110", "table cell").click()
     _finish(addhw, check=details)
 
 
@@ -511,7 +502,6 @@ def testAddChars(app):
     _finish(addhw, check=details)
 
 
-
 def testAddLXCFilesystem(app):
     """
     Adding LXC specific filesystems
@@ -540,8 +530,7 @@ def testAddLXCFilesystem(app):
     lib.utils.check(lambda: choose.sensitive)
     choose.click()
     lib.utils.check(lambda: addhw.active)
-    lib.utils.check(
-            lambda: source.text == "/pool-dir/dir-vol")
+    lib.utils.check(lambda: source.text == "/pool-dir/dir-vol")
 
     tab.find_fuzzy("Export filesystem", "check").click()
     # Use this to test some error.py logic for truncating large errors
@@ -561,13 +550,11 @@ def testAddLXCFilesystem(app):
     _finish(addhw, check=details)
 
 
-
 def testAddHWMisc1(app):
     """
     Add some simple devices
     """
-    details = _open_app(app, "test-clone-simple",
-            keyfile="rawdefault.ini")
+    details = _open_app(app, "test-clone-simple", keyfile="rawdefault.ini")
 
     # Disk, verify that raw will fully allocate by default
     addhw = _open_addhw(app, details)
@@ -674,9 +661,9 @@ def testAddHWUSBNone(app):
     """
     Test some special case handling when VM has controller usb model='none'
     """
-    details = _open_app(app, "test-alternate-devs",
-            title="test alternate devs title",
-            shutdown=True)
+    details = _open_app(
+        app, "test-alternate-devs", title="test alternate devs title", shutdown=True
+    )
     addhw = _open_addhw(app, details)
 
     # Add usb controller
@@ -709,9 +696,7 @@ def testAddHWCornerCases(app):
     _open_addhw(app, details)
     _finish(addhw, check=None)
     alert = app.root.find("vmm dialog", "alert")
-    alert.find(
-            "This device could not be attached to the running machine",
-            "label")
+    alert.find("This device could not be attached to the running machine", "label")
     alert.find("Details", "toggle button").click_expander()
     alert.find("No", "push button").click()
     lib.utils.check(lambda: details.active)
@@ -720,9 +705,7 @@ def testAddHWCornerCases(app):
     _open_addhw(app, details)
     _finish(addhw, check=None)
     alert = app.root.find("vmm dialog", "alert")
-    alert.find(
-            "This device could not be attached to the running machine",
-            "label")
+    alert.find("This device could not be attached to the running machine", "label")
     alert.find("Details", "toggle button").click_expander()
     alert.find("Yes", "push button").click()
     lib.utils.check(lambda: alert.dead)
@@ -732,8 +715,7 @@ def testAddHWXMLEdit(app):
     """
     Test XML editor integration
     """
-    details = _open_app(app, "test-clone-simple",
-            xmleditor_enabled=True)
+    details = _open_app(app, "test-clone-simple", xmleditor_enabled=True)
     win = _open_addhw(app, details)
 
     # Disk test, change path and make sure we error it is missing

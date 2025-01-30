@@ -39,8 +39,10 @@ class vmmGObject(GObject.GObject):
         """
         Make sure idle functions are run thread safe
         """
+
         def cb():
             return func(*args, **kwargs)
+
         return GLib.idle_add(cb)
 
     def __init__(self):
@@ -64,7 +66,9 @@ class vmmGObject(GObject.GObject):
 
     def _get_err(self):
         from . import error
+
         return error.vmmErrorDialog.get_instance()
+
     err = property(_get_err)
 
     def cleanup(self):
@@ -101,8 +105,8 @@ class vmmGObject(GObject.GObject):
 
     def _cleanup_on_app_close(self):
         from .engine import vmmEngine
-        vmmEngine.get_instance().connect(
-                "app-closing", lambda src: self.cleanup())
+
+        vmmEngine.get_instance().connect("app-closing", lambda src: self.cleanup())
 
     def _cleanup(self):
         raise NotImplementedError("_cleanup must be implemented in subclass")
@@ -117,7 +121,6 @@ class vmmGObject(GObject.GObject):
     @property
     def config(self):
         return config.vmmConfig.get_instance()
-
 
     # pylint: disable=arguments-differ
     # Newer pylint can detect, but warns that overridden arguments are wrong
@@ -165,6 +168,7 @@ class vmmGObject(GObject.GObject):
         for easy cleanup
         """
         id_list = []
+
         def wrap_func(*wrapargs):
             # When the our timeout_add callback returns False, remove
             # the source ID from our cache, to avoid glib warnings like
@@ -185,30 +189,34 @@ class vmmGObject(GObject.GObject):
         GObject emit() wrapper to simplify callers
         """
         if not self._is_main_thread():  # pragma: no cover
-            log.error("emitting signal from non-main thread. This is a bug "
-                    "please report it. thread=%s self=%s signal=%s",
-                    self._thread_name(), self, signal_name)
+            log.error(
+                "emitting signal from non-main thread. This is a bug "
+                "please report it. thread=%s self=%s signal=%s",
+                self._thread_name(),
+                self,
+                signal_name,
+            )
         return GObject.GObject.emit(self, signal_name, *args)
 
     def add_gsettings_handle(self, handle):
         self._gsettings_handles.append(handle)
+
     def remove_gsettings_handle(self, handle):
         self.config.remove_notifier(handle)
         self._gsettings_handles.remove(handle)
 
     def add_gobject_timeout(self, handle):
         self._gobject_timeouts.append(handle)
+
     def remove_gobject_timeout(self, handle):
         GLib.source_remove(handle)
         self._gobject_timeouts.remove(handle)
 
     def _start_thread(self, target=None, name=None, args=None, kwargs=None):
         # Helper for starting a daemonized thread
-        t = threading.Thread(target=target, name=name,
-            args=args or [], kwargs=kwargs or {})
+        t = threading.Thread(target=target, name=name, args=args or [], kwargs=kwargs or {})
         t.daemon = True
         t.start()
-
 
     ##############################
     # Internal debugging helpers #
@@ -220,13 +228,18 @@ class vmmGObject(GObject.GObject):
     def _logtrace(self, msg=""):
         if msg:
             msg += " "
-        log.debug("%s(%s %s)\n:%s",
-                      msg, self.object_key, self._refcount(),
-                       "".join(traceback.format_stack()))
+        log.debug(
+            "%s(%s %s)\n:%s",
+            msg,
+            self.object_key,
+            self._refcount(),
+            "".join(traceback.format_stack()),
+        )
 
     def _gc_get_referrers(self):  # pragma: no cover
         import gc
         import pprint
+
         pprint.pprint(gc.get_referrers(self))
 
     def _thread_name(self):
@@ -234,7 +247,6 @@ class vmmGObject(GObject.GObject):
 
     def _is_main_thread(self):
         return self._thread_name() == "MainThread"
-
 
     ##############################
     # Custom signal/idle helpers #
@@ -279,6 +291,7 @@ class vmmGObject(GObject.GObject):
         """
         Safe wrapper for using 'self.emit' with GLib.idle_add
         """
+
         def emitwrap(_s, *_a):
             self.emit(_s, *_a)
             return False
@@ -313,8 +326,10 @@ class vmmGObjectUI(vmmGObject):
     def _get_err(self):
         if self._err is None:
             from . import error
+
             self._err = error.vmmErrorDialog(self.topwin)
         return self._err
+
     err = property(_get_err)
 
     def widget(self, name):
@@ -353,6 +368,7 @@ class vmmGObjectUI(vmmGObject):
         def close_on_escape(src_ignore, event):
             if Gdk.keyval_name(event.keyval) == "Escape":
                 self.close()
+
         self.topwin.connect("key-press-event", close_on_escape)
 
     def _set_cursor(self, cursor_type):
@@ -361,14 +377,12 @@ class vmmGObjectUI(vmmGObject):
             return
 
         try:
-            cursor = Gdk.Cursor.new_from_name(
-                    gdk_window.get_display(), cursor_type)
+            cursor = Gdk.Cursor.new_from_name(gdk_window.get_display(), cursor_type)
             gdk_window.set_cursor(cursor)
         except Exception:  # pragma: no cover
             # If a cursor icon theme isn't installed this can cause errors
             # https://bugzilla.redhat.com/show_bug.cgi?id=1516588
-            log.debug("Error setting cursor_type=%s",
-                    cursor_type, exc_info=True)
+            log.debug("Error setting cursor_type=%s", cursor_type, exc_info=True)
 
     def set_finish_cursor(self):
         self.topwin.set_sensitive(False)
@@ -382,6 +396,7 @@ class vmmGObjectUI(vmmGObject):
 
     def _cleanup_on_conn_removed(self):
         from .connmanager import vmmConnectionManager
+
         connmanager = vmmConnectionManager.get_instance()
 
         def _cb(_src, uri):
@@ -389,4 +404,5 @@ class vmmGObjectUI(vmmGObject):
             if _conn and _conn.get_uri() == uri:
                 self.cleanup()
                 return True
+
         connmanager.connect_opt_out("conn-removed", _cb)

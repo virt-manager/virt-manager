@@ -17,10 +17,11 @@ DATADIR = utils.DATADIR + "/xmlparse/"
 # Helper functions #
 ####################
 
+
 def _sanitize_file_xml(xml):
     # s/"/'/g from generated XML, matches what libxml dumps out
     # This won't work all the time, but should be good enough for testing
-    return xml.replace("'", "\"")
+    return xml.replace("'", '"')
 
 
 def _alter_compare(conn, actualXML, outfile):
@@ -45,6 +46,7 @@ def _set_and_check(obj, param, initval, *args):
 def _make_checker(obj):
     def check(name, initval, *args):
         return _set_and_check(obj, name, initval, *args)
+
     return check
 
 
@@ -67,6 +69,7 @@ def _get_test_content(conn, basename):
 ##############
 # Test cases #
 ##############
+
 
 def testAlterGuest():
     """
@@ -93,8 +96,7 @@ def testAlterGuest():
     check("memory", 409600, 512000)
     check("currentMemory", 204800, 1024000)
     check("memory", 1024000, 2048000)
-    check("uuid", "12345678-1234-1234-1234-123456789012",
-                  "11111111-2222-3333-4444-555555555555")
+    check("uuid", "12345678-1234-1234-1234-123456789012", "11111111-2222-3333-4444-555555555555")
     check("emulator", "/usr/lib/xen/bin/qemu-dm", "/usr/binnnn/fooemu")
     check("type", "kvm", "test")
     check("bootloader", None, "pygrub")
@@ -378,7 +380,7 @@ def testAlterDevicesBootorder():
     iface_2 = guest.devices.interface[1]
     redirdev_1 = guest.devices.redirdev[0]
 
-    assert guest.os.bootorder == ['hd']
+    assert guest.os.bootorder == ["hd"]
     assert disk_1.boot.order is None
     assert disk_2.boot.order == 10
     assert disk_3.boot.order == 10
@@ -419,8 +421,10 @@ def testAlterDevicesBootorder():
 
 def testSingleDisk():
     conn = utils.URIs.open_testdefault_cached()
-    xml = ("""<disk type="file" device="disk"><source file="/a.img"/>\n"""
-           """<target dev="hda" bus="ide"/></disk>\n""")
+    xml = (
+        """<disk type="file" device="disk"><source file="/a.img"/>\n"""
+        """<target dev="hda" bus="ide"/></disk>\n"""
+    )
     conn = utils.URIs.open_testdefault_cached()
     d = virtinst.DeviceDisk(conn, parsexml=xml)
     _set_and_check(d, "target", "hda", "hdb")
@@ -431,15 +435,15 @@ def testAlterChars():
     conn = utils.URIs.open_testdefault_cached()
     guest, outfile = _get_test_content(conn, "change-chars")
 
-    serial1     = guest.devices.serial[0]
-    serial2     = guest.devices.serial[1]
-    parallel1   = guest.devices.parallel[0]
-    parallel2   = guest.devices.parallel[1]
-    console1    = guest.devices.console[0]
-    console2    = guest.devices.console[1]
-    channel1    = guest.devices.channel[0]
-    channel2    = guest.devices.channel[1]
-    channel3    = guest.devices.channel[2]
+    serial1 = guest.devices.serial[0]
+    serial2 = guest.devices.serial[1]
+    parallel1 = guest.devices.parallel[0]
+    parallel2 = guest.devices.parallel[1]
+    console1 = guest.devices.console[0]
+    console2 = guest.devices.console[1]
+    channel1 = guest.devices.channel[0]
+    channel2 = guest.devices.channel[1]
+    channel3 = guest.devices.channel[2]
 
     check = _make_checker(serial1)
     check("type", "null", "udp")
@@ -511,7 +515,11 @@ def testAlterNics():
     check = _make_checker(dev1)
     check("type", "user")
     check("model", None, "vmxnet3")
-    check("source", None, None,)
+    check(
+        "source",
+        None,
+        None,
+    )
     check("macaddr", "22:11:11:11:11:11", "AA:AA:AA:AA:AA:AA")
     check("filterref", None, "foo")
 
@@ -546,8 +554,9 @@ def testAlterNics():
     check("managerid", 12, 11)
     check("typeid", 1193046, 1193047)
     check("typeidversion", 1, 2)
-    check("instanceid", "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b",
-                        "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa4f")
+    check(
+        "instanceid", "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b", "09b11c53-8b5c-4eeb-8f00-d84eaa0aaa4f"
+    )
 
     _alter_compare(conn, guest.get_xml(), outfile)
 
@@ -566,7 +575,7 @@ def testQEMUXMLNS():
     guest.xmlns_qemu.args.add_new().value = "additional-arg"
     arg0 = guest.xmlns_qemu.args[0]
     guest.xmlns_qemu.remove_child(guest.xmlns_qemu.args[0])
-    x = "<qemu:arg xmlns:qemu=\"http://libvirt.org/schemas/domain/qemu/1.0\" value=\"-somenewarg\"/>\n"
+    x = '<qemu:arg xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" value="-somenewarg"/>\n'
     assert arg0.get_xml() == x
 
     check = _make_checker(guest.xmlns_qemu.envs[0])
@@ -606,8 +615,7 @@ def testAddRemoveDevices():
     guest.add_device(adddev)
 
     # Test adding device built from parsed XML
-    guest.add_device(virtinst.DeviceSound(conn,
-        parsexml="""<sound model='pcspk'/>"""))
+    guest.add_device(virtinst.DeviceSound(conn, parsexml="""<sound model='pcspk'/>"""))
 
     _alter_compare(conn, guest.get_xml(), outfile)
 
@@ -645,14 +653,16 @@ def testGuestBootorder():
     kvmconn = utils.URIs.open_kvm()
     guest, outfile = _get_test_content(kvmconn, "bootorder")
 
-    assert guest.get_boot_order() == ['./devices/disk[1]']
-    assert guest.get_boot_order(legacy=True) == ['hd']
+    assert guest.get_boot_order() == ["./devices/disk[1]"]
+    assert guest.get_boot_order(legacy=True) == ["hd"]
 
-    legacy_order = ['hd', 'fd', 'cdrom', 'network']
-    dev_order = ['./devices/disk[1]',
-             './devices/disk[3]',
-             './devices/disk[2]',
-             './devices/interface[1]']
+    legacy_order = ["hd", "fd", "cdrom", "network"]
+    dev_order = [
+        "./devices/disk[1]",
+        "./devices/disk[3]",
+        "./devices/disk[2]",
+        "./devices/interface[1]",
+    ]
     guest.set_boot_order(legacy_order, legacy=True)
     assert guest.get_boot_order() == dev_order
     assert guest.get_boot_order(legacy=True) == legacy_order
@@ -725,8 +735,7 @@ def testFSPool():
     check = _make_checker(pool)
     check("type", "fs", "dir")
     check("name", "pool-fs", "foo-new")
-    check("uuid", "10211510-2115-1021-1510-211510211510",
-                  "10211510-2115-1021-1510-211510211999")
+    check("uuid", "10211510-2115-1021-1510-211510211510", "10211510-2115-1021-1510-211510211999")
     check("capacity", 984373075968, 200000)
     check("allocation", 756681687040, 150000)
     check("available", 227691388928, 50000)
@@ -836,8 +845,7 @@ def testNetMulti():
 
     check = _make_checker(net)
     check("name", "ipv6_multirange", "new-foo")
-    check("uuid", "41b4afe4-87bb-8087-6724-5e208a2d483a",
-                  "41b4afe4-87bb-8087-6724-5e208a2d1111")
+    check("uuid", "41b4afe4-87bb-8087-6724-5e208a2d483a", "41b4afe4-87bb-8087-6724-5e208a2d1111")
     check("bridge", "virbr3", "virbr3new")
     check("stp", True, False)
     check("delay", 0, 2)
@@ -973,8 +981,10 @@ def testYesNoUnexpectedParse():
     # Make sure that if we see an unexpected yes/no or on/off value,
     # we just return it to the user and don't error. Libvirt could
     # change our assumptions and we shouldn't be too restrictive
-    xml = ("<hostdev managed='foo'>\n  <rom bar='wibble'/>\n"
-        "  <source><address bus='hello'/></source>\n</hostdev>")
+    xml = (
+        "<hostdev managed='foo'>\n  <rom bar='wibble'/>\n"
+        "  <source><address bus='hello'/></source>\n</hostdev>"
+    )
     dev = virtinst.DeviceHostdev(conn, parsexml=xml)
 
     assert dev.managed == "foo"
@@ -1069,8 +1079,7 @@ def testReplaceChildParse():
     utils.diff_compare(guest.get_xml(), buildfile)
 
     guest = virtinst.Guest(conn, parsexml=guest.get_xml())
-    newdisk = virtinst.DeviceDisk(conn,
-            parsexml=mkdisk("sdw").get_xml())
+    newdisk = virtinst.DeviceDisk(conn, parsexml=mkdisk("sdw").get_xml())
     guest.devices.replace_child(guest.devices.disk[4], newdisk)
     utils.diff_compare(guest.get_xml(), parsefile)
 
@@ -1103,14 +1112,12 @@ def testGuestXMLDeviceMatch():
         devxml = srcdev.get_xml()
         newdev = srcdev.__class__(conn, devxml)
         if srcdev != guest.find_device(newdev):
-            raise AssertionError("guest.find_device failed for dev=%s" %
-                    newdev)
+            raise AssertionError("guest.find_device failed for dev=%s" % newdev)
 
     # Ensure devices from another parsed XML doc compare correctly
     for srcdev in guest.devices.get_all():
         if not guest2.find_device(srcdev):
-            raise AssertionError("guest.find_device failed for dev=%s" %
-                    srcdev)
+            raise AssertionError("guest.find_device failed for dev=%s" % srcdev)
 
 
 def testControllerAttachedDevices():
@@ -1122,15 +1129,13 @@ def testControllerAttachedDevices():
     guest = virtinst.Guest(conn, xml)
 
     # virtio-serial path
-    controller = [c for c in guest.devices.controller if
-            c.type == "virtio-serial"][0]
+    controller = [c for c in guest.devices.controller if c.type == "virtio-serial"][0]
     devs = controller.get_attached_devices(guest)
     assert len(devs) == 4
     assert devs[-1].DEVICE_TYPE == "console"
 
     # disk path
-    controller = [c for c in guest.devices.controller if
-            c.type == "sata"][0]
+    controller = [c for c in guest.devices.controller if c.type == "sata"][0]
     devs = controller.get_attached_devices(guest)
     assert len(devs) == 1
     assert devs[-1].device == "cdrom"
@@ -1166,6 +1171,7 @@ def testDiskSourceAbspath():
 
     # But setting a relative path should convert it
     import os
+
     disk.set_source_path("foobar2")
     assert disk.get_source_path() == os.path.abspath("foobar2")
 
@@ -1185,6 +1191,7 @@ def testUnknownEmulatorDomcapsLookup(monkeypatch):
     """
 
     seen = False
+
     def fake_build_from_params(conn, emulator, arch, machine, _hvtype):
         nonlocal seen
         seen = True
@@ -1193,9 +1200,7 @@ def testUnknownEmulatorDomcapsLookup(monkeypatch):
         assert emulator == "/my/manual/emulator"
         return virtinst.DomainCapabilities(conn)
 
-    monkeypatch.setattr(
-        "virtinst.DomainCapabilities.build_from_params",
-        fake_build_from_params)
+    monkeypatch.setattr("virtinst.DomainCapabilities.build_from_params", fake_build_from_params)
 
     conn = utils.URIs.open_kvm()
     xml = open(DATADIR + "emulator-custom.xml").read()

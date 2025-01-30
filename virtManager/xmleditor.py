@@ -47,8 +47,7 @@ class vmmXMLEditor(vmmGObjectUI):
     }
 
     def __init__(self, builder, topwin, parent_container, details_widget):
-        super().__init__("xmleditor.ui", None,
-                         builder=builder, topwin=topwin)
+        super().__init__("xmleditor.ui", None, builder=builder, topwin=topwin)
 
         parent_container.remove(details_widget)
         parent_container.add(self.widget("xml-notebook"))
@@ -63,14 +62,12 @@ class vmmXMLEditor(vmmGObjectUI):
         self.details_changed = False
 
         self.add_gsettings_handle(
-            self.config.on_xmleditor_enabled_changed(
-                self._xmleditor_enabled_changed_cb))
-
+            self.config.on_xmleditor_enabled_changed(self._xmleditor_enabled_changed_cb)
+        )
 
     def _cleanup(self):
         self._srcview.destroy()
         self._srcbuff = None
-
 
     ###########
     # UI init #
@@ -79,8 +76,7 @@ class vmmXMLEditor(vmmGObjectUI):
     def _set_xmleditor_enabled_from_config(self):
         enabled = self.config.get_xmleditor_enabled()
         self._srcview.set_editable(enabled)
-        uiutil.set_grid_row_visible(self.widget("xml-warning-box"),
-                not enabled)
+        uiutil.set_grid_row_visible(self.widget("xml-warning-box"), not enabled)
 
     def _init_ui(self):
         if have_gtksourceview:
@@ -99,15 +95,12 @@ class vmmXMLEditor(vmmGObjectUI):
 
         self._srcbuff.connect("changed", self._buffer_changed_cb)
 
-        self.widget("xml-notebook").connect("switch-page",
-                self._before_page_changed_cb)
-        self.widget("xml-notebook").connect("notify::page",
-                self._after_page_changed_cb)
+        self.widget("xml-notebook").connect("switch-page", self._before_page_changed_cb)
+        self.widget("xml-notebook").connect("notify::page", self._after_page_changed_cb)
 
         self._srcview.show_all()
         self.widget("xml-scroll").add(self._srcview)
         self._set_xmleditor_enabled_from_config()
-
 
     ####################
     # Internal helpers #
@@ -135,9 +128,9 @@ class vmmXMLEditor(vmmGObjectUI):
             return False
 
         ret = self.err.yes_no(
-                _("There are unapplied changes."),
-                _("Your changes will be lost if you leave this tab. "
-                    "Really leave this tab?"))
+            _("There are unapplied changes."),
+            _("Your changes will be lost if you leave this tab. Really leave this tab?"),
+        )
         if ret:
             self.details_changed = False
 
@@ -148,14 +141,11 @@ class vmmXMLEditor(vmmGObjectUI):
             return False
 
         ret = self.err.yes_no(
-                _("There are unapplied changes."),
-                _("Your XML changes will be lost if you leave this tab. "
-                  "Really leave this tab?"))
+            _("There are unapplied changes."),
+            _("Your XML changes will be lost if you leave this tab. Really leave this tab?"),
+        )
 
         return not ret
-
-
-
 
     ##############
     # Public API #
@@ -205,7 +195,6 @@ class vmmXMLEditor(vmmGObjectUI):
         Return True if the XML page is selected
         """
         return self._curpage == _PAGE_XML
-
 
     #############
     # Listeners #

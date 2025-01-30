@@ -50,6 +50,7 @@ def _select_hw(app, win, hwname, tabname):
 # UI tests for virt-manager's VM details window #
 #################################################
 
+
 def _testSmokeTest(app, vmname):
     """
     Open the VM with all the crazy hardware and just verify that each
@@ -213,7 +214,7 @@ def testDetailsEditDomain1(app):
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
     new_xml = lib.utils.get_xmleditor_xml(app, win)
-    assert "source type=\"memfd\"" in new_xml
+    assert 'source type="memfd"' in new_xml
     tab.find("Enable shared", "check box").click()
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
@@ -283,7 +284,6 @@ def testDetailsEditCPU(app):
     lib.utils.check(lambda: not appl.sensitive)
 
 
-
 def testDetailsEditDomain2(app):
     """
     Test boot and OS pages
@@ -291,7 +291,6 @@ def testDetailsEditDomain2(app):
     win = app.manager_open_details("test-many-devices")
     appl = win.find("config-apply", "push button")
     _stop_vm(win)
-
 
     # OS edits
     tab = _select_hw(app, win, "OS information", "os-tab")
@@ -308,7 +307,6 @@ def testDetailsEditDomain2(app):
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
     lib.utils.check(lambda: entry.text == "Fedora 12")
-
 
     # Boot tweaks
     def check_bootorder(c):
@@ -433,8 +431,7 @@ def testDetailsEditDiskNet(app):
     src = tab.find("net-source")
     src.click()
     app.rawinput.pressKey("Home")
-    tab.find_fuzzy("Macvtap device...",
-                   "menu item").bring_on_screen().click()
+    tab.find_fuzzy("Macvtap device...", "menu item").bring_on_screen().click()
     tab.find("Device name:", "text").set_text("fakedev12")
     tab.combo_select("Device model:", "rtl8139")
     tab.find("Link state:", "check box").click()
@@ -443,8 +440,7 @@ def testDetailsEditDiskNet(app):
 
     # Manual bridge
     src.click()
-    tab.find_fuzzy("Bridge device...",
-                   "menu item").bring_on_screen().click()
+    tab.find_fuzzy("Bridge device...", "menu item").bring_on_screen().click()
     tab.find("Device name:", "text").set_text("")
     appl.click()
     # Check validation error
@@ -455,8 +451,7 @@ def testDetailsEditDiskNet(app):
 
     # Portgroup
     src.click()
-    tab.find_fuzzy("plainbridge-portgroups",
-                   "menu item").bring_on_screen().click()
+    tab.find_fuzzy("plainbridge-portgroups", "menu item").bring_on_screen().click()
     c = tab.find_fuzzy("Portgroup:", "combo box")
     c.click_combo_entry()
     c.find("sales").click()
@@ -469,6 +464,7 @@ def testDetailsNetIPAddress(app):
     Test all the IP code paths with a few mock cases
     """
     win = app.manager_open_details("test-many-devices")
+
     def check_ip(*args):
         for ip in args:
             tab.find_fuzzy(ip, "label")
@@ -492,7 +488,6 @@ def testDetailsNetIPAddress(app):
     win = app.manager_open_details("test alternate devs title")
     tab = _select_hw(app, win, "NIC :11:72:72", "network-tab")
     check_ip("10.0.0.1", "fd00:beef::1/128")
-
 
 
 def testDetailsEditDevices1(app):
@@ -571,13 +566,11 @@ def testDetailsEditDevices1(app):
     app.click_alert_button("Are you sure", "Yes")
     lib.utils.check(lambda: cell.text != oldtext)
 
-
     # Host device
     tab = _select_hw(app, win, "PCI 0000:00:19.0", "host-tab")
     tab.find("ROM BAR:", "check box").click()
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
-
 
     # Video device
     tab = _select_hw(app, win, "Video VMVGA", "video-tab")
@@ -585,7 +578,6 @@ def testDetailsEditDevices1(app):
     tab.find("3D acceleration:", "check box").click()
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
-
 
     # Watchdog
     tab = _select_hw(app, win, "Watchdog", "watchdog-tab")
@@ -596,16 +588,13 @@ def testDetailsEditDevices1(app):
     lib.utils.check(lambda: not appl.sensitive)
 
 
-
 def testDetailsEditDevices2(app):
     app.uri = tests.utils.URIs.kvm_x86
-    win = app.manager_open_details("test-many-devices",
-            shutdown=True)
+    win = app.manager_open_details("test-many-devices", shutdown=True)
     appl = win.find("config-apply", "push button")
 
     # Controller SCSI
-    tab = _select_hw(app,
-            win, "Controller VirtIO SCSI 9", "controller-tab")
+    tab = _select_hw(app, win, "Controller VirtIO SCSI 9", "controller-tab")
     tab.combo_select("controller-model", "Hypervisor")
     tab.find("SCSI Disk 1 on 9:0:0:0", "table cell")
     appl.click()
@@ -625,7 +614,6 @@ def testDetailsEditDevices2(app):
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 
-
     # Filesystem tweaks
     tab = _select_hw(app, win, "Filesystem /target/", "filesystem-tab")
     tab.combo_select("Driver:", "virtiofs")
@@ -636,7 +624,6 @@ def testDetailsEditDevices2(app):
     tab.find_fuzzy("Export filesystem", "check box").click()
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
-
 
     # Smartcard tweaks
     tab = _select_hw(app, win, "Smartcard", "smartcard-tab")
@@ -666,7 +653,6 @@ def testDetailsEditDevices2(app):
     lib.utils.check(lambda: not addr.visible)
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
-
 
 
 def testDetailsMiscEdits(app):
@@ -802,8 +788,7 @@ def testDetailsXMLEdit(app):
     lib.utils.test_xmleditor_interactions(app, win, finish)
 
 
-@unittest.mock.patch.dict('os.environ',
-        {"VIRTINST_TEST_SUITE_FAKE_NO_SOURCEVIEW": "1"})
+@unittest.mock.patch.dict("os.environ", {"VIRTINST_TEST_SUITE_FAKE_NO_SOURCEVIEW": "1"})
 def testDetailsXMLEditorSourceviewFallback(app):
     """
     Test XML editor standard bits, when falling back to gtk textview
@@ -838,13 +823,16 @@ def testDetailsConsoleChecksSSH(app):
         win.click_title()
         run.click()
         lib.utils.check(lambda: not run.sensitive)
+
     def _stop():
         shutdown.click()
         lib.utils.check(lambda: not shutdown.sensitive)
+
     def _checkcon(msg):
         conbtn.click()
         lib.utils.check(lambda: conpages.showing)
         conpages.find(msg)
+
     def _check_textconsole_menu(msg):
         vmenu = win.find("^View$", "menu")
         vmenu.click()
@@ -939,9 +927,11 @@ def _testDetailsConsoleChecksTCP(app, fakeuri, msg):
         win.click_title()
         run.click()
         lib.utils.check(lambda: not run.sensitive)
+
     def _stop():
         shutdown.click()
         lib.utils.check(lambda: not shutdown.sensitive)
+
     def _checkcon(msg):
         conbtn.click()
         lib.utils.check(lambda: conpages.showing)
@@ -1005,9 +995,11 @@ def testDetailsConsoleSerialSwitch(app):
         win.click_title()
         run.click()
         lib.utils.check(lambda: not run.sensitive)
+
     def _stop():
         shutdown.click()
         lib.utils.check(lambda: not shutdown.sensitive)
+
     def _checkcon(msg):
         conbtn.click()
         lib.utils.check(lambda: conpages.showing)
@@ -1019,7 +1011,7 @@ def testDetailsConsoleSerialSwitch(app):
         vmenu.click()
         tmenu = win.find("Consoles", "menu")
         tmenu.point()
-        app.sleep(.5)  # give console menu time to dynamically populate
+        app.sleep(0.5)  # give console menu time to dynamically populate
         return tmenu
 
     def _find_textconsole_item(msg):

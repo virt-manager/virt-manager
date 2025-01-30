@@ -9,11 +9,12 @@ parser.add_argument("filename")
 
 args = parser.parse_args()
 
-print(f"""#!/usr/bin/env python3
+print(
+    f"""#!/usr/bin/env python3
 
-import os
 import sys
 sys.path.insert(0, "{args.sharepath}")
 from {args.pkgname} import {args.filename}
 
-{args.filename}.runcli()""")
+{args.filename}.runcli()"""
+)

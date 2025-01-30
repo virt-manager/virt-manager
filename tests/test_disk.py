@@ -19,34 +19,34 @@ def test_disk_numtotarget():
     #
     # Note: using single quotes in strings to avoid
     # codespell flagging the 'ba' assert
-    assert DeviceDisk.num_to_target(1) == 'a'
-    assert DeviceDisk.num_to_target(2) == 'b'
-    assert DeviceDisk.num_to_target(26) == 'z'
-    assert DeviceDisk.num_to_target(27) == 'aa'
-    assert DeviceDisk.num_to_target(28) == 'ab'
-    assert DeviceDisk.num_to_target(52) == 'az'
-    assert DeviceDisk.num_to_target(53) == 'ba'
-    assert DeviceDisk.num_to_target(27 * 26) == 'zz'
-    assert DeviceDisk.num_to_target(27 * 26 + 1) == 'aaa'
+    assert DeviceDisk.num_to_target(1) == "a"
+    assert DeviceDisk.num_to_target(2) == "b"
+    assert DeviceDisk.num_to_target(26) == "z"
+    assert DeviceDisk.num_to_target(27) == "aa"
+    assert DeviceDisk.num_to_target(28) == "ab"
+    assert DeviceDisk.num_to_target(52) == "az"
+    assert DeviceDisk.num_to_target(53) == "ba"
+    assert DeviceDisk.num_to_target(27 * 26) == "zz"
+    assert DeviceDisk.num_to_target(27 * 26 + 1) == "aaa"
 
-    assert DeviceDisk.target_to_num('hda') == 0
-    assert DeviceDisk.target_to_num('hdb') == 1
-    assert DeviceDisk.target_to_num('sdz') == 25
-    assert DeviceDisk.target_to_num('sdaa') == 26
-    assert DeviceDisk.target_to_num('vdab') == 27
-    assert DeviceDisk.target_to_num('vdaz') == 51
-    assert DeviceDisk.target_to_num('xvdba') == 52
-    assert DeviceDisk.target_to_num('xvdzz') == 26 * (25 + 1) + 25
-    assert DeviceDisk.target_to_num('xvdaaa') == 26 * 26 * 1 + 26 * 1 + 0
+    assert DeviceDisk.target_to_num("hda") == 0
+    assert DeviceDisk.target_to_num("hdb") == 1
+    assert DeviceDisk.target_to_num("sdz") == 25
+    assert DeviceDisk.target_to_num("sdaa") == 26
+    assert DeviceDisk.target_to_num("vdab") == 27
+    assert DeviceDisk.target_to_num("vdaz") == 51
+    assert DeviceDisk.target_to_num("xvdba") == 52
+    assert DeviceDisk.target_to_num("xvdzz") == 26 * (25 + 1) + 25
+    assert DeviceDisk.target_to_num("xvdaaa") == 26 * 26 * 1 + 26 * 1 + 0
 
     conn = utils.URIs.open_testdefault_cached()
     disk = virtinst.DeviceDisk(conn)
-    disk.bus = 'ide'
+    disk.bus = "ide"
 
-    assert disk.generate_target([]) == 'hda'
-    assert disk.generate_target(['hda']) == 'hdb'
-    assert disk.generate_target(['hdb', 'sda']) == 'hdc'
-    assert disk.generate_target(['hda', 'hdd']) == 'hdb'
+    assert disk.generate_target([]) == "hda"
+    assert disk.generate_target(["hda"]) == "hdb"
+    assert disk.generate_target(["hdb", "sda"]) == "hdc"
+    assert disk.generate_target(["hda", "hdd"]) == "hdb"
 
 
 def test_disk_dir_searchable(monkeypatch):
@@ -56,10 +56,8 @@ def test_disk_dir_searchable(monkeypatch):
     conn = utils.URIs.open_kvm()
 
     def _set_caps_baselabel_uid(uid):
-        secmodel = [s for s in conn.caps.host.secmodels
-                    if s.model == "dac"][0]
-        for baselabel in [b for b in secmodel.baselabels
-                          if b.type in ["qemu", "kvm"]]:
+        secmodel = [s for s in conn.caps.host.secmodels if s.model == "dac"][0]
+        for baselabel in [b for b in secmodel.baselabels if b.type in ["qemu", "kvm"]]:
             baselabel.content = "+%s:+%s" % (uid, uid)
 
     tmpobj = tempfile.TemporaryDirectory(prefix="virtinst-test-search")
@@ -79,8 +77,7 @@ def test_disk_dir_searchable(monkeypatch):
 
         # Use our uid, verify it shows we have expected access
         _set_caps_baselabel_uid(os.getuid())
-        searchdata = virtinst.DeviceDisk.check_path_search(conn,
-                tmpdir + "/footest")
+        searchdata = virtinst.DeviceDisk.check_path_search(conn, tmpdir + "/footest")
         assert searchdata.uid == os.getuid()
         # pylint: disable=use-implicit-booleaness-not-comparison
         assert searchdata.fixlist == []
@@ -109,8 +106,7 @@ def test_disk_path_in_use_kernel():
     conn = utils.URIs.open_kvm()
 
     # Comparing against kernel
-    vms = virtinst.DeviceDisk.path_in_use_by(
-            conn, "/pool-dir/test-arm-kernel")
+    vms = virtinst.DeviceDisk.path_in_use_by(conn, "/pool-dir/test-arm-kernel")
     assert vms == ["test-arm-kernel"]
 
 
@@ -118,7 +114,8 @@ def test_disk_paths_in_use():
     conn = utils.URIs.open_kvm()
 
     vms = virtinst.DeviceDisk.paths_in_use_by(
-            conn, ["/pool-dir/test-arm-kernel", "/pool-dir/test-arm-initrd"])
+        conn, ["/pool-dir/test-arm-kernel", "/pool-dir/test-arm-initrd"]
+    )
     assert vms == [["test-arm-kernel"], ["test-arm-kernel"]]
 
 
@@ -141,7 +138,7 @@ def test_disk_diskbackend_misc():
 
     # Test sparse cloning
     tmpinput = tempfile.NamedTemporaryFile()
-    open(tmpinput.name, "wb").write(b'\0' * 10000)
+    open(tmpinput.name, "wb").write(b"\0" * 10000)
 
     srcdisk = virtinst.DeviceDisk(conn)
     srcdisk.set_source_path(tmpinput.name)
@@ -173,8 +170,7 @@ def test_disk_diskbackend_misc():
 
     disk = virtinst.DeviceDisk(conn)
     try:
-        disk.set_source_path(
-                "/virtinst-testsuite-fail-pool-install/test.qcow2")
+        disk.set_source_path("/virtinst-testsuite-fail-pool-install/test.qcow2")
         raise AssertionError("expected failure")
     except RuntimeError as e:
         assert "StoragePool.install testsuite mocked failure" in str(e)
@@ -184,9 +180,7 @@ def test_disk_diskbackend_parse():
     # Test that calling validate() on parsed disk XML doesn't attempt
     # to verify the path exists. Assume it's a working config
     conn = utils.URIs.open_testdriver_cached()
-    xml = ("<disk type='file' device='disk'>"
-        "<source file='/A/B/C/D/NOPE'/>"
-        "</disk>")
+    xml = "<disk type='file' device='disk'><source file='/A/B/C/D/NOPE'/></disk>"
     disk = virtinst.DeviceDisk(conn, parsexml=xml)
     disk.validate()
     disk.is_size_conflict()
@@ -212,9 +206,7 @@ def test_disk_diskbackend_parse():
 
     # Ensure set_backend_for_existing_path resolves a path
     # to its existing storage volume
-    xml = ("<disk type='file' device='disk'>"
-        "<source file='/pool-dir/default-vol'/>"
-        "</disk>")
+    xml = "<disk type='file' device='disk'><source file='/pool-dir/default-vol'/></disk>"
     disk = virtinst.DeviceDisk(conn, parsexml=xml)
     disk.set_backend_for_existing_path()
     assert disk.get_vol_object()

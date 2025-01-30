@@ -15,7 +15,6 @@ class DevicePanic(Device):
     model = XMLProperty("./@model")
     set_stub = XMLProperty(".", is_bool=True)
 
-
     ##################
     # Default config #
     ##################

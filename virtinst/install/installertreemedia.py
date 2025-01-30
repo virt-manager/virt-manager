@@ -16,16 +16,11 @@ from ..osdict import OSDB
 
 
 # Enum of the various install media types we can have
-(MEDIA_DIR,
- MEDIA_ISO,
- MEDIA_URL,
- MEDIA_KERNEL) = range(1, 5)
+(MEDIA_DIR, MEDIA_ISO, MEDIA_URL, MEDIA_KERNEL) = range(1, 5)
 
 
 def _is_url(url):
-    return (url.startswith("http://") or
-            url.startswith("https://") or
-            url.startswith("ftp://"))
+    return url.startswith("http://") or url.startswith("https://") or url.startswith("ftp://")
 
 
 class _LocationData(object):
@@ -61,13 +56,17 @@ class InstallerTreeMedia(object):
         except Exception as e:
             log.debug("Error validating install location", exc_info=True)
             if path.startswith("nfs:"):
-                log.warning("NFS URL installs are no longer supported. "
+                log.warning(
+                    "NFS URL installs are no longer supported. "
                     "Access your install media over an alternate transport "
                     "like HTTP, or manually mount the NFS share and install "
-                    "from the local directory mount point.")
+                    "from the local directory mount point."
+                )
 
-            msg = (_("Validating install media '%(media)s' failed: %(error)s") %
-                    {"media": str(path), "error": str(e)})
+            msg = _("Validating install media '%(media)s' failed: %(error)s") % {
+                "media": str(path),
+                "error": str(e),
+            }
             raise ValueError(msg) from None
 
     @staticmethod
@@ -85,22 +84,31 @@ class InstallerTreeMedia(object):
         Determine the scratchdir for this URI, create it if necessary.
         scratchdir is the directory that's accessible by VMs
         """
-        user_scratchdir = os.path.join(
-                guest.conn.get_app_cache_dir(), "boot")
+        user_scratchdir = os.path.join(guest.conn.get_app_cache_dir(), "boot")
         system_scratchdir = InstallerTreeMedia.get_system_scratchdir(guest)
 
         # If we are a session URI, or we don't have access to the system
         # scratchdir, make sure the session scratchdir exists and use that.
-        if (guest.conn.is_unprivileged() or
-            not os.path.exists(system_scratchdir) or
-            not os.access(system_scratchdir, os.W_OK)):
+        if (
+            guest.conn.is_unprivileged()
+            or not os.path.exists(system_scratchdir)
+            or not os.access(system_scratchdir, os.W_OK)
+        ):
             os.makedirs(user_scratchdir, 0o751, exist_ok=True)
             return user_scratchdir
 
         return system_scratchdir  # pragma: no cover
 
-    def __init__(self, conn, location, location_kernel, location_initrd,
-                install_kernel, install_initrd, install_kernel_args):
+    def __init__(
+        self,
+        conn,
+        location,
+        location_kernel,
+        location_initrd,
+        install_kernel,
+        install_initrd,
+        install_kernel_args,
+    ):
         self.conn = conn
         self.location = location
         self._location_kernel = location_kernel
@@ -113,11 +121,11 @@ class InstallerTreeMedia(object):
 
         if location_kernel or location_initrd:
             if not location:
-                raise ValueError(_("location kernel/initrd may only "
-                    "be specified with a location URL/path"))
+                raise ValueError(
+                    _("location kernel/initrd may only be specified with a location URL/path")
+                )
             if not (location_kernel and location_initrd):
-                raise ValueError(_("location kernel/initrd must "
-                    "be specified as a pair"))
+                raise ValueError(_("location kernel/initrd must be specified as a pair"))
 
         self._cached_fetcher = None
         self._cached_data = None
@@ -126,9 +134,11 @@ class InstallerTreeMedia(object):
 
         if self._install_kernel or self._install_initrd:
             self._media_type = MEDIA_KERNEL
-        elif (not self.conn.is_remote() and
-              os.path.exists(self.location) and
-              os.path.isdir(self.location)):
+        elif (
+            not self.conn.is_remote()
+            and os.path.exists(self.location)
+            and os.path.isdir(self.location)
+        ):
             self.location = os.path.abspath(self.location)
             self._media_type = MEDIA_DIR
         elif _is_url(self.location):
@@ -136,15 +146,17 @@ class InstallerTreeMedia(object):
         else:
             self._media_type = MEDIA_ISO
 
-        if (self.conn.is_remote() and
-                not self._media_type == MEDIA_URL and
-            not self._media_type == MEDIA_KERNEL):
-            raise ValueError(_("Cannot access install tree on remote "
-                "connection: %s") % self.location)
+        if (
+            self.conn.is_remote()
+            and not self._media_type == MEDIA_URL
+            and not self._media_type == MEDIA_KERNEL
+        ):
+            raise ValueError(
+                _("Cannot access install tree on remote connection: %s") % self.location
+            )
 
         if self._media_type == MEDIA_ISO:
             InstallerTreeMedia.validate_path(self.conn, self.location)
-
 
     ########################
     # Install preparations #
@@ -157,11 +169,9 @@ class InstallerTreeMedia(object):
             scratchdir = InstallerTreeMedia.make_scratchdir(guest)
 
             if self._media_type == MEDIA_KERNEL:
-                self._cached_fetcher = urlfetcher.DirectFetcher(
-                    None, scratchdir, meter)
+                self._cached_fetcher = urlfetcher.DirectFetcher(None, scratchdir, meter)
             else:
-                self._cached_fetcher = urlfetcher.fetcherForURI(
-                    self.location, scratchdir, meter)
+                self._cached_fetcher = urlfetcher.fetcherForURI(self.location, scratchdir, meter)
 
         self._cached_fetcher.meter = meter
         return self._cached_fetcher
@@ -175,15 +185,12 @@ class InstallerTreeMedia(object):
         os_media = None
         os_tree = None
         kernel_paths = []
-        has_location_kernel = bool(
-                self._location_kernel and self._location_initrd)
+        has_location_kernel = bool(self._location_kernel and self._location_initrd)
 
         if self._media_type == MEDIA_KERNEL:
-            kernel_paths = [
-                    (self._install_kernel, self._install_initrd)]
+            kernel_paths = [(self._install_kernel, self._install_initrd)]
         else:
-            store = urldetect.getDistroStore(guest, fetcher,
-                    skip_error=has_location_kernel)
+            store = urldetect.getDistroStore(guest, fetcher, skip_error=has_location_kernel)
 
         if store:
             kernel_paths = store.get_kernel_paths()
@@ -191,11 +198,9 @@ class InstallerTreeMedia(object):
             os_media = store.get_os_media()
             os_tree = store.get_os_tree()
         if has_location_kernel:
-            kernel_paths = [
-                    (self._location_kernel, self._location_initrd)]
+            kernel_paths = [(self._location_kernel, self._location_initrd)]
 
-        self._cached_data = _LocationData(osinfo, kernel_paths,
-                os_media, os_tree)
+        self._cached_data = _LocationData(osinfo, kernel_paths, os_media, os_tree)
         return self._cached_data
 
     def _prepare_kernel_url(self, guest, cache, fetcher):
@@ -205,8 +210,7 @@ class InstallerTreeMedia(object):
             for kpath, ipath in cache.kernel_pairs:
                 if fetcher.hasFile(kpath) and fetcher.hasFile(ipath):
                     return kpath, ipath
-            raise RuntimeError(  # pragma: no cover
-                    _("Couldn't find kernel for install tree."))
+            raise RuntimeError(_("Couldn't find kernel for install tree."))  # pragma: no cover
 
         kernelpath, initrdpath = _check_kernel_pairs()
         kernel = fetcher.acquireFile(kernelpath)
@@ -214,12 +218,9 @@ class InstallerTreeMedia(object):
         initrd = fetcher.acquireFile(initrdpath)
         self._tmpfiles.append(initrd)
 
-        perform_initrd_injections(initrd,
-                                  self._initrd_injections,
-                                  fetcher.scratchdir)
+        perform_initrd_injections(initrd, self._initrd_injections, fetcher.scratchdir)
 
         return kernel, initrd
-
 
     ##############
     # Public API #
@@ -264,9 +265,13 @@ class InstallerTreeMedia(object):
             ret = " ".join(self._extra_args)
 
         if self._media_type == MEDIA_DIR and not ret:
-            log.warning(_("Directory tree installs typically do not work "
-                "unless extra kernel args are passed to point the "
-                "installer at a network accessible install tree."))
+            log.warning(
+                _(
+                    "Directory tree installs typically do not work "
+                    "unless extra kernel args are passed to point the "
+                    "installer at a network accessible install tree."
+                )
+            )
         return ret
 
     def prepare(self, guest, meter, unattended_scripts):

@@ -17,8 +17,7 @@ def _process_src(options):
     if options.original_xml:
         src_xml = open(options.original_xml).read()
     elif not src_name:
-        fail(_("An original machine name is required,"
-            " use '--original src_name' and try again."))
+        fail(_("An original machine name is required, use '--original src_name' and try again."))
     return src_name, src_xml
 
 
@@ -59,69 +58,101 @@ def _validate_disks(cloner):
         if not diskinfo.new_disk:
             continue
         warn_overwrite = not diskinfo.is_preserve_requested()
-        cli.validate_disk(diskinfo.new_disk,
-                warn_overwrite=warn_overwrite)
+        cli.validate_disk(diskinfo.new_disk, warn_overwrite=warn_overwrite)
 
 
 def parse_args():
-    desc = _("Duplicate a virtual machine, changing all the unique "
+    desc = _(
+        "Duplicate a virtual machine, changing all the unique "
         "host side configuration like MAC address, name, etc. \n\n"
         "The VM contents are NOT altered: virt-clone does not change "
         "anything _inside_ the guest OS, it only duplicates disks and "
         "does host side changes. So things like changing passwords, "
         "changing static IP address, etc are outside the scope of "
-        "this tool. For these types of changes, please see virt-sysprep(1).")
+        "this tool. For these types of changes, please see virt-sysprep(1)."
+    )
     parser = cli.setupParser("%(prog)s --original [NAME] ...", desc)
     cli.add_connect_option(parser)
 
     geng = parser.add_argument_group(_("General Options"))
-    geng.add_argument("-o", "--original", dest="src_name",
-                    help=_("Name of the original guest to clone."))
-    geng.add_argument("--original-xml",
-                    help=_("XML file to use as the original guest."))
-    geng.add_argument("--auto-clone", action="store_true",
-                    help=_("Auto generate clone name and storage paths from"
-                           " the original guest configuration."))
-    geng.add_argument("-n", "--name", dest="new_name",
-                    help=_("Name for the new guest"))
+    geng.add_argument(
+        "-o", "--original", dest="src_name", help=_("Name of the original guest to clone.")
+    )
+    geng.add_argument("--original-xml", help=_("XML file to use as the original guest."))
+    geng.add_argument(
+        "--auto-clone",
+        action="store_true",
+        help=_("Auto generate clone name and storage paths from the original guest configuration."),
+    )
+    geng.add_argument("-n", "--name", dest="new_name", help=_("Name for the new guest"))
     geng.add_argument("-u", "--uuid", dest="new_uuid", help=argparse.SUPPRESS)
-    geng.add_argument("--reflink", action="store_true",
-            help=_("use btrfs COW lightweight copy"))
+    geng.add_argument("--reflink", action="store_true", help=_("use btrfs COW lightweight copy"))
 
     stog = parser.add_argument_group(_("Storage Configuration"))
-    stog.add_argument("-f", "--file", dest="new_diskfile", action="append",
-                    help=_("New file to use as the disk image for the "
-                           "new guest"))
-    stog.add_argument("--force-copy", dest="target", action="append",
-                    help=_("Force to copy devices (eg, if 'hdc' is a "
-                           "readonly cdrom device, --force-copy=hdc)"))
-    stog.add_argument("--skip-copy", action="append",
-                    help=_("Skip copy of the device target. (eg, if 'vda' is a "
-                           "disk you don't want to copy and use the same path "
-                           "in the new VM, use --skip-copy=vda)"))
-    stog.add_argument("--nonsparse", action="store_false", dest="sparse",
-                    default=True,
-                    help=_("Do not use a sparse file for the clone's "
-                           "disk image"))
-    stog.add_argument("--preserve-data", dest="preserve",
-            action="store_true", default=False,
-            help=_("Do not clone storage contents to specified file paths, "
-                   "their contents will be left untouched. "
-                   "This requires specifying existing paths for "
-                   "every cloneable disk image."))
-    stog.add_argument("--nvram", dest="new_nvram",
-                      help=_("New file to use as storage for nvram VARS"))
+    stog.add_argument(
+        "-f",
+        "--file",
+        dest="new_diskfile",
+        action="append",
+        help=_("New file to use as the disk image for the new guest"),
+    )
+    stog.add_argument(
+        "--force-copy",
+        dest="target",
+        action="append",
+        help=_("Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-copy=hdc)"),
+    )
+    stog.add_argument(
+        "--skip-copy",
+        action="append",
+        help=_(
+            "Skip copy of the device target. (eg, if 'vda' is a "
+            "disk you don't want to copy and use the same path "
+            "in the new VM, use --skip-copy=vda)"
+        ),
+    )
+    stog.add_argument(
+        "--nonsparse",
+        action="store_false",
+        dest="sparse",
+        default=True,
+        help=_("Do not use a sparse file for the clone's disk image"),
+    )
+    stog.add_argument(
+        "--preserve-data",
+        dest="preserve",
+        action="store_true",
+        default=False,
+        help=_(
+            "Do not clone storage contents to specified file paths, "
+            "their contents will be left untouched. "
+            "This requires specifying existing paths for "
+            "every cloneable disk image."
+        ),
+    )
+    stog.add_argument(
+        "--nvram", dest="new_nvram", help=_("New file to use as storage for nvram VARS")
+    )
 
     netg = parser.add_argument_group(_("Networking Configuration"))
-    netg.add_argument("-m", "--mac", dest="new_mac", action="append",
-                    help=_("New fixed MAC address for the clone guest. "
-                           "Default is a randomly generated MAC"))
+    netg.add_argument(
+        "-m",
+        "--mac",
+        dest="new_mac",
+        action="append",
+        help=_("New fixed MAC address for the clone guest. Default is a randomly generated MAC"),
+    )
 
     misc = parser.add_argument_group(_("Miscellaneous Options"))
 
     # Just used for clone tests
-    misc.add_argument("--__test-nodry", action="store_true", dest="test_nodry",
-                      default=False, help=argparse.SUPPRESS)
+    misc.add_argument(
+        "--__test-nodry",
+        action="store_true",
+        dest="test_nodry",
+        default=False,
+        help=argparse.SUPPRESS,
+    )
 
     cli.add_misc_options(misc, prompt=True, replace=True, printxml=True)
 
@@ -142,10 +173,13 @@ def main(conn=None):
     cli.set_prompt(options.prompt)
     conn = cli.getConnection(options.connect, conn=conn)
 
-    if (options.new_diskfile is None and
-        options.auto_clone is False):
-        fail(_("Either --auto-clone or --file is required,"
-               " use '--auto-clone or --file' and try again."))
+    if options.new_diskfile is None and options.auto_clone is False:
+        fail(
+            _(
+                "Either --auto-clone or --file is required,"
+                " use '--auto-clone or --file' and try again."
+            )
+        )
 
     src_name, src_xml = _process_src(options)
     cloner = Cloner(conn, src_name, src_xml)
@@ -176,8 +210,12 @@ def main(conn=None):
     if options.new_name:
         cloner.set_clone_name(options.new_name)
     elif not options.auto_clone:
-        fail(_("A name is required for the new virtual machine,"
-            " use '--name NEW_VM_NAME' to specify one."))
+        fail(
+            _(
+                "A name is required for the new virtual machine,"
+                " use '--name NEW_VM_NAME' to specify one."
+            )
+        )
 
     _process_macs(options, cloner)
     _process_disks(options, cloner)

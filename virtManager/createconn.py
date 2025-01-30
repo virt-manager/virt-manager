@@ -16,30 +16,26 @@ from .lib import uiutil
 from .baseclass import vmmGObjectUI
 from .connmanager import vmmConnectionManager
 
-(HV_QEMU,
-HV_XEN,
-HV_LXC,
-HV_QEMU_SESSION,
-HV_BHYVE,
-HV_VZ,
-HV_CUSTOM) = range(7)
+(HV_QEMU, HV_XEN, HV_LXC, HV_QEMU_SESSION, HV_BHYVE, HV_VZ, HV_CUSTOM) = range(7)
 
 
 def _default_uri():  # pragma: no cover
-    if os.path.exists('/var/lib/xen'):
-        if (os.path.exists('/dev/xen/evtchn') or
-            os.path.exists("/proc/xen")):
-            return 'xen:///'
+    if os.path.exists("/var/lib/xen"):
+        if os.path.exists("/dev/xen/evtchn") or os.path.exists("/proc/xen"):
+            return "xen:///"
 
-    if (os.path.exists("/usr/bin/qemu") or
-        os.path.exists("/usr/bin/qemu-kvm") or
-        os.path.exists("/usr/bin/kvm") or
-        os.path.exists("/usr/libexec/qemu-kvm") or
-        glob.glob("/usr/bin/qemu-system-*")):
+    if (
+        os.path.exists("/usr/bin/qemu")
+        or os.path.exists("/usr/bin/qemu-kvm")
+        or os.path.exists("/usr/bin/kvm")
+        or os.path.exists("/usr/libexec/qemu-kvm")
+        or glob.glob("/usr/bin/qemu-system-*")
+    ):
         return "qemu:///system"
 
-    if (os.path.exists("/usr/lib/libvirt/libvirt_lxc") or
-        os.path.exists("/usr/lib64/libvirt/libvirt_lxc")):
+    if os.path.exists("/usr/lib/libvirt/libvirt_lxc") or os.path.exists(
+        "/usr/lib64/libvirt/libvirt_lxc"
+    ):
         return "lxc:///"
     return None
 
@@ -52,23 +48,23 @@ class vmmCreateConn(vmmGObjectUI):
                 cls._instance = vmmCreateConn()
             return cls._instance
         except Exception as e:  # pragma: no cover
-            parentobj.err.show_err(
-                    _("Error launching connect dialog: %s") % str(e))
+            parentobj.err.show_err(_("Error launching connect dialog: %s") % str(e))
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "createconn.ui", "vmm-open-connection")
         self._cleanup_on_app_close()
 
-        self.builder.connect_signals({
-            "on_hypervisor_changed": self.hypervisor_changed,
-            "on_connect_remote_toggled": self.connect_remote_toggled,
-            "on_username_entry_changed": self.username_changed,
-            "on_hostname_changed": self.hostname_changed,
-
-            "on_cancel_clicked": self.cancel,
-            "on_connect_clicked": self.open_conn,
-            "on_vmm_open_connection_delete_event": self.cancel,
-        })
+        self.builder.connect_signals(
+            {
+                "on_hypervisor_changed": self.hypervisor_changed,
+                "on_connect_remote_toggled": self.connect_remote_toggled,
+                "on_username_entry_changed": self.username_changed,
+                "on_hostname_changed": self.hostname_changed,
+                "on_cancel_clicked": self.cancel,
+                "on_connect_clicked": self.open_conn,
+                "on_vmm_open_connection_delete_event": self.cancel,
+            }
+        )
 
         self.set_initial_state()
         self.reset_state()
@@ -85,7 +81,6 @@ class vmmCreateConn(vmmGObjectUI):
     def close(self, ignore1=None, ignore2=None):
         log.debug("Closing open connection")
         self.topwin.hide()
-
 
     def show(self, parent):
         log.debug("Showing open connection")
@@ -108,9 +103,11 @@ class vmmCreateConn(vmmGObjectUI):
         model = Gtk.ListStore(int, str)
 
         def _add_hv_row(rowid, config_name, label):
-            if (not self.config.default_hvs or
-                not config_name or
-                config_name in self.config.default_hvs):
+            if (
+                not self.config.default_hvs
+                or not config_name
+                or config_name in self.config.default_hvs
+            ):
                 model.append([rowid, label])
 
         _add_hv_row(HV_QEMU, "qemu", "QEMU/KVM")
@@ -123,8 +120,10 @@ class vmmCreateConn(vmmGObjectUI):
         _add_hv_row(HV_CUSTOM, None, _("Custom URI..."))
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 1)
+
         def sepfunc(model, it):
             return model[it][0] == -1
+
         combo.set_row_separator_func(sepfunc)
 
     def reset_state(self):
@@ -158,14 +157,10 @@ class vmmCreateConn(vmmGObjectUI):
         is_session = hv == HV_QEMU_SESSION
         is_custom = hv == HV_CUSTOM
         show_remote = not is_session and not is_custom
-        uiutil.set_grid_row_visible(
-            self.widget("session-warning-box"), is_session)
-        uiutil.set_grid_row_visible(
-            self.widget("connect-remote"), show_remote)
-        uiutil.set_grid_row_visible(
-            self.widget("username-entry"), show_remote)
-        uiutil.set_grid_row_visible(
-            self.widget("hostname"), show_remote)
+        uiutil.set_grid_row_visible(self.widget("session-warning-box"), is_session)
+        uiutil.set_grid_row_visible(self.widget("connect-remote"), show_remote)
+        uiutil.set_grid_row_visible(self.widget("username-entry"), show_remote)
+        uiutil.set_grid_row_visible(self.widget("hostname"), show_remote)
         if not show_remote:
             self.widget("connect-remote").set_active(False)
 
@@ -253,9 +248,14 @@ class vmmCreateConn(vmmGObjectUI):
         msg += "\n\n"
         msg += _("Would you still like to remember this connection?")
 
-        remember = self.err.show_err(msg, details, title,
-                buttons=Gtk.ButtonsType.YES_NO,
-                dialog_type=Gtk.MessageType.QUESTION, modal=True)
+        remember = self.err.show_err(
+            msg,
+            details,
+            title,
+            buttons=Gtk.ButtonsType.YES_NO,
+            dialog_type=Gtk.MessageType.QUESTION,
+            modal=True,
+        )
         self.reset_finish_cursor()
         if remember:
             self.close()

@@ -12,9 +12,16 @@ class DomainIdmap(XMLBuilder):
     """
     Class for generating user namespace related XML
     """
+
     XML_NAME = "idmap"
-    _XML_PROP_ORDER = ["uid_start", "uid_target", "uid_count",
-            "gid_start", "gid_target", "gid_count"]
+    _XML_PROP_ORDER = [
+        "uid_start",
+        "uid_target",
+        "uid_count",
+        "gid_start",
+        "gid_target",
+        "gid_count",
+    ]
 
     uid_start = XMLProperty("./uid/@start", is_int=True)
     uid_target = XMLProperty("./uid/@target", is_int=True)

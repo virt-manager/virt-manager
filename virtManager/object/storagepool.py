@@ -40,13 +40,13 @@ class vmmStorageVolume(vmmLibvirtObject):
     def __init__(self, conn, backend, key):
         vmmLibvirtObject.__init__(self, conn, backend, key, StorageVolume)
 
-
     ##########################
     # Required class methods #
     ##########################
 
     def _conn_tick_poll_param(self):
         return None  # pragma: no cover
+
     def class_name(self):
         return "volume"  # pragma: no cover
 
@@ -54,13 +54,11 @@ class vmmStorageVolume(vmmLibvirtObject):
         try:
             return self._backend.XMLDesc(flags)
         except Exception as e:  # pragma: no cover
-            log.debug("XMLDesc for vol=%s failed: %s",
-                self._backend.key(), e)
+            log.debug("XMLDesc for vol=%s failed: %s", self._backend.key(), e)
             raise
 
     def _get_backend_status(self):
         return self._STATUS_ACTIVE
-
 
     ###########
     # Actions #
@@ -77,17 +75,19 @@ class vmmStorageVolume(vmmLibvirtObject):
         self._backend.delete(0)
         self._backend = None
 
-
     #################
     # XML accessors #
     #################
 
     def get_key(self):
         return self.get_xmlobj().key or ""
+
     def get_target_path(self):
         return self.get_xmlobj().target_path or ""
+
     def get_format(self):
         return self.get_xmlobj().format
+
     def get_capacity(self):
         return self.get_xmlobj().capacity
 
@@ -107,9 +107,7 @@ class vmmStorageVolume(vmmLibvirtObject):
 
 
 class vmmStoragePool(vmmLibvirtObject):
-    __gsignals__ = {
-        "refreshed": (vmmLibvirtObject.RUN_FIRST, None, [])
-    }
+    __gsignals__ = {"refreshed": (vmmLibvirtObject.RUN_FIRST, None, [])}
 
     @staticmethod
     def supports_volume_creation(pool_type, clone=False):
@@ -126,9 +124,11 @@ class vmmStoragePool(vmmLibvirtObject):
             StoragePool.TYPE_RBD,
         ]
         if not clone:
-            supported.extend([
-                StoragePool.TYPE_ZFS,
-            ])
+            supported.extend(
+                [
+                    StoragePool.TYPE_ZFS,
+                ]
+            )
         return pool_type in supported
 
     @staticmethod
@@ -145,26 +145,27 @@ class vmmStoragePool(vmmLibvirtObject):
         self._last_refresh_time = 0
         self._volumes = None
 
-
     ##########################
     # Required class methods #
     ##########################
 
     def _conn_tick_poll_param(self):
         return "pollpool"
+
     def class_name(self):
         return "pool"
 
     def _XMLDesc(self, flags):
         return self._backend.XMLDesc(flags)
+
     def _define(self, xml):
         return self.conn.define_pool(xml)
+
     def _using_events(self):
         return self.conn.using_storage_pool_events
+
     def _get_backend_status(self):
-        return (bool(self._backend.isActive()) and
-                self._STATUS_ACTIVE or
-                self._STATUS_INACTIVE)
+        return bool(self._backend.isActive()) and self._STATUS_ACTIVE or self._STATUS_INACTIVE
 
     def _init_libvirt_state(self):
         super()._init_libvirt_state()
@@ -183,10 +184,9 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def _cleanup(self):
         vmmLibvirtObject._cleanup(self)
-        for vol in (self._volumes or []):
+        for vol in self._volumes or []:
             vol.cleanup()
         self._volumes = None
-
 
     ###########
     # Actions #
@@ -222,8 +222,7 @@ class vmmStoragePool(vmmLibvirtObject):
             # we want the update to be done immediately
             return
 
-        self.refresh_pool_cache_from_event_loop(
-            _from_object_init=_from_object_init)
+        self.refresh_pool_cache_from_event_loop(_from_object_init=_from_object_init)
 
     def refresh_pool_cache_from_event_loop(self, _from_object_init=False):
         if not _from_object_init:
@@ -234,7 +233,6 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def secs_since_last_refresh(self):
         return time.time() - self._last_refresh_time
-
 
     ###################
     # Volume handling #
@@ -257,12 +255,14 @@ class vmmStoragePool(vmmLibvirtObject):
             return
 
         keymap = dict((o.get_name(), o) for o in self._volumes or [])
+
         def cb(obj, key):
             return vmmStorageVolume(self.conn, obj, key)
-        (dummy1, dummy2, allvols) = pollhelpers.fetch_volumes(
-            self.conn.get_backend(), self.get_backend(), keymap, cb)
-        self._volumes = allvols
 
+        (dummy1, dummy2, allvols) = pollhelpers.fetch_volumes(
+            self.conn.get_backend(), self.get_backend(), keymap, cb
+        )
+        self._volumes = allvols
 
     #########################
     # XML/config operations #
@@ -270,22 +270,27 @@ class vmmStoragePool(vmmLibvirtObject):
 
     def set_autostart(self, val):
         self._backend.setAutostart(val)
+
     def get_autostart(self):
         return self._backend.autostart()
 
     def get_type(self):
         return self.get_xmlobj().type
+
     def get_target_path(self):
         return self.get_xmlobj().target_path or ""
 
     def get_allocation(self):
         return self.get_xmlobj().allocation
+
     def get_available(self):
         return self.get_xmlobj().available
+
     def get_capacity(self):
         return self.get_xmlobj().capacity
 
     def get_pretty_allocation(self):
         return _pretty_bytes(self.get_allocation())
+
     def get_pretty_available(self):
         return _pretty_bytes(self.get_available())

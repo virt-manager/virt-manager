@@ -8,11 +8,25 @@ import traceback
 
 from gi.repository import Gtk
 
-from virtinst import (DeviceChannel, DeviceConsole,
-        DeviceController, DeviceDisk, DeviceHostdev,
-        DeviceInput, DeviceInterface, DevicePanic, DeviceParallel,
-        DeviceRedirdev, DeviceRng, DeviceSerial, DeviceSmartcard,
-        DeviceSound, DeviceVideo, DeviceVsock, DeviceWatchdog)
+from virtinst import (
+    DeviceChannel,
+    DeviceConsole,
+    DeviceController,
+    DeviceDisk,
+    DeviceHostdev,
+    DeviceInput,
+    DeviceInterface,
+    DevicePanic,
+    DeviceParallel,
+    DeviceRedirdev,
+    DeviceRng,
+    DeviceSerial,
+    DeviceSmartcard,
+    DeviceSound,
+    DeviceVideo,
+    DeviceVsock,
+    DeviceWatchdog,
+)
 from virtinst import log
 
 from .lib import uiutil
@@ -28,23 +42,25 @@ from .storagebrowse import vmmStorageBrowser
 from .xmleditor import vmmXMLEditor
 
 
-(PAGE_DISK,
- PAGE_CONTROLLER,
- PAGE_NETWORK,
- PAGE_INPUT,
- PAGE_GRAPHICS,
- PAGE_SOUND,
- PAGE_HOSTDEV,
- PAGE_CHAR,
- PAGE_VIDEO,
- PAGE_WATCHDOG,
- PAGE_FILESYSTEM,
- PAGE_SMARTCARD,
- PAGE_USBREDIR,
- PAGE_TPM,
- PAGE_RNG,
- PAGE_PANIC,
- PAGE_VSOCK) = range(17)
+(
+    PAGE_DISK,
+    PAGE_CONTROLLER,
+    PAGE_NETWORK,
+    PAGE_INPUT,
+    PAGE_GRAPHICS,
+    PAGE_SOUND,
+    PAGE_HOSTDEV,
+    PAGE_CHAR,
+    PAGE_VIDEO,
+    PAGE_WATCHDOG,
+    PAGE_FILESYSTEM,
+    PAGE_SMARTCARD,
+    PAGE_USBREDIR,
+    PAGE_TPM,
+    PAGE_RNG,
+    PAGE_PANIC,
+    PAGE_VSOCK,
+) = range(17)
 
 
 class vmmAddHardware(vmmGObjectUI):
@@ -59,8 +75,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._remove_usb_controller = None
         self._selected_model = None
 
-        self._gfxdetails = vmmGraphicsDetails(
-            self.vm, self.builder, self.topwin)
+        self._gfxdetails = vmmGraphicsDetails(self.vm, self.builder, self.topwin)
         self.widget("graphics-align").add(self._gfxdetails.top_box)
 
         self._fsdetails = vmmFSDetails(self.vm, self.builder, self.topwin)
@@ -72,8 +87,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         self.addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self.addstorage.top_box)
-        self.widget("storage-advanced-align").add(
-                self.addstorage.advanced_top_box)
+        self.widget("storage-advanced-align").add(self.addstorage.advanced_top_box)
         self.addstorage.connect("browse-clicked", self._browse_storage_cb)
 
         self._vsockdetails = vmmVsockDetails(self.vm, self.builder, self.topwin)
@@ -82,31 +96,30 @@ class vmmAddHardware(vmmGObjectUI):
         self._tpmdetails = vmmTPMDetails(self.vm, self.builder, self.topwin)
         self.widget("tpm-align").add(self._tpmdetails.top_box)
 
-        self._xmleditor = vmmXMLEditor(self.builder, self.topwin,
-                self.widget("create-pages-align"),
-                self.widget("create-pages"))
-        self._xmleditor.connect("xml-requested",
-                self._xmleditor_xml_requested_cb)
+        self._xmleditor = vmmXMLEditor(
+            self.builder,
+            self.topwin,
+            self.widget("create-pages-align"),
+            self.widget("create-pages"),
+        )
+        self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
 
-        self.builder.connect_signals({
-            "on_create_cancel_clicked": self.close,
-            "on_vmm_create_delete_event": self.close,
-            "on_create_finish_clicked": self._finish,
-            "on_hw_list_changed": self._hw_selected_cb,
-
-            "on_storage_devtype_changed": self._change_storage_devtype,
-            "on_storage_bustype_changed": self._storage_bus_changed_cb,
-
-            "on_mac_address_clicked": self._change_macaddr_use,
-
-            "on_char_device_type_changed": self._change_char_device_type,
-            "on_char_target_name_changed": self._change_char_target_name,
-            "on_char_auto_socket_toggled": self._change_char_auto_socket,
-
-            "on_usbredir_type_changed": self._change_usbredir_type,
-
-            "on_controller_type_changed": self._change_controller_type,
-        })
+        self.builder.connect_signals(
+            {
+                "on_create_cancel_clicked": self.close,
+                "on_vmm_create_delete_event": self.close,
+                "on_create_finish_clicked": self._finish,
+                "on_hw_list_changed": self._hw_selected_cb,
+                "on_storage_devtype_changed": self._change_storage_devtype,
+                "on_storage_bustype_changed": self._storage_bus_changed_cb,
+                "on_mac_address_clicked": self._change_macaddr_use,
+                "on_char_device_type_changed": self._change_char_device_type,
+                "on_char_target_name_changed": self._change_char_target_name,
+                "on_char_auto_socket_toggled": self._change_char_auto_socket,
+                "on_usbredir_type_changed": self._change_usbredir_type,
+                "on_controller_type_changed": self._change_controller_type,
+            }
+        )
         self.bind_escape_key_close()
 
         self._set_initial_state()
@@ -116,9 +129,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._reset_state()
         self.topwin.set_transient_for(parent)
         self.topwin.present()
-        self.conn.schedule_priority_tick(pollnet=True,
-                                         pollpool=True,
-                                         pollnodedev=True)
+        self.conn.schedule_priority_tick(pollnet=True, pollpool=True, pollnodedev=True)
 
     def close(self, ignore1=None, ignore2=None):
         if self.is_visible():
@@ -152,7 +163,6 @@ class vmmAddHardware(vmmGObjectUI):
         self._xmleditor.cleanup()
         self._xmleditor = None
 
-
     ##########################
     # Initialization methods #
     ##########################
@@ -172,9 +182,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         hw_col.pack_start(icon, False)
         hw_col.pack_start(text, True)
-        hw_col.add_attribute(icon, 'icon-name', 1)
-        hw_col.add_attribute(text, 'text', 0)
-        hw_col.add_attribute(text, 'sensitive', 3)
+        hw_col.add_attribute(icon, "icon-name", 1)
+        hw_col.add_attribute(text, "text", 0)
+        hw_col.add_attribute(text, "sensitive", 3)
         self.widget("hw-list").append_column(hw_col)
 
         # Individual HW page UI
@@ -196,14 +206,12 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.build_simple_combo(self.widget("controller-model"), [])
         self._build_controller_type_combo()
 
-
         # Available HW options
         is_local = not self.conn.is_remote()
-        have_storage = (is_local or self.conn.support.conn_storage())
+        have_storage = is_local or self.conn.support.conn_storage()
         storage_tooltip = None
         if not have_storage:  # pragma: no cover
-            storage_tooltip = _("Connection does not support storage"
-                                " management.")
+            storage_tooltip = _("Connection does not support storage management.")
 
         # Name, icon name, page number, is sensitive, tooltip, icon size,
         # device type (serial/parallel)...
@@ -213,68 +221,108 @@ class vmmAddHardware(vmmGObjectUI):
         def add_hw_option(name, icon, page, sensitive, errortxt, devtype=None):
             model.append([name, icon, page, sensitive, errortxt, devtype])
 
-        add_hw_option(_("Storage"), "drive-harddisk", PAGE_DISK, have_storage,
-                      have_storage and storage_tooltip or None)
+        add_hw_option(
+            _("Storage"),
+            "drive-harddisk",
+            PAGE_DISK,
+            have_storage,
+            have_storage and storage_tooltip or None,
+        )
         add_hw_option(_("Controller"), "device_pci", PAGE_CONTROLLER, True, None)
         add_hw_option(_("Network"), "network-idle", PAGE_NETWORK, True, None)
-        add_hw_option(_("Input"), "input-mouse", PAGE_INPUT, self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option(_("Graphics"), "video-display", PAGE_GRAPHICS,
-                      True, None)
-        add_hw_option(_("Sound"), "audio-card", PAGE_SOUND,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option(_("Serial"), "device_serial", PAGE_CHAR,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."),
-                      "serial")
-        add_hw_option(_("Parallel"), "device_serial", PAGE_CHAR,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."),
-                      "parallel")
-        add_hw_option(_("Console"), "device_serial", PAGE_CHAR,
-                      True, None, "console")
-        add_hw_option(_("Channel"), "device_serial", PAGE_CHAR,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."),
-                      "channel")
-        add_hw_option(_("USB Host Device"), "device_usb", PAGE_HOSTDEV,
-                      self.conn.support.conn_nodedev(),
-                      _("Connection does not support host device enumeration"),
-                      "usb")
+        add_hw_option(
+            _("Input"),
+            "input-mouse",
+            PAGE_INPUT,
+            self.vm.is_hvm(),
+            _("Not supported for this guest type."),
+        )
+        add_hw_option(_("Graphics"), "video-display", PAGE_GRAPHICS, True, None)
+        add_hw_option(
+            _("Sound"),
+            "audio-card",
+            PAGE_SOUND,
+            self.vm.is_hvm(),
+            _("Not supported for this guest type."),
+        )
+        add_hw_option(
+            _("Serial"),
+            "device_serial",
+            PAGE_CHAR,
+            self.vm.is_hvm(),
+            _("Not supported for this guest type."),
+            "serial",
+        )
+        add_hw_option(
+            _("Parallel"),
+            "device_serial",
+            PAGE_CHAR,
+            self.vm.is_hvm(),
+            _("Not supported for this guest type."),
+            "parallel",
+        )
+        add_hw_option(_("Console"), "device_serial", PAGE_CHAR, True, None, "console")
+        add_hw_option(
+            _("Channel"),
+            "device_serial",
+            PAGE_CHAR,
+            self.vm.is_hvm(),
+            _("Not supported for this guest type."),
+            "channel",
+        )
+        add_hw_option(
+            _("USB Host Device"),
+            "device_usb",
+            PAGE_HOSTDEV,
+            self.conn.support.conn_nodedev(),
+            _("Connection does not support host device enumeration"),
+            "usb",
+        )
 
         nodedev_enabled = self.conn.support.conn_nodedev()
-        nodedev_errstr = _("Connection does not support "
-            "host device enumeration")
+        nodedev_errstr = _("Connection does not support host device enumeration")
         if self.vm.is_container():
             nodedev_enabled = False
             nodedev_errstr = _("Not supported for containers")
-        add_hw_option(_("PCI Host Device"), "device_pci", PAGE_HOSTDEV,
-                      nodedev_enabled, nodedev_errstr, "pci")
+        add_hw_option(
+            _("PCI Host Device"), "device_pci", PAGE_HOSTDEV, nodedev_enabled, nodedev_errstr, "pci"
+        )
 
-        add_hw_option(_("MDEV Host Device"), "device_pci", PAGE_HOSTDEV,
-                      self.conn.support.conn_nodedev(),
-                      _("Connection does not support host device enumeration"),
-                      "mdev")
-        add_hw_option(_("Video"), "video-display", PAGE_VIDEO, True,
-                      _("Libvirt version does not support video devices."))
-        add_hw_option(_("Watchdog"), "device_pci", PAGE_WATCHDOG,
-                      self.vm.is_hvm(),
-                      _("Not supported for this guest type."))
-        add_hw_option(_("Filesystem"), "folder", PAGE_FILESYSTEM, True, None)
-        add_hw_option(_("Smartcard"), "device_serial", PAGE_SMARTCARD,
-                      True, None)
-        add_hw_option(_("USB Redirection"), "device_usb", PAGE_USBREDIR,
-                      True, None)
-        add_hw_option(_("TPM"), "device_cpu", PAGE_TPM,
-                      True, None)
-        add_hw_option(_("RNG"), "system-run", PAGE_RNG, True, None)
-        add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC,
-                      True, None)
-        add_hw_option(_("VirtIO VSOCK"), "network-idle", PAGE_VSOCK,
+        add_hw_option(
+            _("MDEV Host Device"),
+            "device_pci",
+            PAGE_HOSTDEV,
+            self.conn.support.conn_nodedev(),
+            _("Connection does not support host device enumeration"),
+            "mdev",
+        )
+        add_hw_option(
+            _("Video"),
+            "video-display",
+            PAGE_VIDEO,
+            True,
+            _("Libvirt version does not support video devices."),
+        )
+        add_hw_option(
+            _("Watchdog"),
+            "device_pci",
+            PAGE_WATCHDOG,
             self.vm.is_hvm(),
-            _("Not supported for this hypervisor/libvirt/arch combination."))
-
+            _("Not supported for this guest type."),
+        )
+        add_hw_option(_("Filesystem"), "folder", PAGE_FILESYSTEM, True, None)
+        add_hw_option(_("Smartcard"), "device_serial", PAGE_SMARTCARD, True, None)
+        add_hw_option(_("USB Redirection"), "device_usb", PAGE_USBREDIR, True, None)
+        add_hw_option(_("TPM"), "device_cpu", PAGE_TPM, True, None)
+        add_hw_option(_("RNG"), "system-run", PAGE_RNG, True, None)
+        add_hw_option(_("Panic Notifier"), "system-run", PAGE_PANIC, True, None)
+        add_hw_option(
+            _("VirtIO VSOCK"),
+            "network-idle",
+            PAGE_VSOCK,
+            self.vm.is_hvm(),
+            _("Not supported for this hypervisor/libvirt/arch combination."),
+        )
 
     def _reset_state(self):
         # Hide all notebook pages, otherwise the wizard window is as large
@@ -290,7 +338,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("storage-devtype").emit("changed")
         self.addstorage.reset_state()
 
-
         # Network init
         newmac = DeviceInterface.generate_mac(self.conn.get_backend())
         self.widget("mac-address").set_active(bool(newmac))
@@ -302,20 +349,17 @@ class vmmAddHardware(vmmGObjectUI):
         netmodel = self.widget("net-model")
         self.populate_network_model_combo(self.vm, netmodel)
 
-
         # Char parameters
         self.widget("char-path").set_text("")
         self.widget("char-channel").set_text("")
         self.widget("char-auto-socket").set_active(True)
         self.widget("char-vdagent-clipboard").set_active(True)
 
-
         # RNG params
         default_rng = "/dev/random"
         if self.conn.support.conn_rng_urandom():
             default_rng = "/dev/urandom"
         self.widget("rng-device").set_text(default_rng)
-
 
         # Remaining devices
         self._fsdetails.reset_state()
@@ -324,8 +368,7 @@ class vmmAddHardware(vmmGObjectUI):
         self._tpmdetails.reset_state()
 
     @staticmethod
-    def change_config_helper(define_func, define_args, vm, err,
-            devobj=None, hotplug_args=None):
+    def change_config_helper(define_func, define_args, vm, err, devobj=None, hotplug_args=None):
         """
         UI helper that handles the logic and reports errors for the
         requested VM define and hotplug changes
@@ -343,8 +386,7 @@ class vmmAddHardware(vmmGObjectUI):
                 # Guest XML editing
                 define_func(**define_args)
         except Exception as e:
-            err.show_err((_("Error changing VM configuration: %s") %
-                              str(e)))
+            err.show_err((_("Error changing VM configuration: %s") % str(e)))
             return False
 
         if not vm.is_active():
@@ -363,27 +405,20 @@ class vmmAddHardware(vmmGObjectUI):
         except Exception as e:
             did_hotplug = True
             log.debug("Hotplug failed: %s", str(e))
-            hotplug_err = ((str(e), "".join(traceback.format_exc())))
+            hotplug_err = (str(e), "".join(traceback.format_exc()))
 
         if did_hotplug and not hotplug_err:
             return True
 
-        msg = _("These changes will take effect after "
-                "the next guest shutdown.")
-        dtype = (Gtk.MessageType.WARNING if hotplug_err else
-                 Gtk.MessageType.INFO)
+        msg = _("These changes will take effect after the next guest shutdown.")
+        dtype = Gtk.MessageType.WARNING if hotplug_err else Gtk.MessageType.INFO
         hotplug_msg = ""
         if hotplug_err:
-            hotplug_msg += (hotplug_err[0] + "\n\n" +
-                            hotplug_err[1] + "\n")
+            hotplug_msg += hotplug_err[0] + "\n\n" + hotplug_err[1] + "\n"
 
-        err.show_err(msg,
-                details=hotplug_msg,
-                buttons=Gtk.ButtonsType.OK,
-                dialog_type=dtype)
+        err.show_err(msg, details=hotplug_msg, buttons=Gtk.ButtonsType.OK, dialog_type=dtype)
 
         return True
-
 
     #####################
     # Pretty UI helpers #
@@ -394,13 +429,13 @@ class vmmAddHardware(vmmGObjectUI):
         if char_class.XML_NAME == "console":
             return [DeviceSerial.TYPE_PTY]
 
-        ret = [DeviceSerial.TYPE_PTY,
-               DeviceSerial.TYPE_FILE,
-               DeviceSerial.TYPE_UNIX]
+        ret = [DeviceSerial.TYPE_PTY, DeviceSerial.TYPE_FILE, DeviceSerial.TYPE_UNIX]
         if char_class.XML_NAME == "channel":
-            ret = [DeviceSerial.TYPE_SPICEVMC,
-                   DeviceSerial.TYPE_SPICEPORT,
-                   DeviceSerial.TYPE_QEMUVDAGENT] + ret
+            ret = [
+                DeviceSerial.TYPE_SPICEVMC,
+                DeviceSerial.TYPE_SPICEPORT,
+                DeviceSerial.TYPE_QEMUVDAGENT,
+            ] + ret
         return ret
 
     @staticmethod
@@ -432,10 +467,12 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def controller_recommended_types():
-        return [DeviceController.TYPE_SCSI,
-                DeviceController.TYPE_USB,
-                DeviceController.TYPE_VIRTIOSERIAL,
-                DeviceController.TYPE_CCID]
+        return [
+            DeviceController.TYPE_SCSI,
+            DeviceController.TYPE_USB,
+            DeviceController.TYPE_VIRTIOSERIAL,
+            DeviceController.TYPE_CCID,
+        ]
 
     @staticmethod
     def controller_pretty_type(val):
@@ -564,8 +601,7 @@ class vmmAddHardware(vmmGObjectUI):
         bus_label = bus_labels.get(bus, bus)
         typ_label = typ_labels.get(typ, typ)
         # translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-        ret = _("%(input_bus)s %(input_type)s") % {
-                "input_bus": bus_label, "input_type": typ_label}
+        ret = _("%(input_bus)s %(input_type)s") % {"input_bus": bus_label, "input_type": typ_label}
         return ret
 
     @staticmethod
@@ -632,17 +668,18 @@ class vmmAddHardware(vmmGObjectUI):
         elif hostdev.bus and hostdev.device:
             label += " %s:%s" % (safeint(hostdev.bus), safeint(hostdev.device))
 
-        elif (hostdev.bus and hostdev.slot and
-              hostdev.function and hostdev.domain):
-            label += (" %s:%s:%s.%s" %
-                      (dehex(hostdev.domain), dehex(hostdev.bus),
-                       dehex(hostdev.slot), dehex(hostdev.function)))
+        elif hostdev.bus and hostdev.slot and hostdev.function and hostdev.domain:
+            label += " %s:%s:%s.%s" % (
+                dehex(hostdev.domain),
+                dehex(hostdev.bus),
+                dehex(hostdev.slot),
+                dehex(hostdev.function),
+            )
 
         elif hostdev.uuid:
             label += " %s" % (str(hostdev.uuid))
 
         return label
-
 
     #########################
     # UI init/reset helpers #
@@ -656,20 +693,16 @@ class vmmAddHardware(vmmGObjectUI):
         icon = Gtk.CellRendererPixbuf()
         icon.set_property("stock-size", Gtk.IconSize.BUTTON)
         target_list.pack_start(icon, False)
-        target_list.add_attribute(icon, 'icon-name', 1)
+        target_list.add_attribute(icon, "icon-name", 1)
         text = Gtk.CellRendererText()
         text.set_property("xpad", 6)
         target_list.pack_start(text, True)
-        target_list.add_attribute(text, 'text', 2)
-        target_model.append([DeviceDisk.DEVICE_DISK,
-                      "drive-harddisk", _("Disk device")])
-        target_model.append([DeviceDisk.DEVICE_CDROM,
-                      "media-optical", _("CDROM device")])
-        target_model.append([DeviceDisk.DEVICE_FLOPPY,
-                      "media-floppy", _("Floppy device")])
+        target_list.add_attribute(text, "text", 2)
+        target_model.append([DeviceDisk.DEVICE_DISK, "drive-harddisk", _("Disk device")])
+        target_model.append([DeviceDisk.DEVICE_CDROM, "media-optical", _("CDROM device")])
+        target_model.append([DeviceDisk.DEVICE_FLOPPY, "media-floppy", _("Floppy device")])
         if self.conn.is_qemu() or self.conn.is_test():
-            target_model.append([DeviceDisk.DEVICE_LUN,
-                          "drive-harddisk", _("LUN Passthrough")])
+            target_model.append([DeviceDisk.DEVICE_LUN, "drive-harddisk", _("LUN Passthrough")])
         target_list.set_active(0)
 
     @staticmethod
@@ -685,7 +718,6 @@ class vmmAddHardware(vmmGObjectUI):
         for bus in buses:
             model.append([bus, vmmAddHardware.disk_pretty_bus(bus)])
 
-
     @staticmethod
     def populate_network_model_combo(vm, combo):
         model = combo.get_model()
@@ -696,14 +728,12 @@ class vmmAddHardware(vmmGObjectUI):
         for netmodel in vmmAddHardware.interface_recommended_models(vm.xmlobj):
             model.append([netmodel, netmodel])
 
-        uiutil.set_list_selection(
-                combo, DeviceInterface.default_model(vm.xmlobj))
+        uiutil.set_list_selection(combo, DeviceInterface.default_model(vm.xmlobj))
 
     @staticmethod
     def build_network_model_combo(vm, combo):
         uiutil.build_simple_combo(combo, [])
         vmmAddHardware.populate_network_model_combo(vm, combo)
-
 
     def _build_input_combo(self):
         devices = [
@@ -714,10 +744,8 @@ class vmmAddHardware(vmmGObjectUI):
             (DeviceInput.TYPE_TABLET, DeviceInput.BUS_VIRTIO),
         ]
 
-        cvals = [((t, b), vmmAddHardware.input_pretty_name(t, b))
-                 for t, b in devices]
+        cvals = [((t, b), vmmAddHardware.input_pretty_name(t, b)) for t, b in devices]
         uiutil.build_simple_combo(self.widget("input-type"), cvals)
-
 
     @staticmethod
     def build_sound_combo(vm, combo):
@@ -728,7 +756,6 @@ class vmmAddHardware(vmmGObjectUI):
         default = DeviceSound.default_model(vm.xmlobj)
         uiutil.build_simple_combo(combo, values, default_value=default)
 
-
     def _build_hostdev_treeview(self):
         host_dev = self.widget("host-device")
         # [ xmlobj, label, sensitive, tooltip]
@@ -737,18 +764,16 @@ class vmmAddHardware(vmmGObjectUI):
         host_col = Gtk.TreeViewColumn()
         text = Gtk.CellRendererText()
         host_col.pack_start(text, True)
-        host_col.add_attribute(text, 'text', 1)
-        host_col.add_attribute(text, 'sensitive', 2)
+        host_col.add_attribute(text, "text", 1)
+        host_col.add_attribute(text, "sensitive", 2)
         host_dev.set_tooltip_column(3)
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
-
 
     def _hostdev_row_selected_cb(self, selection):
         model, treeiter = selection.get_selected()
         sensitive = treeiter and model[treeiter][2] or False
         self.widget("create-finish").set_sensitive(sensitive)
-
 
     def _populate_hostdev_model(self, devtype):
         devlist = self.widget("host-device")
@@ -774,15 +799,19 @@ class vmmAddHardware(vmmGObjectUI):
             if devtype == "mdev" and len(prettyname) <= 41:
                 for parentdev in self.conn.list_nodedevs():
                     if dev.xmlobj.parent == parentdev.xmlobj.name:
-                        prettyname = "%s %s" % (
-                                parentdev.pretty_name(), prettyname)
+                        prettyname = "%s %s" % (parentdev.pretty_name(), prettyname)
 
             tooltip = None
             sensitive = dev.is_active()
             if not sensitive:
-                tooltip = _("%s is not active in the host system.\n"
-                      "Please start the mdev in the host system before "
-                      "adding it to the guest.") % prettyname
+                tooltip = (
+                    _(
+                        "%s is not active in the host system.\n"
+                        "Please start the mdev in the host system before "
+                        "adding it to the guest."
+                    )
+                    % prettyname
+                )
             model.append([dev.xmlobj, prettyname, sensitive, tooltip])
 
         if len(model) == 0:
@@ -790,10 +819,8 @@ class vmmAddHardware(vmmGObjectUI):
 
         uiutil.set_list_selection_by_number(devlist, 0)
 
-        devlist.get_selection().connect(
-                "changed", self._hostdev_row_selected_cb)
+        devlist.get_selection().connect("changed", self._hostdev_row_selected_cb)
         devlist.get_selection().emit("changed")
-
 
     @staticmethod
     def build_video_combo(vm, combo):
@@ -804,7 +831,6 @@ class vmmAddHardware(vmmGObjectUI):
             values.append([None, _("Hypervisor default")])
         default = DeviceVideo.default_model(vm.xmlobj)
         uiutil.build_simple_combo(combo, values, default_value=default)
-
 
     def _build_char_target_type_combo(self):
         values = []
@@ -829,7 +855,6 @@ class vmmAddHardware(vmmGObjectUI):
             model.append([t, vmmAddHardware.char_pretty_type(t) + " (%s)" % t])
         uiutil.set_list_selection(self.widget("char-device-type"), "pty")
 
-
     @staticmethod
     def build_watchdogmodel_combo(_vm, combo):
         values = []
@@ -844,7 +869,6 @@ class vmmAddHardware(vmmGObjectUI):
             values.append([m, vmmAddHardware.watchdog_pretty_action(m)])
         uiutil.build_simple_combo(combo, values, default_value=DeviceWatchdog.ACTION_RESET)
 
-
     @staticmethod
     def build_smartcard_mode_combo(_vm, combo):
         values = [
@@ -853,11 +877,9 @@ class vmmAddHardware(vmmGObjectUI):
         ]
         uiutil.build_simple_combo(combo, values)
 
-
     def _build_redir_type_combo(self):
         values = [["spicevmc", _("Spice channel")]]
         uiutil.build_simple_combo(self.widget("usbredir-list"), values)
-
 
     def _build_panic_model_combo(self):
         guest = self.vm.get_xmlobj()
@@ -868,14 +890,14 @@ class vmmAddHardware(vmmGObjectUI):
         uiutil.build_simple_combo(self.widget("panic-model"), values)
         uiutil.set_list_selection(self.widget("panic-model"), None)
 
-
     def _build_controller_type_combo(self):
         values = []
         for t in vmmAddHardware.controller_recommended_types():
             values.append([t, vmmAddHardware.controller_pretty_type(t)])
 
-        uiutil.build_simple_combo(self.widget("controller-type"), values,
-                default_value=DeviceController.TYPE_SCSI)
+        uiutil.build_simple_combo(
+            self.widget("controller-type"), values, default_value=DeviceController.TYPE_SCSI
+        )
 
     @staticmethod
     def populate_controller_model_combo(combo, controller_type):
@@ -893,8 +915,6 @@ class vmmAddHardware(vmmGObjectUI):
         for row in rows:
             model.append(row)
         uiutil.set_list_selection(combo, rows[0][0])
-
-
 
     #########################
     # Internal misc helpers #
@@ -925,7 +945,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.widget("top-pages").set_current_page(1)
         self.widget("error-label").set_text(msg or "Hardware selection error.")
         self.widget("create-finish").set_sensitive(False)
-
 
     ################
     # UI listeners #
@@ -1022,7 +1041,6 @@ class vmmAddHardware(vmmGObjectUI):
         dev = self._build_device(check_xmleditor=False)
         self._xmleditor.set_xml(dev and dev.get_xml() or "")
 
-
     #########################
     # Device page listeners #
     #########################
@@ -1045,19 +1063,16 @@ class vmmAddHardware(vmmGObjectUI):
             widget.set_active(0)
 
     def _change_storage_devtype(self, ignore):
-        devtype = uiutil.get_list_selection(
-            self.widget("storage-devtype"))
+        devtype = uiutil.get_list_selection(self.widget("storage-devtype"))
         self._refresh_disk_bus(devtype)
 
         allow_create = devtype not in ["cdrom", "floppy"]
-        self.addstorage.widget("storage-create-box").set_sensitive(
-            allow_create)
+        self.addstorage.widget("storage-create-box").set_sensitive(allow_create)
         if not allow_create:
             self.addstorage.widget("storage-select").set_active(True)
 
     def _storage_bus_changed_cb(self, src):
-        bus = uiutil.get_list_selection(
-            self.widget("storage-bustype"))
+        bus = uiutil.get_list_selection(self.widget("storage-bustype"))
         self.addstorage.set_disk_bus(bus)
 
     def _change_macaddr_use(self, ignore=None):
@@ -1084,12 +1099,13 @@ class vmmAddHardware(vmmGObjectUI):
         elif text == DeviceChannel.CHANNEL_NAME_SPICE_WEBDAV:
             settype = "spiceport"
             self.widget("char-channel").set_text(text)
-        elif (text == DeviceChannel.CHANNEL_NAME_QEMUGA or
-              text == DeviceChannel.CHANNEL_NAME_LIBGUESTFS):
+        elif (
+            text == DeviceChannel.CHANNEL_NAME_QEMUGA
+            or text == DeviceChannel.CHANNEL_NAME_LIBGUESTFS
+        ):
             settype = "unix"
         if settype:
-            uiutil.set_list_selection(
-                self.widget("char-device-type"), settype)
+            uiutil.set_list_selection(self.widget("char-device-type"), settype)
 
     def _change_char_device_type(self, src):
         devtype = uiutil.get_list_selection(src)
@@ -1104,24 +1120,19 @@ class vmmAddHardware(vmmGObjectUI):
         iscon = dev.DEVICE_TYPE == "console"
         show_auto = devtype == "unix" and ischan
 
-        supports_path = [dev.TYPE_FILE, dev.TYPE_UNIX,
-                         dev.TYPE_DEV, dev.TYPE_PIPE]
+        supports_path = [dev.TYPE_FILE, dev.TYPE_UNIX, dev.TYPE_DEV, dev.TYPE_PIPE]
         supports_channel = [dev.TYPE_SPICEPORT]
         supports_clipboard = [dev.TYPE_QEMUVDAGENT]
 
-        uiutil.set_grid_row_visible(self.widget("char-path-label"),
-                devtype in supports_path)
-        uiutil.set_grid_row_visible(self.widget("char-channel-label"),
-                devtype in supports_channel)
-        uiutil.set_grid_row_visible(self.widget("char-vdagent-clipboard-label"),
-                devtype in supports_clipboard)
+        uiutil.set_grid_row_visible(self.widget("char-path-label"), devtype in supports_path)
+        uiutil.set_grid_row_visible(self.widget("char-channel-label"), devtype in supports_channel)
+        uiutil.set_grid_row_visible(
+            self.widget("char-vdagent-clipboard-label"), devtype in supports_clipboard
+        )
 
-        uiutil.set_grid_row_visible(
-            self.widget("char-target-name-label"), ischan)
-        uiutil.set_grid_row_visible(
-            self.widget("char-target-type-label"), iscon)
-        uiutil.set_grid_row_visible(
-            self.widget("char-auto-socket-label"), show_auto)
+        uiutil.set_grid_row_visible(self.widget("char-target-name-label"), ischan)
+        uiutil.set_grid_row_visible(self.widget("char-target-type-label"), iscon)
+        uiutil.set_grid_row_visible(self.widget("char-auto-socket-label"), show_auto)
         self.widget("char-auto-socket").emit("toggled")
 
     def _change_usbredir_type(self, src):
@@ -1133,27 +1144,28 @@ class vmmAddHardware(vmmGObjectUI):
 
         def show_tooltip(model_tooltip, show):
             vmname = self.vm.get_name()
-            tooltip = (_("%s already has a USB controller attached.\n"
-            "Adding more than one USB controller is not supported.\n"
-            "You can change the USB controller type in the VM details screen.")
-            % vmname)
+            tooltip = (
+                _(
+                    "%s already has a USB controller attached.\n"
+                    "Adding more than one USB controller is not supported.\n"
+                    "You can change the USB controller type in the VM details screen."
+                )
+                % vmname
+            )
             model_tooltip.set_visible(show)
             model_tooltip.set_tooltip_text(tooltip)
 
-        controller_type = uiutil.get_list_selection(
-            self.widget("controller-type"))
+        controller_type = uiutil.get_list_selection(self.widget("controller-type"))
         combo.set_sensitive(True)
         model_tooltip = self.widget("controller-tooltip")
         show_tooltip(model_tooltip, False)
 
         controllers = self.vm.xmlobj.devices.controller
         if controller_type == DeviceController.TYPE_USB:
-            usb_controllers = [x for x in controllers if
-                    (x.type == DeviceController.TYPE_USB)]
-            if (len(usb_controllers) == 0):
+            usb_controllers = [x for x in controllers if (x.type == DeviceController.TYPE_USB)]
+            if len(usb_controllers) == 0:
                 self.widget("create-finish").set_sensitive(True)
-            elif (len(usb_controllers) == 1 and
-                  usb_controllers[0].model == "none"):
+            elif len(usb_controllers) == 1 and usb_controllers[0].model == "none":
                 self._remove_usb_controller = usb_controllers[0]
                 self.widget("create-finish").set_sensitive(True)
             else:
@@ -1165,7 +1177,6 @@ class vmmAddHardware(vmmGObjectUI):
         self.populate_controller_model_combo(combo, controller_type)
         uiutil.set_grid_row_visible(combo, len(combo.get_model()) > 1)
 
-
     ######################
     # Add device methods #
     ######################
@@ -1175,8 +1186,7 @@ class vmmAddHardware(vmmGObjectUI):
             return
 
         poolname = None
-        if (dev.wants_storage_creation() and
-            dev.get_parent_pool()):
+        if dev.wants_storage_creation() and dev.get_parent_pool():
             poolname = dev.get_parent_pool().name()
 
         log.debug("Running build_storage() for device=%s", dev)
@@ -1188,9 +1198,11 @@ class vmmAddHardware(vmmGObjectUI):
                 pool = self.conn.get_pool_by_name(poolname)
                 self.idle_add(pool.refresh)
             except Exception:  # pragma: no cover
-                log.debug("Error looking up pool=%s for refresh after "
-                    "storage creation.", poolname, exc_info=True)
-
+                log.debug(
+                    "Error looking up pool=%s for refresh after storage creation.",
+                    poolname,
+                    exc_info=True,
+                )
 
     def _add_device(self, dev):
         xml = dev.get_xml()
@@ -1200,9 +1212,13 @@ class vmmAddHardware(vmmGObjectUI):
             kwargs = {}
             kwargs["model"] = self._selected_model
 
-            self.change_config_helper(self.vm.define_controller,
-                    kwargs, self.vm, self.err,
-                    devobj=self._remove_usb_controller)
+            self.change_config_helper(
+                self.vm.define_controller,
+                kwargs,
+                self.vm,
+                self.err,
+                devobj=self._remove_usb_controller,
+            )
 
             self._remove_usb_controller = None
             self._selected_model = None
@@ -1211,8 +1227,7 @@ class vmmAddHardware(vmmGObjectUI):
 
         controller = getattr(dev, "vmm_controller", None)
         if controller is not None:
-            log.debug("Adding controller:\n%s",
-                          controller.get_xml())
+            log.debug("Adding controller:\n%s", controller.get_xml())
         # Hotplug device
         attach_err = False
         try:
@@ -1228,12 +1243,16 @@ class vmmAddHardware(vmmGObjectUI):
                 _("Are you sure you want to add this device?"),
                 details=(attach_err[0] + "\n\n" + attach_err[1]),
                 text2=(
-                _("This device could not be attached to the running machine. "
-                  "Would you like to make the device available after the "
-                  "next guest shutdown?")),
+                    _(
+                        "This device could not be attached to the running machine. "
+                        "Would you like to make the device available after the "
+                        "next guest shutdown?"
+                    )
+                ),
                 dialog_type=Gtk.MessageType.WARNING,
                 buttons=Gtk.ButtonsType.YES_NO,
-                modal=True)
+                modal=True,
+            )
 
             if not res:
                 return False
@@ -1272,19 +1291,20 @@ class vmmAddHardware(vmmGObjectUI):
             if self._validate_device(dev) is False:
                 return
         except Exception as e:
-            self.err.show_err(
-                    _("Error validating device parameters: %s") % str(e))
+            self.err.show_err(_("Error validating device parameters: %s") % str(e))
             return
 
         self.set_finish_cursor()
-        progWin = vmmAsyncJob(self._setup_device, [dev],
-                              self._finish_cb, [dev],
-                              _("Creating device"),
-                              _("Depending on the device, this may take "
-                                "a few minutes to complete."),
-                              self.topwin)
+        progWin = vmmAsyncJob(
+            self._setup_device,
+            [dev],
+            self._finish_cb,
+            [dev],
+            _("Creating device"),
+            _("Depending on the device, this may take a few minutes to complete."),
+            self.topwin,
+        )
         progWin.run()
-
 
     ###########################
     # Device build/validation #
@@ -1302,9 +1322,9 @@ class vmmAddHardware(vmmGObjectUI):
                     names.append(vm.get_name())
         if names:
             res = self.err.yes_no(
-                    _('The device is already in use by other guests %s') %
-                     (names),
-                    _("Do you really want to use the device?"))
+                _("The device is already in use by other guests %s") % (names),
+                _("Do you really want to use the device?"),
+            )
             if not res:
                 return False
 
@@ -1329,8 +1349,7 @@ class vmmAddHardware(vmmGObjectUI):
         dev = devclass(srcdev.conn, parsexml=xml)
 
         if srcdev.DEVICE_TYPE == "disk":
-            if (srcdev.get_source_path() == dev.get_source_path() and
-                srcdev.get_vol_install()):
+            if srcdev.get_source_path() == dev.get_source_path() and srcdev.get_vol_install():
                 dev.set_vol_install(srcdev.get_vol_install())
             elif dev.get_source_path():
                 # Needed to convince disk.validate() to validate a passed path
@@ -1348,8 +1367,7 @@ class vmmAddHardware(vmmGObjectUI):
 
             return dev
         except Exception as e:
-            self.err.show_err(
-                    _("Error building device XML: %s") % str(e))
+            self.err.show_err(_("Error building device XML: %s") % str(e))
             return
 
     def _build_device_page(self, page_num):
@@ -1405,20 +1423,18 @@ class vmmAddHardware(vmmGObjectUI):
         disk.vmm_controller = controller
 
     def _build_storage(self):
-        bus = uiutil.get_list_selection(
-            self.widget("storage-bustype"))
-        device = uiutil.get_list_selection(
-            self.widget("storage-devtype"))
+        bus = uiutil.get_list_selection(self.widget("storage-bustype"))
+        device = uiutil.get_list_selection(self.widget("storage-devtype"))
 
-        disk = self.addstorage.build_device(self.vm.get_name(),
-            collideguest=self.vm.xmlobj, device=device)
+        disk = self.addstorage.build_device(
+            self.vm.get_name(), collideguest=self.vm.xmlobj, device=device
+        )
 
         used = []
         disk.bus = bus
 
         # Generate target
-        disks = (self.vm.xmlobj.devices.disk +
-                 self.vm.get_xmlobj(inactive=True).devices.disk)
+        disks = self.vm.xmlobj.devices.disk + self.vm.get_xmlobj(inactive=True).devices.disk
         for d in disks:
             if d.target not in used:
                 used.append(d.target)
@@ -1537,21 +1553,18 @@ class vmmAddHardware(vmmGObjectUI):
         return dev
 
     def _build_controller(self):
-        controller_type = uiutil.get_list_selection(
-            self.widget("controller-type"))
+        controller_type = uiutil.get_list_selection(self.widget("controller-type"))
         model = uiutil.get_list_selection(self.widget("controller-model"))
 
         self._selected_model = model
         if model == "usb3":
-            dev = DeviceController.get_usb3_controller(
-                    self.conn.get_backend(), self.vm.xmlobj)
+            dev = DeviceController.get_usb3_controller(self.conn.get_backend(), self.vm.xmlobj)
             model = None
         else:
             dev = DeviceController(self.conn.get_backend())
 
         controllers = self.vm.xmlobj.devices.controller
-        controller_num = [x for x in controllers if
-                (x.type == controller_type)]
+        controller_num = [x for x in controllers if (x.type == controller_type)]
         if len(controller_num) > 0:
             index_new = max(int(x.index or 0) for x in controller_num) + 1
             dev.index = index_new
@@ -1569,7 +1582,6 @@ class vmmAddHardware(vmmGObjectUI):
         dev.device = device
         return dev
 
-
     ####################
     # Unsorted helpers #
     ####################
@@ -1582,9 +1594,7 @@ class vmmAddHardware(vmmGObjectUI):
             if path:
                 textent.set_text(path)
 
-        reason = (isdir and
-                  vmmStorageBrowser.REASON_FS or
-                  vmmStorageBrowser.REASON_IMAGE)
+        reason = isdir and vmmStorageBrowser.REASON_FS or vmmStorageBrowser.REASON_IMAGE
         if self._storagebrowser is None:
             self._storagebrowser = vmmStorageBrowser(self.conn)
 

@@ -11,9 +11,10 @@ import sys
 import traceback
 
 import gi
+
 gi.require_version("Gdk", "3.0")
 gi.require_version("Gtk", "3.0")
-gi.require_version('LibvirtGLib', '1.0')
+gi.require_version("LibvirtGLib", "1.0")
 from gi.repository import LibvirtGLib
 
 from virtinst import BuildConfig
@@ -35,18 +36,13 @@ except (ValueError, AttributeError):  # pragma: no cover
 
 
 def _show_startup_error(msg, details):
-    log.debug("Error starting virt-manager: %s\n%s", msg, details,
-                  exc_info=True)
+    log.debug("Error starting virt-manager: %s\n%s", msg, details, exc_info=True)
     from .error import vmmErrorDialog
+
     err = vmmErrorDialog.get_instance()
     title = _("Error starting Virtual Machine Manager")
-    errmsg = (_("Error starting Virtual Machine Manager: %(error)s") %
-              {"error": msg})
-    err.show_err(errmsg,
-                 details=details,
-                 title=title,
-                 modal=True,
-                 debug=False)
+    errmsg = _("Error starting Virtual Machine Manager: %(error)s") % {"error": msg}
+    err.show_err(errmsg, details=details, title=title, modal=True, debug=False)
 
 
 def _import_gtk(leftovers):
@@ -60,6 +56,7 @@ def _import_gtk(leftovers):
     try:
         sys.argv = origargv[:1] + leftovers[:]
         from gi.repository import Gtk
+
         leftovers = sys.argv[1:]
 
         if Gtk.check_version(3, 22, 0):  # pragma: no cover
@@ -72,6 +69,7 @@ def _import_gtk(leftovers):
 
         # This ensures we can init gsettings correctly
         from . import config
+
         ignore = config
     finally:
         sys.argv = origargv
@@ -89,8 +87,7 @@ def _setup_gsettings_path(schemadir):
 
     exe = shutil.which("glib-compile-schemas")
     if not exe:  # pragma: no cover
-        raise RuntimeError("You must install glib-compile-schemas to run "
-            "virt-manager from git.")
+        raise RuntimeError("You must install glib-compile-schemas to run virt-manager from git.")
     subprocess.check_call([exe, "--strict", schemadir])
 
 
@@ -140,46 +137,55 @@ def do_we_fork(options):
 
 
 def parse_commandline():
-    epilog = ("Also accepts standard GTK arguments like --g-fatal-warnings")
-    parser = argparse.ArgumentParser(usage="virt-manager [options]",
-                                     epilog=epilog)
-    parser.add_argument('--version', action='version',
-                        version=BuildConfig.version)
+    epilog = "Also accepts standard GTK arguments like --g-fatal-warnings"
+    parser = argparse.ArgumentParser(usage="virt-manager [options]", epilog=epilog)
+    parser.add_argument("--version", action="version", version=BuildConfig.version)
     parser.set_defaults(domain=None)
 
     # Trace every libvirt API call to debug output
-    parser.add_argument("--trace-libvirt", choices=["all", "mainloop"],
-        help=argparse.SUPPRESS)
+    parser.add_argument("--trace-libvirt", choices=["all", "mainloop"], help=argparse.SUPPRESS)
 
     # comma separated string of options to tweak app behavior,
     # for manual and automated testing config
-    parser.add_argument("--test-options", action='append',
-            default=[], help=argparse.SUPPRESS)
+    parser.add_argument("--test-options", action="append", default=[], help=argparse.SUPPRESS)
 
-    parser.add_argument("-c", "--connect", dest="uri",
-        help="Connect to hypervisor at URI", metavar="URI")
-    parser.add_argument("--debug", action="store_true",
+    parser.add_argument(
+        "-c", "--connect", dest="uri", help="Connect to hypervisor at URI", metavar="URI"
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
         help="Print debug output to stdout (implies --no-fork)",
-        default=False)
-    parser.add_argument("--no-fork", action="store_true",
-        help="Don't fork into background on startup")
-    parser.add_argument("--fork", action="store_true",
-        help="Force fork into background on startup (this is the default)")
+        default=False,
+    )
+    parser.add_argument(
+        "--no-fork", action="store_true", help="Don't fork into background on startup"
+    )
+    parser.add_argument(
+        "--fork",
+        action="store_true",
+        help="Force fork into background on startup (this is the default)",
+    )
 
-    parser.add_argument("--show-domain-creator", action="store_true",
-        help="Show 'New VM' wizard")
-    parser.add_argument("--show-domain-editor", metavar="NAME|ID|UUID",
-        help="Show domain details window")
-    parser.add_argument("--show-domain-performance", metavar="NAME|ID|UUID",
-        help="Show domain performance window")
-    parser.add_argument("--show-domain-console", metavar="NAME|ID|UUID",
-        help="Show domain graphical console window")
-    parser.add_argument("--show-domain-delete", metavar="NAME|ID|UUID",
-        help="Show domain delete window")
-    parser.add_argument("--show-host-summary", action="store_true",
-        help="Show connection details window")
-    parser.add_argument("--show-systray", action="store_true",
-        help="Launch virt-manager only in system tray")
+    parser.add_argument("--show-domain-creator", action="store_true", help="Show 'New VM' wizard")
+    parser.add_argument(
+        "--show-domain-editor", metavar="NAME|ID|UUID", help="Show domain details window"
+    )
+    parser.add_argument(
+        "--show-domain-performance", metavar="NAME|ID|UUID", help="Show domain performance window"
+    )
+    parser.add_argument(
+        "--show-domain-console", metavar="NAME|ID|UUID", help="Show domain graphical console window"
+    )
+    parser.add_argument(
+        "--show-domain-delete", metavar="NAME|ID|UUID", help="Show domain delete window"
+    )
+    parser.add_argument(
+        "--show-host-summary", action="store_true", help="Show connection details window"
+    )
+    parser.add_argument(
+        "--show-systray", action="store_true", help="Launch virt-manager only in system tray"
+    )
 
     return parser.parse_known_args()
 
@@ -199,9 +205,10 @@ def main():
         log.debug("Libvirt tracing requested")
         from .lib import module_trace
         import libvirt
-        module_trace.wrap_module(libvirt,
-                mainloop=(options.trace_libvirt == "mainloop"),
-                regex=None)
+
+        module_trace.wrap_module(
+            libvirt, mainloop=(options.trace_libvirt == "mainloop"), regex=None
+        )
 
     CLITestOptions = CLITestOptionsClass(options.test_options)
 
@@ -211,8 +218,7 @@ def main():
     # Force SSH to use askpass if a password is required,
     # rather than possibly prompting on a terminal the user isn't looking at.
     os.environ.setdefault("SSH_ASKPASS_REQUIRE", "force")
-    log.debug("Using SSH_ASKPASS_REQUIRE=%s",
-              os.environ["SSH_ASKPASS_REQUIRE"])
+    log.debug("Using SSH_ASKPASS_REQUIRE=%s", os.environ["SSH_ASKPASS_REQUIRE"])
 
     # Now we've got basic environment up & running we can fork
     do_fork = do_we_fork(options)
@@ -229,17 +235,19 @@ def main():
     if leftovers:
         raise RuntimeError("Unhandled command line options '%s'" % leftovers)
 
-    log.debug("PyGObject version: %d.%d.%d",
-                  gi.version_info[0],
-                  gi.version_info[1],
-                  gi.version_info[2])
-    log.debug("GTK version: %d.%d.%d",
-                  Gtk.get_major_version(),
-                  Gtk.get_minor_version(),
-                  Gtk.get_micro_version())
+    log.debug(
+        "PyGObject version: %d.%d.%d", gi.version_info[0], gi.version_info[1], gi.version_info[2]
+    )
+    log.debug(
+        "GTK version: %d.%d.%d",
+        Gtk.get_major_version(),
+        Gtk.get_minor_version(),
+        Gtk.get_micro_version(),
+    )
 
     # Prime the vmmConfig cache
     from . import config
+
     config.vmmConfig.get_instance(BuildConfig, CLITestOptions)
 
     # Add our icon dir to icon theme
@@ -247,6 +255,7 @@ def main():
     icon_theme.prepend_search_path(BuildConfig.icon_dir)
 
     from .engine import vmmEngine
+
     Gtk.Window.set_default_icon_name("virt-manager")
 
     show_window = None
@@ -270,10 +279,10 @@ def main():
     elif options.show_systray:
         show_window = vmmEngine.CLI_SHOW_SYSTEM_TRAY
 
-    if (show_window and show_window != vmmEngine.CLI_SHOW_SYSTEM_TRAY and
-        options.uri is None):  # pragma: no cover
-        raise RuntimeError("can't use --show-* options without --connect "
-                           "(except --show-systray)")
+    if (
+        show_window and show_window != vmmEngine.CLI_SHOW_SYSTEM_TRAY and options.uri is None
+    ):  # pragma: no cover
+        raise RuntimeError("can't use --show-* options without --connect (except --show-systray)")
 
     skip_autostart = False
     if show_window and show_window != vmmEngine.CLI_SHOW_SYSTEM_TRAY:
@@ -287,12 +296,13 @@ def main():
 
     # Actually exit when we receive ctrl-c
     from gi.repository import GLib
+
     def _sigint_handler(user_data):
         ignore = user_data
         log.debug("Received KeyboardInterrupt. Exiting application.")
         engine.exit_app()
-    GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT,
-                         _sigint_handler, None)
+
+    GLib.unix_signal_add(GLib.PRIORITY_DEFAULT, signal.SIGINT, _sigint_handler, None)
 
     engine.start(options.uri, show_window, domain, skip_autostart)
 

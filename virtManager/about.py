@@ -17,17 +17,18 @@ class vmmAbout(vmmGObjectUI):
                 cls._instance = vmmAbout()
             cls._instance.show(parentobj.topwin)
         except Exception as e:  # pragma: no cover
-            parentobj.err.show_err(
-                    _("Error launching 'About' dialog: %s") % str(e))
+            parentobj.err.show_err(_("Error launching 'About' dialog: %s") % str(e))
 
     def __init__(self):
         vmmGObjectUI.__init__(self, "about.ui", "vmm-about")
         self._cleanup_on_app_close()
 
-        self.builder.connect_signals({
-            "on_vmm_about_delete_event": self.close,
-            "on_vmm_about_response": self.close,
-        })
+        self.builder.connect_signals(
+            {
+                "on_vmm_about_delete_event": self.close,
+                "on_vmm_about_response": self.close,
+            }
+        )
 
     def show(self, parent):
         log.debug("Showing about")
