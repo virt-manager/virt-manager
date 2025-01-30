@@ -34,7 +34,7 @@ def _random_mac(conn):
         oui = [0x00, 0x16, 0x3E]
 
     mac = oui + [random.randint(0x00, 0xFF), random.randint(0x00, 0xFF), random.randint(0x00, 0xFF)]
-    return ':'.join(["%02x" % x for x in mac])
+    return ":".join(["%02x" % x for x in mac])
 
 
 def _default_route():

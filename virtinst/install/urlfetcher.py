@@ -239,7 +239,7 @@ class _HTTPURLFetcher(_URLFetcher):
         response = self._session.get(url, stream=True)
         response.raise_for_status()
         try:
-            size = int(response.headers.get('content-length'))
+            size = int(response.headers.get("content-length"))
         except Exception:  # pragma: no cover
             size = None
         return response, size
@@ -268,8 +268,8 @@ class _FTPURLFetcher(_URLFetcher):
         try:
             parsed = urllib.parse.urlparse(self.location)
             self._ftp = ftplib.FTP()
-            username = urllib.parse.unquote(parsed.username or '')
-            password = urllib.parse.unquote(parsed.password or '')
+            username = urllib.parse.unquote(parsed.username or "")
+            password = urllib.parse.unquote(parsed.password or "")
             self._ftp.connect(parsed.hostname, parsed.port or 0)
             self._ftp.login(username, password)
             # Force binary mode

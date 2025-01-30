@@ -44,7 +44,7 @@ class _MockRequestsResponse:
         log.debug("mocking requests session for url=%s", url)
         fn = _map_mock_url_to_file(url)
         self._content = open(fn).read()
-        self.headers = {'content-length': len(self._content)}
+        self.headers = {"content-length": len(self._content)}
 
     def raise_for_status(self):
         pass

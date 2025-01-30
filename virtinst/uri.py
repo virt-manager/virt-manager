@@ -14,9 +14,9 @@ from . import xmlutil
 
 def sanitize_xml_for_test_define(xml):
     orig = xml
-    xml = re.sub("arch=\".*\"", "arch=\"i686\"", xml)
-    xml = re.sub("domain type=\".*\"", "domain type=\"test\"", xml)
-    xml = re.sub("machine type=\".*\"", "", xml)
+    xml = re.sub('arch=".*"', 'arch="i686"', xml)
+    xml = re.sub('domain type=".*"', 'domain type="test"', xml)
+    xml = re.sub('machine type=".*"', "", xml)
     xml = re.sub(">exe<", ">hvm<", xml)
     xml = re.sub(">linux<", ">xen<", xml)
 
@@ -40,11 +40,11 @@ class URI(object):
             urllib.parse.unquote, split_uri[1:]
         )
 
-        self.transport = ''
+        self.transport = ""
         if "+" in self.scheme:
             self.scheme, self.transport = self.scheme.rsplit("+", 1)
 
-        self.port = ''
+        self.port = ""
         self.is_ipv6 = False
         if self.hostname.startswith("[") and "]" in self.hostname:
             if "]:" in self.hostname:
@@ -62,7 +62,7 @@ class URI(object):
 
     def _split(self, uri):
         def splitnetloc(url, start=0):
-            for c in '/?#':  # the order is important!
+            for c in "/?#":  # the order is important!
                 delim = url.find(c, start)
                 if delim >= 0:
                     break
@@ -70,20 +70,20 @@ class URI(object):
                 delim = len(url)
             return url[start:delim], url[delim:]
 
-        scheme = username = netloc = query = fragment = ''
+        scheme = username = netloc = query = fragment = ""
         i = uri.find(":")
         if i > 0:
             scheme, uri = uri[:i].lower(), uri[i + 1 :]
-            if uri[:2] == '//':
+            if uri[:2] == "//":
                 netloc, uri = splitnetloc(uri, 2)
                 offset = netloc.find("@")
                 if offset > 0:
                     username = netloc[0:offset]
                     netloc = netloc[offset + 1 :]
-            if '#' in uri:
-                uri, fragment = uri.split('#', 1)
-            if '?' in uri:
-                uri, query = uri.split('?', 1)
+            if "#" in uri:
+                uri, fragment = uri.split("#", 1)
+            if "?" in uri:
+                uri, query = uri.split("?", 1)
         return scheme, username, netloc, uri, query, fragment
 
 

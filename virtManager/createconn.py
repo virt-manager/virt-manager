@@ -20,9 +20,9 @@ from .connmanager import vmmConnectionManager
 
 
 def _default_uri():  # pragma: no cover
-    if os.path.exists('/var/lib/xen'):
-        if os.path.exists('/dev/xen/evtchn') or os.path.exists("/proc/xen"):
-            return 'xen:///'
+    if os.path.exists("/var/lib/xen"):
+        if os.path.exists("/dev/xen/evtchn") or os.path.exists("/proc/xen"):
+            return "xen:///"
 
     if (
         os.path.exists("/usr/bin/qemu")

@@ -70,7 +70,7 @@ def test_ui_minimum_version():
         required_version = None
         for line in open(filename).readlines():
             # This is much faster than XML parsing the whole file
-            if not line.strip().startswith('<requires '):
+            if not line.strip().startswith("<requires "):
                 continue
 
             req = ET.fromstring(line)

@@ -334,7 +334,7 @@ class vmmConfig(object):
 
     def set_keys_combination(self, val):
         # Val have to be a list of integers
-        val = ','.join([str(v) for v in val])
+        val = ",".join([str(v) for v in val])
         self.conf.set("/console/grab-keys", val)
 
     def on_keys_combination_changed(self, cb):

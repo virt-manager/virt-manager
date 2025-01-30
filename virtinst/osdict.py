@@ -165,7 +165,7 @@ class _OSDB(object):
 
         def alphanum_key(obj):
             val = getattr(obj, sortkey)
-            return [to_int(c) for c in re.split('([0-9]+)', val)]
+            return [to_int(c) for c in re.split("([0-9]+)", val)]
 
         return list(sorted(oslist, key=alphanum_key))
 
@@ -368,10 +368,10 @@ class _OsVariant(object):
         return re.match(r"linux\d\d\d\d", self.name)
 
     def is_windows(self):
-        return self._family in ['win9x', 'winnt', 'win16']
+        return self._family in ["win9x", "winnt", "win16"]
 
     def get_clock(self):
-        if self.is_windows() or self._family in ['solaris']:
+        if self.is_windows() or self._family in ["solaris"]:
             return "localtime"
         return "utc"
 

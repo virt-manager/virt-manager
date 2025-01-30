@@ -241,7 +241,7 @@ class vmmAddStorage(vmmGObjectUI):
             # If the user changed the default disk format to raw, assume
             # they want to maximize performance, so fully allocate the
             # disk image. Otherwise use sparse
-            sparse = fmt != 'raw'
+            sparse = fmt != "raw"
 
             vol_install = virtinst.DeviceDisk.build_vol_install(
                 disk.conn, os.path.basename(path), pool, size, sparse

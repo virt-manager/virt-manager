@@ -89,13 +89,13 @@ class CellRendererSparkline(Gtk.CellRenderer):
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array': (
+        "data_array": (
             GObject.TYPE_PYOBJECT,
             "Data Array",
             "Array of data points for the graph",
             GObject.PARAM_READWRITE,
         ),
-        'reversed': (
+        "reversed": (
             GObject.TYPE_BOOLEAN,
             "Reverse data",
             "Process data from back to front.",
@@ -258,20 +258,20 @@ class Sparkline(Gtk.DrawingArea):
         #           nickname, long desc, (type related args), mode)
         # Type related args can be min, max for int (etc.), or default value
         # for strings and bool
-        'data_array': (
+        "data_array": (
             GObject.TYPE_PYOBJECT,
             "Data Array",
             "Array of data points for the graph",
             GObject.PARAM_READWRITE,
         ),
-        'filled': (
+        "filled": (
             GObject.TYPE_BOOLEAN,
-            'Filled',
-            'the foo of the object',
+            "Filled",
+            "the foo of the object",
             1,
             GObject.PARAM_READWRITE,
         ),
-        'num_sets': (
+        "num_sets": (
             GObject.TYPE_INT,
             "Number of sets",
             "Number of data sets to graph",
@@ -280,14 +280,14 @@ class Sparkline(Gtk.DrawingArea):
             1,
             GObject.PARAM_READWRITE,
         ),
-        'reversed': (
+        "reversed": (
             GObject.TYPE_BOOLEAN,
             "Reverse data",
             "Process data from back to front.",
             0,
             GObject.PARAM_READWRITE,
         ),
-        'rgb': (GObject.TYPE_PYOBJECT, "rgb array", "List of rgb values", GObject.PARAM_READWRITE),
+        "rgb": (GObject.TYPE_PYOBJECT, "rgb array", "List of rgb values", GObject.PARAM_READWRITE),
     }
 
     def __init__(self):

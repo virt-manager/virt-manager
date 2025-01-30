@@ -214,7 +214,7 @@ class _SUSEContent(object):
         # opensuse 10.3: DEFAULTBASE i586
         distro_arch = self.content_dict.get("BASEARCHS") or self.content_dict.get("DEFAULTBASE")
         if not distro_arch and "REPOID" in self.content_dict:
-            distro_arch = self.content_dict["REPOID"].rsplit('/', 1)[1]
+            distro_arch = self.content_dict["REPOID"].rsplit("/", 1)[1]
         if not distro_arch:
             return None  # pragma: no cover
 
@@ -267,7 +267,7 @@ class _SUSEContent(object):
 
         distro_version = self.content_dict.get("VERSION", "")
         if "-" in distro_version:
-            distro_version = distro_version.split('-', 1)[0]
+            distro_version = distro_version.split("-", 1)[0]
 
         # Special case, parse version out of a line like this
         # cpe:/o:opensuse:opensuse:13.2,openSUSE
@@ -276,9 +276,9 @@ class _SUSEContent(object):
         distro_version = distro_version.strip()
 
         if "Enterprise" in self.product_name or "SLES" in self.product_name:
-            sle_version = self.product_name.strip().rsplit(' ')[4]
-            if len(self.product_name.strip().rsplit(' ')) > 5:
-                sle_version = sle_version + '.' + self.product_name.strip().rsplit(' ')[5][2]
+            sle_version = self.product_name.strip().rsplit(" ")[4]
+            if len(self.product_name.strip().rsplit(" ")) > 5:
+                sle_version = sle_version + "." + self.product_name.strip().rsplit(" ")[5][2]
             distro_version = sle_version
 
         return distro_version
@@ -520,8 +520,8 @@ class _SuseDistro(_RHELDistro):
         # We only reach here if no treeinfo was matched
         tree_arch = self.cache.suse_content.tree_arch
 
-        if re.match(r'i[4-9]86', tree_arch):
-            tree_arch = 'i386'
+        if re.match(r"i[4-9]86", tree_arch):
+            tree_arch = "i386"
 
         oldkern = "linux"
         oldinit = "initrd"
@@ -558,12 +558,12 @@ class _SuseDistro(_RHELDistro):
         if not distro_version:
             return  # pragma: no cover
 
-        version = distro_version.split('.', 1)[0].strip()
+        version = distro_version.split(".", 1)[0].strip()
 
         if str(self._variant_prefix).startswith(("sles", "sled")):
             sp_version = ""
-            if len(distro_version.split('.', 1)) == 2:
-                sp_version = 'sp' + distro_version.split('.', 1)[1].strip()
+            if len(distro_version.split(".", 1)) == 2:
+                sp_version = "sp" + distro_version.split(".", 1)[1].strip()
 
             return self._variant_prefix + version + sp_version
 
@@ -590,7 +590,7 @@ class _SuseDistro(_RHELDistro):
             tryvar = base
             # SLE doesn't use '.0' for initial releases in
             # osinfo-db (sles11, sles12, etc)
-            if update > 0 or not base.startswith('sle'):
+            if update > 0 or not base.startswith("sle"):
                 tryvar += ".%s" % update
             if OSDB.lookup_os(tryvar):
                 return tryvar

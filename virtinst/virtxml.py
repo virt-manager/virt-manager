@@ -255,7 +255,7 @@ def action_edit(action, guest):
         inst = _find_objects_to_edit(guest, "edit", selector, parserclass)
     else:
         inst = guest
-        if selector and selector != '1' and selector != 'all':
+        if selector and selector != "1" and selector != "all":
             fail(
                 _(
                     "'--edit {option}' doesn't make sense with "
@@ -455,12 +455,12 @@ def parse_args():
 
     cli.add_connect_option(parser, "virt-xml")
 
-    parser.add_argument("domain", nargs='?', help=_("Domain name, id, or uuid"))
+    parser.add_argument("domain", nargs="?", help=_("Domain name, id, or uuid"))
 
     actg = parser.add_argument_group(_("XML actions"))
     actg.add_argument(
         "--edit",
-        nargs='?',
+        nargs="?",
         default=-1,
         help=_(
             "Edit VM XML. Examples:\n"
@@ -512,7 +512,7 @@ def parse_args():
         help=_("Force defining the domain. Only required if a --print " "option was specified."),
     )
     define_g.add_argument(
-        "--no-define", dest='define', action="store_false", help=_("Force not defining the domain.")
+        "--no-define", dest="define", action="store_false", help=_("Force not defining the domain.")
     )
     define_g.set_defaults(define=None)
     outg.add_argument("--start", action="store_true", help=_("Start the domain."))

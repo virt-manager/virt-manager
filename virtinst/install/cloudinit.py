@@ -95,7 +95,7 @@ def _create_userdata_content(cloudinit_data):
         content += "runcmd:\n"
         content += '- echo "Disabled by virt-install" > ' "/etc/cloud/cloud-init.disabled\n"
 
-    clean_content = re.sub(r"root:(.*)", 'root:[SCRUBBLED]', content)
+    clean_content = re.sub(r"root:(.*)", "root:[SCRUBBLED]", content)
     if "VIRTINST_TEST_SUITE_PRINT_CLOUDINIT" in os.environ:
         print(clean_content)
 
@@ -118,7 +118,7 @@ def create_files(scratchdir, cloudinit_data):
     data = [(metadata, "meta-data"), (userdata, "user-data")]
     network_config = _create_network_config_content(cloudinit_data)
     if network_config:
-        data.append((network_config, 'network-config'))
+        data.append((network_config, "network-config"))
 
     filepairs = []
     try:

@@ -19,34 +19,34 @@ def test_disk_numtotarget():
     #
     # Note: using single quotes in strings to avoid
     # codespell flagging the 'ba' assert
-    assert DeviceDisk.num_to_target(1) == 'a'
-    assert DeviceDisk.num_to_target(2) == 'b'
-    assert DeviceDisk.num_to_target(26) == 'z'
-    assert DeviceDisk.num_to_target(27) == 'aa'
-    assert DeviceDisk.num_to_target(28) == 'ab'
-    assert DeviceDisk.num_to_target(52) == 'az'
-    assert DeviceDisk.num_to_target(53) == 'ba'
-    assert DeviceDisk.num_to_target(27 * 26) == 'zz'
-    assert DeviceDisk.num_to_target(27 * 26 + 1) == 'aaa'
+    assert DeviceDisk.num_to_target(1) == "a"
+    assert DeviceDisk.num_to_target(2) == "b"
+    assert DeviceDisk.num_to_target(26) == "z"
+    assert DeviceDisk.num_to_target(27) == "aa"
+    assert DeviceDisk.num_to_target(28) == "ab"
+    assert DeviceDisk.num_to_target(52) == "az"
+    assert DeviceDisk.num_to_target(53) == "ba"
+    assert DeviceDisk.num_to_target(27 * 26) == "zz"
+    assert DeviceDisk.num_to_target(27 * 26 + 1) == "aaa"
 
-    assert DeviceDisk.target_to_num('hda') == 0
-    assert DeviceDisk.target_to_num('hdb') == 1
-    assert DeviceDisk.target_to_num('sdz') == 25
-    assert DeviceDisk.target_to_num('sdaa') == 26
-    assert DeviceDisk.target_to_num('vdab') == 27
-    assert DeviceDisk.target_to_num('vdaz') == 51
-    assert DeviceDisk.target_to_num('xvdba') == 52
-    assert DeviceDisk.target_to_num('xvdzz') == 26 * (25 + 1) + 25
-    assert DeviceDisk.target_to_num('xvdaaa') == 26 * 26 * 1 + 26 * 1 + 0
+    assert DeviceDisk.target_to_num("hda") == 0
+    assert DeviceDisk.target_to_num("hdb") == 1
+    assert DeviceDisk.target_to_num("sdz") == 25
+    assert DeviceDisk.target_to_num("sdaa") == 26
+    assert DeviceDisk.target_to_num("vdab") == 27
+    assert DeviceDisk.target_to_num("vdaz") == 51
+    assert DeviceDisk.target_to_num("xvdba") == 52
+    assert DeviceDisk.target_to_num("xvdzz") == 26 * (25 + 1) + 25
+    assert DeviceDisk.target_to_num("xvdaaa") == 26 * 26 * 1 + 26 * 1 + 0
 
     conn = utils.URIs.open_testdefault_cached()
     disk = virtinst.DeviceDisk(conn)
-    disk.bus = 'ide'
+    disk.bus = "ide"
 
-    assert disk.generate_target([]) == 'hda'
-    assert disk.generate_target(['hda']) == 'hdb'
-    assert disk.generate_target(['hdb', 'sda']) == 'hdc'
-    assert disk.generate_target(['hda', 'hdd']) == 'hdb'
+    assert disk.generate_target([]) == "hda"
+    assert disk.generate_target(["hda"]) == "hdb"
+    assert disk.generate_target(["hdb", "sda"]) == "hdc"
+    assert disk.generate_target(["hda", "hdd"]) == "hdb"
 
 
 def test_disk_dir_searchable(monkeypatch):
@@ -138,7 +138,7 @@ def test_disk_diskbackend_misc():
 
     # Test sparse cloning
     tmpinput = tempfile.NamedTemporaryFile()
-    open(tmpinput.name, "wb").write(b'\0' * 10000)
+    open(tmpinput.name, "wb").write(b"\0" * 10000)
 
     srcdisk = virtinst.DeviceDisk(conn)
     srcdisk.set_source_path(tmpinput.name)

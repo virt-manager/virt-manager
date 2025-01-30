@@ -182,9 +182,9 @@ class vmmAddHardware(vmmGObjectUI):
 
         hw_col.pack_start(icon, False)
         hw_col.pack_start(text, True)
-        hw_col.add_attribute(icon, 'icon-name', 1)
-        hw_col.add_attribute(text, 'text', 0)
-        hw_col.add_attribute(text, 'sensitive', 3)
+        hw_col.add_attribute(icon, "icon-name", 1)
+        hw_col.add_attribute(text, "text", 0)
+        hw_col.add_attribute(text, "sensitive", 3)
         self.widget("hw-list").append_column(hw_col)
 
         # Individual HW page UI
@@ -693,11 +693,11 @@ class vmmAddHardware(vmmGObjectUI):
         icon = Gtk.CellRendererPixbuf()
         icon.set_property("stock-size", Gtk.IconSize.BUTTON)
         target_list.pack_start(icon, False)
-        target_list.add_attribute(icon, 'icon-name', 1)
+        target_list.add_attribute(icon, "icon-name", 1)
         text = Gtk.CellRendererText()
         text.set_property("xpad", 6)
         target_list.pack_start(text, True)
-        target_list.add_attribute(text, 'text', 2)
+        target_list.add_attribute(text, "text", 2)
         target_model.append([DeviceDisk.DEVICE_DISK, "drive-harddisk", _("Disk device")])
         target_model.append([DeviceDisk.DEVICE_CDROM, "media-optical", _("CDROM device")])
         target_model.append([DeviceDisk.DEVICE_FLOPPY, "media-floppy", _("Floppy device")])
@@ -764,8 +764,8 @@ class vmmAddHardware(vmmGObjectUI):
         host_col = Gtk.TreeViewColumn()
         text = Gtk.CellRendererText()
         host_col.pack_start(text, True)
-        host_col.add_attribute(text, 'text', 1)
-        host_col.add_attribute(text, 'sensitive', 2)
+        host_col.add_attribute(text, "text", 1)
+        host_col.add_attribute(text, "sensitive", 2)
         host_dev.set_tooltip_column(3)
         host_dev_model.set_sort_column_id(1, Gtk.SortType.ASCENDING)
         host_dev.append_column(host_col)
@@ -1322,7 +1322,7 @@ class vmmAddHardware(vmmGObjectUI):
                     names.append(vm.get_name())
         if names:
             res = self.err.yes_no(
-                _('The device is already in use by other guests %s') % (names),
+                _("The device is already in use by other guests %s") % (names),
                 _("Do you really want to use the device?"),
             )
             if not res:

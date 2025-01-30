@@ -73,5 +73,5 @@ class DeviceVideo(Device):
     def set_defaults(self, guest):
         if not self.model:
             self.model = self.default_model(guest)
-        if self.model == 'virtio' and guest.has_gl():
+        if self.model == "virtio" and guest.has_gl():
             self.accel3d = True

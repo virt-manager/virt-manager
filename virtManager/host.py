@@ -162,7 +162,7 @@ class vmmHost(vmmGObjectUI):
 
         self.widget("performance-cpu").set_text("%d %%" % self.conn.host_cpu_time_percentage())
         self.widget("performance-memory").set_text(
-            _("%(currentmem)s of %(maxmem)s") % {'currentmem': vm_memory, 'maxmem': host_memory}
+            _("%(currentmem)s of %(maxmem)s") % {"currentmem": vm_memory, "maxmem": host_memory}
         )
 
         self._cpu_usage_graph.set_property("data_array", cpu_vector)

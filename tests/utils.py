@@ -266,7 +266,7 @@ def diff_compare(actual_out, filename=None, expect_out=None):
     if not expect_out.endswith("\n"):
         expect_out += "\n"
 
-    diff = xmlutil.diff(expect_out, actual_out, filename or '', "Generated output")
+    diff = xmlutil.diff(expect_out, actual_out, filename or "", "Generated output")
     if diff:
         raise AssertionError("Conversion outputs did not match.\n%s" % diff)
 

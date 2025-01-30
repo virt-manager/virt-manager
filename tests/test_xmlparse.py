@@ -21,7 +21,7 @@ DATADIR = utils.DATADIR + "/xmlparse/"
 def _sanitize_file_xml(xml):
     # s/"/'/g from generated XML, matches what libxml dumps out
     # This won't work all the time, but should be good enough for testing
-    return xml.replace("'", "\"")
+    return xml.replace("'", '"')
 
 
 def _alter_compare(conn, actualXML, outfile):
@@ -380,7 +380,7 @@ def testAlterDevicesBootorder():
     iface_2 = guest.devices.interface[1]
     redirdev_1 = guest.devices.redirdev[0]
 
-    assert guest.os.bootorder == ['hd']
+    assert guest.os.bootorder == ["hd"]
     assert disk_1.boot.order is None
     assert disk_2.boot.order == 10
     assert disk_3.boot.order == 10
@@ -575,7 +575,7 @@ def testQEMUXMLNS():
     guest.xmlns_qemu.args.add_new().value = "additional-arg"
     arg0 = guest.xmlns_qemu.args[0]
     guest.xmlns_qemu.remove_child(guest.xmlns_qemu.args[0])
-    x = "<qemu:arg xmlns:qemu=\"http://libvirt.org/schemas/domain/qemu/1.0\" value=\"-somenewarg\"/>\n"
+    x = '<qemu:arg xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" value="-somenewarg"/>\n'
     assert arg0.get_xml() == x
 
     check = _make_checker(guest.xmlns_qemu.envs[0])
@@ -653,15 +653,15 @@ def testGuestBootorder():
     kvmconn = utils.URIs.open_kvm()
     guest, outfile = _get_test_content(kvmconn, "bootorder")
 
-    assert guest.get_boot_order() == ['./devices/disk[1]']
-    assert guest.get_boot_order(legacy=True) == ['hd']
+    assert guest.get_boot_order() == ["./devices/disk[1]"]
+    assert guest.get_boot_order(legacy=True) == ["hd"]
 
-    legacy_order = ['hd', 'fd', 'cdrom', 'network']
+    legacy_order = ["hd", "fd", "cdrom", "network"]
     dev_order = [
-        './devices/disk[1]',
-        './devices/disk[3]',
-        './devices/disk[2]',
-        './devices/interface[1]',
+        "./devices/disk[1]",
+        "./devices/disk[3]",
+        "./devices/disk[2]",
+        "./devices/interface[1]",
     ]
     guest.set_boot_order(legacy_order, legacy=True)
     assert guest.get_boot_order() == dev_order

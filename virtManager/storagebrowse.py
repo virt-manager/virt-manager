@@ -164,7 +164,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         self._finish(volume.get_target_path())
 
     def _vol_sensitive_cb(self, fmt):
-        if (self._browse_reason == vmmStorageBrowser.REASON_FS) and fmt != 'dir':
+        if (self._browse_reason == vmmStorageBrowser.REASON_FS) and fmt != "dir":
             return False
         return True
 

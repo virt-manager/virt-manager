@@ -274,7 +274,7 @@ class vmmPreferences(vmmGObjectUI):
     def _process_grabkeys(self, val):
         # We convert keysyms to names
         keys = []
-        for k in val.split(','):
+        for k in val.split(","):
             try:
                 key = int(k)
                 keys.append(Gdk.keyval_name(key))

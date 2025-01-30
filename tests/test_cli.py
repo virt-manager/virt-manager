@@ -67,36 +67,36 @@ EXIST_FILES = [
 
 
 TEST_DATA = {
-    'URI-TEST-FULL': utils.URIs.test_full,
-    'URI-TEST-REMOTE': utils.URIs.test_remote,
-    'URI-KVM-X86': utils.URIs.kvm_x86,
-    'URI-KVM-X86-NODOMCAPS': utils.URIs.kvm_x86_nodomcaps,
-    'URI-KVM-ARMV7L': utils.URIs.kvm_armv7l,
-    'URI-KVM-AARCH64': utils.URIs.kvm_aarch64,
-    'URI-KVM-LOONGARCH64': utils.URIs.kvm_loongarch64,
-    'URI-KVM-PPC64LE': utils.URIs.kvm_ppc64le,
-    'URI-KVM-S390X': utils.URIs.kvm_s390x,
-    'URI-QEMU-RISCV64': utils.URIs.qemu_riscv64,
-    'XMLDIR': XMLDIR,
-    'NEWIMG1': "/pool-dir/new1.img",
-    'NEWIMG2': "/pool-dir/new2.img",
-    'NEWCLONEIMG1': NEW_FILES[0],
-    'NEWCLONEIMG2': NEW_FILES[1],
-    'NEWCLONEIMG3': NEW_FILES[2],
-    'EXISTIMG1': "/pool-dir/testvol1.img",
-    'EXISTIMG2': "/pool-dir/testvol2.img",
-    'EXISTIMG3': EXIST_FILES[0],
-    'EXISTIMG4': EXIST_FILES[1],
-    'ISOTREE': "%s/fake-fedora17-tree.iso" % MEDIA_DIR,
-    'ISOLABEL': "%s/fake-centos65-label.iso" % MEDIA_DIR,
-    'ISO-NO-OS': "%s/fake-no-osinfo.iso" % MEDIA_DIR,
-    'ISO-WIN7': "%s/fake-win7.iso" % MEDIA_DIR,
-    'ISO-F26-NETINST': "%s/fake-f26-netinst.iso" % MEDIA_DIR,
-    'ISO-F29-LIVE': "%s/fake-f29-live.iso" % MEDIA_DIR,
-    'TREEDIR': "%s/fakefedoratree" % MEDIA_DIR,
-    'COLLIDE': "/pool-dir/collidevol1.img",
-    'ADMIN-PASSWORD-FILE': "%s/admin-password.txt" % UNATTENDED_DIR,
-    'USER-PASSWORD-FILE': "%s/user-password.txt" % UNATTENDED_DIR,
+    "URI-TEST-FULL": utils.URIs.test_full,
+    "URI-TEST-REMOTE": utils.URIs.test_remote,
+    "URI-KVM-X86": utils.URIs.kvm_x86,
+    "URI-KVM-X86-NODOMCAPS": utils.URIs.kvm_x86_nodomcaps,
+    "URI-KVM-ARMV7L": utils.URIs.kvm_armv7l,
+    "URI-KVM-AARCH64": utils.URIs.kvm_aarch64,
+    "URI-KVM-LOONGARCH64": utils.URIs.kvm_loongarch64,
+    "URI-KVM-PPC64LE": utils.URIs.kvm_ppc64le,
+    "URI-KVM-S390X": utils.URIs.kvm_s390x,
+    "URI-QEMU-RISCV64": utils.URIs.qemu_riscv64,
+    "XMLDIR": XMLDIR,
+    "NEWIMG1": "/pool-dir/new1.img",
+    "NEWIMG2": "/pool-dir/new2.img",
+    "NEWCLONEIMG1": NEW_FILES[0],
+    "NEWCLONEIMG2": NEW_FILES[1],
+    "NEWCLONEIMG3": NEW_FILES[2],
+    "EXISTIMG1": "/pool-dir/testvol1.img",
+    "EXISTIMG2": "/pool-dir/testvol2.img",
+    "EXISTIMG3": EXIST_FILES[0],
+    "EXISTIMG4": EXIST_FILES[1],
+    "ISOTREE": "%s/fake-fedora17-tree.iso" % MEDIA_DIR,
+    "ISOLABEL": "%s/fake-centos65-label.iso" % MEDIA_DIR,
+    "ISO-NO-OS": "%s/fake-no-osinfo.iso" % MEDIA_DIR,
+    "ISO-WIN7": "%s/fake-win7.iso" % MEDIA_DIR,
+    "ISO-F26-NETINST": "%s/fake-f26-netinst.iso" % MEDIA_DIR,
+    "ISO-F29-LIVE": "%s/fake-f29-live.iso" % MEDIA_DIR,
+    "TREEDIR": "%s/fakefedoratree" % MEDIA_DIR,
+    "COLLIDE": "/pool-dir/collidevol1.img",
+    "ADMIN-PASSWORD-FILE": "%s/admin-password.txt" % UNATTENDED_DIR,
+    "USER-PASSWORD-FILE": "%s/user-password.txt" % UNATTENDED_DIR,
 }
 
 
@@ -309,7 +309,7 @@ class Command(object):
         # Strip the test directory out of the saved output
         search = '"%s/' % utils.TOPDIR
         if search in output:
-            output = output.replace(search, "\"TESTSUITE_SCRUBBED/")
+            output = output.replace(search, '"TESTSUITE_SCRUBBED/')
 
         utils.diff_compare(output, self.compare_file)
 
@@ -894,7 +894,7 @@ hyperv.tlbflush.extended.state=on
 # Specific XML test cases #1
 c.add_compare(
     "--memory 512,maxmemory=1024 "  # special --memory XXX,maxmemory= handling
-    "--description \"foobar & baz\" "  # compat --description handling
+    '--description "foobar & baz" '  # compat --description handling
     "--uuid 12345678-12F4-1234-1234-123456789AFA "  # compat --uuid handling
     "--vcpus sockets=2,threads=2,dies=1,sockets=2 "  # --vcpus determine count from topology
     "--cpuset 1,3-5 "  # setting compat --cpuset when --vcpus is present
@@ -1713,15 +1713,15 @@ c.add_compare(
 ################
 
 c.add_compare(
-    "--arch armv7l --osinfo generic --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args=\"console=ttyAMA0 rw root=/dev/mmcblk0p3\" --disk %(EXISTIMG1)s --nographics",
+    '--arch armv7l --osinfo generic --machine vexpress-a9 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,dtb=/f19-arm.dtb,extra_args="console=ttyAMA0 rw root=/dev/mmcblk0p3" --disk %(EXISTIMG1)s --nographics',
     "arm-vexpress-plain",
 )
 c.add_compare(
-    "--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s --graphics vnc --os-variant fedora20",
+    '--arch armv7l --machine virt --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args="console=ttyAMA0,1234 rw root=/dev/vda3" --disk %(EXISTIMG1)s --graphics vnc --os-variant fedora20',
     "arm-virt-f20",
 )
 c.add_compare(
-    "--arch armv7l --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\",extra_args=foo --disk %(EXISTIMG1)s --os-variant fedora20",
+    '--arch armv7l --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args="console=ttyAMA0,1234 rw root=/dev/vda3",extra_args=foo --disk %(EXISTIMG1)s --os-variant fedora20',
     "arm-defaultmach-f20",
 )
 c.add_compare(
@@ -1742,11 +1742,11 @@ c.add_invalid(
     "--arch aarch64 --nodisks --pxe --connect " + utils.URIs.kvm_x86, grep="OS name is required"
 )  # catch missing osinfo for non-x86
 c.add_compare(
-    "--arch aarch64 --osinfo fedora19 --machine virt --cpu default --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s",
+    '--arch aarch64 --osinfo fedora19 --machine virt --cpu default --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args="console=ttyAMA0,1234 rw root=/dev/vda3" --disk %(EXISTIMG1)s',
     "aarch64-machvirt",
 )
 c.add_compare(
-    "--arch aarch64 --osinfo fedora19 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args=\"console=ttyAMA0,1234 rw root=/dev/vda3\" --disk %(EXISTIMG1)s",
+    '--arch aarch64 --osinfo fedora19 --boot kernel=/f19-arm.kernel,initrd=/f19-arm.initrd,kernel_args="console=ttyAMA0,1234 rw root=/dev/vda3" --disk %(EXISTIMG1)s',
     "aarch64-machdefault",
 )
 c.add_compare(
@@ -2016,7 +2016,7 @@ c.add_valid(
     grep="requested changes will have no effect",
 )
 c.add_valid(
-    "--print-diff test-for-virtxml --remove-device --disk boot.order=5", grep="boot order=\"5"
+    "--print-diff test-for-virtxml --remove-device --disk boot.order=5", grep='boot order="5'
 )
 c.add_invalid(
     "test --edit 2 --events on_poweroff=destroy", grep="'--edit 2' doesn't make sense with --events"
@@ -2065,7 +2065,7 @@ c.add_invalid(
 )
 c.add_invalid("test --edit 0 --disk path=", grep="Invalid --edit option '0'")
 c.add_invalid(
-    "test --edit --hostdev driver_name=vfio", grep='No --hostdev objects found in the XML'
+    "test --edit --hostdev driver_name=vfio", grep="No --hostdev objects found in the XML"
 )
 c.add_invalid(
     "test --edit --cpu host-passthrough --boot hd,network",

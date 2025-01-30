@@ -14,7 +14,7 @@ def _compare_int(nodedev_val, hostdev_val):
     def _intify(val):
         try:
             if "0x" in str(val):
-                return int(val or '0x00', 16)
+                return int(val or "0x00", 16)
             else:
                 return int(val)
         except Exception:
@@ -83,7 +83,7 @@ class NodeDevice(XMLBuilder):
         if self.uuid is not None:
             return self.uuid
 
-        return self.name[5:].replace('_', '-')
+        return self.name[5:].replace("_", "-")
 
     def compare_to_hostdev(self, hostdev):
         if self.device_type == "pci":

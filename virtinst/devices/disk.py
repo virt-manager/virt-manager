@@ -182,7 +182,7 @@ class _DiskSource(XMLBuilder):
                 path += poolxml.source_name
                 if poolxml.source_path:
                     path += poolxml.source_path
-                if not path.endswith('/'):
+                if not path.endswith("/"):
                     path += "/"
             path += volxml.name
         self.name = path or None
@@ -445,7 +445,7 @@ class DeviceDisk(Device):
         for digit in digits:
             if digit == 0:
                 continue
-            gen_t += "%c" % (ord('a') + digit - 1)
+            gen_t += "%c" % (ord("a") + digit - 1)
 
         return gen_t
 
@@ -456,13 +456,13 @@ class DeviceDisk(Device):
         """
         num = 0
         k = 0
-        if tgt[0] == 'x':
+        if tgt[0] == "x":
             # This case is here for 'xvda'
             tgt = tgt[1:]
         for i, c in enumerate(reversed(tgt[2:])):
             if i != 0:
                 k = 1
-            num += (ord(c) - ord('a') + k) * (26**i)
+            num += (ord(c) - ord("a") + k) * (26**i)
         return num
 
     _XML_PROP_ORDER = [

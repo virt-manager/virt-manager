@@ -18,7 +18,7 @@ def pytest_addoption(parser):
 
     # test_urls options
     parser.addoption(
-        '--urls-skip-libosinfo',
+        "--urls-skip-libosinfo",
         action="store_true",
         default=False,
         help=(

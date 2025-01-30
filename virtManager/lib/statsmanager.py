@@ -304,7 +304,7 @@ class vmmStatsManager(vmmGObject):
         # LXC has a special blockStats method
         if vm.conn.is_lxc() and self._disk_stats_lxc_supported:
             try:
-                io = vm.get_backend().blockStats('')
+                io = vm.get_backend().blockStats("")
                 if io:
                     rd = io[1]
                     wr = io[3]

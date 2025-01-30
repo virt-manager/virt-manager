@@ -281,7 +281,7 @@ class _vmmDomainSetTimeThread(vmmGObject):
             return
 
         log.debug("Starting time setting thread")
-        self._thread = threading.Thread(name='settime thread', target=self._do_loop)
+        self._thread = threading.Thread(name="settime thread", target=self._do_loop)
         self._thread.start()
 
     def stop(self):

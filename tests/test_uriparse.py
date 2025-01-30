@@ -17,14 +17,14 @@ import tests
 
 def _compare(
     uri,
-    scheme='',
-    transport='',
-    port='',
-    username='',
-    path='',
-    hostname='',
-    query='',
-    fragment='',
+    scheme="",
+    transport="",
+    port="",
+    username="",
+    path="",
+    hostname="",
+    query="",
+    fragment="",
     is_ipv6=False,
     host_is_ipv4_string=False,
 ):
@@ -49,7 +49,7 @@ def testURIs():
         scheme="http",
         hostname="foobar.com",
         port="5901",
-        path='/my/example.path',
+        path="/my/example.path",
         fragment="my-frag",
     )
     _compare(

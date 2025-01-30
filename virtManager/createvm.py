@@ -76,7 +76,7 @@ def _pretty_memory(mem):
 
 
 def is_virt_bootstrap_installed(conn):
-    ret = importlib.util.find_spec('virtBootstrap') is not None
+    ret = importlib.util.find_spec("virtBootstrap") is not None
     return ret or conn.config.CLITestOptions.fake_virtbootstrap
 
 
@@ -623,7 +623,7 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Memory
         memory = int(self.conn.host_memory_size())
-        mem_label = _("Up to %(maxmem)s available on the host") % {'maxmem': _pretty_memory(memory)}
+        mem_label = _("Up to %(maxmem)s available on the host") % {"maxmem": _pretty_memory(memory)}
         mem_label = "<span size='small'>%s</span>" % mem_label
         self.widget("mem").set_range(50, memory // 1024)
         self.widget("phys-mem-label").set_markup(mem_label)
@@ -632,7 +632,7 @@ class vmmCreateVM(vmmGObjectUI):
         phys_cpus = int(self.conn.host_active_processor_count())
         cpu_label = ngettext(
             "Up to %(numcpus)d available", "Up to %(numcpus)d available", phys_cpus
-        ) % {'numcpus': int(phys_cpus)}
+        ) % {"numcpus": int(phys_cpus)}
         cpu_label = "<span size='small'>%s</span>" % cpu_label
         self.widget("cpus").set_range(1, max(phys_cpus, 1))
         self.widget("phys-cpu-label").set_markup(cpu_label)
@@ -1226,9 +1226,9 @@ class vmmCreateVM(vmmGObjectUI):
 
         # Auto-generate a path if not specified
         if enable_src and not self.widget("install-oscontainer-fs").get_text():
-            fs_dir = ['/var/lib/libvirt/filesystems/']
+            fs_dir = ["/var/lib/libvirt/filesystems/"]
             if os.geteuid() != 0:
-                fs_dir = [os.path.expanduser("~"), '.local/share/libvirt/filesystems/']
+                fs_dir = [os.path.expanduser("~"), ".local/share/libvirt/filesystems/"]
 
             guest = self._gdata.build_guest()
             default_name = virtinst.Guest.generate_name(guest)
@@ -1283,8 +1283,8 @@ class vmmCreateVM(vmmGObjectUI):
             cur = min(cur, final)
 
         page_lbl = _("Step %(current_page)d of %(max_page)d") % {
-            'current_page': cur,
-            'max_page': final,
+            "current_page": cur,
+            "max_page": final,
         }
 
         self.widget("header-pagenum").set_markup(page_lbl)
@@ -1910,12 +1910,12 @@ class vmmCreateVM(vmmGObjectUI):
         # If creating new container and "container bootstrap" is enabled
         if guest.os.is_container() and self._get_config_oscontainer_bootstrap():
             bootstrap_arg_keys = {
-                'src': self._get_config_oscontainer_source_url,
-                'dest': self.widget("install-oscontainer-fs").get_text,
-                'user': self._get_config_oscontainer_source_username,
-                'passwd': self._get_config_oscontainer_source_password,
-                'insecure': self._get_config_oscontainer_isecure,
-                'root_password': self._get_config_oscontainer_root_password,
+                "src": self._get_config_oscontainer_source_url,
+                "dest": self.widget("install-oscontainer-fs").get_text,
+                "user": self._get_config_oscontainer_source_username,
+                "passwd": self._get_config_oscontainer_source_password,
+                "insecure": self._get_config_oscontainer_isecure,
+                "root_password": self._get_config_oscontainer_root_password,
             }
             for key, getter in bootstrap_arg_keys.items():
                 bootstrap_args[key] = getter()
@@ -2055,7 +2055,7 @@ class vmmCreateVM(vmmGObjectUI):
         meter.start(_("Bootstrapping container"), None)
 
         def progress_update_cb(prog):
-            meter.start(_(prog['status']), None)
+            meter.start(_(prog["status"]), None)
 
         asyncjob.details_enable()
 
@@ -2069,28 +2069,28 @@ class vmmCreateVM(vmmGObjectUI):
         log_stream = io.StringIO()
 
         # Get virt-bootstrap logger
-        vbLogger = logging.getLogger('virtBootstrap')
+        vbLogger = logging.getLogger("virtBootstrap")
         vbLogger.setLevel(logging.DEBUG)
         # Create handler to store log messages in the string buffer
         hdlr = logging.StreamHandler(log_stream)
-        hdlr.setFormatter(logging.Formatter('%(message)s'))
+        hdlr.setFormatter(logging.Formatter("%(message)s"))
         # Use logging filter to show messages on GUI
         hdlr.addFilter(SetStateFilter())
         vbLogger.addHandler(hdlr)
 
         # Key word arguments to be passed
         kwargs = {
-            'uri': bootstrap_args['src'],
-            'dest': bootstrap_args['dest'],
-            'not_secure': bootstrap_args['insecure'],
-            'progress_cb': progress_update_cb,
+            "uri": bootstrap_args["src"],
+            "dest": bootstrap_args["dest"],
+            "not_secure": bootstrap_args["insecure"],
+            "progress_cb": progress_update_cb,
         }
-        if bootstrap_args['user'] and bootstrap_args['passwd']:
-            kwargs['username'] = bootstrap_args['user']
-            kwargs['password'] = bootstrap_args['passwd']
-        if bootstrap_args['root_password']:
-            kwargs['root_password'] = bootstrap_args['root_password']
-        log.debug('Start container bootstrap')
+        if bootstrap_args["user"] and bootstrap_args["passwd"]:
+            kwargs["username"] = bootstrap_args["user"]
+            kwargs["password"] = bootstrap_args["passwd"]
+        if bootstrap_args["root_password"]:
+            kwargs["root_password"] = bootstrap_args["root_password"]
+        log.debug("Start container bootstrap")
         try:
             virtBootstrap.bootstrap(**kwargs)
             # Success - uncheck the 'install-oscontainer-bootstrap' checkbox
@@ -2102,5 +2102,5 @@ class vmmCreateVM(vmmGObjectUI):
         except Exception as err:
             asyncjob.set_error(
                 "virt-bootstrap did not complete successfully",
-                '%s\n%s' % (err, log_stream.getvalue()),
+                "%s\n%s" % (err, log_stream.getvalue()),
             )

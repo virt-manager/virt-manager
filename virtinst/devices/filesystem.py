@@ -91,7 +91,7 @@ class DeviceFilesystem(Device):
     target = property(_get_target, _set_target)
 
     def _get_type(self):
-        return getattr(self, '_type_prop')
+        return getattr(self, "_type_prop")
 
     def _set_type(self, val):
         # Get type/value of the attribute of "source" property
@@ -99,7 +99,7 @@ class DeviceFilesystem(Device):
         old_source_value = self.source
 
         # Update "type" property
-        new_type = setattr(self, '_type_prop', val)
+        new_type = setattr(self, "_type_prop", val)
 
         # If the attribute type of 'source' property has changed
         # restore the value

@@ -12,7 +12,7 @@ warnings.simplefilter("ignore")
 # Ignores pylint error since dogtail doesn't specify this
 import gi
 
-gi.require_version('Atspi', '2.0')
+gi.require_version("Atspi", "2.0")
 
 import dogtail.config
 import dogtail.utils

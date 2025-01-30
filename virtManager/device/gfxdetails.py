@@ -164,7 +164,7 @@ class vmmGraphicsDetails(vmmGObjectUI):
         self.widget("graphics-port").set_visible(not is_auto)
 
         rows = ["graphics-password-box", "graphics-listen-type"]
-        if listen == 'address':
+        if listen == "address":
             rows.extend(["graphics-port-box", "graphics-address"])
         if is_spice:
             rows.append("graphics-opengl")

@@ -7,7 +7,7 @@
 
 import gi
 
-gi.require_version('Libosinfo', '1.0')
+gi.require_version("Libosinfo", "1.0")
 
 from virtinst.buildconfig import BuildConfig
 
@@ -17,7 +17,7 @@ def _setup_i18n():
     import locale
 
     try:
-        locale.setlocale(locale.LC_ALL, '')
+        locale.setlocale(locale.LC_ALL, "")
     except Exception:  # pragma: no cover
         # Can happen if user passed a bogus LANG
         pass

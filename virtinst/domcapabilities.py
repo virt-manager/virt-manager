@@ -205,7 +205,7 @@ def _get_expanded_cpu(domcaps, mode):
 
 def _lookup_cpu_security_features(domcaps):
     ret = []
-    sec_features = ['spec-ctrl', 'ssbd', 'ibpb', 'virt-ssbd', 'md-clear']
+    sec_features = ["spec-ctrl", "ssbd", "ibpb", "virt-ssbd", "md-clear"]
 
     for m in domcaps.cpu.modes:
         if m.name != "host-model" or not m.supported:
@@ -326,7 +326,7 @@ class DomainCapabilities(XMLBuilder):
         firmware_files = [f.value for f in self.os.loader.values]
         if self.conn.is_bhyve():
             for firmware_file in firmware_files:
-                if 'BHYVE_UEFI.fd' in firmware_file:
+                if "BHYVE_UEFI.fd" in firmware_file:
                     return firmware_file
             return firmware_files and firmware_files[0] or None  # pragma: no cover
 

@@ -16,17 +16,17 @@ def _run_initrd_commands(initrd, tempdir):
     log.debug("Appending to the initrd.")
 
     find_proc = subprocess.Popen(
-        ['find', '.', '-print0'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=tempdir
+        ["find", ".", "-print0"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=tempdir
     )
     cpio_proc = subprocess.Popen(
-        ['cpio', '--create', '--null', '--quiet', '--format=newc', '--owner=0:0'],
+        ["cpio", "--create", "--null", "--quiet", "--format=newc", "--owner=0:0"],
         stdin=find_proc.stdout,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         cwd=tempdir,
     )
-    f = open(initrd, 'ab')
-    gzip_proc = subprocess.Popen(['gzip'], stdin=cpio_proc.stdout, stdout=f, stderr=subprocess.PIPE)
+    f = open(initrd, "ab")
+    gzip_proc = subprocess.Popen(["gzip"], stdin=cpio_proc.stdout, stdout=f, stderr=subprocess.PIPE)
     cpio_proc.wait()
     find_proc.wait()
     gzip_proc.wait()

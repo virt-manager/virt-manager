@@ -558,7 +558,7 @@ def testNewKVMQ35UEFI(app):
     details.combo_select("Firmware:", "UEFI")
     details.find("config-apply").click()
     new_xml = lib.utils.get_xmleditor_xml(app, details)
-    assert "os firmware=\"efi\"" in new_xml
+    assert 'os firmware="efi"' in new_xml
 
     # Finish
     details.find_fuzzy("Begin Installation", "button").click()
@@ -1270,7 +1270,7 @@ def testNewVMInactiveNetwork(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-@unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE": "1"})
+@unittest.mock.patch.dict("os.environ", {"VIRTINST_TEST_SUITE": "1"})
 def testNewVMDefaultBridge(app):
     """
     We actually set the unittest env variable here, which
@@ -1296,7 +1296,7 @@ def testNewVMDefaultBridge(app):
     lib.utils.check(lambda: not newvm.showing)
 
 
-@unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE_FAKE_NO_SPICE": "1"})
+@unittest.mock.patch.dict("os.environ", {"VIRTINST_TEST_SUITE_FAKE_NO_SPICE": "1"})
 def testCreateVMMissingSpice(app):
     newvm = _open_newvm(app)
 

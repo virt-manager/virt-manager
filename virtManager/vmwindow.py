@@ -516,14 +516,14 @@ class vmmVMWindow(vmmGObjectUI):
         image = self._console.vmwindow_viewer_get_pixbuf()
 
         metadata = {
-            'tEXt::Hypervisor URI': self.vm.conn.get_uri(),
-            'tEXt::Domain Name': self.vm.get_name(),
-            'tEXt::Domain UUID': self.vm.get_uuid(),
-            'tEXt::Generator App': self.config.get_appname(),
-            'tEXt::Generator Version': self.config.get_appversion(),
+            "tEXt::Hypervisor URI": self.vm.conn.get_uri(),
+            "tEXt::Domain Name": self.vm.get_name(),
+            "tEXt::Domain UUID": self.vm.get_uuid(),
+            "tEXt::Generator App": self.config.get_appname(),
+            "tEXt::Generator Version": self.config.get_appversion(),
         }
 
-        ret = image.save_to_bufferv('png', list(metadata.keys()), list(metadata.values()))
+        ret = image.save_to_bufferv("png", list(metadata.keys()), list(metadata.values()))
         # On Fedora 19, ret is (bool, str)
         # Someday the bindings might be fixed to just return the str, try
         # and future proof it a bit

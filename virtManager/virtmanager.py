@@ -14,7 +14,7 @@ import gi
 
 gi.require_version("Gdk", "3.0")
 gi.require_version("Gtk", "3.0")
-gi.require_version('LibvirtGLib', '1.0')
+gi.require_version("LibvirtGLib", "1.0")
 from gi.repository import LibvirtGLib
 
 from virtinst import BuildConfig
@@ -139,7 +139,7 @@ def do_we_fork(options):
 def parse_commandline():
     epilog = "Also accepts standard GTK arguments like --g-fatal-warnings"
     parser = argparse.ArgumentParser(usage="virt-manager [options]", epilog=epilog)
-    parser.add_argument('--version', action='version', version=BuildConfig.version)
+    parser.add_argument("--version", action="version", version=BuildConfig.version)
     parser.set_defaults(domain=None)
 
     # Trace every libvirt API call to debug output
@@ -147,7 +147,7 @@ def parse_commandline():
 
     # comma separated string of options to tweak app behavior,
     # for manual and automated testing config
-    parser.add_argument("--test-options", action='append', default=[], help=argparse.SUPPRESS)
+    parser.add_argument("--test-options", action="append", default=[], help=argparse.SUPPRESS)
 
     parser.add_argument(
         "-c", "--connect", dest="uri", help="Connect to hypervisor at URI", metavar="URI"

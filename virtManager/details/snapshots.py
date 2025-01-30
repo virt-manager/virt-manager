@@ -474,12 +474,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.LARGE_TOOLBAR)
         col.pack_start(img, False)
-        col.add_attribute(img, 'icon-name', 3)
+        col.add_attribute(img, "icon-name", 3)
 
         txt = Gtk.CellRendererText()
         txt.set_property("ellipsize", Pango.EllipsizeMode.END)
         col.pack_start(txt, False)
-        col.add_attribute(txt, 'markup', 1)
+        col.add_attribute(txt, "markup", 1)
 
         img = Gtk.CellRendererPixbuf()
         img.set_property("stock-size", Gtk.IconSize.MENU)

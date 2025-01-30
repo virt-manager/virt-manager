@@ -184,7 +184,7 @@ def testCLIFork(app):
     _testCLIFork(app, ["--fork"])
 
 
-@unittest.mock.patch.dict('os.environ', {"VIRT_MANAGER_DEFAULT_FORK": "yes"})
+@unittest.mock.patch.dict("os.environ", {"VIRT_MANAGER_DEFAULT_FORK": "yes"})
 def testCLIForkEnv(app):
     # Test with fork via env
     _testCLIFork(app, [])
@@ -197,7 +197,7 @@ def testCLIGTKArgs(app):
     lib.utils.check(lambda: app.topwin.showing)
 
 
-@unittest.mock.patch.dict('os.environ', {"DISPLAY": ""})
+@unittest.mock.patch.dict("os.environ", {"DISPLAY": ""})
 def testCLINoDisplay(app):
     # Ensure missing display exits
     app.open(will_fail=True)

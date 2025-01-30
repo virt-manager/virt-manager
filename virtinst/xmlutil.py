@@ -29,7 +29,7 @@ def xml_escape(xml):
     if xml:
         xml = xml.replace("&", "&amp;")
         xml = xml.replace("'", "&apos;")
-        xml = xml.replace("\"", "&quot;")
+        xml = xml.replace('"', "&quot;")
         xml = xml.replace("<", "&lt;")
         xml = xml.replace(">", "&gt;")
     return xml

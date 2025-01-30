@@ -99,8 +99,8 @@ class vmmNetworkList(vmmGObjectUI):
 
         text = Gtk.CellRendererText()
         combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', NET_ROW_LABEL)
-        combo.add_attribute(text, 'sensitive', NET_ROW_SENSITIVE)
+        combo.add_attribute(text, "text", NET_ROW_LABEL)
+        combo.add_attribute(text, "sensitive", NET_ROW_SENSITIVE)
 
         combo = self.widget("net-portgroup")
         model = Gtk.ListStore(str)

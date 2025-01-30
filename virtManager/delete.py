@@ -535,7 +535,7 @@ def _prepare_storage_list(storage_list):
     storage_list.append_column(infoCol)
 
     chkbox = Gtk.CellRendererToggle()
-    chkbox.connect('toggled', _storage_item_toggled, storage_list)
+    chkbox.connect("toggled", _storage_item_toggled, storage_list)
     confirmCol.pack_start(chkbox, False)
 
     def sensitive_cb(column, cell, model, _iter, data):
@@ -544,30 +544,30 @@ def _prepare_storage_list(storage_list):
         sensitive = not inconsistent
         active = row[STORAGE_ROW_CONFIRM]
         chk = column.get_cells()[0]
-        chk.set_property('inconsistent', inconsistent)
-        chk.set_property('active', active)
-        chk.set_property('sensitive', sensitive)
+        chk.set_property("inconsistent", inconsistent)
+        chk.set_property("active", active)
+        chk.set_property("sensitive", sensitive)
 
     confirmCol.set_cell_data_func(chkbox, sensitive_cb)
     confirmCol.set_sort_column_id(STORAGE_ROW_CANT_DELETE)
 
     path_txt = Gtk.CellRendererText()
     pathCol.pack_start(path_txt, True)
-    pathCol.add_attribute(path_txt, 'text', STORAGE_ROW_PATH)
+    pathCol.add_attribute(path_txt, "text", STORAGE_ROW_PATH)
     pathCol.set_sort_column_id(STORAGE_ROW_PATH)
     path_txt.set_property("width-chars", 50)
     path_txt.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
 
     target_txt = Gtk.CellRendererText()
     targetCol.pack_start(target_txt, False)
-    targetCol.add_attribute(target_txt, 'text', STORAGE_ROW_TARGET)
+    targetCol.add_attribute(target_txt, "text", STORAGE_ROW_TARGET)
     targetCol.set_sort_column_id(STORAGE_ROW_TARGET)
 
     info_img = Gtk.CellRendererPixbuf()
     infoCol.pack_start(info_img, False)
-    infoCol.add_attribute(info_img, 'visible', STORAGE_ROW_ICON_SHOW)
-    infoCol.add_attribute(info_img, 'icon-name', STORAGE_ROW_ICON)
-    infoCol.add_attribute(info_img, 'stock-size', STORAGE_ROW_ICON_SIZE)
+    infoCol.add_attribute(info_img, "visible", STORAGE_ROW_ICON_SHOW)
+    infoCol.add_attribute(info_img, "icon-name", STORAGE_ROW_ICON)
+    infoCol.add_attribute(info_img, "stock-size", STORAGE_ROW_ICON_SIZE)
     infoCol.set_sort_column_id(STORAGE_ROW_ICON)
 
 

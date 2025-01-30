@@ -88,7 +88,7 @@ def _test_distro(distro):
     if distro.warntype == WARN_DEBIAN:
         append = "auto=true"
     else:
-        append = "\"ks=file:/%s\"" % os.path.basename(distro.filename)
+        append = '"ks=file:/%s"' % os.path.basename(distro.filename)
     cmd = (
         "./virt-install --connect qemu:///system "
         "--name __virtinst__test__initrd__ --ram 2048 "

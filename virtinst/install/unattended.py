@@ -402,7 +402,7 @@ def download_drivers(locations, scratchdir, meter):
 
     try:
         for location in locations:
-            filename = location.rsplit('/', 1)[1]
+            filename = location.rsplit("/", 1)[1]
             driver = fetcher.acquireFile(location)
             drivers.append((driver, filename))
     except Exception:  # pragma: no cover

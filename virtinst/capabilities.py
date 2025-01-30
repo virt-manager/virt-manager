@@ -299,15 +299,15 @@ class Capabilities(XMLBuilder):
                 msg = _(
                     "Host does not support virtualization type "
                     "'%(virttype)s' for architecture '%(arch)s'"
-                ) % {'virttype': os_type, 'arch': arch}
+                ) % {"virttype": os_type, "arch": arch}
             elif arch:
                 msg = _(
                     "Host does not support any virtualization options "
                     "for architecture '%(arch)s'"
-                ) % {'arch': arch}
+                ) % {"arch": arch}
             elif os_type:
                 msg = _("Host does not support virtualization type " "'%(virttype)s'") % {
-                    'virttype': os_type
+                    "virttype": os_type
                 }
             else:
                 msg = _("Host does not support any virtualization options")
@@ -321,17 +321,17 @@ class Capabilities(XMLBuilder):
                     "machine '%(machine)s' for virtualization type "
                     "'%(virttype)s' with architecture '%(arch)s'"
                 ) % {
-                    'domain': typ,
-                    'virttype': guest.os_type,
-                    'arch': guest.arch,
-                    'machine': machine,
+                    "domain": typ,
+                    "virttype": guest.os_type,
+                    "arch": guest.arch,
+                    "machine": machine,
                 }
             else:
                 msg = _(
                     "Host does not support domain type %(domain)s for "
                     "virtualization type '%(virttype)s' with "
                     "architecture '%(arch)s'"
-                ) % {'domain': typ, 'virttype': guest.os_type, 'arch': guest.arch}
+                ) % {"domain": typ, "virttype": guest.os_type, "arch": guest.arch}
             raise ValueError(msg)
 
         capsinfo = _CapsInfo(self.conn, guest, domain)

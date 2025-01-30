@@ -214,7 +214,7 @@ def testDetailsEditDomain1(app):
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
     new_xml = lib.utils.get_xmleditor_xml(app, win)
-    assert "source type=\"memfd\"" in new_xml
+    assert 'source type="memfd"' in new_xml
     tab.find("Enable shared", "check box").click()
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
@@ -788,7 +788,7 @@ def testDetailsXMLEdit(app):
     lib.utils.test_xmleditor_interactions(app, win, finish)
 
 
-@unittest.mock.patch.dict('os.environ', {"VIRTINST_TEST_SUITE_FAKE_NO_SOURCEVIEW": "1"})
+@unittest.mock.patch.dict("os.environ", {"VIRTINST_TEST_SUITE_FAKE_NO_SOURCEVIEW": "1"})
 def testDetailsXMLEditorSourceviewFallback(app):
     """
     Test XML editor standard bits, when falling back to gtk textview

@@ -329,18 +329,18 @@ class vmmManager(vmmGObjectUI):
         status_icon = Gtk.CellRendererPixbuf()
         status_icon.set_property("stock-size", Gtk.IconSize.DND)
         nameCol.pack_start(status_icon, False)
-        nameCol.add_attribute(status_icon, 'icon-name', ROW_STATUS_ICON)
-        nameCol.add_attribute(status_icon, 'visible', ROW_IS_VM)
+        nameCol.add_attribute(status_icon, "icon-name", ROW_STATUS_ICON)
+        nameCol.add_attribute(status_icon, "visible", ROW_IS_VM)
 
         inspection_os_icon = Gtk.CellRendererPixbuf()
         nameCol.pack_start(inspection_os_icon, False)
-        nameCol.add_attribute(inspection_os_icon, 'pixbuf', ROW_INSPECTION_OS_ICON)
-        nameCol.add_attribute(inspection_os_icon, 'visible', ROW_IS_VM)
+        nameCol.add_attribute(inspection_os_icon, "pixbuf", ROW_INSPECTION_OS_ICON)
+        nameCol.add_attribute(inspection_os_icon, "visible", ROW_IS_VM)
 
         name_txt = Gtk.CellRendererText()
         nameCol.pack_start(name_txt, True)
-        nameCol.add_attribute(name_txt, 'markup', ROW_MARKUP)
-        nameCol.add_attribute(name_txt, 'foreground', ROW_COLOR)
+        nameCol.add_attribute(name_txt, "markup", ROW_MARKUP)
+        nameCol.add_attribute(name_txt, "foreground", ROW_COLOR)
 
         self.spacer_txt = Gtk.CellRendererText()
         self.spacer_txt.set_property("ypad", 4)
@@ -354,14 +354,14 @@ class vmmManager(vmmGObjectUI):
             txt = Gtk.CellRendererText()
             txt.set_property("ypad", 4)
             col.pack_start(txt, True)
-            col.add_attribute(txt, 'visible', ROW_IS_CONN)
+            col.add_attribute(txt, "visible", ROW_IS_CONN)
 
             img = CellRendererSparkline()
             img.set_property("xpad", 6)
             img.set_property("ypad", 12)
             img.set_property("reversed", True)
             col.pack_start(img, True)
-            col.add_attribute(img, 'visible', ROW_IS_VM)
+            col.add_attribute(img, "visible", ROW_IS_VM)
 
             col.set_sort_column_id(colnum)
             vmlist.append_column(col)
@@ -989,7 +989,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.guest_cpu_time_vector(GRAPH_LEN)
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def host_cpu_usage_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -997,7 +997,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.host_cpu_time_vector(GRAPH_LEN)
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def memory_usage_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -1005,7 +1005,7 @@ class vmmManager(vmmGObjectUI):
             return
 
         data = obj.stats_memory_vector(GRAPH_LEN)
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def disk_io_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -1014,7 +1014,7 @@ class vmmManager(vmmGObjectUI):
 
         d1, d2 = obj.disk_io_vectors(GRAPH_LEN, self.max_disk_rate)
         data = [(x + y) / 2 for x, y in zip(d1, d2)]
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)
 
     def network_traffic_img(self, column_ignore, cell, model, _iter, data):
         obj = model[_iter][ROW_HANDLE]
@@ -1023,4 +1023,4 @@ class vmmManager(vmmGObjectUI):
 
         d1, d2 = obj.network_traffic_vectors(GRAPH_LEN, self.max_net_rate)
         data = [(x + y) / 2 for x, y in zip(d1, d2)]
-        cell.set_property('data_array', data)
+        cell.set_property("data_array", data)

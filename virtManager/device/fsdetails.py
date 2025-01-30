@@ -211,7 +211,7 @@ class vmmFSDetails(vmmGObjectUI):
         if _EDIT_FS_RAM_SOURCE in self._active_edits or _EDIT_FS_SOURCE in self._active_edits:
             if fstype == DeviceFilesystem.TYPE_RAM:
                 dev.source = usage
-                dev.source_units = 'MiB'
+                dev.source_units = "MiB"
             else:
                 dev.source = source
         if _EDIT_FS_TARGET in self._active_edits:

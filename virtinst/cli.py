@@ -85,12 +85,12 @@ VIRT_PARSERS = []
 
 
 class VirtHelpFormatter(argparse.RawDescriptionHelpFormatter):
-    '''
+    """
     Subclass the default help formatter to allow printing newline characters
     in --help output. The way we do this is a huge hack :(
 
     Inspiration: http://groups.google.com/group/comp.lang.python/browse_thread/thread/6df6e6b541a15bc2/09f28e26af0699b1
-    '''
+    """
 
     oldwrap = None
 
@@ -121,7 +121,7 @@ def setupParser(usage, description, introspection_epilog=False):
     parser = argparse.ArgumentParser(
         usage=usage, description=description, formatter_class=VirtHelpFormatter, epilog=epilog
     )
-    parser.add_argument('--version', action='version', version=BuildConfig.version)
+    parser.add_argument("--version", action="version", version=BuildConfig.version)
 
     return parser
 
@@ -130,7 +130,7 @@ def earlyLogging():
     reset_logging()
     import logging
 
-    logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+    logging.basicConfig(level=logging.DEBUG, format="%(message)s")
 
 
 def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
@@ -513,7 +513,7 @@ def _get_completer_parsers():
 def _virtparser_completer(prefix, **kwargs):
     sub_options = []
     for parserclass in _get_completer_parsers():
-        if kwargs['action'].dest == parserclass.cli_arg_name:
+        if kwargs["action"].dest == parserclass.cli_arg_name:
             # pylint: disable=protected-access
             for virtarg in sorted(parserclass._virtargs, key=lambda p: p.nonregex_cliname()):
                 sub_options.append(virtarg.nonregex_cliname() + "=")
@@ -708,8 +708,8 @@ def add_metadata_option(grp):
         action="append",
         help=_(
             "Configure guest metadata. Ex:\n"
-            "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
-            "--metadata description=\"My nice long description\""
+            '--metadata name=foo,title="My pretty title",uuid=...\n'
+            '--metadata description="My nice long description"'
         ),
     )
 
@@ -850,7 +850,7 @@ def add_device_options(devg, sound_back_compat=False):
         "help": _("Configure guest sound device emulation"),
     }
     if sound_back_compat:
-        sound_kwargs["nargs"] = '?'
+        sound_kwargs["nargs"] = "?"
     devg.add_argument("--sound", **sound_kwargs)
     if sound_back_compat:
         devg.add_argument("--soundhw", action="append", dest="sound", help=argparse.SUPPRESS)
@@ -1453,7 +1453,7 @@ class _InitClass(type):
             return super().__new__(cls, *args)  # pragma: no cover
         dummy = kwargs
         name, bases, ns = args
-        init = ns.get('_virtcli_class_init')
+        init = ns.get("_virtcli_class_init")
         if isinstance(init, types.FunctionType):
             raise RuntimeError("_virtcli_class_init must be a @classmethod")  # pragma: no cover
         self = super().__new__(cls, name, bases, ns)
@@ -3557,10 +3557,10 @@ class ParserSysinfo(VirtCLIParser):
     }
 
     def parse(self, inst):
-        if self.optstr and 'type' not in self.optdict:
+        if self.optstr and "type" not in self.optdict:
             # If any string specified, default to type=smbios otherwise
             # libvirt errors. User args can still override this though
-            self.optdict['type'] = 'smbios'
+            self.optdict["type"] = "smbios"
 
         # Previously libvirt treated sysinfo as a singleton object, but
         # that changed with fwcfg support. Our cli would merge all options

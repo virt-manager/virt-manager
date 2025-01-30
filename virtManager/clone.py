@@ -289,9 +289,9 @@ class vmmCloneVM(vmmGObjectUI):
         storage_list.set_row_separator_func(separator_cb)
 
         chkbox = Gtk.CellRendererToggle()
-        chkbox.connect('toggled', self._storage_clone_toggled_cb)
+        chkbox.connect("toggled", self._storage_clone_toggled_cb)
         chkimg = Gtk.CellRendererPixbuf()
-        chkimg.set_property('stock-size', Gtk.IconSize.MENU)
+        chkimg.set_property("stock-size", Gtk.IconSize.MENU)
         cloneCol.pack_start(chkimg, False)
         cloneCol.pack_start(chkbox, False)
 
@@ -304,13 +304,13 @@ class vmmCloneVM(vmmGObjectUI):
             active = sinfo.is_clone_requested()
             _chkimg = column.get_cells()[0]
             _chkbox = column.get_cells()[1]
-            _chkbox.set_property('active', active)
-            _chkbox.set_property('visible', visible)
-            _chkimg.set_property('visible', not visible)
+            _chkbox.set_property("active", active)
+            _chkbox.set_property("visible", visible)
+            _chkimg.set_property("visible", not visible)
             icon = "dialog-information"
             if sinfo.warn_about_sharing():
                 icon = "dialog-warning"
-            _chkimg.set_property('icon-name', icon)
+            _chkimg.set_property("icon-name", icon)
             tooltip = sinfo.get_tooltip()
             if tooltip != model[_iter][1]:
                 model[_iter][1] = tooltip
@@ -323,7 +323,7 @@ class vmmCloneVM(vmmGObjectUI):
         pathtxt.set_property("width-chars", 30)
         pathtxt.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
         pathimg = Gtk.CellRendererPixbuf()
-        pathimg.set_property('stock-size', Gtk.IconSize.MENU)
+        pathimg.set_property("stock-size", Gtk.IconSize.MENU)
         pathimg.set_padding(3, 0)
         pathCol.pack_start(pathimg, False)
         pathCol.pack_start(pathtxt, True)
@@ -336,8 +336,8 @@ class vmmCloneVM(vmmGObjectUI):
             _pathimg = column.get_cells()[0]
             _pathtxt = column.get_cells()[1]
             markup = sinfo.get_markup(self.vm)
-            _pathtxt.set_property('markup', markup)
-            _pathimg.set_property('icon-name', sinfo.get_icon_name())
+            _pathtxt.set_property("markup", markup)
+            _pathimg.set_property("icon-name", sinfo.get_icon_name())
 
         pathCol.set_cell_data_func(pathtxt, path_cb)
         pathCol.set_cell_data_func(pathimg, path_cb)

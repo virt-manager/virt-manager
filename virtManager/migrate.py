@@ -117,7 +117,7 @@ class vmmMigrateDialog(vmmGObjectUI):
         text = uiutil.init_combo_text_column(combo, COL_LABEL)
         text.set_property("ellipsize", Pango.EllipsizeMode.MIDDLE)
         text.set_property("width-chars", 30)
-        combo.add_attribute(text, 'sensitive', COL_CAN_MIGRATE)
+        combo.add_attribute(text, "sensitive", COL_CAN_MIGRATE)
         model.set_sort_column_id(COL_LABEL, Gtk.SortType.ASCENDING)
 
         def _sorter(model, iter1, iter2, ignore):

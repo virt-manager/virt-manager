@@ -12,7 +12,7 @@ from gi.repository import GObject
 
 import gi
 
-gi.require_version('GtkVnc', '2.0')
+gi.require_version("GtkVnc", "2.0")
 from gi.repository import GtkVnc
 
 try:
@@ -20,7 +20,7 @@ try:
     if "VIRTINST_TEST_SUITE_FAKE_NO_SPICE" in os.environ:
         raise ImportError("test suite faking no spice")
 
-    gi.require_version('SpiceClientGtk', '3.0')
+    gi.require_version("SpiceClientGtk", "3.0")
     from gi.repository import SpiceClientGtk
     from gi.repository import SpiceClientGLib
 except (ValueError, ImportError) as _SPICE_GTK_IMPORT_ERROR:
@@ -174,7 +174,7 @@ class Viewer(vmmGObject):
                 return  # pragma: no cover
 
             try:
-                keys = [int(k) for k in keys.split(',')]
+                keys = [int(k) for k in keys.split(",")]
             except Exception:  # pragma: no cover
                 log.debug("Error in grab_keys configuration in Gsettings", exc_info=True)
                 return

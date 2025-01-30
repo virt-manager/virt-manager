@@ -72,7 +72,7 @@ class vmmOSList(vmmGObjectUI):
 
         text = Gtk.CellRendererText()
         nameCol.pack_start(text, True)
-        nameCol.add_attribute(text, 'text', 1)
+        nameCol.add_attribute(text, "text", 1)
         os_list.append_column(nameCol)
 
         markup = "<small>%s</small>" % xmlutil.xml_escape(self.widget("eol-warn").get_text())

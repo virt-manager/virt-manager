@@ -240,7 +240,7 @@ def _make_ssh_command(ginfo):
         argv += ["-p", str(port)]
 
     if ginfo.connuser:
-        argv += ['-l', ginfo.connuser]
+        argv += ["-l", ginfo.connuser]
 
     argv += [host]
 
@@ -267,7 +267,7 @@ def _make_ssh_command(ginfo):
         """else"""
         """   CMD="nc %(nc_params)s";"""
         """fi;"""
-        """eval "$CMD";""" % {'nc_params': nc_params}
+        """eval "$CMD";""" % {"nc_params": nc_params}
     )
 
     argv.append("sh -c")

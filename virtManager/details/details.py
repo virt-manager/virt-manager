@@ -559,8 +559,8 @@ class vmmDetails(vmmGObjectUI):
         hw_img.set_property("stock-size", Gtk.IconSize.LARGE_TOOLBAR)
         hwCol.pack_start(hw_img, False)
         hwCol.pack_start(hw_txt, True)
-        hwCol.add_attribute(hw_txt, 'text', HW_LIST_COL_LABEL)
-        hwCol.add_attribute(hw_img, 'icon-name', HW_LIST_COL_ICON_NAME)
+        hwCol.add_attribute(hw_txt, "text", HW_LIST_COL_LABEL)
+        hwCol.add_attribute(hw_img, "icon-name", HW_LIST_COL_ICON_NAME)
         self.widget("hw-list").append_column(hwCol)
 
         # Description text view
@@ -687,17 +687,17 @@ class vmmDetails(vmmGObjectUI):
 
         name_text = Gtk.CellRendererText()
         name_col.pack_start(name_text, True)
-        name_col.add_attribute(name_text, 'text', 0)
+        name_col.add_attribute(name_text, "text", 0)
         name_col.set_sort_column_id(0)
 
         version_text = Gtk.CellRendererText()
         version_col.pack_start(version_text, True)
-        version_col.add_attribute(version_text, 'text', 1)
+        version_col.add_attribute(version_text, "text", 1)
         version_col.set_sort_column_id(1)
 
         summary_text = Gtk.CellRendererText()
         summary_col.pack_start(summary_text, True)
-        summary_col.add_attribute(summary_text, 'text', 2)
+        summary_col.add_attribute(summary_text, "text", 2)
         summary_col.set_sort_column_id(2)
 
         # Boot device list
@@ -715,17 +715,17 @@ class vmmDetails(vmmGObjectUI):
         chk = Gtk.CellRendererToggle()
         chk.connect("toggled", self._config_boot_toggled_cb)
         chkCol.pack_start(chk, False)
-        chkCol.add_attribute(chk, 'active', BOOT_ACTIVE)
-        chkCol.add_attribute(chk, 'visible', BOOT_CAN_SELECT)
+        chkCol.add_attribute(chk, "active", BOOT_ACTIVE)
+        chkCol.add_attribute(chk, "visible", BOOT_CAN_SELECT)
 
         icon = Gtk.CellRendererPixbuf()
         txtCol.pack_start(icon, False)
-        txtCol.add_attribute(icon, 'icon-name', BOOT_ICON)
+        txtCol.add_attribute(icon, "icon-name", BOOT_ICON)
 
         text = Gtk.CellRendererText()
         txtCol.pack_start(text, True)
-        txtCol.add_attribute(text, 'text', BOOT_LABEL)
-        txtCol.add_attribute(text, 'sensitive', BOOT_ACTIVE)
+        txtCol.add_attribute(text, "text", BOOT_LABEL)
+        txtCol.add_attribute(text, "sensitive", BOOT_ACTIVE)
 
         # CPU model combo
         cpu_model = self.widget("cpu-model")
@@ -808,7 +808,7 @@ class vmmDetails(vmmGObjectUI):
         col = Gtk.TreeViewColumn()
         text = Gtk.CellRendererText()
         col.pack_start(text, True)
-        col.add_attribute(text, 'text', 0)
+        col.add_attribute(text, "text", 0)
         combo.append_column(col)
 
     ##########################
@@ -1994,7 +1994,7 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_redir_page(self, rd):
         address = None
-        if rd.type == 'tcp':
+        if rd.type == "tcp":
             address = "%s:%s" % (rd.source.host, rd.source.service)
 
         title = self._get_hw_row_label_for_device(rd)
@@ -2088,8 +2088,8 @@ class vmmDetails(vmmGObjectUI):
             rom_bar = True
 
         devtype = hostdev.type
-        if hostdev.type == 'usb':
-            devtype = 'usb_device'
+        if hostdev.type == "usb":
+            devtype = "usb_device"
 
         nodedev = None
         for trydev in self.vm.conn.filter_nodedevs(devtype):

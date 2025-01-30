@@ -34,7 +34,7 @@ class DomainSeclabel(XMLBuilder):
 
         lab_len = None
         if self.label:
-            lab_len = min(3, len(self.label.split(':')))
+            lab_len = min(3, len(self.label.split(":")))
 
         if lab_len == 3:
             return self.MODEL_SELINUX

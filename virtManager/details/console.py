@@ -261,7 +261,7 @@ class _ConsoleMenu(vmmGObject):
 
     def _get_selected_menu_item(self):
         for child in self._menu.get_children():
-            if hasattr(child, 'get_active') and child.get_active():
+            if hasattr(child, "get_active") and child.get_active():
                 return child
 
     ##############
@@ -429,8 +429,8 @@ class vmmConsolePages(vmmGObjectUI):
             self.topwin.remove_accel_group(g)
 
         settings = Gtk.Settings.get_default()
-        self._gtk_settings_accel = settings.get_property('gtk-menu-bar-accel')
-        settings.set_property('gtk-menu-bar-accel', None)
+        self._gtk_settings_accel = settings.get_property("gtk-menu-bar-accel")
+        settings.set_property("gtk-menu-bar-accel", None)
 
         self._gtk_settings_mnemonic = settings.get_property("gtk-enable-mnemonics")
         settings.set_property("gtk-enable-mnemonics", False)
@@ -440,7 +440,7 @@ class vmmConsolePages(vmmGObjectUI):
             return
 
         settings = Gtk.Settings.get_default()
-        settings.set_property('gtk-menu-bar-accel', self._gtk_settings_accel)
+        settings.set_property("gtk-menu-bar-accel", self._gtk_settings_accel)
         self._gtk_settings_accel = None
 
         if self._gtk_settings_mnemonic is not None:

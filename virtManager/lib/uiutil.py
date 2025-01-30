@@ -167,7 +167,7 @@ def init_combo_text_column(combo, col):
     else:
         text = Gtk.CellRendererText()
         combo.pack_start(text, True)
-        combo.add_attribute(text, 'text', col)
+        combo.add_attribute(text, "text", col)
         return text
     return None
 

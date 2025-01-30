@@ -24,31 +24,31 @@ _ignore = Device
 class _DomainDevices(XMLBuilder):
     XML_NAME = "devices"
     _XML_PROP_ORDER = [
-        'disk',
-        'controller',
-        'filesystem',
-        'interface',
-        'smartcard',
-        'serial',
-        'parallel',
-        'console',
-        'channel',
-        'input',
-        'tpm',
-        'graphics',
-        'sound',
-        'audio',
-        'video',
-        'hostdev',
-        'redirdev',
-        'watchdog',
-        'memballoon',
-        'rng',
-        'panic',
-        'shmem',
-        'memory',
-        'vsock',
-        'iommu',
+        "disk",
+        "controller",
+        "filesystem",
+        "interface",
+        "smartcard",
+        "serial",
+        "parallel",
+        "console",
+        "channel",
+        "input",
+        "tpm",
+        "graphics",
+        "sound",
+        "audio",
+        "video",
+        "hostdev",
+        "redirdev",
+        "watchdog",
+        "memballoon",
+        "rng",
+        "panic",
+        "shmem",
+        "memory",
+        "vsock",
+        "iommu",
     ]
 
     disk = XMLChildProperty(DeviceDisk)
@@ -1188,10 +1188,10 @@ class Guest(XMLBuilder):
 
         dev = DeviceConsole(self.conn)
         if self.conn.is_bhyve():
-            nmdm_dev_prefix = '/dev/nmdm{}'.format(self.generate_uuid(self.conn))
+            nmdm_dev_prefix = "/dev/nmdm{}".format(self.generate_uuid(self.conn))
             dev.type = dev.TYPE_NMDM
-            dev.source.master = nmdm_dev_prefix + 'A'
-            dev.source.slave = nmdm_dev_prefix + 'B'
+            dev.source.master = nmdm_dev_prefix + "A"
+            dev.source.slave = nmdm_dev_prefix + "B"
         else:
             dev.type = dev.TYPE_PTY
 
