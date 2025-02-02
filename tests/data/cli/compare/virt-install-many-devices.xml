@@ -12,7 +12,9 @@
   <iothreads>5</iothreads>
   <iothreadids>
     <iothread id="1"/>
-    <iothread id="2" thread_pool_min="8" thread_pool_max="16"/>
+    <iothread id="2" thread_pool_min="8" thread_pool_max="16">
+      <poll max="123" grow="456" shrink="789"/>
+    </iothread>
   </iothreadids>
   <defaultiothread thread_pool_min="4" thread_pool_max="32"/>
   <memory>65536</memory>
@@ -106,6 +108,8 @@
       <feature enabled="yes" name="secure-boot"/>
       <feature enabled="no" name="enrolled-keys"/>
     </firmware>
+    <loader type="pflash">CODE.fd</loader>
+    <nvram template="VARS.fd" templateFormat="raw"/>
     <initarg>foo=bar</initarg>
     <initarg>baz=woo</initarg>
     <initenv name="MYENV">some value</initenv>
@@ -231,7 +235,7 @@
   <devices>
     <emulator>/new/emu</emulator>
     <disk type="block" device="disk">
-      <driver name="qemu" type="raw" cache="writeback" discard="unmap" io="threads" iothread="3" queues="8"/>
+      <driver name="qemu" type="raw" cache="writeback" discard="unmap" io="threads" iothread="3" queues="8" queue_size="256"/>
       <source dev="/pool-dir/UPPER"/>
       <target dev="vda" bus="virtio"/>
       <serial>WD-WMAP9A966149</serial>
@@ -483,7 +487,7 @@
       <target index="1"/>
     </controller>
     <controller type="pci" index="2" model="pci-bridge">
-      <target chassisNr="1"/>
+      <target chassisNr="1" memReserve="8196"/>
     </controller>
     <controller type="pci" index="3" model="pci-expander-bus">
       <target busNr="252">
@@ -789,6 +793,7 @@
     <tpm model="tpm-tis">
       <backend type="emulator" version="2.0" debug="3">
         <source type="dir" path="/some/dir"/>
+        <profile source="local:mytest" removeDisabled="check"/>
       </backend>
     </tpm>
     <graphics type="sdl" display=":3.4" xauth="/tmp/.Xauthority">

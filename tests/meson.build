@@ -55,8 +55,6 @@ if codespell_prog.found()
     'codespell',
     codespell_prog,
     args: [
-      '--ignore-words', 'tests/data/codespell_dict.txt',
-      '--skip', '*.pyc,*.iso,*.xml,NEWS.md',
       spell_files,
     ],
     workdir: meson.project_source_root(),

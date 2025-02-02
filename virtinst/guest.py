@@ -72,6 +72,9 @@ class _IOThreadID(XMLBuilder):
     id = XMLProperty("./@id", is_int=True)
     thread_pool_min = XMLProperty("./@thread_pool_min", is_int=True)
     thread_pool_max = XMLProperty("./@thread_pool_max", is_int=True)
+    max = XMLProperty("./poll/@max", is_int=True)
+    grow = XMLProperty("./poll/@grow", is_int=True)
+    shrink = XMLProperty("./poll/@shrink", is_int=True)
 
 
 class _DefaultIOThread(XMLBuilder):

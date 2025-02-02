@@ -2693,6 +2693,12 @@ class ParserIOThreads(VirtCLIParser):
                     find_inst_cb=cls.defaultiothread_find_inst_cb)
         cls.add_arg("defaultiothread.thread_pool_max", "thread_pool_max",
                     find_inst_cb=cls.defaultiothread_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.poll.max",
+                    "max", find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.poll.grow",
+                    "grow", find_inst_cb=cls.iothreads_find_inst_cb)
+        cls.add_arg("iothreadids.iothread[0-9]*.poll.shrink",
+                    "shrink", find_inst_cb=cls.iothreads_find_inst_cb)
 
 
 ###################
@@ -2944,6 +2950,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("bios.useserial", "bios_useserial", is_onoff=True)
         cls.add_arg("bios.rebootTimeout", "bios_rebootTimeout")
         cls.add_arg("smbios.mode", "smbios_mode")
+        cls.add_arg("nvram.templateFormat", "nvram_templateFormat")
 
         # Direct kernel boot options
         cls.add_arg("kernel", "kernel")
@@ -3084,9 +3091,13 @@ class ParserFeatures(VirtCLIParser):
         cls.add_arg("hyperv.frequencies.state", "hyperv_frequencies", is_onoff=True)
         cls.add_arg("hyperv.reenlightenment.state", "hyperv_reenlightenment", is_onoff=True)
         cls.add_arg("hyperv.tlbflush.state", "hyperv_tlbflush", is_onoff=True)
+        cls.add_arg("hyperv.tlbflush.direct.state", "hyperv_tlbflush_direct", is_onoff=True)
+        cls.add_arg("hyperv.tlbflush.extended.state", "hyperv_tlbflush_extended", is_onoff=True)
         cls.add_arg("hyperv.ipi.state", "hyperv_ipi", is_onoff=True)
         cls.add_arg("hyperv.evmcs.state", "hyperv_evmcs", is_onoff=True)
         cls.add_arg("hyperv.avic.state", "hyperv_avic", is_onoff=True)
+        cls.add_arg("hyperv.xmm_input.state", "hyperv_xmm_input", is_onoff=True)
+        cls.add_arg("hyperv.emsr_bitmap.state", "hyperv_emsr_bitmap", is_onoff=True)
 
         cls.add_arg("vmport.state", "vmport", is_onoff=True)
         cls.add_arg("kvm.hidden.state", "kvm_hidden", is_onoff=True)
@@ -3778,6 +3789,7 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("driver.queues", "driver_queues")
         cls.add_arg("driver.error_policy", "error_policy")
         cls.add_arg("driver.discard_no_unref", "driver_discard_no_unref", is_onoff=True)
+        cls.add_arg("driver.queue_size", "driver_queue_size")
 
         cls.add_arg("driver.metadata_cache.max_size",
                     "driver_metadata_cache_max_size")
@@ -4199,6 +4211,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("target.busNr", "target_busNr")
         cls.add_arg("target.index", "target_index")
         cls.add_arg("target.node", "target_node")
+        cls.add_arg("target.memReserve", "target_memReserve")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
         cls.add_arg("num_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
@@ -4362,6 +4375,8 @@ class ParserTPM(VirtCLIParser):
         cls.add_arg("backend.debug", "debug")
         cls.add_arg("backend.source.type", "source_type")
         cls.add_arg("backend.source.path", "source_path")
+        cls.add_arg("backend.profile.source", "profile_source")
+        cls.add_arg("backend.profile.removeDisabled", "profile_removeDisabled")
 
         cls.add_arg("backend.active_pcr_banks.sha1",
                     "active_pcr_banks.sha1", is_onoff=True)
@@ -4502,6 +4517,7 @@ class ParserMemdev(VirtCLIParser):
         cls.add_arg("source.pmem", "source.pmem", is_onoff=True)
         cls.add_arg("source.alignsize", "source.alignsize",
                 cb=cls.set_target_size)
+        cls.add_arg("target.dynamicMemslots", "target.dynamicMemslots")
 
 
 ########################

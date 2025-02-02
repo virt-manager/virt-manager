@@ -23,8 +23,8 @@
 - Add support for hvf domain type (Mohamed Akram)
 - Support creating sparse volumes on ZFS pools (Iain Buclaw)
 - UEFI improvements for riscv64 and loongarch64 VMs (Andrea Bolognani)
-- Add graphcis to riscv64 and aarch64
-- build: swtich from setuptools to meson
+- Add graphics to riscv64 and aarch64
+- build: switch from setuptools to meson
 - diskbackend: Drop support for sheepdog (Lin Ma)
 - cli: Deprecate --cpu host in favor of --cpu host-model (Andrea Bolognani)
 
@@ -45,7 +45,7 @@
 - Fill in all --cputune, --cpu, --shmem, --input, and --boot suboptions
   (Hugues Fafard)
 - virt-* mdev improvements (Shalini Chellathurai Saroja)
-- bhyve improvments (Roman Bogorodskiy)
+- bhyve improvements (Roman Bogorodskiy)
 - Revive network portgroup UI
 - enable a TPM by default when UEFI is used (Daniel P. Berrangé)
 - Use cpu host-passthrough by default on qemu x86

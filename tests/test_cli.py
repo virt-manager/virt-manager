@@ -500,7 +500,8 @@ bios.useserial=no,bios.rebootTimeout=60,cmdline=root=/foo,\
 bootmenu.enable=yes,bootmenu.timeout=5000,\
 acpi.table=/path/to/slic.dat,acpi.table.type=slic,\
 initenv0.name=MYENV,initenv0='some value',initenv1.name=FOO,initenv1=bar,\
-initdir=/my/custom/cwd,inituser=tester,initgroup=1000
+initdir=/my/custom/cwd,inituser=tester,initgroup=1000,\
+loader_type=pflash,loader=CODE.fd,nvram.template=VARS.fd,nvram.templateFormat=raw
 
 
 --vcpus vcpus=9,vcpu.placement=static,\
@@ -557,7 +558,7 @@ memorytune0.vcpus=0-3,memorytune0.node0.id=0,memorytune0.node0.bandwidth=60
 --memorybacking size=1,unit='G',nodeset=0,1,nosharepages=yes,locked=yes,discard=yes,allocation.mode=immediate,access_mode=shared,source_type=file,hugepages.page.size=12,hugepages.page1.size=1234,hugepages.page1.unit=MB,hugepages.page1.nodeset=2,allocation.threads=8
 
 
---iothreads iothreads=5,iothreadids.iothread0.id=1,iothreadids.iothread1.id=2,iothreadids.iothread1.thread_pool_min=8,iothreadids.iothread1.thread_pool_max=16,defaultiothread.thread_pool_min=4,defaultiothread.thread_pool_max=32
+--iothreads iothreads=5,iothreadids.iothread0.id=1,iothreadids.iothread1.id=2,iothreadids.iothread1.thread_pool_min=8,iothreadids.iothread1.thread_pool_max=16,iothreadids.iothread1.poll.max=123,iothreadids.iothread1.poll.grow=456,iothreadids.iothread1.poll.shrink=789,defaultiothread.thread_pool_min=4,defaultiothread.thread_pool_max=32
 
 
 --metadata title=my-title,description=my-description,uuid=00000000-1111-2222-3333-444444444444,genid=e9392370-2917-565e-692b-d057f46512d6,genid_enable=yes
@@ -610,7 +611,7 @@ msrs.unknown=ignore
 --sysinfo bios.vendor="Acme LLC",bios.version=1.2.3,bios.date=01/01/1970,bios.release=10.22,system.manufacturer="Acme Inc.",system.product=Computer,system.version=3.2.1,system.serial=123456789,system.uuid=00000000-1111-2222-3333-444444444444,system.sku=abc-123,system.family=Server,baseBoard.manufacturer="Acme Corp.",baseBoard.product=Motherboard,baseBoard.version=A01,baseBoard.serial=1234-5678,baseBoard.asset=Tag,baseBoard.location=Chassis
 
 
---disk type=block,source.dev=/pool-dir/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3,driver.queues=8
+--disk type=block,source.dev=/pool-dir/UPPER,cache=writeback,io=threads,perms=sh,serial=WD-WMAP9A966149,wwn=123456789abcdefa,boot_order=2,driver.iothread=3,driver.queues=8,driver.queue_size=256
 --disk source.file=%(NEWIMG1)s,sparse=false,size=.001,perms=ro,error_policy=enospace,detect_zeroes=unmap,address.type=drive,address.controller=0,address.target=2,address.unit=0
 --disk device=cdrom,bus=sata,read_bytes_sec=1,read_iops_sec=2,write_bytes_sec=5,write_iops_sec=6,driver.copy_on_read=on,geometry.cyls=16383,geometry.heads=16,geometry.secs=63,geometry.trans=lba,discard=ignore
 --disk size=1
@@ -685,7 +686,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller xenbus,maxGrantFrames=64
 --controller pci,index=0,model=pcie-root-port,target.chassis=1,target.port=1,target.hotplug=off
 --controller pci,index=1,model=pci-root,target.index=1
---controller pci,index=2,model=pci-bridge,target.chassisNr=1
+--controller pci,index=2,model=pci-bridge,target.chassisNr=1,target.memReserve=8196
 --controller pci,index=3,model=pci-expander-bus,target.busNr=252,target.node=1
 --controller usb3
 --controller scsi,model=virtio-scsi
@@ -800,7 +801,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 
 --tpm passthrough,model=tpm-crb,path=/dev/tpm0,backend.encryption.secret=11111111-2222-3333-4444-5555555555,backend.persistent_state=yes,backend.active_pcr_banks.sha1=on,backend.active_pcr_banks.sha256=yes,backend.active_pcr_banks.sha384=yes,backend.active_pcr_banks.sha512=yes,version=2.0
 
---tpm model=tpm-tis,backend.type=emulator,backend.version=2.0,backend.debug=3,backend.source.type=dir,backend.source.path=/some/dir
+--tpm model=tpm-tis,backend.type=emulator,backend.version=2.0,backend.debug=3,backend.source.type=dir,backend.source.path=/some/dir,backend.profile.source=local:mytest,backend.profile.removeDisabled=check
 
 
 --watchdog ib700,action=pause
@@ -844,6 +845,19 @@ c.add_compare("""
 --hostdev mdev_11f92c9d_b0b0_4016_b306_a8071277f8b9
 --hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
 """, "mdev-devices", prerun_check="10.4.0")
+
+c.add_compare("""
+--features \
+hyperv.xmm_input.state=on,\
+hyperv.emsr_bitmap.state=on
+""", "hyperv_enable_xmm_and_emsr", prerun_check="10.7.0")
+
+c.add_compare("""
+--features \
+hyperv.tlbflush.state=on,\
+hyperv.tlbflush.direct.state=on,\
+hyperv.tlbflush.extended.state=on
+""", "hyperv_enable_tlbflush_direct_and_extended", prerun_check="11.0.0")
 
 
 # Specific XML test cases #1
@@ -928,7 +942,7 @@ c.add_compare("--pxe "
 "address.type=dimm,address.base=0x100000000,address.slot=1,"
 "source.pmem=on,source.alignsize=2048,target.readonly=on "
 
-"--memdev virtio-mem,target_node=0,target.block=2048,"
+"--memdev virtio-mem,target_node=0,target.block=2048,target.dynamicMemslots=yes,"
 "target_size=512,target.requested=524288,target.address_base=0x180000000 "
 
 "--memdev virtio-pmem,source.path=/tmp/virtio_pmem,"
@@ -1153,7 +1167,7 @@ c.add_compare("--os-variant http://fedoraproject.org/fedora/20 --disk %(EXISTIMG
 c.add_compare("--cdrom %(EXISTIMG2)s --file %(EXISTIMG1)s --os-variant win2k3 --sound --controller usb", "kvm-win2k3-cdrom")  # HVM windows install with disk
 c.add_compare("--os-variant name=ubuntusaucy --nodisks --boot cdrom --virt-type qemu --cpu Penryn --input tablet --boot uefi --graphics vnc", "qemu-plain")  # plain qemu
 c.add_compare("--os-variant fedora20 --nodisks --boot network --graphics default --arch i686 --rng none", "qemu-32-on-64", prerun_check=has_old_osinfo)  # 32 on 64
-c.add_compare("--osinfo linux2020 --pxe --cpu maximum", "linux2020", prerun_check=no_osinfo_linux2020_virtio) # also --cpu maximum
+c.add_compare("--osinfo linux2020 --pxe --cpu maximum", "linux2020", prerun_check=no_osinfo_linux2020_virtio)  # also --cpu maximum
 c.add_compare("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s", "win11", prerun_check=no_osinfo_win11)
 c.add_compare("--check disk_size=off --osinfo win11 --cdrom %(EXISTIMG1)s --boot uefi=off", "win11-no-uefi")
 c.add_compare("--osinfo generic --disk none --location %(ISO-NO-OS)s,kernel=frib.img,initrd=/frob.img", "location-manual-kernel", prerun_check=missing_xorriso)  # --location with an unknown ISO but manually specified kernel paths

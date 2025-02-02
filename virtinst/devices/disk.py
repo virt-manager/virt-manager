@@ -509,6 +509,7 @@ class DeviceDisk(Device):
     driver_iothread = XMLProperty("./driver/@iothread", is_int=True)
     driver_queues = XMLProperty("./driver/@queues", is_int=True)
     driver_discard_no_unref = XMLProperty("./driver/@discard_no_unref", is_onoff=True)
+    driver_queue_size = XMLProperty("./driver/@queue_size", is_int=True)
 
     driver_metadata_cache_max_size = XMLProperty(
         "./driver/metadata_cache/max_size", is_int=True)

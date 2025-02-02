@@ -123,7 +123,7 @@
       </target>
     </memory>
     <memory model="virtio-mem">
-      <target>
+      <target dynamicMemslots="yes">
         <size>524288</size>
         <node>0</node>
         <block>2048</block>
@@ -267,7 +267,7 @@
       </target>
     </memory>
     <memory model="virtio-mem">
-      <target>
+      <target dynamicMemslots="yes">
         <size>524288</size>
         <node>0</node>
         <block>2048</block>

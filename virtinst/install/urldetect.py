@@ -660,7 +660,7 @@ class _DebianDistro(_DistroTree):
             # There's two cases here:
             # 1) Direct access ISO, attached as CDROM afterwards. We
             #    use one set of kernels in that case which seem to
-            #    assume the prescence of CDROM media
+            #    assume the presence of CDROM media
             # 2) ISO mounted and exported over URL. We use a different
             #    set of kernels that expect to boot from the network
             if cache.fetcher_is_iso():

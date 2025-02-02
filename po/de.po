@@ -29,21 +29,23 @@
 # Flo H <emailtoflorian@gmail.com>, 2022.
 # Anna Nym <geierb+fedoraproject@geierb.de>, 2023.
 # Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
+# Jarne Förster <fedora@mymailclient.de>, 2024.
+# christian hartmann <hartmann.christian@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-11-23 12:38+0000\n"
+"PO-Revision-Date: 2024-12-30 09:22+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.9.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -1153,9 +1155,8 @@ msgid "Disk b_us:"
 msgstr "Festplattenb_us:"
 
 #: ui/details.ui:2830
-#, fuzzy
 msgid "disk-bus-label"
-msgstr "disk-bus-Beschriftung"
+msgstr "Fesplatten Bus Beschriftung"
 
 #: ui/details.ui:2878
 msgid "<b>Virtual Disk</b>"
@@ -2713,7 +2714,7 @@ msgid ""
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Die folgenden Festplattengeräte werden nicht geklont:\n"
+"Die folgenden Festplattengeräte werden geteilt mit:\n"
 "\n"
 "%(pathlist)s\n"
 "Das Ausführen des neuen Gasts kann zum Überschreiben von Daten in diesen "
@@ -2736,14 +2737,13 @@ msgid "Creating virtual machine clone '%s'"
 msgstr "Erzeugen eines Klons der virtuellen Maschine «%s»"
 
 #: virtManager/clone.py:571
-#, fuzzy, python-format
-#| msgid " and selected storage (this may take a while)"
+#, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
-"Erstelle Klon der virtuellen Maschine und des ausgewählten Speichers (dies "
-"kann eine Weile dauern)"
+"Erstelle Klon der Virtuellen Maschine \"%s\" sowie dem ausgewähltem Speicher "
+"(dies kann eine Weile dauern)"
 
 #: virtManager/connection.py:397
 msgid "User session"
@@ -4156,11 +4156,11 @@ msgstr "TIS"
 
 #: virtManager/device/tpmdetails.py:13
 msgid "CRB"
-msgstr ""
+msgstr "CRB"
 
 #: virtManager/device/tpmdetails.py:14
 msgid "SPAPR"
-msgstr ""
+msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:71
 msgid "Emulated"
@@ -4168,7 +4168,7 @@ msgstr "Emuliert:"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
-msgstr ""
+msgstr "CID"
 
 #: virtManager/engine.py:124
 msgid "Checking for virtualization packages..."
@@ -4385,19 +4385,23 @@ msgstr "Authentifizierung benötigt"
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
+"Der Remote-Host benötigt eine netcat/nc Version, welche den -U Parameter "
+"unterstützt."
 
 #: virtManager/lib/connectauth.py:159
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
+"Konfigurieren Sie den SSH Schlüsselzugriff für den Remote-Host, oder "
+"installieren Sie lokal ein SSH askpask Paket."
 
 #: virtManager/lib/connectauth.py:163
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "Stellen Sie sicher, dass der »libvirtd«-Dienst läuft."
+msgstr ""
+"Stellen Sie sicher, dass auf dem Remote-Host ein geeigneter »libvirt«-Dienst "
+"läuft."
 
 #: virtManager/lib/connectauth.py:167
 msgid ""
@@ -4415,6 +4419,9 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
+"Konnte keine lokale Sitzung erkennen: Wenn Sie Virt-Manager über ssh -X oder "
+"VNC laufen lassen, können Sie sich evtl. nicht als normaler Benutzer mit "
+"libvirt verbinden. Versuchen Sie es als root."
 
 #: virtManager/lib/connectauth.py:179
 #, fuzzy
@@ -4425,7 +4432,7 @@ msgstr "Stellen Sie sicher, dass der »libvirtd«-Dienst läuft."
 #: virtManager/lib/connectauth.py:182
 #, python-format
 msgid "Unable to connect to libvirt %s."
-msgstr ""
+msgstr "Verbindung zu libvirt %s kann nicht hergestellt werden."
 
 #: virtManager/lib/connectauth.py:194
 msgid "Virtual Machine Manager Connection Failure"
@@ -4437,6 +4444,9 @@ msgid ""
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
+"Es konnte kein Standard-Hypervisor erkannt werden. Stellen Sie sicher, dass "
+"die entsprechenden QEMU/KVM-Virtualisierungs- und libvirt-Pakete installiert "
+"sind, um die Virtualisierung auf diesem Host zu verwalten."
 
 #: virtManager/lib/connectauth.py:215
 msgid ""
@@ -4448,7 +4458,7 @@ msgstr ""
 #: virtManager/lib/inspection.py:77
 #, python-format
 msgid "Error launching libguestfs appliance: %s"
-msgstr ""
+msgstr "Fehler beim Starten der libguestfs-Anwendung: %s"
 
 #: virtManager/lib/inspection.py:86
 msgid "Inspection found no operating systems."
@@ -4572,21 +4582,17 @@ msgstr "Fehler beim Starten der Verwaltung: %s"
 
 #: virtManager/manager.py:292
 msgid "_New"
-msgstr ""
+msgstr "_Neu"
 
 #: virtManager/manager.py:293
 msgid "_Connect"
 msgstr "_Verbinden"
 
 #: virtManager/manager.py:294
-#, fuzzy
-#| msgid "Disconnected"
 msgid "Dis_connect"
-msgstr "Getrennt"
+msgstr "_Trennen"
 
 #: virtManager/manager.py:296
-#, fuzzy
-#| msgid "_Delete"
 msgid "De_lete"
 msgstr "_Löschen"
 
@@ -4668,7 +4674,7 @@ msgstr "Getunnelt"
 #: virtManager/migrate.py:161
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
-msgstr ""
+msgstr "<span size='large'>'%(vm)s' migrieren</span>"
 
 #: virtManager/migrate.py:222
 msgid "A valid destination connection must be selected."
@@ -4853,11 +4859,11 @@ msgstr "Systemvorgabe (%s)"
 
 #: virtManager/preferences.py:137
 msgid "Manual redirect only"
-msgstr ""
+msgstr "Nur manuelle Umleitung"
 
 #: virtManager/preferences.py:138
 msgid "Auto redirect on USB attach"
-msgstr ""
+msgstr "Automatische Umleitung bei Anschluss an USB"
 
 #: virtManager/preferences.py:170
 msgid "Application default"
@@ -4868,10 +4874,8 @@ msgid "Nearest host CPU model"
 msgstr "Nächstes Wirt-CPU-Modell"
 
 #: virtManager/preferences.py:183
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "Systemvorgabe (%s)"
+msgstr "Systemvorgabe"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5129,10 +5133,8 @@ msgid "PNG files"
 msgstr "PNG-Dateien"
 
 #: virtManager/vmwindow.py:559
-#, fuzzy
-#| msgid "Saved"
 msgid "_Save"
-msgstr "Gespeichert"
+msgstr "_Speichern"
 
 #: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
 msgid "There are unapplied changes."

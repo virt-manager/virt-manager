@@ -123,7 +123,7 @@ class _DataStream(vmmGObject):
         log.debug("Opening console stream for dev=%s alias=%s",
                       dev, name)
         # libxl doesn't set aliases, their open_console just defaults to
-        # opening the first console device, so don't force prescence of
+        # opening the first console device, so don't force presence of
         # an alias
 
         stream = self.conn.get_backend().newStream(libvirt.VIR_STREAM_NONBLOCK)

@@ -40,9 +40,13 @@ class DomainFeatures(XMLBuilder):
     hyperv_frequencies = XMLProperty("./hyperv/frequencies/@state", is_onoff=True)
     hyperv_reenlightenment = XMLProperty("./hyperv/reenlightenment/@state", is_onoff=True)
     hyperv_tlbflush = XMLProperty("./hyperv/tlbflush/@state", is_onoff=True)
+    hyperv_tlbflush_direct = XMLProperty("./hyperv/tlbflush/direct/@state", is_onoff=True)
+    hyperv_tlbflush_extended = XMLProperty("./hyperv/tlbflush/extended/@state", is_onoff=True)
     hyperv_ipi = XMLProperty("./hyperv/ipi/@state", is_onoff=True)
     hyperv_evmcs = XMLProperty("./hyperv/evmcs/@state", is_onoff=True)
     hyperv_avic = XMLProperty("./hyperv/avic/@state", is_onoff=True)
+    hyperv_xmm_input = XMLProperty("./hyperv/xmm_input/@state", is_onoff=True)
+    hyperv_emsr_bitmap = XMLProperty("./hyperv/emsr_bitmap/@state", is_onoff=True)
 
     vmport = XMLProperty("./vmport/@state", is_onoff=True)
     kvm_hidden = XMLProperty("./kvm/hidden/@state", is_onoff=True)
