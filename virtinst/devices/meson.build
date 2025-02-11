@@ -23,6 +23,7 @@ virtinst_devices_sources = files(
   'video.py',
   'vsock.py',
   'watchdog.py',
+  'pstore.py',
 )
 
 install_data(
