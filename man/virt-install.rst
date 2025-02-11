@@ -2052,6 +2052,18 @@ Complete details at https://libvirt.org/formatdomain.html#iommu-devices
 
 
 
+``--pstore``
+^^^^^^^^^^^^
+
+**Syntax:** ``--pstore`` OPT=VAL,[...]
+
+Add a pstore device to a guest for storing oops/panic logs before it crashes.
+
+Use --pstore=? to see a list of all available options.
+Complete details at https://libvirt.org/formatdomain.html#pstore
+
+
+
 
 MISCELLANEOUS OPTIONS
 =====================
