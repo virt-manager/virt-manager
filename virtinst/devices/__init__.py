@@ -27,6 +27,7 @@ from .tpm import DeviceTpm
 from .video import DeviceVideo
 from .vsock import DeviceVsock
 from .watchdog import DeviceWatchdog
+from .pstore import DevicePstore
 
 
 __all__ = [l for l in locals() if l.startswith("Device")]

@@ -49,6 +49,7 @@ class _DomainDevices(XMLBuilder):
         "memory",
         "vsock",
         "iommu",
+        "pstore",
     ]
 
     disk = XMLChildProperty(DeviceDisk)
@@ -76,6 +77,7 @@ class _DomainDevices(XMLBuilder):
     memory = XMLChildProperty(DeviceMemory)
     vsock = XMLChildProperty(DeviceVsock)
     iommu = XMLChildProperty(DeviceIommu)
+    pstore = XMLChildProperty(DevicePstore)
 
     def get_all(self):
         retlist = []

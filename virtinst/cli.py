@@ -919,6 +919,16 @@ def add_device_options(devg, sound_back_compat=False):
         action="append",
         help=_("Configure an IOMMU device. Ex:\n--iommu model=intel,driver.aw_bits=48"),
     )
+    ParserPstore.register()
+    devg.add_argument(
+        "--pstore",
+        action="append",
+        help=_(
+            "Configure a nvram storage device.\n"
+            "It's for guest kernel to record oops/panic logs. Ex:\n"
+            "--pstore backend=acpi-erst,size=8"
+        ),
+    )
 
 
 def add_guest_xml_options(geng):
@@ -5128,6 +5138,19 @@ class ParserAudio(VirtCLIParser):
 
         cls.add_arg("type", "type")
         cls.add_arg("id", "id")
+
+
+class ParserPstore(VirtCLIParser):
+    cli_arg_name = "pstore"
+    guest_propname = "devices.pstore"
+
+    @classmethod
+    def _virtcli_class_init(cls):
+        VirtCLIParser._virtcli_class_init_common(cls)
+
+        cls.add_arg("backend", "backend")
+        cls.add_arg("path", "path")
+        cls.add_arg("size", "size")
 
 
 #####################
