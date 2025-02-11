@@ -1020,6 +1020,10 @@
     <iommu model="intel">
       <driver aw_bits="48" intremap="off" caching_mode="on" eim="off" iotlb="off"/>
     </iommu>
+    <pstore backend="acpi-erst">
+      <path>/tmp/guest_acpi_esrt</path>
+      <size>8</size>
+    </pstore>
   </devices>
   <launchSecurity type="sev" kernelHashes="yes">
     <cbitpos>47</cbitpos>
