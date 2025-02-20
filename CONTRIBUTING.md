@@ -1,11 +1,26 @@
 # Contribute to virt-manager
 
+## Setting up the development environment
+
+This project uses `meson` and `cmake` as build system and `python3` as programming language.
+In order to keep code styling consistent the project adopts `pylint`, `pycodestyle`
+and `codespell`. For testing, `pytest` has been choosen as testing framework.
+For localizing the project `gettext` is being used.
+The graphic interfaces is based on `gtk4`, `glib2` and `gobject-introspection`. The build system relies on `pkgconf`
+for detecting them.
+
+In order to get what's needed on a Fedora or derivative distribution you can install everything with:
+
+```console
+dnf install -y meson python3-devel gtk4 glib2-devel pytest pylint codespell pkgconf gobject-introspection
+```
+
 ## Run code from git
 
 Generally virt-* tools can be run straight from git. For example
 for virt-manager:
 
-```
+```console
 git clone https://github.com/virt-manager/virt-manager
 cd virt-manager
 ./virt-manager --debug
@@ -27,7 +42,6 @@ Fedora, please file a bug in their bug tracker.
 
 If you suspect the bug also affects upstream code, please confirm
 it by running the latest code using the steps above.
-
 
 ## Writing patches
 
@@ -55,6 +69,7 @@ Maintainers can help you out if you aren't sure how to test your code.
 
 One useful way to manually test virt-manager's UI is using libvirt's
 unit test driver. From the source directory, Launch virt-manager like:
+
 ```sh
 ./virt-manager --connect test://$PWD/tests/testdriver.xml
 ```
@@ -75,12 +90,10 @@ command that won't alter your host config, you can do:
 We use [glade-3](https://glade.gnome.org/) for building most of virt-manager's
 UI. See the files in the ui/ directory.
 
-
 ## Submitting patches
 
 The [virt-manager git repo](https://github.com/virt-manager/virt-manager)
 is hosted on github. All patches should be submitted there.
-
 
 ## UI design
 
@@ -90,7 +103,6 @@ in that document may be rejected. If you are unsure if your feature is a
 good fit for virt-manager, please ask on the mailing list before you start
 coding!
 
-
 ## Introductory tasks
 
 Extending the virt-install or virt-xml command line is a good introductory
@@ -98,18 +110,16 @@ task for virt-manager. See [the wiki](https://github.com/virt-manager/virt-manag
 for both a patch tutorial, and a list of libvirt `<domain>` XML options
 that still need to be added to our command line.
 
-
 ## Translations
 
 Translations are handled through the Weblate instance hosted by the Fedora Project.
 
-* https://translate.fedoraproject.org/projects/virt-manager/virt-manager/
-* More info about translating as part of Fedora: https://fedoraproject.org/wiki/L10N/Translate_on_Weblate
+* <https://translate.fedoraproject.org/projects/virt-manager/virt-manager/>
+* More info about translating as part of Fedora: <https://fedoraproject.org/wiki/L10N/Translate_on_Weblate>
 * The up to date translation `.pot` template is stored in the `main` branch
 * Translations are submitted by Weblate as pull requests, usually merged to the
   `main` branch before release and whenever needed (e.g. before updating the
   `.pot` template)
-
 
 ## Advanced testing
 
