@@ -7,13 +7,15 @@ supported. Common operations for any libvirt driver should work.
 
 Several command line tools are also provided:
 
- - `virt-install`: Create new libvirt virtual machines
- - `virt-clone`: Duplicate existing libvirt virtual machines
- - `virt-xml`: Edit existing libvirt virtual machines/manipulate libvirt XML
+- `virt-install`: Create new libvirt virtual machines
+- `virt-clone`: Duplicate existing libvirt virtual machines
+- `virt-xml`: Edit existing libvirt virtual machines/manipulate libvirt XML
 
 For dependency info and installation instructions, see the
-[INSTALL.md](INSTALL.md) file. If you just want to quickly test the
-code from a git checkout, you can launch any of the commands like:
+[INSTALL.md](INSTALL.md) file.
+Once you have all the pre-requisite dependencies installed,
+if you just want to quickly test the code from a git checkout,
+you can launch any of the commands like:
 
 ```sh
 ./virt-manager --debug ...
@@ -21,10 +23,10 @@ code from a git checkout, you can launch any of the commands like:
 
 ## Contact
 
- - For IRC we use #virt on OFTC.
- - For bug reporting info, see
-   [virt-manager bug reporting](https://virt-manager.org/bugs).
- - There are further project details on the
-   [virt-manager](https://virt-manager.org/) website.
- - See the [CONTRIBUTING.md](CONTRIBUTING.md) file for info about submitting patches or
-   contributing translations.
+- For IRC we use #virt on OFTC.
+- For bug reporting info, see
+  [virt-manager bug reporting](https://virt-manager.org/bugs).
+- There are further project details on the
+  [virt-manager](https://virt-manager.org/) website.
+- See the [CONTRIBUTING.md](CONTRIBUTING.md) file for info about submitting patches or
+  contributing translations.
