@@ -464,7 +464,8 @@ def testNewKVMQ35Tweaks(app):
     newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
     newvm.find("oslist-entry").set_text("fribfrob")
     popover = newvm.find("oslist-popover")
-    popover.find_fuzzy("linux2020").click()
+    osname = "linux2022"
+    popover.find_fuzzy(osname).click()
     _forward(newvm)
     _forward(newvm)
 
@@ -472,7 +473,7 @@ def testNewKVMQ35Tweaks(app):
     # hit some code paths elsewhere
     newvm.find_fuzzy("Customize", "check").click()
     newvm.find_fuzzy("Finish", "button").click()
-    vmname = "linux2020"
+    vmname = osname
     details = app.find_details_window(vmname)
     appl = details.find("config-apply")
 
