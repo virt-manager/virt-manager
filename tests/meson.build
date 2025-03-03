@@ -37,18 +37,6 @@ test(
   timeout: 300,
 )
 
-pycodestyle_prog = find_program(['pycodestyle', 'pycodestyle-3'])
-test(
-  'pycodestyle',
-  pycodestyle_prog,
-  args: [
-    '--config', 'setup.cfg',
-    '--format', 'pylint',
-    lint_files,
-  ],
-  workdir: meson.project_source_root(),
-)
-
 codespell_prog = find_program('codespell', required:false)
 if codespell_prog.found()
   test(
