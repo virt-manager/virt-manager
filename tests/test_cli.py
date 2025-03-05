@@ -1018,6 +1018,13 @@ c.add_compare(
     "storage-creation",
 )
 
+# Test encoding of funny password characters
+c.add_compare(
+    "--graphics 'vnc,passwd=&\\\"' "  # Ampersand and double-quote in a VNC password
+    "",
+    "funny-passwords",
+)
+
 
 ########################
 # Storage provisioning #
