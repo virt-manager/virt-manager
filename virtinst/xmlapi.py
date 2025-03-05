@@ -370,7 +370,7 @@ class _Libxml2API(_XMLBase):
                 prop.unlinkNode()
                 prop.freeNode()
         else:
-            node.setProp(propname, xmlutil.xml_escape(setval))
+            node.setProp(propname, setval)
 
     def _node_new(self, xpathseg, parentnode):
         newnode = libxml2.newNode(xpathseg.nodename)
