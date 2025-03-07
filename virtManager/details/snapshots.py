@@ -433,6 +433,7 @@ class vmmSnapshotPage(vmmGObjectUI):
                 "on_snapshot_list_button_press_event": self._popup_snapshot_menu,
                 "on_snapshot_refresh_clicked": self._on_refresh_clicked,
                 "on_snapshot_list_row_activated": self._on_start_clicked,
+                "on_snapshot_orderby_changed": self._snapshot_orderby_changed,
             }
         )
 
@@ -465,7 +466,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         # [name, row label, tooltip, icon name, sortname, current]
         model = Gtk.ListStore(str, str, str, str, str, bool)
-        model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
@@ -511,6 +511,27 @@ class vmmSnapshotPage(vmmGObjectUI):
         menu.add(item)
 
         self._snapmenu = menu
+
+        def orderby_pretty_option(option):
+            option_mappings = {
+                "desc_time": _("Creation time"),
+                "asc_alpha": _("Alphabetical order"),
+            }
+            return option_mappings.get(option, option)
+
+        orderby_options = ["desc_time", "asc_alpha"]
+
+        orderby_combo = self.widget("snapshot-orderby")
+        # [option, label]
+        orderby_model = Gtk.ListStore(str, str)
+        orderby_combo.set_model(orderby_model)
+        text = Gtk.CellRendererText()
+        text.set_property("xpad", 2)
+        orderby_combo.pack_start(text, True)
+        orderby_combo.add_attribute(text, "text", 1)
+        for option in orderby_options:
+            orderby_model.append([option, orderby_pretty_option(option)])
+        orderby_combo.set_active(0)
 
     ###################
     # Functional bits #
@@ -563,6 +584,18 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         has_external = False
         has_internal = False
+
+        if len(snapshots) > 1:
+            self.widget("snapshot-order-box").set_sensitive(True)
+            orderby_combo = self.widget("snapshot-orderby")
+            orderby_option = uiutil.get_list_selection(orderby_combo)
+            if orderby_option == "desc_time":
+                snapshots.sort(key=lambda snap: snap.get_xmlobj().creationTime, reverse=True)
+            else:
+                snapshots.sort(key=lambda snap: snap.get_name(), reverse=False)
+        else:
+            self.widget("snapshot-order-box").set_sensitive(False)
+
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             name = snap.get_name()
@@ -851,3 +884,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         except Exception as e:  # pragma: no cover
             log.exception(e)
             self._set_error_page(_("Error selecting snapshot: %s") % str(e))
+
+    def _snapshot_orderby_changed(self, ignore):
+        # Avoid concurrent filling in list with vmwindow_refresh_vm_state
+        if self._initial_populate:
+            self._populate_snapshot_list()
