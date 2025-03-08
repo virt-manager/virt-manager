@@ -124,6 +124,10 @@ class DomainFeatures(XMLBuilder):
             self.acpi = capsinfo.guest.supports_acpi()
         if self._prop_is_unset("apic"):
             self.apic = capsinfo.guest.supports_apic()
+
+        if not guest.os.is_x86():
+            return
+
         if self._prop_is_unset("pae"):
             if guest.os.is_hvm() and guest.type == "xen" and guest.os.arch == "x86_64":
                 self.pae = True

@@ -414,21 +414,14 @@ class Guest(XMLBuilder):
 
         # These _only_ support virtio so don't check the OS
         if (
-            self.os.is_arm_machvirt()
-            or self.os.is_riscv_virt()
+            self.os.is_riscv_virt()
             or self.os.is_s390x()
             or self.os.is_pseries()
             or self.os.is_loongarch64()
         ):
             return True
 
-        if not os_support:
-            return False
-
-        if self.os.is_x86():
-            return True
-
-        return False  # pragma: no cover
+        return os_support
 
     def supports_virtionet(self):
         return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
@@ -1055,6 +1048,9 @@ class Guest(XMLBuilder):
             dev.set_defaults(self)
 
         self.add_virtioscsi_controller()
+
+        if self.is_uefi() and self.os.is_arm():
+            self.num_pcie_root_ports = 13
         self.add_q35_pcie_controllers()
         self._add_spice_devices()
 
