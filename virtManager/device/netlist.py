@@ -148,7 +148,6 @@ class vmmNetworkList(vmmGObjectUI):
         add_usermode = False
         if self.conn.is_qemu_unprivileged():
             log.debug("Using unprivileged qemu, adding usermode net")
-            vnets = []
             default_bridge = None
             add_usermode = True
 
