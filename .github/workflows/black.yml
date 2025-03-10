@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v5
       - uses: pre-commit/action@v3.0.1
         with:
           extra_args: black --all-files
