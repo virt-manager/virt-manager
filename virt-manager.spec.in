@@ -117,7 +117,7 @@ machine).
 %endif
 
 %meson \
-    -Ddefault-hvs=%{default_hvs} \
+    -Dhvs-choices=%{default_hvs} \
     %{?_default_graphics} \
     -Dupdate-icon-cache=false \
     -Dcompile-schemas=false \
