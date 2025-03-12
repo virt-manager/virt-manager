@@ -41,7 +41,7 @@ conf = configuration_data()
 conf.set('version', meson.project_version())
 conf.set('prefix', prefix)
 conf.set('default_graphics', get_option('default-graphics'))
-conf.set('default_hvs', ','.join(get_option('hvs-choices')))
+conf.set('hvs_choices', ','.join(get_option('hvs-choices')))
 
 configure_file(
   input: 'build.cfg.in',

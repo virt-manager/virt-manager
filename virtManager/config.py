@@ -172,7 +172,7 @@ class vmmConfig(object):
         self._keyring = None
 
         self.default_graphics_from_config = BuildConfig.default_graphics
-        self.default_hvs = BuildConfig.default_hvs
+        self.hvs_choices = BuildConfig.hvs_choices
 
         self.default_storage_format_from_config = "qcow2"
         self.default_console_resizeguest = 0

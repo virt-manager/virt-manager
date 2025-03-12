@@ -1,6 +1,6 @@
 # -*- rpm-spec -*-
 
-%global default_hvs         "qemu,xen,lxc"
+%global hvs_choices         "qemu,xen,lxc"
 %global have_spice          %{defined fedora}
 
 
@@ -117,7 +117,7 @@ machine).
 %endif
 
 %meson \
-    -Dhvs-choices=%{default_hvs} \
+    -Dhvs-choices=%{hvs_choices} \
     %{?_default_graphics} \
     -Dupdate-icon-cache=false \
     -Dcompile-schemas=false \
