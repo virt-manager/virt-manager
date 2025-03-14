@@ -52,88 +52,84 @@ class CloudInitData:
         if self.clouduser_ssh_key:
             return self._get_password(self.clouduser_ssh_key)
 
+    def _create_metadata_content(self):
+        content = ""
+        if self.meta_data:
+            log.debug("Using meta-data content from path=%s", self.meta_data)
+            content = open(self.meta_data).read()
+        return content
 
-def _create_metadata_content(cloudinit_data):
-    content = ""
-    if cloudinit_data.meta_data:
-        log.debug("Using meta-data content from path=%s", cloudinit_data.meta_data)
-        content = open(cloudinit_data.meta_data).read()
-    return content
+    def _create_userdata_content(self):
+        if self.user_data:
+            log.debug("Using user-data content from path=%s", self.user_data)
+            return open(self.user_data).read()
 
+        content = "#cloud-config\n"
 
-def _create_userdata_content(cloudinit_data):
-    if cloudinit_data.user_data:
-        log.debug("Using user-data content from path=%s", cloudinit_data.user_data)
-        return open(cloudinit_data.user_data).read()
+        if self.root_password_generate or self.root_password_file:
+            rootpass = self.get_root_password()
+            content += "chpasswd:\n"
+            content += "  list: |\n"
+            content += "    root:%s\n" % rootpass
 
-    content = "#cloud-config\n"
+        if self.root_password_generate:
+            content += "  expire: True\n"
+        elif self.root_password_file:
+            content += "  expire: False\n"
 
-    if cloudinit_data.root_password_generate or cloudinit_data.root_password_file:
-        rootpass = cloudinit_data.get_root_password()
-        content += "chpasswd:\n"
-        content += "  list: |\n"
-        content += "    root:%s\n" % rootpass
+        if self.root_ssh_key:
+            rootkey = self.get_root_ssh_key()
+            content += "users:\n"
+            content += "  - default\n"
+            content += "  - name: root\n"
+            content += "    ssh_authorized_keys:\n"
+            content += "      - %s\n" % rootkey
 
-    if cloudinit_data.root_password_generate:
-        content += "  expire: True\n"
-    elif cloudinit_data.root_password_file:
-        content += "  expire: False\n"
+        if self.clouduser_ssh_key:
+            userkey = self.get_clouduser_ssh_key()
+            content += "ssh_authorized_keys:\n"
+            content += "  - %s\n" % userkey
 
-    if cloudinit_data.root_ssh_key:
-        rootkey = cloudinit_data.get_root_ssh_key()
-        content += "users:\n"
-        content += "  - default\n"
-        content += "  - name: root\n"
-        content += "    ssh_authorized_keys:\n"
-        content += "      - %s\n" % rootkey
+        if self.disable:
+            content += "runcmd:\n"
+            content += '- echo "Disabled by virt-install" > ' "/etc/cloud/cloud-init.disabled\n"
 
-    if cloudinit_data.clouduser_ssh_key:
-        userkey = cloudinit_data.get_clouduser_ssh_key()
-        content += "ssh_authorized_keys:\n"
-        content += "  - %s\n" % userkey
+        clean_content = re.sub(r"root:(.*)", "root:[SCRUBBLED]", content)
+        if "VIRTINST_TEST_SUITE_PRINT_CLOUDINIT" in os.environ:
+            print(clean_content)
 
-    if cloudinit_data.disable:
-        content += "runcmd:\n"
-        content += '- echo "Disabled by virt-install" > ' "/etc/cloud/cloud-init.disabled\n"
+        log.debug("Generated cloud-init userdata: \n%s", clean_content)
+        return content
 
-    clean_content = re.sub(r"root:(.*)", "root:[SCRUBBLED]", content)
-    if "VIRTINST_TEST_SUITE_PRINT_CLOUDINIT" in os.environ:
-        print(clean_content)
+    def _create_network_config_content(self):
+        content = ""
+        if self.network_config:
+            log.debug("Using network-config content from path=%s", self.network_config)
+            content = open(self.network_config).read()
+        return content
 
-    log.debug("Generated cloud-init userdata: \n%s", clean_content)
-    return content
+    def create_files(self, scratchdir):
+        metadata = self._create_metadata_content()
+        userdata = self._create_userdata_content()
 
+        data = [(metadata, "meta-data"), (userdata, "user-data")]
+        network_config = self._create_network_config_content()
+        if network_config:
+            data.append((network_config, "network-config"))
 
-def _create_network_config_content(cloudinit_data):
-    content = ""
-    if cloudinit_data.network_config:
-        log.debug("Using network-config content from path=%s", cloudinit_data.network_config)
-        content = open(cloudinit_data.network_config).read()
-    return content
+        filepairs = []
+        try:
+            for content, destfile in data:
+                fileobj = tempfile.NamedTemporaryFile(
+                    prefix="virtinst-", suffix=("-%s" % destfile), dir=scratchdir, delete=False
+                )
+                filename = fileobj.name
+                filepairs.append((filename, destfile))
 
+                with open(filename, "w+") as f:
+                    f.write(content)
+        except Exception:  # pragma: no cover
+            for filepair in filepairs:
+                os.unlink(filepair[0])
 
-def create_files(scratchdir, cloudinit_data):
-    metadata = _create_metadata_content(cloudinit_data)
-    userdata = _create_userdata_content(cloudinit_data)
-
-    data = [(metadata, "meta-data"), (userdata, "user-data")]
-    network_config = _create_network_config_content(cloudinit_data)
-    if network_config:
-        data.append((network_config, "network-config"))
-
-    filepairs = []
-    try:
-        for content, destfile in data:
-            fileobj = tempfile.NamedTemporaryFile(
-                prefix="virtinst-", suffix=("-%s" % destfile), dir=scratchdir, delete=False
-            )
-            filename = fileobj.name
-            filepairs.append((filename, destfile))
-
-            with open(filename, "w+") as f:
-                f.write(content)
-    except Exception:  # pragma: no cover
-        for filepair in filepairs:
-            os.unlink(filepair[0])
-
-    return filepairs
+        return filepairs
