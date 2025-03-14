@@ -104,9 +104,9 @@ class vmmCreateConn(vmmGObjectUI):
 
         def _add_hv_row(rowid, config_name, label):
             if (
-                not self.config.default_hvs
+                not self.config.hvs_choices
                 or not config_name
-                or config_name in self.config.default_hvs
+                or config_name in self.config.hvs_choices
             ):
                 model.append([rowid, label])
 

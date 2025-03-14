@@ -48,7 +48,7 @@ class _BuildConfig(object):
         self.version = _get_param("version", "")
 
         self.default_graphics = _get_param("default_graphics", "spice")
-        self.default_hvs = _split_list(_get_param("default_hvs", ""))
+        self.hvs_choices = _split_list(_get_param("hvs_choices", ""))
 
         self.prefix = None
         self.gettext_dir = None
