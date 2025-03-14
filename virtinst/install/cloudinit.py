@@ -13,15 +13,16 @@ from ..logger import log
 
 
 class CloudInitData:
-    disable = None
-    root_password_generate = None
-    root_password_file = None
-    generated_root_password = None
-    root_ssh_key = None
-    clouduser_ssh_key = None
-    user_data = None
-    meta_data = None
-    network_config = None
+    def __init__(self):
+        self.disable = None
+        self.root_password_generate = None
+        self.root_password_file = None
+        self.generated_root_password = None
+        self.root_ssh_key = None
+        self.clouduser_ssh_key = None
+        self.user_data = None
+        self.meta_data = None
+        self.network_config = None
 
     def _generate_password(self):
         if not self.generated_root_password:
