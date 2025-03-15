@@ -32,13 +32,14 @@
 # Jarne Förster <fedora@mymailclient.de>, 2024.
 # christian hartmann <hartmann.christian@gmail.com>, 2024.
 # ano n <84fwmjak@anonaddy.com>, 2025.
+# ano n <anon1010@users.noreply.translate.fedoraproject.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-03-13 08:38+0000\n"
-"Last-Translator: ano n <84fwmjak@anonaddy.com>\n"
+"PO-Revision-Date: 2025-03-15 18:38+0000\n"
+"Last-Translator: ano n <anon1010@users.noreply.translate.fedoraproject.org>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/de/>\n"
 "Language: de\n"
@@ -46,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.10.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -6588,27 +6589,27 @@ msgstr ""
 #: virtinst/virtinstall.py:388
 #, python-brace-format
 msgid "Using {osname} --location {url}"
-msgstr ""
+msgstr "Benutze {osname} --location {url}"
 
 #: virtinst/virtinstall.py:472
 #, python-brace-format
 msgid "Using default --name {vm_name}"
-msgstr ""
+msgstr "Standardmäßig --name {vm_name} verwenden"
 
 #: virtinst/virtinstall.py:484
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
-msgstr ""
+msgstr "Benutzer Container Standard --memory {megabytes}"
 
 #: virtinst/virtinstall.py:503
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
-msgstr ""
+msgstr "Verwendung von {os_name} standard --memory {megabytes}"
 
 #: virtinst/virtinstall.py:514
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
-msgstr ""
+msgstr "Verwende {os_name} standard --disk {disk_options}"
 
 #: virtinst/virtinstall.py:564
 #, python-brace-format
@@ -6618,6 +6619,9 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"Fehler bei der Erkennung des osinfo-Betriebssystemnamens vom "
+"Installationsmedium unter Verwendung des Fallback-Namens '{name}'.\n"
+"Bitte melden Sie einen Fehler bei virt-install."
 
 #: virtinst/virtinstall.py:571
 #, python-format
@@ -6629,12 +6633,17 @@ msgid ""
 "--os-variant/--osinfo OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
+"--os-variant/--osinfo Der Name des Betriebssystems ist erforderlich, aber es "
+"wurde kein Wert gesetzt oder erkannt."
 
 #: virtinst/virtinstall.py:586
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"Es gab einen schwerwiegender Fehler. Die Angabe eines Betriebssystemnamens "
+"ist erforderlich\n"
+"für leistungsfähige und sichere Standardwerte für virtuelle Maschinen.\n"
 
 #: virtinst/virtinstall.py:590
 msgid ""
@@ -6643,6 +6652,11 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"Wenn Sie erwartet haben, dass virt-install ein Betriebssystemnamen aus dem\n"
+"Installationsmedium erkennt, können Sie einen Ersatzbetriebssystemnamen "
+"festlegen mit\n"
+"\n"
+"  --osinfo detect=on,name=OSNAME\n"
 
 #: virtinst/virtinstall.py:599
 msgid ""
@@ -6650,6 +6664,10 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"Sie können eine vollständige Liste der möglichen Werte für den "
+"Betriebssystemnamen anzeigen mit:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:606
 #, python-brace-format
@@ -6657,6 +6675,9 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"Wenn Ihre Linux-Distribution nicht aufgelistet ist, versuchen Sie es mit "
+"einem der generischen Werte\n"
+"wie z.B.: {oslist}\n"
 
 #: virtinst/virtinstall.py:613
 #, python-brace-format
@@ -6667,11 +6688,17 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"Wenn Sie nur das alte Verhalten wiederherstellen wollen, können Sie "
+"Folgendes verwenden:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"Oder export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:623
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "{env_var} gesetzt. Überspringe fatalen Fehler."
 
 #: virtinst/virtinstall.py:708
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6691,11 +6718,13 @@ msgstr[1] "%(minutes)d Minuten abwarten, bis Installation abgeschlossen ist."
 #: virtinst/virtinstall.py:768
 #, python-format
 msgid "Password for first root login is: %s"
-msgstr ""
+msgstr "Das Passwort für die erste Root-Anmeldung lautet: %s"
 
 #: virtinst/virtinstall.py:780
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
+"Die Installation wird in 10 Sekunden fortgesetzt (zum Überspringen Enter "
+"drücken)..."
 
 #: virtinst/virtinstall.py:807
 msgid "Console command returned failure."
@@ -6708,15 +6737,19 @@ msgstr "Domain ist abgestürzt."
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "VM unerwartet verschwunden: %s"
 
 #: virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
+"Die Domäne ist noch in Betrieb. Die Installation kann noch nicht "
+"abgeschlossen sein."
 
 #: virtinst/virtinstall.py:886
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
+"Sie können sich erneut mit der Konsole verbinden, um den "
+"Installationsvorgang abzuschließen."
 
 #: virtinst/virtinstall.py:897
 msgid "Domain has shutdown. Continuing."
@@ -6743,7 +6776,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:940
 msgid "User stopped the VM. Not rebooting."
-msgstr ""
+msgstr "Benutzer hat die VM gestoppt. Kein Neustart."
 
 #: virtinst/virtinstall.py:943
 msgid "Restarting guest."
@@ -6796,6 +6829,8 @@ msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
 msgstr ""
+"URL der Distro-Installation, z. B. https://host/path. Siehe Manpage für "
+"spezifische Distro-Beispiele."
 
 #: virtinst/virtinstall.py:1051
 msgid "Boot from the network using the PXE protocol"
@@ -6823,17 +6858,20 @@ msgstr "Eine unbeaufsichtigte Installation durchführen"
 
 #: virtinst/virtinstall.py:1063
 msgid "Specify fine grained install options"
-msgstr ""
+msgstr "Erweiterte Installationsoptionen festlegen"
 
 #: virtinst/virtinstall.py:1065
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
+"Vorhandene VM neu installieren. Nur die Installationsoptionen werden "
+"übernommen, alle anderen VM-Konfigurationsoptionen werden ignoriert."
 
 #: virtinst/virtinstall.py:1068
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
+"Durchführen einer Cloud-Image-Installation, Konfigurieren von cloud-init"
 
 #: virtinst/virtinstall.py:1082
 msgid "Device Options"
@@ -6882,6 +6920,8 @@ msgstr "Erstellen Sie eine vorübergehende Domäne."
 #: virtinst/virtinstall.py:1145
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
+"Erzwingen Sie das Ausschalten der Domäne, wenn der Konsolenbetrachter "
+"geschlossen wird."
 
 #: virtinst/virtinstall.py:1148
 msgid "Minutes to wait for install to complete."
@@ -6893,15 +6933,15 @@ msgstr "Bitte geben Sie »Ja« oder »Nein« ein:"
 
 #: virtinst/virtxml.py:102
 msgid "--os-variant/--osinfo is not supported with --edit"
-msgstr ""
+msgstr "--os-variant/--osinfo wird mit --edit nicht unterstützt"
 
 #: virtinst/virtxml.py:104
 msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr ""
+msgstr "--os-variant/--osinfo wird nicht unterstützt mit --remove-device"
 
 #: virtinst/virtxml.py:106
 msgid "--os-variant/--osinfo is not supported with --build-xml"
-msgstr ""
+msgstr "--os-variant/--osinfo wird nicht unterstützt mit --build-xml"
 
 #: virtinst/virtxml.py:109
 #, fuzzy, python-brace-format
@@ -6995,7 +7035,7 @@ msgstr "Domain '%s' erfolgreich definiert."
 #: virtinst/virtxml.py:333
 #, python-format
 msgid "Start '%s' with the changed XML?"
-msgstr ""
+msgstr "Starte '%s' mit dem geänderten XML?"
 
 #: virtinst/virtxml.py:343 virtinst/virtxml.py:619
 #, fuzzy, python-format
@@ -7006,7 +7046,7 @@ msgstr "Fehler beim Starten der Domain"
 #: virtinst/virtxml.py:348 virtinst/virtxml.py:623
 #, python-format
 msgid "Domain '%s' started successfully."
-msgstr ""
+msgstr "Domäne '%s' erfolgreich gestartet."
 
 #: virtinst/virtxml.py:354
 #, python-format
@@ -7015,6 +7055,9 @@ msgid ""
 "\n"
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Hotplug dieses Geräts an den Gast „%(domain)s“?"
 
 #: virtinst/virtxml.py:356
 #, fuzzy
@@ -7035,6 +7078,9 @@ msgid ""
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Dieses Gerät vom Gast „%(domain)s“ entfernen?"
 
 #: virtinst/virtxml.py:361
 #, fuzzy
