@@ -1021,7 +1021,7 @@ class vmmDomain(vmmLibvirtObject):
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
-    def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL):
+    def define_hostdev(self, devobj, do_hotplug, rom_bar=_SENTINEL, startup_policy=_SENTINEL):
         xmlobj = self._make_xmlobj_to_define()
         editdev = self._lookup_device_to_define(xmlobj, devobj, do_hotplug)
         if not editdev:
@@ -1029,6 +1029,9 @@ class vmmDomain(vmmLibvirtObject):
 
         if rom_bar != _SENTINEL:
             editdev.rom_bar = rom_bar
+
+        if startup_policy != _SENTINEL:
+            editdev.startup_policy = startup_policy
 
         self._process_device_define(editdev, xmlobj, do_hotplug)
 
