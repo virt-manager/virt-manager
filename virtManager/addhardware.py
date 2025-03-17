@@ -756,6 +756,13 @@ class vmmAddHardware(vmmGObjectUI):
         default = DeviceSound.default_model(vm.xmlobj)
         uiutil.build_simple_combo(combo, values, default_value=default)
 
+    @staticmethod
+    def build_hostdev_usb_startup_policy_combo(_vm, combo):
+        values = [[None, _("Hypervisor default")]]
+        for m in DeviceHostdev.STARTUP_POLICIES:
+            values.append([m, m])
+        uiutil.build_simple_combo(combo, values)
+
     def _build_hostdev_treeview(self):
         host_dev = self.widget("host-device")
         # [ xmlobj, label, sensitive, tooltip]
