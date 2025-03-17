@@ -10,6 +10,8 @@ import string
 import tempfile
 
 from ..logger import log
+from .. import progress
+from . import urlfetcher
 
 
 class _CloudInitConfig:
@@ -31,7 +33,12 @@ class _CloudInitConfig:
         self._config = config
         self._scratchdir = scratchdir
 
-    def _create_file(self, content):
+    def _create_file(self):
+        content = self._content()
+
+        if not content:
+            return None
+
         fileobj = tempfile.NamedTemporaryFile(
             prefix="virtinst-", suffix=f"-{self._destfile}", dir=self._scratchdir, delete=False
         )
@@ -39,18 +46,20 @@ class _CloudInitConfig:
             f.write(content)
         return fileobj.name
 
+    def _fetch_file(self):
+        log.debug("Using '%s' content from path='%s'", self._destfile, self._config)
+        meter = progress.make_meter(quiet=True)
+        fetcher = urlfetcher.DirectFetcher(None, self._scratchdir, meter)
+        return fetcher.acquireFile(self._config)
+
     def add_filepair(self, filepairs):
         if self._config:
-            log.debug("Using '%s' content from path='%s'", self._destfile, self._config)
-            with open(self._config) as f:
-                content = f.read()
+            file = self._fetch_file()
         else:
-            content = self._content()
+            file = self._create_file()
 
-        if not content:
+        if not file:
             return
-
-        file = self._create_file(content)
 
         filepairs.append((file, self._destfile))
 
