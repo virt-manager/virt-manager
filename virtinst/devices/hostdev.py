@@ -118,6 +118,8 @@ class DeviceHostdev(Device):
     device = XMLProperty("./source/address/@device")
     bus = XMLProperty("./source/address/@bus")
 
+    startup_policy = XMLProperty("./source/@startupPolicy")
+
     domain = XMLProperty("./source/address/@domain")
     function = XMLProperty("./source/address/@function")
     slot = XMLProperty("./source/address/@slot")

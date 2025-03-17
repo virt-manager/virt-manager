@@ -753,6 +753,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev wlan0,type=net
 --hostdev /dev/vdz,type=storage
 --hostdev /dev/pty7,type=misc
+--hostdev usb_device_781_5567_04010819E733024A202F,source.startupPolicy=optional
 
 
 --filesystem /source,/target,alias.name=testfsalias,driver.ats=on,driver.iommu=off,driver.packed=on,driver.page_per_vq=off
