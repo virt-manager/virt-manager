@@ -12,6 +12,49 @@ import tempfile
 from ..logger import log
 
 
+class _CloudInitConfig:
+    """
+    Helper class to create cloud-init configuration file.
+
+    @destfile: Name of the cloud-init configuration file to be included
+        in cloud-init ISO file.
+    @content: Function to create the content of @destfile. It should return str
+        to create the configuration file or None to not create the file.
+    @config: Path to configuration file user provided to virt-install, if provided
+        @content is ignored.
+    @scratchdir: Directory where to place temporary files.
+    """
+
+    def __init__(self, destfile, content, config, scratchdir):
+        self._destfile = destfile
+        self._content = content
+        self._config = config
+        self._scratchdir = scratchdir
+
+    def _create_file(self, content):
+        fileobj = tempfile.NamedTemporaryFile(
+            prefix="virtinst-", suffix=f"-{self._destfile}", dir=self._scratchdir, delete=False
+        )
+        with open(fileobj.name, "w+") as f:
+            f.write(content)
+        return fileobj.name
+
+    def add_filepair(self, filepairs):
+        if self._config:
+            log.debug("Using '%s' content from path='%s'", self._destfile, self._config)
+            with open(self._config) as f:
+                content = f.read()
+        else:
+            content = self._content()
+
+        if not content:
+            return
+
+        file = self._create_file(content)
+
+        filepairs.append((file, self._destfile))
+
+
 class CloudInitData:
     def __init__(self):
         self.disable = None
@@ -53,17 +96,9 @@ class CloudInitData:
             return self._get_password(self.clouduser_ssh_key)
 
     def _create_metadata_content(self):
-        content = ""
-        if self.meta_data:
-            log.debug("Using meta-data content from path=%s", self.meta_data)
-            content = open(self.meta_data).read()
-        return content
+        return ""
 
     def _create_userdata_content(self):
-        if self.user_data:
-            log.debug("Using user-data content from path=%s", self.user_data)
-            return open(self.user_data).read()
-
         content = "#cloud-config\n"
 
         if self.root_password_generate or self.root_password_file:
@@ -102,34 +137,27 @@ class CloudInitData:
         return content
 
     def _create_network_config_content(self):
-        content = ""
-        if self.network_config:
-            log.debug("Using network-config content from path=%s", self.network_config)
-            content = open(self.network_config).read()
-        return content
+        return None
 
     def create_files(self, scratchdir):
-        metadata = self._create_metadata_content()
-        userdata = self._create_userdata_content()
-
-        data = [(metadata, "meta-data"), (userdata, "user-data")]
-        network_config = self._create_network_config_content()
-        if network_config:
-            data.append((network_config, "network-config"))
+        meta_data = _CloudInitConfig(
+            "meta-data", self._create_metadata_content, self.meta_data, scratchdir
+        )
+        user_data = _CloudInitConfig(
+            "user-data", self._create_userdata_content, self.user_data, scratchdir
+        )
+        network_config = _CloudInitConfig(
+            "network-config", self._create_network_config_content, self.network_config, scratchdir
+        )
 
         filepairs = []
         try:
-            for content, destfile in data:
-                fileobj = tempfile.NamedTemporaryFile(
-                    prefix="virtinst-", suffix=("-%s" % destfile), dir=scratchdir, delete=False
-                )
-                filename = fileobj.name
-                filepairs.append((filename, destfile))
-
-                with open(filename, "w+") as f:
-                    f.write(content)
+            meta_data.add_filepair(filepairs)
+            user_data.add_filepair(filepairs)
+            network_config.add_filepair(filepairs)
         except Exception:  # pragma: no cover
             for filepair in filepairs:
                 os.unlink(filepair[0])
+            raise
 
         return filepairs
