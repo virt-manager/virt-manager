@@ -67,7 +67,8 @@ from ..delete import vmmDeleteStorage
     EDIT_VSOCK_CID,
     EDIT_FS,
     EDIT_HOSTDEV_ROMBAR,
-) = range(1, 38)
+    EDIT_HOSTDEV_USB_STARTUPPOLICY,
+) = range(1, 39)
 
 
 # Columns in hw list model
@@ -436,6 +437,7 @@ class vmmDetails(vmmGObjectUI):
                 "on_watchdog_action_combo_changed": _e(EDIT_WATCHDOG_ACTION),
                 "on_smartcard_mode_combo_changed": _e(EDIT_SMARTCARD_MODE),
                 "on_hostdev_rombar_toggled": _e(EDIT_HOSTDEV_ROMBAR),
+                "on_hostdev_usb_startup_policy_changed": _e(EDIT_HOSTDEV_USB_STARTUPPOLICY),
                 "on_controller_model_combo_changed": _e(EDIT_CONTROLLER_MODEL),
                 "on_config_apply_clicked": self._config_apply_clicked_cb,
                 "on_config_cancel_clicked": self._config_cancel_clicked_cb,
@@ -810,6 +812,10 @@ class vmmDetails(vmmGObjectUI):
         col.pack_start(text, True)
         col.add_attribute(text, "text", 0)
         combo.append_column(col)
+
+        # Hostdev startup policy combo
+        combo = self.widget("hostdev-usb-startup-policy")
+        vmmAddHardware.build_hostdev_usb_startup_policy_combo(self.vm, combo)
 
     ##########################
     # Window state listeners #
@@ -1591,6 +1597,10 @@ class vmmDetails(vmmGObjectUI):
         if self._edited(EDIT_HOSTDEV_ROMBAR):
             kwargs["rom_bar"] = self.widget("hostdev-rombar").get_active()
 
+        if self._edited(EDIT_HOSTDEV_USB_STARTUPPOLICY):
+            startup_policy = uiutil.get_list_selection(self.widget("hostdev-usb-startup-policy"))
+            kwargs["startup_policy"] = startup_policy
+
         return self._change_config(self.vm.define_hostdev, kwargs, devobj=devobj)
 
     def _apply_tpm(self, devobj):
@@ -2106,6 +2116,13 @@ class vmmDetails(vmmGObjectUI):
             pretty_name = vmmAddHardware.hostdev_pretty_name(hostdev)
 
         uiutil.set_grid_row_visible(self.widget("hostdev-rombar"), hostdev.type == "pci")
+        uiutil.set_grid_row_visible(
+            self.widget("hostdev-usb-startup-policy"), hostdev.type == "usb"
+        )
+
+        if hostdev.type == "usb":
+            combo = self.widget("hostdev-usb-startup-policy")
+            uiutil.set_list_selection(combo, hostdev.startup_policy)
 
         devlabel = "<b>" + _("Physical %s Device") % hostdev.type.upper() + "</b>"
         self.widget("hostdev-title").set_markup(devlabel)
