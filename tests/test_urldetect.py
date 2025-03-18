@@ -58,6 +58,7 @@ def test_debian():
     _test("debian/debian-8.10.0-amd64-netinst.iso", kernel="linux")
     _test(
         "debian/debian-8.10.0-amd64-netinst.iso",
+        distro="debian8",
         iso=True,
         kernel="install.amd/vmlinuz",
     )
