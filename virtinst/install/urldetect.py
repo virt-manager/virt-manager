@@ -744,10 +744,13 @@ class _DebianDistro(_DistroTree):
 
     def _detect_version(self):
         oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
+        disk_info = None
 
         if self.cache.debian_media_type == "daily":
             log.debug("Appears to be debian 'daily' URL, using latest debiantesting")
             return "debiantesting"
+        elif self.cache.debian_media_type == "disk":
+            disk_info = self.cache.acquire_file_content(".disk/info").lower()
 
         for osobj in oses:
             if osobj.codename:
@@ -761,6 +764,10 @@ class _DebianDistro(_DistroTree):
 
             if ("/%s/" % codename) in self.uri:
                 log.debug("Found codename=%s in the URL string", codename)
+                return osobj.name
+
+            if disk_info and f'"{codename}"' in disk_info:
+                log.debug("Found codename=%s in the disk/info file", codename)
                 return osobj.name
 
 
