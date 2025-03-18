@@ -179,6 +179,7 @@ class DeviceInterface(Device):
     TYPE_VHOSTUSER = "vhostuser"
     TYPE_ETHERNET = "ethernet"
     TYPE_DIRECT = "direct"
+    TYPE_VDPA = "vdpa"
 
     @staticmethod
     def generate_mac(conn):
@@ -238,7 +239,7 @@ class DeviceInterface(Device):
             return self.network
         if self.type == self.TYPE_BRIDGE:
             return self.bridge
-        if self.type == self.TYPE_DIRECT:
+        if self.type == self.TYPE_DIRECT or self.type == self.TYPE_VDPA:
             return self.source_dev
         return None
 
@@ -255,7 +256,7 @@ class DeviceInterface(Device):
             self.network = newsource
         elif self.type == self.TYPE_BRIDGE:
             self.bridge = newsource
-        elif self.type == self.TYPE_DIRECT:
+        elif self.type == self.TYPE_DIRECT or self.type == self.TYPE_VDPA:
             self.source_dev = newsource
 
     source = property(_get_source, _set_source)
