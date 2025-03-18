@@ -683,7 +683,7 @@ class _DebianDistro(_DistroTree):
 
         # Check for standard arch strings which will be
         # in the URI name for --location $ISO mounts
-        for arch in ["i386", "amd64", "arm64", "riscv64"]:
+        for arch in ["i386", "amd64", "arm64", "riscv64", "s390x", "ppc64el"]:
             if arch in self.uri:
                 log.debug("Found treearch=%s in uri", arch)
                 return arch
@@ -721,20 +721,21 @@ class _DebianDistro(_DistroTree):
         self._kernel_paths.append((hvmroot + kernel_basename, hvmroot + initrd_basename))
 
     def _set_installcd_paths(self):
+        tree_arch = self._find_treearch()
         if self._debname == "ubuntu":
-            if not self.arch == "s390x":
+            if not tree_arch == "s390x":
                 kpair = ("install/vmlinuz", "install/initrd.gz")
             else:
                 kpair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
-        elif self.arch == "x86_64":
+        elif tree_arch == "amd64":
             kpair = ("install.amd/vmlinuz", "install.amd/initrd.gz")
-        elif self.arch == "i686":
+        elif tree_arch == "i386":
             kpair = ("install.386/vmlinuz", "install.386/initrd.gz")
-        elif self.arch == "aarch64":
+        elif tree_arch == "arm64":
             kpair = ("install.a64/vmlinuz", "install.a64/initrd.gz")
-        elif self.arch == "ppc64le":
+        elif tree_arch == "ppc64el":
             kpair = ("install/vmlinux", "install/initrd.gz")
-        elif self.arch == "s390x":
+        elif tree_arch == "s390x":
             kpair = ("boot/linux_vm", "boot/root.bin")
         else:
             kpair = ("install/vmlinuz", "install/initrd.gz")
