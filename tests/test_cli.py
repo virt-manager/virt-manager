@@ -667,6 +667,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network type=direct,source=eth5,source_mode=vepa,source.mode=vepa,target=mytap12,virtualport_type=802.1Qbg,virtualport_managerid=12,virtualport_typeid=1193046,virtualport_typeidversion=1,virtualport_instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500,virtualport.parameters.managerid=12,virtualport.parameters.typeid=1193046,virtualport.parameters.typeidversion=1,virtualport.parameters.instanceid=09b11c53-8b5c-4eeb-8f00-d84eaa0aaa3b,boot_order=1,trustGuestRxFilters=yes,mtu.size=1500
 --network user,model=virtio,address.type=spapr-vio,address.reg=0x500,link.state=no
 --network vhostuser,source_type=unix,source_path=/tmp/vhost1.sock,source_mode=server,model=virtio,source.type=unix,source.path=/tmp/vhost1.sock,address.type=pci,address.bus=0x00,address.slot=0x10,address.function=0x0,address.domain=0x0000
+--network type=vdpa,source=/dev/vhost-vdpa-0,mac=12:34:56:78:9a:bc,driver.queues=16,driver.page_per_vq=on
 --network user,address.type=ccw,address.cssid=0xfe,address.ssid=0,address.devno=01,boot.order=15,boot.loadparm=SYSTEM1
 --network model=vmxnet3
 --network backend.type=passt,backend.logFile=/tmp/foo.log,portForward0.proto=tcp,portForward0.address=192.168.10.10,portForward0.dev=eth0,portForward0.range0.start=4000,portForward0.range0.end=5000,portForward0.range0.to=10000,portForward0.range0.exclude=no,portForward0.range1.start=6000,portForward1.proto=tcp,portForward1.range0.start=2022,portForward1.range0.to=22

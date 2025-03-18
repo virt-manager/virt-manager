@@ -613,6 +613,12 @@
       <model type="virtio"/>
       <address type="pci" domain="0" bus="0" slot="16" function="0"/>
     </interface>
+    <interface type="vdpa">
+      <source dev="/dev/vhost-vdpa-0"/>
+      <mac address="12:34:56:78:9a:bc"/>
+      <model type="virtio"/>
+      <driver page_per_vq="on" queues="16"/>
+    </interface>
     <interface type="user">
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>
