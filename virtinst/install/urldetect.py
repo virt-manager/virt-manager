@@ -688,10 +688,7 @@ class _DebianDistro(_DistroTree):
                 log.debug("Found treearch=%s in uri", arch)
                 return arch
 
-        # Otherwise default to i386
-        arch = "i386"
-        log.debug("No treearch found in uri, defaulting to arch=%s", arch)
-        return arch
+        return None
 
     def _set_url_paths(self):
         url_prefix = "current/images"
@@ -703,6 +700,10 @@ class _DebianDistro(_DistroTree):
             url_prefix = "current/legacy-images"
 
         tree_arch = self._find_treearch()
+        if not tree_arch:
+            tree_arch = "i386"
+            log.debug("No treearch found in uri, defaulting to arch=%s", tree_arch)
+
         hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix, self._debname, tree_arch)
         initrd_basename = "initrd.gz"
         kernel_basename = "linux"
