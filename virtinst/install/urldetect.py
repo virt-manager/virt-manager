@@ -683,17 +683,12 @@ class _DebianDistro(_DistroTree):
 
         # Check for standard arch strings which will be
         # in the URI name for --location $ISO mounts
-        for arch in ["i386", "amd64", "x86_64", "arm64", "riscv64"]:
+        for arch in ["i386", "amd64", "arm64", "riscv64", "s390x", "ppc64el"]:
             if arch in self.uri:
                 log.debug("Found treearch=%s in uri", arch)
-                if arch == "x86_64":
-                    arch = "amd64"  # pragma: no cover
                 return arch
 
-        # Otherwise default to i386
-        arch = "i386"
-        log.debug("No treearch found in uri, defaulting to arch=%s", arch)
-        return arch
+        return None
 
     def _set_url_paths(self):
         url_prefix = "current/images"
@@ -705,6 +700,10 @@ class _DebianDistro(_DistroTree):
             url_prefix = "current/legacy-images"
 
         tree_arch = self._find_treearch()
+        if not tree_arch:
+            tree_arch = "i386"
+            log.debug("No treearch found in uri, defaulting to arch=%s", tree_arch)
+
         hvmroot = "%s/netboot/%s-installer/%s/" % (url_prefix, self._debname, tree_arch)
         initrd_basename = "initrd.gz"
         kernel_basename = "linux"
@@ -722,20 +721,21 @@ class _DebianDistro(_DistroTree):
         self._kernel_paths.append((hvmroot + kernel_basename, hvmroot + initrd_basename))
 
     def _set_installcd_paths(self):
+        tree_arch = self._find_treearch()
         if self._debname == "ubuntu":
-            if not self.arch == "s390x":
+            if not tree_arch == "s390x":
                 kpair = ("install/vmlinuz", "install/initrd.gz")
             else:
                 kpair = ("boot/kernel.ubuntu", "boot/initrd.ubuntu")
-        elif self.arch == "x86_64":
+        elif tree_arch == "amd64":
             kpair = ("install.amd/vmlinuz", "install.amd/initrd.gz")
-        elif self.arch == "i686":
+        elif tree_arch == "i386":
             kpair = ("install.386/vmlinuz", "install.386/initrd.gz")
-        elif self.arch == "aarch64":
+        elif tree_arch == "arm64":
             kpair = ("install.a64/vmlinuz", "install.a64/initrd.gz")
-        elif self.arch == "ppc64le":
+        elif tree_arch == "ppc64el":
             kpair = ("install/vmlinux", "install/initrd.gz")
-        elif self.arch == "s390x":
+        elif tree_arch == "s390x":
             kpair = ("boot/linux_vm", "boot/root.bin")
         else:
             kpair = ("install/vmlinuz", "install/initrd.gz")
@@ -744,10 +744,13 @@ class _DebianDistro(_DistroTree):
 
     def _detect_version(self):
         oses = [n for n in OSDB.list_os() if n.name.startswith(self._debname)]
+        disk_info = None
 
         if self.cache.debian_media_type == "daily":
             log.debug("Appears to be debian 'daily' URL, using latest debiantesting")
             return "debiantesting"
+        elif self.cache.debian_media_type == "disk":
+            disk_info = self.cache.acquire_file_content(".disk/info").lower()
 
         for osobj in oses:
             if osobj.codename:
@@ -761,6 +764,10 @@ class _DebianDistro(_DistroTree):
 
             if ("/%s/" % codename) in self.uri:
                 log.debug("Found codename=%s in the URL string", codename)
+                return osobj.name
+
+            if disk_info and f'"{codename}"' in disk_info:
+                log.debug("Found codename=%s in the disk/info file", codename)
                 return osobj.name
 
 
