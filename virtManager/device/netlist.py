@@ -142,6 +142,11 @@ class vmmNetworkList(vmmGObjectUI):
             _nettype = virtinst.DeviceInterface.TYPE_DIRECT
             model.append(_build_manual_row(_nettype, _label))
 
+        def _add_manual_vdpa_row():
+            _label = _("vDPA device...")
+            _nettype = virtinst.DeviceInterface.TYPE_VDPA
+            model.append(_build_manual_row(_nettype, _label))
+
         vnets = self._find_virtual_networks()
         default_bridge = virtinst.DeviceInterface.default_bridge(self.conn.get_backend())
 
@@ -164,6 +169,7 @@ class vmmNetworkList(vmmGObjectUI):
 
         bridgeidx = _add_manual_bridge_row()
         _add_manual_macvtap_row()
+        _add_manual_vdpa_row()
 
         # If there is a bridge device, default to that
         if default_bridge:
@@ -251,7 +257,11 @@ class vmmNetworkList(vmmGObjectUI):
 
         # If this is a bridge or macvtap device, show the
         # manual source mode
-        if nettype in [virtinst.DeviceInterface.TYPE_BRIDGE, virtinst.DeviceInterface.TYPE_DIRECT]:
+        if nettype in [
+            virtinst.DeviceInterface.TYPE_BRIDGE,
+            virtinst.DeviceInterface.TYPE_DIRECT,
+            virtinst.DeviceInterface.TYPE_VDPA,
+        ]:
             rowiter = _find_row(nettype, None, True)
             self.widget("net-manual-source").set_text(source or "")
             if rowiter:
