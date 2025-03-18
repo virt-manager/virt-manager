@@ -77,10 +77,13 @@ def test_debian():
     )
     # Bad arch triggers a fallback path
     _test(
-        "debian/debian-8.10.0-amd64-netinst.iso", iso=True, arch="badarch", kernel="install/vmlinuz"
+        "debian/debian-8.10.0-badarch-netinst.iso",
+        iso=True,
+        arch="badarch",
+        kernel="install/vmlinuz",
     )
     # Fails to detect treearch, hits certain paths
-    _test("debian/debian-8.10.0-s390x-netinst.iso", kernel="linux")
+    _test("debian/debian-8.10.0-badarch-netinst.iso", kernel="linux")
 
 
 def test_ubuntu():
