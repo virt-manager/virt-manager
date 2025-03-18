@@ -15,14 +15,12 @@ import tests.urlfetcher_mock
 
 
 @unittest.mock.patch.dict(os.environ, {"VIRTINST_TEST_SUITE_FORCE_LIBOSINFO": "0"})
-def _test(mockurl, distro=None, initrd=None, kernel=None, xen=False, iso=False, arch=None):
+def _test(mockurl, distro=None, initrd=None, kernel=None, xen=False, iso=False):
     # pylint: disable=protected-access
 
     conn = tests.utils.URIs.open_testdefault_cached()
     guest = virtinst.Guest(conn)
     guest.os.os_type = xen and "xen" or "hvm"
-    if arch:
-        guest.os.arch = arch
 
     url = tests.urlfetcher_mock.make_mock_input_url(mockurl)
     installer = virtinst.Installer(guest.conn, location=url)
@@ -61,25 +59,20 @@ def test_debian():
     _test(
         "debian/debian-8.10.0-amd64-netinst.iso",
         iso=True,
-        arch="x86_64",
         kernel="install.amd/vmlinuz",
     )
-    _test("debian/debian-8.10.0-s390x-netinst.iso", iso=True, arch="s390x", kernel="linux_vm")
-    _test("debian/debian-8.10.0-ppc64el-netinst.iso", iso=True, arch="ppc64le", kernel="vmlinux")
-    _test(
-        "debian/debian-8.10.0-i386-netinst.iso", iso=True, arch="i686", kernel="install.386/vmlinuz"
-    )
+    _test("debian/debian-8.10.0-s390x-netinst.iso", iso=True, kernel="linux_vm")
+    _test("debian/debian-8.10.0-ppc64el-netinst.iso", iso=True, kernel="vmlinux")
+    _test("debian/debian-8.10.0-i386-netinst.iso", iso=True, kernel="install.386/vmlinuz")
     _test(
         "debian/debian-8.10.0-arm64-netinst.iso",
         iso=True,
-        arch="aarch64",
         kernel="install.a64/vmlinuz",
     )
     # Bad arch triggers a fallback path
     _test(
         "debian/debian-8.10.0-badarch-netinst.iso",
         iso=True,
-        arch="badarch",
         kernel="install/vmlinuz",
     )
     # Fails to detect treearch, hits certain paths
@@ -91,7 +84,7 @@ def test_ubuntu():
     _test("ubuntu/focal/main/installer-amd64", "ubuntu20.04")
 
     _test("ubuntu/ubuntu-17.10-amd64.iso", iso=True, kernel="install/vmlinuz")
-    _test("ubuntu/ubuntu-17.10-s390x.iso", iso=True, arch="s390x", kernel="boot/kernel.ubuntu")
+    _test("ubuntu/ubuntu-17.10-s390x.iso", iso=True, kernel="boot/kernel.ubuntu")
 
 
 def test_fedora():
