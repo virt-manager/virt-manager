@@ -683,11 +683,9 @@ class _DebianDistro(_DistroTree):
 
         # Check for standard arch strings which will be
         # in the URI name for --location $ISO mounts
-        for arch in ["i386", "amd64", "x86_64", "arm64", "riscv64"]:
+        for arch in ["i386", "amd64", "arm64", "riscv64"]:
             if arch in self.uri:
                 log.debug("Found treearch=%s in uri", arch)
-                if arch == "x86_64":
-                    arch = "amd64"  # pragma: no cover
                 return arch
 
         # Otherwise default to i386
