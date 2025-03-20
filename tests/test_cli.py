@@ -772,7 +772,6 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --sound ac97
 --sound codec0.type=micro,codec1.type=duplex,codec2.type=output
 --sound model=usb,multichannel=yes
---sound model=virtio,streams=4
 
 
 --audio id=1,type=spice
@@ -870,6 +869,14 @@ c.add_compare(
 --hostdev mdev_4b20d080_1b54_4048_85b3_a6a62d165c01,address.type=pci,address.domain=0x0000,address.bus=0x01,address.slot=0x01,address.function=0x0,address.zpci.uid=0x0001,address.zpci.fid=0x00000001
 """,
     "mdev-devices",
+    prerun_check="10.4.0",
+)
+
+c.add_compare(
+    """
+--sound model=virtio,streams=4
+    """,
+    "virtio-sound-device",
     prerun_check="10.4.0",
 )
 
