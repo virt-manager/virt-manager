@@ -5278,6 +5278,7 @@ class ParserHostdev(VirtCLIParser):
         cls.add_arg("name", None, cb=cls.set_name_cb, lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver.name", "driver_name")
         cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
+        cls.add_arg("source.startupPolicy", "startup_policy")
 
 
 #############################
