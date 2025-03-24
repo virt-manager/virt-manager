@@ -2185,6 +2185,14 @@ def _determine_default_autoconsole_type(guest, installer):
         log.debug("No viewer to launch for graphics type '%s'", gtype)
         return None
 
+    if (
+        not os.environ.get("DISPLAY", "")
+        and not os.environ.get("DISPLAY_WAYLAND")
+        and not xmlutil.in_testsuite()
+    ):  # pragma: no cover
+        log.warning(_("No display detected. Not running virt-viewer."))
+        return None
+
     if not HAS_VIRTVIEWER and not xmlutil.in_testsuite():  # pragma: no cover
         log.warning(
             _(
@@ -2193,10 +2201,6 @@ def _determine_default_autoconsole_type(guest, installer):
                 "the 'virt-viewer' package."
             )
         )
-        return None
-
-    if not os.environ.get("DISPLAY", "") and not xmlutil.in_testsuite():  # pragma: no cover
-        log.warning(_("Graphics requested but DISPLAY is not set. Not running virt-viewer."))
         return None
 
     return "graphical"
