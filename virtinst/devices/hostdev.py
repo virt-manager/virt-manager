@@ -16,6 +16,8 @@ from ..xmlbuilder import XMLProperty
 class DeviceHostdev(Device):
     XML_NAME = "hostdev"
 
+    STARTUP_POLICIES = ["mandatory", "optional", "requisite"]
+
     def set_from_nodedev(self, nodedev):
         log.debug("set_from_nodedev xml=\n%s", nodedev.get_xml())
 
@@ -117,6 +119,8 @@ class DeviceHostdev(Device):
 
     device = XMLProperty("./source/address/@device")
     bus = XMLProperty("./source/address/@bus")
+
+    startup_policy = XMLProperty("./source/@startupPolicy")
 
     domain = XMLProperty("./source/address/@domain")
     function = XMLProperty("./source/address/@function")
