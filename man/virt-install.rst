@@ -897,10 +897,12 @@ Sub options are:
 ``meta-data=``
     Specify a cloud-init meta-data file to add directly to the iso. All other
     meta-data configuration options on the --cloud-init command line are ignored.
+    Can by path to local file or URL.
 
 ``user-data=``
     Specify a cloud-init user-data file to add directly to the iso. All other
     user-data configuration options on the --cloud-init command line are ignored.
+    Can by path to local file or URL.
 
 ``root-ssh-key=``
     Specify a public key to inject into the guest, providing ssh access to the
@@ -914,6 +916,7 @@ Sub options are:
 
 ``network-config=``
     Specify a cloud-init network-config file to add directly to the iso.
+    Can by path to local file or URL.
 
 
 
