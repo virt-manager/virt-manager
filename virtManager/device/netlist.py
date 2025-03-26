@@ -69,6 +69,7 @@ class vmmNetworkList(vmmGObjectUI):
                 "on_net_source_changed": self._on_net_source_changed,
                 "on_net_portgroup_changed": self._emit_changed,
                 "on_net_bridge_name_changed": self._emit_changed,
+                "on_net_macvtap_mode_changed": self._emit_changed,
             }
         )
 
@@ -106,6 +107,13 @@ class vmmNetworkList(vmmGObjectUI):
         model = Gtk.ListStore(str)
         combo.set_model(model)
         uiutil.init_combo_text_column(combo, 0)
+
+        combo = self.widget("net-macvtap-mode")
+        model = Gtk.ListStore(str)
+        combo.set_model(model)
+        uiutil.init_combo_text_column(combo, 0)
+        for mode in ["vepa", "bridge", "private", "passthrough"]:
+            model.append([mode])
 
         self.conn.connect("net-added", self._repopulate_network_list)
         self.conn.connect("net-removed", self._repopulate_network_list)
@@ -291,9 +299,8 @@ class vmmNetworkList(vmmGObjectUI):
 
         mode = None
         is_direct = net_type == virtinst.DeviceInterface.TYPE_DIRECT
-        if is_direct:
-            # This is generally the safest and most featureful default
-            mode = "bridge"
+        if is_direct and self.widget("net-macvtap-mode").is_visible():
+            mode = uiutil.get_list_selection(self.widget("net-macvtap-mode"))
 
         portgroup = None
         if self.widget("net-portgroup").is_visible():
@@ -323,6 +330,8 @@ class vmmNetworkList(vmmGObjectUI):
         self.widget("net-default-warn-box").set_visible(False)
         self.widget("net-manual-source").set_text("")
         self.widget("net-portgroup").get_child().set_text("")
+        self.widget("net-macvtap-mode-label").set_visible(False)
+        self.widget("net-macvtap-mode").set_visible(False)
         self._repopulate_network_list()
 
     def set_dev(self, net):
@@ -335,6 +344,8 @@ class vmmNetworkList(vmmGObjectUI):
 
         if net.portgroup:
             uiutil.set_list_selection(self.widget("net-portgroup"), net.portgroup)
+        if net.source_mode and net.type == virtinst.DeviceInterface.TYPE_DIRECT:
+            uiutil.set_list_selection(self.widget("net-macvtap-mode"), net.source_mode)
 
     #############
     # Listeners #
@@ -395,6 +406,8 @@ class vmmNetworkList(vmmGObjectUI):
         is_virtual = nettype == virtinst.DeviceInterface.TYPE_VIRTUAL
 
         uiutil.set_grid_row_visible(self.widget("net-macvtap-warn-box"), is_direct)
+        uiutil.set_grid_row_visible(self.widget("net-macvtap-mode-label"), is_direct)
+        uiutil.set_grid_row_visible(self.widget("net-macvtap-mode"), is_direct)
 
         show_bridge = rowdata.manual
         uiutil.set_grid_row_visible(self.widget("net-manual-source"), show_bridge)
