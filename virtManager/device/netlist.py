@@ -73,6 +73,8 @@ class vmmNetworkList(vmmGObjectUI):
         )
 
         self._init_ui()
+        # Populate the MACVTAP mode combo box
+        self._populate_macvtap_mode()
         self.top_label = self.widget("net-source-label")
         self.top_box = self.widget("net-source-box")
 
@@ -109,6 +111,38 @@ class vmmNetworkList(vmmGObjectUI):
 
         self.conn.connect("net-added", self._repopulate_network_list)
         self.conn.connect("net-removed", self._repopulate_network_list)
+
+    def _populate_macvtap_mode(self):
+        """
+        Populate the MACVTAP mode ComboBox (net-macvtap-mode)
+        with supported modes and connect its changed signal.
+        """
+        import gi
+        gi.require_version("Gtk", "3.0")
+        from gi.repository import Gtk
+
+        MACVTAP_MODES = ["bridge", "vepa", "private", "passthrough"]
+
+        macvtap_combo = self.widget("net-macvtap-mode")
+        store = Gtk.ListStore(str)
+        macvtap_combo.set_model(store)
+
+        cell = Gtk.CellRendererText()
+        macvtap_combo.pack_start(cell, True)
+        macvtap_combo.add_attribute(cell, "text", 0)
+
+        for mode in MACVTAP_MODES:
+            store.append([mode])
+
+        macvtap_combo.set_active(0)
+        macvtap_combo.connect("changed", self._on_macvtap_mode_changed)
+
+    def _on_macvtap_mode_changed(self, combo):
+        """
+        Called when the MACVTAP mode selection changes.
+        Emits a change signal so that the XML is updated.
+        """
+        self._emit_changed()
 
     def _find_virtual_networks(self):
         rows = []
@@ -171,24 +205,18 @@ class vmmNetworkList(vmmGObjectUI):
         _add_manual_macvtap_row()
         _add_manual_vdpa_row()
 
-        # If there is a bridge device, default to that
         if default_bridge:
             self.widget("net-manual-source").set_text(default_bridge)
             return bridgeidx
 
-        # If not, use 'default' network
         if defaultnetidx is not None:
             return defaultnetidx
 
-        # If not present, use first list entry
         if bridgeidx == 0:
-            # This means we are defaulting to something that
-            # requires manual intervention. Raise the warning
             self.widget("net-default-warn-box").show()
         return 0
 
     def _check_network_is_running(self, net):
-        # Make sure VirtualNetwork is running
         if not net.type == virtinst.DeviceInterface.TYPE_VIRTUAL:
             return
         devname = net.source
@@ -206,34 +234,21 @@ class vmmNetworkList(vmmGObjectUI):
             % devname,
         )
         if not res:
-            return  # pragma: no cover
+            return
 
-        # Try to start the network
         try:
             netobj.start()
             log.debug("Started network '%s'", devname)
-        except Exception as e:  # pragma: no cover
+        except Exception as e:
             return self.err.show_err(
                 _("Could not start virtual network '%(device)s': %(error)s")
-                % {
-                    "device": devname,
-                    "error": str(e),
-                }
+                % {"device": devname, "error": str(e)}
             )
 
     def _find_rowiter_for_dev(self, net):
-        """
-        Find the row in our current model that matches the passed in
-        net device (like populating the details UI for an existing VM).
-        If we don't find a match, we fake it a bit
-        """
         nettype = net.type
         source = net.source
         if net.network:
-            # If using type=network with a forward mode=bridge network,
-            # on domain startup the runtime XML will be changed to
-            # type=bridge and both source/@bridge and source/@network will
-            # be filled in. For our purposes, treat this as a type=network
             source = net.network
             nettype = "network"
 
@@ -247,16 +262,13 @@ class vmmNetworkList(vmmGObjectUI):
                 if _source and rowdata.source != _source:
                     continue
                 if _manual and rowdata.manual != _manual:
-                    continue  # pragma: no cover
+                    continue
                 return row.iter
 
-        # Find the matching row in the net list
         rowiter = _find_row(nettype, source, None)
         if rowiter:
             return rowiter
 
-        # If this is a bridge or macvtap device, show the
-        # manual source mode
         if nettype in [
             virtinst.DeviceInterface.TYPE_BRIDGE,
             virtinst.DeviceInterface.TYPE_DIRECT,
@@ -267,8 +279,6 @@ class vmmNetworkList(vmmGObjectUI):
             if rowiter:
                 return rowiter
 
-        # This is some network type we don't know about. Generate
-        # a label for it and stuff it in the list
         desc = _pretty_network_desc(nettype, source)
         combo.get_model().insert(0, _NetRowData.build_row(nettype, source, desc, True))
         return combo.get_model()[0].iter
@@ -290,10 +300,14 @@ class vmmNetworkList(vmmGObjectUI):
             net_src = self.widget("net-manual-source").get_text() or None
 
         mode = None
-        is_direct = net_type == virtinst.DeviceInterface.TYPE_DIRECT
-        if is_direct:
-            # This is generally the safest and most featureful default
-            mode = "bridge"
+        if net_type == virtinst.DeviceInterface.TYPE_DIRECT:
+            macvtap_combo = self.widget("net-macvtap-mode")
+            store = macvtap_combo.get_model()
+            active_index = macvtap_combo.get_active()
+            if active_index >= 0:
+                mode = store[active_index][0]
+            else:
+                mode = "bridge"
 
         portgroup = None
         if self.widget("net-portgroup").is_visible():
@@ -326,6 +340,10 @@ class vmmNetworkList(vmmGObjectUI):
         self._repopulate_network_list()
 
     def set_dev(self, net):
+        """
+        Load an existing device into the UI. If the device is macvtap,
+        read net.source_mode and update the MACVTAP mode combo box accordingly.
+        """
         self.reset_state()
         rowiter = self._find_rowiter_for_dev(net)
 
@@ -336,25 +354,29 @@ class vmmNetworkList(vmmGObjectUI):
         if net.portgroup:
             uiutil.set_list_selection(self.widget("net-portgroup"), net.portgroup)
 
+        if net.type == virtinst.DeviceInterface.TYPE_DIRECT:
+            existing_mode = net.source_mode or "bridge"
+            macvtap_combo = self.widget("net-macvtap-mode")
+            store = macvtap_combo.get_model()
+            for idx, row in enumerate(store):
+                if row[0] == existing_mode:
+                    macvtap_combo.set_active(idx)
+                    break
+
     #############
     # Listeners #
     #############
 
     def _emit_changed(self, *args, **kwargs):
-        ignore1 = args
-        ignore2 = kwargs
         self.emit("changed")
 
     def _repopulate_network_list(self, *args, **kwargs):
-        ignore1 = args
-        ignore2 = kwargs
-
         netlist = self.widget("net-source")
         current_label = uiutil.get_list_selection(netlist, column=NET_ROW_LABEL)
 
         model = netlist.get_model()
         if not model:
-            return  # pragma: no cover
+            return
 
         try:
             if model:
@@ -388,16 +410,17 @@ class vmmNetworkList(vmmGObjectUI):
         self._emit_changed()
         rowdata = self._get_network_row_data()
         if not rowdata:
-            return  # pragma: no cover
+            return
 
         nettype = rowdata.nettype
         is_direct = nettype == virtinst.DeviceInterface.TYPE_DIRECT
         is_virtual = nettype == virtinst.DeviceInterface.TYPE_VIRTUAL
 
         uiutil.set_grid_row_visible(self.widget("net-macvtap-warn-box"), is_direct)
-
         show_bridge = rowdata.manual
         uiutil.set_grid_row_visible(self.widget("net-manual-source"), show_bridge)
+        uiutil.set_grid_row_visible(self.widget("net-macvtap-mode-label"), is_direct)
+        uiutil.set_grid_row_visible(self.widget("net-macvtap-mode"), is_direct)
 
         net = None
         if is_virtual:
