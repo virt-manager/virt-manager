@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <!-- n-columns=2 n-rows=5 -->
+  <!-- n-columns=2 n-rows=6 -->
   <object class="GtkGrid" id="net-source-box">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -60,10 +60,14 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">&lt;small&gt;In most configurations, macvtap does not work for host to guest network communication.&lt;/small&gt;</property>
+            <property name="label" translatable="yes">
+&lt;small&gt; In most configurations, macvtap does not work for
+ host to guest network communication.&lt;/small&gt;
+            </property>
             <property name="use-markup">True</property>
             <property name="wrap">True</property>
             <property name="max-width-chars">35</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -119,7 +123,9 @@
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">&lt;small&gt;Failed to find a suitable default network.&lt;/small&gt;</property>
+            <property name="label" translatable="yes">
+              &lt;small&gt;Failed to find a suitable default network.&lt;/small&gt;
+            </property>
             <property name="use-markup">True</property>
             <property name="wrap">True</property>
             <property name="max-width-chars">35</property>
@@ -169,6 +175,33 @@
       <packing>
         <property name="left-attach">1</property>
         <property name="top-attach">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="net-macvtap-mode-label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">False</property>
+        <property name="label" translatable="yes">Macvtap _Mode:</property>
+        <property name="use-underline">True</property>
+        <property name="mnemonic-widget">net-macvtap-mode</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="net-macvtap-mode">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">False</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">5</property>
       </packing>
     </child>
   </object>
