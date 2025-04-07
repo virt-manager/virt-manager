@@ -1021,7 +1021,9 @@ def testXMLBuilderCoverage():
         virtinst.DeviceDisk.validate_generic_name("objtype", None)
 
     with pytest.raises(ValueError):
-        virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar")
+        virtinst.DeviceDisk.validate_generic_name("objtype", "foo/bar")
+
+    assert virtinst.DeviceDisk.validate_generic_name("objtype", "foo bar") is None
 
     # Test property __repr__ for code coverage
     assert "DeviceAddress" in str(virtinst.DeviceDisk.address)
