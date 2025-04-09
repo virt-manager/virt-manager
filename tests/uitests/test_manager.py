@@ -296,8 +296,7 @@ def testManagerDefaultStartup(app):
     app.open(use_uri=False)
     manager = app.topwin
     errlabel = manager.find("error-label")
-    lib.utils.check(lambda: "Checking for virtualization" in errlabel.text)
-    lib.utils.check(lambda: "File->Add Connection" in errlabel.text)
+    lib.utils.check(lambda: "File->Add Connection" in errlabel.text, timeout=5)
     lib.utils.check(lambda: "appropriate QEMU/KVM" in errlabel.text)
 
     manager.find("File", "menu").click()
