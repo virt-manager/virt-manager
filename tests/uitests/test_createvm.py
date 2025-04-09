@@ -1179,12 +1179,12 @@ def testNewVMSession(app):
     """
     Test with fake qemu session
     """
-    app.uri = tests.utils.URIs.kvm_x86_session
+    app.uri = tests.utils.URIs.test_empty + ",fakeuri=qemu:///session"
     newvm = _open_newvm(app)
 
     newvm.find_fuzzy("Import", "radio").click()
     _forward(newvm)
-    newvm.find("import-entry").set_text("/pool-dir/testvol1.img")
+    newvm.find("import-entry").set_text("/etc/hostname")
     newvm.find("oslist-entry").set_text("generic")
     newvm.find("oslist-popover").find_fuzzy("generic").click()
     _forward(newvm)
