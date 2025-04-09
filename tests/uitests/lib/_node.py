@@ -166,6 +166,7 @@ class _VMMDogtailNode(dogtail.tree.Node):
         Check whether interactive widgets are sensitive or not
         """
         valid_types = [
+            "button",
             "push button",
             "toggle button",
             "check button",
@@ -330,6 +331,9 @@ class _VMMDogtailNode(dogtail.tree.Node):
         Search root for any widget that contains the passed name/role regex
         strings.
         """
+        # Somewhere in fedora 41 stack, `push button` became just `button`
+        if roleName in ["push button", ".*push button.*"]:
+            roleName = "(button|push button)"
         pred = _FuzzyPredicate(name, roleName, labeller_text, focusable)
 
         try:
