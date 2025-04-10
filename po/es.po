@@ -38,7 +38,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2025-01-26 11:20+0000\n"
+"PO-Revision-Date: 2025-04-10 00:07+0000\n"
 "Last-Translator: Nicolás Gal <nialegal@yandex.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/es/>\n"
@@ -47,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -2005,7 +2005,7 @@ msgstr "Crear nueva instantánea"
 
 #: ui/snapshots.ui:409
 msgid "Run selected snapshot"
-msgstr "Ejecutar instantánea seleccionada"
+msgstr "Restaurar instantánea seleccionada"
 
 #: ui/snapshots.ui:435
 msgid "Refresh snapshot list"
@@ -3800,7 +3800,7 @@ msgstr "Error al conectar a la consola de texto: %s"
 
 #: virtManager/details/snapshots.py:122
 msgid "external snapshots not supported with this libvirt connection"
-msgstr "no se admiten instantáneas con esta conexión de libvirt"
+msgstr "no se admiten instantáneas externas con esta conexión de libvirt"
 
 #: virtManager/details/snapshots.py:275
 #, python-format
@@ -3883,10 +3883,10 @@ msgid ""
 "the same as having forced the system off mid-flight. It is recommended to "
 "snapshot either the running or shut down system instead."
 msgstr ""
-"El dominio está actualmente guardado. Debido a limitaciones técnicas, ese "
-"estado de memoria guardado no formará parte de la instantánea. Ejecutarlo "
-"más tarde resultará en lo mismo que haber forzado el apagado del sistema en "
-"plena ejecución. Se recomienda hacer una instantánea del sistema en "
+"El dominio está actualmente guardado. Debido a limitaciones técnicas el "
+"estado de memoria guardado no formará parte de la instantánea. Restaurarla "
+"más tarde tendrá el mismo efecto que haber forzado el apagado del sistema en "
+"plena ejecución. Se recomienda hacer una instantánea del sistema ya sea en "
 "ejecución o apagado."
 
 #: virtManager/details/snapshots.py:736
@@ -3895,8 +3895,9 @@ msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
-"¿Confirma que desea ejecutar la instantánea '%(name)s'? Se descartarán todos "
-"los cambios en disco efectuados desde la creación de la última instantánea."
+"¿Confirma que desea restaurar la instantánea '%(name)s'? Se descartarán "
+"todos los cambios en disco efectuados desde la creación de la última "
+"instantánea."
 
 #: virtManager/details/snapshots.py:740
 #, python-format
@@ -3904,9 +3905,9 @@ msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
-"¿Confirma que desea ejecutar la instantánea '%(name)s'? Se descartarán todos "
-"los cambios en disco y de configuración efectuados desde la creación de la "
-"última instantánea."
+"¿Confirma que desea restaurar la instantánea '%(name)s'? Se descartarán "
+"todos los cambios en disco y de configuración efectuados desde la creación "
+"de la última instantánea."
 
 #: virtManager/details/snapshots.py:751
 msgid "Saved state will be removed to avoid filesystem corruption"
@@ -3931,17 +3932,17 @@ msgstr ""
 
 #: virtManager/details/snapshots.py:766
 msgid "Running snapshot"
-msgstr "Ejecutando la instantánea"
+msgstr "Restaurando la instantánea"
 
 #: virtManager/details/snapshots.py:767
 #, python-format
 msgid "Running snapshot '%s'"
-msgstr "Ejecutando la instantánea '%s'"
+msgstr "Restaurando la instantánea '%s'"
 
 #: virtManager/details/snapshots.py:768
 #, python-format
 msgid "Error running snapshot '%s'"
-msgstr "Error al ejecutar la instantánea '%s'"
+msgstr "Error al restaurar la instantánea '%s'"
 
 #: virtManager/details/snapshots.py:777
 msgid "Are you sure you want to permanently delete the selected snapshots?"
@@ -3980,8 +3981,8 @@ msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
-"El huésped está en un anfitrión remoto, pero está configurado para permitir "
-"solo conexiones locales."
+"El huésped se encuentra en un anfitrión remoto pero fue configurado para "
+"permitir solo conexiones locales."
 
 #: virtManager/details/sshtunnels.py:68
 msgid "Guest is configured for TLS only which does not work over SSH."
