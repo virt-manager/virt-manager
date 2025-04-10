@@ -31,13 +31,14 @@
 # Henning <boredsquirrel@users.noreply.translate.fedoraproject.org>, 2024.
 # Jarne Förster <fedora@mymailclient.de>, 2024.
 # christian hartmann <hartmann.christian@gmail.com>, 2024.
+# ano n <84fwmjak@anonaddy.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-12-30 09:22+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2025-03-13 08:38+0000\n"
+"Last-Translator: ano n <84fwmjak@anonaddy.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/de/>\n"
 "Language: de\n"
@@ -45,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.1\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -4467,11 +4468,11 @@ msgstr "Untersuchung fand keine Betriebssysteme."
 #: virtManager/lib/inspection.py:316
 #, python-format
 msgid "Error inspection VM: %s"
-msgstr ""
+msgstr "Fehlerprüfung der VM: %s"
 
 #: virtManager/lib/inspection.py:327
 msgid "Cannot inspect VM on remote connection"
-msgstr ""
+msgstr "VM kann bei Remote-Verbindung nicht inspiziert werden"
 
 #: virtManager/lib/libvirtenummap.py:69
 msgid "Running"
@@ -4738,10 +4739,12 @@ msgstr "Fehler beim Abbrechen des Migrationsvorgangs: %s"
 #: virtManager/object/domain.py:449
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
+"Die Einstellung für den gemeinsamen Speicher kann nicht geändert werden, "
+"wenn <numa> konfiguriert ist."
 
 #: virtManager/object/domain.py:452
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "Libvirt ist möglicherweise nicht neu genug, um memfd zu unterstützen."
 
 #: virtManager/object/domain.py:471
 msgid "Libvirt connection does not support snapshots."
@@ -4867,7 +4870,7 @@ msgstr "Automatische Umleitung bei Anschluss an USB"
 
 #: virtManager/preferences.py:170
 msgid "Application default"
-msgstr ""
+msgstr "Programmstandard"
 
 #: virtManager/preferences.py:173
 msgid "Nearest host CPU model"
@@ -4879,7 +4882,7 @@ msgstr "Systemvorgabe"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
-msgstr ""
+msgstr "Python libguestfs Unterstützung ist nicht installiert"
 
 #: virtManager/preferences.py:322
 msgid "Configure grab key combination"
@@ -5143,11 +5146,15 @@ msgstr "Es gibt nicht angewandte Änderungen."
 #: virtManager/xmleditor.py:139
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
+"Ihre Änderungen gehen verloren, wenn Sie diese Registerkarte verlassen. "
+"Wollen sie diese Registerkarte wirklich verlassen?"
 
 #: virtManager/xmleditor.py:152
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
+"Ihre XML-Änderungen gehen verloren, wenn Sie diese Registerkarte verlassen. "
+"Diese Registerkarte wirklich verlassen?"
 
 #: virtinst/capabilities.py:298
 #, fuzzy, python-format
@@ -5264,9 +5271,9 @@ msgid "Running graphical console command: %(command)s"
 msgstr "Mit grafischer Konsole für Gast wird verbunden"
 
 #: virtinst/cli.py:422
-#, python-format
+#, fuzzy, python-format
 msgid "Running text console command: %(command)s"
-msgstr ""
+msgstr "Textkonsolenbefehl wird ausgeführt: %(Befehl)s"
 
 #: virtinst/cli.py:464
 #, fuzzy, python-format
@@ -5279,7 +5286,7 @@ msgstr "Domain '%s': %s wurde nicht gefunden"
 #: virtinst/cli.py:483
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
-msgstr ""
+msgstr "%(option1)s und %(option2)s können nicht gleichzeitig verwendet werden"
 
 #: virtinst/cli.py:592 virtinst/cli.py:595
 msgid "Connect to hypervisor with libvirt URI"
@@ -5292,6 +5299,10 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
+"Konfigurieren Sie die automatische Verbindung der Gastkonsole. Beispiel:\n"
+"--autoconsole text\n"
+"--autoconsole graphical\n"
+"--autoconsole none"
 
 #: virtinst/cli.py:616
 msgid "Don't automatically try to connect to the guest console"
@@ -5352,6 +5363,9 @@ msgid ""
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
+"Konfigurieren Sie die Zuweisung von Gastspeicher. Beispiel:\n"
+"--memory 1024 (in MiB)\n"
+"--memory memory=1024,currentMemory=512\n"
 
 #: virtinst/cli.py:688
 msgid ""
@@ -5360,6 +5374,10 @@ msgid ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
+"Anzahl der vCPUs, die für Ihren Gast konfiguriert werden sollen. Beispiel:\n"
+"--vcpus 5\n"
+"--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
+"--vcpus sockets=2,cores=4,threads=2"
 
 #: virtinst/cli.py:697
 msgid ""
@@ -5378,6 +5396,10 @@ msgid ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 msgstr ""
+"Konfigurieren Sie die Einstellungen für die Gastanzeige. Beispiel:\n"
+"--graphics spice\n"
+"--graphics vnc,port=5901,listen=0.0.0.0\n"
+"--graphics none\n"
 
 #: virtinst/cli.py:719
 msgid ""
@@ -5401,6 +5423,9 @@ msgid ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 msgstr ""
+"Konfigurieren Sie ein Gast-Controller-Gerät. Beispiel:\n"
+"--controller type=usb,model=qemu-xhci\n"
+"--controller typ=scsi,modell=virtio-scsi\n"
 
 #: virtinst/cli.py:735
 msgid ""
@@ -5500,6 +5525,8 @@ msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
+"Konfigurieren Sie ein Gast-RNG-Gerät. Beispiel:\n"
+"--rng /dev/urandom"
 
 #: virtinst/cli.py:810
 msgid ""
@@ -5526,6 +5553,8 @@ msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
+"Konfigurieren Sie ein Gastspeichergerät. Beispiel:\n"
+"--memdev dimm,target.size=1024"
 
 #: virtinst/cli.py:822
 msgid ""
@@ -5533,28 +5562,35 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
+"Konfigurieren Sie die Gast-VSockel. Beispiel:\n"
+"--vsock cid.auto=yes\n"
+"--vsock cid.address=7"
 
 #: virtinst/cli.py:827
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
+"Konfigurieren Sie ein IOMMU-Gerät. Beispiel:\n"
+"--iommu model=intel,driver.aw_bits=48"
 
 #: virtinst/cli.py:834
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr ""
+msgstr "Konfiguration der Domäne <iothreads> und <iothreadids>."
 
 #: virtinst/cli.py:838
 msgid "Set domain seclabel configuration."
-msgstr ""
+msgstr "Legen Sie die Konfiguration des Domänen-Sekundärzeichens fest."
 
 #: virtinst/cli.py:842
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
+"Legen Sie fest, dass der Gast die kryptografischen "
+"Schlüsselverwaltungsvorgänge des S390 durchführen soll."
 
 #: virtinst/cli.py:847
 msgid "Tune CPU parameters for the domain process."
-msgstr ""
+msgstr "Die CPU-Parameter für den Domänenprozess anpassen."
 
 #: virtinst/cli.py:851
 msgid "Tune NUMA policy for the domain process."
@@ -5582,6 +5618,9 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
+"Domäne <features> XML festlegen. Beispiel:\n"
+"--features acpi=off\n"
+"--merkmale apic=on,apic.eoi=on"
 
 #: virtinst/cli.py:874
 msgid ""
@@ -5609,6 +5648,9 @@ msgid ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
+"Konfigurieren Sie SMBIOS-Systeminformationen. Beispiel:\n"
+"--sysinfo host\n"
+"--sysinfo bios.vendor=MeinHersteller,bios.version=1.2.3,...\n"
 
 #: virtinst/cli.py:897
 msgid ""
@@ -5616,12 +5658,18 @@ msgid ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
+"Übergeben Sie Argumente direkt an den QEMU-Emulator. Beispiel:\n"
+"--qemu-commandline='-display gtk,gl=on'\n"
+"--qemu-befehlszeile env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:903
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
+"Konfigurieren Sie die Sicherheit beim VM-Start (z. B. SEV-"
+"Speicherverschlüsselung). Beispiel:\n"
+"--launchSecurity sev"
 
 #: virtinst/cli.py:910
 msgid ""
@@ -5638,6 +5686,8 @@ msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
+"Aktivieren Sie den Benutzernamensraum für LXC-Container. Beispiel:\n"
+"--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: virtinst/cli.py:926
 msgid ""
@@ -5671,6 +5721,9 @@ msgid ""
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
+"Dies wird verwendet, um optimale Voreinstellungen wie VirtIO zu bestimmen.\n"
+"Beispielwerte: fedora29, rhel7.0, win10, ...\n"
+"Verwenden Sie '--osinfo list', um eine vollständige Liste zu sehen."
 
 #: virtinst/cli.py:952
 msgid ""
@@ -5679,6 +5732,11 @@ msgid ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 msgstr ""
+"Führen Sie rohe XML-XPath-Optionen auf die endgültige XML-Datei aus. "
+"Beispiel:\n"
+"--xml ./cpu/@mode=host-passthrough\n"
+"--xml ./devices/disk[2]/serial=new-serial\n"
+"--xml xpath.delete=./clock"
 
 #: virtinst/cli.py:982
 #, python-format
@@ -5725,7 +5783,7 @@ msgstr "Unbekannter autoconsole-Typ '%s'"
 
 #: virtinst/cli.py:2401
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr ""
+msgstr "CPU model=host ist veraltet, verwenden Sie model=host-model"
 
 #: virtinst/cli.py:3605
 #, python-format
@@ -5735,7 +5793,7 @@ msgstr "Unzulässiger Wert für 'size': %s"
 #: virtinst/cli.py:3618
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
-msgstr ""
+msgstr "Unbekannter '%(optionname)s' Wert '%(string)s'"
 
 #: virtinst/cli.py:3633
 msgid "Storage volume must be specified as vol=poolname/volname"
@@ -5744,7 +5802,7 @@ msgstr "Speicherdatenträger muss angegeben werden als vol=poolname/volname"
 #: virtinst/cli.py:4180
 #, python-format
 msgid "Expected PCI format string for '%s'"
-msgstr ""
+msgstr "Erwarteter PCI-Formatstring für '%s'"
 
 #: virtinst/cli.py:4915
 #, python-format
@@ -5762,6 +5820,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"Sie können zusätzliche Informationen mit anzeigen:\n"
+"\n"
+"    osinfo-query os\n"
 
 #: virtinst/cloner.py:46
 #, fuzzy, python-format
@@ -5793,7 +5854,7 @@ msgstr "Das Klonen von rbd Volumes wird noch nicht unterstützt"
 #: virtinst/cloner.py:187
 #, python-format
 msgid "Disk network type '%s' is not cloneable."
-msgstr ""
+msgstr "Der Datenträgertyp '%s' ist nicht klonbar."
 
 #: virtinst/cloner.py:194
 msgid "Read Only"
@@ -5818,7 +5879,7 @@ msgstr "Originale Festplatteninformationen konnten nicht bestimmt werden: %s"
 
 #: virtinst/cloner.py:334
 msgid "Domain to clone must be shutoff."
-msgstr ""
+msgstr "Der zu klonende Bereich muss abgeschaltet werden."
 
 #: virtinst/cloner.py:368
 msgid ""
@@ -5865,8 +5926,8 @@ msgstr ""
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Es werden nur %(number)s Festplatte für den Bus '%(bus)s' unterstützt"
+msgstr[1] "Es werden nur %(number)s Festplatten für den Bus '%(bus)s' unterstützt"
 
 #: virtinst/devices/filesystem.py:123
 #, python-format
@@ -5948,19 +6009,22 @@ msgid ""
 "cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
 "count %(vcpus)d"
 msgstr ""
+"Die von der Topologie implizierte Gesamtzahl der CPUs (sockets=%(sockets)d * "
+"dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
+"entspricht nicht der Anzahl der vCPUs %(vcpus)d"
 
 #: virtinst/domain/launch_security.py:29
 msgid "SEV launch security requires a Q35 UEFI machine"
-msgstr ""
+msgstr "SEV-Startsicherheit erfordert einen Q35 UEFI-Rechner"
 
 #: virtinst/domain/launch_security.py:43
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr ""
+msgstr "SEV-SNP Startsicherheit erfordert einen Q35 UEFI Rechner"
 
 #: virtinst/domcapabilities.py:208
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
-msgstr ""
+msgstr "Es konnte kein erweitertes CPU-XML abgerufen werden: %s"
 
 #: virtinst/domcapabilities.py:333
 msgid "BIOS"
@@ -6013,6 +6077,8 @@ msgstr "Entfernen des Datenträgers '%s'"
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
+"Überschreiben des Speichers auf %(number)s MiB, die für %(osname)s "
+"Netzwerkinstallation benötigt werden."
 
 #: virtinst/install/installer.py:653
 msgid "Creating domain..."
@@ -6031,6 +6097,8 @@ msgstr "Fehler beim Validieren der Installationsmedien '%s': %s"
 #: virtinst/install/installertreemedia.py:116
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
+"Der Ort kernel/initrd darf nur mit einer Standort-URL/einem Pfad angegeben "
+"werden"
 
 #: virtinst/install/installertreemedia.py:119
 #, fuzzy
@@ -6041,7 +6109,7 @@ msgstr "Ein init-Pfad muss angegeben werden"
 #: virtinst/install/installertreemedia.py:142
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
-msgstr ""
+msgstr "Kein Zugriff auf den Installationsbaum auf der Fernverbindung: %s"
 
 #: virtinst/install/installertreemedia.py:209
 msgid "Couldn't find kernel for install tree."
@@ -6052,11 +6120,14 @@ msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
 msgstr ""
+"Verzeichnisbaum-Installationen funktionieren normalerweise nicht, es sei "
+"denn, es werden zusätzliche Kernel-Parameter übergeben, um den Installer auf "
+"einen über das Netzwerk erreichbaren Installationsbaum zu verweisen."
 
 #: virtinst/install/unattended.py:63
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
-msgstr ""
+msgstr "%(osname)s kann '%(loginname)s' nicht als Benutzer-Login verwenden."
 
 #: virtinst/install/unattended.py:74
 #, python-format
@@ -6071,22 +6142,27 @@ msgstr "%s erfordert die Festlegung des Administratorpassworts."
 #: virtinst/install/unattended.py:180
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
+"libosinfo oder osinfo-db ist zu alt, um unbeaufsichtigte Installationen zu "
+"unterstützen."
 
 #: virtinst/install/unattended.py:198
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr ""
+"Das Betriebssystem '%(osname)s' unterstützt die erforderliche "
+"Injektionsmethode '%(methodname)s' nicht"
 
 #: virtinst/install/unattended.py:335
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
-msgstr ""
+msgstr "Das Betriebssystem '%s' unterstützt keine unbeaufsichtigte Installation"
 
 #: virtinst/install/unattended.py:346
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr ""
+"Das Betriebssystem „%s“ unterstützt keine unbeaufsichtigte Installation."
 
 #: virtinst/install/unattended.py:355
 #, python-format
@@ -6094,11 +6170,14 @@ msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
+"Das Betriebssystem „%(osname)s“ unterstützt keine unbeaufsichtigte "
+"Installation für das Profil „%(profilename)s“. Verfügbare Profile: "
+"%(profiles)s"
 
 #: virtinst/install/unattended.py:362
 #, python-format
 msgid "Using unattended profile '%s'"
-msgstr ""
+msgstr "Unbeaufsichtigtes Profil '%s' verwenden"
 
 #: virtinst/install/urldetect.py:312
 msgid "The URL could not be accessed, maybe you mistyped?"
@@ -6110,6 +6189,8 @@ msgstr ""
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
+"Es konnte keine installierbare Distribution unter der URL '%s' gefunden "
+"werden"
 
 #: virtinst/install/urldetect.py:318
 msgid ""
@@ -6145,21 +6226,24 @@ msgstr "Übertragung von %s"
 #: virtinst/osdict.py:71
 msgid "Generic or unknown OS. Usage is not recommended."
 msgstr ""
+"Generisches oder unbekanntes Betriebssystem. Die Verwendung wird nicht "
+"empfohlen."
 
 #: virtinst/osdict.py:96
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
-msgstr ""
+msgstr "Unbekannte libosinfo-ID '%s'"
 
 #: virtinst/osdict.py:110
 #, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
+"Unbekannter Betriebssystemname '%s'. Siehe `--osinfo list` für gültige Werte."
 
 #: virtinst/osdict.py:537
 #, python-format
 msgid "OS '%s' does not have a URL location"
-msgstr ""
+msgstr "Das Betriebssystem '%s' hat keinen URL-Speicherort"
 
 #: virtinst/osdict.py:549
 #, python-format
@@ -6167,6 +6251,8 @@ msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
 msgstr ""
+"Das Betriebssystem „%(osname)s“ hat keinen URL-Speicherort für die "
+"Architektur „%(archname)s“"
 
 #: virtinst/storage.py:164
 #, fuzzy, python-format
@@ -6288,7 +6374,7 @@ msgstr "Allgemeine Optionen"
 
 #: virtinst/virtclone.py:79
 msgid "Name of the original guest to clone."
-msgstr ""
+msgstr "Name des ursprünglichen Gastes, der geklont werden soll."
 
 #: virtinst/virtclone.py:81
 msgid "XML file to use as the original guest."
@@ -6331,6 +6417,9 @@ msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
+"Überspringen Sie die Kopie des Geräteziels. (z.B. wenn 'vda' eine Festplatte "
+"ist, die Sie nicht kopieren und denselben Pfad in der neuen VM verwenden "
+"wollen, verwenden Sie --skip-copy=vda)"
 
 #: virtinst/virtclone.py:104
 msgid "Do not use a sparse file for the clone's disk image"
@@ -6344,6 +6433,9 @@ msgid ""
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
+"Die Speicherinhalte werden nicht in die angegebenen Dateipfade geklont, ihre "
+"Inhalte bleiben unberührt. Dies erfordert die Angabe vorhandener Pfade für "
+"jedes klonbare Disk-Image."
 
 #: virtinst/virtclone.py:113
 msgid "New file to use as storage for nvram VARS"
@@ -6397,6 +6489,8 @@ msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
+"-c mit etwas angegeben, das wie ein libvirt-URI aussieht. Wollten Sie --"
+"connect verwenden? Wenn nicht, verwenden Sie stattdessen --cdrom"
 
 #: virtinst/virtinstall.py:125
 msgid "Cannot specify storage and use --nodisks"
@@ -6414,6 +6508,7 @@ msgstr ""
 #: virtinst/virtinstall.py:149
 msgid "--os-type is deprecated and does nothing. Please stop using it."
 msgstr ""
+"--os-type ist veraltet und bringt nichts. Bitte verwenden Sie es nicht mehr."
 
 #: virtinst/virtinstall.py:225
 msgid "Cannot mix --graphics and old style graphical options"
