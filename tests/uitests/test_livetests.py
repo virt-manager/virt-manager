@@ -547,19 +547,34 @@ def testLiveExternalSnapshots(fname, app, dom):
     lib.utils.check(lambda: not addhw.showing)
     lib.utils.check(lambda: win.active)
 
-    def _make_snapshot(name, auto=True):
+    def _make_snapshot(name, auto=True, do_external=True):
         win.find("snapshot-add", "push button").click()
         newwin = app.find_window("Create snapshot")
         newwin.find("Name:", "text").set_text(name)
         external = newwin.find("external", "radio button")
         if not external.isChecked:
             pytest.skip("libvirt is too old for external snapshots")
+        if not do_external:
+            newwin.find("internal", "radio button").click()
         if not auto:
             newwin.find("auto", "check box").click()
         newwin.find("Finish", "push button").click()
+        if not do_external:
+            app.click_alert_button("Mixing external and internal snapshots", "No")
+            newwin.find("Finish", "push button").click()
+            app.click_alert_button("Mixing external and internal snapshots", "Yes")
         lib.utils.check(lambda: not newwin.showing)
         newc = win.find(name, "table cell")
         lib.utils.check(lambda: newc.state_selected)
+
+    def _delete_snapshot(name):
+        newc = win.find(name, "table cell")
+        newc.click()
+        lib.utils.check(lambda: newc.state_selected)
+        win.find("snapshot-delete").click()
+        app.click_alert_button("permanently delete", "Yes")
+        lib.utils.check(lambda: newc.dead, timeout=10)
+        lib.utils.check(lambda: win.active)
 
     win.find("Snapshots", "radio button").click()
     _make_snapshot("testnewsnap1")
@@ -573,16 +588,26 @@ def testLiveExternalSnapshots(fname, app, dom):
     _make_snapshot("testnewsnap-offline")
 
     # Delete first snapshot
-    newc = win.find("testnewsnap1", "table cell")
-    newc.click()
-    lib.utils.check(lambda: newc.state_selected)
-    win.find("snapshot-delete").click()
-    app.click_alert_button("permanently delete", "Yes")
-    lib.utils.check(lambda: newc.dead, timeout=10)
-    lib.utils.check(lambda: win.active)
+    _delete_snapshot("testnewsnap1")
 
     # Ensure VM is still offline
     lib.utils.check(lambda: run.sensitive)
+
+    # Mix internal and external snapshots
+    _make_snapshot("testnewsnap3", do_external=False)
+
+    # Ensure newvm window defaults to internal now
+    win.find("snapshot-add", "push button").click()
+    newwin2 = app.find_window("Create snapshot")
+    lib.utils.check(lambda: newwin2.find("internal", "radio button").isChecked)
+    newwin2.find("Cancel", "push button").click()
+    lib.utils.check(lambda: not newwin2.showing)
+
+    # Delete snapshot and check the default reverts to external
+    _delete_snapshot("testnewsnap3")
+    win.find("snapshot-add", "push button").click()
+    newwin2 = app.find_window("Create snapshot")
+    lib.utils.check(lambda: newwin2.find("external", "radio button").isChecked)
 
 
 @_vm_wrapper("uitests-firmware-efi")
