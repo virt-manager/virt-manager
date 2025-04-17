@@ -967,6 +967,12 @@
         <char>/dev/pty7</char>
       </source>
     </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source startupPolicy="optional">
+        <vendor id="0x0781"/>
+        <product id="0x5567"/>
+      </source>
+    </hostdev>
     <redirdev bus="usb" type="spicevmc"/>
     <redirdev bus="usb" type="tcp">
       <source host="localhost" service="4000"/>
