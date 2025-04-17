@@ -8,7 +8,6 @@
 
 import os
 
-from . import cloudinit
 from . import unattended
 from . import volumeupload
 from .installertreemedia import InstallerTreeMedia
@@ -385,7 +384,7 @@ class Installer(object):
 
     def _prepare_cloudinit(self, guest, meter):
         scratchdir = InstallerTreeMedia.make_scratchdir(guest)
-        filepairs = cloudinit.create_files(scratchdir, self._cloudinit_data)
+        filepairs = self._cloudinit_data.create_files(scratchdir)
         for filepair in filepairs:
             self._tmpfiles.append(filepair[0])
 
