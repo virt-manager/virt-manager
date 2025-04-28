@@ -1348,6 +1348,16 @@ c.add_compare(
     "cloud-init-options5",
     env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"},
 )  # --cloud-init user-data=,meta-data=,network-config=
+c.add_compare(
+    "--disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init user-data=https://example.com,meta-data=http://example.com,network-config=ftp://foobar.com",
+    "cloud-init-options6",
+    env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"},
+)  # --cloud-init network URLs
+c.add_invalid(
+    "--disk none --osinfo fedora28 --cloud-init user-data=badurl://example.com",
+    env={"VIRTINST_TEST_SUITE_PRINT_CLOUDINIT": "1"},
+    grep="Couldn't acquire file.*badurl",
+)  # --cloud-init confirm bad URL fails
 c.add_valid(
     "--panic help --disk=? --check=help", grep="path_in_use"
 )  # Make sure introspection doesn't blow up
