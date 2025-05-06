@@ -98,7 +98,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     # following characters: "[{|}~[\\]^':; <=>?@!\"#$%`()+/.,*&]".
     # In order to take a safer path, let's ensure that we never set those,
     # replacing them by "-".
-    hostname = re.sub("[{|}~[\\]^':; <=>?@!\"#$%`()+/.,*&]", "-", hostname)
+    hostname = re.sub("[{|}~[\\]^':; <=>?@!\"#$%`()+/.,*&]", "-", unattended_data.get_hostname() or hostname)
     config.set_hostname(hostname)
 
     # Try to guess the timezone from '/etc/localtime', in case it's not
@@ -128,6 +128,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
     if unattended_data.product_key:
         config.set_reg_product_key(unattended_data.product_key)
 
+
     log.debug("InstallScriptConfig created with the following params:")
     log.debug("username: %s", config.get_user_login())
     log.debug("realname: %s", config.get_user_realname())
@@ -141,6 +142,7 @@ def _make_installconfig(script, osobj, unattended_data, arch, hostname, url):
         log.debug("url: %s", config.get_installation_url())  # pylint: disable=no-member
     log.debug("reg-login %s", config.get_reg_login())
     log.debug("product-key: %s", config.get_reg_product_key())
+    log.debug("hostname: %s", config.get_hostname())
 
     return config
 
@@ -275,6 +277,7 @@ class UnattendedData:
     user_password_file = None
     product_key = None
     reg_login = None
+    hostname = None
 
     def _get_password(self, pwdfile):
         with open(pwdfile, "r") as fobj:
@@ -287,6 +290,10 @@ class UnattendedData:
     def get_admin_password(self):
         if self.admin_password_file:
             return self._get_password(self.admin_password_file)
+    
+    def get_hostname(self):
+        if self.hostname:
+            return self.hostname
 
 
 def _make_scriptmap(script_list):
@@ -385,8 +392,12 @@ def prepare_install_scripts(guest, unattended_data, url, os_media, os_tree, inje
         installationsource = _get_installation_source(os_media)
         script.set_installation_source(installationsource)
 
+        hostname = unattended_data.get_hostname()
+        if not hostname:
+            hostname = guest.name
+
         config = _make_installconfig(
-            script, guest.osinfo, unattended_data, guest.os.arch, guest.name, url
+            script, guest.osinfo, unattended_data, guest.os.arch, hostname, url
         )
         script.set_config(config)
         scripts.append(script)
