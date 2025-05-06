@@ -1166,6 +1166,21 @@ Options that apply to storage creation:
 ``backing_format``
     Disk image format of ``backing_store``
 
+``mode``
+    The mode of the disk. This can be 'w', 'r', 'rw', 'ro', or 'shareable'
+    in octal format. The default is 'rw'.
+    This option is only used when creating a new disk image.
+
+``owner``
+    This is the owner of the disk image. This can be a user name or UID.
+    The default is the user running virt-install.
+    This option is only used when creating a new disk image.
+
+``group`` 
+    This is the group of the disk image. This can be a group name or GID.
+    The default is the group of the user running virt-install.
+    This option is only used when creating a new disk image.
+    
 Some example device configuration suboptions:
 
 ``device``

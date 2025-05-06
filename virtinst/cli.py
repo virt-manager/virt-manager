@@ -3939,6 +3939,11 @@ class ParserDisk(VirtCLIParser):
         convert_perms(self.optdict.pop("perms", None))
         disktype = self.optdict.pop("type", None)
 
+        # New permission options for disk
+        mode = self.optdict.pop("mode", None)
+        owner = self.optdict.pop("owner", None)
+        group = self.optdict.pop("group", None)
+
         if volname:
             if volname.count("/") != 1:
                 raise ValueError(_("Storage volume must be specified as vol=poolname/volname"))
@@ -4028,6 +4033,11 @@ class ParserDisk(VirtCLIParser):
         cls.add_arg("format", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("sparse", None, lookup_cb=None, cb=cls.noset_cb)
         cls.add_arg("type", None, lookup_cb=None, cb=cls.noset_cb)
+
+        # New permission options for disk
+        cls.add_arg("mode", "mode", lookup_cb=None, cb=cls.noset_cb, help="Octal file mode for the new volume (e.g. 0644)")
+        cls.add_arg("owner", "owner", lookup_cb=None, cb=cls.noset_cb, help="UID to chown the new volume to")
+        cls.add_arg("group", "group", lookup_cb=None, cb=cls.noset_cb, help="GID to chown the new volume to")
 
         # These are handled in _add_advertised_aliases
         cls.add_arg("bus", "bus", cb=cls.noset_cb)
