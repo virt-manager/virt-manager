@@ -1154,6 +1154,7 @@ def parse_args():
     devg.add_argument("--nographics", action="store_true", help=argparse.SUPPRESS)
 
     gxmlg = parser.add_argument_group(_("Guest Configuration Options"))
+    # Issue 599: --qemu-commandline configured here
     cli.add_guest_xml_options(gxmlg)
 
     virg = parser.add_argument_group(_("Virtualization Platform Options"))

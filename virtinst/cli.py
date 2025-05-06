@@ -3690,6 +3690,77 @@ class ParserQemuCLI(VirtCLIParser):
             self.optdict["args"] = self.optstr.split("=", 1)[1]
         elif self.optstr.startswith("clearxml="):
             self.optdict["clearxml"] = self.optstr.split("=", 1)[1]
+        elif self.optstr.startswith("device."):
+            # override device new syntax support!
+            parts = [p.strip() for p in self.optstr.split("=")] # ex. ['device.scsi0-0-0-1.rotation_rate', '1']
+
+            # default if met with unexpected syntax
+            if len(parts) != 2:
+                log.warning(f"Invalid device property syntax - setting default to regular arg parsing.\n")
+                self.optdict["args"] = self.optstr
+                return super()._parse(inst)
+
+            device_prop_string = parts[0] # ex. "device.scsi0-0-0-1.rotation_rate"
+            value = parts[1] # ex. "1"
+            device_parts = device_prop_string.split('.') # ex. ['device', 'scsi0-0-0-1', 'rotation_rate']
+            if len(device_parts) != 2:
+                log.warning(f'Invalid device property syntax - setting default to regular arg parsing.\n')
+                self.optdict['args'] = self.optstr
+                return super()._parse(inst)
+
+            # device_parts[0] is already set to 'device' so that is good
+            device_alias = device_parts[1] # ex. 'scsi0-0-0-1'
+            property_name = device_parts[2] # ex. 'rotation_rate'
+
+            # TODO: refactor these at some other point!
+            from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+
+            class QEMUProperty(XMLBuilder):
+                XML_NAME = 'qemu:property'
+                name = XMLProperty('./@name')
+                type = XMLProperty('./@type')
+                value = XMLProperty('./@value')
+
+            class QEMUFrontend(XMLBuilder):
+                XML_NAME = 'qemu:frontend'
+                property = XMLChildProperty(QEMUProperty)
+
+            class QEMUDeviceOverride(XMLBuilder):
+                XML_NAME = 'qemu:device'
+                alias = XMLProperty('./@alias')
+                frontend = XMLChildProperty(QEMUFrontend, is_single=True)
+
+            class QEMUOverride(XMLBuilder):
+                XML_NAME = 'qemu:override'
+                device = XMLChildProperty(QEMUDeviceOverride)
+
+            override = QEMUOverride(self.guest.conn)
+            device_override = QEMUDeviceOverride(self.guest.conn)
+            device_override.alias = device_alias
+            frontend = QEMUFrontend(self.guest.conn)
+            prop = QEMUProperty(self.guest.conn)
+            prop.name = property_name
+
+            t = "string"
+
+            if value.isdigit() or value[0] == "-" and value[1:].isdigit():
+                t = "signed" if value[0] == "-" else "unsigned"
+            elif value == "true" or value == "false":
+                t = "bool"
+            # TODO: Handle `remove` flag
+
+            prop.type = 'string'
+            prop.value = value
+            frontend.property.append(prop)
+            device_override.frontend.set(frontend)
+            override.device.append(device_override)
+
+            # add the override to xmlns_qemu
+            if not inst:
+                inst = self.lookup_prop(self.guest)
+            inst.add_child(override)
+
+            return
         else:
             self.optdict["args"] = self.optstr
         return super()._parse(inst)
