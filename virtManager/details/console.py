@@ -120,6 +120,7 @@ def build_keycombo_menu(on_send_key_fn):
 
     make_item("<Control><Alt>BackSpace", ["Control_L", "Alt_L", "BackSpace"])
     make_item("<Control><Alt>Delete", ["Control_L", "Alt_L", "Delete"])
+    make_item("<Control><Alt><Shift>Escape", ["Control_L", "Alt_L", "Shift_L", "Escape"])
     menu.add(Gtk.SeparatorMenuItem())
 
     for i in range(1, 13):
