@@ -1115,6 +1115,8 @@ def parse_args():
         help=_("Perform a cloud image installation, configuring cloud-init"),
     )
 
+    
+
     # Takes a URL and just prints to stdout the detected distro name
     insg.add_argument("--test-media-detection", help=argparse.SUPPRESS)
     # Helper for cli testing, fills in standard stub options
