@@ -3712,7 +3712,6 @@ class ParserQemuCLI(VirtCLIParser):
             device_alias = device_parts[1] # ex. 'scsi0-0-0-1'
             property_name = device_parts[2] # ex. 'rotation_rate'
 
-            # TODO: refactor these at some other point!
             from .xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
 
             class QEMUProperty(XMLBuilder):
@@ -3747,7 +3746,6 @@ class ParserQemuCLI(VirtCLIParser):
                 t = "signed" if value[0] == "-" else "unsigned"
             elif value == "true" or value == "false":
                 t = "bool"
-            # TODO: Handle `remove` flag
 
             prop.type = 'string'
             prop.value = value
