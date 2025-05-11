@@ -176,6 +176,7 @@ class vmmStorageBrowser(vmmGObjectUI):
         data = _BrowseReasonMetadata(self._browse_reason)
         gsettings_key = data.gsettings_key
 
+        start_folder = None
         if gsettings_key:
             start_folder = self.config.get_default_directory(gsettings_key)
 
