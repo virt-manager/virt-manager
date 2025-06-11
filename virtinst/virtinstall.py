@@ -983,7 +983,7 @@ def start_install(guest, installer, options):
             domain = installer.start_install(
                 guest, meter=meter, doboot=not options.noreboot, transient=options.transient
             )
-        except:  # noqa
+        except:  # noqa: E722
             virtinst.Installer.cleanup_created_disks(guest, meter)
             raise
 
