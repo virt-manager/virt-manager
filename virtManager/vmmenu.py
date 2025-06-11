@@ -191,7 +191,7 @@ class VMActionUI(object):
         if not src.err.chkbox_helper(
             src.config.get_confirm_forcepoweroff,
             src.config.set_confirm_forcepoweroff,
-            text1=_("Are you sure you want to force poweroff '%s'?" % vm.get_name()),
+            text1=_("Are you sure you want to force poweroff '%s'?") % vm.get_name(),
             text2=_(
                 "This will immediately poweroff the VM without "
                 "shutting down the OS and may cause data loss."
@@ -207,7 +207,7 @@ class VMActionUI(object):
         if not src.err.chkbox_helper(
             src.config.get_confirm_pause,
             src.config.set_confirm_pause,
-            text1=_("Are you sure you want to pause '%s'?" % vm.get_name()),
+            text1=_("Are you sure you want to pause '%s'?") % vm.get_name(),
         ):
             return
 
@@ -264,7 +264,7 @@ class VMActionUI(object):
         if not src.err.chkbox_helper(
             src.config.get_confirm_poweroff,
             src.config.set_confirm_poweroff,
-            text1=_("Are you sure you want to poweroff '%s'?" % vm.get_name()),
+            text1=_("Are you sure you want to poweroff '%s'?") % vm.get_name(),
         ):
             return
 
@@ -276,7 +276,7 @@ class VMActionUI(object):
         if not src.err.chkbox_helper(
             src.config.get_confirm_poweroff,
             src.config.set_confirm_poweroff,
-            text1=_("Are you sure you want to reboot '%s'?" % vm.get_name()),
+            text1=_("Are you sure you want to reboot '%s'?") % vm.get_name(),
         ):
             return
 
@@ -288,7 +288,7 @@ class VMActionUI(object):
         if not src.err.chkbox_helper(
             src.config.get_confirm_forcepoweroff,
             src.config.set_confirm_forcepoweroff,
-            text1=_("Are you sure you want to force reset '%s'?" % vm.get_name()),
+            text1=_("Are you sure you want to force reset '%s'?") % vm.get_name(),
             text2=_(
                 "This will immediately reset the VM without "
                 "shutting down the OS and may cause data loss."

@@ -221,7 +221,7 @@ class StoragePool(_StorageObject):
             conn.storagePoolLookupByName(name)
         except libvirt.libvirtError:
             return
-        raise ValueError(_("Name '%s' already in use by another pool." % name))  # pragma: no cover
+        raise ValueError(_("Name '%s' already in use by another pool.") % name)  # pragma: no cover
 
     def default_target_path(self):
         if not self.supports_target_path():
@@ -567,7 +567,7 @@ class StorageVolume(_StorageObject):
         except libvirt.libvirtError:
             return
         raise ValueError(
-            _("Name '%s' already in use by another volume." % name)
+            _("Name '%s' already in use by another volume.") % name
         )  # pragma: no cover
 
     def _get_vol_type(self):

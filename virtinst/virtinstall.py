@@ -525,10 +525,8 @@ def set_cli_defaults(options, guest):
     if storage and not storage_specified(options, guest):
         diskstr = "size=%d" % (storage // (1024**3))
         cli.print_stdout(
-            _(
-                "Using {os_name} default --disk {disk_options}".format(
-                    os_name=guest.osinfo.name, disk_options=diskstr
-                )
+            _("Using {os_name} default --disk {disk_options}").format(
+                os_name=guest.osinfo.name, disk_options=diskstr
             )
         )
         options.disk = [diskstr]

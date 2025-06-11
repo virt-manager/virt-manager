@@ -335,7 +335,7 @@ class vmmCreateNetwork(vmmGObjectUI):
             net.conn.networkLookupByName(net.name)
         except libvirt.libvirtError:
             return
-        raise ValueError(_("Name '%s' already in use by another network." % net.name))
+        raise ValueError(_("Name '%s' already in use by another network.") % net.name)
 
     def _build_xmlobj_from_xmleditor(self):
         xml = self._xmleditor.get_xml()

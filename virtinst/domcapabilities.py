@@ -351,7 +351,7 @@ class DomainCapabilities(XMLBuilder):
                 if re.match(pattern, path):
                     return _("UEFI %(arch)s: %(path)s") % {"arch": arch, "path": path}
 
-        return _("Custom: %(path)s" % {"path": path})
+        return _("Custom: %(path)s") % {"path": path}
 
     def arch_can_uefi(self):
         """
