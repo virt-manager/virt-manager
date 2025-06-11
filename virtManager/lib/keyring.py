@@ -12,7 +12,7 @@ from virtinst import log
 from ..baseclass import vmmGObject
 
 
-class _vmmSecret(object):
+class _vmmSecret:
     def __init__(self, name, secret=None, attributes=None):
         self.name = name
         self.secret = secret
@@ -177,7 +177,7 @@ class vmmKeyring(vmmGObject):
     ##############
 
     def is_available(self):
-        return not (self._collection is None)
+        return self._collection is not None
 
     def _get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()

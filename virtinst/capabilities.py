@@ -181,7 +181,7 @@ class _CapsGuest(XMLBuilder):
 ############################
 
 
-class _CapsInfo(object):
+class _CapsInfo:
     """
     Container object to hold the results of guest_lookup, so users don't
     need to juggle two objects

@@ -386,7 +386,7 @@ class vmmAddHardware(vmmGObjectUI):
                 # Guest XML editing
                 define_func(**define_args)
         except Exception as e:
-            err.show_err((_("Error changing VM configuration: %s") % str(e)))
+            err.show_err(_("Error changing VM configuration: %s") % str(e))
             return False
 
         if not vm.is_active():

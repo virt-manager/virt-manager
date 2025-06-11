@@ -253,7 +253,7 @@ class DeviceDisk(Device):
         """
         log.debug("DeviceDisk.check_path_search path=%s", path)
 
-        class SearchData(object):
+        class SearchData:
             def __init__(self):
                 self.user = None
                 self.uid = None
@@ -391,7 +391,7 @@ class DeviceDisk(Device):
         from ..storage import StorageVolume
 
         if size is None:
-            raise ValueError(_("Size must be specified for non existent volume '%s'" % volname))
+            raise ValueError(_("Size must be specified for non existent volume '%s'") % volname)
 
         # This catches --disk /dev/idontexist,size=1 if /dev is unmanaged
         if not poolobj:

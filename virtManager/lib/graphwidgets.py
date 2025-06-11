@@ -197,7 +197,7 @@ class CellRendererSparkline(Gtk.CellRenderer):
 
         points = []
         for index in range(0, len(self.data_array)):
-            x = int(((index * pixels_per_point) + graph_x))
+            x = int((index * pixels_per_point) + graph_x)
             y = int(get_y(index))
 
             points.append((x, y))

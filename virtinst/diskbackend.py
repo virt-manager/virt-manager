@@ -368,7 +368,7 @@ def is_path_searchable(path, uid, username):
 ##############################################
 
 
-class _StorageBase(object):
+class _StorageBase:
     """
     Storage base class, defining the API used by DeviceDisk
     """
@@ -573,7 +573,7 @@ class CloneStorageCreator(_StorageCreator):
 
     def validate(self):
         if self._size is None:  # pragma: no cover
-            raise ValueError(_("size is required for non-existent disk '%s'" % self.get_path()))
+            raise ValueError(_("size is required for non-existent disk '%s'") % self.get_path())
 
         err, msg = self.is_size_conflict()
         if err:

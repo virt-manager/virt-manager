@@ -23,7 +23,7 @@ def _is_url(url):
     return url.startswith("http://") or url.startswith("https://") or url.startswith("ftp://")
 
 
-class _LocationData(object):
+class _LocationData:
     def __init__(self, osinfo, kernel_pairs, os_media, os_tree):
         self.osinfo = osinfo
         self.kernel_pairs = kernel_pairs
@@ -36,7 +36,7 @@ class _LocationData(object):
             self.kernel_url_arg = osobj.get_kernel_url_arg()
 
 
-class InstallerTreeMedia(object):
+class InstallerTreeMedia:
     """
     Class representing --location Tree media. Can be one of
 

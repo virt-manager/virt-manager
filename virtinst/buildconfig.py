@@ -42,7 +42,7 @@ def _get_param(name, default):  # pragma: no cover
         return default
 
 
-class _BuildConfig(object):
+class _BuildConfig:
     def __init__(self):
         self.cfgpath = _cfgpath
         self.version = _get_param("version", "")

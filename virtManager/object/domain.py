@@ -23,7 +23,7 @@ from ..lib.libvirtenummap import LibvirtEnumMap
 from ..lib import testmock
 
 
-class _SENTINEL(object):
+class _SENTINEL:
     pass
 
 
@@ -140,7 +140,7 @@ class _IPFetcher:
         return None, None
 
 
-class vmmInspectionApplication(object):
+class vmmInspectionApplication:
     def __init__(self):
         self.name = None
         self.display_name = None
@@ -151,7 +151,7 @@ class vmmInspectionApplication(object):
         self.description = None
 
 
-class vmmInspectionData(object):
+class vmmInspectionData:
     def __init__(self):
         self.os_type = None
         self.distro = None

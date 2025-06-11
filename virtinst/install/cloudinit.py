@@ -136,7 +136,7 @@ class CloudInitData:
 
         if self.disable:
             content += "runcmd:\n"
-            content += '- echo "Disabled by virt-install" > ' "/etc/cloud/cloud-init.disabled\n"
+            content += '- echo "Disabled by virt-install" > /etc/cloud/cloud-init.disabled\n'
 
         clean_content = re.sub(r"root:(.*)", "root:[SCRUBBLED]", content)
         if "VIRTINST_TEST_SUITE_PRINT_CLOUDINIT" in os.environ:

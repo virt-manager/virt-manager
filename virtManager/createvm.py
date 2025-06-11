@@ -1713,7 +1713,7 @@ class vmmCreateVM(vmmGObjectUI):
         log.debug("Starting OS detection thread for cdrom=%s location=%s", cdrom, location)
         self.widget("create-forward").set_sensitive(False)
 
-        class ThreadResults(object):
+        class ThreadResults:
             """
             Helper object to track results from the detection thread
             """

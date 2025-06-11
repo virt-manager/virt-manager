@@ -50,7 +50,7 @@ def _get_pool_size_percent(pool):
     alloc = pool.get_allocation()
     per = 0
     if cap and alloc is not None:
-        per = int(((float(alloc) / float(cap)) * 100))
+        per = int((float(alloc) / float(cap)) * 100)
     return "<span size='small'>%s%%</span>" % int(per)
 
 

@@ -12,7 +12,7 @@ from .logger import log
 # pylint: disable=protected-access
 
 
-class _XPathSegment(object):
+class _XPathSegment:
     """
     Class representing a single 'segment' of an xpath string. For example,
     the xpath:
@@ -54,7 +54,7 @@ class _XPathSegment(object):
             self.nsname, self.nodename = self.nodename.split(":")
 
 
-class _XPath(object):
+class _XPath:
     """
     Helper class for performing manipulations of XPath strings. Splits
     the xpath into segments.
@@ -84,7 +84,7 @@ class _XPath(object):
         return self.join(self.segments[:-1])
 
 
-class _XMLBase(object):
+class _XMLBase:
     NAMESPACES = {}
 
     @classmethod

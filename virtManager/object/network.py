@@ -17,8 +17,8 @@ def _make_addr_str(addrStr, prefix, netmaskStr):
     if prefix:
         return str(ipaddress.ip_network(str("{}/{}").format(addrStr, prefix), strict=False))
     elif netmaskStr:
-        netmask = ipaddress.ip_address(str((netmaskStr)))
-        network = ipaddress.ip_address(str((addrStr)))
+        netmask = ipaddress.ip_address(str(netmaskStr))
+        network = ipaddress.ip_address(str(addrStr))
         return str(ipaddress.ip_network(str("{}/{}").format(network, netmask), strict=False))
     else:
         return str(ipaddress.ip_network(str(addrStr), strict=False))

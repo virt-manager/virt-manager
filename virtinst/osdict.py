@@ -50,7 +50,7 @@ class _OsinfoIter:
         return ret
 
 
-class _OSDB(object):
+class _OSDB:
     """
     Entry point for the public API
     """
@@ -237,7 +237,7 @@ class _OsResources:
 #####################
 
 
-class _OsVariant(object):
+class _OsVariant:
     def __init__(self, o):
         self._os = o
 
@@ -596,7 +596,7 @@ class _OsVariant(object):
         return False
 
 
-class _OsMedia(object):
+class _OsMedia:
     def __init__(self, osinfo_media):
         self._media = osinfo_media
 
@@ -623,7 +623,7 @@ class _OsMedia(object):
         return self._media
 
 
-class _OsTree(object):
+class _OsTree:
     def __init__(self, osinfo_tree):
         self._tree = osinfo_tree
 

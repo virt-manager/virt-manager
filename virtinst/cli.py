@@ -46,7 +46,7 @@ HAS_VIRTVIEWER = shutil.which("virt-viewer")
 ##########################
 
 
-class _GlobalState(object):
+class _GlobalState:
     def __init__(self):
         self.quiet = False
 
@@ -186,7 +186,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         if get_global_state().quiet:
             level = logging.ERROR
         else:
-            level = logging.WARN
+            level = logging.WARNING
         streamHandler.setLevel(level)
         streamHandler.setFormatter(logging.Formatter(streamErrorFormat))
     else:  # pragma: no cover
@@ -1170,7 +1170,7 @@ class _SuboptCheckerClass:
 _SuboptChecker = _SuboptCheckerClass()
 
 
-class _VirtCLIArgumentStatic(object):
+class _VirtCLIArgumentStatic:
     """
     Helper class to hold all of the static data we need for knowing
     how to parse a cli subargument, like --disk path=, or --network mac=.
@@ -1271,7 +1271,7 @@ class _VirtCLIArgumentStatic(object):
         return False
 
 
-class _VirtCLIArgument(object):
+class _VirtCLIArgument:
     """
     A class that combines the static parsing data _VirtCLIArgumentStatic
     with actual values passed on the command line.
@@ -2080,7 +2080,7 @@ def parse_location(optstr):
 ####################
 
 
-class OSInfoData(object):
+class OSInfoData:
     _REQUIRE_ON = 1
     _REQUIRE_AUTO = 3
 
@@ -2206,7 +2206,7 @@ def _determine_default_autoconsole_type(guest, installer):
     return "graphical"
 
 
-class _AutoconsoleData(object):
+class _AutoconsoleData:
     def __init__(self, autoconsole, guest, installer):
         self._autoconsole = autoconsole
         if self._autoconsole not in ["none", "default", "text", "graphical"]:

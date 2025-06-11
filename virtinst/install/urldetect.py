@@ -17,7 +17,7 @@ from ..osdict import OSDB
 ###############################################
 
 
-class _DistroCache(object):
+class _DistroCache:
     def __init__(self, fetcher):
         self._fetcher = fetcher
         self._filecache = {}
@@ -182,7 +182,7 @@ class _DistroCache(object):
         return True
 
 
-class _SUSEContent(object):
+class _SUSEContent:
     """
     Helper class tracking the SUSE 'content' files
     """
@@ -329,7 +329,7 @@ def getDistroStore(guest, fetcher, skip_error):
 ##################
 
 
-class _DistroTree(object):
+class _DistroTree:
     """
     Class for determining the kernel/initrd path for an install
     tree (URL, ISO, or local directory)

@@ -6,6 +6,6 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from virtinst import virtinstall
+from virtinst import virtinstall  # noqa: E402
 
 virtinstall.runcli()

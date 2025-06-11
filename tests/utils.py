@@ -18,7 +18,7 @@ from virtinst import xmlutil
 # pylint: disable=protected-access
 
 
-class _TestConfig(object):
+class _TestConfig:
     """
     Class containing any bits passed in from setup.py
     """
@@ -51,7 +51,7 @@ def has_old_osinfo():
     return not virtinst.OSDB.lookup_os(osname).supports_chipset_q35()
 
 
-class _URIs(object):
+class _URIs:
     def __init__(self):
         self._conn_cache = {}
         self._testdriver_cache = None
@@ -146,7 +146,7 @@ class _URIs(object):
                 if not is_testdriver_xml:
                     raise
                 self._testdriver_error = (
-                    "error opening testdriver.xml: %s\n" "libvirt is probably too old" % str(e)
+                    "error opening testdriver.xml: %s\nlibvirt is probably too old" % str(e)
                 )
                 print(self._testdriver_error, file=sys.stderr)
 

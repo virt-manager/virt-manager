@@ -970,7 +970,7 @@ class vmmDetails(vmmGObjectUI):
 
             self.addhw.show(self.topwin)
         except Exception as e:  # pragma: no cover
-            self.err.show_err((_("Error launching hardware dialog: %s") % str(e)))
+            self.err.show_err(_("Error launching hardware dialog: %s") % str(e))
 
     def _remove_non_disk(self, devobj):
         if not self.err.chkbox_helper(
@@ -1435,7 +1435,7 @@ class vmmDetails(vmmGObjectUI):
             try:
                 self.vm.set_autostart(auto.get_active())
             except Exception as e:  # pragma: no cover
-                self.err.show_err((_("Error changing autostart value: %s") % str(e)))
+                self.err.show_err(_("Error changing autostart value: %s") % str(e))
                 return False
 
         if self._edited(EDIT_BOOTORDER):
@@ -1779,7 +1779,7 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_stats_page(self):
         def _multi_color(text1, text2):
-            return '<span color="#82003B">%s</span> ' '<span color="#295C45">%s</span>' % (
+            return '<span color="#82003B">%s</span> <span color="#295C45">%s</span>' % (
                 text1,
                 text2,
             )
@@ -2028,7 +2028,7 @@ class vmmDetails(vmmGObjectUI):
         target_port = chardev.target_port
         dev_type = chardev.type or "pty"
         primary = self.vm.serial_is_console_dup(chardev)
-        show_target_type = not (char_type in ["serial", "parallel"])
+        show_target_type = char_type not in ["serial", "parallel"]
         is_qemuga = chardev.target_name == chardev.CHANNEL_NAME_QEMUGA
         show_clipboard = chardev.type == chardev.TYPE_QEMUVDAGENT
 

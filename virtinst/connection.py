@@ -31,7 +31,7 @@ def _real_local_libvirt_version():
     return getattr(libvirt, key)
 
 
-class VirtinstConnection(object):
+class VirtinstConnection:
     """
     Wrapper for libvirt connection that provides various bits like
     - caching static data

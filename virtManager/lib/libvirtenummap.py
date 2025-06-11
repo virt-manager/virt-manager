@@ -10,7 +10,7 @@ import libvirt
 from virtinst import log
 
 
-class _LibvirtEnumMap(object):
+class _LibvirtEnumMap:
     """
     Helper for mapping libvirt event int values to their API names
     """

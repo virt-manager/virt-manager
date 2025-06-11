@@ -90,7 +90,7 @@ if AppIndicator3:  # pragma: no cover
 ###########################
 
 
-class _Systray(object):
+class _Systray:
     def is_embedded(self):
         raise NotImplementedError()
 

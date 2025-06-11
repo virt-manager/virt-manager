@@ -37,7 +37,7 @@ CSSDATA = """
 """
 
 
-class _SettingsWrapper(object):
+class _SettingsWrapper:
     """
     Wrapper class to simplify interacting with gsettings APIs.
     Basically it allows simple get/set of gconf style paths, and
@@ -131,7 +131,7 @@ class _SettingsWrapper(object):
         return settings.set_value(key, GLib.Variant(fmt, value), *args, **kwargs)
 
 
-class vmmConfig(object):
+class vmmConfig:
     CONSOLE_SCALE_NEVER = 0
     CONSOLE_SCALE_FULLSCREEN = 1
     CONSOLE_SCALE_ALWAYS = 2

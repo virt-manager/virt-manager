@@ -16,7 +16,7 @@ import tests.utils
 from . import utils
 
 
-class VMMDogtailApp(object):
+class VMMDogtailApp:
     """
     Wrapper class to simplify dogtail app handling
     """

@@ -26,7 +26,7 @@ def sanitize_xml_for_test_define(xml):
     return xml
 
 
-class URI(object):
+class URI:
     """
     Parse an arbitrary URI into its individual parts
     """
@@ -87,7 +87,7 @@ class URI(object):
         return scheme, username, netloc, uri, query, fragment
 
 
-class MagicURI(object):
+class MagicURI:
     """
     Handle magic virtinst URIs we use for the test suite and UI testing.
     This allows a special URI to override various features like capabilities

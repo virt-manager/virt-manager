@@ -189,7 +189,7 @@ def connect_error(conn, errmsg, tb, warnconsole):
             hint += _("Verify that an appropriate libvirt daemon is running.")
             show_errmsg = False
 
-    msg = _("Unable to connect to libvirt %s." % conn.get_uri())
+    msg = _("Unable to connect to libvirt %s.") % conn.get_uri()
     if show_errmsg:
         msg += "\n\n%s" % errmsg
     if hint:
