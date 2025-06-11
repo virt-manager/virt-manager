@@ -26,7 +26,7 @@ KSNEW = "tests/data/inject/new-kickstart.ks"
 PRESEED = "tests/data/inject/preseed.cfg"
 
 
-class Distro(object):
+class Distro:
     def __init__(self, name, url, filename, warntype=WARN_FEDORA):
         self.name = name
         self.url = url

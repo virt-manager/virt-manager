@@ -55,7 +55,7 @@ class _XorrisoReader:
 ###########################
 
 
-class _URLFetcher(object):
+class _URLFetcher:
     """
     This is a generic base class for fetching/extracting files from
     a media source, such as CD ISO, or HTTP/HTTPS/FTP server

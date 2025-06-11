@@ -12,7 +12,7 @@ from virtinst import log
 from ..baseclass import vmmGObject
 
 
-class _vmmSecret(object):
+class _vmmSecret:
     def __init__(self, name, secret=None, attributes=None):
         self.name = name
         self.secret = secret

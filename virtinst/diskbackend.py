@@ -368,7 +368,7 @@ def is_path_searchable(path, uid, username):
 ##############################################
 
 
-class _StorageBase(object):
+class _StorageBase:
     """
     Storage base class, defining the API used by DeviceDisk
     """

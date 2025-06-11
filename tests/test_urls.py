@@ -20,7 +20,7 @@ from virtinst import log
 os.environ.pop("VIRTINST_TEST_SUITE", None)
 
 
-class _URLTestData(object):
+class _URLTestData:
     """
     Class that tracks all data needed for a single URL test case.
     Data is stored in data/test_urls.ini
