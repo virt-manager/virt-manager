@@ -6,6 +6,6 @@ import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from virtinst import virtxml
+from virtinst import virtxml  # noqa: E402
 
 virtxml.runcli()
