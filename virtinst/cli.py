@@ -186,7 +186,7 @@ def setupLogging(appname, debug_stdout, do_quiet, cli_app=True):
         if get_global_state().quiet:
             level = logging.ERROR
         else:
-            level = logging.WARN
+            level = logging.WARNING
         streamHandler.setLevel(level)
         streamHandler.setFormatter(logging.Formatter(streamErrorFormat))
     else:  # pragma: no cover
