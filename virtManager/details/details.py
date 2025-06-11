@@ -1779,7 +1779,7 @@ class vmmDetails(vmmGObjectUI):
 
     def _refresh_stats_page(self):
         def _multi_color(text1, text2):
-            return '<span color="#82003B">%s</span> ' '<span color="#295C45">%s</span>' % (
+            return '<span color="#82003B">%s</span> <span color="#295C45">%s</span>' % (
                 text1,
                 text2,
             )
