@@ -970,7 +970,7 @@ class vmmDetails(vmmGObjectUI):
 
             self.addhw.show(self.topwin)
         except Exception as e:  # pragma: no cover
-            self.err.show_err((_("Error launching hardware dialog: %s") % str(e)))
+            self.err.show_err(_("Error launching hardware dialog: %s") % str(e))
 
     def _remove_non_disk(self, devobj):
         if not self.err.chkbox_helper(
@@ -1435,7 +1435,7 @@ class vmmDetails(vmmGObjectUI):
             try:
                 self.vm.set_autostart(auto.get_active())
             except Exception as e:  # pragma: no cover
-                self.err.show_err((_("Error changing autostart value: %s") % str(e)))
+                self.err.show_err(_("Error changing autostart value: %s") % str(e))
                 return False
 
         if self._edited(EDIT_BOOTORDER):
