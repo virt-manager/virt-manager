@@ -294,7 +294,7 @@ class _CloneDiskInfo:
     def raise_error(self):
         if self.is_clone_requested() and self.get_cloneable_msg():
             msg = self.get_cloneable_msg()
-            err = _("Could not determine original disk information: %s" % msg)
+            err = _("Could not determine original disk information: %s") % msg
             raise ValueError(err)
         if self.is_share_requested():
             return

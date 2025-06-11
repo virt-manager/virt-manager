@@ -76,11 +76,14 @@ class ConnectionInfo(object):
             and self._is_listen_localhost()
             and not self._is_listen_localhost(self._connhost)
         ):
-            return _(
-                "Guest is on a remote host with transport '%s' "
-                "but is only configured to listen locally. "
-                "To connect remotely you will need to change the guest's "
-                "listen address." % self.transport
+            return (
+                _(
+                    "Guest is on a remote host with transport '%s' "
+                    "but is only configured to listen locally. "
+                    "To connect remotely you will need to change the guest's "
+                    "listen address."
+                )
+                % self.transport
             )
 
     def get_conn_host(self):
