@@ -44,7 +44,6 @@
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
     <controller type="pci" model="pcie-root-port"/>
-    <controller type="pci" model="pcie-root-port"/>
     <interface type="network">
       <source network="default"/>
       <mac address="00:11:22:33:44:55"/>
@@ -69,7 +68,7 @@
     </graphics>
     <sound model="ich9"/>
     <video>
-      <model type="virtio"/>
+      <model type="ramfb"/>
     </video>
     <memballoon model="virtio"/>
     <rng model="virtio">
