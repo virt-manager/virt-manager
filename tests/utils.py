@@ -146,7 +146,7 @@ class _URIs(object):
                 if not is_testdriver_xml:
                     raise
                 self._testdriver_error = (
-                    "error opening testdriver.xml: %s\n" "libvirt is probably too old" % str(e)
+                    "error opening testdriver.xml: %s\nlibvirt is probably too old" % str(e)
                 )
                 print(self._testdriver_error, file=sys.stderr)
 

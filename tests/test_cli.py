@@ -2686,7 +2686,7 @@ def test_virtinstall_no_testsuite():
     some code paths like proper logging etc.
     """
     cmd = Command(
-        "virt-install --connect %s " "--test-stub-command --noautoconsole" % (utils.URIs.test_suite)
+        "virt-install --connect %s --test-stub-command --noautoconsole" % (utils.URIs.test_suite)
     )
     cmd.run()
 
