@@ -74,7 +74,7 @@ def _version_str_to_int(verstr):
     )
 
 
-class _SupportCheck(object):
+class _SupportCheck:
     """
     @version: Minimum libvirt version required for this feature. Not used
         if 'args' provided.

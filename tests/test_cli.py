@@ -185,7 +185,7 @@ class SkipChecks:
         self._check(conn, self.predefine_check)
 
 
-class Command(object):
+class Command:
     """
     Instance of a single cli command to test
     """
@@ -371,7 +371,7 @@ class Command(object):
         self._run()
 
 
-class _CategoryProxy(object):
+class _CategoryProxy:
     """
     Category of an App. Let's us register chunks of suboptions per logical
     grouping of tests. So we may have a virt-install 'storage' group which
@@ -396,7 +396,7 @@ class _CategoryProxy(object):
         return self._app.add_compare(self._name, *args, **kwargs)
 
 
-class App(object):
+class App:
     """
     Represents a top level app test suite, like virt-install or virt-xml
     """

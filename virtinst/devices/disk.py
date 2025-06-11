@@ -253,7 +253,7 @@ class DeviceDisk(Device):
         """
         log.debug("DeviceDisk.check_path_search path=%s", path)
 
-        class SearchData(object):
+        class SearchData:
             def __init__(self):
                 self.user = None
                 self.uid = None

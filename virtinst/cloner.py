@@ -303,7 +303,7 @@ class _CloneDiskInfo:
             raise ValueError(msg)
 
 
-class Cloner(object):
+class Cloner:
     @staticmethod
     def generate_clone_name(conn, basename):
         return _generate_clone_name(conn, basename)

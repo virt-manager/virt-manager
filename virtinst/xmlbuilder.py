@@ -26,7 +26,7 @@ _allprops = []
 _seenprops = []
 
 
-class XMLManualAction(object):
+class XMLManualAction:
     """
     Helper class for tracking and performing the user requested manual
     XML action
@@ -81,7 +81,7 @@ class XMLManualAction(object):
         xmlstate.xmlapi.set_xpath_content(xpath, setval)
 
 
-class _XMLPropertyCache(object):
+class _XMLPropertyCache:
     """
     Cache lookup tables mapping classes to their associated
     XMLProperty and XMLChildProperty classes
@@ -413,7 +413,7 @@ class XMLProperty(_XMLPropertyBase):
         xmlbuilder._xmlstate.xmlapi.set_xpath_content(xpath, setval)
 
 
-class _XMLState(object):
+class _XMLState:
     def __init__(self, root_name, parsexml, parentxmlstate, relative_object_xpath):
         self._root_name = root_name
         self._namespace = ""
@@ -484,7 +484,7 @@ class _XMLState(object):
         return self._join_xpath(self.abs_xpath() or ".", xpath)
 
 
-class XMLBuilder(object):
+class XMLBuilder:
     """
     Base for all classes which build or parse domain XML
     """

@@ -16,7 +16,7 @@ from virtinst import log
 from ..baseclass import vmmGObject
 
 
-class ConnectionInfo(object):
+class ConnectionInfo:
     """
     Holds all the bits needed to make a connection to a graphical console
     """
@@ -122,7 +122,7 @@ class ConnectionInfo(object):
         )
 
 
-class _TunnelScheduler(object):
+class _TunnelScheduler:
     """
     If the user is using Spice + SSH URI + no SSH keys, we need to
     serialize connection opening otherwise ssh-askpass gets all angry.
@@ -167,7 +167,7 @@ class _TunnelScheduler(object):
 _tunnel_scheduler = _TunnelScheduler()
 
 
-class _Tunnel(object):
+class _Tunnel:
     def __init__(self):
         self._pid = None
         self._closed = False
@@ -281,7 +281,7 @@ def _make_ssh_command(ginfo):
     return argv
 
 
-class SSHTunnels(object):
+class SSHTunnels:
     def __init__(self, ginfo):
         self._tunnels = []
         self._sshcommand = _make_ssh_command(ginfo)

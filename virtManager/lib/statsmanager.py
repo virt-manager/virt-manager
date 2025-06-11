@@ -13,7 +13,7 @@ from virtinst import log
 from ..baseclass import vmmGObject
 
 
-class _VMStatsRecord(object):
+class _VMStatsRecord:
     """
     Tracks a set of VM stats for a single timestamp
     """

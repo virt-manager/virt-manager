@@ -25,7 +25,7 @@ def _make_testsuite_path(path):
     return os.path.join("/VIRTINST-TESTSUITE", os.path.basename(path).split("-", 2)[-1])
 
 
-class Installer(object):
+class Installer:
     """
     Class for kicking off VM installs. The VM is set up separately in a Guest
     instance. This class tracks the install media/bootdev choice, alters the

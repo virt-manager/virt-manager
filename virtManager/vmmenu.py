@@ -132,7 +132,7 @@ class VMActionMenu(_VMMenu):
                 child.get_child().set_label(text)
 
 
-class VMActionUI(object):
+class VMActionUI:
     """
     Singleton object for handling VM actions, asking for confirmation,
     showing errors/progress dialogs, etc.
