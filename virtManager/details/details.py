@@ -2028,7 +2028,7 @@ class vmmDetails(vmmGObjectUI):
         target_port = chardev.target_port
         dev_type = chardev.type or "pty"
         primary = self.vm.serial_is_console_dup(chardev)
-        show_target_type = not (char_type in ["serial", "parallel"])
+        show_target_type = char_type not in ["serial", "parallel"]
         is_qemuga = chardev.target_name == chardev.CHANNEL_NAME_QEMUGA
         show_clipboard = chardev.type == chardev.TYPE_QEMUVDAGENT
 

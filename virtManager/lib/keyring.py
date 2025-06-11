@@ -177,7 +177,7 @@ class vmmKeyring(vmmGObject):
     ##############
 
     def is_available(self):
-        return not (self._collection is None)
+        return self._collection is not None
 
     def _get_secret_name(self, vm):
         return "vm-console-" + vm.get_uuid()
