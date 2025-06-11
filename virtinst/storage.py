@@ -510,12 +510,27 @@ class StorageVolume(_StorageObject):
     TYPE_NETDIR = getattr(libvirt, "VIR_STORAGE_VOL_NETDIR", 4)
 
     def __init__(self, *args, **kwargs):
+        # Handle permissions
+        mode_arg = kwargs.pop("mode", None)
+        owner_arg = kwargs.pop("owner", None)
+        group_arg = kwargs.pop("group", None)
+        if mode_arg or owner_arg or group_arg:
+            self.permissions = _StoragePermissions()
+            if mode_arg:
+                self.permissions.mode = int(mode_arg, 8)
+            if owner_arg:
+                self.permissions.owner = int(owner_arg)
+            if group_arg:
+                self.permissions.group = int(group_arg)
+
         _StorageObject.__init__(self, *args, **kwargs)
 
         self._input_vol = None
         self._pool = None
         self._pool_xml = None
         self._reflink = False
+       
+
 
     ######################
     # Non XML properties #
