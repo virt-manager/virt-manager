@@ -28,13 +28,14 @@
 # 连 浩鑫 <lianhaoxin2012@outlook.com>, 2023.
 # eirik song <eirik.song@gmail.com>, 2024.
 # jianqing yan <yanjianqing@kylinos.cn>, 2024.
+# Poesty Li <poesty7450@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2024-11-26 13:55+0100\n"
-"PO-Revision-Date: 2024-08-21 01:38+0000\n"
-"Last-Translator: jianqing yan <yanjianqing@kylinos.cn>\n"
+"PO-Revision-Date: 2025-05-08 17:13+0000\n"
+"Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -42,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.11.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
 #: ui/manager.ui:7 virtManager/systray.py:138
@@ -400,10 +401,8 @@ msgid "_Connect to console"
 msgstr "连接到控制台(_C)"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "连接(_C)"
+msgstr "连接"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -2004,33 +2003,24 @@ msgid "_Description:"
 msgstr "描述(_D)："
 
 #: ui/snapshotsnew.ui:211
-#, fuzzy
-#| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
-msgstr "快照模式："
+msgstr "快照模式(_M)："
 
 #: ui/snapshotsnew.ui:226
-#, fuzzy
-#| msgid "External"
 msgid "_external"
-msgstr "外部"
+msgstr "外部(_e)"
 
 #: ui/snapshotsnew.ui:243
-#, fuzzy
-#| msgid "External"
 msgid "_internal"
-msgstr "内部"
+msgstr "内部(_i)"
 
 #: ui/snapshotsnew.ui:269
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "内存状态："
+msgstr "内存状态(_S)："
 
 #: ui/snapshotsnew.ui:283
-#, fuzzy
 msgid "_auto"
-msgstr "自动"
+msgstr "自动(_a)"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -3123,10 +3113,8 @@ msgid "Error continuing install: %s"
 msgstr "继续安装时出错：%s"
 
 #: virtManager/createvm.py:2093
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
-msgstr "Bootstraping 容器"
+msgstr "Bootstrapping 容器"
 
 #: virtManager/createvol.py:140
 #, python-format
@@ -5030,10 +5018,8 @@ msgid "PNG files"
 msgstr "PNG 文件"
 
 #: virtManager/vmwindow.py:559
-#, fuzzy
-#| msgid "Saved"
 msgid "_Save"
-msgstr "保存"
+msgstr "保存(_S)"
 
 #: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
 msgid "There are unapplied changes."
@@ -5844,10 +5830,8 @@ msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV 启动安全性设置需要计算机支持 Q35 UEFI"
 
 #: virtinst/domain/launch_security.py:43
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "SEV 启动安全性设置需要计算机支持 Q35 UEFI"
+msgstr "SEV-SNP 启动安全性设置需要计算机支持 Q35 UEFI"
 
 #: virtinst/domcapabilities.py:208
 #, python-format
@@ -5924,8 +5908,6 @@ msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr "位置内核/initrd 只能使用位置 URL/路径指定"
 
 #: virtinst/install/installertreemedia.py:119
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "位置内核/initrd 必须成对指定"
 
@@ -6371,6 +6353,8 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"无法从安装介质检测到 osinfo 操作系统名称，使用备用名称 '{name}'。\n"
+"如果您期望检测成功，请针对 virt-install 提交错误报告。"
 
 #: virtinst/virtinstall.py:571
 #, python-format
@@ -6478,7 +6462,7 @@ msgstr "域已经崩溃。"
 #: virtinst/virtinstall.py:854
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "虚拟机意外消失：%s"
 
 #: virtinst/virtinstall.py:876
 msgid "Domain is still running. Installation may be in progress."
@@ -6669,28 +6653,24 @@ msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgstr "--build-xml 不支持和 --os-variant/--osinfo 一起使用"
 
 #: virtinst/virtxml.py:109
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--%s 选项不支持 --build-xml"
+msgstr "{cli_flag} 选项不支持 --build-xml"
 
 #: virtinst/virtxml.py:115
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "不能同时使用 --remove-device 和 --%s 选项"
+msgstr "不能同时使用 --remove-device 和 {cli_flag} 选项"
 
 #: virtinst/virtxml.py:118
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "不能同时使用 --add-device 和 --%s 选项"
+msgstr "不能同时使用 --add-device 和 {cli_flag} 选项"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "不知如何为 --%s 应用 --update 选项"
+msgstr "不知如何为 {cli_flag} 应用 --update 选项"
 
 #: virtinst/virtxml.py:136
 #, python-format
@@ -6717,27 +6697,19 @@ msgid "Invalid --edit option '%s'"
 msgstr "无效的 --edit 选项 '%s'"
 
 #: virtinst/virtxml.py:201
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "在 XML 配置中，未找到 --%s 对象"
+msgstr "在 XML 配置中，未找到 {cli_flag} 对象"
 
 #: virtinst/virtxml.py:204
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
 msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
-msgstr[0] ""
-"需要 '--edit %(number)s' 选项，但 XML 文件中仅存在 %(max)s --%(type)s 对象"
+msgstr[0] "需要 '--edit {number}' 选项，但 XML 文件中仅存在 {maxnum} {cli_flag} 对象"
 
 #: virtinst/virtxml.py:225
 #, python-format
@@ -6745,13 +6717,10 @@ msgid "No matching objects found for %s"
 msgstr "未发现匹配对象 %s"
 
 #: virtinst/virtxml.py:242
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
-msgstr "'--edit %(option)s' 的 --%(objecttype)s 无任何意义，只需使用 '--edit'"
+msgstr "'--edit {option}' 的 {cli_flag} 无任何意义，只需使用 '--edit'"
 
 #: virtinst/virtxml.py:318
 #, python-format
@@ -6936,20 +6905,18 @@ msgid "Require confirmation before saving any results."
 msgstr "保存任何结果前需要确认。"
 
 #: virtinst/virtxml.py:488
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "冲突选项 %s"
+msgstr "转换选项"
 
 #: virtinst/virtxml.py:492
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "将现有虚拟机从 PC/i440FX 转换为 Q35。"
 
 #: virtinst/virtxml.py:497
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
-msgstr ""
+msgstr "将现有虚拟机转换为使用 VNC 图形显示。这将移除所有 Spice 图形显示的残留部分。"
 
 #: virtinst/virtxml.py:500
 msgid "XML options"
