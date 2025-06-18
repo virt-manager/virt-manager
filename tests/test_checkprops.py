@@ -1,8 +1,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import traceback
-
 import pytest
 
 import tests.utils
@@ -27,12 +25,9 @@ def testCheckXMLBuilderProps():
 
     # pylint: disable=protected-access
     fail = [p for p in virtinst.xmlbuilder._allprops if p not in virtinst.xmlbuilder._seenprops]
-    msg = None
-    try:
-        if fail:
-            raise RuntimeError(str(fail))
-    except Exception:
-        msg = "".join(traceback.format_exc()) + "\n\n"
+    if fail:
+        msg = "\n\n"
+        msg += "\n".join(str(a) for a in fail) + "\n\n"
         msg += (
             "This means that there are XML properties that are\n"
             "untested in the test suite. This could be caused\n"
@@ -40,8 +35,6 @@ def testCheckXMLBuilderProps():
             "a new property and didn't extend the test suite.\n"
             "Look into extending test_cli.py and/or test_xmlparse.py."
         )
-
-    if msg:
         pytest.fail(msg)
 
 
