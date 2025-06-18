@@ -404,10 +404,8 @@ def testAlterDevicesBootorder():
     assert iface_2.boot.order is None
     assert redirdev_1.boot.order == 4
 
-    try:
+    with pytest.raises(RuntimeError, match="unsupported configuration"):
         _alter_compare(conn, guest.get_xml(), outfile)
-    except RuntimeError as error:
-        assert "unsupported configuration" in str(error)
 
     guest.reorder_boot_order(disk_2, 10)
     assert disk_2.boot.order == 10

@@ -7,6 +7,8 @@ import io
 import os
 import unittest
 
+import pytest
+
 import virtinst
 
 from tests import utils
@@ -56,11 +58,8 @@ def test_misc_cpu_topology():
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.threads = "3"
-    try:
+    with pytest.raises(ValueError):
         cpu.set_topology_defaults(14)
-        assert False, "Topology unexpectedly validated"
-    except ValueError:
-        pass
 
     cpu = virtinst.DomainCpu(conn)
     cpu.topology.sockets = 5

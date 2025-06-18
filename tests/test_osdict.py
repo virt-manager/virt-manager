@@ -62,18 +62,12 @@ def test_tree_url():
     assert "Workstation" in f29.get_location("x86_64", "desktop")
 
     # Has tree URLs, but none for arch
-    try:
+    with pytest.raises(RuntimeError, match="ia64"):
         f26.get_location("ia64")
-        raise AssertionError("Expected failure")
-    except RuntimeError as e:
-        assert "ia64" in str(e)
 
     # Has no tree URLs
-    try:
+    with pytest.raises(RuntimeError, match=".*URL location$"):
         winxp.get_location("x86_64")
-        raise AssertionError("Expected failure")
-    except RuntimeError as e:
-        assert str(e).endswith("URL location")
 
     # Trigger an error path for code coverage
     assert OSDB.guess_os_by_tree(utils.TESTDIR) is None
