@@ -635,16 +635,16 @@ class CloneStorageCreator(_StorageCreator):
 
                 i = 0
                 while 1:
-                    l = os.read(src_fd, clone_block_size)
-                    s = len(l)
+                    data = os.read(src_fd, clone_block_size)
+                    s = len(data)
                     if s == 0:
                         meter.end()
                         break
                     # check sequence of zeros
-                    if sparse and zeros == l:
+                    if sparse and zeros == data:
                         os.lseek(dst_fd, s, 1)
                     else:
-                        b = os.write(dst_fd, l)
+                        b = os.write(dst_fd, data)
                         if s != b:  # pragma: no cover
                             meter.end()
                             break

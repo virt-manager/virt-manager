@@ -305,15 +305,15 @@ class SSHTunnels:
         return retfd
 
     def close_all(self):
-        for l in self._tunnels:
-            l.close()
+        for tunnel in self._tunnels:
+            tunnel.close()
         self._tunnels = []
         self.unlock()
 
     def get_err_output(self):
         errstrings = []
-        for l in self._tunnels:
-            e = l.get_err_output().strip()
+        for tunnel in self._tunnels:
+            e = tunnel.get_err_output().strip()
             if e and e not in errstrings:
                 errstrings.append(e)
         return "\n".join(errstrings)
