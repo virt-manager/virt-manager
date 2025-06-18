@@ -30,4 +30,4 @@ from .watchdog import DeviceWatchdog
 from .pstore import DevicePstore
 
 
-__all__ = [l for l in locals() if l.startswith("Device")]
+__all__ = [local for local in locals() if local.startswith("Device")]

@@ -13,13 +13,13 @@ class DevError(RuntimeError):
         RuntimeError.__init__(self, "programming error: %s" % msg)
 
 
-def listify(l):
-    if l is None:
+def listify(lst):
+    if lst is None:
         return []
-    elif not isinstance(l, list):
-        return [l]
+    elif not isinstance(lst, list):
+        return [lst]
     else:
-        return l
+        return lst
 
 
 def xml_escape(xml):

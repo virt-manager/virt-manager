@@ -15,10 +15,10 @@ def testAbout(app):
     app.root.find("Help", "menu").click()
     app.root.find("About", "menu item").click()
     win = app.root.find_fuzzy("About", "dialog")
-    l = win.find_fuzzy("Copyright", "label")
+    label = win.find_fuzzy("Copyright", "label")
 
     curyear = datetime.datetime.today().strftime("%Y")
-    if curyear not in l.text:
+    if curyear not in label.text:
         print("Current year=%s not in about.ui dialog!" % curyear)
 
     win.keyCombo("<ESC>")

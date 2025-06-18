@@ -22,4 +22,4 @@ from .vcpus import DomainVCPUs
 from .xmlnsqemu import DomainXMLNSQemu
 from .launch_security import DomainLaunchSecurity
 
-__all__ = [l for l in locals() if l.startswith("Domain")]
+__all__ = [local for local in locals() if local.startswith("Domain")]

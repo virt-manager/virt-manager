@@ -96,10 +96,10 @@ def _do_convert_old_disks(options):
     paths = virtinst.xmlutil.listify(options.file_paths)
     sizes = virtinst.xmlutil.listify(options.disksize)
 
-    def padlist(l, padsize):
-        l = virtinst.xmlutil.listify(l)
-        l.extend((padsize - len(l)) * [None])
-        return l
+    def padlist(lst, padsize):
+        lst = virtinst.xmlutil.listify(lst)
+        lst.extend((padsize - len(lst)) * [None])
+        return lst
 
     disklist = padlist(paths, max(0, len(sizes)))
     sizelist = padlist(sizes, len(disklist))
@@ -188,10 +188,10 @@ def convert_old_networks(options):
         # Convert old --bridges to --networks
         networks = ["bridge:" + b for b in bridges]
 
-    def padlist(l, padsize):
-        l = virtinst.xmlutil.listify(l)
-        l.extend((padsize - len(l)) * [None])
-        return l
+    def padlist(lst, padsize):
+        lst = virtinst.xmlutil.listify(lst)
+        lst.extend((padsize - len(lst)) * [None])
+        return lst
 
     # If a plain mac is specified, have it imply a default network
     networks = padlist(networks, max(len(macs), 1))

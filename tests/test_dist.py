@@ -45,8 +45,8 @@ def test_validate_pot_strings():
         out = subprocess.check_output(
             ["meson", "compile", "-C", "build", "virt-manager-pot"], stderr=subprocess.STDOUT
         )
-        warnings = [l for l in out.decode("utf-8").splitlines() if "warning:" in l]
-        warnings = [w for w in warnings if "a fallback ITS rule file" not in w]
+        warnings = [line for line in out.decode("utf-8").splitlines() if "warning:" in line]
+        warnings = [warning for warning in warnings if "a fallback ITS rule file" not in warning]
         if warnings:
             raise AssertionError("xgettext has warnings:\n\n%s" % "\n".join(warnings))
     finally:
