@@ -189,19 +189,6 @@ def _testGuest(testdata, guest):
             )
 
 
-def _testURL(testdata):
-    """
-    Test that our URL detection logic works for grabbing kernels
-    """
-    sys.stdout.write("\nTesting %-25s " % testdata.name)
-    sys.stdout.flush()
-
-    testdata.detectdistro = _sanitize_osdict_name(testdata.detectdistro)
-    _testGuest(testdata, hvmguest)
-    if testdata.testxen:
-        _testGuest(testdata, xenguest)
-
-
 def test001BadURL():
     badurl = "http://aksdkakskdfa-idontexist.com/foo/tree"
 
@@ -226,11 +213,10 @@ def _make_tests():
     cfg.read("tests/data/test_urls.ini")
 
     manualpath = "~/.config/virt-manager/test_urls_manual.ini"
-    cfg.read(os.path.expanduser(manualpath))
-    if not os.path.exists(os.path.expanduser(manualpath)):
-        print("NOTE: Pass in manual data with %s" % manualpath)
+    if os.path.exists(os.path.expanduser(manualpath)):
+        cfg.read(os.path.expanduser(manualpath))
 
-    urls = {}
+    distros = []
     for name in cfg.sections():
         vals = dict(cfg.items(name))
         url = vals["url"]
@@ -241,22 +227,27 @@ def _make_tests():
         d = _URLTestData(
             name,
             url,
-            vals["distro"],
+            _sanitize_osdict_name(vals["distro"]),
             vals.get("testxen", "0") == "1",
             vals.get("testshortcircuit", "0") == "1",
             vals.get("kernelarg", None),
             vals.get("kernelregex", None),
             vals.get("skiplibosinfo", "0") == "1",
         )
-        urls[d.name] = d
+        distros.append(d)
 
-    for key, testdata in sorted(urls.items()):
-
-        def _make_wrapper(d):
-            return lambda: _testURL(d)
-
-        methodname = "test_URL%s" % key.replace("-", "_")
-        globals()[methodname] = _make_wrapper(testdata)
+    return distros
 
 
-_make_tests()
+@pytest.mark.parametrize(
+    "testdata",
+    _make_tests(),
+    ids=lambda d: d.name,
+)
+def testURL(testdata):
+    """
+    Test that our URL detection logic works for grabbing kernels
+    """
+    _testGuest(testdata, hvmguest)
+    if testdata.testxen:
+        _testGuest(testdata, xenguest)
