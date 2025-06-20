@@ -13,22 +13,22 @@
 # Göran Uddeborg <goeran@uddeborg.se>, 2018. #zanata, 2020, 2021, 2022, 2023, 2024.
 # Göran Uddeborg <goeran@uddeborg.se>, 2019. #zanata, 2020, 2021, 2022, 2023, 2024.
 # Jonatan Nyberg <jonatan.nyberg.karl@gmail.com>, 2021, 2022.
-# Luna Jernberg <bittin@reimu.nl>, 2021, 2022, 2023, 2024.
+# Luna Jernberg <bittin@reimu.nl>, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-11-18 21:38+0000\n"
+"PO-Revision-Date: 2025-06-19 03:57+0000\n"
 "Last-Translator: Luna Jernberg <bittin@reimu.nl>\n"
-"Language-Team: Swedish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/sv/>\n"
+"Language-Team: Swedish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -82,20 +82,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Administrerare av virtuella maskiner"
+msgstr "Visning/hanterare av virtuella maskiner"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Hantera virtuella maskiner"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "virtualisering"
+msgstr "virtualisering;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3791,6 +3787,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Att blanda externa och interna ögonblicksavbilder för samma virtuella maskin "
+"rekommenderas inte. Är du säker på att du vill fortsätta?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4088,10 +4086,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap-enhet..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap-enhet..."
+msgstr "vDPA-enhet..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5499,6 +5495,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Konfigurera en nvram-lagringsenhet.\n"
+"Det är för att gästkärnan ska spela in oops/panikloggar. Exempel:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5687,10 +5686,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Fel: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr "Grafik begärd men DISPLAY inte satt. Kör inte virt-viewer."
+msgstr "Ingen skärm hittades. virt-viewer körs inte."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6493,15 +6490,11 @@ msgid "Error validating install location: %s"
 msgstr "Fel vid validering av installationsplats: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo OS-namn krävs, men inget värde\n"
+"--osinfo/----os-variant OS-namn krävs, men inget värde\n"
 "sattes eller upptäcktes."
 
 #: virtinst/virtinstall.py:600
@@ -6788,22 +6781,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Ange ”yes” eller ”no”."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo stödjs inte med --edit"
+msgstr "--osinfo/--os-variant stödjs inte med --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo stödjs inte med --remove-device"
+msgstr "--osinfo/--os-variant stödjs inte med --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo stödjs inte med --build-xml"
+msgstr "--osinfo/--os-variant stödjs inte med --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
