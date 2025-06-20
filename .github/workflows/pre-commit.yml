@@ -1,4 +1,4 @@
-name: Check code formatting with black
+name: Check code using pre-commit
 
 on:
   pull_request:
@@ -6,12 +6,10 @@ on:
   push:
 
 jobs:
-  black:
+  pre-commit:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
       - uses: pre-commit/action@v3.0.1
-        with:
-          extra_args: black --all-files
