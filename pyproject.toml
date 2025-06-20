@@ -1,3 +1,121 @@
 [tool.black]
 line-length = 100
 include = '(\.py|^/virt-(clone|install|manager|xml))$'
+
+[tool.ruff]
+line-length = 100
+builtins = [
+  # builtin functions installed by gettext
+  '_',
+  'ngettext',
+]
+extend-include = [
+  '*/virt-clone',
+  '*/virt-install',
+  '*/virt-manager',
+  '*/virt-xml',
+]
+extend-exclude = [
+  # default build directory
+  'build',
+]
+
+[tool.ruff.lint]
+dummy-variable-rgx = '(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_|ignore.*|.*_ignore'
+select = [
+  # flake8-builtins
+  'A',
+  # flake8-debugger
+  'T10',
+  # flake8-gettext
+  'INT',
+  # flake8-implicit-str-concat
+  'ISC',
+  # flake8-import-conventions
+  'ICN',
+  # flake8-logging
+  'LOG',
+  # flake8-logging-format
+  'G',
+  # flake8-no-pep420
+  'INP',
+  # flake8-quotes
+  'Q',
+  # flake8-slots
+  'SLOT',
+  # flynt
+  'FLY',
+  # pycodestyle
+  'E',
+  'W',
+  # Pyflakes
+  'F',
+  # pygrep-hooks
+  'PGH',
+  # Pylint
+  'PLE',
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+'tests/**.py' = [
+  # `pytest.raises(...)` is too broad, set the `match` parameter or use a more specific exception
+  'PT011',
+  # `pytest.raises()` block should contain a single simple statement
+  'PT012',
+]
+'tests/__init__.py' = [
+  # Module level import not at top of file
+  'E402',
+  # `...` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  'F401',
+]
+'tests/test_cli.py' = [
+  # Line too long
+  'E501',
+]
+'tests/uitests/lib/__init__.py' = [
+  # `...` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  'F401',
+]
+'tests/uitests/lib/_dogtailinit.py' = [
+  # Module level import not at top of file
+  'E402',
+]
+'virtManager/details/viewers.py' = [
+  # Module level import not at top of file
+  'E402',
+]
+'virtManager/lib/inspection.py' = [
+  # `guestfs` imported but unused; consider using `importlib.util.find_spec` to test for availability
+  'F401',
+]
+'virtManager/virtmanager.py' = [
+  # Module level import not at top of file
+  'E402',
+]
+'virtManager/xmleditor.py' = [
+  # Module level import not at top of file
+  'E402',
+]
+'virtinst/__init__.py' = [
+  # Module level import not at top of file
+  'E402',
+  # `...` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  'F401',
+  # `from ... import *` used; unable to detect undefined names
+  'F403',
+]
+'virtinst/devices/__init__.py' = [
+  # `...` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  'F401',
+]
+'virtinst/domain/__init__.py' = [
+  # `...` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+  'F401',
+]
+'virtinst/guest.py' = [
+  # `from ... import *` used; unable to detect undefined names
+  'F403',
+  # `...` may be undefined, or defined from star imports
+  'F405',
+]
