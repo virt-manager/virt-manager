@@ -10,25 +10,25 @@
 # Zdenek Styblik <stybla@turnovfree.net>, 2010
 # Zdenek <chmelarz@gmail.com>, 2016. #zanata
 # Zdenek <chmelarz@gmail.com>, 2017. #zanata
-# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021, 2022, 2023, 2024.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2018. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2019. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2020. #zanata, 2021, 2022, 2023, 2024, 2025.
 # Zdenek Chmelar <chmelarz@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-11-14 06:38+0000\n"
+"PO-Revision-Date: 2025-06-19 06:44+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
-"Language-Team: Czech <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/cs/>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -83,20 +83,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Správa virtuálních strojů"
+msgstr "Správa/ovládání virtuálních strojů"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Spravovat virtuální stroje"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "virtualizace"
+msgstr "virtualizace;libvirt;vm,vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3840,6 +3836,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Míchání externích a interních zachycených stavů pro jeden virt. stroj není "
+"doporučeno. Opravdu chcete pokračovat?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4139,10 +4137,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap zařízení…"
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap zařízení…"
+msgstr "vDAP zařízení…"
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5123,7 +5119,7 @@ msgstr "Spravovat zachycené stavy virt. stroje"
 #: virtManager/vmwindow.py:497
 #, python-format
 msgid "Error taking screenshot: %s"
-msgstr "Chyba při pořizování zachyceného stavu: %s"
+msgstr "Chyba při pořizování snímku obrazovky: %s"
 
 #: virtManager/vmwindow.py:505
 msgid "Error initializing spice USB device widget"
@@ -5555,6 +5551,10 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Nastavit nvram úložné zařízení.\n"
+"Slouží jádru systému hosta pro zaznamenávání záznamů událostí pádů (oops/"
+"panic). Příklad:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5744,11 +5744,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Chyba: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Vyžádána grafika ale není nastaven DISPLAY. virt-viewer nebude spuštěn."
+msgstr "Nezjištěno žádné zobrazování. virt-viewer nebude spuštěn."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5770,7 +5767,7 @@ msgstr "model=host pro procesor je zastaralé – použijte model=host-model"
 #: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
-msgstr "Nesprávná hodnota pro „velikost“: %s"
+msgstr "Nesprávná hodnota pro „size“: %s"
 
 #: virtinst/cli.py:3928
 #, python-format
@@ -6569,15 +6566,11 @@ msgid "Error validating install location: %s"
 msgstr "Chyba při ověřování instalačního umístění: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"Je zapotřebí --os-variant/--osinfo název operačního systému\n"
+"Je zapotřebí --osinfo/--os-variant název operačního systému\n"
 "ale není nastavená nebo zjištěná žádná hodnota."
 
 #: virtinst/virtinstall.py:600
@@ -6863,22 +6856,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Zadejte „yes“ nebo „no“."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo nelze použít dohromady s --edit"
+msgstr "--osinfo/--os-variant nelze použít dohromady s --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo nelze použít dohromady s --remove-device"
+msgstr "--osinfo/--os-variant nelze použít dohromady s --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo nelze použít dohromady s --build-xml"
+msgstr "--osinfo/--os-variant nelze použít dohromady s --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
