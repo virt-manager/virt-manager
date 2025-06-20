@@ -106,7 +106,7 @@ class vmmVMWindow(vmmGObjectUI):
                 "on_control_fullscreen_toggled": self.control_fullscreen,
                 "on_details_customize_finish_clicked": self.customize_finish,
                 "on_details_cancel_customize_clicked": self._customize_cancel_clicked,
-                "on_details_menu_virtual_manager_activate": self._on_menu_virtual_machine_activate_cb,
+                "on_details_menu_virtual_manager_activate": self._on_menu_virtual_machine_activate_cb,  # noqa: E501
                 "on_details_menu_screenshot_activate": self.control_vm_screenshot,
                 "on_details_menu_usb_redirection": self.control_vm_usb_redirection,
                 "on_details_menu_view_toolbar_activate": self.toggle_toolbar,

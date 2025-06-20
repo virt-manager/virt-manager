@@ -173,7 +173,7 @@ class _DiskSource(XMLBuilder):
         path = ""
         if is_iscsi_direct:
             # Vol path is like this:
-            # ip-10.66.144.87:3260-iscsi-iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1
+            # ip-10.66.144.87:3260-iscsi-iqn.2017-12.com.virttest:emulated-iscsi-noauth.target2-lun-1  # noqa: E501
             # Always seems to have -iscsi- embedded in it
             if "-iscsi-iqn." in volxml.target_path:
                 path = volxml.target_path.split("-iscsi-", 1)[-1]
