@@ -16,7 +16,7 @@
 # Filippe Ferreira <filippeof@gmail.com>, 2017. #zanata
 # Marcelo Ghelman <marcelo.ghelman@gmail.com>, 2017. #zanata
 # Eduardo Marino Riscado <eduardomr@protonmail.com>, 2018. #zanata
-# Rafael Fontenelle <rafaelff@gnome.org>, 2019. #zanata, 2024.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2019. #zanata, 2024, 2025.
 # José Lemos Neto <lemosjosex@protonmail.com>, 2020, 2022.
 # Lucas Fernandes <lucas.af88@gmail.com>, 2021, 2022, 2024.
 # Gustavo Costa <xfgusta@gmail.com>, 2021, 2022, 2023.
@@ -29,8 +29,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-12-03 12:38+0000\n"
-"Last-Translator: \"Geraldo S. Simião Kutz\" <geraldo.simiao.kutz@gmail.com>\n"
+"PO-Revision-Date: 2025-06-19 03:57+0000\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -92,20 +92,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Gerenciador de máquinas virtuais"
+msgstr "Gerenciador/visualizador de máquinas virtuais"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Gerenciar máquinas virtuais"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "virtualização"
+msgstr "virtualização;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -122,7 +118,8 @@ msgstr ""
 "Lucas Fernandes <lucas.af88@gmail.com>\n"
 "Gustavo Costa <xfgusta@gmail.com>\n"
 "Rodrigo Tavares <rodrigost23@gmail.com>\n"
-"Renan Birck Pinheiro <renan.ee.ufsm@gmail.com>"
+"Renan Birck Pinheiro <renan.ee.ufsm@gmail.com>\n"
+"Rafael Fontenelle <rafaelff@gnome.org>"
 
 #: ui/addhardware.ui:24
 msgid "Add New Virtual Hardware"
@@ -199,7 +196,7 @@ msgstr "_Compartilhar área de transferência:"
 
 #: ui/addhardware.ui:1044 ui/details.ui:4029
 msgid "Ac_tion:"
-msgstr "Aç_ão:"
+msgstr "_Ação:"
 
 #: ui/addhardware.ui:1136 ui/createnet.ui:139
 msgid "_Mode:"
@@ -722,8 +719,8 @@ msgid ""
 " * virt-builder://template\n"
 msgstr ""
 "Formatos de URL possíveis:\n"
-" * file:///path/to/rootfs.tar\n"
-" * docker://registry:port/image:tag\n"
+" * file:///caminho/para/rootfs.tar\n"
+" * docker://registro:porta/imagem:tag\n"
 " * virt-builder://template\n"
 
 #: ui/createvm.ui:1467
@@ -3820,6 +3817,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Não é recomendado misturar snapshots externos e internos para a mesma VM. "
+"Tem certeza de que deseja continuar?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4119,10 +4118,8 @@ msgid "Macvtap device..."
 msgstr "Dispositivo macvtap..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Dispositivo macvtap..."
+msgstr "Dispositivo vDPA..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5256,7 +5253,7 @@ msgstr "Não é possível usar %(option1)s e %(option2)s ao mesmo tempo"
 
 #: virtinst/cli.py:608 virtinst/cli.py:612
 msgid "Connect to hypervisor with libvirt URI"
-msgstr "Conectar-se ao hipervisor com o URI do libvirt"
+msgstr "Conecta ao hipervisor com o URI do libvirt"
 
 #: virtinst/cli.py:635
 msgid ""
@@ -5272,28 +5269,28 @@ msgstr ""
 
 #: virtinst/cli.py:646
 msgid "Don't automatically try to connect to the guest console"
-msgstr "Não tente se conectar automaticamente ao console de convidado"
+msgstr "Não tenta se conectar automaticamente ao console de convidado"
 
 #: virtinst/cli.py:651
 msgid "Don't boot guest after completing install."
-msgstr "Não inicializar o convidado após concluir a instalação."
+msgstr "Não inicializa o convidado após concluir a instalação."
 
 #: virtinst/cli.py:658
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
-"Não verifique a colisão de nomes, substitua qualquer convidado com o mesmo "
+"Não verifica a colisão de nomes, substitui qualquer convidado com o mesmo "
 "nome."
 
 #: virtinst/cli.py:665
 msgid "Print the generated domain XML rather than create the guest."
-msgstr "Imprimir o domínio XML gerado ao invés de criar o convidado."
+msgstr "Imprime o domínio XML gerado ao invés de criar o convidado."
 
 #: virtinst/cli.py:685
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
-"Executar através do processo de instalação, mas não criar dispositivos ou "
-"definer o convidado."
+"Executa através do processo de instalação, mas não cria dispositivos nem "
+"define o convidado."
 
 #: virtinst/cli.py:693
 msgid ""
@@ -5301,17 +5298,17 @@ msgid ""
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
-"Habilitar ou desabilitar as verificações de validação. Exemplo:\n"
+"Habilita ou desabilita as verificações de validação. Exemplo:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 
 #: virtinst/cli.py:698
 msgid "Suppress non-error output"
-msgstr "Suprimir saída não erro (non-error)"
+msgstr "Suprime saída de non-error"
 
 #: virtinst/cli.py:699
 msgid "Print debugging information"
-msgstr "Imprimir informação de depuração"
+msgstr "Imprime informação de depuração"
 
 #: virtinst/cli.py:708
 msgid ""
@@ -5319,9 +5316,9 @@ msgid ""
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
-"Configurar metadados do convidado. Ex:\n"
-"--metadata name=foo,title=\"My pretty title\",uuid=...\n"
-"--metadata description=\"My nice long description\""
+"Configura metadados do convidado. P. ex:\n"
+"--metadata name=foo,title=\"Meu título bonito\",uuid=...\n"
+"--metadata description=\"Minha descrição longa legal\""
 
 #: virtinst/cli.py:721
 msgid ""
@@ -5329,7 +5326,7 @@ msgid ""
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
-"Configura a alocação de memória do convidado. Ex:\n"
+"Configura a alocação de memória do convidado. P. ex:\n"
 "--memory 1024 (em MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 
@@ -5340,7 +5337,7 @@ msgid ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
-"Número de vCPUs para configurar para seu convidado. Ex:\n"
+"Número de vCPUs para configurar para seu convidado. P. ex:\n"
 "--vcpus 5\n"
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
@@ -5351,7 +5348,7 @@ msgid ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
-"Modelo e recursos da CPU. Ex:\n"
+"Modelo e recursos da CPU. P. ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
@@ -5362,7 +5359,7 @@ msgid ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 msgstr ""
-"Configura a exibição do convidado. Ex:\n"
+"Configura a exibição do convidado. P. ex:\n"
 "--graphics spice\n"
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
@@ -5376,7 +5373,7 @@ msgid ""
 "--network none\n"
 "--network help"
 msgstr ""
-"Configurar uma interface de rede do convidado. Ex:\n"
+"Configura uma interface de rede do convidado. P. ex:\n"
 "--network bridge=mybr0\n"
 "--network network=my_libvirt_virtual_net\n"
 "--network network=mynet,model=virtio,mac=00:11...\n"
@@ -5389,7 +5386,7 @@ msgid ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 msgstr ""
-"Configure um dispositivo controlador do convidado. Ex:\n"
+"Configura um dispositivo controlador do convidado. P. ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 
@@ -5399,31 +5396,32 @@ msgid ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
-"Configurar um dispositivo de entrada convidado. Ex:\n"
+"Configura um dispositivo de entrada convidado. P. ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
 #: virtinst/cli.py:809
 msgid "Configure a guest serial device"
-msgstr "Configurar um dispositivo serial no convidado"
+msgstr "Configura um dispositivo serial no convidado"
 
 #: virtinst/cli.py:811
 msgid "Configure a guest parallel device"
-msgstr "Configurar um dispositivo paralelo no convidado"
+msgstr "Configura um dispositivo paralelo no convidado"
 
 #: virtinst/cli.py:814
 msgid "Configure a guest communication channel"
-msgstr "Configurar um canal de comunicação no convidado"
+msgstr "Configura um canal de comunicação no convidado"
 
 #: virtinst/cli.py:820
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
-"Configurar uma conexão do console baseado em texto entre o convidado e o host"
+"Configura uma conexão do console baseado em texto entre o convidado e o "
+"hospedeiro"
 
 #: virtinst/cli.py:826
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
-"Configurar os dispositivos físicos USB/PCI/etc do host a serem "
+"Configura os dispositivos físicos USB/PCI/etc do hospedeiro a serem "
 "compartilhados com o convidado"
 
 #: virtinst/cli.py:836
@@ -5432,32 +5430,32 @@ msgid ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
-"Passar o diretório host ao convidado. Ex: \n"
-"--filesystem /my/source/dir,/dir/in/guest\n"
-"--filesystem template_name,/,type=template"
+"Passa o diretório do hospedeiro ao convidado. P. ex: \n"
+"--filesystem /meu/diretório/fonte,/diretório/no/convidado\n"
+"--filesystem nome_template,/,type=template"
 
 #: virtinst/cli.py:846
 msgid "Configure guest sound device emulation"
-msgstr "Configurar a emulação do dispositivo de som no convidado"
+msgstr "Configura a emulação do dispositivo de som no convidado"
 
 #: virtinst/cli.py:856
 msgid "Configure host audio backend for sound devices"
-msgstr "Configura o back-end de áudio do hospedeiro para dispositivos de som"
+msgstr "Configura o backend de áudio do hospedeiro para dispositivos de som"
 
 #: virtinst/cli.py:860
 msgid "Configure a guest watchdog device"
-msgstr "Configurar um dispositivo watchdog no convidado"
+msgstr "Configura um dispositivo watchdog no convidado"
 
 #: virtinst/cli.py:862
 msgid "Configure guest video hardware."
-msgstr "Configurar hardware de vídeo no convidado."
+msgstr "Configura hardware de vídeo no convidado."
 
 #: virtinst/cli.py:867
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
-"Configurar um dispositivo de cartão inteligente no convidado. Ex:\n"
+"Configura um dispositivo de cartão inteligente no convidado. P. ex:\n"
 "--smartcard mode=passthrough"
 
 #: virtinst/cli.py:874
@@ -5465,7 +5463,7 @@ msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
-"Configurar um dispositivo de redirecionamento no convidado. Ex:\n"
+"Configura um dispositivo de redirecionamento no convidado. P. ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
 #: virtinst/cli.py:882
@@ -5473,7 +5471,7 @@ msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
-"Configurar um dispositivo memballoon no convidado. Ex:\n"
+"Configura um dispositivo memballoon no convidado. P. ex:\n"
 "--memballoon model=virtio"
 
 #: virtinst/cli.py:886
@@ -5481,7 +5479,7 @@ msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
-"Configurar um dispositivo TPM no convidado. Ex:\n"
+"Configura um dispositivo TPM no convidado. P. ex:\n"
 "--tpm /dev/tpm"
 
 #: virtinst/cli.py:890
@@ -5489,7 +5487,7 @@ msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
-"Configure um dispositivo RNG do convidado. Ex:\n"
+"Configura um dispositivo RNG do convidado. P. ex:\n"
 "--rng /dev/urandom"
 
 #: virtinst/cli.py:896
@@ -5497,7 +5495,7 @@ msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
-"Configurar um dispositivo de pânico no convidado. Ex:\n"
+"Configura um dispositivo de pânico no convidado. P. ex:\n"
 "--panic default"
 
 #: virtinst/cli.py:902
@@ -5505,7 +5503,7 @@ msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
-"Configura um dispositivo de memória compartilhada para o convidado. Ex:\n"
+"Configura um dispositivo de memória compartilhada para o convidado. P. ex:\n"
 "--shmem name=shmem0"
 
 #: virtinst/cli.py:908
@@ -5513,7 +5511,7 @@ msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
-"Configura um dispositivo de memória convidado. Ex:\n"
+"Configura um dispositivo de memória convidado. P. ex:\n"
 "--memdev dimm,target.size=1024"
 
 #: virtinst/cli.py:914
@@ -5522,7 +5520,7 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
-"Configurar os sockets vsock do convidado. Ex:\n"
+"Configura os sockets vsock do convidado. P. ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
@@ -5531,7 +5529,7 @@ msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
-"Configura um dispositivo IOMMU. Ex:\n"
+"Configura um dispositivo IOMMU. P. ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 
 #: virtinst/cli.py:927
@@ -5540,43 +5538,46 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Configura um dispositivo de armazenamento nvram.\n"
+"É para o kernel convidado registrar logs de oops/panic. P. ex:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr "Definir as configurações <iothreads> e <iothreadids> para o domínio."
+msgstr "Define as configurações <iothreads> e <iothreadids> do domínio."
 
 #: virtinst/cli.py:944
 msgid "Set domain seclabel configuration."
-msgstr "Definir a configuração seclabel para o domínio."
+msgstr "Define a configuração seclabel para o domínio."
 
 #: virtinst/cli.py:951
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
-"Definir para o convidado executar as operações de gerenciamento de chaves "
+"Define para o convidado executar as operações de gerenciamento de chaves "
 "criptográficas S390."
 
 #: virtinst/cli.py:956
 msgid "Tune CPU parameters for the domain process."
-msgstr "Ajustar os parâmetros de CPU para o processo de domínio."
+msgstr "Ajusta os parâmetros de CPU para o processo de domínio."
 
 #: virtinst/cli.py:961
 msgid "Tune NUMA policy for the domain process."
-msgstr "Ajustar a política NUMA para o processo de domínio."
+msgstr "Ajusta a política NUMA para o processo de domínio."
 
 #: virtinst/cli.py:966
 msgid "Tune memory policy for the domain process."
-msgstr "Ajustar a política de memória para o processo de domínio."
+msgstr "Ajusta a política de memória para o processo de domínio."
 
 #: virtinst/cli.py:971
 msgid "Tune blkio policy for the domain process."
-msgstr "Ajustar a política blkio para o processo de domínio."
+msgstr "Ajusta a política blkio para o processo de domínio."
 
 #: virtinst/cli.py:979
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Definir a política de backup da memória para o processo de domínio. Ex:\n"
+"Define a política de backup da memória para o processo de domínio. P. ex:\n"
 "--memorybacking hugepages=on"
 
 #: virtinst/cli.py:988
@@ -5585,7 +5586,7 @@ msgid ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
-"Definir <features> XML para o domínio. Ex:\n"
+"Define o XML <features> para o domínio. P. ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
@@ -5594,20 +5595,20 @@ msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
-"Definir <clock> XML para o domínio. Ex:\n"
+"Define XML <clock> para o domínio. P. ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
 #: virtinst/cli.py:1002
 msgid "Configure VM power management features"
-msgstr "Configurar recursos de gerenciamento de energia da VM"
+msgstr "Configura recursos de gerenciamento de energia da VM"
 
 #: virtinst/cli.py:1006
 msgid "Configure VM lifecycle management policy"
-msgstr "Configurar a política de gerenciamento do ciclo de vida da VM"
+msgstr "Configura a política de gerenciamento do ciclo de vida da VM"
 
 #: virtinst/cli.py:1011
 msgid "Configure VM resource partitioning (cgroups)"
-msgstr "Configurar o particionamento de recursos VM (cgroups)"
+msgstr "Configura o particionamento de recursos da VM (cgroups)"
 
 #: virtinst/cli.py:1019
 msgid ""
@@ -5615,9 +5616,9 @@ msgid ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
-"Configurar Informações do Sistema SMBIOS. Ex.:\n"
+"Configura informações de sistema SMBIOS. P. ex.:\n"
 "--sysinfo host\n"
-"-- sysinfo bios.vendor=MeuFabricante,bios.version=1.2.3,...\n"
+"--sysinfo bios.vendor=MeuFabricante,bios.version=1.2.3,...\n"
 
 #: virtinst/cli.py:1030
 msgid ""
@@ -5625,7 +5626,7 @@ msgid ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
-"Passe parâmetros diretamente para o emulador QEMU. Ex:\n"
+"Passa argumentos diretamente para o emulador QEMU. P. ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
@@ -5634,8 +5635,8 @@ msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
-"Configurar segurança de lançamento da VM (ex. criptografia de memória SEV). "
-"Ex.:\n"
+"Configura segurança de lançamento da VM (p. ex. criptografia de memória SEV)"
+". P. ex.:\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:1054
@@ -5644,16 +5645,16 @@ msgid ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
-"Configure os parâmetros de inicialização do convidado. Ex:\n"
+"Configura as configurações de inicialização do convidado. P. ex:\n"
 "--boot hd,cdrom,menu=on\n"
-"--boot init=/sbin/init (para recipientes)"
+"--boot init=/sbin/init (para contêineres)"
 
 #: virtinst/cli.py:1065
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
-"Habilitar espaço de nomes em nível de usuário para o container LXC. Ex.:\n"
+"Habilita espaço de nomes em nível de usuário para contêiner LXC. P. ex.:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
 #: virtinst/cli.py:1080
@@ -5664,23 +5665,23 @@ msgid ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 msgstr ""
-"Especificar o armazenamento com várias opções. Ex.\n"
+"Especifica o armazenamento com várias opções. P. ex.\n"
 "--disk size=10 (nova imagem 10GiB no local padrão)\n"
-"--disk /my/existing/disk,cache=none\n"
+"--disk /meu/disco/existente,cache=none\n"
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
 #: virtinst/cli.py:1091
 msgid "OS options"
-msgstr "Opções de SO"
+msgstr "Opções do SO"
 
 #: virtinst/cli.py:1094
 msgid "The OS being installed in the guest."
-msgstr "O SO que está sendo instalado no convidado."
+msgstr "O sistema operacional sendo instalado no convidado."
 
 #: virtinst/cli.py:1096
 msgid "The OS installed in the guest."
-msgstr "O sistema operacional instalado no convidado."
+msgstr "Sistema operacional instalado no convidado."
 
 #: virtinst/cli.py:1099
 msgid ""
@@ -5707,7 +5708,7 @@ msgstr ""
 #: virtinst/cli.py:1148
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
-msgstr "%(key)s deve ser 'sim' ou 'não'"
+msgstr "%(key)s deve ser 'yes' ou 'no'"
 
 #: virtinst/cli.py:1343
 #, python-format
@@ -5716,7 +5717,7 @@ msgid ""
 "'%(property_name)s'"
 msgstr ""
 "Não há conhecimento de como corresponder o tipo de dispositivo "
-"'%(device_type)s' property '%(property_name)s'"
+"'%(device_type)s' propriedade '%(property_name)s'"
 
 #: virtinst/cli.py:1673
 #, python-format
@@ -5729,12 +5730,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Erro: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Gráfico solicitado, mas a (exibição) DISPLAY não está configurada. virt-"
-"viewer não está em execução."
+msgstr "Nenhuma exibição detectada. O virt-viewer não está em execução."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5756,7 +5753,7 @@ msgstr "O modelo de CPU=host está obsoleto, use o modelo=host-model"
 #: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
-msgstr "Valor impróprio para 'tamanho': %s"
+msgstr "Valor impróprio para 'size': %s"
 
 #: virtinst/cli.py:3928
 #, python-format
@@ -5789,9 +5786,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
-"Voc:e pode ver informações extras com:\n"
+"Você pode ver informações extras com:\n"
 "\n"
-"--osinfo-query os\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:46
 #, python-format
@@ -6557,15 +6554,12 @@ msgid "Error validating install location: %s"
 msgstr "Erro ao validar o local de instalação: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo O nome do SO é obrigatório, mas nenhum valor foi\n"
+"É obrigatório ter um nome do SO em --osinfo/--os-variant, mas nenhum valor "
+"foi\n"
 "definido ou detectado."
 
 #: virtinst/virtinstall.py:600
@@ -6860,22 +6854,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Por favor, insira 'sim' ou 'não'."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo não são suportados com --edit"
+msgstr "--osinfo/--os-variant não são suportados com --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo não são compatíveis com --remove-device"
+msgstr "--osinfo/--os-variant não são compatíveis com --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo não são compatíveis com --build-xml"
+msgstr "--osinfo/--os-variant não são compatíveis com --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
