@@ -12,17 +12,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2025-02-20 01:38+0000\n"
+"PO-Revision-Date: 2025-06-19 07:48+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
-"Language-Team: Romanian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ro/>\n"
+"Language-Team: Romanian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -77,20 +77,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Gestionar mașină virtuală"
+msgstr "Gestionar/vizor mașină virtuală"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Gestionează mașini virtuale"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "virtualizare"
+msgstr "virtualizare;libvirt;vm;vmm;mv;mmmv;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3808,6 +3804,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Nu se recomandă amestecarea imaginilor instantanee externe și interne pentru "
+"aceeași mașină virtuală. Sunteți sigur că doriți să continuați?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4114,10 +4112,8 @@ msgid "Macvtap device..."
 msgstr "Dispozitiv macvtap..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Dispozitiv macvtap..."
+msgstr "Dispozitiv vDPA."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5536,6 +5532,10 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Configurează un dispozitiv de stocare nvram.\n"
+"Acesta este destinat nuclelului oaspetelui pentru a\n"
+"înregistra jurnalele oops/panic. De exemplu:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5726,12 +5726,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Eroare: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Grafică solicitată, dar variabila DISPLAY nu este definită. Nu rulează «virt-"
-"viewer»."
+msgstr "Nu a fost detectat niciun afișaj.. Nu se lansează «virt-viewer»."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6571,15 +6567,11 @@ msgid "Error validating install location: %s"
 msgstr "Eroare la validarea locației de instalare: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"Este necesar „--os-variant/--osinfo numele sistemului de operare”,\n"
+"Este necesar „--osinfo/--os-variant numele sistemului de operare”,\n"
 "dar nu a fost definită sau detectată nicio valoare."
 
 #: virtinst/virtinstall.py:600
@@ -6869,26 +6861,19 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Vă rugăm să introduceți „yes” sau „no”."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr ""
-"Opțiunea „--os-variant/--osinfo” nu este acceptată cu opțiunea „--edit”"
+msgstr "Opțiunea „--osinfo/--os-variant” nu este acceptată cu opțiunea „--edit”"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr ""
-"Opțiunea „--os-variant/--osinfo” nu este acceptată cu opțiunea „--remove-"
+"Opțiunea „--osinfo/--os-variant” nu este acceptată cu opțiunea „--remove-"
 "device”"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
 msgstr ""
-"Opțiunea „--os-variant/--osinfo” nu este acceptată cu opțiunea „--build-xml”"
+"Opțiunea „--osinfo/--os-variant” nu este acceptată cu opțiunea „--build-xml”"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
