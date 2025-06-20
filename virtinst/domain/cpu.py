@@ -58,8 +58,8 @@ class _CPUTopology(XMLBuilder):
             raise ValueError(
                 _(
                     "Total CPUs implied by topology "
-                    "(sockets=%(sockets)d * dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) "
-                    "does not match vCPU count %(vcpus)d"
+                    "(sockets=%(sockets)d * dies=%(dies)d * cores=%(cores)d * threads=%(threads)d "
+                    "== %(total)d) does not match vCPU count %(vcpus)d"
                 )
                 % {
                     "sockets": self.sockets,
