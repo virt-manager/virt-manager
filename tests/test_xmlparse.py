@@ -419,10 +419,11 @@ def testAlterDevicesBootorder():
 
 def testSingleDisk():
     conn = utils.URIs.open_testdefault_cached()
-    xml = (
-        """<disk type="file" device="disk"><source file="/a.img"/>\n"""
-        """<target dev="hda" bus="ide"/></disk>\n"""
-    )
+    xml = """<disk type="file" device="disk">
+  <source file="/a.img"/>
+  <target dev="hda" bus="ide"/>
+</disk>
+"""
     conn = utils.URIs.open_testdefault_cached()
     d = virtinst.DeviceDisk(conn, parsexml=xml)
     _set_and_check(d, "target", "hda", "hdb")
@@ -1008,7 +1009,7 @@ def testXMLBuilderCoverage():
         # Ensure we validate root element
         virtinst.DeviceDisk(conn, parsexml="<foo/>")
 
-    with pytest.raises(Exception, match=".*xmlParseDoc.*"):
+    with pytest.raises(Exception, match="can only parse strings"):
         # Ensure we validate root element
         virtinst.DeviceDisk(conn, parsexml=-1)
 
@@ -1041,11 +1042,11 @@ def testXMLBuilderCoverage():
     xml = conn.lookupByName("test-for-virtxml").XMLDesc(0)
     guest = virtinst.Guest(conn, parsexml=xml)
 
-    assert guest.features.get_xml().startswith("  <features")
-    assert guest.clock.get_xml().startswith("  <clock")
+    assert guest.features.get_xml().startswith("<features")
+    assert guest.clock.get_xml().startswith("<clock")
     assert guest.seclabels[0].get_xml().startswith("<seclabel")
-    assert guest.cpu.get_xml().startswith("  <cpu")
-    assert guest.os.get_xml().startswith("  <os")
+    assert guest.cpu.get_xml().startswith("<cpu")
+    assert guest.os.get_xml().startswith("<os")
     assert guest.cpu.get_xml_id() == "./cpu"
     assert guest.cpu.get_xml_idx() == 0
     assert guest.get_xml_id() == "."
