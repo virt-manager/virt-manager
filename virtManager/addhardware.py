@@ -193,6 +193,9 @@ class vmmAddHardware(vmmGObjectUI):
         self.build_network_model_combo(self.vm, self.widget("net-model"))
         self._build_input_combo()
         self.build_sound_combo(self.vm, self.widget("sound-model"))
+        self.build_hostdev_usb_startup_policy_combo(
+            self.vm, self.widget("hostdev-usb-startup-policy")
+        )
         self._build_hostdev_treeview()
         self.build_video_combo(self.vm, self.widget("video-model"))
         uiutil.build_simple_combo(self.widget("char-device-type"), [])
@@ -756,6 +759,13 @@ class vmmAddHardware(vmmGObjectUI):
         default = DeviceSound.default_model(vm.xmlobj)
         uiutil.build_simple_combo(combo, values, default_value=default)
 
+    @staticmethod
+    def build_hostdev_usb_startup_policy_combo(_vm, combo):
+        values = [[None, _("Hypervisor default")]]
+        for m in DeviceHostdev.STARTUP_POLICIES:
+            values.append([m, m])
+        uiutil.build_simple_combo(combo, values)
+
     def _build_hostdev_treeview(self):
         host_dev = self.widget("host-device")
         # [ xmlobj, label, sensitive, tooltip]
@@ -978,6 +988,9 @@ class vmmAddHardware(vmmGObjectUI):
             if row and row[5] == "mdev":
                 devtype = "mdev"
             self._populate_hostdev_model(devtype)
+            uiutil.set_grid_row_visible(
+                self.widget("hostdev-usb-startup-policy-hbox"), devtype == "usb_device"
+            )
 
         if page == PAGE_CONTROLLER:
             # We need to trigger this as it can desensitive 'finish'
@@ -1473,6 +1486,11 @@ class vmmAddHardware(vmmGObjectUI):
         dev = DeviceHostdev(self.conn.get_backend())
         dev.set_from_nodedev(nodedev)
         setattr(dev, "vmm_nodedev", nodedev)
+
+        if dev.type == "usb":
+            startup_policy = uiutil.get_list_selection(self.widget("hostdev-usb-startup-policy"))
+            dev.startup_policy = startup_policy
+
         return dev
 
     def _build_char(self):

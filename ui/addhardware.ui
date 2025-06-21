@@ -657,7 +657,7 @@
                               </packing>
                             </child>
                             <child>
-                              <!-- n-columns=1 n-rows=2 -->
+                              <!-- n-columns=1 n-rows=3 -->
                               <object class="GtkGrid" id="table3">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
@@ -707,6 +707,40 @@
                                   <object class="AtkObject" id="table3-atkobject">
                                     <property name="AtkObject::accessible-name">host-tab</property>
                                   </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="hostdev-usb-startup-policy-hbox">
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">False</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label19">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                        <property name="halign">start</property>
+                                        <property name="label" translatable="yes">Startup Policy:</property>
+                                        <property name="use-underline">True</property>
+                                        <property name="mnemonic-widget">hostdev-usb-startup-policy</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="hostdev-usb-startup-policy">
+                                        <property name="visible">True</property>
+                                        <property name="can-focus">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="left-attach">0</property>
+                                    <property name="top-attach">3</property>
+                                  </packing>
                                 </child>
                               </object>
                               <packing>
