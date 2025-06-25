@@ -26,7 +26,7 @@ def _sanitize_file_xml(xml):
 
 def _alter_compare(conn, actualXML, outfile):
     utils.diff_compare(actualXML, outfile)
-    utils.test_create(conn, actualXML)
+    utils.check_create(conn, actualXML)
 
 
 def _set_and_check(obj, param, initval, *args):
@@ -744,7 +744,7 @@ def testFSPool():
     check("source_name", None, "fooname")
 
     utils.diff_compare(pool.get_xml(), outfile)
-    utils.test_create(conn, pool.get_xml(), "storagePoolDefineXML")
+    utils.check_create(conn, pool.get_xml(), "storagePoolDefineXML")
 
 
 def testISCSIPool():
@@ -760,7 +760,7 @@ def testISCSIPool():
     check("name", "some.random.hostname", "my.host")
 
     utils.diff_compare(pool.get_xml(), outfile)
-    utils.test_create(conn, pool.get_xml(), "storagePoolDefineXML")
+    utils.check_create(conn, pool.get_xml(), "storagePoolDefineXML")
 
 
 def testGlusterPool():
@@ -776,7 +776,7 @@ def testGlusterPool():
     check("name", "some.random.hostname", "my.host")
 
     utils.diff_compare(pool.get_xml(), outfile)
-    utils.test_create(conn, pool.get_xml(), "storagePoolDefineXML")
+    utils.check_create(conn, pool.get_xml(), "storagePoolDefineXML")
 
 
 def testRBDPool():
@@ -800,7 +800,7 @@ def testRBDPool():
     hostobj.port = "5555"
 
     utils.diff_compare(pool.get_xml(), outfile)
-    utils.test_create(conn, pool.get_xml(), "storagePoolDefineXML")
+    utils.check_create(conn, pool.get_xml(), "storagePoolDefineXML")
 
 
 def testVol():
@@ -894,7 +894,7 @@ def testNetMulti():
     check("netmask", None, "foo", None)
 
     utils.diff_compare(net.get_xml(), outfile)
-    utils.test_create(conn, net.get_xml(), "networkDefineXML")
+    utils.check_create(conn, net.get_xml(), "networkDefineXML")
 
 
 def testNetOpen():
@@ -922,7 +922,7 @@ def testNetOpen():
     check("end", "192.168.100.254", "192.168.101.254")
 
     utils.diff_compare(net.get_xml(), outfile)
-    utils.test_create(conn, net.get_xml(), "networkDefineXML")
+    utils.check_create(conn, net.get_xml(), "networkDefineXML")
 
 
 def testNetVfPool():
@@ -943,7 +943,7 @@ def testNetVfPool():
     check("dev", "eth3")
 
     utils.diff_compare(net.get_xml(), outfile)
-    utils.test_create(conn, net.get_xml(), "networkDefineXML")
+    utils.check_create(conn, net.get_xml(), "networkDefineXML")
 
 
 ##############
