@@ -49,6 +49,20 @@ jobs:
       run: |
         pytest --cov --cov-report=xml
 
+    - name: Install additional RPM packages for pylint
+      run: |
+        dnf --setopt install_weak_deps=False install -y \
+          ~/rpmbuild/RPMS/noarch/virt-manager*.rpm
+        dnf --setopt install_weak_deps=False install -y \
+          python3-pylint \
+          gtksourceview4 \
+          python3-dogtail \
+          python3-pyatspi
+
+    - name: Run pylint
+      run: |
+        pylint-3 tests virtinst virtManager
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
