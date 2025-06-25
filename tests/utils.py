@@ -215,7 +215,7 @@ class _URIs:
 URIs = _URIs()
 
 
-def test_create(testconn, xml, define_func="defineXML"):
+def check_create(testconn, xml, define_func="defineXML"):
     xml = virtinst.uri.sanitize_xml_for_test_define(xml)
 
     try:
