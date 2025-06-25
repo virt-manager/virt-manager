@@ -9,6 +9,7 @@ from gi.repository import Gdk
 
 from virtinst import DomainCpu
 from virtinst import log
+from virtinst import xmlutil
 
 from .lib import uiutil
 from .baseclass import vmmGObjectUI
@@ -198,10 +199,15 @@ class vmmPreferences(vmmGObjectUI):
 
     def refresh_view_system_tray(self):
         errmsg = vmmSystray.systray_disabled_message()
-        val = bool(self.config.get_view_system_tray() and not errmsg)
-        self.widget("prefs-system-tray").set_sensitive(not bool(errmsg))
-        self.widget("prefs-system-tray").set_tooltip_text(errmsg)
+        has_errmsg = bool(errmsg)
+        val = bool(self.config.get_view_system_tray()) and not has_errmsg
+        self.widget("prefs-system-tray").set_sensitive(not has_errmsg)
         self.widget("prefs-system-tray").set_active(val)
+        if has_errmsg:
+            self.widget("prefs-system-tray-warn-label").set_markup(
+                "<small>%s</small>" % xmlutil.xml_escape(errmsg)
+            )
+        uiutil.set_grid_row_visible(self.widget("prefs-system-tray-warn-box"), has_errmsg)
 
     def refresh_xmleditor(self):
         val = self.config.get_xmleditor_enabled()

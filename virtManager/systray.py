@@ -416,7 +416,7 @@ class vmmSystray(vmmGObject):
             return
         if _USING_APPINDICATOR:
             return
-        return "No appindicator listener found, which is required on wayland."
+        return _("AppIndicator not installed or usable, system tray icon not available on Wayland")
 
     def __init__(self):
         vmmGObject.__init__(self)
