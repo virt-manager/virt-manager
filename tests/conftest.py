@@ -53,8 +53,7 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_ignore_collect(path, config):
-    collection_path = pathlib.Path(path)
+def _impl_pytest_ignore_collect(collection_path, config):
     uitests_requested = config.getoption("--uitests")
 
     # Default --uitests to --verbosity=2
@@ -74,6 +73,17 @@ def pytest_ignore_collect(path, config):
         return True
     if not uitest_file and uitests_requested:
         return True
+
+
+if getattr(pytest, "version_tuple", (0,)) >= (7,):
+
+    def pytest_ignore_collect(collection_path, config):
+        return _impl_pytest_ignore_collect(collection_path, config)
+
+else:
+
+    def pytest_ignore_collect(path, config):
+        return _impl_pytest_ignore_collect(pathlib.Path(path), config)
 
 
 def pytest_collection_modifyitems(config, items):
