@@ -87,8 +87,14 @@ else:
 
 
 def pytest_collection_modifyitems(config, items):
+    def item_path_basename(item):
+        try:
+            return item.path.name
+        except AttributeError:
+            return os.path.basename(item.fspath)
+
     def find_items(basename):
-        return [i for i in items if os.path.basename(i.fspath) == basename]
+        return [i for i in items if item_path_basename(i) == basename]
 
     # Move test_cli cases to the end, because they are slow
     # Move test_checkprops to the very end, because it needs to run
