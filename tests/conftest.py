@@ -2,6 +2,7 @@
 # See the COPYING file in the top-level directory.
 
 import os
+import pathlib
 
 import pytest
 
@@ -53,6 +54,7 @@ def pytest_addoption(parser):
 
 
 def pytest_ignore_collect(path, config):
+    collection_path = pathlib.Path(path)
     uitests_requested = config.getoption("--uitests")
 
     # Default --uitests to --verbosity=2
@@ -60,14 +62,14 @@ def pytest_ignore_collect(path, config):
         config.option.verbose = max(2, config.option.verbose)
 
     # Unless explicitly requested, ignore these tests
-    if "test_dist.py" in str(path):
-        return True
-    if "test_urls.py" in str(path):
-        return True
-    if "test_inject.py" in str(path):
+    if collection_path.name in (
+        "test_dist.py",
+        "test_urls.py",
+        "test_inject.py",
+    ):
         return True
 
-    uitest_file = "tests/uitests" in str(path)
+    uitest_file = "tests/uitests" in str(collection_path)
     if uitest_file and not uitests_requested:
         return True
     if not uitest_file and uitests_requested:
