@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2025-01-25 04:23+0000\n"
+"PO-Revision-Date: 2025-06-19 03:57+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ka/>\n"
+"Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -71,20 +71,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "ვირტუალური მანქანების მმართველი"
+msgstr "ვირტუალური მანქანების მმართველი/დამთვალიერებელი"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "ვირტუალური მანქანების მართვა"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "ვირტუალიზაცია"
+msgstr "ვირტუალიზაცია;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3790,6 +3786,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"გარე და შიდა სწრაფი ასლების შერევა იგივე ვმ-სთვის რეკომენდებული არაა. მართლა "
+"გნებავთ, გააგრძელოთ?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4088,10 +4086,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap მოწყობილობა..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap მოწყობილობა..."
+msgstr "vDPA მოწყობილობა..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5506,6 +5502,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"nvram საცავის მოწყობილობის მორგება.\n"
+"ის სტუმრის ბირთვისთვისაა პანიკის ჟურნალების ჩასაწერად. მაგ:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5695,12 +5694,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "შეცდომა: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"მოთხოვნილია გრაფიკა, მაგრამ გარემოს ცვლადი DISPLAY დაყენებული არა. virt-"
-"viewer გაშვებული არაა."
+msgstr "ეკრანი აღმოჩენილი არაა. virt-viewer გაშვებული არ იქნება."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5722,7 +5717,7 @@ msgstr "CPU model=host მოძველებულია. გამოიყ�
 #: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
-msgstr "ზომის არასწორი მნიშვნელობა: %s"
+msgstr "არასწორი მნიშვნელობა ცვლადისთვის 'size': %s"
 
 #: virtinst/cli.py:3928
 #, python-format
@@ -6517,10 +6512,6 @@ msgid "Error validating install location: %s"
 msgstr "ინსტალაციის მდებარეობის გადამოწმების შეცდომა: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
@@ -6812,20 +6803,14 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "შეიყვანეთ \"yes\" ან \"no\"."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
 msgstr "--os-variant/--osinfo --edit -თან ერთად მხარდაჭერილი არაა"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr "--os-variant/--osinfo --remove-device -სთან ერთად მხარდაჭერილი არაა"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
 msgstr "--os-variant/--osinfo --build-xml -თან ერთად მხარდაჭერილი არაა"
 
