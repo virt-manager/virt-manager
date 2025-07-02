@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2024-11-26 13:55+0100\n"
+"POT-Creation-Date: 2025-06-18 16:59+0200\n"
 "PO-Revision-Date: 2024-08-20 11:38+0000\n"
 "Last-Translator: Hoppár Zoltán <hopparz@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/virt-"
@@ -35,8 +35,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.6.2\n"
 
-#: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
-#: ui/manager.ui:7 virtManager/systray.py:138
+#: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
+#: ui/manager.ui:7 virtManager/systray.py:148
 msgid "Virtual Machine Manager"
 msgstr "Virtuális gép vezérlőpult"
 
@@ -91,13 +91,21 @@ msgstr ""
 msgid "kvm"
 msgstr ""
 
+#: data/virt-manager.desktop.in:3
+#, fuzzy
+#| msgid "Virtual Machine Manager"
+msgid "Virtual machine viewer/manager"
+msgstr "Virtuális gép vezérlőpult"
+
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Virtuális gépek menedzselése"
 
-#: data/virt-manager.desktop.in:9
-msgid "vmm;"
-msgstr "vmm;"
+#: data/virt-manager.desktop.in:10
+#, fuzzy
+#| msgid "virtualization type '%s'"
+msgid "virtualization;libvirt;vm;vmm;"
+msgstr "virtualizáció típusa '%s'"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -272,12 +280,12 @@ msgstr "Művelet folyamatban"
 msgid "Please wait a few moments..."
 msgstr "Kérem várjon egy pillanatot ..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:300 virtManager/asyncjob.py:307
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:305 virtManager/asyncjob.py:312
 msgid "Processing..."
 msgstr "Feldolgozás…"
 
 #: ui/asyncjob.ui:188 ui/vmwindow.ui:132 ui/xmleditor.ui:26
-#: virtManager/manager.py:298
+#: virtManager/manager.py:295
 msgid "_Details"
 msgstr "_Részletek"
 
@@ -362,7 +370,7 @@ msgstr "K_lónozás"
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>A konzol jelenleg elérhetetlen</b>"
 
-#: ui/console.ui:57 virtManager/addhardware.py:227
+#: ui/console.ui:57 virtManager/addhardware.py:249
 msgid "Serial"
 msgstr "Soros"
 
@@ -617,8 +625,8 @@ msgstr "_Virtualizáció típusa:"
 msgid "Architecture options"
 msgstr "Architektúra tulajdonságok"
 
-#: ui/createvm.ui:748 virtManager/details/details.py:705
-#: virtManager/manager.py:325 virtManager/oslist.py:72
+#: ui/createvm.ui:748 virtManager/details/details.py:680
+#: virtManager/manager.py:321 virtManager/oslist.py:70
 msgid "Name"
 msgstr "Név"
 
@@ -763,7 +771,7 @@ msgstr "C_PU-k:"
 msgid "(Insert host mem)"
 msgstr "(Adja meg a gép memóriát)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2381
+#: ui/createvm.ui:1987 virtManager/details/details.py:2325
 msgid "Memory"
 msgstr "Memória"
 
@@ -771,8 +779,8 @@ msgstr "Memória"
 msgid "_Enable storage for this virtual machine"
 msgstr ""
 
-#: ui/createvm.ui:2040 virtManager/addhardware.py:216
-#: virtManager/addhardware.py:969 virtManager/clone.py:277
+#: ui/createvm.ui:2040 virtManager/addhardware.py:225
+#: virtManager/addhardware.py:993 virtManager/clone.py:279
 msgid "Storage"
 msgstr "Tároló"
 
@@ -863,7 +871,7 @@ msgstr ""
 msgid "_Backing store"
 msgstr "Háttér tároló"
 
-#: ui/delete.ui:9 virtManager/delete.py:287
+#: ui/delete.ui:9 virtManager/delete.py:294
 msgid "Delete Virtual Machine"
 msgstr "Virtuális gép törlése"
 
@@ -879,7 +887,7 @@ msgstr ""
 msgid "Delete _associated storage files"
 msgstr "Hozzárendelt tároló fájlok _törlése"
 
-#: ui/delete.ui:196 ui/manager.ui:110 virtManager/vmmenu.py:91
+#: ui/delete.ui:196 ui/manager.ui:110 virtManager/vmmenu.py:97
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -998,7 +1006,7 @@ msgstr "<b>CPU-k</b>"
 msgid "M_odel:"
 msgstr "M_odell:"
 
-#: ui/details.ui:1454 virtManager/details/details.py:1929
+#: ui/details.ui:1454 virtManager/details/details.py:1884
 msgid "Copy host CP_U configuration"
 msgstr ""
 
@@ -1358,7 +1366,7 @@ msgid "_Port:"
 msgstr "_Port:"
 
 #: ui/gfxdetails.ui:168 ui/vsockdetails.ui:39
-#: virtManager/device/gfxdetails.py:211
+#: virtManager/device/gfxdetails.py:204
 msgid "A_uto"
 msgstr "A_utomatikus"
 
@@ -1442,7 +1450,7 @@ msgstr "Továbbítás:"
 msgid "NAT to any device"
 msgstr "NAT bármely eszközre"
 
-#: ui/hostnets.ui:439 virtManager/createnet.py:112
+#: ui/hostnets.ui:439 virtManager/createnet.py:108
 msgid "Routed"
 msgstr "Útválasztott"
 
@@ -1504,8 +1512,8 @@ msgstr ""
 msgid "Apply pool changes"
 msgstr ""
 
-#: ui/hoststorage.ui:293 virtManager/connection.py:500
-#: virtManager/object/libvirtobject.py:208
+#: ui/hoststorage.ui:293 virtManager/connection.py:491
+#: virtManager/object/libvirtobject.py:213
 msgid "Active"
 msgstr "Aktív"
 
@@ -1607,7 +1615,7 @@ msgstr "Új"
 msgid "Show the virtual machine console and details"
 msgstr "A virtuális gép konzoljának és részletes adatainak megjelenítése"
 
-#: ui/manager.ui:281 virtManager/storagebrowse.py:32 virtManager/vmmenu.py:95
+#: ui/manager.ui:281 virtManager/storagebrowse.py:32 virtManager/vmmenu.py:101
 msgid "_Open"
 msgstr "_Megnyitás"
 
@@ -1615,17 +1623,17 @@ msgstr "_Megnyitás"
 msgid "Power on the virtual machine"
 msgstr "Virtuális gép bekapcsolása"
 
-#: ui/manager.ui:297 virtManager/manager.py:758 virtManager/vmmenu.py:82
-#: virtManager/vmwindow.py:381
+#: ui/manager.ui:297 virtManager/manager.py:752 virtManager/vmmenu.py:88
+#: virtManager/vmwindow.py:370
 msgid "_Run"
 msgstr "_Indítás"
 
-#: ui/manager.ui:312 ui/vmwindow.ui:354 virtManager/manager.py:795
-#: virtManager/vmwindow.py:422
+#: ui/manager.ui:312 ui/vmwindow.ui:354 virtManager/manager.py:789
+#: virtManager/vmwindow.py:410
 msgid "Pause the virtual machine"
 msgstr "Virtuális gép futásának felfüggesztése"
 
-#: ui/manager.ui:313 virtManager/vmmenu.py:83
+#: ui/manager.ui:313 virtManager/vmmenu.py:89
 msgid "_Pause"
 msgstr "_Felfüggesztés"
 
@@ -1633,8 +1641,8 @@ msgstr "_Felfüggesztés"
 msgid "Shut down the virtual machine"
 msgstr ""
 
-#: ui/manager.ui:329 ui/vmwindow.ui:370 virtManager/vmmenu.py:53
-#: virtManager/vmmenu.py:85
+#: ui/manager.ui:329 ui/vmwindow.ui:370 virtManager/vmmenu.py:58
+#: virtManager/vmmenu.py:91
 msgid "_Shut Down"
 msgstr "_Leállítás"
 
@@ -2114,7 +2122,7 @@ msgstr "Billentyű _kód küldése"
 msgid "Show the graphical console"
 msgstr "Grafikus konzol megjelenítése"
 
-#: ui/vmwindow.ui:300 virtManager/addhardware.py:235
+#: ui/vmwindow.ui:300 virtManager/addhardware.py:264
 msgid "Console"
 msgstr "Konzol"
 
@@ -2122,7 +2130,7 @@ msgstr "Konzol"
 msgid "Show virtual hardware details"
 msgstr "Virtuális harver részletes adatainak megjelenítése"
 
-#: ui/vmwindow.ui:315 virtManager/error.py:320
+#: ui/vmwindow.ui:315 virtManager/error.py:326
 msgid "Details"
 msgstr "Részletek"
 
@@ -2169,388 +2177,388 @@ msgstr ""
 msgid "_XML"
 msgstr ""
 
-#: virtManager/about.py:21
+#: virtManager/about.py:20
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Hiba a „Névjegy” párbeszédablak indításakor: %s"
 
-#: virtManager/addhardware.py:164 virtManager/details/details.py:573
+#: virtManager/addhardware.py:174 virtManager/details/details.py:554
 msgid "Hardware"
 msgstr "Hardver"
 
-#: virtManager/addhardware.py:205 virtManager/createvm.py:527
-#: virtManager/device/addstorage.py:189
+#: virtManager/addhardware.py:214 virtManager/createvm.py:506
+#: virtManager/device/addstorage.py:184
 msgid "Connection does not support storage management."
 msgstr "A kapcsolat nem támogatja a tárolókezelést."
 
-#: virtManager/addhardware.py:218 virtManager/addhardware.py:971
+#: virtManager/addhardware.py:231 virtManager/addhardware.py:995
 msgid "Controller"
 msgstr "Vezérlő"
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:973
-#: virtManager/createnet.py:330
+#: virtManager/addhardware.py:232 virtManager/addhardware.py:997
+#: virtManager/createnet.py:332
 msgid "Network"
 msgstr "Hálózat"
 
-#: virtManager/addhardware.py:220 virtManager/addhardware.py:975
-#: virtManager/details/details.py:193
+#: virtManager/addhardware.py:234 virtManager/addhardware.py:999
+#: virtManager/details/details.py:190
 msgid "Input"
 msgstr "Bemenet"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:226
-#: virtManager/addhardware.py:229 virtManager/addhardware.py:233
-#: virtManager/addhardware.py:239 virtManager/addhardware.py:263
+#: virtManager/addhardware.py:238 virtManager/addhardware.py:246
+#: virtManager/addhardware.py:253 virtManager/addhardware.py:261
+#: virtManager/addhardware.py:270 virtManager/addhardware.py:311
 msgid "Not supported for this guest type."
 msgstr "Nem támogatott ennél a vendég típusnál."
 
-#: virtManager/addhardware.py:222 virtManager/addhardware.py:977
+#: virtManager/addhardware.py:240 virtManager/addhardware.py:1001
 msgid "Graphics"
 msgstr "Grafika"
 
-#: virtManager/addhardware.py:224 virtManager/addhardware.py:979
+#: virtManager/addhardware.py:242 virtManager/addhardware.py:1003
 msgid "Sound"
 msgstr "Hang"
 
-#: virtManager/addhardware.py:231
+#: virtManager/addhardware.py:257
 msgid "Parallel"
 msgstr "Párhuzamos"
 
-#: virtManager/addhardware.py:237
+#: virtManager/addhardware.py:266
 msgid "Channel"
 msgstr "Csatorna"
 
-#: virtManager/addhardware.py:241
+#: virtManager/addhardware.py:274
 msgid "USB Host Device"
 msgstr "USB host eszköz"
 
-#: virtManager/addhardware.py:243 virtManager/addhardware.py:247
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:278 virtManager/addhardware.py:283
+#: virtManager/addhardware.py:296
 msgid "Connection does not support host device enumeration"
 msgstr "A kapcsolat nem támogatja a gazda eszközeinek felsorolását"
 
-#: virtManager/addhardware.py:251
+#: virtManager/addhardware.py:286
 msgid "Not supported for containers"
 msgstr "Nem támogatott konténerek"
 
-#: virtManager/addhardware.py:252
+#: virtManager/addhardware.py:288
 msgid "PCI Host Device"
 msgstr ""
 
-#: virtManager/addhardware.py:255
+#: virtManager/addhardware.py:292
 #, fuzzy
 #| msgid "Video Device"
 msgid "MDEV Host Device"
 msgstr "Videoeszköz"
 
-#: virtManager/addhardware.py:259
+#: virtManager/addhardware.py:300
 msgid "Video"
 msgstr ""
 
-#: virtManager/addhardware.py:260
+#: virtManager/addhardware.py:304
 msgid "Libvirt version does not support video devices."
 msgstr "A libvirt verzió nem támogatja a videoeszközöket."
 
-#: virtManager/addhardware.py:261 virtManager/details/details.py:255
-#: virtManager/lib/libvirtenummap.py:110
+#: virtManager/addhardware.py:307 virtManager/details/details.py:252
+#: virtManager/lib/libvirtenummap.py:107
 msgid "Watchdog"
 msgstr "Figyelő"
 
-#: virtManager/addhardware.py:264
+#: virtManager/addhardware.py:313
 msgid "Filesystem"
 msgstr ""
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:987
-#: virtManager/details/details.py:253
+#: virtManager/addhardware.py:314 virtManager/addhardware.py:1011
+#: virtManager/details/details.py:250
 msgid "Smartcard"
 msgstr "Smartcard"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:989
+#: virtManager/addhardware.py:315 virtManager/addhardware.py:1013
 msgid "USB Redirection"
 msgstr "USB átirányítás"
 
-#: virtManager/addhardware.py:269 virtManager/addhardware.py:991
+#: virtManager/addhardware.py:316 virtManager/addhardware.py:1015
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:271 virtManager/details/details.py:245
+#: virtManager/addhardware.py:317 virtManager/details/details.py:242
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:272 virtManager/addhardware.py:995
-#: virtManager/details/details.py:252
+#: virtManager/addhardware.py:318 virtManager/addhardware.py:1019
+#: virtManager/details/details.py:249
 msgid "Panic Notifier"
 msgstr "Pánik értesítő"
 
-#: virtManager/addhardware.py:274 virtManager/details/details.py:254
+#: virtManager/addhardware.py:320 virtManager/details/details.py:251
 msgid "VirtIO VSOCK"
 msgstr ""
 
-#: virtManager/addhardware.py:276
+#: virtManager/addhardware.py:324
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Ez a hipervizor / libvirt / arch kombináció nem támogatott."
 
-#: virtManager/addhardware.py:346
+#: virtManager/addhardware.py:389
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Hiba a VM konfiguráció módosításakor: %s"
 
-#: virtManager/addhardware.py:371
+#: virtManager/addhardware.py:413
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Ezek a változások a vendég leállítását követően lépnek érvénybe."
 
-#: virtManager/addhardware.py:422
+#: virtManager/addhardware.py:457
 msgid "Pseudo TTY"
 msgstr "Pszeudo TTY"
 
-#: virtManager/addhardware.py:423
+#: virtManager/addhardware.py:458
 msgid "Output to a file"
 msgstr "Kimenet fájlba"
 
-#: virtManager/addhardware.py:424
+#: virtManager/addhardware.py:459
 msgid "TCP net console"
 msgstr "TCP hálózati konzol"
 
-#: virtManager/addhardware.py:425
+#: virtManager/addhardware.py:460
 msgid "UDP net console"
 msgstr "UDP hálózati konzol"
 
-#: virtManager/addhardware.py:426
+#: virtManager/addhardware.py:461
 #, fuzzy
 #| msgid "Unix socket"
 msgid "UNIX socket"
 msgstr "Unix foglalat"
 
-#: virtManager/addhardware.py:427
+#: virtManager/addhardware.py:462
 msgid "Spice agent"
 msgstr "Spice ügynök"
 
-#: virtManager/addhardware.py:428
+#: virtManager/addhardware.py:463
 msgid "Spice port"
 msgstr "Spice port"
 
-#: virtManager/addhardware.py:429
+#: virtManager/addhardware.py:464
 msgid "QEMU vdagent"
 msgstr ""
 
-#: virtManager/addhardware.py:443 virtManager/addhardware.py:504
+#: virtManager/addhardware.py:480 virtManager/addhardware.py:541
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:444 virtManager/details/details.py:2314
+#: virtManager/addhardware.py:481 virtManager/details/details.py:2260
 msgid "Floppy"
 msgstr ""
 
-#: virtManager/addhardware.py:445 virtManager/addhardware.py:506
+#: virtManager/addhardware.py:482 virtManager/addhardware.py:543
 msgid "SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:446 virtManager/addhardware.py:505
+#: virtManager/addhardware.py:483 virtManager/addhardware.py:542
 msgid "SATA"
 msgstr ""
 
-#: virtManager/addhardware.py:447
+#: virtManager/addhardware.py:484
 #, fuzzy
 #| msgid "Serial"
 msgid "VirtIO Serial"
 msgstr "Serial"
 
-#: virtManager/addhardware.py:448 virtManager/addhardware.py:508
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:485 virtManager/addhardware.py:545
+#: virtManager/addhardware.py:596
 msgid "USB"
 msgstr ""
 
-#: virtManager/addhardware.py:449
+#: virtManager/addhardware.py:486
 msgid "PCI"
 msgstr ""
 
-#: virtManager/addhardware.py:450
+#: virtManager/addhardware.py:487
 msgid "CCID"
 msgstr ""
 
-#: virtManager/addhardware.py:451
+#: virtManager/addhardware.py:488
 msgid "xenbus"
 msgstr ""
 
-#: virtManager/addhardware.py:459 virtManager/addhardware.py:885
+#: virtManager/addhardware.py:496 virtManager/addhardware.py:912
 msgid "VirtIO SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:462
+#: virtManager/addhardware.py:499
 msgid "PCIe"
 msgstr ""
 
-#: virtManager/addhardware.py:507
+#: virtManager/addhardware.py:544
 msgid "SD"
 msgstr ""
 
-#: virtManager/addhardware.py:509 virtManager/addhardware.py:560
+#: virtManager/addhardware.py:546 virtManager/addhardware.py:597
 msgid "VirtIO"
 msgstr ""
 
-#: virtManager/addhardware.py:510 virtManager/addhardware.py:561
+#: virtManager/addhardware.py:547 virtManager/addhardware.py:598
 msgid "Xen"
 msgstr ""
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:554
 msgid "Random"
 msgstr "Véletlen"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:555
 msgid "Entropy Gathering Daemon"
 msgstr ""
 
-#: virtManager/addhardware.py:519
+#: virtManager/addhardware.py:556
 msgid "Builtin RNG"
 msgstr ""
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:574
 msgid "Forcefully reset the guest"
 msgstr "A vendég rendszer kényszerített újraindítása"
 
-#: virtManager/addhardware.py:538
+#: virtManager/addhardware.py:575
 msgid "Gracefully shutdown the guest"
 msgstr "A vendég rendszer újraindítása"
 
-#: virtManager/addhardware.py:539
+#: virtManager/addhardware.py:576
 msgid "Forcefully power off the guest"
 msgstr "A vendég rendszer kényszerített kikapcsolása"
 
-#: virtManager/addhardware.py:540
+#: virtManager/addhardware.py:577
 msgid "Pause the guest"
 msgstr "Vendég rendszer felfüggesztése"
 
-#: virtManager/addhardware.py:541
+#: virtManager/addhardware.py:578
 msgid "No action"
 msgstr "Nincs művelet"
 
-#: virtManager/addhardware.py:542
+#: virtManager/addhardware.py:579
 msgid "Dump guest memory core"
 msgstr ""
 
-#: virtManager/addhardware.py:549
+#: virtManager/addhardware.py:586
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB Graphics Tablet"
 
-#: virtManager/addhardware.py:552 virtManager/details/details.py:192
+#: virtManager/addhardware.py:589 virtManager/details/details.py:189
 msgid "Keyboard"
 msgstr "Billentyűzet"
 
-#: virtManager/addhardware.py:553 virtManager/details/details.py:190
+#: virtManager/addhardware.py:590 virtManager/details/details.py:187
 msgid "Mouse"
 msgstr "Egér"
 
-#: virtManager/addhardware.py:554 virtManager/details/details.py:188
+#: virtManager/addhardware.py:591 virtManager/details/details.py:185
 msgid "Tablet"
 msgstr "Tablet PC"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:595
 msgid "PS/2"
 msgstr ""
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:604
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:665
+#: virtManager/addhardware.py:701
 msgid "Disk device"
 msgstr "Lemez eszköz"
 
-#: virtManager/addhardware.py:667
+#: virtManager/addhardware.py:702
 msgid "CDROM device"
 msgstr "CDROM eszköz"
 
-#: virtManager/addhardware.py:669
+#: virtManager/addhardware.py:703
 msgid "Floppy device"
 msgstr "Hajlékonylemezes eszköz"
 
-#: virtManager/addhardware.py:672
+#: virtManager/addhardware.py:705
 msgid "LUN Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:695 virtManager/addhardware.py:804
-#: virtManager/addhardware.py:814 virtManager/addhardware.py:863
-#: virtManager/addhardware.py:886 virtManager/device/addstorage.py:98
-#: virtManager/device/addstorage.py:105 virtManager/device/fsdetails.py:88
-#: virtManager/device/gfxdetails.py:103 virtManager/device/tpmdetails.py:76
-#: virtManager/device/tpmdetails.py:87 virtManager/preferences.py:171
+#: virtManager/addhardware.py:727 virtManager/addhardware.py:831
+#: virtManager/addhardware.py:840 virtManager/addhardware.py:886
+#: virtManager/addhardware.py:913 virtManager/device/addstorage.py:98
+#: virtManager/device/addstorage.py:104 virtManager/device/fsdetails.py:87
+#: virtManager/device/gfxdetails.py:105 virtManager/device/tpmdetails.py:77
+#: virtManager/device/tpmdetails.py:88 virtManager/preferences.py:171
 msgid "Hypervisor default"
 msgstr "Hipervizor alapértelmezése"
 
-#: virtManager/addhardware.py:783
+#: virtManager/addhardware.py:809
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
 
-#: virtManager/addhardware.py:789
+#: virtManager/addhardware.py:818
 msgid "No Devices Available"
 msgstr "Nincs elérhető eszköz"
 
-#: virtManager/addhardware.py:851 virtManager/device/tpmdetails.py:72
+#: virtManager/addhardware.py:875 virtManager/device/tpmdetails.py:73
 msgid "Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:852
+#: virtManager/addhardware.py:876
 msgid "Host"
 msgstr ""
 
-#: virtManager/addhardware.py:858
+#: virtManager/addhardware.py:881
 msgid "Spice channel"
 msgstr ""
 
-#: virtManager/addhardware.py:882
+#: virtManager/addhardware.py:909
 msgid "USB 3"
 msgstr ""
 
-#: virtManager/addhardware.py:883
+#: virtManager/addhardware.py:910
 msgid "USB 2"
 msgstr ""
 
-#: virtManager/addhardware.py:981
+#: virtManager/addhardware.py:1005
 msgid "Video Device"
 msgstr "Videoeszköz"
 
-#: virtManager/addhardware.py:983
+#: virtManager/addhardware.py:1007
 msgid "Watchdog Device"
 msgstr "Figyelő eszköz"
 
-#: virtManager/addhardware.py:985
+#: virtManager/addhardware.py:1009
 msgid "Filesystem Passthrough"
 msgstr "Fájlrendszer átengedés"
 
-#: virtManager/addhardware.py:993
+#: virtManager/addhardware.py:1017
 msgid "Random Number Generator"
 msgstr "Véletlenszám-generátor (RNG)"
 
-#: virtManager/addhardware.py:997
+#: virtManager/addhardware.py:1021
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1001 virtManager/details/details.py:2092
+#: virtManager/addhardware.py:1025 virtManager/details/details.py:2044
 #, python-format
 msgid "%s Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:1029
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:1031
 #, fuzzy
 #| msgid "%s Device"
 msgid "MDEV Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:1032
 #, fuzzy
 msgid "USB Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1131
+#: virtManager/addhardware.py:1149
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2558,11 +2566,11 @@ msgid ""
 "You can change the USB controller type in the VM details screen."
 msgstr ""
 
-#: virtManager/addhardware.py:1223
+#: virtManager/addhardware.py:1243
 msgid "Are you sure you want to add this device?"
 msgstr "Biztos, hogy hozzáadja ezt az eszközt?"
 
-#: virtManager/addhardware.py:1226
+#: virtManager/addhardware.py:1247
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2570,108 +2578,108 @@ msgstr ""
 "Ez az eszköz nem adható hozzá működő géphez. Elérhetővé teszi az eszközt a "
 "gép következő leállításakor?"
 
-#: virtManager/addhardware.py:1250
+#: virtManager/addhardware.py:1274
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Az eszköz nem adható hozzá: %s"
 
-#: virtManager/addhardware.py:1271
+#: virtManager/addhardware.py:1294
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1277
+#: virtManager/addhardware.py:1303
 msgid "Creating device"
 msgstr "Eszköz létrehozása"
 
-#: virtManager/addhardware.py:1278
+#: virtManager/addhardware.py:1304
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 
-#: virtManager/addhardware.py:1300
+#: virtManager/addhardware.py:1325
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1302
+#: virtManager/addhardware.py:1326
 msgid "Do you really want to use the device?"
 msgstr "Biztos, hogy használni akarja az eszközt?"
 
-#: virtManager/addhardware.py:1347
+#: virtManager/addhardware.py:1370
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
 
-#: virtManager/asyncjob.py:219
+#: virtManager/asyncjob.py:228
 msgid "Cancelling job..."
 msgstr "Feladat megszakítása…"
 
-#: virtManager/clone.py:28 virtinst/cloner.py:192
+#: virtManager/clone.py:28 virtinst/cloner.py:199
 msgid "No storage to clone."
 msgstr "Nincs klónozható tároló."
 
-#: virtManager/clone.py:111
+#: virtManager/clone.py:118
 #, python-format
 msgid "Disk target: %s"
 msgstr ""
 
-#: virtManager/clone.py:112
+#: virtManager/clone.py:119
 #, python-format
 msgid "Original path: %s"
 msgstr "Elérési út: %s"
 
-#: virtManager/clone.py:114
+#: virtManager/clone.py:121
 #, fuzzy, python-format
 #| msgid "Deleting path '%s'"
 msgid "New path: %s"
 msgstr "'%s' elérési útvonal törlése"
 
-#: virtManager/clone.py:118
+#: virtManager/clone.py:125
 #, fuzzy, python-format
 #| msgid "Storage is marked as shareable."
 msgid "Storage is safe to share: %(reason)s"
 msgstr "A tároló megoszthatóként jelölt."
 
-#: virtManager/clone.py:122
+#: virtManager/clone.py:127
 msgid "Sharing this storage is potentially dangerous."
 msgstr ""
 
-#: virtManager/clone.py:125
+#: virtManager/clone.py:130
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
 msgstr ""
 
-#: virtManager/clone.py:137
+#: virtManager/clone.py:141
 #, fuzzy
 #| msgid "No storage to clone."
 msgid "No storage."
 msgstr "Nincs klónozható tároló."
 
-#: virtManager/clone.py:142
+#: virtManager/clone.py:146
 #, python-format
 msgid "Share disk with %s"
 msgstr "Lemez megosztása vele: %s"
 
-#: virtManager/clone.py:144
+#: virtManager/clone.py:148
 msgid "Clone this disk"
 msgstr "Lemez klónozása"
 
-#: virtManager/clone.py:182
+#: virtManager/clone.py:185
 #, python-format
 msgid "Error launching clone dialog: %s"
 msgstr "Hiba a klónozás párbeszédablak indításakor: %s"
 
-#: virtManager/clone.py:276
+#: virtManager/clone.py:278
 #, fuzzy
 #| msgid "C_lone"
 msgid "Clone"
 msgstr "K_lónozás"
 
-#: virtManager/clone.py:457
+#: virtManager/clone.py:453
 msgid "Cloning will overwrite the existing file"
 msgstr "A klónozás felülírja a meglévő fájlt"
 
-#: virtManager/clone.py:458
+#: virtManager/clone.py:455
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2679,13 +2687,13 @@ msgstr ""
 "Egy már meglévő kép felülírja az útvonalat a klónozási folyamat alatt. "
 "Biztos, hogy ezt az útvonalat akarja?"
 
-#: virtManager/clone.py:487
+#: virtManager/clone.py:483
 #, fuzzy
 #| msgid "Skipping disks may cause data to be overwritten."
 msgid "Sharing storage may cause data to be overwritten."
 msgstr "A lemezek kihagyása adatfelülírást okozhat."
 
-#: virtManager/clone.py:488
+#: virtManager/clone.py:485
 #, fuzzy, python-format
 #| msgid ""
 #| "The following disk devices will not be cloned:\n"
@@ -2704,24 +2712,24 @@ msgstr ""
 "Az új vendég futtatásával felülírhatja ezeket az adatokat ezekben a "
 "lemezképekben."
 
-#: virtManager/clone.py:503
+#: virtManager/clone.py:502
 #, fuzzy, python-format
 #| msgid "Error creating virtual machine clone '%s': %s"
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Hiba történt a(z) „%s” virtuális gép klón létrehozásakor: %s"
 
-#: virtManager/clone.py:561
+#: virtManager/clone.py:562
 #, fuzzy, python-format
 #| msgid "Error changing pool settings: %s"
 msgid "Error with clone settings: %s"
 msgstr "Hiba a készlet tulajdonságainak módosításakor: %s"
 
-#: virtManager/clone.py:566
+#: virtManager/clone.py:567
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "A(z) „%s” virtuális gép klón létrehozása"
 
-#: virtManager/clone.py:571
+#: virtManager/clone.py:573
 #, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
@@ -2730,19 +2738,19 @@ msgstr ""
 "Virtuális gép '%s' klónjának és a kiválasztott tárolónak a létrehozása (ez "
 "eltarthat egy ideig)"
 
-#: virtManager/connection.py:397
+#: virtManager/connection.py:390
 msgid "User session"
 msgstr ""
 
-#: virtManager/connection.py:497
+#: virtManager/connection.py:488
 msgid "Disconnected"
 msgstr "Leválasztva"
 
-#: virtManager/connection.py:499
+#: virtManager/connection.py:490
 msgid "Connecting"
 msgstr "Kapcsolódás"
 
-#: virtManager/connection.py:588
+#: virtManager/connection.py:582
 #, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
@@ -2752,62 +2760,62 @@ msgid ""
 "Recover error: %(recovererror)s"
 msgstr ""
 
-#: virtManager/createconn.py:56
+#: virtManager/createconn.py:51
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "Hiba a kapcsolódás párbeszédablak indításakor: %s"
 
-#: virtManager/createconn.py:117
+#: virtManager/createconn.py:114
 msgid "user session"
 msgstr ""
 
-#: virtManager/createconn.py:123
+#: virtManager/createconn.py:120
 msgid "Custom URI..."
 msgstr ""
 
-#: virtManager/createconn.py:241
+#: virtManager/createconn.py:236
 msgid "A hostname is required for remote connections."
 msgstr "Kiszolgálónév szükséges a távoli kapcsolatokhoz."
 
-#: virtManager/createconn.py:254
+#: virtManager/createconn.py:249
 msgid "Would you still like to remember this connection?"
 msgstr ""
 
-#: virtManager/createnet.py:102
+#: virtManager/createnet.py:98
 msgid "Any physical device"
 msgstr "Bármely fizikai eszköz"
 
-#: virtManager/createnet.py:103
+#: virtManager/createnet.py:99
 msgid "Physical device..."
 msgstr ""
 
-#: virtManager/createnet.py:111 virtManager/object/network.py:161
+#: virtManager/createnet.py:107 virtManager/object/network.py:156
 msgid "NAT"
 msgstr "Átirányítás"
 
-#: virtManager/createnet.py:113
+#: virtManager/createnet.py:109
 msgid "Open"
 msgstr ""
 
-#: virtManager/createnet.py:114
+#: virtManager/createnet.py:110
 msgid "Isolated"
 msgstr ""
 
-#: virtManager/createnet.py:115
+#: virtManager/createnet.py:111
 msgid "SR-IOV pool"
 msgstr ""
 
-#: virtManager/createnet.py:175
+#: virtManager/createnet.py:173
 msgid "No available device"
 msgstr ""
 
-#: virtManager/createnet.py:336
+#: virtManager/createnet.py:338
 #, python-format
 msgid "Name '%s' already in use by another network."
 msgstr "A '%s' nevet már egy másik hálózat használja."
 
-#: virtManager/createnet.py:408 virtManager/createpool.py:318
-#: virtManager/createvol.py:265
+#: virtManager/createnet.py:408 virtManager/createpool.py:312
+#: virtManager/createvol.py:255
 #, python-format
 msgid "Error building XML: %s"
 msgstr ""
@@ -2817,122 +2825,122 @@ msgstr ""
 msgid "Error creating virtual network: %s"
 msgstr "Hiba a virtuális hálózat készítésekor: %s"
 
-#: virtManager/createnet.py:443
+#: virtManager/createnet.py:441
 #, python-format
 msgid "Error validating network: %s"
 msgstr ""
 
-#: virtManager/createnet.py:448
+#: virtManager/createnet.py:449
 msgid "Creating virtual network..."
 msgstr "Virtuális hálózat létrehozása..."
 
-#: virtManager/createnet.py:449
+#: virtManager/createnet.py:450
 msgid "Creating the virtual network may take a while..."
 msgstr "A virtuális hálózat létrehozása eltarthat egy darabig..."
 
-#: virtManager/createpool.py:213
+#: virtManager/createpool.py:210
 msgid "Sou_rce Name:"
 msgstr ""
 
-#: virtManager/createpool.py:213
+#: virtManager/createpool.py:210
 msgid "Volg_roup Name:"
 msgstr ""
 
-#: virtManager/createpool.py:215
+#: virtManager/createpool.py:213
 msgid "_Source Path:"
 msgstr "Forrá_s útvonal:"
 
-#: virtManager/createpool.py:217
+#: virtManager/createpool.py:215
 msgid "_Source IQN:"
 msgstr ""
 
-#: virtManager/createpool.py:219
+#: virtManager/createpool.py:217
 msgid "_Source Adapter:"
 msgstr ""
 
-#: virtManager/createpool.py:332
+#: virtManager/createpool.py:325
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "Hiba az adatgyűjtés készítésekor: %s"
 
-#: virtManager/createpool.py:356
+#: virtManager/createpool.py:348
 #, python-format
 msgid "Error validating pool: %s"
 msgstr ""
 
-#: virtManager/createpool.py:362
+#: virtManager/createpool.py:357
 msgid "Creating storage pool..."
 msgstr "Új tároló adatgyűjtés..."
 
-#: virtManager/createpool.py:363
+#: virtManager/createpool.py:358
 msgid "Creating the storage pool may take a while..."
 msgstr "A tároló készlet készítése eltarthat egy ideig..."
 
-#: virtManager/createpool.py:385
+#: virtManager/createpool.py:378
 msgid "Choose source path"
 msgstr "Adjon meg egy forrás útvonalat"
 
-#: virtManager/createpool.py:397
+#: virtManager/createpool.py:389
 msgid "Choose target directory"
 msgstr "Válasszon ki egy célkönyvtárat"
 
-#: virtManager/createvm.py:70
+#: virtManager/createvm.py:66
 #, python-format
 msgid "%.1f GiB"
 msgstr ""
 
-#: virtManager/createvm.py:74
+#: virtManager/createvm.py:70
 #, python-format
 msgid "%d MiB"
 msgstr ""
 
-#: virtManager/createvm.py:182
+#: virtManager/createvm.py:180
 #, python-format
 msgid "Error launching create dialog: %s"
 msgstr ""
 
-#: virtManager/createvm.py:309
+#: virtManager/createvm.py:301
 #, fuzzy, python-format
 #| msgid "Error"
 msgid "Error: %s"
 msgstr "Hiba"
 
-#: virtManager/createvm.py:315 virtManager/createvm.py:320
+#: virtManager/createvm.py:306 virtManager/createvm.py:310
 #, python-format
 msgid "<span size='small'>Warning: %s</span>"
 msgstr ""
 
-#: virtManager/createvm.py:498
+#: virtManager/createvm.py:482
 #, python-format
 msgid ""
 "Failed to setup UEFI: %s\n"
 "Install options are limited."
 msgstr ""
 
-#: virtManager/createvm.py:524
+#: virtManager/createvm.py:504
 msgid "Libvirt version does not support remote URL installs."
 msgstr "A libvirt verziója nem támogatja a távoli URL-ről történő telepítést."
 
-#: virtManager/createvm.py:531
+#: virtManager/createvm.py:510
 #, fuzzy
 #| msgid "%s installs not available for paravirt guests."
 msgid "CDROM/ISO installs not available for paravirt guests."
 msgstr "A(z) %s telepítések paravirtualizált vendégek esetén nem érhetőek el."
 
-#: virtManager/createvm.py:534
+#: virtManager/createvm.py:513
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "„%s” architektúra nem telepíthető"
 
-#: virtManager/createvm.py:549
+#: virtManager/createvm.py:525
 msgid "No install methods available for this connection."
 msgstr ""
 
-#: virtManager/createvm.py:580
+#: virtManager/createvm.py:553
 msgid "No hypervisor options were found for this connection."
 msgstr "Nem található felügyelő beállítási lehetőség ehhez a kapcsolathoz."
 
-#: virtManager/createvm.py:585
+#: virtManager/createvm.py:558
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -2940,7 +2948,7 @@ msgstr ""
 "Ez általában azt jelenti, hogy a QEMU vagy a KVM nincs telepítve a gépre, "
 "vagy a KVM kernel modul nincs betöltve."
 
-#: virtManager/createvm.py:606
+#: virtManager/createvm.py:583
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -2948,12 +2956,12 @@ msgstr ""
 "A KVM nem érhető el. Ez azt jelenti, hogy a KVM csomag nincs telepítve, vagy "
 "a KVM kernel modul nincs betöltve. A virtuális gépek gyengén teljesíthetnek."
 
-#: virtManager/createvm.py:649
+#: virtManager/createvm.py:626
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "%(maxmem)s áll rendelkezésre a gazda gépen"
 
-#: virtManager/createvm.py:657
+#: virtManager/createvm.py:634
 #, fuzzy, python-format
 #| msgid "Up to %(numcpus)d available"
 msgid "Up to %(numcpus)d available"
@@ -2961,170 +2969,170 @@ msgid_plural "Up to %(numcpus)d available"
 msgstr[0] "%(numcpus)d elérhető"
 msgstr[1] "%(numcpus)d elérhető"
 
-#: virtManager/createvm.py:695
+#: virtManager/createvm.py:669
 msgid "No active connection to install on."
 msgstr "Nincs aktív kapcsolat a telepítéshez."
 
-#: virtManager/createvm.py:955 virtManager/details/details.py:1749
-#: virtManager/device/gfxdetails.py:96
+#: virtManager/createvm.py:921 virtManager/details/details.py:1708
+#: virtManager/device/gfxdetails.py:98
 msgid "None"
 msgstr "Semmi"
 
-#: virtManager/createvm.py:969
+#: virtManager/createvm.py:935
 msgid "Local CDROM/ISO"
 msgstr "Helyi CDROM/ISO"
 
-#: virtManager/createvm.py:971
+#: virtManager/createvm.py:937
 msgid "URL Install Tree"
 msgstr "URL telepítési út"
 
-#: virtManager/createvm.py:973
+#: virtManager/createvm.py:939
 msgid "Import existing OS image"
 msgstr "Létező OS kép importálása"
 
-#: virtManager/createvm.py:975
+#: virtManager/createvm.py:941
 msgid "Manual install"
 msgstr ""
 
-#: virtManager/createvm.py:977
+#: virtManager/createvm.py:943
 msgid "Application container"
 msgstr "Alkalmazás-konténer"
 
-#: virtManager/createvm.py:979
+#: virtManager/createvm.py:945
 msgid "Operating system container"
 msgstr "Operációs rendszer tároló"
 
-#: virtManager/createvm.py:981
+#: virtManager/createvm.py:947
 msgid "Virtuozzo container"
 msgstr ""
 
-#: virtManager/createvm.py:1129
+#: virtManager/createvm.py:1086
 msgid "Removing disk images"
 msgstr ""
 
-#: virtManager/createvm.py:1130
+#: virtManager/createvm.py:1087
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
 
-#: virtManager/createvm.py:1324
+#: virtManager/createvm.py:1285
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "%(current_page)d lépés a(az) %(max_page)d lépésből"
 
-#: virtManager/createvm.py:1333
+#: virtManager/createvm.py:1295
 msgid "Waiting for install media / source"
 msgstr ""
 
-#: virtManager/createvm.py:1407
+#: virtManager/createvm.py:1365
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1451
+#: virtManager/createvm.py:1407
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "Nem kezelt hiba a telepítési paraméterek érvényesítésekor: %s"
 
-#: virtManager/createvm.py:1462
+#: virtManager/createvm.py:1417
 msgid "Source URL is required"
 msgstr ""
 
-#: virtManager/createvm.py:1467
+#: virtManager/createvm.py:1422
 msgid "Please specify password for accessing source registry"
 msgstr ""
 
-#: virtManager/createvm.py:1475
+#: virtManager/createvm.py:1430
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1478
+#: virtManager/createvm.py:1433
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr ""
 
-#: virtManager/createvm.py:1485
+#: virtManager/createvm.py:1440
 msgid "OS root directory is not empty"
 msgstr ""
 
-#: virtManager/createvm.py:1486
+#: virtManager/createvm.py:1442
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
 "Would you like to continue?"
 msgstr ""
 
-#: virtManager/createvm.py:1505
+#: virtManager/createvm.py:1463
 msgid "An install media selection is required."
 msgstr "Egy telepítési adathordozót választani kell."
 
-#: virtManager/createvm.py:1513
+#: virtManager/createvm.py:1471
 msgid "An install tree is required."
 msgstr "Meg kell adni egy telepítési útvonalat."
 
-#: virtManager/createvm.py:1521
+#: virtManager/createvm.py:1479
 msgid "A storage path to import is required."
 msgstr "A tároló elérési útvonalát meg kell adni az importáláshoz."
 
-#: virtManager/createvm.py:1527
+#: virtManager/createvm.py:1483
 msgid "The import path must point to an existing storage."
 msgstr ""
 
-#: virtManager/createvm.py:1533
+#: virtManager/createvm.py:1489
 msgid "An application path is required."
 msgstr "Alkalmazás elérési út megadása szükséges."
 
-#: virtManager/createvm.py:1538
+#: virtManager/createvm.py:1494
 msgid "An OS directory path is required."
 msgstr "Operációs rendszer elérési út megadása szükséges."
 
-#: virtManager/createvm.py:1552
+#: virtManager/createvm.py:1507
 msgid "A template name is required."
 msgstr ""
 
-#: virtManager/createvm.py:1555
+#: virtManager/createvm.py:1510
 msgid "You must select an OS."
 msgstr ""
 
-#: virtManager/createvm.py:1585
+#: virtManager/createvm.py:1540
 msgid "Error setting installer parameters."
 msgstr "Hiba a telepítési paraméterek beállításakor."
 
-#: virtManager/createvm.py:1593
+#: virtManager/createvm.py:1548
 msgid "Error setting default name."
 msgstr "Hiba az alapértelmezett név beállításakor."
 
-#: virtManager/createvm.py:1684
+#: virtManager/createvm.py:1643
 msgid "Storage parameter error."
 msgstr "Tároló paraméter hiba."
 
-#: virtManager/createvm.py:1706
+#: virtManager/createvm.py:1664
 msgid "Invalid guest name"
 msgstr "Érvénytelen vendég név"
 
-#: virtManager/createvm.py:1789
+#: virtManager/createvm.py:1750
 msgid "Detecting..."
 msgstr ""
 
-#: virtManager/createvm.py:1851
+#: virtManager/createvm.py:1812
 msgid "None detected"
 msgstr ""
 
-#: virtManager/createvm.py:1888
+#: virtManager/createvm.py:1848
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "Hiba a telepítés indításakor: %s"
 
-#: virtManager/createvm.py:1931
+#: virtManager/createvm.py:1889
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nem lehet befejezni a telepítést: '%s'"
 
-#: virtManager/createvm.py:1971
+#: virtManager/createvm.py:1929
 msgid "Creating Virtual Machine"
 msgstr "Virtuális gép létrehozása"
 
-#: virtManager/createvm.py:1972
+#: virtManager/createvm.py:1931
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3132,51 +3140,51 @@ msgstr ""
 "A virtuális gép készítése most elindul. A lemezterület kialakítása és a "
 "telepítési lemezkép kinyerése néhány percet igénybe vehet."
 
-#: virtManager/createvm.py:2026
+#: virtManager/createvm.py:1987
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr ""
 
-#: virtManager/createvm.py:2076
+#: virtManager/createvm.py:2039
 #, fuzzy, python-format
 #| msgid "Error continue install: %s"
 msgid "Error continuing install: %s"
 msgstr "Hiba a telepítés folytatásakor: %s"
 
-#: virtManager/createvm.py:2093
+#: virtManager/createvm.py:2055
 #, fuzzy
 #| msgid "Application container"
 msgid "Bootstrapping container"
 msgstr "Alkalmazás-konténer"
 
-#: virtManager/createvol.py:140
+#: virtManager/createvol.py:134
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
 msgstr ""
 
-#: virtManager/createvol.py:280
+#: virtManager/createvol.py:269
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "Hiba a kötet készítésekor: %s"
 
-#: virtManager/createvol.py:296
+#: virtManager/createvol.py:284
 #, python-format
 msgid "Error validating volume: %s"
 msgstr ""
 
-#: virtManager/createvol.py:301
+#: virtManager/createvol.py:292
 msgid "Creating storage volume..."
 msgstr "Tároló kötet készítése..."
 
-#: virtManager/createvol.py:302
+#: virtManager/createvol.py:293
 msgid "Creating the storage volume may take a while..."
 msgstr "Tároló kötet készítése eltarthat egy ideig..."
 
-#: virtManager/delete.py:156
+#: virtManager/delete.py:149
 msgid "Are you sure you want to delete the storage?"
 msgstr "Biztosan törölni szeretné a tárolót?"
 
-#: virtManager/delete.py:157
+#: virtManager/delete.py:150
 #, python-format
 msgid ""
 "The following paths will be deleted:\n"
@@ -3184,134 +3192,134 @@ msgid ""
 "%s"
 msgstr ""
 
-#: virtManager/delete.py:196
+#: virtManager/delete.py:197
 #, fuzzy, python-format
 #| msgid "Error deleting virtual machine '%s': %s"
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Hiba a '%s' virtuális gép törlésekor: %s"
 
-#: virtManager/delete.py:212
+#: virtManager/delete.py:215
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr "Ezen kívül hiba történt néhány tárolóeszköz eltávolítása során:\n"
 
-#: virtManager/delete.py:216
+#: virtManager/delete.py:218
 msgid "Errors encountered while removing certain storage devices."
 msgstr "Hiba történt néhány tárolóeszköz törlésekor."
 
-#: virtManager/delete.py:227
+#: virtManager/delete.py:228
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "'%s' elérési útvonal törlése"
 
-#: virtManager/delete.py:284
+#: virtManager/delete.py:291
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Hiba a törlés párbeszédablak indításakor: %s"
 
-#: virtManager/delete.py:290
+#: virtManager/delete.py:297
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr ""
 
-#: virtManager/delete.py:294
+#: virtManager/delete.py:302
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:298
+#: virtManager/delete.py:307
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "'%s' virtuális gép törlése"
 
-#: virtManager/delete.py:340
+#: virtManager/delete.py:350
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Hiba az eszköz eltávolításakor: %s"
 
-#: virtManager/delete.py:354
+#: virtManager/delete.py:364
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 "Ez a változás a vendég rendszer leállítását követően fog érvényre jutni."
 
-#: virtManager/delete.py:357
+#: virtManager/delete.py:367
 msgid "Storage will not be deleted."
 msgstr ""
 
-#: virtManager/delete.py:360
+#: virtManager/delete.py:370
 msgid "Device could not be removed from the running machine"
 msgstr "Eszköz nem távolítható el futó gépből"
 
-#: virtManager/delete.py:370
+#: virtManager/delete.py:382
 msgid "Remove Disk Device"
 msgstr ""
 
-#: virtManager/delete.py:373
+#: virtManager/delete.py:385
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr ""
 
-#: virtManager/delete.py:378
+#: virtManager/delete.py:390
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 
-#: virtManager/delete.py:381
+#: virtManager/delete.py:394
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr ""
 
-#: virtManager/delete.py:506
+#: virtManager/delete.py:526
 msgid "Target"
 msgstr "Cél"
 
-#: virtManager/delete.py:508
+#: virtManager/delete.py:528
 msgid "Storage Path"
 msgstr "Tároló elérési útvonal"
 
-#: virtManager/delete.py:567
+#: virtManager/delete.py:589
 #, fuzzy
 #| msgid "Cannot delete iscsi share."
 msgid "Cannot delete iSCSI share."
 msgstr "Nem törölhető iscsi megosztás."
 
-#: virtManager/delete.py:569
+#: virtManager/delete.py:591
 msgid "Cannot delete SCSI device."
 msgstr ""
 
-#: virtManager/delete.py:572
+#: virtManager/delete.py:594
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Nem lehet törölni a nem menedzselt távoli tárolót."
 
-#: virtManager/delete.py:574
+#: virtManager/delete.py:596
 msgid "Path does not exist."
 msgstr "Az útvonal nem létezik."
 
-#: virtManager/delete.py:576
+#: virtManager/delete.py:598
 msgid "No write access to parent directory."
 msgstr "Nincs írási jogosultság a szülőkönyvtárhoz."
 
-#: virtManager/delete.py:578
+#: virtManager/delete.py:600
 msgid "Cannot delete unmanaged block device."
 msgstr "Nem lehet törölni a nem menedzselt távoli blokk eszközt."
 
-#: virtManager/delete.py:589
+#: virtManager/delete.py:611
 msgid "Storage is read-only."
 msgstr "A tároló csak olvasható."
 
-#: virtManager/delete.py:591
+#: virtManager/delete.py:613
 msgid "No write access to path."
 msgstr "Nincs írási jogosultság az elérési úthoz."
 
-#: virtManager/delete.py:594
+#: virtManager/delete.py:616
 msgid "Storage is marked as shareable."
 msgstr "A tároló megoszthatóként jelölt."
 
-#: virtManager/delete.py:597
+#: virtManager/delete.py:619
 msgid "Storage is a media device."
 msgstr ""
 
-#: virtManager/delete.py:606
+#: virtManager/delete.py:627
 #, fuzzy
 #| msgid ""
 #| "Storage is in use by the following virtual machines:\n"
@@ -3321,68 +3329,68 @@ msgstr ""
 "A tárolót a következő virtuális gépek használják:\n"
 "- %s"
 
-#: virtManager/delete.py:611
+#: virtManager/delete.py:632
 msgid "Failed to check disk usage conflict."
 msgstr ""
 
-#: virtManager/details/console.py:153
+#: virtManager/details/console.py:155
 #, fuzzy
 #| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
 msgstr "Teljes képernyő elhagyása"
 
-#: virtManager/details/console.py:155
+#: virtManager/details/console.py:157
 msgid "Leave fullscreen"
 msgstr "Teljes képernyő elhagyása"
 
-#: virtManager/details/console.py:164
+#: virtManager/details/console.py:165
 msgid "Send key combination"
 msgstr "Billentyűkombináció küldése"
 
-#: virtManager/details/console.py:195
+#: virtManager/details/console.py:196
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "A(z) „%s” típusú grafikus konzol nem jeleníthető meg"
 
-#: virtManager/details/console.py:223
+#: virtManager/details/console.py:224
 #, python-format
 msgid "Text Console %d"
 msgstr ""
 
-#: virtManager/details/console.py:225
+#: virtManager/details/console.py:226
 #, python-format
 msgid "Serial %d"
 msgstr ""
 
-#: virtManager/details/console.py:231
+#: virtManager/details/console.py:232
 msgid "No text console available"
 msgstr "Nem érhető el szöveges konzol"
 
-#: virtManager/details/console.py:244
+#: virtManager/details/console.py:246
 msgid "Graphical Console"
 msgstr "Grafikus konzol"
 
-#: virtManager/details/console.py:254
+#: virtManager/details/console.py:258
 msgid "virt-manager does not support more than one graphical console"
 msgstr ""
 
-#: virtManager/details/console.py:260
+#: virtManager/details/console.py:263
 msgid "Graphical console not configured for guest"
 msgstr "Nincs grafikus konzol beállítva a vendéghez"
 
-#: virtManager/details/console.py:547
+#: virtManager/details/console.py:540
 msgid "Guest has crashed."
 msgstr ""
 
-#: virtManager/details/console.py:549
+#: virtManager/details/console.py:542
 msgid "Guest is not running."
 msgstr ""
 
-#: virtManager/details/console.py:666
+#: virtManager/details/console.py:651
 msgid "Connecting to graphical console for guest"
 msgstr "Kapcsolódás a vendég grafikus konzoljához"
 
-#: virtManager/details/console.py:689
+#: virtManager/details/console.py:671
 #, fuzzy, python-format
 #| msgid "Error connecting to graphical console"
 msgid ""
@@ -3390,479 +3398,485 @@ msgid ""
 "%s"
 msgstr "Hiba történt a grafikus konzolhoz kapcsolódás során"
 
-#: virtManager/details/console.py:743
+#: virtManager/details/console.py:724
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr ""
 
-#: virtManager/details/console.py:765
+#: virtManager/details/console.py:746
 msgid "USB redirection error"
 msgstr "USB átirányítási hiba"
 
-#: virtManager/details/console.py:774
+#: virtManager/details/console.py:755
 msgid "Viewer was disconnected."
 msgstr ""
 
-#: virtManager/details/console.py:781
+#: virtManager/details/console.py:762
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr ""
 
-#: virtManager/details/console.py:794
+#: virtManager/details/console.py:775
 msgid "Viewer is disconnecting."
 msgstr ""
 
-#: virtManager/details/console.py:940
+#: virtManager/details/console.py:914
 msgid "Viewer window closed."
 msgstr ""
 
-#: virtManager/details/console.py:944
+#: virtManager/details/console.py:919
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "A mutató elengedéséhez nyomja meg a(z) %s billentyűt."
 
-#: virtManager/details/details.py:161
+#: virtManager/details/details.py:158
 #, fuzzy, python-format
 #| msgid "Floppy device"
 msgid "Floppy %(index)d"
 msgstr "Hajlékonylemezes eszköz"
 
-#: virtManager/details/details.py:167
+#: virtManager/details/details.py:164
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:172
+#: virtManager/details/details.py:169
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s Disk %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:176
+#: virtManager/details/details.py:173
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:184
+#: virtManager/details/details.py:181
 #, python-format
 msgid "NIC %(mac)s"
 msgstr ""
 
-#: virtManager/details/details.py:197
+#: virtManager/details/details.py:194
 #, fuzzy, python-format
 #| msgid "Serial"
 msgid "Serial %(num)d"
 msgstr "Serial"
 
-#: virtManager/details/details.py:201
+#: virtManager/details/details.py:198
 #, fuzzy, python-format
 #| msgid "Parallel"
 msgid "Parallel %(num)d"
 msgstr "Párhuzamos"
 
-#: virtManager/details/details.py:205
+#: virtManager/details/details.py:202
 #, fuzzy, python-format
 #| msgid "Console"
 msgid "Console %(num)d"
 msgstr "Konzol"
 
-#: virtManager/details/details.py:213
+#: virtManager/details/details.py:210
 #, fuzzy, python-format
 #| msgid "Channel"
 msgid "Channel (%(name)s)"
 msgstr "Csatorna"
 
-#: virtManager/details/details.py:214
+#: virtManager/details/details.py:211
 #, fuzzy, python-format
 #| msgid "Channel"
 msgid "Channel %(type)s"
 msgstr "Csatorna"
 
-#: virtManager/details/details.py:218
+#: virtManager/details/details.py:215
 #, python-format
 msgid "Display %s"
 msgstr "%s képernyő"
 
-#: virtManager/details/details.py:220
+#: virtManager/details/details.py:217
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:227
+#: virtManager/details/details.py:224
 #, python-format
 msgid "Sound %s"
 msgstr ""
 
-#: virtManager/details/details.py:229
+#: virtManager/details/details.py:226
 #, python-format
 msgid "Video %s"
 msgstr "Videó %s"
 
-#: virtManager/details/details.py:231
+#: virtManager/details/details.py:228
 #, fuzzy, python-format
 #| msgid "Filesystem %s"
 msgid "Filesystem %(path)s"
 msgstr "Fájlrendszer %s"
 
-#: virtManager/details/details.py:235
+#: virtManager/details/details.py:232
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr ""
 
-#: virtManager/details/details.py:239
+#: virtManager/details/details.py:236
 #, python-format
 msgid "Controller %(controller)s"
 msgstr ""
 
-#: virtManager/details/details.py:244
+#: virtManager/details/details.py:241
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "RNG %(device)s"
 msgstr "CDROM eszköz"
 
-#: virtManager/details/details.py:248
+#: virtManager/details/details.py:245
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "TPM %(device)s"
 msgstr "CDROM eszköz"
 
-#: virtManager/details/details.py:249
+#: virtManager/details/details.py:246
 #, python-format
 msgid "TPM v%(version)s"
 msgstr ""
 
-#: virtManager/details/details.py:518
+#: virtManager/details/details.py:496
 msgid "_Add Hardware"
 msgstr "_Hardver hozzáadása"
 
-#: virtManager/details/details.py:524
+#: virtManager/details/details.py:504
 msgid "_Remove Hardware"
 msgstr "Ha_rdver eltávolítása"
 
-#: virtManager/details/details.py:643 virtManager/details/details.py:1756
+#: virtManager/details/details.py:624 virtManager/details/details.py:1715
 msgid "UEFI"
 msgstr ""
 
-#: virtManager/details/details.py:653
+#: virtManager/details/details.py:632
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt vagy a felügyelő nem támogatja az UEFI-t."
 
-#: virtManager/details/details.py:656
+#: virtManager/details/details.py:635
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: virtManager/details/details.py:706
+#: virtManager/details/details.py:681
 msgid "Version"
 msgstr "Verzió"
 
-#: virtManager/details/details.py:768
+#: virtManager/details/details.py:743
 msgid "Application Default"
 msgstr "Alkalmazás alapértelmezett"
 
-#: virtManager/details/details.py:770
+#: virtManager/details/details.py:746
 msgid "Hypervisor Default"
 msgstr "Felügyelő alapértelmezett"
 
-#: virtManager/details/details.py:772
+#: virtManager/details/details.py:749
 msgid "Clear CPU configuration"
 msgstr "CPU konfiguráció törlése"
 
-#: virtManager/details/details.py:790
+#: virtManager/details/details.py:767
 msgid "Disk bus:"
 msgstr ""
 
-#: virtManager/details/details.py:1000
+#: virtManager/details/details.py:973
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Hiba a hardver párbeszédablak indításakor: %s"
 
-#: virtManager/details/details.py:1006
+#: virtManager/details/details.py:979
 msgid "Are you sure you want to remove this device?"
 msgstr "Biztos benne, hogy el kívánja távolítani ezt az eszközt?"
 
-#: virtManager/details/details.py:1253 virtManager/details/details.py:1748
-#: virtManager/details/details.py:1767 virtManager/details/details.py:1969
-#: virtManager/lib/libvirtenummap.py:86
+#: virtManager/details/details.py:1230 virtManager/details/details.py:1707
+#: virtManager/details/details.py:1724 virtManager/details/details.py:1925
+#: virtManager/lib/libvirtenummap.py:82
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: virtManager/details/details.py:1335
+#: virtManager/details/details.py:1311
 #, python-format
 msgid "Error applying changes: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1464
+#: virtManager/details/details.py:1438
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Hiba az automatikus indítás cseréjekor: %s"
 
-#: virtManager/details/details.py:1481
+#: virtManager/details/details.py:1454
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 "Nem lehet beállítani az initrd-t a kernel elérési útvonalának megadása nélkül"
 
-#: virtManager/details/details.py:1484
+#: virtManager/details/details.py:1457
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 "Nem lehet beállítani a kernel paramétereket a kernel elérési útvonalának "
 "megadása nélkül"
 
-#: virtManager/details/details.py:1491
+#: virtManager/details/details.py:1464
 msgid "An init path must be specified"
 msgstr "Meg kell adni egy init elérési útvonalat"
 
-#: virtManager/details/details.py:1504 virtManager/device/addstorage.py:275
+#: virtManager/details/details.py:1476 virtManager/device/addstorage.py:271
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "A %s lemezt %s vendég rendszer már használja."
 
-#: virtManager/details/details.py:1508 virtManager/device/addstorage.py:279
+#: virtManager/details/details.py:1480 virtManager/device/addstorage.py:275
 msgid "Do you really want to use the disk?"
 msgstr "Biztos, hogy használni akarja a lemezt?"
 
-#: virtManager/details/details.py:1670
+#: virtManager/details/details.py:1629
 msgid "Remove this device from the virtual machine"
 msgstr "A megadott eszköz eltávolítása a virtuális gépből"
 
-#: virtManager/details/details.py:1727
+#: virtManager/details/details.py:1686
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Hiba a harver oldal frissítésekor: %s"
 
-#: virtManager/details/details.py:1822
+#: virtManager/details/details.py:1776
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: virtManager/details/details.py:1834
+#: virtManager/details/details.py:1790
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr ""
 
-#: virtManager/details/details.py:1835
+#: virtManager/details/details.py:1790
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr ""
 
-#: virtManager/details/details.py:1838
+#: virtManager/details/details.py:1796
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr ""
 
-#: virtManager/details/details.py:1839
+#: virtManager/details/details.py:1796
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr ""
 
-#: virtManager/details/details.py:1841 virtManager/details/details.py:1842
-#: virtManager/details/details.py:1843 virtManager/details/details.py:1844
-#: virtManager/hostnets.py:206 virtManager/hostnets.py:225
+#: virtManager/details/details.py:1799 virtManager/details/details.py:1800
+#: virtManager/details/details.py:1801 virtManager/details/details.py:1802
+#: virtManager/hostnets.py:203 virtManager/hostnets.py:222
 msgid "Disabled"
 msgstr "Letiltva"
 
-#: virtManager/details/details.py:1852
+#: virtManager/details/details.py:1810
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: virtManager/details/details.py:2018
+#: virtManager/details/details.py:1973
 msgid "Absolute Movement"
 msgstr "Abszolút mozgatási mód"
 
-#: virtManager/details/details.py:2020
+#: virtManager/details/details.py:1975
 msgid "Relative Movement"
 msgstr "Relatív mozgatási mód"
 
-#: virtManager/details/details.py:2029 virtManager/details/details.py:2195
-#: virtManager/details/details.py:2198
+#: virtManager/details/details.py:1984 virtManager/details/details.py:2141
+#: virtManager/details/details.py:2143
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: virtManager/details/details.py:2033
+#: virtManager/details/details.py:1988
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s kiszolgáló"
 
-#: virtManager/details/details.py:2084
+#: virtManager/details/details.py:2036
 msgid "Serial Device"
 msgstr "Soros eszköz"
 
-#: virtManager/details/details.py:2086
+#: virtManager/details/details.py:2038
 msgid "Parallel Device"
 msgstr "Párhuzamos eszköz"
 
-#: virtManager/details/details.py:2088
+#: virtManager/details/details.py:2040
 msgid "Console Device"
 msgstr "Konzol eszköz"
 
-#: virtManager/details/details.py:2090
+#: virtManager/details/details.py:2042
 msgid "Channel Device"
 msgstr "Csatorna eszköz"
 
-#: virtManager/details/details.py:2100
+#: virtManager/details/details.py:2051
 msgid "Primary Console"
 msgstr "Elsődleges konzol"
 
-#: virtManager/details/details.py:2136 virtManager/preferences.py:123
+#: virtManager/details/details.py:2085 virtManager/preferences.py:121
 msgid "Off"
 msgstr "Ki"
 
-#: virtManager/details/details.py:2136 virtManager/preferences.py:124
+#: virtManager/details/details.py:2085 virtManager/preferences.py:122
 msgid "On"
 msgstr "Be"
 
-#: virtManager/details/details.py:2162
+#: virtManager/details/details.py:2110
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: virtManager/details/details.py:2179
+#: virtManager/details/details.py:2126
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2205
+#: virtManager/details/details.py:2150
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr ""
 
-#: virtManager/details/details.py:2211 virtManager/details/details.py:2221
+#: virtManager/details/details.py:2156 virtManager/details/details.py:2165
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2311
+#: virtManager/details/details.py:2257
 msgid "Hard Disk"
 msgstr ""
 
-#: virtManager/details/details.py:2312
+#: virtManager/details/details.py:2258
 msgid "CDROM"
 msgstr ""
 
-#: virtManager/details/details.py:2313
+#: virtManager/details/details.py:2259
 msgid "Network (PXE)"
 msgstr ""
 
-#: virtManager/details/details.py:2328
+#: virtManager/details/details.py:2274
 msgid "No bootable devices"
 msgstr "Nincsenek indítható eszközök"
 
-#: virtManager/details/details.py:2375
+#: virtManager/details/details.py:2320
 msgid "Overview"
 msgstr "Áttekintés"
 
-#: virtManager/details/details.py:2376
+#: virtManager/details/details.py:2321
 msgid "OS information"
 msgstr "OS információ"
 
-#: virtManager/details/details.py:2378
+#: virtManager/details/details.py:2323
 msgid "Performance"
 msgstr ""
 
-#: virtManager/details/details.py:2380
+#: virtManager/details/details.py:2324
 msgid "CPUs"
 msgstr ""
 
-#: virtManager/details/details.py:2382
+#: virtManager/details/details.py:2326
 msgid "Boot Options"
 msgstr ""
 
-#: virtManager/details/serialcon.py:183
+#: virtManager/details/serialcon.py:189
 #, python-format
 msgid "Console for device type '%s' is not supported"
 msgstr ""
 
-#: virtManager/details/serialcon.py:249
+#: virtManager/details/serialcon.py:251
 msgid "_Copy"
 msgstr ""
 
-#: virtManager/details/serialcon.py:253
+#: virtManager/details/serialcon.py:255
 msgid "_Paste"
 msgstr ""
 
-#: virtManager/details/serialcon.py:346
+#: virtManager/details/serialcon.py:342
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Hiba a szöveges konzolhoz kapcsolódás során: %s"
 
-#: virtManager/details/snapshots.py:122
+#: virtManager/details/snapshots.py:125
 msgid "external snapshots not supported with this libvirt connection"
 msgstr ""
 
-#: virtManager/details/snapshots.py:275
+#: virtManager/details/snapshots.py:291
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr "Hiba a pillanatfelvétel létrehozásakor: %s"
 
-#: virtManager/details/snapshots.py:297
+#: virtManager/details/snapshots.py:312
 msgid "Snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:300
+#: virtManager/details/snapshots.py:315
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr "Hiba a pillanatfelvétel ellenőrzésekor: %s"
 
-#: virtManager/details/snapshots.py:340 virtManager/lib/libvirtenummap.py:113
+#: virtManager/details/snapshots.py:357 virtManager/lib/libvirtenummap.py:110
 msgid "Creating snapshot"
 msgstr "Pillanatfelvétel készítése"
 
-#: virtManager/details/snapshots.py:341
+#: virtManager/details/snapshots.py:358
 msgid "Creating virtual machine snapshot"
 msgstr "Virtuális gép pillanatfelvétel készítése"
 
-#: virtManager/details/snapshots.py:461
+#: virtManager/details/snapshots.py:388
+msgid ""
+"Mixing external and internal snapshots for the same VM is not recommended. "
+"Are you sure you want to continue?"
+msgstr ""
+
+#: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
 msgstr "Pillanatfelvétel _indítása"
 
-#: virtManager/details/snapshots.py:466
+#: virtManager/details/snapshots.py:508
 msgid "_Delete snapshot"
 msgstr "Pillanatfelvétel _törlése"
 
-#: virtManager/details/snapshots.py:519
+#: virtManager/details/snapshots.py:561
 #, python-format
 msgid "Error refreshing snapshot list: %s"
 msgstr "Hiba a pillanatfelvétel lista frissítésekor: %s"
 
-#: virtManager/details/snapshots.py:532
+#: virtManager/details/snapshots.py:573
 #, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s (External)</span>"
 msgstr ""
 
-#: virtManager/details/snapshots.py:537
+#: virtManager/details/snapshots.py:577
 #, python-format
 msgid ""
 "%(vm)s\n"
 "<span size='small'>VM State: %(state)s</span>"
 msgstr ""
 
-#: virtManager/details/snapshots.py:599
+#: virtManager/details/snapshots.py:634
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
 msgstr ""
 
-#: virtManager/details/snapshots.py:619
+#: virtManager/details/snapshots.py:650
 msgid "External disk and memory"
 msgstr "Külső lemez és memória"
 
-#: virtManager/details/snapshots.py:621
+#: virtManager/details/snapshots.py:652
 msgid "External memory only"
 msgstr "Csak külső memória"
 
-#: virtManager/details/snapshots.py:623
+#: virtManager/details/snapshots.py:654
 msgid "External disk only"
 msgstr "Csak külső lemez"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:743
 msgid "Saved memory state will not be part of the snapshot"
 msgstr ""
 
-#: virtManager/details/snapshots.py:715
+#: virtManager/details/snapshots.py:745
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -3870,25 +3884,25 @@ msgid ""
 "snapshot either the running or shut down system instead."
 msgstr ""
 
-#: virtManager/details/snapshots.py:736
+#: virtManager/details/snapshots.py:769
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
 "since the last snapshot was created will be discarded."
 msgstr ""
 
-#: virtManager/details/snapshots.py:740
+#: virtManager/details/snapshots.py:775
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
 "configuration changes since the last snapshot was created will be discarded."
 msgstr ""
 
-#: virtManager/details/snapshots.py:751
+#: virtManager/details/snapshots.py:787
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 
-#: virtManager/details/snapshots.py:752
+#: virtManager/details/snapshots.py:789
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -3898,62 +3912,62 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 
-#: virtManager/details/snapshots.py:766
+#: virtManager/details/snapshots.py:807
 msgid "Running snapshot"
 msgstr "Pillanatfelvétel futtatása"
 
-#: virtManager/details/snapshots.py:767
+#: virtManager/details/snapshots.py:808
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "'%s' pillanatfelvétel futtatása"
 
-#: virtManager/details/snapshots.py:768
+#: virtManager/details/snapshots.py:809
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Hiba a '%s' pillanatfelvételkor"
 
-#: virtManager/details/snapshots.py:777
+#: virtManager/details/snapshots.py:819
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr "Biztosan törölni kívánja a kiválasztott pillanatfelvételt?"
 
-#: virtManager/details/snapshots.py:785
+#: virtManager/details/snapshots.py:830
 msgid "Deleting snapshot"
 msgstr "Pillanatfelvétel törlése"
 
-#: virtManager/details/snapshots.py:786
+#: virtManager/details/snapshots.py:831
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "'%s' pillanatfelvétel törlése"
 
-#: virtManager/details/snapshots.py:787
+#: virtManager/details/snapshots.py:832
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Hiba '%s' pillanatfelvétel törlésekor"
 
-#: virtManager/details/snapshots.py:795
+#: virtManager/details/snapshots.py:840
 msgid "No snapshot selected."
 msgstr "Nincs kiválasztott pillanatfelvétel"
 
-#: virtManager/details/snapshots.py:798
+#: virtManager/details/snapshots.py:843
 msgid "Multiple snapshots selected."
 msgstr "Több pillanatfelvétel lett kiválasztva."
 
-#: virtManager/details/snapshots.py:808
+#: virtManager/details/snapshots.py:853
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Hiba a pillanatfelvétel kiválasztásakor: %s"
 
-#: virtManager/details/sshtunnels.py:64
+#: virtManager/details/sshtunnels.py:66
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
 msgstr ""
 
-#: virtManager/details/sshtunnels.py:68
+#: virtManager/details/sshtunnels.py:71
 msgid "Guest is configured for TLS only which does not work over SSH."
 msgstr ""
 
-#: virtManager/details/sshtunnels.py:75
+#: virtManager/details/sshtunnels.py:81
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
@@ -3961,96 +3975,96 @@ msgid ""
 "listen address."
 msgstr ""
 
-#: virtManager/details/viewers.py:384
+#: virtManager/details/viewers.py:389
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
 "The credential type %s is not supported"
 msgstr ""
 
-#: virtManager/details/viewers.py:438
+#: virtManager/details/viewers.py:446
 msgid "GTK-VNC viewer is too old"
 msgstr ""
 
-#: virtManager/details/viewers.py:589
+#: virtManager/details/viewers.py:594
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr ""
 
-#: virtManager/details/viewers.py:740
+#: virtManager/details/viewers.py:741
 msgid "Guest agent is not available."
 msgstr "A vendég ügynök nem érhető el."
 
-#: virtManager/device/addstorage.py:91
+#: virtManager/device/addstorage.py:92
 #, python-format
 msgid "%s available in the default location"
 msgstr ""
 
-#: virtManager/device/addstorage.py:132
+#: virtManager/device/addstorage.py:128
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 "Az emulátor nem rendelkezik keresési jogosultsággal az elérési úton: %s"
 
-#: virtManager/device/addstorage.py:134
+#: virtManager/device/addstorage.py:129
 msgid "Do you want to correct this now?"
 msgstr "Kijavítja most?"
 
-#: virtManager/device/addstorage.py:135 virtManager/device/addstorage.py:159
+#: virtManager/device/addstorage.py:130 virtManager/device/addstorage.py:154
 msgid "Don't ask about these directories again."
 msgstr "Ne kérdezzen újra ezeknél a könyvtáraknál."
 
-#: virtManager/device/addstorage.py:148
+#: virtManager/device/addstorage.py:144
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr "Hiba történt az alábbi könyvtárak jogosultságainak módosítása során:"
 
-#: virtManager/device/addstorage.py:267
+#: virtManager/device/addstorage.py:263
 msgid "A storage path must be specified."
 msgstr "Meg kell adnia a tároló elérési útvonalát."
 
-#: virtManager/device/fsdetails.py:145
+#: virtManager/device/fsdetails.py:140
 msgid "Te_mplate:"
 msgstr "Sablon:"
 
-#: virtManager/device/fsdetails.py:147
+#: virtManager/device/fsdetails.py:142
 msgid "_Source path:"
 msgstr "Forrá_s elérésí útja:"
 
-#: virtManager/device/fsdetails.py:163
+#: virtManager/device/fsdetails.py:154
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:87
+#: virtManager/device/gfxdetails.py:89
 msgid "Spice server"
 msgstr "Spice kiszolgáló"
 
-#: virtManager/device/gfxdetails.py:88
+#: virtManager/device/gfxdetails.py:90
 msgid "VNC server"
 msgstr "VNC kiszolgáló"
 
-#: virtManager/device/gfxdetails.py:95
+#: virtManager/device/gfxdetails.py:97
 msgid "Address"
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:104
+#: virtManager/device/gfxdetails.py:106
 msgid "Localhost only"
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:105
+#: virtManager/device/gfxdetails.py:107
 msgid "All interfaces"
 msgstr "Összes csatoló"
 
-#: virtManager/device/gfxdetails.py:112
+#: virtManager/device/gfxdetails.py:114
 msgid "Auto"
 msgstr ""
 
-#: virtManager/device/gfxdetails.py:218
+#: virtManager/device/gfxdetails.py:211
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr ""
 
-#: virtManager/device/mediacombo.py:67
+#: virtManager/device/mediacombo.py:65
 msgid "No media selected"
 msgstr ""
 
@@ -4070,7 +4084,7 @@ msgstr "Felhasználói üzemmódú hálózat"
 msgid "Virtual network"
 msgstr "Virtuális hálózat"
 
-#: virtManager/device/netlist.py:121 virtManager/object/libvirtobject.py:209
+#: virtManager/device/netlist.py:121 virtManager/object/libvirtobject.py:214
 msgid "Inactive"
 msgstr "Inaktív"
 
@@ -4082,17 +4096,23 @@ msgstr ""
 msgid "Macvtap device..."
 msgstr ""
 
-#: virtManager/device/netlist.py:199
+#: virtManager/device/netlist.py:146
+#, fuzzy
+#| msgid "Disk device"
+msgid "vDPA device..."
+msgstr "Lemez eszköz"
+
+#: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
 msgstr "A virtuális hálózat nem aktív."
 
-#: virtManager/device/netlist.py:200
+#: virtManager/device/netlist.py:205
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "A(z) „%s” virtuális hálózat nem aktív. Elindítja most ezt a hálózatot?"
 
-#: virtManager/device/netlist.py:212
+#: virtManager/device/netlist.py:217
 #, fuzzy, python-format
 #| msgid "Could not start virtual network '%s': %s"
 msgid "Could not start virtual network '%(device)s': %(error)s"
@@ -4110,7 +4130,7 @@ msgstr ""
 msgid "SPAPR"
 msgstr ""
 
-#: virtManager/device/tpmdetails.py:71
+#: virtManager/device/tpmdetails.py:72
 msgid "Emulated"
 msgstr "Emulátor"
 
@@ -4118,237 +4138,237 @@ msgstr "Emulátor"
 msgid "CID"
 msgstr ""
 
-#: virtManager/engine.py:124
+#: virtManager/engine.py:120
 msgid "Checking for virtualization packages..."
 msgstr ""
 
-#: virtManager/error.py:140
+#: virtManager/error.py:145
 msgid "Input Error"
 msgstr "Bemenet hiba"
 
-#: virtManager/error.py:141
+#: virtManager/error.py:146
 #, python-format
 msgid "Validation Error: %s"
 msgstr ""
 
-#: virtManager/error.py:181
+#: virtManager/error.py:186
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr ""
 "Nem érvényesített változások vannak. Szeretné most érvényesíteni ezeket?"
 
-#: virtManager/error.py:183
+#: virtManager/error.py:187
 msgid "Don't warn me again."
 msgstr "Ne figyelmeztessen újra."
 
-#: virtManager/error.py:215
+#: virtManager/error.py:212
 msgid "Don't ask me again"
 msgstr "Ne kérdezze meg újra"
 
-#: virtManager/host.py:32
+#: virtManager/host.py:31
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "Hiba a gazda párbeszédablak indításakor: %s"
 
-#: virtManager/host.py:170
+#: virtManager/host.py:165
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s / %(maxmem)s"
 
-#: virtManager/host.py:180
+#: virtManager/host.py:175
 #, python-format
 msgid "%(connection)s - Connection Details"
 msgstr "%(connection)s – Kapcsolat részletei"
 
-#: virtManager/hostnets.py:106
+#: virtManager/hostnets.py:100
 msgid "Networks"
 msgstr ""
 
-#: virtManager/hostnets.py:140
+#: virtManager/hostnets.py:131
 msgid "Libvirt connection does not support virtual network management."
 msgstr "A libvirt kapcsolat nem támogatja a virtuális hálózatkezelést."
 
-#: virtManager/hostnets.py:148 virtManager/hoststorage.py:278
+#: virtManager/hostnets.py:139 virtManager/hoststorage.py:268
 msgid "Connection not active."
 msgstr "A kapcsolat nem aktív."
 
-#: virtManager/hostnets.py:164
+#: virtManager/hostnets.py:155
 msgid "No virtual network selected."
 msgstr "Nincs virtuális hálózat kiválasztva."
 
-#: virtManager/hostnets.py:173
+#: virtManager/hostnets.py:164
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "Hiba a hálózat kiválasztásakor: %s"
 
-#: virtManager/hostnets.py:218 virtManager/object/network.py:166
+#: virtManager/hostnets.py:215 virtManager/object/network.py:161
 msgid "Routed network"
 msgstr "Útválasztott hálózat"
 
-#: virtManager/hostnets.py:220
+#: virtManager/hostnets.py:217
 msgid "Isolated network, internal routing only"
 msgstr "Elkülönített hálózat, kizárólag belső útválasztás"
 
-#: virtManager/hostnets.py:222
+#: virtManager/hostnets.py:219
 msgid "Isolated network, routing disabled"
 msgstr "Elkülönített hálózat, útválasztás letiltva"
 
-#: virtManager/hostnets.py:253 virtManager/hoststorage.py:321
+#: virtManager/hostnets.py:248 virtManager/hoststorage.py:310
 msgid "On Boot"
 msgstr "Indítás alatt"
 
-#: virtManager/hostnets.py:270
+#: virtManager/hostnets.py:265
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Biztos, hogy véglegesen törli a(z) %s hálózatot?"
 
-#: virtManager/hostnets.py:277
+#: virtManager/hostnets.py:272
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "Hiba a(z) „%s” hálózat törlésekor"
 
-#: virtManager/hostnets.py:286
+#: virtManager/hostnets.py:282
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "Hiba a(z) „%s” hálózat indításakor"
 
-#: virtManager/hostnets.py:295
+#: virtManager/hostnets.py:292
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "Hiba a(z) „%s” hálózat leállításakor"
 
-#: virtManager/hostnets.py:304
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Hiba a hálózati varázsló indításakor: %s"
 
-#: virtManager/hostnets.py:328
+#: virtManager/hostnets.py:325
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "Hiba a hálózati beállítások módosításakor: %s"
 
-#: virtManager/hoststorage.py:178
+#: virtManager/hoststorage.py:173
 msgid "Copy Volume Path"
 msgstr "Kötet elérési út másolása"
 
-#: virtManager/hoststorage.py:188
+#: virtManager/hoststorage.py:183
 msgid "Volumes"
 msgstr ""
 
-#: virtManager/hoststorage.py:196
+#: virtManager/hoststorage.py:191
 msgid "Size"
 msgstr "Méret"
 
-#: virtManager/hoststorage.py:205
+#: virtManager/hoststorage.py:200
 msgid "Format"
 msgstr "Formátum"
 
-#: virtManager/hoststorage.py:213
+#: virtManager/hoststorage.py:208
 msgid "Used By"
 msgstr "Használják"
 
-#: virtManager/hoststorage.py:230
+#: virtManager/hoststorage.py:224
 msgid "Storage Pools"
 msgstr ""
 
-#: virtManager/hoststorage.py:271
+#: virtManager/hoststorage.py:260
 msgid "Libvirt connection does not support storage management."
 msgstr "A libvirt kapcsolat nem támogatja a tároló kezelést."
 
-#: virtManager/hoststorage.py:312
+#: virtManager/hoststorage.py:302
 #, python-format
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr ""
 
-#: virtManager/hoststorage.py:332
+#: virtManager/hoststorage.py:321
 msgid "Create new volume"
 msgstr "Új kötet készítése"
 
-#: virtManager/hoststorage.py:339
+#: virtManager/hoststorage.py:326
 msgid "Pool does not support volume creation"
 msgstr "A készlet nem támogatja a kötet létrehozást"
 
-#: virtManager/hoststorage.py:354
+#: virtManager/hoststorage.py:341
 msgid "No storage pool selected."
 msgstr "Tároló készlet nincs kiválaszva."
 
-#: virtManager/hoststorage.py:363
+#: virtManager/hoststorage.py:350
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Hiba a készlet kiválasztásakor: %s"
 
-#: virtManager/hoststorage.py:468
+#: virtManager/hoststorage.py:454
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Hiba a '%s' készlet leállításakor"
 
-#: virtManager/hoststorage.py:477
+#: virtManager/hoststorage.py:464
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Hiba a '%s' készlet indításakor"
 
-#: virtManager/hoststorage.py:487
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Hiba a készlet varázsló indításakor: %s"
 
-#: virtManager/hoststorage.py:494
+#: virtManager/hoststorage.py:483
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Biztos benne, hogy véglegesen törölni kívánja a %s adatgyűjtést?"
 
-#: virtManager/hoststorage.py:501
+#: virtManager/hoststorage.py:490
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Hiba a '%s' készlet törlésekor"
 
-#: virtManager/hoststorage.py:512
+#: virtManager/hoststorage.py:502
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Hiba a '%s' készlet frissítésekor"
 
-#: virtManager/hoststorage.py:546
+#: virtManager/hoststorage.py:535
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Hiba a kötet varázsló indításakor: %s"
 
-#: virtManager/hoststorage.py:554
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Biztos benne, hogy véglegesen törölni kívánja a %s kötetet?"
 
-#: virtManager/hoststorage.py:567
+#: virtManager/hoststorage.py:559
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr ""
 
-#: virtManager/hoststorage.py:592
+#: virtManager/hoststorage.py:584
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Hiba a készlet tulajdonságainak módosításakor: %s"
 
-#: virtManager/lib/connectauth.py:49
+#: virtManager/lib/connectauth.py:54
 msgid "Authentication required"
 msgstr ""
 
-#: virtManager/lib/connectauth.py:153
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:159
+#: virtManager/lib/connectauth.py:165
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:163
+#: virtManager/lib/connectauth.py:170
 #, fuzzy
 #| msgid "Verify that the 'libvirtd' daemon is running."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr "Ellenőrizze, hogy fut-e a „libvirtd” szolgáltatás."
 
-#: virtManager/lib/connectauth.py:167
+#: virtManager/lib/connectauth.py:174
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4358,36 +4378,36 @@ msgstr ""
 " - A Xen kernel elindult-e\n"
 " - A Xen szolgáltatás fut-e"
 
-#: virtManager/lib/connectauth.py:173
+#: virtManager/lib/connectauth.py:182
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:179
+#: virtManager/lib/connectauth.py:189
 #, fuzzy
 #| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "Ellenőrizze, hogy fut-e a „libvirtd” szolgáltatás."
 
-#: virtManager/lib/connectauth.py:182
+#: virtManager/lib/connectauth.py:192
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:194
+#: virtManager/lib/connectauth.py:204
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Virtuális gép vezérlőpult kapcsolódási hiba"
 
-#: virtManager/lib/connectauth.py:208
+#: virtManager/lib/connectauth.py:219
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
 
-#: virtManager/lib/connectauth.py:215
+#: virtManager/lib/connectauth.py:227
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4397,169 +4417,169 @@ msgstr ""
 msgid "Error launching libguestfs appliance: %s"
 msgstr ""
 
-#: virtManager/lib/inspection.py:86
+#: virtManager/lib/inspection.py:85
 msgid "Inspection found no operating systems."
 msgstr ""
 
-#: virtManager/lib/inspection.py:316
+#: virtManager/lib/inspection.py:319
 #, python-format
 msgid "Error inspection VM: %s"
 msgstr ""
 
-#: virtManager/lib/inspection.py:327
+#: virtManager/lib/inspection.py:329
 msgid "Cannot inspect VM on remote connection"
 msgstr ""
 
-#: virtManager/lib/libvirtenummap.py:69
+#: virtManager/lib/libvirtenummap.py:66
 msgid "Running"
 msgstr "Fut"
 
-#: virtManager/lib/libvirtenummap.py:71
+#: virtManager/lib/libvirtenummap.py:68
 msgid "Paused"
 msgstr "Felfüggesztve"
 
-#: virtManager/lib/libvirtenummap.py:73
+#: virtManager/lib/libvirtenummap.py:70
 msgid "Shutting Down"
 msgstr "Leállítás"
 
-#: virtManager/lib/libvirtenummap.py:76 virtManager/lib/libvirtenummap.py:124
+#: virtManager/lib/libvirtenummap.py:73 virtManager/lib/libvirtenummap.py:121
 msgid "Saved"
 msgstr "Mentve"
 
-#: virtManager/lib/libvirtenummap.py:78
+#: virtManager/lib/libvirtenummap.py:75
 msgid "Shutoff"
 msgstr "Kikapcsolva"
 
-#: virtManager/lib/libvirtenummap.py:80 virtManager/lib/libvirtenummap.py:102
-#: virtManager/lib/libvirtenummap.py:114 virtManager/lib/libvirtenummap.py:122
+#: virtManager/lib/libvirtenummap.py:77 virtManager/lib/libvirtenummap.py:99
+#: virtManager/lib/libvirtenummap.py:111 virtManager/lib/libvirtenummap.py:119
 msgid "Crashed"
 msgstr "Összeomolva"
 
-#: virtManager/lib/libvirtenummap.py:82
+#: virtManager/lib/libvirtenummap.py:79
 msgid "Suspended"
 msgstr "Felfüggesztve"
 
-#: virtManager/lib/libvirtenummap.py:94
+#: virtManager/lib/libvirtenummap.py:91
 msgid "Booted"
 msgstr "Elindítva"
 
-#: virtManager/lib/libvirtenummap.py:95 virtManager/lib/libvirtenummap.py:123
+#: virtManager/lib/libvirtenummap.py:92 virtManager/lib/libvirtenummap.py:120
 msgid "Migrated"
 msgstr "Migrálva"
 
-#: virtManager/lib/libvirtenummap.py:96
+#: virtManager/lib/libvirtenummap.py:93
 msgid "Restored"
 msgstr "Helyreállítva"
 
-#: virtManager/lib/libvirtenummap.py:97 virtManager/lib/libvirtenummap.py:111
-#: virtManager/lib/libvirtenummap.py:126
+#: virtManager/lib/libvirtenummap.py:94 virtManager/lib/libvirtenummap.py:108
+#: virtManager/lib/libvirtenummap.py:123
 msgid "From snapshot"
 msgstr "Pillanatfelvételből"
 
-#: virtManager/lib/libvirtenummap.py:98
+#: virtManager/lib/libvirtenummap.py:95
 msgid "Unpaused"
 msgstr "Folytatva"
 
-#: virtManager/lib/libvirtenummap.py:99
+#: virtManager/lib/libvirtenummap.py:96
 msgid "Migration canceled"
 msgstr "Migrálás megszakítva"
 
-#: virtManager/lib/libvirtenummap.py:100
+#: virtManager/lib/libvirtenummap.py:97
 msgid "Save canceled"
 msgstr "Mentés megszakítva"
 
-#: virtManager/lib/libvirtenummap.py:101
+#: virtManager/lib/libvirtenummap.py:98
 msgid "Event wakeup"
 msgstr ""
 
-#: virtManager/lib/libvirtenummap.py:105 virtManager/lib/libvirtenummap.py:117
+#: virtManager/lib/libvirtenummap.py:102 virtManager/lib/libvirtenummap.py:114
 msgid "User"
 msgstr "Felhasználó"
 
-#: virtManager/lib/libvirtenummap.py:106
+#: virtManager/lib/libvirtenummap.py:103
 msgid "Migrating"
 msgstr "Migrálás"
 
-#: virtManager/lib/libvirtenummap.py:107
+#: virtManager/lib/libvirtenummap.py:104
 msgid "Saving"
 msgstr "Mentés"
 
-#: virtManager/lib/libvirtenummap.py:108
+#: virtManager/lib/libvirtenummap.py:105
 msgid "Dumping"
 msgstr ""
 
-#: virtManager/lib/libvirtenummap.py:109
+#: virtManager/lib/libvirtenummap.py:106
 msgid "I/O error"
 msgstr "I/O hiba"
 
-#: virtManager/lib/libvirtenummap.py:112
+#: virtManager/lib/libvirtenummap.py:109
 msgid "Shutting down"
 msgstr "Leállítás"
 
-#: virtManager/lib/libvirtenummap.py:120
+#: virtManager/lib/libvirtenummap.py:117
 msgid "Shut Down"
 msgstr "Leállítás"
 
-#: virtManager/lib/libvirtenummap.py:121
+#: virtManager/lib/libvirtenummap.py:118
 msgid "Destroyed"
 msgstr ""
 
-#: virtManager/lib/libvirtenummap.py:125
+#: virtManager/lib/libvirtenummap.py:122
 msgid "Failed"
 msgstr ""
 
-#: virtManager/lib/libvirtenummap.py:129
+#: virtManager/lib/libvirtenummap.py:126
 msgid "Panicked"
 msgstr ""
 
-#: virtManager/manager.py:87
+#: virtManager/manager.py:83
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "Hiba a vezérlő indításakor: %s"
 
-#: virtManager/manager.py:292
+#: virtManager/manager.py:289
 msgid "_New"
 msgstr ""
 
-#: virtManager/manager.py:293
+#: virtManager/manager.py:290
 #, fuzzy
 #| msgid "Co_nnect"
 msgid "_Connect"
 msgstr "_Kapcsolódás"
 
-#: virtManager/manager.py:294
+#: virtManager/manager.py:291
 #, fuzzy
 #| msgid "Disconnected"
 msgid "Dis_connect"
 msgstr "Leválasztva"
 
-#: virtManager/manager.py:296
+#: virtManager/manager.py:293
 #, fuzzy
 #| msgid "_Delete"
 msgid "De_lete"
 msgstr "_Törlés"
 
-#: virtManager/manager.py:375
+#: virtManager/manager.py:370
 msgid "CPU usage"
 msgstr "CPU-használat"
 
-#: virtManager/manager.py:376
+#: virtManager/manager.py:371
 msgid "Host CPU usage"
 msgstr "Gazda CPU használata"
 
-#: virtManager/manager.py:377
+#: virtManager/manager.py:372
 msgid "Memory usage"
 msgstr "Memóriahasználat"
 
-#: virtManager/manager.py:378
+#: virtManager/manager.py:373
 msgid "Disk I/O"
 msgstr "Lemez I/O"
 
-#: virtManager/manager.py:379
+#: virtManager/manager.py:374
 msgid "Network I/O"
 msgstr "Hálózati I/O"
 
-#: virtManager/manager.py:494
+#: virtManager/manager.py:493
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -4574,151 +4594,151 @@ msgstr ""
 "\n"
 "Biztos benne?"
 
-#: virtManager/manager.py:571
+#: virtManager/manager.py:570
 #, fuzzy, python-format
 #| msgid "Double click to connect"
 msgid "%(uri)s (Double click to connect)"
 msgstr "Kattintson duplán a kapcsolódáshoz"
 
-#: virtManager/manager.py:578
+#: virtManager/manager.py:577
 #, fuzzy, python-format
 #| msgid "Connection not active."
 msgid "%(connection)s - Not Connected"
 msgstr "A kapcsolat nem aktív."
 
-#: virtManager/manager.py:580
+#: virtManager/manager.py:579
 #, fuzzy, python-format
 #| msgid "Connecting..."
 msgid "%(connection)s - Connecting..."
 msgstr "Kapcsolódás…"
 
-#: virtManager/manager.py:756 virtManager/vmwindow.py:379
+#: virtManager/manager.py:750 virtManager/vmwindow.py:368
 msgid "_Restore"
 msgstr "_Helyreállítás"
 
-#: virtManager/manager.py:793 virtManager/vmwindow.py:420
+#: virtManager/manager.py:787 virtManager/vmwindow.py:408
 msgid "Resume the virtual machine"
 msgstr ""
 
-#: virtManager/manager.py:909
+#: virtManager/manager.py:898
 msgid "Disabled in preferences dialog."
 msgstr "Letiltva a beállítások párbeszédablakban."
 
-#: virtManager/migrate.py:38
+#: virtManager/migrate.py:35
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Hiba a migrálás párbeszédablak indításakor: %s"
 
-#: virtManager/migrate.py:144
+#: virtManager/migrate.py:139
 msgid "Direct"
 msgstr "Közvetlen"
 
-#: virtManager/migrate.py:145
+#: virtManager/migrate.py:140
 msgid "Tunnelled"
 msgstr "Alagutazott"
 
-#: virtManager/migrate.py:161
+#: virtManager/migrate.py:159
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
 msgstr ""
 
-#: virtManager/migrate.py:222
+#: virtManager/migrate.py:219
 msgid "A valid destination connection must be selected."
 msgstr "Érvényes cél kapcsolatot kell választani."
 
-#: virtManager/migrate.py:237
+#: virtManager/migrate.py:235
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
 
-#: virtManager/migrate.py:292
+#: virtManager/migrate.py:287
 #, fuzzy, python-format
 #| msgid "Hypervisors do not match"
 msgid "%(uri)s (Hypervisors do not match)"
 msgstr "A hipervizorok nem egyeznek meg"
 
-#: virtManager/migrate.py:294
+#: virtManager/migrate.py:289
 #, fuzzy, python-format
 #| msgid "Disconnected"
 msgid "%(uri)s (Disconnected)"
 msgstr "Leválasztva"
 
-#: virtManager/migrate.py:296
+#: virtManager/migrate.py:291
 #, python-format
 msgid "%(uri)s (Same connection)"
 msgstr ""
 
-#: virtManager/migrate.py:313
+#: virtManager/migrate.py:307
 msgid "No usable connections available."
 msgstr "Nem elérhető használható kapcsolat."
 
-#: virtManager/migrate.py:353
+#: virtManager/migrate.py:346
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "A vendéget nem lehet migrálni: %s"
 
-#: virtManager/migrate.py:381
+#: virtManager/migrate.py:374
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "El nem kapott hiba a bemenet ellenőrzésekor: %s"
 
-#: virtManager/migrate.py:399
+#: virtManager/migrate.py:391
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "A(z) „%s” VM migrálása"
 
-#: virtManager/migrate.py:400
+#: virtManager/migrate.py:393
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
 
-#: virtManager/migrate.py:411
+#: virtManager/migrate.py:407
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "Hiba a migrálási feladat megszakításakor: %s"
 
-#: virtManager/object/domain.py:449
+#: virtManager/object/domain.py:446
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
 
-#: virtManager/object/domain.py:452
+#: virtManager/object/domain.py:450
 msgid "Libvirt may not be new enough to support memfd."
 msgstr ""
 
-#: virtManager/object/domain.py:471
+#: virtManager/object/domain.py:468
 msgid "Libvirt connection does not support snapshots."
 msgstr "A libvirt kapcsolat nem támogatja a pillanatfelvételeket."
 
-#: virtManager/object/domain.py:505
+#: virtManager/object/domain.py:501
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "Nem található a megadott eszköz az inaktív VM konfigurációjában: %s"
 
-#: virtManager/object/domain.py:1431
+#: virtManager/object/domain.py:1487
 msgid "Saving domain to disk"
 msgstr "Tartomány mentése merevlemezre"
 
-#: virtManager/object/domain.py:1483
+#: virtManager/object/domain.py:1552
 msgid "Migrating domain"
 msgstr "Tartomány migrálása"
 
-#: virtManager/object/network.py:155
+#: virtManager/object/network.py:150
 msgid "Isolated network"
 msgstr "Elkülönített hálózat"
 
-#: virtManager/object/network.py:159
+#: virtManager/object/network.py:154
 #, python-format
 msgid "NAT to %s"
 msgstr "Átirányítás %s helyre"
 
-#: virtManager/object/network.py:164
+#: virtManager/object/network.py:159
 #, python-format
 msgid "Route to %s"
 msgstr ""
 
-#: virtManager/object/network.py:169
+#: virtManager/object/network.py:164
 #, python-format
 msgid "%s network"
 msgstr ""
@@ -4772,38 +4792,38 @@ msgstr ""
 msgid "ZFS Pool"
 msgstr ""
 
-#: virtManager/oslist.py:31
+#: virtManager/oslist.py:29
 msgid "Type to start searching..."
 msgstr ""
 
-#: virtManager/preferences.py:28
+#: virtManager/preferences.py:27
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "Hiba a beállítások indításakor: %s"
 
 #: virtManager/preferences.py:112
-msgid "Never"
-msgstr "Soha"
-
-#: virtManager/preferences.py:113
-msgid "Fullscreen only"
-msgstr "Kizárólag teljes képernyő"
-
-#: virtManager/preferences.py:114
 msgid "Always"
 msgstr "Mindig"
 
-#: virtManager/preferences.py:126 virtManager/preferences.py:148
+#: virtManager/preferences.py:112
+msgid "Fullscreen only"
+msgstr "Kizárólag teljes képernyő"
+
+#: virtManager/preferences.py:112
+msgid "Never"
+msgstr "Soha"
+
+#: virtManager/preferences.py:124 virtManager/preferences.py:146
 #: virtManager/preferences.py:158
 #, python-format
 msgid "System default (%s)"
 msgstr "Rendszer alapértelmezett (%s)"
 
-#: virtManager/preferences.py:137
+#: virtManager/preferences.py:134
 msgid "Manual redirect only"
 msgstr ""
 
-#: virtManager/preferences.py:138
+#: virtManager/preferences.py:135
 msgid "Auto redirect on USB attach"
 msgstr ""
 
@@ -4811,11 +4831,11 @@ msgstr ""
 msgid "Application default"
 msgstr ""
 
-#: virtManager/preferences.py:173
+#: virtManager/preferences.py:172
 msgid "Nearest host CPU model"
 msgstr "Leginkább hasonló CPU modell"
 
-#: virtManager/preferences.py:183
+#: virtManager/preferences.py:184
 #, fuzzy
 #| msgid "System default (%s)"
 msgid "System default"
@@ -4825,18 +4845,18 @@ msgstr "Rendszer alapértelmezett (%s)"
 msgid "python libguestfs support is not installed"
 msgstr ""
 
-#: virtManager/preferences.py:322
+#: virtManager/preferences.py:332
 msgid "Configure grab key combination"
 msgstr "Elkapó billentyűzet kombináció beállítása"
 
-#: virtManager/preferences.py:331
+#: virtManager/preferences.py:342
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
 
-#: virtManager/preferences.py:334
+#: virtManager/preferences.py:347
 msgid "Please press desired grab key combination"
 msgstr "Kérjük nyomja le az igényelt kilépési billentyű kombinációt"
 
@@ -4872,81 +4892,81 @@ msgstr "Könyvtár kötet megadása"
 msgid "Choose Storage Volume"
 msgstr "Válasszon tároló kötetet"
 
-#: virtManager/storagebrowse.py:121
+#: virtManager/storagebrowse.py:122
 msgid "Cannot use local storage on remote connection."
 msgstr "A helyi tároló nem használható távoli kapcsolaton."
 
-#: virtManager/systray.py:109
+#: virtManager/systray.py:118
 msgid "_Show Virtual Machine Manager"
 msgstr "Virtuális Gép vezérlőpult megjeleníté_se"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
 msgstr "Hiba a Virtuális gép vezérlőpult indításakor"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:44
 #, fuzzy, python-format
 #| msgid "Error starting Virtual Machine Manager"
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Hiba a Virtuális gép vezérlőpult indításakor"
 
-#: virtManager/vmmenu.py:52
+#: virtManager/vmmenu.py:57
 msgid "_Reboot"
 msgstr "_Újraindítás"
 
-#: virtManager/vmmenu.py:54
+#: virtManager/vmmenu.py:59
 msgid "F_orce Reset"
 msgstr "Kényszerített újraindítás"
 
-#: virtManager/vmmenu.py:55
+#: virtManager/vmmenu.py:60
 msgid "_Force Off"
 msgstr "_Erőltetett bezárás"
 
-#: virtManager/vmmenu.py:57
+#: virtManager/vmmenu.py:62
 msgid "Sa_ve"
 msgstr "Me_ntés"
 
-#: virtManager/vmmenu.py:84
+#: virtManager/vmmenu.py:90
 msgid "R_esume"
 msgstr "_Folytatás"
 
-#: virtManager/vmmenu.py:89
+#: virtManager/vmmenu.py:95
 msgid "Clone..."
 msgstr "Klónozás..."
 
-#: virtManager/vmmenu.py:90
+#: virtManager/vmmenu.py:96
 msgid "Migrate..."
 msgstr "Áthelyezés..."
 
-#: virtManager/vmmenu.py:145
+#: virtManager/vmmenu.py:151
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Hiba a mentési feladat megszakításakor: %s"
 
-#: virtManager/vmmenu.py:154
+#: virtManager/vmmenu.py:161
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Biztosan menteni szeretné '%s' gépet?"
 
-#: virtManager/vmmenu.py:165
+#: virtManager/vmmenu.py:174
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Hiba a tartomány mentésekor: %s"
 
-#: virtManager/vmmenu.py:170
+#: virtManager/vmmenu.py:182
 msgid "Saving Virtual Machine"
 msgstr "Virtuális gép mentése"
 
-#: virtManager/vmmenu.py:171
+#: virtManager/vmmenu.py:183
 msgid "Saving virtual machine memory to disk "
 msgstr "Virtuális gép memóriájának mentése lemezre "
 
-#: virtManager/vmmenu.py:180
+#: virtManager/vmmenu.py:194
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Biztosan ki szeretné kényszeríteni '%s' gép leállítását?"
 
-#: virtManager/vmmenu.py:182
+#: virtManager/vmmenu.py:196
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -4954,88 +4974,88 @@ msgstr ""
 "Ez azonnal kikapcsolja a virtuális gépet az operációs rendszer leállítása "
 "nélkül, ami adatvesztést okozhat."
 
-#: virtManager/vmmenu.py:188 virtManager/vmmenu.py:257
+#: virtManager/vmmenu.py:203 virtManager/vmmenu.py:272
 msgid "Error shutting down domain"
 msgstr "Hiba a tartomány leállításakor"
 
-#: virtManager/vmmenu.py:194
+#: virtManager/vmmenu.py:210
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Biztosan fel szeretné függeszteni '%s' futását?"
 
-#: virtManager/vmmenu.py:200
+#: virtManager/vmmenu.py:215
 msgid "Error pausing domain"
 msgstr "Hiba a tartomány felfüggesztésekor"
 
-#: virtManager/vmmenu.py:206
+#: virtManager/vmmenu.py:220
 msgid "Error unpausing domain"
 msgstr "Hiba a tartomány folytatásakor"
 
-#: virtManager/vmmenu.py:216
+#: virtManager/vmmenu.py:231
 #, fuzzy, python-format
 #| msgid "Error restoring domain"
 msgid "Error restoring domain: %s"
 msgstr "Hiba a tartomány helyreállításakor"
 
-#: virtManager/vmmenu.py:219
+#: virtManager/vmmenu.py:234
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
 "start up?"
 msgstr ""
 
-#: virtManager/vmmenu.py:233
+#: virtManager/vmmenu.py:250
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "Hiba a tartomány állapot eltávolításakor: %s"
 
-#: virtManager/vmmenu.py:237
+#: virtManager/vmmenu.py:253
 msgid "Restoring Virtual Machine"
 msgstr "Virtuális gép visszaállítása"
 
-#: virtManager/vmmenu.py:238
+#: virtManager/vmmenu.py:254
 msgid "Restoring virtual machine memory from disk"
 msgstr "Virtuális gép memóriatartalmának visszaállítása a lemezről"
 
-#: virtManager/vmmenu.py:244
+#: virtManager/vmmenu.py:259
 msgid "Error starting domain"
 msgstr "Hiba a tartomány indításakor"
 
-#: virtManager/vmmenu.py:251
+#: virtManager/vmmenu.py:267
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Biztosan ki szerené kapcsolni '%s' gépet?"
 
-#: virtManager/vmmenu.py:263
+#: virtManager/vmmenu.py:279
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Biztosan újra szeretné indítani '%s' gépet?"
 
-#: virtManager/vmmenu.py:269
+#: virtManager/vmmenu.py:284
 msgid "Error rebooting domain"
 msgstr "Hiba a tartomány leállításakor"
 
-#: virtManager/vmmenu.py:276
+#: virtManager/vmmenu.py:291
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "Biztosan ki szeretné kényszeríteni '%s' gép újraindítását?"
 
-#: virtManager/vmmenu.py:278
+#: virtManager/vmmenu.py:293
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
 msgstr ""
 
-#: virtManager/vmmenu.py:284
+#: virtManager/vmmenu.py:300
 msgid "Error resetting domain"
 msgstr "Hiba a tartomány újraindításakor"
 
-#: virtManager/vmwindow.py:46
+#: virtManager/vmwindow.py:43
 #, python-format
 msgid "Error launching details: %s"
 msgstr "Hiba a részletek indításakor: %s"
 
-#: virtManager/vmwindow.py:226
+#: virtManager/vmwindow.py:217
 #, fuzzy
 msgid "This will abort the installation. Are you sure?"
 msgstr ""
@@ -5045,56 +5065,56 @@ msgstr ""
 "\n"
 "Biztosan szeretné?"
 
-#: virtManager/vmwindow.py:388
+#: virtManager/vmwindow.py:377
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr ""
 
-#: virtManager/vmwindow.py:432
+#: virtManager/vmwindow.py:420
 msgid "Manage VM snapshots"
 msgstr "VM pillanatfelvételek kezelése"
 
-#: virtManager/vmwindow.py:509
+#: virtManager/vmwindow.py:497
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Hiba a képernyő mentés készítésekor: %s"
 
-#: virtManager/vmwindow.py:517
+#: virtManager/vmwindow.py:505
 msgid "Error initializing spice USB device widget"
 msgstr ""
 
-#: virtManager/vmwindow.py:521
+#: virtManager/vmwindow.py:510
 msgid "Select USB devices for redirection"
 msgstr "Válasszon USB eszközöket az átirányításhoz"
 
-#: virtManager/vmwindow.py:556
+#: virtManager/vmwindow.py:545
 msgid "Save Virtual Machine Screenshot"
 msgstr "Virtuális gép képernyőképének mentése"
 
-#: virtManager/vmwindow.py:557
+#: virtManager/vmwindow.py:546
 msgid "PNG files"
 msgstr ""
 
-#: virtManager/vmwindow.py:559
+#: virtManager/vmwindow.py:548
 #, fuzzy
 #| msgid "Saved"
 msgid "_Save"
 msgstr "Mentve"
 
-#: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
+#: virtManager/xmleditor.py:131 virtManager/xmleditor.py:144
 msgid "There are unapplied changes."
 msgstr ""
 
-#: virtManager/xmleditor.py:139
+#: virtManager/xmleditor.py:132
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 
-#: virtManager/xmleditor.py:152
+#: virtManager/xmleditor.py:145
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 
-#: virtinst/capabilities.py:298
+#: virtinst/capabilities.py:300
 #, fuzzy, python-format
 #| msgid "Host does not support %(virttype)s %(arch)s"
 msgid ""
@@ -5102,48 +5122,48 @@ msgid ""
 "'%(arch)s'"
 msgstr "Gép nem támogatja a %(virttype)s %(arch)s"
 
-#: virtinst/capabilities.py:302
+#: virtinst/capabilities.py:305
 #, fuzzy, python-format
 #| msgid "Host does not support %(virttype)s %(arch)s"
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr "Gép nem támogatja a %(virttype)s %(arch)s"
 
-#: virtinst/capabilities.py:306
+#: virtinst/capabilities.py:309
 #, fuzzy, python-format
 #| msgid "Host does not support %(virttype)s %(arch)s"
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "Gép nem támogatja a %(virttype)s %(arch)s"
 
-#: virtinst/capabilities.py:310
+#: virtinst/capabilities.py:313
 #, fuzzy
 #| msgid "any virtualization options"
 msgid "Host does not support any virtualization options"
 msgstr "bármely virtualizációs lehetőség"
 
-#: virtinst/capabilities.py:316
+#: virtinst/capabilities.py:320
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
 
-#: virtinst/capabilities.py:322
+#: virtinst/capabilities.py:331
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
 
-#: virtinst/cli.py:107
+#: virtinst/cli.py:115
 msgid "See man page for examples and full option syntax."
 msgstr ""
 
-#: virtinst/cli.py:109
+#: virtinst/cli.py:118
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 
-#: virtinst/cli.py:288
+#: virtinst/cli.py:295
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5152,41 +5172,41 @@ msgid ""
 "otherwise, please restart your installation."
 msgstr ""
 
-#: virtinst/cli.py:306
+#: virtinst/cli.py:316
 #, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
 
-#: virtinst/cli.py:319
+#: virtinst/cli.py:329
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr ""
 
-#: virtinst/cli.py:353
+#: virtinst/cli.py:360
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Felülírja a meglévő '%s' elérési utat"
 
-#: virtinst/cli.py:364
+#: virtinst/cli.py:370
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "A %s lemezt %s vendég rendszer már használja."
 
-#: virtinst/cli.py:408
+#: virtinst/cli.py:414
 #, fuzzy, python-format
 #| msgid "Connecting to graphical console for guest"
 msgid "Running graphical console command: %(command)s"
 msgstr "Kapcsolódás a vendég grafikus konzoljához"
 
-#: virtinst/cli.py:422
+#: virtinst/cli.py:426
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr ""
 
-#: virtinst/cli.py:464
+#: virtinst/cli.py:470
 #, fuzzy, python-format
 #| msgid "Could not find domain '%s': %s"
 msgid "Could not find domain '%(domain)s': %(error)s"
@@ -5194,16 +5214,16 @@ msgstr "A(z) „%s” tartomány nem található: %s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
-#: virtinst/cli.py:483
+#: virtinst/cli.py:490
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
 msgstr ""
 
-#: virtinst/cli.py:592 virtinst/cli.py:595
+#: virtinst/cli.py:608 virtinst/cli.py:612
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Kapcsolódás a felügyelőhöz libvirt URI-val"
 
-#: virtinst/cli.py:610
+#: virtinst/cli.py:635
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5211,59 +5231,59 @@ msgid ""
 "--autoconsole none"
 msgstr ""
 
-#: virtinst/cli.py:616
+#: virtinst/cli.py:646
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Ne próbáljon automatikusan kapcsolódni a vendég rendszer konzoljához"
 
-#: virtinst/cli.py:620
+#: virtinst/cli.py:651
 msgid "Don't boot guest after completing install."
 msgstr "Ne indítsa el a vendég rendszert a telepítés befejezése után."
 
-#: virtinst/cli.py:624
+#: virtinst/cli.py:658
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "Ne ellenőrizzen névütközést, írja felül bármelyik azonos nevű vendég "
 "rendszert."
 
-#: virtinst/cli.py:631
+#: virtinst/cli.py:665
 msgid "Print the generated domain XML rather than create the guest."
 msgstr ""
 
-#: virtinst/cli.py:650
+#: virtinst/cli.py:685
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 
-#: virtinst/cli.py:655
+#: virtinst/cli.py:693
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
 "--check all=off"
 msgstr ""
 
-#: virtinst/cli.py:659
+#: virtinst/cli.py:698
 msgid "Suppress non-error output"
 msgstr "Elnyomja a nem-hiba kimenetet"
 
-#: virtinst/cli.py:661
+#: virtinst/cli.py:699
 msgid "Print debugging information"
 msgstr "Hibakeresési információk kiírása"
 
-#: virtinst/cli.py:667
+#: virtinst/cli.py:708
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
 "--metadata description=\"My nice long description\""
 msgstr ""
 
-#: virtinst/cli.py:675
+#: virtinst/cli.py:721
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
 "--memory memory=1024,currentMemory=512\n"
 msgstr ""
 
-#: virtinst/cli.py:688
+#: virtinst/cli.py:738
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5271,14 +5291,14 @@ msgid ""
 "--vcpus sockets=2,cores=4,threads=2"
 msgstr ""
 
-#: virtinst/cli.py:697
+#: virtinst/cli.py:751
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 msgstr ""
 
-#: virtinst/cli.py:710
+#: virtinst/cli.py:766
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5286,7 +5306,7 @@ msgid ""
 "--graphics none\n"
 msgstr ""
 
-#: virtinst/cli.py:719
+#: virtinst/cli.py:781
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5296,221 +5316,228 @@ msgid ""
 "--network help"
 msgstr ""
 
-#: virtinst/cli.py:730
+#: virtinst/cli.py:797
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 msgstr ""
 
-#: virtinst/cli.py:735
+#: virtinst/cli.py:806
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
 "--input keyboard,bus=usb"
 msgstr ""
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:809
 msgid "Configure a guest serial device"
 msgstr "Vendég rendszer soros eszközének beállítása"
 
-#: virtinst/cli.py:743
+#: virtinst/cli.py:811
 msgid "Configure a guest parallel device"
 msgstr "Vendég rendszer párhuzamos eszközének beállítása"
 
-#: virtinst/cli.py:746
+#: virtinst/cli.py:814
 msgid "Configure a guest communication channel"
 msgstr "Vendég rendszer kommunikációs csatornájának beállítása"
 
-#: virtinst/cli.py:749
+#: virtinst/cli.py:820
 msgid "Configure a text console connection between the guest and host"
 msgstr ""
 "A fizikai gép és a vendég rendszer közötti szöveges konzol kapcsolat "
 "beállítása"
 
-#: virtinst/cli.py:753
+#: virtinst/cli.py:826
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 
-#: virtinst/cli.py:761
+#: virtinst/cli.py:836
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
 
-#: virtinst/cli.py:769
+#: virtinst/cli.py:846
 msgid "Configure guest sound device emulation"
 msgstr "Vendég rendszer hang eszköz emulációjának beállítása"
 
-#: virtinst/cli.py:780
+#: virtinst/cli.py:856
 #, fuzzy
 #| msgid "Configure a guest watchdog device"
 msgid "Configure host audio backend for sound devices"
 msgstr "Vendég rendszer figyelő eszköz beállítása"
 
-#: virtinst/cli.py:784
+#: virtinst/cli.py:860
 msgid "Configure a guest watchdog device"
 msgstr "Vendég rendszer figyelő eszköz beállítása"
 
-#: virtinst/cli.py:787
+#: virtinst/cli.py:862
 msgid "Configure guest video hardware."
 msgstr "Vendég rendszer video hardverének beállítása."
 
-#: virtinst/cli.py:790
+#: virtinst/cli.py:867
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
 msgstr ""
 
-#: virtinst/cli.py:794
+#: virtinst/cli.py:874
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 msgstr ""
 
-#: virtinst/cli.py:798
+#: virtinst/cli.py:882
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
 msgstr ""
 
-#: virtinst/cli.py:802
+#: virtinst/cli.py:886
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
 msgstr ""
 
-#: virtinst/cli.py:806
+#: virtinst/cli.py:890
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
 msgstr ""
 
-#: virtinst/cli.py:810
+#: virtinst/cli.py:896
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
 msgstr ""
 
-#: virtinst/cli.py:814
+#: virtinst/cli.py:902
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:908
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
 msgstr ""
 
-#: virtinst/cli.py:822
+#: virtinst/cli.py:914
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
 
-#: virtinst/cli.py:827
+#: virtinst/cli.py:920
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:927
+msgid ""
+"Configure a nvram storage device.\n"
+"It's for guest kernel to record oops/panic logs. Ex:\n"
+"--pstore backend=acpi-erst,size=8"
+msgstr ""
+
+#: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr ""
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:944
 msgid "Set domain seclabel configuration."
 msgstr ""
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:951
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 
-#: virtinst/cli.py:847
+#: virtinst/cli.py:956
 msgid "Tune CPU parameters for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:851
+#: virtinst/cli.py:961
 msgid "Tune NUMA policy for the domain process."
 msgstr "NUMA szabályrendszer hangolása a tartomány processzei számára."
 
-#: virtinst/cli.py:855
+#: virtinst/cli.py:966
 msgid "Tune memory policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:971
 msgid "Tune blkio policy for the domain process."
 msgstr ""
 
-#: virtinst/cli.py:863
+#: virtinst/cli.py:979
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:988
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 msgstr ""
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:998
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 msgstr ""
 
-#: virtinst/cli.py:879
+#: virtinst/cli.py:1002
 msgid "Configure VM power management features"
 msgstr ""
 
-#: virtinst/cli.py:883
+#: virtinst/cli.py:1006
 msgid "Configure VM lifecycle management policy"
 msgstr "Konfigurálja a VM életciklus kezelési szabályrendszert"
 
-#: virtinst/cli.py:887
+#: virtinst/cli.py:1011
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr ""
 
-#: virtinst/cli.py:891
+#: virtinst/cli.py:1019
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 msgstr ""
 
-#: virtinst/cli.py:897
+#: virtinst/cli.py:1030
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 msgstr ""
 
-#: virtinst/cli.py:903
+#: virtinst/cli.py:1042
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
 
-#: virtinst/cli.py:910
+#: virtinst/cli.py:1054
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (for containers)"
 msgstr ""
 
-#: virtinst/cli.py:916
+#: virtinst/cli.py:1065
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 msgstr ""
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:1080
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5519,26 +5546,26 @@ msgid ""
 "--disk=?"
 msgstr ""
 
-#: virtinst/cli.py:934
+#: virtinst/cli.py:1091
 msgid "OS options"
 msgstr ""
 
-#: virtinst/cli.py:937
+#: virtinst/cli.py:1094
 msgid "The OS being installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:939
+#: virtinst/cli.py:1096
 msgid "The OS installed in the guest."
 msgstr ""
 
-#: virtinst/cli.py:941
+#: virtinst/cli.py:1099
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
 "Use '--osinfo list' to see a full list."
 msgstr ""
 
-#: virtinst/cli.py:952
+#: virtinst/cli.py:1115
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5546,29 +5573,33 @@ msgid ""
 "--xml xpath.delete=./clock"
 msgstr ""
 
-#: virtinst/cli.py:982
+#: virtinst/cli.py:1148
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr ""
 
-#: virtinst/cli.py:1167
+#: virtinst/cli.py:1343
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
 "'%(property_name)s'"
 msgstr ""
 
-#: virtinst/cli.py:1499
+#: virtinst/cli.py:1673
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr ""
 
-#: virtinst/cli.py:1555 virtinst/cli.py:1586
+#: virtinst/cli.py:1729 virtinst/cli.py:1760
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr ""
 
-#: virtinst/cli.py:1993
+#: virtinst/cli.py:2193
+msgid "No display detected. Not running virt-viewer."
+msgstr ""
+
+#: virtinst/cli.py:2199
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5576,50 +5607,46 @@ msgstr ""
 "Nem lehet kapcsolódni a grafikus konzolhoz: virt-viewer nincs telepítve. "
 "Telepítse a 'virt-viewer' csomagot."
 
-#: virtinst/cli.py:2000
-msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
-msgstr ""
-
-#: virtinst/cli.py:2011
+#: virtinst/cli.py:2213
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr ""
 
-#: virtinst/cli.py:2401
+#: virtinst/cli.py:2615
 msgid "CPU model=host is deprecated, use model=host-model"
 msgstr ""
 
-#: virtinst/cli.py:3605
+#: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Helytelen 'size' érték: %s"
 
-#: virtinst/cli.py:3618
+#: virtinst/cli.py:3928
 #, fuzzy, python-format
 #| msgid "Unknown '%s' value '%s'"
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Ismeretlen '%s' érték '%s'"
 
-#: virtinst/cli.py:3633
+#: virtinst/cli.py:3944
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr "Tároló kötetet vol=poolname/volname formában kell megadni"
 
-#: virtinst/cli.py:4180
+#: virtinst/cli.py:4470
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:4915
+#: virtinst/cli.py:5229
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr ""
 
-#: virtinst/cli.py:4918
+#: virtinst/cli.py:5231
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:5061
+#: virtinst/cli.py:5372
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5637,95 +5664,95 @@ msgstr "Nem lehet eltávolítani a régi '%s' virtuális gépet: %s"
 msgid "Domain '%s' was not found."
 msgstr "'%s' tartomány nem található."
 
-#: virtinst/cloner.py:155
+#: virtinst/cloner.py:161
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 
-#: virtinst/cloner.py:176
+#: virtinst/cloner.py:182
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr ""
 
-#: virtinst/cloner.py:185
+#: virtinst/cloner.py:191
 msgid "Cloning rbd volumes is not yet supported."
 msgstr ""
 
-#: virtinst/cloner.py:187
+#: virtinst/cloner.py:194
 #, fuzzy, python-format
 #| msgid "Architecture '%s' is not installable"
 msgid "Disk network type '%s' is not cloneable."
 msgstr "„%s” architektúra nem telepíthető"
 
-#: virtinst/cloner.py:194
+#: virtinst/cloner.py:201
 msgid "Read Only"
 msgstr "Csak olvasható"
 
-#: virtinst/cloner.py:196
+#: virtinst/cloner.py:203
 #, fuzzy
 #| msgid "Storage is marked as shareable."
 msgid "Marked as shareable"
 msgstr "A tároló megoszthatóként jelölt."
 
-#: virtinst/cloner.py:265
+#: virtinst/cloner.py:277
 #, fuzzy, python-format
 #| msgid "Error opening socket path '%s': %s"
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "Hiba a socket elérési útvonalának megnyitásakor: '%s': %s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:297
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr ""
 
-#: virtinst/cloner.py:334
+#: virtinst/cloner.py:350
 msgid "Domain to clone must be shutoff."
 msgstr ""
 
-#: virtinst/cloner.py:368
+#: virtinst/cloner.py:385
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 
-#: virtinst/cloner.py:527
+#: virtinst/cloner.py:545
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "Érvénytelen név az új vendég rendszerhez: %s"
 
-#: virtinst/devices/disk.py:379
+#: virtinst/devices/disk.py:394
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr ""
 
-#: virtinst/devices/disk.py:384
+#: virtinst/devices/disk.py:400
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
 "the parent directory as a pool first."
 msgstr ""
 
-#: virtinst/devices/disk.py:407
+#: virtinst/devices/disk.py:425
 msgid "Format attribute not supported for this volume type"
 msgstr "A formátum tulajdonság nem támogatott ennél a kötet típusnál"
 
-#: virtinst/devices/disk.py:840
+#: virtinst/devices/disk.py:861
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr ""
 
-#: virtinst/devices/disk.py:848
+#: virtinst/devices/disk.py:867
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 
-#: virtinst/devices/disk.py:961
+#: virtinst/devices/disk.py:982
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
 msgstr[0] ""
 msgstr[1] ""
 
-#: virtinst/devices/filesystem.py:123
+#: virtinst/devices/filesystem.py:127
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr ""
@@ -5735,62 +5762,62 @@ msgstr ""
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 5900 felett kell lennie, vagy -1 az automatikus foglaláshoz"
 
-#: virtinst/devices/hostdev.py:82
+#: virtinst/devices/hostdev.py:85
 #, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr ""
 
-#: virtinst/devices/hostdev.py:88 virtinst/devices/interface.py:347
+#: virtinst/devices/hostdev.py:91 virtinst/devices/interface.py:357
 #, python-format
 msgid "Unsupported node device type '%s'"
 msgstr ""
 
-#: virtinst/devices/interface.py:220
+#: virtinst/devices/interface.py:218
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr ""
 
-#: virtinst/diskbackend.py:109
+#: virtinst/diskbackend.py:108
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "Nem használható a(z) %(path)s tároló: %(err)s"
 
-#: virtinst/diskbackend.py:288
+#: virtinst/diskbackend.py:284
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr ""
 
-#: virtinst/diskbackend.py:538
+#: virtinst/diskbackend.py:558
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
 
-#: virtinst/diskbackend.py:543
+#: virtinst/diskbackend.py:564
 msgid "There is not enough free space to create the disk."
 msgstr "Nincs elegendő szabad terület a lemez létrehozásához."
 
-#: virtinst/diskbackend.py:548
+#: virtinst/diskbackend.py:568
 #, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr "%(mem1)s M igényelve > %(mem2)s M elérhető"
 
-#: virtinst/diskbackend.py:555
+#: virtinst/diskbackend.py:576
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr ""
 
-#: virtinst/diskbackend.py:565
+#: virtinst/diskbackend.py:585
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr ""
 
-#: virtinst/diskbackend.py:635
+#: virtinst/diskbackend.py:656
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 
-#: virtinst/domain/cpu.py:56
+#: virtinst/domain/cpu.py:60
 #, python-format
 msgid ""
 "Total CPUs implied by topology (sockets=%(sockets)d * dies=%(dies)d * "
@@ -5798,110 +5825,110 @@ msgid ""
 "count %(vcpus)d"
 msgstr ""
 
-#: virtinst/domain/launch_security.py:29
+#: virtinst/domain/launch_security.py:28
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr ""
 
-#: virtinst/domain/launch_security.py:43
+#: virtinst/domain/launch_security.py:42
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr ""
 
-#: virtinst/domcapabilities.py:208
+#: virtinst/domcapabilities.py:217
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:333
+#: virtinst/domcapabilities.py:346
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:334
+#: virtinst/domcapabilities.py:347
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: virtinst/domcapabilities.py:339
+#: virtinst/domcapabilities.py:352
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr ""
 
-#: virtinst/domcapabilities.py:342
+#: virtinst/domcapabilities.py:354
 #, python-format
 msgid "Custom: %(path)s"
 msgstr ""
 
-#: virtinst/guest.py:88
+#: virtinst/guest.py:114
 msgid "Guest"
 msgstr "Vendég rendszer"
 
-#: virtinst/guest.py:96
+#: virtinst/guest.py:122
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "A vendég rendszer neve '%s' már használatban van."
 
-#: virtinst/guest.py:1042
+#: virtinst/guest.py:1095
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt jelenlegi verziója a nem támogatja az UEFI-t."
 
-#: virtinst/guest.py:1046
+#: virtinst/guest.py:1099
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:1051
+#: virtinst/guest.py:1104
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
 
-#: virtinst/install/installer.py:108
+#: virtinst/install/installer.py:120
 #, python-format
 msgid "Removing disk '%s'"
 msgstr ""
 
-#: virtinst/install/installer.py:275
+#: virtinst/install/installer.py:286
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
 msgstr ""
 
-#: virtinst/install/installer.py:653
+#: virtinst/install/installer.py:652
 msgid "Creating domain..."
 msgstr "Tartomány létrehozása..."
 
-#: virtinst/install/installer.py:660
+#: virtinst/install/installer.py:659
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:69
+#: virtinst/install/installertreemedia.py:66
 #, fuzzy, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr "Hiba a telepítés elérési útvonal ellenőrzésekor: %s"
 
-#: virtinst/install/installertreemedia.py:116
+#: virtinst/install/installertreemedia.py:125
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:119
+#: virtinst/install/installertreemedia.py:128
 #, fuzzy
 #| msgid "An init path must be specified"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "Meg kell adni egy init elérési útvonalat"
 
-#: virtinst/install/installertreemedia.py:142
+#: virtinst/install/installertreemedia.py:155
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:209
+#: virtinst/install/installertreemedia.py:213
 msgid "Couldn't find kernel for install tree."
 msgstr ""
 
-#: virtinst/install/installertreemedia.py:267
+#: virtinst/install/installertreemedia.py:270
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
 msgstr ""
 
-#: virtinst/install/unattended.py:63
+#: virtinst/install/unattended.py:64
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
 msgstr ""
@@ -5911,53 +5938,53 @@ msgstr ""
 msgid "%s requires the user-password to be set."
 msgstr ""
 
-#: virtinst/install/unattended.py:83
+#: virtinst/install/unattended.py:80
 #, python-format
 msgid "%s requires the admin-password to be set."
 msgstr ""
 
-#: virtinst/install/unattended.py:180
+#: virtinst/install/unattended.py:176
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 
-#: virtinst/install/unattended.py:198
+#: virtinst/install/unattended.py:194
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
 msgstr ""
 
-#: virtinst/install/unattended.py:335
+#: virtinst/install/unattended.py:323
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr ""
 
-#: virtinst/install/unattended.py:346
+#: virtinst/install/unattended.py:333
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr ""
 
-#: virtinst/install/unattended.py:355
+#: virtinst/install/unattended.py:342
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
 "'%(profilename)s' profile. Available profiles: %(profiles)s"
 msgstr ""
 
-#: virtinst/install/unattended.py:362
+#: virtinst/install/unattended.py:354
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:312
+#: virtinst/install/urldetect.py:315
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr ""
 
-#: virtinst/install/urldetect.py:314
+#: virtinst/install/urldetect.py:317
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 
-#: virtinst/install/urldetect.py:318
+#: virtinst/install/urldetect.py:321
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -5969,7 +5996,7 @@ msgstr ""
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Nem lehet létrehozni a tároló készletet: %s"
 
-#: virtinst/install/urlfetcher.py:106
+#: virtinst/install/urlfetcher.py:105
 #, fuzzy, python-format
 #| msgid "Retrieving file %s..."
 msgid "Retrieving '%(filename)s'"
@@ -5980,98 +6007,98 @@ msgstr "%s állomány letöltése..."
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr ""
 
-#: virtinst/install/volumeupload.py:108
+#: virtinst/install/volumeupload.py:107
 #, fuzzy, python-format
 #| msgid "Transferring %s"
 msgid "Transferring '%(filename)s'"
 msgstr "Átvitel %s"
 
-#: virtinst/osdict.py:71
+#: virtinst/osdict.py:72
 msgid "Generic or unknown OS. Usage is not recommended."
 msgstr ""
 
-#: virtinst/osdict.py:96
+#: virtinst/osdict.py:97
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr ""
 
-#: virtinst/osdict.py:110
+#: virtinst/osdict.py:111
 #, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
 
-#: virtinst/osdict.py:537
+#: virtinst/osdict.py:535
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr ""
 
-#: virtinst/osdict.py:549
+#: virtinst/osdict.py:547
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
 msgstr ""
 
-#: virtinst/storage.py:164
+#: virtinst/storage.py:162
 #, fuzzy, python-format
 #| msgid "Couldn't create default storage pool '%s': %s"
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "Nem lehet létrehozni '%s' alapértelmezett tároló készletet: %s"
 
-#: virtinst/storage.py:217 virtinst/storage.py:553
+#: virtinst/storage.py:218 virtinst/storage.py:563
 msgid "Storage object"
 msgstr "Tároló objektum"
 
-#: virtinst/storage.py:223
+#: virtinst/storage.py:224
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr ""
 
-#: virtinst/storage.py:389
+#: virtinst/storage.py:401
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "Nem lehet meghatározni a tároló készletet: %s"
 
-#: virtinst/storage.py:397
+#: virtinst/storage.py:409
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "Nem lehet létrehozni a tároló készletet: %s"
 
-#: virtinst/storage.py:403
+#: virtinst/storage.py:415
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "Nem lehet elindítani a tároló készletet: %s"
 
-#: virtinst/storage.py:409
+#: virtinst/storage.py:421
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "Nem lehet beállítani az automatikus indítás jelzőt: %s"
 
-#: virtinst/storage.py:559
+#: virtinst/storage.py:570
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr ""
 
-#: virtinst/storage.py:645
+#: virtinst/storage.py:662
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
 msgstr ""
 
-#: virtinst/storage.py:693
+#: virtinst/storage.py:714
 #, fuzzy, python-format
 #| msgid "Allocating '%s'"
 msgid "Allocating '%(filename)s'"
 msgstr "Foglalás '%s'"
 
-#: virtinst/storage.py:734
+#: virtinst/storage.py:755
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
 "(%(mem1)s M requested allocation > %(mem2)s M available)"
 msgstr ""
 
-#: virtinst/storage.py:741
+#: virtinst/storage.py:762
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6085,7 +6112,7 @@ msgid ""
 "again."
 msgstr ""
 
-#: virtinst/virtclone.py:67
+#: virtinst/virtclone.py:66
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6097,7 +6124,7 @@ msgid ""
 "sysprep(1)."
 msgstr ""
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1034
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1056
 msgid "General Options"
 msgstr "Általános beállítások"
 
@@ -6109,7 +6136,7 @@ msgstr ""
 msgid "XML file to use as the original guest."
 msgstr "Az eredeti vendégként használandó XML fájl."
 
-#: virtinst/virtclone.py:83
+#: virtinst/virtclone.py:85
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
@@ -6117,7 +6144,7 @@ msgstr ""
 "Klón név és tároló elérési utak automatikus előállítása az eredeti vendég "
 "beállításaiból."
 
-#: virtinst/virtclone.py:86
+#: virtinst/virtclone.py:87
 msgid "Name for the new guest"
 msgstr "Az új vendég neve"
 
@@ -6129,84 +6156,84 @@ msgstr ""
 msgid "Storage Configuration"
 msgstr "Tároló-összeállítás"
 
-#: virtinst/virtclone.py:93
+#: virtinst/virtclone.py:97
 msgid "New file to use as the disk image for the new guest"
 msgstr "Az új fájl, melyet az új vendég lemezképként használ"
 
-#: virtinst/virtclone.py:96
+#: virtinst/virtclone.py:103
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
 msgstr ""
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:109
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
 msgstr ""
 
-#: virtinst/virtclone.py:104
+#: virtinst/virtclone.py:119
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr ""
 
-#: virtinst/virtclone.py:108
+#: virtinst/virtclone.py:127
 msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
 "cloneable disk image."
 msgstr ""
 
-#: virtinst/virtclone.py:113
+#: virtinst/virtclone.py:134
 msgid "New file to use as storage for nvram VARS"
 msgstr ""
 
-#: virtinst/virtclone.py:115
+#: virtinst/virtclone.py:137
 msgid "Networking Configuration"
 msgstr "Hálózati konfiguráció"
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:143
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
 msgstr ""
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1139
-#: virtinst/virtxml.py:512
+#: virtinst/virtclone.py:146 virtinst/virtinstall.py:1187
+#: virtinst/virtxml.py:567
 msgid "Miscellaneous Options"
 msgstr "Egyéb beállítások"
 
-#: virtinst/virtclone.py:147
+#: virtinst/virtclone.py:179
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
 
-#: virtinst/virtclone.py:179
+#: virtinst/virtclone.py:215
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
 msgstr ""
 
-#: virtinst/virtclone.py:196
+#: virtinst/virtclone.py:234
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "A(z) „%s” klón sikeresen létrejött."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1250
+#: virtinst/virtclone.py:245 virtinst/virtinstall.py:1313
 msgid "Installation aborted at user request"
 msgstr "A telepítés felhasználói kérésre megszakítva"
 
-#: virtinst/virtinstall.py:57
+#: virtinst/virtinstall.py:59
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
 msgstr ""
 
-#: virtinst/virtinstall.py:125
+#: virtinst/virtinstall.py:128
 msgid "Cannot specify storage and use --nodisks"
 msgstr "Nem adhat meg tárolót, ha a --nodisk kapcsolót használja"
 
-#: virtinst/virtinstall.py:129
+#: virtinst/virtinstall.py:133
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -6214,28 +6241,28 @@ msgstr ""
 "Nem keverhető a --file, --nonsparse vagy a --file-size a --disk kapcsolóval. "
 "Használja a következőt: --disk ÚTVONAL[,size=MÉRET][,sparse=yes|no]"
 
-#: virtinst/virtinstall.py:149
+#: virtinst/virtinstall.py:154
 msgid "--os-type is deprecated and does nothing. Please stop using it."
 msgstr ""
 
-#: virtinst/virtinstall.py:225
+#: virtinst/virtinstall.py:229
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr "Nem használható együtt a --graphics a régi grafikai kapcsolókkal"
 
-#: virtinst/virtinstall.py:229
+#: virtinst/virtinstall.py:233
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 "Nem adható meg egynél több ezek közül: VNC, SDL, --graphics vagy --nographics"
 
-#: virtinst/virtinstall.py:312
+#: virtinst/virtinstall.py:315
 msgid "--memory amount in MiB is required"
 msgstr "--memory memória mennyiségének megadása MiB-ban"
 
-#: virtinst/virtinstall.py:316
+#: virtinst/virtinstall.py:318
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr "--disk meg kell adnia a tárolót (felülírás a --disk none kapcsolóval)"
 
-#: virtinst/virtinstall.py:320
+#: virtinst/virtinstall.py:322
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6244,7 +6271,7 @@ msgstr ""
 "Meg kell adnia a telepítési módot\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:332
+#: virtinst/virtinstall.py:336
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6253,30 +6280,30 @@ msgstr ""
 "valószínűleg nem fog szöveges kimenetet látni. Érdemes lehet használni a --"
 "location kapcsolót."
 
-#: virtinst/virtinstall.py:335
+#: virtinst/virtinstall.py:341
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 "Tekintse meg a --location CDROM médiával történő használatának példáit a man "
 "oldalon"
 
-#: virtinst/virtinstall.py:348
+#: virtinst/virtinstall.py:356
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
 
-#: virtinst/virtinstall.py:353
+#: virtinst/virtinstall.py:363
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
 msgstr ""
 
-#: virtinst/virtinstall.py:370
+#: virtinst/virtinstall.py:380
 msgid "The guest's network configuration may not support PXE"
 msgstr ""
 
-#: virtinst/virtinstall.py:374
+#: virtinst/virtinstall.py:385
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "No operating system detected, VM performance may suffer. Specify an OS "
@@ -6288,32 +6315,32 @@ msgstr ""
 "Nincs operációs rendszer észlelve, a VM teljesítménye csökkenhet. A legjobb "
 "eredményért adjon meg egy OS-t az --os-variant kapcsolóval."
 
-#: virtinst/virtinstall.py:388
+#: virtinst/virtinstall.py:401
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr ""
 
-#: virtinst/virtinstall.py:472
+#: virtinst/virtinstall.py:484
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr ""
 
-#: virtinst/virtinstall.py:484
+#: virtinst/virtinstall.py:495
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:503
+#: virtinst/virtinstall.py:515
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 
-#: virtinst/virtinstall.py:514
+#: virtinst/virtinstall.py:528
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 
-#: virtinst/virtinstall.py:564
+#: virtinst/virtinstall.py:580
 #, python-brace-format
 msgid ""
 "Failed to detect osinfo OS name from install media, using fallback name "
@@ -6322,24 +6349,24 @@ msgid ""
 "succeed."
 msgstr ""
 
-#: virtinst/virtinstall.py:571
+#: virtinst/virtinstall.py:587
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Hiba a telepítési hely ellenőrzésekor: %s"
 
-#: virtinst/virtinstall.py:574
+#: virtinst/virtinstall.py:589
 msgid ""
-"--os-variant/--osinfo OS name is required, but no value was\n"
+"--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
 
-#: virtinst/virtinstall.py:586
+#: virtinst/virtinstall.py:600
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:590
+#: virtinst/virtinstall.py:605
 msgid ""
 "If you expected virt-install to detect an OS name from the\n"
 "install media, you can set a fallback OS name with:\n"
@@ -6347,21 +6374,21 @@ msgid ""
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:599
+#: virtinst/virtinstall.py:615
 msgid ""
 "You can see a full list of possible OS name values with:\n"
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:606
+#: virtinst/virtinstall.py:622
 #, python-brace-format
 msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:613
+#: virtinst/virtinstall.py:629
 #, python-brace-format
 msgid ""
 "If you just need to get the old behavior back, you can use:\n"
@@ -6371,22 +6398,22 @@ msgid ""
 "Or export {env_var}=1\n"
 msgstr ""
 
-#: virtinst/virtinstall.py:623
+#: virtinst/virtinstall.py:639
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
 msgstr ""
 
-#: virtinst/virtinstall.py:708
+#: virtinst/virtinstall.py:723
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "Nincs futtatandó konzol a vendéghez, alapértelmezés erre: --wait 1"
 
-#: virtinst/virtinstall.py:744
+#: virtinst/virtinstall.py:761
 #, fuzzy
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting for the installation to complete."
 msgstr "Hány percig várakozzon a telepítés befejezésére."
 
-#: virtinst/virtinstall.py:745
+#: virtinst/virtinstall.py:763
 #, fuzzy, python-format
 #| msgid "Minutes to wait for install to complete."
 msgid "Waiting %(minutes)d minute for the installation to complete."
@@ -6394,49 +6421,49 @@ msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
 msgstr[0] "Hány percig várakozzon a telepítés befejezésére."
 msgstr[1] "Hány percig várakozzon a telepítés befejezésére."
 
-#: virtinst/virtinstall.py:768
+#: virtinst/virtinstall.py:787
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:780
+#: virtinst/virtinstall.py:797
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 
-#: virtinst/virtinstall.py:807
+#: virtinst/virtinstall.py:823
 msgid "Console command returned failure."
 msgstr ""
 
-#: virtinst/virtinstall.py:844
+#: virtinst/virtinstall.py:862
 msgid "Domain has crashed."
 msgstr "A tartomány összeomlott."
 
-#: virtinst/virtinstall.py:854
+#: virtinst/virtinstall.py:872
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
 msgstr ""
 
-#: virtinst/virtinstall.py:876
+#: virtinst/virtinstall.py:894
 msgid "Domain is still running. Installation may be in progress."
 msgstr ""
 
-#: virtinst/virtinstall.py:886
+#: virtinst/virtinstall.py:904
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 
-#: virtinst/virtinstall.py:897
+#: virtinst/virtinstall.py:914
 msgid "Domain has shutdown. Continuing."
 msgstr "A tartomány leállt. Folytatás."
 
-#: virtinst/virtinstall.py:903
+#: virtinst/virtinstall.py:919
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr "A telepítés túllépte a megadott időkorlátot. Kilépés az alkalmazásból."
 
-#: virtinst/virtinstall.py:926
+#: virtinst/virtinstall.py:941
 msgid "Domain creation completed."
 msgstr "A tartomány létrehozása befejeződött."
 
-#: virtinst/virtinstall.py:935
+#: virtinst/virtinstall.py:950
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6445,15 +6472,15 @@ msgstr ""
 "Újraindíthatja a tartomány ennek a futtatásával:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:940
+#: virtinst/virtinstall.py:955
 msgid "User stopped the VM. Not rebooting."
 msgstr ""
 
-#: virtinst/virtinstall.py:943
+#: virtinst/virtinstall.py:958
 msgid "Restarting guest."
 msgstr "Vendég újraindítása."
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:975
 msgid ""
 "\n"
 "Starting install..."
@@ -6461,42 +6488,42 @@ msgstr ""
 "\n"
 "Telepítés indítása..."
 
-#: virtinst/virtinstall.py:983
+#: virtinst/virtinstall.py:1004
 msgid "Domain install interrupted."
 msgstr "A tartomány telepítése megszakadt."
 
-#: virtinst/virtinstall.py:1002
+#: virtinst/virtinstall.py:1023
 msgid "Dry run completed successfully"
 msgstr "A száraz indítás sikeresen befejeződött"
 
-#: virtinst/virtinstall.py:1006
+#: virtinst/virtinstall.py:1027
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr ""
 "Ismeretlen XML lépési kérés: „%s”, a következők egyikének kell lennie: 1, 2 "
 "vagy all."
 
-#: virtinst/virtinstall.py:1013
+#: virtinst/virtinstall.py:1033
 msgid "Requested installation does not have XML step 2"
 msgstr "A kért telepítésnek nincs 2. XML lépése"
 
-#: virtinst/virtinstall.py:1030
+#: virtinst/virtinstall.py:1051
 msgid "Create a new virtual machine from specified install media."
 msgstr "Új virtuális gép létrehozása a megadott telepítő média használatával."
 
-#: virtinst/virtinstall.py:1036
+#: virtinst/virtinstall.py:1057
 msgid "Name of the guest instance"
 msgstr "A vendégpéldány neve"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1065
 msgid "Installation Method Options"
 msgstr "Telepítési mód beállításai"
 
-#: virtinst/virtinstall.py:1046
+#: virtinst/virtinstall.py:1067
 msgid "CD-ROM installation media"
 msgstr "CD-ROM telepítési média"
 
-#: virtinst/virtinstall.py:1048
+#: virtinst/virtinstall.py:1072
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6504,163 +6531,163 @@ msgstr ""
 "Disztribúció telepítési URL-e, például https://gép/útvonal. Konkrét "
 "példákért lásd a man oldalt."
 
-#: virtinst/virtinstall.py:1051
+#: virtinst/virtinstall.py:1077
 msgid "Boot from the network using the PXE protocol"
 msgstr "Rendszerindítás hálózatról PXE protokoll használatával"
 
-#: virtinst/virtinstall.py:1053
+#: virtinst/virtinstall.py:1083
 msgid "Build guest around an existing disk image"
 msgstr "Vendég készítése meglévő lemezkép használatával"
 
-#: virtinst/virtinstall.py:1056
+#: virtinst/virtinstall.py:1090
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 
-#: virtinst/virtinstall.py:1059
+#: virtinst/virtinstall.py:1095
 msgid "Add given file to root of initrd from --location"
 msgstr ""
 
-#: virtinst/virtinstall.py:1061
+#: virtinst/virtinstall.py:1098
 msgid "Perform an unattended installation"
 msgstr ""
 
-#: virtinst/virtinstall.py:1063
+#: virtinst/virtinstall.py:1100
 msgid "Specify fine grained install options"
 msgstr ""
 
-#: virtinst/virtinstall.py:1065
+#: virtinst/virtinstall.py:1105
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
 msgstr ""
 
-#: virtinst/virtinstall.py:1068
+#: virtinst/virtinstall.py:1113
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr ""
 
-#: virtinst/virtinstall.py:1082
+#: virtinst/virtinstall.py:1127
 msgid "Device Options"
 msgstr "Eszközbeállítások"
 
-#: virtinst/virtinstall.py:1112
+#: virtinst/virtinstall.py:1152
 msgid "Guest Configuration Options"
 msgstr "Vendég konfigurációs beállításai"
 
-#: virtinst/virtinstall.py:1116
+#: virtinst/virtinstall.py:1155
 msgid "Virtualization Platform Options"
 msgstr "Virtualizációs platform beállítások"
 
-#: virtinst/virtinstall.py:1120
+#: virtinst/virtinstall.py:1163
 msgid "This guest should be a fully virtualized guest"
 msgstr "A vendégnek teljesen virtualizáltnak kell lennie"
 
-#: virtinst/virtinstall.py:1123
+#: virtinst/virtinstall.py:1171
 msgid "This guest should be a paravirtualized guest"
 msgstr "A vendégnek paravirtualizáltnak kell lennie"
 
-#: virtinst/virtinstall.py:1126
+#: virtinst/virtinstall.py:1178
 msgid "This guest should be a container guest"
 msgstr "A vendégnek konténer-alapúnak kell lennie"
 
-#: virtinst/virtinstall.py:1128
+#: virtinst/virtinstall.py:1180
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Használandó hipervizor (kvm, qemu, xen, …)"
 
-#: virtinst/virtinstall.py:1129
+#: virtinst/virtinstall.py:1181
 msgid "The CPU architecture to simulate"
 msgstr "A szimulálandó CPU architektúra"
 
-#: virtinst/virtinstall.py:1130
+#: virtinst/virtinstall.py:1182
 msgid "The machine type to emulate"
 msgstr "Az emulálandó gép típusa"
 
-#: virtinst/virtinstall.py:1141
+#: virtinst/virtinstall.py:1192
 msgid "Have domain autostart on host boot up."
 msgstr "Tartomány automatikus indítása a gazda indulásakor."
 
-#: virtinst/virtinstall.py:1143
+#: virtinst/virtinstall.py:1195
 msgid "Create a transient domain."
 msgstr ""
 
-#: virtinst/virtinstall.py:1145
+#: virtinst/virtinstall.py:1201
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 
-#: virtinst/virtinstall.py:1148
+#: virtinst/virtinstall.py:1204
 msgid "Minutes to wait for install to complete."
 msgstr "Hány percig várakozzon a telepítés befejezésére."
 
-#: virtinst/virtxml.py:34
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "Kérjük „yes” vagy „no” választ adjon."
 
-#: virtinst/virtxml.py:102
-msgid "--os-variant/--osinfo is not supported with --edit"
+#: virtinst/virtxml.py:105
+msgid "--osinfo/--os-variant is not supported with --edit"
 msgstr ""
 
-#: virtinst/virtxml.py:104
-msgid "--os-variant/--osinfo is not supported with --remove-device"
-msgstr ""
-
-#: virtinst/virtxml.py:106
-msgid "--os-variant/--osinfo is not supported with --build-xml"
+#: virtinst/virtxml.py:107
+msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr ""
 
 #: virtinst/virtxml.py:109
+msgid "--osinfo/--os-variant is not supported with --build-xml"
+msgstr ""
+
+#: virtinst/virtxml.py:113
 #, fuzzy, python-brace-format
 #| msgid "--build-xml not supported for --%s"
 msgid "--build-xml not supported for {cli_flag}"
 msgstr "A --build-xml nem támogatott --%s kapcsolóval"
 
-#: virtinst/virtxml.py:115
+#: virtinst/virtxml.py:122
 #, fuzzy, python-brace-format
 #| msgid "Cannot use --remove-device with --%s"
 msgid "Cannot use --remove-device with {cli_flag}"
 msgstr "Nem használható együtt a --remove-device és a(z) --%s"
 
-#: virtinst/virtxml.py:118
+#: virtinst/virtxml.py:128
 #, fuzzy, python-brace-format
 #| msgid "Cannot use --add-device with --%s"
 msgid "Cannot use --add-device with {cli_flag}"
 msgstr "Nem használható együtt az --add-device és a(z) --%s"
 
-#: virtinst/virtxml.py:122
+#: virtinst/virtxml.py:135
 #, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
 msgstr ""
 
-#: virtinst/virtxml.py:136
+#: virtinst/virtxml.py:151
 #, python-format
 msgid "One of %s must be specified."
 msgstr "Ezek egyikét kell megadni: %s."
 
-#: virtinst/virtxml.py:139
+#: virtinst/virtxml.py:153
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Ütköző beállítások %s"
 
-#: virtinst/virtxml.py:154
+#: virtinst/virtxml.py:167
 msgid "No change specified."
 msgstr "Nincs módosítás megadva."
 
-#: virtinst/virtxml.py:156
+#: virtinst/virtxml.py:170
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr ""
 
-#: virtinst/virtxml.py:198
+#: virtinst/virtxml.py:212
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Érvénytelen --edit kapcsoló: „%s”"
 
-#: virtinst/virtxml.py:201
+#: virtinst/virtxml.py:216
 #, fuzzy, python-brace-format
 #| msgid "No --%s objects found in the XML"
 msgid "No {cli_flag} objects found in the XML"
 msgstr "Nem található --%s objektum az XML-ben"
 
-#: virtinst/virtxml.py:204
+#: virtinst/virtxml.py:223
 #, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
@@ -6671,44 +6698,44 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: virtinst/virtxml.py:225
+#: virtinst/virtxml.py:244
 #, python-format
 msgid "No matching objects found for %s"
 msgstr ""
 
-#: virtinst/virtxml.py:242
+#: virtinst/virtxml.py:261
 #, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
 msgstr ""
 
-#: virtinst/virtxml.py:318
+#: virtinst/virtxml.py:334
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:326
+#: virtinst/virtxml.py:342
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:333
+#: virtinst/virtxml.py:348
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr ""
 
-#: virtinst/virtxml.py:343 virtinst/virtxml.py:619
+#: virtinst/virtxml.py:359 virtinst/virtxml.py:671
 #, fuzzy, python-format
 #| msgid "Error starting domain"
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Hiba a tartomány indításakor"
 
-#: virtinst/virtxml.py:348 virtinst/virtxml.py:623
+#: virtinst/virtxml.py:366 virtinst/virtxml.py:677
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr ""
 
-#: virtinst/virtxml.py:354
+#: virtinst/virtxml.py:372
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6716,19 +6743,19 @@ msgid ""
 "Hotplug this device to the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:373
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotplug successful."
 msgstr "A(z) %s eszköz sikeres."
 
-#: virtinst/virtxml.py:357
+#: virtinst/virtxml.py:374
 #, fuzzy, python-format
 #| msgid "Error adding device: %s"
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "Hiba az eszköz hozzáadásakor: %s"
 
-#: virtinst/virtxml.py:359
+#: virtinst/virtxml.py:376
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6736,19 +6763,19 @@ msgid ""
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:377
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device hotunplug successful."
 msgstr "A(z) %s eszköz sikeres."
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:378
 #, fuzzy, python-format
 #| msgid "Error adding device: %s"
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Hiba az eszköz hozzáadásakor: %s"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:380
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6756,35 +6783,35 @@ msgid ""
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
 
-#: virtinst/virtxml.py:366
+#: virtinst/virtxml.py:381
 #, fuzzy
 #| msgid "Device %s successful."
 msgid "Device update successful."
 msgstr "A(z) %s eszköz sikeres."
 
-#: virtinst/virtxml.py:367
+#: virtinst/virtxml.py:382
 #, fuzzy, python-format
 #| msgid "Error adding device: %s"
 msgid "Error attempting device update: %(error)s"
 msgstr "Hiba az eszköz hozzáadásakor: %s"
 
-#: virtinst/virtxml.py:418
+#: virtinst/virtxml.py:433
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 
-#: virtinst/virtxml.py:437
+#: virtinst/virtxml.py:452
 msgid "Edit libvirt XML using command line options."
 msgstr "A libvirt XML szerkesztése parancssori kapcsolók megadásával."
 
-#: virtinst/virtxml.py:443
+#: virtinst/virtxml.py:458
 msgid "Domain name, id, or uuid"
 msgstr "Tartomány neve, azonosítója vagy uuid értéke"
 
-#: virtinst/virtxml.py:445
+#: virtinst/virtxml.py:460
 msgid "XML actions"
 msgstr "XML műveletek"
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:466
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -6793,7 +6820,7 @@ msgid ""
 "--edit target=hda --disk ... (edit disk 'hda')\n"
 msgstr ""
 
-#: virtinst/virtxml.py:453
+#: virtinst/virtxml.py:477
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -6801,23 +6828,23 @@ msgid ""
 "--remove-device --disk /some/path"
 msgstr ""
 
-#: virtinst/virtxml.py:458
+#: virtinst/virtxml.py:486
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
 msgstr ""
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:492
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
 
-#: virtinst/virtxml.py:464
+#: virtinst/virtxml.py:497
 msgid "Output options"
 msgstr "Kimenet beállításai"
 
-#: virtinst/virtxml.py:466
+#: virtinst/virtxml.py:502
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -6825,82 +6852,82 @@ msgid ""
 "With --edit, this is an update device operation."
 msgstr ""
 
-#: virtinst/virtxml.py:472
+#: virtinst/virtxml.py:512
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 
-#: virtinst/virtxml.py:475
+#: virtinst/virtxml.py:515
 msgid "Force not defining the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:478
+#: virtinst/virtxml.py:518
 msgid "Start the domain."
 msgstr ""
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:522
 msgid "Only print the requested change, in diff format"
 msgstr ""
 
-#: virtinst/virtxml.py:482
+#: virtinst/virtxml.py:527
 msgid "Only print the requested change, in full XML format"
 msgstr ""
 
-#: virtinst/virtxml.py:484
+#: virtinst/virtxml.py:530
 msgid "Require confirmation before saving any results."
 msgstr ""
 
-#: virtinst/virtxml.py:488
+#: virtinst/virtxml.py:535
 #, fuzzy
 #| msgid "Conflicting options %s"
 msgid "Conversion options"
 msgstr "Ütköző beállítások %s"
 
-#: virtinst/virtxml.py:492
+#: virtinst/virtxml.py:541
 msgid "Convert an existing VM from PC/i440FX to Q35."
 msgstr ""
 
-#: virtinst/virtxml.py:497
+#: virtinst/virtxml.py:550
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
 
-#: virtinst/virtxml.py:500
+#: virtinst/virtxml.py:555
 msgid "XML options"
 msgstr "XML beállítások"
 
-#: virtinst/virtxml.py:542
+#: virtinst/virtxml.py:597
 msgid "Can't use --confirm with stdin input."
 msgstr "Nem használhatja a --confirm kapcsolót stdin bemenettel."
 
-#: virtinst/virtxml.py:544
+#: virtinst/virtxml.py:599
 msgid "Can't use --update with stdin input."
 msgstr "Nem használhatja az --update kapcsolót stdin bemenettel."
 
-#: virtinst/virtxml.py:547
+#: virtinst/virtxml.py:602
 msgid "A domain must be specified"
 msgstr "A tartományt meg kell adni"
 
-#: virtinst/virtxml.py:595
+#: virtinst/virtxml.py:647
 msgid "The VM is not running, --update is inapplicable."
 msgstr ""
 
-#: virtinst/virtxml.py:628
+#: virtinst/virtxml.py:680
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
 
-#: virtinst/virtxml.py:630
+#: virtinst/virtxml.py:684
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
 
-#: virtinst/virtxml.py:643
+#: virtinst/virtxml.py:699
 msgid "Aborted at user request"
 msgstr "Felhasználói kérésre megszakítva"
 
-#: virtinst/xmlapi.py:191
+#: virtinst/xmlapi.py:211
 #, python-format
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
@@ -6908,15 +6935,18 @@ msgid ""
 msgstr ""
 
 #. translators: value is a generic object type name
-#: virtinst/xmlbuilder.py:519
+#: virtinst/xmlbuilder.py:517
 #, python-format
 msgid "A name must be specified for the %s"
 msgstr ""
 
-#: virtinst/xmlbuilder.py:524
+#: virtinst/xmlbuilder.py:521
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
+
+#~ msgid "vmm;"
+#~ msgstr "vmm;"
 
 #~ msgid "ISA"
 #~ msgstr "ISA"
