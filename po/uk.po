@@ -3,15 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2020, 2021, 2022, 2023, 2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022, 2023, 2024.
+# Yuri Chornoivan <yurchor@ukr.net>, 2011-2015, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2014, 2020, 2021, 2022, 2023, 2024, 2025.
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Yuri Chornoivan <yurchor@ukr.net>, 2015. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2016. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2017. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2018. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2019. #zanata, 2020, 2021, 2022, 2023, 2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2020. #zanata, 2021, 2022, 2023, 2024.
+# Yuri Chornoivan <yurchor@ukr.net>, 2015. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2016. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2017. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2018. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2019. #zanata, 2020, 2021, 2022, 2023, 2024, 2025.
+# Yuri Chornoivan <yurchor@ukr.net>, 2020. #zanata, 2021, 2022, 2023, 2024, 2025.
 # Taras Panchenko <top39@ukr.net>, 2021, 2022.
 # Kim InSoo <simmon@nplob.com>, 2022.
 msgid ""
@@ -19,17 +19,17 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-11-14 16:16+0000\n"
+"PO-Revision-Date: 2025-06-19 05:50+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/uk/>\n"
+"Language-Team: Ukrainian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -85,20 +85,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Інструмент керування віртуальними машинами"
+msgstr "Інструмент перегляд віртуальних машин та керування ними"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Керування віртуальними машинами"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "віртуалізація"
+msgstr "virtualization;libvirt;vm;vmm;віртуалізація;лібвірт;вм;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3821,6 +3817,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Не рекомендуємо змішувати зовнішні і внутрішні знімки для однієї віртуальної "
+"машини. Ви справді бажаєте продовжити виконання дії?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4122,10 +4120,8 @@ msgid "Macvtap device..."
 msgstr "Пристрій Macvtap…"
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Пристрій Macvtap…"
+msgstr "Пристрій vDPA..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5556,6 +5552,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Налаштувати пристрій зберігання даних nvram.\n"
+"Для запису журнал oops/panic ядра гостьової системи. Приклад:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5747,12 +5746,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Помилка: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Графічний режим, запит щодо якого було надіслано за допомогою DISPLAY, не "
-"встановлено. virt-viewer не запущено."
+msgstr "Не виявлено дисплея. virt-viewer не запущено."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6593,15 +6588,11 @@ msgid "Error validating install location: %s"
 msgstr "Помилка під час перевірки місця встановлення: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"Мало бути вказано назву операційної системи для --os-variant/--osinfo,\n"
+"Мало бути вказано назву операційної системи для --osinfo/--os-variant,\n"
 "але не встановлено або не виявлено жодного значення."
 
 #: virtinst/virtinstall.py:600
@@ -6894,26 +6885,19 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Введіть «yes» («так») або «no» («ні»)."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr ""
-"якщо використано --edit, не можна використовувати --os-variant/--osinfo"
+msgstr "якщо використано --edit, не можна використовувати --osinfo/--os-variant"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr ""
-"якщо використано --remove-device, не можна використовувати --os-variant/--"
-"osinfo"
+"якщо використано --remove-device, не можна використовувати --osinfo/--os-"
+"variant"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
 msgstr ""
-"якщо використано --build-xml, не можна використовувати --os-variant/--osinfo"
+"якщо використано --build-xml, не можна використовувати --osinfo/--os-variant"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
