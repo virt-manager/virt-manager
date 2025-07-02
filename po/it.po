@@ -10,7 +10,7 @@
 # Terry Chuang <tchuang@redhat.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
 # Gianluca Sforna <giallu@gmail.com>, 2017. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2020, 2021, 2022, 2023, 2024.
+# Pino Toscano <toscano.pino@tiscali.it>, 2020, 2021, 2022, 2023, 2024, 2025.
 # Fabio Tomat <f.t.public@gmail.com>, 2021, 2022, 2023.
 # Frediano Ziglio <fziglio@redhat.com>, 2022.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2022.
@@ -21,16 +21,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-12-22 20:26+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
-"Language-Team: Italian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/it/>\n"
+"PO-Revision-Date: 2025-06-19 07:48+0000\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"Language-Team: Italian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.1\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -84,20 +84,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Gestore macchine virtuali"
+msgstr "Gestore/visualizzatore di macchine virtuali"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Gestisci macchine virtuali"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "virtualizzazione"
+msgstr "virtualizzazione;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3833,6 +3829,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Usare snapshot esterni e interni allo stesso tempo per la stessa VM non è "
+"raccomandato. Sei sicuro di voler continuare?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4134,10 +4132,8 @@ msgid "Macvtap device..."
 msgstr "Dispositivo macvtap..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Dispositivo macvtap..."
+msgstr "Dispositivo vDPA..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5557,6 +5553,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Configura un dispositivo di archiviazione nvram.\n"
+"È usato per far sì che il kernel del guest registri oops/panic. Es.:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5750,11 +5749,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Errore: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Grafica richiesta, ma DISPLAY non è impostata. virt-viewer non sarà avviato."
+msgstr "Nessuna grafica disponibile. virt-viewer non sarà avviato."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6586,15 +6582,11 @@ msgid "Error validating install location: %s"
 msgstr "Errore nella convalida del percorso di installazione: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo nome OS è richiesto, ma non è stato \n"
+"--osinfo/--os-variant nome OS è richiesto, ma non è stato \n"
 "specificato o rilevato alcun valore."
 
 #: virtinst/virtinstall.py:600
@@ -6892,22 +6884,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Inserire 'yes' o 'no'."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo non è supportato con --edit"
+msgstr "--osinfo/--os-variant non è supportato con --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo non è supportato con --remove-device"
+msgstr "--osinfo/--os-variant non è supportato con --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo non è supportato con --build-xml"
+msgstr "--osinfo/--os-variant non è supportato con --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
