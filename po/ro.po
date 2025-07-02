@@ -11,11 +11,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2024-11-26 13:55+0100\n"
+"POT-Creation-Date: 2025-06-18 16:59+0200\n"
 "PO-Revision-Date: 2025-02-20 01:38+0000\n"
 "Last-Translator: Remus-Gabriel Chelu <remusgabriel.chelu@disroot.org>\n"
-"Language-Team: Romanian <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/ro/>\n"
+"Language-Team: Romanian <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,8 +24,8 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Weblate 5.10\n"
 
-#: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:3
-#: ui/manager.ui:7 virtManager/systray.py:138
+#: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
+#: ui/manager.ui:7 virtManager/systray.py:148
 msgid "Virtual Machine Manager"
 msgstr "Gestionar mașină virtuală"
 
@@ -76,13 +76,21 @@ msgstr "qemu"
 msgid "kvm"
 msgstr "kvm"
 
+#: data/virt-manager.desktop.in:3
+#, fuzzy
+#| msgid "Virtual Machine Manager"
+msgid "Virtual machine viewer/manager"
+msgstr "Gestionar mașină virtuală"
+
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Gestionează mașini virtuale"
 
-#: data/virt-manager.desktop.in:9
-msgid "vmm;"
-msgstr "vmm;"
+#: data/virt-manager.desktop.in:10
+#, fuzzy
+#| msgid "virtualization"
+msgid "virtualization;libvirt;vm;vmm;"
+msgstr "virtualizare"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -257,12 +265,12 @@ msgstr "Operație în desfășurare"
 msgid "Please wait a few moments..."
 msgstr "Așteptați câteva momente..."
 
-#: ui/asyncjob.ui:118 virtManager/asyncjob.py:300 virtManager/asyncjob.py:307
+#: ui/asyncjob.ui:118 virtManager/asyncjob.py:305 virtManager/asyncjob.py:312
 msgid "Processing..."
 msgstr "Se procesează..."
 
 #: ui/asyncjob.ui:188 ui/vmwindow.ui:132 ui/xmleditor.ui:26
-#: virtManager/manager.py:298
+#: virtManager/manager.py:295
 msgid "_Details"
 msgstr "_Detalii"
 
@@ -346,7 +354,7 @@ msgstr "C_lonează"
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>În prezent consola nu este disponibilă</b>"
 
-#: ui/console.ui:57 virtManager/addhardware.py:227
+#: ui/console.ui:57 virtManager/addhardware.py:249
 msgid "Serial"
 msgstr "Port serial"
 
@@ -598,8 +606,8 @@ msgstr "Tipul de _virtualizare:"
 msgid "Architecture options"
 msgstr "Opțiuni de arhitectură"
 
-#: ui/createvm.ui:748 virtManager/details/details.py:705
-#: virtManager/manager.py:325 virtManager/oslist.py:72
+#: ui/createvm.ui:748 virtManager/details/details.py:680
+#: virtManager/manager.py:321 virtManager/oslist.py:70
 msgid "Name"
 msgstr "Nume"
 
@@ -759,7 +767,7 @@ msgstr "C_PU-uri:"
 msgid "(Insert host mem)"
 msgstr "(Introduceți memoria gazdei)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2381
+#: ui/createvm.ui:1987 virtManager/details/details.py:2325
 msgid "Memory"
 msgstr "Memorie"
 
@@ -767,8 +775,8 @@ msgstr "Memorie"
 msgid "_Enable storage for this virtual machine"
 msgstr "Activați stocar_ea pentru această mașină virtuală"
 
-#: ui/createvm.ui:2040 virtManager/addhardware.py:216
-#: virtManager/addhardware.py:969 virtManager/clone.py:277
+#: ui/createvm.ui:2040 virtManager/addhardware.py:225
+#: virtManager/addhardware.py:993 virtManager/clone.py:279
 msgid "Storage"
 msgstr "Stocare"
 
@@ -854,7 +862,7 @@ msgstr "Ru_ta:"
 msgid "_Backing store"
 msgstr "_Stocarea de rezervă"
 
-#: ui/delete.ui:9 virtManager/delete.py:287
+#: ui/delete.ui:9 virtManager/delete.py:294
 msgid "Delete Virtual Machine"
 msgstr "Ștergeți mașina virtuală"
 
@@ -870,7 +878,7 @@ msgstr ""
 msgid "Delete _associated storage files"
 msgstr "Ștergeți fișierele de stocare _asociate"
 
-#: ui/delete.ui:196 ui/manager.ui:110 virtManager/vmmenu.py:91
+#: ui/delete.ui:196 ui/manager.ui:110 virtManager/vmmenu.py:97
 msgid "_Delete"
 msgstr "Șt_erge"
 
@@ -987,7 +995,7 @@ msgstr "<b>CPU-uri</b>"
 msgid "M_odel:"
 msgstr "M_odel:"
 
-#: ui/details.ui:1454 virtManager/details/details.py:1929
+#: ui/details.ui:1454 virtManager/details/details.py:1884
 msgid "Copy host CP_U configuration"
 msgstr "Copiați configurația CP_U-ului gazdă"
 
@@ -1335,7 +1343,7 @@ msgid "_Port:"
 msgstr "_Port:"
 
 #: ui/gfxdetails.ui:168 ui/vsockdetails.ui:39
-#: virtManager/device/gfxdetails.py:211
+#: virtManager/device/gfxdetails.py:204
 msgid "A_uto"
 msgstr "A_uto"
 
@@ -1420,7 +1428,7 @@ msgstr "Redirecționare:"
 msgid "NAT to any device"
 msgstr "NAT pentru orice dispozitiv"
 
-#: ui/hostnets.ui:439 virtManager/createnet.py:112
+#: ui/hostnets.ui:439 virtManager/createnet.py:108
 msgid "Routed"
 msgstr "Direcționat"
 
@@ -1480,8 +1488,8 @@ msgstr "Alegeți volumul selectat"
 msgid "Apply pool changes"
 msgstr "Aplicați modificările aduse „hangarului”i"
 
-#: ui/hoststorage.ui:293 virtManager/connection.py:500
-#: virtManager/object/libvirtobject.py:208
+#: ui/hoststorage.ui:293 virtManager/connection.py:491
+#: virtManager/object/libvirtobject.py:213
 msgid "Active"
 msgstr "Activă"
 
@@ -1581,7 +1589,7 @@ msgstr "Nouă"
 msgid "Show the virtual machine console and details"
 msgstr "Afișează consola și detaliile mașinii virtuale"
 
-#: ui/manager.ui:281 virtManager/storagebrowse.py:32 virtManager/vmmenu.py:95
+#: ui/manager.ui:281 virtManager/storagebrowse.py:32 virtManager/vmmenu.py:101
 msgid "_Open"
 msgstr "_Deschide"
 
@@ -1589,17 +1597,17 @@ msgstr "_Deschide"
 msgid "Power on the virtual machine"
 msgstr "Pornește mașina virtuală"
 
-#: ui/manager.ui:297 virtManager/manager.py:758 virtManager/vmmenu.py:82
-#: virtManager/vmwindow.py:381
+#: ui/manager.ui:297 virtManager/manager.py:752 virtManager/vmmenu.py:88
+#: virtManager/vmwindow.py:370
 msgid "_Run"
 msgstr "_Rulează"
 
-#: ui/manager.ui:312 ui/vmwindow.ui:354 virtManager/manager.py:795
-#: virtManager/vmwindow.py:422
+#: ui/manager.ui:312 ui/vmwindow.ui:354 virtManager/manager.py:789
+#: virtManager/vmwindow.py:410
 msgid "Pause the virtual machine"
 msgstr "Pune în pauză mașina virtuală"
 
-#: ui/manager.ui:313 virtManager/vmmenu.py:83
+#: ui/manager.ui:313 virtManager/vmmenu.py:89
 msgid "_Pause"
 msgstr "_Pauză"
 
@@ -1607,8 +1615,8 @@ msgstr "_Pauză"
 msgid "Shut down the virtual machine"
 msgstr "Oprește mașina virtuală"
 
-#: ui/manager.ui:329 ui/vmwindow.ui:370 virtManager/vmmenu.py:53
-#: virtManager/vmmenu.py:85
+#: ui/manager.ui:329 ui/vmwindow.ui:370 virtManager/vmmenu.py:58
+#: virtManager/vmmenu.py:91
 msgid "_Shut Down"
 msgstr "_Oprește"
 
@@ -2118,7 +2126,7 @@ msgstr "Trimite _combinația de taste"
 msgid "Show the graphical console"
 msgstr "Afișează consola grafică"
 
-#: ui/vmwindow.ui:300 virtManager/addhardware.py:235
+#: ui/vmwindow.ui:300 virtManager/addhardware.py:264
 msgid "Console"
 msgstr "Consolă"
 
@@ -2126,7 +2134,7 @@ msgstr "Consolă"
 msgid "Show virtual hardware details"
 msgstr "Afișează detaliile hardware-ului virtual"
 
-#: ui/vmwindow.ui:315 virtManager/error.py:320
+#: ui/vmwindow.ui:315 virtManager/error.py:326
 msgid "Details"
 msgstr "Detalii"
 
@@ -2174,311 +2182,311 @@ msgstr ""
 msgid "_XML"
 msgstr "_XML"
 
-#: virtManager/about.py:21
+#: virtManager/about.py:20
 #, python-format
 msgid "Error launching 'About' dialog: %s"
 msgstr "Eroare la lansarea dialogului «Despre»: %s"
 
-#: virtManager/addhardware.py:164 virtManager/details/details.py:573
+#: virtManager/addhardware.py:174 virtManager/details/details.py:554
 msgid "Hardware"
 msgstr "Hardware"
 
-#: virtManager/addhardware.py:205 virtManager/createvm.py:527
-#: virtManager/device/addstorage.py:189
+#: virtManager/addhardware.py:214 virtManager/createvm.py:506
+#: virtManager/device/addstorage.py:184
 msgid "Connection does not support storage management."
 msgstr "Conexiunea nu acceptă gestionarea stocării."
 
-#: virtManager/addhardware.py:218 virtManager/addhardware.py:971
+#: virtManager/addhardware.py:231 virtManager/addhardware.py:995
 msgid "Controller"
 msgstr "Controlor"
 
-#: virtManager/addhardware.py:219 virtManager/addhardware.py:973
-#: virtManager/createnet.py:330
+#: virtManager/addhardware.py:232 virtManager/addhardware.py:997
+#: virtManager/createnet.py:332
 msgid "Network"
 msgstr "Rețea"
 
-#: virtManager/addhardware.py:220 virtManager/addhardware.py:975
-#: virtManager/details/details.py:193
+#: virtManager/addhardware.py:234 virtManager/addhardware.py:999
+#: virtManager/details/details.py:190
 msgid "Input"
 msgstr "Intrare"
 
-#: virtManager/addhardware.py:221 virtManager/addhardware.py:226
-#: virtManager/addhardware.py:229 virtManager/addhardware.py:233
-#: virtManager/addhardware.py:239 virtManager/addhardware.py:263
+#: virtManager/addhardware.py:238 virtManager/addhardware.py:246
+#: virtManager/addhardware.py:253 virtManager/addhardware.py:261
+#: virtManager/addhardware.py:270 virtManager/addhardware.py:311
 msgid "Not supported for this guest type."
 msgstr "Nu este acceptat pentru acest tip de invitat."
 
-#: virtManager/addhardware.py:222 virtManager/addhardware.py:977
+#: virtManager/addhardware.py:240 virtManager/addhardware.py:1001
 msgid "Graphics"
 msgstr "Grafică"
 
-#: virtManager/addhardware.py:224 virtManager/addhardware.py:979
+#: virtManager/addhardware.py:242 virtManager/addhardware.py:1003
 msgid "Sound"
 msgstr "Sunet"
 
-#: virtManager/addhardware.py:231
+#: virtManager/addhardware.py:257
 msgid "Parallel"
 msgstr "Paralel"
 
-#: virtManager/addhardware.py:237
+#: virtManager/addhardware.py:266
 msgid "Channel"
 msgstr "Canal"
 
-#: virtManager/addhardware.py:241
+#: virtManager/addhardware.py:274
 msgid "USB Host Device"
 msgstr "Dispozitiv USB gazdă"
 
-#: virtManager/addhardware.py:243 virtManager/addhardware.py:247
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:278 virtManager/addhardware.py:283
+#: virtManager/addhardware.py:296
 msgid "Connection does not support host device enumeration"
 msgstr "Conexiunea nu acceptă enumerarea dispozitivelor gazdă"
 
-#: virtManager/addhardware.py:251
+#: virtManager/addhardware.py:286
 msgid "Not supported for containers"
 msgstr "Nu este acceptat pentru containere"
 
-#: virtManager/addhardware.py:252
+#: virtManager/addhardware.py:288
 msgid "PCI Host Device"
 msgstr "Dispozitiv PCI gazdă"
 
-#: virtManager/addhardware.py:255
+#: virtManager/addhardware.py:292
 msgid "MDEV Host Device"
 msgstr "Dispozitiv MDEV gazdă"
 
-#: virtManager/addhardware.py:259
+#: virtManager/addhardware.py:300
 msgid "Video"
 msgstr "Video"
 
-#: virtManager/addhardware.py:260
+#: virtManager/addhardware.py:304
 msgid "Libvirt version does not support video devices."
 msgstr "Versiunea Libvirt nu acceptă dispozitive video."
 
-#: virtManager/addhardware.py:261 virtManager/details/details.py:255
-#: virtManager/lib/libvirtenummap.py:110
+#: virtManager/addhardware.py:307 virtManager/details/details.py:252
+#: virtManager/lib/libvirtenummap.py:107
 msgid "Watchdog"
 msgstr "Watchdog"
 
-#: virtManager/addhardware.py:264
+#: virtManager/addhardware.py:313
 msgid "Filesystem"
 msgstr "Sistem de fișiere"
 
-#: virtManager/addhardware.py:265 virtManager/addhardware.py:987
-#: virtManager/details/details.py:253
+#: virtManager/addhardware.py:314 virtManager/addhardware.py:1011
+#: virtManager/details/details.py:250
 msgid "Smartcard"
 msgstr "Card de memorie"
 
-#: virtManager/addhardware.py:267 virtManager/addhardware.py:989
+#: virtManager/addhardware.py:315 virtManager/addhardware.py:1013
 msgid "USB Redirection"
 msgstr "Redirecționare USB"
 
-#: virtManager/addhardware.py:269 virtManager/addhardware.py:991
+#: virtManager/addhardware.py:316 virtManager/addhardware.py:1015
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:271 virtManager/details/details.py:245
+#: virtManager/addhardware.py:317 virtManager/details/details.py:242
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:272 virtManager/addhardware.py:995
-#: virtManager/details/details.py:252
+#: virtManager/addhardware.py:318 virtManager/addhardware.py:1019
+#: virtManager/details/details.py:249
 msgid "Panic Notifier"
 msgstr "Notificator de panică"
 
-#: virtManager/addhardware.py:274 virtManager/details/details.py:254
+#: virtManager/addhardware.py:320 virtManager/details/details.py:251
 msgid "VirtIO VSOCK"
 msgstr "VSOCK VirtIO"
 
-#: virtManager/addhardware.py:276
+#: virtManager/addhardware.py:324
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Nu este acceptat pentru această combinație hipervizor/libvirt/arh."
 
-#: virtManager/addhardware.py:346
+#: virtManager/addhardware.py:389
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Eroare la schimbarea configurației MV: %s"
 
-#: virtManager/addhardware.py:371
+#: virtManager/addhardware.py:413
 msgid "These changes will take effect after the next guest shutdown."
 msgstr ""
 "Aceste modificări vor intra în vigoare după următoarea oprire a invitatului."
 
-#: virtManager/addhardware.py:422
+#: virtManager/addhardware.py:457
 msgid "Pseudo TTY"
 msgstr "Pseudo TTY"
 
-#: virtManager/addhardware.py:423
+#: virtManager/addhardware.py:458
 msgid "Output to a file"
 msgstr "Ieșire într-un fișier"
 
-#: virtManager/addhardware.py:424
+#: virtManager/addhardware.py:459
 msgid "TCP net console"
 msgstr "Consolă de rețea TCP"
 
-#: virtManager/addhardware.py:425
+#: virtManager/addhardware.py:460
 msgid "UDP net console"
 msgstr "Consolă de rețea UDP"
 
-#: virtManager/addhardware.py:426
+#: virtManager/addhardware.py:461
 msgid "UNIX socket"
 msgstr "Soclu UNIX"
 
-#: virtManager/addhardware.py:427
+#: virtManager/addhardware.py:462
 msgid "Spice agent"
 msgstr "Agent Spice"
 
-#: virtManager/addhardware.py:428
+#: virtManager/addhardware.py:463
 msgid "Spice port"
 msgstr "Port Spice"
 
-#: virtManager/addhardware.py:429
+#: virtManager/addhardware.py:464
 msgid "QEMU vdagent"
 msgstr "Vdagent QEMU"
 
-#: virtManager/addhardware.py:443 virtManager/addhardware.py:504
+#: virtManager/addhardware.py:480 virtManager/addhardware.py:541
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:444 virtManager/details/details.py:2314
+#: virtManager/addhardware.py:481 virtManager/details/details.py:2260
 msgid "Floppy"
 msgstr "Dischetă"
 
-#: virtManager/addhardware.py:445 virtManager/addhardware.py:506
+#: virtManager/addhardware.py:482 virtManager/addhardware.py:543
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:446 virtManager/addhardware.py:505
+#: virtManager/addhardware.py:483 virtManager/addhardware.py:542
 msgid "SATA"
 msgstr "SATA"
 
-#: virtManager/addhardware.py:447
+#: virtManager/addhardware.py:484
 msgid "VirtIO Serial"
 msgstr "Serial VirtIO"
 
-#: virtManager/addhardware.py:448 virtManager/addhardware.py:508
-#: virtManager/addhardware.py:559
+#: virtManager/addhardware.py:485 virtManager/addhardware.py:545
+#: virtManager/addhardware.py:596
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:449
+#: virtManager/addhardware.py:486
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:450
+#: virtManager/addhardware.py:487
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:451
+#: virtManager/addhardware.py:488
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:459 virtManager/addhardware.py:885
+#: virtManager/addhardware.py:496 virtManager/addhardware.py:912
 msgid "VirtIO SCSI"
 msgstr "SCSI VirtIO"
 
-#: virtManager/addhardware.py:462
+#: virtManager/addhardware.py:499
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:507
+#: virtManager/addhardware.py:544
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:509 virtManager/addhardware.py:560
+#: virtManager/addhardware.py:546 virtManager/addhardware.py:597
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:510 virtManager/addhardware.py:561
+#: virtManager/addhardware.py:547 virtManager/addhardware.py:598
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:517
+#: virtManager/addhardware.py:554
 msgid "Random"
 msgstr "Aleatoriu"
 
-#: virtManager/addhardware.py:518
+#: virtManager/addhardware.py:555
 msgid "Entropy Gathering Daemon"
 msgstr "Demon de colectare a entropiei"
 
-#: virtManager/addhardware.py:519
+#: virtManager/addhardware.py:556
 msgid "Builtin RNG"
 msgstr "RNG încorporat"
 
-#: virtManager/addhardware.py:537
+#: virtManager/addhardware.py:574
 msgid "Forcefully reset the guest"
 msgstr "Reinițiere forțată a invitatului"
 
-#: virtManager/addhardware.py:538
+#: virtManager/addhardware.py:575
 msgid "Gracefully shutdown the guest"
 msgstr "Oprire elegantă a invitatului"
 
-#: virtManager/addhardware.py:539
+#: virtManager/addhardware.py:576
 msgid "Forcefully power off the guest"
 msgstr "Oprire forțată a invitatului"
 
-#: virtManager/addhardware.py:540
+#: virtManager/addhardware.py:577
 msgid "Pause the guest"
 msgstr "Pune în pauză invitatul"
 
-#: virtManager/addhardware.py:541
+#: virtManager/addhardware.py:578
 msgid "No action"
 msgstr "Nicio acțiune"
 
-#: virtManager/addhardware.py:542
+#: virtManager/addhardware.py:579
 msgid "Dump guest memory core"
 msgstr "Descarcă conținutul memoriei invitatului"
 
-#: virtManager/addhardware.py:549
+#: virtManager/addhardware.py:586
 msgid "EvTouch USB Graphics Tablet"
 msgstr "Tabletă grafică USB EvTouch"
 
-#: virtManager/addhardware.py:552 virtManager/details/details.py:192
+#: virtManager/addhardware.py:589 virtManager/details/details.py:189
 msgid "Keyboard"
 msgstr "Tastatură"
 
-#: virtManager/addhardware.py:553 virtManager/details/details.py:190
+#: virtManager/addhardware.py:590 virtManager/details/details.py:187
 msgid "Mouse"
 msgstr "Mouse"
 
-#: virtManager/addhardware.py:554 virtManager/details/details.py:188
+#: virtManager/addhardware.py:591 virtManager/details/details.py:185
 msgid "Tablet"
 msgstr "Tabletă"
 
-#: virtManager/addhardware.py:558
+#: virtManager/addhardware.py:595
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:567
+#: virtManager/addhardware.py:604
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:665
+#: virtManager/addhardware.py:701
 msgid "Disk device"
 msgstr "Dispozitiv de disc"
 
-#: virtManager/addhardware.py:667
+#: virtManager/addhardware.py:702
 msgid "CDROM device"
 msgstr "Dispozitiv CDRom"
 
-#: virtManager/addhardware.py:669
+#: virtManager/addhardware.py:703
 msgid "Floppy device"
 msgstr "Dispozitiv de dischetă"
 
-#: virtManager/addhardware.py:672
+#: virtManager/addhardware.py:705
 msgid "LUN Passthrough"
 msgstr "Transfer (passthrough) LUN"
 
-#: virtManager/addhardware.py:695 virtManager/addhardware.py:804
-#: virtManager/addhardware.py:814 virtManager/addhardware.py:863
-#: virtManager/addhardware.py:886 virtManager/device/addstorage.py:98
-#: virtManager/device/addstorage.py:105 virtManager/device/fsdetails.py:88
-#: virtManager/device/gfxdetails.py:103 virtManager/device/tpmdetails.py:76
-#: virtManager/device/tpmdetails.py:87 virtManager/preferences.py:171
+#: virtManager/addhardware.py:727 virtManager/addhardware.py:831
+#: virtManager/addhardware.py:840 virtManager/addhardware.py:886
+#: virtManager/addhardware.py:913 virtManager/device/addstorage.py:98
+#: virtManager/device/addstorage.py:104 virtManager/device/fsdetails.py:87
+#: virtManager/device/gfxdetails.py:105 virtManager/device/tpmdetails.py:77
+#: virtManager/device/tpmdetails.py:88 virtManager/preferences.py:171
 msgid "Hypervisor default"
 msgstr "Hipervizor (implicit)"
 
-#: virtManager/addhardware.py:783
+#: virtManager/addhardware.py:809
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
@@ -2488,68 +2496,68 @@ msgstr ""
 "Vă rugăm să porniți mdev-ul în sistemul gazdă înainte de a-l adăuga la "
 "sistemul invitat."
 
-#: virtManager/addhardware.py:789
+#: virtManager/addhardware.py:818
 msgid "No Devices Available"
 msgstr "Nu există dispozitive disponibile"
 
-#: virtManager/addhardware.py:851 virtManager/device/tpmdetails.py:72
+#: virtManager/addhardware.py:875 virtManager/device/tpmdetails.py:73
 msgid "Passthrough"
 msgstr "Transfer"
 
-#: virtManager/addhardware.py:852
+#: virtManager/addhardware.py:876
 msgid "Host"
 msgstr "Gazdă"
 
-#: virtManager/addhardware.py:858
+#: virtManager/addhardware.py:881
 msgid "Spice channel"
 msgstr "Canal Spice"
 
-#: virtManager/addhardware.py:882
+#: virtManager/addhardware.py:909
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:883
+#: virtManager/addhardware.py:910
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:981
+#: virtManager/addhardware.py:1005
 msgid "Video Device"
 msgstr "Dispozitiv video"
 
-#: virtManager/addhardware.py:983
+#: virtManager/addhardware.py:1007
 msgid "Watchdog Device"
 msgstr "Dispozitiv watchdog"
 
-#: virtManager/addhardware.py:985
+#: virtManager/addhardware.py:1009
 msgid "Filesystem Passthrough"
 msgstr "Transfer prin sistemul de fișiere"
 
-#: virtManager/addhardware.py:993
+#: virtManager/addhardware.py:1017
 msgid "Random Number Generator"
 msgstr "Generator de numere aleatorii"
 
-#: virtManager/addhardware.py:997
+#: virtManager/addhardware.py:1021
 msgid "VM Sockets"
 msgstr "Socluri MV"
 
-#: virtManager/addhardware.py:1001 virtManager/details/details.py:2092
+#: virtManager/addhardware.py:1025 virtManager/details/details.py:2044
 #, python-format
 msgid "%s Device"
 msgstr "Dispozitiv %s"
 
-#: virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:1029
 msgid "PCI Device"
 msgstr "Dispozitiv PCI"
 
-#: virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:1031
 msgid "MDEV Device"
 msgstr "Dispozitiv MDEV"
 
-#: virtManager/addhardware.py:1008
+#: virtManager/addhardware.py:1032
 msgid "USB Device"
 msgstr "Dispozitiv USB"
 
-#: virtManager/addhardware.py:1131
+#: virtManager/addhardware.py:1149
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2560,11 +2568,11 @@ msgstr ""
 "Adăugarea a mai mult de un controlor USB nu este acceptată.\n"
 "Puteți modifica tipul de controlor USB în ecranul de detalii al MV."
 
-#: virtManager/addhardware.py:1223
+#: virtManager/addhardware.py:1243
 msgid "Are you sure you want to add this device?"
 msgstr "Sunteți sigur că doriți să adăugați acest dispozitiv?"
 
-#: virtManager/addhardware.py:1226
+#: virtManager/addhardware.py:1247
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2572,102 +2580,102 @@ msgstr ""
 "Acest dispozitiv nu a putut fi atașat la mașina care rulează. Doriți să "
 "faceți dispozitivul disponibil după următoarea oprire a oaspetelui?"
 
-#: virtManager/addhardware.py:1250
+#: virtManager/addhardware.py:1274
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Nu s-a putut adăuga dispozitivul: %s"
 
-#: virtManager/addhardware.py:1271
+#: virtManager/addhardware.py:1294
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "Eroare la validarea parametrilor dispozitivului: %s"
 
-#: virtManager/addhardware.py:1277
+#: virtManager/addhardware.py:1303
 msgid "Creating device"
 msgstr "Crearea dispozitivului"
 
-#: virtManager/addhardware.py:1278
+#: virtManager/addhardware.py:1304
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "În funcție de dispozitiv, această operație poate dura câteva minute."
 
-#: virtManager/addhardware.py:1300
+#: virtManager/addhardware.py:1325
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "Dispozitivul este deja utilizat de alți invitați %s"
 
-#: virtManager/addhardware.py:1302
+#: virtManager/addhardware.py:1326
 msgid "Do you really want to use the device?"
 msgstr "Chiar doriți să utilizați dispozitivul?"
 
-#: virtManager/addhardware.py:1347
+#: virtManager/addhardware.py:1370
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "Eroare la construirea fișei XML a dispozitivului: %s"
 
-#: virtManager/asyncjob.py:219
+#: virtManager/asyncjob.py:228
 msgid "Cancelling job..."
 msgstr "Se anulează operația..."
 
-#: virtManager/clone.py:28 virtinst/cloner.py:192
+#: virtManager/clone.py:28 virtinst/cloner.py:199
 msgid "No storage to clone."
 msgstr "Nu există spațiu de stocare pentru clonare."
 
-#: virtManager/clone.py:111
+#: virtManager/clone.py:118
 #, python-format
 msgid "Disk target: %s"
 msgstr "Disc țintă: %s"
 
-#: virtManager/clone.py:112
+#: virtManager/clone.py:119
 #, python-format
 msgid "Original path: %s"
 msgstr "Ruta originală: %s"
 
-#: virtManager/clone.py:114
+#: virtManager/clone.py:121
 #, python-format
 msgid "New path: %s"
 msgstr "Noua rută: %s"
 
-#: virtManager/clone.py:118
+#: virtManager/clone.py:125
 #, python-format
 msgid "Storage is safe to share: %(reason)s"
 msgstr "Stocarea este sigură pentru partajare: %(reason)s"
 
-#: virtManager/clone.py:122
+#: virtManager/clone.py:127
 msgid "Sharing this storage is potentially dangerous."
 msgstr "Partajarea acestui spațiu de stocare este potențial periculoasă."
 
-#: virtManager/clone.py:125
+#: virtManager/clone.py:130
 #, python-format
 msgid "Storage is not cloneable: %(reason)s"
 msgstr "Spațiul de stocare nu poate fi clonat: %(reason)s"
 
-#: virtManager/clone.py:137
+#: virtManager/clone.py:141
 msgid "No storage."
 msgstr "Nu există spațiu de stocare."
 
-#: virtManager/clone.py:142
+#: virtManager/clone.py:146
 #, python-format
 msgid "Share disk with %s"
 msgstr "Partajează discul cu %s"
 
-#: virtManager/clone.py:144
+#: virtManager/clone.py:148
 msgid "Clone this disk"
 msgstr "Clonează acest disc"
 
-#: virtManager/clone.py:182
+#: virtManager/clone.py:185
 #, python-format
 msgid "Error launching clone dialog: %s"
 msgstr "Eroare la lansarea dialogului de clonare: %s"
 
-#: virtManager/clone.py:276
+#: virtManager/clone.py:278
 msgid "Clone"
 msgstr "Clonare"
 
-#: virtManager/clone.py:457
+#: virtManager/clone.py:453
 msgid "Cloning will overwrite the existing file"
 msgstr "Clonarea va suprascrie fișierul existent"
 
-#: virtManager/clone.py:458
+#: virtManager/clone.py:455
 msgid ""
 "Using an existing image will overwrite the path during the clone process. "
 "Are you sure you want to use this path?"
@@ -2675,11 +2683,11 @@ msgstr ""
 "Utilizarea unei imagini existente va suprascrie ruta în timpul procesului de "
 "clonare. Sunteți sigur că doriți să utilizați această rută?"
 
-#: virtManager/clone.py:487
+#: virtManager/clone.py:483
 msgid "Sharing storage may cause data to be overwritten."
 msgstr "Partajarea spațiului de stocare poate duce la suprascrierea datelor."
 
-#: virtManager/clone.py:488
+#: virtManager/clone.py:485
 #, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
@@ -2692,22 +2700,22 @@ msgstr ""
 "%(pathlist)s\n"
 "Rularea noului invitat ar putea suprascrie datele din aceste imagini de disc."
 
-#: virtManager/clone.py:503
+#: virtManager/clone.py:502
 #, python-format
 msgid "Error creating virtual machine clone '%(vm)s': %(error)s"
 msgstr "Eroare la crearea clonei mașinii virtuale „%(vm)s”: %(error)s"
 
-#: virtManager/clone.py:561
+#: virtManager/clone.py:562
 #, python-format
 msgid "Error with clone settings: %s"
 msgstr "Eroare cu parametrii de clonare: %s"
 
-#: virtManager/clone.py:566
+#: virtManager/clone.py:567
 #, python-format
 msgid "Creating virtual machine clone '%s'"
 msgstr "Se creează clona mașinii virtuale „%s”"
 
-#: virtManager/clone.py:571
+#: virtManager/clone.py:573
 #, python-format
 msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
@@ -2716,19 +2724,19 @@ msgstr ""
 "Se creează clona mașinii virtuale „%s” și spațiul de stocare selectat (acest "
 "lucru poate dura ceva timp)"
 
-#: virtManager/connection.py:397
+#: virtManager/connection.py:390
 msgid "User session"
 msgstr "Sesiune utilizator"
 
-#: virtManager/connection.py:497
+#: virtManager/connection.py:488
 msgid "Disconnected"
 msgstr "Deconectat"
 
-#: virtManager/connection.py:499
+#: virtManager/connection.py:490
 msgid "Connecting"
 msgstr "Se conectează"
 
-#: virtManager/connection.py:588
+#: virtManager/connection.py:582
 #, python-format
 msgid ""
 "%(object)s rename failed. Attempting to recover also failed.\n"
@@ -2744,62 +2752,62 @@ msgstr ""
 "\n"
 "Recuperarea erorii: %(recovererror)s"
 
-#: virtManager/createconn.py:56
+#: virtManager/createconn.py:51
 #, python-format
 msgid "Error launching connect dialog: %s"
 msgstr "Eroare la lansarea dialogului de conectare: %s"
 
-#: virtManager/createconn.py:117
+#: virtManager/createconn.py:114
 msgid "user session"
 msgstr "sesiune utilizator"
 
-#: virtManager/createconn.py:123
+#: virtManager/createconn.py:120
 msgid "Custom URI..."
 msgstr "Adresă URI personalizată..."
 
-#: virtManager/createconn.py:241
+#: virtManager/createconn.py:236
 msgid "A hostname is required for remote connections."
 msgstr "Un nume de gazdă este necesar pentru conexiunile la distanță."
 
-#: virtManager/createconn.py:254
+#: virtManager/createconn.py:249
 msgid "Would you still like to remember this connection?"
 msgstr "Doriți în continuare să vă mai amintiți această legătură?"
 
-#: virtManager/createnet.py:102
+#: virtManager/createnet.py:98
 msgid "Any physical device"
 msgstr "Orice dispozitiv fizic"
 
-#: virtManager/createnet.py:103
+#: virtManager/createnet.py:99
 msgid "Physical device..."
 msgstr "Dispozitiv fizic..."
 
-#: virtManager/createnet.py:111 virtManager/object/network.py:161
+#: virtManager/createnet.py:107 virtManager/object/network.py:156
 msgid "NAT"
 msgstr "NAT"
 
-#: virtManager/createnet.py:113
+#: virtManager/createnet.py:109
 msgid "Open"
 msgstr "Deschide"
 
-#: virtManager/createnet.py:114
+#: virtManager/createnet.py:110
 msgid "Isolated"
 msgstr "Izolat"
 
-#: virtManager/createnet.py:115
+#: virtManager/createnet.py:111
 msgid "SR-IOV pool"
 msgstr "„Hangar” SR-IOV"
 
-#: virtManager/createnet.py:175
+#: virtManager/createnet.py:173
 msgid "No available device"
 msgstr "Niciun dispozitiv disponibil"
 
-#: virtManager/createnet.py:336
+#: virtManager/createnet.py:338
 #, python-format
 msgid "Name '%s' already in use by another network."
 msgstr "Numele „%s” este deja utilizat de o altă rețea."
 
-#: virtManager/createnet.py:408 virtManager/createpool.py:318
-#: virtManager/createvol.py:265
+#: virtManager/createnet.py:408 virtManager/createpool.py:312
+#: virtManager/createvol.py:255
 #, python-format
 msgid "Error building XML: %s"
 msgstr "Eroare la construirea fișei XML: %s"
@@ -2809,91 +2817,91 @@ msgstr "Eroare la construirea fișei XML: %s"
 msgid "Error creating virtual network: %s"
 msgstr "Eroare la crearea rețelei virtuale: %s"
 
-#: virtManager/createnet.py:443
+#: virtManager/createnet.py:441
 #, python-format
 msgid "Error validating network: %s"
 msgstr "Eroare la validarea rețelei: %s"
 
-#: virtManager/createnet.py:448
+#: virtManager/createnet.py:449
 msgid "Creating virtual network..."
 msgstr "Se creează rețeaua virtuală..."
 
-#: virtManager/createnet.py:449
+#: virtManager/createnet.py:450
 msgid "Creating the virtual network may take a while..."
 msgstr "Crearea rețelei virtuale poate dura ceva timp..."
 
-#: virtManager/createpool.py:213
+#: virtManager/createpool.py:210
 msgid "Sou_rce Name:"
 msgstr "Numele sur_sei:"
 
-#: virtManager/createpool.py:213
+#: virtManager/createpool.py:210
 msgid "Volg_roup Name:"
 msgstr "Nume g_rup de volume:"
 
-#: virtManager/createpool.py:215
+#: virtManager/createpool.py:213
 msgid "_Source Path:"
 msgstr "Ruta _sursei:"
 
-#: virtManager/createpool.py:217
+#: virtManager/createpool.py:215
 msgid "_Source IQN:"
 msgstr "_Sursa IQN:"
 
-#: virtManager/createpool.py:219
+#: virtManager/createpool.py:217
 msgid "_Source Adapter:"
 msgstr "Adaptor _sursă:"
 
-#: virtManager/createpool.py:332
+#: virtManager/createpool.py:325
 #, python-format
 msgid "Error creating pool: %s"
 msgstr "Eroare la crearea „hangarului”: %s"
 
-#: virtManager/createpool.py:356
+#: virtManager/createpool.py:348
 #, python-format
 msgid "Error validating pool: %s"
 msgstr "Eroare la validarea „hangarului”: %s"
 
-#: virtManager/createpool.py:362
+#: virtManager/createpool.py:357
 msgid "Creating storage pool..."
 msgstr "Se creează „hangarul” de stocare..."
 
-#: virtManager/createpool.py:363
+#: virtManager/createpool.py:358
 msgid "Creating the storage pool may take a while..."
 msgstr "Crearea „hangarului” de stocare poate dura ceva timp..."
 
-#: virtManager/createpool.py:385
+#: virtManager/createpool.py:378
 msgid "Choose source path"
 msgstr "Alege ruta sursei"
 
-#: virtManager/createpool.py:397
+#: virtManager/createpool.py:389
 msgid "Choose target directory"
 msgstr "Alege directorul țintă"
 
-#: virtManager/createvm.py:70
+#: virtManager/createvm.py:66
 #, python-format
 msgid "%.1f GiB"
 msgstr "%.1f Gio"
 
-#: virtManager/createvm.py:74
+#: virtManager/createvm.py:70
 #, python-format
 msgid "%d MiB"
 msgstr "%d Mio"
 
-#: virtManager/createvm.py:182
+#: virtManager/createvm.py:180
 #, python-format
 msgid "Error launching create dialog: %s"
 msgstr "Eroare la lansarea dialogului de creare: %s"
 
-#: virtManager/createvm.py:309
+#: virtManager/createvm.py:301
 #, python-format
 msgid "Error: %s"
 msgstr "Eroare: %s"
 
-#: virtManager/createvm.py:315 virtManager/createvm.py:320
+#: virtManager/createvm.py:306 virtManager/createvm.py:310
 #, python-format
 msgid "<span size='small'>Warning: %s</span>"
 msgstr "<span size='small'>Avertisment: %s</span>"
 
-#: virtManager/createvm.py:498
+#: virtManager/createvm.py:482
 #, python-format
 msgid ""
 "Failed to setup UEFI: %s\n"
@@ -2902,28 +2910,28 @@ msgstr ""
 "Configurarea UEFI a eșuat: %s\n"
 "Opțiunile de instalare sunt limitate."
 
-#: virtManager/createvm.py:524
+#: virtManager/createvm.py:504
 msgid "Libvirt version does not support remote URL installs."
 msgstr "Versiunea Libvirt nu acceptă instalări URL la distanță."
 
-#: virtManager/createvm.py:531
+#: virtManager/createvm.py:510
 msgid "CDROM/ISO installs not available for paravirt guests."
 msgstr "Instalările CDROM/ISO nu sunt disponibile pentru invitații paravirt."
 
-#: virtManager/createvm.py:534
+#: virtManager/createvm.py:513
 #, python-format
 msgid "Architecture '%s' is not installable"
 msgstr "Arhitectura „%s” nu poate fi instalată"
 
-#: virtManager/createvm.py:549
+#: virtManager/createvm.py:525
 msgid "No install methods available for this connection."
 msgstr "Nu există metode de instalare disponibile pentru această conexiune."
 
-#: virtManager/createvm.py:580
+#: virtManager/createvm.py:553
 msgid "No hypervisor options were found for this connection."
 msgstr "Nu au fost găsite opțiuni de hipervizor pentru această conexiune."
 
-#: virtManager/createvm.py:585
+#: virtManager/createvm.py:558
 msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
@@ -2931,7 +2939,7 @@ msgstr ""
 "Aceasta înseamnă, de obicei, că QEMU sau KVM nu sunt instalate în "
 "calculatorul dvs. sau că modulele nucleului KVM nu sunt încărcate."
 
-#: virtManager/createvm.py:606
+#: virtManager/createvm.py:583
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
@@ -2940,12 +2948,12 @@ msgstr ""
 "instalat sau că modulele nucleului KVM nu sunt încărcate. Mașinile dvs. "
 "virtuale pot avea performanțe slabe."
 
-#: virtManager/createvm.py:649
+#: virtManager/createvm.py:626
 #, python-format
 msgid "Up to %(maxmem)s available on the host"
 msgstr "Până la %(maxmem)s disponibili pe gazdă"
 
-#: virtManager/createvm.py:657
+#: virtManager/createvm.py:634
 #, python-format
 msgid "Up to %(numcpus)d available"
 msgid_plural "Up to %(numcpus)d available"
@@ -2953,95 +2961,95 @@ msgstr[0] "Până la %(numcpus)d disponibil"
 msgstr[1] "Până la %(numcpus)d disponibili"
 msgstr[2] "Până la %(numcpus)d de disponibili"
 
-#: virtManager/createvm.py:695
+#: virtManager/createvm.py:669
 msgid "No active connection to install on."
 msgstr "Nicio conexiune activă pe care să instalați."
 
-#: virtManager/createvm.py:955 virtManager/details/details.py:1749
-#: virtManager/device/gfxdetails.py:96
+#: virtManager/createvm.py:921 virtManager/details/details.py:1708
+#: virtManager/device/gfxdetails.py:98
 msgid "None"
 msgstr "Niciuna"
 
-#: virtManager/createvm.py:969
+#: virtManager/createvm.py:935
 msgid "Local CDROM/ISO"
 msgstr "CDROM/ISO local"
 
-#: virtManager/createvm.py:971
+#: virtManager/createvm.py:937
 msgid "URL Install Tree"
 msgstr "Arborele de instalare al adresei URL"
 
-#: virtManager/createvm.py:973
+#: virtManager/createvm.py:939
 msgid "Import existing OS image"
 msgstr "Importă imaginea sistemului de operare existent"
 
-#: virtManager/createvm.py:975
+#: virtManager/createvm.py:941
 msgid "Manual install"
 msgstr "Instalare manuală"
 
-#: virtManager/createvm.py:977
+#: virtManager/createvm.py:943
 msgid "Application container"
 msgstr "Container de aplicație"
 
-#: virtManager/createvm.py:979
+#: virtManager/createvm.py:945
 msgid "Operating system container"
 msgstr "Container de sistem de operare"
 
-#: virtManager/createvm.py:981
+#: virtManager/createvm.py:947
 msgid "Virtuozzo container"
 msgstr "Container Virtuozzo"
 
-#: virtManager/createvm.py:1129
+#: virtManager/createvm.py:1086
 msgid "Removing disk images"
 msgstr "Se elimină imaginile de disc"
 
-#: virtManager/createvm.py:1130
+#: virtManager/createvm.py:1087
 msgid "Removing disk images we created for this virtual machine."
 msgstr ""
 "Se elimină imaginile de disc pe care le-am creat pentru această mașină "
 "virtuală."
 
-#: virtManager/createvm.py:1324
+#: virtManager/createvm.py:1285
 #, python-format
 msgid "Step %(current_page)d of %(max_page)d"
 msgstr "Pasul %(current_page)d din %(max_page)d"
 
-#: virtManager/createvm.py:1333
+#: virtManager/createvm.py:1295
 msgid "Waiting for install media / source"
 msgstr "Se așteaptă suportul / sursa de instalare"
 
-#: virtManager/createvm.py:1407
+#: virtManager/createvm.py:1365
 #, python-format
 msgid "Error populating summary page: %s"
 msgstr "Eroare la popularea paginii de rezumat: %s"
 
-#: virtManager/createvm.py:1451
+#: virtManager/createvm.py:1407
 #, python-format
 msgid "Uncaught error validating install parameters: %s"
 msgstr "Eroare necapturată la validarea parametrilor de instalare: %s"
 
-#: virtManager/createvm.py:1462
+#: virtManager/createvm.py:1417
 msgid "Source URL is required"
 msgstr "URL-ul sursă este necesar"
 
-#: virtManager/createvm.py:1467
+#: virtManager/createvm.py:1422
 msgid "Please specify password for accessing source registry"
 msgstr "Specificați parola pentru accesarea registrului sursă"
 
-#: virtManager/createvm.py:1475
+#: virtManager/createvm.py:1430
 #, python-format
 msgid "Destination path is not directory: %s"
 msgstr "Ruta de destinație nu este director: %s"
 
-#: virtManager/createvm.py:1478
+#: virtManager/createvm.py:1433
 #, python-format
 msgid "No write permissions for directory path: %s"
 msgstr "Nu există permisiuni de scriere pentru ruta directorului: %s"
 
-#: virtManager/createvm.py:1485
+#: virtManager/createvm.py:1440
 msgid "OS root directory is not empty"
 msgstr "Directorul rădăcină al sistemului de operare nu este gol"
 
-#: virtManager/createvm.py:1486
+#: virtManager/createvm.py:1442
 msgid ""
 "Creating root file system in a non-empty directory might fail due to file "
 "conflicts.\n"
@@ -3051,77 +3059,77 @@ msgstr ""
 "poate eșua din cauza conflictelor de fișiere.\n"
 "Doriți să continuați?"
 
-#: virtManager/createvm.py:1505
+#: virtManager/createvm.py:1463
 msgid "An install media selection is required."
 msgstr "Este necesară o selecție a suportului de instalare."
 
-#: virtManager/createvm.py:1513
+#: virtManager/createvm.py:1471
 msgid "An install tree is required."
 msgstr "Este necesar un arbore de instalare."
 
-#: virtManager/createvm.py:1521
+#: virtManager/createvm.py:1479
 msgid "A storage path to import is required."
 msgstr "Este necesară o rută de stocare pentru import."
 
-#: virtManager/createvm.py:1527
+#: virtManager/createvm.py:1483
 msgid "The import path must point to an existing storage."
 msgstr "Ruta de import trebuie să indice un spațiu de stocare existent."
 
-#: virtManager/createvm.py:1533
+#: virtManager/createvm.py:1489
 msgid "An application path is required."
 msgstr "Este necesară o rută de aplicație."
 
-#: virtManager/createvm.py:1538
+#: virtManager/createvm.py:1494
 msgid "An OS directory path is required."
 msgstr "Este necesară o rută a directorului sistemului de operare."
 
-#: virtManager/createvm.py:1552
+#: virtManager/createvm.py:1507
 msgid "A template name is required."
 msgstr "Este necesar un nume pentru șablon."
 
-#: virtManager/createvm.py:1555
+#: virtManager/createvm.py:1510
 msgid "You must select an OS."
 msgstr "Trebuie să selectați un sistem de operare."
 
-#: virtManager/createvm.py:1585
+#: virtManager/createvm.py:1540
 msgid "Error setting installer parameters."
 msgstr "Eroare la configurarea parametrilor de instalare."
 
-#: virtManager/createvm.py:1593
+#: virtManager/createvm.py:1548
 msgid "Error setting default name."
 msgstr "Eroare la stabilirea numelui implicit."
 
-#: virtManager/createvm.py:1684
+#: virtManager/createvm.py:1643
 msgid "Storage parameter error."
 msgstr "Eroare de parametru de stocare."
 
-#: virtManager/createvm.py:1706
+#: virtManager/createvm.py:1664
 msgid "Invalid guest name"
 msgstr "Nume de invitat nevalid"
 
-#: virtManager/createvm.py:1789
+#: virtManager/createvm.py:1750
 msgid "Detecting..."
 msgstr "Se detectează..."
 
-#: virtManager/createvm.py:1851
+#: virtManager/createvm.py:1812
 msgid "None detected"
 msgstr "Nu s-a detectat niciunul"
 
-#: virtManager/createvm.py:1888
+#: virtManager/createvm.py:1848
 #, python-format
 msgid "Error starting installation: %s"
 msgstr "Eroare la începerea instalării: %s"
 
-#: virtManager/createvm.py:1931
+#: virtManager/createvm.py:1889
 #, python-format
 msgid "Unable to complete install: '%s'"
 msgstr "Nu s-a putut finaliza instalarea: „%s”"
 
-#: virtManager/createvm.py:1971
+#: virtManager/createvm.py:1929
 msgid "Creating Virtual Machine"
 msgstr "Se creează mașina virtuală"
 
-#: virtManager/createvm.py:1972
+#: virtManager/createvm.py:1931
 msgid ""
 "The virtual machine is now being created. Allocation of disk storage and "
 "retrieval of the installation images may take a few minutes to complete."
@@ -3129,48 +3137,48 @@ msgstr ""
 "Mașina virtuală este în curs de creare. Alocarea spațiului de stocare pe "
 "disc și recuperarea imaginilor de instalare pot dura câteva minute."
 
-#: virtManager/createvm.py:2026
+#: virtManager/createvm.py:1987
 #, python-format
 msgid "VM '%s' didn't show up after expected time."
 msgstr "MV „%s” nu a apărut după timpul așteptat."
 
-#: virtManager/createvm.py:2076
+#: virtManager/createvm.py:2039
 #, python-format
 msgid "Error continuing install: %s"
 msgstr "Eroare la continuarea instalării: %s"
 
-#: virtManager/createvm.py:2093
+#: virtManager/createvm.py:2055
 msgid "Bootstrapping container"
 msgstr "Container de lansare"
 
-#: virtManager/createvol.py:140
+#: virtManager/createvol.py:134
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
 msgstr "Spațiu disponibil în: <b>%(volume)s</b> %(size)s"
 
-#: virtManager/createvol.py:280
+#: virtManager/createvol.py:269
 #, python-format
 msgid "Error creating vol: %s"
 msgstr "Eroare la crearea volumului: %s"
 
-#: virtManager/createvol.py:296
+#: virtManager/createvol.py:284
 #, python-format
 msgid "Error validating volume: %s"
 msgstr "Eroare la validarea volumului: %s"
 
-#: virtManager/createvol.py:301
+#: virtManager/createvol.py:292
 msgid "Creating storage volume..."
 msgstr "Se creează volumul de stocare..."
 
-#: virtManager/createvol.py:302
+#: virtManager/createvol.py:293
 msgid "Creating the storage volume may take a while..."
 msgstr "Crearea volumului de stocare poate dura ceva timp..."
 
-#: virtManager/delete.py:156
+#: virtManager/delete.py:149
 msgid "Are you sure you want to delete the storage?"
 msgstr "Sunteți sigur că doriți să ștergeți spațiul de stocare?"
 
-#: virtManager/delete.py:157
+#: virtManager/delete.py:150
 #, python-format
 msgid ""
 "The following paths will be deleted:\n"
@@ -3181,37 +3189,37 @@ msgstr ""
 "\n"
 "%s"
 
-#: virtManager/delete.py:196
+#: virtManager/delete.py:197
 #, python-format
 msgid "Error deleting virtual machine '%(vm)s': %(error)s"
 msgstr "Eroare la ștergerea mașinii virtuale „%(vm)s”: %(error)s"
 
-#: virtManager/delete.py:212
+#: virtManager/delete.py:215
 msgid "Additionally, there were errors removing certain storage devices: \n"
 msgstr ""
 "În plus, au existat erori la eliminarea anumitor dispozitive de stocare: \n"
 
-#: virtManager/delete.py:216
+#: virtManager/delete.py:218
 msgid "Errors encountered while removing certain storage devices."
 msgstr ""
 "Erori întâmpinate în timpul eliminării anumitor dispozitive de stocare."
 
-#: virtManager/delete.py:227
+#: virtManager/delete.py:228
 #, python-format
 msgid "Deleting path '%s'"
 msgstr "Se șterge ruta „%s”"
 
-#: virtManager/delete.py:284
+#: virtManager/delete.py:291
 #, python-format
 msgid "Error launching delete dialog: %s"
 msgstr "Eroare la lansarea dialogului de ștergere: %s"
 
-#: virtManager/delete.py:290
+#: virtManager/delete.py:297
 #, python-format
 msgid "Delete '%(vmname)s'"
 msgstr "Șterge „%(vmname)s"
 
-#: virtManager/delete.py:294
+#: virtManager/delete.py:302
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
@@ -3219,162 +3227,162 @@ msgstr ""
 "Ștergerea mașinii virtuale „%s” și a stocării selectate (poate dura ceva "
 "timp)"
 
-#: virtManager/delete.py:298
+#: virtManager/delete.py:307
 #, python-format
 msgid "Deleting virtual machine '%s'"
 msgstr "Se șterge mașina virtuală „%s”"
 
-#: virtManager/delete.py:340
+#: virtManager/delete.py:350
 #, python-format
 msgid "Error Removing Device: %s"
 msgstr "Eroare la eliminarea dispozitivului: %s"
 
-#: virtManager/delete.py:354
+#: virtManager/delete.py:364
 msgid "This change will take effect after the next guest shutdown."
 msgstr ""
 "Această modificare va intra în vigoare după următoarea oprire a invitatului."
 
-#: virtManager/delete.py:357
+#: virtManager/delete.py:367
 msgid "Storage will not be deleted."
 msgstr "Spațiul de stocare nu va fi șters."
 
-#: virtManager/delete.py:360
+#: virtManager/delete.py:370
 msgid "Device could not be removed from the running machine"
 msgstr "Dispozitivul nu a putut fi eliminat din mașina în funcțiune"
 
-#: virtManager/delete.py:370
+#: virtManager/delete.py:382
 msgid "Remove Disk Device"
 msgstr "Elimină dispozitivul de disc"
 
-#: virtManager/delete.py:373
+#: virtManager/delete.py:385
 #, python-format
 msgid "Remove disk device '%(target)s'"
 msgstr "Elimină dispozitivul de disc „%(target)s"
 
-#: virtManager/delete.py:378
+#: virtManager/delete.py:390
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
 "Eliminarea dispozitivului de disc „%s” și a stocării selectate (poate dura "
 "ceva timp)"
 
-#: virtManager/delete.py:381
+#: virtManager/delete.py:394
 #, python-format
 msgid "Removing disk device '%s'"
 msgstr "Se elimină dispozitivul de disc „%s”"
 
-#: virtManager/delete.py:506
+#: virtManager/delete.py:526
 msgid "Target"
 msgstr "Țintă"
 
-#: virtManager/delete.py:508
+#: virtManager/delete.py:528
 msgid "Storage Path"
 msgstr "Ruta de stocare"
 
-#: virtManager/delete.py:567
+#: virtManager/delete.py:589
 msgid "Cannot delete iSCSI share."
 msgstr "Nu se poate șterge partajarea iSCSI."
 
-#: virtManager/delete.py:569
+#: virtManager/delete.py:591
 msgid "Cannot delete SCSI device."
 msgstr "Nu se poate șterge dispozitivul SCSI."
 
-#: virtManager/delete.py:572
+#: virtManager/delete.py:594
 msgid "Cannot delete unmanaged remote storage."
 msgstr "Nu se poate șterge stocarea de la distanță negestionată."
 
-#: virtManager/delete.py:574
+#: virtManager/delete.py:596
 msgid "Path does not exist."
 msgstr "Ruta nu există."
 
-#: virtManager/delete.py:576
+#: virtManager/delete.py:598
 msgid "No write access to parent directory."
 msgstr "Nu există acces de scriere la directorul părinte."
 
-#: virtManager/delete.py:578
+#: virtManager/delete.py:600
 msgid "Cannot delete unmanaged block device."
 msgstr "Nu se poate șterge dispozitivul de blocuri negestionat."
 
-#: virtManager/delete.py:589
+#: virtManager/delete.py:611
 msgid "Storage is read-only."
 msgstr "Stocarea este numai-pentru-citire."
 
-#: virtManager/delete.py:591
+#: virtManager/delete.py:613
 msgid "No write access to path."
 msgstr "Nu există acces de scriere la rută."
 
-#: virtManager/delete.py:594
+#: virtManager/delete.py:616
 msgid "Storage is marked as shareable."
 msgstr "Stocarea este marcată ca partajabilă."
 
-#: virtManager/delete.py:597
+#: virtManager/delete.py:619
 msgid "Storage is a media device."
 msgstr "Stocarea este un dispozitiv multimedia."
 
-#: virtManager/delete.py:606
+#: virtManager/delete.py:627
 msgid "Storage is in use by the following virtual machines"
 msgstr "Stocarea este utilizată de următoarele mașini virtuale"
 
-#: virtManager/delete.py:611
+#: virtManager/delete.py:632
 msgid "Failed to check disk usage conflict."
 msgstr "Verificarea conflictului de utilizare a discului a eșuat."
 
-#: virtManager/details/console.py:153
+#: virtManager/details/console.py:155
 msgid "Leave Fullscreen"
 msgstr "Părăsiți ecranul complet"
 
-#: virtManager/details/console.py:155
+#: virtManager/details/console.py:157
 msgid "Leave fullscreen"
 msgstr "Părăsiți ecranul complet"
 
-#: virtManager/details/console.py:164
+#: virtManager/details/console.py:165
 msgid "Send key combination"
 msgstr "Trimite combinația de taste"
 
-#: virtManager/details/console.py:195
+#: virtManager/details/console.py:196
 #, python-format
 msgid "Cannot display graphical console type '%s'"
 msgstr "Nu se poate afișa consola grafică de tip „%s”"
 
-#: virtManager/details/console.py:223
+#: virtManager/details/console.py:224
 #, python-format
 msgid "Text Console %d"
 msgstr "Consolă de text %d"
 
-#: virtManager/details/console.py:225
+#: virtManager/details/console.py:226
 #, python-format
 msgid "Serial %d"
 msgstr "Serie %d"
 
-#: virtManager/details/console.py:231
+#: virtManager/details/console.py:232
 msgid "No text console available"
 msgstr "Nu este disponibilă nicio consolă de text"
 
-#: virtManager/details/console.py:244
+#: virtManager/details/console.py:246
 msgid "Graphical Console"
 msgstr "Consolă grafică"
 
-#: virtManager/details/console.py:254
+#: virtManager/details/console.py:258
 msgid "virt-manager does not support more than one graphical console"
 msgstr "virt-manager nu acceptă mai mult de o consolă grafică"
 
-#: virtManager/details/console.py:260
+#: virtManager/details/console.py:263
 msgid "Graphical console not configured for guest"
 msgstr "Consola grafică nu este configurată pentru invitat"
 
-#: virtManager/details/console.py:547
+#: virtManager/details/console.py:540
 msgid "Guest has crashed."
 msgstr "Invitatul s-a prăbușit."
 
-#: virtManager/details/console.py:549
+#: virtManager/details/console.py:542
 msgid "Guest is not running."
 msgstr "Invitatul nu rulează."
 
-#: virtManager/details/console.py:666
+#: virtManager/details/console.py:651
 msgid "Connecting to graphical console for guest"
 msgstr "Conectarea la consola grafică pentru invitat"
 
-#: virtManager/details/console.py:689
+#: virtManager/details/console.py:671
 #, python-format
 msgid ""
 "Error connecting to graphical console:\n"
@@ -3383,432 +3391,438 @@ msgstr ""
 "Eroare de conectare la consola grafică:\n"
 "%s"
 
-#: virtManager/details/console.py:743
+#: virtManager/details/console.py:724
 #, python-format
 msgid "Viewer authentication error: %s"
 msgstr "Eroare de autentificare a vizorului: %s"
 
-#: virtManager/details/console.py:765
+#: virtManager/details/console.py:746
 msgid "USB redirection error"
 msgstr "Eroare de redirecționare USB"
 
-#: virtManager/details/console.py:774
+#: virtManager/details/console.py:755
 msgid "Viewer was disconnected."
 msgstr "Vizorul a fost deconectat."
 
-#: virtManager/details/console.py:781
+#: virtManager/details/console.py:762
 #, python-format
 msgid "SSH tunnel error output: %s"
 msgstr "Ieșirea de eroare a tunelului SSH: %s"
 
-#: virtManager/details/console.py:794
+#: virtManager/details/console.py:775
 msgid "Viewer is disconnecting."
 msgstr "Vizorul se deconectează."
 
-#: virtManager/details/console.py:940
+#: virtManager/details/console.py:914
 msgid "Viewer window closed."
 msgstr "Fereastra vizorului s-a închis."
 
-#: virtManager/details/console.py:944
+#: virtManager/details/console.py:919
 #, python-format
 msgid "Press %s to release pointer."
 msgstr "Apăsați %s pentru a elibera indicatorul mouse-ului."
 
-#: virtManager/details/details.py:161
+#: virtManager/details/details.py:158
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "Discheta %(index)d"
 
-#: virtManager/details/details.py:167
+#: virtManager/details/details.py:164
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "CDROM %(bus)s %(index)d"
 
-#: virtManager/details/details.py:172
+#: virtManager/details/details.py:169
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "Disc %(bus)s %(index)d"
 
-#: virtManager/details/details.py:176
+#: virtManager/details/details.py:173
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(device)s %(bus)s %(index)d"
 
-#: virtManager/details/details.py:184
+#: virtManager/details/details.py:181
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "NIC %(mac)s"
 
-#: virtManager/details/details.py:197
+#: virtManager/details/details.py:194
 #, python-format
 msgid "Serial %(num)d"
 msgstr "Serial %(num)d"
 
-#: virtManager/details/details.py:201
+#: virtManager/details/details.py:198
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "Paralel %(num)d"
 
-#: virtManager/details/details.py:205
+#: virtManager/details/details.py:202
 #, python-format
 msgid "Console %(num)d"
 msgstr "Consola %(num)d"
 
-#: virtManager/details/details.py:213
+#: virtManager/details/details.py:210
 #, python-format
 msgid "Channel (%(name)s)"
 msgstr "Canal (%(name)s)"
 
-#: virtManager/details/details.py:214
+#: virtManager/details/details.py:211
 #, python-format
 msgid "Channel %(type)s"
 msgstr "Canal %(type)s"
 
-#: virtManager/details/details.py:218
+#: virtManager/details/details.py:215
 #, python-format
 msgid "Display %s"
 msgstr "Afișaj %s"
 
-#: virtManager/details/details.py:220
+#: virtManager/details/details.py:217
 #, python-format
 msgid "%(bus)s Redirector %(index)d"
 msgstr "Redirecționare %(bus)s %(index)d"
 
-#: virtManager/details/details.py:227
+#: virtManager/details/details.py:224
 #, python-format
 msgid "Sound %s"
 msgstr "Sunet %s"
 
-#: virtManager/details/details.py:229
+#: virtManager/details/details.py:226
 #, python-format
 msgid "Video %s"
 msgstr "Video %s"
 
-#: virtManager/details/details.py:231
+#: virtManager/details/details.py:228
 #, python-format
 msgid "Filesystem %(path)s"
 msgstr "Sistemul de fișiere %(path)s"
 
-#: virtManager/details/details.py:235
+#: virtManager/details/details.py:232
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr "Controlor %(controller)s %(index)s"
 
-#: virtManager/details/details.py:239
+#: virtManager/details/details.py:236
 #, python-format
 msgid "Controller %(controller)s"
 msgstr "Controlor %(controller)s"
 
-#: virtManager/details/details.py:244
+#: virtManager/details/details.py:241
 #, python-format
 msgid "RNG %(device)s"
 msgstr "RNG %(device)s"
 
-#: virtManager/details/details.py:248
+#: virtManager/details/details.py:245
 #, python-format
 msgid "TPM %(device)s"
 msgstr "TPM %(device)s"
 
-#: virtManager/details/details.py:249
+#: virtManager/details/details.py:246
 #, python-format
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:518
+#: virtManager/details/details.py:496
 msgid "_Add Hardware"
 msgstr "_Adaugă hardware"
 
-#: virtManager/details/details.py:524
+#: virtManager/details/details.py:504
 msgid "_Remove Hardware"
 msgstr "Elimină componenta ha_rdware"
 
-#: virtManager/details/details.py:643 virtManager/details/details.py:1756
+#: virtManager/details/details.py:624 virtManager/details/details.py:1715
 msgid "UEFI"
 msgstr "UEFI"
 
-#: virtManager/details/details.py:653
+#: virtManager/details/details.py:632
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt sau hipervizorul nu acceptă UEFI."
 
-#: virtManager/details/details.py:656
+#: virtManager/details/details.py:635
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirt nu a detectat nicio imagine firmware UEFI/OVMF instalată pe gazdă."
 
-#: virtManager/details/details.py:706
+#: virtManager/details/details.py:681
 msgid "Version"
 msgstr "Versiunea"
 
-#: virtManager/details/details.py:768
+#: virtManager/details/details.py:743
 msgid "Application Default"
 msgstr "Implicit pentru aplicație"
 
-#: virtManager/details/details.py:770
+#: virtManager/details/details.py:746
 msgid "Hypervisor Default"
 msgstr "Implicit pentru hipervizor"
 
-#: virtManager/details/details.py:772
+#: virtManager/details/details.py:749
 msgid "Clear CPU configuration"
 msgstr "Șterge configurația CPU"
 
-#: virtManager/details/details.py:790
+#: virtManager/details/details.py:767
 msgid "Disk bus:"
 msgstr "Magistrală disc:"
 
-#: virtManager/details/details.py:1000
+#: virtManager/details/details.py:973
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Eroare la lansarea dialogului privind componentele hardware: %s"
 
-#: virtManager/details/details.py:1006
+#: virtManager/details/details.py:979
 msgid "Are you sure you want to remove this device?"
 msgstr "Sunteți sigur că doriți să eliminați acest dispozitiv?"
 
-#: virtManager/details/details.py:1253 virtManager/details/details.py:1748
-#: virtManager/details/details.py:1767 virtManager/details/details.py:1969
-#: virtManager/lib/libvirtenummap.py:86
+#: virtManager/details/details.py:1230 virtManager/details/details.py:1707
+#: virtManager/details/details.py:1724 virtManager/details/details.py:1925
+#: virtManager/lib/libvirtenummap.py:82
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: virtManager/details/details.py:1335
+#: virtManager/details/details.py:1311
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "Eroare la aplicarea modificărilor: %s"
 
-#: virtManager/details/details.py:1464
+#: virtManager/details/details.py:1438
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Eroare la schimbarea valorii de autopornire: %s"
 
-#: virtManager/details/details.py:1481
+#: virtManager/details/details.py:1454
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "Nu se poate configura initrd fără a specifica o rută pentru nucleu"
 
-#: virtManager/details/details.py:1484
+#: virtManager/details/details.py:1457
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 "Nu se pot defini argumentele nucleului fără a specifica o rută a nucleului"
 
-#: virtManager/details/details.py:1491
+#: virtManager/details/details.py:1464
 msgid "An init path must be specified"
 msgstr "Trebuie specificată o rută de inițiere"
 
-#: virtManager/details/details.py:1504 virtManager/device/addstorage.py:275
+#: virtManager/details/details.py:1476 virtManager/device/addstorage.py:271
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "Discul „%(path)s” este deja utilizat de alți invitați %(names)s"
 
-#: virtManager/details/details.py:1508 virtManager/device/addstorage.py:279
+#: virtManager/details/details.py:1480 virtManager/device/addstorage.py:275
 msgid "Do you really want to use the disk?"
 msgstr "Chiar doriți să utilizați discul?"
 
-#: virtManager/details/details.py:1670
+#: virtManager/details/details.py:1629
 msgid "Remove this device from the virtual machine"
 msgstr "Elimină acest dispozitiv din mașina virtuală"
 
-#: virtManager/details/details.py:1727
+#: virtManager/details/details.py:1686
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Eroare la reactualizarea paginii componentei hardware: %s"
 
-#: virtManager/details/details.py:1822
+#: virtManager/details/details.py:1776
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1834
+#: virtManager/details/details.py:1790
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "s-a citit %(received)d %(units)s"
 
-#: virtManager/details/details.py:1835
+#: virtManager/details/details.py:1790
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "s-a scris %(transferred)d %(units)s"
 
-#: virtManager/details/details.py:1838
+#: virtManager/details/details.py:1796
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "intrare %(received)d %(units)s"
 
-#: virtManager/details/details.py:1839
+#: virtManager/details/details.py:1796
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "ieșire %(transferred)d %(units)s"
 
-#: virtManager/details/details.py:1841 virtManager/details/details.py:1842
-#: virtManager/details/details.py:1843 virtManager/details/details.py:1844
-#: virtManager/hostnets.py:206 virtManager/hostnets.py:225
+#: virtManager/details/details.py:1799 virtManager/details/details.py:1800
+#: virtManager/details/details.py:1801 virtManager/details/details.py:1802
+#: virtManager/hostnets.py:203 virtManager/hostnets.py:222
 msgid "Disabled"
 msgstr "Dezactivat"
 
-#: virtManager/details/details.py:1852
+#: virtManager/details/details.py:1810
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(current-memory)s din %(total-memory)s"
 
-#: virtManager/details/details.py:2018
+#: virtManager/details/details.py:1973
 msgid "Absolute Movement"
 msgstr "Mișcare absolută"
 
-#: virtManager/details/details.py:2020
+#: virtManager/details/details.py:1975
 msgid "Relative Movement"
 msgstr "Mișcare relativă"
 
-#: virtManager/details/details.py:2029 virtManager/details/details.py:2195
-#: virtManager/details/details.py:2198
+#: virtManager/details/details.py:1984 virtManager/details/details.py:2141
+#: virtManager/details/details.py:2143
 msgid "Hypervisor does not support removing this device"
 msgstr "Hipervizorul nu acceptă eliminarea acestui dispozitiv"
 
-#: virtManager/details/details.py:2033
+#: virtManager/details/details.py:1988
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "Server %(graphicstype)s"
 
-#: virtManager/details/details.py:2084
+#: virtManager/details/details.py:2036
 msgid "Serial Device"
 msgstr "Dispozitiv Serial"
 
-#: virtManager/details/details.py:2086
+#: virtManager/details/details.py:2038
 msgid "Parallel Device"
 msgstr "Dispozitiv paralel"
 
-#: virtManager/details/details.py:2088
+#: virtManager/details/details.py:2040
 msgid "Console Device"
 msgstr "Dispozitiv consolă"
 
-#: virtManager/details/details.py:2090
+#: virtManager/details/details.py:2042
 msgid "Channel Device"
 msgstr "Dispozitiv canal"
 
-#: virtManager/details/details.py:2100
+#: virtManager/details/details.py:2051
 msgid "Primary Console"
 msgstr "Consola principală"
 
-#: virtManager/details/details.py:2136 virtManager/preferences.py:123
+#: virtManager/details/details.py:2085 virtManager/preferences.py:121
 msgid "Off"
 msgstr "Dezactivat"
 
-#: virtManager/details/details.py:2136 virtManager/preferences.py:124
+#: virtManager/details/details.py:2085 virtManager/preferences.py:122
 msgid "On"
 msgstr "Activat"
 
-#: virtManager/details/details.py:2162
+#: virtManager/details/details.py:2110
 #, python-format
 msgid "Physical %s Device"
 msgstr "Dispozitiv %s fizic"
 
-#: virtManager/details/details.py:2179
+#: virtManager/details/details.py:2126
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "Nu se poate elimina ultimul dispozitiv video în timp ce grafica/afișajul "
 "este atașat."
 
-#: virtManager/details/details.py:2205
+#: virtManager/details/details.py:2150
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(device)s la %(address)s"
 
-#: virtManager/details/details.py:2211 virtManager/details/details.py:2221
+#: virtManager/details/details.py:2156 virtManager/details/details.py:2165
 msgid "Cannot remove controller while devices are attached."
 msgstr "Nu se poate elimina controlorul în timp ce dispozitivele sunt atașate."
 
-#: virtManager/details/details.py:2311
+#: virtManager/details/details.py:2257
 msgid "Hard Disk"
 msgstr "Disc dur"
 
-#: virtManager/details/details.py:2312
+#: virtManager/details/details.py:2258
 msgid "CDROM"
 msgstr "CDROM"
 
-#: virtManager/details/details.py:2313
+#: virtManager/details/details.py:2259
 msgid "Network (PXE)"
 msgstr "Rețea (PXE)"
 
-#: virtManager/details/details.py:2328
+#: virtManager/details/details.py:2274
 msgid "No bootable devices"
 msgstr "Nu există dispozitive apte pentru a fi pornite"
 
-#: virtManager/details/details.py:2375
+#: virtManager/details/details.py:2320
 msgid "Overview"
 msgstr "Privire generalã"
 
-#: virtManager/details/details.py:2376
+#: virtManager/details/details.py:2321
 msgid "OS information"
 msgstr "Informații despre sistemul de operare"
 
-#: virtManager/details/details.py:2378
+#: virtManager/details/details.py:2323
 msgid "Performance"
 msgstr "Performanță"
 
-#: virtManager/details/details.py:2380
+#: virtManager/details/details.py:2324
 msgid "CPUs"
 msgstr "CPU-uri"
 
-#: virtManager/details/details.py:2382
+#: virtManager/details/details.py:2326
 msgid "Boot Options"
 msgstr "Opțiuni de pornire"
 
-#: virtManager/details/serialcon.py:183
+#: virtManager/details/serialcon.py:189
 #, python-format
 msgid "Console for device type '%s' is not supported"
 msgstr "Consola pentru tipul de dispozitiv „%s” nu este acceptată"
 
-#: virtManager/details/serialcon.py:249
+#: virtManager/details/serialcon.py:251
 msgid "_Copy"
 msgstr "_Copiază"
 
-#: virtManager/details/serialcon.py:253
+#: virtManager/details/serialcon.py:255
 msgid "_Paste"
 msgstr "Li_pește"
 
-#: virtManager/details/serialcon.py:346
+#: virtManager/details/serialcon.py:342
 #, python-format
 msgid "Error connecting to text console: %s"
 msgstr "Eroare la conectarea la consola de text: %s"
 
-#: virtManager/details/snapshots.py:122
+#: virtManager/details/snapshots.py:125
 msgid "external snapshots not supported with this libvirt connection"
 msgstr ""
 "imaginile instantanee externe nu sunt acceptate cu această conexiune libvirt"
 
-#: virtManager/details/snapshots.py:275
+#: virtManager/details/snapshots.py:291
 #, python-format
 msgid "Error creating snapshot: %s"
 msgstr "Eroare la crearea imaginii instantanee: %s"
 
-#: virtManager/details/snapshots.py:297
+#: virtManager/details/snapshots.py:312
 msgid "Snapshot"
 msgstr "Imagine instantanee"
 
-#: virtManager/details/snapshots.py:300
+#: virtManager/details/snapshots.py:315
 #, python-format
 msgid "Error validating snapshot: %s"
 msgstr "Eroare la validarea imaginii instantanee: %s"
 
-#: virtManager/details/snapshots.py:340 virtManager/lib/libvirtenummap.py:113
+#: virtManager/details/snapshots.py:357 virtManager/lib/libvirtenummap.py:110
 msgid "Creating snapshot"
 msgstr "Se creează imaginea instantanee"
 
-#: virtManager/details/snapshots.py:341
+#: virtManager/details/snapshots.py:358
 msgid "Creating virtual machine snapshot"
 msgstr "Se creează imaginea instantanee a mașinii virtuale"
 
-#: virtManager/details/snapshots.py:461
+#: virtManager/details/snapshots.py:388
+msgid ""
+"Mixing external and internal snapshots for the same VM is not recommended. "
+"Are you sure you want to continue?"
+msgstr ""
+
+#: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
 msgstr "Lan-sează imaginea instantanee"
 
-#: virtManager/details/snapshots.py:466
+#: virtManager/details/snapshots.py:508
 msgid "_Delete snapshot"
 msgstr "Șterge imaginea instantanee"
 
-#: virtManager/details/snapshots.py:519
+#: virtManager/details/snapshots.py:561
 #, python-format
 msgid "Error refreshing snapshot list: %s"
 msgstr "Eroare la actualizarea listei de imagini instantanee: %s"
 
-#: virtManager/details/snapshots.py:532
+#: virtManager/details/snapshots.py:573
 #, python-format
 msgid ""
 "%(vm)s\n"
@@ -3817,7 +3831,7 @@ msgstr ""
 "%(vm)s\n"
 "<span size='small'>Starea MV: %(state)s (externă)</span>"
 
-#: virtManager/details/snapshots.py:537
+#: virtManager/details/snapshots.py:577
 #, python-format
 msgid ""
 "%(vm)s\n"
@@ -3826,28 +3840,28 @@ msgstr ""
 "%(vm)s\n"
 "<span size='small'> Starea MV: %(state)s</span>"
 
-#: virtManager/details/snapshots.py:599
+#: virtManager/details/snapshots.py:634
 #, python-format
 msgid "<b>Snapshot '%(name)s':</b>"
 msgstr "<b>Imaginea instantanee „%(name)s”:</b>"
 
-#: virtManager/details/snapshots.py:619
+#: virtManager/details/snapshots.py:650
 msgid "External disk and memory"
 msgstr "Disc și memorie externe"
 
-#: virtManager/details/snapshots.py:621
+#: virtManager/details/snapshots.py:652
 msgid "External memory only"
 msgstr "Numai memorie externă"
 
-#: virtManager/details/snapshots.py:623
+#: virtManager/details/snapshots.py:654
 msgid "External disk only"
 msgstr "Numai disc extern"
 
-#: virtManager/details/snapshots.py:714
+#: virtManager/details/snapshots.py:743
 msgid "Saved memory state will not be part of the snapshot"
 msgstr "Starea memoriei salvate nu va face parte din imaginea instantanee"
 
-#: virtManager/details/snapshots.py:715
+#: virtManager/details/snapshots.py:745
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
@@ -3860,7 +3874,7 @@ msgstr ""
 "funcționării. Se recomandă, în schimb, realizarea unei imagini instantanee a "
 "sistemului în funcțiune sau oprit."
 
-#: virtManager/details/snapshots.py:736
+#: virtManager/details/snapshots.py:769
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk changes "
@@ -3870,7 +3884,7 @@ msgstr ""
 "modificările aduse discului de la crearea ultimei imagini instantanee vor fi "
 "eliminate."
 
-#: virtManager/details/snapshots.py:740
+#: virtManager/details/snapshots.py:775
 #, python-format
 msgid ""
 "Are you sure you want to run the snapshot '%(name)s'? All the disk and "
@@ -3880,12 +3894,12 @@ msgstr ""
 "modificările de disc și de configurare de la crearea ultimei imagini "
 "instantanee vor fi eliminate."
 
-#: virtManager/details/snapshots.py:751
+#: virtManager/details/snapshots.py:787
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 "Starea salvată va fi eliminată pentru a evita coruperea sistemului de fișiere"
 
-#: virtManager/details/snapshots.py:752
+#: virtManager/details/snapshots.py:789
 #, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
@@ -3901,54 +3915,54 @@ msgstr ""
 "Prin urmare, starea salvată va fi eliminată înainte de restaurarea imaginii "
 "instantanee."
 
-#: virtManager/details/snapshots.py:766
+#: virtManager/details/snapshots.py:807
 msgid "Running snapshot"
 msgstr "Imagine instantanee în curs de execuție"
 
-#: virtManager/details/snapshots.py:767
+#: virtManager/details/snapshots.py:808
 #, python-format
 msgid "Running snapshot '%s'"
 msgstr "Se execută imaginea instantanee „%s”"
 
-#: virtManager/details/snapshots.py:768
+#: virtManager/details/snapshots.py:809
 #, python-format
 msgid "Error running snapshot '%s'"
 msgstr "Eroare la rularea imaginii instantanee „%s”"
 
-#: virtManager/details/snapshots.py:777
+#: virtManager/details/snapshots.py:819
 msgid "Are you sure you want to permanently delete the selected snapshots?"
 msgstr ""
 "Sunteți sigur că doriți să ștergeți permanent imaginile instantanee "
 "selectate?"
 
-#: virtManager/details/snapshots.py:785
+#: virtManager/details/snapshots.py:830
 msgid "Deleting snapshot"
 msgstr "Se șterge imaginea instantanee"
 
-#: virtManager/details/snapshots.py:786
+#: virtManager/details/snapshots.py:831
 #, python-format
 msgid "Deleting snapshot '%s'"
 msgstr "Se șterge imaginea instantanee „%s”"
 
-#: virtManager/details/snapshots.py:787
+#: virtManager/details/snapshots.py:832
 #, python-format
 msgid "Error deleting snapshot '%s'"
 msgstr "Eroare la ștergerea imaginii instantanee „%s”"
 
-#: virtManager/details/snapshots.py:795
+#: virtManager/details/snapshots.py:840
 msgid "No snapshot selected."
 msgstr "Nicio imagine instantanee nu a fost selectată."
 
-#: virtManager/details/snapshots.py:798
+#: virtManager/details/snapshots.py:843
 msgid "Multiple snapshots selected."
 msgstr "Multiple imagini instantanee selectate."
 
-#: virtManager/details/snapshots.py:808
+#: virtManager/details/snapshots.py:853
 #, python-format
 msgid "Error selecting snapshot: %s"
 msgstr "Eroare la selectarea imaginii instantanee: %s"
 
-#: virtManager/details/sshtunnels.py:64
+#: virtManager/details/sshtunnels.py:66
 msgid ""
 "Guest is on a remote host, but is only configured to allow local file "
 "descriptor connections."
@@ -3956,12 +3970,12 @@ msgstr ""
 "Invitatul se află pe o gazdă de la distanță, dar este configurat pentru a "
 "permite numai conexiuni locale de tip descriptor de fișier."
 
-#: virtManager/details/sshtunnels.py:68
+#: virtManager/details/sshtunnels.py:71
 msgid "Guest is configured for TLS only which does not work over SSH."
 msgstr ""
 "Invitatul este configurat numai pentru TLS, care nu funcționează prin SSH."
 
-#: virtManager/details/sshtunnels.py:75
+#: virtManager/details/sshtunnels.py:81
 #, python-format
 msgid ""
 "Guest is on a remote host with transport '%s' but is only configured to "
@@ -3972,7 +3986,7 @@ msgstr ""
 "configurat să asculte doar local. Pentru a vă conecta de la distanță, va "
 "trebui să modificați adresa de ascultare a invitatului."
 
-#: virtManager/details/viewers.py:384
+#: virtManager/details/viewers.py:389
 #, python-format
 msgid ""
 "Unable to provide requested credentials to the VNC server.\n"
@@ -3981,93 +3995,93 @@ msgstr ""
 "Nu se pot furniza acreditările solicitate serverului VNC.\n"
 "Tipul de acreditare %s nu este acceptat"
 
-#: virtManager/details/viewers.py:438
+#: virtManager/details/viewers.py:446
 msgid "GTK-VNC viewer is too old"
 msgstr "Vizorul GTK-VNC este prea vechi"
 
-#: virtManager/details/viewers.py:589
+#: virtManager/details/viewers.py:594
 #, python-format
 msgid "Encountered SPICE %(error-name)s"
 msgstr "S-a găsit o eroare SPICE %(error-name)s"
 
-#: virtManager/details/viewers.py:740
+#: virtManager/details/viewers.py:741
 msgid "Guest agent is not available."
 msgstr "Agentul de invitați nu este disponibil."
 
-#: virtManager/device/addstorage.py:91
+#: virtManager/device/addstorage.py:92
 #, python-format
 msgid "%s available in the default location"
 msgstr "%s disponibil în locația implicită"
 
-#: virtManager/device/addstorage.py:132
+#: virtManager/device/addstorage.py:128
 #, python-format
 msgid "The emulator may not have search permissions for the path '%s'."
 msgstr ""
 "Este posibil ca emulatorul să nu aibă permisiuni de căutare pentru ruta „%s”."
 
-#: virtManager/device/addstorage.py:134
+#: virtManager/device/addstorage.py:129
 msgid "Do you want to correct this now?"
 msgstr "Doriți să corectați acest lucru acum?"
 
-#: virtManager/device/addstorage.py:135 virtManager/device/addstorage.py:159
+#: virtManager/device/addstorage.py:130 virtManager/device/addstorage.py:154
 msgid "Don't ask about these directories again."
 msgstr "Nu mai întreba despre aceste directoare."
 
-#: virtManager/device/addstorage.py:148
+#: virtManager/device/addstorage.py:144
 msgid ""
 "Errors were encountered changing permissions for the following directories:"
 msgstr ""
 "Au fost întâlnite erori la schimbarea permisiunilor pentru următoarele "
 "directoare:"
 
-#: virtManager/device/addstorage.py:267
+#: virtManager/device/addstorage.py:263
 msgid "A storage path must be specified."
 msgstr "Trebuie specificată o rută de stocare."
 
-#: virtManager/device/fsdetails.py:145
+#: virtManager/device/fsdetails.py:140
 msgid "Te_mplate:"
 msgstr "Șab_lon:"
 
-#: virtManager/device/fsdetails.py:147
+#: virtManager/device/fsdetails.py:142
 msgid "_Source path:"
 msgstr "Ruta _sursei:"
 
-#: virtManager/device/fsdetails.py:163
+#: virtManager/device/fsdetails.py:154
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
 "Este posibil să fie necesar să „Activați memoria partajată” din ecranul "
 "„Memorie”."
 
-#: virtManager/device/gfxdetails.py:87
+#: virtManager/device/gfxdetails.py:89
 msgid "Spice server"
 msgstr "Server Spice"
 
-#: virtManager/device/gfxdetails.py:88
+#: virtManager/device/gfxdetails.py:90
 msgid "VNC server"
 msgstr "Server VNC"
 
-#: virtManager/device/gfxdetails.py:95
+#: virtManager/device/gfxdetails.py:97
 msgid "Address"
 msgstr "Adresă"
 
-#: virtManager/device/gfxdetails.py:104
+#: virtManager/device/gfxdetails.py:106
 msgid "Localhost only"
 msgstr "Doar gazda locală"
 
-#: virtManager/device/gfxdetails.py:105
+#: virtManager/device/gfxdetails.py:107
 msgid "All interfaces"
 msgstr "Toate interfețele"
 
-#: virtManager/device/gfxdetails.py:112
+#: virtManager/device/gfxdetails.py:114
 msgid "Auto"
 msgstr "Auto"
 
-#: virtManager/device/gfxdetails.py:218
+#: virtManager/device/gfxdetails.py:211
 #, python-format
 msgid "A_uto (Port %(port)d)"
 msgstr "A_uto (Port %(port)d)"
 
-#: virtManager/device/mediacombo.py:67
+#: virtManager/device/mediacombo.py:65
 msgid "No media selected"
 msgstr "Niciun suport selectat"
 
@@ -4087,7 +4101,7 @@ msgstr "Rețea în modul utilizator"
 msgid "Virtual network"
 msgstr "Rețea virtuală"
 
-#: virtManager/device/netlist.py:121 virtManager/object/libvirtobject.py:209
+#: virtManager/device/netlist.py:121 virtManager/object/libvirtobject.py:214
 msgid "Inactive"
 msgstr "Inactivă"
 
@@ -4099,17 +4113,23 @@ msgstr "Dispozitiv de punte..."
 msgid "Macvtap device..."
 msgstr "Dispozitiv macvtap..."
 
-#: virtManager/device/netlist.py:199
+#: virtManager/device/netlist.py:146
+#, fuzzy
+#| msgid "Macvtap device..."
+msgid "vDPA device..."
+msgstr "Dispozitiv macvtap..."
+
+#: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
 msgstr "Rețeaua virtuală nu este activă."
 
-#: virtManager/device/netlist.py:200
+#: virtManager/device/netlist.py:205
 #, python-format
 msgid ""
 "Virtual Network '%s' is not active. Would you like to start the network now?"
 msgstr "Rețeaua virtuală „%s” nu este activă. Doriți să porniți rețeaua acum?"
 
-#: virtManager/device/netlist.py:212
+#: virtManager/device/netlist.py:217
 #, python-format
 msgid "Could not start virtual network '%(device)s': %(error)s"
 msgstr "Nu s-a putut porni rețeaua virtuală „%(device)s”: %(error)s"
@@ -4126,7 +4146,7 @@ msgstr "CRB"
 msgid "SPAPR"
 msgstr "SPAPR"
 
-#: virtManager/device/tpmdetails.py:71
+#: virtManager/device/tpmdetails.py:72
 msgid "Emulated"
 msgstr "Emulată"
 
@@ -4134,225 +4154,225 @@ msgstr "Emulată"
 msgid "CID"
 msgstr "CID"
 
-#: virtManager/engine.py:124
+#: virtManager/engine.py:120
 msgid "Checking for virtualization packages..."
 msgstr "Se verifică pachetele de virtualizare..."
 
-#: virtManager/error.py:140
+#: virtManager/error.py:145
 msgid "Input Error"
 msgstr "Eroare de intrare"
 
-#: virtManager/error.py:141
+#: virtManager/error.py:146
 #, python-format
 msgid "Validation Error: %s"
 msgstr "Eroare de validare: %s"
 
-#: virtManager/error.py:181
+#: virtManager/error.py:186
 msgid "There are unapplied changes. Would you like to apply them now?"
 msgstr "Există modificări neaplicate. Doriți să le aplicați acum?"
 
-#: virtManager/error.py:183
+#: virtManager/error.py:187
 msgid "Don't warn me again."
 msgstr "Nu mă mai avertiza."
 
-#: virtManager/error.py:215
+#: virtManager/error.py:212
 msgid "Don't ask me again"
 msgstr "Nu mă mai întreba"
 
-#: virtManager/host.py:32
+#: virtManager/host.py:31
 #, python-format
 msgid "Error launching host dialog: %s"
 msgstr "Eroare la lansarea dialogului privind gazda: %s"
 
-#: virtManager/host.py:170
+#: virtManager/host.py:165
 #, python-format
 msgid "%(currentmem)s of %(maxmem)s"
 msgstr "%(currentmem)s din %(maxmem)s"
 
-#: virtManager/host.py:180
+#: virtManager/host.py:175
 #, python-format
 msgid "%(connection)s - Connection Details"
 msgstr "%(connection)s - Detalii privind conexiunea"
 
-#: virtManager/hostnets.py:106
+#: virtManager/hostnets.py:100
 msgid "Networks"
 msgstr "Rețele"
 
-#: virtManager/hostnets.py:140
+#: virtManager/hostnets.py:131
 msgid "Libvirt connection does not support virtual network management."
 msgstr "Conexiunea Libvirt nu acceptă gestionarea rețelei virtuale."
 
-#: virtManager/hostnets.py:148 virtManager/hoststorage.py:278
+#: virtManager/hostnets.py:139 virtManager/hoststorage.py:268
 msgid "Connection not active."
 msgstr "Conexiunea nu este activă."
 
-#: virtManager/hostnets.py:164
+#: virtManager/hostnets.py:155
 msgid "No virtual network selected."
 msgstr "Nu a fost selectată nicio rețea virtuală."
 
-#: virtManager/hostnets.py:173
+#: virtManager/hostnets.py:164
 #, python-format
 msgid "Error selecting network: %s"
 msgstr "Eroare la selectarea rețelei: %s"
 
-#: virtManager/hostnets.py:218 virtManager/object/network.py:166
+#: virtManager/hostnets.py:215 virtManager/object/network.py:161
 msgid "Routed network"
 msgstr "Rețea direcționată"
 
-#: virtManager/hostnets.py:220
+#: virtManager/hostnets.py:217
 msgid "Isolated network, internal routing only"
 msgstr "Rețea izolată, doar direcționare internă"
 
-#: virtManager/hostnets.py:222
+#: virtManager/hostnets.py:219
 msgid "Isolated network, routing disabled"
 msgstr "Rețea izolată, direcționare dezactivată"
 
-#: virtManager/hostnets.py:253 virtManager/hoststorage.py:321
+#: virtManager/hostnets.py:248 virtManager/hoststorage.py:310
 msgid "On Boot"
 msgstr "La pornire"
 
-#: virtManager/hostnets.py:270
+#: virtManager/hostnets.py:265
 #, python-format
 msgid "Are you sure you want to permanently delete the network %s?"
 msgstr "Sunteți sigur că doriți să ștergeți permanent rețeaua %s?"
 
-#: virtManager/hostnets.py:277
+#: virtManager/hostnets.py:272
 #, python-format
 msgid "Error deleting network '%s'"
 msgstr "Eroare la ștergerea rețelei „%s”"
 
-#: virtManager/hostnets.py:286
+#: virtManager/hostnets.py:282
 #, python-format
 msgid "Error starting network '%s'"
 msgstr "Eroare la pornirea rețelei „%s”"
 
-#: virtManager/hostnets.py:295
+#: virtManager/hostnets.py:292
 #, python-format
 msgid "Error stopping network '%s'"
 msgstr "Eroare la oprirea rețelei „%s”"
 
-#: virtManager/hostnets.py:304
+#: virtManager/hostnets.py:302
 #, python-format
 msgid "Error launching network wizard: %s"
 msgstr "Eroare la lansarea asistentului de rețea: %s"
 
-#: virtManager/hostnets.py:328
+#: virtManager/hostnets.py:325
 #, python-format
 msgid "Error changing network settings: %s"
 msgstr "Eroare la schimbarea parametrilor de rețea: %s"
 
-#: virtManager/hoststorage.py:178
+#: virtManager/hoststorage.py:173
 msgid "Copy Volume Path"
 msgstr "Copiază ruta volumului"
 
-#: virtManager/hoststorage.py:188
+#: virtManager/hoststorage.py:183
 msgid "Volumes"
 msgstr "Volume"
 
-#: virtManager/hoststorage.py:196
+#: virtManager/hoststorage.py:191
 msgid "Size"
 msgstr "Dimensiune"
 
-#: virtManager/hoststorage.py:205
+#: virtManager/hoststorage.py:200
 msgid "Format"
 msgstr "Format"
 
-#: virtManager/hoststorage.py:213
+#: virtManager/hoststorage.py:208
 msgid "Used By"
 msgstr "Utilizat de"
 
-#: virtManager/hoststorage.py:230
+#: virtManager/hoststorage.py:224
 msgid "Storage Pools"
 msgstr "„Hangare” de stocare"
 
-#: virtManager/hoststorage.py:271
+#: virtManager/hoststorage.py:260
 msgid "Libvirt connection does not support storage management."
 msgstr "Conexiunea Libvirt nu permite gestionarea stocării."
 
-#: virtManager/hoststorage.py:312
+#: virtManager/hoststorage.py:302
 #, python-format
 msgid "%(bytesfree)s Free / <i>%(bytesinuse)s In Use</i>"
 msgstr "%(bytesfree)s liber / <i>%(bytesinuse)s în uz</i>"
 
-#: virtManager/hoststorage.py:332
+#: virtManager/hoststorage.py:321
 msgid "Create new volume"
 msgstr "Creează un volum nou"
 
-#: virtManager/hoststorage.py:339
+#: virtManager/hoststorage.py:326
 msgid "Pool does not support volume creation"
 msgstr "„Hangarul” nu acceptă crearea de volume"
 
-#: virtManager/hoststorage.py:354
+#: virtManager/hoststorage.py:341
 msgid "No storage pool selected."
 msgstr "Nu a fost selectat niciun „hangar” de stocare."
 
-#: virtManager/hoststorage.py:363
+#: virtManager/hoststorage.py:350
 #, python-format
 msgid "Error selecting pool: %s"
 msgstr "Eroare la selectarea „hangarului”: %s"
 
-#: virtManager/hoststorage.py:468
+#: virtManager/hoststorage.py:454
 #, python-format
 msgid "Error stopping pool '%s'"
 msgstr "Eroare la oprirea „hangarului” „%s”"
 
-#: virtManager/hoststorage.py:477
+#: virtManager/hoststorage.py:464
 #, python-format
 msgid "Error starting pool '%s'"
 msgstr "Eroare la pornirea „hangarului” „%s”"
 
-#: virtManager/hoststorage.py:487
+#: virtManager/hoststorage.py:475
 #, python-format
 msgid "Error launching pool wizard: %s"
 msgstr "Eroare la lansarea asistentului pentru „hangare”: %s"
 
-#: virtManager/hoststorage.py:494
+#: virtManager/hoststorage.py:483
 #, python-format
 msgid "Are you sure you want to permanently delete the pool %s?"
 msgstr "Sunteți sigur că doriți să ștergeți permanent „hangarul” %s?"
 
-#: virtManager/hoststorage.py:501
+#: virtManager/hoststorage.py:490
 #, python-format
 msgid "Error deleting pool '%s'"
 msgstr "Eroare la ștergerea „hangarului” „%s”"
 
-#: virtManager/hoststorage.py:512
+#: virtManager/hoststorage.py:502
 #, python-format
 msgid "Error refreshing pool '%s'"
 msgstr "Eroare la reîncărcarea „hangarului” „%s”"
 
-#: virtManager/hoststorage.py:546
+#: virtManager/hoststorage.py:535
 #, python-format
 msgid "Error launching volume wizard: %s"
 msgstr "Eroare la lansarea asistentului pentru volume: %s"
 
-#: virtManager/hoststorage.py:554
+#: virtManager/hoststorage.py:544
 #, python-format
 msgid "Are you sure you want to permanently delete the volume %s?"
 msgstr "Sunteți sigur că doriți să ștergeți definitiv volumul %s?"
 
-#: virtManager/hoststorage.py:567
+#: virtManager/hoststorage.py:559
 #, python-format
 msgid "Error deleting volume '%s'"
 msgstr "Eroare la ștergerea volumului „%s”"
 
-#: virtManager/hoststorage.py:592
+#: virtManager/hoststorage.py:584
 #, python-format
 msgid "Error changing pool settings: %s"
 msgstr "Eroare la modificarea configurației „hangarului”: %s"
 
-#: virtManager/lib/connectauth.py:49
+#: virtManager/lib/connectauth.py:54
 msgid "Authentication required"
 msgstr "Autentificarea este necesară"
 
-#: virtManager/lib/connectauth.py:153
+#: virtManager/lib/connectauth.py:159
 msgid ""
 "The remote host requires a version of netcat/nc which supports the -U option."
 msgstr ""
 "Gazda de la distanță necesită o versiune a netcat/nc care acceptă opțiunea „-"
 "U”."
 
-#: virtManager/lib/connectauth.py:159
+#: virtManager/lib/connectauth.py:165
 msgid ""
 "Configure SSH key access for the remote host, or install an SSH askpass "
 "package locally."
@@ -4360,14 +4380,14 @@ msgstr ""
 "Configurați accesul la cheia SSH pentru gazda de la distanță sau instalați "
 "local un pachet askpass SSH."
 
-#: virtManager/lib/connectauth.py:163
+#: virtManager/lib/connectauth.py:170
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
 msgstr ""
 "Verificați dacă un demon libvirt corespunzător rulează pe gazda de la "
 "distanță."
 
-#: virtManager/lib/connectauth.py:167
+#: virtManager/lib/connectauth.py:174
 msgid ""
 "Verify that:\n"
 " - A Xen host kernel was booted\n"
@@ -4377,7 +4397,7 @@ msgstr ""
 " - Un nucleu gazdă Xen a fost inițiat\n"
 " - Serviciul Xen a fost pornit"
 
-#: virtManager/lib/connectauth.py:173
+#: virtManager/lib/connectauth.py:182
 msgid ""
 "Could not detect a local session: if you are running virt-manager over ssh -"
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
@@ -4387,20 +4407,20 @@ msgstr ""
 "«ssh -X» sau VNC, este posibil să nu vă puteți conecta la libvirt ca "
 "utilizator obișnuit. Încercați să rulați ca root."
 
-#: virtManager/lib/connectauth.py:179
+#: virtManager/lib/connectauth.py:189
 msgid "Verify that an appropriate libvirt daemon is running."
 msgstr "Verificați dacă rulează un demon libvirt corespunzător."
 
-#: virtManager/lib/connectauth.py:182
+#: virtManager/lib/connectauth.py:192
 #, python-format
 msgid "Unable to connect to libvirt %s."
 msgstr "Nu se poate conecta la libvirt %s."
 
-#: virtManager/lib/connectauth.py:194
+#: virtManager/lib/connectauth.py:204
 msgid "Virtual Machine Manager Connection Failure"
 msgstr "Conexiunea cu gestionarul de mașini virtuale a eșuat"
 
-#: virtManager/lib/connectauth.py:208
+#: virtManager/lib/connectauth.py:219
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
@@ -4410,7 +4430,7 @@ msgstr ""
 "adecvate de virtualizare QEMU/KVM și libvirt sunt instalate pentru a "
 "gestiona virtualizarea pe această gazdă."
 
-#: virtManager/lib/connectauth.py:215
+#: virtManager/lib/connectauth.py:227
 msgid ""
 "A virtualization connection can be manually added via File->Add Connection"
 msgstr ""
@@ -4422,163 +4442,163 @@ msgstr ""
 msgid "Error launching libguestfs appliance: %s"
 msgstr "Eroare la lansarea aplicației libguestfs: %s"
 
-#: virtManager/lib/inspection.py:86
+#: virtManager/lib/inspection.py:85
 msgid "Inspection found no operating systems."
 msgstr "Inspecția nu a găsit niciun sistem de operare."
 
-#: virtManager/lib/inspection.py:316
+#: virtManager/lib/inspection.py:319
 #, python-format
 msgid "Error inspection VM: %s"
 msgstr "Eroare de inspectare a MV: %s"
 
-#: virtManager/lib/inspection.py:327
+#: virtManager/lib/inspection.py:329
 msgid "Cannot inspect VM on remote connection"
 msgstr "Nu se poate inspecta MV pe o conexiune la distanță"
 
-#: virtManager/lib/libvirtenummap.py:69
+#: virtManager/lib/libvirtenummap.py:66
 msgid "Running"
 msgstr "Rulând"
 
-#: virtManager/lib/libvirtenummap.py:71
+#: virtManager/lib/libvirtenummap.py:68
 msgid "Paused"
 msgstr "În pauză"
 
-#: virtManager/lib/libvirtenummap.py:73
+#: virtManager/lib/libvirtenummap.py:70
 msgid "Shutting Down"
 msgstr "Se oprește"
 
-#: virtManager/lib/libvirtenummap.py:76 virtManager/lib/libvirtenummap.py:124
+#: virtManager/lib/libvirtenummap.py:73 virtManager/lib/libvirtenummap.py:121
 msgid "Saved"
 msgstr "Salvată"
 
-#: virtManager/lib/libvirtenummap.py:78
+#: virtManager/lib/libvirtenummap.py:75
 msgid "Shutoff"
 msgstr "Oprită"
 
-#: virtManager/lib/libvirtenummap.py:80 virtManager/lib/libvirtenummap.py:102
-#: virtManager/lib/libvirtenummap.py:114 virtManager/lib/libvirtenummap.py:122
+#: virtManager/lib/libvirtenummap.py:77 virtManager/lib/libvirtenummap.py:99
+#: virtManager/lib/libvirtenummap.py:111 virtManager/lib/libvirtenummap.py:119
 msgid "Crashed"
 msgstr "Prăbuşită"
 
-#: virtManager/lib/libvirtenummap.py:82
+#: virtManager/lib/libvirtenummap.py:79
 msgid "Suspended"
 msgstr "Suspendată"
 
-#: virtManager/lib/libvirtenummap.py:94
+#: virtManager/lib/libvirtenummap.py:91
 msgid "Booted"
 msgstr "Pornită"
 
-#: virtManager/lib/libvirtenummap.py:95 virtManager/lib/libvirtenummap.py:123
+#: virtManager/lib/libvirtenummap.py:92 virtManager/lib/libvirtenummap.py:120
 msgid "Migrated"
 msgstr "Migrată"
 
-#: virtManager/lib/libvirtenummap.py:96
+#: virtManager/lib/libvirtenummap.py:93
 msgid "Restored"
 msgstr "Restaurată"
 
-#: virtManager/lib/libvirtenummap.py:97 virtManager/lib/libvirtenummap.py:111
-#: virtManager/lib/libvirtenummap.py:126
+#: virtManager/lib/libvirtenummap.py:94 virtManager/lib/libvirtenummap.py:108
+#: virtManager/lib/libvirtenummap.py:123
 msgid "From snapshot"
 msgstr "De la imaginea instantanee"
 
-#: virtManager/lib/libvirtenummap.py:98
+#: virtManager/lib/libvirtenummap.py:95
 msgid "Unpaused"
 msgstr "Reluare"
 
-#: virtManager/lib/libvirtenummap.py:99
+#: virtManager/lib/libvirtenummap.py:96
 msgid "Migration canceled"
 msgstr "Migrare anulată"
 
-#: virtManager/lib/libvirtenummap.py:100
+#: virtManager/lib/libvirtenummap.py:97
 msgid "Save canceled"
 msgstr "Salvare anulată"
 
-#: virtManager/lib/libvirtenummap.py:101
+#: virtManager/lib/libvirtenummap.py:98
 msgid "Event wakeup"
 msgstr "Eveniment de trezire"
 
-#: virtManager/lib/libvirtenummap.py:105 virtManager/lib/libvirtenummap.py:117
+#: virtManager/lib/libvirtenummap.py:102 virtManager/lib/libvirtenummap.py:114
 msgid "User"
 msgstr "Utilizator"
 
-#: virtManager/lib/libvirtenummap.py:106
+#: virtManager/lib/libvirtenummap.py:103
 msgid "Migrating"
 msgstr "Se efectuează migrarea"
 
-#: virtManager/lib/libvirtenummap.py:107
+#: virtManager/lib/libvirtenummap.py:104
 msgid "Saving"
 msgstr "Se salvează"
 
-#: virtManager/lib/libvirtenummap.py:108
+#: virtManager/lib/libvirtenummap.py:105
 msgid "Dumping"
 msgstr "Descărcare date"
 
-#: virtManager/lib/libvirtenummap.py:109
+#: virtManager/lib/libvirtenummap.py:106
 msgid "I/O error"
 msgstr "Eroare de In/Ieș"
 
-#: virtManager/lib/libvirtenummap.py:112
+#: virtManager/lib/libvirtenummap.py:109
 msgid "Shutting down"
 msgstr "Oprirea"
 
-#: virtManager/lib/libvirtenummap.py:120
+#: virtManager/lib/libvirtenummap.py:117
 msgid "Shut Down"
 msgstr "Oprire"
 
-#: virtManager/lib/libvirtenummap.py:121
+#: virtManager/lib/libvirtenummap.py:118
 msgid "Destroyed"
 msgstr "Distrusă"
 
-#: virtManager/lib/libvirtenummap.py:125
+#: virtManager/lib/libvirtenummap.py:122
 msgid "Failed"
 msgstr "Eșuat"
 
-#: virtManager/lib/libvirtenummap.py:129
+#: virtManager/lib/libvirtenummap.py:126
 msgid "Panicked"
 msgstr "Panicat"
 
-#: virtManager/manager.py:87
+#: virtManager/manager.py:83
 #, python-format
 msgid "Error launching manager: %s"
 msgstr "Eroare la lansarea gestionarului: %s"
 
-#: virtManager/manager.py:292
+#: virtManager/manager.py:289
 msgid "_New"
 msgstr "_Nouă"
 
-#: virtManager/manager.py:293
+#: virtManager/manager.py:290
 msgid "_Connect"
 msgstr "_Conectare"
 
-#: virtManager/manager.py:294
+#: virtManager/manager.py:291
 msgid "Dis_connect"
 msgstr "Deco_nectare"
 
-#: virtManager/manager.py:296
+#: virtManager/manager.py:293
 msgid "De_lete"
 msgstr "Șt_erge"
 
-#: virtManager/manager.py:375
+#: virtManager/manager.py:370
 msgid "CPU usage"
 msgstr "Utilizare CPU"
 
-#: virtManager/manager.py:376
+#: virtManager/manager.py:371
 msgid "Host CPU usage"
 msgstr "Utilizare CPU gazdă"
 
-#: virtManager/manager.py:377
+#: virtManager/manager.py:372
 msgid "Memory usage"
 msgstr "Utilizare memorie"
 
-#: virtManager/manager.py:378
+#: virtManager/manager.py:373
 msgid "Disk I/O"
 msgstr "In/Ieș disc"
 
-#: virtManager/manager.py:379
+#: virtManager/manager.py:374
 msgid "Network I/O"
 msgstr "In/Ieș rețea"
 
-#: virtManager/manager.py:494
+#: virtManager/manager.py:493
 #, python-format
 msgid ""
 "This will remove the connection:\n"
@@ -4593,56 +4613,56 @@ msgstr ""
 "\n"
 "Sunteți sigur?"
 
-#: virtManager/manager.py:571
+#: virtManager/manager.py:570
 #, python-format
 msgid "%(uri)s (Double click to connect)"
 msgstr "%(uri)s (Faceți dublu clic cu mouse-ul pentru conectare)"
 
-#: virtManager/manager.py:578
+#: virtManager/manager.py:577
 #, python-format
 msgid "%(connection)s - Not Connected"
 msgstr "%(connection)s - Neconectat"
 
-#: virtManager/manager.py:580
+#: virtManager/manager.py:579
 #, python-format
 msgid "%(connection)s - Connecting..."
 msgstr "%(connection)s - Conectare..."
 
-#: virtManager/manager.py:756 virtManager/vmwindow.py:379
+#: virtManager/manager.py:750 virtManager/vmwindow.py:368
 msgid "_Restore"
 msgstr "_Restaurare"
 
-#: virtManager/manager.py:793 virtManager/vmwindow.py:420
+#: virtManager/manager.py:787 virtManager/vmwindow.py:408
 msgid "Resume the virtual machine"
 msgstr "Reluați funcționarea mașinii virtuale"
 
-#: virtManager/manager.py:909
+#: virtManager/manager.py:898
 msgid "Disabled in preferences dialog."
 msgstr "Dezactivată în dialogul de preferințe."
 
-#: virtManager/migrate.py:38
+#: virtManager/migrate.py:35
 #, python-format
 msgid "Error launching migrate dialog: %s"
 msgstr "Eroare la lansarea dialogului de migrare: %s"
 
-#: virtManager/migrate.py:144
+#: virtManager/migrate.py:139
 msgid "Direct"
 msgstr "Direct"
 
-#: virtManager/migrate.py:145
+#: virtManager/migrate.py:140
 msgid "Tunnelled"
 msgstr "Prin tunel"
 
-#: virtManager/migrate.py:161
+#: virtManager/migrate.py:159
 #, python-format
 msgid "<span size='large'>Migrate '%(vm)s'</span>"
 msgstr "<span size='large'>Migrare '%(vm)s'</span>"
 
-#: virtManager/migrate.py:222
+#: virtManager/migrate.py:219
 msgid "A valid destination connection must be selected."
 msgstr "Trebuie selectată o conexiune de destinație validă."
 
-#: virtManager/migrate.py:237
+#: virtManager/migrate.py:235
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
@@ -4652,95 +4672,95 @@ msgstr ""
 "tunel, dar conexiunea selectată este un URI local. Libvirt va respinge acest "
 "lucru dacă nu adăugați un transport."
 
-#: virtManager/migrate.py:292
+#: virtManager/migrate.py:287
 #, python-format
 msgid "%(uri)s (Hypervisors do not match)"
 msgstr "%(uri)s (Hipervizoarele nu corespund)"
 
-#: virtManager/migrate.py:294
+#: virtManager/migrate.py:289
 #, python-format
 msgid "%(uri)s (Disconnected)"
 msgstr "%(uri)s (Deconectat)"
 
-#: virtManager/migrate.py:296
+#: virtManager/migrate.py:291
 #, python-format
 msgid "%(uri)s (Same connection)"
 msgstr "%(uri)s (aceeași conexiune)"
 
-#: virtManager/migrate.py:313
+#: virtManager/migrate.py:307
 msgid "No usable connections available."
 msgstr "Nu există conexiuni utilizabile disponibile."
 
-#: virtManager/migrate.py:353
+#: virtManager/migrate.py:346
 #, python-format
 msgid "Unable to migrate guest: %s"
 msgstr "Nu s-a putut migra invitatul: %s"
 
-#: virtManager/migrate.py:381
+#: virtManager/migrate.py:374
 #, python-format
 msgid "Uncaught error validating input: %s"
 msgstr "Eroare necapturată la validarea intrării: %s"
 
-#: virtManager/migrate.py:399
+#: virtManager/migrate.py:391
 #, python-format
 msgid "Migrating VM '%s'"
 msgstr "Se efectuează migrarea MV „%s”"
 
-#: virtManager/migrate.py:400
+#: virtManager/migrate.py:393
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr "Migrarea MV „%(name)s” la %(host)s. Acest lucru poate dura un timp."
 
-#: virtManager/migrate.py:411
+#: virtManager/migrate.py:407
 #, python-format
 msgid "Error cancelling migrate job: %s"
 msgstr "Eroare la anularea sarcinii de migrare: %s"
 
-#: virtManager/object/domain.py:449
+#: virtManager/object/domain.py:446
 msgid "Can not change shared memory setting when <numa> is configured."
 msgstr ""
 "Nu se poate modifica configurarea memoriei partajate atunci când este "
 "configurat <numa>."
 
-#: virtManager/object/domain.py:452
+#: virtManager/object/domain.py:450
 msgid "Libvirt may not be new enough to support memfd."
 msgstr ""
 "Este posibil ca Libvirt să nu fie suficient de nouă pentru a oferi suport "
 "pentru memfd."
 
-#: virtManager/object/domain.py:471
+#: virtManager/object/domain.py:468
 msgid "Libvirt connection does not support snapshots."
 msgstr "Conexiunea Libvirt nu acceptă imagini instantanee."
 
-#: virtManager/object/domain.py:505
+#: virtManager/object/domain.py:501
 #, python-format
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr ""
 "Nu s-a putut găsi dispozitivul specificat în configurația MV inactive: %s"
 
-#: virtManager/object/domain.py:1431
+#: virtManager/object/domain.py:1487
 msgid "Saving domain to disk"
 msgstr "Se salvează domeniul pe disc"
 
-#: virtManager/object/domain.py:1483
+#: virtManager/object/domain.py:1552
 msgid "Migrating domain"
 msgstr "Se efectuează migrarea domeniului"
 
-#: virtManager/object/network.py:155
+#: virtManager/object/network.py:150
 msgid "Isolated network"
 msgstr "Rețea izolată"
 
-#: virtManager/object/network.py:159
+#: virtManager/object/network.py:154
 #, python-format
 msgid "NAT to %s"
 msgstr "NAT către %s"
 
-#: virtManager/object/network.py:164
+#: virtManager/object/network.py:159
 #, python-format
 msgid "Route to %s"
 msgstr "Rută către %s"
 
-#: virtManager/object/network.py:169
+#: virtManager/object/network.py:164
 #, python-format
 msgid "%s network"
 msgstr "rețeaua %s"
@@ -4794,38 +4814,38 @@ msgstr "Dispozitiv de blocuri RADOS/Ceph"
 msgid "ZFS Pool"
 msgstr "„Hangar” ZFS"
 
-#: virtManager/oslist.py:31
+#: virtManager/oslist.py:29
 msgid "Type to start searching..."
 msgstr "Tastează pentru a începe căutarea..."
 
-#: virtManager/preferences.py:28
+#: virtManager/preferences.py:27
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "Eroare la lansarea preferințelor: %s"
 
 #: virtManager/preferences.py:112
-msgid "Never"
-msgstr "Niciodată"
-
-#: virtManager/preferences.py:113
-msgid "Fullscreen only"
-msgstr "Numai pe ecran complet"
-
-#: virtManager/preferences.py:114
 msgid "Always"
 msgstr "Întotdeauna"
 
-#: virtManager/preferences.py:126 virtManager/preferences.py:148
+#: virtManager/preferences.py:112
+msgid "Fullscreen only"
+msgstr "Numai pe ecran complet"
+
+#: virtManager/preferences.py:112
+msgid "Never"
+msgstr "Niciodată"
+
+#: virtManager/preferences.py:124 virtManager/preferences.py:146
 #: virtManager/preferences.py:158
 #, python-format
 msgid "System default (%s)"
 msgstr "Valoarea implicită a sistemului (%s)"
 
-#: virtManager/preferences.py:137
+#: virtManager/preferences.py:134
 msgid "Manual redirect only"
 msgstr "Doar redirecționare manuală"
 
-#: virtManager/preferences.py:138
+#: virtManager/preferences.py:135
 msgid "Auto redirect on USB attach"
 msgstr "Redirecționare automată la conectarea USB"
 
@@ -4833,11 +4853,11 @@ msgstr "Redirecționare automată la conectarea USB"
 msgid "Application default"
 msgstr "Implicit pentru aplicație"
 
-#: virtManager/preferences.py:173
+#: virtManager/preferences.py:172
 msgid "Nearest host CPU model"
 msgstr "Modelul CPU gazdă cel mai apropiat"
 
-#: virtManager/preferences.py:183
+#: virtManager/preferences.py:184
 msgid "System default"
 msgstr "Valoarea implicită a sistemului"
 
@@ -4845,11 +4865,11 @@ msgstr "Valoarea implicită a sistemului"
 msgid "python libguestfs support is not installed"
 msgstr "suportul python libguestfs nu este instalat"
 
-#: virtManager/preferences.py:322
+#: virtManager/preferences.py:332
 msgid "Configure grab key combination"
 msgstr "Configurați combinația de taste pentru capturare"
 
-#: virtManager/preferences.py:331
+#: virtManager/preferences.py:342
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -4859,7 +4879,7 @@ msgstr ""
 "Pentru a confirma selecția, faceți clic pe butonul «Ok»\n"
 "în timp ce apăsați tastele dorite."
 
-#: virtManager/preferences.py:334
+#: virtManager/preferences.py:347
 msgid "Please press desired grab key combination"
 msgstr "Vă rugăm să apăsați combinația de taste de capturare dorită"
 
@@ -4895,80 +4915,80 @@ msgstr "Localizează volumul de director"
 msgid "Choose Storage Volume"
 msgstr "Alegeți volumul de stocare"
 
-#: virtManager/storagebrowse.py:121
+#: virtManager/storagebrowse.py:122
 msgid "Cannot use local storage on remote connection."
 msgstr "Nu se poate utiliza stocarea locală la o conexiune la distanță."
 
-#: virtManager/systray.py:109
+#: virtManager/systray.py:118
 msgid "_Show Virtual Machine Manager"
 msgstr "Afișează ge_stionarul de mașini virtuale"
 
-#: virtManager/virtmanager.py:42
+#: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
 msgstr "Eroare la pornirea gestionarului de mașini virtuale"
 
-#: virtManager/virtmanager.py:43
+#: virtManager/virtmanager.py:44
 #, python-format
 msgid "Error starting Virtual Machine Manager: %(error)s"
 msgstr "Eroare la pornirea gestionarului de mașini virtuale: %(error)s"
 
-#: virtManager/vmmenu.py:52
+#: virtManager/vmmenu.py:57
 msgid "_Reboot"
 msgstr "_Repornire"
 
-#: virtManager/vmmenu.py:54
+#: virtManager/vmmenu.py:59
 msgid "F_orce Reset"
 msgstr "F_orțează reinițierea"
 
-#: virtManager/vmmenu.py:55
+#: virtManager/vmmenu.py:60
 msgid "_Force Off"
 msgstr "_Forțează oprirrea"
 
-#: virtManager/vmmenu.py:57
+#: virtManager/vmmenu.py:62
 msgid "Sa_ve"
 msgstr "Sal_vează"
 
-#: virtManager/vmmenu.py:84
+#: virtManager/vmmenu.py:90
 msgid "R_esume"
 msgstr "R_eluare"
 
-#: virtManager/vmmenu.py:89
+#: virtManager/vmmenu.py:95
 msgid "Clone..."
 msgstr "Clonare..."
 
-#: virtManager/vmmenu.py:90
+#: virtManager/vmmenu.py:96
 msgid "Migrate..."
 msgstr "_Migrare..."
 
-#: virtManager/vmmenu.py:145
+#: virtManager/vmmenu.py:151
 #, python-format
 msgid "Error cancelling save job: %s"
 msgstr "Eroare la anularea operației de salvare: %s"
 
-#: virtManager/vmmenu.py:154
+#: virtManager/vmmenu.py:161
 #, python-format
 msgid "Are you sure you want to save '%s'?"
 msgstr "Sunteți sigur că doriți să salvați „%s”?"
 
-#: virtManager/vmmenu.py:165
+#: virtManager/vmmenu.py:174
 #, python-format
 msgid "Error saving domain: %s"
 msgstr "Eroare la salvarea domeniului: %s"
 
-#: virtManager/vmmenu.py:170
+#: virtManager/vmmenu.py:182
 msgid "Saving Virtual Machine"
 msgstr "Se salvează mașina virtuală"
 
-#: virtManager/vmmenu.py:171
+#: virtManager/vmmenu.py:183
 msgid "Saving virtual machine memory to disk "
 msgstr "Se salvează memoria mașinii virtuale pe disc "
 
-#: virtManager/vmmenu.py:180
+#: virtManager/vmmenu.py:194
 #, python-format
 msgid "Are you sure you want to force poweroff '%s'?"
 msgstr "Sunteți sigur că doriți să forțați oprirea „%s”?"
 
-#: virtManager/vmmenu.py:182
+#: virtManager/vmmenu.py:196
 msgid ""
 "This will immediately poweroff the VM without shutting down the OS and may "
 "cause data loss."
@@ -4976,29 +4996,29 @@ msgstr ""
 "Această acțiune va opri imediat MV fără a opri sistemul de operare și poate "
 "cauza pierderi de date."
 
-#: virtManager/vmmenu.py:188 virtManager/vmmenu.py:257
+#: virtManager/vmmenu.py:203 virtManager/vmmenu.py:272
 msgid "Error shutting down domain"
 msgstr "Eroare la închiderea domeniului"
 
-#: virtManager/vmmenu.py:194
+#: virtManager/vmmenu.py:210
 #, python-format
 msgid "Are you sure you want to pause '%s'?"
 msgstr "Sunteți sigur că doriți să puneți în pauză „%s”?"
 
-#: virtManager/vmmenu.py:200
+#: virtManager/vmmenu.py:215
 msgid "Error pausing domain"
 msgstr "Eroare la punerea în pauză a domeniului"
 
-#: virtManager/vmmenu.py:206
+#: virtManager/vmmenu.py:220
 msgid "Error unpausing domain"
 msgstr "Eroare la reluarea activității domeniului"
 
-#: virtManager/vmmenu.py:216
+#: virtManager/vmmenu.py:231
 #, python-format
 msgid "Error restoring domain: %s"
 msgstr "Eroare la restaurarea domeniului: %s"
 
-#: virtManager/vmmenu.py:219
+#: virtManager/vmmenu.py:234
 msgid ""
 "The domain could not be restored. Would you like\n"
 "to remove the saved state and perform a regular\n"
@@ -5007,43 +5027,43 @@ msgstr ""
 "Domeniul nu a putut fi restaurat. Doriți să eliminați\n"
 "starea salvată și să efectuați o pornire normală?"
 
-#: virtManager/vmmenu.py:233
+#: virtManager/vmmenu.py:250
 #, python-format
 msgid "Error removing domain state: %s"
 msgstr "Eroare la eliminarea stării domeniului: %s"
 
-#: virtManager/vmmenu.py:237
+#: virtManager/vmmenu.py:253
 msgid "Restoring Virtual Machine"
 msgstr "Se restaurează mașina virtuală"
 
-#: virtManager/vmmenu.py:238
+#: virtManager/vmmenu.py:254
 msgid "Restoring virtual machine memory from disk"
 msgstr "Se restaurează memoria mașinii virtuale de pe disc"
 
-#: virtManager/vmmenu.py:244
+#: virtManager/vmmenu.py:259
 msgid "Error starting domain"
 msgstr "Eroare la pornirea domeniului"
 
-#: virtManager/vmmenu.py:251
+#: virtManager/vmmenu.py:267
 #, python-format
 msgid "Are you sure you want to poweroff '%s'?"
 msgstr "Sunteți sigur că doriți să opriți „%s”?"
 
-#: virtManager/vmmenu.py:263
+#: virtManager/vmmenu.py:279
 #, python-format
 msgid "Are you sure you want to reboot '%s'?"
 msgstr "Sunteți sigur că doriți să reporniți „%s”?"
 
-#: virtManager/vmmenu.py:269
+#: virtManager/vmmenu.py:284
 msgid "Error rebooting domain"
 msgstr "Eroare la repornirea domeniului"
 
-#: virtManager/vmmenu.py:276
+#: virtManager/vmmenu.py:291
 #, python-format
 msgid "Are you sure you want to force reset '%s'?"
 msgstr "Sunteți sigur că doriți să forțați resinițierea „%s”?"
 
-#: virtManager/vmmenu.py:278
+#: virtManager/vmmenu.py:293
 msgid ""
 "This will immediately reset the VM without shutting down the OS and may "
 "cause data loss."
@@ -5051,73 +5071,73 @@ msgstr ""
 "Acest lucru va reiniția imediat MV fără a opri sistemul de operare și poate "
 "cauza pierderi de date."
 
-#: virtManager/vmmenu.py:284
+#: virtManager/vmmenu.py:300
 msgid "Error resetting domain"
 msgstr "F_orțează reinițierea"
 
-#: virtManager/vmwindow.py:46
+#: virtManager/vmwindow.py:43
 #, python-format
 msgid "Error launching details: %s"
 msgstr "Eroare la lansarea detaliilor: %s"
 
-#: virtManager/vmwindow.py:226
+#: virtManager/vmwindow.py:217
 msgid "This will abort the installation. Are you sure?"
 msgstr "Această acțiune va întrerupe instalarea. Sunteți sigur?"
 
-#: virtManager/vmwindow.py:388
+#: virtManager/vmwindow.py:377
 #, python-format
 msgid "%(vm-name)s on %(connection-name)s"
 msgstr "%(vm-name)s pe %(connection-name)s"
 
-#: virtManager/vmwindow.py:432
+#: virtManager/vmwindow.py:420
 msgid "Manage VM snapshots"
 msgstr "Gestionarea imaginilor instantanee ale MV"
 
-#: virtManager/vmwindow.py:509
+#: virtManager/vmwindow.py:497
 #, python-format
 msgid "Error taking screenshot: %s"
 msgstr "Eroare la realizarea capturii de ecran: %s"
 
-#: virtManager/vmwindow.py:517
+#: virtManager/vmwindow.py:505
 msgid "Error initializing spice USB device widget"
 msgstr ""
 "Eroare la inițializarea elementului grafic de control al dispozitivului USB "
 "SPICE"
 
-#: virtManager/vmwindow.py:521
+#: virtManager/vmwindow.py:510
 msgid "Select USB devices for redirection"
 msgstr "Selectează dispozitivele USB pentru redirecționare"
 
-#: virtManager/vmwindow.py:556
+#: virtManager/vmwindow.py:545
 msgid "Save Virtual Machine Screenshot"
 msgstr "Salvează captură ecran Maşină Virtuală"
 
-#: virtManager/vmwindow.py:557
+#: virtManager/vmwindow.py:546
 msgid "PNG files"
 msgstr "fișiere PNG"
 
-#: virtManager/vmwindow.py:559
+#: virtManager/vmwindow.py:548
 msgid "_Save"
 msgstr "_Salvează"
 
-#: virtManager/xmleditor.py:138 virtManager/xmleditor.py:151
+#: virtManager/xmleditor.py:131 virtManager/xmleditor.py:144
 msgid "There are unapplied changes."
 msgstr "Există modificări neaplicate."
 
-#: virtManager/xmleditor.py:139
+#: virtManager/xmleditor.py:132
 msgid "Your changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 "Modificările dvs. vor fi pierdute dacă părăsiți această filă. Chiar părăsiți "
 "această filă?"
 
-#: virtManager/xmleditor.py:152
+#: virtManager/xmleditor.py:145
 msgid ""
 "Your XML changes will be lost if you leave this tab. Really leave this tab?"
 msgstr ""
 "Modificările XML vor fi pierdute dacă părăsiți această filă. Chiar părăsiți "
 "această filă?"
 
-#: virtinst/capabilities.py:298
+#: virtinst/capabilities.py:300
 #, python-format
 msgid ""
 "Host does not support virtualization type '%(virttype)s' for architecture "
@@ -5126,23 +5146,23 @@ msgstr ""
 "Gazda nu acceptă tipul de virtualizare „%(virttype)s” pentru arhitectura "
 "„%(arch)s”"
 
-#: virtinst/capabilities.py:302
+#: virtinst/capabilities.py:305
 #, python-format
 msgid ""
 "Host does not support any virtualization options for architecture '%(arch)s'"
 msgstr ""
 "Gazda nu acceptă nicio opțiune de virtualizare pentru arhitectura „%(arch)s”"
 
-#: virtinst/capabilities.py:306
+#: virtinst/capabilities.py:309
 #, python-format
 msgid "Host does not support virtualization type '%(virttype)s'"
 msgstr "Gazda nu acceptă tipul de virtualizare „%(virttype)s”"
 
-#: virtinst/capabilities.py:310
+#: virtinst/capabilities.py:313
 msgid "Host does not support any virtualization options"
 msgstr "Gazda nu acceptă nicio opțiune de virtualizare"
 
-#: virtinst/capabilities.py:316
+#: virtinst/capabilities.py:320
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
@@ -5151,7 +5171,7 @@ msgstr ""
 "Gazda nu acceptă tipul de domeniu %(domain)s cu mașina „%(machine)s” pentru "
 "tipul de virtualizare „%(virttype)s” cu arhitectura „%(arch)s”"
 
-#: virtinst/capabilities.py:322
+#: virtinst/capabilities.py:331
 #, python-format
 msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
@@ -5160,18 +5180,18 @@ msgstr ""
 "Gazda nu acceptă tipul de domeniu %(domain)s pentru tipul de virtualizare "
 "„%(virttype)s” cu arhitectura „%(arch)s”"
 
-#: virtinst/cli.py:107
+#: virtinst/cli.py:115
 msgid "See man page for examples and full option syntax."
 msgstr ""
 "Consultați pagina de manual pentru exemple și sintaxa completă a opțiunilor."
 
-#: virtinst/cli.py:109
+#: virtinst/cli.py:118
 msgid "Use '--option=?' or '--option help' to see available suboptions"
 msgstr ""
 "Utilizați „--option=?” sau „--option help” pentru a vedea subopțiunile "
 "disponibile"
 
-#: virtinst/cli.py:288
+#: virtinst/cli.py:295
 #, python-format
 msgid ""
 "Domain installation does not appear to have been successful.\n"
@@ -5184,7 +5204,7 @@ msgstr ""
 "  %s\n"
 "în caz contrar, vă rugăm să reporniți instalarea."
 
-#: virtinst/cli.py:306
+#: virtinst/cli.py:316
 #, python-format
 msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
@@ -5194,48 +5214,48 @@ msgstr ""
 "să acordați utilizatorului „%(user)s” permisiuni de căutare pentru "
 "următoarele directoare: %(dirs)s"
 
-#: virtinst/cli.py:319
+#: virtinst/cli.py:329
 #, python-format
 msgid " (Use --check %s=off or --check all=off to override)"
 msgstr " (utilizați „--check %s=off” sau „--check all=off” pentru a înlocui)"
 
-#: virtinst/cli.py:353
+#: virtinst/cli.py:360
 #, python-format
 msgid "This will overwrite the existing path '%s'"
 msgstr "Această operație va suprascrie ruta existentă „%s”"
 
-#: virtinst/cli.py:364
+#: virtinst/cli.py:370
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
 msgstr "Discul %(path)s este deja utilizat de alți invitați %(names)s."
 
-#: virtinst/cli.py:408
+#: virtinst/cli.py:414
 #, python-format
 msgid "Running graphical console command: %(command)s"
 msgstr "Se execută comanda de consolă grafică: %(command)s"
 
-#: virtinst/cli.py:422
+#: virtinst/cli.py:426
 #, python-format
 msgid "Running text console command: %(command)s"
 msgstr "Se execută comanda de consolă text: %(command)s"
 
-#: virtinst/cli.py:464
+#: virtinst/cli.py:470
 #, python-format
 msgid "Could not find domain '%(domain)s': %(error)s"
 msgstr "Nu s-a putut găsi domeniul „%(domain)s”: %(error)s"
 
 #. translators: option1 and option2 are command line options,
 #. e.g. -a or --disk
-#: virtinst/cli.py:483
+#: virtinst/cli.py:490
 #, python-format
 msgid "Cannot use %(option1)s and %(option2)s at the same time"
 msgstr "Nu se pot utiliza %(option1)s și %(option2)s în același timp"
 
-#: virtinst/cli.py:592 virtinst/cli.py:595
+#: virtinst/cli.py:608 virtinst/cli.py:612
 msgid "Connect to hypervisor with libvirt URI"
 msgstr "Conectare la hipervizor cu URI libvirt"
 
-#: virtinst/cli.py:610
+#: virtinst/cli.py:635
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5247,31 +5267,31 @@ msgstr ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 
-#: virtinst/cli.py:616
+#: virtinst/cli.py:646
 msgid "Don't automatically try to connect to the guest console"
 msgstr "Nu încearcă să se conecteze automat la consola invitatului"
 
-#: virtinst/cli.py:620
+#: virtinst/cli.py:651
 msgid "Don't boot guest after completing install."
 msgstr "Nu pornește invitatul după finalizarea instalării."
 
-#: virtinst/cli.py:624
+#: virtinst/cli.py:658
 msgid "Don't check name collision, overwrite any guest with the same name."
 msgstr ""
 "Nu verifică coliziunea de nume, suprascrie orice invitat cu același nume."
 
-#: virtinst/cli.py:631
+#: virtinst/cli.py:665
 msgid "Print the generated domain XML rather than create the guest."
 msgstr "Imprimă XML-ul domeniului generat în loc să creeze invitatul."
 
-#: virtinst/cli.py:650
+#: virtinst/cli.py:685
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
 "Parcurge procesul de instalare, dar nu creează dispozitive și nu definește "
 "invitatul."
 
-#: virtinst/cli.py:655
+#: virtinst/cli.py:693
 msgid ""
 "Enable or disable validation checks. Example:\n"
 "--check path_in_use=off\n"
@@ -5281,15 +5301,15 @@ msgstr ""
 "--check path_in_use=off\n"
 "--check all=off"
 
-#: virtinst/cli.py:659
+#: virtinst/cli.py:698
 msgid "Suppress non-error output"
 msgstr "Suprimă ieșirea fără erori"
 
-#: virtinst/cli.py:661
+#: virtinst/cli.py:699
 msgid "Print debugging information"
 msgstr "Afișează informațiile de depanare"
 
-#: virtinst/cli.py:667
+#: virtinst/cli.py:708
 msgid ""
 "Configure guest metadata. Ex:\n"
 "--metadata name=foo,title=\"My pretty title\",uuid=...\n"
@@ -5299,7 +5319,7 @@ msgstr ""
 "--metadata name=foo,title=„Titlul meu frumos”,uuid=...\n"
 "--metadata description=\"Descrierea mea lungă și frumoasă”"
 
-#: virtinst/cli.py:675
+#: virtinst/cli.py:721
 msgid ""
 "Configure guest memory allocation. Ex:\n"
 "--memory 1024 (in MiB)\n"
@@ -5309,7 +5329,7 @@ msgstr ""
 "--memory 1024 (în Mio)\n"
 "--memory memory=1024,currentMemory=512\n"
 
-#: virtinst/cli.py:688
+#: virtinst/cli.py:738
 msgid ""
 "Number of vCPUs to configure for your guest. Ex:\n"
 "--vcpus 5\n"
@@ -5322,7 +5342,7 @@ msgstr ""
 "--vcpus 5,maxvcpus=10,cpuset=1-4,6,8\n"
 "--vcpus sockets=2,cores=4,threads=2"
 
-#: virtinst/cli.py:697
+#: virtinst/cli.py:751
 msgid ""
 "CPU model and features. Ex:\n"
 "--cpu coreduo,+x2apic\n"
@@ -5332,7 +5352,7 @@ msgstr ""
 "--cpu coreduo,+x2apic\n"
 "--cpu host-passthrough\n"
 
-#: virtinst/cli.py:710
+#: virtinst/cli.py:766
 msgid ""
 "Configure guest display settings. Ex:\n"
 "--graphics spice\n"
@@ -5344,7 +5364,7 @@ msgstr ""
 "--graphics vnc,port=5901,listen=0.0.0.0\n"
 "--graphics none\n"
 
-#: virtinst/cli.py:719
+#: virtinst/cli.py:781
 msgid ""
 "Configure a guest network interface. Ex:\n"
 "--network bridge=mybr0\n"
@@ -5360,7 +5380,7 @@ msgstr ""
 "--network none\n"
 "--network help"
 
-#: virtinst/cli.py:730
+#: virtinst/cli.py:797
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5370,7 +5390,7 @@ msgstr ""
 "--controller type=usb,model=qemu-xhci\n"
 "--controller type=scsi,model=virtio-scsi\n"
 
-#: virtinst/cli.py:735
+#: virtinst/cli.py:806
 msgid ""
 "Configure a guest input device. Ex:\n"
 "--input tablet\n"
@@ -5380,29 +5400,29 @@ msgstr ""
 "--input tablet\n"
 "--input keyboard,bus=usb"
 
-#: virtinst/cli.py:740
+#: virtinst/cli.py:809
 msgid "Configure a guest serial device"
 msgstr "Configurează un dispozitiv serial invitat"
 
-#: virtinst/cli.py:743
+#: virtinst/cli.py:811
 msgid "Configure a guest parallel device"
 msgstr "Configurează un dispozitiv paralel invitat"
 
-#: virtinst/cli.py:746
+#: virtinst/cli.py:814
 msgid "Configure a guest communication channel"
 msgstr "Configurează un canal de comunicare pentru invitat"
 
-#: virtinst/cli.py:749
+#: virtinst/cli.py:820
 msgid "Configure a text console connection between the guest and host"
 msgstr "Configurează o conexiune de consolă text între invitat și gazdă"
 
-#: virtinst/cli.py:753
+#: virtinst/cli.py:826
 msgid "Configure physical USB/PCI/etc host devices to be shared with the guest"
 msgstr ""
 "Configurează dispozitivele gazdă fizice USB/PCI/etc pentru a fi partajate cu "
 "invitatul"
 
-#: virtinst/cli.py:761
+#: virtinst/cli.py:836
 msgid ""
 "Pass host directory to the guest. Ex: \n"
 "--filesystem /my/source/dir,/dir/in/guest\n"
@@ -5412,23 +5432,23 @@ msgstr ""
 "--filesystem /directorul/meu/sursă,/director/în/invitat\n"
 "--filesystem template_name,/,type=template"
 
-#: virtinst/cli.py:769
+#: virtinst/cli.py:846
 msgid "Configure guest sound device emulation"
 msgstr "Configurează emulația dispozitivului de sunet pentru invitat"
 
-#: virtinst/cli.py:780
+#: virtinst/cli.py:856
 msgid "Configure host audio backend for sound devices"
 msgstr "Configurează suportul audio gazdă pentru dispozitivele de sunet"
 
-#: virtinst/cli.py:784
+#: virtinst/cli.py:860
 msgid "Configure a guest watchdog device"
 msgstr "Configurează un dispozitiv watchdog pentru invitat"
 
-#: virtinst/cli.py:787
+#: virtinst/cli.py:862
 msgid "Configure guest video hardware."
 msgstr "Configurează hardware-ul video pentru invitat."
 
-#: virtinst/cli.py:790
+#: virtinst/cli.py:867
 msgid ""
 "Configure a guest smartcard device. Ex:\n"
 "--smartcard mode=passthrough"
@@ -5436,7 +5456,7 @@ msgstr ""
 "Configurează un dispozitiv de card de memorie pentru invitat. Exemplu:\n"
 "--smartcard mode=passthrough"
 
-#: virtinst/cli.py:794
+#: virtinst/cli.py:874
 msgid ""
 "Configure a guest redirection device. Ex:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
@@ -5444,7 +5464,7 @@ msgstr ""
 "Configurează un dispozitiv de redirecționare pentru invitat. Exemplu:\n"
 "--redirdev usb,type=tcp,server=192.168.1.1:4000"
 
-#: virtinst/cli.py:798
+#: virtinst/cli.py:882
 msgid ""
 "Configure a guest memballoon device. Ex:\n"
 "--memballoon model=virtio"
@@ -5452,7 +5472,7 @@ msgstr ""
 "Configurează un dispozitiv memballoon pentru invitat. Exemplu:\n"
 "--memballoon model=virtio"
 
-#: virtinst/cli.py:802
+#: virtinst/cli.py:886
 msgid ""
 "Configure a guest TPM device. Ex:\n"
 "--tpm /dev/tpm"
@@ -5460,7 +5480,7 @@ msgstr ""
 "Configurează un dispozitiv TPM pentru invitat. Exemplu:\n"
 "--tpm /dev/tpm"
 
-#: virtinst/cli.py:806
+#: virtinst/cli.py:890
 msgid ""
 "Configure a guest RNG device. Ex:\n"
 "--rng /dev/urandom"
@@ -5468,7 +5488,7 @@ msgstr ""
 "Configurează un dispozitiv RNG pentru invitat. Exemplu:\n"
 "--rng /dev/urandom"
 
-#: virtinst/cli.py:810
+#: virtinst/cli.py:896
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
@@ -5476,7 +5496,7 @@ msgstr ""
 "Configurează un dispozitiv de panică pentru invitat. Exemplu:\n"
 "--panic default"
 
-#: virtinst/cli.py:814
+#: virtinst/cli.py:902
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
@@ -5484,7 +5504,7 @@ msgstr ""
 "Configurează un dispozitiv de memorie partajată pentru invitat. Exemplu:\n"
 "--shmem name=shmem0"
 
-#: virtinst/cli.py:818
+#: virtinst/cli.py:908
 msgid ""
 "Configure a guest memory device. Ex:\n"
 "--memdev dimm,target.size=1024"
@@ -5492,7 +5512,7 @@ msgstr ""
 "Configurează un dispozitiv de memorie pentru invitat. Exemplu:\n"
 "--memdev dimm,target.size=1024"
 
-#: virtinst/cli.py:822
+#: virtinst/cli.py:914
 msgid ""
 "Configure guest vsock sockets. Ex:\n"
 "--vsock cid.auto=yes\n"
@@ -5502,7 +5522,7 @@ msgstr ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
-#: virtinst/cli.py:827
+#: virtinst/cli.py:920
 msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
@@ -5510,37 +5530,44 @@ msgstr ""
 "Configurează un dispozitiv IOMMU. Exemplu:\n"
 "--iommu model=intel,driver.aw_bits=48"
 
-#: virtinst/cli.py:834
+#: virtinst/cli.py:927
+msgid ""
+"Configure a nvram storage device.\n"
+"It's for guest kernel to record oops/panic logs. Ex:\n"
+"--pstore backend=acpi-erst,size=8"
+msgstr ""
+
+#: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
 msgstr "Definește configurația domeniului <iothreads> și <iothreadids>."
 
-#: virtinst/cli.py:838
+#: virtinst/cli.py:944
 msgid "Set domain seclabel configuration."
 msgstr "Definește configurația seclabel a domeniului."
 
-#: virtinst/cli.py:842
+#: virtinst/cli.py:951
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
 "Configurează invitatul pentru a efectua operațiile de gestionare a cheilor "
 "criptografice S390."
 
-#: virtinst/cli.py:847
+#: virtinst/cli.py:956
 msgid "Tune CPU parameters for the domain process."
 msgstr "Ajustează parametrii CPU pentru procesul de domeniu."
 
-#: virtinst/cli.py:851
+#: virtinst/cli.py:961
 msgid "Tune NUMA policy for the domain process."
 msgstr "Ajustează politica NUMA pentru procesul de domeniu."
 
-#: virtinst/cli.py:855
+#: virtinst/cli.py:966
 msgid "Tune memory policy for the domain process."
 msgstr "Ajustează politica de memorie pentru procesul de domeniu."
 
-#: virtinst/cli.py:859
+#: virtinst/cli.py:971
 msgid "Tune blkio policy for the domain process."
 msgstr "Ajustează politica blkio pentru procesul de domeniu."
 
-#: virtinst/cli.py:863
+#: virtinst/cli.py:979
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
@@ -5548,7 +5575,7 @@ msgstr ""
 "Definește politica de rezervă a memoriei pentru procesul de domeniu. Ex:\n"
 "--memorybacking hugepages=on"
 
-#: virtinst/cli.py:868
+#: virtinst/cli.py:988
 msgid ""
 "Set domain <features> XML. Ex:\n"
 "--features acpi=off\n"
@@ -5558,7 +5585,7 @@ msgstr ""
 "--features acpi=off\n"
 "--features apic=on,apic.eoi=on"
 
-#: virtinst/cli.py:874
+#: virtinst/cli.py:998
 msgid ""
 "Set domain <clock> XML. Ex:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
@@ -5566,19 +5593,19 @@ msgstr ""
 "Definește domeniul <clock> XML. Exemplu:\n"
 "--clock offset=localtime,rtc_tickpolicy=catchup"
 
-#: virtinst/cli.py:879
+#: virtinst/cli.py:1002
 msgid "Configure VM power management features"
 msgstr "Configurează caracteristicile de gestionare a energiei MV"
 
-#: virtinst/cli.py:883
+#: virtinst/cli.py:1006
 msgid "Configure VM lifecycle management policy"
 msgstr "Configurează politica de gestionare a ciclului de viață al MV"
 
-#: virtinst/cli.py:887
+#: virtinst/cli.py:1011
 msgid "Configure VM resource partitioning (cgroups)"
 msgstr "Configurează partiționarea resurselor MV (cgroups)"
 
-#: virtinst/cli.py:891
+#: virtinst/cli.py:1019
 msgid ""
 "Configure SMBIOS System Information. Ex:\n"
 "--sysinfo host\n"
@@ -5588,7 +5615,7 @@ msgstr ""
 "--sysinfo host\n"
 "--sysinfo bios.vendor=MyVendor,bios.version=1.2.3,...\n"
 
-#: virtinst/cli.py:897
+#: virtinst/cli.py:1030
 msgid ""
 "Pass arguments directly to the QEMU emulator. Ex:\n"
 "--qemu-commandline='-display gtk,gl=on'\n"
@@ -5598,7 +5625,7 @@ msgstr ""
 "--qemu-commandline='-display gtk,gl=on'\n"
 "--qemu-commandline env=DISPLAY=:0.1"
 
-#: virtinst/cli.py:903
+#: virtinst/cli.py:1042
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
@@ -5607,7 +5634,7 @@ msgstr ""
 "Exemplu:\n"
 "--launchSecurity sev"
 
-#: virtinst/cli.py:910
+#: virtinst/cli.py:1054
 msgid ""
 "Configure guest boot settings. Ex:\n"
 "--boot hd,cdrom,menu=on\n"
@@ -5617,7 +5644,7 @@ msgstr ""
 "--boot hd,cdrom,menu=on\n"
 "--boot init=/sbin/init (pentru containere)"
 
-#: virtinst/cli.py:916
+#: virtinst/cli.py:1065
 msgid ""
 "Enable user namespace for LXC container. Ex:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
@@ -5625,7 +5652,7 @@ msgstr ""
 "Activează spațiul de nume de utilizator pentru containerul LXC. Exemplu:\n"
 "--idmap uid.start=0,uid.target=1000,uid.count=10"
 
-#: virtinst/cli.py:926
+#: virtinst/cli.py:1080
 msgid ""
 "Specify storage with various options. Ex.\n"
 "--disk size=10 (new 10GiB image in default location)\n"
@@ -5639,19 +5666,19 @@ msgstr ""
 "--disk device=cdrom,bus=scsi\n"
 "--disk=?"
 
-#: virtinst/cli.py:934
+#: virtinst/cli.py:1091
 msgid "OS options"
 msgstr "Opțiuni ale sistemului de operare"
 
-#: virtinst/cli.py:937
+#: virtinst/cli.py:1094
 msgid "The OS being installed in the guest."
 msgstr "Sistemul de operare instalat în invitat."
 
-#: virtinst/cli.py:939
+#: virtinst/cli.py:1096
 msgid "The OS installed in the guest."
 msgstr "Sistemul de operare instalat în invitat."
 
-#: virtinst/cli.py:941
+#: virtinst/cli.py:1099
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5662,7 +5689,7 @@ msgstr ""
 "Exemple de valori: fedora29, rhel7.0, win10, ...\n"
 "Utilizați „--osinfo list” pentru a vedea o listă completă."
 
-#: virtinst/cli.py:952
+#: virtinst/cli.py:1115
 msgid ""
 "Perform raw XML XPath options on the final XML. Example:\n"
 "--xml ./cpu/@mode=host-passthrough\n"
@@ -5674,12 +5701,12 @@ msgstr ""
 "--xml ./devices/disk[2]/serial=new-serial\n"
 "--xml xpath.delete=./clock"
 
-#: virtinst/cli.py:982
+#: virtinst/cli.py:1148
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
 msgstr "%(key)s trebuie să fie „yes” sau „no”"
 
-#: virtinst/cli.py:1167
+#: virtinst/cli.py:1343
 #, python-format
 msgid ""
 "Don't know how to match device type '%(device_type)s' property "
@@ -5688,17 +5715,25 @@ msgstr ""
 "Nu se știe cum să se potrivească tipul de dispozitiv „%(device_type)s” cu "
 "proprietatea „%(property_name)s”"
 
-#: virtinst/cli.py:1499
+#: virtinst/cli.py:1673
 #, python-format
 msgid "Unknown %(optionflag)s options: %(string)s"
 msgstr "Opțiuni necunoscute %(optionflag)s: %(string)s"
 
-#: virtinst/cli.py:1555 virtinst/cli.py:1586
+#: virtinst/cli.py:1729 virtinst/cli.py:1760
 #, python-format
 msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Eroare: %(cli_flag_name)s %(options)s: %(err)s"
 
-#: virtinst/cli.py:1993
+#: virtinst/cli.py:2193
+#, fuzzy
+#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
+msgid "No display detected. Not running virt-viewer."
+msgstr ""
+"Grafică solicitată, dar variabila DISPLAY nu este definită. Nu rulează «virt-"
+"viewer»."
+
+#: virtinst/cli.py:2199
 msgid ""
 "Unable to connect to graphical console: virt-viewer not installed. Please "
 "install the 'virt-viewer' package."
@@ -5706,54 +5741,48 @@ msgstr ""
 "Nu se poate conecta la consola grafică: «virt-viewer» nu este instalat. Vă "
 "rugăm să instalați pachetul „virt-viewer”."
 
-#: virtinst/cli.py:2000
-msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
-msgstr ""
-"Grafică solicitată, dar variabila DISPLAY nu este definită. Nu rulează «virt-"
-"viewer»."
-
-#: virtinst/cli.py:2011
+#: virtinst/cli.py:2213
 #, python-format
 msgid "Unknown autoconsole type '%s'"
 msgstr "Tip de consolă automată necunoscut „%s”"
 
-#: virtinst/cli.py:2401
+#: virtinst/cli.py:2615
 msgid "CPU model=host is deprecated, use model=host-model"
 msgstr ""
 "Parametrul pentru CPU „model=host” este depreciat, utilizați „model=host-"
 "model”"
 
-#: virtinst/cli.py:3605
+#: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
 msgstr "Valoare improprie pentru „size”: %s"
 
-#: virtinst/cli.py:3618
+#: virtinst/cli.py:3928
 #, python-format
 msgid "Unknown '%(optionname)s' value '%(string)s'"
 msgstr "Valoare „%(optionname)s” necunoscută „%(string)s”"
 
-#: virtinst/cli.py:3633
+#: virtinst/cli.py:3944
 msgid "Storage volume must be specified as vol=poolname/volname"
 msgstr ""
 "Volumul de stocare trebuie să fie specificat ca vol=nume-„hangar”/nume-vol"
 
-#: virtinst/cli.py:4180
+#: virtinst/cli.py:4470
 #, python-format
 msgid "Expected PCI format string for '%s'"
 msgstr "Șir de format PCI așteptat pentru „%s”"
 
-#: virtinst/cli.py:4915
+#: virtinst/cli.py:5229
 #, python-format
 msgid "%s corresponds to multiple node devices"
 msgstr "%s corespunde dispozitivelor cu noduri multiple"
 
-#: virtinst/cli.py:4918
+#: virtinst/cli.py:5231
 #, python-format
 msgid "Did not find a matching node device for '%s'"
 msgstr "Nu s-a găsit un dispozitiv de nod corespunzător pentru „%s”"
 
-#: virtinst/cli.py:5061
+#: virtinst/cli.py:5372
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5773,66 +5802,66 @@ msgstr "Nu s-a putut elimina vechea MV „%(vm)s”: %(error)s"
 msgid "Domain '%s' was not found."
 msgstr "Domeniul „%s” nu a fost găsit."
 
-#: virtinst/cloner.py:155
+#: virtinst/cloner.py:161
 #, python-format
 msgid "Clone onto existing storage volume is not currently supported: '%s'"
 msgstr ""
 "Clonarea pe un volum de stocare existent nu este acceptată în prezent: „%s”"
 
-#: virtinst/cloner.py:176
+#: virtinst/cloner.py:182
 #, python-format
 msgid "Disk path '%s' does not exist."
 msgstr "Ruta discului „%s” nu există."
 
-#: virtinst/cloner.py:185
+#: virtinst/cloner.py:191
 msgid "Cloning rbd volumes is not yet supported."
 msgstr "Clonarea volumelor rbd nu este încă acceptată."
 
-#: virtinst/cloner.py:187
+#: virtinst/cloner.py:194
 #, python-format
 msgid "Disk network type '%s' is not cloneable."
 msgstr "Tipul de rețea de discuri „%s” nu este clonabil."
 
-#: virtinst/cloner.py:194
+#: virtinst/cloner.py:201
 msgid "Read Only"
 msgstr "Numai-citire"
 
-#: virtinst/cloner.py:196
+#: virtinst/cloner.py:203
 msgid "Marked as shareable"
 msgstr "Marcat ca partajabil"
 
-#: virtinst/cloner.py:265
+#: virtinst/cloner.py:277
 #, python-format
 msgid "Could not use path '%(path)s' for cloning: %(error)s"
 msgstr "Nu s-a putut utiliza ruta „%(path)s” pentru clonare: %(error)s"
 
-#: virtinst/cloner.py:281
+#: virtinst/cloner.py:297
 #, python-format
 msgid "Could not determine original disk information: %s"
 msgstr "Nu s-a putut determina informația originală a discului: %s"
 
-#: virtinst/cloner.py:334
+#: virtinst/cloner.py:350
 msgid "Domain to clone must be shutoff."
 msgstr "Domeniul pentru clonare trebuie să fie închis."
 
-#: virtinst/cloner.py:368
+#: virtinst/cloner.py:385
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
 "Stabilind portul dispozitivului grafic la auto-port, pentru a evita "
 "conflictele."
 
-#: virtinst/cloner.py:527
+#: virtinst/cloner.py:545
 #, python-format
 msgid "Invalid name for new guest: %s"
 msgstr "Nume nevalid pentru noul invitat: %s"
 
-#: virtinst/devices/disk.py:379
+#: virtinst/devices/disk.py:394
 #, python-format
 msgid "Size must be specified for non existent volume '%s'"
 msgstr "Dimensiunea trebuie specificată pentru volumul inexistent „%s”"
 
-#: virtinst/devices/disk.py:384
+#: virtinst/devices/disk.py:400
 #, python-format
 msgid ""
 "Don't know how to create storage for path '%s'. Use libvirt APIs to manage "
@@ -5841,23 +5870,23 @@ msgstr ""
 "Nu se știe cum să se creeze stocarea pentru ruta „%s”. Utilizați API-urile "
 "libvirt pentru a gestiona mai întâi directorul părinte ca un „hangar”."
 
-#: virtinst/devices/disk.py:407
+#: virtinst/devices/disk.py:425
 msgid "Format attribute not supported for this volume type"
 msgstr "Atributul de format nu este acceptat pentru acest tip de volum"
 
-#: virtinst/devices/disk.py:840
+#: virtinst/devices/disk.py:861
 #, python-format
 msgid "Device type '%s' requires a path"
 msgstr "Tipul de dispozitiv „%s” necesită o rută"
 
-#: virtinst/devices/disk.py:848
+#: virtinst/devices/disk.py:867
 #, python-format
 msgid "Must specify storage creation parameters for non-existent path '%s'."
 msgstr ""
 "Trebuie să specificați parametrii de creare a stocării pentru ruta "
 "inexistentă „%s”."
 
-#: virtinst/devices/disk.py:961
+#: virtinst/devices/disk.py:982
 #, python-format
 msgid "Only %(number)s disk for bus '%(bus)s' are supported"
 msgid_plural "Only %(number)s disks for bus '%(bus)s' are supported"
@@ -5866,7 +5895,7 @@ msgstr[1] "Doar %(number)s discuri pentru magistrala „%(bus)s” sunt acceptat
 msgstr[2] ""
 "Doar %(number)s de discuri pentru magistrala „%(bus)s” sunt acceptate"
 
-#: virtinst/devices/filesystem.py:123
+#: virtinst/devices/filesystem.py:127
 #, python-format
 msgid "Filesystem target '%s' must be an absolute path"
 msgstr "Ținta sistemului de fișiere „%s” trebuie să fie o rută absolută"
@@ -5876,32 +5905,32 @@ msgstr "Ținta sistemului de fișiere „%s” trebuie să fie o rută absolută
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s trebuie să fie peste 5900, sau -1 pentru alocare automată"
 
-#: virtinst/devices/hostdev.py:82
+#: virtinst/devices/hostdev.py:85
 #, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "Nu se știe cum să se genereze nodedev pentru id-ul de tip mdev „%s”"
 
-#: virtinst/devices/hostdev.py:88 virtinst/devices/interface.py:347
+#: virtinst/devices/hostdev.py:91 virtinst/devices/interface.py:357
 #, python-format
 msgid "Unsupported node device type '%s'"
 msgstr "Tipul de dispozitiv de nod „%s” nu este acceptat"
 
-#: virtinst/devices/interface.py:220
+#: virtinst/devices/interface.py:218
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
 msgstr "Adresa MAC „%s” este utilizată de o altă mașină virtuală."
 
-#: virtinst/diskbackend.py:109
+#: virtinst/diskbackend.py:108
 #, python-format
 msgid "Cannot use storage %(path)s: %(err)s"
 msgstr "Nu se poate utiliza stocarea %(path)s: %(err)s"
 
-#: virtinst/diskbackend.py:288
+#: virtinst/diskbackend.py:284
 #, python-format
 msgid "Permissions on '%s' did not stick"
 msgstr "Permisiunile pentru „%s” nu au rămas în vigoare"
 
-#: virtinst/diskbackend.py:538
+#: virtinst/diskbackend.py:558
 msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
@@ -5909,33 +5938,33 @@ msgstr ""
 "Sistemul de fișiere nu va avea suficient spațiu liber pentru a aloca complet "
 "fișierul dispers atunci când invitatul rulează."
 
-#: virtinst/diskbackend.py:543
+#: virtinst/diskbackend.py:564
 msgid "There is not enough free space to create the disk."
 msgstr "Nu există suficient spațiu liber pentru a crea discul."
 
-#: virtinst/diskbackend.py:548
+#: virtinst/diskbackend.py:568
 #, python-format
 msgid "%(mem1)s M requested > %(mem2)s M available"
 msgstr "%(mem1)s M solicitat > %(mem2)s M disponibil"
 
-#: virtinst/diskbackend.py:555
+#: virtinst/diskbackend.py:576
 #, python-format
 msgid "size is required for non-existent disk '%s'"
 msgstr "dimensiunea este necesară pentru discul inexistent „%s”"
 
-#: virtinst/diskbackend.py:565
+#: virtinst/diskbackend.py:585
 #, python-format
 msgid "Cloning %(srcfile)s"
 msgstr "Se clonează %(srcfile)s"
 
-#: virtinst/diskbackend.py:635
+#: virtinst/diskbackend.py:656
 #, python-format
 msgid "Error cloning diskimage %(inputpath)s to %(outputpath)s: %(error)s"
 msgstr ""
 "Eroare la clonarea imaginii de disc %(inputpath)s către %(outputpath)s: "
 "%(error)s"
 
-#: virtinst/domain/cpu.py:56
+#: virtinst/domain/cpu.py:60
 #, python-format
 msgid ""
 "Total CPUs implied by topology (sockets=%(sockets)d * dies=%(dies)d * "
@@ -5946,66 +5975,66 @@ msgstr ""
 "* dies=%(dies)d * cores=%(cores)d * threads=%(threads)d == %(total)d) nu "
 "corespunde numărului de vCPU %(vcpus)d"
 
-#: virtinst/domain/launch_security.py:29
+#: virtinst/domain/launch_security.py:28
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "Securitatea lansării SEV necesită o mașină Q35 UEFI"
 
-#: virtinst/domain/launch_security.py:43
+#: virtinst/domain/launch_security.py:42
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "Securitatea lansării SEV-SNP necesită o mașină Q35 UEFI"
 
-#: virtinst/domcapabilities.py:208
+#: virtinst/domcapabilities.py:217
 #, python-format
 msgid "Failed to get expanded CPU XML: %s"
 msgstr "Obținerea fișei XML extinse pentru CPU a eșuat: %s"
 
-#: virtinst/domcapabilities.py:333
+#: virtinst/domcapabilities.py:346
 msgid "BIOS"
 msgstr "BIOS"
 
-#: virtinst/domcapabilities.py:334
+#: virtinst/domcapabilities.py:347
 msgid "Default"
 msgstr "Implicit"
 
-#: virtinst/domcapabilities.py:339
+#: virtinst/domcapabilities.py:352
 #, python-format
 msgid "UEFI %(arch)s: %(path)s"
 msgstr "UEFI %(arch)s: %(path)s"
 
-#: virtinst/domcapabilities.py:342
+#: virtinst/domcapabilities.py:354
 #, python-format
 msgid "Custom: %(path)s"
 msgstr "Personalizat: %(path)s"
 
-#: virtinst/guest.py:88
+#: virtinst/guest.py:114
 msgid "Guest"
 msgstr "Invitat"
 
-#: virtinst/guest.py:96
+#: virtinst/guest.py:122
 #, python-format
 msgid "Guest name '%s' is already in use."
 msgstr "Numele de invitat „%s” este deja utilizat."
 
-#: virtinst/guest.py:1042
+#: virtinst/guest.py:1095
 msgid "Libvirt version does not support UEFI."
 msgstr "Versiunea Libvirt nu acceptă UEFI."
 
-#: virtinst/guest.py:1046
+#: virtinst/guest.py:1099
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "Nu se știe cum să se configureze UEFI pentru arhiva „%s”"
 
-#: virtinst/guest.py:1051
+#: virtinst/guest.py:1104
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "Nu s-a găsit nicio rută binară UEFI pentru arhiva „%s”"
 
-#: virtinst/install/installer.py:108
+#: virtinst/install/installer.py:120
 #, python-format
 msgid "Removing disk '%s'"
 msgstr "Se elimină discul „%s”"
 
-#: virtinst/install/installer.py:275
+#: virtinst/install/installer.py:286
 #, python-format
 msgid ""
 "Overriding memory to %(number)s MiB needed for %(osname)s network install."
@@ -6013,37 +6042,37 @@ msgstr ""
 "Se suprascrie cantitatea de memorie la %(number)s Mio, necesară pentru "
 "instalarea rețelei %(osname)s."
 
-#: virtinst/install/installer.py:653
+#: virtinst/install/installer.py:652
 msgid "Creating domain..."
 msgstr "Se creează domeniul..."
 
-#: virtinst/install/installer.py:660
+#: virtinst/install/installer.py:659
 msgid "Domain type 'vz' doesn't support transient installs."
 msgstr "Tipul de domeniu „vz” nu acceptă instalări tranzitorii."
 
-#: virtinst/install/installertreemedia.py:69
+#: virtinst/install/installertreemedia.py:66
 #, python-format
 msgid "Validating install media '%(media)s' failed: %(error)s"
 msgstr "Validarea suportului de instalare „%(media)s” a eșuat: %(error)s"
 
-#: virtinst/install/installertreemedia.py:116
+#: virtinst/install/installertreemedia.py:125
 msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr "locația nucleu/initrd poate fi specificată numai cu o locație URL/rută"
 
-#: virtinst/install/installertreemedia.py:119
+#: virtinst/install/installertreemedia.py:128
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "locația nucleu/initrd trebuie să fie specificată ca o pereche"
 
-#: virtinst/install/installertreemedia.py:142
+#: virtinst/install/installertreemedia.py:155
 #, python-format
 msgid "Cannot access install tree on remote connection: %s"
 msgstr "Nu se poate accesa arborele de instalare pe conexiunea la distanță: %s"
 
-#: virtinst/install/installertreemedia.py:209
+#: virtinst/install/installertreemedia.py:213
 msgid "Couldn't find kernel for install tree."
 msgstr "Nu s-a putut găsi nucleul pentru arborele de instalare."
 
-#: virtinst/install/installertreemedia.py:267
+#: virtinst/install/installertreemedia.py:270
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
@@ -6053,7 +6082,7 @@ msgstr ""
 "pentru a direcționa programul de instalare către un arbore de instalare "
 "accesibil prin rețea."
 
-#: virtinst/install/unattended.py:63
+#: virtinst/install/unattended.py:64
 #, python-format
 msgid "%(osname)s cannot use '%(loginname)s' as user-login."
 msgstr ""
@@ -6065,18 +6094,18 @@ msgstr ""
 msgid "%s requires the user-password to be set."
 msgstr "%s necesită definirea parolei de utilizator."
 
-#: virtinst/install/unattended.py:83
+#: virtinst/install/unattended.py:80
 #, python-format
 msgid "%s requires the admin-password to be set."
 msgstr "%s necesită definirea parolei de administrator."
 
-#: virtinst/install/unattended.py:180
+#: virtinst/install/unattended.py:176
 msgid "libosinfo or osinfo-db is too old to support unattended installs."
 msgstr ""
 "libosinfo sau osinfo-db este prea veche pentru a asigura instalări "
 "nesupravegheate."
 
-#: virtinst/install/unattended.py:198
+#: virtinst/install/unattended.py:194
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support required injection method '%(methodname)s'"
@@ -6084,18 +6113,18 @@ msgstr ""
 "Sistemul operativ „%(osname)s” nu acceptă metoda de injecție cerută "
 "„%(methodname)s"
 
-#: virtinst/install/unattended.py:335
+#: virtinst/install/unattended.py:323
 #, python-format
 msgid "OS '%s' media does not support unattended installation"
 msgstr ""
 "Suportul sistemului de operare „%s” nu acceptă instalarea nesupravegheată"
 
-#: virtinst/install/unattended.py:346
+#: virtinst/install/unattended.py:333
 #, python-format
 msgid "OS '%s' does not support unattended installation."
 msgstr "Sistemul de operare „%s” nu acceptă instalarea nesupravegheată."
 
-#: virtinst/install/unattended.py:355
+#: virtinst/install/unattended.py:342
 #, python-format
 msgid ""
 "OS '%(osname)s' does not support unattended installation for the "
@@ -6104,22 +6133,22 @@ msgstr ""
 "Sistemul de operare „%(osname)s” nu acceptă instalarea nesupravegheată "
 "pentru profilul „%(profilename)s”. Profile disponibile: %(profiles)s"
 
-#: virtinst/install/unattended.py:362
+#: virtinst/install/unattended.py:354
 #, python-format
 msgid "Using unattended profile '%s'"
 msgstr "Se utilizează profilul nesupravegheat „%s”"
 
-#: virtinst/install/urldetect.py:312
+#: virtinst/install/urldetect.py:315
 msgid "The URL could not be accessed, maybe you mistyped?"
 msgstr "Adresa URL nu a putut fi accesată, este posibil să fi tastat greșit?"
 
-#: virtinst/install/urldetect.py:314
+#: virtinst/install/urldetect.py:317
 #, python-format
 msgid "Could not find an installable distribution at URL '%s'"
 msgstr ""
 "Nu s-a putut găsi o distribuție aptă pentru a fi instalată la adresa URL „%s”"
 
-#: virtinst/install/urldetect.py:318
+#: virtinst/install/urldetect.py:321
 msgid ""
 "The location must be the root directory of an install tree.\n"
 "See virt-install man page for various distro examples."
@@ -6133,7 +6162,7 @@ msgstr ""
 msgid "Couldn't acquire file %(url)s: %(error)s"
 msgstr "Nu s-a putut achiziționa fișierul %(url)s: %(error)s"
 
-#: virtinst/install/urlfetcher.py:106
+#: virtinst/install/urlfetcher.py:105
 #, python-format
 msgid "Retrieving '%(filename)s'"
 msgstr "Se preia „%(filename)s”"
@@ -6143,34 +6172,34 @@ msgstr "Se preia „%(filename)s”"
 msgid "Opening URL %(url)s failed: %(error)s"
 msgstr "Deschiderea adresei URL %(url)s a eșuat: %(error)s"
 
-#: virtinst/install/volumeupload.py:108
+#: virtinst/install/volumeupload.py:107
 #, python-format
 msgid "Transferring '%(filename)s'"
 msgstr "Se transferă „%(filename)s”"
 
-#: virtinst/osdict.py:71
+#: virtinst/osdict.py:72
 msgid "Generic or unknown OS. Usage is not recommended."
 msgstr ""
 "Sistem de operare generic sau necunoscut. Utilizarea nu este recomandată."
 
-#: virtinst/osdict.py:96
+#: virtinst/osdict.py:97
 #, python-format
 msgid "Unknown libosinfo ID '%s'"
 msgstr "ID libosinfo necunoscut „%s”"
 
-#: virtinst/osdict.py:110
+#: virtinst/osdict.py:111
 #, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
 msgstr ""
 "Nume de sistem de operare necunoscut „%s”. Consultați cu „--osinfo list” "
 "pentru valorile valide."
 
-#: virtinst/osdict.py:537
+#: virtinst/osdict.py:535
 #, python-format
 msgid "OS '%s' does not have a URL location"
 msgstr "Sistemul de operare „%s” nu are o locație URL"
 
-#: virtinst/osdict.py:549
+#: virtinst/osdict.py:547
 #, python-format
 msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
@@ -6179,46 +6208,46 @@ msgstr ""
 "Sistemul de operare „%(osname)s” nu are o locație URL pentru arhitectura "
 "„%(archname)s"
 
-#: virtinst/storage.py:164
+#: virtinst/storage.py:162
 #, python-format
 msgid "Couldn't create default storage pool '%(path)s': %(error)s"
 msgstr "Nu s-a putut crea „hangarul” de stocare implicit „%(path)s”: %(error)s"
 
-#: virtinst/storage.py:217 virtinst/storage.py:553
+#: virtinst/storage.py:218 virtinst/storage.py:563
 msgid "Storage object"
 msgstr "Obiect de stocare"
 
-#: virtinst/storage.py:223
+#: virtinst/storage.py:224
 #, python-format
 msgid "Name '%s' already in use by another pool."
 msgstr "Numele „%s” este deja utilizat de un alt „hangar”."
 
-#: virtinst/storage.py:389
+#: virtinst/storage.py:401
 #, python-format
 msgid "Could not define storage pool: %s"
 msgstr "Nu s-a putut defini „hangarul” de stocare: %s"
 
-#: virtinst/storage.py:397
+#: virtinst/storage.py:409
 #, python-format
 msgid "Could not build storage pool: %s"
 msgstr "Nu s-a putut construi „hangarul” de stocare: %s"
 
-#: virtinst/storage.py:403
+#: virtinst/storage.py:415
 #, python-format
 msgid "Could not start storage pool: %s"
 msgstr "Nu s-a putut porni „hangarul” de stocare: %s"
 
-#: virtinst/storage.py:409
+#: virtinst/storage.py:421
 #, python-format
 msgid "Could not set pool autostart flag: %s"
 msgstr "Nu s-a putut activa fanionul de auto-start al „hangarului”: %s"
 
-#: virtinst/storage.py:559
+#: virtinst/storage.py:570
 #, python-format
 msgid "Name '%s' already in use by another volume."
 msgstr "Numele „%s” este deja utilizat de un alt volum."
 
-#: virtinst/storage.py:645
+#: virtinst/storage.py:662
 msgid ""
 "Sparse logical volumes are not supported, setting allocation equal to "
 "capacity"
@@ -6226,12 +6255,12 @@ msgstr ""
 "Volumele logice disperse nu sunt acceptate, se stabilește alocarea egală cu "
 "capacitatea"
 
-#: virtinst/storage.py:693
+#: virtinst/storage.py:714
 #, python-format
 msgid "Allocating '%(filename)s'"
 msgstr "Se alocă „%(filename)s”"
 
-#: virtinst/storage.py:734
+#: virtinst/storage.py:755
 #, python-format
 msgid ""
 "There is not enough free space on the storage pool to create the volume. "
@@ -6240,7 +6269,7 @@ msgstr ""
 "Nu există suficient spațiu liber în „hangarul” de stocare pentru a crea "
 "volumul. (%(mem1)s M alocare solicitată > %(mem2)s M spațiu disponibil)"
 
-#: virtinst/storage.py:741
+#: virtinst/storage.py:762
 #, python-format
 msgid ""
 "The requested volume capacity will exceed the available pool space when the "
@@ -6259,7 +6288,7 @@ msgstr ""
 "Este necesar un nume original al mașinii, utilizați „--original src_name” și "
 "încercați din nou."
 
-#: virtinst/virtclone.py:67
+#: virtinst/virtclone.py:66
 msgid ""
 "Duplicate a virtual machine, changing all the unique host side configuration "
 "like MAC address, name, etc. \n"
@@ -6280,7 +6309,7 @@ msgstr ""
 "domeniului de aplicare al acestui instrument. Pentru aceste tipuri de "
 "modificări, vă rugăm să consultați virt-sysprep(1)."
 
-#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1034
+#: virtinst/virtclone.py:77 virtinst/virtinstall.py:1056
 msgid "General Options"
 msgstr "Opțiuni generale"
 
@@ -6292,7 +6321,7 @@ msgstr "Numele original al invitatului care urmează să fie clonat."
 msgid "XML file to use as the original guest."
 msgstr "Fișier XML pentru a fi utilizat ca invitat original."
 
-#: virtinst/virtclone.py:83
+#: virtinst/virtclone.py:85
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
@@ -6300,7 +6329,7 @@ msgstr ""
 "Generează automat numele clonei și rutele de stocare din configurația "
 "originală a invitatului."
 
-#: virtinst/virtclone.py:86
+#: virtinst/virtclone.py:87
 msgid "Name for the new guest"
 msgstr "Nume pentru noul invitat"
 
@@ -6312,13 +6341,13 @@ msgstr "utilizează o copie simplă COW în btrfs"
 msgid "Storage Configuration"
 msgstr "Configurarea stocării"
 
-#: virtinst/virtclone.py:93
+#: virtinst/virtclone.py:97
 msgid "New file to use as the disk image for the new guest"
 msgstr ""
 "Fișier nou care urmează să fie utilizat ca imagine de disc pentru noul "
 "invitat"
 
-#: virtinst/virtclone.py:96
+#: virtinst/virtclone.py:103
 msgid ""
 "Force to copy devices (eg, if 'hdc' is a readonly cdrom device, --force-"
 "copy=hdc)"
@@ -6326,7 +6355,7 @@ msgstr ""
 "Forțează copierea dispozitivelor (de exemplu, dacă „hdc” este un dispozitiv "
 "cdrom numai-pentru-citire, „--force-copy=hdc”)"
 
-#: virtinst/virtclone.py:99
+#: virtinst/virtclone.py:109
 msgid ""
 "Skip copy of the device target. (eg, if 'vda' is a disk you don't want to "
 "copy and use the same path in the new VM, use --skip-copy=vda)"
@@ -6335,11 +6364,11 @@ msgstr ""
 "care nu doriți să îl copiați și să utilizați aceeași rută în noua mașină "
 "virtuală, utilizați „--skip-copy=vda”)"
 
-#: virtinst/virtclone.py:104
+#: virtinst/virtclone.py:119
 msgid "Do not use a sparse file for the clone's disk image"
 msgstr "Nu utilizează un fișier dispers pentru imaginea de disc a clonei"
 
-#: virtinst/virtclone.py:108
+#: virtinst/virtclone.py:127
 msgid ""
 "Do not clone storage contents to specified file paths, their contents will "
 "be left untouched. This requires specifying existing paths for every "
@@ -6349,15 +6378,15 @@ msgstr ""
 "acestora va fi lăsat neatins. Acest lucru necesită specificarea rutelor "
 "existente pentru fiecare imagine de disc clonabilă."
 
-#: virtinst/virtclone.py:113
+#: virtinst/virtclone.py:134
 msgid "New file to use as storage for nvram VARS"
 msgstr "Fișier nou de utilizat ca spațiu de stocare pentru nvram VARS"
 
-#: virtinst/virtclone.py:115
+#: virtinst/virtclone.py:137
 msgid "Networking Configuration"
 msgstr "Configurarea rețelei"
 
-#: virtinst/virtclone.py:117
+#: virtinst/virtclone.py:143
 msgid ""
 "New fixed MAC address for the clone guest. Default is a randomly generated "
 "MAC"
@@ -6365,12 +6394,12 @@ msgstr ""
 "Noua adresă MAC fixă pentru invitatul clonă. Implicit este o adresă MAC "
 "generată aleatoriu"
 
-#: virtinst/virtclone.py:120 virtinst/virtinstall.py:1139
-#: virtinst/virtxml.py:512
+#: virtinst/virtclone.py:146 virtinst/virtinstall.py:1187
+#: virtinst/virtxml.py:567
 msgid "Miscellaneous Options"
 msgstr "Opțiuni diverse"
 
-#: virtinst/virtclone.py:147
+#: virtinst/virtclone.py:179
 msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
@@ -6378,7 +6407,7 @@ msgstr ""
 "Este necesară fie opțiunea „--auto-clone”, fie opțiunea „--file”, utilizați "
 "„--auto-clone sau --file” și încercați din nou."
 
-#: virtinst/virtclone.py:179
+#: virtinst/virtclone.py:215
 msgid ""
 "A name is required for the new virtual machine, use '--name NEW_VM_NAME' to "
 "specify one."
@@ -6386,16 +6415,16 @@ msgstr ""
 "Este necesar un nume pentru noua mașină virtuală, utilizați „--name "
 "NUME_MV_NOU” pentru a specifica unul."
 
-#: virtinst/virtclone.py:196
+#: virtinst/virtclone.py:234
 #, python-format
 msgid "Clone '%s' created successfully."
 msgstr "Clona „%s” a fost creată cu succes."
 
-#: virtinst/virtclone.py:207 virtinst/virtinstall.py:1250
+#: virtinst/virtclone.py:245 virtinst/virtinstall.py:1313
 msgid "Installation aborted at user request"
 msgstr "Instalare întreruptă la cererea utilizatorului"
 
-#: virtinst/virtinstall.py:57
+#: virtinst/virtinstall.py:59
 msgid ""
 "-c specified with what looks like a libvirt URI. Did you mean to use --"
 "connect? If not, use --cdrom instead"
@@ -6403,11 +6432,11 @@ msgstr ""
 "Opțiunea „-c” specificată cu ceea ce arată ca o adresă URI libvirt. Ați vrut "
 "să utilizați „--connect”? Dacă nu, utilizați în schimb „--cdrom”"
 
-#: virtinst/virtinstall.py:125
+#: virtinst/virtinstall.py:128
 msgid "Cannot specify storage and use --nodisks"
 msgstr "Nu se poate specifica stocarea și utiliza „--nodisks”"
 
-#: virtinst/virtinstall.py:129
+#: virtinst/virtinstall.py:133
 msgid ""
 "Cannot mix --file, --nonsparse, or --file-size with --disk options. Use --"
 "disk PATH[,size=SIZE][,sparse=yes|no]"
@@ -6415,33 +6444,33 @@ msgstr ""
 "Nu se pot combina opțiunile „--file”, „--nonsparse” sau „--file-size” cu "
 "opțiunea „--disk”. Utilizați „--disk RUTA[,size=DIMENSIUNE][,sparse=yes|no]”"
 
-#: virtinst/virtinstall.py:149
+#: virtinst/virtinstall.py:154
 msgid "--os-type is deprecated and does nothing. Please stop using it."
 msgstr ""
 "Opțiunea „--os-type” este depreciată și nu face nimic. Vă rugăm să nu o mai "
 "folosiți."
 
-#: virtinst/virtinstall.py:225
+#: virtinst/virtinstall.py:229
 msgid "Cannot mix --graphics and old style graphical options"
 msgstr ""
 "Nu se pot combina opțiunile „--graphics” și opțiunile grafice în stil vechi"
 
-#: virtinst/virtinstall.py:229
+#: virtinst/virtinstall.py:233
 msgid "Can't specify more than one of VNC, SDL, --graphics or --nographics"
 msgstr ""
 "Nu se poate specifica mai mult de o opțiune VNC, SDL, „--graphics” sau „--"
 "nographics”"
 
-#: virtinst/virtinstall.py:312
+#: virtinst/virtinstall.py:315
 msgid "--memory amount in MiB is required"
 msgstr "Este necesară opțiunea „--memory cantitatea de memorie în Mio”"
 
-#: virtinst/virtinstall.py:316
+#: virtinst/virtinstall.py:318
 msgid "--disk storage must be specified (override with --disk none)"
 msgstr ""
 "Stocarea trebuie specificată cu „--disk” (suprascrisă cu „--disk none”)"
 
-#: virtinst/virtinstall.py:320
+#: virtinst/virtinstall.py:322
 #, python-format
 msgid ""
 "An install method must be specified\n"
@@ -6450,7 +6479,7 @@ msgstr ""
 "Trebuie specificată o metodă de instalare\n"
 "(%(methods)s)"
 
-#: virtinst/virtinstall.py:332
+#: virtinst/virtinstall.py:336
 msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
@@ -6459,13 +6488,13 @@ msgstr ""
 "probabil că nu veți vedea ieșirea instalării în modul text. Este posibil să "
 "doriți să utilizați opțiunea „--location”."
 
-#: virtinst/virtinstall.py:335
+#: virtinst/virtinstall.py:341
 msgid "See the man page for examples of using --location with CDROM media"
 msgstr ""
 "Consultați pagina de manual pentru exemple de utilizare a opțiunii „--"
 "location” cu suporturi CDROM"
 
-#: virtinst/virtinstall.py:348
+#: virtinst/virtinstall.py:356
 #, python-format
 msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
@@ -6474,7 +6503,7 @@ msgstr ""
 "Memoria solicitată %(mem1)s Mio este mai mică decât cea recomandată %(mem2)s "
 "Mio pentru sistemul de operare %(osname)s"
 
-#: virtinst/virtinstall.py:353
+#: virtinst/virtinstall.py:363
 #, python-format
 msgid ""
 "Requested memory %s MiB is abnormally low. Were you trying to specify GiB?"
@@ -6482,11 +6511,11 @@ msgstr ""
 "Memoria solicitată %s Mio este anormal de mică. Ați încercat să specificați "
 "Gio?"
 
-#: virtinst/virtinstall.py:370
+#: virtinst/virtinstall.py:380
 msgid "The guest's network configuration may not support PXE"
 msgstr "Este posibil ca configurația de rețea a invitatului să nu accepte PXE"
 
-#: virtinst/virtinstall.py:374
+#: virtinst/virtinstall.py:385
 #, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
@@ -6495,35 +6524,35 @@ msgstr ""
 "Folosind „--osinfo {osname}”, performanța MV poate avea de suferit. "
 "Specificați un sistem de operare precis pentru rezultate optime."
 
-#: virtinst/virtinstall.py:388
+#: virtinst/virtinstall.py:401
 #, python-brace-format
 msgid "Using {osname} --location {url}"
 msgstr "Se utilizează {osname} „--location {url}”"
 
-#: virtinst/virtinstall.py:472
+#: virtinst/virtinstall.py:484
 #, python-brace-format
 msgid "Using default --name {vm_name}"
 msgstr "Se utilizează valoarea implicită „--name {vm_name}”"
 
-#: virtinst/virtinstall.py:484
+#: virtinst/virtinstall.py:495
 #, python-brace-format
 msgid "Using container default --memory {megabytes}"
 msgstr ""
 "Se utilizează valoarea implicită a containerului „--memory {megabytes}”"
 
-#: virtinst/virtinstall.py:503
+#: virtinst/virtinstall.py:515
 #, python-brace-format
 msgid "Using {os_name} default --memory {megabytes}"
 msgstr ""
 "Se utilizează valorile implicite pentru {os_name} „--memory {megabytes}”"
 
-#: virtinst/virtinstall.py:514
+#: virtinst/virtinstall.py:528
 #, python-brace-format
 msgid "Using {os_name} default --disk {disk_options}"
 msgstr ""
 "Se utilizează valorile implicite pentru {os_name} „--disk {disk_options}”"
 
-#: virtinst/virtinstall.py:564
+#: virtinst/virtinstall.py:580
 #, python-brace-format
 msgid ""
 "Failed to detect osinfo OS name from install media, using fallback name "
@@ -6536,20 +6565,24 @@ msgstr ""
 "Vă rugăm să depuneți o eroare la adresa virt-install dacă vă așteptați ca "
 "detectarea să reușească."
 
-#: virtinst/virtinstall.py:571
+#: virtinst/virtinstall.py:587
 #, python-format
 msgid "Error validating install location: %s"
 msgstr "Eroare la validarea locației de instalare: %s"
 
-#: virtinst/virtinstall.py:574
+#: virtinst/virtinstall.py:589
+#, fuzzy
+#| msgid ""
+#| "--os-variant/--osinfo OS name is required, but no value was\n"
+#| "set or detected."
 msgid ""
-"--os-variant/--osinfo OS name is required, but no value was\n"
+"--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
 "Este necesar „--os-variant/--osinfo numele sistemului de operare”,\n"
 "dar nu a fost definită sau detectată nicio valoare."
 
-#: virtinst/virtinstall.py:586
+#: virtinst/virtinstall.py:600
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
@@ -6558,7 +6591,7 @@ msgstr ""
 "sistem de operare este necesară pentru a defini valori implicite\n"
 "moderne, performante și sigure pentru mașina virtuală.\n"
 
-#: virtinst/virtinstall.py:590
+#: virtinst/virtinstall.py:605
 msgid ""
 "If you expected virt-install to detect an OS name from the\n"
 "install media, you can set a fallback OS name with:\n"
@@ -6571,7 +6604,7 @@ msgstr ""
 "\n"
 "  --osinfo detect=on,name=NUME_SO\n"
 
-#: virtinst/virtinstall.py:599
+#: virtinst/virtinstall.py:615
 msgid ""
 "You can see a full list of possible OS name values with:\n"
 "\n"
@@ -6582,7 +6615,7 @@ msgstr ""
 "\n"
 "   «virt-install --osinfo list»\n"
 
-#: virtinst/virtinstall.py:606
+#: virtinst/virtinstall.py:622
 #, python-brace-format
 msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
@@ -6591,7 +6624,7 @@ msgstr ""
 "Dacă distribuția dvs. Linux nu este listată, încercați una\n"
 "dintre valorile generice, cum ar fi: {oslist}\n"
 
-#: virtinst/virtinstall.py:613
+#: virtinst/virtinstall.py:629
 #, python-brace-format
 msgid ""
 "If you just need to get the old behavior back, you can use:\n"
@@ -6606,20 +6639,20 @@ msgstr ""
 "\n"
 "Sau exportați {env_var}=1\n"
 
-#: virtinst/virtinstall.py:623
+#: virtinst/virtinstall.py:639
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
 msgstr "{env_var} definită. Se ignoră eroarea fatală."
 
-#: virtinst/virtinstall.py:708
+#: virtinst/virtinstall.py:723
 msgid "No console to launch for the guest, defaulting to --wait -1"
 msgstr "Nicio consolă de lansat pentru invitat, implicit „--wait -1”"
 
-#: virtinst/virtinstall.py:744
+#: virtinst/virtinstall.py:761
 msgid "Waiting for the installation to complete."
 msgstr "Se așteaptă finalizarea instalării."
 
-#: virtinst/virtinstall.py:745
+#: virtinst/virtinstall.py:763
 #, python-format
 msgid "Waiting %(minutes)d minute for the installation to complete."
 msgid_plural "Waiting %(minutes)d minutes for the installation to complete."
@@ -6627,53 +6660,53 @@ msgstr[0] "Așteaptă %(minutes)d minut pentru finalizarea instalării."
 msgstr[1] "Așteaptă %(minutes)d minute pentru finalizarea instalării."
 msgstr[2] "Așteaptă %(minutes)d de minute pentru finalizarea instalării."
 
-#: virtinst/virtinstall.py:768
+#: virtinst/virtinstall.py:787
 #, python-format
 msgid "Password for first root login is: %s"
 msgstr "Parola pentru prima autentificare root este: %s"
 
-#: virtinst/virtinstall.py:780
+#: virtinst/virtinstall.py:797
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
 msgstr ""
 "Instalarea va continua în 10 secunde (apăsați «Enter» pentru a omite "
 "așteptare)..."
 
-#: virtinst/virtinstall.py:807
+#: virtinst/virtinstall.py:823
 msgid "Console command returned failure."
 msgstr "Comanda de consolă a returnat un eșec."
 
-#: virtinst/virtinstall.py:844
+#: virtinst/virtinstall.py:862
 msgid "Domain has crashed."
 msgstr "Domeniul s-a prăbușit."
 
-#: virtinst/virtinstall.py:854
+#: virtinst/virtinstall.py:872
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
 msgstr "MV a dispărut în mod neașteptat: %s"
 
-#: virtinst/virtinstall.py:876
+#: virtinst/virtinstall.py:894
 msgid "Domain is still running. Installation may be in progress."
 msgstr "Domeniul este încă în funcțiune. Instalarea poate fi în curs."
 
-#: virtinst/virtinstall.py:886
+#: virtinst/virtinstall.py:904
 msgid "You can reconnect to the console to complete the installation process."
 msgstr ""
 "Vă puteți reconecta la consolă pentru a finaliza procesul de instalare."
 
-#: virtinst/virtinstall.py:897
+#: virtinst/virtinstall.py:914
 msgid "Domain has shutdown. Continuing."
 msgstr "Domeniul a fost închis. Se continuă."
 
-#: virtinst/virtinstall.py:903
+#: virtinst/virtinstall.py:919
 msgid "Installation has exceeded specified time limit. Exiting application."
 msgstr ""
 "Instalarea a depășit limita de timp specificată. Se iese din aplicație."
 
-#: virtinst/virtinstall.py:926
+#: virtinst/virtinstall.py:941
 msgid "Domain creation completed."
 msgstr "Crearea domeniului a fost finalizată."
 
-#: virtinst/virtinstall.py:935
+#: virtinst/virtinstall.py:950
 #, python-format
 msgid ""
 "You can restart your domain by running:\n"
@@ -6682,15 +6715,15 @@ msgstr ""
 "Puteți reporni domeniul dvs. executând:\n"
 "  %s"
 
-#: virtinst/virtinstall.py:940
+#: virtinst/virtinstall.py:955
 msgid "User stopped the VM. Not rebooting."
 msgstr "Utilizatorul a oprit mașina virtuală. Nu se repornește."
 
-#: virtinst/virtinstall.py:943
+#: virtinst/virtinstall.py:958
 msgid "Restarting guest."
 msgstr "Se repornește invitatul."
 
-#: virtinst/virtinstall.py:960
+#: virtinst/virtinstall.py:975
 msgid ""
 "\n"
 "Starting install..."
@@ -6698,40 +6731,40 @@ msgstr ""
 "\n"
 "Se începe instalarea..."
 
-#: virtinst/virtinstall.py:983
+#: virtinst/virtinstall.py:1004
 msgid "Domain install interrupted."
 msgstr "Instalarea domeniului a fost întreruptă."
 
-#: virtinst/virtinstall.py:1002
+#: virtinst/virtinstall.py:1023
 msgid "Dry run completed successfully"
 msgstr "Simularea a fost finalizată cu succes"
 
-#: virtinst/virtinstall.py:1006
+#: virtinst/virtinstall.py:1027
 #, python-format
 msgid "Unknown XML step request '%s', must be 1, 2, or all"
 msgstr "Cerere de pas XML necunoscută „%s”, trebuie să fie 1, 2 sau toate"
 
-#: virtinst/virtinstall.py:1013
+#: virtinst/virtinstall.py:1033
 msgid "Requested installation does not have XML step 2"
 msgstr "Instalarea solicitată nu are pasul XML 2"
 
-#: virtinst/virtinstall.py:1030
+#: virtinst/virtinstall.py:1051
 msgid "Create a new virtual machine from specified install media."
 msgstr "Creează o mașină virtuală nouă din mediul de instalare specificat."
 
-#: virtinst/virtinstall.py:1036
+#: virtinst/virtinstall.py:1057
 msgid "Name of the guest instance"
 msgstr "Numele instanței invitatului"
 
-#: virtinst/virtinstall.py:1044
+#: virtinst/virtinstall.py:1065
 msgid "Installation Method Options"
 msgstr "Opțiuni pentru metoda de instalare"
 
-#: virtinst/virtinstall.py:1046
+#: virtinst/virtinstall.py:1067
 msgid "CD-ROM installation media"
 msgstr "Suport de instalare CD-ROM"
 
-#: virtinst/virtinstall.py:1048
+#: virtinst/virtinstall.py:1072
 msgid ""
 "Distro install URL, eg. https://host/path. See man page for specific distro "
 "examples."
@@ -6739,34 +6772,34 @@ msgstr ""
 "Adresa URL de instalare a distribuției, de exemplu „https://gazdă/rută”. "
 "Consultați pagina de manual pentru exemple specifice de distribuții."
 
-#: virtinst/virtinstall.py:1051
+#: virtinst/virtinstall.py:1077
 msgid "Boot from the network using the PXE protocol"
 msgstr "Pornire din rețea utilizând protocolul PXE"
 
-#: virtinst/virtinstall.py:1053
+#: virtinst/virtinstall.py:1083
 msgid "Build guest around an existing disk image"
 msgstr "Construiește un invitat în jurul unei imagini de disc existente"
 
-#: virtinst/virtinstall.py:1056
+#: virtinst/virtinstall.py:1090
 msgid ""
 "Additional arguments to pass to the install kernel booted from --location"
 msgstr ""
 "Argumente suplimentare pentru a le pasa nucleului de instalare pornit din „--"
 "location”"
 
-#: virtinst/virtinstall.py:1059
+#: virtinst/virtinstall.py:1095
 msgid "Add given file to root of initrd from --location"
 msgstr "Adaugă fișierul dat la rădăcina initrd din „--location”"
 
-#: virtinst/virtinstall.py:1061
+#: virtinst/virtinstall.py:1098
 msgid "Perform an unattended installation"
 msgstr "Efectuează o instalare nesupravegheată"
 
-#: virtinst/virtinstall.py:1063
+#: virtinst/virtinstall.py:1100
 msgid "Specify fine grained install options"
 msgstr "Specifică opțiuni de instalare cu un grad fin de ajustare"
 
-#: virtinst/virtinstall.py:1065
+#: virtinst/virtinstall.py:1105
 msgid ""
 "Reinstall existing VM. Only install options are applied, all other VM "
 "configuration options are ignored."
@@ -6774,135 +6807,141 @@ msgstr ""
 "Reinstalează MV existentă. Sunt aplicate numai opțiunile de instalare, toate "
 "celelalte opțiuni de configurare ale MV sunt ignorate."
 
-#: virtinst/virtinstall.py:1068
+#: virtinst/virtinstall.py:1113
 msgid "Perform a cloud image installation, configuring cloud-init"
 msgstr "Efectuează o instalare a imaginii cloud, configurând cloud-init"
 
-#: virtinst/virtinstall.py:1082
+#: virtinst/virtinstall.py:1127
 msgid "Device Options"
 msgstr "Opțiuni dispozitiv"
 
-#: virtinst/virtinstall.py:1112
+#: virtinst/virtinstall.py:1152
 msgid "Guest Configuration Options"
 msgstr "Opțiuni de configurare invitat"
 
-#: virtinst/virtinstall.py:1116
+#: virtinst/virtinstall.py:1155
 msgid "Virtualization Platform Options"
 msgstr "Opțiuni pentru platforma de virtualizare"
 
-#: virtinst/virtinstall.py:1120
+#: virtinst/virtinstall.py:1163
 msgid "This guest should be a fully virtualized guest"
 msgstr "Acest invitat ar trebui să fie un invitat complet virtualizat"
 
-#: virtinst/virtinstall.py:1123
+#: virtinst/virtinstall.py:1171
 msgid "This guest should be a paravirtualized guest"
 msgstr "Acest invitat ar trebui să fie un invitat paravirtualizat"
 
-#: virtinst/virtinstall.py:1126
+#: virtinst/virtinstall.py:1178
 msgid "This guest should be a container guest"
 msgstr "Acest invitat ar trebui să fie un invitat container"
 
-#: virtinst/virtinstall.py:1128
+#: virtinst/virtinstall.py:1180
 msgid "Hypervisor name to use (kvm, qemu, xen, ...)"
 msgstr "Numele hipervizorului de utilizat (kvm, qemu, xen, ...)"
 
-#: virtinst/virtinstall.py:1129
+#: virtinst/virtinstall.py:1181
 msgid "The CPU architecture to simulate"
 msgstr "Arhitectura CPU de simulat"
 
-#: virtinst/virtinstall.py:1130
+#: virtinst/virtinstall.py:1182
 msgid "The machine type to emulate"
 msgstr "Tipul de mașină de emulat"
 
-#: virtinst/virtinstall.py:1141
+#: virtinst/virtinstall.py:1192
 msgid "Have domain autostart on host boot up."
 msgstr "Aveți configurată pornirea automată a domeniului, la pornirea gazdei."
 
-#: virtinst/virtinstall.py:1143
+#: virtinst/virtinstall.py:1195
 msgid "Create a transient domain."
 msgstr "Creează un domeniu tranzitoriu."
 
-#: virtinst/virtinstall.py:1145
+#: virtinst/virtinstall.py:1201
 msgid "Force power off the domain when the console viewer is closed."
 msgstr ""
 "Forțează oprirea domeniului atunci când consola de vizualizare este închisă."
 
-#: virtinst/virtinstall.py:1148
+#: virtinst/virtinstall.py:1204
 msgid "Minutes to wait for install to complete."
 msgstr "Minute de așteptat pentru finalizarea instalării."
 
-#: virtinst/virtxml.py:34
+#: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
 msgstr "Vă rugăm să introduceți „yes” sau „no”."
 
-#: virtinst/virtxml.py:102
-msgid "--os-variant/--osinfo is not supported with --edit"
+#: virtinst/virtxml.py:105
+#, fuzzy
+#| msgid "--os-variant/--osinfo is not supported with --edit"
+msgid "--osinfo/--os-variant is not supported with --edit"
 msgstr ""
 "Opțiunea „--os-variant/--osinfo” nu este acceptată cu opțiunea „--edit”"
 
-#: virtinst/virtxml.py:104
-msgid "--os-variant/--osinfo is not supported with --remove-device"
+#: virtinst/virtxml.py:107
+#, fuzzy
+#| msgid "--os-variant/--osinfo is not supported with --remove-device"
+msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr ""
 "Opțiunea „--os-variant/--osinfo” nu este acceptată cu opțiunea „--remove-"
 "device”"
 
-#: virtinst/virtxml.py:106
-msgid "--os-variant/--osinfo is not supported with --build-xml"
+#: virtinst/virtxml.py:109
+#, fuzzy
+#| msgid "--os-variant/--osinfo is not supported with --build-xml"
+msgid "--osinfo/--os-variant is not supported with --build-xml"
 msgstr ""
 "Opțiunea „--os-variant/--osinfo” nu este acceptată cu opțiunea „--build-xml”"
 
-#: virtinst/virtxml.py:109
+#: virtinst/virtxml.py:113
 #, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
 msgstr "Opțiunea „--build-xml” nu este acceptată pentru {cli_flag}"
 
-#: virtinst/virtxml.py:115
+#: virtinst/virtxml.py:122
 #, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
 msgstr "Nu se poate utiliza opțiunea „--remove-device” cu {cli_flag}"
 
-#: virtinst/virtxml.py:118
+#: virtinst/virtxml.py:128
 #, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
 msgstr "Nu se poate utiliza „--add-device” cu {cli_flag}"
 
-#: virtinst/virtxml.py:122
+#: virtinst/virtxml.py:135
 #, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
 msgstr "Nu se știe cum să se efectueze „--update” pentru {cli_flag}"
 
-#: virtinst/virtxml.py:136
+#: virtinst/virtxml.py:151
 #, python-format
 msgid "One of %s must be specified."
 msgstr "Unul dintre %s trebuie să fie specificat."
 
-#: virtinst/virtxml.py:139
+#: virtinst/virtxml.py:153
 #, python-format
 msgid "Conflicting options %s"
 msgstr "Opțiuni în conflict %s"
 
-#: virtinst/virtxml.py:154
+#: virtinst/virtxml.py:167
 msgid "No change specified."
 msgstr "Nu s-a specificat nicio modificare."
 
-#: virtinst/virtxml.py:156
+#: virtinst/virtxml.py:170
 #, python-format
 msgid "Only one change operation may be specified (conflicting options %s)"
 msgstr ""
 "Poate fi specificată o singură operație de modificare (opțiuni în conflict "
 "%s)"
 
-#: virtinst/virtxml.py:198
+#: virtinst/virtxml.py:212
 #, python-format
 msgid "Invalid --edit option '%s'"
 msgstr "Opțiune „--edit” nevalidă „%s”"
 
-#: virtinst/virtxml.py:201
+#: virtinst/virtxml.py:216
 #, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
 msgstr "Nu s-au găsit obiecte {cli_flag} în fișa XML"
 
-#: virtinst/virtxml.py:204
+#: virtinst/virtxml.py:223
 #, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
@@ -6920,12 +6959,12 @@ msgstr[2] ""
 "„--edit {number}” solicitat, dar există doar {maxnum} {cli_flag} de obiecte "
 "în fișa XML"
 
-#: virtinst/virtxml.py:225
+#: virtinst/virtxml.py:244
 #, python-format
 msgid "No matching objects found for %s"
 msgstr "Nu s-au găsit obiecte ce coincid cu %s"
 
-#: virtinst/virtxml.py:242
+#: virtinst/virtxml.py:261
 #, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
@@ -6933,32 +6972,32 @@ msgstr ""
 "„--edit {option}” nu are sens cu {cli_flag}, folosiți doar opțiunea „--edit” "
 "goală (fără argumente)"
 
-#: virtinst/virtxml.py:318
+#: virtinst/virtxml.py:334
 #, python-format
 msgid "Define '%s' with the changed XML?"
 msgstr "Definiți „%s” cu fișa XML modificată?"
 
-#: virtinst/virtxml.py:326
+#: virtinst/virtxml.py:342
 #, python-format
 msgid "Domain '%s' defined successfully."
 msgstr "Domeniul „%s” a fost definit cu succes."
 
-#: virtinst/virtxml.py:333
+#: virtinst/virtxml.py:348
 #, python-format
 msgid "Start '%s' with the changed XML?"
 msgstr "Porniți „%s” cu XML-ul modificat?"
 
-#: virtinst/virtxml.py:343 virtinst/virtxml.py:619
+#: virtinst/virtxml.py:359 virtinst/virtxml.py:671
 #, python-format
 msgid "Failed starting domain '%(domain)s': %(error)s"
 msgstr "Eșec la pornirea domeniului „%(domain)s”: %(error)s"
 
-#: virtinst/virtxml.py:348 virtinst/virtxml.py:623
+#: virtinst/virtxml.py:366 virtinst/virtxml.py:677
 #, python-format
 msgid "Domain '%s' started successfully."
 msgstr "Domeniul „%s” a pornit cu succes."
 
-#: virtinst/virtxml.py:354
+#: virtinst/virtxml.py:372
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6969,16 +7008,16 @@ msgstr ""
 "\n"
 "Conectați la cald acest dispozitiv la invitatul „%(domain)s”?"
 
-#: virtinst/virtxml.py:356
+#: virtinst/virtxml.py:373
 msgid "Device hotplug successful."
 msgstr "Conectarea la cald a dispozitivului a reușit."
 
-#: virtinst/virtxml.py:357
+#: virtinst/virtxml.py:374
 #, python-format
 msgid "Error attempting device hotplug: %(error)s"
 msgstr "Eroare la încercarea de conectare la cald a dispozitivului: %(error)s"
 
-#: virtinst/virtxml.py:359
+#: virtinst/virtxml.py:376
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -6989,16 +7028,16 @@ msgstr ""
 "\n"
 "Deconectați la cald acest dispozitiv de la invitatul „%(domain)s”?"
 
-#: virtinst/virtxml.py:361
+#: virtinst/virtxml.py:377
 msgid "Device hotunplug successful."
 msgstr "Deconectarea la cald a dispozitivului a fost efectuată cu succes."
 
-#: virtinst/virtxml.py:362
+#: virtinst/virtxml.py:378
 #, python-format
 msgid "Error attempting device hotunplug: %(error)s"
 msgstr "Eroare la încercarea de conectare la cald a dispozitivului: %(error)s"
 
-#: virtinst/virtxml.py:364
+#: virtinst/virtxml.py:380
 #, python-format
 msgid ""
 "%(xml)s\n"
@@ -7009,34 +7048,34 @@ msgstr ""
 "\n"
 "Actualizați acest dispozitiv pentru invitatul „%(domain)s”?"
 
-#: virtinst/virtxml.py:366
+#: virtinst/virtxml.py:381
 msgid "Device update successful."
 msgstr "Actualizarea dispozitivului a avut succes."
 
-#: virtinst/virtxml.py:367
+#: virtinst/virtxml.py:382
 #, python-format
 msgid "Error attempting device update: %(error)s"
 msgstr "Eroare în încercarea de actualizare a dispozitivului: %(error)s"
 
-#: virtinst/virtxml.py:418
+#: virtinst/virtxml.py:433
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
 "Nu a fost generată nicio diferență a fișelor XML. Modificările solicitate nu "
 "vor avea niciun efect."
 
-#: virtinst/virtxml.py:437
+#: virtinst/virtxml.py:452
 msgid "Edit libvirt XML using command line options."
 msgstr "Editează libvirt XML folosind opțiunile din linia de comandă."
 
-#: virtinst/virtxml.py:443
+#: virtinst/virtxml.py:458
 msgid "Domain name, id, or uuid"
 msgstr "Numele domeniului, id sau uuid"
 
-#: virtinst/virtxml.py:445
+#: virtinst/virtxml.py:460
 msgid "XML actions"
 msgstr "Acțiuni XML"
 
-#: virtinst/virtxml.py:447
+#: virtinst/virtxml.py:466
 msgid ""
 "Edit VM XML. Examples:\n"
 "--edit --disk ...     (edit first disk device)\n"
@@ -7050,7 +7089,7 @@ msgstr ""
 "--edit all --disk ... (editează toate dispozitivele de disc)\n"
 "--edit target=hda --disk ... (editează discul „hda”)\n"
 
-#: virtinst/virtxml.py:453
+#: virtinst/virtxml.py:477
 msgid ""
 "Remove specified device. Examples:\n"
 "--remove-device --disk 1 (remove first disk)\n"
@@ -7062,7 +7101,7 @@ msgstr ""
 "--remove-device --disk all (elimină toate discurile)\n"
 "--remove-device --disk /vreo/rută"
 
-#: virtinst/virtxml.py:458
+#: virtinst/virtxml.py:486
 msgid ""
 "Add specified device. Example:\n"
 "--add-device --disk ..."
@@ -7070,7 +7109,7 @@ msgstr ""
 "Adaugă dispozitivul specificat. Exemplu:\n"
 "--add-device --disk ..."
 
-#: virtinst/virtxml.py:461
+#: virtinst/virtxml.py:492
 msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
@@ -7078,11 +7117,11 @@ msgstr ""
 "Ieșire în format XML a dispozitivului construit. Domeniul este opțional, dar "
 "recomandat pentru a asigura valori implicite optime."
 
-#: virtinst/virtxml.py:464
+#: virtinst/virtxml.py:497
 msgid "Output options"
 msgstr "Opțiuni de ieșire"
 
-#: virtinst/virtxml.py:466
+#: virtinst/virtxml.py:502
 msgid ""
 "Apply changes to the running VM.\n"
 "With --add-device, this is a hotplug operation.\n"
@@ -7094,42 +7133,42 @@ msgstr ""
 "Cu --remove-device, aceasta este o operație de deconectare la cald.\n"
 "Cu --edit, aceasta este o operație de actualizare a dispozitivului."
 
-#: virtinst/virtxml.py:472
+#: virtinst/virtxml.py:512
 msgid ""
 "Force defining the domain. Only required if a --print option was specified."
 msgstr ""
 "Forțează definirea domeniului. Necesară numai dacă a fost specificată "
 "opțiunea „--print”."
 
-#: virtinst/virtxml.py:475
+#: virtinst/virtxml.py:515
 msgid "Force not defining the domain."
 msgstr "Forțează nedefinirea domeniului."
 
-#: virtinst/virtxml.py:478
+#: virtinst/virtxml.py:518
 msgid "Start the domain."
 msgstr "Pornește domeniul."
 
-#: virtinst/virtxml.py:480
+#: virtinst/virtxml.py:522
 msgid "Only print the requested change, in diff format"
 msgstr "Doar afișează modificarea solicitată, în format diff"
 
-#: virtinst/virtxml.py:482
+#: virtinst/virtxml.py:527
 msgid "Only print the requested change, in full XML format"
 msgstr "Doar afișează modificarea solicitată, în format XML complet"
 
-#: virtinst/virtxml.py:484
+#: virtinst/virtxml.py:530
 msgid "Require confirmation before saving any results."
 msgstr "Solicită confirmarea înainte de a salva orice rezultat."
 
-#: virtinst/virtxml.py:488
+#: virtinst/virtxml.py:535
 msgid "Conversion options"
 msgstr "Opțiuni de conversie"
 
-#: virtinst/virtxml.py:492
+#: virtinst/virtxml.py:541
 msgid "Convert an existing VM from PC/i440FX to Q35."
 msgstr "Conversia unei MV existente de la PC/i440FX la Q35."
 
-#: virtinst/virtxml.py:497
+#: virtinst/virtxml.py:550
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
@@ -7137,31 +7176,31 @@ msgstr ""
 "Convertește o MV existentă pentru a utiliza grafica VNC. Acest lucru elimină "
 "orice rămășițe ale graficii Spice."
 
-#: virtinst/virtxml.py:500
+#: virtinst/virtxml.py:555
 msgid "XML options"
 msgstr "Opțiuni XML"
 
-#: virtinst/virtxml.py:542
+#: virtinst/virtxml.py:597
 msgid "Can't use --confirm with stdin input."
 msgstr "Nu se poate utiliza opțiunea „--confirm” cu intrare de la stdin."
 
-#: virtinst/virtxml.py:544
+#: virtinst/virtxml.py:599
 msgid "Can't use --update with stdin input."
 msgstr "Nu se poate utiliza „--update” cu intrare de la stdin."
 
-#: virtinst/virtxml.py:547
+#: virtinst/virtxml.py:602
 msgid "A domain must be specified"
 msgstr "Trebuie specificat un domeniu"
 
-#: virtinst/virtxml.py:595
+#: virtinst/virtxml.py:647
 msgid "The VM is not running, --update is inapplicable."
 msgstr "MV nu rulează, opțiunea „--update” nu este aplicabilă."
 
-#: virtinst/virtxml.py:628
+#: virtinst/virtxml.py:680
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr "Modificările vor intra în vigoare după ce domeniul este complet oprit."
 
-#: virtinst/virtxml.py:630
+#: virtinst/virtxml.py:684
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
@@ -7169,11 +7208,11 @@ msgstr ""
 "Fișa XML nu s-a modificat după definirea domeniului. Este posibil să fi "
 "modificat o valoare pe care libvirt o stabilește în mod implicit."
 
-#: virtinst/virtxml.py:643
+#: virtinst/virtxml.py:699
 msgid "Aborted at user request"
 msgstr "Întreruptă la cererea utilizatorului"
 
-#: virtinst/xmlapi.py:191
+#: virtinst/xmlapi.py:211
 #, python-format
 msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
@@ -7183,16 +7222,19 @@ msgstr ""
 "găsit „%(foundname)s"
 
 #. translators: value is a generic object type name
-#: virtinst/xmlbuilder.py:519
+#: virtinst/xmlbuilder.py:517
 #, python-format
 msgid "A name must be specified for the %s"
 msgstr "Trebuie specificat un nume pentru %s"
 
-#: virtinst/xmlbuilder.py:524
+#: virtinst/xmlbuilder.py:521
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
 "Numele „%(name)s” al %(objecttype)s nu poate conține caracterul „%(char)s”."
+
+#~ msgid "vmm;"
+#~ msgstr "vmm;"
 
 #~ msgid "ISA"
 #~ msgstr "ISA"
