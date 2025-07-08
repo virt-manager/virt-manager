@@ -22,6 +22,11 @@ class DomainLaunchSecurity(XMLBuilder):
     kernelHashes = XMLProperty("./@kernelHashes", is_yesno=True)
     authorKey = XMLProperty("./@authorKey", is_yesno=True)
     vcek = XMLProperty("./@vcek", is_yesno=True)
+    mrConfigId = XMLProperty("./mrConfigId")
+    mrOwner = XMLProperty("./mrOwner")
+    mrOwnerConfig = XMLProperty("./mrOwnerConfig")
+    quoteGenerationService = XMLProperty("./quoteGenerationService", is_bool=True)
+    quoteGenerationSocket = XMLProperty("./quoteGenerationService/@path")
 
     def _set_defaults_sev(self, guest):
         if not guest.os.is_q35() or not guest.is_uefi():
@@ -41,8 +46,14 @@ class DomainLaunchSecurity(XMLBuilder):
         if not guest.os.is_q35() or not guest.is_uefi():
             raise RuntimeError(_("SEV-SNP launch security requires a Q35 UEFI machine"))
 
+    def _set_defaults_tdx(self, guest):
+        if not guest.os.is_q35() or not guest.is_uefi():
+            raise RuntimeError(_("TDX launch security requires a Q35 UEFI machine"))
+
     def set_defaults(self, guest):
         if self.type == "sev":
             return self._set_defaults_sev(guest)
         elif self.type == "sev-snp":
             return self._set_defaults_sev_snp(guest)
+        elif self.type == "tdx":
+            return self._set_defaults_tdx(guest)

@@ -5310,6 +5310,11 @@ class ParserLaunchSecurity(VirtCLIParser):
         cls.add_arg("kernelHashes", "kernelHashes", is_onoff=True)
         cls.add_arg("authorKey", "authorKey", is_onoff=True)
         cls.add_arg("vcek", "vcek", is_onoff=True)
+        cls.add_arg("mrConfigId", "mrConfigId")
+        cls.add_arg("mrOwner", "mrOwner")
+        cls.add_arg("mrOwnerConfig", "mrOwnerConfig")
+        cls.add_arg("quoteGenerationService", "quoteGenerationService", is_onoff=True)
+        cls.add_arg("quoteGenerationSocket", "quoteGenerationSocket")
 
 
 ###########################

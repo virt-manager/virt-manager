@@ -1853,6 +1853,27 @@ c.add_invalid(
     prerun_check="10.5.0",
 )
 
+c.add_compare(
+    "--boot uefi --machine q35 --launchSecurity type=tdx,policy=0x10000000",
+    "x86_64-launch-security-tdx",
+    prerun_check="11.6.0",
+)
+c.add_compare(
+    "--boot uefi --machine q35 --launchSecurity type=tdx,quoteGenerationService=on",
+    "x86_64-launch-security-tdx-qgs",
+    prerun_check="11.6.0",
+)
+c.add_compare(
+    "--boot uefi --machine q35 --launchSecurity type=tdx,policy=0x10000000,mrConfigId=ASNFZ4mrze8BI0VniavN7wEjRWeJq83vASNFZ4mrze8BI0VniavN7wEjRWeJq83v,mrOwner=ASNFZ4mrze8BI0VniavN7wEjRWeJq83vASNFZ4mrze8BI0VniavN7wEjRWeJq83v,mrOwnerConfig=ASNFZ4mrze8BI0VniavN7wEjRWeJq83vASNFZ4mrze8BI0VniavN7wEjRWeJq83v,quoteGenerationSocket=/var/run/tdx-qgs/qgs.socket",
+    "x86_64-launch-security-tdx-full",
+    prerun_check="11.6.0",
+)
+c.add_invalid(
+    "--machine pc --launchSecurity type=tdx,policy=0x10000000",
+    grep="TDX launch security requires a Q35 UEFI machine",
+    prerun_check="11.6.0",
+)
+
 
 ######################
 # LXC specific tests #
