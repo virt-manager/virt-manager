@@ -23,23 +23,24 @@
 # Sergey A. <sw@atrus.ru>, 2023.
 # "Sergey A." <sw@atrus.ru>, 2023.
 # Elena Mishina <lepata@basealt.ru>, 2024.
+# "Sergey A." <Ser82-png@yandex.ru>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-11-14 06:38+0000\n"
-"Last-Translator: Elena Mishina <lepata@basealt.ru>\n"
-"Language-Team: Russian <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ru/>\n"
+"PO-Revision-Date: 2025-06-20 12:01+0000\n"
+"Last-Translator: \"Sergey A.\" <Ser82-png@yandex.ru>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Weblate 5.8.2\n"
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || ("
+"n%100>=11 && n%100<=14)? 2 : 3);\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -96,20 +97,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Менеджер виртуальных машин"
+msgstr "Просмотрщик/Менеджер виртуальных машин"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Управление виртуальными машинами"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "виртуализация"
+msgstr "virtualization;libvirt;vm;vmm;виртуализация;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3827,6 +3824,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Не рекомендуется смешивать внешние и внутренние снимки для одной виртуальной "
+"машины. Вы действительно хотите продолжить выполнение действия?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4125,10 +4124,8 @@ msgid "Macvtap device..."
 msgstr "Устройство macvtap..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Устройство macvtap..."
+msgstr "Устройство vDPA..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5547,6 +5544,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Конфигурация устройства хранения данных nvram.\n"
+"Для записи журнала oops/panic ядра гостевой системы. Пример:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5737,12 +5737,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Ошибка: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Запрошен графический режим, но DISPLAY не установлен. Virt-viewer не будет "
-"запущен."
+msgstr "Дисплей не обнаружен. Virt-viewer не будет запущен."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6570,15 +6566,11 @@ msgid "Error validating install location: %s"
 msgstr "Ошибка при проверке места установки: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"Параметр «-os-variant/--osinfo» требует имя ОС, но значение\n"
+"Параметр «--osinfo/--os-variant» требует имя ОС, но значение\n"
 "не указано или не обнаружено."
 
 #: virtinst/virtinstall.py:600
@@ -6868,23 +6860,17 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Необходимо ввести «yes» или «no»."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo не поддерживается, если используется --edit"
+msgstr "--osinfo/--os-variant не поддерживается, если используется --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
 msgstr ""
-"--os-variant/--osinfo не поддерживается, если используется --remove-device"
+"--osinfo/--os-variant не поддерживается, если используется --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo не поддерживается, если используется --build-xml"
+msgstr "--osinfo/--os-variant не поддерживается, если используется --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
