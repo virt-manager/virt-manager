@@ -11,22 +11,22 @@
 # simmon <simmon@nplob.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
 # Seungyeon Choi <p@ij.rs>, 2022.
-# 김인수 <simmon@nplob.com>, 2022, 2023, 2024.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2024-11-15 14:38+0000\n"
+"PO-Revision-Date: 2025-06-23 10:05+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
-"Language-Team: Korean <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ko/>\n"
+"Language-Team: Korean <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -80,20 +80,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "가상 장비 관리자"
+msgstr "가상 장비 표시기/관리자"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "가상 장비 관리"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "가상화"
+msgstr "virtualization;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -3768,7 +3764,8 @@ msgstr "가상 장비 순간찍기 생성"
 msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
-msgstr ""
+msgstr "동일한 VM에 대해 외부 및 내부 순간찍기 혼합은 추천되지 않습니다. 계속 "
+"진행할까요?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4061,10 +4058,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap 장치..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap 장치..."
+msgstr "vDPA 장치..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5463,6 +5458,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"nvram 저장 장치를 구성합니다.\n"
+"guest 커널이 oops/panic 기록를 저장합니다. 예:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5627,7 +5625,7 @@ msgstr ""
 #: virtinst/cli.py:1148
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
-msgstr "%(key)s은(는) '예' 또는 '아니요'여야 함"
+msgstr "%(key)s 는 'yes' 또는 'no' 여야 합니다"
 
 #: virtinst/cli.py:1343
 #, python-format
@@ -5649,12 +5647,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "오류: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"그래픽이 요청되었지만 DISPLAY가 설정되지 않았습니다. virt-viewer를 실행하지 "
-"않습니다."
+msgstr "화면이 탐지되지 않습니다. virt-viewer를 실행하지 않습니다."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6450,16 +6444,12 @@ msgid "Error validating install location: %s"
 msgstr "설치 위치 검증 오류: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo OS 이름이 필요하나, 값이 없도록\n"
-"설정 또는 감지되었습니다."
+"--osinfo/--os-variant OS 이름이 필요하나, 값이 없도록\n"
+"설정 또는 탐지되었습니다."
 
 #: virtinst/virtinstall.py:600
 msgid ""
@@ -6739,22 +6729,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "'예' 또는 '아니요'를 입력하십시오."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os- variant/--osinfo는 --edit와 함께 지원하지 않습니다"
+msgstr "--osinfo/--os-variant는 --edit와 함께 지원하지 않습니다"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo는 --remove-device와 함께 지원하지 않습니다"
+msgstr "--osinfo/--os-variant는 --remove-device와 함께 지원하지 않습니다"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo는 --build-xml과 함께 지원하지 않습니다"
+msgstr "--osinfo/--os-variant는 --build-xml과 함께 지원하지 않습니다"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
