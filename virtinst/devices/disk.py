@@ -1037,7 +1037,7 @@ class DeviceDisk(Device):
             # avoid churn, but every newer virt arch that supports virtio-scsi
             # should use it
             return "scsi"
-        if guest.os.is_arm():
+        if str(guest.os.machine).startswith("vexpress"):
             return "sd"
         return "usb"
 
