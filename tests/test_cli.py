@@ -1772,6 +1772,10 @@ c.add_compare(
     "--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --os-variant fedora28 --cloud-init",
     "aarch64-cloud-init",
 )
+c.add_compare(
+    "--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --os-variant win11",
+    "aarch64-win11",
+)
 
 
 #####################
