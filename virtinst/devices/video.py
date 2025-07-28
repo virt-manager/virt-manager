@@ -66,8 +66,11 @@ class DeviceVideo(Device):
             # qxl is only beneficial over regular vga when paired with spice.
             # The device still may not be available though
             return "qxl"
-        if guest.is_uefi() and guest.lookup_domcaps().supports_video_bochs():
-            return "bochs"
+        if guest.is_uefi():
+            if guest.os.is_arm():
+                return "ramfb"
+            if guest.lookup_domcaps().supports_video_bochs():
+                return "bochs"
         return "vga"
 
     def set_defaults(self, guest):
