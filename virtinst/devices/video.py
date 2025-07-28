@@ -46,9 +46,6 @@ class DeviceVideo(Device):
             return "vga"
         if guest.os.is_loongarch64():
             return "virtio"
-        if guest.os.is_arm_machvirt():
-            # For all cases here the hv and guest are new enough for virtio
-            return "virtio"
         if guest.os.is_riscv_virt():
             # For all cases here the hv and guest are new enough for virtio
             return "virtio"
