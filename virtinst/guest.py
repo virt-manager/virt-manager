@@ -422,13 +422,7 @@ class Guest(XMLBuilder):
         ):
             return True
 
-        if not os_support:
-            return False
-
-        if self.os.is_x86():
-            return True
-
-        return False  # pragma: no cover
+        return os_support
 
     def supports_virtionet(self):
         return self._supports_virtio(self.osinfo.supports_virtionet(self._extra_drivers))
