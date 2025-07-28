@@ -1025,19 +1025,21 @@ class DeviceDisk(Device):
             return "ide"
         if self.is_disk() and guest.supports_virtiodisk():
             return "virtio"
-        if self.is_cdrom() and guest.supports_virtioscsi() and not guest.os.is_x86():
+        if guest.os.is_q35():
+            return "sata"
+        if self.conn.is_bhyve():
+            # IDE bus is not supported by bhyve
+            return "sata"
+        if guest.os.is_x86():
+            return "ide"
+        if self.is_cdrom() and guest.supports_virtioscsi():
             # x86 long time default has been IDE CDROM, stick with that to
             # avoid churn, but every newer virt arch that supports virtio-scsi
             # should use it
             return "scsi"
         if guest.os.is_arm():
             return "sd"
-        if guest.os.is_q35():
-            return "sata"
-        if self.conn.is_bhyve():
-            # IDE bus is not supported by bhyve
-            return "sata"
-        return "ide"
+        return "usb"
 
     def set_defaults(self, guest):
         if not self._device:
