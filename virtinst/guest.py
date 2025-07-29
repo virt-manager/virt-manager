@@ -365,6 +365,7 @@ class Guest(XMLBuilder):
     _metadata = XMLChildProperty(DomainMetadata, is_single=True)
 
     xmlns_qemu = XMLChildProperty(DomainXMLNSQemu, is_single=True)
+    
 
     ##############################
     # osinfo related definitions #
