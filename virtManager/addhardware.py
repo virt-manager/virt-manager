@@ -610,13 +610,14 @@ class vmmAddHardware(vmmGObjectUI):
             return []
 
         ret = []
-        if guest.type in ["kvm", "qemu", "vz", "test"]:
+        if guest.type in ["bhyve", "kvm", "qemu", "vz", "test"]:
             ret.append("virtio")
         if guest.os.is_x86():
             if guest.os.is_q35():
                 ret.append("e1000e")
             else:
-                ret.append("rtl8139")
+                if guest.type not in ["bhyve"]:
+                    ret.append("rtl8139")
                 ret.append("e1000")
         if guest.type in ["xen", "test"]:
             ret.append("netfront")
