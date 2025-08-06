@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2025-07-12 11:53+0000\n"
+"PO-Revision-Date: 2025-07-20 00:53+0000\n"
 "Last-Translator: عمّار عبدالله <ammar-dmour19@proton.me>\n"
 "Language-Team: Arabic <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/ar/>\n"
@@ -1689,14 +1689,21 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
+"بشكل افتراضي، يتم حذف تكوين الآلة الافتراضية من المضيف المصدر وحفظه بشكل "
+"دائم على المضيف الوجهة. ويُعتبر المضيف الوجهة الموقع الدائم الجديد للآلة "
+"الافتراضية.\n"
+"\n"
+"في حال اختيار 'مؤقت'، يتم اعتبار عملية النقل مؤقتة فقط: حيث يحتفظ المضيف "
+"المصدر بنسخة من التكوين، بينما تظل النسخة المنقولة إلى الوجهة مؤقتة وسيتم "
+"إزالتها عند إيقاف التشغيل."
 
 #: ui/migrate.ui:571
 msgid "_Temporary move:"
-msgstr ""
+msgstr "_نقل مؤقت:"
 
 #: ui/migrate.ui:599
 msgid "Advanced options"
-msgstr ""
+msgstr "خيارات متقدمة"
 
 #: ui/migrate.ui:653
 msgid "_Migrate"
@@ -1711,18 +1718,20 @@ msgid ""
 "<small>In most configurations, macvtap does not work for host to guest "
 "network communication.</small>"
 msgstr ""
+"<small> في معظم التكوينات، لا يعمل macvtap في اتصال شبكة المضيف "
+"بالضيف.<small>"
 
 #: ui/netlist.ui:122
 msgid "<small>Failed to find a suitable default network.</small>"
-msgstr ""
+msgstr "<small>تعذَّر إيجاد شبكة افتراضية مناسبة.</small>"
 
 #: ui/netlist.ui:146
 msgid "_Portgroup:"
-msgstr ""
+msgstr "_مجموعة المنافذ:"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
-msgstr ""
+msgstr "_مصدر الشبكة:"
 
 #: ui/oslist.ui:56
 msgid ""
@@ -1730,10 +1739,12 @@ msgid ""
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
+"لم تجد نظام التشغيل الذي تبحث عنه؟\n"
+"حاول اختيار توزيعة أو إصدار مشابه، أو استخدم أحد الخيارات \"العامة\"."
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
-msgstr ""
+msgstr "تضمين أنظمة التشغيل منتهية الصلاحية"
 
 #: ui/preferences.ui:14
 msgid "Preferences"
@@ -1741,19 +1752,19 @@ msgstr "التفضيلات"
 
 #: ui/preferences.ui:45
 msgid "Enable _system tray icon"
-msgstr ""
+msgstr "تمكين أيقونة _منطقة الإشعارات"
 
 #: ui/preferences.ui:67
 msgid "Enable libgues_tfs VM introspection"
-msgstr ""
+msgstr "تمكين فحص الآلة الافتراضية باستخدام libgues_tfs"
 
 #: ui/preferences.ui:124
 msgid "Enable _XML editing"
-msgstr ""
+msgstr "تمكين تحرير _XML"
 
 #: ui/preferences.ui:144
 msgid "<b>General</b>"
-msgstr ""
+msgstr "<b>عام</b>"
 
 #: ui/preferences.ui:159
 msgid "_General"
@@ -1761,47 +1772,47 @@ msgstr "_عام"
 
 #: ui/preferences.ui:188
 msgid "Poll _Disk I/O"
-msgstr ""
+msgstr "رصد _إدخال/إخراج القرص"
 
 #: ui/preferences.ui:216
 msgid "Poll _Network I/O"
-msgstr ""
+msgstr "رصد _إدخال/إخراج الشبكة"
 
 #: ui/preferences.ui:244
 msgid "Poll _Memory stats"
-msgstr ""
+msgstr "رصد إحصائيات ال_ذاكرة"
 
 #: ui/preferences.ui:272
 msgid "_Update status every"
-msgstr ""
+msgstr "_تحديث الحالة كل"
 
 #: ui/preferences.ui:309
 msgid "seconds"
-msgstr ""
+msgstr "ثوانٍ"
 
 #: ui/preferences.ui:328
 msgid "Poll C_PU usage"
-msgstr ""
+msgstr "رصد استخدام و_حدة المعالجة المركزية"
 
 #: ui/preferences.ui:357
 msgid "<b>Stats Options</b>"
-msgstr ""
+msgstr "<b>خيارات الإحصائيات</b>"
 
 #: ui/preferences.ui:375
 msgid "P_olling"
-msgstr ""
+msgstr "ال_رصد"
 
 #: ui/preferences.ui:409
 msgid "Gra_phics type:"
-msgstr ""
+msgstr "نوع الر_سوميات:"
 
 #: ui/preferences.ui:422 ui/preferences.ui:448
 msgid "Default storage format for new disk images."
-msgstr ""
+msgstr "تنسيق التخزين الافتراضي لصور الأقراص الجديدة."
 
 #: ui/preferences.ui:424
 msgid "_Storage format:"
-msgstr ""
+msgstr "_تنسيق التخزين:"
 
 #: ui/preferences.ui:460
 msgid ""
@@ -1811,22 +1822,28 @@ msgid ""
 "will need\n"
 "identical CPUs in order to migrate the VM."
 msgstr ""
+"الإعداد الافتراضي للمعالج بالنسبة للآلات الافتراضية الجديدة. يُعتبر هذا عادةً "
+"موازنةً بين الأداء\n"
+"وتوافق النقل: عند استخدام خيار \"نسخ المُضيف\"، ستحتاج الخوادم إلى\n"
+"وحدات معالجة مركزية مُتطابقة لضمان نقل الآلة الافتراضية."
 
 #: ui/preferences.ui:464
 msgid "CPU _default:"
-msgstr ""
+msgstr "إعداد المعالج الا_فنراضي:"
 
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
+"البرنامج الثابت المبدئي للآلات الافتراضية الجديدة. التمهيد باستخدام BIOS أو "
+"UEFI."
 
 #: ui/preferences.ui:490
 msgid "x86 _Firmware:"
-msgstr ""
+msgstr "x86 _البرنامج الثابت:"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
-msgstr ""
+msgstr "<b>الإعدادات الافتراضية للآلات الافتراضية الجديدة</b>"
 
 #: ui/preferences.ui:541
 msgid "N_ew VM"
@@ -1834,47 +1851,51 @@ msgstr "آلة افتراضية ج_ديدة"
 
 #: ui/preferences.ui:569
 msgid "Graphical console _scaling:"
-msgstr ""
+msgstr "_حجم وحدة التحكم الرسومية:"
 
 #: ui/preferences.ui:587
 msgid "Gr_ab keys:"
-msgstr ""
+msgstr "مفاتيح Gr_ab:"
 
 #: ui/preferences.ui:602
 msgid "Not supported"
-msgstr ""
+msgstr "غير مدعوم"
 
 #: ui/preferences.ui:630
 msgid "Change..."
-msgstr ""
+msgstr "تغيير..."
 
 #: ui/preferences.ui:647
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
+"تغيير دقة شاشة الضيف عند تغيير حجم نافذة الضيف. يعمل فقط مع الضيف المهيأ "
+"بشكل صحيح باستخدام spice ووكيل سطح المكتب."
 
 #: ui/preferences.ui:649
 msgid "_Resize guest with window:"
-msgstr ""
+msgstr "_تغيير حجم الضيف مع النافذة:"
 
 #: ui/preferences.ui:675
 msgid "SPICE _USB Redirection:"
-msgstr ""
+msgstr "إعادة توجيه SPICE _USB:"
 
 #: ui/preferences.ui:699
 msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
+"في حالة تعطيلها، لن تتصل نافذة الآلة الافتراضية تلقائيًا بوحدة التحكم "
+"الرسومية لنظيرتها قيد التشغيل."
 
 #: ui/preferences.ui:701
 msgid "Console autoconnec_t:"
-msgstr ""
+msgstr "الاتصال التل_قائي بوحدة التحكم:"
 
 #: ui/preferences.ui:729
 msgid "<b>Graphical Consoles</b>"
-msgstr ""
+msgstr "<b>وحدات التحكم الرسومية</b>"
 
 #: ui/preferences.ui:747
 msgid "Conso_le"
@@ -1886,59 +1907,59 @@ msgstr "_إطفاء إجباري:"
 
 #: ui/preferences.ui:802
 msgid "Poweroff/_Reboot/Save:"
-msgstr ""
+msgstr "إطفاء/_إعادة تشغيل/حفظ:"
 
 #: ui/preferences.ui:816
 msgid "_Pause:"
-msgstr ""
+msgstr "_إيقاف مؤقت:"
 
 #: ui/preferences.ui:869
 msgid "Device re_moval:"
-msgstr ""
+msgstr "إ_زالة الجهاز:"
 
 #: ui/preferences.ui:883
 msgid "_Unapplied changes:"
-msgstr ""
+msgstr "ال_تغييرات غير المطبقة:"
 
 #: ui/preferences.ui:910
 msgid "_Deleting storage:"
-msgstr ""
+msgstr "_حذف التخزين:"
 
 #: ui/preferences.ui:939
 msgid "<b>Confirmations</b>"
-msgstr ""
+msgstr "<b>التأكيدات</b>"
 
 #: ui/preferences.ui:957
 msgid "Feed_back"
-msgstr ""
+msgstr "ملاح_ظة"
 
 #: ui/snapshots.ui:80
 msgid "Description:"
-msgstr ""
+msgstr "الوصف:"
 
 #: ui/snapshots.ui:118
 msgid "VM State:"
-msgstr ""
+msgstr "حالة الآلة الافتراضية:"
 
 #: ui/snapshots.ui:166
 msgid "Timestamp:"
-msgstr ""
+msgstr "الطابع الزمني:"
 
 #: ui/snapshots.ui:204
 msgid "Snapshot Mode:"
-msgstr ""
+msgstr "وضع اللقطة:"
 
 #: ui/snapshots.ui:229
 msgid "Screenshot:"
-msgstr ""
+msgstr "لقطة شاشة:"
 
 #: ui/snapshots.ui:256
 msgid "No screenshot available"
-msgstr ""
+msgstr "لا لقطة شاشة متاحة"
 
 #: ui/snapshots.ui:293
 msgid "<small><i>This was the most recently applied snapshot.</i></small>"
-msgstr ""
+msgstr "<small><i>كانت هذه أحدث لقطة تم تطبيقها مؤخراً.</i></small>"
 
 #: ui/snapshots.ui:382 ui/snapshots.ui:383
 msgid "Create new snapshot"
@@ -1950,51 +1971,51 @@ msgstr "شغِّل اللقطة المحددة"
 
 #: ui/snapshots.ui:435
 msgid "Refresh snapshot list"
-msgstr ""
+msgstr "تحديث قائمة اللقطات"
 
 #: ui/snapshots.ui:462 ui/snapshots.ui:463
 msgid "Delete selected snapshot"
-msgstr ""
+msgstr "حذف اللقطة المحددة"
 
 #: ui/snapshots.ui:504 ui/snapshots.ui:505
 msgid "Save updated snapshot metadata"
-msgstr ""
+msgstr "حفظ البيانات الوصفية للقطة المحدّثة"
 
 #: ui/snapshotsnew.ui:7
 msgid "Create snapshot"
-msgstr ""
+msgstr "إنشاء لقطة"
 
 #: ui/snapshotsnew.ui:49
 msgid "<span size='large'>Create snapshot</span>"
-msgstr ""
+msgstr "<span size='large'>إنشاء لقطة</span>"
 
 #: ui/snapshotsnew.ui:131
 msgid "_Description:"
-msgstr ""
+msgstr "_ااوصف:"
 
 #: ui/snapshotsnew.ui:211
 msgid "Snapshot _Mode:"
-msgstr ""
+msgstr "_وضع اللفطة:"
 
 #: ui/snapshotsnew.ui:226
 msgid "_external"
-msgstr ""
+msgstr "_ خارجي"
 
 #: ui/snapshotsnew.ui:243
 msgid "_internal"
-msgstr ""
+msgstr "_داخلي"
 
 #: ui/snapshotsnew.ui:269
 msgid "Memory _State:"
-msgstr ""
+msgstr "_حالة الذاكرة:"
 
 #: ui/snapshotsnew.ui:283
 msgid "_auto"
-msgstr ""
+msgstr "_تلقائي"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
-msgstr ""
+msgstr "_مسار الجهاز:"
 
 #: ui/tpmdetails.ui:130
 msgid "_Version:"
@@ -2002,35 +2023,35 @@ msgstr "_الإصدار:"
 
 #: ui/tpmdetails.ui:162
 msgid "Adva_nced options"
-msgstr ""
+msgstr "إعدادات مت_قدمة"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
-msgstr ""
+msgstr "آلة افتراضية"
 
 #: ui/vmwindow.ui:73
 msgid "Virtual _Machine"
-msgstr ""
+msgstr "آلة_افتراضية"
 
 #: ui/vmwindow.ui:89
 msgid "_Take Screenshot"
-msgstr ""
+msgstr "_خذ لقطة شاشة"
 
 #: ui/vmwindow.ui:98
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
-msgstr ""
+msgstr "إعادة توجيه جهاز USB المضيف إلى الآلة الافتراضية مع رسوميات SPICE."
 
 #: ui/vmwindow.ui:99
 msgid "_Redirect USB device"
-msgstr ""
+msgstr "_إعادة توجيه جهاز USB"
 
 #: ui/vmwindow.ui:121
 msgid "_Console"
-msgstr ""
+msgstr "_وحدة تحكم"
 
 #: ui/vmwindow.ui:143
 msgid "Sna_pshots"
-msgstr ""
+msgstr "لق_طات"
 
 #: ui/vmwindow.ui:160
 msgid "_Fullscreen"
@@ -2038,39 +2059,40 @@ msgstr "_ملء الشاشة"
 
 #: ui/vmwindow.ui:169
 msgid "_Resize to VM"
-msgstr ""
+msgstr "_تغيير الحجم ليناسب الآلة الافتراضية"
 
 #: ui/vmwindow.ui:178
+#, fuzzy
 msgid "_Scale Display"
-msgstr ""
+msgstr "_قياس عرض الشاشة"
 
 #: ui/vmwindow.ui:188
 msgid "_Always"
-msgstr ""
+msgstr "‌_دائماً"
 
 #: ui/vmwindow.ui:198
 msgid "_Only when Fullscreen"
-msgstr ""
+msgstr "_فقط عند ملء الشاشة"
 
 #: ui/vmwindow.ui:209
 msgid "_Never"
-msgstr ""
+msgstr "_أبداً"
 
 #: ui/vmwindow.ui:226
 msgid "Auto _resize VM with window"
-msgstr ""
+msgstr "ضبط حجم الآلة الافتراضية تلقائياً مع النافذة"
 
 #: ui/vmwindow.ui:239
 msgid "Co_nsoles"
-msgstr ""
+msgstr "وحدات التح_كم"
 
 #: ui/vmwindow.ui:247
 msgid "_Autoconnect"
-msgstr ""
+msgstr "_الاتصال التلقائي"
 
 #: ui/vmwindow.ui:262
 msgid "T_oolbar"
-msgstr ""
+msgstr "ش_ريط الأدوات"
 
 #: ui/vmwindow.ui:276
 msgid "Send _Key"
@@ -2078,15 +2100,15 @@ msgstr "إرسال مفتاح"
 
 #: ui/vmwindow.ui:299
 msgid "Show the graphical console"
-msgstr ""
+msgstr "إظهار وحدة التحكم الرسومية"
 
 #: ui/vmwindow.ui:300 virtManager/addhardware.py:264
 msgid "Console"
-msgstr "وحدة تحكم"
+msgstr "وحدة التحكم"
 
 #: ui/vmwindow.ui:314
 msgid "Show virtual hardware details"
-msgstr ""
+msgstr "إظهار تفاصيل العتاد الافنراضي"
 
 #: ui/vmwindow.ui:315 virtManager/error.py:326
 msgid "Details"
@@ -2106,51 +2128,53 @@ msgstr "اللقطات"
 
 #: ui/vmwindow.ui:407
 msgid "Switch to fullscreen view"
-msgstr ""
+msgstr "التبديل إلى عرض ملء الشاشة"
 
 #: ui/vmwindow.ui:432
 msgid "Begin Installation"
-msgstr ""
+msgstr "بدء التثبيت"
 
 #: ui/vmwindow.ui:434
 msgid "_Begin Installation"
-msgstr ""
+msgstr "_بدء التثبيت"
 
 #: ui/vmwindow.ui:448
 msgid "_Cancel Installation"
-msgstr ""
+msgstr "_إلغاء التثبيت"
 
 #: ui/vsockdetails.ui:23
 msgid "Guest C_ID:"
-msgstr ""
+msgstr "معرّف ضيف الآلة الافتراضية:"
 
 #: ui/xmleditor.ui:96
 msgid ""
 "<small>XML editing is disabled in 'Preferences'. Only enable it if you know "
 "what you are doing.</small>"
 msgstr ""
+"<small>يتم تعطيل تحرير XML في ”التفضيلات“. لا تقم بتمكينه إلا إذا كنت تعرف "
+"ما تفعله.</small>"
 
 #: ui/xmleditor.ui:122
 msgid "_XML"
-msgstr ""
+msgstr "_XML"
 
 #: virtManager/about.py:20
 #, python-format
 msgid "Error launching 'About' dialog: %s"
-msgstr ""
+msgstr "خطأ في تشغيل مربع حوار ”حول“: %s"
 
 #: virtManager/addhardware.py:174 virtManager/details/details.py:554
 msgid "Hardware"
-msgstr ""
+msgstr "عتاد مادي"
 
 #: virtManager/addhardware.py:214 virtManager/createvm.py:506
 #: virtManager/device/addstorage.py:184
 msgid "Connection does not support storage management."
-msgstr ""
+msgstr "لا يدعم الاتصال إدارة التخزين."
 
 #: virtManager/addhardware.py:231 virtManager/addhardware.py:995
 msgid "Controller"
-msgstr ""
+msgstr "متحكِّم"
 
 #: virtManager/addhardware.py:232 virtManager/addhardware.py:997
 #: virtManager/createnet.py:332
@@ -2166,78 +2190,78 @@ msgstr "مُدخَل"
 #: virtManager/addhardware.py:253 virtManager/addhardware.py:261
 #: virtManager/addhardware.py:270 virtManager/addhardware.py:311
 msgid "Not supported for this guest type."
-msgstr ""
+msgstr "غير مدعوم لهذا النوع من الضيوف."
 
 #: virtManager/addhardware.py:240 virtManager/addhardware.py:1001
 msgid "Graphics"
-msgstr ""
+msgstr "الرسوميات"
 
 #: virtManager/addhardware.py:242 virtManager/addhardware.py:1003
 msgid "Sound"
-msgstr ""
+msgstr "الصوت"
 
 #: virtManager/addhardware.py:257
 msgid "Parallel"
-msgstr ""
+msgstr "متوازٍ"
 
 #: virtManager/addhardware.py:266
 msgid "Channel"
-msgstr ""
+msgstr "قناة"
 
 #: virtManager/addhardware.py:274
 msgid "USB Host Device"
-msgstr ""
+msgstr "جهاز USB المضيف"
 
 #: virtManager/addhardware.py:278 virtManager/addhardware.py:283
 #: virtManager/addhardware.py:296
 msgid "Connection does not support host device enumeration"
-msgstr ""
+msgstr "‎لا يدعم الاتصال تعداد الأجهزة المضيفة"
 
 #: virtManager/addhardware.py:286
 msgid "Not supported for containers"
-msgstr ""
+msgstr "غير مدعوم للحاويات"
 
 #: virtManager/addhardware.py:288
 msgid "PCI Host Device"
-msgstr ""
+msgstr "جهاز PCI المضيف"
 
 #: virtManager/addhardware.py:292
 msgid "MDEV Host Device"
-msgstr ""
+msgstr "الجهاز المضيف MDEV"
 
 #: virtManager/addhardware.py:300
 msgid "Video"
-msgstr ""
+msgstr "الفيديو"
 
 #: virtManager/addhardware.py:304
 msgid "Libvirt version does not support video devices."
-msgstr ""
+msgstr "إصدار Libvirt لا يدعم أجهزة الفيديو."
 
 #: virtManager/addhardware.py:307 virtManager/details/details.py:252
 #: virtManager/lib/libvirtenummap.py:107
 msgid "Watchdog"
-msgstr ""
+msgstr "جهاز مراقبة ( Watchdog )"
 
 #: virtManager/addhardware.py:313
 msgid "Filesystem"
-msgstr ""
+msgstr "نظام ملفات"
 
 #: virtManager/addhardware.py:314 virtManager/addhardware.py:1011
 #: virtManager/details/details.py:250
 msgid "Smartcard"
-msgstr ""
+msgstr "بطاقة ذكية"
 
 #: virtManager/addhardware.py:315 virtManager/addhardware.py:1013
 msgid "USB Redirection"
-msgstr ""
+msgstr "إعادة توجيه USB"
 
 #: virtManager/addhardware.py:316 virtManager/addhardware.py:1015
 msgid "TPM"
-msgstr ""
+msgstr "TPM"
 
 #: virtManager/addhardware.py:317 virtManager/details/details.py:242
 msgid "RNG"
-msgstr ""
+msgstr "RNG"
 
 #: virtManager/addhardware.py:318 virtManager/addhardware.py:1019
 #: virtManager/details/details.py:249
@@ -2295,19 +2319,19 @@ msgstr ""
 
 #: virtManager/addhardware.py:480 virtManager/addhardware.py:541
 msgid "IDE"
-msgstr ""
+msgstr "IDE"
 
 #: virtManager/addhardware.py:481 virtManager/details/details.py:2260
 msgid "Floppy"
-msgstr ""
+msgstr "قرص فلوبي مرن"
 
 #: virtManager/addhardware.py:482 virtManager/addhardware.py:543
 msgid "SCSI"
-msgstr ""
+msgstr "SCSI"
 
 #: virtManager/addhardware.py:483 virtManager/addhardware.py:542
 msgid "SATA"
-msgstr ""
+msgstr "SATA"
 
 #: virtManager/addhardware.py:484
 msgid "VirtIO Serial"
@@ -2316,15 +2340,15 @@ msgstr ""
 #: virtManager/addhardware.py:485 virtManager/addhardware.py:545
 #: virtManager/addhardware.py:596
 msgid "USB"
-msgstr ""
+msgstr "USB"
 
 #: virtManager/addhardware.py:486
 msgid "PCI"
-msgstr ""
+msgstr "PCI"
 
 #: virtManager/addhardware.py:487
 msgid "CCID"
-msgstr ""
+msgstr "CCID"
 
 #: virtManager/addhardware.py:488
 msgid "xenbus"
@@ -2340,19 +2364,19 @@ msgstr ""
 
 #: virtManager/addhardware.py:544
 msgid "SD"
-msgstr ""
+msgstr "SD"
 
 #: virtManager/addhardware.py:546 virtManager/addhardware.py:597
 msgid "VirtIO"
-msgstr ""
+msgstr "virtIO"
 
 #: virtManager/addhardware.py:547 virtManager/addhardware.py:598
 msgid "Xen"
-msgstr ""
+msgstr "Xen"
 
 #: virtManager/addhardware.py:554
 msgid "Random"
-msgstr ""
+msgstr "عشوائي"
 
 #: virtManager/addhardware.py:555
 msgid "Entropy Gathering Daemon"
