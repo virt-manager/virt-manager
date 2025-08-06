@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2025-01-10 19:25+0000\n"
+"PO-Revision-Date: 2025-07-18 22:53+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -79,20 +79,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Virtuaalikoneiden hallitsin"
+msgstr "Virtuaalikoneen katselu- ja hallintaohjelma"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Hallitse virtuaalikoneita"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "virtualisointi"
+msgstr "virtualisointi;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -857,7 +853,7 @@ msgstr "_Polku:"
 
 #: ui/createvol.ui:423
 msgid "_Backing store"
-msgstr "_Tausta myymälä"
+msgstr "_Taustavarasto"
 
 #: ui/delete.ui:9 virtManager/delete.py:294
 msgid "Delete Virtual Machine"
@@ -3792,6 +3788,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Ulkoisten ja sisäisten tilannevedosten sekoittamista samassa "
+"virtuaalikoneessa ei suositella. Oletko varma, että haluat jatkaa?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4090,10 +4088,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap-laite ...."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap-laite ...."
+msgstr "vDPA-laite..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -5499,6 +5495,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Määritä nvram-tallennuslaite.\n"
+"Se on tarkoitettu vierasytimelle lokien oops/panic tallentamiseen; esim:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5686,12 +5685,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Virhe: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Grafiikkaa pyydetään, mutta DISPLAY:ta ei ole asetettu. virt-viewer.ei "
-"käynnissä."
+msgstr "Näyttöä ei havaittu. virt-viewer ei ole käynnissä."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -6505,16 +6500,12 @@ msgid "Error validating install location: %s"
 msgstr "Virhe vahvistaessa asennussijaintia: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo OS:n nimi vaaditaan, mutta arvoa ei ole \n"
-"asetettu taikka havaittu."
+"--osinfo/--os-variant Käyttöjärjestelmän nimi vaaditaan, mutta arvoa ei ole\n"
+"asetettu tai havaittu."
 
 #: virtinst/virtinstall.py:600
 msgid ""
@@ -6798,22 +6789,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Kirjoita 'kyllä' vai 'ei'."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo ei tueta --edit parametrin kanssa"
+msgstr "--osinfo/--os-variant ei tueta --edit:n kanssa"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo ei tueta --remove-device parametrin kanssa"
+msgstr "--osinfo/--os-variant ei tueta --remove-device:in kanssa"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo ei tueta --build-xml kanssa"
+msgstr "--osinfo/--os-variant ei tueta --build-xml:n kanssa"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
