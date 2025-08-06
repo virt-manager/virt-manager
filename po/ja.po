@@ -21,7 +21,7 @@
 # Hajime Taira <htaira@fedoraproject.org>, 2018. #zanata
 # Hajime Taira <htaira@fedoraproject.org>, 2019. #zanata
 # rinsuki <428rinsuki+fedora@gmail.com>, 2021.
-# Yasuhiko Kamata <belphegor@belbel.or.jp>, 2021, 2022.
+# Yasuhiko Kamata <belphegor@belbel.or.jp>, 2021, 2022, 2025.
 # R Toda <toda.ryunosuke@gmail.com>, 2022.
 # Pavel Hrdina <phrdina@redhat.com>, 2025.
 msgid ""
@@ -29,16 +29,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2025-03-05 14:03+0000\n"
-"Last-Translator: Pavel Hrdina <phrdina@redhat.com>\n"
-"Language-Team: Japanese <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/ja/>\n"
+"PO-Revision-Date: 2025-08-06 14:25+0000\n"
+"Last-Translator: Yasuhiko Kamata <belphegor@belbel.or.jp>\n"
+"Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.2\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -76,40 +76,32 @@ msgid "Graphical console connection for a virtual machine"
 msgstr "この仮想マシンに対するグラフィカルコンソールの接続"
 
 #: data/virt-manager.appdata.xml.in:36
-#, fuzzy
-#| msgid "virtualization type '%s'"
 msgid "virtualization"
-msgstr "仮想化の形式 '%s'"
+msgstr "仮想化"
 
 #: data/virt-manager.appdata.xml.in:37
-#, fuzzy
-#| msgid "Libvirt URI:"
 msgid "libvirt"
-msgstr "Libvirt URI:"
+msgstr "libvirt"
 
 #: data/virt-manager.appdata.xml.in:38
 msgid "qemu"
-msgstr ""
+msgstr "qemu"
 
 #: data/virt-manager.appdata.xml.in:39
 msgid "kvm"
-msgstr ""
+msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "仮想マシンマネージャー"
+msgstr "仮想マシンビューアー／マネージャー"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "仮想マシンの管理"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization type '%s'"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "仮想化の形式 '%s'"
+msgstr "virtualization;仮想化;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -203,7 +195,7 @@ msgstr "チャンネル(_C):"
 
 #: ui/addhardware.ui:908
 msgid "_Share Clipboard:"
-msgstr ""
+msgstr "クリップボードの共有 (_S):"
 
 #: ui/addhardware.ui:1044 ui/details.ui:4029
 msgid "Ac_tion:"
@@ -408,8 +400,6 @@ msgid "_Connect to console"
 msgstr "コンソールに接続(_C)"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "Connect"
 msgid "Connect"
 msgstr "接続"
 
@@ -1076,10 +1066,8 @@ msgid "MiB"
 msgstr "MiB"
 
 #: ui/details.ui:1915
-#, fuzzy
-#| msgid "External disk and memory"
 msgid "Enable shared _memory"
-msgstr "外部ディスクとメモリー"
+msgstr "共有メモリを有効にする (_m)"
 
 #: ui/details.ui:1945
 msgid "<b>Memory</b>"
@@ -1135,7 +1123,7 @@ msgstr "<b>直接カーネル起動(_E)</b>"
 
 #: ui/details.ui:2452
 msgid "Enable boot me_nu"
-msgstr "起動メニューを有効化する"
+msgstr "起動メニューを有効にする (_n)"
 
 #: ui/details.ui:2589
 msgid "<b>Boot device order</b>"
@@ -1239,7 +1227,7 @@ msgstr "状態:"
 
 #: ui/details.ui:3697
 msgid "Clipboard:"
-msgstr ""
+msgstr "クリップボード:"
 
 #: ui/details.ui:3709
 msgid "Source path:"
@@ -1322,10 +1310,8 @@ msgid "<b>Panic Notifier</b>"
 msgstr "<b>パニックの通知</b>"
 
 #: ui/details.ui:4874
-#, fuzzy
-#| msgid "Removable"
 msgid "_Remove"
-msgstr "リムーバブル"
+msgstr "削除 (_R)"
 
 #: ui/details.ui:4915 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
@@ -1350,7 +1336,7 @@ msgstr "形式(_F):"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr ""
+msgstr "blah foo 警告メッセージ"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1504,10 +1490,8 @@ msgid "Cancel and close dialog"
 msgstr "取り消してダイアログを閉じる"
 
 #: ui/hoststorage.ui:170
-#, fuzzy
-#| msgid "Choose Volume"
 msgid "Ch_oose Volume"
-msgstr "ボリュームの選択"
+msgstr "ボリュームの選択 (_O)"
 
 #: ui/hoststorage.ui:174
 msgid "Choose the selected volume"
@@ -1772,29 +1756,22 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>適切なデフォルトネットワークの検出に失敗しました。</small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "ポート(_P):"
+msgstr "ポートグループ (_P):"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
 msgstr "ネットワークソース(_N):"
 
 #: ui/oslist.ui:56
-#, fuzzy
-#| msgid ""
-#| "Can't find the operating system you are looking for?\n"
-#| "Try selecting the next most recent version displayed,\n"
-#| "or use the \"Generic OS\" entry."
 msgid ""
 "Can't find the operating system you are looking for?\n"
 "Try selecting a similar distro or version, or use one of the 'Generic' "
 "options."
 msgstr ""
 "お探しのオペレーティングシステムが見つかりませんでした。\n"
-"表示されているものの中から最も近いバージョンを選択するか、\n"
-"\"Generic OS\" (汎用 OS) を選択してください。"
+"類似のディストリビューションもしくは近いバージョンを選択するか、 \"Generic\" "
+"(汎用) を選択してください。"
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
@@ -1888,13 +1865,12 @@ msgstr "CPU デフォルト(_D):"
 
 #: ui/preferences.ui:488
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
-msgstr ""
+msgstr "新しいVMのデフォルトファームウェア。BIOSまたはUEFIのいずれかを使用して起動し"
+"ます。"
 
 #: ui/preferences.ui:490
-#, fuzzy
-#| msgid "Firm_ware:"
 msgid "x86 _Firmware:"
-msgstr "ファームウェア(_W):"
+msgstr "x86 ファームウェア(_F):"
 
 #: ui/preferences.ui:516
 msgid "<b>New VM Defaults</b>"
@@ -2050,32 +2026,24 @@ msgid "_Description:"
 msgstr "詳細(_D):"
 
 #: ui/snapshotsnew.ui:211
-#, fuzzy
-#| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
-msgstr "スナップショットのモード:"
+msgstr "スナップショットのモード (_M):"
 
 #: ui/snapshotsnew.ui:226
-#, fuzzy
-#| msgid "External"
 msgid "_external"
-msgstr "外部"
+msgstr "外部 (_E)"
 
 #: ui/snapshotsnew.ui:243
-#, fuzzy
-#| msgid "External"
 msgid "_internal"
-msgstr "外部"
+msgstr "内部 (_I)"
 
 #: ui/snapshotsnew.ui:269
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "仮想マシンの状態:"
+msgstr "メモリの状態 (_S):"
 
 #: ui/snapshotsnew.ui:283
 msgid "_auto"
-msgstr ""
+msgstr "自動 (_A)"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -2086,10 +2054,8 @@ msgid "_Version:"
 msgstr "バージョン(_V):"
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
-msgstr "詳細なオプション"
+msgstr "詳細オプション (_n)"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
@@ -2384,7 +2350,7 @@ msgstr "Spice ポート"
 
 #: virtManager/addhardware.py:464
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "QEMU vdagent"
 
 #: virtManager/addhardware.py:480 virtManager/addhardware.py:541
 msgid "IDE"
@@ -2536,6 +2502,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"\"%s\" はホストシステムでアクティブではありません。\n"
+"ゲストに追加する前にホストシステムで mdev を起動してください。"
 
 #: virtManager/addhardware.py:818
 msgid "No Devices Available"
@@ -3188,8 +3156,6 @@ msgid "Error continuing install: %s"
 msgstr "インストールを継続する際にエラーが発生しました: %s"
 
 #: virtManager/createvm.py:2055
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Bootstraping コンテナー"
 
@@ -3365,8 +3331,6 @@ msgid "Failed to check disk usage conflict."
 msgstr "ディスク使用の矛盾チェックに失敗しました。"
 
 #: virtManager/details/console.py:155
-#, fuzzy
-#| msgid "Leave fullscreen"
 msgid "Leave Fullscreen"
 msgstr "フルスクリーンの解除"
 
@@ -3449,16 +3413,12 @@ msgid "SSH tunnel error output: %s"
 msgstr "SSH トンネルにエラー出力を行いました: %s"
 
 #: virtManager/details/console.py:775
-#, fuzzy
-#| msgid "Viewer was disconnected."
 msgid "Viewer is disconnecting."
-msgstr "ビューアーが切断されました。"
+msgstr "ビューアーを切断しています。"
 
 #: virtManager/details/console.py:914
-#, fuzzy
-#| msgid "Viewer disconnected."
 msgid "Viewer window closed."
-msgstr "ビューアーは切断されています。"
+msgstr "ビューアーウィンドウが閉じています。"
 
 #: virtManager/details/console.py:919
 #, python-format
@@ -3506,10 +3466,9 @@ msgid "Console %(num)d"
 msgstr "コンソール %(num)d"
 
 #: virtManager/details/details.py:210
-#, fuzzy, python-format
-#| msgid "Channel %(name)s"
+#, python-format
 msgid "Channel (%(name)s)"
-msgstr "チャンネル %(name)s"
+msgstr "チャンネル (%(name)s)"
 
 #: virtManager/details/details.py:211
 #, python-format
@@ -3576,7 +3535,7 @@ msgstr "ハードウェアを除去(_R)"
 
 #: virtManager/details/details.py:624 virtManager/details/details.py:1715
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:632
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -3810,11 +3769,11 @@ msgstr "デバイスタイプ '%s' に対するコンソールには対応して
 
 #: virtManager/details/serialcon.py:251
 msgid "_Copy"
-msgstr ""
+msgstr "コピー (_C)"
 
 #: virtManager/details/serialcon.py:255
 msgid "_Paste"
-msgstr ""
+msgstr "貼り付け (_P)"
 
 #: virtManager/details/serialcon.py:342
 #, python-format
@@ -3823,7 +3782,7 @@ msgstr "テキストコンソール接続時にエラーが発生しました: %
 
 #: virtManager/details/snapshots.py:125
 msgid "external snapshots not supported with this libvirt connection"
-msgstr ""
+msgstr "この libvirt 接続では外部スナップショットに対応していません"
 
 #: virtManager/details/snapshots.py:291
 #, python-format
@@ -3851,7 +3810,8 @@ msgstr "仮想マシンのスナップショットを作成中"
 msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
-msgstr ""
+msgstr "同じ仮想マシンに対して外部スナップショットと内部スナップショットを混在させる"
+"のはお勧めできません。続行してもよろしいですか？"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4082,7 +4042,7 @@ msgstr "ソースパス(_S):"
 
 #: virtManager/device/fsdetails.py:154
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
-msgstr ""
+msgstr "'メモリ' 画面で '共有メモリを有効にする' を選択する必要があるかもしれません。"
 
 #: virtManager/device/gfxdetails.py:89
 msgid "Spice server"
@@ -4146,10 +4106,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap デバイス..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap デバイス..."
+msgstr "vDPA デバイス..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -4181,10 +4139,8 @@ msgid "SPAPR"
 msgstr "SPAPR"
 
 #: virtManager/device/tpmdetails.py:72
-#, fuzzy
-#| msgid "Emulator:"
 msgid "Emulated"
-msgstr "エミュレーター:"
+msgstr "擬似"
 
 #: virtManager/device/vsockdetails.py:58
 msgid "CID"
@@ -4417,12 +4373,9 @@ msgstr ""
 "ケージをローカルにインストールしてください。"
 
 #: virtManager/lib/connectauth.py:170
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running on the remote host."
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr ""
-"リモートホストで、'libvirtd' デーモンが実行していることを確認してください。"
+msgstr "接続先のホストで適切な libvirt デーモンが動作していることをご確認ください。"
 
 #: virtManager/lib/connectauth.py:174
 msgid ""
@@ -4445,10 +4398,8 @@ msgstr ""
 "ユーザーにて再度実行してください。"
 
 #: virtManager/lib/connectauth.py:189
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "'libvirtd' デーモンが実行されていることを確認してください。"
+msgstr "適切な libvirt デーモンが動作していることをご確認ください。"
 
 #: virtManager/lib/connectauth.py:192
 #, python-format
@@ -4460,19 +4411,14 @@ msgid "Virtual Machine Manager Connection Failure"
 msgstr "仮想マシンマネージャーの接続障害"
 
 #: virtManager/lib/connectauth.py:219
-#, fuzzy
-#| msgid ""
-#| "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
-#| "virtualization packages are installed to manage virtualization on this "
-#| "host."
 msgid ""
 "Could not detect a default hypervisor. Make sure the appropriate QEMU/KVM "
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
 "デフォルトのハイパーバイザーが検出できません。このホストで仮想化環境を管理す"
-"るのに必要となる、 QEMU/KVM 仮想化パッケージをインストールしているかを確認し"
-"てください。"
+"るのに必要となる、 QEMU/KVM 仮想化パッケージおよび libvirt "
+"パッケージをインストールしていることをご確認ください。"
 
 #: virtManager/lib/connectauth.py:227
 msgid ""
@@ -4606,25 +4552,19 @@ msgstr "仮想マシンマネージャーを起動中にエラーが発生しま
 
 #: virtManager/manager.py:289
 msgid "_New"
-msgstr ""
+msgstr "新規 (_N)"
 
 #: virtManager/manager.py:290
-#, fuzzy
-#| msgid "Connect"
 msgid "_Connect"
-msgstr "接続"
+msgstr "接続 (_C)"
 
 #: virtManager/manager.py:291
-#, fuzzy
-#| msgid "Disconnected"
 msgid "Dis_connect"
-msgstr "切断されました"
+msgstr "切断 (_C)"
 
 #: virtManager/manager.py:293
-#, fuzzy
-#| msgid "_Delete"
 msgid "De_lete"
-msgstr "削除(_D)"
+msgstr "削除 (_L)"
 
 #: virtManager/manager.py:370
 msgid "CPU usage"
@@ -4769,11 +4709,11 @@ msgstr ""
 
 #: virtManager/object/domain.py:446
 msgid "Can not change shared memory setting when <numa> is configured."
-msgstr ""
+msgstr "<numa> が設定されている場合、共有メモリ設定は変更できません。"
 
 #: virtManager/object/domain.py:450
 msgid "Libvirt may not be new enough to support memfd."
-msgstr ""
+msgstr "memfd をサポートできるほど libvirt が新しいものではないかもしれません。"
 
 #: virtManager/object/domain.py:468
 msgid "Libvirt connection does not support snapshots."
@@ -4904,10 +4844,8 @@ msgid "Nearest host CPU model"
 msgstr "最も近いホストの CPU モデル"
 
 #: virtManager/preferences.py:184
-#, fuzzy
-#| msgid "System default (%s)"
 msgid "System default"
-msgstr "システムのデフォルト(%s)"
+msgstr "システムのデフォルト"
 
 #: virtManager/preferences.py:192
 msgid "python libguestfs support is not installed"
@@ -5166,10 +5104,8 @@ msgid "PNG files"
 msgstr "PNG ファイル"
 
 #: virtManager/vmwindow.py:548
-#, fuzzy
-#| msgid "Saved"
 msgid "_Save"
-msgstr "保存済み"
+msgstr "保存 (_S)"
 
 #: virtManager/xmleditor.py:131 virtManager/xmleditor.py:144
 msgid "There are unapplied changes."
@@ -5429,11 +5365,6 @@ msgstr ""
 "--network help"
 
 #: virtinst/cli.py:797
-#, fuzzy
-#| msgid ""
-#| "Configure a guest controller device. Ex:\n"
-#| "--controller type=usb,model=qemu-xhci\n"
-#| "--controller virtio-scsi\n"
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5441,7 +5372,7 @@ msgid ""
 msgstr ""
 "ゲストのコントローラーデバイスを構成します。例:\n"
 "--controller type=usb,model=qemu-xhci\n"
-"--controller virtio-scsi\n"
+"--controller type=scsi,model=virtio-scsi\n"
 
 #: virtinst/cli.py:806
 msgid ""
@@ -5488,10 +5419,8 @@ msgid "Configure guest sound device emulation"
 msgstr "ゲストのサウンドデバイスのエミュレーションを設定します"
 
 #: virtinst/cli.py:856
-#, fuzzy
-#| msgid "Configure a guest watchdog device"
 msgid "Configure host audio backend for sound devices"
-msgstr "ゲストの watchdog デバイスを設定します"
+msgstr "サウンドデバイスに対するホスト側のオーディオバックエンドを設定します"
 
 #: virtinst/cli.py:860
 msgid "Configure a guest watchdog device"
@@ -5589,6 +5518,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"nvram ストレージデバイスを設定します。\n"
+"ゲスト側のカーネルに対して oos/panic ログを記録させるための仕組みです。例:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5677,19 +5609,11 @@ msgstr ""
 "--qemu-commandline env=DISPLAY=:0.1"
 
 #: virtinst/cli.py:1042
-#, fuzzy
-#| msgid ""
-#| "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
-#| "--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-#| "dhCert=BASE64CERT\n"
-#| "--launchSecurity sev"
 msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
 "VM 実行セキュリティ (例: SEV メモリ暗号化) を設定します。例:\n"
-"--launchSecurity type=sev,cbitpos=47,reducedPhysBits=1,policy=0x0001,"
-"dhCert=BASE64CERT\n"
 "--launchSecurity sev"
 
 #: virtinst/cli.py:1054
@@ -5737,11 +5661,6 @@ msgid "The OS installed in the guest."
 msgstr "ゲストにインストールされている OS を指定します。"
 
 #: virtinst/cli.py:1099
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5749,7 +5668,7 @@ msgid ""
 msgstr ""
 "VirtIO などの最適なデフォルト値を判断するために使用します。\n"
 "値の例: fedora29, rhel7.0, win10, ...\n"
-"全ての一覧を表示したい場合は、 'osinfo-query os' を実行してください。"
+"全ての一覧を表示したい場合は、 '--osinfo list' をお使いください。"
 
 #: virtinst/cli.py:1115
 msgid ""
@@ -5788,12 +5707,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "エラー: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"グラフィックスが要求されていますが DISPLAY 変数が設定されていません。virt-"
-"viewer を起動できません。"
+msgstr "ディスプレイが検出できませんでした。 virt-viewer を起動しません。"
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5810,7 +5725,7 @@ msgstr "不明な自動コンソールタイプ '%s' です"
 
 #: virtinst/cli.py:2615
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr ""
+msgstr "CPU model=host は古い形式です。 model=host-model をお使いください"
 
 #: virtinst/cli.py:3914
 #, python-format
@@ -5848,6 +5763,9 @@ msgid ""
 "\n"
 "  osinfo-query os\n"
 msgstr ""
+"追加の情報を表示したい場合は、下記のコマンドをお使いください:\n"
+"\n"
+"  osinfo-query os\n"
 
 #: virtinst/cloner.py:46
 #, python-format
@@ -5966,10 +5884,9 @@ msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "mdev タイプ id '%s' に対する nodedev の生成方法がわかりません"
 
 #: virtinst/devices/hostdev.py:91 virtinst/devices/interface.py:357
-#, fuzzy, python-format
-#| msgid "Unknown node device type %s"
+#, python-format
 msgid "Unsupported node device type '%s'"
-msgstr "不明なノードデバイスタイプ %s"
+msgstr "サポート対象外のノードデバイスタイプ '%s'"
 
 #: virtinst/devices/interface.py:218
 #, python-format
@@ -6027,16 +5944,17 @@ msgid ""
 "cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
 "count %(vcpus)d"
 msgstr ""
+"トポロジから算出される合計 CPU 数 (ソケット数=%(sockets)d * ダイ数=%(dies)d *"
+" コア数=%(cores)d * スレッド数=%(threads)d == %(total)d) が vCPU 数 %(vcpus)"
+"d と合致していません"
 
 #: virtinst/domain/launch_security.py:28
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV 実行時セキュリティには Q35 UEFI マシンが必要です"
 
 #: virtinst/domain/launch_security.py:42
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
-msgstr "SEV 実行時セキュリティには Q35 UEFI マシンが必要です"
+msgstr "SEV-SNP 実行時セキュリティには Q35 UEFI マシンが必要です"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -6115,8 +6033,6 @@ msgid "location kernel/initrd may only be specified with a location URL/path"
 msgstr "カーネルや initrd の配置場所は、 URL またはパスでのみ指定できます"
 
 #: virtinst/install/installertreemedia.py:128
-#, fuzzy
-#| msgid "location kernel/initrd must be be specified as a pair"
 msgid "location kernel/initrd must be specified as a pair"
 msgstr "カーネルや initrd の配置場所は一対で指定しなければなりません"
 
@@ -6230,7 +6146,7 @@ msgstr "'%(filename)s' を転送しています"
 
 #: virtinst/osdict.py:72
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr ""
+msgstr "汎用または不明な OS です。利用はお勧めしません。"
 
 #: virtinst/osdict.py:97
 #, python-format
@@ -6238,12 +6154,9 @@ msgid "Unknown libosinfo ID '%s'"
 msgstr "未知の libosinfo ID '%s' です"
 
 #: virtinst/osdict.py:111
-#, fuzzy, python-format
-#| msgid "Unknown OS name '%s'. See `osinfo-query os` for valid values."
+#, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
-msgstr ""
-"未知の OS 名 '%s' です。指定可能な値の一覧は `osinfo-query os` で取得できま"
-"す。"
+msgstr "不明な OS 名 '%s' です。指定可能な値の一覧は `--osinfo list` で取得できます。"
 
 #: virtinst/osdict.py:535
 #, python-format
@@ -6494,7 +6407,7 @@ msgstr ""
 
 #: virtinst/virtinstall.py:154
 msgid "--os-type is deprecated and does nothing. Please stop using it."
-msgstr ""
+msgstr "--os-type は古い形式で、現在は何もしません。指定しないでください。"
 
 #: virtinst/virtinstall.py:229
 msgid "Cannot mix --graphics and old style graphical options"
@@ -6560,17 +6473,14 @@ msgid "The guest's network configuration may not support PXE"
 msgstr "ゲストのネットワーク設定は PXE に対応しないかもしれません"
 
 #: virtinst/virtinstall.py:385
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No operating system detected, VM performance may suffer. Specify an OS "
-#| "with --os-variant for optimal results."
+#, python-brace-format
 msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"オペレーティングシステムを検出できません。仮想マシンのパフォーマンスが低下す"
-"る可能性があります。最適なパフォーマンスを得るには、--os-variant で OS を指定"
-"する必要があります。"
+"--osinfo {osname} "
+"を指定することで、仮想マシンのパフォーマンスに影響を与えることができます。最"
+"適なパフォーマンスを得るには正確に指定してください。"
 
 #: virtinst/virtinstall.py:401
 #, python-brace-format
@@ -6605,6 +6515,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
+"インストールメディアからの OS 検出に失敗しました。代替名 '{name}' "
+"を使用します。\n"
+"このメディアが正しいインストールメディアである場合は、 virt-install "
+"のバグとして報告をお願いします。"
 
 #: virtinst/virtinstall.py:587
 #, python-format
@@ -6612,19 +6526,20 @@ msgid "Error validating install location: %s"
 msgstr "インストール場所の検証中にエラーが発生しました: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid "An --os-variant is required, but no value was set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant の指定が必要ですが、値が指定されていないか検出できません。"
+"--osinfo {OS名} もしくは --os-variant {OS名} の指定が必要ですが、\n"
+"値が指定されていないか検出できません。"
 
 #: virtinst/virtinstall.py:600
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
+"これは致命的なエラーです。仮想マシンに対する性能・機密設定を\n"
+"適切に行うには、 OS 名の指定が必要です。\n"
 
 #: virtinst/virtinstall.py:605
 msgid ""
@@ -6633,6 +6548,10 @@ msgid ""
 "\n"
 "  --osinfo detect=on,name=OSNAME\n"
 msgstr ""
+"virt-install でインストールメディアから OS を検出したい場合は、\n"
+"下記のように指定することで代替 OS を指定できます:\n"
+"\n"
+"  --osinfo detect=on,name=代替OS名\n"
 
 #: virtinst/virtinstall.py:615
 msgid ""
@@ -6640,6 +6559,10 @@ msgid ""
 "\n"
 "   virt-install --osinfo list\n"
 msgstr ""
+"OS名として設定可能な値の一覧を表示したい場合は、下記のコマンドを実行してくだ"
+"さい:\n"
+"\n"
+"   virt-install --osinfo list\n"
 
 #: virtinst/virtinstall.py:622
 #, python-brace-format
@@ -6647,6 +6570,8 @@ msgid ""
 "If your Linux distro is not listed, try one of generic values\n"
 "such as: {oslist}\n"
 msgstr ""
+"お使いのLinuxディストリビューションが一覧に無い場合は、下記のような\n"
+"汎用名を指定してください: {oslist}\n"
 
 #: virtinst/virtinstall.py:629
 #, python-brace-format
@@ -6657,11 +6582,16 @@ msgid ""
 "\n"
 "Or export {env_var}=1\n"
 msgstr ""
+"古いバージョンの動作に戻したいだけの場合は、下記のように指定してください:\n"
+"\n"
+"  --osinfo detect=on,require=off\n"
+"\n"
+"もしくは下記のように実行してもかまいません: export {env_var}=1\n"
 
 #: virtinst/virtinstall.py:639
 #, python-brace-format
 msgid "{env_var} set. Skipping fatal error."
-msgstr ""
+msgstr "{env_var} が指定されています。致命的エラーを回避します。"
 
 #: virtinst/virtinstall.py:723
 msgid "No console to launch for the guest, defaulting to --wait -1"
@@ -6699,7 +6629,7 @@ msgstr "ゲストがクラッシュしました。"
 #: virtinst/virtinstall.py:872
 #, python-format
 msgid "VM disappeared unexpectedly: %s"
-msgstr ""
+msgstr "仮想マシンが予期せず消えてしまいました: %s"
 
 #: virtinst/virtinstall.py:894
 msgid "Domain is still running. Installation may be in progress."
@@ -6884,46 +6814,36 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "'yes' か 'no' を入力してください。"
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant は --edit をサポートしていません"
+msgstr "--osinfo/--os-variant は --edit をサポートしていません"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant は --remove-device をサポートしていません"
+msgstr "--osinfo/--os-variant は --remove-device をサポートしていません"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant は --build-xml をサポートしていません"
+msgstr "--osinfo/--os-variant は --build-xml をサポートしていません"
 
 #: virtinst/virtxml.py:113
-#, fuzzy, python-brace-format
-#| msgid "--build-xml not supported for --%s"
+#, python-brace-format
 msgid "--build-xml not supported for {cli_flag}"
-msgstr "--build-xml は --%s ではサポートされていません"
+msgstr "--build-xml は {cli_flag} ではサポートされていません"
 
 #: virtinst/virtxml.py:122
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --remove-device with --%s"
+#, python-brace-format
 msgid "Cannot use --remove-device with {cli_flag}"
-msgstr "--remove-device と --%s は同時に指定できません"
+msgstr "--remove-device と {cli_flag} は同時に指定できません"
 
 #: virtinst/virtxml.py:128
-#, fuzzy, python-brace-format
-#| msgid "Cannot use --add-device with --%s"
+#, python-brace-format
 msgid "Cannot use --add-device with {cli_flag}"
-msgstr "--add-device と --%s は同時に指定できません"
+msgstr "--add-device と {cli_flag} は同時に指定できません"
 
 #: virtinst/virtxml.py:135
-#, fuzzy, python-brace-format
-#| msgid "Don't know how to --update for --%s"
+#, python-brace-format
 msgid "Don't know how to --update for {cli_flag}"
-msgstr "--%s の --update の方法が分かりません"
+msgstr "{cli_flag} に対する --update の方法が分かりません"
 
 #: virtinst/virtxml.py:151
 #, python-format
@@ -6950,19 +6870,12 @@ msgid "Invalid --edit option '%s'"
 msgstr "無効な --edit オプション '%s'"
 
 #: virtinst/virtxml.py:216
-#, fuzzy, python-brace-format
-#| msgid "No --%s objects found in the XML"
+#, python-brace-format
 msgid "No {cli_flag} objects found in the XML"
-msgstr "XML の中に --%s オブジェクトが見つかりません"
+msgstr "XML の中に {cli_flag} オブジェクトが見つかりませんでした"
 
 #: virtinst/virtxml.py:223
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(number)s' requested but there's only %(max)s --%(type)s object "
-#| "in the XML"
-#| msgid_plural ""
-#| "'--edit %(number)s' requested but there are only %(max)s --%(type)s "
-#| "objects in the XML"
+#, python-brace-format
 msgid ""
 "'--edit {number}' requested but there's only {maxnum} {cli_flag} object in "
 "the XML"
@@ -6970,8 +6883,8 @@ msgid_plural ""
 "'--edit {number}' requested but there are only {maxnum} {cli_flag} objects "
 "in the XML"
 msgstr[0] ""
-"'--edit %(number)s' が指定されましたが、XML 内には %(max)s のみが %(type)s オ"
-"ブジェクトとして存在しています"
+"'--edit {number}' が指定されましたが、XML 内には {cli_flag} オブジェクトが "
+"{maxnum} 個しかありません"
 
 #: virtinst/virtxml.py:244
 #, python-format
@@ -6979,15 +6892,11 @@ msgid "No matching objects found for %s"
 msgstr "%s に対して該当するオブジェクトが見つかりません"
 
 #: virtinst/virtxml.py:261
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "'--edit %(option)s' doesn't make sense with --%(objecttype)s, just use "
-#| "empty '--edit'"
+#, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
-msgstr ""
-"'--edit %(option)s' と --%(objecttype)s は一緒に指定しても意味がありませ"
-"ん。'--edit' だけを指定してください"
+msgstr "'--edit {option}' と {cli_flag} は一緒に指定しても意味がありません。'--edit' "
+"だけを指定してください"
 
 #: virtinst/virtxml.py:334
 #, python-format
@@ -7177,20 +7086,19 @@ msgid "Require confirmation before saving any results."
 msgstr "すべての結果を保存する前に確認が必要です。"
 
 #: virtinst/virtxml.py:535
-#, fuzzy
-#| msgid "Conflicting options %s"
 msgid "Conversion options"
-msgstr "オプションの競合 %s"
+msgstr "変換オプション"
 
 #: virtinst/virtxml.py:541
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "既存の仮想マシンを PC/i440FX から Q35 に変換します。"
 
 #: virtinst/virtxml.py:550
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
-msgstr ""
+msgstr "既存の仮想マシンに対して VNC グラフィックを使用するように変換します。"
+"あわせて spice グラフィックの残骸も削除します。"
 
 #: virtinst/virtxml.py:555
 msgid "XML options"
