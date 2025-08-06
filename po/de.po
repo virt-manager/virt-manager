@@ -24,7 +24,7 @@
 # Samuel Heinzmann <samuel.heinzmann@bluewin.ch>, 2020.
 # Jan Nerad <neradj@gmail.com>, 2020.
 # Chris Wehrli <christian.wehrli@gmx.ch>, 2021.
-# Ettore Atalan <atalanttore@googlemail.com>, 2021, 2022, 2024.
+# Ettore Atalan <atalanttore@googlemail.com>, 2021, 2022, 2024, 2025.
 # Christian Wehrli <christian@chw.onl>, 2021.
 # Flo H <emailtoflorian@gmail.com>, 2022.
 # Anna Nym <geierb+fedoraproject@geierb.de>, 2023.
@@ -38,8 +38,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-06-18 16:59+0200\n"
-"PO-Revision-Date: 2025-06-23 05:56+0000\n"
-"Last-Translator: ano n <anon1010@users.noreply.translate.fedoraproject.org>\n"
+"PO-Revision-Date: 2025-07-18 22:53+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/de/>\n"
 "Language: de\n"
@@ -102,20 +102,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Virtuelle Maschinenverwaltung"
+msgstr "Betrachter/Manager für virtuelle Maschinen"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Virtuelle Maschinen verwalten"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;"
-msgstr "Virtualisierung"
+msgstr "Virtualisierung;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -2712,23 +2708,18 @@ msgid "Sharing storage may cause data to be overwritten."
 msgstr "Teilen von Speicherplatz kann zum Überschreiben von Daten führen."
 
 #: virtManager/clone.py:485
-#, fuzzy, python-format
-#| msgid ""
-#| "The following disk devices will not be cloned:\n"
-#| "\n"
-#| "%s\n"
-#| "Running the new guest could overwrite data in these disk images."
+#, python-format
 msgid ""
 "The following disk devices will be shared with %(vmname)s:\n"
 "\n"
 "%(pathlist)s\n"
 "Running the new guest could overwrite data in these disk images."
 msgstr ""
-"Die folgenden Festplattengeräte werden geteilt mit:\n"
+"Die folgenden Festplattengeräte werden gemeinsam mit %(vmname)s genutzt:\n"
 "\n"
 "%(pathlist)s\n"
-"Das Ausführen des neuen Gasts kann zum Überschreiben von Daten in diesen "
-"Plattenabbildern führen."
+"Beim Ausführen des neuen Gastes könnten Daten in diesen Festplattenabbildern "
+"überschrieben werden."
 
 #: virtManager/clone.py:502
 #, python-format
