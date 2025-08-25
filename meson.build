@@ -1,5 +1,5 @@
 project('virt-manager',
-  version: '5.0.0',
+  version: '5.1.0',
   meson_version: '>=0.63.0',
 )
 
