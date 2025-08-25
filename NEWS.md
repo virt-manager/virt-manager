@@ -1,5 +1,37 @@
 # Virtual Machine Manager News
 
+## Release 5.1.0 (August 26, 2025)
+- cli: Support --cpu maximum (Andrea Bolognani)
+- Prefer maximum mode for many emulated guests (Andrea Bolognani)
+- virt-manager: Fill in model combo with advertised values by libvirt (Lin Ma)
+- virt-manager: Default to same snapshot mode as currently used snapshot
+- virt-manager: Warn users to not mix snapshot modes
+- cli: Add --memdev target.dynamicMemslots support for virtio-mem (Lin Ma)
+- cli: add target.memReserve for pci-bridge and pcie-root-port controllers (Lin Ma)
+- cli: Add --disk driver.queue_size support (Lin Ma)
+- cli: Add 'poll' settings for iothread (Lin Ma)
+- cli: Add --tpm backend.profile.{source,removeDisabled} support (Lin Ma)
+- cli: Add nvram.templateFormat to indicate template format (Lin Ma)
+- cli: Add --features hyperv.xmm_input.state=on/off (Lin Ma)
+- cli: Add --features hyperv.emsr_bitmap.state=on/off (Lin Ma)
+- cli: Add --features hyperv.tlbflush.direct.state=on/off (Lin Ma)
+- cli: Add --features hyperv.tlbflush.extended.state=on/off (Lin Ma)
+- virt-manager: Add riscv64 to prioritized architectures (Heinrich Schuchardt)
+- virtinst: Add --pstore backend=acpi-erst,path=XX,size=YY support (Lin Ma)
+- XML: Fix escaping special characters twice in some cases (Marius Vollmer)
+- Add riscv64 architecture for Debian ISO/URL detection (Heinrich Schuchardt)
+- virt-manager: list virtual networks when creating new QEMU Session VM
+- Add support for vDPA network devices (Joren)
+- virt-install: Detect wayland in order to start virt-viewer
+- Improve Debian/Ubuntu detection for ISO images
+- Allow spaces, disallow slashes in names (AbhinavTiruvee)
+- cli: Add support to fetch cloud-init config files from URL
+- virt-manager: Fix error when opening File Browser (Zahid Kizmaz)
+- virt-manager: Add Ctrl+Alt+Shift+Esc key command for logind's SecureAttentionKey (n3rdopolis)
+- cli: Add support for creating TDX VMs
+- virt-install: Improve default device models to improve Windows ARM support (Akihiko Odaki)
+- Add support to configure startup policy for USB passed through devices (Lin Ma)
+
 ## Release 5.0.0 (November 26, 2024)
 - virt-clone: colne serial files (Oleg Vasilev)
 - virt-clone: Copy disk permissions as well (Martin Kletzander)
