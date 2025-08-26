@@ -28,11 +28,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2025-06-18 16:59+0200\n"
+"POT-Creation-Date: 2025-08-25 23:23+0200\n"
 "PO-Revision-Date: 2025-08-06 14:25+0000\n"
 "Last-Translator: Yasuhiko Kamata <belphegor@belbel.or.jp>\n"
-"Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
-"virt-manager/virt-manager/ja/>\n"
+"Language-Team: Japanese <https://translate.fedoraproject.org/projects/virt-"
+"manager/virt-manager/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -100,7 +100,9 @@ msgid "Manage virtual machines"
 msgstr "仮想マシンの管理"
 
 #: data/virt-manager.desktop.in:10
-msgid "virtualization;libvirt;vm;vmm;"
+#, fuzzy
+#| msgid "virtualization;libvirt;vm;vmm;"
+msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 msgstr "virtualization;仮想化;libvirt;vm;vmm;"
 
 #: ui/about.ui:10
@@ -136,14 +138,14 @@ msgstr "デバイスの種類(_D):"
 msgid "_Bus type:"
 msgstr "バスの種類(_B):"
 
-#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1178
+#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1214
 #: ui/createpool.ui:355 ui/fsdetails.ui:87 ui/gfxdetails.ui:107
 #: ui/tpmdetails.ui:49
 msgid "_Type:"
 msgstr "種類(_T):"
 
-#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:963
-#: ui/addhardware.ui:1031 ui/addhardware.ui:1308 ui/tpmdetails.ui:99
+#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:999
+#: ui/addhardware.ui:1067 ui/addhardware.ui:1344 ui/tpmdetails.ui:99
 msgid "_Model:"
 msgstr "モデル(_M):"
 
@@ -163,65 +165,71 @@ msgstr "MAC アドレス(_M):"
 msgid "Device mode_l:"
 msgstr "デバイスのモデル(_L):"
 
-#: ui/addhardware.ui:673 ui/addhardware.ui:1255
+#: ui/addhardware.ui:673 ui/addhardware.ui:1291
 msgid "Host _Device:"
 msgstr "ホストデバイス(_D):"
 
-#: ui/addhardware.ui:749
+#: ui/addhardware.ui:715 ui/details.ui:3844
+#, fuzzy
+#| msgid "Start Pool"
+msgid "Startup Policy:"
+msgstr "プールの開始"
+
+#: ui/addhardware.ui:785
 msgid "_Path:"
 msgstr "パス(_P):"
 
-#: ui/addhardware.ui:763
+#: ui/addhardware.ui:799
 msgid "Device _Type:"
 msgstr "デバイスの種類(_T):"
 
-#: ui/addhardware.ui:789
+#: ui/addhardware.ui:825
 msgid "T_ype:"
 msgstr "種類(_Y):"
 
-#: ui/addhardware.ui:803 ui/clone.ui:480 ui/createnet.ui:213
+#: ui/addhardware.ui:839 ui/clone.ui:480 ui/createnet.ui:213
 #: ui/createpool.ui:330 ui/createvm.ui:2152 ui/createvol.ui:185
 #: ui/details.ui:218 ui/host.ui:169 ui/snapshotsnew.ui:103
 msgid "_Name:"
 msgstr "名前(_N):"
 
-#: ui/addhardware.ui:840
+#: ui/addhardware.ui:876
 msgid "_Auto socket:"
 msgstr "自動ソケット(_A):"
 
-#: ui/addhardware.ui:868
+#: ui/addhardware.ui:904
 msgid "_Channel:"
 msgstr "チャンネル(_C):"
 
-#: ui/addhardware.ui:908
+#: ui/addhardware.ui:944
 msgid "_Share Clipboard:"
 msgstr "クリップボードの共有 (_S):"
 
-#: ui/addhardware.ui:1044 ui/details.ui:4029
+#: ui/addhardware.ui:1080 ui/details.ui:4054
 msgid "Ac_tion:"
 msgstr "アクション(_T):"
 
-#: ui/addhardware.ui:1136 ui/createnet.ui:139
+#: ui/addhardware.ui:1172 ui/createnet.ui:139
 msgid "_Mode:"
 msgstr "モード(_M):"
 
-#: ui/addhardware.ui:1289 ui/details.ui:4717
+#: ui/addhardware.ui:1325 ui/details.ui:4742
 msgid "rng"
 msgstr "rng"
 
-#: ui/addhardware.ui:1347 ui/details.ui:4799
+#: ui/addhardware.ui:1383 ui/details.ui:4824
 msgid "panic"
 msgstr "panic"
 
-#: ui/addhardware.ui:1453 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
+#: ui/addhardware.ui:1489 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
 #: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
 #: ui/createpool.ui:478 ui/createvm.ui:2400 ui/createvol.ui:462
-#: ui/delete.ui:181 ui/details.ui:4895 ui/hoststorage.ui:154 ui/migrate.ui:638
+#: ui/delete.ui:181 ui/details.ui:4920 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:343
 msgid "_Cancel"
 msgstr "キャンセル(_C)"
 
-#: ui/addhardware.ui:1468 ui/createnet.ui:813 ui/createpool.ui:493
+#: ui/addhardware.ui:1504 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:358
 msgid "_Finish"
 msgstr "完了(_F)"
@@ -370,7 +378,7 @@ msgstr "複製(_L)"
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>コンソールは現在使用できません</b>"
 
-#: ui/console.ui:57 virtManager/addhardware.py:249
+#: ui/console.ui:57 virtManager/addhardware.py:252
 msgid "Serial"
 msgstr "シリアルポート"
 
@@ -623,7 +631,7 @@ msgstr "仮想化の種類(_V):"
 msgid "Architecture options"
 msgstr "アーキテクチャーオプション"
 
-#: ui/createvm.ui:748 virtManager/details/details.py:680
+#: ui/createvm.ui:748 virtManager/details/details.py:682
 #: virtManager/manager.py:321 virtManager/oslist.py:70
 msgid "Name"
 msgstr "名前"
@@ -782,7 +790,7 @@ msgstr "CPU(_P):"
 msgid "(Insert host mem)"
 msgstr "(ホストの搭載メモリーを入力)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2325
+#: ui/createvm.ui:1987 virtManager/details/details.py:2342
 msgid "Memory"
 msgstr "メモリー"
 
@@ -790,8 +798,8 @@ msgstr "メモリー"
 msgid "_Enable storage for this virtual machine"
 msgstr "この仮想マシンにストレージを割り当てる(_E)"
 
-#: ui/createvm.ui:2040 virtManager/addhardware.py:225
-#: virtManager/addhardware.py:993 virtManager/clone.py:279
+#: ui/createvm.ui:2040 virtManager/addhardware.py:228
+#: virtManager/addhardware.py:1006 virtManager/clone.py:279
 msgid "Storage"
 msgstr "ストレージ"
 
@@ -1004,12 +1012,12 @@ msgstr ""
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU</b>"
 
-#: ui/details.ui:1443 ui/details.ui:3422 ui/details.ui:3908 ui/details.ui:4044
-#: ui/details.ui:4203
+#: ui/details.ui:1443 ui/details.ui:3422 ui/details.ui:3933 ui/details.ui:4069
+#: ui/details.ui:4228
 msgid "M_odel:"
 msgstr "モデル(_O):"
 
-#: ui/details.ui:1454 virtManager/details/details.py:1884
+#: ui/details.ui:1454 virtManager/details/details.py:1894
 msgid "Copy host CP_U configuration"
 msgstr "ホスト CPU の設定をコピーする (_U)"
 
@@ -1177,7 +1185,7 @@ msgstr "IP アドレス(_P):"
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>仮想ネットワークインターフェース</b>"
 
-#: ui/details.ui:3242 ui/details.ui:4156 ui/details.ui:4478 ui/details.ui:4654
+#: ui/details.ui:3242 ui/details.ui:4181 ui/details.ui:4503 ui/details.ui:4679
 msgid "Type:"
 msgstr "種類:"
 
@@ -1245,75 +1253,75 @@ msgstr "デバイス:"
 msgid "ROM _BAR:"
 msgstr "ROM _BAR:"
 
-#: ui/details.ui:3939
+#: ui/details.ui:3964
 msgid "_3D acceleration:"
 msgstr "3D アクセラレーション(_3):"
 
-#: ui/details.ui:3967
+#: ui/details.ui:3992
 msgid "<b>Video</b>"
 msgstr "<b>ビデオ</b>"
 
-#: ui/details.ui:4219
+#: ui/details.ui:4244
 msgid "Devices:"
 msgstr "デバイス:"
 
-#: ui/details.ui:4275
+#: ui/details.ui:4300
 msgid "<b>Controller</b>"
 msgstr "<b>コントローラー</b>"
 
-#: ui/details.ui:4321
+#: ui/details.ui:4346
 msgid "<b>Filesystem</b>"
 msgstr "<b>ファイルシステム</b>"
 
-#: ui/details.ui:4376 ui/migrate.ui:390
+#: ui/details.ui:4401 ui/migrate.ui:390
 msgid "M_ode:"
 msgstr "モード(_O):"
 
-#: ui/details.ui:4421
+#: ui/details.ui:4446
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>スマートカードデバイス</b>"
 
-#: ui/details.ui:4490
+#: ui/details.ui:4515
 msgid "Address:"
 msgstr "アドレス:"
 
-#: ui/details.ui:4502
+#: ui/details.ui:4527
 msgid "foo:12"
 msgstr "foo:12"
 
-#: ui/details.ui:4534
+#: ui/details.ui:4559
 msgid "<b>Redirected device</b>"
 msgstr "<b>リダイレクトデバイス</b>"
 
-#: ui/details.ui:4586
+#: ui/details.ui:4611
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM デバイス</b>"
 
-#: ui/details.ui:4679
+#: ui/details.ui:4704
 msgid "Host Device:"
 msgstr "ホストデバイス:"
 
-#: ui/details.ui:4699
+#: ui/details.ui:4724
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>乱数生成器</b>"
 
-#: ui/details.ui:4749
+#: ui/details.ui:4774
 msgid "Model:"
 msgstr "モデル:"
 
-#: ui/details.ui:4761
+#: ui/details.ui:4786
 msgid "panic-model"
 msgstr "panic-model"
 
-#: ui/details.ui:4781
+#: ui/details.ui:4806
 msgid "<b>Panic Notifier</b>"
 msgstr "<b>パニックの通知</b>"
 
-#: ui/details.ui:4874
+#: ui/details.ui:4899
 msgid "_Remove"
 msgstr "削除 (_R)"
 
-#: ui/details.ui:4915 ui/hostnets.ui:652 ui/hoststorage.ui:186
+#: ui/details.ui:4940 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
 msgstr "適用(_A)"
@@ -1530,7 +1538,7 @@ msgstr "接続を追加(_A)..."
 msgid "_New Virtual Machine"
 msgstr "新しい仮想マシン(_N)"
 
-#: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
+#: ui/manager.ui:59 ui/preferences.ui:1013 ui/vmwindow.ui:49
 msgid "_Close"
 msgstr "閉じる(_C)"
 
@@ -1770,8 +1778,8 @@ msgid ""
 "options."
 msgstr ""
 "お探しのオペレーティングシステムが見つかりませんでした。\n"
-"類似のディストリビューションもしくは近いバージョンを選択するか、 \"Generic\" "
-"(汎用) を選択してください。"
+"類似のディストリビューションもしくは近いバージョンを選択するか、 "
+"\"Generic\" (汎用) を選択してください。"
 
 #: ui/oslist.ui:109
 msgid "Include end of life operating systems"
@@ -1793,59 +1801,59 @@ msgstr "libgues_tfs 仮想マシン introspection を有効にする"
 msgid "Enable _XML editing"
 msgstr "XML 編集の有効化(_X)"
 
-#: ui/preferences.ui:144
+#: ui/preferences.ui:178
 msgid "<b>General</b>"
 msgstr "<b>全般</b>"
 
-#: ui/preferences.ui:159
+#: ui/preferences.ui:193
 msgid "_General"
 msgstr "全般(_G)"
 
-#: ui/preferences.ui:188
+#: ui/preferences.ui:222
 msgid "Poll _Disk I/O"
 msgstr "ディスク I/O の取得 (_D)"
 
-#: ui/preferences.ui:216
+#: ui/preferences.ui:250
 msgid "Poll _Network I/O"
 msgstr "ネットワーク I/O の取得(_N)"
 
-#: ui/preferences.ui:244
+#: ui/preferences.ui:278
 msgid "Poll _Memory stats"
 msgstr "メモリーの統計を取得する(_M)"
 
-#: ui/preferences.ui:272
+#: ui/preferences.ui:306
 msgid "_Update status every"
 msgstr "状態の更新間隔(_U)"
 
-#: ui/preferences.ui:309
+#: ui/preferences.ui:343
 msgid "seconds"
 msgstr "秒"
 
-#: ui/preferences.ui:328
+#: ui/preferences.ui:362
 msgid "Poll C_PU usage"
 msgstr "CPU使用率を取得する(_P)"
 
-#: ui/preferences.ui:357
+#: ui/preferences.ui:391
 msgid "<b>Stats Options</b>"
 msgstr "<b>統計オプション</b>"
 
-#: ui/preferences.ui:375
+#: ui/preferences.ui:409
 msgid "P_olling"
 msgstr "ポーリング(_O)"
 
-#: ui/preferences.ui:409
+#: ui/preferences.ui:443
 msgid "Gra_phics type:"
 msgstr "グラフィックのタイプ(_P):"
 
-#: ui/preferences.ui:422 ui/preferences.ui:448
+#: ui/preferences.ui:456 ui/preferences.ui:482
 msgid "Default storage format for new disk images."
 msgstr "新しいディスクイメージに対するデフォルトのストレージ形式。"
 
-#: ui/preferences.ui:424
+#: ui/preferences.ui:458
 msgid "_Storage format:"
 msgstr "ストレージの形式(_S):"
 
-#: ui/preferences.ui:460
+#: ui/preferences.ui:494
 msgid ""
 "Default CPU setting for new VMs. This is typically a tradeoff between "
 "performance\n"
@@ -1859,44 +1867,45 @@ msgstr ""
 "想マシン\n"
 "を移行するために、移行先のマシンにも同一の CPU が必要になります。"
 
-#: ui/preferences.ui:464
+#: ui/preferences.ui:498
 msgid "CPU _default:"
 msgstr "CPU デフォルト(_D):"
 
-#: ui/preferences.ui:488
+#: ui/preferences.ui:522
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
-msgstr "新しいVMのデフォルトファームウェア。BIOSまたはUEFIのいずれかを使用して起動し"
+msgstr ""
+"新しいVMのデフォルトファームウェア。BIOSまたはUEFIのいずれかを使用して起動し"
 "ます。"
 
-#: ui/preferences.ui:490
+#: ui/preferences.ui:524
 msgid "x86 _Firmware:"
 msgstr "x86 ファームウェア(_F):"
 
-#: ui/preferences.ui:516
+#: ui/preferences.ui:550
 msgid "<b>New VM Defaults</b>"
 msgstr "<b>新しい仮想マシンのデフォルト</b>"
 
-#: ui/preferences.ui:541
+#: ui/preferences.ui:575
 msgid "N_ew VM"
 msgstr "新しい仮想マシン(_E)"
 
-#: ui/preferences.ui:569
+#: ui/preferences.ui:603
 msgid "Graphical console _scaling:"
 msgstr "グラフィカルコンソールの縮小拡大(_S):"
 
-#: ui/preferences.ui:587
+#: ui/preferences.ui:621
 msgid "Gr_ab keys:"
 msgstr "グラブキー(_A):"
 
-#: ui/preferences.ui:602
+#: ui/preferences.ui:636
 msgid "Not supported"
 msgstr "サポートされていません"
 
-#: ui/preferences.ui:630
+#: ui/preferences.ui:664
 msgid "Change..."
 msgstr "変更..."
 
-#: ui/preferences.ui:647
+#: ui/preferences.ui:681
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
@@ -1905,15 +1914,15 @@ msgstr ""
 "現在のところ、SPICE プロトコルを使用した仮想マシンで、ゲスト上でデスクトップ"
 "エージェントが適切に設定されている時のみ機能します。"
 
-#: ui/preferences.ui:649
+#: ui/preferences.ui:683
 msgid "_Resize guest with window:"
 msgstr "ゲストのウィンドウをサイズ変更(_R):"
 
-#: ui/preferences.ui:675
+#: ui/preferences.ui:709
 msgid "SPICE _USB Redirection:"
 msgstr "Spice _USB 転送(_U):"
 
-#: ui/preferences.ui:699
+#: ui/preferences.ui:733
 msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
@@ -1921,47 +1930,47 @@ msgstr ""
 "無効化すると、 VM ウィンドウが自動的に VM グラフィカルコンソールに接続しなく"
 "なります。"
 
-#: ui/preferences.ui:701
+#: ui/preferences.ui:735
 msgid "Console autoconnec_t:"
 msgstr "コンソール自動接続(_T):"
 
-#: ui/preferences.ui:729
+#: ui/preferences.ui:763
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>グラフィックコンソール</b>"
 
-#: ui/preferences.ui:747
+#: ui/preferences.ui:781
 msgid "Conso_le"
 msgstr "コンソール(_L)"
 
-#: ui/preferences.ui:775
+#: ui/preferences.ui:809
 msgid "_Force Poweroff:"
 msgstr "強制的に電源オフ時(_F):"
 
-#: ui/preferences.ui:802
+#: ui/preferences.ui:836
 msgid "Poweroff/_Reboot/Save:"
 msgstr "電源オフ/再起動(_R)/保存時:"
 
-#: ui/preferences.ui:816
+#: ui/preferences.ui:850
 msgid "_Pause:"
 msgstr "一時停止時(_P):"
 
-#: ui/preferences.ui:869
+#: ui/preferences.ui:903
 msgid "Device re_moval:"
 msgstr "デバイスの削除時(_M):"
 
-#: ui/preferences.ui:883
+#: ui/preferences.ui:917
 msgid "_Unapplied changes:"
 msgstr "未適用の変更点(_U):"
 
-#: ui/preferences.ui:910
+#: ui/preferences.ui:944
 msgid "_Deleting storage:"
 msgstr "ストレージを削除中(_D):"
 
-#: ui/preferences.ui:939
+#: ui/preferences.ui:973
 msgid "<b>Confirmations</b>"
 msgstr "<b>確認を行う項目</b>"
 
-#: ui/preferences.ui:957
+#: ui/preferences.ui:991
 msgid "Feed_back"
 msgstr "フィードバック(_B)"
 
@@ -2135,7 +2144,7 @@ msgstr "キーの送信(_K)"
 msgid "Show the graphical console"
 msgstr "グラフィカルコンソールを表示"
 
-#: ui/vmwindow.ui:300 virtManager/addhardware.py:264
+#: ui/vmwindow.ui:300 virtManager/addhardware.py:267
 msgid "Console"
 msgstr "コンソール"
 
@@ -2196,307 +2205,308 @@ msgstr "XML(_X)"
 msgid "Error launching 'About' dialog: %s"
 msgstr "情報ダイアログを表示する際にエラーが発生しました: %s"
 
-#: virtManager/addhardware.py:174 virtManager/details/details.py:554
+#: virtManager/addhardware.py:174 virtManager/details/details.py:556
 msgid "Hardware"
 msgstr "ハードウェア"
 
-#: virtManager/addhardware.py:214 virtManager/createvm.py:506
+#: virtManager/addhardware.py:217 virtManager/createvm.py:506
 #: virtManager/device/addstorage.py:184
 msgid "Connection does not support storage management."
 msgstr "この接続ではストレージ管理をサポートしていません。"
 
-#: virtManager/addhardware.py:231 virtManager/addhardware.py:995
+#: virtManager/addhardware.py:234 virtManager/addhardware.py:1008
 msgid "Controller"
 msgstr "コントローラー"
 
-#: virtManager/addhardware.py:232 virtManager/addhardware.py:997
+#: virtManager/addhardware.py:235 virtManager/addhardware.py:1010
 #: virtManager/createnet.py:332
 msgid "Network"
 msgstr "ネットワーク"
 
-#: virtManager/addhardware.py:234 virtManager/addhardware.py:999
-#: virtManager/details/details.py:190
+#: virtManager/addhardware.py:237 virtManager/addhardware.py:1012
+#: virtManager/details/details.py:191
 msgid "Input"
 msgstr "入力"
 
-#: virtManager/addhardware.py:238 virtManager/addhardware.py:246
-#: virtManager/addhardware.py:253 virtManager/addhardware.py:261
-#: virtManager/addhardware.py:270 virtManager/addhardware.py:311
+#: virtManager/addhardware.py:241 virtManager/addhardware.py:249
+#: virtManager/addhardware.py:256 virtManager/addhardware.py:264
+#: virtManager/addhardware.py:273 virtManager/addhardware.py:314
 msgid "Not supported for this guest type."
 msgstr "このゲストタイプはサポートされていません。"
 
-#: virtManager/addhardware.py:240 virtManager/addhardware.py:1001
+#: virtManager/addhardware.py:243 virtManager/addhardware.py:1014
 msgid "Graphics"
 msgstr "グラフィック"
 
-#: virtManager/addhardware.py:242 virtManager/addhardware.py:1003
+#: virtManager/addhardware.py:245 virtManager/addhardware.py:1016
 msgid "Sound"
 msgstr "サウンド"
 
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:260
 msgid "Parallel"
 msgstr "パラレルポート"
 
-#: virtManager/addhardware.py:266
+#: virtManager/addhardware.py:269
 msgid "Channel"
 msgstr "チャンネル"
 
-#: virtManager/addhardware.py:274
+#: virtManager/addhardware.py:277
 msgid "USB Host Device"
 msgstr "USB ホストデバイス"
 
-#: virtManager/addhardware.py:278 virtManager/addhardware.py:283
-#: virtManager/addhardware.py:296
+#: virtManager/addhardware.py:281 virtManager/addhardware.py:286
+#: virtManager/addhardware.py:299
 msgid "Connection does not support host device enumeration"
 msgstr "この接続は、ホストデバイスの列挙をサポートしません"
 
-#: virtManager/addhardware.py:286
+#: virtManager/addhardware.py:289
 msgid "Not supported for containers"
 msgstr "コンテナーではサポートされません"
 
-#: virtManager/addhardware.py:288
+#: virtManager/addhardware.py:291
 msgid "PCI Host Device"
 msgstr "PCI ホストデバイス"
 
-#: virtManager/addhardware.py:292
+#: virtManager/addhardware.py:295
 msgid "MDEV Host Device"
 msgstr "MDEV ホストデバイス"
 
-#: virtManager/addhardware.py:300
+#: virtManager/addhardware.py:303
 msgid "Video"
 msgstr "ビデオ"
 
-#: virtManager/addhardware.py:304
+#: virtManager/addhardware.py:307
 msgid "Libvirt version does not support video devices."
 msgstr "このバージョンの libvirt は、ビデオデバイスをサポートしません。"
 
-#: virtManager/addhardware.py:307 virtManager/details/details.py:252
+#: virtManager/addhardware.py:310 virtManager/details/details.py:253
 #: virtManager/lib/libvirtenummap.py:107
 msgid "Watchdog"
 msgstr "Watchdog"
 
-#: virtManager/addhardware.py:313
+#: virtManager/addhardware.py:316
 msgid "Filesystem"
 msgstr "ファイルシステム"
 
-#: virtManager/addhardware.py:314 virtManager/addhardware.py:1011
-#: virtManager/details/details.py:250
+#: virtManager/addhardware.py:317 virtManager/addhardware.py:1024
+#: virtManager/details/details.py:251
 msgid "Smartcard"
 msgstr "スマートカード"
 
-#: virtManager/addhardware.py:315 virtManager/addhardware.py:1013
+#: virtManager/addhardware.py:318 virtManager/addhardware.py:1026
 msgid "USB Redirection"
 msgstr "USB リダイレクト"
 
-#: virtManager/addhardware.py:316 virtManager/addhardware.py:1015
+#: virtManager/addhardware.py:319 virtManager/addhardware.py:1028
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:317 virtManager/details/details.py:242
+#: virtManager/addhardware.py:320 virtManager/details/details.py:243
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:318 virtManager/addhardware.py:1019
-#: virtManager/details/details.py:249
+#: virtManager/addhardware.py:321 virtManager/addhardware.py:1032
+#: virtManager/details/details.py:250
 msgid "Panic Notifier"
 msgstr "パニックの通知"
 
-#: virtManager/addhardware.py:320 virtManager/details/details.py:251
+#: virtManager/addhardware.py:323 virtManager/details/details.py:252
 msgid "VirtIO VSOCK"
 msgstr "VirtIO VSOCK"
 
-#: virtManager/addhardware.py:324
+#: virtManager/addhardware.py:327
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr ""
 "このハイパーバイザー/libvirt/アーキテクチャの組み合わせはサポートされていませ"
 "ん。"
 
-#: virtManager/addhardware.py:389
+#: virtManager/addhardware.py:392
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "仮想マシン設定の変更中にエラーが発生しました: %s"
 
-#: virtManager/addhardware.py:413
+#: virtManager/addhardware.py:416
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "これらの変更は、仮想マシンを停止すると反映されます。"
 
-#: virtManager/addhardware.py:457
+#: virtManager/addhardware.py:460
 msgid "Pseudo TTY"
 msgstr "仮想 TTY"
 
-#: virtManager/addhardware.py:458
+#: virtManager/addhardware.py:461
 msgid "Output to a file"
 msgstr "ファイルに出力"
 
-#: virtManager/addhardware.py:459
+#: virtManager/addhardware.py:462
 msgid "TCP net console"
 msgstr "TCP net console"
 
-#: virtManager/addhardware.py:460
+#: virtManager/addhardware.py:463
 msgid "UDP net console"
 msgstr "UDP net console"
 
-#: virtManager/addhardware.py:461
+#: virtManager/addhardware.py:464
 msgid "UNIX socket"
 msgstr "UNIX ソケット"
 
-#: virtManager/addhardware.py:462
+#: virtManager/addhardware.py:465
 msgid "Spice agent"
 msgstr "Spice エージェント"
 
-#: virtManager/addhardware.py:463
+#: virtManager/addhardware.py:466
 msgid "Spice port"
 msgstr "Spice ポート"
 
-#: virtManager/addhardware.py:464
+#: virtManager/addhardware.py:467
 msgid "QEMU vdagent"
 msgstr "QEMU vdagent"
 
-#: virtManager/addhardware.py:480 virtManager/addhardware.py:541
+#: virtManager/addhardware.py:483 virtManager/addhardware.py:544
 msgid "IDE"
 msgstr "IDE"
 
-#: virtManager/addhardware.py:481 virtManager/details/details.py:2260
+#: virtManager/addhardware.py:484 virtManager/details/details.py:2277
 msgid "Floppy"
 msgstr "フロッピー"
 
-#: virtManager/addhardware.py:482 virtManager/addhardware.py:543
+#: virtManager/addhardware.py:485 virtManager/addhardware.py:546
 msgid "SCSI"
 msgstr "SCSI"
 
-#: virtManager/addhardware.py:483 virtManager/addhardware.py:542
+#: virtManager/addhardware.py:486 virtManager/addhardware.py:545
 msgid "SATA"
 msgstr "SATA"
 
-#: virtManager/addhardware.py:484
+#: virtManager/addhardware.py:487
 msgid "VirtIO Serial"
 msgstr "VirtIO シリアル"
 
-#: virtManager/addhardware.py:485 virtManager/addhardware.py:545
-#: virtManager/addhardware.py:596
+#: virtManager/addhardware.py:488 virtManager/addhardware.py:548
+#: virtManager/addhardware.py:599
 msgid "USB"
 msgstr "USB"
 
-#: virtManager/addhardware.py:486
+#: virtManager/addhardware.py:489
 msgid "PCI"
 msgstr "PCI"
 
-#: virtManager/addhardware.py:487
+#: virtManager/addhardware.py:490
 msgid "CCID"
 msgstr "CCID"
 
-#: virtManager/addhardware.py:488
+#: virtManager/addhardware.py:491
 msgid "xenbus"
 msgstr "xenbus"
 
-#: virtManager/addhardware.py:496 virtManager/addhardware.py:912
+#: virtManager/addhardware.py:499 virtManager/addhardware.py:922
 msgid "VirtIO SCSI"
 msgstr "VirtIO SCSI"
 
-#: virtManager/addhardware.py:499
+#: virtManager/addhardware.py:502
 msgid "PCIe"
 msgstr "PCIe"
 
-#: virtManager/addhardware.py:544
+#: virtManager/addhardware.py:547
 msgid "SD"
 msgstr "SD"
 
-#: virtManager/addhardware.py:546 virtManager/addhardware.py:597
+#: virtManager/addhardware.py:549 virtManager/addhardware.py:600
 msgid "VirtIO"
 msgstr "VirtIO"
 
-#: virtManager/addhardware.py:547 virtManager/addhardware.py:598
+#: virtManager/addhardware.py:550 virtManager/addhardware.py:601
 msgid "Xen"
 msgstr "Xen"
 
-#: virtManager/addhardware.py:554
+#: virtManager/addhardware.py:557
 msgid "Random"
 msgstr "ランダム"
 
-#: virtManager/addhardware.py:555
+#: virtManager/addhardware.py:558
 msgid "Entropy Gathering Daemon"
 msgstr "エントロピー収集デーモン"
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:559
 msgid "Builtin RNG"
 msgstr "内蔵 RNG"
 
-#: virtManager/addhardware.py:574
+#: virtManager/addhardware.py:577
 msgid "Forcefully reset the guest"
 msgstr "ゲスト OS を強制的にリセット"
 
-#: virtManager/addhardware.py:575
+#: virtManager/addhardware.py:578
 msgid "Gracefully shutdown the guest"
 msgstr "仮想マシンを正常にシャットダウン"
 
-#: virtManager/addhardware.py:576
+#: virtManager/addhardware.py:579
 msgid "Forcefully power off the guest"
 msgstr "ゲスト OS を強制終了"
 
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:580
 msgid "Pause the guest"
 msgstr "仮想マシンの一時停止"
 
-#: virtManager/addhardware.py:578
+#: virtManager/addhardware.py:581
 msgid "No action"
 msgstr "何もしない"
 
-#: virtManager/addhardware.py:579
+#: virtManager/addhardware.py:582
 msgid "Dump guest memory core"
 msgstr "ゲストメモリーコアをダンプする"
 
-#: virtManager/addhardware.py:586
+#: virtManager/addhardware.py:589
 msgid "EvTouch USB Graphics Tablet"
 msgstr "USB タブレット"
 
-#: virtManager/addhardware.py:589 virtManager/details/details.py:189
+#: virtManager/addhardware.py:592 virtManager/details/details.py:190
 msgid "Keyboard"
 msgstr "キーボード"
 
-#: virtManager/addhardware.py:590 virtManager/details/details.py:187
+#: virtManager/addhardware.py:593 virtManager/details/details.py:188
 msgid "Mouse"
 msgstr "マウス"
 
-#: virtManager/addhardware.py:591 virtManager/details/details.py:185
+#: virtManager/addhardware.py:594 virtManager/details/details.py:186
 msgid "Tablet"
 msgstr "タブレット"
 
-#: virtManager/addhardware.py:595
+#: virtManager/addhardware.py:598
 msgid "PS/2"
 msgstr "PS/2"
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:604
+#: virtManager/addhardware.py:607
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr "%(input_bus)s %(input_type)s"
 
-#: virtManager/addhardware.py:701
+#: virtManager/addhardware.py:704
 msgid "Disk device"
 msgstr "ディスクデバイス"
 
-#: virtManager/addhardware.py:702
+#: virtManager/addhardware.py:705
 msgid "CDROM device"
 msgstr "CD-ROM デバイス"
 
-#: virtManager/addhardware.py:703
+#: virtManager/addhardware.py:706
 msgid "Floppy device"
 msgstr "フロッピーデバイス"
 
-#: virtManager/addhardware.py:705
+#: virtManager/addhardware.py:708
 msgid "LUN Passthrough"
 msgstr "LUN パススルー"
 
-#: virtManager/addhardware.py:727 virtManager/addhardware.py:831
-#: virtManager/addhardware.py:840 virtManager/addhardware.py:886
-#: virtManager/addhardware.py:913 virtManager/device/addstorage.py:98
-#: virtManager/device/addstorage.py:104 virtManager/device/fsdetails.py:87
-#: virtManager/device/gfxdetails.py:105 virtManager/device/tpmdetails.py:77
-#: virtManager/device/tpmdetails.py:88 virtManager/preferences.py:171
+#: virtManager/addhardware.py:730 virtManager/addhardware.py:764
+#: virtManager/addhardware.py:841 virtManager/addhardware.py:850
+#: virtManager/addhardware.py:896 virtManager/addhardware.py:923
+#: virtManager/device/addstorage.py:98 virtManager/device/addstorage.py:104
+#: virtManager/device/fsdetails.py:87 virtManager/device/gfxdetails.py:105
+#: virtManager/device/tpmdetails.py:77 virtManager/device/tpmdetails.py:88
+#: virtManager/preferences.py:172
 msgid "Hypervisor default"
 msgstr "ハイパーバイザーのデフォルト"
 
-#: virtManager/addhardware.py:809
+#: virtManager/addhardware.py:819
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
@@ -2505,68 +2515,68 @@ msgstr ""
 "\"%s\" はホストシステムでアクティブではありません。\n"
 "ゲストに追加する前にホストシステムで mdev を起動してください。"
 
-#: virtManager/addhardware.py:818
+#: virtManager/addhardware.py:828
 msgid "No Devices Available"
 msgstr "利用可能なデバイスがありません"
 
-#: virtManager/addhardware.py:875 virtManager/device/tpmdetails.py:73
+#: virtManager/addhardware.py:885 virtManager/device/tpmdetails.py:73
 msgid "Passthrough"
 msgstr "パススルー"
 
-#: virtManager/addhardware.py:876
+#: virtManager/addhardware.py:886
 msgid "Host"
 msgstr "ホスト"
 
-#: virtManager/addhardware.py:881
+#: virtManager/addhardware.py:891
 msgid "Spice channel"
 msgstr "Spice チャンネル"
 
-#: virtManager/addhardware.py:909
+#: virtManager/addhardware.py:919
 msgid "USB 3"
 msgstr "USB 3"
 
-#: virtManager/addhardware.py:910
+#: virtManager/addhardware.py:920
 msgid "USB 2"
 msgstr "USB 2"
 
-#: virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:1018
 msgid "Video Device"
 msgstr "ビデオデバイス"
 
-#: virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:1020
 msgid "Watchdog Device"
 msgstr "Watchdog デバイス"
 
-#: virtManager/addhardware.py:1009
+#: virtManager/addhardware.py:1022
 msgid "Filesystem Passthrough"
 msgstr "ファイルシステム・パススルー"
 
-#: virtManager/addhardware.py:1017
+#: virtManager/addhardware.py:1030
 msgid "Random Number Generator"
 msgstr "乱数生成器"
 
-#: virtManager/addhardware.py:1021
+#: virtManager/addhardware.py:1034
 msgid "VM Sockets"
 msgstr "VM ソケット"
 
-#: virtManager/addhardware.py:1025 virtManager/details/details.py:2044
+#: virtManager/addhardware.py:1038 virtManager/details/details.py:2054
 #, python-format
 msgid "%s Device"
 msgstr "%s デバイス"
 
-#: virtManager/addhardware.py:1029
+#: virtManager/addhardware.py:1042
 msgid "PCI Device"
 msgstr "PCI デバイス"
 
-#: virtManager/addhardware.py:1031
+#: virtManager/addhardware.py:1044
 msgid "MDEV Device"
 msgstr "MDEV デバイス"
 
-#: virtManager/addhardware.py:1032
+#: virtManager/addhardware.py:1045
 msgid "USB Device"
 msgstr "USB デバイス"
 
-#: virtManager/addhardware.py:1149
+#: virtManager/addhardware.py:1162
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2577,11 +2587,11 @@ msgstr ""
 "複数の USB コントローラーが追加されることはサポートされていません。\n"
 "「仮想マシンの情報の表示」の画面からコントローラーのタイプを変更できます。"
 
-#: virtManager/addhardware.py:1243
+#: virtManager/addhardware.py:1256
 msgid "Are you sure you want to add this device?"
 msgstr "このデバイスを本当に追加しますか？"
 
-#: virtManager/addhardware.py:1247
+#: virtManager/addhardware.py:1260
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2589,34 +2599,34 @@ msgstr ""
 "このデバイスは実行中の仮想マシンに接続できません。仮想マシンを次に停止した時"
 "に、このデバイスを利用できるようにしますか？"
 
-#: virtManager/addhardware.py:1274
+#: virtManager/addhardware.py:1287
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "デバイスを追加できません: %s"
 
-#: virtManager/addhardware.py:1294
+#: virtManager/addhardware.py:1307
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr "デバイスパラメータの検証中にエラーが発生しました: %s"
 
-#: virtManager/addhardware.py:1303
+#: virtManager/addhardware.py:1316
 msgid "Creating device"
 msgstr "デバイスを作成中"
 
-#: virtManager/addhardware.py:1304
+#: virtManager/addhardware.py:1317
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr "デバイスによっては、完了に数分かかる場合があります。"
 
-#: virtManager/addhardware.py:1325
+#: virtManager/addhardware.py:1338
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr "このデバイスは、他の仮想マシン %s が使用しています"
 
-#: virtManager/addhardware.py:1326
+#: virtManager/addhardware.py:1339
 msgid "Do you really want to use the device?"
 msgstr "本当にこのデバイスを使用しますか？"
 
-#: virtManager/addhardware.py:1370
+#: virtManager/addhardware.py:1383
 #, python-format
 msgid "Error building device XML: %s"
 msgstr "デバイス XML の構築中にエラーが発生しました: %s"
@@ -2974,7 +2984,7 @@ msgstr[0] "最大 %(numcpus)d 個まで利用できます"
 msgid "No active connection to install on."
 msgstr "インストールに使用できる接続がありません。"
 
-#: virtManager/createvm.py:921 virtManager/details/details.py:1708
+#: virtManager/createvm.py:921 virtManager/details/details.py:1718
 #: virtManager/device/gfxdetails.py:98
 msgid "None"
 msgstr "なし"
@@ -3425,340 +3435,340 @@ msgstr "ビューアーウィンドウが閉じています。"
 msgid "Press %s to release pointer."
 msgstr "ポインターを解放するには %s を押してください。"
 
-#: virtManager/details/details.py:158
+#: virtManager/details/details.py:159
 #, python-format
 msgid "Floppy %(index)d"
 msgstr "フロッピー %(index)d"
 
-#: virtManager/details/details.py:164
+#: virtManager/details/details.py:165
 #, python-format
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%(bus)s CDROM %(index)d"
 
-#: virtManager/details/details.py:169
+#: virtManager/details/details.py:170
 #, python-format
 msgid "%(bus)s Disk %(index)d"
 msgstr "%(bus)s ディスク %(index)d"
 
-#: virtManager/details/details.py:173
+#: virtManager/details/details.py:174
 #, python-format
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%(bus)s %(device)s %(index)d"
 
-#: virtManager/details/details.py:181
+#: virtManager/details/details.py:182
 #, python-format
 msgid "NIC %(mac)s"
 msgstr "NIC %(mac)s"
 
-#: virtManager/details/details.py:194
+#: virtManager/details/details.py:195
 #, python-format
 msgid "Serial %(num)d"
 msgstr "シリアル %(num)d"
 
-#: virtManager/details/details.py:198
+#: virtManager/details/details.py:199
 #, python-format
 msgid "Parallel %(num)d"
 msgstr "パラレル %(num)d"
 
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:203
 #, python-format
 msgid "Console %(num)d"
 msgstr "コンソール %(num)d"
 
-#: virtManager/details/details.py:210
+#: virtManager/details/details.py:211
 #, python-format
 msgid "Channel (%(name)s)"
 msgstr "チャンネル (%(name)s)"
 
-#: virtManager/details/details.py:211
+#: virtManager/details/details.py:212
 #, python-format
 msgid "Channel %(type)s"
 msgstr "チャンネル %(type)s"
 
-#: virtManager/details/details.py:215
+#: virtManager/details/details.py:216
 #, python-format
 msgid "Display %s"
 msgstr "ディスプレイ %s"
 
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:218
 #, python-format
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%(bus)s リダイレクター %(index)d"
 
-#: virtManager/details/details.py:224
+#: virtManager/details/details.py:225
 #, python-format
 msgid "Sound %s"
 msgstr "サウンド %s"
 
-#: virtManager/details/details.py:226
+#: virtManager/details/details.py:227
 #, python-format
 msgid "Video %s"
 msgstr "ビデオ %s"
 
-#: virtManager/details/details.py:228
+#: virtManager/details/details.py:229
 #, python-format
 msgid "Filesystem %(path)s"
 msgstr "ファイルシステム %(path)s"
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:233
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr "コントローラー %(controller)s %(index)s"
 
-#: virtManager/details/details.py:236
+#: virtManager/details/details.py:237
 #, python-format
 msgid "Controller %(controller)s"
 msgstr "コントローラー %(controller)s"
 
-#: virtManager/details/details.py:241
+#: virtManager/details/details.py:242
 #, python-format
 msgid "RNG %(device)s"
 msgstr "RNG %(device)s"
 
-#: virtManager/details/details.py:245
+#: virtManager/details/details.py:246
 #, python-format
 msgid "TPM %(device)s"
 msgstr "TPM %(device)s"
 
-#: virtManager/details/details.py:246
+#: virtManager/details/details.py:247
 #, python-format
 msgid "TPM v%(version)s"
 msgstr "TPM v%(version)s"
 
-#: virtManager/details/details.py:496
+#: virtManager/details/details.py:498
 msgid "_Add Hardware"
 msgstr "ハードウェアを追加(_A)"
 
-#: virtManager/details/details.py:504
+#: virtManager/details/details.py:506
 msgid "_Remove Hardware"
 msgstr "ハードウェアを除去(_R)"
 
-#: virtManager/details/details.py:624 virtManager/details/details.py:1715
+#: virtManager/details/details.py:626 virtManager/details/details.py:1725
 msgid "UEFI"
 msgstr "UEFI"
 
-#: virtManager/details/details.py:632
+#: virtManager/details/details.py:634
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr ""
 "この libvirt 接続もしくはハイパーバイザーは UEFI をサポートしていません。"
 
-#: virtManager/details/details.py:635
+#: virtManager/details/details.py:637
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirt は、このホストからインストール済みの UEFI/OVMF ファームウェアイメージ"
 "を見つけることができませんでした。"
 
-#: virtManager/details/details.py:681
+#: virtManager/details/details.py:683
 msgid "Version"
 msgstr "バージョン"
 
-#: virtManager/details/details.py:743
+#: virtManager/details/details.py:745
 msgid "Application Default"
 msgstr "アプリケーションのデフォルト"
 
-#: virtManager/details/details.py:746
+#: virtManager/details/details.py:748
 msgid "Hypervisor Default"
 msgstr "ハイパーバイザーのデフォルト"
 
-#: virtManager/details/details.py:749
+#: virtManager/details/details.py:751
 msgid "Clear CPU configuration"
 msgstr "CPU の設定をクリア"
 
-#: virtManager/details/details.py:767
+#: virtManager/details/details.py:769
 msgid "Disk bus:"
 msgstr "ディスクバス:"
 
-#: virtManager/details/details.py:973
+#: virtManager/details/details.py:979
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "ハードウェアのダイアログを起動中にエラー: %s"
 
-#: virtManager/details/details.py:979
+#: virtManager/details/details.py:985
 msgid "Are you sure you want to remove this device?"
 msgstr "この仮想デバイスを本当に除去しますか?"
 
-#: virtManager/details/details.py:1230 virtManager/details/details.py:1707
-#: virtManager/details/details.py:1724 virtManager/details/details.py:1925
+#: virtManager/details/details.py:1236 virtManager/details/details.py:1717
+#: virtManager/details/details.py:1734 virtManager/details/details.py:1935
 #: virtManager/lib/libvirtenummap.py:82
 msgid "Unknown"
 msgstr "不明"
 
-#: virtManager/details/details.py:1311
+#: virtManager/details/details.py:1317
 #, python-format
 msgid "Error applying changes: %s"
 msgstr "変更適用中にエラーが発生: %s"
 
-#: virtManager/details/details.py:1438
+#: virtManager/details/details.py:1444
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "autostart 値の変更中にエラーが発生しました: %s"
 
-#: virtManager/details/details.py:1454
+#: virtManager/details/details.py:1460
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr "カーネルパスを指定せずに initrd を設定することはできません"
 
-#: virtManager/details/details.py:1457
+#: virtManager/details/details.py:1463
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr "カーネルパスを指定せずに kernel の引数を設定することはできません"
 
-#: virtManager/details/details.py:1464
+#: virtManager/details/details.py:1470
 msgid "An init path must be specified"
 msgstr "init パスを指定しなければいけません"
 
-#: virtManager/details/details.py:1476 virtManager/device/addstorage.py:271
+#: virtManager/details/details.py:1482 virtManager/device/addstorage.py:271
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "ディスク '%(path)s' は他のゲスト %(names)s で使用されています"
 
-#: virtManager/details/details.py:1480 virtManager/device/addstorage.py:275
+#: virtManager/details/details.py:1486 virtManager/device/addstorage.py:275
 msgid "Do you really want to use the disk?"
 msgstr "このディスクを本当に使用しますか？"
 
-#: virtManager/details/details.py:1629
+#: virtManager/details/details.py:1639
 msgid "Remove this device from the virtual machine"
 msgstr "仮想マシンからこのデバイスを取り外してください"
 
-#: virtManager/details/details.py:1686
+#: virtManager/details/details.py:1696
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "ハードウェアページの更新中にエラーが発生しました: %s"
 
-#: virtManager/details/details.py:1776
+#: virtManager/details/details.py:1786
 #, python-format
 msgid "%(summary)s ..."
 msgstr "%(summary)s ..."
 
-#: virtManager/details/details.py:1790
+#: virtManager/details/details.py:1800
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr "%(received)d %(units)s 読み込み"
 
-#: virtManager/details/details.py:1790
+#: virtManager/details/details.py:1800
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr "%(transferred)d %(units)s 書き込み"
 
-#: virtManager/details/details.py:1796
+#: virtManager/details/details.py:1806
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr "%(received)d %(units)s 受信"
 
-#: virtManager/details/details.py:1796
+#: virtManager/details/details.py:1806
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr "%(transferred)d %(units)s 送信"
 
-#: virtManager/details/details.py:1799 virtManager/details/details.py:1800
-#: virtManager/details/details.py:1801 virtManager/details/details.py:1802
+#: virtManager/details/details.py:1809 virtManager/details/details.py:1810
+#: virtManager/details/details.py:1811 virtManager/details/details.py:1812
 #: virtManager/hostnets.py:203 virtManager/hostnets.py:222
 msgid "Disabled"
 msgstr "無効"
 
-#: virtManager/details/details.py:1810
+#: virtManager/details/details.py:1820
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr "%(total-memory)s 中の %(current-memory)s"
 
-#: virtManager/details/details.py:1973
+#: virtManager/details/details.py:1983
 msgid "Absolute Movement"
 msgstr "絶対的動作"
 
-#: virtManager/details/details.py:1975
+#: virtManager/details/details.py:1985
 msgid "Relative Movement"
 msgstr "相対的動作"
 
-#: virtManager/details/details.py:1984 virtManager/details/details.py:2141
-#: virtManager/details/details.py:2143
+#: virtManager/details/details.py:1994 virtManager/details/details.py:2158
+#: virtManager/details/details.py:2160
 msgid "Hypervisor does not support removing this device"
 msgstr "ハイパーバイザーは、このデバイスの取り外しをサポートしていません"
 
-#: virtManager/details/details.py:1988
+#: virtManager/details/details.py:1998
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s サーバー"
 
-#: virtManager/details/details.py:2036
+#: virtManager/details/details.py:2046
 msgid "Serial Device"
 msgstr "シリアルデバイス"
 
-#: virtManager/details/details.py:2038
+#: virtManager/details/details.py:2048
 msgid "Parallel Device"
 msgstr "パラレルデバイス"
 
-#: virtManager/details/details.py:2040
+#: virtManager/details/details.py:2050
 msgid "Console Device"
 msgstr "コンソールデバイス"
 
-#: virtManager/details/details.py:2042
+#: virtManager/details/details.py:2052
 msgid "Channel Device"
 msgstr "チャンネルデバイス"
 
-#: virtManager/details/details.py:2051
+#: virtManager/details/details.py:2061
 msgid "Primary Console"
 msgstr "プライマリーコンソール"
 
-#: virtManager/details/details.py:2085 virtManager/preferences.py:121
+#: virtManager/details/details.py:2095 virtManager/preferences.py:122
 msgid "Off"
 msgstr "オフ"
 
-#: virtManager/details/details.py:2085 virtManager/preferences.py:122
+#: virtManager/details/details.py:2095 virtManager/preferences.py:123
 msgid "On"
 msgstr "オン"
 
-#: virtManager/details/details.py:2110
+#: virtManager/details/details.py:2127
 #, python-format
 msgid "Physical %s Device"
 msgstr "物理 %s デバイス"
 
-#: virtManager/details/details.py:2126
+#: virtManager/details/details.py:2143
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 "グラフィック／ディスプレイが割り当てられているため、最後のビデオデバイスを削"
 "除できません。"
 
-#: virtManager/details/details.py:2150
+#: virtManager/details/details.py:2167
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr "%(address)s の %(device)s"
 
-#: virtManager/details/details.py:2156 virtManager/details/details.py:2165
+#: virtManager/details/details.py:2173 virtManager/details/details.py:2182
 msgid "Cannot remove controller while devices are attached."
 msgstr "デバイスが接続されている間はコントローラーを削除できません。"
 
-#: virtManager/details/details.py:2257
+#: virtManager/details/details.py:2274
 msgid "Hard Disk"
 msgstr "ハードディスク"
 
-#: virtManager/details/details.py:2258
+#: virtManager/details/details.py:2275
 msgid "CDROM"
 msgstr "CD-ROM"
 
-#: virtManager/details/details.py:2259
+#: virtManager/details/details.py:2276
 msgid "Network (PXE)"
 msgstr "ネットワーク (PXE)"
 
-#: virtManager/details/details.py:2274
+#: virtManager/details/details.py:2291
 msgid "No bootable devices"
 msgstr "起動デバイスがありません"
 
-#: virtManager/details/details.py:2320
+#: virtManager/details/details.py:2337
 msgid "Overview"
 msgstr "概要"
 
-#: virtManager/details/details.py:2321
+#: virtManager/details/details.py:2338
 msgid "OS information"
 msgstr "OS の情報"
 
-#: virtManager/details/details.py:2323
+#: virtManager/details/details.py:2340
 msgid "Performance"
 msgstr "性能"
 
-#: virtManager/details/details.py:2324
+#: virtManager/details/details.py:2341
 msgid "CPUs"
 msgstr "CPU 数"
 
-#: virtManager/details/details.py:2326
+#: virtManager/details/details.py:2343
 msgid "Boot Options"
 msgstr "ブートオプション"
 
@@ -3810,7 +3820,8 @@ msgstr "仮想マシンのスナップショットを作成中"
 msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
-msgstr "同じ仮想マシンに対して外部スナップショットと内部スナップショットを混在させる"
+msgstr ""
+"同じ仮想マシンに対して外部スナップショットと内部スナップショットを混在させる"
 "のはお勧めできません。続行してもよろしいですか？"
 
 #: virtManager/details/snapshots.py:503
@@ -4042,7 +4053,8 @@ msgstr "ソースパス(_S):"
 
 #: virtManager/device/fsdetails.py:154
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
-msgstr "'メモリ' 画面で '共有メモリを有効にする' を選択する必要があるかもしれません。"
+msgstr ""
+"'メモリ' 画面で '共有メモリを有効にする' を選択する必要があるかもしれません。"
 
 #: virtManager/device/gfxdetails.py:89
 msgid "Spice server"
@@ -4375,7 +4387,8 @@ msgstr ""
 #: virtManager/lib/connectauth.py:170
 msgid ""
 "Verify that an appropriate libvirt daemon is running on the remote host."
-msgstr "接続先のホストで適切な libvirt デーモンが動作していることをご確認ください。"
+msgstr ""
+"接続先のホストで適切な libvirt デーモンが動作していることをご確認ください。"
 
 #: virtManager/lib/connectauth.py:174
 msgid ""
@@ -4417,8 +4430,8 @@ msgid ""
 "on this host."
 msgstr ""
 "デフォルトのハイパーバイザーが検出できません。このホストで仮想化環境を管理す"
-"るのに必要となる、 QEMU/KVM 仮想化パッケージおよび libvirt "
-"パッケージをインストールしていることをご確認ください。"
+"るのに必要となる、 QEMU/KVM 仮想化パッケージおよび libvirt パッケージをインス"
+"トールしていることをご確認ください。"
 
 #: virtManager/lib/connectauth.py:227
 msgid ""
@@ -4713,7 +4726,8 @@ msgstr "<numa> が設定されている場合、共有メモリ設定は変更�
 
 #: virtManager/object/domain.py:450
 msgid "Libvirt may not be new enough to support memfd."
-msgstr "memfd をサポートできるほど libvirt が新しいものではないかもしれません。"
+msgstr ""
+"memfd をサポートできるほど libvirt が新しいものではないかもしれません。"
 
 #: virtManager/object/domain.py:468
 msgid "Libvirt connection does not support snapshots."
@@ -4724,11 +4738,11 @@ msgstr "libvirt 接続は、スナップショットをサポートしていま�
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "非稼働の仮想マシンで、指定したデバイスが見つかりませんでした: %s"
 
-#: virtManager/object/domain.py:1487
+#: virtManager/object/domain.py:1490
 msgid "Saving domain to disk"
 msgstr "仮想マシンをディスクに保存中"
 
-#: virtManager/object/domain.py:1552
+#: virtManager/object/domain.py:1555
 msgid "Migrating domain"
 msgstr "仮想マシンをマイグレーション中"
 
@@ -4804,58 +4818,58 @@ msgstr "ZFS プール"
 msgid "Type to start searching..."
 msgstr "入力して検索..."
 
-#: virtManager/preferences.py:27
+#: virtManager/preferences.py:28
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "設定ダイアログを表示する際にエラーが発生しました: %s"
 
-#: virtManager/preferences.py:112
+#: virtManager/preferences.py:113
 msgid "Always"
 msgstr "常に"
 
-#: virtManager/preferences.py:112
+#: virtManager/preferences.py:113
 msgid "Fullscreen only"
 msgstr "全画面表示のみ"
 
-#: virtManager/preferences.py:112
+#: virtManager/preferences.py:113
 msgid "Never"
 msgstr "しない"
 
-#: virtManager/preferences.py:124 virtManager/preferences.py:146
-#: virtManager/preferences.py:158
+#: virtManager/preferences.py:125 virtManager/preferences.py:147
+#: virtManager/preferences.py:159
 #, python-format
 msgid "System default (%s)"
 msgstr "システムのデフォルト(%s)"
 
-#: virtManager/preferences.py:134
+#: virtManager/preferences.py:135
 msgid "Manual redirect only"
 msgstr "手動redirectのみ"
 
-#: virtManager/preferences.py:135
+#: virtManager/preferences.py:136
 msgid "Auto redirect on USB attach"
 msgstr "USB接続時の自動redirect"
 
-#: virtManager/preferences.py:170
+#: virtManager/preferences.py:171
 msgid "Application default"
 msgstr "アプリケーションのデフォルト"
 
-#: virtManager/preferences.py:172
+#: virtManager/preferences.py:173
 msgid "Nearest host CPU model"
 msgstr "最も近いホストの CPU モデル"
 
-#: virtManager/preferences.py:184
+#: virtManager/preferences.py:185
 msgid "System default"
 msgstr "システムのデフォルト"
 
-#: virtManager/preferences.py:192
+#: virtManager/preferences.py:193
 msgid "python libguestfs support is not installed"
 msgstr "python libguestfsサポートがインストールされていません"
 
-#: virtManager/preferences.py:332
+#: virtManager/preferences.py:338
 msgid "Configure grab key combination"
 msgstr "garb キーの組み合わせを設定する"
 
-#: virtManager/preferences.py:342
+#: virtManager/preferences.py:348
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
@@ -4865,7 +4879,7 @@ msgstr ""
 "garb キーを定義することができます。キーを押した\n"
 "まま、[OK]ボタンをクリックしてください。"
 
-#: virtManager/preferences.py:347
+#: virtManager/preferences.py:353
 msgid "Please press desired grab key combination"
 msgstr "希望するグラブキーの組み合わせを押してください"
 
@@ -4908,6 +4922,12 @@ msgstr "リモート接続では、ローカルストレージは利用できま
 #: virtManager/systray.py:118
 msgid "_Show Virtual Machine Manager"
 msgstr "仮想マシンマネージャーを表示する(_S)"
+
+#: virtManager/systray.py:419
+msgid ""
+"AppIndicator not installed or usable, system tray icon not available on "
+"Wayland"
+msgstr ""
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5757,7 +5777,7 @@ msgstr "%s が複数のノードデバイスと対応しています"
 msgid "Did not find a matching node device for '%s'"
 msgstr "'%s' に一致するノードデバイスを見つけられませんでした"
 
-#: virtinst/cli.py:5372
+#: virtinst/cli.py:5378
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5878,12 +5898,12 @@ msgstr "ファイルシステムのターゲット '%s' は、絶対パスであ
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s は 5900 以上にしてください。自動割り当ての場合は -1 にします"
 
-#: virtinst/devices/hostdev.py:85
+#: virtinst/devices/hostdev.py:87
 #, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr "mdev タイプ id '%s' に対する nodedev の生成方法がわかりません"
 
-#: virtinst/devices/hostdev.py:91 virtinst/devices/interface.py:357
+#: virtinst/devices/hostdev.py:93 virtinst/devices/interface.py:357
 #, python-format
 msgid "Unsupported node device type '%s'"
 msgstr "サポート対象外のノードデバイスタイプ '%s'"
@@ -5944,17 +5964,23 @@ msgid ""
 "cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
 "count %(vcpus)d"
 msgstr ""
-"トポロジから算出される合計 CPU 数 (ソケット数=%(sockets)d * ダイ数=%(dies)d *"
-" コア数=%(cores)d * スレッド数=%(threads)d == %(total)d) が vCPU 数 %(vcpus)"
-"d と合致していません"
+"トポロジから算出される合計 CPU 数 (ソケット数=%(sockets)d * ダイ数=%(dies)d "
+"* コア数=%(cores)d * スレッド数=%(threads)d == %(total)d) が vCPU 数 "
+"%(vcpus)d と合致していません"
 
-#: virtinst/domain/launch_security.py:28
+#: virtinst/domain/launch_security.py:33
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr "SEV 実行時セキュリティには Q35 UEFI マシンが必要です"
 
-#: virtinst/domain/launch_security.py:42
+#: virtinst/domain/launch_security.py:47
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP 実行時セキュリティには Q35 UEFI マシンが必要です"
+
+#: virtinst/domain/launch_security.py:51
+#, fuzzy
+#| msgid "SEV launch security requires a Q35 UEFI machine"
+msgid "TDX launch security requires a Q35 UEFI machine"
+msgstr "SEV 実行時セキュリティには Q35 UEFI マシンが必要です"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -5988,16 +6014,16 @@ msgstr "ゲスト"
 msgid "Guest name '%s' is already in use."
 msgstr "ゲスト名 '%s' はすでに使用中です。"
 
-#: virtinst/guest.py:1095
+#: virtinst/guest.py:1088
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt バージョンが UEFI に対応していません。"
 
-#: virtinst/guest.py:1099
+#: virtinst/guest.py:1092
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr "アーキテクチャー '%s' に対する UEFI の設定方法がわかりません"
 
-#: virtinst/guest.py:1104
+#: virtinst/guest.py:1097
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr "アーキテクチャー '%s' の UEFI バイナリーパスが見つかりませんでした"
@@ -6156,7 +6182,8 @@ msgstr "未知の libosinfo ID '%s' です"
 #: virtinst/osdict.py:111
 #, python-format
 msgid "Unknown OS name '%s'. See `--osinfo list` for valid values."
-msgstr "不明な OS 名 '%s' です。指定可能な値の一覧は `--osinfo list` で取得できます。"
+msgstr ""
+"不明な OS 名 '%s' です。指定可能な値の一覧は `--osinfo list` で取得できます。"
 
 #: virtinst/osdict.py:535
 #, python-format
@@ -6478,9 +6505,8 @@ msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"--osinfo {osname} "
-"を指定することで、仮想マシンのパフォーマンスに影響を与えることができます。最"
-"適なパフォーマンスを得るには正確に指定してください。"
+"--osinfo {osname} を指定することで、仮想マシンのパフォーマンスに影響を与える"
+"ことができます。最適なパフォーマンスを得るには正確に指定してください。"
 
 #: virtinst/virtinstall.py:401
 #, python-brace-format
@@ -6515,10 +6541,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
-"インストールメディアからの OS 検出に失敗しました。代替名 '{name}' "
-"を使用します。\n"
-"このメディアが正しいインストールメディアである場合は、 virt-install "
-"のバグとして報告をお願いします。"
+"インストールメディアからの OS 検出に失敗しました。代替名 '{name}' を使用しま"
+"す。\n"
+"このメディアが正しいインストールメディアである場合は、 virt-install のバグと"
+"して報告をお願いします。"
 
 #: virtinst/virtinstall.py:587
 #, python-format
@@ -6895,7 +6921,8 @@ msgstr "%s に対して該当するオブジェクトが見つかりません"
 #, python-brace-format
 msgid ""
 "'--edit {option}' doesn't make sense with {cli_flag}, just use empty '--edit'"
-msgstr "'--edit {option}' と {cli_flag} は一緒に指定しても意味がありません。'--edit' "
+msgstr ""
+"'--edit {option}' と {cli_flag} は一緒に指定しても意味がありません。'--edit' "
 "だけを指定してください"
 
 #: virtinst/virtxml.py:334
@@ -7097,8 +7124,9 @@ msgstr "既存の仮想マシンを PC/i440FX から Q35 に変換します。"
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
-msgstr "既存の仮想マシンに対して VNC グラフィックを使用するように変換します。"
-"あわせて spice グラフィックの残骸も削除します。"
+msgstr ""
+"既存の仮想マシンに対して VNC グラフィックを使用するように変換します。あわせ"
+"て spice グラフィックの残骸も削除します。"
 
 #: virtinst/virtxml.py:555
 msgid "XML options"
