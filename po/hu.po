@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
-"POT-Creation-Date: 2025-06-18 16:59+0200\n"
+"POT-Creation-Date: 2025-08-25 23:23+0200\n"
 "PO-Revision-Date: 2024-08-20 11:38+0000\n"
 "Last-Translator: Hoppár Zoltán <hopparz@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.fedoraproject.org/projects/virt-"
@@ -104,7 +104,7 @@ msgstr "Virtuális gépek menedzselése"
 #: data/virt-manager.desktop.in:10
 #, fuzzy
 #| msgid "virtualization type '%s'"
-msgid "virtualization;libvirt;vm;vmm;"
+msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 msgstr "virtualizáció típusa '%s'"
 
 #: ui/about.ui:10
@@ -132,14 +132,14 @@ msgstr "Esz_köz tipusa:"
 msgid "_Bus type:"
 msgstr "_Busz típusa:"
 
-#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1178
+#: ui/addhardware.ui:261 ui/addhardware.ui:532 ui/addhardware.ui:1214
 #: ui/createpool.ui:355 ui/fsdetails.ui:87 ui/gfxdetails.ui:107
 #: ui/tpmdetails.ui:49
 msgid "_Type:"
 msgstr "_Típus:"
 
-#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:963
-#: ui/addhardware.ui:1031 ui/addhardware.ui:1308 ui/tpmdetails.ui:99
+#: ui/addhardware.ui:275 ui/addhardware.ui:613 ui/addhardware.ui:999
+#: ui/addhardware.ui:1067 ui/addhardware.ui:1344 ui/tpmdetails.ui:99
 msgid "_Model:"
 msgstr "_Modell:"
 
@@ -159,67 +159,73 @@ msgstr "_MAC-cím:"
 msgid "Device mode_l:"
 msgstr "Eszköz mode_ll:"
 
-#: ui/addhardware.ui:673 ui/addhardware.ui:1255
+#: ui/addhardware.ui:673 ui/addhardware.ui:1291
 msgid "Host _Device:"
 msgstr "Kiszolgáló eszköz:"
 
-#: ui/addhardware.ui:749
+#: ui/addhardware.ui:715 ui/details.ui:3844
+#, fuzzy
+#| msgid "Start Pool"
+msgid "Startup Policy:"
+msgstr "Állapotfigyelés indítása"
+
+#: ui/addhardware.ui:785
 msgid "_Path:"
 msgstr "_Elérési út:"
 
-#: ui/addhardware.ui:763
+#: ui/addhardware.ui:799
 msgid "Device _Type:"
 msgstr "Eszköz _típusa:"
 
-#: ui/addhardware.ui:789
+#: ui/addhardware.ui:825
 msgid "T_ype:"
 msgstr "Típ_us:"
 
-#: ui/addhardware.ui:803 ui/clone.ui:480 ui/createnet.ui:213
+#: ui/addhardware.ui:839 ui/clone.ui:480 ui/createnet.ui:213
 #: ui/createpool.ui:330 ui/createvm.ui:2152 ui/createvol.ui:185
 #: ui/details.ui:218 ui/host.ui:169 ui/snapshotsnew.ui:103
 msgid "_Name:"
 msgstr "_Név:"
 
-#: ui/addhardware.ui:840
+#: ui/addhardware.ui:876
 #, fuzzy
 msgid "_Auto socket:"
 msgstr "_Auto socket:"
 
-#: ui/addhardware.ui:868
+#: ui/addhardware.ui:904
 msgid "_Channel:"
 msgstr "_Csatorna:"
 
-#: ui/addhardware.ui:908
+#: ui/addhardware.ui:944
 msgid "_Share Clipboard:"
 msgstr ""
 
-#: ui/addhardware.ui:1044 ui/details.ui:4029
+#: ui/addhardware.ui:1080 ui/details.ui:4054
 msgid "Ac_tion:"
 msgstr "Műv_elet:"
 
-#: ui/addhardware.ui:1136 ui/createnet.ui:139
+#: ui/addhardware.ui:1172 ui/createnet.ui:139
 msgid "_Mode:"
 msgstr "_Mód:"
 
-#: ui/addhardware.ui:1289 ui/details.ui:4717
+#: ui/addhardware.ui:1325 ui/details.ui:4742
 #, fuzzy
 msgid "rng"
 msgstr "rng"
 
-#: ui/addhardware.ui:1347 ui/details.ui:4799
+#: ui/addhardware.ui:1383 ui/details.ui:4824
 msgid "panic"
 msgstr "pánik"
 
-#: ui/addhardware.ui:1453 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
+#: ui/addhardware.ui:1489 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
 #: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
 #: ui/createpool.ui:478 ui/createvm.ui:2400 ui/createvol.ui:462
-#: ui/delete.ui:181 ui/details.ui:4895 ui/hoststorage.ui:154 ui/migrate.ui:638
+#: ui/delete.ui:181 ui/details.ui:4920 ui/hoststorage.ui:154 ui/migrate.ui:638
 #: ui/snapshotsnew.ui:343
 msgid "_Cancel"
 msgstr "_Megszakítás"
 
-#: ui/addhardware.ui:1468 ui/createnet.ui:813 ui/createpool.ui:493
+#: ui/addhardware.ui:1504 ui/createnet.ui:813 ui/createpool.ui:493
 #: ui/createvm.ui:2446 ui/createvol.ui:477 ui/snapshotsnew.ui:358
 msgid "_Finish"
 msgstr "_Befejezés"
@@ -370,7 +376,7 @@ msgstr "K_lónozás"
 msgid "<b>The console is currently unavailable</b>"
 msgstr "<b>A konzol jelenleg elérhetetlen</b>"
 
-#: ui/console.ui:57 virtManager/addhardware.py:249
+#: ui/console.ui:57 virtManager/addhardware.py:252
 msgid "Serial"
 msgstr "Soros"
 
@@ -625,7 +631,7 @@ msgstr "_Virtualizáció típusa:"
 msgid "Architecture options"
 msgstr "Architektúra tulajdonságok"
 
-#: ui/createvm.ui:748 virtManager/details/details.py:680
+#: ui/createvm.ui:748 virtManager/details/details.py:682
 #: virtManager/manager.py:321 virtManager/oslist.py:70
 msgid "Name"
 msgstr "Név"
@@ -771,7 +777,7 @@ msgstr "C_PU-k:"
 msgid "(Insert host mem)"
 msgstr "(Adja meg a gép memóriát)"
 
-#: ui/createvm.ui:1987 virtManager/details/details.py:2325
+#: ui/createvm.ui:1987 virtManager/details/details.py:2342
 msgid "Memory"
 msgstr "Memória"
 
@@ -779,8 +785,8 @@ msgstr "Memória"
 msgid "_Enable storage for this virtual machine"
 msgstr ""
 
-#: ui/createvm.ui:2040 virtManager/addhardware.py:225
-#: virtManager/addhardware.py:993 virtManager/clone.py:279
+#: ui/createvm.ui:2040 virtManager/addhardware.py:228
+#: virtManager/addhardware.py:1006 virtManager/clone.py:279
 msgid "Storage"
 msgstr "Tároló"
 
@@ -1001,12 +1007,12 @@ msgstr "<small>A vCPU túlfoglalás teljesítmény veszteséget okozhat</small>"
 msgid "<b>CPUs</b>"
 msgstr "<b>CPU-k</b>"
 
-#: ui/details.ui:1443 ui/details.ui:3422 ui/details.ui:3908 ui/details.ui:4044
-#: ui/details.ui:4203
+#: ui/details.ui:1443 ui/details.ui:3422 ui/details.ui:3933 ui/details.ui:4069
+#: ui/details.ui:4228
 msgid "M_odel:"
 msgstr "M_odell:"
 
-#: ui/details.ui:1454 virtManager/details/details.py:1884
+#: ui/details.ui:1454 virtManager/details/details.py:1894
 msgid "Copy host CP_U configuration"
 msgstr ""
 
@@ -1180,7 +1186,7 @@ msgstr ""
 msgid "<b>Virtual Network Interface</b>"
 msgstr "<b>Virtuális hálózati interfész</b>"
 
-#: ui/details.ui:3242 ui/details.ui:4156 ui/details.ui:4478 ui/details.ui:4654
+#: ui/details.ui:3242 ui/details.ui:4181 ui/details.ui:4503 ui/details.ui:4679
 msgid "Type:"
 msgstr "Típus:"
 
@@ -1254,77 +1260,77 @@ msgstr "Eszköz:"
 msgid "ROM _BAR:"
 msgstr ""
 
-#: ui/details.ui:3939
+#: ui/details.ui:3964
 msgid "_3D acceleration:"
 msgstr ""
 
-#: ui/details.ui:3967
+#: ui/details.ui:3992
 msgid "<b>Video</b>"
 msgstr "<b>Videó</b>"
 
-#: ui/details.ui:4219
+#: ui/details.ui:4244
 msgid "Devices:"
 msgstr ""
 
-#: ui/details.ui:4275
+#: ui/details.ui:4300
 msgid "<b>Controller</b>"
 msgstr "<b>Vezérlő</b>"
 
-#: ui/details.ui:4321
+#: ui/details.ui:4346
 msgid "<b>Filesystem</b>"
 msgstr "<b>Fájlrendszer</b>"
 
-#: ui/details.ui:4376 ui/migrate.ui:390
+#: ui/details.ui:4401 ui/migrate.ui:390
 msgid "M_ode:"
 msgstr "Mó_d:"
 
-#: ui/details.ui:4421
+#: ui/details.ui:4446
 msgid "<b>Smartcard Device</b>"
 msgstr "<b>Smartcard eszköz</b>"
 
-#: ui/details.ui:4490
+#: ui/details.ui:4515
 msgid "Address:"
 msgstr "Cím:"
 
-#: ui/details.ui:4502
+#: ui/details.ui:4527
 msgid "foo:12"
 msgstr "valami:12"
 
-#: ui/details.ui:4534
+#: ui/details.ui:4559
 msgid "<b>Redirected device</b>"
 msgstr "<b>Átirányított eszköz</b>"
 
-#: ui/details.ui:4586
+#: ui/details.ui:4611
 msgid "<b>TPM Device</b>"
 msgstr "<b>TPM eszköz</b>"
 
-#: ui/details.ui:4679
+#: ui/details.ui:4704
 msgid "Host Device:"
 msgstr ""
 
-#: ui/details.ui:4699
+#: ui/details.ui:4724
 msgid "<b>Random Number Generator</b>"
 msgstr "<b>Véletlenszám generátor</b>"
 
-#: ui/details.ui:4749
+#: ui/details.ui:4774
 msgid "Model:"
 msgstr ""
 
-#: ui/details.ui:4761
+#: ui/details.ui:4786
 msgid "panic-model"
 msgstr ""
 
-#: ui/details.ui:4781
+#: ui/details.ui:4806
 msgid "<b>Panic Notifier</b>"
 msgstr ""
 
-#: ui/details.ui:4874
+#: ui/details.ui:4899
 #, fuzzy
 #| msgid "Removable"
 msgid "_Remove"
 msgstr "Eltávolítható"
 
-#: ui/details.ui:4915 ui/hostnets.ui:652 ui/hoststorage.ui:186
+#: ui/details.ui:4940 ui/hostnets.ui:652 ui/hoststorage.ui:186
 #: ui/snapshots.ui:499
 msgid "_Apply"
 msgstr ""
@@ -1541,7 +1547,7 @@ msgstr "Kapcsolat hozzá_adása…"
 msgid "_New Virtual Machine"
 msgstr "Ú_j virtuális gép"
 
-#: ui/manager.ui:59 ui/preferences.ui:979 ui/vmwindow.ui:49
+#: ui/manager.ui:59 ui/preferences.ui:1013 ui/vmwindow.ui:49
 msgid "_Close"
 msgstr ""
 
@@ -1782,59 +1788,59 @@ msgstr ""
 msgid "Enable _XML editing"
 msgstr ""
 
-#: ui/preferences.ui:144
+#: ui/preferences.ui:178
 msgid "<b>General</b>"
 msgstr "<b>Általános</b>"
 
-#: ui/preferences.ui:159
+#: ui/preferences.ui:193
 msgid "_General"
 msgstr "Á_ltalános"
 
-#: ui/preferences.ui:188
+#: ui/preferences.ui:222
 msgid "Poll _Disk I/O"
 msgstr "_Lemez I/O követése"
 
-#: ui/preferences.ui:216
+#: ui/preferences.ui:250
 msgid "Poll _Network I/O"
 msgstr "_Hálózati I/O követése"
 
-#: ui/preferences.ui:244
+#: ui/preferences.ui:278
 msgid "Poll _Memory stats"
 msgstr "_Memóriastatisztika követése"
 
-#: ui/preferences.ui:272
+#: ui/preferences.ui:306
 msgid "_Update status every"
 msgstr "Állapot _frissítése minden"
 
-#: ui/preferences.ui:309
+#: ui/preferences.ui:343
 msgid "seconds"
 msgstr "másodpercek"
 
-#: ui/preferences.ui:328
+#: ui/preferences.ui:362
 msgid "Poll C_PU usage"
 msgstr "C_PU használat követése"
 
-#: ui/preferences.ui:357
+#: ui/preferences.ui:391
 msgid "<b>Stats Options</b>"
 msgstr "<b>Statisztika beállításai</b>"
 
-#: ui/preferences.ui:375
+#: ui/preferences.ui:409
 msgid "P_olling"
 msgstr ""
 
-#: ui/preferences.ui:409
+#: ui/preferences.ui:443
 msgid "Gra_phics type:"
 msgstr ""
 
-#: ui/preferences.ui:422 ui/preferences.ui:448
+#: ui/preferences.ui:456 ui/preferences.ui:482
 msgid "Default storage format for new disk images."
 msgstr "Az új lemezképek alapértelmezett tároló formátuma."
 
-#: ui/preferences.ui:424
+#: ui/preferences.ui:458
 msgid "_Storage format:"
 msgstr "_Tároló formátum:"
 
-#: ui/preferences.ui:460
+#: ui/preferences.ui:494
 msgid ""
 "Default CPU setting for new VMs. This is typically a tradeoff between "
 "performance\n"
@@ -1843,105 +1849,105 @@ msgid ""
 "identical CPUs in order to migrate the VM."
 msgstr ""
 
-#: ui/preferences.ui:464
+#: ui/preferences.ui:498
 msgid "CPU _default:"
 msgstr ""
 
-#: ui/preferences.ui:488
+#: ui/preferences.ui:522
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
 
-#: ui/preferences.ui:490
+#: ui/preferences.ui:524
 msgid "x86 _Firmware:"
 msgstr ""
 
-#: ui/preferences.ui:516
+#: ui/preferences.ui:550
 msgid "<b>New VM Defaults</b>"
 msgstr "<b>Új VM alapbeállításai</b>"
 
-#: ui/preferences.ui:541
+#: ui/preferences.ui:575
 msgid "N_ew VM"
 msgstr "Ú_j VM"
 
-#: ui/preferences.ui:569
+#: ui/preferences.ui:603
 msgid "Graphical console _scaling:"
 msgstr "Grafikus konzol _méretezése:"
 
-#: ui/preferences.ui:587
+#: ui/preferences.ui:621
 msgid "Gr_ab keys:"
 msgstr ""
 
-#: ui/preferences.ui:602
+#: ui/preferences.ui:636
 msgid "Not supported"
 msgstr "Nem támogatott"
 
-#: ui/preferences.ui:630
+#: ui/preferences.ui:664
 msgid "Change..."
 msgstr "Módosítás…"
 
-#: ui/preferences.ui:647
+#: ui/preferences.ui:681
 msgid ""
 "Change guest resolution when the guest window size is changed. Only works "
 "with properly configured guest using spice and the desktop agent."
 msgstr ""
 
-#: ui/preferences.ui:649
+#: ui/preferences.ui:683
 msgid "_Resize guest with window:"
 msgstr "Vendég átmé_retezése az ablakkal:"
 
-#: ui/preferences.ui:675
+#: ui/preferences.ui:709
 msgid "SPICE _USB Redirection:"
 msgstr ""
 
-#: ui/preferences.ui:699
+#: ui/preferences.ui:733
 msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
 
-#: ui/preferences.ui:701
+#: ui/preferences.ui:735
 #, fuzzy
 #| msgid "_Autoconnect:"
 msgid "Console autoconnec_t:"
 msgstr "_Automatikus csatlakozás:"
 
-#: ui/preferences.ui:729
+#: ui/preferences.ui:763
 msgid "<b>Graphical Consoles</b>"
 msgstr "<b>Grafikus konzolok</b>"
 
-#: ui/preferences.ui:747
+#: ui/preferences.ui:781
 msgid "Conso_le"
 msgstr "Konzo_l"
 
-#: ui/preferences.ui:775
+#: ui/preferences.ui:809
 msgid "_Force Poweroff:"
 msgstr "_Kényszerített leállítás:"
 
-#: ui/preferences.ui:802
+#: ui/preferences.ui:836
 msgid "Poweroff/_Reboot/Save:"
 msgstr "Leállítás/Új_raindítás/Mentés:"
 
-#: ui/preferences.ui:816
+#: ui/preferences.ui:850
 msgid "_Pause:"
 msgstr "_Felfüggesztés:"
 
-#: ui/preferences.ui:869
+#: ui/preferences.ui:903
 msgid "Device re_moval:"
 msgstr "_Eszköz eltávolítása:"
 
-#: ui/preferences.ui:883
+#: ui/preferences.ui:917
 msgid "_Unapplied changes:"
 msgstr "_Nem érvényesített változások:"
 
-#: ui/preferences.ui:910
+#: ui/preferences.ui:944
 msgid "_Deleting storage:"
 msgstr "Tároló _törlése:"
 
-#: ui/preferences.ui:939
+#: ui/preferences.ui:973
 msgid "<b>Confirmations</b>"
 msgstr "<b>Megerősítések</b>"
 
-#: ui/preferences.ui:957
+#: ui/preferences.ui:991
 msgid "Feed_back"
 msgstr "Vissza_jelzés"
 
@@ -2122,7 +2128,7 @@ msgstr "Billentyű _kód küldése"
 msgid "Show the graphical console"
 msgstr "Grafikus konzol megjelenítése"
 
-#: ui/vmwindow.ui:300 virtManager/addhardware.py:264
+#: ui/vmwindow.ui:300 virtManager/addhardware.py:267
 msgid "Console"
 msgstr "Konzol"
 
@@ -2182,383 +2188,384 @@ msgstr ""
 msgid "Error launching 'About' dialog: %s"
 msgstr "Hiba a „Névjegy” párbeszédablak indításakor: %s"
 
-#: virtManager/addhardware.py:174 virtManager/details/details.py:554
+#: virtManager/addhardware.py:174 virtManager/details/details.py:556
 msgid "Hardware"
 msgstr "Hardver"
 
-#: virtManager/addhardware.py:214 virtManager/createvm.py:506
+#: virtManager/addhardware.py:217 virtManager/createvm.py:506
 #: virtManager/device/addstorage.py:184
 msgid "Connection does not support storage management."
 msgstr "A kapcsolat nem támogatja a tárolókezelést."
 
-#: virtManager/addhardware.py:231 virtManager/addhardware.py:995
+#: virtManager/addhardware.py:234 virtManager/addhardware.py:1008
 msgid "Controller"
 msgstr "Vezérlő"
 
-#: virtManager/addhardware.py:232 virtManager/addhardware.py:997
+#: virtManager/addhardware.py:235 virtManager/addhardware.py:1010
 #: virtManager/createnet.py:332
 msgid "Network"
 msgstr "Hálózat"
 
-#: virtManager/addhardware.py:234 virtManager/addhardware.py:999
-#: virtManager/details/details.py:190
+#: virtManager/addhardware.py:237 virtManager/addhardware.py:1012
+#: virtManager/details/details.py:191
 msgid "Input"
 msgstr "Bemenet"
 
-#: virtManager/addhardware.py:238 virtManager/addhardware.py:246
-#: virtManager/addhardware.py:253 virtManager/addhardware.py:261
-#: virtManager/addhardware.py:270 virtManager/addhardware.py:311
+#: virtManager/addhardware.py:241 virtManager/addhardware.py:249
+#: virtManager/addhardware.py:256 virtManager/addhardware.py:264
+#: virtManager/addhardware.py:273 virtManager/addhardware.py:314
 msgid "Not supported for this guest type."
 msgstr "Nem támogatott ennél a vendég típusnál."
 
-#: virtManager/addhardware.py:240 virtManager/addhardware.py:1001
+#: virtManager/addhardware.py:243 virtManager/addhardware.py:1014
 msgid "Graphics"
 msgstr "Grafika"
 
-#: virtManager/addhardware.py:242 virtManager/addhardware.py:1003
+#: virtManager/addhardware.py:245 virtManager/addhardware.py:1016
 msgid "Sound"
 msgstr "Hang"
 
-#: virtManager/addhardware.py:257
+#: virtManager/addhardware.py:260
 msgid "Parallel"
 msgstr "Párhuzamos"
 
-#: virtManager/addhardware.py:266
+#: virtManager/addhardware.py:269
 msgid "Channel"
 msgstr "Csatorna"
 
-#: virtManager/addhardware.py:274
+#: virtManager/addhardware.py:277
 msgid "USB Host Device"
 msgstr "USB host eszköz"
 
-#: virtManager/addhardware.py:278 virtManager/addhardware.py:283
-#: virtManager/addhardware.py:296
+#: virtManager/addhardware.py:281 virtManager/addhardware.py:286
+#: virtManager/addhardware.py:299
 msgid "Connection does not support host device enumeration"
 msgstr "A kapcsolat nem támogatja a gazda eszközeinek felsorolását"
 
-#: virtManager/addhardware.py:286
+#: virtManager/addhardware.py:289
 msgid "Not supported for containers"
 msgstr "Nem támogatott konténerek"
 
-#: virtManager/addhardware.py:288
+#: virtManager/addhardware.py:291
 msgid "PCI Host Device"
 msgstr ""
 
-#: virtManager/addhardware.py:292
+#: virtManager/addhardware.py:295
 #, fuzzy
 #| msgid "Video Device"
 msgid "MDEV Host Device"
 msgstr "Videoeszköz"
 
-#: virtManager/addhardware.py:300
+#: virtManager/addhardware.py:303
 msgid "Video"
 msgstr ""
 
-#: virtManager/addhardware.py:304
+#: virtManager/addhardware.py:307
 msgid "Libvirt version does not support video devices."
 msgstr "A libvirt verzió nem támogatja a videoeszközöket."
 
-#: virtManager/addhardware.py:307 virtManager/details/details.py:252
+#: virtManager/addhardware.py:310 virtManager/details/details.py:253
 #: virtManager/lib/libvirtenummap.py:107
 msgid "Watchdog"
 msgstr "Figyelő"
 
-#: virtManager/addhardware.py:313
+#: virtManager/addhardware.py:316
 msgid "Filesystem"
 msgstr ""
 
-#: virtManager/addhardware.py:314 virtManager/addhardware.py:1011
-#: virtManager/details/details.py:250
+#: virtManager/addhardware.py:317 virtManager/addhardware.py:1024
+#: virtManager/details/details.py:251
 msgid "Smartcard"
 msgstr "Smartcard"
 
-#: virtManager/addhardware.py:315 virtManager/addhardware.py:1013
+#: virtManager/addhardware.py:318 virtManager/addhardware.py:1026
 msgid "USB Redirection"
 msgstr "USB átirányítás"
 
-#: virtManager/addhardware.py:316 virtManager/addhardware.py:1015
+#: virtManager/addhardware.py:319 virtManager/addhardware.py:1028
 msgid "TPM"
 msgstr "TPM"
 
-#: virtManager/addhardware.py:317 virtManager/details/details.py:242
+#: virtManager/addhardware.py:320 virtManager/details/details.py:243
 msgid "RNG"
 msgstr "RNG"
 
-#: virtManager/addhardware.py:318 virtManager/addhardware.py:1019
-#: virtManager/details/details.py:249
+#: virtManager/addhardware.py:321 virtManager/addhardware.py:1032
+#: virtManager/details/details.py:250
 msgid "Panic Notifier"
 msgstr "Pánik értesítő"
 
-#: virtManager/addhardware.py:320 virtManager/details/details.py:251
+#: virtManager/addhardware.py:323 virtManager/details/details.py:252
 msgid "VirtIO VSOCK"
 msgstr ""
 
-#: virtManager/addhardware.py:324
+#: virtManager/addhardware.py:327
 msgid "Not supported for this hypervisor/libvirt/arch combination."
 msgstr "Ez a hipervizor / libvirt / arch kombináció nem támogatott."
 
-#: virtManager/addhardware.py:389
+#: virtManager/addhardware.py:392
 #, python-format
 msgid "Error changing VM configuration: %s"
 msgstr "Hiba a VM konfiguráció módosításakor: %s"
 
-#: virtManager/addhardware.py:413
+#: virtManager/addhardware.py:416
 msgid "These changes will take effect after the next guest shutdown."
 msgstr "Ezek a változások a vendég leállítását követően lépnek érvénybe."
 
-#: virtManager/addhardware.py:457
+#: virtManager/addhardware.py:460
 msgid "Pseudo TTY"
 msgstr "Pszeudo TTY"
 
-#: virtManager/addhardware.py:458
+#: virtManager/addhardware.py:461
 msgid "Output to a file"
 msgstr "Kimenet fájlba"
 
-#: virtManager/addhardware.py:459
+#: virtManager/addhardware.py:462
 msgid "TCP net console"
 msgstr "TCP hálózati konzol"
 
-#: virtManager/addhardware.py:460
+#: virtManager/addhardware.py:463
 msgid "UDP net console"
 msgstr "UDP hálózati konzol"
 
-#: virtManager/addhardware.py:461
+#: virtManager/addhardware.py:464
 #, fuzzy
 #| msgid "Unix socket"
 msgid "UNIX socket"
 msgstr "Unix foglalat"
 
-#: virtManager/addhardware.py:462
+#: virtManager/addhardware.py:465
 msgid "Spice agent"
 msgstr "Spice ügynök"
 
-#: virtManager/addhardware.py:463
+#: virtManager/addhardware.py:466
 msgid "Spice port"
 msgstr "Spice port"
 
-#: virtManager/addhardware.py:464
+#: virtManager/addhardware.py:467
 msgid "QEMU vdagent"
 msgstr ""
 
-#: virtManager/addhardware.py:480 virtManager/addhardware.py:541
+#: virtManager/addhardware.py:483 virtManager/addhardware.py:544
 msgid "IDE"
 msgstr ""
 
-#: virtManager/addhardware.py:481 virtManager/details/details.py:2260
+#: virtManager/addhardware.py:484 virtManager/details/details.py:2277
 msgid "Floppy"
 msgstr ""
 
-#: virtManager/addhardware.py:482 virtManager/addhardware.py:543
+#: virtManager/addhardware.py:485 virtManager/addhardware.py:546
 msgid "SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:483 virtManager/addhardware.py:542
+#: virtManager/addhardware.py:486 virtManager/addhardware.py:545
 msgid "SATA"
 msgstr ""
 
-#: virtManager/addhardware.py:484
+#: virtManager/addhardware.py:487
 #, fuzzy
 #| msgid "Serial"
 msgid "VirtIO Serial"
 msgstr "Serial"
 
-#: virtManager/addhardware.py:485 virtManager/addhardware.py:545
-#: virtManager/addhardware.py:596
+#: virtManager/addhardware.py:488 virtManager/addhardware.py:548
+#: virtManager/addhardware.py:599
 msgid "USB"
 msgstr ""
 
-#: virtManager/addhardware.py:486
+#: virtManager/addhardware.py:489
 msgid "PCI"
 msgstr ""
 
-#: virtManager/addhardware.py:487
+#: virtManager/addhardware.py:490
 msgid "CCID"
 msgstr ""
 
-#: virtManager/addhardware.py:488
+#: virtManager/addhardware.py:491
 msgid "xenbus"
 msgstr ""
 
-#: virtManager/addhardware.py:496 virtManager/addhardware.py:912
+#: virtManager/addhardware.py:499 virtManager/addhardware.py:922
 msgid "VirtIO SCSI"
 msgstr ""
 
-#: virtManager/addhardware.py:499
+#: virtManager/addhardware.py:502
 msgid "PCIe"
 msgstr ""
 
-#: virtManager/addhardware.py:544
+#: virtManager/addhardware.py:547
 msgid "SD"
 msgstr ""
 
-#: virtManager/addhardware.py:546 virtManager/addhardware.py:597
+#: virtManager/addhardware.py:549 virtManager/addhardware.py:600
 msgid "VirtIO"
 msgstr ""
 
-#: virtManager/addhardware.py:547 virtManager/addhardware.py:598
+#: virtManager/addhardware.py:550 virtManager/addhardware.py:601
 msgid "Xen"
 msgstr ""
 
-#: virtManager/addhardware.py:554
+#: virtManager/addhardware.py:557
 msgid "Random"
 msgstr "Véletlen"
 
-#: virtManager/addhardware.py:555
+#: virtManager/addhardware.py:558
 msgid "Entropy Gathering Daemon"
 msgstr ""
 
-#: virtManager/addhardware.py:556
+#: virtManager/addhardware.py:559
 msgid "Builtin RNG"
 msgstr ""
 
-#: virtManager/addhardware.py:574
+#: virtManager/addhardware.py:577
 msgid "Forcefully reset the guest"
 msgstr "A vendég rendszer kényszerített újraindítása"
 
-#: virtManager/addhardware.py:575
+#: virtManager/addhardware.py:578
 msgid "Gracefully shutdown the guest"
 msgstr "A vendég rendszer újraindítása"
 
-#: virtManager/addhardware.py:576
+#: virtManager/addhardware.py:579
 msgid "Forcefully power off the guest"
 msgstr "A vendég rendszer kényszerített kikapcsolása"
 
-#: virtManager/addhardware.py:577
+#: virtManager/addhardware.py:580
 msgid "Pause the guest"
 msgstr "Vendég rendszer felfüggesztése"
 
-#: virtManager/addhardware.py:578
+#: virtManager/addhardware.py:581
 msgid "No action"
 msgstr "Nincs művelet"
 
-#: virtManager/addhardware.py:579
+#: virtManager/addhardware.py:582
 msgid "Dump guest memory core"
 msgstr ""
 
-#: virtManager/addhardware.py:586
+#: virtManager/addhardware.py:589
 msgid "EvTouch USB Graphics Tablet"
 msgstr "EvTouch USB Graphics Tablet"
 
-#: virtManager/addhardware.py:589 virtManager/details/details.py:189
+#: virtManager/addhardware.py:592 virtManager/details/details.py:190
 msgid "Keyboard"
 msgstr "Billentyűzet"
 
-#: virtManager/addhardware.py:590 virtManager/details/details.py:187
+#: virtManager/addhardware.py:593 virtManager/details/details.py:188
 msgid "Mouse"
 msgstr "Egér"
 
-#: virtManager/addhardware.py:591 virtManager/details/details.py:185
+#: virtManager/addhardware.py:594 virtManager/details/details.py:186
 msgid "Tablet"
 msgstr "Tablet PC"
 
-#: virtManager/addhardware.py:595
+#: virtManager/addhardware.py:598
 msgid "PS/2"
 msgstr ""
 
 #. translators: Examples: 'USB Mouse', 'PS/2 Keyboard'
-#: virtManager/addhardware.py:604
+#: virtManager/addhardware.py:607
 #, python-format
 msgid "%(input_bus)s %(input_type)s"
 msgstr ""
 
-#: virtManager/addhardware.py:701
+#: virtManager/addhardware.py:704
 msgid "Disk device"
 msgstr "Lemez eszköz"
 
-#: virtManager/addhardware.py:702
+#: virtManager/addhardware.py:705
 msgid "CDROM device"
 msgstr "CDROM eszköz"
 
-#: virtManager/addhardware.py:703
+#: virtManager/addhardware.py:706
 msgid "Floppy device"
 msgstr "Hajlékonylemezes eszköz"
 
-#: virtManager/addhardware.py:705
+#: virtManager/addhardware.py:708
 msgid "LUN Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:727 virtManager/addhardware.py:831
-#: virtManager/addhardware.py:840 virtManager/addhardware.py:886
-#: virtManager/addhardware.py:913 virtManager/device/addstorage.py:98
-#: virtManager/device/addstorage.py:104 virtManager/device/fsdetails.py:87
-#: virtManager/device/gfxdetails.py:105 virtManager/device/tpmdetails.py:77
-#: virtManager/device/tpmdetails.py:88 virtManager/preferences.py:171
+#: virtManager/addhardware.py:730 virtManager/addhardware.py:764
+#: virtManager/addhardware.py:841 virtManager/addhardware.py:850
+#: virtManager/addhardware.py:896 virtManager/addhardware.py:923
+#: virtManager/device/addstorage.py:98 virtManager/device/addstorage.py:104
+#: virtManager/device/fsdetails.py:87 virtManager/device/gfxdetails.py:105
+#: virtManager/device/tpmdetails.py:77 virtManager/device/tpmdetails.py:88
+#: virtManager/preferences.py:172
 msgid "Hypervisor default"
 msgstr "Hipervizor alapértelmezése"
 
-#: virtManager/addhardware.py:809
+#: virtManager/addhardware.py:819
 #, python-format
 msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
 
-#: virtManager/addhardware.py:818
+#: virtManager/addhardware.py:828
 msgid "No Devices Available"
 msgstr "Nincs elérhető eszköz"
 
-#: virtManager/addhardware.py:875 virtManager/device/tpmdetails.py:73
+#: virtManager/addhardware.py:885 virtManager/device/tpmdetails.py:73
 msgid "Passthrough"
 msgstr ""
 
-#: virtManager/addhardware.py:876
+#: virtManager/addhardware.py:886
 msgid "Host"
 msgstr ""
 
-#: virtManager/addhardware.py:881
+#: virtManager/addhardware.py:891
 msgid "Spice channel"
 msgstr ""
 
-#: virtManager/addhardware.py:909
+#: virtManager/addhardware.py:919
 msgid "USB 3"
 msgstr ""
 
-#: virtManager/addhardware.py:910
+#: virtManager/addhardware.py:920
 msgid "USB 2"
 msgstr ""
 
-#: virtManager/addhardware.py:1005
+#: virtManager/addhardware.py:1018
 msgid "Video Device"
 msgstr "Videoeszköz"
 
-#: virtManager/addhardware.py:1007
+#: virtManager/addhardware.py:1020
 msgid "Watchdog Device"
 msgstr "Figyelő eszköz"
 
-#: virtManager/addhardware.py:1009
+#: virtManager/addhardware.py:1022
 msgid "Filesystem Passthrough"
 msgstr "Fájlrendszer átengedés"
 
-#: virtManager/addhardware.py:1017
+#: virtManager/addhardware.py:1030
 msgid "Random Number Generator"
 msgstr "Véletlenszám-generátor (RNG)"
 
-#: virtManager/addhardware.py:1021
+#: virtManager/addhardware.py:1034
 msgid "VM Sockets"
 msgstr ""
 
-#: virtManager/addhardware.py:1025 virtManager/details/details.py:2044
+#: virtManager/addhardware.py:1038 virtManager/details/details.py:2054
 #, python-format
 msgid "%s Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1029
+#: virtManager/addhardware.py:1042
 #, fuzzy
 msgid "PCI Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1031
+#: virtManager/addhardware.py:1044
 #, fuzzy
 #| msgid "%s Device"
 msgid "MDEV Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1032
+#: virtManager/addhardware.py:1045
 #, fuzzy
 msgid "USB Device"
 msgstr "%s eszköz"
 
-#: virtManager/addhardware.py:1149
+#: virtManager/addhardware.py:1162
 #, python-format
 msgid ""
 "%s already has a USB controller attached.\n"
@@ -2566,11 +2573,11 @@ msgid ""
 "You can change the USB controller type in the VM details screen."
 msgstr ""
 
-#: virtManager/addhardware.py:1243
+#: virtManager/addhardware.py:1256
 msgid "Are you sure you want to add this device?"
 msgstr "Biztos, hogy hozzáadja ezt az eszközt?"
 
-#: virtManager/addhardware.py:1247
+#: virtManager/addhardware.py:1260
 msgid ""
 "This device could not be attached to the running machine. Would you like to "
 "make the device available after the next guest shutdown?"
@@ -2578,34 +2585,34 @@ msgstr ""
 "Ez az eszköz nem adható hozzá működő géphez. Elérhetővé teszi az eszközt a "
 "gép következő leállításakor?"
 
-#: virtManager/addhardware.py:1274
+#: virtManager/addhardware.py:1287
 #, python-format
 msgid "Unable to add device: %s"
 msgstr "Az eszköz nem adható hozzá: %s"
 
-#: virtManager/addhardware.py:1294
+#: virtManager/addhardware.py:1307
 #, python-format
 msgid "Error validating device parameters: %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1303
+#: virtManager/addhardware.py:1316
 msgid "Creating device"
 msgstr "Eszköz létrehozása"
 
-#: virtManager/addhardware.py:1304
+#: virtManager/addhardware.py:1317
 msgid "Depending on the device, this may take a few minutes to complete."
 msgstr ""
 
-#: virtManager/addhardware.py:1325
+#: virtManager/addhardware.py:1338
 #, python-format
 msgid "The device is already in use by other guests %s"
 msgstr ""
 
-#: virtManager/addhardware.py:1326
+#: virtManager/addhardware.py:1339
 msgid "Do you really want to use the device?"
 msgstr "Biztos, hogy használni akarja az eszközt?"
 
-#: virtManager/addhardware.py:1370
+#: virtManager/addhardware.py:1383
 #, python-format
 msgid "Error building device XML: %s"
 msgstr ""
@@ -2973,7 +2980,7 @@ msgstr[1] "%(numcpus)d elérhető"
 msgid "No active connection to install on."
 msgstr "Nincs aktív kapcsolat a telepítéshez."
 
-#: virtManager/createvm.py:921 virtManager/details/details.py:1708
+#: virtManager/createvm.py:921 virtManager/details/details.py:1718
 #: virtManager/device/gfxdetails.py:98
 msgid "None"
 msgstr "Semmi"
@@ -3429,352 +3436,352 @@ msgstr ""
 msgid "Press %s to release pointer."
 msgstr "A mutató elengedéséhez nyomja meg a(z) %s billentyűt."
 
-#: virtManager/details/details.py:158
+#: virtManager/details/details.py:159
 #, fuzzy, python-format
 #| msgid "Floppy device"
 msgid "Floppy %(index)d"
 msgstr "Hajlékonylemezes eszköz"
 
-#: virtManager/details/details.py:164
+#: virtManager/details/details.py:165
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s CDROM %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:169
+#: virtManager/details/details.py:170
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s Disk %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:173
+#: virtManager/details/details.py:174
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s %(device)s %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:181
+#: virtManager/details/details.py:182
 #, python-format
 msgid "NIC %(mac)s"
 msgstr ""
 
-#: virtManager/details/details.py:194
+#: virtManager/details/details.py:195
 #, fuzzy, python-format
 #| msgid "Serial"
 msgid "Serial %(num)d"
 msgstr "Serial"
 
-#: virtManager/details/details.py:198
+#: virtManager/details/details.py:199
 #, fuzzy, python-format
 #| msgid "Parallel"
 msgid "Parallel %(num)d"
 msgstr "Párhuzamos"
 
-#: virtManager/details/details.py:202
+#: virtManager/details/details.py:203
 #, fuzzy, python-format
 #| msgid "Console"
 msgid "Console %(num)d"
 msgstr "Konzol"
 
-#: virtManager/details/details.py:210
+#: virtManager/details/details.py:211
 #, fuzzy, python-format
 #| msgid "Channel"
 msgid "Channel (%(name)s)"
 msgstr "Csatorna"
 
-#: virtManager/details/details.py:211
+#: virtManager/details/details.py:212
 #, fuzzy, python-format
 #| msgid "Channel"
 msgid "Channel %(type)s"
 msgstr "Csatorna"
 
-#: virtManager/details/details.py:215
+#: virtManager/details/details.py:216
 #, python-format
 msgid "Display %s"
 msgstr "%s képernyő"
 
-#: virtManager/details/details.py:217
+#: virtManager/details/details.py:218
 #, fuzzy, python-format
 #| msgid "%s Redirector %s"
 msgid "%(bus)s Redirector %(index)d"
 msgstr "%s átirányító %s"
 
-#: virtManager/details/details.py:224
+#: virtManager/details/details.py:225
 #, python-format
 msgid "Sound %s"
 msgstr ""
 
-#: virtManager/details/details.py:226
+#: virtManager/details/details.py:227
 #, python-format
 msgid "Video %s"
 msgstr "Videó %s"
 
-#: virtManager/details/details.py:228
+#: virtManager/details/details.py:229
 #, fuzzy, python-format
 #| msgid "Filesystem %s"
 msgid "Filesystem %(path)s"
 msgstr "Fájlrendszer %s"
 
-#: virtManager/details/details.py:232
+#: virtManager/details/details.py:233
 #, python-format
 msgid "Controller %(controller)s %(index)s"
 msgstr ""
 
-#: virtManager/details/details.py:236
+#: virtManager/details/details.py:237
 #, python-format
 msgid "Controller %(controller)s"
 msgstr ""
 
-#: virtManager/details/details.py:241
+#: virtManager/details/details.py:242
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "RNG %(device)s"
 msgstr "CDROM eszköz"
 
-#: virtManager/details/details.py:245
+#: virtManager/details/details.py:246
 #, fuzzy, python-format
 #| msgid "CDROM device"
 msgid "TPM %(device)s"
 msgstr "CDROM eszköz"
 
-#: virtManager/details/details.py:246
+#: virtManager/details/details.py:247
 #, python-format
 msgid "TPM v%(version)s"
 msgstr ""
 
-#: virtManager/details/details.py:496
+#: virtManager/details/details.py:498
 msgid "_Add Hardware"
 msgstr "_Hardver hozzáadása"
 
-#: virtManager/details/details.py:504
+#: virtManager/details/details.py:506
 msgid "_Remove Hardware"
 msgstr "Ha_rdver eltávolítása"
 
-#: virtManager/details/details.py:624 virtManager/details/details.py:1715
+#: virtManager/details/details.py:626 virtManager/details/details.py:1725
 msgid "UEFI"
 msgstr ""
 
-#: virtManager/details/details.py:632
+#: virtManager/details/details.py:634
 msgid "Libvirt or hypervisor does not support UEFI."
 msgstr "Libvirt vagy a felügyelő nem támogatja az UEFI-t."
 
-#: virtManager/details/details.py:635
+#: virtManager/details/details.py:637
 msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 
-#: virtManager/details/details.py:681
+#: virtManager/details/details.py:683
 msgid "Version"
 msgstr "Verzió"
 
-#: virtManager/details/details.py:743
+#: virtManager/details/details.py:745
 msgid "Application Default"
 msgstr "Alkalmazás alapértelmezett"
 
-#: virtManager/details/details.py:746
+#: virtManager/details/details.py:748
 msgid "Hypervisor Default"
 msgstr "Felügyelő alapértelmezett"
 
-#: virtManager/details/details.py:749
+#: virtManager/details/details.py:751
 msgid "Clear CPU configuration"
 msgstr "CPU konfiguráció törlése"
 
-#: virtManager/details/details.py:767
+#: virtManager/details/details.py:769
 msgid "Disk bus:"
 msgstr ""
 
-#: virtManager/details/details.py:973
+#: virtManager/details/details.py:979
 #, python-format
 msgid "Error launching hardware dialog: %s"
 msgstr "Hiba a hardver párbeszédablak indításakor: %s"
 
-#: virtManager/details/details.py:979
+#: virtManager/details/details.py:985
 msgid "Are you sure you want to remove this device?"
 msgstr "Biztos benne, hogy el kívánja távolítani ezt az eszközt?"
 
-#: virtManager/details/details.py:1230 virtManager/details/details.py:1707
-#: virtManager/details/details.py:1724 virtManager/details/details.py:1925
+#: virtManager/details/details.py:1236 virtManager/details/details.py:1717
+#: virtManager/details/details.py:1734 virtManager/details/details.py:1935
 #: virtManager/lib/libvirtenummap.py:82
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: virtManager/details/details.py:1311
+#: virtManager/details/details.py:1317
 #, python-format
 msgid "Error applying changes: %s"
 msgstr ""
 
-#: virtManager/details/details.py:1438
+#: virtManager/details/details.py:1444
 #, python-format
 msgid "Error changing autostart value: %s"
 msgstr "Hiba az automatikus indítás cseréjekor: %s"
 
-#: virtManager/details/details.py:1454
+#: virtManager/details/details.py:1460
 msgid "Cannot set initrd without specifying a kernel path"
 msgstr ""
 "Nem lehet beállítani az initrd-t a kernel elérési útvonalának megadása nélkül"
 
-#: virtManager/details/details.py:1457
+#: virtManager/details/details.py:1463
 msgid "Cannot set kernel arguments without specifying a kernel path"
 msgstr ""
 "Nem lehet beállítani a kernel paramétereket a kernel elérési útvonalának "
 "megadása nélkül"
 
-#: virtManager/details/details.py:1464
+#: virtManager/details/details.py:1470
 msgid "An init path must be specified"
 msgstr "Meg kell adni egy init elérési útvonalat"
 
-#: virtManager/details/details.py:1476 virtManager/device/addstorage.py:271
+#: virtManager/details/details.py:1482 virtManager/device/addstorage.py:271
 #, fuzzy, python-format
 #| msgid "Disk %s is already in use by other guests %s."
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
 msgstr "A %s lemezt %s vendég rendszer már használja."
 
-#: virtManager/details/details.py:1480 virtManager/device/addstorage.py:275
+#: virtManager/details/details.py:1486 virtManager/device/addstorage.py:275
 msgid "Do you really want to use the disk?"
 msgstr "Biztos, hogy használni akarja a lemezt?"
 
-#: virtManager/details/details.py:1629
+#: virtManager/details/details.py:1639
 msgid "Remove this device from the virtual machine"
 msgstr "A megadott eszköz eltávolítása a virtuális gépből"
 
-#: virtManager/details/details.py:1686
+#: virtManager/details/details.py:1696
 #, python-format
 msgid "Error refreshing hardware page: %s"
 msgstr "Hiba a harver oldal frissítésekor: %s"
 
-#: virtManager/details/details.py:1776
+#: virtManager/details/details.py:1786
 #, python-format
 msgid "%(summary)s ..."
 msgstr ""
 
-#: virtManager/details/details.py:1790
+#: virtManager/details/details.py:1800
 #, python-format
 msgid "%(received)d %(units)s read"
 msgstr ""
 
-#: virtManager/details/details.py:1790
+#: virtManager/details/details.py:1800
 #, python-format
 msgid "%(transferred)d %(units)s write"
 msgstr ""
 
-#: virtManager/details/details.py:1796
+#: virtManager/details/details.py:1806
 #, python-format
 msgid "%(received)d %(units)s in"
 msgstr ""
 
-#: virtManager/details/details.py:1796
+#: virtManager/details/details.py:1806
 #, python-format
 msgid "%(transferred)d %(units)s out"
 msgstr ""
 
-#: virtManager/details/details.py:1799 virtManager/details/details.py:1800
-#: virtManager/details/details.py:1801 virtManager/details/details.py:1802
+#: virtManager/details/details.py:1809 virtManager/details/details.py:1810
+#: virtManager/details/details.py:1811 virtManager/details/details.py:1812
 #: virtManager/hostnets.py:203 virtManager/hostnets.py:222
 msgid "Disabled"
 msgstr "Letiltva"
 
-#: virtManager/details/details.py:1810
+#: virtManager/details/details.py:1820
 #, python-format
 msgid "%(current-memory)s of %(total-memory)s"
 msgstr ""
 
-#: virtManager/details/details.py:1973
+#: virtManager/details/details.py:1983
 msgid "Absolute Movement"
 msgstr "Abszolút mozgatási mód"
 
-#: virtManager/details/details.py:1975
+#: virtManager/details/details.py:1985
 msgid "Relative Movement"
 msgstr "Relatív mozgatási mód"
 
-#: virtManager/details/details.py:1984 virtManager/details/details.py:2141
-#: virtManager/details/details.py:2143
+#: virtManager/details/details.py:1994 virtManager/details/details.py:2158
+#: virtManager/details/details.py:2160
 msgid "Hypervisor does not support removing this device"
 msgstr ""
 
-#: virtManager/details/details.py:1988
+#: virtManager/details/details.py:1998
 #, python-format
 msgid "%(graphicstype)s Server"
 msgstr "%(graphicstype)s kiszolgáló"
 
-#: virtManager/details/details.py:2036
+#: virtManager/details/details.py:2046
 msgid "Serial Device"
 msgstr "Soros eszköz"
 
-#: virtManager/details/details.py:2038
+#: virtManager/details/details.py:2048
 msgid "Parallel Device"
 msgstr "Párhuzamos eszköz"
 
-#: virtManager/details/details.py:2040
+#: virtManager/details/details.py:2050
 msgid "Console Device"
 msgstr "Konzol eszköz"
 
-#: virtManager/details/details.py:2042
+#: virtManager/details/details.py:2052
 msgid "Channel Device"
 msgstr "Csatorna eszköz"
 
-#: virtManager/details/details.py:2051
+#: virtManager/details/details.py:2061
 msgid "Primary Console"
 msgstr "Elsődleges konzol"
 
-#: virtManager/details/details.py:2085 virtManager/preferences.py:121
+#: virtManager/details/details.py:2095 virtManager/preferences.py:122
 msgid "Off"
 msgstr "Ki"
 
-#: virtManager/details/details.py:2085 virtManager/preferences.py:122
+#: virtManager/details/details.py:2095 virtManager/preferences.py:123
 msgid "On"
 msgstr "Be"
 
-#: virtManager/details/details.py:2110
+#: virtManager/details/details.py:2127
 #, python-format
 msgid "Physical %s Device"
 msgstr ""
 
-#: virtManager/details/details.py:2126
+#: virtManager/details/details.py:2143
 msgid "Cannot remove last video device while Graphics/Display is attached."
 msgstr ""
 
-#: virtManager/details/details.py:2150
+#: virtManager/details/details.py:2167
 #, python-format
 msgid "%(device)s on %(address)s"
 msgstr ""
 
-#: virtManager/details/details.py:2156 virtManager/details/details.py:2165
+#: virtManager/details/details.py:2173 virtManager/details/details.py:2182
 msgid "Cannot remove controller while devices are attached."
 msgstr ""
 
-#: virtManager/details/details.py:2257
+#: virtManager/details/details.py:2274
 msgid "Hard Disk"
 msgstr ""
 
-#: virtManager/details/details.py:2258
+#: virtManager/details/details.py:2275
 msgid "CDROM"
 msgstr ""
 
-#: virtManager/details/details.py:2259
+#: virtManager/details/details.py:2276
 msgid "Network (PXE)"
 msgstr ""
 
-#: virtManager/details/details.py:2274
+#: virtManager/details/details.py:2291
 msgid "No bootable devices"
 msgstr "Nincsenek indítható eszközök"
 
-#: virtManager/details/details.py:2320
+#: virtManager/details/details.py:2337
 msgid "Overview"
 msgstr "Áttekintés"
 
-#: virtManager/details/details.py:2321
+#: virtManager/details/details.py:2338
 msgid "OS information"
 msgstr "OS információ"
 
-#: virtManager/details/details.py:2323
+#: virtManager/details/details.py:2340
 msgid "Performance"
 msgstr ""
 
-#: virtManager/details/details.py:2324
+#: virtManager/details/details.py:2341
 msgid "CPUs"
 msgstr ""
 
-#: virtManager/details/details.py:2326
+#: virtManager/details/details.py:2343
 msgid "Boot Options"
 msgstr ""
 
@@ -4716,11 +4723,11 @@ msgstr "A libvirt kapcsolat nem támogatja a pillanatfelvételeket."
 msgid "Could not find specified device in the inactive VM configuration: %s"
 msgstr "Nem található a megadott eszköz az inaktív VM konfigurációjában: %s"
 
-#: virtManager/object/domain.py:1487
+#: virtManager/object/domain.py:1490
 msgid "Saving domain to disk"
 msgstr "Tartomány mentése merevlemezre"
 
-#: virtManager/object/domain.py:1552
+#: virtManager/object/domain.py:1555
 msgid "Migrating domain"
 msgstr "Tartomány migrálása"
 
@@ -4796,67 +4803,67 @@ msgstr ""
 msgid "Type to start searching..."
 msgstr ""
 
-#: virtManager/preferences.py:27
+#: virtManager/preferences.py:28
 #, python-format
 msgid "Error launching preferences: %s"
 msgstr "Hiba a beállítások indításakor: %s"
 
-#: virtManager/preferences.py:112
+#: virtManager/preferences.py:113
 msgid "Always"
 msgstr "Mindig"
 
-#: virtManager/preferences.py:112
+#: virtManager/preferences.py:113
 msgid "Fullscreen only"
 msgstr "Kizárólag teljes képernyő"
 
-#: virtManager/preferences.py:112
+#: virtManager/preferences.py:113
 msgid "Never"
 msgstr "Soha"
 
-#: virtManager/preferences.py:124 virtManager/preferences.py:146
-#: virtManager/preferences.py:158
+#: virtManager/preferences.py:125 virtManager/preferences.py:147
+#: virtManager/preferences.py:159
 #, python-format
 msgid "System default (%s)"
 msgstr "Rendszer alapértelmezett (%s)"
 
-#: virtManager/preferences.py:134
+#: virtManager/preferences.py:135
 msgid "Manual redirect only"
 msgstr ""
 
-#: virtManager/preferences.py:135
+#: virtManager/preferences.py:136
 msgid "Auto redirect on USB attach"
 msgstr ""
 
-#: virtManager/preferences.py:170
+#: virtManager/preferences.py:171
 msgid "Application default"
 msgstr ""
 
-#: virtManager/preferences.py:172
+#: virtManager/preferences.py:173
 msgid "Nearest host CPU model"
 msgstr "Leginkább hasonló CPU modell"
 
-#: virtManager/preferences.py:184
+#: virtManager/preferences.py:185
 #, fuzzy
 #| msgid "System default (%s)"
 msgid "System default"
 msgstr "Rendszer alapértelmezett (%s)"
 
-#: virtManager/preferences.py:192
+#: virtManager/preferences.py:193
 msgid "python libguestfs support is not installed"
 msgstr ""
 
-#: virtManager/preferences.py:332
+#: virtManager/preferences.py:338
 msgid "Configure grab key combination"
 msgstr "Elkapó billentyűzet kombináció beállítása"
 
-#: virtManager/preferences.py:342
+#: virtManager/preferences.py:348
 msgid ""
 "You can now define grab keys by pressing them.\n"
 "To confirm your selection please click OK button\n"
 "while you have desired keys pressed."
 msgstr ""
 
-#: virtManager/preferences.py:347
+#: virtManager/preferences.py:353
 msgid "Please press desired grab key combination"
 msgstr "Kérjük nyomja le az igényelt kilépési billentyű kombinációt"
 
@@ -4899,6 +4906,12 @@ msgstr "A helyi tároló nem használható távoli kapcsolaton."
 #: virtManager/systray.py:118
 msgid "_Show Virtual Machine Manager"
 msgstr "Virtuális Gép vezérlőpult megjeleníté_se"
+
+#: virtManager/systray.py:419
+msgid ""
+"AppIndicator not installed or usable, system tray icon not available on "
+"Wayland"
+msgstr ""
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5646,7 +5659,7 @@ msgstr ""
 msgid "Did not find a matching node device for '%s'"
 msgstr ""
 
-#: virtinst/cli.py:5372
+#: virtinst/cli.py:5378
 msgid ""
 "You can see additional information with:\n"
 "\n"
@@ -5762,12 +5775,12 @@ msgstr ""
 msgid "%s must be above 5900, or -1 for auto allocation"
 msgstr "%s 5900 felett kell lennie, vagy -1 az automatikus foglaláshoz"
 
-#: virtinst/devices/hostdev.py:85
+#: virtinst/devices/hostdev.py:87
 #, python-format
 msgid "Don't know how to generate nodedev for mdev type id '%s'"
 msgstr ""
 
-#: virtinst/devices/hostdev.py:91 virtinst/devices/interface.py:357
+#: virtinst/devices/hostdev.py:93 virtinst/devices/interface.py:357
 #, python-format
 msgid "Unsupported node device type '%s'"
 msgstr ""
@@ -5825,12 +5838,16 @@ msgid ""
 "count %(vcpus)d"
 msgstr ""
 
-#: virtinst/domain/launch_security.py:28
+#: virtinst/domain/launch_security.py:33
 msgid "SEV launch security requires a Q35 UEFI machine"
 msgstr ""
 
-#: virtinst/domain/launch_security.py:42
+#: virtinst/domain/launch_security.py:47
 msgid "SEV-SNP launch security requires a Q35 UEFI machine"
+msgstr ""
+
+#: virtinst/domain/launch_security.py:51
+msgid "TDX launch security requires a Q35 UEFI machine"
 msgstr ""
 
 #: virtinst/domcapabilities.py:217
@@ -5865,16 +5882,16 @@ msgstr "Vendég rendszer"
 msgid "Guest name '%s' is already in use."
 msgstr "A vendég rendszer neve '%s' már használatban van."
 
-#: virtinst/guest.py:1095
+#: virtinst/guest.py:1088
 msgid "Libvirt version does not support UEFI."
 msgstr "Libvirt jelenlegi verziója a nem támogatja az UEFI-t."
 
-#: virtinst/guest.py:1099
+#: virtinst/guest.py:1092
 #, python-format
 msgid "Don't know how to setup UEFI for arch '%s'"
 msgstr ""
 
-#: virtinst/guest.py:1104
+#: virtinst/guest.py:1097
 #, python-format
 msgid "Did not find any UEFI binary path for arch '%s'"
 msgstr ""
