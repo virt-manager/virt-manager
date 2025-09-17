@@ -1148,7 +1148,9 @@ c.add_invalid(
 )  # URI doesn't support UEFI bits
 c.add_invalid("--graphics type=vnc,keymap", grep="Option 'keymap' had no value set.")
 c.add_invalid("--xml FOOXPATH", grep="form of XPATH=VALUE")  # failure parsing xpath value
-c.add_invalid("--xml /@foo=bar", grep="/@foo xmlXPathEval")  # failure processing xpath
+c.add_invalid(
+    "--xml /@foo=bar", grep="(/@foo xmlXPathEval|not an iterator)"
+)  # failure processing xpath
 
 
 ########################
