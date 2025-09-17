@@ -24,7 +24,9 @@ virtinst_sources = files(
   'virtinstall.py',
   'virtxml.py',
   'xmlapi.py',
+  'xmlbase.py',
   'xmlbuilder.py',
+  'xmllibxml2.py',
   'xmlutil.py',
 )
 
