@@ -4,8 +4,6 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import libxml2
-
 from . import xmlutil
 from .logger import log
 from .xmlbase import XMLBase, XPath
@@ -21,13 +19,17 @@ class Libxml2API(XMLBase):
     def __init__(self, xml):
         XMLBase.__init__(self)
 
+        import libxml2
+
+        self._libxml2 = libxml2
+
         # Use of gtksourceview in virt-manager changes this libxml
         # global setting which messes up whitespace after parsing.
         # We can probably get away with calling this less but it
         # would take some investigation
-        libxml2.keepBlanksDefault(1)
+        self._libxml2.keepBlanksDefault(1)
 
-        self._doc = libxml2.parseDoc(xml)
+        self._doc = self._libxml2.parseDoc(xml)
         self._ctx = self._doc.xpathNewContext()
         self._ctx.setContextNode(self._doc.children)
         for key, val in self.NAMESPACES.items():
@@ -66,7 +68,7 @@ class Libxml2API(XMLBase):
         return node.serialize()
 
     def _node_from_xml(self, xml):
-        return libxml2.parseDoc(xml).children
+        return self._libxml2.parseDoc(xml).children
 
     def _node_get_text(self, node):
         return node.content
@@ -91,7 +93,7 @@ class Libxml2API(XMLBase):
             node.setProp(propname, setval)
 
     def _node_new(self, xpathseg, parentnode):
-        newnode = libxml2.newNode(xpathseg.nodename)
+        newnode = self._libxml2.newNode(xpathseg.nodename)
         if not xpathseg.nsname:
             return newnode
 
@@ -142,15 +144,15 @@ class Libxml2API(XMLBase):
         if not node_is_text(parentnode.get_last()):
             prevsib = parentnode.get_prev()
             if node_is_text(prevsib):
-                newlast = libxml2.newText(prevsib.content)
+                newlast = self._libxml2.newText(prevsib.content)
             else:
-                newlast = libxml2.newText("\n")
+                newlast = self._libxml2.newText("\n")
             parentnode.addChild(newlast)
 
         endtext = parentnode.get_last().content
-        parentnode.addChild(libxml2.newText("  "))
+        parentnode.addChild(self._libxml2.newText("  "))
         parentnode.addChild(newnode)
-        parentnode.addChild(libxml2.newText(endtext))
+        parentnode.addChild(self._libxml2.newText(endtext))
 
     def _node_replace_child(self, xpath, newnode):
         oldnode = self._find(xpath)
