@@ -243,7 +243,7 @@ class XMLBase:
         xpathobj = XPath(fullxpath)
         parentxpath = "."
         parentnode = self._find(parentxpath)
-        if not parentnode:
+        if parentnode is None:
             raise xmlutil.DevError("Did not find XML root node for xpath=%s" % fullxpath)
 
         for xpathseg in xpathobj.segments[1:]:
