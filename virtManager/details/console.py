@@ -150,7 +150,7 @@ class vmmOverlayToolbar:
         self._toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
         self._toolbar.get_accessible().set_name("Fullscreen Toolbar")
 
-        # Minimize button (if callback provided)
+        # Minimize button
         minimize_button = Gtk.ToolButton()
         minimize_button.set_label(_("Minimize"))
         minimize_button.set_icon_name("window-minimize")
