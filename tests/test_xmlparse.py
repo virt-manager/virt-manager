@@ -1008,7 +1008,7 @@ def testXMLBuilderCoverage():
         # Ensure we validate root element
         virtinst.DeviceDisk(conn, parsexml="<foo/>")
 
-    with pytest.raises(Exception, match=".*xmlParseDoc.*"):
+    with pytest.raises(Exception, match=".*(xmlParseDoc|not 'int').*"):
         # Ensure we validate root element
         virtinst.DeviceDisk(conn, parsexml=-1)
 
