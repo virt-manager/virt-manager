@@ -4,7 +4,7 @@
 # This work is licensed under the GNU GPLv2 or later.
 # See the COPYING file in the top-level directory.
 
-import libxml2
+from lxml import etree
 
 from . import xmlutil
 from .logger import log
@@ -248,7 +248,7 @@ class _XMLBase:
         xpathobj = _XPath(fullxpath)
         parentxpath = "."
         parentnode = self._find(parentxpath)
-        if not parentnode:
+        if parentnode is None:
             raise xmlutil.DevError("Did not find XML root node for xpath=%s" % fullxpath)
 
         for xpathseg in xpathobj.segments[1:]:
@@ -299,30 +299,11 @@ def node_is_text(n):
     return bool(n and n.type == "text")
 
 
-class _Libxml2API(_XMLBase):
+class _LxmlAPI(_XMLBase):
     def __init__(self, xml):
         _XMLBase.__init__(self)
-
-        # Use of gtksourceview in virt-manager changes this libxml
-        # global setting which messes up whitespace after parsing.
-        # We can probably get away with calling this less but it
-        # would take some investigation
-        libxml2.keepBlanksDefault(1)
-
-        self._doc = libxml2.parseDoc(xml)
-        self._ctx = self._doc.xpathNewContext()
-        self._ctx.setContextNode(self._doc.children)
-        for key, val in self.NAMESPACES.items():
-            self._ctx.xpathRegisterNs(key, val)
-
-    def __del__(self):
-        if not hasattr(self, "_doc"):
-            # In case we error when parsing the doc
-            return
-        self._doc.freeDoc()
-        self._doc = None
-        self._ctx.xpathFreeContext()
-        self._ctx = None
+        self._parser = etree.XMLParser(remove_blank_text=True)
+        self._doc = etree.fromstring(xml, parser=self._parser)
 
     def _sanitize_xml(self, xml):
         if not xml.endswith("\n") and "\n" in xml:
@@ -330,113 +311,74 @@ class _Libxml2API(_XMLBase):
         return xml
 
     def copy_api(self):
-        return _Libxml2API(self._doc.children.serialize())
+        return _LxmlAPI(etree.tostring(self._doc, encoding="unicode", pretty_print=True))
 
     def _find(self, fullxpath):
         xpath = _XPath(fullxpath).xpath
         try:
-            node = self._ctx.xpathEval(xpath)
+            node = self._doc.xpath(xpath, namespaces=self.NAMESPACES)
         except Exception as e:
             log.debug("fullxpath=%s xpath=%s eval failed", fullxpath, xpath, exc_info=True)
             raise RuntimeError("%s %s" % (fullxpath, str(e))) from None
-        return node and node[0] or None
+        return node[0] if len(node) else None
 
     def count(self, xpath):
-        return len(self._ctx.xpathEval(xpath))
+        return len(self._doc.xpath(xpath, namespaces=self.NAMESPACES))
 
     def _node_tostring(self, node):
-        return node.serialize()
+        return etree.tostring(node, encoding="unicode", pretty_print=True)
 
     def _node_from_xml(self, xml):
-        return libxml2.parseDoc(xml).children
+        return etree.fromstring(xml, parser=self._parser)
 
     def _node_get_text(self, node):
-        return node.content
+        return node.text
 
     def _node_set_text(self, node, setval):
-        if setval is not None:
-            setval = xmlutil.xml_escape(setval)
-        node.setContent(setval)
+        node.text = setval
 
     def _node_get_property(self, node, propname):
-        prop = node.hasProp(propname)
-        if prop:
-            return prop.content
+        return node.get(propname)
 
     def _node_set_property(self, node, propname, setval):
         if setval is None:
-            prop = node.hasProp(propname)
-            if prop:
-                prop.unlinkNode()
-                prop.freeNode()
+            node.attrib.pop(propname, None)
         else:
-            node.setProp(propname, setval)
+            node.set(propname, setval)
 
     def _node_new(self, xpathseg, parentnode):
-        newnode = libxml2.newNode(xpathseg.nodename)
-        if not xpathseg.nsname:
-            return newnode
+        name = xpathseg.nodename
+        nsmap = None
+        if xpathseg.nsname:
+            name = etree.QName(self.NAMESPACES[xpathseg.nsname], name)
+            nsmap = {xpathseg.nsname: self.NAMESPACES[xpathseg.nsname]}
 
-        def _find_parent_ns():
-            parent = parentnode
-            while parent:
-                for ns in xmlutil.listify(parent.nsDefs()):
-                    if ns.name == xpathseg.nsname:
-                        return ns
-                parent = parent.get_parent()
-
-        ns = _find_parent_ns()
-        if not ns:
-            ns = newnode.newNs(self.NAMESPACES[xpathseg.nsname], xpathseg.nsname)
-        newnode.setNs(ns)
-        return newnode
+        return etree.Element(name, nsmap=nsmap)
 
     def node_clear(self, xpath):
         node = self._find(xpath)
         if node:
-            propnames = [p.name for p in (node.properties or [])]
-            for p in propnames:
-                node.unsetProp(p)
-            node.setContent(None)
+            node.clear()
 
     def _node_has_content(self, node):
-        return node.type == "element" and (node.children or node.properties)
+        return etree.iselement(node) and (node.keys() or node.getchildren() or node.text)
 
     def _node_get_name(self, node):
-        return node.name
+        return etree.QName(node).localname
 
     def _node_remove_child(self, parentnode, childnode):
-        node = childnode
-
-        # Look for preceding whitespace and remove it
-        white = node.get_prev()
-        if node_is_text(white):
-            white.unlinkNode()
-            white.freeNode()
-
-        node.unlinkNode()
-        node.freeNode()
-        if all([node_is_text(n) for n in parentnode.children]):
-            parentnode.setContent(None)
+        parentnode.remove(childnode)
+        if len(parentnode.getchildren()) == 0:
+            parentnode.text = None
 
     def _node_add_child(self, parentxpath, parentnode, newnode):
-        ignore = parentxpath
-        if not node_is_text(parentnode.get_last()):
-            prevsib = parentnode.get_prev()
-            if node_is_text(prevsib):
-                newlast = libxml2.newText(prevsib.content)
-            else:
-                newlast = libxml2.newText("\n")
-            parentnode.addChild(newlast)
-
-        endtext = parentnode.get_last().content
-        parentnode.addChild(libxml2.newText("  "))
-        parentnode.addChild(newnode)
-        parentnode.addChild(libxml2.newText(endtext))
+        parentnode.append(newnode)
+        if parentnode.text and parentnode.text.isspace():
+            parentnode.text = None
 
     def _node_replace_child(self, xpath, newnode):
         oldnode = self._find(xpath)
-        oldnode.replaceNode(newnode)
+        oldnode.getparent().replace(oldnode, newnode)
 
 
-XMLAPI = _Libxml2API
+XMLAPI = _LxmlAPI
