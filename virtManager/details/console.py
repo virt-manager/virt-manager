@@ -134,21 +134,31 @@ def build_keycombo_menu(on_send_key_fn):
 
 
 class vmmOverlayToolbar:
-    def __init__(self, on_leave_fn, on_send_key_fn):
+    def __init__(self, on_leave_fn, on_send_key_fn, on_minimize_fn):
         self._send_key_button = None
         self._keycombo_menu = None
         self._toolbar = None
 
         self.timed_revealer = None
-        self._init_ui(on_leave_fn, on_send_key_fn)
+        self._init_ui(on_leave_fn, on_send_key_fn, on_minimize_fn)
 
-    def _init_ui(self, on_leave_fn, on_send_key_fn):
+    def _init_ui(self, on_leave_fn, on_send_key_fn, on_minimize_fn):
         self._keycombo_menu = build_keycombo_menu(on_send_key_fn)
 
         self._toolbar = Gtk.Toolbar()
         self._toolbar.set_show_arrow(False)
         self._toolbar.set_style(Gtk.ToolbarStyle.BOTH_HORIZ)
         self._toolbar.get_accessible().set_name("Fullscreen Toolbar")
+
+        # Minimize button (if callback provided)
+        minimize_button = Gtk.ToolButton()
+        minimize_button.set_label(_("Minimize"))
+        minimize_button.set_icon_name("window-minimize")
+        minimize_button.set_tooltip_text(_("Minimize Window"))
+        minimize_button.show()
+        minimize_button.get_accessible().set_name("Minimize Window")
+        self._toolbar.add(minimize_button)
+        minimize_button.connect("clicked", on_minimize_fn)
 
         # Exit button
         button = Gtk.ToolButton()
@@ -369,7 +379,9 @@ class vmmConsolePages(vmmGObjectUI):
         self._keycombo_menu = build_keycombo_menu(self._do_send_key)
 
         self._overlay_toolbar_fullscreen = vmmOverlayToolbar(
-            on_leave_fn=self._leave_fullscreen, on_send_key_fn=self._do_send_key
+            on_leave_fn=self._leave_fullscreen,
+            on_send_key_fn=self._do_send_key,
+            on_minimize_fn=self._minimize_window
         )
         self.widget("console-overlay").add_overlay(
             self._overlay_toolbar_fullscreen.timed_revealer.get_overlay_widget()
@@ -518,6 +530,10 @@ class vmmConsolePages(vmmGObjectUI):
 
     def _leave_fullscreen(self, ignore=None):
         self.emit("leave-fullscreen")
+
+    def _minimize_window(self, ignore=None):
+        """Minimize the application window"""
+        self.topwin.iconify()
 
     def _change_fullscreen(self, do_fullscreen):
         if do_fullscreen:
