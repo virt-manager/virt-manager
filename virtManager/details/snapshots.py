@@ -465,7 +465,6 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         # [name, row label, tooltip, icon name, sortname, current]
         model = Gtk.ListStore(str, str, str, str, str, bool)
-        model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
@@ -563,6 +562,7 @@ class vmmSnapshotPage(vmmGObjectUI):
 
         has_external = False
         has_internal = False
+        snapshots.sort(key=lambda snap: snap.get_xmlobj().creationTime)
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             name = snap.get_name()
