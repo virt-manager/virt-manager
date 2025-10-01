@@ -36,7 +36,7 @@ class _CloudInitConfig:
     def _create_file(self):
         content = self._content()
 
-        if not content:
+        if content is None:
             return None
 
         fileobj = tempfile.NamedTemporaryFile(
