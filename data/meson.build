@@ -2,7 +2,7 @@ fs = import('fs')
 
 desktop_file = files('virt-manager.desktop.in')
 
-appdata_file = files('virt-manager.appdata.xml.in')
+metainfo_file = files('org.virt_manager.virt-manager.metainfo.xml.in')
 
 install_data(
   'org.virt-manager.virt-manager.gschema.xml',

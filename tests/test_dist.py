@@ -120,4 +120,6 @@ def test_ui_translatable_atknames():
 
 
 def test_appstream_validate():
-    subprocess.check_call(["appstream-util", "validate", "data/virt-manager.appdata.xml.in"])
+    subprocess.check_call(
+        ["appstream-util", "validate", "data/org.virt_manager.virt-manager.metainfo.xml.in"]
+    )
