@@ -464,7 +464,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         self.widget("snapshot-description").set_buffer(buf)
 
         # [name, row label, tooltip, icon name, sortname, current]
-        model = Gtk.ListStore(str, str, str, str, str, bool)
+        model = Gtk.TreeStore(str, str, str, str, str, bool)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
@@ -578,11 +578,11 @@ class vmmSnapshotPage(vmmGObjectUI):
 
             label = label % {"vm": xmlutil.xml_escape(name), "state": xmlutil.xml_escape(state)}
             model.append(
-                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()]
+                None, [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()]
             )
 
         if has_internal and has_external:
-            model.append([None, None, None, None, "2", False])
+            model.append(None, [None, None, None, None, "2", False])
 
         def check_selection(treemodel, path, it, snaps):
             if select_name:
