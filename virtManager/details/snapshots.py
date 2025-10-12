@@ -463,8 +463,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf.connect("changed", self._description_changed)
         self.widget("snapshot-description").set_buffer(buf)
 
-        # [name, row label, tooltip, icon name, sortname, current]
-        model = Gtk.TreeStore(str, str, str, str, str, bool)
+        # [name, row label, tooltip, icon name, current]
+        model = Gtk.TreeStore(str, str, str, str, bool)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
@@ -485,7 +485,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         img.set_property("icon-name", "emblem-default")
         img.set_property("xalign", 0.0)
         col.pack_start(img, False)
-        col.add_attribute(img, "visible", 5)
+        col.add_attribute(img, "visible", 4)
 
         def _sep_cb(_model, _iter, ignore):
             return not bool(_model[_iter][0])
@@ -564,8 +564,6 @@ class vmmSnapshotPage(vmmGObjectUI):
             self._set_error_page(_("Error refreshing snapshot list: %s") % str(e))
             return
 
-        has_external = False
-        has_internal = False
         snapshots.sort(key=lambda snap: snap.get_xmlobj().creationTime)
         screenshots_name_to_widget = {}
         for snap in snapshots:
@@ -574,12 +572,8 @@ class vmmSnapshotPage(vmmGObjectUI):
             state = snap.run_status()
             parent_name = snap.get_xmlobj().parent
             if snap.is_external():
-                has_external = True
-                sortname = "3%s" % name
                 label = _("%(vm)s\n<span size='small'>VM State: %(state)s (External)</span>")
             else:
-                has_internal = True
-                sortname = "1%s" % name
                 label = _("%(vm)s\n<span size='small'>VM State: %(state)s</span>")
 
             label = label % {"vm": xmlutil.xml_escape(name), "state": xmlutil.xml_escape(state)}
@@ -592,12 +586,9 @@ class vmmSnapshotPage(vmmGObjectUI):
             parent_widget = screenshots_name_to_widget.get(parent_name)
             ui_widget = model.append(
                 parent_widget,
-                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()],
+                [name, label, desc, snap.run_status_icon_name(), snap.is_current()],
             )
             screenshots_name_to_widget[name] = ui_widget
-
-        if has_internal and has_external:
-            model.append(None, [None, None, None, None, "2", False])
 
         def check_selection(treemodel, path, it, snaps):
             if select_name:
