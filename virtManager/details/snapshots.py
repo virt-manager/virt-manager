@@ -590,17 +590,7 @@ class vmmSnapshotPage(vmmGObjectUI):
             )
             screenshots_name_to_widget[name] = ui_widget
 
-        def check_selection(treemodel, path, it, snaps):
-            if select_name:
-                if treemodel[it][0] == select_name:
-                    selection.select_path(path)
-            elif treemodel[it][0] in snaps:
-                selection.select_path(path)
-
-        selection = self.widget("snapshot-list").get_selection()
         model = self.widget("snapshot-list").get_model()
-        selection.unselect_all()
-        model.foreach(check_selection, cursnaps)
         if not self._initial_populate:
             self.widget("snapshot-list").expand_all()
         else:
@@ -609,6 +599,17 @@ class vmmSnapshotPage(vmmGObjectUI):
                 saved_expanded_paths.append(path)
             for path in saved_expanded_paths:
                 self.widget("snapshot-list").expand_to_path(path)
+
+        def check_selection(treemodel, path, it, snaps):
+            if select_name:
+                if treemodel[it][0] == select_name:
+                    selection.select_path(path)
+            elif treemodel[it][0] in snaps:
+                selection.select_path(path)
+
+        selection = self.widget("snapshot-list").get_selection()
+        selection.unselect_all()
+        model.foreach(check_selection, cursnaps)
 
         self._initial_populate = True
 
