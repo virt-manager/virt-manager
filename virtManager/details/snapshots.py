@@ -563,10 +563,12 @@ class vmmSnapshotPage(vmmGObjectUI):
         has_external = False
         has_internal = False
         snapshots.sort(key=lambda snap: snap.get_xmlobj().creationTime)
+        screenshots_name_to_widget = {}
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             name = snap.get_name()
             state = snap.run_status()
+            parent_name = snap.get_xmlobj().parent
             if snap.is_external():
                 has_external = True
                 sortname = "3%s" % name
@@ -577,9 +579,18 @@ class vmmSnapshotPage(vmmGObjectUI):
                 label = _("%(vm)s\n<span size='small'>VM State: %(state)s</span>")
 
             label = label % {"vm": xmlutil.xml_escape(name), "state": xmlutil.xml_escape(state)}
-            model.append(
-                None, [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()]
+
+            if parent_name is not None and parent_name not in screenshots_name_to_widget:
+                error = _("Parent snapshot %s was not found") % parent_name
+                self.err.show_err(error)
+                return
+
+            parent_widget = screenshots_name_to_widget.get(parent_name)
+            ui_widget = model.append(
+                parent_widget,
+                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()],
             )
+            screenshots_name_to_widget[name] = ui_widget
 
         if has_internal and has_external:
             model.append(None, [None, None, None, None, "2", False])
