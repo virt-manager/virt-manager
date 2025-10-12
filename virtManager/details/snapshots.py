@@ -550,6 +550,10 @@ class vmmSnapshotPage(vmmGObjectUI):
         for i in self._get_selected_snapshots():
             cursnaps.append(i.get_name())
 
+        saved_expanded_paths = []
+        self.widget("snapshot-list").map_expanded_rows(
+            lambda _, path, path_list: path_list.append(path), saved_expanded_paths
+        )
         model = self.widget("snapshot-list").get_model()
         model.clear()
 
@@ -606,6 +610,14 @@ class vmmSnapshotPage(vmmGObjectUI):
         model = self.widget("snapshot-list").get_model()
         selection.unselect_all()
         model.foreach(check_selection, cursnaps)
+        if not self._initial_populate:
+            self.widget("snapshot-list").expand_all()
+        else:
+            if select_name is not None and select_name in screenshots_name_to_widget:
+                path = model.get_path(screenshots_name_to_widget.get(select_name))
+                saved_expanded_paths.append(path)
+            for path in saved_expanded_paths:
+                self.widget("snapshot-list").expand_to_path(path)
 
         self._initial_populate = True
 
