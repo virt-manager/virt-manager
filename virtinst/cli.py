@@ -29,6 +29,7 @@ from .devices import (
     DeviceHostdev,
     DeviceInterface,
 )
+from .domain import DomainOs
 from .guest import Guest
 from .logger import log, reset_logging
 from .nodedev import NodeDevice
@@ -3214,10 +3215,10 @@ class ParserBoot(VirtCLIParser):
 
         # This is simply so the boot options are advertised with --boot help,
         # actual processing is handled by _parse
-        cls.add_arg("hd", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("cdrom", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("fd", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("network", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_HARDDISK, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_CDROM, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_FLOPPY, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_NETWORK, None, lookup_cb=None, cb=cls.noset_cb)
 
         cls.add_arg(
             "refresh-machine-type",
