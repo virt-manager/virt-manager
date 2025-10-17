@@ -2274,10 +2274,22 @@ class vmmDetails(vmmGObjectUI):
     def _make_boot_rows(self):
         if not self.vm.can_use_device_boot_order():
             return [
-                ["hd", _("Hard Disk"), "drive-harddisk", False, True],
-                ["cdrom", _("CDROM"), "media-optical", False, True],
-                ["network", _("Network (PXE)"), "network-idle", False, True],
-                ["fd", _("Floppy"), "media-floppy", False, True],
+                [
+                    virtinst.DomainOs.BOOT_DEVICE_HARDDISK,
+                    _("Hard Disk"),
+                    "drive-harddisk",
+                    False,
+                    True,
+                ],
+                [virtinst.DomainOs.BOOT_DEVICE_CDROM, _("CDROM"), "media-optical", False, True],
+                [
+                    virtinst.DomainOs.BOOT_DEVICE_NETWORK,
+                    _("Network (PXE)"),
+                    "network-idle",
+                    False,
+                    True,
+                ],
+                [virtinst.DomainOs.BOOT_DEVICE_FLOPPY, _("Floppy"), "media-floppy", False, True],
             ]
 
         ret = []

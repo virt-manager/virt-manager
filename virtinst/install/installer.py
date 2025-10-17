@@ -87,7 +87,7 @@ class Installer:
         if cdrom:
             cdrom = InstallerTreeMedia.validate_path(self.conn, cdrom)
             self._cdrom = cdrom
-            self._install_bootdev = "cdrom"
+            self._install_bootdev = DomainOs.BOOT_DEVICE_CDROM
         elif location or location_kernel or location_initrd or install_kernel or install_initrd:
             self._treemedia = InstallerTreeMedia(
                 self.conn,
@@ -226,7 +226,7 @@ class Installer:
         # windows virtio installs, and booting local disk from PXE)
         for disk in guest.devices.disk:
             if disk.device == disk.DEVICE_DISK:
-                bootdev = "hd"
+                bootdev = DomainOs.BOOT_DEVICE_HARDDISK
                 if bootdev not in bootorder:
                     bootorder.append(bootdev)
                 break

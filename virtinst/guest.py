@@ -469,13 +469,13 @@ class Guest(XMLBuilder):
             break
 
         for b in boot_order:
-            if b == "network" and net:
+            if b == DomainOs.BOOT_DEVICE_NETWORK and net:
                 ret.append(net.get_xml_id())
-            elif b == "hd" and disk:
+            elif b == DomainOs.BOOT_DEVICE_HARDDISK and disk:
                 ret.append(disk.get_xml_id())
-            elif b == "cdrom" and cdrom:
+            elif b == DomainOs.BOOT_DEVICE_CDROM and cdrom:
                 ret.append(cdrom.get_xml_id())
-            elif b == "fd" and floppy:
+            elif b == DomainOs.BOOT_DEVICE_FLOPPY and floppy:
                 ret.append(floppy.get_xml_id())
         return ret
 
