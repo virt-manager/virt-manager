@@ -129,7 +129,7 @@ storage options via -file.
 ``--reflink``
     Perform a lightweight copy. This is much faster if source images and destination
     images are all on the same btrfs filesystem. This only works for raw format disk
-    images, any non-raw images will not attempt to use refink
+    images, any non-raw images will not attempt to use reflink.
 
 
 ``-m``, ``--mac`` MAC
