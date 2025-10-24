@@ -128,6 +128,7 @@ class DeviceHostdev(Device):
 
     driver_name = XMLProperty("./driver/@name")
     rom_bar = XMLProperty("./rom/@bar", is_onoff=True)
+    acpi_nodeset = XMLProperty("./acpi/@nodeset")
 
     # type=scsi handling
     scsi_adapter = XMLProperty("./source/adapter/@name")
