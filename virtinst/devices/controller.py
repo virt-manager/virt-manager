@@ -91,6 +91,8 @@ class DeviceController(Device):
     target_index = XMLProperty("./target/@index", is_int=True)
     target_node = XMLProperty("./target/node", is_int=True)
     target_memReserve = XMLProperty("./target/@memReserve", is_int=True)
+    pcihole64 = XMLProperty("./pcihole64", is_int=True)
+    pcihole64_unit = XMLProperty("./pcihole64/@unit")
 
     def _get_attached_disk_devices(self, guest):
         ret = []
