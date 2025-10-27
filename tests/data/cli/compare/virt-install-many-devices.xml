@@ -928,6 +928,12 @@
         <zpci uid="0xffff" fid="0xffffffff"/>
       </address>
     </hostdev>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0" bus="21" slot="0" function="4"/>
+      </source>
+      <driver name="vfio" iommufd="yes"/>
+    </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>
         <vendor id="0x062a"/>
