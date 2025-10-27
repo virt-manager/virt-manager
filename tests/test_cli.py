@@ -748,6 +748,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev 15:0.1
 --host-device 2:15:0.2
 --hostdev 0:15:0.3,address.type=pci,address.zpci.uid=0xffff,address.zpci.fid=0xffffffff
+--hostdev 0:15:0.4,driver_name=vfio,driver.iommufd=yes
 --host-device 0x062a:0x0001,driver_name=vfio
 --host-device 0483:2016
 --host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on,acpi.nodeset=0-2
