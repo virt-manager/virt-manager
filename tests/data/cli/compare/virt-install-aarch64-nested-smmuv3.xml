@@ -1,0 +1,56 @@
+<domain type="kvm">
+  <name>vm1</name>
+  <uuid>00000000-1111-2222-3333-444444444444</uuid>
+  <memory>65536</memory>
+  <currentMemory>65536</currentMemory>
+  <vcpu>1</vcpu>
+  <os firmware="efi">
+    <type arch="aarch64" machine="virt">hvm</type>
+    <boot dev="hd"/>
+  </os>
+  <features>
+    <acpi/>
+  </features>
+  <cpu mode="host-passthrough"/>
+  <clock offset="utc"/>
+  <devices>
+    <emulator>/usr/bin/qemu-system-aarch64</emulator>
+    <controller type="pci" index="1" model="pcie-expander-bus"/>
+    <controller type="pci" index="2" model="pcie-root-port">
+      <address type="pci" domain="0" bus="1" function="0" devno="0"/>
+    </controller>
+    <controller type="usb" model="qemu-xhci" ports="15"/>
+    <interface type="bridge">
+      <source bridge="testsuitebr0"/>
+      <mac address="00:11:22:33:44:55"/>
+    </interface>
+    <console type="pty"/>
+    <channel type="spicevmc">
+      <target type="virtio" name="com.redhat.spice.0"/>
+    </channel>
+    <input type="tablet" bus="usb"/>
+    <input type="keyboard" bus="usb"/>
+    <tpm>
+      <backend type="emulator"/>
+    </tpm>
+    <graphics type="spice" port="-1" tlsPort="-1" autoport="yes">
+      <image compression="off"/>
+    </graphics>
+    <sound model="ich9"/>
+    <video>
+      <model type="ramfb"/>
+    </video>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0" bus="0" slot="4" function="0"/>
+      </source>
+      <address type="pci" bus="2" function="0" devno="0"/>
+    </hostdev>
+    <iommu model="smmuv3">
+      <driver pciBus="0" accel="on" ats="on" ril="on" ssidsize="20" oas="48"/>
+    </iommu>
+    <iommu model="smmuv3">
+      <driver pciBus="1" accel="on" ats="on" ril="on" ssidsize="20" oas="48"/>
+    </iommu>
+  </devices>
+</domain>
