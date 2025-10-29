@@ -2237,13 +2237,25 @@ ba</description>
 </pool>
 
 
-<pool type="zfs">
+<pool type='zfs'>
   <name>pool-zfs</name>
   <source>
     <name>testzfspool</name>
-    <device path="/dev/ada1"/>
   </source>
+  <target>
+    <path>/dev/zvol/testzfspool</path>
+  </target>
+
+  <volume type='block'>
+    <name>zfsvol</name>
+    <capacity unit='bytes'>536870912000</capacity>
+    <allocation unit='bytes'>0</allocation>
+    <target>
+      <path>/dev/zvol/testzfspool/zfsvol</path>
+    </target>
+  </volume>
 </pool>
+
 
 <pool type="dir">
   <name>pool-test-nvram</name>
