@@ -562,7 +562,7 @@ class vmmAddHardware(vmmGObjectUI):
 
     @staticmethod
     def sound_recommended_models(_guest):
-        return ["ich6", "ich9", "ac97"]
+        return ["ich6", "ich9", "ac97", "usb"]
 
     @staticmethod
     def sound_pretty_model(model):
