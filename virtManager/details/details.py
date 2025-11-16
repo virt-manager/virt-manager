@@ -368,7 +368,10 @@ class vmmDetails(vmmGObjectUI):
         self._addstorage.connect("changed", _e(EDIT_DISK))
 
         self._xmleditor = vmmXMLEditor(
-            self.builder, self.topwin, self.widget("hw-panel-align"), self.widget("hw-panel")
+            self.builder,
+            self.topwin,
+            self.widget("hw-panel-align"),
+            self.widget("hw-panel-scroll"),
         )
         self._xmleditor.connect("changed", _e(EDIT_XML))
         self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
