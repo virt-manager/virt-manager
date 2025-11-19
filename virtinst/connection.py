@@ -186,7 +186,8 @@ class VirtinstConnection:
     def get_libvirt_data_root_dir(self):
         if self.is_privileged():
             return "/var/lib/libvirt"
-        return os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share/libvirt"))
+        path = os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+        return os.path.join(path, "libvirt")
 
     ####################
     # Polling routines #
