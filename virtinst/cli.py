@@ -4272,6 +4272,8 @@ class ParserNetwork(VirtCLIParser):
         # Standard XML options
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("backend.type", "backend.type")
+        cls.add_arg("backend.hostname", "backend.hostname")
+        cls.add_arg("backend.fqdn", "backend.fqdn")
         cls.add_arg("backend.logFile", "backend.logFile")
         cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters", is_onoff=True)
 

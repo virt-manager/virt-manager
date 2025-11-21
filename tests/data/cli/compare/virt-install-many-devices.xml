@@ -680,6 +680,11 @@
         <range start="5000" end="6000" to="5"/>
       </portForward>
     </interface>
+    <interface type="user">
+      <backend type="passt" hostname="test" fqdn="test.example.com"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
+    </interface>
     <interface type="hostdev">
       <mac address="00:11:22:33:44:55"/>
       <model type="virtio"/>

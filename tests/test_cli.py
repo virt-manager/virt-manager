@@ -675,6 +675,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network passt,portForward=8080
 --network passt,portForward0=7000-8000/udp,portForward1=127.0.0.1:2222:22
 --network passt,portForward0=2001:db8:ac10:fd01::1:10:3000-4000:30,portForward1=127.0.0.1:5000-6000:5
+--network passt,backend.hostname=test,backend.fqdn=test.example.com
 --network type=hostdev,source.address.type=pci,source.address.domain=0x0,source.address.bus=0x00,source.address.slot=0x07,source.address.function=0x0
 --network hostdev=pci_0000_00_09_0
 --network hostdev=0:0:4.0
