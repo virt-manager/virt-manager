@@ -132,6 +132,8 @@ class _Backend(XMLBuilder):
     XML_NAME = "backend"
 
     type = XMLProperty("./@type")
+    hostname = XMLProperty("./@hostname")
+    fqdn = XMLProperty("./@fqdn")
     logFile = XMLProperty("./@logFile", do_abspath=True)
 
 
