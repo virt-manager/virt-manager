@@ -38,16 +38,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-07-18 22:53+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
-"Language-Team: German <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/de/>\n"
+"PO-Revision-Date: 2025-11-03 06:54+0000\n"
+"Last-Translator: ano n <anon1010@users.noreply.translate.fedoraproject.org>\n"
+"Language-Team: German <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -110,10 +110,8 @@ msgid "Manage virtual machines"
 msgstr "Virtuelle Maschinen verwalten"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "Virtualisierung;libvirt;vm;vmm;"
+msgstr "Virtualisierung;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -176,10 +174,8 @@ msgid "Host _Device:"
 msgstr "_Hostrechner:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Pool starten"
+msgstr "Startkonfiguration:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -3182,8 +3178,6 @@ msgid "Error continuing install: %s"
 msgstr "Fehler beim Fortsetzen der Installation: %s"
 
 #: virtManager/createvm.py:2055
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Container wird gebootstrappt"
 
@@ -4446,10 +4440,8 @@ msgstr ""
 "libvirt verbinden. Versuchen Sie es als root."
 
 #: virtManager/lib/connectauth.py:189
-#, fuzzy
-#| msgid "Verify that the 'libvirtd' daemon is running."
 msgid "Verify that an appropriate libvirt daemon is running."
-msgstr "Stellen Sie sicher, dass der »libvirtd«-Dienst läuft."
+msgstr "Stellen Sie sicher, dass dein geeigneter libvirtd-Dienst läuft."
 
 #: virtManager/lib/connectauth.py:192
 #, python-format
@@ -4747,10 +4739,10 @@ msgid "Migrating VM '%s'"
 msgstr "VM «%s» migrieren"
 
 #: virtManager/migrate.py:393
-#, fuzzy, python-format
-#| msgid "Migrating VM '%s' to %s. This may take a while."
+#, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
-msgstr "VM '%s' wird nach %s migriert. Dies kann einen Augenblick dauern."
+msgstr ""
+"VM '%(name)s' wird nach %(host)s migriert. Dies kann einen Augenblick dauern."
 
 #: virtManager/migrate.py:407
 #, python-format
@@ -4968,6 +4960,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator ist nicht installiert oder nutzbar, System-tray-Icon nicht "
+"verfügbar auf Wayland"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5060,10 +5054,9 @@ msgid "Error unpausing domain"
 msgstr "Fehler beim Fortsetzen der Domain"
 
 #: virtManager/vmmenu.py:231
-#, fuzzy, python-format
-#| msgid "Error restoring domain"
+#, python-format
 msgid "Error restoring domain: %s"
-msgstr "Fehler beim Wiederherstellen der Domain"
+msgstr "Fehler beim Wiederherstellen der Domain %s"
 
 #: virtManager/vmmenu.py:234
 msgid ""
@@ -6059,10 +6052,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP Startsicherheit erfordert einen Q35 UEFI Rechner"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV-Startsicherheit erfordert einen Q35 UEFI-Rechner"
+msgstr "TDX-Startsicherheit erfordert einen Q35 UEFI-Rechner"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -7154,6 +7145,9 @@ msgid ""
 "\n"
 "Update this device for the guest '%(domain)s'?"
 msgstr ""
+"%(xml)s\n"
+"\n"
+"Dieses Gerät für den Gast '%(domain)s' aktualisieren?"
 
 #: virtinst/virtxml.py:381
 msgid "Device update successful."
@@ -7167,6 +7161,8 @@ msgstr "Fehler beim Versuch der Geräteaktualisierung: %(error)s"
 #: virtinst/virtxml.py:433
 msgid "No XML diff was generated. The requested changes will have no effect."
 msgstr ""
+"Es wurde kein XML Vergleich generiert. Die angeforderten Änderungen haben "
+"keine Auswirkungen."
 
 #: virtinst/virtxml.py:452
 msgid "Edit libvirt XML using command line options."
@@ -7219,6 +7215,8 @@ msgid ""
 "Output built device XML. Domain is optional but recommended to ensure "
 "optimal defaults."
 msgstr ""
+"Ausgabe des erstellten Geräts als XML. Die Angabe der Domäne ist optional, "
+"wird jedoch empfohlen, um optimale Standardeinstellungen zu gewährleisten."
 
 #: virtinst/virtxml.py:497
 msgid "Output options"
@@ -7245,7 +7243,7 @@ msgstr ""
 
 #: virtinst/virtxml.py:515
 msgid "Force not defining the domain."
-msgstr ""
+msgstr "Zwingen, die Domain nicht zu definieren."
 
 #: virtinst/virtxml.py:518
 msgid "Start the domain."
@@ -7271,13 +7269,15 @@ msgstr "Widersprüchliche Optionen %s"
 
 #: virtinst/virtxml.py:541
 msgid "Convert an existing VM from PC/i440FX to Q35."
-msgstr ""
+msgstr "Konvertieren Sie eine vorhandene VM von PC/i440FX zu Q35."
 
 #: virtinst/virtxml.py:550
 msgid ""
 "Convert an existing VM to use VNC graphics. This removes any remnants of "
 "Spice graphics."
 msgstr ""
+"Konvertieren Sie eine vorhandene VM für die Verwendung von VNC-Grafiken. "
+"Dadurch werden alle Reste von Spice-Grafiken entfernt."
 
 #: virtinst/virtxml.py:555
 msgid "XML options"
@@ -7297,17 +7297,21 @@ msgstr "Eine Domain muss angegeben werden"
 
 #: virtinst/virtxml.py:647
 msgid "The VM is not running, --update is inapplicable."
-msgstr ""
+msgstr "Die VM läuft nicht, --update ist nicht anwendbar."
 
 #: virtinst/virtxml.py:680
 msgid "Changes will take effect after the domain is fully powered off."
 msgstr ""
+"Die Änderungen werden wirksam, nachdem die Domäne vollständig "
+"heruntergefahren wurde."
 
 #: virtinst/virtxml.py:684
 msgid ""
 "XML did not change after domain define. You may have changed a value that "
 "libvirt is setting by default."
 msgstr ""
+"XML hat sich nach der Domänendefinition nicht geändert. Möglicherweise haben "
+"Sie einen Wert geändert, den libvirt standardmäßig festlegt."
 
 #: virtinst/virtxml.py:699
 msgid "Aborted at user request"
@@ -7319,6 +7323,8 @@ msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
+"XML hatte nicht den erwarteten Root-Elementnamen ‚%(expectname)s‘, gefunden "
+"wurde '%(foundname)s'"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:517
@@ -7330,6 +7336,8 @@ msgstr "Ein Name muss für %s angegeben werden"
 #, python-format
 msgid "%(objecttype)s name '%(name)s' can not contain '%(char)s' character."
 msgstr ""
+"Der Name „%(name)s” des Objekttyps „%(objecttype)s” darf das Zeichen „%(char)"
+"s” nicht enthalten."
 
 #~ msgid "vmm;"
 #~ msgstr "vmm;"
