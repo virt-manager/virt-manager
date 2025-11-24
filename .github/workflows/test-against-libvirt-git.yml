@@ -33,7 +33,7 @@ jobs:
 
         dnf builddep -y libvirt
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Build RPM and test install
       run: |
