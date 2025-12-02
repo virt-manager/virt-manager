@@ -475,6 +475,9 @@ class Guest(XMLBuilder):
                 ret.append(floppy.get_xml_id())
         return ret
 
+    def can_use_device_boot_order(self):
+        return self.conn.support.conn_device_boot_order()
+
     def _get_device_boot_order(self):
         order = []
         for dev in self.get_bootable_devices():
