@@ -1396,7 +1396,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
-        return self.conn.support.conn_device_boot_order()
+        return self.get_xmlobj().can_use_device_boot_order()
 
     def get_bootable_devices(self):
         # redirdev can also be marked bootable, but it should be rarely
