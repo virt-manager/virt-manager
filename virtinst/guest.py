@@ -488,10 +488,10 @@ class Guest(XMLBuilder):
         order.sort(key=lambda p: p[1])
         return [p[0] for p in order]
 
-    def get_boot_order(self, legacy=False):
-        if legacy:
-            return self.os.bootorder
-        return self._get_device_boot_order() or self._convert_old_boot_order(self.os.bootorder)
+    def get_boot_order(self):
+        if self.can_use_device_boot_order():
+            return self._get_device_boot_order() or self._convert_old_boot_order(self.os.bootorder)
+        return self.os.bootorder
 
     def _set_device_boot_order(self, boot_order):
         """Sets the new device boot order for the domain"""
@@ -506,12 +506,12 @@ class Guest(XMLBuilder):
         for boot_idx, dev_xml_id in enumerate(boot_order, 1):
             dev_map[dev_xml_id].boot.order = boot_idx
 
-    def set_boot_order(self, boot_order, legacy=False):
+    def set_boot_order(self, boot_order):
         """Modifies the boot order"""
-        if legacy:
-            self.os.bootorder = boot_order
-        else:
+        if self.can_use_device_boot_order():
             self._set_device_boot_order(boot_order)
+        else:
+            self.os.bootorder = boot_order
 
     def reorder_boot_order(self, dev, boot_index):
         """Sets boot order of `dev` to `boot_index`
