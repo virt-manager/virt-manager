@@ -7,7 +7,6 @@
   <os>
     <type arch="x86_64" machine="q35">hvm</type>
     <loader readonly="yes" secure="yes" type="pflash">/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd</loader>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -31,6 +30,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/vm1.qcow2"/>
       <target dev="sda" bus="sata"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">

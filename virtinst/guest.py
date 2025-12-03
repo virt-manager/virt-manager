@@ -439,7 +439,7 @@ class Guest(XMLBuilder):
     # Bootorder helpers #
     #####################
 
-    def _convert_old_boot_order(self, boot_order):
+    def convert_old_boot_order(self, boot_order):
         """Converts the old boot order (e.g. <boot dev='hd'/>) into the
         per-device boot order format.
 
@@ -490,7 +490,7 @@ class Guest(XMLBuilder):
 
     def get_boot_order(self):
         if self.can_use_device_boot_order():
-            return self._get_device_boot_order() or self._convert_old_boot_order(self.os.bootorder)
+            return self._get_device_boot_order() or self.convert_old_boot_order(self.os.bootorder)
         return self.os.bootorder
 
     def _set_device_boot_order(self, boot_order):
@@ -512,6 +512,9 @@ class Guest(XMLBuilder):
             self._set_device_boot_order(boot_order)
         else:
             self.os.bootorder = boot_order
+
+    def has_boot_order(self):
+        return self.os.bootorder or any([d.boot.order for d in self.devices.get_all()])
 
     def reorder_boot_order(self, dev, boot_index):
         """Sets boot order of `dev` to `boot_index`

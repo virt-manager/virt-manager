@@ -72,7 +72,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
-    <boot dev="cdrom"/>
   </os>
   <features>
     <acpi/>
@@ -96,6 +95,7 @@
       <source file="TESTSUITE_SCRUBBED/tests/data/fakemedia/fake-no-osinfo.iso"/>
       <target dev="hda" bus="ide"/>
       <readonly/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
