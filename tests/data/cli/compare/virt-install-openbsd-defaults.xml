@@ -11,7 +11,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -34,6 +33,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/var/lib/libvirt/images/openbsd4.9.qcow2"/>
       <target dev="hda" bus="ide"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">

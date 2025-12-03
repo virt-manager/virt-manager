@@ -11,8 +11,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
-    <boot dev="network"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -35,6 +33,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <boot order="2"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">
@@ -50,6 +49,7 @@
       <source bridge="testsuitebr0"/>
       <mac address="00:11:22:33:44:55"/>
       <model type="e1000"/>
+      <boot order="1"/>
     </interface>
     <console type="pty"/>
     <channel type="spicevmc">
@@ -81,7 +81,6 @@
   <vcpu>1</vcpu>
   <os>
     <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -104,6 +103,7 @@
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">

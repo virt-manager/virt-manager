@@ -75,7 +75,6 @@ users:
   <vcpu>2</vcpu>
   <os>
     <type arch="i686">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <pae/>
@@ -90,6 +89,7 @@ users:
     <disk type="file" device="disk">
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="ich9-ehci1"/>
     <controller type="usb" model="ich9-uhci1">

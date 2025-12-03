@@ -7,8 +7,6 @@
   <os>
     <type arch="i686">hvm</type>
     <loader type="rom">/usr/lib/xen/boot/hvmloader</loader>
-    <boot dev="network"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -25,11 +23,13 @@
       <source file="/pool-dir/test-clone-simple.img"/>
       <target dev="hda" bus="ide"/>
       <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+      <boot order="2"/>
     </disk>
     <controller type="ide" index="0"/>
     <interface type="user">
       <mac address="22:11:11:11:11:11"/>
       <target dev="testnet0"/>
+      <boot order="1"/>
     </interface>
     <parallel type="file">
       <source path="/tmp/foo.log"/>
