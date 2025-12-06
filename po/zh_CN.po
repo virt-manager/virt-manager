@@ -27,15 +27,17 @@
 # zk dc <zkdc2345@qq.com>, 2023.
 # 连 浩鑫 <lianhaoxin2012@outlook.com>, 2023.
 # eirik song <eirik.song@gmail.com>, 2024.
-# jianqing yan <yanjianqing@kylinos.cn>, 2024.
+# jianqing yan <yanjianqing@kylinos.cn>, 2024, 2025.
 # Poesty Li <poesty7450@gmail.com>, 2025.
+# Shunyao Liu <liushunyao31@outlook.com>, 2025.
+# zhanchun li <lzc777@126.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-05-08 17:13+0000\n"
-"Last-Translator: Poesty Li <poesty7450@gmail.com>\n"
+"PO-Revision-Date: 2025-11-27 00:58+0000\n"
+"Last-Translator: jianqing yan <yanjianqing@kylinos.cn>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -43,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -95,20 +97,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "虚拟系统管理器"
+msgstr "虚拟机查看器/管理器"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "管理虚拟系统"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "虚拟化类型"
+msgstr "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -178,10 +176,8 @@ msgid "Host _Device:"
 msgstr "主机设备(_D)："
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "启动池"
+msgstr "启动策略:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -3746,9 +3742,8 @@ msgid "Error connecting to text console: %s"
 msgstr "连接到文本控制台时出错：%s"
 
 #: virtManager/details/snapshots.py:125
-#, fuzzy
 msgid "external snapshots not supported with this libvirt connection"
-msgstr "这个 libvirt 连接不支持外部快照"
+msgstr "当前libvirt连接不支持外部快照"
 
 #: virtManager/details/snapshots.py:291
 #, python-format
@@ -3776,7 +3771,7 @@ msgstr "正在创建虚拟机快照"
 msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
-msgstr ""
+msgstr "不建议将相同虚拟机的外部快照和内部快照混合使用。您确定要继续吗？"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4063,10 +4058,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap 设备..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap 设备..."
+msgstr "vDPA设备..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -4860,7 +4853,7 @@ msgstr "显示虚拟系统管理器(_S)"
 msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
-msgstr ""
+msgstr "未安装或无法使用 AppIndicator，Wayland 上没有系统托盘图标"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5452,6 +5445,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"配置一个 nvram 存储设备。\n"
+"它用于客户机内核记录 oops/panic 日志。例如：\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5636,10 +5632,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Error: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr "需要图形显示，但未设置 DISPLAY。不能运行 virt-viewer。"
+msgstr "未检测到显示。未运行 virt-viewer。"
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5654,9 +5648,8 @@ msgid "Unknown autoconsole type '%s'"
 msgstr "未知的自动控制台类型 '%s'"
 
 #: virtinst/cli.py:2615
-#, fuzzy
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr "CPU model=host 已弃用，请使用 model=host-model"
+msgstr "CPU 配置中的 model=host 已弃用，请使用 model=host-model"
 
 #: virtinst/cli.py:3914
 #, python-format
@@ -5876,10 +5869,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP 启动安全性设置需要计算机支持 Q35 UEFI"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV 启动安全性设置需要计算机支持 Q35 UEFI"
+msgstr "TDX启动安全性设置需要计算机支持 Q35 UEFI"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -6410,16 +6401,12 @@ msgid "Error validating install location: %s"
 msgstr "验证安装位置出错：%s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo 需要操作系统名称，但是没有设置或检测到\n"
-"任何值。"
+"--osinfo/--os-variant 需要指定操作系统名称, 未指定或检测到\n"
+"相关内容。"
 
 #: virtinst/virtinstall.py:600
 msgid ""
@@ -6693,22 +6680,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "请键入 'yes' 或 'no'。"
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--edit 不支持和 --os-variant/--osinfo 一起使用"
+msgstr "--edit 不支持和 --osinfo/--os-variant 一起使用"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--remove-device 不支持和 --os-variant/--osinfo 一起使用"
+msgstr "--remove-device 不支持和 --osinfo/--os-variant 一起使用"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--build-xml 不支持和 --os-variant/--osinfo 一起使用"
+msgstr "--build-xml 不支持和 --osinfo/--os-variant 一起使用"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
