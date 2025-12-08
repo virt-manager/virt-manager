@@ -9,10 +9,10 @@
 # catborise <muhammetalisag@gmail.com>, 2013
 # catborise <muhammetalisag@gmail.com>, 2013
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Emin Tufan Çetin <etcetin@gmail.com>, 2016. #zanata
+# Emin Tufan Çetin <etcetin@gmail.com>, 2016. #zanata, 2025.
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017. #zanata
-# Emin Tufan Çetin <etcetin@gmail.com>, 2018. #zanata
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017. #zanata, 2025.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2018. #zanata, 2025.
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
 # Oğuz Ersen <oguz@ersen.moe>, 2022, 2023, 2024, 2025.
 # Ahmet Kaya <neodeveloper27@gmail.com>, 2025.
@@ -21,8 +21,8 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-10-04 15:43+0000\n"
-"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"PO-Revision-Date: 2025-12-08 08:58+0000\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
 "virt-manager/virt-manager/tr/>\n"
 "Language: tr\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -52,8 +52,8 @@ msgstr ""
 "Virtual Machine Manager, KVM, Xen ve LXC için sanal makineleri yönetmek için "
 "grafiksel bir araç sağlar. Sanal aygıtları başlatın, durdurun, ekleyin veya "
 "kaldırın, bir grafiksel veya seri konsola bağlanın ve yerel veya uzak "
-"makinelerdeki mevcut sanal makineler için kaynak kullanım istatistiklerini "
-"görün. Arka uç yönetim API'si olarak libvirt kullanır."
+"makinelerdeki sanal makineler için kaynak kullanım istatistiklerini görün. "
+"Arka uç yönetim API'si olarak libvirt kullanır."
 
 #: data/virt-manager.appdata.xml.in:20
 msgid "Main manager window"
@@ -114,7 +114,7 @@ msgstr "Yeni Sanal Donanım Ekle"
 
 #: ui/addhardware.ui:153
 msgid "_Device type:"
-msgstr "_Aygıt Türü:"
+msgstr "_Aygıt türü:"
 
 #: ui/addhardware.ui:184
 msgid "_Bus type:"
@@ -175,7 +175,7 @@ msgstr "_Ad:"
 
 #: ui/addhardware.ui:876
 msgid "_Auto socket:"
-msgstr "_Otomatik soket:"
+msgstr "_Kendiliğinden yuva:"
 
 #: ui/addhardware.ui:904
 msgid "_Channel:"
@@ -191,7 +191,7 @@ msgstr "Eyle_m:"
 
 #: ui/addhardware.ui:1172 ui/createnet.ui:139
 msgid "_Mode:"
-msgstr "_Mod:"
+msgstr "_Kip:"
 
 #: ui/addhardware.ui:1325 ui/details.ui:4742
 msgid "rng"
@@ -199,7 +199,7 @@ msgstr "rng"
 
 #: ui/addhardware.ui:1383 ui/details.ui:4824
 msgid "panic"
-msgstr "panik"
+msgstr "panic"
 
 #: ui/addhardware.ui:1489 ui/asyncjob.ui:146 ui/clone.ui:26 ui/clone.ui:690
 #: ui/connectauth.ui:22 ui/createconn.ui:25 ui/createnet.ui:798
@@ -236,11 +236,11 @@ msgstr "_Yönet..."
 
 #: ui/addstorage.ui:254
 msgid "Cac_he mode:"
-msgstr "Ön b_ellek modu:"
+msgstr "Ön b_ellek kipi:"
 
 #: ui/addstorage.ui:285
 msgid "Discard mod_e:"
-msgstr "Atma mod_u:"
+msgstr "Atma _kipi:"
 
 #: ui/addstorage.ui:316
 msgid "R_eadonly:"
@@ -252,7 +252,7 @@ msgstr "Paylaşıla_bilir:"
 
 #: ui/addstorage.ui:371
 msgid "Removab_le:"
-msgstr "Silinebi_lir:"
+msgstr "Kaldırılabi_lir:"
 
 #: ui/addstorage.ui:399
 msgid "Seria_l:"
@@ -264,11 +264,11 @@ msgstr "Gelişmiş _seçenekler"
 
 #: ui/asyncjob.ui:8
 msgid "Operation in progress"
-msgstr "İşlem devam ediyor"
+msgstr "İşlem sürüyor"
 
 #: ui/asyncjob.ui:51
 msgid "Please wait a few moments..."
-msgstr "Lütfen bir kaç dakika bekleyiniz..."
+msgstr "Lütfen biraz bekleyiniz..."
 
 #: ui/asyncjob.ui:118 virtManager/asyncjob.py:305 virtManager/asyncjob.py:312
 msgid "Processing..."
@@ -301,11 +301,11 @@ msgstr "Yol:"
 
 #: ui/clone.ui:183
 msgid "Existing disk"
-msgstr "Varolan disk"
+msgstr "Var olan disk"
 
 #: ui/clone.ui:222
 msgid "Create a new disk (c_lone) for the virtual machine"
-msgstr "Sanal makine için yeni bir disk(k_lon) oluşturun"
+msgstr "Sanal makine için yeni bir disk (k_lon) oluştur"
 
 #: ui/clone.ui:256 ui/createvol.ui:404 ui/fsdetails.ui:63
 msgid "_Browse..."
@@ -325,7 +325,7 @@ msgstr "<span size='large'>Sanal makine klonla</span>"
 
 #: ui/clone.ui:422
 msgid "Original VM:"
-msgstr "Asıl SM:"
+msgstr "Özgün SM:"
 
 #: ui/clone.ui:434
 msgid "Connection:"
@@ -409,7 +409,7 @@ msgstr "SSH üzerinden _uzak ana makineye bağlan"
 
 #: ui/createconn.ui:133
 msgid "_Autoconnect:"
-msgstr "_Otomatik Bağlan:"
+msgstr "_Kendiliğinden Bağlan:"
 
 #: ui/createconn.ui:183
 msgid "H_ostname:"
@@ -422,10 +422,10 @@ msgid ""
 "guests will not be available. Networking options\n"
 "are very limited. </small>"
 msgstr ""
-"<small>QEMU kullanıcı modu oturumu virt-manager için\n"
+"<small>QEMU kullanıcı kipi oturumu virt-manager için\n"
 "öntanımlı değer değildir. Önceden var olan herhangi bir\n"
-"QEMU/KVM konuğunun kullanılabilir olmaması muhtemeldir.\n"
-"Ağ oluşturma seçenekleri çok sınırlıdır.</small>"
+"QEMU/KVM konuğu kullanılamayabilir. Ağ oluşturma.\n"
+"seçenekleri çok sınırlıdır.</small>"
 
 #: ui/createconn.ui:259
 msgid "Cu_stom URI:"
@@ -569,7 +569,7 @@ msgstr "Ağ Üzerinden K_urulum (HTTP, HTTPS, veya FTP)"
 
 #: ui/createvm.ui:297
 msgid "Import _existing disk image"
-msgstr "_Mevcut disk kalıbını içe aktar"
+msgstr "_Var olan disk kalıbını içe aktar"
 
 #: ui/createvm.ui:315
 msgid "Ma_nual install"
@@ -630,7 +630,7 @@ msgstr "ISO"
 
 #: ui/createvm.ui:854
 msgid "Provide the operating system install U_RL:"
-msgstr "İşletim sistemi kurulum U_RL'sini belirtin:"
+msgstr "İşletim sistemi kurulum U_RL'sini belirt:"
 
 #: ui/createvm.ui:918
 msgid "Kerne_l options:"
@@ -650,7 +650,7 @@ msgstr "PXE"
 
 #: ui/createvm.ui:1038
 msgid "Provide the existing stora_ge path:"
-msgstr "Mevcut de_polama yolunu belirtin:"
+msgstr "Var olan de_polama yolunu belirtin:"
 
 #: ui/createvm.ui:1072 ui/createvm.ui:1200 ui/createvm.ui:1287
 msgid "B_rowse..."
@@ -666,11 +666,11 @@ msgstr ""
 
 #: ui/createvm.ui:1171
 msgid "Provide the _application path:"
-msgstr "Uygulama yolunu belirtin:"
+msgstr "_Uygulama yolunu belirt:"
 
 #: ui/createvm.ui:1252
 msgid "Provide the existing OS root _directory:"
-msgstr "Mevcut İS kök _dizinini belirtin:"
+msgstr "Var olan İS kök _dizinini belirt:"
 
 #: ui/createvm.ui:1334
 msgid ""
@@ -679,7 +679,7 @@ msgid ""
 "please install <a href=\"https://github.com/virt-manager/virt-"
 "bootstrap\">virt-bootstrap</a></small>"
 msgstr ""
-"<small>İS dizin ağacı zaten mevcut olmalıdır. İS dizin ağacı oluşturmayı "
+"<small>İS dizin ağacı halihazırda var olmalıdır. İS dizin ağacı oluşturmayı "
 "etkinleştirmek\n"
 "için lütfen <a href=\"https://github.com/virt-manager/virt-bootstrap\">virt-"
 "bootstrap</a> kurun</small>"
@@ -690,8 +690,8 @@ msgid ""
 "tree for remote\n"
 "connections is not yet supported.</small>"
 msgstr ""
-"<small>İS dizin ağacı zaten mevcut olmalıdır. Uzak bağlantılar için bir İS "
-"dizin ağacı\n"
+"<small>İS dizin ağacı halihazırda var olmalıdır. Uzak bağlantılar için bir "
+"İS dizin ağacı\n"
 "oluşturmak henüz desteklenmemektedir.</small>"
 
 #: ui/createvm.ui:1392
@@ -732,7 +732,7 @@ msgstr "Kaynak kayıt defterine erişim için kimlik bilgileri"
 
 #: ui/createvm.ui:1594
 msgid "Root password:"
-msgstr "Root parolası:"
+msgstr "Kök parolası:"
 
 #: ui/createvm.ui:1661
 msgid "Select _container template:"
@@ -748,7 +748,7 @@ msgstr "Kurduğunuz işletim sistemini s_eçin:"
 
 #: ui/createvm.ui:1758
 msgid "A_utomatically detect from the installation media / source"
-msgstr "Kurulum ortamından / kaynağından otomatik olarak te_spit et"
+msgstr "Kurulum ortamından / kaynağından kendiliğinden sapta"
 
 #: ui/createvm.ui:1807
 msgid "Install"
@@ -927,7 +927,7 @@ msgstr "Makine _Türü: "
 
 #: ui/details.ui:488
 msgid "Chipse_t:"
-msgstr "_Yonga Seti:"
+msgstr "_Yonga Takımı:"
 
 #: ui/details.ui:503
 msgid "Firm_ware:"
@@ -983,7 +983,7 @@ msgstr "2"
 
 #: ui/details.ui:1370
 msgid "<small>Overcommitting vCPUs can hurt performance</small>"
-msgstr "<small>vCPU'ları aşırı kullanmak performansa zarar verebilir</small>"
+msgstr "<small>vCPU'ları aşırı kullanmak başarımı düşürebilir<small>"
 
 #: ui/details.ui:1406
 msgid "<b>CPUs</b>"
@@ -1020,7 +1020,7 @@ msgstr "Ç_ekirdekler:"
 
 #: ui/details.ui:1607
 msgid "Socke_ts:"
-msgstr "Soke_tler:"
+msgstr "_Yuvalar:"
 
 #: ui/details.ui:1623 ui/details.ui:1641 ui/details.ui:1659
 msgid "1"
@@ -1064,7 +1064,7 @@ msgstr "Ana makine önyüklendiğinde _sanal makineyi başlat"
 
 #: ui/details.ui:2018
 msgid "<b>Autostart</b>"
-msgstr "<b>Otomatik başlatma</b>"
+msgstr "<b>Kendiliğinden başlat</b>"
 
 #: ui/details.ui:2065
 msgid "Init _path:"
@@ -1076,7 +1076,7 @@ msgstr "Başlatma ar_gümanları:"
 
 #: ui/details.ui:2113
 msgid "<b>Container init</b>"
-msgstr "<b>Konteyner başlatma</b>"
+msgstr "<b>Konteyner başlatım</b>"
 
 #: ui/details.ui:2143
 msgid "Ena_ble direct kernel boot"
@@ -1084,7 +1084,7 @@ msgstr "Doğrudan çekirdek önyüklemeyi etki_nleştir"
 
 #: ui/details.ui:2176
 msgid "Ke_rnel path:"
-msgstr "Ke_rnel yolu:"
+msgstr "Çeki_rdek yolu:"
 
 #: ui/details.ui:2192
 msgid "_Initrd path:"
@@ -1104,7 +1104,7 @@ msgstr "D_TB yolu:"
 
 #: ui/details.ui:2421
 msgid "<b>Dir_ect kernel boot</b>"
-msgstr "<b>Doğrudan ç_ekirdek önyükleme</b>"
+msgstr "<b>Doğrudan ç_ekirdek önyükle</b>"
 
 #: ui/details.ui:2452
 msgid "Enable boot me_nu"
@@ -1136,7 +1136,7 @@ msgstr "Disk veri yol_u:"
 
 #: ui/details.ui:2830
 msgid "disk-bus-label"
-msgstr "disk-sırası-etiketi"
+msgstr "disk-bus-label"
 
 #: ui/details.ui:2878
 msgid "<b>Virtual Disk</b>"
@@ -1168,7 +1168,7 @@ msgstr "Tür:"
 
 #: ui/details.ui:3255
 msgid "Mode:"
-msgstr "Mod:"
+msgstr "Kip:"
 
 #: ui/details.ui:3301
 msgid "<b>Virtual Input Device</b>"
@@ -1252,7 +1252,7 @@ msgstr "<b>Dosya Sistemi</b>"
 
 #: ui/details.ui:4401 ui/migrate.ui:390
 msgid "M_ode:"
-msgstr "M_od:"
+msgstr "_Kip:"
 
 #: ui/details.ui:4446
 msgid "<b>Smartcard Device</b>"
@@ -1321,7 +1321,7 @@ msgstr "_Biçim:"
 
 #: ui/fsdetails.ui:280
 msgid "blah foo warning message"
-msgstr "bla foo uyarı mesajı"
+msgstr "bla foo uyarı iletisi"
 
 #: ui/gfxdetails.ui:75
 msgid "Show passwor_d"
@@ -1342,7 +1342,7 @@ msgstr "_Bağlantı noktası:"
 #: ui/gfxdetails.ui:168 ui/vsockdetails.ui:39
 #: virtManager/device/gfxdetails.py:204
 msgid "A_uto"
-msgstr "_Otomatik"
+msgstr "_Kendiliğinden"
 
 #: ui/gfxdetails.ui:193 ui/vsockdetails.ui:64
 msgid "5900"
@@ -1380,7 +1380,7 @@ msgstr "Libvirt URI'si:"
 
 #: ui/host.ui:184
 msgid "A_utoconnect:"
-msgstr "_Otomatik olarak bağlan:"
+msgstr "_Kendiliğinden bağlan:"
 
 #: ui/host.ui:199
 msgid "<b>Basic details</b>"
@@ -1400,7 +1400,7 @@ msgstr "_Depolama"
 
 #: ui/hostnets.ui:187 ui/hoststorage.ui:403
 msgid "A_utostart:"
-msgstr "_Otomatik olarak başlat:"
+msgstr "_Kendiliğinden başlat:"
 
 #: ui/hostnets.ui:201
 msgid "Domain:"
@@ -1464,7 +1464,7 @@ msgstr "Havuzu Sil"
 
 #: ui/hoststorage.ui:138
 msgid "_Browse Local"
-msgstr "Yerele _Gözat"
+msgstr "Yerele _Göz At"
 
 #: ui/hoststorage.ui:142
 msgid "Browse local filesystem"
@@ -1529,7 +1529,7 @@ msgstr "_Düzenle"
 
 #: ui/manager.ui:92
 msgid "_Connection Details"
-msgstr "Bağlantı Det_ayları"
+msgstr "_Bağlantı Ayrıntıları"
 
 #: ui/manager.ui:101
 msgid "_Virtual Machine Details"
@@ -1593,7 +1593,7 @@ msgstr "_Aç"
 
 #: ui/manager.ui:296 ui/vmwindow.ui:339
 msgid "Power on the virtual machine"
-msgstr "Sanal makinenin gücünü aç"
+msgstr "Sanal makineye güç ver"
 
 #: ui/manager.ui:297 virtManager/manager.py:752 virtManager/vmmenu.py:88
 #: virtManager/vmwindow.py:370
@@ -1628,7 +1628,7 @@ msgstr "Taşınan sanal makine:"
 
 #: ui/migrate.ui:124
 msgid "Original host:"
-msgstr "Asıl ana makine:"
+msgstr "Özgün ana makine:"
 
 #: ui/migrate.ui:140
 msgid "New _host:"
@@ -1682,7 +1682,7 @@ msgid ""
 "\n"
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
-"Öntanımlı olarak libvirt, bir diskin önbellek modunun 'none' olmaması gibi, "
+"Öntanımlı olarak libvirt, bir diskin önbellek kipinin 'none' olmaması gibi, "
 "düzgün çalışmayan konuklara yol açabilecek belirli yapılandırmalar için "
 "sanal makineyi taşımayı reddedecektir.\n"
 "\n"
@@ -1837,11 +1837,11 @@ msgid ""
 "will need\n"
 "identical CPUs in order to migrate the VM."
 msgstr ""
-"Yeni SM'ler için öntanımlı CPU ayarı. Bu genellikle performans ve taşıma "
+"Yeni SM'ler için öntanımlı CPU ayarı. Bu genellikle başarım ve taşıma "
 "uyumluluğu\n"
 "arasında bir ödünleşmedir: eğer 'ana makineyi kopyala' seçeneği "
 "kullanılırsa\n"
-"SM'nin taşınacağı sunucuların da aynı CPU'lara sahip olması gerekecektir."
+"SM'nin taşınacağı sunucuların da aynı CPU'ları olması gerekecektir."
 
 #: ui/preferences.ui:498
 msgid "CPU _default:"
@@ -1850,12 +1850,12 @@ msgstr "CPU _öntanımlısı:"
 #: ui/preferences.ui:522
 msgid "Default Firmware for new VMs. Boot using either BIOS or UEFI."
 msgstr ""
-"Yeni SM'ler için öntanımlı ürün yazılımı. BIOS veya UEFI kullanarak "
+"Yeni SM'ler için öntanımlı donanım yazılımı. BIOS veya UEFI kullanarak "
 "önyükleme yapın."
 
 #: ui/preferences.ui:524
 msgid "x86 _Firmware:"
-msgstr "x86 Ürün _yazılımı:"
+msgstr "x86 _Donanım yazılımı:"
 
 #: ui/preferences.ui:550
 msgid "<b>New VM Defaults</b>"
@@ -1903,12 +1903,12 @@ msgid ""
 "If disabled, the VM window will not automatically connect to the running VM "
 "graphical console."
 msgstr ""
-"Devre dışı bırakılırsa, SM penceresi çalışan SM grafiksel konsoluna otomatik "
-"olarak bağlanmayacaktır."
+"Devre dışı bırakılırsa, SM penceresi çalışan SM grafiksel konsoluna "
+"kendiliğinden bağlanmayacaktır."
 
 #: ui/preferences.ui:735
 msgid "Console autoconnec_t:"
-msgstr "Konsola o_tomatik bağlan:"
+msgstr "Konsola _kendiliğinden bağlan:"
 
 #: ui/preferences.ui:763
 msgid "<b>Graphical Consoles</b>"
@@ -1964,7 +1964,7 @@ msgstr "Zaman Damgası:"
 
 #: ui/snapshots.ui:204
 msgid "Snapshot Mode:"
-msgstr "Anlık Görüntü Modu:"
+msgstr "Anlık Görüntü Kipi:"
 
 #: ui/snapshots.ui:229
 msgid "Screenshot:"
@@ -2012,15 +2012,15 @@ msgstr "_Açıklama:"
 
 #: ui/snapshotsnew.ui:211
 msgid "Snapshot _Mode:"
-msgstr "Anlık _Görüntü Modu:"
+msgstr "Anlık Görüntü _Kipi:"
 
 #: ui/snapshotsnew.ui:226
 msgid "_external"
-msgstr "_harici"
+msgstr "_dış"
 
 #: ui/snapshotsnew.ui:243
 msgid "_internal"
-msgstr "_dahili"
+msgstr "_iç"
 
 #: ui/snapshotsnew.ui:269
 msgid "Memory _State:"
@@ -2028,7 +2028,7 @@ msgstr "_Bellek Durumu:"
 
 #: ui/snapshotsnew.ui:283
 msgid "_auto"
-msgstr "_otomatik"
+msgstr "_kendiliğinden"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -2084,7 +2084,7 @@ msgstr "Ekranı _Ölçekle"
 
 #: ui/vmwindow.ui:188
 msgid "_Always"
-msgstr "Her zam_an"
+msgstr "Her _Zaman"
 
 #: ui/vmwindow.ui:198
 msgid "_Only when Fullscreen"
@@ -2096,7 +2096,7 @@ msgstr "_Asla"
 
 #: ui/vmwindow.ui:226
 msgid "Auto _resize VM with window"
-msgstr "SM'yi pencereyle otomatik _yeniden boyutlandır"
+msgstr "SM'yi pencereyle kendiliğinden _yeniden boyutlandır"
 
 #: ui/vmwindow.ui:239
 msgid "Co_nsoles"
@@ -2104,7 +2104,7 @@ msgstr "Ko_nsollar"
 
 #: ui/vmwindow.ui:247
 msgid "_Autoconnect"
-msgstr "_Otomatik Bağlan"
+msgstr "_Kendiliğinden Bağlan"
 
 #: ui/vmwindow.ui:262
 msgid "T_oolbar"
@@ -2144,7 +2144,7 @@ msgstr "Anlık Görüntüler"
 
 #: ui/vmwindow.ui:407
 msgid "Switch to fullscreen view"
-msgstr "Tam ekran görünümüne geçiş yap"
+msgstr "Tam ekran görünümüne geç"
 
 #: ui/vmwindow.ui:432
 msgid "Begin Installation"
@@ -2320,7 +2320,7 @@ msgstr "UDP ağ konsolu"
 
 #: virtManager/addhardware.py:464
 msgid "UNIX socket"
-msgstr "UNIX soketi"
+msgstr "UNIX yuvası"
 
 #: virtManager/addhardware.py:465
 msgid "Spice agent"
@@ -2409,7 +2409,7 @@ msgstr "Konuğu zorla sıfırla"
 
 #: virtManager/addhardware.py:578
 msgid "Gracefully shutdown the guest"
-msgstr "Konuğu düzgün bir şekilde kapat"
+msgstr "Konuğu düzgünce kapat"
 
 #: virtManager/addhardware.py:579
 msgid "Forcefully power off the guest"
@@ -2530,7 +2530,7 @@ msgstr "Rastgele Sayı Üreteci"
 
 #: virtManager/addhardware.py:1034
 msgid "VM Sockets"
-msgstr "SM Soketleri"
+msgstr "SM Yuvaları"
 
 #: virtManager/addhardware.py:1038 virtManager/details/details.py:2054
 #, python-format
@@ -2556,8 +2556,8 @@ msgid ""
 "Adding more than one USB controller is not supported.\n"
 "You can change the USB controller type in the VM details screen."
 msgstr ""
-"%s zaten bağlı bir USB denetleyicisine sahip.\n"
-"Birden fazla USB denetleyicisinin eklenmesi desteklenmiyor.\n"
+"%s üstüne bağlı bir USB denetleyicisi var.\n"
+"Birden çok USB denetleyicisinin eklenmesi desteklenmiyor.\n"
 "USB denetleyici türünü SM ayrıntıları ekranında değiştirebilirsiniz."
 
 #: virtManager/addhardware.py:1256
@@ -2593,7 +2593,7 @@ msgstr "Aygıta bağlı olarak bu işlemin tamamlanması birkaç dakika sürebil
 #: virtManager/addhardware.py:1338
 #, python-format
 msgid "The device is already in use by other guests %s"
-msgstr "Aygıt zaten diğer konuklar (%s) tarafından kullanılıyor"
+msgstr "Aygıt zaten diğer konuklarca (%s) kullanılıyor"
 
 #: virtManager/addhardware.py:1339
 msgid "Do you really want to use the device?"
@@ -2620,7 +2620,7 @@ msgstr "Disk hedefi: %s"
 #: virtManager/clone.py:119
 #, python-format
 msgid "Original path: %s"
-msgstr "Asıl yol: %s"
+msgstr "Özgün yol: %s"
 
 #: virtManager/clone.py:121
 #, python-format
@@ -2665,7 +2665,7 @@ msgstr "Klonla"
 
 #: virtManager/clone.py:453
 msgid "Cloning will overwrite the existing file"
-msgstr "Klonlama eylemi var olan dosya üzerine yazmaya sebebiyet verecek"
+msgstr "Klonlamak var olan dosyanın üstüne yazacak"
 
 #: virtManager/clone.py:455
 msgid ""
@@ -2713,8 +2713,8 @@ msgid ""
 "Creating virtual machine clone '%s' and selected storage (this may take a "
 "while)"
 msgstr ""
-"'%s' sanal makine klonu ve seçilen depolama alanı oluşturuluyor (bu biraz "
-"zaman alabilir)"
+"'%s' sanal makine klonu ve seçilen depolama alanı oluşturuluyor "
+"(bu biraz sürebilir)"
 
 #: virtManager/connection.py:390
 msgid "User session"
@@ -2739,7 +2739,7 @@ msgid ""
 msgstr ""
 "%(object)s yeniden adlandırılamadı. Kurtarma denemesi de başarısız oldu.\n"
 "\n"
-"Asıl hata: %(origerror)s\n"
+"Özgün hata: %(origerror)s\n"
 "\n"
 "Kurtarma hatası: %(recovererror)s"
 
@@ -2795,7 +2795,7 @@ msgstr "Kullanılabilir aygıt yok"
 #: virtManager/createnet.py:338
 #, python-format
 msgid "Name '%s' already in use by another network."
-msgstr "'%s adı zaten başka bir ağ tarafından kullanılıyor."
+msgstr "'%s adı zaten başka bir ağca kullanılıyor."
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:312
 #: virtManager/createvol.py:255
@@ -2819,7 +2819,7 @@ msgstr "Sanal ağ oluşturuluyor..."
 
 #: virtManager/createnet.py:450
 msgid "Creating the virtual network may take a while..."
-msgstr "Sanal ağın oluşturulması biraz zaman alabilir..."
+msgstr "Sanal ağın oluşturulması biraz sürebilir..."
 
 #: virtManager/createpool.py:210
 msgid "Sou_rce Name:"
@@ -2857,7 +2857,7 @@ msgstr "Depolama havuzu oluşturuluyor..."
 
 #: virtManager/createpool.py:358
 msgid "Creating the storage pool may take a while..."
-msgstr "Depolama havuzunun oluşturulması biraz zaman alabilir..."
+msgstr "Depolama havuzunun oluşturulması biraz sürebilir..."
 
 #: virtManager/createpool.py:378
 msgid "Choose source path"
@@ -2927,17 +2927,17 @@ msgid ""
 "This usually means that QEMU or KVM is not installed on your machine, or the "
 "KVM kernel modules are not loaded."
 msgstr ""
-"Bunun anlamı genellikle QEMU veya KVM'in makinenizde kurulu olmaması yada "
-"KVM çekirdek modülleri yüklenmemiş olmamasıdır."
+"Bunun anlamı genellikle QEMU veya KVM'in makinenizde kurulmaması yada KVM "
+"çekirdek modüllerinin yüklenmemesidir."
 
 #: virtManager/createvm.py:583
 msgid ""
 "KVM is not available. This may mean the KVM package is not installed, or the "
 "KVM kernel modules are not loaded. Your virtual machines may perform poorly."
 msgstr ""
-"KVM kullanılabilir değil. Bunun anlamı KVM paketi kurulmamış ya da KVM "
-"çekirdek modülleri yüklenmemiş olmasıdır. Sanal makinelerinizin performansı "
-"düşük olabilir."
+"KVM kullanılamıyor. Bunun anlamı KVM paketi kurulmamış ya da KVM çekirdek "
+"modülleri yüklenmemiş olmasıdır. Sanal makinelerinizin başarımı düşük "
+"olabilir."
 
 #: virtManager/createvm.py:626
 #, python-format
@@ -3045,7 +3045,7 @@ msgid ""
 msgstr ""
 "Boş olmayan bir dizinde kök dosya sistemi oluşturmak, dosya çakışmaları "
 "nedeniyle başarısız olabilir.\n"
-"Devam etmek istiyor musunuz?"
+"Sürdürmek istiyor musunuz?"
 
 #: virtManager/createvm.py:1463
 msgid "An install media selection is required."
@@ -3097,11 +3097,11 @@ msgstr "Geçersiz konuk adı"
 
 #: virtManager/createvm.py:1750
 msgid "Detecting..."
-msgstr "Tespit ediliyor..."
+msgstr "Saptanıyor..."
 
 #: virtManager/createvm.py:1812
 msgid "None detected"
-msgstr "Hiçbiri tespit edilmedi"
+msgstr "Hiçbiri saptanamadı"
 
 #: virtManager/createvm.py:1848
 #, python-format
@@ -3133,7 +3133,7 @@ msgstr "SM '%s' beklenen süreden sonra görünmedi."
 #: virtManager/createvm.py:2039
 #, python-format
 msgid "Error continuing install: %s"
-msgstr "Kuruluma devam edilirken hata oluştu: %s"
+msgstr "Kurulum sürdürülürken hata oluştu: %s"
 
 #: virtManager/createvm.py:2055
 msgid "Bootstrapping container"
@@ -3160,7 +3160,7 @@ msgstr "Depolama birimi oluşturuluyor..."
 
 #: virtManager/createvol.py:293
 msgid "Creating the storage volume may take a while..."
-msgstr "Depolama biriminin oluşturulması biraz zaman alabilir..."
+msgstr "Depolama biriminin oluşturulması biraz sürebilir..."
 
 #: virtManager/delete.py:149
 msgid "Are you sure you want to delete the storage?"
@@ -3210,8 +3210,7 @@ msgstr "'%(vmname)s' sil"
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
-"'%s' sanal makinesi ve seçilen depolama alanı siliniyor (bu biraz zaman "
-"alabilir)"
+"'%s' sanal makinesi ve seçilen depolama alanı siliniyor (bu biraz sürebilir)"
 
 #: virtManager/delete.py:307
 #, python-format
@@ -3249,8 +3248,7 @@ msgstr "'%(target)s' disk aygıtını kaldır"
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
-"'%s' disk aygıtı ve seçilen depolama alanı kaldırılıyor (bu biraz zaman "
-"alabilir)"
+"'%s' disk aygıtı ve seçilen depolama alanı kaldırılıyor (bu biraz sürebilir)"
 
 #: virtManager/delete.py:394
 #, python-format
@@ -3299,7 +3297,7 @@ msgstr "Belirtilen yola yazma erişimi yok."
 
 #: virtManager/delete.py:616
 msgid "Storage is marked as shareable."
-msgstr "Depolama paylaşılabilir olarak işaretlendi."
+msgstr "Depolama paylaşılabilir olarak imlendi."
 
 #: virtManager/delete.py:619
 msgid "Storage is a media device."
@@ -3307,7 +3305,7 @@ msgstr "Depolama bir ortam aygıtı."
 
 #: virtManager/delete.py:627
 msgid "Storage is in use by the following virtual machines"
-msgstr "Depolama aşağıdaki sanal makineler tarafından kullanılıyor"
+msgstr "Depolama aşağıdaki sanal makinelerce kullanılıyor"
 
 #: virtManager/delete.py:632
 msgid "Failed to check disk usage conflict."
@@ -3350,7 +3348,7 @@ msgstr "Grafiksel Konsol"
 
 #: virtManager/details/console.py:258
 msgid "virt-manager does not support more than one graphical console"
-msgstr "virt-manager birden fazla grafiksel konsolu desteklemiyor"
+msgstr "virt-manager birden çok grafiksel konsolu desteklemiyor"
 
 #: virtManager/details/console.py:263
 msgid "Graphical console not configured for guest"
@@ -3406,7 +3404,7 @@ msgstr "Görüntüleyicinin penceresi kapatıldı."
 #: virtManager/details/console.py:919
 #, python-format
 msgid "Press %s to release pointer."
-msgstr "İşaretçiyi serbest bırakmak için %s'ye basın."
+msgstr "İmleci salmak için %s'ye basın."
 
 #: virtManager/details/details.py:159
 #, python-format
@@ -3529,7 +3527,7 @@ msgid ""
 "Libvirt did not detect any UEFI/OVMF firmware image installed on the host."
 msgstr ""
 "Libvirt, ana makinede kurulu herhangi bir UEFI/OVMF ürün yazılımı kalıbı "
-"tespit edemedi."
+"saptayamadı."
 
 #: virtManager/details/details.py:683
 msgid "Version"
@@ -3574,7 +3572,7 @@ msgstr "Değişiklikler uygulanırken hata oluştu: %s"
 #: virtManager/details/details.py:1444
 #, python-format
 msgid "Error changing autostart value: %s"
-msgstr "Otomatik başlatma değeri değiştirilirken hata oluştu: %s"
+msgstr "Kendiliğinden başlatma değeri değiştirilirken hata oluştu: %s"
 
 #: virtManager/details/details.py:1460
 msgid "Cannot set initrd without specifying a kernel path"
@@ -3591,8 +3589,7 @@ msgstr "Bir başlatma yolu belirtilmelidir"
 #: virtManager/details/details.py:1482 virtManager/device/addstorage.py:271
 #, python-format
 msgid "Disk '%(path)s' is already in use by other guests %(names)s"
-msgstr ""
-"'%(path)s' diski zaten diğer konuklar (%(names)s) tarafından kullanılıyor"
+msgstr "'%(path)s' diski zaten diğer konuklarca (%(names)s) kullanılıyor"
 
 #: virtManager/details/details.py:1486 virtManager/device/addstorage.py:275
 msgid "Do you really want to use the disk?"
@@ -3733,7 +3730,7 @@ msgstr "İS bilgileri"
 
 #: virtManager/details/details.py:2340
 msgid "Performance"
-msgstr "Performans"
+msgstr "Başarım"
 
 #: virtManager/details/details.py:2341
 msgid "CPUs"
@@ -3763,7 +3760,7 @@ msgstr "Metin konsola bağlanırken hata oluştu: %s"
 
 #: virtManager/details/snapshots.py:125
 msgid "external snapshots not supported with this libvirt connection"
-msgstr "harici anlık görüntüler bu libvirt bağlantısıyla desteklenmiyor"
+msgstr "dış anlık görüntüler bu libvirt bağlantısıyla desteklenmiyor"
 
 #: virtManager/details/snapshots.py:291
 #, python-format
@@ -3792,7 +3789,7 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
-"İç ve dış anlık görüntüleri aynı SM için birleştirmek önerilmez. Devam etmek "
+"İç ve dış anlık görüntüleri aynı SM için birleştirmek önerilmez. Sürdürmek "
 "istediğinize emin misiniz?"
 
 #: virtManager/details/snapshots.py:503
@@ -3815,7 +3812,7 @@ msgid ""
 "<span size='small'>VM State: %(state)s (External)</span>"
 msgstr ""
 "%(vm)s\n"
-"<span size='small'>SM Durumu: %(state)s (Harici)</span>"
+"<span size='small'>SM Durumu: %(state)s (Dış)</span>"
 
 #: virtManager/details/snapshots.py:577
 #, python-format
@@ -3833,15 +3830,15 @@ msgstr "<b>Anlık görüntü '%(name)s':</b>"
 
 #: virtManager/details/snapshots.py:650
 msgid "External disk and memory"
-msgstr "Harici disk ve bellek"
+msgstr "Dış disk ve bellek"
 
 #: virtManager/details/snapshots.py:652
 msgid "External memory only"
-msgstr "Yalnızca harici bellek"
+msgstr "Yalnızca dış bellek"
 
 #: virtManager/details/snapshots.py:654
 msgid "External disk only"
-msgstr "Yalnızca harici disk"
+msgstr "Yalnızca dış disk"
 
 #: virtManager/details/snapshots.py:743
 msgid "Saved memory state will not be part of the snapshot"
@@ -3854,10 +3851,11 @@ msgid ""
 "the same as having forced the system off mid-flight. It is recommended to "
 "snapshot either the running or shut down system instead."
 msgstr ""
-"Alan şu anda kaydedildi. Teknik sınırlamalar nedeniyle kaydedilen bellek "
-"durumu anlık görüntünün bir parçası olmayacaktır. Daha sonra çalıştırmak, "
-"sistemi çalışma ortasında kapatmaya zorlamakla aynı olacaktır. Bunun yerine, "
-"çalışan veya kapatılan sistemin anlık görüntüsünü almanız tavsiye edilir."
+"Etki alanı şu anda kaydedildi. Teknik sınırlamalar nedeniyle kaydedilen "
+"bellek durumu anlık görüntünün bir parçası olmayacaktır. Daha sonra "
+"çalıştırmak, sistemi çalışma ortasında kapatmaya zorlamakla aynı olacaktır. "
+"Bunun yerine, çalışan veya kapatılan sistemin anlık görüntüsünü almanız "
+"önerilir."
 
 #: virtManager/details/snapshots.py:769
 #, python-format
@@ -3894,11 +3892,11 @@ msgid ""
 "removed before restoring the snapshot."
 msgstr ""
 "'%s' anlık görüntüsü yalnızca disk içeriyor, bellek durumu içermiyor. Anlık "
-"görüntünün geri yüklenmesi, mevcut kayıtlı durumu yerinde bırakarak, çalışan "
-"bir sistemin altındaki bir diski etkin bir şekilde değiştirir. Etki alanını "
-"daha sonra çalıştırmak büyük olasılıkla kapsamlı dosya sistemi bozulmasına "
-"neden olacaktır. Bu nedenle, anlık görüntü geri yüklenmeden önce kaydedilen "
-"durum kaldırılacaktır."
+"görüntünün geri yüklenmesi, var olan kayıtlı durumu yerinde bırakarak, "
+"çalışan bir sistemin altındaki bir diski etkin biçimde değiştirir. Etki "
+"alanını daha sonra çalıştırmak büyük olasılıkla kapsamlı dosya sistemi "
+"bozulmasına neden olacaktır. Bu nedenle, anlık görüntü geri yüklenmeden önce "
+"kaydedilen durum kaldırılacaktır."
 
 #: virtManager/details/snapshots.py:807
 msgid "Running snapshot"
@@ -3939,7 +3937,7 @@ msgstr "Anlık görüntü seçilmedi."
 
 #: virtManager/details/snapshots.py:843
 msgid "Multiple snapshots selected."
-msgstr "Birden fazla anlık görüntü seçildi."
+msgstr "Birden çok anlık görüntü seçildi."
 
 #: virtManager/details/snapshots.py:853
 #, python-format
@@ -3966,9 +3964,9 @@ msgid ""
 "listen locally. To connect remotely you will need to change the guest's "
 "listen address."
 msgstr ""
-"Konuk, '%s' taşımasına sahip uzak bir ana makine üzerinde, ancak yalnızca "
-"yerel olarak dinlemek üzere yapılandırıldı. Uzaktan bağlanmak için konuğun "
-"dinleme adresini değiştirmeniz gerekecek."
+"Konuk, '%s' taşımalı uzak ana makinede ancak yalnızca yerel olarak dinlemeye "
+"yapılandırıldı. Uzaktan bağlanmak için konuğun dinleme adresini "
+"değiştirmeniz gerekecek."
 
 #: virtManager/details/viewers.py:389
 #, python-format
@@ -4031,8 +4029,8 @@ msgstr "_Kaynak yolu:"
 #: virtManager/device/fsdetails.py:154
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
-"'Bellek' ekranında 'Paylaşılan belleği etkinleştir' seçeneğine ihtiyacınız "
-"olabilir."
+"'Bellek' ekranında 'Paylaşılan belleği etkinleştir' seçeneğine "
+"gereksinebilirsiniz."
 
 #: virtManager/device/gfxdetails.py:89
 msgid "Spice server"
@@ -4056,12 +4054,12 @@ msgstr "Tüm arayüzler"
 
 #: virtManager/device/gfxdetails.py:114
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: virtManager/device/gfxdetails.py:211
 #, python-format
 msgid "A_uto (Port %(port)d)"
-msgstr "_Otomatik (%(port)d bağlantı noktası)"
+msgstr "_Kendiliğinden (%(port)d bağlantı noktası)"
 
 #: virtManager/device/mediacombo.py:65
 msgid "No media selected"
@@ -4073,11 +4071,11 @@ msgstr "Ortam Bilinmiyor"
 
 #: virtManager/device/mediacombo.py:102
 msgid "No media detected"
-msgstr "Ortam tespit edilemedi"
+msgstr "Ortam saptanamadı"
 
 #: virtManager/device/netlist.py:40
 msgid "Usermode networking"
-msgstr "Kullanıcı modu ağı"
+msgstr "Kullanıcı kipi ağı"
 
 #: virtManager/device/netlist.py:44
 msgid "Virtual network"
@@ -4201,7 +4199,7 @@ msgstr "Yönlendirilen ağ"
 
 #: virtManager/hostnets.py:217
 msgid "Isolated network, internal routing only"
-msgstr "Yalıtılmış ağ, yalnızca dahili yönlendirme"
+msgstr "Yalıtılmış ağ, yalnızca iç yönlendirme"
 
 #: virtManager/hostnets.py:219
 msgid "Isolated network, routing disabled"
@@ -4259,7 +4257,7 @@ msgstr "Biçim"
 
 #: virtManager/hoststorage.py:208
 msgid "Used By"
-msgstr "Tarafından Kullanılıyor"
+msgstr "Kullanan"
 
 #: virtManager/hoststorage.py:224
 msgid "Storage Pools"
@@ -4382,9 +4380,9 @@ msgid ""
 "X or VNC, you may not be able to connect to libvirt as a regular user. Try "
 "running as root."
 msgstr ""
-"Yerel bir oturum tespit edilemedi: ssh -X veya VNC üzerinden virt-manager "
-"çalıştırıyorsanız, libvirt'e normal bir kullanıcı olarak "
-"bağlanamayabilirsiniz. Root olarak çalıştırmayı deneyin."
+"Yerel bir oturum saptanamadı: ssh -X veya VNC üzerinden virt-manager "
+"çalıştırıyorsanız, libvirt'e sıradan kullanıcı olarak bağlanamayabilirsiniz. "
+"Kök olarak çalıştırmayı deneyin."
 
 #: virtManager/lib/connectauth.py:189
 msgid "Verify that an appropriate libvirt daemon is running."
@@ -4405,9 +4403,9 @@ msgid ""
 "virtualization and libvirt packages are installed to manage virtualization "
 "on this host."
 msgstr ""
-"Öntanımlı bir hipervizör tespit edilemedi. Bu ana makinede sanallaştırmayı "
-"yönetmek için uygun QEMU/KVM sanallaştırma ve libvirt paketlerinin kurulu "
-"olduğundan emin olun."
+"Öntanımlı bir hipervizör saptanamadı. Bu ana makinede sanallaştırmayı "
+"yönetmek için uygun QEMU/KVM sanallaştırma ve libvirt paketlerinin "
+"kurulduğundan emin olun."
 
 #: virtManager/lib/connectauth.py:227
 msgid ""
@@ -4419,7 +4417,7 @@ msgstr ""
 #: virtManager/lib/inspection.py:77
 #, python-format
 msgid "Error launching libguestfs appliance: %s"
-msgstr "libguestfs cihazı başlatılırken hata oluştu: %s"
+msgstr "libguestfs gereci başlatılırken hata oluştu: %s"
 
 #: virtManager/lib/inspection.py:85
 msgid "Inspection found no operating systems."
@@ -4482,7 +4480,7 @@ msgstr "Anlık görüntüden"
 
 #: virtManager/lib/libvirtenummap.py:95
 msgid "Unpaused"
-msgstr "Devam ettirildi"
+msgstr "Sürdürüldü"
 
 #: virtManager/lib/libvirtenummap.py:96
 msgid "Migration canceled"
@@ -4613,7 +4611,7 @@ msgstr "_Geri yükle"
 
 #: virtManager/manager.py:787 virtManager/vmwindow.py:408
 msgid "Resume the virtual machine"
-msgstr "Sanal makineyi devam ettir"
+msgstr "Sanal makineyi sürdür"
 
 #: virtManager/manager.py:898
 msgid "Disabled in preferences dialog."
@@ -4689,8 +4687,8 @@ msgstr "'%s' sanal makinesi taşınıyor"
 #, python-format
 msgid "Migrating VM '%(name)s' to %(host)s. This may take a while."
 msgstr ""
-"'%(name)s' sanal makinesi %(host)s ana makinesine taşınıyor. Bu biraz zaman "
-"alabilir."
+"'%(name)s' sanal makinesi %(host)s ana makinesine taşınıyor. Bu biraz "
+"sürebilir."
 
 #: virtManager/migrate.py:407
 #, python-format
@@ -4824,7 +4822,7 @@ msgstr "Yalnızca elle yönlendir"
 
 #: virtManager/preferences.py:136
 msgid "Auto redirect on USB attach"
-msgstr "USB bağlandığında otomatik yeniden yönlendir"
+msgstr "USB bağlandığında kendiliğinden yeniden yönlendir"
 
 #: virtManager/preferences.py:171
 msgid "Application default"
@@ -4996,7 +4994,7 @@ msgstr "Alan duraklatılırken hata oluştu"
 
 #: virtManager/vmmenu.py:220
 msgid "Error unpausing domain"
-msgstr "Alan devam ettirilirken hata oluştu"
+msgstr "Alan sürdürülürken hata oluştu"
 
 #: virtManager/vmmenu.py:231
 #, python-format
@@ -5010,7 +5008,7 @@ msgid ""
 "start up?"
 msgstr ""
 "Etki alanı geri yüklenemedi. Kaydedilmiş durumu\n"
-"kaldırmak ve normal bir başlatma gerçekleştirmek\n"
+"kaldırmak ve olağan başlatma gerçekleştirmek\n"
 "ister misiniz?"
 
 #: virtManager/vmmenu.py:250
@@ -5153,8 +5151,8 @@ msgid ""
 "Host does not support domain type %(domain)s with machine '%(machine)s' for "
 "virtualization type '%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Ana makine, '%(arch)s' mimarisine sahip '%(virttype)s' sanallaştırma türü "
-"için '%(machine)s' makine ile %(domain)s etki alanı türünü desteklemiyor"
+"Ana makine, '%(arch)s' mimarili '%(virttype)s' sanallaştırma türü için '%"
+"(machine)s' makine ile %(domain)s etki alanı türünü desteklemiyor"
 
 #: virtinst/capabilities.py:331
 #, python-format
@@ -5162,8 +5160,8 @@ msgid ""
 "Host does not support domain type %(domain)s for virtualization type "
 "'%(virttype)s' with architecture '%(arch)s'"
 msgstr ""
-"Ana makine, '%(arch)s' mimarisine sahip '%(virttype)s' sanallaştırma türü "
-"için %(domain)s etki alanı türünü desteklemiyor"
+"Ana makine, '%(arch)s' mimarili '%(virttype)s' sanallaştırma türü için %"
+"(domain)s etki alanı türünü desteklemiyor"
 
 #: virtinst/cli.py:115
 msgid "See man page for examples and full option syntax."
@@ -5194,8 +5192,8 @@ msgid ""
 "%(path)s may not be accessible by the hypervisor. You will need to grant the "
 "'%(user)s' user search permissions for the following directories: %(dirs)s"
 msgstr ""
-"%(path)s hipervizör tarafından erişilebilir olmayabilir. Şu dizinler için "
-"'%(user)s' kullanıcısına arama izinlerini vermeniz gerekecek: %(dirs)s"
+"%(path)s hipervizörce erişilemeyebilir. Şu dizinler için '%(user)s' "
+"kullanıcısına arama izinlerini vermelisiniz: %(dirs)s"
 
 #: virtinst/cli.py:329
 #, python-format
@@ -5205,13 +5203,12 @@ msgstr " (Geçersiz kılmak için --check %s=off veya --check all=off kullanın)
 #: virtinst/cli.py:360
 #, python-format
 msgid "This will overwrite the existing path '%s'"
-msgstr "Bu, mevcut '%s' yolunun üzerine yazacak"
+msgstr "Bu, var olan '%s' yolunun üzerine yazacak"
 
 #: virtinst/cli.py:370
 #, python-format
 msgid "Disk %(path)s is already in use by other guests %(names)s."
-msgstr ""
-"%(path)s diski zaten diğer konuklar (%(names)s) tarafından kullanılıyor."
+msgstr "%(path)s diski zaten diğer konuklarca (%(names)s) kullanılıyor."
 
 #: virtinst/cli.py:414
 #, python-format
@@ -5246,14 +5243,14 @@ msgid ""
 "--autoconsole graphical\n"
 "--autoconsole none"
 msgstr ""
-"Konuk konsoluna otomatik bağlanmayı yapılandır. Örnek:\n"
+"Konuk konsoluna kendiliğinden bağlanmayı yapılandır. Örnek:\n"
 "--autoconsole text\n"
 "--autoconsole graphical\n"
 "--autoconsole none"
 
 #: virtinst/cli.py:646
 msgid "Don't automatically try to connect to the guest console"
-msgstr "Konuk konsoluna otomatik olarak bağlanmayı deneme"
+msgstr "Konuk konsoluna kendiliğinden bağlanmayı deneme"
 
 #: virtinst/cli.py:651
 msgid "Don't boot guest after completing install."
@@ -5261,8 +5258,7 @@ msgstr "Kurulum tamamlandıktan sonra konuğu başlatma."
 
 #: virtinst/cli.py:658
 msgid "Don't check name collision, overwrite any guest with the same name."
-msgstr ""
-"Ad çakışmasını denetleme, aynı ada sahip herhangi bir konuğun üzerine yaz."
+msgstr "Ad çakışmasını denetleme, aynı adlı herhangi bir konuğun üzerine yaz."
 
 #: virtinst/cli.py:665
 msgid "Print the generated domain XML rather than create the guest."
@@ -5409,7 +5405,7 @@ msgid ""
 "--filesystem /my/source/dir,/dir/in/guest\n"
 "--filesystem template_name,/,type=template"
 msgstr ""
-"Ana makine dizinini misafire ilet. Örnek: \n"
+"Ana makine dizinini konuğa ilet. Örnek: \n"
 "--filesystem /kaynak/dizinim,/konuk/dizini\n"
 "--filesystem şablon_adı,/,type=template"
 
@@ -5499,7 +5495,7 @@ msgid ""
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 msgstr ""
-"Konuk vsock soketlerini yapılandır. Örnek:\n"
+"Konuk vsock yuvalarını yapılandır. Örnek:\n"
 "--vsock cid.auto=yes\n"
 "--vsock cid.address=7"
 
@@ -5517,8 +5513,8 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
-"Bir nvram depolama cihazı ayarla.\n"
-"Bu, misafir çekirdeğin oops/panic günlüklerini kaydetmesi içindir. Örneğin:\n"
+"Bir nvram depolama aygıtı ayarla.\n"
+"Bu, konuk çekirdeğin oops/panic günlüklerini kaydetmesi içindir. Örneğin:\n"
 "--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
@@ -5532,7 +5528,7 @@ msgstr "Etki alanı seclabel yapılandırmasını ayarla."
 #: virtinst/cli.py:951
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
-"Konuğu S390 şifreleme anahtarı yönetimi işlemlerini gerçekleştirecek şekilde "
+"Konuğu S390 şifreleme anahtarı yönetimi işlemlerini gerçekleştirecek biçimde "
 "ayarla."
 
 #: virtinst/cli.py:956
@@ -5709,7 +5705,7 @@ msgstr "Hata: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
 msgid "No display detected. Not running virt-viewer."
-msgstr "Ekran tespit edilmedi. virt manager çalışmıyor."
+msgstr "Ekran saptanamadı. virt-viewer çalışmıyor."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5722,12 +5718,11 @@ msgstr ""
 #: virtinst/cli.py:2213
 #, python-format
 msgid "Unknown autoconsole type '%s'"
-msgstr "Bilinmeyen otomatik konsol türü '%s'"
+msgstr "Bilinmeyen autoconsole türü '%s'"
 
 #: virtinst/cli.py:2615
 msgid "CPU model=host is deprecated, use model=host-model"
-msgstr ""
-"CPU model=anamakine kullanımdan kaldırıldı, model=anamakine-model kullanın"
+msgstr "CPU model=host kullanımdan kaldırıldı, model=host-model kullanın"
 
 #: virtinst/cli.py:3914
 #, python-format
@@ -5751,7 +5746,7 @@ msgstr "'%s' için PCI biçim dizgesi bekleniyor"
 #: virtinst/cli.py:5229
 #, python-format
 msgid "%s corresponds to multiple node devices"
-msgstr "%s birden fazla düğüm aygıtına karşılık geliyor"
+msgstr "%s birden çok düğüm aygıtına karşılık geliyor"
 
 #: virtinst/cli.py:5231
 #, python-format
@@ -5786,7 +5781,7 @@ msgstr "Var olan depolama birimine klonlama şu anda desteklenmiyor: '%s'"
 #: virtinst/cloner.py:182
 #, python-format
 msgid "Disk path '%s' does not exist."
-msgstr "'%s' disk yolu mevcut değil."
+msgstr "'%s' disk yolu yok."
 
 #: virtinst/cloner.py:191
 msgid "Cloning rbd volumes is not yet supported."
@@ -5803,7 +5798,7 @@ msgstr "Salt Okunur"
 
 #: virtinst/cloner.py:203
 msgid "Marked as shareable"
-msgstr "Paylaşılabilir olarak işaretlendi"
+msgstr "Paylaşılabilir olarak imlendi"
 
 #: virtinst/cloner.py:277
 #, python-format
@@ -5813,7 +5808,7 @@ msgstr "'%(path)s' yolu klonlamak için kullanılamadı: %(error)s"
 #: virtinst/cloner.py:297
 #, python-format
 msgid "Could not determine original disk information: %s"
-msgstr "Asıl disk bilgileri belirlenemedi: %s"
+msgstr "Özgün disk bilgileri belirlenemedi: %s"
 
 #: virtinst/cloner.py:350
 msgid "Domain to clone must be shutoff."
@@ -5823,8 +5818,8 @@ msgstr "Klonlanacak alan kapatılmalıdır."
 msgid ""
 "Setting the graphics device port to autoport, in order to avoid conflicting."
 msgstr ""
-"Çakışmayı önlemek için grafik aygıtı bağlantı noktası otomatik bağlantı "
-"noktasına ayarlanıyor."
+"Çakışmayı önlemek için grafik aygıtı bağlantı noktası kendiliğinden "
+"ayarlanıyor."
 
 #: virtinst/cloner.py:545
 #, python-format
@@ -5875,7 +5870,7 @@ msgstr "'%s' dosya sistemi hedefi mutlak bir yol olmalıdır"
 #: virtinst/devices/graphics.py:20
 #, python-format
 msgid "%s must be above 5900, or -1 for auto allocation"
-msgstr "%s 5900'ün üzerinde veya otomatik ayırma için -1 olmalıdır"
+msgstr "%s 5900'ün üzerinde veya kendiliğinden ayırma için -1 olmalıdır"
 
 #: virtinst/devices/hostdev.py:87
 #, python-format
@@ -5890,7 +5885,7 @@ msgstr "Desteklenmeyen düğüm aygıtı türü '%s'"
 #: virtinst/devices/interface.py:218
 #, python-format
 msgid "The MAC address '%s' is in use by another virtual machine."
-msgstr "'%s' MAC adresi başka bir sanal makine tarafından kullanılıyor."
+msgstr "'%s' MAC adresi başka sanal makinece kullanılıyor."
 
 #: virtinst/diskbackend.py:108
 #, python-format
@@ -5907,8 +5902,8 @@ msgid ""
 "The filesystem will not have enough free space to fully allocate the sparse "
 "file when the guest is running."
 msgstr ""
-"Dosya sistemi, konuk çalışırken seyrek dosyayı tam olarak ayırmak için "
-"yeterli boş alana sahip olmayacak."
+"Dosya sisteminin, konuk çalışırken seyrek dosyayı tümüyle ayırmak için "
+"yeterli boş alanı olmayacak."
 
 #: virtinst/diskbackend.py:564
 msgid "There is not enough free space to create the disk."
@@ -5943,9 +5938,9 @@ msgid ""
 "cores=%(cores)d * threads=%(threads)d == %(total)d) does not match vCPU "
 "count %(vcpus)d"
 msgstr ""
-"Topoloji tarafından dolaylı olarak belirtilen toplam CPU (soket=%(sockets)d "
-"* zar=%(dies)d * çekirdek=%(cores)d * iş parçacığı=%(threads)d == "
-"%(total)d,) vCPU sayısıyla (%(vcpus)d) eşleşmiyor"
+"Topolojice dolaylı olarak belirtilen toplam CPU (yuva=%(sockets)d * zar=%"
+"(dies)d * çekirdek=%(cores)d * iş parçacığı=%(threads)d == %(total)d) vCPU "
+"sayısıyla (%(vcpus)d) eşleşmiyor"
 
 #: virtinst/domain/launch_security.py:33
 msgid "SEV launch security requires a Q35 UEFI machine"
@@ -6125,7 +6120,7 @@ msgid ""
 "See virt-install man page for various distro examples."
 msgstr ""
 "Konum, bir kurulum ağacının kök dizini olmalıdır.\n"
-"Çeşitli dağıtım örnekleri için virt-install kılavuz sayfasına bakın."
+"Türlü dağıtım örnekleri için virt-install kılavuz sayfasına bakın."
 
 #: virtinst/install/urlfetcher.py:101
 #, python-format
@@ -6149,7 +6144,7 @@ msgstr "'%(filename)s' aktarılıyor"
 
 #: virtinst/osdict.py:72
 msgid "Generic or unknown OS. Usage is not recommended."
-msgstr "Genel veya bilinmeyen işletim sistemi. Kullanımı tavsiye edilmiyor."
+msgstr "Genel veya bilinmeyen işletim sistemi. Kullanımı önerilmiyor."
 
 #: virtinst/osdict.py:97
 #, python-format
@@ -6166,7 +6161,7 @@ msgstr ""
 #: virtinst/osdict.py:535
 #, python-format
 msgid "OS '%s' does not have a URL location"
-msgstr "'%s' işletim sistemi bir URL konumuna sahip değil"
+msgstr "'%s' işletim sisteminin URL konumu yok"
 
 #: virtinst/osdict.py:547
 #, python-format
@@ -6174,8 +6169,7 @@ msgid ""
 "OS '%(osname)s' does not have a URL location for the architecture "
 "'%(archname)s'"
 msgstr ""
-"'%(osname)s' işletim sistemi '%(archname)s' mimarisi için bir URL konumuna "
-"sahip değil"
+"'%(osname)s' işletim sisteminin '%(archname)s' mimarisi için URL konumu yok"
 
 #: virtinst/storage.py:162
 #, python-format
@@ -6189,7 +6183,7 @@ msgstr "Depolama nesnesi"
 #: virtinst/storage.py:224
 #, python-format
 msgid "Name '%s' already in use by another pool."
-msgstr "'%s' adı zaten başka bir havuz tarafından kullanılıyor."
+msgstr "'%s' adı zaten başka bir havuzca kullanılıyor."
 
 #: virtinst/storage.py:401
 #, python-format
@@ -6209,12 +6203,12 @@ msgstr "Depolama havuzu başlatılamadı: %s"
 #: virtinst/storage.py:421
 #, python-format
 msgid "Could not set pool autostart flag: %s"
-msgstr "Havuz otomatik başlatma işareti ayarlanamadı: %s"
+msgstr "Havuz kendiliğinden başlatma imi ayarlanamadı: %s"
 
 #: virtinst/storage.py:570
 #, python-format
 msgid "Name '%s' already in use by another volume."
-msgstr "'%s' adı zaten başka bir birim tarafından kullanılıyor."
+msgstr "'%s' adı zaten başka bir birimce kullanılıyor."
 
 #: virtinst/storage.py:662
 msgid ""
@@ -6253,7 +6247,7 @@ msgid ""
 "An original machine name is required, use '--original src_name' and try "
 "again."
 msgstr ""
-"Asıl makine adı gerekli, '--original kaynak_ad' kullanın ve tekrar deneyin."
+"Özgün makine adı gerekli, '--original kaynak_ad' kullanın ve yeniden deneyin."
 
 #: virtinst/virtclone.py:66
 msgid ""
@@ -6281,19 +6275,19 @@ msgstr "Genel Seçenekler"
 
 #: virtinst/virtclone.py:79
 msgid "Name of the original guest to clone."
-msgstr "Klonlanacak asıl konuğun adı."
+msgstr "Klonlanacak özgün konuğun adı."
 
 #: virtinst/virtclone.py:81
 msgid "XML file to use as the original guest."
-msgstr "Asıl konuk olarak kullanılacak XML dosyası."
+msgstr "Özgün konuk olarak kullanılacak XML dosyası."
 
 #: virtinst/virtclone.py:85
 msgid ""
 "Auto generate clone name and storage paths from the original guest "
 "configuration."
 msgstr ""
-"Asıl konuk yapılandırmasından klon adını ve depolama yollarını otomatik "
-"olarak oluştur."
+"Özgün konuk yapılandırmasından klon adını ve depolama yollarını "
+"kendiliğinden oluştur."
 
 #: virtinst/virtclone.py:87
 msgid "Name for the new guest"
@@ -6367,8 +6361,8 @@ msgid ""
 "Either --auto-clone or --file is required, use '--auto-clone or --file' and "
 "try again."
 msgstr ""
-"--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya "
-"'--file' kullanın ve tekrar deneyin."
+"--auto-clone veya --file seçeneklerinden biri gerekli, '--auto-clone' veya '"
+"--file' kullanın ve yeniden deneyin."
 
 #: virtinst/virtclone.py:215
 msgid ""
@@ -6446,9 +6440,8 @@ msgid ""
 "CDROM media does not print to the text console by default, so you likely "
 "will not see text install output. You might want to use --location."
 msgstr ""
-"CDROM ortamı öntanımlı olarak metin konsoluna yazdırmaz, bu nedenle büyük "
-"olasılıkla metin kurulum çıktısı görmeyeceksiniz. --location kullanmak "
-"isteyebilirsiniz."
+"CDROM ortamı öntanımlı olarak metin konsoluna yazdırmaz, büyük olasılıkla "
+"metin kurulum çıktısı görmeyeceksiniz. --location kullanmak isteyebilirsiniz."
 
 #: virtinst/virtinstall.py:341
 msgid "See the man page for examples of using --location with CDROM media"
@@ -6461,8 +6454,8 @@ msgid ""
 "Requested memory %(mem1)s MiB is less than the recommended %(mem2)s MiB for "
 "OS %(osname)s"
 msgstr ""
-"İstenen bellek %(mem1)s MiB, %(osname)s işletim sistemi için tavsiye edilen "
-"%(mem2)s MiB'den daha az"
+"İstenen bellek %(mem1)s MiB, %(osname)s işletim sistemi için önerilen %(mem2)"
+"s MiB'den daha az"
 
 #: virtinst/virtinstall.py:363
 #, python-format
@@ -6482,7 +6475,7 @@ msgid ""
 "Using --osinfo {osname}, VM performance may suffer. Specify an accurate OS "
 "for optimal results."
 msgstr ""
-"--osinfo {osname} kullanıldığında SM performansı düşebilir. En iyi sonuçlar "
+"--osinfo {osname} kullanıldığında SM başarımı düşebilir. En iyi sonuçlar "
 "için kesin bir İS belirtin."
 
 #: virtinst/virtinstall.py:401
@@ -6518,10 +6511,10 @@ msgid ""
 "Please file a bug against virt-install if you expected the detection to "
 "succeed."
 msgstr ""
-"Kurulum ortamından osinfo işletim sistemi adı tespit edilemedi, '{name}' adı "
+"Kurulum ortamından osinfo işletim sistemi adı saptanamadı, '{name}' adı "
 "kullanılacak.\n"
-"Tespit işleminin başarılı olmasını bekliyorsanız lütfen virt-install için "
-"bir hata bildirimi oluşturun."
+"Saptamanın başarılmasını bekliyorsanız lütfen virt-install için hata "
+"bildirin."
 
 #: virtinst/virtinstall.py:587
 #, python-format
@@ -6534,15 +6527,15 @@ msgid ""
 "set or detected."
 msgstr ""
 "--osinfo/--os-variant İS adı gerekli, ancak hiçbir değer\n"
-"ayarlanmadı veya tespit edilmedi."
+"ayarlanmadı ya da saptanamadı."
 
 #: virtinst/virtinstall.py:600
 msgid ""
 "This is now a fatal error. Specifying an OS name is required\n"
 "for modern, performant, and secure virtual machine defaults.\n"
 msgstr ""
-"Bu artık ölümcül bir hatadır. Modern, performanslı ve güvenli\n"
-"sanal makine öntanımlı değerleri için bir İS adı belirtmek gereklidir.\n"
+"Bu artık ölümcül bir hatadır. Çağdaş, başarımlı ve güvenli sanal\n"
+"makine öntanımlı değerleri için İS adı belirtilmelidir.\n"
 
 #: virtinst/virtinstall.py:605
 msgid ""
@@ -6614,12 +6607,11 @@ msgstr[1] "Kurulumun tamamlanması için %(minutes)d dakika bekleniyor."
 #: virtinst/virtinstall.py:787
 #, python-format
 msgid "Password for first root login is: %s"
-msgstr "İlk root oturum açma parolası: %s"
+msgstr "İlk kök oturum açma parolası: %s"
 
 #: virtinst/virtinstall.py:797
 msgid "Installation will continue in 10 seconds (press Enter to skip)..."
-msgstr ""
-"Kurulum 10 saniye içinde devam edecek (atlamak için Enter tuşuna basın)..."
+msgstr "Kurulum 10 saniye içinde sürecek (atlamak için Enter tuşuna basın)..."
 
 #: virtinst/virtinstall.py:823
 msgid "Console command returned failure."
@@ -6636,7 +6628,7 @@ msgstr "SM beklenmedik şekilde kayboldu: %s"
 
 #: virtinst/virtinstall.py:894
 msgid "Domain is still running. Installation may be in progress."
-msgstr "Etki alanı hala çalışıyor. Kurulum devam ediyor olabilir."
+msgstr "Etki alanı hala çalışıyor. Kurulum sürüyor olabilir."
 
 #: virtinst/virtinstall.py:904
 msgid "You can reconnect to the console to complete the installation process."
@@ -6644,7 +6636,7 @@ msgstr "Kurulum işlemini tamamlamak için konsola yeniden bağlanabilirsiniz."
 
 #: virtinst/virtinstall.py:914
 msgid "Domain has shutdown. Continuing."
-msgstr "Etki alanı kapatıldı. Devam ediliyor."
+msgstr "Etki alanı kapatıldı. Sürdürülüyor."
 
 #: virtinst/virtinstall.py:919
 msgid "Installation has exceeded specified time limit. Exiting application."
@@ -6772,7 +6764,7 @@ msgstr "Sanallaştırma Platformu Seçenekleri"
 
 #: virtinst/virtinstall.py:1163
 msgid "This guest should be a fully virtualized guest"
-msgstr "Bu konuk tamamen sanallaştırılmış bir konuk olmalıdır"
+msgstr "Bu konuk tümüyle sanallaştırılmış bir konuk olmalıdır"
 
 #: virtinst/virtinstall.py:1171
 msgid "This guest should be a paravirtualized guest"
@@ -6788,7 +6780,7 @@ msgstr "Kullanılacak hipervizör adı (kvm, qemu, xen, ...)"
 
 #: virtinst/virtinstall.py:1181
 msgid "The CPU architecture to simulate"
-msgstr "Simüle edilecek CPU mimarisi"
+msgstr "Benzetilecek CPU mimarisi"
 
 #: virtinst/virtinstall.py:1182
 msgid "The machine type to emulate"
@@ -6796,7 +6788,7 @@ msgstr "Öykünülecek makine türü"
 
 #: virtinst/virtinstall.py:1192
 msgid "Have domain autostart on host boot up."
-msgstr "Ana makine önyüklendiğinde etki alanını otomatik başlat."
+msgstr "Ana makine önyüklendiğinde etki alanını kendiliğinden başlat."
 
 #: virtinst/virtinstall.py:1195
 msgid "Create a transient domain."
@@ -6808,7 +6800,7 @@ msgstr "Konsol görüntüleyici kapatıldığında etki alanını kapatmaya zorl
 
 #: virtinst/virtinstall.py:1204
 msgid "Minutes to wait for install to complete."
-msgstr "Kurulumun tamamlanması için dakika cinsinden beklenecek süre."
+msgstr "Kurulumun tamamlanması için dakika türünden beklenecek süre."
 
 #: virtinst/virtxml.py:35
 msgid "Please enter 'yes' or 'no'."
@@ -7045,7 +7037,7 @@ msgid ""
 "optimal defaults."
 msgstr ""
 "Oluşturulan aygıt XML'ini yazdır. Etki alanı isteğe bağlıdır ancak en iyi "
-"öntanımlı değerleri sağlamak için tavsiye edilir."
+"öntanımlı değerleri sağlamak için önerilir."
 
 #: virtinst/virtxml.py:497
 msgid "Output options"
@@ -7128,7 +7120,7 @@ msgstr "SM çalışmıyor, --update uygulanabilir değil."
 
 #: virtinst/virtxml.py:680
 msgid "Changes will take effect after the domain is fully powered off."
-msgstr "Etki alanı tamamen kapatıldıktan sonra değişiklikler geçerli olacak."
+msgstr "Etki alanı tümüyle kapatıldıktan sonra değişiklikler geçerli olacak."
 
 #: virtinst/virtxml.py:684
 msgid ""
@@ -7148,8 +7140,8 @@ msgid ""
 "XML did not have expected root element name '%(expectname)s', found "
 "'%(foundname)s'"
 msgstr ""
-"XML beklenen '%(expectname)s' kök öge adına sahip değildi, '%(foundname)s' "
-"bulundu"
+"XML, beklenen '%(expectname)s' kök öge adını barındırmıyordu, '%(foundname)"
+"s' bulundu"
 
 #. translators: value is a generic object type name
 #: virtinst/xmlbuilder.py:517
