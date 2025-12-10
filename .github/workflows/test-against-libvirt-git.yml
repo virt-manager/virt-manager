@@ -22,14 +22,15 @@ jobs:
           rpm-build \
           dnf-plugins-core \
           glibc-langpack-en \
-          python3-pytest \
-          python3-pytest-error-for-skips
+          python3-pytest
 
         dnf install -y \
           gettext \
           python3-devel \
           python3-docutils \
           meson
+
+        pip install pytest-error-for-skips
 
         dnf builddep -y libvirt
 
