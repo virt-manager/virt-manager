@@ -72,7 +72,7 @@ class Action:
         XML OPTION (ex. --disk)
     """
 
-    def __init__(self, action_name, selector, parserclass, parservalue):
+    def __init__(self, action_name, selector, parserclass, parservalue, update_force):
         # one of ["edit", "add-device", "remove-device", "build-xml"]
         self.action_name = action_name
         # ex. for `--edit 1` this is selector="1"
@@ -81,6 +81,8 @@ class Action:
         self.parserclass = parserclass
         # ex for `--disk path=/foo` this is "path=/foo"
         self.parservalue = parservalue
+        # override the safety configs of libvirt and force update
+        self.update_force = update_force
 
     @property
     def is_edit(self):
@@ -187,7 +189,7 @@ def parse_action(conn, options):
     #   --build-xml
     action_name, selector = check_action_collision(options)
 
-    action = Action(action_name, selector, parserclass, parservalue)
+    action = Action(action_name, selector, parserclass, parservalue, options.update_force)
     validate_action(action, conn, options)
     return action
 
@@ -399,13 +401,18 @@ def update_changes(domain, devs, action, confirm):
         if action.is_add_device:
             setup_device(dev)
 
+        flags = libvirt.VIR_DOMAIN_AFFECT_LIVE
+
+        if action.update_force:
+            flags |= libvirt.VIR_DOMAIN_DEVICE_MODIFY_FORCE
+
         try:
             if action.is_add_device:
-                domain.attachDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
+                domain.attachDeviceFlags(xml, flags)
             elif action.is_remove_device:
-                domain.detachDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
+                domain.detachDeviceFlags(xml, flags)
             elif action.is_edit:
-                domain.updateDeviceFlags(xml, libvirt.VIR_DOMAIN_AFFECT_LIVE)
+                domain.updateDeviceFlags(xml, flags)
         except libvirt.libvirtError as e:
             if "VIRTXML_TESTSUITE_UPDATE_IGNORE_FAIL" not in os.environ:
                 fail(msg_fail % {"error": e})
@@ -505,6 +512,17 @@ def parse_args():
             "With --edit, this is an update device operation."
         ),
     )
+
+    outg.add_argument(
+        "--update-force",
+        action="store_true",
+        help=_(
+            "Force a device update via libvirt's VIR_DOMAIN_DEVICE_MODIFY_FORCE flag\n"
+            "use this option to override libvirt safety check to force changes to\n"
+            "the device's libvirt XML config."
+        )
+    )
+
     define_g = outg.add_mutually_exclusive_group()
     define_g.add_argument(
         "--define",
@@ -636,6 +654,7 @@ def main(conn=None):
 
     input_devs = None
     performed_update = False
+
     if options.update:
         if options.update and options.start:
             fail_conflicting("--update", "--start")
