@@ -2161,7 +2161,7 @@ class vmmDetails(vmmGObjectUI):
             self._disable_device_remove(_("Hypervisor does not support removing this device"))
         if controller.type == "pci":
             self._disable_device_remove(_("Hypervisor does not support removing this device"))
-        elif controller.type in ["scsi", "sata", "ide", "fdc"]:
+        elif controller.type in ["nvme", "scsi", "sata", "ide", "fdc"]:
             model = self.widget("controller-device-list").get_model()
             model.clear()
             disks = controller.get_attached_devices(self.vm.xmlobj)
@@ -2187,6 +2187,12 @@ class vmmDetails(vmmGObjectUI):
 
         type_label = vmmAddHardware.controller_pretty_desc(controller)
         self.widget("controller-type").set_text(type_label)
+
+        has_serial = controller.type == "nvme" and controller.serial
+        if has_serial:
+            self.widget("controller-serial").set_text(controller.serial)
+        uiutil.set_grid_row_visible(self.widget("controller-serial"), has_serial)
+        uiutil.set_grid_row_visible(self.widget("controller-serial-label"), has_serial)
 
         combo = self.widget("controller-model")
         vmmAddHardware.populate_controller_model_combo(combo, controller.type)
