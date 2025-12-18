@@ -14,6 +14,7 @@ class DeviceController(Device):
     TYPE_IDE = "ide"
     TYPE_FDC = "fdc"
     TYPE_SCSI = "scsi"
+    TYPE_NVME = "nvme"
     TYPE_SATA = "sata"
     TYPE_VIRTIOSERIAL = "virtio-serial"
     TYPE_USB = "usb"
@@ -121,6 +122,6 @@ class DeviceController(Device):
         ret = []
         if self.type == "virtio-serial":
             ret = self._get_attached_virtioserial_devices(guest)
-        elif self.type in ["scsi", "sata", "ide", "fdc"]:
+        elif self.type in ["scsi", "sata", "ide", "fdc", "nvme"]:
             ret = self._get_attached_disk_devices(guest)
         return ret
