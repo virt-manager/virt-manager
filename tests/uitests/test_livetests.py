@@ -654,3 +654,151 @@ def testFirmwareRename(app, dom):
     # Confirm nvram paths were altered as expected
     assert not DeviceDisk.path_definitely_exists(app.conn, origpath)
     assert DeviceDisk.path_definitely_exists(app.conn, newpath)
+
+
+def testConsoleVMSwitcher(app):
+    """
+    Test the VM Switcher button in the fullscreen overlay toolbar
+    """
+    # Start two VMs for testing the switcher
+    app.error_if_already_running()
+
+    # Define and start first VM
+    xmlfile1 = "%s/live/uitests-vnc-standard.xml" % tests.utils.UITESTDATADIR
+    conn = libvirt.open("qemu:///system")
+    dom1 = conn.defineXML(open(xmlfile1).read())
+    dom1.create()
+
+    # Define and start second VM
+    xmlfile2 = "%s/live/uitests-spice-standard.xml" % tests.utils.UITESTDATADIR
+    dom2_xml = open(xmlfile2).read()
+    # Rename the second VM to avoid conflicts
+    dom2_xml = dom2_xml.replace("<name>uitests-spice-standard</name>",
+                                 "<name>uitests-spice-standard-2</name>")
+    dom2 = conn.defineXML(dom2_xml)
+    dom2.create()
+
+    try:
+        # Open first VM window
+        app.uri = "qemu:///system"
+        app.conn = conn
+        app.open(extra_opts=["--show-domain-console", "uitests-vnc-standard"],
+                 keyfile="statsonly.ini")
+        win1 = app.topwin
+        con1 = win1.find("console-gfx-viewport")
+        lib.utils.check(lambda: con1.showing)
+
+        # Open second VM window via manager
+        app.open_window("Manager")
+        manager = app.find_window("Virtual Machine Manager")
+        manager.find("uitests-spice-standard-2", "table cell").click()
+        manager.find("Open", "push button").click()
+
+        # Wait for second window to appear
+        win2 = None
+        def _find_win2():
+            nonlocal win2
+            try:
+                win2 = app.find_window("uitests-spice-standard-2 on")
+                return win2.showing
+            except Exception:
+                return False
+        lib.utils.check(_find_win2)
+
+        con2 = win2.find("console-gfx-viewport")
+        lib.utils.check(lambda: con2.showing)
+
+        # Enter fullscreen on first VM
+        win1.find("^View$", "menu").click()
+        win1.find("Fullscreen", "check menu item").click()
+        fstb = win1.find("Fullscreen Toolbar")
+        lib.utils.check(lambda: fstb.showing)
+
+        # Reveal toolbar to access VM Switcher
+        lib.utils.check(lambda: not fstb.showing, timeout=5)
+        app.rawinput.point(win1.position[0] + win1.size[0] / 2, 0)
+        lib.utils.check(lambda: fstb.showing)
+
+        # Find and click VM Switcher button
+        switcher_btn = fstb.find("VM Switcher")
+        lib.utils.check(lambda: switcher_btn.showing)
+        switcher_btn.click()
+
+        # Verify menu appears with both VMs
+        # The current VM should be checked and disabled
+        def _check_menu():
+            try:
+                # Look for menu items - current VM should exist and be insensitive
+                menu_items = switcher_btn.parent.findChildren(
+                    lambda w: w.roleName == "check menu item"
+                )
+                # Should have at least 2 menu items (both VMs)
+                if len(menu_items) < 2:
+                    return False
+
+                # Find the current VM's menu item (should be insensitive)
+                current_vm_item = None
+                other_vm_item = None
+                for item in menu_items:
+                    if "uitests-vnc-standard" in item.name and item.name != "uitests-vnc-standard-2":
+                        current_vm_item = item
+                    elif "uitests-spice-standard-2" in item.name:
+                        other_vm_item = item
+
+                if not current_vm_item or not other_vm_item:
+                    return False
+
+                # Current VM should be checked and insensitive
+                return (current_vm_item.checked and
+                        not current_vm_item.sensitive and
+                        not other_vm_item.checked and
+                        other_vm_item.sensitive)
+            except Exception:
+                return False
+
+        lib.utils.check(_check_menu, timeout=3)
+
+        # Click on the other VM to switch to it
+        menu_items = switcher_btn.parent.findChildren(
+            lambda w: w.roleName == "check menu item"
+        )
+        other_vm_item = None
+        for item in menu_items:
+            if "uitests-spice-standard-2" in item.name:
+                other_vm_item = item
+                break
+
+        if other_vm_item and other_vm_item.sensitive:
+            other_vm_item.click()
+            # Verify that win2 becomes active
+            lib.utils.check(lambda: win2.active, timeout=2)
+
+        # Exit fullscreen
+        app.rawinput.pressKey("Escape")
+
+        # Close windows
+        win1.window_close()
+        win2.window_close()
+
+    finally:
+        try:
+            app.stop()
+        except Exception:
+            pass
+
+        # Clean up VMs
+        try:
+            flags = (libvirt.VIR_DOMAIN_UNDEFINE_NVRAM |
+                    libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA)
+            dom1.undefineFlags(flags)
+            dom1.destroy()
+        except Exception:
+            pass
+
+        try:
+            flags = (libvirt.VIR_DOMAIN_UNDEFINE_NVRAM |
+                    libvirt.VIR_DOMAIN_UNDEFINE_SNAPSHOTS_METADATA)
+            dom2.undefineFlags(flags)
+            dom2.destroy()
+        except Exception:
+            pass
