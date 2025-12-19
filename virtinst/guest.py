@@ -439,15 +439,11 @@ class Guest(XMLBuilder):
     # Bootorder helpers #
     #####################
 
-    def _get_old_boot_order(self):
-        return self.os.bootorder
-
-    def _convert_old_boot_order(self):
+    def convert_old_boot_order(self, boot_order):
         """Converts the old boot order (e.g. <boot dev='hd'/>) into the
         per-device boot order format.
 
         """
-        boot_order = self._get_old_boot_order()
         ret = []
         disk = None
         cdrom = None
@@ -469,15 +465,18 @@ class Guest(XMLBuilder):
             break
 
         for b in boot_order:
-            if b == "network" and net:
+            if b == DomainOs.BOOT_DEVICE_NETWORK and net:
                 ret.append(net.get_xml_id())
-            elif b == "hd" and disk:
+            elif b == DomainOs.BOOT_DEVICE_HARDDISK and disk:
                 ret.append(disk.get_xml_id())
-            elif b == "cdrom" and cdrom:
+            elif b == DomainOs.BOOT_DEVICE_CDROM and cdrom:
                 ret.append(cdrom.get_xml_id())
-            elif b == "fd" and floppy:
+            elif b == DomainOs.BOOT_DEVICE_FLOPPY and floppy:
                 ret.append(floppy.get_xml_id())
         return ret
+
+    def can_use_device_boot_order(self):
+        return self.conn.support.conn_device_boot_order()
 
     def _get_device_boot_order(self):
         order = []
@@ -486,18 +485,13 @@ class Guest(XMLBuilder):
                 continue
             order.append((dev.get_xml_id(), dev.boot.order))
 
-        if not order:
-            # No devices individually marked bootable, convert traditional
-            # boot XML to fine grained
-            return self._convert_old_boot_order()
-
         order.sort(key=lambda p: p[1])
         return [p[0] for p in order]
 
-    def get_boot_order(self, legacy=False):
-        if legacy:
-            return self._get_old_boot_order()
-        return self._get_device_boot_order()
+    def get_boot_order(self):
+        if self.can_use_device_boot_order():
+            return self._get_device_boot_order() or self.convert_old_boot_order(self.os.bootorder)
+        return self.os.bootorder
 
     def _set_device_boot_order(self, boot_order):
         """Sets the new device boot order for the domain"""
@@ -512,12 +506,15 @@ class Guest(XMLBuilder):
         for boot_idx, dev_xml_id in enumerate(boot_order, 1):
             dev_map[dev_xml_id].boot.order = boot_idx
 
-    def set_boot_order(self, boot_order, legacy=False):
+    def set_boot_order(self, boot_order):
         """Modifies the boot order"""
-        if legacy:
-            self.os.bootorder = boot_order
-        else:
+        if self.can_use_device_boot_order():
             self._set_device_boot_order(boot_order)
+        else:
+            self.os.bootorder = boot_order
+
+    def has_boot_order(self):
+        return self.os.bootorder or any([d.boot.order for d in self.devices.get_all()])
 
     def reorder_boot_order(self, dev, boot_index):
         """Sets boot order of `dev` to `boot_index`

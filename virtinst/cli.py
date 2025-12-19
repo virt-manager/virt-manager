@@ -29,6 +29,7 @@ from .devices import (
     DeviceHostdev,
     DeviceInterface,
 )
+from .domain import DomainOs
 from .guest import Guest
 from .logger import log, reset_logging
 from .nodedev import NodeDevice
@@ -3214,10 +3215,10 @@ class ParserBoot(VirtCLIParser):
 
         # This is simply so the boot options are advertised with --boot help,
         # actual processing is handled by _parse
-        cls.add_arg("hd", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("cdrom", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("fd", None, lookup_cb=None, cb=cls.noset_cb)
-        cls.add_arg("network", None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_HARDDISK, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_CDROM, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_FLOPPY, None, lookup_cb=None, cb=cls.noset_cb)
+        cls.add_arg(DomainOs.BOOT_DEVICE_NETWORK, None, lookup_cb=None, cb=cls.noset_cb)
 
         cls.add_arg(
             "refresh-machine-type",
@@ -4272,6 +4273,8 @@ class ParserNetwork(VirtCLIParser):
         # Standard XML options
         cls.add_arg("type", "type", cb=cls.set_type_cb)
         cls.add_arg("backend.type", "backend.type")
+        cls.add_arg("backend.hostname", "backend.hostname")
+        cls.add_arg("backend.fqdn", "backend.fqdn")
         cls.add_arg("backend.logFile", "backend.logFile")
         cls.add_arg("trustGuestRxFilters", "trustGuestRxFilters", is_onoff=True)
 
@@ -4490,6 +4493,8 @@ class ParserController(VirtCLIParser):
         cls.add_arg("target.index", "target_index")
         cls.add_arg("target.node", "target_node")
         cls.add_arg("target.memReserve", "target_memReserve")
+        cls.add_arg("pcihole64", "pcihole64")
+        cls.add_arg("pcihole64.unit", "pcihole64_unit")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
         cls.add_arg("num_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
@@ -5282,6 +5287,7 @@ class ParserHostdev(VirtCLIParser):
         cls.add_arg("name", None, cb=cls.set_name_cb, lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver.name", "driver_name")
         cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
+        cls.add_arg("acpi.nodeset", "acpi_nodeset", can_comma=True)
         cls.add_arg("source.startupPolicy", "startup_policy")
 
 

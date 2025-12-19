@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
-  <id>virt-manager.desktop</id>
+<component type="desktop-application">
+  <id>org.virt_manager.virt-manager</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>Virtual Machine Manager</name>
+  <developer id="org.virt_manager">
+    <name>The Virtual Machine Manager contributors</name>
+  </developer>
   <summary>Graphically manage KVM, Xen, or LXC via libvirt</summary>
   <description>
     <p>
@@ -39,6 +42,9 @@
     <keyword>kvm</keyword>
   </keywords>
   <content_rating type="oars-1.1"/>
+  <provides>
+    <id>virt-manager.desktop</id>
+  </provides>
   <launchable type="desktop-id">virt-manager.desktop</launchable>
   <releases>
     <release version="5.1.0" date="2025-08-26"/>

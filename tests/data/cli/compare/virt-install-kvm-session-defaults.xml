@@ -11,8 +11,6 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
-    <boot dev="cdrom"/>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -35,12 +33,14 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/tmp/.local/share/libvirt/images/fedora21.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="2"/>
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="qcow2"/>
       <source file="/pool-dir/testvol1.img"/>
       <target dev="hda" bus="ide"/>
       <readonly/>
+      <boot order="1"/>
     </disk>
     <controller type="usb" model="qemu-xhci" ports="15"/>
     <interface type="user">
@@ -85,7 +85,6 @@
   <vcpu>2</vcpu>
   <os>
     <type arch="x86_64" machine="pc-i440fx-6.1">hvm</type>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -108,6 +107,7 @@
       <driver name="qemu" type="qcow2" discard="unmap"/>
       <source file="/tmp/.local/share/libvirt/images/fedora21.qcow2"/>
       <target dev="vda" bus="virtio"/>
+      <boot order="1"/>
     </disk>
     <disk type="file" device="cdrom">
       <target dev="hda" bus="ide"/>

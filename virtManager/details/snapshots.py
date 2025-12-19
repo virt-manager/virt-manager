@@ -32,8 +32,8 @@ mimemap = {
 def _make_screenshot_pixbuf(mime, sdata):
     loader = GdkPixbuf.PixbufLoader.new_with_mime_type(mime)
     loader.write(sdata)
-    pixbuf = loader.get_pixbuf()
     loader.close()
+    pixbuf = loader.get_pixbuf()
 
     maxsize = 450
 

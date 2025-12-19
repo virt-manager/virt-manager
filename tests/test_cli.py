@@ -675,6 +675,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --network passt,portForward=8080
 --network passt,portForward0=7000-8000/udp,portForward1=127.0.0.1:2222:22
 --network passt,portForward0=2001:db8:ac10:fd01::1:10:3000-4000:30,portForward1=127.0.0.1:5000-6000:5
+--network passt,backend.hostname=test,backend.fqdn=test.example.com
 --network type=hostdev,source.address.type=pci,source.address.domain=0x0,source.address.bus=0x00,source.address.slot=0x07,source.address.function=0x0
 --network hostdev=pci_0000_00_09_0
 --network hostdev=0:0:4.0
@@ -702,7 +703,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller scsi,,model=virtio-scsi,driver_queues=4,driver.queues=4,driver.iothread=2,vectors=15
 --controller xenbus,maxGrantFrames=64
 --controller pci,index=0,model=pcie-root-port,target.chassis=1,target.port=1,target.hotplug=off
---controller pci,index=1,model=pci-root,target.index=1
+--controller pci,index=1,model=pci-root,target.index=1,pcihole64=4294967296,pcihole64.unit=KiB
 --controller pci,index=2,model=pci-bridge,target.chassisNr=1,target.memReserve=8196
 --controller pci,index=3,model=pci-expander-bus,target.busNr=252,target.node=1
 --controller usb3
@@ -740,7 +741,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --console pty,target_type=virtio
 
 
---hostdev net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off
+--hostdev net_00_1c_25_10_b1_e4,boot_order=4,rom_bar=off,acpi.nodeset=0,2
 --host-device usb_device_781_5151_2004453082054CA1BEEE
 --host-device 001.003
 --hostdev 15:0.1
@@ -748,7 +749,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev 0:15:0.3,address.type=pci,address.zpci.uid=0xffff,address.zpci.fid=0xffffffff
 --host-device 0x062a:0x0001,driver_name=vfio
 --host-device 0483:2016
---host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on
+--host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on,acpi.nodeset=0-2
 --hostdev usb_5_20 --hostdev usb_5_21
 --hostdev wlan0,type=net
 --hostdev /dev/vdz,type=storage

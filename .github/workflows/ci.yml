@@ -21,12 +21,13 @@ jobs:
           glibc-langpack-en \
           python3-pytest python3-pytest-cov
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Install RPM build deps
       run: |
         dnf install -y \
           gettext \
+          gobject-introspection \
           python3-devel \
           python3-docutils \
           meson

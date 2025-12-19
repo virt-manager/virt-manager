@@ -485,6 +485,7 @@
     </controller>
     <controller type="pci" index="1" model="pci-root">
       <target index="1"/>
+      <pcihole64 unit="KiB">4294967296</pcihole64>
     </controller>
     <controller type="pci" index="2" model="pci-bridge">
       <target chassisNr="1" memReserve="8196"/>
@@ -679,6 +680,11 @@
       <portForward proto="tcp" address="127.0.0.1">
         <range start="5000" end="6000" to="5"/>
       </portForward>
+    </interface>
+    <interface type="user">
+      <backend type="passt" hostname="test" fqdn="test.example.com"/>
+      <mac address="00:11:22:33:44:55"/>
+      <model type="virtio"/>
     </interface>
     <interface type="hostdev">
       <mac address="00:11:22:33:44:55"/>
@@ -886,6 +892,7 @@
         <address domain="0" bus="0" slot="25" function="0"/>
       </source>
       <rom bar="off"/>
+      <acpi nodeset="0,2"/>
       <boot order="4"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
@@ -937,6 +944,7 @@
         <address bus="0" target="0" unit="0"/>
       </source>
       <rom bar="on"/>
+      <acpi nodeset="0-2"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>

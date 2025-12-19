@@ -368,7 +368,10 @@ class vmmDetails(vmmGObjectUI):
         self._addstorage.connect("changed", _e(EDIT_DISK))
 
         self._xmleditor = vmmXMLEditor(
-            self.builder, self.topwin, self.widget("hw-panel-align"), self.widget("hw-panel")
+            self.builder,
+            self.topwin,
+            self.widget("hw-panel-align"),
+            self.widget("hw-panel-scroll"),
         )
         self._xmleditor.connect("changed", _e(EDIT_XML))
         self._xmleditor.connect("xml-requested", self._xmleditor_xml_requested_cb)
@@ -2271,10 +2274,22 @@ class vmmDetails(vmmGObjectUI):
     def _make_boot_rows(self):
         if not self.vm.can_use_device_boot_order():
             return [
-                ["hd", _("Hard Disk"), "drive-harddisk", False, True],
-                ["cdrom", _("CDROM"), "media-optical", False, True],
-                ["network", _("Network (PXE)"), "network-idle", False, True],
-                ["fd", _("Floppy"), "media-floppy", False, True],
+                [
+                    virtinst.DomainOs.BOOT_DEVICE_HARDDISK,
+                    _("Hard Disk"),
+                    "drive-harddisk",
+                    False,
+                    True,
+                ],
+                [virtinst.DomainOs.BOOT_DEVICE_CDROM, _("CDROM"), "media-optical", False, True],
+                [
+                    virtinst.DomainOs.BOOT_DEVICE_NETWORK,
+                    _("Network (PXE)"),
+                    "network-idle",
+                    False,
+                    True,
+                ],
+                [virtinst.DomainOs.BOOT_DEVICE_FLOPPY, _("Floppy"), "media-floppy", False, True],
             ]
 
         ret = []

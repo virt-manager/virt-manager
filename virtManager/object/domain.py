@@ -762,8 +762,7 @@ class vmmDomain(vmmLibvirtObject):
 
         guest = self._make_xmlobj_to_define()
         if boot_order != _SENTINEL:
-            legacy = not self.can_use_device_boot_order()
-            guest.set_boot_order(boot_order, legacy=legacy)
+            guest.set_boot_order(boot_order)
 
         if boot_menu != _SENTINEL:
             guest.os.bootmenu_enable = bool(boot_menu)
@@ -1372,8 +1371,7 @@ class vmmDomain(vmmLibvirtObject):
         return self.get_xmlobj().description
 
     def get_boot_order(self):
-        legacy = not self.can_use_device_boot_order()
-        return self.xmlobj.get_boot_order(legacy=legacy)
+        return self.xmlobj.get_boot_order()
 
     def get_boot_menu(self):
         guest = self.get_xmlobj()
@@ -1396,7 +1394,7 @@ class vmmDomain(vmmLibvirtObject):
 
     def can_use_device_boot_order(self):
         # Return 'True' if guest can use new style boot device ordering
-        return self.conn.support.conn_device_boot_order()
+        return self.get_xmlobj().can_use_device_boot_order()
 
     def get_bootable_devices(self):
         # redirdev can also be marked bootable, but it should be rarely
