@@ -1,13 +1,14 @@
 # Andika Triwidada <andika@gmail.com>, 2017. #zanata, 2020, 2021, 2022, 2024.
 # Kukuh Syafaat <kukuh@syafaat.id>, 2020, 2021, 2022.
 # Abdul Munif Hanafi <amunifhanafi@gmail.com>, 2024.
+# Arif Budiman <arifpedia@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2024-12-28 02:38+0000\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"PO-Revision-Date: 2025-12-25 17:58+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.fedoraproject.org/projects/virt-"
 "manager/virt-manager/id/>\n"
 "Language: id\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -69,20 +70,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Manajer Mesin Virtual"
+msgstr "Penampil/pengelola mesin virtual"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Mengelola mesin virtual"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualisasi"
+msgstr "virtualisasi;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -143,10 +140,8 @@ msgid "Host _Device:"
 msgstr "_Peranti Host:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Mulai Pool"
+msgstr "Kebijakan Startup:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -167,9 +162,8 @@ msgid "_Name:"
 msgstr "_Nama:"
 
 #: ui/addhardware.ui:876
-#, fuzzy
 msgid "_Auto socket:"
-msgstr "_Auto socket:"
+msgstr "Soket otomatis:"
 
 #: ui/addhardware.ui:904
 msgid "_Channel:"
@@ -855,9 +849,8 @@ msgid "Pa_th:"
 msgstr "Pa_th:"
 
 #: ui/createvol.ui:423
-#, fuzzy
 msgid "_Backing store"
-msgstr "_Backing store"
+msgstr "Penyimpanan pendukung"
 
 #: ui/delete.ui:9 virtManager/delete.py:294
 msgid "Delete Virtual Machine"
@@ -1192,9 +1185,8 @@ msgid "Source host:"
 msgstr "Host sumber:"
 
 #: ui/details.ui:3649
-#, fuzzy
 msgid "Bind host:"
-msgstr "Bind host:"
+msgstr "Host terikat:"
 
 #: ui/details.ui:3661
 msgid "Target type:"
@@ -1217,9 +1209,8 @@ msgid "Source path:"
 msgstr "Path sumber:"
 
 #: ui/details.ui:3729
-#, fuzzy
 msgid "<b>insert type</b>"
-msgstr "<b>tipe sisipan</b>"
+msgstr "<b>masukkan tipe</b>"
 
 #: ui/details.ui:3790 ui/hostnets.ui:163
 msgid "Device:"
@@ -1290,9 +1281,8 @@ msgid "panic-model"
 msgstr "panic-model"
 
 #: ui/details.ui:4806
-#, fuzzy
 msgid "<b>Panic Notifier</b>"
-msgstr "<b>Panic Notifier</b>"
+msgstr "<b>Pemberi Notifikasi Panic</b>"
 
 #: ui/details.ui:4899
 msgid "_Remove"
@@ -1353,9 +1343,8 @@ msgid "Open_GL:"
 msgstr "Open_GL:"
 
 #: ui/gfxdetails.ui:275
-#, fuzzy
 msgid "L_isten type:"
-msgstr "Tipe L_isten:"
+msgstr "Jenis pendengaran:"
 
 #: ui/gfxdetails.ui:365
 msgid "OpenGL only works with 'virtio' graphics with '3D acceleration' enabled"
@@ -1363,9 +1352,8 @@ msgstr ""
 "OpenGL hanya bekerja dengan grafik 'virtio' dengan 'akselerasi 3D' diaktifkan"
 
 #: ui/gfxdetails.ui:381
-#, fuzzy
 msgid "OpenGL only works with 'Listen type' value 'none'"
-msgstr "OpenGL hanya bekerja dengan nilai 'Jenis dengar' 'tidak ada'"
+msgstr "OpenGL hanya berfungsi dengan nilai 'Jenis pendengaran' = 'none'."
 
 #: ui/host.ui:27 ui/manager.ui:26 ui/vmwindow.ui:25
 msgid "_File"
@@ -1648,7 +1636,6 @@ msgid "Let libvirt decide"
 msgstr "Biarkan libvirt memutuskan"
 
 #: ui/migrate.ui:386
-#, fuzzy
 msgid ""
 "Tunnel migration through the libvirtd connection channel, rather than having "
 "the hypervisor open a separate network connection to the destination. The "
@@ -1659,14 +1646,14 @@ msgid ""
 "and will encrypt migration traffic if your libvirt connection is encrypted. "
 "But it can be difficult to make this work with SSH transport."
 msgstr ""
-"Migrasi terowongan melalui saluran koneksi libvirtd, daripada memiliki "
-"hypervisor membuka koneksi jaringan terpisah ke tujuan. Sumber instans "
-"libvirt terhubung langsung ke instans libvirt tujuan.\n"
+"Migrasikan melalui saluran koneksi libvirtd, bukan melalui koneksi jaringan "
+"terpisah ke tujuan oleh hypervisor. Instance libvirt sumber terhubung "
+"langsung ke instance libvirt tujuan.\n"
 "\n"
-"Ini dapat menyederhanakan pengaturan karena tidak ada port firewall tambahan "
-"yang harus terbuka, dan akan mengenkripsi lalu lintas migrasi jika koneksi "
-"libvirt Anda dienkripsi. Tapi mungkin sulit untuk membuat pekerjaan ini "
-"dengan transportasi SSH."
+"Ini dapat menyederhanakan pengaturan karena tidak memerlukan pembukaan port "
+"firewall tambahan, serta mengenkripsi lalu lintas migrasi jika koneksi "
+"libvirt Anda terenkripsi. Namun, ini bisa sulit dilakukan dengan transport "
+"SSH."
 
 #: ui/migrate.ui:474
 msgid "_URI:"
@@ -1677,7 +1664,6 @@ msgid "<b>Connectivity</b>"
 msgstr "<b>Konektivitas</b>"
 
 #: ui/migrate.ui:537
-#, fuzzy
 msgid ""
 "By default libvirt will refuse to migrate a VM for certain configurations "
 "that could lead to malfunctioning guests, like if a disk's cache mode is not "
@@ -1685,18 +1671,17 @@ msgid ""
 "\n"
 "Enabling this option tells libvirt to skip those checks."
 msgstr ""
-"Secara default libvirt akan menolak untuk memigrasi VM untuk konfigurasi "
-"tertentu yang dapat menyebabkan tamu tidak berfungsi, seperti jika mode "
-"cache disk bukan 'tidak ada'.&#10;&#10; Mengaktifkan opsi ini memberi tahu "
-"libvirt untuk melewati pemeriksaan tersebut."
+"Secara default, libvirt akan menolak untuk memigrasikan VM dengan "
+"konfigurasi tertentu yang dapat menyebabkan gangguan pada guest, misalnya "
+"jika mode cache disk bukan 'none'.\n"
+"\n"
+"Mengaktifkan opsi ini membuat libvirt melewatkan pemeriksaan tersebut."
 
 #: ui/migrate.ui:541
-#, fuzzy
 msgid "A_llow unsafe:"
-msgstr "A_llow tidak aman:"
+msgstr "Izinkan tidak aman:"
 
 #: ui/migrate.ui:567
-#, fuzzy
 msgid ""
 "By default, the migrated VM config is removed from the source host, and "
 "saved persistently on the destination host. The destination host is "
@@ -1707,18 +1692,18 @@ msgid ""
 "copy moved to the destination is only transient, and will disappear when it "
 "is shutdown."
 msgstr ""
-"Secara default, konfigurasi VM yang dimigrasikan dihapus dari host sumber, "
-"dan disimpan terus-menerus di host tujuan. Tuan rumah tujuan dianggap "
+"Secara default, konfigurasi VM yang dimigrasikan akan dihapus dari host "
+"sumber dan disimpan secara permanen di host tujuan. Host tujuan dianggap "
 "sebagai rumah baru VM.\n"
 "\n"
-"Jika 'sementara' dipilih, migrasi dianggap hanya langkah sementara: host "
-"sumber mempertahankan salinan konfigurasi VM, dan salinan berjalan pindah ke "
-"tujuan hanya sementara, dan akan hilang ketika shutdown."
+"Jika 'sementara' dipilih, migrasi dianggap hanya sebagai pemindahan "
+"sementara: host sumber mempertahankan salinan konfigurasi VM, dan salinan "
+"yang berjalan di host tujuan hanya bersifat sementara serta akan hilang saat "
+"VM dimatikan."
 
 #: ui/migrate.ui:571
-#, fuzzy
 msgid "_Temporary move:"
-msgstr "_Pindah sementara:"
+msgstr "Pemindahan sementara:"
 
 #: ui/migrate.ui:599
 msgid "Advanced options"
@@ -1872,9 +1857,8 @@ msgid "Graphical console _scaling:"
 msgstr "Pen_skalaan konsol grafis:"
 
 #: ui/preferences.ui:621
-#, fuzzy
 msgid "Gr_ab keys:"
-msgstr "Kunci Gr_ab:"
+msgstr "Tangkap tombol:"
 
 #: ui/preferences.ui:636
 msgid "Not supported"
@@ -1949,9 +1933,8 @@ msgid "<b>Confirmations</b>"
 msgstr "<b>Konfirmasi</b>"
 
 #: ui/preferences.ui:991
-#, fuzzy
 msgid "Feed_back"
-msgstr "Feed_back"
+msgstr "Umpan balik"
 
 #: ui/snapshots.ui:80
 msgid "Description:"
@@ -2058,14 +2041,12 @@ msgid "_Take Screenshot"
 msgstr "Ambil _Cuplikan Layar"
 
 #: ui/vmwindow.ui:98
-#, fuzzy
 msgid "Redirect host USB device to virtual machine with SPICE graphics."
-msgstr "Alihkan perangkat USB host ke mesin virtual dengan grafik SPICE."
+msgstr "Arahkan ulang perangkat USB host ke mesin virtual dengan grafik SPICE."
 
 #: ui/vmwindow.ui:99
-#, fuzzy
 msgid "_Redirect USB device"
-msgstr "_Redirect USB perangkat"
+msgstr "Arahkan ulang perangkat USB"
 
 #: ui/vmwindow.ui:121
 msgid "_Console"
@@ -2286,9 +2267,8 @@ msgstr "RNG"
 
 #: virtManager/addhardware.py:321 virtManager/addhardware.py:1032
 #: virtManager/details/details.py:250
-#, fuzzy
 msgid "Panic Notifier"
-msgstr "Panic Notifier"
+msgstr "Pemberi Notifikasi Panic"
 
 #: virtManager/addhardware.py:323 virtManager/details/details.py:252
 msgid "VirtIO VSOCK"
@@ -2308,9 +2288,8 @@ msgid "These changes will take effect after the next guest shutdown."
 msgstr "Perubahan ini akan berlaku setelah penghentian guest berikutnya."
 
 #: virtManager/addhardware.py:460
-#, fuzzy
 msgid "Pseudo TTY"
-msgstr "TTY semu"
+msgstr "TTY Pseudo"
 
 #: virtManager/addhardware.py:461
 msgid "Output to a file"
@@ -2472,7 +2451,6 @@ msgid "Floppy device"
 msgstr "Perangkat floppy"
 
 #: virtManager/addhardware.py:708
-#, fuzzy
 msgid "LUN Passthrough"
 msgstr "LUN Passthrough"
 
@@ -2500,9 +2478,8 @@ msgid "No Devices Available"
 msgstr "Tidak Ada Perangkat yang Tersedia"
 
 #: virtManager/addhardware.py:885 virtManager/device/tpmdetails.py:73
-#, fuzzy
 msgid "Passthrough"
-msgstr "Melewati"
+msgstr "Passthrough"
 
 #: virtManager/addhardware.py:886
 msgid "Host"
@@ -2529,9 +2506,8 @@ msgid "Watchdog Device"
 msgstr "Perangkat Watchdog"
 
 #: virtManager/addhardware.py:1022
-#, fuzzy
 msgid "Filesystem Passthrough"
-msgstr "Sistem File Passthrough"
+msgstr "Filesystem Passthrough"
 
 #: virtManager/addhardware.py:1030
 msgid "Random Number Generator"
@@ -2973,9 +2949,8 @@ msgid "Local CDROM/ISO"
 msgstr "CDROM/ISO lokal"
 
 #: virtManager/createvm.py:937
-#, fuzzy
 msgid "URL Install Tree"
-msgstr "Pohon Pemasangan URL"
+msgstr "Pohon Instalasi URL"
 
 #: virtManager/createvm.py:939
 msgid "Import existing OS image"
@@ -3061,9 +3036,8 @@ msgid "An install media selection is required."
 msgstr "Pemilihan media instalasi diperlukan."
 
 #: virtManager/createvm.py:1471
-#, fuzzy
 msgid "An install tree is required."
-msgstr "Pohon penginstalan diperlukan."
+msgstr "Pohon instalasi diperlukan."
 
 #: virtManager/createvm.py:1479
 msgid "A storage path to import is required."
@@ -3147,9 +3121,8 @@ msgid "Error continuing install: %s"
 msgstr "Galat saat melanjutkan pemasangan: %s"
 
 #: virtManager/createvm.py:2055
-#, fuzzy
 msgid "Bootstrapping container"
-msgstr "Wadah bootstraping"
+msgstr "Menyiapkan kontainer"
 
 #: virtManager/createvol.py:134
 #, python-format
@@ -3369,9 +3342,8 @@ msgid "Graphical console not configured for guest"
 msgstr "Konsol grafis tidak dikonfigurasi untuk guest"
 
 #: virtManager/details/console.py:540
-#, fuzzy
 msgid "Guest has crashed."
-msgstr "Tamu ngadat."
+msgstr "Guest mengalami crash."
 
 #: virtManager/details/console.py:542
 msgid "Guest is not running."
@@ -3804,6 +3776,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Menggabungkan snapshot eksternal dan internal untuk VM yang sama tidak "
+"disarankan. Apakah Anda yakin ingin melanjutkan?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4062,9 +4036,9 @@ msgid "Auto"
 msgstr "Otomatis"
 
 #: virtManager/device/gfxdetails.py:211
-#, fuzzy, python-format
+#, python-format
 msgid "A_uto (Port %(port)d)"
-msgstr "A_uto (Port %(port)d)"
+msgstr "Otomatis (Port %(port)d)"
 
 #: virtManager/device/mediacombo.py:65
 msgid "No media selected"
@@ -4099,10 +4073,8 @@ msgid "Macvtap device..."
 msgstr "Perangkat Macvtap..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Perangkat Macvtap..."
+msgstr "Perangkat vDPA..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -4205,9 +4177,8 @@ msgid "Error selecting network: %s"
 msgstr "Galat saat memilih jaringan: %s"
 
 #: virtManager/hostnets.py:215 virtManager/object/network.py:161
-#, fuzzy
 msgid "Routed network"
-msgstr "Jaringan yang dirutekan"
+msgstr "Jaringan terarah"
 
 #: virtManager/hostnets.py:217
 msgid "Isolated network, internal routing only"
@@ -4499,9 +4470,8 @@ msgid "Save canceled"
 msgstr "Menyimpan dibatalkan"
 
 #: virtManager/lib/libvirtenummap.py:98
-#, fuzzy
 msgid "Event wakeup"
-msgstr "Bangun acara"
+msgstr "Bangun peristiwa"
 
 #: virtManager/lib/libvirtenummap.py:102 virtManager/lib/libvirtenummap.py:114
 msgid "User"
@@ -4636,9 +4606,8 @@ msgid "Direct"
 msgstr "Langsung"
 
 #: virtManager/migrate.py:140
-#, fuzzy
 msgid "Tunnelled"
-msgstr "Terowongan"
+msgstr "Tertunnel"
 
 #: virtManager/migrate.py:159
 #, python-format
@@ -4650,14 +4619,13 @@ msgid "A valid destination connection must be selected."
 msgstr "Koneksi tujuan yang valid harus dipilih."
 
 #: virtManager/migrate.py:235
-#, fuzzy
 msgid ""
 "A remotely accessible libvirt URI is required for tunneled migration, but "
 "the selected connection is a local URI. Libvirt will reject this unless you "
 "add a transport."
 msgstr ""
 "URI libvirt yang dapat diakses dari jarak jauh diperlukan untuk migrasi "
-"terowongan, tetapi koneksi yang dipilih adalah URI lokal. Libvirt akan "
+"bertunnel, tetapi koneksi yang dipilih adalah URI lokal. Libvirt akan "
 "menolak ini kecuali Anda menambahkan transport."
 
 #: virtManager/migrate.py:287
@@ -4914,6 +4882,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator tidak diinstal atau tidak dapat digunakan, ikon baki sistem "
+"tidak tersedia di Wayland."
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5273,12 +5243,11 @@ msgid "Print the generated domain XML rather than create the guest."
 msgstr "Cetak XML domain yang dibuat daripada membuat guest."
 
 #: virtinst/cli.py:685
-#, fuzzy
 msgid ""
 "Run through install process, but do not create devices or define the guest."
 msgstr ""
-"Jalankan melalui proses penginstalan, tetapi jangan membuat perangkat atau "
-"menentukan tamu."
+"Jalankan proses instalasi, tetapi jangan buat perangkat atau definisikan "
+"guest."
 
 #: virtinst/cli.py:693
 msgid ""
@@ -5291,9 +5260,8 @@ msgstr ""
 "--check all=off"
 
 #: virtinst/cli.py:698
-#, fuzzy
 msgid "Suppress non-error output"
-msgstr "Menekan keluaran non-error"
+msgstr "Sembunyikan keluaran non-error"
 
 #: virtinst/cli.py:699
 msgid "Print debugging information"
@@ -5478,11 +5446,12 @@ msgstr ""
 "--rng /dev/urandom"
 
 #: virtinst/cli.py:896
-#, fuzzy
 msgid ""
 "Configure a guest panic device. Ex:\n"
 "--panic default"
-msgstr "Konfigurasikan perangkat panik tamu. Ex:&#10; - default panic"
+msgstr ""
+"Konfigurasikan perangkat panic untuk guest. Contoh:\n"
+"--panic default"
 
 #: virtinst/cli.py:902
 msgid ""
@@ -5524,6 +5493,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Konfigurasikan perangkat penyimpanan NVRAM.\n"
+"Ini digunakan oleh kernel guest untuk merekam log oops/panic. Contoh:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5710,11 +5682,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Galat: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Grafik diminta tetapi DISPLAY tidak disetel. Tidak menjalankan virt-viewer."
+msgstr "Tidak ada tampilan terdeteksi. Tidak menjalankan virt-viewer."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5958,10 +5927,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "Keamanan peluncuran SEV-SNP membutuhkan mesin UEFI Q35"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "Keamanan peluncuran SEV membutuhkan mesin UEFI Q35"
+msgstr "Keamanan peluncuran TDX memerlukan mesin Q35 UEFI"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -6054,14 +6021,13 @@ msgid "Couldn't find kernel for install tree."
 msgstr "Tidak bisa menemukan kernel untuk pohon instalasi."
 
 #: virtinst/install/installertreemedia.py:270
-#, fuzzy
 msgid ""
 "Directory tree installs typically do not work unless extra kernel args are "
 "passed to point the installer at a network accessible install tree."
 msgstr ""
-"Instalasi pohon direktori biasanya tidak bekerja kecuali argumen kernel "
-"tambahan diberikan untuk mengarahkan penginstal pada pohon instalasi yang "
-"dapat diakses jaringan."
+"Instalasi pohon direktori biasanya tidak berfungsi kecuali argumen kernel "
+"tambahan diberikan untuk mengarahkan penginstal ke pohon instalasi yang "
+"dapat diakses melalui jaringan."
 
 #: virtinst/install/unattended.py:64
 #, python-format
@@ -6532,16 +6498,12 @@ msgid "Error validating install location: %s"
 msgstr "Kesalahan saat memvalidasi lokasi instalasi: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo nama OS diperlukan, tetapi tidak ada\n"
-"nilai yang ditetapkan atau terdeteksi."
+"Nama OS --osinfo/--os-variant diperlukan, tetapi tidak disetel atau "
+"terdeteksi."
 
 #: virtinst/virtinstall.py:600
 msgid ""
@@ -6635,9 +6597,8 @@ msgid "Console command returned failure."
 msgstr "Perintah konsol mengembalikan kegagalan."
 
 #: virtinst/virtinstall.py:862
-#, fuzzy
 msgid "Domain has crashed."
-msgstr "Domain macet."
+msgstr "Domain mengalami crash."
 
 #: virtinst/virtinstall.py:872
 #, python-format
@@ -6696,9 +6657,8 @@ msgid "Domain install interrupted."
 msgstr "Instalasi domain terinterupsi."
 
 #: virtinst/virtinstall.py:1023
-#, fuzzy
 msgid "Dry run completed successfully"
-msgstr "Uji coba berhasil diselesaikan"
+msgstr "Uji coba selesai dengan sukses"
 
 #: virtinst/virtinstall.py:1027
 #, python-format
@@ -6757,9 +6717,8 @@ msgid "Perform an unattended installation"
 msgstr "Lakukan instalasi tanpa pendampingan"
 
 #: virtinst/virtinstall.py:1100
-#, fuzzy
 msgid "Specify fine grained install options"
-msgstr "Tentukan opsi penginstalan yang terperinci"
+msgstr "Tentukan opsi instalasi mendetail"
 
 #: virtinst/virtinstall.py:1105
 msgid ""
@@ -6830,22 +6789,16 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Harap masukkan 'ya' atau 'tidak'."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo tidak didukung dengan --edit"
+msgstr "--osinfo/--os-variant tidak didukung dengan --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo tidak didukung dengan --remove-device"
+msgstr "--osinfo/--os-variant tidak didukung dengan --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
-msgstr "--os-variant/--osinfo tidak didukung dengan --build-xml"
+msgstr "--osinfo/--os-variant tidak didukung dengan --build-xml"
 
 #: virtinst/virtxml.py:113
 #, python-brace-format
@@ -6969,26 +6922,24 @@ msgid "Error attempting device hotplug: %(error)s"
 msgstr "Galat saat mencoba hotplug perangkat: %(error)s"
 
 #: virtinst/virtxml.py:376
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(xml)s\n"
 "\n"
 "Hotunplug this device from the guest '%(domain)s'?"
 msgstr ""
-"%(xml)s&\n"
+"%(xml)s\n"
 "\n"
-"Hotunplug perangkat ini dari '%(domain)s' milik guest?"
+"Lepas perangkat ini dari guest '%(domain)s'?"
 
 #: virtinst/virtxml.py:377
-#, fuzzy
 msgid "Device hotunplug successful."
-msgstr "Hotunplug perangkat berhasil."
+msgstr "Pelepasan perangkat berhasil."
 
 #: virtinst/virtxml.py:378
-#, fuzzy, python-format
-#| msgid "Error validating install location: %s"
+#, python-format
 msgid "Error attempting device hotunplug: %(error)s"
-msgstr "Galat saat mencoba hotunplug perangkat: %(error)s"
+msgstr "Kesalahan saat mencoba melepaskan perangkat: %(error)s"
 
 #: virtinst/virtxml.py:380
 #, python-format
