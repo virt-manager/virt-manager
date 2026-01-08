@@ -507,6 +507,9 @@
     <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
+    <controller type="nvme">
+      <serial>1</serial>
+    </controller>
     <filesystem type="mount" accessmode="mapped">
       <driver ats="on" iommu="off" packed="on" page_per_vq="off"/>
       <alias name="testfsalias"/>
