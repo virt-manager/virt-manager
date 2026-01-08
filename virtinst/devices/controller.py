@@ -77,6 +77,7 @@ class DeviceController(Device):
     ports = XMLProperty("./@ports", is_int=True)
     maxGrantFrames = XMLProperty("./@maxGrantFrames", is_int=True)
     index = XMLProperty("./@index", is_int=True)
+    serial = XMLProperty("./serial")
 
     driver_iothread = XMLProperty("./driver/@iothread", is_int=True)
     driver_queues = XMLProperty("./driver/@queues", is_int=True)

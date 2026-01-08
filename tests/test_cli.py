@@ -709,6 +709,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller usb3
 --controller scsi,model=virtio-scsi
 --controller usb2
+--controller nvme,serial=1
 
 
 --input type=keyboard,bus=usb
