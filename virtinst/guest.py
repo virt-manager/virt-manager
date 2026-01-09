@@ -877,7 +877,7 @@ class Guest(XMLBuilder):
             if dev.DEVICE_TYPE == "disk" and dev.bus == "ide":
                 dev.bus = "sata"
                 used_targets = [d.target for d in self.devices.disk if d.target]
-                dev.generate_target(used_targets)
+                dev.generate_target(used_targets, self)
                 dev.address.clear()
 
             if dev.address.type == "pci":
