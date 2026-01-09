@@ -14,23 +14,23 @@
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017. #zanata
 # Emin Tufan Çetin <etcetin@gmail.com>, 2018. #zanata
 # Oğuz Ersen <oguzersen@protonmail.com>, 2020, 2021, 2022.
-# Oğuz Ersen <oguz@ersen.moe>, 2022, 2023, 2024.
+# Oğuz Ersen <oguz@ersen.moe>, 2022, 2023, 2024, 2025.
 # Ahmet Kaya <neodeveloper27@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-07-16 06:22+0000\n"
-"Last-Translator: Ahmet Kaya <neodeveloper27@gmail.com>\n"
-"Language-Team: Turkish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/tr/>\n"
+"PO-Revision-Date: 2025-10-04 15:43+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
+"Language-Team: Turkish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -92,10 +92,8 @@ msgid "Manage virtual machines"
 msgstr "Sanal makineleri yönet"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "sanallaştırma;libvirt;sm;vmm;"
+msgstr "sanallaştırma;libvirt;sm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -154,10 +152,8 @@ msgid "Host _Device:"
 msgstr "Ana Makine _Aygıtı:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Havuzu Başlat"
+msgstr "Başlangıç İlkesi:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -4909,6 +4905,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator kurulu değil veya kullanılamıyor, Wayland'da sistem tepsisi "
+"simgesi yok"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5543,22 +5541,22 @@ msgstr "Etki alanı işlemi için CPU parametrelerini ayarla."
 
 #: virtinst/cli.py:961
 msgid "Tune NUMA policy for the domain process."
-msgstr "Etki alanı işlemi için NUMA politikasını ayarla."
+msgstr "Etki alanı işlemi için NUMA ilkesini ayarla."
 
 #: virtinst/cli.py:966
 msgid "Tune memory policy for the domain process."
-msgstr "Etki alanı işlemi için bellek politikasını ayarla."
+msgstr "Etki alanı işlemi için bellek ilkesini ayarla."
 
 #: virtinst/cli.py:971
 msgid "Tune blkio policy for the domain process."
-msgstr "Etki alanı işlemi için blkio politikasını ayarla."
+msgstr "Etki alanı işlemi için blkio ilkesini ayarla."
 
 #: virtinst/cli.py:979
 msgid ""
 "Set memory backing policy for the domain process. Ex:\n"
 "--memorybacking hugepages=on"
 msgstr ""
-"Etki alanı işlemi için bellek yedekleme politikasını ayarla. Örnek:\n"
+"Etki alanı işlemi için bellek yedekleme ilkesini ayarla. Örnek:\n"
 "--memorybacking hugepages=on"
 
 #: virtinst/cli.py:988
@@ -5585,7 +5583,7 @@ msgstr "SM güç yönetimi özelliklerini yapılandır"
 
 #: virtinst/cli.py:1006
 msgid "Configure VM lifecycle management policy"
-msgstr "SM yaşam döngüsü yönetimi politikasını yapılandır"
+msgstr "SM yaşam döngüsü yönetimi ilkesini yapılandır"
 
 #: virtinst/cli.py:1011
 msgid "Configure VM resource partitioning (cgroups)"
@@ -5958,10 +5956,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
+msgstr "TDX başlatma güvenliği bir Q35 UEFI makinesi gerektiriyor"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
