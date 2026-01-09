@@ -1454,7 +1454,7 @@ class vmmAddHardware(vmmGObjectUI):
                 used.append(d.target)
 
         self._set_disk_controller(disk)
-        disk.generate_target(used)
+        disk.generate_target(used, self.vm.xmlobj)
         return disk
 
     def _build_network(self):
