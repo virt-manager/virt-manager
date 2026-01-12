@@ -463,9 +463,8 @@ class vmmSnapshotPage(vmmGObjectUI):
         buf.connect("changed", self._description_changed)
         self.widget("snapshot-description").set_buffer(buf)
 
-        # [name, row label, tooltip, icon name, sortname, current]
-        model = Gtk.ListStore(str, str, str, str, str, bool)
-        model.set_sort_column_id(4, Gtk.SortType.ASCENDING)
+        # [name, row label, tooltip, icon name, current]
+        model = Gtk.TreeStore(str, str, str, str, bool)
 
         col = Gtk.TreeViewColumn("")
         col.set_min_width(150)
@@ -486,7 +485,7 @@ class vmmSnapshotPage(vmmGObjectUI):
         img.set_property("icon-name", "emblem-default")
         img.set_property("xalign", 0.0)
         col.pack_start(img, False)
-        col.add_attribute(img, "visible", 5)
+        col.add_attribute(img, "visible", 4)
 
         def _sep_cb(_model, _iter, ignore):
             return not bool(_model[_iter][0])
@@ -551,6 +550,10 @@ class vmmSnapshotPage(vmmGObjectUI):
         for i in self._get_selected_snapshots():
             cursnaps.append(i.get_name())
 
+        saved_expanded_paths = []
+        self.widget("snapshot-list").map_expanded_rows(
+            lambda _, path, path_list: path_list.append(path), saved_expanded_paths
+        )
         model = self.widget("snapshot-list").get_model()
         model.clear()
 
@@ -561,28 +564,41 @@ class vmmSnapshotPage(vmmGObjectUI):
             self._set_error_page(_("Error refreshing snapshot list: %s") % str(e))
             return
 
-        has_external = False
-        has_internal = False
+        snapshots.sort(key=lambda snap: snap.get_xmlobj().creationTime)
+        screenshots_name_to_widget = {}
         for snap in snapshots:
             desc = snap.get_xmlobj().description
             name = snap.get_name()
             state = snap.run_status()
+            parent_name = snap.get_xmlobj().parent
             if snap.is_external():
-                has_external = True
-                sortname = "3%s" % name
                 label = _("%(vm)s\n<span size='small'>VM State: %(state)s (External)</span>")
             else:
-                has_internal = True
-                sortname = "1%s" % name
                 label = _("%(vm)s\n<span size='small'>VM State: %(state)s</span>")
 
             label = label % {"vm": xmlutil.xml_escape(name), "state": xmlutil.xml_escape(state)}
-            model.append(
-                [name, label, desc, snap.run_status_icon_name(), sortname, snap.is_current()]
-            )
 
-        if has_internal and has_external:
-            model.append([None, None, None, None, "2", False])
+            if parent_name is not None and parent_name not in screenshots_name_to_widget:
+                error = _("Parent snapshot %s was not found") % parent_name
+                self.err.show_err(error)
+                return
+
+            parent_widget = screenshots_name_to_widget.get(parent_name)
+            ui_widget = model.append(
+                parent_widget,
+                [name, label, desc, snap.run_status_icon_name(), snap.is_current()],
+            )
+            screenshots_name_to_widget[name] = ui_widget
+
+        model = self.widget("snapshot-list").get_model()
+        if not self._initial_populate:
+            self.widget("snapshot-list").expand_all()
+        else:
+            if select_name is not None and select_name in screenshots_name_to_widget:
+                path = model.get_path(screenshots_name_to_widget.get(select_name))
+                saved_expanded_paths.append(path)
+            for path in saved_expanded_paths:
+                self.widget("snapshot-list").expand_to_path(path)
 
         def check_selection(treemodel, path, it, snaps):
             if select_name:
@@ -592,7 +608,6 @@ class vmmSnapshotPage(vmmGObjectUI):
                 selection.select_path(path)
 
         selection = self.widget("snapshot-list").get_selection()
-        model = self.widget("snapshot-list").get_model()
         selection.unselect_all()
         model.foreach(check_selection, cursnaps)
 
