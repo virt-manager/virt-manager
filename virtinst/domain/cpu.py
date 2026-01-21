@@ -522,6 +522,9 @@ class DomainCpu(XMLBuilder):
 
         elif guest.os.is_x86() and guest.type == "kvm":
             self._set_cpu_x86_kvm_default(guest)
+         
+        elif guest.os.is_loongarch64():
+            self.set_model(guest, "la464")
 
         else:
             domcaps = guest.lookup_domcaps()
