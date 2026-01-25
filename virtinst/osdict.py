@@ -438,6 +438,10 @@ class _OsVariant:
         devids = ["http://qemu.org/chipset/x86/q35"]
         return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
 
+    def supports_nvme(self, extra_devs=None):
+        devids = ["http://nvmexpress.org/1.0"]
+        return bool(self._device_filter(devids=devids, extra_devs=extra_devs))
+
     def _get_firmware_list(self):
         if hasattr(self._os, "get_complete_firmware_list"):  # pragma: no cover
             return self._os.get_complete_firmware_list().get_elements()
