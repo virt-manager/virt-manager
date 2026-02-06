@@ -459,7 +459,7 @@ class vmmCreateVM(vmmGObjectUI):
         is_vz_container = is_vz and guest.os.is_container()
         can_remote_url = self.conn.get_backend().support_remote_url_install()
 
-        installable_arch = bool(guest.os.is_x86() or guest.os.is_ppc64() or guest.os.is_s390x())
+        installable_arch = bool(guest.os.is_x86() or guest.os.is_ppc64() or guest.os.is_s390x() or guest.os.is_loongarch64())
 
         default_efi = (
             self.config.get_default_firmware_setting() == "uefi"
@@ -830,7 +830,8 @@ class vmmCreateVM(vmmGObjectUI):
         if recommended_machine:
             defmachine = recommended_machine
             prios = [defmachine]
-
+        if self._capsinfo.arch in ["loongarch64"]:
+            defmachine = "virt"
         for p in prios[:]:
             if p not in machines:
                 prios.remove(p)  # pragma: no cover

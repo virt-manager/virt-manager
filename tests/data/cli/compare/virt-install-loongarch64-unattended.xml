@@ -15,6 +15,9 @@
   <features>
     <acpi/>
   </features>
+  <cpu mode="custom" match="exact">
+    <model>la464</model>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-loongarch64</emulator>
@@ -92,6 +95,9 @@
   <features>
     <acpi/>
   </features>
+  <cpu mode="custom" match="exact">
+    <model>la464</model>
+  </cpu>
   <clock offset="utc"/>
   <devices>
     <emulator>/usr/bin/qemu-system-loongarch64</emulator>
