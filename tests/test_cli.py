@@ -1634,6 +1634,7 @@ c.add_compare(
     "amd-sev",
     prerun_check=no_osinfo_linux2020_virtio,
 )
+c.add_compare("--osinfo generic --boot uefi,secure-boot=yes --disk none", "boot-uefi-secure-boot")
 
 c.add_invalid(
     "--disk none --location nfs:example.com/fake --nonetworks",
@@ -2216,6 +2217,10 @@ c.add_compare(
 c.add_compare(
     "--print-diff --define --connect %(URI-KVM-X86)s test-alternate-devs --edit --boot uefi=off",
     "edit-boot-uefi-off",
+)
+c.add_compare(
+    "--print-diff --define --connect %(URI-KVM-X86)s test-alternate-devs --edit --boot uefi,secure-boot=off",
+    "edit-boot-secure-boot-off",
 )
 c.add_compare(
     "--print-diff --define --connect %(URI-KVM-X86)s test-many-devices --edit --cpu host-copy",
