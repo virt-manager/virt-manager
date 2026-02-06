@@ -3237,6 +3237,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("domain_type", None, lookup_cb=None, cb=cls.set_domain_type_cb)
         cls.add_arg("emulator", None, lookup_cb=None, cb=cls.set_emulator_cb)
         cls.add_arg("uefi", None, lookup_cb=None, cb=cls.set_uefi_cb)
+        cls.add_arg("secure-boot", "secure_boot", is_onoff=True)
 
         # Common/Shared boot options
         cls.add_arg("loader", "loader")
