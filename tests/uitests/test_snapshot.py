@@ -141,7 +141,7 @@ def testSnapshotMisc1(app):
     newwin = app.find_window("Create snapshot")
     newwin.find("internal", "radio button").click()
     # Force validation error
-    newwin.find("Name:", "text").set_text("bad name")
+    newwin.find("Name:", "text").set_text("bad/name")
     newwin.find("Finish", "push button").click()
     app.click_alert_button("validating snapshot", "OK")
     # Force name collision
