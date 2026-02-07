@@ -59,7 +59,7 @@ def _open_delete(app, vmname):
 def _finish(app, delete, paths, expect_fail=False, click_no=False):
     delete.find_fuzzy("Delete", "button").click()
     if paths:
-        alert = app.root.find("vmm dialog", "alert")
+        alert = app.root.find(None, "alert")
         alert.find_fuzzy("Are you sure")
         for path in paths:
             alert.find_fuzzy(path)
