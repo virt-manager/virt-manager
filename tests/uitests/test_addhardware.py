@@ -259,7 +259,7 @@ def testAddDiskSearchPermsCheckbox(app, uri, tmpdir):
     path = tmpdir + "/foo2.img"
     tab.find("storage-entry").set_text(path)
     _finish(addhw, check=None)
-    alert = app.root.find_fuzzy("vmm dialog", "alert")
+    alert = app.root.find_fuzzy(None, "alert")
     alert.find_fuzzy("Don't ask", "check box").click()
     app.click_alert_button("emulator may not have", "No")
     lib.utils.check(lambda: details.active)
@@ -316,7 +316,7 @@ def testAddDiskSearchPermsFail(app, uri, tmpdir):
     tab.find("storage-entry").set_text(path)
     _finish(addhw, check=None)
     app.click_alert_button("emulator may not have", "Yes")
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find_fuzzy("Errors were encountered", "label")
     alert.find_fuzzy("Don't ask", "check box").click()
     alert.find_fuzzy("OK", "push button").click()
@@ -695,7 +695,7 @@ def testAddHWCornerCases(app):
     # Test live adding, error dialog, click no
     _open_addhw(app, details)
     _finish(addhw, check=None)
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find("This device could not be attached to the running machine", "label")
     alert.find("Details", "toggle button").click_expander()
     alert.find("No", "push button").click()
@@ -704,7 +704,7 @@ def testAddHWCornerCases(app):
     # Test live adding, error dialog, click yes
     _open_addhw(app, details)
     _finish(addhw, check=None)
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find("This device could not be attached to the running machine", "label")
     alert.find("Details", "toggle button").click_expander()
     alert.find("Yes", "push button").click()

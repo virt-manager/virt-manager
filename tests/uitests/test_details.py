@@ -711,7 +711,7 @@ def testDetailsMiscEdits(app):
     # Unapplied changes but clicking yes
     share.click()
     hwlist.find("CPUs", "table cell").click()
-    alert = app.root.find("vmm dialog", "alert")
+    alert = app.root.find(None, "alert")
     alert.find_fuzzy("There are unapplied changes", "label")
     alert.find_fuzzy("Don't warn", "check box").click()
     alert.find("Yes", "push button").click()

@@ -410,7 +410,7 @@ def testConsoleSpiceSpecific(app, dom):
     win.find("Virtual Machine", "menu").click()
     win.find("Redirect USB", "menu item").click()
 
-    usbwin = app.root.find("vmm dialog", "alert")
+    usbwin = app.root.find(None, "alert")
     usbwin.find("Select USB devices for redirection", "label")
     usbwin.find("SPICE CD", "check box").click()
     chooser = app.root.find(None, "file chooser")
