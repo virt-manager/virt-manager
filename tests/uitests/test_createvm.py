@@ -973,6 +973,8 @@ def testNewVMXenPV(app):
 
 
 def testNewVMInstallFail(app):
+    app.open(extra_opts=["--test-options=disable-name-validation"])
+
     def dofail():
         _newvm = _open_newvm(app)
         _newvm.find_fuzzy("Manual", "radio").click()

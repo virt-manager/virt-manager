@@ -108,6 +108,7 @@ def testDetailsRenameSimple(app):
     """
     Rename a simple VM
     """
+    app.open(extra_opts=["--test-options=disable-name-validation"])
     origname = "test-clone-simple"
     win = app.manager_open_details(origname)
     _testRename(app, win, origname, origname)
@@ -118,6 +119,7 @@ def testDetailsRenameNVRAM(app):
     """
     Rename a VM that will trigger the nvram behavior
     """
+    app.open(extra_opts=["--test-options=disable-name-validation"])
     origname = "test-many-devices"
     win = app.manager_open_details(origname, shutdown=True)
     _testRename(app, win, origname, "test-new-name")

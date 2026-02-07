@@ -116,6 +116,7 @@ def testSnapshotMisc1(app):
     Test snapshot corner cases
     """
     vmname = "test-state-managedsave"
+    # app.open(extra_opts=["--test-options=disable-name-validation"], show_console=vmname)
     win = _open_snapshots_window(app, vmname)
     vmrun = win.find("Restore", "push button")
 
