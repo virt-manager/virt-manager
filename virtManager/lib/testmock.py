@@ -184,6 +184,8 @@ class CLITestOptionsClass:
 
     * test-vm-run-fail: Make VM run fail, so we can test the error path
     * test-update-device-fail: Make UpdateDevice API call fail
+    * disable-name-validation: Disable validate_generic_name checking
+        to test error handling for invalid object names
 
     * firstrun-uri: If set, use this as the initial connection URI
         if we are doing firstrun testing
@@ -237,6 +239,7 @@ class CLITestOptionsClass:
         self.test_managed_save = _get("test-managed-save")
         self.test_vm_run_fail = _get("test-vm-run-fail")
         self.test_update_device_fail = _get("test-update-device-fail")
+        self.disable_name_validation = _get("disable-name-validation")
         self.firstrun_uri = _get_value("firstrun-uri")
         self.fake_vnc_username = _get("fake-vnc-username")
         self.fake_systray = _get("fake-systray")
@@ -276,3 +279,11 @@ class CLITestOptionsClass:
             virtinst.diskbackend.SETFACL = "getfacl"
             # pylint: disable=protected-access
             virtinst.diskbackend._fix_perms_chmod = fake_search
+
+        if self.disable_name_validation:
+            import virtinst.xmlbuilder
+
+            def noop_validate(*args, **kwargs):
+                pass
+
+            virtinst.xmlbuilder.XMLBuilder.validate_generic_name = noop_validate
