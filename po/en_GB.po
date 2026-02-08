@@ -3,18 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Andi Chandler <andi@gowling.com>, 2013-2014, 2022, 2023, 2024.
-# Andi Chandler <andi@gowling.com>, 2013-2015, 2022, 2023, 2024.
+# Andi Chandler <andi@gowling.com>, 2013-2014, 2022, 2023, 2024, 2025.
+# Andi Chandler <andi@gowling.com>, 2013-2015, 2022, 2023, 2024, 2025.
 # Luke Hollins <luke@farcry.ca>, 2015
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
-# Andi Chandler <andi@gowling.com>, 2018. #zanata, 2022, 2023, 2024.
+# Andi Chandler <andi@gowling.com>, 2018. #zanata, 2022, 2023, 2024, 2025.
 # Pavel Hrdina <phrdina@redhat.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2024-12-04 09:49+0000\n"
+"PO-Revision-Date: 2025-10-16 02:53+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English (United Kingdom) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/en_GB/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -77,20 +77,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Virtual Machine Manager"
+msgstr "Virtual machine viewer/manager"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Manage virtual machines"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualisation"
+msgstr "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -149,10 +145,8 @@ msgid "Host _Device:"
 msgstr "Host _Device:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Start Pool"
+msgstr "Startup Policy:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -3782,6 +3776,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Mixing external and internal snapshots for the same VM is not recommended. "
+"Are you sure you want to continue?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -4076,10 +4072,8 @@ msgid "Macvtap device..."
 msgstr "Macvtap device..."
 
 #: virtManager/device/netlist.py:146
-#, fuzzy
-#| msgid "Macvtap device..."
 msgid "vDPA device..."
-msgstr "Macvtap device..."
+msgstr "vDPA device..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -4883,6 +4877,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator not installed or usable, system tray icon not available on "
+"Wayland"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5486,6 +5482,9 @@ msgid ""
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Configure a nvram storage device.\n"
+"It's for guest kernel to record oops/panic logs. Ex:\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
@@ -5672,10 +5671,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Error: %(cli_flag_name)s %(options)s: %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr "Graphics requested but DISPLAY is not set. Not running virt-viewer."
+msgstr "No display detected. Not running virt-viewer."
 
 #: virtinst/cli.py:2199
 msgid ""
@@ -5917,10 +5914,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP launch security requires a Q35 UEFI machine"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV launch security requires a Q35 UEFI machine"
+msgstr "TDX launch security requires a Q35 UEFI machine"
 
 #: virtinst/domcapabilities.py:217
 #, python-format
@@ -6479,15 +6474,11 @@ msgid "Error validating install location: %s"
 msgstr "Error validating install location: %s"
 
 #: virtinst/virtinstall.py:589
-#, fuzzy
-#| msgid ""
-#| "--os-variant/--osinfo OS name is required, but no value was\n"
-#| "set or detected."
 msgid ""
 "--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 msgstr ""
-"--os-variant/--osinfo OS name is required, but no value was\n"
+"--osinfo/--os-variant OS name is required, but no value was\n"
 "set or detected."
 
 #: virtinst/virtinstall.py:600
@@ -6767,20 +6758,14 @@ msgid "Please enter 'yes' or 'no'."
 msgstr "Please enter 'yes' or 'no'."
 
 #: virtinst/virtxml.py:105
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --edit"
 msgid "--osinfo/--os-variant is not supported with --edit"
-msgstr "--os-variant/--osinfo is not supported with --edit"
+msgstr "--osinfo/--os-variant is not supported with --edit"
 
 #: virtinst/virtxml.py:107
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --remove-device"
 msgid "--osinfo/--os-variant is not supported with --remove-device"
-msgstr "--os-variant/--osinfo is not supported with --remove-device"
+msgstr "--osinfo/--os-variant is not supported with --remove-device"
 
 #: virtinst/virtxml.py:109
-#, fuzzy
-#| msgid "--os-variant/--osinfo is not supported with --build-xml"
 msgid "--osinfo/--os-variant is not supported with --build-xml"
 msgstr "--os-variant/--osinfo is not supported with --build-xml"
 

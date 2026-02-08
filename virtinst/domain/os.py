@@ -5,6 +5,7 @@
 # See the COPYING file in the top-level directory.
 
 from ..xmlbuilder import XMLBuilder, XMLProperty, XMLChildProperty
+from ..logger import log
 
 
 class _InitArg(XMLBuilder):
@@ -194,6 +195,54 @@ class DomainOs(XMLBuilder):
         for val in shlex.split(argstring):
             obj = self.initargs.add_new()
             obj.val = val
+
+    @property
+    def secure_boot(self):
+        for feature in self.firmware_features:
+            if feature.name == "enrolled-keys":
+                return feature.enabled
+        return None
+
+    @secure_boot.setter
+    def secure_boot(self, val):
+        """
+        Enable or disable secure boot by setting enrolled-keys firmware feature.
+        Currently there are two features controlling how secure boot works:
+
+            - secure-boot=enabled + enrolled-keys=enabled
+              This enables secure boot and verifies signature on boot.
+
+            - secure-boot=enabled + enrolled-keys=disabled
+              This enables secure boot but there are no keys to verify signature
+              so it will boot also unsigned binaries.
+
+            - secure-boot=disabled + enrolled-keys=disabled
+              This disables secure boot feature completely.
+
+        Effectively we only need to use firmware with nvram that doesn't have
+        any keys to boot unsigned binaries.
+        """
+        if val is None or self.secure_boot == val:
+            return
+
+        if self.nvram:
+            log.warning(
+                _(
+                    "Changing secure-boot requires resetting NVRAM."
+                    " This can be done using `virsh start VM --reset-nvram`."
+                )
+            )
+
+        for feature in self.firmware_features:
+            if feature.name in ["secure-boot", "enrolled-keys"]:
+                self.remove_child(feature)
+
+        self._xmlstate.xmlapi.node_force_remove("./os/loader")
+        self._xmlstate.xmlapi.node_force_remove("./os/nvram")
+
+        enrolled_keys = self.firmware_features.add_new()
+        enrolled_keys.name = "enrolled-keys"
+        enrolled_keys.enabled = val
 
     ##################
     # Default config #

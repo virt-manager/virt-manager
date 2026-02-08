@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-07-18 22:53+0000\n"
+"PO-Revision-Date: 2025-10-30 21:54+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
-"Language-Team: Finnish <https://translate.fedoraproject.org/projects/virt-"
-"manager/virt-manager/fi/>\n"
+"Language-Team: Finnish <https://translate.fedoraproject.org/projects/"
+"virt-manager/virt-manager/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -87,10 +87,8 @@ msgid "Manage virtual machines"
 msgstr "Hallitse virtuaalikoneita"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization;libvirt;vm;vmm;"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "virtualisointi;libvirt;vm;vmm;"
+msgstr "virtualisointi;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -149,10 +147,8 @@ msgid "Host _Device:"
 msgstr "I_säntälaite:"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Käynnistä varanto"
+msgstr "Käynnistyskäytäntö:"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -4461,7 +4457,7 @@ msgstr "Kaatui"
 
 #: virtManager/lib/libvirtenummap.py:79
 msgid "Suspended"
-msgstr "Keskeytetty"
+msgstr "Jäädytetty"
 
 #: virtManager/lib/libvirtenummap.py:91
 msgid "Booted"
@@ -4903,6 +4899,8 @@ msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator-sovellusta ei ole asennettu tai se ei ole käytettävissä, "
+"ilmaisinalueen kuvaketta ei ole saatavilla Waylandissa"
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5678,7 +5676,7 @@ msgstr ""
 #: virtinst/cli.py:1148
 #, python-format
 msgid "%(key)s must be 'yes' or 'no'"
-msgstr "%(key)s:n täytyy olla 'kyllä' vai 'ei'"
+msgstr "%(key)s:n täytyy olla 'yes' vai 'no'"
 
 #: virtinst/cli.py:1343
 #, python-format
@@ -5723,7 +5721,7 @@ msgstr "CPU model=host on vanhentunut, käytä model=host-model"
 #: virtinst/cli.py:3914
 #, python-format
 msgid "Improper value for 'size': %s"
-msgstr "Virheellinen arvo 'koko':lle: %s"
+msgstr "Ei-kelpava arvo 'size':lle: %s"
 
 #: virtinst/cli.py:3928
 #, python-format
@@ -5951,10 +5949,8 @@ msgid "SEV-SNP launch security requires a Q35 UEFI machine"
 msgstr "SEV-SNP-käynnistysturva vaatii Q35 UEFI -koneen"
 
 #: virtinst/domain/launch_security.py:51
-#, fuzzy
-#| msgid "SEV launch security requires a Q35 UEFI machine"
 msgid "TDX launch security requires a Q35 UEFI machine"
-msgstr "SEV-käynnistysturva vaatii Q35 UEFI -koneen"
+msgstr "TDX-käynnistysturva vaatii Q35 UEFI -koneen"
 
 #: virtinst/domcapabilities.py:217
 #, python-format

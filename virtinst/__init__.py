@@ -24,6 +24,7 @@ def _setup_i18n():
 
     gettext.install("virt-manager", BuildConfig.gettext_dir, names=["ngettext"])
     gettext.bindtextdomain("virt-manager", BuildConfig.gettext_dir)
+    locale.bindtextdomain("virt-manager", BuildConfig.gettext_dir)
 
 
 def _set_libvirt_error_handler():

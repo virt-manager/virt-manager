@@ -507,6 +507,9 @@
     <controller type="usb" model="ich9-uhci3">
       <master startport="4"/>
     </controller>
+    <controller type="nvme">
+      <serial>1</serial>
+    </controller>
     <filesystem type="mount" accessmode="mapped">
       <driver ats="on" iommu="off" packed="on" page_per_vq="off"/>
       <alias name="testfsalias"/>
@@ -924,6 +927,12 @@
       <address type="pci">
         <zpci uid="0xffff" fid="0xffffffff"/>
       </address>
+    </hostdev>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0" bus="21" slot="0" function="4"/>
+      </source>
+      <driver name="vfio" iommufd="yes"/>
     </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>

@@ -3237,6 +3237,7 @@ class ParserBoot(VirtCLIParser):
         cls.add_arg("domain_type", None, lookup_cb=None, cb=cls.set_domain_type_cb)
         cls.add_arg("emulator", None, lookup_cb=None, cb=cls.set_emulator_cb)
         cls.add_arg("uefi", None, lookup_cb=None, cb=cls.set_uefi_cb)
+        cls.add_arg("secure-boot", "secure_boot", is_onoff=True)
 
         # Common/Shared boot options
         cls.add_arg("loader", "loader")
@@ -4495,6 +4496,7 @@ class ParserController(VirtCLIParser):
         cls.add_arg("target.memReserve", "target_memReserve")
         cls.add_arg("pcihole64", "pcihole64")
         cls.add_arg("pcihole64.unit", "pcihole64_unit")
+        cls.add_arg("serial", "serial")
 
         cls.add_arg("address", None, lookup_cb=None, cb=cls.set_address_cb)
         cls.add_arg("num_pcie_root_ports", None, lookup_cb=None, cb=cls.noset_cb)
@@ -5286,6 +5288,7 @@ class ParserHostdev(VirtCLIParser):
         cls.add_arg("type", "type")
         cls.add_arg("name", None, cb=cls.set_name_cb, lookup_cb=cls.name_lookup_cb)
         cls.add_arg("driver.name", "driver_name")
+        cls.add_arg("driver.iommufd", "driver_iommufd")
         cls.add_arg("rom.bar", "rom_bar", is_onoff=True)
         cls.add_arg("acpi.nodeset", "acpi_nodeset", can_comma=True)
         cls.add_arg("source.startupPolicy", "startup_policy")

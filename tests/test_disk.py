@@ -40,13 +40,30 @@ def test_disk_numtotarget():
     assert DeviceDisk.target_to_num("xvdaaa") == 26 * 26 * 1 + 26 * 1 + 0
 
     conn = utils.URIs.open_testdefault_cached()
+    guest = virtinst.Guest(conn)
     disk = virtinst.DeviceDisk(conn)
     disk.bus = "ide"
 
-    assert disk.generate_target([]) == "hda"
-    assert disk.generate_target(["hda"]) == "hdb"
-    assert disk.generate_target(["hdb", "sda"]) == "hdc"
-    assert disk.generate_target(["hda", "hdd"]) == "hdb"
+    assert disk.generate_target([], guest) == "hda"
+    assert disk.generate_target(["hda"], guest) == "hdb"
+    assert disk.generate_target(["hdb", "sda"], guest) == "hdc"
+    assert disk.generate_target(["hda", "hdd"], guest) == "hdb"
+
+    disk.bus = "nvme"
+    disk.serial = "0"
+
+    assert disk.generate_target([], guest) == "nvme0n1"
+
+    controller = virtinst.DeviceController(conn)
+    controller.type = "nvme"
+    controller.serial = "0"
+    controller.index = 0
+    guest.add_device(controller)
+
+    assert disk.generate_target([], guest) == "nvme0n1"
+
+    controller.index = 1
+    assert disk.generate_target(["nvme1n1"], guest) == "nvme1n2"
 
 
 def test_disk_dir_searchable(monkeypatch):

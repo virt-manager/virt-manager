@@ -709,6 +709,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --controller usb3
 --controller scsi,model=virtio-scsi
 --controller usb2
+--controller nvme,serial=1
 
 
 --input type=keyboard,bus=usb
@@ -747,6 +748,7 @@ source.reservations.managed=no,source.reservations.source.type=unix,source.reser
 --hostdev 15:0.1
 --host-device 2:15:0.2
 --hostdev 0:15:0.3,address.type=pci,address.zpci.uid=0xffff,address.zpci.fid=0xffffffff
+--hostdev 0:15:0.4,driver_name=vfio,driver.iommufd=yes
 --host-device 0x062a:0x0001,driver_name=vfio
 --host-device 0483:2016
 --host-device pci_8086_2829_scsi_host_scsi_device_lun0,rom.bar=on,acpi.nodeset=0-2
@@ -1632,6 +1634,7 @@ c.add_compare(
     "amd-sev",
     prerun_check=no_osinfo_linux2020_virtio,
 )
+c.add_compare("--osinfo generic --boot uefi,secure-boot=yes --disk none", "boot-uefi-secure-boot")
 
 c.add_invalid(
     "--disk none --location nfs:example.com/fake --nonetworks",
@@ -2214,6 +2217,10 @@ c.add_compare(
 c.add_compare(
     "--print-diff --define --connect %(URI-KVM-X86)s test-alternate-devs --edit --boot uefi=off",
     "edit-boot-uefi-off",
+)
+c.add_compare(
+    "--print-diff --define --connect %(URI-KVM-X86)s test-alternate-devs --edit --boot uefi,secure-boot=off",
+    "edit-boot-secure-boot-off",
 )
 c.add_compare(
     "--print-diff --define --connect %(URI-KVM-X86)s test-many-devices --edit --cpu host-copy",
