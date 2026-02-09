@@ -451,6 +451,7 @@ def testAddHosts(app):
     _open_addhw(app, details)
     tab = _select_hw(addhw, "USB Host Device", "host-tab")
     tab.find_fuzzy("Cruzer Micro 256", "table cell").click()
+    tab.combo_select("Startup Policy:", "optional")
     _finish(addhw, check=details)
 
     # Add PCI device
