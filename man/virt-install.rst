@@ -977,7 +977,6 @@ Some examples:
     Configure the VM to boot from UEFI with secure-boot enabled and enforced.
     This requires libvirt with firmware auto-selection. Setting ``secure-boot``
     to off ensures the firmware can boot unsigned binaries.
-    This is a convenience option to control the enrolled-keys firmware feature.
 
 ``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=yes,firmware.feature1.name=enrolled-keys,firmware.feature1.enabled=yes``
     Configure the VM to boot from UEFI with Secure Boot support enabled.
