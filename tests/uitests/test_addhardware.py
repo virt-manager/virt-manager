@@ -63,6 +63,11 @@ def _open_app(app, vmname, title=None, shutdown=False, **kwargs):
     return details
 
 
+def _nvme_controller_supported():
+    # pylint: disable=protected-access
+    return tests.utils.URIs.open_testdriver_cached().support._check_version("11.5.0")
+
+
 ##############
 # Test cases #
 ##############
@@ -73,9 +78,16 @@ def testAddControllers(app):
     Add various controller configs
     """
     details = _open_app(app, "test-clone-simple")
-    addhw = _open_addhw(app, details)
+
+    if _nvme_controller_supported():
+        # NVMe controller
+        addhw = _open_addhw(app, details)
+        tab = _select_hw(addhw, "Controller", "controller-tab")
+        tab.combo_select("Type:", "NVMe")
+        _finish(addhw, check=details)
 
     # Default SCSI
+    addhw = _open_addhw(app, details)
     tab = _select_hw(addhw, "Controller", "controller-tab")
     tab.combo_select("Type:", "SCSI")
     _finish(addhw, check=details)
@@ -104,14 +116,18 @@ def testAddControllers(app):
     lib.utils.check(lambda: not finish.sensitive)
 
 
-def testAddCephDisk(app):
-    """
-    Add a disk with a ceph volume, ensure it maps correctly
-    """
+def testAddDisks1(app):
     details = _open_app(app, "test-clone-simple")
-    addhw = _open_addhw(app, details)
 
-    # Select ceph volume for disk
+    # NVME disk
+    if _nvme_controller_supported():
+        addhw = _open_addhw(app, details)
+        tab = _select_hw(addhw, "Storage", "storage-tab")
+        tab.combo_select("Bus type:", "NVMe")
+        _finish(addhw, check=details)
+
+    # Add a disk with a ceph volume, ensure it maps correctly
+    addhw = _open_addhw(app, details)
     tab = _select_hw(addhw, "Storage", "storage-tab")
     tab.find_fuzzy("Select or create", "radio").click()
     tab.find("storage-browse", "push button").click()
@@ -129,7 +145,7 @@ def testAddCephDisk(app):
     lib.utils.check(lambda: "rbd-sourcename/some-rbd-vol" in disk_path.text)
 
 
-def testAddDisks(app):
+def testAddDisks2(app):
     """
     Add various disk configs and test storage browser
     """
