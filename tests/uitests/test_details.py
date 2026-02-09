@@ -568,9 +568,15 @@ def testDetailsEditDevices1(app):
     app.click_alert_button("Are you sure", "Yes")
     lib.utils.check(lambda: cell.text != oldtext)
 
-    # Host device
+    # Host PCI device
     tab = _select_hw(app, win, "PCI 0000:00:19.0", "host-tab")
     tab.find("ROM BAR:", "check box").click()
+    appl.click()
+    lib.utils.check(lambda: not appl.sensitive)
+
+    # Host USB device
+    tab = _select_hw(app, win, "USB 003:002", "host-tab")
+    tab.combo_select("Startup Policy:", "requisite")
     appl.click()
     lib.utils.check(lambda: not appl.sensitive)
 
