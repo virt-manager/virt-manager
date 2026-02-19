@@ -135,6 +135,12 @@ def no_osinfo_win11():
         return "osinfo is too old: no win11 entry"
 
 
+def no_osinfo_win11_aarch64():
+    win11 = OSDB.lookup_os("win11")
+    if not win11 or win11.get_recommended_resources().get_recommended_ncpus("aarch64") == 1:
+        return "osinfo is too old: no win11 aarch64 entry"
+
+
 ######################
 # Test class helpers #
 ######################
@@ -1807,6 +1813,7 @@ c.add_compare(
 c.add_compare(
     "--connect %(URI-KVM-AARCH64)s --disk %(EXISTIMG1)s --os-variant win11",
     "aarch64-win11",
+    prerun_check=no_osinfo_win11_aarch64,
 )
 
 
