@@ -1,6 +1,9 @@
 name: Test on fedora:latest
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
 
 jobs:
   # Test on fedora:latest with stock distro packages
