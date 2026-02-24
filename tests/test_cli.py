@@ -137,7 +137,7 @@ def no_osinfo_win11():
 
 def no_osinfo_win11_aarch64():
     win11 = OSDB.lookup_os("win11")
-    if not win11 or win11.get_recommended_resources().get_recommended_ncpus("aarch64") == 1:
+    if not win11 or win11.get_recommended_resources().get_recommended_ncpus("aarch64") is None:
         return "osinfo is too old: no win11 aarch64 entry"
 
 
