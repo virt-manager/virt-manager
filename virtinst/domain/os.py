@@ -240,9 +240,26 @@ class DomainOs(XMLBuilder):
         self._xmlstate.xmlapi.node_force_remove("./os/loader")
         self._xmlstate.xmlapi.node_force_remove("./os/nvram")
 
-        enrolled_keys = self.firmware_features.add_new()
-        enrolled_keys.name = "enrolled-keys"
-        enrolled_keys.enabled = val
+        self.set_firmware_feature("enrolled-keys", val)
+
+    def set_firmware_feature(self, feature_name, enabled):
+        """
+        Helper for setting firmware feature XML, creating it if it doesn't exist.
+
+        :param feature_name: Name of the firmware feature (e.g., "enrolled-keys")
+        :param enabled: Boolean value for the enabled attribute
+        """
+        feature = None
+        for f in self.firmware_features:
+            if f.name == feature_name:
+                feature = f
+                break
+
+        if feature is None:
+            feature = self.firmware_features.add_new()
+            feature.name = feature_name
+
+        feature.enabled = enabled
 
     ##################
     # Default config #
