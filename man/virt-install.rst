@@ -973,10 +973,13 @@ Some examples:
 ``--boot uefi=off``
     Do not use UEFI if the VM would normally default to it.
 
-``--boot uefi=on,secure-boot=off``
-    Configure the VM to boot from UEFI with secure-boot enabled and enforced.
-    This requires libvirt with firmware auto-selection. Setting ``secure-boot``
-    to off ensures the firmware can boot unsigned binaries.
+``--boot uefi,secure-boot=on|off``
+    Require or forbid Secure Boot enforcement, overriding the ``--boot uefi``
+    default. Typically the default is ``on``.
+
+    If your VM install fails to boot, and UEFI in the VM shows an error
+    with 'Access Denied', you may need to set ``secure-boot=off`` to
+    install your VM.
 
 ``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=yes,firmware.feature1.name=enrolled-keys,firmware.feature1.enabled=yes``
     Configure the VM to boot from UEFI with Secure Boot support enabled.
