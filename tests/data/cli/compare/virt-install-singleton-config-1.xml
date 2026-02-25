@@ -12,6 +12,10 @@
   <vcpu cpuset="1,3-5">4</vcpu>
   <os firmware="efi">
     <type arch="x86_64" machine="q35">hvm</type>
+    <firmware>
+      <feature enabled="yes" name="secure-boot"/>
+      <feature enabled="no" name="enrolled-keys"/>
+    </firmware>
     <boot dev="cdrom"/>
     <boot dev="fd"/>
     <boot dev="hd"/>

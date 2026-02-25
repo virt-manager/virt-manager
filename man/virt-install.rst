@@ -968,14 +968,10 @@ Some examples:
     with 'Access Denied', you may need to set ``secure-boot=off`` to
     install your VM.
 
-``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=yes,firmware.feature1.name=enrolled-keys,firmware.feature1.enabled=yes``
-    Configure the VM to boot from UEFI with Secure Boot support enabled.
-    Only signed operating systems will be able to boot with this configuration.
-
-``--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=no``
-    Configure the VM to boot from UEFI with Secure Boot support disabled.
-    This configuration allows both signed and unsigned operating systems to
-    run.
+``--boot uefi,firmware.secure-boot=yes|no``
+    Convenience option for toggling individual firmware features on or
+    off in domain XML. If you don't know you need this, just use
+    ``--boot uefi,secure-boot=`` instead.
 
     Additional information about the ``secure-boot`` and
     ``enrolled-keys`` firmware features and how they can be used to
