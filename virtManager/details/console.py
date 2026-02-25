@@ -134,10 +134,13 @@ def build_keycombo_menu(on_send_key_fn):
 
 
 class vmmOverlayToolbar:
-    def __init__(self, on_leave_fn, on_send_key_fn):
+    def __init__(self, on_leave_fn, on_send_key_fn, current_vm=None):
         self._send_key_button = None
         self._keycombo_menu = None
+        self._vm_switcher_button = None
+        self._vm_switcher_menu = None
         self._toolbar = None
+        self._current_vm = current_vm
 
         self.timed_revealer = None
         self._init_ui(on_leave_fn, on_send_key_fn)
@@ -168,6 +171,16 @@ class vmmOverlayToolbar:
         self._send_key_button.get_accessible().set_name("Fullscreen Send Key")
         self._toolbar.add(self._send_key_button)
 
+        # VM Switcher button
+        self._vm_switcher_menu = Gtk.Menu()
+        self._vm_switcher_button = Gtk.ToolButton()
+        self._vm_switcher_button.set_icon_name("view-list-symbolic")
+        self._vm_switcher_button.set_tooltip_text(_("Switch to another VM window"))
+        self._vm_switcher_button.show_all()
+        self._vm_switcher_button.connect("clicked", self._on_vm_switcher_button_clicked_cb)
+        self._vm_switcher_button.get_accessible().set_name("VM Switcher")
+        self._toolbar.add(self._vm_switcher_button)
+
         self.timed_revealer = _TimedRevealer(self._toolbar)
 
     def _on_send_key_button_clicked_cb(self, src):
@@ -180,9 +193,118 @@ class vmmOverlayToolbar:
             win, rect, Gdk.Gravity.NORTH_WEST, Gdk.Gravity.NORTH_WEST, event
         )
 
+    def _on_vm_switcher_button_clicked_cb(self, src):
+        self._populate_vm_switcher_menu()
+        event = Gtk.get_current_event()
+        win = self._toolbar.get_window()
+        rect = Gdk.Rectangle()
+
+        rect.y = win.get_height()
+        self._vm_switcher_menu.popup_at_rect(
+            win, rect, Gdk.Gravity.NORTH_WEST, Gdk.Gravity.NORTH_WEST, event
+        )
+
+    def _get_current_screen(self):
+        """Get the screen where the current toolbar window is displayed"""
+        try:
+            win = self._toolbar.get_window()
+            if win:
+                display = win.get_display()
+                monitor = display.get_monitor_at_window(win)
+                return monitor
+        except Exception as e:
+            log.debug("Error getting current screen: %s", e)
+        return None
+
+    def _populate_vm_switcher_menu(self):
+        # Clear existing menu items
+        for child in self._vm_switcher_menu.get_children():
+            self._vm_switcher_menu.remove(child)
+
+        # Import here to avoid circular dependency
+        from ..vmwindow import vmmVMWindow
+
+        # Get all open VM windows
+        all_windows = vmmVMWindow._instances or {}
+
+        if not all_windows:
+            item = Gtk.MenuItem()
+            item.set_label(_("No other VM windows open"))
+            item.set_sensitive(False)
+            self._vm_switcher_menu.add(item)
+        else:
+            # Get current screen to filter VMs on the same screen
+            current_screen = self._get_current_screen()
+
+            # Get current VM's UUID for comparison
+            current_vm_uuid = None
+            if self._current_vm:
+                try:
+                    current_vm_uuid = self._current_vm.get_uuid()
+                except Exception:
+                    pass
+
+            # Filter windows to only those on the current screen
+            same_screen_windows = []
+            for key, window_instance in sorted(all_windows.items()):
+                try:
+                    vm = window_instance.vm
+                    vm_uuid = vm.get_uuid()
+
+                    # Get the window's screen
+                    topwin = window_instance.topwin
+                    if topwin and topwin.get_window():
+                        win = topwin.get_window()
+                        display = win.get_display()
+                        window_monitor = display.get_monitor_at_window(win)
+
+                        # Only include if on same screen or if we couldn't determine screen
+                        if current_screen is None or window_monitor == current_screen:
+                            same_screen_windows.append((key, window_instance, vm, vm_uuid))
+                    else:
+                        # Include windows we can't check (not yet realized)
+                        same_screen_windows.append((key, window_instance, vm, vm_uuid))
+                except Exception as e:
+                    log.debug("Error filtering VM window by screen: %s", e)
+
+            # Create menu items for each VM window on the same screen
+            for key, window_instance, vm, vm_uuid in same_screen_windows:
+                try:
+                    vm_name = vm.get_name()
+
+                    # Use CheckMenuItem to show active state
+                    item = Gtk.CheckMenuItem()
+                    item.set_label(vm_name)
+
+                    # Mark the current VM as active
+                    is_current = (vm_uuid == current_vm_uuid)
+                    item.set_active(is_current)
+
+                    # Make the current VM item insensitive so it's clear you can't "switch" to it
+                    if is_current:
+                        item.set_sensitive(False)
+                    else:
+                        item.vmm_window = window_instance
+                        item.connect("activate", self._on_vm_selected_cb)
+
+                    self._vm_switcher_menu.add(item)
+                except Exception as e:
+                    log.debug("Error adding VM window to switcher menu: %s", e)
+
+        self._vm_switcher_menu.show_all()
+
+    def _on_vm_selected_cb(self, menuitem):
+        try:
+            window = menuitem.vmm_window
+            window.show()
+        except Exception as e:
+            log.exception("Error switching to VM window: %s", e)
+
     def cleanup(self):
         self._keycombo_menu.destroy()
         self._keycombo_menu = None
+        self._vm_switcher_menu.destroy()
+        self._vm_switcher_menu = None
         self._toolbar.destroy()
         self._toolbar = None
         self.timed_revealer.cleanup()
@@ -369,7 +491,7 @@ class vmmConsolePages(vmmGObjectUI):
         self._keycombo_menu = build_keycombo_menu(self._do_send_key)
 
         self._overlay_toolbar_fullscreen = vmmOverlayToolbar(
-            on_leave_fn=self._leave_fullscreen, on_send_key_fn=self._do_send_key
+            on_leave_fn=self._leave_fullscreen, on_send_key_fn=self._do_send_key, current_vm=self.vm
         )
         self.widget("console-overlay").add_overlay(
             self._overlay_toolbar_fullscreen.timed_revealer.get_overlay_widget()
