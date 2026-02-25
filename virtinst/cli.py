@@ -1913,6 +1913,7 @@ class ParserUnattended(VirtCLIParser):
         cls.add_arg("user-password-file", "user_password_file")
         cls.add_arg("product-key", "product_key")
         cls.add_arg("reg-login", "reg_login")
+        cls.add_arg("hostname", "hostname")
 
 
 def parse_unattended(optstr):
