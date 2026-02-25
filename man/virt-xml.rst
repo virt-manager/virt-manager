@@ -152,6 +152,16 @@ These options decide what action to take after altering the XML. In the common c
 
     By default this also implies ``--define``.
 
+``--update-force``
+    **EXPERIMENTAL:** Forces a device update using libvirt's ``VIR_DOMAIN_DEVICE_MODIFY_FORCE`` flag.
+
+    Use this option to override libvirt's safety checks and attempt to apply device changes even if
+    libvirt considers the operation to be unsafe. Note that this option is to be used for an already
+    running VM instance, and is typically used with the ``--edit`` action.
+
+    **WARNING:** Using ``--update-force`` may lead to unexpected behavior, including data loss or VM
+    corruption if used improperly. Use this flag with caution!
+
 
 ``--define``
     Define the requested XML change. This is typically the default if no output option is specified, but if a --print option is specified, --define is required to force the change.
