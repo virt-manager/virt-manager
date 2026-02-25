@@ -947,22 +947,9 @@ Some examples:
     Have guest permanently boot off a local kernel/initrd pair, with the
     specified kernel options.
 
-``--boot kernel=KERNEL,initrd=INITRD,dtb=DTB``
-    Have guest permanently boot off a local kernel/initrd pair with an
-    external device tree binary. DTB can be required for some non-x86
-    configurations like ARM or PPC
-
-``--boot loader=BIOSPATH``
-    Use BIOSPATH as the virtual machine BIOS.
-
 ``--boot bootmenu.enable=on,bios.useserial=on``
     Enable the bios boot menu, and enable sending bios text output over
     serial console.
-
-``--boot init=INITPATH``
-    Path to a binary that the container guest will init. If a root ``--filesystem``
-    has been specified, virt-install will default to /sbin/init, otherwise
-    will default to /bin/sh.
 
 ``--boot uefi``, ``--boot uefi=on``
     Configure the VM to boot from UEFI. In order for virt-install to know the
@@ -995,12 +982,6 @@ Some examples:
     influence firmware selection is available at
     https://libvirt.org/kbase/secureboot.html
 
-``--boot loader=/.../OVMF_CODE.fd,loader.readonly=yes,loader.type=pflash,nvram.template=/.../OVMF_VARS.fd,loader_secure=no``
-    Specify that the virtual machine use the custom OVMF binary as boot firmware,
-    mapped as a virtual flash chip. In addition, request that libvirt instantiate
-    the VM-specific UEFI varstore from the custom "/.../OVMF_VARS.fd" varstore
-    template. This setup is not recommended, and should only be used if
-    --boot uefi doesn't know about your UEFI binaries.
 
 Use --boot=? to see a list of all available sub options.
 Complete details at
