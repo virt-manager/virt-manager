@@ -922,7 +922,7 @@ c.add_compare(
     "--seclabel relabel=yes "  # lets libvirt fill in type and model
     "--sysinfo host "  # special `--sysinfo host` handling
     "--noapic --noacpi "  # feature backcompat
-    "--boot uefi,cdrom,fd,hd,network,menu=on "  # uefi for default devices, + old style bootorder
+    "--boot uefi,cdrom,fd,hd,network,menu=on,firmware.secure-boot=yes,firmware.enrolled-keys=no "  # uefi for default devices, + old style bootorder, + firmware features
     "--launchSecurity sev "  # sev defaults
     # Disabling all the default device setup
     """

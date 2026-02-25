@@ -3209,6 +3209,10 @@ class ParserBoot(VirtCLIParser):
         cb = self._make_find_inst_cb(cliarg, list_propname)
         return cb(*args, **kwargs)
 
+    def set_firmware_feature_cb(self, inst, val, virtarg):
+        feature_name = virtarg.cliname.split(".", 1)[1]
+        inst.set_firmware_feature(feature_name, val)
+
     @classmethod
     def _virtcli_class_init(cls):
         VirtCLIParser._virtcli_class_init_common(cls)
@@ -3255,6 +3259,20 @@ class ParserBoot(VirtCLIParser):
             is_onoff=True,
         )
         cls.add_arg("firmware.feature[0-9]*.name", "name", find_inst_cb=cls.feature_find_inst_cb)
+        cls.add_arg(
+            "firmware.secure-boot",
+            None,
+            lookup_cb=None,
+            cb=cls.set_firmware_feature_cb,
+            is_onoff=True,
+        )
+        cls.add_arg(
+            "firmware.enrolled-keys",
+            None,
+            lookup_cb=None,
+            cb=cls.set_firmware_feature_cb,
+            is_onoff=True,
+        )
         cls.add_arg("nvram", "nvram")
         cls.add_arg("nvram.template", "nvram_template")
         cls.add_arg("boot[0-9]*.dev", "dev", find_inst_cb=cls.boot_find_inst_cb)
