@@ -6,9 +6,15 @@
 
 import importlib
 import io
+import json
 import os
+import shutil
+import subprocess
+import tarfile
+import tempfile
 import threading
 import time
+import xml.etree.ElementTree as ET
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -45,7 +51,8 @@ DEFAULT_MEM = 1024
     INSTALL_PAGE_CONTAINER_APP,
     INSTALL_PAGE_CONTAINER_OS,
     INSTALL_PAGE_VZ_TEMPLATE,
-) = range(7)
+    INSTALL_PAGE_OVA,
+) = range(8)
 
 # Column numbers for os type/version list models
 (OS_COL_ID, OS_COL_LABEL, OS_COL_IS_SEP, OS_COL_IS_SHOW_ALL) = range(4)
@@ -196,6 +203,8 @@ class vmmCreateVM(vmmGObjectUI):
 
         self._storage_browser = None
         self._netlist = None
+        self._ova_ovf_info = None
+        self._ova_vm_name = None
 
         self._addstorage = vmmAddStorage(self.conn, self.builder, self.topwin)
         self.widget("storage-align").add(self._addstorage.top_box)
@@ -230,6 +239,8 @@ class vmmCreateVM(vmmGObjectUI):
                 "on_install_url_entry_changed": self._url_changed,
                 "on_install_url_entry_activate": self._url_activated,
                 "on_install_import_browse_clicked": self._browse_import,
+                "on_install_ova_browse_clicked": self._browse_ova,
+                "on_install_ova_outputdir_browse_clicked": self._browse_ova_outputdir,
                 "on_install_app_browse_clicked": self._browse_app,
                 "on_install_oscontainer_browse_clicked": self._browse_oscontainer,
                 "on_install_container_source_toggle": self._container_source_toggle,
@@ -268,6 +279,8 @@ class vmmCreateVM(vmmGObjectUI):
             self._storage_browser.close()
         self._set_conn(None)
         self._gdata = None
+        self._ova_ovf_info = None
+        self._ova_vm_name = None
 
     def _cleanup(self):
         if self._storage_browser:
@@ -286,6 +299,8 @@ class vmmCreateVM(vmmGObjectUI):
         self.conn = None
         self._capsinfo = None
         self._gdata = None
+        self._ova_ovf_info = None
+        self._ova_vm_name = None
 
     ##########################
     # Initial state handling #
@@ -414,6 +429,12 @@ class vmmCreateVM(vmmGObjectUI):
         # Install import
         self.widget("install-import-entry").set_text("")
 
+        # Install OVA
+        self.widget("install-ova-entry").set_text("")
+        self.widget("install-ova-outputdir").set_text("/var/lib/libvirt/images")
+        self._ova_ovf_info = None
+        self._ova_vm_name = None
+
         # Install container app
         self.widget("install-app-entry").set_text("/bin/sh")
 
@@ -493,7 +514,9 @@ class vmmCreateVM(vmmGObjectUI):
         method_local.set_sensitive(not is_pv and can_storage and installable_arch)
         method_manual.set_sensitive(not is_container_only)
         method_import.set_sensitive(can_storage)
-        virt_methods = [method_local, method_tree, method_manual, method_import]
+        method_ova = self.widget("method-ova")
+        method_ova.set_sensitive(can_storage)
+        virt_methods = [method_local, method_tree, method_manual, method_import, method_ova]
 
         local_tt = None
         tree_tt = None
@@ -528,6 +551,7 @@ class vmmCreateVM(vmmGObjectUI):
         method_tree.set_tooltip_text(tree_tt or "")
         method_local.set_tooltip_text(local_tt or "")
         method_import.set_tooltip_text(import_tt or "")
+        method_ova.set_tooltip_text(import_tt or "")
 
         # Container install options
         method_container_app.set_active(True)
@@ -930,6 +954,18 @@ class vmmCreateVM(vmmGObjectUI):
         cpu = str(int(guest.vcpus))
 
         instmethod = self._get_config_install_page()
+
+        # OVA import summary: guest/mem/cpu were built from _gdata which
+        # was updated by the mem page validation; just override OS/install text
+        if instmethod == INSTALL_PAGE_OVA and self._ova_ovf_info:
+            osobj = self._os_list.get_selected_os()
+            os_label = osobj.label if osobj else _("Generic")
+            self.widget("summary-os").set_text(os_label)
+            self.widget("summary-install").set_text(_("Import OVA archive"))
+            self.widget("summary-mem").set_text(mem)
+            self.widget("summary-cpu").set_text(cpu)
+            self._populate_summary_storage()
+            return
         install = ""
         if instmethod == INSTALL_PAGE_ISO:
             install = _("Local CDROM/ISO")
@@ -945,6 +981,8 @@ class vmmCreateVM(vmmGObjectUI):
             install = _("Operating system container")
         elif instmethod == INSTALL_PAGE_VZ_TEMPLATE:
             install = _("Virtuozzo container")
+        elif instmethod == INSTALL_PAGE_OVA:
+            install = _("Import OVA archive")
 
         self.widget("summary-os").set_text(guest.osinfo.label)
         self.widget("summary-install").set_text(install)
@@ -979,6 +1017,8 @@ class vmmCreateVM(vmmGObjectUI):
                 return INSTALL_PAGE_IMPORT
             elif self.widget("method-manual").get_active():
                 return INSTALL_PAGE_MANUAL
+            elif self.widget("method-ova").get_active():
+                return INSTALL_PAGE_OVA
         else:
             if self.widget("method-container-app").get_active():
                 return INSTALL_PAGE_CONTAINER_APP
@@ -1018,10 +1058,17 @@ class vmmCreateVM(vmmGObjectUI):
     def _should_skip_disk_page(self):
         return self._get_config_install_page() in [
             INSTALL_PAGE_IMPORT,
+            INSTALL_PAGE_OVA,
             INSTALL_PAGE_CONTAINER_APP,
             INSTALL_PAGE_CONTAINER_OS,
             INSTALL_PAGE_VZ_TEMPLATE,
         ]
+
+    def _get_config_ova_path(self):
+        return self.widget("install-ova-entry").get_text()
+
+    def _get_config_ova_output_dir(self):
+        return self.widget("install-ova-outputdir").get_text()
 
     def _get_config_local_media(self, store_media=False):
         return self._mediacombo.get_path(store_media=store_media)
@@ -1190,6 +1237,29 @@ class vmmCreateVM(vmmGObjectUI):
     def _browse_import(self, ignore):
         self._browse_file("install-import-entry")
 
+    def _browse_ova(self, ignore):
+        dialog = Gtk.FileChooserDialog(
+            title=_("Choose an OVA file"),
+            transient_for=self.topwin,
+            action=Gtk.FileChooserAction.OPEN,
+        )
+        dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        dialog.add_button(_("Open"), Gtk.ResponseType.ACCEPT)
+
+        ova_filter = Gtk.FileFilter()
+        ova_filter.set_name(_("OVA archives (*.ova)"))
+        ova_filter.add_pattern("*.ova")
+        ova_filter.add_pattern("*.OVA")
+        dialog.add_filter(ova_filter)
+        dialog.set_filter(ova_filter)
+
+        if dialog.run() == Gtk.ResponseType.ACCEPT:
+            self.widget("install-ova-entry").set_text(dialog.get_filename())
+        dialog.destroy()
+
+    def _browse_ova_outputdir(self, ignore):
+        self._browse_file("install-ova-outputdir", is_dir=True)
+
     def _browse_iso(self, ignore):
         def set_path(ignore, path):
             self._mediacombo.set_path(path)
@@ -1297,8 +1367,9 @@ class vmmCreateVM(vmmGObjectUI):
     def _set_install_page(self):
         instpage = self._get_config_install_page()
 
-        # Setting OS value for container doesn't matter presently
-        self.widget("install-os-distro-box").set_visible(not self._is_container_install())
+        self.widget("install-os-distro-box").set_visible(
+            not self._is_container_install()
+        )
 
         enabledetect = False
         if instpage == INSTALL_PAGE_URL:
@@ -1483,6 +1554,14 @@ class vmmCreateVM(vmmGObjectUI):
                 msg = _("The import path must point to an existing storage.")
                 return self.err.val_err(msg)
 
+        elif instmethod == INSTALL_PAGE_OVA:
+            if not self._validate_ova_page():
+                return False
+            # Re-read after _validate_ova_page() may have auto-selected an OS
+            osobj = self._os_list.get_selected_os()
+            self._gdata.osinfo = osobj and osobj.name or None
+            return True
+
         elif instmethod == INSTALL_PAGE_CONTAINER_APP:
             init = self.widget("install-app-entry").get_text()
             if not init:
@@ -1654,6 +1733,13 @@ class vmmCreateVM(vmmGObjectUI):
         return True
 
     def _validate_final_page(self):
+        # OVA import: just capture the (possibly edited) VM name
+        if self._get_config_install_page() == INSTALL_PAGE_OVA:
+            name = self._get_config_name().strip()
+            if name:
+                self._ova_vm_name = name
+            return True
+
         # HV + Arch selection
         name = self._get_config_name()
         if name != self._gdata.name:
@@ -1818,6 +1904,382 @@ class vmmCreateVM(vmmGObjectUI):
     # Guest install routines #
     ##########################
 
+    def _validate_ova_page(self):
+        """
+        Validate the OVA install page, parse the OVF descriptor,
+        and pre-populate name/memory/CPU fields from it.
+        """
+        from .importova import _read_ovf_from_ova, _parse_ovf
+
+        ova_path = self._get_config_ova_path()
+        if not ova_path:
+            return self.err.val_err(_("An OVA archive path is required."))
+        if not os.path.exists(ova_path):
+            return self.err.val_err(
+                _("The path must point to an existing .ova file.")
+            )
+        if not ova_path.lower().endswith(".ova"):
+            return self.err.val_err(
+                _("Only .ova archive files are supported.\n\nThe selected file does not have a .ova extension.")
+            )
+
+        output_dir = self._get_config_ova_output_dir()
+        if not output_dir:
+            return self.err.val_err(
+                _("An output directory for converted disk images is required.")
+            )
+        if not os.path.isdir(output_dir):
+            return self.err.val_err(
+                _("Output directory does not exist:\n%s\n\nEnter the target path of an active libvirt storage pool.") % output_dir
+            )
+
+        try:
+            ovf_bytes = _read_ovf_from_ova(ova_path)
+            ovf_info = _parse_ovf(ovf_bytes)
+        except Exception as e:
+            return self.err.val_err(
+                _("Failed to read OVA file: %s") % str(e)
+            )
+
+        self._ova_ovf_info = ovf_info
+
+        # Pre-populate name from OVF
+        try:
+            virtinst.Guest.validate_name(self._gdata.conn, ovf_info.name)
+            name = ovf_info.name
+        except Exception:
+            try:
+                name = virtinst.Guest.generate_name(self._gdata.build_guest())
+            except Exception:
+                name = "imported-vm"
+
+        self.widget("create-vm-name").set_text(name)
+        self._ova_vm_name = name
+        self._gdata.name = name
+
+        # Pre-populate memory and CPU from OVF
+        mem_val = ovf_info.memory_mb
+        mem_max = self.widget("mem").get_adjustment().get_upper()
+        self.widget("mem").set_value(min(mem_val, mem_max))
+        cpu_max = self.widget("cpus").get_adjustment().get_upper()
+        self.widget("cpus").set_value(min(ovf_info.vcpus, cpu_max))
+
+        # Pre-select OS from OVF hint — only when the user hasn't already
+        # picked one, so a manual choice is never silently overridden.
+        if not self._os_list.get_selected_os():
+            osobj = virtinst.OSDB.guess_os_from_ovf_hint(
+                vmw_type=ovf_info.ovf_vmw_type,
+                vbox_type=ovf_info.ovf_vbox_type,
+                cim_id=ovf_info.ovf_cim_id,
+            )
+            if osobj:
+                self._os_list.select_os(osobj)
+                log.debug("OVA import: pre-selected OS '%s' from OVF hints "
+                          "vmw=%r vbox=%r cim=%r",
+                          osobj.label, ovf_info.ovf_vmw_type,
+                          ovf_info.ovf_vbox_type, ovf_info.ovf_cim_id)
+
+        return True
+
+    def _start_ova_import(self):
+        """
+        Launch an async job to convert VMDK disks to qcow2 and define
+        the domain via libvirt.
+        """
+        ova_path = self._get_config_ova_path()
+        output_dir = self._get_config_ova_output_dir()
+        vm_name = (self._ova_vm_name or
+                   self.widget("create-vm-name").get_text().strip() or
+                   "imported-vm")
+        ovf_info = self._ova_ovf_info
+        conn = self.conn
+        osname = self._gdata.osinfo
+        # Use user-adjusted memory/CPU values if available from the mem page
+        vcpus = self._gdata.vcpus or ovf_info.vcpus
+        memory_kib = self._gdata.memory or (ovf_info.memory_mb * 1024)
+
+        self.set_finish_cursor()
+        progWin = vmmAsyncJob(
+            self._do_ova_import,
+            [ova_path, vm_name, output_dir, ovf_info, vcpus, memory_kib, osname, conn],
+            self._ova_import_finished_cb,
+            [],
+            _("Importing OVA"),
+            _("Converting and importing \"%s\"…") % vm_name,
+            self.topwin,
+        )
+        progWin.run()
+
+    def _do_ova_import(self, asyncjob, ova_path, vm_name, output_dir, ovf_info, vcpus, memory_kib, osname, conn):
+        """
+        Background thread: extract OVA, convert VMDK→qcow2 in /tmp, then
+        upload into the libvirt storage pool via the daemon (no direct
+        filesystem write to the pool directory required).
+        """
+        backend_conn = conn.get_backend()
+        tmpdir = tempfile.mkdtemp(prefix="virt-manager-ova-")
+        converted_disks = []  # final vol paths for domain XML
+
+        try:
+            # ── 1. Extract only the VMDK files we need ─────────────────────
+            needed_vmdks = {d["vmdk"] for d in ovf_info.disks}
+            asyncjob._pbar_pulse(stage=_("Extracting OVA archive…"))
+            log.debug("Extracting VMDKs %s from %s → %s", needed_vmdks, ova_path, tmpdir)
+            with tarfile.open(ova_path, "r:*") as tar:
+                members = [m for m in tar.getmembers()
+                           if os.path.basename(m.name) in needed_vmdks]
+                if not members:
+                    # Fallback: extract everything if name matching failed
+                    log.debug("VMDK name match failed; extracting full archive")
+                    members = tar.getmembers()
+                try:
+                    tar.extractall(tmpdir, members=members, filter="data")
+                except TypeError:
+                    tar.extractall(tmpdir, members=members)  # noqa: S202
+
+            # ── 2. Find the libvirt pool matching output_dir ─────────────────
+            pool = None
+            try:
+                for pname in (backend_conn.listStoragePools() +
+                              backend_conn.listDefinedStoragePools()):
+                    p = backend_conn.storagePoolLookupByName(pname)
+                    pxml = ET.fromstring(p.XMLDesc(0))
+                    tpath = (pxml.findtext("target/path") or "").rstrip("/")
+                    if tpath == output_dir.rstrip("/"):
+                        pool = p
+                        log.debug("Using libvirt pool '%s' for OVA import", pname)
+                        break
+            except Exception:
+                log.debug("Error looking up storage pool", exc_info=True)
+            if pool is None:
+                try:
+                    pool = backend_conn.storagePoolLookupByName("default")
+                    log.debug("Falling back to 'default' storage pool")
+                except Exception:
+                    log.debug("No default pool found; will write directly", exc_info=True)
+
+            # ── 3. Convert each VMDK → qcow2 in tmpdir, then upload ─────────
+            total = len(ovf_info.disks)
+            for idx, disk_info in enumerate(ovf_info.disks, start=1):
+                vmdk_name = disk_info["vmdk"]
+                vmdk_path = os.path.join(tmpdir, vmdk_name)
+                if not os.path.isfile(vmdk_path):
+                    raise RuntimeError(
+                        _("Disk file '%s' not found inside the extracted OVA.") % vmdk_name
+                    )
+
+                base = os.path.splitext(os.path.basename(vmdk_name))[0]
+                qcow2_name = "%s-%s.qcow2" % (vm_name, base)
+                tmp_qcow2 = os.path.join(tmpdir, qcow2_name)
+
+                asyncjob._pbar_pulse(
+                    stage=_("Converting disk %(n)d/%(total)d: %(src)s") % {
+                        "n": idx, "total": total, "src": vmdk_name,
+                    }
+                )
+                log.debug("qemu-img: %s → %s", vmdk_path, tmp_qcow2)
+                result = subprocess.run(
+                    ["qemu-img", "convert", "-f", "vmdk", "-O", "qcow2",
+                     vmdk_path, tmp_qcow2],
+                    capture_output=True, text=True,
+                )
+                if result.returncode != 0:
+                    raise RuntimeError(
+                        _("qemu-img failed converting '%(disk)s':\n%(err)s") % {
+                            "disk": vmdk_name,
+                            "err": (result.stderr or result.stdout).strip(),
+                        }
+                    )
+
+                file_size = os.path.getsize(tmp_qcow2)
+                virtual_size = file_size
+                try:
+                    info_r = subprocess.run(
+                        ["qemu-img", "info", "--output=json", tmp_qcow2],
+                        capture_output=True, text=True,
+                    )
+                    if info_r.returncode == 0:
+                        virtual_size = json.loads(info_r.stdout).get(
+                            "virtual-size", file_size
+                        )
+                except Exception:
+                    pass
+
+                if pool is not None:
+                    asyncjob._pbar_pulse(
+                        stage=_("Uploading disk %(n)d/%(total)d to storage pool…") % {
+                            "n": idx, "total": total,
+                        }
+                    )
+                    vol_xml = (
+                        "<volume>"
+                        "<name>%s</name>"
+                        "<capacity unit='bytes'>%d</capacity>"
+                        "<allocation unit='bytes'>%d</allocation>"
+                        "<target><format type='qcow2'/></target>"
+                        "</volume>" % (qcow2_name, virtual_size, file_size)
+                    )
+                    try:
+                        # Delete any leftover volume from a previous failed import
+                        try:
+                            existing = pool.storageVolLookupByName(qcow2_name)
+                            log.debug("Deleting pre-existing volume '%s'", qcow2_name)
+                            existing.delete(0)
+                        except Exception:
+                            pass  # volume doesn't exist — that's fine
+                        vol = pool.createXML(vol_xml, 0)
+                        stream = backend_conn.newStream(0)
+                        vol.upload(stream, 0, file_size, 0)
+                        try:
+                            with open(tmp_qcow2, "rb") as fh:
+                                while True:
+                                    chunk = fh.read(1024 * 1024)
+                                    if not chunk:
+                                        break
+                                    stream.send(chunk)
+                            stream.finish()
+                        except Exception:
+                            # Abort the stream so the daemon releases the
+                            # in-progress upload and the partial volume can
+                            # be cleaned up.  Suppress secondary errors.
+                            try:
+                                stream.abort()
+                            except Exception:
+                                pass
+                            raise
+                        pool.refresh(0)
+                        final_path = vol.path()
+                    except Exception as exc:
+                        raise RuntimeError(
+                            _("Failed to upload disk to storage pool: %s") % str(exc)
+                        ) from exc
+                else:
+                    # Last-resort: direct copy (user must have write access)
+                    final_path = os.path.join(output_dir, qcow2_name)
+                    shutil.copy2(tmp_qcow2, final_path)
+
+                converted_disks.append(final_path)
+
+            # ── 4. Define the domain ─────────────────────────────────────────
+            asyncjob._pbar_pulse(stage=_("Defining virtual machine in libvirt…"))
+            guest = virtinst.Guest(backend_conn)
+            try:
+                capsinfo = conn.caps.guest_lookup(
+                    os_type="hvm", arch="x86_64", typ="kvm"
+                )
+                guest.set_capabilities_defaults(capsinfo)
+            except Exception:
+                log.debug("Could not look up KVM capsinfo", exc_info=True)
+
+            if osname:
+                guest.set_os_name(osname)
+            guest.name = vm_name
+            guest.vcpus = vcpus
+            guest.memory = memory_kib
+            guest.currentMemory = memory_kib
+
+            for disk_idx, final_path in enumerate(converted_disks):
+                disk = virtinst.DeviceDisk(backend_conn)
+                disk.set_source_path(final_path)
+                disk.driver_name = virtinst.DeviceDisk.DRIVER_NAME_QEMU
+                disk.driver_type = "qcow2"
+                disk.device = virtinst.DeviceDisk.DEVICE_DISK
+                # Use the bus type the OVF declared for this disk's controller
+                # (ide / scsi / sata), falling back to the VM-wide default.
+                # "sata" is the safest fallback: it works on Windows and Linux
+                # without extra paravirtual drivers, unlike "virtio".
+                bus = ovf_info.disks[disk_idx].get("bus") or ovf_info.disk_bus
+                disk.bus = bus
+                # Assign a target device name appropriate for the bus:
+                #   sata/ide/scsi → sd*; virtio → vd*
+                if bus == "virtio":
+                    disk.target = "vd" + chr(ord("a") + disk_idx)
+                else:
+                    disk.target = "sd" + chr(ord("a") + disk_idx)
+                guest.add_device(disk)
+
+            # Pick the best virtual network available on this host.
+            # Prefer "default" if it is active.  If no virtual networks are
+            # running (e.g. air-gapped systems, hardened servers), fall back
+            # to TYPE_USER (SLIRP): userland NAT that needs no host network
+            # infrastructure and works unconditionally.
+            net_name = None
+            try:
+                active_nets = backend_conn.listNetworks()  # returns active only
+                if "default" in active_nets:
+                    net_name = "default"
+                elif active_nets:
+                    net_name = active_nets[0]
+                    log.debug("OVA import: 'default' network not active; "
+                              "using network '%s'", net_name)
+            except Exception:
+                log.debug("Could not enumerate libvirt networks; "
+                          "will use SLIRP networking", exc_info=True)
+
+            net_count = max(ovf_info.net_count, 1 if converted_disks else 0)
+            for _i in range(net_count):
+                iface = virtinst.DeviceInterface(backend_conn)
+                if net_name:
+                    iface.type = virtinst.DeviceInterface.TYPE_VIRTUAL
+                    iface.source = net_name
+                else:
+                    # No active virtual network — use SLIRP (user-mode NAT).
+                    # SLIRP needs no host bridge or network daemon and works
+                    # in air-gapped and locked-down environments.
+                    iface.type = virtinst.DeviceInterface.TYPE_USER
+                    log.debug("OVA import: no active virtual network found; "
+                              "using SLIRP (user) networking")
+                # Do NOT hardcode iface.model here.  guest.set_defaults() will
+                # consult libosinfo and pick the right model for the detected OS
+                # (e.g. e1000e for Windows, virtio for Linux).
+                guest.add_device(iface)
+
+            # Graphics console — SPICE with no network listener (local only)
+            gfx = virtinst.DeviceGraphics(backend_conn)
+            gfx.type = virtinst.DeviceGraphics.TYPE_SPICE
+            gfx.listen = "none"
+            gfx.set_defaults(guest)
+            guest.add_device(gfx)
+
+            # Video device — QXL pairs well with SPICE
+            vid = virtinst.DeviceVideo(backend_conn)
+            vid.model = "qxl"
+            vid.set_defaults(guest)
+            guest.add_device(vid)
+
+            # Add remaining defaults (input, console, USB, channels, RNG,
+            # memballoon, TPM, …).  set_defaults() skips graphics/video since
+            # both are already present on the guest.
+            guest.skip_default_graphics = True
+            guest.set_defaults(None)
+
+            domain_xml = guest.get_xml()
+            log.debug("Defining domain XML:\n%s", domain_xml)
+            backend_conn.defineXML(domain_xml)
+            log.debug("Domain '%s' defined", vm_name)
+        finally:
+            shutil.rmtree(tmpdir, ignore_errors=True)
+
+    def _ova_import_finished_cb(self, error, details):
+        self.reset_finish_cursor()
+        if error:
+            self.err.show_err(
+                _("Unable to complete OVA import: '%s'") % error,
+                details=details,
+            )
+            return
+
+        vm_name = self._ova_vm_name
+        foundvm = None
+        for vm in self.conn.list_vms():
+            if vm.get_name() == vm_name:
+                foundvm = vm
+                break
+
+        self._close()
+        if foundvm:
+            vmmVMWindow.get_instance(self, foundvm).show()
+
     def _finish_clicked(self, src_ignore):
         # Validate the final page
         page = self.widget("create-pages").get_current_page()
@@ -1826,6 +2288,11 @@ class vmmCreateVM(vmmGObjectUI):
 
         log.debug("Starting create finish() sequence")
         self._gdata.failed_guest = None
+
+        # OVA import has its own async flow
+        if self._get_config_install_page() == INSTALL_PAGE_OVA:
+            self._start_ova_import()
+            return
 
         try:
             guest = self._gdata.build_guest()

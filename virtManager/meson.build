@@ -19,6 +19,7 @@ virtmanager_sources = files(
   'host.py',
   'hostnets.py',
   'hoststorage.py',
+  'importova.py',
   'manager.py',
   'migrate.py',
   'oslist.py',
