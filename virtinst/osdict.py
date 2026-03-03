@@ -445,21 +445,25 @@ class _OsVariant:
 
     def _supports_firmware_type(self, name, arch, default):
         firmwares = self._get_firmware_list()
+        is_supported = default
+        is_recommended = False
 
         for firmware in firmwares:  # pragma: no cover
             if firmware.get_architecture() != arch:
                 continue
             if firmware.get_firmware_type() == name:
-                return firmware.is_supported()
+                is_supported = firmware.is_supported()
+                if hasattr(firmware, "is_recommended"):
+                    is_recommended = firmware.is_recommended()
 
-        return default
+        return (is_supported, is_recommended)
 
     def requires_firmware_efi(self, arch):
         ret = False
         try:
-            supports_efi = self._supports_firmware_type("efi", arch, False)
-            supports_bios = self._supports_firmware_type("bios", arch, True)
-            ret = supports_efi and not supports_bios
+            supports_efi, recommended_efi = self._supports_firmware_type("efi", arch, False)
+            supports_bios, recommended_bios = self._supports_firmware_type("bios", arch, True)
+            ret = supports_efi and (not supports_bios or recommended_efi)
         except Exception:  # pragma: no cover
             log.debug("Error checking osinfo firmware support", exc_info=True)
 
