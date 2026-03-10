@@ -443,6 +443,17 @@ class _OsVariant:
             return self._os.get_complete_firmware_list().get_elements()
         return []  # pragma: no cover
 
+    def _recommends_uefi(self, arch):
+        if hasattr(Libosinfo.Firmware, "is_recommended"):
+            firmwares = self._get_firmware_list()
+            for firmware in firmwares:  # pragma: no cover
+                if firmware.get_architecture() != arch:
+                    continue
+                if firmware.get_firmware_type() == "efi":
+                    return firmware.is_recommended()
+
+        return False
+
     def _supports_firmware_type(self, name, arch, default):
         firmwares = self._get_firmware_list()
         is_supported = default
@@ -461,6 +472,8 @@ class _OsVariant:
     def requires_firmware_efi(self, arch):
         ret = False
         try:
+            if self._recommends_uefi(arch):
+                return True
             supports_efi, recommended_efi = self._supports_firmware_type("efi", arch, False)
             supports_bios, recommended_bios = self._supports_firmware_type("bios", arch, True)
             ret = supports_efi and (not supports_bios or recommended_efi)
