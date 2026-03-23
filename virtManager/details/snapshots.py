@@ -34,6 +34,8 @@ def _make_screenshot_pixbuf(mime, sdata):
     loader.write(sdata)
     loader.close()
     pixbuf = loader.get_pixbuf()
+    if not pixbuf:
+        return None
 
     maxsize = 450
 
