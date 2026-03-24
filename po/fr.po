@@ -28,13 +28,14 @@
 # grimst <grimaitres@gmail.com>, 2023.
 # stephane blondon <stephane.blondon@gmail.com>, 2024.
 # Léane GRASSER <leane.grasser@proton.me>, 2024.
+# William Oprandi <william.oprandi@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2024-11-06 12:48+0000\n"
-"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
+"PO-Revision-Date: 2026-03-20 22:58+0000\n"
+"Last-Translator: William Oprandi <william.oprandi@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/virt-"
 "manager/virt-manager/fr/>\n"
 "Language: fr\n"
@@ -42,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -98,20 +99,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "Gestionnaire de machines virtuelles"
+msgstr "Gestionnaire/Visualisateur de machines virtuelles"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "Gérer des machines virtuelles"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "type de virtualisation « %s »"
+msgstr "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -178,10 +175,8 @@ msgid "Host _Device:"
 msgstr "_Périphérique hôte :"
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "Démarrer le pool"
+msgstr "Politique de démarrage"
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -210,7 +205,6 @@ msgid "_Channel:"
 msgstr "_Canal :"
 
 #: ui/addhardware.ui:944
-#, fuzzy
 msgid "_Share Clipboard:"
 msgstr "_Partager le presse-papier :"
 
@@ -417,10 +411,8 @@ msgid "_Connect to console"
 msgstr "_Connexion à la console"
 
 #: ui/console.ui:291
-#, fuzzy
-#| msgid "_Connect"
 msgid "Connect"
-msgstr "_Connecter"
+msgstr "Connecter"
 
 #: ui/createconn.ui:8
 msgid "Add Connection"
@@ -854,8 +846,6 @@ msgid "_Back"
 msgstr "Précé_dent"
 
 #: ui/createvm.ui:2431
-#, fuzzy
-#| msgid "Forwarding:"
 msgid "_Forward"
 msgstr "Suivan_t"
 
@@ -898,8 +888,6 @@ msgid "Pa_th:"
 msgstr "Che_min :"
 
 #: ui/createvol.ui:423
-#, fuzzy
-#| msgid "Backing store"
 msgid "_Backing store"
 msgstr "Magasin de sauvegarde"
 
@@ -1787,10 +1775,8 @@ msgid "<small>Failed to find a suitable default network.</small>"
 msgstr "<small>Impossible de trouver un réseau par défaut approprié. </small>"
 
 #: ui/netlist.ui:146
-#, fuzzy
-#| msgid "_Port:"
 msgid "_Portgroup:"
-msgstr "_Groupe port_ :"
+msgstr "_Groupe de ports_ :"
 
 #: ui/netlist.ui:182
 msgid "_Network source:"
@@ -1903,7 +1889,6 @@ msgstr ""
 "avec le BIOS ou l’UEFI."
 
 #: ui/preferences.ui:524
-#, fuzzy
 msgid "x86 _Firmware:"
 msgstr "_Micrologiciel x86 :"
 
@@ -2061,32 +2046,24 @@ msgid "_Description:"
 msgstr "_Description :"
 
 #: ui/snapshotsnew.ui:211
-#, fuzzy
-#| msgid "Snapshot Mode:"
 msgid "Snapshot _Mode:"
-msgstr "Mode Cliché :"
+msgstr "_Mode Cliché :"
 
 #: ui/snapshotsnew.ui:226
-#, fuzzy
-#| msgid "External"
 msgid "_external"
-msgstr "Externe"
+msgstr "_externe"
 
 #: ui/snapshotsnew.ui:243
-#, fuzzy
-#| msgid "External"
 msgid "_internal"
-msgstr "Externe"
+msgstr "_interne"
 
 #: ui/snapshotsnew.ui:269
-#, fuzzy
-#| msgid "VM State:"
 msgid "Memory _State:"
-msgstr "État de la VM :"
+msgstr "État de la mémoire :"
 
 #: ui/snapshotsnew.ui:283
 msgid "_auto"
-msgstr ""
+msgstr "_auto"
 
 #: ui/tpmdetails.ui:22
 msgid "Device _Path:"
@@ -2097,10 +2074,8 @@ msgid "_Version:"
 msgstr "_Version :"
 
 #: ui/tpmdetails.ui:162
-#, fuzzy
-#| msgid "Advanced options"
 msgid "Adva_nced options"
-msgstr "Options avancées"
+msgstr "Optio_ns avancées"
 
 #: ui/vmwindow.ui:7
 msgid "Virtual Machine"
@@ -2395,7 +2370,7 @@ msgstr "Port Spice"
 
 #: virtManager/addhardware.py:467
 msgid "QEMU vdagent"
-msgstr ""
+msgstr "Vdagent QEMU"
 
 #: virtManager/addhardware.py:483 virtManager/addhardware.py:544
 msgid "IDE"
@@ -2428,11 +2403,11 @@ msgstr "PCI"
 
 #: virtManager/addhardware.py:490
 msgid "CCID"
-msgstr ""
+msgstr "CCID"
 
 #: virtManager/addhardware.py:491
 msgid "xenbus"
-msgstr ""
+msgstr "xenbus"
 
 #: virtManager/addhardware.py:499 virtManager/addhardware.py:922
 msgid "VirtIO SCSI"
@@ -2448,7 +2423,7 @@ msgstr "SD"
 
 #: virtManager/addhardware.py:549 virtManager/addhardware.py:600
 msgid "VirtIO"
-msgstr ""
+msgstr "VirtIO"
 
 #: virtManager/addhardware.py:550 virtManager/addhardware.py:601
 msgid "Xen"
@@ -2463,7 +2438,6 @@ msgid "Entropy Gathering Daemon"
 msgstr "Démon collecteur d’entropie"
 
 #: virtManager/addhardware.py:559
-#, fuzzy
 msgid "Builtin RNG"
 msgstr "Générateur d'aléa (RNG) intégré"
 
@@ -2549,6 +2523,8 @@ msgid ""
 "%s is not active in the host system.\n"
 "Please start the mdev in the host system before adding it to the guest."
 msgstr ""
+"%s n'est pas actif sur le système hôte.\n"
+"Veuillez démarrer mdev sur le système hôte avant de l'ajouter à l'invité."
 
 #: virtManager/addhardware.py:828
 msgid "No Devices Available"
@@ -2664,7 +2640,7 @@ msgid "Do you really want to use the device?"
 msgstr "Voulez-vous vraiment utiliser le périphérique ?"
 
 #: virtManager/addhardware.py:1383
-#, fuzzy, python-format
+#, python-format
 msgid "Error building device XML: %s"
 msgstr "Erreur lors de la construction du matériel XML : %s"
 
@@ -2677,7 +2653,7 @@ msgid "No storage to clone."
 msgstr "Aucun stockage à cloner."
 
 #: virtManager/clone.py:118
-#, fuzzy, python-format
+#, python-format
 msgid "Disk target: %s"
 msgstr "Disque cible : %s"
 
@@ -2701,7 +2677,7 @@ msgid "Sharing this storage is potentially dangerous."
 msgstr "Partager ce stockage est potentiellement dangereux."
 
 #: virtManager/clone.py:130
-#, fuzzy, python-format
+#, python-format
 msgid "Storage is not cloneable: %(reason)s"
 msgstr "Stockage non clonable : %(reason)s"
 
@@ -2837,9 +2813,8 @@ msgid "Any physical device"
 msgstr "N’importe quel périphérique physique"
 
 #: virtManager/createnet.py:99
-#, fuzzy
 msgid "Physical device..."
-msgstr "Matériel physique..."
+msgstr "Appareil physique..."
 
 #: virtManager/createnet.py:107 virtManager/object/network.py:156
 msgid "NAT"
@@ -2868,7 +2843,7 @@ msgstr "Le nom « %s » est déjà utilisé par un autre réseau."
 
 #: virtManager/createnet.py:408 virtManager/createpool.py:312
 #: virtManager/createvol.py:255
-#, fuzzy, python-format
+#, python-format
 msgid "Error building XML: %s"
 msgstr "Erreur de construction XML : %s"
 
@@ -2878,7 +2853,7 @@ msgid "Error creating virtual network: %s"
 msgstr "Erreur lors de la création du réseau virtuel : %s"
 
 #: virtManager/createnet.py:441
-#, fuzzy, python-format
+#, python-format
 msgid "Error validating network: %s"
 msgstr "Erreur de validation du réseau : %s"
 
@@ -2892,11 +2867,12 @@ msgstr "La création du réseau virtuel peut prendre un moment…"
 
 #: virtManager/createpool.py:210
 msgid "Sou_rce Name:"
-msgstr ""
+msgstr "Nom _source"
 
 #: virtManager/createpool.py:210
+#, fuzzy
 msgid "Volg_roup Name:"
-msgstr ""
+msgstr "Nom volg_roup"
 
 #: virtManager/createpool.py:213
 msgid "_Source Path:"
@@ -2908,7 +2884,7 @@ msgstr "IQN _Source :"
 
 #: virtManager/createpool.py:217
 msgid "_Source Adapter:"
-msgstr ""
+msgstr "Adapteur _source :"
 
 #: virtManager/createpool.py:325
 #, python-format
@@ -2918,7 +2894,7 @@ msgstr "Erreur lors de la création du pool : %s"
 #: virtManager/createpool.py:348
 #, python-format
 msgid "Error validating pool: %s"
-msgstr ""
+msgstr "Erreur lors de la validation du pool : %s"
 
 #: virtManager/createpool.py:357
 msgid "Creating storage pool..."
@@ -2959,7 +2935,7 @@ msgstr "Erreur : %s"
 #: virtManager/createvm.py:306 virtManager/createvm.py:310
 #, python-format
 msgid "<span size='small'>Warning: %s</span>"
-msgstr ""
+msgstr "<span size='small'>Attention : %s</span>"
 
 #: virtManager/createvm.py:482
 #, python-format
@@ -3045,7 +3021,7 @@ msgstr "Importer une image de système d’exploitation existante"
 
 #: virtManager/createvm.py:941
 msgid "Manual install"
-msgstr ""
+msgstr "Installation manuelle"
 
 #: virtManager/createvm.py:943
 msgid "Application container"
@@ -3212,15 +3188,13 @@ msgid "Error continuing install: %s"
 msgstr "Erreur durant l’installation : %s"
 
 #: virtManager/createvm.py:2055
-#, fuzzy
-#| msgid "Bootstraping container"
 msgid "Bootstrapping container"
 msgstr "Conteneur d’amorçage"
 
 #: virtManager/createvol.py:134
 #, python-format
 msgid "<b>%(volume)s's</b> available space: %(size)s"
-msgstr ""
+msgstr "Espace disponible de <b>%(volume)s</b> : %(size)s"
 
 #: virtManager/createvol.py:269
 #, python-format
@@ -3286,13 +3260,15 @@ msgstr "Erreur lors du lancement de la boîte de dialogue de suppression : %s"
 #: virtManager/delete.py:297
 #, python-format
 msgid "Delete '%(vmname)s'"
-msgstr ""
+msgstr "Supprimer « %(vmname)s »"
 
 #: virtManager/delete.py:302
 #, python-format
 msgid ""
 "Deleting virtual machine '%s' and selected storage (this may take a while)"
 msgstr ""
+"Suppression de la machine virtuelle « %s » et du stockage sélectionné (cette "
+"opération peut prendre un certain temps)"
 
 #: virtManager/delete.py:307
 #, python-format
@@ -3311,7 +3287,7 @@ msgstr ""
 
 #: virtManager/delete.py:367
 msgid "Storage will not be deleted."
-msgstr ""
+msgstr "Le stockage ne sera pas supprimé."
 
 #: virtManager/delete.py:370
 msgid "Device could not be removed from the running machine"
@@ -3321,22 +3297,24 @@ msgstr ""
 
 #: virtManager/delete.py:382
 msgid "Remove Disk Device"
-msgstr ""
+msgstr "Retirer le périphérique de disque"
 
 #: virtManager/delete.py:385
 #, python-format
 msgid "Remove disk device '%(target)s'"
-msgstr ""
+msgstr "Supprimer le périphérique de disque « %(target)s »"
 
 #: virtManager/delete.py:390
 #, python-format
 msgid "Removing disk device '%s' and selected storage (this may take a while)"
 msgstr ""
+"Suppression du périphérique de disque « %s » et du stockage sélectionné "
+"(cette opération peut prendre un certain temps)"
 
 #: virtManager/delete.py:394
 #, python-format
 msgid "Removing disk device '%s'"
-msgstr ""
+msgstr "Suppression du périphérique de disque « %s »"
 
 #: virtManager/delete.py:526
 msgid "Target"
@@ -3607,7 +3585,7 @@ msgstr "_Enlever un matériel"
 
 #: virtManager/details/details.py:626 virtManager/details/details.py:1725
 msgid "UEFI"
-msgstr ""
+msgstr "UEFI"
 
 #: virtManager/details/details.py:634
 msgid "Libvirt or hypervisor does not support UEFI."
@@ -3860,7 +3838,7 @@ msgstr "Erreur lors de la connexion à la console texte : %s"
 
 #: virtManager/details/snapshots.py:125
 msgid "external snapshots not supported with this libvirt connection"
-msgstr ""
+msgstr "instantanées externes non supportés avec cette connexion libvirt"
 
 #: virtManager/details/snapshots.py:291
 #, python-format
@@ -3889,6 +3867,8 @@ msgid ""
 "Mixing external and internal snapshots for the same VM is not recommended. "
 "Are you sure you want to continue?"
 msgstr ""
+"Mixer instantanées internes et externes pour la même machine virtuelle n'est "
+"pas recommandé. Êtes-vous sûr de vouloir continuer ?"
 
 #: virtManager/details/snapshots.py:503
 msgid "_Start snapshot"
@@ -3943,12 +3923,18 @@ msgid "Saved memory state will not be part of the snapshot"
 msgstr "L'état mémoire enregistré ne sera pas inclus dans le cliché"
 
 #: virtManager/details/snapshots.py:745
+#, fuzzy
 msgid ""
 "The domain is currently saved. Due to technical limitations that saved "
 "memory state will not become part of the snapshot. Running it later will be "
 "the same as having forced the system off mid-flight. It is recommended to "
 "snapshot either the running or shut down system instead."
 msgstr ""
+"Le domaine est actuellement enregistré. À cause de limitations techniques, "
+"l'état de la mémoire ne fera pas partie de cet instantané. L'exécuter "
+"ultérieurement aura le même effet qu'un arrêt brutal du système en cours "
+"d'exécution. Il est recommandé de créer un instantané du système en cours "
+"d'exécution ou du système arrêté."
 
 #: virtManager/details/snapshots.py:769
 #, python-format
@@ -3971,14 +3957,13 @@ msgstr ""
 "été créé seront supprimées."
 
 #: virtManager/details/snapshots.py:787
-#, fuzzy
 msgid "Saved state will be removed to avoid filesystem corruption"
 msgstr ""
 "L'état enregistré sera supprimé pour éviter une corruption du système de "
 "fichier"
 
 #: virtManager/details/snapshots.py:789
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Snapshot '%s' contains only disk and no memory state. Restoring the snapshot "
 "would leave the existing saved state in place, effectively switching a disk "
@@ -3986,6 +3971,10 @@ msgid ""
 "result in extensive filesystem corruption. Therefore the saved state will be "
 "removed before restoring the snapshot."
 msgstr ""
+"L'instantané '%s' contient uniquement le disque et aucun état de la mémoire. "
+"La restauration de l'instantané laisserait en place l'état enregistré "
+"existant, ce qui reviendrait à remplacer un disque sous un système en cours "
+"d'exécution."
 
 #: virtManager/details/snapshots.py:807
 msgid "Running snapshot"
@@ -4120,7 +4109,6 @@ msgid "_Source path:"
 msgstr "Chemin de la _source :"
 
 #: virtManager/device/fsdetails.py:154
-#, fuzzy
 msgid "You may need to 'Enable shared memory' on the 'Memory' screen."
 msgstr ""
 "Vous pourriez avoir besoin d'« Activer la mémoire partagée » dans le panneau "
@@ -4180,17 +4168,19 @@ msgid "Inactive"
 msgstr "Inactif"
 
 #: virtManager/device/netlist.py:136
+#, fuzzy
 msgid "Bridge device..."
-msgstr ""
+msgstr "Dispositif de pont..."
 
 #: virtManager/device/netlist.py:141
+#, fuzzy
 msgid "Macvtap device..."
-msgstr ""
+msgstr "Dispositif Macvtap..."
 
 #: virtManager/device/netlist.py:146
 #, fuzzy
 msgid "vDPA device..."
-msgstr "Matériel physique..."
+msgstr "Dispositif vDPA..."
 
 #: virtManager/device/netlist.py:204
 msgid "Virtual Network is not active."
@@ -4650,10 +4640,8 @@ msgid "_Connect"
 msgstr "_Connecter"
 
 #: virtManager/manager.py:291
-#, fuzzy
-#| msgid "Disconnected"
 msgid "Dis_connect"
-msgstr "Déconnecté"
+msgstr "Dé_connecter"
 
 #: virtManager/manager.py:293
 #, fuzzy
@@ -5008,10 +4996,13 @@ msgid "_Show Virtual Machine Manager"
 msgstr "_Afficher le gestionnaire de machines virtuelles"
 
 #: virtManager/systray.py:419
+#, fuzzy
 msgid ""
 "AppIndicator not installed or usable, system tray icon not available on "
 "Wayland"
 msgstr ""
+"AppIndicator non installé ou inutilisable, l'icône de la barre d'état "
+"système n'est pas disponible sous Wayland."
 
 #: virtManager/virtmanager.py:43
 msgid "Error starting Virtual Machine Manager"
@@ -5207,10 +5198,8 @@ msgid "PNG files"
 msgstr "Fichiers PNG"
 
 #: virtManager/vmwindow.py:548
-#, fuzzy
-#| msgid "Saved"
 msgid "_Save"
-msgstr "Sauvegardé"
+msgstr "_Sauvegarder"
 
 #: virtManager/xmleditor.py:131 virtManager/xmleditor.py:144
 msgid "There are unapplied changes."
@@ -5351,7 +5340,6 @@ msgid "Connect to hypervisor with libvirt URI"
 msgstr "Se connecter à l’hyperviseur via l’URI libvirt"
 
 #: virtinst/cli.py:635
-#, fuzzy
 msgid ""
 "Configure guest console auto connect. Example:\n"
 "--autoconsole text\n"
@@ -5478,11 +5466,6 @@ msgstr ""
 "--network help"
 
 #: virtinst/cli.py:797
-#, fuzzy
-#| msgid ""
-#| "Configure a guest controller device. Ex:\n"
-#| "--controller type=usb,model=qemu-xhci\n"
-#| "--controller virtio-scsi\n"
 msgid ""
 "Configure a guest controller device. Ex:\n"
 "--controller type=usb,model=qemu-xhci\n"
@@ -5543,7 +5526,7 @@ msgstr "Configurer l’émulation du périphérique audio de l’invité"
 #, fuzzy
 #| msgid "Configure a guest watchdog device"
 msgid "Configure host audio backend for sound devices"
-msgstr "Configurer le périphérique de surveillance invité"
+msgstr "Configurer le backend audio hôte pour les périphériques son"
 
 #: virtinst/cli.py:860
 msgid "Configure a guest watchdog device"
@@ -5603,16 +5586,12 @@ msgstr ""
 "--panic default"
 
 #: virtinst/cli.py:902
-#, fuzzy
-#| msgid ""
-#| "Configure a guest memory device. Ex:\n"
-#| "--memdev dimm,target.size=1024"
 msgid ""
 "Configure a guest shared memory device. Ex:\n"
 "--shmem name=shmem0"
 msgstr ""
 "Configurer un périphérique mémoire invité. Par exemple :\n"
-"--memdev dimm,target.size=1024"
+"--shmem name=shmem0"
 
 #: virtinst/cli.py:908
 msgid ""
@@ -5637,25 +5616,36 @@ msgid ""
 "Configure an IOMMU device. Ex:\n"
 "--iommu model=intel,driver.aw_bits=48"
 msgstr ""
+"Configurer un périphérique IOMMU. Ex :\n"
+"--iommu model=intel,driver.aw_bits=48"
 
 #: virtinst/cli.py:927
+#, fuzzy
 msgid ""
 "Configure a nvram storage device.\n"
 "It's for guest kernel to record oops/panic logs. Ex:\n"
 "--pstore backend=acpi-erst,size=8"
 msgstr ""
+"Configurer un périphérique de stockage nvram.\n"
+"\n"
+"C'est pour permettre au noyau invité d'enregistrer les journaux oops/panic. "
+"Ex :\n"
+"--pstore backend=acpi-erst,size=8"
 
 #: virtinst/cli.py:939
 msgid "Set domain <iothreads> and <iothreadids> configuration."
-msgstr ""
+msgstr "Configurer le domaine <iothreads> et la configuration <iothreadids>."
 
 #: virtinst/cli.py:944
 msgid "Set domain seclabel configuration."
 msgstr "Définir la configuration de seclabel pour le domaine."
 
 #: virtinst/cli.py:951
+#, fuzzy
 msgid "Set guest to perform the S390 cryptographic key management operations."
 msgstr ""
+"Configurer l'invité pour effectuer les opérations de gestion des clés "
+"cryptographiques S390"
 
 #: virtinst/cli.py:956
 msgid "Tune CPU parameters for the domain process."
@@ -5740,6 +5730,9 @@ msgid ""
 "Configure VM launch security (e.g. SEV memory encryption). Ex:\n"
 "--launchSecurity sev"
 msgstr ""
+"Configurer la sécurité au lancement de la machine virtuelle (par exemple, le "
+"chiffrement de la mémoire SEV). Exemple :\n"
+"--launchSecurity sev"
 
 #: virtinst/cli.py:1054
 msgid ""
@@ -5787,11 +5780,6 @@ msgid "The OS installed in the guest."
 msgstr "L’OS installé sur l’invité."
 
 #: virtinst/cli.py:1099
-#, fuzzy
-#| msgid ""
-#| "This is used for deciding optimal defaults like VirtIO.\n"
-#| "Example values: fedora29, rhel7.0, win10, ...\n"
-#| "See 'osinfo-query os' for a full list."
 msgid ""
 "This is used for deciding optimal defaults like VirtIO.\n"
 "Example values: fedora29, rhel7.0, win10, ...\n"
@@ -5800,7 +5788,7 @@ msgstr ""
 "Ceci est utilisé pour décider les paramètres par défaut optimaux tels que "
 "VirtIO.\n"
 "Valeurs d’exemples : fedora29, rhel7.0, win10,…\n"
-"Lisez « osinfo-query os » pour une liste complète."
+"Utilisez « --osinfo list » pour une liste complète."
 
 #: virtinst/cli.py:1115
 msgid ""
@@ -5835,12 +5823,8 @@ msgid "Error: %(cli_flag_name)s %(options)s: %(err)s"
 msgstr "Erreur : %(cli_flag_name)s %(options)s : %(err)s"
 
 #: virtinst/cli.py:2193
-#, fuzzy
-#| msgid "Graphics requested but DISPLAY is not set. Not running virt-viewer."
 msgid "No display detected. Not running virt-viewer."
-msgstr ""
-"Graphismes demandés mais DISPLAY n’est pas défini. Pas de lancement de virt-"
-"viewer."
+msgstr "Pas d'affichage détecté. virt-viewer n'est pas en cours d'exécution."
 
 #: virtinst/cli.py:2199
 msgid ""
