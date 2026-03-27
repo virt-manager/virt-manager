@@ -858,6 +858,9 @@ Sub options are:
 ``product-key=``
     Set a Windows product key
 
+``hostname=``
+    Set the hostname for the unattended VM install.
+
 
 
 ``--cloud-init``
