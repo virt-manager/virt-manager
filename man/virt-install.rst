@@ -707,7 +707,7 @@ disk image. The device used for booting is the first device specified via
 Additional kernel command line arguments to pass to the installer when
 performing a guest install from ``--location``. One common usage is specifying
 an anaconda kickstart file for automated installs, such as
---extra-args "ks=https://myserver/my.ks"
+``--extra-args "inst.ks=https://myserver/my.ks"``
 
 
 
@@ -718,7 +718,7 @@ an anaconda kickstart file for automated installs, such as
 
 Add PATH to the root of the initrd fetched with ``--location``. This can be
 used to run an automated install without requiring a network hosted kickstart
-file: ``--initrd-inject=/path/to/my.ks --extra-args "ks=file:/my.ks"``
+file: ``--initrd-inject=/path/to/my.ks --extra-args "inst.ks=file:/my.ks"``
 
 
 
