@@ -145,6 +145,18 @@ def _checkConsoleStandard(app, dom):
     app.rawinput.point(win.position[0] + win.size[0] / 2, 0)
     lib.utils.check(lambda: fstb.showing)
 
+    # Test minimize button
+    minimize_btn = win.find("Minimize Window")
+    minimize_btn.click()
+    # The window should be iconified (minimized)
+    # We use a small sleep to ensure the window manager processes the request
+    app.sleep(0.3)
+    # After minimizing, we need to restore the window for further tests
+    # The window is still fullscreen, just iconified
+    win.window_deiconify()
+    app.sleep(0.3)
+    lib.utils.check(lambda: fstb.showing)
+
     # Click stuff and exit fullscreen
     win.find("Fullscreen Send Key").click()
     app.rawinput.pressKey("Escape")
