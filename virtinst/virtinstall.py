@@ -1113,6 +1113,8 @@ def parse_args():
         help=_("Perform a cloud image installation, configuring cloud-init"),
     )
 
+    
+
     # Takes a URL and just prints to stdout the detected distro name
     insg.add_argument("--test-media-detection", help=argparse.SUPPRESS)
     # Helper for cli testing, fills in standard stub options
@@ -1150,6 +1152,7 @@ def parse_args():
     devg.add_argument("--nographics", action="store_true", help=argparse.SUPPRESS)
 
     gxmlg = parser.add_argument_group(_("Guest Configuration Options"))
+    # Issue 599: --qemu-commandline configured here
     cli.add_guest_xml_options(gxmlg)
 
     virg = parser.add_argument_group(_("Virtualization Platform Options"))
