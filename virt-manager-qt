@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+# Convenience wrapper for easily running virt-manager with Qt frontend from the git tree
+
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(__file__))
+
+from qt import virtmanager_qt  # noqa: E402
+
+virtmanager_qt.runcli()
