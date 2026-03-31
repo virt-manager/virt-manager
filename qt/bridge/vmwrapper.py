@@ -162,7 +162,9 @@ class VmWrapper(QObject):
             stats = self._domain.memoryStats()
             
             if self._prev_stats and "_timestamp" in self._prev_stats:
-                time_diff = stats.get("_timestamp", 0) - self._prev_stats.get("_timestamp", 0)
+                time_diff = (
+                    stats.get("_timestamp", 0) - self._prev_stats.get("_timestamp", 0)
+                )
                 if time_diff > 0:
                     cpu_diff = stats.get("cpu_time", 0) - self._prev_stats.get("cpu_time", 0)
                     self._stats_cache["cpu_percent"] = min(100, (cpu_diff / time_diff / 1e9) * 100)

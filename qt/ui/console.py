@@ -57,7 +57,10 @@ class ConsoleWindow(QWidget):
         
         send_menu = QMenu(_("Send Key"), self)
         send_menu.addAction(_("Ctrl+Alt+Del"), lambda: self._send_key("ctrl-alt-del"))
-        send_menu.addAction(_("Ctrl+Alt+Backspace"), lambda: self._send_key("ctrl-alt-backspace"))
+        send_menu.addAction(
+            _("Ctrl+Alt+Backspace"),
+            lambda: self._send_key("ctrl-alt-backspace")
+        )
         send_menu.addAction(_("Ctrl+Alt+F1"), lambda: self._send_key("ctrl-alt-f1"))
         send_menu.addAction(_("Ctrl+Alt+F2"), lambda: self._send_key("ctrl-alt-f2"))
         send_menu.addAction(_("Ctrl+Alt+F3"), lambda: self._send_key("ctrl-alt-f3"))

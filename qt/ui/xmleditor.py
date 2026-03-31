@@ -1,4 +1,7 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, QLabel, QTabWidget, QWidget
+from PyQt6.QtWidgets import (
+    QDialog, QVBoxLayout, QHBoxLayout, QTextEdit,
+    QPushButton, QLabel, QTabWidget, QWidget
+)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont
 
@@ -12,7 +15,7 @@ PAGE_XML = 1
 class vmmXMLEditor(QWidget):
     def __init__(self, details_widget, config=None):
         super().__init__()
-        
+
         self._details_widget = details_widget
         self._config = config
         self._curpage = PAGE_DETAILS
@@ -20,40 +23,40 @@ class vmmXMLEditor(QWidget):
         self._xml_notebook = None
         self._xml_text = None
         self._details_changed = False
-        
+
         self._init_ui()
 
     def _init_ui(self):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        
+
         self._notebook = QTabWidget()
         self._notebook.setTabPosition(QTabWidget.TabPosition.North)
-        
+
         self._details_page = QWidget()
         details_layout = QVBoxLayout(self._details_page)
         details_layout.setContentsMargins(0, 0, 0, 0)
         details_layout.addWidget(self._details_widget)
-        
+
         self._xml_page = QWidget()
         xml_layout = QVBoxLayout(self._xml_page)
         xml_layout.setContentsMargins(4, 4, 4, 4)
-        
+
         warning_label = QLabel(_("XML editing is disabled. Enable in Preferences to turn on."))
         warning_label.setStyleSheet("background-color: #fff3cd; padding: 8px; border: 1px solid #ffc107; border-radius: 4px;")
         xml_layout.addWidget(warning_label)
-        
+
         self._xml_text = QTextEdit()
         self._xml_text.setReadOnly(True)
         font = QFont("monospace")
         font.setPointSize(10)
         self._xml_text.setFont(font)
         xml_layout.addWidget(self._xml_text)
-        
+
         self._notebook.addTab(self._details_page, _("Details"))
         self._notebook.addTab(self._xml_page, _("XML"))
         self._notebook.currentChanged.connect(self._page_changed)
-        
+
         main_layout.addWidget(self._notebook)
 
     def _page_changed(self, index):

@@ -67,7 +67,10 @@ class vmmErrorDialog:
         elif dialog_type == QMessageBox.Icon.Information:
             dtype = QMessageBox.Icon.Information
 
-        msg = QMessageBox(dtype, title or _("Error"), summary, QMessageBox.StandardButton.Ok, self._parent)
+        msg = QMessageBox(
+            dtype, title or _("Error"), summary,
+            QMessageBox.StandardButton.Ok, self._parent
+        )
         if text2 or details:
             msg.setDetailedText(details if details else text2)
         msg.exec()

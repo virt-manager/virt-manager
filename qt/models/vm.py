@@ -146,7 +146,10 @@ class VmModel(QAbstractTableModel):
             return 0
         return self.COL_COUNT
     
-    def headerData(self, section: int, orientation: Qt.Orientation, role=Qt.ItemDataRole.DisplayRole):
+    def headerData(
+        self, section: int, orientation: Qt.Orientation,
+        role=Qt.ItemDataRole.DisplayRole
+    ):
         """Return header data."""
         if role != Qt.ItemDataRole.DisplayRole:
             return None

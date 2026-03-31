@@ -42,7 +42,9 @@ class Sparkline(QWidget):
         
         points = []
         for i, val in enumerate(self._data):
-            x = int((i / (len(self._data) - 1)) * (w - 1)) if len(self._data) > 1 else w // 2
+            x = int(
+                (i / (len(self._data) - 1)) * (w - 1)
+            ) if len(self._data) > 1 else w // 2
             y = int(h - ((val - min_val) / (max_val - min_val)) * (h - 4) - 2)
             points.append((x, max(2, min(h - 2, y))))
         

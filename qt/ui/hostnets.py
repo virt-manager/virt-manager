@@ -85,7 +85,8 @@ class vmmHostNets(QWidget):
 
         self._details_layout.addRow(_("Name:"), QLabel(net.get_name()))
         self._details_layout.addRow(_("State:"), QLabel(net.run_status()))
-        self._details_layout.addRow(_("Autostart:"), QLabel(_("Yes") if net.get_autostart() else _("No")))
+        autostart_text = _("Yes") if net.get_autostart() else _("No")
+        self._details_layout.addRow(_("Autostart:"), QLabel(autostart_text))
 
         try:
             ipv4_net, dhcp_range = net.get_ipv4_network()

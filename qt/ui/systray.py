@@ -67,7 +67,10 @@ class SystemTray(QObject):
     def setIcon(self, icon):
         self._tray.setIcon(icon)
     
-    def showMessage(self, title, message, icon=QSystemTrayIcon.MessageIcon.Information, msecs=3000):
+    def showMessage(
+        self, title, message,
+        icon=QSystemTrayIcon.MessageIcon.Information, msecs=3000
+    ):
         self._tray.showMessage(title, message, icon, msecs)
     
     def isVisible(self):

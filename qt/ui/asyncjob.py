@@ -24,7 +24,9 @@ class _vmmMeter(virtinst_progress.Meter):
             self._pbar_pulse("", self._text)
         else:
             fread = virtinst_progress.Meter.format_number(self._total_read)
-            rtime = virtinst_progress.Meter.format_time(self._meter.re.remaining_time(), True)
+            rtime = virtinst_progress.Meter.format_time(
+                self._meter.re.remaining_time(), True
+            )
             frac = self._meter.re.fraction_read()
             out = "%3i%% %5sB %s ETA" % (frac * 100, fread, rtime)
             self._pbar_fraction(frac, out, self._text)
@@ -114,16 +116,16 @@ class vmmAsyncJob:
         self._text = text
         self._parent = parent
         self._show_progress = bool(show_progress)
-        
+
         self.cancel_cb = cancel_cb[0] if cancel_cb else None
         self.cancel_args = [self] + list(cancel_cb[1] if cancel_cb else [])
         self.job_canceled = False
-        
+
         self._error_info = None
         self._meter = None
         self._thread = None
         self._dialog = None
-        
+
         self._is_pulsing = True
 
     def get_meter(self):

@@ -29,7 +29,8 @@ class vmmHostStorage(QWidget):
         layout.addWidget(self._pool_list)
         
         self._vol_list = QTreeWidget()
-        self._vol_list.setHeaderLabels([_("Volumes"), _("Size"), _("Format"), _("Used By")])
+        vol_headers = [_("Volumes"), _("Size"), _("Format"), _("Used By")]
+        self._vol_list.setHeaderLabels(vol_headers)
         self._vol_list.setColumnWidth(0, 200)
         self._vol_list.itemDoubleClicked.connect(self._vol_activated)
         layout.addWidget(self._vol_list)

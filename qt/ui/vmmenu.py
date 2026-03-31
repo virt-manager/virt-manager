@@ -31,7 +31,8 @@ class VMShutdownMenu(QMenu):
         is_shutoff = vm and not vm.is_active()
         
         for action in self.actions():
-            if action.text() in [_("Reboot"), _("Shut Down"), _("Force Reset"), _("Force Off")]:
+            power_actions = [_("Reboot"), _("Shut Down"), _("Force Reset"), _("Force Off")]
+            if action.text() in power_actions:
                 action.setEnabled(is_running)
             elif action.text() == _("Save"):
                 action.setEnabled(is_shutoff)
