@@ -1,12 +1,24 @@
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtCore import QObject, pyqtSignal
 
 
-def QtSignal(*args, **kwargs):
-    return pyqtSignal(*args, **kwargs)
-
-
-class Signals:
+class Signals(QObject):
+    """
+    Global application-wide signals.
+    """
+    
+    vm_added = pyqtSignal(str, str)  # (uri, uuid)
+    vm_removed = pyqtSignal(str, str)  # (uri, uuid)
+    vm_state_changed = pyqtSignal(str, str)  # (uri, uuid)
+    vm_stats_updated = pyqtSignal(str, str)  # (uri, uuid)
+    
+    connection_added = pyqtSignal(str)  # uri
+    connection_removed = pyqtSignal(str)  # uri
+    connection_state_changed = pyqtSignal(str, str)  # (uri, state)
+    
     _instance = None
+    
+    def __init__(self):
+        super().__init__()
     
     @classmethod
     def get_instance(cls):
@@ -15,11 +27,6 @@ class Signals:
         return cls._instance
 
 
-_signals = None
-
-
 def get_signals() -> Signals:
-    global _signals
-    if _signals is None:
-        _signals = Signals()
-    return _signals
+    """Get the global signals instance."""
+    return Signals.get_instance()

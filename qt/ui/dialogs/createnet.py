@@ -127,6 +127,11 @@ class vmmCreateNetwork(QDialog):
         self._dhcpv6_start.clear()
         self._dhcpv6_end.clear()
 
+    def _forward_mode_changed(self, index):
+        mode_map = {0: "nat", 1: "route", 2: "open", 3: "isolated"}
+        mode = mode_map.get(index, "nat")
+        self._forward_device_combo.setEnabled(mode in ["nat", "route"])
+
     def _finish(self):
         name = self._name_entry.text().strip()
         if not name:

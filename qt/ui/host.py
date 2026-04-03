@@ -114,7 +114,7 @@ class vmmHost(QWidget):
 
     def _refresh_conn_state(self):
         self._conn_name.setText(self.conn.get_pretty_desc())
-        self._conn_uri.setText(self.conn.get_uri())
+        self._conn_URI.setText(self.conn.get_uri())
 
     def _page_changed(self, index):
         if index == 1:

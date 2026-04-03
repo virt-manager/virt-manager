@@ -19,6 +19,7 @@ except ImportError:
 
 from .vmwrapper import VmWrapper
 from .statspoller import StatsPoller
+from ..core.signals import get_signals
 
 logger = logging.getLogger("virtmanagerqt.bridge.conn")
 
@@ -52,7 +53,8 @@ class ConnectionWrapper(QObject):
         self._lock = threading.Lock()
         self._thread: Optional[threading.Thread] = None
         self._closing = False
-        self._stats_poller: Optional[StatsPoller] = None
+        self._stats_poller = None
+        self._signals = get_signals()
     
     @property
     def uri(self) -> str:
@@ -179,6 +181,7 @@ class ConnectionWrapper(QObject):
             self._state = new_state
             logger.debug(f"Connection {self._uri} state: {new_state}")
             self.state_changed.emit(new_state)
+            self._signals.connection_state_changed.emit(self._uri, new_state)
     
     def _add_vm(self, domain) -> Optional[VmWrapper]:
         """Add a VM from a libvirt domain."""
@@ -191,10 +194,13 @@ class ConnectionWrapper(QObject):
                 
                 vm = VmWrapper(self, domain)
                 vm.state_changed.connect(lambda: self.vm_state_changed.emit(uuid))
+                vm.state_changed.connect(lambda: self._signals.vm_state_changed.emit(self._uri, uuid))
                 vm.stats_updated.connect(lambda: self.vm_stats_updated.emit(uuid))
+                vm.stats_updated.connect(lambda: self._signals.vm_stats_updated.emit(self._uri, uuid))
                 self._vms[uuid] = vm
             
             self.vm_added.emit(uuid)
+            self._signals.vm_added.emit(self._uri, uuid)
             return vm
             
         except Exception as e:
@@ -211,6 +217,7 @@ class ConnectionWrapper(QObject):
             vm.cleanup()
         
         self.vm_removed.emit(uuid)
+        self._signals.vm_removed.emit(self._uri, uuid)
     
     def get_vm(self, uuid: str) -> Optional[VmWrapper]:
         """Get a VM by UUID."""

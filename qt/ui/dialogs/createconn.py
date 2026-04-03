@@ -34,7 +34,7 @@ def _default_uri():
     return None
 
 
-class vmmCreateConn(QDialog):
+class ConnectionDialog(QDialog):
     def __init__(self, engine):
         super().__init__()
         self.engine = engine
@@ -45,6 +45,12 @@ class vmmCreateConn(QDialog):
         
         self._init_ui()
         self._populate_uri()
+
+    def get_uri(self):
+        hv = self._hypervisor_combo.currentData()
+        if hv == HV_CUSTOM:
+            return self._uri_entry.text()
+        return self._generate_uri()
 
     def _init_ui(self):
         layout = QVBoxLayout(self)

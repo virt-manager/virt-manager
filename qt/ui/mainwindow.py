@@ -6,12 +6,15 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QStackedWidget, QStatusBar, QMenuBar, QToolBar,
     QMessageBox, QSplitter, QLabel, QListView, QPushButton,
-    QTableWidget, QTableWidgetItem, QHeaderView, QMenu
+    QHeaderView, QMenu, QDialog
 )
 from PyQt6.QtCore import Qt, QSize, pyqtSlot
 from PyQt6.QtGui import QIcon, QKeySequence, QAction
 
 from .lib.i18n import _
+from .vmlist import VmListView
+from .models.vm import VmModel
+from .details.details import vmmDetails
 
 
 class MainWindow(QMainWindow):
@@ -24,12 +27,16 @@ class MainWindow(QMainWindow):
         self._engine = None
         self._selected_vm = None
         self._selected_uri = None
+        self._vm_model = None
+        self._details_widget = None
         self._tray = None
         self._setup_ui()
 
     def set_engine(self, engine):
         """Set the engine instance."""
         self._engine = engine
+        self._vm_model = VmModel()
+        self._vm_table.setModel(self._vm_model)
 
     def _setup_ui(self) -> None:
         """Setup the user interface."""
@@ -52,11 +59,14 @@ class MainWindow(QMainWindow):
         self._content = QStackedWidget()
         splitter.addWidget(self._content)
 
-        self._vm_table = self._create_vm_table()
+        self._vm_table = VmListView()
+        self._vm_table.vm_selected.connect(self._on_vm_selected)
         self._content.addWidget(self._vm_table)
 
-        self._details = self._create_details_panel()
-        self._content.addWidget(self._details)
+        self._details_container = QWidget()
+        self._details_layout = QVBoxLayout(self._details_container)
+        self._details_layout.setContentsMargins(0, 0, 0, 0)
+        self._content.addWidget(self._details_container)
 
         splitter.setSizes([250, 800])
 
@@ -97,39 +107,6 @@ class MainWindow(QMainWindow):
         sidebar.setMaximumWidth(350)
 
         return sidebar
-
-    def _create_vm_table(self) -> QWidget:
-        """Create VM table widget."""
-        table = QTableWidget()
-        table.setColumnCount(5)
-        headers = [_("Name"), _("State"), _("vCPUs"), _("Memory"), _("CPU")]
-        table.setHorizontalHeaderLabels(headers)
-        table.horizontalHeader().setStretchLastSection(True)
-        table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-        table.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
-        table.itemSelectionChanged.connect(self._on_vm_selected)
-        table.itemDoubleClicked.connect(lambda: self._content.setCurrentIndex(1))
-        table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        table.customContextMenuRequested.connect(self._show_vm_context_menu)
-        return table
-
-    def _create_details_panel(self) -> QWidget:
-        """Create VM details panel."""
-        panel = QWidget()
-        layout = QVBoxLayout(panel)
-        layout.setContentsMargins(16, 16, 16, 16)
-
-        self._detail_name = QLabel()
-        self._detail_name.setStyleSheet("font-size: 18px; font-weight: bold;")
-        layout.addWidget(self._detail_name)
-
-        self._detail_state = QLabel()
-        layout.addWidget(self._detail_state)
-
-        layout.addStretch()
-
-        return panel
 
     def _setup_toolbar(self) -> None:
         """Setup toolbar."""
@@ -190,6 +167,10 @@ class MainWindow(QMainWindow):
         network_action.triggered.connect(self._on_open_network)
         file_menu.addAction(network_action)
 
+        conn_details_action = QAction(_("Connection Details"), self)
+        conn_details_action.triggered.connect(self._on_open_host)
+        file_menu.addAction(conn_details_action)
+
         file_menu.addSeparator()
 
         prefs_action = QAction(_("Preferences..."), self)
@@ -237,6 +218,10 @@ class MainWindow(QMainWindow):
 
     def _show_vm_context_menu(self, pos):
         """Show context menu for VM."""
+        vm, uri = self._vm_table.get_selected_vm()
+        if not vm:
+            return
+            
         menu = QMenu(self)
 
         start_action = QAction(_("Start"), menu)
@@ -251,20 +236,28 @@ class MainWindow(QMainWindow):
 
     def _on_vm_selected(self) -> None:
         """Handle VM selection."""
-        selected = self._vm_table.selectedItems()
+        vm, uri = self._vm_table.get_selected_vm()
 
-        if not selected:
+        if not vm:
             self._selected_vm = None
             self._selected_uri = None
             self._update_actions(None)
             self._content.setCurrentIndex(0)
             return
 
-        row = selected[0].row()
-        self._selected_uri = self._vm_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
-        self._selected_vm = self._vm_table.item(row, 0).text()
+        self._selected_vm = vm.uuid
+        self._selected_uri = uri
 
-        self._update_actions(self._selected_vm)
+        self._update_actions(vm)
+        
+        # Update details widget
+        if self._details_widget:
+            self._details_widget.deleteLater()
+        
+        conn = self._engine.get_connection(uri)
+        self._details_widget = vmmDetails(vm, conn, self._engine)
+        self._details_layout.addWidget(self._details_widget)
+        
         self._content.setCurrentIndex(1)
 
     def _update_actions(self, vm) -> None:
@@ -279,9 +272,9 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def _on_add_connection(self) -> None:
         """Open add connection dialog."""
-        from .dialogs.connection import ConnectionDialog
-        dialog = ConnectionDialog(self)
-        if dialog.exec() == QMessageBox.StandardButton.Ok:
+        from .dialogs.createconn import ConnectionDialog
+        dialog = ConnectionDialog(self._engine)
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             uri = dialog.get_uri()
             if uri and self._engine:
                 self._engine.add_connection(uri)
@@ -341,17 +334,17 @@ class MainWindow(QMainWindow):
         if not self._selected_vm:
             return
 
-        reply = QMessageBox.question(
-            self,
-            _("Delete VM"),
-            _("Delete VM '%s'?\n\nThis will remove the VM definition.") % self._selected_vm,
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
+        conn = self._engine.get_connection(self._selected_uri)
+        if not conn:
+            return
+            
+        vm = conn.get_vm(self._selected_vm)
+        if not vm:
+            return
 
-        if reply == QMessageBox.StandardButton.Yes and self._engine:
-            conn = self._engine.get_connection(self._selected_uri)
-            if conn:
-                conn.delete_vm(self._selected_vm)
+        from .dialogs.delete import vmmDeleteDialog
+        dialog = vmmDeleteDialog(vm, conn, self._engine)
+        dialog.exec()
 
     @pyqtSlot()
     def _on_preferences(self) -> None:
@@ -372,8 +365,10 @@ class MainWindow(QMainWindow):
         """Open storage management window."""
         if not self._engine:
             return
-        conn = self._engine.get_default_connection()
-        if conn:
+        # Get first connection
+        conns = self._engine.get_connections()
+        if conns:
+            conn = list(conns.values())[0]
             from .storage import StorageWindow
             win = StorageWindow(conn)
             win.show()
@@ -383,10 +378,23 @@ class MainWindow(QMainWindow):
         """Open network management window."""
         if not self._engine:
             return
-        conn = self._engine.get_default_connection()
-        if conn:
+        conns = self._engine.get_connections()
+        if conns:
+            conn = list(conns.values())[0]
             from .storage import NetworkWindow
             win = NetworkWindow(conn)
+            win.show()
+
+    @pyqtSlot()
+    def _on_open_host(self) -> None:
+        """Open connection details window."""
+        if not self._engine:
+            return
+        conns = self._engine.get_connections()
+        if conns:
+            conn = list(conns.values())[0]
+            from .host import vmmHost
+            win = vmmHost(conn, self._engine)
             win.show()
 
     @pyqtSlot()
@@ -398,8 +406,8 @@ class MainWindow(QMainWindow):
         if conn:
             vm = conn.get_vm(self._selected_vm)
             if vm and vm.domain:
-                from .dialogs.addhardware import AddHardwareDialog
-                dialog = AddHardwareDialog(vm, self)
+                from .dialogs.addhardware import vmmAddHardware
+                dialog = vmmAddHardware(conn, vm, self._engine)
                 dialog.exec()
 
     @pyqtSlot()

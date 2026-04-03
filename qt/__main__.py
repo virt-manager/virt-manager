@@ -69,6 +69,10 @@ def main() -> int:
             window = MainWindow()
             log.info("MainWindow created")
             
+            # If engine is already ready, set it
+            if engine:
+                window.set_engine(engine)
+            
             window.show()
             log.info("MainWindow shown")
             
@@ -91,6 +95,10 @@ def main() -> int:
             
             engine.start()
             log.info("Engine started")
+            
+            # If window is already ready, set engine
+            if window:
+                window.set_engine(engine)
             
         except Exception as e:
             log.error(f"Engine init failed: {e}", exc_info=True)

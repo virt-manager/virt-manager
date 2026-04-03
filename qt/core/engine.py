@@ -5,6 +5,9 @@ Main engine for Qt/KDE frontend.
 import logging
 from typing import Optional
 
+from .config import get_config
+from .signals import get_signals
+
 logger = logging.getLogger("virtmanagerqt.engine")
 
 
@@ -27,6 +30,7 @@ class Engine:
         self._initialized = True
         
         self._config = None
+        self._signals = get_signals()
         self._connections: dict = {}
         self._running = False
         self._stats_timer = None
@@ -36,7 +40,6 @@ class Engine:
     def _load_config(self):
         """Load config lazily."""
         if self._config is None:
-            from .config import get_config
             self._config = get_config()
     
     def add_connection(self, uri: str):
@@ -48,6 +51,8 @@ class Engine:
             from ..bridge.connwrapper import ConnectionWrapper
             conn = ConnectionWrapper(uri)
             self._connections[uri] = conn
+            
+            self._signals.connection_added.emit(uri)
             
             if self._config and self._config.is_autoconnect(uri):
                 conn.connect_async()
@@ -64,6 +69,8 @@ class Engine:
         
         conn = self._connections.pop(uri)
         conn.close()
+        
+        self._signals.connection_removed.emit(uri)
         
         if self._config:
             self._config.remove_connection(uri)
