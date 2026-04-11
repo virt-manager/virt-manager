@@ -193,7 +193,10 @@ def _cant_embed_graphics(ginfo):
     if ginfo.gtype in ["vnc", "spice"]:
         return
     if ginfo.gtype == "dbus":
-        return _("Cannot display D-Bus graphics directly. Use an external D-Bus viewer.")
+        return _(
+            "Graphical console is not available in D-Bus mode. "
+            "Use an external tool to connect to the D-Bus display."
+        )
 
     msg = _("Cannot display graphical console type '%s'") % ginfo.gtype
     return msg
@@ -852,6 +855,15 @@ class vmmConsolePages(vmmGObjectUI):
         self._populate_console_menu()
         found = self._consolemenu.activate_default()
         if not found:
+            if self.vm.xmlobj.devices.graphics:
+                gdev = self.vm.xmlobj.devices.graphics[0]
+                ginfo = ConnectionInfo(self.vm.conn, gdev)
+                errmsg = _cant_embed_graphics(ginfo)
+                if errmsg:
+                    self.widget("console-pages").set_current_page(_CONSOLE_PAGE_GRAPHICS)
+                    self.idle_add(self._init_viewer, ginfo, errmsg)
+                    return
+
             # Calling this with dev=None will trigger _init_viewer
             # which shows some meaningful errors
             self._console_menu_view_selected()
