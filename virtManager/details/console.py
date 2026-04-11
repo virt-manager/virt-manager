@@ -192,6 +192,8 @@ class vmmOverlayToolbar:
 def _cant_embed_graphics(ginfo):
     if ginfo.gtype in ["vnc", "spice"]:
         return
+    if ginfo.gtype == "dbus":
+        return _("Cannot display D-Bus graphics directly. Use an external D-Bus viewer.")
 
     msg = _("Cannot display graphical console type '%s'") % ginfo.gtype
     return msg

@@ -497,7 +497,7 @@ class vmmConfig:
     # New VM preferences
     def get_graphics_type(self, raw=False):
         ret = self.conf.get("/new-vm/graphics-type")
-        if ret not in ["system", "vnc", "spice"]:
+        if ret not in ["system", "vnc", "spice", "dbus"]:
             ret = "system"  # pragma: no cover
         if ret == "system" and not raw:
             return self.default_graphics_from_config

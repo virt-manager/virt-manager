@@ -147,6 +147,7 @@ class vmmPreferences(vmmGObjectUI):
             ["system", _("System default (%s)") % self.config.default_graphics_from_config],
             ["vnc", "VNC"],
             ["spice", "Spice"],
+            ["dbus", "D-Bus"],
         ]:
             model.append(row)
         combo.set_model(model)

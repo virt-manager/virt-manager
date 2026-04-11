@@ -37,9 +37,13 @@ class DeviceGraphics(Device):
     TYPE_VNC = "vnc"
     TYPE_RDP = "rdp"
     TYPE_SPICE = "spice"
+    TYPE_EGL_HEADLESS = "egl-headless"
+    TYPE_DBUS = "dbus"
 
     _XML_PROP_ORDER = [
         "_type",
+        "p2p",
+        "dbus_address",
         "gl",
         "_port",
         "_tlsPort",
@@ -50,9 +54,24 @@ class DeviceGraphics(Device):
         "passwd",
         "display",
         "xauth",
+        "audio_id",
     ]
 
     keymap = XMLProperty("./@keymap")
+
+    def _clear_net_config(self):
+        self._remove_all_listens()
+        self._listen = None
+        self._port = None
+        self._tlsPort = None
+        self.autoport = None
+        self.websocket = None
+        self.socket = None
+
+    def _clear_dbus_config(self):
+        self.p2p = None
+        self.dbus_address = None
+        self.audio_id = None
 
     def _set_type(self, val):
         self._type = val
@@ -60,6 +79,19 @@ class DeviceGraphics(Device):
         # libvirt errors out if there is any other value
         if val == "vnc" and self.connected != "keep":
             self.connected = None
+        elif val not in [self.TYPE_VNC, self.TYPE_SPICE]:
+            self.connected = None
+
+        if val == self.TYPE_DBUS:
+            self._clear_net_config()
+            self.keymap = None
+            self.passwd = None
+            self.passwdValidTo = None
+            self.display = None
+            self.xauth = None
+            self.defaultMode = None
+        else:
+            self._clear_dbus_config()
 
     def _get_type(self):
         return self._type
@@ -117,6 +149,9 @@ class DeviceGraphics(Device):
     socket = XMLProperty("./@socket")
     connected = XMLProperty("./@connected")
     defaultMode = XMLProperty("./@defaultMode")
+    p2p = XMLProperty("./@p2p", is_yesno=True)
+    dbus_address = XMLProperty("./@address")
+    audio_id = XMLProperty("./audio/@id", is_int=True)
 
     listens = XMLChildProperty(_GraphicsListen)
 
@@ -191,6 +226,12 @@ class DeviceGraphics(Device):
         if gtype == "spice" and not guest.lookup_domcaps().supports_graphics_spice():
             log.debug("spice requested but HV doesn't support it. Using vnc.")
             gtype = "vnc"
+        if gtype == "dbus" and not guest.lookup_domcaps().supports_graphics_dbus():
+            fallback = "spice"
+            if not guest.lookup_domcaps().supports_graphics_spice():
+                fallback = "vnc"
+            log.debug("dbus requested but HV doesn't support it. Using %s.", fallback)
+            gtype = fallback
         return gtype
 
     def _default_image_compression(self, _guest):
