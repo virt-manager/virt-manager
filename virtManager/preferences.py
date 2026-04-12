@@ -203,7 +203,7 @@ class vmmPreferences(vmmGObjectUI):
         val = bool(self.config.get_view_system_tray()) and not has_errmsg
         self.widget("prefs-system-tray").set_sensitive(not has_errmsg)
         self.widget("prefs-system-tray").set_active(val)
-        if has_errmsg:
+        if has_errmsg:  # pragma: no cover
             self.widget("prefs-system-tray-warn-label").set_markup(
                 "<small>%s</small>" % xmlutil.xml_escape(errmsg)
             )

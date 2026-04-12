@@ -1,6 +1,9 @@
 name: Test on fedora:latest
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
 
 jobs:
   # Test on fedora:latest with stock distro packages
@@ -19,7 +22,8 @@ jobs:
           rpm-build \
           dnf-plugins-core \
           glibc-langpack-en \
-          python3-pytest python3-pytest-cov
+          python3-pytest python3-pytest-cov \
+          acl
 
     - uses: actions/checkout@v6
 
@@ -49,8 +53,9 @@ jobs:
     - name: Run test suite and generate coverage report
       run: |
         pytest --cov --cov-report=xml
+        coverage report -m
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         token: ${{ secrets.CODECOV_TOKEN }}

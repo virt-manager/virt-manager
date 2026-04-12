@@ -68,7 +68,7 @@ class VMMDogtailApp:
         return win
 
     def click_alert_button(self, label_text, button_text):
-        alert = self.find_window("vmm dialog", "alert")
+        alert = self.find_window(".*", "alert")
         alert.find_fuzzy(label_text, "label")
         alert.find(button_text, "push button").click()
         utils.check(lambda: not alert.active)

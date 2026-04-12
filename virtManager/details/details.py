@@ -244,7 +244,9 @@ def _label_for_device(dev, disk_bus_index):
     if devtype == "tpm":
         if dev.device_path:
             return _("TPM %(device)s") % {"device": dev.device_path}
-        return _("TPM v%(version)s") % {"version": dev.version}
+        if dev.version:
+            return _("TPM v%(version)s") % {"version": dev.version}
+        return _("TPM")
 
     devmap = {
         "panic": _("Panic Notifier"),

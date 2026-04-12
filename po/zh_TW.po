@@ -3,18 +3,18 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Translators:
-# Cheng-Chia Tseng <pswo10680@gmail.com>, 2012, 2023, 2025.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2012, 2023, 2025, 2026.
 # Chester Cheng <ccheng@redhat.com>, 2012-2013
 # Cole Robinson <crobinso@redhat.com>, 2011
 # Terry Chuang <tchuang@redhat.com>, 2012-2013
 # Po-Chun Huang <aphroteus@gmail.com>, 2015
-# Cheng-Chia Tseng <pswo10680@gmail.com>, 2015. #zanata, 2023, 2025.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2015. #zanata, 2023, 2025, 2026.
 # Cole Robinson <crobinso@redhat.com>, 2015. #zanata
 # Chester Cheng <snowlet.cheng@gmail.com>, 2016. #zanata
 # Terry Chuang <tchuang@redhat.com>, 2016. #zanata
 # Ting-Wei Lan <lantw44@gmail.com>, 2016. #zanata
 # Cole Robinson <crobinso@redhat.com>, 2017. #zanata
-# Cheng-Chia Tseng <pswo10680@gmail.com>, 2018. #zanata, 2023, 2025.
+# Cheng-Chia Tseng <pswo10680@gmail.com>, 2018. #zanata, 2023, 2025, 2026.
 # Ting-Wei Lan <lantw44@gmail.com>, 2019. #zanata
 # Whired Planck <fungdaat31@outlook.com>, 2020, 2022.
 # Kisaragi Hiu <mail@kisaragi-hiu.com>, 2022.
@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: virt-manager\n"
 "Report-Msgid-Bugs-To: https://github.com/virt-manager/virt-manager/issues\n"
 "POT-Creation-Date: 2025-08-25 23:23+0200\n"
-"PO-Revision-Date: 2025-07-02 18:15+0000\n"
+"PO-Revision-Date: 2026-03-24 02:58+0000\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/virt-manager/virt-manager/zh_TW/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: data/virt-manager.appdata.xml.in:6 data/virt-manager.desktop.in:2
 #: ui/manager.ui:7 virtManager/systray.py:148
@@ -54,8 +54,8 @@ msgid ""
 "management API."
 msgstr ""
 "虛擬系統提供了一個圖形化工具來管理 KVM、Xen 和 LXC 虛擬機。啟動、停止、新增或"
-"移除虛擬裝置、連接到圖形或串列控制台，並查看本機或遠端電腦上現有虛擬機的資源"
-"使用情況統計。使用 libvirt 作為後端管理 API。"
+"移除虛擬裝置、連接到圖形或序列埠控制台，並查看本機或遠端電腦上現有虛擬機的資"
+"源使用情況統計。使用 libvirt 作為後端管理 API。"
 
 #: data/virt-manager.appdata.xml.in:20
 msgid "Main manager window"
@@ -86,20 +86,16 @@ msgid "kvm"
 msgstr "kvm"
 
 #: data/virt-manager.desktop.in:3
-#, fuzzy
-#| msgid "Virtual Machine Manager"
 msgid "Virtual machine viewer/manager"
-msgstr "虛擬系統管理器"
+msgstr "虛擬機檢視器/管理器"
 
 #: data/virt-manager.desktop.in:4
 msgid "Manage virtual machines"
 msgstr "管理虛擬系統"
 
 #: data/virt-manager.desktop.in:10
-#, fuzzy
-#| msgid "virtualization"
 msgid "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;"
-msgstr "虛擬化"
+msgstr "virtualization;libvirt;vm;vmm;qemu;xen;lxc;kvm;虛擬化;虛擬技術;"
 
 #: ui/about.ui:10
 msgid "Copyright (C) 2006-2020 Red Hat Inc."
@@ -170,10 +166,8 @@ msgid "Host _Device:"
 msgstr "主機裝置(_D)："
 
 #: ui/addhardware.ui:715 ui/details.ui:3844
-#, fuzzy
-#| msgid "Start Pool"
 msgid "Startup Policy:"
-msgstr "啟動儲池"
+msgstr "初始啟動方針："
 
 #: ui/addhardware.ui:785
 msgid "_Path:"
@@ -380,7 +374,7 @@ msgstr "<b>終端目前不可用</b>"
 
 #: ui/console.ui:57 virtManager/addhardware.py:252
 msgid "Serial"
-msgstr "串列埠"
+msgstr "序列埠"
 
 #: ui/console.ui:125
 msgid "_Password:"
@@ -2217,7 +2211,7 @@ msgstr "聲音"
 
 #: virtManager/addhardware.py:260
 msgid "Parallel"
-msgstr "並口"
+msgstr "並列埠"
 
 #: virtManager/addhardware.py:269
 msgid "Channel"
@@ -2350,7 +2344,7 @@ msgstr "SATA"
 
 #: virtManager/addhardware.py:487
 msgid "VirtIO Serial"
-msgstr "VirtIO 串列埠"
+msgstr "VirtIO 序列埠"
 
 #: virtManager/addhardware.py:488 virtManager/addhardware.py:548
 #: virtManager/addhardware.py:599
@@ -3318,7 +3312,7 @@ msgstr "文字控制台 %d"
 #: virtManager/details/console.py:226
 #, python-format
 msgid "Serial %d"
-msgstr "序列 %d"
+msgstr "序列埠 %d"
 
 #: virtManager/details/console.py:232
 msgid "No text console available"
@@ -3416,12 +3410,12 @@ msgstr "NIC %(mac)s"
 #: virtManager/details/details.py:195
 #, python-format
 msgid "Serial %(num)d"
-msgstr "串列埠 %(num)d"
+msgstr "序列埠 %(num)d"
 
 #: virtManager/details/details.py:199
 #, python-format
 msgid "Parallel %(num)d"
-msgstr "並口 %(num)d"
+msgstr "並列埠 %(num)d"
 
 #: virtManager/details/details.py:203
 #, python-format
@@ -3640,11 +3634,11 @@ msgstr "%(graphicstype)s 伺服器"
 
 #: virtManager/details/details.py:2046
 msgid "Serial Device"
-msgstr "串列埠裝置"
+msgstr "序列埠裝置"
 
 #: virtManager/details/details.py:2048
 msgid "Parallel Device"
-msgstr "並口裝置"
+msgstr "並列埠裝置"
 
 #: virtManager/details/details.py:2050
 msgid "Console Device"
@@ -5314,11 +5308,11 @@ msgstr ""
 
 #: virtinst/cli.py:809
 msgid "Configure a guest serial device"
-msgstr "組態設定客戶機串列埠裝置"
+msgstr "組態設定客戶機序列埠裝置"
 
 #: virtinst/cli.py:811
 msgid "Configure a guest parallel device"
-msgstr "組態設定客戶機並口裝置"
+msgstr "組態設定客戶機並列埠裝置"
 
 #: virtinst/cli.py:814
 msgid "Configure a guest communication channel"

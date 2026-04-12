@@ -4,6 +4,7 @@ on:
   # Run every 3 days at midnight
   schedule:
     - cron: '0 0 */3 * *'
+  workflow_dispatch:
 
 jobs:
   test-against-libvirt-git:
