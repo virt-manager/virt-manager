@@ -5,9 +5,31 @@
 -      <listen type="address"/>
 +    <graphics type="dbus">
 +      <gl enable="yes"/>
++      <audio id="1"/>
      </graphics>
-     <sound model="sb16"/>
-     <sound model="es1370"/>
+-    <sound model="sb16"/>
+-    <sound model="es1370"/>
+-    <sound model="ich6"/>
++    <sound model="sb16">
++      <audio id="1"/>
++    </sound>
++    <sound model="es1370">
++      <audio id="1"/>
++    </sound>
++    <sound model="ich6">
++      <audio id="1"/>
++    </sound>
+     <video>
+       <model type="vmvga" vram="16384" heads="1" primary="yes"/>
+     </video>
+@@
+     <vsock model="virtio">
+       <cid auto="no" address="5"/>
+     </vsock>
++    <audio type="dbus" id="1"/>
+   </devices>
+   <seclabel type="dynamic" model="selinux" relabel="yes"/>
+   <keywrap>
 
 Domain 'test-for-virtxml' defined successfully.
 Changes will take effect after the domain is fully powered off.
